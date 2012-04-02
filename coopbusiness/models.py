@@ -12,3 +12,4 @@ class Opportunity(ModelSQL, ModelView):
     comment = fields.Text('Comment')
     
 Opportunity()
+
