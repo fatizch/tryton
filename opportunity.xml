@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <tryton>
 	<data>
 		<record model="ir.ui.view" id="opportunity_view_tree">
@@ -6,10 +7,9 @@
 			<field name="arch" type="xml">
 <![CDATA[
 <tree string="Opportunities">
-<field name="party" select="1"/>
-<field name="description" select="1"/>
-<field name="start_date" select="1"/>
-<field name="end_date" select="2"/>
+<field name="description"/>
+<field name="start_date"/>
+<field name="end_date"/>
 </tree>
 ]]>
 			</field>
