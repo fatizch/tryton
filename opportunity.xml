@@ -1,0 +1,54 @@
+<tryton>
+	<data>
+		<record model="ir.ui.view" id="opportunity_view_tree">
+			<field name="model">training.opportunity</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+<![CDATA[
+<tree string="Opportunities">
+<field name="party" select="1"/>
+<field name="description" select="1"/>
+<field name="start_date" select="1"/>
+<field name="end_date" select="2"/>
+</tree>
+]]>
+			</field>
+		</record>
+		<record model="ir.ui.view" id="opportunity_view_form">
+			<field name="model">training.opportunity</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+<![CDATA[
+<form string="Opportunity">
+<label name="party"/>
+<field name="party"/>
+<label name="description"/>
+<field name="description"/>
+<label name="start_date"/>
+<field name="start_date"/>
+<label name="end_date"/>
+<field name="end_date"/>
+<separator name="comment" colspan="4"/>
+<field name="comment" colspan="4"/>
+</form>
+]]>
+			</field>
+		</record>
+		<record model="ir.action.act_window" id="act_opportunity_form">
+			<field name="name">Opportunities</field>
+			<field name="res_model">training.opportunity</field>
+		</record>
+		<record model="ir.action.act_window.view" id="act_opportunity_form_view1">
+			<field name="sequence" eval="10" />
+			<field name="view" ref="opportunity_view_tree" />
+			<field name="act_window" ref="act_opportunity_form" />
+		</record>
+		<record model="ir.action.act_window.view" id="act_opportunity_form_view2">
+			<field name="sequence" eval="20" />
+			<field name="view" ref="opportunity_view_form" />
+			<field name="act_window" ref="act_opportunity_form" />
+		</record>
+		<menuitem name="Training" id="menu_training"/>
+		<menuitem parent="menu_training" action="act_opportunity_form" id="menu_opportunity_form"/>
+	</data>
+</tryton>
