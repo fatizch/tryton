@@ -8,7 +8,7 @@ class Opportunity(ModelSQL, ModelView):
     description = fields.Char('Description', required=True)
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
-    party = fields.Many2One('party.party', 'Party', required=True)
+    #party = fields.Many2One('party.party', 'Party', required=True)
     comment = fields.Text('Comment')
     
 Opportunity()
