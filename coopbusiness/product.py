@@ -6,7 +6,7 @@ class Coverage(ModelSQL, ModelView):
     _name = 'product.coverage'     
     _description = __doc__     
     name = fields.Char('Name', required=True, select=1)     
-    code = fields.Char('CodeToto', size=10,required=True, select=1)    
+    code = fields.Char('Code', size=10,required=True, select=1)    
 	
 Coverage()
 
