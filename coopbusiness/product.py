@@ -1,11 +1,12 @@
-from trytond.model import ModelView, ModelSQL, fields 
+from trytond.model import ModelView, ModelSQL
+from trytond.model import fields as fields
 
 class Coverage(ModelSQL, ModelView):
-    'Coverage'     
+    'Coverage'
     _name = 'product.coverage'     
     _description = __doc__     
     name = fields.Char('Name', required=True, select=1)     
-    code = fields.Char('Code', size=10,required=True, select=1)     
+    code = fields.Char('CodeToto', size=10,required=True, select=1)    
 	
 Coverage()
 
