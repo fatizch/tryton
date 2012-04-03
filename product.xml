@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+  <tryton>
+		<data>
+			<!-- Application Entry point-->
+			<menuitem name="Product" id="menu_product" sequence="10"/>     
+			
+			<!-- Tree view-->
+			<record model="ir.ui.view" id="product_view_tree">             
+				<field name="model">product.product</field>             
+				<field name="type">tree</field>             
+				<field name="arch" type="xml">                 
+					<![CDATA[                 
+					<tree string="Product">
+					<field name="code"/>
+					<field name="name"/>
+					</tree>                 ]]>
+				</field>         
+			</record>
+
+			<!-- form view-->
+			<record model="ir.ui.view" id="product_view_form">
+				 <field name="model">product.product</field>
+				 <field name="type">form</field>
+				 <field name="arch" type="xml">
+					 <![CDATA[
+						<form string="product" col="6">
+						<label name="code"/>
+						<field name="code" />
+						<label name="name"/>
+						<field name="name" xexpand="1"/>
+						<notebook colspan="6">
+							<page string="General" id="general">
+								<field name="options">
+									
+								</field>
+							</page>
+						</notebook>
+						</form>               ]]>
+				 </field>
+			</record>
+
+			<!-- View for the main menu and the event -->         
+			<record model="ir.action.act_window" id="act_product_form">
+				<field name="name">Product</field>
+				<field name="res_model">product.product</field>
+			</record>
+
+			<!-- View that connect the form in the tree with the specification -->
+			<record model="ir.action.act_window.view" id="act_product_form_view1">
+				<field name="sequence" eval="10"/>
+				<field name="view" ref="product_view_tree"/>
+				<field name="act_window" ref="act_product_form"/>
+			</record>
+
+			<!-- View for the edition or the Form of product-->
+			<record model="ir.action.act_window.view" id="act_product_form_view2">
+				<field name="sequence" eval="20"/>
+				<field name="view" ref="product_view_form"/>
+				<field name="act_window" ref="act_product_form"/>
+			</record>
+
+			<menuitem parent="menu_product" sequence="1"  
+			id="menu_product_form" icon="tryton-list" action="act_product_form"/>
+
+			<!-- Application Entry point-->
+			<menuitem name="coverage" id="menu_coverage" sequence="10"/>     
+			
+			<!-- Tree view-->
+			<record model="ir.ui.view" id="coverage_view_tree">             
+				<field name="model">product.coverage</field>             
+				<field name="type">tree</field>             
+				<field name="arch" type="xml">                 
+					<![CDATA[                 
+					<tree string="coverage">
+					<field name="code"/>
+					<field name="name"/>
+					</tree>                 ]]>
+				</field>         
+			</record>
+
+			<!-- form view-->
+			<record model="ir.ui.view" id="coverage_view_form">
+				 <field name="model">product.coverage</field>
+				 <field name="type">form</field>
+				 <field name="arch" type="xml">
+					 <![CDATA[
+					 <form string="coverage">
+					 <label name="code"/>
+					 <field name="code"/>
+					 <label name="name"/>
+					 <field name="name"/>
+					 </form>               ]]>
+				 </field>
+			</record>
+
+			<!-- View for the main menu and the event -->         
+			<record model="ir.action.act_window" id="act_coverage_form">
+				<field name="name">coverage</field>
+				<field name="res_model">product.coverage</field>
+			</record>
+
+			<!-- View that connect the form in the tree with the specification -->
+			<record model="ir.action.act_window.view" id="act_coverage_form_view1">
+				<field name="sequence" eval="10"/>
+				<field name="view" ref="coverage_view_tree"/>
+				<field name="act_window" ref="act_coverage_form"/>
+			</record>
+
+			<!-- View for the edition or the Form of coverage-->
+			<record model="ir.action.act_window.view" id="act_coverage_form_view2">
+				<field name="sequence" eval="20"/>
+				<field name="view" ref="coverage_view_form"/>
+				<field name="act_window" ref="act_coverage_form"/>
+			</record>
+
+			<menuitem parent="menu_coverage" sequence="1"  
+			id="menu_coverage_form" icon="tryton-list" action="act_coverage_form"/>
+		</data>
+	</tryton>
