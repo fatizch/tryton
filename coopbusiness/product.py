@@ -14,7 +14,7 @@ Coverage()
 class ProductOptionsCoverage(ModelSQL):
     'Define Product - Coverage relations'
     _name = 'ins_product-options-coverage'
-    product = fields.Many2One('ins_product.product','ins_product',select=1, required=True)
+    product = fields.Many2One('ins_product.product','Product',select=1, required=True)
     coverage = fields.Many2One('ins_product.coverage','Coverage',select=1, required=True)
 
 ProductOptionsCoverage()	
@@ -25,7 +25,7 @@ class Product(ModelSQL, ModelView):
     _description = __doc__     
     name = fields.Char('Name', required=True, select=1)     
     code = fields.Char('Code', size=10,required=True, select=1)     
-    options = fields.Many2Many('ins_product-options-coverage','ins_product','coverage','Possible Options')
+    options = fields.Many2Many('ins_product-options-coverage','product','coverage','Possible Options')
 
 Product()
 
