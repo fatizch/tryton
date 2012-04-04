@@ -2,6 +2,12 @@ from trytond.model import ModelView, ModelSQL
 from trytond.model import fields as fields
 
 CONTRACTNUMBER_MAX_LENGTH = 10
+CONTRACTSTATUSES = [
+                        (0,'Quote'),
+                        (1,'Active'),
+                        (2,'Hold'),
+                        (3,'Terminated'),
+                    ]
 
 class Contract(ModelSQL, ModelView):
     '''
@@ -51,6 +57,10 @@ class Contract(ModelSQL, ModelView):
                                  'Subscriber',
                                  required=True)
     
+    # Status represents the contract state at current time.
+    status = fields.Selection(CONTRACTSTATUSES,
+                              'Status')
+    
 Contract()
 
 class Option(ModelSQL, ModelView):
@@ -84,4 +94,10 @@ class Option(ModelSQL, ModelView):
                                'Offered Coverage',
                                required=True)
     
+    # Effective date is the date at which the option "starts" to be effective :
+    #    The client pays its premium for it
+    #    Claims can be declared and benefits paid on the coverage
+    effective_date = fields.Date('Effective Date',
+                                 required=True)
+
 Option()

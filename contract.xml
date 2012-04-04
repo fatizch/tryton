@@ -31,7 +31,8 @@
 						<field name="effective_date"/>
 						<label name="product"/>
 						<field name="product" xexpand="1"/>
-						<field name="options"/>
+						<separator string="Options" id="options_separator"/>
+						<field name="options" xexpand="1"/>
 						</form>               ]]>
 				 </field>
 			</record>
