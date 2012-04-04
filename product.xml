@@ -7,7 +7,7 @@
 			
 			    <!-- Tree view-->
 			    <record model="ir.ui.view" id="product_view_tree">             
-				    <field name="model">product.product</field>             
+				    <field name="model">ins_product.product</field>             
 				    <field name="type">tree</field>             
 				    <field name="arch" type="xml">                 
 					    <![CDATA[                 
@@ -21,7 +21,7 @@
 
 			    <!-- form view-->
 			    <record model="ir.ui.view" id="product_view_form">
-				     <field name="model">product.product</field>
+				     <field name="model">ins_product.product</field>
 				     <field name="type">form</field>
 				     <field name="arch" type="xml">
 					     <![CDATA[
@@ -43,8 +43,8 @@
 
 			    <!-- View for the main menu and the event -->         
 			    <record model="ir.action.act_window" id="act_product_form">
-				    <field name="name">Product</field>
-				    <field name="res_model">product.product</field>
+				    <field name="name">ins_product</field>
+				    <field name="res_model">ins_product.product</field>
 			    </record>
 
 			    <!-- View that connect the form in the tree with the specification -->
@@ -71,7 +71,7 @@
 			
 			    <!-- Tree view-->
 			    <record model="ir.ui.view" id="coverage_view_tree">             
-				    <field name="model">product.coverage</field>             
+				    <field name="model">ins_product.coverage</field>             
 				    <field name="type">tree</field>             
 				    <field name="arch" type="xml">                 
 					    <![CDATA[                 
@@ -85,7 +85,7 @@
 
 			    <!-- form view-->
 			    <record model="ir.ui.view" id="coverage_view_form">
-				     <field name="model">product.coverage</field>
+				     <field name="model">ins_product.coverage</field>
 				     <field name="type">form</field>
 				     <field name="arch" type="xml">
 					     <![CDATA[
@@ -103,7 +103,7 @@
 			    <!-- View for the main menu and the event -->         
 			    <record model="ir.action.act_window" id="act_coverage_form">
 				    <field name="name">coverage</field>
-				    <field name="res_model">product.coverage</field>
+				    <field name="res_model">ins_product.coverage</field>
 			    </record>
 
 			    <!-- View that connect the form in the tree with the specification -->
@@ -127,7 +127,7 @@
 			<!-- business_rule_manager-->
 			    <!-- Tree view-->
 			    <record model="ir.ui.view" id="business_rule_manager_view_tree">             
-				    <field name="model">product.businessrulemanager</field>             
+				    <field name="model">ins_product.businessrulemanager</field>             
 				    <field name="type">tree</field>             
 				    <field name="arch" type="xml">                 
 					    <![CDATA[                 
@@ -141,7 +141,7 @@
 
 			    <!-- form view-->
 			    <record model="ir.ui.view" id="business_rule_manager_view_form">
-				     <field name="model">product.businessrulemanager</field>
+				     <field name="model">ins_product.businessrulemanager</field>
 				     <field name="type">form</field>
 				     <field name="arch" type="xml">
 					     <![CDATA[
@@ -160,7 +160,7 @@
 			    <!-- View for the main menu and the event -->         
 			    <record model="ir.action.act_window" id="act_business_rule_manager_form">
 				    <field name="name">business_rule_manager</field>
-				    <field name="res_model">product.business_rule_manager</field>
+				    <field name="res_model">ins_product.business_rule_manager</field>
 			    </record>
 
 			    <!-- View that connect the form in the tree with the specification -->
@@ -184,7 +184,7 @@
 			
 			    <!-- Tree view-->
 			    <record model="ir.ui.view" id="business_rule_view_tree">             
-				    <field name="model">product.businessrule</field>             
+				    <field name="model">ins_product.businessrule</field>             
 				    <field name="type">tree</field>             
 				    <field name="arch" type="xml">                 
 					    <![CDATA[                 
@@ -198,7 +198,7 @@
 
 			    <!-- form view-->
 			    <record model="ir.ui.view" id="business_rule_view_form">
-				     <field name="model">product.businessrule</field>
+				     <field name="model">ins_product.businessrule</field>
 				     <field name="type">form</field>
 				     <field name="arch" type="xml">
 					     <![CDATA[
@@ -216,7 +216,7 @@
 			    <!-- View for the main menu and the event -->         
 			    <record model="ir.action.act_window" id="act_business_rule_form">
 				    <field name="name">business_rule</field>
-				    <field name="res_model">product.business_rule</field>
+				    <field name="res_model">ins_product.business_rule</field>
 			    </record>
 
 			    <!-- View that connect the form in the tree with the specification -->
