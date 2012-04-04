@@ -6,7 +6,7 @@
 			
 			<!-- Tree view-->
 			<record model="ir.ui.view" id="contract_view_tree">             
-				<field name="model">insurance_contract.contract</field>             
+				<field name="model">ins_contract.contract</field>             
 				<field name="type">tree</field>             
 				<field name="arch" type="xml">                 
 					<![CDATA[                 
@@ -20,7 +20,7 @@
 
 			<!-- form view-->
 			<record model="ir.ui.view" id="contract_view_form">
-				 <field name="model">insurance_contract.contract</field>
+				 <field name="model">ins_contract.contract</field>
 				 <field name="type">form</field>
 				 <field name="arch" type="xml">
 					 <![CDATA[
@@ -39,7 +39,7 @@
 			<!-- View for the main menu and the event -->         
 			<record model="ir.action.act_window" id="act_contract_form">
 				<field name="name">Contract</field>
-				<field name="res_model">insurance_contract.contract</field>
+				<field name="res_model">ins_contract.contract</field>
 			</record>
 
 			<!-- View that connect the form in the tree with the specification -->
@@ -61,7 +61,7 @@
 
 			<!-- Tree view-->
 			<record model="ir.ui.view" id="option_view_tree">             
-				<field name="model">insurance_contract.option</field>             
+				<field name="model">ins_contract.option</field>             
 				<field name="type">tree</field>             
 				<field name="arch" type="xml">                 
 					<![CDATA[                 
@@ -74,7 +74,7 @@
 
 			<!-- form view-->
 			<record model="ir.ui.view" id="option_view_form">
-				 <field name="model">insurance_contract.option</field>
+				 <field name="model">ins_contract.option</field>
 				 <field name="type">form</field>
 				 <field name="arch" type="xml">
 					 <![CDATA[
@@ -90,7 +90,7 @@
 			<!-- View for the main menu and the event -->         
 			<record model="ir.action.act_window" id="act_option_form">
 				<field name="name">option</field>
-				<field name="res_model">insurance_contract.option</field>
+				<field name="res_model">ins_contract.option</field>
 			</record>
 
 			<!-- View that connect the form in the tree with the specification -->
