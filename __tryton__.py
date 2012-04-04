@@ -8,7 +8,8 @@
     'description': 'CoopBusiness module',
     'depends' : [],
     'xml' : ['opportunity.xml',
-             'product.xml'
+             'product.xml',
+             'contract.xml'
              ],
     'translation': ['party',
                     'ir'
