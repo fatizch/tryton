@@ -7,7 +7,7 @@ class Contract(ModelSQL, ModelView):
     '''
     This class represents the contract, and will be at the center of many business processes.
     '''
-    _name = 'insurance_contract.contract'
+    _name = 'ins_contract.contract'
     _description = __doc__
     
     # Effective date is the date at which the contract "starts" :
@@ -31,14 +31,14 @@ class Contract(ModelSQL, ModelView):
     # If you want to generate an invoice, you need the options
     # If you want to pay for a claim, you got to check the options to know
     # whether you got to do so or not, and if you do how much you will pay
-    options = fields.One2Many('insurance_contract.options',
+    options = fields.One2Many('ins_contract.options',
                               'contract',
                               'Options')
     
     # Each contract will be build from an offered product, which will give access to a number
     # of business rules. Those rules will be used all along the contract's life, so we need
     # to easily get access to them, through a direct link to the product 
-    product = fields.Many2One('insurance_product.product',
+    product = fields.Many2One('ins_product.product',
                               'Product',
                               required=True)
     
@@ -65,12 +65,12 @@ class Option(ModelSQL, ModelView):
     The Option will store the choice of the client at subscription time, so that it can be
     used later when calculating premium or benefit. 
     '''
-    _name = 'insurance_contract.options'
+    _name = 'ins_contract.options'
     _description = __doc__
     
     # Every option is linked to a contract (and only one !)
     # Also, if the contract is destroyed, so should the option 
-    contract = fields.Many2One('insurance_contract.contract',
+    contract = fields.Many2One('ins_contract.contract',
                                'Contract',
                                ondelete='CASCADE')
     
@@ -80,7 +80,7 @@ class Option(ModelSQL, ModelView):
     # eligibility rules, etc...
     # Almost all actions performed on an option will require a call to a business rule
     # of the offered coverage
-    coverage = fields.Many2One('insurance_product.coverage',
+    coverage = fields.Many2One('ins_product.coverage',
                                'Offered Coverage',
                                required=True)
     
