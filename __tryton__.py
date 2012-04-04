@@ -6,7 +6,7 @@
     'email': 'jonathan.Schemoul@gmail.com',
     'website': '',
     'description': 'CoopBusiness module',
-    'depends' : [],
+    'depends' : ["party"],
     'xml' : ['opportunity.xml',
              'product.xml',
              'contract.xml'
