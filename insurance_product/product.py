@@ -48,6 +48,5 @@ class BusinessRuleManager(ModelSQL, ModelView):
     belongs_to = fields.Many2One('ins_product.coverage','Belongs to', required=True)
     business_rules = fields.One2Many('ins_product.businessrule','manager','Business rules')
 
-
 BusinessRuleManager()
     
