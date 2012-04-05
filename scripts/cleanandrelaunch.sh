@@ -1,5 +1,7 @@
 #!/bin/bash
 SEP="-----------------------------------------------------------------"
+PREV_WD=pwd
+cd dirname $0
 echo $SEP
 echo "Loading conf file"
 echo $SEP
@@ -20,3 +22,4 @@ trytond -d $DATABASE_NAME -c $TRYTOND_CONF -u insurance_contract
 . ./launch.sh
 echo "Launch complete"
 echo $SEP
+cd $PREV_WD
