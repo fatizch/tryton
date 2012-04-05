@@ -2,9 +2,9 @@
   <tryton>
 		<data>
 			<!-- Application Entry point-->
-			<menuitem name="Contract" id="menu_contract" sequence="11"/>     
+			<menuitem name="Contractqsdqsd" id="menu_contract" sequence="11"/>     
 			
-			<!-- Tree view-->
+			<!-- Tree view for contract-->
 			<record model="ir.ui.view" id="contract_view_tree">             
 				<field name="model">ins_contract.contract</field>             
 				<field name="type">tree</field>             

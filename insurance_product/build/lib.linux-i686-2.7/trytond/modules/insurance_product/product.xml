@@ -33,7 +33,6 @@
 						        <notebook colspan="6">
 							        <page string="General" id="general">
 								        <field name="options">
-									
 								        </field>
 							        </page>
 						        </notebook>
@@ -89,14 +88,15 @@
 				     <field name="type">form</field>
 				     <field name="arch" type="xml">
 					     <![CDATA[
-					         <form string="coverage">
+					         <form string="coverage" col="6">
 					             <label name="code"/>
 					             <field name="code"/>
 					             <label name="name"/>
 					             <field name="name"/>
+					              <field name="name"/>
 					             <notebook colspan="6">
-							        <page string="General" id="general">
-								        <field name="managers"/>
+							        <page string="General" id="general2">
+								        <field name="managers">
 								        </field>
 							        </page>
 						        </notebook>
@@ -159,8 +159,8 @@
 					             <field name="belongs_to"/>
 					              <notebook colspan="6">
 							        <page string="General" id="general">
-								        <field name="businessrules"/>
-								        </field>
+								        <field name="business_rules"/>
+								        
 							        </page>
 						        </notebook>
 					         </form>               

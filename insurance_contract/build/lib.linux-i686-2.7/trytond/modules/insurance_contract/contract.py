@@ -23,6 +23,7 @@ class Contract(ModelSQL, ModelView):
                                  required=True)
     
     # Management date is the date at which the company started to manage the contract
+    # Default value is effective_date
     start_management_date = fields.Date('Management Date')
     
     # Contract Number will be the number which will be used to reference the contract
