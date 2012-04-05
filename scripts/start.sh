@@ -4,7 +4,7 @@ SCRIPTPATH=`dirname $SCRIPT`
 PREV_WD=`readlink -f .`
 cd $SCRIPTPATH
 SCRIPT_NAME=$1
-while getopts ":rckl" opt; do
+while getopts ":rcklu" opt; do
    case $opt in
       r)
          SCRIPT_NAME=reset ;;
@@ -14,6 +14,8 @@ while getopts ":rckl" opt; do
          SCRIPT_NAME=killtryton ;;
       l)
          SCRIPT_NAME=launch ;;
+      u)
+         SCRIPT_NAME=updatedatabase ;;
       \?)
          echo "Invalid Option" ;;
    esac

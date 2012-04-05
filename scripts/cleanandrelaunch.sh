@@ -17,8 +17,7 @@ echo $SEP
 cp $DATABASE_BACKUP_FOLDER/$DATABASE_NAME.$DATABASE_EXTENSION $DATABASE_FOLDER/$DATABASE_NAME.$DATABASE_EXTENSION
 echo "Updating modules"
 echo $SEP
-trytond -d $DATABASE_NAME -c $TRYTOND_CONF -u insurance_product
-trytond -d $DATABASE_NAME -c $TRYTOND_CONF -u insurance_contract
+. ./updatedatabase.sh
 . ./launch.sh
 echo "Launch complete"
 echo $SEP
