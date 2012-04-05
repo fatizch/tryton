@@ -94,7 +94,13 @@
 					             <field name="code"/>
 					             <label name="name"/>
 					             <field name="name"/>
-					             <field name="managers"/>
+					             <notebook colspan="6">
+							        <page string="General" id="general">
+								        <field name="managers"/>
+								        </field>
+							        </page>
+						        </notebook>
+					            
 					         </form>               
 					     ]]>
 				     </field>
@@ -150,8 +156,13 @@
 					             <field name="code"/>
 					             <label name="name"/>
 					             <field name="name"/>
-					             <field name="businessrules"/>
 					             <field name="belongs_to"/>
+					              <notebook colspan="6">
+							        <page string="General" id="general">
+								        <field name="businessrules"/>
+								        </field>
+							        </page>
+						        </notebook>
 					         </form>               
 					     ]]>
 				     </field>

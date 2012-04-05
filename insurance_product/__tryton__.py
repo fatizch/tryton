@@ -2,11 +2,11 @@
 {
     'name' : 'CoopBusiness',
     'version' : '0.0.1',
-    'author' : 'Jonathan Schemoul',
-    'email': 'jonathan.Schemoul@gmail.com',
+    'author' : 'Coopengo',
+    'email': 'admin@coopengo.com',
     'website': '',
     'description': 'CoopBusiness module',
-    'depends' : ['party'],
+    'depends' : [],
     'xml' : ['product.xml'],
     'translation': ['ir'
                     ],
