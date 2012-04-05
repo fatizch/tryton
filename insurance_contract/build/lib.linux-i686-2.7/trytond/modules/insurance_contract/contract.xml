@@ -2,7 +2,7 @@
   <tryton>
 		<data>
 			<!-- Application Entry point-->
-			<menuitem name="Contractqsdqsd" id="menu_contract" sequence="11"/>     
+			<menuitem name="Contract" id="menu_contract" sequence="11"/>     
 			
 			<!-- Tree view for contract-->
 			<record model="ir.ui.view" id="contract_view_tree">             
@@ -13,6 +13,7 @@
 					<tree string="Contract">
 					<field name="contract_number"/>
 					<field name="effective_date"/>
+					<field name="status"/>
 					<field name="product"/>
 					<field name="subscriber"/>
 					</tree>                 ]]>
@@ -27,14 +28,16 @@
 					 <![CDATA[
 						<form string="contract">
 						<label name="contract_number"/>
-						<field name="contract_number"/>
+						<field name="contract_number" xfill="1"/>
 						<label name="effective_date"/>
 						<field name="effective_date"/>
 						<newline/>
+						<label name="status"/>
+						<field name="status"/>
 						<label name="product"/>
-						<field name="product" xexpand="1"/>
+						<field name="product" xfill="1"/>
 						<newline/>
-						<field name="options" xexpand="1"/>
+						<field name="options" xfill="1" yfill="1"/>
 						</form>               ]]>
 				 </field>
 			</record>

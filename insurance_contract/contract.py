@@ -60,7 +60,8 @@ class Contract(ModelSQL, ModelView):
     
     # Status represents the contract state at current time.
     status = fields.Selection(CONTRACTSTATUSES,
-                              'Status')
+                              'Status',
+                              readonly=True)
     
 Contract()
 
