@@ -14,7 +14,7 @@ while getopts ":rcklu" opt; do
          SCRIPT_NAME=killtryton ;;
       l)
          SCRIPT_NAME=launch ;;
-      u)
+      d)
          SCRIPT_NAME=updatedatabase ;;
       \?)
          echo "Invalid Option" ;;
