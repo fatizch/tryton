@@ -4,6 +4,21 @@ SCRIPTPATH=`dirname $SCRIPT`
 PREV_WD=`readlink -f .`
 cd $SCRIPTPATH
 SCRIPT_NAME=$1
+while getopts ":rckl" opt; do
+   case $opt in
+      r)
+         SCRIPT_NAME=reset ;;
+      c)
+         SCRIPT_NAME=cleanandrelaunch ;;
+      k)
+         SCRIPT_NAME=killtryton ;;
+      l)
+         SCRIPT_NAME=launch ;;
+      \?)
+         echo "Invalid Option" ;;
+   esac
+done
+echo $SCRIPT_NAME
 if [ ! -e "$SCRIPT_NAME" ]; then
    if [ ! -e "$SCRIPT_NAME.sh" ]; then
       echo "Le script '$1' n'existe pas"
