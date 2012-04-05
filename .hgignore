@@ -7,3 +7,4 @@ syntax: glob
 .pydevproject
 .settings
 .conf
+/build/
