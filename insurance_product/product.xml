@@ -30,6 +30,8 @@
 						        <field name="code" />
 						        <label name="name"/>
 						        <field name="name" xexpand="1"/>
+						        <field name="effective_date" />
+						        <label name="effective_date"/>
 						        <notebook colspan="6">
 							        <page string="General" id="general">
 								        <field name="options">
@@ -74,7 +76,7 @@
 				    <field name="type">tree</field>             
 				    <field name="arch" type="xml">                 
 					    <![CDATA[                 
-					        <tree string="coverage">
+					        <tree>
 					            <field name="code"/>
 					            <field name="name"/>
 					        </tree>                 
@@ -93,7 +95,6 @@
 					             <field name="code"/>
 					             <label name="name"/>
 					             <field name="name"/>
-					              <field name="name"/>
 					             <notebook colspan="6">
 							        <page string="General" id="general2">
 								        <field name="managers">
@@ -160,7 +161,6 @@
 					              <notebook colspan="6">
 							        <page string="General" id="general">
 								        <field name="business_rules"/>
-								        
 							        </page>
 						        </notebook>
 					         </form>               
@@ -199,9 +199,10 @@
 				    <field name="type">tree</field>             
 				    <field name="arch" type="xml">                 
 					    <![CDATA[                 
-					        <tree string="businessrule">
+					        <tree >
 					            <field name="code"/>
 					            <field name="name"/>
+					            <field name="from_date"/>
 					        </tree>                 
 					    ]]>
 				    </field>         
@@ -213,11 +214,13 @@
 				     <field name="type">form</field>
 				     <field name="arch" type="xml">
 					     <![CDATA[
-					         <form string="businessrule">
+					         <form string="Business rule">
 					             <label name="code"/>
 					             <field name="code"/>
 					             <label name="name"/>
 					             <field name="name"/>
+					             <label name="from_date"/>
+					             <field name="from_date"/>
 					             <field name="manager"/>
 					         </form>               
 					     ]]>
@@ -246,5 +249,6 @@
 
 			   
 			<!--/businessrule-->
+			
 		</data>
 	</tryton>

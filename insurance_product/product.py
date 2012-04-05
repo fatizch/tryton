@@ -1,12 +1,34 @@
 from trytond.model import ModelView, ModelSQL
 from trytond.model import fields as fields
 
+class Offered(ModelSQL, ModelView):
+    'Offered'
+    _name = 'ins_product.offered'     
+    _description = __doc__     
+    name = fields.Char('Name', required=True, select=1)     
+    code = fields.Char('Code', size=10,required=True, select=1)
+    effective_date = fields.Date('Effective Date', required=True, select=1)    
+    #managers = fields.One2Many('ins_product.businessrulemanager','belongs_to','Business rule managers')
+
+Offered()
+
+class Coverage1(ModelSQL, ModelView):
+    _name = 'ins_product.offered'
+    
+Coverage1()
+
+class Product1(ModelSQL, ModelView):
+    _name = 'ins_product.offered'
+    
+Product1()
+
 class Coverage(ModelSQL, ModelView):
     'Coverage'
     _name = 'ins_product.coverage'     
     _description = __doc__     
     name = fields.Char('Name', required=True, select=1)     
-    code = fields.Char('Code', size=10,required=True, select=1)    
+    code = fields.Char('Code', size=10,required=True, select=1)
+    effective_date = fields.Date('Effective Date', required=True, select=1)    
     managers = fields.One2Many('ins_product.businessrulemanager','belongs_to','Business rule managers')
     
 Coverage()
@@ -24,7 +46,8 @@ class Product(ModelSQL, ModelView):
     _name = 'ins_product.product'     
     _description = __doc__     
     name = fields.Char('Name', required=True, select=1)     
-    code = fields.Char('Code', size=10,required=True, select=1)     
+    code = fields.Char('Code', size=10,required=True, select=1)
+    effective_date = fields.Date('Effective Date', required=True, select=1)     
     options = fields.Many2Many('ins_product-options-coverage','product','coverage','Possible Options')
 
 Product()
@@ -35,6 +58,7 @@ class BusinessRule(ModelSQL, ModelView):
     _description = __doc__
     name = fields.Char('Name', required=True, select=1)     
     code = fields.Char('Code', size=10,required=True, select=1)
+    from_date = fields.Date('From Date',required=True)
     manager = fields.Many2One('ins_product.businessrulemanager','Manager', required=True)    
 
 BusinessRule()
