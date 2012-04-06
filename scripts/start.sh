@@ -20,7 +20,6 @@ while getopts ":rcklu" opt; do
          echo "Invalid Option" ;;
    esac
 done
-echo $SCRIPT_NAME
 if [ ! -e "$SCRIPT_NAME" ]; then
    if [ ! -e "$SCRIPT_NAME.sh" ]; then
       echo "Le script '$1' n'existe pas"

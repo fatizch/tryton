@@ -1,7 +1,5 @@
 #!/bin/bash
 SEP="-----------------------------------------------------------------"
-PREV_WD=pwd
-cd dirname $0
 echo $SEP
 echo "Loading conf file"
 echo $SEP
@@ -21,4 +19,3 @@ echo $SEP
 . ./launch.sh
 echo "Launch complete"
 echo $SEP
-cd $PREV_WD
