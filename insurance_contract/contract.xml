@@ -26,18 +26,40 @@
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 					 <![CDATA[
-						<form string="contract">
-						<label name="contract_number"/>
-						<field name="contract_number" xfill="1"/>
-						<label name="effective_date"/>
-						<field name="effective_date"/>
+						<form string="contract" col="5">
+						<group yexpand="1" yfill="1" name="Test2" colspan="3">
+							<label name="contract_number" xalign="0"/>
+							<field name="contract_number" xfill="1"/>
+							<newline/>
+							<label name="effective_date" xalign="0"/>
+							<field name="effective_date"/>
+							<newline/>
+							<label name="status" xalign="0"/>
+							<field name="status" xfill="1"/>
+							<newline/>
+							<label name="product" xalign="0"/>
+							<field name="product" xfill="1"/>
+						</group>
+						<group yexpand="1" yfill="1" name="Test" colspan="2">
+							<field name="options" xfill="1" yfill="1"/>
+						</group>
 						<newline/>
-						<label name="status"/>
-						<field name="status"/>
-						<label name="product"/>
-						<field name="product" xfill="1"/>
-						<newline/>
-						<field name="options" xfill="1" yfill="1"/>
+						<group yexpand="1" yfill="1" name="Test" colspan="2">
+							<field name="options" xfill="1" yfill="1"/>
+						</group>
+						<group yexpand="1" yfill="1" name="Test2" colspan="3">
+							<label name="contract_number" xalign="0"/>
+							<field name="contract_number" xfill="1"/>
+							<newline/>
+							<label name="effective_date" xalign="0"/>
+							<field name="effective_date"/>
+							<newline/>
+							<label name="status" xalign="0"/>
+							<field name="status" xfill="1"/>
+							<newline/>
+							<label name="product" xalign="0"/>
+							<field name="product" xfill="1"/>
+						</group>
 						</form>               ]]>
 			</field>
 		</record>

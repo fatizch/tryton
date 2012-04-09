@@ -1,4 +1,4 @@
-from trytond.model import ModelView, ModelSQL
+from trytond.model import ModelSQL, ModelView
 from trytond.model import fields as fields
 
 CONTRACTNUMBER_MAX_LENGTH = 10
