@@ -11,10 +11,10 @@ rm -r $ENV_FOLDER/lib/python2.7/site-packages/insurance_*
 echo $SEP
 echo "Reinstalling product"
 echo $SEP
-easy_install -vUZ $REPOS_ROOT/coopbusiness/insurance_product
+easy_install -UZ $REPOS_ROOT/coopbusiness/insurance_product
 echo $SEP
 echo "Reinstalling contract"
 echo $SEP
-easy_install -vUZ $REPOS_ROOT/coopbusiness/insurance_contract
+easy_install -UZ $REPOS_ROOT/coopbusiness/insurance_contract
 echo $SEP
 

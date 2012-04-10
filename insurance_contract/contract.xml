@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
-<tryton>
-	<data>
-		<!-- Application Entry point -->
-		<menuitem name="Contract" id="menu_contract" sequence="11" />
-
-		<!-- Tree view for contract -->
-		<record model="ir.ui.view" id="contract_view_tree">
-			<field name="model">ins_contract.contract</field>
-			<field name="type">tree</field>
-			<field name="arch" type="xml">                 
+  <tryton>
+		<data>
+			<!-- Application Entry point-->
+			<menuitem name="Contract" id="menu_contract" sequence="11"/>     
+			
+			<!-- Tree view for contract-->
+			<record model="ir.ui.view" id="contract_view_tree">             
+				<field name="model">ins_contract.contract</field>             
+				<field name="type">tree</field>             
+				<field name="arch" type="xml">                 
 					<![CDATA[                 
 					<tree string="Contract">
 					<field name="contract_number"/>
@@ -17,94 +17,94 @@
 					<field name="product"/>
 					<field name="subscriber"/>
 					</tree>                 ]]>
-			</field>
-		</record>
+				</field>         
+			</record>
 
-		<!-- form view -->
-		<record model="ir.ui.view" id="contract_view_form">
-			<field name="model">ins_contract.contract</field>
-			<field name="type">form</field>
-			<field name="arch" type="xml">
+			<!-- form view-->
+			<record model="ir.ui.view" id="contract_view_form">
+				 <field name="model">ins_contract.contract</field>
+				 <field name="type">form</field>
+				 <field name="arch" type="xml">
 					 <![CDATA[
 						<form string="contract" col="5">
-						<group yexpand="1" yfill="1" name="Test2" colspan="3">
-							<label name="contract_number" xalign="0"/>
-							<field name="contract_number" xfill="1"/>
-							<newline/>
-							<label name="effective_date" xalign="0"/>
-							<field name="effective_date"/>
-							<newline/>
-							<label name="status" xalign="0"/>
-							<field name="status" xfill="1"/>
-							<newline/>
-							<label name="product" xalign="0"/>
-							<field name="product" xfill="1"/>
-						</group>
-						<group yexpand="1" yfill="1" name="Test" colspan="2">
-							<field name="options" xfill="1" yfill="1"/>
-						</group>
-						<newline/>
-						<group yexpand="1" yfill="1" name="Test" colspan="2">
-							<field name="options" xfill="1" yfill="1"/>
-						</group>
-						<group yexpand="1" yfill="1" name="Test2" colspan="3">
-							<label name="contract_number" xalign="0"/>
-							<field name="contract_number" xfill="1"/>
-							<newline/>
-							<label name="effective_date" xalign="0"/>
-							<field name="effective_date"/>
-							<newline/>
-							<label name="status" xalign="0"/>
-							<field name="status" xfill="1"/>
-							<newline/>
-							<label name="product" xalign="0"/>
-							<field name="product" xfill="1"/>
-						</group>
+							<group yexpand="1" yfill="1" name="Test2" colspan="3">
+								<label name="contract_number" xalign="0"/>
+								<field name="contract_number" xfill="0" xalign="0"/>
+								<newline/>
+								<label name="effective_date" xalign="0"/>
+								<field name="effective_date"/>
+								<newline/>
+								<label name="status" xalign="0"/>
+								<field name="status" xfill="1"/>
+								<newline/>
+								<label name="product" xalign="0"/>
+								<field name="product" xfill="1"/>
+							</group>
+							<group yexpand="1" yfill="1" name="Test" colspan="2">
+								<field name="options" xfill="1" yfill="1"/>
+							</group>
+	 						<newline/>
+							<group yexpand="1" yfill="1" name="Test" colspan="2">
+								<field name="options" xfill="1" yfill="1"/>
+							</group>
+							<group yexpand="1" yfill="1" name="Test2" colspan="3">
+								<label name="contract_number" xalign="0"/>
+								<field name="contract_number" xfill="1"/>
+								<newline/>
+								<label name="effective_date" xalign="0"/>
+								<field name="effective_date"/>
+								<newline/>
+								<label name="status" xalign="0"/>
+								<field name="status" xfill="1"/>
+								<newline/>
+								<label name="product" xalign="0"/>
+								<field name="product" xfill="1"/>
+							</group>
 						</form>               ]]>
-			</field>
-		</record>
+				 </field>
+			</record>
 
-		<!-- View for the main menu and the event -->
-		<record model="ir.action.act_window" id="act_contract_form">
-			<field name="name">Contract</field>
-			<field name="res_model">ins_contract.contract</field>
-		</record>
+			<!-- View for the main menu and the event -->         
+			<record model="ir.action.act_window" id="act_contract_form">
+				<field name="name">Contract</field>
+				<field name="res_model">ins_contract.contract</field>
+			</record>
 
-		<!-- View that connect the form in the tree with the specification -->
-		<record model="ir.action.act_window.view" id="act_contract_form_view1">
-			<field name="sequence" eval="10" />
-			<field name="view" ref="contract_view_tree" />
-			<field name="act_window" ref="act_contract_form" />
-		</record>
+			<!-- View that connect the form in the tree with the specification -->
+			<record model="ir.action.act_window.view" id="act_contract_form_view1">
+				<field name="sequence" eval="10"/>
+				<field name="view" ref="contract_view_tree"/>
+				<field name="act_window" ref="act_contract_form"/>
+			</record>
 
-		<!-- View for the edition or the Form of product -->
-		<record model="ir.action.act_window.view" id="act_contract_form_view2">
-			<field name="sequence" eval="20" />
-			<field name="view" ref="contract_view_form" />
-			<field name="act_window" ref="act_contract_form" />
-		</record>
+			<!-- View for the edition or the Form of product-->
+			<record model="ir.action.act_window.view" id="act_contract_form_view2">
+				<field name="sequence" eval="20"/>
+				<field name="view" ref="contract_view_form"/>
+				<field name="act_window" ref="act_contract_form"/>
+			</record>
 
-		<menuitem parent="menu_contract" sequence="1"
-			id="menu_contract_form" icon="tryton-list" action="act_contract_form" />
+			<menuitem parent="menu_contract" sequence="1"  
+			id="menu_contract_form" icon="tryton-list" action="act_contract_form"/>
 
-		<!-- Tree view -->
-		<record model="ir.ui.view" id="option_view_tree">
-			<field name="model">ins_contract.option</field>
-			<field name="type">tree</field>
-			<field name="arch" type="xml">                 
+			<!-- Tree view-->
+			<record model="ir.ui.view" id="option_view_tree">             
+				<field name="model">ins_contract.option</field>             
+				<field name="type">tree</field>             
+				<field name="arch" type="xml">                 
 					<![CDATA[                 
 					<tree string="option">
 					<field name="contract"/>
 					<field name="coverage"/>
 					</tree>                 ]]>
-			</field>
-		</record>
+				</field>         
+			</record>
 
-		<!-- form view -->
-		<record model="ir.ui.view" id="option_view_form">
-			<field name="model">ins_contract.option</field>
-			<field name="type">form</field>
-			<field name="arch" type="xml">
+			<!-- form view-->
+			<record model="ir.ui.view" id="option_view_form">
+				 <field name="model">ins_contract.option</field>
+				 <field name="type">form</field>
+				 <field name="arch" type="xml">
 					 <![CDATA[
 					 <form string="option">
 					 <label name="contract"/>
@@ -112,27 +112,27 @@
 					 <label name="coverage"/>
 					 <field name="coverage" xexpand="1"/>
 					 </form>               ]]>
-			</field>
-		</record>
+				 </field>
+			</record>
 
-		<!-- View for the main menu and the event -->
-		<record model="ir.action.act_window" id="act_option_form">
-			<field name="name">option</field>
-			<field name="res_model">ins_contract.option</field>
-		</record>
+			<!-- View for the main menu and the event -->         
+			<record model="ir.action.act_window" id="act_option_form">
+				<field name="name">option</field>
+				<field name="res_model">ins_contract.option</field>
+			</record>
 
-		<!-- View that connect the form in the tree with the specification -->
-		<record model="ir.action.act_window.view" id="act_option_form_view1">
-			<field name="sequence" eval="10" />
-			<field name="view" ref="option_view_tree" />
-			<field name="act_window" ref="act_option_form" />
-		</record>
+			<!-- View that connect the form in the tree with the specification -->
+			<record model="ir.action.act_window.view" id="act_option_form_view1">
+				<field name="sequence" eval="10"/>
+				<field name="view" ref="option_view_tree"/>
+				<field name="act_window" ref="act_option_form"/>
+			</record>
 
-		<!-- View for the edition or the Form of coverage -->
-		<record model="ir.action.act_window.view" id="act_option_form_view2">
-			<field name="sequence" eval="20" />
-			<field name="view" ref="option_view_form" />
-			<field name="act_window" ref="act_option_form" />
-		</record>
-	</data>
-</tryton>
+			<!-- View for the edition or the Form of coverage-->
+			<record model="ir.action.act_window.view" id="act_option_form_view2">
+				<field name="sequence" eval="20"/>
+				<field name="view" ref="option_view_form"/>
+				<field name="act_window" ref="act_option_form"/>
+			</record>
+		</data>
+	</tryton>

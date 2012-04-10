@@ -15,7 +15,8 @@ echo $SEP
 cp $DATABASE_BACKUP_FOLDER/$DATABASE_NAME.$DATABASE_EXTENSION $DATABASE_FOLDER/$DATABASE_NAME.$DATABASE_EXTENSION
 echo "Updating modules"
 echo $SEP
-. ./updatedatabase.sh
+. ./updatedatabase.sh &> /dev/null
 . ./launch.sh
 echo "Launch complete"
 echo $SEP
+

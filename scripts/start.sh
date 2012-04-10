@@ -4,7 +4,7 @@ SCRIPTPATH=`dirname $SCRIPT`
 PREV_WD=`readlink -f .`
 cd $SCRIPTPATH
 SCRIPT_NAME=$1
-while getopts ":rcklu" opt; do
+while getopts ":rckld" opt; do
    case $opt in
       r)
          SCRIPT_NAME=reset ;;
@@ -22,7 +22,7 @@ while getopts ":rcklu" opt; do
 done
 if [ ! -e "$SCRIPT_NAME" ]; then
    if [ ! -e "$SCRIPT_NAME.sh" ]; then
-      echo "Le script '$1' n'existe pas"
+      echo "Le script '$SCRIPT_NAME' n'existe pas"
    else
       ./$SCRIPT_NAME.sh
    fi
