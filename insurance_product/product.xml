@@ -3,7 +3,7 @@
 		<data>
 			<!-- Product-->
 			    <!-- Application Entry point-->
-			    <menuitem name="Product" id="menu_product" sequence="10"/>     
+			    <menuitem name="Laboratory" id="menu_product" sequence="10"/>     
 			
 			    <!-- Tree view-->
 			    <record model="ir.ui.view" id="product_view_tree">             
@@ -25,15 +25,15 @@
 				     <field name="type">form</field>
 				     <field name="arch" type="xml">
 					     <![CDATA[
-						    <form string="product" col="6">
-						        <label name="code"/>
-						        <field name="code" />
-						        <label name="name"/>
-						        <field name="name" xexpand="1"/>
-						        <field name="effective_date" />
-						        <label name="effective_date"/>
-						        <notebook colspan="6">
-							        <page string="General" id="general">
+						    <form string="product" col="2">
+						        <label name="code" colspan="1"/>
+						        <field name="code" colspan="1"/>
+						        <label name="name" colspan="1"/>
+						        <field name="name" colspan="1" xexpand="0"/>
+						        <label name="effective_date" colspan="1"/>
+						        <field name="effective_date" colspan="1"/>
+						        <notebook  colspan="2">
+							        <page string="Options" id="option">
 								        <field name="options">
 								        </field>
 							        </page>
@@ -44,7 +44,7 @@
 
 			    <!-- View for the main menu and the event -->         
 			    <record model="ir.action.act_window" id="act_product_form">
-				    <field name="name">Product Menu</field>
+				    <field name="name">Products</field>
 				    <field name="res_model">ins_product.product</field>
 			    </record>
 
@@ -66,10 +66,7 @@
 			    id="menu_product_form" icon="tryton-list" action="act_product_form"/>
 			<!-- /Product-->
 			
-			<!-- Coverage-->
-			    <!-- Application Entry point-->
-			    <menuitem name="coverage" id="menu_coverage" sequence="10"/>     
-			
+			<!-- Coverage-->   
 			    <!-- Tree view-->
 			    <record model="ir.ui.view" id="coverage_view_tree">             
 				    <field name="model">ins_product.coverage</field>             
@@ -95,6 +92,8 @@
 					             <field name="code"/>
 					             <label name="name"/>
 					             <field name="name"/>
+					             <label name="effective_date" />
+					             <field name="effective_date" />
 					             <notebook colspan="6">
 							        <page string="General" id="general2">
 								        <field name="managers">
@@ -109,7 +108,7 @@
 
 			    <!-- View for the main menu and the event -->         
 			    <record model="ir.action.act_window" id="act_coverage_form">
-				    <field name="name">coverage</field>
+				    <field name="name">Coverages</field>
 				    <field name="res_model">ins_product.coverage</field>
 			    </record>
 
@@ -127,7 +126,7 @@
 				    <field name="act_window" ref="act_coverage_form"/>
 			    </record>
 
-			    <menuitem parent="menu_coverage" sequence="1"  
+			    <menuitem parent="menu_product" sequence="2"  
 			    id="menu_coverage_form" icon="tryton-list" action="act_coverage_form"/>
 			<!--/Coverage-->
 						
@@ -170,7 +169,7 @@
 
 			    <!-- View for the main menu and the event -->         
 			    <record model="ir.action.act_window" id="act_businessrulemanager_form">
-				    <field name="name">businessrulemanager</field>
+				    <field name="name">Business Rule Manager</field>
 				    <field name="res_model">ins_product.businessrulemanager</field>
 			    </record>
 
@@ -229,7 +228,7 @@
 
 			    <!-- View for the main menu and the event -->         
 			    <record model="ir.action.act_window" id="act_businessrule_form">
-				    <field name="name">businessrule</field>
+				    <field name="name">Business Rule</field>
 				    <field name="res_model">ins_product.businessrule</field>
 			    </record>
 
