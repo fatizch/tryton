@@ -1,17 +1,19 @@
-from trytond.model import ModelView, ModelSQL
+from trytond.model import ModelSQL, ModelView
 from trytond.model import fields as fields
 
 CONTRACTNUMBER_MAX_LENGTH = 10
 CONTRACTSTATUSES = [
-                        (0,'Quote'),
-                        (1,'Active'),
-                        (2,'Hold'),
-                        (3,'Terminated'),
+                        (0, 'Quote'),
+                        (1, 'Active'),
+                        (2, 'Hold'),
+                        (3, 'Terminated'),
                     ]
+
 
 class Contract(ModelSQL, ModelView):
     '''
-    This class represents the contract, and will be at the center of many business processes.
+    This class represents the contract, and will be at the center of 
+    many business processes.
     '''
     _name = 'ins_contract.contract'
     _description = 'Contrat'
