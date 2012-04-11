@@ -25,14 +25,14 @@
 				     <field name="type">form</field>
 				     <field name="arch" type="xml">
 					     <![CDATA[
-						    <form string="product" col="2">
-						        <label name="code" colspan="1"/>
+						    <form string="product" col="6">
+						        <label name="code" colspan="1" xalign="0"/>
 						        <field name="code" colspan="1"/>
 						        <label name="name" colspan="1"/>
-						        <field name="name" colspan="1" xexpand="0"/>
+						        <field name="name" colspan="3" xexpand="1"/>
 						        <label name="effective_date" colspan="1"/>
 						        <field name="effective_date" colspan="1"/>
-						        <notebook  colspan="2">
+						        <notebook  colspan="6">
 							        <page string="Options" id="option">
 								        <field name="options">
 								        </field>
@@ -156,6 +156,7 @@
 					             <field name="code"/>
 					             <label name="name"/>
 					             <field name="name"/>
+					             <label name="belongs_to"/>
 					             <field name="belongs_to"/>
 					              <notebook colspan="6">
 							        <page string="General" id="general">
