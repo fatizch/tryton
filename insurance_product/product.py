@@ -1,6 +1,7 @@
 import copy
 
-from trytond.model import ModelView, ModelSQL, fields
+from trytond.model import ModelView, ModelSQL
+from trytond.model import fields as fields
 from trytond.pool import Pool
 
 RULE_TYPES = [
@@ -9,6 +10,7 @@ RULE_TYPES = [
                 ('Termination', 'Termination'),
                 ('Underwriting', 'Underwriting'),
              ]
+
 
 class Offered(object):
     'Offered'
@@ -20,17 +22,45 @@ class Offered(object):
                                'Business rule managers')
 
     def calculate(self, ids, data, rule_kind):
+        '''
+            Calculate is the method which will call the business
+            intelligence, looking for the good rule manager depending
+            on the provided rule_kind
+
+            The 'ids' argument contains a list of Offered ids, which
+            represents the set of elements we want the rule applied to.
+        '''
+        # Pool allows us to get the model object, which represents all
+        # 'instances' of the class businessrulemanager. It is this object
+        # that we will use to call methods, providing a list of ids to treat
         brm_obj = Pool.get('ins_product.businessrulemanager')
+
+        # The result will be a dictionnary in order to be able to return
+        # a different result for each of the ids provided as arguments
         result = {}
         if not [rule for rule in RULE_TYPES if rule[0] == rule_kind]:
+            # If the requested rule does not exist, we return a dictionnary
+            # with empty answers
             return dict((id, (None, ['wrong_rule_kind'])) for id in ids)
+        # Else, we treat each id with the browse method, to get the associated
+        # object :
         for offered in self.browse(ids):
+            # Once we got a browse object, we can call its attributes as
+            # python attributes
             for brm in offered.managers:
+                # We use != and continue rather than == in order to get
+                # one level of indentation back
                 if brm.rule_kind != rule_kind:
                     continue
+                # Now we call the method on the model me got from Pool, passing
+                # directly the object as an argument
                 result[offered.id] = brm_obj.calculate(brm, data)
+            # If we could not find a rule, or calculation did not happen for
+            # some reason, we just return an error tuple as a result for
+            # this id.
             if offered.id not in result:
-                result[offered.id] = (None, ['inexisting_rule_kind_for_offered'])
+                result[offered.id] = (None,
+                                      ['inexisting_rule_kind_for_offered'])
         return result
 
 
@@ -40,11 +70,17 @@ class Coverage(ModelSQL, ModelView, Offered):
     _description = __doc__
 
     def __init__(self):
+        # We want to inherit from Offered, which is not a tryton class.
+        # We defined in offered a One2Many field with no backref, as we could
+        # not the one to use.
+        # Now that we are in an instanciated class, we can, so we just have
+        # to override __init__ in order to tell to tryton, when it creates
+        # the model, the managers field backref is 'for_coverage'
         super(Coverage, self).__init__()
         self.managers = copy.copy(self.managers)
         self.managers.field = 'for_coverage'
-        # We must reset columns in order to allow tryton to understand
-        # the new model
+        # We must reset the columns in order to force tryton to refresh its
+        # understanding of the model
         self._reset_columns()
 
 Coverage()
@@ -73,6 +109,7 @@ class Product(ModelSQL, ModelView, Offered):
                                'coverage', 'Options')
 
     def __init__(self):
+        # cf Coverage.__init__ for details
         super(Product, self).__init__()
         self.managers = copy.copy(self.managers)
         self.managers.field = 'for_product'
@@ -92,21 +129,43 @@ class BusinessRule(ModelSQL, ModelView):
                               'Manager', required=True)
     extension = fields.Reference('Rule',
                                  selection='get_rule_models')
+    # fields.Reference allows us to create a reference to an object without
+    # knowing a priori its model. We can use the selection parameter to
+    # specify a method which will be called to get a list containing the
+    # allowed models.
 
     def delete(self, ids):
+        # We are using a fields.Reference attribute in this class.
+        # We must ensure that it will be deleted properly when the current
+        # object will be terminated.
         to_delete = {}
+        # We go through all the provided ids
         for br in self.browse(ids):
-            # setdefault = dictionnary method which returns the value associated to the
-            # key (1st argument) if it exists, or the second argument if it does not
-            to_delete.setdefault(br.extension.model, []).append(br.extension.id)
+            # setdefault = dictionnary method which returns the value
+            # associated to the key (1st argument) if it exists, or
+            # the second argument if it does not
+            #
+            # Here, we use it to create a dictionnary containing all the models
+            # of the extension we are going to have to delete as keys,
+            # and the list of ids to delete as values.
+            to_delete.setdefault(br.extension.model, [])\
+                                .append(br.extension.id)
+        # Now, we just got to go through those models, and delete the
+        # associated ids
         for model, model_ids in to_delete.items():
             model.delete(model_ids)
+        # Do not forget to call the 'real' delete method !
         super(BusinessRule, self).delete(ids)
 
     def get_rule_models(self):
+        '''
+            This method is used to get the list of models that will be allowed
+            when creating or using the extension field.
+        '''
         model_obj = Pool().get('ir.model')
         res = []
-        offered_models = [model_name for model_name, model in Pool().iterobject()
+        offered_models = [model_name
+                          for model_name, model in Pool().iterobject()
                           if isinstance(model, RuleInterface)]
         model_ids = model_obj.search([
             ('model', 'in', offered_models),
@@ -127,6 +186,7 @@ BusinessRule()
 class RuleInterface(object):
     rule_kind = fields.Function(fields.Selection(RULE_TYPES, 'Rule Type'),
                                 'get_rule_kind')
+
     def calculate(self, rule, data):
         pass
 
@@ -159,31 +219,36 @@ class BusinessRuleManager(ModelSQL, ModelView):
     for_product = fields.Many2One('ins_product.product', 'Belongs to')
     business_rules = fields.One2Many('ins_product.businessrule', 'manager',
                                      'Business rules', required=True)
-    belongs_to = fields.Function(fields.Reference('belongs_to',
-                                                  selection='get_offered_models'),
-                                  'get_belongs_to')
-    # fields.Reference permet de référencer un objet sans connaître sa classe a priori.
-    # Le paramètre selection permet de psécifier une focntion qui renverra une liste de 
-    # noms de modèles autorisés.
-
+    belongs_to = fields.Function(fields.Reference(
+                                        'belongs_to',
+                                        selection='get_offered_models'),
+                                        'get_belongs_to')
     rule_kind = fields.Selection(RULE_TYPES,
                                  'Rule Type')
 
     def __init__(self):
         super(BusinessRuleManager, self).__init__()
-        # Ajout de la contrainte SQL permettant d'être certain que le lien belongs_to est
-        # unique quand bien même il est physiquement réparti dans deux colonnes différentes
+        # Ajout de la contrainte SQL permettant d'être certain que le lien
+        # belongs_to est quand bien même il est physiquement réparti dans deux
+        # colonnes différentes
         self._sql_constraints += [('brm_belongs_to_unicity',
-                                   'CHECK ((FOR_COVERAGE IS NULL AND FOR_PRODUCT IS NOT NULL) OR \
-                                   (FOR_COVERAGE IS NOT NULL AND FOR_PRODUCT IS NULL))',
-                                   'There should be either a product or a coverage')]
-        # We got to add this methos to the pool of callable methods for this class
+                                   '''CHECK
+                                       (
+                                           (FOR_COVERAGE IS NULL AND
+                                           FOR_PRODUCT IS NOT NULL)
+                                        OR
+                                           (FOR_COVERAGE IS NOT NULL AND
+                                           FOR_PRODUCT IS NULL))''',
+                                   'There must be a product or a coverage')]
+        # We got to add this methos to the pool of callable methods
+        # for this class
         self._rpc.update({'get_offered_models': True})
 
     def get_offered_models(self):
         model_obj = Pool().get('ir.model')
         res = []
-        offered_models = [model_name for model_name, model in Pool().iterobject()
+        offered_models = [model_name
+                          for model_name, model in Pool().iterobject()
                           if isinstance(model, Offered)]
         model_ids = model_obj.search([
             ('model', 'in', offered_models),
@@ -196,9 +261,11 @@ class BusinessRuleManager(ModelSQL, ModelView):
         belongs = {}
         for brm in self.browse(ids):
             if brm.for_coverage:
-                belongs[brm.id] = 'ins_product.coverage,%s' % brm.for_coverage.id
+                belongs[brm.id] = 'ins_product.coverage,%s' \
+                                    % brm.for_coverage.id
             elif brm.for_product:
-                belongs[brm.id] = 'ins_product.product,%s' % brm.for_product.id
+                belongs[brm.id] = 'ins_product.product,%s' \
+                                    % brm.for_product.id
         return belongs
 
     def get_good_rule_at_date(self, rulemanager, data):
@@ -209,10 +276,11 @@ class BusinessRuleManager(ModelSQL, ModelView):
             return None
 
         try:
-            good_id, = business_rule_obj.search([('from_date', '<', the_date),
-                                                 ('manager', '=', rulemanager.id)],
-                                                 order='from_date DESC',
-                                                 limit=1)
+            good_id, = business_rule_obj.search([
+                                ('from_date', '<', the_date),
+                                ('manager', '=', rulemanager.id)],
+                                order='from_date DESC',
+                                limit=1)
             return good_id
         except ValueError:
             return None
