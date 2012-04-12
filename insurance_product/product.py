@@ -211,21 +211,34 @@ class BusinessRuleManager(ModelSQL, ModelView):
 
     def get_offered_models(self):
         # cf get_rule_models
+        # This is an alternate way to get our models.
+        # First we get the names
         model_obj = Pool().get('ir.model')
         res = []
         offered_models = [model_name
                           for model_name, model in Pool().iterobject()
                           if isinstance(model, Offered)]
+        # look for the objects in the model table
         model_ids = model_obj.search([
             ('model', 'in', offered_models),
             ])
+        # then get the associated browse object, to finally get the
+        # model.model and model.name
         for model in model_obj.browse(model_ids):
             res.append([model.model, model.name])
         return res
 
     def get_belongs_to(self, ids, name):
+        '''
+            We will use this field as an accessor to either for_product
+            or for_coverage, depending on which one exists.
+        '''
         belongs = {}
+        # So we first get the brm we want to work on
         for brm in self.browse(ids):
+            # Then return either for_coverage or for_product.
+            # The belongs_to function field behaves as a reference, so we
+            # must return a tuple (model_name,instance_id) :
             if brm.for_coverage:
                 belongs[brm.id] = 'ins_product.coverage,%s' \
                                     % brm.for_coverage.id
@@ -235,13 +248,25 @@ class BusinessRuleManager(ModelSQL, ModelView):
         return belongs
 
     def get_good_rule_at_date(self, rulemanager, data):
+        '''
+            This is the template of all rule managers calls :
+                you got the rule manager and the data, give me back the
+                appropriate rule !
+        '''
         business_rule_obj = Pool().get('ins_product.businessrule')
+        # First we got to check that the fields that we will need to calculate
+        # which rule is appliable are available in the data dictionnary
         try:
             the_date = data['date']
         except KeyError:
             return None
 
+        # If they exist, here we go :
         try:
+            # We use the date field from the data argument to search for
+            # the good rule.
+            # (This is a given way to get a rule from a list, using the
+            # applicable date, it could be anything)
             good_id, = business_rule_obj.search([
                                 ('from_date', '<', the_date),
                                 ('manager', '=', rulemanager.id)],
@@ -310,6 +335,9 @@ class BusinessRule(ModelSQL, ModelView):
         # Then we go through all the objects of the Pool to find those
         # who match the criteria we are using (in this case, they must
         # inherit of RuleInterface)
+        # Careful, me must return the _name and the __doc__ of the model.
+        # model._name is NOT model_name !
+        # For extra details, habe a look at get_offered_models
         return [[model._name, model.__doc__]
                           for model_name, model in Pool().iterobject()
                           if isinstance(model, RuleInterface)]
