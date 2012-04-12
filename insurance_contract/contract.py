@@ -10,6 +10,32 @@ CONTRACTSTATUSES = [
                     ]
 
 
+class GenericExtension(ModelSQL, ModelView):
+    '''
+    This class will contains all data that are non-specific to the product
+    used for the contract.
+    '''
+    _name = 'ins_contract.gen_extension'
+    _description = 'Extension'
+
+GenericExtension()
+
+
+class ProductExtension(ModelSQL, ModelView):
+    '''
+    Here comes the Extension which will contains all data needed by a specific
+    product to compute rates, benefits etc.
+
+    It should includes all coverage data, whether we are dealing with life
+    insurance or PnC, each one of those is just a bunch of data that will be
+    used in the business rules to calculate stuff.
+    '''
+    _name = 'ins_contract.prod_extension'
+    _description = 'Product Extension'
+
+ProductExtension()
+
+
 class Contract(ModelSQL, ModelView):
     '''
     This class represents the contract, and will be at the center of
@@ -124,29 +150,3 @@ class Option(ModelSQL, ModelView):
                                  required=True)
 
 Option()
-
-
-class GenericExtension(ModelSQL, ModelView):
-    '''
-    This class will contains all data that are non-specific to the product
-    used for the contract.
-    '''
-    _name = 'ins_contract.gen_extension'
-    _description = 'Extension'
-
-GenericExtension()
-
-
-class ProductExtension(ModelSQL, ModelView):
-    '''
-    Here comes the Extension which will contains all data needed by a specific
-    product to compute rates, benefits etc.
-
-    It should includes all coverage data, whether we are dealing with life
-    insurance or PnC, each one of those is just a bunch of data that will be
-    used in the business rules to calculate stuff.
-    '''
-    _name = 'ins_contract.prod_extension'
-    _description = 'Product Extension'
-
-ProductExtension()

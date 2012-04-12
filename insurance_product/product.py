@@ -1,7 +1,7 @@
+#-*- coding:utf-8 -*-
 import copy
 
-from trytond.model import ModelView, ModelSQL
-from trytond.model import fields as fields
+from trytond.model import ModelView, ModelSQL, fields
 from trytond.pool import Pool
 
 RULE_TYPES = [
@@ -43,7 +43,7 @@ class Offered(object):
             # with empty answers
             return dict((id, (None, ['wrong_rule_kind'])) for id in ids)
         # Else, we treat each id with the browse method, to get the associated
-        # object :
+        # object
         for offered in self.browse(ids):
             # Once we got a browse object, we can call its attributes as
             # python attributes
@@ -86,21 +86,6 @@ class Coverage(ModelSQL, ModelView, Offered):
 Coverage()
 
 
-class ProductOptionsCoverage(ModelSQL):
-    'Define Product - Coverage relations'
-    _name = 'ins_product-options-coverage'
-    product = fields.Many2One('ins_product.product',
-                              'Product',
-                              select=1,
-                              required=True)
-    coverage = fields.Many2One('ins_product.coverage',
-                               'Coverage',
-                               select=1,
-                               required=True)
-
-ProductOptionsCoverage()
-
-
 class Product(ModelSQL, ModelView, Offered):
     'ins_product'
     _name = 'ins_product.product'
@@ -118,67 +103,19 @@ class Product(ModelSQL, ModelView, Offered):
 Product()
 
 
-class BusinessRule(ModelSQL, ModelView):
-    'Business rule'
-    _name = 'ins_product.businessrule'
-    _description = __doc__
-    name = fields.Char('Name', required=True, select=1)
-    code = fields.Char('Code', size=10, required=True, select=1)
-    from_date = fields.Date('From Date', required=True)
-    manager = fields.Many2One('ins_product.businessrulemanager',
-                              'Manager', required=True)
-    extension = fields.Reference('Rule',
-                                 selection='get_rule_models')
-    # fields.Reference allows us to create a reference to an object without
-    # knowing a priori its model. We can use the selection parameter to
-    # specify a method which will be called to get a list containing the
-    # allowed models.
+class ProductOptionsCoverage(ModelSQL):
+    'Define Product - Coverage relations'
+    _name = 'ins_product-options-coverage'
+    product = fields.Many2One('ins_product.product',
+                              'Product',
+                              select=1,
+                              required=True)
+    coverage = fields.Many2One('ins_product.coverage',
+                               'Coverage',
+                               select=1,
+                               required=True)
 
-    def delete(self, ids):
-        # We are using a fields.Reference attribute in this class.
-        # We must ensure that it will be deleted properly when the current
-        # object will be terminated.
-        to_delete = {}
-        # We go through all the provided ids
-        for br in self.browse(ids):
-            # setdefault = dictionnary method which returns the value
-            # associated to the key (1st argument) if it exists, or
-            # the second argument if it does not
-            #
-            # Here, we use it to create a dictionnary containing all the models
-            # of the extension we are going to have to delete as keys,
-            # and the list of ids to delete as values.
-            to_delete.setdefault(br.extension.model, [])\
-                                .append(br.extension.id)
-        # Now, we just got to go through those models, and delete the
-        # associated ids
-        for model, model_ids in to_delete.items():
-            model.delete(model_ids)
-        # Do not forget to call the 'real' delete method !
-        super(BusinessRule, self).delete(ids)
-
-    def get_rule_models(self):
-        '''
-            This method is used to get the list of models that will be allowed
-            when creating or using the extension field.
-        '''
-        # Then we go through all the objects of the Pool to find those
-        # who match the criteria we are using (in this case, they must
-        # inherit of RuleInterface)
-        return [[model._name, model.__doc__]
-                          for model_name, model in Pool().iterobject()
-                          if isinstance(model, RuleInterface)]
-
-    def calculate(self, ids, data):
-        res = {}
-        # Easy one : we got a list of ids, so we just go through each of them,
-        # get a browse object, then call the calculate function on its
-        # extension with the provided data argument
-        for rule in self.browse(ids):
-            res[rule.id] = rule.extension.model.calculate(rule.extension, data)
-        return res
-
-BusinessRule()
+ProductOptionsCoverage()
 
 
 class RuleInterface(object):
@@ -323,3 +260,67 @@ class BusinessRuleManager(ModelSQL, ModelView):
 
 
 BusinessRuleManager()
+
+
+class BusinessRule(ModelSQL, ModelView):
+    'Business rule'
+    _name = 'ins_product.businessrule'
+    _description = __doc__
+    name = fields.Char('Name', required=True, select=1)
+    code = fields.Char('Code', size=10, required=True, select=1)
+    from_date = fields.Date('From Date', required=True)
+    manager = fields.Many2One('ins_product.businessrulemanager',
+                              'Manager', required=True)
+    extension = fields.Reference('Rule',
+                                 selection='get_rule_models')
+
+
+    # fields.Reference allows us to create a reference to an object without
+    # knowing a priori its model. We can use the selection parameter to
+    # specify a method which will be called to get a list containing the
+    # allowed models.
+    def delete(self, ids):
+        # We are using a fields.Reference attribute in this class.
+        # We must ensure that it will be deleted properly when the current
+        # object will be terminated.
+        to_delete = {}
+        # We go through all the provided ids
+        for br in self.browse(ids):
+            # setdefault = dictionnary method which returns the value
+            # associated to the key (1st argument) if it exists, or
+            # the second argument if it does not
+            #
+            # Here, we use it to create a dictionnary containing all the models
+            # of the extension we are going to have to delete as keys,
+            # and the list of ids to delete as values.
+            to_delete.setdefault(br.extension.model, [])\
+                                .append(br.extension.id)
+        # Now, we just got to go through those models, and delete the
+        # associated ids
+        for model, model_ids in to_delete.items():
+            model.delete(model_ids)
+        # Do not forget to call the 'real' delete method !
+        super(BusinessRule, self).delete(ids)
+
+    def get_rule_models(self):
+        '''
+            This method is used to get the list of models that will be allowed
+            when creating or using the extension field.
+        '''
+        # Then we go through all the objects of the Pool to find those
+        # who match the criteria we are using (in this case, they must
+        # inherit of RuleInterface)
+        return [[model._name, model.__doc__]
+                          for model_name, model in Pool().iterobject()
+                          if isinstance(model, RuleInterface)]
+
+    def calculate(self, ids, data):
+        res = {}
+        # Easy one : we got a list of ids, so we just go through each of them,
+        # get a browse object, then call the calculate function on its
+        # extension with the provided data argument
+        for rule in self.browse(ids):
+            res[rule.id] = rule.extension.model.calculate(rule.extension, data)
+        return res
+
+BusinessRule()

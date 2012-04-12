@@ -6,9 +6,9 @@
     'email': 'admin@coopengo.com',
     'website': '',
     'description': 'CoopBusiness module',
-    'depends' : ['insurance_product','party'],
+    'depends' : ['insurance_product', 'party', 'ir', 'res',
+                 ],
     'xml' : ['contract.xml'
              ],
-    'translation': ['ir'
-                    ],
+    'translation': [],
 }
