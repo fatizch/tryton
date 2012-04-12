@@ -162,20 +162,18 @@ class BusinessRule(ModelSQL, ModelView):
             This method is used to get the list of models that will be allowed
             when creating or using the extension field.
         '''
-        model_obj = Pool().get('ir.model')
-        res = []
-        offered_models = [model_name
+        # Then we go through all the objects of the Pool to find those
+        # who match the criteria we are using (in this case, they must
+        # inherit of RuleInterface)
+        return [[model._name, model.__doc__]
                           for model_name, model in Pool().iterobject()
                           if isinstance(model, RuleInterface)]
-        model_ids = model_obj.search([
-            ('model', 'in', offered_models),
-            ])
-        for model in model_obj.browse(model_ids):
-            res.append([model.model, model.name])
-        return res
 
     def calculate(self, ids, data):
         res = {}
+        # Easy one : we got a list of ids, so we just go through each of them,
+        # get a browse object, then call the calculate function on its
+        # extension with the provided data argument
         for rule in self.browse(ids):
             res[rule.id] = rule.extension.model.calculate(rule.extension, data)
         return res
@@ -184,26 +182,45 @@ BusinessRule()
 
 
 class RuleInterface(object):
+    '''
+        This class exists to create a template of the functions / attributes to
+        which all rule classes will have to respond to.
+    '''
     rule_kind = fields.Function(fields.Selection(RULE_TYPES, 'Rule Type'),
                                 'get_rule_kind')
 
     def calculate(self, rule, data):
+        # This method is going to give us a generic entry point to calculate
+        # the result of any Rule we are going to use
         pass
 
     def get_rule_kind(self, ids, name):
+        # This one will be used to decide which kind of rules will be allowed
+        # for a given business rule manager (we got to make get_rule_kind on
+        # the rule and rule_kind on the manager to match)
         pass
 
 
 class PricingRule(ModelSQL, ModelView, RuleInterface):
+    '''
+        This rule is an example of implementation od the RuleInterface
+        interface :
+        we add a field to contain its specific data, and override the
+        two functions declared in the interface.
+    '''
     'Pricing Rule'
     _name = 'ins_product.pricingrule'
     _description = __doc__
     value = fields.Numeric('Rate', digits=(16, 2))
 
     def get_rule_kind(self, ids, name):
+        # This method will allow this class to be used by a pricing business
+        # rule manager
         return dict([(id, 'Pricing') for id in ids])
 
     def calculate(self, rule, data):
+        # Easy one, the argument is the rule object (and not its id), so
+        # we just have to get the value field and return it.
         return rule.value
 
 PricingRule()
@@ -215,21 +232,31 @@ class BusinessRuleManager(ModelSQL, ModelView):
     _description = __doc__
     name = fields.Char('Name', required=True, select=1)
     code = fields.Char('Code', size=10, required=True, select=1)
+
+    # It seems that tryton does not allow us to easily inherit as we are
+    # used to.
+    # Here, we would like to create a link to the abstract Offered class, but
+    # we cannot do it so easily. We got to know which model to use in order to
+    # create a Many2One field. So we create two of them, one for each subclass.
     for_coverage = fields.Many2One('ins_product.coverage', 'Belongs to')
     for_product = fields.Many2One('ins_product.product', 'Belongs to')
-    business_rules = fields.One2Many('ins_product.businessrule', 'manager',
-                                     'Business rules', required=True)
+    # Then we use a function field behaving like a reference in order to create
+    # an abstract access point, for which we will not know the class a priori,
+    # just that it is a subclass of Offered.
     belongs_to = fields.Function(fields.Reference(
                                         'belongs_to',
                                         selection='get_offered_models'),
                                         'get_belongs_to')
+    business_rules = fields.One2Many('ins_product.businessrule', 'manager',
+                                     'Business rules', required=True)
+    # This field will be used to find matching rule classes.
     rule_kind = fields.Selection(RULE_TYPES,
                                  'Rule Type')
 
     def __init__(self):
         super(BusinessRuleManager, self).__init__()
         # Ajout de la contrainte SQL permettant d'être certain que le lien
-        # belongs_to est quand bien même il est physiquement réparti dans deux
+        # belongs_to est unique, quand bien même il est physiquement réparti dans deux
         # colonnes différentes
         self._sql_constraints += [('brm_belongs_to_unicity',
                                    '''CHECK
@@ -238,13 +265,15 @@ class BusinessRuleManager(ModelSQL, ModelView):
                                            FOR_PRODUCT IS NOT NULL)
                                         OR
                                            (FOR_COVERAGE IS NOT NULL AND
-                                           FOR_PRODUCT IS NULL))''',
+                                           FOR_PRODUCT IS NULL)
+                                        )''',
                                    'There must be a product or a coverage')]
-        # We got to add this methos to the pool of callable methods
+        # We got to add this method to the pool of callable methods
         # for this class
         self._rpc.update({'get_offered_models': True})
 
     def get_offered_models(self):
+        # cf get_rule_models
         model_obj = Pool().get('ir.model')
         res = []
         offered_models = [model_name
