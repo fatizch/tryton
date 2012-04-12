@@ -8,7 +8,8 @@
     'description': 'CoopBusiness module',
     'depends' : ['insurance_product', 'party', 'ir', 'res',
                  ],
-    'xml' : ['contract.xml'
+    'xml' : ['contract.xml',
+             'subscription_process.xml'
              ],
     'translation': [],
 }

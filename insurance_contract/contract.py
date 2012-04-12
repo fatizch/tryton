@@ -1,5 +1,14 @@
+import datetime
+
+# Needed for storing and displaying objects
 from trytond.model import ModelSQL, ModelView
 from trytond.model import fields as fields
+
+# Needed for Wizardry 
+from trytond.wizard import Wizard, Button, StateView, StateTransition
+
+# Needed for Eval
+from trytond.pyson import Eval
 
 CONTRACTNUMBER_MAX_LENGTH = 10
 CONTRACTSTATUSES = [
@@ -8,7 +17,16 @@ CONTRACTSTATUSES = [
                         (2, 'Hold'),
                         (3, 'Terminated'),
                     ]
+OPTIONSTATUS = [
+                    ('Active', 'Active'),
+                    ('Refused', 'Refused')
+                ]
 
+class SubscriptionManager(ModelSQL, ModelView):
+    _name = 'ins_contract.subs_manager'
+    _description = __doc__
+
+SubscriptionManager()
 
 class GenericExtension(ModelSQL, ModelView):
     '''
@@ -150,3 +168,102 @@ class Option(ModelSQL, ModelView):
                                  required=True)
 
 Option()
+
+
+class CoverageDisplayer(ModelView):
+    _name = 'ins_contract.coverage_displayer'
+    for_coverage = fields.Many2One('ins_product.coverage',
+                                   'Coverage',
+                                   readonly=True)
+    from_date = fields.Date('From Date')
+    status = fields.Selection(OPTIONSTATUS,
+                              'Status')
+
+CoverageDisplayer()
+
+
+class SubscriptionProcess(Wizard):
+    _name = 'ins_contract.subscription_process'
+    # Define the starting state (fixed attribute name)
+    start_state = 'project'
+    project = StateView('ins_contract.subscription_process.project',
+                        'insurance_contract.project_view',
+                        [Button('Cancel',
+                                'end',
+                                'tryton-cancel'),
+                         Button('Next',
+                                'option_selection',
+                                'tryton-go-next')])
+    option_selection = StateView(
+                        'ins_contract.subscription_process.option_selection',
+                        'insurance_contract.option_selection_view',
+                        [Button('Cancel',
+                                'end',
+                                'tryton-cancel'),
+                         Button('Previous',
+                                'project',
+                                'tryton-go-previous'),
+                         Button('Complete',
+                                'validate',
+                                'tryton-ok'),
+                         ])
+    # Transition State allows us to define a state which will compute the
+    # following step through transition_statename
+    validate = StateTransition()
+
+    # This method will set default values for the 'project' state
+    # Syntax : default_statename(self, session, fields)
+    #     session => give access to all previous states
+    #     fields  => list of attributes used in the state view.
+    def default_project(self, session, fields):
+        return {'effective_date': datetime.date.today()}
+
+    def default_option_selection(self, session, fields):
+        options = []
+        for coverage in session.project.product.options:
+            options.append({'for_coverage': coverage.id,
+                            'from_date': max(coverage.effective_date,
+                                             session.project.effective_date)})
+        return {'options': options}
+
+    def transition_validate(self, session):
+        contract_obj = Pool().get('ins_contract.contract')
+        options = []
+        for option in session.option_selection.options:
+            options.append(('create',
+                            {'effective_date': option.effective_date,
+                             'coverage': option.for_coverage.id,
+                             }))
+        contract_obj.create({'options': options,
+                             'product': session.project.product.id,
+                             'effective_date': session.project.effective_date,
+                             })
+        return 'end'
+
+SubscriptionProcess()
+
+
+class ProjectState(ModelView):
+    _name = 'ins_contract.subscription_process.project'
+    # We define the list of attributes which will be used for display
+    effective_date = fields.Date('Effective Date',
+                                 required=True)
+    product = fields.Many2One('ins_product.product',
+                              'Product',
+                              domain=[('effective_date',
+                                       '<=',
+                                       Eval('effective_date'))],
+                              depends=['effective_date', ],
+                              required=True)
+
+ProjectState()
+
+
+class OptionSelectionState(ModelView):
+    _name = 'ins_contract.subscription_process.option_selection'
+    options = fields.Many2Many('ins_contract.coverage_displayer',
+                               None,
+                               None,
+                               'Options Choices')
+
+OptionSelectionState()
