@@ -8,10 +8,10 @@ echo $SEP
 fi
 echo "Restarting trytond server"
 echo $SEP
-trytond -c $TRYTOND_CONF &
+$TRYTOND_PATH/trytond -c $TRYTOND_CONF &
 echo "Starting tryton client"
 echo $SEP
-tryton &
+$TRYTON_PATH/tryton &
 sleep 2
 echo $SEP
 echo "Client ready"

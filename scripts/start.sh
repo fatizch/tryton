@@ -3,6 +3,9 @@ SCRIPT=`readlink -f $0`
 SCRIPTPATH=`dirname $SCRIPT`
 PREV_WD=`readlink -f .`
 cd $SCRIPTPATH
+cd tryton-workspace/conf
+. ./scripts.conf
+cd ../coopbusiness/scripts
 SCRIPT_NAME=$1
 while getopts ":rckld" opt; do
    case $opt in

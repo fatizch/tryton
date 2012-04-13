@@ -1,0 +1,41 @@
+#!/bin/bash
+SEP=------------------------------------------------
+EXPECTED_ARGS=2
+
+if [ $# -ne $EXPECTED_ARGS ]
+then
+	echo $SEP
+     	echo "Usage: `basename $0` {path} {directory}"
+	echo $SEP
+elif [ ! -e "$1" ]
+then
+	echo $SEP
+	echo $1 must be an existing directory
+	echo $SEP
+elif [ -e "$1/$2" ]
+then
+	echo $SEP
+	echo $2 already exists in $1 !
+	echo $SEP
+else
+	cd $1
+	mkdir $2
+	echo $SEP
+	echo Creating Virtual Env in $2
+	echo $SEP
+	virtualenv $2
+	cd $2
+	echo $SEP
+	echo Entering Virtual Env
+	echo $SEP
+	source bin/activate
+	echo Installing pip packages
+	echo $SEP
+	pip install polib lxml relatorio genshi python-dateutil pywebdav vobject python-ldap pytz psycopg2 hgnested
+	echo $SEP
+	echo Installation complete, remember to add
+	echo 	'[extensions]'
+	echo	'hgnested='
+	echo to your home hgrc file before calling coopinstall.sh
+	echo $SEP
+fi
