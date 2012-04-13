@@ -4,12 +4,14 @@ import datetime
 from trytond.model import ModelSQL, ModelView
 from trytond.model import fields as fields
 
-# Needed for Wizardry 
+# Needed for Wizardry
 from trytond.wizard import Wizard, Button, StateView, StateTransition
-
 
 # Needed for Eval
 from trytond.pyson import Eval
+
+# Needed for getting models
+from trytond.pool import Pool
 
 CONTRACTNUMBER_MAX_LENGTH = 10
 CONTRACTSTATUSES = [
@@ -23,11 +25,13 @@ OPTIONSTATUS = [
                     ('Refused', 'Refused')
                 ]
 
+
 class SubscriptionManager(ModelSQL, ModelView):
     _name = 'ins_contract.subs_manager'
     _description = __doc__
 
 SubscriptionManager()
+
 
 class GenericExtension(ModelSQL, ModelView):
     '''
