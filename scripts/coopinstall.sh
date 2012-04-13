@@ -71,7 +71,7 @@ else
 	echo "TRYTOND_CONF=\$ENV_FOLDER/tryton-workspace/conf/trytond.conf" >> scripts.conf
 	echo "REPOS_ROOT=\$ENV_FOLDER/tryton-workspace/" >> scripts.conf
 	echo "TRYTOND_PATH=\$ENV_FOLDER/tryton-workspace/trytond/trytond/bin" >> scripts.conf
-	echo "TRYTON_PATH=\$ENF_FOLDER/tryton-workspace/tryton-client/tryton/bin" >> scripts.conf
+	echo "TRYTON_PATH=\$ENV_FOLDER/tryton-workspace/tryton-client/tryton/bin" >> scripts.conf
 	echo "export ENV_FOLDER" >> scripts.conf
 	echo "export DATABASE_FOLDER" >> scripts.conf
 	echo "export DATABASE_BACKUP_FOLDER" >> scripts.conf
