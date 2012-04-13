@@ -10,7 +10,7 @@ SCRIPT_NAME=$1
 while getopts ":rckld" opt; do
    case $opt in
       r)
-         SCRIPT_NAME=reset ;;
+         SCRIPT_NAME=resetdb ;;
       c)
          SCRIPT_NAME=cleanandrelaunch ;;
       k)

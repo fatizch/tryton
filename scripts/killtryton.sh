@@ -1,3 +1,4 @@
 #!/bin/sh
-killall -q -9 tryton
-killall -q -9 trytond
+
+kill -9 $(ps aux | grep "python $TRYTON_PATH/tryton" | awk '{ print $2 }')
+kill -9 $(ps aux | grep "python $TRYTOND_PATH/trytond" | awk '{ print $2 }')

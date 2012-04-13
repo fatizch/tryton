@@ -5,7 +5,8 @@ from trytond.model import ModelSQL, ModelView
 from trytond.model import fields as fields
 
 # Needed for Wizardry 
-from trytond.wizard import Wizard, Button, StateView, StateTransition
+from trytond.wizard import Wizard, Button, StateView, StateTransitions
+
 
 # Needed for Eval
 from trytond.pyson import Eval

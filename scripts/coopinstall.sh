@@ -64,7 +64,7 @@ else
 	cd conf
 	echo "#!/bin/sh" > scripts.conf
 	echo "ENV_FOLDER=$TOPPATH" >> scripts.conf
-	echo "DATABAS_FOLDER=\$ENV_FOLDER/tryton-workspace/data" >> scripts.conf
+	echo "DATABASE_FOLDER=\$ENV_FOLDER/tryton-workspace/data" >> scripts.conf
 	echo "DATABASE_BACKUP_FOLDER=\$DATABASE_FOLDER/BackUp" >> scripts.conf
 	echo "DATABASE_NAME=Test" >> scripts.conf
 	echo "DATABASE_EXTENSION=sqlite" >> scripts.conf
