@@ -1,13 +1,17 @@
-#!/bin/sh
+#!/bin/bash
 SCRIPT=`readlink -f $0`
 SCRIPTPATH=`dirname $SCRIPT`
 PREV_WD=`readlink -f .`
 cd $SCRIPTPATH
+VE=`echo $VIRTUAL_ENV`
+if [ -z $VE ]; then
+   source bin/activate
+fi
 cd tryton-workspace/conf
 . ./scripts.conf
 cd ../coopbusiness/scripts
 SCRIPT_NAME=$1
-while getopts ":rckld" opt; do
+while getopts ":rcklds" opt; do
    case $opt in
       r)
          SCRIPT_NAME=resetdb ;;
@@ -19,6 +23,8 @@ while getopts ":rckld" opt; do
          SCRIPT_NAME=launch ;;
       d)
          SCRIPT_NAME=updatedatabase ;;
+      s)
+	 SCRIPT_NAME=sync_coop ;;
       \?)
          echo "Invalid Option" ;;
    esac
