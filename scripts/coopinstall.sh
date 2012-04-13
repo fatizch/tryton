@@ -32,17 +32,11 @@ else
 	echo Getting Trytond
 	echo $SEP
 	cd tryton-workspace
-	mkdir trytond
-	cd trytond
 	hg nclone http://hg.tryton.org/trytond
 	echo $SEP
 	echo Getting Tryton client
 	echo $SEP
-	cd ..
-	mkdir tryton-client
-	cd tryton-client
 	hg nclone http://hg.tryton.org/tryton
-	cd ..
 	echo $SEP
 	echo Getting Coop modules
 	echo $SEP
@@ -50,10 +44,10 @@ else
 	echo $SEP
 	echo Creating links between working directory and tryton modules
 	echo $SEP
-	cd trytond/trytond/trytond/modules
-	ln -s ../../../../coopbusiness/insurance_product .
-	ln -s ../../../../coopbusiness/insurance_contract .
-	cd ../../../../
+	cd trytond/trytond/modules
+	ln -s ../../../coopbusiness/insurance_product .
+	ln -s ../../../coopbusiness/insurance_contract .
+	cd ../../../
 	echo $SEP
 	echo Configuring workspace and scripts, creating minimalist tryton server conf file
 	mkdir data
@@ -70,8 +64,8 @@ else
 	echo "DATABASE_EXTENSION=sqlite" >> scripts.conf
 	echo "TRYTOND_CONF=\$ENV_FOLDER/tryton-workspace/conf/trytond.conf" >> scripts.conf
 	echo "REPOS_ROOT=\$ENV_FOLDER/tryton-workspace/" >> scripts.conf
-	echo "TRYTOND_PATH=\$ENV_FOLDER/tryton-workspace/trytond/trytond/bin" >> scripts.conf
-	echo "TRYTON_PATH=\$ENV_FOLDER/tryton-workspace/tryton-client/tryton/bin" >> scripts.conf
+	echo "TRYTOND_PATH=\$ENV_FOLDER/tryton-workspace/trytond/bin" >> scripts.conf
+	echo "TRYTON_PATH=\$ENV_FOLDER/tryton-workspace/tryton/bin" >> scripts.conf
 	echo "export ENV_FOLDER" >> scripts.conf
 	echo "export DATABASE_FOLDER" >> scripts.conf
 	echo "export DATABASE_BACKUP_FOLDER" >> scripts.conf

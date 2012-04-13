@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
-  	<tryton>
-		<data>
-			<record model="ir.action.wizard" id="project_view_action">
-				<field name="name">New Subscription</field>
-				<field name="wiz_name">ins_contract.subscription_process</field>
-				<field name="model">ir.ui.menu</field>
-			</record>
-			<record model="ir.ui.view" id="project_view">
-				<field name="model">ins_contract.subscription_process.project</field>
-				<field name="type">form</field>
-				<field name="arch" type="xml">
+<tryton>
+	<data>
+		<record model="ir.action.wizard" id="project_view_action">
+			<field name="name">New Subscription</field>
+			<field name="wiz_name">ins_contract.subscription_process</field>
+			<field name="model">ir.ui.menu</field>
+		</record>
+		<record model="ir.ui.view" id="project_view">
+			<field name="model">ins_contract.subscription_process.project</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
 					<![CDATA[ 
 						<form string="Subscription Process - Project Step">
 							<label name="effective_date" xalign="0"/>
@@ -19,38 +19,38 @@
 							<field name="product" xfill="1"/>						
 						</form>
 					]]>
-				</field>
-			</record>
-			<menuitem parent="menu_contract" action="project_view_action"
-							id="menu_start_subscription"/>
-			
-			<record model="ir.ui.view" id="option_selection_view">
-				<field name="model">ins_contract.subscription_process.option_selection</field>
-				<field name="type">form</field>
-				<field name="arch" type="xml">
+			</field>
+		</record>
+		<menuitem parent="menu_contract" action="project_view_action"
+			id="menu_start_subscription" />
+
+		<record model="ir.ui.view" id="option_selection_view">
+			<field name="model">ins_contract.subscription_process.option_selection</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
 					<![CDATA[
 						<form string="Subscription Process - Option Selection Step">
 							<label name="options"/>
 							<field name="options"/>
 						</form>
-					]]>				
-				</field>
-			</record>
-			
-			<record model="ir.ui.view" id="coverage_displayer_tree">
-				<field name="model">ins_contract.coverage_displayer</field>
-				<field name="type">tree</field>
-				<field name="arch" type="xml">
+					]]>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="coverage_displayer_tree">
+			<field name="model">ins_contract.coverage_displayer</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
 					<![CDATA[
 						<tree string="Coverage Choices Tree" editable="top">
 							<field name="status"/>
 							<field name="for_coverage"/>
 							<field name="from_date"/>
 						</tree>
-					]]>				
-				</field>
-			</record>
-		
-		</data>
-	</tryton>
+					]]>
+			</field>
+		</record>
+
+	</data>
+</tryton>
 		
