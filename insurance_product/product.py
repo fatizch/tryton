@@ -1,5 +1,6 @@
 #-*- coding:utf-8 -*-
 import copy
+import datetime
 
 from trytond.model import ModelView, ModelSQL, fields
 from trytond.pool import Pool
@@ -119,6 +120,7 @@ ProductOptionsCoverage()
 
 
 class RuleInterface(object):
+    'Generic Rule Interface'
     '''
         This class exists to create a template of the functions / attributes to
         which all rule classes will have to respond to.
@@ -139,13 +141,13 @@ class RuleInterface(object):
 
 
 class PricingRule(ModelSQL, ModelView, RuleInterface):
+    'Pricing Rule'
     '''
-        This rule is an example of implementation od the RuleInterface
+        This rule is an example of implementation of the RuleInterface
         interface :
         we add a field to contain its specific data, and override the
         two functions declared in the interface.
     '''
-    'Pricing Rule'
     _name = 'ins_product.pricingrule'
     _description = __doc__
     value = fields.Numeric('Rate', digits=(16, 2))
@@ -303,6 +305,8 @@ class BusinessRule(ModelSQL, ModelView):
     # knowing a priori its model. We can use the selection parameter to
     # specify a method which will be called to get a list containing the
     # allowed models.
+    is_current = fields.Function(fields.Boolean('Is current'),
+                                 'get_is_current')
 
     def delete(self, ids):
         # We are using a fields.Reference attribute in this class.
@@ -350,5 +354,15 @@ class BusinessRule(ModelSQL, ModelView):
         for rule in self.browse(ids):
             res[rule.id] = rule.extension.model.calculate(rule.extension, data)
         return res
+
+    def get_is_current(self, ids, name):
+        res = {}
+        brm_obj = Pool().get('ins_product.businessrulemanager')
+        for rule in self.browse(ids):
+            if rule.id == brm_obj.get_good_rule_at_date(rule.manager,
+                                          {'date': datetime.date.today()}):
+                res[rule.id] = True
+            else:
+                res[rule.id] = False
 
 BusinessRule()
