@@ -193,7 +193,8 @@ class BusinessRuleManager(ModelSQL, ModelView):
     def __init__(self):
         super(BusinessRuleManager, self).__init__()
         # Ajout de la contrainte SQL permettant d'être certain que le lien
-        # belongs_to est unique, quand bien même il est physiquement réparti dans deux
+        # belongs_to est unique,
+        # quand bien même il est physiquement réparti dans deux
         # colonnes différentes
         self._sql_constraints += [('brm_belongs_to_unicity',
                                    '''CHECK
@@ -298,12 +299,11 @@ class BusinessRule(ModelSQL, ModelView):
                               'Manager', required=True)
     extension = fields.Reference('Rule',
                                  selection='get_rule_models')
-
-
     # fields.Reference allows us to create a reference to an object without
     # knowing a priori its model. We can use the selection parameter to
     # specify a method which will be called to get a list containing the
     # allowed models.
+
     def delete(self, ids):
         # We are using a fields.Reference attribute in this class.
         # We must ensure that it will be deleted properly when the current
