@@ -48,6 +48,9 @@ else
 	ln -s ../../../coopbusiness/insurance_product .
 	ln -s ../../../coopbusiness/insurance_contract .
 	cd ../../../
+	cd ..
+	ln -s tryton-workspace/coopbusiness/scripts/start.sh .
+	cd tryton-workspace
 	echo $SEP
 	echo Configuring workspace and scripts, creating minimalist tryton server conf file
 	mkdir data

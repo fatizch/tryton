@@ -2,7 +2,6 @@
 SCRIPT=`readlink -f $0`
 SCRIPTPATH=`dirname $SCRIPT`
 PREV_WD=`readlink -f .`
-cd $SCRIPTPATH
 VE=`echo $VIRTUAL_ENV`
 if [ -z $VE ]; then
    source bin/activate
