@@ -80,7 +80,7 @@ class Contract(ModelSQL, ModelView):
     # Contract Number will be the number which will be used to reference the
     # contract for external uses (forms, other softwares...)
     contract_number = fields.Char('Contract Number',
-                                  required=True,
+                                  # required=True,
                                   select=1,
                                   size=CONTRACTNUMBER_MAX_LENGTH)
 
@@ -110,8 +110,7 @@ class Contract(ModelSQL, ModelView):
     # Some business rules might need some of the subscriber's data to compute.
     subscriber = fields.Many2One('party.party',
                                  'Subscriber',
-                                 select='0',
-                                 required=True)
+                                 select='0')
 
     # Status represents the contract state at current time.
     status = fields.Selection(CONTRACTSTATUSES,
@@ -129,6 +128,10 @@ class Contract(ModelSQL, ModelView):
     # element used in most of the product specific business rules.
     product_extension = fields.Many2One('ins_contract.prod_extension',
                                         'Product Extension')
+
+    @staticmethod
+    def get_new_contract_number():
+        return 'Ct00000001'
 
 Contract()
 
@@ -176,11 +179,22 @@ Option()
 
 
 class CoverageDisplayer(ModelView):
+    '''
+        This class is a displayer, that is a class which will only be used
+        to show something (or ask for something) to the user. It needs not
+        to be stored, and is not supposed to be.
+    '''
     _name = 'ins_contract.coverage_displayer'
     for_coverage = fields.Many2One('ins_product.coverage',
                                    'Coverage',
                                    readonly=True)
-    from_date = fields.Date('From Date')
+    from_date = fields.Date(
+                        'From Date',
+                        domain=[(Eval('for_coverage.effective_date'),
+                                 '<',
+                                 Eval('from_date'))],
+                        depends=['for_coverage', ],
+                        required=True)
     status = fields.Selection(OPTIONSTATUS,
                               'Status')
 
@@ -188,9 +202,25 @@ CoverageDisplayer()
 
 
 class SubscriptionProcess(Wizard):
+    '''
+        This class defines the subscription process. It asks the user all that
+        will be needed to finally create a contract.
+    '''
     _name = 'ins_contract.subscription_process'
-    # Define the starting state (fixed attribute name)
+
+    # Defines the starting state (fixed attribute name)
     start_state = 'project'
+
+    # This is a step of the process. It is defined as a StateView, with the
+    # foolowing arguments :
+    #    The name of the entity that defines the step (cf infra,
+    #    class ProjectState)
+    #    The name of the view which will be used to display the step. Careful,
+    #    this name must start with trytonmodule_name, in our case
+    #    'insurance_contract'.
+    #    A list of buttons. A button is defined with its label,
+    #    the state which must be called when pressed, and a reference to an
+    #    image file, which is used for displaying.
     project = StateView('ins_contract.subscription_process.project',
                         'insurance_contract.project_view',
                         [Button('Cancel',
@@ -212,8 +242,9 @@ class SubscriptionProcess(Wizard):
                                 'validate',
                                 'tryton-ok'),
                          ])
-    # Transition State allows us to define a state which will compute the
-    # following step through transition_statename
+
+    # Transition State allows us to define a state which will only compute the
+    # following step name through the function transition_statename.
     validate = StateTransition()
 
     # This method will set default values for the 'project' state
@@ -221,28 +252,60 @@ class SubscriptionProcess(Wizard):
     #     session => give access to all previous states
     #     fields  => list of attributes used in the state view.
     def default_project(self, session, fields):
+        # In this particular case, all we want to do is set today's date as
+        # the default value for the effective_date field
         return {'effective_date': datetime.date.today()}
 
     def default_option_selection(self, session, fields):
+        # Here it is a little harder. We want to create a list of options
+        # (more Coverage Diplayers than Options) which will be used as an
+        # interface for the user.
         options = []
+
+        # We have access to the product previously selected by the user
+        # in the session.project (session.any_state_name) attribute
         for coverage in session.project.product.options:
+            # We create a list of coverage_displayer, whose model is
+            # calculated as it is specified in the definition of the
+            # option field of coverage_displayer
             options.append({'for_coverage': coverage.id,
                             'from_date': max(coverage.effective_date,
-                                             session.project.effective_date)})
+                                             session.project.effective_date),
+                           'status': 'Active'})
         return {'options': options}
 
+    # This function is automatically called when we click on the "next" step of
+    # the option_selection state. We must return the name of the state which
+    # must be called afterwards, but we also have a chance to work a little
+    # before.
     def transition_validate(self, session):
         contract_obj = Pool().get('ins_contract.contract')
         options = []
         for option in session.option_selection.options:
+
+            # We create a list of tuples ('create', dict), which will be passed
+            # to the contract_obj.create method to gives it the data it needs
+            # to create the options.
             options.append(('create',
-                            {'effective_date': option.effective_date,
+                            {'effective_date': option.from_date,
                              'coverage': option.for_coverage.id,
                              }))
+
+        # Once the options are prepared, we can create the contract. To do so,
+        # we use the create method from the contract_obj model, giving it a
+        # dictionnary of attributes / values. For the options field, which is
+        # a list, we give it the list of tuple we just created, which will
+        # provide the create method with all the data it needs to create the
+        # contract record.
         contract_obj.create({'options': options,
                              'product': session.project.product.id,
                              'effective_date': session.project.effective_date,
+                             'contract_number': contract_obj.
+                                                    get_new_contract_number()
                              })
+
+        # We do not forget to return the name of the next step. 'end' is the
+        # technical step marking the end of the process.
         return 'end'
 
 SubscriptionProcess()
