@@ -271,12 +271,14 @@ class BusinessRuleManager(ModelSQL, ModelView):
             # (This is a given way to get a rule from a list, using the
             # applicable date, it could be anything)
             good_id, = business_rule_obj.search([
-                                ('from_date', '<', the_date),
-                                ('manager', '=', rulemanager.id)],
-                                order='from_date DESC',
+                                ('from_date', '<=', the_date),
+                                ('manager', '=', rulemanager.id)
+                                ],
+                                order=[('from_date', 'DESC')],
                                 limit=1)
             return good_id
-        except ValueError:
+        except ValueError, exception:
+            print "Exception : %s " % exception
             return None
 
     def calculate(self, rulemanager, data):
@@ -305,8 +307,9 @@ class BusinessRule(ModelSQL, ModelView):
     # knowing a priori its model. We can use the selection parameter to
     # specify a method which will be called to get a list containing the
     # allowed models.
-    is_current = fields.Function(fields.Boolean('Is current'),
-                                 'get_is_current')
+    is_current = fields.Function(fields.Boolean('Is current',
+                                on_change_with=['manager.business_rules']),
+                                'get_is_current')
 
     def delete(self, ids):
         # We are using a fields.Reference attribute in this class.
@@ -364,5 +367,6 @@ class BusinessRule(ModelSQL, ModelView):
                 res[rule.id] = True
             else:
                 res[rule.id] = False
+        return res
 
 BusinessRule()

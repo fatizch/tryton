@@ -37,6 +37,9 @@
 								        <field name="options">
 								        </field>
 							        </page>
+							        <page string="Managers" id="managers">
+							             <field name="managers"/>
+							        </page>
 						        </notebook>
 						    </form>               ]]>
 			</field>
