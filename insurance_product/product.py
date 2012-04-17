@@ -2,7 +2,7 @@
 import copy
 import datetime
 
-from trytond.model import ModelView, ModelSQL, fields
+from trytond.model import ModelView, ModelSQL, fields as fields
 from trytond.pool import Pool
 
 RULE_TYPES = [
@@ -18,6 +18,7 @@ class Offered(object):
     name = fields.Char('Name', required=True, select=1)
     code = fields.Char('Code', size=10, required=True, select=1)
     effective_date = fields.Date('Effective Date', required=True, select=1)
+    end_date = fields.Date('End Date',)
     managers = fields.One2Many('ins_product.businessrulemanager',
                                None,
                                'Business rule managers')
