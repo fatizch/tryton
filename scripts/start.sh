@@ -14,8 +14,6 @@ while getopts ":rckldsh" opt; do
    case $opt in
       r)
          SCRIPT_NAME=resetdb ;;
-      c)
-         SCRIPT_NAME=cleanandrelaunch ;;
       k)
          SCRIPT_NAME=killtryton ;;
       l)

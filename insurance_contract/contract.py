@@ -318,9 +318,9 @@ class ProjectState(ModelView):
                                  required=True)
     product = fields.Many2One('ins_product.product',
                               'Product',
-                              domain=[('effective_date',
-                                       '<=',
-                                       Eval('effective_date'))],
+                              #domain=[('effective_date',
+                              #         '<=',
+                              #         Eval('effective_date'))],
                               depends=['effective_date', ],
                               required=True)
 

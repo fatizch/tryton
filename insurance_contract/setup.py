@@ -8,15 +8,16 @@ setup(name='insurance_contract',
       description="Coopengo insurance contract  classes for Tryton",
       long_description="""\
 """,
-      classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      classifiers=[],
       keywords='tryton coopengo workflow business classes insurance contract',
       author='',
       author_email='',
       url='',
-      license='',   
-      package_dir={'trytond.modules.insurance_contract': '.',},
-      packages=['trytond.modules.insurance_contract',],
-      package_data={'trytond.modules.insurance_contract':['*.py','*.xml','*.pyc'],},
+      license='',
+      package_dir={'trytond.modules.insurance_contract': '.', },
+      packages=['trytond.modules.insurance_contract', ],
+      package_data={'trytond.modules.insurance_contract':
+                                ['*.py', '*.xml', '*.pyc'], },
       include_package_data=True,
       zip_safe=False,
       install_requires=[

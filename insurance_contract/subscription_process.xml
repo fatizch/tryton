@@ -6,6 +6,8 @@
 			<field name="wiz_name">ins_contract.subscription_process</field>
 			<field name="model">ir.ui.menu</field>
 		</record>
+		<menuitem parent="menu_contract" action="project_view_action"
+			id="menu_start_subscription" />
 		<record model="ir.ui.view" id="project_view">
 			<field name="model">ins_contract.subscription_process.project</field>
 			<field name="type">form</field>
@@ -21,8 +23,6 @@
 					]]>
 			</field>
 		</record>
-		<menuitem parent="menu_contract" action="project_view_action"
-			id="menu_start_subscription" />
 
 		<record model="ir.ui.view" id="option_selection_view">
 			<field name="model">ins_contract.subscription_process.option_selection</field>
@@ -50,7 +50,6 @@
 					]]>
 			</field>
 		</record>
-
 	</data>
 </tryton>
 		

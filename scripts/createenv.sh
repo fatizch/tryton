@@ -31,11 +31,16 @@ else
 	source bin/activate
 	echo Installing pip packages
 	echo $SEP
-	pip install polib lxml relatorio genshi python-dateutil pywebdav vobject python-ldap pytz psycopg2 hgnested
+	pip install polib lxml relatorio genshi python-dateutil pywebdav vobject python-ldap pytz psycopg2 hgnested hgreview
 	echo $SEP
 	echo Installation complete, remember to add
 	echo 	'[extensions]'
 	echo	'hgnested='
+	echo	'hgreview='
+	echo	''
+	echo	'[review]'
+	echo	'server = http://codereview.tryton.org'
+	echo	'send_email = False (True if you are sure of what you are doing)'
 	echo to your home hgrc file before calling coopinstall.sh
 	echo $SEP
 fi
