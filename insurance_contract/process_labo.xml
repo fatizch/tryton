@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<tryton>
+	<data>
+		<!-- Process -->
+		<!-- Application Entry point :
+		Creates a new Entry Point in the left part of the application.
+			Name => entry point label
+			id => string used for reference to the entry point
+			sequence => is used to sort the elements of the menu -->
+		<menuitem name="Process Lab" id="menu_process" sequence="50" />
+
+		<!-- Tree view -->
+		<record model="ir.ui.view" id="process_view_tree">
+			<field name="model">ins_contract.process_desc</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">                 
+					    <![CDATA[                 
+						    <tree string="Process Descriptor">
+							    <field name="name"/>
+							    <field name="process_model"/>
+						    </tree>                 
+					    ]]>
+			</field>
+		</record>
+
+		<!-- form view -->
+		<record model="ir.ui.view" id="process_view_form">
+			<field name="model">ins_contract.process_desc</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+					     <![CDATA[
+						    <form string="process" col="4">
+						        <label name="name" colspan="1" xalign="0"/>
+						        <field name="name" colspan="3"/>
+					     		<label name="number_of_steps"/>
+					     		<field name="number_of_steps"/>
+						        <newline/>
+						        <label name="process_model" colspan="1" xalign="0"/>
+						        <field name="process_model" colspan="3"/>
+						        <newline/>
+						        <field name="steps" colspan="4"/>
+						    </form>               ]]>
+			</field>
+		</record>
+
+		<!-- View for the main menu and the event -->
+		<record model="ir.action.act_window" id="act_process_form">
+			<field name="name">Process</field>
+			<field name="res_model">ins_contract.process_desc</field>
+		</record>
+
+		<!-- View that connect the form in the tree with the specification -->
+		<record model="ir.action.act_window.view" id="act_process_form_view1">
+			<field name="sequence" eval="10" />
+			<field name="view" ref="process_view_tree" />
+			<field name="act_window" ref="act_process_form" />
+		</record>
+
+		<!-- View for the edition or the Form of process -->
+		<record model="ir.action.act_window.view" id="act_process_form_view2">
+			<field name="sequence" eval="20" />
+			<field name="view" ref="process_view_form" />
+			<field name="act_window" ref="act_process_form" />
+		</record>
+		
+		<!-- MenuItem allows us to add a subelement to an entrypoint of the
+			left part of the application (referenced by the 'parent') -->
+		<menuitem parent="menu_process" sequence="1" id="menu_process_form"
+			icon="tryton-list" action="act_process_form" />
+		
+		<!-- /Process -->
+		
+		<!-- Step -->
+		
+		<record model="ir.ui.view" id="step_view_tree">
+			<field name="model">ins_contract.step_desc</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">                 
+					<![CDATA[                 
+					<tree string="step">
+					<field name="order"/>
+					<field name="step_model"/>
+					<button name="go_up" string="^" type="object"/>
+					</tree>                 ]]>
+			</field>
+		</record>
+
+		<!-- form view -->
+		<record model="ir.ui.view" id="step_view_form">
+			<field name="model">ins_contract.step_desc</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+					 <![CDATA[
+					 <form string="step" col="8">
+					 <label name="process_name" xalign="0"/>
+					 <field name="process_name" xexpand="1" colspan="2"/>
+					 <newline/>
+					 <label name="step_model" xalign="0"/>
+					 <field name="step_model" colspan="2"/>
+					 <label name="order"/> 
+					 <field name="order"/>
+					 <newline/>
+					 <field name="methods" colspan="6"/>
+					 </form>               ]]>
+			</field>
+		</record>
+
+		<!-- View for the main menu and the event -->
+		<record model="ir.action.act_window" id="act_step_form">
+			<field name="name">step</field>
+			<field name="res_model">ins_contract.step_desc</field>
+		</record>
+
+		<!-- View that connect the form in the tree with the specification -->
+		<record model="ir.action.act_window.view" id="act_step_form_view1">
+			<field name="sequence" eval="10" />
+			<field name="view" ref="step_view_tree" />
+			<field name="act_window" ref="act_step_form" />
+		</record>
+
+		<!-- View for the edition or the Form of step -->
+		<record model="ir.action.act_window.view" id="act_step_form_view2">
+			<field name="sequence" eval="21" />
+			<field name="view" ref="step_view_form" />
+			<field name="act_window" ref="act_step_form" />
+		</record>
+		
+		<!-- Step -->
+		
+		<!-- Method -->
+		
+		<record model="ir.ui.view" id="step_method_view_tree">
+			<field name="model">ins_contract.step_method_desc</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">                 
+					<![CDATA[                 
+					<tree string="method step">
+					<field name="name"/>
+					</tree>                 ]]>
+			</field>
+		</record>
+
+		<!-- form view -->
+		<record model="ir.ui.view" id="step_method_view_form">
+			<field name="model">ins_contract.step_method_desc</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+					 <![CDATA[
+					 <form string="step">
+					 <label name="process_test" xalign="0"/>
+					 <field name="process_test" xexpand="1" colspan="2"/>
+					 <newline/>
+					 <label name="name" xalign="0"/>
+					 <field name="name"/> 
+					 <field name="name"/>
+					 </form>               ]]>
+			</field>
+		</record>
+
+		<!-- View for the main menu and the event -->
+		<record model="ir.action.act_window" id="act_step_method_form">
+			<field name="name">Step Method</field>
+			<field name="res_model">ins_contract.step_method_desc</field>
+		</record>
+
+		<!-- View that connect the form in the tree with the specification -->
+		<record model="ir.action.act_window.view" id="act_step_method_form_view1">
+			<field name="sequence" eval="10" />
+			<field name="view" ref="step_method_view_tree" />
+			<field name="act_window" ref="act_step_method_form" />
+		</record>
+
+		<!-- View for the edition or the Form of step -->
+		<record model="ir.action.act_window.view" id="act_step_method_form_view2">
+			<field name="sequence" eval="21" />
+			<field name="view" ref="step_method_view_form" />
+			<field name="act_window" ref="act_step_method_form" />
+		</record>
+		
+		<!-- Method -->
+	</data>
+</tryton>
