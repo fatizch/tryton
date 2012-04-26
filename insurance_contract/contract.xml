@@ -134,5 +134,20 @@
 			<field name="view" ref="option_view_form" />
 			<field name="act_window" ref="act_option_form" />
 		</record>
+
+		<!-- View for the coverage displayer used in the subscription process -->
+		<record model="ir.ui.view" id="coverage_displayer_tree">
+			<field name="model">ins_contract.coverage_displayer</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+					<![CDATA[
+						<tree string="Coverage Choices Tree" editable="top">
+							<field name="status"/>
+							<field name="for_coverage"/>
+							<field name="from_date"/>
+						</tree>
+					]]>
+			</field>
+		</record>
 	</data>
 </tryton>

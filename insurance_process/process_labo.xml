@@ -11,7 +11,7 @@
 
 		<!-- Tree view -->
 		<record model="ir.ui.view" id="process_view_tree">
-			<field name="model">ins_contract.process_desc</field>
+			<field name="model">ins_process.process_desc</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">                 
 					    <![CDATA[                 
@@ -25,7 +25,7 @@
 
 		<!-- form view -->
 		<record model="ir.ui.view" id="process_view_form">
-			<field name="model">ins_contract.process_desc</field>
+			<field name="model">ins_process.process_desc</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 					     <![CDATA[
@@ -46,7 +46,7 @@
 		<!-- View for the main menu and the event -->
 		<record model="ir.action.act_window" id="act_process_form">
 			<field name="name">Process</field>
-			<field name="res_model">ins_contract.process_desc</field>
+			<field name="res_model">ins_process.process_desc</field>
 		</record>
 
 		<!-- View that connect the form in the tree with the specification -->
@@ -73,7 +73,7 @@
 		<!-- Step -->
 		
 		<record model="ir.ui.view" id="step_view_tree">
-			<field name="model">ins_contract.step_desc</field>
+			<field name="model">ins_process.step_desc</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">                 
 					<![CDATA[                 
@@ -87,7 +87,7 @@
 
 		<!-- form view -->
 		<record model="ir.ui.view" id="step_view_form">
-			<field name="model">ins_contract.step_desc</field>
+			<field name="model">ins_process.step_desc</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 					 <![CDATA[
@@ -108,7 +108,7 @@
 		<!-- View for the main menu and the event -->
 		<record model="ir.action.act_window" id="act_step_form">
 			<field name="name">step</field>
-			<field name="res_model">ins_contract.step_desc</field>
+			<field name="res_model">ins_process.step_desc</field>
 		</record>
 
 		<!-- View that connect the form in the tree with the specification -->
@@ -130,7 +130,7 @@
 		<!-- Method -->
 		
 		<record model="ir.ui.view" id="step_method_view_tree">
-			<field name="model">ins_contract.step_method_desc</field>
+			<field name="model">ins_process.step_method_desc</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">                 
 					<![CDATA[                 
@@ -142,7 +142,7 @@
 
 		<!-- form view -->
 		<record model="ir.ui.view" id="step_method_view_form">
-			<field name="model">ins_contract.step_method_desc</field>
+			<field name="model">ins_process.step_method_desc</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 					 <![CDATA[
@@ -160,7 +160,7 @@
 		<!-- View for the main menu and the event -->
 		<record model="ir.action.act_window" id="act_step_method_form">
 			<field name="name">Step Method</field>
-			<field name="res_model">ins_contract.step_method_desc</field>
+			<field name="res_model">ins_process.step_method_desc</field>
 		</record>
 
 		<!-- View that connect the form in the tree with the specification -->

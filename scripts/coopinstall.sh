@@ -47,6 +47,7 @@ else
 	cd trytond/trytond/modules
 	ln -s ../../../coopbusiness/insurance_product .
 	ln -s ../../../coopbusiness/insurance_contract .
+	ln -s ../../../coopbusiness/insurance_process .
 	cd ../../../
 	cd ..
 	ln -s tryton-workspace/coopbusiness/scripts/start.sh .

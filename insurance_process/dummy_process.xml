@@ -6,7 +6,7 @@
 			<field name="wiz_name">ins_contract.dummy_process</field>
 			<field name="model">ir.ui.menu</field>
 		</record>
-		<menuitem parent="menu_contract" action="dummy_view_action"
+		<menuitem parent="menu_process" action="dummy_view_action"
 			id="menu_start_dummy_process" sequence="2"/>
 		<record model="ir.ui.view" id="dummy_view">
 			<field name="model">ins_contract.dummy_process.dummy_step</field>

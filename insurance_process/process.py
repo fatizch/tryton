@@ -1,0 +1,853 @@
+# Needed for displaying objects
+from trytond.model import ModelView
+from trytond.model import fields as fields
+
+# Needed for Wizardry
+from trytond.wizard import Wizard, Button, StateView, StateTransition
+
+# Needed for getting models
+from trytond.pool import Pool
+
+ACTIONS = ('go_previous', 'go_next', 'cancel', 'complete', 'check')
+
+
+class ProcessState(ModelView):
+    '''
+        This class is a fake step. Its only purpose is to provide us with a
+        place to store all process-related persistent data.
+
+        As we want something more dynamic than the default tryton wizards, we
+        typically need to know where we are in the process and what we are
+        doing. That's what this step is for.
+    '''
+    _name = 'ins_process.process_state'
+
+    # This is what we currently are trying to do. This field is set in the
+    # transition steps associated to the buttons, before calling the master
+    # transition.
+    cur_action = fields.Selection(
+                    [(action, action) for action in list(ACTIONS)],
+                    'Current Action')
+
+    # This is a link to the process descriptor, which is a kind of client
+    # business rule.
+    # It is the object that knows the step order, and a few other things.
+    process_desc = fields.Many2One('ins_process.process_desc',
+                                   'Process Description')
+
+    # This is the name of the current step as in the standard tryton wizard.
+    # That is, it is the name of the field representing the current step.
+    cur_step = fields.Char('Current step')
+
+    # And this it the link to its process descriptor. Both those references are
+    # updated in the calculate_next_step method
+    cur_step_desc = fields.Many2One('ins_process.step_desc',
+                                    'Step Descriptor')
+
+ProcessState()
+
+
+class CoopProcess(Wizard):
+    '''
+        This class will serve as a master for all process classes.
+
+        It is designed to look for defining rules in the database, which will
+        define how the process is supposed to flow.
+
+        There will be only one virtual step, which will use the rules to
+        calculate its behaviour. It includes validation rules, applicability
+        rules (should we go through the process or step over), and
+        next/previous step calculation.
+
+        There will be a library of steps in which the rules will look for.
+    '''
+
+    # This is not a real state, it will only be used as a storage step for
+    # the process' data
+    process_state = StateView('ins_process.process_state',
+                              '',
+                              [])
+
+    # Starting step, will be the same for all processes
+    start_state = 'steps_start'
+
+    # steps_start is a virtual step. So we just define it as a transition state
+    # so that the transition_steps_start can be overriden in child classes.
+    steps_start = StateTransition()
+
+    # This step is the most important of all. It is the one that will manage
+    # the execution flow through the use of session.process_data[cur_step] to
+    # get the current step, and calls to CoopStep submethods.
+    master_step = StateTransition()
+
+    # Those steps are all virtual steps, whose transition method will be called
+    # every time that someone clicks on a button.
+    # A few actions (typically, setting session.process_state.cur_action) will
+    # be performed before calling master_step
+    steps_next = StateTransition()
+    steps_previous = StateTransition()
+    steps_cancel = StateTransition()
+    steps_complete = StateTransition()
+    steps_check = StateTransition()
+
+    # We use the fact that we know the start step to set up a few things
+    def transition_steps_start(self, session):
+        # First of all, we get and set the process descriptor.
+        process_desc_obj = Pool().get('ins_process.process_desc')
+        try:
+            res, = process_desc_obj.search([
+                                        ('process_model', '=', self._name)],
+                                           limit=1)
+        except Exception:
+            # If no process desc is found, we raise an error and exit the
+            # process.
+            res = None
+        if res is None:
+            self.raise_user_error('Could not find a process descriptor for %s,\
+                                    \nplease contact software admin.'
+                                    % self.coop_process_name())
+            return 'end'
+        session.process_state.process_desc = res
+
+        # We then asks the process desc which one is the first step
+        (step_obj, step_name) = process_desc_obj.get_first_step_desc(
+                                            session.process_state.process_desc)
+
+        # We use the answer to look for the associated state name (step_desc
+        # associations are based on coop_step_nae() calls)
+        first_step, first_step_name = self.get_state_from_model(step_name)
+
+        # We use the process_state's fields to store those persistent data :
+        session.process_state.cur_step = first_step_name
+        session.process_state.cur_step_desc = step_obj.id
+
+        # Now the work begins : we get the step model
+        state_model = Pool().get(step_obj.step_model)
+
+        # And initialize the steps (exiting in case of errors)
+        (res, errors) = state_model.do_before(session,
+                                                   {},
+                                                   step_obj)
+        if not res:
+            self.raise_user_error('Could not initialize process, exiting\n'
+                                  + '\n'.join(errors))
+            return 'end'
+
+        # Time to display
+        return first_step_name
+
+    @staticmethod
+    def coop_process_name():
+        '''
+            This method (static) is used as a label for the wizard, it is
+            supposed to be unique, so that it can be used as a key when
+            creating the process descs.
+
+            All 'real' process classes will inherit from this one, so we must
+            not return a result, as it should never be instanciated.
+        '''
+        return ''
+
+    def get_state_from_model(self, step_model):
+        # Here we go through the states defined on the current process, in
+        # order to find which one corresponds to the model provided by the
+        # process desc
+        for state in self.states:
+            # No need to go through those which are not StateViews
+            if (isinstance(self.states[state], StateView)
+                and self.states[state].model_name == step_model):
+                # We returned both the state object and its name.
+                return (self.states[state], state)
+
+    def transition_master_step(self, session):
+        '''
+            This method will be called every time a flow button is clicked.
+            The transition_steps_* will set a few things in
+            session.process_state (typically cur_action) so that we are
+            able to know where we are in the process flow.
+        '''
+        # Being cautious, we store the current step name, as it will be
+        # modified during calculation.
+        from_step = session.process_state.cur_step
+
+        # Now we call calculate_next_step, which will use the data
+        # available in the session object to compute where we should go,
+        # depending on where we currently are and the cur_action.
+        res = self.calculate_next_step(session)
+
+        # Just to be sure...
+        if res == '':
+            self.raise_user_error('Could not calculate next step')
+            return from_step
+        else:
+            return res
+
+    # Transition method, we just set cur_action for now, and call master_step
+    def transition_steps_next(self, session):
+        session.process_state.cur_action = 'go_next'
+        return 'master_step'
+
+    # Transition method, we just set cur_action for now, and call master_step
+    def transition_steps_previous(self, session):
+        session.process_state.cur_action = 'go_previous'
+        return 'master_step'
+
+    # Transition method, we just set cur_action for now, and call master_step
+    def transition_steps_cancel(self, session):
+        session.process_state.cur_action = 'cancel'
+        return 'master_step'
+
+    # Transition method, we just set cur_action for now, and call master_step
+    def transition_steps_complete(self, session):
+        session.process_state.cur_action = 'complete'
+        return 'master_step'
+
+    # Transition method, we just set cur_action for now, and call master_step
+    def transition_steps_check(self, session):
+        session.process_state.cur_action = 'check'
+        return 'master_step'
+
+    # This method will be called when clicking on the 'complete' button
+    def do_complete(self, session):
+        return (True, [])
+
+    def calculate_next_step(self, session):
+        '''
+            This method is used to calculate the name of the next step to
+            execute. It can call itself if needed.
+        '''
+        # We just need to get a few things at start:
+        #    Process desc model, needed for calling methods
+        process_desc_model = Pool().get('ins_process.process_desc')
+        #    Current state object (the CoopStateView object)
+        cur_state_obj = self.states[session.process_state.cur_step]
+        #    Current state model ('ins_process.process_name.step_name')
+        cur_state_model = Pool().get(cur_state_obj.model_name)
+        #    Current action : what do we want to do ?
+        cur_action = session.process_state.cur_action
+        #    Current step descriptor : a 'ins_process.step_desc' object
+        #    whose step_model field would be cur_state_model
+        cur_step_desc = session.process_state.cur_step_desc
+        #    Current process descriptor : this one is already stored
+        #    in session.process_state
+        cur_process_desc = session.process_state.process_desc
+
+        data = {}
+
+        # Here we go : we switch case based on cur_action :
+        if cur_action == 'check':
+            # CHECK :
+            # Well, just call check_step
+            (res, errors) = cur_state_model.check_step(session,
+                                                       data,
+                                                       cur_step_desc)
+            # and display the result
+            if not res:
+                self.raise_user_error('\n'.join(errors))
+            else:
+                self.raise_user_error('Everything is OK')
+                self.raise_user_error('Everything is OK')
+            return session.process_state.cur_step
+        elif cur_action == 'cancel':
+            # CANCEL :
+            # End of the process
+            return 'end'
+        elif cur_action == 'complete':
+            # COMPLETE :
+            # First we try to complete the current step :
+            (res, errors) = cur_state_model.do_after(session,
+                                                       data,
+                                                       cur_step_desc)
+            # If we cannot, we stay where we are
+            if not res:
+                self.raise_user_error('\n'.join(errors))
+                return session.process_state.cur_step
+
+            # If we can, we call the do_complete method on the process
+            (res, errors) = self.do_complete(session)
+            # If it works, end of the process
+            if res:
+                return 'end'
+            # else, back to current step...
+            self.raise_user_error('\n'.join(errors))
+            return session.process_state.cur_step
+        elif cur_action == 'go_previous':
+            # PREVIOUS :
+            # We need to get the previous step from the process desc
+            next_step_desc = process_desc_model.get_prev_step(cur_step_desc,
+                                            cur_process_desc)
+            # If it does not exist, no need to go further
+            if next_step_desc == cur_step_desc:
+                return session.process_state.cur_step
+            # Now, we get our tools : step name, model, view
+            (next_step_state, next_state_name) = self.get_state_from_model(
+                                            next_step_desc.step_model)
+            next_state_model = Pool().get(next_step_state.model_name)
+
+            # Should we display this step ?
+            (res, errors) = next_state_model.must_step_over(session,
+                                                            data,
+                                                            next_step_desc)
+
+            if not res:
+                # Yes => here we go (no need to call the before method, we do
+                # not want to reset the step)
+                session.process_state.cur_step = next_state_name
+                session.process_state.cur_step_desc = next_step_desc.id
+                return session.process_state.cur_step
+            else:
+                # No => ok, we just set this step as the current step, and
+                # we go on.
+                session.process_state.cur_step = next_state_name
+                session.process_state.cur_step_desc = next_step_desc.id
+                # (Here we suppose that the first step will never be stepped
+                # over, we might have to change a few things if it happens to
+                # be possible)
+                return self.calculate_next_step(session)
+        elif cur_action == 'go_next':
+            # NEXT :
+            # As for previous, we get the next step from the process desc
+            next_step_desc = process_desc_model.get_next_step(cur_step_desc,
+                                            cur_process_desc)
+            # and we exit now if it does no exist
+            if next_step_desc == cur_step_desc:
+                return session.process_state.cur_step
+            # We got our tools
+            (next_step_state, next_state_name) = self.get_state_from_model(
+                                            next_step_desc.step_model)
+            next_state_model = Pool().get(next_step_state.model_name)
+            # And we try to finish the current step
+            (res, errors) = cur_state_model.do_after(session,
+                                                       data,
+                                                       cur_step_desc)
+            if not res:
+                # If it does not work, we stop here
+                self.raise_user_error('\n'.join(errors))
+                return session.process_state.cur_step
+            else:
+                # If it works, we call the before of the next method
+                (res, errors) = next_state_model.do_before(session,
+                                                           data,
+                                                           next_step_desc)
+                if not res:
+                    # Again, it it does not work, we stop right here
+                    self.raise_user_error('\n'.join(errors))
+                    return session.process_state.cur_step
+                # Now we must check that the step should be displayed
+                (res, errors) = next_state_model.must_step_over(session,
+                                                                data,
+                                                                next_step_desc)
+                # We set the step as the current step anyway
+                session.process_state.cur_step = next_state_name
+                session.process_state.cur_step_desc = next_step_desc.id
+                if not res:
+                    # We must not step over, it ends here
+                    return session.process_state.cur_step
+                else:
+                    # We must step over, so we just calculate_next_step again.
+                    # Note that it supposed that the last step will not be
+                    # stepped over !
+                    return self.calculate_next_step(session)
+        # Just in case...
+        return session.process_state.cur_step
+
+
+class CoopState(object):
+    '''
+        This class is going to be used as a parent for all step classes.
+
+        It defines :
+            - a step_over method, which will be called to decide if the step
+            should be displayed or stepped over
+            - a before_step method, which is the code that must be executed
+            before displaying the step
+            - a check_step method, which will be called in order to check
+            data consistency
+            - a post_step method, which will be called if the user clicks on
+            the next button, and if the check_step method returns 'True'
+
+        Ultimately, we will need a way to calculate whether or not a given
+        button must be displayed or not.
+    '''
+
+    @staticmethod
+    def button_next():
+        return Button('Next',
+                      'steps_next',
+                      'tryton-go-next')
+
+    @staticmethod
+    def button_previous():
+        return Button('Previous',
+                      'steps_previous',
+                      'tryton-go-previous')
+
+    @staticmethod
+    def button_cancel():
+        return Button('Cancel',
+                      'steps_cancel',
+                      'tryton-cancel')
+
+    @staticmethod
+    def button_complete():
+        return Button('Complete',
+                      'steps_complete',
+                      'tryton-ok')
+
+    @staticmethod
+    def button_check():
+        return Button('Check',
+                      'steps_check',
+                      'tryton-help')
+
+    # For convenience, a list of all buttons...
+    @staticmethod
+    def all_buttons():
+        return [CoopState.button_previous(),
+                CoopState.button_check(),
+                CoopState.button_next(),
+                CoopState.button_complete(),
+                CoopState.button_cancel()]
+
+
+class CoopStateView(StateView, CoopState):
+    '''
+        This class is an extension of CoopState which will allow us to easily
+        create step classes.
+
+        To use, just create an instance with the name of the model and view,
+        buttons will be calculated automatically.
+    '''
+
+    # Right now, we can only use the all_buttons method to automatically add
+    # all the buttons for each View
+    def __init__(self, name, view):
+        super(CoopStateView, self).__init__(name,
+                                        view,
+                                        CoopState.all_buttons())
+
+    # Here is a little dirty trick to avoid resetting of StateView values after
+    # before methods.
+    # All field initialization should be done through 'before' methods
+    def get_defaults(self, wizard, session, state_name, fields):
+        res = {}
+        # First we get the existing data for our step in the current session
+        default_data = getattr(session, state_name)._data
+        if default_data:
+            # If it exists, we go through each field and set a nex entry in the
+            # return dict
+            for field in [field for field in fields
+                                if (field in default_data)]:
+                res[field] = default_data[field]
+        return res
+
+
+class CoopStep(ModelView):
+    '''
+        This is the step master class. It defines a step, allows to create a
+        view for this step, and has all the methods needed for going through
+        the process :
+            step_over
+            before
+            check
+            after
+        Those methods will look for methods matching a certain pattern (prefix)
+        and call them. It will then (if necessary) look for client defined
+        rules, and call them as well.
+    '''
+    # cf coop_process_name, this method is used as a label for representing
+    # the step class when creating step descs.
+    # All child classes designed to be instanciated must override this method.
+    @staticmethod
+    def coop_step_name():
+        return ''
+
+    def get_methods_starting_with(self, prefix):
+        # This method is used to get all methods of the class that start with
+        # the provided prefix
+        return [getattr(self, method)
+                   for method in dir(self)
+                   if (callable(getattr(self, method))
+                       and method.startswith(prefix))]
+
+    def fill_data_dict(self, session, data, data_pattern):
+        '''
+            This method is a core method.
+            It takes a data pattern as an input, that is a structure asking for
+            data.
+
+            It uses this pattern to go through the session to get the required
+            values and send them back, so that client side rules can use them.
+
+            return value should look like :
+                {'ins_process.contract': {
+                                            'effective_date': some_value,
+                                            'contract_number': other_value
+                                            },
+                 'ins_process.extension': { ... }
+                         etc...
+                }
+        '''
+        return {}
+
+    def call_client_rules(self, session, rulekind, data, step_desc):
+        '''
+            This method will look for and call the client defined ruler in the
+            step_desc, which match the rulekind.
+            It then asks the rule which data are needed for execution, fetchs
+            the data and call the rule.
+
+            It is intended to be use as an iterator which will yield the result
+            of each call, which is a tuple containing the result and a list of
+            errors.
+        '''
+        # We get the models
+        step_desc_model = Pool().get('ins_process.step_desc')
+        method_desc_model = Pool().get('ins_process.step_method_desc')
+
+        # Then we iterate through the list of existing methods on the step_desc
+        # which match our rule_kind
+        for rule in step_desc_model.get_appliable_rules(step_desc, rulekind):
+            # We get the needed data pattern for this method
+            needed_data = method_desc_model.get_data_pattern(rule)
+            # Then we call the fill_data_dict, feed its result to the
+            # method, and yield the result
+            yield method_desc_model.calculate(rule,
+                                        self.fill_data_dict(session,
+                                                            data,
+                                                            needed_data))
+
+    def call_methods(self, session, data, step_desc, prefix, default=True,
+                        client_rules=''):
+        '''
+            This method will call all methods designed for the defined role.
+
+            It will first iterate through the methods matching the prefix,
+            then call and get the result.
+            If the result value is not the default value, it return the result
+            and the errors.
+            If not, it calls the client side rules.
+        '''
+        # We get the list of methods
+        methods = self.get_methods_starting_with(prefix)
+        (result, errors) = (default, [])
+        # and execute each of them
+        for method in methods:
+            try:
+                (res, error) = method.__call__(session, data)
+            except TypeError:
+                (res, error) = (not default, ['Probably forgot to return a\
+                                            value in %s' % method.__name__])
+            if res != default:
+                # We are only interested in the res != default case
+                result = res
+                errors += error
+        if result == default:
+            # Only if result is not default should we call client rules, that
+            # should help in terms of performance
+            if client_rules != '':
+                # We get the result of each call and update the global result
+                # accordingly
+                for res, errs in self.call_client_rules(session,
+                                                  client_rules,
+                                                  data,
+                                                  step_desc):
+                    if res != default:
+                        result = res
+                        errors += errs
+        return (result, errors)
+
+    def do_after(self, session, data, step_desc):
+        '''
+            This method executes what must be done after clicking on 'Next'
+            on the step's view. It will first check for errors then, if
+            everything is ok, will go through post_step methods.
+
+            It is designed as to avoid to be instance dependant, that is it
+            should be possible to call it through a batch to simulate for
+            instance a manual subscription.
+        '''
+        # Check for errors in current view
+        (res, check_errors) = self.check_step(session, data, step_desc)
+        post_errors = []
+        if res:
+            # If there are errors, there is no need (and it would be dangerous)
+            # to continue
+            (res, post_errors) = self.post_step(session, data, step_desc)
+        return (res, check_errors + post_errors)
+
+    def do_before(self, session, data, step_desc):
+        '''
+            This method executes what must be done before displaying the step
+            view. It might be initializing values, creating objects for
+            displaying, etc... It should also check that everything which will
+            be necessary for the step completion is available in the session.
+
+            It is designed as to avoid to be instance dependant, that is it
+            should be possible to call it through a batch to simulate for
+            instance a manual subscription.
+        '''
+        (res, errors) = self.before_step(session, data, step_desc)
+        return (res, errors)
+
+    def must_step_over(self, session, data, step_desc):
+        '''
+            This method calculates whether it is necessary to display the
+            current step view.
+
+            It is designed as to avoid to be instance dependant, that is it
+            should be possible to call it through a batch to simulate for
+            instance a manual subscription.
+        '''
+        (res, errors) = self.step_over(session, data, step_desc)
+        return (res, errors)
+
+    def step_over(self, session, data, step_desc):
+        # This is the actual call to the step_over_ methods and client rules
+        return self.call_methods(session,
+                                 data,
+                                 step_desc,
+                                 'step_over_',
+                                 default=False,
+                                 client_rules='0_step_over')
+
+    def before_step(self, session, data, step_desc):
+        # This is the actual call to the before_step_ methods
+        return self.call_methods(session,
+                                 data,
+                                 step_desc,
+                                 'before_step_')
+
+    def check_step(self, session, data, step_desc):
+        # This is the actual call to the check_step_ methods and client rules
+        return self.call_methods(session,
+                                 data,
+                                 step_desc,
+                                 'check_step_',
+                                 client_rules='2_check_step')
+
+    def post_step(self, session, data, step_desc):
+        # This is the actual call to the post_step_ methods
+        return self.call_methods(session,
+                                 data,
+                                 step_desc,
+                                 'post_step_')
+
+#####################################################
+# Here is an example of implementation of a process #
+#####################################################
+
+
+class DummyStep(CoopStep):
+    # This is a step. It inherits from CoopStep, and has one attribute (name).
+    _name = 'ins_process.dummy_process.dummy_step'
+    name = fields.Char('Name')
+
+    # This is its user-friendly name for creating the step desc
+    @staticmethod
+    def coop_step_name():
+        return 'Dummy Step'
+
+    # This is a before method, which will be useful to initialize our name
+    # field. If we had a One2Many field, we could create objects and use their
+    # fields to compute the default value of another.
+    def before_step_init(self, session, data):
+        session.dummy_step.name = 'Toto'
+        return (True, [])
+
+    # Those are validation methods which will be called by the check_step
+    # method.
+    # DO NOT FORGET to always return something
+    def check_step_schtroumpf_validation(self, session, data):
+        if session.dummy_step.name == 'Toto':
+            return (False, ['Schtroumpf'])
+        return (True, [])
+
+    def check_step_kiwi_validation(self, session, data):
+        if session.dummy_step.name == 'Toto':
+            return (False, ['Kiwi'])
+        return (True, [])
+
+DummyStep()
+
+
+class DummyStep1(CoopStep):
+    # This is another dummy step
+    _name = 'ins_process.dummy_process.dummy_step1'
+    name = fields.Char('Name')
+
+    # We initialize this step with some data from the previous step
+    def before_step_init(self, session, data):
+        # We cannot be sure that the current process uses a 'dummy_step',
+        # so we test for one.
+        # We also could make the state mandatory with else return (False, [..])
+        if hasattr(session, 'dummy_step'):
+            session.dummy_step1.name = session.dummy_step.name
+        return (True, [])
+
+    @staticmethod
+    def coop_step_name():
+        return 'Dummy Step 1'
+
+DummyStep1()
+
+
+class DummyProcess(CoopProcess):
+    # This is a Process. It inherits of CoopProcess.
+    _name = 'ins_process.dummy_process'
+
+    # We just need to declare the two steps
+    dummy_step = CoopStateView('ins_process.dummy_process.dummy_step',
+                               # Remember, the view name must start with the
+                               # tryton module name !
+                               'insurance_process.dummy_view')
+    dummy_step1 = CoopStateView('ins_process.dummy_process.dummy_step1',
+                               'insurance_process.dummy_view')
+
+    # and give it a name.
+    @staticmethod
+    def coop_process_name():
+        return 'Dummy Process Test'
+
+    def do_complete(self, session):
+        # Create and store stuff
+        return (True, [])
+
+DummyProcess()
+
+###############################################################################
+# Here is an example of default tryton wizard, performing a basic             #
+# subscription process. We just removed the class instanciations of tryton to #
+# avoid conflicts                                                             #
+###############################################################################
+
+
+class SubscriptionProcess(Wizard):
+    '''
+        This class defines the subscription process. It asks the user all that
+        will be needed to finally create a contract.
+    '''
+    _name = 'ins_contract.subscription_process'
+
+    # Defines the starting state (fixed attribute name)
+    start_state = 'project'
+
+    # This is a step of the process. It is defined as a StateView, with the
+    # foolowing arguments :
+    #    The name of the entity that defines the step (cf infra,
+    #    class ProjectState)
+    #    The name of the view which will be used to display the step. Careful,
+    #    this name must start with trytonmodule_name, in our case
+    #    'insurance_contract'.
+    #    A list of buttons. A button is defined with its label,
+    #    the state which must be called when pressed, and a reference to an
+    #    image file, which is used for displaying.
+    project = StateView('ins_contract.subscription_process.project',
+                        'insurance_contract.project_view',
+                        [Button('Cancel',
+                                'end',
+                                'tryton-cancel'),
+                         Button('Next',
+                                'option_selection',
+                                'tryton-go-next')])
+    option_selection = StateView(
+                        'ins_contract.subscription_process.option_selection',
+                        'insurance_contract.option_selection_view',
+                        [Button('Cancel',
+                                'end',
+                                'tryton-cancel'),
+                         Button('Previous',
+                                'project',
+                                'tryton-go-previous'),
+                         Button('Complete',
+                                'validate',
+                                'tryton-ok'),
+                         ])
+
+    # Transition State allows us to define a state which will only compute the
+    # following step name through the function transition_statename.
+    validate = StateTransition()
+
+    # This method will set default values for the 'project' state
+    # Syntax : default_statename(self, session, fields)
+    #     session => give access to all previous states
+    #     fields  => list of attributes used in the state view.
+    def default_project(self, session, fields):
+        # In this particular case, all we want to do is set today's date as
+        # the default value for the effective_date field
+        import datetime
+        return {'effective_date': datetime.date.today()}
+
+    def default_option_selection(self, session, fields):
+        # Here it is a little harder. We want to create a list of options
+        # (more Coverage Diplayers than Options) which will be used as an
+        # interface for the user.
+        options = []
+
+        # We have access to the product previously selected by the user
+        # in the session.project (session.any_state_name) attribute
+        for coverage in session.project.product.options:
+            # We create a list of coverage_displayer, whose model is
+            # calculated as it is specified in the definition of the
+            # option field of coverage_displayer
+            options.append({'for_coverage': coverage.id,
+                            'from_date': max(coverage.effective_date,
+                                             session.project.effective_date),
+                           'status': 'Active'})
+        return {'options': options}
+
+    # This function is automatically called when we click on the "next" step of
+    # the option_selection state. We must return the name of the state which
+    # must be called afterwards, but we also have a chance to work a little
+    # before.
+    def transition_validate(self, session):
+        contract_obj = Pool().get('ins_contract.contract')
+        options = []
+        for option in session.option_selection.options:
+
+            # We create a list of tuples ('create', dict), which will be passed
+            # to the contract_obj.create method to gives it the data it needs
+            # to create the options.
+            options.append(('create',
+                            {'effective_date': option.from_date,
+                             'coverage': option.for_coverage.id,
+                             }))
+
+        # Once the options are prepared, we can create the contract. To do so,
+        # we use the create method from the contract_obj model, giving it a
+        # dictionnary of attributes / values. For the options field, which is
+        # a list, we give it the list of tuple we just created, which will
+        # provide the create method with all the data it needs to create the
+        # contract record.
+        contract_obj.create({'options': options,
+                             'product': session.project.product.id,
+                             'effective_date': session.project.effective_date,
+                             'contract_number': contract_obj.
+                                                    get_new_contract_number()
+                             })
+
+        # We do not forget to return the name of the next step. 'end' is the
+        # technical step marking the end of the process.
+        return 'end'
+
+
+class ProjectState(ModelView):
+    _name = 'ins_contract.subscription_process.project'
+    # We define the list of attributes which will be used for display
+    effective_date = fields.Date('Effective Date',
+                                 required=True)
+    product = fields.Many2One('ins_product.product',
+                              'Product',
+                              #domain=[('effective_date',
+                              #         '<=',
+                              #         Eval('effective_date'))],
+                              depends=['effective_date', ],
+                              required=True)
+
+
+class OptionSelectionState(ModelView):
+    _name = 'ins_contract.subscription_process.option_selection'
+    options = fields.Many2Many('ins_contract.coverage_displayer',
+                               None,
+                               None,
+                               'Options Choices')
