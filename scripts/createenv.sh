@@ -33,6 +33,14 @@ else
 	echo $SEP
 	pip install polib lxml relatorio genshi python-dateutil pywebdav vobject python-ldap pytz psycopg2 hgnested hgreview
 	echo $SEP
+	echo $SEP
+	echo Creating symbol link for dependencies
+	echo $SEP
+	ln -s /usr/lib/python2.7/dist-packages/gtk* lib/python2.7/site-packages/
+	ln -s /usr/lib/python2.7/dist-packages/pygtk.p* lib/python2.7/site-packages/
+	ln -s /usr/lib/python2.7/dist-packages/gobject lib/python2.7/site-packages/
+	ln -s /usr/lib/python2.7/dist-packages/glib lib/python2.7/site-packages/
+	ln -s /usr/lib/python2.7/dist-packages/cairo lib/python2.7/site-packages/
 	echo Installation complete, remember to add
 	echo 	'[extensions]'
 	echo	'hgnested='
