@@ -42,10 +42,10 @@ class ProjectState(CoopStep):
     # directions, client side rules, etc...
     product = fields.Many2One('ins_product.product',
                               'Product',
-                              domain=[('effective_date',
-                                       '<=',
-                                       Eval('effective_date'))],
-                              depends=['effective_date', ],
+                              # domain=[('effective_date',
+                              #          '<=',
+                              #          Eval('effective_date'))],
+                              # depends=['effective_date', ],
                               required=True)
 
     # Default effective_date is today

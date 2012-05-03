@@ -61,6 +61,7 @@ class CoopProcess(Wizard):
 
         There will be a library of steps in which the rules will look for.
     '''
+    _name = 'ins_process.coop_process'
 
     # This is not a real state, it will only be used as a storage step for
     # the process' data
@@ -245,7 +246,8 @@ class CoopProcess(Wizard):
             if not res:
                 self.raise_user_error('\n'.join(errors))
             else:
-                self.raise_user_error('Everything is OK')
+                self.raise_user_warning('Everything is OK',
+                                      raise_exception=False)
                 self.raise_user_error('Everything is OK')
             return session.process_state.cur_step
         elif cur_action == 'cancel':
@@ -350,6 +352,8 @@ class CoopProcess(Wizard):
                     return self.calculate_next_step(session)
         # Just in case...
         return session.process_state.cur_step
+
+CoopProcess()
 
 
 class CoopState(object):

@@ -3,13 +3,13 @@
 	<data>
 		<record model="ir.action.wizard" id="dummy_view_action">
 			<field name="name">New Dummy Process</field>
-			<field name="wiz_name">ins_contract.dummy_process</field>
+			<field name="wiz_name">ins_process.dummy_process</field>
 			<field name="model">ir.ui.menu</field>
 		</record>
 		<menuitem parent="menu_process" action="dummy_view_action"
 			id="menu_start_dummy_process" sequence="2"/>
 		<record model="ir.ui.view" id="dummy_view">
-			<field name="model">ins_contract.dummy_process.dummy_step</field>
+			<field name="model">ins_process.dummy_process.dummy_step</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 					<![CDATA[ 

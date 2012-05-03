@@ -147,9 +147,6 @@
 			<field name="arch" type="xml">
 					 <![CDATA[
 					 <form string="step">
-					 <label name="process_test" xalign="0"/>
-					 <field name="process_test" xexpand="1" colspan="2"/>
-					 <newline/>
 					 <label name="name" xalign="0"/>
 					 <field name="name"/> 
 					 <field name="name"/>
