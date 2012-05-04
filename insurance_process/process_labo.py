@@ -98,6 +98,8 @@ class ProcessDesc(ModelSQL, ModelView):
         if not cur_step is None:
             for_step.order = for_step.order - 1
             cur_step.order = cur_step.order + 1
+            cur_step._model.write(cur_step.id, {'order': cur_step.order})
+            for_step._model.write(for_step.id, {'order': for_step.order})
 
     # This method is called by the process itself, providing the process desc
     # as an argument, to get the process' first step desc and its model
@@ -229,6 +231,7 @@ class StepDesc(ModelSQL, ModelView):
         self._rpc.update({'go_up': True})
 
     # Testing some order changing through methods, does not seem to work well.
+    @ModelView.button
     def go_up(self, ids):
         step_desc_obj = Pool().get('ins_process.step_desc')
         process_desc_obj = Pool().get('ins_process.process_desc')

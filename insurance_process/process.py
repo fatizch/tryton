@@ -1,5 +1,7 @@
+import datetime
+
 # Needed for displaying objects
-from trytond.model import ModelView
+from trytond.model import ModelView, ModelSQL
 from trytond.model import fields as fields
 
 # Needed for Wizardry
@@ -7,8 +9,22 @@ from trytond.wizard import Wizard, Button, StateView, StateTransition
 
 # Needed for getting models
 from trytond.pool import Pool
+from trytond.ir.session import Session
 
-ACTIONS = ('go_previous', 'go_next', 'cancel', 'complete', 'check')
+# Needed for creating Wizard Sessions
+from trytond.wizard import Session as SessionWizard
+
+# Needed for resuming processes
+from trytond.transaction import Transaction
+from trytond.protocols.jsonrpc import JSONEncoder
+
+# Needed for serializing data
+try:
+    import simplejson as json
+except ImportError:
+    import json
+
+ACTIONS = ('go_previous', 'go_next', 'cancel', 'complete', 'check', 'suspend')
 
 
 class ProcessState(ModelView):
@@ -89,10 +105,34 @@ class CoopProcess(Wizard):
     steps_previous = StateTransition()
     steps_cancel = StateTransition()
     steps_complete = StateTransition()
+    steps_suspend = StateTransition()
     steps_check = StateTransition()
 
     # We use the fact that we know the start step to set up a few things
     def transition_steps_start(self, session):
+        # We check if we are currently trying to resume a suspended process
+        if (Transaction().context.get('active_model')
+                            == 'ins_process.suspended_process'):
+            susp_process_obj = Pool().get('ins_process.suspended_process')
+            try:
+                susp_process = susp_process_obj.browse(
+                                        Transaction().context.get('active_id'))
+            except KeyError:
+                susp_process = None
+
+            # If a suspended process is found in the current context, resume it
+            if not susp_process is None:
+                # We get a dictionnary with the data from the stored session
+                susp_data = json.loads(
+                                susp_process.session_data.encode('utf-8'))
+                # Then update everything.
+                for key, value in susp_data.iteritems():
+                    session.data[key].update(value)
+                    getattr(session, key).dirty = True
+                self.dirty = True
+                return session.process_state.cur_step
+
+        # If not, we go on and start a new process
         # First of all, we get and set the process descriptor.
         process_desc_obj = Pool().get('ins_process.process_desc')
         try:
@@ -206,6 +246,11 @@ class CoopProcess(Wizard):
     # Transition method, we just set cur_action for now, and call master_step
     def transition_steps_check(self, session):
         session.process_state.cur_action = 'check'
+        return 'master_step'
+
+    # Transition method, we just set cur_action for now, and call master_step
+    def transition_steps_suspend(self, session):
+        session.process_state.cur_action = 'suspend'
         return 'master_step'
 
     # This method will be called when clicking on the 'complete' button
@@ -350,6 +395,21 @@ class CoopProcess(Wizard):
                     # Note that it supposed that the last step will not be
                     # stepped over !
                     return self.calculate_next_step(session)
+        elif cur_action == 'suspend':
+            susp_process_obj = Pool().get('ins_process.suspended_process')
+            tmp_id = susp_process_obj.create({
+                        # 'process_session': session._session.id,
+                        'suspension_date': datetime.date.today(),
+                        'for_user': session._session._user,
+                        'desc': '%s, step %s' % (self.coop_process_name(),
+                                            cur_state_model.coop_step_name()),
+                        'process_model_name': self._name,
+                        'session_data': json.dumps(session.data,
+                                                   cls=JSONEncoder)
+                                                    })
+            if tmp_id is None:
+                self.raise_user_error('Could not store process !')
+            return 'end'
         # Just in case...
         return session.process_state.cur_step
 
@@ -404,6 +464,12 @@ class CoopState(object):
                       'steps_check',
                       'tryton-help')
 
+    @staticmethod
+    def button_suspend():
+        return Button('Suspend',
+                      'steps_suspend',
+                      'tryton-go-jump')
+
     # For convenience, a list of all buttons...
     @staticmethod
     def all_buttons():
@@ -411,6 +477,7 @@ class CoopState(object):
                 CoopState.button_check(),
                 CoopState.button_next(),
                 CoopState.button_complete(),
+                CoopState.button_suspend(),
                 CoopState.button_cancel()]
 
 
@@ -636,6 +703,34 @@ class CoopStep(ModelView):
                                  data,
                                  step_desc,
                                  'post_step_')
+
+
+class SuspendedProcess(ModelSQL, ModelView):
+    '''
+        This class represents a suspended process, which can be resumed later.
+    '''
+    _name = 'ins_process.suspended_process'
+
+    # Just so we know since when the process has been suspended. In the
+    # future, we might want to set a timeout on suspended process so we
+    # need this information.
+    suspension_date = fields.Date('Suspension Date')
+
+    # This is an easy access field, as the data also exists in the session.
+    for_user = fields.Many2One('res.user',
+                               'Suspended by')
+
+    # Process Description, computed at creation time from session data
+    desc = fields.Char('Process Description')
+
+    # Process Model :
+    process_model_name = fields.Char('Process Model')
+
+    # Data from the session
+    session_data = fields.Text('Data')
+
+SuspendedProcess()
+
 
 #####################################################
 # Here is an example of implementation of a process #
