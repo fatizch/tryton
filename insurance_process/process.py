@@ -60,6 +60,11 @@ class ProcessState(ModelView):
     cur_step_desc = fields.Many2One('ins_process.step_desc',
                                     'Step Descriptor')
 
+    # This field will be used to store the suspended process which started the
+    # current process (if it exists) so that we can write over it in case of
+    # suspension, delete in case of completion/cancellation.
+    from_susp_process = fields.Integer('From Process')
+
 ProcessState()
 
 
@@ -107,30 +112,35 @@ class CoopProcess(Wizard):
     steps_complete = StateTransition()
     steps_suspend = StateTransition()
     steps_check = StateTransition()
+    steps_terminate = StateTransition()
 
     # We use the fact that we know the start step to set up a few things
+
+    def resume_suspended(self, session):
+        susp_process_obj = Pool().get('ins_process.suspended_process')
+        try:
+            susp_process = susp_process_obj.browse(
+                                        Transaction().context.get('active_id'))
+        except KeyError:
+            susp_process = None
+
+        # If a suspended process is found in the current context, resume it
+        if not susp_process is None:
+            # We get a dictionnary with the data from the stored session
+            susp_data = json.loads(susp_process.session_data.encode('utf-8'))
+            # Then update everything.
+            for key, value in susp_data.iteritems():
+                session.data[key].update(value)
+                getattr(session, key).dirty = True
+            session.process_state.from_susp_process = susp_process.id
+            self.dirty = True
+
     def transition_steps_start(self, session):
         # We check if we are currently trying to resume a suspended process
         if (Transaction().context.get('active_model')
                             == 'ins_process.suspended_process'):
-            susp_process_obj = Pool().get('ins_process.suspended_process')
-            try:
-                susp_process = susp_process_obj.browse(
-                                        Transaction().context.get('active_id'))
-            except KeyError:
-                susp_process = None
-
-            # If a suspended process is found in the current context, resume it
-            if not susp_process is None:
-                # We get a dictionnary with the data from the stored session
-                susp_data = json.loads(
-                                susp_process.session_data.encode('utf-8'))
-                # Then update everything.
-                for key, value in susp_data.iteritems():
-                    session.data[key].update(value)
-                    getattr(session, key).dirty = True
-                self.dirty = True
-                return session.process_state.cur_step
+            self.resume_suspended(session)
+            return session.process_state.cur_step
 
         # If not, we go on and start a new process
         # First of all, we get and set the process descriptor.
@@ -253,6 +263,15 @@ class CoopProcess(Wizard):
         session.process_state.cur_action = 'suspend'
         return 'master_step'
 
+    # This step will be called in case of soft termination (cancel or complete)
+    # We need to delete the suspended_process object if it exists
+    def transition_steps_terminate(self, session):
+        tmp_id = session.process_state.from_susp_process
+        if tmp_id > 0:
+            susp_process_obj = Pool().get('ins_process.suspended_process')
+            susp_process_obj.delete([tmp_id])
+        return 'end'
+
     # This method will be called when clicking on the 'complete' button
     def do_complete(self, session):
         return (True, [])
@@ -298,7 +317,7 @@ class CoopProcess(Wizard):
         elif cur_action == 'cancel':
             # CANCEL :
             # End of the process
-            return 'end'
+            return 'terminate'
         elif cur_action == 'complete':
             # COMPLETE :
             # First we try to complete the current step :
@@ -314,7 +333,7 @@ class CoopProcess(Wizard):
             (res, errors) = self.do_complete(session)
             # If it works, end of the process
             if res:
-                return 'end'
+                return 'terminate'
             # else, back to current step...
             self.raise_user_error('\n'.join(errors))
             return session.process_state.cur_step
@@ -396,19 +415,28 @@ class CoopProcess(Wizard):
                     # stepped over !
                     return self.calculate_next_step(session)
         elif cur_action == 'suspend':
+            # SUSPEND :
+            # We create or find a suspended process, then store the current
+            # process session data in it.
             susp_process_obj = Pool().get('ins_process.suspended_process')
-            tmp_id = susp_process_obj.create({
-                        # 'process_session': session._session.id,
-                        'suspension_date': datetime.date.today(),
-                        'for_user': session._session._user,
-                        'desc': '%s, step %s' % (self.coop_process_name(),
+            data_dict = {
+                         'suspension_date': datetime.date.today(),
+                         'for_user': session._session._user,
+                         'desc': '%s, step %s' % (self.coop_process_name(),
                                             cur_state_model.coop_step_name()),
-                        'process_model_name': self._name,
-                        'session_data': json.dumps(session.data,
-                                                   cls=JSONEncoder)
-                                                    })
-            if tmp_id is None:
-                self.raise_user_error('Could not store process !')
+                         'process_model_name': self._name,
+                         'session_data': json.dumps(session.data,
+                                                    cls=JSONEncoder)
+                         }
+            if session.process_state.from_susp_process > 0:
+                # Already exist, we just need an update
+                susp_process_obj.write(session.process_state.from_susp_process,
+                                       data_dict)
+            else:
+                # Does not exist, create it !
+                tmp_id = susp_process_obj.create(data_dict)
+                if tmp_id is None:
+                    self.raise_user_error('Could not store process !')
             return 'end'
         # Just in case...
         return session.process_state.cur_step
