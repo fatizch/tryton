@@ -10,7 +10,7 @@ from trytond.pool import Pool
 # Needed for Eval
 from trytond.pyson import Eval
 
-#
+# Needed for accessing the Transaction singleton
 from trytond.transaction import Transaction
 
 # For now, just step_over and checks are customizable
