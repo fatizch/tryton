@@ -229,6 +229,7 @@ class StepDesc(ModelSQL, ModelView):
     def __init__(self):
         super(StepDesc, self).__init__()
         self._rpc.update({'go_up': True})
+        self._buttons = {'go_up': {'invisible': Eval('order', 0) == 1}}
 
     # Testing some order changing through methods, does not seem to work well.
     @ModelView.button

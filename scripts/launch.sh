@@ -11,7 +11,7 @@ echo $SEP
 $TRYTOND_PATH/trytond -c $TRYTOND_CONF &
 echo "Starting tryton client"
 echo $SEP
-$TRYTON_PATH/tryton &
+env UBUNTU_MENUPROXY= $TRYTON_PATH/tryton &
 sleep 2
 echo $SEP
 echo "Client ready"

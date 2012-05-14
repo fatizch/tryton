@@ -31,7 +31,7 @@ else
 	source bin/activate
 	echo Installing pip packages
 	echo $SEP
-	pip install polib lxml relatorio genshi python-dateutil pywebdav vobject python-ldap pytz psycopg2 hgnested hgreview
+	pip install polib lxml relatorio genshi python-dateutil pywebdav vobject python-ldap pytz psycopg2 hgnested hgreview sphinx
 	echo $SEP
 	echo $SEP
 	echo Creating symbol link for dependencies

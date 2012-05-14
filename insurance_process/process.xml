@@ -23,9 +23,10 @@
 		to resume them -->
 		<record model="ir.action.wizard" id="suspended_process_resume">
             <field name="name">Resume Process</field>
-            <field name="wiz_name">ins_process.dummy_process</field>
+            <field name="wiz_name">ins_process.resume_process</field>
             <field name="model">ins_process.suspended_process</field>
         </record>
+        
         <record model="ir.action.keyword" id="resume_process_keyword">
             <field name="keyword">form_action</field>
             <field name="model">ins_process.suspended_process,-1</field>
@@ -49,5 +50,11 @@
 			left part of the application (referenced by the 'parent') -->
 		<menuitem parent="menu_process" sequence="2" id="menu_suspended_process"
 			icon="tryton-list" action="suspended_process_form" />
+
+		<record model="ir.action.wizard" id="resume_dummy_process">
+            <field name="name">Resume Process</field>
+            <field name="wiz_name">ins_process.dummy_process</field>
+            <field name="model">ins_process.suspended_process</field>
+        </record>
 	</data>
 </tryton>

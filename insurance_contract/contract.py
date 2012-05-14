@@ -15,10 +15,10 @@ from trytond.pool import Pool
 
 CONTRACTNUMBER_MAX_LENGTH = 10
 CONTRACTSTATUSES = [
-                        (0, 'Quote'),
-                        (1, 'Active'),
-                        (2, 'Hold'),
-                        (3, 'Terminated'),
+                        ('Quote', 'Quote'),
+                        ('Active', 'Active'),
+                        ('Hold', 'Hold'),
+                        ('Terminated', 'Terminated'),
                     ]
 OPTIONSTATUS = [
                     ('Active', 'Active'),

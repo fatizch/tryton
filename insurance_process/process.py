@@ -6,6 +6,7 @@ from trytond.model import fields as fields
 
 # Needed for Wizardry
 from trytond.wizard import Wizard, Button, StateView, StateTransition
+from trytond.wizard import StateAction
 
 # Needed for getting models
 from trytond.pool import Pool
@@ -17,6 +18,7 @@ from trytond.wizard import Session as SessionWizard
 # Needed for resuming processes
 from trytond.transaction import Transaction
 from trytond.protocols.jsonrpc import JSONEncoder
+from trytond.model.browse import BrowseRecord, BrowseRecordNull
 
 # Needed for serializing data
 try:
@@ -66,6 +68,187 @@ class ProcessState(ModelView):
     from_susp_process = fields.Integer('From Process')
 
 ProcessState()
+
+
+class AbstractObject(object):
+    '''
+        This class is designed as to provide an abstract way to access to
+        data, whether it is stored in the database or still a dictionnary.
+    '''
+
+    def __init__(self, model_name, id=0):
+        # Whatever the status of the object (stored or not yet), it has a
+        # model name, which describes it.
+        #
+        # NOTE : we need to bypass the getattr method as it is overriden, so
+        # we set the field through direct access.
+        self.__dict__['_model_name'] = model_name
+
+        # If the object already exists in the database, it got an id so we
+        # need to store it for later use.
+        self.__dict__['_id'] = id
+
+        # If the object DOES NOT exist yet, we will need to create a basic
+        # datastructure which will be used to store and access data
+        if id == 0:
+            # This structure will be a dictionnary where the key are the names
+            # of the fields of the object.
+            _attrs = {}
+
+            # In order to provide the right fields, we need to get them from
+            # the model.
+            try:
+                model_obj = Pool().get(model_name)
+            except:
+                model_obj = None
+            if not model_obj is None:
+                # So we go through all the attributes which are part of the
+                # model and which are fields as in tryton field
+                for (field_name, field) in [(field, getattr(model_obj, field))
+                              for field in dir(model_obj)
+                              if isinstance(getattr(model_obj, field),
+                                            fields.Field)]:
+                    # If said field is a list, so shall it be
+                    if (isinstance(field, fields.One2Many)
+                            or isinstance(field, fields.Many2Many)):
+                        _attrs[field_name] = []
+                    # else, we just need to create the key, to avoid KeyErrors
+                    # when accessing.
+                    _attrs[field_name] = None
+
+            # And finally we set up the _attrs field.
+            self.__dict__['_attrs'] = _attrs
+
+    # Now we override the __getattr__ method so that we look in the _attrs dict
+    # for keys matching the asked field name.
+    def __getattr__(self, name):
+        # First of all, if the field is a native field, no need to go further
+        if name in self.__dict__:
+            return self.__dict__[name]
+        # Otherwise there are two possibilities :
+        elif self._id == 0:
+            # If we are talking of non-yet stored object
+            if name in self._attrs:
+                # We just return the value that is in the dictionnary.
+                return self._attrs[name]
+            else:
+                raise KeyError
+        else:
+            # If self is a stored object, we return the fields value as
+            # a BrowseRecord value :
+            obj = Pool().get(self._model_name)
+            return obj.browse(self._id).name
+
+    # We need a way to set values on our object
+    def __setattr__(self, name, value):
+        if name in self.__dict__:
+        # Again, no need to make it complicated if the value is meant for a
+        # native field of self.
+            self.__dict__[name] = value
+        elif self._id == 0 and name in self._attrs:
+            # If we are working with a dict and that the field name exists in
+            # it (as we created the dict structure from the model, it means
+            # that the field also exists in the model)
+            obj = Pool().get(self._model_name)
+            field = getattr(obj, name)
+
+            # This method will be use to create an AbstractObject from a value,
+            # whatever the value type.
+            def create_abstract(model, value):
+                if isinstance(value, AbstractObject):
+                    # It is already an abstract object, we just need to check
+                    # that we got the model right
+                    if value._model_name == model:
+                        return value
+                    else:
+                        raise TypeError
+                elif isinstance(value, (int, long)):
+                    # It is an id, we create the object and specify it
+                    return AbstractObject(model, id=value)
+                elif isinstance(value, BrowseRecord):
+                    # It is a BrowseRecord, we create the AbstractObject.
+                    if value._model._name == self._model_name:
+                        return AbstractObject(value._model._name, value.id)
+                    else:
+                        raise TypeError
+                else:
+                    raise TypeError
+                # Anything else is an error...
+
+            # We need some special handling for list types
+            if isinstance(field, fields.One2Many):
+                # When setting a One2Many list, we expect an abstract object
+                # for each element of the list
+                if (type(value) == list and
+                        [elem for elem in value
+                            if not isinstance(elem, AbstractObject)]
+                        == []):
+                    self._attrs[name] = value
+                else:
+                    # Anything else raises an error
+                    raise TypeError
+            elif isinstance(field, fields.Many2Many):
+                # For Many2Many fields, objects might be AbstractObjects, ids,
+                # BroqseRecords, etc...
+                if type(value) == list:
+                    self._attrs[name] = []
+                    for elem in value:
+                        # So we use the create_abstract method to return an
+                        # abstract object which encapsulates the data.
+                        self._attrs[name].append(
+                                create_abstract(field.model_name, elem))
+                else:
+                    raise TypeError
+            elif isinstance(field, fields.Many2One):
+                # in case of a Many2One, we cannot know the value type as well,
+                # the create_abstract method will do the work for us.
+                self._attrs[name] = create_abstract(field.model_name, value)
+            else:
+                # Anything else is (hopefully) a basic type, so we just set
+                # the value.
+                self._attrs[name] = value
+        elif self._id != 0:
+            # This should not be commonly used, as it requires a manual save of
+            # the object later.
+            obj = Pool().get(self._model_name)
+            obj.brwose(self._id).__setattr__(name, value)
+        else:
+            raise KeyError
+
+    @staticmethod
+    def load_from_text(text):
+        # This will take a json text as an input and create the corresponding
+        # abstract object
+        if not (text is None or text == ''):
+            res = json.loads(text.encode('utf-8'))
+            abstract = AbstractObject(res['model_name'], res['id'])
+            abstract.__dict__['_attrs'] = res['attrs']
+            return abstract
+        else:
+            return None
+
+    @staticmethod
+    def store_to_text(object):
+        # This takes an abstract object and uses json to create a storable
+        # (and loadable) string for future use.
+        return json.dumps({'model_name': object._model_name,
+                           'id': object._id,
+                           'attrs': object._attrs},
+                          cls=JSONEncoder)
+
+
+class WithContractProcessState(object):
+    '''
+        This class provides a way to create a process_state for your process
+        which will provide an API to get access to a contract, whether
+        it exists in the database or not yet.
+    '''
+    # Easy case : the contract exists in the database and we only read it
+    for_contract_db = fields.Many2One('ins_process.dummy_object',
+                                   'For Contract')
+
+    # Dict containing contract data as string
+    for_contract_str = fields.Text('Json Contract')
 
 
 class CoopProcess(Wizard):
@@ -165,7 +348,7 @@ class CoopProcess(Wizard):
                                             session.process_state.process_desc)
 
         # We use the answer to look for the associated state name (step_desc
-        # associations are based on coop_step_nae() calls)
+        # associations are based on coop_step_name() calls)
         first_step, first_step_name = self.get_state_from_model(step_name)
 
         # We use the process_state's fields to store those persistent data :
@@ -308,7 +491,8 @@ class CoopProcess(Wizard):
                                                        cur_step_desc)
             # and display the result
             if not res:
-                self.raise_user_error('\n'.join(errors))
+                self.raise_user_warning('Error', '\n'.join(errors))
+                pass
             else:
                 self.raise_user_warning('Everything is OK',
                                       raise_exception=False)
@@ -425,6 +609,9 @@ class CoopProcess(Wizard):
                          'desc': '%s, step %s' % (self.coop_process_name(),
                                             cur_state_model.coop_step_name()),
                          'process_model_name': self._name,
+                         # We need the session_data to be persistent in order
+                         # to be able to resume the process in the same state
+                         # as it was before, so we encode it in a json string.
                          'session_data': json.dumps(session.data,
                                                     cls=JSONEncoder)
                          }
@@ -533,7 +720,7 @@ class CoopStateView(StateView, CoopState):
         # First we get the existing data for our step in the current session
         default_data = getattr(session, state_name)._data
         if default_data:
-            # If it exists, we go through each field and set a nex entry in the
+            # If it exists, we go through each field and set a new entry in the
             # return dict
             for field in [field for field in fields
                                 if (field in default_data)]:
@@ -760,6 +947,72 @@ class SuspendedProcess(ModelSQL, ModelView):
 SuspendedProcess()
 
 
+class ResumeWizard(Wizard):
+    '''
+        This class is designed to provide an interface for restarting a
+        suspended process.
+    '''
+    _name = 'ins_process.resume_process'
+    start_state = 'action'
+
+    class LaunchStateAction(StateAction):
+        '''
+            We need a special StateAction in which we will override the
+            get_action method to calculate the name of the wizard we must
+            launch
+        '''
+
+        def __init__(self):
+            StateAction.__init__(self, None)
+
+        def get_action(self):
+            # First we need to be sure that we are working on a suspended
+            # process.
+            if Transaction().context.get('active_model') != \
+                                            'ins_process.suspended_process':
+                self.raise_user_error(
+                                'Selected record is not a suspended process')
+
+            susp_process_obj = Pool().get('ins_process.suspended_process')
+
+            # Then we look for the associated record. Note that if we had not
+            # check the active_model, we might have found something which would
+            # not have been right !
+            try:
+                susp_process = susp_process_obj.browse(
+                                        Transaction().context.get('active_id'))
+            except KeyError:
+                susp_process = None
+                self.raise_user_error('Could not find a process to resume')
+
+            # Then we look for an action wizard associated to the process_model
+            # of the suspended process :
+            action_obj = Pool().get('ir.action')
+            act_wizard_obj = Pool().get('ir.action.wizard')
+            good_id = act_wizard_obj.search([
+                        ('model', '=', 'ins_process.suspended_process'),
+                        ('wiz_name', '=', susp_process.process_model_name)
+                                             ])[0]
+
+            # Finally, we just return the instruction to start an action wizard
+            # with the id we just found.
+            return action_obj.get_action_values('ir.action.wizard',
+                good_id)
+
+    # The only state of our wizard process is this one.
+    action = LaunchStateAction()
+
+    # We need to specify this method as we want to update the context of the
+    # wizard that is going to be launched with the data we were provided with.
+    def do_action(self, session, action):
+        return (action, {
+                     'id': Transaction().context.get('active_id'),
+                     'model': Transaction().context.get('active_model'),
+                     'ids': Transaction().context.get('active_ids'),
+                         })
+
+ResumeWizard()
+
 #####################################################
 # Here is an example of implementation of a process #
 #####################################################
@@ -795,7 +1048,35 @@ class DummyStep(CoopStep):
             return (False, ['Kiwi'])
         return (True, [])
 
+    def check_step_abstract_obj(self, session, data):
+        contract = session.process_state.for_contract_db
+        if isinstance(contract, BrowseRecordNull):
+            contract = AbstractObject.load_from_text(
+                                    session.process_state.for_contract_str)
+        else:
+            contract = AbstractObject(contract._model._name, contract.id)
+        if contract is None:
+            contract = AbstractObject('ins_process.dummy_object')
+        if contract.contract_number == 'Test':
+            contract.contract_number = 'Toto'
+        else:
+            contract.contract_number = 'Test'
+        session.process_state.for_contract_str = \
+                                    AbstractObject.store_to_text(contract)
+        session.process_state.dirty = True
+        self.dirty = True
+        session.save()
+        print contract.contract_number
+        return (True, [])
+
 DummyStep()
+
+
+class DummyObject(ModelSQL, ModelView):
+    _name = 'ins_process.dummy_object'
+    contract_number = fields.Char('Contract Number')
+
+DummyObject()
 
 
 class DummyStep1(CoopStep):
@@ -819,9 +1100,19 @@ class DummyStep1(CoopStep):
 DummyStep1()
 
 
+class DummyProcessState(ProcessState, WithContractProcessState):
+    _name = 'ins_process.dummy_process_state'
+
+DummyProcessState()
+
+
 class DummyProcess(CoopProcess):
     # This is a Process. It inherits of CoopProcess.
     _name = 'ins_process.dummy_process'
+
+    process_state = StateView('ins_process.dummy_process_state',
+                              '',
+                              [])
 
     # We just need to declare the two steps
     dummy_step = CoopStateView('ins_process.dummy_process.dummy_step',

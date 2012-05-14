@@ -42,10 +42,16 @@ class ProjectState(CoopStep):
     # directions, client side rules, etc...
     product = fields.Many2One('ins_product.product',
                               'Product',
-                              # domain=[('effective_date',
-                              #          '<=',
-                              #          Eval('effective_date'))],
-                              # depends=['effective_date', ],
+                              # domain : a list of conditions
+                              # (param1, op, param2).
+                              # Param1 must be a field of the target model,
+                              # Param2 will be evaluated in the current record
+                              # context, so will return the value of
+                              # effective_date in the current ProjetState
+                              domain=[('effective_date',
+                                       '<=',
+                                       Eval('effective_date', None))],
+                              depends=['effective_date', ],
                               required=True)
 
     # Default effective_date is today
