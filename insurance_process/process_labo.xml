@@ -77,10 +77,9 @@
 			<field name="type">tree</field>
 			<field name="arch" type="xml">                 
 					<![CDATA[                 
-					<tree string="step">
-					<field name="order"/>
+					<tree string="step" sequence="sequence">
+					<field name="sequence"/>
 					<field name="step_model"/>
-					<button name="go_up" string="^" type="object"/>
 					</tree>                 ]]>
 			</field>
 		</record>
@@ -97,8 +96,6 @@
 					 <newline/>
 					 <label name="step_model" xalign="0"/>
 					 <field name="step_model" colspan="2"/>
-					 <label name="order"/> 
-					 <field name="order"/>
 					 <newline/>
 					 <field name="methods" colspan="6"/>
 					 </form>               ]]>

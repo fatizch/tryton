@@ -185,15 +185,15 @@ class CoverageDisplayer(ModelView):
         to be stored, and is not supposed to be.
     '''
     _name = 'ins_contract.coverage_displayer'
-    for_coverage = fields.Many2One('ins_product.coverage',
+    coverage = fields.Many2One('ins_product.coverage',
                                    'Coverage',
                                    readonly=True)
-    from_date = fields.Date(
+    effective_date = fields.Date(
                         'From Date',
-                        domain=[('for_coverage.effective_date',
+                        domain=[('coverage.effective_date',
                                  '<=',
-                                 'from_date')],
-                        depends=['for_coverage', ],
+                                 'effective_date')],
+                        depends=['coverage', ],
                         required=True)
     status = fields.Selection(OPTIONSTATUS,
                               'Status')

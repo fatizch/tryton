@@ -15,8 +15,7 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.protocols.jsonrpc import JSONEncoder
 from trytond.model.browse import BrowseRecord, BrowseRecordNull
-from trytond.modules.insurance_process import to_list
-from types import MemberDescriptorType
+from tools import AbstractObject, to_list
 
 # Needed for serializing data
 try:
@@ -25,173 +24,6 @@ except ImportError:
     import json
 
 ACTIONS = ('go_previous', 'go_next', 'cancel', 'complete', 'check', 'suspend')
-
-
-class AbstractObject(object):
-    '''
-        This class is designed as to provide an abstract way to access to
-        data, whether it is stored in the database or still a dictionnary.
-    '''
-
-    def __init__(self, model_name, for_id=0):
-        # Whatever the status of the object (stored or not yet), it has a
-        # model name, which describes it.
-        #
-        # NOTE : we need to bypass the getattr method as it is overriden, so
-        # we set the field through direct access.
-        self.__dict__['_model_name'] = model_name
-
-        # If the object already exists in the database, it got an id so we
-        # need to store it for later use.
-        self.__dict__['_id'] = for_id
-
-        # If the object DOES NOT exist yet, we will need to create a basic
-        # datastructure which will be used to store and access data
-        if for_id == 0:
-            # This structure will be a dictionnary where the key are the names
-            # of the fields of the object.
-            _attrs = {}
-
-            # In order to provide the right fields, we need to get them from
-            # the model.
-            try:
-                model_obj = Pool().get(model_name)
-            except:
-                model_obj = None
-            if not model_obj is None:
-                # So we go through all the attributes which are part of the
-                # model and which are fields as in tryton field
-                for (field_name, field) in [(field, getattr(model_obj, field))
-                              for field in dir(model_obj)
-                              if isinstance(getattr(model_obj, field),
-                                            fields.Field)]:
-                    # If said field is a list, so shall it be
-                    if (isinstance(field, fields.One2Many)
-                            or isinstance(field, fields.Many2Many)):
-                        _attrs[field_name] = []
-                    # else, we just need to create the key, to avoid KeyErrors
-                    # when accessing.
-                    _attrs[field_name] = None
-
-            # And finally we set up the _attrs field.
-            self.__dict__['_attrs'] = _attrs
-
-    # Now we override the __getattr__ method so that we look in the _attrs dict
-    # for keys matching the asked field name.
-    def __getattr__(self, name):
-        # First of all, if the field is a native field, no need to go further
-        if name in self.__dict__:
-            return self.__dict__[name]
-        # Otherwise there are two possibilities :
-        elif self._id == 0:
-            # If we are talking of non-yet stored object
-            if name in self._attrs:
-                # We just return the value that is in the dictionnary.
-                return self._attrs[name]
-            else:
-                raise KeyError
-        else:
-            # If self is a stored object, we return the fields value as
-            # a BrowseRecord value :
-            obj = Pool().get(self._model_name)
-            return obj.browse(self._id).name
-
-    # We need a way to set values on our object
-    def __setattr__(self, name, value):
-        if name in self.__dict__:
-        # Again, no need to make it complicated if the value is meant for a
-        # native field of self.
-            self.__dict__[name] = value
-        elif self._id == 0 and name in self._attrs:
-            # If we are working with a dict and that the field name exists in
-            # it (as we created the dict structure from the model, it means
-            # that the field also exists in the model)
-            obj = Pool().get(self._model_name)
-            field = getattr(obj, name)
-
-            # This method will be use to create an AbstractObject from a value,
-            # whatever the value type.
-            def create_abstract(model, value):
-                if isinstance(value, AbstractObject):
-                    # It is already an abstract object, we just need to check
-                    # that we got the model right
-                    if value._model_name == model:
-                        return value
-                    else:
-                        raise TypeError
-                elif isinstance(value, (int, long)):
-                    # It is an id, we create the object and specify it
-                    return AbstractObject(model, id=value)
-                elif isinstance(value, BrowseRecord):
-                    # It is a BrowseRecord, we create the AbstractObject.
-                    if value._model._name == self._model_name:
-                        return AbstractObject(value._model._name, value.id)
-                    else:
-                        raise TypeError
-                else:
-                    raise TypeError
-                # Anything else is an error...
-
-            # We need some special handling for list types
-            if isinstance(field, fields.One2Many):
-                # When setting a One2Many list, we expect an abstract object
-                # for each element of the list
-                if (type(value) == list and
-                        [elem for elem in value
-                            if not isinstance(elem, AbstractObject)]
-                        == []):
-                    self._attrs[name] = value
-                else:
-                    # Anything else raises an error
-                    raise TypeError
-            elif isinstance(field, fields.Many2Many):
-                # For Many2Many fields, objects might be AbstractObjects, ids,
-                # BroqseRecords, etc...
-                if type(value) == list:
-                    self._attrs[name] = []
-                    for elem in value:
-                        # So we use the create_abstract method to return an
-                        # abstract object which encapsulates the data.
-                        self._attrs[name].append(
-                                create_abstract(field.model_name, elem))
-                else:
-                    raise TypeError
-            elif isinstance(field, fields.Many2One):
-                # in case of a Many2One, we cannot know the value type as well,
-                # the create_abstract method will do the work for us.
-                self._attrs[name] = create_abstract(field.model_name, value)
-            else:
-                # Anything else is (hopefully) a basic type, so we just set
-                # the value.
-                self._attrs[name] = value
-        elif self._id != 0:
-            # This should not be commonly used, as it requires a manual save of
-            # the object later.
-            obj = Pool().get(self._model_name)
-            obj.brwose(self._id).__setattr__(name, value)
-        else:
-            raise KeyError
-
-    @staticmethod
-    def load_from_text(text):
-        # This will take a json text as an input and create the corresponding
-        # abstract object
-        if not (text is None or text == ''):
-            res = json.loads(text.encode('utf-8'))
-            abstract = AbstractObject(res['model_name'], res['id'])
-            abstract.__dict__['_attrs'] = res['attrs']
-            return abstract
-        else:
-            return None
-
-    @staticmethod
-    def store_to_text(for_object):
-        # This takes an abstract object and uses json to create a storable
-        # (and loadable) string for future use.
-        return json.dumps({'model_name': for_object._model_name,
-                           'id': for_object._id,
-                           'attrs': for_object._attrs},
-                          cls=JSONEncoder)
 
 
 class MetaAbstract(type):
@@ -1071,6 +903,10 @@ class ResumeWizard(Wizard):
 
     # The only state of our wizard process is this one.
     action = LaunchStateAction()
+    dummy_step = CoopStateView('ins_process.dummy_process.dummy_step',
+                               # Remember, the view name must start with the
+                               # tryton module name !
+                               'insurance_process.dummy_view')
 
     # We need to specify this method as we want to update the context of the
     # wizard that is going to be launched with the data we were provided with.
@@ -1080,6 +916,9 @@ class ResumeWizard(Wizard):
                      'model': Transaction().context.get('active_model'),
                      'ids': Transaction().context.get('active_ids'),
                          })
+
+    def transition_action(self, session):
+        return 'dummy_step'
 
 ResumeWizard()
 

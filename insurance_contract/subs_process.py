@@ -16,6 +16,10 @@ from trytond.pyson import Eval
 from trytond.modules.insurance_process import CoopStep
 from trytond.modules.insurance_process import CoopStateView
 from trytond.modules.insurance_process import CoopProcess
+from trytond.modules.insurance_process import ProcessState
+from trytond.modules.insurance_process import WithAbstract
+from trytond.modules.insurance_process import AbstractObject
+from trytond.model.browse import BrowseRecordNull
 
 ###############################################################################
 # This is the Subscription Process. It is a process (which uses the           #
@@ -55,9 +59,21 @@ class ProjectState(CoopStep):
                               required=True)
 
     # Default effective_date is today
-    def before_step_init(self, session, data):
+    def before_step_init(self, session):
         if session.project.effective_date is None:
             session.project.effective_date = datetime.date.today()
+        return (True, [])
+
+    def check_step_product(self, session):
+        if type(session.project.product) != BrowseRecordNull:
+            return (True, [])
+        return (False, ['A product must be provided !'])
+
+    def post_step_update_abstract(self, session):
+        contract = WithAbstract.get_abstract_objects(session, 'for_contract')
+        contract.product = session.project.product
+        contract.effective_date = session.project.effective_date
+        WithAbstract.save_abstract_objects(session, ('for_contract', contract))
         return (True, [])
 
     @staticmethod
@@ -85,7 +101,7 @@ class OptionSelectionState(CoopStep):
 
     # We initialize the list of options with the list of coverages offered by
     # the product previously selected.
-    def before_step_init_options(self, session, data):
+    def before_step_init_options(self, session):
         '''
             This method should not be called when coming from downstream.
             If its from upstream it should.
@@ -104,8 +120,8 @@ class OptionSelectionState(CoopStep):
         # So we go through the options of our product, then create a displayer
         # which will be used to ask for input from the user.
         for coverage in session.project.product.options:
-            options.append({'for_coverage': coverage.id,
-                            'from_date': max(coverage.effective_date,
+            options.append({'coverage': coverage.id,
+                            'effective_date': max(coverage.effective_date,
                                              session.project.effective_date),
                            'status': 'Active'})
         # Then set those displayers as the options field of our current step.
@@ -113,7 +129,7 @@ class OptionSelectionState(CoopStep):
         return (True, [])
 
     # Here we check that at least one option has been selected
-    def check_step_option_selected(self, session, data):
+    def check_step_option_selected(self, session):
         for coverage in session.option_selection.options:
             if coverage.status == 'Active':
                 return (True, [])
@@ -121,15 +137,25 @@ class OptionSelectionState(CoopStep):
 
     # and that all options must have an effective date greater than the
     # future contract's effective date.
-    def check_step_options_date(self, session, data):
+    def check_step_options_date(self, session):
         for coverage in session.option_selection.options:
-            if coverage.from_date < session.project.effective_date:
+            if coverage.effective_date < session.project.effective_date:
                 return (False, ['Options must be subscribed after %s'
                                  % session.project.effective_date])
-            elif coverage.from_date < coverage.for_coverage.effective_date:
+            elif coverage.effective_date < coverage.coverage.effective_date:
                 return (False, ['%s must be subscribed after %s'
-                                % (coverage.for_coverage.name,
-                                   coverage.for_coverage.effective_date)])
+                                % (coverage.coverage.name,
+                                   coverage.coverage.effective_date)])
+        return (True, [])
+
+    def post_step_create_options(self, session):
+        contract = WithAbstract.get_abstract_objects(session, 'for_contract')
+        list_options = []
+        for option in session.option_selection.options:
+            list_options.append(AbstractObject('ins_contract.options', 0,
+                                               init_data=option))
+        contract.options = list_options
+        WithAbstract.save_abstract_objects(session, ('for_contract', contract))
         return (True, [])
 
     @staticmethod
@@ -139,12 +165,23 @@ class OptionSelectionState(CoopStep):
 OptionSelectionState()
 
 
+class SubscriptionProcessState(ProcessState, WithAbstract):
+    __abstracts__ = [('for_contract', 'ins_contract.contract')]
+    _name = 'ins_contract.subs_process.process_state'
+
+SubscriptionProcessState()
+
+
 class SubscriptionProcess(CoopProcess):
     '''
         This class defines the subscription process. It asks the user all that
         will be needed to finally create a contract.
     '''
     _name = 'ins_contract.subs_process'
+
+    process_state = StateView('ins_contract.subs_process.process_state',
+                              '',
+                              [])
 
     @staticmethod
     def coop_process_name():
@@ -160,17 +197,18 @@ class SubscriptionProcess(CoopProcess):
     # And do something when validation occurs
     def do_complete(self, session):
         contract_obj = Pool().get('ins_contract.contract')
+        contract = WithAbstract.get_abstract_objects(session, 'for_contract')
         options = []
         # We got the list of option displayers, so we create the real thing
-        for option in session.option_selection.options:
+        for option in contract.options:
             options.append(('create',
-                            {'effective_date': option.from_date,
-                             'coverage': option.for_coverage.id,
+                            {'effective_date': option.effective_date,
+                             'coverage': option.coverage.id,
                              }))
         # then go for the creation of the contract.
         contract_obj.create({'options': options,
-                             'product': session.project.product.id,
-                             'effective_date': session.project.effective_date,
+                             'product': contract.product.id,
+                             'effective_date': contract.effective_date,
                              'contract_number': contract_obj.
                                                     get_new_contract_number()
                              })
