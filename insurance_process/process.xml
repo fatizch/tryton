@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tryton>
+	<data>
+		<!-- Suspended Process -->
+		<!-- Tree view -->
+		<record model="ir.ui.view" id="suspended_process_view_tree">
+			<field name="model">ins_process.suspended_process</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">                 
+					    <![CDATA[                 
+						    <tree string="Suspended Processes">
+							    <field name="id"/>
+							    <field name="suspension_date"/>
+							    <field name="for_user"/>
+							    <field name="suspension_date"/>
+							    <field name="desc"/>
+						    </tree>                 
+					    ]]>
+			</field>
+		</record>
+
+		<!-- Add an action to the ins_process.suspended_process which allows
+		to resume them -->
+		<record model="ir.action.wizard" id="suspended_process_resume">
+            <field name="name">Resume Process</field>
+            <field name="wiz_name">ins_process.resume_process</field>
+            <field name="model">ins_process.suspended_process</field>
+        </record>
+        
+        <record model="ir.action.keyword" id="resume_process_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">ins_process.suspended_process,-1</field>
+            <field name="action" ref="suspended_process_resume"/>
+        </record>
+		
+		<!-- View for the main menu and the event -->
+		<record model="ir.action.act_window" id="suspended_process_form">
+			<field name="name">Suspended Processes</field>
+			<field name="res_model">ins_process.suspended_process</field>
+		</record>
+
+		<!-- View that connect the form in the tree with the specification -->
+		<record model="ir.action.act_window.view" id="act_susp_process_form_view1">
+			<field name="sequence" eval="10" />
+			<field name="view" ref="suspended_process_view_tree" />
+			<field name="act_window" ref="suspended_process_form" />
+		</record>
+		
+		<!-- MenuItem allows us to add a subelement to an entrypoint of the
+			left part of the application (referenced by the 'parent') -->
+		<menuitem parent="menu_process" sequence="2" id="menu_suspended_process"
+			icon="tryton-list" action="suspended_process_form" />
+
+		<record model="ir.action.wizard" id="resume_dummy_process">
+            <field name="name">Resume Process</field>
+            <field name="wiz_name">ins_process.dummy_process</field>
+            <field name="model">ins_process.suspended_process</field>
+        </record>
+	</data>
+</tryton>

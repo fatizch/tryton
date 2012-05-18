@@ -143,8 +143,8 @@
 					<![CDATA[
 						<tree string="Coverage Choices Tree" editable="top">
 							<field name="status"/>
-							<field name="for_coverage"/>
-							<field name="from_date"/>
+							<field name="coverage"/>
+							<field name="effective_date"/>
 						</tree>
 					]]>
 			</field>

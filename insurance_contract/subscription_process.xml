@@ -38,6 +38,12 @@
 					]]>
 			</field>
 		</record>
+		
+		<record model="ir.action.wizard" id="resume_subs_process">
+            <field name="name">Resume Process</field>
+            <field name="wiz_name">ins_contract.subs_process</field>
+            <field name="model">ins_process.suspended_process</field>
+        </record>
 	</data>
 </tryton>
 		

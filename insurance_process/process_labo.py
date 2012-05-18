@@ -10,7 +10,7 @@ from trytond.pool import Pool
 # Needed for Eval
 from trytond.pyson import Eval
 
-#
+# Needed for accessing the Transaction singleton
 from trytond.transaction import Transaction
 
 # For now, just step_over and checks are customizable
@@ -42,7 +42,6 @@ class ProcessDesc(ModelSQL, ModelView):
                 # available when creating child records
                             context={
                         'parent_name': Eval('name'),
-                        'next_order': Eval('number_of_steps')
                                     })
 
     # This is a trick which allows us to keep track of how many steps are in
@@ -84,49 +83,23 @@ class ProcessDesc(ModelSQL, ModelView):
                 result.append((model_name, model.coop_process_name()))
         return result
 
-    # Testing some order changing through methods, does not seem to work well.
-    def swap_top(self, process, for_step):
-        cur_step = None
-        for step in process.steps:
-            if (step.order < for_step.order
-                and
-                ((not cur_step is None and step.order > cur_step.order)
-                 or cur_step is None)):
-                cur_step = step
-                if cur_step.order == for_step.order - 1:
-                    break
-        if not cur_step is None:
-            for_step.order = for_step.order - 1
-            cur_step.order = cur_step.order + 1
-
     # This method is called by the process itself, providing the process desc
     # as an argument, to get the process' first step desc and its model
     def get_first_step_desc(self, process):
-        cur_min = -1
-        cur_step = None
-        # As it seems that there isn't any way to order the list properly,
-        # we got to go through all the elements and look for the minimum order.
-        for step in process.steps:
-            if cur_step is None or (cur_min > step.order):
-                cur_step = step
-                cur_min = step.order
-        return (cur_step, cur_step.step_model)
+        result = process.steps[0]
+        return (result, result.step_model)
 
     # Here we got the current step, the current process, and we are asking for
     # the next one.
     def get_next_step(self, step, process):
-        # Again, we have to go through the entire list to find what we are
-        # looking for.
-        for cur_step in process.steps:
-            if cur_step.order == step.order + 1:
-                return cur_step
+        if step.sequence < len(process.steps):
+            return process.steps[step.sequence + 1]
         return step
 
     # idem for getting the previous step
     def get_prev_step(self, step, process):
-        for cur_step in process.steps:
-            if cur_step.order == step.order - 1:
-                return cur_step
+        if step.sequence != 1:
+            return process.steps[step.sequence - 1]
         return step
 
 ProcessDesc()
@@ -205,9 +178,9 @@ class StepDesc(ModelSQL, ModelView):
     process_name = fields.Function(fields.Char('Process Name'),
                                    'get_process_name')
 
-    # order is rather important, it indicates the order of the step in the
+    # sequence is rather important, it indicates the order of the step in the
     # list of steps of its process.
-    order = fields.Integer('Order')
+    sequence = fields.Integer('Sequence', required=True)
 
     # This is a core field, it creates the link between the record and the
     # step it is supposed to represent.
@@ -226,24 +199,7 @@ class StepDesc(ModelSQL, ModelView):
     # form view.
     def __init__(self):
         super(StepDesc, self).__init__()
-        self._rpc.update({'go_up': True})
-
-    # Testing some order changing through methods, does not seem to work well.
-    def go_up(self, ids):
-        step_desc_obj = Pool().get('ins_process.step_desc')
-        process_desc_obj = Pool().get('ins_process.process_desc')
-        for step in step_desc_obj.browse(ids):
-            process_desc_obj.swap_top(step.process, step)
-        return True
-
-    # When creating the object, we cannot access the process as it does not
-    # have an idea yet. So we use the context, hoping that it was correctly
-    # updated before displaying the form...
-    def default_order(self):
-        res = Transaction().context.get('next_order')
-        if not res is None:
-            return res + 1
-        res = 0
+        self._order.insert(0, ('sequence', 'ASC'))
 
     # Here we create the list of tuple which will be available for selection.
     # Each tuple contains the model_name (i.e. 'ins_process.dummy_step')

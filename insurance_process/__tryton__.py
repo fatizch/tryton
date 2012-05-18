@@ -12,6 +12,7 @@
     'xml': [
             'process_labo.xml',
             'dummy_process.xml',
+            'process.xml',
              ],
     'translation': [],
 }

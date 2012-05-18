@@ -1,14 +1,95 @@
+import datetime
+
 # Needed for displaying objects
-from trytond.model import ModelView
+from trytond.model import ModelView, ModelSQL
 from trytond.model import fields as fields
 
 # Needed for Wizardry
 from trytond.wizard import Wizard, Button, StateView, StateTransition
+from trytond.wizard import StateAction
 
 # Needed for getting models
 from trytond.pool import Pool
 
-ACTIONS = ('go_previous', 'go_next', 'cancel', 'complete', 'check')
+# Needed for resuming processes
+from trytond.transaction import Transaction
+from trytond.protocols.jsonrpc import JSONEncoder
+from trytond.model.browse import BrowseRecord, BrowseRecordNull
+from tools import AbstractObject, to_list
+
+# Needed for serializing data
+try:
+    import simplejson as json
+except ImportError:
+    import json
+
+ACTIONS = ('go_previous', 'go_next', 'cancel', 'complete', 'check', 'suspend')
+
+
+class MetaAbstract(type):
+    def __new__(cls, name, bases, attrs):
+        for (field_name, field_model) in attrs['__abstracts__']:
+            attrs[field_name + '_db'] = fields.Many2One(field_model,
+                                                        field_name)
+            attrs[field_name + '_str'] = fields.Text('Json' + field_name)
+        return super(MetaAbstract, cls).__new__(cls, name, bases, attrs)
+
+
+class WithAbstract(object):
+
+    __metaclass__ = MetaAbstract
+
+    __abstracts__ = []
+
+    @staticmethod
+    def get_abstract_object(session, field_name):
+        result = getattr(session.process_state, field_name + '_db')
+        if isinstance(result, BrowseRecordNull):
+            result = AbstractObject.load_from_text(
+                        getattr(session.process_state, field_name + '_str'))
+        else:
+            result = AbstractObject(result._model._name, result.id)
+        if result is None:
+            result = AbstractObject(getattr(session.process_state._model,
+                                            field_name + '_db').model_name)
+        return result
+
+    @staticmethod
+    def save_abstract_object(session, field_name, for_object):
+        setattr(session.process_state, field_name + '_str',
+                AbstractObject.store_to_text(for_object))
+        session.process_state.dirty = True
+
+    @staticmethod
+    def abstract_objs(session):
+        res = []
+        for field in [field for field in dir(session.process_state._model)
+                                if field[-3:] == '_db']:
+            res.append(field[:-3])
+        return res
+
+    @staticmethod
+    def get_abstract_objects(session, fields):
+        objs = WithAbstract.abstract_objs(session)
+        elems = to_list(fields)
+        res = []
+        for field in elems:
+            if field in objs:
+                res += [WithAbstract.get_abstract_object(session, field)]
+            else:
+                res += [None]
+        if type(fields) == list:
+            return tuple(res)
+        else:
+            return res[0]
+
+    @staticmethod
+    def save_abstract_objects(session, fields):
+        objs = WithAbstract.abstract_objs(session)
+        list = to_list(fields)
+        for field, value in list:
+            if field in objs:
+                WithAbstract.save_abstract_object(session, field, value)
 
 
 class ProcessState(ModelView):
@@ -44,6 +125,29 @@ class ProcessState(ModelView):
     cur_step_desc = fields.Many2One('ins_process.step_desc',
                                     'Step Descriptor')
 
+    # This field will be used to store the suspended process which started the
+    # current process (if it exists) so that we can write over it in case of
+    # suspension, delete in case of completion/cancellation.
+    from_susp_process = fields.Integer('From Process')
+
+    # Stores the list of errors for displaying
+    errors = fields.Text('Errors')
+
+    @staticmethod
+    def add_error(session, error):
+        errors = to_list(error)
+        session.process_state.errors += '\n'.join(errors)
+
+    @staticmethod
+    def init_session(session):
+        session.process_state.errors = ''
+        for elem in set([elem for elem in dir(session.process_state._model)
+                     if (elem[-3:] == '_db' or elem[-4:] == '_str')]):
+            if not hasattr(session.process_state, elem + '_db'):
+                setattr(session.process_state, elem + '_db', 0)
+            if not hasattr(session.process_state, elem + '_str'):
+                setattr(session.process_state, elem + '_str', '')
+
 ProcessState()
 
 
@@ -61,6 +165,7 @@ class CoopProcess(Wizard):
 
         There will be a library of steps in which the rules will look for.
     '''
+    _name = 'ins_process.coop_process'
 
     # This is not a real state, it will only be used as a storage step for
     # the process' data
@@ -88,10 +193,39 @@ class CoopProcess(Wizard):
     steps_previous = StateTransition()
     steps_cancel = StateTransition()
     steps_complete = StateTransition()
+    steps_suspend = StateTransition()
     steps_check = StateTransition()
+    steps_terminate = StateTransition()
 
     # We use the fact that we know the start step to set up a few things
+
+    def resume_suspended(self, session):
+        susp_process_obj = Pool().get('ins_process.suspended_process')
+        try:
+            susp_process = susp_process_obj.browse(
+                                        Transaction().context.get('active_id'))
+        except KeyError:
+            susp_process = None
+
+        # If a suspended process is found in the current context, resume it
+        if not susp_process is None:
+            # We get a dictionnary with the data from the stored session
+            susp_data = json.loads(susp_process.session_data.encode('utf-8'))
+            # Then update everything.
+            for key, value in susp_data.iteritems():
+                session.data[key].update(value)
+                getattr(session, key).dirty = True
+            session.process_state.from_susp_process = susp_process.id
+            self.dirty = True
+
     def transition_steps_start(self, session):
+        # We check if we are currently trying to resume a suspended process
+        if (Transaction().context.get('active_model')
+                            == 'ins_process.suspended_process'):
+            self.resume_suspended(session)
+            return session.process_state.cur_step
+
+        # If not, we go on and start a new process
         # First of all, we get and set the process descriptor.
         process_desc_obj = Pool().get('ins_process.process_desc')
         try:
@@ -109,13 +243,15 @@ class CoopProcess(Wizard):
             return 'end'
         session.process_state.process_desc = res
 
+        ProcessState.init_session(session)
+
         # We then asks the process desc which one is the first step
         (step_obj, step_name) = process_desc_obj.get_first_step_desc(
                                             session.process_state.process_desc)
 
         # We use the answer to look for the associated state name (step_desc
-        # associations are based on coop_step_nae() calls)
-        first_step, first_step_name = self.get_state_from_model(step_name)
+        # associations are based on coop_step_name() calls)
+        _, first_step_name = self.get_state_from_model(step_name)
 
         # We use the process_state's fields to store those persistent data :
         session.process_state.cur_step = first_step_name
@@ -126,8 +262,7 @@ class CoopProcess(Wizard):
 
         # And initialize the steps (exiting in case of errors)
         (res, errors) = state_model.do_before(session,
-                                                   {},
-                                                   step_obj)
+                                              step_obj)
         if not res:
             self.raise_user_error('Could not initialize process, exiting\n'
                                   + '\n'.join(errors))
@@ -177,10 +312,28 @@ class CoopProcess(Wizard):
 
         # Just to be sure...
         if res == '':
-            self.raise_user_error('Could not calculate next step')
-            return from_step
-        else:
-            return res
+            ProcessState.add_error(session, 'Could not calculate next step')
+            res = from_step
+
+        # We store the new state name (even though it should already be
+        # done.
+        session.process_state.cur_step = res
+
+        # We get the errors
+        errors = session.process_state.errors
+        if len(errors) > 0:
+            # If there are some, we clear them.
+            session.process_state.errors = ''
+
+            # We need to save again, as raise_user_errors drops the session
+            session.save()
+
+            # And we finally display them
+            self.raise_user_error(errors)
+
+        # and we save the session
+        session.save()
+        return res
 
     # Transition method, we just set cur_action for now, and call master_step
     def transition_steps_next(self, session):
@@ -207,6 +360,20 @@ class CoopProcess(Wizard):
         session.process_state.cur_action = 'check'
         return 'master_step'
 
+    # Transition method, we just set cur_action for now, and call master_step
+    def transition_steps_suspend(self, session):
+        session.process_state.cur_action = 'suspend'
+        return 'master_step'
+
+    # This step will be called in case of soft termination (cancel or complete)
+    # We need to delete the suspended_process object if it exists
+    def transition_steps_terminate(self, session):
+        tmp_id = session.process_state.from_susp_process
+        if tmp_id > 0:
+            susp_process_obj = Pool().get('ins_process.suspended_process')
+            susp_process_obj.delete([tmp_id])
+        return 'end'
+
     # This method will be called when clicking on the 'complete' button
     def do_complete(self, session):
         return (True, [])
@@ -232,44 +399,39 @@ class CoopProcess(Wizard):
         #    in session.process_state
         cur_process_desc = session.process_state.process_desc
 
-        data = {}
-
         # Here we go : we switch case based on cur_action :
         if cur_action == 'check':
             # CHECK :
             # Well, just call check_step
             (res, errors) = cur_state_model.check_step(session,
-                                                       data,
                                                        cur_step_desc)
-            # and display the result
+            # and save the result
             if not res:
-                self.raise_user_error('\n'.join(errors))
+                ProcessState.add_error(session, errors)
             else:
-                self.raise_user_error('Everything is OK')
-                self.raise_user_error('Everything is OK')
+                ProcessState.add_error(session, 'Everything is OK')
             return session.process_state.cur_step
         elif cur_action == 'cancel':
             # CANCEL :
             # End of the process
-            return 'end'
+            return 'steps_terminate'
         elif cur_action == 'complete':
             # COMPLETE :
             # First we try to complete the current step :
             (res, errors) = cur_state_model.do_after(session,
-                                                       data,
                                                        cur_step_desc)
             # If we cannot, we stay where we are
             if not res:
-                self.raise_user_error('\n'.join(errors))
+                ProcessState.add_error(session, errors)
                 return session.process_state.cur_step
 
             # If we can, we call the do_complete method on the process
             (res, errors) = self.do_complete(session)
             # If it works, end of the process
             if res:
-                return 'end'
+                return 'steps_terminate'
             # else, back to current step...
-            self.raise_user_error('\n'.join(errors))
+            ProcessState.add_error(session, errors)
             return session.process_state.cur_step
         elif cur_action == 'go_previous':
             # PREVIOUS :
@@ -286,7 +448,6 @@ class CoopProcess(Wizard):
 
             # Should we display this step ?
             (res, errors) = next_state_model.must_step_over(session,
-                                                            data,
                                                             next_step_desc)
 
             if not res:
@@ -318,24 +479,21 @@ class CoopProcess(Wizard):
             next_state_model = Pool().get(next_step_state.model_name)
             # And we try to finish the current step
             (res, errors) = cur_state_model.do_after(session,
-                                                       data,
                                                        cur_step_desc)
             if not res:
                 # If it does not work, we stop here
-                self.raise_user_error('\n'.join(errors))
+                ProcessState.add_error(session, errors)
                 return session.process_state.cur_step
             else:
                 # If it works, we call the before of the next method
                 (res, errors) = next_state_model.do_before(session,
-                                                           data,
                                                            next_step_desc)
                 if not res:
                     # Again, it it does not work, we stop right here
-                    self.raise_user_error('\n'.join(errors))
+                    ProcessState.add_error(session, errors)
                     return session.process_state.cur_step
                 # Now we must check that the step should be displayed
                 (res, errors) = next_state_model.must_step_over(session,
-                                                                data,
                                                                 next_step_desc)
                 # We set the step as the current step anyway
                 session.process_state.cur_step = next_state_name
@@ -348,8 +506,37 @@ class CoopProcess(Wizard):
                     # Note that it supposed that the last step will not be
                     # stepped over !
                     return self.calculate_next_step(session)
+        elif cur_action == 'suspend':
+            # SUSPEND :
+            # We create or find a suspended process, then store the current
+            # process session data in it.
+            susp_process_obj = Pool().get('ins_process.suspended_process')
+            data_dict = {
+                         'suspension_date': datetime.date.today(),
+                         'for_user': session._session._user,
+                         'desc': '%s, step %s' % (self.coop_process_name(),
+                                            cur_state_model.coop_step_name()),
+                         'process_model_name': self._name,
+                         # We need the session_data to be persistent in order
+                         # to be able to resume the process in the same state
+                         # as it was before, so we encode it in a json string.
+                         'session_data': json.dumps(session.data,
+                                                    cls=JSONEncoder)
+                         }
+            if session.process_state.from_susp_process > 0:
+                # Already exist, we just need an update
+                susp_process_obj.write(session.process_state.from_susp_process,
+                                       data_dict)
+            else:
+                # Does not exist, create it !
+                tmp_id = susp_process_obj.create(data_dict)
+                if tmp_id is None:
+                    self.raise_user_error('Could not store process !')
+            return 'end'
         # Just in case...
         return session.process_state.cur_step
+
+CoopProcess()
 
 
 class CoopState(object):
@@ -400,6 +587,12 @@ class CoopState(object):
                       'steps_check',
                       'tryton-help')
 
+    @staticmethod
+    def button_suspend():
+        return Button('Suspend',
+                      'steps_suspend',
+                      'tryton-go-jump')
+
     # For convenience, a list of all buttons...
     @staticmethod
     def all_buttons():
@@ -407,6 +600,7 @@ class CoopState(object):
                 CoopState.button_check(),
                 CoopState.button_next(),
                 CoopState.button_complete(),
+                CoopState.button_suspend(),
                 CoopState.button_cancel()]
 
 
@@ -434,7 +628,7 @@ class CoopStateView(StateView, CoopState):
         # First we get the existing data for our step in the current session
         default_data = getattr(session, state_name)._data
         if default_data:
-            # If it exists, we go through each field and set a nex entry in the
+            # If it exists, we go through each field and set a new entry in the
             # return dict
             for field in [field for field in fields
                                 if (field in default_data)]:
@@ -470,7 +664,7 @@ class CoopStep(ModelView):
                    if (callable(getattr(self, method))
                        and method.startswith(prefix))]
 
-    def fill_data_dict(self, session, data, data_pattern):
+    def fill_data_dict(self, session, data_pattern):
         '''
             This method is a core method.
             It takes a data pattern as an input, that is a structure asking for
@@ -490,7 +684,7 @@ class CoopStep(ModelView):
         '''
         return {}
 
-    def call_client_rules(self, session, rulekind, data, step_desc):
+    def call_client_rules(self, session, rulekind, step_desc):
         '''
             This method will look for and call the client defined ruler in the
             step_desc, which match the rulekind.
@@ -514,10 +708,9 @@ class CoopStep(ModelView):
             # method, and yield the result
             yield method_desc_model.calculate(rule,
                                         self.fill_data_dict(session,
-                                                            data,
                                                             needed_data))
 
-    def call_methods(self, session, data, step_desc, prefix, default=True,
+    def call_methods(self, session, step_desc, prefix, default=True,
                         client_rules=''):
         '''
             This method will call all methods designed for the defined role.
@@ -534,7 +727,7 @@ class CoopStep(ModelView):
         # and execute each of them
         for method in methods:
             try:
-                (res, error) = method.__call__(session, data)
+                (res, error) = method.__call__(session)
             except TypeError:
                 (res, error) = (not default, ['Probably forgot to return a\
                                             value in %s' % method.__name__])
@@ -550,14 +743,13 @@ class CoopStep(ModelView):
                 # accordingly
                 for res, errs in self.call_client_rules(session,
                                                   client_rules,
-                                                  data,
                                                   step_desc):
                     if res != default:
                         result = res
                         errors += errs
         return (result, errors)
 
-    def do_after(self, session, data, step_desc):
+    def do_after(self, session, step_desc):
         '''
             This method executes what must be done after clicking on 'Next'
             on the step's view. It will first check for errors then, if
@@ -568,15 +760,15 @@ class CoopStep(ModelView):
             instance a manual subscription.
         '''
         # Check for errors in current view
-        (res, check_errors) = self.check_step(session, data, step_desc)
+        (res, check_errors) = self.check_step(session, step_desc)
         post_errors = []
         if res:
             # If there are errors, there is no need (and it would be dangerous)
             # to continue
-            (res, post_errors) = self.post_step(session, data, step_desc)
+            (res, post_errors) = self.post_step(session, step_desc)
         return (res, check_errors + post_errors)
 
-    def do_before(self, session, data, step_desc):
+    def do_before(self, session, step_desc):
         '''
             This method executes what must be done before displaying the step
             view. It might be initializing values, creating objects for
@@ -587,10 +779,10 @@ class CoopStep(ModelView):
             should be possible to call it through a batch to simulate for
             instance a manual subscription.
         '''
-        (res, errors) = self.before_step(session, data, step_desc)
+        (res, errors) = self.before_step(session, step_desc)
         return (res, errors)
 
-    def must_step_over(self, session, data, step_desc):
+    def must_step_over(self, session, step_desc):
         '''
             This method calculates whether it is necessary to display the
             current step view.
@@ -599,43 +791,147 @@ class CoopStep(ModelView):
             should be possible to call it through a batch to simulate for
             instance a manual subscription.
         '''
-        (res, errors) = self.step_over(session, data, step_desc)
+        (res, errors) = self.step_over(session, step_desc)
         return (res, errors)
 
-    def step_over(self, session, data, step_desc):
+    def step_over(self, session, step_desc):
         # This is the actual call to the step_over_ methods and client rules
         return self.call_methods(session,
-                                 data,
                                  step_desc,
                                  'step_over_',
                                  default=False,
                                  client_rules='0_step_over')
 
-    def before_step(self, session, data, step_desc):
+    def before_step(self, session, step_desc):
         # This is the actual call to the before_step_ methods
         return self.call_methods(session,
-                                 data,
                                  step_desc,
                                  'before_step_')
 
-    def check_step(self, session, data, step_desc):
+    def check_step(self, session, step_desc):
         # This is the actual call to the check_step_ methods and client rules
         return self.call_methods(session,
-                                 data,
                                  step_desc,
                                  'check_step_',
                                  client_rules='2_check_step')
 
-    def post_step(self, session, data, step_desc):
+    def post_step(self, session, step_desc):
         # This is the actual call to the post_step_ methods
         return self.call_methods(session,
-                                 data,
                                  step_desc,
                                  'post_step_')
+
+
+class SuspendedProcess(ModelSQL, ModelView):
+    '''
+        This class represents a suspended process, which can be resumed later.
+    '''
+    _name = 'ins_process.suspended_process'
+
+    # Just so we know since when the process has been suspended. In the
+    # future, we might want to set a timeout on suspended process so we
+    # need this information.
+    suspension_date = fields.Date('Suspension Date')
+
+    # This is an easy access field, as the data also exists in the session.
+    for_user = fields.Many2One('res.user',
+                               'Suspended by')
+
+    # Process Description, computed at creation time from session data
+    desc = fields.Char('Process Description')
+
+    # Process Model :
+    process_model_name = fields.Char('Process Model')
+
+    # Data from the session
+    session_data = fields.Text('Data')
+
+SuspendedProcess()
+
+
+class ResumeWizard(Wizard):
+    '''
+        This class is designed to provide an interface for restarting a
+        suspended process.
+    '''
+    _name = 'ins_process.resume_process'
+    start_state = 'action'
+
+    class LaunchStateAction(StateAction):
+        '''
+            We need a special StateAction in which we will override the
+            get_action method to calculate the name of the wizard we must
+            launch
+        '''
+
+        def __init__(self):
+            StateAction.__init__(self, None)
+
+        def get_action(self):
+            # First we need to be sure that we are working on a suspended
+            # process.
+            if Transaction().context.get('active_model') != \
+                                            'ins_process.suspended_process':
+                self.raise_user_error(
+                                'Selected record is not a suspended process')
+
+            susp_process_obj = Pool().get('ins_process.suspended_process')
+
+            # Then we look for the associated record. Note that if we had not
+            # check the active_model, we might have found something which would
+            # not have been right !
+            try:
+                susp_process = susp_process_obj.browse(
+                                        Transaction().context.get('active_id'))
+            except KeyError:
+                susp_process = None
+                self.raise_user_error('Could not find a process to resume')
+
+            # Then we look for an action wizard associated to the process_model
+            # of the suspended process :
+            action_obj = Pool().get('ir.action')
+            act_wizard_obj = Pool().get('ir.action.wizard')
+            good_id = act_wizard_obj.search([
+                        ('model', '=', 'ins_process.suspended_process'),
+                        ('wiz_name', '=', susp_process.process_model_name)
+                                             ])[0]
+
+            # Finally, we just return the instruction to start an action wizard
+            # with the id we just found.
+            return action_obj.get_action_values('ir.action.wizard',
+                good_id)
+
+    # The only state of our wizard process is this one.
+    action = LaunchStateAction()
+    dummy_step = CoopStateView('ins_process.dummy_process.dummy_step',
+                               # Remember, the view name must start with the
+                               # tryton module name !
+                               'insurance_process.dummy_view')
+
+    # We need to specify this method as we want to update the context of the
+    # wizard that is going to be launched with the data we were provided with.
+    def do_action(self, session, action):
+        return (action, {
+                     'id': Transaction().context.get('active_id'),
+                     'model': Transaction().context.get('active_model'),
+                     'ids': Transaction().context.get('active_ids'),
+                         })
+
+    def transition_action(self, session):
+        return 'dummy_step'
+
+ResumeWizard()
 
 #####################################################
 # Here is an example of implementation of a process #
 #####################################################
+
+
+class DummyObject(ModelSQL, ModelView):
+    _name = 'ins_process.dummy_object'
+    contract_number = fields.Char('Contract Number')
+
+DummyObject()
 
 
 class DummyStep(CoopStep):
@@ -651,22 +947,36 @@ class DummyStep(CoopStep):
     # This is a before method, which will be useful to initialize our name
     # field. If we had a One2Many field, we could create objects and use their
     # fields to compute the default value of another.
-    def before_step_init(self, session, data):
+    def before_step_init(self, session):
         session.dummy_step.name = 'Toto'
         return (True, [])
 
     # Those are validation methods which will be called by the check_step
     # method.
     # DO NOT FORGET to always return something
-    def check_step_schtroumpf_validation(self, session, data):
+    def check_step_schtroumpf_validation(self, session):
         if session.dummy_step.name == 'Toto':
             return (False, ['Schtroumpf'])
         return (True, [])
 
-    def check_step_kiwi_validation(self, session, data):
+    def check_step_kiwi_validation(self, session):
         if session.dummy_step.name == 'Toto':
             return (False, ['Kiwi'])
         return (True, [])
+
+    def check_step_abstract_obj(self, session):
+        if 'for_contract' in WithAbstract.abstract_objs(session):
+            contract = WithAbstract.get_abstract_objects(session,
+                                                        'for_contract')
+            if contract.contract_number == 'Test':
+                contract.contract_number = 'Toto'
+            else:
+                contract.contract_number = 'Test'
+            WithAbstract.save_abstract_objects(session,
+                                              ('for_contract', contract))
+            return (True, [])
+        else:
+            return (False, ['Could not find for_contract'])
 
 DummyStep()
 
@@ -677,13 +987,24 @@ class DummyStep1(CoopStep):
     name = fields.Char('Name')
 
     # We initialize this step with some data from the previous step
-    def before_step_init(self, session, data):
+    def before_step_init(self, session):
         # We cannot be sure that the current process uses a 'dummy_step',
         # so we test for one.
         # We also could make the state mandatory with else return (False, [..])
         if hasattr(session, 'dummy_step'):
             session.dummy_step1.name = session.dummy_step.name
         return (True, [])
+
+    def check_step_abstract(self, session):
+        for_contract, for_contract1 = WithAbstract.get_abstract_objects(
+                                                        session,
+                                                        ['for_contract',
+                                                         'for_contract1'])
+        for_contract1.contract_number = for_contract.contract_number
+        WithAbstract.save_abstract_objects(session, ('for_contract1',
+                                                     for_contract1))
+        return (False, [session.process_state.for_contract_str,
+                        session.process_state.for_contract1_str])
 
     @staticmethod
     def coop_step_name():
@@ -692,9 +1013,22 @@ class DummyStep1(CoopStep):
 DummyStep1()
 
 
+class DummyProcessState(ProcessState, WithAbstract):
+    _name = 'ins_process.dummy_process_state'
+    __abstracts__ = [('for_contract', 'ins_process.dummy_object'),
+                     ('for_contract1', 'ins_process.dummy_object'),
+                     ]
+
+DummyProcessState()
+
+
 class DummyProcess(CoopProcess):
     # This is a Process. It inherits of CoopProcess.
     _name = 'ins_process.dummy_process'
+
+    process_state = StateView('ins_process.dummy_process_state',
+                              '',
+                              [])
 
     # We just need to declare the two steps
     dummy_step = CoopStateView('ins_process.dummy_process.dummy_step',
