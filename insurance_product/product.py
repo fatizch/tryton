@@ -3,118 +3,55 @@ import copy
 import datetime
 
 from trytond.model import ModelView, ModelSQL, fields as fields
-from trytond.pyson import Eval
 from trytond.pool import Pool
-from trytond.transaction import Transaction
+from trytond.pyson import Eval
 
-RULE_TYPES = [
-                ('Pricing', 'Pricing'),
-                ('Eligibility', 'Eligibility'),
-                ('Termination', 'Termination'),
-                ('Underwriting', 'Underwriting'),
-             ]
-EXTENSION_TYPES = [
-                   ('Disability', 'Disability'),
-                   ('Annuity', 'Annuity'),
-                   ('Pension', 'Pension'),
-                   ('Credit', 'Credit Insurance')]
+import coop_utils
 
 
 class Offered(object):
     'Offered'
-    name = fields.Char('Name', required=True, select=1)
+
+    _description = __doc__
+
     code = fields.Char('Code', size=10, required=True, select=1)
+    name = fields.Char('Name', required=True, select=1)
     effective_date = fields.Date('Effective Date', required=True, select=1)
-    end_date = fields.Date('End Date',)
-    managers = fields.One2Many('ins_product.businessrulemanager',
-                               None,
-                               'Business rule managers')
-
-    def calculate(self, ids, data, rule_kind):
-        '''
-            Calculate is the method which will call the business
-            intelligence, looking for the good rule manager depending
-            on the provided rule_kind
-
-            The 'ids' argument contains a list of Offered ids, which
-            represents the set of elements we want the rule applied to.
-        '''
-        # Pool allows us to get the model object, which represents all
-        # 'instances' of the class businessrulemanager. It is this object
-        # that we will use to call methods, providing a list of ids to treat
-        brm_obj = Pool.get('ins_product.businessrulemanager')
-
-        # The result will be a dictionnary in order to be able to return
-        # a different result for each of the ids provided as arguments
-        result = {}
-        if not [rule for rule in RULE_TYPES if rule[0] == rule_kind]:
-            # If the requested rule does not exist, we return a dictionnary
-            # with empty answers
-            return dict((curid, (None, ['wrong_rule_kind'])) for curid in ids)
-        # Else, we treat each id with the browse method, to get the associated
-        # object
-        for offered in self.browse(ids):
-            # Once we got a browse object, we can call its attributes as
-            # python attributes
-            for brm in offered.managers:
-                # We use != and continue rather than == in order to get
-                # one level of indentation back
-                if brm.rule_kind != rule_kind:
-                    continue
-                # Now we call the method on the model me got from Pool, passing
-                # directly the object as an argument
-                result[offered.id] = brm_obj.calculate(brm, data)
-            # If we could not find a rule, or calculation did not happen for
-            # some reason, we just return an error tuple as a result for
-            # this id.
-            if offered.id not in result:
-                result[offered.id] = (None,
-                                      ['inexisting_rule_kind_for_offered'])
-        return result
+    end_date = fields.Date('End Date')
+    pricing_mgr = fields.Many2One('ins_product.businessrulemanager',
+        'Pricing Manager',
+        domain=[('business_rules.kind', '=', 'ins_product.pricing_rule')])
+    eligibility_mgr = fields.Many2One('ins_product.businessrulemanager',
+        'Eligibility Manager',
+        domain=[('business_rules.kind', '=', 'ins_product.eligibility_rule')])
 
 
 class Coverage(ModelSQL, ModelView, Offered):
     'Coverage'
+
     _name = 'ins_product.coverage'
     _description = __doc__
-
-    def __init__(self):
-        # We want to inherit from Offered, which is not a tryton class.
-        # We defined in offered a One2Many field with no backref, as we could
-        # not the one to use.
-        # Now that we are in an instanciated class, we can, so we just have
-        # to override __init__ in order to tell to tryton, when it creates
-        # the model, the managers field backref is 'for_coverage'
-        super(Coverage, self).__init__()
-        self.managers = copy.copy(self.managers)
-        self.managers.field = 'for_coverage'
-        # We must reset the columns in order to force tryton to refresh its
-        # understanding of the model
-        self._reset_columns()
 
 Coverage()
 
 
 class Product(ModelSQL, ModelView, Offered):
-    'ins_product'
+    'Product'
+
     _name = 'ins_product.product'
     _description = __doc__
+
     options = fields.Many2Many('ins_product-options-coverage', 'product',
                                'coverage', 'Options')
-
-    def __init__(self):
-        # cf Coverage.__init__ for details
-        super(Product, self).__init__()
-        self.managers = copy.copy(self.managers)
-        self.managers.field = 'for_product'
-        self._reset_columns()
 
 Product()
 
 
 class ProductOptionsCoverage(ModelSQL):
     'Define Product - Coverage relations'
+
     _name = 'ins_product-options-coverage'
+
     product = fields.Many2One('ins_product.product',
                               'Product',
                               select=1,
@@ -127,168 +64,30 @@ class ProductOptionsCoverage(ModelSQL):
 ProductOptionsCoverage()
 
 
-class RuleInterface(object):
-    'Generic Rule Interface'
-    '''
-        This class exists to create a template of the functions / attributes to
-        which all rule classes will have to respond to.
-    '''
-    rule_kind = fields.Function(fields.Selection(RULE_TYPES, 'Rule Type'),
-                                'get_rule_kind')
-
-    def calculate(self, rule, data):
-        # This method is going to give us a generic entry point to calculate
-        # the result of any Rule we are going to use
-        pass
-
-    def get_rule_kind(self, ids, name):
-        # This one will be used to decide which kind of rules will be allowed
-        # for a given business rule manager (we got to make get_rule_kind on
-        # the rule and rule_kind on the manager to match)
-        pass
-
-
-class PricingRule(ModelSQL, ModelView, RuleInterface):
-    'Pricing Rule'
-    '''
-        This rule is an example of implementation of the RuleInterface
-        interface :
-        we add a field to contain its specific data, and override the
-        two functions declared in the interface.
-    '''
-    _name = 'ins_product.pricingrule'
-    _description = __doc__
-    value = fields.Numeric('Rate', digits=(16, 2))
-
-    def get_rule_kind(self, ids, name):
-        # This method will allow this class to be used by a pricing business
-        # rule manager
-        return dict([(cur_id, 'Pricing') for cur_id in ids])
-
-    def calculate(self, rule, data):
-        # Easy one, the argument is the rule object (and not its id), so
-        # we just have to get the value field and return it.
-        return rule.value
-
-PricingRule()
-
-
-class EligibilityRule(ModelSQL, ModelView, RuleInterface):
-    'Eligibility Rule'
-
-    _name = 'ins_product.eligibilityrule'
-    _description = __doc__
-    age_min = fields.Integer('Minimum Age')
-    age_max = fields.Integer('Maximum Age')
-
-    def get_rule_kind(self, ids, name):
-        return dict([(cur_id, 'Eligibility') for cur_id in ids])
-
-    def calculate(self, rule, data):
-        pass
-
-    def test(self, ids):
-            eligibility_obj = Pool().get('ins_product.eligibilityrule')
-            for cur_eligibility in self.browse(ids):
-                pass
-
-EligibilityRule()
-
-
 class BusinessRuleManager(ModelSQL, ModelView):
-    'Business rule manager'
+    'Business Rule Manager'
+
     _name = 'ins_product.businessrulemanager'
     _description = __doc__
-    name = fields.Char('Name', required=True, select=1)
-    code = fields.Char('Code', size=10, required=True, select=1)
 
-    # It seems that tryton does not allow us to easily inherit as we are
-    # used to.
-    # Here, we would like to create a link to the abstract Offered class, but
-    # we cannot do it so easily. We got to know which model to use in order to
-    # create a Many2One field. So we create two of them, one for each subclass.
-    for_coverage = fields.Many2One('ins_product.coverage', 'Belongs to')
-    for_product = fields.Many2One('ins_product.product', 'Belongs to')
-    # Then we use a function field behaving like a reference in order to create
-    # an abstract access point, for which we will not know the class a priori,
-    # just that it is a subclass of Offered.
-    belongs_to = fields.Function(fields.Reference(
-                                        'belongs_to',
-                                        selection='get_offered_models'),
-                                        'get_belongs_to')
-    # This field will be used to find matching rule classes.
-    rule_kind = fields.Selection(RULE_TYPES,
-                                 'Rule Type')
-    business_rules = fields.One2Many('ins_product.businessrule', 'manager',
-        'Business rules',
-        required=True,
-        context={'manager': Eval('rule_kind')})
+    business_rules = fields.One2Many('ins_product.genericbusinessrule',
+        'manager', 'Business Rules')
 
-    def __init__(self):
-        super(BusinessRuleManager, self).__init__()
-        # Ajout de la contrainte SQL permettant d'être certain que le lien
-        # belongs_to est unique,
-        # quand bien même il est physiquement réparti dans deux
-        # colonnes différentes
-        self._sql_constraints += [('brm_belongs_to_unicity',
-                                   '''CHECK
-                                       (
-                                           (FOR_COVERAGE IS NULL AND
-                                           FOR_PRODUCT IS NOT NULL)
-                                        OR
-                                           (FOR_COVERAGE IS NOT NULL AND
-                                           FOR_PRODUCT IS NULL)
-                                        )''',
-                                   'There must be a product or a coverage')]
-        # We got to add this method to the pool of callable methods
-        # for this class
-        self._rpc.update({'get_offered_models': True})
-
-    def get_offered_models(self):
-        # cf get_rule_models
-        # This is an alternate way to get our models.
-        # First we get the names
-        model_obj = Pool().get('ir.model')
+    def on_change_2business_rules(self, vals):
         res = []
-        offered_models = [model_name
-                          for model_name, model in Pool().iterobject()
-                          if isinstance(model, Offered)]
-        # look for the objects in the model table
-        model_ids = model_obj.search([
-            ('model', 'in', offered_models),
-            ])
-        # then get the associated browse object, to finally get the
-        # model.model and model.name
-        for model in model_obj.browse(model_ids):
-            res.append([model.model, model.name])
-        return res
+#        for business_rule in vals['business_rules']:
+#            try:
+#                business_rule['to_date'] = business_rule['from_date']
+#            except KeyError:
+#                pass
+#            res.append(business_rule)
+#        return {'business_rules': []}
 
-    def get_belongs_to(self, ids, name):
-        '''
-            We will use this field as an accessor to either for_product
-            or for_coverage, depending on which one exists.
-        '''
-        belongs = {}
-        # So we first get the brm we want to work on
-        for brm in self.browse(ids):
-            # Then return either for_coverage or for_product.
-            # The belongs_to function field behaves as a reference, so we
-            # must return a tuple (model_name,instance_id) :
-            if brm.for_coverage:
-                belongs[brm.id] = 'ins_product.coverage,%s' \
-                                    % brm.for_coverage.id
-            elif brm.for_product:
-                belongs[brm.id] = 'ins_product.product,%s' \
-                                    % brm.for_product.id
-        return belongs
+
+        return {'toto': str(int(vals['toto']) + 1)}
 
     def get_good_rule_at_date(self, rulemanager, data):
-        '''
-            This is the template of all rule managers calls :
-                you got the rule manager and the data, give me back the
-                appropriate rule !
-        '''
-        business_rule_obj = Pool().get('ins_product.businessrule')
+        business_rule_obj = Pool().get('ins_product.genericbusinessrule')
         # First we got to check that the fields that we will need to calculate
         # which rule is appliable are available in the data dictionnary
         try:
@@ -296,7 +95,6 @@ class BusinessRuleManager(ModelSQL, ModelView):
         except KeyError:
             return None
 
-        # If they exist, here we go :
         try:
             # We use the date field from the data argument to search for
             # the good rule.
@@ -313,85 +111,86 @@ class BusinessRuleManager(ModelSQL, ModelView):
             print "Exception : %s " % exception
             return None
 
-    def calculate(self, rulemanager, data):
-        rule_id = self.get_good_rule_at_date(rulemanager, data)
-        if rule_id is None:
-            return None
-        rule_obj = Pool().get('ins_product.businessrule')
-        return rule_obj.calculate([rule_id], data)
-
-
 BusinessRuleManager()
 
 
-class BusinessRule(ModelSQL, ModelView):
-    'Business rule'
-    _name = 'ins_product.businessrule'
+class GenericBusinessRule(ModelSQL, ModelView):
+    'Generic Business Rule'
+
+    _name = 'ins_product.genericbusinessrule'
     _description = __doc__
-    name = fields.Char('Name', required=True, select=1)
-    code = fields.Char('Code', size=10, required=True, select=1)
-    from_date = fields.Date('From Date',
-        required=True,
-        on_change=['is_current'])
-    manager = fields.Many2One('ins_product.businessrulemanager',
-                              'Manager', required=True)
-    extension = fields.Reference('Rule',
-        selection='get_rule_models')
-    # fields.Reference allows us to create a reference to an object without
-    # knowing a priori its model. We can use the selection parameter to
-    # specify a method which will be called to get a list containing the
-    # allowed models.
+
+    kind = fields.Selection('get_kind', 'Kind',
+                            required=True, on_change=['kind'])
+    name = fields.Char('Name', required=True)
+    manager = fields.Many2One('ins_product.businessrulemanager', 'Manager')
+    from_date = fields.Date('From Date', required=True)
+    to_date = fields.Date('To Date')
     is_current = fields.Function(fields.Boolean('Is current',
-                                            on_change_with=[
-                                            '_parent_manager_business_rules']),
-                                'get_is_current')
+        on_change_with=['from_date', 'to_date',
+                        '_parent_manager']),
+        'get_is_current')
+    pricing_rule = fields.One2Many('ins_product.pricing_rule',
+        'generic_rule', 'Pricing Rule')
+    eligibilty_rule = fields.One2Many('ins_product.eligibility_rule',
+        'generic_rule', 'Eligibility Rule')
 
-    def delete(self, ids):
-        # We are using a fields.Reference attribute in this class.
-        # We must ensure that it will be deleted properly when the current
-        # object will be terminated.
-        to_delete = {}
-        # We go through all the provided ids
-        for br in self.browse(ids):
-            # setdefault = dictionnary method which returns the value
-            # associated to the key (1st argument) if it exists, or
-            # the second argument if it does not
-            #
-            # Here, we use it to create a dictionnary containing all the models
-            # of the extension we are going to have to delete as keys,
-            # and the list of ids to delete as values.
-            to_delete.setdefault(br.extension.model, [])\
-                                .append(br.extension.id)
-        # Now, we just got to go through those models, and delete the
-        # associated ids
-        for model, model_ids in to_delete.items():
-            model.delete(model_ids)
-        # Do not forget to call the 'real' delete method !
-        super(BusinessRule, self).delete(ids)
+    def __init__(self):
+        super(GenericBusinessRule, self).__init__()
+        self.kind = copy.copy(self.kind)
+        for field_name, field in self._columns.iteritems():
+            if (hasattr(field, 'model_name')
+                and getattr(field, 'model_name')[-5:] == '_rule'):
+                if self.kind.on_change is None:
+                    self.kind.on_change = []
+                if field_name  not in self.kind.on_change:
+                    self.kind.on_change += [field_name]
 
-    def get_rule_models(self):
-        '''
-            This method is used to get the list of models that will be allowed
-            when creating or using the extension field.
-        '''
-        # Then we go through all the objects of the Pool to find those
-        # who match the criteria we are using (in this case, they must
-        # inherit of RuleInterface)
-        # Careful, we must return the _name and the __doc__ of the model.
-        # model._name is NOT model_name !
-        # For extra details, have a look at get_offered_models
-        return [[model._name, model.__doc__]
-                          for model_name, model in Pool().iterobject()
-                          if isinstance(model, RuleInterface)]
+                attr = getattr(self, field_name)
+                attr.states = {
+                    'invisible': (Eval('kind') != field.model_name)}
+                setattr(self, field_name, copy.copy(attr))
+        self._reset_columns()
 
-    def calculate(self, ids, data):
+        self._rpc.update({'is_current': True, 'on_change_kind': True})
+
+    def on_change_kind(self, vals):
         res = {}
-        # Easy one : we got a list of ids, so we just go through each of them,
-        # get a browse object, then call the calculate function on its
-        # extension with the provided data argument
-        for rule in self.browse(ids):
-            res[rule.id] = rule.extension.model.calculate(rule.extension, data)
+        for field_name, field in self._columns.iteritems():
+            if (hasattr(field, 'model_name')
+                and getattr(field, 'model_name')[-5:] == '_rule'
+                and len(vals[field_name]) == 0):
+                res[field_name] = {}
+                if field.model_name == vals['kind']:
+                    res[field_name]['add'] = [{}]
         return res
+
+    def get_kind(self):
+        return coop_utils.get_descendents_name(BusinessRuleRoot)
+
+#    def _getdefaults(self):
+#        '''This method is called whenever we want to have access to _defaults
+#        this is a hack to create an inline method whisch will instanciate
+#        for each business rules the first element in the list.Only the visible
+#        object will be instanciated'''
+#
+#        res = super(GenericBusinessRule, self)._getdefaults()
+#
+#        #Let's define a curry method to encapsulate the call with a parameter
+#        def default_rule(for_name=''):
+#            if Eval('kind') == for_name:
+#                return [{}]
+#            return []
+#
+#        for field_name, field in self._columns.iteritems():
+#            if (hasattr(field, 'model_name')
+#                and getattr(field, 'model_name')[-5:] == '_rule'):
+#                res[field_name] = coop_utils.curry(
+#                    default_rule, for_name=field.model_name)
+#
+#        self.__defaults = res
+#        return res
+#    _defaults = property(fget=_getdefaults)
 
     def get_is_current(self, ids, name):
         res = {}
@@ -404,10 +203,40 @@ class BusinessRule(ModelSQL, ModelView):
                 res[rule.id] = False
         return res
 
-        def on_change_with_extension(self, vals):
-            pass
+    def on_change_with_is_current(self, vals):
+        pass
 
-    def default_extension(self):
-        return Transaction().context.get('rule_kind')
+GenericBusinessRule()
 
-BusinessRule()
+
+class BusinessRuleRoot(ModelSQL, ModelView):
+    'Business Rule Root'
+
+    _description = __doc__
+
+    generic_rule = fields.Many2One('ins_product.genericbusinessrule',
+                                   'Generic Rule')
+
+
+class PricingRule(BusinessRuleRoot):
+    'Pricing Rule'
+
+    _description = __doc__
+
+    _name = 'ins_product.pricing_rule'
+
+    price = fields.Numeric('Amount', digits=(16, 2), required=True)
+
+PricingRule()
+
+
+class EligibilityRule(BusinessRuleRoot):
+    'Eligibility Rule'
+
+    _description = __doc__
+
+    _name = 'ins_product.eligibility_rule'
+
+    is_eligible = fields.Boolean('Is Eligible')
+
+EligibilityRule()

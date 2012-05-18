@@ -43,7 +43,10 @@
                                         </field>
                                     </page>
                                     <page string="Managers" id="managers">
-                                         <field name="managers"/>
+                                        <label name="pricing_mgr"/>  
+                                        <field name="pricing_mgr"/>
+                                        <label name="eligibility_mgr"/>  
+                                        <field name="eligibility_mgr"/>
                                     </page>
                                 </notebook>
                             </form>
@@ -109,9 +112,11 @@
                                 <label name="end_date" xalign="0"/>
                                 <field name="end_date"/>
                                  <notebook >
-                                    <page string="General" id="general2">
-                                        <field name="managers">
-                                        </field>
+                                    <page string="Managers" id="managers">
+                                        <label name="eligibility_mgr"/>  
+                                        <field name="eligibility_mgr"/>
+                                        <label name="pricing_mgr"/>  
+                                        <field name="pricing_mgr"/>
                                     </page>
                                 </notebook>
                                 
@@ -144,166 +149,48 @@
             icon="tryton-list" action="act_coverage_form" />
         <!--/Coverage -->
 
-        <!-- businessrulemanager -->
-        <!-- Tree view -->
-        <record model="ir.ui.view" id="businessrulemanager_view_tree">
-            <field name="model">ins_product.businessrulemanager</field>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-                        <![CDATA[
-                            <tree string="businessrulemanager">
-                                <field name="code"/>
-                                <field name="name"/>
-                            </tree>
-                        ]]>
-            </field>
-        </record>
-
+        <!-- GenericBusinessRule -->
         <!-- form view -->
-        <record model="ir.ui.view" id="businessrulemanager_view_form">
-            <field name="model">ins_product.businessrulemanager</field>
+        <record model="ir.ui.view" id="genericbusinessrule_view_form">
+            <field name="model">ins_product.genericbusinessrule</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                          <![CDATA[
-                             <form string="Business Rule Manager">
-                                 <label name="code"/>
-                                 <field name="code"/>
-                                 <label name="name"/>
-                                 <field name="name"/>
-                                 <label name="belongs_to"/>
-                                 <field name="belongs_to"/>
-                                 <label name="rule_kind"/>
-                                 <field name="rule_kind"/>
-                                  <notebook colspan="6">
-                                    <page string="General" id="general">
-                                        <field name="business_rules"/>
-                                    </page>
-                                </notebook>
-                             </form>
-                         ]]>
-            </field>
-        </record>
-
-        <!-- View for the main menu and the event -->
-        <record model="ir.action.act_window" id="act_businessrulemanager_form">
-            <field name="name">Business Rule Manager</field>
-            <field name="res_model">ins_product.businessrulemanager</field>
-        </record>
-
-        <!-- View that connect the form in the tree with the specification -->
-        <record model="ir.action.act_window.view" id="act_businessrulemanager_form_view1">
-            <field name="sequence" eval="10" />
-            <field name="view" ref="businessrulemanager_view_tree" />
-            <field name="act_window" ref="act_businessrulemanager_form" />
-        </record>
-
-        <!-- View for the edition or the Form of businessrulemanager -->
-        <record model="ir.action.act_window.view" id="act_businessrulemanager_form_view2">
-            <field name="sequence" eval="20" />
-            <field name="view" ref="businessrulemanager_view_form" />
-            <field name="act_window" ref="act_businessrulemanager_form" />
-        </record>
-
-
-        <!--/businessrulemanager -->
-
-        <!-- businessrule -->
-
-        <!-- Tree view -->
-        <record model="ir.ui.view" id="businessrule_view_tree">
-            <field name="model">ins_product.businessrule</field>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-                        <![CDATA[
-                            <tree >
-                                <field name="code"/>
+                             <form string="Generic Business Rule" col="4">
+                                <label name="kind"/>
+                                <field name="kind"/>
+                                <label name="name"/>
                                 <field name="name"/>
+                                <newline/>
+                                <label name="from_date"/>
                                 <field name="from_date"/>
+                                <label name="to_date"/>
+                                <field name="to_date"/>
+                                <label name="is_current"/>
                                 <field name="is_current"/>
-                            </tree>
-                        ]]>
-            </field>
-        </record>
-
-        <!-- form view -->
-        <record model="ir.ui.view" id="businessrule_view_form">
-            <field name="model">ins_product.businessrule</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                         <![CDATA[
-                             <form string="Business rule">
-                                 <label name="code"/>
-                                 <field name="code"/>
-                                 <label name="name"/>
-                                 <field name="name"/>
-                                 <label name="from_date"/>
-                                 <field name="from_date"/>
-                                 <field name="is_current"/>
-                                 <field name="manager"/>
-                                 <newline/>
-                                 <label name="extension"/>
-                                 <field name="extension"/>
+                                <newline/>
+                                <group name ="Rules" colspan="4" yexpand="1" yfill="1" >
+                                <field name="pricing_rule" mode="form"/>
+                                <field name="eligibilty_rule" mode="form"/>
+                                </group>
                              </form>
                          ]]>
             </field>
         </record>
-
-        <!-- View for the main menu and the event -->
-        <record model="ir.action.act_window" id="act_businessrule_form">
-            <field name="name">Business Rule</field>
-            <field name="res_model">ins_product.businessrule</field>
-        </record>
-
-        <!-- View that connect the form in the tree with the specification -->
-        <record model="ir.action.act_window.view" id="act_businessrule_form_view1">
-            <field name="sequence" eval="10" />
-            <field name="view" ref="businessrule_view_tree" />
-            <field name="act_window" ref="act_businessrule_form" />
-        </record>
-
-        <!-- View for the edition or the Form of businessrule -->
-        <record model="ir.action.act_window.view" id="act_businessrule_form_view2">
-            <field name="sequence" eval="20" />
-            <field name="view" ref="businessrule_view_form" />
-            <field name="act_window" ref="act_businessrule_form" />
-        </record>
-
-        <!--/businessrule -->
-        <!--Pricing Rule -->
-        <!-- form view -->
-        <record model="ir.ui.view" id="pricingrule_view_form">
-            <field name="model">ins_product.pricingrule</field>
-            <field name="type">form</field>
+        <record model="ir.ui.view" id="genericbusinessrule_view_tree">
+            <field name="model">ins_product.genericbusinessrule</field>
+            <field name="type">tree</field>
             <field name="arch" type="xml">
-                        <![CDATA[
-                            <form string="Pricing rule">
-                                <label name="value" xalign="0"/>
-                                <field name="value"/>
-                            </form>
-                        ]]>
+                         <![CDATA[
+                             <tree string="Generic Business Rule">
+                                <field name="is_current"/>
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                                <field name="name"/>
+                             </tree>
+                         ]]>
             </field>
         </record>
-        <!--/Pricing Rule -->
-        <!--Eligibilty Rule -->
-        <!-- form view -->
-        <record model="ir.ui.view" id="eligibiltyrule_view_form">
-            <field name="model">ins_product.eligibiltyrule</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                        <![CDATA[
-                            <form string="Eligibilty rule">
-                                <label name="age_min" xalign="0"/>
-                                <field name="age_min"/>
-                                <label name="age_max" xalign="0"/>
-                                <field name="age_max"/>
-                                 <button name="test"
-                                    string="test"
-                                    type="object"/>
-                            </form>
-                        ]]>
-            </field>
-        </record>
-        <!--/Eligibilty Rule -->
-        
+
     </data>
 </tryton>
