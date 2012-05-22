@@ -5,12 +5,12 @@ from trytond.model import ModelSQL
 
 def get_descendents(from_class):
     res = []
-    brm_models = [model_name
+    cur_models = [model_name
                   for model_name, model in Pool().iterobject()
                   if isinstance(model, from_class)]
     model_obj = Pool().get('ir.model')
     model_ids = model_obj.search([
-        ('model', 'in', brm_models),
+        ('model', 'in', cur_models),
         ])
     for model in model_obj.browse(model_ids):
         res.append([model.model, model.name])

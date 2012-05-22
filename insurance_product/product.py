@@ -19,28 +19,22 @@ class Offered(object):
     name = fields.Char('Name', required=True, select=1)
     start_date = fields.Date('Start Date', required=True, select=1)
     end_date = fields.Date('End Date')
-    pricing_mgr = fields.One2Many('ins_product.business_rule_manager',
-        'for_product',
+    pricing_mgr = fields.Many2One('ins_product.business_rule_manager',
         'Pricing Manager',
-        #domain=[('business_rules.kind', '=', 'ins_product.pricing_rule')]
-        )
-    eligibility_mgr = fields.One2Many('ins_product.business_rule_manager',
-        'for_product',
+        domain=[('business_rules.kind', '=', 'ins_product.pricing_rule')])
+    eligibility_mgr = fields.Many2One('ins_product.business_rule_manager',
         'Eligibility Manager',
-        #domain=[('business_rules.kind', '=', 'ins_product.eligibility_rule')]
-        )
+        domain=[('business_rules.kind', '=', 'ins_product.eligibility_rule')])
 
-#    def __init__(self):
-#        for field_name, field in self._columns.iteritems():
-#            if (hasattr(field, 'field') and field_name.endswith('_mgr')
-#                and getattr(field, 'field') is None):
-#                attr = getattr(self, field_name)
-#                attr.field = self.get_offered_model()
-#                setattr(self, field_name, copy.copy(attr))
-#        self._reset_columns()
-
-    def get_offered_model(self):
-        raise NotImplementedError
+    def __init__(self):
+        for field_name, field in self._columns.iteritems():
+            if hasattr(field, 'context') and field_name.endswith('mgr'):
+                cur_attr = getattr(self, field_name)
+                if cur_attr.context is None:
+                    cur_attr.context = {}
+                cur_attr.context['mgr'] = field_name
+                setattr(self, field_name, copy.copy(cur_attr))
+        self._reset_columns()
 
 
 class Coverage(ModelSQL, ModelView, Offered):
@@ -48,9 +42,6 @@ class Coverage(ModelSQL, ModelView, Offered):
 
     _name = 'ins_product.coverage'
     _description = __doc__
-
-    def get_offered_model(self):
-        return 'for_coverage'
 
 Coverage()
 
@@ -63,9 +54,6 @@ class Product(ModelSQL, ModelView, Offered):
 
     options = fields.Many2Many('ins_product-options-coverage', 'product',
                                'coverage', 'Options')
-
-    def get_offered_model(self):
-        return 'for_product'
 
 Product()
 
@@ -93,8 +81,6 @@ class BusinessRuleManager(ModelSQL, ModelView):
     _name = 'ins_product.business_rule_manager'
     _description = __doc__
 
-    for_coverage = fields.Many2One('ins_product.coverage', 'Belongs to')
-    for_product = fields.Many2One('ins_product.product', 'Belongs to')
     belongs_to = fields.Function(
         fields.Reference('belongs_to', selection='get_offered_models'),
         'get_belongs_to')
@@ -104,35 +90,20 @@ class BusinessRuleManager(ModelSQL, ModelView):
 
     def __init__(self):
         super(BusinessRuleManager, self).__init__()
-        self._sql_constraints += [('brm_belongs_to_unicity',
-            '''CHECK(
-                        (FOR_COVERAGE IS NULL AND FOR_PRODUCT IS NOT NULL)
-                    OR
-                        (FOR_COVERAGE IS NOT NULL AND FOR_PRODUCT IS NULL)
-                    )''',
-            'There must be a product or a coverage')]
         self._rpc.update({'get_offered_models': True})
 
     def get_offered_models(self):
         return coop_utils.get_descendents(Offered)
 
     def get_belongs_to(self, ids, name):
-        '''
-            We will use this field as an accessor to either for_product
-            or for_coverage, depending on which one exists.
-        '''
-        belongs = {}
-        # So we first get the brm we want to work on
-        for brm in self.browse(ids):
-            # Then return either for_coverage or for_product.
-            # The belongs_to function field behaves as a reference, so we
-            # must return a tuple (model_name,instance_id) :
-            if brm.for_coverage:
-                belongs[brm.id] = 'ins_product.coverage,%s' \
-                                    % brm.for_coverage.id
-            elif brm.for_product:
-                belongs[brm.id] = 'ins_product.product,%s' \
-                                    % brm.for_product.id
+        belongs = dict([(x, None) for x in ids])
+        for offered_model, offered_name in self.get_offered_models():
+            offered_obj = Pool().get(offered_model)
+            field_name = Transaction().context.get('mgr')
+            offered_ids = offered_obj.search([(field_name, 'in', ids)])
+            for offered in offered_obj.browse(offered_ids):
+                belongs[getattr(offered, field_name).id] = '%s, %s' \
+                                        % (offered_model, offered.id)
         return belongs
 
     def on_change_business_rules(self, vals):
@@ -325,7 +296,6 @@ class PricingRule(BusinessRuleRoot):
     'Pricing Rule'
 
     _description = __doc__
-    toto = fields.Char('toto')
     _name = 'ins_product.pricing_rule'
 
     price = fields.Numeric('Amount', digits=(16, 2), required=True)
