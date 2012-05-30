@@ -7,7 +7,7 @@ from trytond.pool import Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-import coop_utils
+from trytond.modules.coop_utils import utils as utils
 
 
 class Offered(object):
@@ -93,7 +93,7 @@ class BusinessRuleManager(ModelSQL, ModelView):
         self._rpc.update({'get_offered_models': True})
 
     def get_offered_models(self):
-        return coop_utils.get_descendents(Offered)
+        return utils.get_descendents(Offered)
 
     def get_belongs_to(self, ids, name):
         belongs = dict([(x, None) for x in ids])
@@ -157,7 +157,6 @@ class BusinessRuleManager(ModelSQL, ModelView):
                                 limit=1)
             return good_id
         except ValueError, exception:
-            print "Exception : %s " % exception
             return None
 
 BusinessRuleManager()
@@ -217,7 +216,7 @@ class GenericBusinessRule(ModelSQL, ModelView):
         return res
 
     def get_kind(self):
-        return coop_utils.get_descendents_name(BusinessRuleRoot)
+        return utils.get_descendents_name(BusinessRuleRoot)
 
 #    def _getdefaults(self):
 #        '''This method is called whenever we want to have access to _defaults
@@ -236,7 +235,7 @@ class GenericBusinessRule(ModelSQL, ModelView):
 #        for field_name, field in self._columns.iteritems():
 #            if (hasattr(field, 'model_name')
 #                and getattr(field, 'model_name')[-5:] == '_rule'):
-#                res[field_name] = coop_utils.curry(
+#                res[field_name] = utils.curry(
 #                    default_rule, for_name=field.model_name)
 #
 #        self.__defaults = res
@@ -307,9 +306,9 @@ class EligibilityRule(BusinessRuleRoot):
     'Eligibility Rule'
 
     _description = __doc__
-
     _name = 'ins_product.eligibility_rule'
 
     is_eligible = fields.Boolean('Is Eligible')
 
 EligibilityRule()
+

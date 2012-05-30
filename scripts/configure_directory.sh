@@ -23,9 +23,11 @@ else
 	echo Creating links between working directory and tryton modules
 	echo $SEP
 	cd tryton-workspace/trytond/trytond/modules
+	ln -s ../../../coopbusiness/coop_utils .
 	ln -s ../../../coopbusiness/insurance_product .
 	ln -s ../../../coopbusiness/insurance_contract .
 	ln -s ../../../coopbusiness/insurance_process .
+	ln -s ../../../coopbusiness/insurance_party .
 	cd ../../../..
 	ln -s tryton-workspace/coopbusiness/scripts/start.sh .
 	cd tryton-workspace

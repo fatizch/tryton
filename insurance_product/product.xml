@@ -60,7 +60,7 @@
             <field name="res_model">ins_product.product</field>
         </record>
 
-        <!-- View that connect the form in the tree with the specification -->
+        <!-- View that connects the form in the tree with the specification -->
         <record model="ir.action.act_window.view" id="act_product_form_view1">
             <field name="sequence" eval="10" />
             <field name="view" ref="product_view_tree" />
@@ -195,12 +195,12 @@
                                 <label name="belongs_to"/>
                                 <field name="belongs_to"/>
                                 <newline/>
-                                <label name="business_rules"/>
                                 <field name="business_rules"/>
                              </form>
                          ]]>
             </field>
         </record>
+
 
     </data>
 </tryton>

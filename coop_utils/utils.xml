@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <menuitem name="Configuration" id="menu_configuration" sequence="10" />
+        <!--  ******************************************* 
+              *********   Dynamic Selection   ***********
+              *******************************************-->
+
+        <!-- Dynamic Selection tree view -->
+        <record model="ir.ui.view" id="dynamicselection_view_tree">
+            <field name="model">coop.dynamic_selection</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                        <![CDATA[
+                            <tree>
+                                <field name="kind"/>
+                                <field name="name"/>
+                            </tree>
+                        ]]>
+            </field>
+        </record>
+
+        <!-- Dynamic Selection form view -->
+        <record model="ir.ui.view" id="dynamicselection_view_form">
+            <field name="model">coop.dynamic_selection</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <form string="Dynamic Selection">
+                        <label name="kind"/>
+                        <field name="kind"/>
+                        <newline/>
+                        <label name="key"/>
+                        <field name="key"/>
+                        <label name="name"/>
+                        <field name="name"/>
+                        <newline/>
+                        <label name="reverse_key"/>
+                        <field name="reverse_key"/>
+                     </form>
+                ]]>
+            </field>
+        </record>
+
+        <!-- View for the main menu and the event -->
+        <record model="ir.action.act_window" id="act_dynamicselection_form">
+            <field name="name">Dynamic Selection</field>
+            <field name="res_model">coop.dynamic_selection</field>
+        </record>
+
+        <!-- View that connects the form in the tree with the specification -->
+        <record model="ir.action.act_window.view" id="act_dynamicselection_tree_view">
+            <field name="sequence" eval="10" />
+            <field name="view" ref="dynamicselection_view_tree" />
+            <field name="act_window" ref="act_dynamicselection_form" />
+        </record>
+
+        <!-- View for the edition or the dynamicselection -->
+        <record model="ir.action.act_window.view" id="act_dynamicselection_form_view">
+            <field name="sequence" eval="20" />
+            <field name="view" ref="dynamicselection_view_form" />
+            <field name="act_window" ref="act_dynamicselection_form" />
+        </record>
+
+        <!-- Sub menu configuration Dynamic Selection -->
+        <menuitem parent="menu_configuration" sequence="10" id="menu_dynamicselection_form"
+            icon="tryton-list" action="act_dynamicselection_form" />
+    </data>
+</tryton>

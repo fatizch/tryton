@@ -8,8 +8,7 @@
     'description': 'CoopBusiness module',
     'depends': ['ir',
                  'res',
-                 'coop_utils',
                  ],
-    'xml': ['product.xml', ],
+    'xml': ['utils.xml', ],
     'translation': [],
 }

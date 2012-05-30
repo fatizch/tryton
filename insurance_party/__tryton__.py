@@ -10,6 +10,6 @@
                  'res',
                  'coop_utils',
                  ],
-    'xml': ['product.xml', ],
+    'xml': ['party.xml', ],
     'translation': [],
 }
