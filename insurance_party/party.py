@@ -13,19 +13,39 @@ GENDER = [('M', 'Male'),
 class Party(ModelSQL, ModelView):
     _name = 'party.party'
 
-    is_legal_entity = fields.Function(fields.Boolean('Legal entity'),
-                                      'get_is_legal_entity')
     person = fields.One2Many('party.person', 'party', 'Person')
     legal_entity = fields.One2Many('party.legal_entity',
                                    'party', 'Legal Entity')
-    insurer = fields.One2Many('party.insurer', 'party', 'Insurer')
+    insurer = fields.One2Many('party.insurer', 'party', 'Insurer',
+        states={'invisible': Eval('legal_entity', 0) != 0})
 
-    def get_is_legal_entity(self, ids, name):
+    is_legal_entity = fields.Function(fields.Boolean('Legal entity'),
+                                      'get_is_actor')
+    is_insurer = fields.Function(fields.Boolean('Insurer',
+                                                on_change=['insurer']),
+                                 'get_is_actor', setter='set_is_insurer')
+
+    def get_is_actor(self, ids, name):
         res = {}
+        field_name = name.split('is_')[2]
         for party in self.browse(ids):
-            res[party.id] = len(party.legal_entity) > 0
+            if hasattr(party, field_name):
+                field = getattr(party, field_name)
+                res[party.id] = len(field) > 0
         return res
 
+    def set_is_insurer(self, ids, name, value):
+        print 'value :', value
+        if value:
+            self.write(ids, {'insurer': [{}]})
+
+    def on_change_is_insurer(self, vals):
+        res = {}
+        print 'Is insurer : ', vals.get('is_insurer')
+        if vals.get('is_insurer') == True:
+            print 'yes'
+            res['insurer']['add'] = [{}]
+        return res
 Party()
 
 
@@ -108,6 +128,5 @@ class Insurer(ModelSQL, Actor):
 
     _name = 'party.insurer'
     _description = __doc__
-
 
 Insurer()
