@@ -128,5 +128,7 @@ class Insurer(ModelSQL, Actor):
 
     _name = 'party.insurer'
     _description = __doc__
+    #test commit
 
 Insurer()
+
