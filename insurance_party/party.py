@@ -22,7 +22,8 @@ class Party(ModelSQL, ModelView):
     is_legal_entity = fields.Function(fields.Boolean('Legal entity'),
                                       'get_is_actor')
     is_insurer = fields.Function(fields.Boolean('Insurer',
-                                                on_change=['insurer']),
+                                                on_change=['is_insurer',
+                                                           'insurer']),
                                  'get_is_actor', setter='set_is_insurer')
 
     def get_is_actor(self, ids, name):
@@ -34,17 +35,17 @@ class Party(ModelSQL, ModelView):
                 res[party.id] = len(field) > 0
         return res
 
-    def set_is_insurer(self, ids, name, value):
-        print 'value :', value
-        if value:
-            self.write(ids, {'insurer': [{}]})
-
     def on_change_is_insurer(self, vals):
         res = {}
-        print 'Is insurer : ', vals.get('is_insurer')
-        if vals.get('is_insurer') == True:
-            print 'yes'
-            res['insurer']['add'] = [{}]
+        res['insurer'] = {}
+        if type(vals.get('insurer')) == bool:
+            return res
+        print vals.get('insurer')
+        if vals.get('is_insurer') == True and len(vals.get('insurer')) == 0:
+            res['insurer']['add'] = [{'reference': 'toto'}]
+        elif vals.get('is_insurer') == False and len(vals.get('insurer')) > 0:
+            res['insurer'].setdefault('remove', [])
+            res['insurer']['remove'].append(vals.get('insurer')[0].get('id'))
         return res
 Party()
 
@@ -52,7 +53,9 @@ Party()
 class Actor(ModelView):
     _inherits = {'party.party': 'party'}
     _name = 'party.actor'
+    _rec_name = 'reference'
 
+    reference = fields.Char('Reference')
     party = fields.Many2One('party.party', 'Party',
                     required=True, ondelete='CASCADE', select=True)
 
@@ -128,7 +131,6 @@ class Insurer(ModelSQL, Actor):
 
     _name = 'party.insurer'
     _description = __doc__
-    #test commit
 
 Insurer()
 

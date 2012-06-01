@@ -27,9 +27,9 @@
                                 <field name="is_insurer"/>
                             </xpath>
                             <xpath expr="/form/notebook" position="inside">
-                                <page string="Roles" id="role">
-                                    <label name="insurer"/>
-                                    <field name="insurer"/>
+                                <page string="Insurer" id="insurer" 
+                                states="{'invisible': Bool(~Eval('is_insurer'))}">
+                                    <field name="insurer" mode="form"/>
                                 </page>
                             </xpath>
                          </data>
@@ -170,7 +170,7 @@
         <!-- View for the edition or the person -->
         <record model="ir.action.act_window.view" id="act_person_form_view">
             <field name="sequence" eval="20" />
-            <field name="view" ref="person_view_form" />
+                <field name="view" ref="person_view_form" />
             <field name="act_window" ref="act_person_form" />
         </record>
 
@@ -189,26 +189,56 @@
             <field name="model">party.person-relations</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                        <![CDATA[
-                            <tree>
-                                <field name="kind"/>
-                                <field name="to_person"/>
-                            </tree>
-                        ]]>
+                <![CDATA[
+                    <tree>
+                        <field name="kind"/>
+                        <field name="to_person"/>
+                    </tree>
+                ]]>
             </field>
         </record>
         <record model="ir.ui.view" id="person_relations_view_tree_to">
             <field name="model">party.person-relations</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                        <![CDATA[
-                            <tree>
-                                <field name="reverse_kind"/>
-                                <field name="from_person"/>
-                            </tree>
-                        ]]>
+                <![CDATA[
+                    <tree>
+                        <field name="reverse_kind"/>
+                        <field name="from_person"/>
+                    </tree>
+                ]]>
             </field>
         </record>
+        <!--  ******************************************* 
+              **************   Insurer     ***************
+              *******************************************-->
+                <!-- Person form view -->
+        <record model="ir.ui.view" id="insurer_view_form">
+            <field name="model">party.insurer</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <form>
+                    <label name="reference"/>
+                    <field name="reference"/>
+                </form>
+                ]]>
+            </field>
+        </record>
+
+        <!-- Person tree view -->
+        <record model="ir.ui.view" id="insurer_view_tree">
+            <field name="model">party.insurer</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <tree>
+                        <field name="reference"/>
+                    </tree>
+                ]]>
+            </field>
+        </record>
+        
     </data>
 </tryton>
       
