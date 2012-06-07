@@ -8,6 +8,7 @@
     'description': 'CoopBusiness module',
     'depends': ['ir',
                 'res',
+                'insurance_product'
                  ],
     'xml': [
             'process_labo.xml',

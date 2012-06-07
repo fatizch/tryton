@@ -1,4 +1,5 @@
 import datetime
+import copy
 
 # Needed for displaying objects
 from trytond.model import ModelView, ModelSQL
@@ -6,7 +7,7 @@ from trytond.model import fields as fields
 
 # Needed for Wizardry
 from trytond.wizard import Wizard, Button, StateView, StateTransition
-from trytond.wizard import StateAction
+from trytond.wizard import StateAction, Session
 
 # Needed for getting models
 from trytond.pool import Pool
@@ -14,8 +15,10 @@ from trytond.pool import Pool
 # Needed for resuming processes
 from trytond.transaction import Transaction
 from trytond.protocols.jsonrpc import JSONEncoder
-from trytond.model.browse import BrowseRecord, BrowseRecordNull
+from trytond.model.browse import BrowseRecordNull
 from tools import AbstractObject, to_list
+
+from trytond.pyson import Eval
 
 # Needed for serializing data
 try:
@@ -86,8 +89,8 @@ class WithAbstract(object):
     @staticmethod
     def save_abstract_objects(session, fields):
         objs = WithAbstract.abstract_objs(session)
-        list = to_list(fields)
-        for field, value in list:
+        for_list = to_list(fields)
+        for field, value in for_list:
             if field in objs:
                 WithAbstract.save_abstract_object(session, field, value)
 
@@ -133,6 +136,10 @@ class ProcessState(ModelView):
     # Stores the list of errors for displaying
     errors = fields.Text('Errors')
 
+    # Stores the product for product-based state definition :
+    on_product = fields.Many2One('ins_product.product',
+                                  'On Product Process')
+
     @staticmethod
     def add_error(session, error):
         errors = to_list(error)
@@ -147,6 +154,7 @@ class ProcessState(ModelView):
                 setattr(session.process_state, elem + '_db', 0)
             if not hasattr(session.process_state, elem + '_str'):
                 setattr(session.process_state, elem + '_str', '')
+        session.on_product = 0
 
 ProcessState()
 
@@ -386,6 +394,7 @@ class CoopProcess(Wizard):
         # We just need to get a few things at start:
         #    Process desc model, needed for calling methods
         process_desc_model = Pool().get('ins_process.process_desc')
+        step_desc_model = Pool().get('ins_process.step_desc')
         #    Current state object (the CoopStateView object)
         cur_state_obj = self.states[session.process_state.cur_step]
         #    Current state model ('ins_process.process_name.step_name')
@@ -438,12 +447,22 @@ class CoopProcess(Wizard):
             # We need to get the previous step from the process desc
             next_step_desc = process_desc_model.get_prev_step(cur_step_desc,
                                             cur_process_desc)
+            # We go back until we got a non virtual step.
+            while next_step_desc.virtual_step == True:
+                next_step_desc = process_desc_model.get_prev_step(
+                                            next_step_desc,
+                                            cur_process_desc)
             # If it does not exist, no need to go further
             if next_step_desc == cur_step_desc:
                 return session.process_state.cur_step
             # Now, we get our tools : step name, model, view
             (next_step_state, next_state_name) = self.get_state_from_model(
-                                            next_step_desc.step_model)
+                                step_desc_model.get_step_model(
+                                        next_step_desc,
+                                        session.process_state.on_product))
+            if next_step_state == '':
+                ProcessState.add_error(session, 'Could not find step model')
+                return ''
             next_state_model = Pool().get(next_step_state.model_name)
 
             # Should we display this step ?
@@ -473,9 +492,48 @@ class CoopProcess(Wizard):
             # and we exit now if it does no exist
             if next_step_desc == cur_step_desc:
                 return session.process_state.cur_step
+            # First of all we go on until we find a non-virtual step
+            while next_step_desc.virtual_step == True:
+                result = False
+                errors = []
+                # We call the step_over methods
+                for res, errs in CoopStepMethods.call_client_rules(
+                                            session,
+                                            default=False,
+                                            client_rules='0_step_over'):
+                    if res != False:
+                        result = res
+                        errors += errs
+                # In case of error, we stop here then go back to the step
+                if errors != []:
+                    ProcessState.add_error(session, errors)
+                    # A '' return value will make it so we stay on the
+                    # current step
+                    return ''
+                if result == False:
+                    # We must call the check methods :
+                    result = True
+                    errors = []
+                    # We call the step_over methods
+                    for res, errs in CoopStepMethods.call_client_rules(
+                                            session,
+                                            default=True,
+                                            client_rules='2_check_step'):
+                        if res != True:
+                            result = res
+                            errors += errs
+                    if result == False:
+                        ProcessState.add_error(session, errors)
+                        return ''
+                next_step_desc = process_desc_model.get_next_step(
+                                                    next_step_desc,
+                                                    cur_process_desc)
+            # Now we are sure to have a non-virtual step, so we may go on...
             # We got our tools
-            (next_step_state, next_state_name) = self.get_state_from_model(
-                                            next_step_desc.step_model)
+            (next_step_state, next_state_name) = \
+                    self.get_state_from_model(step_desc_model.get_step_model(
+                                        next_step_desc,
+                                        session.process_state.on_product))
             next_state_model = Pool().get(next_step_state.model_name)
             # And we try to finish the current step
             (res, errors) = cur_state_model.do_after(session,
@@ -494,7 +552,7 @@ class CoopProcess(Wizard):
                     return session.process_state.cur_step
                 # Now we must check that the step should be displayed
                 (res, errors) = next_state_model.must_step_over(session,
-                                                                next_step_desc)
+                                                            next_step_desc)
                 # We set the step as the current step anyway
                 session.process_state.cur_step = next_state_name
                 session.process_state.cur_step_desc = next_step_desc.id
@@ -502,9 +560,9 @@ class CoopProcess(Wizard):
                     # We must not step over, it ends here
                     return session.process_state.cur_step
                 else:
-                    # We must step over, so we just calculate_next_step again.
-                    # Note that it supposed that the last step will not be
-                    # stepped over !
+                    # We must step over, so we just calculate_next_step
+                    # again. Note that it supposed that the last step will
+                    # not be stepped over !
                     return self.calculate_next_step(session)
         elif cur_action == 'suspend':
             # SUSPEND :
@@ -635,8 +693,33 @@ class CoopStateView(StateView, CoopState):
                 res[field] = default_data[field]
         return res
 
+    def get_buttons(self, wizard, state_name):
+        buttons = super(CoopStateView, self).get_buttons(wizard,
+                                                         state_name)
+        process_desc_obj = Pool().get('ins_process.process_desc')
+        process, = process_desc_obj.search([
+                                        ('process_model', '=', wizard._name)],
+                                           limit=1)
+        res_buttons = []
+        for step_desc in process_desc_obj.browse(process).steps:
+            state_obj = Pool().get(self.model_name)
+            if isinstance(state_obj, DependantState):
+                if (not state_obj.depends_on_state() ==
+                                                step_desc.product_step_name):
+                    continue
+            elif self.model_name != step_desc.step_model:
+                continue
+            default_button, _ = step_desc.button_default
+            for button in buttons:
+                if getattr(step_desc, 'button' + button['state'][5:]):
+                    if default_button[7:] == button['state'][6:]:
+                        button['default'] = True
+                    res_buttons.append(button)
+            break
+        return res_buttons
 
-class CoopStep(ModelView):
+
+class CoopStepMethods(object):
     '''
         This is the step master class. It defines a step, allows to create a
         view for this step, and has all the methods needed for going through
@@ -664,7 +747,8 @@ class CoopStep(ModelView):
                    if (callable(getattr(self, method))
                        and method.startswith(prefix))]
 
-    def fill_data_dict(self, session, data_pattern):
+    @staticmethod
+    def fill_data_dict(session, data_pattern):
         '''
             This method is a core method.
             It takes a data pattern as an input, that is a structure asking for
@@ -675,7 +759,7 @@ class CoopStep(ModelView):
 
             return value should look like :
                 {'ins_process.contract': {
-                                            'effective_date': some_value,
+                                            'start_date': some_value,
                                             'contract_number': other_value
                                             },
                  'ins_process.extension': { ... }
@@ -684,7 +768,8 @@ class CoopStep(ModelView):
         '''
         return {}
 
-    def call_client_rules(self, session, rulekind, step_desc):
+    @staticmethod
+    def call_client_rules(session, rulekind, step_desc):
         '''
             This method will look for and call the client defined ruler in the
             step_desc, which match the rulekind.
@@ -707,7 +792,7 @@ class CoopStep(ModelView):
             # Then we call the fill_data_dict, feed its result to the
             # method, and yield the result
             yield method_desc_model.calculate(rule,
-                                        self.fill_data_dict(session,
+                            CoopStepMethods.fill_data_dict(session,
                                                             needed_data))
 
     def call_methods(self, session, step_desc, prefix, default=True,
@@ -741,9 +826,10 @@ class CoopStep(ModelView):
             if client_rules != '':
                 # We get the result of each call and update the global result
                 # accordingly
-                for res, errs in self.call_client_rules(session,
-                                                  client_rules,
-                                                  step_desc):
+                for res, errs in CoopStepMethods.call_client_rules(
+                                                                session,
+                                                                client_rules,
+                                                                step_desc):
                     if res != default:
                         result = res
                         errors += errs
@@ -820,6 +906,77 @@ class CoopStep(ModelView):
         return self.call_methods(session,
                                  step_desc,
                                  'post_step_')
+
+
+class NoSessionFoundException(Exception):
+    pass
+
+
+class CoopView(ModelView):
+    '''
+        This class will be used as a mother class for all non-state views
+        for coop processes.
+        For instance, if your current state needs a One2Many to represent
+        data, you might need non-persistent class as a target.
+        You will want to use this class as a model, as it proides some
+        useful methods.
+    '''
+
+    @staticmethod
+    def get_context():
+        if ('from_session' in Transaction().context
+                        and Transaction().context.get('from_session') > 0):
+            session_obj = Pool().get('ir.session.wizard')
+            session = session_obj.browse(
+                                    Transaction().context.get('from_session'))
+            data = json.loads(session.data.encode('utf-8'))
+            process_obj = Pool().get('ins_process.process_desc')
+            wizard_obj = Pool().get(process_obj.browse(
+                        data['process_state']['process_desc']).process_model,
+                                    type='wizard')
+            the_session = Session(wizard_obj,
+                                  Transaction().context.get('from_session'))
+            # session.data = data
+            return the_session
+        raise NoSessionFoundException
+
+class CoopStep(ModelView, CoopStepMethods):
+    def __init__(self):
+        super(CoopStep, self).__init__()
+        for field_name, field in self._columns.iteritems():
+            if hasattr(field, 'context') and isinstance(field,
+                                                        fields.One2Many):
+                cur_attr = getattr(self, field_name)
+                if cur_attr.context is None:
+                    cur_attr.context = {}
+                cur_attr.context['from_session'] = Eval('session_id')
+                setattr(self, field_name, copy.copy(cur_attr))
+        self._reset_columns()
+
+    # Warning : to work, this field must be added to the view that will be used
+    # displaying the Step, even though it is invisible.
+    session_id = fields.Integer('Session Id',
+                                states={'invisible': True})
+
+
+class DependantState(CoopStep):
+    def __init__(self):
+        super(DependantState, self).__init__()
+
+        def before_step_session_init(session):
+            getattr(session,
+                    self.__class__.state_name()
+                    ).session_id = session._session.id
+            return (True, [])
+        setattr(self, 'before_step_session_init', before_step_session_init)
+
+    @staticmethod
+    def depends_on_state():
+        pass
+
+    @staticmethod
+    def state_name():
+        pass
 
 
 class SuspendedProcess(ModelSQL, ModelView):
@@ -1108,9 +1265,8 @@ class SubscriptionProcess(Wizard):
     #     fields  => list of attributes used in the state view.
     def default_project(self, session, fields):
         # In this particular case, all we want to do is set today's date as
-        # the default value for the effective_date field
-        import datetime
-        return {'effective_date': datetime.date.today()}
+        # the default value for the start_date field
+        return {'start_date': datetime.date.today()}
 
     def default_option_selection(self, session, fields):
         # Here it is a little harder. We want to create a list of options
@@ -1125,8 +1281,8 @@ class SubscriptionProcess(Wizard):
             # calculated as it is specified in the definition of the
             # option field of coverage_displayer
             options.append({'for_coverage': coverage.id,
-                            'from_date': max(coverage.effective_date,
-                                             session.project.effective_date),
+                            'from_date': max(coverage.start_date,
+                                             session.project.start_date),
                            'status': 'Active'})
         return {'options': options}
 
@@ -1143,7 +1299,7 @@ class SubscriptionProcess(Wizard):
             # to the contract_obj.create method to gives it the data it needs
             # to create the options.
             options.append(('create',
-                            {'effective_date': option.from_date,
+                            {'start_date': option.from_date,
                              'coverage': option.for_coverage.id,
                              }))
 
@@ -1155,7 +1311,7 @@ class SubscriptionProcess(Wizard):
         # contract record.
         contract_obj.create({'options': options,
                              'product': session.project.product.id,
-                             'effective_date': session.project.effective_date,
+                             'start_date': session.project.start_date,
                              'contract_number': contract_obj.
                                                     get_new_contract_number()
                              })
@@ -1168,14 +1324,14 @@ class SubscriptionProcess(Wizard):
 class ProjectState(ModelView):
     _name = 'ins_contract.subscription_process.project'
     # We define the list of attributes which will be used for display
-    effective_date = fields.Date('Effective Date',
+    start_date = fields.Date('Effective Date',
                                  required=True)
     product = fields.Many2One('ins_product.product',
                               'Product',
-                              #domain=[('effective_date',
+                              #domain=[('start_date',
                               #         '<=',
-                              #         Eval('effective_date'))],
-                              depends=['effective_date', ],
+                              #         Eval('start_date'))],
+                              depends=['start_date', ],
                               required=True)
 
 
@@ -1185,3 +1341,4 @@ class OptionSelectionState(ModelView):
                                None,
                                None,
                                'Options Choices')
+

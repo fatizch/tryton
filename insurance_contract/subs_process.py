@@ -19,7 +19,13 @@ from trytond.modules.insurance_process import CoopProcess
 from trytond.modules.insurance_process import ProcessState
 from trytond.modules.insurance_process import WithAbstract
 from trytond.modules.insurance_process import AbstractObject
+from trytond.modules.insurance_process import DependantState
+from trytond.modules.insurance_process import CoopView
+from trytond.modules.coop_utils import get_descendents
 from trytond.model.browse import BrowseRecordNull
+
+from trytond.transaction import Transaction
+from trytond.modules.insurance_contract import OPTIONSTATUS
 
 ###############################################################################
 # This is the Subscription Process. It is a process (which uses the           #
@@ -39,8 +45,12 @@ class ProjectState(CoopStep):
 
     # This will be the effective date of our contract. It is necessary to have
     # it at this step for it decides which product will be available.
-    effective_date = fields.Date('Effective Date',
+    start_date = fields.Date('Effective Date',
                                  required=True)
+
+    # The subscriber is the client which wants to subscribe to a contract.
+    subscriber = fields.Many2One('party.party',
+                                 'Subscriber')
 
     # This is a core field, it will be used all along the process to ask for
     # directions, client side rules, etc...
@@ -51,17 +61,17 @@ class ProjectState(CoopStep):
                               # Param1 must be a field of the target model,
                               # Param2 will be evaluated in the current record
                               # context, so will return the value of
-                              # effective_date in the current ProjetState
-                              domain=[('effective_date',
+                              # start_date in the current ProjetState
+                              domain=[('start_date',
                                        '<=',
-                                       Eval('effective_date', None))],
-                              depends=['effective_date', ],
+                                       Eval('start_date', None))],
+                              depends=['start_date', ],
                               required=True)
 
-    # Default effective_date is today
+    # Default start_date is today
     def before_step_init(self, session):
-        if session.project.effective_date is None:
-            session.project.effective_date = datetime.date.today()
+        if session.project.start_date is None:
+            session.project.start_date = datetime.date.today()
         return (True, [])
 
     def check_step_product(self, session):
@@ -69,11 +79,21 @@ class ProjectState(CoopStep):
             return (True, [])
         return (False, ['A product must be provided !'])
 
+    def check_step_subscriber(self, session):
+        if type(session.project.subscriber) != BrowseRecordNull:
+            return (True, [])
+        return (False, ['A subscriber must be provided !'])
+
     def post_step_update_abstract(self, session):
         contract = WithAbstract.get_abstract_objects(session, 'for_contract')
         contract.product = session.project.product
-        contract.effective_date = session.project.effective_date
+        contract.start_date = session.project.start_date
+        contract.subscriber = session.project.subscriber
         WithAbstract.save_abstract_objects(session, ('for_contract', contract))
+        return (True, [])
+
+    def post_step_update_on_product(self, session):
+        session.process_state.on_product = session.project.product.id
         return (True, [])
 
     @staticmethod
@@ -81,6 +101,29 @@ class ProjectState(CoopStep):
         return 'Product Selection'
 
 ProjectState()
+
+
+class CoverageDisplayer(CoopView):
+    '''
+        This class is a displayer, that is a class which will only be used
+        to show something (or ask for something) to the user. It needs not
+        to be stored, and is not supposed to be.
+    '''
+    _name = 'ins_contract.coverage_displayer'
+    coverage = fields.Many2One('ins_product.coverage',
+                                   'Coverage',
+                                   readonly=True)
+    start_date = fields.Date(
+                        'From Date',
+                        domain=[('coverage.start_date',
+                                 '<=',
+                                 'start_date')],
+                        depends=['coverage', ],
+                        required=True)
+    status = fields.Selection(OPTIONSTATUS,
+                              'Status')
+
+CoverageDisplayer()
 
 
 class OptionSelectionState(CoopStep):
@@ -121,8 +164,8 @@ class OptionSelectionState(CoopStep):
         # which will be used to ask for input from the user.
         for coverage in session.project.product.options:
             options.append({'coverage': coverage.id,
-                            'effective_date': max(coverage.effective_date,
-                                             session.project.effective_date),
+                            'start_date': max(coverage.start_date,
+                                             session.project.start_date),
                            'status': 'Active'})
         # Then set those displayers as the options field of our current step.
         session.option_selection.options = options
@@ -139,13 +182,13 @@ class OptionSelectionState(CoopStep):
     # future contract's effective date.
     def check_step_options_date(self, session):
         for coverage in session.option_selection.options:
-            if coverage.effective_date < session.project.effective_date:
+            if coverage.start_date < session.project.start_date:
                 return (False, ['Options must be subscribed after %s'
-                                 % session.project.effective_date])
-            elif coverage.effective_date < coverage.coverage.effective_date:
+                                 % session.project.start_date])
+            elif coverage.start_date < coverage.coverage.start_date:
                 return (False, ['%s must be subscribed after %s'
                                 % (coverage.coverage.name,
-                                   coverage.coverage.effective_date)])
+                                   coverage.coverage.start_date)])
         return (True, [])
 
     def post_step_create_options(self, session):
@@ -163,6 +206,87 @@ class OptionSelectionState(CoopStep):
         return 'Options Selection'
 
 OptionSelectionState()
+
+
+class CoveredDataDesc(CoopView):
+    _name = 'ins_contract.subs_process.covered_data_desc'
+    covered_element = fields.Reference('Covered Element',
+                                       selection='get_covered_elem_model')
+    #covered_element = fields.Many2One(
+     #                   'ins_contract.subs_process.covered_person_desc',
+      #                  'Covered Element')
+
+    status = fields.Selection(OPTIONSTATUS, 'Status')
+
+    start_date = fields.Date('Start Date')
+
+    end_date = fields.Date('End Date')
+
+    for_coverage = fields.Many2One('ins_product.coverage',
+                                   'For coverage')
+
+    def get_covered_elem_model(self):
+        return get_descendents(DependantState)
+
+CoveredDataDesc()
+
+
+class CoveredElementDesc(CoopView):
+    covered_data = fields.One2Many(
+                            'ins_contract.subs_process.covered_data_desc',
+                            'covered_element',
+                            'Covered Data')
+
+
+class CoveredPersonDesc(CoveredElementDesc):
+    _name = 'ins_contract.subs_process.covered_person_desc'
+
+    person = fields.Many2One('party.party',
+                             'Covered Person')
+    life_state = fields.Many2One('ins_contract.subs_process.extension_life',
+                                 'Life State')
+    toto = fields.Char('Test')
+
+    def default_toto(self):
+        return CoveredPersonDesc.get_context().data[
+                                                'process_state']['cur_step']
+
+CoveredPersonDesc()
+
+
+class ExtensionLifeState(DependantState):
+    _name = 'ins_contract.subs_process.extension_life'
+    covered_elements = fields.One2Many(
+                            'ins_contract.subs_process.covered_person_desc',
+                            'life_state',
+                            'Covered Elements')
+
+    @staticmethod
+    def depends_on_state():
+        return 'extension'
+
+    @staticmethod
+    def state_name():
+        return 'extension_life'
+
+    def before_step_subscriber_as_covered(self, session):
+        covered_data = []
+        for coverage in session.option_selection.options:
+            if coverage.status == 'Active':
+                covered_data.append({
+                                'status': 'Active',
+                                'start_date': coverage.start_date,
+                                'for_coverage': coverage.coverage.id
+                                     })
+        session.extension_life.covered_elements = []
+        session.extension_life.covered_elements.append(
+                                    {'person': session.project.subscriber.id,
+                                     'toto': 'Titi',
+                                     'covered_data': covered_data
+                                     })
+        return (True, [])
+
+ExtensionLifeState()
 
 
 class SubscriptionProcessState(ProcessState, WithAbstract):
@@ -193,6 +317,9 @@ class SubscriptionProcess(CoopProcess):
     option_selection = CoopStateView(
                         'ins_contract.subs_process.option_selection',
                         'insurance_contract.option_selection_view')
+    extension_life = CoopStateView(
+                        'ins_contract.subs_process.extension_life',
+                        'insurance_contract.extension_life_view')
 
     # And do something when validation occurs
     def do_complete(self, session):
@@ -202,13 +329,13 @@ class SubscriptionProcess(CoopProcess):
         # We got the list of option displayers, so we create the real thing
         for option in contract.options:
             options.append(('create',
-                            {'effective_date': option.effective_date,
+                            {'start_date': option.start_date,
                              'coverage': option.coverage.id,
                              }))
         # then go for the creation of the contract.
         contract_obj.create({'options': options,
                              'product': contract.product.id,
-                             'effective_date': contract.effective_date,
+                             'start_date': contract.start_date,
                              'contract_number': contract_obj.
                                                     get_new_contract_number()
                              })

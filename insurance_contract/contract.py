@@ -1,14 +1,6 @@
-import datetime
-
 # Needed for storing and displaying objects
 from trytond.model import ModelSQL, ModelView
 from trytond.model import fields as fields
-
-# Needed for Wizardry
-from trytond.wizard import Wizard, Button, StateView, StateTransition
-
-# Needed for Eval
-from trytond.pyson import Eval
 
 # Needed for getting models
 from trytond.pool import Pool
@@ -35,17 +27,6 @@ SubscriptionManager()
 
 class GenericExtension(ModelSQL, ModelView):
     '''
-    This class will contains all data that are non-specific to the product
-    used for the contract.
-    '''
-    _name = 'ins_contract.gen_extension'
-    _description = 'Extension'
-
-GenericExtension()
-
-
-class ProductExtension(ModelSQL, ModelView):
-    '''
     Here comes the Extension which will contains all data needed by a specific
     product to compute rates, benefits etc.
 
@@ -53,10 +34,9 @@ class ProductExtension(ModelSQL, ModelView):
     insurance or PnC, each one of those is just a bunch of data that will be
     used in the business rules to calculate stuff.
     '''
-    _name = 'ins_contract.prod_extension'
-    _description = 'Product Extension'
-
-ProductExtension()
+    covered_elements = fields.One2Many('ins_contract.covered_elements',
+                                       'extension',
+                                       'Coverages')
 
 
 class Contract(ModelSQL, ModelView):
@@ -70,11 +50,11 @@ class Contract(ModelSQL, ModelView):
     # Effective date is the date at which the contract "starts" :
     #    The client pays its premium
     #    Claims can be declared
-    effective_date = fields.Date('Effective Date',
+    start_date = fields.Date('Effective Date',
                                  required=True)
 
     # Management date is the date at which the company started to manage the
-    # contract. Default value is effective_date
+    # contract. Default value is start_date
     start_management_date = fields.Date('Management Date')
 
     # Contract Number will be the number which will be used to reference the
@@ -117,21 +97,47 @@ class Contract(ModelSQL, ModelView):
                               'Status',
                               readonly=True)
 
-    # The generic extension will contain complementary data which is not
-    # specific to the product. It just gives us a place to store additional
-    # data which does not depend on the product chosen by the subscriber.
-    generic_extension = fields.Many2One('ins_contract.gen_extension',
-                                        'Extension')
-
     # On the other hand, the Product Extension will represents all product
     # specific data, including coverages description. It will be one major
     # element used in most of the product specific business rules.
-    product_extension = fields.Many2One('ins_contract.prod_extension',
-                                        'Product Extension')
+    product_extension = fields.Reference('Product Extension',
+                                         'get_extension_models')
+
+    # The master field is the object on which rules will be called.
+    # Basically, we need an abstract way to call rules, because in some case
+    # (typically in GBP rules might be managed on the group contract) the rules
+    # will not be those of the product.
+    master = fields.Reference('Master',
+                              [('ins_contract.contract', 'Contract'),
+                               ('ins_product.product', 'Product')])
+
+    # The billing manager will be in charge of all billing-related actions.
+    # The select statements for billing will use this object to get the list
+    # of tasks
+    billing_manager = fields.One2Many('ins_contract.billing_manager',
+                                      'contract',
+                                      'Billing Manager')
+
+    extension_life = fields.Many2One('ins_contract.extension_life',
+                                     'Life Extension')
+
+    extension_car = fields.Many2One('ins_contract.extension_car',
+                                    'Car Extension')
 
     @staticmethod
     def get_new_contract_number():
         return 'Ct00000001'
+
+    @staticmethod
+    def get_master(master):
+        res = master.split(',')
+        return res[0], int(res[1])
+
+    def get_extension_models(self):
+        return [(model_name, model.get_extension_name())
+                for (model_name, model) in Pool().iterobject()
+                if hasattr(model, 'get_extension_name')
+                    and model.get_extension_name() != '']
 
 Contract()
 
@@ -172,30 +178,105 @@ class Option(ModelSQL, ModelView):
     # Effective date is the date at which the option "starts" to be effective :
     #    The client pays its premium for it
     #    Claims can be declared and benefits paid on the coverage
-    effective_date = fields.Date('Effective Date',
+    start_date = fields.Date('Effective Date',
                                  required=True)
+
+    option_data = fields.Reference('Option Data',
+                                   'get_data_model')
+
+    def get_data_model(self):
+        return [(model_name, model.get_option_data_name())
+                for (model_name, model) in Pool().iterobject()
+                if hasattr(model, 'get_option_data_name')
+                    and model.get_option_data_name() != '']
 
 Option()
 
 
-class CoverageDisplayer(ModelView):
+class BillingManager(ModelSQL, ModelView):
     '''
-        This class is a displayer, that is a class which will only be used
-        to show something (or ask for something) to the user. It needs not
-        to be stored, and is not supposed to be.
+        This object will manage all billing-related content on the contract.
+        It will be the target of all sql requests for automated bill
+        calculation, lapsing, etc...
     '''
-    _name = 'ins_contract.coverage_displayer'
-    coverage = fields.Many2One('ins_product.coverage',
-                                   'Coverage',
-                                   readonly=True)
-    effective_date = fields.Date(
-                        'From Date',
-                        domain=[('coverage.effective_date',
-                                 '<=',
-                                 'effective_date')],
-                        depends=['coverage', ],
-                        required=True)
-    status = fields.Selection(OPTIONSTATUS,
-                              'Status')
+    _name = 'ins_contract.billing_manager'
 
-CoverageDisplayer()
+    # This is the related contract for which the current billing manager is
+    # defined. It is necessary to have this link as the billing manager is just
+    # an interface for billing-related actions, the critical are stored on the
+    # contract.
+    contract = fields.Many2One('ins_contract.contract',
+                               'Contract')
+
+    # This is a critical field. It MUST be updated every time a billing is
+    # done, so that the next batch will have up-to-date information on whether
+    # or not it needs to work on this contract.
+    next_billing_date = fields.Date('Next Billing Date')
+
+BillingManager()
+
+
+class CoveredElement(ModelSQL, ModelView):
+    _name = 'ins_contract.covered_element'
+    product_specific = fields.Reference('Specific Part',
+                                        'get_specific_models')
+    covered_data = fields.One2Many('ins_contract.coverage_description',
+                                   'for_covered',
+                                   'Coverage Data')
+
+    # extension = fields.Many2One('ins_contract.generic_extension',
+    #                            'Extension')
+
+    def get_specific_models(self):
+        return [(model_name, model.get_specific_model_name())
+                for (model_name, model) in Pool().iterobject()
+                if hasattr(model, 'get_specific_model_name')
+                    and model.get_specific_model_name() != '']
+
+CoveredElement()
+
+
+class CoveredData(ModelSQL, ModelView):
+    _name = 'ins_contract.covered_data'
+    for_covered = fields.Many2One('ins_contract.covered_element',
+                                  'Covered Element')
+    for_coverage = fields.Many2One('ins_contract.options',
+                                   'Coverage')
+    start_date = fields.Date('Start Date')
+    end_date = fields.Date('End Date')
+
+CoveredData()
+
+
+class ExtensionLife(GenericExtension):
+    _name = 'ins_contract.extension_life'
+
+    @staticmethod
+    def get_covered_elements_model():
+        return 'ins_contract.covered_person'
+
+ExtensionLife()
+
+
+class ExtensionCar(GenericExtension):
+    _name = 'ins_contract.extension_car'
+
+    @staticmethod
+    def get_covered_elements_model():
+        return 'ins_contract.covered_car'
+
+ExtensionCar()
+
+
+class CoveredPerson(ModelSQL, ModelView):
+    _name = 'ins_contract.covered_person'
+    person = fields.Many2One('party.party',
+                             'Person')
+
+CoveredPerson()
+
+
+class CoveredCar(ModelSQL, ModelView):
+    _name = 'ins_contract.covered_car'
+
+CoveredCar()

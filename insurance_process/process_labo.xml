@@ -32,8 +32,6 @@
 						    <form string="process" col="4">
 						        <label name="name" colspan="1" xalign="0"/>
 						        <field name="name" colspan="3"/>
-					     		<label name="number_of_steps"/>
-					     		<field name="number_of_steps"/>
 						        <newline/>
 						        <label name="process_model" colspan="1" xalign="0"/>
 						        <field name="process_model" colspan="3"/>
@@ -79,7 +77,7 @@
 					<![CDATA[                 
 					<tree string="step" sequence="sequence">
 					<field name="sequence"/>
-					<field name="step_model"/>
+					<field name="step_name"/>
 					</tree>                 ]]>
 			</field>
 		</record>
@@ -91,11 +89,42 @@
 			<field name="arch" type="xml">
 					 <![CDATA[
 					 <form string="step" col="8">
-					 <label name="process_name" xalign="0"/>
-					 <field name="process_name" xexpand="1" colspan="2"/>
+					 <group name="top_group">
+						 <label name="process_name" xalign="0"/>
+						 <field name="process_name"/>
+						 <newline/>
+						 <label name="virtual_step" xalign="0"/>
+						 <field name="virtual_step"/>
+					 </group>
 					 <newline/>
-					 <label name="step_model" xalign="0"/>
-					 <field name="step_model" colspan="2"/>
+					 <group name="data_group">
+						 <label name="on_product_step" xalign="0"/>
+						 <field name="on_product_step"/>
+						 <newline/>
+						 <label name="step_model" xalign="0"/>
+						 <field name="step_model"/>
+						 <newline/>
+						 <label name="product_step_name" xalign="0"/>
+						 <field name="product_step_name"/>
+					 </group>
+					 <group string="Buttons" name="buttons_group" col="6"
+					 			states="{'invisible': Bool(Eval('virtual_step'))}">
+						 <label name="button_previous" xalign="0"/>
+						 <field name="button_previous"/>
+						 <label name="button_next" xalign="0"/>
+						 <field name="button_next"/>
+						 <label name="button_check" xalign="0"/>
+						 <field name="button_check"/>
+						 <label name="button_suspend" xalign="0"/>
+						 <field name="button_suspend"/>
+						 <label name="button_cancel" xalign="0"/>
+						 <field name="button_cancel"/>
+						 <label name="button_complete" xalign="0"/>
+						 <field name="button_complete"/>
+						 <newline/>
+						 <label name="button_default" xalign="0"/>
+						 <field name="button_default"/>
+					 </group>
 					 <newline/>
 					 <field name="methods" colspan="6"/>
 					 </form>               ]]>

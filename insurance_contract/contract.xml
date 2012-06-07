@@ -12,7 +12,7 @@
 					<![CDATA[                 
 					<tree string="Contract">
 					<field name="contract_number"/>
-					<field name="effective_date"/>
+					<field name="start_date"/>
 					<field name="status"/>
 					<field name="product"/>
 					<field name="subscriber"/>
@@ -31,8 +31,8 @@
 								<label name="contract_number" xalign="0"/>
 								<field name="contract_number" xfill="0" xalign="0"/>
 								<newline/>
-								<label name="effective_date" xalign="0"/>
-								<field name="effective_date"/>
+								<label name="start_date" xalign="0"/>
+								<field name="start_date"/>
 								<newline/>
 								<label name="status" xalign="0"/>
 								<field name="status" xfill="1"/>
@@ -42,23 +42,6 @@
 							</group>
 							<group yexpand="1" yfill="1" name="Test" colspan="2">
 								<field name="options" xfill="1" yfill="1"/>
-							</group>
-	 						<newline/>
-							<group yexpand="1" yfill="1" name="Test" colspan="2">
-								<field name="options" xfill="1" yfill="1"/>
-							</group>
-							<group yexpand="1" yfill="1" name="Test2" colspan="3">
-								<label name="contract_number" xalign="0"/>
-								<field name="contract_number" xfill="1"/>
-								<newline/>
-								<label name="effective_date" xalign="0"/>
-								<field name="effective_date"/>
-								<newline/>
-								<label name="status" xalign="0"/>
-								<field name="status" xfill="1"/>
-								<newline/>
-								<label name="product" xalign="0"/>
-								<field name="product" xfill="1"/>
 							</group>
 						</form>               ]]>
 			</field>
@@ -144,7 +127,7 @@
 						<tree string="Coverage Choices Tree" editable="top">
 							<field name="status"/>
 							<field name="coverage"/>
-							<field name="effective_date"/>
+							<field name="start_date"/>
 						</tree>
 					]]>
 			</field>

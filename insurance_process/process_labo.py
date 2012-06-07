@@ -8,10 +8,14 @@ from trytond.model import fields as fields
 from trytond.pool import Pool
 
 # Needed for Eval
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Not, Bool, Or
 
 # Needed for accessing the Transaction singleton
 from trytond.transaction import Transaction
+
+from trytond.model.browse import BrowseRecordNull
+
+from trytond.modules.insurance_process import DependantState
 
 # For now, just step_over and checks are customizable
 METHOD_TYPES = [
@@ -20,6 +24,15 @@ METHOD_TYPES = [
                 ('2_check_step', 'Step Validation'),
                 # ('3_post_step', 'Step Completion')
                 ]
+
+BUTTONS = [
+           ('button_next', "'Next' Button"),
+           ('button_previous', "'Previous' Button"),
+           ('button_check', "'Check' Button"),
+           ('button_complete', "'Complete' Button"),
+           ('button_cancel', "'Cancel' Button"),
+           ('button_suspend', "'Suspend' Button"),
+           ]
 
 
 class ProcessDesc(ModelSQL, ModelView):
@@ -44,31 +57,10 @@ class ProcessDesc(ModelSQL, ModelView):
                         'parent_name': Eval('name'),
                                     })
 
-    # This is a trick which allows us to keep track of how many steps are in
-    # the list, maybe a 'count' method exists ?
-    number_of_steps = fields.Integer('Number of fields',
-                                     states={
-                                             'invisible': True,
-                                             },
-                                     on_change_with=['steps']
-                                      )
-
     # This is a core field, it creates the link between the record and the
     # process it is supposed to represent.
     process_model = fields.Selection('get_process_model',
                                      'Process Model')
-
-    # Easy one : at first, there aren't any step in our process desc
-    def default_number_of_steps(self):
-        return 0
-
-    # We makes number_of_steps increment each time the number of element in the
-    # steps field change
-    def on_change_with_number_of_steps(self, values):
-        result = 0
-        for step in values['steps']:
-            result = result + 1
-        return result
 
     # Here we create the list of tuple which will be available for selection.
     # Each tuple contains the model_name (i.e. 'ins_process.dummy_process')
@@ -93,13 +85,13 @@ class ProcessDesc(ModelSQL, ModelView):
     # the next one.
     def get_next_step(self, step, process):
         if step.sequence < len(process.steps):
-            return process.steps[step.sequence + 1]
+            return process.steps[step.sequence]
         return step
 
     # idem for getting the previous step
     def get_prev_step(self, step, process):
         if step.sequence != 1:
-            return process.steps[step.sequence - 1]
+            return process.steps[step.sequence - 2]
         return step
 
 ProcessDesc()
@@ -143,7 +135,7 @@ class StepMethodDesc(ModelSQL, ModelView):
         # we need for calculation.
         # Hopefully, the process will look in its session for a contract
         # (matching 'ins_process.contract') and parse its fields.
-        return {'ins_process.contract': ['effective_date',
+        return {'ins_process.contract': ['start_date',
                                           'name']}
 
     # This method makes it work : It takes the rule to execute, the data it
@@ -186,20 +178,129 @@ class StepDesc(ModelSQL, ModelView):
     # step it is supposed to represent.
     step_model = fields.Selection('get_steps_model',
                                   'Step',
-                                  required=True)
+                                  states={
+                            'invisible': Or(Bool(Eval('on_product_step')),
+                                            Bool(Eval('virtual_step'))),
+                            'required': Not(Or(Bool(Eval('on_product_step')),
+                                            Bool(Eval('virtual_step')))),
+                                    },
+                                  depends=['on_product_step',
+                                           'virtual_step'])
 
     # This is the list of methods which might be called when the step is asked
     # for client rules.
     methods = fields.One2Many('ins_process.step_method_desc',
                               'step',
-                              'Methods')
+                              'Methods',
+                              states={
+                                      'required': Bool(Eval('virtual_step')),
+                                      },
+                              depends=['virtual_step'])
 
-    # This is not necessary as long as 'go_up' do not work.
-    # It allows the method to be called from the client when not in the step's
-    # form view.
+    # Virtual_step makes the step 'virtual', that is without any form. It is
+    # just a way to add user-defined methods between steps
+    virtual_step = fields.Boolean('Virtual Step')
+
+    # Here we give the user a possibility to define a step whos definition will
+    # be found on the process instance product.
+    # This must be done carefully, as we have to be sure that the process using
+    # the state uses a product.
+    on_product_step = fields.Boolean('On Product Step',
+                                     states={
+                                        'invisible': Bool(Eval('virtual_step'))
+                                        },
+                                     depends=['virtual_step'])
+
+    # In the case the step is defined 'on product', we use the
+    # product_step_name field to get the type of the step that we must look for
+    # in the product step descriptions.
+    product_step_name = fields.Selection('get_product_steps',
+                                         'Product Step Name',
+                                    #required=Eval('on_product_step'),
+                                    states={
+                                    'invisible': Or(Not(Bool(
+                                                Eval('on_product_step'))),
+                                                Bool(Eval('virtual_step'))),
+                                    'required': Bool(Eval('on_product_step'))
+                                            },
+                                    depends=['on_product_step',
+                                             'virtual_step'])
+
+    # Step Name uses the get_step_name method to compute a user friendly name
+    # from the step desc parameters
+    step_name = fields.Function(fields.Char('Step Name'),
+                                'get_step_name')
+
+    button_next = fields.Function(fields.Boolean("'Next' button"),
+                                  'get_button',
+                                  setter='set_button')
+    button_previous = fields.Function(fields.Boolean("'Previous' button"),
+                                  'get_button',
+                                  setter='set_button')
+    button_check = fields.Function(fields.Boolean("'Check' button"),
+                                  'get_button',
+                                  setter='set_button')
+    button_complete = fields.Function(fields.Boolean("'Complete' button"),
+                                  'get_button',
+                                  setter='set_button')
+    button_cancel = fields.Function(fields.Boolean("'Cancel' button"),
+                                  'get_button',
+                                  setter='set_button')
+    button_suspend = fields.Function(fields.Boolean("'Suspend' button"),
+                                  'get_button',
+                                  setter='set_button')
+
+    button_default = fields.Function(fields.Selection(BUTTONS,
+                                                      'Default Button'),
+                                     'get_button',
+                                     setter='set_button')
+
+    buttons_storage = fields.Char('Buttons',
+                                  states={'invisible': True})
+
+    # This maps the 'sequence' column as the default order for step_descs
     def __init__(self):
         super(StepDesc, self).__init__()
         self._order.insert(0, ('sequence', 'ASC'))
+
+    def get_button(self, ids, names):
+        res = {}
+        for name in names:
+            res[name] = {}
+        for step in self.browse(ids):
+            buttons_str = step.buttons_storage
+            idx = -1
+            for button, _ in BUTTONS:
+                idx += 1
+                if not button in names:
+                    continue
+                res[button][step.id] = bool(int(buttons_str[idx]))
+            if 'button_default' in names:
+                res['button_default'][step.id] = BUTTONS[
+                                                    int(buttons_str[-1]) - 1]
+        return res
+
+    def set_button(self, ids, name, value):
+        for step in self.browse(ids):
+            buttons_names = [elem for elem, _ in BUTTONS]
+            buttons = step.buttons_storage
+            buttons_list = list(buttons)
+            if name == 'button_default':
+                if value in buttons_names:
+                    res = str(buttons_names.index(value) + 1)
+                else:
+                    res = 0
+                buttons_list[-1] = res
+            else:
+                if value:
+                    res = '1'
+                else:
+                    res = '0'
+                buttons_list[buttons_names.index(name)] = res
+            buttons = ''.join(buttons_list)
+            self.write([step.id], {
+                            'buttons_storage': buttons,
+                            })
 
     # Here we create the list of tuple which will be available for selection.
     # Each tuple contains the model_name (i.e. 'ins_process.dummy_step')
@@ -236,5 +337,44 @@ class StepDesc(ModelSQL, ModelView):
         for rule in for_step.methods:
             if rule.rule_kind == rule_kind:
                 yield rule
+
+    # This method will be used to get the model of the state that is
+    # associated to the step desc.
+    def get_step_model(self, for_step, for_product):
+        # Basic case :
+        if not for_step.on_product_step and for_step.step_model != '':
+            return for_step.step_model
+        elif (for_step.on_product_step
+                                    and for_step.product_step_name != ''
+                                    and not (for_product is None or
+                                             isinstance(for_product,
+                                                        BrowseRecordNull))):
+            # Go look in for_product for the right step_model
+            # return (lambda x:(x, x))(
+                            # for_product.get_step(for_step.product_step_name))
+            return 'ins_contract.subs_process.extension_life'
+        else:
+            return ''
+
+    def get_step_name(self, ids, name):
+        step_desc_obj = Pool().get('ins_process.step_desc')
+        res = {}
+        for elem in step_desc_obj.browse(ids):
+            if elem.virtual_step == True:
+                res[elem.id] = 'Virtual Step'
+            elif elem.on_product_step == True:
+                res[elem.id] = elem.product_step_name
+            else:
+                res[elem.id] = elem.step_model
+        return res
+
+    def get_product_steps(self):
+        result = set()
+        for cls in DependantState.__subclasses__():
+            result.add((lambda x:(x, x))(cls.depends_on_state()))
+        return list(result)
+
+    def default_buttons_storage(self):
+        return '0000000'
 
 StepDesc()
