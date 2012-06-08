@@ -8,6 +8,7 @@
     'description': 'CoopBusiness module',
     'depends': ['ir',
                  'res',
+                 'party',
                  'coop_utils',
                  ],
     'xml': ['party.xml', ],

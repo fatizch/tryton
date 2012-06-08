@@ -1,23 +1,27 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
+
+        <!--  ******************************************* 
+              **************    Product    **************
+              *******************************************-->
+    
         <!-- Product -->
         <!-- Application Entry point -->
         <menuitem name="Laboratory" id="menu_product" sequence="10" />
 
-        <!-- Tree view -->
         <record model="ir.ui.view" id="product_view_tree">
             <field name="model">ins_product.product</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                        <![CDATA[
-                            <tree string="Product">
-                                <field name="code"/>
-                                <field name="name"/>
-                                <field name="start_date"/>
-                                <field name="end_date"/>
-                            </tree>
-                        ]]>
+                <![CDATA[
+                <tree string="Product">
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                </tree>
+                ]]>
             </field>
         </record>
 
@@ -26,31 +30,30 @@
             <field name="model">ins_product.product</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                        <![CDATA[
-                            <form string="product">
-                                <label name="code" xalign="0"/>
-                                <field name="code"/>
-                                <label name="name" xalign="0"/>
-                                <field name="name"/>
-                                <newline/>
-                                <label name="start_date" xalign="0"/>
-                                <field name="start_date"/>
-                                <label name="end_date" xalign="0"/>
-                                <field name="end_date"/>
-                                <notebook>
-                                    <page string="Options" id="option">
-                                        <field name="options">
-                                        </field>
-                                    </page>
-                                    <page string="Managers" id="managers">
-                                        <label name="eligibility_mgr"/>
-                                        <field name="eligibility_mgr"/>
-                                        <label name="pricing_mgr" />
-                                        <field name="pricing_mgr" />
-                                    </page>
-                                </notebook>
-                            </form>
-                        ]]>
+                <![CDATA[
+                <form string="Product">
+                    <label name="code" xalign="0"/>
+                    <field name="code"/>
+                    <label name="name" xalign="0"/>
+                    <field name="name"/>
+                    <newline/>
+                    <label name="start_date" xalign="0"/>
+                    <field name="start_date"/>
+                    <label name="end_date" xalign="0"/>
+                    <field name="end_date"/>
+                    <notebook>
+                        <page string="Managers" id="managers">
+                            <label name="eligibility_mgr"/>
+                            <field name="eligibility_mgr"/>
+                            <label name="pricing_mgr"/>
+                            <field name="pricing_mgr"/>
+                        </page>
+                        <page string="Options" id="option">
+                            <field name="options"/>
+                        </page>
+                    </notebook>
+                </form>
+                ]]>
             </field>
         </record>
 
@@ -78,51 +81,53 @@
             icon="tryton-list" action="act_product_form" />
         <!-- /Product -->
 
+        <!--  ******************************************* 
+              **************    Coverage    **************
+              *******************************************-->
+
         <!-- Coverage -->
-        <!-- Tree view -->
         <record model="ir.ui.view" id="coverage_view_tree">
             <field name="model">ins_product.coverage</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                        <![CDATA[
-                            <tree>
-                                <field name="code"/>
-                                <field name="name"/>
-                                <field name="start_date"/>
-                                <field name="end_date"/>
-                            </tree>
-                        ]]>
+                <![CDATA[
+                <tree string="Product">
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                </tree>
+                ]]>
             </field>
         </record>
-
-        <!-- form view -->
-        <record model="ir.ui.view" id="coverage_view_form">
+            <record model="ir.ui.view" id="coverage_view_form">
             <field name="model">ins_product.coverage</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                         <![CDATA[
-                             <form string="coverage">
-                                <label name="code" xalign="0"/>
-                                <field name="code"/>
-                                <label name="name" xalign="0"/>
-                                <field name="name"/>
-                                <newline/>
-                                <label name="start_date" xalign="0"/>
-                                <field name="start_date"/>
-                                <label name="end_date" xalign="0"/>
-                                <field name="end_date"/>
-                                 <notebook >
-                                    <page string="Managers" id="managers" col="4">
-                                        <field name="eligibility_mgr" mode="form" colspan="4"/>
-                                        <field name="pricing_mgr" mode="form" colspan="4"/>
-                                    </page>
-                                </notebook>
-                                
-                             </form>
-                         ]]>
+                <![CDATA[
+                <form string="Offered">
+                    <label name="code" xalign="0"/>
+                    <field name="code"/>
+                    <label name="name" xalign="0"/>
+                    <field name="name"/>
+                    <newline/>
+                    <label name="start_date" xalign="0"/>
+                    <field name="start_date"/>
+                    <label name="end_date" xalign="0"/>
+                    <field name="end_date"/>
+                    <notebook>
+                        <page string="Managers" id="managers">
+                            <label name="eligibility_mgr"/>
+                            <field name="eligibility_mgr"/>
+                            <label name="pricing_mgr"/>
+                            <field name="pricing_mgr"/>
+                        </page>
+                    </notebook>
+                </form>
+                ]]>
             </field>
         </record>
-
+        
         <!-- View for the main menu and the event -->
         <record model="ir.action.act_window" id="act_coverage_form">
             <field name="name">Coverages</field>
@@ -146,7 +151,10 @@
         <menuitem parent="menu_product" sequence="2" id="menu_coverage_form"
             icon="tryton-list" action="act_coverage_form" />
         <!--/Coverage -->
-
+        
+        <!--  ******************************************* 
+              ********    GenericBusinessRule    ********
+              *******************************************-->
         <!-- GenericBusinessRule -->
         <!-- form view -->
         <record model="ir.ui.view" id="genericbusinessrule_view_form">

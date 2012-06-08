@@ -5,13 +5,17 @@ from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import utils as utils
 
+__all__ = ['Party', 'Actor', 'PersonRelations', 'Person', 'LegalEntity',
+           'Insurer', ]
+
 GENDER = [('M', 'Male'),
-            ('F', 'Female'),
+          ('F', 'Female'),
             ]
 
 
 class Party(ModelSQL, ModelView):
-    _name = 'party.party'
+    'Party'
+    __name__ = 'party.party'
 
     person = fields.One2Many('party.person', 'party', 'Person')
     legal_entity = fields.One2Many('party.legal_entity',
@@ -26,47 +30,41 @@ class Party(ModelSQL, ModelView):
                                                            'insurer']),
                                  'get_is_actor', setter='set_is_insurer')
 
-    def get_is_actor(self, ids, name):
-        res = {}
+    def get_is_actor(self, name):
         field_name = name.split('is_')[2]
-        for party in self.browse(ids):
-            if hasattr(party, field_name):
-                field = getattr(party, field_name)
-                res[party.id] = len(field) > 0
-        return res
+        if hasattr(self, field_name):
+            field = getattr(self, field_name)
+            return len(field) > 0
+        return False
 
-    def on_change_is_insurer(self, vals):
+    def on_change_is_insurer(self):
         res = {}
         res['insurer'] = {}
-        if type(vals.get('insurer')) == bool:
+        if type(self.insurer) == bool:
             return res
-        print vals.get('insurer')
-        if vals.get('is_insurer') == True and len(vals.get('insurer')) == 0:
-            res['insurer']['add'] = [{'reference': 'toto'}]
-        elif vals.get('is_insurer') == False and len(vals.get('insurer')) > 0:
+        if self.is_insurer == True and len(self.insurer) == 0:
+            res['insurer']['add'] = [{}]
+        elif self.is_insurer == False and len(self.insurer) > 0:
             res['insurer'].setdefault('remove', [])
-            res['insurer']['remove'].append(vals.get('insurer')[0].get('id'))
+            res['insurer']['remove'].append(self.insurer[0].get('id'))
         return res
-Party()
 
 
 class Actor(ModelView):
+    'Actor'
     _inherits = {'party.party': 'party'}
-    _name = 'party.actor'
+    __name__ = 'party.actor'
     _rec_name = 'reference'
 
     reference = fields.Char('Reference')
     party = fields.Many2One('party.party', 'Party',
                     required=True, ondelete='CASCADE', select=True)
 
-Actor()
-
 
 class PersonRelations(ModelSQL, ModelView):
     'Person Relations'
 
-    _name = 'party.person-relations'
-    _description = __doc__
+    __name__ = 'party.person-relations'
 
     from_person = fields.Many2One('party.person', 'From Person')
     to_person = fields.Many2One('party.person', 'From Person')
@@ -74,25 +72,21 @@ class PersonRelations(ModelSQL, ModelView):
     reverse_kind = fields.Function(fields.Char('Reverse Kind', readonly=True),
                                    'get_reverse_kind')
 
-    def get_relation_kind(self):
+    @staticmethod
+    def get_relation_kind():
         return utils.get_dynamic_selection('person_relation')
 
-    def get_reverse_kind(self, ids, name):
-        res = {}
-        for relation in self.browse(ids):
-            reverse_values = utils.get_reverse_dynamic_selection(relation.kind)
-            if len(reverse_values) > 0:
-                res[relation.id] = reverse_values[0][1]
-        return res
-
-PersonRelations()
+    def get_reverse_kind(self, name):
+        reverse_values = utils.get_reverse_dynamic_selection(self.kind)
+        if len(reverse_values) > 0:
+            return reverse_values[0][1]
+        return ''
 
 
 class Person(ModelSQL, Actor):
     'Person'
 
-    _name = 'party.person'
-    _description = __doc__
+    __name__ = 'party.person'
 
     gender = fields.Selection(GENDER, 'Gender', required=True)
     first_name = fields.Char('First Name', required=True)
@@ -106,31 +100,17 @@ class Person(ModelSQL, Actor):
     in_relation_with = fields.One2Many('party.person-relations',
                                  'to_person', 'in relation with')
 
-    def get_rec_name(self, ids, name):
-        if not ids:
-            return {}
-        res = {}
-        for person in self.browse(ids):
-                res[person.id] = ("%s %s" %
-                                  (person.name.upper(), person.first_name))
-        return res
-Person()
+    def get_rec_name(self, name):
+        return "%s %s" % self.name.upper(), self.first_name
 
 
 class LegalEntity(ModelSQL, Actor):
     'Legal Entity'
 
-    _name = 'party.legal_entity'
-    _description = __doc__
-
-LegalEntity()
+    __name__ = 'party.legal_entity'
 
 
 class Insurer(ModelSQL, Actor):
     'Insurer'
 
-    _name = 'party.insurer'
-    _description = __doc__
-
-Insurer()
-
+    __name__ = 'party.insurer'

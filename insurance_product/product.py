@@ -6,14 +6,17 @@ from trytond.model import ModelView, ModelSQL, fields as fields
 from trytond.pool import Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
+from trytond.rpc import RPC
 
 from trytond.modules.coop_utils import utils as utils
+
+__all__ = ['Coverage', 'Product', 'ProductOptionsCoverage',
+           'BusinessRuleManager', 'GenericBusinessRule',
+           'PricingRule', 'EligibilityRule']
 
 
 class Offered(object):
     'Offered'
-
-    _description = __doc__
 
     code = fields.Char('Code', size=10, required=True, select=1)
     name = fields.Char('Name', required=True, select=1)
@@ -26,42 +29,36 @@ class Offered(object):
         'Eligibility Manager',
         domain=[('business_rules.kind', '=', 'ins_product.eligibility_rule')])
 
-    def __init__(self):
-        for field_name, field in self._columns.iteritems():
+    @classmethod
+    def __setup__(cls):
+        for field_name, field in cls._columns.iteritems():
             if hasattr(field, 'context') and field_name.endswith('mgr'):
-                cur_attr = getattr(self, field_name)
+                cur_attr = getattr(cls, field_name)
                 if cur_attr.context is None:
                     cur_attr.context = {}
                 cur_attr.context['mgr'] = field_name
-                setattr(self, field_name, copy.copy(cur_attr))
-        self._reset_columns()
+                setattr(cls, field_name, copy.copy(cur_attr))
 
 
 class Coverage(ModelSQL, ModelView, Offered):
     'Coverage'
 
-    _name = 'ins_product.coverage'
-    _description = __doc__
-
-Coverage()
+    __name__ = 'ins_product.coverage'
 
 
 class Product(ModelSQL, ModelView, Offered):
     'Product'
 
-    _name = 'ins_product.product'
-    _description = __doc__
+    __name__ = 'ins_product.product'
 
     options = fields.Many2Many('ins_product-options-coverage', 'product',
                                'coverage', 'Options')
-
-Product()
 
 
 class ProductOptionsCoverage(ModelSQL):
     'Define Product - Coverage relations'
 
-    _name = 'ins_product-options-coverage'
+    __name__ = 'ins_product-options-coverage'
 
     product = fields.Many2One('ins_product.product',
                               'Product',
@@ -72,14 +69,11 @@ class ProductOptionsCoverage(ModelSQL):
                                select=1,
                                required=True)
 
-ProductOptionsCoverage()
-
 
 class BusinessRuleManager(ModelSQL, ModelView):
     'Business Rule Manager'
 
-    _name = 'ins_product.business_rule_manager'
-    _description = __doc__
+    __name__ = 'ins_product.business_rule_manager'
 
     belongs_to = fields.Function(
         fields.Reference('belongs_to', selection='get_offered_models'),
@@ -88,31 +82,31 @@ class BusinessRuleManager(ModelSQL, ModelView):
         'manager', 'Business Rules', on_change=['business_rules'],
         context={'start_date': Eval('start_date')})
 
-    def __init__(self):
-        super(BusinessRuleManager, self).__init__()
-        self._rpc.update({'get_offered_models': True})
+    @classmethod
+    def __super__(cls):
+        super(BusinessRuleManager, cls).__super__()
+        cls.__rpc__.update({'get_offered_models': RPC(readonly=False)})
 
-    def get_offered_models(self):
+    @staticmethod
+    def get_offered_models():
         return utils.get_descendents(Offered)
 
-    def get_belongs_to(self, ids, name):
-        belongs = dict([(x, None) for x in ids])
+    def get_belongs_to(self, name):
         for offered_model, offered_name in self.get_offered_models():
-            offered_obj = Pool().get(offered_model)
+            Offered = Pool().get(offered_model)
             field_name = Transaction().context.get('mgr')
-            offered_ids = offered_obj.search([(field_name, 'in', ids)])
-            for offered in offered_obj.browse(offered_ids):
-                belongs[getattr(offered, field_name).id] = '%s, %s' \
-                                        % (offered_model, offered.id)
-        return belongs
+            offered = Offered.search([(field_name, '=', self.id)])
+            if offered is not None:
+                return '%s, %s' % (offered_model, offered.id)
+        return ''
 
-    def on_change_business_rules(self, vals):
+    def on_change_business_rules(self):
         res = {'business_rules': {}}
         res['business_rules'].setdefault('update', [])
-        for business_rule1 in vals['business_rules']:
+        for business_rule1 in self.business_rules:
             #the idea is to always set the end_date
             #to the according next start_date
-            for business_rule2 in vals['business_rules']:
+            for business_rule2 in self.business_rules:
                 if (business_rule1.get('id') != business_rule2.get('id') and
                     business_rule2['start_date'] is not None
                     and business_rule1['start_date'] is not None and
@@ -136,7 +130,7 @@ class BusinessRuleManager(ModelSQL, ModelView):
         return res
 
     def get_good_rule_at_date(self, rulemanager, data):
-        business_rule_obj = Pool().get('ins_product.generic_business_rule')
+        Business_rule = Pool().get('ins_product.generic_business_rule')
         # First we got to check that the fields that we will need to calculate
         # which rule is appliable are available in the data dictionnary
         try:
@@ -149,24 +143,21 @@ class BusinessRuleManager(ModelSQL, ModelView):
             # the good rule.
             # (This is a given way to get a rule from a list, using the
             # applicable date, it could be anything)
-            good_id, = business_rule_obj.search([
+            good_rule, = Business_rule.search([
                                 ('start_date', '<=', the_date),
                                 ('manager', '=', rulemanager.id)
                                 ],
                                 order=[('start_date', 'DESC')],
                                 limit=1)
-            return good_id
+            return good_rule
         except ValueError, exception:
             return None
-
-BusinessRuleManager()
 
 
 class GenericBusinessRule(ModelSQL, ModelView):
     'Generic Business Rule'
 
-    _name = 'ins_product.generic_business_rule'
-    _description = __doc__
+    __name__ = 'ins_product.generic_business_rule'
 
     kind = fields.Selection('get_kind', 'Kind',
                             required=True, on_change=['kind'])
@@ -181,41 +172,43 @@ class GenericBusinessRule(ModelSQL, ModelView):
     eligibilty_rule = fields.One2Many('ins_product.eligibility_rule',
         'generic_rule', 'Eligibility Rule')
 
-    def __init__(self):
-        super(GenericBusinessRule, self).__init__()
-        self.kind = copy.copy(self.kind)
-        for field_name, field in self._columns.iteritems():
-            if (hasattr(field, 'model_name')
-                and getattr(field, 'model_name').endswith('_rule')):
-                if self.kind.on_change is None:
-                    self.kind.on_change = []
-                if field_name  not in self.kind.on_change:
-                    self.kind.on_change += [field_name]
+    @classmethod
+    def __setup__(cls):
+        super(GenericBusinessRule, cls).__setup__()
+#        cls.kind = copy.copy(cls.kind)
+#        for field_name, field in cls._columns.iteritems():
+#            if (hasattr(field, 'model_name')
+#                and getattr(field, 'model_name').endswith('_rule')):
+#                if cls.kind.on_change is None:
+#                    cls.kind.on_change = []
+#                if field_name  not in cls.kind.on_change:
+#                    cls.kind.on_change += [field_name]
+#
+#                attr = getattr(cls, field_name)
+#                attr.states = {
+#                    'invisible': (Eval('kind') != field.model_name)}
+#                setattr(cls, field_name, copy.copy(attr))
 
-                attr = getattr(self, field_name)
-                attr.states = {
-                    'invisible': (Eval('kind') != field.model_name)}
-                setattr(self, field_name, copy.copy(attr))
-        self._reset_columns()
-
-        self._rpc.update({'is_current': True, 'on_change_kind': True})
-        self._order.insert(0, ('start_date', 'ASC'))
-        self._constraints += [('check_dates', 'businessrule_overlaps')]
-        self._error_messages.update({'businessrule_overlaps':
+        cls.__rpc__.update({'is_current': RPC(readonly=False),
+                             'on_change_kind': RPC(readonly=False)})
+        cls._order.insert(0, ('start_date', 'ASC'))
+        cls._constraints += [('check_dates', 'businessrule_overlaps')]
+        cls._error_messages.update({'businessrule_overlaps':
             'You can not have 2 business rules that overlaps!'})
 
-    def on_change_kind(self, vals):
+    def on_change_kind(self):
         res = {}
         for field_name, field in self._columns.iteritems():
             if (hasattr(field, 'model_name')
                 and getattr(field, 'model_name').endswith('_rule')
-                and len(vals[field_name]) == 0):
+                and len(getattr(self, field_name) == 0)):
                 res[field_name] = {}
-                if field.model_name == vals['kind']:
+                if field.model_name == self.kind:
                     res[field_name]['add'] = [{}]
         return res
 
-    def get_kind(self):
+    @staticmethod
+    def get_kind():
         return utils.get_descendents_name(BusinessRuleRoot)
 
 #    def _getdefaults(self):
@@ -242,50 +235,40 @@ class GenericBusinessRule(ModelSQL, ModelView):
 #        return res
 #    _defaults = property(fget=_getdefaults)
 
-    def get_is_current(self, ids, name):
-        res = {}
-        brm_obj = Pool().get('ins_product.business_rule_manager')
-        for rule in self.browse(ids):
-            if rule.id == brm_obj.get_good_rule_at_date(rule.manager,
-                                          {'date': datetime.date.today()}):
-                res[rule.id] = True
-            else:
-                res[rule.id] = False
-        return res
+    def get_is_current(self, name):
+        BRM = Pool().get('ins_product.business_self_manager')
+        return self == BRM.get_good_rule_at_date(self.manager,
+                {'date': datetime.date.today()})
 
-    def on_change_with_is_current(self, vals):
-        return (datetime.date.today() >= vals['start_date'] and
-                (vals['end_date'] is None or
-                 datetime.date.today() <= vals['end_date']))
+    def on_change_with_is_current(self):
+        return (datetime.date.today() >= self.start_date and
+                (self.end_date is None or
+                 datetime.date.today() <= self.end_date))
 
-    def check_dates(self, ids):
+    def check_dates(self):
         cursor = Transaction().cursor
-        for business_rule in self.browse(ids):
-            cursor.execute('SELECT id ' \
-                    'FROM ' + self._table + ' ' \
-                    'WHERE ((start_date <= %s AND end_date >= %s) ' \
-                            'OR (start_date <= %s AND end_date >= %s) ' \
-                            'OR (start_date >= %s AND end_date <= %s)) ' \
-                        'AND manager = %s ' \
-                        'AND id != %s',
-                    (business_rule.start_date, business_rule.start_date,
-                        business_rule.end_date, business_rule.end_date,
-                        business_rule.start_date, business_rule.end_date,
-                        business_rule.manager.id, business_rule.id))
-            if cursor.fetchone():
-                return False
+        cursor.execute('SELECT id ' \
+                'FROM ' + self._table + ' ' \
+                'WHERE ((start_date <= %s AND end_date >= %s) ' \
+                        'OR (start_date <= %s AND end_date >= %s) ' \
+                        'OR (start_date >= %s AND end_date <= %s)) ' \
+                    'AND manager = %s ' \
+                    'AND id != %s',
+                (self.start_date, self.start_date,
+                    self.end_date, self.end_date,
+                    self.start_date, self.end_date,
+                    self.manager.id, self.id))
+        if cursor.fetchone():
+            return False
         return True
 
-    def default_start_date(self):
+    @staticmethod
+    def default_start_date():
         return Transaction().context.get('start_date')
-
-GenericBusinessRule()
 
 
 class BusinessRuleRoot(ModelSQL, ModelView):
     'Business Rule Root'
-
-    _description = __doc__
 
     generic_rule = fields.Many2One('ins_product.generic_business_rule',
                                    'Generic Rule')
@@ -294,21 +277,14 @@ class BusinessRuleRoot(ModelSQL, ModelView):
 class PricingRule(BusinessRuleRoot):
     'Pricing Rule'
 
-    _description = __doc__
-    _name = 'ins_product.pricing_rule'
+    __name__ = 'ins_product.pricing_rule'
 
     price = fields.Numeric('Amount', digits=(16, 2), required=True)
-
-PricingRule()
 
 
 class EligibilityRule(BusinessRuleRoot):
     'Eligibility Rule'
 
-    _description = __doc__
-    _name = 'ins_product.eligibility_rule'
+    __name__ = 'ins_product.eligibility_rule'
 
     is_eligible = fields.Boolean('Is Eligible')
-
-EligibilityRule()
-

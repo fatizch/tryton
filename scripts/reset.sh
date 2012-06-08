@@ -8,6 +8,15 @@ echo $SEP
 fi
 echo "Removing eggs in site-packages"
 rm -r $ENV_FOLDER/lib/python2.7/site-packages/insurance_*
+rm -r $ENV_FOLDER/lib/python2.7/site-packages/coop_*
+echo $SEP
+echo "Reinstalling coop utils"
+echo $SEP
+easy_install -UZ $REPOS_ROOT/coopbusiness/coop_utils
+echo $SEP
+echo "Reinstalling party"
+echo $SEP
+easy_install -UZ $REPOS_ROOT/coopbusiness/insurance_party
 echo $SEP
 echo "Reinstalling product"
 echo $SEP

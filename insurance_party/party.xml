@@ -29,7 +29,7 @@
                             <xpath expr="/form/notebook" position="inside">
                                 <page string="Insurer" id="insurer" 
                                 states="{'invisible': Bool(~Eval('is_insurer'))}">
-                                    <field name="insurer" mode="form"/>
+                                    <field name="insurer" mode="tree"/>
                                 </page>
                             </xpath>
                          </data>
@@ -124,7 +124,7 @@
                 <data>
                     <xpath expr="/form/label[@name=&quot;name&quot;]" position="before">
                             <label name="gender"/>
-                            <field name="gender" xfill="0" xalign="0"/>
+                            <field name="gender" xalign="0" xexpand="0"/>
                     </xpath>
                     <xpath expr="/form/field[@name=&quot;name&quot;]" position="after">
                             <label name="maiden_name"/>
