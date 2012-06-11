@@ -19,8 +19,8 @@ def get_descendents(from_class):
 def get_descendents_name(from_class):
     result = []
     for model_name, model in Pool().iterobject():
-        if isinstance(model, from_class):
-            result.append((model_name, model._description))
+        if issubclass(model, from_class):
+            result.append((model_name, model.__doc__.splitlines()[0]))
     return result
 
 

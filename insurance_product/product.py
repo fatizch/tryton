@@ -15,13 +15,15 @@ __all__ = ['Coverage', 'Product', 'ProductOptionsCoverage',
            'PricingRule', 'EligibilityRule']
 
 
-class Offered(object):
+class Offered(ModelView):
     'Offered'
 
     code = fields.Char('Code', size=10, required=True, select=1)
     name = fields.Char('Name', required=True, select=1)
     start_date = fields.Date('Start Date', required=True, select=1)
     end_date = fields.Date('End Date')
+    #all mgr are Many2One because they all have the same backref var and though
+    #it's not possible for the moment to have a O2M(1)
     pricing_mgr = fields.Many2One('ins_product.business_rule_manager',
         'Pricing Manager',
         domain=[('business_rules.kind', '=', 'ins_product.pricing_rule')])
@@ -31,22 +33,24 @@ class Offered(object):
 
     @classmethod
     def __setup__(cls):
-        for field_name, field in cls._columns.iteritems():
-            if hasattr(field, 'context') and field_name.endswith('mgr'):
-                cur_attr = getattr(cls, field_name)
-                if cur_attr.context is None:
-                    cur_attr.context = {}
-                cur_attr.context['mgr'] = field_name
-                setattr(cls, field_name, copy.copy(cur_attr))
+        super(Offered, cls).__setup__()
+        for field_name in (mgr for mgr in dir(cls) if mgr.endswith('mgr')):
+            cur_attr = copy.copy(getattr(cls, field_name))
+            if not hasattr(cur_attr, 'context'):
+                continue
+            if cur_attr.context is None:
+                cur_attr.context = {}
+            cur_attr.context['mgr'] = field_name
+            setattr(cls, field_name, copy.copy(cur_attr))
 
 
-class Coverage(ModelSQL, ModelView, Offered):
+class Coverage(ModelSQL, Offered):
     'Coverage'
 
     __name__ = 'ins_product.coverage'
 
 
-class Product(ModelSQL, ModelView, Offered):
+class Product(ModelSQL, Offered):
     'Product'
 
     __name__ = 'ins_product.product'
@@ -83,9 +87,9 @@ class BusinessRuleManager(ModelSQL, ModelView):
         context={'start_date': Eval('start_date')})
 
     @classmethod
-    def __super__(cls):
-        super(BusinessRuleManager, cls).__super__()
-        cls.__rpc__.update({'get_offered_models': RPC(readonly=False)})
+    def __setup__(cls):
+        super(BusinessRuleManager, cls).__setup__()
+        cls.__rpc__.update({'get_offered_models': RPC()})
 
     @staticmethod
     def get_offered_models():
@@ -107,7 +111,7 @@ class BusinessRuleManager(ModelSQL, ModelView):
             #the idea is to always set the end_date
             #to the according next start_date
             for business_rule2 in self.business_rules:
-                if (business_rule1.get('id') != business_rule2.get('id') and
+                if (business_rule1 != business_rule2 and
                     business_rule2['start_date'] is not None
                     and business_rule1['start_date'] is not None and
                     business_rule2['start_date'] > business_rule1['start_date']
@@ -117,7 +121,7 @@ class BusinessRuleManager(ModelSQL, ModelView):
                     end_date = (business_rule2['start_date']
                                - datetime.timedelta(days=1))
                     res['business_rules']['update'].append({
-                        'id': business_rule1.get('id'),
+                        'id': business_rule1.id,
                         'end_date': end_date})
 
             #if we change the start_date to a date after the end_date,
@@ -125,7 +129,7 @@ class BusinessRuleManager(ModelSQL, ModelView):
             if (business_rule1['end_date'] is not None
                 and business_rule1['end_date'] < business_rule1['start_date']):
                 res['business_rules']['update'].append({
-                        'id': business_rule1.get('id'),
+                        'id': business_rule1.id,
                         'end_date': None})
         return res
 
@@ -162,10 +166,9 @@ class GenericBusinessRule(ModelSQL, ModelView):
     kind = fields.Selection('get_kind', 'Kind',
                             required=True, on_change=['kind'])
     manager = fields.Many2One('ins_product.business_rule_manager', 'Manager')
-    start_date = fields.Date('From Date', required=True)
+    start_date = fields.Date('From Date', required=True, on_change=['kind', 'start_date'])
     end_date = fields.Date('To Date')
-    is_current = fields.Function(fields.Boolean('Is current',
-        on_change_with=['start_date', 'end_date']),
+    is_current = fields.Function(fields.Boolean('Is current'),
         'get_is_current')
     pricing_rule = fields.One2Many('ins_product.pricing_rule',
         'generic_rule', 'Pricing Rule')
@@ -175,22 +178,22 @@ class GenericBusinessRule(ModelSQL, ModelView):
     @classmethod
     def __setup__(cls):
         super(GenericBusinessRule, cls).__setup__()
-#        cls.kind = copy.copy(cls.kind)
-#        for field_name, field in cls._columns.iteritems():
-#            if (hasattr(field, 'model_name')
-#                and getattr(field, 'model_name').endswith('_rule')):
-#                if cls.kind.on_change is None:
-#                    cls.kind.on_change = []
-#                if field_name  not in cls.kind.on_change:
-#                    cls.kind.on_change += [field_name]
-#
-#                attr = getattr(cls, field_name)
-#                attr.states = {
-#                    'invisible': (Eval('kind') != field.model_name)}
-#                setattr(cls, field_name, copy.copy(attr))
+        cls.kind = copy.copy(cls.kind)
+        for field_name in (rule for rule in dir(cls) if rule.endswith('rule')):
+            attr = copy.copy(getattr(cls, field_name))
+            if not hasattr(attr, 'model_name'):
+                continue
+            if cls.kind.on_change is None:
+                cls.kind.on_change = []
+            if field_name not in cls.kind.on_change:
+                cls.kind.on_change += [field_name]
 
-        cls.__rpc__.update({'is_current': RPC(readonly=False),
-                             'on_change_kind': RPC(readonly=False)})
+            attr.states = {
+                'invisible': (Eval('kind') != attr.model_name)}
+            setattr(cls, field_name, copy.copy(attr))
+
+        cls.__rpc__.update({'is_current': RPC(),
+                            'on_change_kind': RPC(readonly=False)})
         cls._order.insert(0, ('start_date', 'ASC'))
         cls._constraints += [('check_dates', 'businessrule_overlaps')]
         cls._error_messages.update({'businessrule_overlaps':
@@ -201,11 +204,16 @@ class GenericBusinessRule(ModelSQL, ModelView):
         for field_name, field in self._columns.iteritems():
             if (hasattr(field, 'model_name')
                 and getattr(field, 'model_name').endswith('_rule')
-                and len(getattr(self, field_name) == 0)):
+                and (not getattr(self, field_name)
+                     or len(getattr(self, field_name) == 0))):
                 res[field_name] = {}
                 if field.model_name == self.kind:
                     res[field_name]['add'] = [{}]
         return res
+
+    def on_change_start_date(self):
+        return self.on_change_kind()
+
 
     @staticmethod
     def get_kind():
@@ -239,11 +247,6 @@ class GenericBusinessRule(ModelSQL, ModelView):
         BRM = Pool().get('ins_product.business_self_manager')
         return self == BRM.get_good_rule_at_date(self.manager,
                 {'date': datetime.date.today()})
-
-    def on_change_with_is_current(self):
-        return (datetime.date.today() >= self.start_date and
-                (self.end_date is None or
-                 datetime.date.today() <= self.end_date))
 
     def check_dates(self):
         cursor = Transaction().cursor
