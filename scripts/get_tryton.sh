@@ -24,6 +24,7 @@ else
 	echo Cleaning previous installation
 	echo $SEP
 	rm -r tryton-workspace/trytond
+	rm -r tryton-workspace/tryton
 	echo $SEP
 	echo Getting Trytond
 	echo $SEP
