@@ -7,7 +7,7 @@ from trytond.model import fields as fields
 
 # Needed for Wizardry
 from trytond.wizard import Wizard, Button, StateView, StateTransition
-from trytond.wizard import StateAction, Session
+from trytond.wizard import StateAction
 
 # Needed for getting models
 from trytond.pool import Pool
@@ -15,7 +15,7 @@ from trytond.pool import Pool
 # Needed for resuming processes
 from trytond.transaction import Transaction
 from trytond.protocols.jsonrpc import JSONEncoder
-from trytond.model.browse import BrowseRecordNull
+from trytond.pool import PoolMeta
 from tools import AbstractObject, to_list
 
 from trytond.pyson import Eval
@@ -26,10 +26,16 @@ try:
 except ImportError:
     import json
 
+
+__all__ = ['ProcessState', 'CoopProcess', 'SuspendedProcess', 'ResumeWizard',
+    'DummyObject', 'DummyStep', 'DummyStep1', 'DummyProcessState',
+    'DummyProcess']
+
+
 ACTIONS = ('go_previous', 'go_next', 'cancel', 'complete', 'check', 'suspend')
 
 
-class MetaAbstract(type):
+class MetaAbstract(PoolMeta):
     def __new__(cls, name, bases, attrs):
         for (field_name, field_model) in attrs['__abstracts__']:
             attrs[field_name + '_db'] = fields.Many2One(field_model,
@@ -47,14 +53,14 @@ class WithAbstract(object):
     @staticmethod
     def get_abstract_object(session, field_name):
         result = getattr(session.process_state, field_name + '_db')
-        if isinstance(result, BrowseRecordNull):
+        if not result:
             result = AbstractObject.load_from_text(
                         getattr(session.process_state, field_name + '_str'))
         else:
             result = AbstractObject(result._model._name, result.id)
         if result is None:
-            result = AbstractObject(getattr(session.process_state._model,
-                                            field_name + '_db').model_name)
+            result = AbstractObject(session.process_state._fields[
+                                            field_name + '_db'].model_name)
         return result
 
     @staticmethod
@@ -66,7 +72,7 @@ class WithAbstract(object):
     @staticmethod
     def abstract_objs(session):
         res = []
-        for field in [field for field in dir(session.process_state._model)
+        for field in [field for field in dir(session.process_state)
                                 if field[-3:] == '_db']:
             res.append(field[:-3])
         return res
@@ -104,7 +110,7 @@ class ProcessState(ModelView):
         typically need to know where we are in the process and what we are
         doing. That's what this step is for.
     '''
-    _name = 'ins_process.process_state'
+    __name__ = 'ins_process.process_state'
 
     # This is what we currently are trying to do. This field is set in the
     # transition steps associated to the buttons, before calling the master
@@ -140,24 +146,6 @@ class ProcessState(ModelView):
     on_product = fields.Many2One('ins_product.product',
                                   'On Product Process')
 
-    @staticmethod
-    def add_error(session, error):
-        errors = to_list(error)
-        session.process_state.errors += '\n'.join(errors)
-
-    @staticmethod
-    def init_session(session):
-        session.process_state.errors = ''
-        for elem in set([elem for elem in dir(session.process_state._model)
-                     if (elem[-3:] == '_db' or elem[-4:] == '_str')]):
-            if not hasattr(session.process_state, elem + '_db'):
-                setattr(session.process_state, elem + '_db', 0)
-            if not hasattr(session.process_state, elem + '_str'):
-                setattr(session.process_state, elem + '_str', '')
-        session.on_product = 0
-
-ProcessState()
-
 
 class CoopProcess(Wizard):
     '''
@@ -173,7 +161,7 @@ class CoopProcess(Wizard):
 
         There will be a library of steps in which the rules will look for.
     '''
-    _name = 'ins_process.coop_process'
+    __name__ = 'ins_process.coop_process'
 
     # This is not a real state, it will only be used as a storage step for
     # the process' data
@@ -205,72 +193,85 @@ class CoopProcess(Wizard):
     steps_check = StateTransition()
     steps_terminate = StateTransition()
 
-    # We use the fact that we know the start step to set up a few things
+    def init_session(self):
+        self.process_state.errors = ''
+        for elem in set([elem for elem in dir(self.process_state)
+                     if (elem[-3:] == '_db' or elem[-4:] == '_str')]):
+            if not hasattr(self.process_state, elem + '_db'):
+                setattr(self.process_state, elem + '_db', 0)
+            if not hasattr(self.process_state, elem + '_str'):
+                setattr(self.process_state, elem + '_str', '')
+        self.on_product = 0
 
-    def resume_suspended(self, session):
-        susp_process_obj = Pool().get('ins_process.suspended_process')
+    def add_error(self, error):
+        errors = to_list(error)
+        self.process_state.errors += '\n'.join(errors)
+
+    # We use the fact that we know the start step to set up a few things
+    def resume_suspended(self):
+        SuspendedProcess = Pool().get('ins_process.suspended_process')
         try:
-            susp_process = susp_process_obj.browse(
-                                        Transaction().context.get('active_id'))
+            susp_process = SuspendedProcess(
+                Transaction().context.get('active_id'))
         except KeyError:
             susp_process = None
 
         # If a suspended process is found in the current context, resume it
-        if not susp_process is None:
+        if susp_process:
             # We get a dictionnary with the data from the stored session
             susp_data = json.loads(susp_process.session_data.encode('utf-8'))
             # Then update everything.
             for key, value in susp_data.iteritems():
-                session.data[key].update(value)
-                getattr(session, key).dirty = True
-            session.process_state.from_susp_process = susp_process.id
+                self.data[key].update(value)
+                getattr(self, key).dirty = True
+            self.process_state.from_susp_process = susp_process.id
             self.dirty = True
 
-    def transition_steps_start(self, session):
+    def transition_steps_start(self):
         # We check if we are currently trying to resume a suspended process
         if (Transaction().context.get('active_model')
                             == 'ins_process.suspended_process'):
-            self.resume_suspended(session)
-            return session.process_state.cur_step
+            self.resume_suspended()
+            return self.process_state.cur_step
 
         # If not, we go on and start a new process
         # First of all, we get and set the process descriptor.
-        process_desc_obj = Pool().get('ins_process.process_desc')
+        ProcessDesc = Pool().get('ins_process.process_desc')
         try:
-            res, = process_desc_obj.search([
-                                        ('process_model', '=', self._name)],
-                                           limit=1)
+            res, = ProcessDesc.search([
+                    ('process_model', '=', self.__name__)],
+                limit=1)
         except Exception:
             # If no process desc is found, we raise an error and exit the
             # process.
             res = None
-        if res is None:
+        if not res:
             self.raise_user_error('Could not find a process descriptor for %s,\
                                     \nplease contact software admin.'
-                                    % self.coop_process_name())
+                                    % self.__class__.coop_process_name())
             return 'end'
-        session.process_state.process_desc = res
 
-        ProcessState.init_session(session)
+        self.process_state.process_desc = res
+
+        self.init_session()
 
         # We then asks the process desc which one is the first step
-        (step_obj, step_name) = process_desc_obj.get_first_step_desc(
-                                            session.process_state.process_desc)
+        (step_obj, step_name) = \
+            self.process_state.process_desc.get_first_step_desc()
 
         # We use the answer to look for the associated state name (step_desc
         # associations are based on coop_step_name() calls)
         _, first_step_name = self.get_state_from_model(step_name)
 
         # We use the process_state's fields to store those persistent data :
-        session.process_state.cur_step = first_step_name
-        session.process_state.cur_step_desc = step_obj.id
+        self.process_state.cur_step = first_step_name
+        self.process_state.cur_step_desc = step_obj.id
 
-        # Now the work begins : we get the step model
-        state_model = Pool().get(step_obj.step_model)
+        # Now the work begins : we get the current state
+        state = getattr(self, first_step_name)
 
         # And initialize the steps (exiting in case of errors)
-        (res, errors) = state_model.do_before(session,
-                                              step_obj)
+        (res, errors) = state.do_before(self, step_obj)
         if not res:
             self.raise_user_error('Could not initialize process, exiting\n'
                                   + '\n'.join(errors))
@@ -282,7 +283,7 @@ class CoopProcess(Wizard):
     @staticmethod
     def coop_process_name():
         '''
-            This method (static) is used as a label for the wizard, it is
+            This method is used as a label for the wizard, it is
             supposed to be unique, so that it can be used as a key when
             creating the process descs.
 
@@ -302,7 +303,7 @@ class CoopProcess(Wizard):
                 # We returned both the state object and its name.
                 return (self.states[state], state)
 
-    def transition_master_step(self, session):
+    def transition_master_step(self):
         '''
             This method will be called every time a flow button is clicked.
             The transition_steps_* will set a few things in
@@ -311,115 +312,109 @@ class CoopProcess(Wizard):
         '''
         # Being cautious, we store the current step name, as it will be
         # modified during calculation.
-        from_step = session.process_state.cur_step
+        from_step = self.process_state.cur_step
 
         # Now we call calculate_next_step, which will use the data
         # available in the session object to compute where we should go,
         # depending on where we currently are and the cur_action.
-        res = self.calculate_next_step(session)
+        res = self.calculate_next_step()
 
         # Just to be sure...
         if res == '':
-            ProcessState.add_error(session, 'Could not calculate next step')
+            self.add_error('Could not calculate next step')
             res = from_step
 
         # We store the new state name (even though it should already be
         # done.
-        session.process_state.cur_step = res
+        self.process_state.cur_step = res
 
         # We get the errors
-        errors = session.process_state.errors
+        errors = self.process_state.errors
         if len(errors) > 0:
             # If there are some, we clear them.
-            session.process_state.errors = ''
+            self.process_state.errors = ''
 
             # We need to save again, as raise_user_errors drops the session
-            session.save()
+            self._save()
 
             # And we finally display them
             self.raise_user_error(errors)
 
         # and we save the session
-        session.save()
+        self._save()
         return res
 
     # Transition method, we just set cur_action for now, and call master_step
-    def transition_steps_next(self, session):
-        session.process_state.cur_action = 'go_next'
+    def transition_steps_next(self):
+        self.process_state.cur_action = 'go_next'
         return 'master_step'
 
     # Transition method, we just set cur_action for now, and call master_step
-    def transition_steps_previous(self, session):
-        session.process_state.cur_action = 'go_previous'
+    def transition_steps_previous(self):
+        self.process_state.cur_action = 'go_previous'
         return 'master_step'
 
     # Transition method, we just set cur_action for now, and call master_step
-    def transition_steps_cancel(self, session):
-        session.process_state.cur_action = 'cancel'
+    def transition_steps_cancel(self):
+        self.process_state.cur_action = 'cancel'
         return 'master_step'
 
     # Transition method, we just set cur_action for now, and call master_step
-    def transition_steps_complete(self, session):
-        session.process_state.cur_action = 'complete'
+    def transition_steps_complete(self):
+        self.process_state.cur_action = 'complete'
         return 'master_step'
 
     # Transition method, we just set cur_action for now, and call master_step
-    def transition_steps_check(self, session):
-        session.process_state.cur_action = 'check'
+    def transition_steps_check(self):
+        self.process_state.cur_action = 'check'
         return 'master_step'
 
     # Transition method, we just set cur_action for now, and call master_step
-    def transition_steps_suspend(self, session):
-        session.process_state.cur_action = 'suspend'
+    def transition_steps_suspend(self):
+        self.process_state.cur_action = 'suspend'
         return 'master_step'
 
     # This step will be called in case of soft termination (cancel or complete)
     # We need to delete the suspended_process object if it exists
-    def transition_steps_terminate(self, session):
-        tmp_id = session.process_state.from_susp_process
-        if tmp_id > 0:
-            susp_process_obj = Pool().get('ins_process.suspended_process')
-            susp_process_obj.delete([tmp_id])
+    def transition_steps_terminate(self):
+        from_process = self.process_state.from_susp_process
+        if from_process:
+            SuspendedProcess = Pool().get('ins_process.suspended_process')
+            SuspendedProcess.delete([from_process])
         return 'end'
 
     # This method will be called when clicking on the 'complete' button
-    def do_complete(self, session):
+    def do_complete(self):
         return (True, [])
 
-    def calculate_next_step(self, session):
+    def calculate_next_step(self):
         '''
             This method is used to calculate the name of the next step to
             execute. It can call itself if needed.
         '''
         # We just need to get a few things at start:
-        #    Process desc model, needed for calling methods
-        process_desc_model = Pool().get('ins_process.process_desc')
-        step_desc_model = Pool().get('ins_process.step_desc')
-        #    Current state object (the CoopStateView object)
-        cur_state_obj = self.states[session.process_state.cur_step]
         #    Current state model ('ins_process.process_name.step_name')
-        cur_state_model = Pool().get(cur_state_obj.model_name)
+        cur_state = getattr(self, self.process_state.cur_step)
         #    Current action : what do we want to do ?
-        cur_action = session.process_state.cur_action
+        cur_action = self.process_state.cur_action
         #    Current step descriptor : a 'ins_process.step_desc' object
         #    whose step_model field would be cur_state_model
-        cur_step_desc = session.process_state.cur_step_desc
+        cur_step = self.process_state.cur_step_desc
         #    Current process descriptor : this one is already stored
         #    in session.process_state
-        cur_process_desc = session.process_state.process_desc
+        cur_process = self.process_state.process_desc
 
         # Here we go : we switch case based on cur_action :
         if cur_action == 'check':
             # CHECK :
             # Well, just call check_step
-            (res, errors) = cur_state_model.check_step(session,
-                                                       cur_step_desc)
+            (res, errors) = cur_state.check_step(self, cur_step)
             # and save the result
             if not res:
-                ProcessState.add_error(session, errors)
+                self.add_error(errors)
             else:
-                ProcessState.add_error(session, 'Everything is OK')
-            return session.process_state.cur_step
+                self.add_error('Everything is OK')
+            return self.process_state.cur_step
         elif cur_action == 'cancel':
             # CANCEL :
             # End of the process
@@ -427,86 +422,78 @@ class CoopProcess(Wizard):
         elif cur_action == 'complete':
             # COMPLETE :
             # First we try to complete the current step :
-            (res, errors) = cur_state_model.do_after(session,
-                                                       cur_step_desc)
+            (res, errors) = cur_state.do_after(self, cur_step)
             # If we cannot, we stay where we are
             if not res:
-                ProcessState.add_error(session, errors)
-                return session.process_state.cur_step
+                self.add_error(errors)
+                return self.process_state.cur_step
 
             # If we can, we call the do_complete method on the process
-            (res, errors) = self.do_complete(session)
+            (res, errors) = self.do_complete()
             # If it works, end of the process
             if res:
                 return 'steps_terminate'
             # else, back to current step...
-            ProcessState.add_error(session, errors)
-            return session.process_state.cur_step
+            self.add_error(errors)
+            return self.process_state.cur_step
         elif cur_action == 'go_previous':
             # PREVIOUS :
             # We need to get the previous step from the process desc
-            next_step_desc = process_desc_model.get_prev_step(cur_step_desc,
-                                            cur_process_desc)
+            next_step = cur_process.get_prev_step(cur_step)
             # We go back until we got a non virtual step.
-            while next_step_desc.virtual_step == True:
-                next_step_desc = process_desc_model.get_prev_step(
-                                            next_step_desc,
-                                            cur_process_desc)
+            while next_step.virtual_step == True:
+                next_step = cur_process.get_prev_step(next_step)
             # If it does not exist, no need to go further
-            if next_step_desc == cur_step_desc:
-                return session.process_state.cur_step
+            if next_step == cur_step:
+                return self.process_state.cur_step
             # Now, we get our tools : step name, model, view
-            (next_step_state, next_state_name) = self.get_state_from_model(
-                                step_desc_model.get_step_model(
-                                        next_step_desc,
-                                        session.process_state.on_product))
-            if next_step_state == '':
-                ProcessState.add_error(session, 'Could not find step model')
+            (_, next_state_name) = self.get_state_from_model(
+                next_step.get_step_model(self.process_state.on_product))
+            if next_state_name == '':
+                self.add_error('Could not find step model')
                 return ''
-            next_state_model = Pool().get(next_step_state.model_name)
 
+            next_state = getattr(self, next_state_name)
             # Should we display this step ?
-            (res, errors) = next_state_model.must_step_over(session,
-                                                            next_step_desc)
+            (res, errors) = next_state.must_step_over(self, next_step)
 
             if not res:
                 # Yes => here we go (no need to call the before method, we do
                 # not want to reset the step)
-                session.process_state.cur_step = next_state_name
-                session.process_state.cur_step_desc = next_step_desc.id
-                return session.process_state.cur_step
+                self.process_state.cur_step = next_state_name
+                self.process_state.cur_step_desc = next_step.id
+                return self.process_state.cur_step
             else:
                 # No => ok, we just set this step as the current step, and
                 # we go on.
-                session.process_state.cur_step = next_state_name
-                session.process_state.cur_step_desc = next_step_desc.id
+                self.process_state.cur_step = next_state_name
+                self.process_state.cur_step_desc = next_step.id
                 # (Here we suppose that the first step will never be stepped
                 # over, we might have to change a few things if it happens to
                 # be possible)
-                return self.calculate_next_step(session)
+                return self.calculate_next_step()
         elif cur_action == 'go_next':
             # NEXT :
             # As for previous, we get the next step from the process desc
-            next_step_desc = process_desc_model.get_next_step(cur_step_desc,
-                                            cur_process_desc)
+            next_step = cur_process.get_next_step(cur_step)
             # and we exit now if it does no exist
-            if next_step_desc == cur_step_desc:
-                return session.process_state.cur_step
+            if next_step == cur_step:
+                return self.process_state.cur_step
             # First of all we go on until we find a non-virtual step
-            while next_step_desc.virtual_step == True:
+            while next_step.virtual_step == True:
                 result = False
                 errors = []
                 # We call the step_over methods
                 for res, errs in CoopStepMethods.call_client_rules(
-                                            session,
-                                            default=False,
-                                            client_rules='0_step_over'):
+                                            self,
+                                            '0_step_over',
+                                            next_step):
                     if res != False:
                         result = res
                         errors += errs
                 # In case of error, we stop here then go back to the step
                 if errors != []:
-                    ProcessState.add_error(session, errors)
+                    self.add_error(errors)
                     # A '' return value will make it so we stay on the
                     # current step
                     return ''
@@ -516,85 +503,78 @@ class CoopProcess(Wizard):
                     errors = []
                     # We call the step_over methods
                     for res, errs in CoopStepMethods.call_client_rules(
-                                            session,
-                                            default=True,
-                                            client_rules='2_check_step'):
+                                            self,
+                                            '2_check_step',
+                                            next_step):
                         if res != True:
                             result = res
                             errors += errs
                     if result == False:
-                        ProcessState.add_error(session, errors)
+                        self.add_error(errors)
                         return ''
-                next_step_desc = process_desc_model.get_next_step(
-                                                    next_step_desc,
-                                                    cur_process_desc)
-            # Now we are sure to have a non-virtual step, so we may go on...
-            # We got our tools
-            (next_step_state, next_state_name) = \
-                    self.get_state_from_model(step_desc_model.get_step_model(
-                                        next_step_desc,
-                                        session.process_state.on_product))
-            next_state_model = Pool().get(next_step_state.model_name)
+                next_step = cur_process.get_next_step(next_step)
+            # If it does not exist, no need to go further
+            if next_step == cur_step:
+                return self.process_state.cur_step
+            # Now, we get our tools : step name, model, view
+            (_, next_state_name) = self.get_state_from_model(
+                next_step.get_step_model(self.process_state.on_product))
+            next_state = getattr(self, next_state_name)
             # And we try to finish the current step
-            (res, errors) = cur_state_model.do_after(session,
-                                                       cur_step_desc)
+            (res, errors) = cur_state.do_after(self, cur_step)
             if not res:
                 # If it does not work, we stop here
-                ProcessState.add_error(session, errors)
-                return session.process_state.cur_step
+                self.add_error(errors)
+                return self.process_state.cur_step
             else:
                 # If it works, we call the before of the next method
-                (res, errors) = next_state_model.do_before(session,
-                                                           next_step_desc)
+                (res, errors) = next_state.do_before(self, next_step)
                 if not res:
                     # Again, it it does not work, we stop right here
-                    ProcessState.add_error(session, errors)
-                    return session.process_state.cur_step
+                    self.add_error(errors)
+                    return self.process_state.cur_step
                 # Now we must check that the step should be displayed
-                (res, errors) = next_state_model.must_step_over(session,
-                                                            next_step_desc)
+                (res, errors) = next_state.must_step_over(self, next_step)
                 # We set the step as the current step anyway
-                session.process_state.cur_step = next_state_name
-                session.process_state.cur_step_desc = next_step_desc.id
+                self.process_state.cur_step = next_state_name
+                self.process_state.cur_step_desc = next_step.id
                 if not res:
                     # We must not step over, it ends here
-                    return session.process_state.cur_step
+                    return self.process_state.cur_step
                 else:
                     # We must step over, so we just calculate_next_step
                     # again. Note that it supposed that the last step will
                     # not be stepped over !
-                    return self.calculate_next_step(session)
+                    return self.calculate_next_step()
         elif cur_action == 'suspend':
             # SUSPEND :
             # We create or find a suspended process, then store the current
             # process session data in it.
-            susp_process_obj = Pool().get('ins_process.suspended_process')
+            SuspendedProcess = Pool().get('ins_process.suspended_process')
             data_dict = {
-                         'suspension_date': datetime.date.today(),
-                         'for_user': session._session._user,
-                         'desc': '%s, step %s' % (self.coop_process_name(),
-                                            cur_state_model.coop_step_name()),
-                         'process_model_name': self._name,
-                         # We need the session_data to be persistent in order
-                         # to be able to resume the process in the same state
-                         # as it was before, so we encode it in a json string.
-                         'session_data': json.dumps(session.data,
-                                                    cls=JSONEncoder)
-                         }
-            if session.process_state.from_susp_process > 0:
+                'suspension_date': datetime.date.today(),
+                'for_user': self._session._user,
+                'desc': '%s, step %s' % (
+                    self.__class__.coop_process_name(),
+                    cur_state.__class__.coop_step_name()),
+                'process_model_name': self._name,
+                # We need the session_data to be persistent in order
+                # to be able to resume the process in the same state
+                # as it was before, so we encode it in a json string.
+                'session_data': json.dumps(self.data, cls=JSONEncoder)
+                }
+            if self.process_state.from_susp_process > 0:
                 # Already exist, we just need an update
-                susp_process_obj.write(session.process_state.from_susp_process,
+                SuspendedProcess.write([self.process_state.from_susp_process],
                                        data_dict)
             else:
                 # Does not exist, create it !
-                tmp_id = susp_process_obj.create(data_dict)
-                if tmp_id is None:
+                process = SuspendedProcess.create(data_dict)
+                if not process:
                     self.raise_user_error('Could not store process !')
             return 'end'
         # Just in case...
-        return session.process_state.cur_step
-
-CoopProcess()
+        return self.process_state.cur_step
 
 
 class CoopState(object):
@@ -673,35 +653,37 @@ class CoopStateView(StateView, CoopState):
 
     # Right now, we can only use the all_buttons method to automatically add
     # all the buttons for each View
-    def __init__(self, name, view):
+    def __init__(self, name, view, toto):
         super(CoopStateView, self).__init__(name,
-                                        view,
-                                        CoopState.all_buttons())
+                                            view,
+                                            CoopState.all_buttons())
 
     # Here is a little dirty trick to avoid resetting of StateView values after
     # before methods.
     # All field initialization should be done through 'before' methods
-    def get_defaults(self, wizard, session, state_name, fields):
-        res = {}
+    def get_defaults(self, wizard, state_name, fields):
+        res = super(CoopStateView, self).get_defaults(wizard,
+                                                      state_name,
+                                                      fields)
         # First we get the existing data for our step in the current session
-        default_data = getattr(session, state_name)._data
+        default_data = getattr(wizard, state_name)
         if default_data:
             # If it exists, we go through each field and set a new entry in the
             # return dict
-            for field in [field for field in fields
-                                if (field in default_data)]:
-                res[field] = default_data[field]
+            for field in fields:
+                if field in dir(default_data):
+                    res[field] = getattr(default_data, field)
         return res
 
     def get_buttons(self, wizard, state_name):
         buttons = super(CoopStateView, self).get_buttons(wizard,
                                                          state_name)
-        process_desc_obj = Pool().get('ins_process.process_desc')
-        process, = process_desc_obj.search([
-                                        ('process_model', '=', wizard._name)],
+        ProcessDesc = Pool().get('ins_process.process_desc')
+        process_desc, = ProcessDesc.search([
+                                    ('process_model', '=', wizard.__name__)],
                                            limit=1)
         res_buttons = []
-        for step_desc in process_desc_obj.browse(process).steps:
+        for step_desc in process_desc.steps:
             state_obj = Pool().get(self.model_name)
             if isinstance(state_obj, DependantState):
                 if (not state_obj.depends_on_state() ==
@@ -739,16 +721,17 @@ class CoopStepMethods(object):
     def coop_step_name():
         return ''
 
-    def get_methods_starting_with(self, prefix):
+    @classmethod
+    def get_methods_starting_with(cls, prefix):
         # This method is used to get all methods of the class that start with
         # the provided prefix
-        return [getattr(self, method)
-                   for method in dir(self)
-                   if (callable(getattr(self, method))
+        return [getattr(cls, method)
+                   for method in dir(cls)
+                   if (callable(getattr(cls, method))
                        and method.startswith(prefix))]
 
     @staticmethod
-    def fill_data_dict(session, data_pattern):
+    def fill_data_dict(wizard, data_pattern):
         '''
             This method is a core method.
             It takes a data pattern as an input, that is a structure asking for
@@ -769,7 +752,7 @@ class CoopStepMethods(object):
         return {}
 
     @staticmethod
-    def call_client_rules(session, rulekind, step_desc):
+    def call_client_rules(wizard, rulekind, step_desc):
         '''
             This method will look for and call the client defined ruler in the
             step_desc, which match the rulekind.
@@ -780,22 +763,20 @@ class CoopStepMethods(object):
             of each call, which is a tuple containing the result and a list of
             errors.
         '''
-        # We get the models
-        step_desc_model = Pool().get('ins_process.step_desc')
-        method_desc_model = Pool().get('ins_process.step_method_desc')
 
-        # Then we iterate through the list of existing methods on the step_desc
+        # We iterate through the list of existing methods on the step_desc
         # which match our rule_kind
-        for rule in step_desc_model.get_appliable_rules(step_desc, rulekind):
+        for rule in step_desc.get_appliable_rules(rulekind):
             # We get the needed data pattern for this method
-            needed_data = method_desc_model.get_data_pattern(rule)
+            needed_data = rule.get_data_pattern()
             # Then we call the fill_data_dict, feed its result to the
             # method, and yield the result
-            yield method_desc_model.calculate(rule,
-                            CoopStepMethods.fill_data_dict(session,
-                                                            needed_data))
+            yield rule.calculate(rule,
+                            CoopStepMethods.fill_data_dict(wizard,
+                                                           needed_data))
 
-    def call_methods(self, session, step_desc, prefix, default=True,
+    @classmethod
+    def call_methods(cls, wizard, step_desc, prefix, default=True,
                         client_rules=''):
         '''
             This method will call all methods designed for the defined role.
@@ -807,14 +788,22 @@ class CoopStepMethods(object):
             If not, it calls the client side rules.
         '''
         # We get the list of methods
-        methods = self.get_methods_starting_with(prefix)
+        methods = cls.get_methods_starting_with(prefix)
         (result, errors) = (default, [])
         # and execute each of them
+        tmp_res = None
         for method in methods:
             try:
-                (res, error) = method.__call__(session)
-            except TypeError:
-                (res, error) = (not default, ['Probably forgot to return a\
+                tmp_res = method.__call__(wizard)
+            except Exception:
+                (res, error) = (not default, ['Internal Error in %s'
+                                                        % method.__name__])
+
+            if tmp_res:
+                try:
+                    (res, error) = tmp_res
+                except TypeError:
+                    (res, error) = (not default, ['Probably forgot to return a\
                                             value in %s' % method.__name__])
             if res != default:
                 # We are only interested in the res != default case
@@ -826,16 +815,16 @@ class CoopStepMethods(object):
             if client_rules != '':
                 # We get the result of each call and update the global result
                 # accordingly
-                for res, errs in CoopStepMethods.call_client_rules(
-                                                                session,
-                                                                client_rules,
-                                                                step_desc):
+                for res, errs in cls.call_client_rules(
+                        wizard,
+                        client_rules,
+                        step_desc):
                     if res != default:
                         result = res
                         errors += errs
         return (result, errors)
 
-    def do_after(self, session, step_desc):
+    def do_after(self, wizard, step_desc):
         '''
             This method executes what must be done after clicking on 'Next'
             on the step's view. It will first check for errors then, if
@@ -846,15 +835,15 @@ class CoopStepMethods(object):
             instance a manual subscription.
         '''
         # Check for errors in current view
-        (res, check_errors) = self.check_step(session, step_desc)
+        (res, check_errors) = self.check_step(wizard, step_desc)
         post_errors = []
         if res:
             # If there are errors, there is no need (and it would be dangerous)
             # to continue
-            (res, post_errors) = self.post_step(session, step_desc)
+            (res, post_errors) = self.post_step(wizard, step_desc)
         return (res, check_errors + post_errors)
 
-    def do_before(self, session, step_desc):
+    def do_before(self, wizard, step_desc):
         '''
             This method executes what must be done before displaying the step
             view. It might be initializing values, creating objects for
@@ -865,10 +854,10 @@ class CoopStepMethods(object):
             should be possible to call it through a batch to simulate for
             instance a manual subscription.
         '''
-        (res, errors) = self.before_step(session, step_desc)
+        (res, errors) = self.before_step(wizard, step_desc)
         return (res, errors)
 
-    def must_step_over(self, session, step_desc):
+    def must_step_over(self, wizard, step_desc):
         '''
             This method calculates whether it is necessary to display the
             current step view.
@@ -877,38 +866,42 @@ class CoopStepMethods(object):
             should be possible to call it through a batch to simulate for
             instance a manual subscription.
         '''
-        (res, errors) = self.step_over(session, step_desc)
+        (res, errors) = self.step_over(wizard, step_desc)
         return (res, errors)
 
-    def step_over(self, session, step_desc):
+    def step_over(self, wizard, step_desc):
         # This is the actual call to the step_over_ methods and client rules
-        return self.call_methods(session,
+        return self.call_methods(wizard,
                                  step_desc,
                                  'step_over_',
                                  default=False,
                                  client_rules='0_step_over')
 
-    def before_step(self, session, step_desc):
+    def before_step(self, wizard, step_desc):
         # This is the actual call to the before_step_ methods
-        return self.call_methods(session,
+        return self.call_methods(wizard,
                                  step_desc,
                                  'before_step_')
 
-    def check_step(self, session, step_desc):
+    def check_step(self, wizard, step_desc):
         # This is the actual call to the check_step_ methods and client rules
-        return self.call_methods(session,
+        return self.call_methods(wizard,
                                  step_desc,
                                  'check_step_',
                                  client_rules='2_check_step')
 
-    def post_step(self, session, step_desc):
+    def post_step(self, wizard, step_desc):
         # This is the actual call to the post_step_ methods
-        return self.call_methods(session,
+        return self.call_methods(wizard,
                                  step_desc,
                                  'post_step_')
 
 
 class NoSessionFoundException(Exception):
+    '''
+        Exception that will be raised in case of a One2Many target looking
+        for a 'from_session' context that does not exist.
+    '''
     pass
 
 
@@ -934,24 +927,30 @@ class CoopView(ModelView):
             wizard_obj = Pool().get(process_obj.browse(
                         data['process_state']['process_desc']).process_model,
                                     type='wizard')
-            the_session = Session(wizard_obj,
+            the_session = session_obj(wizard_obj,
                                   Transaction().context.get('from_session'))
             # session.data = data
             return the_session
         raise NoSessionFoundException
 
+
 class CoopStep(ModelView, CoopStepMethods):
-    def __init__(self):
-        super(CoopStep, self).__init__()
-        for field_name, field in self._columns.iteritems():
+    '''
+        This class aggregates the Methods of CoopStepMethods with the ModelView
+        so that it can be use as steps for our processes.
+    '''
+    @classmethod
+    def __setup__(cls):
+        super(CoopStep, cls).__setup__()
+        for field_name, field in ((field, getattr(cls, field))
+                for field in dir(cls)):
             if hasattr(field, 'context') and isinstance(field,
                                                         fields.One2Many):
                 cur_attr = getattr(self, field_name)
                 if cur_attr.context is None:
                     cur_attr.context = {}
                 cur_attr.context['from_session'] = Eval('session_id')
-                setattr(self, field_name, copy.copy(cur_attr))
-        self._reset_columns()
+                setattr(cls, field_name, copy.copy(cur_attr))
 
     # Warning : to work, this field must be added to the view that will be used
     # displaying the Step, even though it is invisible.
@@ -960,15 +959,16 @@ class CoopStep(ModelView, CoopStepMethods):
 
 
 class DependantState(CoopStep):
-    def __init__(self):
-        super(DependantState, self).__init__()
+    @classmethod
+    def __setup__(cls):
+        super(DependantState, cls).__setup__()
 
-        def before_step_session_init(session):
-            getattr(session,
-                    self.__class__.state_name()
-                    ).session_id = session._session.id
+        def before_step_wizard_init(wizard):
+            getattr(wizard,
+                    cls.state_name()
+                    ).session_id = wizard._session.id
             return (True, [])
-        setattr(self, 'before_step_session_init', before_step_session_init)
+        setattr(cls, 'before_step_wizard_init', before_step_wizard_init)
 
     @staticmethod
     def depends_on_state():
@@ -983,7 +983,7 @@ class SuspendedProcess(ModelSQL, ModelView):
     '''
         This class represents a suspended process, which can be resumed later.
     '''
-    _name = 'ins_process.suspended_process'
+    __name__ = 'ins_process.suspended_process'
 
     # Just so we know since when the process has been suspended. In the
     # future, we might want to set a timeout on suspended process so we
@@ -1003,15 +1003,13 @@ class SuspendedProcess(ModelSQL, ModelView):
     # Data from the session
     session_data = fields.Text('Data')
 
-SuspendedProcess()
-
 
 class ResumeWizard(Wizard):
     '''
         This class is designed to provide an interface for restarting a
         suspended process.
     '''
-    _name = 'ins_process.resume_process'
+    __name__ = 'ins_process.resume_process'
     start_state = 'action'
 
     class LaunchStateAction(StateAction):
@@ -1032,52 +1030,51 @@ class ResumeWizard(Wizard):
                 self.raise_user_error(
                                 'Selected record is not a suspended process')
 
-            susp_process_obj = Pool().get('ins_process.suspended_process')
+            SuspendedProcess = Pool().get('ins_process.suspended_process')
 
             # Then we look for the associated record. Note that if we had not
             # check the active_model, we might have found something which would
             # not have been right !
             try:
-                susp_process = susp_process_obj.browse(
-                                        Transaction().context.get('active_id'))
+                susp_process = SuspendedProcess(
+                    Transaction().context.get('active_id'))
             except KeyError:
                 susp_process = None
                 self.raise_user_error('Could not find a process to resume')
 
             # Then we look for an action wizard associated to the process_model
             # of the suspended process :
-            action_obj = Pool().get('ir.action')
-            act_wizard_obj = Pool().get('ir.action.wizard')
-            good_id = act_wizard_obj.search([
-                        ('model', '=', 'ins_process.suspended_process'),
-                        ('wiz_name', '=', susp_process.process_model_name)
-                                             ])[0]
+            Action = Pool().get('ir.action')
+            ActionWizard = Pool().get('ir.action.wizard')
+            good_wizard, = ActionWizard.search([
+                    ('model', '=', 'ins_process.suspended_process'),
+                    ('wiz_name', '=', susp_process.process_model_name)
+                                             ])
 
             # Finally, we just return the instruction to start an action wizard
             # with the id we just found.
-            return action_obj.get_action_values('ir.action.wizard',
-                good_id)
+            return Action.get_action_values('ir.action.wizard',
+                                            good_wizard.id)
 
     # The only state of our wizard process is this one.
     action = LaunchStateAction()
     dummy_step = CoopStateView('ins_process.dummy_process.dummy_step',
                                # Remember, the view name must start with the
                                # tryton module name !
-                               'insurance_process.dummy_view')
+                               'insurance_process.dummy_view', '')
 
     # We need to specify this method as we want to update the context of the
     # wizard that is going to be launched with the data we were provided with.
-    def do_action(self, session, action):
+    def do_action(self, action):
         return (action, {
                      'id': Transaction().context.get('active_id'),
                      'model': Transaction().context.get('active_model'),
                      'ids': Transaction().context.get('active_ids'),
                          })
 
-    def transition_action(self, session):
+    def transition_action(self):
         return 'dummy_step'
 
-ResumeWizard()
 
 #####################################################
 # Here is an example of implementation of a process #
@@ -1085,15 +1082,19 @@ ResumeWizard()
 
 
 class DummyObject(ModelSQL, ModelView):
-    _name = 'ins_process.dummy_object'
+    '''
+        A dummy Object for our DummyProcess
+    '''
+    __name__ = 'ins_process.dummy_object'
     contract_number = fields.Char('Contract Number')
-
-DummyObject()
 
 
 class DummyStep(CoopStep):
+    '''
+        a DummyStep for a DummyProcess
+    '''
     # This is a step. It inherits from CoopStep, and has one attribute (name).
-    _name = 'ins_process.dummy_process.dummy_step'
+    __name__ = 'ins_process.dummy_process.dummy_step'
     name = fields.Char('Name')
 
     # This is its user-friendly name for creating the step desc
@@ -1104,84 +1105,93 @@ class DummyStep(CoopStep):
     # This is a before method, which will be useful to initialize our name
     # field. If we had a One2Many field, we could create objects and use their
     # fields to compute the default value of another.
-    def before_step_init(self, session):
-        session.dummy_step.name = 'Toto'
+    @staticmethod
+    def before_step_init(wizard):
+        wizard.dummy_step.name = 'Toto'
         return (True, [])
 
     # Those are validation methods which will be called by the check_step
     # method.
     # DO NOT FORGET to always return something
-    def check_step_schtroumpf_validation(self, session):
-        if session.dummy_step.name == 'Toto':
+    @staticmethod
+    def check_step_schtroumpf_validation(wizard):
+        if wizard.dummy_step.name == 'Toto':
             return (False, ['Schtroumpf'])
         return (True, [])
 
-    def check_step_kiwi_validation(self, session):
-        if session.dummy_step.name == 'Toto':
+    @staticmethod
+    def check_step_kiwi_validation(wizard):
+        if wizard.dummy_step.name == 'Toto':
             return (False, ['Kiwi'])
         return (True, [])
 
-    def check_step_abstract_obj(self, session):
-        if 'for_contract' in WithAbstract.abstract_objs(session):
-            contract = WithAbstract.get_abstract_objects(session,
+    @staticmethod
+    def check_step_abstract_obj(wizard):
+        if 'for_contract' in WithAbstract.abstract_objs(wizard):
+            contract = WithAbstract.get_abstract_objects(wizard,
                                                         'for_contract')
             if contract.contract_number == 'Test':
                 contract.contract_number = 'Toto'
             else:
                 contract.contract_number = 'Test'
-            WithAbstract.save_abstract_objects(session,
+            WithAbstract.save_abstract_objects(wizard,
                                               ('for_contract', contract))
             return (True, [])
         else:
             return (False, ['Could not find for_contract'])
 
-DummyStep()
-
 
 class DummyStep1(CoopStep):
+    '''
+        Another DummyStep for our DummyProcess
+    '''
     # This is another dummy step
-    _name = 'ins_process.dummy_process.dummy_step1'
+    __name__ = 'ins_process.dummy_process.dummy_step1'
     name = fields.Char('Name')
 
     # We initialize this step with some data from the previous step
-    def before_step_init(self, session):
+    @staticmethod
+    def before_step_init(wizard):
         # We cannot be sure that the current process uses a 'dummy_step',
         # so we test for one.
         # We also could make the state mandatory with else return (False, [..])
-        if hasattr(session, 'dummy_step'):
-            session.dummy_step1.name = session.dummy_step.name
+        if hasattr(wizard, 'dummy_step'):
+            wizard.dummy_step1.name = wizard.dummy_step.name
         return (True, [])
 
-    def check_step_abstract(self, session):
+    @staticmethod
+    def check_step_abstract(wizard):
         for_contract, for_contract1 = WithAbstract.get_abstract_objects(
-                                                        session,
+                                                        wizard,
                                                         ['for_contract',
                                                          'for_contract1'])
         for_contract1.contract_number = for_contract.contract_number
-        WithAbstract.save_abstract_objects(session, ('for_contract1',
-                                                     for_contract1))
-        return (False, [session.process_state.for_contract_str,
-                        session.process_state.for_contract1_str])
+        WithAbstract.save_abstract_objects(wizard, ('for_contract1',
+                                                  for_contract1))
+        return (False, [wizard.process_state.for_contract_str,
+                        wizard.process_state.for_contract1_str])
 
     @staticmethod
     def coop_step_name():
         return 'Dummy Step 1'
 
-DummyStep1()
-
 
 class DummyProcessState(ProcessState, WithAbstract):
-    _name = 'ins_process.dummy_process_state'
+    '''
+        A DummyProcessState with abstract objects, for tests...
+    '''
+    __name__ = 'ins_process.dummy_process_state'
     __abstracts__ = [('for_contract', 'ins_process.dummy_object'),
                      ('for_contract1', 'ins_process.dummy_object'),
                      ]
 
-DummyProcessState()
-
 
 class DummyProcess(CoopProcess):
+    '''
+        A DummyProcess for test processing
+    '''
     # This is a Process. It inherits of CoopProcess.
-    _name = 'ins_process.dummy_process'
+    __name__ = 'ins_process.dummy_process'
 
     process_state = StateView('ins_process.dummy_process_state',
                               '',
@@ -1191,20 +1201,20 @@ class DummyProcess(CoopProcess):
     dummy_step = CoopStateView('ins_process.dummy_process.dummy_step',
                                # Remember, the view name must start with the
                                # tryton module name !
-                               'insurance_process.dummy_view')
+                               'insurance_process.dummy_view',
+                               '')
     dummy_step1 = CoopStateView('ins_process.dummy_process.dummy_step1',
-                               'insurance_process.dummy_view')
+                               'insurance_process.dummy_view',
+                               '')
 
     # and give it a name.
     @staticmethod
     def coop_process_name():
         return 'Dummy Process Test'
 
-    def do_complete(self, session):
+    def do_complete(self):
         # Create and store stuff
         return (True, [])
-
-DummyProcess()
 
 ###############################################################################
 # Here is an example of default tryton wizard, performing a basic             #
@@ -1341,4 +1351,3 @@ class OptionSelectionState(ModelView):
                                None,
                                None,
                                'Options Choices')
-

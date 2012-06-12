@@ -13,9 +13,9 @@ from trytond.pyson import Eval, Not, Bool, Or
 # Needed for accessing the Transaction singleton
 from trytond.transaction import Transaction
 
-from trytond.model.browse import BrowseRecordNull
+from process import DependantState
 
-from trytond.modules.insurance_process import DependantState
+__all__ = ['ProcessDesc', 'StepDesc', 'StepMethodDesc']
 
 # For now, just step_over and checks are customizable
 METHOD_TYPES = [
@@ -40,7 +40,7 @@ class ProcessDesc(ModelSQL, ModelView):
         Master Class for all processes, has a list of steps and
         knows the name of the model it is supposed to represent
     '''
-    _name = 'ins_process.process_desc'
+    __name__ = 'ins_process.process_desc'
 
     # The user friendly name, we could forget it and use the coop_process_name
     # in its place.
@@ -66,7 +66,8 @@ class ProcessDesc(ModelSQL, ModelView):
     # Each tuple contains the model_name (i.e. 'ins_process.dummy_process')
     # associated with the process' user friendly name provided by
     # coop_process_name.
-    def get_process_model(self):
+    @staticmethod
+    def get_process_model():
         result = []
         for model_name, model in Pool().iterobject(type='wizard'):
             # Evil hack to check model's class inheritance
@@ -77,77 +78,22 @@ class ProcessDesc(ModelSQL, ModelView):
 
     # This method is called by the process itself, providing the process desc
     # as an argument, to get the process' first step desc and its model
-    def get_first_step_desc(self, process):
-        result = process.steps[0]
+    def get_first_step_desc(self):
+        result = self.steps[0]
         return (result, result.step_model)
 
     # Here we got the current step, the current process, and we are asking for
     # the next one.
-    def get_next_step(self, step, process):
-        if step.sequence < len(process.steps):
-            return process.steps[step.sequence]
+    def get_next_step(self, step):
+        if step.sequence < len(self.steps):
+            return self.steps[step.sequence]
         return step
 
     # idem for getting the previous step
-    def get_prev_step(self, step, process):
+    def get_prev_step(self, step):
         if step.sequence != 1:
-            return process.steps[step.sequence - 2]
+            return self.steps[step.sequence - 2]
         return step
-
-ProcessDesc()
-
-
-class StepMethodDesc(ModelSQL, ModelView):
-    '''
-        This is a prototype of method (rule) which might be called anytime
-        from a process.
-        There might be child classes adding other fields needed for the
-        calculate method.
-
-        There are three core elements to this class :
-            rule_kind : when is this method relevant ? It will be used by
-                owner classes to decide which method to call when being ask for
-                a specific kind of rule.
-            get_data_pattern : before execution, the method might need some
-                data from the calling process. This method returns a dict of
-                model: [attributes] which are needed for calculation
-            calculate : once you got the data, you're good to go !
-    '''
-    _name = 'ins_process.step_method_desc'
-
-    name = fields.Char('Name')
-
-    # step is a backref to the step descriptor
-    step = fields.Many2One('ins_process.step_desc',
-                           'Step',
-                           ondelete='CASCADE')
-
-    # METHOD TYPES are the possible context for which the method might be used.
-    # Currently there are only two choices : step_over or check_step.
-    # It will be used when the step is asked for methods matching a particular
-    # rule_kind to decide which methods must be used.
-    rule_kind = fields.Selection(METHOD_TYPES,
-                                 'Rule Kind',
-                                 required=True)
-
-    def get_data_pattern(self, rule):
-        # This is an example of pattern which we could use to ask for the data
-        # we need for calculation.
-        # Hopefully, the process will look in its session for a contract
-        # (matching 'ins_process.contract') and parse its fields.
-        return {'ins_process.contract': ['start_date',
-                                          'name']}
-
-    # This method makes it work : It takes the rule to execute, the data it
-    # needs, then return the result.
-    def calculate(self, rule, data):
-        print 'Calculating %s' % rule.name
-        if rule.rule_kind == '0_step_over':
-            return False
-        elif rule.rule_kind == '2_check_step':
-            return True
-
-StepMethodDesc()
 
 
 class StepDesc(ModelSQL, ModelView):
@@ -158,7 +104,7 @@ class StepDesc(ModelSQL, ModelView):
         of the step it represents, and also has a list of additional rules
         which will be used.
     '''
-    _name = 'ins_process.step_desc'
+    __name__ = 'ins_process.step_desc'
 
     # process is a backref to the process descriptor
     process = fields.Many2One('ins_process.process_desc',
@@ -259,30 +205,26 @@ class StepDesc(ModelSQL, ModelView):
                                   states={'invisible': True})
 
     # This maps the 'sequence' column as the default order for step_descs
-    def __init__(self):
-        super(StepDesc, self).__init__()
-        self._order.insert(0, ('sequence', 'ASC'))
+    @classmethod
+    def __setup__(cls):
+        super(StepDesc, cls).__setup__()
+        cls._order.insert(0, ('sequence', 'ASC'))
 
-    def get_button(self, ids, names):
-        res = {}
-        for name in names:
-            res[name] = {}
-        for step in self.browse(ids):
-            buttons_str = step.buttons_storage
-            idx = -1
-            for button, _ in BUTTONS:
-                idx += 1
-                if not button in names:
-                    continue
-                res[button][step.id] = bool(int(buttons_str[idx]))
-            if 'button_default' in names:
-                res['button_default'][step.id] = BUTTONS[
-                                                    int(buttons_str[-1]) - 1]
-        return res
+    def get_button(self, name):
+        buttons_str = self.buttons_storage
+        idx = -1
+        for button, _ in BUTTONS:
+            idx += 1
+            if not button in name:
+                continue
+            return bool(int(buttons_str[idx]))
+        if 'button_default' in name:
+            return BUTTONS[int(buttons_str[-1]) - 1]
 
-    def set_button(self, ids, name, value):
-        for step in self.browse(ids):
-            buttons_names = [elem for elem, _ in BUTTONS]
+    @classmethod
+    def set_button(cls, steps, name, value):
+        buttons_names = [elem for elem, _ in BUTTONS]
+        for step in steps:
             buttons = step.buttons_storage
             buttons_list = list(buttons)
             if name == 'button_default':
@@ -298,7 +240,7 @@ class StepDesc(ModelSQL, ModelView):
                     res = '0'
                 buttons_list[buttons_names.index(name)] = res
             buttons = ''.join(buttons_list)
-            self.write([step.id], {
+            StepDesc.write([step], {
                             'buttons_storage': buttons,
                             })
 
@@ -306,7 +248,8 @@ class StepDesc(ModelSQL, ModelView):
     # Each tuple contains the model_name (i.e. 'ins_process.dummy_step')
     # associated with the step's user friendly name provided by
     # coop_step_name.
-    def get_steps_model(self):
+    @staticmethod
+    def get_steps_model():
         result = []
         for model_name, model in Pool().iterobject():
             # Evil hack to check model's class inheritance
@@ -318,37 +261,32 @@ class StepDesc(ModelSQL, ModelView):
     # This is our way of displaying the process' name. Unfortunately, this
     # method is not available while the process has not been stored (which
     # will provide an id). So...
-    def get_process_name(self, ids, name):
-        step_desc_obj = Pool().get('ins_process.step_desc')
-        res = {}
-        for step in step_desc_obj.browse(ids):
-            res[step.id] = step.process.name
-        return res
+    def get_process_name(self, name):
+        return self.process.name
 
     # ... we set a default value for the function field, looking for the good
     # value in the context
-    def default_process_name(self):
+    @staticmethod
+    def default_process_name():
         res = Transaction().context.get('parent_name')
         return res
 
     # This method will be used by the processes to ask for the rules which
     # match the rule_kind and go through and call them.
-    def get_appliable_rules(self, for_step, rule_kind):
-        for rule in for_step.methods:
+    def get_appliable_rules(self, rule_kind):
+        for rule in self.methods:
             if rule.rule_kind == rule_kind:
                 yield rule
 
     # This method will be used to get the model of the state that is
     # associated to the step desc.
-    def get_step_model(self, for_step, for_product):
+    def get_step_model(self, for_product):
         # Basic case :
-        if not for_step.on_product_step and for_step.step_model != '':
-            return for_step.step_model
-        elif (for_step.on_product_step
-                                    and for_step.product_step_name != ''
-                                    and not (for_product is None or
-                                             isinstance(for_product,
-                                                        BrowseRecordNull))):
+        if not self.on_product_step and self.step_model != '':
+            return self.step_model
+        elif (self.on_product_step
+            and self.product_step_name != ''
+            and for_product):
             # Go look in for_product for the right step_model
             # return (lambda x:(x, x))(
                             # for_product.get_step(for_step.product_step_name))
@@ -356,17 +294,13 @@ class StepDesc(ModelSQL, ModelView):
         else:
             return ''
 
-    def get_step_name(self, ids, name):
-        step_desc_obj = Pool().get('ins_process.step_desc')
-        res = {}
-        for elem in step_desc_obj.browse(ids):
-            if elem.virtual_step == True:
-                res[elem.id] = 'Virtual Step'
-            elif elem.on_product_step == True:
-                res[elem.id] = elem.product_step_name
-            else:
-                res[elem.id] = elem.step_model
-        return res
+    def get_step_name(self, name):
+        if self.virtual_step == True:
+            return 'Virtual Step'
+        elif self.on_product_step == True:
+            return self.product_step_name
+        else:
+            return self.step_model
 
     def get_product_steps(self):
         result = set()
@@ -374,7 +308,57 @@ class StepDesc(ModelSQL, ModelView):
             result.add((lambda x:(x, x))(cls.depends_on_state()))
         return list(result)
 
-    def default_buttons_storage(self):
+    @staticmethod
+    def default_buttons_storage():
         return '0000000'
 
-StepDesc()
+
+class StepMethodDesc(ModelSQL, ModelView):
+    '''
+        This is a prototype of method (rule) which might be called anytime
+        from a process.
+        There might be child classes adding other fields needed for the
+        calculate method.
+
+        There are three core elements to this class :
+            rule_kind : when is this method relevant ? It will be used by
+                owner classes to decide which method to call when being ask for
+                a specific kind of rule.
+            get_data_pattern : before execution, the method might need some
+                data from the calling process. This method returns a dict of
+                model: [attributes] which are needed for calculation
+            calculate : once you got the data, you're good to go !
+    '''
+    __name__ = 'ins_process.step_method_desc'
+
+    name = fields.Char('Name')
+
+    # step is a backref to the step descriptor
+    step = fields.Many2One('ins_process.step_desc',
+                           'Step',
+                           ondelete='CASCADE')
+
+    # METHOD TYPES are the possible context for which the method might be used.
+    # Currently there are only two choices : step_over or check_step.
+    # It will be used when the step is asked for methods matching a particular
+    # rule_kind to decide which methods must be used.
+    rule_kind = fields.Selection(METHOD_TYPES,
+                                 'Rule Kind',
+                                 required=True)
+
+    def get_data_pattern(self):
+        # This is an example of pattern which we could use to ask for the data
+        # we need for calculation.
+        # Hopefully, the process will look in its session for a contract
+        # (matching 'ins_process.contract') and parse its fields.
+        return {'ins_process.contract': ['start_date',
+                                          'name']}
+
+    # This method makes it work : It takes the rule to execute, the data it
+    # needs, then return the result.
+    def calculate(self, data):
+        print 'Calculating %s' % self.name
+        if self.rule_kind == '0_step_over':
+            return False
+        elif self.rule_kind == '2_check_step':
+            return True

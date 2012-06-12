@@ -89,7 +89,7 @@
 			<field name="arch" type="xml">
 					 <![CDATA[
 					 <form string="step" col="8">
-					 <group name="top_group">
+					 <group id="top_group">
 						 <label name="process_name" xalign="0"/>
 						 <field name="process_name"/>
 						 <newline/>
@@ -97,7 +97,7 @@
 						 <field name="virtual_step"/>
 					 </group>
 					 <newline/>
-					 <group name="data_group">
+					 <group id="data_group">
 						 <label name="on_product_step" xalign="0"/>
 						 <field name="on_product_step"/>
 						 <newline/>
@@ -107,7 +107,7 @@
 						 <label name="product_step_name" xalign="0"/>
 						 <field name="product_step_name"/>
 					 </group>
-					 <group string="Buttons" name="buttons_group" col="6"
+					 <group string="Buttons" id="buttons_group" col="6"
 					 			states="{'invisible': Bool(Eval('virtual_step'))}">
 						 <label name="button_previous" xalign="0"/>
 						 <field name="button_previous"/>

@@ -3,11 +3,11 @@ from trytond.pool import Pool
 
 # Needed for fields
 from trytond.model import fields as fields
+from trytond.model import Model
+from trytond.wizard import Wizard
 
 # Needed for data storage
 from trytond.protocols.jsonrpc import JSONEncoder
-from trytond.model.browse import BrowseRecord, BrowseRecordNull
-from trytond.wizard.wizard import _SessionRecord
 
 # Needed for serializing data
 try:
@@ -49,7 +49,7 @@ class AbstractObject(object):
 
         if init_data is None:
             init_dict = {}
-        elif type(init_data) in (_SessionRecord,):
+        elif type(init_data) in (Wizard):
             init_dict = init_data._data
         elif type(init_data) in (dict,):
             init_dict = init_data
@@ -90,7 +90,7 @@ class AbstractObject(object):
             for field_name in init_dict.keys():
                 if field_name in _attrs:
                     init_value = init_dict[field_name]
-                    if type(init_value) in (BrowseRecord, AbstractObject):
+                    if type(init_value) in (Model, AbstractObject):
                         _attrs[field_name] = init_value
                     elif type(init_value) in (dict,):
                         _attrs[field_name] = AbstractObject(
@@ -165,7 +165,7 @@ class AbstractObject(object):
         elif isinstance(value, (int, long)):
             # It is an id, we create the object and specify it
             return AbstractObject(model, id=value)
-        elif isinstance(value, BrowseRecord):
+        elif isinstance(value, Model):
             # It is a BrowseRecord, we create the AbstractObject.
             if value._model._name == model:
                 return AbstractObject(value._model._name, value.id)
@@ -194,7 +194,7 @@ class AbstractObject(object):
                 # for each element of the list
                 if type(value) == list:
                     for elem in value:
-                        if (type(elem) in (BrowseRecord,) and
+                        if (type(elem) in (Model,) and
                                     elem._model._name == field.model_name):
                             self._attrs[name].append(
                                 AbstractObject(elem._model._name, elem.id))
@@ -274,7 +274,7 @@ class AbstractObject(object):
                 storable_attrs[field] = None
             elif isinstance(value, AbstractObject):
                 storable_attrs[field] = AbstractObject.storable_dict(value)
-            elif isinstance(value, BrowseRecord):
+            elif isinstance(value, Model):
                 storable_attrs[field] = AbstractObject.storable_dict(
                                           AbstractObject(value._model._name,
                                                          value.id))
@@ -284,7 +284,7 @@ class AbstractObject(object):
                     if type(elem) in (AbstractObject,):
                         storable_list.append(
                                         AbstractObject.storable_dict(elem))
-                    elif type(value) in (BrowseRecord,):
+                    elif type(value) in (Model,):
                         storable_list.append(AbstractObject.storable_dict(
                                           AbstractObject(elem._model._name,
                                                          elem.id)))
