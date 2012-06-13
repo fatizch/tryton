@@ -21,15 +21,19 @@
                             </xpath>
                             <xpath expr="/form/group[@id=&quot;checkboxes&quot;]" 
                             position="inside">
-                                <label name="is_legal_entity"/>
-                                <field name="is_legal_entity"/>
                                 <label name="is_insurer"/>
                                 <field name="is_insurer"/>
+                                <label name="is_broker"/>
+                                <field name="is_broker"/>
                             </xpath>
                             <xpath expr="/form/notebook" position="inside">
                                 <page string="Insurer" id="insurer" 
                                 states="{'invisible': Bool(~Eval('is_insurer'))}">
-                                    <field name="insurer" mode="tree"/>
+                                    <field name="insurer_role" mode="form"/>
+                                </page>
+                                <page string="Broker" id="broker" 
+                                states="{'invisible': Bool(~Eval('is_broker'))}">
+                                    <field name="broker_role" mode="form"/>
                                 </page>
                             </xpath>
                          </data>
@@ -124,7 +128,7 @@
                 <data>
                     <xpath expr="/form/label[@name=&quot;name&quot;]" position="before">
                             <label name="gender"/>
-                            <field name="gender" xalign="0" xexpand="0"/>
+                            <field name="gender" widget="selection" xalign="1" xexpand="0"/>
                     </xpath>
                     <xpath expr="/form/field[@name=&quot;name&quot;]" position="after">
                             <label name="maiden_name"/>
@@ -212,7 +216,7 @@
         <!--  ******************************************* 
               **************   Insurer     ***************
               *******************************************-->
-                <!-- Person form view -->
+        <!-- Insurer form view -->
         <record model="ir.ui.view" id="insurer_view_form">
             <field name="model">party.insurer</field>
             <field name="type">form</field>
@@ -226,9 +230,38 @@
             </field>
         </record>
 
-        <!-- Person tree view -->
+        <!-- Insurer tree view -->
         <record model="ir.ui.view" id="insurer_view_tree">
             <field name="model">party.insurer</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <tree>
+                        <field name="reference"/>
+                    </tree>
+                ]]>
+            </field>
+        </record>
+        <!--  ******************************************* 
+              **************   Broker     ***************
+              *******************************************-->
+        <!-- Broker form view -->
+        <record model="ir.ui.view" id="broker_view_form">
+            <field name="model">party.broker</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <form>
+                    <label name="reference"/>
+                    <field name="reference"/>
+                </form>
+                ]]>
+            </field>
+        </record>
+
+        <!-- Broker tree view -->
+        <record model="ir.ui.view" id="broker_view_tree">
+            <field name="model">party.broker</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <![CDATA[

@@ -2,11 +2,12 @@
 
 from trytond.model import ModelView, ModelSQL, fields as fields
 from trytond.pyson import Eval
+from trytond.pool import Pool
 
 from trytond.modules.coop_utils import utils as utils
 
 __all__ = ['Party', 'Actor', 'PersonRelations', 'Person', 'LegalEntity',
-           'Insurer', ]
+           'Insurer', 'Broker', ]
 
 GENDER = [('M', 'Male'),
           ('F', 'Female'),
@@ -15,39 +16,73 @@ GENDER = [('M', 'Male'),
 
 class Party(ModelSQL, ModelView):
     'Party'
+
     __name__ = 'party.party'
 
     person = fields.One2Many('party.person', 'party', 'Person')
     legal_entity = fields.One2Many('party.legal_entity',
-                                   'party', 'Legal Entity')
-    insurer = fields.One2Many('party.insurer', 'party', 'Insurer',
+        'party', 'Legal Entity')
+    is_legal_entity = fields.Function(fields.Boolean('Legal entity'),
+        'get_is_actor')
+
+    insurer_role = fields.One2Many('party.insurer', 'party', 'Insurer',
+        states={'invisible': Eval('legal_entity', 0) != 0})
+    broker_role = fields.One2Many('party.broker', 'party', 'Broker',
         states={'invisible': Eval('legal_entity', 0) != 0})
 
-    is_legal_entity = fields.Function(fields.Boolean('Legal entity'),
-                                      'get_is_actor')
-    is_insurer = fields.Function(fields.Boolean('Insurer',
-                                                on_change=['is_insurer',
-                                                           'insurer']),
-                                 'get_is_actor', setter='set_is_insurer')
+    @staticmethod
+    def get_is_actor_var_name(var_name):
+        return 'is_' + var_name.split('_role')[0]
+
+    @staticmethod
+    def get_actor_var_name(var_name):
+        return var_name.split('is_')[1] + '_role'
+
+    @classmethod
+    def __setup__(cls):
+        super(Party, cls).__setup__()
+        #this loop will add for each One2Many role, a function field is_role
+        for field_name in (role for role in dir(cls) if role.endswith('role')):
+            field = getattr(cls, field_name)
+            if not hasattr(field, 'model_name'):
+                continue
+            is_actor_var_name = Party.get_is_actor_var_name(field_name)
+            field = fields.Function(fields.Boolean(field.string,
+                    on_change=[field_name, is_actor_var_name]),
+                'get_is_actor',
+                setter='set_is_actor')
+            setattr(cls, is_actor_var_name, field)
 
     def get_is_actor(self, name):
-        field_name = name.split('is_')[2]
+        field_name = Party.get_actor_var_name(name)
         if hasattr(self, field_name):
             field = getattr(self, field_name)
             return len(field) > 0
         return False
 
-    def on_change_is_insurer(self):
+    def _change_is_actor(self, role):
         res = {}
-        res['insurer'] = {}
-        if type(self.insurer) == bool:
+        res[role] = {}
+        attr_role = getattr(self, role)
+        attr_is_role = getattr(self, Party.get_is_actor_var_name(role))
+        if type(attr_role) == bool:
             return res
-        if self.is_insurer == True and len(self.insurer) == 0:
-            res['insurer']['add'] = [{}]
-        elif self.is_insurer == False and len(self.insurer) > 0:
-            res['insurer'].setdefault('remove', [])
-            res['insurer']['remove'].append(self.insurer[0].get('id'))
+        if attr_is_role == True and len(attr_role) == 0:
+            res[role]['add'] = [{}]
+        elif attr_is_role == False and len(attr_role) > 0:
+            res[role].setdefault('remove', [])
+            res[role]['remove'].append(attr_role[0].id)
         return res
+
+    def on_change_is_insurer(self):
+        return self._change_is_actor('insurer_role')
+
+    def on_change_is_broker(self):
+        return self._change_is_actor('broker_role')
+
+    @classmethod
+    def set_is_actor(cls, parties, name, value):
+        pass
 
 
 class Actor(ModelView):
@@ -69,8 +104,10 @@ class PersonRelations(ModelSQL, ModelView):
     from_person = fields.Many2One('party.person', 'From Person')
     to_person = fields.Many2One('party.person', 'From Person')
     kind = fields.Selection('get_relation_kind', 'Kind')
-    reverse_kind = fields.Function(fields.Char('Reverse Kind', readonly=True),
-                                   'get_reverse_kind')
+    reverse_kind = fields.Function(fields.Char('Reverse Kind',
+            readonly=True,
+            on_change_with=['kind']),
+        'get_reverse_kind')
 
     @staticmethod
     def get_relation_kind():
@@ -81,6 +118,9 @@ class PersonRelations(ModelSQL, ModelView):
         if len(reverse_values) > 0:
             return reverse_values[0][1]
         return ''
+
+    def on_change_with_reverse_kind(self, name):
+        return self.get_reverse_kind(name)
 
 
 class Person(ModelSQL, Actor):
@@ -114,3 +154,9 @@ class Insurer(ModelSQL, Actor):
     'Insurer'
 
     __name__ = 'party.insurer'
+
+
+class Broker(ModelSQL, Actor):
+    'Broker'
+
+    __name__ = 'party.broker'

@@ -10,4 +10,5 @@ def register():
         Person,
         LegalEntity,
         Insurer,
+        Broker,
         module='insurance_party', type_='model')
