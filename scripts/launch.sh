@@ -8,10 +8,10 @@ echo $SEP
 fi
 echo "Restarting trytond server"
 echo $SEP
-$TRYTOND_PATH/trytond -c $TRYTOND_CONF -v &
+$TRYTOND_PATH/trytond -c $TRYTOND_CONF &
 echo "Starting tryton client"
 echo $SEP
-env UBUNTU_MENUPROXY= $TRYTON_PATH/tryton -v &
+env UBUNTU_MENUPROXY= $TRYTON_PATH/tryton &
 sleep 2
 echo $SEP
 echo "Client ready"
