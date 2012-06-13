@@ -62,19 +62,19 @@ class DynamicSelection(ModelSQL, ModelView):
 
 
 def get_dynamic_selection(kind):
-        res = []
-        DynamicSelection = Pool().get('coop.dynamic_selection')
-        dyn_sels = DynamicSelection.search([('kind', '=', kind)])
-        for dyn_sel in dyn_sels:
-            res.append([dyn_sel.key, dyn_sel.name])
-        return res
+    res = []
+    DynamicSelection = Pool().get('coop.dynamic_selection')
+    dyn_sels = DynamicSelection.search([('kind', '=', kind)])
+    for dyn_sel in dyn_sels:
+        res.append([dyn_sel.key, dyn_sel.name])
+    return res
 
 
 def get_reverse_dynamic_selection(key):
-        res = []
-        DynamicSelection = Pool().get('coop.dynamic_selection')
-        dyn_sels = DynamicSelection.search([('reverse_key', '=', key)],
-                                           limit=1)
-        for dyn_sel in dyn_sels:
-            res.append([dyn_sel.key, dyn_sel.name])
-        return res
+    res = []
+    DynamicSelection = Pool().get('coop.dynamic_selection')
+    dyn_sels = DynamicSelection.search([('reverse_key', '=', key)],
+                                       limit=1)
+    for dyn_sel in dyn_sels:
+        res.append([dyn_sel.key, dyn_sel.name])
+    return res

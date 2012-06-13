@@ -10,13 +10,15 @@ from trytond.rpc import RPC
 
 from trytond.modules.coop_utils import utils as utils
 
-__all__ = ['Coverage', 'Product', 'ProductOptionsCoverage',
+__all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
            'BusinessRuleManager', 'GenericBusinessRule',
            'PricingRule', 'EligibilityRule']
 
 
 class Offered(ModelView):
     'Offered'
+
+    __name__ = 'ins_product.offered'
 
     code = fields.Char('Code', size=10, required=True, select=1)
     name = fields.Char('Name', required=True, select=1)
@@ -86,11 +88,6 @@ class BusinessRuleManager(ModelSQL, ModelView):
         'manager', 'Business Rules', on_change=['business_rules'],
         context={'start_date': Eval('start_date')})
 
-    @classmethod
-    def __setup__(cls):
-        super(BusinessRuleManager, cls).__setup__()
-        cls.__rpc__.update({'get_offered_models': RPC()})
-
     @staticmethod
     def get_offered_models():
         return utils.get_descendents(Offered)
@@ -133,8 +130,7 @@ class BusinessRuleManager(ModelSQL, ModelView):
                         'end_date': None})
         return res
 
-    def get_good_rule_at_date(self, rulemanager, data):
-        Business_rule = Pool().get('ins_product.generic_business_rule')
+    def get_good_rule_at_date(self, data):
         # First we got to check that the fields that we will need to calculate
         # which rule is appliable are available in the data dictionnary
         try:
@@ -147,15 +143,20 @@ class BusinessRuleManager(ModelSQL, ModelView):
             # the good rule.
             # (This is a given way to get a rule from a list, using the
             # applicable date, it could be anything)
-            good_rule, = Business_rule.search([
-                                ('start_date', '<=', the_date),
-                                ('manager', '=', rulemanager.id)
-                                ],
-                                order=[('start_date', 'DESC')],
-                                limit=1)
-            return good_rule
+            for busines_rule in self.business_rules:
+                if busines_rule.start_date <= the_date:
+                    return busines_rule
         except ValueError, exception:
             return None
+
+        def get_rec_name(self, name):
+            res = ''
+            if self.business_rules and len(self.business_rules) > 0:
+                res = self.business_rules[0].kind
+            if res != '':
+                res += ' '
+            res += '(%s)' % self.id
+            return res
 
 
 class GenericBusinessRule(ModelSQL, ModelView):
@@ -166,7 +167,7 @@ class GenericBusinessRule(ModelSQL, ModelView):
     kind = fields.Selection('get_kind', 'Kind',
                             required=True, on_change=['kind'])
     manager = fields.Many2One('ins_product.business_rule_manager', 'Manager')
-    start_date = fields.Date('From Date', required=True, on_change=['kind', 'start_date'])
+    start_date = fields.Date('From Date', required=True)
     end_date = fields.Date('To Date')
     is_current = fields.Function(fields.Boolean('Is current'),
         'get_is_current')
@@ -190,10 +191,9 @@ class GenericBusinessRule(ModelSQL, ModelView):
 
             attr.states = {
                 'invisible': (Eval('kind') != attr.model_name)}
-            setattr(cls, field_name, copy.copy(attr))
+            setattr(cls, field_name, attr)
 
-        cls.__rpc__.update({'is_current': RPC(),
-                            'on_change_kind': RPC(readonly=False)})
+        cls.__rpc__.update({'is_current': RPC()})
         cls._order.insert(0, ('start_date', 'ASC'))
         cls._constraints += [('check_dates', 'businessrule_overlaps')]
         cls._error_messages.update({'businessrule_overlaps':
@@ -206,14 +206,11 @@ class GenericBusinessRule(ModelSQL, ModelView):
                 and getattr(field, 'model_name').endswith('_rule')
                 and (not getattr(self, field_name)
                      or len(getattr(self, field_name) == 0))):
-                res[field_name] = {}
+
                 if field.model_name == self.kind:
+                    res[field_name] = {}
                     res[field_name]['add'] = [{}]
         return res
-
-    def on_change_start_date(self):
-        return self.on_change_kind()
-
 
     @staticmethod
     def get_kind():
@@ -244,7 +241,7 @@ class GenericBusinessRule(ModelSQL, ModelView):
 #    _defaults = property(fget=_getdefaults)
 
     def get_is_current(self, name):
-        BRM = Pool().get('ins_product.business_self_manager')
+        BRM = Pool().get('ins_product.business_rule_manager')
         return self == BRM.get_good_rule_at_date(self.manager,
                 {'date': datetime.date.today()})
 

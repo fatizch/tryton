@@ -4,6 +4,7 @@ from product import *
 
 def register():
     Pool.register(
+        Offered,
         Coverage,
         Product,
         ProductOptionsCoverage,
