@@ -7,7 +7,7 @@ from trytond.pool import Pool
 from trytond.modules.coop_utils import utils as utils
 
 __all__ = ['Party', 'Actor', 'PersonRelations', 'Person', 'LegalEntity',
-           'Insurer', 'Broker', ]
+           'Insurer', 'Broker', 'Customer', ]
 
 GENDER = [('M', 'Male'),
           ('F', 'Female'),
@@ -25,10 +25,9 @@ class Party(ModelSQL, ModelView):
     is_legal_entity = fields.Function(fields.Boolean('Legal entity'),
         'get_is_actor')
 
-    insurer_role = fields.One2Many('party.insurer', 'party', 'Insurer',
-        states={'invisible': Eval('legal_entity', 0) != 0})
-    broker_role = fields.One2Many('party.broker', 'party', 'Broker',
-        states={'invisible': Eval('legal_entity', 0) != 0})
+    insurer_role = fields.One2Many('party.insurer', 'party', 'Insurer')
+    broker_role = fields.One2Many('party.broker', 'party', 'Broker')
+    customer_role = fields.One2Many('party.broker', 'party', 'Customer')
 
     @staticmethod
     def get_is_actor_var_name(var_name):
@@ -52,6 +51,8 @@ class Party(ModelSQL, ModelView):
                 'get_is_actor',
                 setter='set_is_actor')
             setattr(cls, is_actor_var_name, field)
+            setattr(cls,
+                'on_change_%s' % is_actor_var_name, cls.on_change_generic)
 
     def get_is_actor(self, name):
         field_name = Party.get_actor_var_name(name)
@@ -60,25 +61,30 @@ class Party(ModelSQL, ModelView):
             return len(field) > 0
         return False
 
-    def _change_is_actor(self, role):
+    def on_change_generic(self):
+        #first we'll guess the field name we're coming from
+        def get_role_name(self):
+            for field1 in self._values.iterkeys():
+                for field2 in self._values.iterkeys():
+                    if (Party.get_is_actor_var_name(field1) == field2
+                        and Party.get_actor_var_name(field2) == field1):
+                        return (field1, field2)
+            return ('', '')
+
         res = {}
-        res[role] = {}
-        attr_role = getattr(self, role)
-        attr_is_role = getattr(self, Party.get_is_actor_var_name(role))
-        if type(attr_role) == bool:
+        (role, is_role) = get_role_name(self)
+        if role == '' or is_role == '':
             return res
-        if attr_is_role == True and len(attr_role) == 0:
+
+        res[role] = {}
+        if type(self[role]) == bool:
+            return res
+        if self[is_role] == True and len(self[role]) == 0:
             res[role]['add'] = [{}]
-        elif attr_is_role == False and len(attr_role) > 0:
+        elif self[is_role] == False and len(self[role]) > 0:
             res[role].setdefault('remove', [])
-            res[role]['remove'].append(attr_role[0].id)
+            res[role]['remove'].append(self[role][0].id)
         return res
-
-    def on_change_is_insurer(self):
-        return self._change_is_actor('insurer_role')
-
-    def on_change_is_broker(self):
-        return self._change_is_actor('broker_role')
 
     @classmethod
     def set_is_actor(cls, parties, name, value):
@@ -131,10 +137,10 @@ class Person(ModelSQL, Actor):
     gender = fields.Selection(GENDER, 'Gender', required=True)
     first_name = fields.Char('First Name', required=True)
     maiden_name = fields.Char('Maiden Name',
-        states={'invisible': Eval('gender') != 'F'},
+        states={'readonly': Eval('gender') != 'F'},
         depends=['gender'])
     birth_date = fields.Date('Birth Date', required=True)
-    ssn = fields.Char('Social Security Number')
+    ssn = fields.Char('SSN')
     relations = fields.One2Many('party.person-relations',
                                  'from_person', 'Relations')
     in_relation_with = fields.One2Many('party.person-relations',
@@ -160,3 +166,9 @@ class Broker(ModelSQL, Actor):
     'Broker'
 
     __name__ = 'party.broker'
+
+
+class Customer(ModelSQL, Actor):
+    'Customer'
+
+    __name__ = 'party.customer'
