@@ -27,7 +27,7 @@ else
 	echo $SEP
 	echo Getting Coop modules
 	echo $SEP
-	hg clone https://$2@bitbucket.org/coopengo/coopbusiness
+	hg clone https://$2@bitbucket.org/coopengo/coopbusiness -r default
 	echo $SEP
 	echo Done
 	echo $SEP

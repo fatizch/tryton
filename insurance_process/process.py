@@ -3,6 +3,7 @@ import copy
 
 # Needed for displaying objects
 from trytond.model import ModelView, ModelSQL
+from trytond.model.model import ModelMeta, Model
 from trytond.model import fields as fields
 
 # Needed for Wizardry
@@ -14,8 +15,7 @@ from trytond.pool import Pool
 
 # Needed for resuming processes
 from trytond.transaction import Transaction
-from trytond.protocols.jsonrpc import JSONEncoder
-from trytond.pool import PoolMeta
+from trytond.protocols.jsonrpc import JSONEncoder, object_hook
 from tools import AbstractObject, to_list
 
 from trytond.pyson import Eval
@@ -27,21 +27,26 @@ except ImportError:
     import json
 
 
-__all__ = ['ProcessState', 'CoopProcess', 'SuspendedProcess', 'ResumeWizard',
-    'DummyObject', 'DummyStep', 'DummyStep1', 'DummyProcessState',
-    'DummyProcess']
+__all__ = ['WithAbstract', 'ProcessState', 'CoopProcess', 'CoopStateView',
+           'CoopStep', 'CoopView', 'DependantState', 'SuspendedProcess',
+           'ResumeWizard', 'DummyObject', 'DummyStep', 'DummyStep1',
+           'DummyProcessState', 'DummyProcess']
 
 
 ACTIONS = ('go_previous', 'go_next', 'cancel', 'complete', 'check', 'suspend')
 
 
-class MetaAbstract(PoolMeta):
+class MetaAbstract(ModelMeta):
     def __new__(cls, name, bases, attrs):
         for (field_name, field_model) in attrs['__abstracts__']:
             attrs[field_name + '_db'] = fields.Many2One(field_model,
                                                         field_name)
             attrs[field_name + '_str'] = fields.Text('Json' + field_name)
         return super(MetaAbstract, cls).__new__(cls, name, bases, attrs)
+
+
+class BadDataKeyError(Exception):
+    pass
 
 
 class WithAbstract(object):
@@ -51,22 +56,108 @@ class WithAbstract(object):
     __abstracts__ = []
 
     @staticmethod
+    def create_field(field_desc, value):
+        if isinstance(value, list):
+            res = []
+            if not len(value) > 0:
+                return res
+            if isinstance(field_desc, (fields.One2Many, fields.Many2Many)):
+                for elem in value:
+                    if isinstance(elem, Model):
+                        res.append(WithAbstract.create_field(elem))
+                    elif isinstance(elem, (dict, int, long)):
+                        res.append(WithAbstract.create_abstract(
+                            field_desc.model_name,
+                            elem))
+                    else:
+                        raise BadDataKeyError
+        elif isinstance(value, Model):
+            if isinstance(field_desc, fields.Many2One):
+                res = value
+            else:
+                raise BadDataKeyError
+        elif isinstance(value, dict) and isinstance(field_desc,
+                                                    fields.Many2One):
+            res = WithAbstract.create_abstract(field_desc.model_name, value)
+        else:
+            res = value
+        return res
+
+    @staticmethod
+    def load_from_text(model_name, data):
+        data_text = json.loads(data.encode('utf-8'), object_hook=object_hook)
+        return WithAbstract.create_abstract(model_name, data_text)
+
+    # This method will be use to create an AbstractObject from a value,
+    # whatever the value type.
+    @staticmethod
+    def create_abstract(model, data):
+        ForModel = Pool().get(model)
+        if isinstance(data, (int, long)):
+            # It is an id, we create the object and specify it
+            return ForModel(data)
+        elif isinstance(data, dict):
+            for_object = ForModel()
+            for key, value in data.iteritems():
+                if not key in for_object._fields:
+                    raise BadDataKeyError
+                setattr(for_object,
+                        key,
+                        WithAbstract.create_field(for_object._fields[key],
+                                                  value))
+            return for_object
+        elif isinstance(data, str):
+            data_dict = WithAbstract.load_from_text(data)
+            return WithAbstract.create_abstract(model, data_dict)
+        else:
+            raise TypeError
+        # Anything else is an error...
+
+    @staticmethod
     def get_abstract_object(session, field_name):
         result = getattr(session.process_state, field_name + '_db')
-        if not result:
-            result = AbstractObject.load_from_text(
-                        getattr(session.process_state, field_name + '_str'))
-        else:
-            result = AbstractObject(result._model._name, result.id)
-        if result is None:
-            result = AbstractObject(session.process_state._fields[
-                                            field_name + '_db'].model_name)
+        if not result.id:
+            src_text = getattr(session.process_state, field_name + '_str')
+            if src_text:
+                result = WithAbstract.load_from_text(
+                            result.__name__,
+                            getattr(session.process_state,
+                                    field_name + '_str'))
+            else:
+                ForModel = Pool().get(result.__name__)
+                result = ForModel()
         return result
+
+    @staticmethod
+    def serialize_field(field):
+        res = None
+        if (isinstance(field, list) and
+                                field != [] and
+                                isinstance(field[0], Model)):
+            res = []
+            for elem in field:
+                res.append(WithAbstract.serialize_field(elem))
+        elif isinstance(field, Model):
+            if isinstance(field, Model) and field.id > 0:
+                res = field.id
+            else:
+                res = {}
+                for key, value in field._values.iteritems():
+                    res[key] = WithAbstract.serialize_field(value)
+        else:
+            res = field
+
+        return res
+
+    @staticmethod
+    def store_to_text(for_object):
+        return json.dumps(WithAbstract.serialize_field(for_object),
+                          cls=JSONEncoder)
 
     @staticmethod
     def save_abstract_object(session, field_name, for_object):
         setattr(session.process_state, field_name + '_str',
-                AbstractObject.store_to_text(for_object))
+                WithAbstract.store_to_text(for_object))
         session.process_state.dirty = True
 
     @staticmethod
@@ -197,11 +288,15 @@ class CoopProcess(Wizard):
         self.process_state.errors = ''
         for elem in set([elem for elem in dir(self.process_state)
                      if (elem[-3:] == '_db' or elem[-4:] == '_str')]):
-            if not hasattr(self.process_state, elem + '_db'):
-                setattr(self.process_state, elem + '_db', 0)
-            if not hasattr(self.process_state, elem + '_str'):
-                setattr(self.process_state, elem + '_str', '')
-        self.on_product = 0
+            if not hasattr(self.process_state, elem):
+                setattr(self.process_state, elem, 0)
+            if not hasattr(self.process_state, elem):
+                setattr(self.process_state, elem, '')
+        self.process_state.on_product = 0
+        for elem in dir(self.process_state):
+            if elem[:-4] == '_str':
+
+                setattr(self.process_state, elem, '')
 
     def add_error(self, error):
         errors = to_list(error)
@@ -219,11 +314,14 @@ class CoopProcess(Wizard):
         # If a suspended process is found in the current context, resume it
         if susp_process:
             # We get a dictionnary with the data from the stored session
-            susp_data = json.loads(susp_process.session_data.encode('utf-8'))
+            susp_data = json.loads(susp_process.session_data.encode('utf-8'),
+                                   object_hook=object_hook)
             # Then update everything.
-            for key, value in susp_data.iteritems():
-                self.data[key].update(value)
-                getattr(self, key).dirty = True
+            for state_name, state in self.states.iteritems():
+                if isinstance(state, CoopStateView):
+                    Target = Pool().get(state.model_name)
+                    susp_data.setdefault(state_name, {})
+                    setattr(self, state_name, Target(**susp_data[state_name]))
             self.process_state.from_susp_process = susp_process.id
             self.dirty = True
 
@@ -377,8 +475,8 @@ class CoopProcess(Wizard):
     # This step will be called in case of soft termination (cancel or complete)
     # We need to delete the suspended_process object if it exists
     def transition_steps_terminate(self):
-        from_process = self.process_state.from_susp_process
-        if from_process:
+        if hasattr(self.process_state, 'from_process'):
+            from_process = self.process_state.from_susp_process
             SuspendedProcess = Pool().get('ins_process.suspended_process')
             SuspendedProcess.delete([from_process])
         return 'end'
@@ -551,19 +649,22 @@ class CoopProcess(Wizard):
             # We create or find a suspended process, then store the current
             # process session data in it.
             SuspendedProcess = Pool().get('ins_process.suspended_process')
+            SessionObj = Pool().get('ir.session.wizard')
+            the_session = SessionObj(self._session_id)
             data_dict = {
                 'suspension_date': datetime.date.today(),
-                'for_user': self._session._user,
+                'for_user': the_session._user,
                 'desc': '%s, step %s' % (
-                    self.__class__.coop_process_name(),
-                    cur_state.__class__.coop_step_name()),
-                'process_model_name': self._name,
+                    self.coop_process_name(),
+                    cur_state.coop_step_name()),
+                'process_model_name': self.__name__,
                 # We need the session_data to be persistent in order
                 # to be able to resume the process in the same state
                 # as it was before, so we encode it in a json string.
-                'session_data': json.dumps(self.data, cls=JSONEncoder)
+                'session_data': the_session.data
                 }
-            if self.process_state.from_susp_process > 0:
+            if (hasattr(self.process_state, 'from_susp_process') and
+                                self.process_state.from_susp_process > 0):
                 # Already exist, we just need an update
                 SuspendedProcess.write([self.process_state.from_susp_process],
                                        data_dict)
@@ -653,10 +754,30 @@ class CoopStateView(StateView, CoopState):
 
     # Right now, we can only use the all_buttons method to automatically add
     # all the buttons for each View
-    def __init__(self, name, view, toto):
+    def __init__(self, name, view):
         super(CoopStateView, self).__init__(name,
                                             view,
                                             CoopState.all_buttons())
+
+    def serialize_field(self, field):
+        res = None
+        if (isinstance(field, list) and
+                                field != [] and
+                                isinstance(field[0], Model)):
+            res = []
+            for elem in field:
+                res.append(self.serialize_field(elem))
+        elif isinstance(field, Model):
+            if isinstance(field, Model) and field.id > 0:
+                res = field.id
+            else:
+                res = {}
+                for key, value in field._values.iteritems():
+                    res[key] = self.serialize_field(value)
+        else:
+            res = field
+
+        return res
 
     # Here is a little dirty trick to avoid resetting of StateView values after
     # before methods.
@@ -671,8 +792,10 @@ class CoopStateView(StateView, CoopState):
             # If it exists, we go through each field and set a new entry in the
             # return dict
             for field in fields:
-                if field in dir(default_data):
-                    res[field] = getattr(default_data, field)
+                if hasattr(default_data, field):
+                    field_value = getattr(default_data, field)
+                    res[field] = self.serialize_field(field_value)
+
         return res
 
     def get_buttons(self, wizard, state_name):
@@ -685,7 +808,7 @@ class CoopStateView(StateView, CoopState):
         res_buttons = []
         for step_desc in process_desc.steps:
             state_obj = Pool().get(self.model_name)
-            if isinstance(state_obj, DependantState):
+            if state_obj in DependantState.__subclasses__():
                 if (not state_obj.depends_on_state() ==
                                                 step_desc.product_step_name):
                     continue
@@ -793,11 +916,12 @@ class CoopStepMethods(object):
         # and execute each of them
         tmp_res = None
         for method in methods:
-            try:
-                tmp_res = method.__call__(wizard)
-            except Exception:
-                (res, error) = (not default, ['Internal Error in %s'
-                                                        % method.__name__])
+            #try:
+            tmp_res = method.__call__(wizard)
+            #except Exception, e:
+            #    (res, error) = (not default, ['Internal Error in %s'
+            #                                            % method.__name__])
+            #    raise e
 
             if tmp_res:
                 try:
@@ -919,18 +1043,15 @@ class CoopView(ModelView):
     def get_context():
         if ('from_session' in Transaction().context
                         and Transaction().context.get('from_session') > 0):
-            session_obj = Pool().get('ir.session.wizard')
-            session = session_obj.browse(
-                                    Transaction().context.get('from_session'))
+            Session = Pool().get('ir.session.wizard')
+            session = Session(Transaction().context.get('from_session'))
             data = json.loads(session.data.encode('utf-8'))
-            process_obj = Pool().get('ins_process.process_desc')
-            wizard_obj = Pool().get(process_obj.browse(
-                        data['process_state']['process_desc']).process_model,
-                                    type='wizard')
-            the_session = session_obj(wizard_obj,
-                                  Transaction().context.get('from_session'))
-            # session.data = data
-            return the_session
+            ProcessDesc = Pool().get('ins_process.process_desc')
+            process_model = ProcessDesc(
+                data['process_state']['process_desc']).process_model
+            Wizard = Pool().get(process_model, type='wizard')
+            the_wizard = Wizard(session.id)
+            return the_wizard
         raise NoSessionFoundException
 
 
@@ -946,7 +1067,7 @@ class CoopStep(ModelView, CoopStepMethods):
                 for field in dir(cls)):
             if hasattr(field, 'context') and isinstance(field,
                                                         fields.One2Many):
-                cur_attr = getattr(self, field_name)
+                cur_attr = getattr(cls, field_name)
                 if cur_attr.context is None:
                     cur_attr.context = {}
                 cur_attr.context['from_session'] = Eval('session_id')
@@ -963,10 +1084,11 @@ class DependantState(CoopStep):
     def __setup__(cls):
         super(DependantState, cls).__setup__()
 
+        @staticmethod
         def before_step_wizard_init(wizard):
             getattr(wizard,
                     cls.state_name()
-                    ).session_id = wizard._session.id
+                    ).session_id = wizard._session_id
             return (True, [])
         setattr(cls, 'before_step_wizard_init', before_step_wizard_init)
 
@@ -1058,10 +1180,6 @@ class ResumeWizard(Wizard):
 
     # The only state of our wizard process is this one.
     action = LaunchStateAction()
-    dummy_step = CoopStateView('ins_process.dummy_process.dummy_step',
-                               # Remember, the view name must start with the
-                               # tryton module name !
-                               'insurance_process.dummy_view', '')
 
     # We need to specify this method as we want to update the context of the
     # wizard that is going to be launched with the data we were provided with.
@@ -1071,9 +1189,6 @@ class ResumeWizard(Wizard):
                      'model': Transaction().context.get('active_model'),
                      'ids': Transaction().context.get('active_ids'),
                          })
-
-    def transition_action(self):
-        return 'dummy_step'
 
 
 #####################################################
@@ -1130,7 +1245,7 @@ class DummyStep(CoopStep):
         if 'for_contract' in WithAbstract.abstract_objs(wizard):
             contract = WithAbstract.get_abstract_objects(wizard,
                                                         'for_contract')
-            if contract.contract_number == 'Test':
+            if hasattr(contract, 'contract_number'):
                 contract.contract_number = 'Toto'
             else:
                 contract.contract_number = 'Test'
@@ -1201,11 +1316,9 @@ class DummyProcess(CoopProcess):
     dummy_step = CoopStateView('ins_process.dummy_process.dummy_step',
                                # Remember, the view name must start with the
                                # tryton module name !
-                               'insurance_process.dummy_view',
-                               '')
+                               'insurance_process.dummy_view')
     dummy_step1 = CoopStateView('ins_process.dummy_process.dummy_step1',
-                               'insurance_process.dummy_view',
-                               '')
+                               'insurance_process.dummy_view')
 
     # and give it a name.
     @staticmethod
@@ -1336,13 +1449,12 @@ class ProjectState(ModelView):
     # We define the list of attributes which will be used for display
     start_date = fields.Date('Effective Date',
                                  required=True)
-    product = fields.Many2One('ins_product.product',
-                              'Product',
-                              #domain=[('start_date',
-                              #         '<=',
-                              #         Eval('start_date'))],
-                              depends=['start_date', ],
-                              required=True)
+    product = fields.Many2One(
+        'ins_product.product',
+        'Product',
+        domain=[('start_date', '<=', Eval('start_date'))],
+        depends=['start_date', ],
+        required=True)
 
 
 class OptionSelectionState(ModelView):

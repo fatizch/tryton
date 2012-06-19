@@ -49,7 +49,7 @@ class AbstractObject(object):
 
         if init_data is None:
             init_dict = {}
-        elif type(init_data) in (Wizard):
+        elif type(init_data) in (Model):
             init_dict = init_data._data
         elif type(init_data) in (dict,):
             init_dict = init_data
@@ -167,8 +167,8 @@ class AbstractObject(object):
             return AbstractObject(model, id=value)
         elif isinstance(value, Model):
             # It is a BrowseRecord, we create the AbstractObject.
-            if value._model._name == model:
-                return AbstractObject(value._model._name, value.id)
+            if value.__name__ == model:
+                return AbstractObject(value.__name__, value.id)
             else:
                 raise TypeError
         else:
@@ -195,9 +195,9 @@ class AbstractObject(object):
                 if type(value) == list:
                     for elem in value:
                         if (type(elem) in (Model,) and
-                                    elem._model._name == field.model_name):
+                                    elem.__name__ == field.model_name):
                             self._attrs[name].append(
-                                AbstractObject(elem._model._name, elem.id))
+                                AbstractObject(elem.__name__, elem.id))
                         elif type(elem) in (AbstractObject,):
                             self._attrs[name].append(elem)
                         else:
@@ -276,7 +276,7 @@ class AbstractObject(object):
                 storable_attrs[field] = AbstractObject.storable_dict(value)
             elif isinstance(value, Model):
                 storable_attrs[field] = AbstractObject.storable_dict(
-                                          AbstractObject(value._model._name,
+                                          AbstractObject(value.__name__,
                                                          value.id))
             elif isinstance(value, list):
                 storable_list = []
@@ -286,7 +286,7 @@ class AbstractObject(object):
                                         AbstractObject.storable_dict(elem))
                     elif type(value) in (Model,):
                         storable_list.append(AbstractObject.storable_dict(
-                                          AbstractObject(elem._model._name,
+                                          AbstractObject(elem.__name__,
                                                          elem.id)))
                     else:
                         storable_list.append(elem)

@@ -23,7 +23,10 @@
 							<field name="subscriber"/>
 							<newline/>
 							<label name="product" xalign="0"/>
-							<field name="product" xfill="1"/>						
+							<field name="product" xfill="1"/>		
+							<newline/>
+							<label name="broker" xalign="0"/>
+							<field name="broker" xfill="1"/>				
 						</form>
 					]]>
 			</field>
@@ -90,7 +93,7 @@
 	
 		<!-- Here are some init data for a default Subscription Process -->
 	
-	<data skiptest="1">
+	<data>
 		<record model="ins_process.process_desc" id="subs_process_desc">
 			<field name="name">Subscription Process Descriptor</field>
 			<field name="process_model">ins_contract.subs_process</field>	
