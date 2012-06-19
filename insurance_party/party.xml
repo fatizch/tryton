@@ -35,9 +35,6 @@
                 <xpath expr="/form/notebook/page[@id=&quot;general&quot;]/field[@name=&quot;contact_mechanisms&quot;]"
                     position="replace">
                 </xpath>
-                <xpath expr="/form/group[@id=&quot;checkboxes&quot;]" 
-                position="inside">
-                </xpath>
                 <xpath expr="/form/notebook" position="inside">
                     <page string="Roles" id="role">
                         <group id="role_group" colspan="4">
@@ -50,16 +47,14 @@
                         </group>
                         <group string="Insurer" id="insurer" colspan="4" yexpand="1" yfill="1"
                         states="{'invisible': Bool(~Eval('is_insurer'))}">
-                            <field name="insurer_role" mode="form"/>
+                            <field name="insurer_role" mode="form" 
+                            view_ids="insurance_party.insurer_view_form_hosted"/>
                         </group>
                         <group string="Broker" id="broker" colspan="4" yexpand="1" yfill="1"
                         states="{'invisible': Bool(~Eval('is_broker'))}">
                             <field name="broker_role" mode="form"/>
                         </group>
                     </page>
-                </xpath>
-                <xpath expr="/form/notebook" position="inside">
-                    
                 </xpath>
              </data>
              ]]>
@@ -247,7 +242,7 @@
               **************   Insurer     ***************
               *******************************************-->
         <!-- Insurer form view -->
-        <record model="ir.ui.view" id="insurer_view_form">
+        <record model="ir.ui.view" id="insurer_view_form_hosted">
             <field name="model">party.insurer</field>
             <field name="type">form</field>
             <field name="arch" type="xml">

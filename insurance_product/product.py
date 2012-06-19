@@ -32,6 +32,7 @@ class Offered(ModelView):
     eligibility_mgr = fields.Many2One('ins_product.business_rule_manager',
         'Eligibility Manager',
         domain=[('business_rules.kind', '=', 'ins_product.eligibility_rule')])
+    insurer = fields.Many2One('party.insurer', 'Insurer')
 
     @classmethod
     def __setup__(cls):
@@ -149,6 +150,7 @@ class BusinessRuleManager(ModelSQL, ModelView):
         except ValueError, exception:
             return None
 
+        #Used????
         def get_rec_name(self, name):
             res = ''
             if self.business_rules and len(self.business_rules) > 0:

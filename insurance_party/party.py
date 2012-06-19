@@ -3,18 +3,20 @@
 from trytond.model import ModelView, ModelSQL, fields as fields
 from trytond.pyson import Eval
 from trytond.pool import Pool
+from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import utils as utils
 
 __all__ = ['Party', 'Actor', 'PersonRelations', 'Person', 'LegalEntity',
            'Insurer', 'Broker', 'Customer', ]
+__metaclass__ = PoolMeta
 
-GENDER = [('M', 'Male'),
-          ('F', 'Female'),
+GENDER = [('M', 'Mr.'),
+          ('F', 'Mrs.'),
             ]
 
 
-class Party(ModelSQL, ModelView):
+class Party:
     'Party'
 
     __name__ = 'party.party'
@@ -27,7 +29,7 @@ class Party(ModelSQL, ModelView):
 
     insurer_role = fields.One2Many('party.insurer', 'party', 'Insurer')
     broker_role = fields.One2Many('party.broker', 'party', 'Broker')
-    customer_role = fields.One2Many('party.broker', 'party', 'Customer')
+    customer_role = fields.One2Many('party.customer', 'party', 'Customer')
 
     @staticmethod
     def get_is_actor_var_name(var_name):
@@ -51,8 +53,15 @@ class Party(ModelSQL, ModelView):
                 'get_is_actor',
                 setter='set_is_actor')
             setattr(cls, is_actor_var_name, field)
-            setattr(cls,
-                'on_change_%s' % is_actor_var_name, cls.on_change_generic)
+
+            if not getattr(cls, 'on_change_%s' % is_actor_var_name, None):
+                for kls in cls.__mro__:
+                    if 'on_change_generic' in kls.__dict__:
+                        on_change_generic = kls.__dict__['on_change_generic']
+                        setattr(cls, 'on_change_%s' % is_actor_var_name,
+                            lambda a: on_change_generic(a,
+                                role=is_actor_var_name))
+                        break
 
     def get_is_actor(self, name):
         field_name = Party.get_actor_var_name(name)
@@ -61,7 +70,8 @@ class Party(ModelSQL, ModelView):
             return len(field) > 0
         return False
 
-    def on_change_generic(self):
+    def on_change_generic(self, role):
+        print role
         #first we'll guess the field name we're coming from
         def get_role_name(self):
             for field1 in self._values.iterkeys():
@@ -134,7 +144,9 @@ class Person(ModelSQL, Actor):
 
     __name__ = 'party.person'
 
-    gender = fields.Selection(GENDER, 'Gender', required=True)
+    gender = fields.Selection(GENDER, 'Gender',
+        required=True,
+        on_change=['gender'])
     first_name = fields.Char('First Name', required=True)
     maiden_name = fields.Char('Maiden Name',
         states={'readonly': Eval('gender') != 'F'},
@@ -147,7 +159,14 @@ class Person(ModelSQL, Actor):
                                  'to_person', 'in relation with')
 
     def get_rec_name(self, name):
-        return "%s %s" % self.name.upper(), self.first_name
+        return "%s %s" % (self.name.upper(), self.first_name)
+
+    def on_change_gender(self):
+        res = {}
+        if self.gender == 'F':
+            return res
+        res['maiden_name'] = ''
+        return res
 
 
 class LegalEntity(ModelSQL, Actor):

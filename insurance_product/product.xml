@@ -1,21 +1,15 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
-
         <!--  ******************************************* 
-              **************    Product    **************
+              **************    Offered    **************
               *******************************************-->
-    
-        <!-- Product -->
-        <!-- Application Entry point -->
-        <menuitem name="Laboratory" id="menu_product" sequence="10" />
-
-        <record model="ir.ui.view" id="product_view_tree">
-            <field name="model">ins_product.product</field>
+        <record model="ir.ui.view" id="offered_view_tree">
+            <field name="model">ins_product.offered</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                <tree string="Product">
+                <tree string="Offered">
                         <field name="code"/>
                         <field name="name"/>
                         <field name="start_date"/>
@@ -24,14 +18,13 @@
                 ]]>
             </field>
         </record>
-
         <!-- form view -->
-        <record model="ir.ui.view" id="product_view_form">
-            <field name="model">ins_product.product</field>
+        <record model="ir.ui.view" id="offered_view_form">
+            <field name="model">ins_product.offered</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                <form string="Product">
+                <form string="Offered">
                     <label name="code" xalign="0"/>
                     <field name="code"/>
                     <label name="name" xalign="0"/>
@@ -48,11 +41,33 @@
                             <label name="pricing_mgr"/>
                             <field name="pricing_mgr"/>
                         </page>
-                        <page string="Options" id="option">
-                            <field name="options"/>
-                        </page>
                     </notebook>
                 </form>
+                ]]>
+            </field>
+        </record>
+        <!--  ******************************************* 
+              **************    Product    **************
+              *******************************************-->
+    
+        <!-- Product -->
+        <!-- Application Entry point -->
+        <menuitem name="Laboratory" id="menu_product" sequence="10" />
+
+        <!-- form view -->
+        <record model="ir.ui.view" id="product_view_form">
+            <field name="model">ins_product.product</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered_view_form"/>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <data>
+                <xpath expr="/form/notebook" position="inside">
+                    <page string="Options" id="option">
+                        <field name="options"/>
+                    </page>
+                </xpath>
+                </data>
                 ]]>
             </field>
         </record>
@@ -66,7 +81,7 @@
         <!-- View that connects the form in the tree with the specification -->
         <record model="ir.action.act_window.view" id="act_product_form_view1">
             <field name="sequence" eval="10" />
-            <field name="view" ref="product_view_tree" />
+            <field name="view" ref="offered_view_tree" />
             <field name="act_window" ref="act_product_form" />
         </record>
 
@@ -173,7 +188,7 @@
                                 <label name="is_current"/>
                                 <field name="is_current"/>
                                 <newline/>
-                                <group id="Rules" colspan="4" yexpand="1" yfill="1" >
+                                <group id ="Rules" colspan="4" yexpand="1" yfill="1" >
                                 <field name="pricing_rule" mode="form"/>
                                 <field name="eligibilty_rule" mode="form"/>
                                 </group>
@@ -200,9 +215,6 @@
             <field name="arch" type="xml">
                          <![CDATA[
                              <form string="Business Rule Manager">
-                                <label name="belongs_to"/>
-                                <field name="belongs_to"/>
-                                <newline/>
                                 <field name="business_rules"/>
                              </form>
                          ]]>
