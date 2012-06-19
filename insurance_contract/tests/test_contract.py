@@ -12,7 +12,7 @@ from trytond.wizard import Wizard
 from trytond.exceptions import UserError
 
 
-class ProcessTestCase(unittest.TestCase):
+class ContractTestCase(unittest.TestCase):
     def setUp(self):
         trytond.tests.test_tryton.install_module('insurance_contract')
         self.SubsProcess = POOL.get('ins_contract.subs_process',
@@ -51,7 +51,6 @@ class ProcessTestCase(unittest.TestCase):
                 wizard,
                 wizard.process_state.cur_step_desc)
             self.assertEqual(tmp[0], False)
-
 
     def test0011DummyProcess(self):
         '''
@@ -117,7 +116,7 @@ class ProcessTestCase(unittest.TestCase):
 def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-        ProcessTestCase))
+        ContractTestCase))
     return suite
 
 if __name__ == '__main__':

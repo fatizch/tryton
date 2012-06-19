@@ -173,7 +173,7 @@
                                 <label name="is_current"/>
                                 <field name="is_current"/>
                                 <newline/>
-                                <group name ="Rules" colspan="4" yexpand="1" yfill="1" >
+                                <group id="Rules" colspan="4" yexpand="1" yfill="1" >
                                 <field name="pricing_rule" mode="form"/>
                                 <field name="eligibilty_rule" mode="form"/>
                                 </group>
