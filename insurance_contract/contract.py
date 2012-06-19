@@ -5,6 +5,20 @@ from trytond.model import fields as fields
 # Needed for getting models
 from trytond.pool import Pool
 
+__all__ = [
+        'SubscriptionManager',
+        'Contract',
+        'Option',
+        'BillingManager',
+        'CoveredElement',
+        'CoveredData',
+        'ExtensionLife',
+        'ExtensionCar',
+        'CoveredPerson',
+        'CoveredCar',
+        'BrokerManager'
+        ]
+
 CONTRACTNUMBER_MAX_LENGTH = 10
 CONTRACTSTATUSES = [
                         ('Quote', 'Quote'),
@@ -19,10 +33,11 @@ OPTIONSTATUS = [
 
 
 class SubscriptionManager(ModelSQL, ModelView):
-    _name = 'ins_contract.subs_manager'
-    _description = __doc__
-
-SubscriptionManager()
+    '''
+        The subscription Manager will be used to store subscription-only
+        related data.
+    '''
+    __name__ = 'ins_contract.subs_manager'
 
 
 class GenericExtension(ModelSQL, ModelView):
@@ -34,7 +49,7 @@ class GenericExtension(ModelSQL, ModelView):
     insurance or PnC, each one of those is just a bunch of data that will be
     used in the business rules to calculate stuff.
     '''
-    covered_elements = fields.One2Many('ins_contract.covered_elements',
+    covered_elements = fields.One2Many('ins_contract.covered_element',
                                        'extension',
                                        'Coverages')
 
@@ -44,8 +59,7 @@ class Contract(ModelSQL, ModelView):
     This class represents the contract, and will be at the center of
     many business processes.
     '''
-    _name = 'ins_contract.contract'
-    _description = 'Contrat'
+    __name__ = 'ins_contract.contract'
 
     # Effective date is the date at which the contract "starts" :
     #    The client pays its premium
@@ -124,6 +138,9 @@ class Contract(ModelSQL, ModelView):
     extension_car = fields.Many2One('ins_contract.extension_car',
                                     'Car Extension')
 
+    broker_manager = fields.Many2One('ins_contract.broker_manager',
+                                     'Broker Manager')
+
     @staticmethod
     def get_new_contract_number():
         return 'Ct00000001'
@@ -133,13 +150,12 @@ class Contract(ModelSQL, ModelView):
         res = master.split(',')
         return res[0], int(res[1])
 
-    def get_extension_models(self):
-        return [(model_name, model.get_extension_name())
-                for (model_name, model) in Pool().iterobject()
-                if hasattr(model, 'get_extension_name')
-                    and model.get_extension_name() != '']
-
-Contract()
+    @staticmethod
+    def get_extension_models():
+        return [(model__name__, model.get_extension__name__())
+                for (model__name__, model) in Pool().iterobject()
+                if hasattr(model, 'get_extension__name__')
+                    and model.get_extension__name__() != '']
 
 
 class Option(ModelSQL, ModelView):
@@ -156,8 +172,7 @@ class Option(ModelSQL, ModelView):
     subscription time, so that it can be used later when calculating premium
     or benefit.
     '''
-    _name = 'ins_contract.options'
-    _description = 'Option'
+    __name__ = 'ins_contract.options'
 
     # Every option is linked to a contract (and only one !)
     # Also, if the contract is destroyed, so should the option
@@ -178,19 +193,21 @@ class Option(ModelSQL, ModelView):
     # Effective date is the date at which the option "starts" to be effective :
     #    The client pays its premium for it
     #    Claims can be declared and benefits paid on the coverage
-    start_date = fields.Date('Effective Date',
-                                 required=True)
+    start_date = fields.Date('Effective Date', required=True)
+
+    # To go with it, there is the end_date wich marks the end of coverage :
+    end_date = fields.Date('Effective_date',
+                           domain=[('start_date', '<=', 'end_date')])
 
     option_data = fields.Reference('Option Data',
                                    'get_data_model')
 
-    def get_data_model(self):
-        return [(model_name, model.get_option_data_name())
-                for (model_name, model) in Pool().iterobject()
-                if hasattr(model, 'get_option_data_name')
-                    and model.get_option_data_name() != '']
-
-Option()
+    @staticmethod
+    def get_data_model():
+        return [(model__name__, model.get_option_data__name__())
+                for (model__name__, model) in Pool().iterobject()
+                if hasattr(model, 'get_option_data__name__')
+                    and model.get_option_data__name__() != '']
 
 
 class BillingManager(ModelSQL, ModelView):
@@ -199,7 +216,7 @@ class BillingManager(ModelSQL, ModelView):
         It will be the target of all sql requests for automated bill
         calculation, lapsing, etc...
     '''
-    _name = 'ins_contract.billing_manager'
+    __name__ = 'ins_contract.billing_manager'
 
     # This is the related contract for which the current billing manager is
     # defined. It is necessary to have this link as the billing manager is just
@@ -213,70 +230,95 @@ class BillingManager(ModelSQL, ModelView):
     # or not it needs to work on this contract.
     next_billing_date = fields.Date('Next Billing Date')
 
-BillingManager()
-
 
 class CoveredElement(ModelSQL, ModelView):
-    _name = 'ins_contract.covered_element'
+    '''
+        Covered elements represents anything which is covered by at least one
+        option of the contract.
+
+        It got a link with a dependant element, which is product dependant. It
+        also has a list of covered datas which describes which options covers
+        element and in which conditions.
+    '''
+    __name__ = 'ins_contract.covered_element'
     product_specific = fields.Reference('Specific Part',
                                         'get_specific_models')
-    covered_data = fields.One2Many('ins_contract.coverage_description',
+    covered_data = fields.One2Many('ins_contract.covered_data',
                                    'for_covered',
                                    'Coverage Data')
 
     # extension = fields.Many2One('ins_contract.generic_extension',
     #                            'Extension')
-
-    def get_specific_models(self):
-        return [(model_name, model.get_specific_model_name())
-                for (model_name, model) in Pool().iterobject()
-                if hasattr(model, 'get_specific_model_name')
-                    and model.get_specific_model_name() != '']
-
-CoveredElement()
+    @staticmethod
+    def get_specific_models():
+        return [(model__name__, model.get_specific_model__name__())
+                for (model__name__, model) in Pool().iterobject()
+                if hasattr(model, 'get_specific_model__name__')
+                    and model.get_specific_model__name__() != '']
 
 
 class CoveredData(ModelSQL, ModelView):
-    _name = 'ins_contract.covered_data'
+    '''
+        Covered Datas are the link between covered elements and options.
+
+        Basically, it is the start and end date of covering.
+    '''
+    __name__ = 'ins_contract.covered_data'
     for_covered = fields.Many2One('ins_contract.covered_element',
                                   'Covered Element')
-    for_coverage = fields.Many2One('ins_contract.options',
+    for_coverage = fields.Many2One('ins_product.coverage',
                                    'Coverage')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
 
-CoveredData()
-
 
 class ExtensionLife(GenericExtension):
-    _name = 'ins_contract.extension_life'
+    '''
+        This is a particular case of contract extension designed for Life
+        insurance products.
+    '''
+    __name__ = 'ins_contract.extension_life'
 
     @staticmethod
-    def get_covered_elements_model():
+    def get_covered_element_model():
         return 'ins_contract.covered_person'
-
-ExtensionLife()
 
 
 class ExtensionCar(GenericExtension):
-    _name = 'ins_contract.extension_car'
+    '''
+        This is a particular case of contract extension designed for Car
+        insurance products.
+    '''
+    __name__ = 'ins_contract.extension_car'
 
     @staticmethod
-    def get_covered_elements_model():
+    def get_covered_element_model():
         return 'ins_contract.covered_car'
-
-ExtensionCar()
 
 
 class CoveredPerson(ModelSQL, ModelView):
-    _name = 'ins_contract.covered_person'
+    '''
+        This is an extension of covered element in the case of a life product.
+
+        In life insurance, we cover persons, so here is a covered person...
+    '''
+    __name__ = 'ins_contract.covered_person'
     person = fields.Many2One('party.party',
                              'Person')
 
-CoveredPerson()
-
 
 class CoveredCar(ModelSQL, ModelView):
-    _name = 'ins_contract.covered_car'
+    '''
+        This is a covered car.
+    '''
+    __name__ = 'ins_contract.covered_car'
 
-CoveredCar()
+
+class BrokerManager(ModelSQL, ModelView):
+    '''
+        This entity will be used to manage the relation between the contract
+        and its broker
+    '''
+    __name__ = 'ins_contract.broker_manager'
+    broker = fields.Many2One('party.party',
+                             'Broker')

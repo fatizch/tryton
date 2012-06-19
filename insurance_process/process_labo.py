@@ -302,7 +302,8 @@ class StepDesc(ModelSQL, ModelView):
         else:
             return self.step_model
 
-    def get_product_steps(self):
+    @staticmethod
+    def get_product_steps():
         result = set()
         for cls in DependantState.__subclasses__():
             result.add((lambda x:(x, x))(cls.depends_on_state()))
