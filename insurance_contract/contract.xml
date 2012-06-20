@@ -27,8 +27,8 @@
 			<field name="arch" type="xml">
 					 <![CDATA[
 						<form string="contract" col="5">
-							<group yexpand="1" yfill="1" name="Test2" colspan="3">
-					 			<group name="Administrative data">
+							<group yexpand="1" yfill="1" id="Test2" colspan="3">
+					 			<group id="Administrative data">
 									<label name="contract_number" xalign="0"/>
 									<field name="contract_number" xfill="0" xalign="0"/>
 									<newline/>
@@ -42,11 +42,11 @@
 									<field name="product" xfill="1"/>
 								</group>
 								<newline/>
-								<group name="Extension Data">
+								<group id="Extension Data">
 									<field name="extension_life"/>
 								</group>
 							</group>
-							<group yexpand="1" yfill="1" name="Test" colspan="2">
+							<group yexpand="1" yfill="1" id="Test" colspan="2">
 								<field name="options" xfill="1" yfill="1"/>
 							</group>
 						</form>               ]]>

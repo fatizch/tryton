@@ -85,7 +85,7 @@ class Contract(ModelSQL, ModelView):
     #
     # If you want to pay for a claim, you got to check the options to know
     # whether you got to do so or not, and if you do how much you will pay
-    options = fields.One2Many('ins_contract.options',
+    options = fields.One2Many('ins_contract.option',
                               'contract',
                               'Options')
 
@@ -172,7 +172,7 @@ class Option(ModelSQL, ModelView):
     subscription time, so that it can be used later when calculating premium
     or benefit.
     '''
-    __name__ = 'ins_contract.options'
+    __name__ = 'ins_contract.option'
 
     # Every option is linked to a contract (and only one !)
     # Also, if the contract is destroyed, so should the option

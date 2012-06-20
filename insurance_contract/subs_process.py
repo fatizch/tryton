@@ -86,19 +86,19 @@ class ProjectState(CoopStep):
 
     @staticmethod
     def check_step_product(wizard):
-        if wizard.project.product:
+        if hasattr(wizard.project, 'product'):
             return (True, [])
         return (False, ['A product must be provided !'])
 
     @staticmethod
     def check_step_subscriber(wizard):
-        if wizard.project.subscriber:
+        if hasattr(wizard.project, 'subscriber'):
             return (True, [])
         return (False, ['A subscriber must be provided !'])
 
     @staticmethod
     def check_step_effective_date(wizard):
-        if wizard.project.start_date:
+        if hasattr(wizard.project, 'start_date'):
             return (True, [])
         return (False, ['An effective date is necessary'])
 
@@ -109,9 +109,10 @@ class ProjectState(CoopStep):
         contract.product = wizard.project.product
         contract.start_date = wizard.project.start_date
         contract.subscriber = wizard.project.subscriber
-        broker_manager = BrokerManager()
-        broker_manager.broker = wizard.project.broker
-        contract.broker_manager = broker_manager
+        if hasattr(wizard.project, 'broker'):
+            broker_manager = BrokerManager()
+            broker_manager.broker = wizard.project.broker
+            contract.broker_manager = broker_manager
         WithAbstract.save_abstract_objects(wizard, ('for_contract', contract))
         return (True, [])
 
@@ -218,7 +219,7 @@ class OptionSelectionState(CoopStep):
     def post_step_create_options(wizard):
         contract = WithAbstract.get_abstract_objects(wizard, 'for_contract')
         list_options = []
-        Option = Pool().get('ins_contract.options')
+        Option = Pool().get('ins_contract.option')
         for option in wizard.option_selection.options:
             if option.status != 'Active':
                 continue
