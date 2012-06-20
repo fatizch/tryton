@@ -1,18 +1,29 @@
 from trytond.model import ModelView, ModelSQL, fields as fields
+from trytond.wizard import Wizard
 from trytond.pool import Pool
+
+
+class CoopSQL(ModelSQL):
+    pass
+
+
+class CoopView(ModelView):
+    pass
+
+
+class CoopWizard(Wizard):
+    pass
 
 
 def get_descendents(from_class):
     res = []
     cur_models = [model_name
                   for model_name, model in Pool().iterobject()
-                  if isinstance(model, from_class)]
-    model_obj = Pool().get('ir.model')
-    model_ids = model_obj.search([
-        ('model', 'in', cur_models),
-        ])
-    for model in model_obj.browse(model_ids):
-        res.append([model.model, model.name])
+                  if issubclass(model, from_class)]
+    Model = Pool().get('ir.model')
+    models = Model.search([('model', 'in', cur_models)])
+    for cur_model in models:
+        res.append([cur_model.model, cur_model.name])
     return res
 
 
@@ -78,3 +89,7 @@ def get_reverse_dynamic_selection(key):
     for dyn_sel in dyn_sels:
         res.append([dyn_sel.key, dyn_sel.name])
     return res
+
+
+def get_module_name(cls):
+    return cls.__name__.split('.')[0]
