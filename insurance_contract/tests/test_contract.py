@@ -184,7 +184,7 @@ class ContractTestCase(unittest.TestCase):
             wizard.transition_steps_complete()
             wizard.transition_master_step()
 
-            contract, = self.Contract.search('id', '=', '1')
+            contract, = self.Contract.search([('id', '=', '1')])
             self.assert_(contract.id)
 
 
