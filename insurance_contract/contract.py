@@ -5,6 +5,8 @@ from trytond.model import fields as fields
 # Needed for getting models
 from trytond.pool import Pool
 
+from trytond.modules.coop_utils import get_descendents
+
 __all__ = [
         'SubscriptionManager',
         'Contract',
@@ -243,18 +245,26 @@ class CoveredElement(ModelSQL, ModelView):
     __name__ = 'ins_contract.covered_element'
     product_specific = fields.Reference('Specific Part',
                                         'get_specific_models')
+
     covered_data = fields.One2Many('ins_contract.covered_data',
                                    'for_covered',
                                    'Coverage Data')
 
-    # extension = fields.Many2One('ins_contract.generic_extension',
-    #                            'Extension')
+    extension = fields.Reference('Extension',
+                                 'get_extension_models')
+
     @staticmethod
     def get_specific_models():
-        return [(model__name__, model.get_specific_model__name__())
+        return [(model__name__, model.get_specific_model_name())
                 for (model__name__, model) in Pool().iterobject()
-                if hasattr(model, 'get_specific_model__name__')
-                    and model.get_specific_model__name__() != '']
+                if hasattr(model, 'get_specific_model_name')
+                    and model.get_specific_model_name() != '']
+
+    @staticmethod
+    def get_extension_models():
+        res = [(elem.__name__, elem.__name__) for elem in
+               GenericExtension.__subclasses__()]
+        return res
 
 
 class CoveredData(ModelSQL, ModelView):
@@ -305,6 +315,10 @@ class CoveredPerson(ModelSQL, ModelView):
     __name__ = 'ins_contract.covered_person'
     person = fields.Many2One('party.party',
                              'Person')
+
+    @staticmethod
+    def get_specific_model_name():
+        return 'Covered Person'
 
 
 class CoveredCar(ModelSQL, ModelView):

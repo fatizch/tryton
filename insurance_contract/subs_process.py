@@ -381,8 +381,9 @@ class ExtensionLifeState(DependantState):
                 cur_data.for_coverage = covered_data.for_coverage
                 cur_element.covered_data.append(cur_data)
             cur_person = CoveredPerson()
-            cur_person = covered_element.person
-            cur_element.product_specific = cur_person
+            cur_person.person = covered_element.person
+            cur_element.product_specific = '%s,%s' % (cur_person.__name__,
+                                                      cur_person.id)
             ext.covered_elements.append(cur_element)
 
         contract.extension_life = ext

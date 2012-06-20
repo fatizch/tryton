@@ -18,6 +18,7 @@ class ContractTestCase(unittest.TestCase):
 
     def setUp(self):
         trytond.tests.test_tryton.install_module('insurance_contract')
+        self.Contract = POOL.get('ins_contract.contract')
         self.SubsProcess = POOL.get('ins_contract.subs_process',
                                           type='wizard')
         self.ProcessDesc = POOL.get('ins_process.process_desc')
@@ -180,6 +181,11 @@ class ContractTestCase(unittest.TestCase):
             self.assertEqual(covered.covered_data[0].start_date,
                              wizard.project.start_date +
                              datetime.timedelta(days=1))
+            wizard.transition_steps_complete()
+            wizard.transition_master_step()
+
+            contract, = self.Contract.search('id', '=', '1')
+            self.assert_(contract.id)
 
 
 def suite():
