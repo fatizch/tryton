@@ -28,6 +28,7 @@ else
 	ln -s ../../../coopbusiness/insurance_product .
 	ln -s ../../../coopbusiness/insurance_contract .
 	ln -s ../../../coopbusiness/insurance_process .
+	ln -s ../../../coopbusiness/insurance_collective .
 	cd ../../../..
 	ln -s tryton-workspace/coopbusiness/scripts/start.sh .
 	cd tryton-workspace

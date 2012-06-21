@@ -10,6 +10,7 @@ def register():
         ProductOptionsCoverage,
         BusinessRuleManager,
         GenericBusinessRule,
+        BusinessRuleRoot,
         PricingRule,
         EligibilityRule,
         module='insurance_product', type_='model')

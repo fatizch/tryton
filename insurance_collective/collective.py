@@ -1,0 +1,100 @@
+#-*- coding:utf-8 -*-
+from trytond.model import fields as fields
+
+from trytond.modules.insurance_product import *
+from trytond.modules.coop_utils import utils
+
+
+__all__ = ['GroupInsurancePlan', 'GroupInsuranceCoverage',
+           'GroupInsurancePlanOptionsCoverage', 'GroupBusinessRuleManager',
+           'GroupGenericBusinessRule', 'GroupPricingRule',
+           'GroupEligibilityRule']
+
+
+class GroupOffered(Offered):
+    'Group Offered'
+    __name__ = 'ins_collective.group_offered'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupOffered, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
+class GroupInsurancePlan(Product):
+    'Group Insurance Plan'
+    __name__ = 'ins_collective.product'
+    _table = None
+
+    test = fields.Char('toto')
+    @classmethod
+    def __setup__(cls):
+        super(GroupInsurancePlan, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
+class GroupInsuranceCoverage(Coverage):
+    'Group Insurance Coverage'
+    __name__ = 'ins_collective.coverage'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupInsuranceCoverage, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
+class GroupInsurancePlanOptionsCoverage(ProductOptionsCoverage):
+    'Define Group Insurance Plan - Coverage relations'
+    __name__ = 'ins_collective.product-options-coverage'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupInsurancePlanOptionsCoverage, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
+class GroupBusinessRuleManager(BusinessRuleManager):
+    'Group Business Rule Manager'
+    __name__ = 'ins_collective.business_rule_manager'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupBusinessRuleManager, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
+class GroupGenericBusinessRule(GenericBusinessRule):
+    'Group Generic Business Rule'
+    __name__ = 'ins_collective.generic_business_rule'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupGenericBusinessRule, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
+class GroupPricingRule(PricingRule):
+    'Group Pricing Rule'
+    __name__ = 'ins_collective.pricing_rule'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupPricingRule, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
+class GroupEligibilityRule(EligibilityRule):
+    'Group Eligibility Rule'
+    __name__ = 'ins_collective.eligibility_rule'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupEligibilityRule, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
