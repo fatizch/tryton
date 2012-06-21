@@ -1,4 +1,5 @@
 #-*- coding:utf-8 -*-
+import functools
 
 from trytond.model import ModelView, ModelSQL, fields as fields
 from trytond.pyson import Eval
@@ -21,15 +22,16 @@ class Party:
 
     __name__ = 'party.party'
 
-    person = fields.One2Many('party.person', 'party', 'Person')
+    person = fields.One2Many('party.person', 'party', 'Person', size=1)
     legal_entity = fields.One2Many('party.legal_entity',
-        'party', 'Legal Entity')
+        'party', 'Legal Entity', size=1)
     is_legal_entity = fields.Function(fields.Boolean('Legal entity'),
         'get_is_actor')
 
-    insurer_role = fields.One2Many('party.insurer', 'party', 'Insurer')
-    broker_role = fields.One2Many('party.broker', 'party', 'Broker')
-    customer_role = fields.One2Many('party.customer', 'party', 'Customer')
+    insurer_role = fields.One2Many('party.insurer', 'party', 'Insurer', size=1)
+    broker_role = fields.One2Many('party.broker', 'party', 'Broker', size=1)
+    customer_role = fields.One2Many('party.customer', 'party', 'Customer',
+        size=1)
 
     @staticmethod
     def get_is_actor_var_name(var_name):
@@ -58,9 +60,10 @@ class Party:
                 for kls in cls.__mro__:
                     if 'on_change_generic' in kls.__dict__:
                         on_change_generic = kls.__dict__['on_change_generic']
+                        on_change = functools.partial(on_change_generic,
+                            is_role=is_actor_var_name)
                         setattr(cls, 'on_change_%s' % is_actor_var_name,
-                            lambda a: on_change_generic(a,
-                                role=is_actor_var_name))
+                            on_change)
                         break
 
     def get_is_actor(self, name):
@@ -70,22 +73,11 @@ class Party:
             return len(field) > 0
         return False
 
-    def on_change_generic(self, role):
-        print role
-        #first we'll guess the field name we're coming from
-        def get_role_name(self):
-            for field1 in self._values.iterkeys():
-                for field2 in self._values.iterkeys():
-                    if (Party.get_is_actor_var_name(field1) == field2
-                        and Party.get_actor_var_name(field2) == field1):
-                        return (field1, field2)
-            return ('', '')
-
+    def on_change_generic(self, is_role):
         res = {}
-        (role, is_role) = get_role_name(self)
+        role = Party.get_actor_var_name(is_role)
         if role == '' or is_role == '':
             return res
-
         res[role] = {}
         if type(self[role]) == bool:
             return res
