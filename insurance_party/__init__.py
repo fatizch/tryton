@@ -6,8 +6,8 @@ def register():
     Pool.register(
         Party,
         Actor,
-        PersonRelations,
         Person,
+        PersonRelations,
         LegalEntity,
         Insurer,
         Broker,
