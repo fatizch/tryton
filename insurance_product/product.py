@@ -2,20 +2,20 @@
 import copy
 import datetime
 
-from trytond.model import ModelView, ModelSQL, fields as fields
+from trytond.model import fields as fields
 from trytond.pool import Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
-from trytond.modules.coop_utils import utils as utils
+from trytond.modules.coop_utils import utils, CoopView, CoopSQL
 
 __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
-           'BusinessRuleManager', 'GenericBusinessRule',
+           'BusinessRuleManager', 'GenericBusinessRule', 'BusinessRuleRoot',
            'PricingRule', 'EligibilityRule']
 
 
-class Offered(ModelView):
+class Offered(CoopView):
     'Offered'
 
     __name__ = 'ins_product.offered'
@@ -24,15 +24,15 @@ class Offered(ModelView):
     name = fields.Char('Name', required=True, select=1)
     start_date = fields.Date('Start Date', required=True, select=1)
     end_date = fields.Date('End Date')
+    template = fields.Many2One(None, 'Template')
     #all mgr are Many2One because they all have the same backref var and though
     #it's not possible for the moment to have a O2M(1)
+    #
+    #All mgr var must be the same as the business rule class and ends with mgr
     pricing_mgr = fields.Many2One('ins_product.business_rule_manager',
-        'Pricing Manager',
-        domain=[('business_rules.kind', '=', 'ins_product.pricing_rule')])
+        'Pricing Manager')
     eligibility_mgr = fields.Many2One('ins_product.business_rule_manager',
-        'Eligibility Manager',
-        domain=[('business_rules.kind', '=', 'ins_product.eligibility_rule')])
-    insurer = fields.Many2One('party.insurer', 'Insurer')
+        'Eligibility Manager')
 
     @classmethod
     def __setup__(cls):
@@ -44,28 +44,42 @@ class Offered(ModelView):
             if cur_attr.context is None:
                 cur_attr.context = {}
             cur_attr.context['mgr'] = field_name
+            if not hasattr(cur_attr, 'model_name'):
+                continue
+            cur_attr.domain = [('business_rules.kind', '=',
+                    '%s.%s_rule' %
+                        (utils.get_module_name(cls),
+                        field_name.split('_mgr')[0]))]
             setattr(cls, field_name, copy.copy(cur_attr))
+        cls.template = copy.copy(cls.template)
+        cls.template.model_name = cls.__name__
 
 
-class Coverage(ModelSQL, Offered):
+class Coverage(CoopSQL, Offered):
     'Coverage'
 
     __name__ = 'ins_product.coverage'
 
+    insurer = fields.Many2One('party.insurer', 'Insurer')
 
-class Product(ModelSQL, Offered):
+
+class Product(CoopSQL, Offered):
     'Product'
 
     __name__ = 'ins_product.product'
 
-    options = fields.Many2Many('ins_product-options-coverage', 'product',
-                               'coverage', 'Options')
+    options = fields.Many2Many('ins_product.product-options-coverage',
+        'product', 'coverage', 'Options')
+
+    @classmethod
+    def __setup__(cls):
+        super(Product, cls).__setup__()
 
 
-class ProductOptionsCoverage(ModelSQL):
+class ProductOptionsCoverage(CoopSQL):
     'Define Product - Coverage relations'
 
-    __name__ = 'ins_product-options-coverage'
+    __name__ = 'ins_product.product-options-coverage'
 
     product = fields.Many2One('ins_product.product',
                               'Product',
@@ -77,7 +91,7 @@ class ProductOptionsCoverage(ModelSQL):
                                required=True)
 
 
-class BusinessRuleManager(ModelSQL, ModelView):
+class BusinessRuleManager(CoopSQL, CoopView):
     'Business Rule Manager'
 
     __name__ = 'ins_product.business_rule_manager'
@@ -85,21 +99,30 @@ class BusinessRuleManager(ModelSQL, ModelView):
     belongs_to = fields.Function(
         fields.Reference('belongs_to', selection='get_offered_models'),
         'get_belongs_to')
+    template = fields.Many2One(None, 'Template')
     business_rules = fields.One2Many('ins_product.generic_business_rule',
         'manager', 'Business Rules', on_change=['business_rules'],
         context={'start_date': Eval('start_date')})
+
+    @classmethod
+    def __setup__(cls):
+        super(BusinessRuleManager, cls).__setup__()
+        cls.template = copy.copy(cls.template)
+        cls.template.model_name = cls.__name__
+        cls.__rpc__.update({'get_offered_models': RPC()})
 
     @staticmethod
     def get_offered_models():
         return utils.get_descendents(Offered)
 
     def get_belongs_to(self, name):
-        for offered_model, offered_name in self.get_offered_models():
+        for offered_model, _offered_name in self.get_offered_models():
             Offered = Pool().get(offered_model)
             field_name = Transaction().context.get('mgr')
-            offered = Offered.search([(field_name, '=', self.id)])
-            if offered is not None:
-                return '%s, %s' % (offered_model, offered.id)
+            if hasattr(Offered, 'search'):
+                offered = Offered.search([(field_name, '=', self.id)])
+                if len(offered) > 0:
+                    return '%s, %s' % (offered_model, offered[0].id)
         return ''
 
     def on_change_business_rules(self):
@@ -147,7 +170,7 @@ class BusinessRuleManager(ModelSQL, ModelView):
             for busines_rule in self.business_rules:
                 if busines_rule.start_date <= the_date:
                     return busines_rule
-        except ValueError, exception:
+        except ValueError, _exception:
             return None
 
         #Used????
@@ -161,7 +184,7 @@ class BusinessRuleManager(ModelSQL, ModelView):
             return res
 
 
-class GenericBusinessRule(ModelSQL, ModelView):
+class GenericBusinessRule(CoopSQL, CoopView):
     'Generic Business Rule'
 
     __name__ = 'ins_product.generic_business_rule'
@@ -218,32 +241,14 @@ class GenericBusinessRule(ModelSQL, ModelView):
     def get_kind():
         return utils.get_descendents_name(BusinessRuleRoot)
 
-#    def _getdefaults(self):
-#        '''This method is called whenever we want to have access to _defaults
-#        this is a hack to create an inline method whisch will instanciate
-#        for each business rules the first element in the list.Only the visible
-#        object will be instanciated'''
-#
-#        res = super(GenericBusinessRule, self)._getdefaults()
-#
-#        #Let's define a curry method to encapsulate the call with a parameter
-#        def default_rule(for_name=''):
-#            if Eval('kind') == for_name:
-#                return [{}]
-#            return []
-#
-#        for field_name, field in self._columns.iteritems():
-#            if (hasattr(field, 'model_name')
-#                and getattr(field, 'model_name')[-5:] == '_rule'):
-#                res[field_name] = utils.curry(
-#                    default_rule, for_name=field.model_name)
-#
-#        self.__defaults = res
-#        return res
-#    _defaults = property(fget=_getdefaults)
-
     def get_is_current(self, name):
-        BRM = Pool().get('ins_product.business_rule_manager')
+        #first we need the model for the manager (depends on the module used
+        if not hasattr(self.__cls__, 'manager'):
+            return False
+        manager_attr = getattr(self.__cls__, 'manager')
+        if not hasattr(manager_attr, 'model_name'):
+            return False
+        BRM = Pool().get(manager_attr.model_name)
         return self == BRM.get_good_rule_at_date(self.manager,
                 {'date': datetime.date.today()})
 
@@ -269,14 +274,23 @@ class GenericBusinessRule(ModelSQL, ModelView):
         return Transaction().context.get('start_date')
 
 
-class BusinessRuleRoot(ModelSQL, ModelView):
+class BusinessRuleRoot(CoopView):
     'Business Rule Root'
+
+    __name__ = 'ins_product.business_rule_root'
 
     generic_rule = fields.Many2One('ins_product.generic_business_rule',
                                    'Generic Rule')
+    template = fields.Many2One(None, 'Template')
+
+    @classmethod
+    def __setup__(cls):
+        super(BusinessRuleRoot, cls).__setup__()
+        cls.template = copy.copy(cls.template)
+        cls.template.model_name = cls.__name__
 
 
-class PricingRule(BusinessRuleRoot):
+class PricingRule(CoopSQL, BusinessRuleRoot):
     'Pricing Rule'
 
     __name__ = 'ins_product.pricing_rule'
@@ -284,7 +298,7 @@ class PricingRule(BusinessRuleRoot):
     price = fields.Numeric('Amount', digits=(16, 2), required=True)
 
 
-class EligibilityRule(BusinessRuleRoot):
+class EligibilityRule(CoopSQL, BusinessRuleRoot):
     'Eligibility Rule'
 
     __name__ = 'ins_product.eligibility_rule'

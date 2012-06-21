@@ -26,4 +26,8 @@ echo "Reinstalling contract"
 echo $SEP
 easy_install -UZ $REPOS_ROOT/coopbusiness/insurance_contract
 echo $SEP
+echo "Reinstalling insurance collective"
+echo $SEP
+easy_install -UZ $REPOS_ROOT/coopbusiness/insurance_collective
+echo $SEP
 

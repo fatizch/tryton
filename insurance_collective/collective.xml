@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+
+        <!--  ******************************************* 
+              **************    Product    **************
+              *******************************************-->
+        <!-- View for the main menu and the event -->
+        <record model="ir.action.act_window" id="act_product_form">
+            <field name="name">Insurance Plan</field>
+            <field name="res_model">ins_collective.product</field>
+        </record>
+
+        <!-- View that connects the form in the tree with the specification -->
+        <record model="ir.action.act_window.view" id="act_product_tree_view">
+            <field name="sequence" eval="10" />
+            <field name="view" ref="insurance_product.offered_view_tree" />
+            <field name="act_window" ref="act_product_form" />
+        </record>
+
+        <!-- View for the edition or the Form of product -->
+        <record model="ir.action.act_window.view" id="act_product_form_view">
+            <field name="sequence" eval="20" />
+            <field name="view" ref="insurance_product.product_view_form" />
+            <field name="act_window" ref="act_product_form" />
+        </record>
+
+        <menuitem parent="insurance_product.menu_product" sequence="10" id="menu_product_form"
+            icon="tryton-list" action="act_product_form" />
+        <!-- form view -->
+        <!-- /Product -->
+
+       <!-- View for the main menu and the event -->
+        <record model="ir.action.act_window" id="act_coverage_form">
+            <field name="name">Plan Coverages</field>
+            <field name="res_model">ins_collective.coverage</field>
+        </record>
+
+        <!-- View that connect the form in the tree with the specification -->
+        <record model="ir.action.act_window.view" id="act_coverage_form_view1">
+            <field name="sequence" eval="30" />
+            <field name="view" ref="insurance_product.offered_view_tree" />
+            <field name="act_window" ref="act_coverage_form" />
+        </record>
+
+        <!-- View for the edition or the Form of coverage -->
+        <record model="ir.action.act_window.view" id="act_coverage_form_view2">
+            <field name="sequence" eval="40" />
+            <field name="view" ref="insurance_product.coverage_view_form" />
+            <field name="act_window" ref="act_coverage_form" />
+        </record>
+
+        <menuitem parent="insurance_product.menu_product" sequence="20" id="menu_coverage_form"
+            icon="tryton-list" action="act_coverage_form" />
+        <!--/Coverage -->
+
+    </data>
+</tryton>

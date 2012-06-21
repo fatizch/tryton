@@ -34,6 +34,8 @@
                     <field name="start_date"/>
                     <label name="end_date" xalign="0"/>
                     <field name="end_date"/>
+                    <label name="template"/>
+                    <field name="template"/>
                     <notebook>
                         <page string="Managers" id="managers">
                             <label name="eligibility_mgr"/>
@@ -99,46 +101,19 @@
         <!--  ******************************************* 
               **************    Coverage    **************
               *******************************************-->
-
-        <!-- Coverage -->
-        <record model="ir.ui.view" id="coverage_view_tree">
-            <field name="model">ins_product.coverage</field>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Product">
-                        <field name="code"/>
-                        <field name="name"/>
-                        <field name="start_date"/>
-                        <field name="end_date"/>
-                </tree>
-                ]]>
-            </field>
-        </record>
-            <record model="ir.ui.view" id="coverage_view_form">
+        <!-- form view -->
+        <record model="ir.ui.view" id="coverage_view_form">
             <field name="model">ins_product.coverage</field>
             <field name="type">form</field>
+            <field name="inherit" ref="offered_view_form"/>
             <field name="arch" type="xml">
                 <![CDATA[
-                <form string="Offered">
-                    <label name="code" xalign="0"/>
-                    <field name="code"/>
-                    <label name="name" xalign="0"/>
-                    <field name="name"/>
-                    <newline/>
-                    <label name="start_date" xalign="0"/>
-                    <field name="start_date"/>
-                    <label name="end_date" xalign="0"/>
-                    <field name="end_date"/>
-                    <notebook>
-                        <page string="Managers" id="managers">
-                            <label name="eligibility_mgr"/>
-                            <field name="eligibility_mgr"/>
-                            <label name="pricing_mgr"/>
-                            <field name="pricing_mgr"/>
-                        </page>
-                    </notebook>
-                </form>
+                <data>
+                <xpath expr="/form/field[@name=&quot;end_date&quot;]" position="after">
+                    <label name="insurer" xalign="0"/>
+                    <field name="insurer" widget="selection"/>
+                </xpath>
+                </data>
                 ]]>
             </field>
         </record>
@@ -152,7 +127,7 @@
         <!-- View that connect the form in the tree with the specification -->
         <record model="ir.action.act_window.view" id="act_coverage_form_view1">
             <field name="sequence" eval="10" />
-            <field name="view" ref="coverage_view_tree" />
+            <field name="view" ref="offered_view_tree" />
             <field name="act_window" ref="act_coverage_form" />
         </record>
 
@@ -209,18 +184,78 @@
                          ]]>
             </field>
         </record>
+        <!--  ******************************************* 
+              ********    BusinessRuleManager    ********
+              *******************************************-->
         <record model="ir.ui.view" id="businessrulemanager_view_form">
             <field name="model">ins_product.business_rule_manager</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                          <![CDATA[
                              <form string="Business Rule Manager">
-                                <field name="business_rules"/>
+                                <label name="template"/>
+                                <field name="template"/>
+                                <newline/>
+                                <field name="business_rules" colspan="4"/>
                              </form>
                          ]]>
             </field>
         </record>
-
-
+        <!--  ******************************************* 
+              ********    BusinessRuleRoot    ********
+              *******************************************-->
+        <record model="ir.ui.view" id="businessruleroot_view_form">
+            <field name="model">ins_product.business_rule_root</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                         <![CDATA[
+                             <form string="Business Rule Root">
+                                <label name="template"/>
+                                <field name="template"/>
+                                <label name="generic_rule"/>
+                                <field name="generic_rule"/>
+                             </form>
+                         ]]>
+            </field>
+        </record>
+        <!--  ******************************************* 
+              ********    PricingRule    ********
+              *******************************************-->
+        <record model="ir.ui.view" id="pricingrule_view_form">
+            <field name="model">ins_product.pricing_rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="businessruleroot_view_form"/>
+            <field name="arch" type="xml">
+                         <![CDATA[
+                         <data>
+		                     <xpath expr="/form/field[@name=&quot;template&quot;]"
+                              position="after">
+                                <label name="price"/>
+                                <field name="price"/>
+		                     </xpath>
+                         </data>
+                         ]]>
+            </field>
+        </record>
+        
+        <!--  ******************************************* 
+              ********    EligibilityRule    ********
+              *******************************************-->
+        <record model="ir.ui.view" id="gligibilityrule_view_form">
+            <field name="model">ins_product.eligibility_rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="businessruleroot_view_form"/>
+            <field name="arch" type="xml">
+                         <![CDATA[
+                         <data>
+                             <xpath expr="/form/field[@name=&quot;template&quot;]"
+                              position="after">
+                                <label name="is_eligible"/>
+                                <field name="is_eligible"/>
+                             </xpath>
+                         </data>
+                         ]]>
+            </field>
+        </record>
     </data>
 </tryton>
