@@ -53,7 +53,6 @@
 						<form string="Subscription Process - Life Extension">
 							<label name="covered_elements"/>
 							<field name="covered_elements"/>
-							<field name="session_id"/> 
 						</form>
 					]]>
 			</field>

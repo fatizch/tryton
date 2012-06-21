@@ -128,6 +128,10 @@ class ContractTestCase(unittest.TestCase):
                             datetime.date.today())
             wizard.project.start_date += datetime.timedelta(days=2)
             wizard.project.subscriber = on_party
+            tmp = wizard.project.check_step(
+                wizard,
+                wizard.process_state.cur_step_desc)
+            self.assertEqual(tmp[0], False)
             wizard.project.product = on_product
             tmp = wizard.project.check_step(
                 wizard,

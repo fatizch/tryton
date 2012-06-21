@@ -9,6 +9,7 @@ from trytond.modules.coop_utils import get_descendents
 
 __all__ = [
         'SubscriptionManager',
+        'GenericContract',
         'Contract',
         'Option',
         'BillingManager',
@@ -56,12 +57,17 @@ class GenericExtension(ModelSQL, ModelView):
                                        'Coverages')
 
 
-class Contract(ModelSQL, ModelView):
+class GenericContract(ModelSQL, ModelView):
     '''
-    This class represents the contract, and will be at the center of
-    many business processes.
+        This class will provide the basics of all contracts :
+            Contract Number
+            Subscriber
+            Start_Date
+            Status
+            Management_Date
+            BillingManager
+            BrokerManager
     '''
-    __name__ = 'ins_contract.contract'
 
     # Effective date is the date at which the contract "starts" :
     #    The client pays its premium
@@ -79,6 +85,44 @@ class Contract(ModelSQL, ModelView):
                                   # required=True,
                                   select=1,
                                   size=CONTRACTNUMBER_MAX_LENGTH)
+
+    # The subscriber is the client which did (or will) sign the contract.
+    # It is an important part of the contract life, as he usually is the
+    # recipient of the letters of the contract, he will pay the premium etc...
+    #
+    # Some business rules might need some of the subscriber's data to compute.
+    subscriber = fields.Many2One('party.party',
+                                 'Subscriber',
+                                 select='0')
+
+    # Status represents the contract state at current time.
+    status = fields.Selection(CONTRACTSTATUSES,
+                              'Status',
+                              readonly=True)
+
+    # The broker manager will be used to describe the relation between the
+    # contract and its broker (if it exists)
+    broker_manager = fields.Many2One('ins_contract.broker_manager',
+                                     'Broker Manager')
+
+    # The billing manager will be in charge of all billing-related actions.
+    # The select statements for billing will use this object to get the list
+    # of tasks
+    billing_manager = fields.One2Many('ins_contract.billing_manager',
+                                      'contract',
+                                      'Billing Manager')
+
+    @staticmethod
+    def get_new_contract_number():
+        return 'Ct00000001'
+
+
+class Contract(GenericContract):
+    '''
+    This class represents the contract, and will be at the center of
+    many business processes.
+    '''
+    __name__ = 'ins_contract.contract'
 
     # The option list is very important, as it is what really "makes" the
     # contract. Almost all the main actions on the contract will use either
@@ -99,20 +143,6 @@ class Contract(ModelSQL, ModelView):
                               'Product',
                               required=True)
 
-    # The subscriber is the client which did (or will) sign the contract.
-    # It is an important part of the contract life, as he usually is the
-    # recipient of the letters of the contract, he will pay the premium etc...
-    #
-    # Some business rules might need some of the subscriber's data to compute.
-    subscriber = fields.Many2One('party.party',
-                                 'Subscriber',
-                                 select='0')
-
-    # Status represents the contract state at current time.
-    status = fields.Selection(CONTRACTSTATUSES,
-                              'Status',
-                              readonly=True)
-
     # On the other hand, the Product Extension will represents all product
     # specific data, including coverages description. It will be one major
     # element used in most of the product specific business rules.
@@ -127,25 +157,11 @@ class Contract(ModelSQL, ModelView):
                               [('ins_contract.contract', 'Contract'),
                                ('ins_product.product', 'Product')])
 
-    # The billing manager will be in charge of all billing-related actions.
-    # The select statements for billing will use this object to get the list
-    # of tasks
-    billing_manager = fields.One2Many('ins_contract.billing_manager',
-                                      'contract',
-                                      'Billing Manager')
-
     extension_life = fields.Many2One('ins_contract.extension_life',
                                      'Life Extension')
 
     extension_car = fields.Many2One('ins_contract.extension_car',
                                     'Car Extension')
-
-    broker_manager = fields.Many2One('ins_contract.broker_manager',
-                                     'Broker Manager')
-
-    @staticmethod
-    def get_new_contract_number():
-        return 'Ct00000001'
 
     @staticmethod
     def get_master(master):
@@ -306,7 +322,16 @@ class ExtensionCar(GenericExtension):
         return 'ins_contract.covered_car'
 
 
-class CoveredPerson(ModelSQL, ModelView):
+class SpecificCovered(ModelSQL, ModelView):
+    '''
+        This is the common part of all specific covered parts.
+
+        It will be later used to add extra functionnality (versionned part)
+    '''
+    pass
+
+
+class CoveredPerson(SpecificCovered):
     '''
         This is an extension of covered element in the case of a life product.
 
@@ -321,7 +346,7 @@ class CoveredPerson(ModelSQL, ModelView):
         return 'Covered Person'
 
 
-class CoveredCar(ModelSQL, ModelView):
+class CoveredCar(SpecificCovered):
     '''
         This is a covered car.
     '''
