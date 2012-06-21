@@ -73,6 +73,12 @@
                 ]]>
             </field>
         </record>
+        <record model="ir.ui.view" id="product_view_tree">
+            <field name="model">ins_product.product</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="offered_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
 
         <!-- View for the main menu and the event -->
         <record model="ir.action.act_window" id="act_product_form">
@@ -83,7 +89,7 @@
         <!-- View that connects the form in the tree with the specification -->
         <record model="ir.action.act_window.view" id="act_product_form_view1">
             <field name="sequence" eval="10" />
-            <field name="view" ref="offered_view_tree" />
+            <field name="view" ref="product_view_tree" />
             <field name="act_window" ref="act_product_form" />
         </record>
 
@@ -117,6 +123,12 @@
                 ]]>
             </field>
         </record>
+        <record model="ir.ui.view" id="coverage_view_tree">
+            <field name="model">ins_product.coverage</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="offered_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
         
         <!-- View for the main menu and the event -->
         <record model="ir.action.act_window" id="act_coverage_form">
@@ -125,9 +137,9 @@
         </record>
 
         <!-- View that connect the form in the tree with the specification -->
-        <record model="ir.action.act_window.view" id="act_coverage_form_view1">
+        <record model="ir.action.act_window.view" id="act_coverage_tree_view">
             <field name="sequence" eval="10" />
-            <field name="view" ref="offered_view_tree" />
+            <field name="view" ref="coverage_view_tree" />
             <field name="act_window" ref="act_coverage_form" />
         </record>
 
