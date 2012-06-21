@@ -148,6 +148,7 @@ class BusinessRuleManager(CoopSQL, CoopView):
             #if we change the start_date to a date after the end_date,
             #we reinitialize the end_date
             if (business_rule1['end_date'] is not None
+                and business_rule1['start_date'] is not None
                 and business_rule1['end_date'] < business_rule1['start_date']):
                 res['business_rules']['update'].append({
                         'id': business_rule1.id,
@@ -197,9 +198,9 @@ class GenericBusinessRule(CoopSQL, CoopView):
     is_current = fields.Function(fields.Boolean('Is current'),
         'get_is_current')
     pricing_rule = fields.One2Many('ins_product.pricing_rule',
-        'generic_rule', 'Pricing Rule')
+        'generic_rule', 'Pricing Rule', size=1)
     eligibilty_rule = fields.One2Many('ins_product.eligibility_rule',
-        'generic_rule', 'Eligibility Rule')
+        'generic_rule', 'Eligibility Rule', size=1)
 
     @classmethod
     def __setup__(cls):
@@ -218,7 +219,7 @@ class GenericBusinessRule(CoopSQL, CoopView):
                 'invisible': (Eval('kind') != attr.model_name)}
             setattr(cls, field_name, attr)
 
-        cls.__rpc__.update({'is_current': RPC()})
+        #cls.__rpc__.update({'is_current': RPC()})
         cls._order.insert(0, ('start_date', 'ASC'))
         cls._constraints += [('check_dates', 'businessrule_overlaps')]
         cls._error_messages.update({'businessrule_overlaps':
@@ -243,9 +244,9 @@ class GenericBusinessRule(CoopSQL, CoopView):
 
     def get_is_current(self, name):
         #first we need the model for the manager (depends on the module used
-        if not hasattr(self.__cls__, 'manager'):
+        if not hasattr(self.__class__, 'manager'):
             return False
-        manager_attr = getattr(self.__cls__, 'manager')
+        manager_attr = getattr(self.__class__, 'manager')
         if not hasattr(manager_attr, 'model_name'):
             return False
         BRM = Pool().get(manager_attr.model_name)
