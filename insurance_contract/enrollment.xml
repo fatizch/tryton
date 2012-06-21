@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<tryton>
+	<data>
+		<!-- Tree view for contract -->
+		<record model="ir.ui.view" id="enrollment_view_tree">
+			<field name="model">ins_contract.enrollment</field>
+			<field name="type">tree</field>
+            <field name="inherit" ref="insurance_contract.contract_view_tree"/>
+			<field name="arch" type="xml">                 
+					<![CDATA[                 
+						<data>
+							<xpath expr="/tree/field[@name=&quot;product&quot;]"
+			                    position="replace_attributes">
+			                    <field name="on_contract"/>
+			                </xpath>
+						</data>
+					]]>
+			</field>
+		</record>
+
+		<!-- form view -->
+		<record model="ir.ui.view" id="enrollment_view_form">
+			<field name="model">ins_contract.enrollment</field>
+			<field name="type">form</field>
+            <field name="inherit" ref="insurance_contract.contract_view_form"/>
+			<field name="arch" type="xml">
+					 <![CDATA[
+					 	<data>
+					 		<xpath expr="/form/group/label[@name=&quot;product&quot;]"
+			                    position="replace_attributes">
+			                    <label name="on_contract" xalign="0"/>
+			                </xpath>
+			                <xpath expr="/form/group/field[@name=&quot;product&quot;]"
+			                    position="replace_attributes">
+			                    <field name="on_contract"/>
+			                </xpath>
+					 	</data>
+					 ]]>
+			</field>
+		</record>
+
+		<!-- View for the main menu and the event -->
+		<record model="ir.action.act_window" id="act_enrollment_form">
+			<field name="name">Enrollment</field>
+			<field name="res_model">ins_contract.enrollment</field>
+		</record>
+
+		<!-- View that connect the form in the tree with the specification -->
+		<record model="ir.action.act_window.view" id="act_enrollment_form_view1">
+			<field name="sequence" eval="50" />
+			<field name="view" ref="enrollment_view_tree" />
+			<field name="act_window" ref="act_enrollment_form" />
+		</record>
+
+		<!-- View for the edition or the Form of product -->
+		<record model="ir.action.act_window.view" id="act_enrollment_form_view2">
+			<field name="sequence" eval="60" />
+			<field name="view" ref="enrollment_view_form" />
+			<field name="act_window" ref="act_enrollment_form" />
+		</record>
+
+		<menuitem parent="menu_contract" sequence="7"
+			id="menu_enrollment_form" icon="tryton-list" action="act_enrollment_form"/>
+	</data>
+</tryton>
