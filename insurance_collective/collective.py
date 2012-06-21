@@ -11,23 +11,11 @@ __all__ = ['GroupInsurancePlan', 'GroupInsuranceCoverage',
            'GroupEligibilityRule']
 
 
-class GroupOffered(Offered):
-    'Group Offered'
-    __name__ = 'ins_collective.group_offered'
-    _table = None
-
-    @classmethod
-    def __setup__(cls):
-        super(GroupOffered, cls).__setup__()
-        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
-
-
 class GroupInsurancePlan(Product):
     'Group Insurance Plan'
     __name__ = 'ins_collective.product'
     _table = None
 
-    test = fields.Char('toto')
     @classmethod
     def __setup__(cls):
         super(GroupInsurancePlan, cls).__setup__()
@@ -79,7 +67,7 @@ class GroupGenericBusinessRule(GenericBusinessRule):
 
 
 class GroupPricingRule(PricingRule):
-    'Group Pricing Rule'
+    'Pricing Rule'
     __name__ = 'ins_collective.pricing_rule'
     _table = None
 
@@ -90,7 +78,7 @@ class GroupPricingRule(PricingRule):
 
 
 class GroupEligibilityRule(EligibilityRule):
-    'Group Eligibility Rule'
+    'Eligibility Rule'
     __name__ = 'ins_collective.eligibility_rule'
     _table = None
 

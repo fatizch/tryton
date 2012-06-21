@@ -4,11 +4,11 @@ from product import *
 
 def register():
     Pool.register(
+        BusinessRuleManager,
         Offered,
         Coverage,
         Product,
         ProductOptionsCoverage,
-        BusinessRuleManager,
         GenericBusinessRule,
         BusinessRuleRoot,
         PricingRule,

@@ -219,7 +219,6 @@ class GenericBusinessRule(CoopSQL, CoopView):
                 'invisible': (Eval('kind') != attr.model_name)}
             setattr(cls, field_name, attr)
 
-        #cls.__rpc__.update({'is_current': RPC()})
         cls._order.insert(0, ('start_date', 'ASC'))
         cls._constraints += [('check_dates', 'businessrule_overlaps')]
         cls._error_messages.update({'businessrule_overlaps':

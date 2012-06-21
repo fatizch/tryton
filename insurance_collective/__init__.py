@@ -4,10 +4,10 @@ from collective import *
 
 def register():
     Pool.register(
+        GroupBusinessRuleManager,
         GroupInsurancePlan,
         GroupInsuranceCoverage,
         GroupInsurancePlanOptionsCoverage,
-        GroupBusinessRuleManager,
         GroupGenericBusinessRule,
         GroupPricingRule,
         GroupEligibilityRule,

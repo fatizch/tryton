@@ -18,10 +18,17 @@
             <field name="act_window" ref="act_product_form" />
         </record>
 
+        <record model="ir.ui.view" id="product_view_form">
+            <field name="model">ins_collective.product</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_product.product_view_form"/>
+            <field name="arch" type="xml"/>
+        </record>
+            
         <!-- View for the edition or the Form of product -->
         <record model="ir.action.act_window.view" id="act_product_form_view">
             <field name="sequence" eval="20" />
-            <field name="view" ref="insurance_product.product_view_form" />
+            <field name="view" ref="product_view_form" />
             <field name="act_window" ref="act_product_form" />
         </record>
 
@@ -29,13 +36,22 @@
             icon="tryton-list" action="act_product_form" />
         <!-- form view -->
         <!-- /Product -->
-
+        
+        <!--  ******************************************* 
+              *************    Coverage    **************
+              *******************************************-->
        <!-- View for the main menu and the event -->
         <record model="ir.action.act_window" id="act_coverage_form">
             <field name="name">Plan Coverages</field>
             <field name="res_model">ins_collective.coverage</field>
         </record>
-
+        
+        <record model="ir.ui.view" id="coverage_view_form">
+            <field name="model">ins_collective.coverage</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_product.coverage_view_form"/>
+            <field name="arch" type="xml"/>
+        </record>
         <!-- View that connect the form in the tree with the specification -->
         <record model="ir.action.act_window.view" id="act_coverage_form_view1">
             <field name="sequence" eval="30" />
@@ -46,13 +62,60 @@
         <!-- View for the edition or the Form of coverage -->
         <record model="ir.action.act_window.view" id="act_coverage_form_view2">
             <field name="sequence" eval="40" />
-            <field name="view" ref="insurance_product.coverage_view_form" />
+            <field name="view" ref="coverage_view_form" />
             <field name="act_window" ref="act_coverage_form" />
         </record>
 
         <menuitem parent="insurance_product.menu_product" sequence="20" id="menu_coverage_form"
             icon="tryton-list" action="act_coverage_form" />
         <!--/Coverage -->
-
+        
+        <!--  ******************************************* 
+              ********    GenericBusinessRule    ********
+              *******************************************-->
+        <!-- GenericBusinessRule -->
+        <!-- form view -->
+        <record model="ir.ui.view" id="genericbusinessrule_view_form">
+            <field name="model">ins_collective.generic_business_rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_product.genericbusinessrule_view_form"/>
+            <field name="arch" type="xml"/>
+        </record>
+        <record model="ir.ui.view" id="genericbusinessrule_view_tree">
+            <field name="model">ins_collective.generic_business_rule</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_product.genericbusinessrule_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+        
+        <!--  ******************************************* 
+              ********    BusinessRuleManager    ********
+              *******************************************-->
+        <record model="ir.ui.view" id="businessrulemanager_view_form">
+            <field name="model">ins_collective.business_rule_manager</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_product.businessrulemanager_view_form"/>
+            <field name="arch" type="xml"/>
+        </record>
+        
+        <!--  ******************************************* 
+              ********    PricingRule    ********
+              *******************************************-->
+        <record model="ir.ui.view" id="pricingrule_view_form">
+            <field name="model">ins_collective.pricing_rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_product.pricingrule_view_form"/>
+            <field name="arch" type="xml"/>
+        </record>
+        
+        <!--  ******************************************* 
+              ********    EligibilityRule    ********
+              *******************************************-->
+        <record model="ir.ui.view" id="eligibilityrule_view_form">
+            <field name="model">ins_collective.eligibility_rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_product.eligibilityrule_view_form"/>
+            <field name="arch" type="xml"/>
+        </record>
     </data>
 </tryton>

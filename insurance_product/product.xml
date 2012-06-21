@@ -241,7 +241,7 @@
         <!--  ******************************************* 
               ********    EligibilityRule    ********
               *******************************************-->
-        <record model="ir.ui.view" id="gligibilityrule_view_form">
+        <record model="ir.ui.view" id="eligibilityrule_view_form">
             <field name="model">ins_product.eligibility_rule</field>
             <field name="type">form</field>
             <field name="inherit" ref="businessruleroot_view_form"/>
