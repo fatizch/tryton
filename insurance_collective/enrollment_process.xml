@@ -3,15 +3,15 @@
 	<data>
 		<record model="ir.action.wizard" id="enrollment_view_action">
 			<field name="name">New Enrollment</field>
-			<field name="wiz_name">ins_contract.enrollment_process</field>
+			<field name="wiz_name">ins_collective.enrollment_process</field>
 			<field name="model">ir.ui.menu</field>
 		</record>
 
-		<menuitem parent="menu_contract" action="enrollment_view_action"
+		<menuitem parent="insurance_contract.menu_contract" action="enrollment_view_action"
 			id="menu_start_enroll"/>
 
 		<record model="ir.ui.view" id="enrollment_project_view">
-			<field name="model">ins_contract.enrollment_process.project</field>
+			<field name="model">ins_collective.enrollment_process.project</field>
 			<field name="type">form</field>
             <field name="inherit" ref="insurance_contract.project_view"/>
 			<field name="arch" type="xml">
@@ -32,7 +32,7 @@
 
 		<record model="ir.action.wizard" id="resume_enrollment_process">
             <field name="name">Resume Process</field>
-            <field name="wiz_name">ins_contract.enrollment_process</field>
+            <field name="wiz_name">ins_collective.enrollment_process</field>
             <field name="model">ins_process.suspended_process</field>
         </record>
 	</data>
@@ -42,7 +42,7 @@
 	<data>
 		<record model="ins_process.process_desc" id="enrollment_process_desc">
 			<field name="name">Enrollment Process Descriptor</field>
-			<field name="process_model">ins_contract.enrollment_process</field>	
+			<field name="process_model">ins_collective.enrollment_process</field>	
 		</record>
 		<record model="ins_process.step_desc" id="enrollment_project_step_desc">
 			<field name="button_next">True</field>
@@ -56,7 +56,7 @@
 			<field name="process" ref="enrollment_process_desc"/>
 			<field name="virtual_step">0</field>
 			<field name="sequence">1</field>
-			<field name="step_model">ins_contract.enrollment_process.project</field>	
+			<field name="step_model">ins_collective.enrollment_process.project</field>	
 		</record>
 		<record model="ins_process.step_desc" id="enrollment_option_selection_step_desc">
 			<field name="button_next">True</field>

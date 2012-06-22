@@ -20,8 +20,8 @@ class Enrollment(Contract):
         with the insurance company, which uses the GBP contract of the company
         as a product.
     '''
-    __name__ = 'ins_contract.enrollment'
+    __name__ = 'ins_collective.enrollment'
 
     on_contract = fields.Many2One(
-        'ins_contract.gbp_contract',
+        'ins_collective.gbp_contract',
         'GBP Contract')

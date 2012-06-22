@@ -20,6 +20,7 @@ def register():
         ExtensionGBPState,
         GBPSubscriptionProcessState,
         Enrollment,
+        EnrollmentProcessState,
         ProjectStateEnrollment,
         module='insurance_collective', type_='model')
     Pool.register(

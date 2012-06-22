@@ -22,7 +22,7 @@ class GBPContract(GenericContract):
         In fact, it defines a product, and as such shall not be mixed with
         usual contracts.
     '''
-    __name__ = 'ins_contract.gbp_contract'
+    __name__ = 'ins_collective.gbp_contract'
 
     # GBP contract usually weigh a lot of money, so the subscribing company
     # usually have a dedicated contact for the insurance company on this
@@ -38,5 +38,5 @@ class GBPContract(GenericContract):
     # instance), which made each gbp contract a unique offered product for the
     # employees.
     final_product = fields.Many2One(
-        'ins_product.product',
+        'ins_collective.product',
         'Final Product')

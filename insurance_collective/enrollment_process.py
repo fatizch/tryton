@@ -20,8 +20,6 @@ from trytond.modules.insurance_process import DependantState
 from trytond.modules.insurance_process import CoopView
 from trytond.modules.coop_utils import get_descendents
 
-from contract import OPTIONSTATUS
-
 from trytond.modules.insurance_contract import ProjectState
 from trytond.modules.insurance_contract import SubscriptionProcess
 
@@ -36,6 +34,7 @@ from trytond.modules.insurance_contract import SubscriptionProcess
 __all__ = [
         'ProjectStateEnrollment',
         'EnrollmentProcess',
+        'EnrollmentProcessState',
            ]
 
 
@@ -44,15 +43,15 @@ class ProjectStateEnrollment(ProjectState):
         This step should be the first one, as it asks the user which product
         the contract will be based on, and who will be the client.
     '''
-    __name__ = 'ins_contract.enrollment_process.project'
+    __name__ = 'ins_collective.enrollment_process.project'
 
     # This is a core field, it will be used all along the process to ask for
     # directions, client side rules, etc...
-    product = fields.Many2One('ins_product.product',
+    product = fields.Many2One('ins_collective.product',
                               'Product')
 
     on_contract = fields.Many2One(
-        'ins_contract.gbp_contract',
+        'ins_collective.gbp_contract',
         'GBP Contract')
 
     # Override this control, it is not the same as before.
@@ -73,11 +72,20 @@ class ProjectStateEnrollment(ProjectState):
         return 'GBP Contract Selection'
 
 
+class EnrollmentProcessState(ProcessState, WithAbstract):
+    '''
+        The process state for the subscription process must have an abstract
+        contract.
+    '''
+    __abstracts__ = [('for_contract', 'ins_collective.enrollment')]
+    __name__ = 'ins_collective.enrollment_process.process_state'
+
+
 class EnrollmentProcess(SubscriptionProcess):
     '''
         This class defines the enrollment process.
     '''
-    __name__ = 'ins_contract.enrollment_process'
+    __name__ = 'ins_collective.enrollment_process'
 
-    project = CoopStateView('ins_contract.enrollment_process.project',
-                            'insurance_contract.enrollment_project_view')
+    project = CoopStateView('ins_collective.enrollment_process.project',
+                            'insurance_collective.enrollment_project_view')

@@ -3,7 +3,7 @@
 	<data>
 		<!-- Tree view for contract -->
 		<record model="ir.ui.view" id="enrollment_view_tree">
-			<field name="model">ins_contract.enrollment</field>
+			<field name="model">ins_collective.enrollment</field>
 			<field name="type">tree</field>
             <field name="inherit" ref="insurance_contract.contract_view_tree"/>
 			<field name="arch" type="xml">                 
@@ -20,7 +20,7 @@
 
 		<!-- form view -->
 		<record model="ir.ui.view" id="enrollment_view_form">
-			<field name="model">ins_contract.enrollment</field>
+			<field name="model">ins_collective.enrollment</field>
 			<field name="type">form</field>
             <field name="inherit" ref="insurance_contract.contract_view_form"/>
 			<field name="arch" type="xml">
@@ -42,7 +42,7 @@
 		<!-- View for the main menu and the event -->
 		<record model="ir.action.act_window" id="act_enrollment_form">
 			<field name="name">Enrollment</field>
-			<field name="res_model">ins_contract.enrollment</field>
+			<field name="res_model">ins_collective.enrollment</field>
 		</record>
 
 		<!-- View that connect the form in the tree with the specification -->
@@ -59,7 +59,7 @@
 			<field name="act_window" ref="act_enrollment_form" />
 		</record>
 
-		<menuitem parent="menu_contract" sequence="7"
+		<menuitem parent="insurance_contract.menu_contract" sequence="7"
 			id="menu_enrollment_form" icon="tryton-list" action="act_enrollment_form"/>
 	</data>
 </tryton>

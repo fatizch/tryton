@@ -3,15 +3,15 @@
 	<data>
 		<record model="ir.action.wizard" id="gbp_project_view_action">
 			<field name="name">New GBP Subscription Process</field>
-			<field name="wiz_name">ins_contract.gbp_subs_process</field>
+			<field name="wiz_name">ins_collective.gbp_subs_process</field>
 			<field name="model">ir.ui.menu</field>
 		</record>
 
-		<menuitem parent="menu_contract" action="gbp_project_view_action"
+		<menuitem parent="insurance_contract.menu_contract" action="gbp_project_view_action"
 			id="menu_start_gbp_subs"/>
 
 		<record model="ir.ui.view" id="gbp_project_view">
-			<field name="model">ins_contract.gbp_subs_process.project</field>
+			<field name="model">ins_collective.gbp_subs_process.project</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 					<![CDATA[ 
@@ -30,7 +30,7 @@
 		</record>
 
 		<record model="ir.ui.view" id="gbp_extension_view">
-			<field name="model">ins_contract.gbp_subs_process.extension_gbp</field>
+			<field name="model">ins_collective.gbp_subs_process.extension_gbp</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 					<![CDATA[
@@ -46,7 +46,7 @@
 		
 		<record model="ir.action.wizard" id="resume_gbp_subs_process">
             <field name="name">Resume Process</field>
-            <field name="wiz_name">ins_contract.gbp_subs_process</field>
+            <field name="wiz_name">ins_collective.gbp_subs_process</field>
             <field name="model">ins_process.suspended_process</field>
         </record>
 	</data>
@@ -56,7 +56,7 @@
 	<data>
 		<record model="ins_process.process_desc" id="gbp_subs_process_desc">
 			<field name="name">GBP Subscription Process Descriptor</field>
-			<field name="process_model">ins_contract.gbp_subs_process</field>	
+			<field name="process_model">ins_collective.gbp_subs_process</field>	
 		</record>
 		<record model="ins_process.step_desc" id="gbp_project_step_desc">
 			<field name="button_next">True</field>
@@ -70,7 +70,7 @@
 			<field name="process" ref="gbp_subs_process_desc"/>
 			<field name="virtual_step">0</field>
 			<field name="sequence">1</field>
-			<field name="step_model">ins_contract.gbp_subs_process.project</field>	
+			<field name="step_model">ins_collective.gbp_subs_process.project</field>	
 		</record>
 		<record model="ins_process.step_desc" id="gbp_extension_step_desc">
 			<field name="button_next"></field>
@@ -84,7 +84,7 @@
 			<field name="process" ref="gbp_subs_process_desc"/>
 			<field name="virtual_step">0</field>
 			<field name="sequence">2</field>
-			<field name="step_model">ins_contract.gbp_subs_process.extension_gbp</field>	
+			<field name="step_model">ins_collective.gbp_subs_process.extension_gbp</field>	
 		</record>
 	</data>
 </tryton>

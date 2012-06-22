@@ -20,8 +20,6 @@ from trytond.modules.insurance_process import DependantState
 from trytond.modules.insurance_process import CoopView
 from trytond.modules.coop_utils import get_descendents
 
-from contract import OPTIONSTATUS
-
 ###############################################################################
 # This is the Subscription Process. It is a process (which uses the           #
 # CoopProcess framework) which allows to create a contract from scratch.      #
@@ -43,7 +41,7 @@ class ProjectGBPState(CoopStep):
         This step should be the first one, as it asks the user which product
         the contract will be based on, and who will be the client.
     '''
-    __name__ = 'ins_contract.gbp_subs_process.project'
+    __name__ = 'ins_collective.gbp_subs_process.project'
 
     # This will be the effective date of our contract. It is necessary to have
     # it at this step for it decides which product will be available.
@@ -54,8 +52,7 @@ class ProjectGBPState(CoopStep):
                                  'Subscriber')
 
     broker = fields.Many2One('party.party',
-                             'Broker',
-                             states={'invisible': ~Eval('product')})
+                             'Broker')
 
     # Default start_date is today
     @staticmethod
@@ -98,14 +95,14 @@ class ExtensionGBPState(CoopStep):
     '''
         This a process step which will be used for Life product subscriptions.
     '''
-    __name__ = 'ins_contract.gbp_subs_process.extension_gbp'
+    __name__ = 'ins_collective.gbp_subs_process.extension_gbp'
 
     contact = fields.Many2One(
         'party.party',
         'Subscriber Contact')
 
     final_product = fields.One2Many(
-        'ins_product.product',
+        'ins_collective.product',
         None,
         'Final Product')
 
@@ -158,8 +155,8 @@ class GBPSubscriptionProcessState(ProcessState, WithAbstract):
         The process state for the subscription process must have an abstract
         contract.
     '''
-    __abstracts__ = [('for_contract', 'ins_contract.gbp_contract')]
-    __name__ = 'ins_contract.gbp_subs_process.process_state'
+    __abstracts__ = [('for_contract', 'ins_collective.gbp_contract')]
+    __name__ = 'ins_collective.gbp_subs_process.process_state'
 
 
 class GBPSubscriptionProcess(CoopProcess):
@@ -167,9 +164,9 @@ class GBPSubscriptionProcess(CoopProcess):
         This class defines the subscription process. It asks the user all that
         will be needed to finally create a contract.
     '''
-    __name__ = 'ins_contract.gbp_subs_process'
+    __name__ = 'ins_collective.gbp_subs_process'
 
-    process_state = StateView('ins_contract.gbp_subs_process.process_state',
+    process_state = StateView('ins_collective.gbp_subs_process.process_state',
                               '',
                               [])
 
@@ -178,11 +175,11 @@ class GBPSubscriptionProcess(CoopProcess):
         return 'GBP Subscription Process'
 
     # Here we just have to declare our steps
-    project = CoopStateView('ins_contract.gbp_subs_process.project',
-                            'insurance_contract.gbp_project_view')
+    project = CoopStateView('ins_collective.gbp_subs_process.project',
+                            'insurance_collective.gbp_project_view')
     extension_gbp = CoopStateView(
-        'ins_contract.gbp_subs_process.extension_gbp',
-        'insurance_contract.gbp_extension_view')
+        'ins_collective.gbp_subs_process.extension_gbp',
+        'insurance_collective.gbp_extension_view')
 
     # And do something when validation occurs
     def do_complete(self):
