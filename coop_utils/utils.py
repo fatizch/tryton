@@ -37,7 +37,7 @@ def get_descendents_name(from_class):
     return result
 
 
-class DynamicSelection(ModelSQL, ModelView):
+class DynamicSelection(CoopSQL, CoopView):
     'Dynamic Selection'
 
     __name__ = 'coop.dynamic_selection'
