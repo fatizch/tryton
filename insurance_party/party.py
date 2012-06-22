@@ -55,15 +55,15 @@ class Party:
                 setter='set_is_actor')
             setattr(cls, is_actor_var_name, field)
 
-            if not getattr(cls, 'on_change_%s' % is_actor_var_name, None):
-                for kls in cls.__mro__:
-                    if 'on_change_generic' in kls.__dict__:
-                        on_change_generic = kls.__dict__['on_change_generic']
-                        on_change = functools.partial(on_change_generic,
-                            is_role=is_actor_var_name)
-                        setattr(cls, 'on_change_%s' % is_actor_var_name,
-                            on_change)
-                        break
+#            if not getattr(cls, 'on_change_%s' % is_actor_var_name, None):
+#                for kls in cls.__mro__:
+#                    if 'on_change_generic' in kls.__dict__:
+#                        on_change_generic = kls.__dict__['on_change_generic']
+#                        on_change = functools.partial(on_change_generic,
+#                            is_role=is_actor_var_name)
+#                        setattr(cls, 'on_change_%s' % is_actor_var_name,
+#                            on_change)
+#                        break
 
     def get_is_actor(self, name):
         field_name = Party.get_actor_var_name(name)
@@ -86,6 +86,15 @@ class Party:
             res[role].setdefault('remove', [])
             res[role]['remove'].append(self[role][0].id)
         return res
+
+    def on_change_is_insurer(self):
+        return self.on_change_generic('is_insurer')
+
+    def on_change_is_broker(self):
+        return self.on_change_generic('is_broker')
+
+    def on_change_is_customer(self):
+        return self.on_change_generic('is_customer')
 
     @classmethod
     def set_is_actor(cls, parties, name, value):
