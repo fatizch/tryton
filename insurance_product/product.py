@@ -8,7 +8,7 @@ from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
-from trytond.modules.coop_utils import utils, CoopView, CoopSQL
+from trytond.modules.coop_utils import utils, CoopView, CoopSQL, Many2OneForm
 
 __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
            'BusinessRuleManager', 'GenericBusinessRule', 'BusinessRuleRoot',

@@ -1,12 +1,11 @@
 #-*- coding:utf-8 -*-
 import functools
 
-from trytond.model import ModelView, ModelSQL, fields as fields
+from trytond.model import fields as fields
 from trytond.pyson import Eval
-from trytond.pool import Pool
 from trytond.pool import PoolMeta
 
-from trytond.modules.coop_utils import utils as utils
+from trytond.modules.coop_utils import utils, CoopView, CoopSQL
 
 __all__ = ['Party', 'Actor', 'PersonRelations', 'Person', 'LegalEntity',
            'Insurer', 'Broker', 'Customer', ]
@@ -93,7 +92,7 @@ class Party:
         pass
 
 
-class Actor(ModelView):
+class Actor(CoopView):
     'Actor'
     _inherits = {'party.party': 'party'}
     __name__ = 'party.actor'
@@ -104,7 +103,7 @@ class Actor(ModelView):
                     required=True, ondelete='CASCADE', select=True)
 
 
-class PersonRelations(ModelSQL, ModelView):
+class PersonRelations(CoopSQL, CoopView):
     'Person Relations'
 
     __name__ = 'party.person-relations'
@@ -131,7 +130,7 @@ class PersonRelations(ModelSQL, ModelView):
         return self.get_reverse_kind(name)
 
 
-class Person(ModelSQL, Actor):
+class Person(CoopSQL, Actor):
     'Person'
 
     __name__ = 'party.person'
@@ -161,25 +160,25 @@ class Person(ModelSQL, Actor):
         return res
 
 
-class LegalEntity(ModelSQL, Actor):
+class LegalEntity(CoopSQL, Actor):
     'Legal Entity'
 
     __name__ = 'party.legal_entity'
 
 
-class Insurer(ModelSQL, Actor):
+class Insurer(CoopSQL, Actor):
     'Insurer'
 
     __name__ = 'party.insurer'
 
 
-class Broker(ModelSQL, Actor):
+class Broker(CoopSQL, Actor):
     'Broker'
 
     __name__ = 'party.broker'
 
 
-class Customer(ModelSQL, Actor):
+class Customer(CoopSQL, Actor):
     'Customer'
 
     __name__ = 'party.customer'
