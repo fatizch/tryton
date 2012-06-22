@@ -1,5 +1,9 @@
 from trytond.pool import Pool
 from collective import *
+from gbp_contract import *
+from enrollment import *
+from gbp_subs_process import *
+from enrollment_process import *
 
 
 def register():
@@ -11,4 +15,14 @@ def register():
         GroupGenericBusinessRule,
         GroupPricingRule,
         GroupEligibilityRule,
+        GBPContract,
+        ProjectGBPState,
+        ExtensionGBPState,
+        GBPSubscriptionProcessState,
+        Enrollment,
+        ProjectStateEnrollment,
         module='insurance_collective', type_='model')
+    Pool.register(
+        GBPSubscriptionProcess,
+        EnrollmentProcess,
+        module='insurance_collective', type_='wizard')
