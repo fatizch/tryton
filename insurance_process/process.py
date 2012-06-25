@@ -61,13 +61,21 @@ class WithAbstract(object):
             res = []
             if not len(value) > 0:
                 return res
-            if isinstance(field_desc, (fields.One2Many, fields.Many2Many)):
+            if isinstance(field_desc, (
+                    fields.One2Many,
+                    fields.Many2Many)):
+                if isinstance(field_desc, fields.Many2Many):
+                    relation_model = Pool().get(field_desc.relation_name)
+                    rel_field = relation_model._fields[field_desc.target]
+                    for_model = rel_field.model_name
+                else:
+                    for_model = field_desc.model_name
                 for elem in value:
                     if isinstance(elem, Model):
                         res.append(WithAbstract.create_field(elem))
                     elif isinstance(elem, (dict, int, long)):
                         res.append(WithAbstract.create_abstract(
-                            field_desc.model_name,
+                            for_model,
                             elem))
                     else:
                         raise BadDataKeyError
@@ -318,12 +326,14 @@ class CoopProcess(Wizard):
                                    object_hook=object_hook)
             # Then update everything.
             for state_name, state in self.states.iteritems():
-                if isinstance(state, CoopStateView):
+                if isinstance(state, StateView):
                     Target = Pool().get(state.model_name)
                     susp_data.setdefault(state_name, {})
                     setattr(self, state_name, Target(**susp_data[state_name]))
             self.process_state.from_susp_process = susp_process.id
             self.dirty = True
+        else:
+            self.raise_user_error('Could not find process to init from')
 
     def transition_steps_start(self):
         # We check if we are currently trying to resume a suspended process
@@ -1308,9 +1318,7 @@ class DummyProcess(CoopProcess):
     # This is a Process. It inherits of CoopProcess.
     __name__ = 'ins_process.dummy_process'
 
-    process_state = StateView('ins_process.dummy_process_state',
-                              '',
-                              [])
+    process_state_model = 'ins_process.dummy_process_state'
 
     # We just need to declare the two steps
     dummy_step = CoopStateView('ins_process.dummy_process.dummy_step',
