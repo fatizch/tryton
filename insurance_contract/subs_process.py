@@ -22,6 +22,8 @@ from trytond.modules.coop_utils import get_descendents
 
 from contract import OPTIONSTATUS
 
+from trytond.modules.insurance_product import Coverage
+
 ###############################################################################
 # This is the Subscription Process. It is a process (which uses the           #
 # CoopProcess framework) which allows to create a contract from scratch.      #
@@ -146,6 +148,11 @@ class CoverageDisplayer(CoopView):
     status = fields.Selection(OPTIONSTATUS,
                               'Status')
 
+    def init_from_coverage(self, for_coverage):
+        self.coverage = for_coverage
+        self.start_date = for_coverage.start_date
+        self.status = 'Active'
+
 
 class OptionSelectionState(CoopStep):
     '''
@@ -184,11 +191,14 @@ class OptionSelectionState(CoopStep):
         #
         # So we go through the options of our product, then create a displayer
         # which will be used to ask for input from the user.
+        CoverageDisplayer = Pool().get(wizard.give_displayer_model())
         for coverage in wizard.project.product.options:
-            options.append({'coverage': coverage.id,
-                            'start_date': max(coverage.start_date,
-                                             wizard.project.start_date),
-                           'status': 'Active'})
+            cur_displayer = CoverageDisplayer()
+            cur_displayer.init_from_coverage(coverage)
+            cur_displayer.start_date = max(
+                cur_displayer.start_date,
+                wizard.project.start_date)
+            options.append(cur_displayer)
         # Then set those displayers as the options field of our current step.
         wizard.option_selection.options = options
         return (True, [])
@@ -219,7 +229,7 @@ class OptionSelectionState(CoopStep):
     def post_step_create_options(wizard):
         contract = WithAbstract.get_abstract_objects(wizard, 'for_contract')
         list_options = []
-        Option = Pool().get('ins_contract.option')
+        Option = Pool().get(contract.give_option_model())
         for option in wizard.option_selection.options:
             if option.status != 'Active':
                 continue
@@ -253,12 +263,23 @@ class CoveredDataDesc(CoopView):
 
     end_date = fields.Date('End Date')
 
-    for_coverage = fields.Many2One('ins_product.coverage',
-                                   'For coverage')
+    for_coverage = fields.Reference(
+        'For coverage',
+        'get_coverages_model')
 
     @staticmethod
     def get_covered_elem_model():
         return get_descendents(DependantState)
+
+    @staticmethod
+    def get_coverages_model():
+        return get_descendents(Coverage)
+
+    def init_from_coverage(self, for_coverage):
+        self.start_date = for_coverage.start_date
+        self.for_coverage = '%s,%s' % (
+            for_coverage.coverage.__name__,
+            for_coverage.coverage.id)
 
 
 class CoveredElementDesc(CoopView):
@@ -276,11 +297,11 @@ class CoveredElementDesc(CoopView):
         contract = WithAbstract.get_abstract_objects(from_wizard,
                                                      'for_contract')
         covered_datas = []
+        CoveredDataDesc = from_wizard.give_covered_data_desc_model()
         for covered in contract.options:
-            covered_data = {
-                'status': 'Active',
-                'start_date': covered.start_date,
-                'for_coverage': covered.coverage.id}
+            covered_data = CoveredDataDesc()
+            covered_data.init_from_coverage(covered)
+            covered_data.status = 'Active'
             covered_datas.append(covered_data)
         return covered_datas
 
@@ -323,15 +344,14 @@ class ExtensionLifeState(DependantState):
     @staticmethod
     def before_step_subscriber_as_covered(wizard):
         covered_datas = []
-        CoveredData = Pool().get('ins_contract.subs_process.covered_data_desc')
+        CoveredData = Pool().get(wizard.give_covered_data_desc_model())
         CoveredPerson = Pool().get(
             'ins_contract.subs_process.covered_person_desc')
         for coverage in wizard.option_selection.options:
             if coverage.status == 'Active':
                 covered_data = CoveredData()
                 covered_data.status = 'Active'
-                covered_data.start_date = coverage.start_date
-                covered_data.for_coverage = coverage.coverage.id
+                covered_data.init_from_coverage(coverage)
                 covered_datas.append(covered_data)
         wizard.extension_life.covered_elements = []
         covered_person = CoveredPerson()
@@ -366,7 +386,12 @@ class ExtensionLifeState(DependantState):
         CoveredElement = Pool().get('ins_contract.covered_element')
         CoveredData = Pool().get('ins_contract.covered_data')
         CoveredPerson = Pool().get('ins_contract.covered_person')
-        ext = ExtensionLife()
+        if hasattr(contract, 'extension_life'):
+            ext = ExtensionLife(contract.extension_life)
+            for elem in ext.covered_elements:
+                elem.delete()
+        else:
+            ext = ExtensionLife()
         ext.covered_elements = []
         for covered_element in wizard.extension_life.covered_elements:
             cur_element = CoveredElement()
@@ -379,13 +404,17 @@ class ExtensionLifeState(DependantState):
                 if hasattr(covered_data, 'end_date'):
                     cur_data.end_date = covered_data.end_date
                 cur_data.for_coverage = covered_data.for_coverage
+                cur_data.save()
                 cur_element.covered_data.append(cur_data)
             cur_person = CoveredPerson()
             cur_person.person = covered_element.person
+            cur_person.save()
             cur_element.product_specific = '%s,%s' % (cur_person.__name__,
                                                       cur_person.id)
+            cur_element.save()
             ext.covered_elements.append(cur_element)
 
+        ext.save()
         contract.extension_life = ext
         WithAbstract.save_abstract_objects(wizard, ('for_contract', contract))
         return (True, [])
@@ -411,10 +440,6 @@ class SubscriptionProcess(CoopProcess):
                               '',
                               [])
 
-    @staticmethod
-    def coop_process_name():
-        return 'Subscription Process'
-
     # Here we just have to declare our steps
     project = CoopStateView('ins_contract.subs_process.project',
                             'insurance_contract.project_view')
@@ -436,3 +461,13 @@ class SubscriptionProcess(CoopProcess):
 
         # Do not forget to return a 'everything went right' signal !
         return (True, [])
+
+    def give_displayer_model(self):
+        return 'ins_contract.subs_process.coverage_displayer'
+
+    def give_covered_data_desc_model(self):
+        return 'ins_contract.subs_process.covered_data_desc'
+
+    @staticmethod
+    def coop_process_name():
+        return 'Subscription Process'

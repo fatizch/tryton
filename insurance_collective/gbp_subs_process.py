@@ -170,13 +170,10 @@ class GBPSubscriptionProcess(CoopProcess):
                               '',
                               [])
 
-    @staticmethod
-    def coop_process_name():
-        return 'GBP Subscription Process'
-
     # Here we just have to declare our steps
     project = CoopStateView('ins_collective.gbp_subs_process.project',
                             'insurance_collective.gbp_project_view')
+
     extension_gbp = CoopStateView(
         'ins_collective.gbp_subs_process.extension_gbp',
         'insurance_collective.gbp_extension_view')
@@ -191,3 +188,8 @@ class GBPSubscriptionProcess(CoopProcess):
 
         # Do not forget to return a 'everything went right' signal !
         return (True, [])
+
+    @staticmethod
+    def coop_process_name():
+        return 'GBP Subscription Process'
+

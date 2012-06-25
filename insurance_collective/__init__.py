@@ -22,6 +22,9 @@ def register():
         Enrollment,
         EnrollmentProcessState,
         ProjectStateEnrollment,
+        CoverageDisplayerForEnrollment,
+        OptionSelectionStateForEnrollment,
+        EnrollmentOption,
         module='insurance_collective', type_='model')
     Pool.register(
         GBPSubscriptionProcess,

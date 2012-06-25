@@ -70,7 +70,7 @@
 			<field name="process" ref="enrollment_process_desc"/>
 			<field name="virtual_step">0</field>
 			<field name="sequence">2</field>
-			<field name="step_model">ins_contract.subs_process.option_selection</field>	
+			<field name="step_model">ins_collective.enrollment_process.option_selection</field>	
 		</record>
 		<record model="ins_process.step_desc" id="enrollment_extension_step_desc">
 			<field name="button_next"></field>

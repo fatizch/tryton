@@ -22,6 +22,8 @@ from trytond.modules.coop_utils import get_descendents
 
 from trytond.modules.insurance_contract import ProjectState
 from trytond.modules.insurance_contract import SubscriptionProcess
+from trytond.modules.insurance_contract import CoverageDisplayer
+from trytond.modules.insurance_contract import OptionSelectionState
 
 ###############################################################################
 # This is the Subscription Process. It is a process (which uses the           #
@@ -35,7 +37,22 @@ __all__ = [
         'ProjectStateEnrollment',
         'EnrollmentProcess',
         'EnrollmentProcessState',
+        'CoverageDisplayerForEnrollment',
+        'OptionSelectionStateForEnrollment',
            ]
+
+
+class CoverageDisplayerForEnrollment(CoverageDisplayer):
+    '''
+        This class tunes the CoverageDisplayer class to use collective coverage
+        in place of normal coverage for the 'coverage' field.
+    '''
+    __name__ = 'ins_collective.enrollment_process.coverage_displayer'
+
+    coverage = fields.Many2One(
+        'ins_collective.coverage',
+        'Coverage',
+        readonly=True)
 
 
 class ProjectStateEnrollment(ProjectState):
@@ -65,11 +82,34 @@ class ProjectStateEnrollment(ProjectState):
     @staticmethod
     def post_step_update_abstract(wizard):
         wizard.project.product = wizard.project.on_contract.final_product
-        return ProjectState.post_step_update_abstract(wizard)
+        result = ProjectState.post_step_update_abstract(wizard)
+        if result[0]:
+            contract = WithAbstract.get_abstract_objects(
+                wizard,
+                'for_contract')
+            contract.on_contract = wizard.project.on_contract
+            WithAbstract.save_abstract_objects(
+                wizard,
+                ('for_contract', contract))
+        return result
 
     @staticmethod
     def coop_step_name():
         return 'GBP Contract Selection'
+
+
+class OptionSelectionStateForEnrollment(OptionSelectionState):
+    '''
+        This class customizes the OptionSelection state in the case of an
+        enrollment.
+    '''
+    __name__ = 'ins_collective.enrollment_process.option_selection'
+
+    options = fields.Many2Many(
+        'ins_collective.enrollment_process.coverage_displayer',
+         None,
+         None,
+         'Options Choices')
 
 
 class EnrollmentProcessState(ProcessState, WithAbstract):
@@ -87,5 +127,17 @@ class EnrollmentProcess(SubscriptionProcess):
     '''
     __name__ = 'ins_collective.enrollment_process'
 
+    process_state = StateView(
+        'ins_collective.enrollment_process.process_state',
+        '',
+        [])
+
     project = CoopStateView('ins_collective.enrollment_process.project',
                             'insurance_collective.enrollment_project_view')
+
+    option_selection = CoopStateView(
+                        'ins_collective.enrollment_process.option_selection',
+                        'insurance_contract.option_selection_view')
+
+    def give_displayer_model(self):
+        return 'ins_collective.enrollment_process.coverage_displayer'

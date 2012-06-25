@@ -26,11 +26,11 @@
 			<field name="arch" type="xml">
 					 <![CDATA[
 					 	<data>
-					 		<xpath expr="/form/group/label[@name=&quot;product&quot;]"
+					 		<xpath expr="/form/group/group/label[@name=&quot;product&quot;]"
 			                    position="replace_attributes">
 			                    <label name="on_contract" xalign="0"/>
 			                </xpath>
-			                <xpath expr="/form/group/field[@name=&quot;product&quot;]"
+			                <xpath expr="/form/group/group/field[@name=&quot;product&quot;]"
 			                    position="replace_attributes">
 			                    <field name="on_contract"/>
 			                </xpath>

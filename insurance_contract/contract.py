@@ -7,6 +7,8 @@ from trytond.pool import Pool
 
 from trytond.modules.coop_utils import get_descendents
 
+from trytond.modules.insurance_product import Coverage
+
 __all__ = [
         'SubscriptionManager',
         'GenericContract',
@@ -175,6 +177,9 @@ class Contract(GenericContract):
                 if hasattr(model, 'get_extension__name__')
                     and model.get_extension__name__() != '']
 
+    def give_option_model(self):
+        return self._fields['options'].model_name
+
 
 class Option(ModelSQL, ModelView):
     '''
@@ -222,10 +227,10 @@ class Option(ModelSQL, ModelView):
 
     @staticmethod
     def get_data_model():
-        return [(model__name__, model.get_option_data__name__())
+        return [(model__name__, model.get_option_data_name())
                 for (model__name__, model) in Pool().iterobject()
-                if hasattr(model, 'get_option_data__name__')
-                    and model.get_option_data__name__() != '']
+                if hasattr(model, 'get_option_data_name')
+                    and model.get_option_data_name() != '']
 
 
 class BillingManager(ModelSQL, ModelView):
@@ -290,12 +295,28 @@ class CoveredData(ModelSQL, ModelView):
         Basically, it is the start and end date of covering.
     '''
     __name__ = 'ins_contract.covered_data'
-    for_covered = fields.Many2One('ins_contract.covered_element',
-                                  'Covered Element')
-    for_coverage = fields.Many2One('ins_product.coverage',
-                                   'Coverage')
+    for_covered = fields.Reference(
+        'Covered Element',
+        'get_covered_element_models')
+    for_coverage = fields.Reference(
+        'Coverage',
+        'get_coverages_models')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
+
+    @staticmethod
+    def get_covered_element_models():
+        res = [(elem.__name__, elem.__name__) for elem in
+               CoveredElement.__subclasses__()]
+        res.append((lambda x:(x,x))(CoveredElement.__name__))
+        return res
+
+    @staticmethod
+    def get_coverages_models():
+        res = [(elem.__name__, elem.__name__) for elem in
+               Coverage.__subclasses__()]
+        res.append((lambda x:(x,x))(Coverage.__name__))
+        return res
 
 
 class ExtensionLife(GenericExtension):
