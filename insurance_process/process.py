@@ -2,9 +2,10 @@ import datetime
 import copy
 
 # Needed for displaying objects
-from trytond.model import ModelView, ModelSQL
 from trytond.model.model import ModelMeta, Model
 from trytond.model import fields as fields
+
+from trytond.modules.coop_utils import utils, CoopView, CoopSQL
 
 # Needed for Wizardry
 from trytond.wizard import Wizard, Button, StateView, StateTransition
@@ -28,7 +29,7 @@ except ImportError:
 
 
 __all__ = ['WithAbstract', 'ProcessState', 'CoopProcess', 'CoopStateView',
-           'CoopStep', 'CoopView', 'DependantState', 'SuspendedProcess',
+           'CoopStep', 'CoopStepView', 'DependantState', 'SuspendedProcess',
            'ResumeWizard', 'DummyObject', 'DummyStep', 'DummyStep1',
            'DummyProcessState', 'DummyProcess']
 
@@ -200,7 +201,7 @@ class WithAbstract(object):
                 WithAbstract.save_abstract_object(session, field, value)
 
 
-class ProcessState(ModelView):
+class ProcessState(CoopView):
     '''
         This class is a fake step. Its only purpose is to provide us with a
         place to store all process-related persistent data.
@@ -1039,7 +1040,7 @@ class NoSessionFoundException(Exception):
     pass
 
 
-class CoopView(ModelView):
+class CoopStepView(CoopView):
     '''
         This class will be used as a mother class for all non-state views
         for coop processes.
@@ -1065,9 +1066,9 @@ class CoopView(ModelView):
         raise NoSessionFoundException
 
 
-class CoopStep(ModelView, CoopStepMethods):
+class CoopStep(CoopView, CoopStepMethods):
     '''
-        This class aggregates the Methods of CoopStepMethods with the ModelView
+        This class aggregates the Methods of CoopStepMethods with the CoopView
         so that it can be use as steps for our processes.
     '''
     @classmethod
@@ -1111,7 +1112,7 @@ class DependantState(CoopStep):
         pass
 
 
-class SuspendedProcess(ModelSQL, ModelView):
+class SuspendedProcess(CoopSQL, CoopView):
     '''
         This class represents a suspended process, which can be resumed later.
     '''
@@ -1206,7 +1207,7 @@ class ResumeWizard(Wizard):
 #####################################################
 
 
-class DummyObject(ModelSQL, ModelView):
+class DummyObject(CoopSQL, CoopView):
     '''
         A dummy Object for our DummyProcess
     '''
@@ -1318,7 +1319,9 @@ class DummyProcess(CoopProcess):
     # This is a Process. It inherits of CoopProcess.
     __name__ = 'ins_process.dummy_process'
 
-    process_state_model = 'ins_process.dummy_process_state'
+    process_state = StateView('ins_process.dummy_process_state',
+                              '',
+                              [])
 
     # We just need to declare the two steps
     dummy_step = CoopStateView('ins_process.dummy_process.dummy_step',
@@ -1452,7 +1455,7 @@ class SubscriptionProcess(Wizard):
         return 'end'
 
 
-class ProjectState(ModelView):
+class ProjectState(CoopView):
     _name = 'ins_contract.subscription_process.project'
     # We define the list of attributes which will be used for display
     start_date = fields.Date('Effective Date',
@@ -1465,7 +1468,7 @@ class ProjectState(ModelView):
         required=True)
 
 
-class OptionSelectionState(ModelView):
+class OptionSelectionState(CoopView):
     _name = 'ins_contract.subscription_process.option_selection'
     options = fields.Many2Many('ins_contract.coverage_displayer',
                                None,

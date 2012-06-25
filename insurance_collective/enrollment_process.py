@@ -17,7 +17,6 @@ from trytond.modules.insurance_process import CoopStep
 from trytond.modules.insurance_process import CoopStateView
 from trytond.modules.insurance_process import WithAbstract
 from trytond.modules.insurance_process import DependantState
-from trytond.modules.insurance_process import CoopView
 from trytond.modules.coop_utils import get_descendents
 
 from trytond.modules.insurance_contract import ProjectState

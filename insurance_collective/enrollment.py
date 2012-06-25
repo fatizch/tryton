@@ -1,5 +1,4 @@
 # Needed for storing and displaying objects
-from trytond.model import ModelSQL, ModelView
 from trytond.model import fields as fields
 
 # Needed for getting models

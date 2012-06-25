@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 # Needed for displaying and storing objects
-from trytond.model import ModelView, ModelSQL
 from trytond.model import fields as fields
+
+from trytond.modules.coop_utils import utils, CoopView, CoopSQL
 
 # Needed for easy access to models
 from trytond.pool import Pool
@@ -35,7 +36,7 @@ BUTTONS = [
            ]
 
 
-class ProcessDesc(ModelSQL, ModelView):
+class ProcessDesc(CoopSQL, CoopView):
     '''
         Master Class for all processes, has a list of steps and
         knows the name of the model it is supposed to represent
@@ -96,7 +97,7 @@ class ProcessDesc(ModelSQL, ModelView):
         return step
 
 
-class StepDesc(ModelSQL, ModelView):
+class StepDesc(CoopSQL, CoopView):
     '''
         Master Class for process steps.
 
@@ -314,7 +315,7 @@ class StepDesc(ModelSQL, ModelView):
         return '0000000'
 
 
-class StepMethodDesc(ModelSQL, ModelView):
+class StepMethodDesc(CoopSQL, CoopView):
     '''
         This is a prototype of method (rule) which might be called anytime
         from a process.

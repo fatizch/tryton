@@ -17,7 +17,7 @@ from trytond.modules.insurance_process import CoopStep
 from trytond.modules.insurance_process import CoopStateView
 from trytond.modules.insurance_process import WithAbstract
 from trytond.modules.insurance_process import DependantState
-from trytond.modules.insurance_process import CoopView
+from trytond.modules.insurance_process import CoopStepView
 from trytond.modules.coop_utils import get_descendents
 
 from contract import OPTIONSTATUS
@@ -128,7 +128,7 @@ class ProjectState(CoopStep):
         return 'Product Selection'
 
 
-class CoverageDisplayer(CoopView):
+class CoverageDisplayer(CoopStepView):
     '''
         This class is a displayer, that is a class which will only be used
         to show something (or ask for something) to the user. It needs not
@@ -246,7 +246,7 @@ class OptionSelectionState(CoopStep):
         return 'Options Selection'
 
 
-class CoveredDataDesc(CoopView):
+class CoveredDataDesc(CoopStepView):
     '''
         This is a descriptor for the covered data element.
     '''
@@ -282,7 +282,7 @@ class CoveredDataDesc(CoopView):
             for_coverage.coverage.id)
 
 
-class CoveredElementDesc(CoopView):
+class CoveredElementDesc(CoopStepView):
     '''
         This is a descriptor for the covered element.
     '''
@@ -463,7 +463,7 @@ class SubscriptionProcess(CoopProcess):
         return (True, [])
 
     def give_displayer_model(self):
-        return 'ins_contract.subs_process.coverage_displayer'
+        return 'ins_contract.coverage_displayer'
 
     def give_covered_data_desc_model(self):
         return 'ins_contract.subs_process.covered_data_desc'

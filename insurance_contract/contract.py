@@ -1,6 +1,7 @@
 # Needed for storing and displaying objects
-from trytond.model import ModelSQL, ModelView
 from trytond.model import fields as fields
+
+from trytond.modules.coop_utils import utils, CoopView, CoopSQL
 
 # Needed for getting models
 from trytond.pool import Pool
@@ -37,7 +38,7 @@ OPTIONSTATUS = [
                 ]
 
 
-class SubscriptionManager(ModelSQL, ModelView):
+class SubscriptionManager(CoopSQL, CoopView):
     '''
         The subscription Manager will be used to store subscription-only
         related data.
@@ -45,7 +46,7 @@ class SubscriptionManager(ModelSQL, ModelView):
     __name__ = 'ins_contract.subs_manager'
 
 
-class GenericExtension(ModelSQL, ModelView):
+class GenericExtension(CoopSQL, CoopView):
     '''
     Here comes the Extension which will contains all data needed by a specific
     product to compute rates, benefits etc.
@@ -59,7 +60,7 @@ class GenericExtension(ModelSQL, ModelView):
                                        'Coverages')
 
 
-class GenericContract(ModelSQL, ModelView):
+class GenericContract(CoopSQL, CoopView):
     '''
         This class will provide the basics of all contracts :
             Contract Number
@@ -181,7 +182,7 @@ class Contract(GenericContract):
         return self._fields['options'].model_name
 
 
-class Option(ModelSQL, ModelView):
+class Option(CoopSQL, CoopView):
     '''
     This class is an option, that is a global coverage which will be applied
     to all covered persons on the contract.
@@ -233,7 +234,7 @@ class Option(ModelSQL, ModelView):
                     and model.get_option_data_name() != '']
 
 
-class BillingManager(ModelSQL, ModelView):
+class BillingManager(CoopSQL, CoopView):
     '''
         This object will manage all billing-related content on the contract.
         It will be the target of all sql requests for automated bill
@@ -254,7 +255,7 @@ class BillingManager(ModelSQL, ModelView):
     next_billing_date = fields.Date('Next Billing Date')
 
 
-class CoveredElement(ModelSQL, ModelView):
+class CoveredElement(CoopSQL, CoopView):
     '''
         Covered elements represents anything which is covered by at least one
         option of the contract.
@@ -288,7 +289,7 @@ class CoveredElement(ModelSQL, ModelView):
         return res
 
 
-class CoveredData(ModelSQL, ModelView):
+class CoveredData(CoopSQL, CoopView):
     '''
         Covered Datas are the link between covered elements and options.
 
@@ -343,7 +344,7 @@ class ExtensionCar(GenericExtension):
         return 'ins_contract.covered_car'
 
 
-class SpecificCovered(ModelSQL, ModelView):
+class SpecificCovered(CoopSQL, CoopView):
     '''
         This is the common part of all specific covered parts.
 
@@ -374,7 +375,7 @@ class CoveredCar(SpecificCovered):
     __name__ = 'ins_contract.covered_car'
 
 
-class BrokerManager(ModelSQL, ModelView):
+class BrokerManager(CoopSQL, CoopView):
     '''
         This entity will be used to manage the relation between the contract
         and its broker
