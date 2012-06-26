@@ -38,51 +38,105 @@ ACTIONS = ('go_previous', 'go_next', 'cancel', 'complete', 'check', 'suspend')
 
 
 class BadDataKeyError(Exception):
+    'Bad data key error'
+    # This exception will be raised when trying to access or set a non-existing
+    # field of an object via the WithAbstract tool.
+
     pass
 
 
 class WithAbstract(object):
-
-    __abstracts__ = []
+    'With Abstract'
+    # This class is a tool class which contains a set of methods allowing the
+    # use (creation, modification, saving) of Active Record objects with
+    # storage through a string.
+    #
+    # The main purpose of doing this is to provide a way for transferring data
+    # in object form with no need to store them.
+    #
+    # This is particularly useful in a wizard context, where you may need a way
+    # to pass an object from one state to another, without having to store it
+    # in the database in an incomplete form.
+    #
+    # USAGE :
+    # You need to tweak the __setup__ code of your class to match the content
+    # of that of ProcessState in order for the WithAbstract tools to be
+    # functionnal.
+    #
+    # Basically, you must declare the '__abstracts__' variable in your class
+    # and set it with a list of tuples with the following pattern :
+    #     __abstracts__ = [(field_name, model_name)]
+    #
+    # With this done, you can access those objects through the use of
+    # 'get_abstract_objects' and 'store_abstract_objects' to get your object,
+    # play with it, then store it.
 
     @staticmethod
     def create_field(field_desc, value):
+        # This method is used to get what will be set in the field_desc of the
+        # object you currently are working on.
+
         if isinstance(value, list):
+            # If the value is a list
             res = []
             if not len(value) > 0:
                 return res
+
+            # then the field_desc must be a list-compatible field desc
             if isinstance(field_desc, (
                     fields.One2Many,
                     fields.Many2Many)):
+                # We need to get the model of the target.
                 if isinstance(field_desc, fields.Many2Many):
+                    # In the case of a Many2Many, it is necessary to go through
+                    # the relation model, as there is no direct access in the
+                    # field description to the target model.
                     relation_model = Pool().get(field_desc.relation_name)
                     rel_field = relation_model._fields[field_desc.target]
                     for_model = rel_field.model_name
                 else:
                     for_model = field_desc.model_name
+
+                # Then we treat each element separately
                 for elem in value:
                     if isinstance(elem, Model):
-                        res.append(WithAbstract.create_field(elem))
+                        # If it already is a Model (that is an instance of the
+                        # model_name, we just append it.
+                        res.append(elem)
                     elif isinstance(elem, (dict, int, long)):
+                        # If not, we assume its value will allow us to create
+                        # or find a record.
                         res.append(WithAbstract.create_abstract(
                             for_model,
                             elem))
                     else:
+                        # Anything else is wrong.
                         raise BadDataKeyError
         elif isinstance(value, Model):
-            if isinstance(field_desc, fields.Many2One):
+            # If the value is a model
+            if isinstance(field_desc, (fields.Many2One, fields.Reference)):
+                # and the field is a M2O or a Reference (a one on one field),
+                # it's all done !
                 res = value
             else:
+                # If you try to assign a Model to another field kind, error.
                 raise BadDataKeyError
         elif isinstance(value, dict) and isinstance(field_desc,
-                                                    fields.Many2One):
+                (fields.Many2One, fields.Reference)):
+            # If the value is a dict and the expected field value an instance,
+            # we assume that we can create it then go !
             res = WithAbstract.create_abstract(field_desc.model_name, value)
         else:
+            # Any basic type (string, int, etc...) in a non model-link context
+            # is a direct set.
             res = value
         return res
 
     @staticmethod
     def load_from_text(model_name, data):
+        # This method is just an entry point that will decode the encoded text
+        # into a dict that is then passed as a value for the object we are
+        # trying to create.
         data_text = json.loads(data.encode('utf-8'), object_hook=object_hook)
         return WithAbstract.create_abstract(model_name, data_text)
 
@@ -95,9 +149,13 @@ class WithAbstract(object):
             # It is an id, we create the object and specify it
             return ForModel(data)
         elif isinstance(data, dict):
+            # It is a dictionnary, we assume that it matches the model's fields
+            # and instanciate it :
             for_object = ForModel()
             for key, value in data.iteritems():
+                # We go through each value of the dictionnary an set it.
                 if not key in for_object._fields:
+                    # After checking that it mathces, of course...
                     raise BadDataKeyError
                 setattr(for_object,
                         key,
@@ -105,6 +163,7 @@ class WithAbstract(object):
                                                   value))
             return for_object
         elif isinstance(data, str):
+            # There might be recursive serialization, so me must account for it
             data_dict = WithAbstract.load_from_text(data)
             return WithAbstract.create_abstract(model, data_dict)
         else:
@@ -113,54 +172,89 @@ class WithAbstract(object):
 
     @staticmethod
     def get_abstract_object(session, field_name):
+        # This method takes a session, a field_name, and give back an object
+        # based on the field_name.
+        #
+        # TODO :
+        #  - remove the 'process_state', the first parameter should be the
+        # object which has field_name in its __abstracts__ field.
+
         result = getattr(session.process_state, field_name + '_db')
+        # We need to use the '_db' field to get the model.
         if not result.id:
+            # If the object is not stored in the database, we will try to get
+            # it from serialization value.
             src_text = getattr(session.process_state, field_name + '_str')
             if src_text:
-                result = WithAbstract.load_from_text(
-                            result.__name__,
-                            getattr(session.process_state,
-                                    field_name + '_str'))
+                # It's already been serialized, so we load and return it.
+                result = WithAbstract.load_from_text(result.__name__, src_text)
             else:
+                # It really is the first time this object is needed, so we just
+                # instanciate it.
                 ForModel = Pool().get(result.__name__)
                 result = ForModel()
         return result
 
     @staticmethod
     def serialize_field(field):
+        # We need a way to serialize fields so that they become json compatible
+        # for storing while still being readable when extracting.
         res = None
         if (isinstance(field, list) and
-                                field != [] and
-                                isinstance(field[0], Model)):
+                field != [] and
+                isinstance(field[0], Model)):
+            # It the provided field is a list, and the elements of this list is
+            # a Model, we need to serialize each element before use.
             res = []
             for elem in field:
                 res.append(WithAbstract.serialize_field(elem))
         elif isinstance(field, Model):
+            # If the field is a model
             if isinstance(field, Model) and field.id > 0:
+                # that has been stored in the db, we just need its id to store
+                # it.
                 res = field.id
             else:
+                # If not, we need to go through each field to serialize each of
+                # them separately.
                 res = {}
                 for key, value in field._values.iteritems():
                     res[key] = WithAbstract.serialize_field(value)
         else:
+            # If the field is a basic type, no need for further work.
             res = field
 
         return res
 
     @staticmethod
     def store_to_text(for_object):
+        # Storing to text is easy, we serialize our object, then create a json
+        # string from it.
         return json.dumps(WithAbstract.serialize_field(for_object),
                           cls=JSONEncoder)
 
     @staticmethod
     def save_abstract_object(session, field_name, for_object):
+        # Saving the object means serializing it in a json-compatible string,
+        # then storing it in the dedicated field.
+        #
+        # TODO :
+        #  - same as get_abstract_object
+
         setattr(session.process_state, field_name + '_str',
                 WithAbstract.store_to_text(for_object))
         session.process_state.dirty = True
 
     @staticmethod
     def abstract_objs(session):
+        # Sometimes, one may need to know the list of fields which use the
+        # Abstract tool on a particular object.
+        #
+        # TODO :
+        #  - same as get_abstract_object
+
         res = []
+        # We just need to look for the '_db' pattern in our fields
         for field in [field for field in dir(session.process_state)
                                 if field[-3:] == '_db']:
             res.append(field[:-3])
@@ -168,24 +262,34 @@ class WithAbstract(object):
 
     @staticmethod
     def get_abstract_objects(session, fields):
+        # This is the main entry point for accessing abstract objects.
+        # It takes an object, and a list of field names to look for.
         objs = WithAbstract.abstract_objs(session)
+
+        # We convert 'fields' to a list if needed
         elems = to_list(fields)
         res = []
         for field in elems:
             if field in objs:
-                res += [WithAbstract.get_abstract_object(session, field)]
-            else:
-                res += [None]
-        if type(fields) == list:
-            return tuple(res)
+                # We check that the current field exists in the object before
+                # getting it !
+                res.append(WithAbstract.get_abstract_object(session, field))
+
+        if isinstance(fields, list):
+            return res
         else:
             return res[0]
 
     @staticmethod
     def save_abstract_objects(session, fields):
+        # Here we store the specified fields in the object where they have been
+        # defined.
         objs = WithAbstract.abstract_objs(session)
+
+        # We convert to a list if needed
         for_list = to_list(fields)
         for field, value in for_list:
+            # Then store each element.
             if field in objs:
                 WithAbstract.save_abstract_object(session, field, value)
 
@@ -297,9 +401,13 @@ class CoopProcess(Wizard):
     steps_terminate = StateTransition()
 
     def init_session(self):
+        # Abstract objects must be initialized. This must be done for each one
+        # of those defined in the process_state.
         self.process_state.errors = ''
         for elem in set([elem for elem in dir(self.process_state)
                      if (elem[-3:] == '_db' or elem[-4:] == '_str')]):
+            # Every field matching the '_db' or the '_str' pattern will be
+            # considered as an abstract field, and initialized.
             if not hasattr(self.process_state, elem):
                 setattr(self.process_state, elem, 0)
             if not hasattr(self.process_state, elem):
@@ -311,11 +419,14 @@ class CoopProcess(Wizard):
                 setattr(self.process_state, elem, '')
 
     def add_error(self, error):
+        # We needed a common entry-point for all error creation.
+        # Errors are stored in the process_state.errors field, which will be
+        # used when the errors are displayed.
         errors = to_list(error)
         self.process_state.errors += '\n'.join(errors)
 
-    # We use the fact that we know the start step to set up a few things
     def resume_suspended(self):
+        # Here we want to resume a previously suspended process.
         SuspendedProcess = Pool().get('ins_process.suspended_process')
         try:
             susp_process = SuspendedProcess(
@@ -329,16 +440,25 @@ class CoopProcess(Wizard):
             susp_data = json.loads(susp_process.session_data.encode('utf-8'),
                                    object_hook=object_hook)
             # Then update everything.
+            # This code comes from the execute method of wizard.py
             for state_name, state in self.states.iteritems():
                 if isinstance(state, StateView):
                     Target = Pool().get(state.model_name)
                     susp_data.setdefault(state_name, {})
                     setattr(self, state_name, Target(**susp_data[state_name]))
+
+            # We store the fact that the process comes from a previously
+            # suspended process in order to write rather than create, and to
+            # be able to delete the suspended process from the db when
+            # completing the process (going through the 'terminate' state)
             self.process_state.from_susp_process = susp_process.id
             self.dirty = True
         else:
+            # Of course, Trying to resume an inexisting process raises an
+            # error.
             self.raise_user_error('Could not find process to init from')
 
+    # We use the fact that we know the start step to set up a few things
     def transition_steps_start(self):
         # We check if we are currently trying to resume a suspended process
         if (Transaction().context.get('active_model')
@@ -774,6 +894,8 @@ class CoopStateView(StateView, CoopState):
                                             CoopState.all_buttons())
 
     def serialize_field(self, field):
+        # This method is a copy from WithAbstract.serialize_field.
+        # It is deprecated.
         res = None
         if (isinstance(field, list) and
                                 field != [] and
@@ -808,28 +930,54 @@ class CoopStateView(StateView, CoopState):
             for field in fields:
                 if hasattr(default_data, field):
                     field_value = getattr(default_data, field)
-                    res[field] = self.serialize_field(field_value)
+                    # We need to make the field json-compatible, so we use the
+                    # serialize_field function which does exactly that.
+                    res[field] = WithAbstract.serialize_field(field_value)
 
         return res
 
     def get_buttons(self, wizard, state_name):
+        # As a default behaviour, all CoopStateView declarations append all
+        # available buttons to the state definition.
+        #
+        # That allows to fine-tune displayed buttons through the process_desc
+        # records use. Here we use those records to filter which buttons will
+        # be displayed on the state.
+
+        # First of all, we got a list of all available buttons.
         buttons = super(CoopStateView, self).get_buttons(wizard,
                                                          state_name)
+
+        # Then we get the current process_desc, so that we can iterate on its
+        # steps.
         ProcessDesc = Pool().get('ins_process.process_desc')
         process_desc, = ProcessDesc.search([
                                     ('process_model', '=', wizard.__name__)],
                                            limit=1)
         res_buttons = []
         for step_desc in process_desc.steps:
+            # We need to get the state_obj associated to the step.
             state_obj = Pool().get(self.model_name)
+            # In the case of dependant step, it becomes trickier. We need to
+            # find the step_desc which matches the state we currently are
+            # working on.
+            #
+            # In any case, we loop on the step_descs until we find one that
+            # matches the current state.
             if state_obj in DependantState.__subclasses__():
                 if (not state_obj.depends_on_state() ==
                                                 step_desc.product_step_name):
                     continue
             elif self.model_name != step_desc.step_model:
                 continue
+
+            # We get the default button name
             default_button, _ = step_desc.button_default
             for button in buttons:
+                # For each available button, if it is defined in the step_desc,
+                # we append it to the result list.
+                #
+                # If we found one that matches the default_button, we set it.
                 if getattr(step_desc, 'button' + button['state'][5:]):
                     if default_button[7:] == button['state'][6:]:
                         button['default'] = True
