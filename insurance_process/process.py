@@ -37,22 +37,11 @@ __all__ = ['WithAbstract', 'ProcessState', 'CoopProcess', 'CoopStateView',
 ACTIONS = ('go_previous', 'go_next', 'cancel', 'complete', 'check', 'suspend')
 
 
-class MetaAbstract(ModelMeta):
-    def __new__(cls, name, bases, attrs):
-        for (field_name, field_model) in attrs['__abstracts__']:
-            attrs[field_name + '_db'] = fields.Many2One(field_model,
-                                                        field_name)
-            attrs[field_name + '_str'] = fields.Text('Json' + field_name)
-        return super(MetaAbstract, cls).__new__(cls, name, bases, attrs)
-
-
 class BadDataKeyError(Exception):
     pass
 
 
 class WithAbstract(object):
-
-    __metaclass__ = MetaAbstract
 
     __abstracts__ = []
 
@@ -245,6 +234,20 @@ class ProcessState(CoopView):
     # Stores the product for product-based state definition :
     on_product = fields.Many2One('ins_product.product',
                                   'On Product Process')
+
+    @classmethod
+    def __setup__(cls):
+        if '__abstracts__' in dir(cls):
+            for (field_name, field_model) in getattr(cls, '__abstracts__'):
+                setattr(
+                    cls,
+                    field_name + '_db',
+                    fields.Many2One(field_model, field_name))
+                setattr(
+                    cls,
+                    field_name + '_str',
+                    fields.Text('Json' + field_name))
+        return super(ProcessState, cls).__setup__()
 
 
 class CoopProcess(Wizard):
