@@ -31,7 +31,7 @@ else
 	source bin/activate
 	echo Installing pip packages
 	echo $SEP
-	pip install polib lxml relatorio genshi python-dateutil pywebdav vobject python-ldap pytz psycopg2 hgnested hgreview sphinx
+	pip install polib lxml relatorio genshi python-dateutil pywebdav vobject python-ldap pytz psycopg2 hgnested hgreview sphinx ibanlib python-stdnum
 	echo $SEP
 	echo $SEP
 	echo Creating symbol link for dependencies
@@ -41,6 +41,8 @@ else
 	ln -s /usr/lib/python2.7/dist-packages/gobject lib/python2.7/site-packages/
 	ln -s /usr/lib/python2.7/dist-packages/glib lib/python2.7/site-packages/
 	ln -s /usr/lib/python2.7/dist-packages/cairo lib/python2.7/site-packages/
+	ln -s /usr/local/lib/python2.7/dist-packages/ibanlib lib/python2.7/site-packages/
+	ln -s /usr/local/lib/python2.7/dist-packages/stdnum/ lib/python2.7/site-packages/ 
 	echo Installation complete, remember to add
 	echo 	'[extensions]'
 	echo	'hgnested='

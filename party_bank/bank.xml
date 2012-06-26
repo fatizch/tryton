@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!--  ******************************************* 
+              **************   Bank     ***************
+              *******************************************-->
+        <!-- Bank form view -->
+        <record model="ir.ui.view" id="bank_view_form">
+            <field name="model">party.bank</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <form>
+                    <label name="reference"/>
+                    <field name="reference"/>
+                </form>
+                ]]>
+            </field>
+        </record>
+
+        <!-- Bank tree view -->
+        <record model="ir.ui.view" id="bank_view_tree">
+            <field name="model">party.bank</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <tree>
+                        <field name="reference"/>
+                    </tree>
+                ]]>
+            </field>
+        </record>
+        <!--  ******************************************* 
+              ************   Bank account    ************
+              *******************************************-->
+        <!-- Bank account form view -->
+        <record model="ir.ui.view" id="bank_account_view_form">
+            <field name="model">party.bank_account</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <form col="6">
+                    <label name="currency"/>
+                    <field name="currency"/>
+                    <label name="start_date"/>
+                    <field name="start_date"/>
+                    <label name="end_date"/>
+                    <field name="end_date"/>
+                    <newline/>
+                    <field name="account_numbers" colspan="6" mode="form,tree"/>
+                    <label name="agency"/>
+                    <field name="agency"/>
+                    <label name="address"/>
+                    <field name="address"/>
+
+                </form>
+                ]]>
+            </field>
+        </record>
+        <!--  ******************************************* 
+              ******   Bank account Number   ************
+              *******************************************-->
+        <!-- Bank account number form view -->
+        <record model="ir.ui.view" id="bank_account_number_view_form">
+            <field name="model">party.bank_account_number</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <form col="6">
+                    <label name="kind"/>
+                    <field name="kind"/>
+                    <label name="number"/>
+                    <field name="number" col="5"/>
+                </form>
+                ]]>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="bank_account_number_view_tree">
+            <field name="model">party.bank_account_number</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <tree>
+                        <field name="kind"/>
+                        <field name="number"/>
+                    </tree>
+                ]]>
+            </field>
+        </record>
+    </data>
+</tryton>
+        
