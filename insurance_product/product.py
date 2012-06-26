@@ -25,7 +25,8 @@ class Offered(CoopView):
     start_date = fields.Date('Start Date', required=True, select=1)
     end_date = fields.Date('End Date')
     template = fields.Many2One(None, 'Template',
-        domain=[('id', '!=', Eval('id'))])
+        domain=[('id', '!=', Eval('id'))],
+        depends=['id'])
     #all mgr are Many2One because they all have the same backref var and though
     #it's not possible for the moment to have a O2M(1)
     #
@@ -101,7 +102,8 @@ class BusinessRuleManager(CoopSQL, CoopView):
         fields.Reference('belongs_to', selection='get_offered_models'),
         'get_belongs_to')
     template = fields.Many2One(None, 'Template',
-        domain=[('id', '!=', Eval('id'))])
+        domain=[('id', '!=', Eval('id'))],
+        depends=['id'])
     business_rules = fields.One2Many('ins_product.generic_business_rule',
         'manager', 'Business Rules', on_change=['business_rules'],
         context={'start_date': Eval('start_date')})
@@ -284,7 +286,8 @@ class BusinessRuleRoot(CoopView):
     generic_rule = fields.Many2One('ins_product.generic_business_rule',
                                    'Generic Rule')
     template = fields.Many2One(None, 'Template',
-        domain=[('id', '!=', Eval('id'))])
+        domain=[('id', '!=', Eval('id'))],
+        depends=['id'])
 
     @classmethod
     def __setup__(cls):
