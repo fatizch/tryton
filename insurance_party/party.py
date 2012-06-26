@@ -3,6 +3,7 @@ import functools
 
 from trytond.model import fields as fields
 from trytond.pyson import Eval
+
 from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import utils, CoopView, CoopSQL
