@@ -372,3 +372,77 @@ class WithAbstract(object):
             # Then store each element.
             if field in objs:
                 WithAbstract.save_abstract_object(session, field, value)
+
+
+class GetResult(object):
+    def get_result(self, at_date, target, args, manager='', path=''):
+        # This method is a generic entry point for getting parameters.
+        #
+        # Arguments are :
+        #  - The date at which the computation must take place. It is important
+        #    as many rules / managers / brm will be versionned
+        #  - The target value to compute. It is a key which will be used to
+        #    decide which data is asked for
+        #  - The dict of arguments which will be used by the rule to compute.
+        #    Another way to do this would be a link to a method on the caller
+        #    which would provide said args on demand.
+        #  - The manager will usually be filled, it is a key to finding where
+        #    the required data is stored. So if the target is "price", the
+        #    manager should be set to "pricing".
+        #  - We can use the 'path' arg to specify the way to our data.
+        #    Basically, we try to match the first part of path (which looks
+        #    like a '.' delimited string ('alpha1.beta3.gamma2')) to one of the
+        #    sub-elements of self, then iterate.
+
+        if path:
+            # If a path is set, the data we look for is not set on self. So we
+            # need to iterate on self's sub-elems.
+            #
+            # First of all, we need the sub-elems descriptor. This is the
+            # result of the get_sub_elem_data method, which returns a tuple
+            # with the field name to iterate on as the first element, and
+            # this field's field on which to try to match the value.
+            sub_elem_data = self.get_sub_elem_data()
+
+            if not sub_elem_data:
+                # If it does not exist, someone failed...
+                return (None, ['Object %s does not have any sub_data.'
+                    % (self.name)])
+
+            path_elems = path.split('.')
+
+            for elem in getattr(self, sub_elem_data[0]):
+                # Now we iterate on the specified field
+                if path_elems[0] in (getattr(elem, attr) for attr in
+                        sub_elem_data[1]):
+                    if isinstance(elem, GetResult):
+                        return elem.get_result(at_date, target, args, manager,
+                            '.'.join(path_elems[1:]))
+                    return (None, ['Sub element %s of %s cannot get_result !'
+                        % (elem.name, self.name)])
+            return (None, ['Could not find %s sub element in %s'
+                % (path_elems[0], self.name)])
+
+        if manager:
+            # A manager is specified, we look for it
+            for brm_name, brm in [(elem, getattr(self, elem))
+                    for elem in dir(self) if elem[-4:] == '_mrg']:
+                if not brm_name.startswith(manager):
+                    continue
+                # When found, we just call the get_result method with our args
+                return brm.get_result(at_date, target, args)
+            # We did not found any manager matching the specified name
+            return (None, ['Business Manager %s does not exist on %s']
+                % (manager, self.name))
+
+        # Now we look for our target, as it is at our level
+        target_func = getattr(self, 'give_me_' + target)
+
+        result = target_func(at_date, args)
+        if not isinstance(result, tuple) and not result is None:
+            return (result, [])
+        return result
+
+    def get_sub_elem_data(self):
+        # Should be overridden
+        return None
