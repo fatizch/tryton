@@ -1,5 +1,4 @@
 from trytond.pool import Pool
-from tools import *
 from process import *
 from process_labo import *
 
