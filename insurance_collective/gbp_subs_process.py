@@ -15,9 +15,9 @@ from trytond.modules.insurance_process import CoopProcess
 from trytond.modules.insurance_process import ProcessState
 from trytond.modules.insurance_process import CoopStep
 from trytond.modules.insurance_process import CoopStateView
-from trytond.modules.insurance_process import WithAbstract
 from trytond.modules.insurance_process import DependantState
-from trytond.modules.coop_utils import get_descendents
+
+from trytond.modules.coop_utils import get_descendents, WithAbstract
 
 ###############################################################################
 # This is the Subscription Process. It is a process (which uses the           #
