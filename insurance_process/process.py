@@ -1,5 +1,6 @@
 import datetime
 import copy
+import functools
 
 # Needed for displaying objects
 from trytond.model.model import ModelMeta, Model
@@ -115,9 +116,13 @@ class CoopProcess(Wizard):
     '''
     __name__ = 'ins_process.coop_process'
 
+    config_data = {
+        'process_state_model': 'ins_process.process_state'
+        }
+
     # This is not a real state, it will only be used as a storage step for
     # the process' data
-    process_state = StateView('ins_process.process_state',
+    process_state = StateView(None,
                               '',
                               [])
 
@@ -144,6 +149,21 @@ class CoopProcess(Wizard):
     steps_suspend = StateTransition()
     steps_check = StateTransition()
     steps_terminate = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        def get_config(name, config_dict={}):
+            if name in config_dict:
+                return config_dict[name]
+            else:
+                return None
+
+        setattr(cls, 'get_config',
+            functools.partial(get_config, config_dict=cls.config_data))
+
+        cls.process_state.model_name = cls.get_config('process_state_model')
+
+        super(CoopProcess, cls).__setup__()
 
     def init_session(self):
         # Abstract objects must be initialized. This must be done for each one
@@ -1215,9 +1235,9 @@ class DummyProcess(CoopProcess):
     # This is a Process. It inherits of CoopProcess.
     __name__ = 'ins_process.dummy_process'
 
-    process_state = StateView('ins_process.dummy_process_state',
-                              '',
-                              [])
+    config_data = {
+        'process_state_model': 'ins_process.dummy_process_state'
+        }
 
     # We just need to declare the two steps
     dummy_step = CoopStateView('ins_process.dummy_process.dummy_step',

@@ -436,9 +436,9 @@ class SubscriptionProcess(CoopProcess):
     '''
     __name__ = 'ins_contract.subs_process'
 
-    process_state = StateView('ins_contract.subs_process.process_state',
-                              '',
-                              [])
+    config_data = {
+        'process_state_model': 'ins_contract.subs_process.process_state'
+        }
 
     # Here we just have to declare our steps
     project = CoopStateView('ins_contract.subs_process.project',

@@ -1,36 +1,17 @@
-import datetime
-
 from trytond.model import fields as fields
 
 # Needed for Wizardry
 from trytond.wizard import StateView
 
-# Needed for getting models
-from trytond.pool import Pool
-
-# Needed for Evaluation
-from trytond.pyson import Eval
-
-from trytond.modules.insurance_process import CoopProcess
 from trytond.modules.insurance_process import ProcessState
-from trytond.modules.insurance_process import CoopStep
 from trytond.modules.insurance_process import CoopStateView
-from trytond.modules.insurance_process import DependantState
 
-from trytond.modules.coop_utils import get_descendents, WithAbstract
+from trytond.modules.coop_utils import WithAbstract
 
 from trytond.modules.insurance_contract import ProjectState
 from trytond.modules.insurance_contract import SubscriptionProcess
 from trytond.modules.insurance_contract import CoverageDisplayer
 from trytond.modules.insurance_contract import OptionSelectionState
-
-###############################################################################
-# This is the Subscription Process. It is a process (which uses the           #
-# CoopProcess framework) which allows to create a contract from scratch.      #
-# It asks first for a product, then uses it to calculate things like          #
-# eligibility to decide which options will be offered, then finally           #
-# creates the contract.                                                       #
-###############################################################################
 
 __all__ = [
         'ProjectStateEnrollment',
@@ -126,10 +107,10 @@ class EnrollmentProcess(SubscriptionProcess):
     '''
     __name__ = 'ins_collective.enrollment_process'
 
-    process_state = StateView(
-        'ins_collective.enrollment_process.process_state',
-        '',
-        [])
+    config_data = {
+        'process_state_model': \
+            'ins_collective.enrollment_process.process_state'
+        }
 
     project = CoopStateView('ins_collective.enrollment_process.project',
                             'insurance_collective.enrollment_project_view')

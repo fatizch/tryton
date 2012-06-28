@@ -8,24 +8,12 @@ from trytond.wizard import StateView
 # Needed for getting models
 from trytond.pool import Pool
 
-# Needed for Evaluation
-from trytond.pyson import Eval
-
 from trytond.modules.insurance_process import CoopProcess
 from trytond.modules.insurance_process import ProcessState
 from trytond.modules.insurance_process import CoopStep
 from trytond.modules.insurance_process import CoopStateView
-from trytond.modules.insurance_process import DependantState
 
-from trytond.modules.coop_utils import get_descendents, WithAbstract
-
-###############################################################################
-# This is the Subscription Process. It is a process (which uses the           #
-# CoopProcess framework) which allows to create a contract from scratch.      #
-# It asks first for a product, then uses it to calculate things like          #
-# eligibility to decide which options will be offered, then finally           #
-# creates the contract.                                                       #
-###############################################################################
+from trytond.modules.coop_utils import WithAbstract
 
 __all__ = [
         'ProjectGBPState',
@@ -165,9 +153,9 @@ class GBPSubscriptionProcess(CoopProcess):
     '''
     __name__ = 'ins_collective.gbp_subs_process'
 
-    process_state = StateView('ins_collective.gbp_subs_process.process_state',
-                              '',
-                              [])
+    config_data = {
+        'process_state_model': 'ins_collective.gbp_subs_process.process_state'
+        }
 
     # Here we just have to declare our steps
     project = CoopStateView('ins_collective.gbp_subs_process.project',
