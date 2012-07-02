@@ -59,6 +59,7 @@ class ContractTestCase(unittest.TestCase):
     def create_product(self):
         prm_a = self.pricing()
         prm_a.price = 12
+        prm_a.per_sub_elem_price = 1
 
         gbr_a = self.gbr()
         gbr_a.kind = 'ins_product.pricing_rule'
@@ -86,11 +87,26 @@ class ContractTestCase(unittest.TestCase):
         coverage_a.name = 'Alpha Coverage'
         coverage_a.start_date = datetime.date.today()
 
+        prm_c = self.pricing()
+        prm_c.price = 30
+
+        gbr_c = self.gbr()
+        gbr_c.kind = 'ins_product.pricing_rule'
+        gbr_c.start_date = datetime.date.today()
+        gbr_c.end_date = datetime.date.today() + \
+                                        datetime.timedelta(days=10)
+        gbr_c.pricing_rule = [prm_c]
+
+        brm_b = self.brm()
+        brm_b.business_rules = [gbr_c]
+
         coverage_b = self.coverage()
         coverage_b.code = 'BET'
         coverage_b.name = 'Beta Coverage'
         coverage_b.start_date = datetime.date.today() + \
                                         datetime.timedelta(days=5)
+
+        coverage_b.pricing_mgr = brm_b
 
         coverage_a.pricing_mgr = brm_a
 
@@ -110,6 +126,8 @@ class ContractTestCase(unittest.TestCase):
         '''
             Tests subscription process
         '''
+        from trytond.modules.coop_utils import add_days
+
         with Transaction().start(DB_NAME,
                                  USER,
                                  context=CONTEXT) as transaction:
@@ -170,6 +188,7 @@ class ContractTestCase(unittest.TestCase):
                 wizard,
                 wizard.process_state.cur_step_desc)
             self.assertEqual(tmp[0], True)
+            wizard.option_selection.options[1].status = 'Active'
             wizard.transition_steps_next()
             wizard.transition_master_step()
             wizard.transition_steps_previous()
@@ -181,7 +200,7 @@ class ContractTestCase(unittest.TestCase):
             self.assertEqual(len(wizard.extension_life.covered_elements), 1)
             covered = wizard.extension_life.covered_elements[0]
             self.assertEqual(covered.person, on_party)
-            self.assertEqual(len(covered.covered_data), 1)
+            self.assertEqual(len(covered.covered_data), 2)
             self.assertEqual(covered.covered_data[0].start_date,
                              wizard.project.start_date +
                              datetime.timedelta(days=1))
@@ -190,6 +209,27 @@ class ContractTestCase(unittest.TestCase):
 
             contract, = self.Contract.search([('id', '=', '1')])
             self.assert_(contract.id)
+            prices = {}
+            for cur_date in contract.get_dates():
+                price = contract.product.get_result(
+                'options_price',
+                {'date': cur_date,
+                 'contract': contract})
+                prices[cur_date.isoformat()] = price
+
+            def date_from_today(nb):
+                return add_days(datetime.date.today(), nb)
+
+            self.assertEqual(
+                prices[date_from_today(0).isoformat()][0]['total'], 0)
+            self.assertEqual(
+                prices[date_from_today(2).isoformat()][0]['total'], 0)
+            self.assertEqual(
+                prices[date_from_today(3).isoformat()][0]['total'], 13)
+            self.assertEqual(
+                prices[date_from_today(5).isoformat()][0]['total'], 43)
+            self.assertEqual(
+                prices[date_from_today(11).isoformat()][0]['total'], 15)
 
 
 def suite():

@@ -1,4 +1,5 @@
 import copy
+import datetime
 
 from trytond.model import ModelView, ModelSQL, fields as fields
 from trytond.wizard import Wizard
@@ -153,6 +154,8 @@ class WithAbstract(object):
 
     @staticmethod
     def create_field(field_desc, value):
+        if value == 'ins_product.coverage,1':
+            pass
         # This method is used to get what will be set in the field_desc of the
         # object you currently are working on.
 
@@ -206,6 +209,14 @@ class WithAbstract(object):
             # If the value is a dict and the expected field value an instance,
             # we assume that we can create it then go !
             res = WithAbstract.create_abstract(field_desc.model_name, value)
+        elif isinstance(value, str) and isinstance(field_desc,
+                (fields.Reference)):
+            try:
+                model_name, id = value.split(',')
+            except Exception:
+                raise
+            model_obj = Pool().get(model_name)
+            return model_obj(id)
         else:
             # Any basic type (string, int, etc...) in a non model-link context
             # is a direct set.
@@ -375,12 +386,10 @@ class WithAbstract(object):
 
 
 class GetResult(object):
-    def get_result(self, at_date, target, args, manager='', path=''):
+    def get_result(self, target, args, manager='', path=''):
         # This method is a generic entry point for getting parameters.
         #
         # Arguments are :
-        #  - The date at which the computation must take place. It is important
-        #    as many rules / managers / brm will be versionned
         #  - The target value to compute. It is a key which will be used to
         #    decide which data is asked for
         #  - The dict of arguments which will be used by the rule to compute.
@@ -416,7 +425,7 @@ class GetResult(object):
                 if path_elems[0] in (getattr(elem, attr) for attr in
                         sub_elem_data[1]):
                     if isinstance(elem, GetResult):
-                        return elem.get_result(at_date, target, args, manager,
+                        return elem.get_result(target, args, manager,
                             '.'.join(path_elems[1:]))
                     return (None, ['Sub element %s of %s cannot get_result !'
                         % (elem.name, self.name)])
@@ -426,19 +435,29 @@ class GetResult(object):
         if manager:
             # A manager is specified, we look for it
             for brm_name, brm in [(elem, getattr(self, elem))
-                    for elem in dir(self) if elem[-4:] == '_mrg']:
+                    for elem in dir(self) if elem[-4:] == '_mgr']:
                 if not brm_name.startswith(manager):
                     continue
+                if brm is None:
+                    break
                 # When found, we just call the get_result method with our args
-                return brm.get_result(at_date, target, args)
+                try:
+                    good_rule = brm.get_good_rule_at_date(
+                        args).get_good_rule_from_kind()
+                except Exception:
+                    good_rule = None
+                if not good_rule:
+                    return (None, ['Could not find a matching manager'])
+                return good_rule.get_result(target, args)
             # We did not found any manager matching the specified name
-            return (None, ['Business Manager %s does not exist on %s']
-                % (manager, self.name))
+            return (None, ['Business Manager %s does not exist on %s'
+                % (manager, self.name)]
+                )
 
         # Now we look for our target, as it is at our level
         target_func = getattr(self, 'give_me_' + target)
 
-        result = target_func(at_date, args)
+        result = target_func(args)
         if not isinstance(result, tuple) and not result is None:
             return (result, [])
         return result
@@ -446,3 +465,42 @@ class GetResult(object):
     def get_sub_elem_data(self):
         # Should be overridden
         return None
+
+
+def add_results(results):
+    res = [None, []]
+    for cur_res in results:
+        if cur_res == (None, []):
+            continue
+        elif cur_res[0] is None:
+            res[1] += cur_res[1]
+        elif res[0] is None:
+            res[0] = cur_res[0]
+            res[1] += cur_res[1]
+        else:
+            res[0] += cur_res[0]
+            res[1] += cur_res[1]
+    return tuple(res)
+
+
+def get_data_from_dict(data, dict):
+    res = ({}, [])
+    for elem in data:
+        if elem in dict:
+            res[0][elem] = dict[elem]
+        else:
+            res[1] += '%s data not found' % elem
+    return res
+
+
+def convert_ref_to_obj(ref):
+    try:
+        model, id = ref.split(',')
+    except Exception:
+        raise
+    model_obj = Pool().get(model)
+    return model_obj(id)
+
+
+def add_days(date, nb):
+    return date + datetime.timedelta(days=nb)

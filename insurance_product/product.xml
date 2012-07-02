@@ -244,6 +244,9 @@
                               position="after">
                                 <label name="price"/>
                                 <field name="price"/>
+                         		<newline/>
+                         		<label name="per_sub_elem_price"/>
+                         		<field name="per_sub_elem_price"/>
 		                     </xpath>
                          </data>
                          ]]>

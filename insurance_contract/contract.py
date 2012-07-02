@@ -59,6 +59,15 @@ class GenericExtension(CoopSQL, CoopView):
                                        'extension',
                                        'Coverages')
 
+    def get_dates(self):
+        res = set()
+        for covered in self.covered_elements:
+            for data in covered.covered_data:
+                res.add(data.start_date)
+                if data.end_date:
+                    res.add(data.end_date)
+        return res
+
 
 class GenericContract(CoopSQL, CoopView):
     '''
@@ -181,6 +190,26 @@ class Contract(GenericContract):
     def give_option_model(self):
         return self._fields['options'].model_name
 
+    def get_active_options_at_date(self, at_date):
+        res = []
+        for elem in self.options:
+            if elem.start_date <= at_date and (
+                    elem.end_date is None or elem.end_date > at_date):
+                res += [elem]
+        return list(set(res))
+
+    def get_active_coverages_at_date(self, at_date):
+        return [elem.get_coverage()
+            for elem in self.get_active_options_at_date(at_date)]
+
+    def get_dates(self):
+        res = set()
+        res.add(self.start_date)
+        res.update(self.extension_life.get_dates())
+        for cur_option in self.options:
+            res.update(cur_option.get_dates())
+        return res
+
 
 class Option(CoopSQL, CoopView):
     '''
@@ -232,6 +261,17 @@ class Option(CoopSQL, CoopView):
                 for (model__name__, model) in Pool().iterobject()
                 if hasattr(model, 'get_option_data_name')
                     and model.get_option_data_name() != '']
+
+    def get_coverage(self):
+        return self.coverage
+
+    def get_dates(self):
+        res = set()
+        res.add(self.start_date)
+        if self.end_date:
+            res.add(self.end_date)
+        res.update(self.coverage.get_dates())
+        return res
 
 
 class BillingManager(CoopSQL, CoopView):

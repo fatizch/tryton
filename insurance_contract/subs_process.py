@@ -277,9 +277,7 @@ class CoveredDataDesc(CoopStepView):
 
     def init_from_coverage(self, for_coverage):
         self.start_date = for_coverage.start_date
-        self.for_coverage = '%s,%s' % (
-            for_coverage.coverage.__name__,
-            for_coverage.coverage.id)
+        self.for_coverage = for_coverage
 
 
 class CoveredElementDesc(CoopStepView):
@@ -403,15 +401,15 @@ class ExtensionLifeState(DependantState):
                 cur_data.start_date = covered_data.start_date
                 if hasattr(covered_data, 'end_date'):
                     cur_data.end_date = covered_data.end_date
-                cur_data.for_coverage = covered_data.for_coverage
-                cur_data.save()
+                cur_data.for_coverage = '%s,%s' \
+                    % (covered_data.for_coverage.coverage.__name__,
+                    covered_data.for_coverage.coverage.id)
                 cur_element.covered_data.append(cur_data)
             cur_person = CoveredPerson()
             cur_person.person = covered_element.person
             cur_person.save()
             cur_element.product_specific = '%s,%s' % (cur_person.__name__,
                                                       cur_person.id)
-            cur_element.save()
             ext.covered_elements.append(cur_element)
 
         ext.save()

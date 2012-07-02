@@ -8,14 +8,16 @@ from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
-from trytond.modules.coop_utils import utils, CoopView, CoopSQL
+from trytond.modules.coop_utils import utils, CoopView, CoopSQL, GetResult
+from trytond.modules.coop_utils import get_data_from_dict, add_results
+from trytond.modules.coop_utils import convert_ref_to_obj
 
 __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
            'BusinessRuleManager', 'GenericBusinessRule', 'BusinessRuleRoot',
            'PricingRule', 'EligibilityRule']
 
 
-class Offered(CoopView):
+class Offered(CoopView, GetResult):
     'Offered'
 
     __name__ = 'ins_product.offered'
@@ -64,6 +66,46 @@ class Coverage(CoopSQL, Offered):
 
     insurer = fields.Many2One('party.insurer', 'Insurer')
 
+    def give_me_price(self, args):
+        data_dict, errs = get_data_from_dict(['contract', 'date'], args)
+        if errs:
+            return (None, errs)
+        contract = data_dict['contract']
+        date = data_dict['date']
+        coverages = contract.get_active_coverages_at_date(date)
+        res = 0
+        if self in coverages:
+            res, errs = add_results(
+                [(res, errs),
+                self.get_result('price', args, manager='pricing')])
+            if hasattr(contract, 'extension_life'):
+                for covered in contract.extension_life.covered_elements:
+                    for covered_data in covered.covered_data:
+                        for_coverage = convert_ref_to_obj(
+                            covered_data.for_coverage)
+                        if not for_coverage.code == self.code:
+                            continue
+                        if not (date >= covered_data.start_date and
+                                (covered_data.end_date is None or
+                                    covered_data.end_date < date)):
+                            break
+                        tmp_args = args
+                        tmp_args['for_covered'] = covered
+                        res, errs = add_results([(res, errs),
+                            self.get_result('sub_elem_price',
+                                            tmp_args,
+                                            manager='pricing')])
+                        break
+            return (res, errs)
+        return (None, [])
+
+    def get_dates(self):
+        res = set()
+        if self.pricing_mgr:
+            for rule in self.pricing_mgr.business_rules:
+                res.add(rule.start_date)
+        return res
+
 
 class Product(CoopSQL, Offered):
     'Product'
@@ -76,6 +118,33 @@ class Product(CoopSQL, Offered):
     @classmethod
     def __setup__(cls):
         super(Product, cls).__setup__()
+
+    def get_sub_elem_data(self):
+        return ('options', ['code', 'name'])
+
+    def give_me_options_price(self, args):
+        res = {'total': 0}
+        errs = []
+        for option in self.options:
+            tmp_res = option.get_result('price', args)
+            if not tmp_res[0] is None:
+                res[option.code] = tmp_res[0]
+                res['total'] += tmp_res[0]
+            errs += tmp_res[1]
+        return (res, errs)
+
+    def give_me_product_price(self, args):
+        res = self.get_result('price', args, manager='pricing')
+        if not res[0]:
+            res = (0, res[1])
+        return res
+
+    def give_me_total_price(self, args):
+        (product_price, errs_product) = self.give_me_product_price(args)
+        (options_price, errs_options) = self.give_me_options_price(args)
+        return (
+            product_price + options_price['total'],
+            errs_product + errs_options)
 
 
 class ProductOptionsCoverage(CoopSQL):
@@ -93,7 +162,7 @@ class ProductOptionsCoverage(CoopSQL):
                                required=True)
 
 
-class BusinessRuleManager(CoopSQL, CoopView):
+class BusinessRuleManager(CoopSQL, CoopView, GetResult):
     'Business Rule Manager'
 
     __name__ = 'ins_product.business_rule_manager'
@@ -172,9 +241,11 @@ class BusinessRuleManager(CoopSQL, CoopView):
             # the good rule.
             # (This is a given way to get a rule from a list, using the
             # applicable date, it could be anything)
-            for busines_rule in self.business_rules:
-                if busines_rule.start_date <= the_date:
-                    return busines_rule
+            for business_rule in self.business_rules:
+                if business_rule.start_date <= the_date:
+                    if not business_rule.end_date or \
+                            business_rule.end_date > the_date:
+                        return business_rule
         except ValueError, _exception:
             return None
 
@@ -277,8 +348,14 @@ class GenericBusinessRule(CoopSQL, CoopView):
     def default_start_date():
         return Transaction().context.get('start_date')
 
+    def get_good_rule_from_kind(self):
+        for field_name, field_desc in self._fields.iteritems():
+            if (hasattr(field_desc, 'model_name') and
+                    field_desc.model_name == self.kind):
+                return getattr(self, field_name)[0]
 
-class BusinessRuleRoot(CoopView):
+
+class BusinessRuleRoot(CoopView, GetResult):
     'Business Rule Root'
 
     __name__ = 'ins_product.business_rule_root'
@@ -302,6 +379,16 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
     __name__ = 'ins_product.pricing_rule'
 
     price = fields.Numeric('Amount', digits=(16, 2), required=True)
+
+    per_sub_elem_price = fields.Numeric(
+        'Amount per Covered Element',
+        digits=(16, 2))
+
+    def give_me_price(self, args):
+        return (self.price, [])
+
+    def give_me_sub_elem_price(self, args):
+        return (self.per_sub_elem_price, [])
 
 
 class EligibilityRule(CoopSQL, BusinessRuleRoot):
