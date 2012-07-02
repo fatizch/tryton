@@ -193,8 +193,9 @@ class Contract(GenericContract):
     def get_active_options_at_date(self, at_date):
         res = []
         for elem in self.options:
-            if elem.start_date <= at_date and (
-                    elem.end_date is None or elem.end_date > at_date):
+            if elem.start_date <= at_date and (not hasattr(
+                    elem, 'end_date') or (
+                    elem.end_date is None or elem.end_date > at_date)):
                 res += [elem]
         return list(set(res))
 
@@ -268,7 +269,7 @@ class Option(CoopSQL, CoopView):
     def get_dates(self):
         res = set()
         res.add(self.start_date)
-        if self.end_date:
+        if hasattr(self, 'end_date') and self.end_date:
             res.add(self.end_date)
         res.update(self.coverage.get_dates())
         return res

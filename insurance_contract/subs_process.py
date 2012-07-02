@@ -41,6 +41,8 @@ __all__ = [
         'ExtensionLifeState',
         'SubscriptionProcessState',
         'SubscriptionProcess',
+        'SummaryState',
+        'PricingLine'
            ]
 
 
@@ -277,7 +279,9 @@ class CoveredDataDesc(CoopStepView):
 
     def init_from_coverage(self, for_coverage):
         self.start_date = for_coverage.start_date
-        self.for_coverage = for_coverage
+        self.for_coverage = '%s,%s' % (
+            for_coverage.coverage.__name__,
+            for_coverage.coverage.id)
 
 
 class CoveredElementDesc(CoopStepView):
@@ -386,8 +390,7 @@ class ExtensionLifeState(DependantState):
         CoveredPerson = Pool().get('ins_contract.covered_person')
         if hasattr(contract, 'extension_life'):
             ext = ExtensionLife(contract.extension_life)
-            for elem in ext.covered_elements:
-                elem.delete()
+            CoveredElement.delete(ext.covered_elements)
         else:
             ext = ExtensionLife()
         ext.covered_elements = []
@@ -401,9 +404,7 @@ class ExtensionLifeState(DependantState):
                 cur_data.start_date = covered_data.start_date
                 if hasattr(covered_data, 'end_date'):
                     cur_data.end_date = covered_data.end_date
-                cur_data.for_coverage = '%s,%s' \
-                    % (covered_data.for_coverage.coverage.__name__,
-                    covered_data.for_coverage.coverage.id)
+                cur_data.for_coverage = covered_data.for_coverage
                 cur_element.covered_data.append(cur_data)
             cur_person = CoveredPerson()
             cur_person.person = covered_element.person
@@ -416,6 +417,66 @@ class ExtensionLifeState(DependantState):
         contract.extension_life = ext
         WithAbstract.save_abstract_objects(wizard, ('for_contract', contract))
         return (True, [])
+
+
+class PricingLine(CoopStepView):
+    'Pricing Line'
+    # This class is a displayer for pricing data. It is supposed to be
+    # displayed as a list.
+
+    __name__ = 'ins_contract.subs_process.lines'
+
+    summary_state = fields.Many2One(
+        'ins_contract.subs_process.summary',
+        'State')
+
+    name = fields.Char('Name')
+
+    value = fields.Numeric('Value')
+
+
+class SummaryState(CoopStep):
+    'Summary'
+    # This class describes a view which will be used to display a summary of
+    # the subscription process just before the finalization of the subscription
+
+    __name__ = 'ins_contract.subs_process.summary'
+
+    lines = fields.One2Many(
+        'ins_contract.subs_process.lines',
+        'summary_state',
+        'Lines')
+
+    @staticmethod
+    def before_step_calculate_lines(wizard):
+        PricingLine = Pool().get('ins_contract.subs_process.lines')
+        contract = WithAbstract.get_abstract_objects(wizard, 'for_contract')
+        prices = {}
+        for cur_date in contract.get_dates():
+            price = contract.product.get_result(
+            'options_price',
+            {'date': cur_date,
+             'contract': contract})
+            prices[cur_date.isoformat()] = price
+
+        wizard.summary.lines = []
+        for key, value in prices.iteritems():
+            line = PricingLine()
+            line.name = key
+            wizard.summary.lines.append(line)
+
+            for sub_key, sub_value in value[0].iteritems():
+                line = PricingLine()
+                line.name = '\t' + sub_key
+                line.value = sub_value
+                wizard.summary.lines.append(line)
+            line = PricingLine()
+            wizard.summary.lines.append(line)
+        return (True, [])
+
+    @staticmethod
+    def coop_step_name():
+        return 'Summary'
 
 
 class SubscriptionProcessState(ProcessState, WithAbstract):
@@ -439,14 +500,19 @@ class SubscriptionProcess(CoopProcess):
         }
 
     # Here we just have to declare our steps
-    project = CoopStateView('ins_contract.subs_process.project',
-                            'insurance_contract.project_view')
+    project = CoopStateView(
+        'ins_contract.subs_process.project',
+        'insurance_contract.project_view')
     option_selection = CoopStateView(
-                        'ins_contract.subs_process.option_selection',
-                        'insurance_contract.option_selection_view')
+        'ins_contract.subs_process.option_selection',
+        'insurance_contract.option_selection_view')
     extension_life = CoopStateView(
-                        'ins_contract.subs_process.extension_life',
-                        'insurance_contract.extension_life_view')
+        'ins_contract.subs_process.extension_life',
+        'insurance_contract.extension_life_view')
+
+    summary = CoopStateView(
+        'ins_contract.subs_process.summary',
+        'insurance_contract.summary_view')
 
     # And do something when validation occurs
     def do_complete(self):

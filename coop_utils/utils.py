@@ -309,8 +309,9 @@ class WithAbstract(object):
                 # If not, we need to go through each field to serialize each of
                 # them separately.
                 res = {}
-                for key, value in field._values.iteritems():
-                    res[key] = WithAbstract.serialize_field(value)
+                if not field._values is None:
+                    for key, value in field._values.iteritems():
+                        res[key] = WithAbstract.serialize_field(value)
         else:
             # If the field is a basic type, no need for further work.
             res = field

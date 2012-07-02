@@ -120,12 +120,6 @@ class CoopProcess(Wizard):
         'process_state_model': 'ins_process.process_state'
         }
 
-    # This is not a real state, it will only be used as a storage step for
-    # the process' data
-    process_state = StateView(None,
-                              '',
-                              [])
-
     # Starting step, will be the same for all processes
     start_state = 'steps_start'
 
@@ -158,10 +152,16 @@ class CoopProcess(Wizard):
             else:
                 return None
 
+        # This is not a real state, it will only be used as a storage step for
+        # the process' data
+
         setattr(cls, 'get_config',
             functools.partial(get_config, config_dict=cls.config_data))
 
-        cls.process_state.model_name = cls.get_config('process_state_model')
+        cls.process_state = StateView(
+            cls.get_config('process_state_model'),
+            '',
+            [])
 
         super(CoopProcess, cls).__setup__()
 
@@ -657,28 +657,6 @@ class CoopStateView(StateView, CoopState):
         super(CoopStateView, self).__init__(name,
                                             view,
                                             CoopState.all_buttons())
-
-    def serialize_field(self, field):
-        # This method is a copy from WithAbstract.serialize_field.
-        # It is deprecated.
-        res = None
-        if (isinstance(field, list) and
-                                field != [] and
-                                isinstance(field[0], Model)):
-            res = []
-            for elem in field:
-                res.append(self.serialize_field(elem))
-        elif isinstance(field, Model):
-            if isinstance(field, Model) and field.id > 0:
-                res = field.id
-            else:
-                res = {}
-                for key, value in field._values.iteritems():
-                    res[key] = self.serialize_field(value)
-        else:
-            res = field
-
-        return res
 
     # Here is a little dirty trick to avoid resetting of StateView values after
     # before methods.

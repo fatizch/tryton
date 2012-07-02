@@ -57,6 +57,31 @@
 					]]>
 			</field>
 		</record>
+
+		<record model="ir.ui.view" id="lines_view">
+			<field name="model">ins_contract.subs_process.lines</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+					<![CDATA[
+						<tree string="Pricing Lines">
+							<field name="name"/>
+							<field name="value"/>
+						</tree>
+					]]>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view" id="summary_view">
+			<field name="model">ins_contract.subs_process.summary</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+					<![CDATA[
+						<form string="Subscription Process - Summary">
+							<field name="lines"/>
+						</form>
+					]]>
+			</field>
+		</record>
 		
 		<record model="ir.ui.view" id="covered_person_desc_view_tree">
 			<field name="model">ins_contract.subs_process.covered_person_desc</field>
@@ -126,18 +151,32 @@
 			<field name="step_model">ins_contract.subs_process.option_selection</field>	
 		</record>
 		<record model="ins_process.step_desc" id="extension_step_desc">
-			<field name="button_next"></field>
+			<field name="button_next">True</field>
 			<field name="button_previous">True</field>
 			<field name="button_check">True</field>
-			<field name="button_complete">True</field>
+			<field name="button_complete"></field>
 			<field name="button_cancel">True</field>
 			<field name="button_suspend">True</field>
-			<field name="button_default">button_complete</field>
+			<field name="button_default">button_next</field>
 			<field name="on_product_step">1</field>
 			<field name="process" ref="subs_process_desc"/>
 			<field name="virtual_step">0</field>
 			<field name="sequence">3</field>
 			<field name="product_step_name">extension</field>	
+		</record>
+		<record model="ins_process.step_desc" id="summary_step_desc">
+			<field name="button_next"></field>
+			<field name="button_previous">True</field>
+			<field name="button_check"></field>
+			<field name="button_complete">True</field>
+			<field name="button_cancel">True</field>
+			<field name="button_suspend">True</field>
+			<field name="button_default">button_complete</field>
+			<field name="on_product_step">0</field>
+			<field name="process" ref="subs_process_desc"/>
+			<field name="virtual_step">0</field>
+			<field name="sequence">4</field>
+			<field name="step_model">ins_contract.subs_process.summary</field>	
 		</record>
 	</data>
 </tryton>

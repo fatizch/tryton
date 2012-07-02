@@ -23,6 +23,8 @@ def register():
         ExtensionLifeState,
         SubscriptionProcessState,
         BrokerManager,
+        SummaryState,
+        PricingLine,
         module='insurance_contract', type_='model')
     Pool.register(
         SubscriptionProcess,

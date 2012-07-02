@@ -204,32 +204,53 @@ class ContractTestCase(unittest.TestCase):
             self.assertEqual(covered.covered_data[0].start_date,
                              wizard.project.start_date +
                              datetime.timedelta(days=1))
+            wizard.transition_steps_next()
+            wizard.transition_master_step()
+
+            def print_line(line):
+                if not hasattr(line, 'name'):
+                    return ''
+                res = line.name
+                if hasattr(line, 'value') and not line.value is None:
+                    res += ' => %d' % line.value
+                return res
+
+            lines = []
+            for elem in wizard.summary.lines:
+                lines.append(print_line(elem))
+
+            def date_from_today(nb):
+                return add_days(datetime.date.today(), nb)
+
+            good_lines = [
+                date_from_today(5).isoformat(),
+                '\ttotal => 43',
+                '\tBET => 30',
+                '\tALP => 13',
+                '',
+                date_from_today(2).isoformat(),
+                '\ttotal => 0',
+                '',
+                date_from_today(3).isoformat(),
+                '\ttotal => 13',
+                '\tALP => 13',
+                '',
+                date_from_today(0).isoformat(),
+                '\ttotal => 0',
+                '',
+                date_from_today(11).isoformat(),
+                '\ttotal => 15',
+                '\tBET => 0',
+                '\tALP => 15',
+                '']
+
+            self.assertEqual(lines, good_lines)
+
             wizard.transition_steps_complete()
             wizard.transition_master_step()
 
             contract, = self.Contract.search([('id', '=', '1')])
             self.assert_(contract.id)
-            prices = {}
-            for cur_date in contract.get_dates():
-                price = contract.product.get_result(
-                'options_price',
-                {'date': cur_date,
-                 'contract': contract})
-                prices[cur_date.isoformat()] = price
-
-            def date_from_today(nb):
-                return add_days(datetime.date.today(), nb)
-
-            self.assertEqual(
-                prices[date_from_today(0).isoformat()][0]['total'], 0)
-            self.assertEqual(
-                prices[date_from_today(2).isoformat()][0]['total'], 0)
-            self.assertEqual(
-                prices[date_from_today(3).isoformat()][0]['total'], 13)
-            self.assertEqual(
-                prices[date_from_today(5).isoformat()][0]['total'], 43)
-            self.assertEqual(
-                prices[date_from_today(11).isoformat()][0]['total'], 15)
 
 
 def suite():
