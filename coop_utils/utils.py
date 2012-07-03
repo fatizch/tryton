@@ -505,3 +505,10 @@ def convert_ref_to_obj(ref):
 
 def add_days(date, nb):
     return date + datetime.timedelta(days=nb)
+
+
+def priority(priority_lvl):
+    def wrap(f):
+        f.priority = priority_lvl
+        return f
+    return wrap

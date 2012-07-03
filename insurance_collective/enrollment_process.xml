@@ -73,10 +73,10 @@
 			<field name="step_model">ins_collective.enrollment_process.option_selection</field>	
 		</record>
 		<record model="ins_process.step_desc" id="enrollment_extension_step_desc">
-			<field name="button_next"></field>
+			<field name="button_next">True</field>
 			<field name="button_previous">True</field>
 			<field name="button_check">True</field>
-			<field name="button_complete">True</field>
+			<field name="button_complete"></field>
 			<field name="button_cancel">True</field>
 			<field name="button_suspend">True</field>
 			<field name="button_default">button_complete</field>
@@ -85,6 +85,20 @@
 			<field name="virtual_step">0</field>
 			<field name="sequence">3</field>
 			<field name="product_step_name">extension</field>	
+		</record>
+		<record model="ins_process.step_desc" id="summary_step_desc">
+			<field name="button_next"></field>
+			<field name="button_previous">True</field>
+			<field name="button_check"></field>
+			<field name="button_complete">True</field>
+			<field name="button_cancel">True</field>
+			<field name="button_suspend">True</field>
+			<field name="button_default">button_complete</field>
+			<field name="on_product_step">0</field>
+			<field name="process" ref="subs_process_desc"/>
+			<field name="virtual_step">0</field>
+			<field name="sequence">4</field>
+			<field name="step_model">ins_contract.subs_process.summary</field>	
 		</record>
 	</data>
 </tryton>

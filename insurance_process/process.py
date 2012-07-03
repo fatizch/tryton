@@ -7,7 +7,7 @@ from trytond.model.model import ModelMeta, Model
 from trytond.model import fields as fields
 
 from trytond.modules.coop_utils import utils, CoopView, CoopSQL
-from trytond.modules.coop_utils import WithAbstract
+from trytond.modules.coop_utils import WithAbstract, priority
 
 # Needed for proper encoding / decoding of objects as strings
 from trytond.protocols.jsonrpc import JSONEncoder, object_hook
@@ -753,10 +753,36 @@ class CoopStepMethods(object):
     def get_methods_starting_with(cls, prefix):
         # This method is used to get all methods of the class that start with
         # the provided prefix
-        return [getattr(cls, method)
+        res = [getattr(cls, method)
                    for method in dir(cls)
                    if (callable(getattr(cls, method))
                        and method.startswith(prefix))]
+
+        # Methods which will be defined can have a 'priority' assigned to them.
+        # This can be done by using the @priority(value) decorator on them.
+        #
+        # Here we use this data to sort the methods that will be executed
+        def comp_func(f1, f2):
+            # No priority defined means 'do not care'.
+            if hasattr(f1, 'priority'):
+                if hasattr(f2, 'priority'):
+                    # Equal priority returns 0. We might want to return an
+                    # error instead, there should be no doubt on which method
+                    # comes first.
+                    if f1.priority == f2.priority: return 0
+                    # Lower number means higher priority.
+                    if f1.priority < f2.priority: return 1
+                    return -1
+                # If f1 has a priority defined and not f2, then f1 wins
+                return 1
+            # Idem, if f1 has no priority and f2 does, f2 wins
+            if hasattr(f2, 'priority'):
+                return -1
+            return 0
+
+        res.sort(cmp=comp_func)
+
+        return res
 
     @staticmethod
     def fill_data_dict(wizard, data_pattern):
@@ -1134,12 +1160,14 @@ class DummyStep(CoopStep):
     # method.
     # DO NOT FORGET to always return something
     @staticmethod
+    @priority(1)
     def check_step_schtroumpf_validation(wizard):
         if wizard.dummy_step.name == 'Toto':
             return (False, ['Schtroumpf'])
         return (True, [])
 
     @staticmethod
+    @priority(2)
     def check_step_kiwi_validation(wizard):
         if wizard.dummy_step.name == 'Toto':
             return (False, ['Kiwi'])

@@ -244,6 +244,9 @@ class ContractTestCase(unittest.TestCase):
                 '\tALP => 15',
                 '']
 
+            lines.sort()
+            good_lines.sort()
+
             self.assertEqual(lines, good_lines)
 
             wizard.transition_steps_complete()
