@@ -484,6 +484,19 @@ def add_results(results):
     return tuple(res)
 
 
+def add_price_results(results):
+    res = [[0, '', []], []]
+    for cur_res in results:
+        if cur_res == (None, []):
+            continue
+        elif cur_res[0] is None:
+            res[1] += cur_res[1]
+        else:
+            res[0][0] += cur_res[0][0]
+            res[0][2].append(cur_res[0])
+    return tuple(res)
+
+
 def get_data_from_dict(data, dict):
     res = ({}, [])
     for elem in data:
@@ -512,3 +525,27 @@ def priority(priority_lvl):
         f.priority = priority_lvl
         return f
     return wrap
+
+
+class PricingLine(object):
+    'Pricing Line'
+    value = 0
+    desc = []
+    name = ''
+
+    def __init__(self, value=0, name='', desc=[]):
+        super(PricingLine, self).__init__()
+        self.value = value
+        self.name = name
+        self.desc = desc
+
+    def __iadd__(self, other):
+        self.value += other.value
+        self.desc.append(other)
+        return self
+
+    def __add__(self, other):
+        tmp = PricingLine()
+        tmp.value = self.value + other.value
+        tmp.desc = [self, other]
+        return tmp
