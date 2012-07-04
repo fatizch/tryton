@@ -1,0 +1,20 @@
+<tryton>
+    <data>
+        <!-- Person form view -->
+        <record model="ir.ui.view" id="person_view_form">
+            <field name="model">party.person</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="coop_party.actor_view_form"/>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <data>
+                    <xpath expr="/form/label[@name=&quot;siren&quot;]" position="replace">
+                    </xpath>
+                    <xpath expr="/form/field[@name=&quot;siren&quot;]" position="replace">
+                    </xpath>
+                </data>
+                ]]>
+            </field>
+        </record>
+    </data>
+</tryton>
