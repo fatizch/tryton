@@ -95,7 +95,7 @@
 			<field name="button_suspend">True</field>
 			<field name="button_default">button_complete</field>
 			<field name="on_product_step">0</field>
-			<field name="process" ref="subs_process_desc"/>
+			<field name="process" ref="insurance_contract.subs_process_desc"/>
 			<field name="virtual_step">0</field>
 			<field name="sequence">4</field>
 			<field name="step_model">ins_contract.subs_process.summary</field>	
