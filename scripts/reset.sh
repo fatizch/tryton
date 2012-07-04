@@ -15,9 +15,21 @@ echo "Reinstalling coop utils"
 echo $SEP
 easy_install -UZ $REPOS_ROOT/coopbusiness/coop_utils
 echo $SEP
-echo "Reinstalling party"
+echo "Reinstalling coop party"
+echo $SEP
+easy_install -UZ $REPOS_ROOT/coopbusiness/coop_party
+echo $SEP
+echo "Reinstalling coop party fr"
+echo $SEP
+easy_install -UZ $REPOS_ROOT/coopbusiness/coop_party_fr
+echo $SEP
+echo "Reinstalling insurance party"
 echo $SEP
 easy_install -UZ $REPOS_ROOT/coopbusiness/insurance_party
+echo $SEP
+echo "Reinstalling insurance party fr"
+echo $SEP
+easy_install -UZ $REPOS_ROOT/coopbusiness/insurance_party_fr
 echo $SEP
 echo "Reinstalling party bank"
 echo $SEP

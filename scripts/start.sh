@@ -38,7 +38,6 @@ if [ ! -e "$SCRIPT_NAME" ]; then
    if [ ! -e "$SCRIPT_NAME.sh" ]; then
       echo "Le script '$SCRIPT_NAME' n'existe pas"
    else
-   echo $
       ./$SCRIPT_NAME.sh $2
    fi
 else
