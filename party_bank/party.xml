@@ -17,5 +17,22 @@
              ]]>
             </field>
         </record>
+        <!-- Legal entity form view -->
+        <record model="ir.ui.view" id="legal_entity_view_form">
+            <field name="model">party.legal_entity</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="coop_party.actor_view_form"/>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <data>
+                    <xpath expr="/form/notebook/page[@id=&quot;role&quot;]/group[@id=&quot;role_group&quot;]" 
+                    position="inside">
+                        <label name="is_bank"/>
+                        <field name="is_bank" xexpand="0" width="25"/>
+                    </xpath>
+                </data>
+                ]]>
+            </field>
+        </record>
     </data>
 </tryton>

@@ -11,8 +11,12 @@
             <field name="arch" type="xml">
                 <![CDATA[
                 <form>
-                    <label name="reference"/>
-                    <field name="reference"/>
+                    <label name="bic"/>
+                    <field name="bic"/>
+                    <label name="bank_code"/>
+                    <field name="bank_code"/>
+                    <label name="branch_code"/>
+                    <field name="branch_code"/>
                 </form>
                 ]]>
             </field>
@@ -25,7 +29,9 @@
             <field name="arch" type="xml">
                 <![CDATA[
                     <tree>
-                        <field name="reference"/>
+                        <field name="bic"/>
+                        <field name="bank_code"/>
+                        <field name="branch_code"/>
                     </tree>
                 ]]>
             </field>
@@ -40,19 +46,22 @@
             <field name="arch" type="xml">
                 <![CDATA[
                 <form col="6">
-                    <label name="currency"/>
-                    <field name="currency"/>
-                    <label name="start_date"/>
-                    <field name="start_date"/>
-                    <label name="end_date"/>
-                    <field name="end_date"/>
-                    <newline/>
-                    <field name="account_numbers" colspan="6" mode="form,tree"/>
-                    <label name="agency"/>
-                    <field name="agency"/>
-                    <label name="address"/>
-                    <field name="address"/>
+                    <group id="general" colspan="3" col="4">
+                        <label name="start_date"/>
+                        <field name="start_date"/>
+                        <label name="end_date"/>
+                        <field name="end_date"/>
+	                    <label name="currency"/>
+	                    <field name="currency" colspan="3"/>
 
+	                    <label name="agency"/>
+	                    <field name="agency" colspan="3"/>
+	                    <label name="address"/>
+	                    <field name="address" colspan="3"/>
+                    </group>
+                    <group id="account_number" colspan="3" rowspan="6" yfill="1">
+                        <field name="account_numbers" mode="form,tree" />
+                    </group>
                 </form>
                 ]]>
             </field>
@@ -66,11 +75,11 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                <form col="6">
+                <form col="9">
                     <label name="kind"/>
                     <field name="kind"/>
                     <label name="number"/>
-                    <field name="number" col="5"/>
+                    <field name="number" colspan="6"/>
                 </form>
                 ]]>
             </field>

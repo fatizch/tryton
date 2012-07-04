@@ -1,6 +1,6 @@
 from trytond.pool import Pool
-from party import *
-from bank import *
+from .party import *
+from .bank import *
 
 
 def register():
