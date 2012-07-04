@@ -1,0 +1,215 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- Let's add a sub menu actor to the party menu -->
+        <menuitem name="Actors" parent="party.menu_party" sequence="0"
+            id="menu_actor" icon="tryton-party"/>
+
+        <!-- Generic actor form view -->
+        <record model="ir.ui.view" id="actor_view_form">
+            <field name="model">party.actor</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="party.party_view_form"/>
+            <field name="arch" type="xml">
+             <![CDATA[
+             <data>
+                <xpath expr="/form"
+                    position="replace_attributes">
+                    <form col="8"/>
+                </xpath>
+                <xpath expr="/form/label[@name=&quot;name&quot;]"
+                    position="replace_attributes">
+                    <label name="name" xalign="0"/>
+                </xpath>
+                <xpath expr="/form/field[@name=&quot;name&quot;]"
+                    position="replace_attributes">
+                    <field name="name" colspan="2"/>
+                </xpath>
+                <xpath expr="/form/notebook"
+                    position="replace_attributes">
+                    <notebook colspan="8"/>
+                </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;accounting&quot;]"
+                    position="replace">
+                </xpath>
+                <xpath expr="/form/notebook" position="inside">
+                    <page string="Roles" id="role">
+                        <group id="role_group" colspan="4">
+                        </group>
+                    </page>
+                </xpath>
+             </data>
+             ]]>
+            </field>
+        </record>
+        
+        <!--  ******************************************* 
+              ************    Legal Entity    ***********
+              *******************************************-->
+
+        <!-- View for the main menu and the event -->
+        <record model="ir.action.act_window" id="act_legal_entity_form">
+            <field name="name">Legal Entity</field>
+            <field name="res_model">party.legal_entity</field>
+        </record>
+
+        <!-- Sub menu actors Legal Entity -->
+        <menuitem parent="menu_actor" sequence="0" id="menu_legal_entity_form"
+            icon="tryton-list" action="act_legal_entity_form" />
+
+        <!-- Legal entity form view -->
+        <record model="ir.ui.view" id="legal_entity_view_form">
+            <field name="model">party.legal_entity</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="actor_view_form"/>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <data>
+                    <xpath expr="/form/group[@id=&quot;checkboxes&quot;]" position="after">
+                        <newline/>
+                        <label name="vat_country"/>
+                        <field name="vat_country"/>
+                        <label name="vat_number"/>
+                        <field name="vat_number"/>
+                    </xpath>
+                </data>
+                ]]>
+            </field>
+        </record>
+
+        <!-- Legal entity tree view -->
+        <record model="ir.ui.view" id="legal_entity_view_tree">
+            <field name="model">party.legal_entity</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                        <![CDATA[
+                            <tree>
+                                <field name="name"/>
+                            </tree>
+                        ]]>
+            </field>
+        </record>
+        <!-- View for the edition or the legal entity -->
+        <record model="ir.action.act_window.view" id="act_legal_entity_form_view">
+            <field name="sequence" eval="20" />
+            <field name="view" ref="legal_entity_view_form" />
+            <field name="act_window" ref="act_legal_entity_form" />
+        </record>
+
+        <!-- View that connects the form in the tree with the specification -->
+        <record model="ir.action.act_window.view" id="act_legal_entity_tree_view">
+            <field name="sequence" eval="10" />
+            <field name="view" ref="legal_entity_view_tree" />
+            <field name="act_window" ref="act_legal_entity_form" />
+        </record>
+
+        <!--  ******************************************* 
+              **************   Person     ***************
+              *******************************************-->
+
+        <!-- View for the main menu and the event -->
+        <record model="ir.action.act_window" id="act_person_form">
+            <field name="name">Person</field>
+            <field name="res_model">party.person</field>
+        </record>
+
+        <!-- Sub menu actors Person -->
+        <menuitem parent="menu_actor" sequence="1" id="menu_person_form"
+            icon="tryton-list" action="act_person_form" />
+
+        <!-- Person form view -->
+        <record model="ir.ui.view" id="person_view_form">
+            <field name="model">party.person</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="actor_view_form"/>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <data>
+                    <xpath expr="/form/label[@name=&quot;name&quot;]" position="before">
+                            <label name="gender"/>
+                            <field name="gender" widget="selection" xalign="0" xexpand="0"/>
+                    </xpath>
+                    <xpath expr="/form/field[@name=&quot;name&quot;]" position="after">
+                            <label name="first_name" xalign="0"/>
+                            <field name="first_name" colspan="2"/>
+                            <newline/>
+                            <label name="birth_date" xalign="0"/>
+                            <field name="birth_date"/>
+                            <label name="ssn" xalign="0"/>
+                            <field name="ssn" colspan="2"/>
+                            <label name="maiden_name" xalign="0"/>
+                            <field name="maiden_name" colspan="2"/>
+                            <newline/>
+                    </xpath>
+                    <xpath expr="/form/notebook" position="inside">
+                            <page string="Relations" id="rel">
+                                <field name="relations"
+                                    view_ids="coop_party.person_relations_view_tree_from"/>
+                                <newline/>
+                                <field name="in_relation_with"
+                                    view_ids="coop_party.person_relations_view_tree_to"/>
+                                
+                            </page>
+                    </xpath>
+                </data>
+                ]]>
+            </field>
+        </record>
+
+        <!-- Person tree view -->
+        <record model="ir.ui.view" id="person_view_tree">
+            <field name="model">party.person</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                        <![CDATA[
+                            <tree>
+                                <field name="name"/>
+                            </tree>
+                        ]]>
+            </field>
+        </record>
+
+        <!-- View for the edition or the person -->
+        <record model="ir.action.act_window.view" id="act_person_form_view">
+            <field name="sequence" eval="20" />
+                <field name="view" ref="person_view_form" />
+            <field name="act_window" ref="act_person_form" />
+        </record>
+
+        <!-- View that connects the form in the tree with the specification -->
+        <record model="ir.action.act_window.view" id="act_person_tree_view">
+            <field name="sequence" eval="10" />
+            <field name="view" ref="person_view_tree" />
+            <field name="act_window" ref="act_person_form" />
+        </record>
+
+        <!--  ******************************************* 
+              **************   PersonRelations     ***************
+              *******************************************-->
+        <!-- Person tree view -->
+        <record model="ir.ui.view" id="person_relations_view_tree_from">
+            <field name="model">party.person-relations</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <tree>
+                        <field name="kind"/>
+                        <field name="to_person"/>
+                    </tree>
+                ]]>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="person_relations_view_tree_to">
+            <field name="model">party.person-relations</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <tree>
+                        <field name="reverse_kind"/>
+                        <field name="from_person"/>
+                    </tree>
+                ]]>
+            </field>
+        </record>
+    </data>
+</tryton>
