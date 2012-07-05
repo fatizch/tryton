@@ -408,12 +408,12 @@ class ExtensionLifeState(DependantState):
                 cur_element.covered_data.append(cur_data)
             cur_person = CoveredPerson()
             cur_person.person = covered_element.person
-            cur_person.save()
+            # cur_person.save()
             cur_element.product_specific = '%s,%s' % (cur_person.__name__,
                                                       cur_person.id)
             ext.covered_elements.append(cur_element)
 
-        ext.save()
+        # ext.save()
         contract.extension_life = ext
         WithAbstract.save_abstract_objects(wizard, ('for_contract', contract))
         return (True, [])
@@ -433,6 +433,17 @@ class PricingLine(CoopStepView):
     name = fields.Char('Name')
 
     value = fields.Numeric('Value')
+
+    @staticmethod
+    def create_from_result(result, prefix=''):
+        # result is a PricingLineResult instance
+        top_line = PricingLine()
+        top_line.name = prefix + result.name
+        top_line.value = result.value
+        res = [top_line]
+        for elem in result.desc:
+            res += PricingLine.create_from_result(elem, prefix + '\t')
+        return res
 
 
 class SummaryState(CoopStep):
@@ -456,7 +467,7 @@ class SummaryState(CoopStep):
             price = contract.product.get_result(
             'options_price',
             {'date': cur_date,
-             'contract': contract})
+             'contract': contract})[0]
             prices[cur_date.isoformat()] = price
 
         wizard.summary.lines = []
@@ -464,12 +475,8 @@ class SummaryState(CoopStep):
             line = PricingLine()
             line.name = key
             wizard.summary.lines.append(line)
-
-            for sub_key, sub_value in value[0].iteritems():
-                line = PricingLine()
-                line.name = '\t' + sub_key
-                line.value = sub_value
-                wizard.summary.lines.append(line)
+            other_lines = PricingLine.create_from_result(value, '\t')
+            wizard.summary.lines += other_lines
             line = PricingLine()
             wizard.summary.lines.append(line)
         return (True, [])

@@ -9,10 +9,6 @@ from trytond.tests.test_tryton import test_view, test_depends
 from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT
 from trytond.transaction import Transaction
 
-# Needed for wizardry testing
-from trytond.wizard import Wizard
-from trytond.exceptions import UserError
-
 
 class ContractTestCase(unittest.TestCase):
 
@@ -224,25 +220,35 @@ class ContractTestCase(unittest.TestCase):
 
             good_lines = [
                 date_from_today(5).isoformat(),
-                '\ttotal => 43',
-                '\tBET => 30',
-                '\tALP => 13',
+                '\tOptions => 43',
+                '\t\tBeta Coverage => 30',
+                '\t\t\tBase price => 30',
+                '\t\tAlpha Coverage => 13',
+                '\t\t\tBase price => 12',
+                '\t\t\tTo be implemented => 1',
                 '',
                 date_from_today(2).isoformat(),
-                '\ttotal => 0',
+                '\tOptions => 0',
                 '',
                 date_from_today(3).isoformat(),
-                '\ttotal => 13',
-                '\tALP => 13',
+                '\tOptions => 13',
+                '\t\tAlpha Coverage => 13',
+                '\t\t\tBase price => 12',
+                '\t\t\tTo be implemented => 1',
                 '',
                 date_from_today(0).isoformat(),
-                '\ttotal => 0',
+                '\tOptions => 0',
                 '',
                 date_from_today(11).isoformat(),
-                '\ttotal => 15',
-                '\tBET => 0',
-                '\tALP => 15',
+                '\tOptions => 15',
+                '\t\tBeta Coverage => 0',
+                '\t\tAlpha Coverage => 15',
+                '\t\t\tBase price => 15',
                 '']
+
+            # print '\n'.join(lines)
+            # print '###################'
+            # print '\n'.join(good_lines)
 
             lines.sort()
             good_lines.sort()

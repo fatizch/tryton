@@ -9,8 +9,8 @@ from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
 from trytond.modules.coop_utils import utils, CoopView, CoopSQL, GetResult
-from trytond.modules.coop_utils import get_data_from_dict, add_results
-from trytond.modules.coop_utils import convert_ref_to_obj
+from trytond.modules.coop_utils import get_data_from_dict
+from trytond.modules.coop_utils import convert_ref_to_obj, PricingResultLine
 
 __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
            'BusinessRuleManager', 'GenericBusinessRule', 'BusinessRuleRoot',
@@ -73,11 +73,13 @@ class Coverage(CoopSQL, Offered):
         contract = data_dict['contract']
         date = data_dict['date']
         coverages = contract.get_active_coverages_at_date(date)
-        res = 0
+        res = PricingResultLine(name=self.name)
         if self in coverages:
-            res, errs = add_results(
-                [(res, errs),
-                self.get_result('price', args, manager='pricing')])
+            _res, _errs = self.get_result('price', args, manager='pricing')
+            if _res:
+                _res.name = 'Base price'
+                res += _res
+            errs += _errs
             if hasattr(contract, 'extension_life'):
                 for covered in contract.extension_life.covered_elements:
                     for covered_data in covered.covered_data:
@@ -86,15 +88,25 @@ class Coverage(CoopSQL, Offered):
                         if not for_coverage.code == self.code:
                             continue
                         if not (date >= covered_data.start_date and
-                                (covered_data.end_date is None or
+                                (not hasattr(covered_data, 'end_date') or
+                                    covered_data.end_date is None or
                                     covered_data.end_date < date)):
                             break
                         tmp_args = args
                         tmp_args['for_covered'] = covered
-                        res, errs = add_results([(res, errs),
-                            self.get_result('sub_elem_price',
-                                            tmp_args,
-                                            manager='pricing')])
+                        _res, _errs = self.get_result(
+                            'sub_elem_price',
+                            tmp_args,
+                            manager='pricing')
+                        if _res and _res.value:
+                            # Basically we set name = covered.product_specific
+                            # .person.name, but 'product_specific' is a
+                            # Reference field and is not automatically turned
+                            # into a browse object.
+                            # Should be done later by tryton.
+                            _res.name = 'To be implemented'
+                            res += _res
+                            errs += _errs
                         break
             return (res, errs)
         return (None, [])
@@ -123,28 +135,25 @@ class Product(CoopSQL, Offered):
         return ('options', ['code', 'name'])
 
     def give_me_options_price(self, args):
-        res = {'total': 0}
         errs = []
+        res = PricingResultLine(name='Options')
         for option in self.options:
-            tmp_res = option.get_result('price', args)
-            if not tmp_res[0] is None:
-                res[option.code] = tmp_res[0]
-                res['total'] += tmp_res[0]
-            errs += tmp_res[1]
+            _res, _errs = option.get_result('price', args)
+            if not _res is None:
+                res += _res
+            errs += _errs
         return (res, errs)
 
     def give_me_product_price(self, args):
         res = self.get_result('price', args, manager='pricing')
         if not res[0]:
-            res = (0, res[1])
+            res = (PricingResultLine(), res[1])
         return res
 
     def give_me_total_price(self, args):
-        (product_price, errs_product) = self.give_me_product_price(args)
-        (options_price, errs_options) = self.give_me_options_price(args)
-        return (
-            product_price + options_price['total'],
-            errs_product + errs_options)
+        (p_price, errs_product) = self.give_me_product_price(args)
+        (o_price, errs_options) = self.give_me_options_price(args)
+        return (p_price + o_price, errs_product + errs_options)
 
 
 class ProductOptionsCoverage(CoopSQL):
@@ -385,10 +394,10 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
         digits=(16, 2))
 
     def give_me_price(self, args):
-        return (self.price, [])
+        return (PricingResultLine(value=self.price), [])
 
     def give_me_sub_elem_price(self, args):
-        return (self.per_sub_elem_price, [])
+        return (PricingResultLine(value=self.per_sub_elem_price), [])
 
 
 class EligibilityRule(CoopSQL, BusinessRuleRoot):

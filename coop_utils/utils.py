@@ -154,8 +154,6 @@ class WithAbstract(object):
 
     @staticmethod
     def create_field(field_desc, value):
-        if value == 'ins_product.coverage,1':
-            pass
         # This method is used to get what will be set in the field_desc of the
         # object you currently are working on.
 
@@ -527,25 +525,26 @@ def priority(priority_lvl):
     return wrap
 
 
-class PricingLine(object):
-    'Pricing Line'
-    value = 0
-    desc = []
-    name = ''
+class PricingResultLine(object):
+    'Pricing Line Result'
 
-    def __init__(self, value=0, name='', desc=[]):
-        super(PricingLine, self).__init__()
+    def __init__(self, value=0, name='', desc=None):
+        super(PricingResultLine, self).__init__()
         self.value = value
         self.name = name
-        self.desc = desc
+        self.desc = desc or []
+        self.details = []
+        self.on_object = None
 
     def __iadd__(self, other):
+        if other is None or other.value is None:
+            return self
         self.value += other.value
-        self.desc.append(other)
+        self.desc += [other]
         return self
 
     def __add__(self, other):
-        tmp = PricingLine()
+        tmp = PricingResultLine()
         tmp.value = self.value + other.value
         tmp.desc = [self, other]
         return tmp

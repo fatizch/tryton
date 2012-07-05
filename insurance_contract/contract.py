@@ -64,7 +64,7 @@ class GenericExtension(CoopSQL, CoopView):
         for covered in self.covered_elements:
             for data in covered.covered_data:
                 res.add(data.start_date)
-                if data.end_date:
+                if hasattr(data, 'end_date') and data.end_date:
                     res.add(data.end_date)
         return res
 
