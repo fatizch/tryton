@@ -9,7 +9,7 @@ from trytond.pool import PoolMeta
 from trytond.modules.coop_utils import utils, CoopView, CoopSQL
 from trytond.modules.coop_party import Actor
 
-__all__ = ['Party', 'Actor', 'Insurer', 'Broker', 'Customer', ]
+__all__ = ['Party', 'Insurer', 'Broker', 'Customer', ]
 __metaclass__ = PoolMeta
 
 
@@ -90,11 +90,6 @@ class Party:
     @classmethod
     def set_is_actor(cls, parties, name, value):
         pass
-
-
-class Actor(CoopView):
-    'Actor'
-    __name__ = 'party.actor'
 
 
 class Insurer(CoopSQL, Actor):

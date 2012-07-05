@@ -5,7 +5,6 @@ from .party import *
 def register():
     Pool.register(
         Party,
-        Actor,
         Insurer,
         Broker,
         Customer,
