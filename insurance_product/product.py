@@ -67,33 +67,73 @@ class Coverage(CoopSQL, Offered):
     insurer = fields.Many2One('party.insurer', 'Insurer')
 
     def give_me_price(self, args):
+        # This method is one of the core of the pricing system. It asks for the
+        # price for the self depending on the contrat that is given as an
+        # argument.
         data_dict, errs = get_data_from_dict(['contract', 'date'], args)
         if errs:
+            # No contract means no price.
             return (None, errs)
         contract = data_dict['contract']
         date = data_dict['date']
+
+        # We need to chack that self is part of the subscribed coverages of the
+        # contract.
         coverages = contract.get_active_coverages_at_date(date)
         res = PricingResultLine(name=self.name)
         if self in coverages:
+            # The first part of the pricing is the price at the coverage level.
+            # It is computed by the pricing manager, so we just need to forward
+            # the request.
             _res, _errs = self.get_result('price', args, manager='pricing')
             if _res:
-                _res.name = 'Base price'
+                # If a result exists, we give it a name and add it to the main
+                # result
+                for_option = contract.get_option_for_coverage_at_date(
+                    self, date)
+                if for_option and for_option.id:
+                    _res.on_object = '%s,%s' % (
+                        for_option.__name__, for_option.id)
                 res += _res
+            # We always append the errors (if any).
             errs += _errs
+
+            # Now it is time to price the covered elements of the contract.
+            # Note that they might have a role in the Base Price computation,
+            # depending on the algorithm that is used.
+            #
+            # What we compute now is the part of the price that is associated
+            # to each of the covered elements.
+            #
+            # For now, the extension is hardcoded as a first step. It should be
+            # made more generic in the future.
             if hasattr(contract, 'extension_life'):
+                # First of all we go through the list of covered elements on
+                # the contract's extension which matches self
                 for covered in contract.extension_life.covered_elements:
+                    # Then we must check that the current covered element is
+                    # covered by self.
                     for covered_data in covered.covered_data:
                         for_coverage = convert_ref_to_obj(
                             covered_data.for_coverage)
                         if not for_coverage.code == self.code:
                             continue
+
+                        # And that this coverage is effective at the requested
+                        # computation date.
                         if not (date >= covered_data.start_date and
                                 (not hasattr(covered_data, 'end_date') or
                                     covered_data.end_date is None or
                                     covered_data.end_date < date)):
                             break
+
+                        # Now we need to set a new argument before forwarding
+                        # the request to the manager, which is the covered
+                        # element it must work on.
                         tmp_args = args
                         tmp_args['for_covered'] = covered
+
+                        # And we finally call the manager for the price
                         _res, _errs = self.get_result(
                             'sub_elem_price',
                             tmp_args,
@@ -104,14 +144,26 @@ class Coverage(CoopSQL, Offered):
                             # Reference field and is not automatically turned
                             # into a browse object.
                             # Should be done later by tryton.
-                            _res.name = 'To be implemented'
+                            _res.name = convert_ref_to_obj(
+                                covered.product_specific).person.name
+                            if covered_data.id:
+                                _res.on_object = '%s,%s' % (
+                                    covered_data.__name__,
+                                    covered_data.id)
                             res += _res
                             errs += _errs
                         break
-            return (res, errs)
+            errs = list(set(errs))
+            if 'Could not find a matching manager' in errs:
+                errs.remove('Could not find a matching manager')
+            return (res, list(set(errs)))
         return (None, [])
 
     def get_dates(self):
+        # This is a temporary functionnality that is provided to ease the
+        # checking of the pricing calculations.
+        # In 'real life', it is not systematic to update the pricing when a new
+        # version of the rule is defined.
         res = set()
         if self.pricing_mgr:
             for rule in self.pricing_mgr.business_rules:
@@ -132,9 +184,17 @@ class Product(CoopSQL, Offered):
         super(Product, cls).__setup__()
 
     def get_sub_elem_data(self):
+        # This method is used by the get_result method to know where to look
+        # for sub-elements to parse and what fields can be used for key
+        # matching
+        #
+        # Here it states that Product objects have a list of 'options' which
+        # implements the GetResult class, and on which we might use 'code' or
+        # 'name' as keys.
         return ('options', ['code', 'name'])
 
     def give_me_options_price(self, args):
+        # Getting the options price is easy : just loop and append the results
         errs = []
         res = PricingResultLine(name='Options')
         for option in self.options:
@@ -145,15 +205,33 @@ class Product(CoopSQL, Offered):
         return (res, errs)
 
     def give_me_product_price(self, args):
+        # There is a pricing manager on the products so we can just forward the
+        # request.
         res = self.get_result('price', args, manager='pricing')
         if not res[0]:
             res = (PricingResultLine(), res[1])
+        data_dict, errs = get_data_from_dict(['contract'], args)
+        if errs:
+            # No contract means no price.
+            return (None, errs)
+        contract = data_dict['contract']
+        res[0].name = 'Product Base Price'
+        if contract.id:
+            res[0].on_object = '%s,%s' % (contract.__name__, contract.id)
+        try:
+            res[1].remove('Business Manager pricing does not exist on %s'
+                % self.name)
+        except ValueError:
+            pass
         return res
 
     def give_me_total_price(self, args):
+        # Total price is the sum of Options price and Product price
         (p_price, errs_product) = self.give_me_product_price(args)
         (o_price, errs_options) = self.give_me_options_price(args)
-        return (p_price + o_price, errs_product + errs_options)
+        total_price = p_price + o_price
+        total_price.name = 'Total Price'
+        return (total_price, errs_product + errs_options)
 
 
 class ProductOptionsCoverage(CoopSQL):
@@ -394,9 +472,11 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
         digits=(16, 2))
 
     def give_me_price(self, args):
+        # This is the most basic pricing rule : just return the price
         return (PricingResultLine(value=self.price), [])
 
     def give_me_sub_elem_price(self, args):
+        # This will be called for each covered element of the contract
         return (PricingResultLine(value=self.per_sub_elem_price), [])
 
 

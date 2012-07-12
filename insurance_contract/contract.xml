@@ -1,8 +1,51 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <tryton>
 	<data>
-		<!-- Application Entry point -->
-		<menuitem name="Contract" id="menu_contract" sequence="11" />
+
+    <!--################################################################-->
+    <!--                           Price Lines                          -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="price_lines_tree">
+            <field name="model">ins_contract.price_line</field>
+            <field name="type">tree</field>
+            <field name="field_childs">child_lines</field>
+            <field name="arch" type="xml">
+                    <![CDATA[
+                        <tree string="Pricing Lines">
+                            <field name="name"/>
+                            <field name="amount"/>
+                        </tree>
+                    ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
+    <!--                        Billing Manager                         -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="billing_manager_view_form">
+            <field name="model">ins_contract.billing_manager</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                     <![CDATA[
+                     <form string="billing_manager">
+                         <group id="Administrative data">
+                             <label name="next_billing_date" xalign="0"/>
+                             <field name="next_billing_date" xexpand="1"/>
+                         </group>
+                         <newline/>
+                         <group id="Pricing Data" yfill="1" yexpand="1">
+                             <field name="prices" mode="tree" yfill="1"
+                                 yexpand="1" xfill="1"/>
+                         </group>
+                     </form>               ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
+    <!--                       Contract Screens                         -->
+    <!--################################################################-->
 
 		<!-- Tree view for contract -->
 		<record model="ir.ui.view" id="contract_view_tree">
@@ -27,7 +70,7 @@
 			<field name="arch" type="xml">
 					 <![CDATA[
 						<form string="contract" col="5">
-							<group yexpand="1" yfill="1" id="Test2" colspan="3">
+							<group id="Test2" colspan="3" yexpand="1" yfill="1">
 					 			<group id="Administrative data">
 									<label name="contract_number" xalign="0"/>
 									<field name="contract_number" xfill="0" xalign="0"/>
@@ -42,8 +85,10 @@
 									<field name="product" xfill="1"/>
 								</group>
 								<newline/>
-								<group id="Extension Data">
+								<group id="Extension Data" yexpand="1" yfill="1">
 									<field name="extension_life"/>
+									<newline/>
+									<field name="billing_manager" mode="form"  yexpand="1" yfill="1"/>
 								</group>
 							</group>
 							<group yexpand="1" yfill="1" id="Test" colspan="2">
@@ -73,8 +118,9 @@
 			<field name="act_window" ref="act_contract_form" />
 		</record>
 
-		<menuitem parent="menu_contract" sequence="1"
-			id="menu_contract_form" icon="tryton-list" action="act_contract_form" />
+    <!--################################################################-->
+    <!--                       Options Screens                          -->
+    <!--################################################################-->
 
 		<!-- Tree view -->
 		<record model="ir.ui.view" id="option_view_tree">
@@ -124,6 +170,10 @@
 			<field name="act_window" ref="act_option_form" />
 		</record>
 
+    <!--################################################################-->
+    <!--                       Coverage Displayer                       -->
+    <!--################################################################-->
+
 		<!-- View for the coverage displayer used in the subscription process -->
 		<record model="ir.ui.view" id="coverage_displayer_tree">
 			<field name="model">ins_contract.coverage_displayer</field>
@@ -138,5 +188,16 @@
 					]]>
 			</field>
 		</record>
+
+    <!--################################################################-->
+    <!--                           Menus                                -->
+    <!--################################################################-->
+
+        <!-- Application Entry point -->
+        <menuitem name="Contract" id="menu_contract" sequence="11" />
+
+        <menuitem parent="menu_contract" sequence="1"
+            id="menu_contract_form" icon="tryton-list" action="act_contract_form" />
+
 	</data>
 </tryton>

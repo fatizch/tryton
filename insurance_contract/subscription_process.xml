@@ -1,14 +1,9 @@
 <?xml version="1.0"?>
 <tryton>
 	<data>
-		<record model="ir.action.wizard" id="project_view_action">
-			<field name="name">New Subscription Process</field>
-			<field name="wiz_name">ins_contract.subs_process</field>
-			<field name="model">ir.ui.menu</field>
-		</record>
-
-		<menuitem parent="menu_contract" action="project_view_action"
-			id="menu_start_subs" />
+    <!--################################################################-->
+    <!--                          Project View                          -->
+    <!--################################################################-->
 
 		<record model="ir.ui.view" id="project_view">
 			<field name="model">ins_contract.subs_process.project</field>
@@ -32,6 +27,10 @@
 			</field>
 		</record>
 
+    <!--################################################################-->
+    <!--                     Option Selection View                      -->
+    <!--################################################################-->
+
 		<record model="ir.ui.view" id="option_selection_view">
 			<field name="model">ins_contract.subs_process.option_selection</field>
 			<field name="type">form</field>
@@ -44,7 +43,44 @@
 					]]>
 			</field>
 		</record>
-		
+
+    <!--################################################################-->
+    <!--                Covered Person Desc View                        -->
+    <!--################################################################-->
+        
+        <record model="ir.ui.view" id="covered_person_desc_view_tree">
+            <field name="model">ins_contract.subs_process.covered_person_desc</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">                 
+                    <![CDATA[                 
+                    <tree string="Covered Persons">
+                    <field name="person"/>
+                    </tree>                 ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
+    <!--                 Covered Data Desc View                         -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="covered_data_desc_view_tree">
+            <field name="model">ins_contract.subs_process.covered_data_desc</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">                 
+                    <![CDATA[                 
+                    <tree string="Covered Data">
+                    <field name="status"/>
+                    <field name="for_coverage"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    </tree>                 ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
+    <!--                    Extension Life View                         -->
+    <!--################################################################-->
+
 		<record model="ir.ui.view" id="extension_life_view">
 			<field name="model">ins_contract.subs_process.extension_life</field>
 			<field name="type">form</field>
@@ -58,6 +94,10 @@
 			</field>
 		</record>
 
+    <!--################################################################-->
+    <!--                        Pricing Lines                           -->
+    <!--################################################################-->
+
 		<record model="ir.ui.view" id="lines_view">
 			<field name="model">ins_contract.subs_process.lines</field>
 			<field name="type">tree</field>
@@ -70,7 +110,11 @@
 					]]>
 			</field>
 		</record>
-		
+
+    <!--################################################################-->
+    <!--                       Summary View                             -->
+    <!--################################################################-->
+
 		<record model="ir.ui.view" id="summary_view">
 			<field name="model">ins_contract.subs_process.summary</field>
 			<field name="type">form</field>
@@ -83,39 +127,33 @@
 			</field>
 		</record>
 		
-		<record model="ir.ui.view" id="covered_person_desc_view_tree">
-			<field name="model">ins_contract.subs_process.covered_person_desc</field>
-			<field name="type">tree</field>
-			<field name="arch" type="xml">                 
-					<![CDATA[                 
-					<tree string="Covered Persons">
-					<field name="person"/>
-					</tree>                 ]]>
-			</field>
-		</record>
-		
-		<record model="ir.ui.view" id="covered_data_desc_view_tree">
-			<field name="model">ins_contract.subs_process.covered_data_desc</field>
-			<field name="type">tree</field>
-			<field name="arch" type="xml">                 
-					<![CDATA[                 
-					<tree string="Covered Data">
-					<field name="status"/>
-					<field name="for_coverage"/>
-					<field name="start_date"/>
-					<field name="end_date"/>
-					</tree>                 ]]>
-			</field>
-		</record>
-		
-		<record model="ir.action.wizard" id="resume_subs_process">
+    <!--################################################################-->
+    <!--                          Menu Entries                          -->
+    <!--################################################################-->
+
+        <record model="ir.action.wizard" id="project_view_action">
+            <field name="name">New Subscription Process</field>
+            <field name="wiz_name">ins_contract.subs_process</field>
+            <field name="model">ir.ui.menu</field>
+        </record>
+
+        <menuitem parent="menu_contract" action="project_view_action"
+            id="menu_start_subs" />
+        
+    <!--################################################################-->
+    <!--                          Actions Entries                       -->
+    <!--################################################################-->
+
+        <record model="ir.action.wizard" id="resume_subs_process">
             <field name="name">Resume Process</field>
             <field name="wiz_name">ins_contract.subs_process</field>
             <field name="model">ins_process.suspended_process</field>
         </record>
 	</data>
 	
-		<!-- Here are some init data for a default Subscription Process -->
+    <!--################################################################-->
+    <!--                          Init Data                             -->
+    <!--################################################################-->
 	
 	<data>
 		<record model="ins_process.process_desc" id="subs_process_desc">

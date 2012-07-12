@@ -1,4 +1,3 @@
-import copy
 import datetime
 
 from trytond.model import ModelView, ModelSQL, fields as fields
@@ -28,15 +27,24 @@ class CoopWizard(Wizard):
     pass
 
 
-def get_descendents(from_class):
+def get_descendents(from_class, names_only=False):
     res = []
-    cur_models = [model_name
-                  for model_name, model in Pool().iterobject()
-                  if issubclass(model, from_class)]
-    Model = Pool().get('ir.model')
-    models = Model.search([('model', 'in', cur_models)])
-    for cur_model in models:
-        res.append([cur_model.model, cur_model.name])
+    if names_only:
+        format = lambda x: x
+    else:
+        format = lambda x: (x, x)
+    if isinstance(from_class, str):
+        cur_models = [model_name
+                      for model_name, model in Pool().iterobject()
+                      if issubclass(model, from_class)]
+        Model = Pool().get('ir.model')
+        models = Model.search([('model', 'in', cur_models)])
+        for cur_model in models:
+            res.append(format(cur_model.model))
+    elif isinstance(from_class, type):
+        for elem in from_class.__subclasses__():
+            if isinstance(elem, type):
+                res.append(format(elem.__name__))
     return res
 
 
@@ -215,6 +223,11 @@ class WithAbstract(object):
                 raise
             model_obj = Pool().get(model_name)
             return model_obj(id)
+        elif (isinstance(field_desc, fields.Many2One) and
+                isinstance(value, (int, long))):
+            # Case of a Relation Field being stored as an integer.
+            ModelObject = Pool().get(field_desc.model_name)
+            res = ModelObject(value)
         else:
             # Any basic type (string, int, etc...) in a non model-link context
             # is a direct set.
@@ -244,7 +257,7 @@ class WithAbstract(object):
             for key, value in data.iteritems():
                 # We go through each value of the dictionnary an set it.
                 if not key in for_object._fields:
-                    # After checking that it mathces, of course...
+                    # After checking that it matches, of course...
                     raise BadDataKeyError
                 setattr(for_object,
                         key,
@@ -467,6 +480,9 @@ class GetResult(object):
 
 
 def add_results(results):
+    # This function can be used to concatenate simple return types, of the
+    # form (result, [errors]).
+    # It supposes that the result's type supports the += operator
     res = [None, []]
     for cur_res in results:
         if cur_res == (None, []):
@@ -482,20 +498,10 @@ def add_results(results):
     return tuple(res)
 
 
-def add_price_results(results):
-    res = [[0, '', []], []]
-    for cur_res in results:
-        if cur_res == (None, []):
-            continue
-        elif cur_res[0] is None:
-            res[1] += cur_res[1]
-        else:
-            res[0][0] += cur_res[0][0]
-            res[0][2].append(cur_res[0])
-    return tuple(res)
-
-
 def get_data_from_dict(data, dict):
+    # This is used to parse a given dict for a set of data, and returns a dict
+    # and a list of errors in the case it could not find one or more of the
+    # specified data keys in the dict.
     res = ({}, [])
     for elem in data:
         if elem in dict:
@@ -506,6 +512,12 @@ def get_data_from_dict(data, dict):
 
 
 def convert_ref_to_obj(ref):
+    # Currently (version 2.4), tryton does not convert automatically Reference
+    # fields from string concatenation to browse objects.
+    # That might evolve in the future, meanwhile this litlle method should make
+    # it easier to do.
+    #
+    # Warning : it is not failsafe
     try:
         model, id = ref.split(',')
     except Exception:
@@ -519,6 +531,14 @@ def add_days(date, nb):
 
 
 def priority(priority_lvl):
+    # This function is meant to be used as a decorator that will allow the
+    # definition of priorities on other functions.
+    # This is especially important in the case of before / post step methods
+    # in the CoopProcess framework.
+    #
+    # USAGE :
+    #    @priority(4)
+    #    def my_func...
     def wrap(f):
         f.priority = priority_lvl
         return f
@@ -529,22 +549,91 @@ class PricingResultLine(object):
     'Pricing Line Result'
 
     def __init__(self, value=0, name='', desc=None):
+        # Careful : whatever better it feels, using desc=[] for init is a very
+        # bad idea...
+        # Basically, that means that all instances 'desc' attributes will be
+        # a pointer to the same list.
+        # So if you change it in one of the instance, it will change it for all
+
         super(PricingResultLine, self).__init__()
         self.value = value
         self.name = name
+
+        # Use this instead :
         self.desc = desc or []
         self.details = []
         self.on_object = None
 
     def __iadd__(self, other):
+        # __iadd__ will be called when doing a += b
         if other is None or other.value is None:
             return self
         self.value += other.value
+
+        # a += b means that a is a master of b (in some way), so we append b to
+        # the list of a's subelements
         self.desc += [other]
         return self
 
     def __add__(self, other):
+        # In this case (c = a + b), we must create a new instance (c) :
         tmp = PricingResultLine()
+
+        # Then set what we can ; its value and its childs
         tmp.value = self.value + other.value
         tmp.desc = [self, other]
         return tmp
+
+    def encode_as_dict(self):
+        res = {
+            'name': self.name,
+            'value': self.value,
+            'details': self.details,
+            'on_object': self.on_object,
+            'desc': []}
+
+        for elem in self.desc:
+            res['desc'].append(elem.encode_as_dict())
+
+        return res
+
+    def decode_from_dict(self, from_dict):
+        self.name = from_dict['name']
+        self.value = from_dict['value']
+        self.details = from_dict['details']
+        self.on_object = from_dict['on_object']
+        self.desc = []
+        for elem in from_dict['desc']:
+            tmp_desc = PricingResultLine()
+            tmp_desc.decode_from_dict(elem)
+            self.desc.append(tmp_desc)
+
+
+def convert_to_periods(dates):
+    tmp_dates = dates
+    tmp_dates.sort()
+    res = []
+    for i in range(0, len(tmp_dates) - 1):
+        res.append(
+            (tmp_dates[i], tmp_dates[i + 1] - datetime.timedelta(days=1)))
+    res[-1][1] = res[-1][1] + datetime.timedelta(days=1)
+    return res
+
+
+def limit_dates(dates, start=None, end=None):
+    res = list(dates)
+    res.sort()
+    final_res = []
+    for elem in res:
+        if (not start or elem > start) and (not end or elem <= end):
+            final_res.append(elem)
+    if start and (not final_res or final_res[0] and final_res[0] != start):
+        final_res.insert(0, start)
+    if end and final_res[-1] != end:
+        final_res.append(end)
+    return final_res
+
+
+def to_date(string, format='ymd'):
+    elems = [int(value) for value in string.split('-')]
+    return datetime.date(elems[0], elems[1], elems[2])

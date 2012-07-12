@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+    <!--################################################################-->
+    <!--                     Bill Parameters View                       -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="parameters_view">
+            <field name="model">ins_contract.billing_process.bill_parameters</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                    <![CDATA[
+                        <form string="Billing Process - Bill Parameters">
+                            <label name="start_date" xalign="0"/>
+                            <field name="start_date"/>
+                            <newline/>
+                            <label name="end_date" xalign="0"/>
+                            <field name="end_date"/>
+                        </form>
+                    ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
+    <!--                    Bill Lines for Display                      -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="bill_lines_view">
+            <field name="model">ins_contract.billing_process.bill_line_view</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                    <![CDATA[
+                        <tree string="Bill Lines">
+                            <field name="line_name"/>
+                            <field name="line_start_date"/>
+                            <field name="line_end_date"/>
+                            <field name="line_amount_ht"/>
+                            <field name="line_amount_ttc"/>
+                            <field name="line_base_price"/>
+                        </tree>
+                    ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
+    <!--                            Bill Display                        -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="bill_view">
+            <field name="model">ins_contract.billing_process.bill_display</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                    <![CDATA[
+                        <form string="Billing Process - Bill Result">
+                            <group id="Basic Data">
+                                <label name="start_date" xalign="0"/>
+                                <field name="start_date"/>
+                                <label name="end_date" xalign="0"/>
+                                <field name="end_date"/>
+                                <newline/>
+                                <label name="bill_amount_ht" xalign="0"/>
+                                <field name="bill_amount_ht"/>
+                                <label name="bill_amount_ttc" xalign="0"/>
+                                <field name="bill_amount_ttc"/>
+                            </group>
+                            <newline/>
+                            <group id="Bill Lines" yfill="1" yexpand="1">
+                                <field name="bill_lines" mode="tree"
+                                    yexpand="1" yfill="1"/>
+                            </group>
+                        </form>
+                    ]]>
+            </field>
+        </record>
+        
+    <!--################################################################-->
+    <!--                          Actions Entries                       -->
+    <!--################################################################-->
+
+        <record model="ir.action.wizard" id="launch_billing_process">
+            <field name="name">Billing</field>
+            <field name="wiz_name">ins_contract.billing_process</field>
+            <field name="model">ins_contract.contract</field>
+        </record>
+
+        <record model="ir.action.keyword" id="launch_billing_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">ins_contract.contract,-1</field>
+            <field name="action" ref="launch_billing_process"/>
+        </record>
+        
+    <!--################################################################-->
+    <!--                          Actions Entries                       -->
+    <!--################################################################-->
+
+<!-- Do not work for now, to do later...
+
+        <record model="ir.action.act_window" id="act_billing_by_contract">
+            <field name="name">Bills by Contract</field>
+            <field name="res_model">ins_contract.billing.bill</field>
+            <field name="domain">[('id', '=', 1)]</field>
+        </record>
+
+        <record model="ir.action.keyword" id="act_billing_by_contract_keyword1">
+            <field name="keyword">form_relate</field>
+            <field name="model">ins_contract.contract,-1</field>
+            <field name="action" ref="act_billing_by_contract"/>
+        </record>
+
+-->
+
+    </data>
+
+    <!--################################################################-->
+    <!--                          Init Data                             -->
+    <!--################################################################-->
+    
+    <data>
+        <record model="ins_process.process_desc" id="bill_process_desc">
+            <field name="name">Billing Process Descriptor</field>
+            <field name="process_model">ins_contract.billing_process</field>   
+        </record>
+        <record model="ins_process.step_desc" id="parameters_step_desc">
+            <field name="button_next">True</field>
+            <field name="button_previous"></field>
+            <field name="button_check"></field>
+            <field name="button_complete"></field>
+            <field name="button_cancel">True</field>
+            <field name="button_suspend"></field>
+            <field name="button_default">button_next</field>
+            <field name="on_product_step">0</field>
+            <field name="process" ref="bill_process_desc"/>
+            <field name="virtual_step">0</field>
+            <field name="sequence">1</field>
+            <field name="step_model">ins_contract.billing_process.bill_parameters</field>  
+        </record>
+        <record model="ins_process.step_desc" id="bill_view_step_desc">
+            <field name="button_next"></field>
+            <field name="button_previous">True</field>
+            <field name="button_check"></field>
+            <field name="button_complete">True</field>
+            <field name="button_cancel">True</field>
+            <field name="button_suspend"></field>
+            <field name="button_default">button_complete</field>
+            <field name="on_product_step">0</field>
+            <field name="process" ref="bill_process_desc"/>
+            <field name="virtual_step">0</field>
+            <field name="sequence">2</field>
+            <field name="step_model">ins_contract.billing_process.bill_display</field> 
+        </record>
+    </data>
+</tryton>

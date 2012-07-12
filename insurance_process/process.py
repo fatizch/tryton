@@ -3,14 +3,13 @@ import copy
 import functools
 
 # Needed for displaying objects
-from trytond.model.model import ModelMeta, Model
 from trytond.model import fields as fields
 
 from trytond.modules.coop_utils import utils, CoopView, CoopSQL
 from trytond.modules.coop_utils import WithAbstract, priority
 
 # Needed for proper encoding / decoding of objects as strings
-from trytond.protocols.jsonrpc import JSONEncoder, object_hook
+from trytond.protocols.jsonrpc import object_hook
 
 # Needed for Wizardry
 from trytond.wizard import Wizard, Button, StateView, StateTransition
@@ -769,9 +768,11 @@ class CoopStepMethods(object):
                     # Equal priority returns 0. We might want to return an
                     # error instead, there should be no doubt on which method
                     # comes first.
-                    if f1.priority == f2.priority: return 0
+                    if f1.priority == f2.priority:
+                        return 0
                     # Lower number means higher priority.
-                    if f1.priority < f2.priority: return 1
+                    if f1.priority < f2.priority:
+                        return 1
                     return -1
                 # If f1 has a priority defined and not f2, then f1 wins
                 return 1

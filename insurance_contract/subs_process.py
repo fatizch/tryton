@@ -2,9 +2,6 @@ import datetime
 
 from trytond.model import fields as fields
 
-# Needed for Wizardry
-from trytond.wizard import StateView
-
 # Needed for getting models
 from trytond.pool import Pool
 
@@ -90,19 +87,19 @@ class ProjectState(CoopStep):
 
     @staticmethod
     def check_step_product(wizard):
-        if hasattr(wizard.project, 'product'):
+        if hasattr(wizard.project, 'product') and wizard.project.product:
             return (True, [])
         return (False, ['A product must be provided !'])
 
     @staticmethod
     def check_step_subscriber(wizard):
-        if hasattr(wizard.project, 'subscriber'):
+        if hasattr(wizard.project, 'subscriber') and wizard.project.subscriber:
             return (True, [])
         return (False, ['A subscriber must be provided !'])
 
     @staticmethod
     def check_step_effective_date(wizard):
-        if hasattr(wizard.project, 'start_date'):
+        if hasattr(wizard.project, 'start_date') and wizard.project.start_date:
             return (True, [])
         return (False, ['An effective date is necessary'])
 
@@ -255,9 +252,6 @@ class CoveredDataDesc(CoopStepView):
     __name__ = 'ins_contract.subs_process.covered_data_desc'
     covered_element = fields.Reference('Covered Element',
                                        selection='get_covered_elem_model')
-    #covered_element = fields.Many2One(
-     #                   'ins_contract.subs_process.covered_person_desc',
-      #                  'Covered Element')
 
     status = fields.Selection(OPTIONSTATUS, 'Status')
 
@@ -408,12 +402,12 @@ class ExtensionLifeState(DependantState):
                 cur_element.covered_data.append(cur_data)
             cur_person = CoveredPerson()
             cur_person.person = covered_element.person
-            # cur_person.save()
+            cur_person.save()
             cur_element.product_specific = '%s,%s' % (cur_person.__name__,
                                                       cur_person.id)
             ext.covered_elements.append(cur_element)
 
-        # ext.save()
+        ext.save()
         contract.extension_life = ext
         WithAbstract.save_abstract_objects(wizard, ('for_contract', contract))
         return (True, [])
@@ -462,14 +456,11 @@ class SummaryState(CoopStep):
     def before_step_calculate_lines(wizard):
         PricingLine = Pool().get('ins_contract.subs_process.lines')
         contract = WithAbstract.get_abstract_objects(wizard, 'for_contract')
-        prices = {}
-        for cur_date in contract.get_dates():
-            price = contract.product.get_result(
-            'options_price',
-            {'date': cur_date,
-             'contract': contract})[0]
-            prices[cur_date.isoformat()] = price
 
+        prices, errs = contract.calculate_prices_at_all_dates()
+
+        if errs:
+            return (False, errs)
         wizard.summary.lines = []
         for key, value in prices.iteritems():
             line = PricingLine()
@@ -523,12 +514,32 @@ class SubscriptionProcess(CoopProcess):
 
     # And do something when validation occurs
     def do_complete(self):
-        Contract = Pool().get('ins_contract.contract')
         contract = WithAbstract.get_abstract_objects(self, 'for_contract')
-        # contract.extension_life.save()
+        Contract = Pool().get(contract.__name__)
+
         contract.contract_number = contract.get_new_contract_number()
 
+        if not (hasattr(contract, 'billing_manager') and
+                contract.billing_manager):
+            BillingManager = Pool().get(contract.get_manager_model())
+            bm = BillingManager()
+            contract.billing_manager = [bm]
+
         contract.save()
+
+        contract = Contract(contract.id)
+
+        # We need to recalculate the pricing in order to be able to set the
+        # links with the covered elements
+
+        prices, errs = contract.calculate_prices_at_all_dates()
+
+        if errs:
+            return (False, errs)
+
+        contract.billing_manager[0].store_prices(prices)
+
+        contract.billing_manager[0].save()
 
         # Do not forget to return a 'everything went right' signal !
         return (True, [])
