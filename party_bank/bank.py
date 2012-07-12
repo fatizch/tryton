@@ -130,7 +130,7 @@ class BankAccountNumber(CoopSQL, CoopView):
 
     @staticmethod
     def default_kind():
-        return 'IBAN'
+        return 'RIB'
 
     def calculate_iban_from_rib(self):
         try:

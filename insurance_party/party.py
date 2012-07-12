@@ -48,8 +48,8 @@ class Party:
 
 #            if not getattr(cls, 'on_change_%s' % is_actor_var_name, None):
 #                for kls in cls.__mro__:
-#                    if 'on_change_generic' in kls.__dict__:
-#                        on_change_generic = kls.__dict__['on_change_generic']
+#                    if 'toto' in kls.__dict__:
+#                        on_change_generic = kls.__dict__['toto']
 #                        on_change = functools.partial(on_change_generic,
 #                            is_role=is_actor_var_name)
 #                        setattr(cls, 'on_change_%s' % is_actor_var_name,
@@ -63,8 +63,10 @@ class Party:
             return len(field) > 0
         return False
 
-    def on_change_generic(self, is_role):
+    def on_change_generic(self, is_role=''):
         res = {}
+        if is_role == '':
+            return res
         role = Party.get_actor_var_name(is_role)
         if role == '' or is_role == '':
             return res

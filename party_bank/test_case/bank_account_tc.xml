@@ -1,0 +1,805 @@
+<?xml version="1.0"?>
+<tryton>
+  <data>
+    <record model="party.bank_account" id="bank_account_0">
+      <field ref="coop_party.party_0" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_0">
+      <field ref="bank_account_0" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">45129008650000064042331</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_1">
+      <field ref="coop_party.party_1" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_1">
+      <field ref="bank_account_1" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">23380006980003570937078</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_2">
+      <field ref="coop_party.party_2" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_2">
+      <field ref="bank_account_2" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">14707009320007859853432</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_3">
+      <field ref="coop_party.party_3" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_3">
+      <field ref="bank_account_3" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">18209004120009447604260</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_4">
+      <field ref="coop_party.party_4" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_4">
+      <field ref="bank_account_4" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">18989001540006454488668</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_5">
+      <field ref="coop_party.party_5" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_5">
+      <field ref="bank_account_5" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">40618009840001075264960</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_6">
+      <field ref="coop_party.party_6" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_6">
+      <field ref="bank_account_6" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">16560002650008187525734</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_7">
+      <field ref="coop_party.party_7" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_7">
+      <field ref="bank_account_7" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">10228000410003377051722</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_8">
+      <field ref="coop_party.party_8" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_8">
+      <field ref="bank_account_8" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">15959002270006769617303</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_9">
+      <field ref="coop_party.party_9" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_9">
+      <field ref="bank_account_9" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">15708003050001723525327</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_10">
+      <field ref="coop_party.party_10" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_10">
+      <field ref="bank_account_10" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">13088004410002343438833</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_11">
+      <field ref="coop_party.party_11" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_11">
+      <field ref="bank_account_11" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">13220009480001136753545</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_12">
+      <field ref="coop_party.party_12" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_12">
+      <field ref="bank_account_12" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">41259007350002471411604</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_13">
+      <field ref="coop_party.party_13" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_13">
+      <field ref="bank_account_13" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">10008001610007016478365</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_14">
+      <field ref="coop_party.party_14" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_14">
+      <field ref="bank_account_14" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">21990004470006718089194</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_15">
+      <field ref="coop_party.party_15" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_15">
+      <field ref="bank_account_15" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">18190000670001027717895</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_16">
+      <field ref="coop_party.party_16" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_16">
+      <field ref="bank_account_16" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">14006005690000621778550</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_17">
+      <field ref="coop_party.party_17" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_17">
+      <field ref="bank_account_17" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">41629008590007737328140</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_18">
+      <field ref="coop_party.party_18" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_18">
+      <field ref="bank_account_18" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">14148008580007636066414</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_19">
+      <field ref="coop_party.party_19" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_19">
+      <field ref="bank_account_19" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">15138000830005028152689</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_20">
+      <field ref="coop_party.party_20" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_20">
+      <field ref="bank_account_20" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">15788002830002419602759</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_21">
+      <field ref="coop_party.party_21" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_21">
+      <field ref="bank_account_21" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">14918005850004646675767</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_22">
+      <field ref="coop_party.party_22" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_22">
+      <field ref="bank_account_22" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">14568005130004791509209</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_23">
+      <field ref="coop_party.party_23" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_23">
+      <field ref="bank_account_23" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">16198000040001519428205</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_24">
+      <field ref="coop_party.party_24" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_24">
+      <field ref="bank_account_24" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">13018003340005346293904</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_25">
+      <field ref="coop_party.party_25" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_25">
+      <field ref="bank_account_25" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">14178004490004752762921</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_26">
+      <field ref="coop_party.party_26" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_26">
+      <field ref="bank_account_26" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">16179002600001718856019</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_27">
+      <field ref="coop_party.party_27" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_27">
+      <field ref="bank_account_27" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">18319004810001057614422</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_28">
+      <field ref="coop_party.party_28" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_28">
+      <field ref="bank_account_28" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">12138007150002370907611</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_29">
+      <field ref="coop_party.party_29" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_29">
+      <field ref="bank_account_29" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">18709004670009994202823</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_30">
+      <field ref="coop_party.party_30" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_30">
+      <field ref="bank_account_30" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">41329000100007944302137</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_31">
+      <field ref="coop_party.party_31" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_31">
+      <field ref="bank_account_31" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">19906007630001149583835</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_32">
+      <field ref="coop_party.party_32" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_32">
+      <field ref="bank_account_32" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">12939000650000029886096</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_33">
+      <field ref="coop_party.party_33" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_33">
+      <field ref="bank_account_33" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">41219001180006009533175</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_34">
+      <field ref="coop_party.party_34" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_34">
+      <field ref="bank_account_34" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">15968003900007998984297</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_35">
+      <field ref="coop_party.party_35" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_35">
+      <field ref="bank_account_35" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">31489008460005494780263</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_36">
+      <field ref="coop_party.party_36" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_36">
+      <field ref="bank_account_36" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">14040002520004420929227</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_37">
+      <field ref="coop_party.party_37" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_37">
+      <field ref="bank_account_37" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">12050005110003037988667</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_38">
+      <field ref="coop_party.party_38" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_38">
+      <field ref="bank_account_38" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">16158001140003331595949</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_39">
+      <field ref="coop_party.party_39" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_39">
+      <field ref="bank_account_39" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">11818004110007732209415</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_40">
+      <field ref="coop_party.party_40" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_40">
+      <field ref="bank_account_40" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">18329009610001457622013</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_41">
+      <field ref="coop_party.party_41" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_41">
+      <field ref="bank_account_41" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">13390009040005869146266</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_42">
+      <field ref="coop_party.party_42" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_42">
+      <field ref="bank_account_42" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">15208005890004918421296</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_43">
+      <field ref="coop_party.party_43" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_43">
+      <field ref="bank_account_43" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">19406006790009335518377</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_44">
+      <field ref="coop_party.party_44" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_44">
+      <field ref="bank_account_44" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">18179008820009980862909</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_45">
+      <field ref="coop_party.party_45" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_45">
+      <field ref="bank_account_45" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">14410007660007356269801</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_46">
+      <field ref="coop_party.party_46" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_46">
+      <field ref="bank_account_46" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">19110005710007814759001</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_47">
+      <field ref="coop_party.party_47" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_47">
+      <field ref="bank_account_47" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">44269005800004279013221</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_48">
+      <field ref="coop_party.party_48" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_48">
+      <field ref="bank_account_48" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">14889001630009984807496</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_49">
+      <field ref="coop_party.party_49" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_49">
+      <field ref="bank_account_49" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">12398009880003714731568</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_50">
+      <field ref="coop_party.party_50" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_50">
+      <field ref="bank_account_50" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">13489002680000589804528</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_51">
+      <field ref="coop_party.party_51" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_51">
+      <field ref="bank_account_51" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">16178001490003662528932</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_52">
+      <field ref="coop_party.party_52" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_52">
+      <field ref="bank_account_52" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">13158003410007633787525</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_53">
+      <field ref="coop_party.party_53" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_53">
+      <field ref="bank_account_53" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">17989007470007761406705</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_54">
+      <field ref="coop_party.party_54" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_54">
+      <field ref="bank_account_54" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">12338002290008557688924</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_55">
+      <field ref="coop_party.party_55" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_55">
+      <field ref="bank_account_55" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">14749000170003686527756</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_56">
+      <field ref="coop_party.party_56" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_56">
+      <field ref="bank_account_56" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">40198008870007467211430</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_57">
+      <field ref="coop_party.party_57" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_57">
+      <field ref="bank_account_57" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">31489001230004727113417</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_58">
+      <field ref="coop_party.party_58" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_58">
+      <field ref="bank_account_58" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">10548001210003526306012</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_59">
+      <field ref="coop_party.party_59" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_59">
+      <field ref="bank_account_59" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">50140002590001533880711</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_60">
+      <field ref="coop_party.party_60" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_60">
+      <field ref="bank_account_60" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">15930001110001181851070</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_61">
+      <field ref="coop_party.party_61" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_61">
+      <field ref="bank_account_61" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">19190008330006700193216</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_62">
+      <field ref="coop_party.party_62" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_62">
+      <field ref="bank_account_62" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">16048003160003248896241</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_63">
+      <field ref="coop_party.party_63" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_63">
+      <field ref="bank_account_63" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">15138007540007714715928</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_64">
+      <field ref="coop_party.party_64" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_64">
+      <field ref="bank_account_64" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">14020005790001051260465</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_65">
+      <field ref="coop_party.party_65" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_65">
+      <field ref="bank_account_65" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">14628000510005039874352</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_66">
+      <field ref="coop_party.party_66" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_66">
+      <field ref="bank_account_66" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">17219005060003735729754</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_67">
+      <field ref="coop_party.party_67" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_67">
+      <field ref="bank_account_67" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">11978003210009049751114</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_68">
+      <field ref="coop_party.party_68" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_68">
+      <field ref="bank_account_68" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">50140009810005581939356</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_69">
+      <field ref="coop_party.party_69" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_69">
+      <field ref="bank_account_69" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">40978001560002903606197</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_70">
+      <field ref="coop_party.party_70" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_70">
+      <field ref="bank_account_70" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">14798006930005101028268</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_71">
+      <field ref="coop_party.party_71" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_71">
+      <field ref="bank_account_71" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">41139002620003567085701</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_72">
+      <field ref="coop_party.party_72" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_72">
+      <field ref="bank_account_72" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">13106008610006517702838</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_73">
+      <field ref="coop_party.party_73" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_73">
+      <field ref="bank_account_73" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">18919006530009401724355</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_74">
+      <field ref="coop_party.party_74" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_74">
+      <field ref="bank_account_74" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">17206007220002869587802</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_75">
+      <field ref="coop_party.party_75" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_75">
+      <field ref="bank_account_75" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">13878004140000193390506</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_76">
+      <field ref="coop_party.party_76" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_76">
+      <field ref="bank_account_76" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">10140001020009688245396</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_77">
+      <field ref="coop_party.party_77" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_77">
+      <field ref="bank_account_77" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">17679009550003134212239</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_78">
+      <field ref="coop_party.party_78" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_78">
+      <field ref="bank_account_78" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">11190002570004995514176</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_79">
+      <field ref="coop_party.party_79" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_79">
+      <field ref="bank_account_79" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">14958007960004254812516</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_80">
+      <field ref="coop_party.party_80" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_80">
+      <field ref="bank_account_80" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">14607009880009982989053</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_81">
+      <field ref="coop_party.party_81" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_81">
+      <field ref="bank_account_81" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">10807007360005412162480</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_82">
+      <field ref="coop_party.party_82" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_82">
+      <field ref="bank_account_82" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">11008004730001231232905</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_83">
+      <field ref="coop_party.party_83" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_83">
+      <field ref="bank_account_83" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">15908009330006719658386</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_84">
+      <field ref="coop_party.party_84" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_84">
+      <field ref="bank_account_84" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">12006003440005066201359</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_85">
+      <field ref="coop_party.party_85" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_85">
+      <field ref="bank_account_85" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">11733002590000429447772</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_86">
+      <field ref="coop_party.party_86" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_86">
+      <field ref="bank_account_86" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">16830001840002586404662</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_87">
+      <field ref="coop_party.party_87" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_87">
+      <field ref="bank_account_87" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">13158000870000517307280</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_88">
+      <field ref="coop_party.party_88" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_88">
+      <field ref="bank_account_88" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">44449003410005537982410</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_89">
+      <field ref="coop_party.party_89" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_89">
+      <field ref="bank_account_89" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">10638006860000062714310</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_90">
+      <field ref="coop_party.party_90" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_90">
+      <field ref="bank_account_90" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">16707002610000576634303</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_91">
+      <field ref="coop_party.party_91" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_91">
+      <field ref="bank_account_91" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">13688009260005488110786</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_92">
+      <field ref="coop_party.party_92" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_92">
+      <field ref="bank_account_92" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">18359002610005931127350</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_93">
+      <field ref="coop_party.party_93" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_93">
+      <field ref="bank_account_93" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">12280002250007808568772</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_94">
+      <field ref="coop_party.party_94" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_94">
+      <field ref="bank_account_94" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">11210001400008817445295</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_95">
+      <field ref="coop_party.party_95" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_95">
+      <field ref="bank_account_95" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">11008002150002846380768</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_96">
+      <field ref="coop_party.party_96" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_96">
+      <field ref="bank_account_96" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">16108001170007761926459</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_97">
+      <field ref="coop_party.party_97" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_97">
+      <field ref="bank_account_97" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">14690006450007037590929</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_98">
+      <field ref="coop_party.party_98" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_98">
+      <field ref="bank_account_98" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">19406007360009111558781</field>
+    </record>
+    <record model="party.bank_account" id="bank_account_99">
+      <field ref="coop_party.party_99" name="party"/>
+    </record>
+    <record model="party.bank_account_number" id="bank_account_nb_99">
+      <field ref="bank_account_99" name="bank_account"/>
+      <field name="kind">RIB</field>
+      <field name="number">15668007950000024029254</field>
+    </record>
+  </data>
+</tryton>

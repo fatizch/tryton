@@ -81,12 +81,8 @@
         <record model="ir.ui.view" id="legal_entity_view_tree">
             <field name="model">party.legal_entity</field>
             <field name="type">tree</field>
+            <field name="inherit" ref="party.party_view_tree"/>
             <field name="arch" type="xml">
-                        <![CDATA[
-                            <tree>
-                                <field name="name"/>
-                            </tree>
-                        ]]>
             </field>
         </record>
         <!-- View for the edition or the legal entity -->
@@ -164,6 +160,8 @@
                         <![CDATA[
                             <tree>
                                 <field name="name"/>
+                                <field name="first_name"/>
+                                <field name="birth_date"/>
                             </tree>
                         ]]>
             </field>

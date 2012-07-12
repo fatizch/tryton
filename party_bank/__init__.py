@@ -7,6 +7,6 @@ def register():
     Pool.register(
         Party,
         Bank,
-        BankAccountNumber,
         BankAccount,
+        BankAccountNumber,
         module='party_bank', type_='model')
