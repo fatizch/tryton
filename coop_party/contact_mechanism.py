@@ -12,8 +12,8 @@ class ContactMechanism(ModelSQL, ModelView):
     @classmethod
     def __setup__(cls):
         super(ContactMechanism, cls).__setup__()
-        type = copy.copy(cls.type)
-        type.selection.remove(('skype', 'Skype'))
-        type.selection.remove(('sip', 'SIP'))
-        type.selection.remove(('irc', 'IRC'))
-        type.selection.remove(('jabber', 'Jabber'))
+        cls.type = copy.copy(cls.type)
+        cls.type.selection.remove(('skype', 'Skype'))
+        cls.type.selection.remove(('sip', 'SIP'))
+        cls.type.selection.remove(('irc', 'IRC'))
+        cls.type.selection.remove(('jabber', 'Jabber'))

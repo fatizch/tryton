@@ -20,9 +20,6 @@ class Party:
     bank_accounts = fields.One2Many('party.bank_account', 'party',
         'Bank Accounts')
 
-    def on_change_is_bank(self):
-        return self.on_change_generic('is_bank')
-
 
 class Bank(CoopSQL, Actor):
     'Bank'

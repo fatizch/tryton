@@ -17,9 +17,9 @@
              ]]>
             </field>
         </record>
-        <!-- Legal entity form view -->
-        <record model="ir.ui.view" id="legal_entity_view_form">
-            <field name="model">party.legal_entity</field>
+        <!-- Company form view -->
+        <record model="ir.ui.view" id="company_view_form">
+            <field name="model">company.company</field>
             <field name="type">form</field>
             <field name="inherit" ref="coop_party.actor_view_form"/>
             <field name="arch" type="xml">
@@ -37,6 +37,29 @@
                         <field name="bank_role" mode="form"/>
                     </group>
                 </xpath>
+                </data>
+                ]]>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="employee_view_form">
+            <field name="model">company.employee</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="company.employee_view_form"/>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <data>
+                    <xpath 
+                        expr="/form/notebook/page[@id=&quot;general&quot;]"
+                        position="replace_attributes">
+                        <page string="General" id="general"
+                            states="{'invisible':True}"/>
+                    </xpath>
+                    <xpath 
+                        expr="/form/notebook/page[@id=&quot;bank_account&quot;]"
+                        position="replace_attributes">
+                        <page id="bank_account"
+                            states="{'invisible':True}"/>
+                    </xpath>
                 </data>
                 ]]>
             </field>

@@ -21,7 +21,7 @@ def generate_bank():
         add_address(line, data)
 
         le = etree.SubElement(data, 'record',
-            {'model': "party.legal_entity",
+            {'model': "company.company",
              'id': 'le_%s' % line[0:5]})
         field = etree.SubElement(le, 'field',
         {'name': 'party', 'ref': 'party_%s' % line[0:5]})

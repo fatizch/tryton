@@ -6,9 +6,10 @@ from .contact_mechanism import *
 def register():
     Pool.register(
         Party,
+        Company,
+        Employee,
         Actor,
-        PersonRelations,
         Person,
-        LegalEntity,
+        PersonRelations,
         ContactMechanism,
         module='coop_party', type_='model')
