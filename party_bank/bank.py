@@ -198,10 +198,10 @@ class BankAccountNumber(CoopSQL, CoopView):
     def on_change_with_number(self, name):
         if self.kind != 'RIB':
             return self.number
-        res = getattr(self, 'bank_code', 'O').rjust(5, '0')
-        res += getattr(self, 'branch_code', 'O').rjust(5, '0')
-        res += getattr(self, 'account_number', 'O').rjust(11, '0')
-        res += getattr(self, 'key', 'O').rjust(2, '0')
+        res = getattr(self, 'bank_code', '0').rjust(5, '0')
+        res += getattr(self, 'branch_code', '0').rjust(5, '0')
+        res += getattr(self, 'account_number', '0').rjust(11, '0')
+        res += getattr(self, 'key', '0').rjust(2, '0')
         return res
 
     def on_change_sub_rib(self, name):
