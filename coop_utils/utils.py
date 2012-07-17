@@ -518,6 +518,8 @@ def convert_ref_to_obj(ref):
     # it easier to do.
     #
     # Warning : it is not failsafe
+    if isinstance(ref, Model):
+        return ref
     try:
         model, id = ref.split(',')
     except Exception:

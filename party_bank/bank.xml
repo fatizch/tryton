@@ -75,11 +75,14 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                <form col="9">
+                <form col="12">
                     <label name="kind"/>
                     <field name="kind"/>
-                    <label name="number"/>
                     <field name="number" colspan="6"/>
+                    <field name="bank_code"/>
+                    <field name="branch_code"/>
+                    <field name="account_number"/>
+                    <field name="key"/>
                 </form>
                 ]]>
             </field>

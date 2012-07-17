@@ -1,8 +1,5 @@
 from trytond.model import fields as fields
 
-# Needed for Wizardry
-from trytond.wizard import StateView
-
 from trytond.modules.insurance_process import ProcessState
 from trytond.modules.insurance_process import CoopStateView
 

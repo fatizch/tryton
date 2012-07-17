@@ -28,6 +28,25 @@
 		</record>
 
     <!--################################################################-->
+    <!--                       Coverage Displayer                       -->
+    <!--################################################################-->
+
+        <!-- View for the coverage displayer used in the subscription process -->
+        <record model="ir.ui.view" id="coverage_displayer_tree">
+            <field name="model">ins_contract.coverage_displayer</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                    <![CDATA[
+                        <tree string="Coverage Choices Tree" editable="top">
+                            <field name="status"/>
+                            <field name="coverage"/>
+                            <field name="start_date"/>
+                        </tree>
+                    ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
     <!--                     Option Selection View                      -->
     <!--################################################################-->
 
