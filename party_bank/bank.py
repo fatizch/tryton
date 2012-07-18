@@ -7,8 +7,6 @@ from trytond.model import fields as fields
 from trytond.pyson import Eval
 from trytond.pool import Pool
 
-from trytond.transaction import Transaction
-
 from trytond.modules.coop_utils import CoopView, CoopSQL
 
 BANK_ACCOUNT_KIND = [('IBAN', 'IBAN'),
@@ -183,6 +181,8 @@ class BankAccountNumber(CoopSQL, CoopView):
     @classmethod
     def set_sub_rib(cls, bank_account_nbs, name, value):
         for nb in bank_account_nbs:
+            if nb.kind != 'RIB':
+                continue
             if not nb.number or len(nb.number) < RIB_LENGTH:
                 nb.number = '0' * RIB_LENGTH
             if name == 'bank_code':
