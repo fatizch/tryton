@@ -8,7 +8,7 @@ import random
 def generate_bank():
     f = open('bank.cfg', 'r')
     tryton = etree.Element('tryton')
-    data = etree.SubElement(tryton, 'data')
+    data = etree.SubElement(tryton, 'data', {'skiptest': "1"})
     for line in f:
         party = etree.SubElement(data, 'record',
             {'model': "party.party",

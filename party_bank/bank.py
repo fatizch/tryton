@@ -7,7 +7,7 @@ from trytond.model import fields as fields
 from trytond.pyson import Eval
 from trytond.pool import Pool
 
-from trytond.modules.coop_utils import CoopView, CoopSQL
+from trytond.modules.coop_utils import CoopView, CoopSQL, zfill
 
 BANK_ACCOUNT_KIND = [('IBAN', 'IBAN'),
                      ('RIB', 'RIB'),
@@ -96,9 +96,9 @@ class BankAccountNumber(CoopSQL, CoopView):
         if self.kind == 'IBAN':
             return self.check_iban()
         elif self.kind == 'RIB':
-            return self.check_rib()
+            return self.check_rib(self.number)
         elif self.kind == 'CC':
-            return self.check_credit_card()
+            return self.check_credit_card(self.number)
         return True
 
     @staticmethod
@@ -108,10 +108,9 @@ class BankAccountNumber(CoopSQL, CoopView):
     def check_iban(self):
         return self.number != '' and iban.valid(self.number)
 
-    def split_account_number(self):
-        if self.kind != 'RIB':
-            return self.number
-        rib = self.get_clean_bank_account(self.number)
+    @staticmethod
+    def split_rib(number):
+        rib = BankAccountNumber.get_clean_bank_account(number)
         if len(rib) != RIB_LENGTH:
             return False
         regex = re.compile(r"""^(?P<bank>[0-9]{5})
@@ -127,8 +126,14 @@ class BankAccountNumber(CoopSQL, CoopView):
             'account_number': match.group('account'),
             'key': match.group('key')}
 
-    def check_rib(self):
-        the_dict = self.split_account_number()
+    def split_account_number(self):
+        if self.kind != 'RIB':
+            return self.number
+        return self.split_rib(self.number)
+
+    @staticmethod
+    def check_rib(number):
+        the_dict = BankAccountNumber.split_rib(number)
         if the_dict == False:
             return False
         account = the_dict['account_number']
@@ -141,27 +146,30 @@ class BankAccountNumber(CoopSQL, CoopView):
         calculated_key = 97 - (89 * int(the_dict['bank_code'])
             + 15 * int(the_dict['branch_code'])
             + 3 * int(account)) % 97
+        print calculated_key
         return calculated_key == int(the_dict['key'])
 
-    def check_credit_card(self):
+    @staticmethod
+    def check_credit_card(number):
         expr = """^(?:4[0-9]{12}(?:[0-9]{3})?|
             5[1-5][0-9]{14}|
             6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|
             3(?:0[0-5]|[68][0-9])[0-9]{11}|
             (?:2131|1800|35\d{3})\d{11})$"""
-        return (re.search(expr, self.number, re.X)
-            and luhn.is_valid(self.number))
+        return (re.search(expr, number, re.X)
+            and luhn.is_valid(number))
 
     @staticmethod
     def default_kind():
         return 'RIB'
 
-    def calculate_iban_from_rib(self):
+    @staticmethod
+    def calculate_iban_from_rib(number):
         try:
-            the_dict = self.split_account_number()
+            the_dict = BankAccountNumber.split_rib(number)
             if not the_dict:
                 return ''
-            i = iban. IntAccount(country='FR',
+            i = iban.IntAccount(country='FR',
                 bank=the_dict['bank_code'],
                 branche=the_dict['branch_code'],
                 account=the_dict['account_number'],
@@ -198,17 +206,17 @@ class BankAccountNumber(CoopSQL, CoopView):
     def on_change_with_number(self, name):
         if self.kind != 'RIB':
             return self.number
-        res = getattr(self, 'bank_code', '0').rjust(5, '0')
-        res += getattr(self, 'branch_code', '0').rjust(5, '0')
-        res += getattr(self, 'account_number', '0').rjust(11, '0')
-        res += getattr(self, 'key', '0').rjust(2, '0')
+        res = zfill(self, 'bank_code',)
+        res += zfill(self, 'branch_code')
+        res += zfill(self, 'account_number')
+        res += zfill(self, 'key')
         return res
 
     def on_change_sub_rib(self, name):
         res = {}
-        field = getattr(self.__class__, name)
-        if field and hasattr(field, 'size'):
-            res[name] = getattr(self, name).rjust(field.size, '0')
+        val = zfill(self, name)
+        if val:
+            res[name] = val
             return res
         return res
 

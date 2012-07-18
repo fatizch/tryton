@@ -1,13 +1,14 @@
+from datetime import date
 from lxml import etree
 import ConfigParser
 import random
-from datetime import date
+
 
 def generate_xml(path):
     config = ConfigParser.ConfigParser()
     config.read('test_case.cfg')
     tryton = etree.Element('tryton')
-    data = etree.SubElement(tryton, 'data')
+    data = etree.SubElement(tryton, 'data', {'skiptest': "1"})
     dicts = {}
     total_nb = config.getint('test_case', 'total_nb')
     nb_male = config.getint('test_case', 'nb_male')
@@ -21,12 +22,13 @@ def generate_xml(path):
         add_person(data, dicts, date_interv, 'M', i)
 
     for j in range(nb_female):
-        add_person(data, dicts, date_interv, 'F', i + j+ 1)
+        add_person(data, dicts, date_interv, 'F', i + j + 1)
 
     f = open('person_tc.xml', 'w')
     f.write('<?xml version="1.0"?>\n')
     f.write(etree.tostring(tryton, pretty_print=True))
     f.close()
+
 
 def calculate_date_interval(config):
     start_date = date.today()
@@ -34,8 +36,9 @@ def calculate_date_interval(config):
         - config.getint('test_case', 'adult_age_max')).toordinal()
     end_date = date.today()
     end_date = end_date.replace(year=end_date.year
-        -config.getint('test_case', 'adult_age_min')).toordinal()
+        - config.getint('test_case', 'adult_age_min')).toordinal()
     return [start_date, end_date]
+
 
 def add_person(data_node, dicts, date_interv, sex='M', i=0):
     party = etree.SubElement(data_node, 'record',
@@ -56,6 +59,7 @@ def add_person(data_node, dicts, date_interv, sex='M', i=0):
     add_field(person, 'birth_date',
         str(date.fromordinal(random.randint(date_interv[0], date_interv[1]))))
 
+
 def get_dictionnary(file_name, size):
     fd = open(file_name, 'r')
     res = {}
@@ -70,8 +74,10 @@ def get_dictionnary(file_name, size):
     fd.close()
     return res
 
+
 def get_random(the_dict):
-    return u'%s' % the_dict.get(random.randint(0, len(the_dict)-1))
+    return u'%s' % the_dict.get(random.randint(0, len(the_dict) - 1))
+
 
 def add_field(node_parent, field_name, string):
     if string != '':

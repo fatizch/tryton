@@ -639,3 +639,9 @@ def limit_dates(dates, start=None, end=None):
 def to_date(string, format='ymd'):
     elems = [int(value) for value in string.split('-')]
     return datetime.date(elems[0], elems[1], elems[2])
+
+
+def zfill(the_instance, val_name):
+    field = getattr(the_instance.__class__, val_name)
+    if field and hasattr(field, 'size'):
+        return getattr(the_instance, val_name, '').zfill(field.size)
