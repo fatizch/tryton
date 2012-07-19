@@ -1,3 +1,9 @@
 #!/bin/bash
 cd $ENV_FOLDER/tryton-workspace/coopbusiness
 hg pull -u -b default
+cd $ENV_FOLDER/tryton-workspace/tryton
+hg pull -u
+cd $ENV_FOLDER/tryton-workspace/trytond
+hg pull -u
+cd $ENV_FOLDER/tryton-workspace/coopbusiness/scripts
+./configure_directory $ENV_FOLDER

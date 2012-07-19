@@ -1,6 +1,6 @@
 #!/bin/bash
 SEP=------------------------------------------------
-EXPECTED_ARGS=1
+EXPECTED_ARGS=2
 
 if [ $# -ne $EXPECTED_ARGS ]
 then
