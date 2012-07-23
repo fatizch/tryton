@@ -55,7 +55,7 @@
             <field name="act_window" ref="act_dynamicselection_form" />
         </record>
 
-        <!-- View for the edition or the dynamicselection -->
+        <!-- View for the edition or the dynamic selection -->
         <record model="ir.action.act_window.view" id="act_dynamicselection_form_view">
             <field name="sequence" eval="20" />
             <field name="view" ref="dynamicselection_view_form" />
@@ -65,5 +65,49 @@
         <!-- Sub menu configuration Dynamic Selection -->
         <menuitem parent="menu_configuration" sequence="10" id="menu_dynamicselection_form"
             icon="tryton-list" action="act_dynamicselection_form" />
+
+        <!--  ******************************************* 
+              *********   Table of table   ***********
+              *******************************************-->
+        <record model="ir.ui.view" id="table_of_table_view_tree">
+            <field name="model">coop.table_of_table</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <tree>
+                        <field name="name"/>
+                    </tree>
+                ]]>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="table_of_table_view_tree_editable">
+            <field name="model">coop.table_of_table</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <tree editable="bottom">
+                        <field name="value_kind" width="100"/>
+                        <field name="name"/>
+                    </tree>
+                ]]>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="table_of_table_view_form">
+            <field name="model">coop.table_of_table</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <form col="8">
+                        <label name="value_kind"/>
+                        <field name="value_kind"/>
+                        <label name="name"/>
+                        <field name="name" colspan="5"/>
+                        <newline/>
+                        <field name="my_fields" colspan="8"
+                            view_ids="coop_utils.table_of_table_view_tree_editable"/>
+                    </form>
+                ]]>
+            </field>
+        </record>
     </data>
 </tryton>

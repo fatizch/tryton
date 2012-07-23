@@ -1,10 +1,8 @@
 import datetime
 
-from trytond.model import ModelView, ModelSQL, fields as fields
-from trytond.wizard import Wizard
 from trytond.pool import Pool
 from trytond.model import Model
-
+from trytond.model import fields as fields
 # Needed for proper encoding / decoding of objects as strings
 from trytond.protocols.jsonrpc import JSONEncoder, object_hook
 
@@ -13,18 +11,6 @@ try:
     import simplejson as json
 except ImportError:
     import json
-
-
-class CoopSQL(ModelSQL):
-    pass
-
-
-class CoopView(ModelView):
-    pass
-
-
-class CoopWizard(Wizard):
-    pass
 
 
 def get_descendents(from_class, names_only=False):
@@ -54,45 +40,6 @@ def get_descendents_name(from_class):
         if issubclass(model, from_class):
             result.append((model_name, model.__doc__.splitlines()[0]))
     return result
-
-
-class DynamicSelection(CoopSQL, CoopView):
-    'Dynamic Selection'
-
-    __name__ = 'coop.dynamic_selection'
-
-    kind = fields.Selection([('person_relation', 'Person Relation'),
-                             ('company_relation', 'Company Relation')],
-                            'Kind', required=True)
-    key = fields.Char('Key', required=True)
-    name = fields.Char('Value', required=True)
-    reverse_key = fields.Char('Reverse Key')
-
-    @classmethod
-    def __setup__(cls):
-        super(DynamicSelection, cls).__setup__()
-        cls._sql_constraints += [
-            ('key_uniq', 'UNIQUE(key)', 'The key must be unique!'),
-        ]
-
-
-def get_dynamic_selection(kind):
-    res = []
-    DynamicSelection = Pool().get('coop.dynamic_selection')
-    dyn_sels = DynamicSelection.search([('kind', '=', kind)])
-    for dyn_sel in dyn_sels:
-        res.append([dyn_sel.key, dyn_sel.name])
-    return res
-
-
-def get_reverse_dynamic_selection(key):
-    res = []
-    DynamicSelection = Pool().get('coop.dynamic_selection')
-    dyn_sels = DynamicSelection.search([('reverse_key', '=', key)],
-                                       limit=1)
-    for dyn_sel in dyn_sels:
-        res.append([dyn_sel.key, dyn_sel.name])
-    return res
 
 
 def get_module_name(cls):

@@ -1,16 +1,16 @@
 #-*- coding:utf-8 -*-
 import copy
-import functools
 
 from trytond.model import fields as fields, ModelSQL, ModelView
 from trytond.pyson import Eval
 
 from trytond.pool import PoolMeta
 
-from trytond.modules.coop_utils import utils, CoopView, CoopSQL
+from trytond.modules.coop_utils import CoopView, CoopSQL
+from trytond.modules.coop_utils import TableOfTable, DynamicSelection
 
 __all__ = ['Party', 'Company', 'Employee', 'Actor', 'Person',
-           'PersonRelations', ]
+           'PersonRelations', 'GenericActorKind', 'GenericActor', ]
 __metaclass__ = PoolMeta
 
 GENDER = [('M', 'Mr.'),
@@ -28,6 +28,8 @@ class Party:
         'party', 'Company', size=1)
     employee_role = fields.One2Many('company.employee', 'party', 'Employee',
         size=1)
+    generic_roles = fields.One2Many('party.generic_actor', 'party',
+        'Generic Actor')
 
     @classmethod
     def __setup__(cls):
@@ -131,6 +133,28 @@ class Actor(CoopView):
                     required=True, ondelete='CASCADE', select=True)
 
 
+class GenericActorKind(TableOfTable):
+    'Generic Actor Kind'
+
+    __name__ = 'party.generic_actor_kind'
+    _table = 'coop_table_of_table'
+
+    @staticmethod
+    def default_value_kind():
+        return 'str'
+
+
+class GenericActor(CoopSQL, Actor):
+    'Generic Actor'
+
+    __name__ = 'party.generic_actor'
+
+    kind = fields.Many2One('party.generic_actor_kind', 'Kind',
+        domain=[('my_model_name', '=', 'party.generic_actor_kind'),
+                ('parent', '=', False)],
+        required=True)
+
+
 class PersonRelations(CoopSQL, CoopView):
     'Person Relations'
 
@@ -146,10 +170,10 @@ class PersonRelations(CoopSQL, CoopView):
 
     @staticmethod
     def get_relation_kind():
-        return utils.get_dynamic_selection('person_relation')
+        return DynamicSelection.get_dyn_sel('person_relation')
 
     def get_reverse_kind(self, name):
-        reverse_values = utils.get_reverse_dynamic_selection(self.kind)
+        reverse_values = DynamicSelection.get_reverse_dyn_sel(self.kind)
         if len(reverse_values) > 0:
             return reverse_values[0][1]
         return ''
@@ -186,4 +210,3 @@ class Person(CoopSQL, Actor):
             return res
         res['maiden_name'] = ''
         return res
-

@@ -12,4 +12,6 @@ def register():
         Person,
         PersonRelations,
         ContactMechanism,
+        GenericActorKind,
+        GenericActor,
         module='coop_party', type_='model')
