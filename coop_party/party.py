@@ -160,8 +160,10 @@ class PersonRelations(CoopSQL, CoopView):
 
     __name__ = 'party.person-relations'
 
-    from_person = fields.Many2One('party.person', 'From Person')
-    to_person = fields.Many2One('party.person', 'From Person')
+    from_person = fields.Many2One('party.person', 'From Person',
+        ondelete='CASCADE')
+    to_person = fields.Many2One('party.person', 'From Person',
+        ondelete='CASCADE')
     kind = fields.Selection('get_relation_kind', 'Kind')
     reverse_kind = fields.Function(fields.Char('Reverse Kind',
             readonly=True,

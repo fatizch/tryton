@@ -22,7 +22,8 @@ class BankAccount(CoopSQL, CoopView):
     'Bank Account'
     __name__ = 'party.bank_account'
 
-    party = fields.Many2One('party.party', 'Party')
+    party = fields.Many2One('party.party', 'Party',
+        ondelete='CASCADE')
     currency = fields.Many2One('currency.currency', 'Currency',
         states={'required': Eval('kind') != 'CC'})
     start_date = fields.Date('Start Date')
@@ -54,7 +55,8 @@ class BankAccountNumber(CoopSQL, CoopView):
     'Bank account Number'
     __name__ = 'party.bank_account_number'
 
-    bank_account = fields.Many2One('party.bank_account', 'Bank Account')
+    bank_account = fields.Many2One('party.bank_account', 'Bank Account',
+        ondelete='CASCADE')
     kind = fields.Selection(BANK_ACCOUNT_KIND, 'Kind', required=True)
     number = fields.Char('Number', required=True,
         states={'invisible': Eval('kind') == 'RIB'},

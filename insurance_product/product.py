@@ -354,7 +354,8 @@ class GenericBusinessRule(CoopSQL, CoopView):
 
     kind = fields.Selection('get_kind', 'Kind',
                             required=True, on_change=['kind'])
-    manager = fields.Many2One('ins_product.business_rule_manager', 'Manager')
+    manager = fields.Many2One('ins_product.business_rule_manager', 'Manager',
+        ondelete='CASCADE')
     start_date = fields.Date('From Date', required=True)
     end_date = fields.Date('To Date')
     is_current = fields.Function(fields.Boolean('Is current'),
@@ -448,7 +449,7 @@ class BusinessRuleRoot(CoopView, GetResult):
     __name__ = 'ins_product.business_rule_root'
 
     generic_rule = fields.Many2One('ins_product.generic_business_rule',
-                                   'Generic Rule')
+        'Generic Rule', ondelete='CASCADE')
     template = fields.Many2One(None, 'Template',
         domain=[('id', '!=', Eval('id'))],
         depends=['id'])
