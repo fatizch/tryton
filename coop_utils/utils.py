@@ -298,7 +298,7 @@ class WithAbstract(object):
         return result
 
     @staticmethod
-    def serialize_field(field):
+    def serialize_field(field, from_field=None):
         # We need a way to serialize fields so that they become json compatible
         # for storing while still being readable when extracting.
         res = None
@@ -316,13 +316,19 @@ class WithAbstract(object):
                 # that has been stored in the db, we just need its id to store
                 # it.
                 res = field.id
+                if isinstance(from_field, fields.Reference):
+                    res = '%s,%s' % (
+                        field.__name__,
+                        field.id)
             else:
                 # If not, we need to go through each field to serialize each of
                 # them separately.
                 res = {}
                 if not field._values is None:
                     for key, value in field._values.iteritems():
-                        res[key] = WithAbstract.serialize_field(value)
+                        res[key] = WithAbstract.serialize_field(
+                            value,
+                            field._fields[key])
         else:
             # If the field is a basic type, no need for further work.
             res = field
