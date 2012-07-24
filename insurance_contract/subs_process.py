@@ -269,13 +269,13 @@ class CoveredDataDesc(CoopStepView):
 
     @staticmethod
     def get_coverages_model():
-        return get_descendents(Coverage)
+        res = get_descendents(Coverage)
+        res.append((Coverage.__name__, Coverage.__name__))
+        return res
 
     def init_from_coverage(self, for_coverage):
         self.start_date = for_coverage.start_date
-        self.for_coverage = '%s,%s' % (
-            for_coverage.coverage.__name__,
-            for_coverage.coverage.id)
+        self.for_coverage = for_coverage.coverage
 
 
 class CoveredElementDesc(CoopStepView):
@@ -293,13 +293,14 @@ class CoveredElementDesc(CoopStepView):
         contract = WithAbstract.get_abstract_objects(from_wizard,
                                                      'for_contract')
         covered_datas = []
-        CoveredDataDesc = from_wizard.give_covered_data_desc_model()
+        CoveredDataDesc = Pool().get(
+            from_wizard.give_covered_data_desc_model())
         for covered in contract.options:
             covered_data = CoveredDataDesc()
             covered_data.init_from_coverage(covered)
             covered_data.status = 'Active'
             covered_datas.append(covered_data)
-        return covered_datas
+        return WithAbstract.serialize_field(covered_datas)
 
 
 class CoveredPersonDesc(CoveredElementDesc):
@@ -365,7 +366,9 @@ class ExtensionLifeState(DependantState):
         for covered_element in wizard.extension_life.covered_elements:
             found = False
             for covered_data in covered_element.covered_data:
-                if covered_data.status == 'Active':
+                if hasattr(
+                        covered_data,
+                        'status') and covered_data.status == 'Active':
                     found = True
                     break
             if not found:

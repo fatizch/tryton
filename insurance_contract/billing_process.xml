@@ -53,10 +53,10 @@
                     <![CDATA[
                         <form string="Billing Process - Bill Result">
                             <group id="Basic Data">
-                                <label name="start_date" xalign="0"/>
-                                <field name="start_date"/>
-                                <label name="end_date" xalign="0"/>
-                                <field name="end_date"/>
+                                <label name="bill_start_date" xalign="0"/>
+                                <field name="bill_start_date"/>
+                                <label name="bill_end_date" xalign="0"/>
+                                <field name="bill_end_date"/>
                                 <newline/>
                                 <label name="bill_amount_ht" xalign="0"/>
                                 <field name="bill_amount_ht"/>
@@ -72,7 +72,6 @@
                     ]]>
             </field>
         </record>
-        
     <!--################################################################-->
     <!--                          Actions Entries                       -->
     <!--################################################################-->
@@ -90,15 +89,15 @@
         </record>
         
     <!--################################################################-->
-    <!--                          Actions Entries                       -->
+    <!--                           Relate Entries                       -->
     <!--################################################################-->
-
-<!-- Do not work for now, to do later...
 
         <record model="ir.action.act_window" id="act_billing_by_contract">
             <field name="name">Bills by Contract</field>
             <field name="res_model">ins_contract.billing.bill</field>
-            <field name="domain">[('id', '=', 1)]</field>
+            <field name="domain">[
+                ('for_contract', '=',
+                (('ins_contract.contract'),(Eval('active_id'))))]</field>
         </record>
 
         <record model="ir.action.keyword" id="act_billing_by_contract_keyword1">
@@ -106,8 +105,6 @@
             <field name="model">ins_contract.contract,-1</field>
             <field name="action" ref="act_billing_by_contract"/>
         </record>
-
--->
 
     </data>
 

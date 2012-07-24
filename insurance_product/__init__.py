@@ -13,4 +13,5 @@ def register():
         BusinessRuleRoot,
         PricingRule,
         EligibilityRule,
+        PricingContext_Contract,
         module='insurance_product', type_='model')

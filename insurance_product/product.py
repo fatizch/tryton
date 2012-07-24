@@ -14,7 +14,7 @@ from trytond.modules.coop_utils import convert_ref_to_obj, PricingResultLine
 
 __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
            'BusinessRuleManager', 'GenericBusinessRule', 'BusinessRuleRoot',
-           'PricingRule', 'EligibilityRule']
+           'PricingRule', 'EligibilityRule', 'PricingContext_Contract']
 
 
 class Offered(CoopView, GetResult):
@@ -91,9 +91,12 @@ class Coverage(CoopSQL, Offered):
                 # result
                 for_option = contract.get_option_for_coverage_at_date(
                     self, date)
-                if for_option and for_option.id:
-                    _res.on_object = '%s,%s' % (
-                        for_option.__name__, for_option.id)
+                if for_option:
+                    if for_option.id:
+                        _res.on_object = '%s,%s' % (
+                            for_option.__name__, for_option.id)
+                    else:
+                        _res.name = 'Base Price'
                 res += _res
             # We always append the errors (if any).
             errs += _errs
@@ -354,7 +357,8 @@ class GenericBusinessRule(CoopSQL, CoopView):
 
     kind = fields.Selection('get_kind', 'Kind',
                             required=True, on_change=['kind'])
-    manager = fields.Many2One('ins_product.business_rule_manager', 'Manager')
+    manager = fields.Many2One('ins_product.business_rule_manager', 'Manager',
+        ondelete='CASCADE')
     start_date = fields.Date('From Date', required=True)
     end_date = fields.Date('To Date')
     is_current = fields.Function(fields.Boolean('Is current'),
@@ -448,7 +452,7 @@ class BusinessRuleRoot(CoopView, GetResult):
     __name__ = 'ins_product.business_rule_root'
 
     generic_rule = fields.Many2One('ins_product.generic_business_rule',
-                                   'Generic Rule')
+        'Generic Rule', ondelete='CASCADE')
     template = fields.Many2One(None, 'Template',
         domain=[('id', '!=', Eval('id'))],
         depends=['id'])
@@ -465,6 +469,10 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
 
     __name__ = 'ins_product.pricing_rule'
 
+    price_rule = fields.Many2One(
+        'rule_engine',
+        'Rule for Price Calculation')
+
     price = fields.Numeric('Amount', digits=(16, 2), required=True)
 
     per_sub_elem_price = fields.Numeric(
@@ -472,6 +480,10 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
         digits=(16, 2))
 
     def give_me_price(self, args):
+        if hasattr(self, 'price_rule') and self.price_rule:
+            res = self.price_rule.compute(args)
+            return (PricingResultLine(value=res), [])
+
         # This is the most basic pricing rule : just return the price
         return (PricingResultLine(value=self.price), [])
 
@@ -486,3 +498,16 @@ class EligibilityRule(CoopSQL, BusinessRuleRoot):
     __name__ = 'ins_product.eligibility_rule'
 
     is_eligible = fields.Boolean('Is Eligible')
+
+
+class PricingContext_Contract(CoopView):
+    '''
+        Context functions for pricing rules on contracts.
+    '''
+    __name__ = 'ins_product.rule_sets.pricing.contract'
+
+    @classmethod
+    def get_subscriber_age(cls, args):
+        name = args['contract'].subscriber.name
+        print name
+        return name

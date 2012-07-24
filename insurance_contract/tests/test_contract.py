@@ -224,9 +224,9 @@ class ContractTestCase(unittest.TestCase):
                 '\t\tProduct Base Price => 0',
                 '\t\tOptions => 43',
                 '\t\t\tBeta Coverage => 30',
-                '\t\t\t\tBase price => 30',
+                '\t\t\t\tBase Price => 30',
                 '\t\t\tAlpha Coverage => 13',
-                '\t\t\t\tBase price => 12',
+                '\t\t\t\tBase Price => 12',
                 '\t\t\t\tToto => 1',
                 '',
                 date_from_today(2).isoformat(),
@@ -239,7 +239,7 @@ class ContractTestCase(unittest.TestCase):
                 '\t\tProduct Base Price => 0',
                 '\t\tOptions => 13',
                 '\t\t\tAlpha Coverage => 13',
-                '\t\t\t\tBase price => 12',
+                '\t\t\t\tBase Price => 12',
                 '\t\t\t\tToto => 1',
                 '',
                 date_from_today(0).isoformat(),
@@ -253,7 +253,7 @@ class ContractTestCase(unittest.TestCase):
                 '\t\tOptions => 15',
                 '\t\t\tBeta Coverage => 0',
                 '\t\t\tAlpha Coverage => 15',
-                '\t\t\t\tBase price => 15',
+                '\t\t\t\tBase Price => 15',
                 '']
 
             # print '\n'.join(lines)
@@ -263,7 +263,9 @@ class ContractTestCase(unittest.TestCase):
             lines.sort()
             good_lines.sort()
 
-            self.assertEqual(lines, good_lines)
+            self.maxDiff = None
+
+            self.assertListEqual(lines, good_lines)
 
             wizard.transition_steps_complete()
             wizard.transition_master_step()

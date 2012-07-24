@@ -24,7 +24,7 @@ else
 	echo $SEP
 	cd tryton-workspace/trytond/trytond/modules
 	ln -s ../../../coopbusiness/* .
-	rm defaults scripts
+	rm defaults scripts test_case
 	cd ../../../..
 	ln -s tryton-workspace/coopbusiness/scripts/start.sh .
 	cd tryton-workspace

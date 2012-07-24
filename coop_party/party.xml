@@ -36,6 +36,7 @@
                     <page string="Roles" id="role">
                         <group id="role_group" colspan="4">
                         </group>
+                        <field name="generic_roles" colspan="4"/>
                     </page>
                 </xpath>
              </data>
@@ -276,6 +277,80 @@
         <record model="ir.ui.menu" id="company.menu_employee_form"><field name="active" eval="False"/></record>
         <record model="ir.ui.menu" id="company.menu_company_tree"><field name="active" eval="False"/></record>
         <record model="ir.ui.menu" id="company.menu_company_list"><field name="active" eval="False"/></record>
-        
+
+        <!--  ******************************************* 
+              ********    Generic Actor Kind   **********
+              *******************************************-->
+        <!-- generic_actor_kind -->
+
+        <!-- form view -->
+        <record model="ir.ui.view" id="generic_actor_kind_view_form">
+            <field name="model">party.generic_actor_kind</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="coop_utils.table_of_table_view_form"/>
+            <field name="arch" type="xml">
+            </field>
+        </record>
+        <record model="ir.ui.view" id="generic_actor_kind_view_tree">
+            <field name="model">party.generic_actor_kind</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="coop_utils.table_of_table_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+
+        <!-- View for the main menu and the event -->
+        <record model="ir.action.act_window" id="act_generic_actor_kind_form">
+            <field name="name">Generic Actor</field>
+            <field name="res_model">party.generic_actor_kind</field>
+            <field name="domain">[("parent", "=", False)]</field>
+        </record>
+
+        <!-- View that connects the form in the tree with the specification -->
+        <record model="ir.action.act_window.view" id="act_generic_actor_kind_form_view1">
+            <field name="sequence" eval="10" />
+            <field name="view" ref="generic_actor_kind_view_tree" />
+            <field name="act_window" ref="act_generic_actor_kind_form" />
+        </record>
+
+        <!-- View for the edition or the Form of generic_actor_kind -->
+        <record model="ir.action.act_window.view" id="act_generic_actor_kind_form_view2">
+            <field name="sequence" eval="20" />
+            <field name="view" ref="generic_actor_kind_view_form" />
+            <field name="act_window" ref="act_generic_actor_kind_form" />
+        </record>
+
+        <menuitem parent="coop_utils.menu_configuration" sequence="1" id="menu_generic_actor_kind_form"
+            icon="tryton-list" action="act_generic_actor_kind_form" />
+        <!-- /generic_actor_kind -->
+
+        <!--  ******************************************* 
+              ********    Generic Actor  **********
+              *******************************************-->
+        <record model="ir.ui.view" id="generic_actor_view_form">
+            <field name="model">party.generic_actor</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <form>
+                    <label name="kind"/>
+                    <field name="kind" widget="selection"/>
+                    <label name="reference"/>
+                    <field name="reference"/>
+                </form>
+                ]]>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="generic_actor_view_tree">
+            <field name="model">party.generic_actor</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <tree>
+                        <field name="kind"/>
+                        <field name="reference"/>
+                    </tree>
+                ]]>
+            </field>
+        </record>
     </data>
 </tryton>

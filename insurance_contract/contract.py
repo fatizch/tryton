@@ -342,7 +342,7 @@ class PriceLine(CoopSQL, CoopView):
 
     def get_id(self):
         if hasattr(self, 'on_object') and self.on_object:
-            return self.on_object
+            return self.on_object.get_name_for_billing()
         return self.name
 
     def init_values(self):

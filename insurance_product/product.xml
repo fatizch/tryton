@@ -242,8 +242,11 @@
                          <data>
 		                     <xpath expr="/form/field[@name=&quot;template&quot;]"
                               position="after">
+                                <newline/>
                                 <label name="price"/>
                                 <field name="price"/>
+                                <label name="price_rule"/>
+                                <field name="price_rule"/>
                          		<newline/>
                          		<label name="per_sub_elem_price"/>
                          		<field name="per_sub_elem_price"/>
