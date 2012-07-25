@@ -507,7 +507,7 @@ class PricingContext_Contract(CoopView):
     __name__ = 'ins_product.rule_sets.pricing.contract'
 
     @classmethod
-    def get_subscriber_age(cls, args):
+    def get_subscriber_name(cls, args):
         name = args['contract'].subscriber.name
         print name
         return name

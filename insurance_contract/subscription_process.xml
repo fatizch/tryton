@@ -79,7 +79,30 @@
         </record>
 
     <!--################################################################-->
-    <!--                 Covered Data Desc View                         -->
+    <!--                 Covered Data Desc Form                         -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="covered_data_desc_view_form">
+            <field name="model">ins_contract.subs_process.covered_data_desc</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">                 
+                    <![CDATA[                 
+                    <form string="Covered Data">
+                        <label name="status"/>
+                        <field name="status"/>
+                        <label name="for_coverage"/>
+                        <field name="for_coverage"/>
+                        <newline/>
+                        <label name="start_date"/>
+                        <field name="start_date"/>
+                        <label name="end_date"/>
+                        <field name="end_date"/>
+                    </form>                 ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
+    <!--                 Covered Data Desc Tree                         -->
     <!--################################################################-->
 
         <record model="ir.ui.view" id="covered_data_desc_view_tree">
@@ -108,6 +131,7 @@
 						<form string="Subscription Process - Life Extension">
 							<label name="covered_elements"/>
 							<field name="covered_elements"/>
+							<field name="session_id"/>
 						</form>
 					]]>
 			</field>
