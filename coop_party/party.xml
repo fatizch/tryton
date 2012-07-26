@@ -117,6 +117,7 @@
             <field name="arch" type="xml">
                         <![CDATA[
                             <tree>
+                                <field name="ssn"/>
                                 <field name="name"/>
                                 <field name="first_name"/>
                                 <field name="birth_date"/>

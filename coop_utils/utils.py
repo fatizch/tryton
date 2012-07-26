@@ -594,7 +594,20 @@ def to_date(string, format='ymd'):
     return datetime.date(elems[0], elems[1], elems[2])
 
 
-def zfill(the_instance, val_name):
+def get_field_size(the_instance, val_name):
     field = getattr(the_instance.__class__, val_name)
     if field and hasattr(field, 'size'):
-        return getattr(the_instance, val_name, '').zfill(field.size)
+        return field.size
+
+
+def zfill(the_instance, val_name):
+    size = get_field_size(the_instance, val_name)
+    if size:
+        return getattr(the_instance, val_name, '').zfill(size)
+
+
+def tuple_index(value, the_tuple, key_index=0):
+    '''
+    Retrieve the index of the value in the tuple, comparing the
+    value with the key_index value of the tuple'''
+    return [y[key_index] for y in list(the_tuple)].index(value)

@@ -7,7 +7,8 @@ from trytond.pyson import Eval
 from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import CoopView, CoopSQL
-from trytond.modules.coop_utils import TableOfTable, DynamicSelection
+from trytond.modules.coop_utils import TableOfTable, DynamicSelection, \
+    tuple_index
 
 __all__ = ['Party', 'Company', 'Employee', 'Actor', 'Person',
            'PersonRelations', 'GenericActorKind', 'GenericActor', ]
@@ -212,3 +213,10 @@ class Person(CoopSQL, Actor):
             return res
         res['maiden_name'] = ''
         return res
+
+    @staticmethod
+    def gender_as_int(gender):
+        return tuple_index(gender, GENDER) + 1
+
+    def get_gender_as_int(self):
+        return self.gender_as_int(self.gender)

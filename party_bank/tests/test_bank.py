@@ -31,7 +31,7 @@ class PartyTestCase(unittest.TestCase):
         '''
         Test views.
         '''
-        test_view('party')
+        test_view('party_bank')
 
     def test0006depends(self):
         '''

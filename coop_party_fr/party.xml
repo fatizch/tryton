@@ -8,10 +8,30 @@
             <field name="arch" type="xml">
                 <![CDATA[
                 <data>
+                <xpath expr="/form"
+                    position="replace_attributes">
+                    <form col="10"/>
+                </xpath>
+                <xpath expr="/form/notebook"
+                    position="replace_attributes">
+                    <notebook colspan="10"/>
+                </xpath>
                     <xpath expr="/form/label[@name=&quot;siren&quot;]" position="replace">
                     </xpath>
                     <xpath expr="/form/field[@name=&quot;siren&quot;]" position="replace">
                     </xpath>
+                    <xpath expr="/form/label[@name=&quot;ssn&quot;]"
+                        position="replace"/>
+                    <xpath expr="/form/field[@name=&quot;ssn&quot;]"
+                        position="replace"/>
+                    <xpath expr="/form/label[@name=&quot;gender&quot;]" position="before">
+                        <label name="ssn"/>
+                        <group id="ssn" col="8" colspan="1">
+                            <field name="ssn_no_key" colspan="7"/>
+                            <field name="ssn_key"/>
+                        </group>
+                    </xpath>
+                    
                 </data>
                 ]]>
             </field>
