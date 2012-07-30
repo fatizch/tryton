@@ -38,10 +38,14 @@
                     <field name="template"/>
                     <notebook>
                         <page string="Managers" id="managers">
-                            <label name="eligibility_mgr"/>
-                            <field name="eligibility_mgr"/>
-                            <label name="pricing_mgr"/>
-                            <field name="pricing_mgr"/>
+                            <notebook>
+                                <page string="Eligibilty" id="eligibility">
+                                    <field name="eligibility_mgr_O2M" colspan="4" mode="form"/>
+                                </page>
+                                <page string="Pricing" id="pricing">
+                                    <field name="pricing_mgr_O2M" colspan="4" mode="form"/>
+                                </page>
+                            </notebook>
                         </page>
                     </notebook>
                 </form>
@@ -64,7 +68,7 @@
             <field name="arch" type="xml">
                 <![CDATA[
                 <data>
-                <xpath expr="/form/notebook" position="inside">
+                <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]" position="before">
                     <page string="Options" id="option">
                         <field name="options"/>
                     </page>

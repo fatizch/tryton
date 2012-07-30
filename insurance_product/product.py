@@ -9,7 +9,7 @@ from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
 from trytond.modules.coop_utils import utils, CoopView, CoopSQL, GetResult
-from trytond.modules.coop_utils import get_data_from_dict
+from trytond.modules.coop_utils import get_data_from_dict, Many2OneForm
 from trytond.modules.coop_utils import convert_ref_to_obj, PricingResultLine
 
 __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
@@ -50,11 +50,21 @@ class Offered(CoopView, GetResult):
             cur_attr.context['mgr'] = field_name
             if not hasattr(cur_attr, 'model_name'):
                 continue
-            cur_attr.domain = [('business_rules.kind', '=',
+            cur_domain = [('business_rules.kind', '=',
                     '%s.%s_rule' %
                         (utils.get_module_name(cls),
                         field_name.split('_mgr')[0]))]
-            setattr(cls, field_name, copy.copy(cur_attr))
+            cur_attr.domain = cur_domain
+            cur_attr = copy.copy(cur_attr)
+            setattr(cls, field_name, cur_attr)
+
+            #Creating O2M form based on the M2O
+            O2M_attr = Many2OneForm(cur_attr)
+            #For the moment, the domain set on the M20 is not transmitted
+            #to the O2M. May be unnecessary in the future
+            O2M_attr.domain = cur_domain
+            setattr(cls, field_name + '_O2M', O2M_attr)
+
         cls.template = copy.copy(cls.template)
         cls.template.model_name = cls.__name__
 
