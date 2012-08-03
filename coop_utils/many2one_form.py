@@ -13,7 +13,11 @@ class Many2OneForm(fields.Function):
 
     def __init__(self, many2one, loading='eager'):
         field = fields.One2Many(many2one.model_name, None, many2one.string,
-            size=1)
+            datetime_field=many2one.datetime_field, size=1, help=many2one.help,
+            required=many2one.required, readonly=many2one.readonly,
+            domain=many2one.domain, states=many2one.states,
+            depends=many2one.depends, order_field=many2one.order_field,
+            context=many2one.context)
         super(Many2OneForm, self).__init__(field, many2one.name,
             setter=many2one.name, searcher=many2one.name, loading=loading)
         self.many2one = many2one
