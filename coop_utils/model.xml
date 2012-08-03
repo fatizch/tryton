@@ -3,12 +3,12 @@
     <data>
         <menuitem name="Configuration" id="menu_configuration" sequence="10" />
         <!--  ******************************************* 
-              *********   Dynamic Selection   ***********
+              *********   Party Relation   ***********
               *******************************************-->
 
-        <!-- Dynamic Selection tree view -->
-        <record model="ir.ui.view" id="dynamicselection_view_tree">
-            <field name="model">coop.dynamic_selection</field>
+        <!-- Party Relation tree view -->
+        <record model="ir.ui.view" id="party_relation_view_tree">
+            <field name="model">coop.party_relation</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
                         <![CDATA[
@@ -20,13 +20,13 @@
             </field>
         </record>
 
-        <!-- Dynamic Selection form view -->
-        <record model="ir.ui.view" id="dynamicselection_view_form">
-            <field name="model">coop.dynamic_selection</field>
+        <!-- Party Relation form view -->
+        <record model="ir.ui.view" id="party_relation_view_form">
+            <field name="model">coop.party_relation</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                    <form string="Dynamic Selection">
+                    <form string="Party Relation">
                         <label name="kind"/>
                         <field name="kind"/>
                         <newline/>
@@ -43,28 +43,28 @@
         </record>
 
         <!-- View for the main menu and the event -->
-        <record model="ir.action.act_window" id="act_dynamicselection_form">
-            <field name="name">Dynamic Selection</field>
-            <field name="res_model">coop.dynamic_selection</field>
+        <record model="ir.action.act_window" id="act_party_relation_form">
+            <field name="name">Party Relation</field>
+            <field name="res_model">coop.party_relation</field>
         </record>
 
         <!-- View that connects the form in the tree with the specification -->
-        <record model="ir.action.act_window.view" id="act_dynamicselection_tree_view">
+        <record model="ir.action.act_window.view" id="act_party_relation_tree_view">
             <field name="sequence" eval="10" />
-            <field name="view" ref="dynamicselection_view_tree" />
-            <field name="act_window" ref="act_dynamicselection_form" />
+            <field name="view" ref="party_relation_view_tree" />
+            <field name="act_window" ref="act_party_relation_form" />
         </record>
 
-        <!-- View for the edition or the dynamic selection -->
-        <record model="ir.action.act_window.view" id="act_dynamicselection_form_view">
+        <!-- View for the edition or the Party Relation -->
+        <record model="ir.action.act_window.view" id="act_party_relation_form_view">
             <field name="sequence" eval="20" />
-            <field name="view" ref="dynamicselection_view_form" />
-            <field name="act_window" ref="act_dynamicselection_form" />
+            <field name="view" ref="party_relation_view_form" />
+            <field name="act_window" ref="act_party_relation_form" />
         </record>
 
-        <!-- Sub menu configuration Dynamic Selection -->
-        <menuitem parent="menu_configuration" sequence="10" id="menu_dynamicselection_form"
-            icon="tryton-list" action="act_dynamicselection_form" />
+        <!-- Sub menu configuration Party Relation -->
+        <menuitem parent="menu_configuration" sequence="10" id="menu_party_relation_form"
+            icon="tryton-list" action="act_party_relation_form" />
 
         <!--  ******************************************* 
               *********   Table of table   ***********
@@ -106,6 +106,38 @@
                         <field name="my_fields" colspan="8"
                             view_ids="coop_utils.table_of_table_view_tree_editable"/>
                     </form>
+                ]]>
+            </field>
+        </record>
+        <!--  ******************************************* 
+              *********   Dynamic Selection   ***********
+              *******************************************-->
+        <!-- Dynamic Selection tree view -->
+        <record model="ir.ui.view" id="dyn_selection_view_tree">
+            <field name="model">coop.dyn_selection</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                        <![CDATA[
+                            <tree>
+                                <field name="store_value"/>
+                                <field name="name"/>
+                            </tree>
+                        ]]>
+            </field>
+        </record>
+
+        <!-- Dynamic Selection form view -->
+        <record model="ir.ui.view" id="dyn_selection_view_form">
+            <field name="model">coop.dyn_selection</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <form string="Dynamic Selection">
+                        <label name="store_value"/>
+                        <field name="store_value"/>
+                        <label name="name"/>
+                        <field name="name"/>
+                     </form>
                 ]]>
             </field>
         </record>
