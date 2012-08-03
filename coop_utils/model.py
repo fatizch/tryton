@@ -24,10 +24,10 @@ class CoopWizard(Wizard):
     pass
 
 
-class DynamicSelection(CoopSQL, CoopView):
+class PartyRelation(CoopSQL, CoopView):
     'Dynamic Selection'
 
-    __name__ = 'coop.dynamic_selection'
+    __name__ = 'coop.party_relation'
 
     kind = fields.Selection([('person_relation', 'Person Relation'),
                              ('company_relation', 'Company Relation')],
@@ -38,7 +38,7 @@ class DynamicSelection(CoopSQL, CoopView):
 
     @classmethod
     def __setup__(cls):
-        super(DynamicSelection, cls).__setup__()
+        super(PartyRelation, cls).__setup__()
         cls._sql_constraints += [
             ('key_uniq', 'UNIQUE(key)', 'The key must be unique!'),
         ]
@@ -46,7 +46,7 @@ class DynamicSelection(CoopSQL, CoopView):
     @staticmethod
     def get_dyn_sel(kind):
         res = []
-        DynamicSelection = Pool().get('coop.dynamic_selection')
+        DynamicSelection = Pool().get('coop.party_relation')
         dyn_sels = DynamicSelection.search([('kind', '=', kind)])
         for dyn_sel in dyn_sels:
             res.append([dyn_sel.key, dyn_sel.name])
@@ -55,7 +55,7 @@ class DynamicSelection(CoopSQL, CoopView):
     @staticmethod
     def get_reverse_dyn_sel(key):
         res = []
-        DynamicSelection = Pool().get('coop.dynamic_selection')
+        DynamicSelection = Pool().get('coop.party_relation')
         dyn_sels = DynamicSelection.search([('reverse_key', '=', key)],
                                            limit=1)
         for dyn_sel in dyn_sels:
@@ -71,7 +71,8 @@ class TableOfTable(CoopSQL, CoopView):
     _table = 'coop_table_of_table'
 
     my_model_name = fields.Char('Model Name')
-    name = fields.Char('Value', required=True)
+    store_value = fields.Char('Value stored')
+    name = fields.Char('Value displayed', required=True, translate=True)
     parent = fields.Many2One('coop.table_of_table', 'Parent',
         ondelete='CASCADE')
     my_fields = fields.One2Many('coop.table_of_table', 'parent', 'Fields',
@@ -89,12 +90,20 @@ class TableOfTable(CoopSQL, CoopView):
     def default_value_kind():
         return 'bool'
 
-#    @classmethod
-#    def search(cls, domain, offset=0, limit=None, order=None, count=False):
-#        print 'avant', domain
-#        if len([item for item in domain if 'parent' in item] +
-#            [item for item in domain if 'id' in item]) == 0:
-#            domain = ['AND', domain[:], ('parent', '=', None)]
-#        print 'apres', domain
-#        return super(TableOfTable, cls).search(domain, offset=offset,
-#                   limit=limit, order=order, count=count)
+
+class DynamicSelection(TableOfTable):
+    'Dynamic Selection'
+
+    __name__ = 'coop.dyn_selection'
+    _table = 'coop_table_of_table'
+
+    @staticmethod
+    def get_selection(model_name):
+        res = []
+        DynamicSelection = Pool().get('coop.dyn_selection')
+        selections = DynamicSelection.search([
+            ('my_model_name', '=', model_name),
+            ])
+        for cur_sel in selections:
+            res.append((cur_sel.store_value, cur_sel.name))
+        return res

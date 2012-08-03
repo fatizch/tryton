@@ -7,7 +7,7 @@ from trytond.pyson import Eval
 from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import CoopView, CoopSQL
-from trytond.modules.coop_utils import TableOfTable, DynamicSelection, \
+from trytond.modules.coop_utils import TableOfTable, PartyRelation, \
     tuple_index
 
 __all__ = ['Party', 'Company', 'Employee', 'Actor', 'Person',
@@ -173,10 +173,10 @@ class PersonRelations(CoopSQL, CoopView):
 
     @staticmethod
     def get_relation_kind():
-        return DynamicSelection.get_dyn_sel('person_relation')
+        return PartyRelation.get_dyn_sel('person_relation')
 
     def get_reverse_kind(self, name):
-        reverse_values = DynamicSelection.get_reverse_dyn_sel(self.kind)
+        reverse_values = PartyRelation.get_reverse_dyn_sel(self.kind)
         if len(reverse_values) > 0:
             return reverse_values[0][1]
         return ''
