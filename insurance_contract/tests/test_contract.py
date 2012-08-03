@@ -1,3 +1,4 @@
+#-*- coding:utf-8 -*-
 import datetime
 
 # Needed for python test management
@@ -24,6 +25,7 @@ class ContractTestCase(unittest.TestCase):
         self.brm = POOL.get('ins_product.business_rule_manager')
         self.gbr = POOL.get('ins_product.generic_business_rule')
         self.pricing = POOL.get('ins_product.pricing_rule')
+        self.currency = POOL.get('currency.currency')
 
         with Transaction().start(DB_NAME,
                                  USER,
@@ -53,7 +55,14 @@ class ContractTestCase(unittest.TestCase):
         self.assert_(party.id)
 
     def create_product(self):
+        euro = self.currency()
+        euro.name = 'Euro'
+        euro.symbol = u'€'
+        euro.code = 'EUR'
+        euro.save()
+
         prm_a = self.pricing()
+        prm_a.config_kind = 'simple'
         prm_a.price = 12
         prm_a.per_sub_elem_price = 1
 
@@ -65,6 +74,7 @@ class ContractTestCase(unittest.TestCase):
         gbr_a.pricing_rule = [prm_a]
 
         prm_b = self.pricing()
+        prm_b.config_kind = 'simple'
         prm_b.price = 15
 
         gbr_b = self.gbr()
@@ -84,6 +94,7 @@ class ContractTestCase(unittest.TestCase):
         coverage_a.start_date = datetime.date.today()
 
         prm_c = self.pricing()
+        prm_c.config_kind = 'simple'
         prm_c.price = 30
 
         gbr_c = self.gbr()

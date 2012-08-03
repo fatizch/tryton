@@ -9,6 +9,7 @@ from trytond.tests.test_tryton import test_view, test_depends
 from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT
 from trytond.transaction import Transaction
 from trytond.modules.coop_utils import PricingResultLine
+from trytond.modules.coop_utils import utils
 
 
 class LaboratoryTestCase(unittest.TestCase):
@@ -56,6 +57,11 @@ class LaboratoryTestCase(unittest.TestCase):
         self.assertEqual(sub_p, p2)
 
         p1 += p2
+
+    def test0020get_module_path(self):
+        self.assert_(utils.get_module_path('coop_utils'))
+        self.assert_(utils.get_module_path('coop_party'))
+        self.assert_(utils.get_module_path('dfsfsfsdf') is None)
 
 
 def suite():

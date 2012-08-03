@@ -8,7 +8,8 @@ from trytond.modules.coop_utils import utils
 __all__ = ['GroupInsurancePlan', 'GroupInsuranceCoverage',
            'GroupInsurancePlanOptionsCoverage', 'GroupBusinessRuleManager',
            'GroupGenericBusinessRule', 'GroupPricingRule',
-           'GroupEligibilityRule']
+           'GroupEligibilityRule', 'GroupBenefit', 'GroupBenefitRule',
+           'GroupReserveRule']
 
 
 class GroupInsurancePlan(Product):
@@ -86,3 +87,40 @@ class GroupEligibilityRule(EligibilityRule):
     def __setup__(cls):
         super(GroupEligibilityRule, cls).__setup__()
         utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
+class GroupBenefit(Benefit):
+    'Benefit'
+
+    __name__ = 'ins_collective.benefit'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupBenefit, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
+class GroupBenefitRule(BenefitRule):
+    'Benefit Rule'
+
+    __name__ = 'ins_collective.benefit_rule'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupBenefitRule, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
+class GroupReserveRule(ReserveRule):
+    'Reserve Rule'
+
+    __name__ = 'ins_collective.reserve_rule'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupReserveRule, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+

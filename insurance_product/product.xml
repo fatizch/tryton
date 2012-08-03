@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
+        <!-- Application Entry point -->
+        <menuitem name="Laboratory" id="menu_product" sequence="10" />
+        <menuitem name="Configuration" parent="menu_product"
+            id="menu_product_configuration" sequence="0" icon="tryton-preferences"/>
+
         <!--  ******************************************* 
               **************    Offered    **************
               *******************************************-->
@@ -40,12 +45,14 @@
                         <page string="Managers" id="managers">
                             <notebook>
                                 <page string="Eligibilty" id="eligibility">
-                                    <field name="eligibility_mgr_O2M" colspan="4" mode="form"/>
+                                    <field name="eligibility_mgr" colspan="4" mode="form"/>
                                 </page>
                                 <page string="Pricing" id="pricing">
-                                    <field name="pricing_mgr_O2M" colspan="4" mode="form"/>
+                                    <field name="pricing_mgr" colspan="4" mode="form"/>
                                 </page>
                             </notebook>
+                        </page>
+                        <page string="Administration" id="admin">
                         </page>
                     </notebook>
                 </form>
@@ -57,8 +64,6 @@
               *******************************************-->
     
         <!-- Product -->
-        <!-- Application Entry point -->
-        <menuitem name="Laboratory" id="menu_product" sequence="10" />
 
         <!-- form view -->
         <record model="ir.ui.view" id="product_view_form">
@@ -68,10 +73,18 @@
             <field name="arch" type="xml">
                 <![CDATA[
                 <data>
+                <xpath expr="/form" position="replace_attributes">
+                    <form string="Product"/>
+                </xpath>
                 <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]" position="before">
                     <page string="Options" id="option">
                         <field name="options"/>
                     </page>
+                </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;admin&quot;]"
+                position="inside">
+                    <label name="currency"/>
+                    <field name="currency"/>
                 </xpath>
                 </data>
                 ]]>
@@ -119,7 +132,18 @@
             <field name="arch" type="xml">
                 <![CDATA[
                 <data>
-                <xpath expr="/form/field[@name=&quot;end_date&quot;]" position="after">
+                <xpath expr="/form" position="replace_attributes">
+                    <form string="Coverage"/>
+                </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]" position="before">
+                    <page string="Benefits" id="benefits">
+                        <field name="benefits"/>
+                    </page>
+                </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;admin&quot;]"
+                position="inside">
+                    <label name="currency"/>
+                    <field name="currency"/>
                     <label name="insurer" xalign="0"/>
                     <field name="insurer" widget="selection"/>
                 </xpath>
@@ -167,37 +191,39 @@
             <field name="model">ins_product.generic_business_rule</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                         <![CDATA[
-                             <form string="Generic Business Rule" col="4">
-                                <label name="kind"/>
-                                <field name="kind"/>
-                                <newline/>
-                                <label name="start_date"/>
-                                <field name="start_date"/>
-                                <label name="end_date"/>
-                                <field name="end_date"/>
-                                <label name="is_current"/>
-                                <field name="is_current"/>
-                                <newline/>
-                                <group id ="Rules" colspan="4" yexpand="1" yfill="1" >
-                                <field name="pricing_rule" mode="form"/>
-                                <field name="eligibilty_rule" mode="form"/>
-                                </group>
-                             </form>
-                         ]]>
+            <![CDATA[
+                <form string="Generic Business Rule" col="4">
+                    <label name="kind"/>
+                    <field name="kind"/>
+                    <newline/>
+                    <label name="start_date"/>
+                    <field name="start_date"/>
+                    <label name="end_date"/>
+                    <field name="end_date"/>
+                    <label name="is_current"/>
+                    <field name="is_current"/>
+                    <newline/>
+                    <group id ="Rules" colspan="4" yexpand="1" yfill="1" >
+                        <field name="pricing_rule" mode="form"/>
+                        <field name="eligibilty_rule" mode="form"/>
+                        <field name="benefit_rule" mode="form"/>
+                        <field name="reserve_rule" mode="form"/>
+                    </group>
+                </form>
+            ]]>
             </field>
         </record>
         <record model="ir.ui.view" id="genericbusinessrule_view_tree">
             <field name="model">ins_product.generic_business_rule</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                         <![CDATA[
-                             <tree string="Generic Business Rule">
-                                <field name="is_current"/>
-                                <field name="start_date"/>
-                                <field name="end_date"/>
-                             </tree>
-                         ]]>
+            <![CDATA[
+                <tree string="Generic Business Rule">
+                    <field name="is_current"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </tree>
+            ]]>
             </field>
         </record>
         <!--  ******************************************* 
@@ -207,14 +233,14 @@
             <field name="model">ins_product.business_rule_manager</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                         <![CDATA[
-                             <form string="Business Rule Manager">
-                                <label name="template"/>
-                                <field name="template"/>
-                                <newline/>
-                                <field name="business_rules" colspan="4"/>
-                             </form>
-                         ]]>
+            <![CDATA[
+                <form string="Business Rule Manager">
+                    <label name="template"/>
+                    <field name="template"/>
+                    <newline/>
+                    <field name="business_rules" colspan="4"/>
+                </form>
+            ]]>
             </field>
         </record>
         <!--  ******************************************* 
@@ -224,14 +250,25 @@
             <field name="model">ins_product.business_rule_root</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                         <![CDATA[
-                             <form string="Business Rule Root">
-                                <label name="template"/>
-                                <field name="template"/>
-                                <label name="generic_rule"/>
-                                <field name="generic_rule"/>
-                             </form>
-                         ]]>
+            <![CDATA[
+                <form string="Business Rule Root">
+                   <label name="template" xalign="0"/>
+                   <field name="template"/>
+                   <newline/>
+                   <label name="config_kind" xalign="0"/>
+                   <field name="config_kind" xfill="0" xexpand="0" xalign="0.0"/>
+                   <newline/>
+                   <group id="rule" string="Rule Engine" colspan="4"
+                   states="{'invisible': Eval('config_kind') != 'rule'}">
+                       <label name="rule" xalign="0"/>
+                       <field name="rule"/>
+                    </group>
+                   <label name="generic_rule"/>
+                   <field name="generic_rule"/>
+                   <group id="simple" string="Simple Settings" colspan="4"
+                   states="{'invisible': Eval('config_kind') != 'simple'}"/>
+                </form>
+            ]]>
             </field>
         </record>
         <!--  ******************************************* 
@@ -242,21 +279,22 @@
             <field name="type">form</field>
             <field name="inherit" ref="businessruleroot_view_form"/>
             <field name="arch" type="xml">
-                         <![CDATA[
-                         <data>
-		                     <xpath expr="/form/field[@name=&quot;template&quot;]"
-                              position="after">
-                                <newline/>
-                                <label name="price"/>
-                                <field name="price"/>
-                                <label name="price_rule"/>
-                                <field name="price_rule"/>
-                         		<newline/>
-                         		<label name="per_sub_elem_price"/>
-                         		<field name="per_sub_elem_price"/>
-		                     </xpath>
-                         </data>
-                         ]]>
+                <![CDATA[
+                <data>
+                    <xpath expr="/form" position="replace_attributes">
+                        <form string="Pricing rule"/>
+                    </xpath>
+                    <xpath expr="/form/group[@id=&quot;simple&quot;]"
+                     position="inside">
+                        <newline/>
+                        <label name="price" xalign="0"/>
+                        <field name="price"/>
+                        <newline/>
+                        <label name="per_sub_elem_price" xalign="0"/>
+                        <field name="per_sub_elem_price"/>
+                    </xpath>
+                </data>
+                ]]>
             </field>
         </record>
         
@@ -268,16 +306,120 @@
             <field name="type">form</field>
             <field name="inherit" ref="businessruleroot_view_form"/>
             <field name="arch" type="xml">
-                         <![CDATA[
-                         <data>
-                             <xpath expr="/form/field[@name=&quot;template&quot;]"
-                              position="after">
-                                <label name="is_eligible"/>
-                                <field name="is_eligible"/>
-                             </xpath>
-                         </data>
-                         ]]>
+            <![CDATA[
+            <data>
+                <xpath expr="/form" position="replace_attributes">
+                    <form string="Eligibility rule"/>
+                </xpath>
+                <xpath expr="/form/field[@name=&quot;template&quot;]"
+                 position="after">
+                    <label name="is_eligible"/>
+                    <field name="is_eligible"/>
+                </xpath>
+            </data>
+            ]]>
             </field>
         </record>
+        <!--  ******************************************* 
+              *************    Benefit          *********
+              *******************************************-->
+        <!-- form view -->
+        <record model="ir.ui.view" id="benefit_view_form">
+            <field name="model">ins_product.benefit</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered_view_form"/>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <data>
+                <xpath expr="/form" position="replace_attributes">
+                    <form string="Benefit"/>
+                </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]/notebook/page[@id=&quot;eligibility&quot;]" position="before">
+                    <page string="Benefit" id="benefit">
+                        <field name="benefit_mgr" colspan="4" mode="form"/>
+                    </page>
+                    <page string="Reserve" id="reserve">
+                        <field name="reserve_mgr" colspan="4" mode="form"/>
+                    </page>
+                </xpath>
+                </data>
+                ]]>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="benefit_view_tree">
+            <field name="model">ins_product.benefit</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="offered_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+
+        <!--  ******************************************* 
+              ********    Reserve Rule    ***************
+              *******************************************-->
+        <record model="ir.ui.view" id="reserverule_view_form">
+            <field name="model">ins_product.reserve_rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="businessruleroot_view_form"/>
+            <field name="arch" type="xml">
+            <![CDATA[
+            <data>
+                <xpath expr="/form" position="replace_attributes">
+                    <form string="Reserve rule"/>
+                </xpath>
+                <xpath expr="/form/group[@id=&quot;simple&quot;]"
+                 position="inside">
+                    <label name="amount"/>
+                    <field name="amount"/>
+                </xpath>
+            </data>
+            ]]>
+            </field>
+        </record>
+
+        <!--  ******************************************* 
+              *********   Dynamic Selection   ***********
+              *******************************************-->
+        <!-- 
+        <record model="ir.action.act_window" id="act_dyn_selection_form">
+            <field name="name">Benefit Kind</field>
+            <field name="res_model">coop.dyn_selection</field>
+            <field name="domain">[("my_model_name", "=", "ins_product.benefit_manager.kind")]</field>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_dyn_selection_tree_view">
+            <field name="sequence" eval="10" />
+            <field name="view" ref="coop_utils.dyn_selection_view_tree" />
+            <field name="act_window" ref="act_dyn_selection_form" />
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_dyn_selection_form_view">
+            <field name="sequence" eval="20" />
+            <field name="view" ref="coop_utils.dyn_selection_view_form" />
+            <field name="act_window" ref="act_dyn_selection_form" />
+        </record>
+
+        <record model="coop.dyn_selection" id="coop.dyn_selection_DC">
+            <field name="my_model_name">ins_product.benefit_manager.kind</field>
+            <field name="store_value">DEATH</field>
+            <field name="name">Death</field>
+        </record>
+        <record model="coop.dyn_selection" id="coop.dyn_selection_ITT">
+            <field name="my_model_name">ins_product.benefit_manager.kind</field>
+            <field name="store_value">DEATH</field>
+            <field name="name">Death</field>
+        </record>
+        <record model="coop.dyn_selection" id="coop.dyn_selection_0">
+            <field name="my_model_name">ins_product.benefit_manager.kind</field>
+            <field name="store_value">DEATH</field>
+            <field name="name">Death</field>
+        </record>
+        <record model="coop.dyn_selection" id="coop.dyn_selection_0">
+            <field name="my_model_name">ins_product.benefit_manager.kind</field>
+            <field name="store_value">DEATH</field>
+            <field name="name">Death</field>
+        </record>
+        <menuitem parent="menu_product_configuration" sequence="10" id="menu_dyn_selection_form"
+            icon="tryton-list" action="act_dyn_selection_form" />
+            -->
     </data>
 </tryton>

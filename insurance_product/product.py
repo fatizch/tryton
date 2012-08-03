@@ -4,17 +4,18 @@ import datetime
 
 from trytond.model import fields as fields
 from trytond.pool import Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
 from trytond.modules.coop_utils import utils, CoopView, CoopSQL, GetResult
-from trytond.modules.coop_utils import get_data_from_dict, Many2OneForm
-from trytond.modules.coop_utils import convert_ref_to_obj, PricingResultLine
+from trytond.modules.coop_utils import PricingResultLine, Many2OneForm
+from trytond.modules.coop_utils import business
 
 __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
            'BusinessRuleManager', 'GenericBusinessRule', 'BusinessRuleRoot',
-           'PricingRule', 'EligibilityRule', 'PricingContext_Contract']
+           'PricingRule', 'EligibilityRule', 'PricingContext_Contract',
+           'Benefit', 'BenefitRule', 'ReserveRule']
 
 
 class Offered(CoopView, GetResult):
@@ -48,6 +49,12 @@ class Offered(CoopView, GetResult):
             if cur_attr.context is None:
                 cur_attr.context = {}
             cur_attr.context['mgr'] = field_name
+            cur_attr.context['start_date'] = Eval('start_date')
+
+            if cur_attr.states is None:
+                cur_attr.states = {}
+            cur_attr.states['readonly'] = ~Bool(Eval('start_date'))
+
             if not hasattr(cur_attr, 'model_name'):
                 continue
             cur_domain = [('business_rules.kind', '=',
@@ -60,13 +67,14 @@ class Offered(CoopView, GetResult):
 
             #Creating O2M form based on the M2O
             O2M_attr = Many2OneForm(cur_attr)
-            #For the moment, the domain set on the M20 is not transmitted
-            #to the O2M. May be unnecessary in the future
-            O2M_attr.domain = cur_domain
             setattr(cls, field_name + '_O2M', O2M_attr)
 
         cls.template = copy.copy(cls.template)
         cls.template.model_name = cls.__name__
+
+    @staticmethod
+    def default_start_date():
+        return Transaction().context.get('start_date')
 
 
 class Coverage(CoopSQL, Offered):
@@ -75,12 +83,16 @@ class Coverage(CoopSQL, Offered):
     __name__ = 'ins_product.coverage'
 
     insurer = fields.Many2One('party.insurer', 'Insurer')
+    benefits = fields.One2Many('ins_product.benefit', 'coverage', 'Benefits',
+        context={'start_date': Eval('start_date')},
+        states={'readonly': ~Bool(Eval('start_date'))})
+    currency = fields.Many2One('currency.currency', 'Currency', required=True)
 
     def give_me_price(self, args):
         # This method is one of the core of the pricing system. It asks for the
         # price for the self depending on the contrat that is given as an
         # argument.
-        data_dict, errs = get_data_from_dict(['contract', 'date'], args)
+        data_dict, errs = utils.get_data_from_dict(['contract', 'date'], args)
         if errs:
             # No contract means no price.
             return (None, errs)
@@ -127,7 +139,7 @@ class Coverage(CoopSQL, Offered):
                     # Then we must check that the current covered element is
                     # covered by self.
                     for covered_data in covered.covered_data:
-                        for_coverage = convert_ref_to_obj(
+                        for_coverage = utils.convert_ref_to_obj(
                             covered_data.for_coverage)
                         if not for_coverage.code == self.code:
                             continue
@@ -157,7 +169,7 @@ class Coverage(CoopSQL, Offered):
                             # Reference field and is not automatically turned
                             # into a browse object.
                             # Should be done later by tryton.
-                            _res.name = convert_ref_to_obj(
+                            _res.name = utils.convert_ref_to_obj(
                                 covered.product_specific).person.name
                             if covered_data.id:
                                 _res.on_object = '%s,%s' % (
@@ -183,6 +195,14 @@ class Coverage(CoopSQL, Offered):
                 res.add(rule.start_date)
         return res
 
+    @staticmethod
+    def default_currency():
+        return business.get_default_currency()
+
+    def get_currency_digits(self, name):
+        if self.currency:
+            return self.currency.digits
+
 
 class Product(CoopSQL, Offered):
     'Product'
@@ -190,7 +210,10 @@ class Product(CoopSQL, Offered):
     __name__ = 'ins_product.product'
 
     options = fields.Many2Many('ins_product.product-options-coverage',
-        'product', 'coverage', 'Options')
+        'product', 'coverage', 'Options',
+        domain=[('currency', '=', Eval('currency'))],
+        depends=['currency'])
+    currency = fields.Many2One('currency.currency', 'Currency', required=True)
 
     @classmethod
     def __setup__(cls):
@@ -223,7 +246,7 @@ class Product(CoopSQL, Offered):
         res = self.get_result('price', args, manager='pricing')
         if not res[0]:
             res = (PricingResultLine(), res[1])
-        data_dict, errs = get_data_from_dict(['contract'], args)
+        data_dict, errs = utils.get_data_from_dict(['contract'], args)
         if errs:
             # No contract means no price.
             return (None, errs)
@@ -245,6 +268,14 @@ class Product(CoopSQL, Offered):
         total_price = p_price + o_price
         total_price.name = 'Total Price'
         return (total_price, errs_product + errs_options)
+
+    @staticmethod
+    def default_currency():
+        return business.get_default_currency()
+
+    def get_currency_digits(self, name):
+        if self.currency:
+            return self.currency.digits
 
 
 class ProductOptionsCoverage(CoopSQL):
@@ -274,8 +305,7 @@ class BusinessRuleManager(CoopSQL, CoopView, GetResult):
         domain=[('id', '!=', Eval('id'))],
         depends=['id'])
     business_rules = fields.One2Many('ins_product.generic_business_rule',
-        'manager', 'Business Rules', on_change=['business_rules'],
-        context={'start_date': Eval('start_date')})
+        'manager', 'Business Rules', on_change=['business_rules'])
 
     @classmethod
     def __setup__(cls):
@@ -292,11 +322,13 @@ class BusinessRuleManager(CoopSQL, CoopView, GetResult):
         for offered_model, _offered_name in self.get_offered_models():
             Offered = Pool().get(offered_model)
             field_name = Transaction().context.get('mgr')
-            if hasattr(Offered, 'search'):
-                offered = Offered.search([(field_name, '=', self.id)])
-                if len(offered) > 0:
-                    return '%s, %s' % (offered_model, offered[0].id)
-        return ''
+            if field_name and hasattr(Offered, field_name):
+                try:
+                    offered = Offered.search([(field_name, '=', self.id)])
+                    if len(offered) > 0:
+                        return '%s, %s' % (offered_model, offered[0].id)
+                except:
+                    pass
 
     def on_change_business_rules(self):
         res = {'business_rules': {}}
@@ -359,6 +391,11 @@ class BusinessRuleManager(CoopSQL, CoopView, GetResult):
             res += '(%s)' % self.id
             return res
 
+    def get_currency_digits(self, name):
+        if self.belongs_to:
+            return self.belongs_to.get_currency_digits(name)
+        return 2
+
 
 class GenericBusinessRule(CoopSQL, CoopView):
     'Generic Business Rule'
@@ -377,6 +414,10 @@ class GenericBusinessRule(CoopSQL, CoopView):
         'generic_rule', 'Pricing Rule', size=1)
     eligibilty_rule = fields.One2Many('ins_product.eligibility_rule',
         'generic_rule', 'Eligibility Rule', size=1)
+    benefit_rule = fields.One2Many('ins_product.benefit_rule',
+        'generic_rule', 'Benefit Rule', size=1)
+    reserve_rule = fields.One2Many('ins_product.reserve_rule',
+        'generic_rule', 'Reserve Rule', size=1)
 
     @classmethod
     def __setup__(cls):
@@ -455,17 +496,28 @@ class GenericBusinessRule(CoopSQL, CoopView):
                     field_desc.model_name == self.kind):
                 return getattr(self, field_name)[0]
 
+    def get_currency_digits(self, name):
+        if self.manager:
+            return self.manager.get_currency_digits(name)
+
 
 class BusinessRuleRoot(CoopView, GetResult):
     'Business Rule Root'
 
     __name__ = 'ins_product.business_rule_root'
 
+    config_kind = fields.Selection([
+            ('simple', 'Simple'),
+            ('rule', 'Rule Engine')],
+        'Conf. kind')
     generic_rule = fields.Many2One('ins_product.generic_business_rule',
         'Generic Rule', ondelete='CASCADE')
     template = fields.Many2One(None, 'Template',
         domain=[('id', '!=', Eval('id'))],
         depends=['id'])
+    rule = fields.Many2One('rule_engine', 'Rule Engine',
+        states={'readonly': Eval('config_kind') != 'rule'},
+        depends=['config_kind'])
 
     @classmethod
     def __setup__(cls):
@@ -473,25 +525,34 @@ class BusinessRuleRoot(CoopView, GetResult):
         cls.template = copy.copy(cls.template)
         cls.template.model_name = cls.__name__
 
+    def get_currency_digits(self, name):
+        if self.generic_rule:
+            return self.generic_rule.get_currency_digits(name)
+
+    @staticmethod
+    def default_config_kind():
+        return 'simple'
+
 
 class PricingRule(CoopSQL, BusinessRuleRoot):
     'Pricing Rule'
 
     __name__ = 'ins_product.pricing_rule'
 
-    price_rule = fields.Many2One(
-        'rule_engine',
-        'Rule for Price Calculation')
-
-    price = fields.Numeric('Amount', digits=(16, 2), required=True)
+    currency_digits = fields.Function(fields.Integer('Currency Digits'),
+        'get_currency_digits')
+    price = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
+         required=True,
+         depends=['currency_digits'])
 
     per_sub_elem_price = fields.Numeric(
         'Amount per Covered Element',
-        digits=(16, 2))
+        digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'])
 
     def give_me_price(self, args):
-        if hasattr(self, 'price_rule') and self.price_rule:
-            res = self.price_rule.compute(args)
+        if hasattr(self, 'rule') and self.rule:
+            res = self.rule.compute(args)
             return (PricingResultLine(value=res), [])
 
         # This is the most basic pricing rule : just return the price
@@ -521,3 +582,37 @@ class PricingContext_Contract(CoopView):
         name = args['contract'].subscriber.name
         print name
         return name
+
+
+class Benefit(CoopSQL, Offered):
+    'Benefit'
+
+    __name__ = 'ins_product.benefit'
+
+    coverage = fields.Many2One('ins_product.coverage', 'Coverage',
+        ondelete='CASCADE')
+    benefit_mgr = fields.Many2One('ins_product.business_rule_manager',
+        'Benefit Manager')
+    reserve_mgr = fields.Many2One('ins_product.business_rule_manager',
+        'Reserve Manager')
+
+    def get_currency_digits(self, name):
+        if self.coverage:
+            return self.coverage.get_currency_digits(name)
+
+
+class BenefitRule(CoopSQL, BusinessRuleRoot):
+    'Benefit Rule'
+
+    __name__ = 'ins_product.benefit_rule'
+
+
+class ReserveRule(CoopSQL, BusinessRuleRoot):
+    'Reserve Rule'
+
+    __name__ = 'ins_product.reserve_rule'
+
+    currency_digits = fields.Function(fields.Integer('Currency Digits'),
+        'get_currency_digits')
+    amount = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'])

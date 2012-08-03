@@ -1,4 +1,6 @@
+import ConfigParser
 import datetime
+import os
 
 from trytond.pool import Pool
 from trytond.model import Model
@@ -611,3 +613,18 @@ def tuple_index(value, the_tuple, key_index=0):
     Retrieve the index of the value in the tuple, comparing the
     value with the key_index value of the tuple'''
     return [y[key_index] for y in list(the_tuple)].index(value)
+
+
+def get_module_path(module_name):
+    module_path = os.path.abspath(os.path.join(os.path.normpath(__file__),
+        '..', '..', module_name))
+    if os.path.isdir(module_path):
+        return module_path
+
+
+def get_coop_config(section, option):
+    coop_utils = get_module_path('coop_utils')
+    if coop_utils:
+        config = ConfigParser.ConfigParser()
+        config.read(os.path.join(coop_utils, 'coop.cfg'))
+        return config.get(section, option)

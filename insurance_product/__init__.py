@@ -14,4 +14,7 @@ def register():
         PricingRule,
         EligibilityRule,
         PricingContext_Contract,
+        Benefit,
+        BenefitRule,
+        ReserveRule,
         module='insurance_product', type_='model')

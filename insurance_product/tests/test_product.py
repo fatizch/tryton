@@ -1,3 +1,4 @@
+#-*- coding:utf-8 -*-
 import datetime
 
 # Needed for python test management
@@ -18,6 +19,7 @@ class LaboratoryTestCase(unittest.TestCase):
         self.brm = POOL.get('ins_product.business_rule_manager')
         self.gbr = POOL.get('ins_product.generic_business_rule')
         self.pricing = POOL.get('ins_product.pricing_rule')
+        self.currency = POOL.get('currency.currency')
 
     def test0005views(self):
         '''
@@ -38,8 +40,18 @@ class LaboratoryTestCase(unittest.TestCase):
         with Transaction().start(DB_NAME,
                                  USER,
                                  context=CONTEXT) as transaction:
+
+            #We need to create the currency manually because it's needed
+            #on the default currency for product and coverage
+            euro = self.currency()
+            euro.name = 'Euro'
+            euro.symbol = u'€'
+            euro.code = 'EUR'
+            euro.save()
+
             prm_a = self.pricing()
             prm_a.price = 12
+            prm_a.config_kind = 'simple'
 
             gbr_a = self.gbr()
             gbr_a.kind = 'ins_product.pricing_rule'
@@ -50,6 +62,7 @@ class LaboratoryTestCase(unittest.TestCase):
 
             prm_b = self.pricing()
             prm_b.price = 15
+            prm_b.config_kind = 'simple'
 
             gbr_b = self.gbr()
             gbr_b.kind = 'ins_product.pricing_rule'
