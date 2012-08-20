@@ -140,6 +140,11 @@
                         <field name="benefits"/>
                     </page>
                 </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]/notebook" position="inside">
+                    <page string="Coverage Amount" id="coverage_amount">
+                        <field name="coverage_amount_mgr" mode="form"/>
+                    </page>
+                </xpath>
                 <xpath expr="/form/notebook/page[@id=&quot;admin&quot;]"
                 position="inside">
                     <label name="currency"/>
@@ -208,6 +213,7 @@
                         <field name="eligibilty_rule" mode="form"/>
                         <field name="benefit_rule" mode="form"/>
                         <field name="reserve_rule" mode="form"/>
+                        <field name="coverage_amount_rule" mode="form"/>
                     </group>
                 </form>
             ]]>
@@ -238,7 +244,7 @@
                     <label name="template"/>
                     <field name="template"/>
                     <newline/>
-                    <field name="business_rules" colspan="4"/>
+                    <field name="business_rules" colspan="4" />
                 </form>
             ]]>
             </field>
@@ -256,7 +262,7 @@
                    <field name="template"/>
                    <newline/>
                    <label name="config_kind" xalign="0"/>
-                   <field name="config_kind" xfill="0" xexpand="0" xalign="0.0"/>
+                   <field name="config_kind" xfill="1" xexpand="0" xalign="0"/>
                    <newline/>
                    <group id="rule" string="Rule Engine" colspan="4"
                    states="{'invisible': Eval('config_kind') != 'rule'}">
@@ -377,6 +383,47 @@
         </record>
 
         <!--  ******************************************* 
+              ********    Benefit Rule    ***************
+              *******************************************-->
+        <record model="ir.ui.view" id="benefitrule_view_form">
+            <field name="model">ins_product.benefit_rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="businessruleroot_view_form"/>
+            <field name="arch" type="xml">
+            <![CDATA[
+            <data>
+                <xpath expr="/form" position="replace_attributes">
+                    <form string="benefit rule"/>
+                </xpath>
+            </data>
+            ]]>
+            </field>
+        </record>
+
+        <!--  ******************************************* 
+              ********    Coverage Amount Rule    ***************
+              *******************************************-->
+        <record model="ir.ui.view" id="coverage_amountrule_view_form">
+            <field name="model">ins_product.coverage_amount_rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="businessruleroot_view_form"/>
+            <field name="arch" type="xml">
+            <![CDATA[
+            <data>
+                <xpath expr="/form" position="replace_attributes">
+                    <form string="Coverage Amount rule"/>
+                </xpath>
+                <xpath expr="/form/group[@id=&quot;simple&quot;]"
+                 position="inside">
+                    <label name="amounts"/>
+                    <field name="amounts"/>
+                </xpath>
+            </data>
+            ]]>
+            </field>
+        </record>
+
+        <!--  ******************************************* 
               *********   Dynamic Selection   ***********
               *******************************************-->
         <!-- 
@@ -398,26 +445,6 @@
             <field name="act_window" ref="act_dyn_selection_form" />
         </record>
 
-        <record model="coop.dyn_selection" id="coop.dyn_selection_DC">
-            <field name="my_model_name">ins_product.benefit_manager.kind</field>
-            <field name="store_value">DEATH</field>
-            <field name="name">Death</field>
-        </record>
-        <record model="coop.dyn_selection" id="coop.dyn_selection_ITT">
-            <field name="my_model_name">ins_product.benefit_manager.kind</field>
-            <field name="store_value">DEATH</field>
-            <field name="name">Death</field>
-        </record>
-        <record model="coop.dyn_selection" id="coop.dyn_selection_0">
-            <field name="my_model_name">ins_product.benefit_manager.kind</field>
-            <field name="store_value">DEATH</field>
-            <field name="name">Death</field>
-        </record>
-        <record model="coop.dyn_selection" id="coop.dyn_selection_0">
-            <field name="my_model_name">ins_product.benefit_manager.kind</field>
-            <field name="store_value">DEATH</field>
-            <field name="name">Death</field>
-        </record>
         <menuitem parent="menu_product_configuration" sequence="10" id="menu_dyn_selection_form"
             icon="tryton-list" action="act_dyn_selection_form" />
             -->

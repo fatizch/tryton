@@ -17,4 +17,5 @@ def register():
         Benefit,
         BenefitRule,
         ReserveRule,
+        CoverageAmountRule,
         module='insurance_product', type_='model')

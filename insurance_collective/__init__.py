@@ -18,6 +18,7 @@ def register():
         GroupBenefit,
         GroupBenefitRule,
         GroupReserveRule,
+        GroupCoverageAmountRule,
         GBPContract,
         ProjectGBPState,
         ExtensionGBPState,

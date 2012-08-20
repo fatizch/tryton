@@ -9,7 +9,7 @@ __all__ = ['GroupInsurancePlan', 'GroupInsuranceCoverage',
            'GroupInsurancePlanOptionsCoverage', 'GroupBusinessRuleManager',
            'GroupGenericBusinessRule', 'GroupPricingRule',
            'GroupEligibilityRule', 'GroupBenefit', 'GroupBenefitRule',
-           'GroupReserveRule']
+           'GroupReserveRule', 'GroupCoverageAmountRule']
 
 
 class GroupInsurancePlan(Product):
@@ -122,5 +122,17 @@ class GroupReserveRule(ReserveRule):
     @classmethod
     def __setup__(cls):
         super(GroupReserveRule, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
+class GroupCoverageAmountRule(CoverageAmountRule):
+    'Coverage Amount Rule'
+
+    __name__ = 'ins_collective.coverage_amount_rule'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupCoverageAmountRule, cls).__setup__()
         utils.change_relation_links(cls, 'ins_product', 'ins_collective')
 

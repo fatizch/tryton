@@ -405,11 +405,11 @@ class GetResult(object):
                     for elem in dir(self) if elem[-4:] == '_mgr']:
                 if not brm_name.startswith(manager):
                     continue
-                if brm is None:
+                if brm is None or len(brm) == 0:
                     break
                 # When found, we just call the get_result method with our args
                 try:
-                    good_rule = brm.get_good_rule_at_date(
+                    good_rule = brm[0].get_good_rule_at_date(
                         args).get_good_rule_from_kind()
                 except Exception:
                     good_rule = None

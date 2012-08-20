@@ -9,13 +9,14 @@ from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
 from trytond.modules.coop_utils import utils, CoopView, CoopSQL, GetResult
-from trytond.modules.coop_utils import PricingResultLine, Many2OneForm
+from trytond.modules.coop_utils import PricingResultLine
+from trytond.modules.coop_utils import One2ManyDomain
 from trytond.modules.coop_utils import business
 
 __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
            'BusinessRuleManager', 'GenericBusinessRule', 'BusinessRuleRoot',
            'PricingRule', 'EligibilityRule', 'PricingContext_Contract',
-           'Benefit', 'BenefitRule', 'ReserveRule']
+           'Benefit', 'BenefitRule', 'ReserveRule', 'CoverageAmountRule', ]
 
 
 class Offered(CoopView, GetResult):
@@ -30,14 +31,11 @@ class Offered(CoopView, GetResult):
     template = fields.Many2One(None, 'Template',
         domain=[('id', '!=', Eval('id'))],
         depends=['id'])
-    #all mgr are Many2One because they all have the same backref var and though
-    #it's not possible for the moment to have a O2M(1)
-    #
     #All mgr var must be the same as the business rule class and ends with mgr
-    pricing_mgr = fields.Many2One('ins_product.business_rule_manager',
-        'Pricing Manager')
-    eligibility_mgr = fields.Many2One('ins_product.business_rule_manager',
-        'Eligibility Manager')
+    pricing_mgr = One2ManyDomain('ins_product.business_rule_manager',
+        'offered', 'Pricing Manager')
+    eligibility_mgr = One2ManyDomain('ins_product.business_rule_manager',
+        'offered', 'Eligibility Manager')
 
     @classmethod
     def __setup__(cls):
@@ -48,7 +46,6 @@ class Offered(CoopView, GetResult):
                 continue
             if cur_attr.context is None:
                 cur_attr.context = {}
-            cur_attr.context['mgr'] = field_name
             cur_attr.context['start_date'] = Eval('start_date')
 
             if cur_attr.states is None:
@@ -57,17 +54,13 @@ class Offered(CoopView, GetResult):
 
             if not hasattr(cur_attr, 'model_name'):
                 continue
-            cur_domain = [('business_rules.kind', '=',
+            cur_attr.domain = [('business_rules.kind', '=',
                     '%s.%s_rule' %
                         (utils.get_module_name(cls),
                         field_name.split('_mgr')[0]))]
-            cur_attr.domain = cur_domain
+            cur_attr.size = 1
             cur_attr = copy.copy(cur_attr)
             setattr(cls, field_name, cur_attr)
-
-            #Creating O2M form based on the M2O
-            O2M_attr = Many2OneForm(cur_attr)
-            setattr(cls, field_name + '_O2M', O2M_attr)
 
         cls.template = copy.copy(cls.template)
         cls.template.model_name = cls.__name__
@@ -87,6 +80,8 @@ class Coverage(CoopSQL, Offered):
         context={'start_date': Eval('start_date')},
         states={'readonly': ~Bool(Eval('start_date'))})
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
+    coverage_amount_mgr = One2ManyDomain('ins_product.business_rule_manager',
+        'offered', 'Coverage Amount Manager')
 
     def give_me_price(self, args):
         # This method is one of the core of the pricing system. It asks for the
@@ -190,8 +185,8 @@ class Coverage(CoopSQL, Offered):
         # In 'real life', it is not systematic to update the pricing when a new
         # version of the rule is defined.
         res = set()
-        if self.pricing_mgr:
-            for rule in self.pricing_mgr.business_rules:
+        if self.pricing_mgr and len(self.pricing_mgr) == 1:
+            for rule in self.pricing_mgr[0].business_rules:
                 res.add(rule.start_date)
         return res
 
@@ -298,14 +293,12 @@ class BusinessRuleManager(CoopSQL, CoopView, GetResult):
 
     __name__ = 'ins_product.business_rule_manager'
 
-    belongs_to = fields.Function(
-        fields.Reference('belongs_to', selection='get_offered_models'),
-        'get_belongs_to')
+    offered = fields.Reference('Offered', selection='get_offered_models')
     template = fields.Many2One(None, 'Template',
         domain=[('id', '!=', Eval('id'))],
         depends=['id'])
     business_rules = fields.One2Many('ins_product.generic_business_rule',
-        'manager', 'Business Rules', on_change=['business_rules'])
+        'manager', 'Business Rules')  # on_change=['business_rules'])
 
     @classmethod
     def __setup__(cls):
@@ -318,47 +311,35 @@ class BusinessRuleManager(CoopSQL, CoopView, GetResult):
     def get_offered_models():
         return utils.get_descendents(Offered)
 
-    def get_belongs_to(self, name):
-        for offered_model, _offered_name in self.get_offered_models():
-            Offered = Pool().get(offered_model)
-            field_name = Transaction().context.get('mgr')
-            if field_name and hasattr(Offered, field_name):
-                try:
-                    offered = Offered.search([(field_name, '=', self.id)])
-                    if len(offered) > 0:
-                        return '%s, %s' % (offered_model, offered[0].id)
-                except:
-                    pass
-
-    def on_change_business_rules(self):
-        res = {'business_rules': {}}
-        res['business_rules'].setdefault('update', [])
-        for business_rule1 in self.business_rules:
-            #the idea is to always set the end_date
-            #to the according next start_date
-            for business_rule2 in self.business_rules:
-                if (business_rule1 != business_rule2 and
-                    business_rule2['start_date'] is not None
-                    and business_rule1['start_date'] is not None and
-                    business_rule2['start_date'] > business_rule1['start_date']
-                    and (business_rule1['end_date'] is None or
-                         business_rule1['end_date'] >=
-                         business_rule2['start_date'])):
-                    end_date = (business_rule2['start_date']
-                               - datetime.timedelta(days=1))
-                    res['business_rules']['update'].append({
-                        'id': business_rule1.id,
-                        'end_date': end_date})
-
-            #if we change the start_date to a date after the end_date,
-            #we reinitialize the end_date
-            if (business_rule1['end_date'] is not None
-                and business_rule1['start_date'] is not None
-                and business_rule1['end_date'] < business_rule1['start_date']):
-                res['business_rules']['update'].append({
-                        'id': business_rule1.id,
-                        'end_date': None})
-        return res
+#    def on_change_business_rules(self):
+#        res = {'business_rules': {}}
+#        res['business_rules'].setdefault('update', [])
+#        for business_rule1 in self.business_rules:
+#            #the idea is to always set the end_date
+#            #to the according next start_date
+#            for business_rule2 in self.business_rules:
+#                if (business_rule1 != business_rule2 and
+#                    business_rule2['start_date'] is not None
+#                    and business_rule1['start_date'] is not None and
+#                    business_rule2['start_date'] > business_rule1['start_date']
+#                    and (business_rule1['end_date'] is None or
+#                         business_rule1['end_date'] >=
+#                         business_rule2['start_date'])):
+#                    end_date = (business_rule2['start_date']
+#                               - datetime.timedelta(days=1))
+#                    res['business_rules']['update'].append({
+#                        'id': business_rule1.id,
+#                        'end_date': end_date})
+#
+#            #if we change the start_date to a date after the end_date,
+#            #we reinitialize the end_date
+#            if (business_rule1['end_date'] is not None
+#                and business_rule1['start_date'] is not None
+#                and business_rule1['end_date'] < business_rule1['start_date']):
+#                res['business_rules']['update'].append({
+#                        'id': business_rule1.id,
+#                        'end_date': None})
+#        return res
 
     def get_good_rule_at_date(self, data):
         # First we got to check that the fields that we will need to calculate
@@ -392,8 +373,8 @@ class BusinessRuleManager(CoopSQL, CoopView, GetResult):
             return res
 
     def get_currency_digits(self, name):
-        if self.belongs_to:
-            return self.belongs_to.get_currency_digits(name)
+        if self.offered:
+            return self.offered.get_currency_digits(name)
         return 2
 
 
@@ -418,6 +399,11 @@ class GenericBusinessRule(CoopSQL, CoopView):
         'generic_rule', 'Benefit Rule', size=1)
     reserve_rule = fields.One2Many('ins_product.reserve_rule',
         'generic_rule', 'Reserve Rule', size=1)
+    coverage_amount_rule = fields.One2Many('ins_product.coverage_amount_rule',
+        'generic_rule', 'Coverage Amount Rule', size=1)
+
+    def get_rec_name(self, name):
+        return self.kind
 
     @classmethod
     def __setup__(cls):
@@ -591,10 +577,10 @@ class Benefit(CoopSQL, Offered):
 
     coverage = fields.Many2One('ins_product.coverage', 'Coverage',
         ondelete='CASCADE')
-    benefit_mgr = fields.Many2One('ins_product.business_rule_manager',
-        'Benefit Manager')
-    reserve_mgr = fields.Many2One('ins_product.business_rule_manager',
-        'Reserve Manager')
+    benefit_mgr = One2ManyDomain('ins_product.business_rule_manager',
+        'offered', 'Benefit Manager')
+    reserve_mgr = One2ManyDomain('ins_product.business_rule_manager',
+        'offered', 'Reserve Manager')
 
     def get_currency_digits(self, name):
         if self.coverage:
@@ -616,3 +602,11 @@ class ReserveRule(CoopSQL, BusinessRuleRoot):
         'get_currency_digits')
     amount = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
         depends=['currency_digits'])
+
+
+class CoverageAmountRule(CoopSQL, BusinessRuleRoot):
+    'Coverage Amount Rule'
+
+    __name__ = 'ins_product.coverage_amount_rule'
+
+    amounts = fields.Char('Amounts', help='Specify amounts separated by ;')

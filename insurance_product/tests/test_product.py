@@ -86,7 +86,7 @@ class LaboratoryTestCase(unittest.TestCase):
             coverage_b.start_date = datetime.date.today() + \
                                             datetime.timedelta(days=5)
 
-            coverage_a.pricing_mgr = brm_a
+            coverage_a.pricing_mgr = [brm_a]
 
             coverage_a.save()
             coverage_b.save()
