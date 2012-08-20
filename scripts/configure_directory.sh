@@ -65,6 +65,7 @@ else
 	echo $SEP
 	cp coopbusiness/defaults/Test.sqlite data/BackUp/
 	cp coopbusiness/defaults/Test.sqlite data/
+	cp coopbusiness/defaults/tryton.conf conf/
 	echo $SEP
 	echo Done
 	echo $SEP
