@@ -9,13 +9,14 @@ def register():
     Pool.register(
         # contract.py classes
         SubscriptionManager,
+        ExtensionLife,
+        ExtensionCar,
+        BrokerManager,
         Contract,
         Option,
         BillingManager,
         CoveredElement,
         CoveredData,
-        ExtensionLife,
-        ExtensionCar,
         CoveredPerson,
         CoveredCar,
         PriceLine,
@@ -27,12 +28,11 @@ def register():
         CoveredPersonDesc,
         ExtensionLifeState,
         SubscriptionProcessState,
-        BrokerManager,
         SummaryState,
         PricingLine,
         # billing.py classes
-        GenericBillLine,
         Bill,
+        GenericBillLine,
         # billing_process.py classes
         BillParameters,
         BillLineForDisplay,
