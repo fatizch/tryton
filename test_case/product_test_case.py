@@ -100,9 +100,10 @@ def setup_insurance_product(config):
     coverage_b.start_date = datetime.date.today() + \
                                     datetime.timedelta(days=5)
 
-    coverage_b.pricing_mgr = [brm_b]
+#    coverage_b.pricing_mgr = []
+    coverage_b.pricing_mgr.append(brm_b)
 
-    coverage_a.pricing_mgr = [brm_a]
+    coverage_a.pricing_mgr.append(brm_a)
 
     coverage_a.save()
     coverage_b.save()
