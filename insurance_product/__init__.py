@@ -1,4 +1,5 @@
 from trytond.pool import Pool
+from rule_engine_results import *
 from product import *
 
 

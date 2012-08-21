@@ -9,14 +9,16 @@ from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
 from trytond.modules.coop_utils import utils, CoopView, CoopSQL, GetResult
-from trytond.modules.coop_utils import PricingResultLine
+from trytond.modules.insurance_product import PricingResultLine
+from trytond.modules.insurance_product import EligibilityResultLine
 from trytond.modules.coop_utils import One2ManyDomain
 from trytond.modules.coop_utils import business
+from trytond.modules.coop_utils import NonExistingManagerException
 
 __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
            'BusinessRuleManager', 'GenericBusinessRule', 'BusinessRuleRoot',
            'PricingRule', 'EligibilityRule', 'PricingContext_Contract',
-           'Benefit', 'BenefitRule', 'ReserveRule', 'CoverageAmountRule', ]
+           'Benefit', 'BenefitRule', 'ReserveRule', 'CoverageAmountRule']
 
 
 class Offered(CoopView, GetResult):
@@ -190,6 +192,21 @@ class Coverage(CoopSQL, Offered):
                 res.add(rule.start_date)
         return res
 
+    def give_me_eligibility(self, args):
+        try:
+            res = self.get_result('eligibility', args, manager='eligibility')
+        except NonExistingManagerException:
+            return (EligibilityResultLine(True), [])
+        return res
+
+    def give_me_sub_elem_eligibility(self, args):
+        try:
+            res = self.get_result(
+                'sub_elem_eligibility', args, manager='eligibility')
+        except NonExistingManagerException:
+            return (EligibilityResultLine(True), [])
+        return res
+
     @staticmethod
     def default_currency():
         return business.get_default_currency()
@@ -238,7 +255,10 @@ class Product(CoopSQL, Offered):
     def give_me_product_price(self, args):
         # There is a pricing manager on the products so we can just forward the
         # request.
-        res = self.get_result('price', args, manager='pricing')
+        try:
+            res = self.get_result('price', args, manager='pricing')
+        except NonExistingManagerException:
+            res = (False, [])
         if not res[0]:
             res = (PricingResultLine(), res[1])
         data_dict, errs = utils.get_data_from_dict(['contract'], args)
@@ -263,6 +283,13 @@ class Product(CoopSQL, Offered):
         total_price = p_price + o_price
         total_price.name = 'Total Price'
         return (total_price, errs_product + errs_options)
+
+    def give_me_eligibility(self, args):
+        try:
+            res = self.get_result('eligibility', args, manager='eligibility')
+        except NonExistingManagerException:
+            return (EligibilityResultLine(True), [])
+        return res
 
     @staticmethod
     def default_currency():
@@ -393,7 +420,7 @@ class GenericBusinessRule(CoopSQL, CoopView):
         'get_is_current')
     pricing_rule = fields.One2Many('ins_product.pricing_rule',
         'generic_rule', 'Pricing Rule', size=1)
-    eligibilty_rule = fields.One2Many('ins_product.eligibility_rule',
+    eligibility_rule = fields.One2Many('ins_product.eligibility_rule',
         'generic_rule', 'Eligibility Rule', size=1)
     benefit_rule = fields.One2Many('ins_product.benefit_rule',
         'generic_rule', 'Benefit Rule', size=1)
@@ -530,7 +557,6 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
     price = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
          required=True,
          depends=['currency_digits'])
-
     per_sub_elem_price = fields.Numeric(
         'Amount per Covered Element',
         digits=(16, Eval('currency_digits', 2)),
@@ -555,6 +581,46 @@ class EligibilityRule(CoopSQL, BusinessRuleRoot):
     __name__ = 'ins_product.eligibility_rule'
 
     is_eligible = fields.Boolean('Is Eligible')
+
+    is_sub_elem_eligible = fields.Boolean('Sub Elem Eligible')
+
+    def give_me_eligibility(self, args):
+        if hasattr(self, 'rule') and self.rule:
+            res = self.rule.compute(args)
+            return (EligibilityResultLine(eligible=res[0], details=res[1]), [])
+
+        # This is the most basic pricing rule : just return the price
+        if self.is_eligible:
+            details = []
+        else:
+            details = ['Not eligible']
+        return (
+            EligibilityResultLine(eligible=self.is_eligible, details=details),
+            [])
+
+    def give_me_sub_elem_eligibility(self, args):
+        if self.is_sub_elem_eligible:
+            details = []
+        else:
+            if 'person' in args and 'option' in args:
+                details = ['%s not eligible for %s' %
+                    (args['person'].name,
+                    args['option'].coverage.name)]
+            else:
+                details = ['Not eligible']
+        return (
+            EligibilityResultLine(
+                eligible=self.is_sub_elem_eligible,
+                details=details),
+            [])
+
+    @staticmethod
+    def default_is_eligible():
+        return True
+
+    @staticmethod
+    def default_is_sub_elem_eligible():
+        return True
 
 
 class PricingContext_Contract(CoopView):

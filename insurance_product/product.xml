@@ -321,6 +321,8 @@
                  position="after">
                     <label name="is_eligible"/>
                     <field name="is_eligible"/>
+                    <label name="is_sub_elem_eligible"/>
+                    <field name="is_sub_elem_eligible"/>
                 </xpath>
             </data>
             ]]>
