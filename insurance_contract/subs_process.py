@@ -87,9 +87,18 @@ class ProjectState(CoopStep):
 
     @staticmethod
     def check_step_product(wizard):
-        if hasattr(wizard.project, 'product') and wizard.project.product:
+        if not (hasattr(wizard.project, 'product') and wizard.project.product):
+            return (False, ['A product must be provided !'])
+        if not(hasattr(wizard.project, 'subscriber')
+                and wizard.project.subscriber):
             return (True, [])
-        return (False, ['A product must be provided !'])
+        eligibility, errors = wizard.project.product.get_result(
+            'eligibility',
+            {'subscriber': wizard.project.subscriber,
+            'date': wizard.project.start_date})
+        if eligibility:
+            return (eligibility.eligible, eligibility.details + errors)
+        return (True, [])
 
     @staticmethod
     def check_step_subscriber(wizard):
@@ -164,8 +173,7 @@ class OptionSelectionState(CoopStep):
     # Those are the temporary fields that we will use to represent options.
     # There is no need to give origin and target values, as they are intended
     # solely to provide a way for the user to make his choice.
-    options = fields.Many2Many('ins_contract.coverage_displayer',
-                               None,
+    options = fields.One2Many('ins_contract.coverage_displayer',
                                None,
                                'Options Choices')
 
@@ -201,6 +209,20 @@ class OptionSelectionState(CoopStep):
         # Then set those displayers as the options field of our current step.
         wizard.option_selection.options = options
         return (True, [])
+
+    @staticmethod
+    def check_step_option_eligibility(wizard):
+        errs = []
+        eligible = True
+        for displayer in wizard.option_selection.options:
+            if displayer.status == 'Active':
+                eligibility, errors = displayer.coverage.get_result(
+                    'eligibility',
+                    {'date': wizard.project.start_date,
+                    'subscriber': wizard.project.subscriber})
+                errs += eligibility.details + errors
+                eligible = eligible and eligibility.eligible
+        return (eligible, errs)
 
     # Here we check that at least one option has been selected
     @staticmethod
@@ -313,11 +335,6 @@ class CoveredPersonDesc(CoveredElementDesc):
                              'Covered Person')
     life_state = fields.Many2One('ins_contract.subs_process.extension_life',
                                  'Life State')
-    toto = fields.Char('Test')
-
-    @staticmethod
-    def default_toto():
-        return CoveredPersonDesc.get_context().process_state.cur_step
 
 
 class ExtensionLifeState(DependantState):
@@ -354,7 +371,6 @@ class ExtensionLifeState(DependantState):
         covered_person = CoveredPerson()
         covered_person.person = wizard.project.subscriber.id
         covered_person.covered_data = covered_datas
-        covered_person.toto = 'Titi'
         wizard.extension_life.covered_elements = [covered_person]
         return (True, [])
 
@@ -377,6 +393,30 @@ class ExtensionLifeState(DependantState):
         if errors:
             return (False, errors)
         return (True, [])
+
+    @staticmethod
+    def check_step_sub_elem_eligibility(wizard):
+        contract = WithAbstract.get_abstract_objects(wizard, 'for_contract')
+        options = dict([
+            (option.coverage.code, option)
+            for option in contract.options
+            ])
+        res, errs = (True, [])
+        for covered_element in wizard.extension_life.covered_elements:
+            for covered_data in covered_element.covered_data:
+                if not hasattr(
+                        covered_data,
+                        'status') and covered_data.status == 'Active':
+                    continue
+                eligibility, errors = covered_data.for_coverage.get_result(
+                    'sub_elem_eligibility',
+                    {'date': wizard.project.start_date,
+                    'person': covered_element.person,
+                    'option': options[covered_data.for_coverage.code]})
+                res = res and eligibility.eligible
+                errs += eligibility.details
+                errs += errors
+        return (res, errs)
 
     @staticmethod
     def post_step_update_contract(wizard):

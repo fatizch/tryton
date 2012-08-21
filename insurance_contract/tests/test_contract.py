@@ -25,6 +25,7 @@ class ContractTestCase(unittest.TestCase):
         self.brm = POOL.get('ins_product.business_rule_manager')
         self.gbr = POOL.get('ins_product.generic_business_rule')
         self.pricing = POOL.get('ins_product.pricing_rule')
+        self.eligibility = POOL.get('ins_product.eligibility_rule')
         self.currency = POOL.get('currency.currency')
 
         with Transaction().start(DB_NAME,
@@ -61,6 +62,8 @@ class ContractTestCase(unittest.TestCase):
         euro.code = 'EUR'
         euro.save()
 
+        # Coverage A
+
         prm_a = self.pricing()
         prm_a.config_kind = 'simple'
         prm_a.price = 12
@@ -93,6 +96,12 @@ class ContractTestCase(unittest.TestCase):
         coverage_a.name = 'Alpha Coverage'
         coverage_a.start_date = datetime.date.today()
 
+        coverage_a.pricing_mgr = [brm_a]
+
+        coverage_a.save()
+
+        # Coverage B
+
         prm_c = self.pricing()
         prm_c.config_kind = 'simple'
         prm_c.price = 30
@@ -115,19 +124,103 @@ class ContractTestCase(unittest.TestCase):
 
         coverage_b.pricing_mgr = [brm_b]
 
-        coverage_a.pricing_mgr = [brm_a]
-
-        coverage_a.save()
         coverage_b.save()
+
+        # Coverage C
+
+        erm_a = self.eligibility()
+        erm_a.config_kind = 'simple'
+        erm_a.is_eligible = False
+
+        gbr_d = self.gbr()
+        gbr_d.kind = 'ins_product.eligibility_rule'
+        gbr_d.start_date = datetime.date.today()
+        gbr_d.eligibility_rule = [erm_a]
+
+        brm_c = self.brm()
+        brm_c.business_rules = [gbr_d]
+
+        coverage_c = self.coverage()
+        coverage_c.code = 'GAM'
+        coverage_c.name = 'Gamma Coverage'
+        coverage_c.start_date = datetime.date.today()
+
+        coverage_c.eligibility_mgr = [brm_c]
+
+        coverage_c.save()
+
+        # Coverage D
+
+        erm_d = self.eligibility()
+        erm_d.config_kind = 'simple'
+        erm_d.is_eligible = True
+        erm_d.is_sub_elem_eligible = False
+
+        gbr_g = self.gbr()
+        gbr_g.kind = 'ins_product.eligibility_rule'
+        gbr_g.start_date = datetime.date.today()
+        gbr_g.eligibility_rule = [erm_d]
+
+        brm_f = self.brm()
+        brm_f.business_rules = [gbr_g]
+
+        coverage_d = self.coverage()
+        coverage_d.code = 'DEL'
+        coverage_d.name = 'Delta Coverage'
+        coverage_d.start_date = datetime.date.today()
+
+        coverage_d.eligibility_mgr = [brm_f]
+
+        coverage_d.save()
+
+        # Product Eligibility Manager
+
+        erm_b = self.eligibility()
+        erm_b.config_kind = 'simple'
+        erm_b.is_eligible = True
+
+        gbr_e = self.gbr()
+        gbr_e.kind = 'ins_product.eligibility_rule'
+        gbr_e.start_date = datetime.date.today()
+        gbr_e.eligibility_rule = [erm_b]
+
+        brm_d = self.brm()
+        brm_d.business_rules = [gbr_e]
+
+        # Product
 
         product_a = self.Product()
         product_a.code = 'AAA'
         product_a.name = 'Awesome Alternative Allowance'
         product_a.start_date = datetime.date.today()
-        product_a.options = [coverage_a, coverage_b]
+        product_a.options = [coverage_a, coverage_b, coverage_c, coverage_d]
+        product_a.eligibility_mgr = [brm_d]
         product_a.save()
 
         self.assert_(product_a.id)
+
+        # Fake Eligibility Manager
+
+        erm_c = self.eligibility()
+        erm_c.config_kind = 'simple'
+        erm_c.is_eligible = False
+
+        gbr_f = self.gbr()
+        gbr_f.kind = 'ins_product.eligibility_rule'
+        gbr_f.start_date = datetime.date.today()
+        gbr_f.eligibility_rule = [erm_c]
+
+        brm_e = self.brm()
+        brm_e.business_rules = [gbr_f]
+
+        # Fake Product
+
+        product_b = self.Product()
+        product_b.code = 'BBB'
+        product_b.name = 'Big Bad Bully'
+        product_b.start_date = datetime.date.today()
+        product_b.eligibility_mgr = [brm_e]
+        product_b.save()
 
     def test0010Contract_creation(self):
         '''
@@ -141,7 +234,7 @@ class ContractTestCase(unittest.TestCase):
             self.create_party()
             self.create_product()
             on_party, = self.Party.search([('name', '=', 'Toto')])
-            on_product, = self.Product.search([('code', '=', 'AAA')])
+            on_product, = self.Product.search([('code', '=', 'BBB')])
             wizard_id, _, _ = self.SubsProcess.create()
             wizard = self.SubsProcess(wizard_id)
             wizard.transition_steps_start()
@@ -157,6 +250,13 @@ class ContractTestCase(unittest.TestCase):
                 wizard,
                 wizard.process_state.cur_step_desc)
             self.assertEqual(tmp[0], False)
+            wizard.project.product = on_product
+            tmp = wizard.project.check_step(
+                wizard,
+                wizard.process_state.cur_step_desc)
+            self.assertEqual(tmp[0], False)
+            self.assertEqual(tmp[1][0], 'Not eligible')
+            on_product, = self.Product.search([('code', '=', 'AAA')])
             wizard.project.product = on_product
             tmp = wizard.project.check_step(
                 wizard,
@@ -190,6 +290,12 @@ class ContractTestCase(unittest.TestCase):
             self.assertEqual(tmp[0], False)
             wizard.option_selection.options[1].start_date += \
                 datetime.timedelta(days=1)
+            tmp = wizard.option_selection.check_step(
+                wizard,
+                wizard.process_state.cur_step_desc)
+            self.assertEqual(tmp[0], False)
+            self.assertEqual(tmp[1][0], 'Not eligible')
+            wizard.option_selection.options[3].status = 'Refused'
             wizard.option_selection.options[1].status = 'Refused'
             tmp = wizard.option_selection.check_step(
                 wizard,
@@ -207,10 +313,26 @@ class ContractTestCase(unittest.TestCase):
             self.assertEqual(len(wizard.extension_life.covered_elements), 1)
             covered = wizard.extension_life.covered_elements[0]
             self.assertEqual(covered.person, on_party)
-            self.assertEqual(len(covered.covered_data), 2)
+            self.assertEqual(len(covered.covered_data), 3)
             self.assertEqual(covered.covered_data[0].start_date,
                              wizard.project.start_date +
                              datetime.timedelta(days=1))
+            tmp = wizard.extension_life.check_step(
+                wizard,
+                wizard.process_state.cur_step_desc)
+            self.assertEqual(tmp[0], False)
+            self.assertEqual(
+                tmp[1][0],
+                'Toto not eligible for Delta Coverage')
+            wizard.transition_steps_previous()
+            wizard.transition_master_step()
+            wizard.option_selection.options[2].status = 'Refused'
+            wizard.transition_steps_next()
+            wizard.transition_master_step()
+            tmp = wizard.extension_life.check_step(
+                wizard,
+                wizard.process_state.cur_step_desc)
+            self.assertEqual(tmp[0], True)
             wizard.transition_steps_next()
             wizard.transition_master_step()
 
