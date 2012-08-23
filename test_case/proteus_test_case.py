@@ -8,12 +8,12 @@ from proteus import config as pconfig
 
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
-CODE_TEMPLATE = '''def execute_test():
+CODE_TEMPLATE = '''def execute_test(cfg_dict):
     from %s import launch_test_case
 
-    launch_test_case()
+    launch_test_case(cfg_dict)
 
-execute_test()
+execute_test(cfg_dict)
 '''
 
 
@@ -115,20 +115,30 @@ def get_modules_to_update(from_modules):
     return [x.name for x in graph if is_coop_module(x.name)]
 
 
-def install_or_update_modules(from_modules):
-    modules = get_modules_to_update(from_modules)
+def get_module_cfg(path, cfg_dict):
+    if not os.path.isfile(os.path.join(path, 'test_case.cfg')):
+        return cfg_dict
+    module_cfg = get_cfg_as_dict(
+        os.path.join(path, 'test_case.cfg'), 'options')
+    return dict(cfg_dict.items() + module_cfg.items())
+
+
+def install_or_update_modules(cfg_dict):
+    modules = get_modules_to_update(cfg_dict['modules'])
     for cur_module in modules:
-        print '=' * 80
-        cur_file = os.path.abspath(
-            os.path.join(DIR, '..', cur_module, 'test_case',
-                'proteus_test_case.py'))
-        if not os.path.isfile(cur_file):
+        print '=' * 80 + '\n'
+        cur_path = os.path.abspath(
+            os.path.join(DIR, '..', cur_module, 'test_case'))
+        if not os.path.isfile(os.path.join(cur_path, 'proteus_test_case.py')):
             print 'Missing test case file for module %s' % cur_module
             continue
         print 'Running test case for module % s' % cur_module
+
         code = CODE_TEMPLATE % ('trytond.modules.' + cur_module + '.test_case')
         try:
-            exec code
+            context = {'cfg_dict': get_module_cfg(cur_path, cfg_dict)}
+            localcontext = {}
+            exec code in context, localcontext
         except:
             warnings.warn('KO : Exception raised', stacklevel=2)
 
@@ -154,8 +164,8 @@ def launch_proteus_test_case(test_config_file):
         else:
             print 'Module %s already installed' % module
 
-    install_or_update_modules(cfg_dict['modules'])
+    install_or_update_modules(cfg_dict)
 
 
 if __name__ == '__main__':
-    launch_proteus_test_case('test.cfg')
+    launch_proteus_test_case('test_case.cfg')

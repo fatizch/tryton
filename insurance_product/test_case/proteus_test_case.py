@@ -7,7 +7,7 @@ from decimal import Decimal
 from proteus import Model
 
 
-def launch_test_case():
+def launch_test_case(cfg_dict):
     Product = Model.get('ins_product.product')
     coverage = Model.get('ins_product.coverage')
     brm = Model.get('ins_product.business_rule_manager')

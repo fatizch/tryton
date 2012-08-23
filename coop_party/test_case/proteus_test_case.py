@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from datetime import date
-import ConfigParser
 import random
 import os
 from proteus import Model
@@ -16,29 +15,20 @@ def setup():
     return res
 
 
-def get_template_file_path():
-    config = ConfigParser.ConfigParser()
-    config.read(os.path.abspath(os.path.join(
-                DIR, '..', '..', 'coop_utils/coop.cfg')))
-    return os.path.join(DIR, config.get('localization', 'country').lower())
-
-
-def launch_test_case():
+def launch_test_case(cfg_dict):
     models = setup()
-    config = ConfigParser.ConfigParser()
-    config.read(os.path.join(DIR, 'test_case.cfg'))
     dicts = {}
-    total_nb = config.getint('test_case', 'total_nb')
-    nb_male = config.getint('test_case', 'nb_male')
+    total_nb = int(cfg_dict['total_nb'])
+    nb_male = int(cfg_dict['nb_male'])
     nb_female = total_nb - nb_male
-    path = get_template_file_path()
+    path = os.path.join(DIR, cfg_dict.get('language', 'fr')[0:2].lower())
     dicts['male'] = get_dictionnary(
         os.path.join(path, 'male.txt'), nb_male)
     dicts['female'] = get_dictionnary(
         os.path.join(path, 'female.txt'), nb_female)
     dicts['last_name'] = get_dictionnary(
         os.path.join(path, 'last_name.txt'), total_nb)
-    date_interv = calculate_date_interval(config)
+    date_interv = calculate_date_interval(cfg_dict)
 
     for i in range(nb_male):
         add_person(models, dicts, date_interv, 'M', i)
@@ -47,13 +37,13 @@ def launch_test_case():
         add_person(models, dicts, date_interv, 'F', i + j + 1)
 
 
-def calculate_date_interval(config):
+def calculate_date_interval(cfg_dict):
     start_date = date.today()
     start_date = start_date.replace(year=start_date.year
-        - config.getint('test_case', 'adult_age_max')).toordinal()
+        - int(cfg_dict['adult_age_max'])).toordinal()
     end_date = date.today()
     end_date = end_date.replace(year=end_date.year
-        - config.getint('test_case', 'adult_age_min')).toordinal()
+        - int(cfg_dict['adult_age_min'])).toordinal()
     return [start_date, end_date]
 
 
