@@ -7,7 +7,10 @@ import os
 
 DIR = os.path.abspath(os.path.normpath(os.path.join(__file__,
     '..', '..', '..')))
-os.remove(os.path.join(DIR, 'data/Test.sqlite'))
+try:
+    os.remove(os.path.join(DIR, 'data/Test.sqlite'))
+except OSError:
+    pass
 main(
     'Test',
     ['insurance_contract'],
