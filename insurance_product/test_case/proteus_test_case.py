@@ -3,11 +3,11 @@
 
 import datetime
 
+from decimal import Decimal
+from proteus import Model
+
 
 def launch_test_case():
-    from proteus import Model
-    from decimal import Decimal
-
     Product = Model.get('ins_product.product')
     coverage = Model.get('ins_product.coverage')
     brm = Model.get('ins_product.business_rule_manager')
@@ -30,7 +30,7 @@ def launch_test_case():
     gbr_b.end_date = datetime.date.today() + \
                                     datetime.timedelta(days=20)
     prm_b = gbr_b.pricing_rule[0]
-    prm_b.price = k(15.0)
+    prm_b.price = Decimal(15.0)
 
     brm_a = brm()
     brm_a.business_rules.append(gbr_a)

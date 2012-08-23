@@ -348,7 +348,8 @@ class BusinessRuleManager(CoopSQL, CoopView, GetResult):
 #                if (business_rule1 != business_rule2 and
 #                    business_rule2['start_date'] is not None
 #                    and business_rule1['start_date'] is not None and
-#                    business_rule2['start_date'] > business_rule1['start_date']
+#                    business_rule2['start_date'] >
+#                    business_rule1['start_date']
 #                    and (business_rule1['end_date'] is None or
 #                         business_rule1['end_date'] >=
 #                         business_rule2['start_date'])):
@@ -362,7 +363,8 @@ class BusinessRuleManager(CoopSQL, CoopView, GetResult):
 #            #we reinitialize the end_date
 #            if (business_rule1['end_date'] is not None
 #                and business_rule1['start_date'] is not None
-#                and business_rule1['end_date'] < business_rule1['start_date']):
+#                and business_rule1['end_date'] <
+#                    business_rule1['start_date']):
 #                res['business_rules']['update'].append({
 #                        'id': business_rule1.id,
 #                        'end_date': None})

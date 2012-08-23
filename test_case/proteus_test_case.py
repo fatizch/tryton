@@ -1,15 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import datetime
 import os
 import ConfigParser
-
+import warnings
 from proteus import Model, Wizard
 from proteus import config as pconfig
 
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
-
 CODE_TEMPLATE = '''def execute_test():
     from %s import launch_test_case
 
@@ -129,7 +127,10 @@ def install_or_update_modules(from_modules):
             continue
         print 'Running test case for module % s' % cur_module
         code = CODE_TEMPLATE % ('trytond.modules.' + cur_module + '.test_case')
-        exec code
+        try:
+            exec code
+        except:
+            warnings.warn('KO : Exception raised', stacklevel=2)
 
 
 def launch_proteus_test_case(test_config_file):
