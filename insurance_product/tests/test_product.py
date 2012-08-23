@@ -21,6 +21,7 @@ class LaboratoryTestCase(unittest.TestCase):
         self.gbr = POOL.get('ins_product.generic_business_rule')
         self.pricing = POOL.get('ins_product.pricing_rule')
         self.currency = POOL.get('currency.currency')
+        self.eligibility = POOL.get('ins_product.eligibility_rule')
 
     def test0005views(self):
         '''
@@ -177,7 +178,7 @@ class LaboratoryTestCase(unittest.TestCase):
 
             # Product
 
-            product_a = self.Product()
+            product_a = self.product()
             product_a.code = 'AAA'
             product_a.name = 'Awesome Alternative Allowance'
             product_a.start_date = datetime.date.today()

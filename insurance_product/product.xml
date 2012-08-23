@@ -210,7 +210,7 @@
                     <newline/>
                     <group id ="Rules" colspan="4" yexpand="1" yfill="1" >
                         <field name="pricing_rule" mode="form"/>
-                        <field name="eligibilty_rule" mode="form"/>
+                        <field name="eligibility_rule" mode="form"/>
                         <field name="benefit_rule" mode="form"/>
                         <field name="reserve_rule" mode="form"/>
                         <field name="coverage_amount_rule" mode="form"/>
