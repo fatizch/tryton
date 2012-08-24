@@ -134,22 +134,25 @@ class BankAccountNumber(CoopSQL, CoopView):
         return self.split_rib(self.number)
 
     @staticmethod
-    def check_rib(number):
-        the_dict = BankAccountNumber.split_rib(number)
-        if the_dict == False:
-            return False
-        account = the_dict['account_number']
-        for char in account:
+    def calculate_key_rib(bank_code, branch_code, nb):
+        for char in str(nb):
             if char.encode('utf-8').isalpha():
                 char = char.upper()
                 digit = ord(char) - ord('A') + 1
                 digit = (digit > 18 and digit + 1 or digit) % 9
-                account = account.replace(char, str(digit))
-        calculated_key = 97 - (89 * int(the_dict['bank_code'])
-            + 15 * int(the_dict['branch_code'])
-            + 3 * int(account)) % 97
-        print calculated_key
-        return calculated_key == int(the_dict['key'])
+                nb = nb.replace(char, str(digit))
+        key = str(97 - (89 * int(bank_code) + 15 * int(branch_code)
+                + 3 * int(nb)) % 97).zfill(2)
+        return key
+
+    @staticmethod
+    def check_rib(number):
+        the_dict = BankAccountNumber.split_rib(number)
+        if not the_dict:
+            return False
+        return (BankAccountNumber.calculate_key_rib(
+            the_dict['bank_code'], the_dict['branch_code'],
+            the_dict['account_number']) == the_dict['key'])
 
     @staticmethod
     def check_credit_card(number):
@@ -205,7 +208,7 @@ class BankAccountNumber(CoopSQL, CoopView):
                 nb.number = nb.number[0:21] + value
             cls.write([nb], {'number': nb.number})
 
-    def on_change_with_number(self, name):
+    def on_change_with_number(self, name=None):
         if self.kind != 'RIB':
             return self.number
         res = zfill(self, 'bank_code',)

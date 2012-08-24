@@ -62,11 +62,6 @@ class Party:
                     get_on_change(is_actor_var_name))
 
     @staticmethod
-    def default_addresses():
-        #RSE 03/07/2012 Temporary fix for xml import. See issue B-529
-        return ''
-
-    @staticmethod
     def get_is_actor_var_name(var_name):
         return 'is_' + var_name.split('_role')[0]
 
@@ -89,13 +84,13 @@ class Party:
         if role == '' or is_role == '':
             return res
         res[role] = {}
-        if type(self[role]) == bool:
+        if type(getattr(self, role)) == bool:
             return res
-        if self[is_role] == True and len(self[role]) == 0:
+        if getattr(self, is_role) == True and len(getattr(self, role)) == 0:
             res[role]['add'] = [{}]
-        elif self[is_role] == False and len(self[role]) > 0:
+        elif getattr(self, is_role) == False and len(getattr(self, role)) > 0:
             res[role].setdefault('remove', [])
-            res[role]['remove'].append(self[role][0].id)
+            res[role]['remove'].append(getattr(self, role)[0].id)
         return res
 
     @classmethod

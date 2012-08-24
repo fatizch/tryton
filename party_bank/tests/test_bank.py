@@ -46,7 +46,7 @@ class PartyTestCase(unittest.TestCase):
         with Transaction().start(DB_NAME, USER,
                 context=CONTEXT) as transaction:
             bank1 = self.Bank.create({
-                    'name': 'Bank 1',
+                    'name': 'Bank 1', 'addresses': []
                 })
             self.assert_(bank1.id)
             transaction.cursor.commit()

@@ -46,6 +46,7 @@ class PartyFRTestCase(unittest.TestCase):
                     'ssn': ssn,
                     'birth_date': birth_date,
                     'gender': gender,
+                    'addresses': []
                     })
                 res = person.id > 0
             except:

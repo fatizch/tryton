@@ -46,7 +46,6 @@ class Person(CoopSQL, Actor):
     def calculate_ssn_key(ssn_no_key):
         ssn_as_num = str(ssn_no_key).replace('2A', '19').replace('2B', '18')
         key = 97 - int(ssn_as_num) % 97
-        print key
         return key
 
     def check_ssn(self):

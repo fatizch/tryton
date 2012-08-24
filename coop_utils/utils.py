@@ -546,7 +546,10 @@ def get_field_size(the_instance, val_name):
 def zfill(the_instance, val_name):
     size = get_field_size(the_instance, val_name)
     if size:
-        return getattr(the_instance, val_name, '').zfill(size)
+        val = getattr(the_instance, val_name)
+        if not val:
+            val = ''
+        return val.zfill(size)
 
 
 def tuple_index(value, the_tuple, key_index=0):

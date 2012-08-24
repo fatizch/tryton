@@ -4,19 +4,19 @@
 from datetime import date
 import random
 import os
+import warnings
 from proteus import Model
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
 
-def setup():
+def get_models():
     res = {}
     res['Person'] = Model.get('party.person')
     return res
 
 
-def launch_test_case(cfg_dict):
-    models = setup()
+def create_persons(models, cfg_dict):
     dicts = {}
     total_nb = int(cfg_dict['total_nb'])
     nb_male = int(cfg_dict['nb_male'])
@@ -35,6 +35,14 @@ def launch_test_case(cfg_dict):
 
     for j in range(nb_female):
         add_person(models, dicts, date_interv, 'F', i + j + 1)
+
+    print 'Successfully created %s parties' % total_nb
+
+
+def launch_test_case(cfg_dict):
+    models = get_models()
+    if is_table_empty(models['Person']):
+        create_persons(models, cfg_dict)
 
 
 def calculate_date_interval(cfg_dict):
@@ -58,6 +66,7 @@ def add_person(models, dicts, date_interv, sex='M', i=0):
     person.first_name = get_random(dicts[the_dict])
     person.birth_date = date.fromordinal(
         random.randint(date_interv[0], date_interv[1]))
+    person.addresses[:] = []
     person.save()
 
 
@@ -80,5 +89,5 @@ def get_random(the_dict):
     return u'%s' % the_dict.get(random.randint(0, len(the_dict) - 1))
 
 
-if __name__ == '__main__':
-    launch_test_case()
+def is_table_empty(model):
+    return len(model.find(limit=1)) == 0

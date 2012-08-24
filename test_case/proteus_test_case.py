@@ -116,10 +116,18 @@ def get_modules_to_update(from_modules):
 
 
 def get_module_cfg(path, cfg_dict):
-    if not os.path.isfile(os.path.join(path, 'test_case.cfg')):
+    if not os.path.isfile(os.path.join(path, 'test_case', 'test_case.cfg')):
         return cfg_dict
     module_cfg = get_cfg_as_dict(
-        os.path.join(path, 'test_case.cfg'), 'options')
+        os.path.join(path, 'test_case', 'test_case.cfg'), 'options',
+        ['depends'])
+    if 'depends' in module_cfg.keys():
+        for dependency in module_cfg['depends']:
+            module_cfg = dict(get_module_cfg(
+                    os.path.abspath(os.path.join(path, '..', dependency)),
+                    cfg_dict).items()
+                + module_cfg.items())
+        module_cfg.pop('depends')
     return dict(cfg_dict.items() + module_cfg.items())
 
 
@@ -128,19 +136,20 @@ def install_or_update_modules(cfg_dict):
     for cur_module in modules:
         print '=' * 80 + '\n'
         cur_path = os.path.abspath(
-            os.path.join(DIR, '..', cur_module, 'test_case'))
-        if not os.path.isfile(os.path.join(cur_path, 'proteus_test_case.py')):
+            os.path.join(DIR, '..', cur_module))
+        if not os.path.isfile(os.path.join(
+                    cur_path, 'test_case', 'proteus_test_case.py')):
             print 'Missing test case file for module %s' % cur_module
             continue
         print 'Running test case for module % s' % cur_module
 
         code = CODE_TEMPLATE % ('trytond.modules.' + cur_module + '.test_case')
-        try:
-            context = {'cfg_dict': get_module_cfg(cur_path, cfg_dict)}
-            localcontext = {}
-            exec code in context, localcontext
-        except:
-            warnings.warn('KO : Exception raised', stacklevel=2)
+        #try:
+        context = {'cfg_dict': get_module_cfg(cur_path, cfg_dict)}
+        localcontext = {}
+        exec code in context, localcontext
+        #except:
+        #    warnings.warn('KO : Exception raised', stacklevel=2)
 
 
 def launch_proteus_test_case(test_config_file):

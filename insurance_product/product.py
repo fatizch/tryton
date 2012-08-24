@@ -634,7 +634,6 @@ class PricingContext_Contract(CoopView):
     @classmethod
     def get_subscriber_name(cls, args):
         name = args['contract'].subscriber.name
-        print name
         return name
 
 
