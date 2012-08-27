@@ -6,7 +6,7 @@ DIR = os.path.abspath(os.path.normpath(os.path.join(__file__,
 if os.path.isdir(DIR):
     sys.path.insert(0, os.path.dirname(DIR))
 
-from ibanlib import iban
+import ibanlib
 import unittest
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT, test_view,\
@@ -51,6 +51,15 @@ class PartyTestCase(unittest.TestCase):
             self.assert_(bank1.id)
             transaction.cursor.commit()
 
+    def test0015ibanlibconfiguration(self):
+        '''
+        Check that the module ibanlib is well installed
+        '''
+        config_file = os.path.abspath(os.path.join(ibanlib.__file__, '..',
+                'iban_countries.cfg'))
+        self.assert_(os.path.isfile(config_file),
+            'Impossible to found iban lib config file %s' % config_file)
+
     def test0020bankaccount(self):
         '''
         Create bank Account
@@ -92,7 +101,7 @@ class PartyTestCase(unittest.TestCase):
                 ('099100031044T8477', False),
             )
         for value, test in values:
-            self.assert_(iban.valid(value) == test)
+            self.assert_(ibanlib.iban.valid(value) == test)
 
     def test0040creditcard(self):
         '''
@@ -136,10 +145,8 @@ class PartyTestCase(unittest.TestCase):
             )
         for value, test in values:
             res = self.BankAccountNumber.check_rib(value)
-            if res != test:
-                print 'Error for %s, expected : %s, found : %s' % (
-                        value, test, res)
-            self.assert_(res == test)
+            self.assert_(res == test, 'Error for %s, expected : %s, found : %s'
+                % (value, test, res))
 
 
 def suite():
