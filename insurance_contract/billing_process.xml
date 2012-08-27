@@ -97,7 +97,7 @@
             <field name="res_model">ins_contract.billing.bill</field>
             <field name="domain">[
                 ('for_contract', '=',
-                (('ins_contract.contract'),(Eval('active_id'))))]</field>
+                (Eval('active_model),Eval('active_id')))]</field>
         </record>
 
         <record model="ir.action.keyword" id="act_billing_by_contract_keyword1">
