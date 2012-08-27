@@ -5,7 +5,7 @@ import re
 from trytond.model import fields as fields
 from trytond.modules.coop_utils import CoopSQL
 from trytond.modules.coop_party import Actor
-
+from trytond.rpc import RPC
 from trytond.modules.coop_utils import utils
 
 SSN_LENGTH = 15
@@ -86,7 +86,7 @@ class Person(CoopSQL, Actor):
                 person.ssn = person.ssn[0:SSN_LENGTH - size] + value
             cls.write([person], {'ssn': person.ssn})
 
-    def on_change_with_ssn(self, name):
+    def on_change_with_ssn(self, name=None):
         return self.ssn_no_key + self.ssn_key
 
     def check_ssn_birth_date(self):
