@@ -16,6 +16,7 @@ from trytond.modules.insurance_process import DependantState
 from trytond.modules.insurance_process import CoopStepView
 
 from trytond.modules.coop_utils import get_descendents, WithAbstract
+from trytond.modules.coop_utils import ReferenceForm
 
 from contract import OPTIONSTATUS
 

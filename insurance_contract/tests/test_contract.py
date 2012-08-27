@@ -50,6 +50,7 @@ class ContractTestCase(unittest.TestCase):
     def create_party(self):
         party = self.Party()
         party.name = 'Toto'
+        party.address = []
         party.save()
 
         party, = self.Party.search([('name', '=', 'Toto')])

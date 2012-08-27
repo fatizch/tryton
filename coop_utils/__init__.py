@@ -4,6 +4,7 @@ from .model import *
 from .many2one_form import *
 from .one2many_domain import *
 from .business import *
+from .reference_form import *
 
 
 def register():
