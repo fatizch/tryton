@@ -18,9 +18,9 @@ except ImportError:
 def get_descendents(from_class, names_only=False):
     res = []
     if names_only:
-        format = lambda x: x
+        format_ = lambda x: x
     else:
-        format = lambda x: (x, x)
+        format_ = lambda x: (x, x)
     if isinstance(from_class, str):
         cur_models = [model_name
                       for model_name, model in Pool().iterobject()
@@ -28,11 +28,11 @@ def get_descendents(from_class, names_only=False):
         Model = Pool().get('ir.model')
         models = Model.search([('model', 'in', cur_models)])
         for cur_model in models:
-            res.append(format(cur_model.model))
+            res.append(format_(cur_model.model))
     elif isinstance(from_class, type):
         for elem in from_class.__subclasses__():
-            if isinstance(elem, type):
-                res.append(format(elem.__name__))
+            if isinstance(elem, type) and elem.__name__ in Pool().classes:
+                res.append(format_(elem.__name__))
     return res
 
 
