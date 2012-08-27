@@ -209,7 +209,7 @@
                     <field name="is_current"/>
                     <newline/>
                     <group id ="Rules" colspan="4" yexpand="1" yfill="1" >
-                        <field name="pricing_rule" mode="form"/>
+                        <field name="pricing_rule" mode="tree"/>
                         <field name="eligibility_rule" mode="form"/>
                         <field name="benefit_rule" mode="form"/>
                         <field name="reserve_rule" mode="form"/>
@@ -265,14 +265,16 @@
                    <field name="config_kind" xfill="1" xexpand="0" xalign="0"/>
                    <newline/>
                    <group id="rule" string="Rule Engine" colspan="4"
-                   states="{'invisible': Eval('config_kind') != 'rule'}">
+                   states="{'readonly': Eval('config_kind') != 'rule'}">
                        <label name="rule" xalign="0"/>
                        <field name="rule"/>
                     </group>
                    <label name="generic_rule"/>
                    <field name="generic_rule"/>
                    <group id="simple" string="Simple Settings" colspan="4"
-                   states="{'invisible': Eval('config_kind') != 'simple'}"/>
+                   states="{'readonly': Eval('config_kind') != 'simple'}">
+                        <field name="toto"/>
+                   </group>
                 </form>
             ]]>
             </field>

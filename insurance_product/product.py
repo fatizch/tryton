@@ -524,15 +524,15 @@ class BusinessRuleRoot(CoopView, GetResult):
     config_kind = fields.Selection([
             ('simple', 'Simple'),
             ('rule', 'Rule Engine')],
-        'Conf. kind')
+        'Conf. kind', required=True)
     generic_rule = fields.Many2One('ins_product.generic_business_rule',
         'Generic Rule', ondelete='CASCADE')
     template = fields.Many2One(None, 'Template',
         domain=[('id', '!=', Eval('id'))],
         depends=['id'])
     rule = fields.Many2One('rule_engine', 'Rule Engine',
-        states={'readonly': Eval('config_kind') != 'rule'},
         depends=['config_kind'])
+    toto = fields.Char('toto', depends=['config_kind'])
 
     @classmethod
     def __setup__(cls):
@@ -546,7 +546,7 @@ class BusinessRuleRoot(CoopView, GetResult):
 
     @staticmethod
     def default_config_kind():
-        return 'simple'
+        return 'rule'
 
 
 class PricingRule(CoopSQL, BusinessRuleRoot):
