@@ -30,8 +30,9 @@ def get_descendents(from_class, names_only=False):
         for cur_model in models:
             res.append(format_(cur_model.model))
     elif isinstance(from_class, type):
+        names = [elem for elem, _ in Pool().iterobject()]
         for elem in from_class.__subclasses__():
-            if isinstance(elem, type) and elem.__name__ in Pool().classes:
+            if isinstance(elem, type) and elem.__name__ in names:
                 res.append(format_(elem.__name__))
     return res
 
