@@ -7,6 +7,7 @@ if os.path.isdir(DIR):
 
 import unittest
 import trytond.tests.test_tryton
+from trytond.model import ModelView
 from trytond.tests.test_tryton import test_view, test_depends
 from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT
 from trytond.transaction import Transaction
@@ -39,14 +40,30 @@ class RuleEngineTestCase(unittest.TestCase):
         test_depends()
 
     def test0010_testRuleEngine(self):
+        class TestRuleEngine(ModelView):
+            __name__ = 'rule_engine_tests'
+
+            @classmethod
+            def test_values(cls, args, alpha):
+                args['messages'].append('Toto')
+                args['errors'].append('Titi')
+                return alpha * 2
+
+            @classmethod
+            def test_values_inexisting(cls, args):
+                return 200
+
         with Transaction().start(DB_NAME,
                                  USER,
                                  context=CONTEXT) as transaction:
+            POOL.register(TestRuleEngine, type_='model', module='rule_engine')
+            POOL.add(TestRuleEngine)
+
             te = self.TreeElement()
             te.type = 'function'
             te.name = 'test_values'
             te.description = 'Test Values'
-            te.namespace = te.__name__
+            te.namespace = 'rule_engine_tests'
 
             te.save()
 
@@ -54,7 +71,7 @@ class RuleEngineTestCase(unittest.TestCase):
             te1.type = 'function'
             te1.name = 'test_values_inexisting'
             te1.description = 'Test Values'
-            te1.namespace = te1.__name__
+            te1.namespace = 'rule_engine_tests'
 
             te1.save()
 

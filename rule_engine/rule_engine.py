@@ -197,16 +197,6 @@ class TreeElement(ModelView, ModelSQL):
             element.as_context(context)
         return context
 
-    @classmethod
-    def test_values(cls, args, alpha):
-        args['messages'].append('Toto')
-        args['errors'].append('Titi')
-        return alpha * 2
-
-    @classmethod
-    def test_values_inexisting(cls, args):
-        return 200
-
 
 class ContextTreeElement(ModelSQL):
     "Context Tree Element"
