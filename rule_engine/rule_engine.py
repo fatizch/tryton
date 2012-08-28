@@ -67,7 +67,10 @@ class Rule(ModelView, ModelSQL):
         context['context'] = context
         localcontext = {}
         exec self.as_function in context, localcontext
-        return localcontext['%s_result' % self.name]
+        result = localcontext['%s_result' % self.name]
+        messages = context['messages']
+        errors = context['errors']
+        return (result, messages, errors)
 
     @property
     def as_function(self):
@@ -129,6 +132,8 @@ class Context(ModelView, ModelSQL):
 
     def get_context(self):
         context = {}
+        context['messages'] = []
+        context['errors'] = []
         for element in self.allowed_elements:
             element.as_context(context)
         return context
@@ -191,6 +196,16 @@ class TreeElement(ModelView, ModelSQL):
         for element in self.children:
             element.as_context(context)
         return context
+
+    @classmethod
+    def test_values(cls, args, alpha):
+        args['messages'].append('Toto')
+        args['errors'].append('Titi')
+        return alpha * 2
+
+    @classmethod
+    def test_values_inexisting(cls, args):
+        return 200
 
 
 class ContextTreeElement(ModelSQL):
