@@ -508,6 +508,13 @@ def priority(priority_lvl):
     return wrap
 
 
+def keywords(keys):
+    def wrap(f):
+        f.keywords = keys
+        return f
+    return wrap
+
+
 def convert_to_periods(dates):
     tmp_dates = dates
     tmp_dates.sort()
