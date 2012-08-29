@@ -22,6 +22,12 @@ class LaboratoryTestCase(unittest.TestCase):
         self.pricing = POOL.get('ins_product.pricing_rule')
         self.currency = POOL.get('currency.currency')
         self.eligibility = POOL.get('ins_product.eligibility_rule')
+        self.TreeElement = POOL.get('rule_engine.tree_element')
+        self.Context = POOL.get('rule_engine.context')
+        self.RuleEngine = POOL.get('rule_engine')
+        self.TestCase = POOL.get('rule_engine.test_case')
+        self.TestCaseValue = POOL.get('rule_engine.test_case.value')
+        self.RunTests = POOL.get('rule_engine.run_tests', type='wizard')
 
     def test0005views(self):
         '''
@@ -35,6 +41,103 @@ class LaboratoryTestCase(unittest.TestCase):
         '''
         test_depends()
 
+    def createTestRule(self):
+        te1 = self.TreeElement()
+        te1.type = 'function'
+        te1.name = 'get_subscriber_name'
+        te1.description = 'Name'
+        te1.namespace = 'ins_product.rule_sets.contract'
+
+        te1.save()
+
+        te2 = self.TreeElement()
+        te2.type = 'function'
+        te2.name = 'get_subscriber_birthdate'
+        te2.description = 'Birthday'
+        te2.namespace = 'ins_product.rule_sets.contract'
+
+        te2.save()
+
+        te = self.TreeElement()
+        te.type = 'folder'
+        te.description = 'Subscriber'
+        te.children = [te1, te2]
+
+        te.save()
+
+        te3 = self.TreeElement()
+        te3.type = 'function'
+        te3.name = 'years_between'
+        te3.description = 'Years between'
+        te3.namespace = 'rule_engine.tools_functions'
+
+        te3.save()
+
+        te5 = self.TreeElement()
+        te5.type = 'function'
+        te5.name = 'today'
+        te5.description = 'Today'
+        te5.namespace = 'rule_engine.tools_functions'
+
+        te5.save()
+
+        te6 = self.TreeElement()
+        te6.type = 'function'
+        te6.name = 'message'
+        te6.description = 'Add message'
+        te6.namespace = 'rule_engine.tools_functions'
+
+        te6.save()
+
+        te4 = self.TreeElement()
+        te4.type = 'folder'
+        te4.description = 'Tools'
+        te4.children = [te3, te5, te6]
+
+        te4.save()
+
+        ct = self.Context()
+        ct.name = 'test_context'
+        ct.allowed_elements = []
+        ct.allowed_elements.append(te)
+        ct.allowed_elements.append(te4)
+
+        ct.save()
+
+        rule = self.RuleEngine()
+        rule.name = 'test_rule'
+        rule.context = ct
+        rule.code = '''
+birthdate = get_subscriber_birthdate()
+if years_between(birthdate, today()) > 40:
+    message('Subscriber too old (max: 40)')
+    return False
+return True'''
+
+        tcv = self.TestCaseValue()
+        tcv.name = 'get_subscriber_birthdate'
+        tcv.value = 'datetime.date(2000, 11, 02)'
+
+        tc = self.TestCase()
+        tc.description = 'Test'
+        tc.values = [tcv]
+        tc.expected_result = '(True, [], [])'
+
+        tcv1 = self.TestCaseValue()
+        tcv1.name = 'get_subscriber_birthdate'
+        tcv1.value = 'datetime.date(1950, 11, 02)'
+
+        tc1 = self.TestCase()
+        tc1.description = 'Test1'
+        tc1.values = [tcv1]
+        tc1.expected_result = '(False, ["Subscriber too old (max: 40)"], [])'
+
+        rule.test_cases = [tc, tc1]
+
+        rule.save()
+
+        return rule
+
     def test0010Coverage_creation(self):
         '''
             Tests process desc creation
@@ -42,6 +145,17 @@ class LaboratoryTestCase(unittest.TestCase):
         with Transaction().start(DB_NAME,
                                  USER,
                                  context=CONTEXT) as transaction:
+
+            rule = self.createTestRule()
+
+            with transaction.set_context({'active_id': rule.id}):
+                wizard_id, _, _ = self.RunTests.create()
+                wizard = self.RunTests(wizard_id)
+                wizard._execute('report')
+                res = wizard.default_report(None)
+                self.assertEqual(
+                    res,
+                    {'report': 'Test ... SUCCESS\n\nTest1 ... SUCCESS'})
 
             #We need to create the currency manually because it's needed
             #on the default currency for product and coverage
@@ -118,8 +232,9 @@ class LaboratoryTestCase(unittest.TestCase):
             # Coverage C
 
             erm_a = self.eligibility()
-            erm_a.config_kind = 'simple'
+            erm_a.config_kind = 'rule'
             erm_a.is_eligible = False
+            erm_a.rule = rule
 
             gbr_d = self.gbr()
             gbr_d.kind = 'ins_product.eligibility_rule'

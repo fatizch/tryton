@@ -17,7 +17,7 @@ from trytond.modules.coop_utils import NonExistingManagerException
 
 __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
            'BusinessRuleManager', 'GenericBusinessRule', 'BusinessRuleRoot',
-           'PricingRule', 'EligibilityRule', 'PricingContext_Contract',
+           'PricingRule', 'EligibilityRule',
            'Benefit', 'BenefitRule', 'ReserveRule', 'CoverageAmountRule']
 
 
@@ -559,6 +559,12 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
     price = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
          required=True,
          depends=['currency_digits'])
+    sub_elem_config_kind = fields.Selection([
+            ('simple', 'Simple'),
+            ('rule', 'Rule Engine')],
+        'Sub Elem Conf. kind', required=True)
+    sub_elem_rule = fields.Many2One('rule_engine', 'Sub Elem Rule Engine',
+        depends=['config_kind'])
     per_sub_elem_price = fields.Numeric(
         'Amount per Covered Element',
         digits=(16, Eval('currency_digits', 2)),
@@ -566,15 +572,22 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
 
     def give_me_price(self, args):
         if hasattr(self, 'rule') and self.rule:
-            res = self.rule.compute(args)
-            return (PricingResultLine(value=res), [])
+            res, mess, errs = self.rule.compute(args)
+            return (PricingResultLine(value=res, details=mess), errs)
 
         # This is the most basic pricing rule : just return the price
         return (PricingResultLine(value=self.price), [])
 
     def give_me_sub_elem_price(self, args):
+        if hasattr(self, 'sub_elem_rule') and self.sub_elem_rule:
+            res, mess, errs = self.sub_elem_rule.compute(args)
+            return (PricingResultLine(value=res, details=mess), errs)
         # This will be called for each covered element of the contract
         return (PricingResultLine(value=self.per_sub_elem_price), [])
+
+    @staticmethod
+    def default_sub_elem_config_kind():
+        return 'simple'
 
 
 class EligibilityRule(CoopSQL, BusinessRuleRoot):
@@ -584,12 +597,20 @@ class EligibilityRule(CoopSQL, BusinessRuleRoot):
 
     is_eligible = fields.Boolean('Is Eligible')
 
+    sub_elem_config_kind = fields.Selection([
+            ('simple', 'Simple'),
+            ('rule', 'Rule Engine')],
+        'Sub Elem Conf. kind', required=True)
+
+    sub_elem_rule = fields.Many2One('rule_engine', 'Sub Elem Rule Engine',
+        depends=['config_kind'])
+
     is_sub_elem_eligible = fields.Boolean('Sub Elem Eligible')
 
     def give_me_eligibility(self, args):
         if hasattr(self, 'rule') and self.rule:
-            res = self.rule.compute(args)
-            return (EligibilityResultLine(eligible=res[0], details=res[1]), [])
+            res, mess, errs = self.rule.compute(args)
+            return (EligibilityResultLine(eligible=res, details=mess), errs)
 
         # This is the most basic pricing rule : just return the price
         if self.is_eligible:
@@ -601,6 +622,9 @@ class EligibilityRule(CoopSQL, BusinessRuleRoot):
             [])
 
     def give_me_sub_elem_eligibility(self, args):
+        if hasattr(self, 'sub_elem_rule') and self.sub_elem_rule:
+            res, mess, errs = self.sub_elem_rule.compute(args)
+            return (EligibilityResultLine(eligible=res, details=mess), errs)
         if self.is_sub_elem_eligible:
             details = []
         else:
@@ -624,17 +648,9 @@ class EligibilityRule(CoopSQL, BusinessRuleRoot):
     def default_is_sub_elem_eligible():
         return True
 
-
-class PricingContext_Contract(CoopView):
-    '''
-        Context functions for pricing rules on contracts.
-    '''
-    __name__ = 'ins_product.rule_sets.pricing.contract'
-
-    @classmethod
-    def get_subscriber_name(cls, args):
-        name = args['contract'].subscriber.name
-        return name
+    @staticmethod
+    def default_sub_elem_config_kind():
+        return 'simple'
 
 
 class Benefit(CoopSQL, Offered):
