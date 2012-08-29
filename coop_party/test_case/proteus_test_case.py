@@ -75,7 +75,7 @@ def get_dictionnary(file_name, size):
     res = {}
     n = 0
     for line in fd:
-        res[n] = line.strip()
+        res[n] = line.decode('utf8').strip()
         n += 1
         #item are ordered by name popularity, if the sample is small,
         #no need to search for too exotic name
