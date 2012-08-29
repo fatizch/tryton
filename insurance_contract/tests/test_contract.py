@@ -19,7 +19,7 @@ class ContractTestCase(unittest.TestCase):
         self.SubsProcess = POOL.get('ins_contract.subs_process',
                                           type='wizard')
         self.ProcessDesc = POOL.get('ins_process.process_desc')
-        self.Party = POOL.get('party.party')
+        self.Party = POOL.get('party.person')
         self.Product = POOL.get('ins_product.product')
         self.coverage = POOL.get('ins_product.coverage')
         self.brm = POOL.get('ins_product.business_rule_manager')
@@ -27,6 +27,12 @@ class ContractTestCase(unittest.TestCase):
         self.pricing = POOL.get('ins_product.pricing_rule')
         self.eligibility = POOL.get('ins_product.eligibility_rule')
         self.currency = POOL.get('currency.currency')
+        self.TreeElement = POOL.get('rule_engine.tree_element')
+        self.Context = POOL.get('rule_engine.context')
+        self.RuleEngine = POOL.get('rule_engine')
+        self.TestCase = POOL.get('rule_engine.test_case')
+        self.TestCaseValue = POOL.get('rule_engine.test_case.value')
+        self.RunTests = POOL.get('rule_engine.run_tests', type='wizard')
 
         with Transaction().start(DB_NAME,
                                  USER,
@@ -50,12 +56,119 @@ class ContractTestCase(unittest.TestCase):
     def create_party(self):
         party = self.Party()
         party.name = 'Toto'
+        party.first_name = 'titi'
+        party.birth_date = datetime.date(1950, 12, 04)
+        party.gender = 'M'
         party.save()
 
         party, = self.Party.search([('name', '=', 'Toto')])
         self.assert_(party.id)
 
+    def createTestRule(self):
+        te1 = self.TreeElement()
+        te1.type = 'function'
+        te1.name = 'get_person_name'
+        te1.description = 'Name'
+        te1.namespace = 'ins_product.rule_sets.person'
+
+        te1.save()
+
+        te2 = self.TreeElement()
+        te2.type = 'function'
+        te2.name = 'get_person_birthdate'
+        te2.description = 'Birthday'
+        te2.namespace = 'ins_product.rule_sets.person'
+
+        te2.save()
+
+        te = self.TreeElement()
+        te.type = 'folder'
+        te.description = 'Person'
+        te.children = [te1, te2]
+
+        te.save()
+
+        te3 = self.TreeElement()
+        te3.type = 'function'
+        te3.name = 'years_between'
+        te3.description = 'Years between'
+        te3.namespace = 'rule_engine.tools_functions'
+
+        te3.save()
+
+        te5 = self.TreeElement()
+        te5.type = 'function'
+        te5.name = 'today'
+        te5.description = 'Today'
+        te5.namespace = 'rule_engine.tools_functions'
+
+        te5.save()
+
+        te6 = self.TreeElement()
+        te6.type = 'function'
+        te6.name = 'message'
+        te6.description = 'Add message'
+        te6.namespace = 'rule_engine.tools_functions'
+
+        te6.save()
+
+        te4 = self.TreeElement()
+        te4.type = 'folder'
+        te4.description = 'Tools'
+        te4.children = [te3, te5, te6]
+
+        te4.save()
+
+        ct = self.Context()
+        ct.name = 'test_context'
+        ct.allowed_elements = []
+        ct.allowed_elements.append(te)
+        ct.allowed_elements.append(te4)
+
+        ct.save()
+
+        rule = self.RuleEngine()
+        rule.name = 'test_rule'
+        rule.context = ct
+        rule.code = '''
+birthdate = get_person_birthdate()
+if years_between(birthdate, today()) > 40:
+    message('Subscriber too old (max: 40)')
+    return False
+return True'''
+
+        tcv = self.TestCaseValue()
+        tcv.name = 'get_subscriber_birthdate'
+        tcv.value = 'datetime.date(2000, 11, 02)'
+
+        tc = self.TestCase()
+        tc.description = 'Test'
+        tc.values = [tcv]
+        tc.expected_result = '(True, [], [])'
+
+        tcv1 = self.TestCaseValue()
+        tcv1.name = 'get_subscriber_birthdate'
+        tcv1.value = 'datetime.date(1950, 11, 02)'
+
+        tc1 = self.TestCase()
+        tc1.description = 'Test1'
+        tc1.values = [tcv1]
+        tc1.expected_result = '(False, ["Subscriber too old (max: 40)"], [])'
+
+        rule.test_cases = [tc, tc1]
+
+        rule.save()
+
+        return rule
+
     def create_product(self):
+        '''
+            Tests process desc creation
+        '''
+        rule = self.createTestRule()
+
+        #We need to create the currency manually because it's needed
+        #on the default currency for product and coverage
         euro = self.currency()
         euro.name = 'Euro'
         euro.symbol = u'€'
@@ -129,8 +242,9 @@ class ContractTestCase(unittest.TestCase):
         # Coverage C
 
         erm_a = self.eligibility()
-        erm_a.config_kind = 'simple'
+        erm_a.config_kind = 'rule'
         erm_a.is_eligible = False
+        erm_a.rule = rule
 
         gbr_d = self.gbr()
         gbr_d.kind = 'ins_product.eligibility_rule'
@@ -193,7 +307,8 @@ class ContractTestCase(unittest.TestCase):
         product_a.code = 'AAA'
         product_a.name = 'Awesome Alternative Allowance'
         product_a.start_date = datetime.date.today()
-        product_a.options = [coverage_a, coverage_b, coverage_c, coverage_d]
+        product_a.options = [
+            coverage_a, coverage_b, coverage_c, coverage_d]
         product_a.eligibility_mgr = [brm_d]
         product_a.save()
 
@@ -294,7 +409,7 @@ class ContractTestCase(unittest.TestCase):
                 wizard,
                 wizard.process_state.cur_step_desc)
             self.assertEqual(tmp[0], False)
-            self.assertEqual(tmp[1][0], 'Not eligible')
+            self.assertEqual(tmp[1][0], 'Subscriber too old (max: 40)')
             wizard.option_selection.options[3].status = 'Refused'
             wizard.option_selection.options[1].status = 'Refused'
             tmp = wizard.option_selection.check_step(
@@ -312,7 +427,7 @@ class ContractTestCase(unittest.TestCase):
             self.assert_(tmp)
             self.assertEqual(len(wizard.extension_life.covered_elements), 1)
             covered = wizard.extension_life.covered_elements[0]
-            self.assertEqual(covered.person, on_party)
+            self.assertEqual(covered.person, on_party.party)
             self.assertEqual(len(covered.covered_data), 3)
             self.assertEqual(covered.covered_data[0].start_date,
                              wizard.project.start_date +
