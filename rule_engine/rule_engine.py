@@ -40,8 +40,6 @@ def check_args(*_args):
                 if not arg in args[1]:
                     args[1]['errors'].append('%s undefined !' % arg)
                     raise InternalRuleEngineError
-            print args
-            print kwargs
             return f(*args, **kwargs)
         return wrap
     return decorator
