@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import os
 import ConfigParser
-import warnings
 from proteus import Model, Wizard
 from proteus import config as pconfig
 
@@ -177,4 +176,4 @@ def launch_proteus_test_case(test_config_file):
 
 
 if __name__ == '__main__':
-    launch_proteus_test_case('test_case.cfg')
+    launch_proteus_test_case(os.path.join(DIR, 'test_case.cfg'))
