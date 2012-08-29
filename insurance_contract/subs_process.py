@@ -55,7 +55,7 @@ class ProjectState(CoopStep):
     start_date = fields.Date('Effective Date')
 
     # The subscriber is the client which wants to subscribe to a contract.
-    subscriber = fields.Many2One('party.party',
+    subscriber = fields.Many2One('party.person',
                                  'Subscriber')
 
     # This is a core field, it will be used all along the process to ask for
@@ -219,7 +219,7 @@ class OptionSelectionState(CoopStep):
                 eligibility, errors = displayer.coverage.get_result(
                     'eligibility',
                     {'date': wizard.project.start_date,
-                    'subscriber': wizard.project.subscriber})
+                    'person': wizard.project.subscriber})
                 errs += eligibility.details + errors
                 eligible = eligible and eligibility.eligible
         return (eligible, errs)

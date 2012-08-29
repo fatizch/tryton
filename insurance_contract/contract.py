@@ -105,7 +105,7 @@ class GenericContract(CoopSQL, CoopView):
     # recipient of the letters of the contract, he will pay the premium etc...
     #
     # Some business rules might need some of the subscriber's data to compute.
-    subscriber = fields.Many2One('party.party',
+    subscriber = fields.Many2One('party.person',
                                  'Subscriber',
                                  select='0')
 
