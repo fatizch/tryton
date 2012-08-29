@@ -4,6 +4,7 @@ from .rule_engine import *
 
 def register():
     Pool.register(
+        RuleTools,
         Context,
         Rule,
         TestCase,

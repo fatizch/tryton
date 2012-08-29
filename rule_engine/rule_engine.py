@@ -2,17 +2,24 @@ import sys
 import ast
 import functools
 import json
+import datetime
+
+from decimal import Decimal
+
+from dateutil.relativedelta import relativedelta
 
 from trytond.model import ModelView, ModelSQL, fields
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.tools import safe_eval
+from trytond.tools.misc import _compile_source
 from trytond.pyson import Eval
+from trytond.modules.coop_utils import CoopView
 
 __all__ = ['Rule', 'Context', 'TreeElement', 'ContextTreeElement', 'TestCase',
     'TestCaseValue', 'TestRule', 'TestRuleStart', 'TestRuleTest',
-    'CreateTestValues', 'RunTests', 'RunTestsReport']
+    'CreateTestValues', 'RunTests', 'RunTestsReport', 'RuleTools',
+    'RuleEngineContext', 'InternalRuleEngineError', 'check_args']
 
 CODE_TEMPLATE = """
 def %s():
@@ -22,10 +29,74 @@ def %s():
 """
 
 
+class InternalRuleEngineError(Exception):
+    pass
+
+
+def check_args(*_args):
+    def decorator(f):
+        def wrap(*args, **kwargs):
+            for arg in _args:
+                if not arg in args[1]:
+                    args[1]['errors'].append('%s undefined !' % arg)
+                    raise InternalRuleEngineError
+            print args
+            print kwargs
+            return f(*args, **kwargs)
+        return wrap
+    return decorator
+
+
+def safe_eval(source, data=None):
+    if '__subclasses__' in source:
+        raise ValueError('__subclasses__ not allowed')
+
+    comp = _compile_source(source)
+    return eval(comp, {'__builtins__': {
+        'True': True,
+        'False': False,
+        'str': str,
+        'globals': locals,
+        'locals': locals,
+        'bool': bool,
+        'dict': dict,
+        'round': round,
+        'Decimal': Decimal,
+        'datetime': datetime
+        }}, data)
+
+
 def noargs_func(value):
     def newfunc(*args, **keywords):
         return value
     return newfunc
+
+
+class RuleEngineContext(CoopView):
+    pass
+
+
+class RuleTools(RuleEngineContext):
+    '''
+        Tools functions
+    '''
+    __name__ = 'rule_engine.tools_functions'
+
+    @classmethod
+    def years_between(cls, args, date1, date2):
+        if (not isinstance(date1, datetime.date)
+                or not isinstance(date2, datetime.date)):
+            args['errors'].append('years_between needs datetime types')
+            raise InternalRuleEngineError
+        return relativedelta(date2, date1).years
+
+    @classmethod
+    def today(cls, args):
+        return datetime.date.today()
+
+    @classmethod
+    def message(cls, args, the_message):
+        args['messages'].append(the_message)
 
 
 class FunctionFinder(ast.NodeVisitor):
