@@ -36,10 +36,12 @@ class InternalRuleEngineError(Exception):
 def check_args(*_args):
     def decorator(f):
         def wrap(*args, **kwargs):
+            f.needed_args = []
             for arg in _args:
                 if not arg in args[1]:
                     args[1]['errors'].append('%s undefined !' % arg)
                     raise InternalRuleEngineError
+                f.needed_args.append(arg)
             return f(*args, **kwargs)
         return wrap
     return decorator
@@ -135,8 +137,11 @@ class Rule(ModelView, ModelSQL):
         context.update(evaluation_context)
         context['context'] = context
         localcontext = {}
-        exec self.as_function in context, localcontext
-        result = localcontext['%s_result' % self.name]
+        try:
+            exec self.as_function in context, localcontext
+            result = localcontext['%s_result' % self.name]
+        except InternalRuleEngineError:
+            result = None
         messages = context['messages']
         errors = context['errors']
         return (result, messages, errors)
@@ -174,10 +179,18 @@ class TestCase(ModelView, ModelSQL):
             test_context[value.name] = noargs_func(safe_eval(value.value))
         try:
             test_value = self.rule.compute(test_context)
-            assert test_value == safe_eval(self.expected_result)
-            return True, None
+        except InternalRuleEngineError:
+            pass
         except:
             return False, sys.exc_info()
+
+        try:
+            assert test_value == safe_eval(self.expected_result)
+            return True, None
+        except AssertionError:
+            return False, test_value + ' vs. ' + self.expected_result
+        except:
+            return False, str(sys.exc_info())
 
 
 class TestCaseValue(ModelView, ModelSQL):
@@ -336,11 +349,12 @@ class RunTests(Wizard):
             ])
 
     def format_result(self, test_case):
-        success, exec_info = test_case.do_test()
+        success, info = test_case.do_test()
         if success:
             return '{} ... SUCCESS'.format(test_case.description)
         else:
-            return '{} ... FAILED'.format(test_case.description)
+            return '{} ... FAILED'.format(test_case.description) +\
+                '\n%s' % info
 
     def default_report(self, fields):
         Rule = Pool().get('rule_engine')
