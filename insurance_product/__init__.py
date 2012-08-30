@@ -1,5 +1,6 @@
 from trytond.pool import Pool
 from rule_engine_results import *
+from rule_sets import *
 from product import *
 
 
@@ -14,7 +15,8 @@ def register():
         BusinessRuleRoot,
         PricingRule,
         EligibilityRule,
-        PricingContext_Contract,
+        ContractContext,
+        PersonContext,
         Benefit,
         BenefitRule,
         ReserveRule,
