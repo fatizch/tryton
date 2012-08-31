@@ -138,10 +138,12 @@ class ProjectState(CoopStep):
 
 class CoverageDisplayer(CoopStepView):
     '''
-        This class is a displayer, that is a class which will only be used
-        to show something (or ask for something) to the user. It needs not
-        to be stored, and is not supposed to be.
+        Coverage Description
     '''
+    # This class is a displayer, that is a class which will only be used
+    # to show something (or ask for something) to the user. It needs not
+    # to be stored, and is not supposed to be.
+
     __name__ = 'ins_contract.coverage_displayer'
     coverage = fields.Many2One('ins_product.coverage',
                                    'Coverage',
@@ -220,7 +222,11 @@ class OptionSelectionState(CoopStep):
                     'eligibility',
                     {'date': wizard.project.start_date,
                     'person': wizard.project.subscriber})
-                errs += eligibility.details + errors
+                if not eligibility.eligible:
+                    errs.append(
+                        '%s option not eligible :' % displayer.coverage.code)
+                    errs += ['\t' + elem
+                        for elem in eligibility.details + errors]
                 eligible = eligible and eligibility.eligible
         return (eligible, errs)
 
