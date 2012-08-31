@@ -1,6 +1,7 @@
 from trytond.pool import Pool
 from .party import *
 from .contact_mechanism import *
+from .relation import *
 
 
 def register():
@@ -10,7 +11,8 @@ def register():
         Employee,
         Actor,
         Person,
-        PersonRelations,
+        PartyRelationKind,
+        PartyRelation,
         ContactMechanism,
         GenericActorKind,
         GenericActor,

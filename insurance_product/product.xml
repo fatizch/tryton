@@ -273,7 +273,6 @@
                    <field name="generic_rule"/>
                    <group id="simple" string="Simple Settings" colspan="4"
                    states="{'readonly': Eval('config_kind') != 'simple'}">
-                        <field name="toto"/>
                    </group>
                 </form>
             ]]>

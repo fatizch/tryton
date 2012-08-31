@@ -7,11 +7,10 @@ from trytond.pyson import Eval
 from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import CoopView, CoopSQL
-from trytond.modules.coop_utils import TableOfTable, PartyRelation, \
-    tuple_index
+from trytond.modules.coop_utils import TableOfTable, tuple_index
 
 __all__ = ['Party', 'Company', 'Employee', 'Actor', 'Person',
-           'PersonRelations', 'GenericActorKind', 'GenericActor', ]
+           'GenericActorKind', 'GenericActor', ]
 __metaclass__ = PoolMeta
 
 GENDER = [('M', 'Mr.'),
@@ -31,6 +30,10 @@ class Party:
         size=1)
     generic_roles = fields.One2Many('party.generic_actor', 'party',
         'Generic Actor')
+    relations = fields.One2Many('party.party-relation',
+                                 'from_party', 'Relations')
+    in_relation_with = fields.One2Many('party.party-relation',
+                                 'to_party', 'in relation with')
 
     @classmethod
     def __setup__(cls):
@@ -107,6 +110,7 @@ class Company(ModelSQL, ModelView):
         super(Company, cls).__setup__()
         cls.currency = copy.copy(cls.currency)
         cls.currency.required = False
+        cls._order.insert(0, ('name', 'ASC'))
 
 
 class Employee(ModelSQL, ModelView):
@@ -135,10 +139,6 @@ class GenericActorKind(TableOfTable):
     __name__ = 'party.generic_actor_kind'
     _table = 'coop_table_of_table'
 
-    @staticmethod
-    def default_value_kind():
-        return 'str'
-
 
 class GenericActor(CoopSQL, Actor):
     'Generic Actor'
@@ -149,35 +149,6 @@ class GenericActor(CoopSQL, Actor):
         domain=[('my_model_name', '=', 'party.generic_actor_kind'),
                 ('parent', '=', False)],
         required=True)
-
-
-class PersonRelations(CoopSQL, CoopView):
-    'Person Relations'
-
-    __name__ = 'party.person-relations'
-
-    from_person = fields.Many2One('party.person', 'From Person',
-        ondelete='CASCADE')
-    to_person = fields.Many2One('party.person', 'From Person',
-        ondelete='CASCADE')
-    kind = fields.Selection('get_relation_kind', 'Kind')
-    reverse_kind = fields.Function(fields.Char('Reverse Kind',
-            readonly=True,
-            on_change_with=['kind']),
-        'get_reverse_kind')
-
-    @staticmethod
-    def get_relation_kind():
-        return PartyRelation.get_dyn_sel('person_relation')
-
-    def get_reverse_kind(self, name):
-        reverse_values = PartyRelation.get_reverse_dyn_sel(self.kind)
-        if len(reverse_values) > 0:
-            return reverse_values[0][1]
-        return ''
-
-    def on_change_with_reverse_kind(self, name):
-        return self.get_reverse_kind(name)
 
 
 class Person(CoopSQL, Actor):
@@ -194,10 +165,11 @@ class Person(CoopSQL, Actor):
         depends=['gender'])
     birth_date = fields.Date('Birth Date', required=True)
     ssn = fields.Char('SSN')
-    relations = fields.One2Many('party.person-relations',
-                                 'from_person', 'Relations')
-    in_relation_with = fields.One2Many('party.person-relations',
-                                 'to_person', 'in relation with')
+
+    @classmethod
+    def __setup__(cls):
+        super(Person, cls).__setup__()
+        cls._order.insert(0, ('name', 'ASC'))
 
     def get_rec_name(self, name):
         return "%s %s" % (self.name.upper(), self.first_name)

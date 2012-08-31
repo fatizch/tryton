@@ -5,6 +5,27 @@
         <menuitem name="Actors" parent="party.menu_party" sequence="0"
             id="menu_actor" icon="tryton-party"/>
 
+        <record model="ir.ui.view" id="party_view_form">
+            <field name="model">party.party</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="party.party_view_form"/>
+            <field name="arch" type="xml">
+             <![CDATA[
+             <data>
+                <xpath expr="/form/notebook" position="inside">
+                        <page string="Relations" id="rel">
+                            <field name="relations"
+                                view_ids="coop_party.party_relation_view_tree_from"/>
+                            <newline/>
+                            <field name="in_relation_with"
+                                view_ids="coop_party.party_relation_view_tree_to"/>
+                            
+                        </page>
+                </xpath>
+             </data>
+             ]]>
+            </field>
+        </record>
         <!-- Generic actor form view -->
         <record model="ir.ui.view" id="actor_view_form">
             <field name="model">party.actor</field>
@@ -83,16 +104,6 @@
                             <field name="maiden_name" colspan="2"/>
                             <newline/>
                     </xpath>
-                    <xpath expr="/form/notebook" position="inside">
-                            <page string="Relations" id="rel">
-                                <field name="relations"
-                                    view_ids="coop_party.person_relations_view_tree_from"/>
-                                <newline/>
-                                <field name="in_relation_with"
-                                    view_ids="coop_party.person_relations_view_tree_to"/>
-                                
-                            </page>
-                    </xpath>
                     <xpath expr="/form/notebook/page[@id=&quot;role&quot;]/group[@id=&quot;role_group&quot;]"
                     position="inside">
                         <label name="is_employee"/>
@@ -141,34 +152,6 @@
             <field name="act_window" ref="act_person_form" />
         </record>
 
-        <!--  ******************************************* 
-              **************   PersonRelations     ***************
-              *******************************************-->
-        <!-- Person tree view -->
-        <record model="ir.ui.view" id="person_relations_view_tree_from">
-            <field name="model">party.person-relations</field>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                    <tree>
-                        <field name="kind"/>
-                        <field name="to_person"/>
-                    </tree>
-                ]]>
-            </field>
-        </record>
-        <record model="ir.ui.view" id="person_relations_view_tree_to">
-            <field name="model">party.person-relations</field>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                    <tree>
-                        <field name="reverse_kind"/>
-                        <field name="from_person"/>
-                    </tree>
-                ]]>
-            </field>
-        </record>
         <!--  ******************************************* 
               **************   Employee     *************
               *******************************************-->
@@ -320,7 +303,7 @@
             <field name="act_window" ref="act_generic_actor_kind_form" />
         </record>
 
-        <menuitem parent="coop_utils.menu_configuration" sequence="1" id="menu_generic_actor_kind_form"
+        <menuitem parent="party.menu_configuration" sequence="1" id="menu_generic_actor_kind_form"
             icon="tryton-list" action="act_generic_actor_kind_form" />
         <!-- /generic_actor_kind -->
 

@@ -1,70 +1,6 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
-        <menuitem name="Configuration" id="menu_configuration" sequence="10" />
-        <!--  ******************************************* 
-              *********   Party Relation   ***********
-              *******************************************-->
-
-        <!-- Party Relation tree view -->
-        <record model="ir.ui.view" id="party_relation_view_tree">
-            <field name="model">coop.party_relation</field>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-                        <![CDATA[
-                            <tree>
-                                <field name="kind"/>
-                                <field name="name"/>
-                            </tree>
-                        ]]>
-            </field>
-        </record>
-
-        <!-- Party Relation form view -->
-        <record model="ir.ui.view" id="party_relation_view_form">
-            <field name="model">coop.party_relation</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                    <form string="Party Relation">
-                        <label name="kind"/>
-                        <field name="kind"/>
-                        <newline/>
-                        <label name="key"/>
-                        <field name="key"/>
-                        <label name="name"/>
-                        <field name="name"/>
-                        <newline/>
-                        <label name="reverse_key"/>
-                        <field name="reverse_key"/>
-                     </form>
-                ]]>
-            </field>
-        </record>
-
-        <!-- View for the main menu and the event -->
-        <record model="ir.action.act_window" id="act_party_relation_form">
-            <field name="name">Party Relation</field>
-            <field name="res_model">coop.party_relation</field>
-        </record>
-
-        <!-- View that connects the form in the tree with the specification -->
-        <record model="ir.action.act_window.view" id="act_party_relation_tree_view">
-            <field name="sequence" eval="10" />
-            <field name="view" ref="party_relation_view_tree" />
-            <field name="act_window" ref="act_party_relation_form" />
-        </record>
-
-        <!-- View for the edition or the Party Relation -->
-        <record model="ir.action.act_window.view" id="act_party_relation_form_view">
-            <field name="sequence" eval="20" />
-            <field name="view" ref="party_relation_view_form" />
-            <field name="act_window" ref="act_party_relation_form" />
-        </record>
-
-        <!-- Sub menu configuration Party Relation -->
-        <menuitem parent="menu_configuration" sequence="10" id="menu_party_relation_form"
-            icon="tryton-list" action="act_party_relation_form" />
 
         <!--  ******************************************* 
               *********   Table of table   ***********
@@ -86,7 +22,6 @@
             <field name="arch" type="xml">
                 <![CDATA[
                     <tree editable="bottom">
-                        <field name="value_kind" width="100"/>
                         <field name="name"/>
                     </tree>
                 ]]>
@@ -98,12 +33,12 @@
             <field name="arch" type="xml">
                 <![CDATA[
                     <form col="8">
-                        <label name="value_kind"/>
-                        <field name="value_kind"/>
+                        <label name="key"/>
+                        <field name="key"/>
                         <label name="name"/>
                         <field name="name" colspan="5"/>
                         <newline/>
-                        <field name="my_fields" colspan="8"
+                        <field name="childs" colspan="8"
                             view_ids="coop_utils.table_of_table_view_tree_editable"/>
                     </form>
                 ]]>
@@ -119,7 +54,7 @@
             <field name="arch" type="xml">
                         <![CDATA[
                             <tree>
-                                <field name="store_value"/>
+                                <field name="key"/>
                                 <field name="name"/>
                             </tree>
                         ]]>
@@ -133,8 +68,8 @@
             <field name="arch" type="xml">
                 <![CDATA[
                     <form string="Dynamic Selection">
-                        <label name="store_value"/>
-                        <field name="store_value"/>
+                        <label name="key"/>
+                        <field name="key"/>
                         <label name="name"/>
                         <field name="name"/>
                      </form>

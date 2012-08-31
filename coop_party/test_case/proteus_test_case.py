@@ -4,7 +4,6 @@
 from datetime import date
 import random
 import os
-import warnings
 from proteus import Model
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))

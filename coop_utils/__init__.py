@@ -8,7 +8,6 @@ from .business import *
 
 def register():
     Pool.register(
-        PartyRelation,
         TableOfTable,
         DynamicSelection,
         module='coop_utils', type_='model')

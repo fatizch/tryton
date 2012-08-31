@@ -1,13 +1,9 @@
-import datetime
-
 # Needed for python test management
 import unittest
 
 # Needed for tryton test integration
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import test_view, test_depends
-from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT
-from trytond.transaction import Transaction
 from trytond.modules.coop_utils import utils
 
 

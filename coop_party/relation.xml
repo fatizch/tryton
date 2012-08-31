@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!--  ******************************************* 
+              *********   Party Relation Kind  ***********
+              *******************************************-->
+
+        <!-- Party Relation kind tree view -->
+        <record model="ir.ui.view" id="party_relation_kind_view_tree">
+            <field name="model">party.party_relation_kind</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                        <![CDATA[
+                            <tree>
+                                <field name="name"/>
+                            </tree>
+                        ]]>
+            </field>
+        </record>
+
+        <!-- Party Relation Kind form view -->
+        <record model="ir.ui.view" id="party_relation_kind_view_form">
+            <field name="model">party.party_relation_kind</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <form string="Party Relation Kind">
+                        <label name="key"/>
+                        <field name="key"/>
+                        <label name="name"/>
+                        <field name="name"/>
+                        <newline/>
+                        <label name="childs"/>
+                        <field name="childs" colspan="4"/>
+                     </form>
+                ]]>
+            </field>
+        </record>
+
+        <!-- View for the main menu and the event -->
+        <record model="ir.action.act_window" id="act_party_relation_kind_form">
+            <field name="name">Party Relation Kind</field>
+            <field name="res_model">party.party_relation_kind</field>
+            <field name="domain">[("parent", "=", False)]</field>
+        </record>
+
+        <!-- View that connects the form in the tree with the specification -->
+        <record model="ir.action.act_window.view" id="act_party_relation_kind_tree_view">
+            <field name="sequence" eval="10" />
+            <field name="view" ref="party_relation_kind_view_tree" />
+            <field name="act_window" ref="act_party_relation_kind_form" />
+        </record>
+
+        <!-- View for the edition or the Party Relation -->
+        <record model="ir.action.act_window.view" id="act_party_relation_kind_form_view">
+            <field name="sequence" eval="20" />
+            <field name="view" ref="party_relation_kind_view_form" />
+            <field name="act_window" ref="act_party_relation_kind_form" />
+        </record>
+
+        <!-- Sub menu configuration Party Relation -->
+        <menuitem parent="party.menu_configuration" sequence="10" id="menu_party_relation_kind_form"
+            icon="tryton-list" action="act_party_relation_kind_form" />
+        <!--  ******************************************* 
+              **************   Party Relation     ***************
+              *******************************************-->
+        <record model="ir.ui.view" id="party_relation_view_form">
+            <field name="model">party.party-relation</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <form>
+                        <label name="start_date"/>
+                        <field name="start_date"/>
+                        <label name="end_date"/>
+                        <field name="end_date"/>
+                        <newline/>
+                        <label name="kind"/>
+                        <field name="kind"/>
+                        <label name="to_party"/>
+                        <field name="to_party"/>
+                    </form>
+                ]]>
+            </field>
+        </record>        <record model="ir.ui.view" id="party_relation_view_tree_from">
+            <field name="model">party.party-relation</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <tree>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                        <field name="kind"/>
+                        <field name="to_party"/>
+                    </tree>
+                ]]>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="party_relation_view_tree_to">
+            <field name="model">party.party-relation</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <tree>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                        <field name="reverse_kind"/>
+                        <field name="from_party"/>
+                    </tree>
+                ]]>
+            </field>
+        </record>
+    </data>
+</tryton>
