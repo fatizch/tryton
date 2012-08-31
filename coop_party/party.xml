@@ -178,16 +178,9 @@
                         <field name="person" mode="form" yfill="1" yexpand="1" colspan="4"/>
                     </xpath>
                     <xpath 
-                        expr="/form/notebook/page[@id=&quot;general&quot;]"
+                        expr="/form/notebook"
                         position="replace_attributes">
-                        <page string="General" id="general"
-                            states="{'invisible':True}"/>
-                    </xpath>
-                    <xpath 
-                        expr="/form/notebook/page[@id=&quot;accounting&quot;]"
-                        position="replace_attributes">
-                        <page id="accounting"
-                            states="{'invisible':True}"/>
+                        <notebook states="{'invisible':True}"/>
                     </xpath>
 
                 </data>
