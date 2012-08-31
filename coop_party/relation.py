@@ -28,7 +28,7 @@ class PartyRelationKind(TableOfTable):
             return self.parent
         if self.childs and len(self.childs) > 0:
             return self.childs[0]
-        #if not children and no parent, the relation is symemtrical ex: spouse
+        #if not children and no parent, the relation is symmetrical ex: spouse
         return self
 
 
