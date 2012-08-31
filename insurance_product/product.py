@@ -20,6 +20,11 @@ __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
            'PricingRule', 'EligibilityRule',
            'Benefit', 'BenefitRule', 'ReserveRule', 'CoverageAmountRule']
 
+CONFIG_KIND = [
+    ('simple', 'Simple'),
+    ('rule', 'Rule Engine')
+    ]
+
 
 class Offered(CoopView, GetResult):
     'Offered'
@@ -84,6 +89,13 @@ class Coverage(CoopSQL, Offered):
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
     coverage_amount_mgr = One2ManyDomain('ins_product.business_rule_manager',
         'offered', 'Coverage Amount Manager')
+
+    @classmethod
+    def __setup__(cls):
+        super(Coverage, cls).__setup__()
+        cls._sql_constraints += [
+            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+        ]
 
     def give_me_price(self, args):
         # This method is one of the core of the pricing system. It asks for the
@@ -230,6 +242,9 @@ class Product(CoopSQL, Offered):
     @classmethod
     def __setup__(cls):
         super(Product, cls).__setup__()
+        cls._sql_constraints += [
+            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+        ]
 
     def get_sub_elem_data(self):
         # This method is used by the get_result method to know where to look
@@ -459,14 +474,24 @@ class GenericBusinessRule(CoopSQL, CoopView):
     def on_change_kind(self):
         res = {}
         for field_name, field in self._columns.iteritems():
-            if (hasattr(field, 'model_name')
+            if not (hasattr(field, 'model_name')
                 and getattr(field, 'model_name').endswith('_rule')
                 and (not getattr(self, field_name)
-                     or len(getattr(self, field_name) == 0))):
+                    or len(getattr(self, field_name) == 0))):
+                continue
 
-                if field.model_name == self.kind:
-                    res[field_name] = {}
-                    res[field_name]['add'] = [{}]
+            if field.model_name != self.kind:
+                continue
+
+            res[field_name] = {}
+            #We add in the dictionary all default values
+#            Rule = Pool().get(field.model_name)
+#            fields_names = list(x for x in set(Rule._fields.keys()
+#                    + Rule._inherit_fields.keys())
+#            if x not in ['id', 'create_uid', 'create_date',
+#                'write_uid', 'write_date'])
+#            res[field_name]['add'] = [Rule.default_get(fields_names)]
+            res[field_name]['add'] = [{}]
         return res
 
     @staticmethod
@@ -521,9 +546,7 @@ class BusinessRuleRoot(CoopView, GetResult):
 
     __name__ = 'ins_product.business_rule_root'
 
-    config_kind = fields.Selection([
-            ('simple', 'Simple'),
-            ('rule', 'Rule Engine')],
+    config_kind = fields.Selection(CONFIG_KIND,
         'Conf. kind', required=True)
     generic_rule = fields.Many2One('ins_product.generic_business_rule',
         'Generic Rule', ondelete='CASCADE')
@@ -532,7 +555,6 @@ class BusinessRuleRoot(CoopView, GetResult):
         depends=['id'])
     rule = fields.Many2One('rule_engine', 'Rule Engine',
         depends=['config_kind'])
-    toto = fields.Char('toto', depends=['config_kind'])
 
     @classmethod
     def __setup__(cls):
@@ -546,7 +568,7 @@ class BusinessRuleRoot(CoopView, GetResult):
 
     @staticmethod
     def default_config_kind():
-        return 'rule'
+        return 'simple'
 
 
 class PricingRule(CoopSQL, BusinessRuleRoot):
@@ -559,9 +581,7 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
     price = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
          required=True,
          depends=['currency_digits'])
-    sub_elem_config_kind = fields.Selection([
-            ('simple', 'Simple'),
-            ('rule', 'Rule Engine')],
+    sub_elem_config_kind = fields.Selection(CONFIG_KIND,
         'Sub Elem Conf. kind', required=True)
     sub_elem_rule = fields.Many2One('rule_engine', 'Sub Elem Rule Engine',
         depends=['config_kind'])
@@ -597,9 +617,7 @@ class EligibilityRule(CoopSQL, BusinessRuleRoot):
 
     is_eligible = fields.Boolean('Is Eligible')
 
-    sub_elem_config_kind = fields.Selection([
-            ('simple', 'Simple'),
-            ('rule', 'Rule Engine')],
+    sub_elem_config_kind = fields.Selection(CONFIG_KIND,
         'Sub Elem Conf. kind', required=True)
 
     sub_elem_rule = fields.Many2One('rule_engine', 'Sub Elem Rule Engine',

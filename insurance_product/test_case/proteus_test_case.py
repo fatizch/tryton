@@ -7,8 +7,31 @@ from decimal import Decimal
 from proteus import Model
 
 
-def create_AAA_Product():
-    Product = Model.get('ins_product.product')
+def get_models():
+    res = {}
+    res['Product'] = Model.get('ins_product.product')
+    return res
+
+
+def create_product(models, code, name, options=None):
+    if not is_in_db(models, 'Product', code):
+        product = models['Product']()
+        product.code = code
+        product.name = name
+        product.start_date = datetime.date.today()
+        if options:
+            product.options[:] = options
+        return product
+
+
+def is_in_db(models, model, code):
+    return len(models[model].find([('code', '=', code)], limit=1)) > 0
+
+
+def create_AAA_Product(models, code, name):
+    product_a = create_product(models, code, name)
+    if not product_a:
+        return None
     coverage = Model.get('ins_product.coverage')
     brm = Model.get('ins_product.business_rule_manager')
     gbr = Model.get('ins_product.generic_business_rule')
@@ -68,10 +91,6 @@ def create_AAA_Product():
     coverage_a.save()
     coverage_b.save()
 
-    product_a = Product()
-    product_a.code = 'AAA'
-    product_a.name = 'Awesome Alternative Allowance'
-    product_a.start_date = datetime.date.today()
     product_a.options.append(coverage_a)
     product_a.options.append(coverage_b)
     product_a.save()
@@ -185,71 +204,18 @@ return True'''
     return rule
 
 
-def create_BBB_product():
-
-    Product = Model.get('ins_product.product')
+def create_BBB_product(models, code, name):
+    product_b = create_product(models, code, name)
+    if not product_b:
+        return None
     coverage = Model.get('ins_product.coverage')
     brm = Model.get('ins_product.business_rule_manager')
     gbr = Model.get('ins_product.generic_business_rule')
 
     rule = createRule()
 
-    # Coverage A
-    gbr_a = gbr()
-    gbr_a.kind = 'ins_product.pricing_rule'
-    gbr_a.start_date = datetime.date.today()
-    gbr_a.end_date = datetime.date.today() + \
-                                    datetime.timedelta(days=10)
-    prm_a = gbr_a.pricing_rule[0]
-    prm_a.config_kind = 'simple'
-    prm_a.price = Decimal(12.0)
-    prm_a.per_sub_elem_price = Decimal(1.0)
-
-    gbr_b = gbr()
-    gbr_b.kind = 'ins_product.pricing_rule'
-    gbr_b.start_date = datetime.date.today() + \
-                                    datetime.timedelta(days=11)
-    gbr_b.end_date = datetime.date.today() + \
-                                    datetime.timedelta(days=20)
-    prm_b = gbr_b.pricing_rule[0]
-    prm_b.config_kind = 'simple'
-    prm_b.price = Decimal(15.0)
-
-    brm_a = brm()
-    brm_a.business_rules.append(gbr_a)
-    brm_a.business_rules.append(gbr_b)
-
-    coverage_a = coverage()
-    coverage_a.code = 'ALP'
-    coverage_a.name = 'Alpha Coverage'
-    coverage_a.start_date = datetime.date.today()
-
-    coverage_a.pricing_mgr.append(brm_a)
-
-    coverage_a.save()
-
-    # Coverage B
-    gbr_c = gbr()
-    gbr_c.kind = 'ins_product.pricing_rule'
-    gbr_c.start_date = datetime.date.today()
-    gbr_c.end_date = datetime.date.today() + \
-                                    datetime.timedelta(days=10)
-    prm_c = gbr_c.pricing_rule[0]
-    prm_c.config_kind = 'simple'
-    prm_c.price = Decimal(30.0)
-
-    brm_b = brm()
-    brm_b.business_rules.append(gbr_c)
-
-    coverage_b = coverage()
-    coverage_b.code = 'BET'
-    coverage_b.name = 'Beta Coverage'
-    coverage_b.start_date = datetime.date.today() + \
-                                    datetime.timedelta(days=5)
-
-    coverage_b.pricing_mgr.append(brm_b)
-
-    coverage_b.save()
+    coverage_a, = coverage.find([('code', '=', 'ALP')], limit=1)
+    coverage_b, = coverage.find([('code', '=', 'BET')], limit=1)
 
     # Coverage C
     gbr_d = gbr()
@@ -306,16 +272,12 @@ def create_BBB_product():
 
     # Product
 
-    product_a = Product()
-    product_a.code = 'BBB'
-    product_a.name = 'Big Bad Bully'
-    product_a.start_date = datetime.date.today()
-    product_a.options.append(coverage_a)
-    product_a.options.append(coverage_b)
-    product_a.options.append(coverage_c)
-    product_a.options.append(coverage_d)
-    product_a.eligibility_mgr.append(brm_d)
-    product_a.save()
+    product_b.options.append(coverage_a)
+    product_b.options.append(coverage_b)
+    product_b.options.append(coverage_c)
+    product_b.options.append(coverage_d)
+    product_b.eligibility_mgr.append(brm_d)
+    product_b.save()
 
 
 def launch_test_case(cfg_dict):
@@ -328,5 +290,6 @@ def launch_test_case(cfg_dict):
     euro.code = 'EUR'
     euro.save()
 
-    create_AAA_Product()
-    create_BBB_product()
+    models = get_models()
+    create_AAA_Product(models, 'AAA', 'Awesome Alternative Allowance')
+    create_BBB_product(models, 'BBB', 'Big Bad Bully')

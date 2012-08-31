@@ -31,9 +31,9 @@ class Party:
     generic_roles = fields.One2Many('party.generic_actor', 'party',
         'Generic Actor')
     relations = fields.One2Many('party.party-relation',
-                                 'from_party', 'Relations')
+        'from_party', 'Relations', context={'direction': 'normal'})
     in_relation_with = fields.One2Many('party.party-relation',
-                                 'to_party', 'in relation with')
+        'to_party', 'in relation with', context={'direction': 'reverse'})
 
     @classmethod
     def __setup__(cls):
@@ -99,6 +99,13 @@ class Party:
     @classmethod
     def set_is_actor(cls, parties, name, value):
         pass
+
+    def get_rec_name(self, name):
+        if self.person:
+            return self.person[0].get_rec_name(name)
+        elif self.company:
+            return self.company[0].get_rec_name(name)
+        return super(Party, self).get_rec_name(name)
 
 
 class Company(ModelSQL, ModelView):
