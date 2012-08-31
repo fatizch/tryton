@@ -77,8 +77,13 @@
                         <newline/>
                         <label name="kind"/>
                         <field name="kind"/>
+                        <label name="reverse_kind"/>
+                        <field name="reverse_kind"/>
+                        <label name="from_party"/>
+                        <field name="from_party"/>
                         <label name="to_party"/>
                         <field name="to_party"/>
+
                     </form>
                 ]]>
             </field>
