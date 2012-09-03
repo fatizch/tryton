@@ -1,0 +1,431 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:rule_engine,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:rule_engine,context:"
+msgid "Context"
+msgstr ""
+
+msgctxt "field:rule_engine,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:rule_engine,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:rule_engine,data_tree:"
+msgid "Data Tree"
+msgstr ""
+
+msgctxt "field:rule_engine,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine,status:"
+msgid "Status"
+msgstr ""
+
+msgctxt "field:rule_engine,test_cases:"
+msgid "Test Cases"
+msgstr ""
+
+msgctxt "field:rule_engine,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:rule_engine,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:rule_engine.context,allowed_elements:"
+msgid "Allowed tree elements"
+msgstr ""
+
+msgctxt "field:rule_engine.context,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:rule_engine.context,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:rule_engine.context,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.context,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.context,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.context,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:rule_engine.context,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:rule_engine.context-rule_engine.tree_element,context:"
+msgid "Context"
+msgstr ""
+
+msgctxt "field:rule_engine.context-rule_engine.tree_element,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:rule_engine.context-rule_engine.tree_element,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:rule_engine.context-rule_engine.tree_element,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.context-rule_engine.tree_element,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.context-rule_engine.tree_element,tree_element:"
+msgid "Tree Element"
+msgstr ""
+
+msgctxt "field:rule_engine.context-rule_engine.tree_element,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:rule_engine.context-rule_engine.tree_element,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:rule_engine.run_tests.report,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.run_tests.report,report:"
+msgid "Report"
+msgstr "Rapport"
+
+msgctxt "field:rule_engine.test_case,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:rule_engine.test_case,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:rule_engine.test_case,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:rule_engine.test_case,expected_result:"
+msgid "Expected Result"
+msgstr ""
+
+msgctxt "field:rule_engine.test_case,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.test_case,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.test_case,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:rule_engine.test_case,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:rule_engine.test_case,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:rule_engine.test_case,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:rule_engine.test_case.value,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:rule_engine.test_case.value,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:rule_engine.test_case.value,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.test_case.value,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.test_case.value,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.test_case.value,test_case:"
+msgid "Test Case"
+msgstr ""
+
+msgctxt "field:rule_engine.test_case.value,value:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "field:rule_engine.test_case.value,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:rule_engine.test_case.value,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:rule_engine.test_rule.start,context:"
+msgid "Context"
+msgstr ""
+
+msgctxt "field:rule_engine.test_rule.start,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.test_rule.test,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.test_rule.test,result:"
+msgid "Result"
+msgstr ""
+
+msgctxt "field:rule_engine.tools_functions,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.tree_element,children:"
+msgid "Children"
+msgstr "Enfants"
+
+msgctxt "field:rule_engine.tree_element,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:rule_engine.tree_element,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:rule_engine.tree_element,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:rule_engine.tree_element,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.tree_element,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.tree_element,namespace:"
+msgid "Namespace"
+msgstr ""
+
+msgctxt "field:rule_engine.tree_element,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:rule_engine.tree_element,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.tree_element,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:rule_engine.tree_element,type:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "field:rule_engine.tree_element,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:rule_engine.tree_element,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "model:ir.action,name:context_window"
+msgid "Contexts"
+msgstr ""
+
+msgctxt "model:ir.action,name:create_test_values_wizard"
+msgid "Create Test Values"
+msgstr ""
+
+msgctxt "model:ir.action,name:rule_window"
+msgid "Rules"
+msgstr "Règles"
+
+msgctxt "model:ir.action,name:run_tests_wizard"
+msgid "Run Tests"
+msgstr ""
+
+msgctxt "model:ir.action,name:test_case_window_relate"
+msgid "Test Cases"
+msgstr ""
+
+msgctxt "model:ir.action,name:test_rule_wizard"
+msgid "Test Rule"
+msgstr ""
+
+msgctxt "model:ir.action,name:tree_element_window"
+msgid "Tree Elements"
+msgstr ""
+
+msgctxt "model:ir.ui.menu,name:menu_context"
+msgid "Contexts"
+msgstr ""
+
+msgctxt "model:ir.ui.menu,name:menu_rule"
+msgid "Rules"
+msgstr "Règles"
+
+msgctxt "model:ir.ui.menu,name:menu_rule_engine"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "model:ir.ui.menu,name:menu_tree_element"
+msgid "Tree Elements"
+msgstr ""
+
+msgctxt "model:rule_engine,name:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "model:rule_engine.context,name:"
+msgid "Context"
+msgstr ""
+
+msgctxt "model:rule_engine.context-rule_engine.tree_element,name:"
+msgid "Context Tree Element"
+msgstr ""
+
+msgctxt "model:rule_engine.run_tests.report,name:"
+msgid "Test Run Report"
+msgstr ""
+
+msgctxt "model:rule_engine.test_case,name:"
+msgid "Test Case"
+msgstr ""
+
+msgctxt "model:rule_engine.test_case.value,name:"
+msgid "Test Case Value"
+msgstr ""
+
+msgctxt "model:rule_engine.test_rule.start,name:"
+msgid "Test Rule Input Form"
+msgstr ""
+
+msgctxt "model:rule_engine.test_rule.test,name:"
+msgid "Test Rule Result Form"
+msgstr ""
+
+msgctxt "model:rule_engine.tools_functions,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:rule_engine.tree_element,name:"
+msgid "Rule Engine Tree Element"
+msgstr ""
+
+msgctxt "selection:rule_engine,status:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "selection:rule_engine,status:"
+msgid "Validated"
+msgstr ""
+
+msgctxt "selection:rule_engine.tree_element,type:"
+msgid "Folder"
+msgstr ""
+
+msgctxt "selection:rule_engine.tree_element,type:"
+msgid "Function"
+msgstr "Fonction"
+
+msgctxt "selection:rule_engine.tree_element,type:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "view:rule_engine.context:"
+msgid "Context"
+msgstr ""
+
+msgctxt "view:rule_engine.context:"
+msgid "Contexts"
+msgstr ""
+
+msgctxt "view:rule_engine.run_tests.report:"
+msgid "Tests Report"
+msgstr ""
+
+msgctxt "view:rule_engine.test_case.value:"
+msgid "Test Case Value"
+msgstr ""
+
+msgctxt "view:rule_engine.test_case:"
+msgid "Test Case"
+msgstr ""
+
+msgctxt "view:rule_engine.test_rule.start:"
+msgid "Test Rule"
+msgstr ""
+
+msgctxt "view:rule_engine.test_rule.test:"
+msgid "Test Rule"
+msgstr ""
+
+msgctxt "view:rule_engine.tree_element:"
+msgid "Tree Element"
+msgstr ""
+
+msgctxt "view:rule_engine:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "view:rule_engine:"
+msgid "Rules"
+msgstr "Règles"
+
+msgctxt "wizard_button:rule_engine.run_tests,report,end:"
+msgid "OK"
+msgstr ""
+
+msgctxt "wizard_button:rule_engine.test_rule,start,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:rule_engine.test_rule,start,test:"
+msgid "Test"
+msgstr "Test"
+
+msgctxt "wizard_button:rule_engine.test_rule,test,end:"
+msgid "OK"
+msgstr ""

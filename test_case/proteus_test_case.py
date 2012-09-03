@@ -130,12 +130,35 @@ def get_module_cfg(path, cfg_dict):
     return dict(cfg_dict.items() + module_cfg.items())
 
 
+def generate_module_translation(cfg_dict, base_path, module_name):
+    export_wizard = Wizard('ir.translation.export')
+    wiz_form = export_wizard.form
+    wiz_form.language, = Model.get('ir.lang').find(
+        [('code', '=', cfg_dict['language'])])
+    Module = Model.get('ir.module.module')
+    wiz_form.module, = Module.find([('name', '=', module_name)])
+    export_wizard.execute('export')
+    locale_dir = os.path.join(base_path, 'locale')
+    if not os.path.exists(locale_dir):
+        os.mkdir(locale_dir)
+    po_path = os.path.join(locale_dir, '%s.po' % cfg_dict['language'])
+    with open(po_path, 'w') as csv_file:
+        print 'Generating translation file ', po_path
+        csv_file.write(export_wizard.form.file)
+
+
 def install_or_update_modules(cfg_dict):
     modules = get_modules_to_update(cfg_dict['modules'])
     for cur_module in modules:
         print '=' * 80 + '\n'
         cur_path = os.path.abspath(
             os.path.join(DIR, '..', cur_module))
+        if cfg_dict['un_fuzzy_translation']:
+            un_fuzzy_translation(module=cur_module)
+        if cfg_dict['export_translation']:
+            generate_module_translation(cfg_dict, cur_path, cur_module)
+        if not cfg_dict['create_data']:
+            continue
         if not os.path.isfile(os.path.join(
                     cur_path, 'test_case', 'proteus_test_case.py')):
             print 'Missing test case file for module %s' % cur_module
@@ -151,21 +174,23 @@ def install_or_update_modules(cfg_dict):
         #    warnings.warn('KO : Exception raised', stacklevel=2)
 
 
-def launch_proteus_test_case(test_config_file):
-    cfg_dict = get_test_cfg(test_config_file)
-
-    delete_db_if_necessary(cfg_dict)
-
-    config = pconfig.set_trytond(
+def get_config(cfg_dict):
+    return pconfig.set_trytond(
         database_name=cfg_dict['database_name'],
         user=cfg_dict['user'],
         database_type=cfg_dict['db_type'],
         language=cfg_dict['language'],
         password=cfg_dict['password'],
         config_file=cfg_dict['config_file'],
-        )
+    )
 
-    modules = install_modules(config, cfg_dict['modules'])
+
+def launch_proteus_test_case(test_config_file):
+    cfg_dict = get_test_cfg(test_config_file)
+
+    delete_db_if_necessary(cfg_dict)
+
+    modules = install_modules(get_config(cfg_dict), cfg_dict['modules'])
     for module in cfg_dict['modules']:
         if module in modules:
             print 'Module %s installed' % module
@@ -174,6 +199,19 @@ def launch_proteus_test_case(test_config_file):
 
     install_or_update_modules(cfg_dict)
 
+
+def un_fuzzy_translation(src=None, module=None):
+    Translation = Model.get('ir.translation')
+    cur_domain = [('fuzzy', '=', True)]
+    if module:
+        cur_domain.append(('module', '=', module))
+    if src:
+        cur_domain.append(('src', '=', src))
+    for cur_translation in Translation.find(cur_domain):
+        cur_translation.fuzzy = False
+        print 'unfuzzy %s in %s' % (
+            cur_translation.src, cur_translation.name)
+        cur_translation.save()
 
 if __name__ == '__main__':
     launch_proteus_test_case(os.path.join(DIR, 'test_case.cfg'))

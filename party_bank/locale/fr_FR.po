@@ -1,0 +1,211 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:party.bank:"
+msgid "Invalid BIC!"
+msgstr "BIC non valide!"
+
+msgctxt "error:party.bank_account_number:"
+msgid "Invalid number!"
+msgstr "Numéro non valide!"
+
+msgctxt "field:party.bank,bank_code:"
+msgid "Bank Code"
+msgstr "Code Banque"
+
+msgctxt "field:party.bank,bic:"
+msgid "BIC"
+msgstr "BIC"
+
+msgctxt "field:party.bank,branch_code:"
+msgid "Branch Code"
+msgstr "Code Guichet"
+
+msgctxt "field:party.bank,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:party.bank,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.bank,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.bank,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:party.bank,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.bank,reference:"
+msgid "Reference"
+msgstr "Référence"
+
+msgctxt "field:party.bank,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.bank,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:party.bank_account,account_numbers:"
+msgid "Account Number"
+msgstr "Numéro de Compte"
+
+msgctxt "field:party.bank_account,address:"
+msgid "Address"
+msgstr "Adresse"
+
+msgctxt "field:party.bank_account,agency:"
+msgid "Agency"
+msgstr "Agence"
+
+msgctxt "field:party.bank_account,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:party.bank_account,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.bank_account,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:party.bank_account,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:party.bank_account,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.bank_account,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:party.bank_account,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.bank_account,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:party.bank_account,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.bank_account,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:party.bank_account_number,account_number:"
+msgid "Account Number"
+msgstr "Numéro de Compte"
+
+msgctxt "field:party.bank_account_number,bank_account:"
+msgid "Bank Account"
+msgstr "Compte Bancaire"
+
+msgctxt "field:party.bank_account_number,bank_code:"
+msgid "Bank Code"
+msgstr "Code Banque"
+
+msgctxt "field:party.bank_account_number,branch_code:"
+msgid "Branch Code"
+msgstr "Code Guichet"
+
+msgctxt "field:party.bank_account_number,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:party.bank_account_number,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.bank_account_number,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.bank_account_number,key:"
+msgid "Key"
+msgstr "Clé"
+
+msgctxt "field:party.bank_account_number,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:party.bank_account_number,number:"
+msgid "Number"
+msgstr "Numéro"
+
+msgctxt "field:party.bank_account_number,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.bank_account_number,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.bank_account_number,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:party.party,bank_accounts:"
+msgid "Bank Accounts"
+msgstr "Comptes Bancaires"
+
+msgctxt "field:party.party,bank_role:"
+msgid "Bank"
+msgstr "Bank"
+
+msgctxt "field:party.party,is_bank:"
+msgid "Bank"
+msgstr "Bank"
+
+msgctxt "model:party.bank,name:"
+msgid "Bank"
+msgstr "Bank"
+
+msgctxt "model:party.bank_account,name:"
+msgid "Bank Account"
+msgstr "Compte Bancaire"
+
+msgctxt "model:party.bank_account_number,name:"
+msgid "Bank account Number"
+msgstr "Numéro de Compte"
+
+msgctxt "selection:party.bank_account_number,kind:"
+msgid "Credit Card"
+msgstr "Carte de Crédit"
+
+msgctxt "selection:party.bank_account_number,kind:"
+msgid "IBAN"
+msgstr "IBAN"
+
+msgctxt "selection:party.bank_account_number,kind:"
+msgid "Other"
+msgstr "Autre"
+
+msgctxt "selection:party.bank_account_number,kind:"
+msgid "RIB"
+msgstr "RIB"
+
+msgctxt "view:company.company:"
+msgid "Bank"
+msgstr "Bank"
+
+msgctxt "view:company.employee:"
+msgid "General"
+msgstr "Général"
+
+msgctxt "view:party.party:"
+msgid "Bank accounts"
+msgstr "Comptes Bancaires"

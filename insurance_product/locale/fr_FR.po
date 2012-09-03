@@ -2,3 +2,902 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:ins_product.coverage:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
+
+msgctxt "error:ins_product.generic_business_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "Vous ne pouvez pas avoir deux règles métiers qui se chevauchent"
+
+msgctxt "error:ins_product.product:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
+
+msgctxt "field:ins_product.benefit,benefit_mgr:"
+msgid "Benefit Manager"
+msgstr "Gestionnaire de Prestations"
+
+msgctxt "field:ins_product.benefit,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:ins_product.benefit,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:ins_product.benefit,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.benefit,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.benefit,eligibility_mgr:"
+msgid "Eligibility Manager"
+msgstr "Gestionnaire d'éligibilité"
+
+msgctxt "field:ins_product.benefit,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_product.benefit,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.benefit,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.benefit,pricing_mgr:"
+msgid "Pricing Manager"
+msgstr "Gestionnaire de Tarification"
+
+msgctxt "field:ins_product.benefit,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.benefit,reserve_mgr:"
+msgid "Reserve Manager"
+msgstr "Gestionnaire de Provisions"
+
+msgctxt "field:ins_product.benefit,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_product.benefit,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_product.benefit,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.benefit,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.benefit_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de conf"
+
+msgctxt "field:ins_product.benefit_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.benefit_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.benefit_rule,generic_rule:"
+msgid "Generic Rule"
+msgstr "Règle Générique"
+
+msgctxt "field:ins_product.benefit_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.benefit_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.benefit_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:ins_product.benefit_rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_product.benefit_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.benefit_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.business_rule_manager,business_rules:"
+msgid "Business Rules"
+msgstr "Règles Métiers"
+
+msgctxt "field:ins_product.business_rule_manager,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.business_rule_manager,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.business_rule_manager,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.business_rule_manager,offered:"
+msgid "Offered"
+msgstr ""
+
+msgctxt "field:ins_product.business_rule_manager,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.business_rule_manager,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_product.business_rule_manager,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.business_rule_manager,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.business_rule_root,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de conf"
+
+msgctxt "field:ins_product.business_rule_root,generic_rule:"
+msgid "Generic Rule"
+msgstr "Règle Générique"
+
+msgctxt "field:ins_product.business_rule_root,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.business_rule_root,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:ins_product.business_rule_root,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_product.coverage,benefits:"
+msgid "Benefits"
+msgstr "Prestations"
+
+msgctxt "field:ins_product.coverage,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:ins_product.coverage,coverage_amount_mgr:"
+msgid "Coverage Amount Manager"
+msgstr "Gestionnaire de Montant de Couverture"
+
+msgctxt "field:ins_product.coverage,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.coverage,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.coverage,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_product.coverage,eligibility_mgr:"
+msgid "Eligibility Manager"
+msgstr "Gestionnaire d'éligibilité"
+
+msgctxt "field:ins_product.coverage,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_product.coverage,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.coverage,insurer:"
+msgid "Insurer"
+msgstr "Assureur"
+
+msgctxt "field:ins_product.coverage,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.coverage,pricing_mgr:"
+msgid "Pricing Manager"
+msgstr "Gestionnaire de Tarification"
+
+msgctxt "field:ins_product.coverage,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.coverage,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_product.coverage,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_product.coverage,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.coverage,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.coverage_amount_rule,amounts:"
+msgid "Amounts"
+msgstr "Montant"
+
+msgctxt "field:ins_product.coverage_amount_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de conf"
+
+msgctxt "field:ins_product.coverage_amount_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.coverage_amount_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.coverage_amount_rule,generic_rule:"
+msgid "Generic Rule"
+msgstr "Règle Générique"
+
+msgctxt "field:ins_product.coverage_amount_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.coverage_amount_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.coverage_amount_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:ins_product.coverage_amount_rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_product.coverage_amount_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.coverage_amount_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.eligibility_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de conf"
+
+msgctxt "field:ins_product.eligibility_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.eligibility_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.eligibility_rule,generic_rule:"
+msgid "Generic Rule"
+msgstr "Règle Générique"
+
+msgctxt "field:ins_product.eligibility_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.eligibility_rule,is_eligible:"
+msgid "Is Eligible"
+msgstr "Est éligible"
+
+msgctxt "field:ins_product.eligibility_rule,is_sub_elem_eligible:"
+msgid "Sub Elem Eligible"
+msgstr "Sous élement éligible"
+
+msgctxt "field:ins_product.eligibility_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.eligibility_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:ins_product.eligibility_rule,sub_elem_config_kind:"
+msgid "Sub Elem Conf. kind"
+msgstr "Conf. du Sous Element"
+
+msgctxt "field:ins_product.eligibility_rule,sub_elem_rule:"
+msgid "Sub Elem Rule Engine"
+msgstr "Moteur de Règle du Sous Element"
+
+msgctxt "field:ins_product.eligibility_rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_product.eligibility_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.eligibility_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.generic_business_rule,benefit_rule:"
+msgid "Benefit Rule"
+msgstr "Règle de Prestation"
+
+msgctxt "field:ins_product.generic_business_rule,coverage_amount_rule:"
+msgid "Coverage Amount Rule"
+msgstr "Règle de Montant de Couverture"
+
+msgctxt "field:ins_product.generic_business_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.generic_business_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.generic_business_rule,eligibility_rule:"
+msgid "Eligibility Rule"
+msgstr "Règle d'Eligibilité"
+
+msgctxt "field:ins_product.generic_business_rule,end_date:"
+msgid "To Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_product.generic_business_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.generic_business_rule,is_current:"
+msgid "Is current"
+msgstr "Courant"
+
+msgctxt "field:ins_product.generic_business_rule,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_product.generic_business_rule,manager:"
+msgid "Manager"
+msgstr "Gestionnaire"
+
+msgctxt "field:ins_product.generic_business_rule,pricing_rule:"
+msgid "Pricing Rule"
+msgstr "Règle de Tarification"
+
+msgctxt "field:ins_product.generic_business_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.generic_business_rule,reserve_rule:"
+msgid "Reserve Rule"
+msgstr "Règle de Provisionnement"
+
+msgctxt "field:ins_product.generic_business_rule,start_date:"
+msgid "From Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_product.generic_business_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.generic_business_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.offered,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:ins_product.offered,eligibility_mgr:"
+msgid "Eligibility Manager"
+msgstr "Gestionnaire d'éligibilité"
+
+msgctxt "field:ins_product.offered,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_product.offered,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.offered,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.offered,pricing_mgr:"
+msgid "Pricing Manager"
+msgstr "Gestionnaire de Tarification"
+
+msgctxt "field:ins_product.offered,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_product.offered,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_product.pricing_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de conf"
+
+msgctxt "field:ins_product.pricing_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.pricing_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.pricing_rule,currency_digits:"
+msgid "Currency Digits"
+msgstr "Nombre de chiffres après la virgule"
+
+msgctxt "field:ins_product.pricing_rule,generic_rule:"
+msgid "Generic Rule"
+msgstr "Règle Générique"
+
+msgctxt "field:ins_product.pricing_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.pricing_rule,per_sub_elem_price:"
+msgid "Amount per Covered Element"
+msgstr "Montant par élement couvert"
+
+msgctxt "field:ins_product.pricing_rule,price:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:ins_product.pricing_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.pricing_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:ins_product.pricing_rule,sub_elem_config_kind:"
+msgid "Sub Elem Conf. kind"
+msgstr "Conf. du Sous Element"
+
+msgctxt "field:ins_product.pricing_rule,sub_elem_rule:"
+msgid "Sub Elem Rule Engine"
+msgstr "Moteur de Règle du Sous Element"
+
+msgctxt "field:ins_product.pricing_rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_product.pricing_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.pricing_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.product,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:ins_product.product,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.product,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.product,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_product.product,eligibility_mgr:"
+msgid "Eligibility Manager"
+msgstr "Gestionnaire d'éligibilité"
+
+msgctxt "field:ins_product.product,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_product.product,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.product,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.product,options:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt "field:ins_product.product,pricing_mgr:"
+msgid "Pricing Manager"
+msgstr "Gestionnaire de Tarification"
+
+msgctxt "field:ins_product.product,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.product,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_product.product,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_product.product,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.product,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.product-options-coverage,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:ins_product.product-options-coverage,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.product-options-coverage,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.product-options-coverage,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.product-options-coverage,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:ins_product.product-options-coverage,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.product-options-coverage,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.product-options-coverage,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.reserve_rule,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:ins_product.reserve_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de conf"
+
+msgctxt "field:ins_product.reserve_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.reserve_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.reserve_rule,currency_digits:"
+msgid "Currency Digits"
+msgstr "Nombre de chiffres après la virgule"
+
+msgctxt "field:ins_product.reserve_rule,generic_rule:"
+msgid "Generic Rule"
+msgstr "Règle Générique"
+
+msgctxt "field:ins_product.reserve_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.reserve_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.reserve_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:ins_product.reserve_rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_product.reserve_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.reserve_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.rule_sets.contract,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.rule_sets.person,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "help:ins_product.coverage_amount_rule,amounts:"
+msgid "Specify amounts separated by ;"
+msgstr "Spécifier les montants séparés par des ;"
+
+msgctxt "model:ins_product.benefit,name:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "model:ins_product.benefit_rule,name:"
+msgid "Benefit Rule"
+msgstr "Règle de Prestation"
+
+msgctxt "model:ins_product.business_rule_manager,name:"
+msgid "Business Rule Manager"
+msgstr "Gestionnaire de Règle Métier"
+
+msgctxt "model:ins_product.business_rule_root,name:"
+msgid "Business Rule Root"
+msgstr "Règle Métier Racine"
+
+msgctxt "model:ins_product.coverage,name:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "model:ins_product.coverage_amount_rule,name:"
+msgid "Coverage Amount Rule"
+msgstr "Règle de Montant de Couverture"
+
+msgctxt "model:ins_product.eligibility_rule,name:"
+msgid "Eligibility Rule"
+msgstr "Règle d'Eligibilité"
+
+msgctxt "model:ins_product.generic_business_rule,name:"
+msgid "Generic Business Rule"
+msgstr "Règle Métier Générique"
+
+msgctxt "model:ins_product.offered,name:"
+msgid "Offered"
+msgstr ""
+
+msgctxt "model:ins_product.pricing_rule,name:"
+msgid "Pricing Rule"
+msgstr "Règle de Tarification"
+
+msgctxt "model:ins_product.product,name:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "model:ins_product.product-options-coverage,name:"
+msgid "Define Product - Coverage relations"
+msgstr "Relations Produit Garantie"
+
+msgctxt "model:ins_product.reserve_rule,name:"
+msgid "Reserve Rule"
+msgstr "Règle de Provisionnement"
+
+msgctxt "model:ins_product.rule_sets.contract,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ins_product.rule_sets.person,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ir.action,name:act_coverage_form"
+msgid "Coverages"
+msgstr "Garanties"
+
+msgctxt "model:ir.action,name:act_product_form"
+msgid "Products"
+msgstr "Produits"
+
+msgctxt "model:ir.ui.menu,name:menu_coverage_form"
+msgid "Coverages"
+msgstr "Garanties"
+
+msgctxt "model:ir.ui.menu,name:menu_product"
+msgid "Laboratory"
+msgstr "Laboratoire"
+
+msgctxt "model:ir.ui.menu,name:menu_product_configuration"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt "model:ir.ui.menu,name:menu_product_form"
+msgid "Products"
+msgstr "Produits"
+
+msgctxt "selection:ins_product.benefit_rule,config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_product.benefit_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_product.business_rule_root,config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_product.business_rule_root,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_product.coverage_amount_rule,config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_product.coverage_amount_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_product.eligibility_rule,config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_product.eligibility_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_product.eligibility_rule,sub_elem_config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_product.eligibility_rule,sub_elem_config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_product.pricing_rule,config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_product.pricing_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_product.pricing_rule,sub_elem_config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_product.pricing_rule,sub_elem_config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_product.reserve_rule,config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_product.reserve_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "view:ins_product.benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "view:ins_product.benefit:"
+msgid "Reserve"
+msgstr "Provision"
+
+msgctxt "view:ins_product.benefit_rule:"
+msgid "benefit rule"
+msgstr "Règle de Prestation"
+
+msgctxt "view:ins_product.business_rule_manager:"
+msgid "Business Rule Manager"
+msgstr "Gestionnaire de Règle Métier"
+
+msgctxt "view:ins_product.business_rule_root:"
+msgid "Business Rule Root"
+msgstr "Règle Métier Racine"
+
+msgctxt "view:ins_product.business_rule_root:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "view:ins_product.business_rule_root:"
+msgid "Simple Settings"
+msgstr "Paramétrage Simple"
+
+msgctxt "view:ins_product.coverage:"
+msgid "Benefits"
+msgstr "Prestations"
+
+msgctxt "view:ins_product.coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "view:ins_product.coverage:"
+msgid "Coverage Amount"
+msgstr "Montant de Couverture"
+
+msgctxt "view:ins_product.coverage_amount_rule:"
+msgid "Coverage Amount rule"
+msgstr "Règle de Montant de Couverture"
+
+msgctxt "view:ins_product.eligibility_rule:"
+msgid "Eligibility rule"
+msgstr "Règle d'Eligibilité"
+
+msgctxt "view:ins_product.eligibility_rule:"
+msgid "Sub Elem - Simple Settings"
+msgstr "Sous Element - Param. Simple"
+
+msgctxt "view:ins_product.eligibility_rule:"
+msgid "Sub Elem Rule Engine"
+msgstr "Moteur de Règle du Sous Element"
+
+msgctxt "view:ins_product.generic_business_rule:"
+msgid "Generic Business Rule"
+msgstr "Règle Métier Générique"
+
+msgctxt "view:ins_product.offered:"
+msgid "Administration"
+msgstr "Administration"
+
+msgctxt "view:ins_product.offered:"
+msgid "Eligibilty"
+msgstr "Eligibilité"
+
+msgctxt "view:ins_product.offered:"
+msgid "Managers"
+msgstr "Gestionnaires"
+
+msgctxt "view:ins_product.offered:"
+msgid "Offered"
+msgstr ""
+
+msgctxt "view:ins_product.offered:"
+msgid "Pricing"
+msgstr "Tarification"
+
+msgctxt "view:ins_product.pricing_rule:"
+msgid "Pricing rule"
+msgstr "Règle de Tarification"
+
+msgctxt "view:ins_product.pricing_rule:"
+msgid "Sub Elem - Rule Engine"
+msgstr "Sous Element - Moteur de Règle"
+
+msgctxt "view:ins_product.pricing_rule:"
+msgid "Sub Elem - Simple Settings"
+msgstr "Sous Element - Param. Simple"
+
+msgctxt "view:ins_product.product:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt "view:ins_product.product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "view:ins_product.reserve_rule:"
+msgid "Reserve rule"
+msgstr "Règle de Provisionnement"

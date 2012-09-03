@@ -2,3 +2,1448 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:ins_collective.coverage:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
+
+msgctxt "error:ins_collective.generic_business_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "Vous ne pouvez pas avoir deux règles métiers qui se chevauchent"
+
+msgctxt "error:ins_collective.product:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
+
+msgctxt "field:ins_collective.benefit,benefit_mgr:"
+msgid "Benefit Manager"
+msgstr "Gestionnaire de Prestations"
+
+msgctxt "field:ins_collective.benefit,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:ins_collective.benefit,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:ins_collective.benefit,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.benefit,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.benefit,eligibility_mgr:"
+msgid "Eligibility Manager"
+msgstr "Gestionnaire d'éligibilité"
+
+msgctxt "field:ins_collective.benefit,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_collective.benefit,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.benefit,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.benefit,pricing_mgr:"
+msgid "Pricing Manager"
+msgstr "Gestionnaire de Tarification"
+
+msgctxt "field:ins_collective.benefit,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.benefit,reserve_mgr:"
+msgid "Reserve Manager"
+msgstr "Gestionnaire de Provisions"
+
+msgctxt "field:ins_collective.benefit,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_collective.benefit,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_collective.benefit,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.benefit,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.benefit_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de conf"
+
+msgctxt "field:ins_collective.benefit_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.benefit_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.benefit_rule,generic_rule:"
+msgid "Generic Rule"
+msgstr "Règle Générique"
+
+msgctxt "field:ins_collective.benefit_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.benefit_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.benefit_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:ins_collective.benefit_rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_collective.benefit_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.benefit_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.business_rule_manager,business_rules:"
+msgid "Business Rules"
+msgstr "Règles Métiers"
+
+msgctxt "field:ins_collective.business_rule_manager,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.business_rule_manager,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.business_rule_manager,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.business_rule_manager,offered:"
+msgid "Offered"
+msgstr ""
+
+msgctxt "field:ins_collective.business_rule_manager,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.business_rule_manager,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_collective.business_rule_manager,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.business_rule_manager,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.coverage,benefits:"
+msgid "Benefits"
+msgstr "Prestations"
+
+msgctxt "field:ins_collective.coverage,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:ins_collective.coverage,coverage_amount_mgr:"
+msgid "Coverage Amount Manager"
+msgstr "Gestionnaire de Montant de Couverture"
+
+msgctxt "field:ins_collective.coverage,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.coverage,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.coverage,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_collective.coverage,eligibility_mgr:"
+msgid "Eligibility Manager"
+msgstr "Gestionnaire d'éligibilité"
+
+msgctxt "field:ins_collective.coverage,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_collective.coverage,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.coverage,insurer:"
+msgid "Insurer"
+msgstr "Assureur"
+
+msgctxt "field:ins_collective.coverage,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.coverage,pricing_mgr:"
+msgid "Pricing Manager"
+msgstr "Gestionnaire de Tarification"
+
+msgctxt "field:ins_collective.coverage,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.coverage,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_collective.coverage,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_collective.coverage,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.coverage,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.coverage_amount_rule,amounts:"
+msgid "Amounts"
+msgstr "Montant"
+
+msgctxt "field:ins_collective.coverage_amount_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de conf"
+
+msgctxt "field:ins_collective.coverage_amount_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.coverage_amount_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.coverage_amount_rule,generic_rule:"
+msgid "Generic Rule"
+msgstr "Règle Générique"
+
+msgctxt "field:ins_collective.coverage_amount_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.coverage_amount_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.coverage_amount_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:ins_collective.coverage_amount_rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_collective.coverage_amount_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.coverage_amount_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.eligibility_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de conf"
+
+msgctxt "field:ins_collective.eligibility_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.eligibility_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.eligibility_rule,generic_rule:"
+msgid "Generic Rule"
+msgstr "Règle Générique"
+
+msgctxt "field:ins_collective.eligibility_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.eligibility_rule,is_eligible:"
+msgid "Is Eligible"
+msgstr "Est éligible"
+
+msgctxt "field:ins_collective.eligibility_rule,is_sub_elem_eligible:"
+msgid "Sub Elem Eligible"
+msgstr "Sous élement éligible"
+
+msgctxt "field:ins_collective.eligibility_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.eligibility_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:ins_collective.eligibility_rule,sub_elem_config_kind:"
+msgid "Sub Elem Conf. kind"
+msgstr "Conf. du Sous Element"
+
+msgctxt "field:ins_collective.eligibility_rule,sub_elem_rule:"
+msgid "Sub Elem Rule Engine"
+msgstr "Moteur de Règle du Sous Element"
+
+msgctxt "field:ins_collective.eligibility_rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_collective.eligibility_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.eligibility_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.enrollment,billing_manager:"
+msgid "Billing Manager"
+msgstr "Gestionnaire de Facturation"
+
+msgctxt "field:ins_collective.enrollment,broker_manager:"
+msgid "Broker Manager"
+msgstr "Gestionnaire de Courtier"
+
+msgctxt "field:ins_collective.enrollment,contract_number:"
+msgid "Contract Number"
+msgstr "Numéro de Contrat"
+
+msgctxt "field:ins_collective.enrollment,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.enrollment,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.enrollment,extension_car:"
+msgid "Car Extension"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment,extension_life:"
+msgid "Life Extension"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.enrollment,master:"
+msgid "Master"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment,on_contract:"
+msgid "GBP Contract"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment,options:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt "field:ins_collective.enrollment,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:ins_collective.enrollment,product_extension:"
+msgid "Product Extension"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.enrollment,start_date:"
+msgid "Effective Date"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment,start_management_date:"
+msgid "Management Date"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment,status:"
+msgid "Status"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment,subscriber:"
+msgid "Subscriber"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.enrollment,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.enrollment_process.coverage_displayer,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:ins_collective.enrollment_process.coverage_displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt ""
+"field:ins_collective.enrollment_process.coverage_displayer,start_date:"
+msgid "From Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_collective.enrollment_process.coverage_displayer,status:"
+msgid "Status"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment_process.option_selection,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.enrollment_process.option_selection,options:"
+msgid "Options Choices"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment_process.option_selection,session_id:"
+msgid "Session Id"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment_process.process_state,cur_action:"
+msgid "Current Action"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment_process.process_state,cur_step:"
+msgid "Current step"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment_process.process_state,cur_step_desc:"
+msgid "Step Descriptor"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment_process.process_state,errors:"
+msgid "Errors"
+msgstr ""
+
+msgctxt ""
+"field:ins_collective.enrollment_process.process_state,for_contract_db:"
+msgid "for_contract"
+msgstr ""
+
+msgctxt ""
+"field:ins_collective.enrollment_process.process_state,for_contract_str:"
+msgid "Jsonfor_contract"
+msgstr ""
+
+msgctxt ""
+"field:ins_collective.enrollment_process.process_state,from_susp_process:"
+msgid "From Process"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment_process.process_state,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.enrollment_process.process_state,on_product:"
+msgid "On Product Process"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment_process.process_state,process_desc:"
+msgid "Process Description"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment_process.project,broker:"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "field:ins_collective.enrollment_process.project,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.enrollment_process.project,on_contract:"
+msgid "GBP Contract"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment_process.project,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:ins_collective.enrollment_process.project,session_id:"
+msgid "Session Id"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment_process.project,start_date:"
+msgid "Effective Date"
+msgstr ""
+
+msgctxt "field:ins_collective.enrollment_process.project,subscriber:"
+msgid "Subscriber"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_contract,billing_manager:"
+msgid "Billing Manager"
+msgstr "Gestionnaire de Facturation"
+
+msgctxt "field:ins_collective.gbp_contract,broker_manager:"
+msgid "Broker Manager"
+msgstr "Gestionnaire de Courtier"
+
+msgctxt "field:ins_collective.gbp_contract,contact:"
+msgid "Contact"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_contract,contract_number:"
+msgid "Contract Number"
+msgstr "Numéro de Contrat"
+
+msgctxt "field:ins_collective.gbp_contract,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.gbp_contract,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.gbp_contract,final_product:"
+msgid "Final Product"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_contract,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.gbp_contract,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.gbp_contract,start_date:"
+msgid "Effective Date"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_contract,start_management_date:"
+msgid "Management Date"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_contract,status:"
+msgid "Status"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_contract,subscriber:"
+msgid "Subscriber"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_contract,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.gbp_contract,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.gbp_subs_process.extension_gbp,contact:"
+msgid "Subscriber Contact"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_subs_process.extension_gbp,final_product:"
+msgid "Final Product"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_subs_process.extension_gbp,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.gbp_subs_process.extension_gbp,session_id:"
+msgid "Session Id"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_subs_process.process_state,cur_action:"
+msgid "Current Action"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_subs_process.process_state,cur_step:"
+msgid "Current step"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_subs_process.process_state,cur_step_desc:"
+msgid "Step Descriptor"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_subs_process.process_state,errors:"
+msgid "Errors"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_subs_process.process_state,for_contract_db:"
+msgid "for_contract"
+msgstr ""
+
+msgctxt ""
+"field:ins_collective.gbp_subs_process.process_state,for_contract_str:"
+msgid "Jsonfor_contract"
+msgstr ""
+
+msgctxt ""
+"field:ins_collective.gbp_subs_process.process_state,from_susp_process:"
+msgid "From Process"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_subs_process.process_state,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.gbp_subs_process.process_state,on_product:"
+msgid "On Product Process"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_subs_process.process_state,process_desc:"
+msgid "Process Description"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_subs_process.project,broker:"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "field:ins_collective.gbp_subs_process.project,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.gbp_subs_process.project,session_id:"
+msgid "Session Id"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_subs_process.project,start_date:"
+msgid "Effective Date"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_subs_process.project,subscriber:"
+msgid "Subscriber"
+msgstr ""
+
+msgctxt "field:ins_collective.generic_business_rule,benefit_rule:"
+msgid "Benefit Rule"
+msgstr "Règle de Prestation"
+
+msgctxt "field:ins_collective.generic_business_rule,coverage_amount_rule:"
+msgid "Coverage Amount Rule"
+msgstr "Règle de Montant de Couverture"
+
+msgctxt "field:ins_collective.generic_business_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.generic_business_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.generic_business_rule,eligibility_rule:"
+msgid "Eligibility Rule"
+msgstr "Règle d'Eligibilité"
+
+msgctxt "field:ins_collective.generic_business_rule,end_date:"
+msgid "To Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_collective.generic_business_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.generic_business_rule,is_current:"
+msgid "Is current"
+msgstr "Courant"
+
+msgctxt "field:ins_collective.generic_business_rule,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_collective.generic_business_rule,manager:"
+msgid "Manager"
+msgstr "Gestionnaire"
+
+msgctxt "field:ins_collective.generic_business_rule,pricing_rule:"
+msgid "Pricing Rule"
+msgstr "Règle de Tarification"
+
+msgctxt "field:ins_collective.generic_business_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.generic_business_rule,reserve_rule:"
+msgid "Reserve Rule"
+msgstr "Règle de Provisionnement"
+
+msgctxt "field:ins_collective.generic_business_rule,start_date:"
+msgid "From Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_collective.generic_business_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.generic_business_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.option,contract:"
+msgid "Contract"
+msgstr ""
+
+msgctxt "field:ins_collective.option,coverage:"
+msgid "Offered Coverage"
+msgstr ""
+
+msgctxt "field:ins_collective.option,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.option,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.option,end_date:"
+msgid "Effective_date"
+msgstr ""
+
+msgctxt "field:ins_collective.option,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.option,option_data:"
+msgid "Option Data"
+msgstr ""
+
+msgctxt "field:ins_collective.option,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.option,start_date:"
+msgid "Effective Date"
+msgstr ""
+
+msgctxt "field:ins_collective.option,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.option,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.pricing_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de conf"
+
+msgctxt "field:ins_collective.pricing_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.pricing_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.pricing_rule,currency_digits:"
+msgid "Currency Digits"
+msgstr "Nombre de chiffres après la virgule"
+
+msgctxt "field:ins_collective.pricing_rule,generic_rule:"
+msgid "Generic Rule"
+msgstr "Règle Générique"
+
+msgctxt "field:ins_collective.pricing_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.pricing_rule,per_sub_elem_price:"
+msgid "Amount per Covered Element"
+msgstr "Montant par élement couvert"
+
+msgctxt "field:ins_collective.pricing_rule,price:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:ins_collective.pricing_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.pricing_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:ins_collective.pricing_rule,sub_elem_config_kind:"
+msgid "Sub Elem Conf. kind"
+msgstr "Conf. du Sous Element"
+
+msgctxt "field:ins_collective.pricing_rule,sub_elem_rule:"
+msgid "Sub Elem Rule Engine"
+msgstr "Moteur de Règle du Sous Element"
+
+msgctxt "field:ins_collective.pricing_rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_collective.pricing_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.pricing_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.product,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:ins_collective.product,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.product,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.product,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_collective.product,eligibility_mgr:"
+msgid "Eligibility Manager"
+msgstr "Gestionnaire d'éligibilité"
+
+msgctxt "field:ins_collective.product,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_collective.product,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.product,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.product,options:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt "field:ins_collective.product,pricing_mgr:"
+msgid "Pricing Manager"
+msgstr "Gestionnaire de Tarification"
+
+msgctxt "field:ins_collective.product,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.product,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_collective.product,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_collective.product,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.product,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.product-options-coverage,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:ins_collective.product-options-coverage,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.product-options-coverage,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.product-options-coverage,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.product-options-coverage,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:ins_collective.product-options-coverage,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.product-options-coverage,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.product-options-coverage,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.reserve_rule,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:ins_collective.reserve_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de conf"
+
+msgctxt "field:ins_collective.reserve_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.reserve_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.reserve_rule,currency_digits:"
+msgid "Currency Digits"
+msgstr "Nombre de chiffres après la virgule"
+
+msgctxt "field:ins_collective.reserve_rule,generic_rule:"
+msgid "Generic Rule"
+msgstr "Règle Générique"
+
+msgctxt "field:ins_collective.reserve_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.reserve_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.reserve_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:ins_collective.reserve_rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_collective.reserve_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.reserve_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "help:ins_collective.coverage_amount_rule,amounts:"
+msgid "Specify amounts separated by ;"
+msgstr "Spécifier les montants séparés par des ;"
+
+msgctxt "model:ins_collective.benefit,name:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "model:ins_collective.benefit_rule,name:"
+msgid "Benefit Rule"
+msgstr "Règle de Prestation"
+
+msgctxt "model:ins_collective.business_rule_manager,name:"
+msgid "Group Business Rule Manager"
+msgstr ""
+
+msgctxt "model:ins_collective.coverage,name:"
+msgid "Group Insurance Coverage"
+msgstr ""
+
+msgctxt "model:ins_collective.coverage_amount_rule,name:"
+msgid "Coverage Amount Rule"
+msgstr "Règle de Montant de Couverture"
+
+msgctxt "model:ins_collective.eligibility_rule,name:"
+msgid "Eligibility Rule"
+msgstr "Règle d'Eligibilité"
+
+msgctxt "model:ins_collective.enrollment,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ins_collective.enrollment_process.coverage_displayer,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ins_collective.enrollment_process.option_selection,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ins_collective.enrollment_process.process_state,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ins_collective.enrollment_process.project,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ins_collective.gbp_contract,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ins_collective.gbp_subs_process.extension_gbp,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ins_collective.gbp_subs_process.process_state,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ins_collective.gbp_subs_process.project,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ins_collective.generic_business_rule,name:"
+msgid "Group Generic Business Rule"
+msgstr ""
+
+msgctxt "model:ins_collective.option,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ins_collective.pricing_rule,name:"
+msgid "Pricing Rule"
+msgstr "Règle de Tarification"
+
+msgctxt "model:ins_collective.product,name:"
+msgid "Group Insurance Plan"
+msgstr ""
+
+msgctxt "model:ins_collective.product-options-coverage,name:"
+msgid "Define Group Insurance Plan - Coverage relations"
+msgstr ""
+
+msgctxt "model:ins_collective.reserve_rule,name:"
+msgid "Reserve Rule"
+msgstr "Règle de Provisionnement"
+
+msgctxt "model:ir.action,name:act_coverage_form"
+msgid "Plan Coverages"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_enrollment_form"
+msgid "Enrollment"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_gbp_contract_form"
+msgid "GBP Contract"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_product_form"
+msgid "Insurance Plan"
+msgstr ""
+
+msgctxt "model:ir.action,name:enrollment_view_action"
+msgid "New Enrollment"
+msgstr ""
+
+msgctxt "model:ir.action,name:gbp_project_view_action"
+msgid "New GBP Subscription Process"
+msgstr ""
+
+msgctxt "model:ir.action,name:resume_enrollment_process"
+msgid "Resume Process"
+msgstr ""
+
+msgctxt "model:ir.action,name:resume_gbp_subs_process"
+msgid "Resume Process"
+msgstr ""
+
+msgctxt "model:ir.ui.menu,name:menu_coverage_form"
+msgid "Plan Coverages"
+msgstr ""
+
+msgctxt "model:ir.ui.menu,name:menu_enrollment_form"
+msgid "Enrollment"
+msgstr ""
+
+msgctxt "model:ir.ui.menu,name:menu_gbp_contract_form"
+msgid "GBP Contract"
+msgstr ""
+
+msgctxt "model:ir.ui.menu,name:menu_product_form"
+msgid "Insurance Plan"
+msgstr ""
+
+msgctxt "model:ir.ui.menu,name:menu_start_enroll"
+msgid "New Enrollment"
+msgstr ""
+
+msgctxt "model:ir.ui.menu,name:menu_start_gbp_subs"
+msgid "New GBP Subscription Process"
+msgstr ""
+
+msgctxt "selection:ins_collective.benefit_rule,config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_collective.benefit_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_collective.coverage_amount_rule,config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_collective.coverage_amount_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_collective.eligibility_rule,config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_collective.eligibility_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_collective.eligibility_rule,sub_elem_config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_collective.eligibility_rule,sub_elem_config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_collective.enrollment,master:"
+msgid "Contract"
+msgstr ""
+
+msgctxt "selection:ins_collective.enrollment,master:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "selection:ins_collective.enrollment,status:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "selection:ins_collective.enrollment,status:"
+msgid "Hold"
+msgstr ""
+
+msgctxt "selection:ins_collective.enrollment,status:"
+msgid "Quote"
+msgstr ""
+
+msgctxt "selection:ins_collective.enrollment,status:"
+msgid "Terminated"
+msgstr ""
+
+msgctxt ""
+"selection:ins_collective.enrollment_process.coverage_displayer,status:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt ""
+"selection:ins_collective.enrollment_process.coverage_displayer,status:"
+msgid "Refused"
+msgstr ""
+
+msgctxt ""
+"selection:ins_collective.enrollment_process.process_state,cur_action:"
+msgid "cancel"
+msgstr ""
+
+msgctxt ""
+"selection:ins_collective.enrollment_process.process_state,cur_action:"
+msgid "check"
+msgstr ""
+
+msgctxt ""
+"selection:ins_collective.enrollment_process.process_state,cur_action:"
+msgid "complete"
+msgstr ""
+
+msgctxt ""
+"selection:ins_collective.enrollment_process.process_state,cur_action:"
+msgid "go_next"
+msgstr ""
+
+msgctxt ""
+"selection:ins_collective.enrollment_process.process_state,cur_action:"
+msgid "go_previous"
+msgstr ""
+
+msgctxt ""
+"selection:ins_collective.enrollment_process.process_state,cur_action:"
+msgid "suspend"
+msgstr ""
+
+msgctxt "selection:ins_collective.gbp_contract,status:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "selection:ins_collective.gbp_contract,status:"
+msgid "Hold"
+msgstr ""
+
+msgctxt "selection:ins_collective.gbp_contract,status:"
+msgid "Quote"
+msgstr ""
+
+msgctxt "selection:ins_collective.gbp_contract,status:"
+msgid "Terminated"
+msgstr ""
+
+msgctxt "selection:ins_collective.gbp_subs_process.process_state,cur_action:"
+msgid "cancel"
+msgstr ""
+
+msgctxt "selection:ins_collective.gbp_subs_process.process_state,cur_action:"
+msgid "check"
+msgstr ""
+
+msgctxt "selection:ins_collective.gbp_subs_process.process_state,cur_action:"
+msgid "complete"
+msgstr ""
+
+msgctxt "selection:ins_collective.gbp_subs_process.process_state,cur_action:"
+msgid "go_next"
+msgstr ""
+
+msgctxt "selection:ins_collective.gbp_subs_process.process_state,cur_action:"
+msgid "go_previous"
+msgstr ""
+
+msgctxt "selection:ins_collective.gbp_subs_process.process_state,cur_action:"
+msgid "suspend"
+msgstr ""
+
+msgctxt "selection:ins_collective.pricing_rule,config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_collective.pricing_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_collective.pricing_rule,sub_elem_config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_collective.pricing_rule,sub_elem_config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_collective.reserve_rule,config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_collective.reserve_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "view:ins_collective.gbp_contract:"
+msgid "Contract"
+msgstr ""
+
+msgctxt "view:ins_collective.gbp_contract:"
+msgid "GBP Administration"
+msgstr ""
+
+msgctxt "view:ins_collective.gbp_contract:"
+msgid "GBP Product"
+msgstr ""
+
+msgctxt "view:ins_collective.gbp_contract:"
+msgid "contract"
+msgstr ""
+
+msgctxt "view:ins_collective.gbp_subs_process.extension_gbp:"
+msgid "GBP Subscription Process - GBP"
+msgstr ""
+
+msgctxt "view:ins_collective.gbp_subs_process.project:"
+msgid "GBP Subscription Process - Project Step"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,extension_life,steps_cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,extension_life,steps_check:"
+msgid "Check"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,extension_life,steps_complete:"
+msgid "Complete"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,extension_life,steps_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,extension_life,steps_previous:"
+msgid "Previous"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,extension_life,steps_suspend:"
+msgid "Suspend"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,option_selection,steps_cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,option_selection,steps_check:"
+msgid "Check"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,option_selection,steps_complete:"
+msgid "Complete"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,option_selection,steps_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,option_selection,steps_previous:"
+msgid "Previous"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,option_selection,steps_suspend:"
+msgid "Suspend"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,project,steps_cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:ins_collective.enrollment_process,project,steps_check:"
+msgid "Check"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,project,steps_complete:"
+msgid "Complete"
+msgstr ""
+
+msgctxt "wizard_button:ins_collective.enrollment_process,project,steps_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,project,steps_previous:"
+msgid "Previous"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,project,steps_suspend:"
+msgid "Suspend"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,summary,steps_cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:ins_collective.enrollment_process,summary,steps_check:"
+msgid "Check"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,summary,steps_complete:"
+msgid "Complete"
+msgstr ""
+
+msgctxt "wizard_button:ins_collective.enrollment_process,summary,steps_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,summary,steps_previous:"
+msgid "Previous"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.enrollment_process,summary,steps_suspend:"
+msgid "Suspend"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.gbp_subs_process,extension_gbp,steps_cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:ins_collective.gbp_subs_process,extension_gbp,steps_check:"
+msgid "Check"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.gbp_subs_process,extension_gbp,steps_complete:"
+msgid "Complete"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.gbp_subs_process,extension_gbp,steps_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:ins_collective.gbp_subs_process,extension_gbp,steps_previous:"
+msgid "Previous"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.gbp_subs_process,extension_gbp,steps_suspend:"
+msgid "Suspend"
+msgstr ""
+
+msgctxt "wizard_button:ins_collective.gbp_subs_process,project,steps_cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:ins_collective.gbp_subs_process,project,steps_check:"
+msgid "Check"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_collective.gbp_subs_process,project,steps_complete:"
+msgid "Complete"
+msgstr ""
+
+msgctxt "wizard_button:ins_collective.gbp_subs_process,project,steps_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:ins_collective.gbp_subs_process,project,steps_previous:"
+msgid "Previous"
+msgstr ""
+
+msgctxt "wizard_button:ins_collective.gbp_subs_process,project,steps_suspend:"
+msgid "Suspend"
+msgstr ""
