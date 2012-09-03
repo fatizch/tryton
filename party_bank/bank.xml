@@ -60,7 +60,8 @@
 	                    <field name="address" colspan="3"/>
                     </group>
                     <group id="account_number" colspan="3" rowspan="6" yfill="1">
-                        <field name="account_numbers" mode="form,tree" />
+                        <field name="account_numbers" mode="form,tree" 
+                            pre_validate="1"/>
                     </group>
                 </form>
                 ]]>
