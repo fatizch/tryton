@@ -177,12 +177,6 @@
                         position="before">
                         <field name="person" mode="form" yfill="1" yexpand="1" colspan="4"/>
                     </xpath>
-                    <xpath 
-                        expr="/form/notebook"
-                        position="replace_attributes">
-                        <notebook states="{'invisible':True}"/>
-                    </xpath>
-
                 </data>
                 ]]>
             </field>
