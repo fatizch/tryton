@@ -74,7 +74,10 @@ class Offered(CoopView, GetResult):
 
     @staticmethod
     def default_start_date():
-        return Transaction().context.get('start_date')
+        res = Transaction().context.get('start_date')
+        if not res:
+            res = datetime.date.today()
+        return res
 
 
 class Coverage(CoopSQL, Offered):
@@ -528,7 +531,10 @@ class GenericBusinessRule(CoopSQL, CoopView):
 
     @staticmethod
     def default_start_date():
-        return Transaction().context.get('start_date')
+        res = Transaction().context.get('start_date')
+        if not res:
+            res = datetime.date.today()
+        return res
 
     def get_good_rule_from_kind(self):
         for field_name, field_desc in self._fields.iteritems():
@@ -711,3 +717,6 @@ class CoverageAmountRule(CoopSQL, BusinessRuleRoot):
     __name__ = 'ins_product.coverage_amount_rule'
 
     amounts = fields.Char('Amounts', help='Specify amounts separated by ;')
+
+    def give_me_allowed_amounts(self, args):
+        return [(elem, elem) for elem in self.amounts.split(';')]
