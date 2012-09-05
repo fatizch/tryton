@@ -409,7 +409,8 @@ return True'''
                 wizard,
                 wizard.process_state.cur_step_desc)
             self.assertEqual(tmp[0], False)
-            self.assertEqual(tmp[1][0], 'Subscriber too old (max: 40)')
+            self.assertEqual(tmp[1][0], 'GAM option not eligible :')
+            self.assertEqual(tmp[1][1], '\tSubscriber too old (max: 40)')
             wizard.option_selection.options[3].status = 'Refused'
             wizard.option_selection.options[1].status = 'Refused'
             tmp = wizard.option_selection.check_step(
