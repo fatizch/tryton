@@ -24,11 +24,11 @@ def create_persons(models, cfg_dict, relations_kind):
     nb_female = total_nb - nb_male
     path = os.path.join(DIR, cfg_dict.get('language', 'fr')[0:2].lower())
     dicts['male'] = get_name_as_liste(
-        os.path.join(path, 'male.txt'), nb_male)
+        os.path.join(path, 'male'), nb_male)
     dicts['female'] = get_name_as_liste(
-        os.path.join(path, 'female.txt'), nb_female)
+        os.path.join(path, 'female'), nb_female)
     dicts['last_name'] = get_name_as_liste(
-        os.path.join(path, 'last_name.txt'), total_nb)
+        os.path.join(path, 'last_name'), total_nb)
     adult_date_interv = calculate_date_interval(cfg_dict,
         cfg_dict['adult_age_min'], cfg_dict['adult_age_max'])
     children_date_interv = calculate_date_interval(cfg_dict, 1, 18)
@@ -75,8 +75,8 @@ def launch_dice(cfg_dict, probability_name):
 def launch_test_case(cfg_dict):
     models = get_models()
     relations_kind = create_relations_kind(models)
-#    if is_table_empty(models['Person']):
-    create_persons(models, cfg_dict, relations_kind)
+    if is_table_empty(models['Person']):
+        create_persons(models, cfg_dict, relations_kind)
 
 
 def calculate_date_interval(cfg_dict, age_min, age_max):
