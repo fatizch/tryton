@@ -139,6 +139,9 @@ class Actor(CoopView):
     party = fields.Many2One('party.party', 'Party',
                     required=True, ondelete='CASCADE', select=True)
 
+    def get_rec_name(self, name):
+        return self.name
+
 
 class GenericActorKind(TableOfTable):
     'Generic Actor Kind'
