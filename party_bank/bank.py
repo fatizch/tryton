@@ -238,5 +238,6 @@ class BankAccountNumber(CoopSQL, CoopView):
         return self.on_change_sub_rib('key')
 
     def pre_validate(self):
+        print 'toto'
         if not self.check_number():
             self.raise_user_error('invalid_number')

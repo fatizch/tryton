@@ -10,6 +10,11 @@ from proteus import Model
 def get_models():
     res = {}
     res['Product'] = Model.get('ins_product.product')
+    res['TreeElement'] = Model.get('rule_engine.tree_element')
+    res['Context'] = Model.get('rule_engine.context')
+    res['RuleEngine'] = Model.get('rule_engine')
+    res['TestCase'] = Model.get('rule_engine.test_case')
+    res['TestCaseValue'] = Model.get('rule_engine.test_case.value')
     return res
 
 
@@ -96,80 +101,51 @@ def create_AAA_Product(models, code, name):
     product_a.save()
 
 
-def createRule():
-    TreeElement = Model.get('rule_engine.tree_element')
-    Context = Model.get('rule_engine.context')
-    RuleEngine = Model.get('rule_engine')
-    TestCase = Model.get('rule_engine.test_case')
-    TestCaseValue = Model.get('rule_engine.test_case.value')
-
-    te1 = TreeElement()
-    te1.type = 'function'
-    te1.name = 'get_person_name'
-    te1.description = 'Name'
-    te1.namespace = 'ins_product.rule_sets.person'
-
-    te1.save()
-
-    te2 = TreeElement()
-    te2.type = 'function'
-    te2.name = 'get_person_birthdate'
-    te2.description = 'Birthday'
-    te2.namespace = 'ins_product.rule_sets.person'
-
-    te2.save()
-
-    te = TreeElement()
-    te.type = 'folder'
-    te.description = 'Person'
-
-    te.children.append(te1)
-    te.children.append(te2)
-
+def get_or_create_tree_element(models, cur_type, description, name=None,
+        namespace=None):
+    cur_domain = []
+    if cur_type == 'function':
+        cur_domain.append(('namespace', '=', namespace))
+        cur_domain.append(('name', '=', name))
+    if cur_type == 'folder':
+        cur_domain.append(('name', '=', name))
+    tree_elements = models['TreeElement'].find(cur_domain)
+    if len(tree_elements) > 0:
+        return tree_elements[0]
+    te = models['TreeElement']()
+    te.type = cur_type
+    te.name = name
+    te.description = description
+    te.namespace = namespace
     te.save()
+    return te
 
-    te3 = TreeElement()
-    te3.type = 'function'
-    te3.name = 'years_between'
-    te3.description = 'Years between'
-    te3.namespace = 'rule_engine.tools_functions'
 
-    te3.save()
+def append_inexisting_elements(cur_object, list_name, cur_list):
+    cur_list = getattr(cur_object, list_name, [])
+    for child in cur_list:
+        if not child in cur_list:
+            cur_list.append(child)
+    cur_object.save()
+    return cur_object
 
-    te5 = TreeElement()
-    te5.type = 'function'
-    te5.name = 'today'
-    te5.description = 'Today'
-    te5.namespace = 'rule_engine.tools_functions'
 
-    te5.save()
-
-    te6 = TreeElement()
-    te6.type = 'function'
-    te6.name = 'message'
-    te6.description = 'Add message'
-    te6.namespace = 'rule_engine.tools_functions'
-
-    te6.save()
-
-    te4 = TreeElement()
-    te4.type = 'folder'
-    te4.description = 'Tools'
-    te4.children.append(te3)
-    te4.children.append(te5)
-    te4.children.append(te6)
-
-    te4.save()
-
-    ct = Context()
-    ct.name = 'test_context'
-    ct.allowed_elements.append(te)
-    ct.allowed_elements.append(te4)
-
+def get_or_create_context(models, name):
+    contexts = models['Context'].find([('name', '=', name)])
+    if len(contexts) > 0:
+        return contexts[0]
+    ct = models['Context']()
+    ct.name = name
     ct.save()
+    return ct
 
-    rule = RuleEngine()
-    rule.name = 'test_rule'
+
+def create_rule(models, ct, name):
+    rules = models('RuleEngine').find([('name', '=', name)])
+    if len(rules > 0):
+        return rules[0]
+    rule = models('RuleEngine')()
+    rule.name = name
     rule.context = ct
     rule.code = '''
 birthdate = get_person_birthdate()
@@ -178,20 +154,20 @@ if years_between(birthdate, today()) > 40:
     return False
 return True'''
 
-    tcv = TestCaseValue()
+    tcv = models('TestCaseValue')()
     tcv.name = 'get_person_birthdate'
     tcv.value = 'datetime.date(2000, 11, 02)'
 
-    tc = TestCase()
+    tc = models('TestCase')()
     tc.description = 'Test'
     tc.values.append(tcv)
     tc.expected_result = '(True, [], [])'
 
-    tcv1 = TestCaseValue()
+    tcv1 = models('TestCaseValue')()
     tcv1.name = 'get_person_birthdate'
     tcv1.value = 'datetime.date(1950, 11, 02)'
 
-    tc1 = TestCase()
+    tc1 = models('TestCase')()
     tc1.description = 'Test1'
     tc1.values.append(tcv1)
     tc1.expected_result = '(False, ["Subscriber too old (max: 40)"], [])'
@@ -204,6 +180,31 @@ return True'''
     return rule
 
 
+def create_rule_engine_data(models):
+    te1 = get_or_create_tree_element(models, 'function', 'Name',
+        'get_person_name', 'ins_product.rule_sets.person')
+    te2 = get_or_create_tree_element(models, 'function', 'Birthday',
+        'get_person_birthdate', 'ins_product.rule_sets.person')
+    te = get_or_create_tree_element(models, 'folder', 'Person')
+    append_inexisting_elements(te, 'children', [te1, te2])
+
+    te3 = get_or_create_tree_element(models, 'function', 'Years between',
+        'years_between', 'rule_engine.tools_functions')
+    te5 = get_or_create_tree_element(models, 'function', 'Today', 'today',
+        'rule_engine.tools_functions')
+
+    te6 = get_or_create_tree_element(models, 'function', 'Add message',
+        'message', 'rule_engine.tools_functions')
+
+    te4 = get_or_create_tree_element(models, 'folder', 'Tools')
+    append_inexisting_elements(te4, 'children', [te3, te5, te6])
+
+    ct = get_or_create_context(models, 'test_context')
+    append_inexisting_elements(ct, 'allowed_elements', [te, te4])
+
+    return create_rule(models, ct, 'test_rule')
+
+
 def create_BBB_product(models, code, name):
     product_b = create_product(models, code, name)
     if not product_b:
@@ -212,7 +213,7 @@ def create_BBB_product(models, code, name):
     brm = Model.get('ins_product.business_rule_manager')
     gbr = Model.get('ins_product.generic_business_rule')
 
-    rule = createRule()
+    rule = create_rule_engine_data(models)
 
     coverage_a, = coverage.find([('code', '=', 'ALP')], limit=1)
     coverage_b, = coverage.find([('code', '=', 'BET')], limit=1)
