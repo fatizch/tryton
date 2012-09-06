@@ -86,6 +86,8 @@ class Coverage(CoopSQL, Offered):
     __name__ = 'ins_product.coverage'
 
     insurer = fields.Many2One('party.insurer', 'Insurer')
+    family = fields.Selection('get_possible_coverage_family', 'Family',
+        required=True)
     benefits = fields.One2Many('ins_product.benefit', 'coverage', 'Benefits',
         context={'start_date': Eval('start_date')},
         states={'readonly': ~Bool(Eval('start_date'))})
@@ -99,6 +101,12 @@ class Coverage(CoopSQL, Offered):
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
         ]
+
+    @staticmethod
+    def get_possible_coverage_family():
+        return [
+            ('life', 'Life'),
+            ]
 
     def give_me_price(self, args):
         # This method is one of the core of the pricing system. It asks for the
@@ -229,6 +237,10 @@ class Coverage(CoopSQL, Offered):
     def get_currency_digits(self, name):
         if self.currency:
             return self.currency.digits
+
+    @staticmethod
+    def default_family():
+        return 'life'
 
 
 class Product(CoopSQL, Offered):

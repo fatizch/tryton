@@ -39,7 +39,7 @@
                     <field name="start_date"/>
                     <label name="end_date" xalign="0"/>
                     <field name="end_date"/>
-                    <label name="template"/>
+                    <label name="template" xalign="0"/>
                     <field name="template"/>
                     <notebook>
                         <page string="Managers" id="managers">
@@ -152,6 +152,11 @@
                     <label name="insurer" xalign="0"/>
                     <field name="insurer" widget="selection"/>
                 </xpath>
+                <xpath expr="/form/label[@name=&quot;template&quot;]"
+                    position="before">
+                    <label name="family" xalign="0"/>
+                    <field name="family" xexpand="0"/>
+                </xpath>
                 </data>
                 ]]>
             </field>
@@ -160,7 +165,16 @@
             <field name="model">ins_product.coverage</field>
             <field name="type">tree</field>
             <field name="inherit" ref="offered_view_tree"/>
-            <field name="arch" type="xml"/>
+            <field name="arch" type="xml">
+             <![CDATA[
+                <data>
+                <xpath expr="/tree/field[@name=&quot;code&quot;]"
+                    position="after">
+                    <field name="family"/>
+                </xpath>
+                </data>
+            ]]>
+            </field>
         </record>
         
         <!-- View for the main menu and the event -->
