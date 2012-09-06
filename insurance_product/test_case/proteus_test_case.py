@@ -141,10 +141,10 @@ def get_or_create_context(models, name):
 
 
 def create_rule(models, ct, name):
-    rules = models('RuleEngine').find([('name', '=', name)])
-    if len(rules > 0):
+    rules = models['RuleEngine'].find([('name', '=', name)])
+    if len(rules) > 0:
         return rules[0]
-    rule = models('RuleEngine')()
+    rule = models['RuleEngine']()
     rule.name = name
     rule.context = ct
     rule.code = '''
@@ -154,20 +154,20 @@ if years_between(birthdate, today()) > 40:
     return False
 return True'''
 
-    tcv = models('TestCaseValue')()
+    tcv = models['TestCaseValue']()
     tcv.name = 'get_person_birthdate'
     tcv.value = 'datetime.date(2000, 11, 02)'
 
-    tc = models('TestCase')()
+    tc = models['TestCase']()
     tc.description = 'Test'
     tc.values.append(tcv)
     tc.expected_result = '(True, [], [])'
 
-    tcv1 = models('TestCaseValue')()
+    tcv1 = models['TestCaseValue']()
     tcv1.name = 'get_person_birthdate'
     tcv1.value = 'datetime.date(1950, 11, 02)'
 
-    tc1 = models('TestCase')()
+    tc1 = models['TestCase']()
     tc1.description = 'Test1'
     tc1.values.append(tcv1)
     tc1.expected_result = '(False, ["Subscriber too old (max: 40)"], [])'
