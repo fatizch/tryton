@@ -336,13 +336,9 @@ class ProductOptionsCoverage(CoopSQL):
     __name__ = 'ins_product.product-options-coverage'
 
     product = fields.Many2One('ins_product.product',
-                              'Product',
-                              select=1,
-                              required=True)
+        'Product', select=1, required=True, ondelete='CASCADE')
     coverage = fields.Many2One('ins_product.coverage',
-                               'Coverage',
-                               select=1,
-                               required=True)
+        'Coverage', select=1, required=True, ondelete='CASCADE')
 
 
 class BusinessRuleManager(CoopSQL, CoopView, GetResult):
