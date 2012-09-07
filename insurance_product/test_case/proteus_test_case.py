@@ -263,14 +263,10 @@ def create_BBB_product(cfg_dict, code, name):
     brm_c = brm()
     brm_c.business_rules.append(gbr_d)
 
-    coverage_c = coverage()
-    coverage_c.code = 'GAM'
-    coverage_c.name = 'Gamma Coverage'
-    coverage_c.start_date = datetime.date.today()
-
-    coverage_c.eligibility_mgr.append(brm_c)
-
-    try_to_save_object(cfg_dict, coverage_c)
+    coverage_c = get_or_create_coverage(cfg_dict, 'GAM', 'Gamma Coverage')
+    if not coverage_c.id > 0:
+        coverage_c.eligibility_mgr.append(brm_c)
+        try_to_save_object(cfg_dict, coverage_c)
 
     # Coverage D
     gbr_g = gbr()
@@ -284,14 +280,10 @@ def create_BBB_product(cfg_dict, code, name):
     brm_f = brm()
     brm_f.business_rules.append(gbr_g)
 
-    coverage_d = coverage()
-    coverage_d.code = 'DEL'
-    coverage_d.name = 'Delta Coverage'
-    coverage_d.start_date = datetime.date.today()
-
-    coverage_d.eligibility_mgr.append(brm_f)
-
-    try_to_save_object(cfg_dict, coverage_d)
+    coverage_d = get_or_create_coverage(cfg_dict, 'DEL', 'Delta Coverage')
+    if not coverage_d.id > 0:
+        coverage_d.eligibility_mgr.append(brm_f)
+        try_to_save_object(cfg_dict, coverage_d)
 
     # Product Eligibility Manager
     gbr_e = gbr()
