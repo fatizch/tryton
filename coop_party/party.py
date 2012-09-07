@@ -133,14 +133,10 @@ class Actor(CoopView):
     'Actor'
     _inherits = {'party.party': 'party'}
     __name__ = 'party.actor'
-    _rec_name = 'reference'
 
     reference = fields.Char('Reference')
     party = fields.Many2One('party.party', 'Party',
                     required=True, ondelete='CASCADE', select=True)
-
-    def get_rec_name(self, name):
-        return self.name
 
 
 class GenericActorKind(TableOfTable):
