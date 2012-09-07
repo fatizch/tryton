@@ -206,6 +206,10 @@ msgctxt "field:ins_product.coverage,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
+msgctxt "field:ins_product.coverage,family:"
+msgid "Family"
+msgstr "Famille"
+
 msgctxt "field:ins_product.coverage,id:"
 msgid "ID"
 msgstr "ID"
@@ -749,6 +753,10 @@ msgstr "Moteur de Règle"
 msgctxt "selection:ins_product.business_rule_root,config_kind:"
 msgid "Simple"
 msgstr "Simple"
+
+msgctxt "selection:ins_product.coverage,family:"
+msgid "Life"
+msgstr "Prévoyance"
 
 msgctxt "selection:ins_product.coverage_amount_rule,config_kind:"
 msgid "Rule Engine"

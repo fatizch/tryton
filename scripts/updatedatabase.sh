@@ -19,7 +19,7 @@ if test -z $1 ; then
     echo ""
     echo "Update module insurance_party"
     echo ""
-    $TRYTOND_PATH/trytond -d $DATABASE_NAME -c $TRYTOND_CONF -u insurance_party
+    $TRYTOND_PATH/tr    ytond -d $DATABASE_NAME -c $TRYTOND_CONF -u insurance_party
     echo ""
     echo "Update module insurance_party_fr"
     echo ""
@@ -44,6 +44,18 @@ if test -z $1 ; then
     echo "Update module insurance_collective"
     echo ""
     $TRYTOND_PATH/trytond -d $DATABASE_NAME -c $TRYTOND_CONF -u insurance_collective
+    echo ""
+    echo "Update module loan product"
+    echo ""
+    $TRYTOND_PATH/trytond -d $DATABASE_NAME -c $TRYTOND_CONF -u loan_product
+    echo ""
+    echo "Update module P&C product"
+    echo ""
+    $TRYTOND_PATH/trytond -d $DATABASE_NAME -c $TRYTOND_CONF -u property_product
+    echo ""
+    echo "Update module loan product"
+    echo ""
+    $TRYTOND_PATH/trytond -d $DATABASE_NAME -c $TRYTOND_CONF -u health_product
 else
     echo ""
     echo "Update module $1"

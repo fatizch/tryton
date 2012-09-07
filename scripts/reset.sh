@@ -47,4 +47,15 @@ echo "Reinstalling insurance collective"
 echo $SEP
 easy_install -UZ $REPOS_ROOT/coopbusiness/insurance_collective
 echo $SEP
-
+echo "Reinstalling Loan Product"
+echo $SEP
+easy_install -UZ $REPOS_ROOT/coopbusiness/loan_product
+echo $SEP
+echo "Reinstalling P&C Product"
+echo $SEP
+easy_install -UZ $REPOS_ROOT/coopbusiness/property_product
+echo $SEP
+echo "Reinstalling Health Product"
+echo $SEP
+easy_install -UZ $REPOS_ROOT/coopbusiness/health_product
+echo $SEP
