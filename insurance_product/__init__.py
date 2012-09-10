@@ -6,6 +6,7 @@ from product import *
 
 def register():
     Pool.register(
+        # from product
         BusinessRuleManager,
         Offered,
         Coverage,
@@ -15,10 +16,12 @@ def register():
         BusinessRuleRoot,
         PricingRule,
         EligibilityRule,
-        ContractContext,
-        PersonContext,
         Benefit,
         BenefitRule,
         ReserveRule,
         CoverageAmountRule,
+        # from rule_sets
+        SubscriberContext,
+        PersonContext,
+        CoveredDataContext,
         module='insurance_product', type_='model')
