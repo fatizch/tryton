@@ -654,9 +654,9 @@ class EligibilityRule(CoopSQL, BusinessRuleRoot):
         if self.is_sub_elem_eligible:
             details = []
         else:
-            if 'person' in args and 'option' in args:
+            if 'sub_elem' in args and 'option' in args:
                 details = ['%s not eligible for %s' %
-                    (args['person'].name,
+                    (args['sub_elem'].get_name_for_info(),
                     args['option'].coverage.name)]
             else:
                 details = ['Not eligible']
