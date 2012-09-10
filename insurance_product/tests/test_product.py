@@ -46,7 +46,7 @@ class LaboratoryTestCase(unittest.TestCase):
         te1.type = 'function'
         te1.name = 'get_subscriber_name'
         te1.description = 'Name'
-        te1.namespace = 'ins_product.rule_sets.contract'
+        te1.namespace = 'ins_product.rule_sets.subscriber'
 
         te1.save()
 
@@ -54,7 +54,7 @@ class LaboratoryTestCase(unittest.TestCase):
         te2.type = 'function'
         te2.name = 'get_subscriber_birthdate'
         te2.description = 'Birthday'
-        te2.namespace = 'ins_product.rule_sets.contract'
+        te2.namespace = 'ins_product.rule_sets.subscriber'
 
         te2.save()
 

@@ -154,12 +154,25 @@ def get_or_create_tree_element(cfg_dict, cur_type, description, name=None,
     return te
 
 
-def append_inexisting_elements(cfg_dict, cur_object, list_name, cur_list):
-    cur_list = getattr(cur_object, list_name, [])
-    for child in cur_list:
+def append_inexisting_elements(cur_object, list_name, the_list):
+    to_set = False
+    if hasattr(cur_object, list_name):
+        cur_list = getattr(cur_object, list_name)
+        if cur_list is None:
+            cur_list = []
+            to_set = True
+
+    if not isinstance(the_list, (list, tuple)):
+        the_list = [the_list]
+
+    for child in the_list:
         if not child in cur_list:
             cur_list.append(child)
-    try_to_save_object(cfg_dict, cur_object)
+
+    if to_set:
+        setattr(cur_object, list_name, cur_list)
+
+    cur_object.save()
     return cur_object
 
 
@@ -213,27 +226,47 @@ return True'''
     return rule
 
 
+def create_folder_from_set(cfg_dict, set_name, folder_name):
+    the_set = Model.get(set_name)
+    if not the_set:
+        return
+    functions = the_set.get_rules({})
+    tes = []
+    for fun in functions:
+        cur_te = get_or_create_tree_element(
+            cfg_dict, 'function', fun['rule_name'], fun['name'], set_name)
+        tes.append(cur_te)
+    te_top = get_or_create_tree_element(cfg_dict, 'folder', folder_name)
+    append_inexisting_elements(te_top, 'children', tes)
+    te_top.save()
+    return te_top
+
+
 def create_rule_engine_data(cfg_dict):
-    te1 = get_or_create_tree_element(cfg_dict, 'function', 'Name',
-        'get_person_name', 'ins_product.rule_sets.person')
-    te2 = get_or_create_tree_element(cfg_dict, 'function', 'Birthday',
-        'get_person_birthdate', 'ins_product.rule_sets.person')
-    te = get_or_create_tree_element(cfg_dict, 'folder', 'Person')
-    append_inexisting_elements(cfg_dict, te, 'children', [te1, te2])
+    tools = create_folder_from_set(
+        cfg_dict,
+        'rule_engine.tools_functions',
+        'Tools')
 
-    te3 = get_or_create_tree_element(cfg_dict, 'function', 'Years between',
-        'years_between', 'rule_engine.tools_functions')
-    te5 = get_or_create_tree_element(cfg_dict, 'function', 'Today', 'today',
-        'rule_engine.tools_functions')
+    person = create_folder_from_set(
+        cfg_dict,
+        'ins_product.rule_sets.person',
+        'Person')
 
-    te6 = get_or_create_tree_element(cfg_dict, 'function', 'Add message',
-        'message', 'rule_engine.tools_functions')
+    subscriber = create_folder_from_set(
+        cfg_dict,
+        'ins_product.rule_sets.subscriber',
+        'Subscriber')
 
-    te4 = get_or_create_tree_element(cfg_dict, 'folder', 'Tools')
-    append_inexisting_elements(cfg_dict, te4, 'children', [te3, te5, te6])
+    data_coverage = create_folder_from_set(
+        cfg_dict,
+        'ins_product.rule_sets.covered_data',
+        'Coverage Data')
 
     ct = get_or_create_context(cfg_dict, 'test_context')
-    append_inexisting_elements(cfg_dict, ct, 'allowed_elements', [te, te4])
+    append_inexisting_elements(ct, 'allowed_elements', [tools, person])
+
+    ct.save()
 
     return get_or_create_rule(cfg_dict, ct, 'test_rule')
 
