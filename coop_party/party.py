@@ -4,7 +4,7 @@ import copy
 from trytond.model import fields as fields, ModelSQL, ModelView
 from trytond.pyson import Eval
 
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coop_utils import CoopView, CoopSQL
 from trytond.modules.coop_utils import TableOfTable, tuple_index
@@ -107,6 +107,20 @@ class Party:
             return self.company[0].get_rec_name(name)
         return super(Party, self).get_rec_name(name)
 
+    def get_nationality(self):
+        pass
+
+    def get_subscribed_contracts(self):
+        Contract = Pool().get('ins_contract.contract')
+        return Contract.search(['subscriber', '=', self.id])
+
+    def get_relation_with(self, target):
+        kind = set([elem.kind for elem in self.relations
+            if elem.to_party.id == elem.id])
+        if kind:
+            return kind[0]
+        return None
+
 
 class Company(ModelSQL, ModelView):
     'Company'
@@ -171,6 +185,9 @@ class Person(CoopSQL, Actor):
         depends=['gender'])
     birth_date = fields.Date('Birth Date', required=True)
     ssn = fields.Char('SSN')
+    nationality = fields.Many2One(
+        'country.country',
+        'Nationality')
 
     @classmethod
     def __setup__(cls):
@@ -193,3 +210,6 @@ class Person(CoopSQL, Actor):
 
     def get_gender_as_int(self):
         return self.gender_as_int(self.gender)
+
+    def get_nationality(self):
+        return self.nationality

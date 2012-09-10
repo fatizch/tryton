@@ -4,7 +4,6 @@ import datetime
 from trytond.model import fields as fields
 from trytond.pool import Pool
 from trytond.modules.coop_utils import CoopView, CoopSQL, TableOfTable
-from trytond.pyson import Eval
 
 
 __all__ = ['PartyRelationKind', 'PartyRelation']
