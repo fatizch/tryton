@@ -3,10 +3,13 @@ import ast
 import functools
 import json
 import datetime
+import copy
 
 from decimal import Decimal
 
 from dateutil.relativedelta import relativedelta
+
+from trytond.rpc import RPC
 
 from trytond.model import ModelView, ModelSQL, fields
 from trytond.wizard import Wizard, StateView, StateTransition, Button
@@ -19,7 +22,9 @@ from trytond.modules.coop_utils import CoopView
 __all__ = ['Rule', 'Context', 'TreeElement', 'ContextTreeElement', 'TestCase',
     'TestCaseValue', 'TestRule', 'TestRuleStart', 'TestRuleTest',
     'CreateTestValues', 'RunTests', 'RunTestsReport', 'RuleTools',
-    'RuleEngineContext', 'InternalRuleEngineError', 'check_args']
+    'RuleEngineContext', 'InternalRuleEngineError', 'check_args',
+    'for_rule'
+    ]
 
 CODE_TEMPLATE = """
 def %s():
@@ -43,8 +48,16 @@ def check_args(*_args):
                     raise InternalRuleEngineError
                 f.needed_args.append(arg)
             return f(*args, **kwargs)
+        wrap.__name__ = f.__name__
         return wrap
     return decorator
+
+
+def for_rule(rule_name):
+    def wrap(f):
+        f.rule_name = rule_name
+        return f
+    return wrap
 
 
 def safe_eval(source, data=None):
@@ -73,7 +86,23 @@ def noargs_func(value):
 
 
 class RuleEngineContext(CoopView):
-    pass
+
+    @classmethod
+    def get_rules(cls):
+        res = []
+        for elem in dir(cls):
+            elem = getattr(cls, elem)
+            if hasattr(elem, 'rule_name'):
+                tmpres = {}
+                tmpres['name'] = elem.__name__
+                tmpres['rule_name'] = elem.rule_name
+                res.append(tmpres)
+        return res
+
+    @classmethod
+    def __setup__(cls):
+        super(RuleEngineContext, cls).__setup__()
+        cls.__rpc__.update({'get_rules': RPC()})
 
 
 class RuleTools(RuleEngineContext):
@@ -83,6 +112,7 @@ class RuleTools(RuleEngineContext):
     __name__ = 'rule_engine.tools_functions'
 
     @classmethod
+    @for_rule('Years between')
     def years_between(cls, args, date1, date2):
         if (not isinstance(date1, datetime.date)
                 or not isinstance(date2, datetime.date)):
@@ -91,10 +121,12 @@ class RuleTools(RuleEngineContext):
         return relativedelta(date2, date1).years
 
     @classmethod
+    @for_rule('Today')
     def today(cls, args):
         return datetime.date.today()
 
     @classmethod
+    @for_rule('Add Message')
     def message(cls, args, the_message):
         args['messages'].append(the_message)
 
