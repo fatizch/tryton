@@ -16,6 +16,7 @@ from trytond.modules.insurance_process import DependantState
 from trytond.modules.insurance_process import CoopStepView
 
 from trytond.modules.coop_utils import get_descendents, WithAbstract
+from trytond.modules.coop_utils import priority
 
 from contract import OPTIONSTATUS
 
@@ -401,30 +402,7 @@ class ExtensionLifeState(DependantState):
         return (True, [])
 
     @staticmethod
-    def check_step_sub_elem_eligibility(wizard):
-        contract = WithAbstract.get_abstract_objects(wizard, 'for_contract')
-        options = dict([
-            (option.coverage.code, option)
-            for option in contract.options
-            ])
-        res, errs = (True, [])
-        for covered_element in wizard.extension_life.covered_elements:
-            for covered_data in covered_element.covered_data:
-                if not hasattr(
-                        covered_data,
-                        'status') and covered_data.status == 'Active':
-                    continue
-                eligibility, errors = covered_data.for_coverage.get_result(
-                    'sub_elem_eligibility',
-                    {'date': wizard.project.start_date,
-                    'person': covered_element.person,
-                    'option': options[covered_data.for_coverage.code]})
-                res = res and eligibility.eligible
-                errs += eligibility.details
-                errs += errors
-        return (res, errs)
-
-    @staticmethod
+    @priority(0)
     def post_step_update_contract(wizard):
         contract = WithAbstract.get_abstract_objects(wizard, 'for_contract')
         ExtensionLife = Pool().get('ins_contract.extension_life')
@@ -432,7 +410,7 @@ class ExtensionLifeState(DependantState):
         CoveredData = Pool().get('ins_contract.covered_data')
         CoveredPerson = Pool().get('ins_contract.covered_person')
         if hasattr(contract, 'extension_life'):
-            ext = ExtensionLife(contract.extension_life)
+            ext = contract.extension_life
             CoveredElement.delete(ext.covered_elements)
         else:
             ext = ExtensionLife()
@@ -458,8 +436,13 @@ class ExtensionLifeState(DependantState):
 
         ext.save()
         contract.extension_life = ext
-        WithAbstract.save_abstract_objects(wizard, ('for_contract', contract))
-        return (True, [])
+        res = contract.check_sub_elem_eligibility(
+            wizard.project.start_date,
+            'extension_life')
+        if res[0]:
+            WithAbstract.save_abstract_objects(
+                wizard, ('for_contract', contract))
+        return res
 
 
 class PricingLine(CoopStepView):

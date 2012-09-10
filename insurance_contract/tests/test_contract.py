@@ -436,6 +436,10 @@ return True'''
             tmp = wizard.extension_life.check_step(
                 wizard,
                 wizard.process_state.cur_step_desc)
+            self.assertEqual(tmp[0], True)
+            tmp = wizard.extension_life.post_step(
+                wizard,
+                wizard.process_state.cur_step_desc)
             self.assertEqual(tmp[0], False)
             self.assertEqual(
                 tmp[1][0],

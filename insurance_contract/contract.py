@@ -133,6 +133,9 @@ class GenericContract(CoopSQL, CoopView):
     def get_manager_model(self):
         return 'ins_contract.billing_manager'
 
+    def get_product(self):
+        pass
+
 
 class Contract(GenericContract):
     '''
@@ -241,6 +244,33 @@ class Contract(GenericContract):
 
     def get_name_for_billing(self):
         return self.product.name + ' - Base Price'
+
+    def get_product(self):
+        return self.product
+
+    def check_sub_elem_eligibility(self, at_date, ext):
+        options = dict([
+            (option.coverage.code, option)
+            for option in self.options
+            ])
+        res, errs = (True, [])
+        for covered_element in getattr(self, ext).covered_elements:
+            for covered_data in covered_element.covered_data:
+                if (covered_data.start_date > at_date
+                        or hasattr(covered_data, 'end_date') and
+                        covered_data.end_date and
+                        covered_data.end_date > at_date):
+                    continue
+                eligibility, errors = covered_data.for_coverage.get_result(
+                    'sub_elem_eligibility',
+                    {'date': at_date,
+                    'sub_elem': covered_element,
+                    'data': covered_data,
+                    'option': options[covered_data.for_coverage.code]})
+                res = res and eligibility.eligible
+                errs += eligibility.details
+                errs += errors
+        return (res, errs)
 
 
 class Option(CoopSQL, CoopView):
@@ -530,6 +560,9 @@ class CoveredElement(CoopSQL, CoopView):
     def get_name_for_billing(self):
         return convert_ref_to_obj(self.product_specific).get_name_for_billing()
 
+    def get_name_for_info(self):
+        return self.product_specific.get_name_for_info()
+
 
 class CoveredData(CoopSQL, CoopView):
     '''
@@ -613,6 +646,9 @@ class CoveredPerson(SpecificCovered):
         return 'Covered Person'
 
     def get_name_for_billing(self):
+        return self.person.name
+
+    def get_name_for_info(self):
         return self.person.name
 
 
