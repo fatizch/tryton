@@ -1,6 +1,5 @@
 #-*- coding:utf-8 -*-
 import copy
-import datetime
 
 from trytond.model import fields as fields
 from trytond.pool import Pool
@@ -76,7 +75,8 @@ class Offered(CoopView, GetResult):
     def default_start_date():
         res = Transaction().context.get('start_date')
         if not res:
-            res = datetime.date.today()
+            date = Pool().get('ir.date').today()
+            res = date
         return res
 
 
@@ -511,8 +511,9 @@ class GenericBusinessRule(CoopSQL, CoopView):
         if not hasattr(manager_attr, 'model_name'):
             return False
         BRM = Pool().get(manager_attr.model_name)
+        date = Pool().get('ir.date').today()
         return self == BRM.get_good_rule_at_date(self.manager,
-                {'date': datetime.date.today()})
+                {'date': date})
 
     def check_dates(self):
         cursor = Transaction().cursor
@@ -535,7 +536,8 @@ class GenericBusinessRule(CoopSQL, CoopView):
     def default_start_date():
         res = Transaction().context.get('start_date')
         if not res:
-            res = datetime.date.today()
+            date = Pool().get('ir.date').today()
+            res = date
         return res
 
     def get_good_rule_from_kind(self):

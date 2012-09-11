@@ -1,5 +1,3 @@
-import datetime
-
 from trytond.model import fields as fields
 
 # Needed for getting models
@@ -82,8 +80,9 @@ class ProjectState(CoopStep):
     # Default start_date is today
     @staticmethod
     def before_step_init(wizard):
+        Date = Pool().get('ir.date')
         if not hasattr(wizard.project, 'start_date'):
-            wizard.project.start_date = datetime.date.today()
+            wizard.project.start_date = Date.today()
         return (True, [])
 
     @staticmethod

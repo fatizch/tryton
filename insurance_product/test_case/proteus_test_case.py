@@ -17,6 +17,7 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['TestCase'] = Model.get('rule_engine.test_case')
     cfg_dict['TestCaseValue'] = Model.get('rule_engine.test_case.value')
     cfg_dict['Insurer'] = Model.get('party.insurer')
+    cfg_dict['Date'] = Model.get('ir.date')
     return cfg_dict
 
 
@@ -27,7 +28,7 @@ def get_or_create_product(cfg_dict, code, name, options=None):
     product = cfg_dict['Product']()
     product.code = code
     product.name = name
-    product.start_date = datetime.date.today()
+    product.start_date = cfg_dict['Date'].today()
     if options:
         product.options[:] = options
     return product
@@ -67,7 +68,7 @@ def get_or_create_coverage(cfg_dict, code, name, date=None):
     if date:
         coverage.start_date = date
     else:
-        coverage.start_date = datetime.date.today()
+        coverage.start_date = cfg_dict['Date'].today()
     coverage.insurer = get_object_from_db(cfg_dict, 'Insurer',
         force_search=True)
     return coverage
@@ -82,8 +83,8 @@ def create_AAA_Product(cfg_dict, code, name):
 
     gbr_a = gbr()
     gbr_a.kind = 'ins_product.pricing_rule'
-    gbr_a.start_date = datetime.date.today()
-    gbr_a.end_date = datetime.date.today() + \
+    gbr_a.start_date = cfg_dict['Date'].today()
+    gbr_a.end_date = cfg_dict['Date'].today() + \
                                     datetime.timedelta(days=10)
     prm_a = gbr_a.pricing_rule[0]
     prm_a.price = Decimal(12.0)
@@ -91,9 +92,9 @@ def create_AAA_Product(cfg_dict, code, name):
 
     gbr_b = gbr()
     gbr_b.kind = 'ins_product.pricing_rule'
-    gbr_b.start_date = datetime.date.today() + \
+    gbr_b.start_date = cfg_dict['Date'].today() + \
                                     datetime.timedelta(days=11)
-    gbr_b.end_date = datetime.date.today() + \
+    gbr_b.end_date = cfg_dict['Date'].today() + \
                                     datetime.timedelta(days=20)
     prm_b = gbr_b.pricing_rule[0]
     prm_b.price = Decimal(15.0)
@@ -105,8 +106,8 @@ def create_AAA_Product(cfg_dict, code, name):
     coverage_a = get_or_create_coverage(cfg_dict, 'ALP', 'Alpha Coverage')
     gbr_c = gbr()
     gbr_c.kind = 'ins_product.pricing_rule'
-    gbr_c.start_date = datetime.date.today()
-    gbr_c.end_date = datetime.date.today() + \
+    gbr_c.start_date = cfg_dict['Date'].today()
+    gbr_c.end_date = cfg_dict['Date'].today() + \
                                     datetime.timedelta(days=10)
     prm_c = gbr_c.pricing_rule[0]
     prm_c.price = Decimal(30.0)
@@ -118,7 +119,7 @@ def create_AAA_Product(cfg_dict, code, name):
     try_to_save_object(cfg_dict, brm_a)
 
     coverage_b = get_or_create_coverage(cfg_dict, 'BET', 'Beta Coverage',
-        datetime.date.today() + datetime.timedelta(days=5))
+        cfg_dict['Date'].today() + datetime.timedelta(days=5))
 
 #    coverage_b.pricing_mgr = []
     coverage_b.pricing_mgr.append(brm_b)
@@ -287,7 +288,7 @@ def create_BBB_product(cfg_dict, code, name):
     # Coverage C
     gbr_d = gbr()
     gbr_d.kind = 'ins_product.eligibility_rule'
-    gbr_d.start_date = datetime.date.today()
+    gbr_d.start_date = cfg_dict['Date'].today()
     erm_a = gbr_d.eligibility_rule[0]
     erm_a.config_kind = 'rule'
     erm_a.is_eligible = False
@@ -304,7 +305,7 @@ def create_BBB_product(cfg_dict, code, name):
     # Coverage D
     gbr_g = gbr()
     gbr_g.kind = 'ins_product.eligibility_rule'
-    gbr_g.start_date = datetime.date.today()
+    gbr_g.start_date = cfg_dict['Date'].today()
     erm_d = gbr_g.eligibility_rule[0]
     erm_d.config_kind = 'simple'
     erm_d.is_eligible = True
@@ -321,7 +322,7 @@ def create_BBB_product(cfg_dict, code, name):
     # Product Eligibility Manager
     gbr_e = gbr()
     gbr_e.kind = 'ins_product.eligibility_rule'
-    gbr_e.start_date = datetime.date.today()
+    gbr_e.start_date = cfg_dict['Date'].today()
     erm_b = gbr_e.eligibility_rule[0]
     erm_b.config_kind = 'simple'
     erm_b.is_eligible = True

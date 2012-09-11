@@ -3,7 +3,6 @@ import ast
 import functools
 import json
 import datetime
-import copy
 
 from decimal import Decimal
 
@@ -123,7 +122,7 @@ class RuleTools(RuleEngineContext):
     @classmethod
     @for_rule('Today')
     def today(cls, args):
-        return datetime.date.today()
+        return Pool().get('ir.date').today()
 
     @classmethod
     @for_rule('Add Message')

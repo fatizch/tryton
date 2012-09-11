@@ -388,6 +388,7 @@ class CoopProcess(Wizard):
             This method is used to calculate the name of the next step to
             execute. It can call itself if needed.
         '''
+        Date = Pool().get('ir.date')
         # We just need to get a few things at start:
         #    Current state model ('ins_process.process_name.step_name')
         cur_state = getattr(self, self.process_state.cur_step)
@@ -550,7 +551,7 @@ class CoopProcess(Wizard):
             SessionObj = Pool().get('ir.session.wizard')
             the_session = SessionObj(self._session_id)
             data_dict = {
-                'suspension_date': datetime.date.today(),
+                'suspension_date': Date.system_today(),
                 'for_user': the_session._user,
                 'desc': '%s, step %s' % (
                     self.coop_process_name(),
@@ -1323,7 +1324,8 @@ class SubscriptionProcess(Wizard):
     def default_project(self, session, fields):
         # In this particular case, all we want to do is set today's date as
         # the default value for the start_date field
-        return {'start_date': datetime.date.today()}
+        date = Pool().get('ir.date').today()
+        return {'start_date': date}
 
     def default_option_selection(self, session, fields):
         # Here it is a little harder. We want to create a list of options

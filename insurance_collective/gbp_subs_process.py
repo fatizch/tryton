@@ -1,9 +1,4 @@
-import datetime
-
 from trytond.model import fields as fields
-
-# Needed for Wizardry
-from trytond.wizard import StateView
 
 # Needed for getting models
 from trytond.pool import Pool
@@ -44,8 +39,9 @@ class ProjectGBPState(CoopStep):
     # Default start_date is today
     @staticmethod
     def before_step_init(wizard):
+        Date = Pool().get('ir.date')
         if not hasattr(wizard.project, 'start_date'):
-            wizard.project.start_date = datetime.date.today()
+            wizard.project.start_date = Date.today()
         return (True, [])
 
     @staticmethod
@@ -179,4 +175,3 @@ class GBPSubscriptionProcess(CoopProcess):
     @staticmethod
     def coop_process_name():
         return 'GBP Subscription Process'
-

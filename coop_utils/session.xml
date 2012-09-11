@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<tryton>
+	<data>
+    <!--################################################################-->
+    <!--                           Ask Date View                        -->
+    <!--################################################################-->
+
+		<record model="ir.ui.view" id="ask_new_date">
+			<field name="model">utils.change_session.ask_date</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+					<![CDATA[ 
+						<form string="New date for session">
+							<label name="system_date" xalign="0"/>
+							<field name="system_date"/>
+							<newline/>
+							<label name="current_date" xalign="0"/>
+							<field name="current_date"/>
+							<newline/>
+							<label name="new_date" xalign="0"/>
+							<field name="new_date"/>			
+						</form>
+					]]>
+			</field>
+		</record>
+		
+    <!--################################################################-->
+    <!--                          Menu Entries                          -->
+    <!--################################################################-->
+
+        <record model="ir.action.wizard" id="ask_date_view_action">
+            <field name="name">Change Session Date</field>
+            <field name="wiz_name">utils.change_session</field>
+            <field name="model">ir.ui.menu</field>
+        </record>
+
+
+        <menuitem name="Tools" id="menu_tools" sequence="100" />
+
+        <menuitem parent="menu_tools" action="ask_date_view_action"
+            id="menu_change_date" />
+
+	</data>
+</tryton>
+		

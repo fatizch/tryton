@@ -48,7 +48,7 @@ class BankAccount(CoopSQL, CoopView):
 
     @staticmethod
     def default_start_date():
-        return datetime.date.today()
+        return Pool().get('ir.date').today()
 
 
 class BankAccountNumber(CoopSQL, CoopView):

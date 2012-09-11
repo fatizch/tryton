@@ -461,9 +461,8 @@ class BillingManager(CoopSQL, CoopView):
         self.prices = result_prices
 
     def next_billing_dates(self):
-        return (
-            datetime.date.today(),
-            datetime.date.today() + datetime.timedelta(days=90))
+        date = Pool().get('ir.date').today()
+        return (date, date + datetime.timedelta(days=90))
 
     def get_bill_model(self):
         return 'ins_contract.billing.bill'

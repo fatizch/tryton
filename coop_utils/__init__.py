@@ -4,10 +4,21 @@ from .model import *
 from .many2one_form import *
 from .one2many_domain import *
 from .business import *
+from .session import *
 
 
 def register():
     Pool.register(
+        # from model
         TableOfTable,
         DynamicSelection,
+        # from session
+        SessionClass,
+        DateClass,
+        AskDate,
         module='coop_utils', type_='model')
+
+    Pool.register(
+        # from session
+        ChangeSessionDate,
+        module='coop_utils', type_='wizard')
