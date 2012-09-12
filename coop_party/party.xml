@@ -22,6 +22,12 @@
                             
                         </page>
                 </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;general&quot;]"
+                    position="before">
+                    <page string="Summary" id="summary">
+                        <field name="summary" widget="richtext"/>
+                    </page>
+                </xpath>
              </data>
              ]]>
             </field>
@@ -103,6 +109,7 @@
                             <label name="maiden_name" xalign="0"/>
                             <field name="maiden_name" colspan="2"/>
                             <newline/>
+                            <label name="nationality" xalign="0"/>
                             <field name="nationality"/>
                     </xpath>
                     <xpath expr="/form/notebook/page[@id=&quot;role&quot;]/group[@id=&quot;role_group&quot;]"
