@@ -10,7 +10,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="arch" type="xml">
                 <![CDATA[
                 <data>
-                <xpath expr="/form/group[@id=&quot;checkboxes&quot;]"
+                <xpath expr="/form/field[@name=&quot;end_date&quot;]"
                 position="after">
                     <newline/>
                     <label name="line1"/>

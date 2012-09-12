@@ -4,5 +4,24 @@
         <record model="ir.ui.menu" id="party.menu_address_form">
             <field name="active" eval="False"/>
         </record>
+        <record model="ir.ui.view" id="address_view_form">
+            <field name="model">party.address</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="party.address_view_form"></field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <data>
+                <xpath expr="/form/group[@id=&quot;checkboxes&quot;]"
+                position="after">
+                    <newline/>
+                    <label name="start_date"/>
+                    <field name="start_date"/>
+                    <label name="end_date"/>
+                    <field name="end_date"/>
+                </xpath>
+                </data>
+                ]]>
+            </field>
+        </record>
     </data>
 </tryton>
