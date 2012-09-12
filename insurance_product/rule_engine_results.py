@@ -46,6 +46,7 @@ class PricingResultLine(RuleEngineResultLine):
         self.desc = desc or []
         self.details = []
         self.on_object = None
+        self.taxes = {}
 
     def __iadd__(self, other):
         # __iadd__ will be called when doing a += b
@@ -56,6 +57,7 @@ class PricingResultLine(RuleEngineResultLine):
         # a += b means that a is a master of b (in some way), so we append b to
         # the list of a's subelements
         self.desc += [other]
+        self.update_taxes(other.taxes)
         return self
 
     def __add__(self, other):
@@ -65,7 +67,22 @@ class PricingResultLine(RuleEngineResultLine):
         # Then set what we can ; its value and its childs
         tmp.value = self.value + other.value
         tmp.desc = [self, other]
+        tmp.update_taxes(self.taxes)
+        tmp.update_taxes(other.taxes)
         return tmp
+
+    def update_taxes(self, other_taxes):
+        for key, value in other_taxes.iteritems():
+            if key in self.taxes:
+                self.taxes[key] += value
+            else:
+                self.taxes[key] = value
+
+    def get_total_taxes(self):
+        res = 0
+        for value in self.taxes.itervalues():
+            res += value
+        return res
 
     def encode_as_dict(self):
         res = {
@@ -73,6 +90,7 @@ class PricingResultLine(RuleEngineResultLine):
             'value': self.value,
             'details': self.details,
             'on_object': self.on_object,
+            'taxes': self.taxes,
             'desc': []}
 
         for elem in self.desc:
@@ -85,6 +103,7 @@ class PricingResultLine(RuleEngineResultLine):
         self.value = from_dict['value']
         self.details = from_dict['details']
         self.on_object = from_dict['on_object']
+        self.taxes = from_dict['taxes']
         self.desc = []
         for elem in from_dict['desc']:
             tmp_desc = PricingResultLine()

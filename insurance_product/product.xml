@@ -119,7 +119,6 @@
 
         <menuitem parent="menu_product" sequence="1" id="menu_product_form"
             icon="tryton-list" action="act_product_form" />
-        <!-- /Product -->
 
         <!--  ******************************************* 
               **************    Coverage    **************
@@ -310,6 +309,7 @@
                         <newline/>
                         <label name="sub_elem_config_kind" xalign="0"/>
                         <field name="sub_elem_config_kind" xfill="1" xexpand="0" xalign="0"/>
+                        <field name="sub_elem_taxes" xexpand="1"/>
                         <newline/>
                         <group id="sub_simple" string="Sub Elem - Simple Settings" colspan="4"
                             states="{'readonly': Eval('sub_elem_config_kind') != 'simple'}">
@@ -326,6 +326,10 @@
                         position="inside">
                         <label name="price" xalign="0"/>
                         <field name="price"/>
+                    </xpath>
+                    <xpath expr="/form/field[@name=&quot;config_kind&quot;]"
+                        position="after">
+                        <field name="taxes" xexpand="1"/>
                     </xpath>
                 </data>
                 ]]>

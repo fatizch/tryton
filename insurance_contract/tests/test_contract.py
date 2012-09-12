@@ -1,5 +1,6 @@
 #-*- coding:utf-8 -*-
 import datetime
+from decimal import Decimal
 
 # Needed for python test management
 import unittest
@@ -33,6 +34,9 @@ class ContractTestCase(unittest.TestCase):
         self.TestCase = POOL.get('rule_engine.test_case')
         self.TestCaseValue = POOL.get('rule_engine.test_case.value')
         self.RunTests = POOL.get('rule_engine.run_tests', type='wizard')
+        self.Tax = POOL.get('coop_account.tax_desc')
+        self.TaxVersion = POOL.get('coop_account.tax_version')
+        self.TaxManager = POOL.get('coop_account.tax_manager')
 
         with Transaction().start(DB_NAME,
                                  USER,
@@ -52,6 +56,21 @@ class ContractTestCase(unittest.TestCase):
         Test depends.
         '''
         test_depends()
+
+    def create_tax(self, code, amount):
+        tax_v1 = self.TaxVersion()
+        tax_v1.kind = 'rate'
+        tax_v1.rate_value = Decimal(amount)
+        tax_v1.start_date = datetime.date.today()
+
+        tax = self.Tax()
+        tax.name = 'Test Tax %s' % code
+        tax.code = 'code'
+        tax.rates = [tax_v1]
+
+        tax.save()
+
+        return tax
 
     def create_party(self):
         party = self.Party()
@@ -177,9 +196,17 @@ return True'''
 
         # Coverage A
 
+        tax = self.create_tax('TT', 0.13)
+
+        tm = self.TaxManager()
+        tm.taxes = [tax]
+
+        tm.save()
+
         prm_a = self.pricing()
         prm_a.config_kind = 'simple'
         prm_a.price = 12
+        prm_a.taxes = tm
         prm_a.per_sub_elem_price = 1
 
         gbr_a = self.gbr()
@@ -215,8 +242,16 @@ return True'''
 
         # Coverage B
 
+        tax_1 = self.create_tax('TTA', 0.27)
+
+        tm1 = self.TaxManager()
+        tm1.taxes = [tax_1]
+
+        tm1.save()
+
         prm_c = self.pricing()
         prm_c.config_kind = 'simple'
+        prm_c.taxes = tm1
         prm_c.price = 30
 
         gbr_c = self.gbr()
@@ -460,8 +495,10 @@ return True'''
                 if not hasattr(line, 'name'):
                     return ''
                 res = line.name
-                if hasattr(line, 'value') and not line.value is None:
-                    res += ' => %d' % line.value
+                if hasattr(line, 'value'):
+                    res += ' => %.2f' % line.value
+                if hasattr(line, 'taxes') and line.taxes:
+                    res += ' (Tx : %.2f)' % line.taxes
                 return res
 
             lines = []
@@ -473,40 +510,40 @@ return True'''
 
             good_lines = [
                 date_from_today(5).isoformat(),
-                '\tTotal Price => 43',
-                '\t\tProduct Base Price => 0',
-                '\t\tOptions => 43',
-                '\t\t\tBeta Coverage => 30',
-                '\t\t\t\tBase Price => 30',
-                '\t\t\tAlpha Coverage => 13',
-                '\t\t\t\tBase Price => 12',
-                '\t\t\t\tToto => 1',
+                '\tTotal Price => 43.00 (Tx : 9.66)',
+                '\t\tProduct Base Price => 0.00',
+                '\t\tOptions => 43.00 (Tx : 9.66)',
+                '\t\t\tBeta Coverage => 30.00 (Tx : 8.10)',
+                '\t\t\t\tBase Price => 30.00 (Tx : 8.10)',
+                '\t\t\tAlpha Coverage => 13.00 (Tx : 1.56)',
+                '\t\t\t\tBase Price => 12.00 (Tx : 1.56)',
+                '\t\t\t\tToto => 1.00',
                 '',
                 date_from_today(2).isoformat(),
-                '\tTotal Price => 0',
-                '\t\tProduct Base Price => 0',
-                '\t\tOptions => 0',
+                '\tTotal Price => 0.00',
+                '\t\tProduct Base Price => 0.00',
+                '\t\tOptions => 0.00',
                 '',
                 date_from_today(3).isoformat(),
-                '\tTotal Price => 13',
-                '\t\tProduct Base Price => 0',
-                '\t\tOptions => 13',
-                '\t\t\tAlpha Coverage => 13',
-                '\t\t\t\tBase Price => 12',
-                '\t\t\t\tToto => 1',
+                '\tTotal Price => 13.00 (Tx : 1.56)',
+                '\t\tProduct Base Price => 0.00',
+                '\t\tOptions => 13.00 (Tx : 1.56)',
+                '\t\t\tAlpha Coverage => 13.00 (Tx : 1.56)',
+                '\t\t\t\tBase Price => 12.00 (Tx : 1.56)',
+                '\t\t\t\tToto => 1.00',
                 '',
                 date_from_today(0).isoformat(),
-                '\tTotal Price => 0',
-                '\t\tProduct Base Price => 0',
-                '\t\tOptions => 0',
+                '\tTotal Price => 0.00',
+                '\t\tProduct Base Price => 0.00',
+                '\t\tOptions => 0.00',
                 '',
                 date_from_today(11).isoformat(),
-                '\tTotal Price => 15',
-                '\t\tProduct Base Price => 0',
-                '\t\tOptions => 15',
-                '\t\t\tBeta Coverage => 0',
-                '\t\t\tAlpha Coverage => 15',
-                '\t\t\t\tBase Price => 15',
+                '\tTotal Price => 15.00',
+                '\t\tProduct Base Price => 0.00',
+                '\t\tOptions => 15.00',
+                '\t\t\tBeta Coverage => 0.00',
+                '\t\t\tAlpha Coverage => 15.00',
+                '\t\t\t\tBase Price => 15.00',
                 '']
 
             # print '\n'.join(lines)

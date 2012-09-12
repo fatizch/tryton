@@ -1,13 +1,14 @@
+import datetime
+
 # Needed for storing and displaying objects
 from trytond.model import fields as fields
 
 from trytond.modules.coop_utils import CoopView, CoopSQL, convert_ref_to_obj
 from trytond.modules.coop_utils import limit_dates, to_date
+from trytond.modules.coop_utils import One2ManyDomain
 
 # Needed for getting models
 from trytond.pool import Pool
-
-import datetime
 
 from trytond.modules.insurance_product import Coverage
 
@@ -349,14 +350,28 @@ class PriceLine(CoopSQL, CoopView):
 
     name = fields.Char('Short Description')
 
+    kind = fields.Selection(
+        [('price', 'Price'), ('tax', 'Tax')],
+        'Kind',
+        readonly='True')
+
     on_object = fields.Reference(
         'Priced object',
         'get_line_target_models')
 
-    child_lines = fields.One2Many(
+    taxes = fields.Function(fields.Numeric('Taxes'), 'get_total_taxes')
+
+    child_taxes = One2ManyDomain(
         'ins_contract.price_line',
         'master',
-        'Sub-Lines')
+        'Sub-Lines',
+        domain=[('kind', '=', 'tax')])
+
+    child_lines = One2ManyDomain(
+        'ins_contract.price_line',
+        'master',
+        'Sub-Lines',
+        domain=[('kind', '=', 'price')])
 
     billing_manager = fields.Many2One(
         'ins_contract.billing_manager',
@@ -384,8 +399,16 @@ class PriceLine(CoopSQL, CoopView):
     def init_from_result_line(self, line):
         if not line:
             return
+        PLModel = Pool().get(self.__name__)
         self.init_values()
         self.amount = line.value
+        self.child_taxes = []
+        for code, value in line.taxes.iteritems():
+            tax_line = PLModel()
+            tax_line.name = code
+            tax_line.amount = value
+            tax_line.kind = 'tax'
+            self.child_taxes.append(tax_line)
         if not self.name:
             if line.on_object:
                 self.name = convert_ref_to_obj(
@@ -396,11 +419,17 @@ class PriceLine(CoopSQL, CoopView):
             self.on_object = line.on_object
         if line.desc:
             self.child_lines = []
-            Model = Pool().get(self.__name__)
             for elem in line.desc:
-                child_line = Model()
+                child_line = PLModel()
                 child_line.init_from_result_line(elem)
                 self.child_lines.append(child_line)
+
+    @staticmethod
+    def default_kind():
+        return 'price'
+
+    def get_total_taxes(self):
+        return sum([tax.value for tax in self.child_taxes])
 
     @staticmethod
     def get_line_target_models():

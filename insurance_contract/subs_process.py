@@ -459,12 +459,15 @@ class PricingLine(CoopStepView):
 
     value = fields.Numeric('Value')
 
+    taxes = fields.Numeric('Taxes')
+
     @staticmethod
     def create_from_result(result, prefix=''):
         # result is a PricingLineResult instance
         top_line = PricingLine()
         top_line.name = prefix + result.name
         top_line.value = result.value
+        top_line.taxes = result.get_total_taxes()
         res = [top_line]
         for elem in result.desc:
             res += PricingLine.create_from_result(elem, prefix + '\t')
@@ -481,7 +484,8 @@ class SummaryState(CoopStep):
     lines = fields.One2Many(
         'ins_contract.subs_process.lines',
         'summary_state',
-        'Lines')
+        'Lines',
+        readonly=True)
 
     @staticmethod
     def before_step_calculate_lines(wizard):

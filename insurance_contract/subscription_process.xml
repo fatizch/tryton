@@ -149,6 +149,7 @@
 						<tree string="Pricing Lines">
 							<field name="name"/>
 							<field name="value"/>
+							<field name="taxes"/>
 						</tree>
 					]]>
 			</field>

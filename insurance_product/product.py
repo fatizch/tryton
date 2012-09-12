@@ -599,25 +599,85 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
         'Amount per Covered Element',
         digits=(16, Eval('currency_digits', 2)),
         depends=['currency_digits'])
+    taxes = fields.Many2One(
+        'coop_account.tax_manager',
+        'Taxes')
+    sub_elem_taxes = fields.Many2One(
+        'coop_account.tax_manager',
+        'Sub Elem Taxes')
+
+    def give_me_appliable_taxes(self, args):
+        errs = []
+        if 'date' in args:
+            if hasattr(self, 'taxes') and self.taxes:
+                res = self.taxes.give_appliable_taxes(args)
+            else:
+                res = []
+        else:
+            errs.append('No date provided')
+            res = []
+        return res, errs
+
+    def give_me_appliable_sub_elem_taxes(self, args):
+        errs = []
+        if 'date' in args:
+            if hasattr(self, 'sub_elem_taxes') and self.sub_elem_taxes:
+                res = self.sub_elem_taxes.give_appliable_taxes(args)
+            else:
+                res = []
+        else:
+            errs.append('No date provided')
+            res = []
+        return res, errs
+
+    def calculate_taxes(self, amount, taxes):
+        res = {}
+        for tax in taxes:
+            res[tax.get_code()] = tax.apply_tax(amount)
+        return res
 
     def give_me_price(self, args):
         if hasattr(self, 'rule') and self.rule:
             res, mess, errs = self.rule.compute(args)
-            return (PricingResultLine(value=res, details=mess), errs)
+            result, errors = (PricingResultLine(value=res, details=mess), errs)
+        else:
+            result, errors = (PricingResultLine(value=self.price), [])
 
-        # This is the most basic pricing rule : just return the price
-        return (PricingResultLine(value=self.price), [])
+        taxes, _ = self.give_me_appliable_taxes(args)
+        tax_amounts = self.calculate_taxes(result.value, taxes)
+        result.taxes = tax_amounts
+        return result, errors
 
     def give_me_sub_elem_price(self, args):
         if hasattr(self, 'sub_elem_rule') and self.sub_elem_rule:
             res, mess, errs = self.sub_elem_rule.compute(args)
-            return (PricingResultLine(value=res, details=mess), errs)
-        # This will be called for each covered element of the contract
-        return (PricingResultLine(value=self.per_sub_elem_price), [])
+            result, errors = PricingResultLine(value=res, details=mess), errs
+        else:
+            result = PricingResultLine(value=self.per_sub_elem_price)
+            errors = []
+
+        taxes, _ = self.give_me_appliable_sub_elem_taxes(args)
+        tax_amounts = self.calculate_taxes(result.value, taxes)
+        result.taxes = tax_amounts
+        return result, errors
 
     @staticmethod
     def default_sub_elem_config_kind():
         return 'simple'
+
+    @classmethod
+    def delete(cls, rules):
+        def delete_link(inst, name):
+            if hasattr(inst, name):
+                val = getattr(inst, name)
+                if val:
+                    val.delete([val])
+
+        for rule in rules:
+            delete_link(rule, 'taxes')
+            delete_link(rule, 'sub_elem_taxes')
+
+        super(PricingRule, cls).delete(rules)
 
 
 class EligibilityRule(CoopSQL, BusinessRuleRoot):
