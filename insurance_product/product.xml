@@ -53,6 +53,8 @@
                             </notebook>
                         </page>
                         <page string="Administration" id="admin">
+                            <field name="description" widget="richtext"
+                                colspan="4"/>
                         </page>
                     </notebook>
                 </form>
