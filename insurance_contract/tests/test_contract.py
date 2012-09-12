@@ -20,7 +20,8 @@ class ContractTestCase(unittest.TestCase):
         self.SubsProcess = POOL.get('ins_contract.subs_process',
                                           type='wizard')
         self.ProcessDesc = POOL.get('ins_process.process_desc')
-        self.Party = POOL.get('party.person')
+        self.Party = POOL.get('party.party')
+        self.Person = POOL.get('party.person')
         self.Product = POOL.get('ins_product.product')
         self.coverage = POOL.get('ins_product.coverage')
         self.brm = POOL.get('ins_product.business_rule_manager')
@@ -72,8 +73,8 @@ class ContractTestCase(unittest.TestCase):
 
         return tax
 
-    def create_party(self):
-        party = self.Party()
+    def create_person(self):
+        party = self.Person()
         party.name = 'Toto'
         party.first_name = 'titi'
         party.birth_date = datetime.date(1950, 12, 04)
@@ -86,17 +87,17 @@ class ContractTestCase(unittest.TestCase):
     def createTestRule(self):
         te1 = self.TreeElement()
         te1.type = 'function'
-        te1.name = 'get_person_name'
+        te1.name = 'get_subscriber_name'
         te1.description = 'Name'
-        te1.namespace = 'ins_product.rule_sets.person'
+        te1.namespace = 'ins_product.rule_sets.subscriber'
 
         te1.save()
 
         te2 = self.TreeElement()
         te2.type = 'function'
-        te2.name = 'get_person_birthdate'
+        te2.name = 'get_subscriber_birthdate'
         te2.description = 'Birthday'
-        te2.namespace = 'ins_product.rule_sets.person'
+        te2.namespace = 'ins_product.rule_sets.subscriber'
 
         te2.save()
 
@@ -150,7 +151,7 @@ class ContractTestCase(unittest.TestCase):
         rule.name = 'test_rule'
         rule.context = ct
         rule.code = '''
-birthdate = get_person_birthdate()
+birthdate = get_subscriber_birthdate()
 if years_between(birthdate, today()) > 40:
     message('Subscriber too old (max: 40)')
     return False
@@ -381,7 +382,7 @@ return True'''
         with Transaction().start(DB_NAME,
                                  USER,
                                  context=CONTEXT) as transaction:
-            self.create_party()
+            self.create_person()
             self.create_product()
             on_party, = self.Party.search([('name', '=', 'Toto')])
             on_product, = self.Product.search([('code', '=', 'BBB')])
@@ -463,7 +464,7 @@ return True'''
             self.assert_(tmp)
             self.assertEqual(len(wizard.extension_life.covered_elements), 1)
             covered = wizard.extension_life.covered_elements[0]
-            self.assertEqual(covered.person, on_party.party)
+            self.assertEqual(covered.person.party, on_party)
             self.assertEqual(len(covered.covered_data), 3)
             self.assertEqual(covered.covered_data[0].start_date,
                              wizard.project.start_date +

@@ -12,6 +12,9 @@ from trytond.modules.insurance_product import PricingResultLine
 from trytond.modules.insurance_product import EligibilityResultLine
 from trytond.modules.coop_utils import One2ManyDomain
 from trytond.modules.coop_utils import business
+from trytond.modules.coop_utils import NonExistingManagerException
+from trytond.modules.coop_utils import update_args_with_subscriber
+from trytond.modules.coop_utils import ArgsDoNotMatchException
 
 __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
            'BusinessRuleManager', 'GenericBusinessRule', 'BusinessRuleRoot',
@@ -21,6 +24,13 @@ __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
 CONFIG_KIND = [
     ('simple', 'Simple'),
     ('rule', 'Rule Engine')
+    ]
+
+
+SUBSCRIBER_CLASSES = [
+    ('party.person', 'Person'),
+    ('party.company', 'Company'),
+    ('party.party', 'All'),
     ]
 
 
@@ -36,7 +46,6 @@ class Offered(CoopView, GetResult):
     template = fields.Many2One(None, 'Template',
         domain=[('id', '!=', Eval('id'))],
         depends=['id'])
-    description = fields.Text('Description')
     #All mgr var must be the same as the business rule class and ends with mgr
     pricing_mgr = One2ManyDomain('ins_product.business_rule_manager',
         'offered', 'Pricing Manager')
@@ -212,7 +221,7 @@ class Coverage(CoopSQL, Offered):
     def give_me_eligibility(self, args):
         try:
             res = self.get_result('eligibility', args, manager='eligibility')
-        except utils.NonExistingManagerException:
+        except NonExistingManagerException:
             return (EligibilityResultLine(True), [])
         return res
 
@@ -220,7 +229,7 @@ class Coverage(CoopSQL, Offered):
         try:
             res = self.get_result(
                 'sub_elem_eligibility', args, manager='eligibility')
-        except utils.NonExistingManagerException:
+        except NonExistingManagerException:
             return (EligibilityResultLine(True), [])
         return res
 
@@ -281,7 +290,7 @@ class Product(CoopSQL, Offered):
         # request.
         try:
             res = self.get_result('price', args, manager='pricing')
-        except utils.NonExistingManagerException:
+        except NonExistingManagerException:
             res = (False, [])
         if not res[0]:
             res = (PricingResultLine(), res[1])
@@ -311,7 +320,7 @@ class Product(CoopSQL, Offered):
     def give_me_eligibility(self, args):
         try:
             res = self.get_result('eligibility', args, manager='eligibility')
-        except utils.NonExistingManagerException:
+        except NonExistingManagerException:
             return (EligibilityResultLine(True), [])
         return res
 
@@ -403,20 +412,23 @@ class BusinessRuleManager(CoopSQL, CoopView, GetResult):
             # the good rule.
             # (This is a given way to get a rule from a list, using the
             # applicable date, it could be anything)
-            return utils.get_good_version_at_date(self, 'business_rules',
-                the_date)
+            for business_rule in self.business_rules:
+                if business_rule.start_date <= the_date:
+                    if not business_rule.end_date or \
+                            business_rule.end_date > the_date:
+                        return business_rule
         except ValueError, _exception:
             return None
 
         #Used????
-    def get_rec_name(self, name):
-        res = ''
-        if self.business_rules and len(self.business_rules) > 0:
-            res = self.business_rules[0].kind
-        if res != '':
-            res += ' '
-        res += '(%s)' % self.id
-        return res
+        def get_rec_name(self, name):
+            res = ''
+            if self.business_rules and len(self.business_rules) > 0:
+                res = self.business_rules[0].kind
+            if res != '':
+                res += ' '
+            res += '(%s)' % self.id
+            return res
 
     def get_currency_digits(self, name):
         if self.offered:
@@ -692,12 +704,42 @@ class EligibilityRule(CoopSQL, BusinessRuleRoot):
 
     is_sub_elem_eligible = fields.Boolean('Sub Elem Eligible')
 
+    subscriber_eligibility = fields.Selection(
+        SUBSCRIBER_CLASSES,
+        'Can be subscribed',
+        required=True)
+
     def give_me_eligibility(self, args):
+        # First of all, we look for a subscriber data in the args and update
+        # the args dictionnary for sub values.
+        try:
+            update_args_with_subscriber(args)
+        except ArgsDoNotMatchException:
+            # If no Subscriber is found, automatic refusal
+            return (EligibilityResultLine(
+                False, ['Subscriber not defined in args']), [])
+
+        # We define a match_table which will tell what data to look for
+        # depending on the subscriber_eligibility attribute value.
+        match_table = {
+            'party.party': 'subscriber',
+            'party.person': 'subscriber_person',
+            'party.company': 'subscriber_company'}
+
+        # if it does not match, refusal
+        if not match_table[self.subscriber_eligibility] in args:
+            return (EligibilityResultLine(
+                False,
+                ['Subscriber must be a %s'
+                    % dict(SUBSCRIBER_CLASSES)[self.subscriber_eligibility]]),
+                [])
+
+        # Now we can call the rule if it exists :
         if hasattr(self, 'rule') and self.rule:
             res, mess, errs = self.rule.compute(args)
             return (EligibilityResultLine(eligible=res, details=mess), errs)
 
-        # This is the most basic pricing rule : just return the price
+        # This is the most basic eligibility rule :
         if self.is_eligible:
             details = []
         else:
@@ -736,6 +778,10 @@ class EligibilityRule(CoopSQL, BusinessRuleRoot):
     @staticmethod
     def default_sub_elem_config_kind():
         return 'simple'
+
+    @staticmethod
+    def default_subscriber_eligibility():
+        return 'party.person'
 
 
 class Benefit(CoopSQL, Offered):

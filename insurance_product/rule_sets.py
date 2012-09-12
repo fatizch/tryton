@@ -3,6 +3,17 @@ from trytond.modules.rule_engine import InternalRuleEngineError
 from trytond.modules.rule_engine import check_args, for_rule
 from trytond.modules.rule_engine import RuleTools
 
+###############################################################################
+# We write here sets of functions that will be available in the rule engine.  #
+# They will be automatically created as tree_elements in sub_folders          #
+# matching the different RuleEngineContext classes.                           #
+# There are a few decorators available for management of these functions :    #
+#   - for_rule(str) => sets the 'rule_name' attribute which will be used      #
+#     for automatic creation of the tree_element for the description field    #
+#   - check_args(str1, str2...) => checks that each of the str in the args is #
+#     a key in the 'args' parameter of the function                           #
+###############################################################################
+
 
 class SubscriberContext(RuleEngineContext):
     '''
@@ -12,14 +23,16 @@ class SubscriberContext(RuleEngineContext):
 
     @classmethod
     @for_rule('Name')
+    @check_args('contract')
     def get_subscriber_name(cls, args):
         name = args['contract'].subscriber.name
         return name
 
     @classmethod
     @for_rule('Birthdate')
+    @check_args('subscriber_person')
     def get_subscriber_birthdate(cls, args):
-        subscriber = args['contract'].subscriber
+        subscriber = args['subscriber_person']
         if hasattr(subscriber, 'birth_date'):
             return subscriber.birth_date
         args['errors'].append('Subscriber does not have a birth date')
@@ -27,23 +40,27 @@ class SubscriberContext(RuleEngineContext):
 
     @classmethod
     @for_rule('Gender')
+    @check_args('subscriber_person')
     def get_subscriber_gender(cls, args):
-        return args['contract'].subscriber.gender
+        return args['subscriber_person'].gender
 
     @classmethod
     @for_rule('Nationality')
+    @check_args('subscriber_person')
     def get_subscriber_nationality(cls, args):
-        country = args['contract'].subscriber.get_nationality()
+        country = args['subscriber_person'].get_nationality()
         return country.code
 
     @classmethod
     @for_rule('Living country')
+    @check_args('contract')
     def get_subscriber_living_country(cls, args):
         address = args['contract'].subscriber.address_get()
         return address.country
 
     @classmethod
     @for_rule('Product subscribed ?')
+    @check_args('contract')
     def subscriber_subscribed(cls, args, product_name):
         contracts = args['contract'].subscriber.get_subscribed_contracts()
         matches = [1 for x in contracts

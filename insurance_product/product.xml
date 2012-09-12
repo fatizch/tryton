@@ -331,7 +331,11 @@
                     </xpath>
                     <xpath expr="/form/field[@name=&quot;config_kind&quot;]"
                         position="after">
+                        <label name="taxes" xalign="0"/>
                         <field name="taxes" xexpand="1"/>
+                        <newline/>
+                        <label name="subscriber_eligibility" xalign="0"/>
+                        <field name="subscriber_eligibility"/>
                     </xpath>
                 </data>
                 ]]>

@@ -54,7 +54,7 @@ class ProjectState(CoopStep):
     start_date = fields.Date('Effective Date')
 
     # The subscriber is the client which wants to subscribe to a contract.
-    subscriber = fields.Many2One('party.person',
+    subscriber = fields.Many2One('party.party',
                                  'Subscriber')
 
     # This is a core field, it will be used all along the process to ask for
@@ -221,7 +221,7 @@ class OptionSelectionState(CoopStep):
                 eligibility, errors = displayer.coverage.get_result(
                     'eligibility',
                     {'date': wizard.project.start_date,
-                    'person': wizard.project.subscriber})
+                    'subscriber': wizard.project.subscriber})
                 if not eligibility.eligible:
                     errs.append(
                         '%s option not eligible :' % displayer.coverage.code)
@@ -337,7 +337,7 @@ class CoveredPersonDesc(CoveredElementDesc):
     '''
     __name__ = 'ins_contract.subs_process.covered_person_desc'
 
-    person = fields.Many2One('party.party',
+    person = fields.Many2One('party.person',
                              'Covered Person')
     life_state = fields.Many2One('ins_contract.subs_process.extension_life',
                                  'Life State')
@@ -375,7 +375,8 @@ class ExtensionLifeState(DependantState):
                 covered_datas.append(covered_data)
         wizard.extension_life.covered_elements = []
         covered_person = CoveredPerson()
-        covered_person.person = wizard.project.subscriber.id
+        # Bad, must be rewritten
+        covered_person.person = wizard.project.subscriber.person[0].id
         covered_person.covered_data = covered_datas
         wizard.extension_life.covered_elements = [covered_person]
         return (True, [])

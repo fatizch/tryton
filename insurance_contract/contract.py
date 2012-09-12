@@ -106,7 +106,7 @@ class GenericContract(CoopSQL, CoopView):
     # recipient of the letters of the contract, he will pay the premium etc...
     #
     # Some business rules might need some of the subscriber's data to compute.
-    subscriber = fields.Many2One('party.person',
+    subscriber = fields.Many2One('party.party',
                                  'Subscriber',
                                  select='0')
 
@@ -666,7 +666,7 @@ class CoveredPerson(SpecificCovered):
         In life insurance, we cover persons, so here is a covered person...
     '''
     __name__ = 'ins_contract.covered_person'
-    person = fields.Many2One('party.party',
+    person = fields.Many2One('party.person',
                              'Person')
 
     @staticmethod
