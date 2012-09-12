@@ -7,7 +7,7 @@ from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coop_utils import CoopView, CoopSQL
-from trytond.modules.coop_utils import TableOfTable, tuple_index
+from trytond.modules.coop_utils import TableOfTable, utils as utils
 
 __all__ = ['Party', 'Company', 'Employee', 'Actor', 'Person',
            'GenericActorKind', 'GenericActor', ]
@@ -34,6 +34,7 @@ class Party:
         'from_party', 'Relations', context={'direction': 'normal'})
     in_relation_with = fields.One2Many('party.party-relation',
         'to_party', 'in relation with', context={'direction': 'reverse'})
+    summary = fields.Function(fields.Text('Summary'), 'get_summary')
 
     @classmethod
     def __setup__(cls):
@@ -121,6 +122,24 @@ class Party:
             return kind[0]
         return None
 
+    def get_summary(self, name=None, indent=0, at_date=None):
+        res = self.get_summary_header(name)
+        res += utils.get_field_as_summary(self, 'addresses',
+            True, indent, at_date)
+        res += utils.get_field_as_summary(self, 'relations',
+            True, indent, at_date)
+        res += utils.get_field_as_summary(self, 'in_relation_with',
+            True, indent, at_date)
+        return res
+
+    def get_summary_header(self, name=None, indent=0, at_date=None):
+        res = "<span size='12'><b>%s</b></span>\n" % self.get_rec_name(name)
+        if self.person and len(self.person) > 0:
+            res += self.person[0].get_summary_header(name, indent, at_date)
+        if self.company and len(self.company) > 0:
+            res += self.company[0].get_summary_header(name, indent, at_date)
+        return res
+
 
 class Company(ModelSQL, ModelView):
     'Company'
@@ -132,6 +151,9 @@ class Company(ModelSQL, ModelView):
         cls.currency = copy.copy(cls.currency)
         cls.currency.required = False
         cls._order.insert(0, ('name', 'ASC'))
+
+    def get_summary_header(self, name=None, indent=0, at_date=None):
+        return ''
 
 
 class Employee(ModelSQL, ModelView):
@@ -195,7 +217,8 @@ class Person(CoopSQL, Actor):
         cls._order.insert(0, ('name', 'ASC'))
 
     def get_rec_name(self, name):
-        return "%s %s" % (self.name.upper(), self.first_name)
+        return "%s %s %s" % (utils.translate_value(self, 'gender'),
+            self.name.upper(), self.first_name)
 
     def on_change_gender(self):
         res = {}
@@ -206,10 +229,18 @@ class Person(CoopSQL, Actor):
 
     @staticmethod
     def gender_as_int(gender):
-        return tuple_index(gender, GENDER) + 1
+        return utils.tuple_index(gender, GENDER) + 1
 
     def get_gender_as_int(self):
         return self.gender_as_int(self.gender)
 
     def get_nationality(self):
         return self.nationality
+
+    def get_summary_header(self, name=None, indent=0, at_date=None):
+        res = ''
+        res += utils.get_field_as_summary(self, 'ssn', indent=indent)
+        res += utils.get_field_as_summary(self, 'birth_date', indent=indent)
+        res += utils.get_field_as_summary(self, 'nationality', indent=indent)
+        res += utils.get_field_as_summary(self, 'maiden_name', indent=indent)
+        return res

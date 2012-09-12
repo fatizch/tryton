@@ -5,7 +5,6 @@ import re
 from trytond.model import fields as fields
 from trytond.modules.coop_utils import CoopSQL
 from trytond.modules.coop_party import Actor
-from trytond.rpc import RPC
 from trytond.modules.coop_utils import utils
 
 SSN_LENGTH = 15

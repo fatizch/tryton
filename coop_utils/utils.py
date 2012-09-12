@@ -584,7 +584,11 @@ def get_coop_config(section, option):
 
 
 def get_string_from_selection(instance, var_name):
-    selection = getattr(instance.__class__, var_name).selection
+    field = getattr(instance.__class__, var_name)
+    if hasattr(field, '_field'):
+        selection = field._field.selection
+    else:
+        selection = field.selection
     if type(selection) is str:
         selection = getattr(instance.__class__, selection)()
     for cur_tuple in selection:
@@ -599,11 +603,16 @@ def translate_label(instance, var_name):
 
 def translate_value(instance, var_name):
     field = getattr(instance.__class__, var_name)
-    if field.__class__._type == 'selection':
+    if hasattr(field, '_field'):
+        _type = field._field.__class__._type
+    else:
+        _type = field.__class__._type
+    if _type == 'selection':
         value = get_string_from_selection(instance, var_name)
         ttype = field.__class__._type
     else:
         value = str(getattr(instance, var_name))
+        ttype = None
     if (hasattr(field, 'translate') and field.translate
         or (hasattr(field, 'translate_selection')
             and field.translate_selection)):
