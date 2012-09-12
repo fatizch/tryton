@@ -5,6 +5,7 @@ import os
 from trytond.pool import Pool
 from trytond.model import Model
 from trytond.model import fields as fields
+from trytond.transaction import Transaction
 # Needed for proper encoding / decoding of objects as strings
 from trytond.protocols.jsonrpc import JSONEncoder, object_hook
 
@@ -407,7 +408,7 @@ class GetResult(object):
         if manager:
             # A manager is specified, we look for it
             for brm_name, brm in [(elem, getattr(self, elem))
-                    for elem in dir(self) if elem[-4:] == '_mgr']:
+                    for elem in dir(self) if elem.endswith('_mgr')]:
                 if not brm_name.startswith(manager):
                     continue
                 if brm is None or len(brm) == 0:
@@ -580,3 +581,111 @@ def get_coop_config(section, option):
         config = ConfigParser.ConfigParser()
         config.read(os.path.join(coop_utils, 'coop.cfg'))
         return config.get(section, option)
+
+
+def get_string_from_selection(instance, var_name):
+    selection = getattr(instance.__class__, var_name).selection
+    if type(selection) is str:
+        selection = getattr(instance.__class__, selection)()
+    for cur_tuple in selection:
+        if cur_tuple[0] == getattr(instance, var_name):
+            return cur_tuple[1]
+
+
+def translate_label(instance, var_name):
+    field = getattr(instance.__class__, var_name)
+    return translate_field(instance, var_name, field.string)
+
+
+def translate_value(instance, var_name):
+    field = getattr(instance.__class__, var_name)
+    if field.__class__._type == 'selection':
+        value = get_string_from_selection(instance, var_name)
+        ttype = field.__class__._type
+    else:
+        value = str(getattr(instance, var_name))
+    if (hasattr(field, 'translate') and field.translate
+        or (hasattr(field, 'translate_selection')
+            and field.translate_selection)):
+        return translate_field(instance, var_name, value, ttype)
+    return str(value)
+
+
+def translate_field(instance, var_name, src, ttype='field'):
+    Translation = Pool().get('ir.translation')
+    res = Translation.get_source(
+            '%s,%s' % (instance.__class__.__name__, var_name),
+             ttype,
+             Transaction().language,
+             src)
+    if not res:
+        return src
+    return res
+
+
+def get_field_as_summary(instance, var_name, with_label=True, indent=0,
+    at_date=None):
+
+    if not getattr(instance, var_name):
+        return ''
+    res = ''
+    if type(getattr(instance, var_name)) is tuple:
+        list_at_date = get_good_versions_at_date(instance, var_name, at_date)
+        for element in list_at_date:
+            if not hasattr(element, 'get_summary'):
+                continue
+            if with_label and res == '':
+                res = '<b>%s :</b>' % translate_label(instance, var_name)
+            res += '\n%s\n' % element.get_summary(name=var_name,
+                indent=indent + 1, at_date=at_date)
+    else:
+        if with_label:
+            res = '%s : ' % translate_label(instance, var_name)
+        res += '%s\n' % re_indent_text(
+            translate_value(instance, var_name),
+            indent)
+    return res
+
+
+def re_indent_text(src, indent):
+    return "\n".join((4 * ' ' * indent) + i for i in src.splitlines())
+
+
+def today():
+    return Pool().get('ir.date').today()
+
+
+def get_good_versions_at_date(instance, var_name, at_date=None):
+    '''This method looks for the elements in the list which are effective at
+    the date. By default, it will check that the at_date is between the start
+    date and the end_date, otherwise it will check if there is already a
+    specific method on the object'''
+
+    if not at_date:
+        at_date = today()
+    if hasattr(instance, 'get_good_versions_at_date'):
+        return getattr(instance, 'get_good_versions_at_date')(var_name,
+            at_date)
+    res = []
+    element_added = False
+    for element in reversed(getattr(instance, var_name)):
+        if (not hasattr(element, 'end_date')
+            and hasattr(element, 'start_date)')):
+            if not element.start_date:
+                res.insert(0, element)
+            elif at_date >= element.start_date and not element_added:
+                res.insert(0, element)
+                element_added = True
+        elif hasattr(element, 'start_date') and hasattr(element, 'end_date'):
+            if (not element.start_date or at_date >= element.start_date) and (
+                not element.end_date or at_date <= element.end_date):
+                res.insert(0, element)
+        else:
+            res.insert(0, element)
+    return res
+
+
+def get_good_version_at_date(instance, var_name, at_date=None):
+    res = get_good_versions_at_date(instance, var_name, at_date)
+    if len(res) == 1:
+        return res[0]

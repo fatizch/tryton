@@ -1,10 +1,8 @@
 #-*- coding:utf-8 -*-
-import datetime
-
 from trytond.model import fields as fields
 from trytond.pool import Pool
 from trytond.modules.coop_utils import CoopView, CoopSQL, TableOfTable
-
+from trytond.modules.coop_utils import utils as utils
 
 __all__ = ['PartyRelationKind', 'PartyRelation']
 
@@ -65,7 +63,7 @@ class PartyRelation(CoopSQL, CoopView):
 
     @staticmethod
     def default_start_date():
-        return datetime.datetime.today()
+        return utils.today()
 
     def get_reverse_kind(self, name=None):
         RelationKind = Pool().get('party.party_relation_kind')
@@ -75,3 +73,15 @@ class PartyRelation(CoopSQL, CoopView):
             reverse_relation_kind = relation_kind.get_reverse_relation_kind()
             if reverse_relation_kind:
                 return reverse_relation_kind.key
+
+    def get_summary(self, name=None, indent=None, at_date=None):
+        if name == 'relations':
+            link = 'kind'
+            party = self.to_party
+        elif name == 'in_relation_with':
+            link = 'reverse_kind'
+            party = self.from_party
+        return utils.re_indent_text(
+            '%s %s' % (utils.translate_value(self, link),
+                    party.get_rec_name(name)),
+            indent)
