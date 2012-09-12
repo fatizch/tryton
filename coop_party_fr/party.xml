@@ -25,7 +25,7 @@
                     <xpath expr="/form/field[@name=&quot;ssn&quot;]"
                         position="replace"/>
                     <xpath expr="/form/label[@name=&quot;gender&quot;]" position="before">
-                        <label name="ssn"/>
+                        <label name="ssn" xalign="0"/>
                         <group id="ssn" col="8" colspan="1">
                             <field name="ssn_no_key" colspan="7"/>
                             <field name="ssn_key"/>
