@@ -376,6 +376,7 @@ class ExtensionLifeState(DependantState):
         wizard.extension_life.covered_elements = []
         covered_person = CoveredPerson()
         # Bad, must be rewritten
+        print wizard.project.subscriber
         covered_person.person = wizard.project.subscriber.person[0].id
         covered_person.covered_data = covered_datas
         wizard.extension_life.covered_elements = [covered_person]

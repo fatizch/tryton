@@ -311,6 +311,7 @@
                         <newline/>
                         <label name="sub_elem_config_kind" xalign="0"/>
                         <field name="sub_elem_config_kind" xfill="1" xexpand="0" xalign="0"/>
+                        <label name="sub_elem_taxes" xalign="0"/>
                         <field name="sub_elem_taxes" xexpand="1"/>
                         <newline/>
                         <group id="sub_simple" string="Sub Elem - Simple Settings" colspan="4"

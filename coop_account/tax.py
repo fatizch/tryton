@@ -90,7 +90,7 @@ class TaxVersion(CoopSQL, CoopView):
 
 
 class TaxManager(CoopSQL, CoopView):
-    '''A class that will manage a set of taxes'''
+    '''A Tax Manager'''
     __name__ = 'coop_account.tax_manager'
 
     taxes = fields.Many2Many(
