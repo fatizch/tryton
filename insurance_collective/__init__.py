@@ -17,6 +17,7 @@ def register():
         GroupEligibilityRule,
         GroupBenefit,
         GroupBenefitRule,
+        GroupEligibilityRelationKind,
         GroupReserveRule,
         GroupCoverageAmountRule,
         GBPContract,

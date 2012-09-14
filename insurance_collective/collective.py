@@ -1,6 +1,4 @@
 #-*- coding:utf-8 -*-
-from trytond.model import fields as fields
-
 from trytond.modules.insurance_product import *
 from trytond.modules.coop_utils import utils
 
@@ -8,7 +6,8 @@ from trytond.modules.coop_utils import utils
 __all__ = ['GroupInsurancePlan', 'GroupInsuranceCoverage',
            'GroupInsurancePlanOptionsCoverage', 'GroupBusinessRuleManager',
            'GroupGenericBusinessRule', 'GroupPricingRule',
-           'GroupEligibilityRule', 'GroupBenefit', 'GroupBenefitRule',
+           'GroupEligibilityRule', 'GroupEligibilityRelationKind',
+           'GroupBenefit', 'GroupBenefitRule',
            'GroupReserveRule', 'GroupCoverageAmountRule']
 
 
@@ -89,6 +88,18 @@ class GroupEligibilityRule(EligibilityRule):
         utils.change_relation_links(cls, 'ins_product', 'ins_collective')
 
 
+class GroupEligibilityRelationKind(EligibilityRelationKind):
+    'Define relation between eligibility rule and relation kind authorized'
+
+    __name__ = 'ins_collective.eligibility_relation_kind'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupEligibilityRelationKind, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
 class GroupBenefit(Benefit):
     'Benefit'
 
@@ -135,4 +146,3 @@ class GroupCoverageAmountRule(CoverageAmountRule):
     def __setup__(cls):
         super(GroupCoverageAmountRule, cls).__setup__()
         utils.change_relation_links(cls, 'ins_product', 'ins_collective')
-
