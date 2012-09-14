@@ -7,15 +7,18 @@ from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
-from trytond.modules.coop_utils import utils, CoopView, CoopSQL, GetResult
+from trytond.modules.coop_utils import CoopView, CoopSQL, GetResult
+from trytond.modules.coop_utils import utils as utils
 from trytond.modules.insurance_product import PricingResultLine
 from trytond.modules.insurance_product import EligibilityResultLine
 from trytond.modules.coop_utils import One2ManyDomain
 from trytond.modules.coop_utils import business
+from trytond.modules.coop_utils import update_args_with_subscriber, \
+    ArgsDoNotMatchException
 
 __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
            'BusinessRuleManager', 'GenericBusinessRule', 'BusinessRuleRoot',
-           'PricingRule', 'EligibilityRule',
+           'PricingRule', 'EligibilityRule', 'EligibilityRelationKind',
            'Benefit', 'BenefitRule', 'ReserveRule', 'CoverageAmountRule']
 
 CONFIG_KIND = [
@@ -596,25 +599,25 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
          required=True,
          depends=['currency_digits'])
     sub_elem_config_kind = fields.Selection(CONFIG_KIND,
-        'Sub Elem Conf. kind', required=True)
-    sub_elem_rule = fields.Many2One('rule_engine', 'Sub Elem Rule Engine',
+        'Conf. kind', required=True)
+    sub_elem_rule = fields.Many2One('rule_engine', 'Rule Engine',
         depends=['config_kind'])
     per_sub_elem_price = fields.Numeric(
         'Amount per Covered Element',
         digits=(16, Eval('currency_digits', 2)),
         depends=['currency_digits'])
-    taxes = fields.Many2One(
+    tax_mgr = fields.Many2One(
         'coop_account.tax_manager',
         'Taxes')
     sub_elem_taxes = fields.Many2One(
         'coop_account.tax_manager',
-        'Sub Elem Taxes')
+        'Taxes')
 
     def give_me_appliable_taxes(self, args):
         errs = []
         if 'date' in args:
-            if hasattr(self, 'taxes') and self.taxes:
-                res = self.taxes.give_appliable_taxes(args)
+            if hasattr(self, 'tax_mgr') and self.tax_mgr:
+                res = self.tax_mgr.give_appliable_taxes(args)
             else:
                 res = []
         else:
@@ -662,7 +665,7 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
 
         taxes, _ = self.give_me_appliable_sub_elem_taxes(args)
         tax_amounts = self.calculate_taxes(result.value, taxes)
-        result.taxes = tax_amounts
+        result.tax_mgr = tax_amounts
         return result, errors
 
     @staticmethod
@@ -678,7 +681,7 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
                     val.delete([val])
 
         for rule in rules:
-            delete_link(rule, 'taxes')
+            delete_link(rule, 'tax_mgr')
             delete_link(rule, 'sub_elem_taxes')
 
         super(PricingRule, cls).delete(rules)
@@ -688,28 +691,25 @@ class EligibilityRule(CoopSQL, BusinessRuleRoot):
     'Eligibility Rule'
 
     __name__ = 'ins_product.eligibility_rule'
-
     is_eligible = fields.Boolean('Is Eligible')
-
     sub_elem_config_kind = fields.Selection(CONFIG_KIND,
         'Sub Elem Conf. kind', required=True)
-
     sub_elem_rule = fields.Many2One('rule_engine', 'Sub Elem Rule Engine',
         depends=['config_kind'])
-
     is_sub_elem_eligible = fields.Boolean('Sub Elem Eligible')
-
-    subscriber_eligibility = fields.Selection(
+    subscriber_classes = fields.Selection(
         SUBSCRIBER_CLASSES,
         'Can be subscribed',
         required=True)
+    relation_kinds = fields.Many2Many('ins_product.eligibility_relation_kind',
+        'eligibility_rule', 'relation_kind', 'Relations Authorized')
 
     def give_me_eligibility(self, args):
         # First of all, we look for a subscriber data in the args and update
         # the args dictionnary for sub values.
         try:
-            utils.update_args_with_subscriber(args)
-        except utils.ArgsDoNotMatchException:
+            update_args_with_subscriber(args)
+        except ArgsDoNotMatchException:
             # If no Subscriber is found, automatic refusal
             return (EligibilityResultLine(
                 False, ['Subscriber not defined in args']), [])
@@ -722,11 +722,11 @@ class EligibilityRule(CoopSQL, BusinessRuleRoot):
             'party.company': 'subscriber_company'}
 
         # if it does not match, refusal
-        if not match_table[self.subscriber_eligibility] in args:
+        if not match_table[self.subscriber_classes] in args:
             return (EligibilityResultLine(
                 False,
                 ['Subscriber must be a %s'
-                    % dict(SUBSCRIBER_CLASSES)[self.subscriber_eligibility]]),
+                    % dict(SUBSCRIBER_CLASSES)[self.subscriber_classes]]),
                 [])
 
         # Now we can call the rule if it exists :
@@ -775,8 +775,19 @@ class EligibilityRule(CoopSQL, BusinessRuleRoot):
         return 'simple'
 
     @staticmethod
-    def default_subscriber_eligibility():
+    def default_subscriber_classes():
         return 'party.person'
+
+
+class EligibilityRelationKind(CoopSQL):
+    'Define relation between eligibility rule and relation kind authorized'
+
+    __name__ = 'ins_product.eligibility_relation_kind'
+
+    eligibility_rule = fields.Many2One('ins_product.eligibility_rule',
+        'Eligibility Rule', ondelete='CASCADE')
+    relation_kind = fields.Many2One('party.party_relation_kind',
+        'Relation Kind', ondelete='CASCADE')
 
 
 class Benefit(CoopSQL, Offered):

@@ -92,7 +92,7 @@ def get_or_create_tax(cfg_dict, code, name, vals=None):
             tax_ver.kind = val.get('kind', 'None')
             tax_ver.flat_value = Decimal(val.get('flat_value', 0))
             tax_ver.rate_value = Decimal(val.get('rate_value', 0))
-            tax.rates.append(tax_ver)
+            tax.versions.append(tax_ver)
     tax.save()
     return tax
 
@@ -134,7 +134,7 @@ def create_AAA_Product(cfg_dict, code, name):
 
     prm_b = gbr_b.pricing_rule[0]
     prm_b.price = Decimal(15.0)
-    prm_b.taxes = tax_manager
+    prm_b.tax_mgr = tax_manager
 
     brm_a = brm()
     brm_a.business_rules.append(gbr_a)

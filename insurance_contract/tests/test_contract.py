@@ -67,7 +67,7 @@ class ContractTestCase(unittest.TestCase):
         tax = self.Tax()
         tax.name = 'Test Tax %s' % code
         tax.code = 'code'
-        tax.rates = [tax_v1]
+        tax.versions = [tax_v1]
 
         tax.save()
 
@@ -197,7 +197,7 @@ return True'''
 
         # Coverage A
 
-        tax = self.create_tax('TT', 0.13)
+        tax = self.create_tax('TT', 13)
 
         tm = self.TaxManager()
         tm.taxes = [tax]
@@ -207,7 +207,7 @@ return True'''
         prm_a = self.pricing()
         prm_a.config_kind = 'simple'
         prm_a.price = 12
-        prm_a.taxes = tm
+        prm_a.tax_mgr = tm
         prm_a.per_sub_elem_price = 1
 
         gbr_a = self.gbr()
@@ -243,7 +243,7 @@ return True'''
 
         # Coverage B
 
-        tax_1 = self.create_tax('TTA', 0.27)
+        tax_1 = self.create_tax('TTA', 27)
 
         tm1 = self.TaxManager()
         tm1.taxes = [tax_1]
@@ -252,7 +252,7 @@ return True'''
 
         prm_c = self.pricing()
         prm_c.config_kind = 'simple'
-        prm_c.taxes = tm1
+        prm_c.tax_mgr = tm1
         prm_c.price = 30
 
         gbr_c = self.gbr()
@@ -547,9 +547,9 @@ return True'''
                 '\t\t\t\tBase Price => 15.00',
                 '']
 
-            # print '\n'.join(lines)
-            # print '###################'
-            # print '\n'.join(good_lines)
+            print '\n'.join(lines)
+            print '###################'
+            print '\n'.join(good_lines)
 
             lines.sort()
             good_lines.sort()

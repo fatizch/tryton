@@ -3,7 +3,7 @@ from trytond.pool import Pool
 
 from trytond.pyson import Eval
 
-from trytond.modules.coop_utils import CoopSQL, CoopView
+from trytond.modules.coop_utils import CoopSQL, CoopView, utils as utils
 
 
 __all__ = [
@@ -20,23 +20,13 @@ class TaxDesc(CoopSQL, CoopView):
 
     name = fields.Char('Tax Name')
     code = fields.Char('Code')
-    rates = fields.One2Many(
+    versions = fields.One2Many(
         'coop_account.tax_version',
         'my_tax_desc',
         'Versionned Rates')
 
     # To do : CTD0069
     # Check there is no overlapping of versions before save
-
-    def get_good_version_at_date(self, date):
-        for rate in self.rates:
-            if rate.start_date <= date:
-                if hasattr(rate, 'end_date') and rate.end_date:
-                    if rate.end_date >= date:
-                        return rate
-                    continue
-                return rate
-        return None
 
 
 class TaxVersion(CoopSQL, CoopView):
@@ -51,7 +41,7 @@ class TaxVersion(CoopSQL, CoopView):
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     kind = fields.Selection(
-        [('flat', 'Flat'), ('none', 'None'), ('rate', 'Rate')],
+        [('flat', 'Flat'), ('rate', 'Rate')],
         'Rating mode',
         required=True)
     flat_value = fields.Numeric(
@@ -63,7 +53,7 @@ class TaxVersion(CoopSQL, CoopView):
 
     @staticmethod
     def default_kind():
-        return 'none'
+        return 'rate'
 
     @staticmethod
     def default_flat_value():
@@ -83,7 +73,7 @@ class TaxVersion(CoopSQL, CoopView):
 
     def apply_tax(self, base):
         if self.kind == 'rate':
-            return base * self.rate_value
+            return base * self.rate_value / 100
         elif self.kind == 'flat':
             return self.flat_value
         return 0
@@ -102,10 +92,13 @@ class TaxManager(CoopSQL, CoopView):
     def give_appliable_taxes(self, args):
         res = []
         for tax in self.taxes:
-            tmp_res = tax.get_good_version_at_date(args['date'])
-            if tmp_res:
-                res.append(tmp_res)
+            res.extend(
+                utils.get_good_versions_at_date(tax, 'versions', args['date']))
         return res
+
+    def get_rec_name(self, name):
+        taxes = self.give_appliable_taxes({'date': utils.today()})
+        return '; '.join([tax.name for tax in taxes])
 
 
 class ManagerTaxRelation(CoopSQL):

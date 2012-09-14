@@ -41,6 +41,7 @@
                     <newline/>
                     <label name="rate_value" xalign="0"/>
                     <field name="rate_value"/>
+
                 </form>
                 ]]>
             </field>
@@ -76,7 +77,7 @@
                     </group>
                     <newline/>
                     <group id="versions" yexpand="1" yfill="1">
-                        <field name="rates" yexpand="1"/>
+                        <field name="versions" yexpand="1"/>
                     </group>
                 </form>
                 ]]>
