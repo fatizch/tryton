@@ -598,6 +598,12 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
     price = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
          required=True,
          depends=['currency_digits'])
+    price_kind = fields.Selection(
+        [
+            ('subscriber', 'Subscriber'),
+            ('cov_element', 'Covered Elements')
+        ],
+        'Price based on', required=True)
     sub_elem_config_kind = fields.Selection(CONFIG_KIND,
         'Conf. kind', required=True)
     sub_elem_rule = fields.Many2One('rule_engine', 'Rule Engine',
@@ -685,6 +691,10 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
             delete_link(rule, 'sub_elem_taxes')
 
         super(PricingRule, cls).delete(rules)
+
+    @staticmethod
+    def default_price_kind():
+        return 'subscriber'
 
 
 class EligibilityRule(CoopSQL, BusinessRuleRoot):

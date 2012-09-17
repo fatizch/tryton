@@ -308,7 +308,8 @@
                     </xpath>
                     <xpath expr="/form/notebook/page[@id=&quot;main&quot;]"
                      position="after">
-                        <page id="sub" string="Sub Element">
+                        <page id="sub" string="Sub Element"
+                            states="{'invisible': Eval('price_kind') != 'cov_element'}">
                             <label name="sub_elem_config_kind" xalign="0"/>
                             <field name="sub_elem_config_kind" xexpand="0" xalign="0"/>
                             <newline/>
@@ -333,8 +334,14 @@
                     </xpath>
                     <xpath expr="/form/notebook/page[@id=&quot;main&quot;]"
                         position="inside">
-                            <label name="taxes" xalign="0"/>
-                            <field name="taxes" xexpand="1"/> 
+                            <label name="tax_mgr" xalign="0"/>
+                            <field name="tax_mgr" xexpand="1"/> 
+                    </xpath>
+                    <xpath expr="/form/field[@name=&quot;template&quot;]"
+                        position="after">
+                            <newline/>
+                            <label name="price_kind" xalign="0"/>
+                            <field name="price_kind"/> 
                     </xpath>
                 </data>
                 ]]>
