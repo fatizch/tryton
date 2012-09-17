@@ -1,0 +1,199 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:coop_account.manager_tax_relation,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:coop_account.manager_tax_relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:coop_account.manager_tax_relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:coop_account.manager_tax_relation,manager:"
+msgid "Tax Manager"
+msgstr "Gestionnaire de Taxes"
+
+msgctxt "field:coop_account.manager_tax_relation,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:coop_account.manager_tax_relation,tax:"
+msgid "Tax Descriptor"
+msgstr "Taxe"
+
+msgctxt "field:coop_account.manager_tax_relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:coop_account.manager_tax_relation,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:coop_account.tax_desc,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:coop_account.tax_desc,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:coop_account.tax_desc,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:coop_account.tax_desc,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:coop_account.tax_desc,name:"
+msgid "Tax Name"
+msgstr "Nom"
+
+msgctxt "field:coop_account.tax_desc,rates:"
+msgid "Versionned Rates"
+msgstr "Taux Versionnés"
+
+msgctxt "field:coop_account.tax_desc,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:coop_account.tax_desc,versions:"
+msgid "Versionned Rates"
+msgstr "Taux Versionnés"
+
+msgctxt "field:coop_account.tax_desc,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:coop_account.tax_desc,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:coop_account.tax_manager,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:coop_account.tax_manager,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:coop_account.tax_manager,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:coop_account.tax_manager,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:coop_account.tax_manager,taxes:"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "field:coop_account.tax_manager,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:coop_account.tax_manager,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:coop_account.tax_version,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:coop_account.tax_version,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:coop_account.tax_version,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:coop_account.tax_version,flat_value:"
+msgid "Flat rate"
+msgstr "Taux Fixe"
+
+msgctxt "field:coop_account.tax_version,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:coop_account.tax_version,kind:"
+msgid "Rating mode"
+msgstr "Type"
+
+msgctxt "field:coop_account.tax_version,my_tax_desc:"
+msgid "Tax Descriptor"
+msgstr "Taxe"
+
+msgctxt "field:coop_account.tax_version,rate_value:"
+msgid "Appliable Rate"
+msgstr "Taux Applicable"
+
+msgctxt "field:coop_account.tax_version,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:coop_account.tax_version,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:coop_account.tax_version,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:coop_account.tax_version,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "model:coop_account.manager_tax_relation,name:"
+msgid "A Relation between a pricing rule and a tax"
+msgstr ""
+
+msgctxt "model:coop_account.tax_desc,name:"
+msgid "A Simple Tax Descriptor"
+msgstr ""
+
+msgctxt "model:coop_account.tax_manager,name:"
+msgid "A Tax Manager"
+msgstr ""
+
+msgctxt "model:coop_account.tax_version,name:"
+msgid "A tax Version"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_tax_form"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "model:ir.ui.menu,name:menu_account"
+msgid "Accounting"
+msgstr "Comptabilité"
+
+msgctxt "model:ir.ui.menu,name:menu_product_taxes"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "selection:coop_account.tax_version,kind:"
+msgid "Flat"
+msgstr "Fixe"
+
+msgctxt "selection:coop_account.tax_version,kind:"
+msgid "None"
+msgstr "Aucun"
+
+msgctxt "selection:coop_account.tax_version,kind:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "view:coop_account.tax_desc:"
+msgid "Tax Descriptor"
+msgstr "Taxe"
+
+msgctxt "view:coop_account.tax_version:"
+msgid "Tax Version"
+msgstr "Version de Taxe"

@@ -8,7 +8,7 @@ msgstr "Code"
 
 msgctxt "field:rule_engine,context:"
 msgid "Context"
-msgstr ""
+msgstr "Contexte"
 
 msgctxt "field:rule_engine,create_date:"
 msgid "Create Date"
@@ -20,7 +20,7 @@ msgstr "Créé par"
 
 msgctxt "field:rule_engine,data_tree:"
 msgid "Data Tree"
-msgstr ""
+msgstr "Arbre de Données"
 
 msgctxt "field:rule_engine,id:"
 msgid "ID"
@@ -36,7 +36,7 @@ msgstr "Nom"
 
 msgctxt "field:rule_engine,status:"
 msgid "Status"
-msgstr ""
+msgstr "Statut"
 
 msgctxt "field:rule_engine,test_cases:"
 msgid "Test Cases"
@@ -84,7 +84,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:rule_engine.context-rule_engine.tree_element,context:"
 msgid "Context"
-msgstr ""
+msgstr "Contexte"
 
 msgctxt "field:rule_engine.context-rule_engine.tree_element,create_date:"
 msgid "Create Date"
@@ -136,7 +136,7 @@ msgstr "Description"
 
 msgctxt "field:rule_engine.test_case,expected_result:"
 msgid "Expected Result"
-msgstr ""
+msgstr "Résultat attendu"
 
 msgctxt "field:rule_engine.test_case,id:"
 msgid "ID"
@@ -200,7 +200,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:rule_engine.test_rule.start,context:"
 msgid "Context"
-msgstr ""
+msgstr "Contexte"
 
 msgctxt "field:rule_engine.test_rule.start,id:"
 msgid "ID"
@@ -212,7 +212,7 @@ msgstr "ID"
 
 msgctxt "field:rule_engine.test_rule.test,result:"
 msgid "Result"
-msgstr ""
+msgstr "Résultat"
 
 msgctxt "field:rule_engine.tools_functions,id:"
 msgid "ID"
@@ -272,7 +272,7 @@ msgstr "Mis à jour par"
 
 msgctxt "model:ir.action,name:context_window"
 msgid "Contexts"
-msgstr ""
+msgstr "Contextes"
 
 msgctxt "model:ir.action,name:create_test_values_wizard"
 msgid "Create Test Values"
@@ -284,7 +284,7 @@ msgstr "Règles"
 
 msgctxt "model:ir.action,name:run_tests_wizard"
 msgid "Run Tests"
-msgstr ""
+msgstr "Jouer les Tests"
 
 msgctxt "model:ir.action,name:test_case_window_relate"
 msgid "Test Cases"
@@ -296,11 +296,11 @@ msgstr ""
 
 msgctxt "model:ir.action,name:tree_element_window"
 msgid "Tree Elements"
-msgstr ""
+msgstr "Eléments de l'arbre"
 
 msgctxt "model:ir.ui.menu,name:menu_context"
 msgid "Contexts"
-msgstr ""
+msgstr "Contextes"
 
 msgctxt "model:ir.ui.menu,name:menu_rule"
 msgid "Rules"
@@ -312,7 +312,7 @@ msgstr "Moteur de Règle"
 
 msgctxt "model:ir.ui.menu,name:menu_tree_element"
 msgid "Tree Elements"
-msgstr ""
+msgstr "Eléments de l'arbre"
 
 msgctxt "model:rule_engine,name:"
 msgid "Rule"
@@ -320,7 +320,7 @@ msgstr "Règle"
 
 msgctxt "model:rule_engine.context,name:"
 msgid "Context"
-msgstr ""
+msgstr "Contexte"
 
 msgctxt "model:rule_engine.context-rule_engine.tree_element,name:"
 msgid "Context Tree Element"
@@ -376,11 +376,11 @@ msgstr "Règle"
 
 msgctxt "view:rule_engine.context:"
 msgid "Context"
-msgstr ""
+msgstr "Contexte"
 
 msgctxt "view:rule_engine.context:"
 msgid "Contexts"
-msgstr ""
+msgstr "Contextes"
 
 msgctxt "view:rule_engine.run_tests.report:"
 msgid "Tests Report"

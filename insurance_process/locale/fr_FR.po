@@ -424,51 +424,51 @@ msgstr ""
 
 msgctxt "selection:ins_process.dummy_process_state,cur_action:"
 msgid "cancel"
-msgstr ""
+msgstr "Annuler"
 
 msgctxt "selection:ins_process.dummy_process_state,cur_action:"
 msgid "check"
-msgstr ""
+msgstr "Vérifier"
 
 msgctxt "selection:ins_process.dummy_process_state,cur_action:"
 msgid "complete"
-msgstr ""
+msgstr "Terminer"
 
 msgctxt "selection:ins_process.dummy_process_state,cur_action:"
 msgid "go_next"
-msgstr ""
+msgstr "Suivant"
 
 msgctxt "selection:ins_process.dummy_process_state,cur_action:"
 msgid "go_previous"
-msgstr ""
+msgstr "Précédent"
 
 msgctxt "selection:ins_process.dummy_process_state,cur_action:"
 msgid "suspend"
-msgstr ""
+msgstr "Suspendre"
 
 msgctxt "selection:ins_process.process_state,cur_action:"
 msgid "cancel"
-msgstr ""
+msgstr "Annuler"
 
 msgctxt "selection:ins_process.process_state,cur_action:"
 msgid "check"
-msgstr ""
+msgstr "Vérifier"
 
 msgctxt "selection:ins_process.process_state,cur_action:"
 msgid "complete"
-msgstr ""
+msgstr "Terminer"
 
 msgctxt "selection:ins_process.process_state,cur_action:"
 msgid "go_next"
-msgstr ""
+msgstr "Suivant"
 
 msgctxt "selection:ins_process.process_state,cur_action:"
 msgid "go_previous"
-msgstr ""
+msgstr "Précédent"
 
 msgctxt "selection:ins_process.process_state,cur_action:"
 msgid "suspend"
-msgstr ""
+msgstr "Suspendre"
 
 msgctxt "selection:ins_process.step_desc,button_default:"
 msgid "'Cancel' Button"
@@ -540,11 +540,11 @@ msgstr "Annuler"
 
 msgctxt "wizard_button:ins_process.dummy_process,dummy_step,steps_check:"
 msgid "Check"
-msgstr ""
+msgstr "Vérifier"
 
 msgctxt "wizard_button:ins_process.dummy_process,dummy_step,steps_complete:"
 msgid "Complete"
-msgstr ""
+msgstr "Terminer"
 
 msgctxt "wizard_button:ins_process.dummy_process,dummy_step,steps_next:"
 msgid "Next"
@@ -552,11 +552,11 @@ msgstr "Suivant"
 
 msgctxt "wizard_button:ins_process.dummy_process,dummy_step,steps_previous:"
 msgid "Previous"
-msgstr ""
+msgstr "Précédent"
 
 msgctxt "wizard_button:ins_process.dummy_process,dummy_step,steps_suspend:"
 msgid "Suspend"
-msgstr ""
+msgstr "Suspendre"
 
 msgctxt "wizard_button:ins_process.dummy_process,dummy_step1,steps_cancel:"
 msgid "Cancel"
@@ -564,11 +564,11 @@ msgstr "Annuler"
 
 msgctxt "wizard_button:ins_process.dummy_process,dummy_step1,steps_check:"
 msgid "Check"
-msgstr ""
+msgstr "Vérifier"
 
 msgctxt "wizard_button:ins_process.dummy_process,dummy_step1,steps_complete:"
 msgid "Complete"
-msgstr ""
+msgstr "Terminer"
 
 msgctxt "wizard_button:ins_process.dummy_process,dummy_step1,steps_next:"
 msgid "Next"
@@ -576,8 +576,8 @@ msgstr "Suivant"
 
 msgctxt "wizard_button:ins_process.dummy_process,dummy_step1,steps_previous:"
 msgid "Previous"
-msgstr ""
+msgstr "Précédent"
 
 msgctxt "wizard_button:ins_process.dummy_process,dummy_step1,steps_suspend:"
 msgid "Suspend"
-msgstr ""
+msgstr "Suspendre"

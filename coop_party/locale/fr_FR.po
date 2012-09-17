@@ -18,6 +18,14 @@ msgctxt "field:party.actor,reference:"
 msgid "Reference"
 msgstr "Référence"
 
+msgctxt "field:party.address,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:party.address,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
 msgctxt "field:party.generic_actor,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -125,6 +133,10 @@ msgstr "Personne"
 msgctxt "field:party.party,relations:"
 msgid "Relations"
 msgstr "Relations"
+
+msgctxt "field:party.party,summary:"
+msgid "Summary"
+msgstr "Résumé"
 
 msgctxt "field:party.party-relation,create_date:"
 msgid "Create Date"
@@ -246,6 +258,10 @@ msgctxt "field:party.person,maiden_name:"
 msgid "Maiden Name"
 msgstr "Nom de Jeune Fille"
 
+msgctxt "field:party.person,nationality:"
+msgid "Nationality"
+msgstr ""
+
 msgctxt "field:party.person,party:"
 msgid "Party"
 msgstr "Tiers"
@@ -353,6 +369,10 @@ msgstr "Rôles"
 msgctxt "view:party.party:"
 msgid "Relations"
 msgstr "Relations"
+
+msgctxt "view:party.party:"
+msgid "Summary"
+msgstr "Résumé"
 
 msgctxt "view:party.party_relation_kind:"
 msgid "Party Relation Kind"
