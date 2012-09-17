@@ -13,8 +13,8 @@ class Address(ModelSQL, ModelView):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
 
-    def get_summary(self, name=None, indent=0, at_date=None):
-        res = utils.re_indent_text(self.get_full_address(name), indent)
+    def get_summary(self, name=None, at_date=None):
+        res = self.get_full_address(name)
         return res
 
     @staticmethod

@@ -1,5 +1,4 @@
 import re
-import datetime
 from stdnum import luhn
 from ibanlib import iban
 
@@ -7,7 +6,7 @@ from trytond.model import fields as fields
 from trytond.pyson import Eval
 from trytond.pool import Pool
 
-from trytond.modules.coop_utils import CoopView, CoopSQL, zfill
+from trytond.modules.coop_utils import CoopView, CoopSQL, utils as utils
 
 BANK_ACCOUNT_KIND = [('IBAN', 'IBAN'),
                      ('RIB', 'RIB'),
@@ -49,6 +48,10 @@ class BankAccount(CoopSQL, CoopView):
     @staticmethod
     def default_start_date():
         return Pool().get('ir.date').today()
+
+    def get_summary(self, name=None, at_date=None):
+        return utils.get_field_as_summary(self, 'account_numbers',
+            False, at_date)
 
 
 class BankAccountNumber(CoopSQL, CoopView):
@@ -211,15 +214,15 @@ class BankAccountNumber(CoopSQL, CoopView):
     def on_change_with_number(self, name=None):
         if self.kind != 'RIB':
             return self.number
-        res = zfill(self, 'bank_code',)
-        res += zfill(self, 'branch_code')
-        res += zfill(self, 'account_number')
-        res += zfill(self, 'key')
+        res = utils.zfill(self, 'bank_code',)
+        res += utils.zfill(self, 'branch_code')
+        res += utils.zfill(self, 'account_number')
+        res += utils.zfill(self, 'key')
         return res
 
     def on_change_sub_rib(self, name):
         res = {}
-        val = zfill(self, name)
+        val = utils.zfill(self, name)
         if val:
             res[name] = val
             return res
@@ -238,6 +241,15 @@ class BankAccountNumber(CoopSQL, CoopView):
         return self.on_change_sub_rib('key')
 
     def pre_validate(self):
-        print 'toto'
         if not self.check_number():
             self.raise_user_error('invalid_number')
+
+    def get_rec_name(self, name):
+        if self.kind == 'RIB':
+            return '%s %s %s %s' % (self.bank_code, self.branch_code,
+                self.account_number, self.key)
+        else:
+            return self.number
+
+    def get_summary(self, name=None, at_date=None):
+        return '%s : %s' % (self.kind, self.rec_name)

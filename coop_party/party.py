@@ -122,22 +122,22 @@ class Party:
             return kind[0]
         return None
 
-    def get_summary(self, name=None, indent=0, at_date=None):
+    def get_summary(self, name=None, at_date=None):
         res = self.get_summary_header(name)
         res += utils.get_field_as_summary(self, 'addresses',
-            True, indent, at_date)
+            True, at_date)
         res += utils.get_field_as_summary(self, 'relations',
-            True, indent, at_date)
+            True, at_date)
         res += utils.get_field_as_summary(self, 'in_relation_with',
-            True, indent, at_date)
+            True, at_date)
         return res
 
-    def get_summary_header(self, name=None, indent=0, at_date=None):
+    def get_summary_header(self, name=None, at_date=None):
         res = "<span size='12'><b>%s</b></span>\n" % self.get_rec_name(name)
         if self.person and len(self.person) > 0:
-            res += self.person[0].get_summary_header(name, indent, at_date)
+            res += self.person[0].get_summary_header(name, at_date)
         if self.company and len(self.company) > 0:
-            res += self.company[0].get_summary_header(name, indent, at_date)
+            res += self.company[0].get_summary_header(name, at_date)
         return res
 
 
@@ -152,7 +152,7 @@ class Company(ModelSQL, ModelView):
         cls.currency.required = False
         cls._order.insert(0, ('name', 'ASC'))
 
-    def get_summary_header(self, name=None, indent=0, at_date=None):
+    def get_summary_header(self, name=None, at_date=None):
         return ''
 
 
@@ -237,10 +237,10 @@ class Person(CoopSQL, Actor):
     def get_nationality(self):
         return self.nationality
 
-    def get_summary_header(self, name=None, indent=0, at_date=None):
+    def get_summary_header(self, name=None, at_date=None):
         res = ''
-        res += utils.get_field_as_summary(self, 'ssn', indent=indent)
-        res += utils.get_field_as_summary(self, 'birth_date', indent=indent)
-        res += utils.get_field_as_summary(self, 'nationality', indent=indent)
-        res += utils.get_field_as_summary(self, 'maiden_name', indent=indent)
+        res += utils.get_field_as_summary(self, 'ssn')
+        res += utils.get_field_as_summary(self, 'birth_date')
+        res += utils.get_field_as_summary(self, 'nationality')
+        res += utils.get_field_as_summary(self, 'maiden_name')
         return res

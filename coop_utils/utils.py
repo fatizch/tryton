@@ -632,8 +632,7 @@ def translate_field(instance, var_name, src, ttype='field'):
     return res
 
 
-def get_field_as_summary(instance, var_name, with_label=True, indent=0,
-    at_date=None):
+def get_field_as_summary(instance, var_name, with_label=True, at_date=None):
 
     if not getattr(instance, var_name):
         return ''
@@ -643,21 +642,29 @@ def get_field_as_summary(instance, var_name, with_label=True, indent=0,
         for element in list_at_date:
             if not hasattr(element, 'get_summary'):
                 continue
-            if with_label and res == '':
-                res = '<b>%s :</b>' % translate_label(instance, var_name)
-            res += '\n%s\n' % element.get_summary(name=var_name,
-                indent=indent + 1, at_date=at_date)
+            sub_indent = 0
+            if res != '':
+                res += '\n'
+            if with_label:
+                if res == '':
+                    res = '<b>%s :</b>\n' % translate_label(instance, var_name)
+                sub_indent = 1
+            res += re_indent_text('%s\n' % element.get_summary(name=var_name,
+                    at_date=at_date),
+                sub_indent)
     else:
         if with_label:
             res = '%s : ' % translate_label(instance, var_name)
-        res += '%s\n' % re_indent_text(
-            translate_value(instance, var_name),
-            indent)
-    return res
+        if hasattr(getattr(instance, var_name), 'get_summary'):
+            value = getattr(instance, var_name).get_summary(at_date=at_date)
+        else:
+            value = translate_value(instance, var_name)
+        res += '%s\n' % value
+    return re_indent_text(res, 0)
 
 
 def re_indent_text(src, indent):
-    return "\n".join((4 * ' ' * indent) + i for i in src.splitlines())
+    return '%s\n' % "\n".join((4 * ' ' * indent) + i for i in src.splitlines())
 
 
 def today():

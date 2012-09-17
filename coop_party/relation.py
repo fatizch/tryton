@@ -74,14 +74,12 @@ class PartyRelation(CoopSQL, CoopView):
             if reverse_relation_kind:
                 return reverse_relation_kind.key
 
-    def get_summary(self, name=None, indent=None, at_date=None):
+    def get_summary(self, name=None, at_date=None):
         if name == 'relations':
             link = 'kind'
             party = self.to_party
         elif name == 'in_relation_with':
             link = 'reverse_kind'
             party = self.from_party
-        return utils.re_indent_text(
-            '%s %s' % (utils.translate_value(self, link),
-                    party.get_rec_name(name)),
-            indent)
+        return '%s %s' % (utils.translate_value(self, link),
+                    party.rec_name)

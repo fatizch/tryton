@@ -4,7 +4,7 @@ from ibanlib import iban
 from trytond.model import fields as fields
 from trytond.pool import PoolMeta
 
-from trytond.modules.coop_utils import CoopSQL
+from trytond.modules.coop_utils import CoopSQL, utils as utils
 from trytond.modules.coop_party import Actor
 __metaclass__ = PoolMeta
 
@@ -19,6 +19,12 @@ class Party:
         size=1)
     bank_accounts = fields.One2Many('party.bank_account', 'party',
         'Bank Accounts')
+
+    def get_summary(self, name=None, at_date=None):
+        res = super(Party, self).get_summary(name, at_date)
+        res += utils.get_field_as_summary(self, 'bank_accounts',
+            True, at_date)
+        return res
 
 
 class Bank(CoopSQL, Actor):
