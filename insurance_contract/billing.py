@@ -31,19 +31,32 @@ class GenericBillLine(CoopSQL, CoopView):
         'Amount TTC',
         required=True)
     base_price = fields.Numeric(
-        'Base Price')
+        'Base Price',
+        required=True)
     on_object = fields.Reference(
         'Target',
         'get_on_object_model'
         )
-    for_bill = fields.Many2One(
-        'ins_contract.billing.bill',
-        'For Bill')
+    master = fields.Reference(
+        'Master',
+        [('ins_contract.billing.bill', 'Bill'),
+            ('ins_contract.billing.generic_line', 'Line')])
+    kind = fields.Selection([
+        ('base', 'Base Amount'),
+        ('tax', 'Tax'),
+        ('fee', 'Fee'),
+        ], 'Kind')
+    childs = fields.One2Many(
+        'ins_contract.billing.generic_line',
+        'master',
+        'Child Lines')
 
     @staticmethod
     def get_on_object_model():
         f = lambda x: (x, x)
         return [
+            f('ins_product.product'),
+            f('ins_product.coverage'),
             f('ins_contract.contract'),
             f('ins_contract.option'),
             f('ins_contract.covered_data')]
@@ -56,19 +69,32 @@ class GenericBillLine(CoopSQL, CoopView):
         self.base_price = 0
         self.name = ''
 
-    def update_from_price_line(self, line):
-        number_of_days = \
-            self.end_date.toordinal() - self.start_date.toordinal() + 1
+    def update_from_price_line(self, line, number_of_days):
+        LineModel = Pool().get(self.__name__)
+        self.childs = []
+        for elem in line.all_lines:
+            sub_line = LineModel()
+            sub_line.flat_init(self.start_date, self.end_date)
+            sub_line.update_from_price_line(elem, number_of_days)
+            self.childs.append(sub_line)
         self.amount_ht = line.amount * number_of_days / 365
-        self.amount_ttc = line.amount * number_of_days / 365
         self.base_price = line.amount
+        self.kind = line.kind
         self.name = line.get_id()
         self.on_object = line.on_object
+        self.amount_ttc = line.get_total_detail('tax') * number_of_days / 365 \
+            + self.amount_ht
 
     def get_rec_name(self, name):
         if hasattr(self, 'on_object') and self.on_object:
             return convert_ref_to_obj(self.on_object).get_name_for_billing()
         return self.name
+
+    def is_main_line(self):
+        return hasattr(self, 'on_object') and self.on_object and \
+            self.on_object.split(',')[0] in (
+                'ins_product.product',
+                'ins_product.coverage')
 
 
 class Bill(CoopSQL, CoopView):
@@ -90,7 +116,7 @@ class Bill(CoopSQL, CoopView):
         required=True)
     lines = fields.One2Many(
         'ins_contract.billing.generic_line',
-        'for_bill',
+        'master',
         'Bill Lines')
     for_contract = fields.Reference(
         'Contract',
@@ -122,7 +148,9 @@ class Bill(CoopSQL, CoopView):
     def init_from_lines(self, lines):
         GenericBillLine = Pool().get(self.get_bill_line_model())
         for start_date, end_date, cur_line in lines:
+            number_of_days = \
+                end_date.toordinal() - start_date.toordinal() + 1
             bill_line = GenericBillLine()
             bill_line.flat_init(start_date, end_date)
-            bill_line.update_from_price_line(cur_line)
+            bill_line.update_from_price_line(cur_line, number_of_days)
             self.append_bill_line(bill_line)

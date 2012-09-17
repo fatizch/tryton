@@ -98,7 +98,7 @@ class TaxManager(CoopSQL, CoopView):
 
     def get_rec_name(self, name):
         taxes = self.give_appliable_taxes({'date': utils.today()})
-        return '; '.join([tax.name for tax in taxes])
+        return '; '.join([tax.my_tax_desc.name for tax in taxes])
 
 
 class ManagerTaxRelation(CoopSQL):

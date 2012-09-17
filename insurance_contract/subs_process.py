@@ -376,7 +376,6 @@ class ExtensionLifeState(DependantState):
         wizard.extension_life.covered_elements = []
         covered_person = CoveredPerson()
         # Bad, must be rewritten
-        print wizard.project.subscriber
         covered_person.person = wizard.project.subscriber.person[0].id
         covered_person.covered_data = covered_datas
         wizard.extension_life.covered_elements = [covered_person]
@@ -469,7 +468,7 @@ class PricingLine(CoopStepView):
         top_line = PricingLine()
         top_line.name = prefix + result.name
         top_line.value = result.value
-        top_line.taxes = result.get_total_taxes()
+        top_line.taxes = result.get_total_detail('tax')
         res = [top_line]
         for elem in result.desc:
             res += PricingLine.create_from_result(elem, prefix + '\t')

@@ -9,6 +9,7 @@
         <record model="ir.ui.view" id="generic_line_tree">
             <field name="model">ins_contract.billing.generic_line</field>
             <field name="type">tree</field>
+            <field name="field_childs">childs</field>
             <field name="arch" type="xml">
                     <![CDATA[
                         <tree string="Bill Lines">

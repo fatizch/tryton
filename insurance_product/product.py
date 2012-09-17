@@ -89,6 +89,9 @@ class Offered(CoopView, GetResult):
             res = date
         return res
 
+    def get_name_for_billing(self):
+        return self.name
+
 
 class Coverage(CoopSQL, Offered):
     'Coverage'
@@ -144,6 +147,8 @@ class Coverage(CoopSQL, Offered):
                     else:
                         _res.name = 'Base Price'
                 res += _res
+                res.on_object = '%s,%s' % (
+                    self.__name__, self.id)
             # We always append the errors (if any).
             errs += _errs
 
@@ -302,7 +307,7 @@ class Product(CoopSQL, Offered):
         contract = data_dict['contract']
         res[0].name = 'Product Base Price'
         if contract.id:
-            res[0].on_object = '%s,%s' % (contract.__name__, contract.id)
+            res[0].on_object = '%s,%s' % (self.__name__, self.id)
         try:
             res[1].remove('Business Manager pricing does not exist on %s'
                 % self.name)
@@ -646,7 +651,7 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
     def calculate_taxes(self, amount, taxes):
         res = {}
         for tax in taxes:
-            res[tax.get_code()] = tax.apply_tax(amount)
+            res[('tax', tax.get_code())] = tax.apply_tax(amount)
         return res
 
     def give_me_price(self, args):
@@ -658,7 +663,7 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
 
         taxes, _ = self.give_me_appliable_taxes(args)
         tax_amounts = self.calculate_taxes(result.value, taxes)
-        result.taxes = tax_amounts
+        result.update_details(tax_amounts)
         return result, errors
 
     def give_me_sub_elem_price(self, args):
@@ -671,7 +676,7 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
 
         taxes, _ = self.give_me_appliable_sub_elem_taxes(args)
         tax_amounts = self.calculate_taxes(result.value, taxes)
-        result.tax_mgr = tax_amounts
+        result.update_details(tax_amounts)
         return result, errors
 
     @staticmethod

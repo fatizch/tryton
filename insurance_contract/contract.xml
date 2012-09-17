@@ -6,7 +6,7 @@
     <!--                           Price Lines                          -->
     <!--################################################################-->
 
-        <record model="ir.ui.view" id="price_lines_tree">
+        <record model="ir.ui.view" id="price_lines_expandable_tree">
             <field name="model">ins_contract.price_line</field>
             <field name="type">tree</field>
             <field name="field_childs">child_lines</field>
@@ -14,9 +14,54 @@
                     <![CDATA[
                         <tree string="Pricing Lines">
                             <field name="name"/>
-                            <field name="amount"/>
+                            <field name="amount_for_display"/>
+                            <field name="taxes"/>
                         </tree>
                     ]]>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="price_lines_tree">
+            <field name="model">ins_contract.price_line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                    <![CDATA[
+                        <tree string="Pricing Lines">
+                            <field name="name"/>
+                            <field name="start_date_calculated"/>
+                            <field name="end_date_calculated"/>
+                            <field name="amount_for_display"/>
+                            <field name="taxes"/>
+                        </tree>
+                    ]]>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="price_line_view_form">
+            <field name="model">ins_contract.price_line</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                     <![CDATA[
+                     <form string="price_line">
+                         <group id="General">
+                             <label name="start_date_calculated" xalign="0"/>
+                             <field name="start_date_calculated" xexpand="1"/>
+                             <label name="end_date_calculated" xalign="0"/>
+                             <field name="end_date_calculated" xexpand="1"/>
+                             <newline/>
+                             <label name="amount_for_display" xalign="0"/>
+                             <field name="amount_for_display" xexpand="1"/>
+                             <label name="taxes" xalign="0"/>
+                             <field name="taxes" xexpand="1"/>
+                         </group>
+                         <newline/>
+                         <field name="child_lines" mode="tree" yfill="1"
+                             yexpand="1" xfill="1" 
+                             view_ids="insurance_contract.price_lines_tree"/>
+                         <field name="details" mode="tree" yfill="1"
+                             yexpand="1" xfill="1"
+                             view_ids="insurance_contract.price_lines_tree"/>
+                     </form>               ]]>
             </field>
         </record>
 
@@ -37,7 +82,8 @@
                          <newline/>
                          <group id="Pricing Data" yfill="1" yexpand="1">
                              <field name="prices" mode="tree" yfill="1"
-                                 yexpand="1" xfill="1"/>
+                                 yexpand="1" xfill="1"
+                                 view_ids="insurance_contract.price_lines_expandable_tree"/>
                          </group>
                      </form>               ]]>
             </field>
@@ -68,33 +114,35 @@
 			<field name="model">ins_contract.contract</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
-					 <![CDATA[
-						<form string="contract" col="5">
-							<group id="Test2" colspan="3" yexpand="1" yfill="1">
-					 			<group id="Administrative data">
-									<label name="contract_number" xalign="0"/>
-									<field name="contract_number" xfill="0" xalign="0"/>
-									<newline/>
-									<label name="start_date" xalign="0"/>
-									<field name="start_date"/>
-									<newline/>
-									<label name="status" xalign="0"/>
-									<field name="status" xfill="1"/>
-									<newline/>
-									<label name="product" xalign="0"/>
-									<field name="product" xfill="1"/>
-								</group>
-								<newline/>
-								<group id="Extension Data" yexpand="1" yfill="1">
-									<field name="extension_life"/>
-									<newline/>
-									<field name="billing_manager" mode="form"  yexpand="1" yfill="1"/>
-								</group>
-							</group>
-							<group yexpand="1" yfill="1" id="Test" colspan="2">
-								<field name="options" xfill="1" yfill="1"/>
-							</group>
-						</form>               ]]>
+			    <![CDATA[
+					<form string="contract" col="5">
+						<group id="Administrative data">
+							<label name="contract_number" xalign="0"/>
+							<field name="contract_number" xfill="0" xalign="0"/>
+							<label name="subscriber" xalign="0"/>
+                            <field name="subscriber" xfill="0" xalign="0"/>
+                            <newline/>
+							<label name="start_date" xalign="0"/>
+							<field name="start_date"/>
+							<label name="product" xalign="0"/>
+							<field name="product" xfill="1"/>
+						</group>
+						<newline/>
+						<notebook>
+						    <page string="Options" id="options">
+							    <field name="options" xfill="1" yfill="1"/>
+							</page>
+							<page string="Life Extension" id="life_extension">
+							    <field name="extension_life_displayer" mode="form"
+							        xexpand="1" yexpand="1"/>
+							</page>
+							<page string="Billing" id="billing">
+							    <field name="billing_manager" mode="form"
+							        yexpand="1" yfill="1"/>
+							</page>
+						</notebook>
+					</form>
+                ]]>
 			</field>
 		</record>
 

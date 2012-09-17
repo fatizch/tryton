@@ -5,7 +5,7 @@ from trytond.model import fields as fields
 
 from trytond.modules.coop_utils import CoopView, CoopSQL, convert_ref_to_obj
 from trytond.modules.coop_utils import limit_dates, to_date
-from trytond.modules.coop_utils import One2ManyDomain
+from trytond.modules.coop_utils import One2ManyDomain, WithAbstract
 
 # Needed for getting models
 from trytond.pool import Pool
@@ -127,6 +127,10 @@ class GenericContract(CoopSQL, CoopView):
                                       'contract',
                                       'Billing Manager')
 
+    # This field will be used to compute a textuel synthesis of the contract
+    # that will be displayed on top of the contract forms
+    summary = fields.Function(fields.Text('Summary'), 'get_summary')
+
     @staticmethod
     def get_new_contract_number():
         return 'Ct00000001'
@@ -181,6 +185,11 @@ class Contract(GenericContract):
     extension_life = fields.Many2One('ins_contract.extension_life',
                                      'Life Extension')
 
+    extension_life_displayer = fields.Function(fields.One2Many(
+        'ins_contract.extension_life',
+        None,
+        'Life Extension'), 'get_extension_life')
+
     extension_car = fields.Many2One('ins_contract.extension_car',
                                     'Car Extension')
 
@@ -213,6 +222,9 @@ class Contract(GenericContract):
             if elem.get_coverage() == coverage:
                 return elem
         return None
+
+    def get_extension_life(self, field_name):
+        return WithAbstract.serialize_field([self.extension_life])
 
     def get_active_coverages_at_date(self, at_date):
         return [elem.get_coverage()
@@ -346,12 +358,20 @@ class PriceLine(CoopSQL, CoopView):
     # dsplaying.
     __name__ = 'ins_contract.price_line'
 
+    # First are the 'real' fields :
+
     amount = fields.Numeric('Amount')
 
     name = fields.Char('Short Description')
 
+    master = fields.Many2One(
+        'ins_contract.price_line',
+        'Master Line')
+
     kind = fields.Selection(
-        [('price', 'Price'), ('tax', 'Tax')],
+        [('base', 'Base'),
+        ('tax', 'Tax'),
+        ('fee', 'Fee')],
         'Kind',
         readonly='True')
 
@@ -359,31 +379,49 @@ class PriceLine(CoopSQL, CoopView):
         'Priced object',
         'get_line_target_models')
 
-    taxes = fields.Function(fields.Numeric('Taxes'), 'get_total_taxes')
+    billing_manager = fields.Many2One(
+        'ins_contract.billing_manager',
+        'Billing Manager')
 
-    child_taxes = One2ManyDomain(
+    start_date = fields.Date('Start Date')
+
+    end_date = fields.Date('End Date')
+
+    all_lines = fields.One2Many(
         'ins_contract.price_line',
         'master',
-        'Sub-Lines',
-        domain=[('kind', '=', 'tax')])
+        'Lines',
+        readonly=True)
+
+    # Now some display fields :
+
+    taxes = fields.Function(fields.Numeric('Taxes'), 'get_total_taxes')
+
+    amount_for_display = fields.Function(
+        fields.Numeric('Amount'), 'get_amount_for_display')
+
+    start_date_calculated = fields.Function(fields.Date(
+        'Start Date'), 'get_start_date')
+
+    end_date_calculated = fields.Function(fields.Date(
+        'End Date'), 'get_end_date')
+
+    # Two special fields : they use the all_lines One2Many field as a base
+    # for two Domain-Dependant One2Many :
+
+    details = One2ManyDomain(
+        'ins_contract.price_line',
+        'master',
+        'Details',
+        domain=[('kind', '!=', 'base')],
+        readonly=True)
 
     child_lines = One2ManyDomain(
         'ins_contract.price_line',
         'master',
         'Sub-Lines',
-        domain=[('kind', '=', 'price')])
-
-    billing_manager = fields.Many2One(
-        'ins_contract.billing_manager',
-        'Billing Manager')
-
-    master = fields.Many2One(
-        'ins_contract.price_line',
-        'Master Line')
-
-    start_date = fields.Date('Start Date')
-
-    end_date = fields.Date('End Date')
+        domain=[('kind', '=', 'base')],
+        readonly=True)
 
     def get_id(self):
         if hasattr(self, 'on_object') and self.on_object:
@@ -394,7 +432,7 @@ class PriceLine(CoopSQL, CoopView):
         if not hasattr(self, 'name') or not self.name:
             self.name = ''
         self.amount = 0
-        self.child_lines = []
+        self.all_lines = []
 
     def init_from_result_line(self, line):
         if not line:
@@ -402,13 +440,17 @@ class PriceLine(CoopSQL, CoopView):
         PLModel = Pool().get(self.__name__)
         self.init_values()
         self.amount = line.value
-        self.child_taxes = []
-        for code, value in line.taxes.iteritems():
-            tax_line = PLModel()
-            tax_line.name = code
-            tax_line.amount = value
-            tax_line.kind = 'tax'
-            self.child_taxes.append(tax_line)
+        for (kind, code), value in line.details.iteritems():
+            detail_line = PLModel()
+            detail_line.name = code
+            detail_line.amount = value
+            detail_line.kind = kind
+            self.all_lines.append(detail_line)
+        if line.desc:
+            for elem in line.desc:
+                child_line = PLModel()
+                child_line.init_from_result_line(elem)
+                self.all_lines.append(child_line)
         if not self.name:
             if line.on_object:
                 self.name = convert_ref_to_obj(
@@ -417,27 +459,69 @@ class PriceLine(CoopSQL, CoopView):
                 self.name = line.name
         if line.on_object:
             self.on_object = line.on_object
-        if line.desc:
-            self.child_lines = []
-            for elem in line.desc:
-                child_line = PLModel()
-                child_line.init_from_result_line(elem)
-                self.child_lines.append(child_line)
 
     @staticmethod
     def default_kind():
-        return 'price'
+        return 'base'
 
-    def get_total_taxes(self):
-        return sum([tax.value for tax in self.child_taxes])
+    def get_total_taxes(self, field_name):
+        res = sum([tax.amount for tax in self.details if tax.kind == 'tax'])
+        if res:
+            return res
+
+    def get_total_detail(self, name):
+        res = 0
+        for line in self.details:
+            if line.kind == name:
+                res += line.amount
+        return res
+
+    def get_amount_for_display(self, field_name):
+        res = self.amount
+        if not res:
+            return None
+        return res
+
+    def get_start_date(self, field_name):
+        if hasattr(self, 'start_date') and self.start_date:
+            return self.start_date
+        if self.master:
+            return self.master.start_date_calculated
+
+    def get_end_date(self, field_name):
+        if hasattr(self, 'end_date') and self.end_date:
+            return self.end_date
+        if self.master:
+            return self.master.end_date_calculated
 
     @staticmethod
     def get_line_target_models():
         f = lambda x: (x, x)
         return [
+            f('ins_product.product'),
+            f('ins_product.coverage'),
             f('ins_contract.contract'),
             f('ins_contract.option'),
             f('ins_contract.covered_data')]
+
+    def is_main_line(self):
+        return hasattr(self, 'on_object') and self.on_object and \
+            self.on_object.__name__ in (
+                'ins_product.product',
+                'ins_product.coverage')
+
+    def print_line(self):
+        res = [self.get_id()]
+        res.append(self.name)
+        res.append('%.2f' % self.amount)
+        res.append(self.kind)
+        res.append('%s' % self.start_date)
+        res.append('%s' % self.end_date)
+        if self.on_object:
+            res.append(self.on_object.__name__)
+        else:
+            res.append('')
+        return ' - '.join(res)
 
 
 class BillingManager(CoopSQL, CoopView):
@@ -516,12 +600,12 @@ class BillingManager(CoopSQL, CoopView):
         # provided price_lines, in which all lines have set start and end dates
         lines_desc = []
         for elem in prices:
-            if not hasattr(elem[2], 'child_lines') or not elem[2].child_lines:
+            if elem[2].is_main_line():
                 if elem[2].amount:
                     lines_desc.append(elem)
-                continue
-            lines_desc += self.flatten(
-                [(elem[0], elem[1], line) for line in elem[2].child_lines])
+            else:
+                lines_desc += self.flatten(
+                    [(elem[0], elem[1], line) for line in elem[2].child_lines])
         return lines_desc
 
     def lines_as_dict(self, lines):

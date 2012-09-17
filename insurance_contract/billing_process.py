@@ -51,7 +51,11 @@ class BillParameters(CoopStep):
     @staticmethod
     def check_step_valid_interval(wizard):
         if wizard.bill_parameters.start_date > wizard.bill_parameters.end_date:
-            return (False, ['Start date must be greater than End date'])
+            return (False, ['Start date must be smaller than End date'])
+        if (wizard.bill_parameters.start_date <
+                wizard.process_state.get_contract().start_date):
+            return (False,
+                ["Start date must be greater than contract's start date"])
         return (True, [])
 
     @staticmethod
@@ -86,6 +90,13 @@ class BillLineForDisplay(CoopStepView):
 
     line_base_price = fields.Numeric('Base Price')
 
+    line_kind = fields.Char('Kind')
+
+    line_sub_lines = fields.One2Many(
+        'ins_contract.billing_process.bill_line_view',
+        None,
+        'Sub Lines')
+
     def init_from_bill_line(self, line):
         self.line_amount_ht = line.amount_ht
         self.line_amount_ttc = line.amount_ttc
@@ -93,6 +104,13 @@ class BillLineForDisplay(CoopStepView):
         self.line_end_date = line.end_date
         self.line_name = line.get_rec_name('')
         self.line_base_price = line.base_price
+        self.line_kind = line.kind
+        LineModel = Pool().get(self.__name__)
+        self.line_sub_lines = []
+        for sub_line in line.childs:
+            new_line = LineModel()
+            new_line.init_from_bill_line(sub_line)
+            self.line_sub_lines.append(new_line)
 
 
 class BillDisplay(CoopStep):
@@ -100,18 +118,19 @@ class BillDisplay(CoopStep):
 
     __name__ = 'ins_contract.billing_process.bill_display'
 
-    bill_amount_ht = fields.Numeric('Amount HT')
+    bill_amount_ht = fields.Numeric('Amount HT', readonly=True)
 
-    bill_amount_ttc = fields.Numeric('Amount TTC')
+    bill_amount_ttc = fields.Numeric('Amount TTC', readonly=True)
 
-    bill_start_date = fields.Date('Start Date')
+    bill_start_date = fields.Date('Start Date', readonly=True)
 
-    bill_end_date = fields.Date('End Date')
+    bill_end_date = fields.Date('End Date', readonly=True)
 
     bill_lines = fields.One2Many(
         'ins_contract.billing_process.bill_line_view',
         None,
-        'Bill Lines'
+        'Bill Lines',
+        readonly=True
         )
 
     @staticmethod
@@ -174,6 +193,7 @@ class BillingProcess(CoopProcess):
 
     def do_complete(self):
         the_bill = WithAbstract.get_abstract_objects(self, 'the_bill')
+        the_bill.for_contract = self.process_state.get_contract()
         the_bill.save()
         return (True, [])
 
