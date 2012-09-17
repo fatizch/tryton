@@ -956,7 +956,7 @@ msgstr "Règle Métier Racine"
 
 msgctxt "view:ins_product.business_rule_root:"
 msgid "Main"
-msgstr ""
+msgstr "Principal"
 
 msgctxt "view:ins_product.business_rule_root:"
 msgid "Rule Engine"

@@ -79,7 +79,7 @@ def get_country(models, country_code, countries):
 
 def add_address(models, line, bank, countries):
     address = bank.addresses[0]
-    address.line1 = line[11:49].strip()
+    address.name = line[11:49].strip()
     address.line3 = line[88:120].strip()
     address.street = line[120:152].strip().upper()
     address.streetbis = line[152:184].strip().upper()

@@ -5,14 +5,6 @@ from trytond.model import ModelView, ModelSQL, fields as fields
 from trytond.wizard import Wizard
 from trytond.pool import Pool
 
-_TYPES = [
-    ('bool', 'Boolean'),
-    ('str', 'String'),
-    ('int', 'Integer'),
-    ('float', 'Numeric'),
-    ('text', 'Text')
-]
-
 
 class CoopSQL(ModelSQL):
     pass
@@ -34,7 +26,8 @@ class TableOfTable(CoopSQL, CoopView):
     _table = 'coop_table_of_table'
 
     my_model_name = fields.Char('Model Name')
-    key = fields.Char('Key')
+    key = fields.Char('Key', states={'readonly': Bool(Eval('is_used'))},
+        depends=['is_used'])
     name = fields.Char('Value', required=True, translate=True)
     parent = fields.Many2One(None, 'Parent',
         ondelete='CASCADE')
@@ -42,6 +35,7 @@ class TableOfTable(CoopSQL, CoopView):
         domain=[('my_model_name', '=', Eval('my_model_name'))],
         depends=['my_model_name', 'parent'],
         states={'invisible': Bool(Eval('parent'))},)
+    is_used = fields.Function(fields.Boolean('Is Used'), 'get_is_used')
 
     @classmethod
     def __setup__(cls):
@@ -69,6 +63,23 @@ class TableOfTable(CoopSQL, CoopView):
         for dyn_sel in DynamicSelection.search([]):
             res.append((dyn_sel.key, dyn_sel.name))
         return res
+
+    @staticmethod
+    def get_class_where_used():
+        '''Method to override in all sub class and return the list of tuple
+        class, var_name of object using this class'''
+        raise NotImplementedError
+
+    def get_instances_using_me(self):
+        res = []
+        for cur_class, var_name in self.get_class_where_used():
+            Class = Pool().get(cur_class)
+            for cur_instance in Class.search([(var_name, '=', self.key)]):
+                res.append(cur_instance)
+        return res
+
+    def get_is_used(self, name):
+        return len(self.get_instances_using_me()) > 0
 
 
 class DynamicSelection(TableOfTable):

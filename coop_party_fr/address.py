@@ -9,13 +9,6 @@ class Address(ModelSQL, ModelView):
     "Address"
     __name__ = 'party.address'
 
-    line1 = fields.Char('Recipient', 38,
-        '''AFNOR - Line 1
-        For individual : Identity of the addressee -
-        Form of address or given name or surname...
-        For companies : Organization identification -
-        Organization name, Legal Status''',
-        required=True, states=STATES, depends=DEPENDS)
     line2 = fields.Char('Add. complement', 38,
         '''AFNOR - Line 2
         For individual : Delivery Point Access Data
@@ -32,6 +25,15 @@ class Address(ModelSQL, ModelView):
     @classmethod
     def __setup__(cls):
         super(Address, cls).__setup__()
+        cls.name = copy.copy(cls.name)
+        cls.name.size = 38
+        cls.name.string = 'Recipient'
+        cls.name.help = '''AFNOR - Line 1
+        For individual : Identity of the addressee -
+        Form of address or given name or surname...
+        For companies : Organization identification -
+        Organization name, Legal Status'''
+
         cls.street = copy.copy(cls.street)
         cls.street.size = 38
         if cls.street.on_change is None:
@@ -71,8 +73,8 @@ class Address(ModelSQL, ModelView):
 
     def get_full_address(self, name):
         res = ''
-        if self.line1:
-            res = self.line1 + '\n'
+        if self.name:
+            res = self.name + '\n'
         if self.line2:
             res += self.line2 + '\n'
         if self.line3:

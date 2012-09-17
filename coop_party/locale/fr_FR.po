@@ -22,9 +22,61 @@ msgctxt "field:party.address,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
+msgctxt "field:party.address,kind:"
+msgid "Kind"
+msgstr "Type"
+
 msgctxt "field:party.address,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
+
+msgctxt "field:party.address_kind,childs:"
+msgid "Sub values"
+msgstr "Sous valeurs"
+
+msgctxt "field:party.address_kind,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:party.address_kind,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.address_kind,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.address_kind,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:party.address_kind,key:"
+msgid "Key"
+msgstr "Clé"
+
+msgctxt "field:party.address_kind,my_model_name:"
+msgid "Model Name"
+msgstr "Nom de l'objet"
+
+msgctxt "field:party.address_kind,name:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "field:party.address_kind,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.address_kind,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.address_kind,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.address_kind,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
 
 msgctxt "field:party.generic_actor,create_date:"
 msgid "Create Date"
@@ -77,6 +129,10 @@ msgstr "Créé par"
 msgctxt "field:party.generic_actor_kind,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:party.generic_actor_kind,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:party.generic_actor_kind,key:"
 msgid "Key"
@@ -202,6 +258,10 @@ msgctxt "field:party.party_relation_kind,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:party.party_relation_kind,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:party.party_relation_kind,key:"
 msgid "Key"
 msgstr "Clé"
@@ -286,6 +346,10 @@ msgctxt "field:party.person,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "model:ir.action,name:act_address_kind_form"
+msgid "Address Kind"
+msgstr "Type d'adresse"
+
 msgctxt "model:ir.action,name:act_company_form"
 msgid "Company"
 msgstr "Société"
@@ -306,6 +370,10 @@ msgctxt "model:ir.ui.menu,name:menu_actor"
 msgid "Actors"
 msgstr "Acteurs"
 
+msgctxt "model:ir.ui.menu,name:menu_address_kind_form"
+msgid "Address Kind"
+msgstr "Type d'adresse"
+
 msgctxt "model:ir.ui.menu,name:menu_company_form"
 msgid "Company"
 msgstr "Société"
@@ -325,6 +393,10 @@ msgstr "Personne"
 msgctxt "model:party.actor,name:"
 msgid "Actor"
 msgstr "Acteur"
+
+msgctxt "model:party.address_kind,name:"
+msgid "Addresse Kind"
+msgstr "Type d'Adresse"
 
 msgctxt "model:party.generic_actor,name:"
 msgid "Generic Actor"

@@ -38,6 +38,7 @@ class ContractTestCase(unittest.TestCase):
         self.Tax = POOL.get('coop_account.tax_desc')
         self.TaxVersion = POOL.get('coop_account.tax_version')
         self.TaxManager = POOL.get('coop_account.tax_manager')
+        self.AddressKind = POOL.get('party.address_kind')
 
         with Transaction().start(DB_NAME,
                                  USER,
@@ -74,6 +75,11 @@ class ContractTestCase(unittest.TestCase):
         return tax
 
     def create_person(self):
+        address_kind = self.AddressKind()
+        address_kind.key = 'main'
+        address_kind.name = 'Main'
+        address_kind.save()
+
         party = self.Person()
         party.name = 'Toto'
         party.first_name = 'titi'

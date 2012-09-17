@@ -18,4 +18,5 @@ def register():
         ContactMechanism,
         GenericActorKind,
         GenericActor,
+        AddresseKind,
         module='coop_party', type_='model')

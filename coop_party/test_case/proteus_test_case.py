@@ -14,6 +14,7 @@ def get_models():
     res['Person'] = Model.get('party.person')
     res['RelationKind'] = Model.get('party.party_relation_kind')
     res['Relation'] = Model.get('party.party-relation')
+    res['AddressKind'] = Model.get('party.address_kind')
     return res
 
 
@@ -75,6 +76,7 @@ def launch_dice(cfg_dict, probability_name):
 def launch_test_case(cfg_dict):
     models = get_models()
     relations_kind = create_relations_kind(models)
+    create_address_kind(models)
     if is_table_empty(models['Person']):
         create_persons(models, cfg_dict, relations_kind)
 
@@ -145,3 +147,20 @@ def create_relations_kind(models):
     res['parent'] = get_or_create_relation_kind(models, 'parent', 'Parent Of',
         [get_or_create_relation_kind(models, 'child', 'Children Of')])
     return res
+
+
+def get_or_create_address_kind(models, key, name):
+    res = models['AddressKind'].find([('key', '=', key)])
+    if len(res) > 0:
+        return res[0]
+    res = models['AddressKind']()
+    res.key = key
+    res.name = name
+    res.save()
+    return res
+
+
+def create_address_kind(models):
+    get_or_create_address_kind(models, 'main', 'Main')
+    get_or_create_address_kind(models, '2nd', 'Secondary')
+    get_or_create_address_kind(models, 'job', 'Job')

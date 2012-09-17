@@ -181,16 +181,22 @@ class GenericActorKind(TableOfTable):
     __name__ = 'party.generic_actor_kind'
     _table = 'coop_table_of_table'
 
+    @staticmethod
+    def get_class_where_used():
+        return [('party.generic_actor', 'kind')]
+
 
 class GenericActor(CoopSQL, Actor):
     'Generic Actor'
 
     __name__ = 'party.generic_actor'
 
-    kind = fields.Many2One('party.generic_actor_kind', 'Kind',
-        domain=[('my_model_name', '=', 'party.generic_actor_kind'),
-                ('parent', '=', False)],
-        required=True)
+    kind = fields.Selection('get_possible_actor_kind', 'Kind', required=True)
+
+    @staticmethod
+    def get_possible_actor_kind():
+        return GenericActorKind.get_values_as_selection(
+            'party.generic_actor_kind')
 
 
 class Person(CoopSQL, Actor):

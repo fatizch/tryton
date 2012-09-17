@@ -28,6 +28,10 @@ class PartyRelationKind(TableOfTable):
         #if not children and no parent, the relation is symmetrical ex: spouse
         return self
 
+    @staticmethod
+    def get_class_where_used():
+        return [('party.party-relation', 'kind')]
+
 
 class PartyRelation(CoopSQL, CoopView):
     'Party Relation'

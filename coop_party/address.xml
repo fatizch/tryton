@@ -12,7 +12,10 @@
                 <![CDATA[
                 <data>
                 <xpath expr="/form/group[@id=&quot;checkboxes&quot;]"
-                position="after">
+                position="before">
+                    <newline/>
+                    <label name="kind"/>
+                    <field name="kind"/>
                     <newline/>
                     <label name="start_date"/>
                     <field name="start_date"/>
@@ -23,5 +26,43 @@
                 ]]>
             </field>
         </record>
+        <!-- Address kind tree view -->
+        <record model="ir.ui.view" id="address_kind_view_tree">
+            <field name="model">party.address_kind</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="coop_utils.dyn_selection_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+
+        <!-- Address Kind form view -->
+        <record model="ir.ui.view" id="address_kind_view_form">
+            <field name="model">party.address_kind</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml"/>
+            <field name="inherit" ref="coop_utils.dyn_selection_view_form"/>
+        </record>
+        <!-- View for the main menu and the event -->
+        <record model="ir.action.act_window" id="act_address_kind_form">
+            <field name="name">Address Kind</field>
+            <field name="res_model">party.address_kind</field>
+        </record>
+
+        <!-- View that connects the form in the tree with the specification -->
+        <record model="ir.action.act_window.view" id="act_address_kind_tree_view">
+            <field name="sequence" eval="10" />
+            <field name="view" ref="address_kind_view_tree" />
+            <field name="act_window" ref="act_address_kind_form" />
+        </record>
+
+        <!-- View for the edition or the Party Relation -->
+        <record model="ir.action.act_window.view" id="act_address_kind_form_view">
+            <field name="sequence" eval="20" />
+            <field name="view" ref="address_kind_view_form" />
+            <field name="act_window" ref="act_address_kind_form" />
+        </record>
+
+        <!-- Sub menu configuration Party Relation -->
+        <menuitem parent="party.menu_configuration" sequence="10" id="menu_address_kind_form"
+            icon="tryton-list" action="act_address_kind_form" />
     </data>
 </tryton>
