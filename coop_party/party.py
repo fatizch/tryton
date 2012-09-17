@@ -130,6 +130,8 @@ class Party:
             True, at_date)
         res += utils.get_field_as_summary(self, 'in_relation_with',
             True, at_date)
+        res += utils.get_field_as_summary(self, 'generic_roles',
+            True, at_date)
         return res
 
     def get_summary_header(self, name=None, at_date=None):
@@ -197,6 +199,9 @@ class GenericActor(CoopSQL, Actor):
     def get_possible_actor_kind():
         return GenericActorKind.get_values_as_selection(
             'party.generic_actor_kind')
+
+    def get_summary(self, name=None, at_date=None):
+        return utils.get_field_as_summary(self, 'kind', True, at_date)
 
 
 class Person(CoopSQL, Actor):
