@@ -11,12 +11,11 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                <tree string="Tax Version">
+                <tree string="Tax Version" editable="bottom">
                         <field name="start_date"/>
                         <field name="end_date"/>
                         <field name="kind"/>
-                        <field name="flat_value"/>
-                        <field name="rate_value"/>
+                        <field name="value"/>
                 </tree>
                 ]]>
             </field>
@@ -36,12 +35,8 @@
                     <label name="kind" xalign="0"/>
                     <field name="kind"/>
                     <newline/>
-                    <label name="flat_value" xalign="0"/>
-                    <field name="flat_value"/>
-                    <newline/>
-                    <label name="rate_value" xalign="0"/>
-                    <field name="rate_value"/>
-
+                    <label name="value" xalign="0"/>
+                    <field name="value"/>
                 </form>
                 ]]>
             </field>
@@ -58,6 +53,7 @@
                 <tree string="Tax Descriptor">
                         <field name="code"/>
                         <field name="name"/>
+                        <field name="current_value"/>
                 </tree>
                 ]]>
             </field>
@@ -69,11 +65,13 @@
             <field name="arch" type="xml">
                 <![CDATA[
                 <form string="Tax Descriptor">
-                    <group id="basic data">
+                    <group id="basic data" col="12">
                         <label name="code" xalign="0"/>
                         <field name="code"/>
                         <label name="name" xalign="0"/>
-                        <field name="name"/>
+                        <field name="name" colspan="9"/>
+                        <label name="description" xalign="0"/>
+                        <field name="description" colspan="11"/>
                     </group>
                     <newline/>
                     <group id="versions" yexpand="1" yfill="1">
