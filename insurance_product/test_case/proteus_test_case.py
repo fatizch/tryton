@@ -90,17 +90,55 @@ def get_or_create_tax(cfg_dict, code, name, vals=None):
             tax_ver.start_date = val.get('start_date', None)
             tax_ver.end_date = val.get('end_date', None)
             tax_ver.kind = val.get('kind', 'None')
-            tax_ver.flat_value = Decimal(val.get('flat_value', 0))
-            tax_ver.rate_value = Decimal(val.get('rate_value', 0))
+            tax_ver.value = Decimal(val.get('value', 0))
             tax.versions.append(tax_ver)
     tax.save()
     return tax
+
+
+def add_description(product):
+    if product.description:
+        return product
+    product.description = '''Une solution pour <b>compléter votre régime \
+obligatoire</b>
+<b>En cas d’arrêt de travail temporaire ou prolongé, maintenez votre \
+salaire à 100 %</b>
+    En cas d’arrêt de travail, seuls 50 % de vos revenus vous sont versés \
+par la Sécurité Sociale. Pour maintenir votre revenu et continuer à vivre\
+ normalement, une indemnité journalière complète intégralement celle de \
+votre régime obligatoire jusqu’au 1095ème jour (3 ans, délai après lequel \
+vous êtes considéré comme invalide).
+
+<b>En cas d’invalidité, votre pouvoir d’achat est préservé</b>
+    Vous risquez de ne plus pouvoir exercer votre emploi. Nous complétons \
+votre rente de la Sécurité Sociale par une rente d’invalidité, jusqu’à \
+votre retraite (au plus tard jusqu’à votre 60ème anniversaire).
+
+<b>En cas de décès ou de Perte Totale et Irréversible d’Autonomie, \
+l’avenir de vos proches est assuré</b>
+    Des garanties financières pour votre foyer :
+            • Capital décès
+            Vous mettez vos proches à l’abri des soucis financiers.Vous \
+choisissez librement le montant du capital qui peut aller jusqu’à \
+600 000 € et n’est pas imposable dans la limite de 152 500 € \
+(selon la réglementation en vigueur).
+            • Rente de conjoint
+            Une rente plafonnée à 20 000 € par an est versée jusqu’au 65ème \
+anniversaire du conjoint ou concubin.Vous avez la certitude que \
+votre conjoint bénéficiera d’un complément de revenu régulier \
+jusqu’à sa retraite.
+            • Rente éducation
+            Vous donnez les moyens de garantir à vos enfants le financement \
+de leurs études quoiqu’il arrive.Vos enfants perçoivent une rente \
+pouvant atteindre 4 500 € par an et ce, jusqu’à la fin de \
+leurs études (au plus tard jusqu’à leur 26ème anniversaire).'''
 
 
 def create_AAA_Product(cfg_dict, code, name):
     product_a = get_or_create_product(cfg_dict, code, name)
     if product_a.id > 0:
         return product_a
+    add_description(product_a)
     brm = Model.get('ins_product.business_rule_manager')
     gbr = Model.get('ins_product.generic_business_rule')
 
@@ -121,12 +159,12 @@ def create_AAA_Product(cfg_dict, code, name):
                                     datetime.timedelta(days=20)
 
     tax = get_or_create_tax(cfg_dict,
-        'TT1',
-        'Test Tax 1',
+        'CCSS',
+        u'Contribution prévue par le Code de la Sécurité sociale',
         [
             {'start_date': cfg_dict['Date'].today({}),
             'kind': 'rate',
-            'rate_value': 0.15}])
+            'value': 0.15}])
     tax_manager = cfg_dict['TaxManager']()
     tax_manager.taxes.append(tax)
 
@@ -313,6 +351,7 @@ def create_BBB_product(cfg_dict, code, name):
     product_b = get_or_create_product(cfg_dict, code, name)
     if product_b.id > 0:
         return product_b
+    add_description(product_b)
     coverage = Model.get('ins_product.coverage')
     brm = Model.get('ins_product.business_rule_manager')
     gbr = Model.get('ins_product.generic_business_rule')
