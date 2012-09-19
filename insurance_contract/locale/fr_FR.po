@@ -62,6 +62,10 @@ msgctxt "field:ins_contract.billing.generic_line,base_price:"
 msgid "Base Price"
 msgstr ""
 
+msgctxt "field:ins_contract.billing.generic_line,childs:"
+msgid "Child Lines"
+msgstr ""
+
 msgctxt "field:ins_contract.billing.generic_line,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -81,6 +85,14 @@ msgstr ""
 msgctxt "field:ins_contract.billing.generic_line,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_contract.billing.generic_line,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_contract.billing.generic_line,master:"
+msgid "Master"
+msgstr ""
 
 msgctxt "field:ins_contract.billing.generic_line,name:"
 msgid "Short Description"
@@ -190,6 +202,10 @@ msgctxt "field:ins_contract.billing_process.bill_line_view,line_end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
+msgctxt "field:ins_contract.billing_process.bill_line_view,line_kind:"
+msgid "Kind"
+msgstr "Type"
+
 msgctxt "field:ins_contract.billing_process.bill_line_view,line_name:"
 msgid "Short Description"
 msgstr ""
@@ -197,6 +213,10 @@ msgstr ""
 msgctxt "field:ins_contract.billing_process.bill_line_view,line_start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
+
+msgctxt "field:ins_contract.billing_process.bill_line_view,line_sub_lines:"
+msgid "Sub Lines"
+msgstr ""
 
 msgctxt "field:ins_contract.billing_process.bill_parameters,end_date:"
 msgid "End Date"
@@ -314,6 +334,10 @@ msgctxt "field:ins_contract.contract,extension_life:"
 msgid "Life Extension"
 msgstr ""
 
+msgctxt "field:ins_contract.contract,extension_life_displayer:"
+msgid "Life Extension"
+msgstr ""
+
 msgctxt "field:ins_contract.contract,id:"
 msgid "ID"
 msgstr "ID"
@@ -353,6 +377,10 @@ msgstr "Statut"
 msgctxt "field:ins_contract.contract,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
+
+msgctxt "field:ins_contract.contract,summary:"
+msgid "Summary"
+msgstr "Résumé"
 
 msgctxt "field:ins_contract.contract,write_date:"
 msgid "Write Date"
@@ -444,7 +472,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_contract.covered_element,covered_data:"
 msgid "Coverage Data"
-msgstr ""
+msgstr "Coverage Data"
 
 msgctxt "field:ins_contract.covered_element,create_date:"
 msgid "Create Date"
@@ -606,7 +634,15 @@ msgctxt "field:ins_contract.option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_contract.price_line,all_lines:"
+msgid "Lines"
+msgstr ""
+
 msgctxt "field:ins_contract.price_line,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:ins_contract.price_line,amount_for_display:"
 msgid "Amount"
 msgstr "Montant"
 
@@ -630,7 +666,15 @@ msgctxt "field:ins_contract.price_line,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_contract.price_line,details:"
+msgid "Details"
+msgstr "Détails"
+
 msgctxt "field:ins_contract.price_line,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.price_line,end_date_calculated:"
 msgid "End Date"
 msgstr "Date de Fin"
 
@@ -659,6 +703,10 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:ins_contract.price_line,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.price_line,start_date_calculated:"
 msgid "Start Date"
 msgstr "Date de Début"
 
@@ -1014,6 +1062,26 @@ msgctxt "model:ir.ui.menu,name:menu_start_subs"
 msgid "New Subscription Process"
 msgstr ""
 
+msgctxt "selection:ins_contract.billing.generic_line,kind:"
+msgid "Base Amount"
+msgstr "Montant de Base"
+
+msgctxt "selection:ins_contract.billing.generic_line,kind:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "selection:ins_contract.billing.generic_line,kind:"
+msgid "Tax"
+msgstr "Taxe"
+
+msgctxt "selection:ins_contract.billing.generic_line,master:"
+msgid "Bill"
+msgstr ""
+
+msgctxt "selection:ins_contract.billing.generic_line,master:"
+msgid "Line"
+msgstr ""
+
 msgctxt "selection:ins_contract.billing_process.process_state,cur_action:"
 msgid "cancel"
 msgstr "Annuler"
@@ -1071,12 +1139,20 @@ msgid "Refused"
 msgstr "Refusé"
 
 msgctxt "selection:ins_contract.price_line,kind:"
+msgid "Base"
+msgstr ""
+
+msgctxt "selection:ins_contract.price_line,kind:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "selection:ins_contract.price_line,kind:"
 msgid "Price"
 msgstr ""
 
 msgctxt "selection:ins_contract.price_line,kind:"
 msgid "Tax"
-msgstr ""
+msgstr "Taxe"
 
 msgctxt "selection:ins_contract.subs_process.covered_data_desc,status:"
 msgid "Active"
@@ -1143,8 +1219,20 @@ msgid "Billing Process - Bill Parameters"
 msgstr ""
 
 msgctxt "view:ins_contract.contract:"
+msgid "Billing"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
 msgid "Contract"
 msgstr "Contrat"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Life Extension"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "Options"
+msgstr "Options"
 
 msgctxt "view:ins_contract.contract:"
 msgid "contract"
@@ -1160,6 +1248,10 @@ msgstr ""
 
 msgctxt "view:ins_contract.price_line:"
 msgid "Pricing Lines"
+msgstr ""
+
+msgctxt "view:ins_contract.price_line:"
+msgid "price_line"
 msgstr ""
 
 msgctxt "view:ins_contract.subs_process.covered_data_desc:"

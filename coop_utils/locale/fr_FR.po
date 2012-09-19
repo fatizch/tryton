@@ -18,6 +18,10 @@ msgctxt "field:coop.dyn_selection,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:coop.dyn_selection,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:coop.dyn_selection,key:"
 msgid "Key"
 msgstr "Clé"
@@ -61,6 +65,10 @@ msgstr "Créé par"
 msgctxt "field:coop.table_of_table,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:coop.table_of_table,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:coop.table_of_table,key:"
 msgid "Key"

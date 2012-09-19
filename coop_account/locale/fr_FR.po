@@ -46,6 +46,14 @@ msgctxt "field:coop_account.tax_desc,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:coop_account.tax_desc,current_value:"
+msgid "Current Value"
+msgstr "Valeur Courante"
+
+msgctxt "field:coop_account.tax_desc,description:"
+msgid "Description"
+msgstr "Description"
+
 msgctxt "field:coop_account.tax_desc,id:"
 msgid "ID"
 msgstr "ID"
@@ -141,6 +149,10 @@ msgstr "Nom"
 msgctxt "field:coop_account.tax_version,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
+
+msgctxt "field:coop_account.tax_version,value:"
+msgid "Value"
+msgstr "Valeur"
 
 msgctxt "field:coop_account.tax_version,write_date:"
 msgid "Write Date"

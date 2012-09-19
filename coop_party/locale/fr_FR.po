@@ -320,7 +320,7 @@ msgstr "Nom de Jeune Fille"
 
 msgctxt "field:party.person,nationality:"
 msgid "Nationality"
-msgstr ""
+msgstr "Nationalité"
 
 msgctxt "field:party.person,party:"
 msgid "Party"

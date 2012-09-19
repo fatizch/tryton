@@ -406,6 +406,10 @@ msgctxt "field:ins_collective.enrollment,extension_life:"
 msgid "Life Extension"
 msgstr ""
 
+msgctxt "field:ins_collective.enrollment,extension_life_displayer:"
+msgid "Life Extension"
+msgstr ""
+
 msgctxt "field:ins_collective.enrollment,id:"
 msgid "ID"
 msgstr "ID"
@@ -449,6 +453,10 @@ msgstr "Statut"
 msgctxt "field:ins_collective.enrollment,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
+
+msgctxt "field:ins_collective.enrollment,summary:"
+msgid "Summary"
+msgstr "Résumé"
 
 msgctxt "field:ins_collective.enrollment,write_date:"
 msgid "Write Date"
@@ -609,6 +617,10 @@ msgstr "Statut"
 msgctxt "field:ins_collective.gbp_contract,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
+
+msgctxt "field:ins_collective.gbp_contract,summary:"
+msgid "Summary"
+msgstr "Résumé"
 
 msgctxt "field:ins_collective.gbp_contract,write_date:"
 msgid "Write Date"
