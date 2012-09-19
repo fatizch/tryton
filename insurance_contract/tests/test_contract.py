@@ -66,7 +66,7 @@ class ContractTestCase(unittest.TestCase):
     def create_tax(self, code, amount):
         tax_v1 = self.TaxVersion()
         tax_v1.kind = 'rate'
-        tax_v1.rate_value = Decimal(amount)
+        tax_v1.value = Decimal(amount)
         tax_v1.start_date = datetime.date.today()
 
         tax = self.Tax()
