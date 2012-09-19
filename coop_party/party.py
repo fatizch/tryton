@@ -135,7 +135,7 @@ class Party:
         return res
 
     def get_summary_header(self, name=None, at_date=None):
-        res = "<span size='12'><b>%s</b></span>\n" % self.get_rec_name(name)
+        res = "<b>%s</b>\n" % self.get_rec_name(name)
         if self.person and len(self.person) > 0:
             res += self.person[0].get_summary_header(name, at_date)
         if self.company and len(self.company) > 0:
