@@ -259,7 +259,9 @@ class Coverage(CoopSQL, Offered):
         date = args['date']
         res = []
         good_ext = self.give_me_extension_name(args)
-        for covered in contract.extension_life.covered_elements:
+        if not hasattr(contract, good_ext):
+            return []
+        for covered in getattr(contract, good_ext).covered_elements:
             # We must check that the current covered element is
             # covered by self.
             for covered_data in covered.covered_data:
