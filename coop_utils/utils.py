@@ -2,6 +2,8 @@ import ConfigParser
 import datetime
 import os
 
+from dateutil.relativedelta import relativedelta
+
 from trytond.pool import Pool
 from trytond.model import Model
 from trytond.model import fields as fields
@@ -705,3 +707,18 @@ def get_good_version_at_date(instance, var_name, at_date=None):
     res = get_good_versions_at_date(instance, var_name, at_date)
     if len(res) == 1:
         return res[0]
+
+
+def add_frequency(frequency, to_date):
+    if frequency == 'yearly':
+        return to_date + relativedelta(years=+1)
+    elif frequency == 'half-yearly':
+        return to_date + relativedelta(months=+6)
+    elif frequency == 'quarterly':
+        return to_date + relativedelta(months=+3)
+    elif frequency == 'monthly':
+        return to_date + relativedelta(months=+1)
+
+
+def number_of_days_between(start_date, end_date):
+    return end_date.toordinal() - start_date.toordinal() + 1
