@@ -6,6 +6,7 @@ from trytond.modules.coop_utils import utils
 __all__ = ['GroupInsurancePlan', 'GroupInsuranceCoverage',
            'GroupInsurancePlanOptionsCoverage', 'GroupBusinessRuleManager',
            'GroupGenericBusinessRule', 'GroupPricingRule',
+           'GroupPricingData', 'GroupPriceCalculator',
            'GroupEligibilityRule', 'GroupEligibilityRelationKind',
            'GroupBenefit', 'GroupBenefitRule',
            'GroupReserveRule', 'GroupCoverageAmountRule']
@@ -63,6 +64,28 @@ class GroupGenericBusinessRule(GenericBusinessRule):
     @classmethod
     def __setup__(cls):
         super(GroupGenericBusinessRule, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
+class GroupPricingData(PricingData):
+    'Pricing Rule'
+    __name__ = 'ins_collective.pricing_data'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupPricingData, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
+class GroupPriceCalculator(PriceCalculator):
+    'Pricing Rule'
+    __name__ = 'ins_collective.pricing_calculator'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupPriceCalculator, cls).__setup__()
         utils.change_relation_links(cls, 'ins_product', 'ins_collective')
 
 

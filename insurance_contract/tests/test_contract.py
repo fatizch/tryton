@@ -11,8 +11,6 @@ from trytond.tests.test_tryton import test_view, test_depends
 from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import WithAbstract
-
 
 class ContractTestCase(unittest.TestCase):
 
@@ -29,6 +27,8 @@ class ContractTestCase(unittest.TestCase):
         self.brm = POOL.get('ins_product.business_rule_manager')
         self.gbr = POOL.get('ins_product.generic_business_rule')
         self.pricing = POOL.get('ins_product.pricing_rule')
+        self.PricingData = POOL.get('ins_product.pricing_data')
+        self.Calculator = POOL.get('ins_product.pricing_calculator')
         self.eligibility = POOL.get('ins_product.eligibility_rule')
         self.currency = POOL.get('currency.currency')
         self.TreeElement = POOL.get('rule_engine.tree_element')
@@ -214,11 +214,28 @@ return True'''
 
         tm.save()
 
+        pr_data1 = self.PricingData()
+        pr_data1.config_kind = 'simple'
+        pr_data1.fixed_amount = 12
+        pr_data1.kind = 'base'
+
+        pr_calc1 = self.Calculator()
+        pr_calc1.data = [pr_data1]
+        pr_calc1.key = 'price'
+
+        pr_data2 = self.PricingData()
+        pr_data2.config_kind = 'simple'
+        pr_data2.fixed_amount = 1
+        pr_data2.kind = 'base'
+
+        pr_calc2 = self.Calculator()
+        pr_calc2.data = [pr_data2]
+        pr_calc2.key = 'sub_price'
+
         prm_a = self.pricing()
-        prm_a.config_kind = 'simple'
-        prm_a.price = 12
+
         prm_a.tax_mgr = tm
-        prm_a.per_sub_elem_price = 1
+        prm_a.calculators = [pr_calc1, pr_calc2]
 
         gbr_a = self.gbr()
         gbr_a.kind = 'ins_product.pricing_rule'
@@ -227,9 +244,17 @@ return True'''
                                         datetime.timedelta(days=10)
         gbr_a.pricing_rule = [prm_a]
 
+        pr_data3 = self.PricingData()
+        pr_data3.config_kind = 'simple'
+        pr_data3.fixed_amount = 15
+        pr_data3.kind = 'base'
+
+        pr_calc3 = self.Calculator()
+        pr_calc3.data = [pr_data3]
+        pr_calc3.key = 'price'
+
         prm_b = self.pricing()
-        prm_b.config_kind = 'simple'
-        prm_b.price = 15
+        prm_b.calculators = [pr_calc3]
 
         gbr_b = self.gbr()
         gbr_b.kind = 'ins_product.pricing_rule'
@@ -260,10 +285,19 @@ return True'''
 
         tm1.save()
 
+        pr_data4 = self.PricingData()
+        pr_data4.config_kind = 'simple'
+        pr_data4.fixed_amount = 30
+        pr_data4.kind = 'base'
+
+        pr_calc4 = self.Calculator()
+        pr_calc4.data = [pr_data4]
+        pr_calc4.key = 'price'
+
         prm_c = self.pricing()
         prm_c.config_kind = 'simple'
         prm_c.tax_mgr = tm1
-        prm_c.price = 30
+        prm_c.calculators = [pr_calc4]
 
         gbr_c = self.gbr()
         gbr_c.kind = 'ins_product.pricing_rule'
@@ -510,53 +544,57 @@ return True'''
             return res
 
         lines = []
+
+        def parse_line(line, prefix=''):
+            res = []
+            res.append(prefix + print_line(line))
+            if hasattr(line, 'childs') and line.childs:
+                for sub_elem in line.childs:
+                    res += map(lambda x: prefix + x,
+                        parse_line(sub_elem, '\t'))
+            return res
+
         for elem in wizard.summary.lines:
-            lines.append(print_line(elem))
+            lines += parse_line(elem)
+            lines += ['']
 
         def date_from_today(nb):
             return add_days(datetime.date.today(), nb)
 
         good_lines = [
-            date_from_today(5).isoformat(),
-            '\tTotal Price => 43.00 (Tx : 9.66)',
-            '\t\tProduct Base Price => 0.00',
-            '\t\tOptions => 43.00 (Tx : 9.66)',
-            '\t\t\tBeta Coverage => 30.00 (Tx : 8.10)',
-            '\t\t\t\tBase Price => 30.00 (Tx : 8.10)',
-            '\t\t\tAlpha Coverage => 13.00 (Tx : 1.56)',
-            '\t\t\t\tBase Price => 12.00 (Tx : 1.56)',
-            '\t\t\t\tToto => 1.00',
+            date_from_today(5).isoformat() + ' => 43.00 (Tx : 9.66)',
+            '\tAlpha Coverage => 13.00 (Tx : 1.56)',
+            '\t\tGlobal Price => 12.00 (Tx : 1.56)',
+            '\t\t\tbase => 12.00',
+            '\t\t\tTax - TVA => 1.56',
+            '\t\tToto => 1.00',
+            '\t\t\tbase => 1.00',
+            '\tBeta Coverage => 30.00 (Tx : 8.10)',
+            '\t\tGlobal Price => 30.00 (Tx : 8.10)',
+            '\t\t\tbase => 30.00',
+            '\t\t\tTax - TVA => 8.10',
             '',
-            date_from_today(2).isoformat(),
-            '\tTotal Price => 0.00',
-            '\t\tProduct Base Price => 0.00',
-            '\t\tOptions => 0.00',
+            date_from_today(2).isoformat() + ' => 0.00',
             '',
-            date_from_today(3).isoformat(),
-            '\tTotal Price => 13.00 (Tx : 1.56)',
-            '\t\tProduct Base Price => 0.00',
-            '\t\tOptions => 13.00 (Tx : 1.56)',
-            '\t\t\tAlpha Coverage => 13.00 (Tx : 1.56)',
-            '\t\t\t\tBase Price => 12.00 (Tx : 1.56)',
-            '\t\t\t\tToto => 1.00',
+            date_from_today(3).isoformat() + ' => 13.00 (Tx : 1.56)',
+            '\tAlpha Coverage => 13.00 (Tx : 1.56)',
+            '\t\tGlobal Price => 12.00 (Tx : 1.56)',
+            '\t\t\tbase => 12.00',
+            '\t\t\tTax - TVA => 1.56',
+            '\t\tToto => 1.00',
+            '\t\t\tbase => 1.00',
             '',
-            date_from_today(0).isoformat(),
-            '\tTotal Price => 0.00',
-            '\t\tProduct Base Price => 0.00',
-            '\t\tOptions => 0.00',
+            date_from_today(0).isoformat() + ' => 0.00',
             '',
-            date_from_today(11).isoformat(),
-            '\tTotal Price => 15.00',
-            '\t\tProduct Base Price => 0.00',
-            '\t\tOptions => 15.00',
-            '\t\t\tBeta Coverage => 0.00',
-            '\t\t\tAlpha Coverage => 15.00',
-            '\t\t\t\tBase Price => 15.00',
+            date_from_today(11).isoformat() + ' => 15.00',
+            '\tAlpha Coverage => 15.00',
+            '\t\tGlobal Price => 15.00',
+            '\t\t\tbase => 15.00',
             '']
 
-        # print '\n'.join(lines)
-        # print '###################'
-        # print '\n'.join(good_lines)
+#        print '\n'.join(lines)
+#        print '###################'
+#        print '\n'.join(good_lines)
 
         lines.sort()
         good_lines.sort()

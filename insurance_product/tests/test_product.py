@@ -4,6 +4,8 @@ import datetime
 # Needed for python test management
 import unittest
 
+from decimal import Decimal
+
 # Needed for tryton test integration
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import test_view, test_depends
@@ -28,6 +30,11 @@ class LaboratoryTestCase(unittest.TestCase):
         self.TestCase = POOL.get('rule_engine.test_case')
         self.TestCaseValue = POOL.get('rule_engine.test_case.value')
         self.RunTests = POOL.get('rule_engine.run_tests', type='wizard')
+        self.PricingData = POOL.get('ins_product.pricing_data')
+        self.Calculator = POOL.get('ins_product.pricing_calculator')
+        self.Tax = POOL.get('coop_account.tax_desc')
+        self.TaxVersion = POOL.get('coop_account.tax_version')
+        self.TaxManager = POOL.get('coop_account.tax_manager')
 
     def test0005views(self):
         '''
@@ -138,6 +145,21 @@ return True'''
 
         return rule
 
+    def create_tax(self, code, amount):
+        tax_v1 = self.TaxVersion()
+        tax_v1.kind = 'rate'
+        tax_v1.rate_value = Decimal(amount)
+        tax_v1.start_date = datetime.date.today()
+
+        tax = self.Tax()
+        tax.name = 'Test Tax %s' % code
+        tax.code = 'TVA'
+        tax.versions = [tax_v1]
+
+        tax.save()
+
+        return tax
+
     def test0010Coverage_creation(self):
         '''
             Tests process desc creation
@@ -167,10 +189,35 @@ return True'''
 
             # Coverage A
 
+            tax = self.create_tax('TT', 13)
+
+            tm = self.TaxManager()
+            tm.taxes = [tax]
+
+            tm.save()
+
+            pr_data1 = self.PricingData()
+            pr_data1.config_kind = 'simple'
+            pr_data1.fixed_amount = 12
+            pr_data1.kind = 'base'
+
+            pr_calc1 = self.Calculator()
+            pr_calc1.data = [pr_data1]
+            pr_calc1.key = 'price'
+
+            pr_data2 = self.PricingData()
+            pr_data2.config_kind = 'simple'
+            pr_data2.fixed_amount = 1
+            pr_data2.kind = 'base'
+
+            pr_calc2 = self.Calculator()
+            pr_calc2.data = [pr_data2]
+            pr_calc2.key = 'sub_price'
+
             prm_a = self.pricing()
-            prm_a.config_kind = 'simple'
-            prm_a.price = 12
-            prm_a.per_sub_elem_price = 1
+
+            prm_a.tax_mgr = tm
+            prm_a.calculators = [pr_calc1, pr_calc2]
 
             gbr_a = self.gbr()
             gbr_a.kind = 'ins_product.pricing_rule'
@@ -179,9 +226,17 @@ return True'''
                                             datetime.timedelta(days=10)
             gbr_a.pricing_rule = [prm_a]
 
+            pr_data3 = self.PricingData()
+            pr_data3.config_kind = 'simple'
+            pr_data3.fixed_amount = 15
+            pr_data3.kind = 'base'
+
+            pr_calc3 = self.Calculator()
+            pr_calc3.data = [pr_data3]
+            pr_calc3.key = 'price'
+
             prm_b = self.pricing()
-            prm_b.config_kind = 'simple'
-            prm_b.price = 15
+            prm_b.calculators = [pr_calc3]
 
             gbr_b = self.gbr()
             gbr_b.kind = 'ins_product.pricing_rule'
@@ -205,9 +260,26 @@ return True'''
 
             # Coverage B
 
+            tax_1 = self.create_tax('TTA', 27)
+
+            tm1 = self.TaxManager()
+            tm1.taxes = [tax_1]
+
+            tm1.save()
+
+            pr_data4 = self.PricingData()
+            pr_data4.config_kind = 'simple'
+            pr_data4.fixed_amount = 30
+            pr_data4.kind = 'base'
+
+            pr_calc4 = self.Calculator()
+            pr_calc4.data = [pr_data4]
+            pr_calc4.key = 'price'
+
             prm_c = self.pricing()
             prm_c.config_kind = 'simple'
-            prm_c.price = 30
+            prm_c.tax_mgr = tm1
+            prm_c.calculators = [pr_calc4]
 
             gbr_c = self.gbr()
             gbr_c.kind = 'ins_product.pricing_rule'

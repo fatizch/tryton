@@ -462,17 +462,31 @@ class PricingLine(CoopStepView):
 
     taxes = fields.Numeric('Taxes')
 
+    childs = fields.One2Many(
+        'ins_contract.subs_process.lines',
+        None,
+        'Details')
+
     @staticmethod
-    def create_from_result(result, prefix=''):
+    def create_from_result(result):
         # result is a PricingLineResult instance
         top_line = PricingLine()
-        top_line.name = prefix + result.name
+        top_line.name = result.name
         top_line.value = result.value
-        top_line.taxes = result.get_total_detail('tax')
-        res = [top_line]
+        if not result.is_detail_alone('tax'):
+            top_line.taxes = result.get_total_detail('tax')
+        top_line.childs = []
         for elem in result.desc:
-            res += PricingLine.create_from_result(elem, prefix + '\t')
-        return res
+            top_line.childs.append(PricingLine.create_from_result(elem))
+        return top_line
+
+    @staticmethod
+    def default_taxes():
+        return 0
+
+    @staticmethod
+    def default_value():
+        return 0
 
 
 class SummaryState(CoopStep):
@@ -501,10 +515,14 @@ class SummaryState(CoopStep):
         for key, value in prices.iteritems():
             line = PricingLine()
             line.name = key
-            wizard.summary.lines.append(line)
-            other_lines = PricingLine.create_from_result(value, '\t')
-            wizard.summary.lines += other_lines
-            line = PricingLine()
+            line.value = 0
+            line.taxes = 0
+            line.childs = []
+            for val in value:
+                sub_line = PricingLine.create_from_result(val)
+                line.childs.append(sub_line)
+                line.value += sub_line.value
+                line.taxes += sub_line.taxes
             wizard.summary.lines.append(line)
         return (True, [])
 

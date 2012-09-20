@@ -144,6 +144,7 @@
 		<record model="ir.ui.view" id="lines_view">
 			<field name="model">ins_contract.subs_process.lines</field>
 			<field name="type">tree</field>
+            <field name="field_childs">childs</field>
 			<field name="arch" type="xml">
 					<![CDATA[
 						<tree string="Pricing Lines">

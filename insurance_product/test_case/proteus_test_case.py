@@ -21,6 +21,8 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['Tax'] = Model.get('coop_account.tax_desc')
     cfg_dict['TaxVersion'] = Model.get('coop_account.tax_version')
     cfg_dict['TaxManager'] = Model.get('coop_account.tax_manager')
+    cfg_dict['PricingData'] = Model.get('ins_product.pricing_data')
+    cfg_dict['Calculator'] = Model.get('ins_product.pricing_calculator')
     return cfg_dict
 
 
@@ -147,9 +149,28 @@ def create_AAA_Product(cfg_dict, code, name):
     gbr_a.start_date = cfg_dict['Date'].today({})
     gbr_a.end_date = cfg_dict['Date'].today({}) + \
                                     datetime.timedelta(days=10)
+
+    pr_data1 = cfg_dict['PricingData']()
+    pr_data1.config_kind = 'simple'
+    pr_data1.fixed_amount = Decimal(12)
+    pr_data1.kind = 'base'
+
+    pr_calc1 = cfg_dict['Calculator']()
+    pr_calc1.data.append(pr_data1)
+    pr_calc1.key = 'price'
+
+    pr_data2 = cfg_dict['PricingData']()
+    pr_data2.config_kind = 'simple'
+    pr_data2.fixed_amount = Decimal(1)
+    pr_data2.kind = 'base'
+
+    pr_calc2 = cfg_dict['Calculator']()
+    pr_calc2.data.append(pr_data2)
+    pr_calc2.key = 'sub_price'
+
     prm_a = gbr_a.pricing_rule[0]
-    prm_a.price = Decimal(12.0)
-    prm_a.per_sub_elem_price = Decimal(1.0)
+    prm_a.calculators.append(pr_calc1)
+    prm_a.calculators.append(pr_calc2)
 
     gbr_b = gbr()
     gbr_b.kind = 'ins_product.pricing_rule'
@@ -170,8 +191,17 @@ def create_AAA_Product(cfg_dict, code, name):
 
     tax_manager.save()
 
+    pr_data3 = cfg_dict['PricingData']()
+    pr_data3.config_kind = 'simple'
+    pr_data3.fixed_amount = Decimal(15)
+    pr_data3.kind = 'base'
+
+    pr_calc3 = cfg_dict['Calculator']()
+    pr_calc3.data.append(pr_data3)
+    pr_calc3.key = 'price'
+
     prm_b = gbr_b.pricing_rule[0]
-    prm_b.price = Decimal(15.0)
+    prm_b.calculators.append(pr_calc3)
     prm_b.tax_mgr = tax_manager
 
     brm_a = brm()
@@ -184,8 +214,18 @@ def create_AAA_Product(cfg_dict, code, name):
     gbr_c.start_date = cfg_dict['Date'].today({})
     gbr_c.end_date = cfg_dict['Date'].today({}) + \
                                     datetime.timedelta(days=10)
+
+    pr_data4 = cfg_dict['PricingData']()
+    pr_data4.config_kind = 'simple'
+    pr_data4.fixed_amount = Decimal(30)
+    pr_data4.kind = 'base'
+
+    pr_calc4 = cfg_dict['Calculator']()
+    pr_calc4.data.append(pr_data4)
+    pr_calc4.key = 'price'
+
     prm_c = gbr_c.pricing_rule[0]
-    prm_c.price = Decimal(30.0)
+    prm_c.calculators.append(pr_calc4)
 
     brm_b = brm()
     brm_b.business_rules.append(gbr_c)

@@ -64,7 +64,7 @@
         <!--  ******************************************* 
               **************    Product    **************
               *******************************************-->
-    
+
         <!-- Product -->
 
         <!-- form view -->
@@ -177,7 +177,7 @@
             ]]>
             </field>
         </record>
-        
+
         <!-- View for the main menu and the event -->
         <record model="ir.action.act_window" id="act_coverage_form">
             <field name="name">Coverages</field>
@@ -201,7 +201,7 @@
         <menuitem parent="menu_product" sequence="2" id="menu_coverage_form"
             icon="tryton-list" action="act_coverage_form" />
         <!--/Coverage -->
-        
+
         <!--  ******************************************* 
               ********    GenericBusinessRule    ********
               *******************************************-->
@@ -294,6 +294,89 @@
             </field>
         </record>
         <!--  ******************************************* 
+              ********        PricingData        ********
+              *******************************************-->
+        <record model="ir.ui.view" id="pricingdata_view_tree">
+            <field name="model">ins_product.pricing_data</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <tree string="Pricing Components">
+                        <field name="kind"/>
+                        <field name="code"/>
+                        <field name="config_kind"/>
+                    </tree>
+                ]]>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="pricingdata_view_form">
+            <field name="model">ins_product.pricing_data</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <form string="Pricing Component">
+                        <group id="main">
+                            <label name="kind" xalign="0"/>
+                            <field name="kind"/>
+                            <label name="code" xalign="0"/>
+                            <field name="code"/>
+                            <label name="config_kind" xalign="0"/>
+                            <field name="config_kind" xexpand="0" xalign="0"/>
+                        </group>
+                        <newline/>
+                        <group id="simple" colspan="4"
+                            states="{'invisible': Eval('config_kind') != 'simple'}">
+                            <label name="fixed_amount" xalign="0"/>
+                            <field name="fixed_amount"/>
+                        </group>
+                        <group id="rule" colspan="4"
+                            states="{'invisible': Eval('config_kind') != 'rule'}">
+                           <label name="rule" xalign="0"/>
+                           <field name="rule"/>
+                        </group>
+                    </form>
+                ]]>
+            </field>
+        </record>
+
+        <!--  ******************************************* 
+              ********        Calculator         ********
+              *******************************************-->
+
+        <record model="ir.ui.view" id="calculator_view_tree">
+            <field name="model">ins_product.pricing_calculator</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <tree string="Calculators">
+                        <field name="rec_name"/>
+                        <field name="key"/>
+                    </tree>
+                ]]>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="calculator_view_form">
+            <field name="model">ins_product.pricing_calculator</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <form string="Price Calculator">
+                        <group id="main">
+                            <label name="key" xalign="0"/>
+                            <field name="key"/>
+                        </group>
+                        <newline/>
+                        <group id="test_data" string="Components" xfill="1"
+                            yexpand="1" yfill="1">
+                            <field name="data" yfill="1" yexpand="1"/>
+                        </group>
+                    </form>
+                ]]>
+            </field>
+        </record>
+
+        <!--  ******************************************* 
               ********    PricingRule    ********
               *******************************************-->
         <record model="ir.ui.view" id="pricingrule_view_form">
@@ -308,46 +391,50 @@
                     </xpath>
                     <xpath expr="/form/notebook/page[@id=&quot;main&quot;]"
                      position="after">
+                        <!-- Commented whil using a O2M for calculators
+                        <page id="main_elem" string="Main">
+                            <label name="tax_mgr" xalign="0"/>
+                            <field name="tax_mgr" xexpand="1"/>
+                            <newline/>
+                            <label name="price" xalign="0"/>
+                            <field name="price"/>
+                        </page>
                         <page id="sub" string="Sub Element"
                             states="{'invisible': Eval('price_kind') != 'cov_element'}">
-                            <label name="sub_elem_config_kind" xalign="0"/>
-                            <field name="sub_elem_config_kind" xexpand="0" xalign="0"/>
-                            <newline/>
-                            <group id="sub_simple" colspan="4"
-                                states="{'invisible': Eval('sub_elem_config_kind') != 'simple'}">
-                                <label name="per_sub_elem_price" xalign="0"/>
-                                <field name="per_sub_elem_price"/>
-                            </group>
-                            <group id="sub_rule" colspan="4"
-                                states="{'invisible': Eval('sub_elem_config_kind') != 'rule'}">
-                               <label name="sub_elem_rule" xalign="0"/>
-                               <field name="sub_elem_rule"/>
-                            </group>
                             <label name="sub_elem_taxes" xalign="0"/>
                             <field name="sub_elem_taxes" xexpand="1"/>
+                            <newline/>
+                            <label name="sub_price" xalign="0"/>
+                            <field name="sub_price"/>
+                        </page>
+                        -->
+                        <page id="temp" string="Main">
+                            <label name="tax_mgr" xalign="0"/>
+                            <field name="tax_mgr" xexpand="1"/>
+                            <label name="sub_elem_taxes" xalign="0"/>
+                            <field name="sub_elem_taxes" xexpand="1"/>
+                            <newline/>
+                            <field name="calculators" yfill="1" yexpand="1"
+                                xexpand="1" colspan="4"/>
                         </page>
                     </xpath>
-                    <xpath expr="/form/notebook/page[@id=&quot;main&quot;]/group[@id=&quot;simple&quot;]"
-                        position="inside">
-                        <label name="price" xalign="0"/>
-                        <field name="price"/>
-                    </xpath>
                     <xpath expr="/form/notebook/page[@id=&quot;main&quot;]"
-                        position="inside">
-                            <label name="tax_mgr" xalign="0"/>
-                            <field name="tax_mgr" xexpand="1"/> 
+                        position="replace_attributes">
+                        <page id="main" states="{'invisible': True}"/>
                     </xpath>
                     <xpath expr="/form/field[@name=&quot;template&quot;]"
                         position="after">
                             <newline/>
                             <label name="price_kind" xalign="0"/>
-                            <field name="price_kind"/> 
+                            <field name="price_kind"/>
+                            <label name="frequency" xalign="0"/>
+                            <field name="frequency"/> 
                     </xpath>
                 </data>
                 ]]>
             </field>
         </record>
-        
+
         <!--  ******************************************* 
               ********    EligibilityRule    ********
               *******************************************-->

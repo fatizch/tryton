@@ -6,14 +6,32 @@
     <!--                        Bill Line Tree                          -->
     <!--################################################################-->
 
-        <record model="ir.ui.view" id="generic_line_tree">
+        <record model="ir.ui.view" id="generic_line_tree_node_expandable">
             <field name="model">ins_contract.billing.generic_line</field>
             <field name="type">tree</field>
-            <field name="field_childs">childs</field>
+            <field name="field_childs">node_childs</field>
             <field name="arch" type="xml">
                     <![CDATA[
                         <tree string="Bill Lines">
                             <field name="name"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="amount_ht"/>
+                            <field name="amount_ttc"/>
+                            <field name="base_price"/>
+                        </tree>
+                    ]]>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="generic_line_tree_flat">
+            <field name="model">ins_contract.billing.generic_line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                    <![CDATA[
+                        <tree string="Bill Lines">
+                            <field name="name"/>
+                            <field name="kind"/>
                             <field name="start_date"/>
                             <field name="end_date"/>
                             <field name="amount_ht"/>
@@ -34,20 +52,30 @@
             <field name="arch" type="xml">
                     <![CDATA[
                         <form string="Bill Summary">
-                            <label name="start_date" xalign="0"/>
-                            <field name="start_date"/>
-                            <label name="end_date" xalign="0"/>
-                            <field name="end_date"/>
+                            <group id="summary">
+                                <label name="start_date" xalign="0"/>
+                                <field name="start_date"/>
+                                <label name="end_date" xalign="0"/>
+                                <field name="end_date"/>
+                                <newline/>
+                                <label name="amount_ht" xalign="0"/>
+                                <field name="amount_ht"/>
+                                <label name="amount_ttc" xalign="0"/>
+                                <field name="amount_ttc"/>
+                                <newline/>
+                                <label name="base_price"/>
+                                <field name="base_price"/>
+                                <label name="on_object"/>
+                                <field name="on_object"/>
+                                <newline/>
+                                <label name="kind" xalign="0"/>
+                                <field name="kind"/>
+                            </group>
                             <newline/>
-                            <label name="amount_ht" xalign="0"/>
-                            <field name="amount_ht"/>
-                            <label name="amount_ttc" xalign="0"/>
-                            <field name="amount_ttc"/>
-                            <newline/>
-                            <label name="base_price"/>
-                            <field name="base_price"/>
-                            <label name="on_object"/>
-                            <field name="on_object"/>
+                            <group id="lines" yfill="1" yexpand="1">
+                                <field name="detail_childs" yfill="1" yexpand="1"
+                                    mode="tree" view_ids="insurance_contract.generic_line_tree_flat"/>
+                            </group>
                         </form>
                     ]]>
             </field>
@@ -62,7 +90,7 @@
         <!-- View that connect the form in the tree with the specification -->
         <record model="ir.action.act_window.view" id="act_generic_line_form_view1">
             <field name="sequence" eval="10" />
-            <field name="view" ref="generic_line_tree" />
+            <field name="view" ref="generic_line_tree_flat" />
             <field name="act_window" ref="act_generic_line_form" />
         </record>
 
@@ -119,9 +147,10 @@
                                 <field name="for_contract"/>
                             </group>
                             <newline/>
-                            <group id="Bill Lines" yfill="1" yexpand="1">
+                            <group id="bill_lines" yfill="1" yexpand="1">
                                 <field name="lines" mode="tree"
-                                    yexpand="1" yfill="1"/>
+                                    yexpand="1" yfill="1"
+                                    view_ids="insurance_contract.generic_line_tree_node_expandable"/>
                             </group>
                         </form>
                     ]]>

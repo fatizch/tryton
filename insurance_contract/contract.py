@@ -239,11 +239,11 @@ class Contract(GenericContract):
         return limit_dates(res, start, end)
 
     def calculate_price_at_date(self, date):
-        price, errs = self.product.get_result(
+        prices, errs = self.product.get_result(
             'total_price',
             {'date': date,
             'contract': self})
-        return (price, errs)
+        return (prices, errs)
 
     def calculate_prices_at_all_dates(self):
         prices = {}
@@ -369,7 +369,8 @@ class PriceLine(CoopSQL, CoopView):
         'Master Line')
 
     kind = fields.Selection(
-        [('base', 'Base'),
+        [('main', 'Line'),
+        ('base', 'Base'),
         ('tax', 'Tax'),
         ('fee', 'Fee')],
         'Kind',
@@ -413,20 +414,22 @@ class PriceLine(CoopSQL, CoopView):
         'ins_contract.price_line',
         'master',
         'Details',
-        domain=[('kind', '!=', 'base')],
+        domain=[('kind', '!=', 'main')],
         readonly=True)
 
     child_lines = One2ManyDomain(
         'ins_contract.price_line',
         'master',
         'Sub-Lines',
-        domain=[('kind', '=', 'base')],
+        domain=[('kind', '=', 'main')],
         readonly=True)
 
     def get_id(self):
         if hasattr(self, 'on_object') and self.on_object:
             return self.on_object.get_name_for_billing()
-        return self.name
+        if hasattr(self, 'name') and self.name:
+            return self.name
+        return self.kind
 
     def init_values(self):
         if not hasattr(self, 'name') or not self.name:
@@ -462,10 +465,10 @@ class PriceLine(CoopSQL, CoopView):
 
     @staticmethod
     def default_kind():
-        return 'base'
+        return 'main'
 
     def get_total_taxes(self, field_name):
-        res = sum([tax.amount for tax in self.details if tax.kind == 'tax'])
+        res = self.get_total_detail('tax')
         if res:
             return res
 
@@ -561,9 +564,12 @@ class BillingManager(CoopSQL, CoopView):
         for date, price in prices.iteritems():
             pl = PriceLine()
             pl.name = date
-            details = PriceLine()
-            details.init_from_result_line(price)
-            pl.child_lines = [details]
+            details = []
+            for cur_price in price:
+                detail = PriceLine()
+                detail.init_from_result_line(cur_price)
+                details.append(detail)
+            pl.all_lines = details
             pl.start_date = to_date(date)
             try:
                 pl.end_date = dates[dates.index(pl.start_date) + 1] + \
@@ -574,7 +580,7 @@ class BillingManager(CoopSQL, CoopView):
         self.prices = result_prices
 
     def next_billing_dates(self):
-        date = Pool().get('ir.date').today()
+        date = max(Pool().get('ir.date').today(), self.contract.start_date)
         return (date, date + datetime.timedelta(days=90))
 
     def get_bill_model(self):

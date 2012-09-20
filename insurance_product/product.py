@@ -11,14 +11,16 @@ from trytond.modules.coop_utils import CoopView, CoopSQL, GetResult
 from trytond.modules.coop_utils import utils as utils
 from trytond.modules.insurance_product import PricingResultLine
 from trytond.modules.insurance_product import EligibilityResultLine
-from trytond.modules.coop_utils import One2ManyDomain
+from trytond.modules.coop_utils import One2ManyDomain, WithAbstract
+from trytond.modules.coop_utils import add_frequency, number_of_days_between
 from trytond.modules.coop_utils import business
 from trytond.modules.coop_utils import update_args_with_subscriber, \
     ArgsDoNotMatchException
 
 __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
            'BusinessRuleManager', 'GenericBusinessRule', 'BusinessRuleRoot',
-           'PricingRule', 'EligibilityRule', 'EligibilityRelationKind',
+           'PricingRule', 'PriceCalculator', 'PricingData',
+           'EligibilityRule', 'EligibilityRelationKind',
            'Benefit', 'BenefitRule', 'ReserveRule', 'CoverageAmountRule']
 
 CONFIG_KIND = [
@@ -32,6 +34,24 @@ SUBSCRIBER_CLASSES = [
     ('party.company', 'Company'),
     ('party.party', 'All'),
     ]
+
+
+PRICING_LINE_KINDS = [
+    ('base', 'Base Price'),
+    ('tax', 'Tax'),
+    ('fee', 'Fee')
+    ]
+
+
+PRICING_FREQUENCY = [
+    ('yearly', 'Yearly'),
+    ('half-yearly', 'Half Yearly'),
+    ('quarterly', 'Quarterly'),
+    ('monthly', 'Monthly')
+    ]
+
+FAMILIES_EXTS = {
+    'life': 'extension_life'}
 
 
 class Offered(CoopView, GetResult):
@@ -145,7 +165,7 @@ class Coverage(CoopSQL, Offered):
                         _res.on_object = '%s,%s' % (
                             for_option.__name__, for_option.id)
                     else:
-                        _res.name = 'Base Price'
+                        _res.name = 'Global Price'
                 res += _res
                 res.on_object = '%s,%s' % (
                     self.__name__, self.id)
@@ -157,56 +177,33 @@ class Coverage(CoopSQL, Offered):
             # depending on the algorithm that is used.
             #
             # What we compute now is the part of the price that is associated
-            # to each of the covered elements.
-            #
-            # For now, the extension is hardcoded as a first step. It should be
-            # made more generic in the future.
-            if hasattr(contract, 'extension_life'):
-                # First of all we go through the list of covered elements on
-                # the contract's extension which matches self
-                for covered in contract.extension_life.covered_elements:
-                    # Then we must check that the current covered element is
-                    # covered by self.
-                    for covered_data in covered.covered_data:
-                        for_coverage = utils.convert_ref_to_obj(
-                            covered_data.for_coverage)
-                        if not for_coverage.code == self.code:
-                            continue
+            # to each of the covered elements at the given date
+            for covered, covered_data in self.give_me_covered_elements_at_date(
+                    args):
+                # Now we need to set a new argument before forwarding
+                # the request to the manager, which is the covered
+                # element it must work on.
+                tmp_args = args
+                tmp_args['for_covered'] = covered
 
-                        # And that this coverage is effective at the requested
-                        # computation date.
-                        if not (date >= covered_data.start_date and
-                                (not hasattr(covered_data, 'end_date') or
-                                    covered_data.end_date is None or
-                                    covered_data.end_date < date)):
-                            break
-
-                        # Now we need to set a new argument before forwarding
-                        # the request to the manager, which is the covered
-                        # element it must work on.
-                        tmp_args = args
-                        tmp_args['for_covered'] = covered
-
-                        # And we finally call the manager for the price
-                        _res, _errs = self.get_result(
-                            'sub_elem_price',
-                            tmp_args,
-                            manager='pricing')
-                        if _res and _res.value:
-                            # Basically we set name = covered.product_specific
-                            # .person.name, but 'product_specific' is a
-                            # Reference field and is not automatically turned
-                            # into a browse object.
-                            # Should be done later by tryton.
-                            _res.name = utils.convert_ref_to_obj(
-                                covered.product_specific).person.name
-                            if covered_data.id:
-                                _res.on_object = '%s,%s' % (
-                                    covered_data.__name__,
-                                    covered_data.id)
-                            res += _res
-                            errs += _errs
-                        break
+                # And we finally call the manager for the price
+                _res, _errs = self.get_result(
+                    'sub_elem_price',
+                    tmp_args,
+                    manager='pricing')
+                if _res and _res.value:
+                    # Basically we set name = covered.product_specific
+                    # .person.name, but 'product_specific' is a
+                    # Reference field and is not automatically turned
+                    # into a browse object.
+                    # Should be done later by tryton.
+                    _res.name = covered.get_name_for_info()
+                    if covered_data.id:
+                        _res.on_object = '%s,%s' % (
+                            covered_data.__name__,
+                            covered_data.id)
+                    res += _res
+                    errs += _errs
             errs = list(set(errs))
             if 'Could not find a matching manager' in errs:
                 errs.remove('Could not find a matching manager')
@@ -251,6 +248,36 @@ class Coverage(CoopSQL, Offered):
     def default_family():
         return 'life'
 
+    def give_me_family(self, args):
+        return (self.family, [])
+
+    def give_me_extension_name(self, args):
+        return FAMILIES_EXTS[self.give_me_family(args)[0]]
+
+    def give_me_covered_elements_at_date(self, args):
+        contract = args['contract']
+        date = args['date']
+        res = []
+        good_ext = self.give_me_extension_name(args)
+        for covered in contract.extension_life.covered_elements:
+            # We must check that the current covered element is
+            # covered by self.
+            for covered_data in covered.covered_data:
+                for_coverage = utils.convert_ref_to_obj(
+                    covered_data.for_coverage)
+                if not for_coverage.code == self.code:
+                    continue
+
+                # And that this coverage is effective at the requested
+                # computation date.
+                if not (date >= covered_data.start_date and
+                        (not hasattr(covered_data, 'end_date') or
+                            covered_data.end_date is None or
+                            covered_data.end_date < date)):
+                    continue
+                res.append((covered, covered_data))
+        return res
+
 
 class Product(CoopSQL, Offered):
     'Product'
@@ -280,14 +307,21 @@ class Product(CoopSQL, Offered):
         # 'name' as keys.
         return ('options', ['code', 'name'])
 
+    def update_args(self, args):
+        # We might need the product while computing the options
+        if not 'product' in args:
+            args['product'] = self
+
     def give_me_options_price(self, args):
         # Getting the options price is easy : just loop and append the results
         errs = []
-        res = PricingResultLine(name='Options')
+        res = []
+
+        self.update_args(args)
         for option in self.options:
             _res, _errs = option.get_result('price', args)
-            if not _res is None:
-                res += _res
+            if _res:
+                res.append(_res)
             errs += _errs
         return (res, errs)
 
@@ -305,7 +339,7 @@ class Product(CoopSQL, Offered):
             # No contract means no price.
             return (None, errs)
         contract = data_dict['contract']
-        res[0].name = 'Product Base Price'
+        res[0].name = 'Product Global Price'
         if contract.id:
             res[0].on_object = '%s,%s' % (self.__name__, self.id)
         try:
@@ -313,15 +347,21 @@ class Product(CoopSQL, Offered):
                 % self.name)
         except ValueError:
             pass
-        return res
+        return [res[0]], res[1]
 
     def give_me_total_price(self, args):
         # Total price is the sum of Options price and Product price
         (p_price, errs_product) = self.give_me_product_price(args)
         (o_price, errs_options) = self.give_me_options_price(args)
-        total_price = p_price + o_price
-        total_price.name = 'Total Price'
-        return (total_price, errs_product + errs_options)
+
+        lines = []
+
+        for line in p_price + o_price:
+            if line.value == 0:
+                continue
+            lines.append(line)
+
+        return (lines, errs_product + errs_options)
 
     def give_me_eligibility(self, args):
         try:
@@ -329,6 +369,16 @@ class Product(CoopSQL, Offered):
         except utils.NonExistingManagerException:
             return (EligibilityResultLine(True), [])
         return res
+
+    def give_me_families(self, args):
+        self.update_args(args)
+        result = []
+        errors = []
+        for option in self.options:
+            res, errs = option.get_result('family', args)
+            result += res
+            errors += errs
+        return (result, errors)
 
     @staticmethod
     def default_currency():
@@ -593,36 +643,157 @@ class BusinessRuleRoot(CoopView, GetResult):
         return 'simple'
 
 
+class PricingData(CoopSQL, CoopView):
+    'Pricing Data'
+
+    __name__ = 'ins_product.pricing_data'
+
+    calculator = fields.Many2One(
+        'ins_product.pricing_calculator',
+        'Calculator',
+        ondelete='CASCADE')
+
+    currency_digits = fields.Function(fields.Integer('Currency Digits'),
+        'get_currency_digits')
+
+    fixed_amount = fields.Numeric(
+        'Amount',
+        digits=(16, Eval('currency_digits', 2)),
+        required=True,
+        depends=['currency_digits'])
+
+    config_kind = fields.Selection(CONFIG_KIND,
+        'Conf. kind', required=True)
+
+    rule = fields.Many2One('rule_engine', 'Rule Engine',
+        depends=['config_kind'])
+
+    kind = fields.Selection(
+        PRICING_LINE_KINDS,
+        'Line kind',
+        required=True)
+
+    code = fields.Char(
+        'Code',
+        states={'invisible': (Eval('kind') != 'base')})
+
+    @staticmethod
+    def default_kind():
+        return 'base'
+
+    @staticmethod
+    def default_config_kind():
+        return 'simple'
+
+    def get_currency_digits(self, name):
+        if self.calculator:
+            return self.calculator.get_currency_digits(name)
+
+    def calculate_price(self, args):
+        result = 0
+        errors = []
+        kind = self.kind
+        if hasattr(self, 'code') and self.code:
+            code = self.code
+            name = kind + ' - ' + code
+        else:
+            code = ''
+            name = kind
+        if self.config_kind == 'simple':
+            result = self.fixed_amount
+        elif self.config_kind == 'rule' and self.rule:
+            res, mess, errs = self.rule.compute(args)
+            result, errors = res, mess + errs
+        final_res = PricingResultLine(result, name)
+        final_res.update_details({(kind, code): result})
+        return final_res, errors
+
+
+class PriceCalculator(CoopSQL, CoopView):
+    'Price Calculator'
+
+    __name__ = 'ins_product.pricing_calculator'
+
+    currency_digits = fields.Function(fields.Integer('Currency Digits'),
+        'get_currency_digits')
+
+    data = fields.One2Many(
+        'ins_product.pricing_data',
+        'calculator',
+        'Price Components'
+        )
+
+    key = fields.Char(
+        'Key',
+        readonly=True)
+
+    rule = fields.Many2One(
+        'ins_product.pricing_rule',
+        'Pricing Rule',
+        ondelete='CASCADE')
+
+    def get_currency_digits(self, name):
+        if hasattr(self, 'rule') and self.rule:
+            return self.rule.get_currency_digits(name)
+
+    def calculate_price(self, args):
+        result = PricingResultLine()
+        errors = []
+        for data in self.data:
+            res, errs = data.calculate_price(args)
+            result += res
+            errors += errs
+        return result, errors
+
+    def get_rec_name(self, name):
+        return 'Price Calculator'
+
+
 class PricingRule(CoopSQL, BusinessRuleRoot):
     'Pricing Rule'
 
     __name__ = 'ins_product.pricing_rule'
 
-    currency_digits = fields.Function(fields.Integer('Currency Digits'),
-        'get_currency_digits')
-    price = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
-         required=True,
-         depends=['currency_digits'])
     price_kind = fields.Selection(
         [
             ('subscriber', 'Subscriber'),
             ('cov_element', 'Covered Elements')
         ],
         'Price based on', required=True)
-    sub_elem_config_kind = fields.Selection(CONFIG_KIND,
-        'Conf. kind', required=True)
-    sub_elem_rule = fields.Many2One('rule_engine', 'Rule Engine',
-        depends=['config_kind'])
-    per_sub_elem_price = fields.Numeric(
-        'Amount per Covered Element',
-        digits=(16, Eval('currency_digits', 2)),
-        depends=['currency_digits'])
+
     tax_mgr = fields.Many2One(
         'coop_account.tax_manager',
         'Taxes')
+
     sub_elem_taxes = fields.Many2One(
         'coop_account.tax_manager',
         'Taxes')
+
+    calculators = fields.One2Many(
+        'ins_product.pricing_calculator',
+        'rule',
+        'Calculators')
+
+    price = fields.Function(fields.Many2One(
+        'ins_product.pricing_calculator',
+        'Price Calculator'),
+        'get_calculator')
+
+    sub_price = fields.Function(fields.Many2One(
+        'ins_product.pricing_calculator',
+        'Price Calculator'),
+        'get_calculator')
+
+    frequency = fields.Selection(
+        PRICING_FREQUENCY,
+        'Rate Frequency')
+
+    def get_calculator(self, name):
+        if hasattr(self, 'calculators') and self.calculators:
+            for elem in self.calculators:
+                if elem.key == name:
+                    return WithAbstract.serialize_field(elem)
+        return None
 
     def give_me_appliable_taxes(self, args):
         errs = []
@@ -649,39 +820,46 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
         return res, errs
 
     def calculate_taxes(self, amount, taxes):
-        res = {}
+        res = []
         for tax in taxes:
-            res[('tax', tax.get_code())] = tax.apply_tax(amount)
+            tax_amount = tax.apply_tax(amount)
+            tmp_line = PricingResultLine(
+                tax_amount, 'Tax' + ' - ' + tax.get_code())
+            tmp_line.update_details({('tax', tax.get_code()): tax_amount})
+            res.append(tmp_line)
         return res
 
     def give_me_price(self, args):
-        if hasattr(self, 'rule') and self.rule:
-            res, mess, errs = self.rule.compute(args)
-            result, errors = (PricingResultLine(value=res, details=mess), errs)
+        if self.price:
+            result, errors = self.price.calculate_price(args)
+            taxes, _ = self.give_me_appliable_taxes(args)
+            tax_amounts = self.calculate_taxes(result.value, taxes)
+            for tax_line in tax_amounts:
+                result += tax_line
         else:
-            result, errors = (PricingResultLine(value=self.price), [])
+            result, errors = (PricingResultLine(value=0), [])
 
-        taxes, _ = self.give_me_appliable_taxes(args)
-        tax_amounts = self.calculate_taxes(result.value, taxes)
-        result.update_details(tax_amounts)
         return result, errors
 
     def give_me_sub_elem_price(self, args):
-        if hasattr(self, 'sub_elem_rule') and self.sub_elem_rule:
-            res, mess, errs = self.sub_elem_rule.compute(args)
-            result, errors = PricingResultLine(value=res, details=mess), errs
+        if self.sub_price:
+            result, errors = self.sub_price.calculate_price(args)
+            taxes, _ = self.give_me_appliable_sub_elem_taxes(args)
+            tax_amounts = self.calculate_taxes(result.value, taxes)
+            for tax_line in tax_amounts:
+                result += tax_line
         else:
-            result = PricingResultLine(value=self.per_sub_elem_price)
-            errors = []
+            result, errors = (PricingResultLine(value=0), [])
 
-        taxes, _ = self.give_me_appliable_sub_elem_taxes(args)
-        tax_amounts = self.calculate_taxes(result.value, taxes)
-        result.update_details(tax_amounts)
         return result, errors
 
-    @staticmethod
-    def default_sub_elem_config_kind():
-        return 'simple'
+    def give_me_frequency_days(self, args):
+        if not 'date' in args:
+            return (None, ['A base date must be provided !'])
+        date = args['date']
+        return number_of_days_between(
+            date,
+            add_frequency(self.frequency, date))
 
     @classmethod
     def delete(cls, rules):
@@ -700,6 +878,10 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
     @staticmethod
     def default_price_kind():
         return 'subscriber'
+
+    @staticmethod
+    def default_frequency():
+        return 'yearly'
 
 
 class EligibilityRule(CoopSQL, BusinessRuleRoot):

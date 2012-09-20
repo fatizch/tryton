@@ -14,6 +14,8 @@ def register():
         ProductOptionsCoverage,
         GenericBusinessRule,
         BusinessRuleRoot,
+        PriceCalculator,
+        PricingData,
         PricingRule,
         EligibilityRule,
         EligibilityRelationKind,

@@ -13,6 +13,8 @@ def register():
         GroupInsuranceCoverage,
         GroupInsurancePlanOptionsCoverage,
         GroupGenericBusinessRule,
+        GroupPricingData,
+        GroupPriceCalculator,
         GroupPricingRule,
         GroupEligibilityRule,
         GroupBenefit,

@@ -63,7 +63,8 @@ class PricingResultLine(RuleEngineResultLine):
         # __iadd__ will be called when doing a += b
         if other is None or other.value is None:
             return self
-        self.value += other.value
+
+        self.value += other.get_add_value()
 
         # a += b means that a is a master of b (in some way), so we append b to
         # the list of a's subelements
@@ -76,11 +77,23 @@ class PricingResultLine(RuleEngineResultLine):
         tmp = PricingResultLine()
 
         # Then set what we can ; its value and its childs
-        tmp.value = self.value + other.value
+        tmp.value = self.get_add_value() + other.get_add_value()
         tmp.desc = [self, other]
         tmp.update_details(self.details)
         tmp.update_details(other.details)
         return tmp
+
+    def is_detail_alone(self, name):
+        if not self.desc:
+            if len(self.details) == 1:
+                if self.details.keys()[0][0] == name:
+                    return True
+        return False
+
+    def get_add_value(self):
+        if self.is_detail_alone('tax'):
+            return 0
+        return self.value
 
     def update_details(self, other_details):
         for key, value in other_details.iteritems():
