@@ -722,3 +722,8 @@ def add_frequency(frequency, to_date):
 
 def number_of_days_between(start_date, end_date):
     return end_date.toordinal() - start_date.toordinal() + 1
+
+
+def get_those_objects(model_name, domain, limit=None):
+    the_model = Pool().get(model_name)
+    return the_model.search(domain, limit=limit)

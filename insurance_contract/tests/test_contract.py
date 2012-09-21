@@ -39,7 +39,8 @@ class ContractTestCase(unittest.TestCase):
         self.RunTests = POOL.get('rule_engine.run_tests', type='wizard')
         self.Tax = POOL.get('coop_account.tax_desc')
         self.TaxVersion = POOL.get('coop_account.tax_version')
-        self.TaxManager = POOL.get('coop_account.tax_manager')
+        self.Fee = POOL.get('coop_account.fee_desc')
+        self.FeeVersion = POOL.get('coop_account.fee_version')
         self.AddressKind = POOL.get('party.address_kind')
         self.BillingProcess = POOL.get('ins_contract.billing_process',
             type='wizard')
@@ -71,12 +72,27 @@ class ContractTestCase(unittest.TestCase):
 
         tax = self.Tax()
         tax.name = 'Test Tax %s' % code
-        tax.code = 'TVA'
+        tax.code = code
         tax.versions = [tax_v1]
 
         tax.save()
 
         return tax
+
+    def create_fee(self, code, amount):
+        fee_v1 = self.FeeVersion()
+        fee_v1.kind = 'flat'
+        fee_v1.value = Decimal(amount)
+        fee_v1.start_date = datetime.date.today()
+
+        fee = self.Fee()
+        fee.name = 'Test Fee %s' % code
+        fee.code = code
+        fee.versions = [fee_v1]
+
+        fee.save()
+
+        return fee
 
     def create_person(self):
         address_kind = self.AddressKind()
@@ -208,25 +224,31 @@ return True'''
         # Coverage A
 
         tax = self.create_tax('TT', 13)
-
-        tm = self.TaxManager()
-        tm.taxes = [tax]
-
-        tm.save()
+        fee = self.create_fee('FEE', 20)
 
         pr_data1 = self.PricingData()
         pr_data1.config_kind = 'simple'
         pr_data1.fixed_amount = 12
         pr_data1.kind = 'base'
+        pr_data1.code = 'PP'
+
+        pr_data11 = self.PricingData()
+        pr_data11.kind = 'tax'
+        pr_data11.the_tax = tax
+
+        pr_data12 = self.PricingData()
+        pr_data12.kind = 'fee'
+        pr_data12.the_fee = fee
 
         pr_calc1 = self.Calculator()
-        pr_calc1.data = [pr_data1]
+        pr_calc1.data = [pr_data1, pr_data11, pr_data12]
         pr_calc1.key = 'price'
 
         pr_data2 = self.PricingData()
         pr_data2.config_kind = 'simple'
         pr_data2.fixed_amount = 1
         pr_data2.kind = 'base'
+        pr_data2.code = 'PP'
 
         pr_calc2 = self.Calculator()
         pr_calc2.data = [pr_data2]
@@ -234,7 +256,6 @@ return True'''
 
         prm_a = self.pricing()
 
-        prm_a.tax_mgr = tm
         prm_a.calculators = [pr_calc1, pr_calc2]
 
         gbr_a = self.gbr()
@@ -248,6 +269,7 @@ return True'''
         pr_data3.config_kind = 'simple'
         pr_data3.fixed_amount = 15
         pr_data3.kind = 'base'
+        pr_data3.code = 'PP'
 
         pr_calc3 = self.Calculator()
         pr_calc3.data = [pr_data3]
@@ -280,23 +302,22 @@ return True'''
 
         tax_1 = self.create_tax('TTA', 27)
 
-        tm1 = self.TaxManager()
-        tm1.taxes = [tax_1]
-
-        tm1.save()
-
         pr_data4 = self.PricingData()
         pr_data4.config_kind = 'simple'
         pr_data4.fixed_amount = 30
         pr_data4.kind = 'base'
+        pr_data4.code = 'PP'
+
+        pr_data41 = self.PricingData()
+        pr_data41.kind = 'tax'
+        pr_data41.the_tax = tax_1
 
         pr_calc4 = self.Calculator()
-        pr_calc4.data = [pr_data4]
+        pr_calc4.data = [pr_data4, pr_data41]
         pr_calc4.key = 'price'
 
         prm_c = self.pricing()
         prm_c.config_kind = 'simple'
-        prm_c.tax_mgr = tm1
         prm_c.calculators = [pr_calc4]
 
         gbr_c = self.gbr()
@@ -562,36 +583,41 @@ return True'''
             return add_days(datetime.date.today(), nb)
 
         good_lines = [
-            date_from_today(5).isoformat() + ' => 43.00 (Tx : 9.66)',
-            '\tAlpha Coverage => 13.00 (Tx : 1.56)',
-            '\t\tGlobal Price => 12.00 (Tx : 1.56)',
-            '\t\t\tbase => 12.00',
-            '\t\t\tTax - TVA => 1.56',
+            date_from_today(5).isoformat() + ' => 63.00 (Tx : 12.26)',
+            '\tAlpha Coverage => 33.00 (Tx : 4.16)',
+            '\t\tGlobal Price => 32.00 (Tx : 4.16)',
+            '\t\t\tbase - PP => 12.00',
+            '\t\t\ttax - TT => 4.16',
+            '\t\t\tfee - FEE => 20.00',
             '\t\tToto => 1.00',
-            '\t\t\tbase => 1.00',
+            '\t\t\tbase - PP => 1.00',
             '\tBeta Coverage => 30.00 (Tx : 8.10)',
             '\t\tGlobal Price => 30.00 (Tx : 8.10)',
-            '\t\t\tbase => 30.00',
-            '\t\t\tTax - TVA => 8.10',
+            '\t\t\tbase - PP => 30.00',
+            '\t\t\ttax - TTA => 8.10',
             '',
             date_from_today(2).isoformat() + ' => 0.00',
             '',
-            date_from_today(3).isoformat() + ' => 13.00 (Tx : 1.56)',
-            '\tAlpha Coverage => 13.00 (Tx : 1.56)',
-            '\t\tGlobal Price => 12.00 (Tx : 1.56)',
-            '\t\t\tbase => 12.00',
-            '\t\t\tTax - TVA => 1.56',
+            date_from_today(3).isoformat() + ' => 33.00 (Tx : 4.16)',
+            '\tAlpha Coverage => 33.00 (Tx : 4.16)',
+            '\t\tGlobal Price => 32.00 (Tx : 4.16)',
+            '\t\t\tbase - PP => 12.00',
+            '\t\t\ttax - TT => 4.16',
+            '\t\t\tfee - FEE => 20.00',
             '\t\tToto => 1.00',
-            '\t\t\tbase => 1.00',
+            '\t\t\tbase - PP => 1.00',
             '',
             date_from_today(0).isoformat() + ' => 0.00',
             '',
             date_from_today(11).isoformat() + ' => 15.00',
             '\tAlpha Coverage => 15.00',
             '\t\tGlobal Price => 15.00',
-            '\t\t\tbase => 15.00',
+            '\t\t\tbase - PP => 15.00',
             '']
 
+#        lines.sort()
+#        good_lines.sort()
+#
 #        print '\n'.join(lines)
 #        print '###################'
 #        print '\n'.join(good_lines)

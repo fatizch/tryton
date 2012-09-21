@@ -3,6 +3,8 @@ from trytond.modules.rule_engine import InternalRuleEngineError
 from trytond.modules.rule_engine import check_args, for_rule
 from trytond.modules.rule_engine import RuleTools
 
+from trytond.modules.coop_utils import utils as utils
+
 ###############################################################################
 # We write here sets of functions that will be available in the rule engine.  #
 # They will be automatically created as tree_elements in sub_folders          #
@@ -176,3 +178,55 @@ class CoveredDataContext(RuleEngineContext):
         else:
             args['errors'].append('No end date defined on provided data')
             raise InternalRuleEngineError
+
+
+class RuleCombinationContext(RuleEngineContext):
+    '''
+        Context functions for combination of rule_engine results (see
+        ins_product.pricing_calculator
+    '''
+
+    __name__ = 'ins_product.rule_sets.rule_combination'
+
+    @classmethod
+    @for_rule('Get Sub-Component')
+    @check_args('price_details')
+    def get_sub_component(cls, args, the_code):
+        det = args['price_details']
+        for code, value in det.iteritems():
+            if code[1] == the_code:
+                return value
+        args['errors'].append('Inexisting code : %s' % the_code)
+        raise InternalRuleEngineError
+
+    @classmethod
+    @for_rule('Append Detail')
+    @check_args('price_details', 'final_details')
+    def append_detail(cls, args, the_code, amount):
+        for key, code in args['price_details'].iterkeys():
+            if not code == the_code:
+                continue
+            args['final_details'][(key, code)] += amount
+            break
+
+    @classmethod
+    @for_rule('Apply Tax')
+    @check_args('price_details')
+    def apply_tax(cls, args, code, base):
+        if ('tax', code) in args['price_details']:
+            tax, = utils.get_those_objects(
+                'coop_account.tax_desc',
+                [('code', '=', code)], 1)
+            tax_vers = tax.get_version_at_date(args['date'])
+            return tax_vers.apply_tax(base)
+
+    @classmethod
+    @for_rule('Apply Fee')
+    @check_args('price_details')
+    def apply_fee(cls, args, code, base):
+        if ('fee', code) in args['price_details']:
+            fee, = utils.get_those_objects(
+                'coop_account.fee_desc',
+                [('code', '=', code)], 1)
+            fee_vers = fee.get_version_at_date(args['date'])
+            return fee_vers.apply_fee(base)

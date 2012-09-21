@@ -20,7 +20,8 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['Date'] = Model.get('ir.date')
     cfg_dict['Tax'] = Model.get('coop_account.tax_desc')
     cfg_dict['TaxVersion'] = Model.get('coop_account.tax_version')
-    cfg_dict['TaxManager'] = Model.get('coop_account.tax_manager')
+    cfg_dict['Fee'] = Model.get('coop_account.fee_desc')
+    cfg_dict['FeeVersion'] = Model.get('coop_account.fee_version')
     cfg_dict['PricingData'] = Model.get('ins_product.pricing_data')
     cfg_dict['Calculator'] = Model.get('ins_product.pricing_calculator')
     return cfg_dict
@@ -98,6 +99,25 @@ def get_or_create_tax(cfg_dict, code, name, vals=None):
     return tax
 
 
+def get_or_create_fee(cfg_dict, code, name, vals=None):
+    fee = get_object_from_db(cfg_dict, 'Fee', 'code', code)
+    if fee:
+        return fee
+    fee = cfg_dict['Fee']()
+    fee.code = code
+    fee.name = name
+    if vals:
+        for val in vals:
+            fee_ver = cfg_dict['FeeVersion']()
+            fee_ver.start_date = val.get('start_date', None)
+            fee_ver.end_date = val.get('end_date', None)
+            fee_ver.kind = val.get('kind', 'None')
+            fee_ver.value = Decimal(val.get('value', 0))
+            fee.versions.append(fee_ver)
+    fee.save()
+    return fee
+
+
 def add_description(product):
     if product.description:
         return product
@@ -154,15 +174,43 @@ def create_AAA_Product(cfg_dict, code, name):
     pr_data1.config_kind = 'simple'
     pr_data1.fixed_amount = Decimal(12)
     pr_data1.kind = 'base'
+    pr_data1.code = 'PP'
+
+    tax = get_or_create_tax(cfg_dict,
+        'CCSS',
+        u'Contribution prévue par le Code de la Sécurité sociale',
+        [
+            {'start_date': cfg_dict['Date'].today({}),
+            'kind': 'rate',
+            'value': 15}])
+
+    pr_data11 = cfg_dict['PricingData']()
+    pr_data11.kind = 'tax'
+    pr_data11.the_tax = tax
+
+    fee = get_or_create_fee(cfg_dict,
+        'FG',
+        u'Frais de gestion',
+        [
+            {'start_date': cfg_dict['Date'].today({}),
+            'kind': 'rate',
+            'value': 4}])
+
+    pr_data12 = cfg_dict['PricingData']()
+    pr_data12.kind = 'fee'
+    pr_data12.the_fee = fee
 
     pr_calc1 = cfg_dict['Calculator']()
     pr_calc1.data.append(pr_data1)
+    pr_calc1.data.append(pr_data11)
+    pr_calc1.data.append(pr_data12)
     pr_calc1.key = 'price'
 
     pr_data2 = cfg_dict['PricingData']()
     pr_data2.config_kind = 'simple'
     pr_data2.fixed_amount = Decimal(1)
     pr_data2.kind = 'base'
+    pr_data2.code = 'PP'
 
     pr_calc2 = cfg_dict['Calculator']()
     pr_calc2.data.append(pr_data2)
@@ -179,30 +227,23 @@ def create_AAA_Product(cfg_dict, code, name):
     gbr_b.end_date = cfg_dict['Date'].today({}) + \
                                     datetime.timedelta(days=20)
 
-    tax = get_or_create_tax(cfg_dict,
-        'CCSS',
-        u'Contribution prévue par le Code de la Sécurité sociale',
-        [
-            {'start_date': cfg_dict['Date'].today({}),
-            'kind': 'rate',
-            'value': 0.15}])
-    tax_manager = cfg_dict['TaxManager']()
-    tax_manager.taxes.append(tax)
-
-    tax_manager.save()
-
     pr_data3 = cfg_dict['PricingData']()
     pr_data3.config_kind = 'simple'
     pr_data3.fixed_amount = Decimal(15)
     pr_data3.kind = 'base'
+    pr_data3.code = 'PP'
+
+    pr_data31 = cfg_dict['PricingData']()
+    pr_data31.kind = 'tax'
+    pr_data31.the_tax = tax
 
     pr_calc3 = cfg_dict['Calculator']()
     pr_calc3.data.append(pr_data3)
+    pr_calc3.data.append(pr_data31)
     pr_calc3.key = 'price'
 
     prm_b = gbr_b.pricing_rule[0]
     prm_b.calculators.append(pr_calc3)
-    prm_b.tax_mgr = tax_manager
 
     brm_a = brm()
     brm_a.business_rules.append(gbr_a)
@@ -219,6 +260,7 @@ def create_AAA_Product(cfg_dict, code, name):
     pr_data4.config_kind = 'simple'
     pr_data4.fixed_amount = Decimal(30)
     pr_data4.kind = 'base'
+    pr_data4.code = 'PP'
 
     pr_calc4 = cfg_dict['Calculator']()
     pr_calc4.data.append(pr_data4)
@@ -378,6 +420,11 @@ def create_rule_engine_data(cfg_dict):
         cfg_dict,
         'ins_product.rule_sets.covered_data',
         'Coverage Data')
+
+    data_coverage = create_folder_from_set(
+        cfg_dict,
+        'ins_product.rule_sets.rule_combination',
+        'Rule Combination')
 
     ct = get_or_create_context(cfg_dict, 'test_context')
     append_inexisting_elements(ct, 'allowed_elements', [tools, person])

@@ -13,9 +13,9 @@ from trytond.modules.insurance_product import PricingResultLine
 from trytond.modules.insurance_product import EligibilityResultLine
 from trytond.modules.coop_utils import One2ManyDomain, WithAbstract
 from trytond.modules.coop_utils import add_frequency, number_of_days_between
-from trytond.modules.coop_utils import business
+from trytond.modules.coop_utils import business, NonExistingManagerException
 from trytond.modules.coop_utils import update_args_with_subscriber, \
-    ArgsDoNotMatchException
+    ArgsDoNotMatchException, get_those_objects
 
 __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
            'BusinessRuleManager', 'GenericBusinessRule', 'BusinessRuleRoot',
@@ -382,6 +382,22 @@ class Product(CoopSQL, Offered):
             errors += errs
         return (result, errors)
 
+    def give_me_frequency(self, args):
+        if not 'date' in args:
+            raise Exception('A date must be provided')
+        date = args['date']
+        try:
+            return self.get_result('frequency', args, manager='pricing')
+        except NonExistingManagerException:
+            pass
+        for coverage in self.options:
+            try:
+                return coverage.get_result(
+                    'frequency', args, manager='pricing')
+            except NonExistingManagerException:
+                pass
+        return 'yearly', []
+
     @staticmethod
     def default_currency():
         return business.get_default_currency()
@@ -661,23 +677,68 @@ class PricingData(CoopSQL, CoopView):
     fixed_amount = fields.Numeric(
         'Amount',
         digits=(16, Eval('currency_digits', 2)),
-        required=True,
-        depends=['currency_digits'])
+        depends=['currency_digits', 'kind', 'config_kind'])
 
     config_kind = fields.Selection(CONFIG_KIND,
         'Conf. kind', required=True)
 
     rule = fields.Many2One('rule_engine', 'Rule Engine',
-        depends=['config_kind'])
+        depends=['config_kind', 'kind'])
 
     kind = fields.Selection(
         PRICING_LINE_KINDS,
         'Line kind',
         required=True)
 
-    code = fields.Char(
-        'Code',
-        states={'invisible': (Eval('kind') != 'base')})
+    code = fields.Char('Code', required=True)
+
+    the_tax = fields.Function(fields.Many2One(
+            'coop_account.tax_desc',
+            'Tax Descriptor'),
+        'get_tax',
+        'set_tax')
+
+    the_fee = fields.Function(fields.Many2One(
+            'coop_account.fee_desc',
+            'Fee Descriptor'),
+        'get_fee',
+        'set_fee')
+
+    def get_tax(self, name):
+        if not (self.kind == 'tax' and
+                hasattr(self, 'code') and self.code):
+            return
+        tax = get_those_objects(
+            'coop_account.tax_desc',
+            [('code', '=', self.code)], 1)
+        if tax:
+            return tax[0].id
+
+    @classmethod
+    def set_tax(cls, calcs, name, value):
+        tax, = get_those_objects(
+            'coop_account.tax_desc',
+            [('id', '=', value)])
+        code = tax.code
+        cls.write(calcs, {'code': code})
+
+    def get_fee(self, name):
+        if not (self.kind == 'fee' and
+                hasattr(self, 'code') and self.code):
+            return
+        fee = get_those_objects(
+            'coop_account.fee_desc',
+            [('code', '=', self.code)], 1)
+        if fee:
+            return fee[0].id
+
+    @classmethod
+    def set_fee(cls, calcs, name, value):
+        fee, = get_those_objects(
+            'coop_account.fee_desc',
+            [('id', '=', value)])
+        code = fee.code
+        cls.write(calcs, {'code': code})
 
     @staticmethod
     def default_kind():
@@ -691,23 +752,31 @@ class PricingData(CoopSQL, CoopView):
         if self.calculator:
             return self.calculator.get_currency_digits(name)
 
-    def calculate_price(self, args):
+    def calculate_tax(self, args):
+        # No need to calculate here, it will be done at combination time
+        return 0
+
+    def calculate_fee(self, args):
+        # No need to calculate here, it will be done at combination time
+        return 0
+
+    def calculate_value(self, args):
         result = 0
         errors = []
         kind = self.kind
-        if hasattr(self, 'code') and self.code:
-            code = self.code
-            name = kind + ' - ' + code
-        else:
-            code = ''
-            name = kind
-        if self.config_kind == 'simple':
-            result = self.fixed_amount
+        if self.kind == 'tax':
+            amount = self.calculate_tax(args)
+        elif self.kind == 'fee':
+            amount = self.calculate_fee(args)
+        elif self.config_kind == 'simple':
+            amount = self.fixed_amount
         elif self.config_kind == 'rule' and self.rule:
             res, mess, errs = self.rule.compute(args)
-            result, errors = res, mess + errs
-        final_res = PricingResultLine(result, name)
-        final_res.update_details({(kind, code): result})
+            amount, errors = res, mess + errs
+        code = self.code
+        name = kind + ' - ' + code
+        final_res = PricingResultLine(amount, name)
+        final_res.update_details({(kind, code): amount})
         return final_res, errors
 
 
@@ -725,14 +794,22 @@ class PriceCalculator(CoopSQL, CoopView):
         'Price Components'
         )
 
-    key = fields.Char(
-        'Key',
-        readonly=True)
+    key = fields.Selection(
+        [('price', 'Subscriber Price'),
+        ('sub_price', 'Sub Elem Price')],
+        'Key')
 
     rule = fields.Many2One(
         'ins_product.pricing_rule',
         'Pricing Rule',
         ondelete='CASCADE')
+
+    simple = fields.Boolean('Simple components combination')
+
+    combine = fields.Many2One(
+        'rule_engine',
+        'Combining Rule',
+        states={'invisible': Bool(Eval('simple'))})
 
     def get_currency_digits(self, name):
         if hasattr(self, 'rule') and self.rule:
@@ -742,13 +819,59 @@ class PriceCalculator(CoopSQL, CoopView):
         result = PricingResultLine()
         errors = []
         for data in self.data:
-            res, errs = data.calculate_price(args)
+            res, errs = data.calculate_value(args)
             result += res
             errors += errs
+        if not errors and not self.simple and \
+                hasattr(self, 'combine') and self.combine:
+            new_args = copy.copy(args)
+            new_args['price_details'] = result.details
+            final_details = {}
+            for key in result.details.iterkeys():
+                final_details[key] = 0
+            new_args['final_details'] = final_details
+            res, mess, errs = self.combine.compute(new_args)
+            errors += mess + errs
+            result = PricingResultLine(value=res)
+            result.details = {}
+            result.update_details(new_args['final_details'])
+        elif not errs and self.simple:
+            result.value = 0
+            sorted = dict([(key, []) for key, _ in PRICING_LINE_KINDS])
+            result.desc = []
+            for key, value in result.details.iteritems():
+                sorted[key[0]].append((key[1], value))
+            for the_code, value in sorted['base']:
+                result.value += value
+            total_fee = 0
+            for the_code, value in sorted['fee']:
+                fee, = utils.get_those_objects(
+                    'coop_account.fee_desc',
+                    [('code', '=', the_code)], 1)
+                fee_vers = fee.get_version_at_date(args['date'])
+                amount = fee_vers.apply_fee(result.value)
+                total_fee += amount
+                result.details[('fee', the_code)] = amount
+            result.value += total_fee
+            total_tax = 0
+            for the_code, value in sorted['tax']:
+                tax, = utils.get_those_objects(
+                    'coop_account.tax_desc',
+                    [('code', '=', the_code)], 1)
+                tax_vers = tax.get_version_at_date(args['date'])
+                amount = tax_vers.apply_tax(result.value)
+                total_tax += amount
+                result.details[('tax', the_code)] = amount
+            # result.value += total_tax
+        result.create_descs_from_details()
         return result, errors
 
     def get_rec_name(self, name):
         return 'Price Calculator'
+
+    @staticmethod
+    def default_simple():
+        return True
 
 
 class PricingRule(CoopSQL, BusinessRuleRoot):
@@ -763,13 +886,13 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
         ],
         'Price based on', required=True)
 
-    tax_mgr = fields.Many2One(
-        'coop_account.tax_manager',
-        'Taxes')
-
-    sub_elem_taxes = fields.Many2One(
-        'coop_account.tax_manager',
-        'Taxes')
+#    tax_mgr = fields.Many2One(
+#        'coop_account.tax_manager',
+#        'Taxes')
+#
+#    sub_elem_taxes = fields.Many2One(
+#        'coop_account.tax_manager',
+#        'Taxes')
 
     calculators = fields.One2Many(
         'ins_product.pricing_calculator',
@@ -797,47 +920,43 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
                     return WithAbstract.serialize_field(elem)
         return None
 
-    def give_me_appliable_taxes(self, args):
-        errs = []
-        if 'date' in args:
-            if hasattr(self, 'tax_mgr') and self.tax_mgr:
-                res = self.tax_mgr.give_appliable_taxes(args)
-            else:
-                res = []
-        else:
-            errs.append('No date provided')
-            res = []
-        return res, errs
-
-    def give_me_appliable_sub_elem_taxes(self, args):
-        errs = []
-        if 'date' in args:
-            if hasattr(self, 'sub_elem_taxes') and self.sub_elem_taxes:
-                res = self.sub_elem_taxes.give_appliable_taxes(args)
-            else:
-                res = []
-        else:
-            errs.append('No date provided')
-            res = []
-        return res, errs
-
-    def calculate_taxes(self, amount, taxes):
-        res = []
-        for tax in taxes:
-            tax_amount = tax.apply_tax(amount)
-            tmp_line = PricingResultLine(
-                tax_amount, 'Tax' + ' - ' + tax.get_code())
-            tmp_line.update_details({('tax', tax.get_code()): tax_amount})
-            res.append(tmp_line)
-        return res
+#    def give_me_appliable_taxes(self, args):
+#        errs = []
+#        if 'date' in args:
+#            if hasattr(self, 'tax_mgr') and self.tax_mgr:
+#                res = self.tax_mgr.give_appliable_taxes(args)
+#            else:
+#                res = []
+#        else:
+#            errs.append('No date provided')
+#            res = []
+#        return res, errs
+#
+#    def give_me_appliable_sub_elem_taxes(self, args):
+#        errs = []
+#        if 'date' in args:
+#            if hasattr(self, 'sub_elem_taxes') and self.sub_elem_taxes:
+#                res = self.sub_elem_taxes.give_appliable_taxes(args)
+#            else:
+#                res = []
+#        else:
+#            errs.append('No date provided')
+#            res = []
+#        return res, errs
+#
+#    def calculate_taxes(self, amount, taxes):
+#        res = []
+#        for tax in taxes:
+#            tax_amount = tax.apply_tax(amount)
+#            tmp_line = PricingResultLine(
+#                tax_amount, 'Tax' + ' - ' + tax.get_code())
+#            tmp_line.update_details({('tax', tax.get_code()): tax_amount})
+#            res.append(tmp_line)
+#        return res
 
     def give_me_price(self, args):
         if self.price:
             result, errors = self.price.calculate_price(args)
-            taxes, _ = self.give_me_appliable_taxes(args)
-            tax_amounts = self.calculate_taxes(result.value, taxes)
-            for tax_line in tax_amounts:
-                result += tax_line
         else:
             result, errors = (PricingResultLine(value=0), [])
 
@@ -846,14 +965,15 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
     def give_me_sub_elem_price(self, args):
         if self.sub_price:
             result, errors = self.sub_price.calculate_price(args)
-            taxes, _ = self.give_me_appliable_sub_elem_taxes(args)
-            tax_amounts = self.calculate_taxes(result.value, taxes)
-            for tax_line in tax_amounts:
-                result += tax_line
         else:
             result, errors = (PricingResultLine(value=0), [])
 
         return result, errors
+
+    def give_me_frequency(self, args):
+        if hasattr(self, 'frequency') and self.frequency:
+            return self.frequency
+        return None
 
     def give_me_frequency_days(self, args):
         if not 'date' in args:

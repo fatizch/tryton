@@ -109,6 +109,19 @@ class PricingResultLine(RuleEngineResultLine):
                 res += value
         return res
 
+    def get_desc_from_key(self, key):
+        for elem in self.desc:
+            if elem.is_detail_alone() and key in elem.details:
+                return elem
+
+    def create_descs_from_details(self):
+        for (key, code), value in self.details.iteritems():
+            pl = PricingResultLine()
+            pl.value = value
+            pl.details = {(key, code): value}
+            pl.name = '%s - %s' % (key, code)
+            self.desc.append(pl)
+
     def encode_as_dict(self):
         res = {
             'name': self.name,

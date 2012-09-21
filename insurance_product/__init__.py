@@ -27,4 +27,5 @@ def register():
         SubscriberContext,
         PersonContext,
         CoveredDataContext,
+        RuleCombinationContext,
         module='insurance_product', type_='model')

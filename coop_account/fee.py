@@ -5,17 +5,17 @@ from trytond.modules.coop_utils import model as model, utils as utils
 
 
 __all__ = [
-    'TaxDesc',
-    'TaxVersion',
+    'FeeDesc',
+    'FeeVersion',
     ]
 
 
-class TaxDesc(model.CoopSQL, model.VersionedObject):
-    '''A Simple Tax Descriptor'''
+class FeeDesc(model.CoopSQL, model.VersionedObject):
+    '''A Simple Fee Descriptor'''
 
-    __name__ = 'coop_account.tax_desc'
+    __name__ = 'coop_account.fee_desc'
 
-    name = fields.Char('Tax Name')
+    name = fields.Char('Fee Name', required=True)
     code = fields.Char('Code', required=True)
     description = fields.Text('Description')
     current_value = fields.Function(fields.Char('Current Value'),
@@ -23,7 +23,7 @@ class TaxDesc(model.CoopSQL, model.VersionedObject):
 
     @classmethod
     def version_model(cls):
-        return 'coop_account.tax_version'
+        return 'coop_account.fee_version'
 
     def get_current_value(self, name):
         vers = self.get_version_at_date(utils.today())
@@ -41,10 +41,10 @@ class TaxDesc(model.CoopSQL, model.VersionedObject):
         return res
 
 
-class TaxVersion(model.CoopSQL, model.VersionObject):
-    '''A tax Version'''
+class FeeVersion(model.CoopSQL, model.VersionObject):
+    '''A fee Version'''
 
-    __name__ = 'coop_account.tax_version'
+    __name__ = 'coop_account.fee_version'
 
     kind = fields.Selection(
         [('flat', 'Flat'), ('rate', 'Rate')],
@@ -54,7 +54,7 @@ class TaxVersion(model.CoopSQL, model.VersionObject):
 
     @classmethod
     def main_model(cls):
-        return 'coop_account.tax_desc'
+        return 'coop_account.fee_desc'
 
     @staticmethod
     def default_kind():
@@ -70,9 +70,9 @@ class TaxVersion(model.CoopSQL, model.VersionObject):
         return date
 
     def get_code(self):
-        return self.my_tax_desc.code
+        return self.my_fee_desc.code
 
-    def apply_tax(self, base):
+    def apply_fee(self, base):
         if self.kind == 'rate':
             return base * self.value / 100
         elif self.kind == 'flat':

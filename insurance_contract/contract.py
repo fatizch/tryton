@@ -4,7 +4,7 @@ import datetime
 from trytond.model import fields as fields
 
 from trytond.modules.coop_utils import CoopView, CoopSQL, convert_ref_to_obj
-from trytond.modules.coop_utils import limit_dates, to_date
+from trytond.modules.coop_utils import limit_dates, to_date, add_frequency
 from trytond.modules.coop_utils import One2ManyDomain, WithAbstract
 
 # Needed for getting models
@@ -579,9 +579,18 @@ class BillingManager(CoopSQL, CoopView):
             result_prices.append(pl)
         self.prices = result_prices
 
+    def get_product_frequency(self, at_date):
+        res, errs = self.contract.product.get_result(
+            'frequency',
+            {'date': at_date})
+        if not errs:
+            return res
+
     def next_billing_dates(self):
         date = max(Pool().get('ir.date').today(), self.contract.start_date)
-        return (date, date + datetime.timedelta(days=90))
+        return (
+            date,
+            add_frequency(self.get_product_frequency(date), date))
 
     def get_bill_model(self):
         return 'ins_contract.billing.bill'

@@ -321,19 +321,35 @@
                             <field name="kind"/>
                             <label name="code" xalign="0"/>
                             <field name="code"/>
-                            <label name="config_kind" xalign="0"/>
-                            <field name="config_kind" xexpand="0" xalign="0"/>
                         </group>
                         <newline/>
-                        <group id="simple" colspan="4"
-                            states="{'invisible': Eval('config_kind') != 'simple'}">
-                            <label name="fixed_amount" xalign="0"/>
-                            <field name="fixed_amount"/>
+                        <group id="tax"
+                            states="{'invisible': Eval('kind') != 'tax'}">
+                            <label name="the_tax" xalign="0"/>
+                            <field name="the_tax"/>
                         </group>
-                        <group id="rule" colspan="4"
-                            states="{'invisible': Eval('config_kind') != 'rule'}">
-                           <label name="rule" xalign="0"/>
-                           <field name="rule"/>
+                        <newline/>
+                        <group id="fee"
+                            states="{'invisible': Eval('kind') != 'fee'}">
+                            <label name="the_fee" xalign="0"/>
+                            <field name="the_fee"/>
+                        </group>
+                        <newline/>
+                        <group id="other"
+                            states="{'invisible': Eval('kind') != 'base'}">
+                            <label name="config_kind" xalign="0"/>
+                            <field name="config_kind" xexpand="0" xalign="0"/>
+                            <newline/>
+                            <group id="simple" colspan="4"
+                                states="{'invisible': Eval('config_kind') != 'simple'}">
+                                <label name="fixed_amount" xalign="0"/>
+                                <field name="fixed_amount"/>
+                            </group>
+                            <group id="rule" colspan="4"
+                                states="{'invisible': Eval('config_kind') != 'rule'}">
+                               <label name="rule" xalign="0"/>
+                               <field name="rule"/>
+                            </group>
                         </group>
                     </form>
                 ]]>
@@ -365,6 +381,11 @@
                         <group id="main">
                             <label name="key" xalign="0"/>
                             <field name="key"/>
+                            <newline/>
+                            <label name="simple" xalign="0"/>
+                            <field name="simple"/>
+                            <label name="combine" xalign="0"/>
+                            <field name="combine"/>
                         </group>
                         <newline/>
                         <group id="test_data" string="Components" xfill="1"
@@ -409,11 +430,13 @@
                         </page>
                         -->
                         <page id="temp" string="Main">
+                            <!--
                             <label name="tax_mgr" xalign="0"/>
                             <field name="tax_mgr" xexpand="1"/>
                             <label name="sub_elem_taxes" xalign="0"/>
                             <field name="sub_elem_taxes" xexpand="1"/>
                             <newline/>
+                            -->
                             <field name="calculators" yfill="1" yexpand="1"
                                 xexpand="1" colspan="4"/>
                         </page>

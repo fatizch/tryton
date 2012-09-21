@@ -17,7 +17,7 @@ from trytond.modules.insurance_product import PricingResultLine
 class LaboratoryTestCase(unittest.TestCase):
     def setUp(self):
         trytond.tests.test_tryton.install_module('insurance_product')
-        self.product = POOL.get('ins_product.product')
+        self.Product = POOL.get('ins_product.product')
         self.coverage = POOL.get('ins_product.coverage')
         self.brm = POOL.get('ins_product.business_rule_manager')
         self.gbr = POOL.get('ins_product.generic_business_rule')
@@ -34,7 +34,8 @@ class LaboratoryTestCase(unittest.TestCase):
         self.Calculator = POOL.get('ins_product.pricing_calculator')
         self.Tax = POOL.get('coop_account.tax_desc')
         self.TaxVersion = POOL.get('coop_account.tax_version')
-        self.TaxManager = POOL.get('coop_account.tax_manager')
+        self.Fee = POOL.get('coop_account.fee_desc')
+        self.FeeVersion = POOL.get('coop_account.fee_version')
 
     def test0005views(self):
         '''
@@ -148,17 +149,32 @@ return True'''
     def create_tax(self, code, amount):
         tax_v1 = self.TaxVersion()
         tax_v1.kind = 'rate'
-        tax_v1.rate_value = Decimal(amount)
+        tax_v1.value = Decimal(amount)
         tax_v1.start_date = datetime.date.today()
 
         tax = self.Tax()
         tax.name = 'Test Tax %s' % code
-        tax.code = 'TVA'
+        tax.code = code
         tax.versions = [tax_v1]
 
         tax.save()
 
         return tax
+
+    def create_fee(self, code, amount):
+        fee_v1 = self.FeeVersion()
+        fee_v1.kind = 'flat'
+        fee_v1.value = Decimal(amount)
+        fee_v1.start_date = datetime.date.today()
+
+        fee = self.Fee()
+        fee.name = 'Test Fee %s' % code
+        fee.code = code
+        fee.versions = [fee_v1]
+
+        fee.save()
+
+        return fee
 
     def test0010Coverage_creation(self):
         '''
@@ -190,25 +206,31 @@ return True'''
             # Coverage A
 
             tax = self.create_tax('TT', 13)
-
-            tm = self.TaxManager()
-            tm.taxes = [tax]
-
-            tm.save()
+            fee = self.create_fee('FEE', 20)
 
             pr_data1 = self.PricingData()
             pr_data1.config_kind = 'simple'
             pr_data1.fixed_amount = 12
             pr_data1.kind = 'base'
+            pr_data1.code = 'PP'
+
+            pr_data11 = self.PricingData()
+            pr_data11.kind = 'tax'
+            pr_data11.the_tax = tax
+
+            pr_data12 = self.PricingData()
+            pr_data12.kind = 'fee'
+            pr_data12.the_fee = fee
 
             pr_calc1 = self.Calculator()
-            pr_calc1.data = [pr_data1]
+            pr_calc1.data = [pr_data1, pr_data11, pr_data12]
             pr_calc1.key = 'price'
 
             pr_data2 = self.PricingData()
             pr_data2.config_kind = 'simple'
             pr_data2.fixed_amount = 1
             pr_data2.kind = 'base'
+            pr_data2.code = 'PP'
 
             pr_calc2 = self.Calculator()
             pr_calc2.data = [pr_data2]
@@ -216,7 +238,6 @@ return True'''
 
             prm_a = self.pricing()
 
-            prm_a.tax_mgr = tm
             prm_a.calculators = [pr_calc1, pr_calc2]
 
             gbr_a = self.gbr()
@@ -230,6 +251,7 @@ return True'''
             pr_data3.config_kind = 'simple'
             pr_data3.fixed_amount = 15
             pr_data3.kind = 'base'
+            pr_data3.code = 'PP'
 
             pr_calc3 = self.Calculator()
             pr_calc3.data = [pr_data3]
@@ -262,23 +284,22 @@ return True'''
 
             tax_1 = self.create_tax('TTA', 27)
 
-            tm1 = self.TaxManager()
-            tm1.taxes = [tax_1]
-
-            tm1.save()
-
             pr_data4 = self.PricingData()
             pr_data4.config_kind = 'simple'
             pr_data4.fixed_amount = 30
             pr_data4.kind = 'base'
+            pr_data4.code = 'PP'
+
+            pr_data41 = self.PricingData()
+            pr_data41.kind = 'tax'
+            pr_data41.the_tax = tax_1
 
             pr_calc4 = self.Calculator()
-            pr_calc4.data = [pr_data4]
+            pr_calc4.data = [pr_data4, pr_data41]
             pr_calc4.key = 'price'
 
             prm_c = self.pricing()
             prm_c.config_kind = 'simple'
-            prm_c.tax_mgr = tm1
             prm_c.calculators = [pr_calc4]
 
             gbr_c = self.gbr()
@@ -365,7 +386,7 @@ return True'''
 
             # Product
 
-            product_a = self.product()
+            product_a = self.Product()
             product_a.code = 'AAA'
             product_a.name = 'Awesome Alternative Allowance'
             product_a.start_date = datetime.date.today()
@@ -373,6 +394,8 @@ return True'''
                 coverage_a, coverage_b, coverage_c, coverage_d]
             product_a.eligibility_mgr = [brm_d]
             product_a.save()
+
+            self.assert_(product_a.id)
 
             transaction.cursor.commit()
 
