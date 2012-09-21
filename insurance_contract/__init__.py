@@ -8,7 +8,7 @@ from billing_process import *
 def register():
     Pool.register(
         # contract.py classes
-        SubscriptionManager,
+        GenericExtension,
         ExtensionLife,
         ExtensionCar,
         BrokerManager,

@@ -13,7 +13,7 @@ from trytond.pool import Pool
 from trytond.modules.insurance_product import Coverage
 
 __all__ = [
-    'SubscriptionManager',
+    'GenericExtension',
     'GenericContract',
     'Contract',
     'Option',
@@ -41,15 +41,7 @@ OPTIONSTATUS = [
     ]
 
 
-class SubscriptionManager(CoopSQL, CoopView):
-    '''
-        The subscription Manager will be used to store subscription-only
-        related data.
-    '''
-    __name__ = 'ins_contract.subs_manager'
-
-
-class GenericExtension(CoopSQL, CoopView):
+class GenericExtension(CoopView):
     '''
     Here comes the Extension which will contains all data needed by a specific
     product to compute rates, benefits etc.
@@ -58,6 +50,9 @@ class GenericExtension(CoopSQL, CoopView):
     insurance or PnC, each one of those is just a bunch of data that will be
     used in the business rules to calculate stuff.
     '''
+
+    __name__ = 'ins_contract.generic_extension'
+
     covered_elements = fields.One2Many('ins_contract.covered_element',
                                        'extension',
                                        'Coverages')
@@ -660,7 +655,9 @@ class CoveredElement(CoopSQL, CoopView):
         also has a list of covered datas which describes which options covers
         element and in which conditions.
     '''
+
     __name__ = 'ins_contract.covered_element'
+
     product_specific = fields.Reference('Specific Part',
                                         'get_specific_models')
 
@@ -670,6 +667,15 @@ class CoveredElement(CoopSQL, CoopView):
 
     extension = fields.Reference('Extension',
                                  'get_extension_models')
+
+    specific_name = fields.Function(
+        fields.Char('Covered Name'),
+        'get_specific_name')
+
+    def get_specific_name(self, name):
+        if hasattr(self, 'specific_name') and self.product_specific:
+            return self.product_specific.get_name_for_info()
+        return ''
 
     @staticmethod
     def get_specific_models():
@@ -692,6 +698,7 @@ class CoveredElement(CoopSQL, CoopView):
 
 
 class CoveredData(CoopSQL, CoopView):
+    'Coverage Data'
     '''
         Covered Datas are the link between covered elements and options.
 
@@ -706,6 +713,15 @@ class CoveredData(CoopSQL, CoopView):
         'get_coverages_models')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
+
+    coverage_name = fields.Function(
+        fields.Char('Coverage Name'),
+        'get_coverage_name')
+
+    def get_coverage_name(self, name):
+        if hasattr(self, 'for_coverage') and self.for_coverage:
+            return self.for_coverage.get_rec_name(name)
+        return ''
 
     @staticmethod
     def get_covered_element_models():
@@ -725,7 +741,7 @@ class CoveredData(CoopSQL, CoopView):
         return convert_ref_to_obj(self.for_covered).get_name_for_billing()
 
 
-class ExtensionLife(GenericExtension):
+class ExtensionLife(CoopSQL, GenericExtension):
     '''
         This is a particular case of contract extension designed for Life
         insurance products.
@@ -737,7 +753,7 @@ class ExtensionLife(GenericExtension):
         return 'ins_contract.covered_person'
 
 
-class ExtensionCar(GenericExtension):
+class ExtensionCar(CoopSQL, GenericExtension):
     '''
         This is a particular case of contract extension designed for Car
         insurance products.
@@ -759,6 +775,7 @@ class SpecificCovered(CoopSQL, CoopView):
 
 
 class CoveredPerson(SpecificCovered):
+    'Covered Person'
     '''
         This is an extension of covered element in the case of a life product.
 
@@ -776,6 +793,9 @@ class CoveredPerson(SpecificCovered):
         return self.person.name
 
     def get_name_for_info(self):
+        return self.person.name
+
+    def get_rec_name(self, value):
         return self.person.name
 
 

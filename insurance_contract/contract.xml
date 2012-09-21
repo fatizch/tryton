@@ -3,6 +3,40 @@
 	<data>
 
     <!--################################################################-->
+    <!--                       Generic Extension                        -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="generic_extension_view_form">
+            <field name="model">ins_contract.generic_extension</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                     <![CDATA[
+                     <form string="Extension">
+                         <field name="covered_elements"/>
+                     </form>               ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
+    <!--                         Life Extension                         -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="life_extension_view_form">
+            <field name="model">ins_contract.extension_life</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="generic_extension_view_form"/>
+            <field name="arch" type="xml">
+                     <![CDATA[
+                        <data>
+                            <xpath expr="/form" position="replace_attributes">
+                                <form string="Extension Life"/>
+                            </xpath>
+                        </data>
+                     ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
     <!--                           Price Lines                          -->
     <!--################################################################-->
 
@@ -179,6 +213,8 @@
 					<tree string="option">
 					<field name="contract"/>
 					<field name="coverage"/>
+					<field name="start_date"/>
+					<field name="end_date"/>
 					</tree>                 ]]>
 			</field>
 		</record>
@@ -217,6 +253,89 @@
 			<field name="view" ref="option_view_form" />
 			<field name="act_window" ref="act_option_form" />
 		</record>
+
+    <!--################################################################-->
+    <!--                         Covered Data                           -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="covered_data_view_tree">
+            <field name="model">ins_contract.covered_data</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">                 
+                    <![CDATA[                 
+                    <tree string="data">
+                        <field name="coverage_name"/>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                    </tree>                 ]]>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="covered_data_view_form">
+            <field name="model">ins_contract.covered_data</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                     <![CDATA[
+                     <form string="Covered Data">
+                         <label name="start_date" xalign="0"/>
+                         <field name="start_date"/>
+                         <label name="end_date" xalign="0"/>
+                         <field name="end_date"/>
+                         <newline/>
+                         <label name="for_coverage" xalign="0"/>
+                         <field name="for_coverage" xfill="1"/>
+                     </form>               ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
+    <!--                       Covered Elements                         -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="covered_element_view_tree">
+            <field name="model">ins_contract.covered_element</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">                 
+                    <![CDATA[                 
+                    <tree string="Covered Elements">
+                        <field name="specific_name"/>
+                    </tree>                 ]]>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="covered_element_view_form">
+            <field name="model">ins_contract.covered_element</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                     <![CDATA[
+                     <form string="Covered Element">
+                         <group id="product">
+                             <label name="product_specific" xalign="0"/>
+                             <field name="product_specific"/>
+                         </group>
+                         <newline/>
+                         <group id="covered_data" yfill="1" yexpand="1">
+                            <field name="covered_data" xfill="1" yfill="1" yexpand="1"/>
+                         </group>
+                     </form>               ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
+    <!--                       Covered Person                           -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="covered_person_view_form">
+            <field name="model">ins_contract.covered_person</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                     <![CDATA[
+                     <form string="Covered Person">
+                         <label name="person" xalign="0"/>
+                         <field name="person"/>
+                     </form>               ]]>
+            </field>
+        </record>
 
     <!--################################################################-->
     <!--                           Menus                                -->
