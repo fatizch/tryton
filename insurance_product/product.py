@@ -961,6 +961,10 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
         'get_basic_tax',
         'set_basic_tax')
 
+    @staticmethod
+    def default_config_kind():
+        return 'simple'
+
     @classmethod
     def set_basic_price(cls, prices, name, value):
         if value:
