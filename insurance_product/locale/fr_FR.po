@@ -532,7 +532,7 @@ msgstr ""
 
 msgctxt "field:ins_product.pricing_calculator,combine:"
 msgid "Combining Rule"
-msgstr ""
+msgstr "Règle de combinaison"
 
 msgctxt "field:ins_product.pricing_calculator,create_date:"
 msgid "Create Date"
@@ -567,8 +567,8 @@ msgid "Pricing Rule"
 msgstr "Règle de Tarification"
 
 msgctxt "field:ins_product.pricing_calculator,simple:"
-msgid "Simple components combination"
-msgstr ""
+msgid "Basic Combination"
+msgstr "Combinaison simple"
 
 msgctxt "field:ins_product.pricing_calculator,write_date:"
 msgid "Write Date"
@@ -580,7 +580,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_product.pricing_data,calculator:"
 msgid "Calculator"
-msgstr ""
+msgstr "Calculateur"
 
 msgctxt "field:ins_product.pricing_data,code:"
 msgid "Code"
@@ -612,7 +612,7 @@ msgstr "ID"
 
 msgctxt "field:ins_product.pricing_data,kind:"
 msgid "Line kind"
-msgstr ""
+msgstr "Type"
 
 msgctxt "field:ins_product.pricing_data,rec_name:"
 msgid "Name"
@@ -652,7 +652,7 @@ msgstr "Taxe"
 
 msgctxt "field:ins_product.pricing_rule,calculators:"
 msgid "Calculators"
-msgstr "Calculettes"
+msgstr "Calculateur"
 
 msgctxt "field:ins_product.pricing_rule,config_kind:"
 msgid "Conf. kind"
@@ -1027,16 +1027,32 @@ msgid "Products"
 msgstr "Produits"
 
 msgctxt "selection:ins_product.benefit,template_behaviour:"
+msgid "A"
+msgstr ""
+
+msgctxt "selection:ins_product.benefit,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
+
+msgctxt "selection:ins_product.benefit,template_behaviour:"
+msgid "O"
+msgstr ""
 
 msgctxt "selection:ins_product.benefit,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.benefit,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_product.benefit,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
+
+msgctxt "selection:ins_product.benefit,template_behaviour:"
+msgid "V"
+msgstr ""
 
 msgctxt "selection:ins_product.benefit,template_behaviour:"
 msgid "Validate"
@@ -1051,19 +1067,39 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
+msgid "A"
+msgstr ""
+
+msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
+
+msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
+msgid "O"
+msgstr ""
 
 msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
+msgid "V"
+msgstr ""
+
+msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
 msgid "Validate"
+msgstr ""
+
+msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
+msgid "A"
 msgstr ""
 
 msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
@@ -1071,12 +1107,24 @@ msgid "Add"
 msgstr "Ajouter"
 
 msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
+msgid "O"
+msgstr ""
+
+msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
+
+msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
+msgid "V"
+msgstr ""
 
 msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
 msgid "Validate"
@@ -1091,16 +1139,32 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
+msgid "A"
+msgstr ""
+
+msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
+
+msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
+msgid "O"
+msgstr ""
 
 msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
+
+msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
+msgid "V"
+msgstr ""
 
 msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
 msgid "Validate"
@@ -1111,16 +1175,32 @@ msgid "Life"
 msgstr "Prévoyance"
 
 msgctxt "selection:ins_product.coverage,template_behaviour:"
+msgid "A"
+msgstr ""
+
+msgctxt "selection:ins_product.coverage,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
+
+msgctxt "selection:ins_product.coverage,template_behaviour:"
+msgid "O"
+msgstr ""
 
 msgctxt "selection:ins_product.coverage,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.coverage,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_product.coverage,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
+
+msgctxt "selection:ins_product.coverage,template_behaviour:"
+msgid "V"
+msgstr ""
 
 msgctxt "selection:ins_product.coverage,template_behaviour:"
 msgid "Validate"
@@ -1135,16 +1215,32 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
+msgid "A"
+msgstr ""
+
+msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
+
+msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
+msgid "O"
+msgstr ""
 
 msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
+
+msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
+msgid "V"
+msgstr ""
 
 msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
 msgid "Validate"
@@ -1191,19 +1287,39 @@ msgid "Person"
 msgstr "Personne"
 
 msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
+msgid "A"
+msgstr ""
+
+msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
+
+msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
+msgid "O"
+msgstr ""
 
 msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
+msgid "V"
+msgstr ""
+
+msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
 msgid "Validate"
+msgstr ""
+
+msgctxt "selection:ins_product.offered,template_behaviour:"
+msgid "A"
 msgstr ""
 
 msgctxt "selection:ins_product.offered,template_behaviour:"
@@ -1211,12 +1327,24 @@ msgid "Add"
 msgstr "Ajouter"
 
 msgctxt "selection:ins_product.offered,template_behaviour:"
+msgid "O"
+msgstr ""
+
+msgctxt "selection:ins_product.offered,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.offered,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_product.offered,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
+
+msgctxt "selection:ins_product.offered,template_behaviour:"
+msgid "V"
+msgstr ""
 
 msgctxt "selection:ins_product.offered,template_behaviour:"
 msgid "Validate"
@@ -1295,19 +1423,39 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
+msgid "A"
+msgstr ""
+
+msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
+
+msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
+msgid "O"
+msgstr ""
 
 msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
+msgid "V"
+msgstr ""
+
+msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
 msgid "Validate"
+msgstr ""
+
+msgctxt "selection:ins_product.product,template_behaviour:"
+msgid "A"
 msgstr ""
 
 msgctxt "selection:ins_product.product,template_behaviour:"
@@ -1315,12 +1463,24 @@ msgid "Add"
 msgstr "Ajouter"
 
 msgctxt "selection:ins_product.product,template_behaviour:"
+msgid "O"
+msgstr ""
+
+msgctxt "selection:ins_product.product,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.product,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_product.product,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
+
+msgctxt "selection:ins_product.product,template_behaviour:"
+msgid "V"
+msgstr ""
 
 msgctxt "selection:ins_product.product,template_behaviour:"
 msgid "Validate"
@@ -1335,16 +1495,32 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
+msgid "A"
+msgstr ""
+
+msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
+
+msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
+msgid "O"
+msgstr ""
 
 msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
+
+msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
+msgid "V"
+msgstr ""
 
 msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
 msgid "Validate"
@@ -1440,7 +1616,7 @@ msgstr "Tarification"
 
 msgctxt "view:ins_product.pricing_calculator:"
 msgid "Calculators"
-msgstr "Calculettes"
+msgstr "Calculateurs"
 
 msgctxt "view:ins_product.pricing_calculator:"
 msgid "Components"
