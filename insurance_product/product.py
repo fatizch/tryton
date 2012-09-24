@@ -68,16 +68,21 @@ class Templated(object):
 
     template = fields.Many2One(None, 'Template',
         domain=[('id', '!=', Eval('id'))],
-        depends=['id'])
+        depends=['id'],
+        on_change=['template'])
     template_behaviour = fields.Selection(
         TEMPLATE_BEHAVIOUR,
         'Template Behaviour',
         states={'readonly': ~Eval('template')},
         depends=['template'])
 
-    @staticmethod
-    def default_template_behaviour():
-        return 'override'
+    def on_change_template(self):
+        if hasattr(self, 'template') and self.template:
+            if not hasattr(self, 'template_behaviour') or \
+                    not self.template_behaviour:
+                return {'template_behaviour': 'override'}
+        else:
+            return {'template_behaviour': None}
 
 
 class Offered(CoopView, GetResult, Templated):
