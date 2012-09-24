@@ -60,7 +60,7 @@ msgstr ""
 
 msgctxt "field:ins_contract.billing.generic_line,base_price:"
 msgid "Base Price"
-msgstr ""
+msgstr "Prix de Base"
 
 msgctxt "field:ins_contract.billing.generic_line,childs:"
 msgid "Child Lines"
@@ -204,7 +204,7 @@ msgstr ""
 
 msgctxt "field:ins_contract.billing_process.bill_line_view,line_base_price:"
 msgid "Base Price"
-msgstr ""
+msgstr "Prix de Base"
 
 msgctxt "field:ins_contract.billing_process.bill_line_view,line_end_date:"
 msgid "End Date"
