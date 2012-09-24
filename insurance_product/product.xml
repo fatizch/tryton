@@ -16,7 +16,7 @@
                 <![CDATA[
                 <tree string="Offered">
                         <field name="code"/>
-                        <field name="name"/>
+                         <field name="name"/>
                         <field name="start_date"/>
                         <field name="end_date"/>
                 </tree>
@@ -391,14 +391,14 @@
             <field name="arch" type="xml">
                 <![CDATA[
                     <form string="Price Calculator">
-                        <group id="main">
+                        <group id="main" col="8">
                             <label name="key" xalign="0"/>
-                            <field name="key"/>
+                            <field name="key" />
                             <newline/>
                             <label name="simple" xalign="0"/>
-                            <field name="simple"/>
+                            <field name="simple" xexpand="0"/>
                             <label name="combine" xalign="0"/>
-                            <field name="combine"/>
+                            <field name="combine" colspan="5"/>
                         </group>
                         <newline/>
                         <group id="test_data" xfill="1"

@@ -195,7 +195,6 @@ class Rule(ModelView, ModelSQL):
         return self.get_summary(name)
 
     def get_summary(self, name=None, with_label=True, at_date=None):
-        res = self.name
         kw = 'return'
         pos1 = self.code.rfind(kw)
         pos2 = self.code.rfind('\n')
@@ -204,7 +203,9 @@ class Rule(ModelView, ModelSQL):
         else:
             pos1 += len(kw) + 1
         if pos2 > 0:
-            res = '%s (= %s)' % (res, self.code[pos1:pos2])
+            res = self.code[pos1:pos2]
+        else:
+            res = self.name
         return res
 
 
