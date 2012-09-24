@@ -37,7 +37,9 @@ class TaxDesc(model.CoopSQL, model.VersionedObject):
             res = self.code
         elif self.name:
             res = self.name
-        res += ' (%s)' % self.get_current_value(name)
+        val = self.get_current_value(name)
+        if val != '':
+            res += ' (%s)' % val
         return res
 
 

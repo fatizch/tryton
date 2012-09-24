@@ -317,6 +317,7 @@
                         <field name="kind"/>
                         <field name="code"/>
                         <field name="config_kind"/>
+                        <field name="summary"/>
                     </tree>
                 ]]>
             </field>

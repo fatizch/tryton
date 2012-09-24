@@ -191,6 +191,22 @@ class Rule(ModelView, ModelSQL):
         return sum([e.as_functions_list()
                 for e in self.context.allowed_elements], [])
 
+    def get_rec_name(self, name=None):
+        return self.get_summary(name)
+
+    def get_summary(self, name=None, with_label=True, at_date=None):
+        res = self.name
+        kw = 'return'
+        pos1 = self.code.rfind(kw)
+        pos2 = self.code.rfind('\n')
+        if pos1 == -1:
+            pos1 = 0
+        else:
+            pos1 += len(kw) + 1
+        if pos2 > 0:
+            res = '%s (= %s)' % (res, self.code[pos1:pos2])
+        return res
+
 
 class TestCase(ModelView, ModelSQL):
     "Test Case"
