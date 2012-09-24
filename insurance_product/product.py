@@ -600,13 +600,13 @@ class GenericBusinessRule(CoopSQL, CoopView):
 
             res[field_name] = {}
             #We add in the dictionary all default values
-#            Rule = Pool().get(field.model_name)
-#            fields_names = list(x for x in set(Rule._fields.keys()
-#                    + Rule._inherit_fields.keys())
-#            if x not in ['id', 'create_uid', 'create_date',
-#                'write_uid', 'write_date'])
-#            res[field_name]['add'] = [Rule.default_get(fields_names)]
-            res[field_name]['add'] = [{}]
+            Rule = Pool().get(field.model_name)
+            fields_names = list(x for x in set(Rule._fields.keys()
+                    + Rule._inherit_fields.keys())
+            if x not in ['id', 'create_uid', 'create_date',
+                'write_uid', 'write_date'])
+            res[field_name]['add'] = [Rule.default_get(fields_names)]
+            #res[field_name]['add'] = [{}]
         return res
 
     @staticmethod
@@ -731,6 +731,11 @@ class PricingData(CoopSQL, CoopView):
         'get_fee',
         'set_fee')
 
+    summary = fields.Function(fields.Char('Value',
+                    on_change_with=['fixed_amount', 'config_kind', 'rule',
+                        'kind', 'the_tax', 'the_fee', 'code']),
+        'get_summary')
+
     def get_tax(self, name):
         if not (self.kind == 'tax' and
                 hasattr(self, 'code') and self.code):
@@ -815,6 +820,25 @@ class PricingData(CoopSQL, CoopView):
         final_res = PricingResultLine(amount, name)
         final_res.update_details({(kind, code): amount})
         return final_res, errors
+
+    def get_summary(self, name=None, with_label=False, at_date=None):
+        res = ''
+        if self.kind == 'tax' and self.the_tax:
+            res = self.the_tax.rec_name
+        elif self.kind == 'fee' and self.the_fee:
+            res = self.the_fee.rec_name
+        else:
+            if self.config_kind == 'rule' and self.rule:
+                res = self.rule.rec_name
+            elif self.config_kind == 'simple':
+                res = str(self.fixed_amount)
+        return res
+
+    def get_rec_name(self, name=None):
+        return self.get_summary(name)
+
+    def on_change_with_summary(self, name=None):
+        return self.get_summary(name)
 
 
 class PriceCalculator(CoopSQL, CoopView):
@@ -932,13 +956,13 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
         'Calculators')
 
     price = fields.Function(fields.Many2One(
-        'ins_product.pricing_calculator',
-        'Price Calculator'),
+            'ins_product.pricing_calculator',
+            'Price Calculator'),
         'get_calculator')
 
     sub_price = fields.Function(fields.Many2One(
-        'ins_product.pricing_calculator',
-        'Price Calculator'),
+            'ins_product.pricing_calculator',
+            'Price Calculator'),
         'get_calculator')
 
     frequency = fields.Selection(
