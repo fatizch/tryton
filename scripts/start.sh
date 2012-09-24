@@ -6,6 +6,7 @@ VE=`echo $VIRTUAL_ENV`
 if [ -z $VE ]; then
    source bin/activate
 fi
+cd $VIRTUAL_ENV
 cd tryton-workspace/conf
 . ./scripts.conf
 cd ../coopbusiness/scripts

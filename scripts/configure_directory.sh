@@ -15,6 +15,9 @@ then
 else
 	cd $1
 	TOPPATH=$PWD
+	cd bin
+	ln -s ../tryton-workspace/coopbusiness/scripts/start.sh coop_start
+	cd ..
 	echo $SEP
 	echo Entering Virtual Env
 	echo $SEP
