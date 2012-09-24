@@ -566,18 +566,6 @@ class GenericBusinessRule(CoopSQL, CoopView):
     coverage_amount_rule = fields.One2Many('ins_product.coverage_amount_rule',
         'generic_rule', 'Coverage Amount Rule', size=1)
 
-    @classmethod
-    def view_header_get(cls, value, view_type='form'):
-        resource = Transaction().context.get('resource')
-        if resource:
-            model_name, record_id = resource.split(',', 1)
-            Resource = Pool().get(model_name)
-            record = Resource(int(record_id))
-            if hasattr(record, 'kind') and record.kind:
-                return record.kind
-        return super(GenericBusinessRule, cls).view_header_get(
-            value, view_type)
-
     def get_rec_name(self, name):
         return self.kind
 

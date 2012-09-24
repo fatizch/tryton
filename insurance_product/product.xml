@@ -401,7 +401,7 @@
                             <field name="combine"/>
                         </group>
                         <newline/>
-                        <group id="test_data" string="Components" xfill="1"
+                        <group id="test_data" xfill="1"
                             yexpand="1" yfill="1">
                             <field name="data" yfill="1" yexpand="1"/>
                         </group>

@@ -548,7 +548,7 @@ msgstr "Nombre de chiffres après la virgule"
 
 msgctxt "field:ins_product.pricing_calculator,data:"
 msgid "Price Components"
-msgstr ""
+msgstr "Eléments de tarification"
 
 msgctxt "field:ins_product.pricing_calculator,id:"
 msgid "ID"
@@ -964,7 +964,7 @@ msgstr "Montant"
 
 msgctxt "model:ins_product.pricing_data,name:"
 msgid "Pricing Data"
-msgstr ""
+msgstr "Elément de Tarification"
 
 msgctxt "model:ins_product.pricing_rule,name:"
 msgid "Pricing Rule"
@@ -1352,11 +1352,11 @@ msgstr ""
 
 msgctxt "selection:ins_product.pricing_calculator,key:"
 msgid "Sub Elem Price"
-msgstr ""
+msgstr "Tarif par élément couvert"
 
 msgctxt "selection:ins_product.pricing_calculator,key:"
 msgid "Subscriber Price"
-msgstr ""
+msgstr "Tarif souscripteur"
 
 msgctxt "selection:ins_product.pricing_data,config_kind:"
 msgid "Rule Engine"
@@ -1368,7 +1368,7 @@ msgstr "Simple"
 
 msgctxt "selection:ins_product.pricing_data,kind:"
 msgid "Base Price"
-msgstr ""
+msgstr "Prime de base"
 
 msgctxt "selection:ins_product.pricing_data,kind:"
 msgid "Fee"
@@ -1628,11 +1628,11 @@ msgstr "Montant"
 
 msgctxt "view:ins_product.pricing_data:"
 msgid "Pricing Component"
-msgstr ""
+msgstr "Elément de tarification"
 
 msgctxt "view:ins_product.pricing_data:"
 msgid "Pricing Components"
-msgstr ""
+msgstr "Eléments de tarification"
 
 msgctxt "view:ins_product.pricing_rule:"
 msgid "Main"

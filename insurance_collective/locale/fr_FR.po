@@ -840,9 +840,10 @@ msgctxt "field:ins_collective.option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+#, fuzzy
 msgctxt "field:ins_collective.pricing_calculator,combine:"
 msgid "Combining Rule"
-msgstr ""
+msgstr "Règle de combinaison"
 
 msgctxt "field:ins_collective.pricing_calculator,create_date:"
 msgid "Create Date"
@@ -858,7 +859,7 @@ msgstr "Nombre de chiffres après la virgule"
 
 msgctxt "field:ins_collective.pricing_calculator,data:"
 msgid "Price Components"
-msgstr ""
+msgstr "Eléments de tarification"
 
 msgctxt "field:ins_collective.pricing_calculator,id:"
 msgid "ID"
@@ -876,9 +877,10 @@ msgctxt "field:ins_collective.pricing_calculator,rule:"
 msgid "Pricing Rule"
 msgstr "Règle de Tarification"
 
+#, fuzzy
 msgctxt "field:ins_collective.pricing_calculator,simple:"
-msgid "Simple components combination"
-msgstr ""
+msgid "Basic Combination"
+msgstr "Combinaison simple"
 
 msgctxt "field:ins_collective.pricing_calculator,write_date:"
 msgid "Write Date"
@@ -888,9 +890,10 @@ msgctxt "field:ins_collective.pricing_calculator,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+#, fuzzy
 msgctxt "field:ins_collective.pricing_data,calculator:"
 msgid "Calculator"
-msgstr ""
+msgstr "Calculateur"
 
 msgctxt "field:ins_collective.pricing_data,code:"
 msgid "Code"
@@ -920,9 +923,10 @@ msgctxt "field:ins_collective.pricing_data,id:"
 msgid "ID"
 msgstr "ID"
 
+#, fuzzy
 msgctxt "field:ins_collective.pricing_data,kind:"
 msgid "Line kind"
-msgstr ""
+msgstr "Type"
 
 msgctxt "field:ins_collective.pricing_data,rec_name:"
 msgid "Name"
@@ -1361,16 +1365,32 @@ msgid "New GBP Subscription Process"
 msgstr ""
 
 msgctxt "selection:ins_collective.benefit,template_behaviour:"
+msgid "A"
+msgstr ""
+
+msgctxt "selection:ins_collective.benefit,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
+
+msgctxt "selection:ins_collective.benefit,template_behaviour:"
+msgid "O"
+msgstr ""
 
 msgctxt "selection:ins_collective.benefit,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.benefit,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_collective.benefit,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
+
+msgctxt "selection:ins_collective.benefit,template_behaviour:"
+msgid "V"
+msgstr ""
 
 msgctxt "selection:ins_collective.benefit,template_behaviour:"
 msgid "Validate"
@@ -1385,19 +1405,39 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:ins_collective.benefit_rule,template_behaviour:"
+msgid "A"
+msgstr ""
+
+msgctxt "selection:ins_collective.benefit_rule,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
+
+msgctxt "selection:ins_collective.benefit_rule,template_behaviour:"
+msgid "O"
+msgstr ""
 
 msgctxt "selection:ins_collective.benefit_rule,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.benefit_rule,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_collective.benefit_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_collective.benefit_rule,template_behaviour:"
+msgid "V"
+msgstr ""
+
+msgctxt "selection:ins_collective.benefit_rule,template_behaviour:"
 msgid "Validate"
+msgstr ""
+
+msgctxt "selection:ins_collective.business_rule_manager,template_behaviour:"
+msgid "A"
 msgstr ""
 
 msgctxt "selection:ins_collective.business_rule_manager,template_behaviour:"
@@ -1405,12 +1445,24 @@ msgid "Add"
 msgstr "Ajouter"
 
 msgctxt "selection:ins_collective.business_rule_manager,template_behaviour:"
+msgid "O"
+msgstr ""
+
+msgctxt "selection:ins_collective.business_rule_manager,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.business_rule_manager,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_collective.business_rule_manager,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
+
+msgctxt "selection:ins_collective.business_rule_manager,template_behaviour:"
+msgid "V"
+msgstr ""
 
 msgctxt "selection:ins_collective.business_rule_manager,template_behaviour:"
 msgid "Validate"
@@ -1421,16 +1473,32 @@ msgid "Life"
 msgstr "Prévoyance"
 
 msgctxt "selection:ins_collective.coverage,template_behaviour:"
+msgid "A"
+msgstr ""
+
+msgctxt "selection:ins_collective.coverage,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
+
+msgctxt "selection:ins_collective.coverage,template_behaviour:"
+msgid "O"
+msgstr ""
 
 msgctxt "selection:ins_collective.coverage,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.coverage,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_collective.coverage,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
+
+msgctxt "selection:ins_collective.coverage,template_behaviour:"
+msgid "V"
+msgstr ""
 
 msgctxt "selection:ins_collective.coverage,template_behaviour:"
 msgid "Validate"
@@ -1445,16 +1513,32 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
+msgid "A"
+msgstr ""
+
+msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
+
+msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
+msgid "O"
+msgstr ""
 
 msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
+
+msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
+msgid "V"
+msgstr ""
 
 msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
 msgid "Validate"
@@ -1501,16 +1585,32 @@ msgid "Person"
 msgstr "Personne"
 
 msgctxt "selection:ins_collective.eligibility_rule,template_behaviour:"
+msgid "A"
+msgstr ""
+
+msgctxt "selection:ins_collective.eligibility_rule,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
+
+msgctxt "selection:ins_collective.eligibility_rule,template_behaviour:"
+msgid "O"
+msgstr ""
 
 msgctxt "selection:ins_collective.eligibility_rule,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.eligibility_rule,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_collective.eligibility_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
+
+msgctxt "selection:ins_collective.eligibility_rule,template_behaviour:"
+msgid "V"
+msgstr ""
 
 msgctxt "selection:ins_collective.eligibility_rule,template_behaviour:"
 msgid "Validate"
@@ -1622,11 +1722,11 @@ msgstr "Suspendre"
 
 msgctxt "selection:ins_collective.pricing_calculator,key:"
 msgid "Sub Elem Price"
-msgstr ""
+msgstr "Tarif par élément couvert"
 
 msgctxt "selection:ins_collective.pricing_calculator,key:"
 msgid "Subscriber Price"
-msgstr ""
+msgstr "Tarif souscripteur"
 
 msgctxt "selection:ins_collective.pricing_data,config_kind:"
 msgid "Rule Engine"
@@ -1638,7 +1738,7 @@ msgstr "Simple"
 
 msgctxt "selection:ins_collective.pricing_data,kind:"
 msgid "Base Price"
-msgstr ""
+msgstr "Prime de base"
 
 msgctxt "selection:ins_collective.pricing_data,kind:"
 msgid "Fee"
@@ -1689,19 +1789,39 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:ins_collective.pricing_rule,template_behaviour:"
+msgid "A"
+msgstr ""
+
+msgctxt "selection:ins_collective.pricing_rule,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
+
+msgctxt "selection:ins_collective.pricing_rule,template_behaviour:"
+msgid "O"
+msgstr ""
 
 msgctxt "selection:ins_collective.pricing_rule,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.pricing_rule,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_collective.pricing_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_collective.pricing_rule,template_behaviour:"
+msgid "V"
+msgstr ""
+
+msgctxt "selection:ins_collective.pricing_rule,template_behaviour:"
 msgid "Validate"
+msgstr ""
+
+msgctxt "selection:ins_collective.product,template_behaviour:"
+msgid "A"
 msgstr ""
 
 msgctxt "selection:ins_collective.product,template_behaviour:"
@@ -1709,12 +1829,24 @@ msgid "Add"
 msgstr "Ajouter"
 
 msgctxt "selection:ins_collective.product,template_behaviour:"
+msgid "O"
+msgstr ""
+
+msgctxt "selection:ins_collective.product,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.product,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_collective.product,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
+
+msgctxt "selection:ins_collective.product,template_behaviour:"
+msgid "V"
+msgstr ""
 
 msgctxt "selection:ins_collective.product,template_behaviour:"
 msgid "Validate"
@@ -1729,16 +1861,32 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:ins_collective.reserve_rule,template_behaviour:"
+msgid "A"
+msgstr ""
+
+msgctxt "selection:ins_collective.reserve_rule,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
+
+msgctxt "selection:ins_collective.reserve_rule,template_behaviour:"
+msgid "O"
+msgstr ""
 
 msgctxt "selection:ins_collective.reserve_rule,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.reserve_rule,template_behaviour:"
+msgid "R"
+msgstr ""
+
+msgctxt "selection:ins_collective.reserve_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
+
+msgctxt "selection:ins_collective.reserve_rule,template_behaviour:"
+msgid "V"
+msgstr ""
 
 msgctxt "selection:ins_collective.reserve_rule,template_behaviour:"
 msgid "Validate"
