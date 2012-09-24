@@ -39,8 +39,12 @@
                     <field name="start_date"/>
                     <label name="end_date" xalign="0"/>
                     <field name="end_date"/>
-                    <label name="template" xalign="0"/>
-                    <field name="template"/>
+                    <newline/>
+                    <group id="templating" colspan="4">
+                        <label name="template" xalign="0"/>
+                        <field name="template" xexpand="1"/>
+                        <field name="template_behaviour"/>
+                    </group>
                     <notebook>
                         <page string="Managers" id="managers">
                             <notebook>
@@ -153,7 +157,7 @@
                     <label name="insurer" xalign="0"/>
                     <field name="insurer" widget="selection"/>
                 </xpath>
-                <xpath expr="/form/label[@name=&quot;template&quot;]"
+                <xpath expr="/form/group[@id=&quot;templating&quot;]"
                     position="before">
                     <label name="family" xalign="0"/>
                     <field name="family" xexpand="0"/>
@@ -203,6 +207,60 @@
         <!--/Coverage -->
 
         <!--  ******************************************* 
+              ********    BusinessRuleManager    ********
+              *******************************************-->
+        <record model="ir.ui.view" id="businessrulemanager_view_form">
+            <field name="model">ins_product.business_rule_manager</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            <![CDATA[
+                <form string="Business Rule Manager">
+                    <group id="templating">
+                        <label name="template"/>
+                        <field name="template"/>
+                        <field name="template_behaviour"/>
+                    </group>
+                    <newline/>
+                    <field name="business_rules" colspan="4" />
+                </form>
+            ]]>
+            </field>
+        </record>
+
+        <!--  ******************************************* 
+              ********    BusinessRuleRoot    ********
+              *******************************************-->
+        <record model="ir.ui.view" id="businessruleroot_view_form">
+            <field name="model">ins_product.business_rule_root</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            <![CDATA[
+                <form string="Business Rule Root">
+                    <group id="templating">
+                        <label name="template"/>
+                        <field name="template"/>
+                        <field name="template_behaviour"/>
+                    </group>
+                    <notebook>
+                        <page id="main" string="Main">
+                            <label name="config_kind" xalign="0" xfill="1"/>
+                            <field name="config_kind" xfill="1" xexpand="0" xalign="0"/>
+                            <group id="rule" colspan="4" 
+                              states="{'invisible': Eval('config_kind') != 'rule'}">
+                                <label name="rule" xalign="0"/>
+                                <field name="rule"/>
+                            </group>
+                            <group id="simple" colspan="4"
+                            states="{'invisible': Eval('config_kind') != 'simple'}">
+                            </group>
+                        </page>
+                    </notebook>
+                </form>
+            ]]>
+            </field>
+        </record>
+
+        <!--  ******************************************* 
               ********    GenericBusinessRule    ********
               *******************************************-->
         <!-- GenericBusinessRule -->
@@ -244,52 +302,6 @@
                     <field name="start_date"/>
                     <field name="end_date"/>
                 </tree>
-            ]]>
-            </field>
-        </record>
-        <!--  ******************************************* 
-              ********    BusinessRuleManager    ********
-              *******************************************-->
-        <record model="ir.ui.view" id="businessrulemanager_view_form">
-            <field name="model">ins_product.business_rule_manager</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-            <![CDATA[
-                <form string="Business Rule Manager">
-                    <label name="template"/>
-                    <field name="template"/>
-                    <newline/>
-                    <field name="business_rules" colspan="4" />
-                </form>
-            ]]>
-            </field>
-        </record>
-        <!--  ******************************************* 
-              ********    BusinessRuleRoot    ********
-              *******************************************-->
-        <record model="ir.ui.view" id="businessruleroot_view_form">
-            <field name="model">ins_product.business_rule_root</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-            <![CDATA[
-                <form string="Business Rule Root">
-                    <label name="template" xalign="0"/>
-                    <field name="template"/>
-                    <notebook>
-                        <page id="main" string="Main">
-                            <label name="config_kind" xalign="0" xfill="1"/>
-                            <field name="config_kind" xfill="1" xexpand="0" xalign="0"/>
-                            <group id="rule" colspan="4" 
-                              states="{'invisible': Eval('config_kind') != 'rule'}">
-                                <label name="rule" xalign="0"/>
-                                <field name="rule"/>
-                            </group>
-                            <group id="simple" colspan="4"
-                            states="{'invisible': Eval('config_kind') != 'simple'}">
-                            </group>
-                        </page>
-                    </notebook>
-                </form>
             ]]>
             </field>
         </record>
@@ -338,7 +350,7 @@
                         <group id="other"
                             states="{'invisible': Eval('kind') != 'base'}">
                             <label name="config_kind" xalign="0"/>
-                            <field name="config_kind" xexpand="0" xalign="0"/>
+                            <field name="config_kind" xexpand="1"/>
                             <newline/>
                             <group id="simple" colspan="4"
                                 states="{'invisible': Eval('config_kind') != 'simple'}">
@@ -412,31 +424,8 @@
                     </xpath>
                     <xpath expr="/form/notebook/page[@id=&quot;main&quot;]"
                      position="after">
-                        <!-- Commented whil using a O2M for calculators
-                        <page id="main_elem" string="Main">
-                            <label name="tax_mgr" xalign="0"/>
-                            <field name="tax_mgr" xexpand="1"/>
-                            <newline/>
-                            <label name="price" xalign="0"/>
-                            <field name="price"/>
-                        </page>
-                        <page id="sub" string="Sub Element"
-                            states="{'invisible': Eval('price_kind') != 'cov_element'}">
-                            <label name="sub_elem_taxes" xalign="0"/>
-                            <field name="sub_elem_taxes" xexpand="1"/>
-                            <newline/>
-                            <label name="sub_price" xalign="0"/>
-                            <field name="sub_price"/>
-                        </page>
-                        -->
-                        <page id="temp" string="Main">
-                            <!--
-                            <label name="tax_mgr" xalign="0"/>
-                            <field name="tax_mgr" xexpand="1"/>
-                            <label name="sub_elem_taxes" xalign="0"/>
-                            <field name="sub_elem_taxes" xexpand="1"/>
-                            <newline/>
-                            -->
+                        <page id="calculators" string="Main"
+                            states="{'invisible' : Eval('config_kind') == 'simple'}">
                             <field name="calculators" yfill="1" yexpand="1"
                                 xexpand="1" colspan="4"/>
                         </page>
@@ -445,13 +434,30 @@
                         position="replace_attributes">
                         <page id="main" states="{'invisible': True}"/>
                     </xpath>
-                    <xpath expr="/form/field[@name=&quot;template&quot;]"
+                    <xpath expr="/form/group[@id=&quot;templating&quot;]"
                         position="after">
                             <newline/>
-                            <label name="price_kind" xalign="0"/>
-                            <field name="price_kind"/>
-                            <label name="frequency" xalign="0"/>
-                            <field name="frequency"/> 
+                            <group id="config_kind">
+                                <label name="config_kind" xalign="0"/>
+                                <field name="config_kind" xexpand="1"/>
+                                <label name="frequency" xalign="0"/>
+                                <field name="frequency" xexpand="1"/>
+                            </group>
+                            <newline/>
+                            <group id="price_kind"
+                                states="{'invisible': Eval('config_kind') == 'simple'}">
+                                <label name="price_kind" xalign="0"/>
+                                <field name="price_kind"/>
+                            </group>
+                            <newline/>
+                            <group id="basic"
+                                states="{'invisible': Eval('config_kind') == 'rule'}">
+                                <label name="basic_price" xalign="0"/>
+                                <field name="basic_price" xexpand="1"/>
+                                <newline/>
+                                <label name="basic_tax" xalign="0"/>
+                                <field name="basic_tax" xexpand="1"/>
+                            </group>
                     </xpath>
                 </data>
                 ]]>

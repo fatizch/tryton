@@ -50,11 +50,37 @@ PRICING_FREQUENCY = [
     ('monthly', 'Monthly')
     ]
 
+TEMPLATE_BEHAVIOUR = [
+    ('override', 'Override'),
+    ('add', 'Add'),
+    ('remove', 'Remove'),
+    ('validate', 'Validate'),
+    ]
+
 FAMILIES_EXTS = {
     'life': 'extension_life'}
 
 
-class Offered(CoopView, GetResult):
+class Templated(object):
+    'Templated Class'
+
+    __name__ = 'ins_product.templated'
+
+    template = fields.Many2One(None, 'Template',
+        domain=[('id', '!=', Eval('id'))],
+        depends=['id'])
+    template_behaviour = fields.Selection(
+        TEMPLATE_BEHAVIOUR,
+        'Template Behaviour',
+        states={'readonly': ~Eval('template')},
+        depends=['template'])
+
+    @staticmethod
+    def default_template_behaviour():
+        return 'override'
+
+
+class Offered(CoopView, GetResult, Templated):
     'Offered'
 
     __name__ = 'ins_product.offered'
@@ -63,9 +89,6 @@ class Offered(CoopView, GetResult):
     name = fields.Char('Name', required=True, select=1)
     start_date = fields.Date('Start Date', required=True, select=1)
     end_date = fields.Date('End Date')
-    template = fields.Many2One(None, 'Template',
-        domain=[('id', '!=', Eval('id'))],
-        depends=['id'])
     description = fields.Text('Description')
     #All mgr var must be the same as the business rule class and ends with mgr
     pricing_mgr = One2ManyDomain('ins_product.business_rule_manager',
@@ -280,6 +303,11 @@ class Coverage(CoopSQL, Offered):
                 res.append((covered, covered_data))
         return res
 
+    def is_valid(self):
+        if self.template_behaviour == 'remove':
+            return False
+        return True
+
 
 class Product(CoopSQL, Offered):
     'Product'
@@ -298,6 +326,11 @@ class Product(CoopSQL, Offered):
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
         ]
+
+    def get_valid_options(self):
+        for option in self.options:
+            if option.is_valid():
+                yield option
 
     def get_sub_elem_data(self):
         # This method is used by the get_result method to know where to look
@@ -320,7 +353,7 @@ class Product(CoopSQL, Offered):
         res = []
 
         self.update_args(args)
-        for option in self.options:
+        for option in self.get_valid_options():
             _res, _errs = option.get_result('price', args)
             if _res:
                 res.append(_res)
@@ -376,7 +409,7 @@ class Product(CoopSQL, Offered):
         self.update_args(args)
         result = []
         errors = []
-        for option in self.options:
+        for option in self.get_valid_options():
             res, errs = option.get_result('family', args)
             result += res
             errors += errs
@@ -390,7 +423,7 @@ class Product(CoopSQL, Offered):
             return self.get_result('frequency', args, manager='pricing')
         except NonExistingManagerException:
             pass
-        for coverage in self.options:
+        for coverage in self.get_valid_options():
             try:
                 return coverage.get_result(
                     'frequency', args, manager='pricing')
@@ -418,15 +451,12 @@ class ProductOptionsCoverage(CoopSQL):
         'Coverage', select=1, required=True, ondelete='CASCADE')
 
 
-class BusinessRuleManager(CoopSQL, CoopView, GetResult):
+class BusinessRuleManager(CoopSQL, CoopView, GetResult, Templated):
     'Business Rule Manager'
 
     __name__ = 'ins_product.business_rule_manager'
 
     offered = fields.Reference('Offered', selection='get_offered_models')
-    template = fields.Many2One(None, 'Template',
-        domain=[('id', '!=', Eval('id'))],
-        depends=['id'])
     business_rules = fields.One2Many('ins_product.generic_business_rule',
         'manager', 'Business Rules')  # on_change=['business_rules'])
 
@@ -631,7 +661,7 @@ class GenericBusinessRule(CoopSQL, CoopView):
             return self.manager.get_currency_digits(name)
 
 
-class BusinessRuleRoot(CoopView, GetResult):
+class BusinessRuleRoot(CoopView, GetResult, Templated):
     'Business Rule Root'
 
     __name__ = 'ins_product.business_rule_root'
@@ -640,9 +670,6 @@ class BusinessRuleRoot(CoopView, GetResult):
         'Conf. kind', required=True)
     generic_rule = fields.Many2One('ins_product.generic_business_rule',
         'Generic Rule', ondelete='CASCADE')
-    template = fields.Many2One(None, 'Template',
-        domain=[('id', '!=', Eval('id'))],
-        depends=['id'])
     rule = fields.Many2One('rule_engine', 'Rule Engine',
         depends=['config_kind'])
 
@@ -716,11 +743,16 @@ class PricingData(CoopSQL, CoopView):
 
     @classmethod
     def set_tax(cls, calcs, name, value):
-        tax, = get_those_objects(
-            'coop_account.tax_desc',
-            [('id', '=', value)])
-        code = tax.code
-        cls.write(calcs, {'code': code})
+        if value:
+            try:
+                tax, = get_those_objects(
+                    'coop_account.tax_desc',
+                    [('id', '=', value)])
+                code = tax.code
+                cls.write(calcs, {'code': code})
+            except ValueError:
+                raise Exception(
+                    'Could not found a Tax Desc with code %s' % value)
 
     def get_fee(self, name):
         if not (self.kind == 'fee' and
@@ -734,11 +766,16 @@ class PricingData(CoopSQL, CoopView):
 
     @classmethod
     def set_fee(cls, calcs, name, value):
-        fee, = get_those_objects(
-            'coop_account.fee_desc',
-            [('id', '=', value)])
-        code = fee.code
-        cls.write(calcs, {'code': code})
+        if value:
+            try:
+                fee, = get_those_objects(
+                    'coop_account.fee_desc',
+                    [('id', '=', value)])
+                code = fee.code
+                cls.write(calcs, {'code': code})
+            except ValueError:
+                raise Exception(
+                    'Could not found a Fee Desc with code %s' % value)
 
     @staticmethod
     def default_kind():
@@ -809,7 +846,9 @@ class PriceCalculator(CoopSQL, CoopView):
     combine = fields.Many2One(
         'rule_engine',
         'Combining Rule',
-        states={'invisible': Bool(Eval('simple'))})
+        states={
+            'invisible': Bool(Eval('simple')),
+            'required': ~Bool(Eval('simple'))})
 
     def get_currency_digits(self, name):
         if hasattr(self, 'rule') and self.rule:
@@ -884,15 +923,8 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
             ('subscriber', 'Subscriber'),
             ('cov_element', 'Covered Elements')
         ],
-        'Price based on', required=True)
-
-#    tax_mgr = fields.Many2One(
-#        'coop_account.tax_manager',
-#        'Taxes')
-#
-#    sub_elem_taxes = fields.Many2One(
-#        'coop_account.tax_manager',
-#        'Taxes')
+        'Price based on',
+        states={'required': Eval('config_kind') == 'rule'})
 
     calculators = fields.One2Many(
         'ins_product.pricing_calculator',
@@ -911,7 +943,126 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
 
     frequency = fields.Selection(
         PRICING_FREQUENCY,
-        'Rate Frequency')
+        'Rate Frequency',
+        required=True)
+
+    basic_price = fields.Function(
+        fields.Numeric(
+            'Amount',
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_basic_price',
+        'set_basic_price')
+
+    basic_tax = fields.Function(
+        fields.Many2One(
+            'coop_account.tax_desc',
+            'Tax'),
+        'get_basic_tax',
+        'set_basic_tax')
+
+    @classmethod
+    def set_basic_price(cls, prices, name, value):
+        if value:
+            Calc = Pool().get('ins_product.pricing_calculator')
+            Data = Pool().get('ins_product.pricing_data')
+            for price in prices:
+                if len(price.calculators) == 1:
+                    the_calc = price.calculators[0]
+                    Data.delete(
+                        [data for data in the_calc.data
+                            if data.kind == 'base'])
+                else:
+                    if len(price.calculators) > 1:
+                        Calc.delete(price.calculators)
+                    the_calc = Calc()
+                    the_calc.key = 'price'
+                    the_calc.data = []
+                if the_calc.id:
+                    the_calc.write([the_calc],
+                        {'data': [(
+                            'create', {
+                                'fixed_amount': value,
+                                'kind': 'base',
+                                'code': 'PP'})]})
+                else:
+                    price.write([price], {
+                        'calculators': [(
+                            'create', {
+                                'key': 'price',
+                                'data': [(
+                                    'create', {
+                                        'fixed_amount': value,
+                                        'code': 'PP',
+                                        'kind': 'base'})]})]})
+
+    @classmethod
+    def set_basic_tax(cls, prices, name, value):
+        if value:
+            try:
+                tax, = get_those_objects(
+                    'coop_account.tax_desc',
+                    [('id', '=', value)])
+            except ValueError:
+                raise Exception(
+                    'Could not found a Tax Desc with code %s' % value)
+            Calc = Pool().get('ins_product.pricing_calculator')
+            Data = Pool().get('ins_product.pricing_data')
+            for price in prices:
+                if len(price.calculators) == 1:
+                    the_calc = price.calculators[0]
+                    Data.delete(
+                        [data for data in the_calc.data
+                            if data.kind == 'tax'])
+                else:
+                    if len(price.calculators) > 1:
+                        Calc.delete(price.calculators)
+                    the_calc = Calc()
+                    the_calc.key = 'price'
+                    the_calc.data = []
+                if the_calc.id:
+                    the_calc.write([the_calc],
+                        {'data': [(
+                            'create', {
+                                'kind': 'tax',
+                                'code': tax.code})]})
+                else:
+                    price.write([price], {
+                        'calculators': [(
+                            'create', {
+                                'key': 'price',
+                                'data': [(
+                                    'create', {
+                                        'code': tax.code,
+                                        'kind': 'tax'})]})]})
+
+    def get_basic_price(self, name):
+        if not self.config_kind == 'simple':
+            return 0
+        calcs = [elem for elem in self.calculators if elem.key == 'price']
+        if not calcs or len(calcs) > 1:
+            return 0
+        calc = calcs[0]
+        datas = [data for data in calc.data if data.kind == 'base']
+        if not datas or len(datas) > 1:
+            return 0
+        return datas[0].fixed_amount
+
+    def get_basic_tax(self, name):
+        if not self.config_kind == 'simple':
+            return
+        calcs = [elem for elem in self.calculators if elem.key == 'price']
+        if not calcs or len(calcs) > 1:
+            return
+        calc = calcs[0]
+        datas = [data for data in calc.data if data.kind == 'tax']
+        if not datas or len(datas) > 1:
+            return
+        tax = get_those_objects(
+            'coop_account.tax_desc',
+            [('code', '=', datas[0].code)], 1)
+        if tax:
+            return tax[0].id
 
     def get_calculator(self, name):
         if hasattr(self, 'calculators') and self.calculators:
@@ -919,40 +1070,6 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
                 if elem.key == name:
                     return WithAbstract.serialize_field(elem)
         return None
-
-#    def give_me_appliable_taxes(self, args):
-#        errs = []
-#        if 'date' in args:
-#            if hasattr(self, 'tax_mgr') and self.tax_mgr:
-#                res = self.tax_mgr.give_appliable_taxes(args)
-#            else:
-#                res = []
-#        else:
-#            errs.append('No date provided')
-#            res = []
-#        return res, errs
-#
-#    def give_me_appliable_sub_elem_taxes(self, args):
-#        errs = []
-#        if 'date' in args:
-#            if hasattr(self, 'sub_elem_taxes') and self.sub_elem_taxes:
-#                res = self.sub_elem_taxes.give_appliable_taxes(args)
-#            else:
-#                res = []
-#        else:
-#            errs.append('No date provided')
-#            res = []
-#        return res, errs
-#
-#    def calculate_taxes(self, amount, taxes):
-#        res = []
-#        for tax in taxes:
-#            tax_amount = tax.apply_tax(amount)
-#            tmp_line = PricingResultLine(
-#                tax_amount, 'Tax' + ' - ' + tax.get_code())
-#            tmp_line.update_details({('tax', tax.get_code()): tax_amount})
-#            res.append(tmp_line)
-#        return res
 
     def give_me_price(self, args):
         if self.price:
