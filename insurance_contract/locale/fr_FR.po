@@ -74,6 +74,10 @@ msgctxt "field:ins_contract.billing.generic_line,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_contract.billing.generic_line,detail_childs:"
+msgid "Details"
+msgstr "Détails"
+
 msgctxt "field:ins_contract.billing.generic_line,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -96,6 +100,10 @@ msgstr ""
 
 msgctxt "field:ins_contract.billing.generic_line,name:"
 msgid "Short Description"
+msgstr ""
+
+msgctxt "field:ins_contract.billing.generic_line,node_childs:"
+msgid "Nodes"
 msgstr ""
 
 msgctxt "field:ins_contract.billing.generic_line,on_object:"
@@ -430,6 +438,10 @@ msgctxt "field:ins_contract.covered_car,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_contract.covered_data,coverage_name:"
+msgid "Coverage Name"
+msgstr ""
+
 msgctxt "field:ins_contract.covered_data,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -497,6 +509,10 @@ msgstr ""
 msgctxt "field:ins_contract.covered_element,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:ins_contract.covered_element,specific_name:"
+msgid "Covered Name"
+msgstr ""
 
 msgctxt "field:ins_contract.covered_element,write_date:"
 msgid "Write Date"
@@ -589,6 +605,14 @@ msgstr "Date de mise à jour"
 msgctxt "field:ins_contract.extension_life,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.generic_extension,covered_elements:"
+msgid "Coverages"
+msgstr "Garanties"
+
+msgctxt "field:ins_contract.generic_extension,id:"
+msgid "ID"
+msgstr "ID"
 
 msgctxt "field:ins_contract.option,contract:"
 msgid "Contract"
@@ -798,6 +822,10 @@ msgctxt "field:ins_contract.subs_process.extension_life,session_id:"
 msgid "Session Id"
 msgstr ""
 
+msgctxt "field:ins_contract.subs_process.lines,childs:"
+msgid "Details"
+msgstr "Détails"
+
 msgctxt "field:ins_contract.subs_process.lines,id:"
 msgid "ID"
 msgstr "ID"
@@ -951,22 +979,26 @@ msgid ""
 msgstr ""
 
 msgctxt "model:ins_contract.covered_data,name:"
-msgid ""
-msgstr ""
+msgid "Coverage Data"
+msgstr "Données de Couverture"
 
 msgctxt "model:ins_contract.covered_element,name:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
 msgctxt "model:ins_contract.covered_person,name:"
-msgid ""
-msgstr ""
+msgid "Covered Person"
+msgstr "Personne Couverte"
 
 msgctxt "model:ins_contract.extension_car,name:"
 msgid ""
 msgstr ""
 
 msgctxt "model:ins_contract.extension_life,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ins_contract.generic_extension,name:"
 msgid ""
 msgstr ""
 
@@ -1071,6 +1103,10 @@ msgid "Fee"
 msgstr "Frais"
 
 msgctxt "selection:ins_contract.billing.generic_line,kind:"
+msgid "Node"
+msgstr ""
+
+msgctxt "selection:ins_contract.billing.generic_line,kind:"
 msgid "Tax"
 msgstr "Taxe"
 
@@ -1145,6 +1181,10 @@ msgstr ""
 msgctxt "selection:ins_contract.price_line,kind:"
 msgid "Fee"
 msgstr "Frais"
+
+msgctxt "selection:ins_contract.price_line,kind:"
+msgid "Line"
+msgstr ""
 
 msgctxt "selection:ins_contract.price_line,kind:"
 msgid "Price"
@@ -1241,6 +1281,34 @@ msgstr ""
 msgctxt "view:ins_contract.coverage_displayer:"
 msgid "Coverage Choices Tree"
 msgstr ""
+
+msgctxt "view:ins_contract.covered_data:"
+msgid "Covered Data"
+msgstr ""
+
+msgctxt "view:ins_contract.covered_data:"
+msgid "data"
+msgstr ""
+
+msgctxt "view:ins_contract.covered_element:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "view:ins_contract.covered_element:"
+msgid "Covered Elements"
+msgstr "Eléments Couverts"
+
+msgctxt "view:ins_contract.covered_person:"
+msgid "Covered Person"
+msgstr "Personne Couverte"
+
+msgctxt "view:ins_contract.extension_life:"
+msgid "Extension Life"
+msgstr ""
+
+msgctxt "view:ins_contract.generic_extension:"
+msgid "Extension"
+msgstr "Extension"
 
 msgctxt "view:ins_contract.option:"
 msgid "option"

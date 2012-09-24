@@ -164,15 +164,15 @@ msgstr "Comptes Bancaires"
 
 msgctxt "field:party.party,bank_role:"
 msgid "Bank"
-msgstr "Bank"
+msgstr "Banque"
 
 msgctxt "field:party.party,is_bank:"
 msgid "Bank"
-msgstr "Bank"
+msgstr "Banque"
 
 msgctxt "model:party.bank,name:"
 msgid "Bank"
-msgstr "Bank"
+msgstr "Banque"
 
 msgctxt "model:party.bank_account,name:"
 msgid "Bank Account"

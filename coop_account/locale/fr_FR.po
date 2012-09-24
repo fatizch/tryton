@@ -2,6 +2,94 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:coop_account.fee_desc,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:coop_account.fee_desc,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:coop_account.fee_desc,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:coop_account.fee_desc,current_value:"
+msgid "Current Value"
+msgstr "Valeur Courante"
+
+msgctxt "field:coop_account.fee_desc,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:coop_account.fee_desc,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:coop_account.fee_desc,name:"
+msgid "Fee Name"
+msgstr "Nom du Frais"
+
+msgctxt "field:coop_account.fee_desc,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:coop_account.fee_desc,versions:"
+msgid "Versionned Rates"
+msgstr "Taux Versionnés"
+
+msgctxt "field:coop_account.fee_desc,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:coop_account.fee_desc,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:coop_account.fee_version,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:coop_account.fee_version,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:coop_account.fee_version,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:coop_account.fee_version,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:coop_account.fee_version,kind:"
+msgid "Rating mode"
+msgstr "Type"
+
+msgctxt "field:coop_account.fee_version,main_elem:"
+msgid "Descriptor"
+msgstr ""
+
+msgctxt "field:coop_account.fee_version,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:coop_account.fee_version,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:coop_account.fee_version,value:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "field:coop_account.fee_version,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:coop_account.fee_version,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:coop_account.manager_tax_relation,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -134,6 +222,10 @@ msgctxt "field:coop_account.tax_version,kind:"
 msgid "Rating mode"
 msgstr "Type"
 
+msgctxt "field:coop_account.tax_version,main_elem:"
+msgid "Descriptor"
+msgstr ""
+
 msgctxt "field:coop_account.tax_version,my_tax_desc:"
 msgid "Tax Descriptor"
 msgstr "Taxe"
@@ -162,6 +254,14 @@ msgctxt "field:coop_account.tax_version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "model:coop_account.fee_desc,name:"
+msgid "A Simple Fee Descriptor"
+msgstr ""
+
+msgctxt "model:coop_account.fee_version,name:"
+msgid "A fee Version"
+msgstr ""
+
 msgctxt "model:coop_account.manager_tax_relation,name:"
 msgid "A Relation between a pricing rule and a tax"
 msgstr ""
@@ -178,6 +278,10 @@ msgctxt "model:coop_account.tax_version,name:"
 msgid "A tax Version"
 msgstr ""
 
+msgctxt "model:ir.action,name:act_fee_form"
+msgid "Fees"
+msgstr "Frais"
+
 msgctxt "model:ir.action,name:act_tax_form"
 msgid "Taxes"
 msgstr "Taxes"
@@ -186,9 +290,21 @@ msgctxt "model:ir.ui.menu,name:menu_account"
 msgid "Accounting"
 msgstr "Comptabilité"
 
+msgctxt "model:ir.ui.menu,name:menu_product_fees"
+msgid "Fees"
+msgstr "Frais"
+
 msgctxt "model:ir.ui.menu,name:menu_product_taxes"
 msgid "Taxes"
 msgstr "Taxes"
+
+msgctxt "selection:coop_account.fee_version,kind:"
+msgid "Flat"
+msgstr "Fixe"
+
+msgctxt "selection:coop_account.fee_version,kind:"
+msgid "Rate"
+msgstr "Taux"
 
 msgctxt "selection:coop_account.tax_version,kind:"
 msgid "Flat"
@@ -201,6 +317,14 @@ msgstr "Aucun"
 msgctxt "selection:coop_account.tax_version,kind:"
 msgid "Rate"
 msgstr "Taux"
+
+msgctxt "view:coop_account.fee_desc:"
+msgid "Fee Descriptor"
+msgstr "Descripteur de Frais"
+
+msgctxt "view:coop_account.fee_version:"
+msgid "Fee Version"
+msgstr "Version"
 
 msgctxt "view:coop_account.tax_desc:"
 msgid "Tax Descriptor"
