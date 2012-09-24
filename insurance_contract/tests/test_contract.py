@@ -255,6 +255,7 @@ return True'''
         pr_calc2.key = 'sub_price'
 
         prm_a = self.pricing()
+        prm_a.config_kind = 'rule'
 
         prm_a.calculators = [pr_calc1, pr_calc2]
 
@@ -277,6 +278,7 @@ return True'''
 
         prm_b = self.pricing()
         prm_b.calculators = [pr_calc3]
+        prm_b.config_kind = 'rule'
 
         gbr_b = self.gbr()
         gbr_b.kind = 'ins_product.pricing_rule'
