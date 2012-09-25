@@ -22,8 +22,8 @@ def update_cfg_dict(cfg_dict):
 def launch_test_case(cfg_dict):
     cfg_dict = update_cfg_dict(cfg_dict)
 
-#    if is_table_empty(cfg_dict['Bank']):
-    create_bank(cfg_dict)
+    if is_table_empty(cfg_dict['Bank']):
+        create_bank(cfg_dict)
     create_bank_accounts(cfg_dict)
 
 
