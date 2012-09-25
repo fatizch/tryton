@@ -36,6 +36,8 @@ def create_bank(cfg_dict):
     countries = {}
     n = 0
     for line in f:
+        if n > cfg_dict['nb_bank']:
+            break
         try:
             bank = cfg_dict['Bank']()
             company = cfg_dict['Company']()
@@ -101,7 +103,9 @@ def create_bank_accounts(cfg_dict):
     banks = load_bank_code(cfg_dict)
     Party = cfg_dict['Party']
     n = 0
-    for party in Party.find([('bank_accounts', '=', None)]):
+    parties = Party.find([('bank_accounts', '=', None)])
+    print 'Creating %s bank accounts' % len(parties)
+    for party in parties:
         try:
             add_bank_account(cfg_dict, party, banks)
             party.save()
@@ -110,7 +114,7 @@ def create_bank_accounts(cfg_dict):
             warnings.warn('Impossible to create bank account for %s'
                 % party.name, stacklevel=2)
     if n > 0:
-        print 'Successfully created %s bank accounts' % n
+        print 'Successfully created %s/%s bank accounts' % (n, len(parties))
 
 
 def get_random(the_dict):
