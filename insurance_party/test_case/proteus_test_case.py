@@ -26,6 +26,7 @@ def get_or_create_insurer(models, cfg_dict, code, name):
     insurer.name = name
     insurer.code = code
     insurer.addresses[:] = []
+    company.currency = cfg_dict['currency']
     insurer.save()
     return insurer
 

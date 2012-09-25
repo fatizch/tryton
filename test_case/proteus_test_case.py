@@ -147,7 +147,8 @@ def generate_module_translation(cfg_dict, base_path, module_name):
         csv_file.write(export_wizard.form.file)
 
 
-def install_or_update_modules(cfg_dict):
+def update_modules(cfg_dict):
+    cfg_dict = set_currency(cfg_dict)
     modules = get_modules_to_update(cfg_dict['modules'])
     for cur_module in modules:
         print '=' * 80 + '\n'
@@ -197,7 +198,7 @@ def launch_proteus_test_case(test_config_file):
         else:
             print 'Module %s already installed' % module
 
-    install_or_update_modules(cfg_dict)
+    update_modules(cfg_dict)
 
 
 def un_fuzzy_translation(src=None, module=None):
@@ -212,6 +213,17 @@ def un_fuzzy_translation(src=None, module=None):
         print 'unfuzzy %s in %s' % (
             cur_translation.src, cur_translation.name)
         cur_translation.save()
+
+
+def set_currency(cfg_dict):
+    Currency = Model.get('currency.currency')
+    cur_domain = []
+    if cfg_dict['currency']:
+        cur_domain.append(('code', '=', cfg_dict['currency']))
+    currencies = Currency.find(cur_domain, limit=1)
+    if len(currencies) > 0:
+        cfg_dict['currency'] = currencies[0]
+    return cfg_dict
 
 if __name__ == '__main__':
     launch_proteus_test_case(os.path.join(DIR, 'test_case.cfg'))
