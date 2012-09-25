@@ -8,44 +8,44 @@ from proteus import Model
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
 
-def get_models():
-    res = {}
-    res['Bank'] = Model.get('party.bank')
-    res['Address'] = Model.get('party.address')
-    res['Country'] = Model.get('country.country')
-    res['Party'] = Model.get('party.party')
-    res['BankAccount'] = Model.get('party.bank_account')
-    res['BankAccountNumber'] = Model.get('party.bank_account_number')
-    res['Company'] = Model.get('company.company')
-    return res
+def update_cfg_dict(cfg_dict):
+    cfg_dict['Bank'] = Model.get('party.bank')
+    cfg_dict['Address'] = Model.get('party.address')
+    cfg_dict['Country'] = Model.get('country.country')
+    cfg_dict['Party'] = Model.get('party.party')
+    cfg_dict['BankAccount'] = Model.get('party.bank_account')
+    cfg_dict['BankAccountNumber'] = Model.get('party.bank_account_number')
+    cfg_dict['Company'] = Model.get('company.company')
+    return cfg_dict
 
 
 def launch_test_case(cfg_dict):
-    models = get_models()
+    cfg_dict = update_cfg_dict(cfg_dict)
 
-    if is_table_empty(models['Bank']):
-        create_bank(cfg_dict, models)
-    create_bank_accounts(cfg_dict, models)
+#    if is_table_empty(cfg_dict['Bank']):
+    create_bank(cfg_dict)
+    create_bank_accounts(cfg_dict)
 
 
 def is_table_empty(model):
     return len(model.find(limit=1)) == 0
 
 
-def create_bank(cfg_dict, models):
+def create_bank(cfg_dict):
     f = open(os.path.join(DIR, 'bank.cfg'), 'r')
     countries = {}
     n = 0
     for line in f:
         try:
-            bank = models['Bank']()
-            company = models['Company']()
+            bank = cfg_dict['Bank']()
+            company = cfg_dict['Company']()
+            company.currency = cfg_dict['currency']
             if bank.company is None:
                 bank.company = []
             bank.company.append(company)
             bank.name = line[11:51].strip()
             bank.code = line[51:61].strip()
-            add_address(models, line, bank, countries)
+            add_address(cfg_dict, line, bank, countries)
             add_bank_info(line, bank)
             bank.save()
             n += 1
@@ -66,10 +66,10 @@ def check_pattern(s, pattern):
         return False
 
 
-def get_country(models, country_code, countries):
+def get_country(cfg_dict, country_code, countries):
     if country_code in countries.keys():
         return countries[country_code]
-    Country = models['Country']
+    Country = cfg_dict['Country']
     country, = Country.find(
         [('code', '=', country_code.upper())],
         limit=1)
@@ -77,7 +77,7 @@ def get_country(models, country_code, countries):
     return country
 
 
-def add_address(models, line, bank, countries):
+def add_address(cfg_dict, line, bank, countries):
     address = bank.addresses[0]
     address.name = line[11:49].strip()
     address.line3 = line[88:120].strip()
@@ -87,7 +87,7 @@ def add_address(models, line, bank, countries):
     address.city = line[190:216].strip().upper()
     country_code = check_pattern(line[240:242], r'^[A-Z]{2}')
     if country_code:
-        address.country = get_country(models, country_code, countries)
+        address.country = get_country(cfg_dict, country_code, countries)
 
 
 def add_bank_info(line, bank):
@@ -97,13 +97,13 @@ def add_bank_info(line, bank):
     bank.bank_code = line[0:5]
 
 
-def create_bank_accounts(cfg_dict, models):
+def create_bank_accounts(cfg_dict):
     banks = load_bank_code(cfg_dict)
-    Party = models['Party']
+    Party = cfg_dict['Party']
     n = 0
     for party in Party.find([('bank_accounts', '=', None)]):
         try:
-            add_bank_account(models, party, banks)
+            add_bank_account(cfg_dict, party, banks)
             party.save()
             n += 1
         except:
@@ -117,8 +117,8 @@ def get_random(the_dict):
     return u'%s' % the_dict.get(random.randint(0, len(the_dict) - 1))
 
 
-def add_bank_account(models, party, banks):
-    bank_account = models['BankAccount']()
+def add_bank_account(cfg_dict, party, banks):
+    bank_account = cfg_dict['BankAccount']()
     if party.bank_accounts is None:
         party.bank_accounts = []
     party.bank_accounts.append(bank_account)
