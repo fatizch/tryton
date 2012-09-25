@@ -593,7 +593,7 @@ class GenericBusinessRule(CoopSQL, CoopView):
 
     def on_change_kind(self):
         res = {}
-        for field_name, field in self._columns.iteritems():
+        for field_name, field in self._fields.iteritems():
             if not (hasattr(field, 'model_name')
                 and getattr(field, 'model_name').endswith('_rule')
                 and (not getattr(self, field_name)
