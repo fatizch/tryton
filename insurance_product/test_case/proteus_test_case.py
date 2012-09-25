@@ -217,6 +217,7 @@ def create_AAA_Product(cfg_dict, code, name):
     pr_calc2.key = 'sub_price'
 
     prm_a = gbr_a.pricing_rule[0]
+    prm_a.config_kind = 'rule'
     prm_a.calculators.append(pr_calc1)
     prm_a.calculators.append(pr_calc2)
 
@@ -243,6 +244,7 @@ def create_AAA_Product(cfg_dict, code, name):
     pr_calc3.key = 'price'
 
     prm_b = gbr_b.pricing_rule[0]
+    prm_a.config_kind = 'rule'
     prm_b.calculators.append(pr_calc3)
 
     brm_a = brm()
@@ -267,6 +269,7 @@ def create_AAA_Product(cfg_dict, code, name):
     pr_calc4.key = 'price'
 
     prm_c = gbr_c.pricing_rule[0]
+    prm_a.config_kind = 'rule'
     prm_c.calculators.append(pr_calc4)
 
     brm_b = brm()

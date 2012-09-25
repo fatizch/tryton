@@ -304,23 +304,24 @@ return True'''
 
         tax_1 = self.create_tax('TTA', 27)
 
-        pr_data4 = self.PricingData()
-        pr_data4.config_kind = 'simple'
-        pr_data4.fixed_amount = 30
-        pr_data4.kind = 'base'
-        pr_data4.code = 'PP'
-
-        pr_data41 = self.PricingData()
-        pr_data41.kind = 'tax'
-        pr_data41.the_tax = tax_1
-
-        pr_calc4 = self.Calculator()
-        pr_calc4.data = [pr_data4, pr_data41]
-        pr_calc4.key = 'price'
+#        pr_data4 = self.PricingData()
+#        pr_data4.config_kind = 'simple'
+#        pr_data4.fixed_amount = 30
+#        pr_data4.kind = 'base'
+#        pr_data4.code = 'PP'
+#
+#        pr_data41 = self.PricingData()
+#        pr_data41.kind = 'tax'
+#        pr_data41.the_tax = tax_1
+#
+#        pr_calc4 = self.Calculator()
+#        pr_calc4.data = [pr_data4, pr_data41]
+#        pr_calc4.key = 'price'
 
         prm_c = self.pricing()
-        prm_c.config_kind = 'simple'
-        prm_c.calculators = [pr_calc4]
+        prm_c.basic_price = 30
+        prm_c.basic_tax = tax_1
+#        prm_c.calculators = [pr_calc4]
 
         gbr_c = self.gbr()
         gbr_c.kind = 'ins_product.pricing_rule'
