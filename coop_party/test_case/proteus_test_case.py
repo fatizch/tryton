@@ -75,7 +75,7 @@ def launch_dice(cfg_dict, probability_name):
 
 def launch_test_case(cfg_dict):
     models = get_models()
-    relations_kind = create_relations_kind(models)
+    relations_kind = get_relations_kind(models)
     create_address_kind(models)
     if is_table_empty(models['Person']):
         create_persons(models, cfg_dict, relations_kind)
@@ -128,24 +128,16 @@ def is_table_empty(model):
     return len(model.find(limit=1)) == 0
 
 
-def get_or_create_relation_kind(models, key, name, children=None):
+def get_relation_kind(models, key):
     res = models['RelationKind'].find([('key', '=', key)])
     if len(res) > 0:
         return res[0]
-    res = models['RelationKind']()
-    res.key = key
-    res.name = name
-    if children:
-        res.childs[:] = children
-    res.save()
-    return res
 
 
-def create_relations_kind(models):
+def get_relations_kind(models):
     res = {}
-    res['spouse'] = get_or_create_relation_kind(models, 'spouse', 'Spouse Of')
-    res['parent'] = get_or_create_relation_kind(models, 'parent', 'Parent Of',
-        [get_or_create_relation_kind(models, 'child', 'Children Of')])
+    res['spouse'] = get_relation_kind(models, 'spouse')
+    res['parent'] = get_relation_kind(models, 'parent')
     return res
 
 
