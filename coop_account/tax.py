@@ -11,7 +11,7 @@ __all__ = [
 
 
 class TaxDesc(model.CoopSQL, model.VersionedObject):
-    '''A Simple Tax Descriptor'''
+    '''Tax Descriptor'''
 
     __name__ = 'coop_account.tax_desc'
 
@@ -51,7 +51,7 @@ class TaxDesc(model.CoopSQL, model.VersionedObject):
 
 
 class TaxVersion(model.CoopSQL, model.VersionObject):
-    '''A tax Version'''
+    '''Tax Version'''
 
     __name__ = 'coop_account.tax_version'
 

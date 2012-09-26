@@ -11,7 +11,7 @@ __all__ = [
 
 
 class FeeDesc(model.CoopSQL, model.VersionedObject):
-    '''A Simple Fee Descriptor'''
+    '''Fee Descriptor'''
 
     __name__ = 'coop_account.fee_desc'
 
@@ -49,7 +49,7 @@ class FeeDesc(model.CoopSQL, model.VersionedObject):
 
 
 class FeeVersion(model.CoopSQL, model.VersionObject):
-    '''A fee Version'''
+    '''Fee Version'''
 
     __name__ = 'coop_account.fee_version'
 
