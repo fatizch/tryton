@@ -187,7 +187,6 @@ def create_AAA_Product(cfg_dict, code, name):
     pr_data11 = cfg_dict['PricingData']()
     pr_data11.kind = 'tax'
     pr_data11.the_tax = tax
-    pr_data11.code = tax.code
 
     fee = get_or_create_fee(cfg_dict,
         'FG',
@@ -200,7 +199,6 @@ def create_AAA_Product(cfg_dict, code, name):
     pr_data12 = cfg_dict['PricingData']()
     pr_data12.kind = 'fee'
     pr_data12.the_fee = fee
-    pr_data12.code = fee.code
 
     pr_calc1 = cfg_dict['Calculator']()
     pr_calc1.data.append(pr_data1)
@@ -239,7 +237,6 @@ def create_AAA_Product(cfg_dict, code, name):
     pr_data31 = cfg_dict['PricingData']()
     pr_data31.kind = 'tax'
     pr_data31.the_tax = tax
-    pr_data31.code = tax.code
 
     pr_calc3 = cfg_dict['Calculator']()
     pr_calc3.data.append(pr_data3)

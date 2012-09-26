@@ -762,7 +762,7 @@ class PricingData(CoopSQL, CoopView):
                 cls.write(calcs, {'code': code})
             except ValueError:
                 raise Exception(
-                    'Could not found a Tax Desc with code %s' % value)
+                    'Could not found the required Tax Desc')
 
     def get_fee(self, name):
         if not (self.kind == 'fee' and
@@ -785,7 +785,30 @@ class PricingData(CoopSQL, CoopView):
                 cls.write(calcs, {'code': code})
             except ValueError:
                 raise Exception(
-                    'Could not found a Fee Desc with code %s' % value)
+                    'Could not found the required Fee desc')
+
+    @classmethod
+    def create(cls, values):
+        values = values.copy()
+        if 'the_tax' in values:
+            try:
+                tax, = get_those_objects(
+                    'coop_account.tax_desc',
+                    [('id', '=', values['the_tax'])])
+                values['code'] = tax.code
+            except ValueError:
+                raise Exception(
+                    'Could not found the required Tax Desc')
+        elif 'the_fee' in values:
+            try:
+                fee, = get_those_objects(
+                    'coop_account.fee_desc',
+                    [('id', '=', values['the_fee'])])
+                values['code'] = fee.code
+            except ValueError:
+                raise Exception(
+                    'Could not found the required Fee desc')
+        super(PricingData, cls).create(values)
 
     @staticmethod
     def default_kind():
