@@ -622,16 +622,24 @@ def translate_value(instance, var_name):
     return str(value)
 
 
-def translate_field(instance, var_name, src, ttype='field'):
+def translate(model, var_name, src, ttype):
     Translation = Pool().get('ir.translation')
     res = Translation.get_source(
-            '%s,%s' % (instance.__class__.__name__, var_name),
+            '%s,%s' % (model.__name__, var_name),
              ttype,
              Transaction().language,
              src)
     if not res:
         return src
     return res
+
+
+def translate_field(instance, var_name, src, ttype='field'):
+    return translate(instance.__class__, var_name, src, ttype)
+
+
+def translate_model_name(model):
+    return translate(model, 'name', model.__doc__, ttype='model')
 
 
 def get_field_as_summary(instance, var_name, with_label=True, at_date=None):

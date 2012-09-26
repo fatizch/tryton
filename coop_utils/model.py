@@ -9,7 +9,82 @@ import utils
 
 
 class CoopSQL(ModelSQL):
-    pass
+    'Root class for all stored classes'
+
+    is_used = fields.Function(fields.Boolean('Is Used'), 'get_is_used')
+
+    @classmethod
+    def __setup__(cls):
+        super(CoopSQL, cls).__setup__()
+        cls._error_messages.update({
+            'item_used': 'This item (%s) is used by %s (%s, %s)',
+        })
+
+    @staticmethod
+    def get_class_where_used():
+        '''Method to override in all sub class and return the list of tuple
+        class, var_name of object using this class. Needed when you can't
+        guess dependency with foreign keys'''
+        return []
+
+    @classmethod
+    def get_instances_using_me(cls, instances):
+        res = dict((instance.id, []) for instance in instances)
+        key_name = cls.get_func_pk_name()
+        if not key_name:
+            return res
+        key_dict = dict((getattr(instance, key_name), instance.id)
+            for instance in instances)
+        for cur_class, var_name in cls.get_class_where_used():
+            Class = Pool().get(cur_class)
+            for found_instance in Class.search(
+                [
+                    (var_name, 'in',
+                        [getattr(instance, key_name) for instance in instances]
+                    )
+                ]):
+                cur_id = key_dict[getattr(found_instance, var_name)]
+                res[cur_id].append(found_instance)
+        return res
+
+    @staticmethod
+    def get_func_pk_name():
+        'return the functional key var name used when not using the id'
+
+    @classmethod
+    def get_is_used(cls, instances, name):
+        using_inst = cls.get_instances_using_me(instances)
+        res = dict((instance.id,
+                len(using_inst[instance.id]) > 0) for instance in instances)
+        return res
+
+    @classmethod
+    def can_be_deleted(cls, instances):
+        using_inst = cls.get_instances_using_me(instances)
+        res = {}
+        for instance in instances:
+            if len(using_inst[instance.id]) == 0:
+                res[instance.id] = (True, '', [])
+            for using_instance in using_inst[instance.id]:
+                res[instance.id] = (False, 'item_used',
+                    (
+                        instance.rec_name,
+                        using_instance.rec_name,
+                        utils.translate_model_name(using_instance.__class__),
+                        using_instance.id,
+                        ))
+                continue
+        return res
+
+    @classmethod
+    def delete(cls, instances):
+        can_be_del_dict = cls.can_be_deleted(instances)
+        for instance in instances:
+            (can_be_deleted, error, error_args) = can_be_del_dict[instance.id]
+            if not can_be_deleted:
+                cls.raise_user_error(error, error_args)
+
+        super(CoopSQL, cls).delete(instances)
 
 
 class CoopView(ModelView):
@@ -37,7 +112,6 @@ class TableOfTable(CoopSQL, CoopView):
         domain=[('my_model_name', '=', Eval('my_model_name'))],
         depends=['my_model_name', 'parent'],
         states={'invisible': Bool(Eval('parent'))},)
-    is_used = fields.Function(fields.Boolean('Is Used'), 'get_is_used')
 
     @classmethod
     def __setup__(cls):
@@ -68,20 +142,11 @@ class TableOfTable(CoopSQL, CoopView):
 
     @staticmethod
     def get_class_where_used():
-        '''Method to override in all sub class and return the list of tuple
-        class, var_name of object using this class'''
         raise NotImplementedError
 
-    def get_instances_using_me(self):
-        res = []
-        for cur_class, var_name in self.get_class_where_used():
-            Class = Pool().get(cur_class)
-            for cur_instance in Class.search([(var_name, '=', self.key)]):
-                res.append(cur_instance)
-        return res
-
-    def get_is_used(self, name):
-        return len(self.get_instances_using_me()) > 0
+    @staticmethod
+    def get_func_pk_name():
+        return 'key'
 
 
 class DynamicSelection(TableOfTable):
