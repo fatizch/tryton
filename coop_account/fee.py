@@ -22,6 +22,13 @@ class FeeDesc(model.CoopSQL, model.VersionedObject):
         'get_current_value')
 
     @classmethod
+    def __setup__(cls):
+        super(FeeDesc, cls).__setup__()
+        cls._sql_constraints += [
+            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+        ]
+
+    @classmethod
     def version_model(cls):
         return 'coop_account.fee_version'
 
