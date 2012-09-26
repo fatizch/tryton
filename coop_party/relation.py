@@ -32,6 +32,10 @@ class PartyRelationKind(TableOfTable):
     def get_class_where_used():
         return [('party.party-relation', 'kind')]
 
+    @classmethod
+    def check_xml_record(self, records, values):
+        return True
+
 
 class PartyRelation(CoopSQL, CoopView):
     'Party Relation'
@@ -79,11 +83,14 @@ class PartyRelation(CoopSQL, CoopView):
                 return reverse_relation_kind.key
 
     def get_summary(self, name=None, at_date=None):
-        if name == 'relations':
-            link = 'kind'
-            party = self.to_party
-        elif name == 'in_relation_with':
+        link = 'kind'
+        party = self.to_party
+        if name == 'in_relation_with':
             link = 'reverse_kind'
             party = self.from_party
         return '%s %s' % (utils.translate_value(self, link),
                     party.rec_name)
+
+    def get_rec_name(self, name):
+        print name
+        return self.get_summary(name)

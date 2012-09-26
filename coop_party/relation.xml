@@ -115,5 +115,21 @@
                 ]]>
             </field>
         </record>
+        <!--  ******************************************* 
+              ***   Party Relation Kind Test Case*******
+              *******************************************-->
+        <record model="party.party_relation_kind" id="spouse">
+            <field name="name">Spouse Of</field>
+            <field name="key">spouse</field>
+        </record>
+        <record model="party.party_relation_kind" id="parent">
+            <field name="name">Parent Of</field>
+            <field name="key">parent</field>
+        </record>
+        <record model="party.party_relation_kind" id="child">
+            <field name="name">Children Of</field>
+            <field name="key">child</field>
+            <field name="parent" ref="parent"/>
+        </record>
     </data>
 </tryton>
