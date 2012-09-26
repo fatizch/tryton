@@ -7,15 +7,11 @@ from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
-from trytond.modules.coop_utils import CoopView, CoopSQL, GetResult
+from trytond.modules.coop_utils import model as model
+from trytond.modules.coop_utils import business as business
 from trytond.modules.coop_utils import utils as utils
 from trytond.modules.insurance_product import PricingResultLine
 from trytond.modules.insurance_product import EligibilityResultLine
-from trytond.modules.coop_utils import One2ManyDomain, WithAbstract
-from trytond.modules.coop_utils import add_frequency, number_of_days_between
-from trytond.modules.coop_utils import business, NonExistingManagerException
-from trytond.modules.coop_utils import update_args_with_subscriber, \
-    ArgsDoNotMatchException, get_those_objects
 
 __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
            'BusinessRuleManager', 'GenericBusinessRule', 'BusinessRuleRoot',
@@ -85,7 +81,7 @@ class Templated(object):
             return {'template_behaviour': None}
 
 
-class Offered(CoopView, GetResult, Templated):
+class Offered(model.CoopView, utils.GetResult, Templated):
     'Offered'
 
     __name__ = 'ins_product.offered'
@@ -96,9 +92,9 @@ class Offered(CoopView, GetResult, Templated):
     end_date = fields.Date('End Date')
     description = fields.Text('Description')
     #All mgr var must be the same as the business rule class and ends with mgr
-    pricing_mgr = One2ManyDomain('ins_product.business_rule_manager',
+    pricing_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
         'offered', 'Pricing Manager')
-    eligibility_mgr = One2ManyDomain('ins_product.business_rule_manager',
+    eligibility_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
         'offered', 'Eligibility Manager')
 
     @classmethod
@@ -141,7 +137,7 @@ class Offered(CoopView, GetResult, Templated):
         return self.name
 
 
-class Coverage(CoopSQL, Offered):
+class Coverage(model.CoopSQL, Offered):
     'Coverage'
 
     __name__ = 'ins_product.coverage'
@@ -153,8 +149,17 @@ class Coverage(CoopSQL, Offered):
         context={'start_date': Eval('start_date')},
         states={'readonly': ~Bool(Eval('start_date'))})
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
-    coverage_amount_mgr = One2ManyDomain('ins_product.business_rule_manager',
+    coverage_amount_mgr = model.One2ManyDomain(
+        'ins_product.business_rule_manager',
         'offered', 'Coverage Amount Manager')
+
+    @classmethod
+    def delete(cls, entities):
+        utils.delete_reference_backref(
+            entities,
+            'ins_product.business_rule_manager',
+            'offered')
+        super(Coverage, cls).delete(entities)
 
     @classmethod
     def __setup__(cls):
@@ -314,7 +319,7 @@ class Coverage(CoopSQL, Offered):
         return True
 
 
-class Product(CoopSQL, Offered):
+class Product(model.CoopSQL, Offered):
     'Product'
 
     __name__ = 'ins_product.product'
@@ -331,6 +336,14 @@ class Product(CoopSQL, Offered):
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
         ]
+
+    @classmethod
+    def delete(cls, entities):
+        utils.delete_reference_backref(
+            entities,
+            'ins_product.business_rule_manager',
+            'offered')
+        super(Product, cls).delete(entities)
 
     def get_valid_options(self):
         for option in self.options:
@@ -423,16 +436,15 @@ class Product(CoopSQL, Offered):
     def give_me_frequency(self, args):
         if not 'date' in args:
             raise Exception('A date must be provided')
-        date = args['date']
         try:
             return self.get_result('frequency', args, manager='pricing')
-        except NonExistingManagerException:
+        except utils.NonExistingManagerException:
             pass
         for coverage in self.get_valid_options():
             try:
                 return coverage.get_result(
                     'frequency', args, manager='pricing')
-            except NonExistingManagerException:
+            except utils.NonExistingManagerException:
                 pass
         return 'yearly', []
 
@@ -445,7 +457,7 @@ class Product(CoopSQL, Offered):
             return self.currency.digits
 
 
-class ProductOptionsCoverage(CoopSQL):
+class ProductOptionsCoverage(model.CoopSQL):
     'Define Product - Coverage relations'
 
     __name__ = 'ins_product.product-options-coverage'
@@ -456,7 +468,8 @@ class ProductOptionsCoverage(CoopSQL):
         'Coverage', select=1, required=True, ondelete='CASCADE')
 
 
-class BusinessRuleManager(CoopSQL, CoopView, GetResult, Templated):
+class BusinessRuleManager(model.CoopSQL, model.CoopView,
+        utils.GetResult, Templated):
     'Business Rule Manager'
 
     __name__ = 'ins_product.business_rule_manager'
@@ -542,7 +555,7 @@ class BusinessRuleManager(CoopSQL, CoopView, GetResult, Templated):
         return 2
 
 
-class GenericBusinessRule(CoopSQL, CoopView):
+class GenericBusinessRule(model.CoopSQL, model.CoopView):
     'Generic Business Rule'
 
     __name__ = 'ins_product.generic_business_rule'
@@ -666,7 +679,7 @@ class GenericBusinessRule(CoopSQL, CoopView):
             return self.manager.get_currency_digits(name)
 
 
-class BusinessRuleRoot(CoopView, GetResult, Templated):
+class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
     'Business Rule Root'
 
     __name__ = 'ins_product.business_rule_root'
@@ -693,7 +706,7 @@ class BusinessRuleRoot(CoopView, GetResult, Templated):
         return 'simple'
 
 
-class PricingData(CoopSQL, CoopView):
+class PricingData(model.CoopSQL, model.CoopView):
     'Pricing Data'
 
     __name__ = 'ins_product.pricing_data'
@@ -745,7 +758,7 @@ class PricingData(CoopSQL, CoopView):
         if not (self.kind == 'tax' and
                 hasattr(self, 'code') and self.code):
             return
-        tax = get_those_objects(
+        tax = utils.get_those_objects(
             'coop_account.tax_desc',
             [('code', '=', self.code)], 1)
         if tax:
@@ -755,7 +768,7 @@ class PricingData(CoopSQL, CoopView):
     def set_tax(cls, calcs, name, value):
         if value:
             try:
-                tax, = get_those_objects(
+                tax, = utils.get_those_objects(
                     'coop_account.tax_desc',
                     [('id', '=', value)])
                 code = tax.code
@@ -768,7 +781,7 @@ class PricingData(CoopSQL, CoopView):
         if not (self.kind == 'fee' and
                 hasattr(self, 'code') and self.code):
             return
-        fee = get_those_objects(
+        fee = utils.get_those_objects(
             'coop_account.fee_desc',
             [('code', '=', self.code)], 1)
         if fee:
@@ -778,7 +791,7 @@ class PricingData(CoopSQL, CoopView):
     def set_fee(cls, calcs, name, value):
         if value:
             try:
-                fee, = get_those_objects(
+                fee, = utils.get_those_objects(
                     'coop_account.fee_desc',
                     [('id', '=', value)])
                 code = fee.code
@@ -792,7 +805,7 @@ class PricingData(CoopSQL, CoopView):
         values = values.copy()
         if 'the_tax' in values:
             try:
-                tax, = get_those_objects(
+                tax, = utils.get_those_objects(
                     'coop_account.tax_desc',
                     [('id', '=', values['the_tax'])])
                 values['code'] = tax.code
@@ -801,7 +814,7 @@ class PricingData(CoopSQL, CoopView):
                     'Could not found the required Tax Desc')
         elif 'the_fee' in values:
             try:
-                fee, = get_those_objects(
+                fee, = utils.get_those_objects(
                     'coop_account.fee_desc',
                     [('id', '=', values['the_fee'])])
                 values['code'] = fee.code
@@ -869,7 +882,7 @@ class PricingData(CoopSQL, CoopView):
         return self.get_summary(name)
 
 
-class PriceCalculator(CoopSQL, CoopView):
+class PriceCalculator(model.CoopSQL, model.CoopView):
     'Price Calculator'
 
     __name__ = 'ins_product.pricing_calculator'
@@ -965,7 +978,7 @@ class PriceCalculator(CoopSQL, CoopView):
         return True
 
 
-class PricingRule(CoopSQL, BusinessRuleRoot):
+class PricingRule(model.CoopSQL, BusinessRuleRoot):
     'Pricing Rule'
 
     __name__ = 'ins_product.pricing_rule'
@@ -1056,7 +1069,7 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
     def set_basic_tax(cls, prices, name, value):
         if value:
             try:
-                tax, = get_those_objects(
+                tax, = utils.get_those_objects(
                     'coop_account.tax_desc',
                     [('id', '=', value)])
             except ValueError:
@@ -1114,7 +1127,7 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
         datas = [data for data in calc.data if data.kind == 'tax']
         if not datas or len(datas) > 1:
             return
-        tax = get_those_objects(
+        tax = utils.get_those_objects(
             'coop_account.tax_desc',
             [('code', '=', datas[0].code)], 1)
         if tax:
@@ -1124,7 +1137,7 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
         if hasattr(self, 'calculators') and self.calculators:
             for elem in self.calculators:
                 if elem.key == name:
-                    return WithAbstract.serialize_field(elem)
+                    return utils.WithAbstract.serialize_field(elem)
         return None
 
     def give_me_price(self, args):
@@ -1152,23 +1165,9 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
         if not 'date' in args:
             return (None, ['A base date must be provided !'])
         date = args['date']
-        return number_of_days_between(
+        return utils.number_of_days_between(
             date,
-            add_frequency(self.frequency, date))
-
-    @classmethod
-    def delete(cls, rules):
-        def delete_link(inst, name):
-            if hasattr(inst, name):
-                val = getattr(inst, name)
-                if val:
-                    val.delete([val])
-
-        for rule in rules:
-            delete_link(rule, 'tax_mgr')
-            delete_link(rule, 'sub_elem_taxes')
-
-        super(PricingRule, cls).delete(rules)
+            utils.add_frequency(self.frequency, date))
 
     @staticmethod
     def default_price_kind():
@@ -1179,7 +1178,7 @@ class PricingRule(CoopSQL, BusinessRuleRoot):
         return 'yearly'
 
 
-class EligibilityRule(CoopSQL, BusinessRuleRoot):
+class EligibilityRule(model.CoopSQL, BusinessRuleRoot):
     'Eligibility Rule'
 
     __name__ = 'ins_product.eligibility_rule'
@@ -1200,8 +1199,8 @@ class EligibilityRule(CoopSQL, BusinessRuleRoot):
         # First of all, we look for a subscriber data in the args and update
         # the args dictionnary for sub values.
         try:
-            update_args_with_subscriber(args)
-        except ArgsDoNotMatchException:
+            business.update_args_with_subscriber(args)
+        except business.ArgsDoNotMatchException:
             # If no Subscriber is found, automatic refusal
             return (EligibilityResultLine(
                 False, ['Subscriber not defined in args']), [])
@@ -1271,7 +1270,7 @@ class EligibilityRule(CoopSQL, BusinessRuleRoot):
         return 'party.person'
 
 
-class EligibilityRelationKind(CoopSQL):
+class EligibilityRelationKind(model.CoopSQL):
     'Define relation between eligibility rule and relation kind authorized'
 
     __name__ = 'ins_product.eligibility_relation_kind'
@@ -1282,30 +1281,38 @@ class EligibilityRelationKind(CoopSQL):
         'Relation Kind', ondelete='CASCADE')
 
 
-class Benefit(CoopSQL, Offered):
+class Benefit(model.CoopSQL, Offered):
     'Benefit'
 
     __name__ = 'ins_product.benefit'
 
     coverage = fields.Many2One('ins_product.coverage', 'Coverage',
         ondelete='CASCADE')
-    benefit_mgr = One2ManyDomain('ins_product.business_rule_manager',
+    benefit_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
         'offered', 'Benefit Manager')
-    reserve_mgr = One2ManyDomain('ins_product.business_rule_manager',
+    reserve_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
         'offered', 'Reserve Manager')
+
+    @classmethod
+    def delete(cls, entities):
+        utils.delete_reference_backref(
+            entities,
+            'ins_product.business_rule_manager',
+            'offered')
+        super(Benefit, cls).delete(entities)
 
     def get_currency_digits(self, name):
         if self.coverage:
             return self.coverage.get_currency_digits(name)
 
 
-class BenefitRule(CoopSQL, BusinessRuleRoot):
+class BenefitRule(model.CoopSQL, BusinessRuleRoot):
     'Benefit Rule'
 
     __name__ = 'ins_product.benefit_rule'
 
 
-class ReserveRule(CoopSQL, BusinessRuleRoot):
+class ReserveRule(model.CoopSQL, BusinessRuleRoot):
     'Reserve Rule'
 
     __name__ = 'ins_product.reserve_rule'
@@ -1316,7 +1323,7 @@ class ReserveRule(CoopSQL, BusinessRuleRoot):
         depends=['currency_digits'])
 
 
-class CoverageAmountRule(CoopSQL, BusinessRuleRoot):
+class CoverageAmountRule(model.CoopSQL, BusinessRuleRoot):
     'Coverage Amount Rule'
 
     __name__ = 'ins_product.coverage_amount_rule'
