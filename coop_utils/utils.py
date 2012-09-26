@@ -735,3 +735,12 @@ def number_of_days_between(start_date, end_date):
 def get_those_objects(model_name, domain, limit=None):
     the_model = Pool().get(model_name)
     return the_model.search(domain, limit=limit)
+
+
+def delete_reference_backref(objs, target_model, target_field):
+    the_model = Pool().get(target_model)
+    to_delete = the_model.search([(
+        target_field, 'in', [
+            '%s,%s' % (obj.__name__, obj.id)
+            for obj in objs])])
+    the_model.delete(to_delete)

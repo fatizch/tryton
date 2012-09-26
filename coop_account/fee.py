@@ -11,7 +11,7 @@ __all__ = [
 
 
 class FeeDesc(model.CoopSQL, model.VersionedObject):
-    '''A Simple Fee Descriptor'''
+    '''Fee Descriptor'''
 
     __name__ = 'coop_account.fee_desc'
 
@@ -20,6 +20,13 @@ class FeeDesc(model.CoopSQL, model.VersionedObject):
     description = fields.Text('Description')
     current_value = fields.Function(fields.Char('Current Value'),
         'get_current_value')
+
+    @classmethod
+    def __setup__(cls):
+        super(FeeDesc, cls).__setup__()
+        cls._sql_constraints += [
+            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+        ]
 
     @classmethod
     def version_model(cls):
@@ -42,7 +49,7 @@ class FeeDesc(model.CoopSQL, model.VersionedObject):
 
 
 class FeeVersion(model.CoopSQL, model.VersionObject):
-    '''A fee Version'''
+    '''Fee Version'''
 
     __name__ = 'coop_account.fee_version'
 
