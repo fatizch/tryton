@@ -2,20 +2,6 @@
 <tryton>
     <data>
         <!--  ******************************************* 
-              ****************    Menu    ***************
-              *******************************************-->
-
-        <menuitem name="Accounting" id="menu_account" sequence="10" />
-
-        <menuitem name="Taxes" parent="menu_account"
-            id="menu_product_taxes" sequence="40" icon="tryton-preferences"
-            action="act_tax_form"/>
-
-        <!-- Moving Currency entry point -->
-        <menuitem name="Currency" id="currency.menu_currency" sequence="100"
-            icon="tryton-currency" parent="menu_account"/>
-
-        <!--  ******************************************* 
               ************    Tax Version    ************
               *******************************************-->
 
@@ -114,5 +100,19 @@
             <field name="view" ref="tax_desc_view_form" />
             <field name="act_window" ref="act_tax_form" />
         </record>
+
+        <!--  ******************************************* 
+              ****************    Menu    ***************
+              *******************************************-->
+
+        <menuitem name="Accounting" id="menu_account" sequence="10" />
+
+        <menuitem name="Taxes" parent="menu_account"
+            id="menu_product_taxes" sequence="40" icon="tryton-preferences"
+            action="act_tax_form"/>
+
+        <!-- Moving Currency entry point -->
+        <menuitem name="Currency" id="currency.menu_currency" sequence="100"
+            icon="tryton-currency" parent="menu_account"/>
     </data>
 </tryton>
