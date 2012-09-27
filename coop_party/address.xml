@@ -64,5 +64,21 @@
         <!-- Sub menu configuration Party Relation -->
         <menuitem parent="party.menu_configuration" sequence="10" id="menu_address_kind_form"
             icon="tryton-list" action="act_address_kind_form" />
+        <!--  ******************************************* 
+              ***   Address Kind Test Case*******
+              *******************************************-->
+        <record model="party.address_kind" id="main">
+            <field name="name">Main</field>
+            <field name="key">main</field>
+        </record>
+        <record model="party.address_kind" id="second">
+            <field name="name">Secondary</field>
+            <field name="key">2nd</field>
+        </record>
+        <record model="party.address_kind" id="job">
+            <field name="name">Job</field>
+            <field name="key">job</field>
+        </record>
     </data>
+    
 </tryton>

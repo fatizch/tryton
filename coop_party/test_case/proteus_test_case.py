@@ -141,18 +141,13 @@ def get_relations_kind(models):
     return res
 
 
-def get_or_create_address_kind(models, key, name):
+def get_address_kind(models, key):
     res = models['AddressKind'].find([('key', '=', key)])
     if len(res) > 0:
         return res[0]
-    res = models['AddressKind']()
-    res.key = key
-    res.name = name
-    res.save()
-    return res
 
 
 def create_address_kind(models):
-    get_or_create_address_kind(models, 'main', 'Main')
-    get_or_create_address_kind(models, '2nd', 'Secondary')
-    get_or_create_address_kind(models, 'job', 'Job')
+    get_address_kind(models, 'main')
+    get_address_kind(models, '2nd')
+    get_address_kind(models, 'job')
