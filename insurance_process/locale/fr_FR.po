@@ -276,11 +276,11 @@ msgstr "Séquence"
 
 msgctxt "field:ins_process.step_desc,step_model:"
 msgid "Step"
-msgstr ""
+msgstr "Etape"
 
 msgctxt "field:ins_process.step_desc,step_name:"
 msgid "Step Name"
-msgstr ""
+msgstr "Nom de l'Etape"
 
 msgctxt "field:ins_process.step_desc,virtual_step:"
 msgid "Virtual Step"
@@ -320,11 +320,11 @@ msgstr "Nom"
 
 msgctxt "field:ins_process.step_method_desc,rule_kind:"
 msgid "Rule Kind"
-msgstr ""
+msgstr "Type de Règle"
 
 msgctxt "field:ins_process.step_method_desc,step:"
 msgid "Step"
-msgstr ""
+msgstr "Etape"
 
 msgctxt "field:ins_process.step_method_desc,write_date:"
 msgid "Write Date"
@@ -436,7 +436,7 @@ msgstr ""
 
 msgctxt "model:ir.action,name:resume_dummy_process"
 msgid "Resume Process"
-msgstr ""
+msgstr "Reprendre le Workflow"
 
 msgctxt "model:ir.action,name:suspended_process_form"
 msgid "Suspended Processes"
@@ -444,7 +444,7 @@ msgstr ""
 
 msgctxt "model:ir.action,name:suspended_process_resume"
 msgid "Resume Process"
-msgstr ""
+msgstr "Reprendre le Workflow"
 
 msgctxt "model:ir.ui.menu,name:menu_process"
 msgid "Process Lab"
