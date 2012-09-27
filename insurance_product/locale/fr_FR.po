@@ -2,17 +2,73 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:ins_product.benefit:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.benefit_rule:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.business_rule_manager:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:ins_product.coverage:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
+
+msgctxt "error:ins_product.coverage:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.coverage_amount_rule:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.eligibility_relation_kind:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.eligibility_rule:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.generic_business_rule:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_product.generic_business_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "Vous ne pouvez pas avoir deux règles métiers qui se chevauchent"
 
+msgctxt "error:ins_product.pricing_calculator:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.pricing_data:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.pricing_rule:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.product-options-coverage:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:ins_product.product:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
+
+msgctxt "error:ins_product.product:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.reserve_rule:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:ins_product.benefit,benefit_mgr:"
 msgid "Benefit Manager"
@@ -49,6 +105,10 @@ msgstr "Date de Fin"
 msgctxt "field:ins_product.benefit,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_product.benefit,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.benefit,name:"
 msgid "Name"
@@ -106,6 +166,10 @@ msgctxt "field:ins_product.benefit_rule,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_product.benefit_rule,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:ins_product.benefit_rule,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -145,6 +209,10 @@ msgstr "Créé par"
 msgctxt "field:ins_product.business_rule_manager,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_product.business_rule_manager,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.business_rule_manager,offered:"
 msgid "Offered"
@@ -242,6 +310,10 @@ msgctxt "field:ins_product.coverage,insurer:"
 msgid "Insurer"
 msgstr "Assureur"
 
+msgctxt "field:ins_product.coverage,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:ins_product.coverage,name:"
 msgid "Name"
 msgstr "Nom"
@@ -298,6 +370,10 @@ msgctxt "field:ins_product.coverage_amount_rule,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_product.coverage_amount_rule,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:ins_product.coverage_amount_rule,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -337,6 +413,10 @@ msgstr "Règle d'Eligibilité"
 msgctxt "field:ins_product.eligibility_relation_kind,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_product.eligibility_relation_kind,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.eligibility_relation_kind,rec_name:"
 msgid "Name"
@@ -381,6 +461,10 @@ msgstr "Est éligible"
 msgctxt "field:ins_product.eligibility_rule,is_sub_elem_eligible:"
 msgid "Sub Elem Eligible"
 msgstr "Sous élement éligible"
+
+msgctxt "field:ins_product.eligibility_rule,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.eligibility_rule,rec_name:"
 msgid "Name"
@@ -457,6 +541,10 @@ msgstr "ID"
 msgctxt "field:ins_product.generic_business_rule,is_current:"
 msgid "Is current"
 msgstr "Courant"
+
+msgctxt "field:ins_product.generic_business_rule,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.generic_business_rule,kind:"
 msgid "Kind"
@@ -554,6 +642,10 @@ msgctxt "field:ins_product.pricing_calculator,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_product.pricing_calculator,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:ins_product.pricing_calculator,key:"
 msgid "Key"
 msgstr "Clé"
@@ -609,6 +701,10 @@ msgstr "Montant"
 msgctxt "field:ins_product.pricing_data,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_product.pricing_data,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.pricing_data,kind:"
 msgid "Line kind"
@@ -681,6 +777,10 @@ msgstr "Règle Générique"
 msgctxt "field:ins_product.pricing_rule,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_product.pricing_rule,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.pricing_rule,per_sub_elem_price:"
 msgid "Amount per Covered Element"
@@ -774,6 +874,10 @@ msgctxt "field:ins_product.product,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_product.product,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:ins_product.product,name:"
 msgid "Name"
 msgstr "Nom"
@@ -826,6 +930,10 @@ msgctxt "field:ins_product.product-options-coverage,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_product.product-options-coverage,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:ins_product.product-options-coverage,product:"
 msgid "Product"
 msgstr "Produit"
@@ -869,6 +977,10 @@ msgstr "Règle Générique"
 msgctxt "field:ins_product.reserve_rule,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_product.reserve_rule,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.reserve_rule,rec_name:"
 msgid "Name"

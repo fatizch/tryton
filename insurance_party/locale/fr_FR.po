@@ -2,6 +2,18 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:party.broker:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:party.customer:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:party.insurer:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "field:party.broker,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -13,6 +25,10 @@ msgstr "Créé par"
 msgctxt "field:party.broker,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:party.broker,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:party.broker,party:"
 msgid "Party"
@@ -46,6 +62,10 @@ msgctxt "field:party.customer,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:party.customer,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:party.customer,party:"
 msgid "Party"
 msgstr "Tiers"
@@ -77,6 +97,10 @@ msgstr "Créé par"
 msgctxt "field:party.insurer,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:party.insurer,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:party.insurer,party:"
 msgid "Party"

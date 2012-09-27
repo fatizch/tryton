@@ -2,9 +2,33 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:party.address_kind:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:party.generic_actor:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:party.generic_actor_kind:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:party.party-relation:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:party.party_relation_kind:"
 msgid "The key must be unique!"
 msgstr "La clé doit être unique"
+
+msgctxt "error:party.party_relation_kind:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:party.person:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:party.actor,id:"
 msgid "ID"
@@ -89,6 +113,10 @@ msgstr "Créé par"
 msgctxt "field:party.generic_actor,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:party.generic_actor,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:party.generic_actor,kind:"
 msgid "Kind"
@@ -214,6 +242,10 @@ msgctxt "field:party.party-relation,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:party.party-relation,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:party.party-relation,kind:"
 msgid "Kind"
 msgstr "Type"
@@ -314,6 +346,10 @@ msgctxt "field:party.person,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:party.person,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:party.person,maiden_name:"
 msgid "Maiden Name"
 msgstr "Nom de Jeune Fille"
@@ -413,6 +449,30 @@ msgstr "Relations entre Tiers"
 msgctxt "model:party.party_relation_kind,name:"
 msgid "Party Relation Kind"
 msgstr "Type de Relation entre Tiers"
+
+msgctxt "model:party.party_relation_kind,name:None"
+msgid "Children Of"
+msgstr "Enfant de"
+
+msgctxt "model:party.party_relation_kind,name:None"
+msgid "Parent Of"
+msgstr "Parent de"
+
+msgctxt "model:party.party_relation_kind,name:None"
+msgid "Spouse Of"
+msgstr "Conjoint de"
+
+msgctxt "model:party.party_relation_kind,name:child"
+msgid "Children Of"
+msgstr "Enfant de"
+
+msgctxt "model:party.party_relation_kind,name:parent"
+msgid "Parent Of"
+msgstr "Parent de"
+
+msgctxt "model:party.party_relation_kind,name:spouse"
+msgid "Spouse Of"
+msgstr "Conjoint de"
 
 msgctxt "model:party.person,name:"
 msgid "Person"

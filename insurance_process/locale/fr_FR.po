@@ -2,6 +2,26 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:ins_process.dummy_object:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_process.process_desc:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_process.step_desc:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_process.step_method_desc:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_process.suspended_process:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "field:ins_process.dummy_object,contract_number:"
 msgid "Contract Number"
 msgstr "Numéro de Contrat"
@@ -17,6 +37,10 @@ msgstr "Créé par"
 msgctxt "field:ins_process.dummy_object,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_process.dummy_object,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_process.dummy_object,rec_name:"
 msgid "Name"
@@ -113,6 +137,10 @@ msgstr "Créé par"
 msgctxt "field:ins_process.process_desc,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_process.process_desc,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_process.process_desc,name:"
 msgid "Process Name"
@@ -214,6 +242,10 @@ msgctxt "field:ins_process.step_desc,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_process.step_desc,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:ins_process.step_desc,methods:"
 msgid "Methods"
 msgstr ""
@@ -274,6 +306,10 @@ msgctxt "field:ins_process.step_method_desc,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_process.step_method_desc,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:ins_process.step_method_desc,name:"
 msgid "Name"
 msgstr "Nom"
@@ -317,6 +353,10 @@ msgstr ""
 msgctxt "field:ins_process.suspended_process,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_process.suspended_process,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_process.suspended_process,process_model_name:"
 msgid "Process Model"

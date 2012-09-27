@@ -2,6 +2,58 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:ins_contract.billing.bill:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.billing.generic_line:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.billing_manager:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.broker_manager:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.contract:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.covered_car:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.covered_data:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.covered_element:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.covered_person:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.extension_car:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.extension_life:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.option:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.price_line:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "field:ins_contract.billing.bill,amount_ht:"
 msgid "Amount HT"
 msgstr ""
@@ -29,6 +81,10 @@ msgstr "Contrat"
 msgctxt "field:ins_contract.billing.bill,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_contract.billing.bill,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.billing.bill,lines:"
 msgid "Bill Lines"
@@ -90,6 +146,10 @@ msgctxt "field:ins_contract.billing.generic_line,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_contract.billing.generic_line,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:ins_contract.billing.generic_line,kind:"
 msgid "Kind"
 msgstr "Type"
@@ -141,6 +201,10 @@ msgstr "Créé par"
 msgctxt "field:ins_contract.billing_manager,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_contract.billing_manager,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.billing_manager,next_billing_date:"
 msgid "Next Billing Date"
@@ -302,6 +366,10 @@ msgctxt "field:ins_contract.broker_manager,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_contract.broker_manager,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:ins_contract.broker_manager,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -349,6 +417,10 @@ msgstr ""
 msgctxt "field:ins_contract.contract,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_contract.contract,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.contract,master:"
 msgid "Master"
@@ -426,6 +498,10 @@ msgctxt "field:ins_contract.covered_car,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_contract.covered_car,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:ins_contract.covered_car,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -466,6 +542,10 @@ msgctxt "field:ins_contract.covered_data,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_contract.covered_data,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:ins_contract.covered_data,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -502,6 +582,10 @@ msgctxt "field:ins_contract.covered_element,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_contract.covered_element,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:ins_contract.covered_element,product_specific:"
 msgid "Specific Part"
 msgstr ""
@@ -533,6 +617,10 @@ msgstr "Créé par"
 msgctxt "field:ins_contract.covered_person,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_contract.covered_person,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.covered_person,person:"
 msgid "Person"
@@ -566,6 +654,10 @@ msgctxt "field:ins_contract.extension_car,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_contract.extension_car,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:ins_contract.extension_car,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -593,6 +685,10 @@ msgstr "Créé par"
 msgctxt "field:ins_contract.extension_life,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_contract.extension_life,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.extension_life,rec_name:"
 msgid "Name"
@@ -637,6 +733,10 @@ msgstr ""
 msgctxt "field:ins_contract.option,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_contract.option,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.option,option_data:"
 msgid "Option Data"
@@ -705,6 +805,10 @@ msgstr "Date de Fin"
 msgctxt "field:ins_contract.price_line,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_contract.price_line,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.price_line,kind:"
 msgid "Kind"

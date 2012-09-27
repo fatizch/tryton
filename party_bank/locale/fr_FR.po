@@ -6,9 +6,21 @@ msgctxt "error:party.bank:"
 msgid "Invalid BIC!"
 msgstr "BIC non valide!"
 
+msgctxt "error:party.bank:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:party.bank_account:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:party.bank_account_number:"
 msgid "Invalid number!"
 msgstr "Numéro non valide!"
+
+msgctxt "error:party.bank_account_number:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:party.bank,bank_code:"
 msgid "Bank Code"
@@ -33,6 +45,10 @@ msgstr "Créé par"
 msgctxt "field:party.bank,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:party.bank,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:party.bank,party:"
 msgid "Party"
@@ -86,6 +102,10 @@ msgctxt "field:party.bank_account,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:party.bank_account,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:party.bank_account,party:"
 msgid "Party"
 msgstr "Tiers"
@@ -133,6 +153,10 @@ msgstr "Créé par"
 msgctxt "field:party.bank_account_number,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:party.bank_account_number,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:party.bank_account_number,key:"
 msgid "Key"
