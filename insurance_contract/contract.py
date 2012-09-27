@@ -3,9 +3,8 @@ import datetime
 # Needed for storing and displaying objects
 from trytond.model import fields as fields
 
-from trytond.modules.coop_utils import CoopView, CoopSQL, convert_ref_to_obj
-from trytond.modules.coop_utils import limit_dates, to_date, add_frequency
-from trytond.modules.coop_utils import One2ManyDomain, WithAbstract
+from trytond.modules.coop_utils import model as model
+from trytond.modules.coop_utils import utils as utils
 
 # Needed for getting models
 from trytond.pool import Pool
@@ -41,7 +40,7 @@ OPTIONSTATUS = [
     ]
 
 
-class GenericExtension(CoopView):
+class GenericExtension(model.CoopView):
     '''
     Here comes the Extension which will contains all data needed by a specific
     product to compute rates, benefits etc.
@@ -67,7 +66,7 @@ class GenericExtension(CoopView):
         return res
 
 
-class GenericContract(CoopSQL, CoopView):
+class GenericContract(model.CoopSQL, model.CoopView):
     '''
         This class will provide the basics of all contracts :
             Contract Number
@@ -219,7 +218,7 @@ class Contract(GenericContract):
         return None
 
     def get_extension_life(self, field_name):
-        return WithAbstract.serialize_field([self.extension_life])
+        return utils.WithAbstract.serialize_field([self.extension_life])
 
     def get_active_coverages_at_date(self, at_date):
         return [elem.get_coverage()
@@ -231,7 +230,7 @@ class Contract(GenericContract):
         res.update(self.extension_life.get_dates())
         for cur_option in self.options:
             res.update(cur_option.get_dates())
-        return limit_dates(res, start, end)
+        return utils.limit_dates(res, start, end)
 
     def calculate_price_at_date(self, date):
         prices, errs = self.product.get_result(
@@ -281,7 +280,7 @@ class Contract(GenericContract):
         return (res, errs)
 
 
-class Option(CoopSQL, CoopView):
+class Option(model.CoopSQL, model.CoopView):
     '''
     This class is an option, that is a global coverage which will be applied
     to all covered persons on the contract.
@@ -347,7 +346,7 @@ class Option(CoopSQL, CoopView):
         return self.get_coverage().name + ' - Base Price'
 
 
-class PriceLine(CoopSQL, CoopView):
+class PriceLine(model.CoopSQL, model.CoopView):
     'Price Line'
     # We need an object to present pricing line, even though it is just for
     # dsplaying.
@@ -405,14 +404,14 @@ class PriceLine(CoopSQL, CoopView):
     # Two special fields : they use the all_lines One2Many field as a base
     # for two Domain-Dependant One2Many :
 
-    details = One2ManyDomain(
+    details = model.One2ManyDomain(
         'ins_contract.price_line',
         'master',
         'Details',
         domain=[('kind', '!=', 'main')],
         readonly=True)
 
-    child_lines = One2ManyDomain(
+    child_lines = model.One2ManyDomain(
         'ins_contract.price_line',
         'master',
         'Sub-Lines',
@@ -451,7 +450,7 @@ class PriceLine(CoopSQL, CoopView):
                 self.all_lines.append(child_line)
         if not self.name:
             if line.on_object:
-                self.name = convert_ref_to_obj(
+                self.name = utils.convert_ref_to_obj(
                     line.on_object).get_name_for_billing()
             else:
                 self.name = line.name
@@ -522,7 +521,7 @@ class PriceLine(CoopSQL, CoopView):
         return ' - '.join(res)
 
 
-class BillingManager(CoopSQL, CoopView):
+class BillingManager(model.CoopSQL, model.CoopView):
     '''
         This object will manage all billing-related content on the contract.
         It will be the target of all sql requests for automated bill
@@ -554,7 +553,7 @@ class BillingManager(CoopSQL, CoopView):
         if hasattr(self, 'prices') and self.prices:
             Pool().get(self._fields['prices'].model_name).delete(self.prices)
         result_prices = []
-        dates = [to_date(key) for key in prices.iterkeys()]
+        dates = [utils.to_date(key) for key in prices.iterkeys()]
         dates.sort()
         for date, price in prices.iteritems():
             pl = PriceLine()
@@ -565,7 +564,7 @@ class BillingManager(CoopSQL, CoopView):
                 detail.init_from_result_line(cur_price)
                 details.append(detail)
             pl.all_lines = details
-            pl.start_date = to_date(date)
+            pl.start_date = utils.to_date(date)
             try:
                 pl.end_date = dates[dates.index(pl.start_date) + 1] + \
                     datetime.timedelta(days=-1)
@@ -585,7 +584,7 @@ class BillingManager(CoopSQL, CoopView):
         date = max(Pool().get('ir.date').today(), self.contract.start_date)
         return (
             date,
-            add_frequency(self.get_product_frequency(date), date))
+            utils.add_frequency(self.get_product_frequency(date), date))
 
     def get_bill_model(self):
         return 'ins_contract.billing.bill'
@@ -645,7 +644,7 @@ class BillingManager(CoopSQL, CoopView):
         return the_bill
 
 
-class CoveredElement(CoopSQL, CoopView):
+class CoveredElement(model.CoopSQL, model.CoopView):
     'Covered Element'
     '''
         Covered elements represents anything which is covered by at least one
@@ -691,13 +690,14 @@ class CoveredElement(CoopSQL, CoopView):
         return res
 
     def get_name_for_billing(self):
-        return convert_ref_to_obj(self.product_specific).get_name_for_billing()
+        return utils.convert_ref_to_obj(
+            self.product_specific).get_name_for_billing()
 
     def get_name_for_info(self):
         return self.product_specific.get_name_for_info()
 
 
-class CoveredData(CoopSQL, CoopView):
+class CoveredData(model.CoopSQL, model.CoopView):
     'Coverage Data'
     '''
         Covered Datas are the link between covered elements and options.
@@ -738,10 +738,11 @@ class CoveredData(CoopSQL, CoopView):
         return res
 
     def get_name_for_billing(self):
-        return convert_ref_to_obj(self.for_covered).get_name_for_billing()
+        return utils.convert_ref_to_obj(
+            self.for_covered).get_name_for_billing()
 
 
-class ExtensionLife(CoopSQL, GenericExtension):
+class ExtensionLife(model.CoopSQL, GenericExtension):
     '''
         This is a particular case of contract extension designed for Life
         insurance products.
@@ -753,7 +754,7 @@ class ExtensionLife(CoopSQL, GenericExtension):
         return 'ins_contract.covered_person'
 
 
-class ExtensionCar(CoopSQL, GenericExtension):
+class ExtensionCar(model.CoopSQL, GenericExtension):
     '''
         This is a particular case of contract extension designed for Car
         insurance products.
@@ -765,7 +766,7 @@ class ExtensionCar(CoopSQL, GenericExtension):
         return 'ins_contract.covered_car'
 
 
-class SpecificCovered(CoopSQL, CoopView):
+class SpecificCovered(model.CoopSQL, model.CoopView):
     '''
         This is the common part of all specific covered parts.
 
@@ -806,7 +807,7 @@ class CoveredCar(SpecificCovered):
     __name__ = 'ins_contract.covered_car'
 
 
-class BrokerManager(CoopSQL, CoopView):
+class BrokerManager(model.CoopSQL, model.CoopView):
     '''
         This entity will be used to manage the relation between the contract
         and its broker
