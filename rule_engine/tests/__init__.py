@@ -1,1 +1,1 @@
-from .test_rule_engine import suite
+from .test_module import suite

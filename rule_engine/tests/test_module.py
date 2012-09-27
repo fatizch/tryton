@@ -13,13 +13,18 @@ from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT
 from trytond.transaction import Transaction
 
 
-class RuleEngineTestCase(unittest.TestCase):
+MODULE_NAME = os.path.basename(
+                  os.path.abspath(
+                      os.path.join(os.path.normpath(__file__), '..', '..')))
+
+
+class ModuleTestCase(unittest.TestCase):
     '''
-    Test Rule Engine module.
+    Test Coop module.
     '''
 
     def setUp(self):
-        trytond.tests.test_tryton.install_module('rule_engine')
+        trytond.tests.test_tryton.install_module(MODULE_NAME)
         self.TreeElement = POOL.get('rule_engine.tree_element')
         self.Context = POOL.get('rule_engine.context')
         self.RuleEngine = POOL.get('rule_engine')
@@ -31,7 +36,7 @@ class RuleEngineTestCase(unittest.TestCase):
         '''
         Test views.
         '''
-        test_view('rule_engine')
+        test_view(MODULE_NAME)
 
     def test0006depends(self):
         '''
@@ -56,7 +61,7 @@ class RuleEngineTestCase(unittest.TestCase):
         with Transaction().start(DB_NAME,
                                  USER,
                                  context=CONTEXT) as transaction:
-            POOL.register(TestRuleEngine, type_='model', module='rule_engine')
+            POOL.register(TestRuleEngine, type_='model', module=MODULE_NAME)
             POOL.add(TestRuleEngine)
 
             te = self.TreeElement()
@@ -112,7 +117,7 @@ class RuleEngineTestCase(unittest.TestCase):
 def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-        RuleEngineTestCase))
+        ModuleTestCase))
     return suite
 
 if __name__ == '__main__':

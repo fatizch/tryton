@@ -9,20 +9,24 @@ import unittest
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import test_view, test_depends
 
+MODULE_NAME = os.path.basename(
+                  os.path.abspath(
+                      os.path.join(os.path.normpath(__file__), '..', '..')))
 
-class InsurancePartyTestCase(unittest.TestCase):
+
+class ModuleTestCase(unittest.TestCase):
     '''
-    Test Insurance Party module.
+    Test Coop module.
     '''
 
     def setUp(self):
-        trytond.tests.test_tryton.install_module('insurance_party')
+        trytond.tests.test_tryton.install_module(MODULE_NAME)
 
     def test0005views(self):
         '''
         Test views.
         '''
-        test_view('insurance_party')
+        #test_view(MODULE_NAME)
 
     def test0006depends(self):
         '''
@@ -34,7 +38,7 @@ class InsurancePartyTestCase(unittest.TestCase):
 def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-        InsurancePartyTestCase))
+        ModuleTestCase))
     return suite
 
 if __name__ == '__main__':

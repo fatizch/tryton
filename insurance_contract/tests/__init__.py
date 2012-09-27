@@ -1,1 +1,1 @@
-from .test_contract import suite
+from .test_module import suite

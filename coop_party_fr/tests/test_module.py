@@ -14,21 +14,25 @@ from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT, test_view,\
     test_depends
 from trytond.transaction import Transaction
 
+MODULE_NAME = os.path.basename(
+                  os.path.abspath(
+                      os.path.join(os.path.normpath(__file__), '..', '..')))
 
-class PartyFRTestCase(unittest.TestCase):
+
+class ModuleTestCase(unittest.TestCase):
     '''
-    Test Party module.
+    Test Coop module.
     '''
 
     def setUp(self):
-        trytond.tests.test_tryton.install_module('coop_party_fr')
+        trytond.tests.test_tryton.install_module(MODULE_NAME)
         self.Person = POOL.get('party.person')
 
     def test0005views(self):
         '''
         Test views.
         '''
-        test_view('coop_party_fr')
+        test_view(MODULE_NAME)
 
     def test0006depends(self):
         '''
@@ -105,7 +109,7 @@ class PartyFRTestCase(unittest.TestCase):
 def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-        PartyFRTestCase))
+        ModuleTestCase))
     return suite
 
 if __name__ == '__main__':

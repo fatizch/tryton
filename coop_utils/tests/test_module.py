@@ -1,21 +1,33 @@
-# Needed for python test management
-import unittest
+import sys
+import os
+DIR = os.path.abspath(os.path.normpath(os.path.join(__file__,
+    '..', '..', '..', '..', '..', 'trytond')))
+if os.path.isdir(DIR):
+    sys.path.insert(0, os.path.dirname(DIR))
 
-# Needed for tryton test integration
+import unittest
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import test_view, test_depends
 from trytond.modules.coop_utils import utils
 
+MODULE_NAME = os.path.basename(
+                  os.path.abspath(
+                      os.path.join(os.path.normpath(__file__), '..', '..')))
 
-class LaboratoryTestCase(unittest.TestCase):
+
+class ModuleTestCase(unittest.TestCase):
+    '''
+    Test Coop module.
+    '''
+
     def setUp(self):
-        trytond.tests.test_tryton.install_module('coop_utils')
+        trytond.tests.test_tryton.install_module(MODULE_NAME)
 
     def test0005views(self):
         '''
         Test views.
         '''
-        test_view('coop_utils')
+        test_view(MODULE_NAME)
 
     def test0006depends(self):
         '''
@@ -24,7 +36,7 @@ class LaboratoryTestCase(unittest.TestCase):
         test_depends()
 
     def test0020get_module_path(self):
-        self.assert_(utils.get_module_path('coop_utils'))
+        self.assert_(utils.get_module_path(MODULE_NAME))
         self.assert_(utils.get_module_path('coop_party'))
         self.assert_(utils.get_module_path('dfsfsfsdf') is None)
 
@@ -32,7 +44,7 @@ class LaboratoryTestCase(unittest.TestCase):
 def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-        LaboratoryTestCase))
+        ModuleTestCase))
     return suite
 
 if __name__ == '__main__':

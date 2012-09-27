@@ -1,12 +1,14 @@
 #-*- coding:utf-8 -*-
-import datetime
-
-# Needed for python test management
-import unittest
-
+import sys
+import os
 from decimal import Decimal
+import datetime
+DIR = os.path.abspath(os.path.normpath(os.path.join(__file__,
+    '..', '..', '..', '..', '..', 'trytond')))
+if os.path.isdir(DIR):
+    sys.path.insert(0, os.path.dirname(DIR))
 
-# Needed for tryton test integration
+import unittest
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import test_view, test_depends
 from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT
@@ -14,9 +16,18 @@ from trytond.transaction import Transaction
 from trytond.modules.insurance_product import PricingResultLine
 
 
-class LaboratoryTestCase(unittest.TestCase):
+MODULE_NAME = os.path.basename(
+                  os.path.abspath(
+                      os.path.join(os.path.normpath(__file__), '..', '..')))
+
+
+class ModuleTestCase(unittest.TestCase):
+    '''
+    Test Coop module.
+    '''
+
     def setUp(self):
-        trytond.tests.test_tryton.install_module('insurance_product')
+        trytond.tests.test_tryton.install_module(MODULE_NAME)
         self.Product = POOL.get('ins_product.product')
         self.coverage = POOL.get('ins_product.coverage')
         self.brm = POOL.get('ins_product.business_rule_manager')
@@ -41,7 +52,7 @@ class LaboratoryTestCase(unittest.TestCase):
         '''
         Test views.
         '''
-        test_view('insurance_product')
+        test_view(MODULE_NAME)
 
     def test0006depends(self):
         '''
@@ -433,7 +444,7 @@ return True'''
 def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-        LaboratoryTestCase))
+        ModuleTestCase))
     return suite
 
 if __name__ == '__main__':

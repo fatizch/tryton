@@ -1,1 +1,1 @@
-from .test_bank import suite
+from .test_module import suite

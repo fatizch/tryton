@@ -1,21 +1,34 @@
 #-*- coding:utf-8 -*-
+import sys
+import os
 import datetime
 from decimal import Decimal
+DIR = os.path.abspath(os.path.normpath(os.path.join(__file__,
+    '..', '..', '..', '..', '..', 'trytond')))
+if os.path.isdir(DIR):
+    sys.path.insert(0, os.path.dirname(DIR))
 
-# Needed for python test management
 import unittest
-
-# Needed for tryton test integration
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import test_view, test_depends
+
+
 from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT
 from trytond.transaction import Transaction
 
 
-class ContractTestCase(unittest.TestCase):
+MODULE_NAME = os.path.basename(
+                  os.path.abspath(
+                      os.path.join(os.path.normpath(__file__), '..', '..')))
+
+
+class ModuleTestCase(unittest.TestCase):
+    '''
+    Test Coop module.
+    '''
 
     def setUp(self):
-        trytond.tests.test_tryton.install_module('insurance_contract')
+        trytond.tests.test_tryton.install_module(MODULE_NAME)
         self.Contract = POOL.get('ins_contract.contract')
         self.SubsProcess = POOL.get('ins_contract.subs_process',
                                           type='wizard')
@@ -56,7 +69,7 @@ class ContractTestCase(unittest.TestCase):
         '''
         Test views.
         '''
-        test_view('insurance_contract')
+        test_view(MODULE_NAME)
 
     def test0006depends(self):
         '''
@@ -701,7 +714,7 @@ return True'''
 def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-        ContractTestCase))
+        ModuleTestCase))
     return suite
 
 if __name__ == '__main__':

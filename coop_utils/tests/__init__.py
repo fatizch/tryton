@@ -1,1 +1,1 @@
-from .test_utils import suite
+from .test_module import suite
