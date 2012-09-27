@@ -36,7 +36,7 @@ def create_bank(cfg_dict):
     countries = {}
     n = 0
     for line in f:
-        if n > cfg_dict['nb_bank']:
+        if n >= int(cfg_dict['nb_bank']):
             break
         try:
             bank = cfg_dict['Bank']()
