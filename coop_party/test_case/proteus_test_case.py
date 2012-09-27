@@ -59,10 +59,10 @@ def create_persons(models, cfg_dict, relations_kind):
     print 'Successfully created %s parties' % total_nb
 
 
-def create_relation(models, from_party, to_party, kind, start_date=None):
+def create_relation(models, from_actor, to_actor, kind, start_date=None):
     relation = models['Relation']()
-    relation.from_party = from_party
-    relation.to_party = to_party
+    relation.from_party = from_actor.party
+    relation.to_party = to_actor.party
     relation.kind = kind
     if start_date:
         relation.start_date = start_date
