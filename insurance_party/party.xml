@@ -40,6 +40,21 @@
              ]]>
             </field>
         </record>
+        <record model="ir.ui.view" id="party_view_tree">
+            <field name="model">party.party</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="party.party_view_tree"/>
+            <field name="arch" type="xml">
+             <![CDATA[
+             <data>
+                <xpath expr="/tree" position="inside">
+                    <field name="is_customer"/>
+                    <field name="is_broker"/>
+                </xpath>
+             </data>
+             ]]>
+            </field>
+        </record>
         <!--  ******************************************* 
               **************   Person     ***************
               *******************************************-->

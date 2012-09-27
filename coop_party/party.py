@@ -43,15 +43,22 @@ class Party:
              'The code of the party must be unique!'))
 
         #this loop will add for each One2Many role, a function field is_role
-        for field_name in (role for role in dir(cls) if role.endswith('role')):
+        for field_name in dir(cls):
+            if not (field_name.endswith('role') or field_name == 'person'
+                or field_name == 'company'):
+                continue
             field = getattr(cls, field_name)
             if not hasattr(field, 'model_name'):
                 continue
             is_actor_var_name = Party.get_is_actor_var_name(field_name)
+            searcher = None
+            if not field_name.endswith('_role'):
+                searcher = 'search_is_actor'
             field = fields.Function(fields.Boolean(field.string,
                     on_change=[field_name, is_actor_var_name]),
                 'get_is_actor',
-                setter='set_is_actor')
+                setter='set_is_actor',
+                searcher=searcher)
             setattr(cls, is_actor_var_name, field)
 
             def get_on_change(name):
@@ -67,11 +74,19 @@ class Party:
 
     @staticmethod
     def get_is_actor_var_name(var_name):
-        return 'is_' + var_name.split('_role')[0]
+        res = 'is_'
+        if var_name.endswith('_role'):
+            res += var_name.split('_role')[0]
+        else:
+            res += var_name
+        return res
 
     @staticmethod
     def get_actor_var_name(var_name):
-        return var_name.split('is_')[1] + '_role'
+        res = var_name.split('is_')[1]
+        if res not in ['person', 'company']:
+            res += '_role'
+        return res
 
     def get_is_actor(self, name):
         field_name = Party.get_actor_var_name(name)
@@ -79,6 +94,11 @@ class Party:
             field = getattr(self, field_name)
             return len(field) > 0
         return False
+
+    @classmethod
+    def search_is_actor(cls, name, clause):
+        field_name = Party.get_actor_var_name(name)
+        return [(field_name, ) + tuple(clause[1:])]
 
     def on_change_generic(self, is_role=''):
         res = {}
