@@ -92,5 +92,4 @@ class PartyRelation(CoopSQL, CoopView):
                     party.rec_name)
 
     def get_rec_name(self, name):
-        print name
         return self.get_summary(name)

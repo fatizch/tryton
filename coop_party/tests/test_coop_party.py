@@ -44,38 +44,25 @@ class CoopPartyTestCase(unittest.TestCase):
             })
         return party
 
-    def createRelationKind(self, key, name):
-        res = self.RelationKind()
-        res.key = key
-        res.name = name
-        return res
-
     def test0010relations(self):
         '''
         Test Relations
         '''
         with Transaction().start(DB_NAME, USER,
            context=CONTEXT) as transaction:
-            relation_kind_parent = self.createRelationKind('parent',
-                'Parent Of')
-            relation_kind_children = self.createRelationKind('child',
-                'Children Of')
-            relation_kind_parent.childs = [relation_kind_children]
-            relation_kind_parent.save()
-
             party1 = self.createParty('Parent')
             party2 = self.createParty('Children')
             relation = self.PartyRelation()
             relation.from_party = party1
             relation.to_party = party2
-            relation.kind = relation_kind_parent.key
+            relation.kind = 'parent'
             relation.start_date = datetime.date.today()
             relation.save()
 
             relation2 = self.PartyRelation()
             relation2.from_party = party2
             relation2.to_party = party1
-            relation2.kind = relation_kind_children.key
+            relation2.kind = 'child'
             relation2.start_date = datetime.date.today()
             relation2.save()
             transaction.cursor.commit()
