@@ -1,4 +1,3 @@
-import datetime
 import copy
 import functools
 
@@ -6,7 +5,7 @@ import functools
 from trytond.model import fields as fields
 
 from trytond.modules.coop_utils import utils, CoopView, CoopSQL
-from trytond.modules.coop_utils import WithAbstract, priority
+from trytond.modules.coop_utils import WithAbstract
 
 # Needed for proper encoding / decoding of objects as strings
 from trytond.protocols.jsonrpc import object_hook
@@ -32,8 +31,7 @@ except ImportError:
 
 __all__ = ['WithAbstract', 'ProcessState', 'CoopProcess', 'CoopStateView',
            'CoopStep', 'CoopStepView', 'DependantState', 'SuspendedProcess',
-           'ResumeWizard', 'DummyObject', 'DummyStep', 'DummyStep1',
-           'DummyProcessState', 'DummyProcess']
+           'ResumeWizard']
 
 
 ACTIONS = ('go_previous', 'go_next', 'cancel', 'complete', 'check', 'suspend')
@@ -1128,141 +1126,7 @@ class ResumeWizard(Wizard):
 # Here is an example of implementation of a process #
 #####################################################
 
-
-class DummyObject(CoopSQL, CoopView):
-    '''
-        A dummy Object for our DummyProcess
-    '''
-    __name__ = 'ins_process.dummy_object'
-    contract_number = fields.Char('Contract Number')
-
-
-class DummyStep(CoopStep):
-    '''
-        a DummyStep for a DummyProcess
-    '''
-    # This is a step. It inherits from CoopStep, and has one attribute (name).
-    __name__ = 'ins_process.dummy_process.dummy_step'
-    name = fields.Char('Name')
-
-    # This is its user-friendly name for creating the step desc
-    @staticmethod
-    def coop_step_name():
-        return 'Dummy Step'
-
-    # This is a before method, which will be useful to initialize our name
-    # field. If we had a One2Many field, we could create objects and use their
-    # fields to compute the default value of another.
-    @staticmethod
-    def before_step_init(wizard):
-        wizard.dummy_step.name = 'Toto'
-        return (True, [])
-
-    # Those are validation methods which will be called by the check_step
-    # method.
-    # DO NOT FORGET to always return something
-    @staticmethod
-    @priority(1)
-    def check_step_schtroumpf_validation(wizard):
-        if wizard.dummy_step.name == 'Toto':
-            return (False, ['Schtroumpf'])
-        return (True, [])
-
-    @staticmethod
-    @priority(2)
-    def check_step_kiwi_validation(wizard):
-        if wizard.dummy_step.name == 'Toto':
-            return (False, ['Kiwi'])
-        return (True, [])
-
-    @staticmethod
-    def check_step_abstract_obj(wizard):
-        if 'for_contract' in WithAbstract.abstract_objs(wizard):
-            contract = WithAbstract.get_abstract_objects(wizard,
-                                                        'for_contract')
-            if hasattr(contract, 'contract_number'):
-                contract.contract_number = 'Toto'
-            else:
-                contract.contract_number = 'Test'
-            WithAbstract.save_abstract_objects(wizard,
-                                              ('for_contract', contract))
-            return (True, [])
-        else:
-            return (False, ['Could not find for_contract'])
-
-
-class DummyStep1(CoopStep):
-    '''
-        Another DummyStep for our DummyProcess
-    '''
-    # This is another dummy step
-    __name__ = 'ins_process.dummy_process.dummy_step1'
-    name = fields.Char('Name')
-
-    # We initialize this step with some data from the previous step
-    @staticmethod
-    def before_step_init(wizard):
-        # We cannot be sure that the current process uses a 'dummy_step',
-        # so we test for one.
-        # We also could make the state mandatory with else return (False, [..])
-        if hasattr(wizard, 'dummy_step'):
-            wizard.dummy_step1.name = wizard.dummy_step.name
-        return (True, [])
-
-    @staticmethod
-    def check_step_abstract(wizard):
-        for_contract, for_contract1 = WithAbstract.get_abstract_objects(
-                                                        wizard,
-                                                        ['for_contract',
-                                                         'for_contract1'])
-        for_contract1.contract_number = for_contract.contract_number
-        WithAbstract.save_abstract_objects(wizard, ('for_contract1',
-                                                  for_contract1))
-        return (False, [wizard.process_state.for_contract_str,
-                        wizard.process_state.for_contract1_str])
-
-    @staticmethod
-    def coop_step_name():
-        return 'Dummy Step 1'
-
-
-class DummyProcessState(ProcessState, WithAbstract):
-    '''
-        A DummyProcessState with abstract objects, for tests...
-    '''
-    __name__ = 'ins_process.dummy_process_state'
-    __abstracts__ = [('for_contract', 'ins_process.dummy_object'),
-                     ('for_contract1', 'ins_process.dummy_object'),
-                     ]
-
-
-class DummyProcess(CoopProcess):
-    '''
-        A DummyProcess for test processing
-    '''
-    # This is a Process. It inherits of CoopProcess.
-    __name__ = 'ins_process.dummy_process'
-
-    config_data = {
-        'process_state_model': 'ins_process.dummy_process_state'
-        }
-
-    # We just need to declare the two steps
-    dummy_step = CoopStateView('ins_process.dummy_process.dummy_step',
-                               # Remember, the view name must start with the
-                               # tryton module name !
-                               'insurance_process.dummy_view')
-    dummy_step1 = CoopStateView('ins_process.dummy_process.dummy_step1',
-                               'insurance_process.dummy_view')
-
-    # and give it a name.
-    @staticmethod
-    def coop_process_name():
-        return 'Dummy Process Test'
-
-    def do_complete(self):
-        # Create and store stuff
-        return (True, [])
+# This section has been moved in tests/test_process.py
 
 ###############################################################################
 # Here is an example of default tryton wizard, performing a basic             #

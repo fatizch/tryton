@@ -7,10 +7,6 @@ def register():
     Pool.register(
         ProcessState,
         SuspendedProcess,
-        DummyObject,
-        DummyStep,
-        DummyStep1,
-        DummyProcessState,
         ProcessDesc,
         StepDesc,
         StepMethodDesc,
@@ -19,5 +15,4 @@ def register():
     Pool.register(
         CoopProcess,
         ResumeWizard,
-        DummyProcess,
         module='insurance_process', type_='wizard')
