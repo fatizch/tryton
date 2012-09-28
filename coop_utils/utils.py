@@ -25,9 +25,10 @@ def get_descendents(from_class, names_only=False):
     else:
         format_ = lambda x: (x, x)
     if isinstance(from_class, str):
+        the_class = Pool().get(from_class)
         cur_models = [model_name
                       for model_name, model in Pool().iterobject()
-                      if issubclass(model, from_class)]
+                      if issubclass(model, the_class)]
         Model = Pool().get('ir.model')
         models = Model.search([('model', 'in', cur_models)])
         for cur_model in models:
@@ -63,7 +64,8 @@ def change_relation_links(cls, from_module, to_module):
         if attr_name == '':
             continue
         model_name = getattr(field, attr_name)
-        if not model_name.startswith(from_module):
+        if not (model_name.startswith(from_module)
+                and model_name.split('.', 1)[0] == from_module):
             continue
         setattr(field, attr_name,
             to_module + model_name.split(from_module)[1])
