@@ -1,5 +1,6 @@
 import sys
 import ast
+import _ast
 import functools
 import json
 import datetime
@@ -7,6 +8,8 @@ import datetime
 from decimal import Decimal
 
 from dateutil.relativedelta import relativedelta
+from pyflakes.checker import Checker
+from pyflakes.messages import Message
 
 from trytond.rpc import RPC
 
@@ -31,6 +34,18 @@ def %s():
 
 %s_result = %s()
 """
+
+
+def check_code(code):
+    try:
+        tree = compile(code, 'test', 'exec', _ast.PyCF_ONLY_AST)
+    except SyntaxError, syn_error:
+        error = Message('test', syn_error.lineno)
+        error.message = 'Syntax Error'
+        return [error]
+    else:
+        warnings = Checker(tree, 'test')
+        return warnings.messages
 
 
 class InternalRuleEngineError(Exception):
@@ -159,6 +174,19 @@ class Rule(ModelView, ModelSQL):
             ('draft', 'Draft'),
             ('validated', 'Validated'),
             ], 'Status')
+
+    @classmethod
+    def __setup__(cls):
+        super(Rule, cls).__setup__()
+        cls._constraints += [
+            ('check_code', 'invalid_code'),
+            ]
+        cls._error_messages.update({
+                'invalid_code': 'Your code has errors!',
+                })
+
+    def check_code(self):
+        return not bool(check_code(self.as_function))
 
     @staticmethod
     def default_status():
