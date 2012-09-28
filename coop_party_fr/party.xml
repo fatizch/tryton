@@ -4,7 +4,7 @@
         <record model="ir.ui.view" id="person_view_form">
             <field name="model">party.person</field>
             <field name="type">form</field>
-            <field name="inherit" ref="coop_party.actor_view_form"/>
+            <field name="inherit" ref="coop_party.person_view_form"/>
             <field name="arch" type="xml">
                 <![CDATA[
                 <data>
@@ -16,10 +16,6 @@
                     position="replace_attributes">
                     <notebook colspan="10"/>
                 </xpath>
-                    <xpath expr="/form/label[@name=&quot;siren&quot;]" position="replace">
-                    </xpath>
-                    <xpath expr="/form/field[@name=&quot;siren&quot;]" position="replace">
-                    </xpath>
                     <xpath expr="/form/label[@name=&quot;ssn&quot;]"
                         position="replace"/>
                     <xpath expr="/form/field[@name=&quot;ssn&quot;]"
@@ -50,6 +46,22 @@
                     </xpath>
                     <xpath expr="/form/field[@name=&quot;siren&quot;]" position="replace">
                     </xpath>
+                </data>
+                ]]>
+            </field>
+        </record>
+        <!-- Company form view -->
+        <record model="ir.ui.view" id="company_view_form">
+            <field name="model">company.company</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="coop_party.company_view_form"/>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <data>
+                    <xpath expr="/form/notebook" position="before">
+                        <label name="siren"/>
+                        <field name="siren"/>
+                </xpath>
                 </data>
                 ]]>
             </field>
