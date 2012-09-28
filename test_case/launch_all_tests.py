@@ -74,11 +74,7 @@ if __name__ == '__main__':
     for file in log_files:
         cur_module = file.rsplit('/', 1)[1].split('.')[0]
         sum = {}
-        print '\n' + '=' * 80 + '\n' + 'Test results (detailed) for module ' \
-            + cur_module + '\n' + '=' * 80
         lines = open(file).readlines()
-        for line in lines:
-            print line[:-1]
         if lines[-1][:-1] == 'OK':
             sum['errors'] = 0
         elif lines[-1][:6] == 'FAILED':
@@ -88,6 +84,12 @@ if __name__ == '__main__':
                 sum['errors'] = int(lines[-1][15:-2])
         else:
             sum['errors'] = 0
+
+        if lines[-1][:-1] != 'OK':
+            print '\n' + '=' * 80 + '\n' + 'Test results (detailed) ' \
+                + 'for module ' + cur_module + '\n' + '=' * 80
+            for line in lines:
+                print line[:-1]
 
         sum['number'] = int(lines[-3].split(' ', 2)[1])
 
@@ -99,17 +101,24 @@ if __name__ == '__main__':
     print '\n\tPASSED :\n'
     final = {'number': 0, 'time': 0.00, 'errors': 0}
 
+    tag = False
     for key, value in summary.iteritems():
+        if not tag:
+            print '\n' + '=' * 80 + '\n' + 'Global summary' + '\n' + '=' * 80
+            print '\n\tPASSED :\n'
+            tag = True
         if value['errors'] == 0:
             print 'Module %s ran %s tests in %s seconds' % (
                 key, value['number'], value['time'])
             for key1, value1 in value.iteritems():
                 final[key1] += value1
 
-    print '\n\tFAILED :\n'
-
+    tag = False
     for key, value in summary.iteritems():
         if value['errors'] != 0:
+            if not tag:
+                print '\n\tFAILED :\n'
+                tag = True
             print 'Module %s ran %s tests in %s seconds with %s failures' % (
                 key, value['number'], value['time'], value['errors'])
             for key1, value1 in value.iteritems():
