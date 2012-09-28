@@ -79,11 +79,15 @@ if __name__ == '__main__':
         lines = open(file).readlines()
         for line in lines:
             print line[:-1]
-        print cur_module
         if lines[-1][:-1] == 'OK':
             sum['errors'] = 0
+        elif lines[-1][:6] == 'FAILED':
+            if lines[-1][8] == 'f':
+                sum['errors'] = int(lines[-1][17:-2])
+            else:
+                sum['errors'] = int(lines[-1][15:-2])
         else:
-            sum['errors'] = int(lines[-1][17:-2])
+            sum['errors'] = 0
 
         sum['number'] = int(lines[-3].split(' ', 2)[1])
 
@@ -92,14 +96,24 @@ if __name__ == '__main__':
         summary[cur_module] = sum
 
     print '\n' + '=' * 80 + '\n' + 'Global summary' + '\n' + '=' * 80
-
+    print '\n\tPASSED :\n'
     final = {'number': 0, 'time': 0.00, 'errors': 0}
 
     for key, value in summary.iteritems():
-        print 'Module %s ran %s tests in %s seconds with %s failures' % (
-            key, value['number'], value['time'], value['errors'])
-        for key1, value1 in value.iteritems():
-            final[key1] += value1
+        if value['errors'] == 0:
+            print 'Module %s ran %s tests in %s seconds' % (
+                key, value['number'], value['time'])
+            for key1, value1 in value.iteritems():
+                final[key1] += value1
+
+    print '\n\tFAILED :\n'
+
+    for key, value in summary.iteritems():
+        if value['errors'] != 0:
+            print 'Module %s ran %s tests in %s seconds with %s failures' % (
+                key, value['number'], value['time'], value['errors'])
+            for key1, value1 in value.iteritems():
+                final[key1] += value1
 
     print ''
     print 'Total : %s tests in %.2f seconds with %s failures' % (
