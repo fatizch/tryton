@@ -182,6 +182,14 @@ class Employee(ModelSQL, ModelView):
     'Employee'
     __name__ = 'company.employee'
 
+    @classmethod
+    def __setup__(cls):
+        super(Employee, cls).__setup__()
+        cls.party = copy.copy(cls.party)
+        if not cls.party.domain:
+            cls.party.domain = []
+        cls.party.domain.append([('is_person', '=', True)])
+
     @staticmethod
     def default_person():
         return [{}]
