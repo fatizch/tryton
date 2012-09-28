@@ -150,7 +150,8 @@ class Rule(ModelView, ModelSQL):
     __name__ = 'rule_engine'
 
     name = fields.Char('Name', required=True)
-    context = fields.Many2One('rule_engine.context', 'Context', required=True)
+    context = fields.Many2One('rule_engine.context', 'Context',
+        on_change=['context'], required=True)
     code = fields.Text('Code')
     data_tree = fields.Function(fields.Text('Data Tree'), 'get_data_tree')
     test_cases = fields.One2Many('rule_engine.test_case', 'rule', 'Test Cases')
@@ -176,6 +177,11 @@ class Rule(ModelView, ModelSQL):
         messages = context['messages']
         errors = context['errors']
         return (result, messages, errors)
+
+    def on_change_context(self):
+        return {
+            'data_tree': self.get_data_tree(None) if self.context else '[]',
+            }
 
     @property
     def as_function(self):

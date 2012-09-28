@@ -136,7 +136,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_product.benefit,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement de Modèle"
 
 msgctxt "field:ins_product.benefit,write_date:"
 msgid "Write Date"
@@ -184,7 +184,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_product.benefit_rule,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_product.benefit_rule,write_date:"
 msgid "Write Date"
@@ -228,7 +228,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_product.business_rule_manager,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_product.business_rule_manager,write_date:"
 msgid "Write Date"
@@ -260,7 +260,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_product.business_rule_root,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_product.coverage,benefits:"
 msgid "Benefits"
@@ -336,7 +336,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_product.coverage,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_product.coverage,write_date:"
 msgid "Write Date"
@@ -388,7 +388,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_product.coverage_amount_rule,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_product.coverage_amount_rule,write_date:"
 msgid "Write Date"
@@ -424,7 +424,7 @@ msgstr "Nom"
 
 msgctxt "field:ins_product.eligibility_relation_kind,relation_kind:"
 msgid "Relation Kind"
-msgstr ""
+msgstr "Type de Relation"
 
 msgctxt "field:ins_product.eligibility_relation_kind,write_date:"
 msgid "Write Date"
@@ -472,7 +472,7 @@ msgstr "Nom"
 
 msgctxt "field:ins_product.eligibility_rule,relation_kinds:"
 msgid "Relations Authorized"
-msgstr ""
+msgstr "Relations Autorisées"
 
 msgctxt "field:ins_product.eligibility_rule,rule:"
 msgid "Rule Engine"
@@ -488,11 +488,7 @@ msgstr "Moteur de Règle du Sous Element"
 
 msgctxt "field:ins_product.eligibility_rule,subscriber_classes:"
 msgid "Can be subscribed"
-msgstr ""
-
-msgctxt "field:ins_product.eligibility_rule,subscriber_eligibility:"
-msgid "Can be subscribed"
-msgstr ""
+msgstr "Peut-être Souscrit"
 
 msgctxt "field:ins_product.eligibility_rule,template:"
 msgid "Template"
@@ -500,7 +496,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_product.eligibility_rule,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_product.eligibility_rule,write_date:"
 msgid "Write Date"
@@ -616,7 +612,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_product.offered,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_product.pricing_calculator,combine:"
 msgid "Combining Rule"
@@ -762,10 +758,6 @@ msgctxt "field:ins_product.pricing_rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.pricing_rule,currency_digits:"
-msgid "Currency Digits"
-msgstr "Nombre de chiffres après la virgule"
-
 msgctxt "field:ins_product.pricing_rule,frequency:"
 msgid "Rate Frequency"
 msgstr "Fréquence de calcul"
@@ -781,10 +773,6 @@ msgstr "ID"
 msgctxt "field:ins_product.pricing_rule,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
-
-msgctxt "field:ins_product.pricing_rule,per_sub_elem_price:"
-msgid "Amount per Covered Element"
-msgstr "Montant par élement couvert"
 
 msgctxt "field:ins_product.pricing_rule,price:"
 msgid "Price Calculator"
@@ -802,29 +790,9 @@ msgctxt "field:ins_product.pricing_rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:ins_product.pricing_rule,sub_elem_config_kind:"
-msgid "Conf. kind"
-msgstr "Conf. du Sous Element"
-
-msgctxt "field:ins_product.pricing_rule,sub_elem_rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle du Sous Element"
-
-msgctxt "field:ins_product.pricing_rule,sub_elem_taxes:"
-msgid "Taxes"
-msgstr "Taxes"
-
 msgctxt "field:ins_product.pricing_rule,sub_price:"
 msgid "Price Calculator"
 msgstr "Montant"
-
-msgctxt "field:ins_product.pricing_rule,tax_mgr:"
-msgid "Taxes"
-msgstr "Taxes"
-
-msgctxt "field:ins_product.pricing_rule,taxes:"
-msgid "Taxes"
-msgstr "Taxes"
 
 msgctxt "field:ins_product.pricing_rule,template:"
 msgid "Template"
@@ -832,7 +800,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_product.pricing_rule,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_product.pricing_rule,write_date:"
 msgid "Write Date"
@@ -904,7 +872,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_product.product,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_product.product,write_date:"
 msgid "Write Date"
@@ -996,7 +964,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_product.reserve_rule,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_product.reserve_rule,write_date:"
 msgid "Write Date"
@@ -1005,10 +973,6 @@ msgstr "Date de mise à jour"
 msgctxt "field:ins_product.reserve_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
-
-msgctxt "field:ins_product.rule_sets.contract,id:"
-msgid "ID"
-msgstr "ID"
 
 msgctxt "field:ins_product.rule_sets.covered_data,id:"
 msgid "ID"
@@ -1094,10 +1058,6 @@ msgctxt "model:ins_product.reserve_rule,name:"
 msgid "Reserve Rule"
 msgstr "Règle de Provisionnement"
 
-msgctxt "model:ins_product.rule_sets.contract,name:"
-msgid ""
-msgstr ""
-
 msgctxt "model:ins_product.rule_sets.covered_data,name:"
 msgid ""
 msgstr ""
@@ -1139,36 +1099,20 @@ msgid "Products"
 msgstr "Produits"
 
 msgctxt "selection:ins_product.benefit,template_behaviour:"
-msgid "A"
-msgstr ""
-
-msgctxt "selection:ins_product.benefit,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
-
-msgctxt "selection:ins_product.benefit,template_behaviour:"
-msgid "O"
-msgstr ""
 
 msgctxt "selection:ins_product.benefit,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.benefit,template_behaviour:"
-msgid "R"
-msgstr ""
-
-msgctxt "selection:ins_product.benefit,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_product.benefit,template_behaviour:"
-msgid "V"
-msgstr ""
-
-msgctxt "selection:ins_product.benefit,template_behaviour:"
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_product.benefit_rule,config_kind:"
 msgid "Rule Engine"
@@ -1179,68 +1123,36 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
-msgid "A"
-msgstr ""
-
-msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
-
-msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
-msgid "O"
-msgstr ""
 
 msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
-msgid "R"
-msgstr ""
-
-msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
-msgid "V"
-msgstr ""
-
-msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
 msgid "Validate"
-msgstr ""
-
-msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
-msgid "A"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
 
 msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
-msgid "O"
-msgstr ""
-
-msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
-
-msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
-msgid "R"
-msgstr ""
 
 msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
-msgid "V"
-msgstr ""
-
-msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_product.business_rule_root,config_kind:"
 msgid "Rule Engine"
@@ -1251,72 +1163,40 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
-msgid "A"
-msgstr ""
-
-msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
-
-msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
-msgid "O"
-msgstr ""
 
 msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
-msgid "R"
-msgstr ""
-
-msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
-msgid "V"
-msgstr ""
-
-msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_product.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
 
 msgctxt "selection:ins_product.coverage,template_behaviour:"
-msgid "A"
-msgstr ""
-
-msgctxt "selection:ins_product.coverage,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
-
-msgctxt "selection:ins_product.coverage,template_behaviour:"
-msgid "O"
-msgstr ""
 
 msgctxt "selection:ins_product.coverage,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.coverage,template_behaviour:"
-msgid "R"
-msgstr ""
-
-msgctxt "selection:ins_product.coverage,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_product.coverage,template_behaviour:"
-msgid "V"
-msgstr ""
-
-msgctxt "selection:ins_product.coverage,template_behaviour:"
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_product.coverage_amount_rule,config_kind:"
 msgid "Rule Engine"
@@ -1327,36 +1207,20 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
-msgid "A"
-msgstr ""
-
-msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
-
-msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
-msgid "O"
-msgstr ""
 
 msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
-msgid "R"
-msgstr ""
-
-msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
-msgid "V"
-msgstr ""
-
-msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_product.eligibility_rule,config_kind:"
 msgid "Rule Engine"
@@ -1376,7 +1240,7 @@ msgstr "Simple"
 
 msgctxt "selection:ins_product.eligibility_rule,subscriber_classes:"
 msgid "All"
-msgstr ""
+msgstr "Tous"
 
 msgctxt "selection:ins_product.eligibility_rule,subscriber_classes:"
 msgid "Company"
@@ -1386,81 +1250,37 @@ msgctxt "selection:ins_product.eligibility_rule,subscriber_classes:"
 msgid "Person"
 msgstr "Personne"
 
-msgctxt "selection:ins_product.eligibility_rule,subscriber_eligibility:"
-msgid "All"
-msgstr ""
-
-msgctxt "selection:ins_product.eligibility_rule,subscriber_eligibility:"
-msgid "Company"
-msgstr "Société"
-
-msgctxt "selection:ins_product.eligibility_rule,subscriber_eligibility:"
-msgid "Person"
-msgstr "Personne"
-
-msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
-msgid "A"
-msgstr ""
-
 msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
-
-msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
-msgid "O"
-msgstr ""
 
 msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
-msgid "R"
-msgstr ""
-
-msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
-msgid "V"
-msgstr ""
-
-msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
 msgid "Validate"
-msgstr ""
-
-msgctxt "selection:ins_product.offered,template_behaviour:"
-msgid "A"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_product.offered,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
 
 msgctxt "selection:ins_product.offered,template_behaviour:"
-msgid "O"
-msgstr ""
-
-msgctxt "selection:ins_product.offered,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
-
-msgctxt "selection:ins_product.offered,template_behaviour:"
-msgid "R"
-msgstr ""
 
 msgctxt "selection:ins_product.offered,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_product.offered,template_behaviour:"
-msgid "V"
-msgstr ""
-
-msgctxt "selection:ins_product.offered,template_behaviour:"
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_product.pricing_calculator,key:"
 msgid "Sub Elem Price"
@@ -1511,10 +1331,6 @@ msgid "Quarterly"
 msgstr "Trimestriel"
 
 msgctxt "selection:ins_product.pricing_rule,frequency:"
-msgid "Quaterly"
-msgstr "Trimestriel"
-
-msgctxt "selection:ins_product.pricing_rule,frequency:"
 msgid "Yearly"
 msgstr "Annuel"
 
@@ -1526,77 +1342,37 @@ msgctxt "selection:ins_product.pricing_rule,price_kind:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-msgctxt "selection:ins_product.pricing_rule,sub_elem_config_kind:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "selection:ins_product.pricing_rule,sub_elem_config_kind:"
-msgid "Simple"
-msgstr "Simple"
-
-msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
-msgid "A"
-msgstr ""
-
 msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
-
-msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
-msgid "O"
-msgstr ""
 
 msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
-msgid "R"
-msgstr ""
-
-msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
-msgid "V"
-msgstr ""
-
-msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
 msgid "Validate"
-msgstr ""
-
-msgctxt "selection:ins_product.product,template_behaviour:"
-msgid "A"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_product.product,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
 
 msgctxt "selection:ins_product.product,template_behaviour:"
-msgid "O"
-msgstr ""
-
-msgctxt "selection:ins_product.product,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
-
-msgctxt "selection:ins_product.product,template_behaviour:"
-msgid "R"
-msgstr ""
 
 msgctxt "selection:ins_product.product,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_product.product,template_behaviour:"
-msgid "V"
-msgstr ""
-
-msgctxt "selection:ins_product.product,template_behaviour:"
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_product.reserve_rule,config_kind:"
 msgid "Rule Engine"
@@ -1607,36 +1383,20 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
-msgid "A"
-msgstr ""
-
-msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
-
-msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
-msgid "O"
-msgstr ""
 
 msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
 msgid "Override"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
-msgid "R"
-msgstr ""
-
-msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
-msgid "V"
-msgstr ""
-
-msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "view:ins_product.benefit:"
 msgid "Benefit"
@@ -1732,7 +1492,7 @@ msgstr "Calculateurs"
 
 msgctxt "view:ins_product.pricing_calculator:"
 msgid "Components"
-msgstr ""
+msgstr "Composantes"
 
 msgctxt "view:ins_product.pricing_calculator:"
 msgid "Price Calculator"

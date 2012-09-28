@@ -105,7 +105,8 @@
               ****************    Menu    ***************
               *******************************************-->
 
-        <menuitem name="Accounting" id="menu_account" sequence="10" />
+        <menuitem name="Accounting" id="menu_account" sequence="30" 
+            icon="tryton-currency"/>
 
         <menuitem name="Taxes" parent="menu_account"
             id="menu_product_taxes" sequence="40" icon="tryton-preferences"

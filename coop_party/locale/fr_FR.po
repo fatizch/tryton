@@ -434,6 +434,18 @@ msgctxt "model:party.address_kind,name:"
 msgid "Addresse Kind"
 msgstr "Type d'Adresse"
 
+msgctxt "model:party.address_kind,name:job"
+msgid "Job"
+msgstr "Lieu de Travail"
+
+msgctxt "model:party.address_kind,name:main"
+msgid "Main"
+msgstr "Principale"
+
+msgctxt "model:party.address_kind,name:second"
+msgid "Secondary"
+msgstr "Secondaire"
+
 msgctxt "model:party.generic_actor,name:"
 msgid "Generic Actor"
 msgstr "Acteur Générique"

@@ -100,11 +100,11 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ir.session,business_date:"
 msgid "Business Date"
-msgstr ""
+msgstr "Date Fonctionnelle"
 
 msgctxt "field:utils.change_session.ask_date,current_date:"
 msgid "Current Business Date"
-msgstr ""
+msgstr "Date Fonc. Courante"
 
 msgctxt "field:utils.change_session.ask_date,id:"
 msgid "ID"
@@ -112,11 +112,11 @@ msgstr "ID"
 
 msgctxt "field:utils.change_session.ask_date,new_date:"
 msgid "New Business Date"
-msgstr ""
+msgstr "Nouvelle Date Fonctionnelle"
 
 msgctxt "field:utils.change_session.ask_date,system_date:"
 msgid "System Date"
-msgstr ""
+msgstr "Date Système"
 
 msgctxt "model:coop.dyn_selection,name:"
 msgid "Dynamic Selection"
@@ -128,11 +128,11 @@ msgstr "Table des Tables"
 
 msgctxt "model:ir.action,name:ask_date_view_action"
 msgid "Change Session Date"
-msgstr ""
+msgstr "Changer la Date de la Session"
 
 msgctxt "model:ir.ui.menu,name:menu_change_date"
 msgid "Change Session Date"
-msgstr ""
+msgstr "Changer la Date de la Session"
 
 msgctxt "model:ir.ui.menu,name:menu_tools"
 msgid "Tools"
@@ -152,7 +152,7 @@ msgstr ""
 
 msgctxt "wizard_button:utils.change_session,ask_date,apply:"
 msgid "Apply"
-msgstr ""
+msgstr "Appliquer"
 
 msgctxt "wizard_button:utils.change_session,ask_date,end:"
 msgid "Cancel"

@@ -148,7 +148,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_collective.benefit,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_collective.benefit,write_date:"
 msgid "Write Date"
@@ -196,7 +196,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_collective.benefit_rule,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_collective.benefit_rule,write_date:"
 msgid "Write Date"
@@ -240,7 +240,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_collective.business_rule_manager,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_collective.business_rule_manager,write_date:"
 msgid "Write Date"
@@ -324,7 +324,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_collective.coverage,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_collective.coverage,write_date:"
 msgid "Write Date"
@@ -376,7 +376,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_collective.coverage_amount_rule,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_collective.coverage_amount_rule,write_date:"
 msgid "Write Date"
@@ -412,7 +412,7 @@ msgstr "Nom"
 
 msgctxt "field:ins_collective.eligibility_relation_kind,relation_kind:"
 msgid "Relation Kind"
-msgstr ""
+msgstr "Type de Relation"
 
 msgctxt "field:ins_collective.eligibility_relation_kind,write_date:"
 msgid "Write Date"
@@ -460,7 +460,7 @@ msgstr "Nom"
 
 msgctxt "field:ins_collective.eligibility_rule,relation_kinds:"
 msgid "Relations Authorized"
-msgstr ""
+msgstr "Relations Autorisées"
 
 msgctxt "field:ins_collective.eligibility_rule,rule:"
 msgid "Rule Engine"
@@ -476,11 +476,7 @@ msgstr "Moteur de Règle du Sous Element"
 
 msgctxt "field:ins_collective.eligibility_rule,subscriber_classes:"
 msgid "Can be subscribed"
-msgstr ""
-
-msgctxt "field:ins_collective.eligibility_rule,subscriber_eligibility:"
-msgid "Can be subscribed"
-msgstr ""
+msgstr "Peut-être Souscrit"
 
 msgctxt "field:ins_collective.eligibility_rule,template:"
 msgid "Template"
@@ -488,7 +484,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_collective.eligibility_rule,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_collective.eligibility_rule,write_date:"
 msgid "Write Date"
@@ -520,15 +516,15 @@ msgstr "Créé par"
 
 msgctxt "field:ins_collective.enrollment,extension_car:"
 msgid "Car Extension"
-msgstr ""
+msgstr "Auto"
 
 msgctxt "field:ins_collective.enrollment,extension_life:"
 msgid "Life Extension"
-msgstr ""
+msgstr "Prévoyance"
 
 msgctxt "field:ins_collective.enrollment,extension_life_displayer:"
 msgid "Life Extension"
-msgstr ""
+msgstr "Prévoyance"
 
 msgctxt "field:ins_collective.enrollment,id:"
 msgid "ID"
@@ -556,7 +552,7 @@ msgstr "Produit"
 
 msgctxt "field:ins_collective.enrollment,product_extension:"
 msgid "Product Extension"
-msgstr ""
+msgstr "Extension Produit"
 
 msgctxt "field:ins_collective.enrollment,rec_name:"
 msgid "Name"
@@ -564,11 +560,11 @@ msgstr "Nom"
 
 msgctxt "field:ins_collective.enrollment,start_date:"
 msgid "Effective Date"
-msgstr ""
+msgstr "Date d'Effet"
 
 msgctxt "field:ins_collective.enrollment,start_management_date:"
 msgid "Management Date"
-msgstr ""
+msgstr "Date de Début de Gestion"
 
 msgctxt "field:ins_collective.enrollment,status:"
 msgid "Status"
@@ -613,7 +609,7 @@ msgstr "ID"
 
 msgctxt "field:ins_collective.enrollment_process.option_selection,options:"
 msgid "Options Choices"
-msgstr ""
+msgstr "Choix des Garanties"
 
 msgctxt "field:ins_collective.enrollment_process.option_selection,session_id:"
 msgid "Session Id"
@@ -684,7 +680,7 @@ msgstr ""
 
 msgctxt "field:ins_collective.enrollment_process.project,start_date:"
 msgid "Effective Date"
-msgstr ""
+msgstr "Date d'Effet"
 
 msgctxt "field:ins_collective.enrollment_process.project,subscriber:"
 msgid "Subscriber"
@@ -732,11 +728,11 @@ msgstr "Nom"
 
 msgctxt "field:ins_collective.gbp_contract,start_date:"
 msgid "Effective Date"
-msgstr ""
+msgstr "Date d'Effet"
 
 msgctxt "field:ins_collective.gbp_contract,start_management_date:"
 msgid "Management Date"
-msgstr ""
+msgstr "Date de Début de Gestion"
 
 msgctxt "field:ins_collective.gbp_contract,status:"
 msgid "Status"
@@ -830,7 +826,7 @@ msgstr ""
 
 msgctxt "field:ins_collective.gbp_subs_process.project,start_date:"
 msgid "Effective Date"
-msgstr ""
+msgstr "Date d'Effet"
 
 msgctxt "field:ins_collective.gbp_subs_process.project,subscriber:"
 msgid "Subscriber"
@@ -942,7 +938,7 @@ msgstr "Nom"
 
 msgctxt "field:ins_collective.option,start_date:"
 msgid "Effective Date"
-msgstr ""
+msgstr "Date d'Effet"
 
 msgctxt "field:ins_collective.option,write_date:"
 msgid "Write Date"
@@ -1096,10 +1092,6 @@ msgctxt "field:ins_collective.pricing_rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_collective.pricing_rule,currency_digits:"
-msgid "Currency Digits"
-msgstr "Nombre de chiffres après la virgule"
-
 msgctxt "field:ins_collective.pricing_rule,frequency:"
 msgid "Rate Frequency"
 msgstr "Fréquence de calcul"
@@ -1115,10 +1107,6 @@ msgstr "ID"
 msgctxt "field:ins_collective.pricing_rule,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
-
-msgctxt "field:ins_collective.pricing_rule,per_sub_elem_price:"
-msgid "Amount per Covered Element"
-msgstr "Montant par élement couvert"
 
 msgctxt "field:ins_collective.pricing_rule,price:"
 msgid "Price Calculator"
@@ -1136,29 +1124,9 @@ msgctxt "field:ins_collective.pricing_rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:ins_collective.pricing_rule,sub_elem_config_kind:"
-msgid "Conf. kind"
-msgstr "Conf. du Sous Element"
-
-msgctxt "field:ins_collective.pricing_rule,sub_elem_rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle du Sous Element"
-
-msgctxt "field:ins_collective.pricing_rule,sub_elem_taxes:"
-msgid "Taxes"
-msgstr "Taxes"
-
 msgctxt "field:ins_collective.pricing_rule,sub_price:"
 msgid "Price Calculator"
 msgstr "Montant"
-
-msgctxt "field:ins_collective.pricing_rule,tax_mgr:"
-msgid "Taxes"
-msgstr "Taxes"
-
-msgctxt "field:ins_collective.pricing_rule,taxes:"
-msgid "Taxes"
-msgstr "Taxes"
 
 msgctxt "field:ins_collective.pricing_rule,template:"
 msgid "Template"
@@ -1166,7 +1134,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_collective.pricing_rule,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_collective.pricing_rule,write_date:"
 msgid "Write Date"
@@ -1238,7 +1206,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_collective.product,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_collective.product,write_date:"
 msgid "Write Date"
@@ -1330,7 +1298,7 @@ msgstr "Modèle"
 
 msgctxt "field:ins_collective.reserve_rule,template_behaviour:"
 msgid "Template Behaviour"
-msgstr ""
+msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_collective.reserve_rule,write_date:"
 msgid "Write Date"
@@ -1354,11 +1322,11 @@ msgstr "Règle de Prestation"
 
 msgctxt "model:ins_collective.business_rule_manager,name:"
 msgid "Group Business Rule Manager"
-msgstr ""
+msgstr "Gestionnaire de Règle Métier"
 
 msgctxt "model:ins_collective.coverage,name:"
 msgid "Group Insurance Coverage"
-msgstr ""
+msgstr "Garantie Collective"
 
 msgctxt "model:ins_collective.coverage_amount_rule,name:"
 msgid "Coverage Amount Rule"
@@ -1410,7 +1378,7 @@ msgstr ""
 
 msgctxt "model:ins_collective.generic_business_rule,name:"
 msgid "Group Generic Business Rule"
-msgstr ""
+msgstr "Règle Métier"
 
 msgctxt "model:ins_collective.option,name:"
 msgid ""
@@ -1430,7 +1398,7 @@ msgstr "Règle de Tarification"
 
 msgctxt "model:ins_collective.product,name:"
 msgid "Group Insurance Plan"
-msgstr ""
+msgstr "Produit Collectif"
 
 msgctxt "model:ins_collective.product-options-coverage,name:"
 msgid "Define Group Insurance Plan - Coverage relations"
@@ -1442,11 +1410,11 @@ msgstr "Règle de Provisionnement"
 
 msgctxt "model:ir.action,name:act_coverage_form"
 msgid "Plan Coverages"
-msgstr ""
+msgstr "Garanties Collectives"
 
 msgctxt "model:ir.action,name:act_enrollment_form"
 msgid "Enrollment"
-msgstr ""
+msgstr "Affiliation"
 
 msgctxt "model:ir.action,name:act_gbp_contract_form"
 msgid "GBP Contract"
@@ -1454,7 +1422,7 @@ msgstr "Contrat Collectif"
 
 msgctxt "model:ir.action,name:act_product_form"
 msgid "Insurance Plan"
-msgstr ""
+msgstr "Produits Collectifs"
 
 msgctxt "model:ir.action,name:enrollment_view_action"
 msgid "New Enrollment"
@@ -1466,19 +1434,19 @@ msgstr ""
 
 msgctxt "model:ir.action,name:resume_enrollment_process"
 msgid "Resume Process"
-msgstr ""
+msgstr "Reprendre le Workflow"
 
 msgctxt "model:ir.action,name:resume_gbp_subs_process"
 msgid "Resume Process"
-msgstr ""
+msgstr "Reprendre le Workflow"
 
 msgctxt "model:ir.ui.menu,name:menu_coverage_form"
 msgid "Plan Coverages"
-msgstr ""
+msgstr "Garanties Collectives"
 
 msgctxt "model:ir.ui.menu,name:menu_enrollment_form"
 msgid "Enrollment"
-msgstr ""
+msgstr "Affiliation"
 
 msgctxt "model:ir.ui.menu,name:menu_gbp_contract_form"
 msgid "GBP Contract"
@@ -1486,7 +1454,7 @@ msgstr "Contrat Collectif"
 
 msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Insurance Plan"
-msgstr ""
+msgstr "Produits Collectifs"
 
 msgctxt "model:ir.ui.menu,name:menu_start_enroll"
 msgid "New Enrollment"
@@ -1510,7 +1478,7 @@ msgstr "Supprimer"
 
 msgctxt "selection:ins_collective.benefit,template_behaviour:"
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_collective.benefit_rule,config_kind:"
 msgid "Rule Engine"
@@ -1534,7 +1502,7 @@ msgstr "Supprimer"
 
 msgctxt "selection:ins_collective.benefit_rule,template_behaviour:"
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_collective.business_rule_manager,template_behaviour:"
 msgid "Add"
@@ -1550,7 +1518,7 @@ msgstr "Supprimer"
 
 msgctxt "selection:ins_collective.business_rule_manager,template_behaviour:"
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_collective.coverage,family:"
 msgid "Life"
@@ -1570,7 +1538,7 @@ msgstr "Supprimer"
 
 msgctxt "selection:ins_collective.coverage,template_behaviour:"
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_collective.coverage_amount_rule,config_kind:"
 msgid "Rule Engine"
@@ -1594,7 +1562,7 @@ msgstr "Supprimer"
 
 msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_collective.eligibility_rule,config_kind:"
 msgid "Rule Engine"
@@ -1614,25 +1582,13 @@ msgstr "Simple"
 
 msgctxt "selection:ins_collective.eligibility_rule,subscriber_classes:"
 msgid "All"
-msgstr ""
+msgstr "Tous"
 
 msgctxt "selection:ins_collective.eligibility_rule,subscriber_classes:"
 msgid "Company"
 msgstr "Société"
 
 msgctxt "selection:ins_collective.eligibility_rule,subscriber_classes:"
-msgid "Person"
-msgstr "Personne"
-
-msgctxt "selection:ins_collective.eligibility_rule,subscriber_eligibility:"
-msgid "All"
-msgstr ""
-
-msgctxt "selection:ins_collective.eligibility_rule,subscriber_eligibility:"
-msgid "Company"
-msgstr "Société"
-
-msgctxt "selection:ins_collective.eligibility_rule,subscriber_eligibility:"
 msgid "Person"
 msgstr "Personne"
 
@@ -1650,7 +1606,7 @@ msgstr "Supprimer"
 
 msgctxt "selection:ins_collective.eligibility_rule,template_behaviour:"
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_collective.enrollment,master:"
 msgid "Contract"
@@ -1816,14 +1772,6 @@ msgctxt "selection:ins_collective.pricing_rule,price_kind:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-msgctxt "selection:ins_collective.pricing_rule,sub_elem_config_kind:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "selection:ins_collective.pricing_rule,sub_elem_config_kind:"
-msgid "Simple"
-msgstr "Simple"
-
 msgctxt "selection:ins_collective.pricing_rule,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
@@ -1838,7 +1786,7 @@ msgstr "Supprimer"
 
 msgctxt "selection:ins_collective.pricing_rule,template_behaviour:"
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_collective.product,template_behaviour:"
 msgid "Add"
@@ -1854,7 +1802,7 @@ msgstr "Supprimer"
 
 msgctxt "selection:ins_collective.product,template_behaviour:"
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "selection:ins_collective.reserve_rule,config_kind:"
 msgid "Rule Engine"
@@ -1878,7 +1826,7 @@ msgstr "Supprimer"
 
 msgctxt "selection:ins_collective.reserve_rule,template_behaviour:"
 msgid "Validate"
-msgstr ""
+msgstr "Valider"
 
 msgctxt "view:ins_collective.gbp_contract:"
 msgid "Contract"
