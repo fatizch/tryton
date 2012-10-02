@@ -349,7 +349,8 @@ class TreeElement(ModelView, ModelSQL):
         if self.type in ('function', 'rule'):
             return [self.name]
         else:
-            return sum([child.as_function() for child in self.children], [])
+            return sum([child.as_functions_list()
+                    for child in self.children], [])
 
     def as_context(self, context):
         pool = Pool()
