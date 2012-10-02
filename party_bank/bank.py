@@ -7,6 +7,7 @@ from trytond.pyson import Eval
 from trytond.pool import Pool
 
 from trytond.modules.coop_utils import CoopView, CoopSQL, utils as utils
+from trytond.modules.coop_utils import string as string
 
 BANK_ACCOUNT_KIND = [('IBAN', 'IBAN'),
                      ('RIB', 'RIB'),
@@ -47,10 +48,10 @@ class BankAccount(CoopSQL, CoopView):
 
     @staticmethod
     def default_start_date():
-        return Pool().get('ir.date').today()
+        return utils.today()
 
     def get_summary(self, name=None, at_date=None):
-        return utils.get_field_as_summary(self, 'account_numbers',
+        return string.get_field_as_summary(self, 'account_numbers',
             False, at_date)
 
 
@@ -214,15 +215,15 @@ class BankAccountNumber(CoopSQL, CoopView):
     def on_change_with_number(self, name=None):
         if self.kind != 'RIB':
             return self.number
-        res = utils.zfill(self, 'bank_code',)
-        res += utils.zfill(self, 'branch_code')
-        res += utils.zfill(self, 'account_number')
-        res += utils.zfill(self, 'key')
+        res = string.zfill(self, 'bank_code',)
+        res += string.zfill(self, 'branch_code')
+        res += string.zfill(self, 'account_number')
+        res += string.zfill(self, 'key')
         return res
 
     def on_change_sub_rib(self, name):
         res = {}
-        val = utils.zfill(self, name)
+        val = string.zfill(self, name)
         if val:
             res[name] = val
             return res

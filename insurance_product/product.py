@@ -9,7 +9,7 @@ from trytond.rpc import RPC
 
 from trytond.modules.coop_utils import model as model
 from trytond.modules.coop_utils import business as business
-from trytond.modules.coop_utils import utils as utils
+from trytond.modules.coop_utils import utils as utils, date as date
 from trytond.modules.insurance_product import PricingResultLine
 from trytond.modules.insurance_product import EligibilityResultLine
 
@@ -129,8 +129,7 @@ class Offered(model.CoopView, utils.GetResult, Templated):
     def default_start_date():
         res = Transaction().context.get('start_date')
         if not res:
-            date = Pool().get('ir.date').today()
-            res = date
+            res = utils.today()
         return res
 
     def get_name_for_billing(self):
@@ -639,7 +638,7 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
         if not hasattr(manager_attr, 'model_name'):
             return False
         BRM = Pool().get(manager_attr.model_name)
-        date = Pool().get('ir.date').today()
+        date = utils.today()
         return self == BRM.get_good_rule_at_date(self.manager,
                 {'date': date})
 
@@ -664,7 +663,7 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
     def default_start_date():
         res = Transaction().context.get('start_date')
         if not res:
-            date = Pool().get('ir.date').today()
+            date = utils.today()
             res = date
         return res
 
@@ -1165,7 +1164,7 @@ class PricingRule(model.CoopSQL, BusinessRuleRoot):
         if not 'date' in args:
             return (None, ['A base date must be provided !'])
         date = args['date']
-        return utils.number_of_days_between(
+        return date.number_of_days_between(
             date,
             utils.add_frequency(self.frequency, date))
 

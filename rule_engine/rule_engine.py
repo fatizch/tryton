@@ -19,7 +19,7 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.tools.misc import _compile_source
 from trytond.pyson import Eval
-from trytond.modules.coop_utils import CoopView
+from trytond.modules.coop_utils import CoopView, utils as utils
 
 __all__ = ['Rule', 'Context', 'TreeElement', 'ContextTreeElement', 'TestCase',
     'TestCaseValue', 'TestRule', 'TestRuleStart', 'TestRuleTest',
@@ -137,7 +137,7 @@ class RuleTools(RuleEngineContext):
     @classmethod
     @for_rule('Today')
     def today(cls, args):
-        return Pool().get('ir.date').today()
+        return utils.today()
 
     @classmethod
     @for_rule('Add Message')
