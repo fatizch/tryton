@@ -8,6 +8,7 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coop_utils import CoopView, CoopSQL
 from trytond.modules.coop_utils import TableOfTable, utils as utils
+from trytond.modules.coop_utils import string as string
 
 __all__ = ['Party', 'Company', 'Employee', 'Actor', 'Person',
            'GenericActorKind', 'GenericActor', ]
@@ -144,13 +145,13 @@ class Party:
 
     def get_summary(self, name=None, at_date=None):
         res = self.get_summary_header(name)
-        res += utils.get_field_as_summary(self, 'addresses',
+        res += string.get_field_as_summary(self, 'addresses',
             True, at_date)
-        res += utils.get_field_as_summary(self, 'relations',
+        res += string.get_field_as_summary(self, 'relations',
             True, at_date)
-        res += utils.get_field_as_summary(self, 'in_relation_with',
+        res += string.get_field_as_summary(self, 'in_relation_with',
             True, at_date)
-        res += utils.get_field_as_summary(self, 'generic_roles',
+        res += string.get_field_as_summary(self, 'generic_roles',
             True, at_date)
         return res
 
@@ -229,7 +230,7 @@ class GenericActor(CoopSQL, Actor):
             'party.generic_actor_kind')
 
     def get_summary(self, name=None, at_date=None):
-        return utils.get_field_as_summary(self, 'kind', True, at_date)
+        return string.get_field_as_summary(self, 'kind', True, at_date)
 
 
 class Person(CoopSQL, Actor):
@@ -256,7 +257,7 @@ class Person(CoopSQL, Actor):
         cls._order.insert(0, ('name', 'ASC'))
 
     def get_rec_name(self, name):
-        return "%s %s %s" % (utils.translate_value(self, 'gender'),
+        return "%s %s %s" % (string.translate_value(self, 'gender'),
             self.name.upper(), self.first_name)
 
     def on_change_gender(self):
@@ -278,8 +279,8 @@ class Person(CoopSQL, Actor):
 
     def get_summary_header(self, name=None, at_date=None):
         res = ''
-        res += utils.get_field_as_summary(self, 'ssn')
-        res += utils.get_field_as_summary(self, 'birth_date')
-        res += utils.get_field_as_summary(self, 'nationality')
-        res += utils.get_field_as_summary(self, 'maiden_name')
+        res += string.get_field_as_summary(self, 'ssn')
+        res += string.get_field_as_summary(self, 'birth_date')
+        res += string.get_field_as_summary(self, 'nationality')
+        res += string.get_field_as_summary(self, 'maiden_name')
         return res

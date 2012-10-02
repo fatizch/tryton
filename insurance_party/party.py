@@ -3,7 +3,7 @@ from trytond.model import fields as fields
 
 from trytond.pool import PoolMeta
 
-from trytond.modules.coop_utils import CoopSQL, utils as utils
+from trytond.modules.coop_utils import CoopSQL, string as string
 from trytond.modules.coop_party import Actor
 
 __all__ = ['Party', 'Insurer', 'Broker', 'Customer', ]
@@ -23,13 +23,13 @@ class Party:
     def get_summary(self, name=None, at_date=None):
         res = super(Party, self).get_summary(name, at_date)
         if self.insurer_role:
-            res += utils.get_field_as_summary(self, 'insurer_role', True,
+            res += string.get_field_as_summary(self, 'insurer_role', True,
                 at_date)
         if self.broker_role:
-            res += utils.get_field_as_summary(self, 'broker_role', True,
+            res += string.get_field_as_summary(self, 'broker_role', True,
                 at_date)
         if self.customer_role:
-            res += utils.get_field_as_summary(self, 'broker_role', True,
+            res += string.get_field_as_summary(self, 'broker_role', True,
                 at_date)
         return res
 

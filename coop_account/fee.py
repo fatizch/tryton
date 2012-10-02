@@ -73,8 +73,7 @@ class FeeVersion(model.CoopSQL, model.VersionObject):
 
     @staticmethod
     def default_start_date():
-        date = Pool().get('ir.date').today()
-        return date
+        return utils.today()
 
     def get_code(self):
         return self.my_fee_desc.code

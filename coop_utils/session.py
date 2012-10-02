@@ -5,6 +5,7 @@ from trytond.model import ModelView
 from trytond.model import fields as fields
 
 from trytond.wizard import Wizard, StateView, StateTransition, Button
+from trytond.modules.coop_utils import utils as utils
 
 
 class DateClass():
@@ -69,7 +70,7 @@ class ChangeSessionDate(Wizard):
     apply = StateTransition()
 
     def default_ask_date(self, wizard, fields):
-        date = Pool().get('ir.date').today()
+        date = utils.today()
         return {
             'system_date': '%s' % datetime.date.today(),
             'current_date': '%s' % date,

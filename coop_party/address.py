@@ -2,6 +2,7 @@
 
 from trytond.model import ModelView, ModelSQL, fields as fields
 from trytond.modules.coop_utils import DynamicSelection, utils as utils
+from trytond.modules.coop_utils import string as string
 
 __all__ = ['Address', 'AddresseKind']
 
@@ -18,9 +19,9 @@ class Address(ModelSQL, ModelView):
         res = ''
         indent = 0
         if self.kind:
-            res = utils.get_field_as_summary(self, 'kind', False, at_date)
+            res = string.get_field_as_summary(self, 'kind', False, at_date)
             indent = 1
-        res += utils.re_indent_text(self.get_full_address(name), indent)
+        res += string.re_indent_text(self.get_full_address(name), indent)
         return res
 
     @staticmethod
