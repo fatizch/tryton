@@ -18,7 +18,8 @@ def re_indent_text(src, indent):
     return '%s\n' % "\n".join((4 * ' ' * indent) + i for i in src.splitlines())
 
 
-def get_field_as_summary(instance, var_name, with_label=True, at_date=None):
+def get_field_as_summary(instance, var_name, with_label=True, at_date=None,
+                         lang=None):
 
     if not getattr(instance, var_name):
         return ''
@@ -27,71 +28,82 @@ def get_field_as_summary(instance, var_name, with_label=True, at_date=None):
         list_at_date = utils.get_good_versions_at_date(instance, var_name,
             at_date)
         for element in list_at_date:
-            if not hasattr(element, 'get_summary'):
+            if not hasattr(element.__class__, 'get_summary'):
                 continue
             sub_indent = 0
             if res != '':
                 res += '\n'
             if with_label:
                 if res == '':
-                    res = '<b>%s :</b>\n' % translate_label(instance, var_name)
+                    res = '<b>%s :</b>\n' % translate_label(instance, var_name,
+                        lang=lang)
                 sub_indent = 1
-            res += re_indent_text('%s\n' % element.get_summary(name=var_name,
-                    at_date=at_date),
+            summary_dict = element.__class__.get_summary([element],
+                    name=var_name, at_date=at_date, lang=lang)
+            res += re_indent_text('%s\n' % summary_dict[element.id],
                 sub_indent)
     else:
         if with_label:
-            res = '%s : ' % translate_label(instance, var_name)
-        if hasattr(getattr(instance, var_name), 'get_summary'):
-            value = getattr(instance, var_name).get_summary(at_date=at_date)
+            res = '%s : ' % translate_label(instance, var_name, lang=lang)
+        if hasattr(getattr(instance, var_name).__class__, 'get_summary'):
+            summary_dict = getattr(instance, var_name).__class__.get_summary(
+                [instance], at_date=at_date, lang=lang)
+            value = summary_dict[instance.id]
         else:
             value = translate_value(instance, var_name)
         res += '%s\n' % value
     return re_indent_text(res, 0)
 
 
-def translate_label(instance, var_name):
+def translate_label(instance, var_name, lang=None):
     field = getattr(instance.__class__, var_name)
-    return translate_field(instance, var_name, field.string)
+    return translate_field(instance, var_name, field.string, lang=lang)
 
 
-def translate_value(instance, var_name):
+def translate_value(instance, var_name, lang=None):
     field = getattr(instance.__class__, var_name)
     if hasattr(field, '_field'):
         _type = field._field.__class__._type
     else:
         _type = field.__class__._type
+
+    ttype = None
     if _type == 'selection':
         value = selection_as_string(instance, var_name)
         ttype = field.__class__._type
+    elif _type == 'date':
+        value = date_as_string(getattr(instance, var_name), lang)
     else:
         value = str(getattr(instance, var_name))
-        ttype = None
     if (hasattr(field, 'translate') and field.translate
         or (hasattr(field, 'translate_selection')
             and field.translate_selection)):
-        return translate_field(instance, var_name, value, ttype)
+        return translate_field(instance, var_name, value, ttype, lang=lang)
     return str(value)
 
 
-def translate_field(instance, var_name, src, ttype='field'):
-    return translate(instance.__class__, var_name, src, ttype)
+def translate_field(instance, var_name, src, ttype='field', lang=None):
+    return translate(instance.__class__, var_name, src, ttype, lang=lang)
 
 
-def translate(model, var_name, src, ttype):
+def translate(model, var_name, src, ttype, lang=None):
+    if lang:
+        language = lang.code
+    else:
+        language = Transaction().language
     Translation = Pool().get('ir.translation')
     res = Translation.get_source(
             '%s,%s' % (model.__name__, var_name),
              ttype,
-             Transaction().language,
+             language,
              src)
     if not res:
         return src
     return res
 
 
-def translate_model_name(model):
-    return translate(model, 'name', model.__doc__, ttype='model')
+def translate_model_name(model, lang=None):
+    return translate(model, 'name', model.__doc__, ttype='model', lang=lang)
 
 
 def selection_as_string(instance, var_name):
@@ -105,3 +117,10 @@ def selection_as_string(instance, var_name):
     for cur_tuple in selection:
         if cur_tuple[0] == getattr(instance, var_name):
             return cur_tuple[1]
+
+
+def date_as_string(date, lang=None):
+    Lang = Pool().get('ir.lang')
+    if not lang:
+        lang = utils.get_user_language()
+    return Lang.strftime(date, lang.code, lang.date)

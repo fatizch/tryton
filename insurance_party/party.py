@@ -20,17 +20,19 @@ class Party:
     customer_role = fields.One2Many('party.customer', 'party', 'Customer',
         size=1)
 
-    def get_summary(self, name=None, at_date=None):
-        res = super(Party, self).get_summary(name, at_date)
-        if self.insurer_role:
-            res += string.get_field_as_summary(self, 'insurer_role', True,
-                at_date)
-        if self.broker_role:
-            res += string.get_field_as_summary(self, 'broker_role', True,
-                at_date)
-        if self.customer_role:
-            res += string.get_field_as_summary(self, 'broker_role', True,
-                at_date)
+    @classmethod
+    def get_summary(cls, parties, name=None, at_date=None, lang=None):
+        res = super(Party, cls).get_summary(parties, name, at_date, lang=lang)
+        for party in parties:
+            if party.insurer_role:
+                res[party.id] += string.get_field_as_summary(party,
+                    'insurer_role', True, at_date, lang=lang)
+            if party.broker_role:
+                res[party.id] += string.get_field_as_summary(party,
+                    'broker_role', True, at_date, lang=lang)
+            if party.customer_role:
+                res[party.id] += string.get_field_as_summary(party,
+                    'broker_role', True, at_date, lang=lang)
         return res
 
 
@@ -39,8 +41,9 @@ class Insurer(CoopSQL, Actor):
 
     __name__ = 'party.insurer'
 
-    def get_summary(self, name=None, at_date=None):
-        return 'X'
+    @classmethod
+    def get_summary(cls, insurers, name=None, at_date=None, lang=None):
+        return dict([(insurer.id, 'X') for insurer in insurers])
 
 
 class Broker(CoopSQL, Actor):
@@ -48,8 +51,9 @@ class Broker(CoopSQL, Actor):
 
     __name__ = 'party.broker'
 
-    def get_summary(self, name=None, at_date=None):
-        return 'X'
+    @classmethod
+    def get_summary(cls, brokers, name=None, at_date=None, lang=None):
+        return dict([(broker.id, 'X') for broker in brokers])
 
 
 class Customer(CoopSQL, Actor):
@@ -57,5 +61,6 @@ class Customer(CoopSQL, Actor):
 
     __name__ = 'party.customer'
 
-    def get_summary(self, name=None, at_date=None):
-        return 'X'
+    @classmethod
+    def get_summary(cls, customers, name=None, at_date=None, lang=None):
+        return dict([(customer.id, 'X') for customer in customers])

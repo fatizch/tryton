@@ -8,8 +8,8 @@ from trytond.wizard import Wizard
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import string as string
 import utils
+from trytond.modules.coop_utils import translate_model_name
 
 
 class CoopSQL(ModelSQL):
@@ -74,7 +74,7 @@ class CoopSQL(ModelSQL):
                     (
                         instance.rec_name,
                         using_instance.rec_name,
-                        string.translate_model_name(using_instance.__class__),
+                        translate_model_name(using_instance.__class__),
                         using_instance.id,
                         ))
                 continue

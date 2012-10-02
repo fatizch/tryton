@@ -861,17 +861,21 @@ class PricingData(model.CoopSQL, model.CoopView):
         final_res.update_details({(kind, code): amount})
         return final_res, errors
 
-    def get_summary(self, name=None, with_label=False, at_date=None):
-        res = ''
-        if self.kind == 'tax' and self.the_tax:
-            res = self.the_tax.rec_name
-        elif self.kind == 'fee' and self.the_fee:
-            res = self.the_fee.rec_name
-        else:
-            if self.config_kind == 'rule' and self.rule:
-                res = self.rule.rec_name
-            elif self.config_kind == 'simple':
-                res = str(self.fixed_amount)
+    @classmethod
+    def get_summary(cls, pricings, name=None, with_label=False, at_date=None,
+                    lang=None):
+        res = {}
+        for pricing in pricings:
+            res[pricing.id] = ''
+            if pricing.kind == 'tax' and pricing.the_tax:
+                res[pricing.id] = pricing.the_tax.rec_name
+            elif pricing.kind == 'fee' and pricing.the_fee:
+                res[pricing.id] = pricing.the_fee.rec_name
+            else:
+                if pricing.config_kind == 'rule' and pricing.rule:
+                    res[pricing.id] = pricing.rule.rec_name
+                elif pricing.config_kind == 'simple':
+                    res[pricing.id] = str(pricing.fixed_amount)
         return res
 
     def get_rec_name(self, name=None):

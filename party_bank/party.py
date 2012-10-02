@@ -20,13 +20,15 @@ class Party:
     bank_accounts = fields.One2Many('party.bank_account', 'party',
         'Bank Accounts')
 
-    def get_summary(self, name=None, at_date=None):
-        res = super(Party, self).get_summary(name, at_date)
-        if self.bank_role:
-            res += string.get_field_as_summary(self, 'bank_role', True,
-                at_date)
-        res += string.get_field_as_summary(self, 'bank_accounts',
-            True, at_date)
+    @classmethod
+    def get_summary(cls, parties, name=None, at_date=None, lang=None):
+        res = super(Party, cls).get_summary(parties, at_date, lang=lang)
+        for party in parties:
+            if party.bank_role:
+                res[party.id] += string.get_field_as_summary(party,
+                    'bank_role', True, at_date, lang=lang)
+            res[party.id] += string.get_field_as_summary(party,
+                'bank_accounts', True, at_date, lang=lang)
         return res
 
 
@@ -52,10 +54,13 @@ class Bank(CoopSQL, Actor):
     def check_bic(self):
         return self.bic is None or iban.valid_BIC(self.bic)
 
-    def get_summary(self, name=None, at_date=None):
-        res = ''
-        res += string.get_field_as_summary(self, 'bank_code', True,
-                at_date)
-        res += string.get_field_as_summary(self, 'bic', True,
-                at_date)
+    @classmethod
+    def get_summary(cls, banks, name=None, at_date=None, lang=None):
+        res = {}
+        for bank in banks:
+            res[bank.id] = ''
+            res[bank.id] += string.get_field_as_summary(bank, 'bank_code',
+                    True, at_date, lang=lang)
+            res[bank.id] += string.get_field_as_summary(bank, 'bic', True,
+                    at_date, lang=lang)
         return res

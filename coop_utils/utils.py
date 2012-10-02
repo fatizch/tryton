@@ -5,6 +5,7 @@ from dateutil.relativedelta import relativedelta
 
 from trytond.pool import Pool
 from trytond.model import Model
+from trytond.transaction import Transaction
 from trytond.model import fields as fields
 # Needed for proper encoding / decoding of objects as strings
 from trytond.protocols.jsonrpc import JSONEncoder, object_hook
@@ -617,6 +618,11 @@ def get_those_objects(model_name, domain, limit=None):
     return the_model.search(domain, limit=limit)
 
 
+def get_this_object(model_name, domain):
+    res, = get_those_objects(model_name, domain)
+    return res
+
+
 def delete_reference_backref(objs, target_model, target_field):
     the_model = Pool().get(target_model)
     to_delete = the_model.search([(
@@ -624,3 +630,7 @@ def delete_reference_backref(objs, target_model, target_field):
             '%s,%s' % (obj.__name__, obj.id)
             for obj in objs])])
     the_model.delete(to_delete)
+
+
+def get_user_language():
+    return get_this_object('ir.lang', [('code', '=', Transaction().language)])

@@ -15,13 +15,18 @@ class Address(ModelSQL, ModelView):
     end_date = fields.Date('End Date')
     kind = fields.Selection('get_possible_address_kind', 'Kind')
 
-    def get_summary(self, name=None, at_date=None):
-        res = ''
-        indent = 0
-        if self.kind:
-            res = string.get_field_as_summary(self, 'kind', False, at_date)
-            indent = 1
-        res += string.re_indent_text(self.get_full_address(name), indent)
+    @classmethod
+    def get_summary(cls, addresses, name=None, at_date=None, lang=None):
+        res = {}
+        for address in addresses:
+            res[address.id] = ''
+            indent = 0
+            if address.kind:
+                res[address.id] = string.get_field_as_summary(address, 'kind',
+                    False, at_date, lang=lang)
+                indent = 1
+            res[address.id] += string.re_indent_text(
+                address.get_full_address(name), indent)
         return res
 
     @staticmethod

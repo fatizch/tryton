@@ -82,14 +82,19 @@ class PartyRelation(CoopSQL, CoopView):
             if reverse_relation_kind:
                 return reverse_relation_kind.key
 
-    def get_summary(self, name=None, at_date=None):
-        link = 'kind'
-        party = self.to_party
-        if name == 'in_relation_with':
-            link = 'reverse_kind'
-            party = self.from_party
-        return '%s %s' % (string.translate_value(self, link),
-                    party.rec_name)
+    @classmethod
+    def get_summary(cls, relations, name=None, at_date=None, lang=None):
+        res = {}
+        for relation in relations:
+            link = 'kind'
+            party = relation.to_party
+            if name == 'in_relation_with':
+                link = 'reverse_kind'
+                party = relation.from_party
+            res[relation.id] = '%s %s' % (string.translate_value(relation,
+                    link, lang=lang),
+                party.rec_name)
+        return res
 
     def get_rec_name(self, name):
-        return self.get_summary(name)
+        return self.get_summary([self], name)

@@ -10,6 +10,7 @@ from trytond.modules.coop_utils import CoopView, CoopSQL
 from trytond.modules.coop_utils import TableOfTable, utils as utils
 from trytond.modules.coop_utils import string as string
 
+
 __all__ = ['Party', 'Company', 'Employee', 'Actor', 'Person',
            'GenericActorKind', 'GenericActor', ]
 __metaclass__ = PoolMeta
@@ -143,24 +144,47 @@ class Party:
             return kind[0]
         return None
 
-    def get_summary(self, name=None, at_date=None):
-        res = self.get_summary_header(name)
-        res += string.get_field_as_summary(self, 'addresses',
-            True, at_date)
-        res += string.get_field_as_summary(self, 'relations',
-            True, at_date)
-        res += string.get_field_as_summary(self, 'in_relation_with',
-            True, at_date)
-        res += string.get_field_as_summary(self, 'generic_roles',
-            True, at_date)
+    @classmethod
+    def get_summary(cls, parties, name=None, at_date=None, lang=None):
+        if not lang:
+            lang = utils.get_user_language()
+        res = cls.get_summary_header(parties, name=name, at_date=at_date,
+            lang=lang)
+        for party in parties:
+            res[party.id] += string.get_field_as_summary(party, 'addresses',
+                True, at_date, lang=lang)
+            res[party.id] += string.get_field_as_summary(party, 'relations',
+                True, at_date, lang=lang)
+            res[party.id] += string.get_field_as_summary(party,
+                'in_relation_with', True, at_date, lang=lang)
+            res[party.id] += string.get_field_as_summary(party,
+                'generic_roles', True, at_date, lang=lang)
         return res
 
-    def get_summary_header(self, name=None, at_date=None):
-        res = "<b>%s</b>\n" % self.get_rec_name(name)
-        if self.person and len(self.person) > 0:
-            res += self.person[0].get_summary_header(name, at_date)
-        if self.company and len(self.company) > 0:
-            res += self.company[0].get_summary_header(name, at_date)
+    @classmethod
+    def get_summary_header(cls, parties, name=None, at_date=None, lang=None):
+        res = {}
+        persons = []
+        companies = []
+        person_dict = {}
+        company_dict = {}
+        for party in parties:
+            res[party.id] = "<b>%s</b>\n" % party.get_rec_name(name)
+            if party.person and len(party.person) > 0:
+                persons.append(party.person[0])
+                person_dict[party.person[0].id] = party.id
+            if party.company and len(party.company) > 0:
+                companies.append(party.company[0])
+                company_dict[party.company[0].id] = party.id
+        Person = Pool().get('party.person')
+        for pers_id, pers_header in Person.get_summary_header(persons,
+            at_date=at_date, lang=lang).iteritems():
+            res[person_dict[pers_id]] += pers_header
+
+        Company = Pool().get('company.company')
+        for comp_id, comp_header in Company.get_summary_header(companies,
+            at_date=at_date, lang=lang).iteritems():
+            res[company_dict[comp_id]] += comp_header
         return res
 
 
@@ -175,8 +199,9 @@ class Company(ModelSQL, ModelView):
         cls.currency.required = False
         cls._order.insert(0, ('name', 'ASC'))
 
-    def get_summary_header(self, name=None, at_date=None):
-        return ''
+    @classmethod
+    def get_summary_header(cls, companies, name=None, at_date=None, lang=None):
+        return dict([(company.id, '') for company in companies])
 
 
 class Employee(ModelSQL, ModelView):
@@ -229,8 +254,13 @@ class GenericActor(CoopSQL, Actor):
         return GenericActorKind.get_values_as_selection(
             'party.generic_actor_kind')
 
-    def get_summary(self, name=None, at_date=None):
-        return string.get_field_as_summary(self, 'kind', True, at_date)
+    @classmethod
+    def get_summary(cls, actors, name=None, at_date=None, lang=None):
+        res = {}
+        for actor in actors:
+            res[actor.id] = string.get_field_as_summary(self, 'kind', True,
+                at_date, lang=lang)
+        return res
 
 
 class Person(CoopSQL, Actor):
@@ -277,10 +307,13 @@ class Person(CoopSQL, Actor):
     def get_nationality(self):
         return self.nationality
 
-    def get_summary_header(self, name=None, at_date=None):
-        res = ''
-        res += string.get_field_as_summary(self, 'ssn')
-        res += string.get_field_as_summary(self, 'birth_date')
-        res += string.get_field_as_summary(self, 'nationality')
-        res += string.get_field_as_summary(self, 'maiden_name')
+    @classmethod
+    def get_summary_header(cls, persons, name=None, at_date=None, lang=None):
+        res = {}
+        for party in persons:
+            res[party.id] = ''
+            res[party.id] += string.get_field_as_summary(party, 'ssn')
+            res[party.id] += string.get_field_as_summary(party, 'birth_date')
+            res[party.id] += string.get_field_as_summary(party, 'nationality')
+            res[party.id] += string.get_field_as_summary(party, 'maiden_name')
         return res

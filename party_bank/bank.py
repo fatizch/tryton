@@ -50,9 +50,13 @@ class BankAccount(CoopSQL, CoopView):
     def default_start_date():
         return utils.today()
 
-    def get_summary(self, name=None, at_date=None):
-        return string.get_field_as_summary(self, 'account_numbers',
-            False, at_date)
+    @classmethod
+    def get_summary(cls, bank_accounts, name=None, at_date=None, lang=None):
+        res = {}
+        for bank_acc in bank_accounts:
+            res[bank_acc.id] = string.get_field_as_summary(bank_acc,
+                'account_numbers', False, at_date, lang=lang)
+        return res
 
 
 class BankAccountNumber(CoopSQL, CoopView):
@@ -252,5 +256,7 @@ class BankAccountNumber(CoopSQL, CoopView):
         else:
             return self.number
 
-    def get_summary(self, name=None, at_date=None):
-        return '%s : %s' % (self.kind, self.rec_name)
+    @classmethod
+    def get_summary(cls, numbers, name=None, at_date=None, lang=None):
+        return dict([(nb.id, '%s : %s' % (nb.kind, nb.rec_name))
+            for nb in numbers])
