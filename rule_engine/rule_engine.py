@@ -9,7 +9,7 @@ from decimal import Decimal
 
 from dateutil.relativedelta import relativedelta
 from pyflakes.checker import Checker
-from pyflakes.messages import Message
+from pyflakes.messages import Message, UndefinedName
 
 from trytond.rpc import RPC
 
@@ -186,7 +186,10 @@ class Rule(ModelView, ModelSQL):
                 })
 
     def check_code(self):
-        return not bool(check_code(self.as_function))
+        return not bool(filter(
+                lambda m: not (isinstance(m, UndefinedName)
+                    and m.message_args[0] in self.allowed_functions),
+                check_code(self.as_function)))
 
     @staticmethod
     def default_status():
