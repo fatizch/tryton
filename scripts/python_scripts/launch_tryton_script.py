@@ -22,9 +22,14 @@ sys.path.extend([PROTEUS_PATH, TRYTOND_PATH])
 if __name__ == '__main__':
     parser = OptionParser(usage="Usage: %prog script_path script_args")
     options, args = parser.parse_args()
-    extra_args = args[1:]
-    subprocess.call(
-        [sys.executable,
-        os.path.abspath(args[0])] + extra_args,
-        env={"PYTHONPATH": ":".join(sys.path)})
+    if args:
+        extra_args = args[1:]
+        subprocess.call(
+            [sys.executable,
+            os.path.abspath(args[0])] + extra_args,
+            env={"PYTHONPATH": ":".join(sys.path)})
+    else:
+        subprocess.call(
+            [sys.executable],
+            env={"PYTHONPATH": ":".join(sys.path)})
 
