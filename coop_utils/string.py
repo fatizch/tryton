@@ -103,7 +103,20 @@ def translate(model, var_name, src, ttype, lang=None):
 
 
 def translate_model_name(model, lang=None):
-    return translate(model, 'name', model.__doc__, ttype='model', lang=lang)
+    return translate(model, 'name', model.__doc__.splitlines()[0],
+        ttype='model', lang=lang)
+
+
+def get_descendents_name(from_class):
+    result = []
+    for model_name, model in Pool().iterobject():
+        if issubclass(model, from_class):
+            if model.__doc__:
+                result.append((model_name, translate_model_name(model)))
+            else:
+                raise Exception(
+                    'Model %s does not have a docstring !' % model_name)
+    return result
 
 
 def selection_as_string(instance, var_name):
