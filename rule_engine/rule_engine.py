@@ -7,7 +7,6 @@ import datetime
 
 from decimal import Decimal
 
-from dateutil.relativedelta import relativedelta
 from pyflakes.checker import Checker
 from pyflakes.messages import Message, UndefinedName
 
@@ -20,6 +19,7 @@ from trytond.transaction import Transaction
 from trytond.tools.misc import _compile_source
 from trytond.pyson import Eval
 from trytond.modules.coop_utils import CoopView, utils as utils
+from trytond.modules.coop_utils import date as date
 
 __all__ = ['Rule', 'Context', 'TreeElement', 'ContextTreeElement', 'TestCase',
     'TestCaseValue', 'TestRule', 'TestRuleStart', 'TestRuleTest',
@@ -132,7 +132,7 @@ class RuleTools(RuleEngineContext):
                 or not isinstance(date2, datetime.date)):
             args['errors'].append('years_between needs datetime types')
             raise InternalRuleEngineError
-        return relativedelta(date2, date1).years
+        return date.number_of_years_between(date1, date2)
 
     @classmethod
     @for_rule('Today')
