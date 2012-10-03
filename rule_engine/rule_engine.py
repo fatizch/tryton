@@ -229,7 +229,7 @@ class Rule(ModelView, ModelSQL):
                 for e in self.context.allowed_elements], [])
 
     def get_rec_name(self, name=None):
-        return self.get_summary(name)
+        return self.get_summary([self])
 
     @classmethod
     def get_summary(cls, rules, name=None, with_label=True,
