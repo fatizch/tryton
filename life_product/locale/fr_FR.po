@@ -1,3 +1,12 @@
 # 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+#, fuzzy
+msgctxt "field:life_product.definition,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "model:life_product.definition,name:"
+msgid "Life Product Definition"
+msgstr ""

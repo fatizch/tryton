@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:rule_engine:"
+msgid "Your code has errors!"
+msgstr ""
+
 msgctxt "field:rule_engine,code:"
 msgid "Code"
 msgstr "Code"
@@ -314,6 +318,7 @@ msgctxt "model:ir.ui.menu,name:menu_tree_element"
 msgid "Tree Elements"
 msgstr "Eléments de l'arbre"
 
+#, fuzzy
 msgctxt "model:rule_engine,name:"
 msgid "Rule"
 msgstr "Règle"

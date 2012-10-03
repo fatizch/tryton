@@ -70,6 +70,59 @@ msgctxt "error:ins_product.reserve_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_product_utils.business_family:"
+msgid "There can be only one default business family !"
+msgstr ""
+
+#, fuzzy
+msgctxt "error:ins_product_utils.business_family:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+#, fuzzy
+msgctxt "field:ProductDefinition,id:"
+msgid "ID"
+msgstr "ID"
+
+#, fuzzy
+msgctxt "field:hstore,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+#, fuzzy
+msgctxt "field:hstore,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:hstore,dico:"
+msgid "Dictionnary"
+msgstr ""
+
+#, fuzzy
+msgctxt "field:hstore,id:"
+msgid "ID"
+msgstr "ID"
+
+#, fuzzy
+msgctxt "field:hstore,name:"
+msgid "Name"
+msgstr "Nom"
+
+#, fuzzy
+msgctxt "field:hstore,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+#, fuzzy
+msgctxt "field:hstore,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+#, fuzzy
+msgctxt "field:hstore,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_product.benefit,benefit_mgr:"
 msgid "Benefit Manager"
 msgstr "Gestionnaire de Prestations"
@@ -129,6 +182,11 @@ msgstr "Gestionnaire de Provisions"
 msgctxt "field:ins_product.benefit,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
+
+#, fuzzy
+msgctxt "field:ins_product.benefit,summary:"
+msgid "Summary"
+msgstr "Résumé"
 
 msgctxt "field:ins_product.benefit,template:"
 msgid "Template"
@@ -330,6 +388,11 @@ msgctxt "field:ins_product.coverage,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
+#, fuzzy
+msgctxt "field:ins_product.coverage,summary:"
+msgid "Summary"
+msgstr "Résumé"
+
 msgctxt "field:ins_product.coverage,template:"
 msgid "Template"
 msgstr "Modèle"
@@ -408,7 +471,7 @@ msgstr "Créé par"
 
 msgctxt "field:ins_product.eligibility_relation_kind,eligibility_rule:"
 msgid "Eligibility Rule"
-msgstr "Règle d'Eligibilité"
+msgstr "Eligibilite"
 
 msgctxt "field:ins_product.eligibility_relation_kind,id:"
 msgid "ID"
@@ -484,7 +547,7 @@ msgstr "Conf. du Sous Element"
 
 msgctxt "field:ins_product.eligibility_rule,sub_elem_rule:"
 msgid "Sub Elem Rule Engine"
-msgstr "Moteur de Règle du Sous Element"
+msgstr "Moteur de Règle"
 
 msgctxt "field:ins_product.eligibility_rule,subscriber_classes:"
 msgid "Can be subscribed"
@@ -512,7 +575,7 @@ msgstr "Règle de Prestation"
 
 msgctxt "field:ins_product.generic_business_rule,coverage_amount_rule:"
 msgid "Coverage Amount Rule"
-msgstr "Règle de Montant de Couverture"
+msgstr "Montant de Couverture"
 
 msgctxt "field:ins_product.generic_business_rule,create_date:"
 msgid "Create Date"
@@ -524,7 +587,7 @@ msgstr "Créé par"
 
 msgctxt "field:ins_product.generic_business_rule,eligibility_rule:"
 msgid "Eligibility Rule"
-msgstr "Règle d'Eligibilité"
+msgstr "Eligibilite"
 
 msgctxt "field:ins_product.generic_business_rule,end_date:"
 msgid "To Date"
@@ -552,7 +615,7 @@ msgstr "Gestionnaire"
 
 msgctxt "field:ins_product.generic_business_rule,pricing_rule:"
 msgid "Pricing Rule"
-msgstr "Règle de Tarification"
+msgstr "Tarification"
 
 msgctxt "field:ins_product.generic_business_rule,rec_name:"
 msgid "Name"
@@ -560,7 +623,7 @@ msgstr "Nom"
 
 msgctxt "field:ins_product.generic_business_rule,reserve_rule:"
 msgid "Reserve Rule"
-msgstr "Règle de Provisionnement"
+msgstr "Provisionnement"
 
 msgctxt "field:ins_product.generic_business_rule,start_date:"
 msgid "From Date"
@@ -605,6 +668,11 @@ msgstr "Gestionnaire de Tarification"
 msgctxt "field:ins_product.offered,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
+
+#, fuzzy
+msgctxt "field:ins_product.offered,summary:"
+msgid "Summary"
+msgstr "Résumé"
 
 msgctxt "field:ins_product.offered,template:"
 msgid "Template"
@@ -652,7 +720,7 @@ msgstr "Nom"
 
 msgctxt "field:ins_product.pricing_calculator,rule:"
 msgid "Pricing Rule"
-msgstr "Règle de Tarification"
+msgstr "Tarification"
 
 msgctxt "field:ins_product.pricing_calculator,simple:"
 msgid "Basic Combination"
@@ -866,6 +934,11 @@ msgctxt "field:ins_product.product,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
+#, fuzzy
+msgctxt "field:ins_product.product,summary:"
+msgid "Summary"
+msgstr "Résumé"
+
 msgctxt "field:ins_product.product,template:"
 msgid "Template"
 msgstr "Modèle"
@@ -990,9 +1063,70 @@ msgctxt "field:ins_product.rule_sets.subscriber,id:"
 msgid "ID"
 msgstr "ID"
 
+#, fuzzy
+msgctxt "field:ins_product_utils.business_family,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:ins_product_utils.business_family,contract_extension:"
+msgid "Contract Extension"
+msgstr ""
+
+#, fuzzy
+msgctxt "field:ins_product_utils.business_family,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+#, fuzzy
+msgctxt "field:ins_product_utils.business_family,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+#, fuzzy
+msgctxt "field:ins_product_utils.business_family,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product_utils.business_family,is_default:"
+msgid "Is Default"
+msgstr ""
+
+#, fuzzy
+msgctxt "field:ins_product_utils.business_family,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+#, fuzzy
+msgctxt "field:ins_product_utils.business_family,name:"
+msgid "Name"
+msgstr "Nom"
+
+#, fuzzy
+msgctxt "field:ins_product_utils.business_family,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+#, fuzzy
+msgctxt "field:ins_product_utils.business_family,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+#, fuzzy
+msgctxt "field:ins_product_utils.business_family,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "help:ins_product.coverage_amount_rule,amounts:"
 msgid "Specify amounts separated by ;"
 msgstr "Spécifier les montants séparés par des ;"
+
+msgctxt "model:ProductDefinition,name:"
+msgid "Product Definition"
+msgstr ""
+
+msgctxt "model:hstore,name:"
+msgid "HStore"
+msgstr ""
 
 msgctxt "model:ins_product.benefit,name:"
 msgid "Benefit"
@@ -1000,7 +1134,7 @@ msgstr "Prestation"
 
 msgctxt "model:ins_product.benefit_rule,name:"
 msgid "Benefit Rule"
-msgstr "Règle de Prestation"
+msgstr "Prestation"
 
 msgctxt "model:ins_product.business_rule_manager,name:"
 msgid "Business Rule Manager"
@@ -1016,7 +1150,7 @@ msgstr "Garantie"
 
 msgctxt "model:ins_product.coverage_amount_rule,name:"
 msgid "Coverage Amount Rule"
-msgstr "Règle de Montant de Couverture"
+msgstr "Montant de Couverture"
 
 msgctxt "model:ins_product.eligibility_relation_kind,name:"
 msgid "Define relation between eligibility rule and relation kind authorized"
@@ -1024,11 +1158,11 @@ msgstr ""
 
 msgctxt "model:ins_product.eligibility_rule,name:"
 msgid "Eligibility Rule"
-msgstr "Règle d'Eligibilité"
+msgstr "Eligibilite"
 
 msgctxt "model:ins_product.generic_business_rule,name:"
 msgid "Generic Business Rule"
-msgstr "Règle Métier Générique"
+msgstr "Règle Métier"
 
 msgctxt "model:ins_product.offered,name:"
 msgid "Offered"
@@ -1044,7 +1178,7 @@ msgstr "Elément de Tarification"
 
 msgctxt "model:ins_product.pricing_rule,name:"
 msgid "Pricing Rule"
-msgstr "Règle de Tarification"
+msgstr "Tarification"
 
 msgctxt "model:ins_product.product,name:"
 msgid "Product"
@@ -1056,7 +1190,7 @@ msgstr "Relations Produit Garantie"
 
 msgctxt "model:ins_product.reserve_rule,name:"
 msgid "Reserve Rule"
-msgstr "Règle de Provisionnement"
+msgstr "Provisionnement"
 
 msgctxt "model:ins_product.rule_sets.covered_data,name:"
 msgid ""
@@ -1074,6 +1208,22 @@ msgctxt "model:ins_product.rule_sets.subscriber,name:"
 msgid ""
 msgstr ""
 
+msgctxt "model:ins_product_utils.business_family,name:"
+msgid "Business Family"
+msgstr ""
+
+msgctxt "model:ir.action,name:None"
+msgid "Business Families"
+msgstr ""
+
+msgctxt "model:ir.action,name:None"
+msgid "HStores"
+msgstr ""
+
+msgctxt "model:ir.action,name:None"
+msgid "HStores"
+msgstr ""
+
 msgctxt "model:ir.action,name:act_coverage_form"
 msgid "Coverages"
 msgstr "Garanties"
@@ -1081,6 +1231,18 @@ msgstr "Garanties"
 msgctxt "model:ir.action,name:act_product_form"
 msgid "Products"
 msgstr "Produits"
+
+msgctxt "model:ir.ui.menu,name:None"
+msgid "Business Families"
+msgstr ""
+
+msgctxt "model:ir.ui.menu,name:None"
+msgid "HStores"
+msgstr ""
+
+msgctxt "model:ir.ui.menu,name:None"
+msgid "HStores"
+msgstr ""
 
 msgctxt "model:ir.ui.menu,name:menu_coverage_form"
 msgid "Coverages"
@@ -1181,6 +1343,10 @@ msgstr "Valider"
 msgctxt "selection:ins_product.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
+
+msgctxt "selection:ins_product.coverage,family:"
+msgid "default"
+msgstr ""
 
 msgctxt "selection:ins_product.coverage,template_behaviour:"
 msgid "Add"
@@ -1292,7 +1458,7 @@ msgstr "Tarif souscripteur"
 
 msgctxt "selection:ins_product.pricing_data,config_kind:"
 msgid "Rule Engine"
-msgstr "Moteur de Règle du Sous Element"
+msgstr "Moteur de Règle"
 
 msgctxt "selection:ins_product.pricing_data,config_kind:"
 msgid "Simple"
@@ -1398,6 +1564,14 @@ msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
 msgid "Validate"
 msgstr "Valider"
 
+msgctxt "view:hstore:"
+msgid "HStore"
+msgstr ""
+
+msgctxt "view:hstore:"
+msgid "HStores"
+msgstr ""
+
 msgctxt "view:ins_product.benefit:"
 msgid "Benefit"
 msgstr "Prestation"
@@ -1444,11 +1618,11 @@ msgstr "Montant de Couverture"
 
 msgctxt "view:ins_product.coverage_amount_rule:"
 msgid "Coverage Amount rule"
-msgstr "Règle de Montant de Couverture"
+msgstr "Montant de Couverture"
 
 msgctxt "view:ins_product.eligibility_rule:"
 msgid "Eligibility rule"
-msgstr "Règle d'Eligibilité"
+msgstr "Eligibilite"
 
 msgctxt "view:ins_product.eligibility_rule:"
 msgid "Sub Elem - Simple Settings"
@@ -1461,6 +1635,10 @@ msgstr "Moteur de Règle du Sous Element"
 msgctxt "view:ins_product.eligibility_rule:"
 msgid "Sub Element"
 msgstr ""
+
+msgctxt "view:ins_product.generic_business_rule:"
+msgid "Business Rule"
+msgstr "Règle Métier"
 
 msgctxt "view:ins_product.generic_business_rule:"
 msgid "Generic Business Rule"
@@ -1485,6 +1663,11 @@ msgstr ""
 msgctxt "view:ins_product.offered:"
 msgid "Pricing"
 msgstr "Tarification"
+
+#, fuzzy
+msgctxt "view:ins_product.offered:"
+msgid "Summary"
+msgstr "Résumé"
 
 msgctxt "view:ins_product.pricing_calculator:"
 msgid "Calculators"
@@ -1512,7 +1695,7 @@ msgstr "Principal"
 
 msgctxt "view:ins_product.pricing_rule:"
 msgid "Pricing rule"
-msgstr "Règle de Tarification"
+msgstr "Tarification"
 
 msgctxt "view:ins_product.pricing_rule:"
 msgid "Sub Elem - Rule Engine"
@@ -1536,4 +1719,12 @@ msgstr "Produit"
 
 msgctxt "view:ins_product.reserve_rule:"
 msgid "Reserve rule"
-msgstr "Règle de Provisionnement"
+msgstr "Provisionnement"
+
+msgctxt "view:ins_product_utils.business_family:"
+msgid "Business Families"
+msgstr ""
+
+msgctxt "view:ins_product_utils.business_family:"
+msgid "Business Family"
+msgstr ""

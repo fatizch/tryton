@@ -698,6 +698,10 @@ msgctxt "field:ins_contract.extension_life,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_contract.generic_extension,contract:"
+msgid "The contract"
+msgstr ""
+
 msgctxt "field:ins_contract.generic_extension,covered_elements:"
 msgid "Coverages"
 msgstr "Garanties"
@@ -1038,9 +1042,10 @@ msgctxt "model:ins_contract.broker_manager,name:"
 msgid ""
 msgstr ""
 
+#, fuzzy
 msgctxt "model:ins_contract.contract,name:"
-msgid ""
-msgstr ""
+msgid "Contract"
+msgstr "Contrat"
 
 msgctxt "model:ins_contract.coverage_displayer,name:"
 msgid ""
@@ -1083,7 +1088,7 @@ msgid "Price Line"
 msgstr ""
 
 msgctxt "model:ins_contract.subs_process.covered_data_desc,name:"
-msgid ""
+msgid "Covered Data"
 msgstr ""
 
 msgctxt "model:ins_contract.subs_process.covered_person_desc,name:"
@@ -1349,6 +1354,11 @@ msgstr ""
 msgctxt "view:ins_contract.covered_data:"
 msgid "Covered Data"
 msgstr ""
+
+#, fuzzy
+msgctxt "view:ins_contract.covered_data:"
+msgid "Data"
+msgstr "Données"
 
 msgctxt "view:ins_contract.covered_data:"
 msgid "data"

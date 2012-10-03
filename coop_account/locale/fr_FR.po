@@ -2,6 +2,36 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+#, fuzzy
+msgctxt "error:coop_account.fee_desc:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
+
+#, fuzzy
+msgctxt "error:coop_account.fee_desc:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+#, fuzzy
+msgctxt "error:coop_account.fee_version:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+#, fuzzy
+msgctxt "error:coop_account.tax_desc:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
+
+#, fuzzy
+msgctxt "error:coop_account.tax_desc:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+#, fuzzy
+msgctxt "error:coop_account.tax_version:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "field:coop_account.fee_desc,code:"
 msgid "Code"
 msgstr "Code"
@@ -25,6 +55,11 @@ msgstr "Description"
 msgctxt "field:coop_account.fee_desc,id:"
 msgid "ID"
 msgstr "ID"
+
+#, fuzzy
+msgctxt "field:coop_account.fee_desc,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:coop_account.fee_desc,name:"
 msgid "Fee Name"
@@ -61,6 +96,11 @@ msgstr "Date de Fin"
 msgctxt "field:coop_account.fee_version,id:"
 msgid "ID"
 msgstr "ID"
+
+#, fuzzy
+msgctxt "field:coop_account.fee_version,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:coop_account.fee_version,kind:"
 msgid "Rating mode"
@@ -114,6 +154,11 @@ msgctxt "field:coop_account.tax_desc,id:"
 msgid "ID"
 msgstr "ID"
 
+#, fuzzy
+msgctxt "field:coop_account.tax_desc,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:coop_account.tax_desc,name:"
 msgid "Tax Name"
 msgstr "Nom"
@@ -150,6 +195,11 @@ msgctxt "field:coop_account.tax_version,id:"
 msgid "ID"
 msgstr "ID"
 
+#, fuzzy
+msgctxt "field:coop_account.tax_version,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:coop_account.tax_version,kind:"
 msgid "Rating mode"
 msgstr "Type"
@@ -178,20 +228,24 @@ msgctxt "field:coop_account.tax_version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+#, fuzzy
 msgctxt "model:coop_account.fee_desc,name:"
-msgid "A Simple Fee Descriptor"
+msgid "Fee Descriptor"
 msgstr "Descripteur de Frais"
 
+#, fuzzy
 msgctxt "model:coop_account.fee_version,name:"
-msgid "A fee Version"
+msgid "Fee Version"
 msgstr "Version de Frais"
 
+#, fuzzy
 msgctxt "model:coop_account.tax_desc,name:"
-msgid "A Simple Tax Descriptor"
+msgid "Tax Descriptor"
 msgstr "Descripteur de Taxe"
 
+#, fuzzy
 msgctxt "model:coop_account.tax_version,name:"
-msgid "A tax Version"
+msgid "Tax Version"
 msgstr "Version de Taxe"
 
 msgctxt "model:ir.action,name:act_fee_form"

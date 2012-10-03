@@ -418,6 +418,10 @@ msgctxt "model:ins_process.suspended_process,name:"
 msgid ""
 msgstr ""
 
+msgctxt "model:ir.action,name:None"
+msgid "New Dummy Process"
+msgstr ""
+
 msgctxt "model:ir.action,name:act_process_form"
 msgid "Process"
 msgstr ""
@@ -428,10 +432,6 @@ msgstr ""
 
 msgctxt "model:ir.action,name:act_step_method_form"
 msgid "Step Method"
-msgstr ""
-
-msgctxt "model:ir.action,name:dummy_view_action"
-msgid "New Dummy Process"
 msgstr ""
 
 msgctxt "model:ir.action,name:resume_dummy_process"
@@ -446,16 +446,16 @@ msgctxt "model:ir.action,name:suspended_process_resume"
 msgid "Resume Process"
 msgstr "Reprendre le Workflow"
 
+msgctxt "model:ir.ui.menu,name:None"
+msgid "New Dummy Process"
+msgstr ""
+
 msgctxt "model:ir.ui.menu,name:menu_process"
 msgid "Process Lab"
 msgstr ""
 
 msgctxt "model:ir.ui.menu,name:menu_process_form"
 msgid "Process"
-msgstr ""
-
-msgctxt "model:ir.ui.menu,name:menu_start_dummy_process"
-msgid "New Dummy Process"
 msgstr ""
 
 msgctxt "model:ir.ui.menu,name:menu_suspended_process"

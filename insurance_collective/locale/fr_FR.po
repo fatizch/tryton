@@ -142,6 +142,11 @@ msgctxt "field:ins_collective.benefit,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
+#, fuzzy
+msgctxt "field:ins_collective.benefit,summary:"
+msgid "Summary"
+msgstr "Résumé"
+
 msgctxt "field:ins_collective.benefit,template:"
 msgid "Template"
 msgstr "Modèle"
@@ -317,6 +322,11 @@ msgstr "Nom"
 msgctxt "field:ins_collective.coverage,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
+
+#, fuzzy
+msgctxt "field:ins_collective.coverage,summary:"
+msgid "Summary"
+msgstr "Résumé"
 
 msgctxt "field:ins_collective.coverage,template:"
 msgid "Template"
@@ -1200,6 +1210,11 @@ msgctxt "field:ins_collective.product,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
+#, fuzzy
+msgctxt "field:ins_collective.product,summary:"
+msgid "Summary"
+msgstr "Résumé"
+
 msgctxt "field:ins_collective.product,template:"
 msgid "Template"
 msgstr "Modèle"
@@ -1523,6 +1538,10 @@ msgstr "Valider"
 msgctxt "selection:ins_collective.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
+
+msgctxt "selection:ins_collective.coverage,family:"
+msgid "default"
+msgstr ""
 
 msgctxt "selection:ins_collective.coverage,template_behaviour:"
 msgid "Add"
