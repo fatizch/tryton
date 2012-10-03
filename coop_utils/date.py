@@ -1,4 +1,5 @@
 import datetime
+from dateutil.relativedelta import relativedelta
 
 
 def add_days(date, nb):
@@ -18,3 +19,7 @@ def convert_to_periods(dates):
 
 def number_of_days_between(start_date, end_date):
     return end_date.toordinal() - start_date.toordinal() + 1
+
+
+def number_of_years_between(date1, date2):
+    return relativedelta(date2, date1).years
