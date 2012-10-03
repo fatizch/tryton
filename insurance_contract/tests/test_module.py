@@ -348,7 +348,7 @@ return True'''
 
         erm_a = self.eligibility()
         erm_a.config_kind = 'rule'
-        erm_a.is_eligible = False
+        erm_a.min_age = 100
         erm_a.rule = rule
 
         gbr_d = self.gbr()
@@ -373,8 +373,7 @@ return True'''
 
         erm_d = self.eligibility()
         erm_d.config_kind = 'simple'
-        erm_d.is_eligible = True
-        erm_d.is_sub_elem_eligible = False
+        erm_d.sub_min_age = 100
 
         gbr_g = self.gbr()
         gbr_g.kind = 'ins_product.eligibility_rule'
@@ -398,7 +397,7 @@ return True'''
 
         erm_b = self.eligibility()
         erm_b.config_kind = 'simple'
-        erm_b.is_eligible = True
+        erm_b.sub_min_age = 20
 
         gbr_e = self.gbr()
         gbr_e.kind = 'ins_product.eligibility_rule'
@@ -425,7 +424,7 @@ return True'''
 
         erm_c = self.eligibility()
         erm_c.config_kind = 'simple'
-        erm_c.is_eligible = False
+        erm_c.min_age = 100
 
         gbr_f = self.gbr()
         gbr_f.kind = 'ins_product.eligibility_rule'
@@ -474,7 +473,7 @@ return True'''
             wizard,
             wizard.process_state.cur_step_desc)
         self.assertEqual(tmp[0], False)
-        self.assertEqual(tmp[1][0], 'Not eligible')
+        self.assertEqual(tmp[1][0], 'Subscriber must be older than 100')
         on_product, = self.Product.search([('code', '=', 'AAA')])
         wizard.project.product = on_product
         tmp = wizard.project.check_step(
@@ -547,7 +546,7 @@ return True'''
         self.assertEqual(tmp[0], False)
         self.assertEqual(
             tmp[1][0],
-            'Toto not eligible for Delta Coverage')
+            'Toto must be older than 100')
         wizard.transition_steps_previous()
         wizard.transition_master_step()
         wizard.option_selection.options[2].status = 'Refused'

@@ -459,7 +459,6 @@ def create_BBB_product(cfg_dict, code, name):
     gbr_d.start_date = cfg_dict['Date'].today({})
     erm_a = gbr_d.eligibility_rule[0]
     erm_a.config_kind = 'rule'
-    erm_a.is_eligible = False
     erm_a.rule = rule
 
     brm_c = brm()
@@ -476,8 +475,7 @@ def create_BBB_product(cfg_dict, code, name):
     gbr_g.start_date = cfg_dict['Date'].today({})
     erm_d = gbr_g.eligibility_rule[0]
     erm_d.config_kind = 'simple'
-    erm_d.is_eligible = True
-    erm_d.is_sub_elem_eligible = False
+    erm_d.sub_min_age = 100
 
     brm_f = brm()
     brm_f.business_rules.append(gbr_g)
@@ -493,7 +491,6 @@ def create_BBB_product(cfg_dict, code, name):
     gbr_e.start_date = cfg_dict['Date'].today({})
     erm_b = gbr_e.eligibility_rule[0]
     erm_b.config_kind = 'simple'
-    erm_b.is_eligible = True
 
     brm_d = brm()
     brm_d.business_rules.append(gbr_e)

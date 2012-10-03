@@ -7,4 +7,5 @@ def register():
         # from life_product
         LifeCoverage,
         LifeProductDefinition,
+        LifeEligibilityRule,
         module='life_product', type_='model')
