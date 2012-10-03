@@ -2,7 +2,22 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-#, fuzzy
+msgctxt "field:ins_product.eligibility_rule,max_age:"
+msgid "Maximum Age"
+msgstr "Age Maximum"
+
+msgctxt "field:ins_product.eligibility_rule,min_age:"
+msgid "Minimum Age"
+msgstr "Age Minimum"
+
+msgctxt "field:ins_product.eligibility_rule,sub_max_age:"
+msgid "Maximum Age"
+msgstr "Age Maximum"
+
+msgctxt "field:ins_product.eligibility_rule,sub_min_age:"
+msgid "Minimum Age"
+msgstr "Age Minimum"
+
 msgctxt "field:life_product.definition,id:"
 msgid "ID"
 msgstr "ID"

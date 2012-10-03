@@ -318,7 +318,6 @@ msgctxt "model:ir.ui.menu,name:menu_tree_element"
 msgid "Tree Elements"
 msgstr "Eléments de l'arbre"
 
-#, fuzzy
 msgctxt "model:rule_engine,name:"
 msgid "Rule"
 msgstr "Règle"

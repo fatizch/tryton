@@ -2,17 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-#, fuzzy
 msgctxt "error:life_contract.covered_data:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-#, fuzzy
 msgctxt "error:life_contract.covered_person:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-#, fuzzy
 msgctxt "error:life_contract.extension:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -21,57 +18,46 @@ msgctxt "field:life_contract.covered_data,amount:"
 msgid "Covered Amount"
 msgstr ""
 
-#, fuzzy
 msgctxt "field:life_contract.covered_data,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_data,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_data,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_data,for_coverage:"
 msgid "Coverage"
 msgstr "Garantie"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_data,for_covered:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_data,id:"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_data,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_data,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_data,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_data,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
@@ -80,12 +66,10 @@ msgctxt "field:life_contract.covered_data_desc,covered_amount:"
 msgid "Covered Amount"
 msgstr ""
 
-#, fuzzy
 msgctxt "field:life_contract.covered_data_desc,covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_data_desc,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -94,67 +78,54 @@ msgctxt "field:life_contract.covered_data_desc,for_coverage:"
 msgid "For coverage"
 msgstr ""
 
-#, fuzzy
 msgctxt "field:life_contract.covered_data_desc,id:"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_data_desc,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_data_desc,status:"
 msgid "Status"
 msgstr "Statut"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_person,covered_data:"
 msgid "Coverage Data"
 msgstr "Données de Couverture"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_person,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_person,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_person,extension:"
 msgid "Extension"
 msgstr "Extension"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_person,id:"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_person,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_person,person:"
 msgid "Person"
 msgstr "Personne"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_person,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_person,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_person,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
@@ -163,7 +134,6 @@ msgctxt "field:life_contract.covered_person_desc,covered_data:"
 msgid "Covered Data"
 msgstr ""
 
-#, fuzzy
 msgctxt "field:life_contract.covered_person_desc,id:"
 msgid "ID"
 msgstr "ID"
@@ -172,7 +142,6 @@ msgctxt "field:life_contract.covered_person_desc,life_state:"
 msgid "Life State"
 msgstr ""
 
-#, fuzzy
 msgctxt "field:life_contract.covered_person_desc,person:"
 msgid "Covered Person"
 msgstr "Personne Couverte"
@@ -181,52 +150,42 @@ msgctxt "field:life_contract.extension,contract:"
 msgid "The contract"
 msgstr ""
 
-#, fuzzy
 msgctxt "field:life_contract.extension,covered_elements:"
 msgid "Coverages"
 msgstr "Garanties"
 
-#, fuzzy
 msgctxt "field:life_contract.extension,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-#, fuzzy
 msgctxt "field:life_contract.extension,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-#, fuzzy
 msgctxt "field:life_contract.extension,id:"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgctxt "field:life_contract.extension,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-#, fuzzy
 msgctxt "field:life_contract.extension,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-#, fuzzy
 msgctxt "field:life_contract.extension,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-#, fuzzy
 msgctxt "field:life_contract.extension,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-#, fuzzy
 msgctxt "field:life_contract.extension_life_state,covered_elements:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
 
-#, fuzzy
 msgctxt "field:life_contract.extension_life_state,id:"
 msgid "ID"
 msgstr "ID"
@@ -243,12 +202,10 @@ msgctxt "model:life_contract.covered_data_desc,name:"
 msgid "Covered Data"
 msgstr ""
 
-#, fuzzy
 msgctxt "model:life_contract.covered_person,name:"
 msgid "Covered Person"
 msgstr "Personne Couverte"
 
-#, fuzzy
 msgctxt "model:life_contract.covered_person_desc,name:"
 msgid "Covered Person"
 msgstr "Personne Couverte"
@@ -257,32 +214,26 @@ msgctxt "model:life_contract.extension,name:"
 msgid ""
 msgstr ""
 
-#, fuzzy
 msgctxt "model:life_contract.extension_life_state,name:"
 msgid "Life Extension"
 msgstr "Prévoyance"
 
-#, fuzzy
 msgctxt "selection:life_contract.covered_data_desc,status:"
 msgid "Active"
 msgstr "Actif"
 
-#, fuzzy
 msgctxt "selection:life_contract.covered_data_desc,status:"
 msgid "Refused"
 msgstr "Refusé"
 
-#, fuzzy
 msgctxt "view:ins_contract.contract:"
 msgid "Extension Life"
 msgstr "Prévoyance"
 
-#, fuzzy
 msgctxt "view:life_contract.covered_person:"
 msgid "Covered Person"
 msgstr "Personne Couverte"
 
-#, fuzzy
 msgctxt "view:life_contract.extension:"
 msgid "Extension Life"
 msgstr "Prévoyance"
@@ -291,130 +242,106 @@ msgctxt "view:life_contract.extension_life_state:"
 msgid "Subscription Process - Life Extension"
 msgstr ""
 
-#, fuzzy
 msgctxt "wizard_button:ins_contract.subs_process,extension_life,steps_cancel:"
 msgid "Cancel"
 msgstr "Annuler"
 
-#, fuzzy
 msgctxt "wizard_button:ins_contract.subs_process,extension_life,steps_check:"
 msgid "Check"
 msgstr "Vérifier"
 
-#, fuzzy
 msgctxt ""
 "wizard_button:ins_contract.subs_process,extension_life,steps_complete:"
 msgid "Complete"
 msgstr "Terminer"
 
-#, fuzzy
 msgctxt "wizard_button:ins_contract.subs_process,extension_life,steps_next:"
 msgid "Next"
 msgstr "Suivant"
 
-#, fuzzy
 msgctxt ""
 "wizard_button:ins_contract.subs_process,extension_life,steps_previous:"
 msgid "Previous"
 msgstr "Précédent"
 
-#, fuzzy
 msgctxt ""
 "wizard_button:ins_contract.subs_process,extension_life,steps_suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
 
-#, fuzzy
 msgctxt ""
 "wizard_button:ins_contract.subs_process,option_selection,steps_cancel:"
 msgid "Cancel"
 msgstr "Annuler"
 
-#, fuzzy
 msgctxt ""
 "wizard_button:ins_contract.subs_process,option_selection,steps_check:"
 msgid "Check"
 msgstr "Vérifier"
 
-#, fuzzy
 msgctxt ""
 "wizard_button:ins_contract.subs_process,option_selection,steps_complete:"
 msgid "Complete"
 msgstr "Terminer"
 
-#, fuzzy
 msgctxt "wizard_button:ins_contract.subs_process,option_selection,steps_next:"
 msgid "Next"
 msgstr "Suivant"
 
-#, fuzzy
 msgctxt ""
 "wizard_button:ins_contract.subs_process,option_selection,steps_previous:"
 msgid "Previous"
 msgstr "Précédent"
 
-#, fuzzy
 msgctxt ""
 "wizard_button:ins_contract.subs_process,option_selection,steps_suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
 
-#, fuzzy
 msgctxt "wizard_button:ins_contract.subs_process,project,steps_cancel:"
 msgid "Cancel"
 msgstr "Annuler"
 
-#, fuzzy
 msgctxt "wizard_button:ins_contract.subs_process,project,steps_check:"
 msgid "Check"
 msgstr "Vérifier"
 
-#, fuzzy
 msgctxt "wizard_button:ins_contract.subs_process,project,steps_complete:"
 msgid "Complete"
 msgstr "Terminer"
 
-#, fuzzy
 msgctxt "wizard_button:ins_contract.subs_process,project,steps_next:"
 msgid "Next"
 msgstr "Suivant"
 
-#, fuzzy
 msgctxt "wizard_button:ins_contract.subs_process,project,steps_previous:"
 msgid "Previous"
 msgstr "Précédent"
 
-#, fuzzy
 msgctxt "wizard_button:ins_contract.subs_process,project,steps_suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
 
-#, fuzzy
 msgctxt "wizard_button:ins_contract.subs_process,summary,steps_cancel:"
 msgid "Cancel"
 msgstr "Annuler"
 
-#, fuzzy
 msgctxt "wizard_button:ins_contract.subs_process,summary,steps_check:"
 msgid "Check"
 msgstr "Vérifier"
 
-#, fuzzy
 msgctxt "wizard_button:ins_contract.subs_process,summary,steps_complete:"
 msgid "Complete"
 msgstr "Terminer"
 
-#, fuzzy
 msgctxt "wizard_button:ins_contract.subs_process,summary,steps_next:"
 msgid "Next"
 msgstr "Suivant"
 
-#, fuzzy
 msgctxt "wizard_button:ins_contract.subs_process,summary,steps_previous:"
 msgid "Previous"
 msgstr "Précédent"
 
-#, fuzzy
 msgctxt "wizard_button:ins_contract.subs_process,summary,steps_suspend:"
 msgid "Suspend"
 msgstr "Suspendre"

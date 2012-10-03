@@ -74,22 +74,18 @@ msgctxt "error:ins_product_utils.business_family:"
 msgid "There can be only one default business family !"
 msgstr ""
 
-#, fuzzy
 msgctxt "error:ins_product_utils.business_family:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-#, fuzzy
 msgctxt "field:ProductDefinition,id:"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgctxt "field:hstore,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-#, fuzzy
 msgctxt "field:hstore,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -98,27 +94,22 @@ msgctxt "field:hstore,dico:"
 msgid "Dictionnary"
 msgstr ""
 
-#, fuzzy
 msgctxt "field:hstore,id:"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgctxt "field:hstore,name:"
 msgid "Name"
 msgstr "Nom"
 
-#, fuzzy
 msgctxt "field:hstore,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-#, fuzzy
 msgctxt "field:hstore,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-#, fuzzy
 msgctxt "field:hstore,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
@@ -183,10 +174,9 @@ msgctxt "field:ins_product.benefit,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-#, fuzzy
 msgctxt "field:ins_product.benefit,summary:"
 msgid "Summary"
-msgstr "Résumé"
+msgstr "Synthèse"
 
 msgctxt "field:ins_product.benefit,template:"
 msgid "Template"
@@ -388,10 +378,9 @@ msgctxt "field:ins_product.coverage,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-#, fuzzy
 msgctxt "field:ins_product.coverage,summary:"
 msgid "Summary"
-msgstr "Résumé"
+msgstr "Synthèse"
 
 msgctxt "field:ins_product.coverage,template:"
 msgid "Template"
@@ -543,7 +532,7 @@ msgstr "Moteur de Règle"
 
 msgctxt "field:ins_product.eligibility_rule,sub_elem_config_kind:"
 msgid "Sub Elem Conf. kind"
-msgstr "Conf. du Sous Element"
+msgstr "Type de Conf."
 
 msgctxt "field:ins_product.eligibility_rule,sub_elem_rule:"
 msgid "Sub Elem Rule Engine"
@@ -551,7 +540,7 @@ msgstr "Moteur de Règle"
 
 msgctxt "field:ins_product.eligibility_rule,subscriber_classes:"
 msgid "Can be subscribed"
-msgstr "Peut-être Souscrit"
+msgstr "Peut-être souscrit par"
 
 msgctxt "field:ins_product.eligibility_rule,template:"
 msgid "Template"
@@ -669,10 +658,9 @@ msgctxt "field:ins_product.offered,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-#, fuzzy
 msgctxt "field:ins_product.offered,summary:"
 msgid "Summary"
-msgstr "Résumé"
+msgstr "Synthèse"
 
 msgctxt "field:ins_product.offered,template:"
 msgid "Template"
@@ -780,7 +768,7 @@ msgstr "Nom"
 
 msgctxt "field:ins_product.pricing_data,rule:"
 msgid "Rule Engine"
-msgstr "Moteur de Règle du Sous Element"
+msgstr "Moteur de Règle"
 
 msgctxt "field:ins_product.pricing_data,summary:"
 msgid "Value"
@@ -934,10 +922,9 @@ msgctxt "field:ins_product.product,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-#, fuzzy
 msgctxt "field:ins_product.product,summary:"
 msgid "Summary"
-msgstr "Résumé"
+msgstr "Synthèse"
 
 msgctxt "field:ins_product.product,template:"
 msgid "Template"
@@ -1063,7 +1050,6 @@ msgctxt "field:ins_product.rule_sets.subscriber,id:"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgctxt "field:ins_product_utils.business_family,code:"
 msgid "Code"
 msgstr "Code"
@@ -1072,17 +1058,14 @@ msgctxt "field:ins_product_utils.business_family,contract_extension:"
 msgid "Contract Extension"
 msgstr ""
 
-#, fuzzy
 msgctxt "field:ins_product_utils.business_family,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-#, fuzzy
 msgctxt "field:ins_product_utils.business_family,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-#, fuzzy
 msgctxt "field:ins_product_utils.business_family,id:"
 msgid "ID"
 msgstr "ID"
@@ -1091,27 +1074,22 @@ msgctxt "field:ins_product_utils.business_family,is_default:"
 msgid "Is Default"
 msgstr ""
 
-#, fuzzy
 msgctxt "field:ins_product_utils.business_family,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-#, fuzzy
 msgctxt "field:ins_product_utils.business_family,name:"
 msgid "Name"
 msgstr "Nom"
 
-#, fuzzy
 msgctxt "field:ins_product_utils.business_family,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-#, fuzzy
 msgctxt "field:ins_product_utils.business_family,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-#, fuzzy
 msgctxt "field:ins_product_utils.business_family,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
@@ -1214,7 +1192,7 @@ msgstr ""
 
 msgctxt "model:ir.action,name:None"
 msgid "Business Families"
-msgstr ""
+msgstr "Familles Métiers"
 
 msgctxt "model:ir.action,name:None"
 msgid "HStores"
@@ -1234,7 +1212,7 @@ msgstr "Produits"
 
 msgctxt "model:ir.ui.menu,name:None"
 msgid "Business Families"
-msgstr ""
+msgstr "Familles Métiers"
 
 msgctxt "model:ir.ui.menu,name:None"
 msgid "HStores"
@@ -1414,7 +1392,7 @@ msgstr "Société"
 
 msgctxt "selection:ins_product.eligibility_rule,subscriber_classes:"
 msgid "Person"
-msgstr "Personne"
+msgstr "Personne Physique"
 
 msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
 msgid "Add"
@@ -1621,16 +1599,20 @@ msgid "Coverage Amount rule"
 msgstr "Montant de Couverture"
 
 msgctxt "view:ins_product.eligibility_rule:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "view:ins_product.eligibility_rule:"
 msgid "Eligibility rule"
 msgstr "Eligibilite"
 
 msgctxt "view:ins_product.eligibility_rule:"
 msgid "Sub Elem - Simple Settings"
-msgstr "Sous Element - Param. Simple"
+msgstr "Param. Simple"
 
 msgctxt "view:ins_product.eligibility_rule:"
 msgid "Sub Elem Rule Engine"
-msgstr "Moteur de Règle du Sous Element"
+msgstr "Moteur de Règle"
 
 msgctxt "view:ins_product.eligibility_rule:"
 msgid "Sub Element"
@@ -1664,7 +1646,6 @@ msgctxt "view:ins_product.offered:"
 msgid "Pricing"
 msgstr "Tarification"
 
-#, fuzzy
 msgctxt "view:ins_product.offered:"
 msgid "Summary"
 msgstr "Résumé"
@@ -1699,11 +1680,11 @@ msgstr "Tarification"
 
 msgctxt "view:ins_product.pricing_rule:"
 msgid "Sub Elem - Rule Engine"
-msgstr "Sous Element - Moteur de Règle"
+msgstr "Moteur de Règle"
 
 msgctxt "view:ins_product.pricing_rule:"
 msgid "Sub Elem - Simple Settings"
-msgstr "Sous Element - Param. Simple"
+msgstr "Param. Simple"
 
 msgctxt "view:ins_product.pricing_rule:"
 msgid "Sub Element"
@@ -1723,7 +1704,7 @@ msgstr "Provisionnement"
 
 msgctxt "view:ins_product_utils.business_family:"
 msgid "Business Families"
-msgstr ""
+msgstr "Familles Métiers"
 
 msgctxt "view:ins_product_utils.business_family:"
 msgid "Business Family"

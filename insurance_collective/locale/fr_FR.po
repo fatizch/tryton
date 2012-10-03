@@ -142,10 +142,9 @@ msgctxt "field:ins_collective.benefit,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-#, fuzzy
 msgctxt "field:ins_collective.benefit,summary:"
 msgid "Summary"
-msgstr "Résumé"
+msgstr "Synthèse"
 
 msgctxt "field:ins_collective.benefit,template:"
 msgid "Template"
@@ -323,10 +322,9 @@ msgctxt "field:ins_collective.coverage,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-#, fuzzy
 msgctxt "field:ins_collective.coverage,summary:"
 msgid "Summary"
-msgstr "Résumé"
+msgstr "Synthèse"
 
 msgctxt "field:ins_collective.coverage,template:"
 msgid "Template"
@@ -478,15 +476,15 @@ msgstr "Moteur de Règle"
 
 msgctxt "field:ins_collective.eligibility_rule,sub_elem_config_kind:"
 msgid "Sub Elem Conf. kind"
-msgstr "Conf. du Sous Element"
+msgstr "Type de Conf."
 
 msgctxt "field:ins_collective.eligibility_rule,sub_elem_rule:"
 msgid "Sub Elem Rule Engine"
-msgstr "Moteur de Règle du Sous Element"
+msgstr "Moteur de Règle"
 
 msgctxt "field:ins_collective.eligibility_rule,subscriber_classes:"
 msgid "Can be subscribed"
-msgstr "Peut-être Souscrit"
+msgstr "Peut-être souscrit par"
 
 msgctxt "field:ins_collective.eligibility_rule,template:"
 msgid "Template"
@@ -1056,7 +1054,7 @@ msgstr "Nom"
 
 msgctxt "field:ins_collective.pricing_data,rule:"
 msgid "Rule Engine"
-msgstr "Moteur de Règle du Sous Element"
+msgstr "Moteur de Règle"
 
 msgctxt "field:ins_collective.pricing_data,summary:"
 msgid "Value"
@@ -1210,10 +1208,9 @@ msgctxt "field:ins_collective.product,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-#, fuzzy
 msgctxt "field:ins_collective.product,summary:"
 msgid "Summary"
-msgstr "Résumé"
+msgstr "Synthèse"
 
 msgctxt "field:ins_collective.product,template:"
 msgid "Template"
@@ -1741,7 +1738,7 @@ msgstr "Prix basé sur le souscripteur"
 
 msgctxt "selection:ins_collective.pricing_data,config_kind:"
 msgid "Rule Engine"
-msgstr "Moteur de Règle du Sous Element"
+msgstr "Moteur de Règle"
 
 msgctxt "selection:ins_collective.pricing_data,config_kind:"
 msgid "Simple"

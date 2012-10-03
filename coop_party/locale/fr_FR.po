@@ -206,7 +206,6 @@ msgctxt "field:party.party,in_relation_with:"
 msgid "in relation with"
 msgstr "En Relation avec"
 
-#, fuzzy
 msgctxt "field:party.party,is_company:"
 msgid "Company"
 msgstr "Société"
@@ -215,7 +214,6 @@ msgctxt "field:party.party,is_employee:"
 msgid "Employee"
 msgstr "Employé"
 
-#, fuzzy
 msgctxt "field:party.party,is_person:"
 msgid "Person"
 msgstr "Personne"
@@ -472,20 +470,17 @@ msgctxt "model:party.party_relation_kind,name:"
 msgid "Party Relation Kind"
 msgstr "Type de Relation entre Tiers"
 
-#, fuzzy
 msgctxt "model:party.party_relation_kind,name:None"
 msgid "Children Of"
 msgstr "Enfant de"
 
-#, fuzzy
 msgctxt "model:party.party_relation_kind,name:None"
 msgid "Parent Of"
-msgstr "Parent Of"
+msgstr "Parent de"
 
-#, fuzzy
 msgctxt "model:party.party_relation_kind,name:None"
 msgid "Spouse Of"
-msgstr "Spouse Of"
+msgstr "Conjoint de"
 
 msgctxt "model:party.party_relation_kind,name:child"
 msgid "Children Of"
@@ -527,7 +522,6 @@ msgctxt "view:party.party:"
 msgid "Contact"
 msgstr ""
 
-#, fuzzy
 msgctxt "view:party.party:"
 msgid "Party"
 msgstr "Tiers"
@@ -536,7 +530,6 @@ msgctxt "view:party.party:"
 msgid "Relations"
 msgstr "Relations"
 
-#, fuzzy
 msgctxt "view:party.party:"
 msgid "Roles"
 msgstr "Rôles"
