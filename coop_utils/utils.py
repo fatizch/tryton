@@ -40,18 +40,6 @@ def get_descendents(from_class, names_only=False):
     return res
 
 
-def get_descendents_name(from_class):
-    result = []
-    for model_name, model in Pool().iterobject():
-        if issubclass(model, from_class):
-            if model.__doc__:
-                result.append((model_name, model.__doc__.splitlines()[0]))
-            else:
-                raise Exception(
-                    'Model %s does not have a docstring !' % model_name)
-    return result
-
-
 def get_module_name(cls):
     return cls.__name__.split('.')[0]
 
