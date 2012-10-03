@@ -10,6 +10,7 @@ from trytond.rpc import RPC
 from trytond.modules.coop_utils import model as model
 from trytond.modules.coop_utils import business as business
 from trytond.modules.coop_utils import utils as utils, date as date
+from trytond.modules.coop_utils import string
 from trytond.modules.insurance_product import PricingResultLine
 from trytond.modules.insurance_product import EligibilityResultLine
 
@@ -94,6 +95,7 @@ class Offered(model.CoopView, utils.GetResult, Templated):
         'offered', 'Pricing Manager')
     eligibility_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
         'offered', 'Eligibility Manager')
+    summary = fields.Function(fields.Text('Summary'), 'get_summary')
 
     @classmethod
     def __setup__(cls):
@@ -132,6 +134,13 @@ class Offered(model.CoopView, utils.GetResult, Templated):
 
     def get_name_for_billing(self):
         return self.name
+
+    @classmethod
+    def get_summary(cls, offereds, name=None, at_date=None, lang=None):
+        res = {}
+        for offered in offereds:
+            res[offered.id] = ''
+        return res
 
 
 class Coverage(model.CoopSQL, Offered):
@@ -571,7 +580,7 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
     __name__ = 'ins_product.generic_business_rule'
 
     kind = fields.Selection('get_kind', 'Kind',
-                            required=True, on_change=['kind'])
+        required=True, on_change=['kind'], states={'readonly': True})
     manager = fields.Many2One('ins_product.business_rule_manager', 'Manager',
         ondelete='CASCADE')
     start_date = fields.Date('From Date', required=True)
@@ -620,12 +629,10 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
             if not (hasattr(field, 'model_name')
                 and getattr(field, 'model_name').endswith('_rule')
                 and (not getattr(self, field_name)
-                    or len(getattr(self, field_name) == 0))):
+                    or len(getattr(self, field_name)) == 0)):
                 continue
-
             if field.model_name != self.kind:
                 continue
-
             res[field_name] = {}
             #We add in the dictionary all default values
             Rule = Pool().get(field.model_name)
@@ -634,12 +641,11 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
             if x not in ['id', 'create_uid', 'create_date',
                 'write_uid', 'write_date'])
             res[field_name]['add'] = [Rule.default_get(fields_names)]
-            #res[field_name]['add'] = [{}]
         return res
 
     @staticmethod
     def get_kind():
-        return utils.get_descendents_name(BusinessRuleRoot)
+        return string.get_descendents_name(BusinessRuleRoot)
 
     def get_is_current(self, name):
         #first we need the model for the manager (depends on the module used

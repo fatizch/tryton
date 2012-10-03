@@ -54,6 +54,12 @@
                         <field name="template_behaviour"/>
                     </group>
                     <notebook>
+                        <page string="Summary" id="summary">
+                            <field name="description" widget="richtext"
+                                colspan="4"/>
+                            <field name="summary" widget="richtext"
+                                colspan="4"/>
+                        </page>
                         <page string="Managers" id="managers">
                             <notebook>
                                 <page string="Eligibilty" id="eligibility">
@@ -65,8 +71,7 @@
                             </notebook>
                         </page>
                         <page string="Administration" id="admin">
-                            <field name="description" widget="richtext"
-                                colspan="4"/>
+                        
                         </page>
                     </notebook>
                 </form>
@@ -148,12 +153,12 @@
                 <xpath expr="/form" position="replace_attributes">
                     <form string="Coverage"/>
                 </xpath>
-                <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]" position="before">
+                <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]" position="after">
                     <page string="Benefits" id="benefits">
                         <field name="benefits"/>
                     </page>
                 </xpath>
-                <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]/notebook" position="inside">
+                <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]/notebook/page[@id=&quot;eligibility&quot;]" position="before">
                     <page string="Coverage Amount" id="coverage_amount">
                         <field name="coverage_amount_mgr" mode="form"/>
                     </page>
@@ -251,8 +256,10 @@
                     </group>
                     <notebook>
                         <page id="main" string="Main">
+                            <group id="config_kind" colspan="2">
                             <label name="config_kind" xalign="0" xfill="1"/>
                             <field name="config_kind" xfill="1" xexpand="0" xalign="0"/>
+                            </group>
                             <group id="rule" colspan="4" 
                               states="{'invisible': Eval('config_kind') != 'rule'}">
                                 <label name="rule" xalign="0"/>
@@ -278,7 +285,7 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
             <![CDATA[
-                <form string="Generic Business Rule" col="4">
+                <form string="Business Rule" col="4">
                     <label name="kind"/>
                     <field name="kind"/>
                     <newline/>
@@ -338,7 +345,7 @@
                 <![CDATA[
                     <form string="Pricing Component">
                         <group id="main">
-                            <label name="kind" xalign="0"/>
+                            <label name="kind" xalign="0" xfill="1"/>
                             <field name="kind"/>
                             <label name="code" xalign="0"/>
                             <field name="code"/>
@@ -358,7 +365,7 @@
                         <newline/>
                         <group id="other"
                             states="{'invisible': Eval('kind') != 'base'}">
-                            <label name="config_kind" xalign="0"/>
+                            <label name="config_kind" xalign="0" xfill="1"/>
                             <field name="config_kind" xexpand="1"/>
                             <newline/>
                             <group id="simple" colspan="4"
@@ -447,7 +454,7 @@
                         position="after">
                             <newline/>
                             <group id="config_kind">
-                                <label name="config_kind" xalign="0"/>
+                                <label name="config_kind" xalign="0" xfill="1"/>
                                 <field name="config_kind" xexpand="1"/>
                                 <label name="frequency" xalign="0"/>
                                 <field name="frequency" xexpand="1"/>
@@ -488,8 +495,8 @@
                 </xpath>
                 <xpath expr="/form/notebook/page[@id=&quot;main&quot;]"
                      position="after">
-                    <page id="sub" string="Sub Element">
-                        <label name="sub_elem_config_kind" xalign="0"/>
+                    <page id="sub" string="Covered Element">
+                        <label name="sub_elem_config_kind" xalign="0" xfill="1"/>
                         <field name="sub_elem_config_kind" xfill="1" xexpand="0" xalign="0"/>
                         <newline/>
                         <group id="sub_simple" colspan="4"
