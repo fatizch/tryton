@@ -115,11 +115,11 @@
 			<field name="arch" type="xml">                 
 					<![CDATA[                 
 					<tree string="Contract">
-					<field name="contract_number"/>
-					<field name="start_date"/>
-					<field name="status"/>
-					<field name="product"/>
-					<field name="subscriber"/>
+    					<field name="contract_number"/>
+                        <field name="subscriber"/>
+                        <field name="status"/>
+    					<field name="start_date"/>
+    					<field name="product"/>
 					</tree>                 ]]>
 			</field>
 		</record>
@@ -132,6 +132,9 @@
 			    <![CDATA[
 					<form string="contract" col="5">
 						<group id="Administrative data">
+						    <label name="status" xalign="0"/>
+						    <field name="status"/>
+						    <newline/>
 							<label name="contract_number" xalign="0"/>
 							<field name="contract_number" xfill="0" xalign="0"/>
 							<label name="subscriber" xalign="0"/>

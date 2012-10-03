@@ -463,6 +463,8 @@ class SubscriptionProcess(CoopProcess):
             bm = BillingManager()
             contract.billing_manager = [bm]
 
+        contract.status = 'active'
+
         contract.save()
 
         contract = Contract(contract.id)

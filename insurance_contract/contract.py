@@ -25,10 +25,10 @@ __all__ = [
 
 CONTRACTNUMBER_MAX_LENGTH = 10
 CONTRACTSTATUSES = [
-    ('Quote', 'Quote'),
-    ('Active', 'Active'),
-    ('Hold', 'Hold'),
-    ('Terminated', 'Terminated'),
+    ('quote', 'Quote'),
+    ('active', 'Active'),
+    ('hold', 'Hold'),
+    ('terminated', 'Terminated'),
     ]
 OPTIONSTATUS = [
     ('Active', 'Active'),
@@ -286,6 +286,9 @@ class Contract(GenericContract):
                 errs += eligibility.details
                 errs += errors
         return (res, errs)
+
+    def default_status(self):
+        return 'quote'
 
 
 class Option(model.CoopSQL, model.CoopView):
