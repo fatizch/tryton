@@ -98,13 +98,11 @@ if __name__ == '__main__':
         summary[cur_module] = sum
 
     print '\n' + '=' * 80 + '\n' + 'Global summary' + '\n' + '=' * 80
-    print '\n\tPASSED :\n'
     final = {'number': 0, 'time': 0.00, 'errors': 0}
 
     tag = False
     for key, value in summary.iteritems():
         if not tag:
-            print '\n' + '=' * 80 + '\n' + 'Global summary' + '\n' + '=' * 80
             print '\n\tPASSED :\n'
             tag = True
         if value['errors'] == 0:

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tryton>
+    <data>
+    <!--################################################################-->
+    <!--                          Contract                              -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="life_contract_view_form">
+            <field name="model">ins_contract.contract</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_contract.contract_view_form"/>
+            <field name="arch" type="xml">
+                     <![CDATA[
+                        <data>
+                            <xpath expr="/form/notebook" position="inside">
+                                <page string="Extension Life" id="life"
+                                        states="{'invisible':~Eval('extension_life')}">
+                                    <field name="extension_life" xexpand="1" yexpand="1"
+                                        mode="form"/>
+                                </page>
+                            </xpath>
+                        </data>
+                     ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
+    <!--                         Life Extension                         -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="life_extension_view_form">
+            <field name="model">life_contract.extension</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_contract.generic_extension_view_form"/>
+            <field name="arch" type="xml">
+                     <![CDATA[
+                        <data>
+                            <xpath expr="/form" position="replace_attributes">
+                                <form string="Extension Life"/>
+                            </xpath>
+                        </data>
+                     ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
+    <!--                       Covered Person                           -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="covered_person_tree_form">
+            <field name="model">life_contract.covered_person</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_contract.covered_element_view_tree"/>
+            <field name="arch" type="xml">
+                     <![CDATA[
+                        <data>
+                            <xpath expr="/tree" position="inside">
+                                <field name="person"/>
+                            </xpath>
+                        </data>
+                     ]]>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="covered_person_view_form">
+            <field name="model">life_contract.covered_person</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_contract.covered_element_view_form"/>
+            <field name="arch" type="xml">
+                     <![CDATA[
+                        <data>
+                            <xpath expr="/form" position="replace_attributes">
+                                <form string="Covered Person"/>
+                            </xpath>
+                            <xpath expr="/form/group[@id=&quot;product&quot;]"
+                                    position="inside">
+                                <label name="person" xalign="0"/>
+                                <field name="person"/>
+                            </xpath>
+                        </data>
+                     ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
+    <!--                     Life Covered Data                          -->
+    <!--################################################################-->
+        
+        <record model="ir.ui.view" id="life_covered_data_desc_view_tree">
+            <field name="model">life_contract.covered_data</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_contract.covered_data_view_tree"/>
+            <field name="arch" type="xml">                 
+                     <![CDATA[
+                        <data>
+                            <xpath expr="/tree" position="inside">
+                                <field name="amount"/>
+                            </xpath>
+                        </data>
+                     ]]>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="life_covered_data_desc_view_form">
+            <field name="model">life_contract.covered_data</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_contract.covered_data_view_form"/>
+            <field name="arch" type="xml">                 
+                     <![CDATA[
+                        <data>
+                            <xpath expr="/form/group[@id=&quot;specific&quot;]"
+                            position="inside">
+                                <label name="amount" xalign="0"/>
+                                <field name="amount" xexpand="1"/>
+                            </xpath>
+                        </data>
+                     ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
+    <!--                Covered Person Desc View                        -->
+    <!--################################################################-->
+        
+        <record model="ir.ui.view" id="covered_person_desc_view_tree">
+            <field name="model">life_contract.covered_person_desc</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_contract.covered_element_view_tree"/>
+            <field name="arch" type="xml">                 
+                     <![CDATA[
+                        <data>
+                            <xpath expr="/tree" position="inside">
+                                <field name="person"/>
+                            </xpath>
+                        </data>
+                     ]]>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="covered_person_desc_view_form">
+            <field name="model">life_contract.covered_person_desc</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_contract.covered_element_view_form"/>
+            <field name="arch" type="xml">                 
+                     <![CDATA[
+                        <data>
+                            <xpath expr="/form/group[@id=&quot;product&quot;]"
+                            position="inside">
+                                <label name="person" xalign="0"/>
+                                <field name="person" xexpand="1"/>
+                            </xpath>
+                        </data>
+                     ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
+    <!--                  Covered Data Desc View                        -->
+    <!--################################################################-->
+        
+        <record model="ir.ui.view" id="covered_data_desc_view_tree">
+            <field name="model">life_contract.covered_data_desc</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_contract.covered_data_desc_view_tree"/>
+            <field name="arch" type="xml">                 
+                     <![CDATA[
+                        <data>
+                            <xpath expr="/tree/field[@name=&quot;for_coverage&quot;]"
+                            position="after">
+                                <field name="covered_amount"/>
+                            </xpath>
+                        </data>
+                     ]]>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="covered_data_desc_view_form">
+            <field name="model">life_contract.covered_data_desc</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_contract.covered_data_desc_view_form"/>
+            <field name="arch" type="xml">                 
+                     <![CDATA[
+                        <data>
+                            <xpath expr="/form/group[@id=&quot;specific&quot;]"
+                            position="inside">
+                                <label name="covered_amount" xalign="0"/>
+                                <field name="covered_amount" xexpand="1"/>
+                            </xpath>
+                        </data>
+                     ]]>
+            </field>
+        </record>
+
+    <!--################################################################-->
+    <!--                    Extension Life View                         -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="extension_life_view">
+            <field name="model">life_contract.extension_life_state</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                    <![CDATA[
+                        <form string="Subscription Process - Life Extension">
+                            <label name="covered_elements"/>
+                            <field name="covered_elements"/>
+                            <field name="session_id"/>
+                        </form>
+                    ]]>
+            </field>
+        </record>
+    </data>
+</tryton>

@@ -27,7 +27,7 @@ class ModuleTestCase(unittest.TestCase):
     '''
 
     def setUp(self):
-        trytond.tests.test_tryton.install_module(MODULE_NAME)
+        trytond.tests.test_tryton.install_module('life_product')
         self.Product = POOL.get('ins_product.product')
         self.coverage = POOL.get('ins_product.coverage')
         self.brm = POOL.get('ins_product.business_rule_manager')
@@ -196,7 +196,6 @@ return True'''
                                  context=CONTEXT) as transaction:
 
             rule = self.createTestRule()
-
             with transaction.set_context({'active_id': rule.id}):
                 wizard_id, _, _ = self.RunTests.create()
                 wizard = self.RunTests(wizard_id)
@@ -283,6 +282,7 @@ return True'''
             brm_a.business_rules = [gbr_a, gbr_b]
 
             coverage_a = self.coverage()
+            coverage_a.family = coverage_a._fields['family'].selection[0][0]
             coverage_a.code = 'ALP'
             coverage_a.name = 'Alpha Coverage'
             coverage_a.start_date = datetime.date.today()
@@ -326,6 +326,7 @@ return True'''
             coverage_b = self.coverage()
             coverage_b.code = 'BET'
             coverage_b.name = 'Beta Coverage'
+            coverage_b.family = coverage_a._fields['family'].selection[0][0]
             coverage_b.start_date = datetime.date.today() + \
                                             datetime.timedelta(days=5)
 
@@ -351,6 +352,7 @@ return True'''
             coverage_c = self.coverage()
             coverage_c.code = 'GAM'
             coverage_c.name = 'Gamma Coverage'
+            coverage_c.family = coverage_a._fields['family'].selection[0][0]
             coverage_c.start_date = datetime.date.today()
 
             coverage_c.eligibility_mgr = [brm_c]
@@ -375,6 +377,7 @@ return True'''
             coverage_d = self.coverage()
             coverage_d.code = 'DEL'
             coverage_d.name = 'Delta Coverage'
+            coverage_d.family = coverage_a._fields['family'].selection[0][0]
             coverage_d.start_date = datetime.date.today()
 
             coverage_d.eligibility_mgr = [brm_f]

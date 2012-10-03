@@ -17,7 +17,8 @@ __all__ = ['Offered', 'Coverage', 'Product', 'ProductOptionsCoverage',
            'BusinessRuleManager', 'GenericBusinessRule', 'BusinessRuleRoot',
            'PricingRule', 'PriceCalculator', 'PricingData',
            'EligibilityRule', 'EligibilityRelationKind',
-           'Benefit', 'BenefitRule', 'ReserveRule', 'CoverageAmountRule']
+           'Benefit', 'BenefitRule', 'ReserveRule', 'CoverageAmountRule',
+           'ProductDefinition']
 
 CONFIG_KIND = [
     ('simple', 'Simple'),
@@ -52,9 +53,6 @@ TEMPLATE_BEHAVIOUR = [
     ('remove', 'Remove'),
     ('validate', 'Validate'),
     ]
-
-FAMILIES_EXTS = {
-    'life': 'extension_life'}
 
 
 class Templated(object):
@@ -142,7 +140,7 @@ class Coverage(model.CoopSQL, Offered):
     __name__ = 'ins_product.coverage'
 
     insurer = fields.Many2One('party.insurer', 'Insurer')
-    family = fields.Selection([('life', 'Life')], 'Family',
+    family = fields.Selection([('default', 'default')], 'Family',
         required=True)
     benefits = fields.One2Many('ins_product.benefit', 'coverage', 'Benefits',
         context={'start_date': Eval('start_date')},
@@ -276,24 +274,20 @@ class Coverage(model.CoopSQL, Offered):
         if self.currency:
             return self.currency.digits
 
-    @staticmethod
-    def default_family():
-        return 'life'
-
     def give_me_family(self, args):
-        return (self.family, [])
+        return (Pool().get(self.family), [])
 
-    def give_me_extension_name(self, args):
-        return FAMILIES_EXTS[self.give_me_family(args)[0]]
+    def give_me_extension_field(self, args):
+        return self.give_me_family(args)[0].get_extension_model()
 
     def give_me_covered_elements_at_date(self, args):
         contract = args['contract']
         date = args['date']
         res = []
-        good_ext = self.give_me_extension_name(args)
-        if not hasattr(contract, good_ext):
-            return []
-        for covered in getattr(contract, good_ext).covered_elements:
+        good_ext = self.give_me_extension_field(args)
+        if not good_ext or not hasattr(contract, good_ext):
+            return [], ['Extension not found']
+        for covered in getattr(contract, good_ext)[0].covered_elements:
             # We must check that the current covered element is
             # covered by self.
             for covered_data in covered.covered_data:
@@ -428,7 +422,7 @@ class Product(model.CoopSQL, Offered):
         errors = []
         for option in self.get_valid_options():
             res, errs = option.get_result('family', args)
-            result += res
+            result.append(res)
             errors += errs
         return (result, errors)
 
@@ -454,6 +448,10 @@ class Product(model.CoopSQL, Offered):
     def get_currency_digits(self, name):
         if self.currency:
             return self.currency.digits
+
+    def give_me_step(self, args):
+        good_family = self.give_me_families(args)[0][0]
+        return good_family.get_step_model(args['step_name']), []
 
 
 class ProductOptionsCoverage(model.CoopSQL):
@@ -843,7 +841,6 @@ class PricingData(model.CoopSQL, model.CoopView):
         return 0
 
     def calculate_value(self, args):
-        result = 0
         errors = []
         kind = self.kind
         if self.kind == 'tax':
@@ -1167,10 +1164,10 @@ class PricingRule(model.CoopSQL, BusinessRuleRoot):
     def give_me_frequency_days(self, args):
         if not 'date' in args:
             return (None, ['A base date must be provided !'])
-        date = args['date']
+        the_date = args['date']
         return date.number_of_days_between(
-            date,
-            utils.add_frequency(self.frequency, date))
+            the_date,
+            utils.add_frequency(self.frequency, the_date))
 
     @staticmethod
     def default_price_kind():
@@ -1335,3 +1332,14 @@ class CoverageAmountRule(model.CoopSQL, BusinessRuleRoot):
 
     def give_me_allowed_amounts(self, args):
         return [(elem, elem) for elem in self.amounts.split(';')]
+
+
+class ProductDefinition(model.CoopView):
+    'Product Definition'
+
+    # This class is the base of Product Definitions. It defines number of
+    # methods which will be used to define a business family behaviour in
+    # the application
+
+    def get_extension_model(self):
+        raise NotImplementedError

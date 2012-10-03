@@ -28,7 +28,8 @@ class ModuleTestCase(unittest.TestCase):
     '''
 
     def setUp(self):
-        trytond.tests.test_tryton.install_module(MODULE_NAME)
+        trytond.tests.test_tryton.install_module('life_contract')
+
         self.Contract = POOL.get('ins_contract.contract')
         self.SubsProcess = POOL.get('ins_contract.subs_process',
                                           type='wizard')
@@ -307,6 +308,7 @@ return True'''
         coverage_a = self.coverage()
         coverage_a.code = 'ALP'
         coverage_a.name = 'Alpha Coverage'
+        coverage_a.family = 'life_product.definition'
         coverage_a.start_date = datetime.date.today()
 
         coverage_a.pricing_mgr = [brm_a]
@@ -317,24 +319,9 @@ return True'''
 
         tax_1 = self.create_tax('TTA', 27)
 
-#        pr_data4 = self.PricingData()
-#        pr_data4.config_kind = 'simple'
-#        pr_data4.fixed_amount = 30
-#        pr_data4.kind = 'base'
-#        pr_data4.code = 'PP'
-#
-#        pr_data41 = self.PricingData()
-#        pr_data41.kind = 'tax'
-#        pr_data41.the_tax = tax_1
-#
-#        pr_calc4 = self.Calculator()
-#        pr_calc4.data = [pr_data4, pr_data41]
-#        pr_calc4.key = 'price'
-
         prm_c = self.pricing()
         prm_c.basic_price = 30
         prm_c.basic_tax = tax_1
-#        prm_c.calculators = [pr_calc4]
 
         gbr_c = self.gbr()
         gbr_c.kind = 'ins_product.pricing_rule'
@@ -349,6 +336,7 @@ return True'''
         coverage_b = self.coverage()
         coverage_b.code = 'BET'
         coverage_b.name = 'Beta Coverage'
+        coverage_b.family = 'life_product.definition'
         coverage_b.start_date = datetime.date.today() + \
                                         datetime.timedelta(days=5)
 
@@ -374,6 +362,7 @@ return True'''
         coverage_c = self.coverage()
         coverage_c.code = 'GAM'
         coverage_c.name = 'Gamma Coverage'
+        coverage_c.family = 'life_product.definition'
         coverage_c.start_date = datetime.date.today()
 
         coverage_c.eligibility_mgr = [brm_c]
@@ -398,6 +387,7 @@ return True'''
         coverage_d = self.coverage()
         coverage_d.code = 'DEL'
         coverage_d.name = 'Delta Coverage'
+        coverage_d.family = 'life_product.definition'
         coverage_d.start_date = datetime.date.today()
 
         coverage_d.eligibility_mgr = [brm_f]

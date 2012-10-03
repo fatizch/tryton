@@ -16,15 +16,11 @@ __all__ = [
     'GenericContract',
     'Contract',
     'Option',
+    'PriceLine',
     'BillingManager',
     'CoveredElement',
     'CoveredData',
-    'ExtensionLife',
-    'ExtensionCar',
-    'CoveredPerson',
-    'CoveredCar',
     'BrokerManager',
-    'PriceLine'
     ]
 
 CONTRACTNUMBER_MAX_LENGTH = 10
@@ -42,12 +38,16 @@ OPTIONSTATUS = [
 
 class GenericExtension(model.CoopView):
     '''
-    Here comes the Extension which will contains all data needed by a specific
-    product to compute rates, benefits etc.
+        This class is the mother class of all product-specific extensions.
+        Extension classes will be defined in the proper module
+        (ex: life_contract) and must inherit from GenericExtension.
 
-    It should includes all coverage data, whether we are dealing with life
-    insurance or PnC, each one of those is just a bunch of data that will be
-    used in the business rules to calculate stuff.
+        GenericExtension provides the covered_elements list, which contains
+        a list of covered elements whose model depends on the associated
+        product.
+
+        In sub-classes, it is necessary to override __setup__ to change
+        the model_name attribute of the 'covered_elements' field.
     '''
 
     __name__ = 'ins_contract.generic_extension'
@@ -55,6 +55,11 @@ class GenericExtension(model.CoopView):
     covered_elements = fields.One2Many('ins_contract.covered_element',
                                        'extension',
                                        'Coverages')
+
+    contract = fields.Many2One(
+        'ins_contract.contract',
+        'The contract',
+        ondelete='CASCADE')
 
     def get_dates(self):
         res = set()
@@ -64,6 +69,9 @@ class GenericExtension(model.CoopView):
                 if hasattr(data, 'end_date') and data.end_date:
                     res.add(data.end_date)
         return res
+
+    def get_extension_name(self):
+        return ''
 
 
 class GenericContract(model.CoopSQL, model.CoopView):
@@ -137,6 +145,7 @@ class GenericContract(model.CoopSQL, model.CoopView):
 
 
 class Contract(GenericContract):
+    'Contract'
     '''
     This class represents the contract, and will be at the center of
     many business processes.
@@ -176,17 +185,6 @@ class Contract(GenericContract):
                               [('ins_contract.contract', 'Contract'),
                                ('ins_product.product', 'Product')])
 
-    extension_life = fields.Many2One('ins_contract.extension_life',
-                                     'Life Extension')
-
-    extension_life_displayer = fields.Function(fields.One2Many(
-        'ins_contract.extension_life',
-        None,
-        'Life Extension'), 'get_extension_life')
-
-    extension_car = fields.Many2One('ins_contract.extension_car',
-                                    'Car Extension')
-
     @staticmethod
     def get_master(master):
         res = master.split(',')
@@ -217,17 +215,27 @@ class Contract(GenericContract):
                 return elem
         return None
 
-    def get_extension_life(self, field_name):
-        return utils.WithAbstract.serialize_field([self.extension_life])
-
     def get_active_coverages_at_date(self, at_date):
         return [elem.get_coverage()
             for elem in self.get_active_options_at_date(at_date)]
 
+    def get_active_extensions(self):
+        for elem in dir(self):
+            if hasattr(self, elem) and elem.startswith('extension_'):
+                attr = getattr(self, elem)
+                if attr:
+                    yield attr[0]
+
+    def get_extensions_dates(self):
+        res = set()
+        for ext in self.get_active_extensions():
+            res.update(ext.get_dates())
+        return res
+
     def get_dates(self, start=None, end=None):
         res = set()
         res.add(self.start_date)
-        res.update(self.extension_life.get_dates())
+        res.update(self.get_extensions_dates())
         for cur_option in self.options:
             res.update(cur_option.get_dates())
         return utils.limit_dates(res, start, end)
@@ -261,7 +269,7 @@ class Contract(GenericContract):
             for option in self.options
             ])
         res, errs = (True, [])
-        for covered_element in getattr(self, ext).covered_elements:
+        for covered_element in getattr(self, ext)[0].covered_elements:
             for covered_data in covered_element.covered_data:
                 if (covered_data.start_date > at_date
                         or hasattr(covered_data, 'end_date') and
@@ -494,12 +502,13 @@ class PriceLine(model.CoopSQL, model.CoopView):
     @staticmethod
     def get_line_target_models():
         f = lambda x: (x, x)
-        return [
+        res = [
             f('ins_product.product'),
             f('ins_product.coverage'),
             f('ins_contract.contract'),
-            f('ins_contract.option'),
-            f('ins_contract.covered_data')]
+            f('ins_contract.option')]
+        res += utils.get_descendents('ins_contract.covered_data')
+        return res
 
     def is_main_line(self):
         return hasattr(self, 'on_object') and self.on_object and \
@@ -644,7 +653,7 @@ class BillingManager(model.CoopSQL, model.CoopView):
         return the_bill
 
 
-class CoveredElement(model.CoopSQL, model.CoopView):
+class CoveredElement(model.CoopView):
     'Covered Element'
     '''
         Covered elements represents anything which is covered by at least one
@@ -657,47 +666,26 @@ class CoveredElement(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.covered_element'
 
-    product_specific = fields.Reference('Specific Part',
-                                        'get_specific_models')
-
     covered_data = fields.One2Many('ins_contract.covered_data',
                                    'for_covered',
                                    'Coverage Data')
 
-    extension = fields.Reference('Extension',
-                                 'get_extension_models')
-
-    specific_name = fields.Function(
-        fields.Char('Covered Name'),
-        'get_specific_name')
-
-    def get_specific_name(self, name):
-        if hasattr(self, 'specific_name') and self.product_specific:
-            return self.product_specific.get_name_for_info()
-        return ''
-
-    @staticmethod
-    def get_specific_models():
-        return [(model__name__, model.get_specific_model_name())
-                for (model__name__, model) in Pool().iterobject()
-                if hasattr(model, 'get_specific_model_name')
-                    and model.get_specific_model_name() != '']
-
-    @staticmethod
-    def get_extension_models():
-        res = [(elem.__name__, elem.__name__) for elem in
-               GenericExtension.__subclasses__()]
-        return res
+    extension = fields.Many2One(
+        'ins_contract.generic_extension',
+        'Extension',
+        ondelete='CASCADE')
 
     def get_name_for_billing(self):
-        return utils.convert_ref_to_obj(
-            self.product_specific).get_name_for_billing()
+        pass
 
     def get_name_for_info(self):
-        return self.product_specific.get_name_for_info()
+        pass
+
+    def get_rec_name(self, value):
+        return ''
 
 
-class CoveredData(model.CoopSQL, model.CoopView):
+class CoveredData(model.CoopView):
     'Coverage Data'
     '''
         Covered Datas are the link between covered elements and options.
@@ -705,106 +693,23 @@ class CoveredData(model.CoopSQL, model.CoopView):
         Basically, it is the start and end date of covering.
     '''
     __name__ = 'ins_contract.covered_data'
-    for_covered = fields.Reference(
-        'Covered Element',
-        'get_covered_element_models')
-    for_coverage = fields.Reference(
+
+    for_coverage = fields.Many2One(
+        'ins_product.coverage',
         'Coverage',
-        'get_coverages_models')
+        ondelete='CASCADE')
+
+    for_covered = fields.Many2One(
+        'ins_contract.covered_element',
+        'Covered Element',
+        ondelete='CASCADE')
+
     start_date = fields.Date('Start Date')
+
     end_date = fields.Date('End Date')
 
-    coverage_name = fields.Function(
-        fields.Char('Coverage Name'),
-        'get_coverage_name')
-
-    def get_coverage_name(self, name):
-        if hasattr(self, 'for_coverage') and self.for_coverage:
-            return self.for_coverage.get_rec_name(name)
-        return ''
-
-    @staticmethod
-    def get_covered_element_models():
-        res = [(elem.__name__, elem.__name__) for elem in
-               CoveredElement.__subclasses__()]
-        res.append((lambda x: (x, x))(CoveredElement.__name__))
-        return res
-
-    @staticmethod
-    def get_coverages_models():
-        res = [(elem.__name__, elem.__name__) for elem in
-               Coverage.__subclasses__()]
-        res.append((lambda x: (x, x))(Coverage.__name__))
-        return res
-
     def get_name_for_billing(self):
-        return utils.convert_ref_to_obj(
-            self.for_covered).get_name_for_billing()
-
-
-class ExtensionLife(model.CoopSQL, GenericExtension):
-    '''
-        This is a particular case of contract extension designed for Life
-        insurance products.
-    '''
-    __name__ = 'ins_contract.extension_life'
-
-    @staticmethod
-    def get_covered_element_model():
-        return 'ins_contract.covered_person'
-
-
-class ExtensionCar(model.CoopSQL, GenericExtension):
-    '''
-        This is a particular case of contract extension designed for Car
-        insurance products.
-    '''
-    __name__ = 'ins_contract.extension_car'
-
-    @staticmethod
-    def get_covered_element_model():
-        return 'ins_contract.covered_car'
-
-
-class SpecificCovered(model.CoopSQL, model.CoopView):
-    '''
-        This is the common part of all specific covered parts.
-
-        It will be later used to add extra functionnality (versionned part)
-    '''
-    pass
-
-
-class CoveredPerson(SpecificCovered):
-    'Covered Person'
-    '''
-        This is an extension of covered element in the case of a life product.
-
-        In life insurance, we cover persons, so here is a covered person...
-    '''
-    __name__ = 'ins_contract.covered_person'
-    person = fields.Many2One('party.person',
-                             'Person')
-
-    @staticmethod
-    def get_specific_model_name():
-        return 'Covered Person'
-
-    def get_name_for_billing(self):
-        return self.person.name
-
-    def get_name_for_info(self):
-        return self.person.name
-
-    def get_rec_name(self, value):
-        return self.person.name
-
-
-class CoveredCar(SpecificCovered):
-    '''
-        This is a covered car.
-    '''
-    __name__ = 'ins_contract.covered_car'
+        return self.for_covered.get_name_for_billing()
 
 
 class BrokerManager(model.CoopSQL, model.CoopView):

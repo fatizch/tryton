@@ -10,11 +10,9 @@ from trytond.modules.insurance_process import CoopProcess
 from trytond.modules.insurance_process import ProcessState
 from trytond.modules.insurance_process import CoopStep
 from trytond.modules.insurance_process import CoopStateView
-from trytond.modules.insurance_process import DependantState
 from trytond.modules.insurance_process import CoopStepView
 
 from trytond.modules.coop_utils import get_descendents, WithAbstract
-from trytond.modules.coop_utils import priority
 
 from contract import OPTIONSTATUS
 
@@ -33,8 +31,8 @@ __all__ = [
         'CoverageDisplayer',
         'OptionSelectionState',
         'CoveredDataDesc',
-        'CoveredPersonDesc',
-        'ExtensionLifeState',
+        'CoveredElementDesc',
+        'SummaryState',
         'SubscriptionProcessState',
         'SubscriptionProcess',
         'SummaryState',
@@ -274,12 +272,15 @@ class OptionSelectionState(CoopStep):
 
 
 class CoveredDataDesc(CoopStepView):
+    'Covered Data'
     '''
         This is a descriptor for the covered data element.
     '''
     __name__ = 'ins_contract.subs_process.covered_data_desc'
-    covered_element = fields.Reference('Covered Element',
-                                       selection='get_covered_elem_model')
+
+    covered_element = fields.Many2One(
+        'ins_contract.subs_process.covered_element_desc',
+        'Covered Element')
 
     status = fields.Selection(OPTIONSTATUS, 'Status')
 
@@ -289,11 +290,8 @@ class CoveredDataDesc(CoopStepView):
 
     for_coverage = fields.Reference(
         'For coverage',
-        'get_coverages_model')
-
-    @staticmethod
-    def get_covered_elem_model():
-        return get_descendents(DependantState)
+        'get_coverages_model',
+        readonly=True)
 
     @staticmethod
     def get_coverages_model():
@@ -310,6 +308,9 @@ class CoveredElementDesc(CoopStepView):
     '''
         This is a descriptor for the covered element.
     '''
+
+    __name__ = 'ins_contract.subs_process.covered_element'
+
     covered_data = fields.One2Many(
                             'ins_contract.subs_process.covered_data_desc',
                             'covered_element',
@@ -317,7 +318,7 @@ class CoveredElementDesc(CoopStepView):
 
     @staticmethod
     def default_covered_data():
-        from_wizard = CoveredPersonDesc.get_context()
+        from_wizard = CoveredElementDesc.get_context()
         contract = WithAbstract.get_abstract_objects(from_wizard,
                                                      'for_contract')
         covered_datas = []
@@ -329,120 +330,6 @@ class CoveredElementDesc(CoopStepView):
             covered_data.status = 'Active'
             covered_datas.append(covered_data)
         return WithAbstract.serialize_field(covered_datas)
-
-
-class CoveredPersonDesc(CoveredElementDesc):
-    '''
-        This is a descriptor for a covered person.
-    '''
-    __name__ = 'ins_contract.subs_process.covered_person_desc'
-
-    person = fields.Many2One('party.person',
-                             'Covered Person')
-    life_state = fields.Many2One('ins_contract.subs_process.extension_life',
-                                 'Life State')
-
-
-class ExtensionLifeState(DependantState):
-    '''
-        This a process step which will be used for Life product subscriptions.
-    '''
-    __name__ = 'ins_contract.subs_process.extension_life'
-    covered_elements = fields.One2Many(
-                            'ins_contract.subs_process.covered_person_desc',
-                            'life_state',
-                            'Covered Elements')
-
-    @staticmethod
-    def depends_on_state():
-        return 'extension'
-
-    @staticmethod
-    def state_name():
-        return 'extension_life'
-
-    @staticmethod
-    def before_step_subscriber_as_covered(wizard):
-        covered_datas = []
-        CoveredData = Pool().get(wizard.give_covered_data_desc_model())
-        CoveredPerson = Pool().get(
-            'ins_contract.subs_process.covered_person_desc')
-        for coverage in wizard.option_selection.options:
-            if coverage.status == 'Active':
-                covered_data = CoveredData()
-                covered_data.status = 'Active'
-                covered_data.init_from_coverage(coverage)
-                covered_datas.append(covered_data)
-        wizard.extension_life.covered_elements = []
-        covered_person = CoveredPerson()
-        # Bad, must be rewritten
-        covered_person.person = wizard.project.subscriber.person[0].id
-        covered_person.covered_data = covered_datas
-        wizard.extension_life.covered_elements = [covered_person]
-        return (True, [])
-
-    @staticmethod
-    def check_step_at_least_one_covered(wizard):
-        if len(wizard.extension_life.covered_elements) == 0:
-            return (False, ['There must be at least one covered person'])
-        errors = []
-        for covered_element in wizard.extension_life.covered_elements:
-            found = False
-            for covered_data in covered_element.covered_data:
-                if hasattr(
-                        covered_data,
-                        'status') and covered_data.status == 'Active':
-                    found = True
-                    break
-            if not found:
-                errors.append('At least one option must be activated for %s'
-                              % covered_element.person.name)
-        if errors:
-            return (False, errors)
-        return (True, [])
-
-    @staticmethod
-    @priority(0)
-    def post_step_update_contract(wizard):
-        contract = WithAbstract.get_abstract_objects(wizard, 'for_contract')
-        ExtensionLife = Pool().get('ins_contract.extension_life')
-        CoveredElement = Pool().get('ins_contract.covered_element')
-        CoveredData = Pool().get('ins_contract.covered_data')
-        CoveredPerson = Pool().get('ins_contract.covered_person')
-        if hasattr(contract, 'extension_life'):
-            ext = contract.extension_life
-            CoveredElement.delete(ext.covered_elements)
-        else:
-            ext = ExtensionLife()
-        ext.covered_elements = []
-        for covered_element in wizard.extension_life.covered_elements:
-            cur_element = CoveredElement()
-            cur_element.covered_data = []
-            for covered_data in covered_element.covered_data:
-                if covered_data.status != 'Active':
-                    continue
-                cur_data = CoveredData()
-                cur_data.start_date = covered_data.start_date
-                if hasattr(covered_data, 'end_date'):
-                    cur_data.end_date = covered_data.end_date
-                cur_data.for_coverage = covered_data.for_coverage
-                cur_element.covered_data.append(cur_data)
-            cur_person = CoveredPerson()
-            cur_person.person = covered_element.person
-            cur_person.save()
-            cur_element.product_specific = '%s,%s' % (cur_person.__name__,
-                                                      cur_person.id)
-            ext.covered_elements.append(cur_element)
-
-        ext.save()
-        contract.extension_life = ext
-        res = contract.check_sub_elem_eligibility(
-            wizard.project.start_date,
-            'extension_life')
-        if res[0]:
-            WithAbstract.save_abstract_objects(
-                wizard, ('for_contract', contract))
-        return res
 
 
 class PricingLine(CoopStepView):
@@ -558,9 +445,6 @@ class SubscriptionProcess(CoopProcess):
     option_selection = CoopStateView(
         'ins_contract.subs_process.option_selection',
         'insurance_contract.option_selection_view')
-    extension_life = CoopStateView(
-        'ins_contract.subs_process.extension_life',
-        'insurance_contract.extension_life_view')
 
     summary = CoopStateView(
         'ins_contract.subs_process.summary',
@@ -601,9 +485,9 @@ class SubscriptionProcess(CoopProcess):
     def give_displayer_model(self):
         return 'ins_contract.coverage_displayer'
 
-    def give_covered_data_desc_model(self):
-        return 'ins_contract.subs_process.covered_data_desc'
-
     @staticmethod
     def coop_process_name():
         return 'Subscription Process'
+
+    def give_covered_data_desc_model(self):
+        raise NotImplementedError

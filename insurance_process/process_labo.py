@@ -3,7 +3,7 @@
 # Needed for displaying and storing objects
 from trytond.model import fields as fields
 
-from trytond.modules.coop_utils import utils, CoopView, CoopSQL
+from trytond.modules.coop_utils import model as model
 
 # Needed for easy access to models
 from trytond.pool import Pool
@@ -36,7 +36,7 @@ BUTTONS = [
            ]
 
 
-class ProcessDesc(CoopSQL, CoopView):
+class ProcessDesc(model.CoopSQL, model.CoopView):
     '''
         Master Class for all processes, has a list of steps and
         knows the name of the model it is supposed to represent
@@ -97,7 +97,7 @@ class ProcessDesc(CoopSQL, CoopView):
         return step
 
 
-class StepDesc(CoopSQL, CoopView):
+class StepDesc(model.CoopSQL, model.CoopView):
     '''
         Master Class for process steps.
 
@@ -289,9 +289,12 @@ class StepDesc(CoopSQL, CoopView):
             and self.product_step_name != ''
             and for_product):
             # Go look in for_product for the right step_model
-            # return (lambda x:(x, x))(
-                            # for_product.get_step(for_step.product_step_name))
-            return 'ins_contract.subs_process.extension_life'
+            try:
+                return for_product.get_result(
+                    'step',
+                    {'step_name': 'extension'})[0]
+            except IndexError, KeyError:
+                return '', ['Step not found']
         else:
             return ''
 
@@ -315,7 +318,7 @@ class StepDesc(CoopSQL, CoopView):
         return '0000000'
 
 
-class StepMethodDesc(CoopSQL, CoopView):
+class StepMethodDesc(model.CoopSQL, model.CoopView):
     '''
         This is a prototype of method (rule) which might be called anytime
         from a process.

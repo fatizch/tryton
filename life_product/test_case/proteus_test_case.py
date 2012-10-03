@@ -64,13 +64,15 @@ def try_to_save_object(cfg_dict, cur_object):
         print 'Exception raised when trying to save', cur_object
 
 
-def get_or_create_coverage(cfg_dict, code, name, date=None):
+def get_or_create_coverage(cfg_dict, code, name, date=None,
+        family='life_product.definition'):
     coverage = get_object_from_db(cfg_dict, 'Coverage', 'code', code)
     if coverage:
         return coverage
     coverage = cfg_dict['Coverage']()
     coverage.code = code
     coverage.name = name
+    coverage.family = family
     if date:
         coverage.start_date = date
     else:

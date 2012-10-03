@@ -1,9 +1,9 @@
-from trytond.modules.coop_utils import CoopSQL, CoopView, get_descendents
-from trytond.modules.coop_utils import convert_ref_to_obj
 from trytond.model import fields
 from trytond.modules.insurance_contract import GenericContract
 
-from trytond.modules.coop_utils import WithAbstract, number_of_days_between
+from trytond.modules.coop_utils import utils as utils
+from trytond.modules.coop_utils import date as date
+from trytond.modules.coop_utils import model as model
 
 # Needed for getting models
 from trytond.pool import Pool
@@ -14,7 +14,7 @@ __all__ = [
     ]
 
 
-class GenericBillLine(CoopSQL, CoopView):
+class GenericBillLine(model.CoopSQL, model.CoopView):
     'Bill Line'
 
     __name__ = 'ins_contract.billing.generic_line'
@@ -67,26 +67,27 @@ class GenericBillLine(CoopSQL, CoopView):
     @staticmethod
     def get_on_object_model():
         f = lambda x: (x, x)
-        return [
+        res = [
             f('ins_product.product'),
             f('ins_product.coverage'),
             f('ins_contract.contract'),
-            f('ins_contract.option'),
-            f('ins_contract.covered_data')]
+            f('ins_contract.option')]
+        res += utils.get_descendents('ins_contract.covered_data')
+        return res
 
     def get_detail_childs(self, name):
         res = []
         for elem in self.childs:
             if elem.kind != 'main':
                 res.append(elem)
-        return WithAbstract.serialize_field(res)
+        return utils.WithAbstract.serialize_field(res)
 
     def get_node_childs(self, name):
         res = []
         for elem in self.childs:
             if elem.kind == 'main':
                 res.append(elem)
-        return WithAbstract.serialize_field(res)
+        return utils.WithAbstract.serialize_field(res)
 
     def flat_init(self, start_date, end_date):
         self.start_date = start_date
@@ -118,7 +119,8 @@ class GenericBillLine(CoopSQL, CoopView):
 
     def get_rec_name(self, name):
         if hasattr(self, 'on_object') and self.on_object:
-            return convert_ref_to_obj(self.on_object).get_name_for_billing()
+            return utils.convert_ref_to_obj(
+                self.on_object).get_name_for_billing()
         if hasattr(self, 'name') and self.name:
             return self.kind + ' - ' + self.name
         return self.kind
@@ -140,7 +142,7 @@ class GenericBillLine(CoopSQL, CoopView):
         return self.end_date.toordinal() - self.start_date.toordinal() + 1
 
 
-class Bill(CoopSQL, CoopView):
+class Bill(model.CoopSQL, model.CoopView):
     'Bill'
 
     __name__ = 'ins_contract.billing.bill'
@@ -176,7 +178,7 @@ class Bill(CoopSQL, CoopView):
 
     @staticmethod
     def get_contract_models():
-        return get_descendents(GenericContract)
+        return utils.get_descendents(GenericContract)
 
     def get_bill_line_model(self):
         return 'ins_contract.billing.generic_line'
@@ -189,7 +191,7 @@ class Bill(CoopSQL, CoopView):
     def init_from_lines(self, lines):
         GenericBillLine = Pool().get(self.get_bill_line_model())
         for start_date, end_date, cur_line in lines:
-            number_of_days = number_of_days_between(start_date, end_date)
+            number_of_days = date.number_of_days_between(start_date, end_date)
             frequency_days, _ = cur_line.on_object.get_result(
                 'frequency_days',
                 {'date': start_date},

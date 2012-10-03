@@ -18,25 +18,6 @@
         </record>
 
     <!--################################################################-->
-    <!--                         Life Extension                         -->
-    <!--################################################################-->
-
-        <record model="ir.ui.view" id="life_extension_view_form">
-            <field name="model">ins_contract.extension_life</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="generic_extension_view_form"/>
-            <field name="arch" type="xml">
-                     <![CDATA[
-                        <data>
-                            <xpath expr="/form" position="replace_attributes">
-                                <form string="Extension Life"/>
-                            </xpath>
-                        </data>
-                     ]]>
-            </field>
-        </record>
-
-    <!--################################################################-->
     <!--                           Price Lines                          -->
     <!--################################################################-->
 
@@ -166,10 +147,6 @@
 						    <page string="Options" id="options">
 							    <field name="options" xfill="1" yfill="1"/>
 							</page>
-							<page string="Life Extension" id="life_extension">
-							    <field name="extension_life_displayer" mode="form"
-							        xexpand="1" yexpand="1"/>
-							</page>
 							<page string="Billing" id="billing">
 							    <field name="billing_manager" mode="form"
 							        yexpand="1" yfill="1"/>
@@ -263,8 +240,8 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">                 
                     <![CDATA[                 
-                    <tree string="data">
-                        <field name="coverage_name"/>
+                    <tree string="Data">
+                        <field name="for_coverage"/>
                         <field name="start_date"/>
                         <field name="end_date"/>
                     </tree>                 ]]>
@@ -275,16 +252,23 @@
             <field name="model">ins_contract.covered_data</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                     <![CDATA[
-                     <form string="Covered Data">
-                         <label name="start_date" xalign="0"/>
-                         <field name="start_date"/>
-                         <label name="end_date" xalign="0"/>
-                         <field name="end_date"/>
-                         <newline/>
-                         <label name="for_coverage" xalign="0"/>
-                         <field name="for_coverage" xfill="1"/>
-                     </form>               ]]>
+                    <![CDATA[
+                    <form string="Covered Data">
+                        <group id="dates">
+                            <label name="start_date" xalign="0"/>
+                            <field name="start_date"/>
+                            <label name="end_date" xalign="0"/>
+                            <field name="end_date"/>
+                        </group>
+                        <newline/>
+                        <group id="coverage">
+                            <label name="for_coverage" xalign="0"/>
+                            <field name="for_coverage" xfill="1"/>
+                        </group>
+                        <newline/>
+                        <group id="specific">
+                        </group>
+                    </form>               ]]>
             </field>
         </record>
 
@@ -298,7 +282,6 @@
             <field name="arch" type="xml">                 
                     <![CDATA[                 
                     <tree string="Covered Elements">
-                        <field name="specific_name"/>
                     </tree>                 ]]>
             </field>
         </record>
@@ -310,29 +293,11 @@
                      <![CDATA[
                      <form string="Covered Element">
                          <group id="product">
-                             <label name="product_specific" xalign="0"/>
-                             <field name="product_specific"/>
                          </group>
                          <newline/>
                          <group id="covered_data" yfill="1" yexpand="1">
                             <field name="covered_data" xfill="1" yfill="1" yexpand="1"/>
                          </group>
-                     </form>               ]]>
-            </field>
-        </record>
-
-    <!--################################################################-->
-    <!--                       Covered Person                           -->
-    <!--################################################################-->
-
-        <record model="ir.ui.view" id="covered_person_view_form">
-            <field name="model">ins_contract.covered_person</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                     <![CDATA[
-                     <form string="Covered Person">
-                         <label name="person" xalign="0"/>
-                         <field name="person"/>
                      </form>               ]]>
             </field>
         </record>

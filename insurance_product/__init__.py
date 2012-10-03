@@ -1,14 +1,11 @@
 from trytond.pool import Pool
 from rule_engine_results import *
 from rule_sets import *
-from .business_family import *
 from .product import *
 
 
 def register():
     Pool.register(
-        # from business_family
-        BusinessFamily,
         # from product
         BusinessRuleManager,
         Offered,
@@ -26,6 +23,7 @@ def register():
         BenefitRule,
         ReserveRule,
         CoverageAmountRule,
+        ProductDefinition,
         # from rule_sets
         SubscriberContext,
         PersonContext,
