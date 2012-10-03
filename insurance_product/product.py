@@ -561,6 +561,9 @@ class BusinessRuleManager(model.CoopSQL, model.CoopView,
             return self.offered.get_currency_digits(name)
         return 2
 
+    def get_offered(self):
+        return self.offered
+
 
 class GenericBusinessRule(model.CoopSQL, model.CoopView):
     'Generic Business Rule'
@@ -685,6 +688,9 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
         if self.manager:
             return self.manager.get_currency_digits(name)
 
+    def get_offered(self):
+        return self.manager.get_offered()
+
 
 class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
     'Business Rule Root'
@@ -711,6 +717,9 @@ class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
     @staticmethod
     def default_config_kind():
         return 'simple'
+
+    def get_offered(self):
+        return self.generic_rule.get_offered()
 
 
 class PricingData(model.CoopSQL, model.CoopView):
@@ -1192,12 +1201,10 @@ class EligibilityRule(model.CoopSQL, BusinessRuleRoot):
     'Eligibility Rule'
 
     __name__ = 'ins_product.eligibility_rule'
-    is_eligible = fields.Boolean('Is Eligible')
     sub_elem_config_kind = fields.Selection(CONFIG_KIND,
         'Sub Elem Conf. kind', required=True)
     sub_elem_rule = fields.Many2One('rule_engine', 'Sub Elem Rule Engine',
         depends=['config_kind'])
-    is_sub_elem_eligible = fields.Boolean('Sub Elem Eligible')
     subscriber_classes = fields.Selection(
         SUBSCRIBER_CLASSES,
         'Can be subscribed',
@@ -1235,33 +1242,16 @@ class EligibilityRule(model.CoopSQL, BusinessRuleRoot):
             res, mess, errs = self.rule.compute(args)
             return (EligibilityResultLine(eligible=res, details=mess), errs)
 
-        # This is the most basic eligibility rule :
-        if self.is_eligible:
-            details = []
-        else:
-            details = ['Not eligible']
+        # Default eligibility is "True" :
         return (
-            EligibilityResultLine(eligible=self.is_eligible, details=details),
+            EligibilityResultLine(eligible=True),
             [])
 
     def give_me_sub_elem_eligibility(self, args):
         if hasattr(self, 'sub_elem_rule') and self.sub_elem_rule:
             res, mess, errs = self.sub_elem_rule.compute(args)
             return (EligibilityResultLine(eligible=res, details=mess), errs)
-        if self.is_sub_elem_eligible:
-            details = []
-        else:
-            if 'sub_elem' in args and 'option' in args:
-                details = ['%s not eligible for %s' %
-                    (args['sub_elem'].get_name_for_info(),
-                    args['option'].coverage.name)]
-            else:
-                details = ['Not eligible']
-        return (
-            EligibilityResultLine(
-                eligible=self.is_sub_elem_eligible,
-                details=details),
-            [])
+        return (EligibilityResultLine(True), [])
 
     @staticmethod
     def default_is_eligible():

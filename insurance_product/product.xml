@@ -494,8 +494,6 @@
                         <newline/>
                         <group id="sub_simple" colspan="4"
                             states="{'invisible': Eval('sub_elem_config_kind') != 'simple'}">
-                            <label name="is_sub_elem_eligible"/>
-                            <field name="is_sub_elem_eligible"/>
                         </group>
                         <group id="sub_rule" colspan="4"
                             states="{'invisible': Eval('sub_elem_config_kind') != 'rule'}">
@@ -506,9 +504,6 @@
                 </xpath>
                 <xpath expr="/form/notebook/page[@id=&quot;main&quot;]/group[@id=&quot;simple&quot;]"
                  position="inside">
-                    <newline/>
-                    <label name="is_eligible"/>
-                    <field name="is_eligible"/>
                 </xpath>
                 <xpath expr="/form/notebook/page[@id=&quot;main&quot;]"
                  position="inside">
