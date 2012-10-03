@@ -98,7 +98,7 @@ class Offered(model.CoopView, utils.GetResult, Templated):
     @classmethod
     def __setup__(cls):
         super(Offered, cls).__setup__()
-        for field_name in (mgr for mgr in dir(cls) if mgr.endswith('mgr')):
+        for field_name in (mgr for mgr in dir(cls) if mgr.endswith('_mgr')):
             cur_attr = copy.copy(getattr(cls, field_name))
             if not hasattr(cur_attr, 'context'):
                 continue
@@ -164,6 +164,16 @@ class Coverage(model.CoopSQL, Offered):
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
         ]
+        for field_name in (mgr for mgr in dir(cls) if mgr.endswith('_mgr')):
+            cur_attr = copy.copy(getattr(cls, field_name))
+            if not hasattr(cur_attr, 'context') or not isinstance(
+                    cur_attr, fields.Field):
+                continue
+            if cur_attr.context is None:
+                cur_attr.context = {}
+            cur_attr.context['for_family'] = Eval('family')
+            cur_attr = copy.copy(cur_attr)
+            setattr(cls, field_name, cur_attr)
 
     def give_me_price(self, args):
         # This method is one of the core of the pricing system. It asks for the
@@ -876,10 +886,10 @@ class PricingData(model.CoopSQL, model.CoopView):
         return res
 
     def get_rec_name(self, name=None):
-        return self.get_summary(name)
+        return self.get_summary([self])
 
     def on_change_with_summary(self, name=None):
-        return self.get_summary(name)
+        return self.get_summary([self])
 
 
 class PriceCalculator(model.CoopSQL, model.CoopView):
