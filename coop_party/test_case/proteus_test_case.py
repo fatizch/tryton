@@ -4,21 +4,60 @@
 from datetime import date
 import random
 import os
+import csv
 from proteus import Model
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
 
-def get_models():
-    res = {}
-    res['Person'] = Model.get('party.person')
-    res['RelationKind'] = Model.get('party.party_relation_kind')
-    res['Relation'] = Model.get('party.party-relation')
-    res['AddressKind'] = Model.get('party.address_kind')
+def update_models(cfg_dict):
+    cfg_dict['Person'] = Model.get('party.person')
+    cfg_dict['RelationKind'] = Model.get('party.party_relation_kind')
+    cfg_dict['Relation'] = Model.get('party.party-relation')
+    cfg_dict['AddressKind'] = Model.get('party.address_kind')
+    cfg_dict['Address'] = Model.get('party.address')
+    cfg_dict['Country'] = Model.get('country.country')
+    return cfg_dict
+
+
+def load_addresses(cfg_dict, party_kind):
+    path = os.path.join(DIR, cfg_dict.get('language', 'fr')[0:2].lower(),
+        'address_' + party_kind + '.csv')
+    reader = csv.DictReader(open(path, 'rb'), delimiter=';')
+    cfg_dict['address_' + party_kind] = []
+    for cur_line in reader:
+        cfg_dict['address_' + party_kind].append(cur_line)
+    return cfg_dict
+
+
+def get_country(cfg_dict, name):
+    if name == '':
+        return cfg_dict, None
+    if not cfg_dict.get('countries', None):
+        cfg_dict['countries'] = {}
+    if cfg_dict['countries'].get(name, None):
+        return cfg_dict, cfg_dict['countries'][name]
+    Country = cfg_dict['Country']
+    countries = Country.find([('name', 'ilike', name.upper())], limit=1)
+    if len(countries) > 0:
+        cfg_dict['countries'][name] = countries[0]
+        return cfg_dict, countries[0]
+
+
+def create_address(cfg_dict, party, party_kind):
+    res = cfg_dict['Address']()
+    res.party = party
+    data = random.choice(cfg_dict['address_' + party_kind])
+    res.street = data['street']
+    res.streetbis = data['streetbis']
+    res.zip = data['zip'].zfill(5)
+    res.city = data['city']
+    cfg_dict, res.country = get_country(cfg_dict, data['country'])
+    res.save()
     return res
 
 
-def create_persons(models, cfg_dict, relations_kind):
+def create_persons(cfg_dict, relations_kind, addresses_kind):
     dicts = {}
     total_nb = int(cfg_dict['total_nb'])
     nb_male = int(cfg_dict['nb_male'])
@@ -33,34 +72,36 @@ def create_persons(models, cfg_dict, relations_kind):
     adult_date_interv = calculate_date_interval(cfg_dict,
         cfg_dict['adult_age_min'], cfg_dict['adult_age_max'])
     children_date_interv = calculate_date_interval(cfg_dict, 1, 18)
+    cfg_dict = load_addresses(cfg_dict, 'person')
 
     for _i in range(nb_male):
         name = random.choice(dicts['last_name'])
-        person1 = add_person(models, name, dicts, adult_date_interv, 'M')
+        person1 = add_person(cfg_dict, name, dicts, adult_date_interv, 'M')
+        create_address(cfg_dict, person1.party, 'person')
         if launch_dice(cfg_dict, 'percent_of_couple'):
             if not launch_dice(cfg_dict, 'percent_of_couple_with_same_name'):
                 name = random.choice(dicts['last_name'])
-            person2 = add_person(models, name, dicts, adult_date_interv, 'F')
+            person2 = add_person(cfg_dict, name, dicts, adult_date_interv, 'F')
             nb_female -= 1
-            create_relation(models, person1, person2,
+            create_relation(cfg_dict, person1, person2,
                 relations_kind['spouse'].key)
             if launch_dice(cfg_dict, 'percent_of_couple_with_children'):
                 for _k in range(random.randint(1,
                         int(cfg_dict['max_nb_of_children_per_couple']))):
-                    children = add_person(models, person1.name,
+                    children = add_person(cfg_dict, person1.name,
                         dicts, children_date_interv)
-                    create_relation(models, person1, children,
+                    create_relation(cfg_dict, person1, children,
                         relations_kind['parent'].key, children.birth_date)
 
     for _j in range(nb_female):
         name = random.choice(dicts['last_name'])
-        add_person(models, name, dicts, adult_date_interv, 'F')
+        add_person(cfg_dict, name, dicts, adult_date_interv, 'F')
 
     print 'Successfully created %s parties' % total_nb
 
 
-def create_relation(models, from_actor, to_actor, kind, start_date=None):
-    relation = models['Relation']()
+def create_relation(cfg_dict, from_actor, to_actor, kind, start_date=None):
+    relation = cfg_dict['Relation']()
     relation.from_party = from_actor.party
     relation.to_party = to_actor.party
     relation.kind = kind
@@ -74,11 +115,11 @@ def launch_dice(cfg_dict, probability_name):
 
 
 def launch_test_case(cfg_dict):
-    models = get_models()
-    relations_kind = get_relations_kind(models)
-    create_address_kind(models)
-    if is_table_empty(models['Person']):
-        create_persons(models, cfg_dict, relations_kind)
+    cfg_dict = update_models(cfg_dict)
+    relations_kind = get_relations_kind(cfg_dict)
+    addresses_kind = create_address_kind(cfg_dict)
+    if is_table_empty(cfg_dict['Person']):
+        create_persons(cfg_dict, relations_kind, addresses_kind)
 
 
 def calculate_date_interval(cfg_dict, age_min, age_max):
@@ -91,8 +132,8 @@ def calculate_date_interval(cfg_dict, age_min, age_max):
     return [start_date, end_date]
 
 
-def add_person(models, name, dicts, date_interv, sex=None):
-    person = models['Person']()
+def add_person(cfg_dict, name, dicts, date_interv, sex=None):
+    person = cfg_dict['Person']()
     person.name = name
     if not sex:
         sex = random.choice(['M', 'F'])
@@ -128,26 +169,28 @@ def is_table_empty(model):
     return len(model.find(limit=1)) == 0
 
 
-def get_relation_kind(models, key):
-    res = models['RelationKind'].find([('key', '=', key)])
+def get_relation_kind(cfg_dict, key):
+    res = cfg_dict['RelationKind'].find([('key', '=', key)])
     if len(res) > 0:
         return res[0]
 
 
-def get_relations_kind(models):
+def get_relations_kind(cfg_dict):
     res = {}
-    res['spouse'] = get_relation_kind(models, 'spouse')
-    res['parent'] = get_relation_kind(models, 'parent')
+    res['spouse'] = get_relation_kind(cfg_dict, 'spouse')
+    res['parent'] = get_relation_kind(cfg_dict, 'parent')
     return res
 
 
-def get_address_kind(models, key):
-    res = models['AddressKind'].find([('key', '=', key)])
+def get_address_kind(cfg_dict, key):
+    res = cfg_dict['AddressKind'].find([('key', '=', key)])
     if len(res) > 0:
         return res[0]
 
 
-def create_address_kind(models):
-    get_address_kind(models, 'main')
-    get_address_kind(models, '2nd')
-    get_address_kind(models, 'job')
+def create_address_kind(cfg_dict):
+    res = {}
+    res['main'] = get_address_kind(cfg_dict, 'main')
+    res['2nd'] = get_address_kind(cfg_dict, '2nd')
+    res['job'] = get_address_kind(cfg_dict, 'job')
+    return res
