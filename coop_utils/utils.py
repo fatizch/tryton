@@ -626,3 +626,21 @@ def delete_reference_backref(objs, target_model, target_field):
 
 def get_user_language():
     return get_this_object('ir.lang', [('code', '=', Transaction().language)])
+
+
+def create_inst_with_default_val(from_class, field_name, action=None):
+    res = {}
+    field = getattr(from_class, field_name)
+    CurModel = Pool().get(field.model_name)
+    fields_names = list(x for x in set(CurModel._fields.keys()
+            + CurModel._inherit_fields.keys())
+    if x not in ['id', 'create_uid', 'create_date',
+        'write_uid', 'write_date'])
+    if isinstance(field, fields.One2Many):
+        if action:
+            res = {action: [CurModel.default_get(fields_names)]}
+        else:
+            res = [CurModel.default_get(fields_names)]
+    else:
+        res = CurModel.default_get(fields_names)
+    return res
