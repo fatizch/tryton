@@ -127,7 +127,7 @@ class ModuleTestCase(unittest.TestCase):
     def createTestRule(self):
         te1 = self.TreeElement()
         te1.type = 'function'
-        te1.name = 'get_subscriber_name'
+        te1.name = '_re_get_subscriber_name'
         te1.description = 'Name'
         te1.namespace = 'ins_product.rule_sets.subscriber'
 
@@ -135,7 +135,7 @@ class ModuleTestCase(unittest.TestCase):
 
         te2 = self.TreeElement()
         te2.type = 'function'
-        te2.name = 'get_subscriber_birthdate'
+        te2.name = '_re_get_subscriber_birthdate'
         te2.description = 'Birthday'
         te2.namespace = 'ins_product.rule_sets.subscriber'
 
@@ -150,7 +150,7 @@ class ModuleTestCase(unittest.TestCase):
 
         te3 = self.TreeElement()
         te3.type = 'function'
-        te3.name = 'years_between'
+        te3.name = '_re_years_between'
         te3.description = 'Years between'
         te3.namespace = 'rule_engine.tools_functions'
 
@@ -158,7 +158,7 @@ class ModuleTestCase(unittest.TestCase):
 
         te5 = self.TreeElement()
         te5.type = 'function'
-        te5.name = 'today'
+        te5.name = '_re_today'
         te5.description = 'Today'
         te5.namespace = 'rule_engine.tools_functions'
 
@@ -166,7 +166,7 @@ class ModuleTestCase(unittest.TestCase):
 
         te6 = self.TreeElement()
         te6.type = 'function'
-        te6.name = 'message'
+        te6.name = '_re_message'
         te6.description = 'Add message'
         te6.namespace = 'rule_engine.tools_functions'
 
@@ -191,9 +191,9 @@ class ModuleTestCase(unittest.TestCase):
         rule.name = 'test_rule'
         rule.context = ct
         rule.code = '''
-birthdate = get_subscriber_birthdate()
-if years_between(birthdate, today()) > 40:
-    message('Subscriber too old (max: 40)')
+birthdate = _re_get_subscriber_birthdate()
+if _re_years_between(birthdate, _re_today()) > 40:
+    _re_message('Subscriber too old (max: 40)')
     return False
 return True'''
 

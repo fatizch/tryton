@@ -2,9 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import ConfigParser
+import os
 
 from decimal import Decimal
 from proteus import Model
+
+DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
 
 def update_cfg_dict_with_models(cfg_dict):
@@ -357,9 +361,9 @@ def get_or_create_rule(cfg_dict, ct, name):
     rule.name = name
     rule.context = ct
     rule.code = '''
-birthdate = get_person_birthdate()
-if years_between(birthdate, today({})) > 40:
-    message('Subscriber too old (max: 40)')
+birthdate = _re_get_person_birthdate()
+if _re_years_between(birthdate, _re_today({})) > 40:
+    _re_message('Subscriber too old (max: 40)')
     return False
 return True'''
 
@@ -389,47 +393,59 @@ return True'''
     return rule
 
 
-def create_folder_from_set(cfg_dict, set_name, folder_name):
+def create_folder_from_set(cfg_dict, set_name, descs):
     the_set = Model.get(set_name)
     if not the_set:
         return
     functions = the_set.get_rules({})
     tes = []
     for fun in functions:
+        full_name = set_name + '.' + fun['name']
         cur_te = get_or_create_tree_element(
-            cfg_dict, 'function', fun['rule_name'], fun['name'], set_name)
+            cfg_dict, 'function', descs[full_name], fun['name'], set_name)
         tes.append(cur_te)
-    te_top = get_or_create_tree_element(cfg_dict, 'folder', folder_name)
+    te_top = get_or_create_tree_element(
+        cfg_dict, 'folder', descs[set_name])
     append_inexisting_elements(te_top, 'children', tes)
     te_top.save()
     return te_top
 
 
+def get_file_as_dict(filename):
+    cfg_parser = ConfigParser.ConfigParser()
+    with open(filename) as fp:
+        cfg_parser.readfp(fp)
+    cfg_dict = dict(cfg_parser.items('tree_name'))
+    return cfg_dict
+
+
 def create_rule_engine_data(cfg_dict):
+    path = os.path.join(DIR, cfg_dict.get('language', 'fr')[0:2].lower())
+    descs = get_file_as_dict(os.path.join(path, 'tree_names'))
     tools = create_folder_from_set(
         cfg_dict,
         'rule_engine.tools_functions',
-        'Tools')
+        descs)
 
     person = create_folder_from_set(
         cfg_dict,
         'ins_product.rule_sets.person',
-        'Person')
+        descs)
 
     subscriber = create_folder_from_set(
         cfg_dict,
         'ins_product.rule_sets.subscriber',
-        'Subscriber')
+        descs)
 
     data_coverage = create_folder_from_set(
         cfg_dict,
         'ins_product.rule_sets.covered_data',
-        'Coverage Data')
+        descs)
 
     data_coverage = create_folder_from_set(
         cfg_dict,
         'ins_product.rule_sets.rule_combination',
-        'Rule Combination')
+        descs)
 
     ct = get_or_create_context(cfg_dict, 'test_context')
     append_inexisting_elements(ct, 'allowed_elements', [tools, person])

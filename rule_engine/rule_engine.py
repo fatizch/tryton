@@ -25,7 +25,6 @@ __all__ = ['Rule', 'Context', 'TreeElement', 'ContextTreeElement', 'TestCase',
     'TestCaseValue', 'TestRule', 'TestRuleStart', 'TestRuleTest',
     'CreateTestValues', 'RunTests', 'RunTestsReport', 'RuleTools',
     'RuleEngineContext', 'InternalRuleEngineError', 'check_args',
-    'for_rule'
     ]
 
 CODE_TEMPLATE = """
@@ -67,13 +66,6 @@ def check_args(*_args):
     return decorator
 
 
-def for_rule(rule_name):
-    def wrap(f):
-        f.rule_name = rule_name
-        return f
-    return wrap
-
-
 def safe_eval(source, data=None):
     if '__subclasses__' in source:
         raise ValueError('__subclasses__ not allowed')
@@ -105,12 +97,12 @@ class RuleEngineContext(CoopView):
     def get_rules(cls):
         res = []
         for elem in dir(cls):
+            if not elem.startswith('_re_'):
+                continue
             elem = getattr(cls, elem)
-            if hasattr(elem, 'rule_name'):
-                tmpres = {}
-                tmpres['name'] = elem.__name__
-                tmpres['rule_name'] = elem.rule_name
-                res.append(tmpres)
+            tmpres = {}
+            tmpres['name'] = elem.__name__
+            res.append(tmpres)
         return res
 
     @classmethod
@@ -126,8 +118,7 @@ class RuleTools(RuleEngineContext):
     __name__ = 'rule_engine.tools_functions'
 
     @classmethod
-    @for_rule('Years between')
-    def years_between(cls, args, date1, date2):
+    def _re_years_between(cls, args, date1, date2):
         if (not isinstance(date1, datetime.date)
                 or not isinstance(date2, datetime.date)):
             args['errors'].append('years_between needs datetime types')
@@ -135,13 +126,11 @@ class RuleTools(RuleEngineContext):
         return date.number_of_years_between(date1, date2)
 
     @classmethod
-    @for_rule('Today')
-    def today(cls, args):
+    def _re_today(cls, args):
         return utils.today()
 
     @classmethod
-    @for_rule('Add Message')
-    def message(cls, args, the_message):
+    def _re_message(cls, args, the_message):
         args['messages'].append(the_message)
 
 
@@ -368,6 +357,13 @@ class TreeElement(ModelView, ModelSQL):
         for element in self.children:
             element.as_context(context)
         return context
+
+    @classmethod
+    def delete(cls, elements):
+        from operator import attrgetter
+        elements.sort(key=attrgetter('type'), reverse=True)
+        print elements
+        super(TreeElement, cls).delete(elements)
 
 
 class ContextTreeElement(ModelSQL):

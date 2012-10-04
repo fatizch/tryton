@@ -1,6 +1,6 @@
 from trytond.modules.rule_engine import RuleEngineContext
 from trytond.modules.rule_engine import InternalRuleEngineError
-from trytond.modules.rule_engine import check_args, for_rule
+from trytond.modules.rule_engine import check_args
 from trytond.modules.rule_engine import RuleTools
 
 from trytond.modules.coop_utils import utils as utils
@@ -24,16 +24,14 @@ class SubscriberContext(RuleEngineContext):
     __name__ = 'ins_product.rule_sets.subscriber'
 
     @classmethod
-    @for_rule('Name')
     @check_args('contract')
-    def get_subscriber_name(cls, args):
+    def _re_get_subscriber_name(cls, args):
         name = args['contract'].subscriber.name
         return name
 
     @classmethod
-    @for_rule('Birthdate')
     @check_args('subscriber_person')
-    def get_subscriber_birthdate(cls, args):
+    def _re_get_subscriber_birthdate(cls, args):
         subscriber = args['subscriber_person']
         if hasattr(subscriber, 'birth_date'):
             return subscriber.birth_date
@@ -41,29 +39,25 @@ class SubscriberContext(RuleEngineContext):
         raise InternalRuleEngineError
 
     @classmethod
-    @for_rule('Gender')
     @check_args('subscriber_person')
-    def get_subscriber_gender(cls, args):
+    def _re_get_subscriber_gender(cls, args):
         return args['subscriber_person'].gender
 
     @classmethod
-    @for_rule('Nationality')
     @check_args('subscriber_person')
-    def get_subscriber_nationality(cls, args):
+    def _re_get_subscriber_nationality(cls, args):
         country = args['subscriber_person'].get_nationality()
         return country.code
 
     @classmethod
-    @for_rule('Living country')
     @check_args('contract')
-    def get_subscriber_living_country(cls, args):
+    def _re_get_subscriber_living_country(cls, args):
         address = args['contract'].subscriber.address_get()
         return address.country
 
     @classmethod
-    @for_rule('Product subscribed ?')
     @check_args('contract')
-    def subscriber_subscribed(cls, args, product_name):
+    def _re_subscriber_subscribed(cls, args, product_name):
         contracts = args['contract'].subscriber.get_subscribed_contracts()
         matches = [1 for x in contracts
             if x.get_product().code == product_name]
@@ -87,14 +81,12 @@ class PersonContext(RuleEngineContext):
             raise InternalRuleEngineError
 
     @classmethod
-    @for_rule('Name')
-    def get_person_name(cls, args):
+    def _re_get_person_name(cls, args):
         name = cls.get_person(args).name
         return name
 
     @classmethod
-    @for_rule('Birthdate')
-    def get_person_birthdate(cls, args):
+    def _re_get_person_birthdate(cls, args):
         person = cls.get_person(args)
         if hasattr(person, 'birth_date'):
             return person.birth_date
@@ -102,33 +94,28 @@ class PersonContext(RuleEngineContext):
         raise InternalRuleEngineError
 
     @classmethod
-    @for_rule('Gender')
-    def get_person_gender(cls, args):
+    def _re_get_person_gender(cls, args):
         return cls.get_person(args).gender
 
     @classmethod
-    @for_rule('Nationality')
-    def get_person_nationality(cls, args):
+    def _re_get_person_nationality(cls, args):
         country = cls.get_person(args).get_nationality()
         return country.code
 
     @classmethod
-    @for_rule('Living Country')
-    def get_person_living_country(cls, args):
+    def _re_get_person_living_country(cls, args):
         address = cls.get_person(args).address_get()
         return address.country
 
     @classmethod
-    @for_rule('Product subscribed ?')
-    def person_subscribed(cls, args, product_name):
+    def _re_person_subscribed(cls, args, product_name):
         contracts = cls.get_person(args).get_subscribed_contracts()
         matches = [1 for x in contracts
             if x.get_product().code == product_name]
         return len(matches) > 0
 
     @classmethod
-    @for_rule('Over majority age ?')
-    def is_person_of_age(cls, args):
+    def _re_is_person_of_age(cls, args):
         person = cls.get_person(args)
         birthdate = cls.get_person_birthdate({'person': person})
         country = cls.get_person_nationality({'person': person})
@@ -141,9 +128,8 @@ class PersonContext(RuleEngineContext):
             RuleTools.today(args)) >= limit_age
 
     @classmethod
-    @for_rule('Relation with subscriber')
     @check_args('contract')
-    def link_with_subscriber(cls, args):
+    def _re_link_with_subscriber(cls, args):
         person = cls.get_person(args)
         subscriber = args['contract'].subscriber
         return person.get_relation_with(subscriber)
@@ -165,13 +151,11 @@ class CoveredDataContext(RuleEngineContext):
             raise InternalRuleEngineError
 
     @classmethod
-    @for_rule('Subscription date')
-    def get_initial_subscription_date(cls, args):
+    def _re_get_initial_subscription_date(cls, args):
         return cls.get_covered_data(args).start_date
 
     @classmethod
-    @for_rule('End date')
-    def get_subscription_end_date(cls, args):
+    def _re_get_subscription_end_date(cls, args):
         data = cls.get_covered_data(args)
         if hasattr(data, 'end_date') and data.end_date:
             return data.end_date
@@ -189,9 +173,8 @@ class RuleCombinationContext(RuleEngineContext):
     __name__ = 'ins_product.rule_sets.rule_combination'
 
     @classmethod
-    @for_rule('Get Sub-Component')
     @check_args('price_details')
-    def get_sub_component(cls, args, the_code):
+    def _re_get_sub_component(cls, args, the_code):
         det = args['price_details']
         for code, value in det.iteritems():
             if code[1] == the_code:
@@ -200,9 +183,8 @@ class RuleCombinationContext(RuleEngineContext):
         raise InternalRuleEngineError
 
     @classmethod
-    @for_rule('Append Detail')
     @check_args('price_details', 'final_details')
-    def append_detail(cls, args, the_code, amount):
+    def _re_append_detail(cls, args, the_code, amount):
         for key, code in args['price_details'].iterkeys():
             if not code == the_code:
                 continue
@@ -210,9 +192,8 @@ class RuleCombinationContext(RuleEngineContext):
             break
 
     @classmethod
-    @for_rule('Apply Tax')
     @check_args('price_details')
-    def apply_tax(cls, args, code, base):
+    def _re_apply_tax(cls, args, code, base):
         if ('tax', code) in args['price_details']:
             tax, = utils.get_those_objects(
                 'coop_account.tax_desc',
@@ -221,9 +202,8 @@ class RuleCombinationContext(RuleEngineContext):
             return tax_vers.apply_tax(base)
 
     @classmethod
-    @for_rule('Apply Fee')
     @check_args('price_details')
-    def apply_fee(cls, args, code, base):
+    def _re_apply_fee(cls, args, code, base):
         if ('fee', code) in args['price_details']:
             fee, = utils.get_those_objects(
                 'coop_account.fee_desc',
