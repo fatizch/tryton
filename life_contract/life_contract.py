@@ -202,7 +202,6 @@ class ExtensionLifeState(DependantState):
         CoveredData = Pool().get('life_contract.covered_data')
         if hasattr(contract, 'extension_life') and contract.extension_life:
             ext = contract.extension_life[0]
-            CoveredPerson.delete(ext.covered_elements)
         else:
             ext = ExtensionLife()
         ext.covered_elements = []
