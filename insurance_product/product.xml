@@ -365,8 +365,10 @@
                         <newline/>
                         <group id="other"
                             states="{'invisible': Eval('kind') != 'base'}">
-                            <label name="config_kind" xalign="0" xfill="1"/>
-                            <field name="config_kind" xexpand="1"/>
+                            <group id="config_kind" colspan="2">
+                                <label name="config_kind" xalign="0" xfill="1"/>
+                                <field name="config_kind" xexpand="1"/>
+                            </group>
                             <newline/>
                             <group id="simple" colspan="4"
                                 states="{'invisible': Eval('config_kind') != 'simple'}">
@@ -463,7 +465,7 @@
                             <group id="price_kind"
                                 states="{'invisible': Eval('config_kind') == 'simple'}">
                                 <label name="price_kind" xalign="0"/>
-                                <field name="price_kind"/>
+                                <field name="price_kind" xexpand="0"/>
                             </group>
                             <newline/>
                             <group id="basic"
@@ -496,8 +498,12 @@
                 <xpath expr="/form/notebook/page[@id=&quot;main&quot;]"
                      position="after">
                     <page id="sub" string="Covered Element">
-                        <label name="sub_elem_config_kind" xalign="0" xfill="1"/>
-                        <field name="sub_elem_config_kind" xfill="1" xexpand="0" xalign="0"/>
+                        <field name="relation_kinds" colspan="4" xexpand="1"
+                            yfill="1" yexpand="1"/>
+                        <group id="sub_elem_config_kind" colspan="2">
+                            <label name="sub_elem_config_kind" xalign="0" xfill="1"/>
+                            <field name="sub_elem_config_kind" xfill="1" xexpand="0" xalign="0"/>
+                        </group>
                         <newline/>
                         <group id="sub_simple" colspan="4"
                             states="{'invisible': Eval('sub_elem_config_kind') != 'simple'}">
@@ -514,10 +520,10 @@
                 </xpath>
                 <xpath expr="/form/notebook/page[@id=&quot;main&quot;]"
                  position="inside">
-                    <label name="subscriber_classes" xalign="0"/>
-                    <field name="subscriber_classes" xexpand="0"/>
-                    <field name="relation_kinds" colspan="4" xexpand="1"
-                        yfill="1" yexpand="1"/>
+                    <group id="subscriber_classes" colspan="2">
+                        <label name="subscriber_classes" xalign="0"/>
+                        <field name="subscriber_classes" xexpand="0"/>
+                    </group>
                 </xpath>
             </data>
             ]]>
