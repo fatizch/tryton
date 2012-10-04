@@ -71,7 +71,7 @@
                             </notebook>
                         </page>
                         <page string="Administration" id="admin">
-                        
+
                         </page>
                     </notebook>
                 </form>
@@ -94,6 +94,10 @@
                 <data>
                 <xpath expr="/form" position="replace_attributes">
                     <form string="Product"/>
+                </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;admin&quot;]" position="inside">
+                    <label name="contract_generator" xalign="0"/>
+                    <field name="contract_generator"/>
                 </xpath>
                 <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]" position="before">
                     <page string="Options" id="option">
@@ -624,6 +628,21 @@
             </data>
             ]]>
             </field>
+        </record>
+
+    <!--################################################################-->
+    <!--                    Contract Number Generator                   -->
+    <!--################################################################-->
+
+        <record model="ir.sequence.type" id="sequence_type_contract_number">
+            <field name="name">Contract Number</field>
+            <field name="code">ins_product.product</field>
+        </record>
+
+        <record model="ir.sequence.type-res.group"
+            id="sequence_type_contract_number_group_admin">
+            <field name="sequence_type" ref="sequence_type_contract_number"/>
+            <field name="group" ref="res.group_admin"/>
         </record>
 
         <!--  ******************************************* 

@@ -56,6 +56,7 @@ class ModuleTestCase(unittest.TestCase):
         self.Fee = POOL.get('coop_account.fee_desc')
         self.FeeVersion = POOL.get('coop_account.fee_version')
         self.AddressKind = POOL.get('party.address_kind')
+        self.Sequence = POOL.get('ir.sequence')
         self.BillingProcess = POOL.get('ins_contract.billing_process',
             type='wizard')
 
@@ -77,6 +78,16 @@ class ModuleTestCase(unittest.TestCase):
         Test depends.
         '''
         test_depends()
+
+    def create_number_generator(self, code):
+        ng = self.Sequence()
+        ng.name = 'Contract Sequence'
+        ng.code = code
+        ng.prefix = 'Ctr'
+        ng.suffix = 'Y${year}'
+        ng.padding = 10
+        ng.save()
+        return ng
 
     def create_tax(self, code, amount):
         tax_v1 = self.TaxVersion()
@@ -226,6 +237,7 @@ return True'''
             Tests process desc creation
         '''
         rule = self.createTestRule()
+        ng = self.create_number_generator('ins_product.product')
 
         #We need to create the currency manually because it's needed
         #on the default currency for product and coverage
@@ -416,6 +428,7 @@ return True'''
         product_a.options = [
             coverage_a, coverage_b, coverage_c, coverage_d]
         product_a.eligibility_mgr = [brm_d]
+        product_a.contract_generator = ng
         product_a.save()
 
         self.assert_(product_a.id)
@@ -441,6 +454,8 @@ return True'''
         product_b.name = 'Big Bad Bully'
         product_b.start_date = datetime.date.today()
         product_b.eligibility_mgr = [brm_e]
+        product_b.contract_generator = ng
+
         product_b.save()
 
     def create_contract(self):

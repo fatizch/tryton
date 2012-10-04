@@ -344,6 +344,12 @@ class Product(model.CoopSQL, Offered):
         domain=[('currency', '=', Eval('currency'))],
         depends=['currency'])
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
+    contract_generator = fields.Many2One(
+        'ir.sequence',
+        'Contract Number Generator',
+        context={'code': 'ins_product.product'},
+        required=True,
+        ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):
@@ -476,6 +482,9 @@ class Product(model.CoopSQL, Offered):
         good_family = self.give_me_families(args)[0][0]
         return good_family.get_step_model(args['step_name']), []
 
+    def give_me_new_contract_number(self, args):
+        return self.contract_generator.get_id(self.contract_generator.id)
+
 
 class ProductOptionsCoverage(model.CoopSQL):
     'Define Product - Coverage relations'
@@ -485,7 +494,7 @@ class ProductOptionsCoverage(model.CoopSQL):
     product = fields.Many2One('ins_product.product',
         'Product', select=1, required=True, ondelete='CASCADE')
     coverage = fields.Many2One('ins_product.coverage',
-        'Coverage', select=1, required=True, ondelete='CASCADE')
+        'Coverage', select=1, required=True, ondelete='RESTRICT')
 
 
 class BusinessRuleManager(model.CoopSQL, model.CoopView,

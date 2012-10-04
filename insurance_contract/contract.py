@@ -9,8 +9,6 @@ from trytond.modules.coop_utils import utils as utils
 # Needed for getting models
 from trytond.pool import Pool
 
-from trytond.modules.insurance_product import Coverage
-
 __all__ = [
     'GenericExtension',
     'GenericContract',
@@ -23,13 +21,13 @@ __all__ = [
     'BrokerManager',
     ]
 
-CONTRACTNUMBER_MAX_LENGTH = 10
 CONTRACTSTATUSES = [
     ('quote', 'Quote'),
     ('active', 'Active'),
     ('hold', 'Hold'),
     ('terminated', 'Terminated'),
     ]
+
 OPTIONSTATUS = [
     ('Active', 'Active'),
     ('Refused', 'Refused')
@@ -100,8 +98,7 @@ class GenericContract(model.CoopSQL, model.CoopView):
     # contract for external uses (forms, other softwares...)
     contract_number = fields.Char('Contract Number',
                                   # required=True,
-                                  select=1,
-                                  size=CONTRACTNUMBER_MAX_LENGTH)
+                                  select=1)
 
     # The subscriber is the client which did (or will) sign the contract.
     # It is an important part of the contract life, as he usually is the
@@ -133,15 +130,17 @@ class GenericContract(model.CoopSQL, model.CoopView):
     # that will be displayed on top of the contract forms
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
 
-    @staticmethod
-    def get_new_contract_number():
-        return 'Ct00000001'
+    def get_new_contract_number(self):
+        raise NotImplementedError
 
     def get_manager_model(self):
         return 'ins_contract.billing_manager'
 
     def get_product(self):
         pass
+
+    def finalize_contract(self):
+        raise NotImplementedError
 
 
 class Contract(GenericContract):
@@ -289,6 +288,13 @@ class Contract(GenericContract):
 
     def default_status(self):
         return 'quote'
+
+    def get_new_contract_number(self):
+        return self.get_product().get_result(
+            'new_contract_number', {})[0]
+
+    def finalize_contract(self):
+        self.contract_number = self.get_new_contract_number()
 
 
 class Option(model.CoopSQL, model.CoopView):

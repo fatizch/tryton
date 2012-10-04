@@ -28,6 +28,7 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['FeeVersion'] = Model.get('coop_account.fee_version')
     cfg_dict['PricingData'] = Model.get('ins_product.pricing_data')
     cfg_dict['Calculator'] = Model.get('ins_product.pricing_calculator')
+    cfg_dict['Sequence'] = Model.get('ir.sequence')
     return cfg_dict
 
 
@@ -42,6 +43,20 @@ def get_or_create_product(cfg_dict, code, name, options=None):
     if options:
         product.options[:] = options
     return product
+
+
+def get_or_create_generator(cfg_dict, code):
+    seq = get_object_from_db(cfg_dict, 'Sequence', 'code', code)
+    if seq:
+        return seq
+    seq = cfg_dict['Sequence']()
+    seq.name = 'Contract Sequence'
+    seq.code = code
+    seq.prefix = 'Ctr'
+    seq.suffix = 'Y${year}'
+    seq.padding = 10
+    seq.save()
+    return seq
 
 
 def get_object_from_db(cfg_dict, model, key=None, value=None, domain=None,
@@ -297,6 +312,9 @@ def create_AAA_Product(cfg_dict, code, name):
 
     product_a.options.append(coverage_a)
     product_a.options.append(coverage_b)
+
+    product_a.contract_generator = get_or_create_generator(
+        cfg_dict, 'ins_product.product')
     try_to_save_object(cfg_dict, product_a)
 
 
@@ -518,6 +536,8 @@ def create_BBB_product(cfg_dict, code, name):
     product_b.options.append(coverage_c)
     product_b.options.append(coverage_d)
     product_b.eligibility_mgr.append(brm_d)
+    product_b.contract_generator = get_or_create_generator(
+        cfg_dict, 'ins_product.product')
     try_to_save_object(cfg_dict, product_b)
 
 

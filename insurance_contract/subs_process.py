@@ -455,7 +455,7 @@ class SubscriptionProcess(CoopProcess):
         contract = WithAbstract.get_abstract_objects(self, 'for_contract')
         Contract = Pool().get(contract.__name__)
 
-        contract.contract_number = contract.get_new_contract_number()
+        contract.finalize_contract()
 
         if not (hasattr(contract, 'billing_manager') and
                 contract.billing_manager):

@@ -47,6 +47,7 @@ class ModuleTestCase(unittest.TestCase):
         self.TaxVersion = POOL.get('coop_account.tax_version')
         self.Fee = POOL.get('coop_account.fee_desc')
         self.FeeVersion = POOL.get('coop_account.fee_version')
+        self.Sequence = POOL.get('ir.sequence')
 
     def test0005views(self):
         '''
@@ -187,6 +188,15 @@ return True'''
 
         return fee
 
+    def create_number_generator(self, code):
+        ng = self.Sequence()
+        ng.name = 'Contract Sequence'
+        ng.code = code
+        ng.prefix = 'Ctr'
+        ng.suffix = 'Y${year}'
+        ng.save()
+        return ng
+
     def test0010Coverage_creation(self):
         '''
             Tests process desc creation
@@ -204,6 +214,8 @@ return True'''
                 self.assertEqual(
                     res,
                     {'report': 'Test ... SUCCESS\n\nTest1 ... SUCCESS'})
+
+            ng = self.create_number_generator('ins_product.product')
 
             #We need to create the currency manually because it's needed
             #on the default currency for product and coverage
@@ -407,6 +419,7 @@ return True'''
             product_a.options = [
                 coverage_a, coverage_b, coverage_c, coverage_d]
             product_a.eligibility_mgr = [brm_d]
+            product_a.contract_generator = ng
             product_a.save()
 
             self.assert_(product_a.id)
