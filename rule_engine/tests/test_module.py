@@ -58,6 +58,8 @@ class ModuleTestCase(unittest.TestCase):
             def test_values_inexisting(cls, args):
                 return 200
 
+        Language = POOL.get('ir.lang')
+
         with Transaction().start(DB_NAME,
                                  USER,
                                  context=CONTEXT) as transaction:
@@ -66,17 +68,19 @@ class ModuleTestCase(unittest.TestCase):
 
             te = self.TreeElement()
             te.type = 'function'
-            te.name = 'test_values'
+            te.name = te.translated_technical_name = 'test_values'
             te.description = 'Test Values'
             te.namespace = 'rule_engine_tests'
+            te.language, = Language.search([('code', '=', 'en_US')])
 
             te.save()
 
             te1 = self.TreeElement()
             te1.type = 'function'
-            te1.name = 'test_values_inexisting'
+            te1.name = te1.translated_technical_name = 'test_values_inexisting'
             te1.description = 'Test Values'
             te1.namespace = 'rule_engine_tests'
+            te1.language, = Language.search([('code', '=', 'en_US')])
 
             te1.save()
 
