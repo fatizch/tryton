@@ -301,6 +301,15 @@ class Contract(GenericContract):
             self.contract_number, self.get_product().get_rec_name(val),
             self.subscriber.get_rec_name(val))
 
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        contracts = cls.search([
+                'OR',
+                ('contract_number',) + clause[1:],
+                ('subscriber.name',) + clause[1:],
+            ])
+        return [('id', 'in', [c.id for c in contracts])]
+
 
 class Option(model.CoopSQL, model.CoopView):
     '''
