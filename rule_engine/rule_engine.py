@@ -268,7 +268,7 @@ class TestCase(ModelView, ModelSQL):
             assert test_value == safe_eval(self.expected_result)
             return True, None
         except AssertionError:
-            return False, test_value + ' vs. ' + self.expected_result
+            return False, str(test_value) + ' vs. ' + str(self.expected_result)
         except:
             return False, str(sys.exc_info())
 
@@ -396,13 +396,6 @@ class TreeElement(ModelView, ModelSQL):
         for element in self.children:
             element.as_context(context)
         return context
-
-    @classmethod
-    def delete(cls, elements):
-        from operator import attrgetter
-        elements.sort(key=attrgetter('type'), reverse=True)
-        print elements
-        super(TreeElement, cls).delete(elements)
 
 
 class ContextTreeElement(ModelSQL):
