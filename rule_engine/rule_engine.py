@@ -379,7 +379,7 @@ class TreeElement(ModelView, ModelSQL):
 
     def as_functions_list(self):
         if self.type in ('function', 'rule'):
-            return [self.name]
+            return [self.translated_technical_name]
         else:
             return sum([child.as_functions_list()
                     for child in self.children], [])
