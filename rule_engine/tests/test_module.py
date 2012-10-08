@@ -68,7 +68,8 @@ class ModuleTestCase(unittest.TestCase):
 
             te = self.TreeElement()
             te.type = 'function'
-            te.name = te.translated_technical_name = 'test_values'
+            te.name = 'test_values'
+            te.translated_technical_name = 'values_test'
             te.description = 'Test Values'
             te.namespace = 'rule_engine_tests'
             te.language, = Language.search([('code', '=', 'en_US')])
@@ -77,7 +78,8 @@ class ModuleTestCase(unittest.TestCase):
 
             te1 = self.TreeElement()
             te1.type = 'function'
-            te1.name = te1.translated_technical_name = 'test_values_inexisting'
+            te1.name = 'test_values_inexisting'
+            te1.translated_technical_name = 'inexisting_test_values'
             te1.description = 'Test Values'
             te1.namespace = 'rule_engine_tests'
             te1.language, = Language.search([('code', '=', 'en_US')])
@@ -95,16 +97,16 @@ class ModuleTestCase(unittest.TestCase):
             rule = self.RuleEngine()
             rule.name = 'test_rule'
             rule.context = ct
-            rule.code = 'return test_values(test_values_inexisting())'
+            rule.code = 'return values_test(inexisting_test_values())'
 
             tcv = self.TestCaseValue()
-            tcv.name = 'test_values_inexisting'
+            tcv.name = 'inexisting_test_values'
             tcv.value = '4'
 
             tc = self.TestCase()
             tc.description = 'Test'
             tc.values = [tcv]
-            tc.expected_result = '(8, ["Toto"], ["Titi"])'
+            tc.expected_result = "(8, ['Toto'], ['Titi'])"
 
             rule.test_cases = [tc]
 

@@ -29,6 +29,7 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['PricingData'] = Model.get('ins_product.pricing_data')
     cfg_dict['Calculator'] = Model.get('ins_product.pricing_calculator')
     cfg_dict['Sequence'] = Model.get('ir.sequence')
+    cfg_dict['Lang'] = Model.get('ir.lang')
     return cfg_dict
 
 
@@ -318,23 +319,28 @@ def create_AAA_Product(cfg_dict, code, name):
     try_to_save_object(cfg_dict, product_a)
 
 
-def get_or_create_tree_element(cfg_dict, cur_type, description, name=None,
-        namespace=None):
+def get_or_create_tree_element(cfg_dict, cur_type, description,
+        translated_technical, name=None, namespace=None):
     cur_domain = []
     if cur_type == 'function':
         cur_domain.append(('namespace', '=', namespace))
         cur_domain.append(('name', '=', name))
     if cur_type == 'folder':
         cur_domain.append(('name', '=', name))
+    cur_domain.append(('language.code', '=', cfg_dict['language']))
+    cur_domain.append(('translated_technical_name', '=', translated_technical))
     tree_element = get_object_from_db(cfg_dict, 'TreeElement',
         domain=cur_domain)
     if tree_element:
         return tree_element
+    lang = cfg_dict['Lang'].find([('code', '=', cfg_dict['language'])])[0]
     te = cfg_dict['TreeElement']()
     te.type = cur_type
     te.name = name
     te.description = description
+    te.translated_technical_name = translated_technical
     te.namespace = namespace
+    te.language = lang
     try_to_save_object(cfg_dict, te)
     return te
 
@@ -379,9 +385,9 @@ def get_or_create_rule(cfg_dict, ct, name):
     rule.name = name
     rule.context = ct
     rule.code = '''
-birthdate = _re_get_person_birthdate()
-if _re_years_between(birthdate, _re_today({})) > 40:
-    _re_message('Subscriber too old (max: 40)')
+birthdate = date_de_naissance()
+if annees_entre(birthdate, aujourd_hui({})) > 40:
+    ajouter_message('Subscriber too old (max: 40)')
     return False
 return True'''
 
@@ -420,10 +426,12 @@ def create_folder_from_set(cfg_dict, set_name, descs):
     for fun in functions:
         full_name = set_name + '.' + fun['name']
         cur_te = get_or_create_tree_element(
-            cfg_dict, 'function', descs[full_name], fun['name'], set_name)
+            cfg_dict, 'function', descs[full_name + '.desc'],
+            descs[full_name + '.tech_name'], fun['name'], set_name)
         tes.append(cur_te)
     te_top = get_or_create_tree_element(
-        cfg_dict, 'folder', descs[set_name])
+        cfg_dict, 'folder', descs[set_name + '.desc'],
+        descs[set_name + '.tech_name'])
     append_inexisting_elements(te_top, 'children', tes)
     te_top.save()
     return te_top

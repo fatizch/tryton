@@ -62,56 +62,72 @@ class ModuleTestCase(unittest.TestCase):
         test_depends()
 
     def createTestRule(self):
+        Lang = POOL.get('ir.lang')
+        fr = Lang.search([('name', '=', 'French')], limit=1)[0]
         te1 = self.TreeElement()
+        te1.language = fr
         te1.type = 'function'
         te1.name = '_re_get_subscriber_name'
-        te1.description = 'Name'
+        te1.translated_technical_name = 'nom_du_souscripteur'
+        te1.description = 'Nom du Souscripteur'
         te1.namespace = 'ins_product.rule_sets.subscriber'
 
         te1.save()
 
         te2 = self.TreeElement()
+        te2.language = fr
         te2.type = 'function'
         te2.name = '_re_get_subscriber_birthdate'
-        te2.description = 'Birthday'
+        te2.translated_technical_name = 'date_de_naissance_souscripteur'
+        te2.description = 'Date de naissance du Souscripteur'
         te2.namespace = 'ins_product.rule_sets.subscriber'
 
         te2.save()
 
-        te = self.TreeElement()
-        te.type = 'folder'
-        te.description = 'Subscriber'
-        te.children = [te1, te2]
+        te8 = self.TreeElement()
+        te8.language = fr
+        te8.type = 'folder'
+        te8.translated_technical_name = 'Dossier Souscripteur'
+        te8.description = 'Souscripteur'
+        te8.children = [te1, te2]
 
-        te.save()
+        te8.save()
 
         te3 = self.TreeElement()
+        te3.language = fr
         te3.type = 'function'
         te3.name = '_re_years_between'
-        te3.description = 'Years between'
+        te3.translated_technical_name = 'annees_entre'
+        te3.description = 'Années entre...'
         te3.namespace = 'rule_engine.tools_functions'
 
         te3.save()
 
         te5 = self.TreeElement()
+        te5.language = fr
         te5.type = 'function'
+        te5.translated_technical_name = 'aujourd_hui'
         te5.name = '_re_today'
-        te5.description = 'Today'
+        te5.description = "Aujourd'hui"
         te5.namespace = 'rule_engine.tools_functions'
 
         te5.save()
 
         te6 = self.TreeElement()
+        te6.language = fr
         te6.type = 'function'
         te6.name = '_re_message'
-        te6.description = 'Add message'
+        te6.translated_technical_name = 'ajouter_message'
+        te6.description = 'Ajouter message'
         te6.namespace = 'rule_engine.tools_functions'
 
         te6.save()
 
         te4 = self.TreeElement()
+        te4.language = fr
         te4.type = 'folder'
-        te4.description = 'Tools'
+        te4.translated_technical_name = 'Dossier Outils'
+        te4.description = 'Outils'
         te4.children = [te3, te5, te6]
 
         te4.save()
@@ -119,7 +135,7 @@ class ModuleTestCase(unittest.TestCase):
         ct = self.Context()
         ct.name = 'test_context'
         ct.allowed_elements = []
-        ct.allowed_elements.append(te)
+        ct.allowed_elements.append(te8)
         ct.allowed_elements.append(te4)
 
         ct.save()
@@ -128,14 +144,14 @@ class ModuleTestCase(unittest.TestCase):
         rule.name = 'test_rule'
         rule.context = ct
         rule.code = '''
-birthdate = _re_get_subscriber_birthdate()
-if _re_years_between(birthdate, _re_today()) > 40:
-    _re_message('Subscriber too old (max: 40)')
+birthdate = date_de_naissance_souscripteur()
+if annees_entre(birthdate, aujourd_hui()) > 40:
+    ajouter_message('Subscriber too old (max: 40)')
     return False
 return True'''
 
         tcv = self.TestCaseValue()
-        tcv.name = '_re_get_subscriber_birthdate'
+        tcv.name = 'date_de_naissance_souscripteur'
         tcv.value = 'datetime.date(2000, 11, 02)'
 
         tc = self.TestCase()
@@ -144,7 +160,7 @@ return True'''
         tc.expected_result = '(True, [], [])'
 
         tcv1 = self.TestCaseValue()
-        tcv1.name = '_re_get_subscriber_birthdate'
+        tcv1.name = 'date_de_naissance_souscripteur'
         tcv1.value = 'datetime.date(1950, 11, 02)'
 
         tc1 = self.TestCase()
