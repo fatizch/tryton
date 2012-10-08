@@ -485,6 +485,9 @@ class Product(model.CoopSQL, Offered):
     def give_me_new_contract_number(self, args):
         return self.contract_generator.get_id(self.contract_generator.id)
 
+    def get_rec_name(self, val):
+        return self.name
+
 
 class ProductOptionsCoverage(model.CoopSQL):
     'Define Product - Coverage relations'

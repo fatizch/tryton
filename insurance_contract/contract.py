@@ -296,6 +296,11 @@ class Contract(GenericContract):
     def finalize_contract(self):
         self.contract_number = self.get_new_contract_number()
 
+    def get_rec_name(self, val):
+        return '%s (%s) - %s' % (
+            self.contract_number, self.get_product().get_rec_name(val),
+            self.subscriber.get_rec_name(val))
+
 
 class Option(model.CoopSQL, model.CoopView):
     '''
