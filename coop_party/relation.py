@@ -97,4 +97,4 @@ class PartyRelation(CoopSQL, CoopView):
         return res
 
     def get_rec_name(self, name):
-        return self.get_summary([self], name)
+        return self.get_summary([self], name)[self.id]

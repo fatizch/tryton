@@ -28,10 +28,10 @@ __all__ = ['Rule', 'Context', 'TreeElement', 'ContextTreeElement', 'TestCase',
     ]
 
 CODE_TEMPLATE = """
-def %s():
+def fct_%s():
 %%s
 
-%s_result = %s()
+result_%s = fct_%s()
 """
 
 
@@ -191,7 +191,8 @@ class Rule(ModelView, ModelSQL):
         localcontext = {}
         try:
             exec self.as_function in context, localcontext
-            result = localcontext['%s_result' % self.name]
+            result = localcontext[('result_%s' %
+                    hash(self.name)).replace('-', '_')]
         except InternalRuleEngineError:
             result = None
         messages = context['messages']
@@ -206,7 +207,8 @@ class Rule(ModelView, ModelSQL):
     @property
     def as_function(self):
         code = '\n'.join(' ' + l for l in self.code.splitlines())
-        code_template = CODE_TEMPLATE % (self.name, self.name, self.name)
+        name = ('%s' % hash(self.name)).replace('-', '_')
+        code_template = CODE_TEMPLATE % (name, name, name)
         return code_template % code
 
     def get_data_tree(self, name):
@@ -290,6 +292,28 @@ class Context(ModelView, ModelSQL):
         'rule_engine.context-rule_engine.tree_element', 'context',
         'tree_element', 'Allowed tree elements')
 
+    @classmethod
+    def __setup__(cls):
+        super(Context, cls).__setup__()
+        cls._constraints += [
+            ('check_duplicate_name', 'duplicate_name'),
+            ]
+        cls._error_messages.update({
+                'duplicate_name': 'You define twice the same name!',
+                })
+
+    def check_duplicate_name(self):
+        names = set()
+        elements = list(self.allowed_elements)
+        while elements:
+            element = elements.pop()
+            if element.translated_technical_name in names:
+                return False
+            else:
+                names.add(element.translated_technical_name)
+            elements.extend(element.children)
+        return True
+
     def get_context(self):
         context = {}
         context['messages'] = []
@@ -304,14 +328,15 @@ class TreeElement(ModelView, ModelSQL):
     __name__ = 'rule_engine.tree_element'
     _rec_name = 'description'
 
-    description = fields.Char('Description', translate=True)
+    description = fields.Char('Description',
+        on_change=['description', 'translated_technical_name'])
     rule = fields.Many2One('rule_engine', 'Rule', states={
             'invisible': Eval('type') != 'rule',
             'required': Eval('type') == 'rule',
             }, depends=['rule'])
     name = fields.Char('Name', states={
-            'invisible': ~Eval('type').in_(['function', 'rule']),
-            'required': Eval('type').in_(['function', 'rule']),
+            'invisible': ~Eval('type').in_(['function']),
+            'required': Eval('type').in_(['function']),
             }, depends=['type'])
     namespace = fields.Char('Namespace', states={
             'invisible': Eval('type') != 'function',
@@ -325,14 +350,28 @@ class TreeElement(ModelView, ModelSQL):
     parent = fields.Many2One('rule_engine.tree_element', 'Parent')
     children = fields.One2Many('rule_engine.tree_element', 'parent',
         'Children')
+    translated_technical_name = fields.Char('Translated technical name',
+        states={
+            'invisible': ~Eval('type').in_(['function', 'rule']),
+            'required': Eval('type').in_(['function', 'rule']),
+            }, depends=['type'])
+    language = fields.Many2One('ir.lang', 'Language', required=True)
 
     @staticmethod
     def default_type():
         return 'function'
 
+    def on_change_description(self):
+        if self.translated_technical_name:
+            return {}
+        return {
+            'translated_technical_name': self.description.replace(' ', '_'),
+            }
+
     def as_tree(self):
         tree = {}
         tree['name'] = self.name
+        tree['translated'] = self.translated_technical_name
         tree['description'] = self.description
         tree['type'] = self.type
         tree['children'] = [child.as_tree() for child in self.children]
@@ -349,10 +388,10 @@ class TreeElement(ModelView, ModelSQL):
         pool = Pool()
         if self.type == 'function':
             namespace_obj = pool.get(self.namespace)
-            context[self.name] = functools.partial(
+            context[self.translated_technical_name] = functools.partial(
                 getattr(namespace_obj, self.name), context)
         elif self.type == 'rule':
-            context[self.name] = functools.partial(
+            context[self.translated_technical_name] = functools.partial(
                 self.rule.compute, context)
         for element in self.children:
             element.as_context(context)
