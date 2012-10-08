@@ -911,10 +911,10 @@ class PricingData(model.CoopSQL, model.CoopView):
         return res
 
     def get_rec_name(self, name=None):
-        return self.get_summary([self])
+        return self.get_summary([self])[self.id]
 
     def on_change_with_summary(self, name=None):
-        return self.get_summary([self])
+        return self.get_summary([self])[self.id]
 
 
 class PriceCalculator(model.CoopSQL, model.CoopView):

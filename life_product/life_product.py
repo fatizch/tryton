@@ -123,5 +123,5 @@ class LifeEligibilityRule():
             res = False
             details.append(
                 '%s must be younger than %s' % (
-                    person.name, self.max_age))
+                    person.name, self.sub_max_age))
         return (EligibilityResultLine(eligible=res, details=details), [])
