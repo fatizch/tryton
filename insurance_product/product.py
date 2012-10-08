@@ -485,6 +485,9 @@ class Product(model.CoopSQL, Offered):
     def give_me_new_contract_number(self, args):
         return self.contract_generator.get_id(self.contract_generator.id)
 
+    def get_rec_name(self, val):
+        return self.name
+
 
 class ProductOptionsCoverage(model.CoopSQL):
     'Define Product - Coverage relations'
@@ -911,10 +914,10 @@ class PricingData(model.CoopSQL, model.CoopView):
         return res
 
     def get_rec_name(self, name=None):
-        return self.get_summary([self])
+        return self.get_summary([self])[self.id]
 
     def on_change_with_summary(self, name=None):
-        return self.get_summary([self])
+        return self.get_summary([self])[self.id]
 
 
 class PriceCalculator(model.CoopSQL, model.CoopView):
