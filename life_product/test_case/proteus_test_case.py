@@ -29,6 +29,8 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['PricingData'] = Model.get('ins_product.pricing_data')
     cfg_dict['Calculator'] = Model.get('ins_product.pricing_calculator')
     cfg_dict['Sequence'] = Model.get('ir.sequence')
+    cfg_dict['BRM'] = Model.get('ins_product.business_rule_manager')
+    cfg_dict['GBR'] = Model.get('ins_product.generic_business_rule')
     cfg_dict['Lang'] = Model.get('ir.lang')
     return cfg_dict
 
@@ -43,6 +45,8 @@ def get_or_create_product(cfg_dict, code, name, options=None):
     product.start_date = cfg_dict['Date'].today({})
     if options:
         product.options[:] = options
+    product.contract_generator = get_or_create_generator(
+        cfg_dict, 'ins_product.product')
     return product
 
 
@@ -102,7 +106,7 @@ def get_or_create_coverage(cfg_dict, code, name, date=None,
     return coverage
 
 
-def get_or_create_tax(cfg_dict, code, name, vals=None):
+def get_or_create_tax(cfg_dict, code, name=None, vals=None):
     tax = get_object_from_db(cfg_dict, 'Tax', 'code', code)
     if tax:
         return tax
@@ -182,7 +186,6 @@ def create_AAA_Product(cfg_dict, code, name):
     product_a = get_or_create_product(cfg_dict, code, name)
     if product_a.id > 0:
         return product_a
-    add_description(product_a)
     brm = Model.get('ins_product.business_rule_manager')
     gbr = Model.get('ins_product.generic_business_rule')
 
@@ -485,7 +488,6 @@ def create_BBB_product(cfg_dict, code, name):
     product_b = get_or_create_product(cfg_dict, code, name)
     if product_b.id > 0:
         return product_b
-    add_description(product_b)
     coverage = Model.get('ins_product.coverage')
     brm = Model.get('ins_product.business_rule_manager')
     gbr = Model.get('ins_product.generic_business_rule')
@@ -562,8 +564,60 @@ def get_or_create_currency(cfg_dict):
     return currency
 
 
+def get_module_name(instance):
+    return instance.__class__.__name__.split('.')[0]
+
+
+def add_rule(cfg_dict, offered, kind, at_date=None):
+    if not at_date:
+        at_date = cfg_dict['Date'].today({})
+    mgr_list = getattr(offered, '%s_mgr' % kind)
+    if len(mgr_list) == 0:
+        mgr = cfg_dict['BRM']()
+        mgr_list.append(mgr)
+    mgr = mgr_list[-1]
+
+    if len(mgr.business_rules) == 0:
+        gbr = cfg_dict['GBR']()
+        gbr.start_date = at_date
+        mgr.business_rules.append(gbr)
+        model_name = '%s.%s_rule' % (get_module_name(offered), kind)
+        gbr.kind = model_name
+        rule = getattr(gbr, '%s_rule' % kind)[0]
+        return rule
+    else:
+        return getattr(mgr.business_rules[0], '%s_rule' % kind)[0]
+
+
+def create_disability_coverage(cfg_dict):
+    cov = get_or_create_coverage(cfg_dict, 'INCAP', u'INCAPACITÉ')
+    ca_rule = add_rule(cfg_dict, cov, 'coverage_amount')
+    ca_rule.amounts = '50;100;150;200'
+
+    elig_rule = add_rule(cfg_dict, cov, 'eligibility')
+    elig_rule.min_age = 18
+    elig_rule.max_age = 65
+
+    pricing_rule = add_rule(cfg_dict, cov, 'pricing')
+    pricing_rule.basic_price = Decimal(5)
+    pricing_rule.basic_tax = get_or_create_tax(cfg_dict, 'TSCA')
+
+    cov.save()
+    return cov
+
+
+def create_prev_product(cfg_dict):
+    disability = create_disability_coverage(cfg_dict)
+    prod = get_or_create_product(cfg_dict, 'PREV', u'Prévoyance Indviduelle',
+        [disability])
+    add_description(prod)
+    prod.save()
+    return prod
+
+
 def launch_test_case(cfg_dict):
     cfg_dict = update_cfg_dict_with_models(cfg_dict)
     get_or_create_currency(cfg_dict)
     create_AAA_Product(cfg_dict, 'AAA', 'Awesome Alternative Allowance')
     create_BBB_product(cfg_dict, 'BBB', 'Big Bad Bully')
+    create_prev_product(cfg_dict)
