@@ -13,6 +13,7 @@ from trytond.modules.insurance_process import CoopStateView
 from trytond.modules.insurance_process import CoopStepView
 
 from trytond.modules.coop_utils import get_descendents, WithAbstract
+from trytond.modules.coop_party import ACTOR_KIND
 
 from contract import OPTIONSTATUS
 
@@ -51,9 +52,24 @@ class ProjectState(CoopStep):
     # it at this step for it decides which product will be available.
     start_date = fields.Date('Effective Date')
 
+    subscriber_kind = fields.Selection(ACTOR_KIND, 'Kind',
+        on_change=['subscriber_as_person', 'subscriber_as_person',
+            'subscriber_kind'])
     # The subscriber is the client which wants to subscribe to a contract.
-    subscriber = fields.Many2One('party.party',
-                                 'Subscriber')
+    subscriber = fields.Many2One('party.party', 'Subscriber',
+        on_change_with=['subscriber_as_person', 'subscriber_as_company',
+            'subscriber_kind']
+        )
+    subscriber_as_person = fields.Many2One('party.person', 'Subscriber',
+        states={'invisible': Eval('subscriber_kind') != 'party.person',
+            })
+    subscriber_as_company = fields.Many2One('company.company', 'Subscriber',
+        states={'invisible': Eval('subscriber_kind') != 'company.company'})
+
+    subscriber_desc = fields.Function(fields.Text('Summary',
+            on_change_with=['subscriber_as_person', 'subscriber_as_company',
+                'subscriber']),
+        'on_change_with_subscriber_desc')
 
     # This is a core field, it will be used all along the process to ask for
     # directions, client side rules, etc...
@@ -71,9 +87,12 @@ class ProjectState(CoopStep):
                               depends=['start_date', ],
                               states={'invisible': ~Eval('start_date')})
 
+    product_desc = fields.Function(fields.Text('Description',
+            on_change_with=['product']),
+        'on_change_with_product_desc')
+
     broker = fields.Many2One('party.party',
-                             'Broker',
-                             states={'invisible': ~Eval('product')})
+                             'Broker')
 
     # Default start_date is today
     @staticmethod
@@ -132,6 +151,38 @@ class ProjectState(CoopStep):
     @staticmethod
     def coop_step_name():
         return 'Product Selection'
+
+    def on_change_with_product_desc(self):
+        res = ''
+        if self.product:
+            res = self.product.description
+        return res
+
+    def on_change_with_subscriber_desc(self):
+        res = ''
+        if self.subscriber:
+            res = self.subscriber.summary
+        return res
+
+    def on_change_with_subscriber(self):
+        if (self.subscriber_as_person
+                and self.subscriber_kind == 'party.person'):
+            return self.subscriber_as_person.party.id
+        elif (self.subscriber_as_company
+                and self.subscriber_kind == 'company.company'):
+            return self.subscriber_as_company.party.id
+
+    def on_change_subscriber_kind(self):
+        res = {}
+        if self.subscriber_kind == 'party.person':
+            res['subscriber_as_company'] = None
+        elif self.subscriber_kind == 'company.company':
+            res['subscriber_as_person'] = None
+        return res
+
+    @staticmethod
+    def default_subscriber_kind():
+        return 'party.person'
 
 
 class CoverageDisplayer(CoopStepView):

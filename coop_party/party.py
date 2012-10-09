@@ -12,12 +12,15 @@ from trytond.modules.coop_utils import string as string
 
 
 __all__ = ['Party', 'Company', 'Employee', 'Actor', 'Person',
-           'GenericActorKind', 'GenericActor', ]
+           'GenericActorKind', 'GenericActor', 'ACTOR_KIND']
 __metaclass__ = PoolMeta
 
 GENDER = [('M', 'Mr.'),
           ('F', 'Mrs.'),
             ]
+
+ACTOR_KIND = [('party.person', 'Person'),
+              ('company.company', 'Company')]
 
 
 class Party:

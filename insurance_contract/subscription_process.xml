@@ -1,31 +1,43 @@
 <?xml version="1.0"?>
 <tryton>
-	<data>
+    <data>
     <!--################################################################-->
     <!--                          Project View                          -->
     <!--################################################################-->
 
-		<record model="ir.ui.view" id="project_view">
-			<field name="model">ins_contract.subs_process.project</field>
-			<field name="type">form</field>
-			<field name="arch" type="xml">
-					<![CDATA[ 
-						<form string="Subscription Process - Project Step">
-							<label name="start_date" xalign="0"/>
-							<field name="start_date" xfill="1"/>
-							<newline/>
-							<label name="subscriber" xalign="0"/>
-							<field name="subscriber"/>
-							<newline/>
-							<label name="product" xalign="0"/>
-							<field name="product" xfill="1"/>		
-							<newline/>
-							<label name="broker" xalign="0"/>
-							<field name="broker" xfill="1"/>				
-						</form>
-					]]>
-			</field>
-		</record>
+        <record model="ir.ui.view" id="project_view">
+            <field name="model">ins_contract.subs_process.project</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                    <![CDATA[ 
+                        <form string="Subscription Process - Project Step">
+                            <label name="start_date" xalign="0"/>
+                            <field name="start_date" xfill="1"/>
+                            <newline/>
+                            <label name="broker" xalign="0"/>
+                            <field name="broker"/>
+                            <newline/>
+                            <label name="subscriber_kind" xalign="0"/>
+                            <field name="subscriber_kind"/>
+                            <newline/>
+                            <label name="subscriber" xalign="0"/>
+                            <group id="subscriber">
+                                <field name="subscriber_as_person"/>
+                                <field name="subscriber_as_company"/>
+                            </group>
+                            <newline/>
+                            <label name="subscriber_desc" xalign="0"/>
+                            <field name="subscriber_desc" xfill="1" widget="richtext"/>
+                            <newline/>
+                            <label name="product" xalign="0"/>
+                            <field name="product" xfill="1" widget="selection"/>
+                            <newline/>
+                            <label name="product_desc" xalign="0"/>
+                            <field name="product_desc" xfill="1" widget="richtext"/>
+                        </form>
+                    ]]>
+            </field>
+        </record>
 
     <!--################################################################-->
     <!--                       Coverage Displayer                       -->
@@ -50,18 +62,17 @@
     <!--                     Option Selection View                      -->
     <!--################################################################-->
 
-		<record model="ir.ui.view" id="option_selection_view">
-			<field name="model">ins_contract.subs_process.option_selection</field>
-			<field name="type">form</field>
-			<field name="arch" type="xml">
-					<![CDATA[
-						<form string="Subscription Process - Option Selection Step">
-							<label name="options"/>
-							<field name="options"/>
-						</form>
-					]]>
-			</field>
-		</record>
+        <record model="ir.ui.view" id="option_selection_view">
+            <field name="model">ins_contract.subs_process.option_selection</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                    <![CDATA[
+                        <form string="Subscription Process - Option Selection Step">
+                            <field name="options"/>
+                        </form>
+                    ]]>
+            </field>
+        </record>
 
     <!--################################################################-->
     <!--                      Covered Data Desc                         -->
@@ -70,8 +81,8 @@
         <record model="ir.ui.view" id="covered_data_desc_view_form">
             <field name="model">ins_contract.subs_process.covered_data_desc</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">                 
-                    <![CDATA[                 
+            <field name="arch" type="xml">
+                    <![CDATA[
                     <form string="Covered Data">
                         <group id="global">
                             <label name="status"/>
@@ -89,21 +100,23 @@
                         <newline/>
                         <group id="specific">
                         </group>
-                    </form>                 ]]>
+                    </form>
+                    ]]>
             </field>
         </record>
 
         <record model="ir.ui.view" id="covered_data_desc_view_tree">
             <field name="model">ins_contract.subs_process.covered_data_desc</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">                 
-                    <![CDATA[                 
+            <field name="arch" type="xml">
+                    <![CDATA[
                     <tree string="Covered Data" editable="top">
                         <field name="status"/>
                         <field name="for_coverage"/>
                         <field name="start_date"/>
                         <field name="end_date"/>
-                    </tree>                 ]]>
+                    </tree>
+                    ]]>
             </field>
         </record>
 
@@ -111,37 +124,37 @@
     <!--                        Pricing Lines                           -->
     <!--################################################################-->
 
-		<record model="ir.ui.view" id="lines_view">
-			<field name="model">ins_contract.subs_process.lines</field>
-			<field name="type">tree</field>
+        <record model="ir.ui.view" id="lines_view">
+            <field name="model">ins_contract.subs_process.lines</field>
+            <field name="type">tree</field>
             <field name="field_childs">childs</field>
-			<field name="arch" type="xml">
-					<![CDATA[
-						<tree string="Pricing Lines">
-							<field name="name"/>
-							<field name="value"/>
-							<field name="taxes"/>
-						</tree>
-					]]>
-			</field>
-		</record>
+            <field name="arch" type="xml">
+                    <![CDATA[
+                        <tree string="Pricing Lines">
+                            <field name="name"/>
+                            <field name="value"/>
+                            <field name="taxes"/>
+                        </tree>
+                    ]]>
+            </field>
+        </record>
 
     <!--################################################################-->
     <!--                       Summary View                             -->
     <!--################################################################-->
 
-		<record model="ir.ui.view" id="summary_view">
-			<field name="model">ins_contract.subs_process.summary</field>
-			<field name="type">form</field>
-			<field name="arch" type="xml">
-					<![CDATA[
-						<form string="Subscription Process - Summary">
-							<field name="lines"/>
-						</form>
-					]]>
-			</field>
-		</record>
-		
+        <record model="ir.ui.view" id="summary_view">
+            <field name="model">ins_contract.subs_process.summary</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                    <![CDATA[
+                        <form string="Subscription Process - Summary">
+                            <field name="lines"/>
+                        </form>
+                    ]]>
+            </field>
+        </record>
+        
     <!--################################################################-->
     <!--                          Menu Entries                          -->
     <!--################################################################-->
@@ -164,73 +177,73 @@
             <field name="wiz_name">ins_contract.subs_process</field>
             <field name="model">ins_process.suspended_process</field>
         </record>
-	</data>
-	
+    </data>
+    
     <!--################################################################-->
     <!--                          Init Data                             -->
     <!--################################################################-->
-	
-	<data>
-		<record model="ins_process.process_desc" id="subs_process_desc">
-			<field name="name">Subscription Process Descriptor</field>
-			<field name="process_model">ins_contract.subs_process</field>	
-		</record>
-		<record model="ins_process.step_desc" id="project_step_desc">
-			<field name="button_next">True</field>
-			<field name="button_previous"></field>
-			<field name="button_check"></field>
-			<field name="button_complete"></field>
-			<field name="button_cancel">True</field>
-			<field name="button_suspend">True</field>
-			<field name="button_default">button_next</field>
-			<field name="on_product_step">0</field>
-			<field name="process" ref="subs_process_desc"/>
-			<field name="virtual_step">0</field>
-			<field name="sequence">1</field>
-			<field name="step_model">ins_contract.subs_process.project</field>	
-		</record>
-		<record model="ins_process.step_desc" id="option_selection_step_desc">
-			<field name="button_next">True</field>
-			<field name="button_previous">True</field>
-			<field name="button_check">True</field>
-			<field name="button_complete"></field>
-			<field name="button_cancel">True</field>
-			<field name="button_suspend">True</field>
-			<field name="button_default">button_next</field>
-			<field name="on_product_step">0</field>
-			<field name="process" ref="subs_process_desc"/>
-			<field name="virtual_step">0</field>
-			<field name="sequence">2</field>
-			<field name="step_model">ins_contract.subs_process.option_selection</field>	
-		</record>
-		<record model="ins_process.step_desc" id="extension_step_desc">
-			<field name="button_next">True</field>
-			<field name="button_previous">True</field>
-			<field name="button_check">True</field>
-			<field name="button_complete"></field>
-			<field name="button_cancel">True</field>
-			<field name="button_suspend">True</field>
-			<field name="button_default">button_next</field>
-			<field name="on_product_step">1</field>
-			<field name="process" ref="subs_process_desc"/>
-			<field name="virtual_step">0</field>
-			<field name="sequence">3</field>
-			<field name="product_step_name">extension</field>	
-		</record>
-		<record model="ins_process.step_desc" id="summary_step_desc">
-			<field name="button_next"></field>
-			<field name="button_previous">True</field>
-			<field name="button_check"></field>
-			<field name="button_complete">True</field>
-			<field name="button_cancel">True</field>
-			<field name="button_suspend">True</field>
-			<field name="button_default">button_complete</field>
-			<field name="on_product_step">0</field>
-			<field name="process" ref="subs_process_desc"/>
-			<field name="virtual_step">0</field>
-			<field name="sequence">4</field>
-			<field name="step_model">ins_contract.subs_process.summary</field>	
-		</record>
-	</data>
+    
+    <data>
+        <record model="ins_process.process_desc" id="subs_process_desc">
+            <field name="name">Subscription Process Descriptor</field>
+            <field name="process_model">ins_contract.subs_process</field>
+        </record>
+        <record model="ins_process.step_desc" id="project_step_desc">
+            <field name="button_next">True</field>
+            <field name="button_previous"></field>
+            <field name="button_check"></field>
+            <field name="button_complete"></field>
+            <field name="button_cancel">True</field>
+            <field name="button_suspend">True</field>
+            <field name="button_default">button_next</field>
+            <field name="on_product_step">0</field>
+            <field name="process" ref="subs_process_desc"/>
+            <field name="virtual_step">0</field>
+            <field name="sequence">1</field>
+            <field name="step_model">ins_contract.subs_process.project</field>
+        </record>
+        <record model="ins_process.step_desc" id="option_selection_step_desc">
+            <field name="button_next">True</field>
+            <field name="button_previous">True</field>
+            <field name="button_check">True</field>
+            <field name="button_complete"></field>
+            <field name="button_cancel">True</field>
+            <field name="button_suspend">True</field>
+            <field name="button_default">button_next</field>
+            <field name="on_product_step">0</field>
+            <field name="process" ref="subs_process_desc"/>
+            <field name="virtual_step">0</field>
+            <field name="sequence">2</field>
+            <field name="step_model">ins_contract.subs_process.option_selection</field>
+        </record>
+        <record model="ins_process.step_desc" id="extension_step_desc">
+            <field name="button_next">True</field>
+            <field name="button_previous">True</field>
+            <field name="button_check">True</field>
+            <field name="button_complete"></field>
+            <field name="button_cancel">True</field>
+            <field name="button_suspend">True</field>
+            <field name="button_default">button_next</field>
+            <field name="on_product_step">1</field>
+            <field name="process" ref="subs_process_desc"/>
+            <field name="virtual_step">0</field>
+            <field name="sequence">3</field>
+            <field name="product_step_name">extension</field>
+        </record>
+        <record model="ins_process.step_desc" id="summary_step_desc">
+            <field name="button_next"></field>
+            <field name="button_previous">True</field>
+            <field name="button_check"></field>
+            <field name="button_complete">True</field>
+            <field name="button_cancel">True</field>
+            <field name="button_suspend">True</field>
+            <field name="button_default">button_complete</field>
+            <field name="on_product_step">0</field>
+            <field name="process" ref="subs_process_desc"/>
+            <field name="virtual_step">0</field>
+            <field name="sequence">4</field>
+            <field name="step_model">ins_contract.subs_process.summary</field>
+        </record>
+    </data>
 </tryton>
-		
+        
