@@ -134,18 +134,6 @@ msgctxt "model:coop.table_of_table,name:"
 msgid "Table of table"
 msgstr "Table des Tables"
 
-msgctxt "model:ir.action,name:ask_date_view_action"
-msgid "Change Session Date"
-msgstr "Changer la Date de la Session"
-
-msgctxt "model:ir.ui.menu,name:menu_change_date"
-msgid "Change Session Date"
-msgstr "Changer la Date de la Session"
-
-msgctxt "model:ir.ui.menu,name:menu_tools"
-msgid "Tools"
-msgstr "Outils"
-
 msgctxt "model:utils.change_session.ask_date,name:"
 msgid "Asks a new business date for the current session"
 msgstr ""

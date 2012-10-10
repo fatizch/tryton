@@ -18,7 +18,6 @@ msgctxt "field:ins_contract.contract,extension_life:"
 msgid ""
 msgstr ""
 
-#, fuzzy
 msgctxt "field:life_contract.covered_data,amount:"
 msgid "Covered Amount"
 msgstr "Montant de Couverture"
@@ -68,6 +67,10 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:life_contract.covered_data_desc,covered_amount:"
+msgid "Coverage Amount"
+msgstr "Montant de Couverture"
+
+msgctxt "field:life_contract.covered_data_desc,covered_amount_old:"
 msgid "Covered Amount"
 msgstr "Montant de Couverture"
 
@@ -135,7 +138,6 @@ msgctxt "field:life_contract.covered_person,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-#, fuzzy
 msgctxt "field:life_contract.covered_person_desc,covered_data:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
@@ -152,7 +154,6 @@ msgctxt "field:life_contract.covered_person_desc,person:"
 msgid "Covered Person"
 msgstr "Personne Couverte"
 
-#, fuzzy
 msgctxt "field:life_contract.extension,contract:"
 msgid "The contract"
 msgstr "Contrat"
@@ -205,7 +206,6 @@ msgctxt "model:life_contract.covered_data,name:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
 
-#, fuzzy
 msgctxt "model:life_contract.covered_data_desc,name:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
@@ -246,10 +246,9 @@ msgctxt "view:life_contract.extension:"
 msgid "Extension Life"
 msgstr "Prévoyance"
 
-#, fuzzy
 msgctxt "view:life_contract.extension_life_state:"
 msgid "Subscription Process - Life Extension"
-msgstr "Prévoyance"
+msgstr "Sélection des Elèments Couverts"
 
 msgctxt "wizard_button:ins_contract.subs_process,extension_life,steps_cancel:"
 msgid "Cancel"

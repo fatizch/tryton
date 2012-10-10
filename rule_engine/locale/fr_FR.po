@@ -246,7 +246,6 @@ msgctxt "field:rule_engine.tree_element,id:"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgctxt "field:rule_engine.tree_element,language:"
 msgid "Language"
 msgstr "Langues"
@@ -411,17 +410,14 @@ msgctxt "view:rule_engine.test_case:"
 msgid "Test Case"
 msgstr ""
 
-#, fuzzy
 msgctxt "view:rule_engine.test_rule.start:"
 msgid "Test Rule"
 msgstr "Tester la Règle"
 
-#, fuzzy
 msgctxt "view:rule_engine.test_rule.test:"
 msgid "Test Rule"
 msgstr "Tester la Règle"
 
-#, fuzzy
 msgctxt "view:rule_engine.tree_element:"
 msgid "Tree Element"
 msgstr "Elèment de l'Arbre"
@@ -434,7 +430,6 @@ msgctxt "view:rule_engine:"
 msgid "Rules"
 msgstr "Règles"
 
-#, fuzzy
 msgctxt "wizard_button:rule_engine.run_tests,report,end:"
 msgid "OK"
 msgstr "OK"

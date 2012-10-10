@@ -392,7 +392,7 @@ msgstr "Mis à jour par"
 
 msgctxt "model:ir.action,name:act_address_kind_form"
 msgid "Address Kind"
-msgstr "Type d'adresse"
+msgstr "Type d'Adresse"
 
 msgctxt "model:ir.action,name:act_company_form"
 msgid "Company"
@@ -416,7 +416,7 @@ msgstr "Acteurs"
 
 msgctxt "model:ir.ui.menu,name:menu_address_kind_form"
 msgid "Address Kind"
-msgstr "Type d'adresse"
+msgstr "Type d'Adresse"
 
 msgctxt "model:ir.ui.menu,name:menu_company_form"
 msgid "Company"

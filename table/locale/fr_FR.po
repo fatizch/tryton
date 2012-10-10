@@ -10,22 +10,18 @@ msgctxt "error:table.table_def:"
 msgid "The name of \"Table Definition\" must be unique"
 msgstr "Le nom de la table doit être unique"
 
-#, fuzzy
 msgctxt "field:table.2d,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-#, fuzzy
 msgctxt "field:table.2d,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-#, fuzzy
 msgctxt "field:table.2d,id:"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgctxt "field:table.2d,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -34,17 +30,14 @@ msgctxt "field:table.2d,row:"
 msgid "Row"
 msgstr "Ligne"
 
-#, fuzzy
 msgctxt "field:table.2d,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-#, fuzzy
 msgctxt "field:table.2d,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-#, fuzzy
 msgctxt "field:table.2d.open.ask_dimensions,definition:"
 msgid "Definition"
 msgstr "Définition"
@@ -57,7 +50,6 @@ msgctxt "field:table.2d.open.ask_dimensions,dimension3_required:"
 msgid "Dimension 3 Required"
 msgstr "Dimension 3 requise"
 
-#, fuzzy
 msgctxt "field:table.2d.open.ask_dimensions,dimension4:"
 msgid "Dimension 4"
 msgstr "Dimension 4"
@@ -66,37 +58,30 @@ msgctxt "field:table.2d.open.ask_dimensions,dimension4_required:"
 msgid "Dimension 4 Required"
 msgstr "Dimension 4 requise"
 
-#, fuzzy
 msgctxt "field:table.2d.open.ask_dimensions,id:"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgctxt "field:table.table_cell,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-#, fuzzy
 msgctxt "field:table.table_cell,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-#, fuzzy
 msgctxt "field:table.table_cell,definition:"
 msgid "Definition"
 msgstr "Définition"
 
-#, fuzzy
 msgctxt "field:table.table_cell,dimension1:"
 msgid "Dimension 1"
 msgstr "Dimension 1"
 
-#, fuzzy
 msgctxt "field:table.table_cell,dimension2:"
 msgid "Dimension 2"
 msgstr "Dimension 2"
 
-#, fuzzy
 msgctxt "field:table.table_cell,dimension3:"
 msgid "Dimension 3"
 msgstr "Dimension 3"
@@ -105,7 +90,6 @@ msgctxt "field:table.table_cell,dimension4:"
 msgid "Dimension 4"
 msgstr "Dimension 4"
 
-#, fuzzy
 msgctxt "field:table.table_cell,id:"
 msgid "ID"
 msgstr "ID"
@@ -114,27 +98,22 @@ msgctxt "field:table.table_cell,rec_name:"
 msgid "Name"
 msgstr "Valeur"
 
-#, fuzzy
 msgctxt "field:table.table_cell,value:"
 msgid "Value"
 msgstr "Valeur"
 
-#, fuzzy
 msgctxt "field:table.table_cell,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-#, fuzzy
 msgctxt "field:table.table_cell,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-#, fuzzy
 msgctxt "field:table.table_def,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-#, fuzzy
 msgctxt "field:table.table_def,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -151,7 +130,6 @@ msgctxt "field:table.table_def,dimension3:"
 msgid "Dimension 3"
 msgstr "Dimension 3"
 
-#, fuzzy
 msgctxt "field:table.table_def,dimension4:"
 msgid "Dimension 4"
 msgstr "Dimension 4"
@@ -172,42 +150,34 @@ msgctxt "field:table.table_def,dimension_kind4:"
 msgid "Dimension Kind 4"
 msgstr "Type Dim 4"
 
-#, fuzzy
 msgctxt "field:table.table_def,id:"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgctxt "field:table.table_def,name:"
 msgid "Name"
 msgstr "Nom"
 
-#, fuzzy
 msgctxt "field:table.table_def,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-#, fuzzy
 msgctxt "field:table.table_def,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-#, fuzzy
 msgctxt "field:table.table_def,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-#, fuzzy
 msgctxt "field:table.table_dimension,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-#, fuzzy
 msgctxt "field:table.table_dimension,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-#, fuzzy
 msgctxt "field:table.table_dimension,date:"
 msgid "Date"
 msgstr "Date"
@@ -216,17 +186,14 @@ msgctxt "field:table.table_dimension,definition:"
 msgid "Definition"
 msgstr "Définition"
 
-#, fuzzy
 msgctxt "field:table.table_dimension,end:"
 msgid "End"
 msgstr "Borne Supérieure"
 
-#, fuzzy
 msgctxt "field:table.table_dimension,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-#, fuzzy
 msgctxt "field:table.table_dimension,id:"
 msgid "ID"
 msgstr "ID"
@@ -239,27 +206,22 @@ msgctxt "field:table.table_dimension,start:"
 msgid "Start"
 msgstr "Borne Inférieure"
 
-#, fuzzy
 msgctxt "field:table.table_dimension,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-#, fuzzy
 msgctxt "field:table.table_dimension,type:"
 msgid "Type"
 msgstr "Type"
 
-#, fuzzy
 msgctxt "field:table.table_dimension,value:"
 msgid "Value"
 msgstr "Valeur"
 
-#, fuzzy
 msgctxt "field:table.table_dimension,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-#, fuzzy
 msgctxt "field:table.table_dimension,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
@@ -272,22 +234,18 @@ msgctxt "model:ir.action,name:act_cell_relate_form"
 msgid "Cells"
 msgstr "Cellules"
 
-#, fuzzy
 msgctxt "model:ir.action,name:act_table_2d_open"
 msgid "Table 2D"
 msgstr "Table 2D"
 
-#, fuzzy
 msgctxt "model:ir.action,name:act_table_2d_relate_form"
 msgid "Table 2D"
 msgstr "Table 2D"
 
-#, fuzzy
 msgctxt "model:ir.action,name:act_table_definition_form"
 msgid "Tables"
 msgstr "Tables"
 
-#, fuzzy
 msgctxt "model:ir.ui.menu,name:menu_table_defintion_form"
 msgid "Tables"
 msgstr "Tables"
@@ -308,7 +266,6 @@ msgctxt "model:table.table_def,name:"
 msgid "Table Definition"
 msgstr "Table"
 
-#, fuzzy
 msgctxt "model:table.table_dimension,name:"
 msgid "Table Definition Dimension"
 msgstr "Dimension"
@@ -317,12 +274,10 @@ msgctxt "selection:table.table_def,dimension_kind1:"
 msgid ""
 msgstr ""
 
-#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind1:"
 msgid "Date"
 msgstr "Date"
 
-#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind1:"
 msgid "Range"
 msgstr "Intervalle"
@@ -331,7 +286,6 @@ msgctxt "selection:table.table_def,dimension_kind1:"
 msgid "Range-Date"
 msgstr "Intervalle de Date"
 
-#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind1:"
 msgid "Value"
 msgstr "Valeur"
@@ -340,22 +294,18 @@ msgctxt "selection:table.table_def,dimension_kind2:"
 msgid ""
 msgstr ""
 
-#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind2:"
 msgid "Date"
 msgstr "Date"
 
-#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind2:"
 msgid "Range"
 msgstr "Intervalle"
 
-#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind2:"
 msgid "Range-Date"
 msgstr "Intervalle de Date"
 
-#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind2:"
 msgid "Value"
 msgstr "Valeur"
@@ -364,7 +314,6 @@ msgctxt "selection:table.table_def,dimension_kind3:"
 msgid ""
 msgstr ""
 
-#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind3:"
 msgid "Date"
 msgstr "Date"
@@ -377,7 +326,6 @@ msgctxt "selection:table.table_def,dimension_kind3:"
 msgid "Range-Date"
 msgstr "Intervalle de Date"
 
-#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind3:"
 msgid "Value"
 msgstr "Valeur"
@@ -386,27 +334,22 @@ msgctxt "selection:table.table_def,dimension_kind4:"
 msgid ""
 msgstr ""
 
-#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind4:"
 msgid "Date"
 msgstr "Date"
 
-#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind4:"
 msgid "Range"
 msgstr "Intervalle"
 
-#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind4:"
 msgid "Range-Date"
 msgstr "Plage de Date"
 
-#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind4:"
 msgid "Value"
 msgstr "Valeur"
 
-#, fuzzy
 msgctxt "selection:table.table_dimension,type:"
 msgid "Dimension 1"
 msgstr "Dimension 1"
@@ -419,7 +362,6 @@ msgctxt "selection:table.table_dimension,type:"
 msgid "Dimension 3"
 msgstr "Dimension 3"
 
-#, fuzzy
 msgctxt "selection:table.table_dimension,type:"
 msgid "Dimension 4"
 msgstr "Dimension 4"
@@ -428,7 +370,6 @@ msgctxt "view:table.2d.open.ask_dimensions:"
 msgid "Dimensions"
 msgstr "Dimensions"
 
-#, fuzzy
 msgctxt "view:table.table_cell:"
 msgid "Table"
 msgstr "Table"
@@ -449,12 +390,10 @@ msgctxt "view:table:"
 msgid "Table"
 msgstr "Table"
 
-#, fuzzy
 msgctxt "wizard_button:table.2d.open,ask_dimensions,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-#, fuzzy
 msgctxt "wizard_button:table.2d.open,ask_dimensions,open_:"
 msgid "Open"
 msgstr "Ouvert"

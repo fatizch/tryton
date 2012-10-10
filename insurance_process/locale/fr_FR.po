@@ -78,12 +78,10 @@ msgctxt "field:ins_process.dummy_process.dummy_step1,session_id:"
 msgid "Session Id"
 msgstr ""
 
-#, fuzzy
 msgctxt "field:ins_process.dummy_process_state,cur_action:"
 msgid "Current Action"
 msgstr "Action Courante"
 
-#, fuzzy
 msgctxt "field:ins_process.dummy_process_state,cur_step:"
 msgid "Current step"
 msgstr "Etape Courante"
@@ -92,7 +90,6 @@ msgctxt "field:ins_process.dummy_process_state,cur_step_desc:"
 msgid "Step Descriptor"
 msgstr "Descripteur d'Etape"
 
-#, fuzzy
 msgctxt "field:ins_process.dummy_process_state,errors:"
 msgid "Errors"
 msgstr "Erreurs"
@@ -113,7 +110,6 @@ msgctxt "field:ins_process.dummy_process_state,for_contract_str:"
 msgid "Jsonfor_contract"
 msgstr ""
 
-#, fuzzy
 msgctxt "field:ins_process.dummy_process_state,from_susp_process:"
 msgid "From Process"
 msgstr "Processus Source"
@@ -122,12 +118,10 @@ msgctxt "field:ins_process.dummy_process_state,id:"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgctxt "field:ins_process.dummy_process_state,on_product:"
 msgid "On Product Process"
 msgstr "Produit"
 
-#, fuzzy
 msgctxt "field:ins_process.dummy_process_state,process_desc:"
 msgid "Process Description"
 msgstr "Description du Processus"
@@ -172,27 +166,22 @@ msgctxt "field:ins_process.process_desc,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-#, fuzzy
 msgctxt "field:ins_process.process_state,cur_action:"
 msgid "Current Action"
 msgstr "Action Courante"
 
-#, fuzzy
 msgctxt "field:ins_process.process_state,cur_step:"
 msgid "Current step"
 msgstr "Etape Courante"
 
-#, fuzzy
 msgctxt "field:ins_process.process_state,cur_step_desc:"
 msgid "Step Descriptor"
 msgstr "Descripteur d'Etape"
 
-#, fuzzy
 msgctxt "field:ins_process.process_state,errors:"
 msgid "Errors"
 msgstr "Erreurs"
 
-#, fuzzy
 msgctxt "field:ins_process.process_state,from_susp_process:"
 msgid "From Process"
 msgstr "Processus Source"
@@ -201,12 +190,10 @@ msgctxt "field:ins_process.process_state,id:"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgctxt "field:ins_process.process_state,on_product:"
 msgid "On Product Process"
 msgstr "Produit"
 
-#, fuzzy
 msgctxt "field:ins_process.process_state,process_desc:"
 msgid "Process Description"
 msgstr "Description du Processus"
@@ -267,12 +254,10 @@ msgctxt "field:ins_process.step_desc,on_product_step:"
 msgid "On Product Step"
 msgstr "Sélection du Produit"
 
-#, fuzzy
 msgctxt "field:ins_process.step_desc,process:"
 msgid "Process"
 msgstr "Processus"
 
-#, fuzzy
 msgctxt "field:ins_process.step_desc,process_name:"
 msgid "Process Name"
 msgstr "Nom du Processus"
@@ -433,7 +418,6 @@ msgctxt "model:ins_process.suspended_process,name:"
 msgid ""
 msgstr ""
 
-#, fuzzy
 msgctxt "model:ir.action,name:act_process_form"
 msgid "Process"
 msgstr "Processus"
@@ -574,12 +558,10 @@ msgctxt "view:ins_process.step_method_desc:"
 msgid "method step"
 msgstr ""
 
-#, fuzzy
 msgctxt "view:ins_process.step_method_desc:"
 msgid "step"
 msgstr "étape"
 
-#, fuzzy
 msgctxt "view:ins_process.suspended_process:"
 msgid "Suspended Processes"
 msgstr "Processus Suspendus"

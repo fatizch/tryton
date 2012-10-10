@@ -26,7 +26,6 @@ msgctxt "model:life_product.definition,name:"
 msgid "Life Product Definition"
 msgstr "Définition du Produit"
 
-#, fuzzy
 msgctxt "selection:ins_product.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"

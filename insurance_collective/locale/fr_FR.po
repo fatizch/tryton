@@ -164,7 +164,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_collective.benefit_rule,config_kind:"
 msgid "Conf. kind"
-msgstr "Type de conf"
+msgstr "Type de Conf."
 
 msgctxt "field:ins_collective.benefit_rule,create_date:"
 msgid "Create Date"
@@ -230,7 +230,6 @@ msgctxt "field:ins_collective.business_rule_manager,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-#, fuzzy
 msgctxt "field:ins_collective.business_rule_manager,offered:"
 msgid "Offered"
 msgstr "Offre"
@@ -349,7 +348,7 @@ msgstr "Montant"
 
 msgctxt "field:ins_collective.coverage_amount_rule,config_kind:"
 msgid "Conf. kind"
-msgstr "Type de conf"
+msgstr "Type de Conf."
 
 msgctxt "field:ins_collective.coverage_amount_rule,create_date:"
 msgid "Create Date"
@@ -433,7 +432,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_collective.eligibility_rule,config_kind:"
 msgid "Conf. kind"
-msgstr "Type de conf"
+msgstr "Type de Conf."
 
 msgctxt "field:ins_collective.eligibility_rule,create_date:"
 msgid "Create Date"
@@ -543,7 +542,6 @@ msgctxt "field:ins_collective.enrollment,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-#, fuzzy
 msgctxt "field:ins_collective.enrollment,master:"
 msgid "Master"
 msgstr "Maître"
@@ -625,7 +623,6 @@ msgctxt "field:ins_collective.enrollment_process.option_selection,session_id:"
 msgid "Session Id"
 msgstr ""
 
-#, fuzzy
 msgctxt "field:ins_collective.enrollment_process.process_state,cur_action:"
 msgid "Current Action"
 msgstr "Action Courante"
@@ -634,12 +631,10 @@ msgctxt "field:ins_collective.enrollment_process.process_state,cur_step:"
 msgid "Current step"
 msgstr "Etape Courante"
 
-#, fuzzy
 msgctxt "field:ins_collective.enrollment_process.process_state,cur_step_desc:"
 msgid "Step Descriptor"
 msgstr "Descripteur d'Etape"
 
-#, fuzzy
 msgctxt "field:ins_collective.enrollment_process.process_state,errors:"
 msgid "Errors"
 msgstr "Erreurs"
@@ -654,7 +649,6 @@ msgctxt ""
 msgid "Jsonfor_contract"
 msgstr ""
 
-#, fuzzy
 msgctxt ""
 "field:ins_collective.enrollment_process.process_state,from_susp_process:"
 msgid "From Process"
@@ -664,7 +658,6 @@ msgctxt "field:ins_collective.enrollment_process.process_state,id:"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgctxt "field:ins_collective.enrollment_process.process_state,on_product:"
 msgid "On Product Process"
 msgstr "Produit"
@@ -689,7 +682,6 @@ msgctxt "field:ins_collective.enrollment_process.project,product:"
 msgid "Product"
 msgstr "Produit"
 
-#, fuzzy
 msgctxt "field:ins_collective.enrollment_process.project,product_desc:"
 msgid "Description"
 msgstr "Description"
@@ -706,13 +698,11 @@ msgctxt "field:ins_collective.enrollment_process.project,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-#, fuzzy
 msgctxt ""
 "field:ins_collective.enrollment_process.project,subscriber_as_company:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-#, fuzzy
 msgctxt ""
 "field:ins_collective.enrollment_process.project,subscriber_as_person:"
 msgid "Subscriber"
@@ -722,7 +712,6 @@ msgctxt "field:ins_collective.enrollment_process.project,subscriber_desc:"
 msgid "Summary"
 msgstr "Synthèse"
 
-#, fuzzy
 msgctxt "field:ins_collective.enrollment_process.project,subscriber_kind:"
 msgid "Kind"
 msgstr "Type"
@@ -751,7 +740,6 @@ msgctxt "field:ins_collective.gbp_contract,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-#, fuzzy
 msgctxt "field:ins_collective.gbp_contract,final_product:"
 msgid "Final Product"
 msgstr "Produit Final"
@@ -812,22 +800,18 @@ msgctxt "field:ins_collective.gbp_subs_process.extension_gbp,session_id:"
 msgid "Session Id"
 msgstr ""
 
-#, fuzzy
 msgctxt "field:ins_collective.gbp_subs_process.process_state,cur_action:"
 msgid "Current Action"
 msgstr "Action Courante"
 
-#, fuzzy
 msgctxt "field:ins_collective.gbp_subs_process.process_state,cur_step:"
 msgid "Current step"
 msgstr "Etape Courante"
 
-#, fuzzy
 msgctxt "field:ins_collective.gbp_subs_process.process_state,cur_step_desc:"
 msgid "Step Descriptor"
 msgstr "Descripteur d'Etape"
 
-#, fuzzy
 msgctxt "field:ins_collective.gbp_subs_process.process_state,errors:"
 msgid "Errors"
 msgstr "Erreurs"
@@ -841,7 +825,6 @@ msgctxt ""
 msgid "Jsonfor_contract"
 msgstr ""
 
-#, fuzzy
 msgctxt ""
 "field:ins_collective.gbp_subs_process.process_state,from_susp_process:"
 msgid "From Process"
@@ -851,12 +834,10 @@ msgctxt "field:ins_collective.gbp_subs_process.process_state,id:"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgctxt "field:ins_collective.gbp_subs_process.process_state,on_product:"
 msgid "On Product Process"
 msgstr "Produit"
 
-#, fuzzy
 msgctxt "field:ins_collective.gbp_subs_process.process_state,process_desc:"
 msgid "Process Description"
 msgstr "Description du Processus"
@@ -965,7 +946,6 @@ msgctxt "field:ins_collective.option,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-#, fuzzy
 msgctxt "field:ins_collective.option,end_date:"
 msgid "Effective_date"
 msgstr "Date d'Effet"
@@ -1060,7 +1040,7 @@ msgstr "Code"
 
 msgctxt "field:ins_collective.pricing_data,config_kind:"
 msgid "Conf. kind"
-msgstr "Type de conf"
+msgstr "Type de Conf."
 
 msgctxt "field:ins_collective.pricing_data,create_date:"
 msgid "Create Date"
@@ -1132,7 +1112,7 @@ msgstr "Calculettes"
 
 msgctxt "field:ins_collective.pricing_rule,config_kind:"
 msgid "Conf. kind"
-msgstr "Type de conf"
+msgstr "Type de Conf."
 
 msgctxt "field:ins_collective.pricing_rule,create_date:"
 msgid "Create Date"
@@ -1198,7 +1178,6 @@ msgctxt "field:ins_collective.product,code:"
 msgid "Code"
 msgstr "Code"
 
-#, fuzzy
 msgctxt "field:ins_collective.product,contract_generator:"
 msgid "Contract Number Generator"
 msgstr "Générateur de N° de Contrat"
@@ -1317,7 +1296,7 @@ msgstr "Montant"
 
 msgctxt "field:ins_collective.reserve_rule,config_kind:"
 msgid "Conf. kind"
-msgstr "Type de conf"
+msgstr "Type de Conf."
 
 msgctxt "field:ins_collective.reserve_rule,create_date:"
 msgid "Create Date"
@@ -1487,7 +1466,6 @@ msgctxt "model:ir.action,name:enrollment_view_action"
 msgid "New Enrollment"
 msgstr "Nouvelle Affiliation"
 
-#, fuzzy
 msgctxt "model:ir.action,name:gbp_project_view_action"
 msgid "New GBP Subscription Process"
 msgstr "Souscription Contrat Groupe"
@@ -1736,12 +1714,10 @@ msgctxt ""
 msgid "suspend"
 msgstr "Suspendre"
 
-#, fuzzy
 msgctxt "selection:ins_collective.enrollment_process.project,subscriber_kind:"
 msgid "Company"
 msgstr "Société"
 
-#, fuzzy
 msgctxt "selection:ins_collective.enrollment_process.project,subscriber_kind:"
 msgid "Person"
 msgstr "Personne Physique"

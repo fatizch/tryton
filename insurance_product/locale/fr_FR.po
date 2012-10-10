@@ -196,7 +196,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_product.benefit_rule,config_kind:"
 msgid "Conf. kind"
-msgstr "Type de conf"
+msgstr "Type de Conf."
 
 msgctxt "field:ins_product.benefit_rule,create_date:"
 msgid "Create Date"
@@ -288,7 +288,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_product.business_rule_root,config_kind:"
 msgid "Conf. kind"
-msgstr "Type de conf"
+msgstr "Type de Conf."
 
 msgctxt "field:ins_product.business_rule_root,generic_rule:"
 msgid "Generic Rule"
@@ -404,7 +404,7 @@ msgstr "Montant"
 
 msgctxt "field:ins_product.coverage_amount_rule,config_kind:"
 msgid "Conf. kind"
-msgstr "Type de conf"
+msgstr "Type de Conf."
 
 msgctxt "field:ins_product.coverage_amount_rule,create_date:"
 msgid "Create Date"
@@ -488,7 +488,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_product.eligibility_rule,config_kind:"
 msgid "Conf. kind"
-msgstr "Type de conf"
+msgstr "Type de Conf."
 
 msgctxt "field:ins_product.eligibility_rule,create_date:"
 msgid "Create Date"
@@ -732,7 +732,7 @@ msgstr "Code"
 
 msgctxt "field:ins_product.pricing_data,config_kind:"
 msgid "Conf. kind"
-msgstr "Type de conf"
+msgstr "Type de Conf."
 
 msgctxt "field:ins_product.pricing_data,create_date:"
 msgid "Create Date"
@@ -804,7 +804,7 @@ msgstr "Calculateur"
 
 msgctxt "field:ins_product.pricing_rule,config_kind:"
 msgid "Conf. kind"
-msgstr "Type de conf"
+msgstr "Type de Conf."
 
 msgctxt "field:ins_product.pricing_rule,create_date:"
 msgid "Create Date"
@@ -988,7 +988,7 @@ msgstr "Montant"
 
 msgctxt "field:ins_product.reserve_rule,config_kind:"
 msgid "Conf. kind"
-msgstr "Type de conf"
+msgstr "Type de Conf."
 
 msgctxt "field:ins_product.reserve_rule,create_date:"
 msgid "Create Date"
@@ -1190,7 +1190,6 @@ msgctxt "model:ins_product.rule_sets.subscriber,name:"
 msgid ""
 msgstr ""
 
-#, fuzzy
 msgctxt "model:ins_product_utils.business_family,name:"
 msgid "Business Family"
 msgstr "Famille Métier"
@@ -1203,7 +1202,6 @@ msgctxt "model:ir.action,name:act_product_form"
 msgid "Products"
 msgstr "Produits"
 
-#, fuzzy
 msgctxt "model:ir.sequence.type,name:sequence_type_contract_number"
 msgid "Contract Number"
 msgstr "Numéro de Contrat"
@@ -1308,7 +1306,6 @@ msgctxt "selection:ins_product.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
 
-#, fuzzy
 msgctxt "selection:ins_product.coverage,family:"
 msgid "default"
 msgstr "Défaut"
@@ -1625,7 +1622,6 @@ msgctxt "view:ins_product.offered:"
 msgid "Managers"
 msgstr "Gestionnaires"
 
-#, fuzzy
 msgctxt "view:ins_product.offered:"
 msgid "Offered"
 msgstr "Offre"
