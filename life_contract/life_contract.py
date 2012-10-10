@@ -112,6 +112,7 @@ class LifeCoveredDataDesc(CoveredDataDesc):
     covered_amount_old = fields.Numeric('Covered Amount')
     covered_amount = fields.Selection(
         'get_allowed_amounts',
+        'Coverage Amount',
         context={'for_coverage': Eval('for_coverage')},
         depends=['for_coverage'])
 
