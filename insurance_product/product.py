@@ -333,6 +333,9 @@ class Coverage(model.CoopSQL, Offered):
             return False
         return True
 
+    def get_rec_name(self, name):
+        return '(%s) %s' % (self.code, self.name)
+
 
 class Product(model.CoopSQL, Offered):
     'Product'
@@ -485,8 +488,8 @@ class Product(model.CoopSQL, Offered):
     def give_me_new_contract_number(self, args):
         return self.contract_generator.get_id(self.contract_generator.id)
 
-    def get_rec_name(self, val):
-        return self.name
+    def get_rec_name(self, name):
+        return '(%s) %s' % (self.code, self.name)
 
 
 class ProductOptionsCoverage(model.CoopSQL):
