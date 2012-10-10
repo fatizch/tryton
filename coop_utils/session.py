@@ -1,7 +1,7 @@
 import datetime
 
 from trytond.pool import PoolMeta
-from trytond.tr import Transaction
+from trytond.transaction import Transaction
 
 
 class DateClass():

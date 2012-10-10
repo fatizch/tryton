@@ -596,7 +596,7 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
     __name__ = 'ins_product.generic_business_rule'
 
     kind = fields.Selection('get_kind', 'Kind',
-        required=True, on_change=['kind'])#  , states={'readonly': True})
+        required=True, on_change=['kind'])  # , states={'readonly': True})
     manager = fields.Many2One('ins_product.business_rule_manager', 'Manager',
         ondelete='CASCADE')
     start_date = fields.Date('From Date', required=True)

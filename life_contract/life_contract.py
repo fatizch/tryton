@@ -3,6 +3,8 @@ import copy
 from trytond.model import fields as fields
 
 from trytond.pool import Pool, PoolMeta
+from trytond.pyson import Eval
+from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model as model
 from trytond.modules.coop_utils import utils as utils
@@ -107,13 +109,31 @@ class LifeCoveredDataDesc(CoveredDataDesc):
 
     __name__ = 'life_contract.covered_data_desc'
 
-    covered_amount = fields.Numeric('Covered Amount')
+    covered_amount_old = fields.Numeric('Covered Amount')
+    covered_amount = fields.Selection(
+        'get_allowed_amounts',
+        context={'for_coverage': Eval('for_coverage')},
+        depends=['for_coverage'])
 
     @classmethod
     def __setup__(cls):
         super(LifeCoveredDataDesc, cls).__setup__()
         cls.covered_element = copy.copy(cls.covered_element)
         cls.covered_element.model_name = 'life_contract.covered_person_desc'
+
+    @staticmethod
+    def get_allowed_amounts():
+        coverage = Transaction().context.get('for_coverage')
+        if not coverage:
+            return []
+        wizard = LifeCoveredDataDesc.get_context()
+        the_coverage = utils.convert_ref_to_obj(coverage)
+        vals, = the_coverage.get_result(
+            'allowed_amounts',
+            {'date': wizard.project.start_date},
+            manager='coverage_amount'
+            )
+        return vals
 
 
 class LifeCoveredPersonDesc(CoveredElementDesc):
