@@ -15,25 +15,22 @@
                             <field name="start_date" xfill="1"/>
                             <newline/>
                             <label name="broker" xalign="0"/>
-                            <field name="broker"/>
+                            <field name="broker" colspan="3"/>
                             <newline/>
                             <label name="subscriber_kind" xalign="0"/>
-                            <field name="subscriber_kind"/>
+                            <field name="subscriber_kind" colspan="3"/>
                             <newline/>
                             <label name="subscriber" xalign="0"/>
-                            <group id="subscriber">
+                            <group id="subscriber" colspan="3" col="1">
                                 <field name="subscriber_as_person"/>
                                 <field name="subscriber_as_company"/>
                             </group>
                             <newline/>
-                            <label name="subscriber_desc" xalign="0"/>
-                            <field name="subscriber_desc" xfill="1" widget="richtext"/>
-                            <newline/>
                             <label name="product" xalign="0"/>
-                            <field name="product" xfill="1" widget="selection"/>
+                            <field name="product" xfill="1" widget="selection" colspan="3"/>
                             <newline/>
-                            <label name="product_desc" xalign="0"/>
-                            <field name="product_desc" xfill="1" widget="richtext"/>
+                            <field name="subscriber_desc" widget="richtext" colspan="2"/>
+                            <field name="product_desc" widget="richtext" colspan="2"/>
                         </form>
                     ]]>
             </field>
