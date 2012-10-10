@@ -311,8 +311,8 @@
 
         <!-- Application Entry point -->
         <menuitem name="Contract" id="menu_contract" sequence="11" />
-
-        <menuitem parent="menu_contract" sequence="1"
+        <menuitem parent="menu_contract" name="Individual Policy" id="menu_individual" sequence="10" />
+        <menuitem parent="menu_individual" sequence="1"
             id="menu_contract_form" icon="tryton-list" action="act_contract_form" />
 
 	</data>

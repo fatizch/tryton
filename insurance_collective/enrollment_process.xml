@@ -51,7 +51,8 @@
             <field name="model">ir.ui.menu</field>
         </record>
 
-        <menuitem parent="insurance_contract.menu_contract" action="enrollment_view_action"
+
+        <menuitem parent="menu_group" action="enrollment_view_action"
             id="menu_start_enroll"/>
 
     <!--################################################################-->

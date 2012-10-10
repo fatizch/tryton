@@ -125,5 +125,6 @@
             <field name="inherit" ref="insurance_product.eligibilityrule_view_form"/>
             <field name="arch" type="xml"/>
         </record>
+        <menuitem parent="insurance_contract.menu_contract" name="Group" id="menu_group" sequence="20" />
     </data>
 </tryton>

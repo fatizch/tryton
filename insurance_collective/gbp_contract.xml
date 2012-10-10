@@ -71,7 +71,7 @@
 			<field name="act_window" ref="act_gbp_contract_form" />
 		</record>
 
-		<menuitem parent="insurance_contract.menu_contract" sequence="3"
+		<menuitem parent="menu_group" sequence="3"
 			id="menu_gbp_contract_form" icon="tryton-list" action="act_gbp_contract_form"/>
 	</data>
 </tryton>

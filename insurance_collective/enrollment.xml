@@ -59,7 +59,7 @@
 			<field name="act_window" ref="act_enrollment_form" />
 		</record>
 
-		<menuitem parent="insurance_contract.menu_contract" sequence="7"
+		<menuitem parent="menu_group" sequence="7"
 			id="menu_enrollment_form" icon="tryton-list" action="act_enrollment_form"/>
 	</data>
 </tryton>

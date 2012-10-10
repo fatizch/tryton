@@ -7,7 +7,7 @@
 			<field name="model">ir.ui.menu</field>
 		</record>
 
-		<menuitem parent="insurance_contract.menu_contract" action="gbp_project_view_action"
+		<menuitem parent="menu_group" action="gbp_project_view_action"
 			id="menu_start_gbp_subs"/>
 
 		<record model="ir.ui.view" id="gbp_project_view">
