@@ -4,11 +4,11 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:rule_engine.context:"
 msgid "You define twice the same name!"
-msgstr ""
+msgstr "Vous avez défini le même nom plusieurs fois"
 
 msgctxt "error:rule_engine:"
 msgid "Your code has errors!"
-msgstr ""
+msgstr "L'algorithme contient des erreurs"
 
 msgctxt "field:rule_engine,code:"
 msgid "Code"
@@ -60,7 +60,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:rule_engine.context,allowed_elements:"
 msgid "Allowed tree elements"
-msgstr ""
+msgstr "Elèments Compatibles"
 
 msgctxt "field:rule_engine.context,create_date:"
 msgid "Create Date"
@@ -112,7 +112,7 @@ msgstr "Nom"
 
 msgctxt "field:rule_engine.context-rule_engine.tree_element,tree_element:"
 msgid "Tree Element"
-msgstr ""
+msgstr "Elèment de l'Arbre"
 
 msgctxt "field:rule_engine.context-rule_engine.tree_element,write_date:"
 msgid "Write Date"
@@ -273,7 +273,7 @@ msgstr "Règle"
 
 msgctxt "field:rule_engine.tree_element,translated_technical_name:"
 msgid "Translated technical name"
-msgstr ""
+msgstr "Nom Technique Traduit"
 
 msgctxt "field:rule_engine.tree_element,type:"
 msgid "Type"
@@ -309,16 +309,11 @@ msgstr ""
 
 msgctxt "model:ir.action,name:test_rule_wizard"
 msgid "Test Rule"
-msgstr ""
+msgstr "Tester la Règle"
 
 msgctxt "model:ir.action,name:tree_element_window"
 msgid "Tree Elements"
 msgstr "Eléments de l'arbre"
-
-#, fuzzy
-msgctxt "model:ir.ui.menu,name:None"
-msgid "Table Definitions"
-msgstr "Tables"
 
 msgctxt "model:ir.ui.menu,name:menu_context"
 msgid "Contexts"
@@ -374,7 +369,7 @@ msgstr ""
 
 msgctxt "model:rule_engine.tree_element,name:"
 msgid "Rule Engine Tree Element"
-msgstr ""
+msgstr "Elèment de l'Arbre"
 
 msgctxt "selection:rule_engine,status:"
 msgid "Draft"
@@ -382,11 +377,11 @@ msgstr "Brouillon"
 
 msgctxt "selection:rule_engine,status:"
 msgid "Validated"
-msgstr ""
+msgstr "Validé"
 
 msgctxt "selection:rule_engine.tree_element,type:"
 msgid "Folder"
-msgstr ""
+msgstr "Dossier"
 
 msgctxt "selection:rule_engine.tree_element,type:"
 msgid "Function"
@@ -416,17 +411,20 @@ msgctxt "view:rule_engine.test_case:"
 msgid "Test Case"
 msgstr ""
 
+#, fuzzy
 msgctxt "view:rule_engine.test_rule.start:"
 msgid "Test Rule"
-msgstr ""
+msgstr "Tester la Règle"
 
+#, fuzzy
 msgctxt "view:rule_engine.test_rule.test:"
 msgid "Test Rule"
-msgstr ""
+msgstr "Tester la Règle"
 
+#, fuzzy
 msgctxt "view:rule_engine.tree_element:"
 msgid "Tree Element"
-msgstr ""
+msgstr "Elèment de l'Arbre"
 
 msgctxt "view:rule_engine:"
 msgid "Rule"
@@ -436,9 +434,10 @@ msgctxt "view:rule_engine:"
 msgid "Rules"
 msgstr "Règles"
 
+#, fuzzy
 msgctxt "wizard_button:rule_engine.run_tests,report,end:"
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 msgctxt "wizard_button:rule_engine.test_rule,start,end:"
 msgid "Cancel"
@@ -450,4 +449,4 @@ msgstr "Test"
 
 msgctxt "wizard_button:rule_engine.test_rule,test,end:"
 msgid "OK"
-msgstr ""
+msgstr "OK"

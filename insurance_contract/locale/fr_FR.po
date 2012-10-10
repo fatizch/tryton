@@ -120,7 +120,7 @@ msgstr "Prix de Base"
 
 msgctxt "field:ins_contract.billing.generic_line,childs:"
 msgid "Child Lines"
-msgstr ""
+msgstr "Lignes Filles"
 
 msgctxt "field:ins_contract.billing.generic_line,create_date:"
 msgid "Create Date"
@@ -150,9 +150,10 @@ msgctxt "field:ins_contract.billing.generic_line,kind:"
 msgid "Kind"
 msgstr "Type"
 
+#, fuzzy
 msgctxt "field:ins_contract.billing.generic_line,master:"
 msgid "Master"
-msgstr ""
+msgstr "Maître"
 
 msgctxt "field:ins_contract.billing.generic_line,name:"
 msgid "Short Description"
@@ -204,11 +205,11 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.billing_manager,next_billing_date:"
 msgid "Next Billing Date"
-msgstr ""
+msgstr "Prochain Calcul de Cotisation"
 
 msgctxt "field:ins_contract.billing_manager,prices:"
 msgid "Prices"
-msgstr ""
+msgstr "Cotisations"
 
 msgctxt "field:ins_contract.billing_manager,rec_name:"
 msgid "Name"
@@ -302,21 +303,25 @@ msgctxt "field:ins_contract.billing_process.bill_parameters,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
+#, fuzzy
 msgctxt "field:ins_contract.billing_process.process_state,cur_action:"
 msgid "Current Action"
-msgstr ""
+msgstr "Action Courante"
 
+#, fuzzy
 msgctxt "field:ins_contract.billing_process.process_state,cur_step:"
 msgid "Current step"
-msgstr ""
+msgstr "Etape Courante"
 
+#, fuzzy
 msgctxt "field:ins_contract.billing_process.process_state,cur_step_desc:"
 msgid "Step Descriptor"
-msgstr ""
+msgstr "Descripteur d'Etape"
 
+#, fuzzy
 msgctxt "field:ins_contract.billing_process.process_state,errors:"
 msgid "Errors"
-msgstr ""
+msgstr "Erreurs"
 
 msgctxt "field:ins_contract.billing_process.process_state,for_contract:"
 msgid "Contract"
@@ -324,19 +329,21 @@ msgstr "Contrat"
 
 msgctxt "field:ins_contract.billing_process.process_state,from_susp_process:"
 msgid "From Process"
-msgstr ""
+msgstr "Processus Source"
 
 msgctxt "field:ins_contract.billing_process.process_state,id:"
 msgid "ID"
 msgstr "ID"
 
+#, fuzzy
 msgctxt "field:ins_contract.billing_process.process_state,on_product:"
 msgid "On Product Process"
-msgstr ""
+msgstr "Produit"
 
+#, fuzzy
 msgctxt "field:ins_contract.billing_process.process_state,process_desc:"
 msgid "Process Description"
-msgstr ""
+msgstr "Description du Processus"
 
 msgctxt "field:ins_contract.billing_process.process_state,the_bill_db:"
 msgid "the_bill"
@@ -420,7 +427,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.contract,master:"
 msgid "Master"
-msgstr ""
+msgstr "Maître"
 
 msgctxt "field:ins_contract.contract,options:"
 msgid "Options"
@@ -456,7 +463,7 @@ msgstr "Souscripteur"
 
 msgctxt "field:ins_contract.contract,summary:"
 msgid "Summary"
-msgstr "Résumé"
+msgstr "Synthèse"
 
 msgctxt "field:ins_contract.contract,write_date:"
 msgid "Write Date"
@@ -512,7 +519,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_contract.covered_data,coverage_name:"
 msgid "Coverage Name"
-msgstr ""
+msgstr "Nom de la Garantie"
 
 msgctxt "field:ins_contract.covered_data,create_date:"
 msgid "Create Date"
@@ -584,7 +591,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.covered_element,product_specific:"
 msgid "Specific Part"
-msgstr ""
+msgstr "Partie Spécifique"
 
 msgctxt "field:ins_contract.covered_element,rec_name:"
 msgid "Name"
@@ -592,7 +599,7 @@ msgstr "Nom"
 
 msgctxt "field:ins_contract.covered_element,specific_name:"
 msgid "Covered Name"
-msgstr ""
+msgstr "Nom de l'élement couvert"
 
 msgctxt "field:ins_contract.covered_element,write_date:"
 msgid "Write Date"
@@ -700,7 +707,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_contract.generic_extension,contract:"
 msgid "The contract"
-msgstr ""
+msgstr "Contrat"
 
 msgctxt "field:ins_contract.generic_extension,covered_elements:"
 msgid "Coverages"
@@ -716,7 +723,7 @@ msgstr "Contrat"
 
 msgctxt "field:ins_contract.option,coverage:"
 msgid "Offered Coverage"
-msgstr ""
+msgstr "Garantie"
 
 msgctxt "field:ins_contract.option,create_date:"
 msgid "Create Date"
@@ -728,7 +735,7 @@ msgstr "Créé par"
 
 msgctxt "field:ins_contract.option,end_date:"
 msgid "Effective_date"
-msgstr ""
+msgstr "Date d'Effet"
 
 msgctxt "field:ins_contract.option,id:"
 msgid "ID"
@@ -820,7 +827,7 @@ msgstr "Description"
 
 msgctxt "field:ins_contract.price_line,on_object:"
 msgid "Priced object"
-msgstr ""
+msgstr "Elément Tarifé"
 
 msgctxt "field:ins_contract.price_line,rec_name:"
 msgid "Name"
@@ -856,7 +863,7 @@ msgstr "Date de Fin"
 
 msgctxt "field:ins_contract.subs_process.covered_data_desc,for_coverage:"
 msgid "For coverage"
-msgstr ""
+msgstr "Garantie"
 
 msgctxt "field:ins_contract.subs_process.covered_data_desc,id:"
 msgid "ID"
@@ -870,17 +877,19 @@ msgctxt "field:ins_contract.subs_process.covered_data_desc,status:"
 msgid "Status"
 msgstr "Statut"
 
+#, fuzzy
 msgctxt "field:ins_contract.subs_process.covered_person_desc,covered_data:"
 msgid "Covered Data"
-msgstr ""
+msgstr "Données de Couverture"
 
 msgctxt "field:ins_contract.subs_process.covered_person_desc,id:"
 msgid "ID"
 msgstr "ID"
 
+#, fuzzy
 msgctxt "field:ins_contract.subs_process.covered_person_desc,life_state:"
 msgid "Life State"
-msgstr ""
+msgstr "Prévoyance"
 
 msgctxt "field:ins_contract.subs_process.covered_person_desc,person:"
 msgid "Covered Person"
@@ -936,19 +945,21 @@ msgstr ""
 
 msgctxt "field:ins_contract.subs_process.process_state,cur_action:"
 msgid "Current Action"
-msgstr ""
+msgstr "Action Courante"
 
+#, fuzzy
 msgctxt "field:ins_contract.subs_process.process_state,cur_step:"
 msgid "Current step"
-msgstr ""
+msgstr "Etape Courante"
 
+#, fuzzy
 msgctxt "field:ins_contract.subs_process.process_state,cur_step_desc:"
 msgid "Step Descriptor"
-msgstr ""
+msgstr "Descripteur d'Etape"
 
 msgctxt "field:ins_contract.subs_process.process_state,errors:"
 msgid "Errors"
-msgstr ""
+msgstr "Erreurs"
 
 msgctxt "field:ins_contract.subs_process.process_state,for_contract_db:"
 msgid "for_contract"
@@ -958,9 +969,10 @@ msgctxt "field:ins_contract.subs_process.process_state,for_contract_str:"
 msgid "Jsonfor_contract"
 msgstr ""
 
+#, fuzzy
 msgctxt "field:ins_contract.subs_process.process_state,from_susp_process:"
 msgid "From Process"
-msgstr ""
+msgstr "Processus Source"
 
 msgctxt "field:ins_contract.subs_process.process_state,id:"
 msgid "ID"
@@ -968,11 +980,11 @@ msgstr "ID"
 
 msgctxt "field:ins_contract.subs_process.process_state,on_product:"
 msgid "On Product Process"
-msgstr ""
+msgstr "Produit"
 
 msgctxt "field:ins_contract.subs_process.process_state,process_desc:"
 msgid "Process Description"
-msgstr ""
+msgstr "Description du Processus"
 
 msgctxt "field:ins_contract.subs_process.project,broker:"
 msgid "Broker"
@@ -1013,7 +1025,6 @@ msgctxt "field:ins_contract.subs_process.project,subscriber_as_person:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-#, fuzzy
 msgctxt "field:ins_contract.subs_process.project,subscriber_desc:"
 msgid "Summary"
 msgstr "Synthèse"
@@ -1057,7 +1068,7 @@ msgstr "Ligne de Cotisation"
 
 msgctxt "model:ins_contract.billing_process.bill_parameters,name:"
 msgid "Bill Parameters"
-msgstr ""
+msgstr "Paramètre de Cotisation"
 
 msgctxt "model:ins_contract.billing_process.process_state,name:"
 msgid "Billing Process State"
@@ -1109,11 +1120,12 @@ msgstr ""
 
 msgctxt "model:ins_contract.price_line,name:"
 msgid "Price Line"
-msgstr ""
+msgstr "Ligne de Cotisation"
 
+#, fuzzy
 msgctxt "model:ins_contract.subs_process.covered_data_desc,name:"
 msgid "Covered Data"
-msgstr ""
+msgstr "Données de Couverture"
 
 msgctxt "model:ins_contract.subs_process.covered_person_desc,name:"
 msgid ""
@@ -1125,7 +1137,7 @@ msgstr ""
 
 msgctxt "model:ins_contract.subs_process.lines,name:"
 msgid "Pricing Line"
-msgstr ""
+msgstr "Ligne de Cotisation"
 
 msgctxt "model:ins_contract.subs_process.option_selection,name:"
 msgid ""
@@ -1141,7 +1153,7 @@ msgstr ""
 
 msgctxt "model:ins_contract.subs_process.summary,name:"
 msgid "Summary"
-msgstr "Résumé"
+msgstr "Synthèse"
 
 msgctxt "model:ir.action,name:act_bill_form"
 msgid "Bill"
@@ -1167,9 +1179,10 @@ msgctxt "model:ir.action,name:launch_billing_process"
 msgid "Billing"
 msgstr "Cotisation"
 
+#, fuzzy
 msgctxt "model:ir.action,name:project_view_action"
 msgid "New Subscription Process"
-msgstr ""
+msgstr "Processus de Souscription"
 
 msgctxt "model:ir.action,name:resume_subs_process"
 msgid "Resume Process"
@@ -1189,7 +1202,7 @@ msgstr "Contrat"
 
 msgctxt "model:ir.ui.menu,name:menu_start_subs"
 msgid "New Subscription Process"
-msgstr ""
+msgstr "Processus de Souscription"
 
 msgctxt "selection:ins_contract.billing.generic_line,kind:"
 msgid "Base Amount"
@@ -1201,7 +1214,7 @@ msgstr "Frais"
 
 msgctxt "selection:ins_contract.billing.generic_line,kind:"
 msgid "Node"
-msgstr ""
+msgstr "Noeud"
 
 msgctxt "selection:ins_contract.billing.generic_line,kind:"
 msgid "Tax"
@@ -1351,7 +1364,7 @@ msgstr "Gestionnaire de Cotisation"
 
 msgctxt "view:ins_contract.billing_process.bill_display:"
 msgid "Billing Process - Bill Result"
-msgstr ""
+msgstr "Cotisation"
 
 msgctxt "view:ins_contract.billing_process.bill_line_view:"
 msgid "Bill Lines"
@@ -1359,7 +1372,7 @@ msgstr "Lignes de Cotisation"
 
 msgctxt "view:ins_contract.billing_process.bill_parameters:"
 msgid "Billing Process - Bill Parameters"
-msgstr ""
+msgstr "Paramètres de Cotisation"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Billing"
@@ -1379,15 +1392,16 @@ msgstr "Options"
 
 msgctxt "view:ins_contract.contract:"
 msgid "contract"
-msgstr ""
+msgstr "contrat"
 
 msgctxt "view:ins_contract.coverage_displayer:"
 msgid "Coverage Choices Tree"
-msgstr ""
+msgstr "Choix des Garanties"
 
+#, fuzzy
 msgctxt "view:ins_contract.covered_data:"
 msgid "Covered Data"
-msgstr ""
+msgstr "Données de Couverture"
 
 msgctxt "view:ins_contract.covered_data:"
 msgid "Data"
@@ -1427,11 +1441,12 @@ msgstr "Lignes de Cotisation"
 
 msgctxt "view:ins_contract.price_line:"
 msgid "price_line"
-msgstr ""
+msgstr "ligne de cotisation"
 
+#, fuzzy
 msgctxt "view:ins_contract.subs_process.covered_data_desc:"
 msgid "Covered Data"
-msgstr ""
+msgstr "Données de Couverture"
 
 msgctxt "view:ins_contract.subs_process.covered_person_desc:"
 msgid "Covered Persons"
@@ -1439,7 +1454,7 @@ msgstr "Personnes Couvertes"
 
 msgctxt "view:ins_contract.subs_process.extension_life:"
 msgid "Subscription Process - Life Extension"
-msgstr ""
+msgstr "Prévoyance"
 
 msgctxt "view:ins_contract.subs_process.lines:"
 msgid "Pricing Lines"
@@ -1447,15 +1462,15 @@ msgstr "Lignes de Cotisation"
 
 msgctxt "view:ins_contract.subs_process.option_selection:"
 msgid "Subscription Process - Option Selection Step"
-msgstr ""
+msgstr "Sélection des Garanties"
 
 msgctxt "view:ins_contract.subs_process.project:"
 msgid "Subscription Process - Project Step"
-msgstr ""
+msgstr "Sélection du Produit"
 
 msgctxt "view:ins_contract.subs_process.summary:"
 msgid "Subscription Process - Summary"
-msgstr ""
+msgstr "Synthèse"
 
 msgctxt ""
 "wizard_button:ins_contract.billing_process,bill_display,steps_cancel:"

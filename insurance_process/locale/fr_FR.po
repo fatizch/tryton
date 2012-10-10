@@ -78,21 +78,24 @@ msgctxt "field:ins_process.dummy_process.dummy_step1,session_id:"
 msgid "Session Id"
 msgstr ""
 
+#, fuzzy
 msgctxt "field:ins_process.dummy_process_state,cur_action:"
 msgid "Current Action"
-msgstr ""
+msgstr "Action Courante"
 
+#, fuzzy
 msgctxt "field:ins_process.dummy_process_state,cur_step:"
 msgid "Current step"
-msgstr ""
+msgstr "Etape Courante"
 
 msgctxt "field:ins_process.dummy_process_state,cur_step_desc:"
 msgid "Step Descriptor"
-msgstr ""
+msgstr "Descripteur d'Etape"
 
+#, fuzzy
 msgctxt "field:ins_process.dummy_process_state,errors:"
 msgid "Errors"
-msgstr ""
+msgstr "Erreurs"
 
 msgctxt "field:ins_process.dummy_process_state,for_contract1_db:"
 msgid "for_contract1"
@@ -110,21 +113,24 @@ msgctxt "field:ins_process.dummy_process_state,for_contract_str:"
 msgid "Jsonfor_contract"
 msgstr ""
 
+#, fuzzy
 msgctxt "field:ins_process.dummy_process_state,from_susp_process:"
 msgid "From Process"
-msgstr ""
+msgstr "Processus Source"
 
 msgctxt "field:ins_process.dummy_process_state,id:"
 msgid "ID"
 msgstr "ID"
 
+#, fuzzy
 msgctxt "field:ins_process.dummy_process_state,on_product:"
 msgid "On Product Process"
-msgstr ""
+msgstr "Produit"
 
+#, fuzzy
 msgctxt "field:ins_process.dummy_process_state,process_desc:"
 msgid "Process Description"
-msgstr ""
+msgstr "Description du Processus"
 
 msgctxt "field:ins_process.process_desc,create_date:"
 msgid "Create Date"
@@ -144,7 +150,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_process.process_desc,name:"
 msgid "Process Name"
-msgstr ""
+msgstr "Nom du Processus"
 
 msgctxt "field:ins_process.process_desc,process_model:"
 msgid "Process Model"
@@ -156,7 +162,7 @@ msgstr "Nom"
 
 msgctxt "field:ins_process.process_desc,steps:"
 msgid "Steps"
-msgstr ""
+msgstr "Etapes"
 
 msgctxt "field:ins_process.process_desc,write_date:"
 msgid "Write Date"
@@ -166,37 +172,44 @@ msgctxt "field:ins_process.process_desc,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+#, fuzzy
 msgctxt "field:ins_process.process_state,cur_action:"
 msgid "Current Action"
-msgstr ""
+msgstr "Action Courante"
 
+#, fuzzy
 msgctxt "field:ins_process.process_state,cur_step:"
 msgid "Current step"
-msgstr ""
+msgstr "Etape Courante"
 
+#, fuzzy
 msgctxt "field:ins_process.process_state,cur_step_desc:"
 msgid "Step Descriptor"
-msgstr ""
+msgstr "Descripteur d'Etape"
 
+#, fuzzy
 msgctxt "field:ins_process.process_state,errors:"
 msgid "Errors"
-msgstr ""
+msgstr "Erreurs"
 
+#, fuzzy
 msgctxt "field:ins_process.process_state,from_susp_process:"
 msgid "From Process"
-msgstr ""
+msgstr "Processus Source"
 
 msgctxt "field:ins_process.process_state,id:"
 msgid "ID"
 msgstr "ID"
 
+#, fuzzy
 msgctxt "field:ins_process.process_state,on_product:"
 msgid "On Product Process"
-msgstr ""
+msgstr "Produit"
 
+#, fuzzy
 msgctxt "field:ins_process.process_state,process_desc:"
 msgid "Process Description"
-msgstr ""
+msgstr "Description du Processus"
 
 msgctxt "field:ins_process.step_desc,button_cancel:"
 msgid "'Cancel' button"
@@ -248,19 +261,21 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_process.step_desc,methods:"
 msgid "Methods"
-msgstr ""
+msgstr "Méthodes"
 
 msgctxt "field:ins_process.step_desc,on_product_step:"
 msgid "On Product Step"
-msgstr ""
+msgstr "Sélection du Produit"
 
+#, fuzzy
 msgctxt "field:ins_process.step_desc,process:"
 msgid "Process"
-msgstr ""
+msgstr "Processus"
 
+#, fuzzy
 msgctxt "field:ins_process.step_desc,process_name:"
 msgid "Process Name"
-msgstr ""
+msgstr "Nom du Processus"
 
 msgctxt "field:ins_process.step_desc,product_step_name:"
 msgid "Product Step Name"
@@ -344,11 +359,11 @@ msgstr "Créé par"
 
 msgctxt "field:ins_process.suspended_process,desc:"
 msgid "Process Description"
-msgstr ""
+msgstr "Description du Processus"
 
 msgctxt "field:ins_process.suspended_process,for_user:"
 msgid "Suspended by"
-msgstr ""
+msgstr "Suspendu Par"
 
 msgctxt "field:ins_process.suspended_process,id:"
 msgid "ID"
@@ -372,7 +387,7 @@ msgstr "Données"
 
 msgctxt "field:ins_process.suspended_process,suspension_date:"
 msgid "Suspension Date"
-msgstr ""
+msgstr "Date de Mise en Suspend"
 
 msgctxt "field:ins_process.suspended_process,write_date:"
 msgid "Write Date"
@@ -418,13 +433,14 @@ msgctxt "model:ins_process.suspended_process,name:"
 msgid ""
 msgstr ""
 
+#, fuzzy
 msgctxt "model:ir.action,name:act_process_form"
 msgid "Process"
-msgstr ""
+msgstr "Processus"
 
 msgctxt "model:ir.action,name:act_step_form"
 msgid "step"
-msgstr ""
+msgstr "étape"
 
 msgctxt "model:ir.action,name:act_step_method_form"
 msgid "Step Method"
@@ -436,7 +452,7 @@ msgstr "Reprendre le Workflow"
 
 msgctxt "model:ir.action,name:suspended_process_form"
 msgid "Suspended Processes"
-msgstr ""
+msgstr "Processus Suspendus"
 
 msgctxt "model:ir.action,name:suspended_process_resume"
 msgid "Resume Process"
@@ -444,15 +460,15 @@ msgstr "Reprendre le Workflow"
 
 msgctxt "model:ir.ui.menu,name:menu_process"
 msgid "Process Lab"
-msgstr ""
+msgstr "Paramétrage des Processus"
 
 msgctxt "model:ir.ui.menu,name:menu_process_form"
 msgid "Process"
-msgstr ""
+msgstr "Processus"
 
 msgctxt "model:ir.ui.menu,name:menu_suspended_process"
 msgid "Suspended Processes"
-msgstr ""
+msgstr "Processus Suspendus"
 
 msgctxt "selection:ins_process.dummy_process_state,cur_action:"
 msgid "cancel"
@@ -540,11 +556,11 @@ msgstr ""
 
 msgctxt "view:ins_process.process_desc:"
 msgid "Process Descriptor"
-msgstr ""
+msgstr "Descripteur de Processus"
 
 msgctxt "view:ins_process.process_desc:"
 msgid "process"
-msgstr ""
+msgstr "processus"
 
 msgctxt "view:ins_process.step_desc:"
 msgid "Buttons"
@@ -552,19 +568,21 @@ msgstr "Boutons"
 
 msgctxt "view:ins_process.step_desc:"
 msgid "step"
-msgstr ""
+msgstr "étape"
 
 msgctxt "view:ins_process.step_method_desc:"
 msgid "method step"
 msgstr ""
 
+#, fuzzy
 msgctxt "view:ins_process.step_method_desc:"
 msgid "step"
-msgstr ""
+msgstr "étape"
 
+#, fuzzy
 msgctxt "view:ins_process.suspended_process:"
 msgid "Suspended Processes"
-msgstr ""
+msgstr "Processus Suspendus"
 
 msgctxt "wizard_button:ins_process.dummy_process,dummy_step,steps_cancel:"
 msgid "Cancel"

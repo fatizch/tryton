@@ -72,7 +72,7 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_product_utils.business_family:"
 msgid "There can be only one default business family !"
-msgstr ""
+msgstr "Il ne peut y avoir qu'une famille métier par défaut"
 
 msgctxt "error:ins_product_utils.business_family:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -264,7 +264,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.business_rule_manager,offered:"
 msgid "Offered"
-msgstr ""
+msgstr "Offre"
 
 msgctxt "field:ins_product.business_rule_manager,rec_name:"
 msgid "Name"
@@ -872,7 +872,7 @@ msgstr "Code"
 
 msgctxt "field:ins_product.product,contract_generator:"
 msgid "Contract Number Generator"
-msgstr ""
+msgstr "Générateur de N° de Contrat"
 
 msgctxt "field:ins_product.product,create_date:"
 msgid "Create Date"
@@ -1060,7 +1060,7 @@ msgstr "Code"
 
 msgctxt "field:ins_product_utils.business_family,contract_extension:"
 msgid "Contract Extension"
-msgstr ""
+msgstr "Extension Contrat"
 
 msgctxt "field:ins_product_utils.business_family,create_date:"
 msgid "Create Date"
@@ -1104,7 +1104,7 @@ msgstr "Spécifier les montants séparés par des ;"
 
 msgctxt "model:ProductDefinition,name:"
 msgid "Product Definition"
-msgstr ""
+msgstr "Définition Produit"
 
 msgctxt "model:hstore,name:"
 msgid "HStore"
@@ -1148,7 +1148,7 @@ msgstr "Règle Métier"
 
 msgctxt "model:ins_product.offered,name:"
 msgid "Offered"
-msgstr ""
+msgstr "Offre"
 
 msgctxt "model:ins_product.pricing_calculator,name:"
 msgid "Price Calculator"
@@ -1190,9 +1190,10 @@ msgctxt "model:ins_product.rule_sets.subscriber,name:"
 msgid ""
 msgstr ""
 
+#, fuzzy
 msgctxt "model:ins_product_utils.business_family,name:"
 msgid "Business Family"
-msgstr ""
+msgstr "Famille Métier"
 
 msgctxt "model:ir.action,name:act_coverage_form"
 msgid "Coverages"
@@ -1307,9 +1308,10 @@ msgctxt "selection:ins_product.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
 
+#, fuzzy
 msgctxt "selection:ins_product.coverage,family:"
 msgid "default"
-msgstr ""
+msgstr "Défaut"
 
 msgctxt "selection:ins_product.coverage,template_behaviour:"
 msgid "Add"
@@ -1601,7 +1603,7 @@ msgstr "Moteur de Règle"
 
 msgctxt "view:ins_product.eligibility_rule:"
 msgid "Sub Element"
-msgstr ""
+msgstr "Elèment Couvert"
 
 msgctxt "view:ins_product.generic_business_rule:"
 msgid "Business Rule"
@@ -1623,9 +1625,10 @@ msgctxt "view:ins_product.offered:"
 msgid "Managers"
 msgstr "Gestionnaires"
 
+#, fuzzy
 msgctxt "view:ins_product.offered:"
 msgid "Offered"
-msgstr ""
+msgstr "Offre"
 
 msgctxt "view:ins_product.offered:"
 msgid "Pricing"
@@ -1633,7 +1636,7 @@ msgstr "Tarification"
 
 msgctxt "view:ins_product.offered:"
 msgid "Summary"
-msgstr "Résumé"
+msgstr "Synthèse"
 
 msgctxt "view:ins_product.pricing_calculator:"
 msgid "Calculators"
@@ -1673,7 +1676,7 @@ msgstr "Param. Simple"
 
 msgctxt "view:ins_product.pricing_rule:"
 msgid "Sub Element"
-msgstr ""
+msgstr "Elèment Couvert"
 
 msgctxt "view:ins_product.product:"
 msgid "Options"
@@ -1693,4 +1696,4 @@ msgstr "Familles Métiers"
 
 msgctxt "view:ins_product_utils.business_family:"
 msgid "Business Family"
-msgstr ""
+msgstr "Famille Métier"

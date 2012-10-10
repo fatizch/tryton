@@ -230,9 +230,10 @@ msgctxt "field:ins_collective.business_rule_manager,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
+#, fuzzy
 msgctxt "field:ins_collective.business_rule_manager,offered:"
 msgid "Offered"
-msgstr ""
+msgstr "Offre"
 
 msgctxt "field:ins_collective.business_rule_manager,rec_name:"
 msgid "Name"
@@ -542,9 +543,10 @@ msgctxt "field:ins_collective.enrollment,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
+#, fuzzy
 msgctxt "field:ins_collective.enrollment,master:"
 msgid "Master"
-msgstr ""
+msgstr "Maître"
 
 msgctxt "field:ins_collective.enrollment,on_contract:"
 msgid "GBP Contract"
@@ -584,7 +586,7 @@ msgstr "Souscripteur"
 
 msgctxt "field:ins_collective.enrollment,summary:"
 msgid "Summary"
-msgstr "Résumé"
+msgstr "Synthèse"
 
 msgctxt "field:ins_collective.enrollment,write_date:"
 msgid "Write Date"
@@ -623,21 +625,24 @@ msgctxt "field:ins_collective.enrollment_process.option_selection,session_id:"
 msgid "Session Id"
 msgstr ""
 
+#, fuzzy
 msgctxt "field:ins_collective.enrollment_process.process_state,cur_action:"
 msgid "Current Action"
-msgstr ""
+msgstr "Action Courante"
 
 msgctxt "field:ins_collective.enrollment_process.process_state,cur_step:"
 msgid "Current step"
-msgstr ""
+msgstr "Etape Courante"
 
+#, fuzzy
 msgctxt "field:ins_collective.enrollment_process.process_state,cur_step_desc:"
 msgid "Step Descriptor"
-msgstr ""
+msgstr "Descripteur d'Etape"
 
+#, fuzzy
 msgctxt "field:ins_collective.enrollment_process.process_state,errors:"
 msgid "Errors"
-msgstr ""
+msgstr "Erreurs"
 
 msgctxt ""
 "field:ins_collective.enrollment_process.process_state,for_contract_db:"
@@ -649,22 +654,24 @@ msgctxt ""
 msgid "Jsonfor_contract"
 msgstr ""
 
+#, fuzzy
 msgctxt ""
 "field:ins_collective.enrollment_process.process_state,from_susp_process:"
 msgid "From Process"
-msgstr ""
+msgstr "Processus Source"
 
 msgctxt "field:ins_collective.enrollment_process.process_state,id:"
 msgid "ID"
 msgstr "ID"
 
+#, fuzzy
 msgctxt "field:ins_collective.enrollment_process.process_state,on_product:"
 msgid "On Product Process"
-msgstr ""
+msgstr "Produit"
 
 msgctxt "field:ins_collective.enrollment_process.process_state,process_desc:"
 msgid "Process Description"
-msgstr ""
+msgstr "Description du Processus"
 
 msgctxt "field:ins_collective.enrollment_process.project,broker:"
 msgid "Broker"
@@ -711,7 +718,6 @@ msgctxt ""
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-#, fuzzy
 msgctxt "field:ins_collective.enrollment_process.project,subscriber_desc:"
 msgid "Summary"
 msgstr "Synthèse"
@@ -731,7 +737,7 @@ msgstr "Gestionnaire de Courtier"
 
 msgctxt "field:ins_collective.gbp_contract,contact:"
 msgid "Contact"
-msgstr ""
+msgstr "Contact"
 
 msgctxt "field:ins_collective.gbp_contract,contract_number:"
 msgid "Contract Number"
@@ -745,9 +751,10 @@ msgctxt "field:ins_collective.gbp_contract,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+#, fuzzy
 msgctxt "field:ins_collective.gbp_contract,final_product:"
 msgid "Final Product"
-msgstr ""
+msgstr "Produit Final"
 
 msgctxt "field:ins_collective.gbp_contract,id:"
 msgid "ID"
@@ -779,7 +786,7 @@ msgstr "Souscripteur"
 
 msgctxt "field:ins_collective.gbp_contract,summary:"
 msgid "Summary"
-msgstr "Résumé"
+msgstr "Synthèse"
 
 msgctxt "field:ins_collective.gbp_contract,write_date:"
 msgid "Write Date"
@@ -791,11 +798,11 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_collective.gbp_subs_process.extension_gbp,contact:"
 msgid "Subscriber Contact"
-msgstr ""
+msgstr "Contact Souscripteur"
 
 msgctxt "field:ins_collective.gbp_subs_process.extension_gbp,final_product:"
 msgid "Final Product"
-msgstr ""
+msgstr "Produit Final"
 
 msgctxt "field:ins_collective.gbp_subs_process.extension_gbp,id:"
 msgid "ID"
@@ -805,21 +812,25 @@ msgctxt "field:ins_collective.gbp_subs_process.extension_gbp,session_id:"
 msgid "Session Id"
 msgstr ""
 
+#, fuzzy
 msgctxt "field:ins_collective.gbp_subs_process.process_state,cur_action:"
 msgid "Current Action"
-msgstr ""
+msgstr "Action Courante"
 
+#, fuzzy
 msgctxt "field:ins_collective.gbp_subs_process.process_state,cur_step:"
 msgid "Current step"
-msgstr ""
+msgstr "Etape Courante"
 
+#, fuzzy
 msgctxt "field:ins_collective.gbp_subs_process.process_state,cur_step_desc:"
 msgid "Step Descriptor"
-msgstr ""
+msgstr "Descripteur d'Etape"
 
+#, fuzzy
 msgctxt "field:ins_collective.gbp_subs_process.process_state,errors:"
 msgid "Errors"
-msgstr ""
+msgstr "Erreurs"
 
 msgctxt "field:ins_collective.gbp_subs_process.process_state,for_contract_db:"
 msgid "for_contract"
@@ -830,22 +841,25 @@ msgctxt ""
 msgid "Jsonfor_contract"
 msgstr ""
 
+#, fuzzy
 msgctxt ""
 "field:ins_collective.gbp_subs_process.process_state,from_susp_process:"
 msgid "From Process"
-msgstr ""
+msgstr "Processus Source"
 
 msgctxt "field:ins_collective.gbp_subs_process.process_state,id:"
 msgid "ID"
 msgstr "ID"
 
+#, fuzzy
 msgctxt "field:ins_collective.gbp_subs_process.process_state,on_product:"
 msgid "On Product Process"
-msgstr ""
+msgstr "Produit"
 
+#, fuzzy
 msgctxt "field:ins_collective.gbp_subs_process.process_state,process_desc:"
 msgid "Process Description"
-msgstr ""
+msgstr "Description du Processus"
 
 msgctxt "field:ins_collective.gbp_subs_process.project,broker:"
 msgid "Broker"
@@ -941,7 +955,7 @@ msgstr "Contrat"
 
 msgctxt "field:ins_collective.option,coverage:"
 msgid "Offered Coverage"
-msgstr ""
+msgstr "Garantie"
 
 msgctxt "field:ins_collective.option,create_date:"
 msgid "Create Date"
@@ -951,9 +965,10 @@ msgctxt "field:ins_collective.option,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+#, fuzzy
 msgctxt "field:ins_collective.option,end_date:"
 msgid "Effective_date"
-msgstr ""
+msgstr "Date d'Effet"
 
 msgctxt "field:ins_collective.option,id:"
 msgid "ID"
@@ -1183,9 +1198,10 @@ msgctxt "field:ins_collective.product,code:"
 msgid "Code"
 msgstr "Code"
 
+#, fuzzy
 msgctxt "field:ins_collective.product,contract_generator:"
 msgid "Contract Number Generator"
-msgstr ""
+msgstr "Générateur de N° de Contrat"
 
 msgctxt "field:ins_collective.product,create_date:"
 msgid "Create Date"
@@ -1471,9 +1487,10 @@ msgctxt "model:ir.action,name:enrollment_view_action"
 msgid "New Enrollment"
 msgstr "Nouvelle Affiliation"
 
+#, fuzzy
 msgctxt "model:ir.action,name:gbp_project_view_action"
 msgid "New GBP Subscription Process"
-msgstr ""
+msgstr "Souscription Contrat Groupe"
 
 msgctxt "model:ir.action,name:resume_enrollment_process"
 msgid "Resume Process"
@@ -1505,7 +1522,7 @@ msgstr "Nouvelle Affiliation"
 
 msgctxt "model:ir.ui.menu,name:menu_start_gbp_subs"
 msgid "New GBP Subscription Process"
-msgstr ""
+msgstr "Souscription Contrat Groupe"
 
 msgctxt "selection:ins_collective.benefit,template_behaviour:"
 msgid "Add"
@@ -1569,7 +1586,7 @@ msgstr "Prévoyance"
 
 msgctxt "selection:ins_collective.coverage,family:"
 msgid "default"
-msgstr ""
+msgstr "Défaut"
 
 msgctxt "selection:ins_collective.coverage,template_behaviour:"
 msgid "Add"
@@ -1895,15 +1912,15 @@ msgstr ""
 
 msgctxt "view:ins_collective.gbp_contract:"
 msgid "GBP Product"
-msgstr ""
+msgstr "Produit Collectif"
 
 msgctxt "view:ins_collective.gbp_contract:"
 msgid "contract"
-msgstr ""
+msgstr "contrat"
 
 msgctxt "view:ins_collective.gbp_subs_process.extension_gbp:"
 msgid "GBP Subscription Process - GBP"
-msgstr ""
+msgstr "Souscription de Contrat Groupe"
 
 msgctxt "view:ins_collective.gbp_subs_process.project:"
 msgid "GBP Subscription Process - Project Step"

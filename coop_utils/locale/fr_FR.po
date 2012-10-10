@@ -144,7 +144,7 @@ msgstr "Changer la Date de la Session"
 
 msgctxt "model:ir.ui.menu,name:menu_tools"
 msgid "Tools"
-msgstr "Tools"
+msgstr "Outils"
 
 msgctxt "model:utils.change_session.ask_date,name:"
 msgid "Asks a new business date for the current session"
@@ -156,7 +156,7 @@ msgstr "Sélection Dynamique"
 
 msgctxt "view:utils.change_session.ask_date:"
 msgid "New date for session"
-msgstr ""
+msgstr "Nouvelle Date pour la Session"
 
 msgctxt "wizard_button:utils.change_session,ask_date,apply:"
 msgid "Apply"

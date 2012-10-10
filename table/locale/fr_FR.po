@@ -51,15 +51,16 @@ msgstr "Définition"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension3:"
 msgid "Dimension 3"
-msgstr ""
+msgstr "Dimension 3"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension3_required:"
 msgid "Dimension 3 Required"
 msgstr "Dimension 3 requise"
 
+#, fuzzy
 msgctxt "field:table.2d.open.ask_dimensions,dimension4:"
 msgid "Dimension 4"
-msgstr ""
+msgstr "Dimension 4"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension4_required:"
 msgid "Dimension 4 Required"
@@ -85,21 +86,24 @@ msgctxt "field:table.table_cell,definition:"
 msgid "Definition"
 msgstr "Définition"
 
+#, fuzzy
 msgctxt "field:table.table_cell,dimension1:"
 msgid "Dimension 1"
-msgstr ""
+msgstr "Dimension 1"
 
+#, fuzzy
 msgctxt "field:table.table_cell,dimension2:"
 msgid "Dimension 2"
-msgstr ""
+msgstr "Dimension 2"
 
+#, fuzzy
 msgctxt "field:table.table_cell,dimension3:"
 msgid "Dimension 3"
-msgstr ""
+msgstr "Dimension 3"
 
 msgctxt "field:table.table_cell,dimension4:"
 msgid "Dimension 4"
-msgstr ""
+msgstr "Dimension 4"
 
 #, fuzzy
 msgctxt "field:table.table_cell,id:"
@@ -137,19 +141,20 @@ msgstr "Créé par"
 
 msgctxt "field:table.table_def,dimension1:"
 msgid "Dimension 1"
-msgstr ""
+msgstr "Dimension 1"
 
 msgctxt "field:table.table_def,dimension2:"
 msgid "Dimension 2"
-msgstr ""
+msgstr "Dimension 2"
 
 msgctxt "field:table.table_def,dimension3:"
 msgid "Dimension 3"
-msgstr ""
+msgstr "Dimension 3"
 
+#, fuzzy
 msgctxt "field:table.table_def,dimension4:"
 msgid "Dimension 4"
-msgstr ""
+msgstr "Dimension 4"
 
 msgctxt "field:table.table_def,dimension_kind1:"
 msgid "Dimension Kind 1"
@@ -259,14 +264,6 @@ msgctxt "field:table.table_dimension,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "model:ir.action,name:None"
-msgid "Table"
-msgstr ""
-
-msgctxt "model:ir.action,name:None"
-msgid "Tables"
-msgstr ""
-
 msgctxt "model:ir.action,name:act_cell_form"
 msgid "Cells"
 msgstr "Cellules"
@@ -275,39 +272,29 @@ msgctxt "model:ir.action,name:act_cell_relate_form"
 msgid "Cells"
 msgstr "Cellules"
 
+#, fuzzy
 msgctxt "model:ir.action,name:act_table_2d_open"
 msgid "Table 2D"
-msgstr ""
+msgstr "Table 2D"
 
+#, fuzzy
 msgctxt "model:ir.action,name:act_table_2d_relate_form"
 msgid "Table 2D"
-msgstr ""
+msgstr "Table 2D"
 
 #, fuzzy
 msgctxt "model:ir.action,name:act_table_definition_form"
-msgid "Table Definitions"
+msgid "Tables"
 msgstr "Tables"
-
-msgctxt "model:ir.ui.menu,name:None"
-msgid "Table"
-msgstr ""
 
 #, fuzzy
-msgctxt "model:ir.ui.menu,name:None"
-msgid "Table Definitions"
-msgstr "Tables"
-
-msgctxt "model:ir.ui.menu,name:None"
-msgid "Tables"
-msgstr ""
-
 msgctxt "model:ir.ui.menu,name:menu_table_defintion_form"
-msgid "Table Definitions"
+msgid "Tables"
 msgstr "Tables"
 
 msgctxt "model:table.2d,name:"
 msgid "Table 2D"
-msgstr ""
+msgstr "Table 2D"
 
 msgctxt "model:table.2d.open.ask_dimensions,name:"
 msgid "Table Open 2D Ask Dimensions"
@@ -419,29 +406,32 @@ msgctxt "selection:table.table_def,dimension_kind4:"
 msgid "Value"
 msgstr "Valeur"
 
+#, fuzzy
 msgctxt "selection:table.table_dimension,type:"
 msgid "Dimension 1"
-msgstr ""
+msgstr "Dimension 1"
 
 msgctxt "selection:table.table_dimension,type:"
 msgid "Dimension 2"
-msgstr ""
+msgstr "Dimension 2"
 
 msgctxt "selection:table.table_dimension,type:"
 msgid "Dimension 3"
-msgstr ""
+msgstr "Dimension 3"
 
+#, fuzzy
 msgctxt "selection:table.table_dimension,type:"
 msgid "Dimension 4"
-msgstr ""
+msgstr "Dimension 4"
 
 msgctxt "view:table.2d.open.ask_dimensions:"
 msgid "Dimensions"
-msgstr ""
+msgstr "Dimensions"
 
+#, fuzzy
 msgctxt "view:table.table_cell:"
 msgid "Table"
-msgstr ""
+msgstr "Table"
 
 msgctxt "view:table.table_def:"
 msgid "Table Definition"
@@ -457,7 +447,7 @@ msgstr "Dimensions"
 
 msgctxt "view:table:"
 msgid "Table"
-msgstr ""
+msgstr "Table"
 
 #, fuzzy
 msgctxt "wizard_button:table.2d.open,ask_dimensions,end:"

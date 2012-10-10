@@ -228,7 +228,7 @@ msgstr "Relations"
 
 msgctxt "field:party.party,summary:"
 msgid "Summary"
-msgstr "Résumé"
+msgstr "Synthèse"
 
 msgctxt "field:party.party-relation,create_date:"
 msgid "Create Date"
@@ -508,7 +508,7 @@ msgstr "Rôles"
 
 msgctxt "view:party.party:"
 msgid "Contact"
-msgstr ""
+msgstr "Contact"
 
 msgctxt "view:party.party:"
 msgid "Party"
@@ -524,7 +524,7 @@ msgstr "Rôles"
 
 msgctxt "view:party.party:"
 msgid "Summary"
-msgstr "Résumé"
+msgstr "Synthèse"
 
 msgctxt "view:party.party_relation_kind:"
 msgid "Party Relation Kind"
