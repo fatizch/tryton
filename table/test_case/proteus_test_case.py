@@ -8,9 +8,9 @@ DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
 
 def update_cfg_dict_with_models(cfg_dict):
-    cfg_dict['Table'] = Model.get('indice_table.definition')
-    cfg_dict['Dimension'] = Model.get('indice_table.definition.dimension')
-    cfg_dict['Cell'] = Model.get('indice_table')
+    cfg_dict['Table'] = Model.get('table.table_def')
+    cfg_dict['Dimension'] = Model.get('table.table_dimension')
+    cfg_dict['Cell'] = Model.get('table.table_cell')
     return cfg_dict
 
 
@@ -55,7 +55,13 @@ def create_cell(cfg_dict, table, value, dim1, dim2=None, dim3=None):
     return res
 
 
+def is_table_empty(model):
+    return len(model.find(limit=1)) == 0
+
+
 def create_objects(cfg_dict):
+    if not is_table_empty(cfg_dict['Table']):
+        return None
     table = create_table(cfg_dict, 'Table 10x100', 'value', range(100),
     'value', range(10))
     table.save()

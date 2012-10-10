@@ -13,23 +13,27 @@ from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT, test_view,\
     test_depends
 from trytond.transaction import Transaction
 
+MODULE_NAME = os.path.basename(
+                  os.path.abspath(
+                      os.path.join(os.path.normpath(__file__), '..', '..')))
 
-class IndiceTableTestCase(unittest.TestCase):
+
+class ModuleTestCase(unittest.TestCase):
     '''
-    Test IndiceTable module.
+    Test Coop module.
     '''
 
     def setUp(self):
-        trytond.tests.test_tryton.install_module('indice_table')
-        self.definition = POOL.get('indice_table.definition')
-        self.dimension = POOL.get('indice_table.definition.dimension')
-        self.indice_table = POOL.get('indice_table')
+        trytond.tests.test_tryton.install_module(MODULE_NAME)
+        self.definition = POOL.get('table.table_def')
+        self.dimension = POOL.get('table.table_dimension')
+        self.cell = POOL.get('table.table_cell')
 
     def test0005views(self):
         '''
         Test views.
         '''
-        test_view('indice_table')
+        test_view(MODULE_NAME)
 
     def test0006depends(self):
         '''
@@ -48,9 +52,9 @@ class IndiceTableTestCase(unittest.TestCase):
             self.assertEqual(self.definition.get('Test'), definition)
             self.assertRaises(IndexError, self.definition.get, 'foo')
 
-    def test0020indice_table_1dim_value_get(self):
+    def test0020table_1dim_value_get(self):
         '''
-        Test IndiceTable.get with 1 dimension of value.
+        Test TableCell.get with 1 dimension of value.
         '''
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             definition = self.definition.create({
@@ -72,18 +76,18 @@ class IndiceTableTestCase(unittest.TestCase):
                 values.update({
                         'definition': definition.id,
                         })
-                self.indice_table.create(values)
+                self.cell.create(values)
             for query, result in (
                     (('foo',), 'ham'),
                     (('bar',), 'spam'),
                     (('test',), None),
                     ):
-                self.assertEqual(self.indice_table.get(definition, *query),
+                self.assertEqual(self.cell.get(definition, *query),
                     result, (query, result))
 
-    def test0030indice_table_1dim_date_get(self):
+    def test0030table_1dim_date_get(self):
         '''
-        Test IndiceTable.get with 1 dimension of date.
+        Test TableCell.get with 1 dimension of date.
         '''
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             definition = self.definition.create({
@@ -105,18 +109,18 @@ class IndiceTableTestCase(unittest.TestCase):
                 values.update({
                         'definition': definition.id,
                         })
-                self.indice_table.create(values)
+                self.cell.create(values)
             for query, result in (
                     ((datetime.date(2012, 12, 21),), 'ham'),
                     ((datetime.date(2012, 9, 21),), 'spam'),
                     ((datetime.date(2012, 6, 20),), None),
                     ):
-                self.assertEqual(self.indice_table.get(definition, *query),
+                self.assertEqual(self.cell.get(definition, *query),
                     result, (query, result))
 
-    def test0040indice_table_1dim_range_get(self):
+    def test0040table_1dim_range_get(self):
         '''
-        Test IndiceTable.get with 1 dimension of range.
+        Test TableCell.get with 1 dimension of range.
         '''
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             definition = self.definition.create({
@@ -140,7 +144,7 @@ class IndiceTableTestCase(unittest.TestCase):
                 values.update({
                         'definition': definition.id,
                         })
-                self.indice_table.create(values)
+                self.cell.create(values)
             for query, result in (
                     ((0,), None),
                     ((1,), 'ham'),
@@ -149,12 +153,12 @@ class IndiceTableTestCase(unittest.TestCase):
                     ((30,), 'spam'),
                     ((50,), None),
                     ):
-                self.assertEqual(self.indice_table.get(definition, *query),
+                self.assertEqual(self.cell.get(definition, *query),
                     result, (query, result))
 
-    def test0050indice_table_1dim_range_date_get(self):
+    def test0050table_1dim_range_date_get(self):
         '''
-        Test IndiceTable.get with 1 dimension of range.
+        Test TableCell.get with 1 dimension of range.
         '''
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             definition = self.definition.create({
@@ -178,7 +182,7 @@ class IndiceTableTestCase(unittest.TestCase):
                 values.update({
                         'definition': definition.id,
                         })
-                self.indice_table.create(values)
+                self.cell.create(values)
             for query, result in (
                     ((datetime.date(2011, 1, 1),), None),
                     ((datetime.date(2012, 1, 1),), 'ham'),
@@ -187,12 +191,12 @@ class IndiceTableTestCase(unittest.TestCase):
                     ((datetime.date(2013, 7, 1),), 'spam'),
                     ((datetime.date(2014, 1, 1),), None),
                     ):
-                self.assertEqual(self.indice_table.get(definition, *query),
+                self.assertEqual(self.cell.get(definition, *query),
                     result, (query, result))
 
-    def test0060indice_table_2dim(self):
+    def test0060table_2dim(self):
         '''
-        Test IndiceTable.get with 2 dimensions of value.
+        Test TableCell.get with 2 dimensions of value.
         '''
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             definition = self.definition.create({
@@ -234,7 +238,7 @@ class IndiceTableTestCase(unittest.TestCase):
                 values.update({
                         'definition': definition.id,
                         })
-                self.indice_table.create(values)
+                self.cell.create(values)
 
             for query, result in (
                     (('foo', 1), 'ham'),
@@ -243,14 +247,14 @@ class IndiceTableTestCase(unittest.TestCase):
                     (('bar', 30), 'chicken'),
                     (('test', 30), None),
                     ):
-                self.assertEqual(self.indice_table.get(definition, *query),
+                self.assertEqual(self.cell.get(definition, *query),
                     result, (query, result))
 
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-            IndiceTableTestCase))
+            ModuleTestCase))
     return suite
 
 if __name__ == '__main__':

@@ -9,9 +9,9 @@ from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
     Button
 from trytond.modules.coop_utils import One2ManyDomain
 
-__all__ = ['IndiceTable', 'IndiceTableDefinition',
-    'IndiceTableDefinitionDimension', 'IndiceTableOpen2DAskDimensions',
-    'IndiceTableOpen2D', 'IndiceTable2D']
+__all__ = ['TableCell', 'TableDefinition',
+    'TableDefinitionDimension', 'TableOpen2DAskDimensions',
+    'TableOpen2D', 'Table2D']
 
 KIND = [
     (None, ''),
@@ -22,9 +22,9 @@ KIND = [
     ]
 
 
-class IndiceTableDefinition(ModelSQL, ModelView):
-    "Indice Table Definition"
-    __name__ = 'indice_table.definition'
+class TableDefinition(ModelSQL, ModelView):
+    "Table Definition"
+    __name__ = 'table.table_def'
     name = fields.Char('Name', required=True)
     dimension_kind1 = fields.Selection(KIND, 'Dimension Kind 1',
         states={
@@ -42,25 +42,25 @@ class IndiceTableDefinition(ModelSQL, ModelView):
         states={
             'readonly': Bool(Eval('dimension4')),
             })
-    dimension1 = One2ManyDomain('indice_table.definition.dimension',
+    dimension1 = One2ManyDomain('table.table_dimension',
         'definition', 'Dimension 1', domain=[('type', '=', 'dimension1')],
         states={
             'invisible': ~Eval('dimension_kind1'),
             },
         depends=['dimension_kind1'])
-    dimension2 = One2ManyDomain('indice_table.definition.dimension',
+    dimension2 = One2ManyDomain('table.table_dimension',
         'definition', 'Dimension 2', domain=[('type', '=', 'dimension2')],
         states={
             'invisible': ~Eval('dimension_kind2'),
             },
         depends=['dimension_kind2'])
-    dimension3 = One2ManyDomain('indice_table.definition.dimension',
+    dimension3 = One2ManyDomain('table.table_dimension',
         'definition', 'Dimension 3', domain=[('type', '=', 'dimension3')],
         states={
             'invisible': ~Eval('dimension_kind3'),
             },
         depends=['dimension_kind3'])
-    dimension4 = One2ManyDomain('indice_table.definition.dimension',
+    dimension4 = One2ManyDomain('table.table_dimension',
         'definition', 'Dimension 4', domain=[('type', '=', 'dimension4')],
         states={
             'invisible': ~Eval('dimension_kind4'),
@@ -69,10 +69,10 @@ class IndiceTableDefinition(ModelSQL, ModelView):
 
     @classmethod
     def __setup__(cls):
-        super(IndiceTableDefinition, cls).__setup__()
+        super(TableDefinition, cls).__setup__()
         cls._sql_constraints = [
             ('name_unique', 'UNIQUE(name)',
-                'The name of "Indice Table Definition" must be unique'),
+                'The name of "Table Definition" must be unique'),
             ]
         cls._order.insert(0, ('name', 'ASC'))
 
@@ -103,11 +103,11 @@ def dimension_state(kind):
 DIMENSION_DEPENDS = ['type']
 
 
-class IndiceTableDefinitionDimension(ModelSQL, ModelView):
-    "Indice Table Definition Dimension"
-    __name__ = 'indice_table.definition.dimension'
+class TableDefinitionDimension(ModelSQL, ModelView):
+    "Table Definition Dimension"
+    __name__ = 'table.table_dimension'
     _order_name = 'rec_name'
-    definition = fields.Many2One('indice_table.definition', 'Definition',
+    definition = fields.Many2One('table.table_def', 'Definition',
         required=True)
     type = fields.Selection([
             ('dimension1', 'Dimension 1'),
@@ -130,7 +130,7 @@ class IndiceTableDefinitionDimension(ModelSQL, ModelView):
 
     @classmethod
     def __setup__(cls):
-        super(IndiceTableDefinitionDimension, cls).__setup__()
+        super(TableDefinitionDimension, cls).__setup__()
 
         cls.rec_name.order_field = ("%(table)s.value %(order)s, "
             "%(table)s.date %(order)s, "
@@ -150,7 +150,7 @@ class IndiceTableDefinitionDimension(ModelSQL, ModelView):
     def __register__(cls, module_name):
         cursor = Transaction().cursor
 
-        super(IndiceTableDefinitionDimension, cls).__register__(module_name)
+        super(TableDefinitionDimension, cls).__register__(module_name)
 
         table = TableHandler(cursor, cls, module_name)
         table.index_action(['definition', 'type'], 'add')
@@ -194,6 +194,9 @@ class IndiceTableDefinitionDimension(ModelSQL, ModelView):
                     names[dimension.id] = '- %s' % (
                         Lang.strftime(dimension.end_date, lang.code,
                             lang.date))
+            if (getattr(dimension.definition, kind)
+                and getattr(dimension.definition, kind).startswith('range')):
+                names[dimension.id] = '[%s[' % names[dimension.id]
         return names
 
     @classmethod
@@ -201,33 +204,33 @@ class IndiceTableDefinitionDimension(ModelSQL, ModelView):
         return [('value',) + tuple(clause[1:])]
 
 
-class IndiceTable(ModelSQL, ModelView):
-    "Indice Table"
-    __name__ = 'indice_table'
-    definition = fields.Many2One('indice_table.definition', 'Definition',
+class TableCell(ModelSQL, ModelView):
+    "Cell"
+    __name__ = 'table.table_cell'
+    definition = fields.Many2One('table.table_def', 'Definition',
         required=True)
-    dimension1 = fields.Many2One('indice_table.definition.dimension',
+    dimension1 = fields.Many2One('table.table_dimension',
         'Dimension 1', ondelete='CASCADE',
         domain=[
             ('definition', '=', Eval('definition')),
             ('type', '=', 'dimension1'),
             ],
         depends=['definition'])
-    dimension2 = fields.Many2One('indice_table.definition.dimension',
+    dimension2 = fields.Many2One('table.table_dimension',
         'Dimension 2', ondelete='CASCADE',
         domain=[
             ('definition', '=', Eval('definition')),
             ('type', '=', 'dimension2'),
             ],
         depends=['definition'])
-    dimension3 = fields.Many2One('indice_table.definition.dimension',
+    dimension3 = fields.Many2One('table.table_dimension',
         'Dimension 3', ondelete='CASCADE',
         domain=[
             ('definition', '=', Eval('definition')),
             ('type', '=', 'dimension3'),
             ],
         depends=['definition'])
-    dimension4 = fields.Many2One('indice_table.definition.dimension',
+    dimension4 = fields.Many2One('table.table_dimension',
         'Dimension 4', ondelete='CASCADE',
         domain=[
             ('definition', '=', Eval('definition')),
@@ -240,7 +243,7 @@ class IndiceTable(ModelSQL, ModelView):
     def __register__(cls, module_name):
         cursor = Transaction().cursor
 
-        super(IndiceTable, cls).__register__(module_name)
+        super(TableCell, cls).__register__(module_name)
 
         table = TableHandler(cursor, cls, module_name)
         table.index_action(['definition',
@@ -252,8 +255,8 @@ class IndiceTable(ModelSQL, ModelView):
         Return the value for the tuple dimensions values.
         """
         pool = Pool()
-        Definition = pool.get('indice_table.definition')
-        Dimension = pool.get('indice_table.definition.dimension')
+        Definition = pool.get('table.table_def')
+        Dimension = pool.get('table.table_dimension')
 
         if not isinstance(definition, Definition):
             definition = Definition.get(definition)
@@ -287,18 +290,18 @@ class IndiceTable(ModelSQL, ModelView):
             domain.append(('dimension%d' % (i + 1), '=',
                     dimension.id if dimension else None))
         try:
-            indice, = cls.search(domain)
+            cell, = cls.search(domain)
         except ValueError:
             return None
-        return indice.value
+        return cell.value
 
 
-class IndiceTableOpen2DAskDimensions(ModelView):
-    "Indice Table Open 2D Ask Dimensions"
-    __name__ = 'indice_table.2d.open.ask_dimensions'
-    definition = fields.Many2One('indice_table.definition', 'Definition',
+class TableOpen2DAskDimensions(ModelView):
+    "Table Open 2D Ask Dimensions"
+    __name__ = 'table.2d.open.ask_dimensions'
+    definition = fields.Many2One('table.table_def', 'Definition',
         readonly=True)
-    dimension3 = fields.Many2One('indice_table.definition.dimension',
+    dimension3 = fields.Many2One('table.table_dimension',
         'Dimension 3',
         domain=[
             ('definition', '=', Eval('definition')),
@@ -310,7 +313,7 @@ class IndiceTableOpen2DAskDimensions(ModelView):
             },
         depends=['definition', 'dimension3_required'])
     dimension3_required = fields.Boolean('Dimension 3 Required', readonly=True)
-    dimension4 = fields.Many2One('indice_table.definition.dimension',
+    dimension4 = fields.Many2One('table.table_dimension',
         'Dimension 4',
         domain=[
             ('definition', '=', Eval('definition')),
@@ -329,10 +332,10 @@ class IndiceTableOpen2DAskDimensions(ModelView):
 
     @staticmethod
     def default_dimension_required(dimension):
-        IndiceTableDefinition = Pool().get('indice_table.definition')
+        TableDefinition = Pool().get('table.table_def')
         definition_id = Transaction().context.get('active_id')
         if definition_id:
-            definition = IndiceTableDefinition(definition_id)
+            definition = TableDefinition(definition_id)
             return bool(getattr(definition, 'dimension_kind%s' % dimension))
         return False
 
@@ -345,22 +348,22 @@ class IndiceTableOpen2DAskDimensions(ModelView):
         return cls.default_dimension_required(4)
 
 
-class IndiceTableOpen2D(Wizard):
-    "Indice Table Open 2D"
-    __name__ = 'indice_table.2d.open'
+class TableOpen2D(Wizard):
+    "Table Open 2D"
+    __name__ = 'table.2d.open'
     start = StateTransition()
-    ask_dimensions = StateView('indice_table.2d.open.ask_dimensions',
-        'indice_table.indice_table_2d_open_ask_dimensions_form_view', [
+    ask_dimensions = StateView('table.2d.open.ask_dimensions',
+        'table.table_2d_open_ask_dimensions_form_view', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Open', 'open_', 'tryton-ok', True),
             ])
-    open_ = StateAction('indice_table.act_indice_table_2d_relate_form')
+    open_ = StateAction('table.act_table_2d_relate_form')
 
     def transition_start(self):
-        IndiceTableDefinition = Pool().get('indice_table.definition')
+        TableDefinition = Pool().get('table.table_def')
         definition_id = int(Transaction().context['active_id'])
         if definition_id != -1:
-            definition = IndiceTableDefinition(definition_id)
+            definition = TableDefinition(definition_id)
             if (not definition.dimension_kind1
                     or not definition.dimension_kind2
                     or definition.dimension_kind3
@@ -370,7 +373,7 @@ class IndiceTableOpen2D(Wizard):
 
     def do_open_(self, action):
         context = {
-            'indice_table.definition': Transaction().context['active_id'],
+            'table.table_def': Transaction().context['active_id'],
             }
         if getattr(self.ask_dimensions, 'dimension3', None):
             context['dimension3'] = self.ask_dimensions.dimension3.id
@@ -380,67 +383,67 @@ class IndiceTableOpen2D(Wizard):
         return action, {}
 
 
-class IndiceTable2DDict(dict):
+class Table2DDict(dict):
 
     def __getitem__(self, key):
         pool = Pool()
-        IndiceTable = pool.get('indice_table')
+        TableCell = pool.get('table.table_cell')
         if key.startswith('col'):
-            field = copy.copy(IndiceTable.value)
+            field = copy.copy(TableCell.value)
             field.string = ''
             return field
-        return super(IndiceTable2DDict, self).__getitem__(key)
+        return super(Table2DDict, self).__getitem__(key)
 
     def __contains__(self, key):
         if key.startswith('col'):
             return True
-        return super(IndiceTable2DDict, self).__contains__(key)
+        return super(Table2DDict, self).__contains__(key)
 
     def keys(self):
         pool = Pool()
-        IndiceTableDefinitionDimension = pool.get(
-            'indice_table.definition.dimension')
+        TableDefinitionDimension = pool.get(
+            'table.table_dimension')
         definition_id = int(
-            Transaction().context.get('indice_table.definition', -1))
-        dimensions2 = IndiceTableDefinitionDimension.search([
+            Transaction().context.get('table.table_def', -1))
+        dimensions2 = TableDefinitionDimension.search([
                 ('type', '=', 'dimension2'),
                 ('definition', '=', definition_id),
                 ])
-        result = super(IndiceTable2DDict, self).keys()
+        result = super(Table2DDict, self).keys()
         result += ['col%d' % d.id for d in dimensions2]
         return result
 
 
-class IndiceTable2D(ModelSQL, ModelView):
-    "Indice Table 2D"
-    __name__ = 'indice_table.2d'
+class Table2D(ModelSQL, ModelView):
+    "Table 2D"
+    __name__ = 'table.2d'
 
-    row = fields.Many2One('indice_table.definition.dimension', 'Row',
+    row = fields.Many2One('table.table_dimension', 'Row',
         readonly=True)
 
     @classmethod
     def __setup__(cls):
-        super(IndiceTable2D, cls).__setup__()
+        super(Table2D, cls).__setup__()
         cls._error_messages.update({
-                'not_2d': 'The indice table is not 2D',
+                'not_2d': 'The table is not 2D',
                 })
 
     @classmethod
     def __post_setup__(cls):
-        super(IndiceTable2D, cls).__post_setup__()
-        cls._fields = IndiceTable2DDict(cls._fields)
+        super(Table2D, cls).__post_setup__()
+        cls._fields = Table2DDict(cls._fields)
 
     @classmethod
     def table_query(cls):
         pool = Pool()
-        IndiceTable = pool.get('indice_table')
-        IndiceTableDefinition = pool.get('indice_table.definition')
-        IndiceTableDefinitionDimension = pool.get(
-            'indice_table.definition.dimension')
+        TableCell = pool.get('table.table_cell')
+        TableDefinition = pool.get('table.table_def')
+        TableDefinitionDimension = pool.get(
+            'table.table_dimension')
         definition_id = int(
-            Transaction().context.get('indice_table.definition', -1))
+            Transaction().context.get('table.table_def', -1))
         if definition_id != -1:
-            definition = IndiceTableDefinition(definition_id)
+            definition = TableDefinition(definition_id)
             if (not definition.dimension_kind1
                     or not definition.dimension_kind2
                     or (definition.dimension_kind3
@@ -448,7 +451,7 @@ class IndiceTable2D(ModelSQL, ModelView):
                     or (definition.dimension_kind4
                         and not Transaction().context.get('dimension4'))):
                 cls.raise_user_error('not_2d')
-        dimensions2 = IndiceTableDefinitionDimension.search([
+        dimensions2 = TableDefinitionDimension.search([
                 ('type', '=', 'dimension2'),
                 ('definition', '=', definition_id),
                 ])
@@ -467,14 +470,14 @@ class IndiceTable2D(ModelSQL, ModelView):
                 " NOW() AS create_date, NULL AS write_date "
             "FROM CROSSTAB("
             "'SELECT d.id, i.dimension2, i.value "
-            'FROM "' + IndiceTableDefinitionDimension._table + '" AS d '
-            'LEFT JOIN "' + IndiceTable._table + '" AS i '
+            'FROM "' + TableDefinitionDimension._table + '" AS d '
+            'LEFT JOIN "' + TableCell._table + '" AS i '
                 "ON (d.id = i.dimension1 " + dimensions_clause + ") "
             + ("WHERE d.definition = %s " % definition_id)
                 + "AND type = ''dimension1'' "
             "ORDER BY 1', "
             "'SELECT id "
-            'FROM "' + IndiceTableDefinitionDimension._table + '" '
+            'FROM "' + TableDefinitionDimension._table + '" '
             "WHERE type = ''dimension2'' "
                 + ("AND definition = %s " % definition_id)
             + " ORDER BY value ASC, date ASC, start ASC, \"end\" ASC, "
@@ -484,16 +487,16 @@ class IndiceTable2D(ModelSQL, ModelView):
     @classmethod
     def fields_view_get(cls, view_id=None, view_type='form'):
         pool = Pool()
-        IndiceTable = pool.get('indice_table')
-        IndiceTableDefinition = pool.get('indice_table.definition')
-        IndiceTableDefinitionDimension = pool.get(
-            'indice_table.definition.dimension')
+        TableCell = pool.get('table.table_cell')
+        TableDefinition = pool.get('table.table_def')
+        TableDefinitionDimension = pool.get(
+            'table.table_dimension')
 
         definition_id = int(
-            Transaction().context.get('indice_table.definition', -1))
-        definition = IndiceTableDefinition(definition_id)
-        value_field = IndiceTable.fields_get(['value'])['value']
-        dimensions2 = IndiceTableDefinitionDimension.search([
+            Transaction().context.get('table.table_def', -1))
+        definition = TableDefinition(definition_id)
+        value_field = TableCell.fields_get(['value'])['value']
+        dimensions2 = TableDefinitionDimension.search([
                 ('type', '=', 'dimension2'),
                 ('definition', '=', definition_id),
                 ])
@@ -504,7 +507,7 @@ class IndiceTable2D(ModelSQL, ModelView):
         dimension_title = []
         for dimension in ('dimension3', 'dimension4'):
             if Transaction().context.get(dimension):
-                dimension = IndiceTableDefinitionDimension(
+                dimension = TableDefinitionDimension(
                     Transaction().context[dimension])
                 dimension_title.append(dimension.rec_name)
         if dimension_title:
@@ -538,14 +541,14 @@ class IndiceTable2D(ModelSQL, ModelView):
     @classmethod
     def write(cls, rows, values):
         pool = Pool()
-        IndiceTable = pool.get('indice_table')
-        super(IndiceTable2D, cls).write(rows, values)
+        TableCell = pool.get('table.table_cell')
+        super(Table2D, cls).write(rows, values)
         dim1_ids = [r.id for r in rows]
         definition_id = int(
-            Transaction().context.get('indice_table.definition', -1))
+            Transaction().context.get('table.table_def', -1))
         for col, value in values.iteritems():
             dim2_id = int(col[3:])
-            indices = IndiceTable.search([
+            cells = TableCell.search([
                     ('dimension1', 'in', dim1_ids),
                     ('dimension2', '=', dim2_id),
                     ('dimension3', '=',
@@ -554,13 +557,13 @@ class IndiceTable2D(ModelSQL, ModelView):
                         Transaction().context.get('dimension4')),
                     ('definition', '=', definition_id),
                     ])
-            if indices:
-                IndiceTable.write(indices, {
+            if cells:
+                TableCell.write(cells, {
                         'value': value,
                         })
-            to_creates = set(dim1_ids) - set(i.id for i in indices)
+            to_creates = set(dim1_ids) - set(i.id for i in cells)
             for dim1_id in to_creates:
-                IndiceTable.create({
+                TableCell.create({
                         'definition': definition_id,
                         'dimension1': dim1_id,
                         'dimension2': dim2_id,

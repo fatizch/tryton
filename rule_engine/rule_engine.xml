@@ -300,5 +300,9 @@
             <field name="action" ref="run_tests_wizard"/>
         </record>
 
+        <!-- Move table menu to rule engine -->
+        <menuitem action="table.act_table_definition_form" 
+            sequence="50"
+            id="table.menu_table_defintion_form" parent ="menu_rule_engine"/>
     </data>
 </tryton>

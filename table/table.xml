@@ -1,15 +1,16 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
-        <menuitem name="Indice Table" id="menu_indice_table"/>
-
-        <record model="ir.ui.view" id="indice_table_definition_form_view">
-            <field name="model">indice_table.definition</field>
+        <!--  
+            <menuitem name="Table" id="menu_table"/>
+        -->
+        <record model="ir.ui.view" id="table_definition_form_view">
+            <field name="model">table.table_def</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                <form string="Indice Table Definition" col="2">
-                    <label name="name"/>
+                <form string="Table Definition" col="2">
+                    <label name="name" xalign="0"/>
                     <field name="name"/>
                     <label name="dimension_kind1"/>
                     <field name="dimension_kind1"/>
@@ -28,46 +29,45 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="indice_table_definition_list_view">
-            <field name="model">indice_table.definition</field>
+        <record model="ir.ui.view" id="table_definition_list_view">
+            <field name="model">table.table_def</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                <tree string="Indice Table Definition">
+                <tree string="Table Definition">
                     <field name="name" expand="1"/>
                 </tree>
                 ]]>
             </field>
         </record>
 
-        <record model="ir.action.act_window" id="act_indice_table_definition_form">
-            <field name="name">Indice Table Definitions</field>
-            <field name="res_model">indice_table.definition</field>
+        <record model="ir.action.act_window" id="act_table_definition_form">
+            <field name="name">Tables</field>
+            <field name="res_model">table.table_def</field>
         </record>
         <record model="ir.action.act_window.view"
-            id="act_indice_table_definition_form_view1">
+            id="act_table_definition_form_view1">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="indice_table_definition_list_view"/>
-            <field name="act_window" ref="act_indice_table_definition_form"/>
+            <field name="view" ref="table_definition_list_view"/>
+            <field name="act_window" ref="act_table_definition_form"/>
         </record>
         <record model="ir.action.act_window.view"
-            id="act_indice_table_definition_form_view2">
+            id="act_table_definition_form_view2">
             <field name="sequence" eval="20"/>
-            <field name="view" ref="indice_table_definition_form_view"/>
-            <field name="act_window" ref="act_indice_table_definition_form"/>
+            <field name="view" ref="table_definition_form_view"/>
+            <field name="act_window" ref="act_table_definition_form"/>
         </record>
 
-        <menuitem parent="menu_indice_table"
-            action="act_indice_table_definition_form"
+        <menuitem action="act_table_definition_form"
             sequence="10"
-            id="menu_indice_table_defintion_form"/>
+            id="menu_table_defintion_form"/>
 
-        <record model="ir.ui.view" id="indice_table_definition_dimension_form_view">
-            <field name="model">indice_table.definition.dimension</field>
+        <record model="ir.ui.view" id="table_definition_dimension_form_view">
+            <field name="model">table.table_dimension</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                <form string="Indice Table Definition Dimension">
+                <form string="Table Definition Dimension">
                     <label name="definition"/>
                     <field name="definition"/>
                     <newline/>
@@ -91,12 +91,12 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="indice_table_definition_dimension_list_view">
-            <field name="model">indice_table.definition.dimension</field>
+        <record model="ir.ui.view" id="table_definition_dimension_list_view">
+            <field name="model">table.table_dimension</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                <tree string="Indice Table Definition Dimensions">
+                <tree string="Table Definition Dimensions">
                     <field name="definition"/>
                     <field name="rec_name" expand="1"/>
                     <field name="type" tree_invisible="1"/>
@@ -105,12 +105,12 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="indice_table_form_view">
-            <field name="model">indice_table</field>
+        <record model="ir.ui.view" id="cell_form_view">
+            <field name="model">table.table_cell</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                <form string="Indice Table" col="6">
+                <form string="Table" col="6">
                     <label name="definition"/>
                     <field name="definition" colspan="5"/>
                     <newline/>
@@ -129,12 +129,12 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="indice_table_list_view">
-            <field name="model">indice_table</field>
+        <record model="ir.ui.view" id="cell_list_view">
+            <field name="model">table.table_cell</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                <tree string="Indice Table" editable="bottom">
+                <tree string="Table" editable="bottom">
                     <field name="definition"/>
                     <field name="dimension1"/>
                     <field name="dimension2"/>
@@ -146,44 +146,46 @@
             </field>
         </record>
 
-        <record model="ir.action.act_window" id="act_indice_table_form">
-            <field name="name">Indice Tables</field>
-            <field name="res_model">indice_table</field>
+        <record model="ir.action.act_window" id="act_cell_form">
+            <field name="name">Cells</field>
+            <field name="res_model">table.table_cell</field>
         </record>
 
         <record model="ir.action.act_window.view"
-            id="act_indice_table_form_view1">
+            id="act_cell_form_view1">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="indice_table_list_view"/>
-            <field name="act_window" ref="act_indice_table_form"/>
+            <field name="view" ref="cell_list_view"/>
+            <field name="act_window" ref="act_cell_form"/>
         </record>
         <record model="ir.action.act_window.view"
-            id="act_indice_table_form_view2">
+            id="act_cell_form_view2">
             <field name="sequence" eval="20"/>
-            <field name="view" ref="indice_table_form_view"/>
-            <field name="act_window" ref="act_indice_table_form"/>
+            <field name="view" ref="cell_form_view"/>
+            <field name="act_window" ref="act_cell_form"/>
         </record>
 
-        <menuitem parent="menu_indice_table"
-            action="act_indice_table_form"
+        <!--  
+        <menuitem parent="menu_table"
+            action="act_cell_form"
             sequence="20"
-            id="menu_indice_table_form"/>
+            id="menu_cell_form"/>
+        -->
 
-        <record model="ir.action.act_window" id="act_indice_table_relate_form">
-            <field name="name">Indice Table</field>
-            <field name="res_model">indice_table</field>
+        <record model="ir.action.act_window" id="act_cell_relate_form">
+            <field name="name">Cells</field>
+            <field name="res_model">table.table_cell</field>
             <field name="domain">[('definition', '=', Eval('active_id'))]</field>
         </record>
         <record model="ir.action.keyword"
-            id="act_indice_table_relate_keyword1">
+            id="act_table_relate_keyword1">
             <field name="keyword">form_relate</field>
-            <field name="model">indice_table.definition,-1</field>
-            <field name="action" ref="act_indice_table_relate_form"/>
+            <field name="model">table.table_def,-1</field>
+            <field name="action" ref="act_cell_relate_form"/>
         </record>
 
         <record model="ir.ui.view"
-            id="indice_table_2d_open_ask_dimensions_form_view">
-            <field name="model">indice_table.2d.open.ask_dimensions</field>
+            id="table_2d_open_ask_dimensions_form_view">
+            <field name="model">table.2d.open.ask_dimensions</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <![CDATA[
@@ -197,27 +199,27 @@
             </field>
         </record>
 
-        <record model="ir.action.wizard" id="act_indice_table_2d_open">
-            <field name="name">Indice Table 2D</field>
-            <field name="wiz_name">indice_table.2d.open</field>
+        <record model="ir.action.wizard" id="act_table_2d_open">
+            <field name="name">Table 2D</field>
+            <field name="wiz_name">table.2d.open</field>
         </record>
         <record model="ir.action.keyword"
-            id="act_indice_table_2d_open_keyword1">
+            id="act_table_2d_open_keyword1">
             <field name="keyword">form_relate</field>
-            <field name="model">indice_table.definition,-1</field>
-            <field name="action" ref="act_indice_table_2d_open"/>
+            <field name="model">table.table_def,-1</field>
+            <field name="action" ref="act_table_2d_open"/>
         </record>
 
         <record model="ir.action.act_window"
-            id="act_indice_table_2d_relate_form">
-            <field name="name">Indice Table 2D</field>
-            <field name="res_model">indice_table.2d</field>
+            id="act_table_2d_relate_form">
+            <field name="name">Table 2D</field>
+            <field name="res_model">table.2d</field>
             <field name="window_name" eval="False"/>
-            <field name="context">{'indice_table.definition': Eval('active_id'), 'dimension3': Eval('dimension3'), 'dimension4': Eval('dimension4')}</field>
+            <field name="context">{'table.table_def': Eval('active_id'), 'dimension3': Eval('dimension3'), 'dimension4': Eval('dimension4')}</field>
         </record>
 
-        <record model="ir.model.access" id="access_indice_table_2d">
-            <field name="model" search="[('model', '=', 'indice_table.2d')]"/>
+        <record model="ir.model.access" id="access_table_2d">
+            <field name="model" search="[('model', '=', 'table.2d')]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="False"/>
