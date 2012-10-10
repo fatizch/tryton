@@ -36,4 +36,4 @@ def launch_test_case(cfg_dict):
             len(the_args)])
 
     multiprocess_this(create_contract, the_args, cfg_dict,
-        datetime.datetime.now() + datetime.timedelta(days=20))
+        datetime.date.today() + datetime.timedelta(days=20))
