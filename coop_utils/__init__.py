@@ -14,12 +14,5 @@ def register():
         TableOfTable,
         DynamicSelection,
         # from session
-        SessionClass,
         DateClass,
-        AskDate,
         module='coop_utils', type_='model')
-
-    Pool.register(
-        # from session
-        ChangeSessionDate,
-        module='coop_utils', type_='wizard')
