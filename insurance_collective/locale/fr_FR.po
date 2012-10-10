@@ -1490,6 +1490,10 @@ msgctxt "model:ir.ui.menu,name:menu_gbp_contract_form"
 msgid "GBP Contract"
 msgstr "Contrat Collectif"
 
+msgctxt "model:ir.ui.menu,name:menu_group"
+msgid "Group"
+msgstr "Collectif"
+
 msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Insurance Plan"
 msgstr "Produits Collectifs"

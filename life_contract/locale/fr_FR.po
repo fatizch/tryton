@@ -248,7 +248,7 @@ msgstr "Prévoyance"
 
 msgctxt "view:life_contract.extension_life_state:"
 msgid "Subscription Process - Life Extension"
-msgstr "Sélection des Elèments Couverts"
+msgstr "Sélection des Eléments Couverts"
 
 msgctxt "wizard_button:ins_contract.subs_process,extension_life,steps_cancel:"
 msgid "Cancel"

@@ -60,7 +60,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:rule_engine.context,allowed_elements:"
 msgid "Allowed tree elements"
-msgstr "Elèments Compatibles"
+msgstr "Eléments Compatibles"
 
 msgctxt "field:rule_engine.context,create_date:"
 msgid "Create Date"
@@ -112,7 +112,7 @@ msgstr "Nom"
 
 msgctxt "field:rule_engine.context-rule_engine.tree_element,tree_element:"
 msgid "Tree Element"
-msgstr "Elèment de l'Arbre"
+msgstr "Elément de l'Arbre"
 
 msgctxt "field:rule_engine.context-rule_engine.tree_element,write_date:"
 msgid "Write Date"
@@ -368,7 +368,7 @@ msgstr ""
 
 msgctxt "model:rule_engine.tree_element,name:"
 msgid "Rule Engine Tree Element"
-msgstr "Elèment de l'Arbre"
+msgstr "Elément de l'Arbre"
 
 msgctxt "selection:rule_engine,status:"
 msgid "Draft"
@@ -420,7 +420,7 @@ msgstr "Tester la Règle"
 
 msgctxt "view:rule_engine.tree_element:"
 msgid "Tree Element"
-msgstr "Elèment de l'Arbre"
+msgstr "Elément de l'Arbre"
 
 msgctxt "view:rule_engine:"
 msgid "Rule"

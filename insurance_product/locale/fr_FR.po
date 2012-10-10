@@ -1600,7 +1600,7 @@ msgstr "Moteur de Règle"
 
 msgctxt "view:ins_product.eligibility_rule:"
 msgid "Sub Element"
-msgstr "Elèment Couvert"
+msgstr "Elément Couvert"
 
 msgctxt "view:ins_product.generic_business_rule:"
 msgid "Business Rule"
@@ -1672,7 +1672,7 @@ msgstr "Param. Simple"
 
 msgctxt "view:ins_product.pricing_rule:"
 msgid "Sub Element"
-msgstr "Elèment Couvert"
+msgstr "Elément Couvert"
 
 msgctxt "view:ins_product.product:"
 msgid "Options"

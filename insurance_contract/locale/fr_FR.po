@@ -1182,6 +1182,10 @@ msgctxt "model:ir.ui.menu,name:menu_contract_form"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "model:ir.ui.menu,name:menu_individual"
+msgid "Individual Policy"
+msgstr "Individuel"
+
 msgctxt "model:ir.ui.menu,name:menu_start_subs"
 msgid "New Subscription Process"
 msgstr "Souscription Individuelle"
