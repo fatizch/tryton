@@ -870,6 +870,10 @@ msgctxt "field:ins_product.product,code:"
 msgid "Code"
 msgstr "Code"
 
+msgctxt "field:ins_product.product,contract_generator:"
+msgid "Contract Number Generator"
+msgstr ""
+
 msgctxt "field:ins_product.product,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -1190,18 +1194,6 @@ msgctxt "model:ins_product_utils.business_family,name:"
 msgid "Business Family"
 msgstr ""
 
-msgctxt "model:ir.action,name:None"
-msgid "Business Families"
-msgstr "Familles Métiers"
-
-msgctxt "model:ir.action,name:None"
-msgid "HStores"
-msgstr ""
-
-msgctxt "model:ir.action,name:None"
-msgid "HStores"
-msgstr ""
-
 msgctxt "model:ir.action,name:act_coverage_form"
 msgid "Coverages"
 msgstr "Garanties"
@@ -1210,17 +1202,10 @@ msgctxt "model:ir.action,name:act_product_form"
 msgid "Products"
 msgstr "Produits"
 
-msgctxt "model:ir.ui.menu,name:None"
-msgid "Business Families"
-msgstr "Familles Métiers"
-
-msgctxt "model:ir.ui.menu,name:None"
-msgid "HStores"
-msgstr ""
-
-msgctxt "model:ir.ui.menu,name:None"
-msgid "HStores"
-msgstr ""
+#, fuzzy
+msgctxt "model:ir.sequence.type,name:sequence_type_contract_number"
+msgid "Contract Number"
+msgstr "Numéro de Contrat"
 
 msgctxt "model:ir.ui.menu,name:menu_coverage_form"
 msgid "Coverages"

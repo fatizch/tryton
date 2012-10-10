@@ -470,18 +470,6 @@ msgctxt "model:party.party_relation_kind,name:"
 msgid "Party Relation Kind"
 msgstr "Type de Relation entre Tiers"
 
-msgctxt "model:party.party_relation_kind,name:None"
-msgid "Children Of"
-msgstr "Enfant de"
-
-msgctxt "model:party.party_relation_kind,name:None"
-msgid "Parent Of"
-msgstr "Parent de"
-
-msgctxt "model:party.party_relation_kind,name:None"
-msgid "Spouse Of"
-msgstr "Conjoint de"
-
 msgctxt "model:party.party_relation_kind,name:child"
 msgid "Children Of"
 msgstr "Enfant de"

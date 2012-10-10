@@ -986,6 +986,11 @@ msgctxt "field:ins_contract.subs_process.project,product:"
 msgid "Product"
 msgstr "Produit"
 
+#, fuzzy
+msgctxt "field:ins_contract.subs_process.project,product_desc:"
+msgid "Description"
+msgstr "Description"
+
 msgctxt "field:ins_contract.subs_process.project,session_id:"
 msgid "Session Id"
 msgstr ""
@@ -997,6 +1002,26 @@ msgstr "Date d'Effet"
 msgctxt "field:ins_contract.subs_process.project,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
+
+#, fuzzy
+msgctxt "field:ins_contract.subs_process.project,subscriber_as_company:"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
+#, fuzzy
+msgctxt "field:ins_contract.subs_process.project,subscriber_as_person:"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
+#, fuzzy
+msgctxt "field:ins_contract.subs_process.project,subscriber_desc:"
+msgid "Summary"
+msgstr "Synthèse"
+
+#, fuzzy
+msgctxt "field:ins_contract.subs_process.project,subscriber_kind:"
+msgid "Kind"
+msgstr "Type"
 
 msgctxt "field:ins_contract.subs_process.summary,id:"
 msgid "ID"
@@ -1293,6 +1318,16 @@ msgstr "Précédent"
 msgctxt "selection:ins_contract.subs_process.process_state,cur_action:"
 msgid "suspend"
 msgstr "Suspendre"
+
+#, fuzzy
+msgctxt "selection:ins_contract.subs_process.project,subscriber_kind:"
+msgid "Company"
+msgstr "Société"
+
+#, fuzzy
+msgctxt "selection:ins_contract.subs_process.project,subscriber_kind:"
+msgid "Person"
+msgstr "Personne Physique"
 
 msgctxt "view:ins_contract.billing.bill:"
 msgid "Bill Summary"

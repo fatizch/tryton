@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:rule_engine.context:"
+msgid "You define twice the same name!"
+msgstr ""
+
 msgctxt "error:rule_engine:"
 msgid "Your code has errors!"
 msgstr ""
@@ -242,6 +246,11 @@ msgctxt "field:rule_engine.tree_element,id:"
 msgid "ID"
 msgstr "ID"
 
+#, fuzzy
+msgctxt "field:rule_engine.tree_element,language:"
+msgid "Language"
+msgstr "Langues"
+
 msgctxt "field:rule_engine.tree_element,name:"
 msgid "Name"
 msgstr "Nom"
@@ -261,6 +270,10 @@ msgstr "Nom"
 msgctxt "field:rule_engine.tree_element,rule:"
 msgid "Rule"
 msgstr "Règle"
+
+msgctxt "field:rule_engine.tree_element,translated_technical_name:"
+msgid "Translated technical name"
+msgstr ""
 
 msgctxt "field:rule_engine.tree_element,type:"
 msgid "Type"
@@ -301,6 +314,11 @@ msgstr ""
 msgctxt "model:ir.action,name:tree_element_window"
 msgid "Tree Elements"
 msgstr "Eléments de l'arbre"
+
+#, fuzzy
+msgctxt "model:ir.ui.menu,name:None"
+msgid "Table Definitions"
+msgstr "Tables"
 
 msgctxt "model:ir.ui.menu,name:menu_context"
 msgid "Contexts"
