@@ -72,15 +72,12 @@ class LifeEligibilityRule():
         cls.__doc__ = 'Eligibility Rule'
 
     def give_me_eligibility(self, args):
+        res, errs = super(LifeEligibilityRule, self).give_me_eligibility(args)
+        if not res.eligible:
+            return res, errs
         if not self.config_kind == 'simple' or not(
                 hasattr(self, 'min_age') or hasattr(self, 'max_age')):
-            return super(LifeEligibilityRule, self).give_me_eligibility(args)
-        try:
-            business.update_args_with_subscriber(args)
-        except business.ArgsDoNotMatchException:
-            # If no Subscriber is found, automatic refusal
-            return (EligibilityResultLine(
-                False, ['Subscriber not defined in args']), [])
+            return res, errs
         subscriber = args['subscriber_person']
         age = date.number_of_years_between(
             subscriber.birth_date, args['date'])
@@ -94,13 +91,16 @@ class LifeEligibilityRule():
             res = False
             details.append(
                 'Subscriber must be younger than %s' % self.max_age)
-        return (EligibilityResultLine(eligible=res, details=details), [])
+        return (EligibilityResultLine(eligible=res, details=details), errs)
 
     def give_me_sub_elem_eligibility(self, args):
-        if not self.sub_elem_config_kind == 'simple' or not (
-                hasattr(self, 'sub_min_age') or hasattr(self, 'sub_max_age')):
-            return super(
+        res, errs = super(
                 LifeEligibilityRule, self).give_me_sub_elem_eligibility(args)
+        if not res.eligible:
+            return res, errs
+        if not self.config_kind == 'simple' or not(
+                hasattr(self, 'sub_min_age') or hasattr(self, 'sub_max_age')):
+            return res, errs
         try:
             sub_elem = args['sub_elem']
         except KeyError:
@@ -124,4 +124,4 @@ class LifeEligibilityRule():
             details.append(
                 '%s must be younger than %s' % (
                     person.name, self.sub_max_age))
-        return (EligibilityResultLine(eligible=res, details=details), [])
+        return (EligibilityResultLine(eligible=res, details=details), errs)
