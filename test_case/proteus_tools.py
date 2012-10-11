@@ -49,4 +49,5 @@ def multiprocess_this(fun, the_args, cfg_dict, connexion_date):
             npop(the_args, grouping),
             connexion_date))
         p.start()
+        p.join()
         print 'Number of args remaining : %s' % len(the_args)
