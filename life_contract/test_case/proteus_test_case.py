@@ -23,7 +23,9 @@ def create_contract(on_party, on_product, date_delta):
 
 
 def launch_test_case(cfg_dict):
-    the_date = datetime.date.today()
+    Contract = Model.get('ins_contract.contract')
+    if len(Contract.find()) >= int(cfg_dict['total_nb']):
+        return
     Party = Model.get('party.person')
     Product = Model.get('ins_product.product')
     on_product, = Product.find([('code', '=', 'AAA')], limit=1)
