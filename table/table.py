@@ -108,7 +108,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
     __name__ = 'table.table_dimension'
     _order_name = 'rec_name'
     definition = fields.Many2One('table.table_def', 'Definition',
-        required=True)
+        required=True, ondelete='CASCADE')
     type = fields.Selection([
             ('dimension1', 'Dimension 1'),
             ('dimension2', 'Dimension 2'),
