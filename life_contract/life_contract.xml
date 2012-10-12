@@ -94,7 +94,7 @@
                      <![CDATA[
                         <data>
                             <xpath expr="/tree" position="inside">
-                                <field name="amount"/>
+                                <field name="coverage_amount"/>
                             </xpath>
                         </data>
                      ]]>
@@ -110,8 +110,8 @@
                         <data>
                             <xpath expr="/form/group[@id=&quot;specific&quot;]"
                             position="inside">
-                                <label name="amount" xalign="0"/>
-                                <field name="amount" xexpand="1"/>
+                                <label name="coverage_amount" xalign="0"/>
+                                <field name="coverage_amount" xexpand="1"/>
                             </xpath>
                         </data>
                      ]]>
@@ -167,7 +167,7 @@
                         <data>
                             <xpath expr="/tree/field[@name=&quot;for_coverage&quot;]"
                             position="after">
-                                <field name="covered_amount"/>
+                                <field name="coverage_amount"/>
                             </xpath>
                         </data>
                      ]]>
@@ -183,8 +183,8 @@
                         <data>
                             <xpath expr="/form/group[@id=&quot;specific&quot;]"
                             position="inside">
-                                <label name="covered_amount" xalign="0"/>
-                                <field name="covered_amount" xexpand="1"/>
+                                <label name="coverage_amount" xalign="0"/>
+                                <field name="coverage_amount" xexpand="1"/>
                             </xpath>
                         </data>
                      ]]>

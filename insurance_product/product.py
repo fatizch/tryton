@@ -230,12 +230,13 @@ class Coverage(model.CoopSQL, Offered):
             # What we compute now is the part of the price that is associated
             # to each of the covered elements at the given date
             for covered, covered_data in self.give_me_covered_elements_at_date(
-                    args):
+                    args)[0]:
                 # Now we need to set a new argument before forwarding
                 # the request to the manager, which is the covered
                 # element it must work on.
                 tmp_args = args
                 tmp_args['for_covered'] = covered
+                tmp_args['data'] = covered_data
 
                 # And we finally call the manager for the price
                 _res, _errs = self.get_result(
@@ -326,7 +327,7 @@ class Coverage(model.CoopSQL, Offered):
                             covered_data.end_date < date)):
                     continue
                 res.append((covered, covered_data))
-        return res
+        return res, []
 
     def is_valid(self):
         if self.template_behaviour == 'remove':
@@ -335,6 +336,24 @@ class Coverage(model.CoopSQL, Offered):
 
     def get_rec_name(self, name):
         return '(%s) %s' % (self.code, self.name)
+
+    def give_me_allowed_amounts(self, args):
+        try:
+            return self.get_result(
+                'allowed_amounts',
+                args,
+                manager='coverage_amount')
+        except utils.NonExistingManagerException:
+            return [], []
+
+    def give_me_coverage_amount_validity(self, args):
+        try:
+            return self.get_result(
+                'coverage_amount_validity',
+                args,
+                manager='coverage_amount')
+        except utils.NonExistingManagerException:
+            return (True, []), []
 
 
 class Product(model.CoopSQL, Offered):
@@ -1361,8 +1380,44 @@ class CoverageAmountRule(model.CoopSQL, BusinessRuleRoot):
 
     amounts = fields.Char('Amounts', help='Specify amounts separated by ;')
 
+    @classmethod
+    def __setup__(cls):
+        super(CoverageAmountRule, cls).__setup__()
+        cls._error_messages.update({
+                'amounts_float': 'Amounts need to be floats !',
+                })
+
     def give_me_allowed_amounts(self, args):
-        return [(elem, elem) for elem in self.amounts.split(';')]
+        if self.config_kind == 'simple' and self.amounts:
+            res = map(float, self.amounts.split(';'))
+            return res, []
+        elif self.config_kind == 'rule' and self.rule:
+            res, mess, errs = self.rule.compute(args)
+            if res:
+                res = map(float, res.split(';'))
+            return res, mess + errs
+
+    def give_me_coverage_amount_validity(self, args):
+        if not('data' in args and hasattr(args['data'], 'coverage_amount')
+                and args['data'].coverage_amount):
+            return (False, []), 'Coverage amount not found'
+        amount = args['data'].coverage_amount
+        if hasattr(self, 'amounts') and self.amounts:
+            if not amount in self.give_me_allowed_amounts(args)[0]:
+                errs = ['Amount %.2f not allowed on coverage %s' % (
+                    amount,
+                    args['data'].for_coverage.name)]
+                return (False, errs), []
+        return (True, []), []
+
+    def pre_validate(self):
+        if not hasattr(self, 'amounts'):
+            return
+        if self.config_kind == 'simple':
+            try:
+                map(float, self.amounts.split(';'))
+            except ValueError:
+                self.raise_user_error('amounts_float')
 
 
 class ProductDefinition(model.CoopView):

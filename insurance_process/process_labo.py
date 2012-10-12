@@ -220,7 +220,7 @@ class StepDesc(model.CoopSQL, model.CoopView):
                 continue
             return bool(int(buttons_str[idx]))
         if 'button_default' in name:
-            return BUTTONS[int(buttons_str[-1]) - 1]
+            return BUTTONS[int(buttons_str[-1]) - 1][0]
 
     @classmethod
     def set_button(cls, steps, name, value):

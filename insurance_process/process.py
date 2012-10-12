@@ -713,7 +713,7 @@ class CoopStateView(StateView, CoopState):
                 continue
 
             # We get the default button name
-            default_button, _ = step_desc.button_default
+            default_button = step_desc.button_default
             for button in buttons:
                 # For each available button, if it is defined in the step_desc,
                 # we append it to the result list.

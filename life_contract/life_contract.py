@@ -1,5 +1,7 @@
 import copy
 
+from decimal import Decimal
+
 from trytond.model import fields as fields
 
 from trytond.pool import Pool, PoolMeta
@@ -35,6 +37,31 @@ class Contract():
         'contract',
         'Life Extension',
         size=1)
+
+    def check_covered_amounts(self, at_date, ext):
+        options = dict([
+            (option.coverage.code, option)
+            for option in self.options
+            ])
+        res, errs = (True, [])
+        for covered_element in getattr(self, ext)[0].covered_elements:
+            for covered_data in covered_element.covered_data:
+                if (covered_data.start_date > at_date
+                        or hasattr(covered_data, 'end_date') and
+                        covered_data.end_date and
+                        covered_data.end_date > at_date):
+                    continue
+                validity, errors = covered_data.for_coverage.get_result(
+                    'coverage_amount_validity',
+                    {'date': at_date,
+                    'sub_elem': covered_element,
+                    'data': covered_data,
+                    'option': options[covered_data.for_coverage.code],
+                    'contract': self})
+                res = res and validity[0]
+                errs += validity[1]
+                errs += errors
+        return (res, errs)
 
 
 class ExtensionLife(model.CoopSQL, GenericExtension):
@@ -95,7 +122,7 @@ class LifeCoveredData(model.CoopSQL, CoveredData):
 
     __name__ = 'life_contract.covered_data'
 
-    amount = fields.Numeric('Covered Amount')
+    coverage_amount = fields.Numeric('Coverage Amount')
 
     @classmethod
     def __setup__(cls):
@@ -109,12 +136,12 @@ class LifeCoveredDataDesc(CoveredDataDesc):
 
     __name__ = 'life_contract.covered_data_desc'
 
-    covered_amount_old = fields.Numeric('Covered Amount')
-    covered_amount = fields.Selection(
+    coverage_amount = fields.Selection(
         'get_allowed_amounts',
         'Coverage Amount',
         context={'for_coverage': Eval('for_coverage')},
-        depends=['for_coverage'])
+        depends=['for_coverage'],
+        sort=False)
 
     @classmethod
     def __setup__(cls):
@@ -129,12 +156,13 @@ class LifeCoveredDataDesc(CoveredDataDesc):
             return []
         wizard = LifeCoveredDataDesc.get_context()
         the_coverage = utils.convert_ref_to_obj(coverage)
-        vals, = the_coverage.get_result(
+        vals = the_coverage.get_result(
             'allowed_amounts',
-            {'date': wizard.project.start_date},
-            manager='coverage_amount'
-            )
-        return vals
+            {
+                'date': wizard.project.start_date,
+                'contract': utils.WithAbstract.get_abstract_objects(
+                    wizard, 'for_contract')},)[0]
+        return map(lambda x: (x, x), map(lambda x: '%.2f' % x, vals))
 
 
 class LifeCoveredPersonDesc(CoveredElementDesc):
@@ -237,6 +265,15 @@ class ExtensionLifeState(DependantState):
                 if hasattr(covered_data, 'end_date'):
                     cur_data.end_date = covered_data.end_date
                 cur_data.for_coverage = covered_data.for_coverage
+                if hasattr(covered_data, 'coverage_amount') and \
+                        covered_data.coverage_amount:
+                    try:
+                        cur_data.coverage_amount = Decimal(
+                            covered_data.coverage_amount)
+                    except ValueError:
+                        return False, ['Invalid amount']
+                else:
+                    cur_data.coverage_amount = Decimal(0)
                 cur_element.covered_data.append(cur_data)
             cur_element.person = covered_element.person
             ext.covered_elements.append(cur_element)
@@ -246,9 +283,17 @@ class ExtensionLifeState(DependantState):
             wizard.project.start_date,
             'extension_life')
         if res[0]:
+            res1 = contract.check_covered_amounts(
+                wizard.project.start_date,
+                'extension_life')
+        else:
+            return res
+        if res[0] and res1[0]:
             utils.WithAbstract.save_abstract_objects(
                 wizard, ('for_contract', contract))
-        return res
+            return res[0] * res1[0], res[1] + res1[1]
+        else:
+            return res1
 
 
 class SubscriptionProcess():
