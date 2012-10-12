@@ -21,6 +21,8 @@ KIND = [
     ('range-date', 'Range-Date'),
     ]
 
+DIMENSION_MAX = 4
+
 
 class TableDefinition(ModelSQL, ModelView):
     "Table Definition"
@@ -66,6 +68,7 @@ class TableDefinition(ModelSQL, ModelView):
             'invisible': ~Eval('dimension_kind4'),
             },
         depends=['dimension_kind3'])
+    kind = fields.Function(fields.Char('Kind'), 'get_kind')
 
     @classmethod
     def __setup__(cls):
@@ -84,6 +87,18 @@ class TableDefinition(ModelSQL, ModelView):
         return cls.search([
                 ('name', '=', name),
                 ])[0]
+
+    def get_kind(self, name):
+        nb_dim = 0
+        for i in range(1, DIMENSION_MAX + 1):
+            if getattr(self, 'dimension_kind%s' % i):
+                nb_dim += 1
+        if nb_dim == 1:
+            return 'Index'
+        elif nb_dim == 2:
+            return 'Table'
+        else:
+            return 'Table %sD' % nb_dim
 
 
 def dimension_state(kind):
@@ -260,9 +275,9 @@ class TableCell(ModelSQL, ModelView):
 
         if not isinstance(definition, Definition):
             definition = Definition.get(definition)
-        values = (values + (None,) * 4)[:4]
+        values = (values + (None,) * DIMENSION_MAX)[:DIMENSION_MAX]
         domain = [('definition', '=', definition.id)]
-        for i in range(4):
+        for i in range(DIMENSION_MAX):
             value = values[i]
             kind = getattr(definition, 'dimension_kind%d' % (i + 1))
             dimension = None

@@ -9,21 +9,31 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                <form string="Table Definition" col="2">
-                    <label name="name" xalign="0"/>
-                    <field name="name"/>
-                    <label name="dimension_kind1"/>
-                    <field name="dimension_kind1"/>
-                    <field name="dimension1" colspan="2"/>
-                    <label name="dimension_kind2"/>
-                    <field name="dimension_kind2"/>
-                    <field name="dimension2" colspan="2"/>
-                    <label name="dimension_kind3"/>
-                    <field name="dimension_kind3"/>
-                    <field name="dimension3" colspan="2"/>
-                    <label name="dimension_kind4"/>
-                    <field name="dimension_kind4"/>
-                    <field name="dimension4" colspan="2"/>
+                <form string="Table Definition" col="4">
+                    <group id="name" colspan="4">
+                        <label name="name" xalign="0"/>
+                        <field name="name" colspan="3" xfill="1"/>
+                    </group>
+                    <group id="dim1" colspan="2" col="2" yfill="1" yexpand="1">
+                        <label name="dimension_kind1"/>
+                        <field name="dimension_kind1"/>
+                        <field name="dimension1" colspan="2" yfill="1"/>
+                    </group>
+                    <group id="dim2" colspan="2" col="2" yfill="1" yexpand="1">
+                        <label name="dimension_kind2"/>
+                        <field name="dimension_kind2"/>
+                        <field name="dimension2" colspan="2" yfill="1"/>
+                    </group>
+                    <group id="dim3" colspan="2" col="2" yfill="1" yexpand="1">
+                        <label name="dimension_kind3"/>
+                        <field name="dimension_kind3"/>
+                        <field name="dimension3" colspan="2" yfill="1"/>
+                    </group>
+                    <group id="dim4" colspan="2" col="2" yfill="1" yexpand="1">
+                        <label name="dimension_kind4"/>
+                        <field name="dimension_kind4"/>
+                        <field name="dimension4" colspan="2" yfill="1"/>
+                    </group>
                 </form>
                 ]]>
             </field>
@@ -35,7 +45,8 @@
             <field name="arch" type="xml">
                 <![CDATA[
                 <tree string="Table Definition">
-                    <field name="name" expand="1"/>
+                    <field name="name"/>
+                    <field name="kind"/>
                 </tree>
                 ]]>
             </field>
@@ -191,9 +202,9 @@
                 <![CDATA[
                 <form string="Dimensions" col="2">
                     <label name="dimension3"/>
-                    <field name="dimension3"/>
+                    <field name="dimension3" widget="selection"/>
                     <label name="dimension4"/>
-                    <field name="dimension4"/>
+                    <field name="dimension4" widget="selection"/>
                 </form>
                 ]]>
             </field>
