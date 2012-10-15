@@ -147,6 +147,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
     def __setup__(cls):
         super(TableDefinitionDimension, cls).__setup__()
 
+        cls._order.insert(0, ('rec_name', 'ASC'))
         cls.rec_name.order_field = ("%(table)s.value %(order)s, "
             "%(table)s.date %(order)s, "
             "%(table)s.start %(order)s, %(table)s.end %(order)s, "
