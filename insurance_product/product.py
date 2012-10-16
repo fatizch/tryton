@@ -371,6 +371,12 @@ class Coverage(model.CoopSQL, Offered):
         except utils.NonExistingManagerException:
             return (True, []), []
 
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        if cls.search([('code',) + clause[1:]], limit=1):
+            return [('code',) + clause[1:]]
+        return [(cls._rec_name,) + clause[1:]]
+
 
 class Product(model.CoopSQL, Offered):
     'Product'
@@ -542,6 +548,12 @@ class Product(model.CoopSQL, Offered):
         for elem in elems:
             res[elem.technical_name] = elem.get_default_value(None)
         return res
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        if cls.search([('code',) + clause[1:]], limit=1):
+            return [('code',) + clause[1:]]
+        return [(cls._rec_name,) + clause[1:]]
 
 
 class ProductOptionsCoverage(model.CoopSQL):
