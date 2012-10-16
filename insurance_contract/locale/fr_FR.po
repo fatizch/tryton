@@ -22,26 +22,6 @@ msgctxt "error:ins_contract.contract:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_contract.covered_car:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.covered_element:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.covered_person:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.extension_car:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.extension_life:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:ins_contract.option:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -394,15 +374,7 @@ msgctxt "field:ins_contract.contract,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_contract.contract,extension_car:"
-msgid "Car Extension"
-msgstr "Auto"
-
 msgctxt "field:ins_contract.contract,extension_life:"
-msgid "Life Extension"
-msgstr "Prévoyance"
-
-msgctxt "field:ins_contract.contract,extension_life_displayer:"
 msgid "Life Extension"
 msgstr "Prévoyance"
 
@@ -478,46 +450,6 @@ msgctxt "field:ins_contract.coverage_displayer,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:ins_contract.covered_car,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_contract.covered_car,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_contract.covered_car,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_contract.covered_car,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_contract.covered_car,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_contract.covered_car,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_contract.covered_car,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:ins_contract.covered_data,coverage_name:"
-msgid "Coverage Name"
-msgstr "Nom de la Garantie"
-
-msgctxt "field:ins_contract.covered_data,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_contract.covered_data,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
 msgctxt "field:ins_contract.covered_data,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -534,37 +466,13 @@ msgctxt "field:ins_contract.covered_data,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_contract.covered_data,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_contract.covered_data,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
 msgctxt "field:ins_contract.covered_data,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:ins_contract.covered_data,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_contract.covered_data,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:ins_contract.covered_element,covered_data:"
 msgid "Coverage Data"
 msgstr "Coverage Data"
-
-msgctxt "field:ins_contract.covered_element,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_contract.covered_element,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
 
 msgctxt "field:ins_contract.covered_element,extension:"
 msgid "Extension"
@@ -573,126 +481,6 @@ msgstr "Extension"
 msgctxt "field:ins_contract.covered_element,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_contract.covered_element,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_contract.covered_element,product_specific:"
-msgid "Specific Part"
-msgstr "Partie Spécifique"
-
-msgctxt "field:ins_contract.covered_element,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_contract.covered_element,specific_name:"
-msgid "Covered Name"
-msgstr "Nom de l'élement couvert"
-
-msgctxt "field:ins_contract.covered_element,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_contract.covered_element,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:ins_contract.covered_person,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_contract.covered_person,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_contract.covered_person,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_contract.covered_person,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_contract.covered_person,person:"
-msgid "Person"
-msgstr "Personne"
-
-msgctxt "field:ins_contract.covered_person,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_contract.covered_person,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_contract.covered_person,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:ins_contract.extension_car,covered_elements:"
-msgid "Coverages"
-msgstr "Garanties"
-
-msgctxt "field:ins_contract.extension_car,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_contract.extension_car,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_contract.extension_car,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_contract.extension_car,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_contract.extension_car,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_contract.extension_car,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_contract.extension_car,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:ins_contract.extension_life,covered_elements:"
-msgid "Coverages"
-msgstr "Garanties"
-
-msgctxt "field:ins_contract.extension_life,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_contract.extension_life,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_contract.extension_life,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_contract.extension_life,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_contract.extension_life,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_contract.extension_life,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_contract.extension_life,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
 
 msgctxt "field:ins_contract.generic_extension,contract:"
 msgid "The contract"
@@ -866,34 +654,6 @@ msgctxt "field:ins_contract.subs_process.covered_data_desc,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:ins_contract.subs_process.covered_person_desc,covered_data:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
-
-msgctxt "field:ins_contract.subs_process.covered_person_desc,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_contract.subs_process.covered_person_desc,life_state:"
-msgid "Life State"
-msgstr "Prévoyance"
-
-msgctxt "field:ins_contract.subs_process.covered_person_desc,person:"
-msgid "Covered Person"
-msgstr "Personne Couverte"
-
-msgctxt "field:ins_contract.subs_process.extension_life,covered_elements:"
-msgid "Covered Elements"
-msgstr "Eléments Couverts"
-
-msgctxt "field:ins_contract.subs_process.extension_life,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_contract.subs_process.extension_life,session_id:"
-msgid "Session Id"
-msgstr ""
-
 msgctxt "field:ins_contract.subs_process.lines,childs:"
 msgid "Details"
 msgstr "Détails"
@@ -928,7 +688,7 @@ msgstr "Choix des Garanties"
 
 msgctxt "field:ins_contract.subs_process.option_selection,session_id:"
 msgid "Session Id"
-msgstr ""
+msgstr "Session Id"
 
 msgctxt "field:ins_contract.subs_process.process_state,cur_action:"
 msgid "Current Action"
@@ -1066,10 +826,6 @@ msgctxt "model:ins_contract.coverage_displayer,name:"
 msgid ""
 msgstr ""
 
-msgctxt "model:ins_contract.covered_car,name:"
-msgid ""
-msgstr ""
-
 msgctxt "model:ins_contract.covered_data,name:"
 msgid "Coverage Data"
 msgstr "Données de Couverture"
@@ -1077,18 +833,6 @@ msgstr "Données de Couverture"
 msgctxt "model:ins_contract.covered_element,name:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
-
-msgctxt "model:ins_contract.covered_person,name:"
-msgid "Covered Person"
-msgstr "Personne Couverte"
-
-msgctxt "model:ins_contract.extension_car,name:"
-msgid ""
-msgstr ""
-
-msgctxt "model:ins_contract.extension_life,name:"
-msgid ""
-msgstr ""
 
 msgctxt "model:ins_contract.generic_extension,name:"
 msgid ""
@@ -1105,14 +849,6 @@ msgstr "Ligne de Cotisation"
 msgctxt "model:ins_contract.subs_process.covered_data_desc,name:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
-
-msgctxt "model:ins_contract.subs_process.covered_person_desc,name:"
-msgid ""
-msgstr ""
-
-msgctxt "model:ins_contract.subs_process.extension_life,name:"
-msgid ""
-msgstr ""
 
 msgctxt "model:ins_contract.subs_process.lines,name:"
 msgid "Pricing Line"
@@ -1398,14 +1134,6 @@ msgctxt "view:ins_contract.covered_element:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
 
-msgctxt "view:ins_contract.covered_person:"
-msgid "Covered Person"
-msgstr "Personne Couverte"
-
-msgctxt "view:ins_contract.extension_life:"
-msgid "Extension Life"
-msgstr "Prévoyance"
-
 msgctxt "view:ins_contract.generic_extension:"
 msgid "Extension"
 msgstr "Extension"
@@ -1425,14 +1153,6 @@ msgstr "ligne de cotisation"
 msgctxt "view:ins_contract.subs_process.covered_data_desc:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
-
-msgctxt "view:ins_contract.subs_process.covered_person_desc:"
-msgid "Covered Persons"
-msgstr "Personnes Couvertes"
-
-msgctxt "view:ins_contract.subs_process.extension_life:"
-msgid "Subscription Process - Life Extension"
-msgstr "Prévoyance"
 
 msgctxt "view:ins_contract.subs_process.lines:"
 msgid "Pricing Lines"

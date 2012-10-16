@@ -23,6 +23,14 @@ msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_product.coverage_amount_rule:"
+msgid "Amounts need to be floats !"
+msgstr ""
+
+msgctxt "error:ins_product.coverage_amount_rule:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.dynamic_data_manager:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -70,49 +78,17 @@ msgctxt "error:ins_product.reserve_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_product_utils.business_family:"
-msgid "There can be only one default business family !"
-msgstr "Il ne peut y avoir qu'une famille métier par défaut"
+msgctxt "error:ins_product.schema_element:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_product_utils.business_family:"
+msgctxt "error:ins_product.schema_element_relation:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:ProductDefinition,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:hstore,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:hstore,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:hstore,dico:"
-msgid "Dictionnary"
-msgstr ""
-
-msgctxt "field:hstore,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:hstore,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:hstore,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:hstore,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:hstore,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
 
 msgctxt "field:ins_product.benefit,benefit_mgr:"
 msgid "Benefit Manager"
@@ -134,6 +110,10 @@ msgctxt "field:ins_product.benefit,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_product.benefit,currency_digits:"
+msgid "Currency Digits"
+msgstr ""
+
 msgctxt "field:ins_product.benefit,description:"
 msgid "Description"
 msgstr "Description"
@@ -153,6 +133,10 @@ msgstr "ID"
 msgctxt "field:ins_product.benefit,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.benefit,kind:"
+msgid "Kind"
+msgstr "Type"
 
 msgctxt "field:ins_product.benefit,name:"
 msgid "Name"
@@ -194,6 +178,14 @@ msgctxt "field:ins_product.benefit,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_product.benefit_rule,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:ins_product.benefit_rule,coef_coverage_amount:"
+msgid "Multiplier"
+msgstr "Coef. Multiplicateur"
+
 msgctxt "field:ins_product.benefit_rule,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
@@ -217,6 +209,10 @@ msgstr "ID"
 msgctxt "field:ins_product.benefit_rule,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.benefit_rule,kind:"
+msgid "Kind"
+msgstr "Type"
 
 msgctxt "field:ins_product.benefit_rule,rec_name:"
 msgid "Name"
@@ -334,6 +330,10 @@ msgctxt "field:ins_product.coverage,currency:"
 msgid "Currency"
 msgstr "Devises"
 
+msgctxt "field:ins_product.coverage,currency_digits:"
+msgid "Currency Digits"
+msgstr ""
+
 msgctxt "field:ins_product.coverage,description:"
 msgid "Description"
 msgstr "Description"
@@ -450,6 +450,46 @@ msgctxt "field:ins_product.coverage_amount_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_product.dynamic_data_manager,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.dynamic_data_manager,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.dynamic_data_manager,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.dynamic_data_manager,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.dynamic_data_manager,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:ins_product.dynamic_data_manager,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_product.dynamic_data_manager,shared_dynamic:"
+msgid "Shared Dynamic Data"
+msgstr ""
+
+msgctxt "field:ins_product.dynamic_data_manager,specific_dynamic:"
+msgid "Specific Dynamic Data"
+msgstr ""
+
+msgctxt "field:ins_product.dynamic_data_manager,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.dynamic_data_manager,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_product.eligibility_relation_kind,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -505,14 +545,6 @@ msgstr "Règle Générique"
 msgctxt "field:ins_product.eligibility_rule,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_product.eligibility_rule,is_eligible:"
-msgid "Is Eligible"
-msgstr "Est éligible"
-
-msgctxt "field:ins_product.eligibility_rule,is_sub_elem_eligible:"
-msgid "Sub Elem Eligible"
-msgstr "Sous élement éligible"
 
 msgctxt "field:ins_product.eligibility_rule,is_used:"
 msgid "Is Used"
@@ -630,6 +662,10 @@ msgctxt "field:ins_product.offered,code:"
 msgid "Code"
 msgstr "Code"
 
+msgctxt "field:ins_product.offered,currency_digits:"
+msgid "Currency Digits"
+msgstr ""
+
 msgctxt "field:ins_product.offered,description:"
 msgid "Description"
 msgstr "Description"
@@ -681,10 +717,6 @@ msgstr "Date de création"
 msgctxt "field:ins_product.pricing_calculator,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
-
-msgctxt "field:ins_product.pricing_calculator,currency_digits:"
-msgid "Currency Digits"
-msgstr "Nombre de chiffres après la virgule"
 
 msgctxt "field:ins_product.pricing_calculator,data:"
 msgid "Price Components"
@@ -741,10 +773,6 @@ msgstr "Date de création"
 msgctxt "field:ins_product.pricing_data,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
-
-msgctxt "field:ins_product.pricing_data,currency_digits:"
-msgid "Currency Digits"
-msgstr "Nombre de chiffres après la virgule"
 
 msgctxt "field:ins_product.pricing_data,fixed_amount:"
 msgid "Amount"
@@ -886,9 +914,17 @@ msgctxt "field:ins_product.product,currency:"
 msgid "Currency"
 msgstr "Devises"
 
+msgctxt "field:ins_product.product,currency_digits:"
+msgid "Currency Digits"
+msgstr ""
+
 msgctxt "field:ins_product.product,description:"
 msgid "Description"
 msgstr "Description"
+
+msgctxt "field:ins_product.product,dynamic_data_manager:"
+msgid "Dynamic Data Manager"
+msgstr ""
 
 msgctxt "field:ins_product.product,eligibility_mgr:"
 msgid "Eligibility Manager"
@@ -998,10 +1034,6 @@ msgctxt "field:ins_product.reserve_rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.reserve_rule,currency_digits:"
-msgid "Currency Digits"
-msgstr "Nombre de chiffres après la virgule"
-
 msgctxt "field:ins_product.reserve_rule,generic_rule:"
 msgid "Generic Rule"
 msgstr "Règle Générique"
@@ -1054,49 +1086,125 @@ msgctxt "field:ins_product.rule_sets.subscriber,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product_utils.business_family,code:"
-msgid "Code"
-msgstr "Code"
+msgctxt "field:ins_product.schema_element,choices:"
+msgid "Selection Choices"
+msgstr ""
 
-msgctxt "field:ins_product_utils.business_family,contract_extension:"
-msgid "Contract Extension"
-msgstr "Extension Contrat"
-
-msgctxt "field:ins_product_utils.business_family,create_date:"
+msgctxt "field:ins_product.schema_element,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product_utils.business_family,create_uid:"
+msgctxt "field:ins_product.schema_element,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product_utils.business_family,id:"
+msgctxt "field:ins_product.schema_element,default_value:"
+msgid "Default Value"
+msgstr ""
+
+msgctxt "field:ins_product.schema_element,default_value_boolean:"
+msgid "Default Value"
+msgstr ""
+
+msgctxt "field:ins_product.schema_element,default_value_char:"
+msgid "Default Value"
+msgstr ""
+
+msgctxt "field:ins_product.schema_element,default_value_selection:"
+msgid "Default Value"
+msgstr ""
+
+msgctxt "field:ins_product.schema_element,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_product.schema_element,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product_utils.business_family,is_default:"
-msgid "Is Default"
+msgctxt "field:ins_product.schema_element,is_shared:"
+msgid "Shared"
 msgstr ""
 
-msgctxt "field:ins_product_utils.business_family,is_used:"
+msgctxt "field:ins_product.schema_element,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-msgctxt "field:ins_product_utils.business_family,name:"
-msgid "Name"
-msgstr "Nom"
+msgctxt "field:ins_product.schema_element,manager:"
+msgid "Manager"
+msgstr "Gestionnaire"
 
-msgctxt "field:ins_product_utils.business_family,rec_name:"
+msgctxt "field:ins_product.schema_element,name:"
 msgid "Name"
-msgstr "Nom"
+msgstr "Valeur"
 
-msgctxt "field:ins_product_utils.business_family,write_date:"
+msgctxt "field:ins_product.schema_element,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_product.schema_element,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_product.schema_element,technical_name:"
+msgid "Technical Name"
+msgstr ""
+
+msgctxt "field:ins_product.schema_element,type_:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "field:ins_product.schema_element,with_default_value:"
+msgid "Default Value"
+msgstr ""
+
+msgctxt "field:ins_product.schema_element,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product_utils.business_family,write_uid:"
+msgctxt "field:ins_product.schema_element,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.schema_element_relation,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.schema_element_relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.schema_element_relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.schema_element_relation,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.schema_element_relation,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_product.schema_element_relation,schema_element:"
+msgid "Schema Element"
+msgstr ""
+
+msgctxt "field:ins_product.schema_element_relation,the_manager:"
+msgid "Manager"
+msgstr "Gestionnaire"
+
+msgctxt "field:ins_product.schema_element_relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.schema_element_relation,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "help:ins_product.benefit_rule,coef_coverage_amount:"
+msgid "Add a multiplier to apply to the coverage amount"
+msgstr "Ajouter un coefficient multiplicateur au montant de couverture"
 
 msgctxt "help:ins_product.coverage_amount_rule,amounts:"
 msgid "Specify amounts separated by ;"
@@ -1105,10 +1213,6 @@ msgstr "Spécifier les montants séparés par des ;"
 msgctxt "model:ProductDefinition,name:"
 msgid "Product Definition"
 msgstr "Définition Produit"
-
-msgctxt "model:hstore,name:"
-msgid "HStore"
-msgstr ""
 
 msgctxt "model:ins_product.benefit,name:"
 msgid "Benefit"
@@ -1133,6 +1237,10 @@ msgstr "Garantie"
 msgctxt "model:ins_product.coverage_amount_rule,name:"
 msgid "Coverage Amount Rule"
 msgstr "Montant de Couverture"
+
+msgctxt "model:ins_product.dynamic_data_manager,name:"
+msgid "Dynamic Data Manager"
+msgstr ""
 
 msgctxt "model:ins_product.eligibility_relation_kind,name:"
 msgid "Define relation between eligibility rule and relation kind authorized"
@@ -1190,13 +1298,21 @@ msgctxt "model:ins_product.rule_sets.subscriber,name:"
 msgid ""
 msgstr ""
 
-msgctxt "model:ins_product_utils.business_family,name:"
-msgid "Business Family"
-msgstr "Famille Métier"
+msgctxt "model:ins_product.schema_element,name:"
+msgid "Dynamic Data Definition"
+msgstr ""
+
+msgctxt "model:ins_product.schema_element_relation,name:"
+msgid "Relation between schema element and dynamic data manager"
+msgstr ""
 
 msgctxt "model:ir.action,name:act_coverage_form"
 msgid "Coverages"
 msgstr "Garanties"
+
+msgctxt "model:ir.action,name:act_model_coop_schema"
+msgid "Dynamic Data Schema Elements"
+msgstr ""
 
 msgctxt "model:ir.action,name:act_product_form"
 msgid "Products"
@@ -1210,6 +1326,10 @@ msgctxt "model:ir.ui.menu,name:menu_coverage_form"
 msgid "Coverages"
 msgstr "Garanties"
 
+msgctxt "model:ir.ui.menu,name:menu_model_coop_schema"
+msgid "Dynamic Data Schema Elements"
+msgstr ""
+
 msgctxt "model:ir.ui.menu,name:menu_product"
 msgid "Laboratory"
 msgstr "Laboratoire"
@@ -1221,6 +1341,14 @@ msgstr "Configuration"
 msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Products"
 msgstr "Produits"
+
+msgctxt "selection:ins_product.benefit,kind:"
+msgid "Annuity"
+msgstr "Rente"
+
+msgctxt "selection:ins_product.benefit,kind:"
+msgid "Capital"
+msgstr ""
 
 msgctxt "selection:ins_product.benefit,template_behaviour:"
 msgid "Add"
@@ -1245,6 +1373,14 @@ msgstr "Moteur de Règle"
 msgctxt "selection:ins_product.benefit_rule,config_kind:"
 msgid "Simple"
 msgstr "Simple"
+
+msgctxt "selection:ins_product.benefit_rule,kind:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "selection:ins_product.benefit_rule,kind:"
+msgid "Coverage Amount"
+msgstr "Montant de Couverture"
 
 msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
 msgid "Add"
@@ -1526,13 +1662,61 @@ msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
 msgid "Validate"
 msgstr "Valider"
 
-msgctxt "view:hstore:"
-msgid "HStore"
+msgctxt "selection:ins_product.schema_element,type_:"
+msgid "Binary"
 msgstr ""
 
-msgctxt "view:hstore:"
-msgid "HStores"
+msgctxt "selection:ins_product.schema_element,type_:"
+msgid "Boolean"
 msgstr ""
+
+msgctxt "selection:ins_product.schema_element,type_:"
+msgid "Char"
+msgstr ""
+
+msgctxt "selection:ins_product.schema_element,type_:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "selection:ins_product.schema_element,type_:"
+msgid "DateTime"
+msgstr ""
+
+msgctxt "selection:ins_product.schema_element,type_:"
+msgid "Float"
+msgstr ""
+
+msgctxt "selection:ins_product.schema_element,type_:"
+msgid "Integer"
+msgstr ""
+
+msgctxt "selection:ins_product.schema_element,type_:"
+msgid "Numeric"
+msgstr ""
+
+msgctxt "selection:ins_product.schema_element,type_:"
+msgid "Reference"
+msgstr "Référence"
+
+msgctxt "selection:ins_product.schema_element,type_:"
+msgid "Selection"
+msgstr "Sélection"
+
+msgctxt "selection:ins_product.schema_element,type_:"
+msgid "Sha"
+msgstr ""
+
+msgctxt "selection:ins_product.schema_element,type_:"
+msgid "Text"
+msgstr ""
+
+msgctxt "selection:ins_product.schema_element,type_:"
+msgid "Time"
+msgstr ""
+
+msgctxt "selection:ins_product.schema_element,type_:"
+msgid "Timestamp"
+msgstr "Estampille"
 
 msgctxt "view:ins_product.benefit:"
 msgid "Benefit"
@@ -1581,6 +1765,10 @@ msgstr "Montant de Couverture"
 msgctxt "view:ins_product.coverage_amount_rule:"
 msgid "Coverage Amount rule"
 msgstr "Montant de Couverture"
+
+msgctxt "view:ins_product.dynamic_data_manager:"
+msgid "Dynamic Data Manager"
+msgstr ""
 
 msgctxt "view:ins_product.eligibility_rule:"
 msgid "Covered Element"
@@ -1675,6 +1863,10 @@ msgid "Sub Element"
 msgstr "Elément Couvert"
 
 msgctxt "view:ins_product.product:"
+msgid "Dynamic Data"
+msgstr ""
+
+msgctxt "view:ins_product.product:"
 msgid "Options"
 msgstr "Options"
 
@@ -1686,10 +1878,10 @@ msgctxt "view:ins_product.reserve_rule:"
 msgid "Reserve rule"
 msgstr "Provisionnement"
 
-msgctxt "view:ins_product_utils.business_family:"
-msgid "Business Families"
-msgstr "Familles Métiers"
+msgctxt "view:ins_product.schema_element:"
+msgid "Dynamic Data Desciptor"
+msgstr ""
 
-msgctxt "view:ins_product_utils.business_family:"
-msgid "Business Family"
-msgstr "Famille Métier"
+msgctxt "view:ins_product.schema_element:"
+msgid "Dynamic Data Descriptors"
+msgstr ""

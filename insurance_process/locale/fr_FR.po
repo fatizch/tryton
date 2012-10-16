@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:ins_process.dummy_object:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:ins_process.process_desc:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -21,110 +17,6 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "error:ins_process.suspended_process:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "field:ins_process.dummy_object,contract_number:"
-msgid "Contract Number"
-msgstr "Numéro de Contrat"
-
-msgctxt "field:ins_process.dummy_object,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_process.dummy_object,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_process.dummy_object,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_process.dummy_object,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_process.dummy_object,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_process.dummy_object,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_process.dummy_object,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:ins_process.dummy_process.dummy_step,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_process.dummy_process.dummy_step,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_process.dummy_process.dummy_step,session_id:"
-msgid "Session Id"
-msgstr ""
-
-msgctxt "field:ins_process.dummy_process.dummy_step1,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_process.dummy_process.dummy_step1,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_process.dummy_process.dummy_step1,session_id:"
-msgid "Session Id"
-msgstr ""
-
-msgctxt "field:ins_process.dummy_process_state,cur_action:"
-msgid "Current Action"
-msgstr "Action Courante"
-
-msgctxt "field:ins_process.dummy_process_state,cur_step:"
-msgid "Current step"
-msgstr "Etape Courante"
-
-msgctxt "field:ins_process.dummy_process_state,cur_step_desc:"
-msgid "Step Descriptor"
-msgstr "Descripteur d'Etape"
-
-msgctxt "field:ins_process.dummy_process_state,errors:"
-msgid "Errors"
-msgstr "Erreurs"
-
-msgctxt "field:ins_process.dummy_process_state,for_contract1_db:"
-msgid "for_contract1"
-msgstr ""
-
-msgctxt "field:ins_process.dummy_process_state,for_contract1_str:"
-msgid "Jsonfor_contract1"
-msgstr ""
-
-msgctxt "field:ins_process.dummy_process_state,for_contract_db:"
-msgid "for_contract"
-msgstr ""
-
-msgctxt "field:ins_process.dummy_process_state,for_contract_str:"
-msgid "Jsonfor_contract"
-msgstr ""
-
-msgctxt "field:ins_process.dummy_process_state,from_susp_process:"
-msgid "From Process"
-msgstr "Processus Source"
-
-msgctxt "field:ins_process.dummy_process_state,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_process.dummy_process_state,on_product:"
-msgid "On Product Process"
-msgstr "Produit"
-
-msgctxt "field:ins_process.dummy_process_state,process_desc:"
-msgid "Process Description"
-msgstr "Description du Processus"
 
 msgctxt "field:ins_process.process_desc,create_date:"
 msgid "Create Date"
@@ -382,22 +274,6 @@ msgctxt "field:ins_process.suspended_process,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "model:ins_process.dummy_object,name:"
-msgid ""
-msgstr ""
-
-msgctxt "model:ins_process.dummy_process.dummy_step,name:"
-msgid ""
-msgstr ""
-
-msgctxt "model:ins_process.dummy_process.dummy_step1,name:"
-msgid ""
-msgstr ""
-
-msgctxt "model:ins_process.dummy_process_state,name:"
-msgid ""
-msgstr ""
-
 msgctxt "model:ins_process.process_desc,name:"
 msgid ""
 msgstr ""
@@ -453,30 +329,6 @@ msgstr "Processus"
 msgctxt "model:ir.ui.menu,name:menu_suspended_process"
 msgid "Suspended Processes"
 msgstr "Processus Suspendus"
-
-msgctxt "selection:ins_process.dummy_process_state,cur_action:"
-msgid "cancel"
-msgstr "Annuler"
-
-msgctxt "selection:ins_process.dummy_process_state,cur_action:"
-msgid "check"
-msgstr "Vérifier"
-
-msgctxt "selection:ins_process.dummy_process_state,cur_action:"
-msgid "complete"
-msgstr "Terminer"
-
-msgctxt "selection:ins_process.dummy_process_state,cur_action:"
-msgid "go_next"
-msgstr "Suivant"
-
-msgctxt "selection:ins_process.dummy_process_state,cur_action:"
-msgid "go_previous"
-msgstr "Précédent"
-
-msgctxt "selection:ins_process.dummy_process_state,cur_action:"
-msgid "suspend"
-msgstr "Suspendre"
 
 msgctxt "selection:ins_process.process_state,cur_action:"
 msgid "cancel"
@@ -534,10 +386,6 @@ msgctxt "selection:ins_process.step_method_desc,rule_kind:"
 msgid "Step Validation"
 msgstr ""
 
-msgctxt "view:ins_process.dummy_process.dummy_step:"
-msgid "Dummy Process - Dummy Step"
-msgstr ""
-
 msgctxt "view:ins_process.process_desc:"
 msgid "Process Descriptor"
 msgstr "Descripteur de Processus"
@@ -565,51 +413,3 @@ msgstr "étape"
 msgctxt "view:ins_process.suspended_process:"
 msgid "Suspended Processes"
 msgstr "Processus Suspendus"
-
-msgctxt "wizard_button:ins_process.dummy_process,dummy_step,steps_cancel:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:ins_process.dummy_process,dummy_step,steps_check:"
-msgid "Check"
-msgstr "Vérifier"
-
-msgctxt "wizard_button:ins_process.dummy_process,dummy_step,steps_complete:"
-msgid "Complete"
-msgstr "Terminer"
-
-msgctxt "wizard_button:ins_process.dummy_process,dummy_step,steps_next:"
-msgid "Next"
-msgstr "Suivant"
-
-msgctxt "wizard_button:ins_process.dummy_process,dummy_step,steps_previous:"
-msgid "Previous"
-msgstr "Précédent"
-
-msgctxt "wizard_button:ins_process.dummy_process,dummy_step,steps_suspend:"
-msgid "Suspend"
-msgstr "Suspendre"
-
-msgctxt "wizard_button:ins_process.dummy_process,dummy_step1,steps_cancel:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:ins_process.dummy_process,dummy_step1,steps_check:"
-msgid "Check"
-msgstr "Vérifier"
-
-msgctxt "wizard_button:ins_process.dummy_process,dummy_step1,steps_complete:"
-msgid "Complete"
-msgstr "Terminer"
-
-msgctxt "wizard_button:ins_process.dummy_process,dummy_step1,steps_next:"
-msgid "Next"
-msgstr "Suivant"
-
-msgctxt "wizard_button:ins_process.dummy_process,dummy_step1,steps_previous:"
-msgid "Previous"
-msgstr "Précédent"
-
-msgctxt "wizard_button:ins_process.dummy_process,dummy_step1,steps_suspend:"
-msgid "Suspend"
-msgstr "Suspendre"

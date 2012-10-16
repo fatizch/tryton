@@ -106,26 +106,6 @@ msgctxt "field:coop.table_of_table,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ir.session,business_date:"
-msgid "Business Date"
-msgstr "Date Fonctionnelle"
-
-msgctxt "field:utils.change_session.ask_date,current_date:"
-msgid "Current Business Date"
-msgstr "Date Fonc. Courante"
-
-msgctxt "field:utils.change_session.ask_date,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:utils.change_session.ask_date,new_date:"
-msgid "New Business Date"
-msgstr "Nouvelle Date Fonctionnelle"
-
-msgctxt "field:utils.change_session.ask_date,system_date:"
-msgid "System Date"
-msgstr "Date Système"
-
 msgctxt "model:coop.dyn_selection,name:"
 msgid "Dynamic Selection"
 msgstr "Sélection Dynamique"
@@ -134,22 +114,6 @@ msgctxt "model:coop.table_of_table,name:"
 msgid "Table of table"
 msgstr "Table des Tables"
 
-msgctxt "model:utils.change_session.ask_date,name:"
-msgid "Asks a new business date for the current session"
-msgstr ""
-
 msgctxt "view:coop.dyn_selection:"
 msgid "Dynamic Selection"
 msgstr "Sélection Dynamique"
-
-msgctxt "view:utils.change_session.ask_date:"
-msgid "New date for session"
-msgstr "Nouvelle Date pour la Session"
-
-msgctxt "wizard_button:utils.change_session,ask_date,apply:"
-msgid "Apply"
-msgstr "Appliquer"
-
-msgctxt "wizard_button:utils.change_session,ask_date,end:"
-msgid "Cancel"
-msgstr "Annuler"
