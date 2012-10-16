@@ -240,7 +240,10 @@ class Contract(GenericContract):
     def get_dynamic_data_value(self, at_date, value):
         if not(hasattr(self, 'dynamic_data') and self.dynamic_data):
             return None
-        return self.dynamic_data.get(value, None)
+        try:
+            return self.dynamic_data[value]
+        except KeyError:
+            return None
 
     def get_dates(self, start=None, end=None):
         res = set()
