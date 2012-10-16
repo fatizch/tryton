@@ -165,18 +165,21 @@ class LifeCoveredDataDesc(CoveredDataDesc):
 
     @staticmethod
     def get_allowed_amounts():
-        coverage = Transaction().context.get('for_coverage')
-        if not coverage:
+        try:
+            coverage = Transaction().context.get('for_coverage')
+            if not coverage:
+                return []
+            wizard = LifeCoveredDataDesc.get_context()
+            the_coverage = utils.convert_ref_to_obj(coverage)
+            vals = the_coverage.get_result(
+                'allowed_amounts',
+                {
+                    'date': wizard.project.start_date,
+                    'contract': utils.WithAbstract.get_abstract_objects(
+                        wizard, 'for_contract')},)[0]
+            return map(lambda x: (x, x), map(lambda x: '%.2f' % x, vals))
+        except:
             return []
-        wizard = LifeCoveredDataDesc.get_context()
-        the_coverage = utils.convert_ref_to_obj(coverage)
-        vals = the_coverage.get_result(
-            'allowed_amounts',
-            {
-                'date': wizard.project.start_date,
-                'contract': utils.WithAbstract.get_abstract_objects(
-                    wizard, 'for_contract')},)[0]
-        return map(lambda x: (x, x), map(lambda x: '%.2f' % x, vals))
 
 
 class LifeCoveredPersonDesc(CoveredElementDesc):
