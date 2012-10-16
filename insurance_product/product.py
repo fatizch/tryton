@@ -1343,6 +1343,12 @@ class Benefit(model.CoopSQL, Offered):
         'offered', 'Benefit Manager')
     reserve_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
         'offered', 'Reserve Manager')
+    kind = fields.Selection(
+        [
+            ('capital', 'Capital'),
+            ('annuity', 'Annuity')
+        ],
+        'Kind', required=True)
 
     @classmethod
     def delete(cls, entities):
@@ -1351,6 +1357,10 @@ class Benefit(model.CoopSQL, Offered):
             'ins_product.business_rule_manager',
             'offered')
         super(Benefit, cls).delete(entities)
+
+    @staticmethod
+    def default_kind():
+        return 'capital'
 
 
 class BenefitRule(model.CoopSQL, BusinessRuleRoot):
@@ -1364,9 +1374,26 @@ class BenefitRule(model.CoopSQL, BusinessRuleRoot):
             ('cov_amount', 'Coverage Amount')
         ],
         'Kind')
-    amount = fields.Numeric('Amount',
+
+    amount = fields.Numeric(
+        'Amount',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
-        states={'invisible': Eval('kind') != 'amount'})
+        states={'invisible': Eval('kind') != 'amount'},
+        )
+
+    coef_coverage_amount = fields.Numeric(
+        'Multiplier',
+        states={'invisible': Eval('kind') != 'cov_amount'},
+        help='Add a multiplier to apply to the coverage amount',
+        )
+
+    @staticmethod
+    def default_coef_coverage_amount():
+        return 1
+
+    @staticmethod
+    def default_kind():
+        return 'cov_amount'
 
 
 class ReserveRule(model.CoopSQL, BusinessRuleRoot):

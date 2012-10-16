@@ -558,6 +558,10 @@
                         <field name="reserve_mgr" colspan="4" mode="form"/>
                     </page>
                 </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;admin&quot;]" position="inside">
+                    <label name="kind" xalign="0"/>
+                    <field name="kind" xexpand="0"/>
+                </xpath>
                 </data>
                 ]]>
             </field>
@@ -566,7 +570,15 @@
             <field name="model">ins_product.benefit</field>
             <field name="type">tree</field>
             <field name="inherit" ref="offered_view_tree"/>
-            <field name="arch" type="xml"/>
+            <field name="arch" type="xml">
+            <![CDATA[
+                <data>
+                    <xpath expr="/tree/field[@name=&quot;code&quot;]" position="before">
+                        <field name="kind"/>
+                    </xpath>
+                </data>
+            ]]>
+            </field>
         </record>
 
         <!--  ******************************************* 
@@ -604,6 +616,17 @@
             <data>
                 <xpath expr="/form" position="replace_attributes">
                     <form string="benefit rule"/>
+                </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;main&quot;]/group[@id=&quot;simple&quot;]"
+                 position="inside">
+                    <label name="kind" xalign="0"/>
+                    <field name="kind" xexpand="0"/>
+                    <newline/>
+                    <label name="amount"/>
+                    <field name="amount"/>
+                    <newline/>
+                    <label name="coef_coverage_amount"/>
+                    <field name="coef_coverage_amount"/>
                 </xpath>
             </data>
             ]]>
