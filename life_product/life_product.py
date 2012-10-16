@@ -4,7 +4,7 @@ import copy
 from trytond.pool import PoolMeta
 from trytond.model import fields as fields
 
-from trytond.modules.coop_utils import business as business
+from trytond.modules.coop_utils import utils as utils
 from trytond.modules.coop_utils import date as date
 
 from trytond.modules.insurance_product import ProductDefinition
@@ -26,12 +26,10 @@ class LifeCoverage():
         cls.family = copy.copy(cls.family)
         if not cls.family.selection:
             cls.family.selection = []
-        if not ('life_product.definition', 'Life') in cls.family.selection:
-            cls.family.selection.append(
-                ('life_product.definition', 'Life'))
+        utils.append_inexisting(cls.family.selection,
+            ('life_product.definition', 'Life'))
         if ('default', 'default') in cls.family.selection:
-            cls.family.selection.append(
-                ('default', 'default'))
+            cls.family.selection.remove(('default', 'default'))
 
 
 class LifeProductDefinition(ProductDefinition):
