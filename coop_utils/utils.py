@@ -646,3 +646,15 @@ def create_inst_with_default_val(from_class, field_name, action=None):
     else:
         res = CurModel.default_get(fields_names)
     return res
+
+
+def append_inexisting(cur_list, item):
+    if not item in cur_list:
+        cur_list.append(item)
+    return cur_list
+
+
+def extend_inexisting(into_list, elements):
+    for item in elements:
+        into_list = append_inexisting(into_list, item)
+    return into_list

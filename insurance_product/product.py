@@ -62,7 +62,7 @@ TEMPLATE_BEHAVIOUR = [
     ('validate', 'Validate'),
     ]
 
-DEFAULT_CURRENCY_DIGITS = 2
+DEF_CUR_DIG = 2
 
 
 class Templated(object):
@@ -105,6 +105,8 @@ class Offered(model.CoopView, utils.GetResult, Templated):
     eligibility_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
         'offered', 'Eligibility Manager')
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
+    currency_digits = fields.Function(fields.Integer('Currency Digits'),
+        'get_currency_digits')
 
     @classmethod
     def __setup__(cls):
@@ -116,7 +118,11 @@ class Offered(model.CoopView, utils.GetResult, Templated):
             if cur_attr.context is None:
                 cur_attr.context = {}
             cur_attr.context['start_date'] = Eval('start_date')
-
+            cur_attr.context['currency_digits'] = Eval('currency_digits')
+            if cur_attr.depends is None:
+                cur_attr.depends = []
+            utils.extend_inexisting(cur_attr.depends,
+                ['start_date', 'currency_digits'])
             if cur_attr.states is None:
                 cur_attr.states = {}
             cur_attr.states['readonly'] = ~Bool(Eval('start_date'))
@@ -151,6 +157,12 @@ class Offered(model.CoopView, utils.GetResult, Templated):
             res[offered.id] = ''
         return res
 
+    def get_currency_digits(self, name):
+        if hasattr(self, 'currency') and self.currency:
+            return self.currency.digits
+        else:
+            return Transaction().context.get('currency_digits')
+
 
 class Coverage(model.CoopSQL, Offered):
     'Coverage'
@@ -161,8 +173,10 @@ class Coverage(model.CoopSQL, Offered):
     family = fields.Selection([('default', 'default')], 'Family',
         required=True)
     benefits = fields.One2Many('ins_product.benefit', 'coverage', 'Benefits',
-        context={'start_date': Eval('start_date')},
-        states={'readonly': ~Bool(Eval('start_date'))})
+        context={'start_date': Eval('start_date'),
+                 'currency_digits': Eval('currency_digits')},
+        states={'readonly': ~Bool(Eval('start_date'))},
+        depends=['currency_digits'])
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
     coverage_amount_mgr = model.One2ManyDomain(
         'ins_product.business_rule_manager',
@@ -298,11 +312,6 @@ class Coverage(model.CoopSQL, Offered):
     @staticmethod
     def default_currency():
         return business.get_default_currency()
-
-    def get_currency_digits(self, name):
-        if self.currency:
-            return self.currency.digits
-        return DEFAULT_CURRENCY_DIGITS
 
     def give_me_family(self, args):
         return (Pool().get(self.family), [])
@@ -507,11 +516,6 @@ class Product(model.CoopSQL, Offered):
     def default_currency():
         return business.get_default_currency()
 
-    def get_currency_digits(self, name):
-        if self.currency:
-            return self.currency.digits
-        return DEFAULT_CURRENCY_DIGITS
-
     def give_me_step(self, args):
         good_family = self.give_me_families(args)[0][0]
         return good_family.get_step_model(args['step_name']), []
@@ -632,11 +636,6 @@ class BusinessRuleManager(model.CoopSQL, model.CoopView,
         res += '(%s)' % self.id
         return res
 
-    def get_currency_digits(self, name):
-        if self.offered:
-            return self.offered.get_currency_digits(name)
-        return DEFAULT_CURRENCY_DIGITS
-
     def get_offered(self):
         return self.offered
 
@@ -751,11 +750,6 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
                     field_desc.model_name == self.kind):
                 return getattr(self, field_name)[0]
 
-    def get_currency_digits(self, name):
-        if self.manager:
-            return self.manager.get_currency_digits(name)
-        return DEFAULT_CURRENCY_DIGITS
-
     def get_offered(self):
         return self.manager.get_offered()
 
@@ -778,11 +772,6 @@ class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
         cls.template = copy.copy(cls.template)
         cls.template.model_name = cls.__name__
 
-    def get_currency_digits(self, name):
-        if self.generic_rule:
-            return self.generic_rule.get_currency_digits(name)
-        return DEFAULT_CURRENCY_DIGITS
-
     @staticmethod
     def default_config_kind():
         return 'simple'
@@ -801,13 +790,10 @@ class PricingData(model.CoopSQL, model.CoopView):
         'Calculator',
         ondelete='CASCADE')
 
-    currency_digits = fields.Function(fields.Integer('Currency Digits'),
-        'get_currency_digits')
-
     fixed_amount = fields.Numeric(
         'Amount',
-        digits=(16, Eval('currency_digits', DEFAULT_CURRENCY_DIGITS)),
-        depends=['currency_digits', 'kind', 'config_kind'])
+        digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
+        depends=['kind', 'config_kind'])
 
     config_kind = fields.Selection(CONFIG_KIND,
         'Conf. kind', required=True)
@@ -916,11 +902,6 @@ class PricingData(model.CoopSQL, model.CoopView):
     def default_config_kind():
         return 'simple'
 
-    def get_currency_digits(self, name):
-        if self.calculator:
-            return self.calculator.get_currency_digits(name)
-        return DEFAULT_CURRENCY_DIGITS
-
     def calculate_tax(self, args):
         # No need to calculate here, it will be done at combination time
         return 0
@@ -976,9 +957,6 @@ class PriceCalculator(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_product.pricing_calculator'
 
-    currency_digits = fields.Function(fields.Integer('Currency Digits'),
-        'get_currency_digits')
-
     data = fields.One2Many(
         'ins_product.pricing_data',
         'calculator',
@@ -1003,11 +981,6 @@ class PriceCalculator(model.CoopSQL, model.CoopView):
         states={
             'invisible': Bool(Eval('simple')),
             'required': ~Bool(Eval('simple'))})
-
-    def get_currency_digits(self, name):
-        if hasattr(self, 'rule') and self.rule:
-            return self.rule.get_currency_digits(name)
-        return DEFAULT_CURRENCY_DIGITS
 
     def calculate_price(self, args):
         result = PricingResultLine()
@@ -1110,8 +1083,9 @@ class PricingRule(model.CoopSQL, BusinessRuleRoot):
     basic_price = fields.Function(
         fields.Numeric(
             'Amount',
-            digits=(16, Eval('currency_digits', DEFAULT_CURRENCY_DIGITS)),
-            depends=['currency_digits']),
+            digits=(16,
+                Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
+            ),
         'get_basic_price',
         'set_basic_price')
 
@@ -1378,16 +1352,21 @@ class Benefit(model.CoopSQL, Offered):
             'offered')
         super(Benefit, cls).delete(entities)
 
-    def get_currency_digits(self, name):
-        if self.coverage:
-            return self.coverage.get_currency_digits(name)
-        return DEFAULT_CURRENCY_DIGITS
-
 
 class BenefitRule(model.CoopSQL, BusinessRuleRoot):
     'Benefit Rule'
 
     __name__ = 'ins_product.benefit_rule'
+
+    kind = fields.Selection(
+        [
+            ('amount', 'Amount'),
+            ('cov_amount', 'Coverage Amount')
+        ],
+        'Kind')
+    amount = fields.Numeric('Amount',
+        digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
+        states={'invisible': Eval('kind') != 'amount'})
 
 
 class ReserveRule(model.CoopSQL, BusinessRuleRoot):
@@ -1395,11 +1374,9 @@ class ReserveRule(model.CoopSQL, BusinessRuleRoot):
 
     __name__ = 'ins_product.reserve_rule'
 
-    currency_digits = fields.Function(fields.Integer('Currency Digits'),
-        'get_currency_digits')
-    amount = fields.Numeric('Amount', digits=(16,
-            Eval('currency_digits', DEFAULT_CURRENCY_DIGITS)),
-        depends=['currency_digits'])
+    amount = fields.Numeric('Amount',
+        digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
+        )
 
 
 class CoverageAmountRule(model.CoopSQL, BusinessRuleRoot):
