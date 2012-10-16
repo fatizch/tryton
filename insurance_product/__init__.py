@@ -30,6 +30,7 @@ def register():
         # from rule_sets
         SubscriberContext,
         PersonContext,
+        ContractContext,
         CoveredDataContext,
         RuleCombinationContext,
         module='insurance_product', type_='model')

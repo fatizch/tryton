@@ -66,6 +66,10 @@
                     <![CDATA[
                         <form string="Subscription Process - Option Selection Step">
                             <field name="options"/>
+                            <field name="for_product"/>
+                            <field name="at_date"/>
+                            <newline/>
+                            <field name="dynamic_data"/>
                         </form>
                     ]]>
             </field>

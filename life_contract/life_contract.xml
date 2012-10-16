@@ -38,11 +38,6 @@
                             <xpath expr="/form" position="replace_attributes">
                                 <form string="Extension Life"/>
                             </xpath>
-                            <xpath expr="/form/group[@id=&quot;elements&quot;]"
-                                position="before">
-                                <field name="dynamic_data"/>
-                                <newline/>
-                            </xpath>
                         </data>
                      ]]>
             </field>
@@ -206,10 +201,6 @@
             <field name="arch" type="xml">
                     <![CDATA[
                         <form string="Subscription Process - Life Extension">
-                            <field name="dynamic_data"/>
-                            <field name="for_product"/>
-                            <field name="at_date"/>
-                            <newline/>
                             <field name="covered_elements"/>
                             <field name="session_id"/>
                         </form>

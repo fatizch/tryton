@@ -156,6 +156,9 @@
 							    <field name="billing_manager" mode="form"
 							        yexpand="1" yfill="1"/>
 							</page>
+							<page string="Dynamic Data" id="dynamic_data">
+                                <field name="dynamic_data"/>
+							</page>
 						</notebook>
 					</form>
                 ]]>

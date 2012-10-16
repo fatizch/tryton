@@ -1555,19 +1555,22 @@ class CoopSchemaElement(SchemaElementMixin, model.CoopSQL, model.CoopView):
     @classmethod
     def search(cls, domain, offset=0, limit=None, order=None, count=False,
             query_string=False):
-        if 'for_product' in Transaction().context and \
-                'at_date' in Transaction().context and not(
-                'relation_selection' in Transaction().context):
-            the_product, = Pool().get('ins_product.product').search(
-                [('id', '=', Transaction().context['for_product'])])
-            # Important : if you do not do this (update context + test above),
-            # There is a risk of infinite recursion if your code needs to do a
-            # search here (might only be a O2M / M2M)
-            with Transaction().set_context({'relation_selection': True}):
-                good_schemas = the_product.get_result(
-                    'dynamic_data_ids',
-                    {'date': Transaction().context['at_date']})
-            domain.append(('id', 'in', good_schemas[0]))
+        # Important : if you do not check (and set below) relation_selection,
+        # There is a risk of infinite recursion if your code needs to do a
+        # search (might only be a O2M / M2M)
+        if not('relation_selection' in Transaction().context) and \
+                'for_product' in Transaction().context and \
+                'at_date' in Transaction().context:
+            for_product = Transaction().context['for_product']
+            at_date = Transaction().context['at_date']
+            if for_product and at_date:
+                the_product, = Pool().get('ins_product.product').search(
+                    [('id', '=', Transaction().context['for_product'])])
+                with Transaction().set_context({'relation_selection': True}):
+                    good_schemas = the_product.get_result(
+                        'dynamic_data_ids',
+                        {'date': Transaction().context['at_date']})
+                domain.append(('id', 'in', good_schemas[0]))
         return super(CoopSchemaElement, cls).search(domain, offset=offset,
                 limit=limit, order=order, count=count,
                 query_string=query_string)

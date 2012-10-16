@@ -184,6 +184,12 @@ class Contract(GenericContract):
                               [('ins_contract.contract', 'Contract'),
                                ('ins_product.product', 'Product')])
 
+    # This field will be used to store the answer to dynamic questions asked
+    # at subscription time to the subscriber depending on the product he chose.
+    dynamic_data = fields.Dict(
+        'Dynamic Data',
+        schema_model='ins_product.schema_element')
+
     @staticmethod
     def get_master(master):
         res = master.split(',')
@@ -230,6 +236,11 @@ class Contract(GenericContract):
         for ext in self.get_active_extensions():
             res.update(ext.get_dates())
         return res
+
+    def get_dynamic_data_value(self, at_date, value):
+        if not(hasattr(self, 'dynamic_data') and self.dynamic_data):
+            return None
+        return self.dynamic_data.get(value, None)
 
     def get_dates(self, start=None, end=None):
         res = set()

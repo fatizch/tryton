@@ -100,6 +100,7 @@ class ProjectState(CoopStep):
         Date = Pool().get('ir.date')
         if not hasattr(wizard.project, 'start_date'):
             wizard.project.start_date = Date.today()
+        wizard.project.product = 1
         return (True, [])
 
     @staticmethod
@@ -227,6 +228,21 @@ class OptionSelectionState(CoopStep):
     options = fields.One2Many('ins_contract.coverage_displayer',
                                None,
                                'Options Choices')
+    dynamic_data = fields.Dict(
+        'Dynamic Data',
+        schema_model='ins_product.schema_element',
+        context={
+            'for_product': Eval('for_product'),
+            'at_date': Eval('at_date')},
+        depends=['for_product', 'at_date'],)
+#        states={'invisible': ~Eval('for_product')})
+    for_product = fields.Many2One(
+        'ins_product.product',
+        'For Product',
+        states={'invisible': True})
+    at_date = fields.Date(
+        'At Date',
+        states={'invisible': True})
 
     # We initialize the list of options with the list of coverages offered by
     # the product previously selected.
@@ -249,8 +265,9 @@ class OptionSelectionState(CoopStep):
         #
         # So we go through the options of our product, then create a displayer
         # which will be used to ask for input from the user.
+        product = wizard.project.product
         CoverageDisplayer = Pool().get(wizard.give_displayer_model())
-        for coverage in wizard.project.product.options:
+        for coverage in product.options:
             cur_displayer = CoverageDisplayer()
             cur_displayer.init_from_coverage(coverage)
             cur_displayer.start_date = max(
@@ -259,6 +276,17 @@ class OptionSelectionState(CoopStep):
             options.append(cur_displayer)
         # Then set those displayers as the options field of our current step.
         wizard.option_selection.options = options
+        return (True, [])
+
+    @staticmethod
+    def before_step_init_dynamic_data(wizard):
+        product = wizard.project.product
+        wizard.option_selection.dynamic_data = product.get_result(
+            'dynamic_data_init',
+            {'date': wizard.project.start_date})[0]
+        if wizard.option_selection.dynamic_data:
+            wizard.option_selection.for_product = product
+            wizard.option_selection.at_date = wizard.project.start_date
         return (True, [])
 
     @staticmethod
@@ -314,12 +342,21 @@ class OptionSelectionState(CoopStep):
             cur_option.start_date = option.start_date
             list_options.append(cur_option)
         contract.options = list_options
+        contract.dynamic_data = {}
+        if hasattr(wizard.option_selection, 'dynamic_data') and \
+                wizard.option_selection.dynamic_data:
+            contract.dynamic_data.update(wizard.option_selection.dynamic_data)
         WithAbstract.save_abstract_objects(wizard, ('for_contract', contract))
         return (True, [])
 
     @staticmethod
     def coop_step_name():
         return 'Options Selection'
+
+    @classmethod
+    def default_get(cls, fields_names, with_rec_name=True):
+        return super(OptionSelectionState, cls).default_get(
+            fields_names, with_rec_name=with_rec_name)
 
 
 class CoveredDataDesc(CoopStepView):

@@ -135,6 +135,20 @@ class PersonContext(RuleEngineContext):
         return person.get_relation_with(subscriber)
 
 
+class ContractContext(RuleEngineContext):
+    '''
+        Context functions for contract related data
+    '''
+
+    __name__ = 'ins_product.rule_sets.contract'
+
+    @classmethod
+    @check_args('contract')
+    def _re_contract_dynamic_data(cls, args, data_name):
+        contract = args['contract']
+        return contract.get_dynamic_data_value(args['date'], data_name)
+
+
 class CoveredDataContext(RuleEngineContext):
     '''
         Context functions for Coverage-Covered associations objects

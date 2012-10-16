@@ -306,7 +306,7 @@
                         <field name="eligibility_rule" mode="form"/>
                         <field name="benefit_rule" mode="form"/>
                         <field name="reserve_rule" mode="form"/>
-                        <field name="coverage_amount_rule" mode="tree" pre_validate="1"/>
+                        <field name="coverage_amount_rule" mode="form" pre_validate="1"/>
                     </group>
                 </form>
             ]]>
