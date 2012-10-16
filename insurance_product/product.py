@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
 import copy
-
+import datetime
 from trytond.model import fields as fields
 from trytond.ir.model import SchemaElementMixin
 from trytond.pool import Pool
@@ -563,7 +563,7 @@ class BusinessRuleManager(model.CoopSQL, model.CoopView,
 
     offered = fields.Reference('Offered', selection='get_offered_models')
     business_rules = fields.One2Many('ins_product.generic_business_rule',
-        'manager', 'Business Rules')  # on_change=['business_rules'])
+        'manager', 'Business Rules', on_change=['business_rules'])
 
     @classmethod
     def __setup__(cls):
@@ -576,37 +576,37 @@ class BusinessRuleManager(model.CoopSQL, model.CoopView,
     def get_offered_models():
         return utils.get_descendents(Offered)
 
-#    def on_change_business_rules(self):
-#        res = {'business_rules': {}}
-#        res['business_rules'].setdefault('update', [])
-#        for business_rule1 in self.business_rules:
-#            #the idea is to always set the end_date
-#            #to the according next start_date
-#            for business_rule2 in self.business_rules:
-#                if (business_rule1 != business_rule2 and
-#                    business_rule2['start_date'] is not None
-#                    and business_rule1['start_date'] is not None and
-#                    business_rule2['start_date'] >
-#                    business_rule1['start_date']
-#                    and (business_rule1['end_date'] is None or
-#                         business_rule1['end_date'] >=
-#                         business_rule2['start_date'])):
-#                    end_date = (business_rule2['start_date']
-#                               - datetime.timedelta(days=1))
-#                    res['business_rules']['update'].append({
-#                        'id': business_rule1.id,
-#                        'end_date': end_date})
-#
-#            #if we change the start_date to a date after the end_date,
-#            #we reinitialize the end_date
-#            if (business_rule1['end_date'] is not None
-#                and business_rule1['start_date'] is not None
-#                and business_rule1['end_date'] <
-#                    business_rule1['start_date']):
-#                res['business_rules']['update'].append({
-#                        'id': business_rule1.id,
-#                        'end_date': None})
-#        return res
+    def on_change_business_rules(self):
+        res = {'business_rules': {}}
+        res['business_rules'].setdefault('update', [])
+        for business_rule1 in self.business_rules:
+            #the idea is to always set the end_date
+            #to the according next start_date
+            for business_rule2 in self.business_rules:
+                if (business_rule1 != business_rule2 and
+                    business_rule2['start_date'] is not None
+                    and business_rule1['start_date'] is not None and
+                    business_rule2['start_date'] >
+                    business_rule1['start_date']
+                    and (business_rule1['end_date'] is None or
+                         business_rule1['end_date'] >=
+                         business_rule2['start_date'])):
+                    end_date = (business_rule2['start_date']
+                               - datetime.timedelta(days=1))
+                    res['business_rules']['update'].append({
+                        'id': business_rule1.id,
+                        'end_date': end_date})
+
+            #if we change the start_date to a date after the end_date,
+            #we reinitialize the end_date
+            if (business_rule1['end_date'] is not None
+                and business_rule1['start_date'] is not None
+                and business_rule1['end_date'] <
+                    business_rule1['start_date']):
+                res['business_rules']['update'].append({
+                        'id': business_rule1.id,
+                        'end_date': None})
+        return res
 
     def get_good_rule_at_date(self, data):
         # First we got to check that the fields that we will need to calculate
@@ -626,7 +626,6 @@ class BusinessRuleManager(model.CoopSQL, model.CoopView,
         except ValueError, _exception:
             return None
 
-    #Used????
     def get_rec_name(self, name):
         res = ''
         if self.business_rules and len(self.business_rules) > 0:
@@ -638,6 +637,11 @@ class BusinessRuleManager(model.CoopSQL, model.CoopView,
 
     def get_offered(self):
         return self.offered
+
+#    @staticmethod
+#    def default_business_rules():
+#        return utils.create_inst_with_default_val(BusinessRuleManager,
+#            'business_rules')
 
 
 class GenericBusinessRule(model.CoopSQL, model.CoopView):
