@@ -300,8 +300,6 @@
                     <field name="start_date"/>
                     <label name="end_date"/>
                     <field name="end_date"/>
-                    <label name="is_current"/>
-                    <field name="is_current"/>
                     <newline/>
                     <group id ="Rules" colspan="4" yexpand="1" yfill="1" >
                         <field name="pricing_rule" mode="form"/>
@@ -319,8 +317,8 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
             <![CDATA[
-                <tree string="Generic Business Rule">
-                    <field name="is_current"/>
+                <tree string="Generic Business Rule"
+                colors="If(Bool(Eval('is_current')), 'blue', 'black')">
                     <field name="start_date"/>
                     <field name="end_date"/>
                 </tree>
