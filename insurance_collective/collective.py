@@ -9,7 +9,9 @@ __all__ = ['GroupInsurancePlan', 'GroupInsuranceCoverage',
            'GroupPricingData', 'GroupPriceCalculator',
            'GroupEligibilityRule', 'GroupEligibilityRelationKind',
            'GroupBenefit', 'GroupBenefitRule',
-           'GroupReserveRule', 'GroupCoverageAmountRule']
+           'GroupReserveRule', 'GroupCoverageAmountRule',
+           'GroupSchemaElement', 'GroupSchemaElementRelation',
+           'GroupDynamicDataManager']
 
 
 class GroupInsurancePlan(Product):
@@ -168,4 +170,39 @@ class GroupCoverageAmountRule(CoverageAmountRule):
     @classmethod
     def __setup__(cls):
         super(GroupCoverageAmountRule, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
+class GroupSchemaElement(CoopSchemaElement):
+    'Dynamic Data Definition'
+    __name__ = 'ins_collective.schema_element'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupSchemaElement, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
+class GroupSchemaElementRelation(SchemaElementRelation):
+    'Relation between schema element and dynamic data manager'
+
+    __name__ = 'ins_collective.schema_element_relation'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupSchemaElementRelation, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
+class GroupDynamicDataManager(DynamicDataManager):
+    'Dynamic Data Manager'
+
+    __name__ = 'ins_collective.dynamic_data_manager'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupDynamicDataManager, cls).__setup__()
         utils.change_relation_links(cls, 'ins_product', 'ins_collective')

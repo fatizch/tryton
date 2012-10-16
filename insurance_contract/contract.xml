@@ -12,7 +12,9 @@
             <field name="arch" type="xml">
                      <![CDATA[
                      <form string="Extension">
-                         <field name="covered_elements"/>
+                         <group id="elements" yfill="1" yexpand="1">
+                            <field name="covered_elements" yfill="1" yexpand="1"/>
+                         </group>
                      </form>               ]]>
             </field>
         </record>

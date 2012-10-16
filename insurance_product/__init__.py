@@ -24,6 +24,9 @@ def register():
         ReserveRule,
         CoverageAmountRule,
         ProductDefinition,
+        DynamicDataManager,
+        CoopSchemaElement,
+        SchemaElementRelation,
         # from rule_sets
         SubscriberContext,
         PersonContext,

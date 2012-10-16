@@ -71,6 +71,10 @@ class ExtensionLife(model.CoopSQL, GenericExtension):
     '''
     __name__ = 'life_contract.extension'
 
+    dynamic_data = fields.Dict(
+        'Dynamic Data',
+        schema_model='ins_product.schema_element')
+
     @classmethod
     def __setup__(cls):
         super(ExtensionLife, cls).__setup__()
@@ -115,6 +119,20 @@ class CoveredPerson(model.CoopSQL, CoveredElement):
 
     def get_rec_name(self, value):
         return self.person.name
+
+
+#
+#  This code was added as a test to check that step_over could allow to
+#  totally jump over a step
+#
+#class OptionSelectionStateLife():
+#    'Option Selection State'
+#    __metaclass__ = PoolMeta
+#    __name__ = 'ins_contract.subs_process.option_selection'
+#
+#    @staticmethod
+#    def step_over_test(wizard):
+#        return True, []
 
 
 class LifeCoveredData(model.CoopSQL, CoveredData):
@@ -190,10 +208,24 @@ class ExtensionLifeState(DependantState):
         This a process step which will be used for Life product subscriptions.
     '''
     __name__ = 'life_contract.extension_life_state'
+    dynamic_data = fields.Dict(
+        'Dynamic Data',
+        schema_model='ins_product.schema_element',
+        context={
+            'for_product': Eval('for_product'),
+            'at_date': Eval('at_date')},
+        depends=['for_product', 'at_date'])
     covered_elements = fields.One2Many(
                             'life_contract.covered_person_desc',
                             'life_state',
                             'Covered Elements')
+    for_product = fields.Many2One(
+        'ins_product.product',
+        'For Product',
+        states={'invisible': True})
+    at_date = fields.Date(
+        'At Date',
+        states={'invisible': True})
 
     @staticmethod
     def depends_on_state():
@@ -215,10 +247,15 @@ class ExtensionLifeState(DependantState):
                 covered_data.init_from_coverage(coverage)
                 covered_datas.append(covered_data)
         wizard.extension_life.covered_elements = []
+        wizard.extension_life.dynamic_data = wizard.project.product.get_result(
+            'dynamic_data_init',
+            {'date': wizard.project.start_date})[0]
         covered_person = CoveredPerson()
         covered_person.person = wizard.project.subscriber.person[0].id
         covered_person.covered_data = covered_datas
         wizard.extension_life.covered_elements = [covered_person]
+        wizard.extension_life.for_product = wizard.project.product
+        wizard.extension_life.at_date = wizard.project.start_date
         return (True, [])
 
     @staticmethod
@@ -277,6 +314,12 @@ class ExtensionLifeState(DependantState):
                 cur_element.covered_data.append(cur_data)
             cur_element.person = covered_element.person
             ext.covered_elements.append(cur_element)
+
+        if not(hasattr(ext, 'dynamic_data') and ext.dynamic_data):
+            ext.dynamic_data = {}
+        if hasattr(wizard.extension_life, 'dynamic_data') and\
+                wizard.extension_life.dynamic_data:
+            ext.dynamic_data.update(wizard.extension_life.dynamic_data)
 
         contract.extension_life = [ext]
         res = contract.check_sub_elem_eligibility(

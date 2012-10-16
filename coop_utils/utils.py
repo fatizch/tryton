@@ -52,6 +52,8 @@ def change_relation_links(cls, from_module, to_module):
             attr_name = 'model_name'
         if hasattr(field, 'relation_name'):
             attr_name = 'relation_name'
+        if hasattr(field, 'schema_element'):
+            attr_name = 'schema_element'
         if attr_name == '':
             continue
         model_name = getattr(field, attr_name)
