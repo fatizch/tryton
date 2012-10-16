@@ -595,29 +595,30 @@ class BusinessRuleManager(model.CoopSQL, model.CoopView,
             #the idea is to always set the end_date
             #to the according next start_date
             for business_rule2 in self.business_rules:
-                if (business_rule1 != business_rule2 and
-                    business_rule2['start_date'] is not None
-                    and business_rule1['start_date'] is not None and
-                    business_rule2['start_date'] >
-                    business_rule1['start_date']
-                    and (business_rule1['end_date'] is None or
-                         business_rule1['end_date'] >=
-                         business_rule2['start_date'])):
-                    end_date = (business_rule2['start_date']
-                               - datetime.timedelta(days=1))
+                if (business_rule1 != business_rule2
+                    and business_rule2.start_date
+                    and business_rule1.start_date
+                    and business_rule2.start_date > business_rule1.start_date
+                    and (not business_rule1.end_date
+                        or business_rule1.end_date >= business_rule2.start_date
+                        )
+                    ):
+                    end_date = (business_rule2.start_date
+                        - datetime.timedelta(days=1))
                     res['business_rules']['update'].append({
                         'id': business_rule1.id,
                         'end_date': end_date})
 
             #if we change the start_date to a date after the end_date,
             #we reinitialize the end_date
-            if (business_rule1['end_date'] is not None
-                and business_rule1['start_date'] is not None
-                and business_rule1['end_date'] <
-                    business_rule1['start_date']):
-                res['business_rules']['update'].append({
+            if (business_rule1.end_date
+                and business_rule1.start_date
+                and business_rule1.end_date < business_rule1.start_date):
+                res['business_rules']['update'].append(
+                    {
                         'id': business_rule1.id,
-                        'end_date': None})
+                        'end_date': None
+                    })
         return res
 
     def get_good_rule_at_date(self, data):
