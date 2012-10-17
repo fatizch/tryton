@@ -320,3 +320,11 @@ class Person(CoopSQL, Actor):
             res[party.id] += string.get_field_as_summary(party, 'nationality')
             res[party.id] += string.get_field_as_summary(party, 'maiden_name')
         return res
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        if cls.search([('first_name',) + clause[1:]], limit=1):
+            return [('first_name',) + clause[1:]]
+        if cls.search([('ssn',) + clause[1:]], limit=1):
+            return [('ssn',) + clause[1:]]
+        return [(cls._rec_name,) + clause[1:]]
