@@ -100,7 +100,6 @@ class ProjectState(CoopStep):
         Date = Pool().get('ir.date')
         if not hasattr(wizard.project, 'start_date'):
             wizard.project.start_date = Date.today()
-        wizard.project.product = 1
         return (True, [])
 
     @staticmethod
@@ -381,6 +380,10 @@ class CoveredDataDesc(CoopStepView):
         'get_coverages_model',
         readonly=True)
 
+    coverage_name = fields.Function(fields.Char('Coverage',
+            depends=['for_coverage'], on_change_with=['for_coverage']),
+        'on_change_with_coverage_name')
+
     @staticmethod
     def get_coverages_model():
         res = get_descendents(Coverage)
@@ -390,6 +393,11 @@ class CoveredDataDesc(CoopStepView):
     def init_from_coverage(self, for_coverage):
         self.start_date = for_coverage.start_date
         self.for_coverage = for_coverage.coverage
+        self.coverage_name = self.for_coverage.get_rec_name('')
+
+    def on_change_with_coverage_name(self):
+        if self.for_coverage:
+            return self.for_coverage.get_rec_name('')
 
 
 class CoveredElementDesc(CoopStepView):

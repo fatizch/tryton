@@ -88,8 +88,8 @@
                         <group id="global">
                             <label name="status"/>
                             <field name="status"/>
-                            <label name="for_coverage"/>
-                            <field name="for_coverage"/>
+                            <label name="coverage_name"/>
+                            <field name="coverage_name"/>
                         </group>
                         <newline/>
                         <group id="dates">
@@ -113,7 +113,7 @@
                     <![CDATA[
                     <tree string="Covered Data" editable="top">
                         <field name="status"/>
-                        <field name="for_coverage"/>
+                        <field name="coverage_name"/>
                         <field name="start_date"/>
                         <field name="end_date"/>
                     </tree>

@@ -165,6 +165,7 @@ class LifeCoveredDataDesc(CoveredDataDesc):
 
     @staticmethod
     def get_allowed_amounts():
+        print 'calculating get_allowed_amounts'
         try:
             coverage = Transaction().context.get('for_coverage')
             if not coverage:

@@ -165,7 +165,7 @@
             <field name="arch" type="xml">                 
                      <![CDATA[
                         <data>
-                            <xpath expr="/tree/field[@name=&quot;for_coverage&quot;]"
+                            <xpath expr="/tree/field[@name=&quot;coverage_name&quot;]"
                             position="after">
                                 <field name="coverage_amount"/>
                             </xpath>
