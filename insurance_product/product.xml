@@ -646,8 +646,22 @@
                         </xpath>
                         <xpath expr="/form/notebook/page[@id=&quot;main&quot;]/group[@id=&quot;simple&quot;]"
                          position="inside">
+                            <group id="kind" colspan="2">
+                                <label name="kind" xalign="0"/>
+                                <field name="kind" xexpand="0"/>
+                            </group>
+                            <newline/>
                             <label name="amounts"/>
                             <field name="amounts"/>
+                            <newline/>
+                            <group id="calc_list" col="6" colspan="4">
+	                            <label name="amount_start"/>
+	                            <field name="amount_start"/>
+	                            <label name="amount_end"/>
+	                            <field name="amount_end"/>
+	                            <label name="amount_step"/>
+	                            <field name="amount_step"/>
+                            </group>
                         </xpath>
                     </data>
                 ]]>

@@ -666,7 +666,8 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
         required=True, on_change=['kind'])  # , states={'readonly': True})
     manager = fields.Many2One('ins_product.business_rule_manager', 'Manager',
         ondelete='CASCADE')
-    start_date = fields.Date('From Date', required=True)
+    start_date = fields.Date('From Date', required=True,
+        depends=['is_current'])
     end_date = fields.Date('To Date')
     is_current = fields.Function(fields.Boolean('Is current'),
         'get_is_current')
@@ -1428,7 +1429,23 @@ class CoverageAmountRule(model.CoopSQL, BusinessRuleRoot):
 
     __name__ = 'ins_product.coverage_amount_rule'
 
-    amounts = fields.Char('Amounts', help='Specify amounts separated by ;')
+    kind = fields.Selection(
+        [
+            ('amount', 'Amount'),
+            ('cal_list', 'Calculated List')
+        ],
+        'Kind')
+    amounts = fields.Char('Amounts', help='Specify amounts separated by ;',
+        states={'invisible': Eval('kind') != 'amount'},)
+    amount_start = fields.Numeric('From',
+        digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
+        states={'invisible': Eval('kind') != 'cal_list'})
+    amount_end = fields.Numeric('To',
+        digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
+        states={'invisible': Eval('kind') != 'cal_list'})
+    amount_step = fields.Numeric('Step',
+        digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
+        states={'invisible': Eval('kind') != 'cal_list'})
 
     @classmethod
     def __setup__(cls):
@@ -1438,9 +1455,15 @@ class CoverageAmountRule(model.CoopSQL, BusinessRuleRoot):
                 })
 
     def give_me_allowed_amounts(self, args):
-        if self.config_kind == 'simple' and self.amounts:
-            res = map(float, self.amounts.split(';'))
-            return res, []
+        if self.config_kind == 'simple':
+            if self.kind == 'amount' and self.amounts:
+                res = map(float, self.amounts.split(';'))
+                return res, []
+            elif self.kind == 'cal_list' and self.amount_end:
+                start = self.amount_start if self.amount_start else 0
+                step = self.amount_step if self.amount_step else 1
+                res = range(start, self.amount_end + 1, step)
+                return res, []
         elif self.config_kind == 'rule' and self.rule:
             res, mess, errs = self.rule.compute(args)
             if res:
