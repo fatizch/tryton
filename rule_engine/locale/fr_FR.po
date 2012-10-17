@@ -292,7 +292,7 @@ msgstr "Contextes"
 
 msgctxt "model:ir.action,name:create_test_values_wizard"
 msgid "Create Test Values"
-msgstr ""
+msgstr "Créer les valeurs de test"
 
 msgctxt "model:ir.action,name:rule_window"
 msgid "Rules"

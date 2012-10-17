@@ -24,7 +24,7 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_product.coverage_amount_rule:"
 msgid "Amounts need to be floats !"
-msgstr ""
+msgstr "Les montants doivent être des numériques !"
 
 msgctxt "error:ins_product.coverage_amount_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -112,7 +112,7 @@ msgstr "Créé par"
 
 msgctxt "field:ins_product.benefit,currency_digits:"
 msgid "Currency Digits"
-msgstr ""
+msgstr "Nbre de chiffres après la virgule"
 
 msgctxt "field:ins_product.benefit,description:"
 msgid "Description"
@@ -332,7 +332,7 @@ msgstr "Devises"
 
 msgctxt "field:ins_product.coverage,currency_digits:"
 msgid "Currency Digits"
-msgstr ""
+msgstr "Nbre de chiffres après la virgule"
 
 msgctxt "field:ins_product.coverage,description:"
 msgid "Description"
@@ -398,6 +398,18 @@ msgctxt "field:ins_product.coverage,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_product.coverage_amount_rule,amount_end:"
+msgid "To"
+msgstr "À"
+
+msgctxt "field:ins_product.coverage_amount_rule,amount_start:"
+msgid "From"
+msgstr "De"
+
+msgctxt "field:ins_product.coverage_amount_rule,amount_step:"
+msgid "Step"
+msgstr "Etape"
+
 msgctxt "field:ins_product.coverage_amount_rule,amounts:"
 msgid "Amounts"
 msgstr "Montant"
@@ -425,6 +437,10 @@ msgstr "ID"
 msgctxt "field:ins_product.coverage_amount_rule,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.coverage_amount_rule,kind:"
+msgid "Kind"
+msgstr "Type"
 
 msgctxt "field:ins_product.coverage_amount_rule,rec_name:"
 msgid "Name"
@@ -476,11 +492,11 @@ msgstr "Valeur"
 
 msgctxt "field:ins_product.dynamic_data_manager,shared_dynamic:"
 msgid "Shared Dynamic Data"
-msgstr ""
+msgstr "Donnée Dyn. Partagé"
 
 msgctxt "field:ins_product.dynamic_data_manager,specific_dynamic:"
 msgid "Specific Dynamic Data"
-msgstr ""
+msgstr "Donnée Dynamique Spécifique"
 
 msgctxt "field:ins_product.dynamic_data_manager,write_date:"
 msgid "Write Date"
@@ -664,7 +680,7 @@ msgstr "Code"
 
 msgctxt "field:ins_product.offered,currency_digits:"
 msgid "Currency Digits"
-msgstr ""
+msgstr "Nbre de chiffres après la virgule"
 
 msgctxt "field:ins_product.offered,description:"
 msgid "Description"
@@ -916,7 +932,7 @@ msgstr "Devises"
 
 msgctxt "field:ins_product.product,currency_digits:"
 msgid "Currency Digits"
-msgstr ""
+msgstr "Nbre de chiffres après la virgule"
 
 msgctxt "field:ins_product.product,description:"
 msgid "Description"
@@ -924,7 +940,7 @@ msgstr "Description"
 
 msgctxt "field:ins_product.product,dynamic_data_manager:"
 msgid "Dynamic Data Manager"
-msgstr ""
+msgstr "Gestionnaire de Données Dynamiques"
 
 msgctxt "field:ins_product.product,eligibility_mgr:"
 msgid "Eligibility Manager"
@@ -1070,6 +1086,10 @@ msgctxt "field:ins_product.reserve_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_product.rule_sets.contract,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:ins_product.rule_sets.covered_data,id:"
 msgid "ID"
 msgstr "ID"
@@ -1088,7 +1108,7 @@ msgstr "ID"
 
 msgctxt "field:ins_product.schema_element,choices:"
 msgid "Selection Choices"
-msgstr ""
+msgstr "Choix"
 
 msgctxt "field:ins_product.schema_element,create_date:"
 msgid "Create Date"
@@ -1100,19 +1120,19 @@ msgstr "Créé par"
 
 msgctxt "field:ins_product.schema_element,default_value:"
 msgid "Default Value"
-msgstr ""
+msgstr "Valeur par Défaut"
 
 msgctxt "field:ins_product.schema_element,default_value_boolean:"
 msgid "Default Value"
-msgstr ""
+msgstr "Valeur par Défaut"
 
 msgctxt "field:ins_product.schema_element,default_value_char:"
 msgid "Default Value"
-msgstr ""
+msgstr "Valeur par Défaut"
 
 msgctxt "field:ins_product.schema_element,default_value_selection:"
 msgid "Default Value"
-msgstr ""
+msgstr "Valeur par Défaut"
 
 msgctxt "field:ins_product.schema_element,end_date:"
 msgid "End Date"
@@ -1124,7 +1144,7 @@ msgstr "ID"
 
 msgctxt "field:ins_product.schema_element,is_shared:"
 msgid "Shared"
-msgstr ""
+msgstr "Partagé"
 
 msgctxt "field:ins_product.schema_element,is_used:"
 msgid "Is Used"
@@ -1148,7 +1168,7 @@ msgstr "Date de Début"
 
 msgctxt "field:ins_product.schema_element,technical_name:"
 msgid "Technical Name"
-msgstr ""
+msgstr "Nom Technique"
 
 msgctxt "field:ins_product.schema_element,type_:"
 msgid "Type"
@@ -1156,7 +1176,7 @@ msgstr "Type"
 
 msgctxt "field:ins_product.schema_element,with_default_value:"
 msgid "Default Value"
-msgstr ""
+msgstr "Valeur par Défaut"
 
 msgctxt "field:ins_product.schema_element,write_date:"
 msgid "Write Date"
@@ -1240,7 +1260,7 @@ msgstr "Montant de Couverture"
 
 msgctxt "model:ins_product.dynamic_data_manager,name:"
 msgid "Dynamic Data Manager"
-msgstr ""
+msgstr "Gestionnaire de Données Dynamiques"
 
 msgctxt "model:ins_product.eligibility_relation_kind,name:"
 msgid "Define relation between eligibility rule and relation kind authorized"
@@ -1282,6 +1302,10 @@ msgctxt "model:ins_product.reserve_rule,name:"
 msgid "Reserve Rule"
 msgstr "Provisionnement"
 
+msgctxt "model:ins_product.rule_sets.contract,name:"
+msgid ""
+msgstr ""
+
 msgctxt "model:ins_product.rule_sets.covered_data,name:"
 msgid ""
 msgstr ""
@@ -1300,7 +1324,7 @@ msgstr ""
 
 msgctxt "model:ins_product.schema_element,name:"
 msgid "Dynamic Data Definition"
-msgstr ""
+msgstr "Définition de Données Dynamiques"
 
 msgctxt "model:ins_product.schema_element_relation,name:"
 msgid "Relation between schema element and dynamic data manager"
@@ -1312,7 +1336,7 @@ msgstr "Garanties"
 
 msgctxt "model:ir.action,name:act_model_coop_schema"
 msgid "Dynamic Data Schema Elements"
-msgstr ""
+msgstr "Données Dynamiques"
 
 msgctxt "model:ir.action,name:act_product_form"
 msgid "Products"
@@ -1328,7 +1352,7 @@ msgstr "Garanties"
 
 msgctxt "model:ir.ui.menu,name:menu_model_coop_schema"
 msgid "Dynamic Data Schema Elements"
-msgstr ""
+msgstr "Données Dynamiques"
 
 msgctxt "model:ir.ui.menu,name:menu_product"
 msgid "Laboratory"
@@ -1348,7 +1372,7 @@ msgstr "Rente"
 
 msgctxt "selection:ins_product.benefit,kind:"
 msgid "Capital"
-msgstr ""
+msgstr "Capitale"
 
 msgctxt "selection:ins_product.benefit,template_behaviour:"
 msgid "Add"
@@ -1442,10 +1466,6 @@ msgctxt "selection:ins_product.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
 
-msgctxt "selection:ins_product.coverage,family:"
-msgid "default"
-msgstr "Défaut"
-
 msgctxt "selection:ins_product.coverage,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"
@@ -1469,6 +1489,14 @@ msgstr "Moteur de Règle"
 msgctxt "selection:ins_product.coverage_amount_rule,config_kind:"
 msgid "Simple"
 msgstr "Simple"
+
+msgctxt "selection:ins_product.coverage_amount_rule,kind:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "selection:ins_product.coverage_amount_rule,kind:"
+msgid "Calculated List"
+msgstr ""
 
 msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
 msgid "Add"
@@ -1664,11 +1692,11 @@ msgstr "Valider"
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Binary"
-msgstr ""
+msgstr "Binaire"
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Boolean"
-msgstr ""
+msgstr "Booléen"
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Char"
@@ -1680,15 +1708,15 @@ msgstr "Date"
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "DateTime"
-msgstr ""
+msgstr "Durée"
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Float"
-msgstr ""
+msgstr "Numérique"
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Integer"
-msgstr ""
+msgstr "Entier"
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Numeric"
@@ -1708,11 +1736,11 @@ msgstr ""
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Text"
-msgstr ""
+msgstr "Texte"
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Time"
-msgstr ""
+msgstr "Durée"
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Timestamp"
@@ -1768,7 +1796,7 @@ msgstr "Montant de Couverture"
 
 msgctxt "view:ins_product.dynamic_data_manager:"
 msgid "Dynamic Data Manager"
-msgstr ""
+msgstr "Gestionnaire de Données Dynamiques"
 
 msgctxt "view:ins_product.eligibility_rule:"
 msgid "Covered Element"
@@ -1864,7 +1892,7 @@ msgstr "Elément Couvert"
 
 msgctxt "view:ins_product.product:"
 msgid "Dynamic Data"
-msgstr ""
+msgstr "Données Dynamiques"
 
 msgctxt "view:ins_product.product:"
 msgid "Options"
@@ -1880,8 +1908,8 @@ msgstr "Provisionnement"
 
 msgctxt "view:ins_product.schema_element:"
 msgid "Dynamic Data Desciptor"
-msgstr ""
+msgstr "Descripteur de Données Dynamiques"
 
 msgctxt "view:ins_product.schema_element:"
 msgid "Dynamic Data Descriptors"
-msgstr ""
+msgstr "Descripteur de Données Dynamiques"

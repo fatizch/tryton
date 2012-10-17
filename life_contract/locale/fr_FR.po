@@ -70,6 +70,10 @@ msgctxt "field:life_contract.covered_data_desc,coverage_amount:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"
 
+msgctxt "field:life_contract.covered_data_desc,coverage_name:"
+msgid "Coverage"
+msgstr "Garantie"
+
 msgctxt "field:life_contract.covered_data_desc,covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
@@ -166,10 +170,6 @@ msgctxt "field:life_contract.extension,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:life_contract.extension,dynamic_data:"
-msgid "Dynamic Data"
-msgstr ""
-
 msgctxt "field:life_contract.extension,id:"
 msgid "ID"
 msgstr "ID"
@@ -190,21 +190,9 @@ msgctxt "field:life_contract.extension,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:life_contract.extension_life_state,at_date:"
-msgid "At Date"
-msgstr ""
-
 msgctxt "field:life_contract.extension_life_state,covered_elements:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
-
-msgctxt "field:life_contract.extension_life_state,dynamic_data:"
-msgid "Dynamic Data"
-msgstr ""
-
-msgctxt "field:life_contract.extension_life_state,for_product:"
-msgid "For Product"
-msgstr ""
 
 msgctxt "field:life_contract.extension_life_state,id:"
 msgid "ID"
@@ -212,7 +200,7 @@ msgstr "ID"
 
 msgctxt "field:life_contract.extension_life_state,session_id:"
 msgid "Session Id"
-msgstr ""
+msgstr "Session Id"
 
 msgctxt "model:life_contract.covered_data,name:"
 msgid "Covered Data"

@@ -224,7 +224,7 @@ msgstr "ID"
 
 msgctxt "field:ins_contract.billing_process.bill_display,session_id:"
 msgid "Session Id"
-msgstr ""
+msgstr "Session Id"
 
 msgctxt "field:ins_contract.billing_process.bill_line_view,id:"
 msgid "ID"
@@ -272,7 +272,7 @@ msgstr "ID"
 
 msgctxt "field:ins_contract.billing_process.bill_parameters,session_id:"
 msgid "Session Id"
-msgstr ""
+msgstr "Session Id"
 
 msgctxt "field:ins_contract.billing_process.bill_parameters,start_date:"
 msgid "Start Date"
@@ -373,6 +373,10 @@ msgstr "Date de création"
 msgctxt "field:ins_contract.contract,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:ins_contract.contract,dynamic_data:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
 
 msgctxt "field:ins_contract.contract,extension_life:"
 msgid "Life Extension"
@@ -630,6 +634,10 @@ msgctxt "field:ins_contract.price_line,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_contract.subs_process.covered_data_desc,coverage_name:"
+msgid "Coverage"
+msgstr "Garantie"
+
 msgctxt "field:ins_contract.subs_process.covered_data_desc,covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
@@ -678,6 +686,18 @@ msgctxt "field:ins_contract.subs_process.lines,value:"
 msgid "Value"
 msgstr "Valeur"
 
+msgctxt "field:ins_contract.subs_process.option_selection,at_date:"
+msgid "At Date"
+msgstr ""
+
+msgctxt "field:ins_contract.subs_process.option_selection,dynamic_data:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
+
+msgctxt "field:ins_contract.subs_process.option_selection,for_product:"
+msgid "For Product"
+msgstr ""
+
 msgctxt "field:ins_contract.subs_process.option_selection,id:"
 msgid "ID"
 msgstr "ID"
@@ -708,7 +728,7 @@ msgstr "Erreurs"
 
 msgctxt "field:ins_contract.subs_process.process_state,for_contract_db:"
 msgid "for_contract"
-msgstr ""
+msgstr "for_contract"
 
 msgctxt "field:ins_contract.subs_process.process_state,for_contract_str:"
 msgid "Jsonfor_contract"
@@ -748,7 +768,7 @@ msgstr "Description"
 
 msgctxt "field:ins_contract.subs_process.project,session_id:"
 msgid "Session Id"
-msgstr ""
+msgstr "Session Id"
 
 msgctxt "field:ins_contract.subs_process.project,start_date:"
 msgid "Effective Date"
@@ -784,7 +804,7 @@ msgstr "Lignes de Cotisation"
 
 msgctxt "field:ins_contract.subs_process.summary,session_id:"
 msgid "Session Id"
-msgstr ""
+msgstr "Session Id"
 
 msgctxt "model:ins_contract.billing.bill,name:"
 msgid "Bill"
@@ -1097,6 +1117,10 @@ msgstr "Cotisation"
 msgctxt "view:ins_contract.contract:"
 msgid "Contract"
 msgstr "Contrat"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Life Extension"
