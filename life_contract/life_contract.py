@@ -1,5 +1,5 @@
 import copy
-
+import datetime
 from decimal import Decimal
 
 from trytond.model import fields as fields
@@ -165,7 +165,7 @@ class LifeCoveredDataDesc(CoveredDataDesc):
 
     @staticmethod
     def get_allowed_amounts():
-        print 'calculating get_allowed_amounts'
+        print datetime.datetime.now(), 'calculating get_allowed_amounts'
         try:
             coverage = Transaction().context.get('for_coverage')
             if not coverage:
