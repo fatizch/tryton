@@ -10,7 +10,7 @@
                 <data>
                 <xpath expr="/form"
                     position="replace_attributes">
-                    <form col="10"/>
+                    <form col="10" cursor="ssn_no_key"/>
                 </xpath>
                 <xpath expr="/form/notebook"
                     position="replace_attributes">
