@@ -1553,9 +1553,13 @@ class CoverageAmountRule(model.CoopSQL, BusinessRuleRoot):
     def pre_validate(self):
         if not hasattr(self, 'amounts'):
             return
-        if self.config_kind == 'simple':
+        if self.config_kind == 'simple' and self.kind == 'amount':
             if self.validate_those_amounts(self.amounts) == False:
                 self.raise_user_error('amounts_float')
+
+    @staticmethod
+    def default_kind():
+        return 'amount'
 
 
 class ProductDefinition(model.CoopView):
