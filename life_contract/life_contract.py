@@ -209,9 +209,32 @@ class ExtensionLifeState(DependantState):
     '''
     __name__ = 'life_contract.extension_life_state'
     covered_elements = fields.One2Many(
-                            'life_contract.covered_person_desc',
-                            'life_state',
-                            'Covered Elements')
+        'life_contract.covered_person_desc',
+        'life_state',
+        'Covered Elements',
+        context={
+            'for_product': Eval('for_product'),
+            'at_date': Eval('at_date')})
+    dynamic_data = fields.Dict(
+        'Dynamic Data',
+        schema_model='ins_product.schema_element',
+        context={
+            'for_product': Eval('for_product'),
+            'at_date': Eval('at_date'),
+            'dd_args': {
+                'options': Eval('for_options'),
+                'kind': 'main',
+                'path': 'extension_life'}},
+        depends=['for_product', 'at_date', 'for_options'],
+        states={'invisible': ~Eval('for_product')})
+    for_product = fields.Many2One(
+        'ins_product.product',
+        'For Product',
+        states={'invisible': True})
+    at_date = fields.Date(
+        'At Date',
+        states={'invisible': True})
+    for_options = fields.Char('For Options', states={'invisible': True})
 
     @staticmethod
     def depends_on_state():
@@ -226,17 +249,39 @@ class ExtensionLifeState(DependantState):
         covered_datas = []
         CoveredData = Pool().get('life_contract.covered_data_desc')
         CoveredPerson = Pool().get('life_contract.covered_person_desc')
-        for coverage in wizard.option_selection.options:
-            if coverage.status == 'Active':
-                covered_data = CoveredData()
-                covered_data.status = 'Active'
-                covered_data.init_from_coverage(coverage)
-                covered_datas.append(covered_data)
-        wizard.extension_life.covered_elements = []
+#        for coverage in wizard.option_selection.options:
+#            if coverage.status == 'Active':
+#                covered_data = CoveredData()
+#                covered_data.status = 'Active'
+#                covered_data.init_from_coverage(coverage)
+#                covered_datas.append(covered_data)
+#        wizard.extension_life.covered_elements = []
         covered_person = CoveredPerson()
         covered_person.person = wizard.project.subscriber.person[0].id
-        covered_person.covered_data = covered_datas
+        covered_person.covered_data = CoveredPerson.default_covered_data(
+            from_wizard=wizard)
         wizard.extension_life.covered_elements = [covered_person]
+        return (True, [])
+
+    @staticmethod
+    def before_step_init_dynamic_data(wizard):
+        product = wizard.project.product
+        options = ';'.join([opt.coverage.code
+            for opt in wizard.option_selection.options
+            if opt.status == 'Active'])
+        wizard.extension_life.dynamic_data = utils.init_dynamic_data(
+            product.get_result(
+                'dynamic_data_getter',
+                {
+                    'date': wizard.project.start_date,
+                    'dd_args': {
+                        'options': options,
+                        'kind': 'main',
+                        'path': 'extension_life'}})[0])
+        if wizard.extension_life.dynamic_data:
+            wizard.extension_life.for_product = product
+            wizard.extension_life.at_date = wizard.project.start_date
+            wizard.extension_life.for_options = options
         return (True, [])
 
     @staticmethod

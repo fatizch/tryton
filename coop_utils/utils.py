@@ -658,3 +658,12 @@ def extend_inexisting(into_list, elements):
     for item in elements:
         into_list = append_inexisting(into_list, item)
     return into_list
+
+
+def init_dynamic_data(ids):
+    the_model = Pool().get('ins_product.schema_element')
+    res = {}
+    for id in ids:
+        elem = the_model(id)
+        res[elem.technical_name] = elem.get_default_value(None)
+    return res

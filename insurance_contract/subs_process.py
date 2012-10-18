@@ -12,7 +12,7 @@ from trytond.modules.insurance_process import CoopStep
 from trytond.modules.insurance_process import CoopStateView
 from trytond.modules.insurance_process import CoopStepView
 
-from trytond.modules.coop_utils import get_descendents, WithAbstract
+from trytond.modules.coop_utils import utils as utils
 from trytond.modules.coop_party import ACTOR_KIND
 
 from contract import OPTIONSTATUS
@@ -132,7 +132,8 @@ class ProjectState(CoopStep):
     @staticmethod
     def post_step_update_abstract(wizard):
         BrokerManager = Pool().get('ins_contract.broker_manager')
-        contract = WithAbstract.get_abstract_objects(wizard, 'for_contract')
+        contract = utils.WithAbstract.get_abstract_objects(
+            wizard, 'for_contract')
         contract.product = wizard.project.product
         contract.start_date = wizard.project.start_date
         contract.subscriber = wizard.project.subscriber
@@ -140,7 +141,8 @@ class ProjectState(CoopStep):
             broker_manager = BrokerManager()
             broker_manager.broker = wizard.project.broker
             contract.broker_manager = broker_manager
-        WithAbstract.save_abstract_objects(wizard, ('for_contract', contract))
+        utils.WithAbstract.save_abstract_objects(
+            wizard, ('for_contract', contract))
         return (True, [])
 
     @staticmethod
@@ -232,9 +234,11 @@ class OptionSelectionState(CoopStep):
         schema_model='ins_product.schema_element',
         context={
             'for_product': Eval('for_product'),
-            'at_date': Eval('at_date')},
-        depends=['for_product', 'at_date'],)
-#        states={'invisible': ~Eval('for_product')})
+            'at_date': Eval('at_date'),
+            'dd_args': {
+                'kind': 'main'}},
+        depends=['for_product', 'at_date'],
+        states={'invisible': ~Eval('for_product')})
     for_product = fields.Many2One(
         'ins_product.product',
         'For Product',
@@ -280,9 +284,13 @@ class OptionSelectionState(CoopStep):
     @staticmethod
     def before_step_init_dynamic_data(wizard):
         product = wizard.project.product
-        wizard.option_selection.dynamic_data = product.get_result(
-            'dynamic_data_init',
-            {'date': wizard.project.start_date})[0]
+        wizard.option_selection.dynamic_data = utils.init_dynamic_data(
+            product.get_result(
+                'dynamic_data_getter',
+                {
+                    'date': wizard.project.start_date,
+                    'dd_args': {
+                        'kind': 'main'}})[0])
         if wizard.option_selection.dynamic_data:
             wizard.option_selection.for_product = product
             wizard.option_selection.at_date = wizard.project.start_date
@@ -330,7 +338,8 @@ class OptionSelectionState(CoopStep):
 
     @staticmethod
     def post_step_create_options(wizard):
-        contract = WithAbstract.get_abstract_objects(wizard, 'for_contract')
+        contract = utils.WithAbstract.get_abstract_objects(
+            wizard, 'for_contract')
         list_options = []
         Option = Pool().get(contract.give_option_model())
         for option in wizard.option_selection.options:
@@ -345,7 +354,8 @@ class OptionSelectionState(CoopStep):
         if hasattr(wizard.option_selection, 'dynamic_data') and \
                 wizard.option_selection.dynamic_data:
             contract.dynamic_data.update(wizard.option_selection.dynamic_data)
-        WithAbstract.save_abstract_objects(wizard, ('for_contract', contract))
+        utils.WithAbstract.save_abstract_objects(
+            wizard, ('for_contract', contract))
         return (True, [])
 
     @staticmethod
@@ -384,20 +394,42 @@ class CoveredDataDesc(CoopStepView):
             depends=['for_coverage'], on_change_with=['for_coverage']),
         'on_change_with_coverage_name')
 
+    dynamic_data = fields.Dict(
+        'Dynamic Data',
+        schema_model='ins_product.schema_element',
+        context={
+            'at_date': Eval('start_date'),
+            'dd_args': {
+                'options': Eval('for_option_char'),
+                'kind': 'sub_elem'}},
+        depends=['for_option_char', 'start_date'])
+
+    for_option_char = fields.Function(fields.Char(
+            'For Option',
+            states={'invisible': True},
+            on_change_with=['for_coverage'],
+            depends=['for_coverage']),
+        'on_change_with_for_option_char')
+
     @staticmethod
     def get_coverages_model():
-        res = get_descendents(Coverage)
+        res = utils.get_descendents(Coverage)
         res.append((Coverage.__name__, Coverage.__name__))
         return res
 
     def init_from_coverage(self, for_coverage):
         self.start_date = for_coverage.start_date
         self.for_coverage = for_coverage.coverage
+        self.for_option_char = self.for_coverage.code
         self.coverage_name = self.for_coverage.get_rec_name('')
 
     def on_change_with_coverage_name(self):
         if self.for_coverage:
             return self.for_coverage.get_rec_name('')
+    def on_change_with_for_option_char(self):
+        if not hasattr(self, 'for_coverage') and self.for_coverage:
+            return ''
+        return utils.convert_ref_to_obj(self.for_coverage).code
 
 
 class CoveredElementDesc(CoopStepView):
@@ -413,19 +445,29 @@ class CoveredElementDesc(CoopStepView):
                             'Covered Data')
 
     @staticmethod
-    def default_covered_data():
-        from_wizard = CoveredElementDesc.get_context()
-        contract = WithAbstract.get_abstract_objects(from_wizard,
-                                                     'for_contract')
+    def default_covered_data(from_wizard=None):
+        if not from_wizard:
+            from_wizard = CoveredElementDesc.get_context()
+        contract = utils.WithAbstract.get_abstract_objects(
+            from_wizard, 'for_contract')
         covered_datas = []
         CoveredDataDesc = Pool().get(
             from_wizard.give_covered_data_desc_model())
         for covered in contract.options:
             covered_data = CoveredDataDesc()
             covered_data.init_from_coverage(covered)
+            covered_data.dynamic_data = utils.init_dynamic_data(
+                from_wizard.project.product.get_result(
+                    'dynamic_data_getter',
+                    {
+                        'date': covered_data.start_date,
+                        'dd_args': {
+                            'options': covered.coverage.code,
+                            'kind': 'sub_elem',
+                            'path': 'all'}})[0])
             covered_data.status = 'Active'
             covered_datas.append(covered_data)
-        return WithAbstract.serialize_field(covered_datas)
+        return utils.WithAbstract.serialize_field(covered_datas)
 
 
 class PricingLine(CoopStepView):
@@ -488,7 +530,8 @@ class SummaryState(CoopStep):
     @staticmethod
     def before_step_calculate_lines(wizard):
         PricingLine = Pool().get('ins_contract.subs_process.lines')
-        contract = WithAbstract.get_abstract_objects(wizard, 'for_contract')
+        contract = utils.WithAbstract.get_abstract_objects(
+            wizard, 'for_contract')
 
         prices, errs = contract.calculate_prices_at_all_dates()
 
@@ -514,7 +557,7 @@ class SummaryState(CoopStep):
         return 'Summary'
 
 
-class SubscriptionProcessState(ProcessState, WithAbstract):
+class SubscriptionProcessState(ProcessState, utils.WithAbstract):
     '''
         The process state for the subscription process must have an abstract
         contract.
@@ -548,7 +591,8 @@ class SubscriptionProcess(CoopProcess):
 
     # And do something when validation occurs
     def do_complete(self):
-        contract = WithAbstract.get_abstract_objects(self, 'for_contract')
+        contract = utils.WithAbstract.get_abstract_objects(
+            self, 'for_contract')
         Contract = Pool().get(contract.__name__)
 
         contract.finalize_contract()
