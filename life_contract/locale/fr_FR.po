@@ -30,6 +30,10 @@ msgctxt "field:life_contract.covered_data,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:life_contract.covered_data,dynamic_data:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
+
 msgctxt "field:life_contract.covered_data,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -78,6 +82,10 @@ msgctxt "field:life_contract.covered_data_desc,covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
+msgctxt "field:life_contract.covered_data_desc,dynamic_data:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
+
 msgctxt "field:life_contract.covered_data_desc,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -85,6 +93,10 @@ msgstr "Date de Fin"
 msgctxt "field:life_contract.covered_data_desc,for_coverage:"
 msgid "For coverage"
 msgstr "Garantie"
+
+msgctxt "field:life_contract.covered_data_desc,for_option_char:"
+msgid "For Option"
+msgstr ""
 
 msgctxt "field:life_contract.covered_data_desc,id:"
 msgid "ID"
@@ -170,6 +182,10 @@ msgctxt "field:life_contract.extension,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:life_contract.extension,dynamic_data:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
+
 msgctxt "field:life_contract.extension,id:"
 msgid "ID"
 msgstr "ID"
@@ -190,9 +206,25 @@ msgctxt "field:life_contract.extension,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:life_contract.extension_life_state,at_date:"
+msgid "At Date"
+msgstr ""
+
 msgctxt "field:life_contract.extension_life_state,covered_elements:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
+
+msgctxt "field:life_contract.extension_life_state,dynamic_data:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
+
+msgctxt "field:life_contract.extension_life_state,for_options:"
+msgid "For Options"
+msgstr ""
+
+msgctxt "field:life_contract.extension_life_state,for_product:"
+msgid "For Product"
+msgstr ""
 
 msgctxt "field:life_contract.extension_life_state,id:"
 msgid "ID"

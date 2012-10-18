@@ -538,6 +538,13 @@ def tuple_index(value, the_tuple, key_index=0):
     return [y[key_index] for y in list(the_tuple)].index(value)
 
 
+def remove_tuple_from_list(cur_list, key):
+    for cur_tuple in cur_list:
+        if cur_tuple[0] == key:
+            cur_list.remove(cur_tuple)
+    return cur_list
+
+
 def get_module_path(module_name):
     module_path = os.path.abspath(os.path.join(os.path.normpath(__file__),
         '..', '..', module_name))

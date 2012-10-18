@@ -454,6 +454,10 @@ msgctxt "field:ins_contract.coverage_displayer,status:"
 msgid "Status"
 msgstr "Statut"
 
+msgctxt "field:ins_contract.covered_data,dynamic_data:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
+
 msgctxt "field:ins_contract.covered_data,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -493,6 +497,10 @@ msgstr "Contrat"
 msgctxt "field:ins_contract.generic_extension,covered_elements:"
 msgid "Coverages"
 msgstr "Garanties"
+
+msgctxt "field:ins_contract.generic_extension,dynamic_data:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
 
 msgctxt "field:ins_contract.generic_extension,id:"
 msgid "ID"
@@ -642,6 +650,10 @@ msgctxt "field:ins_contract.subs_process.covered_data_desc,covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
+msgctxt "field:ins_contract.subs_process.covered_data_desc,dynamic_data:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
+
 msgctxt "field:ins_contract.subs_process.covered_data_desc,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -649,6 +661,10 @@ msgstr "Date de Fin"
 msgctxt "field:ins_contract.subs_process.covered_data_desc,for_coverage:"
 msgid "For coverage"
 msgstr "Garantie"
+
+msgctxt "field:ins_contract.subs_process.covered_data_desc,for_option_char:"
+msgid "For Option"
+msgstr ""
 
 msgctxt "field:ins_contract.subs_process.covered_data_desc,id:"
 msgid "ID"
