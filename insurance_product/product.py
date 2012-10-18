@@ -1486,7 +1486,7 @@ class CoverageAmountRule(model.CoopSQL, BusinessRuleRoot):
     def pre_validate(self):
         if not hasattr(self, 'amounts'):
             return
-        if self.config_kind == 'simple':
+        if self.config_kind == 'simple' and self.kind == 'amount':
             try:
                 map(float, self.amounts.split(';'))
             except ValueError:
