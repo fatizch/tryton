@@ -253,9 +253,9 @@
             <field name="arch" type="xml">                 
                     <![CDATA[                 
                     <tree string="Data">
-                        <field name="coverage_name"/>
                         <field name="start_date"/>
                         <field name="end_date"/>
+                        <field name="for_coverage"/>
                     </tree>                 ]]>
             </field>
         </record>
@@ -274,8 +274,8 @@
                         </group>
                         <newline/>
                         <group id="coverage">
-                            <label name="coverage_name" xalign="0"/>
-                            <field name="coverage_name" xfill="1"/>
+                            <label name="for_coverage" xalign="0"/>
+                            <field name="for_coverage" xfill="1"/>
                         </group>
                         <newline/>
                         <group id="specific">

@@ -31,6 +31,9 @@ class ModuleTestCase(unittest.TestCase):
         self.TestCase = POOL.get('rule_engine.test_case')
         self.TestCaseValue = POOL.get('rule_engine.test_case.value')
         self.RunTests = POOL.get('rule_engine.run_tests', type='wizard')
+        self.definition = POOL.get('table.table_def')
+        self.dimension = POOL.get('table.table_dimension')
+        self.cell = POOL.get('table.table_cell')
 
     def test0005views(self):
         '''
@@ -43,6 +46,51 @@ class ModuleTestCase(unittest.TestCase):
         Test depends.
         '''
         test_depends()
+
+    def create_test_table(self):
+        definition = self.definition.create({
+                'name': 'Test',
+                'code': 'test_table_awesome',
+                'dimension_kind1': 'value',
+                'dimension_kind2': 'range',
+                })
+        dim1_foo = self.dimension.create({
+                'definition': definition.id,
+                'type': 'dimension1',
+                'value': 'foo',
+                })
+        dim1_bar = self.dimension.create({
+                'definition': definition.id,
+                'type': 'dimension1',
+                'value': 'bar',
+                })
+        dim2_foo = self.dimension.create({
+                'definition': definition.id,
+                'type': 'dimension2',
+                'start': 1,
+                'end': 10,
+                })
+        dim2_bar = self.dimension.create({
+                'definition': definition.id,
+                'type': 'dimension2',
+                'start': 20,
+                'end': 42,
+                })
+        for values in (
+                {'dimension1': dim1_foo.id, 'dimension2': dim2_foo.id,
+                    'value': 'ham'},
+                {'dimension1': dim1_bar.id, 'dimension2': dim2_foo.id,
+                    'value': 'spam'},
+                {'dimension1': dim1_foo.id, 'dimension2': dim2_bar.id,
+                    'value': 'egg'},
+                {'dimension1': dim1_bar.id, 'dimension2': dim2_bar.id,
+                    'value': 'chicken'}):
+            values.update({
+                    'definition': definition.id,
+                    })
+            self.cell.create(values)
+
+        return definition
 
     def test0010_testRuleEngine(self):
         class TestRuleEngine(ModelView):
@@ -86,18 +134,33 @@ class ModuleTestCase(unittest.TestCase):
 
             te1.save()
 
+            te2 = self.TreeElement()
+            te2.type = 'table'
+            te2.translated_technical_name = 'table_test_table_awesome'
+            te2.description = 'Table Test'
+            te2.the_table = self.create_test_table()
+            te2.language, = Language.search([('code', '=', 'en_US')])
+
+            te2.save()
+
             ct = self.Context()
             ct.name = 'test_context'
             ct.allowed_elements = []
             ct.allowed_elements.append(te)
             ct.allowed_elements.append(te1)
+            ct.allowed_elements.append(te2)
 
             ct.save()
 
             rule = self.RuleEngine()
             rule.name = 'test_rule'
             rule.context = ct
-            rule.code = 'return values_test(inexisting_test_values())'
+            rule.code = '''
+if table_test_table_awesome('bar', 5) != 'spam':
+    return 0
+
+return values_test(inexisting_test_values())
+'''
 
             tcv = self.TestCaseValue()
             tcv.name = 'inexisting_test_values'

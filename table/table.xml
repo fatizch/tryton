@@ -13,6 +13,8 @@
                     <group id="name" colspan="4">
                         <label name="name" xalign="0"/>
                         <field name="name" colspan="3" xfill="1"/>
+                        <label name="code" xalign="0"/>
+                        <field name="code" colspan="3" xfill="1"/>
                     </group>
                     <group id="dim1" colspan="2" col="2" yfill="1" yexpand="1">
                         <label name="dimension_kind1"/>

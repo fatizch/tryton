@@ -14,6 +14,7 @@ def register():
         TestRuleStart,
         TestRuleTest,
         RunTestsReport,
+        TableDefinition,
         module='rule_engine', type_='model')
     Pool.register(
         TestRule,

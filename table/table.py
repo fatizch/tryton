@@ -28,6 +28,7 @@ class TableDefinition(ModelSQL, ModelView):
     "Table Definition"
     __name__ = 'table.table_def'
     name = fields.Char('Name', required=True)
+    code = fields.Char('Code', required=True)
     dimension_kind1 = fields.Selection(KIND, 'Dimension Kind 1',
         states={
             'readonly': Bool(Eval('dimension1')),

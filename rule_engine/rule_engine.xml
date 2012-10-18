@@ -193,6 +193,8 @@
                         <label name="rule"/>
                         <field name="rule"/>
                     </group>
+                    <label name="the_table"/>
+                    <field name="the_table"/>
                     <label name="language"/>
                     <field name="language"/>
                     <label name="translated_technical_name"/>

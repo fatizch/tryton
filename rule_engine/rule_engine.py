@@ -14,17 +14,19 @@ from trytond.rpc import RPC
 
 from trytond.model import ModelView, ModelSQL, fields
 from trytond.wizard import Wizard, StateView, StateTransition, Button
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.tools.misc import _compile_source
 from trytond.pyson import Eval
 from trytond.modules.coop_utils import CoopView, utils as utils
 from trytond.modules.coop_utils import date as date
+from trytond.modules.table import TableCell
 
 __all__ = ['Rule', 'Context', 'TreeElement', 'ContextTreeElement', 'TestCase',
     'TestCaseValue', 'TestRule', 'TestRuleStart', 'TestRuleTest',
     'CreateTestValues', 'RunTests', 'RunTestsReport', 'RuleTools',
     'RuleEngineContext', 'InternalRuleEngineError', 'check_args',
+    'TableDefinition'
     ]
 
 CODE_TEMPLATE = """
@@ -346,6 +348,7 @@ class TreeElement(ModelView, ModelSQL):
             ('folder', 'Folder'),
             ('function', 'Function'),
             ('rule', 'Rule'),
+            ('table', 'Table'),
             ], 'Type', required=True)
     parent = fields.Many2One('rule_engine.tree_element', 'Parent')
     children = fields.One2Many('rule_engine.tree_element', 'parent',
@@ -356,6 +359,14 @@ class TreeElement(ModelView, ModelSQL):
             'required': Eval('type').in_(['function', 'rule']),
             }, depends=['type'])
     language = fields.Many2One('ir.lang', 'Language', required=True)
+    the_table = fields.Many2One(
+        'table.table_def',
+        'For Table',
+        states={
+            'invisible': Eval('type') != 'table',
+            'required': Eval('type') == 'table'},
+        on_change=['translated_technical_name', 'description'],
+        ondelete='RESTRICT')
 
     @staticmethod
     def default_type():
@@ -368,6 +379,13 @@ class TreeElement(ModelView, ModelSQL):
             'translated_technical_name': self.description.replace(' ', '_'),
             }
 
+    def on_change_the_table(self):
+        if not self.the_table:
+            return {}
+        return {
+            'translated_technical_name': 'table_%s' % self.the_table.code,
+            'description': 'Table %s' % self.the_table.name}
+
     def as_tree(self):
         tree = {}
         tree['name'] = self.name
@@ -378,7 +396,7 @@ class TreeElement(ModelView, ModelSQL):
         return tree
 
     def as_functions_list(self):
-        if self.type in ('function', 'rule'):
+        if self.type in ('function', 'rule', 'table'):
             return [self.translated_technical_name]
         else:
             return sum([child.as_functions_list()
@@ -393,6 +411,9 @@ class TreeElement(ModelView, ModelSQL):
         elif self.type == 'rule':
             context[self.translated_technical_name] = functools.partial(
                 self.rule.compute, context)
+        elif self.type == 'table':
+            context[self.translated_technical_name] = functools.partial(
+                TableCell.get, self.the_table)
         for element in self.children:
             element.as_context(context)
         return context
@@ -472,7 +493,7 @@ class RunTests(Wizard):
             return '{} ... SUCCESS'.format(test_case.description)
         else:
             return '{} ... FAILED'.format(test_case.description) +\
-                '\n%s' % info
+                '\n%s' % str(info)
 
     def default_report(self, fields):
         Rule = Pool().get('rule_engine')
@@ -508,3 +529,40 @@ class CreateTestValues(Wizard):
             test_value = TestCaseValue(name=func_name, test_case=test_case)
             test_value.save()
         return 'end'
+
+
+class TableDefinition():
+    'Table Definition'
+
+    __metaclass__ = PoolMeta
+
+    __name__ = 'table.table_def'
+
+    @classmethod
+    def create(cls, values):
+        table = super(TableDefinition, cls).create(values)
+        TreeElement = Pool().get('rule_engine.tree_element')
+        folder = utils.get_those_objects(
+            'rule_engine.tree_element',
+            [('type', '=', 'folder'), ('description', '=', 'Tables')])
+        if not folder:
+            folder = TreeElement()
+            folder.type = 'folder'
+            folder.description = 'Tables'
+            folder.translated_technical_name = 'table_folder'
+            folder.language = utils.get_this_object(
+                'ir.lang', ('code', '=', Transaction().language))
+            folder.save()
+        else:
+            folder = folder[0]
+
+        new_tree = TreeElement()
+        new_tree.type = 'table'
+        new_tree.translated_technical_name = 'table_%s' % values['code']
+        new_tree.description = 'Table %s' % values['name']
+        new_tree.language = utils.get_this_object(
+            'ir.lang', ('code', '=', Transaction().language))
+        new_tree.the_table = table.id
+        new_tree.parent = folder
+        new_tree.save()
+        return table

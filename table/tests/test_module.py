@@ -48,6 +48,7 @@ class ModuleTestCase(unittest.TestCase):
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             definition = self.definition.create({
                     'name': 'Test',
+                    'code': 'test0'
                     })
             self.assertEqual(self.definition.get('Test'), definition)
             self.assertRaises(IndexError, self.definition.get, 'foo')
@@ -59,6 +60,7 @@ class ModuleTestCase(unittest.TestCase):
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             definition = self.definition.create({
                     'name': 'Test',
+                    'code': 'test1',
                     'dimension_kind1': 'value',
                     })
             dim1_foo = self.dimension.create({
@@ -92,6 +94,7 @@ class ModuleTestCase(unittest.TestCase):
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             definition = self.definition.create({
                     'name': 'Test',
+                    'code': 'test2',
                     'dimension_kind1': 'date',
                     })
             dim1_foo = self.dimension.create({
@@ -125,6 +128,7 @@ class ModuleTestCase(unittest.TestCase):
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             definition = self.definition.create({
                     'name': 'Test',
+                    'code': 'test3',
                     'dimension_kind1': 'range',
                     })
             dim1_foo = self.dimension.create({
@@ -163,6 +167,7 @@ class ModuleTestCase(unittest.TestCase):
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             definition = self.definition.create({
                     'name': 'Test',
+                    'code': 'test4',
                     'dimension_kind1': 'range-date',
                     })
             dim1_foo = self.dimension.create({
@@ -201,6 +206,7 @@ class ModuleTestCase(unittest.TestCase):
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             definition = self.definition.create({
                     'name': 'Test',
+                    'code': 'test_code',
                     'dimension_kind1': 'value',
                     'dimension_kind2': 'range',
                     })
