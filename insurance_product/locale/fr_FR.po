@@ -324,7 +324,7 @@ msgstr "Gestionnaire de Montant de Couverture"
 
 msgctxt "field:ins_product.coverage,covered_dynamic_data_manager:"
 msgid "Covered Dynamic Data Manager"
-msgstr ""
+msgstr "Données Dynamiques Eléments Couverts"
 
 msgctxt "field:ins_product.coverage,create_date:"
 msgid "Create Date"
