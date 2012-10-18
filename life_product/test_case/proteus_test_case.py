@@ -637,6 +637,7 @@ def create_disability_coverage(cfg_dict):
     benefit = get_or_create_benefit(cfg_dict, 'IJ',
         'Indémnité Journalière', 'annuity')
     benefit_rule = add_rule(cfg_dict, benefit, 'benefit')
+    cov.benefits.append(benefit)
 
     cov.description = '''<b>En cas d’arrêt de travail temporaire ou prolongé, \
 maintenez votre salaire à 100 %</b>
@@ -668,6 +669,8 @@ def create_invalidity_coverage(cfg_dict):
     benefit = get_or_create_benefit(cfg_dict, 'RENT_INVAL',
         'Rente d\'invalidité', 'annuity')
     benefit_rule = add_rule(cfg_dict, benefit, 'benefit')
+    cov.benefits.append(benefit)
+
     cov.description = '''<b>En cas d’invalidité, votre pouvoir d’achat est \
 préservé</b>
 Vous risquez de ne plus pouvoir exercer votre emploi. Nous complétons \
@@ -695,18 +698,20 @@ def create_death_coverage(cfg_dict):
     capital_benefit = get_or_create_benefit(cfg_dict, 'CAP_DC',
         'Capital Décès', 'capital')
     benefit_rule = add_rule(cfg_dict, capital_benefit, 'benefit')
+    cov.benefits.append(capital_benefit)
 
     annuity_benefit = get_or_create_benefit(cfg_dict, 'RENT_CJ',
         'Rente de conjoint', 'annuity')
     benefit_rule = add_rule(cfg_dict, annuity_benefit, 'benefit')
     benefit_rule.coef_coverage_amount = Decimal(1 / (10 * 12))
+    cov.benefits.append(annuity_benefit)
 
-    annuity_benefit = get_or_create_benefit(cfg_dict, 'RENT_EDU',
+    annuity__edu_benefit = get_or_create_benefit(cfg_dict, 'RENT_EDU',
         'Rente éducation', 'annuity')
-    benefit_rule = add_rule(cfg_dict, annuity_benefit, 'benefit')
+    benefit_rule = add_rule(cfg_dict, annuity__edu_benefit, 'benefit')
     benefit_rule.coef_coverage_amount = Decimal(1 / (10 * 12 * 4))
+    cov.benefits.append(annuity__edu_benefit)
 
-    cov.benefits.append(capital_benefit)
     cov.description = '''<b>En cas de décès ou de Perte Totale et Irréversible\
  d’Autonomie</b>, l’avenir de vos proches est assuré Des garanties financières\
  pour votre foyer :
