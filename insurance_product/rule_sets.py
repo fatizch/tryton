@@ -144,6 +144,20 @@ class ContractContext(RuleEngineContext):
 
     @classmethod
     @check_args('contract')
+    def _re_option_dynamic_data(cls, args, data_name):
+        contract = args['contract']
+        return contract.get_ext_dynamic_data_value(args['date'], data_name)
+
+
+class OptionContext(RuleEngineContext):
+    '''
+        Context functions for option related data
+    '''
+
+    __name__ = 'ins_product.rule_sets.option'
+
+    @classmethod
+    @check_args('contract')
     def _re_contract_dynamic_data(cls, args, data_name):
         contract = args['contract']
         return contract.get_dynamic_data_value(args['date'], data_name)
@@ -184,6 +198,12 @@ class CoveredDataContext(RuleEngineContext):
             return data.coverage_amount
         args['errors'].append('Coverage amount undefined')
         raise InternalRuleEngineError
+
+    @classmethod
+    @check_args('contract')
+    def _re_covered_data_dynamic_data(cls, args, data_name):
+        data = cls.get_covered_data(args)
+        return data.get_dynamic_data_value(args['date'], data_name)
 
 
 class RuleCombinationContext(RuleEngineContext):

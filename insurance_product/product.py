@@ -107,6 +107,13 @@ class Offered(model.CoopView, utils.GetResult, Templated):
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
     currency_digits = fields.Function(fields.Integer('Currency Digits'),
         'get_currency_digits')
+    dynamic_data_manager = model.One2ManyDomain(
+        'ins_product.dynamic_data_manager',
+        'master',
+        'Dynamic Data Manager',
+        context={'for_kind': 'main'},
+        domain=[('kind', '=', 'main')],
+        size=1)
 
     @classmethod
     def __setup__(cls):
@@ -163,6 +170,13 @@ class Offered(model.CoopView, utils.GetResult, Templated):
         else:
             return Transaction().context.get('currency_digits')
 
+    def give_me_dynamic_data_ids(self, args):
+        if not(hasattr(self,
+                'dynamic_data_manager') and self.dynamic_data_manager):
+            return []
+        return self.dynamic_data_manager[0].get_valid_schemas_ids(
+            args['date']), []
+
 
 class Coverage(model.CoopSQL, Offered):
     'Coverage'
@@ -181,6 +195,13 @@ class Coverage(model.CoopSQL, Offered):
     coverage_amount_mgr = model.One2ManyDomain(
         'ins_product.business_rule_manager',
         'offered', 'Coverage Amount Manager')
+    covered_dynamic_data_manager = model.One2ManyDomain(
+        'ins_product.dynamic_data_manager',
+        'master',
+        'Covered Dynamic Data Manager',
+        context={'for_kind': 'sub_elem'},
+        domain=[('kind', '=', 'sub_elem')],
+        size=1)
 
     @classmethod
     def delete(cls, entities):
@@ -188,6 +209,10 @@ class Coverage(model.CoopSQL, Offered):
             entities,
             'ins_product.business_rule_manager',
             'offered')
+        utils.delete_reference_backref(
+            entities,
+            'ins_product.dynamic_data_manager',
+            'master')
         super(Coverage, cls).delete(entities)
 
     @classmethod
@@ -377,6 +402,30 @@ class Coverage(model.CoopSQL, Offered):
             return [('code',) + clause[1:]]
         return [(cls._rec_name,) + clause[1:]]
 
+    def give_me_dynamic_data_ids_aggregate(self, args):
+        if not 'dd_args' in args:
+            return [], []
+        dd_args = args['dd_args']
+        if not self.give_me_family(args)[0].get_extension_model() \
+                == dd_args['path'] and not dd_args['path'] == 'all':
+            return [], []
+        if not('options' in dd_args and dd_args['options'] != '' and
+                self.code in dd_args['options'].split(';')):
+            return [], []
+        if dd_args['kind'] == 'main':
+            return self.give_me_dynamic_data_ids(args)
+        elif dd_args['kind'] == 'sub_elem':
+            return self.give_me_covered_dynamic_data_ids(args)
+        return [], []
+
+    def give_me_covered_dynamic_data_ids(self, args):
+        if not(hasattr(self,
+                'covered_dynamic_data_manager') and
+                self.covered_dynamic_data_manager):
+            return []
+        return self.covered_dynamic_data_manager[0].get_valid_schemas_ids(
+            args['date']), []
+
 
 class Product(model.CoopSQL, Offered):
     'Product'
@@ -394,11 +443,6 @@ class Product(model.CoopSQL, Offered):
         context={'code': 'ins_product.product'},
         required=True,
         ondelete='RESTRICT')
-    dynamic_data_manager = fields.One2Many(
-        'ins_product.dynamic_data_manager',
-        'product',
-        'Dynamic Data Manager',
-        size=1)
 
     @classmethod
     def __setup__(cls):
@@ -413,6 +457,10 @@ class Product(model.CoopSQL, Offered):
             entities,
             'ins_product.business_rule_manager',
             'offered')
+        utils.delete_reference_backref(
+            entities,
+            'ins_product.dynamic_data_manager',
+            'master')
         super(Product, cls).delete(entities)
 
     def get_valid_options(self):
@@ -532,28 +580,34 @@ class Product(model.CoopSQL, Offered):
     def get_rec_name(self, name):
         return '(%s) %s' % (self.code, self.name)
 
-    def give_me_dynamic_data_ids(self, args):
-        if not(hasattr(self,
-                'dynamic_data_manager') and self.dynamic_data_manager):
-            return []
-        return self.dynamic_data_manager[0].get_valid_schemas_ids(
-            args['date'])
-
-    def give_me_dynamic_data_init(self, args):
-        if not(hasattr(self,
-                'dynamic_data_manager') and self.dynamic_data_manager):
-            return {}
-        elems = self.dynamic_data_manager[0].get_valid_schemas(args['date'])
-        res = {}
-        for elem in elems:
-            res[elem.technical_name] = elem.get_default_value(None)
-        return res
-
     @classmethod
     def search_rec_name(cls, name, clause):
         if cls.search([('code',) + clause[1:]], limit=1):
             return [('code',) + clause[1:]]
         return [(cls._rec_name,) + clause[1:]]
+
+    def give_me_dynamic_data_ids_aggregate(self, args):
+        if not 'dd_args' in args:
+            return [], []
+        res = set()
+        errs = []
+        for opt in self.options:
+            result, errors = opt.get_result(
+                'dynamic_data_ids_aggregate',
+                args)
+            map(lambda x: res.add(x), result)
+            errs += errors
+        return list(res), errs
+
+    def give_me_dynamic_data_getter(self, args):
+        if not 'dd_args' in args:
+            return [], []
+        dd_args = args['dd_args']
+        if not 'path' in dd_args:
+            if not 'options' in dd_args:
+                return self.give_me_dynamic_data_ids(args)
+            dd_args['path'] = 'all'
+        return self.give_me_dynamic_data_ids_aggregate(args)
 
 
 class ProductOptionsCoverage(model.CoopSQL):
@@ -1454,6 +1508,12 @@ class CoverageAmountRule(model.CoopSQL, BusinessRuleRoot):
                 'amounts_float': 'Amounts need to be floats !',
                 })
 
+    def validate_those_amounts(self, amounts):
+        try:
+            return map(float, amounts.split(';'))
+        except ValueError:
+            return False
+
     def give_me_allowed_amounts(self, args):
         if self.config_kind == 'simple':
             if self.kind == 'amount' and self.amounts:
@@ -1465,9 +1525,16 @@ class CoverageAmountRule(model.CoopSQL, BusinessRuleRoot):
                 res = range(start, self.amount_end + 1, step)
                 return res, []
         elif self.config_kind == 'rule' and self.rule:
-            res, mess, errs = self.rule.compute(args)
-            if res:
-                res = map(float, res.split(';'))
+            try:
+                res, mess, errs = self.rule.compute(args)
+                if res:
+                    res = self.validate_those_amounts(res)
+            except Exception:
+                res = []
+                errs += ['Invalid rule !']
+            if res == False:
+                res = []
+                errs += ['Invalid amounts']
             return res, mess + errs
 
     def give_me_coverage_amount_validity(self, args):
@@ -1486,15 +1553,9 @@ class CoverageAmountRule(model.CoopSQL, BusinessRuleRoot):
     def pre_validate(self):
         if not hasattr(self, 'amounts'):
             return
-        if self.config_kind == 'simple' and self.kind == 'amount':
-            try:
-                map(float, self.amounts.split(';'))
-            except ValueError:
+        if self.config_kind == 'simple':
+            if self.validate_those_amounts(self.amounts) == False:
                 self.raise_user_error('amounts_float')
-
-    @staticmethod
-    def default_kind():
-        return 'amount'
 
 
 class ProductDefinition(model.CoopView):
@@ -1588,16 +1649,19 @@ class CoopSchemaElement(SchemaElementMixin, model.CoopSQL, model.CoopView):
         # search (might only be a O2M / M2M)
         if not('relation_selection' in Transaction().context) and \
                 'for_product' in Transaction().context and \
-                'at_date' in Transaction().context:
+                'at_date' in Transaction().context and \
+                'dd_args' in Transaction().context:
             for_product = Transaction().context['for_product']
             at_date = Transaction().context['at_date']
+            dd_args = Transaction().context['dd_args']
             if for_product and at_date:
                 the_product, = Pool().get('ins_product.product').search(
                     [('id', '=', Transaction().context['for_product'])])
                 with Transaction().set_context({'relation_selection': True}):
                     good_schemas = the_product.get_result(
-                        'dynamic_data_ids',
-                        {'date': Transaction().context['at_date']})
+                        'dynamic_data_getter',
+                        {'date': Transaction().context['at_date'],
+                         'dd_args': dd_args})
                 domain.append(('id', 'in', good_schemas[0]))
         return super(CoopSchemaElement, cls).search(domain, offset=offset,
                 limit=limit, order=order, count=count,
@@ -1637,10 +1701,11 @@ class DynamicDataManager(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_product.dynamic_data_manager'
 
-    product = fields.Many2One(
-        'ins_product.product',
+    master = fields.Reference(
         'Product',
-        ondelete='CASCADE')
+        selection=[
+            ('ins_product.product', 'Product'),
+            ('ins_product.coverage', 'Coverage')])
 
     specific_dynamic = fields.One2Many(
         'ins_product.schema_element',
@@ -1651,7 +1716,13 @@ class DynamicDataManager(model.CoopSQL, model.CoopView):
         'the_manager',
         'schema_element',
         'Shared Dynamic Data',
-        domain=[('manager', '=', None)])
+        domain=[('manager', '=', None)],
+        # Not needed but allows to force the display for O2MDomain validation
+        depends=['kind'])
+    kind = fields.Selection([
+        ('main', 'Main'),
+        ('sub_elem', 'Sub Element')],
+        'Kind')
 
     def get_valid_schemas_ids(self, date):
         res = []
@@ -1668,3 +1739,9 @@ class DynamicDataManager(model.CoopSQL, model.CoopView):
         for elem in self.shared_dynamic:
             res.append(elem)
         return res
+
+    @staticmethod
+    def default_kind():
+        if not 'for_kind' in Transaction().context:
+            return 'main'
+        return Transaction().context['for_kind']

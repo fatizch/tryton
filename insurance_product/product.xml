@@ -68,6 +68,9 @@
                                 <page string="Pricing" id="pricing">
                                     <field name="pricing_mgr" colspan="4" mode="form"/>
                                 </page>
+                                <page string="Dynamic Data" id="dynamic_data">
+                                    <field name="dynamic_data_manager" mode="form"/>
+                                </page>
                             </notebook>
                         </page>
                         <page string="Administration" id="admin">
@@ -94,11 +97,6 @@
                 <data>
                 <xpath expr="/form" position="replace_attributes">
                     <form string="Product"/>
-                </xpath>
-                <xpath expr="/form/notebook/page[@id=&quot;admin&quot;]" position="after">
-                    <page string="Dynamic Data" id="dynamic_data">
-                        <field name="dynamic_data_manager" mode="form"/>
-                    </page>
                 </xpath>
                 <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]" position="before">
                     <page string="Options" id="option">
@@ -169,6 +167,10 @@
                     <page string="Coverage Amount" id="coverage_amount">
                         <field name="coverage_amount_mgr" mode="form"/>
                     </page>
+                </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]/notebook/page[@id=&quot;dynamic_data&quot;]/field[@name=&quot;dynamic_data_manager&quot;]" position="after">
+                    <newline/>
+                    <field name="covered_dynamic_data_manager" mode="form"/>
                 </xpath>
                 <xpath expr="/form/notebook/page[@id=&quot;admin&quot;]"
                 position="inside">

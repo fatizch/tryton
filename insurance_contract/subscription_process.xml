@@ -101,6 +101,11 @@
                         <newline/>
                         <group id="specific">
                         </group>
+                        <newline/>
+                        <group id="dynamic_data">
+                            <field name="dynamic_data"/>
+                            <field name="for_option_char"/>
+                        </group>
                     </form>
                     ]]>
             </field>
