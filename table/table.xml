@@ -48,6 +48,7 @@
                 <![CDATA[
                 <tree string="Table Definition">
                     <field name="name"/>
+                    <field name="code"/>
                     <field name="kind"/>
                 </tree>
                 ]]>
