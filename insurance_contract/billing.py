@@ -192,10 +192,13 @@ class Bill(model.CoopSQL, model.CoopView):
         GenericBillLine = Pool().get(self.get_bill_line_model())
         for start_date, end_date, cur_line in lines:
             number_of_days = date.number_of_days_between(start_date, end_date)
-            frequency_days, _ = cur_line.on_object.get_result(
-                'frequency_days',
-                {'date': start_date},
-                manager='pricing')
+            try:
+                frequency_days, _ = cur_line.on_object.get_result(
+                    'frequency_days',
+                    {'date': start_date},
+                    manager='pricing')
+            except utils.NonExistingManagerException:
+                frequency_days = 365
             bill_line = GenericBillLine()
             bill_line.flat_init(start_date, end_date)
             bill_line.update_from_price_line(

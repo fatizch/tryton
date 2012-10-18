@@ -251,7 +251,11 @@ class Coverage(model.CoopSQL, Offered):
             # The first part of the pricing is the price at the coverage level.
             # It is computed by the pricing manager, so we just need to forward
             # the request.
-            _res, _errs = self.get_result('price', args, manager='pricing')
+            try:
+                _res, _errs = self.get_result('price', args, manager='pricing')
+            except utils.NonExistingManagerException:
+                _res = None
+                _errs = []
             if _res:
                 # If a result exists, we give it a name and add it to the main
                 # result
@@ -285,10 +289,14 @@ class Coverage(model.CoopSQL, Offered):
                 tmp_args['data'] = covered_data
 
                 # And we finally call the manager for the price
-                _res, _errs = self.get_result(
-                    'sub_elem_price',
-                    tmp_args,
-                    manager='pricing')
+                try:
+                    _res, _errs = self.get_result(
+                        'sub_elem_price',
+                        tmp_args,
+                        manager='pricing')
+                except utils.NonExistingManagerException:
+                    _res = None
+                    _errs = []
                 if _res and _res.value:
                     # Basically we set name = covered.product_specific
                     # .person.name, but 'product_specific' is a
@@ -513,11 +521,6 @@ class Product(model.CoopSQL, Offered):
         res[0].name = 'Product Global Price'
         if contract.id:
             res[0].on_object = '%s,%s' % (self.__name__, self.id)
-        try:
-            res[1].remove('Business Manager pricing does not exist on %s'
-                % self.name)
-        except ValueError:
-            pass
         return [res[0]], res[1]
 
     def give_me_total_price(self, args):

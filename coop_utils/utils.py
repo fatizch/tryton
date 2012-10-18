@@ -421,9 +421,6 @@ class GetResult(object):
                 return good_rule.get_result(target, args)
             # We did not found any manager matching the specified name
             raise NonExistingManagerException
-            return  (None, ['Business Manager %s does not exist on %s'
-                % (manager, self.name)]
-                )
 
         # Now we look for our target, as it is at our level
         target_func = getattr(self, 'give_me_' + target)
