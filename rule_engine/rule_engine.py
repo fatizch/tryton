@@ -222,7 +222,7 @@ class Rule(ModelView, ModelSQL):
                 for e in self.context.allowed_elements], [])
 
     def get_rec_name(self, name=None):
-        return self.get_summary([self])[self.id]
+        return self.name
 
     @classmethod
     def get_summary(cls, rules, name=None, with_label=True,
@@ -365,7 +365,7 @@ class TreeElement(ModelView, ModelSQL):
         states={
             'invisible': Eval('type') != 'table',
             'required': Eval('type') == 'table'},
-        on_change=['translated_technical_name', 'description'],
+        on_change=['translated_technical_name', 'description', 'the_table'],
         ondelete='RESTRICT')
 
     @staticmethod
@@ -380,7 +380,7 @@ class TreeElement(ModelView, ModelSQL):
             }
 
     def on_change_the_table(self):
-        if not self.the_table:
+        if not(hasattr(self, 'the_table') and self.the_table):
             return {}
         return {
             'translated_technical_name': 'table_%s' % self.the_table.code,
