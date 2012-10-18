@@ -201,7 +201,7 @@
             <field name="arch" type="xml">
                     <![CDATA[
                         <form string="Subscription Process - Life Extension">
-                            <field name="covered_elements"/>
+                            <field name="covered_elements" mode="form, tree"/>
                             <field name="session_id"/>
                         </form>
                     ]]>
