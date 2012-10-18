@@ -1496,7 +1496,7 @@ msgstr "Montant"
 
 msgctxt "selection:ins_product.coverage_amount_rule,kind:"
 msgid "Calculated List"
-msgstr ""
+msgstr "Liste Calculé"
 
 msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
 msgid "Add"

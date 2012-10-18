@@ -392,7 +392,7 @@ msgstr "De"
 
 msgctxt "field:ins_collective.coverage_amount_rule,amount_step:"
 msgid "Step"
-msgstr "Etape"
+msgstr "Pas"
 
 msgctxt "field:ins_collective.coverage_amount_rule,amounts:"
 msgid "Amounts"
@@ -1834,7 +1834,7 @@ msgstr "Montant"
 
 msgctxt "selection:ins_collective.coverage_amount_rule,kind:"
 msgid "Calculated List"
-msgstr ""
+msgstr "Liste Calculé"
 
 msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
 msgid "Add"
