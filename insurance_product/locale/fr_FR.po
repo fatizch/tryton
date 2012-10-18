@@ -118,6 +118,10 @@ msgctxt "field:ins_product.benefit,description:"
 msgid "Description"
 msgstr "Description"
 
+msgctxt "field:ins_product.benefit,dynamic_data_manager:"
+msgid "Dynamic Data Manager"
+msgstr "Gestionnaire de Données Dynamiques"
+
 msgctxt "field:ins_product.benefit,eligibility_mgr:"
 msgid "Eligibility Manager"
 msgstr "Gestionnaire d'éligibilité"
@@ -318,6 +322,10 @@ msgctxt "field:ins_product.coverage,coverage_amount_mgr:"
 msgid "Coverage Amount Manager"
 msgstr "Gestionnaire de Montant de Couverture"
 
+msgctxt "field:ins_product.coverage,covered_dynamic_data_manager:"
+msgid "Covered Dynamic Data Manager"
+msgstr ""
+
 msgctxt "field:ins_product.coverage,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -337,6 +345,10 @@ msgstr "Nbre de chiffres après la virgule"
 msgctxt "field:ins_product.coverage,description:"
 msgid "Description"
 msgstr "Description"
+
+msgctxt "field:ins_product.coverage,dynamic_data_manager:"
+msgid "Dynamic Data Manager"
+msgstr "Gestionnaire de Données Dynamiques"
 
 msgctxt "field:ins_product.coverage,eligibility_mgr:"
 msgid "Eligibility Manager"
@@ -482,7 +494,11 @@ msgctxt "field:ins_product.dynamic_data_manager,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-msgctxt "field:ins_product.dynamic_data_manager,product:"
+msgctxt "field:ins_product.dynamic_data_manager,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_product.dynamic_data_manager,master:"
 msgid "Product"
 msgstr "Produit"
 
@@ -492,11 +508,11 @@ msgstr "Valeur"
 
 msgctxt "field:ins_product.dynamic_data_manager,shared_dynamic:"
 msgid "Shared Dynamic Data"
-msgstr "Donnée Dyn. Partagé"
+msgstr "Donnée Dynamiques Partagées"
 
 msgctxt "field:ins_product.dynamic_data_manager,specific_dynamic:"
 msgid "Specific Dynamic Data"
-msgstr "Donnée Dynamique Spécifique"
+msgstr "Données Dynamiques Spécifiques"
 
 msgctxt "field:ins_product.dynamic_data_manager,write_date:"
 msgid "Write Date"
@@ -685,6 +701,10 @@ msgstr "Nbre de chiffres après la virgule"
 msgctxt "field:ins_product.offered,description:"
 msgid "Description"
 msgstr "Description"
+
+msgctxt "field:ins_product.offered,dynamic_data_manager:"
+msgid "Dynamic Data Manager"
+msgstr "Gestionnaire de Données Dynamiques"
 
 msgctxt "field:ins_product.offered,eligibility_mgr:"
 msgid "Eligibility Manager"
@@ -1094,6 +1114,10 @@ msgctxt "field:ins_product.rule_sets.covered_data,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_product.rule_sets.option,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:ins_product.rule_sets.person,id:"
 msgid "ID"
 msgstr "ID"
@@ -1208,7 +1232,7 @@ msgstr "Valeur"
 
 msgctxt "field:ins_product.schema_element_relation,schema_element:"
 msgid "Schema Element"
-msgstr ""
+msgstr "Données Dynamiques"
 
 msgctxt "field:ins_product.schema_element_relation,the_manager:"
 msgid "Manager"
@@ -1307,6 +1331,10 @@ msgid ""
 msgstr ""
 
 msgctxt "model:ins_product.rule_sets.covered_data,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ins_product.rule_sets.option,name:"
 msgid ""
 msgstr ""
 
@@ -1513,6 +1541,22 @@ msgstr "Supprimer"
 msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
 msgid "Validate"
 msgstr "Valider"
+
+msgctxt "selection:ins_product.dynamic_data_manager,kind:"
+msgid "Main"
+msgstr "Principale"
+
+msgctxt "selection:ins_product.dynamic_data_manager,kind:"
+msgid "Sub Element"
+msgstr "Elément Couvert"
+
+msgctxt "selection:ins_product.dynamic_data_manager,master:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "selection:ins_product.dynamic_data_manager,master:"
+msgid "Product"
+msgstr "Produit"
 
 msgctxt "selection:ins_product.eligibility_rule,config_kind:"
 msgid "Rule Engine"
@@ -1829,6 +1873,10 @@ msgstr "Règle Métier Générique"
 msgctxt "view:ins_product.offered:"
 msgid "Administration"
 msgstr "Administration"
+
+msgctxt "view:ins_product.offered:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
 
 msgctxt "view:ins_product.offered:"
 msgid "Eligibilty"
