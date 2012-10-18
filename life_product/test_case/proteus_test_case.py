@@ -32,17 +32,18 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['BRM'] = Model.get('ins_product.business_rule_manager')
     cfg_dict['GBR'] = Model.get('ins_product.generic_business_rule')
     cfg_dict['Lang'] = Model.get('ir.lang')
+    cfg_dict['Benefit'] = Model.get('ins_product.benefit')
     return cfg_dict
 
 
-def get_or_create_product(cfg_dict, code, name, options=None):
+def get_or_create_product(cfg_dict, code, name, options=None, date=None):
     product = get_object_from_db(cfg_dict, 'Product', 'code', code)
     if product:
         return product
     product = cfg_dict['Product']()
     product.code = code
     product.name = name
-    product.start_date = cfg_dict['Date'].today({})
+    product.start_date = date if date else cfg_dict['Date'].today({})
     if options:
         product.options[:] = options
     product.contract_generator = get_or_create_generator(
@@ -75,6 +76,19 @@ def get_object_from_db(cfg_dict, model, key=None, value=None, domain=None,
     instances = cfg_dict[model].find(domain, limit=1)
     if instances:
         return instances[0]
+
+
+def get_or_create_benefit(cfg_dict, code, name, kind=None, date=None):
+    benefit = get_object_from_db(cfg_dict, 'Benefit', 'code', code)
+    if benefit:
+        return benefit
+    benefit = cfg_dict['Benefit']()
+    benefit.code = code
+    benefit.name = name
+    benefit.start_date = date if date else cfg_dict['Date'].today({})
+    if kind:
+        benefit.kind = kind
+    return benefit
 
 
 def try_to_save_object(cfg_dict, cur_object):
@@ -476,7 +490,7 @@ def create_rule_engine_data(cfg_dict):
         'ins_product.rule_sets.rule_combination',
         descs)
 
-    ct = get_or_create_context(cfg_dict, 'test_context')
+    ct = get_or_create_context(cfg_dict, 'Default Context')
     append_inexisting_elements(ct, 'allowed_elements', [tools, person])
 
     ct.save()
@@ -577,22 +591,30 @@ def add_rule(cfg_dict, offered, kind, at_date=None):
         mgr_list.append(mgr)
     mgr = mgr_list[-1]
 
-    if len(mgr.business_rules) == 0:
-        gbr = cfg_dict['GBR']()
-        gbr.start_date = at_date
-        mgr.business_rules.append(gbr)
-        model_name = '%s.%s_rule' % (get_module_name(offered), kind)
-        gbr.kind = model_name
-        rule = getattr(gbr, '%s_rule' % kind)[0]
-        return rule
-    else:
-        return getattr(mgr.business_rules[0], '%s_rule' % kind)[0]
+    gbr = cfg_dict['GBR']()
+    gbr.start_date = at_date
+    mgr.business_rules.append(gbr)
+    model_name = '%s.%s_rule' % (get_module_name(offered), kind)
+    gbr.kind = model_name
+    rule = getattr(gbr, '%s_rule' % kind)[0]
+    return rule
 
 
 def create_disability_coverage(cfg_dict):
-    cov = get_or_create_coverage(cfg_dict, 'INCAP', u'INCAPACITÉ')
-    ca_rule = add_rule(cfg_dict, cov, 'coverage_amount')
+    at_date = datetime.date(2011, 1, 1)
+    cov = get_or_create_coverage(cfg_dict, 'INCAP', u'Incapacité',
+        date=at_date)
+
+    ca_rule = add_rule(cfg_dict, cov, 'coverage_amount', at_date)
+    ca_rule.amounts = '40;90;140;190'
+
+    at_date = datetime.date(2012, 1, 1)
+    ca_rule = add_rule(cfg_dict, cov, 'coverage_amount', at_date)
     ca_rule.amounts = '50;100;150;200'
+
+    at_date = datetime.date(2013, 1, 1)
+    ca_rule = add_rule(cfg_dict, cov, 'coverage_amount', at_date)
+    ca_rule.amounts = '60;110;160;210'
 
     elig_rule = add_rule(cfg_dict, cov, 'eligibility')
     elig_rule.min_age = 18
@@ -602,14 +624,107 @@ def create_disability_coverage(cfg_dict):
     pricing_rule.basic_price = Decimal(5)
     pricing_rule.basic_tax = get_or_create_tax(cfg_dict, 'TSCA')
 
+    benefit = get_or_create_benefit(cfg_dict, 'IJ',
+        'Indémnité Journalière', 'annuity')
+    benefit_rule = add_rule(cfg_dict, benefit, 'benefit')
+
+    cov.description = '''<b>En cas d’arrêt de travail temporaire ou prolongé, \
+maintenez votre salaire à 100 %</b>
+En cas d’arrêt de travail, seuls 50 % de vos revenus vous sont versés par \
+la Sécurité Sociale. Pour maintenir votre revenu et continuer à vivre \
+normalement, uneindemnité journalière complète intégralement celle de votre \
+régime obligatoire jusqu’au 1095ème jour (3 ans, délai après lequel vous êtes \
+considéré comme invalide).'''
+    cov.save()
+    return cov
+
+
+def create_invalidity_coverage(cfg_dict):
+    at_date = datetime.date(2011, 1, 1)
+    cov = get_or_create_coverage(cfg_dict, 'INVAL', u'Invalidité',
+        date=at_date)
+
+    ca_rule = add_rule(cfg_dict, cov, 'coverage_amount', at_date)
+    ca_rule.amounts = '0'
+
+    elig_rule = add_rule(cfg_dict, cov, 'eligibility')
+    elig_rule.min_age = 18
+    elig_rule.max_age = 65
+
+    pricing_rule = add_rule(cfg_dict, cov, 'pricing')
+    pricing_rule.basic_price = Decimal(5)
+    pricing_rule.basic_tax = get_or_create_tax(cfg_dict, 'TSCA')
+
+    benefit = get_or_create_benefit(cfg_dict, 'RENT_INVAL',
+        'Rente d\'invalidité', 'annuity')
+    benefit_rule = add_rule(cfg_dict, benefit, 'benefit')
+    cov.description = '''<b>En cas d’invalidité, votre pouvoir d’achat est \
+préservé</b>
+Vous risquez de ne plus pouvoir exercer votre emploi. Nous complétons \
+votre rente de la Sécurité Sociale par une rente d’invalidité, jusqu’à votre \
+retraite (au plus tard jusqu’à votre 60ème anniversaire).'''
+    cov.save()
+    return cov
+
+
+def create_death_coverage(cfg_dict):
+    at_date = datetime.date(2011, 1, 1)
+    cov = get_or_create_coverage(cfg_dict, 'DC', u'Décès', date=at_date)
+    ca_rule = add_rule(cfg_dict, cov, 'coverage_amount')
+    ca_rule.kind = 'cal_list'
+    ca_rule.amount_start = Decimal(25000)
+    ca_rule.amount_end = Decimal(100000)
+    ca_rule.amount_step = Decimal(25000)
+
+    elig_rule = add_rule(cfg_dict, cov, 'eligibility')
+
+    pricing_rule = add_rule(cfg_dict, cov, 'pricing')
+    pricing_rule.basic_price = Decimal(5)
+    pricing_rule.basic_tax = get_or_create_tax(cfg_dict, 'TSCA')
+
+    capital_benefit = get_or_create_benefit(cfg_dict, 'CAP_DC',
+        'Capital Décès', 'capital')
+    benefit_rule = add_rule(cfg_dict, capital_benefit, 'benefit')
+
+    annuity_benefit = get_or_create_benefit(cfg_dict, 'RENT_CJ',
+        'Rente de conjoint', 'annuity')
+    benefit_rule = add_rule(cfg_dict, annuity_benefit, 'benefit')
+    benefit_rule.coef_coverage_amount = Decimal(1 / (10 * 12))
+
+    annuity_benefit = get_or_create_benefit(cfg_dict, 'RENT_EDU',
+        'Rente éducation', 'annuity')
+    benefit_rule = add_rule(cfg_dict, annuity_benefit, 'benefit')
+    benefit_rule.coef_coverage_amount = Decimal(1 / (10 * 12 * 4))
+
+    cov.benefits.append(capital_benefit)
+    cov.description = '''<b>En cas de décès ou de Perte Totale et Irréversible\
+ d’Autonomie</b>, l’avenir de vos proches est assuré Des garanties financières\
+ pour votre foyer :
+<b>• Capital décès</b>
+Vous mettez vos proches à l’abri des soucis financiers.Vous choisissez \
+librement le montant du capital qui peut aller jusqu’à 600 000 € \
+et n’est pas imposable dans la limite de 152 500 € \
+(selon la réglementation en vigueur).
+<b>• Rente de conjoint</b>
+Une rente plafonnée à 20 000 € par an est versée jusqu’au 65ème anniversaire \
+du conjoint ou concubin.Vous avez la certitude que votre conjoint bénéficiera \
+d’un complément de revenu régulier jusqu’à sa retraite.
+<b>• Rente éducation</b>
+Vous donnez les moyens de garantir à vos enfants le financement de leurs\
+études quoiqu’il arrive.Vos enfants perçoivent une rente pouvant atteindre\
+4 500 € par an et ce, jusqu’à la fin de leurs études (au plus tard jusqu’à leur
+26ème anniversaire).'''
     cov.save()
     return cov
 
 
 def create_prev_product(cfg_dict):
+    at_date = datetime.date(2011, 1, 1)
     disability = create_disability_coverage(cfg_dict)
+    death = create_death_coverage(cfg_dict)
+    inval = create_invalidity_coverage(cfg_dict)
     prod = get_or_create_product(cfg_dict, 'PREV', u'Prévoyance Indviduelle',
-        [disability])
+        options=[death, inval, disability], date=at_date)
     add_description(prod)
     prod.save()
     return prod
