@@ -27,7 +27,7 @@
                             </group>
                             <newline/>
                             <label name="product" xalign="0"/>
-                            <field name="product" xfill="1" widget="selection" colspan="3"/>
+                            <field name="product" xfill="1" colspan="3"/>
                             <newline/>
                             <field name="subscriber_desc" widget="richtext" colspan="2"/>
                             <field name="product_desc" widget="richtext" colspan="2"/>
