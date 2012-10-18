@@ -1734,7 +1734,7 @@ msgstr "Rente"
 
 msgctxt "selection:ins_collective.benefit,kind:"
 msgid "Capital"
-msgstr "Capitale"
+msgstr "Capital"
 
 msgctxt "selection:ins_collective.benefit,template_behaviour:"
 msgid "Add"
