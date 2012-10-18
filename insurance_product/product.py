@@ -285,7 +285,7 @@ class Coverage(model.CoopSQL, Offered):
                 # the request to the manager, which is the covered
                 # element it must work on.
                 tmp_args = args
-                tmp_args['for_covered'] = covered
+                tmp_args['sub_elem'] = covered
                 tmp_args['data'] = covered_data
 
                 # And we finally call the manager for the price
@@ -1549,7 +1549,7 @@ class CoverageAmountRule(model.CoopSQL, BusinessRuleRoot):
             if not amount in self.give_me_allowed_amounts(args)[0]:
                 errs = ['Amount %.2f not allowed on coverage %s' % (
                     amount,
-                    args['data'].for_coverage.name)]
+                    args['data'].for_coverage.code)]
                 return (False, errs), []
         return (True, []), []
 
