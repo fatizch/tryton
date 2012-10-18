@@ -15,6 +15,10 @@
                          <group id="elements" yfill="1" yexpand="1">
                             <field name="covered_elements" yfill="1" yexpand="1"/>
                          </group>
+                         <newline/>
+                         <group id="dynamic_data">
+                             <field name="dynamic_data"/>
+                         </group>
                      </form>               ]]>
             </field>
         </record>
@@ -275,6 +279,10 @@
                         </group>
                         <newline/>
                         <group id="specific">
+                        </group>
+                        <newline/>
+                        <group id="dynamic_data">
+                            <field name="dynamic_data"/>
                         </group>
                     </form>               ]]>
             </field>

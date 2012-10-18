@@ -31,6 +31,7 @@ def register():
         SubscriberContext,
         PersonContext,
         ContractContext,
+        OptionContext,
         CoveredDataContext,
         RuleCombinationContext,
         module='insurance_product', type_='model')

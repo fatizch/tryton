@@ -53,6 +53,9 @@ class GenericExtension(model.CoopView):
     covered_elements = fields.One2Many('ins_contract.covered_element',
                                        'extension',
                                        'Coverages')
+    dynamic_data = fields.Dict(
+        'Dynamic Data',
+        schema_model='ins_product.schema_element')
 
     contract = fields.Many2One(
         'ins_contract.contract',
@@ -70,6 +73,14 @@ class GenericExtension(model.CoopView):
 
     def get_extension_name(self):
         return ''
+
+    def get_dynamic_data_value(self, at_date, value):
+        if not(hasattr(self, 'dynamic_data') and self.dynamic_data):
+            return None
+        try:
+            return self.dynamic_data[value]
+        except KeyError:
+            return None
 
 
 class GenericContract(model.CoopSQL, model.CoopView):
@@ -244,6 +255,14 @@ class Contract(GenericContract):
             return self.dynamic_data[value]
         except KeyError:
             return None
+
+    def get_ext_dynamic_data_value(self, at_date, value):
+        res = None
+        for ext in self.get_active_extensions():
+            res = ext.get_dynamic_data_value(at_date, value)
+            if res:
+                return res
+        return res
 
     def get_dates(self, start=None, end=None):
         res = set()
@@ -741,12 +760,24 @@ class CoveredData(model.CoopView):
         'Covered Element',
         ondelete='CASCADE')
 
+    dynamic_data = fields.Dict(
+        'Dynamic Data',
+        schema_model='ins_product.schema_element')
+
     start_date = fields.Date('Start Date')
 
     end_date = fields.Date('End Date')
 
     def get_name_for_billing(self):
         return self.for_covered.get_name_for_billing()
+
+    def get_dynamic_data_value(self, at_date, value):
+        if not(hasattr(self, 'dynamic_data') and self.dynamic_data):
+            return None
+        try:
+            return self.dynamic_data[value]
+        except KeyError:
+            return None
 
 
 class BrokerManager(model.CoopSQL, model.CoopView):

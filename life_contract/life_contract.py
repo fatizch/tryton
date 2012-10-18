@@ -337,10 +337,16 @@ class ExtensionLifeState(DependantState):
                         return False, ['Invalid amount']
                 else:
                     cur_data.coverage_amount = Decimal(0)
+                if hasattr(covered_data, 'dynamic_data') and \
+                        covered_data.dynamic_data:
+                    cur_data.dynamic_data = covered_data.dynamic_data
                 cur_element.covered_data.append(cur_data)
             cur_element.person = covered_element.person
             ext.covered_elements.append(cur_element)
 
+        if not(hasattr(ext, 'dynamic_data') and ext.dynamic_data):
+            ext.dynamic_data = {}
+        ext.dynamic_data.update(wizard.extension_life.dynamic_data)
         contract.extension_life = [ext]
         res = contract.check_sub_elem_eligibility(
             wizard.project.start_date,

@@ -466,12 +466,22 @@ def create_rule_engine_data(cfg_dict):
         'ins_product.rule_sets.subscriber',
         descs)
 
+    contract = create_folder_from_set(
+        cfg_dict,
+        'ins_product.rule_sets.contract',
+        descs)
+
+    option = create_folder_from_set(
+        cfg_dict,
+        'ins_product.rule_sets.option',
+        descs)
+
     data_coverage = create_folder_from_set(
         cfg_dict,
         'ins_product.rule_sets.covered_data',
         descs)
 
-    data_coverage = create_folder_from_set(
+    rule_combination = create_folder_from_set(
         cfg_dict,
         'ins_product.rule_sets.rule_combination',
         descs)
