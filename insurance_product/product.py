@@ -1492,6 +1492,10 @@ class CoverageAmountRule(model.CoopSQL, BusinessRuleRoot):
             except ValueError:
                 self.raise_user_error('amounts_float')
 
+    @staticmethod
+    def default_kind():
+        return 'amount'
+
 
 class ProductDefinition(model.CoopView):
     'Product Definition'
