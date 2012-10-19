@@ -42,7 +42,7 @@ def create_dim_value(cfg_dict, dim_number, value, kind='value', end=None):
     return res
 
 
-def get_or_create_table(cfg_dict, name, dim_dict):
+def get_or_create_table(cfg_dict, name, dim_dict, code):
 
     Table = cfg_dict['Table']
     res = get_object_from_db(Table, 'name', name)
@@ -50,6 +50,7 @@ def get_or_create_table(cfg_dict, name, dim_dict):
         return res
     res = Table()
     res.name = name
+    res.code = code
     for i in range(1, 5):
         kind, values = dim_dict.get(str(i), (None, None))
         if not kind:
@@ -87,7 +88,8 @@ def create_table_10_100(cfg_dict):
         {
             '1': ('value', range(100)),
             '2': ('value', range(10))
-        })
+        },
+        'Table_10_100')
     if table.id > 0:
         return table
     table.save()
@@ -104,7 +106,8 @@ def create_table_cotisation(cfg_dict):
                 'Tranche C']),
             '3': ('value', ['cadre', 'non cadre']),
             '4': ('range-date', ['01/01/2012'])
-        })
+        },
+        'Cotis_Ret')
     if table.id > 0:
         return table
     table.save()
@@ -172,6 +175,7 @@ def load_table_from_csv(cfg_dict, path, name):
     line = 0
     table = Table()
     table.name = name
+    table.code = name.replace(' ', '_')
     table.save()
     Cell = cfg_dict['Cell']
     for cur_line in reader:
