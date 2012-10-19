@@ -197,6 +197,9 @@ class Rule(ModelView, ModelSQL):
                     hash(self.name)).replace('-', '_')]
         except InternalRuleEngineError:
             result = None
+        except:
+            context['errors'].append('Critical Internal Rule Engine Error')
+            result = None
         messages = context['messages']
         errors = context['errors']
         return (result, messages, errors)

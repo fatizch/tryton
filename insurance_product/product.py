@@ -949,7 +949,7 @@ class PricingData(model.CoopSQL, model.CoopView):
     @classmethod
     def create(cls, values):
         values = values.copy()
-        if 'the_tax' in values:
+        if 'the_tax' in values and values['the_tax']:
             try:
                 tax, = utils.get_those_objects(
                     'coop_account.tax_desc',
@@ -958,7 +958,7 @@ class PricingData(model.CoopSQL, model.CoopView):
             except ValueError:
                 raise Exception(
                     'Could not found the required Tax Desc')
-        elif 'the_fee' in values:
+        elif 'the_fee' in values and values['the_fee']:
             try:
                 fee, = utils.get_those_objects(
                     'coop_account.fee_desc',
