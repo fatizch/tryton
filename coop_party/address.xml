@@ -26,6 +26,22 @@
                 ]]>
             </field>
         </record>
+        <record model="ir.ui.view" id="address_view_tree">
+            <field name="model">party.address</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="party.address_view_tree_sequence"></field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <data>
+                <xpath expr="/tree/field[@name=&quot;name&quot;]"
+                position="after">
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </xpath>
+                </data>
+                ]]>
+            </field>
+        </record>
         <!-- Address kind tree view -->
         <record model="ir.ui.view" id="address_kind_view_tree">
             <field name="model">party.address_kind</field>
