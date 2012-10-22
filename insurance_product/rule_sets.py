@@ -34,11 +34,6 @@ class SubscriberContext(RuleEngineContext):
 
     @classmethod
     @check_args('subscriber_person')
-    def _re_get_subscriber_gender(cls, args):
-        return args['subscriber_person'].gender
-
-    @classmethod
-    @check_args('subscriber_person')
     def _re_get_subscriber_nationality(cls, args):
         country = args['subscriber_person'].get_nationality()
         return country.code
@@ -81,10 +76,6 @@ class PersonContext(RuleEngineContext):
             return person.birth_date
         args['errors'].append('%s does not have a birth date' % person.name)
         raise InternalRuleEngineError
-
-    @classmethod
-    def _re_get_person_gender(cls, args):
-        return cls.get_person(args).gender
 
     @classmethod
     def _re_get_person_nationality(cls, args):
