@@ -256,7 +256,7 @@ class Coverage(model.CoopSQL, Offered):
             except utils.NonExistingManagerException:
                 _res = None
                 _errs = []
-            if _res:
+            if _res and _res.value:
                 # If a result exists, we give it a name and add it to the main
                 # result
                 for_option = contract.get_option_for_coverage_at_date(
