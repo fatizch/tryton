@@ -24,12 +24,6 @@ class SubscriberContext(RuleEngineContext):
     __name__ = 'ins_product.rule_sets.subscriber'
 
     @classmethod
-    @check_args('contract')
-    def _re_get_subscriber_name(cls, args):
-        name = args['contract'].subscriber.name
-        return name
-
-    @classmethod
     @check_args('subscriber_person')
     def _re_get_subscriber_birthdate(cls, args):
         subscriber = args['subscriber_person']
@@ -79,11 +73,6 @@ class PersonContext(RuleEngineContext):
         else:
             args['errors'].append('Cannot find a person to get')
             raise InternalRuleEngineError
-
-    @classmethod
-    def _re_get_person_name(cls, args):
-        name = cls.get_person(args).name
-        return name
 
     @classmethod
     def _re_get_person_birthdate(cls, args):
