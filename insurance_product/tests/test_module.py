@@ -64,15 +64,6 @@ class ModuleTestCase(unittest.TestCase):
     def createTestRule(self):
         Lang = POOL.get('ir.lang')
         fr = Lang.search([('name', '=', 'French')], limit=1)[0]
-        te1 = self.TreeElement()
-        te1.language = fr
-        te1.type = 'function'
-        te1.name = '_re_get_subscriber_name'
-        te1.translated_technical_name = 'nom_du_souscripteur'
-        te1.description = 'Nom du Souscripteur'
-        te1.namespace = 'ins_product.rule_sets.subscriber'
-
-        te1.save()
 
         te2 = self.TreeElement()
         te2.language = fr
@@ -89,7 +80,7 @@ class ModuleTestCase(unittest.TestCase):
         te8.type = 'folder'
         te8.translated_technical_name = 'Dossier Souscripteur'
         te8.description = 'Souscripteur'
-        te8.children = [te1, te2]
+        te8.children = [te2]
 
         te8.save()
 
