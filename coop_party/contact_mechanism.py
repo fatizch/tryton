@@ -1,11 +1,14 @@
 import copy
-from trytond.model import ModelView, ModelSQL
+from trytond.pool import PoolMeta
 
 __all__ = ['ContactMechanism']
 
 
-class ContactMechanism(ModelSQL, ModelView):
+class ContactMechanism():
     "Contact Mechanism"
+
+    __metaclass__ = PoolMeta
+
     __name__ = 'party.contact_mechanism'
     _rec_name = 'value'
 
@@ -17,3 +20,13 @@ class ContactMechanism(ModelSQL, ModelView):
         cls.type.selection.remove(('sip', 'SIP'))
         cls.type.selection.remove(('irc', 'IRC'))
         cls.type.selection.remove(('jabber', 'Jabber'))
+        cls._constraints += [('check_email', 'invalid_email')]
+        cls._error_messages.update({
+            'invalid_email': 'Invalid Email !'})
+
+    def check_email(self):
+        if hasattr(self, 'email') and self.email:
+            import re
+            if not re.match(r"[^@]+@[^@]+\.[^@]+", self.email):
+                return False
+        return True
