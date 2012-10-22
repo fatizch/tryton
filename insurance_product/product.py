@@ -1699,6 +1699,15 @@ class CoopSchemaElement(SchemaElementMixin, model.CoopSQL, model.CoopView):
             keys.append(new_key)
         return keys
 
+    def valid_at_date(self, at_date):
+        if hasattr(self, 'start_date') and self.start_date:
+            if self.start_date > at_date:
+                return False
+        if hasattr(self, 'end_date') and self.end_date:
+            if self.end_date < at_date:
+                return False
+        return True
+
 
 class SchemaElementRelation(model.CoopSQL):
     'Relation between schema element and dynamic data manager'
@@ -1740,19 +1749,16 @@ class DynamicDataManager(model.CoopSQL, model.CoopView):
         'Kind')
 
     def get_valid_schemas_ids(self, date):
-        res = []
-        for elem in self.specific_dynamic:
-            res.append(elem.id)
-        for elem in self.shared_dynamic:
-            res.append(elem.id)
-        return res
+        return map(lambda x: x.id, self.get_valid_schemas(date))
 
     def get_valid_schemas(self, date):
         res = []
         for elem in self.specific_dynamic:
-            res.append(elem)
+            if elem.valid_at_date(date):
+                res.append(elem)
         for elem in self.shared_dynamic:
-            res.append(elem)
+            if elem.valid_at_date(date):
+                res.append(elem)
         return res
 
     @staticmethod
