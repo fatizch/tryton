@@ -113,7 +113,7 @@
                     </xpath>
                     <xpath expr="/form/notebook/page[@id=&quot;role&quot;]/group[@id=&quot;role_group&quot;]"
                     position="after">
-                        <group string="Employee" id="employee" colspan="4" yexpand="1" yfill="1"
+                        <group id="employee" colspan="4" yexpand="1" yfill="1"
                         states="{'invisible': Bool(~Eval('is_employee'))}">
                             <field name="employee_role" mode="form" view_ids="company.employee_view_form2"/>
                         </group>

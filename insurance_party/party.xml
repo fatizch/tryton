@@ -7,7 +7,7 @@
         <record model="ir.ui.view" id="company_view_form">
             <field name="model">company.company</field>
             <field name="type">form</field>
-            <field name="inherit" ref="coop_party.actor_view_form"/>
+            <field name="inherit" ref="coop_party.company_view_form"/>
             <field name="arch" type="xml">
              <![CDATA[
              <data>
@@ -22,16 +22,16 @@
                 </xpath>
                 <xpath expr="/form/notebook/page[@id=&quot;role&quot;]/group[@id=&quot;role_group&quot;]"
                 position="after">
-                    <group string="Customer" id="customer" colspan="4" yexpand="1" yfill="1"
+                    <group id="customer" colspan="4" yexpand="1" yfill="1"
                     states="{'invisible': Bool(~Eval('is_customer'))}">
                         <field name="customer_role" mode="form"/>
                     </group>
-                    <group string="Insurer" id="insurer" colspan="4" yexpand="1" yfill="1"
+                    <group id="insurer" colspan="4" yexpand="1" yfill="1"
                     states="{'invisible': Bool(~Eval('is_insurer'))}">
                         <field name="insurer_role" mode="form" 
                         view_ids="insurance_party.insurer_view_form_hosted"/>
                     </group>
-                    <group string="Broker" id="broker" colspan="4" yexpand="1" yfill="1"
+                    <group id="broker" colspan="4" yexpand="1" yfill="1"
                     states="{'invisible': Bool(~Eval('is_broker'))}">
                         <field name="broker_role" mode="form"/>
                     </group>
@@ -61,7 +61,7 @@
         <record model="ir.ui.view" id="person_view_form">
             <field name="model">party.person</field>
             <field name="type">form</field>
-            <field name="inherit" ref="coop_party.actor_view_form"/>
+            <field name="inherit" ref="coop_party.person_view_form"/>
             <field name="arch" type="xml">
              <![CDATA[
              <data>
@@ -72,7 +72,7 @@
                 </xpath>
                 <xpath expr="/form/notebook/page[@id=&quot;role&quot;]/group[@id=&quot;role_group&quot;]"
                 position="after">
-                    <group string="Customer" id="customer" colspan="4" yexpand="1" yfill="1"
+                    <group id="customer" colspan="4" yexpand="1" yfill="1"
                     states="{'invisible': Bool(~Eval('is_customer'))}">
                         <field name="customer_role" mode="form"/>
                     </group>

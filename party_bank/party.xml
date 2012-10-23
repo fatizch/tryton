@@ -32,7 +32,7 @@
                     </xpath>
                     <xpath expr="/form/notebook/page[@id=&quot;role&quot;]/group[@id=&quot;role_group&quot;]"
                     position="after">
-                    <group string="Bank" id="bank" colspan="4" yexpand="1" yfill="1"
+                    <group id="bank" colspan="4" yexpand="1" yfill="1"
                     states="{'invisible': Bool(~Eval('is_bank'))}">
                         <field name="bank_role" mode="form"/>
                     </group>
