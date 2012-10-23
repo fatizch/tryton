@@ -734,6 +734,8 @@ Vous donnez les moyens de garantir à vos enfants le financement de leurs\
 
 
 def create_prev_product(cfg_dict):
+    if get_object_from_db(cfg_dict, 'Product', 'code', 'PREV'):
+        return
     at_date = datetime.date(2011, 1, 1)
     disability = create_disability_coverage(cfg_dict)
     death = create_death_coverage(cfg_dict)
