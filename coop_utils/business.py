@@ -15,6 +15,14 @@ def get_default_currency():
         return currencies[0].id
 
 
+def get_default_country():
+    cur_code = get_coop_config('localization', 'country')
+    Country = Pool().get('country.country')
+    countries = Country.search([('code', '=', cur_code)], limit=1)
+    if len(countries) > 0:
+        return countries[0].id
+
+
 def update_args_with_subscriber(args):
     subscriber = None
     if 'contract' in args:
