@@ -42,7 +42,7 @@
                             <field name="addresses" mode="form,tree" colspan="4"
                                 view_ids="party.address_view_form,party.address_view_tree_sequence"/>
                             <field name="contact_mechanisms" colspan="2"
-                                view_ids="party.contact_mechanism_view_tree_sequence"/>
+                                view_ids="party.contact_mechanism_view_tree_sequence" pre_validate="1"/>
                             <field name="categories" colspan="2"
                                 view_ids="party.category_view_list"/>
                         </page>
@@ -118,6 +118,8 @@
                             <field name="employee_role" mode="form" view_ids="company.employee_view_form2"/>
                         </group>
                     </xpath>
+                    <xpath expr="/form/label[@name=&quot;code&quot;]" position="replace"/>
+                    <xpath expr="/form/field[@name=&quot;code&quot;]" position="replace"/>
                     </data>
                 ]]>
             </field>
