@@ -648,7 +648,7 @@ msgstr "Contrat Collectif"
 
 msgctxt "field:ins_collective.enrollment,options:"
 msgid "Options"
-msgstr "Options"
+msgstr "Garanties"
 
 msgctxt "field:ins_collective.enrollment,product:"
 msgid "Product"
@@ -1330,7 +1330,7 @@ msgstr "Nom"
 
 msgctxt "field:ins_collective.product,options:"
 msgid "Options"
-msgstr "Options"
+msgstr "Garanties"
 
 msgctxt "field:ins_collective.product,pricing_mgr:"
 msgid "Pricing Manager"
@@ -1609,39 +1609,40 @@ msgid "Eligibility Rule"
 msgstr "Règle d'Eligibilité"
 
 msgctxt "model:ins_collective.enrollment,name:"
-msgid ""
+msgid "An enrollment represents the contract of an employee of a company"
 msgstr ""
 
 msgctxt "model:ins_collective.enrollment_process.coverage_displayer,name:"
 msgid ""
+"This class tunes the CoverageDisplayer class to use collective coverage"
 msgstr ""
 
 msgctxt "model:ins_collective.enrollment_process.option_selection,name:"
-msgid ""
+msgid "This class customizes the OptionSelection state in the case of an"
 msgstr ""
 
 msgctxt "model:ins_collective.enrollment_process.process_state,name:"
-msgid ""
+msgid "The process state for the subscription process must have an abstract"
 msgstr ""
 
 msgctxt "model:ins_collective.enrollment_process.project,name:"
-msgid ""
+msgid "This step should be the first one, as it asks the user which product"
 msgstr ""
 
 msgctxt "model:ins_collective.gbp_contract,name:"
-msgid ""
+msgid "A GBP contract is slightly different from usual contract, as it does"
 msgstr ""
 
 msgctxt "model:ins_collective.gbp_subs_process.extension_gbp,name:"
-msgid ""
+msgid "This a process step which will be used for Life product subscriptions."
 msgstr ""
 
 msgctxt "model:ins_collective.gbp_subs_process.process_state,name:"
-msgid ""
+msgid "The process state for the subscription process must have an abstract"
 msgstr ""
 
 msgctxt "model:ins_collective.gbp_subs_process.project,name:"
-msgid ""
+msgid "This step should be the first one, as it asks the user which product"
 msgstr ""
 
 msgctxt "model:ins_collective.generic_business_rule,name:"
@@ -1649,7 +1650,7 @@ msgid "Group Generic Business Rule"
 msgstr "Règle Métier"
 
 msgctxt "model:ins_collective.option,name:"
-msgid ""
+msgid "Options on Enrollments are slightly different than standard options as"
 msgstr ""
 
 msgctxt "model:ins_collective.pricing_calculator,name:"
@@ -1751,6 +1752,10 @@ msgstr "Rente"
 msgctxt "selection:ins_collective.benefit,kind:"
 msgid "Capital"
 msgstr "Capital"
+
+msgctxt "selection:ins_collective.benefit,kind:"
+msgid "Per Diem"
+msgstr ""
 
 msgctxt "selection:ins_collective.benefit,template_behaviour:"
 msgid "Add"

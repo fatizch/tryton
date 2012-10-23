@@ -396,7 +396,7 @@ msgstr "Maître"
 
 msgctxt "field:ins_contract.contract,options:"
 msgid "Options"
-msgstr "Options"
+msgstr "Garanties"
 
 msgctxt "field:ins_contract.contract,product:"
 msgid "Product"
@@ -831,7 +831,7 @@ msgid "Bill Line"
 msgstr "Ligne de Cotisation"
 
 msgctxt "model:ins_contract.billing_manager,name:"
-msgid ""
+msgid "This object will manage all billing-related content on the contract."
 msgstr ""
 
 msgctxt "model:ins_contract.billing_process.bill_display,name:"
@@ -851,7 +851,7 @@ msgid "Billing Process State"
 msgstr ""
 
 msgctxt "model:ins_contract.broker_manager,name:"
-msgid ""
+msgid "This entity will be used to manage the relation between the contract"
 msgstr ""
 
 msgctxt "model:ins_contract.contract,name:"
@@ -859,7 +859,7 @@ msgid "Contract"
 msgstr "Contrat"
 
 msgctxt "model:ins_contract.coverage_displayer,name:"
-msgid ""
+msgid "Coverage Description"
 msgstr ""
 
 msgctxt "model:ins_contract.covered_data,name:"
@@ -871,11 +871,12 @@ msgid "Covered Element"
 msgstr "Elément Couvert"
 
 msgctxt "model:ins_contract.generic_extension,name:"
-msgid ""
+msgid "This class is the mother class of all product-specific extensions."
 msgstr ""
 
 msgctxt "model:ins_contract.option,name:"
 msgid ""
+"This class is an option, that is a global coverage which will be applied"
 msgstr ""
 
 msgctxt "model:ins_contract.price_line,name:"
@@ -891,15 +892,15 @@ msgid "Pricing Line"
 msgstr "Ligne de Cotisation"
 
 msgctxt "model:ins_contract.subs_process.option_selection,name:"
-msgid ""
+msgid "This step uses the provided product to compute a list of available"
 msgstr ""
 
 msgctxt "model:ins_contract.subs_process.process_state,name:"
-msgid ""
+msgid "The process state for the subscription process must have an abstract"
 msgstr ""
 
 msgctxt "model:ins_contract.subs_process.project,name:"
-msgid ""
+msgid "This step should be the first one, as it asks the user which product"
 msgstr ""
 
 msgctxt "model:ins_contract.subs_process.summary,name:"
@@ -1144,7 +1145,7 @@ msgstr "Prévoyance"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Options"
-msgstr "Options"
+msgstr "Garanties"
 
 msgctxt "view:ins_contract.contract:"
 msgid "contract"

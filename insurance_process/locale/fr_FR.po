@@ -275,23 +275,23 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "model:ins_process.process_desc,name:"
-msgid ""
+msgid "Master Class for all processes, has a list of steps and"
 msgstr ""
 
 msgctxt "model:ins_process.process_state,name:"
-msgid ""
+msgid "This class is a fake step. Its only purpose is to provide us with a"
 msgstr ""
 
 msgctxt "model:ins_process.step_desc,name:"
-msgid ""
+msgid "Master Class for process steps."
 msgstr ""
 
 msgctxt "model:ins_process.step_method_desc,name:"
-msgid ""
+msgid "This is a prototype of method (rule) which might be called anytime"
 msgstr ""
 
 msgctxt "model:ins_process.suspended_process,name:"
-msgid ""
+msgid "This class represents a suspended process, which can be resumed later."
 msgstr ""
 
 msgctxt "model:ir.action,name:act_process_form"

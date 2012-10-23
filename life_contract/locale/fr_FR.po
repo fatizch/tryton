@@ -251,7 +251,7 @@ msgid "Covered Person"
 msgstr "Personne Couverte"
 
 msgctxt "model:life_contract.extension,name:"
-msgid ""
+msgid "This is a particular case of contract extension designed for Life"
 msgstr ""
 
 msgctxt "model:life_contract.extension_life_state,name:"

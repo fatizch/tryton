@@ -984,7 +984,7 @@ msgstr "Nom"
 
 msgctxt "field:ins_product.product,options:"
 msgid "Options"
-msgstr "Options"
+msgstr "Garanties"
 
 msgctxt "field:ins_product.product,pricing_mgr:"
 msgid "Pricing Manager"
@@ -1953,7 +1953,7 @@ msgstr "Données Dynamiques"
 
 msgctxt "view:ins_product.product:"
 msgid "Options"
-msgstr "Options"
+msgstr "Garanties"
 
 msgctxt "view:ins_product.product:"
 msgid "Product"

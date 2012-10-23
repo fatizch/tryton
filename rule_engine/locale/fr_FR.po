@@ -270,6 +270,10 @@ msgctxt "field:rule_engine.tree_element,rule:"
 msgid "Rule"
 msgstr "Règle"
 
+msgctxt "field:rule_engine.tree_element,the_table:"
+msgid "For Table"
+msgstr ""
+
 msgctxt "field:rule_engine.tree_element,translated_technical_name:"
 msgid "Translated technical name"
 msgstr "Nom Technique Traduit"
@@ -363,7 +367,7 @@ msgid "Test Rule Result Form"
 msgstr ""
 
 msgctxt "model:rule_engine.tools_functions,name:"
-msgid ""
+msgid "Tools functions"
 msgstr ""
 
 msgctxt "model:rule_engine.tree_element,name:"
@@ -389,6 +393,11 @@ msgstr "Fonction"
 msgctxt "selection:rule_engine.tree_element,type:"
 msgid "Rule"
 msgstr "Règle"
+
+#, fuzzy
+msgctxt "selection:rule_engine.tree_element,type:"
+msgid "Table"
+msgstr "Table"
 
 msgctxt "view:rule_engine.context:"
 msgid "Context"

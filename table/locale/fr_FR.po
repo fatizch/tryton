@@ -110,6 +110,11 @@ msgctxt "field:table.table_cell,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+#, fuzzy
+msgctxt "field:table.table_def,code:"
+msgid "Code"
+msgstr "Code"
+
 msgctxt "field:table.table_def,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
