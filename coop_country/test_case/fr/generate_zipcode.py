@@ -84,7 +84,9 @@ def normalize_commune(art, ncc):
         resu = "%s %s" % (resu, ncc)
     else:
         resu = ncc
-    resu = resu.replace('-', ' ').replace('SAINT', 'ST').replace("'", " ")
+    resu = resu.replace('-', ' ').replace("'", " ")
+    if resu.startswith('SAINT '):
+        resu = 'ST ' + resu[6:]
     return resu
 
 
