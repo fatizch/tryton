@@ -1327,27 +1327,27 @@ msgid "Reserve Rule"
 msgstr "Provisionnement"
 
 msgctxt "model:ins_product.rule_sets.contract,name:"
-msgid ""
+msgid "Context functions for contract related data"
 msgstr ""
 
 msgctxt "model:ins_product.rule_sets.covered_data,name:"
-msgid ""
+msgid "Context functions for Coverage-Covered associations objects"
 msgstr ""
 
 msgctxt "model:ins_product.rule_sets.option,name:"
-msgid ""
+msgid "Context functions for option related data"
 msgstr ""
 
 msgctxt "model:ins_product.rule_sets.person,name:"
-msgid ""
+msgid "Context functions for Persons."
 msgstr ""
 
 msgctxt "model:ins_product.rule_sets.rule_combination,name:"
-msgid ""
+msgid "Context functions for combination of rule_engine results (see"
 msgstr ""
 
 msgctxt "model:ins_product.rule_sets.subscriber,name:"
-msgid ""
+msgid "Context functions for Contracts."
 msgstr ""
 
 msgctxt "model:ins_product.schema_element,name:"
@@ -1401,6 +1401,10 @@ msgstr "Rente"
 msgctxt "selection:ins_product.benefit,kind:"
 msgid "Capital"
 msgstr "Capital"
+
+msgctxt "selection:ins_product.benefit,kind:"
+msgid "Per Diem"
+msgstr "Indemnité Journalière"
 
 msgctxt "selection:ins_product.benefit,template_behaviour:"
 msgid "Add"
@@ -1493,6 +1497,11 @@ msgstr "Valider"
 msgctxt "selection:ins_product.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
+
+#, fuzzy
+msgctxt "selection:ins_product.coverage,family:"
+msgid "default"
+msgstr "Défaut"
 
 msgctxt "selection:ins_product.coverage,template_behaviour:"
 msgid "Add"

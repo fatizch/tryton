@@ -1421,6 +1421,7 @@ class Benefit(model.CoopSQL, Offered):
     kind = fields.Selection(
         [
             ('capital', 'Capital'),
+            ('per_diem', 'Per Diem'),
             ('annuity', 'Annuity')
         ],
         'Kind', required=True)

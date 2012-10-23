@@ -635,7 +635,7 @@ def create_disability_coverage(cfg_dict):
     pricing_rule.basic_tax = get_or_create_tax(cfg_dict, 'TSCA')
 
     benefit = get_or_create_benefit(cfg_dict, 'IJ',
-        'Indémnité Journalière', 'annuity')
+        'Indémnité Journalière', 'per_diem')
     benefit_rule = add_rule(cfg_dict, benefit, 'benefit')
     cov.benefits.append(benefit)
 
