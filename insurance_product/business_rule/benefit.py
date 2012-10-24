@@ -1,0 +1,46 @@
+#-*- coding:utf-8 -*-
+from trytond.model import fields
+from trytond.pyson import Eval
+
+from trytond.modules.coop_utils import model
+from trytond.modules.insurance_product.business_rule.business_rule import \
+    BusinessRuleRoot
+from trytond.modules.insurance_product.product import DEF_CUR_DIG
+
+
+__all__ = [
+    'BenefitRule',
+    ]
+
+
+class BenefitRule(model.CoopSQL, BusinessRuleRoot):
+    'Benefit Rule'
+
+    __name__ = 'ins_product.benefit_rule'
+
+    kind = fields.Selection(
+        [
+            ('amount', 'Amount'),
+            ('cov_amount', 'Coverage Amount')
+        ],
+        'Kind')
+
+    amount = fields.Numeric(
+        'Amount',
+        digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
+        states={'invisible': Eval('kind') != 'amount'},
+        )
+
+    coef_coverage_amount = fields.Numeric(
+        'Multiplier',
+        states={'invisible': Eval('kind') != 'cov_amount'},
+        help='Add a multiplier to apply to the coverage amount',
+        )
+
+    @staticmethod
+    def default_coef_coverage_amount():
+        return 1
+
+    @staticmethod
+    def default_kind():
+        return 'cov_amount'
