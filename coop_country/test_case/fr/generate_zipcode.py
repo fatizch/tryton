@@ -19,7 +19,7 @@ def get_cp(txtCommune, cdep=None):
     while i > -1:
         i = reponse.find('onclick=window.open')
         if i > -1:
-            logging.warn("malformed html found")
+            #logging.warn("malformed html found for %s" % txtCommune)
             j = reponse.find('false;', i)
             reponse = reponse[:i] + reponse[j + len('false;'):]
     p = MyParser(cdep)
@@ -87,6 +87,10 @@ def normalize_commune(art, ncc):
     resu = resu.replace('-', ' ').replace("'", " ")
     if resu.startswith('SAINT '):
         resu = 'ST ' + resu[6:]
+    if resu.startswith('SAINTE '):
+        resu = 'STE ' + resu[7:]
+    resu = resu.replace(' SAINT ', ' ST ')
+    resu = resu.replace(' SAINTE ', ' STE ')
     return resu
 
 
@@ -116,11 +120,14 @@ def write_cp(from_file, to_file):
 #                if len(cp) > 1:
 #                    logging.warn("Plusieurs    CP")
 #                    logging.warn(cp)
+#                if len(cp) == 0:
+#                    logging.info("Impossible to find CP for %s in %s"
+#                            % (txtCommune, dep))
                 for cur_list in cp:
                     if cur_list[1] != txtCommune:
                         logging.info("Searching: %s Found: %s CP: %s INSEE: %s"
                             % (txtCommune, cur_list[1], cur_list[0], cd_insee))
-                    insee_cp.write("%s\t%s\t%s" % (txtCommune, cur_list[0],
+                    insee_cp.write("%s\t%s\t%s" % (cur_list[1], cur_list[0],
                         cd_insee))
                     insee_cp.write("\n")
 
@@ -131,5 +138,5 @@ if __name__ == '__main__':
         to_file = sys.argv[2]
     else:
         from_file = 'comsimp2012.txt'
-        to_file = 'zipcode.csv'
+        to_file = 'zipcode_temp.csv'
     write_cp(from_file, to_file)
