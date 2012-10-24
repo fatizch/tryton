@@ -68,7 +68,7 @@ class Address():
     @classmethod
     def create(cls, vals):
         address = super(Address, cls).create(vals)
-        if not (vals['zip'] and vals['country'] and vals['city']):
+        if not all([elem in vals for elem in ['zip', 'country', 'city']]):
             return address
         ZipCode = Pool().get('country.zipcode')
         if len(ZipCode.search(
