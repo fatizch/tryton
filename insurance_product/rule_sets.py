@@ -3,7 +3,7 @@ from trytond.modules.rule_engine import InternalRuleEngineError
 from trytond.modules.rule_engine import check_args
 from trytond.modules.rule_engine import RuleTools
 
-from trytond.modules.coop_utils import utils as utils
+from trytond.modules.coop_utils import utils
 
 ###############################################################################
 # We write here sets of functions that will be available in the rule engine.  #

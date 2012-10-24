@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 import copy
 
-from trytond.modules.coop_utils import CoopSQL, utils as utils
+from trytond.modules.coop_utils import CoopSQL, utils
 from trytond.modules.insurance_product import Offered
 
 __all__ = ['Coverage']

@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 import copy
 
-from trytond.model import fields as fields
+from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.coop_utils import DynamicSelection, utils
 from trytond.modules.coop_utils import string, business

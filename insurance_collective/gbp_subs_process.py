@@ -1,4 +1,4 @@
-from trytond.model import fields as fields
+from trytond.model import fields
 
 # Needed for getting models
 from trytond.pool import Pool

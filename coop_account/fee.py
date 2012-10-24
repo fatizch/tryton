@@ -1,7 +1,6 @@
-from trytond.model import fields as fields
-from trytond.pool import Pool
+from trytond.model import fields
 
-from trytond.modules.coop_utils import model as model, utils as utils
+from trytond.modules.coop_utils import model, utils
 
 
 __all__ = [

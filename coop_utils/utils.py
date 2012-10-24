@@ -6,7 +6,7 @@ from dateutil.relativedelta import relativedelta
 from trytond.pool import Pool
 from trytond.model import Model
 from trytond.transaction import Transaction
-from trytond.model import fields as fields
+from trytond.model import fields
 # Needed for proper encoding / decoding of objects as strings
 from trytond.protocols.jsonrpc import JSONEncoder, object_hook
 

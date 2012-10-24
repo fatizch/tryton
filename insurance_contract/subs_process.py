@@ -1,4 +1,4 @@
-from trytond.model import fields as fields
+from trytond.model import fields
 
 # Needed for getting models
 from trytond.pool import Pool
@@ -12,7 +12,7 @@ from trytond.modules.insurance_process import CoopStep
 from trytond.modules.insurance_process import CoopStateView
 from trytond.modules.insurance_process import CoopStepView
 
-from trytond.modules.coop_utils import utils as utils
+from trytond.modules.coop_utils import utils
 from trytond.modules.coop_party import ACTOR_KIND
 
 from contract import OPTIONSTATUS

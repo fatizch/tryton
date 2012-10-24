@@ -1,14 +1,14 @@
 #-*- coding:utf-8 -*-
 import copy
 
-from trytond.model import fields as fields, ModelSQL, ModelView
+from trytond.model import fields, ModelSQL, ModelView
 from trytond.pyson import Eval
 
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coop_utils import CoopView, CoopSQL
-from trytond.modules.coop_utils import TableOfTable, utils as utils
-from trytond.modules.coop_utils import string as string
+from trytond.modules.coop_utils import TableOfTable, utils
+from trytond.modules.coop_utils import string
 
 
 __all__ = ['Party', 'Company', 'Employee', 'Actor', 'Person',

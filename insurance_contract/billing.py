@@ -1,9 +1,9 @@
 from trytond.model import fields
 from trytond.modules.insurance_contract import GenericContract
 
-from trytond.modules.coop_utils import utils as utils
-from trytond.modules.coop_utils import date as date
-from trytond.modules.coop_utils import model as model
+from trytond.modules.coop_utils import utils
+from trytond.modules.coop_utils import date
+from trytond.modules.coop_utils import model
 
 # Needed for getting models
 from trytond.pool import Pool

@@ -1,9 +1,9 @@
 #-*- coding:utf-8 -*-
-from trytond.model import fields as fields
+from trytond.model import fields
 
 from trytond.pool import PoolMeta
 
-from trytond.modules.coop_utils import CoopSQL, string as string
+from trytond.modules.coop_utils import CoopSQL, string
 from trytond.modules.coop_party import Actor
 
 __all__ = ['Party', 'Insurer', 'Broker', 'Customer', ]

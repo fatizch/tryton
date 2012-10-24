@@ -2,7 +2,7 @@ import copy
 import functools
 
 # Needed for displaying objects
-from trytond.model import fields as fields
+from trytond.model import fields
 
 from trytond.modules.coop_utils import utils, CoopView, CoopSQL
 from trytond.modules.coop_utils import WithAbstract

@@ -1,10 +1,10 @@
 import datetime
 
 # Needed for storing and displaying objects
-from trytond.model import fields as fields
+from trytond.model import fields
 
-from trytond.modules.coop_utils import model as model
-from trytond.modules.coop_utils import utils as utils
+from trytond.modules.coop_utils import model
+from trytond.modules.coop_utils import utils
 
 # Needed for getting models
 from trytond.pool import Pool

@@ -2,14 +2,14 @@ import copy
 import datetime
 from decimal import Decimal
 
-from trytond.model import fields as fields
+from trytond.model import fields
 
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model as model
-from trytond.modules.coop_utils import utils as utils
+from trytond.modules.coop_utils import model
+from trytond.modules.coop_utils import utils
 
 from trytond.modules.insurance_contract import GenericExtension
 from trytond.modules.insurance_contract import CoveredElement

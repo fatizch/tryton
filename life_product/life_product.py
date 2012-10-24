@@ -2,10 +2,10 @@
 import copy
 
 from trytond.pool import PoolMeta
-from trytond.model import fields as fields
+from trytond.model import fields
 
-from trytond.modules.coop_utils import utils as utils
-from trytond.modules.coop_utils import date as date
+from trytond.modules.coop_utils import utils
+from trytond.modules.coop_utils import date
 
 from trytond.modules.insurance_product import ProductDefinition
 from trytond.modules.insurance_product import EligibilityResultLine

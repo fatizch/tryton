@@ -1,4 +1,4 @@
-from trytond.model import fields as fields
+from trytond.model import fields
 
 from trytond.modules.insurance_process import ProcessState
 from trytond.modules.insurance_process import CoopStateView

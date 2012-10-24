@@ -1,4 +1,4 @@
-import utils as utils
+import utils
 
 from trytond.pool import Pool
 
