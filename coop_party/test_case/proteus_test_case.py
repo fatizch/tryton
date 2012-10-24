@@ -53,8 +53,12 @@ def create_address(cfg_dict, party, party_kind):
     res.zip = data['zip'].zfill(5)
     res.city = data['city']
     cfg_dict, res.country = get_country(cfg_dict, data['country'])
-    res.save()
-    return res
+    try:
+        res.save()
+        return res
+    except:
+        print 'Impossible to store address % s' % res
+        return None
 
 
 def create_persons(cfg_dict, relations_kind, addresses_kind):
@@ -77,7 +81,8 @@ def create_persons(cfg_dict, relations_kind, addresses_kind):
     for _i in range(nb_male):
         name = random.choice(dicts['last_name'])
         person1 = add_person(cfg_dict, name, dicts, adult_date_interv, 'M')
-        create_address(cfg_dict, person1.party, 'person')
+        while not create_address(cfg_dict, person1.party, 'person'):
+            print 'Erreur in address, retrying'
         if launch_dice(cfg_dict, 'percent_of_couple'):
             if not launch_dice(cfg_dict, 'percent_of_couple_with_same_name'):
                 name = random.choice(dicts['last_name'])
