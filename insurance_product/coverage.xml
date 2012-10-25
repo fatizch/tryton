@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!--  ******************************************* 
+              **************    Coverage    **************
+              *******************************************-->
+        <!-- form view -->
+        <record model="ir.ui.view" id="coverage_view_form">
+            <field name="model">ins_product.coverage</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered_view_form"/>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <data>
+                <xpath expr="/form" position="replace_attributes">
+                    <form string="Coverage"/>
+                </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]" position="after">
+                    <page string="Benefits" id="benefits">
+                        <field name="benefits"/>
+                    </page>
+                </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]/notebook/page[@id=&quot;eligibility&quot;]" position="before">
+                    <page string="Coverage Amount" id="coverage_amount">
+                        <field name="coverage_amount_mgr" mode="form"/>
+                    </page>
+                </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]/notebook/page[@id=&quot;dynamic_data&quot;]/field[@name=&quot;dynamic_data_manager&quot;]" position="after">
+                    <newline/>
+                    <field name="covered_dynamic_data_manager" mode="form"/>
+                </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;admin&quot;]"
+                position="inside">
+                    <label name="currency"/>
+                    <field name="currency"/>
+                    <label name="insurer" xalign="0"/>
+                    <field name="insurer" widget="selection"/>
+                </xpath>
+                <xpath expr="/form/group[@id=&quot;templating&quot;]"
+                    position="before">
+                    <label name="family" xalign="0"/>
+                    <field name="family" xexpand="0"/>
+                </xpath>
+                </data>
+                ]]>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="coverage_view_tree">
+            <field name="model">ins_product.coverage</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="offered_view_tree"/>
+            <field name="arch" type="xml">
+             <![CDATA[
+                <data>
+                <xpath expr="/tree/field[@name=&quot;code&quot;]"
+                    position="after">
+                    <field name="family"/>
+                </xpath>
+                </data>
+            ]]>
+            </field>
+        </record>
+
+        <!-- View for the main menu and the event -->
+        <record model="ir.action.act_window" id="act_coverage_form">
+            <field name="name">Coverages</field>
+            <field name="res_model">ins_product.coverage</field>
+        </record>
+
+        <!-- View that connect the form in the tree with the specification -->
+        <record model="ir.action.act_window.view" id="act_coverage_tree_view">
+            <field name="sequence" eval="10" />
+            <field name="view" ref="coverage_view_tree" />
+            <field name="act_window" ref="act_coverage_form" />
+        </record>
+
+        <!-- View for the edition or the Form of coverage -->
+        <record model="ir.action.act_window.view" id="act_coverage_form_view2">
+            <field name="sequence" eval="20" />
+            <field name="view" ref="coverage_view_form" />
+            <field name="act_window" ref="act_coverage_form" />
+        </record>
+
+        <menuitem parent="menu_product" sequence="2" id="menu_coverage_form"
+            icon="tryton-list" action="act_coverage_form" />
+        <!--/Coverage -->
+    </data>
+</tryton>

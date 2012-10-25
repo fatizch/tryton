@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!--  ******************************************* 
+              ********    Clause     ***************
+              *******************************************-->
+        <record model="ir.ui.view" id="clause_view_tree">
+            <field name="model">ins_product.clause</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="coop_utils.versionned_object_view_tree"/>
+            <field name="arch" type="xml"/>
+            <!--  
+            <![CDATA[
+            <data>
+                <xpath expr="/form" position="replace_attributes">
+                    <form string="Clause rule"/>
+                </xpath>
+            </data>
+            ]]>
+            </field>
+            -->
+        </record>
+        <record model="ir.ui.view" id="clause_view_form">
+            <field name="model">ins_product.clause</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="coop_utils.versionned_object_view_form"/>
+            <field name="arch" type="xml">
+            <![CDATA[
+            <data>
+                <xpath expr="/form" position="replace_attributes">
+                    <form string="Clause"/>
+                </xpath>
+                <xpath expr="/form/group[@id=&quot;basic data&quot;]" position="inside">
+                    <label name="code" xalign="0"/>
+                    <field name="code"/>
+                    <label name="name" xalign="0"/>
+                    <field name="name" colspan="9"/>
+                    <newline/>
+                    <label name="title" xalign="0"/>
+                    <field name="title" colspan="11"/>
+                </xpath>
+                <xpath expr="/form/group[@id=&quot;versions&quot;]/field[@name=&quot;versions&quot;]"
+                    position="replace_attributes">
+                    <field name="versions" mode="form, tree"/>
+                </xpath>
+            </data>
+            ]]>
+            </field>
+        </record>
+        <record model="ir.action.act_window" id="act_model_clause">
+            <field name="name">Clauses</field>
+            <field name="res_model">ins_product.clause</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_model_clause_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="clause_view_tree"/>
+            <field name="act_window" ref="act_model_clause"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_model_clause_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="clause_view_form"/>
+            <field name="act_window" ref="act_model_clause"/>
+        </record>
+        <menuitem parent="menu_product" action="act_model_clause" id="menu_model_clause"/>
+        <!--  ******************************************* 
+              ********    Clause Version    ***************
+              *******************************************-->
+        <record model="ir.ui.view" id="clause_version_view_tree">
+            <field name="model">ins_product.clause_version</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="coop_utils.version_object_view_tree"/>
+            <field name="arch" type="xml">
+            <![CDATA[
+            <data>
+                <xpath expr="/tree" position="replace_attributes">
+                    <tree string="Clause rule"/>
+                </xpath>
+                <xpath expr="/tree" position="inside">
+                    <field name="content"/>
+                </xpath>
+            </data>
+            ]]>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="clause_version_view_form">
+            <field name="model">ins_product.clause_version</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="coop_utils.version_object_view_form"/>
+            <field name="arch" type="xml">
+            <![CDATA[
+            <data>
+                <xpath expr="/form" position="replace_attributes">
+                    <form string="Clause Version"/>
+                </xpath>
+                <xpath expr="/form" position="inside">
+                    <label name="content" xalign="0"/>
+                    <newline/>
+                    <field name="content" widget="richtext" 
+                        xexpand="1" yexpand="1" colspan="4"/>
+                </xpath>
+            </data>
+            ]]>
+            </field>
+        </record>
+    </data>
+</tryton>

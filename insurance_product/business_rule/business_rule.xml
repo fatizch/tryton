@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!--  ******************************************* 
+              ********    BusinessRuleManager    ********
+              *******************************************-->
+        <record model="ir.ui.view" id="businessrulemanager_view_form">
+            <field name="model">ins_product.business_rule_manager</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            <![CDATA[
+                <form string="Business Rule Manager">
+                    <group id="templating">
+                        <label name="template"/>
+                        <field name="template"/>
+                        <field name="template_behaviour"/>
+                    </group>
+                    <newline/>
+                    <field name="business_rules" colspan="4" />
+                </form>
+            ]]>
+            </field>
+        </record>
+
+        <!--  ******************************************* 
+              ********    BusinessRuleRoot    ********
+              *******************************************-->
+        <record model="ir.ui.view" id="businessruleroot_view_form">
+            <field name="model">ins_product.business_rule_root</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            <![CDATA[
+                <form string="Business Rule Root">
+                    <group id="templating">
+                        <label name="template"/>
+                        <field name="template"/>
+                        <field name="template_behaviour"/>
+                    </group>
+                    <notebook>
+                        <page id="main" string="Main">
+                            <group id="config_kind" colspan="2">
+                            <label name="config_kind" xalign="0" xfill="1"/>
+                            <field name="config_kind" xfill="1" xexpand="0" xalign="0"/>
+                            </group>
+                            <group id="rule" colspan="4" 
+                              states="{'invisible': Eval('config_kind') != 'rule'}">
+                                <label name="rule" xalign="0"/>
+                                <field name="rule"/>
+                            </group>
+                            <group id="simple" colspan="4"
+                            states="{'invisible': Eval('config_kind') != 'simple'}">
+                            </group>
+                        </page>
+                    </notebook>
+                </form>
+            ]]>
+            </field>
+        </record>
+
+        <!--  ******************************************* 
+              ********    GenericBusinessRule    ********
+              *******************************************-->
+        <!-- GenericBusinessRule -->
+        <!-- form view -->
+        <record model="ir.ui.view" id="genericbusinessrule_view_form">
+            <field name="model">ins_product.generic_business_rule</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            <![CDATA[
+                <form string="Business Rule" col="4">
+                    <label name="kind"/>
+                    <field name="kind"/>
+                    <newline/>
+                    <label name="start_date"/>
+                    <field name="start_date"/>
+                    <label name="end_date"/>
+                    <field name="end_date"/>
+                    <newline/>
+                    <group id ="Rules" colspan="4" yexpand="1" yfill="1" >
+                        <field name="pricing_rule" mode="form"/>
+                        <field name="eligibility_rule" mode="form"/>
+                        <field name="benefit_rule" mode="form"/>
+                        <field name="reserve_rule" mode="form"/>
+                        <field name="coverage_amount_rule" mode="form" pre_validate="1"/>
+                        <field name="clause_rule" mode="form"/>
+                    </group>
+                </form>
+            ]]>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="genericbusinessrule_view_tree">
+            <field name="model">ins_product.generic_business_rule</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+            <![CDATA[
+                <tree string="Generic Business Rule"
+                colors="If(Bool(Eval('is_current')), 'blue', 'black')">
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </tree>
+            ]]>
+            </field>
+        </record>
+    </data>
+</tryton>

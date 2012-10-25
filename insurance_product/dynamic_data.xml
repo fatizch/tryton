@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+    <!--################################################################-->
+    <!--                       Dynamic Data Manager                     -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="dynamic_data_view_form">
+            <field name="model">ins_product.dynamic_data_manager</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <form string="Dynamic Data Manager">
+                        <field name="specific_dynamic"/>
+                        <field name="shared_dynamic"/>
+                    </form>
+                ]]>
+            </field>
+        </record>
+    <!--################################################################-->
+    <!--                       Coop Schema Elements                     -->
+    <!--################################################################-->
+
+        <record model="ir.ui.view" id="schema_element_view_tree">
+            <field name="model">ins_product.schema_element</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <tree string="Dynamic Data Descriptors">
+                        <field name="is_shared"/>
+                        <field name="name"/>
+                        <field name="type_"/>
+                        <field name="technical_name"/>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                    </tree>
+                ]]>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="schema_element_view_form">
+            <field name="model">ins_product.schema_element</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <form string="Dynamic Data Desciptor">
+                        <group id="names">
+                            <label name="name" xalign="0"/>
+                            <field name="name"/>
+                            <label name="technical_name" xalign="0"/>
+                            <field name="technical_name"/>
+                        </group>
+                        <newline/>
+                        <group id="dates">
+                            <label name="start_date" xalign="0"/>
+                            <field name="start_date"/>
+                            <label name="end_date" xalign="0"/>
+                            <field name="end_date"/>
+                        </group>
+                        <newline/>
+                        <group id="types">
+                            <label name="type_" xalign="0"/>
+                            <field name="type_"/>
+                            <field name="choices" colspan="4"/>
+                        </group>
+                        <newline/>
+                        <group id="defaults">
+                            <label name="with_default_value" xalign="0"/>
+                            <field name="with_default_value"/>
+                            <field name="default_value_boolean"/>
+                            <field name="default_value_char"/>
+                            <field name="default_value_selection"/>
+                        </group>
+                    </form>
+                ]]>
+            </field>
+        </record>
+
+        <record model="ir.action.act_window" id="act_model_coop_schema">
+            <field name="name">Dynamic Data Schema Elements</field>
+            <field name="res_model">ins_product.schema_element</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_model_coop_schema_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="schema_element_view_tree"/>
+            <field name="act_window" ref="act_model_coop_schema"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_model_coop_schema_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="schema_element_view_form"/>
+            <field name="act_window" ref="act_model_coop_schema"/>
+        </record>
+        <menuitem parent="menu_product" action="act_model_coop_schema" id="menu_model_coop_schema"/>
+    </data>
+</tryton>

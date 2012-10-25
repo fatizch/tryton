@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!--  ******************************************* 
+              ********    Reserve Rule    ***************
+              *******************************************-->
+        <record model="ir.ui.view" id="reserverule_view_form">
+            <field name="model">ins_product.reserve_rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="businessruleroot_view_form"/>
+            <field name="arch" type="xml">
+            <![CDATA[
+            <data>
+                <xpath expr="/form" position="replace_attributes">
+                    <form string="Reserve rule"/>
+                </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;main&quot;]/group[@id=&quot;simple&quot;]"
+                 position="inside">
+                    <label name="amount"/>
+                    <field name="amount"/>
+                </xpath>
+            </data>
+            ]]>
+            </field>
+        </record>
+    </data>
+</tryton>

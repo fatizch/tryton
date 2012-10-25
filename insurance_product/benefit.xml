@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!--  ******************************************* 
+              *************    Benefit          *********
+              *******************************************-->
+        <!-- form view -->
+        <record model="ir.ui.view" id="benefit_view_form">
+            <field name="model">ins_product.benefit</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered_view_form"/>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <data>
+                <xpath expr="/form" position="replace_attributes">
+                    <form string="Benefit"/>
+                </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]/notebook/page[@id=&quot;eligibility&quot;]" position="before">
+                    <page string="Benefit" id="benefit">
+                        <field name="benefit_mgr" colspan="4" mode="form"/>
+                    </page>
+                    <page string="Reserve" id="reserve">
+                        <field name="reserve_mgr" colspan="4" mode="form"/>
+                    </page>
+                </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;admin&quot;]" position="inside">
+                    <label name="kind" xalign="0"/>
+                    <field name="kind" xexpand="0"/>
+                </xpath>
+                </data>
+                ]]>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="benefit_view_tree">
+            <field name="model">ins_product.benefit</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="offered_view_tree"/>
+            <field name="arch" type="xml">
+            <![CDATA[
+                <data>
+                    <xpath expr="/tree/field[@name=&quot;code&quot;]" position="before">
+                        <field name="kind"/>
+                    </xpath>
+                </data>
+            ]]>
+            </field>
+        </record>
+    </data>
+</tryton>
