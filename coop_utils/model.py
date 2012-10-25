@@ -213,14 +213,20 @@ class One2ManyDomain(fields.One2Many):
 
 
 class VersionedObject(CoopView):
+    'Versionned Object'
+
+    __name__ = 'utils.versionned_object'
+
     versions = fields.One2Many(
         None,
         'main_elem',
-        'Versionned Rates')
+        'Versions')
+    current_rec_name = fields.Function(fields.Char('Current Value'),
+        'get_current_rec_name')
 
     @classmethod
     def version_model(cls):
-        raise NotImplementedError
+        return 'utils.version_object'
 
     @classmethod
     def __setup__(cls):
@@ -252,8 +258,18 @@ class VersionedObject(CoopView):
     def get_version_at_date(self, date):
         return utils.get_good_version_at_date(self, 'versions', date)
 
+    def get_current_rec_name(self, name):
+        vers = self.get_version_at_date(utils.today())
+        if vers:
+            return vers.rec_name
+        return ''
+
 
 class VersionObject(CoopView):
+    'Version Object'
+
+    __name__ = 'utils.version_object'
+
     main_elem = fields.Many2One(
         None,
         'Descriptor',
@@ -263,7 +279,7 @@ class VersionObject(CoopView):
 
     @classmethod
     def main_model(cls):
-        raise NotImplementedError
+        return 'utils.versionned_object'
 
     @classmethod
     def __setup__(cls):
@@ -271,3 +287,7 @@ class VersionObject(CoopView):
         main_elem = copy.copy(getattr(cls, 'main_elem'))
         main_elem.model_name = cls.main_model()
         setattr(cls, 'main_elem', main_elem)
+
+    @staticmethod
+    def default_start_date():
+        return Transaction().context.get('start_date', utils.today())

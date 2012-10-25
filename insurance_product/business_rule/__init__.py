@@ -4,3 +4,4 @@ from .reserve import *
 from .benefit import *
 from .eligibility import *
 from .pricing import *
+from .clause import *

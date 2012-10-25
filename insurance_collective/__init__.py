@@ -22,6 +22,7 @@ def register():
         GroupEligibilityRelationKind,
         GroupReserveRule,
         GroupCoverageAmountRule,
+        GroupClauseRule,
         GBPContract,
         ProjectGBPState,
         ExtensionGBPState,

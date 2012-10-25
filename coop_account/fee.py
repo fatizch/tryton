@@ -17,8 +17,6 @@ class FeeDesc(model.CoopSQL, model.VersionedObject):
     name = fields.Char('Fee Name', required=True)
     code = fields.Char('Code', required=True)
     description = fields.Text('Description')
-    current_value = fields.Function(fields.Char('Current Value'),
-        'get_current_value')
 
     @classmethod
     def __setup__(cls):
@@ -31,19 +29,13 @@ class FeeDesc(model.CoopSQL, model.VersionedObject):
     def version_model(cls):
         return 'coop_account.fee_version'
 
-    def get_current_value(self, name):
-        vers = self.get_version_at_date(utils.today())
-        if vers:
-            return vers.rec_name
-        return ''
-
     def get_rec_name(self, name):
         res = ''
         if self.code:
             res = self.code
         elif self.name:
             res = self.name
-        res += ' (%s)' % self.get_current_value(name)
+        res += ' (%s)' % self.get_current_rec_name(name)
         return res
 
 

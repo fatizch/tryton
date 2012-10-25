@@ -6,6 +6,7 @@ from .dynamic_data import *
 from .business_rule import *
 from .coverage import *
 from .benefit import *
+from .clause import *
 
 
 def register():
@@ -38,4 +39,7 @@ def register():
         OptionContext,
         CoveredDataContext,
         RuleCombinationContext,
+        ClauseRule,
+        Clause,
+        ClauseVersion,
         module='insurance_product', type_='model')

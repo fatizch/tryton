@@ -13,6 +13,8 @@ def register():
         # from model
         TableOfTable,
         DynamicSelection,
+        VersionedObject,
+        VersionObject,
         # from session
         DateClass,
         module='coop_utils', type_='model')

@@ -52,7 +52,7 @@
                 <tree string="Tax Descriptor">
                         <field name="code"/>
                         <field name="name"/>
-                        <field name="current_value"/>
+                        <field name="current_rec_name"/>
                 </tree>
                 ]]>
             </field>

@@ -10,6 +10,7 @@ __all__ = ['GroupInsurancePlan', 'GroupInsuranceCoverage',
            'GroupEligibilityRule', 'GroupEligibilityRelationKind',
            'GroupBenefit', 'GroupBenefitRule',
            'GroupReserveRule', 'GroupCoverageAmountRule',
+           'GroupClauseRule',
            'GroupSchemaElement', 'GroupSchemaElementRelation',
            'GroupDynamicDataManager']
 
@@ -170,6 +171,18 @@ class GroupCoverageAmountRule(CoverageAmountRule):
     @classmethod
     def __setup__(cls):
         super(GroupCoverageAmountRule, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+
+class GroupClauseRule(ClauseRule):
+    'Clause Rule'
+
+    __name__ = 'ins_collective.clause_rule'
+    _table = None
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupClauseRule, cls).__setup__()
         utils.change_relation_links(cls, 'ins_product', 'ins_collective')
 
 

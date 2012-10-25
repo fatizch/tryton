@@ -18,8 +18,6 @@ class TaxDesc(model.CoopSQL, model.VersionedObject):
     name = fields.Char('Tax Name')
     code = fields.Char('Code', required=True)
     description = fields.Text('Description')
-    current_value = fields.Function(fields.Char('Current Value'),
-        'get_current_value')
 
     @classmethod
     def __setup__(cls):
@@ -32,19 +30,13 @@ class TaxDesc(model.CoopSQL, model.VersionedObject):
     def version_model(cls):
         return 'coop_account.tax_version'
 
-    def get_current_value(self, name):
-        vers = self.get_version_at_date(utils.today())
-        if vers:
-            return vers.rec_name
-        return ''
-
     def get_rec_name(self, name):
         res = ''
         if self.code:
             res = self.code
         elif self.name:
             res = self.name
-        val = self.get_current_value(name)
+        val = self.get_current_rec_name(name)
         if val != '':
             res += ' (%s)' % val
         return res
@@ -72,10 +64,6 @@ class TaxVersion(model.CoopSQL, model.VersionObject):
     @staticmethod
     def default_value():
         return 0
-
-    @staticmethod
-    def default_start_date():
-        return utils.today()
 
     def get_code(self):
         return self.my_tax_desc.code

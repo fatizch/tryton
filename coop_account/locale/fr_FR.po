@@ -38,7 +38,7 @@ msgctxt "field:coop_account.fee_desc,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:coop_account.fee_desc,current_value:"
+msgctxt "field:coop_account.fee_desc,current_rec_name:"
 msgid "Current Value"
 msgstr "Valeur Courante"
 
@@ -134,7 +134,7 @@ msgctxt "field:coop_account.tax_desc,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:coop_account.tax_desc,current_value:"
+msgctxt "field:coop_account.tax_desc,current_rec_name:"
 msgid "Current Value"
 msgstr "Valeur Courante"
 

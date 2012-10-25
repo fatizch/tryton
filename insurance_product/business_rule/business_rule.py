@@ -133,6 +133,8 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
         'generic_rule', 'Reserve Rule', size=1)
     coverage_amount_rule = fields.One2Many('ins_product.coverage_amount_rule',
         'generic_rule', 'Coverage Amount Rule', size=1)
+    clause_rule = fields.One2Many('ins_product.clause_rule',
+        'generic_rule', 'Clause Rule', size=1)
 
     def get_rec_name(self, name):
         return self.kind

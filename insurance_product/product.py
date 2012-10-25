@@ -71,6 +71,8 @@ class Offered(model.CoopView, utils.GetResult, Templated):
         'offered', 'Pricing Manager')
     eligibility_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
         'offered', 'Eligibility Manager')
+    clause_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
+        'offered', 'Clause Manager')
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
     currency_digits = fields.Function(fields.Integer('Currency Digits'),
         'get_currency_digits')
