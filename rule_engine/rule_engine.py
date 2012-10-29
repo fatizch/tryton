@@ -1,9 +1,11 @@
 import sys
 import ast
 import _ast
+import tokenize
 import functools
 import json
 import datetime
+from StringIO import StringIO
 
 from decimal import Decimal
 
@@ -47,6 +49,37 @@ def check_code(code):
     else:
         warnings = Checker(tree, 'test')
         return warnings.messages
+
+
+# code snippet taken from http://docs.python.org/library/tokenize.html
+def decistmt(s):
+    """Substitute Decimals for floats in a string of statements.
+
+    >>> from decimal import Decimal
+    >>> s = 'print +21.3e-5*-.1234/81.7'
+    >>> decistmt(s)
+    "print +Decimal ('21.3e-5')*-Decimal ('.1234')/Decimal ('81.7')"
+
+    >>> exec(s)
+    -3.21716034272e-007
+    >>> exec(decistmt(s))
+    -3.217160342717258261933904529E-7
+    """
+    result = []
+    # tokenize the string
+    g = tokenize.generate_tokens(StringIO(s).readline)
+    for toknum, tokval, _, _, _  in g:
+        # replace NUMBER tokens
+        if toknum == tokenize.NUMBER and '.' in tokval:
+            result.extend([
+                (tokenize.NAME, 'Decimal'),
+                (tokenize.OP, '('),
+                (tokenize.STRING, repr(tokval)),
+                (tokenize.OP, ')')
+            ])
+        else:
+            result.append((toknum, tokval))
+    return tokenize.untokenize(result)
 
 
 class InternalRuleEngineError(Exception):
@@ -214,7 +247,7 @@ class Rule(ModelView, ModelSQL):
         code = '\n'.join(' ' + l for l in self.code.splitlines())
         name = ('%s' % hash(self.name)).replace('-', '_')
         code_template = CODE_TEMPLATE % (name, name, name)
-        return code_template % code
+        return decistmt(code_template % code)
 
     def get_data_tree(self, name):
         return json.dumps([e.as_tree() for e in self.context.allowed_elements])
