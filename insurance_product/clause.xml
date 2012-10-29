@@ -50,6 +50,7 @@
         <record model="ir.action.act_window" id="act_model_clause">
             <field name="name">Clauses</field>
             <field name="res_model">ins_product.clause</field>
+            <field name="domain">[("rule", "=", False)]</field>
         </record>
         <record model="ir.action.act_window.view" id="act_model_clause_tree">
             <field name="sequence" eval="10"/>
@@ -74,9 +75,6 @@
             <data>
                 <xpath expr="/tree" position="replace_attributes">
                     <tree string="Clause rule"/>
-                </xpath>
-                <xpath expr="/tree" position="inside">
-                    <field name="content"/>
                 </xpath>
             </data>
             ]]>

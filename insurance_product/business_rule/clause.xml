@@ -19,6 +19,7 @@
                  </xpath>
                  <xpath expr="/form" position="inside">
                     <field name="specific_clauses" xexpand="1" yexpand="1"/>
+                    <field name="shared_clauses" xexpand="1" yexpand="1"/>
                  </xpath>
             </data>
             ]]>

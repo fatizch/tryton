@@ -39,6 +39,7 @@ def register():
         OptionContext,
         CoveredDataContext,
         RuleCombinationContext,
+        ClauseRelation,
         ClauseRule,
         Clause,
         ClauseVersion,
