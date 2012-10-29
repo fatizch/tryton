@@ -117,3 +117,11 @@ msgstr "Table des Tables"
 msgctxt "view:coop.dyn_selection:"
 msgid "Dynamic Selection"
 msgstr "Sélection Dynamique"
+
+msgctxt "view:utils.version_object:"
+msgid "Version Object"
+msgstr ""
+
+msgctxt "view:utils.versionned_object:"
+msgid "Versionned Object"
+msgstr ""

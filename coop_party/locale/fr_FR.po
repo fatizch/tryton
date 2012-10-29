@@ -34,47 +34,38 @@ msgctxt "error:party.person:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-#, fuzzy
 msgctxt "field:country.zipcode,city:"
 msgid "City"
 msgstr "Ville"
 
-#, fuzzy
 msgctxt "field:country.zipcode,country:"
 msgid "Country"
 msgstr "Pays"
 
-#, fuzzy
 msgctxt "field:country.zipcode,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-#, fuzzy
 msgctxt "field:country.zipcode,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-#, fuzzy
 msgctxt "field:country.zipcode,id:"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgctxt "field:country.zipcode,rec_name:"
 msgid "Name"
 msgstr "Valeur"
 
-#, fuzzy
 msgctxt "field:country.zipcode,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-#, fuzzy
 msgctxt "field:country.zipcode,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-#, fuzzy
 msgctxt "field:country.zipcode,zip:"
 msgid "Zip"
 msgstr "Code Postal"
@@ -439,47 +430,38 @@ msgctxt "field:party.person,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-#, fuzzy
 msgctxt "field:party.zipcode,city:"
 msgid "City"
 msgstr "Ville"
 
-#, fuzzy
 msgctxt "field:party.zipcode,country:"
 msgid "Country"
 msgstr "Pays"
 
-#, fuzzy
 msgctxt "field:party.zipcode,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-#, fuzzy
 msgctxt "field:party.zipcode,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-#, fuzzy
 msgctxt "field:party.zipcode,id:"
 msgid "ID"
 msgstr "ID"
 
-#, fuzzy
 msgctxt "field:party.zipcode,rec_name:"
 msgid "Name"
 msgstr "Valeur"
 
-#, fuzzy
 msgctxt "field:party.zipcode,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-#, fuzzy
 msgctxt "field:party.zipcode,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-#, fuzzy
 msgctxt "field:party.zipcode,zip:"
 msgid "Zip"
 msgstr "Code Postal"

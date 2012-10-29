@@ -394,7 +394,6 @@ msgctxt "selection:rule_engine.tree_element,type:"
 msgid "Rule"
 msgstr "Règle"
 
-#, fuzzy
 msgctxt "selection:rule_engine.tree_element,type:"
 msgid "Table"
 msgstr "Table"

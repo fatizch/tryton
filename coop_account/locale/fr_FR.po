@@ -42,6 +42,10 @@ msgctxt "field:coop_account.fee_desc,current_rec_name:"
 msgid "Current Value"
 msgstr "Valeur Courante"
 
+msgctxt "field:coop_account.fee_desc,current_value:"
+msgid "Current Value"
+msgstr "Valeur Courante"
+
 msgctxt "field:coop_account.fee_desc,description:"
 msgid "Description"
 msgstr "Description"
@@ -135,6 +139,10 @@ msgid "Create User"
 msgstr "Créé par"
 
 msgctxt "field:coop_account.tax_desc,current_rec_name:"
+msgid "Current Value"
+msgstr "Valeur Courante"
+
+msgctxt "field:coop_account.tax_desc,current_value:"
 msgid "Current Value"
 msgstr "Valeur Courante"
 

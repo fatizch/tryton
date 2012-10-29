@@ -14,6 +14,10 @@ msgctxt "error:ins_collective.business_rule_manager:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_collective.clause_rule:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:ins_collective.coverage:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
@@ -101,6 +105,10 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "field:ins_collective.benefit,benefit_mgr:"
 msgid "Benefit Manager"
 msgstr "Gestionnaire de Prestations"
+
+msgctxt "field:ins_collective.benefit,clause_mgr:"
+msgid "Clause Manager"
+msgstr "Gestionnaire de Clauses"
 
 msgctxt "field:ins_collective.benefit,code:"
 msgid "Code"
@@ -294,9 +302,69 @@ msgctxt "field:ins_collective.business_rule_manager,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_collective.clause_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:ins_collective.clause_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.clause_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.clause_rule,generic_rule:"
+msgid "Generic Rule"
+msgstr "Règle Générique"
+
+msgctxt "field:ins_collective.clause_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.clause_rule,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_collective.clause_rule,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_collective.clause_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:ins_collective.clause_rule,shared_clauses:"
+msgid "Shared Clauses"
+msgstr "Clauses Partagées"
+
+msgctxt "field:ins_collective.clause_rule,specific_clauses:"
+msgid "Specific Clauses"
+msgstr "Clauses Spécifiques"
+
+msgctxt "field:ins_collective.clause_rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_collective.clause_rule,template_behaviour:"
+msgid "Template Behaviour"
+msgstr "Comportement du Modèle"
+
+msgctxt "field:ins_collective.clause_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.clause_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_collective.coverage,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
+
+msgctxt "field:ins_collective.coverage,clause_mgr:"
+msgid "Clause Manager"
+msgstr "Gestionnaire de Clauses"
 
 msgctxt "field:ins_collective.coverage,code:"
 msgid "Code"
@@ -976,6 +1044,10 @@ msgctxt "field:ins_collective.generic_business_rule,benefit_rule:"
 msgid "Benefit Rule"
 msgstr "Règle de Prestation"
 
+msgctxt "field:ins_collective.generic_business_rule,clause_rule:"
+msgid "Clause Rule"
+msgstr "Clause"
+
 msgctxt "field:ins_collective.generic_business_rule,coverage_amount_rule:"
 msgid "Coverage Amount Rule"
 msgstr "Règle de Montant de Couverture"
@@ -1275,6 +1347,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:ins_collective.pricing_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.product,clause_mgr:"
+msgid "Clause Manager"
+msgstr "Gestionnaire de Clauses"
 
 msgctxt "field:ins_collective.product,code:"
 msgid "Code"
@@ -1588,6 +1664,10 @@ msgctxt "model:ins_collective.business_rule_manager,name:"
 msgid "Group Business Rule Manager"
 msgstr "Gestionnaire de Règle Métier"
 
+msgctxt "model:ins_collective.clause_rule,name:"
+msgid "Clause Rule"
+msgstr "Clause"
+
 msgctxt "model:ins_collective.coverage,name:"
 msgid "Group Insurance Coverage"
 msgstr "Garantie Collective"
@@ -1755,7 +1835,7 @@ msgstr "Capital"
 
 msgctxt "selection:ins_collective.benefit,kind:"
 msgid "Per Diem"
-msgstr ""
+msgstr "Indemnité Journalière"
 
 msgctxt "selection:ins_collective.benefit,template_behaviour:"
 msgid "Add"
@@ -1818,6 +1898,30 @@ msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_collective.business_rule_manager,template_behaviour:"
+msgid "Validate"
+msgstr "Valider"
+
+msgctxt "selection:ins_collective.clause_rule,config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_collective.clause_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_collective.clause_rule,template_behaviour:"
+msgid "Add"
+msgstr "Ajouter"
+
+msgctxt "selection:ins_collective.clause_rule,template_behaviour:"
+msgid "Override"
+msgstr "Remplacer"
+
+msgctxt "selection:ins_collective.clause_rule,template_behaviour:"
+msgid "Remove"
+msgstr "Supprimer"
+
+msgctxt "selection:ins_collective.clause_rule,template_behaviour:"
 msgid "Validate"
 msgstr "Valider"
 

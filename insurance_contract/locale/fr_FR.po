@@ -678,6 +678,50 @@ msgctxt "field:ins_contract.subs_process.covered_data_desc,status:"
 msgid "Status"
 msgstr "Statut"
 
+msgctxt "field:ins_contract.subs_process.covered_desc,data_coverage_name:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,data_covered_element:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,data_dynamic_data:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,data_end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,data_for_coverage:"
+msgid "For coverage"
+msgstr "Garantie"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,data_for_option_char:"
+msgid "For Option"
+msgstr ""
+
+msgctxt "field:ins_contract.subs_process.covered_desc,data_start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,data_status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,elem_covered_data:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,the_kind:"
+msgid "The kind"
+msgstr ""
+
 msgctxt "field:ins_contract.subs_process.lines,childs:"
 msgid "Details"
 msgstr "Détails"
@@ -887,6 +931,10 @@ msgctxt "model:ins_contract.subs_process.covered_data_desc,name:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
 
+msgctxt "model:ins_contract.subs_process.covered_desc,name:"
+msgid "Covered Desc"
+msgstr ""
+
 msgctxt "model:ins_contract.subs_process.lines,name:"
 msgid "Pricing Line"
 msgstr "Ligne de Cotisation"
@@ -1063,6 +1111,14 @@ msgctxt "selection:ins_contract.subs_process.covered_data_desc,status:"
 msgid "Refused"
 msgstr "Refusé"
 
+msgctxt "selection:ins_contract.subs_process.covered_desc,the_kind:"
+msgid "data"
+msgstr ""
+
+msgctxt "selection:ins_contract.subs_process.covered_desc,the_kind:"
+msgid "elem"
+msgstr ""
+
 msgctxt "selection:ins_contract.subs_process.process_state,cur_action:"
 msgid "cancel"
 msgstr "Annuler"
@@ -1192,6 +1248,10 @@ msgid "price_line"
 msgstr "ligne de cotisation"
 
 msgctxt "view:ins_contract.subs_process.covered_data_desc:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
+msgctxt "view:ins_contract.subs_process.covered_desc:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
 
