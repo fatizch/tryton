@@ -20,7 +20,7 @@ def register():
         ProjectState,
         CoverageDisplayer,
         OptionSelectionState,
-        CoveredDataDesc,
+        CoveredDesc,
         SubscriptionProcessState,
         SummaryState,
         PricingLine,

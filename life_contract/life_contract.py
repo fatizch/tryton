@@ -14,15 +14,20 @@ from trytond.modules.coop_utils import utils
 from trytond.modules.insurance_contract import GenericExtension
 from trytond.modules.insurance_contract import CoveredElement
 from trytond.modules.insurance_contract import CoveredData
-from trytond.modules.insurance_contract import CoveredElementDesc
-from trytond.modules.insurance_contract import CoveredDataDesc
+from trytond.modules.insurance_contract import CoveredDesc
 from trytond.modules.insurance_process import DependantState
 from trytond.modules.insurance_process import CoopStateView
 
 
-__all__ = ['Contract', 'ExtensionLife', 'CoveredPerson',
-    'LifeCoveredData', 'LifeCoveredDataDesc', 'LifeCoveredPersonDesc',
-    'ExtensionLifeState', 'SubscriptionProcess']
+__all__ = [
+    'Contract',
+    'ExtensionLife',
+    'CoveredPerson',
+    'LifeCoveredData',
+    'LifeCoveredDesc',
+    'ExtensionLifeState',
+    'SubscriptionProcess',
+    ]
 
 
 class Contract():
@@ -117,20 +122,6 @@ class CoveredPerson(model.CoopSQL, CoveredElement):
         return self.person.name
 
 
-#
-#  This code was added as a test to check that step_over could allow to
-#  totally jump over a step
-#
-#class OptionSelectionStateLife():
-#    'Option Selection State'
-#    __metaclass__ = PoolMeta
-#    __name__ = 'ins_contract.subs_process.option_selection'
-#
-#    @staticmethod
-#    def step_over_test(wizard):
-#        return True, []
-
-
 class LifeCoveredData(model.CoopSQL, CoveredData):
     'Covered Data'
 
@@ -145,32 +136,50 @@ class LifeCoveredData(model.CoopSQL, CoveredData):
         cls.for_covered.model_name = 'life_contract.covered_person'
 
 
-class LifeCoveredDataDesc(CoveredDataDesc):
-    'Covered Data'
+class LifeCoveredDesc(CoveredDesc):
+    'Covered Desc'
 
-    __name__ = 'life_contract.covered_data_desc'
+    __name__ = 'life_contract.covered_desc'
 
-    coverage_amount = fields.Selection(
+    data_coverage_amount = fields.Selection(
         'get_allowed_amounts',
         'Coverage Amount',
-        context={'for_coverage': Eval('for_coverage')},
-        depends=['for_coverage'],
-        sort=False)
+        context={'data_for_coverage': Eval('data_for_coverage')},
+        depends=['data_for_coverage', 'start_date'],
+        sort=False,
+        states={
+            'readonly': Eval('the_kind') != 'data'})
+
+    elem_person = fields.Many2One(
+        'party.person',
+        'Covered Person',
+        depends=['data_coverage_name'],
+        on_change=['elem_person'])
+
+    elem_life_state = fields.Many2One(
+        'life_contract.extension_life_state',
+        'Life State')
 
     @classmethod
     def __setup__(cls):
-        super(LifeCoveredDataDesc, cls).__setup__()
-        cls.covered_element = copy.copy(cls.covered_element)
-        cls.covered_element.model_name = 'life_contract.covered_person_desc'
+        super(LifeCoveredDesc, cls).__setup__()
+        cls.data_covered_element = copy.copy(cls.data_covered_element)
+        cls.data_covered_element.model_name = \
+            'life_contract.covered_desc'
+
+    def on_change_elem_person(self):
+        if hasattr(self, 'elem_person') and self.elem_person:
+            return {'data_coverage_name': self.elem_person.get_rec_name('')}
+        return {}
 
     @staticmethod
     def get_allowed_amounts():
         print datetime.datetime.now(), 'calculating get_allowed_amounts'
         try:
-            coverage = Transaction().context.get('for_coverage')
+            coverage = Transaction().context.get('data_for_coverage')
             if not coverage:
                 return []
-            wizard = LifeCoveredDataDesc.get_context()
+            wizard = LifeCoveredDesc.get_context()
             the_coverage = utils.convert_ref_to_obj(coverage)
             vals = the_coverage.get_result(
                 'allowed_amounts',
@@ -183,25 +192,6 @@ class LifeCoveredDataDesc(CoveredDataDesc):
             return []
 
 
-class LifeCoveredPersonDesc(CoveredElementDesc):
-    'Covered Person'
-    '''
-        This is a descriptor for a covered person.
-    '''
-    __name__ = 'life_contract.covered_person_desc'
-
-    person = fields.Many2One('party.person',
-                             'Covered Person')
-    life_state = fields.Many2One('life_contract.extension_life_state',
-                                 'Life State')
-
-    @classmethod
-    def __setup__(cls):
-        super(LifeCoveredPersonDesc, cls).__setup__()
-        cls.covered_data = copy.copy(cls.covered_data)
-        cls.covered_data.model_name = 'life_contract.covered_data_desc'
-
-
 class ExtensionLifeState(DependantState):
     'Life Extension'
     '''
@@ -209,12 +199,15 @@ class ExtensionLifeState(DependantState):
     '''
     __name__ = 'life_contract.extension_life_state'
     covered_elements = fields.One2Many(
-        'life_contract.covered_person_desc',
+#        'life_contract.covered_person_desc',
+        'life_contract.covered_desc',
         'life_state',
         'Covered Elements',
         context={
             'for_product': Eval('for_product'),
-            'at_date': Eval('at_date')})
+            'at_date': Eval('at_date'),
+            'kind': 'elem'},
+        depends=['covered_elements'])
     dynamic_data = fields.Dict(
         'Dynamic Data',
         schema_model='ins_product.schema_element',
@@ -246,20 +239,27 @@ class ExtensionLifeState(DependantState):
 
     @staticmethod
     def before_step_subscriber_as_covered(wizard):
-        covered_datas = []
-        CoveredData = Pool().get('life_contract.covered_data_desc')
-        CoveredPerson = Pool().get('life_contract.covered_person_desc')
-#        for coverage in wizard.option_selection.options:
-#            if coverage.status == 'Active':
-#                covered_data = CoveredData()
-#                covered_data.status = 'Active'
-#                covered_data.init_from_coverage(coverage)
-#                covered_datas.append(covered_data)
-#        wizard.extension_life.covered_elements = []
-        covered_person = CoveredPerson()
-        covered_person.person = wizard.project.subscriber.person[0].id
-        covered_person.covered_data = CoveredPerson.default_covered_data(
-            from_wizard=wizard)
+        contract = utils.WithAbstract.get_abstract_objects(
+            wizard, 'for_contract')
+        if hasattr(wizard.extension_life, 'covered_elements') and \
+                wizard.extension_life.covered_elements:
+            # Later, an update procedure should be written.
+            options = [o.coverage.code for o in contract.options]
+            for elem in wizard.extension_life.covered_elements:
+                for data in elem.elem_covered_data:
+                    if not data.data_for_coverage.code in options:
+                        elem.elem_covered_data.remove(data)
+            return True, []
+        CoveredDesc = Pool().get('life_contract.covered_desc')
+        covered_person = CoveredDesc()
+        covered_person.the_kind = 'elem'
+        with Transaction().set_context({
+                'kind': 'elem'}):
+            covered_person.elem_covered_data = \
+                CoveredDesc.default_elem_covered_data(wizard)
+        covered_person.elem_person = wizard.project.subscriber.person[0].id
+        covered_person.data_coverage_name = \
+            covered_person.elem_person.get_rec_name('')
         wizard.extension_life.covered_elements = [covered_person]
         return (True, [])
 
@@ -291,15 +291,14 @@ class ExtensionLifeState(DependantState):
         errors = []
         for covered_element in wizard.extension_life.covered_elements:
             found = False
-            for covered_data in covered_element.covered_data:
-                if hasattr(
-                        covered_data,
-                        'status') and covered_data.status == 'Active':
+            for covered_data in covered_element.elem_covered_data:
+                if hasattr(covered_data, 'data_status') and \
+                        covered_data.data_status == True:
                     found = True
                     break
             if not found:
                 errors.append('At least one option must be activated for %s'
-                              % covered_element.person.name)
+                              % covered_element.elem_person.name)
         if errors:
             return (False, errors)
         return (True, [])
@@ -320,28 +319,28 @@ class ExtensionLifeState(DependantState):
         for covered_element in wizard.extension_life.covered_elements:
             cur_element = CoveredPerson()
             cur_element.covered_data = []
-            for covered_data in covered_element.covered_data:
-                if covered_data.status != 'Active':
+            for covered_data in covered_element.elem_covered_data:
+                if covered_data.data_status != True:
                     continue
                 cur_data = CoveredData()
-                cur_data.start_date = covered_data.start_date
-                if hasattr(covered_data, 'end_date'):
-                    cur_data.end_date = covered_data.end_date
-                cur_data.for_coverage = covered_data.for_coverage
-                if hasattr(covered_data, 'coverage_amount') and \
-                        covered_data.coverage_amount:
+                cur_data.start_date = covered_data.data_start_date
+                if hasattr(covered_data, 'data_end_date'):
+                    cur_data.end_date = covered_data.data_end_date
+                cur_data.for_coverage = covered_data.data_for_coverage
+                if hasattr(covered_data, 'data_coverage_amount') and \
+                        covered_data.data_coverage_amount:
                     try:
                         cur_data.coverage_amount = Decimal(
-                            covered_data.coverage_amount)
+                            covered_data.data_coverage_amount)
                     except ValueError:
                         return False, ['Invalid amount']
                 else:
                     cur_data.coverage_amount = Decimal(0)
-                if hasattr(covered_data, 'dynamic_data') and \
-                        covered_data.dynamic_data:
-                    cur_data.dynamic_data = covered_data.dynamic_data
+                if hasattr(covered_data, 'data_dynamic_data') and \
+                        covered_data.data_dynamic_data:
+                    cur_data.dynamic_data = covered_data.data_dynamic_data
                 cur_element.covered_data.append(cur_data)
-            cur_element.person = covered_element.person
+            cur_element.person = covered_element.elem_person
             ext.covered_elements.append(cur_element)
 
         if not(hasattr(ext, 'dynamic_data') and ext.dynamic_data):
@@ -377,4 +376,4 @@ class SubscriptionProcess():
         'life_contract.extension_life_view')
 
     def give_covered_data_desc_model(self):
-        return 'life_contract.covered_data_desc'
+        return 'life_contract.covered_desc'

@@ -5,6 +5,7 @@ from trytond.pool import Pool
 
 # Needed for Evaluation
 from trytond.pyson import Eval
+from trytond.transaction import Transaction
 
 from trytond.modules.insurance_process import CoopProcess
 from trytond.modules.insurance_process import ProcessState
@@ -31,8 +32,7 @@ __all__ = [
         'ProjectState',
         'CoverageDisplayer',
         'OptionSelectionState',
-        'CoveredDataDesc',
-        'CoveredElementDesc',
+        'CoveredDesc',
         'SummaryState',
         'SubscriptionProcessState',
         'SubscriptionProcess',
@@ -368,48 +368,108 @@ class OptionSelectionState(CoopStep):
             fields_names, with_rec_name=with_rec_name)
 
 
-class CoveredDataDesc(CoopStepView):
-    'Covered Data'
+class CoveredDesc(CoopStepView):
+    'Covered Desc'
     '''
-        This is a descriptor for the covered data element.
+        This class is an attempt to unify CoveredDataDesc and
+        CoveredElementDesc in order to be able to present both of these
+        concepts in one tree view with child elements.
     '''
-    __name__ = 'ins_contract.subs_process.covered_data_desc'
 
-    covered_element = fields.Many2One(
-        'ins_contract.subs_process.covered_element_desc',
+    __name__ = 'ins_contract.subs_process.covered_desc'
+
+    the_kind = fields.Selection([
+        ('elem', 'elem'),
+        ('data', 'data'),
+        ],
+        'The kind',
+        states={'invisible': True})
+
+    elem_covered_data = fields.One2Many(
+        'ins_contract.subs_process.covered_desc',
+        'data_covered_element',
+        'Covered Data',
+        context={'kind': 'data'})
+
+    data_covered_element = fields.Many2One(
+        'ins_contract.subs_process.covered_desc',
         'Covered Element')
 
-    status = fields.Selection(OPTIONSTATUS, 'Status')
+    data_status = fields.Boolean(
+        'Status',
+        states={
+            'readonly': Eval('the_kind') != 'data'})
 
-    start_date = fields.Date('Start Date')
+    data_start_date = fields.Date(
+        'Start Date',
+        states={
+            'readonly': Eval('the_kind') != 'data'})
 
-    end_date = fields.Date('End Date')
+    data_end_date = fields.Date(
+        'End Date',
+        states={
+            'readonly': Eval('the_kind') != 'data'})
 
-    for_coverage = fields.Reference(
+    data_for_coverage = fields.Reference(
         'For coverage',
         'get_coverages_model',
         readonly=True)
 
-    coverage_name = fields.Function(fields.Char('Coverage',
-            depends=['for_coverage'], on_change_with=['for_coverage']),
-        'on_change_with_coverage_name')
+    data_coverage_name = fields.Char(
+        'Coverage',
+        depends=['data_for_coverage'],
+        on_change_with=['data_for_coverage'],
+        readonly=True)
 
-    dynamic_data = fields.Dict(
+    data_dynamic_data = fields.Dict(
         'Dynamic Data',
         schema_model='ins_product.schema_element',
         context={
-            'at_date': Eval('start_date'),
+            'at_date': Eval('data_start_date'),
             'dd_args': {
-                'options': Eval('for_option_char'),
+                'options': Eval('data_for_option_char'),
                 'kind': 'sub_elem'}},
-        depends=['for_option_char', 'start_date'])
+        depends=['data_for_option_char', 'data_start_date'])
 
-    for_option_char = fields.Function(fields.Char(
+    data_for_option_char = fields.Function(fields.Char(
             'For Option',
             states={'invisible': True},
-            on_change_with=['for_coverage'],
-            depends=['for_coverage']),
-        'on_change_with_for_option_char')
+            on_change_with=['data_for_coverage'],
+            depends=['data_for_coverage']),
+        'on_change_with_data_for_option_char')
+
+    @classmethod
+    def default_the_kind(cls):
+        if Transaction().context.get('kind', '') in ('data'):
+            return 'data'
+        else:
+            return 'elem'
+
+    @classmethod
+    def default_elem_covered_data(cls, from_wizard=None):
+        if Transaction().context.get('kind', '') in ('data', ''):
+            return [{'the_kind': 'elem'}]
+        if not from_wizard:
+            from_wizard = CoveredDesc.get_context()
+        contract = utils.WithAbstract.get_abstract_objects(
+            from_wizard, 'for_contract')
+        covered_datas = []
+        for covered in contract.options:
+            covered_data = cls()
+            covered_data.the_kind = 'data'
+            covered_data.init_from_coverage(covered)
+            covered_data.data_dynamic_data = utils.init_dynamic_data(
+                from_wizard.project.product.get_result(
+                    'dynamic_data_getter',
+                    {
+                        'date': covered_data.data_start_date,
+                        'dd_args': {
+                            'options': covered.coverage.code,
+                            'kind': 'sub_elem',
+                            'path': 'all'}})[0])
+            covered_data.data_status = True
+            covered_datas.append(covered_data)
+        return utils.WithAbstract.serialize_field(covered_datas)
 
     @staticmethod
     def get_coverages_model():
@@ -418,56 +478,22 @@ class CoveredDataDesc(CoopStepView):
         return res
 
     def init_from_coverage(self, for_coverage):
-        self.start_date = for_coverage.start_date
-        self.for_coverage = for_coverage.coverage
-        self.for_option_char = self.for_coverage.code
-        self.coverage_name = self.for_coverage.get_rec_name('')
+        self.data_start_date = for_coverage.start_date
+        self.data_for_coverage = for_coverage.coverage
+        self.data_for_option_char = self.data_for_coverage.code
+        self.data_coverage_name = self.data_for_coverage.get_rec_name('')
 
-    def on_change_with_coverage_name(self):
-        if self.for_coverage:
-            return self.for_coverage.get_rec_name('')
-    def on_change_with_for_option_char(self):
-        if not hasattr(self, 'for_coverage') and self.for_coverage:
+    def on_change_with_data_coverage_name(self):
+        res = ''
+        if self.data_for_coverage:
+            res = self.data_for_coverage.get_rec_name('')
+        return res
+
+    def on_change_with_data_for_option_char(self):
+        if not hasattr(self, 'data_for_coverage') and \
+                self.data_for_coverage:
             return ''
-        return utils.convert_ref_to_obj(self.for_coverage).code
-
-
-class CoveredElementDesc(CoopStepView):
-    '''
-        This is a descriptor for the covered element.
-    '''
-
-    __name__ = 'ins_contract.subs_process.covered_element'
-
-    covered_data = fields.One2Many(
-                            'ins_contract.subs_process.covered_data_desc',
-                            'covered_element',
-                            'Covered Data')
-
-    @staticmethod
-    def default_covered_data(from_wizard=None):
-        if not from_wizard:
-            from_wizard = CoveredElementDesc.get_context()
-        contract = utils.WithAbstract.get_abstract_objects(
-            from_wizard, 'for_contract')
-        covered_datas = []
-        CoveredDataDesc = Pool().get(
-            from_wizard.give_covered_data_desc_model())
-        for covered in contract.options:
-            covered_data = CoveredDataDesc()
-            covered_data.init_from_coverage(covered)
-            covered_data.dynamic_data = utils.init_dynamic_data(
-                from_wizard.project.product.get_result(
-                    'dynamic_data_getter',
-                    {
-                        'date': covered_data.start_date,
-                        'dd_args': {
-                            'options': covered.coverage.code,
-                            'kind': 'sub_elem',
-                            'path': 'all'}})[0])
-            covered_data.status = 'Active'
-            covered_datas.append(covered_data)
-        return utils.WithAbstract.serialize_field(covered_datas)
+        return utils.convert_ref_to_obj(self.data_for_coverage).code
 
 
 class PricingLine(CoopStepView):

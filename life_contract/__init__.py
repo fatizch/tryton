@@ -9,8 +9,7 @@ def register():
         ExtensionLife,
         CoveredPerson,
         LifeCoveredData,
-        LifeCoveredDataDesc,
-        LifeCoveredPersonDesc,
+        LifeCoveredDesc,
         ExtensionLifeState,
         module='life_contract', type_='model')
 

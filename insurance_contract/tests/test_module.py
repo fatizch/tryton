@@ -553,9 +553,9 @@ return True'''
         self.assert_(tmp)
         self.assertEqual(len(wizard.extension_life.covered_elements), 1)
         covered = wizard.extension_life.covered_elements[0]
-        self.assertEqual(covered.person.party, on_party)
-        self.assertEqual(len(covered.covered_data), 3)
-        self.assertEqual(covered.covered_data[0].start_date,
+        self.assertEqual(covered.elem_person.party, on_party)
+        self.assertEqual(len(covered.elem_covered_data), 3)
+        self.assertEqual(covered.elem_covered_data[0].data_start_date,
                          wizard.project.start_date +
                          datetime.timedelta(days=1))
         tmp = wizard.extension_life.check_step(
