@@ -28,6 +28,7 @@ __all__ = ['Rule', 'Context', 'TreeElement', 'ContextTreeElement', 'TestCase',
     'TestCaseValue', 'TestRule', 'TestRuleStart', 'TestRuleTest',
     'CreateTestValues', 'RunTests', 'RunTestsReport', 'RuleTools',
     'RuleEngineContext', 'InternalRuleEngineError', 'check_args',
+    'CreateTestCase', 'CreateTestCaseStart', 'CreateTestCaseAskDescription',
     'TableDefinition'
     ]
 
@@ -602,3 +603,91 @@ class TableDefinition():
         new_tree.parent = folder
         new_tree.save()
         return table
+
+
+class CreateTestCaseStart(ModelView):
+    'Display test cases variables'
+    __name__ = 'rule_engine.create_test_case.start'
+
+    mode = fields.Selection([
+            ('edit_values', 'Edit Values'),
+            ('show_result', 'Show Result'),
+            ], 'Mode')
+    test_values = fields.One2Many('rule_engine.test_case.value', None,
+        'Values', states={
+            'readonly': Eval('mode', 'edit_values') != 'edit_values',
+            }, depends=['mode'])
+    result = fields.Char('Result', readonly=True, states={
+            'invisible': Eval('mode', 'edit_values') == 'edit_values',
+            }, depends=['mode'])
+
+
+class CreateTestCaseAskDescription(ModelView):
+    'Ask for test case description'
+    __name__ = 'rule_engine.create_test_case.ask_description'
+
+    description = fields.Char('Description', required=True)
+
+
+class CreateTestCase(Wizard):
+    'Create a test case'
+    __name__ = 'rule_engine.create_test_case'
+
+    start = StateView('rule_engine.create_test_case.start',
+        'rule_engine.create_test_case_start_view', [
+            Button('OK', 'run_test', default=True),
+            Button('Cancel', 'end'),
+            ])
+    run_test = StateView('rule_engine.create_test_case.start',
+        'rule_engine.create_test_case_start_view', [
+            Button('Create Test Case', 'ask_description'),
+            Button('OK', 'end', default=True),
+            ])
+    ask_description = StateView('rule_engine.create_test_case.ask_description',
+        'rule_engine.create_test_case_ask_description', [
+            Button('Create', 'create_test_case', default=True),
+            Button('Cancel', 'end'),
+            ])
+    create_test_case = StateTransition()
+
+    def default_start(self, fields):
+        Rule = Pool().get('rule_engine')
+        rule, = Rule.browse([Transaction().context['active_id']])
+        rule_name = ('fct_%s' % hash(rule.name)).replace('-', '_')
+        func_finder = FunctionFinder([rule_name] + rule.allowed_functions)
+        ast_node = ast.parse(rule.as_function)
+        func_finder.visit(ast_node)
+        return {
+            'mode': 'edit_values',
+            'test_values': [{'name': n} for n in func_finder.functions
+                if n != rule_name],
+            }
+
+    def compute_value(self):
+        Rule = Pool().get('rule_engine')
+        rule, = Rule.browse([Transaction().context['active_id']])
+        test_context = {}
+        for value in self.start.test_values:
+            test_context[value.name] = noargs_func(safe_eval(value.value))
+        return rule.compute(test_context)
+
+    def default_run_test(self, fields):
+        test_value = self.compute_value()
+        return {
+            'mode': 'show_result',
+            'test_values': [{'name': tv.name, 'value': tv.value}
+                for tv in self.start.test_values],
+            'result': (str(test_value[0]) if test_value[0] is not None
+                else test_value[1]),
+            }
+
+    def transition_create_test_case(self):
+        TestCase = Pool().get('rule_engine.test_case')
+        TestCase.create({
+                'description': self.ask_description.description,
+                'rule': Transaction().context['active_id'],
+                'values': [('create', {'name': tv.name, 'value': tv.value})
+                    for tv in self.start.test_values],
+                'expected_result': str(self.compute_value()),
+                })
+        return 'end'

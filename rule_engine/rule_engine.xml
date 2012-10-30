@@ -125,7 +125,7 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                <tree string="Test Case Value">
+                <tree string="Test Case Value" editable="bottom">
                     <field name="name"/>
                     <field name="value"/>
                 </tree>
@@ -300,6 +300,42 @@
             <field name="keyword">form_action</field>
             <field name="model">rule_engine,-1</field>
             <field name="action" ref="run_tests_wizard"/>
+        </record>
+
+        <record model="ir.ui.view" id="create_test_case_start_view">
+            <field name="model">rule_engine.create_test_case.start</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <form string="Create Test Case">
+                    <field name="test_values" colspan="4"/>
+                    <label name="result"/>
+                    <field name="result" colspan="3"/>
+                </form>
+                ]]>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="create_test_case_ask_description">
+            <field name="model">rule_engine.create_test_case.ask_description</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <form string="Enter Description">
+                    <label name="description"/>
+                    <field name="description"/>
+                </form>
+                ]]>
+            </field>
+        </record>
+        <record model="ir.action.wizard" id="create_test_case_wizard">
+            <field name="name">Create Test Case</field>
+            <field name="wiz_name">rule_engine.create_test_case</field>
+            <field name="model">rule_engine</field>
+        </record>
+        <record model="ir.action.keyword" id="create_test_case_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">rule_engine,-1</field>
+            <field name="action" ref="create_test_case_wizard"/>
         </record>
 
         <!-- Move table menu to rule engine -->

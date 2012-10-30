@@ -14,10 +14,13 @@ def register():
         TestRuleStart,
         TestRuleTest,
         RunTestsReport,
+        CreateTestCaseStart,
+        CreateTestCaseAskDescription,
         TableDefinition,
         module='rule_engine', type_='model')
     Pool.register(
         TestRule,
         CreateTestValues,
         RunTests,
+        CreateTestCase,
         module='rule_engine', type_='wizard')
