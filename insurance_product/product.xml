@@ -77,6 +77,9 @@
                         </page>
                         <page string="Administration" id="admin">
                         </page>
+                        <page string="Dynamic Data" id="dynamic_data">
+                            <field name="offered_dynamic_data"/>
+                        </page>
                     </notebook>
                 </form>
                 ]]>

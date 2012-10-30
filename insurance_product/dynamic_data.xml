@@ -59,6 +59,9 @@
                         </group>
                         <newline/>
                         <group id="types">
+                            <label name="kind" xalign="0"/>
+                            <field name="kind"/>
+                            <newline/>
                             <label name="type_" xalign="0"/>
                             <field name="type_"/>
                             <field name="choices" colspan="4"/>
@@ -79,6 +82,7 @@
         <record model="ir.action.act_window" id="act_model_coop_schema">
             <field name="name">Dynamic Data Schema Elements</field>
             <field name="res_model">ins_product.schema_element</field>
+            <field name="domain">[("kind", "!=", "product")]</field>
         </record>
         <record model="ir.action.act_window.view" id="act_model_coop_schema_tree">
             <field name="sequence" eval="10"/>
@@ -91,5 +95,21 @@
             <field name="act_window" ref="act_model_coop_schema"/>
         </record>
         <menuitem parent="menu_product" action="act_model_coop_schema" id="menu_model_coop_schema"/>
+        <record model="ir.action.act_window" id="act_model_coop_schema_product">
+            <field name="name">Dynamic Data Schema Elements for Offered</field>
+            <field name="res_model">ins_product.schema_element</field>
+            <field name="domain">[("kind", "=", "product")]</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_model_coop_schema_tree_product">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="schema_element_view_tree"/>
+            <field name="act_window" ref="act_model_coop_schema_product"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_model_coop_schema_form_product">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="schema_element_view_form"/>
+            <field name="act_window" ref="act_model_coop_schema_product"/>
+        </record>
+        <menuitem parent="menu_product" action="act_model_coop_schema_product" id="menu_model_coop_schema_product"/>
     </data>
 </tryton>

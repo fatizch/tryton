@@ -2,6 +2,7 @@
 import copy
 
 from trytond.model import fields
+from trytond.pool import Pool
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
@@ -80,9 +81,17 @@ class Offered(model.CoopView, utils.GetResult, Templated):
         'ins_product.dynamic_data_manager',
         'master',
         'Dynamic Data Manager',
-        context={'for_kind': 'main'},
+        context={
+            'schema_element_kind': 'contract',
+            'for_kind': 'main'},
         domain=[('kind', '=', 'main')],
         size=1)
+    offered_dynamic_data = fields.Dict(
+        'Dynamic Data',
+        schema_model='ins_product.schema_element',
+        context={
+            'schema_element_kind': 'product'},
+        domain=[('kind', '=', 'product')])
 
     @classmethod
     def __setup__(cls):
@@ -145,6 +154,15 @@ class Offered(model.CoopView, utils.GetResult, Templated):
             return []
         return self.dynamic_data_manager[0].get_valid_schemas_ids(
             args['date']), []
+
+    @staticmethod
+    def default_offered_dynamic_data():
+        good_se = Pool().get('ins_product.schema_element').search([
+            ('kind', '=', 'product')])
+        res = {}
+        for se in good_se:
+            res[se.technical_name] = se.get_default_value(None)
+        return res
 
 
 class Product(model.CoopSQL, Offered):

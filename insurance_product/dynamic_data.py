@@ -47,6 +47,13 @@ class CoopSchemaElement(SchemaElementMixin, model.CoopSQL, model.CoopView):
         'set_default_value')
     default_value = fields.Char('Default Value')
     is_shared = fields.Function(fields.Boolean('Shared'), 'get_is_shared')
+    kind = fields.Selection(
+        [
+            ('contract', 'On Contract'),
+            ('product', 'On Product'),
+            ('sub_elem', 'On Sub Element')
+        ],
+        'Kind')
 
     @classmethod
     def __setup__(cls):
@@ -153,6 +160,12 @@ class CoopSchemaElement(SchemaElementMixin, model.CoopSQL, model.CoopView):
                 return False
         return True
 
+    @staticmethod
+    def default_kind():
+        if 'schema_element_kind' in Transaction().context:
+            return Transaction().context['schema_element_kind']
+        return 'contract'
+
 
 class SchemaElementRelation(model.CoopSQL):
     'Relation between schema element and dynamic data manager'
@@ -179,13 +192,18 @@ class DynamicDataManager(model.CoopSQL, model.CoopView):
     specific_dynamic = fields.One2Many(
         'ins_product.schema_element',
         'manager',
-        'Specific Dynamic Data')
+        'Specific Dynamic Data',
+        domain=[
+            ('kind', '!=', 'product')])
+
     shared_dynamic = fields.Many2Many(
         'ins_product.schema_element_relation',
         'the_manager',
         'schema_element',
         'Shared Dynamic Data',
-        domain=[('manager', '=', None)],
+        domain=[
+            ('manager', '=', None),
+            ('kind', '!=', 'product')],
         # Not needed but allows to force the display for O2MDomain validation
         depends=['kind'])
     kind = fields.Selection([

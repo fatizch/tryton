@@ -37,7 +37,9 @@ class Coverage(model.CoopSQL, Offered):
         'ins_product.dynamic_data_manager',
         'master',
         'Covered Dynamic Data Manager',
-        context={'for_kind': 'sub_elem'},
+        context={
+            'for_kind': 'sub_elem',
+            'schema_element_kind': 'sub_elem'},
         domain=[('kind', '=', 'sub_elem')],
         size=1)
 
