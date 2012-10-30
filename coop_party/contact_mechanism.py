@@ -30,3 +30,7 @@ class ContactMechanism():
             if not re.match(r"[^@]+@[^@]+\.[^@]+", self.email):
                 return False
         return True
+
+    def pre_validate(self):
+        if not self.check_email():
+            self.raise_user_error('invalid_email')
