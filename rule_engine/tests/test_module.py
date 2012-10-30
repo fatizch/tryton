@@ -156,10 +156,12 @@ class ModuleTestCase(unittest.TestCase):
             rule.name = 'test_rule'
             rule.context = ct
             rule.code = '''
+from decimal import Decimal
+
 if table_test_table_awesome('bar', 5) != 'spam':
     return 0
 
-return values_test(inexisting_test_values())
+return values_test(inexisting_test_values()) * 1.0
 '''
 
             tcv = self.TestCaseValue()
