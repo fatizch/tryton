@@ -213,7 +213,8 @@ class Rule(ModelView, ModelSQL):
     def check_code(self):
         return not bool(filter(
                 lambda m: not (isinstance(m, UndefinedName)
-                    and m.message_args[0] in self.allowed_functions),
+                    and (m.message_args[0] in self.allowed_functions or
+                        m.message_args[0] == 'Decimal')),
                 check_code(self.as_function)))
 
     @staticmethod
