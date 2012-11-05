@@ -285,7 +285,8 @@ class Contract(GenericContract):
         dates = self.get_dates()
         for cur_date in dates:
             price, err = self.calculate_price_at_date(cur_date)
-            prices[cur_date.isoformat()] = price
+            if price:
+                prices[cur_date.isoformat()] = price
             errs += err
         return prices, errs
 
