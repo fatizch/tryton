@@ -34,6 +34,7 @@ __all__ = ['Rule', 'Context', 'TreeElement', 'ContextTreeElement', 'TestCase',
 
 CODE_TEMPLATE = """
 def fct_%s():
+ from decimal import Decimal
 %%s
 
 result_%s = fct_%s()
