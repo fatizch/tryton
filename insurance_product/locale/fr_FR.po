@@ -166,6 +166,10 @@ msgctxt "field:ins_product.benefit,name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:ins_product.benefit,offered_dynamic_data:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
+
 msgctxt "field:ins_product.benefit,pricing_mgr:"
 msgid "Pricing Manager"
 msgstr "Gestionnaire de Tarification"
@@ -372,7 +376,7 @@ msgstr ""
 
 msgctxt "field:ins_product.clause,versions:"
 msgid "Versions"
-msgstr ""
+msgstr "Taux Versionnés"
 
 msgctxt "field:ins_product.clause,write_date:"
 msgid "Write Date"
@@ -589,6 +593,10 @@ msgstr "Est Utilisé"
 msgctxt "field:ins_product.coverage,name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:ins_product.coverage,offered_dynamic_data:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
 
 msgctxt "field:ins_product.coverage,pricing_mgr:"
 msgid "Pricing Manager"
@@ -942,6 +950,10 @@ msgctxt "field:ins_product.offered,name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:ins_product.offered,offered_dynamic_data:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
+
 msgctxt "field:ins_product.offered,pricing_mgr:"
 msgid "Pricing Manager"
 msgstr "Gestionnaire de Tarification"
@@ -1206,6 +1218,10 @@ msgctxt "field:ins_product.product,name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:ins_product.product,offered_dynamic_data:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
+
 msgctxt "field:ins_product.product,options:"
 msgid "Options"
 msgstr "Garanties"
@@ -1355,8 +1371,12 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:ins_product.schema_element,choices:"
-msgid "Selection Choices"
+msgid "Choices"
 msgstr "Choix"
+
+msgctxt "field:ins_product.schema_element,choices_json:"
+msgid "Choices JSON"
+msgstr "Choix JSON"
 
 msgctxt "field:ins_product.schema_element,create_date:"
 msgid "Create Date"
@@ -1397,6 +1417,10 @@ msgstr "Partagé"
 msgctxt "field:ins_product.schema_element,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.schema_element,kind:"
+msgid "Kind"
+msgstr "Type"
 
 msgctxt "field:ins_product.schema_element,manager:"
 msgid "Manager"
@@ -1610,6 +1634,10 @@ msgctxt "model:ir.action,name:act_model_coop_schema"
 msgid "Dynamic Data Schema Elements"
 msgstr "Données Dynamiques"
 
+msgctxt "model:ir.action,name:act_model_coop_schema_product"
+msgid "Dynamic Data Schema Elements for Offered"
+msgstr "Données Dynamiques Produit"
+
 msgctxt "model:ir.action,name:act_product_form"
 msgid "Products"
 msgstr "Produits"
@@ -1629,6 +1657,10 @@ msgstr "Clauses"
 msgctxt "model:ir.ui.menu,name:menu_model_coop_schema"
 msgid "Dynamic Data Schema Elements"
 msgstr "Données Dynamiques"
+
+msgctxt "model:ir.ui.menu,name:menu_model_coop_schema_product"
+msgid "Dynamic Data Schema Elements for Offered"
+msgstr "Données Dynamiques Produit"
 
 msgctxt "model:ir.ui.menu,name:menu_product"
 msgid "Laboratory"
@@ -1769,10 +1801,6 @@ msgstr "Valider"
 msgctxt "selection:ins_product.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
-
-msgctxt "selection:ins_product.coverage,family:"
-msgid "default"
-msgstr "Défaut"
 
 msgctxt "selection:ins_product.coverage,template_behaviour:"
 msgid "Add"
@@ -2014,9 +2042,17 @@ msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
 msgid "Validate"
 msgstr "Valider"
 
-msgctxt "selection:ins_product.schema_element,type_:"
-msgid "Binary"
-msgstr "Binaire"
+msgctxt "selection:ins_product.schema_element,kind:"
+msgid "On Contract"
+msgstr "Contrat"
+
+msgctxt "selection:ins_product.schema_element,kind:"
+msgid "On Product"
+msgstr "Produit"
+
+msgctxt "selection:ins_product.schema_element,kind:"
+msgid "On Sub Element"
+msgstr "Elèment Couvert"
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Boolean"
@@ -2031,20 +2067,12 @@ msgid "Date"
 msgstr "Date"
 
 msgctxt "selection:ins_product.schema_element,type_:"
-msgid "DateTime"
-msgstr "Durée"
-
-msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Float"
 msgstr "Numérique"
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Integer"
 msgstr "Entier"
-
-msgctxt "selection:ins_product.schema_element,type_:"
-msgid "Numeric"
-msgstr ""
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Reference"
@@ -2055,20 +2083,8 @@ msgid "Selection"
 msgstr "Sélection"
 
 msgctxt "selection:ins_product.schema_element,type_:"
-msgid "Sha"
-msgstr ""
-
-msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Text"
 msgstr "Texte"
-
-msgctxt "selection:ins_product.schema_element,type_:"
-msgid "Time"
-msgstr "Durée"
-
-msgctxt "selection:ins_product.schema_element,type_:"
-msgid "Timestamp"
-msgstr "Estampille"
 
 msgctxt "view:ins_product.benefit:"
 msgid "Benefit"

@@ -106,6 +106,34 @@ msgctxt "field:coop.table_of_table,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:utils.version_object,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:utils.version_object,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:utils.version_object,main_elem:"
+msgid "Descriptor"
+msgstr "Descripteur"
+
+msgctxt "field:utils.version_object,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:utils.versionned_object,current_rec_name:"
+msgid "Current Value"
+msgstr "Valeur Courante"
+
+msgctxt "field:utils.versionned_object,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:utils.versionned_object,versions:"
+msgid "Versions"
+msgstr "Taux Versionnés"
+
 msgctxt "model:coop.dyn_selection,name:"
 msgid "Dynamic Selection"
 msgstr "Sélection Dynamique"
@@ -114,14 +142,22 @@ msgctxt "model:coop.table_of_table,name:"
 msgid "Table of table"
 msgstr "Table des Tables"
 
+msgctxt "model:utils.version_object,name:"
+msgid "Version Object"
+msgstr "Version d'Objet"
+
+msgctxt "model:utils.versionned_object,name:"
+msgid "Versionned Object"
+msgstr "Objet Versionné"
+
 msgctxt "view:coop.dyn_selection:"
 msgid "Dynamic Selection"
 msgstr "Sélection Dynamique"
 
 msgctxt "view:utils.version_object:"
 msgid "Version Object"
-msgstr ""
+msgstr "Version d'Objet"
 
 msgctxt "view:utils.versionned_object:"
 msgid "Versionned Object"
-msgstr ""
+msgstr "Objet Versionné"

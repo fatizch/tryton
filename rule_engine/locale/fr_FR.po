@@ -122,6 +122,30 @@ msgctxt "field:rule_engine.context-rule_engine.tree_element,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:rule_engine.create_test_case.ask_description,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:rule_engine.create_test_case.ask_description,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.create_test_case.start,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.create_test_case.start,mode:"
+msgid "Mode"
+msgstr "Mode"
+
+msgctxt "field:rule_engine.create_test_case.start,result:"
+msgid "Result"
+msgstr "Résultat"
+
+msgctxt "field:rule_engine.create_test_case.start,test_values:"
+msgid "Values"
+msgstr "Valeurs"
+
 msgctxt "field:rule_engine.run_tests.report,id:"
 msgid "ID"
 msgstr "ID"
@@ -294,6 +318,10 @@ msgctxt "model:ir.action,name:context_window"
 msgid "Contexts"
 msgstr "Contextes"
 
+msgctxt "model:ir.action,name:create_test_case_wizard"
+msgid "Create Test Case"
+msgstr "Créer le jeu de test"
+
 msgctxt "model:ir.action,name:create_test_values_wizard"
 msgid "Create Test Values"
 msgstr "Créer les valeurs de test"
@@ -346,6 +374,14 @@ msgctxt "model:rule_engine.context-rule_engine.tree_element,name:"
 msgid "Context Tree Element"
 msgstr ""
 
+msgctxt "model:rule_engine.create_test_case.ask_description,name:"
+msgid "Ask for test case description"
+msgstr "Description du Test"
+
+msgctxt "model:rule_engine.create_test_case.start,name:"
+msgid "Display test cases variables"
+msgstr "Afficher les Variables"
+
 msgctxt "model:rule_engine.run_tests.report,name:"
 msgid "Test Run Report"
 msgstr ""
@@ -382,6 +418,14 @@ msgctxt "selection:rule_engine,status:"
 msgid "Validated"
 msgstr "Validé"
 
+msgctxt "selection:rule_engine.create_test_case.start,mode:"
+msgid "Edit Values"
+msgstr "Editer les Valeurs"
+
+msgctxt "selection:rule_engine.create_test_case.start,mode:"
+msgid "Show Result"
+msgstr "Voir le Résultat"
+
 msgctxt "selection:rule_engine.tree_element,type:"
 msgid "Folder"
 msgstr "Dossier"
@@ -405,6 +449,14 @@ msgstr "Contexte"
 msgctxt "view:rule_engine.context:"
 msgid "Contexts"
 msgstr "Contextes"
+
+msgctxt "view:rule_engine.create_test_case.ask_description:"
+msgid "Enter Description"
+msgstr "Entrer la Description"
+
+msgctxt "view:rule_engine.create_test_case.start:"
+msgid "Create Test Case"
+msgstr "Créer le jeu de test"
 
 msgctxt "view:rule_engine.run_tests.report:"
 msgid "Tests Report"
@@ -437,6 +489,31 @@ msgstr "Règle"
 msgctxt "view:rule_engine:"
 msgid "Rules"
 msgstr "Règles"
+
+msgctxt ""
+"wizard_button:rule_engine.create_test_case,ask_description,create_test_case:"
+msgid "Create"
+msgstr "Créer"
+
+msgctxt "wizard_button:rule_engine.create_test_case,ask_description,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:rule_engine.create_test_case,run_test,ask_description:"
+msgid "Create Test Case"
+msgstr "Créer le jeu de test"
+
+msgctxt "wizard_button:rule_engine.create_test_case,run_test,end:"
+msgid "OK"
+msgstr "OK"
+
+msgctxt "wizard_button:rule_engine.create_test_case,start,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:rule_engine.create_test_case,start,run_test:"
+msgid "OK"
+msgstr "OK"
 
 msgctxt "wizard_button:rule_engine.run_tests,report,end:"
 msgid "OK"

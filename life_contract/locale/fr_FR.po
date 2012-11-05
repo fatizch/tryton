@@ -70,46 +70,6 @@ msgctxt "field:life_contract.covered_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:life_contract.covered_data_desc,coverage_amount:"
-msgid "Coverage Amount"
-msgstr "Montant de Couverture"
-
-msgctxt "field:life_contract.covered_data_desc,coverage_name:"
-msgid "Coverage"
-msgstr "Garantie"
-
-msgctxt "field:life_contract.covered_data_desc,covered_element:"
-msgid "Covered Element"
-msgstr "Elément Couvert"
-
-msgctxt "field:life_contract.covered_data_desc,dynamic_data:"
-msgid "Dynamic Data"
-msgstr "Données Dynamiques"
-
-msgctxt "field:life_contract.covered_data_desc,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:life_contract.covered_data_desc,for_coverage:"
-msgid "For coverage"
-msgstr "Garantie"
-
-msgctxt "field:life_contract.covered_data_desc,for_option_char:"
-msgid "For Option"
-msgstr ""
-
-msgctxt "field:life_contract.covered_data_desc,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:life_contract.covered_data_desc,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:life_contract.covered_data_desc,status:"
-msgid "Status"
-msgstr "Statut"
-
 msgctxt "field:life_contract.covered_desc,data_coverage_amount:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"
@@ -206,22 +166,6 @@ msgctxt "field:life_contract.covered_person,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:life_contract.covered_person_desc,covered_data:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
-
-msgctxt "field:life_contract.covered_person_desc,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:life_contract.covered_person_desc,life_state:"
-msgid "Life State"
-msgstr "Prévoyance"
-
-msgctxt "field:life_contract.covered_person_desc,person:"
-msgid "Covered Person"
-msgstr "Personne Couverte"
-
 msgctxt "field:life_contract.extension,contract:"
 msgid "The contract"
 msgstr "Contrat"
@@ -294,19 +238,11 @@ msgctxt "model:life_contract.covered_data,name:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
 
-msgctxt "model:life_contract.covered_data_desc,name:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
-
 msgctxt "model:life_contract.covered_desc,name:"
 msgid "Covered Desc"
 msgstr ""
 
 msgctxt "model:life_contract.covered_person,name:"
-msgid "Covered Person"
-msgstr "Personne Couverte"
-
-msgctxt "model:life_contract.covered_person_desc,name:"
 msgid "Covered Person"
 msgstr "Personne Couverte"
 
@@ -317,14 +253,6 @@ msgstr ""
 msgctxt "model:life_contract.extension_life_state,name:"
 msgid "Life Extension"
 msgstr "Prévoyance"
-
-msgctxt "selection:life_contract.covered_data_desc,status:"
-msgid "Active"
-msgstr "Actif"
-
-msgctxt "selection:life_contract.covered_data_desc,status:"
-msgid "Refused"
-msgstr "Refusé"
 
 msgctxt "selection:life_contract.covered_desc,the_kind:"
 msgid "data"

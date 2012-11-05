@@ -162,6 +162,10 @@ msgctxt "field:ins_collective.benefit,name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:ins_collective.benefit,offered_dynamic_data:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
+
 msgctxt "field:ins_collective.benefit,pricing_mgr:"
 msgid "Pricing Manager"
 msgstr "Gestionnaire de Tarification"
@@ -429,6 +433,10 @@ msgstr "Est Utilisé"
 msgctxt "field:ins_collective.coverage,name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:ins_collective.coverage,offered_dynamic_data:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
 
 msgctxt "field:ins_collective.coverage,pricing_mgr:"
 msgid "Pricing Manager"
@@ -1404,6 +1412,10 @@ msgctxt "field:ins_collective.product,name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:ins_collective.product,offered_dynamic_data:"
+msgid "Dynamic Data"
+msgstr "Données Dynamiques"
+
 msgctxt "field:ins_collective.product,options:"
 msgid "Options"
 msgstr "Garanties"
@@ -1529,8 +1541,12 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:ins_collective.schema_element,choices:"
-msgid "Selection Choices"
+msgid "Choices"
 msgstr "Choix"
+
+msgctxt "field:ins_collective.schema_element,choices_json:"
+msgid "Choices JSON"
+msgstr "Choix JSON"
 
 msgctxt "field:ins_collective.schema_element,create_date:"
 msgid "Create Date"
@@ -1571,6 +1587,10 @@ msgstr "Partagé"
 msgctxt "field:ins_collective.schema_element,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
+
+msgctxt "field:ins_collective.schema_element,kind:"
+msgid "Kind"
+msgstr "Type"
 
 msgctxt "field:ins_collective.schema_element,manager:"
 msgid "Manager"
@@ -2265,9 +2285,17 @@ msgctxt "selection:ins_collective.reserve_rule,template_behaviour:"
 msgid "Validate"
 msgstr "Valider"
 
-msgctxt "selection:ins_collective.schema_element,type_:"
-msgid "Binary"
-msgstr "Binaire"
+msgctxt "selection:ins_collective.schema_element,kind:"
+msgid "On Contract"
+msgstr "Contrat"
+
+msgctxt "selection:ins_collective.schema_element,kind:"
+msgid "On Product"
+msgstr "Produit"
+
+msgctxt "selection:ins_collective.schema_element,kind:"
+msgid "On Sub Element"
+msgstr "Elèment Couvert"
 
 msgctxt "selection:ins_collective.schema_element,type_:"
 msgid "Boolean"
@@ -2282,20 +2310,12 @@ msgid "Date"
 msgstr "Date"
 
 msgctxt "selection:ins_collective.schema_element,type_:"
-msgid "DateTime"
-msgstr "Durée"
-
-msgctxt "selection:ins_collective.schema_element,type_:"
 msgid "Float"
 msgstr "Numérique"
 
 msgctxt "selection:ins_collective.schema_element,type_:"
 msgid "Integer"
 msgstr "Entier"
-
-msgctxt "selection:ins_collective.schema_element,type_:"
-msgid "Numeric"
-msgstr ""
 
 msgctxt "selection:ins_collective.schema_element,type_:"
 msgid "Reference"
@@ -2306,20 +2326,8 @@ msgid "Selection"
 msgstr "Sélection"
 
 msgctxt "selection:ins_collective.schema_element,type_:"
-msgid "Sha"
-msgstr ""
-
-msgctxt "selection:ins_collective.schema_element,type_:"
 msgid "Text"
 msgstr "Texte"
-
-msgctxt "selection:ins_collective.schema_element,type_:"
-msgid "Time"
-msgstr "Durée"
-
-msgctxt "selection:ins_collective.schema_element,type_:"
-msgid "Timestamp"
-msgstr "Estampille"
 
 msgctxt "view:ins_collective.gbp_contract:"
 msgid "Contract"

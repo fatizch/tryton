@@ -42,10 +42,6 @@ msgctxt "field:coop_account.fee_desc,current_rec_name:"
 msgid "Current Value"
 msgstr "Valeur Courante"
 
-msgctxt "field:coop_account.fee_desc,current_value:"
-msgid "Current Value"
-msgstr "Valeur Courante"
-
 msgctxt "field:coop_account.fee_desc,description:"
 msgid "Description"
 msgstr "Description"
@@ -67,7 +63,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:coop_account.fee_desc,versions:"
-msgid "Versionned Rates"
+msgid "Versions"
 msgstr "Taux Versionnés"
 
 msgctxt "field:coop_account.fee_desc,write_date:"
@@ -142,10 +138,6 @@ msgctxt "field:coop_account.tax_desc,current_rec_name:"
 msgid "Current Value"
 msgstr "Valeur Courante"
 
-msgctxt "field:coop_account.tax_desc,current_value:"
-msgid "Current Value"
-msgstr "Valeur Courante"
-
 msgctxt "field:coop_account.tax_desc,description:"
 msgid "Description"
 msgstr "Description"
@@ -167,7 +159,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:coop_account.tax_desc,versions:"
-msgid "Versionned Rates"
+msgid "Versions"
 msgstr "Taux Versionnés"
 
 msgctxt "field:coop_account.tax_desc,write_date:"
