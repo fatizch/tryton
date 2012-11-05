@@ -65,10 +65,10 @@ class CoverageAmountRule(model.CoopSQL, BusinessRuleRoot):
                     res = self.validate_those_amounts(res)
             except Exception:
                 res = []
-                errs += ['Invalid rule !']
+                errs = ['Invalid rule !']
             if res == False:
                 res = []
-                errs += ['Invalid amounts']
+                errs = ['Invalid amounts']
             return res, mess + errs
 
     def give_me_coverage_amount_validity(self, args):
