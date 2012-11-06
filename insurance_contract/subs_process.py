@@ -448,7 +448,7 @@ class CoveredDesc(CoopStepView):
     @classmethod
     def default_elem_covered_data(cls, from_wizard=None):
         if Transaction().context.get('kind', '') in ('data', ''):
-            return [{'the_kind': 'elem'}]
+            return []
         if not from_wizard:
             from_wizard = CoveredDesc.get_context()
         contract = utils.WithAbstract.get_abstract_objects(
