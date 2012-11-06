@@ -37,6 +37,7 @@ else
 	cd data
 	mkdir BackUp
 	cd ..
+	mkdir logs
 	mkdir conf
 	cd conf
 	echo "#!/bin/sh" > scripts.conf
@@ -62,6 +63,7 @@ else
 	echo "jsonrpc = localhost:8000" >> trytond.conf
 	echo "db_type = sqlite" >> trytond.conf
 	echo "data_path = $TOPPATH/tryton-workspace/data" >> trytond.conf
+	echo "logfile = $TOPPATH/tryton-workspace/logs/server_logs.log" >> trytond.conf
 	cd ..
 	echo $SEP
 	echo Initializing database
