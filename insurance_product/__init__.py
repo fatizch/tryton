@@ -39,8 +39,8 @@ def register():
         OptionContext,
         CoveredDataContext,
         RuleCombinationContext,
+        Clause,
         ClauseRelation,
         ClauseRule,
-        Clause,
         ClauseVersion,
         module='insurance_product', type_='model')
