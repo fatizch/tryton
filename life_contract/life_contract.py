@@ -166,6 +166,9 @@ class LifeCoveredDesc(CoveredDesc):
         cls.data_covered_element = copy.copy(cls.data_covered_element)
         cls.data_covered_element.model_name = \
             'life_contract.covered_desc'
+        cls.elem_covered_data = copy.copy(cls.elem_covered_data)
+        cls.elem_covered_data.model_name = \
+            'life_contract.covered_desc'
 
     def on_change_elem_person(self):
         if hasattr(self, 'elem_person') and self.elem_person:
@@ -174,7 +177,6 @@ class LifeCoveredDesc(CoveredDesc):
 
     @staticmethod
     def get_allowed_amounts():
-        print datetime.datetime.now(), 'calculating get_allowed_amounts'
         try:
             coverage = Transaction().context.get('data_for_coverage')
             if not coverage:
