@@ -179,10 +179,11 @@ def update_modules(cfg_dict):
 
 
 def get_config(cfg_dict):
-    logf = get_cfg_as_dict(
-        cfg_dict['config_file'], 'options').get('logfile', None)
+    print cfg_dict
+    logf = cfg_dict.get('logfile', None)
 
     if logf:
+        print logf
         format = '[%(asctime)s] %(levelname)s:%(name)s:%(message)s'
         datefmt = '%a %b %d %H:%M:%S %Y'
         logging.basicConfig(level=logging.INFO, format=format,
