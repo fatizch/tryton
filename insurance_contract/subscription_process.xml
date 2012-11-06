@@ -130,7 +130,7 @@
             <field name="field_childs">elem_covered_data</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                    <tree string="Covered Data" editable="top">
+                    <tree string="Covered Data" editable="bottom" editable_open="1">
                         <field name="data_coverage_name"/>
                         <field name="data_status"/>
                         <field name="data_start_date"/>
