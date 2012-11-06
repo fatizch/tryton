@@ -1,5 +1,4 @@
 import copy
-import datetime
 from decimal import Decimal
 
 from trytond.model import fields
