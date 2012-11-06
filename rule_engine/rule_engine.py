@@ -10,7 +10,7 @@ from StringIO import StringIO
 from decimal import Decimal
 
 from pyflakes.checker import Checker
-from pyflakes.messages import Message, UndefinedName
+from pyflakes.messages import Message, UndefinedName, UnusedImport
 
 from trytond.rpc import RPC
 
@@ -211,11 +211,18 @@ class Rule(ModelView, ModelSQL):
                 'invalid_code': 'Your code has errors!',
                 })
 
+    def filter_errors(self, error):
+        if isinstance(error, UnusedImport):
+            return False
+        elif isinstance(error, UndefinedName) and \
+                error.message_args[0] in self.allowed_functions:
+            return False
+        else:
+            return True
+
     def check_code(self):
         return not bool(filter(
-                lambda m: not (isinstance(m, UndefinedName)
-                    and (m.message_args[0] in self.allowed_functions or
-                        m.message_args[0] == 'Decimal')),
+                lambda m: self.filter_errors(m),
                 check_code(self.as_function)))
 
     @staticmethod
