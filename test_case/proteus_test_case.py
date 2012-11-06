@@ -4,6 +4,9 @@ import os
 import ConfigParser
 from proteus import Model, Wizard
 from proteus import config as pconfig
+import logging.handlers
+import time
+import sys
 
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
@@ -176,6 +179,36 @@ def update_modules(cfg_dict):
 
 
 def get_config(cfg_dict):
+    logf = get_cfg_as_dict(
+        cfg_dict['config_file'], 'options').get('logfile', None)
+
+    if logf:
+        format = '[%(asctime)s] %(levelname)s:%(name)s:%(message)s'
+        datefmt = '%a %b %d %H:%M:%S %Y'
+        logging.basicConfig(level=logging.INFO, format=format,
+                datefmt=datefmt)
+
+        # test if the directories exist, else create them
+        try:
+            diff = 0
+            if os.path.isfile(logf):
+                diff = int(time.time()) - int(os.stat(logf)[-1])
+            handler = logging.handlers.TimedRotatingFileHandler(
+                logf, 'D', 1, 30)
+            handler.rolloverAt -= diff
+        except Exception, exception:
+            sys.stderr.write(\
+                    "ERROR: couldn't create the logfile directory:" \
+                    + str(exception))
+        else:
+            formatter = logging.Formatter(format, datefmt)
+            # tell the handler to use this format
+            handler.setFormatter(formatter)
+
+            # add the handler to the root logger
+            logging.getLogger().addHandler(handler)
+            logging.getLogger().setLevel(logging.INFO)
+
     return pconfig.set_trytond(
         database_name=cfg_dict['database_name'],
         user=cfg_dict['user'],
