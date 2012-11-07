@@ -75,7 +75,7 @@ class CoopSchemaElement(SchemaElementMixin, model.CoopSQL, model.CoopView):
         cls.type_ = copy.copy(cls.type_)
         utils.remove_tuple_from_list(cls.type_.selection, 'sha')
         utils.remove_tuple_from_list(cls.type_.selection, 'datetime')
-        utils.remove_tuple_from_list(cls.type_.selection, 'numeric')
+        utils.remove_tuple_from_list(cls.type_.selection, 'float')
         utils.remove_tuple_from_list(cls.type_.selection, 'timestamp')
         utils.remove_tuple_from_list(cls.type_.selection, 'time')
         utils.remove_tuple_from_list(cls.type_.selection, 'binary')
