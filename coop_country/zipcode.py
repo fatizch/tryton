@@ -9,6 +9,6 @@ class ZipCode(ModelSQL, ModelView):
 
     __name__ = 'country.zipcode'
 
-    zip = fields.Char('Zip', required=True)
+    zip = fields.Char('Zip', required=True, select=True)
     city = fields.Char('City', required=True)
     country = fields.Many2One('country.country', 'Country', required=True)
