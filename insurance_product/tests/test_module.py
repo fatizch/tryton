@@ -136,7 +136,7 @@ class ModuleTestCase(unittest.TestCase):
         rule.context = ct
         rule.code = '''
 birthdate = date_de_naissance_souscripteur()
-if annees_entre(birthdate, aujourd_hui()) > 40:
+if annees_entre(birthdate, aujourd_hui()) > 40.0:
     ajouter_message('Subscriber too old (max: 40)')
     return False
 return True'''
