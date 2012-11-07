@@ -103,6 +103,12 @@
                         <field name="options"/>
                     </page>
                 </xpath>
+                <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]/notebook/page[@id=&quot;pricing&quot;]"
+                        position="after">
+                    <page string="Term - Renewal" id="term_renewal">
+                        <field name="term_renewal_mgr" colspan="4" mode="form"/>
+                    </page>
+                </xpath>
                 <xpath expr="/form/notebook/page[@id=&quot;admin&quot;]"
                         position="inside">
                     <label name="contract_generator" xalign="0"/>

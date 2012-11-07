@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!--  ******************************************* 
+              ********  Term/Renewal Rule ***************
+              *******************************************-->
+        <record model="ir.ui.view" id="term_renewal_rule_view_form">
+            <field name="model">ins_product.term_renewal_rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="businessruleroot_view_form"/>
+            <field name="arch" type="xml">
+                <![CDATA[
+                    <data>
+                        <xpath expr="/form" position="replace_attributes">
+                            <form string="Term - Renewal rule"/>
+                        </xpath>
+                        <xpath expr="/form/notebook/page[@id=&quot;main&quot;]/group[@id=&quot;config_kind&quot;]"
+                         position="replace_attributes">
+                            <group id="config_kind" states="{'invisible': True}"/>
+                        </xpath>
+                        <xpath expr="/form/notebook/page[@id=&quot;main&quot;]/group[@id=&quot;simple&quot;]"
+                                position="inside">
+                            <group id="term">
+                                <label name="with_term" xalign="0"/>
+                                <field name="with_term"/>
+                                <newline/>
+                                <label name="term_date_choice" xalign="0"/>
+                                <field name="term_date_choice"/>
+                                <label name="date_for_sync" xalign="0"/>
+                                <field name="date_for_sync"/>
+                            </group>
+                            <newline/>
+                            <group id="renewal">
+                                <label name="can_be_renewed" xalign="0"/>
+                                <field name="can_be_renewed"/>
+                                <label name="frequency" xalign="0"/>
+                                <field name="frequency"/>
+                            </group>
+                        </xpath>
+                    </data>
+                ]]>
+            </field>
+        </record>
+    </data>
+</tryton>
