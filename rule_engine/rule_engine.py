@@ -122,9 +122,12 @@ def safe_eval(source, data=None):
         }}, data)
 
 
-def noargs_func(value):
+def noargs_func(values):
+    v_iterator = iter(values)
+
     def newfunc(*args, **keywords):
-        return value
+        return v_iterator.next()
+
     return newfunc
 
 
@@ -175,14 +178,14 @@ class FunctionFinder(ast.NodeVisitor):
 
     def __init__(self, allowed_names):
         super(FunctionFinder, self).__init__()
-        self.functions = set()
+        self.functions = []
         self.allowed_names = allowed_names
 
     def visit(self, node):
         if isinstance(node, ast.Call):
             if node.func.id not in self.allowed_names:
                 raise LookupError(node.func.id)
-            self.functions.add(node.func.id)
+            self.functions.append(node.func.id)
         return super(FunctionFinder, self).visit(node)
 
 
@@ -304,7 +307,10 @@ class TestCase(ModelView, ModelSQL):
     def do_test(self):
         test_context = {}
         for value in self.values:
-            test_context[value.name] = noargs_func(safe_eval(value.value))
+            test_context.setdefault(value.name, []).append(
+                safe_eval(value.value))
+        test_context = {key: noargs_func(value)
+            for key, value in test_context.items()}
         try:
             test_value = self.rule.compute(test_context)
         except InternalRuleEngineError:
@@ -667,13 +673,14 @@ class CreateTestCase(Wizard):
         Rule = Pool().get('rule_engine')
         rule, = Rule.browse([Transaction().context['active_id']])
         rule_name = ('fct_%s' % hash(rule.name)).replace('-', '_')
-        func_finder = FunctionFinder([rule_name] + rule.allowed_functions)
+        func_finder = FunctionFinder(['Decimal', rule_name]
+            + rule.allowed_functions)
         ast_node = ast.parse(rule.as_function)
         func_finder.visit(ast_node)
         return {
             'mode': 'edit_values',
             'test_values': [{'name': n} for n in func_finder.functions
-                if n != rule_name],
+                if n not in (rule_name, 'Decimal')],
             }
 
     def compute_value(self):
@@ -681,17 +688,25 @@ class CreateTestCase(Wizard):
         rule, = Rule.browse([Transaction().context['active_id']])
         test_context = {}
         for value in self.start.test_values:
-            test_context[value.name] = noargs_func(safe_eval(value.value))
+            val = safe_eval(value.value)
+            test_context.setdefault(value.name, []).append(val)
+        test_context = {key: noargs_func(value)
+            for key, value in test_context.items()}
         return rule.compute(test_context)
 
     def default_run_test(self, fields):
-        test_value = self.compute_value()
+        try:
+            test_value = self.compute_value()
+            result = (str(test_value[0]) if test_value[0] is not None
+                else test_value[1])
+        except Exception as exc:
+            result = 'ERROR: {}'.format(exc)
+
         return {
             'mode': 'show_result',
             'test_values': [{'name': tv.name, 'value': tv.value}
                 for tv in self.start.test_values],
-            'result': (str(test_value[0]) if test_value[0] is not None
-                else test_value[1]),
+            'result': result,
             }
 
     def transition_create_test_case(self):
