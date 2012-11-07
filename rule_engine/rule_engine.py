@@ -70,7 +70,7 @@ def decistmt(s):
     result = []
     # tokenize the string
     g = tokenize.generate_tokens(StringIO(s).readline)
-    for toknum, tokval, _, _, _  in g:
+    for toknum, tokval, _, _, _ in g:
         # replace NUMBER tokens
         if toknum == tokenize.NUMBER and '.' in tokval:
             result.extend([
@@ -404,6 +404,9 @@ class TreeElement(ModelView, ModelSQL):
             'invisible': ~Eval('type').in_(['function', 'rule']),
             'required': Eval('type').in_(['function', 'rule']),
             }, depends=['type'])
+    fct_args = fields.Char('Function Arguments', states={
+            'invisible': Eval('type') != 'function',
+            })
     language = fields.Many2One('ir.lang', 'Language', required=True)
     the_table = fields.Many2One(
         'table.table_def',
@@ -436,6 +439,7 @@ class TreeElement(ModelView, ModelSQL):
         tree = {}
         tree['name'] = self.name
         tree['translated'] = self.translated_technical_name
+        tree['fct_args'] = self.fct_args if self.fct_args else ''
         tree['description'] = self.description
         tree['type'] = self.type
         tree['children'] = [child.as_tree() for child in self.children]
