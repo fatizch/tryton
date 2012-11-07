@@ -111,7 +111,7 @@
                             <xpath expr="/form/group[@id=&quot;specific&quot;]"
                             position="inside">
                                 <label name="coverage_amount" xalign="0"/>
-                                <field name="coverage_amount" xexpand="1"/>
+                                <field name="coverage_amount"/>
                             </xpath>
                         </data>
                      ]]>
