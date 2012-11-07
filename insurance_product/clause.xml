@@ -8,17 +8,19 @@
             <field name="model">ins_product.clause</field>
             <field name="type">tree</field>
             <field name="inherit" ref="coop_utils.versionned_object_view_tree"/>
-            <field name="arch" type="xml"/>
-            <!--  
+            <field name="arch" type="xml">
             <![CDATA[
             <data>
-                <xpath expr="/form" position="replace_attributes">
-                    <form string="Clause rule"/>
+                <xpath expr="/tree/field[@name=&quot;current_rec_name&quot;]"
+                    position="replace"/>
+                <xpath expr="/tree" position="inside">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="title"/>
                 </xpath>
             </data>
             ]]>
             </field>
-            -->
         </record>
         <record model="ir.ui.view" id="clause_view_form">
             <field name="model">ins_product.clause</field>
