@@ -28,6 +28,10 @@ class Address():
             cls.city.on_change_with = []
         utils.extend_inexisting(cls.city.on_change_with,
             ['zip', 'country', 'city'])
+        if not cls.city.autocomplete:
+            cls.city.autocomplete = []
+        utils.extend_inexisting(cls.city.autocomplete,
+            ['zip', 'country'])
 
     @classmethod
     def get_summary(cls, addresses, name=None, at_date=None, lang=None):
@@ -56,13 +60,18 @@ class Address():
         'RSE TODO : what if this address kind was removed or modified?'
         return 'main'
 
-    def on_change_with_city(self):
+    @staticmethod
+    def get_cities_from_zip(zipcode, country):
         domain = []
-        domain.append(('zip', '=', self.zip))
-        domain.append(('country', '=', self.country))
-        cities = utils.get_those_objects('country.zipcode', domain)
-        if len(cities) > 0:
-            return cities[0].city
+        domain.append(('zip', '=', zipcode))
+        domain.append(('country', '=', country))
+        return utils.get_those_objects('country.zipcode', domain)
+
+    def on_change_with_city(self):
+        if self.zip and self.country:
+            cities = self.get_cities_from_zip(self.zip, self.country)
+            if len(cities) > 0:
+                return cities[0].city
         return self.city
 
     @classmethod
@@ -88,6 +97,13 @@ class Address():
     @staticmethod
     def default_country():
         return business.get_default_country()
+
+    def autocomplete_city(self):
+        if self.zip and self.country:
+            cities = self.get_cities_from_zip(self.zip, self.country)
+            return [x.city for x in cities]
+        else:
+            return ['']
 
 
 class AddresseKind(DynamicSelection):
