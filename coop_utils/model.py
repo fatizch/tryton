@@ -1,18 +1,181 @@
 import copy
 
 from itertools import chain
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
 from trytond.pyson import Eval, Bool
 from trytond.model import ModelView, ModelSQL, fields as fields
 from trytond.wizard import Wizard
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
+from trytond.rpc import RPC
+from trytond.protocols.jsonrpc import JSONEncoder, object_hook
 
 import utils
 from trytond.modules.coop_utils import translate_model_name
 
 
-class CoopSQL(ModelSQL):
+class NotExportImport(Exception):
+    pass
+
+
+class ExportImportMixin(object):
+    'Mixin to support export/import in json'
+    __metaclass__ = PoolMeta
+
+    _export_name = 'rec_name'
+
+    @classmethod
+    def __setup__(cls):
+        super(ExportImportMixin, cls).__setup__()
+        cls.__rpc__['export_json'] = RPC(instantiate=0,
+            result=lambda r: json.dumps(r, cls=JSONEncoder))
+        cls.__rpc__['import_json'] = RPC(readonly=False,
+            result=lambda r: None)
+
+    def _export_json_xxx2one(self, field_name, skip_fields=None):
+        target = getattr(self, field_name)
+        if not hasattr(target, 'export_json'):
+            raise NotExportImport()
+        if target:
+            return target.export_json(skip_fields=skip_fields)
+
+    def _export_json_xxx2many(self, field_name, skip_fields=None):
+        if skip_fields is None:
+            skip_fields = set()
+        field = self._fields[field_name]
+        if isinstance(field, fields.One2Many):
+            skip_fields.add(field.field)
+        if not hasattr(field.get_target(), 'export_json'):
+            raise NotExportImport()
+        targets = getattr(self, field_name) or []
+        return [t.export_json(skip_fields=skip_fields) for t in targets]
+
+    def export_json(self, skip_fields=None):
+        if skip_fields is None:
+            skip_fields = set()
+        skip_fields |= set(('id',
+                'create_uid', 'write_uid',
+                'create_date', 'write_date'))
+        values = {
+            '__name__': self.__name__,
+            '_export_name': getattr(self, self._export_name),
+            }
+        for field_name, field in self._fields.iteritems():
+            if (field_name in skip_fields
+                    or (isinstance(field, fields.Function)
+                        and not isinstance(field, fields.Property))):
+                continue
+            elif isinstance(field, (fields.Many2One, fields.One2One,
+                        fields.Reference)):
+                try:
+                    values[field_name] = self._export_json_xxx2one(field_name)
+                except NotExportImport:
+                    pass
+            elif isinstance(field, (fields.One2Many, fields.Many2Many)):
+                try:
+                    values[field_name] = self._export_json_xxx2many(field_name)
+                except NotExportImport:
+                    pass
+            else:
+                values[field_name] = getattr(self, field_name)
+        return values
+
+    @classmethod
+    def _import_json(cls, values):
+        pool = Pool()
+        assert values['__name__'] == cls.__name__, (values['__name__'],
+            cls.__name__)
+        new_values = {}
+        lines = {}
+        for field_name, value in values.iteritems():
+            if field_name in ('__name__', '_export_name'):
+                continue
+            field = cls._fields[field_name]
+            if isinstance(field, (fields.Many2One, fields.One2One,
+                        fields.Reference)):
+                if value:
+                    if isinstance(field, fields.Reference):
+                        Target = pool.get(value['__name__'])
+                    else:
+                        Target = field.get_target()
+                    target = Target.import_json(value)
+                    new_values[field_name] = target.id
+                else:
+                    new_values[field_name] = None
+            elif isinstance(field, (fields.One2Many, fields.Many2Many)):
+                lines[field_name] = value
+            else:
+                new_values[field_name] = value
+
+        records = cls.search([(cls._export_name, '=', values['_export_name'])])
+        if records:
+            record, = records
+        else:
+            record = None
+
+        for field_name, value in lines.iteritems():
+            field = cls._fields[field_name]
+            Target = field.get_target()
+            if record:
+                existing_lines = dict((getattr(l, l._export_name), l)
+                    for l in getattr(record, field_name))
+            else:
+                existing_lines = {}
+
+            writes = []
+            creates = []
+            adds = []
+            deletes = []
+            for line in value:
+                export_name = line['_export_name']
+                if export_name in existing_lines:
+                    existing_line = existing_lines[export_name]
+                    writes.append(
+                        ('write', [existing_line.id],
+                            Target._import_json(line)))
+                    del existing_lines[export_name]
+                else:
+                    if isinstance(field, fields.Many2Many):
+                        if Target.search([
+                                    (Target._export_name, '=',
+                                        line['_export_name'])]):
+                            target = Target.import_json(line)
+                            adds.append(target.id)
+                            continue
+                    creates.append(
+                        ('create', Target._import_json(line)))
+            if existing_lines:
+                deletes.append(
+                    ('delete', [l.id for l in existing_lines.itervalues()]))
+
+            new_values[field_name] = []
+            for action in (writes, creates, deletes):
+                if action:
+                    new_values[field_name].extend(action)
+            if adds:
+                new_values[field_name].append(('add', adds))
+
+        return new_values
+
+    @classmethod
+    def import_json(cls, values):
+        if isinstance(values, basestring):
+            values = json.loads(values, object_hook=object_hook)
+        new_values = cls._import_json(values)
+        records = cls.search([(cls._export_name, '=', values['_export_name'])])
+        if records:
+            record, = records
+            cls.write(records, new_values)
+        else:
+            record = cls.create(new_values)
+        return record
+
+
+class CoopSQL(ExportImportMixin, ModelSQL):
     'Root class for all stored classes'
 
     is_used = fields.Function(fields.Boolean('Is Used'), 'get_is_used')
