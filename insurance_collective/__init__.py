@@ -23,6 +23,10 @@ def register():
         GroupReserveRule,
         GroupCoverageAmountRule,
         GroupClauseRule,
+        GroupTermRenewalRule,
+        GroupDynamicDataManager,
+        GroupSchemaElement,
+        GroupSchemaElementRelation,
         GBPContract,
         ProjectGBPState,
         ExtensionGBPState,
@@ -33,9 +37,6 @@ def register():
         CoverageDisplayerForEnrollment,
         OptionSelectionStateForEnrollment,
         EnrollmentOption,
-        GroupDynamicDataManager,
-        GroupSchemaElement,
-        GroupSchemaElementRelation,
         module='insurance_collective', type_='model')
     Pool.register(
         GBPSubscriptionProcess,

@@ -30,6 +30,7 @@ def register():
         CoverageAmountRule,
         ProductDefinition,
         DynamicDataManager,
+        TermRenewalRule,
         CoopSchemaElement,
         SchemaElementRelation,
         # from rule_sets
