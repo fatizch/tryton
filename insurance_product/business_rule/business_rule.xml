@@ -83,6 +83,7 @@
                         <field name="reserve_rule" mode="form"/>
                         <field name="coverage_amount_rule" mode="form" pre_validate="1"/>
                         <field name="clause_rule" mode="form"/>
+                        <field name="term_renewal_rule" mode="form"/>
                     </group>
                 </form>
             ]]>

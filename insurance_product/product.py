@@ -181,6 +181,8 @@ class Product(model.CoopSQL, Offered):
         context={'code': 'ins_product.product'},
         required=True,
         ondelete='RESTRICT')
+    term_renewal_mgr = model.One2ManyDomain(
+        'ins_product.business_rule_manager', 'offered', 'Term - Renewal')
 
     @classmethod
     def __setup__(cls):

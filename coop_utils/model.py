@@ -113,6 +113,10 @@ class ExportImportMixin(object):
 
         records = cls.search([(cls._export_name, '=', values['_export_name'])])
         if records:
+            if len(records) > 1:
+                pass
+                print 'Too many values found for class %s (%s)' % (
+                    cls._export_name, values['_export_name'])
             record, = records
         else:
             record = None

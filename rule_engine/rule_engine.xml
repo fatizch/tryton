@@ -199,6 +199,8 @@
                     <field name="language"/>
                     <label name="translated_technical_name"/>
                     <field name="translated_technical_name"/>
+                    <label name="fct_args"/>
+                    <field name="fct_args"/>
                 </form>
                 ]]>
             </field>
