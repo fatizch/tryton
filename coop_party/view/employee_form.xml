@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form" position="replace_attributes">
+        <form col="4"/>
+    </xpath>
+    <xpath expr="/form/label[@name=&quot;name&quot;]" position="replace"/>
+    <xpath expr="/form/field[@name=&quot;name&quot;]" position="replace"/>
+    <xpath expr="/form/label[@name=&quot;code&quot;]" position="replace"/>
+    <xpath expr="/form/field[@name=&quot;code&quot;]" position="replace"/>
+    <xpath expr="/form/group[@id=&quot;checkboxes&quot;]" position="replace"/>
+    <xpath expr="/form/notebook" position="before">
+        <field name="person" mode="form" yfill="1" yexpand="1" colspan="4"/>
+    </xpath>
+</data>

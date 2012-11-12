@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tree>
+    <field name="ssn"/>
+    <field name="name"/>
+    <field name="first_name"/>
+    <field name="birth_date"/>
+    <field name="is_employee"/>
+</tree>

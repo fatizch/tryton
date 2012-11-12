@@ -8,39 +8,13 @@
             <field name="model">party.address</field>
             <field name="type">form</field>
             <field name="inherit" ref="party.address_view_form"></field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <data>
-                <xpath expr="/form/group[@id=&quot;checkboxes&quot;]"
-                position="before">
-                    <newline/>
-                    <label name="kind"/>
-                    <field name="kind"/>
-                    <newline/>
-                    <label name="start_date"/>
-                    <field name="start_date"/>
-                    <label name="end_date"/>
-                    <field name="end_date"/>
-                </xpath>
-                </data>
-                ]]>
-            </field>
+            <field name="name">address_form</field>
         </record>
         <record model="ir.ui.view" id="address_view_tree">
             <field name="model">party.address</field>
             <field name="type">tree</field>
             <field name="inherit" ref="party.address_view_tree_sequence"></field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <data>
-                <xpath expr="/tree/field[@name=&quot;name&quot;]"
-                position="after">
-                    <field name="start_date"/>
-                    <field name="end_date"/>
-                </xpath>
-                </data>
-                ]]>
-            </field>
+            <field name="name">address_tree</field>
         </record>
         <!-- Address kind tree view -->
         <record model="ir.ui.view" id="address_kind_view_tree">
@@ -65,24 +39,24 @@
 
         <!-- View that connects the form in the tree with the specification -->
         <record model="ir.action.act_window.view" id="act_address_kind_tree_view">
-            <field name="sequence" eval="10" />
-            <field name="view" ref="address_kind_view_tree" />
-            <field name="act_window" ref="act_address_kind_form" />
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="address_kind_view_tree"/>
+            <field name="act_window" ref="act_address_kind_form"/>
         </record>
 
         <!-- View for the edition or the Party Relation -->
         <record model="ir.action.act_window.view" id="act_address_kind_form_view">
-            <field name="sequence" eval="20" />
-            <field name="view" ref="address_kind_view_form" />
-            <field name="act_window" ref="act_address_kind_form" />
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="address_kind_view_form"/>
+            <field name="act_window" ref="act_address_kind_form"/>
         </record>
 
         <!-- Sub menu configuration Party Relation -->
-        <menuitem parent="party.menu_configuration" sequence="10" id="menu_address_kind_form"
-            icon="tryton-list" action="act_address_kind_form" />
-        <!--  ******************************************* 
-              ***   Address Kind Test Case*******
-              *******************************************-->
+        <menuitem parent="party.menu_configuration" sequence="10"
+            id="menu_address_kind_form" icon="tryton-list" action="act_address_kind_form"/>
+        <!-- *******************************************
+            *** Address Kind Test Case*******
+            ******************************************* -->
         <record model="party.address_kind" id="main">
             <field name="name">Main</field>
             <field name="key">main</field>
@@ -96,5 +70,4 @@
             <field name="key">job</field>
         </record>
     </data>
-    
 </tryton>
