@@ -11,31 +11,12 @@
         <record model="ir.ui.view" id="zipcode_view_form">
             <field name="model">country.zipcode</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form>
-                    <label name="zip"/>
-                    <field name="zip"/>
-                    <label name="city"/>
-                    <field name="city"/>
-                    <label name="country"/>
-                    <field name="country"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">zipcode_form</field>
         </record>
         <record model="ir.ui.view" id="zipcode_view_tree">
             <field name="model">country.zipcode</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                    <tree>
-                        <field name="zip"/>
-                        <field name="city"/>
-                        <field name="country"/>
-                    </tree>
-                ]]>
-            </field>
+            <field name="name">zipcode_tree</field>
         </record>
 
         <!-- View for the main menu and the event -->
