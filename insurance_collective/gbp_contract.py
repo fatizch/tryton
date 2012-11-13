@@ -1,10 +1,5 @@
-# Needed for storing and displaying objects
+#-*- coding:utf-8 -*-
 from trytond.model import fields
-
-# Needed for getting models
-from trytond.pool import Pool
-
-from trytond.modules.coop_utils import get_descendents
 
 from trytond.modules.insurance_contract import GenericContract
 
@@ -14,13 +9,12 @@ __all__ = [
 
 
 class GBPContract(GenericContract):
-    '''
-        A GBP contract is slightly different from usual contract, as it does
-        not really have neither a product nor associated options.
-
-        In fact, it defines a product, and as such shall not be mixed with
-        usual contracts.
-    '''
+    'GBP Contract'
+    #A GBP contract is slightly different from usual contract, as it does
+    #not really have neither a product nor associated options.
+    #
+    #In fact, it defines a product, and as such shall not be mixed with
+    #usual contracts.
     __name__ = 'ins_collective.gbp_contract'
 
     # GBP contract usually weigh a lot of money, so the subscribing company
