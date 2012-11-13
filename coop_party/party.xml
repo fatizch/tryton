@@ -45,7 +45,7 @@
         <record model="ir.ui.view" id="person_view_tree">
             <field name="model">party.person</field>
             <field name="type">tree</field>
-            <field name="name">party_tree</field>
+            <field name="name">person_tree</field>
         </record>
 
         <!-- View for the edition of the person -->
