@@ -18,8 +18,8 @@ class GroupRoot(object):
     @classmethod
     def __setup__(cls):
         cls._table = None
-        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
         super(GroupRoot, cls).__setup__()
+        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
 
 
 class GroupInsurancePlan(GroupRoot, product.Product):
