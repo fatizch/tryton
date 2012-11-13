@@ -1,77 +1,41 @@
 <?xml version="1.0"?>
 <tryton>
-	<data>
-		<!-- Tree view for contract -->
-		<record model="ir.ui.view" id="gbp_contract_view_tree">
-			<field name="model">ins_collective.gbp_contract</field>
-			<field name="type">tree</field>
-			<field name="arch" type="xml">                 
-					<![CDATA[                 
-					<tree string="Contract">
-					<field name="contract_number"/>
-					<field name="start_date"/>
-					<field name="status"/>
-					<field name="subscriber"/>
-					</tree>                 ]]>
-			</field>
-		</record>
+    <data>
+        <!-- Tree view for contract -->
+        <record model="ir.ui.view" id="gbp_contract_view_tree">
+            <field name="model">ins_collective.gbp_contract</field>
+            <field name="type">tree</field>
+            <field name="name">gbp_contract_tree</field>
+        </record>
 
-		<!-- form view -->
-		<record model="ir.ui.view" id="gbp_contract_view_form">
-			<field name="model">ins_collective.gbp_contract</field>
-			<field name="type">form</field>
-			<field name="arch" type="xml">
-					 <![CDATA[
-						<form string="contract" col="5">
-				 			<group id="Administrative data">
-								<label name="contract_number" xalign="0"/>
-								<field name="contract_number" xfill="0" xalign="0"/>
-								<newline/>
-								<label name="start_date" xalign="0"/>
-								<field name="start_date"/>
-								<newline/>
-								<label name="status" xalign="0"/>
-								<field name="status" xfill="1"/>
-								<newline/>
-								<label name="final_product" xalign="0"/>
-								<field name="final_product" xfill="1"/>
-							</group>
-							<newline/>
-							<group id="GBP">
-								<group id="GBP Administration"  string="GBP Administration">
-									<label name="contact" xalign="0"/>
-									<field name="contact"/>
-								</group>
-								<group id="GBP Product" string="GBP Product">
-									<label name="final_product" xalign="0"/>
-									<field name="final_product"/>
-								</group>
-							</group>
-						</form>               ]]>
-			</field>
-		</record>
+        <!-- form view -->
+        <record model="ir.ui.view" id="gbp_contract_view_form">
+            <field name="model">ins_collective.gbp_contract</field>
+            <field name="type">form</field>
+            <field name="name">gbp_contract_form</field>
+        </record>
 
-		<!-- View for the main menu and the event -->
-		<record model="ir.action.act_window" id="act_gbp_contract_form">
-			<field name="name">GBP Contract</field>
-			<field name="res_model">ins_collective.gbp_contract</field>
-		</record>
+        <!-- View for the main menu and the event -->
+        <record model="ir.action.act_window" id="act_gbp_contract_form">
+            <field name="name">GBP Contract</field>
+            <field name="res_model">ins_collective.gbp_contract</field>
+        </record>
 
-		<!-- View that connect the form in the tree with the specification -->
-		<record model="ir.action.act_window.view" id="act_gbp_contract_form_view1">
-			<field name="sequence" eval="30" />
-			<field name="view" ref="gbp_contract_view_tree" />
-			<field name="act_window" ref="act_gbp_contract_form" />
-		</record>
+        <!-- View that connect the form in the tree with the specification -->
+        <record model="ir.action.act_window.view" id="act_gbp_contract_form_view1">
+            <field name="sequence" eval="30"/>
+            <field name="view" ref="gbp_contract_view_tree"/>
+            <field name="act_window" ref="act_gbp_contract_form"/>
+        </record>
 
-		<!-- View for the edition or the Form of product -->
-		<record model="ir.action.act_window.view" id="act_gbp_contract_form_view2">
-			<field name="sequence" eval="40" />
-			<field name="view" ref="gbp_contract_view_form" />
-			<field name="act_window" ref="act_gbp_contract_form" />
-		</record>
+        <!-- View for the edition or the Form of product -->
+        <record model="ir.action.act_window.view" id="act_gbp_contract_form_view2">
+            <field name="sequence" eval="40"/>
+            <field name="view" ref="gbp_contract_view_form"/>
+            <field name="act_window" ref="act_gbp_contract_form"/>
+        </record>
 
-		<menuitem parent="menu_group" sequence="3"
-			id="menu_gbp_contract_form" icon="tryton-list" action="act_gbp_contract_form"/>
-	</data>
+        <menuitem parent="menu_group" sequence="3"
+            id="menu_gbp_contract_form" icon="tryton-list" action="act_gbp_contract_form"/>
+    </data>
 </tryton>

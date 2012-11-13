@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<form string="contract" col="5">
+    <group id="Administrative data">
+        <label name="contract_number" xalign="0"/>
+        <field name="contract_number" xfill="0" xalign="0"/>
+        <newline/>
+        <label name="start_date" xalign="0"/>
+        <field name="start_date"/>
+        <newline/>
+        <label name="status" xalign="0"/>
+        <field name="status" xfill="1"/>
+        <newline/>
+        <label name="final_product" xalign="0"/>
+        <field name="final_product" xfill="1"/>
+    </group>
+    <newline/>
+    <group id="GBP">
+        <group id="GBP Administration" string="GBP Administration">
+            <label name="contact" xalign="0"/>
+            <field name="contact"/>
+        </group>
+        <group id="GBP Product" string="GBP Product">
+            <label name="final_product" xalign="0"/>
+            <field name="final_product"/>
+        </group>
+    </group>
+</form>
