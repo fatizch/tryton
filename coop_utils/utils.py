@@ -1,6 +1,7 @@
 import ConfigParser
 import os
 import datetime
+import copy
 from dateutil.relativedelta import relativedelta
 
 from trytond.pool import Pool
@@ -45,8 +46,8 @@ def get_module_name(cls):
 
 
 def change_relation_links(cls, from_module, to_module):
-    for field_name in dir(cls):
-        field = getattr(cls, field_name)
+    for field_name in cls._fields.iterkeys():
+        field = copy.copy(getattr(cls, field_name))
         attr_name = ''
         if hasattr(field, 'model_name'):
             attr_name = 'model_name'
