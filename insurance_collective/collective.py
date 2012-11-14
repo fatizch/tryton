@@ -1,16 +1,21 @@
 #-*- coding:utf-8 -*-
+from trytond.pool import PoolMeta
 
-from trytond.modules.insurance_product import product, business_rule
+from trytond.modules.insurance_product import product, business_rule, benefit
 from trytond.modules.insurance_product import coverage, clause
 from trytond.modules.insurance_product.benefit import *
-from trytond.modules.insurance_product.business_rule import pricing
-from trytond.modules.insurance_product.business_rule import eligibility
-from trytond.modules.insurance_product.business_rule import benefit, reserve
-from trytond.modules.insurance_product.business_rule import coverage_amount
-from trytond.modules.insurance_product.business_rule import clause as clause_r
-from trytond.modules.insurance_product.business_rule import term_renewal
+from trytond.modules.insurance_product.business_rule import pricing_rule
+from trytond.modules.insurance_product.business_rule import eligibility_rule
+from trytond.modules.insurance_product.business_rule import benefit_rule
+from trytond.modules.insurance_product.business_rule import reserve_rule
+from trytond.modules.insurance_product.business_rule import coverage_amount_rule
+from trytond.modules.insurance_product.business_rule import clause_rule
+from trytond.modules.insurance_product.business_rule import term_renewal_rule
 from trytond.modules.insurance_product import dynamic_data
 from trytond.modules.coop_utils import utils
+
+
+__metaclass__ = PoolMeta
 
 
 class GroupRoot(object):
@@ -18,8 +23,8 @@ class GroupRoot(object):
     @classmethod
     def __setup__(cls):
         cls._table = None
-        super(GroupRoot, cls).__setup__()
         utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+        super(GroupRoot, cls).__setup__()
 
 
 class GroupInsurancePlan(GroupRoot, product.Product):
@@ -52,57 +57,62 @@ class GroupGenericBusinessRule(GroupRoot, business_rule.GenericBusinessRule):
 
     __name__ = 'ins_collective.generic_business_rule'
 
+    @classmethod
+    def __setup__(cls):
+        super(GroupGenericBusinessRule, cls).__setup__()
 
-class GroupPricingData(GroupRoot, pricing.PricingData):
+
+class GroupPricingData(GroupRoot, pricing_rule.PricingData):
     'Pricing Data'
 
     __name__ = 'ins_collective.pricing_data'
 
 
-class GroupPriceCalculator(GroupRoot, pricing.PriceCalculator):
+class GroupPriceCalculator(GroupRoot, pricing_rule.PriceCalculator):
     'Price Calculator'
 
     __name__ = 'ins_collective.pricing_calculator'
 
 
-class GroupPricingRule(GroupRoot, pricing.PricingRule):
+class GroupPricingRule(GroupRoot, pricing_rule.PricingRule):
     'Pricing Rule'
 
     __name__ = 'ins_collective.pricing_rule'
 
 
-class GroupEligibilityRule(GroupRoot, eligibility.EligibilityRule):
+class GroupEligibilityRule(GroupRoot, eligibility_rule.EligibilityRule):
     'Eligibility Rule'
 
     __name__ = 'ins_collective.eligibility_rule'
 
 
 class GroupEligibilityRelationKind(GroupRoot,
-        eligibility.EligibilityRelationKind):
+        eligibility_rule.EligibilityRelationKind):
     'Define relation between eligibility rule and relation kind authorized'
 
     __name__ = 'ins_collective.eligibility_relation_kind'
 
 
-class GroupBenefit(GroupRoot, Benefit):
+class GroupBenefit(GroupRoot, benefit.Benefit):
     'Benefit'
 
     __name__ = 'ins_collective.benefit'
 
 
-class GroupBenefitRule(GroupRoot, benefit.BenefitRule):
+class GroupBenefitRule(GroupRoot, benefit_rule.BenefitRule):
     'Benefit Rule'
 
     __name__ = 'ins_collective.benefit_rule'
 
 
-class GroupReserveRule(GroupRoot, reserve.ReserveRule):
+class GroupReserveRule(GroupRoot, reserve_rule.ReserveRule):
     'Reserve Rule'
 
     __name__ = 'ins_collective.reserve_rule'
 
 
-class GroupCoverageAmountRule(GroupRoot, coverage_amount.CoverageAmountRule):
+class GroupCoverageAmountRule(GroupRoot,
+        coverage_amount_rule.CoverageAmountRule):
     'Coverage Amount Rule'
 
     __name__ = 'ins_collective.coverage_amount_rule'
@@ -120,19 +130,19 @@ class GroupClauseVersion(GroupRoot, clause.ClauseVersion):
     __name__ = 'ins_collective.clause_version'
 
 
-class GroupClauseRule(GroupRoot, clause_r.ClauseRule):
+class GroupClauseRule(GroupRoot, clause_rule.ClauseRule):
     'Clause Rule'
 
     __name__ = 'ins_collective.clause_rule'
 
 
-class GroupClauseRelation(GroupRoot, clause_r.ClauseRelation):
+class GroupClauseRelation(GroupRoot, clause_rule.ClauseRelation):
     'Relation between clause and offered'
 
     __name__ = 'ins_collective.clause_relation'
 
 
-class GroupTermRenewalRule(GroupRoot, term_renewal.TermRenewalRule):
+class GroupTermRenewalRule(GroupRoot, term_renewal_rule.TermRenewalRule):
     'Clause Rule'
 
     __name__ = 'ins_collective.term_renewal_rule'
