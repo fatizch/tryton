@@ -628,17 +628,29 @@ class CreateTestCaseStart(ModelView):
     'Display test cases variables'
     __name__ = 'rule_engine.create_test_case.start'
 
-    mode = fields.Selection([
-            ('edit_values', 'Edit Values'),
-            ('show_result', 'Show Result'),
-            ], 'Mode')
+    rule = fields.Many2One('rule_engine', 'Rule', readonly=True)
+    unknown_values = fields.Integer('Unknown Values')
     test_values = fields.One2Many('rule_engine.test_case.value', None,
-        'Values', states={
-            'readonly': Eval('mode', 'edit_values') != 'edit_values',
-            }, depends=['mode'])
-    result = fields.Char('Result', readonly=True, states={
-            'invisible': Eval('mode', 'edit_values') == 'edit_values',
-            }, depends=['mode'])
+        'Values', size=Eval('unknown_values', 0),
+        on_change=['test_values', 'rule'], depends=['unknown_values', 'rule'])
+    result = fields.Char('Result', readonly=True)
+
+    def on_change_test_values(self):
+        test_context = {}
+        for value in self.test_values:
+            val = safe_eval(value.value if value.value != '' else "''")
+            test_context.setdefault(value.name, []).append(val)
+        test_context = {key: noargs_func(value)
+            for key, value in test_context.items()}
+        try:
+            test_value = self.rule.compute(test_context)
+            result = (str(test_value[0]) if test_value[0] is not None
+                else test_value[1])
+        except Exception as exc:
+            result = 'ERROR: {}'.format(exc)
+        return {
+            'result': result
+            }
 
 
 class CreateTestCaseAskDescription(ModelView):
@@ -654,13 +666,8 @@ class CreateTestCase(Wizard):
 
     start = StateView('rule_engine.create_test_case.start',
         'rule_engine.create_test_case_start_view', [
-            Button('OK', 'run_test', default=True),
+            Button('Create Test Case', 'ask_description', default=True),
             Button('Cancel', 'end'),
-            ])
-    run_test = StateView('rule_engine.create_test_case.start',
-        'rule_engine.create_test_case_start_view', [
-            Button('Create Test Case', 'ask_description'),
-            Button('OK', 'end', default=True),
             ])
     ask_description = StateView('rule_engine.create_test_case.ask_description',
         'rule_engine.create_test_case_ask_description', [
@@ -677,10 +684,12 @@ class CreateTestCase(Wizard):
             + rule.allowed_functions)
         ast_node = ast.parse(rule.as_function)
         func_finder.visit(ast_node)
+        test_values = [{'name': n} for n in func_finder.functions
+            if n not in (rule_name, 'Decimal')]
         return {
-            'mode': 'edit_values',
-            'test_values': [{'name': n} for n in func_finder.functions
-                if n not in (rule_name, 'Decimal')],
+            'rule': rule.id,
+            'test_values': test_values,
+            'unknown_values': len(test_values),
             }
 
     def compute_value(self):
@@ -693,21 +702,6 @@ class CreateTestCase(Wizard):
         test_context = {key: noargs_func(value)
             for key, value in test_context.items()}
         return rule.compute(test_context)
-
-    def default_run_test(self, fields):
-        try:
-            test_value = self.compute_value()
-            result = (str(test_value[0]) if test_value[0] is not None
-                else test_value[1])
-        except Exception as exc:
-            result = 'ERROR: {}'.format(exc)
-
-        return {
-            'mode': 'show_result',
-            'test_values': [{'name': tv.name, 'value': tv.value}
-                for tv in self.start.test_values],
-            'result': result,
-            }
 
     def transition_create_test_case(self):
         TestCase = Pool().get('rule_engine.test_case')
