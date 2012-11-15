@@ -32,7 +32,7 @@ msgstr "Créé par"
 
 msgctxt "field:life_contract.covered_data,dynamic_data:"
 msgid "Dynamic Data"
-msgstr "Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "field:life_contract.covered_data,end_date:"
 msgid "End Date"
@@ -84,7 +84,7 @@ msgstr "Elément Couvert"
 
 msgctxt "field:life_contract.covered_desc,data_dynamic_data:"
 msgid "Dynamic Data"
-msgstr "Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "field:life_contract.covered_desc,data_end_date:"
 msgid "End Date"
@@ -96,7 +96,7 @@ msgstr "Garantie"
 
 msgctxt "field:life_contract.covered_desc,data_for_option_char:"
 msgid "For Option"
-msgstr ""
+msgstr "Garantie"
 
 msgctxt "field:life_contract.covered_desc,data_start_date:"
 msgid "Start Date"
@@ -184,7 +184,7 @@ msgstr "Créé par"
 
 msgctxt "field:life_contract.extension,dynamic_data:"
 msgid "Dynamic Data"
-msgstr "Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "field:life_contract.extension,id:"
 msgid "ID"
@@ -216,11 +216,11 @@ msgstr "Eléments Couverts"
 
 msgctxt "field:life_contract.extension_life_state,dynamic_data:"
 msgid "Dynamic Data"
-msgstr "Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "field:life_contract.extension_life_state,for_options:"
 msgid "For Options"
-msgstr ""
+msgstr "Garanties"
 
 msgctxt "field:life_contract.extension_life_state,for_product:"
 msgid "For Product"

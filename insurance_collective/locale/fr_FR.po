@@ -104,11 +104,11 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:ins_collective.benefit,benefit_mgr:"
 msgid "Benefit Manager"
-msgstr "Gestionnaire de Prestations"
+msgstr "Règles de Prestation"
 
 msgctxt "field:ins_collective.benefit,clause_mgr:"
 msgid "Clause Manager"
-msgstr "Gestionnaire de Clauses"
+msgstr "Clausier"
 
 msgctxt "field:ins_collective.benefit,code:"
 msgid "Code"
@@ -136,11 +136,11 @@ msgstr "Description"
 
 msgctxt "field:ins_collective.benefit,dynamic_data_manager:"
 msgid "Dynamic Data Manager"
-msgstr "Gestionnaire de Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.benefit,eligibility_mgr:"
 msgid "Eligibility Manager"
-msgstr "Gestionnaire d'éligibilité"
+msgstr "Règles d'Eligibilité"
 
 msgctxt "field:ins_collective.benefit,end_date:"
 msgid "End Date"
@@ -164,11 +164,11 @@ msgstr "Nom"
 
 msgctxt "field:ins_collective.benefit,offered_dynamic_data:"
 msgid "Dynamic Data"
-msgstr "Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.benefit,pricing_mgr:"
 msgid "Pricing Manager"
-msgstr "Gestionnaire de Tarification"
+msgstr "Règles de Tarification"
 
 msgctxt "field:ins_collective.benefit,rec_name:"
 msgid "Name"
@@ -176,7 +176,7 @@ msgstr "Nom"
 
 msgctxt "field:ins_collective.benefit,reserve_mgr:"
 msgid "Reserve Manager"
-msgstr "Gestionnaire de Provisions"
+msgstr "Règles de Provisions"
 
 msgctxt "field:ins_collective.benefit,start_date:"
 msgid "Start Date"
@@ -368,7 +368,7 @@ msgstr "Prestations"
 
 msgctxt "field:ins_collective.coverage,clause_mgr:"
 msgid "Clause Manager"
-msgstr "Gestionnaire de Clauses"
+msgstr "Clausier"
 
 msgctxt "field:ins_collective.coverage,code:"
 msgid "Code"
@@ -376,11 +376,11 @@ msgstr "Code"
 
 msgctxt "field:ins_collective.coverage,coverage_amount_mgr:"
 msgid "Coverage Amount Manager"
-msgstr "Gestionnaire de Montant de Couverture"
+msgstr "Règles de Montant de Couverture"
 
 msgctxt "field:ins_collective.coverage,covered_dynamic_data_manager:"
 msgid "Covered Dynamic Data Manager"
-msgstr "Données Dynamiques Eléments Couverts"
+msgstr "Données Complémentaires Eléments Couverts"
 
 msgctxt "field:ins_collective.coverage,create_date:"
 msgid "Create Date"
@@ -404,11 +404,11 @@ msgstr "Description"
 
 msgctxt "field:ins_collective.coverage,dynamic_data_manager:"
 msgid "Dynamic Data Manager"
-msgstr "Gestionnaire de Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.coverage,eligibility_mgr:"
 msgid "Eligibility Manager"
-msgstr "Gestionnaire d'éligibilité"
+msgstr "Règles d'Eligibilité"
 
 msgctxt "field:ins_collective.coverage,end_date:"
 msgid "End Date"
@@ -436,11 +436,11 @@ msgstr "Nom"
 
 msgctxt "field:ins_collective.coverage,offered_dynamic_data:"
 msgid "Dynamic Data"
-msgstr "Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.coverage,pricing_mgr:"
 msgid "Pricing Manager"
-msgstr "Gestionnaire de Tarification"
+msgstr "Règles de Tarification"
 
 msgctxt "field:ins_collective.coverage,rec_name:"
 msgid "Name"
@@ -568,11 +568,11 @@ msgstr "Valeur"
 
 msgctxt "field:ins_collective.dynamic_data_manager,shared_dynamic:"
 msgid "Shared Dynamic Data"
-msgstr "Donnée Dynamiques Partagées"
+msgstr "Données Complémentaires Partagées"
 
 msgctxt "field:ins_collective.dynamic_data_manager,specific_dynamic:"
 msgid "Specific Dynamic Data"
-msgstr "Donnée Dynamique Spécifique"
+msgstr "Données Complémentaires Spécifiques"
 
 msgctxt "field:ins_collective.dynamic_data_manager,write_date:"
 msgid "Write Date"
@@ -684,11 +684,11 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_collective.enrollment,billing_manager:"
 msgid "Billing Manager"
-msgstr "Gestionnaire de Facturation"
+msgstr "Cotisation"
 
 msgctxt "field:ins_collective.enrollment,broker_manager:"
 msgid "Broker Manager"
-msgstr "Gestionnaire de Courtier"
+msgstr "Courtier"
 
 msgctxt "field:ins_collective.enrollment,contract_number:"
 msgid "Contract Number"
@@ -704,7 +704,7 @@ msgstr "Créé par"
 
 msgctxt "field:ins_collective.enrollment,dynamic_data:"
 msgid "Dynamic Data"
-msgstr "Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.enrollment,id:"
 msgid "ID"
@@ -790,7 +790,7 @@ msgstr ""
 msgctxt ""
 "field:ins_collective.enrollment_process.option_selection,dynamic_data:"
 msgid "Dynamic Data"
-msgstr "Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt ""
 "field:ins_collective.enrollment_process.option_selection,for_product:"
@@ -904,11 +904,11 @@ msgstr "Type"
 
 msgctxt "field:ins_collective.gbp_contract,billing_manager:"
 msgid "Billing Manager"
-msgstr "Gestionnaire de Facturation"
+msgstr "Cotisation"
 
 msgctxt "field:ins_collective.gbp_contract,broker_manager:"
 msgid "Broker Manager"
-msgstr "Gestionnaire de Courtier"
+msgstr "Courtier"
 
 msgctxt "field:ins_collective.gbp_contract,contact:"
 msgid "Contact"
@@ -1094,7 +1094,7 @@ msgstr "Type"
 
 msgctxt "field:ins_collective.generic_business_rule,manager:"
 msgid "Manager"
-msgstr "Gestionnaire"
+msgstr "Règles"
 
 msgctxt "field:ins_collective.generic_business_rule,pricing_rule:"
 msgid "Pricing Rule"
@@ -1150,7 +1150,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_collective.option,option_data:"
 msgid "Option Data"
-msgstr ""
+msgstr "Garantie"
 
 msgctxt "field:ins_collective.option,rec_name:"
 msgid "Name"
@@ -1358,7 +1358,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_collective.product,clause_mgr:"
 msgid "Clause Manager"
-msgstr "Gestionnaire de Clauses"
+msgstr "Clausier"
 
 msgctxt "field:ins_collective.product,code:"
 msgid "Code"
@@ -1390,11 +1390,11 @@ msgstr "Description"
 
 msgctxt "field:ins_collective.product,dynamic_data_manager:"
 msgid "Dynamic Data Manager"
-msgstr "Gestionnaire de Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.product,eligibility_mgr:"
 msgid "Eligibility Manager"
-msgstr "Gestionnaire d'éligibilité"
+msgstr "Règles d'Eligibilité"
 
 msgctxt "field:ins_collective.product,end_date:"
 msgid "End Date"
@@ -1414,7 +1414,7 @@ msgstr "Nom"
 
 msgctxt "field:ins_collective.product,offered_dynamic_data:"
 msgid "Dynamic Data"
-msgstr "Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.product,options:"
 msgid "Options"
@@ -1422,7 +1422,7 @@ msgstr "Garanties"
 
 msgctxt "field:ins_collective.product,pricing_mgr:"
 msgid "Pricing Manager"
-msgstr "Gestionnaire de Tarification"
+msgstr "Règles de Tarification"
 
 msgctxt "field:ins_collective.product,rec_name:"
 msgid "Name"
@@ -1594,7 +1594,7 @@ msgstr "Type"
 
 msgctxt "field:ins_collective.schema_element,manager:"
 msgid "Manager"
-msgstr "Gestionnaire"
+msgstr "Manager"
 
 msgctxt "field:ins_collective.schema_element,name:"
 msgid "Name"
@@ -1650,11 +1650,11 @@ msgstr "Valeur"
 
 msgctxt "field:ins_collective.schema_element_relation,schema_element:"
 msgid "Schema Element"
-msgstr "Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.schema_element_relation,the_manager:"
 msgid "Manager"
-msgstr "Gestionnaire"
+msgstr "Manager"
 
 msgctxt "field:ins_collective.schema_element_relation,write_date:"
 msgid "Write Date"
@@ -1682,7 +1682,7 @@ msgstr "Règle de Prestation"
 
 msgctxt "model:ins_collective.business_rule_manager,name:"
 msgid "Group Business Rule Manager"
-msgstr "Gestionnaire de Règle Métier"
+msgstr "Règles"
 
 msgctxt "model:ins_collective.clause_rule,name:"
 msgid "Clause Rule"
@@ -1698,7 +1698,7 @@ msgstr "Règle de Montant de Couverture"
 
 msgctxt "model:ins_collective.dynamic_data_manager,name:"
 msgid "Dynamic Data Manager"
-msgstr "Gestionnaire de Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "model:ins_collective.eligibility_relation_kind,name:"
 msgid "Define relation between eligibility rule and relation kind authorized"
@@ -1779,7 +1779,7 @@ msgstr "Règle de Provisionnement"
 
 msgctxt "model:ins_collective.schema_element,name:"
 msgid "Dynamic Data Definition"
-msgstr "Définition de Données Dynamiques"
+msgstr "Définition de Données Complémentaires"
 
 msgctxt "model:ins_collective.schema_element_relation,name:"
 msgid "Relation between schema element and dynamic data manager"

@@ -356,11 +356,11 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_contract.contract,billing_manager:"
 msgid "Billing Manager"
-msgstr "Gestionnaire de Facturation"
+msgstr "Cotisation"
 
 msgctxt "field:ins_contract.contract,broker_manager:"
 msgid "Broker Manager"
-msgstr "Gestionnaire de Courtier"
+msgstr "Courtier"
 
 msgctxt "field:ins_contract.contract,contract_number:"
 msgid "Contract Number"
@@ -376,7 +376,7 @@ msgstr "Créé par"
 
 msgctxt "field:ins_contract.contract,dynamic_data:"
 msgid "Dynamic Data"
-msgstr "Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_contract.contract,extension_life:"
 msgid "Life Extension"
@@ -456,7 +456,7 @@ msgstr "Statut"
 
 msgctxt "field:ins_contract.covered_data,dynamic_data:"
 msgid "Dynamic Data"
-msgstr "Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_contract.covered_data,end_date:"
 msgid "End Date"
@@ -500,7 +500,7 @@ msgstr "Garanties"
 
 msgctxt "field:ins_contract.generic_extension,dynamic_data:"
 msgid "Dynamic Data"
-msgstr "Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_contract.generic_extension,id:"
 msgid "ID"
@@ -536,7 +536,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.option,option_data:"
 msgid "Option Data"
-msgstr ""
+msgstr "Garantie"
 
 msgctxt "field:ins_contract.option,rec_name:"
 msgid "Name"
@@ -568,7 +568,7 @@ msgstr "Montant"
 
 msgctxt "field:ins_contract.price_line,billing_manager:"
 msgid "Billing Manager"
-msgstr "Gestionnaire de Facturation"
+msgstr "Cotisation"
 
 msgctxt "field:ins_contract.price_line,child_lines:"
 msgid "Sub-Lines"
@@ -652,7 +652,7 @@ msgstr "Elément Couvert"
 
 msgctxt "field:ins_contract.subs_process.covered_desc,data_dynamic_data:"
 msgid "Dynamic Data"
-msgstr "Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_contract.subs_process.covered_desc,data_end_date:"
 msgid "End Date"
@@ -664,7 +664,7 @@ msgstr "Garantie"
 
 msgctxt "field:ins_contract.subs_process.covered_desc,data_for_option_char:"
 msgid "For Option"
-msgstr ""
+msgstr "Garantie"
 
 msgctxt "field:ins_contract.subs_process.covered_desc,data_start_date:"
 msgid "Start Date"
@@ -716,7 +716,7 @@ msgstr ""
 
 msgctxt "field:ins_contract.subs_process.option_selection,dynamic_data:"
 msgid "Dynamic Data"
-msgstr "Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_contract.subs_process.option_selection,for_product:"
 msgid "For Product"
@@ -1121,7 +1121,7 @@ msgstr "Synthèse de la Cotisation"
 
 msgctxt "view:ins_contract.billing_manager:"
 msgid "billing_manager"
-msgstr "Gestionnaire de Cotisation"
+msgstr "Cotisation"
 
 msgctxt "view:ins_contract.billing_process.bill_display:"
 msgid "Billing Process - Bill Result"
@@ -1145,7 +1145,7 @@ msgstr "Contrat"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Dynamic Data"
-msgstr "Données Dynamiques"
+msgstr "Données Complémentaires"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Life Extension"
