@@ -13,11 +13,11 @@
 			<field name="arch" type="xml">
 					<![CDATA[ 
 		                <data>
-			                <xpath expr="/form/label[@name=&quot;product&quot;]"
+			                <xpath expr="/form/label[@name='product']"
 			                    position="replace_attributes">
 			                    <label name="on_contract"/>
 			                </xpath>
-						    <xpath expr="/form/field[@name=&quot;product&quot;]"
+						    <xpath expr="/form/field[@name='product']"
 			                    position="replace_attributes">
 			                    <field name="on_contract" colspan="2"/>
 			                </xpath>

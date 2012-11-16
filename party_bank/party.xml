@@ -25,12 +25,12 @@
             <field name="arch" type="xml">
                 <![CDATA[
                 <data>
-                    <xpath expr="/form/notebook/page[@id=&quot;role&quot;]/group[@id=&quot;role_group&quot;]" 
+                    <xpath expr="/form/notebook/page[@id='role']/group[@id='role_group']" 
                     position="inside">
                         <label name="is_bank"/>
                         <field name="is_bank" xexpand="0" width="25"/>
                     </xpath>
-                    <xpath expr="/form/notebook/page[@id=&quot;role&quot;]/group[@id=&quot;role_group&quot;]"
+                    <xpath expr="/form/notebook/page[@id='role']/group[@id='role_group']"
                     position="after">
                     <group id="bank" colspan="4" yexpand="1" yfill="1"
                     states="{'invisible': Bool(~Eval('is_bank'))}">
@@ -49,13 +49,13 @@
                 <![CDATA[
                 <data>
                     <xpath 
-                        expr="/form/notebook/page[@id=&quot;general&quot;]"
+                        expr="/form/notebook/page[@id='general']"
                         position="replace_attributes">
                         <page string="General" id="general"
                             states="{'invisible':True}"/>
                     </xpath>
                     <xpath 
-                        expr="/form/notebook/page[@id=&quot;bank_account&quot;]"
+                        expr="/form/notebook/page[@id='bank_account']"
                         position="replace_attributes">
                         <page id="bank_account"
                             states="{'invisible':True}"/>

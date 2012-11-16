@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
 <data>
-    <xpath expr="/tree/field[@name=&quot;is_person&quot;]" position="replace"/>
+    <xpath expr="/tree/field[@name='is_person']" position="replace"/>
 </data>

@@ -11,7 +11,7 @@
             <field name="arch" type="xml">
             <![CDATA[
             <data>
-                <xpath expr="/tree/field[@name=&quot;current_rec_name&quot;]"
+                <xpath expr="/tree/field[@name='current_rec_name']"
                     position="replace"/>
                 <xpath expr="/tree" position="inside">
                     <field name="code"/>
@@ -32,7 +32,7 @@
                 <xpath expr="/form" position="replace_attributes">
                     <form string="Clause"/>
                 </xpath>
-                <xpath expr="/form/group[@id=&quot;basic data&quot;]" position="inside">
+                <xpath expr="/form/group[@id='basic data']" position="inside">
                     <label name="code"/>
                     <field name="code"/>
                     <label name="name"/>
@@ -41,7 +41,7 @@
                     <label name="title"/>
                     <field name="title" colspan="11"/>
                 </xpath>
-                <xpath expr="/form/group[@id=&quot;versions&quot;]/field[@name=&quot;versions&quot;]"
+                <xpath expr="/form/group[@id='versions']/field[@name='versions']"
                     position="replace_attributes">
                     <field name="versions" mode="form, tree"/>
                 </xpath>

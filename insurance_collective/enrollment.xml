@@ -9,7 +9,7 @@
 			<field name="arch" type="xml">                 
 					<![CDATA[                 
 						<data>
-							<xpath expr="/tree/field[@name=&quot;product&quot;]"
+							<xpath expr="/tree/field[@name='product']"
 			                    position="replace_attributes">
 			                    <field name="on_contract"/>
 			                </xpath>
@@ -26,11 +26,11 @@
 			<field name="arch" type="xml">
 					 <![CDATA[
 					 	<data>
-					 		<xpath expr="/form/group/group/label[@name=&quot;product&quot;]"
+					 		<xpath expr="/form/group/group/label[@name='product']"
 			                    position="replace_attributes">
 			                    <label name="on_contract"/>
 			                </xpath>
-			                <xpath expr="/form/group/group/field[@name=&quot;product&quot;]"
+			                <xpath expr="/form/group/group/field[@name='product']"
 			                    position="replace_attributes">
 			                    <field name="on_contract"/>
 			                </xpath>

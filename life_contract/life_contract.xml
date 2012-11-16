@@ -72,7 +72,7 @@
                             <xpath expr="/form" position="replace_attributes">
                                 <form string="Covered Person"/>
                             </xpath>
-                            <xpath expr="/form/group[@id=&quot;product&quot;]"
+                            <xpath expr="/form/group[@id='product']"
                                     position="inside">
                                 <label name="person"/>
                                 <field name="person"/>
@@ -108,7 +108,7 @@
             <field name="arch" type="xml">                 
                      <![CDATA[
                         <data>
-                            <xpath expr="/form/group[@id=&quot;specific&quot;]"
+                            <xpath expr="/form/group[@id='specific']"
                             position="inside">
                                 <label name="coverage_amount"/>
                                 <field name="coverage_amount"/>
@@ -130,7 +130,7 @@
             <field name="arch" type="xml">                 
                  <![CDATA[
                     <data>
-                        <xpath expr="/tree/field[@name=&quot;data_status&quot;]"
+                        <xpath expr="/tree/field[@name='data_status']"
                                 position="after">
                             <field name="data_coverage_amount"/>
                         </xpath>
@@ -146,12 +146,12 @@
             <field name="arch" type="xml">                 
                  <![CDATA[
                     <data>
-                        <xpath expr="/form/group[@id=&quot;covered_element&quot;]/group[@id=&quot;product&quot;]"
+                        <xpath expr="/form/group[@id='covered_element']/group[@id='product']"
                                 position="inside">
                             <label name="elem_person"/>
                             <field name="elem_person" xexpand="1"/>
                         </xpath>
-                        <xpath expr="/form/group[@id=&quot;covered_data&quot;]/group[@id=&quot;specific&quot;]"
+                        <xpath expr="/form/group[@id='covered_data']/group[@id='specific']"
                                 position="inside">
                             <label name="data_coverage_amount"/>
                             <field name="data_coverage_amount" xexpand="1"/>

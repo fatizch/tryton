@@ -121,7 +121,7 @@
                     <xpath expr="/form" position="replace_attributes">
                         <form string="Pricing rule"/>
                     </xpath>
-                    <xpath expr="/form/notebook/page[@id=&quot;main&quot;]"
+                    <xpath expr="/form/notebook/page[@id='main']"
                      position="after">
                         <page id="calculators" string="Main"
                             states="{'invisible' : Eval('config_kind') == 'simple'}">
@@ -129,11 +129,11 @@
                                 xexpand="1" colspan="4" mode="form, tree"/>
                         </page>
                     </xpath>
-                    <xpath expr="/form/notebook/page[@id=&quot;main&quot;]"
+                    <xpath expr="/form/notebook/page[@id='main']"
                         position="replace_attributes">
                         <page id="main" states="{'invisible': True}"/>
                     </xpath>
-                    <xpath expr="/form/group[@id=&quot;templating&quot;]"
+                    <xpath expr="/form/group[@id='templating']"
                         position="after">
                             <newline/>
                             <group id="config_kind">

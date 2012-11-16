@@ -14,7 +14,7 @@
                 <xpath expr="/form" position="replace_attributes">
                     <form string="Eligibility rule"/>
                 </xpath>
-                <xpath expr="/form/notebook/page[@id=&quot;main&quot;]"
+                <xpath expr="/form/notebook/page[@id='main']"
                      position="after">
                     <page id="sub" string="Covered Element">
                         <field name="relation_kinds" colspan="4" xexpand="1"
@@ -34,10 +34,10 @@
                         </group>
                     </page>
                 </xpath>
-                <xpath expr="/form/notebook/page[@id=&quot;main&quot;]/group[@id=&quot;simple&quot;]"
+                <xpath expr="/form/notebook/page[@id='main']/group[@id='simple']"
                  position="inside">
                 </xpath>
-                <xpath expr="/form/notebook/page[@id=&quot;main&quot;]"
+                <xpath expr="/form/notebook/page[@id='main']"
                  position="inside">
                     <group id="subscriber_classes" colspan="2">
                         <label name="subscriber_classes"/>

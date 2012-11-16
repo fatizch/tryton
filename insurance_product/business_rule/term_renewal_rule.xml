@@ -14,11 +14,11 @@
                         <xpath expr="/form" position="replace_attributes">
                             <form string="Term - Renewal rule"/>
                         </xpath>
-                        <xpath expr="/form/notebook/page[@id=&quot;main&quot;]/group[@id=&quot;config_kind&quot;]"
+                        <xpath expr="/form/notebook/page[@id='main']/group[@id='config_kind']"
                          position="replace_attributes">
                             <group id="config_kind" states="{'invisible': True}"/>
                         </xpath>
-                        <xpath expr="/form/notebook/page[@id=&quot;main&quot;]/group[@id=&quot;simple&quot;]"
+                        <xpath expr="/form/notebook/page[@id='main']/group[@id='simple']"
                                 position="inside">
                             <group id="term">
                                 <label name="with_term"/>

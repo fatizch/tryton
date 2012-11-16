@@ -15,7 +15,7 @@
                 <xpath expr="/form" position="replace_attributes">
                     <form string="Benefit"/>
                 </xpath>
-                <xpath expr="/form/notebook/page[@id=&quot;managers&quot;]/notebook/page[@id=&quot;eligibility&quot;]" position="before">
+                <xpath expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']" position="before">
                     <page string="Benefit" id="benefit">
                         <field name="benefit_mgr" colspan="4" mode="form"/>
                     </page>
@@ -23,7 +23,7 @@
                         <field name="reserve_mgr" colspan="4" mode="form"/>
                     </page>
                 </xpath>
-                <xpath expr="/form/notebook/page[@id=&quot;admin&quot;]" position="inside">
+                <xpath expr="/form/notebook/page[@id='admin']" position="inside">
                     <label name="kind"/>
                     <field name="kind" xexpand="0"/>
                 </xpath>
@@ -38,7 +38,7 @@
             <field name="arch" type="xml">
             <![CDATA[
                 <data>
-                    <xpath expr="/tree/field[@name=&quot;code&quot;]" position="before">
+                    <xpath expr="/tree/field[@name='code']" position="before">
                         <field name="kind"/>
                     </xpath>
                 </data>
