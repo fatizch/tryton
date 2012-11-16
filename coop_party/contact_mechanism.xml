@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<record model="ir.ui.view" id="contact_mechanism_view_tree_sequence">
+    <field name="model">party.contact_mechanism</field>
+    <field name="type">tree</field>
+    <field name="priority" eval="20"/>
+    <field name="inherit" ref="party.contact_mechanism_view_tree_sequence"/>
+    <field name="name">contact_mechanism_tree</field>
+</record>
