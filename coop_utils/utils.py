@@ -19,6 +19,8 @@ except ImportError:
 
 
 def get_descendents(from_class, names_only=False):
+    # Used to compute the possible models from a given top level
+    # name
     res = []
     if names_only:
         format_ = lambda x: x
