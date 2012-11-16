@@ -102,6 +102,10 @@ msgctxt "error:ins_product.schema_element_relation:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_product.term_renewal_rule:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "field:ProductDefinition,id:"
 msgid "ID"
 msgstr "ID"
@@ -269,6 +273,10 @@ msgstr "Mis à jour par"
 msgctxt "field:ins_product.business_rule_manager,business_rules:"
 msgid "Business Rules"
 msgstr "Règles Métiers"
+
+msgctxt "field:ins_product.business_rule_manager,code:"
+msgid "Code"
+msgstr "Code"
 
 msgctxt "field:ins_product.business_rule_manager,create_date:"
 msgid "Create Date"
@@ -906,6 +914,10 @@ msgctxt "field:ins_product.generic_business_rule,start_date:"
 msgid "From Date"
 msgstr "Date de Début"
 
+msgctxt "field:ins_product.generic_business_rule,term_renewal_rule:"
+msgid "Term - Renewal Rule"
+msgstr "Règle de Terme - Renouvellement"
+
 msgctxt "field:ins_product.generic_business_rule,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -1250,6 +1262,10 @@ msgctxt "field:ins_product.product,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
 
+msgctxt "field:ins_product.product,term_renewal_mgr:"
+msgid "Term - Renewal"
+msgstr "Règles de Terme - Renouvellement"
+
 msgctxt "field:ins_product.product,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -1494,6 +1510,74 @@ msgctxt "field:ins_product.schema_element_relation,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_product.term_renewal_rule,can_be_renewed:"
+msgid "Can be renewed"
+msgstr ""
+
+msgctxt "field:ins_product.term_renewal_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:ins_product.term_renewal_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.term_renewal_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.term_renewal_rule,date_for_sync:"
+msgid "Sync Date"
+msgstr ""
+
+msgctxt "field:ins_product.term_renewal_rule,frequency:"
+msgid "Frequency"
+msgstr ""
+
+msgctxt "field:ins_product.term_renewal_rule,generic_rule:"
+msgid "Generic Rule"
+msgstr "Règle Générique"
+
+msgctxt "field:ins_product.term_renewal_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.term_renewal_rule,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.term_renewal_rule,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_product.term_renewal_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:ins_product.term_renewal_rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_product.term_renewal_rule,template_behaviour:"
+msgid "Template Behaviour"
+msgstr "Comportement du Modèle"
+
+msgctxt "field:ins_product.term_renewal_rule,term_date_choice:"
+msgid "Term Date Selection"
+msgstr "Date de Terme"
+
+msgctxt "field:ins_product.term_renewal_rule,with_term:"
+msgid "With Term"
+msgstr "Avec Terme"
+
+msgctxt "field:ins_product.term_renewal_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.term_renewal_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "help:ins_product.benefit_rule,coef_coverage_amount:"
 msgid "Add a multiplier to apply to the coverage amount"
 msgstr "Ajouter un coefficient multiplicateur au montant de couverture"
@@ -1621,6 +1705,10 @@ msgstr "Définition de Données Complémentaires"
 msgctxt "model:ins_product.schema_element_relation,name:"
 msgid "Relation between schema element and dynamic data manager"
 msgstr ""
+
+msgctxt "model:ins_product.term_renewal_rule,name:"
+msgid "Term and Renewal Rule"
+msgstr "Règle de Terme - Renouvellement"
 
 msgctxt "model:ir.action,name:act_coverage_form"
 msgid "Coverages"
@@ -2067,12 +2155,12 @@ msgid "Date"
 msgstr "Date"
 
 msgctxt "selection:ins_product.schema_element,type_:"
-msgid "Float"
-msgstr "Numérique"
-
-msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Integer"
 msgstr "Entier"
+
+msgctxt "selection:ins_product.schema_element,type_:"
+msgid "Numeric"
+msgstr ""
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Reference"
@@ -2085,6 +2173,58 @@ msgstr "Sélection"
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Text"
 msgstr "Texte"
+
+msgctxt "selection:ins_product.term_renewal_rule,config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_product.term_renewal_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_product.term_renewal_rule,frequency:"
+msgid "Biyearly"
+msgstr ""
+
+msgctxt "selection:ins_product.term_renewal_rule,frequency:"
+msgid "Half Yearly"
+msgstr "Semestriel"
+
+msgctxt "selection:ins_product.term_renewal_rule,frequency:"
+msgid "Monthly"
+msgstr "Mensuel"
+
+msgctxt "selection:ins_product.term_renewal_rule,frequency:"
+msgid "Quarterly"
+msgstr "Trimestriel"
+
+msgctxt "selection:ins_product.term_renewal_rule,frequency:"
+msgid "Yearly"
+msgstr "Annuel"
+
+msgctxt "selection:ins_product.term_renewal_rule,template_behaviour:"
+msgid "Add"
+msgstr "Ajouter"
+
+msgctxt "selection:ins_product.term_renewal_rule,template_behaviour:"
+msgid "Override"
+msgstr "Remplacer"
+
+msgctxt "selection:ins_product.term_renewal_rule,template_behaviour:"
+msgid "Remove"
+msgstr "Supprimer"
+
+msgctxt "selection:ins_product.term_renewal_rule,template_behaviour:"
+msgid "Validate"
+msgstr "Valider"
+
+msgctxt "selection:ins_product.term_renewal_rule,term_date_choice:"
+msgid "At subscription Time"
+msgstr ""
+
+msgctxt "selection:ins_product.term_renewal_rule,term_date_choice:"
+msgid "At this Date"
+msgstr ""
 
 msgctxt "view:ins_product.benefit:"
 msgid "Benefit"
@@ -2266,6 +2406,10 @@ msgctxt "view:ins_product.product:"
 msgid "Product"
 msgstr "Produit"
 
+msgctxt "view:ins_product.product:"
+msgid "Term - Renewal"
+msgstr "Terme - Renouvellement"
+
 msgctxt "view:ins_product.reserve_rule:"
 msgid "Reserve rule"
 msgstr "Provisionnement"
@@ -2277,3 +2421,7 @@ msgstr "Descripteur de Données Complémentaires"
 msgctxt "view:ins_product.schema_element:"
 msgid "Dynamic Data Descriptors"
 msgstr "Descripteur de Données Complémentaires"
+
+msgctxt "view:ins_product.term_renewal_rule:"
+msgid "Term - Renewal rule"
+msgstr "Règle de Terme - Renouvellement"

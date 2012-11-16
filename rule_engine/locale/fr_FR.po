@@ -134,10 +134,6 @@ msgctxt "field:rule_engine.create_test_case.start,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.create_test_case.start,mode:"
-msgid "Mode"
-msgstr "Mode"
-
 msgctxt "field:rule_engine.create_test_case.start,result:"
 msgid "Result"
 msgstr "Résultat"
@@ -265,6 +261,10 @@ msgstr "Créé par"
 msgctxt "field:rule_engine.tree_element,description:"
 msgid "Description"
 msgstr "Description"
+
+msgctxt "field:rule_engine.tree_element,fct_args:"
+msgid "Function Arguments"
+msgstr ""
 
 msgctxt "field:rule_engine.tree_element,id:"
 msgid "ID"
@@ -418,14 +418,6 @@ msgctxt "selection:rule_engine,status:"
 msgid "Validated"
 msgstr "Validé"
 
-msgctxt "selection:rule_engine.create_test_case.start,mode:"
-msgid "Edit Values"
-msgstr "Editer les Valeurs"
-
-msgctxt "selection:rule_engine.create_test_case.start,mode:"
-msgid "Show Result"
-msgstr "Voir le Résultat"
-
 msgctxt "selection:rule_engine.tree_element,type:"
 msgid "Folder"
 msgstr "Dossier"
@@ -499,21 +491,9 @@ msgctxt "wizard_button:rule_engine.create_test_case,ask_description,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:rule_engine.create_test_case,run_test,ask_description:"
-msgid "Create Test Case"
-msgstr "Créer le jeu de test"
-
-msgctxt "wizard_button:rule_engine.create_test_case,run_test,end:"
-msgid "OK"
-msgstr "OK"
-
 msgctxt "wizard_button:rule_engine.create_test_case,start,end:"
 msgid "Cancel"
 msgstr "Annuler"
-
-msgctxt "wizard_button:rule_engine.create_test_case,start,run_test:"
-msgid "OK"
-msgstr "OK"
 
 msgctxt "wizard_button:rule_engine.run_tests,report,end:"
 msgid "OK"
