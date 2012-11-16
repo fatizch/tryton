@@ -1,5 +1,5 @@
 #-*- coding:utf-8 -*-
-from trytond.pool import PoolMeta
+from trytond.model import fields
 
 from trytond.modules.insurance_product import product, business_rule, benefit
 from trytond.modules.insurance_product import coverage, clause
@@ -8,14 +8,12 @@ from trytond.modules.insurance_product.business_rule import pricing_rule
 from trytond.modules.insurance_product.business_rule import eligibility_rule
 from trytond.modules.insurance_product.business_rule import benefit_rule
 from trytond.modules.insurance_product.business_rule import reserve_rule
-from trytond.modules.insurance_product.business_rule import coverage_amount_rule
+from trytond.modules.insurance_product.business_rule import \
+    coverage_amount_rule
 from trytond.modules.insurance_product.business_rule import clause_rule
 from trytond.modules.insurance_product.business_rule import term_renewal_rule
 from trytond.modules.insurance_product import dynamic_data
 from trytond.modules.coop_utils import utils
-
-
-__metaclass__ = PoolMeta
 
 
 class GroupRoot(object):
@@ -32,18 +30,20 @@ class GroupInsurancePlan(GroupRoot, product.Product):
 
     __name__ = 'ins_collective.product'
 
+    @classmethod
+    def __setup__(cls):
+        field = fields.One2Many('ins_collective.coverage',
+            'product', 'Options')
+        cls.options = field
+
 
 class GroupInsuranceCoverage(GroupRoot, coverage.Coverage):
     'Group Insurance Coverage'
 
     __name__ = 'ins_collective.coverage'
 
-
-class GroupInsurancePlanOptionsCoverage(GroupRoot,
-        product.ProductOptionsCoverage):
-    'Define Group Insurance Plan - Coverage relations'
-
-    __name__ = 'ins_collective.product-options-coverage'
+    product = fields.Many2One('ins_collective.product', 'Product',
+        ondelete='CASCADE')
 
 
 class GroupBusinessRuleManager(GroupRoot, business_rule.BusinessRuleManager):

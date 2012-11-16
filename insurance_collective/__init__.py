@@ -11,7 +11,6 @@ def register():
         GroupBusinessRuleManager,
         GroupInsurancePlan,
         GroupInsuranceCoverage,
-        GroupInsurancePlanOptionsCoverage,
         GroupGenericBusinessRule,
         GroupPricingRule,
         GroupPriceCalculator,
