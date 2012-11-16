@@ -4,17 +4,17 @@ import copy
 from trytond.modules.coop_utils import CoopSQL, utils
 from trytond.modules.insurance_product import Offered
 
-__all__ = ['Coverage']
+__all__ = ['HealthCoverage']
 
 
-class Coverage(CoopSQL, Offered):
+class HealthCoverage(CoopSQL, Offered):
     'Coverage'
 
     __name__ = 'ins_product.coverage'
 
     @classmethod
     def __setup__(cls):
-        super(Coverage, cls).__setup__()
+        super(HealthCoverage, cls).__setup__()
         cls.family = copy.copy(cls.family)
         if not cls.family.selection:
             cls.family.selection = []

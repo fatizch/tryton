@@ -4,5 +4,5 @@ from .product import *
 
 def register():
     Pool.register(
-        HealthCoverage,
-        module='health_product', type_='model')
+        GroupLifeCoverage,
+        module='life_product_collective', type_='model')
