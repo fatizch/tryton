@@ -33,12 +33,12 @@
                 position="inside">
                     <label name="currency"/>
                     <field name="currency"/>
-                    <label name="insurer" xalign="0"/>
+                    <label name="insurer"/>
                     <field name="insurer" widget="selection"/>
                 </xpath>
                 <xpath expr="/form/group[@id=&quot;templating&quot;]"
                     position="before">
-                    <label name="family" xalign="0"/>
+                    <label name="family"/>
                     <field name="family" xexpand="0"/>
                 </xpath>
                 </data>

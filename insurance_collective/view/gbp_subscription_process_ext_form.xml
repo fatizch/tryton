@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <form string="GBP Subscription Process - GBP">
-    <label name="contact" xalign="0"/>
+    <label name="contact"/>
     <field name="contact"/>
     <newline/>
     <field name="final_product" mode="form" colspan="4"/>

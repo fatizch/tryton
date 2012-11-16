@@ -1,22 +1,22 @@
 <?xml version="1.0"?>
 <data>
     <xpath expr="/form/label[@name=&quot;name&quot;]" position="before">
-        <label name="ssn" xalign="0"/>
+        <label name="ssn"/>
         <field name="ssn" colspan="2"/>
-        <label name="gender" xalign="0"/>
-        <field name="gender" widget="selection" xalign="0" xexpand="0"/>
+        <label name="gender"/>
+        <field name="gender" widget="selection" xexpand="0"/>
     </xpath>
     <xpath expr="/form/field[@name=&quot;name&quot;]" position="after">
-        <label name="first_name" xalign="0"/>
+        <label name="first_name"/>
         <field name="first_name" colspan="2"/>
         <newline/>
-        <label name="birth_date" xalign="0"/>
+        <label name="birth_date"/>
         <field name="birth_date"/>
 
-        <label name="maiden_name" xalign="0"/>
+        <label name="maiden_name"/>
         <field name="maiden_name" colspan="2"/>
         <newline/>
-        <label name="nationality" xalign="0"/>
+        <label name="nationality"/>
         <field name="nationality"/>
     </xpath>
     <xpath

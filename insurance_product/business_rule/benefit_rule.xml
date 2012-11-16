@@ -16,7 +16,7 @@
                 </xpath>
                 <xpath expr="/form/notebook/page[@id=&quot;main&quot;]/group[@id=&quot;simple&quot;]"
                  position="inside">
-                    <label name="kind" xalign="0"/>
+                    <label name="kind"/>
                     <field name="kind" xexpand="0"/>
                     <newline/>
                     <label name="amount"/>

@@ -20,8 +20,8 @@
                         <field name="relation_kinds" colspan="4" xexpand="1"
                             yfill="1" yexpand="1"/>
                         <group id="sub_elem_config_kind" colspan="2">
-                            <label name="sub_elem_config_kind" xalign="0" xfill="1"/>
-                            <field name="sub_elem_config_kind" xfill="1" xexpand="0" xalign="0"/>
+                            <label name="sub_elem_config_kind" xfill="1"/>
+                            <field name="sub_elem_config_kind" xfill="1" xexpand="0"/>
                         </group>
                         <newline/>
                         <group id="sub_simple" colspan="4"
@@ -29,7 +29,7 @@
                         </group>
                         <group id="sub_rule" colspan="4"
                             states="{'invisible': Eval('sub_elem_config_kind') != 'rule'}">
-                           <label name="sub_elem_rule" xalign="0"/>
+                           <label name="sub_elem_rule"/>
                            <field name="sub_elem_rule"/>
                         </group>
                     </page>
@@ -40,7 +40,7 @@
                 <xpath expr="/form/notebook/page[@id=&quot;main&quot;]"
                  position="inside">
                     <group id="subscriber_classes" colspan="2">
-                        <label name="subscriber_classes" xalign="0"/>
+                        <label name="subscriber_classes"/>
                         <field name="subscriber_classes" xexpand="0"/>
                     </group>
                 </xpath>

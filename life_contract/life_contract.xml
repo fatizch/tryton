@@ -74,7 +74,7 @@
                             </xpath>
                             <xpath expr="/form/group[@id=&quot;product&quot;]"
                                     position="inside">
-                                <label name="person" xalign="0"/>
+                                <label name="person"/>
                                 <field name="person"/>
                             </xpath>
                         </data>
@@ -110,7 +110,7 @@
                         <data>
                             <xpath expr="/form/group[@id=&quot;specific&quot;]"
                             position="inside">
-                                <label name="coverage_amount" xalign="0"/>
+                                <label name="coverage_amount"/>
                                 <field name="coverage_amount"/>
                             </xpath>
                         </data>
@@ -148,12 +148,12 @@
                     <data>
                         <xpath expr="/form/group[@id=&quot;covered_element&quot;]/group[@id=&quot;product&quot;]"
                                 position="inside">
-                            <label name="elem_person" xalign="0"/>
+                            <label name="elem_person"/>
                             <field name="elem_person" xexpand="1"/>
                         </xpath>
                         <xpath expr="/form/group[@id=&quot;covered_data&quot;]/group[@id=&quot;specific&quot;]"
                                 position="inside">
-                            <label name="data_coverage_amount" xalign="0"/>
+                            <label name="data_coverage_amount"/>
                             <field name="data_coverage_amount" xexpand="1"/>
                         </xpath>
                     </data>

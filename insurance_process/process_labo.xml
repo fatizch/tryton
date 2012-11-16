@@ -30,10 +30,10 @@
 			<field name="arch" type="xml">
 					     <![CDATA[
 						    <form string="process" col="4">
-						        <label name="name" colspan="1" xalign="0"/>
+						        <label name="name" colspan="1"/>
 						        <field name="name" colspan="3"/>
 						        <newline/>
-						        <label name="process_model" colspan="1" xalign="0"/>
+						        <label name="process_model" colspan="1"/>
 						        <field name="process_model" colspan="3"/>
 						        <newline/>
 						        <field name="steps" colspan="4"/>
@@ -90,39 +90,39 @@
 					 <![CDATA[
 					 <form string="step" col="8">
 					 <group id="top_group">
-						 <label name="process_name" xalign="0"/>
+						 <label name="process_name"/>
 						 <field name="process_name"/>
 						 <newline/>
-						 <label name="virtual_step" xalign="0"/>
+						 <label name="virtual_step"/>
 						 <field name="virtual_step"/>
 					 </group>
 					 <newline/>
 					 <group id="data_group">
-						 <label name="on_product_step" xalign="0"/>
+						 <label name="on_product_step"/>
 						 <field name="on_product_step"/>
 						 <newline/>
-						 <label name="step_model" xalign="0"/>
+						 <label name="step_model"/>
 						 <field name="step_model"/>
 						 <newline/>
-						 <label name="product_step_name" xalign="0"/>
+						 <label name="product_step_name"/>
 						 <field name="product_step_name"/>
 					 </group>
 					 <group string="Buttons" id="buttons_group" col="6"
 					 			states="{'invisible': Bool(Eval('virtual_step'))}">
-						 <label name="button_previous" xalign="0"/>
+						 <label name="button_previous"/>
 						 <field name="button_previous"/>
-						 <label name="button_next" xalign="0"/>
+						 <label name="button_next"/>
 						 <field name="button_next"/>
-						 <label name="button_check" xalign="0"/>
+						 <label name="button_check"/>
 						 <field name="button_check"/>
-						 <label name="button_suspend" xalign="0"/>
+						 <label name="button_suspend"/>
 						 <field name="button_suspend"/>
-						 <label name="button_cancel" xalign="0"/>
+						 <label name="button_cancel"/>
 						 <field name="button_cancel"/>
-						 <label name="button_complete" xalign="0"/>
+						 <label name="button_complete"/>
 						 <field name="button_complete"/>
 						 <newline/>
-						 <label name="button_default" xalign="0"/>
+						 <label name="button_default"/>
 						 <field name="button_default"/>
 					 </group>
 					 <newline/>
@@ -173,7 +173,7 @@
 			<field name="arch" type="xml">
 					 <![CDATA[
 					 <form string="step">
-					 <label name="name" xalign="0"/>
+					 <label name="name"/>
 					 <field name="name"/> 
 					 <field name="name"/>
 					 </form>               ]]>

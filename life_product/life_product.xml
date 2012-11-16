@@ -16,10 +16,10 @@
                         position="inside">
                             <group id="simple_life" 
                                     states="{'invisible': Eval('context', {}).get('for_family') != 'life_product.definition'}">
-                                <label name="min_age" xalign="0"/>
+                                <label name="min_age"/>
                                 <field name="min_age" xexpand="1"/>
                                 <newline/>
-                                <label name="max_age" xalign="0"/>
+                                <label name="max_age"/>
                                 <field name="max_age" xexpand="1"/>
                             </group>
                         </xpath>
@@ -27,10 +27,10 @@
                         position="inside">
                             <group id="simple_sub_life" 
                                     states="{'invisible': Eval('context', {}).get('for_family') != 'life_product.definition'}">
-                                <label name="sub_min_age" xalign="0"/>
+                                <label name="sub_min_age"/>
                                 <field name="sub_min_age" xexpand="1"/>
                                 <newline/>
-                                <label name="sub_max_age" xalign="0"/>
+                                <label name="sub_max_age"/>
                                 <field name="sub_max_age" xexpand="1"/>
                             </group>
                         </xpath>

@@ -28,7 +28,7 @@
 					 	<data>
 					 		<xpath expr="/form/group/group/label[@name=&quot;product&quot;]"
 			                    position="replace_attributes">
-			                    <label name="on_contract" xalign="0"/>
+			                    <label name="on_contract"/>
 			                </xpath>
 			                <xpath expr="/form/group/group/field[@name=&quot;product&quot;]"
 			                    position="replace_attributes">

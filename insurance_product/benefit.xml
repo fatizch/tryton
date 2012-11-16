@@ -24,7 +24,7 @@
                     </page>
                 </xpath>
                 <xpath expr="/form/notebook/page[@id=&quot;admin&quot;]" position="inside">
-                    <label name="kind" xalign="0"/>
+                    <label name="kind"/>
                     <field name="kind" xexpand="0"/>
                 </xpath>
                 </data>

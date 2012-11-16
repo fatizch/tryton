@@ -37,18 +37,18 @@
             <field name="arch" type="xml">
                 <![CDATA[
                 <form string="Offered">
-                    <label name="code" xalign="0"/>
+                    <label name="code"/>
                     <field name="code"/>
-                    <label name="name" xalign="0"/>
+                    <label name="name"/>
                     <field name="name"/>
                     <newline/>
-                    <label name="start_date" xalign="0"/>
+                    <label name="start_date"/>
                     <field name="start_date"/>
-                    <label name="end_date" xalign="0"/>
+                    <label name="end_date"/>
                     <field name="end_date"/>
                     <newline/>
                     <group id="templating" colspan="4">
-                        <label name="template" xalign="0"/>
+                        <label name="template"/>
                         <field name="template" xexpand="1"/>
                         <field name="template_behaviour"/>
                     </group>
@@ -111,7 +111,7 @@
                 </xpath>
                 <xpath expr="/form/notebook/page[@id=&quot;admin&quot;]"
                         position="inside">
-                    <label name="contract_generator" xalign="0"/>
+                    <label name="contract_generator"/>
                     <field name="contract_generator"/>
                     <label name="currency"/>
                     <field name="currency"/>

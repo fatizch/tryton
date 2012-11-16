@@ -53,14 +53,14 @@
                     <![CDATA[
                         <form string="Bill Summary">
                             <group id="summary">
-                                <label name="start_date" xalign="0"/>
+                                <label name="start_date"/>
                                 <field name="start_date"/>
-                                <label name="end_date" xalign="0"/>
+                                <label name="end_date"/>
                                 <field name="end_date"/>
                                 <newline/>
-                                <label name="amount_ht" xalign="0"/>
+                                <label name="amount_ht"/>
                                 <field name="amount_ht"/>
-                                <label name="amount_ttc" xalign="0"/>
+                                <label name="amount_ttc"/>
                                 <field name="amount_ttc"/>
                                 <newline/>
                                 <label name="base_price"/>
@@ -68,7 +68,7 @@
                                 <label name="on_object"/>
                                 <field name="on_object"/>
                                 <newline/>
-                                <label name="kind" xalign="0"/>
+                                <label name="kind"/>
                                 <field name="kind"/>
                             </group>
                             <newline/>
@@ -133,14 +133,14 @@
                     <![CDATA[
                         <form string="Bill Summary">
                             <group id="Basic Data">
-                                <label name="start_date" xalign="0"/>
+                                <label name="start_date"/>
                                 <field name="start_date"/>
-                                <label name="end_date" xalign="0"/>
+                                <label name="end_date"/>
                                 <field name="end_date"/>
                                 <newline/>
-                                <label name="amount_ht" xalign="0"/>
+                                <label name="amount_ht"/>
                                 <field name="amount_ht"/>
-                                <label name="amount_ttc" xalign="0"/>
+                                <label name="amount_ttc"/>
                                 <field name="amount_ttc"/>
                                 <newline/>
                                 <label name="for_contract"/>

@@ -39,12 +39,12 @@
                     <notebook>
                         <page id="main" string="Main">
                             <group id="config_kind" colspan="2">
-                            <label name="config_kind" xalign="0" xfill="1"/>
-                            <field name="config_kind" xfill="1" xexpand="0" xalign="0"/>
+                            <label name="config_kind" xfill="1"/>
+                            <field name="config_kind" xfill="1" xexpand="0"/>
                             </group>
                             <group id="rule" colspan="4" 
                               states="{'invisible': Eval('config_kind') != 'rule'}">
-                                <label name="rule" xalign="0"/>
+                                <label name="rule"/>
                                 <field name="rule"/>
                             </group>
                             <group id="simple" colspan="4"

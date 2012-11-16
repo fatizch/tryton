@@ -33,12 +33,12 @@
                     <form string="Clause"/>
                 </xpath>
                 <xpath expr="/form/group[@id=&quot;basic data&quot;]" position="inside">
-                    <label name="code" xalign="0"/>
+                    <label name="code"/>
                     <field name="code"/>
-                    <label name="name" xalign="0"/>
+                    <label name="name"/>
                     <field name="name" colspan="9"/>
                     <newline/>
-                    <label name="title" xalign="0"/>
+                    <label name="title"/>
                     <field name="title" colspan="11"/>
                 </xpath>
                 <xpath expr="/form/group[@id=&quot;versions&quot;]/field[@name=&quot;versions&quot;]"
@@ -93,7 +93,7 @@
                     <form string="Clause Version"/>
                 </xpath>
                 <xpath expr="/form" position="inside">
-                    <label name="content" xalign="0"/>
+                    <label name="content"/>
                     <newline/>
                     <field name="content" widget="richtext" 
                         xexpand="1" yexpand="1" colspan="4"/>

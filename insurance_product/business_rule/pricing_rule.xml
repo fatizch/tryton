@@ -26,39 +26,39 @@
                 <![CDATA[
                     <form string="Pricing Component">
                         <group id="main">
-                            <label name="kind" xalign="0" xfill="1"/>
+                            <label name="kind" xfill="1"/>
                             <field name="kind"/>
-                            <label name="code" xalign="0"/>
+                            <label name="code"/>
                             <field name="code"/>
                         </group>
                         <newline/>
                         <group id="tax"
                             states="{'invisible': Eval('kind') != 'tax'}">
-                            <label name="the_tax" xalign="0"/>
+                            <label name="the_tax"/>
                             <field name="the_tax"/>
                         </group>
                         <newline/>
                         <group id="fee"
                             states="{'invisible': Eval('kind') != 'fee'}">
-                            <label name="the_fee" xalign="0"/>
+                            <label name="the_fee"/>
                             <field name="the_fee"/>
                         </group>
                         <newline/>
                         <group id="other"
                             states="{'invisible': Eval('kind') != 'base'}">
                             <group id="config_kind" colspan="2">
-                                <label name="config_kind" xalign="0" xfill="1"/>
+                                <label name="config_kind" xfill="1"/>
                                 <field name="config_kind" xexpand="1"/>
                             </group>
                             <newline/>
                             <group id="simple" colspan="4"
                                 states="{'invisible': Eval('config_kind') != 'simple'}">
-                                <label name="fixed_amount" xalign="0"/>
+                                <label name="fixed_amount"/>
                                 <field name="fixed_amount"/>
                             </group>
                             <group id="rule" colspan="4"
                                 states="{'invisible': Eval('config_kind') != 'rule'}">
-                               <label name="rule" xalign="0"/>
+                               <label name="rule"/>
                                <field name="rule"/>
                             </group>
                         </group>
@@ -90,12 +90,12 @@
                 <![CDATA[
                     <form string="Price Calculator">
                         <group id="main" col="8">
-                            <label name="key" xalign="0"/>
+                            <label name="key"/>
                             <field name="key" />
                             <newline/>
-                            <label name="simple" xalign="0"/>
+                            <label name="simple"/>
                             <field name="simple" xexpand="0"/>
-                            <label name="combine" xalign="0"/>
+                            <label name="combine"/>
                             <field name="combine" colspan="5"/>
                         </group>
                         <newline/>
@@ -137,24 +137,24 @@
                         position="after">
                             <newline/>
                             <group id="config_kind">
-                                <label name="config_kind" xalign="0" xfill="1"/>
+                                <label name="config_kind" xfill="1"/>
                                 <field name="config_kind" xexpand="1"/>
-                                <label name="frequency" xalign="0"/>
+                                <label name="frequency"/>
                                 <field name="frequency" xexpand="1"/>
                             </group>
                             <newline/>
                             <group id="price_kind"
                                 states="{'invisible': Eval('config_kind') == 'simple'}">
-                                <label name="price_kind" xalign="0"/>
+                                <label name="price_kind"/>
                                 <field name="price_kind" xexpand="0"/>
                             </group>
                             <newline/>
                             <group id="basic"
                                 states="{'invisible': Eval('config_kind') == 'rule'}">
-                                <label name="basic_price" xalign="0"/>
+                                <label name="basic_price"/>
                                 <field name="basic_price" xexpand="1"/>
                                 <newline/>
-                                <label name="basic_tax" xalign="0"/>
+                                <label name="basic_tax"/>
                                 <field name="basic_tax" xexpand="1"/>
                             </group>
                     </xpath>

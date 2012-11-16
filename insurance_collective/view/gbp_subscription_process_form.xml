@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <form string="GBP Subscription Process - Project Step">
-    <label name="start_date" xalign="0"/>
+    <label name="start_date"/>
     <field name="start_date" xfill="1"/>
     <newline/>
-    <label name="subscriber" xalign="0"/>
+    <label name="subscriber"/>
     <field name="subscriber"/>
     <newline/>
-    <label name="broker" xalign="0"/>
+    <label name="broker"/>
     <field name="broker" xfill="1"/>
 </form>

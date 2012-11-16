@@ -11,22 +11,22 @@
             <field name="arch" type="xml">
                     <![CDATA[ 
                         <form string="Subscription Process - Project Step">
-                            <label name="start_date" xalign="0"/>
+                            <label name="start_date"/>
                             <field name="start_date" xfill="1"/>
                             <newline/>
-                            <label name="broker" xalign="0"/>
+                            <label name="broker"/>
                             <field name="broker" colspan="3"/>
                             <newline/>
-                            <label name="subscriber_kind" xalign="0"/>
+                            <label name="subscriber_kind"/>
                             <field name="subscriber_kind" colspan="3"/>
                             <newline/>
-                            <label name="subscriber" xalign="0"/>
+                            <label name="subscriber"/>
                             <group id="subscriber" colspan="3" col="1">
                                 <field name="subscriber_as_person"/>
                                 <field name="subscriber_as_company"/>
                             </group>
                             <newline/>
-                            <label name="product" xalign="0"/>
+                            <label name="product"/>
                             <field name="product" xfill="1" colspan="3"/>
                             <newline/>
                             <field name="subscriber_desc" widget="richtext" colspan="2"/>
