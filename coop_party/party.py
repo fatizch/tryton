@@ -2,7 +2,7 @@
 import copy
 
 from trytond.model import fields, ModelSQL, ModelView
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool, Not
 
 from trytond.pool import PoolMeta, Pool
 
@@ -28,9 +28,11 @@ class Party:
 
     __name__ = 'party.party'
 
-    person = fields.One2Many('party.person', 'party', 'Person', size=1)
+    person = fields.One2Many('party.person', 'party', 'Person', size=1,
+        states={'invisible': Not(Bool(Eval('person')))})
     company = fields.One2Many('company.company',
-        'party', 'Company', size=1)
+        'party', 'Company', size=1,
+        states={'invisible': Not(Bool(Eval('company')))})
     employee_role = fields.One2Many('company.employee', 'party', 'Employee',
         size=1)
     generic_roles = fields.One2Many('party.generic_actor', 'party',

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<form string="Party" col="8">
+    <label name="name"/>
+    <field name="name" xexpand="1" colspan="2"/>
+    <label name="code"/>
+    <field name="code"/>
+    <notebook colspan="8">
+        <page string="Summary" id="summary">
+            <field name="summary" widget="richtext"/>
+        </page>
+        <page string="Contact" id="general">
+            <field name="addresses" mode="form,tree" colspan="4"
+                view_ids="party.address_view_form,party.address_view_tree_sequence"/>
+            <field name="contact_mechanisms" colspan="4"
+                view_ids="party.contact_mechanism_view_tree_sequence"
+                pre_validate="1"/>
+        </page>
+        <page string="Relations" id="rel">
+            <field name="relations" view_ids="coop_party.party_relation_view_tree_from"/>
+            <newline/>
+            <field name="in_relation_with" view_ids="coop_party.party_relation_view_tree_to"/>
+        </page>
+        <page string="Roles" id="role">
+            <group id="role_group" colspan="4">
+            </group>
+            <field name="generic_roles" colspan="4"/>
+        </page>
+    </notebook>
+</form>

@@ -4,7 +4,7 @@
         <record model="ir.ui.view" id="party_bank_view_form">
             <field name="model">party.party</field>
             <field name="type">form</field>
-            <field name="inherit" ref="coop_party.actor_view_form"/>
+            <field name="inherit" ref="coop_party.party_root_view_form"/>
             <field name="arch" type="xml"> 
              <![CDATA[
              <data>

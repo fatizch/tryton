@@ -7,10 +7,10 @@
         <!-- Application Entry point -->
         <menuitem name="Laboratory" id="menu_product" sequence="10" />
         <menuitem name="Configuration" parent="menu_product"
-            id="menu_product_configuration" sequence="0" icon="tryton-preferences"/>
+            id="menu_product_configuration" sequence="100" icon="tryton-preferences"/>
 
         <!-- Moving existing Entry Points -->
-        <menuitem parent="menu_product" name="Rule Engine"
+        <menuitem parent="menu_product_configuration" name="Rule Engine"
             id="rule_engine.menu_rule_engine" sequence="100"/>
 
 

@@ -94,7 +94,7 @@
             <field name="view" ref="schema_element_view_form"/>
             <field name="act_window" ref="act_model_coop_schema"/>
         </record>
-        <menuitem parent="menu_product" action="act_model_coop_schema" id="menu_model_coop_schema"/>
+        <menuitem parent="menu_product_configuration" action="act_model_coop_schema" id="menu_model_coop_schema"/>
         <record model="ir.action.act_window" id="act_model_coop_schema_product">
             <field name="name">Dynamic Data Schema Elements for Offered</field>
             <field name="res_model">ins_product.schema_element</field>
@@ -110,6 +110,6 @@
             <field name="view" ref="schema_element_view_form"/>
             <field name="act_window" ref="act_model_coop_schema_product"/>
         </record>
-        <menuitem parent="menu_product" action="act_model_coop_schema_product" id="menu_model_coop_schema_product"/>
+        <menuitem parent="menu_product_configuration" action="act_model_coop_schema_product" id="menu_model_coop_schema_product"/>
     </data>
 </tryton>
