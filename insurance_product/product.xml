@@ -5,7 +5,7 @@
               **************     Menus     **************
               *******************************************-->
         <!-- Application Entry point -->
-        <menuitem name="Laboratory" id="menu_product" sequence="10" />
+        <menuitem name="Laboratory" id="menu_product" sequence="20" />
         <menuitem name="Configuration" parent="menu_product"
             id="menu_product_configuration" sequence="100" icon="tryton-preferences"/>
 
