@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+    <form col="6">
+        <group id="general" colspan="1" col="4">
+            <label name="start_date"/>
+            <field name="start_date"/>
+            <label name="end_date"/>
+            <field name="end_date"/>
+            <label name="currency"/>
+            <field name="currency" colspan="3"/>
+
+            <label name="agency"/>
+            <field name="agency" colspan="3"/>
+            <label name="address"/>
+            <field name="address" colspan="3"/>
+        </group>
+        <group id="account_number" colspan="5" rowspan="6" yfill="1">
+            <field name="account_numbers" mode="form,tree" pre_validate="1"/>
+        </group>
+    </form>

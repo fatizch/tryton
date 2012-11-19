@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<form>
+    <label name="kind"/>
+    <field name="kind"/>
+    <group colspan="2" col="4">
+        <field name="number" colspan="4"/>
+        <field name="bank_code"/>
+        <field name="branch_code"/>
+        <field name="account_number"/>
+        <field name="key"/>
+    </group>
+</form>

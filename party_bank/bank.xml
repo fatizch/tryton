@@ -8,33 +8,14 @@
         <record model="ir.ui.view" id="bank_view_form">
             <field name="model">party.bank</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form>
-                    <label name="bic"/>
-                    <field name="bic"/>
-                    <label name="bank_code"/>
-                    <field name="bank_code"/>
-                    <label name="branch_code"/>
-                    <field name="branch_code"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">bank_form</field>
         </record>
 
         <!-- Bank tree view -->
         <record model="ir.ui.view" id="bank_view_tree">
             <field name="model">party.bank</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                    <tree>
-                        <field name="bic"/>
-                        <field name="bank_code"/>
-                        <field name="branch_code"/>
-                    </tree>
-                ]]>
-            </field>
+            <field name="name">bank_tree</field>
         </record>
         <!--  ******************************************* 
               ************   Bank account    ************
@@ -43,28 +24,7 @@
         <record model="ir.ui.view" id="bank_account_view_form">
             <field name="model">party.bank_account</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form col="6">
-                    <group id="general" colspan="3" col="4">
-                        <label name="start_date"/>
-                        <field name="start_date"/>
-                        <label name="end_date"/>
-                        <field name="end_date"/>
-	                    <label name="currency"/>
-	                    <field name="currency" colspan="3"/>
-
-	                    <label name="agency"/>
-	                    <field name="agency" colspan="3"/>
-	                    <label name="address"/>
-	                    <field name="address" colspan="3"/>
-                    </group>
-                    <group id="account_number" colspan="3" rowspan="6" yfill="1">
-                        <field name="account_numbers" mode="form,tree" pre_validate="1"/>
-                    </group>
-                </form>
-                ]]>
-            </field>
+            <field name="name">bank_account_form</field>
         </record>
         <!--  ******************************************* 
               ******   Bank account Number   ************
@@ -73,31 +33,12 @@
         <record model="ir.ui.view" id="bank_account_number_view_form">
             <field name="model">party.bank_account_number</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form col="12">
-                    <label name="kind"/>
-                    <field name="kind"/>
-                    <field name="number" colspan="6"/>
-                    <field name="bank_code"/>
-                    <field name="branch_code"/>
-                    <field name="account_number"/>
-                    <field name="key"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">bank_account_number_form</field>
         </record>
         <record model="ir.ui.view" id="bank_account_number_view_tree">
             <field name="model">party.bank_account_number</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                    <tree>
-                        <field name="kind"/>
-                        <field name="number"/>
-                    </tree>
-                ]]>
-            </field>
+            <field name="name">bank_account_number_tree</field>
         </record>
     </data>
 </tryton>
