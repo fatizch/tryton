@@ -175,8 +175,8 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:ins_collective.benefit,offered_dynamic_data:"
-msgid "Dynamic Data"
-msgstr "Données Complémentaires"
+msgid "Offered Kind"
+msgstr "Typage"
 
 msgctxt "field:ins_collective.benefit,pricing_mgr:"
 msgid "Pricing Manager"
@@ -583,8 +583,8 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:ins_collective.coverage,offered_dynamic_data:"
-msgid "Dynamic Data"
-msgstr "Données Complémentaires"
+msgid "Offered Kind"
+msgstr "Typage"
 
 msgctxt "field:ins_collective.coverage,pricing_mgr:"
 msgid "Pricing Manager"
@@ -1569,8 +1569,8 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:ins_collective.product,offered_dynamic_data:"
-msgid "Dynamic Data"
-msgstr "Données Complémentaires"
+msgid "Offered Kind"
+msgstr "Typage"
 
 msgctxt "field:ins_collective.product,options:"
 msgid "Options"
@@ -2020,26 +2020,6 @@ msgstr "Reprendre le Workflow"
 msgctxt "model:ir.action,name:resume_gbp_subs_process"
 msgid "Resume Process"
 msgstr "Reprendre le Workflow"
-
-msgctxt "model:ir.ui.menu,name:None"
-msgid "Enrollment"
-msgstr "Affiliation"
-
-msgctxt "model:ir.ui.menu,name:None"
-msgid "GBP Contract"
-msgstr "Contrat Collectif"
-
-msgctxt "model:ir.ui.menu,name:None"
-msgid "Group"
-msgstr "Groupe"
-
-msgctxt "model:ir.ui.menu,name:None"
-msgid "New Enrollment"
-msgstr "Nouvelle Affiliation"
-
-msgctxt "model:ir.ui.menu,name:None"
-msgid "New GBP Subscription Process"
-msgstr "Souscription Contrat Groupe"
 
 msgctxt "model:ir.ui.menu,name:menu_coverage_form"
 msgid "Plan Coverages"

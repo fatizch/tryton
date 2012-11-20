@@ -278,9 +278,12 @@ msgctxt "model:table.table_dimension,name:"
 msgid "Table Definition Dimension"
 msgstr "Dimension"
 
+#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind1:"
 msgid ""
 msgstr ""
+"[[\"DC\",\"Décès\"], [\"PTIA\", \"PTIA\"], [\"INCAP\", \"Incapacité\"], "
+"[\"INVAL\", \"Invalidité\"], [\"CHOM\", \"Chômage\"]]"
 
 msgctxt "selection:table.table_def,dimension_kind1:"
 msgid "Date"
@@ -298,9 +301,12 @@ msgctxt "selection:table.table_def,dimension_kind1:"
 msgid "Value"
 msgstr "Valeur"
 
+#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind2:"
 msgid ""
 msgstr ""
+"[[\"DC\",\"Décès\"], [\"PTIA\", \"PTIA\"], [\"INCAP\", \"Incapacité\"], "
+"[\"INVAL\", \"Invalidité\"], [\"CHOM\", \"Chômage\"]]"
 
 msgctxt "selection:table.table_def,dimension_kind2:"
 msgid "Date"
@@ -318,9 +324,12 @@ msgctxt "selection:table.table_def,dimension_kind2:"
 msgid "Value"
 msgstr "Valeur"
 
+#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind3:"
 msgid ""
 msgstr ""
+"[[\"DC\",\"Décès\"], [\"PTIA\", \"PTIA\"], [\"INCAP\", \"Incapacité\"], "
+"[\"INVAL\", \"Invalidité\"], [\"CHOM\", \"Chômage\"]]"
 
 msgctxt "selection:table.table_def,dimension_kind3:"
 msgid "Date"
@@ -338,9 +347,12 @@ msgctxt "selection:table.table_def,dimension_kind3:"
 msgid "Value"
 msgstr "Valeur"
 
+#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind4:"
 msgid ""
 msgstr ""
+"[[\"DC\",\"Décès\"], [\"PTIA\", \"PTIA\"], [\"INCAP\", \"Incapacité\"], "
+"[\"INVAL\", \"Invalidité\"], [\"CHOM\", \"Chômage\"]]"
 
 msgctxt "selection:table.table_def,dimension_kind4:"
 msgid "Date"

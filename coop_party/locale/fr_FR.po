@@ -434,6 +434,16 @@ msgctxt "model:country.zipcode,name:"
 msgid "ZipCode"
 msgstr ""
 
+#, fuzzy
+msgctxt "model:ir.action,name:None"
+msgid "Party"
+msgstr "Tiers"
+
+#, fuzzy
+msgctxt "model:ir.action,name:None"
+msgid "Party"
+msgstr "Tiers"
+
 msgctxt "model:ir.action,name:act_address_kind_form"
 msgid "Address Kind"
 msgstr "Type d'Adresse"
@@ -446,6 +456,11 @@ msgctxt "model:ir.action,name:act_generic_actor_kind_form"
 msgid "Generic Actor"
 msgstr "Acteur Générique"
 
+#, fuzzy
+msgctxt "model:ir.action,name:act_party_form"
+msgid "Party"
+msgstr "Tiers"
+
 msgctxt "model:ir.action,name:act_party_relation_kind_form"
 msgid "Party Relation Kind"
 msgstr "Type de Relation entre Tiers"
@@ -454,9 +469,14 @@ msgctxt "model:ir.action,name:act_person_form"
 msgid "Person"
 msgstr "Personne"
 
-msgctxt "model:ir.ui.menu,name:menu_actor"
+msgctxt "model:ir.ui.menu,name:None"
 msgid "Actors"
-msgstr "Acteurs"
+msgstr ""
+
+#, fuzzy
+msgctxt "model:ir.ui.menu,name:None"
+msgid "Party"
+msgstr "Tiers"
 
 msgctxt "model:ir.ui.menu,name:menu_address_kind_form"
 msgid "Address Kind"

@@ -171,8 +171,8 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:ins_product.benefit,offered_dynamic_data:"
-msgid "Dynamic Data"
-msgstr "Données Complémentaires"
+msgid "Offered Kind"
+msgstr "Typage"
 
 msgctxt "field:ins_product.benefit,pricing_mgr:"
 msgid "Pricing Manager"
@@ -603,8 +603,8 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:ins_product.coverage,offered_dynamic_data:"
-msgid "Dynamic Data"
-msgstr "Données Complémentaires"
+msgid "Offered Kind"
+msgstr "Typage"
 
 msgctxt "field:ins_product.coverage,pricing_mgr:"
 msgid "Pricing Manager"
@@ -963,8 +963,8 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:ins_product.offered,offered_dynamic_data:"
-msgid "Dynamic Data"
-msgstr "Données Complémentaires"
+msgid "Offered Kind"
+msgstr "Typage"
 
 msgctxt "field:ins_product.offered,pricing_mgr:"
 msgid "Pricing Manager"
@@ -1231,8 +1231,8 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:ins_product.product,offered_dynamic_data:"
-msgid "Dynamic Data"
-msgstr "Données Complémentaires"
+msgid "Offered Kind"
+msgstr "Typage"
 
 msgctxt "field:ins_product.product,options:"
 msgid "Options"

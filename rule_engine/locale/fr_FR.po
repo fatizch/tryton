@@ -138,9 +138,18 @@ msgctxt "field:rule_engine.create_test_case.start,result:"
 msgid "Result"
 msgstr "Résultat"
 
+#, fuzzy
+msgctxt "field:rule_engine.create_test_case.start,rule:"
+msgid "Rule"
+msgstr "Règle"
+
 msgctxt "field:rule_engine.create_test_case.start,test_values:"
 msgid "Values"
 msgstr "Valeurs"
+
+msgctxt "field:rule_engine.create_test_case.start,unknown_values:"
+msgid "Unknown Values"
+msgstr ""
 
 msgctxt "field:rule_engine.run_tests.report,id:"
 msgid "ID"
@@ -490,6 +499,11 @@ msgstr "Créer"
 msgctxt "wizard_button:rule_engine.create_test_case,ask_description,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+#, fuzzy
+msgctxt "wizard_button:rule_engine.create_test_case,start,ask_description:"
+msgid "Create Test Case"
+msgstr "Créer le jeu de test"
 
 msgctxt "wizard_button:rule_engine.create_test_case,start,end:"
 msgid "Cancel"
