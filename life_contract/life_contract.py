@@ -112,13 +112,13 @@ class CoveredPerson(model.CoopSQL, CoveredElement):
         return 'Covered Person'
 
     def get_name_for_billing(self):
-        return self.person.name
+        return self.person.rec_name
 
     def get_name_for_info(self):
-        return self.person.name
+        return self.person.rec_name
 
     def get_rec_name(self, value):
-        return self.person.name
+        return self.person.rec_name
 
 
 class LifeCoveredData(model.CoopSQL, CoveredData):
