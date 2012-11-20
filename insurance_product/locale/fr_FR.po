@@ -648,7 +648,7 @@ msgstr "De"
 
 msgctxt "field:ins_product.coverage_amount_rule,amount_step:"
 msgid "Step"
-msgstr "Etape"
+msgstr "Pas"
 
 msgctxt "field:ins_product.coverage_amount_rule,amounts:"
 msgid "Amounts"
@@ -1141,10 +1141,6 @@ msgstr "Est Utilisé"
 msgctxt "field:ins_product.pricing_rule,price:"
 msgid "Price Calculator"
 msgstr "Montant"
-
-msgctxt "field:ins_product.pricing_rule,price_kind:"
-msgid "Price based on"
-msgstr "Prix basé sur"
 
 msgctxt "field:ins_product.pricing_rule,rec_name:"
 msgid "Name"
@@ -2065,14 +2061,6 @@ msgstr "Trimestriel"
 msgctxt "selection:ins_product.pricing_rule,frequency:"
 msgid "Yearly"
 msgstr "Annuel"
-
-msgctxt "selection:ins_product.pricing_rule,price_kind:"
-msgid "Covered Elements"
-msgstr "Eléments Couverts"
-
-msgctxt "selection:ins_product.pricing_rule,price_kind:"
-msgid "Subscriber"
-msgstr "Souscripteur"
 
 msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
 msgid "Add"

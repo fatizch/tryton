@@ -1480,10 +1480,6 @@ msgctxt "field:ins_collective.pricing_rule,price:"
 msgid "Price Calculator"
 msgstr "Montant"
 
-msgctxt "field:ins_collective.pricing_rule,price_kind:"
-msgid "Price based on"
-msgstr "Prix basé sur"
-
 msgctxt "field:ins_collective.pricing_rule,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -2021,6 +2017,31 @@ msgctxt "model:ir.action,name:resume_gbp_subs_process"
 msgid "Resume Process"
 msgstr "Reprendre le Workflow"
 
+#, fuzzy
+msgctxt "model:ir.ui.menu,name:None"
+msgid "Enrollment"
+msgstr "Affiliation"
+
+#, fuzzy
+msgctxt "model:ir.ui.menu,name:None"
+msgid "GBP Contract"
+msgstr "Contrat Collectif"
+
+#, fuzzy
+msgctxt "model:ir.ui.menu,name:None"
+msgid "Group"
+msgstr "Groupe"
+
+#, fuzzy
+msgctxt "model:ir.ui.menu,name:None"
+msgid "New Enrollment"
+msgstr "Nouvelle Affiliation"
+
+#, fuzzy
+msgctxt "model:ir.ui.menu,name:None"
+msgid "New GBP Subscription Process"
+msgstr "Souscription Contrat Groupe"
+
 msgctxt "model:ir.ui.menu,name:menu_coverage_form"
 msgid "Plan Coverages"
 msgstr "Garanties Collectives"
@@ -2420,14 +2441,6 @@ msgstr "Trimestriel"
 msgctxt "selection:ins_collective.pricing_rule,frequency:"
 msgid "Yearly"
 msgstr "Annuel"
-
-msgctxt "selection:ins_collective.pricing_rule,price_kind:"
-msgid "Covered Elements"
-msgstr "Eléments Couverts"
-
-msgctxt "selection:ins_collective.pricing_rule,price_kind:"
-msgid "Subscriber"
-msgstr "Souscripteur"
 
 msgctxt "selection:ins_collective.pricing_rule,template_behaviour:"
 msgid "Add"
