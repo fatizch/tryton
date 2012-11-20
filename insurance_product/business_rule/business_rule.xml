@@ -16,7 +16,7 @@
         <record model="ir.ui.view" id="businessruleroot_view_form">
             <field name="model">ins_product.business_rule_root</field>
             <field name="type">form</field>
-            <field name="name">br_root_form.xml</field>
+            <field name="name">br_root_form</field>
         </record>
 
         <!--  ******************************************* 
