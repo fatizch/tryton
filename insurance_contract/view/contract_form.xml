@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form string="contract" col="5">
+    <group id="Administrative data">
+        <label name="contract_number"/>
+        <field name="contract_number"/>
+        <label name="status"/>
+        <field name="status"/>
+        <newline/>
+
+        <label name="subscriber"/>
+        <field name="subscriber"/>
+        <newline/>
+        <label name="start_date"/>
+        <field name="start_date"/>
+        <label name="product"/>
+        <field name="product"/>
+    </group>
+    <newline/>
+    <notebook>
+        <page string="Options" id="options">
+            <field name="options" />
+        </page>
+        <page string="Billing" id="billing">
+            <field name="billing_manager" mode="form" />
+        </page>
+        <page string="Dynamic Data" id="dynamic_data">
+            <field name="dynamic_data"/>
+        </page>
+    </notebook>
+</form>
