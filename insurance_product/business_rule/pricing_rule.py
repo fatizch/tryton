@@ -303,14 +303,6 @@ class PricingRule(model.CoopSQL, BusinessRuleRoot):
 
     __name__ = 'ins_product.pricing_rule'
 
-    price_kind = fields.Selection(
-        [
-            ('subscriber', 'Subscriber'),
-            ('cov_element', 'Covered Elements')
-        ],
-        'Price based on',
-        states={'required': Eval('config_kind') == 'rule'})
-
     calculators = fields.One2Many(
         'ins_product.pricing_calculator',
         'rule',
@@ -489,10 +481,6 @@ class PricingRule(model.CoopSQL, BusinessRuleRoot):
         return date.number_of_days_between(
             the_date,
             utils.add_frequency(self.frequency, the_date))
-
-    @staticmethod
-    def default_price_kind():
-        return 'subscriber'
 
     @staticmethod
     def default_frequency():
