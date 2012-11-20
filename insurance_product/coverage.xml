@@ -9,58 +9,14 @@
             <field name="model">ins_product.coverage</field>
             <field name="type">form</field>
             <field name="inherit" ref="offered_view_form"/>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <data>
-                <xpath expr="/form" position="replace_attributes">
-                    <form string="Coverage"/>
-                </xpath>
-                <xpath expr="/form/notebook/page[@id='managers']" position="after">
-                    <page string="Benefits" id="benefits">
-                        <field name="benefits"/>
-                    </page>
-                </xpath>
-                <xpath expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']" position="before">
-                    <page string="Coverage Amount" id="coverage_amount">
-                        <field name="coverage_amount_mgr" mode="form"/>
-                    </page>
-                </xpath>
-                <xpath expr="/form/notebook/page[@id='managers']/notebook/page[@id='dynamic_data']/field[@name='dynamic_data_manager']" position="after">
-                    <newline/>
-                    <field name="covered_dynamic_data_manager" mode="form"/>
-                </xpath>
-                <xpath expr="/form/notebook/page[@id='admin']"
-                position="inside">
-                    <label name="currency"/>
-                    <field name="currency"/>
-                    <label name="insurer"/>
-                    <field name="insurer" widget="selection"/>
-                </xpath>
-                <xpath expr="/form/group[@id='templating']"
-                    position="before">
-                    <label name="family"/>
-                    <field name="family" xexpand="0"/>
-                </xpath>
-                </data>
-                ]]>
-            </field>
+            <field name="name">coverage_form</field>
         </record>
         <record model="ir.ui.view" id="coverage_view_tree">
             <field name="model">ins_product.coverage</field>
             <field name="type">tree</field>
             <field name="inherit" ref="offered_view_tree"/>
-            <field name="arch" type="xml">
-             <![CDATA[
-                <data>
-                <xpath expr="/tree/field[@name='code']"
-                    position="after">
-                    <field name="family"/>
-                </xpath>
-                </data>
-            ]]>
-            </field>
+            <field name="name">coverage_tree</field>
         </record>
-
         <!-- View for the main menu and the event -->
         <record model="ir.action.act_window" id="act_coverage_form">
             <field name="name">Coverages</field>

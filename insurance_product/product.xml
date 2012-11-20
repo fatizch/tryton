@@ -20,70 +20,12 @@
         <record model="ir.ui.view" id="offered_view_tree">
             <field name="model">ins_product.offered</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Offered">
-                        <field name="code"/>
-                         <field name="name"/>
-                        <field name="start_date"/>
-                        <field name="end_date"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">offered_tree</field>
         </record>
         <record model="ir.ui.view" id="offered_view_form">
             <field name="model">ins_product.offered</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Offered">
-                    <label name="code"/>
-                    <field name="code"/>
-                    <label name="name"/>
-                    <field name="name"/>
-                    <newline/>
-                    <label name="start_date"/>
-                    <field name="start_date"/>
-                    <label name="end_date"/>
-                    <field name="end_date"/>
-                    <newline/>
-                    <group id="templating" colspan="4">
-                        <label name="template"/>
-                        <field name="template" xexpand="1"/>
-                        <field name="template_behaviour"/>
-                    </group>
-                    <notebook>
-                        <page string="Summary" id="summary">
-                            <field name="description" widget="richtext"
-                                colspan="4"/>
-                            <field name="summary" widget="richtext"
-                                colspan="4"/>
-                        </page>
-                        <page string="Managers" id="managers">
-                            <notebook>
-                                <page string="Eligibilty" id="eligibility">
-                                    <field name="eligibility_mgr" colspan="4" mode="form"/>
-                                </page>
-                                <page string="Pricing" id="pricing">
-                                    <field name="pricing_mgr" colspan="4" mode="form"/>
-                                </page>
-                                <page string="Dynamic Data" id="dynamic_data">
-                                    <field name="dynamic_data_manager" mode="form"/>
-                                </page>
-                                <page string="Clause" id="clause">
-                                    <field name="clause_mgr" colspan="4" mode="form"/>
-                                </page>
-                            </notebook>
-                        </page>
-                        <page string="Administration" id="admin">
-                        </page>
-                        <page string="Dynamic Data" id="dynamic_data">
-                            <field name="offered_dynamic_data"/>
-                        </page>
-                    </notebook>
-                </form>
-                ]]>
-            </field>
+            <field name="name">offered_form</field>
         </record>
         <!--  ******************************************* 
               **************    Product    **************
@@ -92,33 +34,7 @@
             <field name="model">ins_product.product</field>
             <field name="type">form</field>
             <field name="inherit" ref="offered_view_form"/>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <data>
-                <xpath expr="/form" position="replace_attributes">
-                    <form string="Product"/>
-                </xpath>
-                <xpath expr="/form/notebook/page[@id='managers']" position="before">
-                    <page string="Options" id="option">
-                        <field name="options"/>
-                    </page>
-                </xpath>
-                <xpath expr="/form/notebook/page[@id='managers']/notebook/page[@id='pricing']"
-                        position="after">
-                    <page string="Term - Renewal" id="term_renewal">
-                        <field name="term_renewal_mgr" colspan="4" mode="form"/>
-                    </page>
-                </xpath>
-                <xpath expr="/form/notebook/page[@id='admin']"
-                        position="inside">
-                    <label name="contract_generator"/>
-                    <field name="contract_generator"/>
-                    <label name="currency"/>
-                    <field name="currency"/>
-                </xpath>
-                </data>
-                ]]>
-            </field>
+            <field name="name">product_form</field>
         </record>
         <record model="ir.ui.view" id="product_view_tree">
             <field name="model">ins_product.product</field>

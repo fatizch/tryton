@@ -9,41 +9,13 @@
             <field name="model">ins_product.benefit</field>
             <field name="type">form</field>
             <field name="inherit" ref="offered_view_form"/>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <data>
-                <xpath expr="/form" position="replace_attributes">
-                    <form string="Benefit"/>
-                </xpath>
-                <xpath expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']" position="before">
-                    <page string="Benefit" id="benefit">
-                        <field name="benefit_mgr" colspan="4" mode="form"/>
-                    </page>
-                    <page string="Reserve" id="reserve">
-                        <field name="reserve_mgr" colspan="4" mode="form"/>
-                    </page>
-                </xpath>
-                <xpath expr="/form/notebook/page[@id='admin']" position="inside">
-                    <label name="kind"/>
-                    <field name="kind" xexpand="0"/>
-                </xpath>
-                </data>
-                ]]>
-            </field>
+            <field name="name">benefit_form</field>
         </record>
         <record model="ir.ui.view" id="benefit_view_tree">
             <field name="model">ins_product.benefit</field>
             <field name="type">tree</field>
             <field name="inherit" ref="offered_view_tree"/>
-            <field name="arch" type="xml">
-            <![CDATA[
-                <data>
-                    <xpath expr="/tree/field[@name='code']" position="before">
-                        <field name="kind"/>
-                    </xpath>
-                </data>
-            ]]>
-            </field>
+            <field name="name">benefit_tree</field>
         </record>
     </data>
 </tryton>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<form string="Business Rule Root">
+    <group id="templating">
+        <label name="template"/>
+        <field name="template"/>
+        <field name="template_behaviour"/>
+    </group>
+    <notebook>
+        <page id="main" string="Main">
+            <group id="config_kind" colspan="2">
+                <label name="config_kind" xfill="1"/>
+                <field name="config_kind" xfill="1" xexpand="0"/>
+            </group>
+            <group id="rule" colspan="4"
+                states="{'invisible': Eval('config_kind') != 'rule'}">
+                <label name="rule"/>
+                <field name="rule"/>
+            </group>
+            <group id="simple" colspan="4"
+                states="{'invisible': Eval('config_kind') != 'simple'}">
+            </group>
+        </page>
+    </notebook>
+</form>

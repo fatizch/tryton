@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<form string="Pricing Component">
+    <group id="main">
+        <label name="kind" xfill="1"/>
+        <field name="kind"/>
+        <label name="code"/>
+        <field name="code"/>
+    </group>
+    <newline/>
+    <group id="tax" states="{'invisible': Eval('kind') != 'tax'}">
+        <label name="the_tax"/>
+        <field name="the_tax"/>
+    </group>
+    <newline/>
+    <group id="fee" states="{'invisible': Eval('kind') != 'fee'}">
+        <label name="the_fee"/>
+        <field name="the_fee"/>
+    </group>
+    <newline/>
+    <group id="other" states="{'invisible': Eval('kind') != 'base'}">
+        <group id="config_kind" colspan="2">
+            <label name="config_kind" xfill="1"/>
+            <field name="config_kind" xexpand="1"/>
+        </group>
+        <newline/>
+        <group id="simple" colspan="4"
+            states="{'invisible': Eval('config_kind') != 'simple'}">
+            <label name="fixed_amount"/>
+            <field name="fixed_amount"/>
+        </group>
+        <group id="rule" colspan="4"
+            states="{'invisible': Eval('config_kind') != 'rule'}">
+            <label name="rule"/>
+            <field name="rule"/>
+        </group>
+    </group>
+</form>

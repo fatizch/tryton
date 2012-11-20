@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form" position="replace_attributes">
+        <form string="Coverage"/>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='managers']" position="after">
+        <page string="Benefits" id="benefits">
+            <field name="benefits"/>
+        </page>
+    </xpath>
+    <xpath
+        expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']"
+        position="before">
+        <page string="Coverage Amount" id="coverage_amount">
+            <field name="coverage_amount_mgr" mode="form"/>
+        </page>
+    </xpath>
+    <xpath
+        expr="/form/notebook/page[@id='managers']/notebook/page[@id='dynamic_data']/field[@name='dynamic_data_manager']"
+        position="replace"/>
+    <xpath
+        expr="/form/notebook/page[@id='managers']/notebook/page[@id='dynamic_data']"
+        position="inside">
+        <notebook>
+            <page id="coverage" string="Coverage">
+                <field name="dynamic_data_manager" mode="form"/>
+            </page>
+            <page id="covered" string="Covered Element">
+                <field name="covered_dynamic_data_manager" mode="form"/>
+            </page>
+        </notebook>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"
+        position="inside">
+        <label name="currency"/>
+        <field name="currency"/>
+        <newline/>
+        <label name="insurer"/>
+        <field name="insurer" widget="selection"/>
+    </xpath>
+    <xpath expr="/form/label[@name='template']" position="before">
+        <label name="family"/>
+        <field name="family" xexpand="0"/>
+        <newline/>
+    </xpath>
+</data>

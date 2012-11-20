@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<form string="Offered">
+    <label name="code"/>
+    <field name="code"/>
+    <label name="name"/>
+    <field name="name"/>
+    <newline/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <newline/>
+    <label name="template"/>
+    <group id="templating" colspan="1">
+        <field name="template" xexpand="1"/>
+        <field name="template_behaviour"/>
+    </group>
+    <notebook>
+        <page string="Summary" id="summary">
+            <field name="description" widget="richtext" colspan="4"/>
+            <field name="summary" widget="richtext" colspan="4"/>
+        </page>
+        <page string="Managers" id="managers">
+            <notebook>
+                <page string="Dynamic Data" id="dynamic_data">
+                    <field name="dynamic_data_manager" mode="form"/>
+                </page>
+                <page string="Eligibilty" id="eligibility">
+                    <field name="eligibility_mgr" colspan="4" mode="form"/>
+                </page>
+                <page string="Pricing" id="pricing">
+                    <field name="pricing_mgr" colspan="4" mode="form"/>
+                </page>
+                <page string="Clause" id="clause">
+                    <field name="clause_mgr" colspan="4" mode="form"/>
+                </page>
+            </notebook>
+        </page>
+        <page string="Administration" id="admin">
+            <group id="left" colspan="2" yfill="1" yexpand="1">
+            </group>
+            <group id="right" colspan="2" yfill="1" yexpand="1">
+                <field name="offered_dynamic_data"/>
+            </group>
+        </page>
+    </notebook>
+</form>

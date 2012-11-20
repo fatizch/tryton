@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<form string="Business Rule Manager">
+    <group id="templating">
+        <label name="template"/>
+        <field name="template"/>
+        <field name="template_behaviour"/>
+    </group>
+    <newline/>
+    <field name="business_rules" colspan="4"/>
+</form>

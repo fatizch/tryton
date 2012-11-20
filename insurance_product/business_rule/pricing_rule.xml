@@ -7,64 +7,12 @@
         <record model="ir.ui.view" id="pricingdata_view_tree">
             <field name="model">ins_product.pricing_data</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                    <tree string="Pricing Components">
-                        <field name="kind"/>
-                        <field name="code"/>
-                        <field name="config_kind"/>
-                        <field name="summary"/>
-                    </tree>
-                ]]>
-            </field>
+            <field name="name">pricing_data_tree</field>
         </record>
-
         <record model="ir.ui.view" id="pricingdata_view_form">
             <field name="model">ins_product.pricing_data</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                    <form string="Pricing Component">
-                        <group id="main">
-                            <label name="kind" xfill="1"/>
-                            <field name="kind"/>
-                            <label name="code"/>
-                            <field name="code"/>
-                        </group>
-                        <newline/>
-                        <group id="tax"
-                            states="{'invisible': Eval('kind') != 'tax'}">
-                            <label name="the_tax"/>
-                            <field name="the_tax"/>
-                        </group>
-                        <newline/>
-                        <group id="fee"
-                            states="{'invisible': Eval('kind') != 'fee'}">
-                            <label name="the_fee"/>
-                            <field name="the_fee"/>
-                        </group>
-                        <newline/>
-                        <group id="other"
-                            states="{'invisible': Eval('kind') != 'base'}">
-                            <group id="config_kind" colspan="2">
-                                <label name="config_kind" xfill="1"/>
-                                <field name="config_kind" xexpand="1"/>
-                            </group>
-                            <newline/>
-                            <group id="simple" colspan="4"
-                                states="{'invisible': Eval('config_kind') != 'simple'}">
-                                <label name="fixed_amount"/>
-                                <field name="fixed_amount"/>
-                            </group>
-                            <group id="rule" colspan="4"
-                                states="{'invisible': Eval('config_kind') != 'rule'}">
-                               <label name="rule"/>
-                               <field name="rule"/>
-                            </group>
-                        </group>
-                    </form>
-                ]]>
-            </field>
+            <field name="name">pricing_data_form</field>
         </record>
 
         <!--  ******************************************* 
@@ -74,38 +22,12 @@
         <record model="ir.ui.view" id="calculator_view_tree">
             <field name="model">ins_product.pricing_calculator</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                    <tree string="Calculators">
-                        <field name="rec_name"/>
-                        <field name="key"/>
-                    </tree>
-                ]]>
-            </field>
+            <field name="name">calculator_tree</field>
         </record>
         <record model="ir.ui.view" id="calculator_view_form">
             <field name="model">ins_product.pricing_calculator</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                    <form string="Price Calculator">
-                        <group id="main" col="8">
-                            <label name="key"/>
-                            <field name="key" />
-                            <newline/>
-                            <label name="simple"/>
-                            <field name="simple" xexpand="0"/>
-                            <label name="combine"/>
-                            <field name="combine" colspan="5"/>
-                        </group>
-                        <newline/>
-                        <group id="test_data" xfill="1"
-                            yexpand="1" yfill="1">
-                            <field name="data" yfill="1" yexpand="1"/>
-                        </group>
-                    </form>
-                ]]>
-            </field>
+            <field name="name">calculator_form</field>
         </record>
 
         <!--  ******************************************* 
@@ -115,52 +37,7 @@
             <field name="model">ins_product.pricing_rule</field>
             <field name="type">form</field>
             <field name="inherit" ref="businessruleroot_view_form"/>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <data>
-                    <xpath expr="/form" position="replace_attributes">
-                        <form string="Pricing rule"/>
-                    </xpath>
-                    <xpath expr="/form/notebook/page[@id='main']"
-                     position="after">
-                        <page id="calculators" string="Main"
-                            states="{'invisible' : Eval('config_kind') == 'simple'}">
-                            <field name="calculators" yfill="1" yexpand="1"
-                                xexpand="1" colspan="4" mode="form, tree"/>
-                        </page>
-                    </xpath>
-                    <xpath expr="/form/notebook/page[@id='main']"
-                        position="replace_attributes">
-                        <page id="main" states="{'invisible': True}"/>
-                    </xpath>
-                    <xpath expr="/form/group[@id='templating']"
-                        position="after">
-                            <newline/>
-                            <group id="config_kind">
-                                <label name="config_kind" xfill="1"/>
-                                <field name="config_kind" xexpand="1"/>
-                                <label name="frequency"/>
-                                <field name="frequency" xexpand="1"/>
-                            </group>
-                            <newline/>
-                            <group id="price_kind"
-                                states="{'invisible': Eval('config_kind') == 'simple'}">
-                                <label name="price_kind"/>
-                                <field name="price_kind" xexpand="0"/>
-                            </group>
-                            <newline/>
-                            <group id="basic"
-                                states="{'invisible': Eval('config_kind') == 'rule'}">
-                                <label name="basic_price"/>
-                                <field name="basic_price" xexpand="1"/>
-                                <newline/>
-                                <label name="basic_tax"/>
-                                <field name="basic_tax" xexpand="1"/>
-                            </group>
-                    </xpath>
-                </data>
-                ]]>
-            </field>
+            <field name="name">pricing_rule_form</field>
         </record>
     </data>
 </tryton>
