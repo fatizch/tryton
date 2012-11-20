@@ -45,7 +45,9 @@ class Templated(object):
     template_behaviour = fields.Selection(
         TEMPLATE_BEHAVIOUR,
         'Template Behaviour',
-        states={'readonly': ~Eval('template')},
+        states={
+            'invisible': ~Eval('template'),
+        },
         depends=['template'])
 
     def on_change_template(self):
@@ -61,8 +63,9 @@ class Offered(model.CoopView, utils.GetResult, Templated):
     'Offered'
 
     __name__ = 'ins_product.offered'
+    _export_name = 'code'
 
-    code = fields.Char('Code', size=10, required=True, select=1)
+    code = fields.Char('Code', required=True, select=1)
     name = fields.Char('Name', required=True, select=1)
     start_date = fields.Date('Start Date', required=True, select=1)
     end_date = fields.Date('End Date')
@@ -74,7 +77,11 @@ class Offered(model.CoopView, utils.GetResult, Templated):
         'offered', 'Eligibility Manager')
     clause_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
         'offered', 'Clause Manager')
-    summary = fields.Function(fields.Text('Summary'), 'get_summary')
+    summary = fields.Function(fields.Text('Summary',
+            states={
+                'invisible': ~Eval('summary',)
+            }),
+        'get_summary')
     currency_digits = fields.Function(fields.Integer('Currency Digits'),
         'get_currency_digits')
     dynamic_data_manager = model.One2ManyDomain(
@@ -87,7 +94,7 @@ class Offered(model.CoopView, utils.GetResult, Templated):
         domain=[('kind', '=', 'main')],
         size=1)
     offered_dynamic_data = fields.Dict(
-        'Dynamic Data',
+        'Offered Kind',
         schema_model='ins_product.schema_element',
         context={
             'schema_element_kind': 'product'},
@@ -343,6 +350,10 @@ class Product(model.CoopSQL, Offered):
                 return self.give_me_dynamic_data_ids(args)
             dd_args['path'] = 'all'
         return self.give_me_dynamic_data_ids_aggregate(args)
+
+    @classmethod
+    def search_options(cls, name, clause):
+        super(Product, cls).search_options(name, clause)
 
 
 class ProductOptionsCoverage(model.CoopSQL):
