@@ -2017,31 +2017,6 @@ msgctxt "model:ir.action,name:resume_gbp_subs_process"
 msgid "Resume Process"
 msgstr "Reprendre le Workflow"
 
-#, fuzzy
-msgctxt "model:ir.ui.menu,name:None"
-msgid "Enrollment"
-msgstr "Affiliation"
-
-#, fuzzy
-msgctxt "model:ir.ui.menu,name:None"
-msgid "GBP Contract"
-msgstr "Contrat Collectif"
-
-#, fuzzy
-msgctxt "model:ir.ui.menu,name:None"
-msgid "Group"
-msgstr "Groupe"
-
-#, fuzzy
-msgctxt "model:ir.ui.menu,name:None"
-msgid "New Enrollment"
-msgstr "Nouvelle Affiliation"
-
-#, fuzzy
-msgctxt "model:ir.ui.menu,name:None"
-msgid "New GBP Subscription Process"
-msgstr "Souscription Contrat Groupe"
-
 msgctxt "model:ir.ui.menu,name:menu_coverage_form"
 msgid "Plan Coverages"
 msgstr "Garanties Collectives"

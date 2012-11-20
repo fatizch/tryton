@@ -380,7 +380,7 @@ msgstr "Règle"
 
 msgctxt "field:ins_product.clause,title:"
 msgid "Title"
-msgstr ""
+msgstr "Titre"
 
 msgctxt "field:ins_product.clause,versions:"
 msgid "Versions"
@@ -1508,7 +1508,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_product.term_renewal_rule,can_be_renewed:"
 msgid "Can be renewed"
-msgstr ""
+msgstr "Peut Etre Renouvelé"
 
 msgctxt "field:ins_product.term_renewal_rule,config_kind:"
 msgid "Conf. kind"
@@ -1524,11 +1524,11 @@ msgstr "Créé par"
 
 msgctxt "field:ins_product.term_renewal_rule,date_for_sync:"
 msgid "Sync Date"
-msgstr ""
+msgstr "Date de Synchro"
 
 msgctxt "field:ins_product.term_renewal_rule,frequency:"
 msgid "Frequency"
-msgstr ""
+msgstr "Fréquence"
 
 msgctxt "field:ins_product.term_renewal_rule,generic_rule:"
 msgid "Generic Rule"
@@ -1608,7 +1608,7 @@ msgstr "Clause"
 
 msgctxt "model:ins_product.clause_relation,name:"
 msgid "Relation between clause and offered"
-msgstr ""
+msgstr "Table intermédiaire entre l'offre et le clause"
 
 msgctxt "model:ins_product.clause_rule,name:"
 msgid "Clause Rule"
@@ -1633,6 +1633,7 @@ msgstr "Données Complémentaires"
 msgctxt "model:ins_product.eligibility_relation_kind,name:"
 msgid "Define relation between eligibility rule and relation kind authorized"
 msgstr ""
+"Table intermédiaire entre la règle d'égibilité et les relations autorisées"
 
 msgctxt "model:ins_product.eligibility_rule,name:"
 msgid "Eligibility Rule"
@@ -1700,7 +1701,7 @@ msgstr "Définition de Données Complémentaires"
 
 msgctxt "model:ins_product.schema_element_relation,name:"
 msgid "Relation between schema element and dynamic data manager"
-msgstr ""
+msgstr "Table intermédiaire pour les données complémentaires"
 
 msgctxt "model:ins_product.term_renewal_rule,name:"
 msgid "Term and Renewal Rule"
@@ -2136,7 +2137,7 @@ msgstr "Booléen"
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Char"
-msgstr ""
+msgstr "Alphanumérique"
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Date"
@@ -2148,7 +2149,7 @@ msgstr "Entier"
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Numeric"
-msgstr ""
+msgstr "Numérique"
 
 msgctxt "selection:ins_product.schema_element,type_:"
 msgid "Reference"
@@ -2172,7 +2173,7 @@ msgstr "Simple"
 
 msgctxt "selection:ins_product.term_renewal_rule,frequency:"
 msgid "Biyearly"
-msgstr ""
+msgstr "Biannuel"
 
 msgctxt "selection:ins_product.term_renewal_rule,frequency:"
 msgid "Half Yearly"
@@ -2208,11 +2209,11 @@ msgstr "Valider"
 
 msgctxt "selection:ins_product.term_renewal_rule,term_date_choice:"
 msgid "At subscription Time"
-msgstr ""
+msgstr "À La Souscription"
 
 msgctxt "selection:ins_product.term_renewal_rule,term_date_choice:"
 msgid "At this Date"
-msgstr ""
+msgstr "À Cette Date"
 
 msgctxt "view:ins_product.benefit:"
 msgid "Benefit"
