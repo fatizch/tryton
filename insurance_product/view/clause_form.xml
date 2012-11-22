@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form" position="replace_attributes">
+        <form string="Clause"/>
+    </xpath>
+    <xpath expr="/form/group[@id='basic data']" position="inside">
+        <label name="code"/>
+        <field name="code"/>
+        <label name="name"/>
+        <field name="name" colspan="9"/>
+        <newline/>
+        <label name="title"/>
+        <field name="title" colspan="11"/>
+    </xpath>
+    <xpath expr="/form/group[@id='versions']/field[@name='versions']"
+        position="replace_attributes">
+        <field name="versions" mode="form, tree"/>
+    </xpath>
+</data>

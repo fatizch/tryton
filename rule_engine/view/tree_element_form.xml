@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form string="Tree Element">
+    <label name="description"/>
+    <field name="description"/>
+    <label name="parent"/>
+    <field name="parent"/>
+    <label name="type"/>
+    <field name="type"/>
+    <group id="code_id" colspan="2" col="6">
+        <label name="name"/>
+        <field name="name"/>
+        <label name="namespace"/>
+        <field name="namespace"/>
+        <label name="rule"/>
+        <field name="rule"/>
+    </group>
+    <label name="the_table"/>
+    <field name="the_table"/>
+    <label name="language"/>
+    <field name="language"/>
+    <label name="translated_technical_name"/>
+    <field name="translated_technical_name"/>
+    <label name="fct_args"/>
+    <field name="fct_args"/>
+</form>

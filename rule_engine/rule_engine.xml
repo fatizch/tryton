@@ -6,37 +6,12 @@
         <record model="ir.ui.view" id="rule_form">
             <field name="model">rule_engine</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Rule">
-                    <label name="name"/>
-                    <field name="name"/>
-                    <label name="context"/>
-                    <field name="context"/>
-                    <notebook>
-                        <page name="code">
-                            <field name="code" widget="source" context_tree="data_tree" colspan="4"/>
-                            <field name="data_tree" invisible="1"/>
-                        </page>
-                        <page name="test_cases">
-                            <field name="test_cases" colspan="4"/>
-                        </page>
-                    </notebook>
-                </form>
-                ]]>
-            </field>
+            <field name="name">rule_engine_form</field>
         </record>
         <record model="ir.ui.view" id="rule_tree">
             <field name="model">rule_engine</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Rules">
-                    <field name="name"/>
-                    <field name="context"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">rule_engine_tree</field>
         </record>
         <record model="ir.action.act_window" id="rule_window">
             <field name="name">Rules</field>
@@ -176,49 +151,13 @@
         <record model="ir.ui.view" id="tree_element_form">
             <field name="model">rule_engine.tree_element</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Tree Element">
-                    <label name="description"/>
-                    <field name="description"/>
-                    <label name="parent"/>
-                    <field name="parent"/>
-                    <label name="type"/>
-                    <field name="type"/>
-                    <group id="code_id" colspan="2" col="6">
-                        <label name="name"/>
-                        <field name="name"/>
-                        <label name="namespace"/>
-                        <field name="namespace"/>
-                        <label name="rule"/>
-                        <field name="rule"/>
-                    </group>
-                    <label name="the_table"/>
-                    <field name="the_table"/>
-                    <label name="language"/>
-                    <field name="language"/>
-                    <label name="translated_technical_name"/>
-                    <field name="translated_technical_name"/>
-                    <label name="fct_args"/>
-                    <field name="fct_args"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">tree_element_form</field>
         </record>
         <record model="ir.ui.view" id="tree_element_tree">
             <field name="model">rule_engine.tree_element</field>
             <field name="type">tree</field>
             <field name="field_childs">children</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Tree Element">
-                    <field name="type"/>
-                    <field name="description"/>
-                    <field name="name"/>
-                    <field name="namespace"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">tree_element_tree</field>
         </record>
         <record model="ir.action.act_window" id="tree_element_window">
             <field name="name">Tree Elements</field>
