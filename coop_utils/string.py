@@ -137,3 +137,14 @@ def date_as_string(date, lang=None):
     if not lang:
         lang = utils.get_user_language()
     return Lang.strftime(date, lang.code, lang.date)
+
+
+def remove_invalid_char(from_string):
+    import unicodedata
+    return ''.join(
+        (c for c in unicodedata.normalize('NFD', unicode(from_string))
+        if unicodedata.category(c) != 'Mn'))
+
+
+def remove_blank_and_invalid_char(from_string):
+    return remove_invalid_char(from_string).replace(' ', '_')
