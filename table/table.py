@@ -8,6 +8,7 @@ from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
     Button
 from trytond.modules.coop_utils import One2ManyDomain
+from trytond.modules.coop_utils import string
 
 __all__ = ['TableCell', 'TableDefinition',
     'TableDefinitionDimension', 'TableOpen2DAskDimensions',
@@ -26,9 +27,12 @@ DIMENSION_MAX = 4
 
 class TableDefinition(ModelSQL, ModelView):
     "Table Definition"
+
     __name__ = 'table.table_def'
+
     name = fields.Char('Name', required=True)
-    code = fields.Char('Code', required=True)
+    code = fields.Char('Code', required=True,
+        on_change_with=['name', 'code'])
     dimension_kind1 = fields.Selection(KIND, 'Dimension Kind 1',
         states={
             'readonly': Bool(Eval('dimension1')),
@@ -101,6 +105,11 @@ class TableDefinition(ModelSQL, ModelView):
         else:
             return 'Table %sD' % nb_dim
 
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return string.remove_blank_and_invalid_char(self.name)
+
 
 def dimension_state(kind):
     return {
@@ -121,8 +130,10 @@ DIMENSION_DEPENDS = ['type']
 
 class TableDefinitionDimension(ModelSQL, ModelView):
     "Table Definition Dimension"
+
     __name__ = 'table.table_dimension'
     _order_name = 'rec_name'
+
     definition = fields.Many2One('table.table_def', 'Definition',
         required=True, ondelete='CASCADE')
     type = fields.Selection([
