@@ -12,7 +12,7 @@ $TRYTOND_PATH/trytond -c $TRYTOND_CONF &
 echo "Starting tryton client"
 echo $SEP
 #developpement mode
-env UBUNTU_MENUPROXY= $TRYTON_PATH/tryton -c $TRYTON_CONF -d &
+env UBUNTU_MENUPROXY= $TRYTON_PATH/tryton -c $TRYTON_CONF -l DEBUG &
 
 #Non developpement mode for demo or production
 #env UBUNTU_MENUPROXY= $TRYTON_PATH/tryton -c $TRYTON_CONF &

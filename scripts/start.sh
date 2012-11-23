@@ -11,7 +11,7 @@ cd tryton-workspace/conf
 . ./scripts.conf
 cd ../coopbusiness/scripts
 SCRIPT_NAME=$1
-while getopts ":rckldsh" opt; do
+while getopts ":rckldsht" opt; do
    case $opt in
       r)
          SCRIPT_NAME=resetdb ;;
@@ -23,6 +23,8 @@ while getopts ":rckldsh" opt; do
          SCRIPT_NAME=updatedatabase ;;
       s)
 	 SCRIPT_NAME=sync_coop ;;
+      t)
+         SCRIPT_NAME=test_case ;;
       h)
          echo "
 -r reset 
@@ -30,7 +32,8 @@ while getopts ":rckldsh" opt; do
 -k killtryton 
 -l launch 
 -d updatedatabase
--s sync_coop" ;;
+-s sync_coop
+-t test_case" ;;
       \?)
          echo "Invalid Option" ;;
    esac
