@@ -35,6 +35,7 @@ class ClauseVersion(model.CoopSQL, model.VersionObject):
     'Clause Version'
 
     __name__ = 'ins_product.clause_version'
+
     content = fields.Text('Content')
 
     @classmethod

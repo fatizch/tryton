@@ -4,30 +4,11 @@
         <!--  ******************************************* 
               ********    Benefit Rule    ***************
               *******************************************-->
-        <record model="ir.ui.view" id="benefitrule_view_form">
+        <record model="ir.ui.view" id="benefit_rule_view_form">
             <field name="model">ins_product.benefit_rule</field>
             <field name="type">form</field>
             <field name="inherit" ref="businessruleroot_view_form"/>
-            <field name="arch" type="xml">
-            <![CDATA[
-            <data>
-                <xpath expr="/form" position="replace_attributes">
-                    <form string="benefit rule"/>
-                </xpath>
-                <xpath expr="/form/notebook/page[@id='main']/group[@id='simple']"
-                 position="inside">
-                    <label name="kind"/>
-                    <field name="kind" xexpand="0"/>
-                    <newline/>
-                    <label name="amount"/>
-                    <field name="amount"/>
-                    <newline/>
-                    <label name="coef_coverage_amount"/>
-                    <field name="coef_coverage_amount"/>
-                </xpath>
-            </data>
-            ]]>
-            </field>
+            <field name="name">benefit_rule_form</field>
         </record>
     </data>
 </tryton>

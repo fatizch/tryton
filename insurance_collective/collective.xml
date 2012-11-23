@@ -79,6 +79,24 @@
         <!--/Coverage -->
 
         <!-- *******************************************
+            ******** benefit ********
+            ******************************************* -->
+        <!-- benefit -->
+        <!-- form view -->
+        <record model="ir.ui.view" id="benefit_view_form">
+            <field name="model">ins_collective.benefit</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_product.benefit_view_form"/>
+            <field name="arch" type="xml"/>
+        </record>
+        <record model="ir.ui.view" id="benefit_view_tree">
+            <field name="model">ins_collective.benefit</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_product.benefit_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+
+        <!-- *******************************************
             ******** GenericBusinessRule ********
             ******************************************* -->
         <!-- GenericBusinessRule -->
@@ -133,6 +151,16 @@
             <field name="model">ins_collective.clause_rule</field>
             <field name="type">form</field>
             <field name="inherit" ref="insurance_product.clause_rule_view_form"/>
+            <field name="arch" type="xml"/>
+        </record>
+
+        <!-- *******************************************
+            ******** benefit Rule ********
+            ******************************************* -->
+        <record model="ir.ui.view" id="benefit_rule_view_form">
+            <field name="model">ins_collective.benefit_rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_product.benefit_rule_view_form"/>
             <field name="arch" type="xml"/>
         </record>
 
