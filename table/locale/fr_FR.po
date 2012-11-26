@@ -278,7 +278,6 @@ msgctxt "model:table.table_dimension,name:"
 msgid "Table Definition Dimension"
 msgstr "Dimension"
 
-#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind1:"
 msgid ""
 msgstr ""
@@ -301,7 +300,6 @@ msgctxt "selection:table.table_def,dimension_kind1:"
 msgid "Value"
 msgstr "Valeur"
 
-#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind2:"
 msgid ""
 msgstr ""
@@ -324,7 +322,6 @@ msgctxt "selection:table.table_def,dimension_kind2:"
 msgid "Value"
 msgstr "Valeur"
 
-#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind3:"
 msgid ""
 msgstr ""
@@ -347,7 +344,6 @@ msgctxt "selection:table.table_def,dimension_kind3:"
 msgid "Value"
 msgstr "Valeur"
 
-#, fuzzy
 msgctxt "selection:table.table_def,dimension_kind4:"
 msgid ""
 msgstr ""

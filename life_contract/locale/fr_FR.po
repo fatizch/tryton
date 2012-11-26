@@ -14,7 +14,6 @@ msgctxt "error:life_contract.extension:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-#, fuzzy
 msgctxt "field:ins_contract.contract,extension_life:"
 msgid ""
 msgstr ""

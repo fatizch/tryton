@@ -2,6 +2,22 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:tranche.calc_line:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:tranche.calculator:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:tranche.tranche:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:tranche.tranche_version:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "field:ins_product.eligibility_rule,max_age:"
 msgid "Maximum Age"
 msgstr "Age Maximum"
@@ -22,10 +38,238 @@ msgctxt "field:life_product.definition,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:tranche.calc_line,calculator:"
+msgid "Calculator"
+msgstr "Calculateur"
+
+msgctxt "field:tranche.calc_line,contribution_base:"
+msgid "Contribution Base"
+msgstr ""
+
+msgctxt "field:tranche.calc_line,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:tranche.calc_line,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:tranche.calc_line,fixed_value:"
+msgid "Fixed Amount"
+msgstr ""
+
+msgctxt "field:tranche.calc_line,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:tranche.calc_line,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:tranche.calc_line,rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:tranche.calc_line,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:tranche.calc_line,tranche:"
+msgid "Tranche"
+msgstr ""
+
+msgctxt "field:tranche.calc_line,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:tranche.calc_line,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:tranche.calculator,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:tranche.calculator,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:tranche.calculator,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:tranche.calculator,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:tranche.calculator,lines:"
+msgid "Lines"
+msgstr "Lignes de Cotisation"
+
+msgctxt "field:tranche.calculator,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:tranche.calculator,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:tranche.calculator,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:tranche.tranche,ceiling:"
+msgid "Current Ceiling"
+msgstr ""
+
+msgctxt "field:tranche.tranche,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:tranche.tranche,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:tranche.tranche,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:tranche.tranche,current_rec_name:"
+msgid "Current Value"
+msgstr "Valeur Courante"
+
+msgctxt "field:tranche.tranche,floor:"
+msgid "Current Floor"
+msgstr ""
+
+msgctxt "field:tranche.tranche,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:tranche.tranche,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:tranche.tranche,name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:tranche.tranche,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:tranche.tranche,versions:"
+msgid "Versions"
+msgstr "Taux Versionnés"
+
+msgctxt "field:tranche.tranche,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:tranche.tranche,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:tranche.tranche_version,ceiling:"
+msgid "Ceiling"
+msgstr ""
+
+msgctxt "field:tranche.tranche_version,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:tranche.tranche_version,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:tranche.tranche_version,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:tranche.tranche_version,floor:"
+msgid "Floor"
+msgstr ""
+
+msgctxt "field:tranche.tranche_version,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:tranche.tranche_version,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:tranche.tranche_version,main_elem:"
+msgid "Descriptor"
+msgstr "Descripteur"
+
+msgctxt "field:tranche.tranche_version,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:tranche.tranche_version,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:tranche.tranche_version,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:tranche.tranche_version,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "help:tranche.calc_line,contribution_base:"
+msgid "Value between 0 and 100"
+msgstr ""
+
+msgctxt "help:tranche.calc_line,rate:"
+msgid "Value between 0 and 100"
+msgstr ""
+
+msgctxt "help:tranche.tranche_version,ceiling:"
+msgid "Included"
+msgstr ""
+
+msgctxt "help:tranche.tranche_version,floor:"
+msgid "Not Included"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_model_tranche"
+msgid "tranches"
+msgstr ""
+
+msgctxt "model:ir.ui.menu,name:menu_model_tranche"
+msgid "tranches"
+msgstr ""
+
 msgctxt "model:life_product.definition,name:"
 msgid "Life Product Definition"
 msgstr "Définition du Produit"
 
+msgctxt "model:tranche.calc_line,name:"
+msgid "Tranche Calculator Line"
+msgstr ""
+
+msgctxt "model:tranche.calculator,name:"
+msgid "Tranche Calculator"
+msgstr ""
+
+msgctxt "model:tranche.tranche,name:"
+msgid "Tranche"
+msgstr ""
+
+msgctxt "model:tranche.tranche_version,name:"
+msgid "Tranche Version"
+msgstr ""
+
 msgctxt "selection:ins_product.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
+
+msgctxt "view:tranche.tranche:"
+msgid "Tranche"
+msgstr ""
+
+msgctxt "view:tranche.tranche_version:"
+msgid "Tranche Version"
+msgstr ""

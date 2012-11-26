@@ -434,12 +434,10 @@ msgctxt "model:country.zipcode,name:"
 msgid "ZipCode"
 msgstr ""
 
-#, fuzzy
 msgctxt "model:ir.action,name:None"
 msgid "Party"
 msgstr "Tiers"
 
-#, fuzzy
 msgctxt "model:ir.action,name:None"
 msgid "Party"
 msgstr "Tiers"
@@ -456,7 +454,6 @@ msgctxt "model:ir.action,name:act_generic_actor_kind_form"
 msgid "Generic Actor"
 msgstr "Acteur Générique"
 
-#, fuzzy
 msgctxt "model:ir.action,name:act_party_form"
 msgid "Party"
 msgstr "Tiers"
@@ -473,7 +470,6 @@ msgctxt "model:ir.ui.menu,name:None"
 msgid "Actors"
 msgstr ""
 
-#, fuzzy
 msgctxt "model:ir.ui.menu,name:None"
 msgid "Party"
 msgstr "Tiers"

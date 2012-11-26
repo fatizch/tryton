@@ -2,7 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-#, fuzzy
+msgctxt "field:ins_collective.pricing_data,tranche_calculator:"
+msgid "Tranche Calculator"
+msgstr ""
+
 msgctxt "selection:ins_collective.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"

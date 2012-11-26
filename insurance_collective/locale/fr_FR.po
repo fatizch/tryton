@@ -31,10 +31,6 @@ msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_collective.coverage:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique"
-
-msgctxt "error:ins_collective.coverage:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -43,6 +39,10 @@ msgid "Amounts need to be floats !"
 msgstr "Les montants doivent être des numériques !"
 
 msgctxt "error:ins_collective.coverage_amount_rule:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_collective.deductible_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -91,10 +91,6 @@ msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_collective.product:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique"
-
-msgctxt "error:ins_collective.product:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -141,6 +137,10 @@ msgstr "Créé par"
 msgctxt "field:ins_collective.benefit,currency_digits:"
 msgid "Currency Digits"
 msgstr "Nbre de chiffres après la virgule"
+
+msgctxt "field:ins_collective.benefit,deductible_mgr:"
+msgid "Deductible Manager"
+msgstr "Franchises"
 
 msgctxt "field:ins_collective.benefit,description:"
 msgid "Description"
@@ -360,7 +360,7 @@ msgstr "Règle"
 
 msgctxt "field:ins_collective.clause,title:"
 msgid "Title"
-msgstr ""
+msgstr "Titre"
 
 msgctxt "field:ins_collective.clause,versions:"
 msgid "Versions"
@@ -546,6 +546,10 @@ msgctxt "field:ins_collective.coverage,currency_digits:"
 msgid "Currency Digits"
 msgstr "Nbre de chiffres après la virgule"
 
+msgctxt "field:ins_collective.coverage,deductible_mgr:"
+msgid "Deductible Manager"
+msgstr "Franchises"
+
 msgctxt "field:ins_collective.coverage,description:"
 msgid "Description"
 msgstr "Description"
@@ -687,6 +691,58 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:ins_collective.coverage_amount_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.deductible_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:ins_collective.deductible_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.deductible_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.deductible_rule,generic_rule:"
+msgid "Generic Rule"
+msgstr "Règle Générique"
+
+msgctxt "field:ins_collective.deductible_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.deductible_rule,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_collective.deductible_rule,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_collective.deductible_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:ins_collective.deductible_rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_collective.deductible_rule,template_behaviour:"
+msgid "Template Behaviour"
+msgstr "Comportement du Modèle"
+
+msgctxt "field:ins_collective.deductible_rule,value:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "field:ins_collective.deductible_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.deductible_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -1220,6 +1276,10 @@ msgctxt "field:ins_collective.generic_business_rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_collective.generic_business_rule,deductible_rule:"
+msgid "Deductible Rule"
+msgstr "Franchise"
+
 msgctxt "field:ins_collective.generic_business_rule,eligibility_rule:"
 msgid "Eligibility Rule"
 msgstr "Règle d'Eligibilité"
@@ -1536,6 +1596,10 @@ msgctxt "field:ins_collective.product,currency_digits:"
 msgid "Currency Digits"
 msgstr "Nbre de chiffres après la virgule"
 
+msgctxt "field:ins_collective.product,deductible_mgr:"
+msgid "Deductible Manager"
+msgstr "Franchises"
+
 msgctxt "field:ins_collective.product,description:"
 msgid "Description"
 msgstr "Description"
@@ -1786,7 +1850,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_collective.term_renewal_rule,can_be_renewed:"
 msgid "Can be renewed"
-msgstr ""
+msgstr "Peut Etre Renouvelé"
 
 msgctxt "field:ins_collective.term_renewal_rule,config_kind:"
 msgid "Conf. kind"
@@ -1802,11 +1866,11 @@ msgstr "Créé par"
 
 msgctxt "field:ins_collective.term_renewal_rule,date_for_sync:"
 msgid "Sync Date"
-msgstr ""
+msgstr "Date de Synchro"
 
 msgctxt "field:ins_collective.term_renewal_rule,frequency:"
 msgid "Frequency"
-msgstr ""
+msgstr "Fréquence"
 
 msgctxt "field:ins_collective.term_renewal_rule,generic_rule:"
 msgid "Generic Rule"
@@ -1878,7 +1942,7 @@ msgstr "Clause"
 
 msgctxt "model:ins_collective.clause_relation,name:"
 msgid "Relation between clause and offered"
-msgstr ""
+msgstr "Table intermédiaire entre l'offre et le clause"
 
 msgctxt "model:ins_collective.clause_rule,name:"
 msgid "Clause Rule"
@@ -1896,6 +1960,10 @@ msgctxt "model:ins_collective.coverage_amount_rule,name:"
 msgid "Coverage Amount Rule"
 msgstr "Règle de Montant de Couverture"
 
+msgctxt "model:ins_collective.deductible_rule,name:"
+msgid "Deductible Rule"
+msgstr "Franchise"
+
 msgctxt "model:ins_collective.dynamic_data_manager,name:"
 msgid "Dynamic Data Manager"
 msgstr "Données Complémentaires"
@@ -1903,6 +1971,7 @@ msgstr "Données Complémentaires"
 msgctxt "model:ins_collective.eligibility_relation_kind,name:"
 msgid "Define relation between eligibility rule and relation kind authorized"
 msgstr ""
+"Table intermédiaire entre la règle d'égibilité et les relations autorisées"
 
 msgctxt "model:ins_collective.eligibility_rule,name:"
 msgid "Eligibility Rule"
@@ -1979,7 +2048,7 @@ msgstr "Définition de Données Complémentaires"
 
 msgctxt "model:ins_collective.schema_element_relation,name:"
 msgid "Relation between schema element and dynamic data manager"
-msgstr ""
+msgstr "Table intermédiaire pour les données complémentaires"
 
 msgctxt "model:ins_collective.term_renewal_rule,name:"
 msgid "Clause Rule"
@@ -2016,6 +2085,26 @@ msgstr "Reprendre le Workflow"
 msgctxt "model:ir.action,name:resume_gbp_subs_process"
 msgid "Resume Process"
 msgstr "Reprendre le Workflow"
+
+msgctxt "model:ir.ui.menu,name:None"
+msgid "Enrollment"
+msgstr "Affiliation"
+
+msgctxt "model:ir.ui.menu,name:None"
+msgid "GBP Contract"
+msgstr "Contrat Collectif"
+
+msgctxt "model:ir.ui.menu,name:None"
+msgid "Group"
+msgstr "Groupe"
+
+msgctxt "model:ir.ui.menu,name:None"
+msgid "New Enrollment"
+msgstr "Nouvelle Affiliation"
+
+msgctxt "model:ir.ui.menu,name:None"
+msgid "New GBP Subscription Process"
+msgstr "Souscription Contrat Groupe"
 
 msgctxt "model:ir.ui.menu,name:menu_coverage_form"
 msgid "Plan Coverages"
@@ -2190,6 +2279,30 @@ msgid "Remove"
 msgstr "Supprimer"
 
 msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
+msgid "Validate"
+msgstr "Valider"
+
+msgctxt "selection:ins_collective.deductible_rule,config_kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:ins_collective.deductible_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_collective.deductible_rule,template_behaviour:"
+msgid "Add"
+msgstr "Ajouter"
+
+msgctxt "selection:ins_collective.deductible_rule,template_behaviour:"
+msgid "Override"
+msgstr "Remplacer"
+
+msgctxt "selection:ins_collective.deductible_rule,template_behaviour:"
+msgid "Remove"
+msgstr "Supprimer"
+
+msgctxt "selection:ins_collective.deductible_rule,template_behaviour:"
 msgid "Validate"
 msgstr "Valider"
 
@@ -2491,7 +2604,7 @@ msgstr "Booléen"
 
 msgctxt "selection:ins_collective.schema_element,type_:"
 msgid "Char"
-msgstr ""
+msgstr "Alphanumérique"
 
 msgctxt "selection:ins_collective.schema_element,type_:"
 msgid "Date"
@@ -2503,7 +2616,7 @@ msgstr "Entier"
 
 msgctxt "selection:ins_collective.schema_element,type_:"
 msgid "Numeric"
-msgstr ""
+msgstr "Numérique"
 
 msgctxt "selection:ins_collective.schema_element,type_:"
 msgid "Reference"
@@ -2527,7 +2640,7 @@ msgstr "Simple"
 
 msgctxt "selection:ins_collective.term_renewal_rule,frequency:"
 msgid "Biyearly"
-msgstr ""
+msgstr "Biannuel"
 
 msgctxt "selection:ins_collective.term_renewal_rule,frequency:"
 msgid "Half Yearly"
@@ -2563,11 +2676,11 @@ msgstr "Valider"
 
 msgctxt "selection:ins_collective.term_renewal_rule,term_date_choice:"
 msgid "At subscription Time"
-msgstr ""
+msgstr "À La Souscription"
 
 msgctxt "selection:ins_collective.term_renewal_rule,term_date_choice:"
 msgid "At this Date"
-msgstr ""
+msgstr "À Cette Date"
 
 msgctxt "view:ins_collective.gbp_contract:"
 msgid "Contract"

@@ -138,7 +138,6 @@ msgctxt "field:rule_engine.create_test_case.start,result:"
 msgid "Result"
 msgstr "Résultat"
 
-#, fuzzy
 msgctxt "field:rule_engine.create_test_case.start,rule:"
 msgid "Rule"
 msgstr "Règle"
@@ -500,7 +499,6 @@ msgctxt "wizard_button:rule_engine.create_test_case,ask_description,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-#, fuzzy
 msgctxt "wizard_button:rule_engine.create_test_case,start,ask_description:"
 msgid "Create Test Case"
 msgstr "Créer le jeu de test"
