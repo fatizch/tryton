@@ -24,13 +24,12 @@ class BusinessRuleManager(model.CoopSQL, model.CoopView,
     'Business Rule Manager'
 
     __name__ = 'ins_product.business_rule_manager'
-    _export_name = 'code'
 
     offered = fields.Reference('Offered', selection='get_offered_models')
     business_rules = fields.One2Many('ins_product.generic_business_rule',
         'manager', 'Business Rules', on_change=['business_rules'])
-    code = fields.Char('Code',
-        on_change_with=['business_rules', 'offered'])
+#    code = fields.Char('Code',
+#        on_change_with=['business_rules', 'offered'])
 
     @classmethod
     def __setup__(cls):
