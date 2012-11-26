@@ -25,11 +25,14 @@
                 <page string="Dynamic Data" id="dynamic_data">
                     <field name="dynamic_data_manager" mode="form"/>
                 </page>
-                <page string="Eligibilty" id="eligibility">
+                <page string="Eligibility" id="eligibility">
                     <field name="eligibility_mgr" colspan="4" mode="form"/>
                 </page>
                 <page string="Pricing" id="pricing">
                     <field name="pricing_mgr" colspan="4" mode="form"/>
+                </page>
+                <page string="Deductible" id="deductible">
+                    <field name="deductible_mgr" colspan="4" mode="form"/>
                 </page>
                 <page string="Clause" id="clause">
                     <field name="clause_mgr" colspan="4" mode="form"/>

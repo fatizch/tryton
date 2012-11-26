@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!--  ******************************************* 
+              ********    Deductible Rule    ***************
+              *******************************************-->
+        <record model="ir.ui.view" id="deductible_rule_view_form">
+            <field name="model">ins_product.deductible_rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="businessruleroot_view_form"/>
+            <field name="name">deductible_rule_form</field>
+        </record>
+    </data>
+</tryton>

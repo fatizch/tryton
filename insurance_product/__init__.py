@@ -28,6 +28,7 @@ def register():
         BenefitRule,
         ReserveRule,
         CoverageAmountRule,
+        DeductibleRule,
         ProductDefinition,
         DynamicDataManager,
         TermRenewalRule,

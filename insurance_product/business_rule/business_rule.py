@@ -24,10 +24,13 @@ class BusinessRuleManager(model.CoopSQL, model.CoopView,
     'Business Rule Manager'
 
     __name__ = 'ins_product.business_rule_manager'
+    _export_name = 'code'
 
     offered = fields.Reference('Offered', selection='get_offered_models')
     business_rules = fields.One2Many('ins_product.generic_business_rule',
         'manager', 'Business Rules', on_change=['business_rules'])
+    code = fields.Char('Code',
+        on_change_with=['business_rules', 'offered'])
 
     @classmethod
     def __setup__(cls):
@@ -91,17 +94,22 @@ class BusinessRuleManager(model.CoopSQL, model.CoopView,
         except ValueError, _exception:
             return None
 
-    def get_rec_name(self, name):
-        res = ''
-        if self.business_rules and len(self.business_rules) > 0:
-            res = self.business_rules[0].kind
-        if res != '':
-            res += ' '
-        res += '(%s)' % self.id
-        return res
-
     def get_offered(self):
         return self.offered
+
+    @classmethod
+    def create(cls, vals):
+        #We need a functional key for import/export, we'll create one when we
+        #create a brm and therefore a business rule because br is required for
+        #brm.
+        #the functional key is the concatenation of the func key of the offered
+        #and the func key of the business rule (kind)
+#        offered = utils.convert_ref_to_obj(vals['offered'])
+#        offered_key = getattr(offered, offered._export_name)
+#        kind = vals['business_rules'][0][1]['kind']
+#        vals['code'] = '%s,%s,%s' % (
+#            offered.__class__.__name__, offered_key, kind)
+        return super(BusinessRuleManager, cls).create(vals)
 
 #    @staticmethod
 #    def default_business_rules():
@@ -115,7 +123,7 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
     __name__ = 'ins_product.generic_business_rule'
 
     kind = fields.Selection('get_kind', 'Kind',
-        required=True, on_change=['kind'])  # , states={'readonly': True})
+        required=True, on_change=['kind'], states={'readonly': True})
     manager = fields.Many2One('ins_product.business_rule_manager', 'Manager',
         ondelete='CASCADE')
     start_date = fields.Date('From Date', required=True,
@@ -137,6 +145,8 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
         'generic_rule', 'Clause Rule', size=1)
     term_renewal_rule = fields.One2Many('ins_product.term_renewal_rule',
         'generic_rule', 'Term - Renewal Rule', size=1)
+    deductible_rule = fields.One2Many('ins_product.deductible_rule',
+        'generic_rule', 'Deductible Rule', size=1)
 
     def get_rec_name(self, name):
         return self.kind
@@ -155,7 +165,8 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
                 cls.kind.on_change += [field_name]
 
             attr.states = {
-                'invisible': (Eval('kind') != attr.model_name)}
+                'invisible': (Eval('kind') != attr.model_name)
+            }
             setattr(cls, field_name, attr)
 
         cls._order.insert(0, ('start_date', 'ASC'))

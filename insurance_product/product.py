@@ -77,6 +77,8 @@ class Offered(model.CoopView, utils.GetResult, Templated):
         'offered', 'Eligibility Manager')
     clause_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
         'offered', 'Clause Manager')
+    deductible_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
+        'offered', 'Deductible Manager')
     summary = fields.Function(fields.Text('Summary',
             states={
                 'invisible': ~Eval('summary',)

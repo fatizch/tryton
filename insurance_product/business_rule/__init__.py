@@ -6,3 +6,4 @@ from .eligibility_rule import *
 from .pricing_rule import *
 from .clause_rule import *
 from .term_renewal_rule import *
+from .deductible_rule import *
