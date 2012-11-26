@@ -20,6 +20,7 @@ class Coverage(model.CoopSQL, Offered):
     'Coverage'
 
     __name__ = 'ins_product.coverage'
+    _export_name = 'code'
 
     insurer = fields.Many2One('party.insurer', 'Insurer')
     family = fields.Selection([('default', 'default')], 'Family',
@@ -58,9 +59,10 @@ class Coverage(model.CoopSQL, Offered):
     @classmethod
     def __setup__(cls):
         super(Coverage, cls).__setup__()
-        cls._sql_constraints += [
-            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
-        ]
+        #Temporary remove, while impossible to duplicate whith same code
+#        cls._sql_constraints += [
+#            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+#        ]
         for field_name in (mgr for mgr in dir(cls) if mgr.endswith('_mgr')):
             cur_attr = copy.copy(getattr(cls, field_name))
             if not hasattr(cur_attr, 'context') or not isinstance(

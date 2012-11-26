@@ -194,9 +194,10 @@ class Product(model.CoopSQL, Offered):
     @classmethod
     def __setup__(cls):
         super(Product, cls).__setup__()
-        cls._sql_constraints += [
-            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
-        ]
+        #Temporary remove, while impossible to duplicate whith same code
+#        cls._sql_constraints += [
+#            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+#        ]
 
     @classmethod
     def delete(cls, entities):
