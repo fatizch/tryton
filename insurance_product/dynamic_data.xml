@@ -11,8 +11,8 @@
             <field name="arch" type="xml">
                 <![CDATA[
                     <form string="Dynamic Data Manager">
-                        <field name="specific_dynamic"/>
-                        <field name="shared_dynamic"/>
+                        <field name="specific_dynamic" colspan="2"/>
+                        <field name="shared_dynamic" colspan="2"/>
                     </form>
                 ]]>
             </field>
