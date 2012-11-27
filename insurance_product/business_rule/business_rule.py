@@ -96,8 +96,8 @@ class BusinessRuleManager(model.CoopSQL, model.CoopView,
     def get_offered(self):
         return self.offered
 
-    @classmethod
-    def create(cls, vals):
+#    @classmethod
+#    def create(cls, vals):
         #We need a functional key for import/export, we'll create one when we
         #create a brm and therefore a business rule because br is required for
         #brm.
@@ -108,7 +108,7 @@ class BusinessRuleManager(model.CoopSQL, model.CoopView,
 #        kind = vals['business_rules'][0][1]['kind']
 #        vals['code'] = '%s,%s,%s' % (
 #            offered.__class__.__name__, offered_key, kind)
-        return super(BusinessRuleManager, cls).create(vals)
+#        return super(BusinessRuleManager, cls).create(vals)
 
 #    @staticmethod
 #    def default_business_rules():
