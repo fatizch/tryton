@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form string="Table Definition Dimension">
+    <label name="definition"/>
+    <field name="definition"/>
+    <newline/>
+    <label name="value"/>
+    <field name="value"/>
+    <newline/>
+    <label name="date"/>
+    <field name="date"/>
+    <newline/>
+    <label name="start"/>
+    <field name="start"/>
+    <label name="end"/>
+    <field name="end"/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <field name="type" invisible="1" colspan="4"/>
+</form>

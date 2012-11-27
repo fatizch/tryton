@@ -7,52 +7,13 @@
         <record model="ir.ui.view" id="table_definition_form_view">
             <field name="model">table.table_def</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Table Definition" col="4">
-                    <group id="name" colspan="4">
-                        <label name="name"/>
-                        <field name="name" colspan="3" xfill="1"/>
-                        <label name="code"/>
-                        <field name="code" colspan="3" xfill="1"/>
-                    </group>
-                    <group id="dim1" colspan="2" col="2" yfill="1" yexpand="1">
-                        <label name="dimension_kind1"/>
-                        <field name="dimension_kind1"/>
-                        <field name="dimension1" colspan="2" yfill="1"/>
-                    </group>
-                    <group id="dim2" colspan="2" col="2" yfill="1" yexpand="1">
-                        <label name="dimension_kind2"/>
-                        <field name="dimension_kind2"/>
-                        <field name="dimension2" colspan="2" yfill="1"/>
-                    </group>
-                    <group id="dim3" colspan="2" col="2" yfill="1" yexpand="1">
-                        <label name="dimension_kind3"/>
-                        <field name="dimension_kind3"/>
-                        <field name="dimension3" colspan="2" yfill="1"/>
-                    </group>
-                    <group id="dim4" colspan="2" col="2" yfill="1" yexpand="1">
-                        <label name="dimension_kind4"/>
-                        <field name="dimension_kind4"/>
-                        <field name="dimension4" colspan="2" yfill="1"/>
-                    </group>
-                </form>
-                ]]>
-            </field>
+            <field name="name">table_definition_form</field>
         </record>
 
         <record model="ir.ui.view" id="table_definition_list_view">
             <field name="model">table.table_def</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Table Definition">
-                    <field name="name"/>
-                    <field name="code"/>
-                    <field name="kind"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">table_definition_tree</field>
         </record>
 
         <record model="ir.action.act_window" id="act_table_definition_form">
@@ -79,85 +40,25 @@
         <record model="ir.ui.view" id="table_definition_dimension_form_view">
             <field name="model">table.table_dimension</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Table Definition Dimension">
-                    <label name="definition"/>
-                    <field name="definition"/>
-                    <newline/>
-                    <label name="value"/>
-                    <field name="value"/>
-                    <newline/>
-                    <label name="date"/>
-                    <field name="date"/>
-                    <newline/>
-                    <label name="start"/>
-                    <field name="start"/>
-                    <label name="end"/>
-                    <field name="end"/>
-                    <label name="start_date"/>
-                    <field name="start_date"/>
-                    <label name="end_date"/>
-                    <field name="end_date"/>
-                    <field name="type" invisible="1" colspan="4"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">table_dimension_form</field>
         </record>
 
         <record model="ir.ui.view" id="table_definition_dimension_list_view">
             <field name="model">table.table_dimension</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Table Definition Dimensions">
-                    <field name="definition"/>
-                    <field name="rec_name" expand="1"/>
-                    <field name="type" tree_invisible="1"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">table_dimension_tree</field>
         </record>
 
         <record model="ir.ui.view" id="cell_form_view">
             <field name="model">table.table_cell</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Table" col="6">
-                    <label name="definition"/>
-                    <field name="definition" colspan="5"/>
-                    <newline/>
-                    <label name="dimension1"/>
-                    <field name="dimension1"/>
-                    <label name="dimension2"/>
-                    <field name="dimension2"/>
-                    <label name="dimension3"/>
-                    <field name="dimension3"/>
-                    <label name="dimension4"/>
-                    <field name="dimension4"/>
-                    <label name="value"/>
-                    <field name="value" colspan="5"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">cell_form</field>
         </record>
 
         <record model="ir.ui.view" id="cell_list_view">
             <field name="model">table.table_cell</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Table" editable="bottom">
-                    <field name="definition"/>
-                    <field name="dimension1"/>
-                    <field name="dimension2"/>
-                    <field name="dimension3"/>
-                    <field name="dimension4"/>
-                    <field name="value"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">cell_tree</field>
         </record>
 
         <record model="ir.action.act_window" id="act_cell_form">
