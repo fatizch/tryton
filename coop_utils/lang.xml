@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.lang" id="ir.lang_fr">
+            <field name="date">%d/%m/%Y</field>
+        </record>
+    </data>
+</tryton>
