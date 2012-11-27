@@ -38,9 +38,11 @@ class BusinessRuleManager(model.CoopSQL, model.CoopView,
         cls.template.model_name = cls.__name__
         cls.__rpc__.update({'get_offered_models': RPC()})
 
-    @staticmethod
-    def get_offered_models():
-        return utils.get_descendents(Offered)
+    @classmethod
+    def get_offered_models(cls):
+        module_name = utils.get_module_name(cls)
+        return [x for x in utils.get_descendents('ins_product.offered')
+            if module_name in x[0]]
 
     def on_change_business_rules(self):
         res = {'business_rules': {}}

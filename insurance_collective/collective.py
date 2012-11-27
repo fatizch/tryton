@@ -4,13 +4,13 @@ from trytond.model import fields
 from trytond.modules.insurance_product import product, business_rule, benefit
 from trytond.modules.insurance_product import coverage, clause
 from trytond.modules.insurance_product.benefit import *
-from trytond.modules.insurance_product.business_rule import pricing_rule
 from trytond.modules.insurance_product.business_rule import eligibility_rule
 from trytond.modules.insurance_product.business_rule import benefit_rule
 from trytond.modules.insurance_product.business_rule import reserve_rule
 from trytond.modules.insurance_product.business_rule import \
     coverage_amount_rule
 from trytond.modules.insurance_product.business_rule import clause_rule
+from trytond.modules.insurance_product.business_rule import deductible_rule
 from trytond.modules.insurance_product.business_rule import term_renewal_rule
 from trytond.modules.insurance_product import dynamic_data
 from trytond.modules.coop_utils import utils
@@ -60,24 +60,6 @@ class GroupGenericBusinessRule(GroupRoot, business_rule.GenericBusinessRule):
     @classmethod
     def __setup__(cls):
         super(GroupGenericBusinessRule, cls).__setup__()
-
-
-class GroupPricingData(GroupRoot, pricing_rule.PricingData):
-    'Pricing Data'
-
-    __name__ = 'ins_collective.pricing_data'
-
-
-class GroupPriceCalculator(GroupRoot, pricing_rule.PriceCalculator):
-    'Price Calculator'
-
-    __name__ = 'ins_collective.pricing_calculator'
-
-
-class GroupPricingRule(GroupRoot, pricing_rule.PricingRule):
-    'Pricing Rule'
-
-    __name__ = 'ins_collective.pricing_rule'
 
 
 class GroupEligibilityRule(GroupRoot, eligibility_rule.EligibilityRule):
@@ -134,6 +116,12 @@ class GroupClauseRule(GroupRoot, clause_rule.ClauseRule):
     'Clause Rule'
 
     __name__ = 'ins_collective.clause_rule'
+
+
+class GroupDeductibleRule(GroupRoot, deductible_rule.DeductibleRule):
+    'Deductible Rule'
+
+    __name__ = 'ins_collective.deductible_rule'
 
 
 class GroupClauseRelation(GroupRoot, clause_rule.ClauseRelation):

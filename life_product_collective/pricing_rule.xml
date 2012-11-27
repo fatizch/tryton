@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- *******************************************
+            ******** PricingData ********
+            ******************************************* -->
+        <record model="ir.ui.view" id="pricingdata_view_tree">
+            <field name="model">ins_collective.pricing_data</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_product.pricingdata_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+        <record model="ir.ui.view" id="pricingdata_view_form">
+            <field name="model">ins_collective.pricing_data</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_product.pricingdata_view_form"/>
+            <field name="name">pricing_data_form</field>
+        </record>
+        </data>
+</tryton>

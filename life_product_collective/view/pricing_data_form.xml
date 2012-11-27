@@ -1,0 +1,6 @@
+<data>
+    <xpath expr="/form" position="inside">
+        <newline/>
+        <field name="tranche_calculator" mode="form"/>
+    </xpath>
+</data>

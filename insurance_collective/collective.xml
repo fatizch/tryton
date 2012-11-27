@@ -95,6 +95,15 @@
             <field name="inherit" ref="insurance_product.benefit_view_tree"/>
             <field name="arch" type="xml"/>
         </record>
+        <!-- *******************************************
+            ******** BusinessRuleManager ********
+            ******************************************* -->
+        <record model="ir.ui.view" id="businessrulemanager_view_form">
+            <field name="model">ins_collective.business_rule_manager</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_product.businessrulemanager_view_form"/>
+            <field name="arch" type="xml"/>
+        </record>
 
         <!-- *******************************************
             ******** GenericBusinessRule ********
@@ -115,15 +124,14 @@
         </record>
 
         <!-- *******************************************
-            ******** BusinessRuleManager ********
+            ******** Coverage Amount Rule ********
             ******************************************* -->
-        <record model="ir.ui.view" id="businessrulemanager_view_form">
-            <field name="model">ins_collective.business_rule_manager</field>
+        <record model="ir.ui.view" id="coverage_amountrule_view_form">
+            <field name="model">ins_collective.coverage_amount_rule</field>
             <field name="type">form</field>
-            <field name="inherit" ref="insurance_product.businessrulemanager_view_form"/>
+            <field name="inherit" ref="insurance_product.coverage_amountrule_view_form"/>
             <field name="arch" type="xml"/>
         </record>
-
         <!-- *******************************************
             ******** PricingRule ********
             ******************************************* -->
@@ -164,6 +172,15 @@
             <field name="arch" type="xml"/>
         </record>
 
+        <!-- *******************************************
+            ******** Deductible Rule ********
+            ******************************************* -->
+        <record model="ir.ui.view" id="deductible_rule_view_form">
+            <field name="model">ins_collective.deductible_rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_product.deductible_rule_view_form"/>
+            <field name="arch" type="xml"/>
+        </record>
         <!-- *******************************************
             ******** term_renewal Rule ********
             ******************************************* -->

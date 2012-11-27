@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- *******************************************
+            ******** tranche ***************
+            ******************************************* -->
+        <record model="ir.ui.view" id="tranche_view_tree">
+            <field name="model">tranche.tranche</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="coop_utils.versionned_object_view_tree"/>
+            <field name="name">tranche_tree</field>
+        </record>
+        <record model="ir.ui.view" id="tranche_view_form">
+            <field name="model">tranche.tranche</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="coop_utils.versionned_object_view_form"/>
+            <field name="name">tranche_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_model_tranche">
+            <field name="name">Tranches</field>
+            <field name="res_model">tranche.tranche</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_model_tranche_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="tranche_view_tree"/>
+            <field name="act_window" ref="act_model_tranche"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_model_tranche_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="tranche_view_form"/>
+            <field name="act_window" ref="act_model_tranche"/>
+        </record>
+        <menuitem parent="insurance_product.menu_product_configuration"
+            action="act_model_tranche" id="menu_model_tranche"/>
+
+        <!-- *******************************************
+            ******** tranche Version ***************
+            ******************************************* -->
+        <record model="ir.ui.view" id="tranche_version_view_tree">
+            <field name="model">tranche.tranche_version</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="coop_utils.version_object_view_tree"/>
+            <field name="name">tranche_version_tree</field>
+        </record>
+        <record model="ir.ui.view" id="tranche_version_view_form">
+            <field name="model">tranche.tranche_version</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="coop_utils.version_object_view_form"/>
+            <field name="name">tranche_version_form</field>
+        </record>
+
+        <!-- *******************************************
+            ******** TrancheCalculatorLine ***************
+            ******************************************* -->
+        <record model="ir.ui.view" id="tranche_calc_line_view_tree">
+            <field name="model">tranche.calc_line</field>
+            <field name="type">tree</field>
+            <field name="name">tranche_calc_line_tree</field>
+        </record>
+        <record model="ir.ui.view" id="tranche_calc_line_view_form">
+            <field name="model">tranche.calc_line</field>
+            <field name="type">form</field>
+            <field name="name">tranche_calc_line_form</field>
+        </record>
+
+        <!-- *******************************************
+            ******** TrancheCalculator**************
+            ******************************************* -->
+        <record model="ir.ui.view" id="tranche_calculator_view_tree">
+            <field name="model">tranche.calculator</field>
+            <field name="type">tree</field>
+            <field name="name">tranche_calculator_tree</field>
+        </record>
+        <record model="ir.ui.view" id="tranche_calculator_view_form">
+            <field name="model">tranche.calculator</field>
+            <field name="type">form</field>
+            <field name="name">tranche_calculator_form</field>
+        </record>
+
+        <record model="ir.action.act_window" id="act_model_tranche_calculator">
+            <field name="name">Tranches Calc</field>
+            <field name="res_model">tranche.calculator</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_model_tranche_calculator_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="tranche_calculator_view_tree"/>
+            <field name="act_window" ref="act_model_tranche_calculator"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_model_tranche_calculator_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="tranche_calculator_view_form"/>
+            <field name="act_window" ref="act_model_tranche_calculator"/>
+        </record>
+        <menuitem parent="insurance_product.menu_product_configuration"
+            action="act_model_tranche_calculator" id="menu_model_tranche_calculator"/>
+
+
+
+
+    </data>
+</tryton>
