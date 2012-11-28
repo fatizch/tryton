@@ -22,12 +22,12 @@
         <record model="ir.ui.view" id="calculator_view_tree">
             <field name="model">ins_product.pricing_calculator</field>
             <field name="type">tree</field>
-            <field name="name">calculator_tree</field>
+            <field name="name">price_calculator_tree</field>
         </record>
         <record model="ir.ui.view" id="calculator_view_form">
             <field name="model">ins_product.pricing_calculator</field>
             <field name="type">form</field>
-            <field name="name">calculator_form</field>
+            <field name="name">price_calculator_form</field>
         </record>
 
         <!--  ******************************************* 

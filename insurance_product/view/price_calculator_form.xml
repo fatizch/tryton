@@ -3,9 +3,9 @@
     <group id="main" col="8">
         <label name="key"/>
         <field name="key"/>
-        <newline/>
         <label name="simple"/>
         <field name="simple" xexpand="0"/>
+        <newline/>
         <label name="combine"/>
         <field name="combine" colspan="5"/>
     </group>
