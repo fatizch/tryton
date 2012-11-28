@@ -140,8 +140,10 @@ class CoopSchemaElement(SchemaElementMixin, model.CoopSQL, model.CoopView):
         for key in cls.browse(key_ids):
             with Transaction().set_context(language='fr_FR'):
                 english_key = cls(key.id)
-                choices = dict(json.loads(english_key.choices or '[]'))
-            choices.update(dict(json.loads(key.choices or '[]')))
+                json_ = json.loads(english_key.choices_json or '[]')
+                print json_
+                choices = dict(json_)
+            choices.update(dict(json.loads(key.choices_json or '[]')))
             new_key = {
                 'name': key.name,
                 'technical_name': key.technical_name,
