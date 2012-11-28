@@ -225,9 +225,6 @@ class Coverage(model.CoopSQL, Offered):
             return False
         return True
 
-    def get_rec_name(self, name):
-        return '(%s) %s' % (self.code, self.name)
-
     def give_me_allowed_amounts(self, args):
         try:
             return self.get_result(
@@ -245,12 +242,6 @@ class Coverage(model.CoopSQL, Offered):
                 manager='coverage_amount')
         except utils.NonExistingManagerException:
             return (True, []), []
-
-    @classmethod
-    def search_rec_name(cls, name, clause):
-        if cls.search([('code',) + clause[1:]], limit=1):
-            return [('code',) + clause[1:]]
-        return [(cls._rec_name,) + clause[1:]]
 
     def give_me_dynamic_data_ids_aggregate(self, args):
         if not 'dd_args' in args:
