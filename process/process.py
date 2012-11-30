@@ -218,13 +218,6 @@ class RichWorkflow(Workflow, model.CoopView):
         return good_step.get_button('button_%s' % name[8:])
 
     @classmethod
-    def apply_these_state_methods(cls, state_name, meth_kind, works):
-        the_meths = cls._state_defs[state_name][meth_kind]
-        for cur_meth in the_meths:
-            # TODO : Handle errors
-            getattr(cls, cur_meth).__call__(works)
-
-    @classmethod
     def technical_states(cls):
         # Technical states to be mapped on buttons :
         #  - Next : calls check methods, post methods, calculate next step
@@ -246,22 +239,22 @@ class RichWorkflow(Workflow, model.CoopView):
         self.states_history = json.dumps(value)
 
     @classmethod
-    def compute_before(cls, step_desc, works):
-        step_desc.apply_these_methods('before', works)
+    def compute_before(cls, step_desc, work):
+        step_desc.apply_these_methods('before', work)
 
     @classmethod
-    def compute_after(cls, step_desc, works):
+    def compute_after(cls, step_desc, work):
         # First step : we check that the data input is coherent
-        step_desc.apply_these_methods('check', works)
+        step_desc.apply_these_methods('check', work)
 
         # Next : we update the core objects through the update method
-        step_desc.apply_these_methods('update', works)
+        step_desc.apply_these_methods('update', work)
 
         # We got to check that the update worked properly
-        step_desc.apply_these_methods('validate', works)
+        step_desc.apply_these_methods('validate', work)
 
         # Finally : call the after methods
-        step_desc.apply_these_methods('after', works)
+        step_desc.apply_these_methods('after', work)
 
     def get_step_desc(self):
         good_field = self.get_good_field_from_context()
@@ -285,7 +278,7 @@ class RichWorkflow(Workflow, model.CoopView):
         for work in works:
             step_desc = work.get_step_desc()
 
-            work.compute_after(step_desc, [work])
+            work.compute_after(step_desc, work)
 
             next_step = step_desc.next_step(work)
 
@@ -298,7 +291,7 @@ class RichWorkflow(Workflow, model.CoopView):
 
             work.update_history(cur_hist)
 
-            work.compute_before(next_step, [work])
+            work.compute_before(next_step, work)
 
             setattr(work, field_name, next_step.step_technical_name)
 
@@ -319,7 +312,7 @@ class RichWorkflow(Workflow, model.CoopView):
 
             next_step_desc = work.get_good_step_from_context(next_step_name)
 
-            work.compute_before(next_step_desc, [work])
+            work.compute_before(next_step_desc, work)
 
             cur_hist[field_name] = cur_hist[field_name][:-1]
 

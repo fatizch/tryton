@@ -163,6 +163,7 @@ class StepDesc(model.CoopSQL, model.CoopView):
             ('model', '=', Eval('main_model')),
             ('name', 'like', 'workflow_%'),
         ],
+        depends=['main_model'],
     )
 
     # We use this selection field to provide the good filters and cleaner
@@ -456,9 +457,9 @@ class StepDesc(model.CoopSQL, model.CoopView):
         # TODO : handle authorizations
         return True
 
-    def apply_these_methods(self, meth_type, targets):
+    def apply_these_methods(self, meth_type, target):
         for elem in getattr(self, '%s_meths' % meth_type):
-            elem.apply_meth(targets)
+            elem.apply_meth(target)
 
     def next_step(self, target):
         return self.next_steps[0]
@@ -634,12 +635,12 @@ class StepMethodDesc(model.CoopSQL, model.CoopView):
     def default_rule_type(cls):
         return 'code'
 
-    def apply_meth(self, targets):
-        if not targets:
+    def apply_meth(self, target):
+        if not target:
             return
         if self.rule_type == 'code':
-            good_meth = getattr(targets[0], self.code)
-            good_meth(targets)
+            good_meth = getattr(target, self.code)
+            good_meth(target)
         elif self.rule_type == 'rule':
             #do_stuff
             # Basically, it should parse the code of the view to detect the
