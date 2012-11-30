@@ -136,6 +136,7 @@ class StepDesc(model.CoopSQL, model.CoopView):
         domain=[
             ('id', '!=', Eval('id', None)),
             ('main_model', '=', Eval('main_model', None))],
+        depends=['id', 'main_model'],
     )
 
     # A user frinedy name that will be used when displaying the step
