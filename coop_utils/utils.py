@@ -18,29 +18,35 @@ except ImportError:
     import json
 
 
+def get_child_models(from_class):
+    if isinstance(from_class, str):
+        try:
+            the_class = Pool().get(from_class)
+        except KeyError:
+            raise
+        cur_models = [model_name
+                      for model_name, model in Pool().iterobject()
+                      if issubclass(model, the_class)]
+        models = map(lambda x: Pool().get(x), cur_models)
+        return models
+    elif isinstance(from_class, type):
+        res = []
+        names = [elem for elem, _ in Pool().iterobject()]
+        for elem in from_class.__subclasses__():
+            if isinstance(elem, type) and elem.__name__ in names:
+                res.append(elem)
+        return res
+
+
 def get_descendents(from_class, names_only=False):
     # Used to compute the possible models from a given top level
     # name
-    res = []
     if names_only:
         format_ = lambda x: x
     else:
         format_ = lambda x: (x, x)
-    if isinstance(from_class, str):
-        the_class = Pool().get(from_class)
-        cur_models = [model_name
-                      for model_name, model in Pool().iterobject()
-                      if issubclass(model, the_class)]
-        Model = Pool().get('ir.model')
-        models = Model.search([('model', 'in', cur_models)])
-        for cur_model in models:
-            res.append(format_(cur_model.model))
-    elif isinstance(from_class, type):
-        names = [elem for elem, _ in Pool().iterobject()]
-        for elem in from_class.__subclasses__():
-            if isinstance(elem, type) and elem.__name__ in names:
-                res.append(format_(elem.__name__))
-    return res
+    models = get_child_models(from_class)
+    return map(lambda x: format_(x.__name__), models)
 
 
 def get_module_name(cls):
