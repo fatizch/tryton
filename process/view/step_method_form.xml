@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<form string="step">
+  <group id="top">
+    <label name="name" xalign="0"/>
+    <field name="name"/>
+    <newline/>
+    <label name="rule_kind" xalign="0"/>
+    <field name="rule_kind"/>
+    <newline/>
+    <label name="rule_type" xalign="0"/>
+    <field name="rule_type"/>
+  </group>
+  <newline/>
+  <group id="data">
+    <label name="rule_engine" xalign="0"/>
+    <field name="rule_engine"/>
+    <label name="code" xalign="0"/>
+    <field name="code"/>
+  </group>
+</form>

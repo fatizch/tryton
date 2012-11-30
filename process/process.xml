@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<tryton>
+  <data>
+    <menuitem name="Test Process" id="test_process" sequence="45"/>
+    <menuitem name="Process" parent="test_process" id="process_test" sequence="70"/>
+    <record model="ir.ui.view" id="rich_workflow_form">
+      <field name="model">process.rich_workflow</field>
+      <field name="type">form</field>
+      <field name="name">rich_workflow_form</field>
+    </record>
+    <record model="ir.ui.view" id="rich_workflow_tree">
+      <field name="model">process.rich_workflow</field>
+      <field name="type">tree</field>
+      <field name="name">rich_workflow_tree</field>
+    </record>
+    <record model="ir.ui.view" id="menu_builder_tree">
+      <field name="model">process.menu_builder</field>
+      <field name="type">tree</field>
+      <field name="name">menu_builder_tree</field>
+    </record>
+    <record model="ir.ui.view" id="menu_builder_form">
+      <field name="model">process.menu_builder</field>
+      <field name="type">form</field>
+      <field name="name">menu_builder_form</field>
+    </record>
+  </data>
+</tryton>
