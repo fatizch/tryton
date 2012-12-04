@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<tree>
-    <field name="fixed_value"/>
-    <field name="rate"/>
-    <field name="contribution_base"/>
-    <field name="tranche"/>
-</tree>
