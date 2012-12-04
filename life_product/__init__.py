@@ -11,6 +11,4 @@ def register():
         LifeEligibilityRule,
         Tranche,
         TrancheVersion,
-        TrancheCalculator,
-        TrancheCalculatorLine,
         module='life_product', type_='model')

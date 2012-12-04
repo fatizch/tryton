@@ -4,7 +4,6 @@ from .gbp_contract import *
 from .enrollment import *
 from .gbp_subs_process import *
 from .enrollment_process import *
-from business_rule import *
 
 
 def register():

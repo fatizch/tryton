@@ -1,4 +1,6 @@
 #-*- coding:utf-8 -*-
+import copy
+
 from trytond.model import fields
 
 from trytond.modules.insurance_product import product, business_rule, benefit
@@ -14,6 +16,7 @@ from trytond.modules.insurance_product.business_rule import deductible_rule
 from trytond.modules.insurance_product.business_rule import term_renewal_rule
 from trytond.modules.insurance_product import dynamic_data
 from trytond.modules.coop_utils import utils
+from trytond.modules.insurance_product.business_rule import pricing_rule
 
 
 class GroupRoot(object):
@@ -137,19 +140,51 @@ class GroupTermRenewalRule(GroupRoot, term_renewal_rule.TermRenewalRule):
 
 
 class GroupSchemaElement(GroupRoot, dynamic_data.CoopSchemaElement):
-    'Dynamic Data Definition'
+    'Complementary Data Definition'
 
     __name__ = 'ins_collective.schema_element'
 
 
 class GroupSchemaElementRelation(GroupRoot,
         dynamic_data.SchemaElementRelation):
-    'Relation between schema element and dynamic data manager'
+    'Relation between schema element and complementary data manager'
 
     __name__ = 'ins_collective.schema_element_relation'
 
 
 class GroupDynamicDataManager(GroupRoot, dynamic_data.DynamicDataManager):
-    'Dynamic Data Manager'
+    'Complementary Data Manager'
 
     __name__ = 'ins_collective.dynamic_data_manager'
+
+
+class GroupPricingData(GroupRoot, pricing_rule.PricingData):
+    'Pricing Data'
+
+    __name__ = 'ins_collective.pricing_data'
+
+
+class GroupPriceCalculator(GroupRoot, pricing_rule.PriceCalculator):
+    'Price Calculator'
+
+    __name__ = 'ins_collective.pricing_calculator'
+
+
+class GroupPricingRule(GroupRoot, pricing_rule.PricingRule):
+    'Pricing Rule'
+
+    __name__ = 'ins_collective.pricing_rule'
+
+    @classmethod
+    def __setup__(cls):
+        super(GroupPricingRule, cls).__setup__()
+        #In pricing config kind means simple ou multiple prices, in collective
+        #you always have at least a price per covered item
+        cls.config_kind = copy.copy(cls.config_kind)
+        if not cls.config_kind.states:
+            cls.config_kind.states = {}
+        cls.config_kind.states['invisible'] = True
+
+    @staticmethod
+    def default_config_kind():
+        return 'rule'
