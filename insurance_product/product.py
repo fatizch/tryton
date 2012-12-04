@@ -89,7 +89,7 @@ class Offered(model.CoopView, utils.GetResult, Templated):
     dynamic_data_manager = model.One2ManyDomain(
         'ins_product.dynamic_data_manager',
         'master',
-        'Dynamic Data Manager',
+        'Complementary Data Manager',
         context={
             'schema_element_kind': 'contract',
             'for_kind': 'main'},

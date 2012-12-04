@@ -210,7 +210,7 @@ class ExtensionLifeState(DependantState):
             'kind': 'elem'},
         depends=['covered_elements'])
     dynamic_data = fields.Dict(
-        'Dynamic Data',
+        'Complementary Data',
         schema_model='ins_product.schema_element',
         context={
             'for_product': Eval('for_product'),

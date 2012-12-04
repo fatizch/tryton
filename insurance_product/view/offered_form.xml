@@ -22,7 +22,7 @@
         </page>
         <page string="Managers" id="managers">
             <notebook>
-                <page string="Dynamic Data" id="dynamic_data">
+                <page string="Complementary Data" id="dynamic_data">
                     <field name="dynamic_data_manager" mode="form"/>
                 </page>
                 <page string="Eligibility" id="eligibility">

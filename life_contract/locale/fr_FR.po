@@ -33,7 +33,7 @@ msgid "Create User"
 msgstr "Créé par"
 
 msgctxt "field:life_contract.covered_data,dynamic_data:"
-msgid "Dynamic Data"
+msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:life_contract.covered_data,end_date:"
@@ -85,7 +85,7 @@ msgid "Covered Element"
 msgstr "Elément Couvert"
 
 msgctxt "field:life_contract.covered_desc,data_dynamic_data:"
-msgid "Dynamic Data"
+msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:life_contract.covered_desc,data_end_date:"
@@ -185,7 +185,7 @@ msgid "Create User"
 msgstr "Créé par"
 
 msgctxt "field:life_contract.extension,dynamic_data:"
-msgid "Dynamic Data"
+msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:life_contract.extension,id:"
@@ -217,7 +217,7 @@ msgid "Covered Elements"
 msgstr "Eléments Couverts"
 
 msgctxt "field:life_contract.extension_life_state,dynamic_data:"
-msgid "Dynamic Data"
+msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:life_contract.extension_life_state,for_options:"

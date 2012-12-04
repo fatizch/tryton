@@ -143,7 +143,7 @@ msgid "Description"
 msgstr "Description"
 
 msgctxt "field:ins_product.benefit,dynamic_data_manager:"
-msgid "Dynamic Data Manager"
+msgid "Complementary Data Manager"
 msgstr "Données Complémentaires"
 
 msgctxt "field:ins_product.benefit,eligibility_mgr:"
@@ -273,10 +273,6 @@ msgstr "Mis à jour par"
 msgctxt "field:ins_product.business_rule_manager,business_rules:"
 msgid "Business Rules"
 msgstr "Règles Métiers"
-
-msgctxt "field:ins_product.business_rule_manager,code:"
-msgid "Code"
-msgstr "Code"
 
 msgctxt "field:ins_product.business_rule_manager,create_date:"
 msgid "Create Date"
@@ -547,7 +543,7 @@ msgid "Coverage Amount Manager"
 msgstr "Règles de Montant de Couverture"
 
 msgctxt "field:ins_product.coverage,covered_dynamic_data_manager:"
-msgid "Covered Dynamic Data Manager"
+msgid "Covered Complementary Data Manager"
 msgstr "Données Complémentaires Eléments Couverts"
 
 msgctxt "field:ins_product.coverage,create_date:"
@@ -575,7 +571,7 @@ msgid "Description"
 msgstr "Description"
 
 msgctxt "field:ins_product.coverage,dynamic_data_manager:"
-msgid "Dynamic Data Manager"
+msgid "Complementary Data Manager"
 msgstr "Données Complémentaires"
 
 msgctxt "field:ins_product.coverage,eligibility_mgr:"
@@ -791,11 +787,11 @@ msgid "Name"
 msgstr "Valeur"
 
 msgctxt "field:ins_product.dynamic_data_manager,shared_dynamic:"
-msgid "Shared Dynamic Data"
+msgid "Shared Complementary Data"
 msgstr "Donnée Complémentaires Partagées"
 
 msgctxt "field:ins_product.dynamic_data_manager,specific_dynamic:"
-msgid "Specific Dynamic Data"
+msgid "Specific Complementary Data"
 msgstr "Données Complémentaires Spécifiques"
 
 msgctxt "field:ins_product.dynamic_data_manager,write_date:"
@@ -1007,7 +1003,7 @@ msgid "Description"
 msgstr "Description"
 
 msgctxt "field:ins_product.offered,dynamic_data_manager:"
-msgid "Dynamic Data Manager"
+msgid "Complementary Data Manager"
 msgstr "Données Complémentaires"
 
 msgctxt "field:ins_product.offered,eligibility_mgr:"
@@ -1075,8 +1071,8 @@ msgid "Is Used"
 msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.pricing_calculator,key:"
-msgid "Key"
-msgstr "Clé"
+msgid "Kind"
+msgstr "Type"
 
 msgctxt "field:ins_product.pricing_calculator,rec_name:"
 msgid "Name"
@@ -1271,7 +1267,7 @@ msgid "Description"
 msgstr "Description"
 
 msgctxt "field:ins_product.product,dynamic_data_manager:"
-msgid "Dynamic Data Manager"
+msgid "Complementary Data Manager"
 msgstr "Données Complémentaires"
 
 msgctxt "field:ins_product.product,eligibility_mgr:"
@@ -1699,7 +1695,7 @@ msgid "Deductible Rule"
 msgstr "Franchise"
 
 msgctxt "model:ins_product.dynamic_data_manager,name:"
-msgid "Dynamic Data Manager"
+msgid "Complementary Data Manager"
 msgstr "Données Complémentaires"
 
 msgctxt "model:ins_product.eligibility_relation_kind,name:"
@@ -1724,7 +1720,7 @@ msgid "Price Calculator"
 msgstr "Montant"
 
 msgctxt "model:ins_product.pricing_data,name:"
-msgid "Pricing Data"
+msgid "Pricing Component"
 msgstr "Elément de Tarification"
 
 msgctxt "model:ins_product.pricing_rule,name:"
@@ -1768,7 +1764,7 @@ msgid "Context functions for Contracts."
 msgstr ""
 
 msgctxt "model:ins_product.schema_element,name:"
-msgid "Dynamic Data Definition"
+msgid "Complementary Data Definition"
 msgstr "Définition de Données Complémentaires"
 
 msgctxt "model:ins_product.schema_element_relation,name:"
@@ -1788,11 +1784,11 @@ msgid "Clauses"
 msgstr "Clauses"
 
 msgctxt "model:ir.action,name:act_model_coop_schema"
-msgid "Dynamic Data Schema Elements"
+msgid "Complementary Data Schema Elements"
 msgstr "Données Complémentaires"
 
 msgctxt "model:ir.action,name:act_model_coop_schema_product"
-msgid "Dynamic Data Schema Elements for Offered"
+msgid "Complementary Data Schema Elements for Offered"
 msgstr "Données Complémentaires Produit"
 
 msgctxt "model:ir.action,name:act_product_form"
@@ -1812,11 +1808,11 @@ msgid "Clauses"
 msgstr "Clauses"
 
 msgctxt "model:ir.ui.menu,name:menu_model_coop_schema"
-msgid "Dynamic Data Schema Elements"
+msgid "Complementary Data Schema Elements"
 msgstr "Données Complémentaires"
 
 msgctxt "model:ir.ui.menu,name:menu_model_coop_schema_product"
-msgid "Dynamic Data Schema Elements for Offered"
+msgid "Complementary Data Schema Elements for Offered"
 msgstr "Données Complémentaires Produit"
 
 msgctxt "model:ir.ui.menu,name:menu_product"
@@ -2108,7 +2104,7 @@ msgid "Validate"
 msgstr "Valider"
 
 msgctxt "selection:ins_product.pricing_calculator,key:"
-msgid "Sub Elem Price"
+msgid "Covered Element Price"
 msgstr "Tarif par élément couvert"
 
 msgctxt "selection:ins_product.pricing_calculator,key:"
@@ -2380,7 +2376,7 @@ msgid "Deductible rule"
 msgstr "Franchise"
 
 msgctxt "view:ins_product.dynamic_data_manager:"
-msgid "Dynamic Data Manager"
+msgid "Complementary Data Manager"
 msgstr "Données Complémentaires"
 
 msgctxt "view:ins_product.eligibility_rule:"
@@ -2420,7 +2416,7 @@ msgid "Clause"
 msgstr "Clause"
 
 msgctxt "view:ins_product.offered:"
-msgid "Dynamic Data"
+msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
 msgctxt "view:ins_product.offered:"
@@ -2484,7 +2480,7 @@ msgid "Sub Element"
 msgstr "Elément Couvert"
 
 msgctxt "view:ins_product.product:"
-msgid "Dynamic Data"
+msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
 msgctxt "view:ins_product.product:"
@@ -2504,11 +2500,11 @@ msgid "Reserve rule"
 msgstr "Provisionnement"
 
 msgctxt "view:ins_product.schema_element:"
-msgid "Dynamic Data Desciptor"
+msgid "Complementary Data Desciptor"
 msgstr "Descripteur de Données Complémentaires"
 
 msgctxt "view:ins_product.schema_element:"
-msgid "Dynamic Data Descriptors"
+msgid "Complementary Data Descriptors"
 msgstr "Descripteur de Données Complémentaires"
 
 msgctxt "view:ins_product.term_renewal_rule:"

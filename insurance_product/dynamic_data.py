@@ -22,7 +22,7 @@ __all__ = [
 
 
 class CoopSchemaElement(SchemaElementMixin, model.CoopSQL, model.CoopView):
-    'Dynamic Data Definition'
+    'Complementary Data Definition'
 
     __name__ = 'ins_product.schema_element'
 
@@ -141,7 +141,6 @@ class CoopSchemaElement(SchemaElementMixin, model.CoopSQL, model.CoopView):
             with Transaction().set_context(language='fr_FR'):
                 english_key = cls(key.id)
                 json_ = json.loads(english_key.choices_json or '[]')
-                print json_
                 choices = dict(json_)
             choices.update(dict(json.loads(key.choices_json or '[]')))
             new_key = {
@@ -170,7 +169,7 @@ class CoopSchemaElement(SchemaElementMixin, model.CoopSQL, model.CoopView):
 
 
 class SchemaElementRelation(model.CoopSQL):
-    'Relation between schema element and dynamic data manager'
+    'Relation between schema element and complementary data manager'
 
     __name__ = 'ins_product.schema_element_relation'
 
@@ -181,7 +180,7 @@ class SchemaElementRelation(model.CoopSQL):
 
 
 class DynamicDataManager(model.CoopSQL, model.CoopView):
-    'Dynamic Data Manager'
+    'Complementary Data Manager'
 
     __name__ = 'ins_product.dynamic_data_manager'
 
@@ -194,7 +193,7 @@ class DynamicDataManager(model.CoopSQL, model.CoopView):
     specific_dynamic = fields.One2Many(
         'ins_product.schema_element',
         'manager',
-        'Specific Dynamic Data',
+        'Specific Complementary Data',
         domain=[
             ('kind', '!=', 'product')])
 
@@ -202,7 +201,7 @@ class DynamicDataManager(model.CoopSQL, model.CoopView):
         'ins_product.schema_element_relation',
         'the_manager',
         'schema_element',
-        'Shared Dynamic Data',
+        'Shared Complementary Data',
         domain=[
             ('manager', '=', None),
             ('kind', '!=', 'product')],

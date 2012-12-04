@@ -54,7 +54,7 @@ class GenericExtension(model.CoopView):
                                        'extension',
                                        'Coverages')
     dynamic_data = fields.Dict(
-        'Dynamic Data',
+        'Complementary Data',
         schema_model='ins_product.schema_element')
 
     contract = fields.Many2One(
@@ -195,10 +195,11 @@ class Contract(GenericContract):
                               [('ins_contract.contract', 'Contract'),
                                ('ins_product.product', 'Product')])
 
-    # This field will be used to store the answer to dynamic questions asked
-    # at subscription time to the subscriber depending on the product he chose.
+    # This field will be used to store the answer to Complementary questions
+    # asked at subscription time to the subscriber depending on the product
+    # he chose.
     dynamic_data = fields.Dict(
-        'Dynamic Data',
+        'Complementary Data',
         schema_model='ins_product.schema_element')
 
     @staticmethod
@@ -762,7 +763,7 @@ class CoveredData(model.CoopView):
         ondelete='CASCADE')
 
     dynamic_data = fields.Dict(
-        'Dynamic Data',
+        'Complementary Data',
         schema_model='ins_product.schema_element')
 
     start_date = fields.Date('Start Date')

@@ -230,7 +230,7 @@ class OptionSelectionState(CoopStep):
                                None,
                                'Options Choices')
     dynamic_data = fields.Dict(
-        'Dynamic Data',
+        'Complementary Data',
         schema_model='ins_product.schema_element',
         context={
             'for_product': Eval('for_product'),
@@ -422,7 +422,7 @@ class CoveredDesc(CoopStepView):
         readonly=True)
 
     data_dynamic_data = fields.Dict(
-        'Dynamic Data',
+        'Complementary Data',
         schema_model='ins_product.schema_element',
         context={
             'at_date': Eval('data_start_date'),

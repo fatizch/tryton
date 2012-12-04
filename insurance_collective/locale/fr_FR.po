@@ -110,6 +110,18 @@ msgctxt "error:ins_collective.term_renewal_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:party.college:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:party.college_tranche:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:company.employee,college:"
+msgid "College"
+msgstr ""
+
 msgctxt "field:ins_collective.benefit,benefit_mgr:"
 msgid "Benefit Manager"
 msgstr "Règles de Prestation"
@@ -147,7 +159,7 @@ msgid "Description"
 msgstr "Description"
 
 msgctxt "field:ins_collective.benefit,dynamic_data_manager:"
-msgid "Dynamic Data Manager"
+msgid "Complementary Data Manager"
 msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.benefit,eligibility_mgr:"
@@ -277,10 +289,6 @@ msgstr "Mis à jour par"
 msgctxt "field:ins_collective.business_rule_manager,business_rules:"
 msgid "Business Rules"
 msgstr "Règles Métiers"
-
-msgctxt "field:ins_collective.business_rule_manager,code:"
-msgid "Code"
-msgstr "Code"
 
 msgctxt "field:ins_collective.business_rule_manager,create_date:"
 msgid "Create Date"
@@ -527,7 +535,7 @@ msgid "Coverage Amount Manager"
 msgstr "Règles de Montant de Couverture"
 
 msgctxt "field:ins_collective.coverage,covered_dynamic_data_manager:"
-msgid "Covered Dynamic Data Manager"
+msgid "Covered Complementary Data Manager"
 msgstr "Données Complémentaires Eléments Couverts"
 
 msgctxt "field:ins_collective.coverage,create_date:"
@@ -555,7 +563,7 @@ msgid "Description"
 msgstr "Description"
 
 msgctxt "field:ins_collective.coverage,dynamic_data_manager:"
-msgid "Dynamic Data Manager"
+msgid "Complementary Data Manager"
 msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.coverage,eligibility_mgr:"
@@ -775,11 +783,11 @@ msgid "Name"
 msgstr "Valeur"
 
 msgctxt "field:ins_collective.dynamic_data_manager,shared_dynamic:"
-msgid "Shared Dynamic Data"
+msgid "Shared Complementary Data"
 msgstr "Données Complémentaires Partagées"
 
 msgctxt "field:ins_collective.dynamic_data_manager,specific_dynamic:"
-msgid "Specific Dynamic Data"
+msgid "Specific Complementary Data"
 msgstr "Données Complémentaires Spécifiques"
 
 msgctxt "field:ins_collective.dynamic_data_manager,write_date:"
@@ -911,7 +919,7 @@ msgid "Create User"
 msgstr "Créé par"
 
 msgctxt "field:ins_collective.enrollment,dynamic_data:"
-msgid "Dynamic Data"
+msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.enrollment,id:"
@@ -997,7 +1005,7 @@ msgstr ""
 
 msgctxt ""
 "field:ins_collective.enrollment_process.option_selection,dynamic_data:"
-msgid "Dynamic Data"
+msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
 msgctxt ""
@@ -1384,6 +1392,10 @@ msgctxt "field:ins_collective.option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_collective.pricing_calculator,college:"
+msgid "College"
+msgstr ""
+
 msgctxt "field:ins_collective.pricing_calculator,combine:"
 msgid "Combining Rule"
 msgstr "Règle de combinaison"
@@ -1409,8 +1421,8 @@ msgid "Is Used"
 msgstr "Est Utilisé"
 
 msgctxt "field:ins_collective.pricing_calculator,key:"
-msgid "Key"
-msgstr "Clé"
+msgid "Kind"
+msgstr "Type"
 
 msgctxt "field:ins_collective.pricing_calculator,rec_name:"
 msgid "Name"
@@ -1605,7 +1617,7 @@ msgid "Description"
 msgstr "Description"
 
 msgctxt "field:ins_collective.product,dynamic_data_manager:"
-msgid "Dynamic Data Manager"
+msgid "Complementary Data Manager"
 msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.product,eligibility_mgr:"
@@ -1916,6 +1928,82 @@ msgctxt "field:ins_collective.term_renewal_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:party.college,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:party.college,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:party.college,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.college,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.college,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:party.college,name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:party.college,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:party.college,tranches:"
+msgid "Tranches"
+msgstr ""
+
+msgctxt "field:party.college,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.college,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:party.college_tranche,college:"
+msgid "College"
+msgstr ""
+
+msgctxt "field:party.college_tranche,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:party.college_tranche,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.college_tranche,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.college_tranche,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:party.college_tranche,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:party.college_tranche,tranche:"
+msgid "Tranche"
+msgstr ""
+
+msgctxt "field:party.college_tranche,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.college_tranche,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "help:ins_collective.benefit_rule,coef_coverage_amount:"
 msgid "Add a multiplier to apply to the coverage amount"
 msgstr "Ajouter un coefficient multiplicateur au montant de couverture"
@@ -1965,7 +2053,7 @@ msgid "Deductible Rule"
 msgstr "Franchise"
 
 msgctxt "model:ins_collective.dynamic_data_manager,name:"
-msgid "Dynamic Data Manager"
+msgid "Complementary Data Manager"
 msgstr "Données Complémentaires"
 
 msgctxt "model:ins_collective.eligibility_relation_kind,name:"
@@ -2043,11 +2131,11 @@ msgid "Reserve Rule"
 msgstr "Règle de Provisionnement"
 
 msgctxt "model:ins_collective.schema_element,name:"
-msgid "Dynamic Data Definition"
+msgid "Complementary Data Definition"
 msgstr "Définition de Données Complémentaires"
 
 msgctxt "model:ins_collective.schema_element_relation,name:"
-msgid "Relation between schema element and dynamic data manager"
+msgid "Relation between schema element and complementary data manager"
 msgstr "Table intermédiaire pour les données complémentaires"
 
 msgctxt "model:ins_collective.term_renewal_rule,name:"
@@ -2133,6 +2221,14 @@ msgstr "Nouvelle Affiliation"
 msgctxt "model:ir.ui.menu,name:menu_start_gbp_subs"
 msgid "New GBP Subscription Process"
 msgstr "Souscription Contrat Groupe"
+
+msgctxt "model:party.college,name:"
+msgid "College"
+msgstr ""
+
+msgctxt "model:party.college_tranche,name:"
+msgid ""
+msgstr ""
 
 msgctxt "selection:ins_collective.benefit,kind:"
 msgid "Annuity"
@@ -2479,7 +2575,7 @@ msgid "suspend"
 msgstr "Suspendre"
 
 msgctxt "selection:ins_collective.pricing_calculator,key:"
-msgid "Sub Elem Price"
+msgid "Covered Element Price"
 msgstr "Tarif par élément couvert"
 
 msgctxt "selection:ins_collective.pricing_calculator,key:"

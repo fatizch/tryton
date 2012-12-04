@@ -37,7 +37,7 @@ class Coverage(model.CoopSQL, Offered):
     covered_dynamic_data_manager = model.One2ManyDomain(
         'ins_product.dynamic_data_manager',
         'master',
-        'Covered Dynamic Data Manager',
+        'Covered Complementary Data Manager',
         context={
             'for_kind': 'sub_elem',
             'schema_element_kind': 'sub_elem'},

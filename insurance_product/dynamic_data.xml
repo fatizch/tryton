@@ -2,7 +2,7 @@
 <tryton>
     <data>
     <!--################################################################-->
-    <!--                       Dynamic Data Manager                     -->
+    <!--                       Complementary Data Manager                     -->
     <!--################################################################-->
 
         <record model="ir.ui.view" id="dynamic_data_view_form">
@@ -10,7 +10,7 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                    <form string="Dynamic Data Manager">
+                    <form string="Complementary Data Manager">
                         <field name="specific_dynamic" colspan="2"/>
                         <field name="shared_dynamic" colspan="2"/>
                     </form>
@@ -26,7 +26,7 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                    <tree string="Dynamic Data Descriptors">
+                    <tree string="Complementary Data Descriptors">
                         <field name="is_shared"/>
                         <field name="name"/>
                         <field name="type_"/>
@@ -43,7 +43,7 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                    <form string="Dynamic Data Desciptor">
+                    <form string="Complementary Data Desciptor">
                         <group id="names">
                             <label name="name"/>
                             <field name="name"/>
@@ -80,7 +80,7 @@
         </record>
 
         <record model="ir.action.act_window" id="act_model_coop_schema">
-            <field name="name">Dynamic Data Schema Elements</field>
+            <field name="name">Complementary Data Schema Elements</field>
             <field name="res_model">ins_product.schema_element</field>
             <field name="domain">[("kind", "!=", "product")]</field>
         </record>
@@ -96,7 +96,7 @@
         </record>
         <menuitem parent="menu_product_configuration" action="act_model_coop_schema" id="menu_model_coop_schema"/>
         <record model="ir.action.act_window" id="act_model_coop_schema_product">
-            <field name="name">Dynamic Data Schema Elements for Offered</field>
+            <field name="name">Complementary Data Schema Elements for Offered</field>
             <field name="res_model">ins_product.schema_element</field>
             <field name="domain">[("kind", "=", "product")]</field>
         </record>
