@@ -46,6 +46,8 @@ class GroupPricingData():
             'invisible': Eval('config_kind') != 'simple',
         },
         depends=['config_kind'],
+        domain=[('colleges', '=',
+                Eval('_parent_calculator', {}).get('college'))]
         )
 
     @staticmethod
@@ -90,39 +92,6 @@ class GroupPriceCalculator():
     __metaclass__ = PoolMeta
 
     college = fields.Many2One('party.college', 'College')
-    tranches = fields.Function(fields.Char('Tranches',
-            on_change_with=['college']),
-        'on_change_with_tranches')
-
-    @classmethod
-    def __setup__(cls):
-        super(GroupPriceCalculator, cls).__setup__()
-        cls.data = copy.copy(cls.data)
-#        if not cls.data.context:
-#            cls.data.context = {}
-#        cls.data.context['tranches'] = Eval('college', {}).get('code')
-#        if not cls.data.depends:
-#            cls.data.depends = []
-#        utils.append_inexisting(cls.data.depends, 'college')
-#        if not cls.data.states:
-#            cls.data.states = {}
-#        cls.data.states['readonly'] = ~Eval('college')
-#        cls.data.domain = []
-        cls.data.domain.append(
-            (
-                'tranche.id',
-                'in',
-                Eval('_parent_calculator', {}).get('tranches')
-            )
-        )
-#        cls.data.depends = ['tranches']
-
-    def on_change_with_tranches(self):
-        tranches = []
-        if self.college:
-            tranches = [x.id for x in self.college.tranches]
-        print tranches
-        return str(tranches)
 
     @staticmethod
     def default_key():

@@ -2,9 +2,11 @@
 
 from trytond.model import fields
 from trytond.modules.coop_utils import CoopSQL, CoopView
+from trytond.pool import PoolMeta
 
 __all__ = [
     'College',
+    'Tranche',
     'CollegeTranche',
 ]
 
@@ -18,6 +20,16 @@ class College(CoopSQL, CoopView):
     name = fields.Char('Name')
     tranches = fields.Many2Many('party.college_tranche', 'college', 'tranche',
         'Tranches')
+
+
+class Tranche():
+    'Tranche'
+
+    __name__ = 'tranche.tranche'
+    __metaclass__ = PoolMeta
+
+    colleges = fields.Many2Many('party.college_tranche', 'tranche', 'college',
+        'Colleges')
 
 
 class CollegeTranche(CoopSQL):

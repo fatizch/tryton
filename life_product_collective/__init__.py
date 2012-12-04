@@ -12,6 +12,7 @@ def register():
         GroupPricingData,
         TrancheCalculatorLine,
         College,
+        Tranche,
         CollegeTranche,
         Employee,
         TrancheCalculator,
