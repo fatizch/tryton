@@ -1,6 +1,11 @@
 <data>
-    <xpath expr="/form" position="inside">
+    <xpath expr="/form/group[@id='other']/group[@id='simple']" position="inside">
         <newline/>
-        <field name="tranche_calculator" mode="form"/>
+        <label name="contribution_base"/>
+        <field name="contribution_base"/>
+        <label name="rate"/>
+        <field name="rate"/>
+        <label name="tranche"/>
+        <field name="tranche"/>
     </xpath>
 </data>

@@ -32,7 +32,7 @@ PRICING_FREQUENCY = [
 
 
 class PricingData(model.CoopSQL, model.CoopView):
-    'Pricing Data'
+    'Pricing Component'
 
     __name__ = 'ins_product.pricing_data'
 
@@ -161,9 +161,8 @@ class PricingData(model.CoopSQL, model.CoopView):
         # No need to calculate here, it will be done at combination time
         return 0
 
-    def calculate_value(self, args):
+    def get_amount(self, args):
         errors = []
-        kind = self.kind
         if self.kind == 'tax':
             amount = self.calculate_tax(args)
         elif self.kind == 'fee':
@@ -173,6 +172,11 @@ class PricingData(model.CoopSQL, model.CoopView):
         elif self.config_kind == 'rule' and self.rule:
             res, mess, errs = self.rule.compute(args)
             amount, errors = res, mess + errs
+        return amount, errors
+
+    def calculate_value(self, args):
+        kind = self.kind
+        amount, errors = self.get_amount(args)
         code = self.code
         name = kind + ' - ' + code
         final_res = PricingResultLine(amount, name)
@@ -216,8 +220,8 @@ class PriceCalculator(model.CoopSQL, model.CoopView):
 
     key = fields.Selection(
         [('price', 'Subscriber Price'),
-        ('sub_price', 'Sub Elem Price')],
-        'Key')
+        ('sub_price', 'Covered Element Price')],
+        'Kind')
 
     rule = fields.Many2One(
         'ins_product.pricing_rule',

@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <form string="Price Calculator">
-    <group id="main" col="8">
-        <label name="key"/>
-        <field name="key"/>
+    <group id="main">
+            <label name="key"/>
+            <field name="key"/>
         <label name="simple"/>
         <field name="simple" xexpand="0"/>
         <newline/>
         <label name="combine"/>
-        <field name="combine" colspan="5"/>
+        <field name="combine"/>
     </group>
     <newline/>
-    <group id="test_data" xfill="1" yexpand="1" yfill="1">
+    <group id="test_data" colspan="4" yexpand="1" yfill="1">
         <field name="data" yfill="1" yexpand="1"/>
     </group>
 </form>
