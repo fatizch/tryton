@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.action.act_window" id="act_college_form">
+            <field name="name">College</field>
+            <field name="res_model">party.college</field>
+        </record>
+        <record model="ir.ui.view" id="college_view_form">
+            <field name="model">party.college</field>
+            <field name="type">form</field>
+            <field name="name">college_form</field>
+        </record>
+        <record model="ir.ui.view" id="college_view_tree">
+            <field name="model">party.college</field>
+            <field name="type">tree</field>
+            <field name="name">college_tree</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_college_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="college_view_form"/>
+            <field name="act_window" ref="act_college_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_college_tree_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="college_view_tree"/>
+            <field name="act_window" ref="act_college_form"/>
+        </record>
+        <menuitem parent="party.menu_configuration" sequence="50"
+            id="menu_college_form" icon="tryton-list" action="act_college_form"/>
+    </data>
+</tryton>
