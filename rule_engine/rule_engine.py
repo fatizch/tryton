@@ -19,8 +19,8 @@ from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.tools.misc import _compile_source
-from trytond.pyson import Eval
-from trytond.modules.coop_utils import CoopView, utils
+from trytond.pyson import Eval, And
+from trytond.modules.coop_utils import CoopView, utils, string
 from trytond.modules.coop_utils import date
 from trytond.modules.table import TableCell
 
@@ -244,6 +244,7 @@ class Rule(ModelView, ModelSQL):
         except InternalRuleEngineError:
             result = None
         except:
+            #raise
             context['errors'].append('Critical Internal Rule Engine Error')
             result = None
         messages = context['messages']
@@ -407,11 +408,15 @@ class TreeElement(ModelView, ModelSQL):
         'Children')
     translated_technical_name = fields.Char('Translated technical name',
         states={
-            'invisible': ~Eval('type').in_(['function', 'rule']),
-            'required': Eval('type').in_(['function', 'rule']),
-            }, depends=['type'])
+            'invisible': ~Eval('type').in_(['function', 'rule', 'table']),
+            'required': Eval('type').in_(['function', 'rule', 'table']),
+            }, depends=['type'],
+        on_change_with=['rule'])
     fct_args = fields.Char('Function Arguments', states={
-            'invisible': Eval('type') != 'function',
+            'invisible': And(
+                Eval('type') != 'function',
+                Eval('type') != 'table'
+                ),
             })
     language = fields.Many2One('ir.lang', 'Language', required=True)
     the_table = fields.Many2One(
@@ -421,7 +426,7 @@ class TreeElement(ModelView, ModelSQL):
             'invisible': Eval('type') != 'table',
             'required': Eval('type') == 'table'},
         on_change=['translated_technical_name', 'description', 'the_table'],
-        ondelete='RESTRICT')
+        ondelete='CASCADE')
 
     @staticmethod
     def default_type():
@@ -473,6 +478,10 @@ class TreeElement(ModelView, ModelSQL):
         for element in self.children:
             element.as_context(context)
         return context
+
+    def on_change_with_translated_technical_name(self):
+        if self.rule:
+            return string.remove_blank_and_invalid_char(self.rule.name)
 
 
 class ContextTreeElement(ModelSQL):
