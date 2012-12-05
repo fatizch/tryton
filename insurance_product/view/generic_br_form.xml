@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
-<form string="Business Rule" col="4">
-    <label name="kind"/>
+<form string="Business Rule" col="2">
     <field name="kind"/>
+    <group id="date">
+        <label name="start_date" xexpand="0"/>
+        <field name="start_date" xexpand="0"/>
+        <label name="end_date" xexpand="0"/>
+        <field name="end_date" xexpand="0"/>
+    </group>
     <newline/>
-    <label name="start_date"/>
-    <field name="start_date"/>
-    <label name="end_date"/>
-    <field name="end_date"/>
-    <newline/>
-    <group id="Rules" colspan="4" yexpand="1" yfill="1">
+    <group id="Rules" colspan="2" yexpand="1" yfill="1">
         <field name="pricing_rule" mode="form"/>
         <field name="eligibility_rule" mode="form"/>
         <field name="benefit_rule" mode="form"/>

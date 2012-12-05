@@ -8,10 +8,10 @@ from .company import *
 def register():
     Pool.register(
         GroupLifeCoverage,
+        College,
         GroupPriceCalculator,
         GroupPricingData,
         TrancheCalculatorLine,
-        College,
         Tranche,
         CollegeTranche,
         Employee,
