@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<tree string="method step">
-  <field name="name"/>
-  <field name="rule_kind"/>
-  <field name="rule_type"/>
-  <field name="code"/>
-</tree>

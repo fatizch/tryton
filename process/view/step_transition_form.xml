@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<form string="Step Transition Descriptor" col="4">
+  <label name="from_step" xalign="0"/>
+  <field name="from_step"/>
+  <label name="to_step" xalign="0"/>
+  <field name="to_step"/>
+  <newline/>
+  <label name="kind" xalign="0"/>
+  <field name="kind" colspan="3" readonly="1"/>
+  <newline/>
+  <label name="pyson" xalign="0"/>
+  <field name="pyson" colspan="3"/>
+  <newline/>
+  <group id="methods" colspan="2" xexpand="1" xfill="1" yexpand="1" yfill="1">
+    <separator name="methods"/>
+    <newline/>
+    <field name="methods" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
+  </group>
+  <field name="authorizations" xexpand="1" xfill="1" yexpand="1" yfill="1" colspan="2"/>
+</form>

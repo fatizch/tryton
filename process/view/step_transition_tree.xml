@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<tree string="Transitions">
+  <field name="from_step"/>
+  <field name="to_step"/>
+</tree>

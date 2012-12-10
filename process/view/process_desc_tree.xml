@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<tree string="Step Descriptors">
+<tree string="Process Descriptors">
   <field name="fancy_name"/>
+  <field name="on_model"/>
   <field name="technical_name"/>
 </tree>

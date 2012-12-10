@@ -1,82 +1,19 @@
 <?xml version="1.0"?>
-<form string="step">
-  <group id="top_group" col="4">
-    <group id="header" colspan="4" col="4">
-      <!-- Should be changed when selection depending on context can -->
-      <!-- be stored properly -->
-      <!--<label name="main_model_selection"/>-->
-      <!--<field name="main_model_selection" xfill="1" xexpand="1"/>-->
-      <label name="main_model" xalign="0"/>
-      <field name="main_model"/>
-      <!--<label name="process_field_selection" xalign="0"/>-->
-      <!--<field name="process_field_selection"/>-->
-      <label name="process_field" xalign="0"/>
-      <field name="process_field"/>
-      <newline/>
-      <label name="step_name" xalign="0"/>
-      <field name="step_name"/>
-      <label name="step_technical_name" xalign="0"/>
-      <field name="step_technical_name"/>
-    </group>
-    <newline/>
-    <group id="mid_group">
-      <group id="text_data" yexpand="1" yfill="1" xfill="1" xexpand="1">
-        <field name="next_steps" yfill="1" yexpand="1"/>
-      </group>
-      <group string="Buttons" id="buttons_group" col="2" states="{'invisible': Bool(Eval('virtual_step'))}">
-        <label name="button_previous" xalign="0"/>
-        <field name="button_previous"/>
-        <label name="button_check" xalign="0"/>
-        <field name="button_check"/>
-        <label name="button_next" xalign="0"/>
-        <field name="button_next"/>
-        <label name="button_suspend" xalign="0"/>
-        <field name="button_suspend"/>
-        <label name="button_cancel" xalign="0"/>
-        <field name="button_cancel"/>
-        <label name="button_complete" xalign="0"/>
-        <field name="button_complete"/>
-        <label name="button_default" xalign="0"/>
-        <field name="button_default"/>
-      </group>
-    </group>
+<form string="Step Descriptor">
+  <group id="global_part">
+    <label name="fancy_name" xalign="0"/>
+    <field name="fancy_name"/>
+    <label name="technical_name" xalign="0"/>
+    <field name="technical_name"/>
   </group>
   <newline/>
-  <group id="bot_group" yexpand="1" yfill="1">
-    <notebook>
-      <page string="Functions" id="functions">
-        <notebook>
-          <page string="Step Over" id="step_over_meths">
-            <field name="step_over_meths"/>
-          </page>
-          <page string="Before" id="before_meths">
-            <field name="before_meths"/>
-          </page>
-          <page string="Check" id="check_meths">
-            <field name="check_meths"/>
-          </page>
-          <page string="Update" id="update_meths">
-            <field name="update_meths"/>
-          </page>
-          <page string="Validate" id="validate_meths">
-            <field name="validate_meths"/>
-          </page>
-          <page string="After" id="after_meths">
-            <field name="after_meths"/>
-          </page>
-        </notebook>
-      </page>
-      <page string="View" id="xml_view">
-        <field name="step_xml"/>
-      </page>
-      <page string="Menu" id="menu_builder">
-        <field name="menu_desc" xexpand="1" xfill="1" yexpand="1" yfill="1" mode="form"/>
-        <newline/>
-        <label name="menu_elem" xalign="0"/>
-        <field name="menu_elem"/>
-        <newline/>
-        <button string="Create Menu" name="build_ir_elems"/>
-      </page>
-    </notebook>
-  </group>
+  <notebook>
+    <page string="Relations" id="relations">
+      <field name="from_steps" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
+      <field name="to_steps" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
+    </page>
+    <page string="XML" id="XML">
+      <field name="step_xml" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
+    </page>
+  </notebook>
 </form>

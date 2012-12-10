@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<form string="Process Descriptor" col="4">
+  <group id="global_part">
+    <label name="fancy_name" xalign="0"/>
+    <field name="fancy_name"/>
+    <label name="technical_name" xalign="0"/>
+    <field name="technical_name"/>
+    <newline/>
+    <label name="on_model" xalign="0"/>
+    <field name="on_model" colspan="3"/>
+    <newline/>
+    <label name="menu_top" xalign="0"/>
+    <field name="menu_top" colspan="3"/>
+    <label name="menu_item" xalign="0"/>
+    <field name="menu_item" colspan="3"/>
+  </group>
+  <newline/>
+  <notebook>
+    <page string="Steps" id="steps" col="4">
+      <field name="all_steps" yexpand="1" yfill="1" xexpand="1" xfill="1" colspan="4"/>
+      <newline/>
+      <label name="first_step" xalign="0"/>
+      <field name="first_step" colspan="3"/>
+    </page>
+    <page string="XML" id="xml">
+      <separator name="xml_header"/>
+      <field name="xml_header"/>
+      <newline/>
+      <separator name="xml_footer"/>
+      <field name="xml_footer"/>
+    </page>
+  </notebook>
+  <button string="Update Menu" name="update_view"/>
+</form>
