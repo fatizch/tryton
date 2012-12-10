@@ -153,6 +153,10 @@ class GenericContract(model.CoopSQL, model.CoopView):
     def finalize_contract(self):
         raise NotImplementedError
 
+    @staticmethod
+    def default_start_date():
+        return utils.today()
+
 
 class Contract(GenericContract):
     'Contract'

@@ -40,7 +40,6 @@
     </xpath>
     <xpath expr="/form/label[@name='template']" position="before">
         <label name="family"/>
-        <field name="family" xexpand="0"/>
-        <newline/>
+        <field name="family" xexpand="1"/>
     </xpath>
 </data>

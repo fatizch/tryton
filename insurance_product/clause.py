@@ -25,10 +25,9 @@ class Clause(model.CoopSQL, model.VersionedObject):
     def version_model(cls):
         return 'ins_product.clause_version'
 
-    @staticmethod
-    def default_versions():
-        return utils.create_inst_with_default_val(
-            Pool().get('ins_product.clause'), 'versions')
+    @classmethod
+    def default_versions(cls):
+        return utils.create_inst_with_default_val(cls, 'versions')
 
 
 class ClauseVersion(model.CoopSQL, model.VersionObject):

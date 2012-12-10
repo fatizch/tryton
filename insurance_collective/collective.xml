@@ -47,12 +47,11 @@
             <field name="name">Plan Coverages</field>
             <field name="res_model">ins_collective.coverage</field>
         </record>
-
         <record model="ir.ui.view" id="coverage_view_form">
             <field name="model">ins_collective.coverage</field>
             <field name="type">form</field>
             <field name="inherit" ref="insurance_product.coverage_view_form"/>
-            <field name="arch" type="xml"/>
+            <field name="name">gbp_coverage_form</field>
         </record>
         <record model="ir.ui.view" id="coverage_view_tree">
             <field name="model">ins_collective.coverage</field>

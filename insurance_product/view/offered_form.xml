@@ -1,21 +1,20 @@
 <?xml version="1.0"?>
-<form string="Offered">
+<form string="Offered" col="9">
     <label name="code"/>
     <field name="code"/>
     <label name="name"/>
-    <field name="name"/>
-    <newline/>
+    <field name="name" colspan="2"/>
     <label name="start_date"/>
-    <field name="start_date"/>
+    <field name="start_date" xexpand="0"/>
     <label name="end_date"/>
-    <field name="end_date"/>
-    <newline/>
+    <field name="end_date" xexpand="0"/>
     <label name="template"/>
     <group id="templating" colspan="1">
         <field name="template" xexpand="1"/>
         <field name="template_behaviour"/>
     </group>
-    <notebook>
+    <newline/>
+    <notebook colspan="9">
         <page string="Summary" id="summary">
             <field name="description" widget="richtext" colspan="4"/>
             <field name="summary" widget="richtext" colspan="4"/>

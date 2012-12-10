@@ -18,6 +18,10 @@ msgctxt "field:ins_collective.pricing_data,tranche:"
 msgid "Tranche"
 msgstr ""
 
+msgctxt "field:tranche.tranche,colleges:"
+msgid "Colleges"
+msgstr ""
+
 msgctxt "help:ins_collective.pricing_data,contribution_base:"
 msgid "Value between 0 and 100"
 msgstr ""

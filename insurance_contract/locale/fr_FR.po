@@ -1140,12 +1140,16 @@ msgid "Billing"
 msgstr "Cotisation"
 
 msgctxt "view:ins_contract.contract:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "view:ins_contract.contract:"
 msgid "Contract"
 msgstr "Contrat"
 
 msgctxt "view:ins_contract.contract:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
+msgid "Dynamic Data"
+msgstr ""
 
 msgctxt "view:ins_contract.contract:"
 msgid "Life Extension"

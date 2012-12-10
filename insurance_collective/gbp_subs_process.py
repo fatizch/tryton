@@ -19,10 +19,8 @@ __all__ = [
 
 
 class ProjectGBPState(CoopStep):
-    '''
-        This step should be the first one, as it asks the user which product
-        the contract will be based on, and who will be the client.
-    '''
+    'Subscriber Selection Step'
+
     __name__ = 'ins_collective.gbp_subs_process.project'
 
     # This will be the effective date of our contract. It is necessary to have
@@ -30,8 +28,8 @@ class ProjectGBPState(CoopStep):
     start_date = fields.Date('Effective Date')
 
     # The subscriber is the client which wants to subscribe to a contract.
-    subscriber = fields.Many2One('party.party',
-                                 'Subscriber')
+    subscriber = fields.Many2One('party.party', 'Subscriber',
+        domain=[('is_company', '=', True)])
 
     broker = fields.Many2One('party.party',
                              'Broker')
@@ -165,7 +163,7 @@ class GBPSubscriptionProcess(CoopProcess):
     def do_complete(self):
         contract = WithAbstract.get_abstract_objects(self, 'for_contract')
         # contract.extension_life.save()
-        contract.contract_number = contract.get_new_contract_number()
+        #contract.contract_number = contract.get_new_contract_number()
 
         contract.save()
 

@@ -2330,6 +2330,10 @@ msgctxt "selection:ins_collective.clause_rule,template_behaviour:"
 msgid "Validate"
 msgstr "Valider"
 
+msgctxt "selection:ins_collective.coverage,family:"
+msgid "default"
+msgstr ""
+
 msgctxt "selection:ins_collective.coverage,template_behaviour:"
 msgid "Add"
 msgstr "Ajouter"

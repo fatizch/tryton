@@ -1,4 +1,6 @@
 #-*- coding:utf-8 -*-
+import copy
+
 from trytond.model import fields
 
 from trytond.modules.insurance_contract import GenericContract
@@ -33,3 +35,11 @@ class GBPContract(GenericContract):
     final_product = fields.Many2One(
         'ins_collective.product',
         'Final Product')
+
+    @classmethod
+    def __setup__(cls):
+        super(GBPContract, cls).__setup__()
+        cls.subscriber = copy.copy(cls.subscriber)
+        if not cls.subscriber.domain:
+            cls.subscriber.domain = []
+        cls.subscriber.domain.append(('is_company', '=', True))

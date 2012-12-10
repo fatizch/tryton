@@ -26,7 +26,7 @@ class ModuleTestCase(unittest.TestCase):
         '''
         Test views.
         '''
-        #test_view(MODULE_NAME)
+        test_view(MODULE_NAME)
 
     def test0006depends(self):
         '''

@@ -35,6 +35,7 @@ class GroupInsurancePlan(GroupRoot, product.Product):
 
     @classmethod
     def __setup__(cls):
+        super(GroupInsurancePlan, cls).__setup__()
         field = fields.One2Many('ins_collective.coverage',
             'product', 'Options')
         cls.options = field

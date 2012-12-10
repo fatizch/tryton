@@ -48,13 +48,6 @@ class Tranche(CoopSQL, VersionedObject):
             return 0
         return version.get_ceiling(at_date=at_date)
 
-    @classmethod
-    def search(cls, domain, offset=0, limit=None, order=None, count=False,
-            query_string=False):
-        print domain
-        return super(Tranche, cls).search(domain=domain, offset=offset,
-            limit=limit, order=order, count=count, query_string=query_string)
-
 
 class TrancheVersion(CoopSQL, VersionObject):
     'Tranche Version'
