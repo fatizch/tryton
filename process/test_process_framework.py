@@ -12,13 +12,12 @@ except ImportError:
     import json
 
 from trytond.model import fields
-from trytond.model import ModelView, ModelSQL
+from trytond.model import ModelView
 
 
 __all__ = [
     'Model',
     'ProcessFramework',
-    'DemoProcess',
 ]
 
 
