@@ -386,6 +386,7 @@ class StepTransition(ModelSQL, ModelView):
         # (they cannot be the same)
         domain=[('id', '!=', Eval('from_step'))],
         required=True,
+        depends=['from_step'],
     )
 
     # Theoratically, there might be a difference between going from B to A

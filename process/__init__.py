@@ -1,6 +1,6 @@
 from trytond.pool import Pool
-from .test_process import *
-from .test_process_framework import *
+from .process_desc import *
+from .process_framework import *
 
 
 def register():
