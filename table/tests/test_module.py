@@ -160,9 +160,43 @@ class ModuleTestCase(unittest.TestCase):
                 self.assertEqual(self.cell.get(definition, *query),
                     result, (query, result))
 
+        with Transaction().start(DB_NAME, USER, context=CONTEXT):
+            definition = self.definition.create({
+                    'name': 'Test',
+                    'code': 'test',
+                    'dimension_kind1': 'range',
+                    })
+            dim1_foo = self.dimension.create({
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'start': None,
+                    'end': 10,
+                    })
+            dim1_bar = self.dimension.create({
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'start': 20,
+                    'end': None,
+                    })
+            for values in ({'dimension1': dim1_foo.id, 'value': 'ham'},
+                    {'dimension1': dim1_bar.id, 'value': 'spam'}):
+                values.update({
+                        'definition': definition.id,
+                        })
+                self.cell.create(values)
+            for query, result in (
+                    ((0,), 'ham'),
+                    ((5,), 'ham'),
+                    ((10,), None),
+                    ((30,), 'spam'),
+                    ((50,), 'spam'),
+                    ):
+                self.assertEqual(self.cell.get(definition, *query),
+                    result, (query, result))
+
     def test0050table_1dim_range_date_get(self):
         '''
-        Test TableCell.get with 1 dimension of range.
+        Test TableCell.get with 1 dimension of range-date.
         '''
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             definition = self.definition.create({
@@ -195,6 +229,40 @@ class ModuleTestCase(unittest.TestCase):
                     ((datetime.date(2013, 1, 1),), None),
                     ((datetime.date(2013, 7, 1),), 'spam'),
                     ((datetime.date(2014, 1, 1),), None),
+                    ):
+                self.assertEqual(self.cell.get(definition, *query),
+                    result, (query, result))
+
+        with Transaction().start(DB_NAME, USER, context=CONTEXT):
+            definition = self.definition.create({
+                    'name': 'Test',
+                    'code': 'test',
+                    'dimension_kind1': 'range-date',
+                    })
+            dim1_foo = self.dimension.create({
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'start_date': None,
+                    'end_date': datetime.date(2012, 12, 31),
+                    })
+            dim1_bar = self.dimension.create({
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'start_date': datetime.date(2013, 6, 1),
+                    'end_date': None,
+                    })
+            for values in ({'dimension1': dim1_foo.id, 'value': 'ham'},
+                    {'dimension1': dim1_bar.id, 'value': 'spam'}):
+                values.update({
+                        'definition': definition.id,
+                        })
+                self.cell.create(values)
+            for query, result in (
+                    ((datetime.date(2011, 1, 1),), 'ham'),
+                    ((datetime.date(2012, 3, 1),), 'ham'),
+                    ((datetime.date(2013, 1, 1),), None),
+                    ((datetime.date(2013, 7, 1),), 'spam'),
+                    ((datetime.date(2014, 1, 1),), 'spam'),
                     ):
                 self.assertEqual(self.cell.get(definition, *query),
                     result, (query, result))

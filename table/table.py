@@ -304,13 +304,25 @@ class TableCell(ModelSQL, ModelView):
                 clause.append(('date', '=', value))
             elif kind == 'range':
                 clause.extend([
-                        ('start', '<=', float(value)),
-                        ('end', '>', float(value)),
+                        ['OR',
+                            ('start', '=', None),
+                            ('start', '<=', float(value)),
+                            ],
+                        ['OR',
+                            ('end', '=', None),
+                            ('end', '>', float(value)),
+                            ],
                         ])
             elif kind == 'range-date':
                 clause.extend([
-                        ('start_date', '<=', value),
-                        ('end_date', '>', value),
+                        ['OR',
+                            ('start_date', '=', None),
+                            ('start_date', '<=', value),
+                            ],
+                        ['OR',
+                            ('end_date', '=', None),
+                            ('end_date', '>', value),
+                            ],
                         ])
             dimensions = Dimension.search(clause)
             if dimensions:
