@@ -26,6 +26,7 @@ __all__ = [
     'LifeCoveredDesc',
     'ExtensionLifeState',
     'SubscriptionProcess',
+    'PriceLine',
     ]
 
 
@@ -76,6 +77,21 @@ class Contract():
                     errs += errors
         return (res, errs)
 
+
+class PriceLine():
+    'Price Line'
+    
+    __metaclass__ = PoolMeta
+    
+    __name__ = 'ins_contract.price_line'
+
+    @classmethod
+    def get_line_target_models(cls):
+        res = super(PriceLine, cls).get_line_target_models()
+        
+        res.append(('life_contract.covered_data', 'life_contract.covered_data'))
+        
+        return res
 
 class ExtensionLife(model.CoopSQL, GenericExtension):
     '''

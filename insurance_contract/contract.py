@@ -178,8 +178,8 @@ class GenericContract(model.CoopSQL, ProcessFramework):
     # Effective date is the date at which the contract "starts" :
     #    The client pays its premium
     #    Claims can be declared
-    start_date = fields.Date('Effective Date',
-                                 required=True)
+    start_date = fields.Date('Effective Date', required=True)
+    end_date = fields.Date('End Date')
 
     # Management date is the date at which the company started to manage the
     # contract. Default value is start_date
@@ -240,10 +240,11 @@ class GenericContract(model.CoopSQL, ProcessFramework):
 
 class Contract(GenericContract):
     'Contract'
-    '''
-    This class represents the contract, and will be at the center of
-    many business processes.
-    '''
+#    '''
+#    This class represents the contract, and will be at the center of
+#    many business processes.
+#    '''
+
     __name__ = 'ins_contract.contract'
 
     # The option list is very important, as it is what really "makes" the
@@ -416,8 +417,8 @@ class Contract(GenericContract):
                     errs += errors
         return (res, errs)
 
-    @classmethod
-    def default_status(cls):
+    @staticmethod
+    def default_status():
         return 'quote'
 
     def get_new_contract_number(self):
@@ -426,6 +427,8 @@ class Contract(GenericContract):
 
     def finalize_contract(self):
         self.contract_number = self.get_new_contract_number()
+        
+        return True, ()
 
     def get_rec_name(self, val):
         if self.product and self.subscriber:
@@ -455,20 +458,20 @@ class Contract(GenericContract):
 
 
 class Option(model.CoopSQL, model.CoopView):
-    'Option'
-    '''
-    This class is an option, that is a global coverage which will be applied
-    to all covered persons on the contract.
-
-    An instance is based on a product.coverage, which is then customized at
-    subscription time in order to let the client decide precisely what
-    he wants.
-
-    Typically, on a life contract, the product.coverage might allow a choice
-    of coverage amount. The Option will store the choice of the client at
-    subscription time, so that it can be used later when calculating premium
-    or benefit.
-    '''
+    'Coverage'
+#    '''
+#    This class is an option, that is a global coverage which will be applied
+#    to all covered persons on the contract.
+#
+#    An instance is based on a product.coverage, which is then customized at
+#    subscription time in order to let the client decide precisely what
+#    he wants.
+#
+#    Typically, on a life contract, the product.coverage might allow a choice
+#    of coverage amount. The Option will store the choice of the client at
+#    subscription time, so that it can be used later when calculating premium
+#    or benefit.
+#    '''
     __name__ = 'ins_contract.option'
 
     # Every option is linked to a contract (and only one !)
@@ -676,15 +679,15 @@ class PriceLine(model.CoopSQL, model.CoopView):
         if self.master:
             return self.master.end_date_calculated
 
-    @staticmethod
-    def get_line_target_models():
+    @classmethod
+    def get_line_target_models(cls):
         f = lambda x: (x, x)
         res = [
             f('ins_product.product'),
             f('ins_product.coverage'),
             f('ins_contract.contract'),
-            f('ins_contract.option')]
-        res += utils.get_descendents('ins_contract.covered_data')
+            f('ins_contract.option'),
+            f('ins_contract.covered_data')]
         return res
 
     def is_main_line(self):
@@ -737,8 +740,10 @@ class BillingManager(model.CoopSQL, model.CoopView):
     def store_prices(self, prices):
         if not prices:
             return
+        PriceLine = Pool().get(self.get_price_line_model())
         if hasattr(self, 'prices') and self.prices:
-            Pool().get(self._fields['prices'].model_name).delete(self.prices)
+            PriceLine.delete(self.prices)
+            
         result_prices = []
         dates = [utils.to_date(key) for key in prices.iterkeys()]
         dates.sort()
@@ -759,6 +764,10 @@ class BillingManager(model.CoopSQL, model.CoopView):
                 pass
             result_prices.append(pl)
         self.prices = result_prices
+    
+    @classmethod
+    def get_price_line_model(cls):
+        return cls._fields['prices'].model_name
 
     def get_product_frequency(self, at_date):
         res, errs = self.contract.product.get_result(
@@ -936,10 +945,9 @@ class CoveredData(model.CoopView):
 
 class BrokerManager(model.CoopSQL, model.CoopView):
     'Broker Manager'
-    '''
-        This entity will be used to manage the relation between the contract
-        and its broker
-    '''
+#    '''
+#        This entity will be used to manage the relation between the contract
+#        and its broker
+#    '''
     __name__ = 'ins_contract.broker_manager'
-    broker = fields.Many2One('party.party',
-                             'Broker')
+    broker = fields.Many2One('party.party', 'Broker')

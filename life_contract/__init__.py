@@ -11,6 +11,7 @@ def register():
         LifeCoveredData,
         LifeCoveredDesc,
         ExtensionLifeState,
+        PriceLine,
         module='life_contract', type_='model')
 
     Pool.register(
