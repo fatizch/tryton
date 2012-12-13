@@ -361,7 +361,15 @@ class ProcessFramework(ModelView):
         result = []
 
         # One error looks like : (error_code, (error_arg1, error_arg2))
-        for (error, error_args) in errors:
+        for the_error in errors:
+            # TODO : Remove this cast which exists only for backward
+            # compatibility
+            if isinstance(the_error, (str, unicode)):
+                error = the_error
+                error_args = ()
+            else:
+                error, error_args = the_error
+
             # We get the error code from the cls definition
             error = cls._error_messages.get(error, error)
 
