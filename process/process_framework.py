@@ -1,10 +1,14 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
-from trytond.model.model import ModelMeta
+from trytond.model import ModelMeta
 
-from trytond.pyson import Eval
+from trytond.tools import safe_eval
+
+from trytond.pyson import Eval, PYSONEncoder, CONTEXT
 
 from trytond.transaction import Transaction
+
+from trytond.exceptions import UserError
 
 try:
     import simplejson as json
@@ -18,6 +22,7 @@ from trytond.model import ModelView
 __all__ = [
     'Model',
     'ProcessFramework',
+    'ClassAttr',
 ]
 
 
@@ -100,24 +105,29 @@ class DynamicButtonDict(dict):
         if auth_ids:
             auth_pyson = Eval('groups', []).contains(auth_ids)
         else:
-            auth_pyson = None
+            auth_pyson = True
 
         # We also got to take into account the custom pyson
-        pyson = good_transition.pyson
+        if not good_transition.pyson:
+            pyson = False
+        else:
+            pyson = good_transition.pyson
 
         # To get the good pyson, we combine everything.
         res = None
         if auth_ids:
             res = auth_pyson
-            if pyson:
+            if good_transition.pyson:
                 res = res and pyson
-        elif pyson:
+        elif good_transition.pyson:
             res = pyson
 
         if not res:
             return {}
         else:
-            return {'invisible': res}
+            encoder = PYSONEncoder()
+            res = encoder.encode(safe_eval(res, CONTEXT))
+            return {'invisibe': safe_eval(res)}
 
     def __contains__(self, name):
         # Names starting sith the allowed prefix are in, no matter what !
@@ -293,6 +303,8 @@ class ProcessFramework(ModelView):
         # If no process_state is set (i.e. no process has ever been launched
         # on the current instance), there is no state to get
         if not (hasattr(self, 'process_state') and self.process_state):
+            if process_name:
+                return self.default_cur_state()
             return ''
 
         # We load the process_state
@@ -349,7 +361,7 @@ class ProcessFramework(ModelView):
         result = []
 
         # One error looks like : (error_code, (error_arg1, error_arg2))
-        for error, error_args in errors:
+        for (error, error_args) in errors:
             # We get the error code from the cls definition
             error = cls._error_messages.get(error, error)
 
@@ -371,4 +383,5 @@ class ProcessFramework(ModelView):
             result.append(error)
 
         # We display the resulting list of strings
-        super(ProcessFramework, cls).raise_user_error('\n'.join(result))
+        #super(ProcessFramework, cls).raise_user_error('\n'.join(result))
+        raise UserError('\n'.join(result))

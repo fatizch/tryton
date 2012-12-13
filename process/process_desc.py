@@ -13,6 +13,7 @@ __all__ = [
     'TransitionAuthorization',
     'StepTransition',
     'StepDesc',
+    'StepDescAuthorization',
 ]
 
 
@@ -217,6 +218,18 @@ class ProcessDesc(ModelSQL, ModelView):
 
         # Now we can build the steps' xml
         for step in self.all_steps:
+            step_xml = "(Eval('cur_state', '') == '%s')" % (
+                step.technical_name)
+
+            if step.authorizations:
+                auth_xml = '('
+                for elem in step.authorizations:
+                    auth_xml += "Eval('groups', []).contains(%s) or " % elem.id
+
+                auth_xml = auth_xml[:-4] + ')'
+            else:
+                auth_xml = None
+
             xml += '<newline/>'
             # The xml of each step is contains inside a group that will have
             # a pyson expression calculated in order to display it only when
@@ -224,20 +237,36 @@ class ProcessDesc(ModelSQL, ModelView):
             xml += '<group name="group_%s" ' % step.technical_name
             xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1" '
             xml += 'states="{'
-            xml += "'invisible': Eval('cur_state') != '%s'" % (
-                step.technical_name)
+            xml += "'invisible': "
+
+            if auth_xml:
+                xml += 'Not(And(%s, %s))' % (step_xml, auth_xml)
+            else:
+                xml += 'Not(%s)' % step_xml
+
             xml += '}">'
 
             # Inside the group, we get the xml calculated on the step
             xml += step.calculate_form_view()
             xml += '</group>'
 
+            if auth_xml:
+                xml += '<group name="group_%s_noauth" ' % step.technical_name
+                xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1" '
+                xml += 'states="{'
+                xml += "'invisible': Not(And(%s, Not(%s)))" % (
+                    step_xml, auth_xml)
+                xml += '}">'
+                xml += '<label id="noauth_text" string="The current record is\
+ in a state (%s) that you are not allowed to view."/>' % step.fancy_name
+                xml += '</group>'
+
         xml += '</group>'
         xml += '<newline/>'
         xml += '<group name="process_footer">'
         xml += '</group>'
         xml += '</form>'
-
+        
         # Our xml is complete, we set it on the good view, then save it.
         good_form.arch = xml
         good_form.save()
@@ -451,6 +480,24 @@ class StepTransition(ModelSQL, ModelView):
         return xml
 
 
+class StepDescAuthorization(ModelSQL):
+    'Step Desc Authorization'
+
+    __name__ = 'process.step_desc_authorization'
+
+    step_desc = fields.Many2One(
+        'process.step_desc',
+        'Step Desc',
+        ondelete='CASCADE',
+    )
+
+    group = fields.Many2One(
+        'res.group',
+        'Group',
+        ondelete='CASCADE',
+    )
+
+
 class StepDesc(ModelSQL, ModelView):
     'Step Descriptor'
 
@@ -489,6 +536,13 @@ class StepDesc(ModelSQL, ModelView):
     # Finally, the xml which will be displayed on the current state.
     step_xml = fields.Text(
         'XML',
+    )
+
+    authorizations = fields.Many2Many(
+        'process.step_desc_authorization',
+        'step_desc',
+        'group',
+        'Authorizations',
     )
 
     @classmethod
