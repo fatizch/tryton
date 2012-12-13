@@ -11,9 +11,9 @@ from trytond.modules.coop_utils import model
 from trytond.modules.coop_utils import utils
 
 from trytond.modules.insurance_contract import GenericExtension
-from trytond.modules.insurance_contract import CoveredElement
-from trytond.modules.insurance_contract import CoveredData
 from trytond.modules.insurance_contract import CoveredDesc
+from trytond.modules.insurance_contract import CoveredData
+from trytond.modules.insurance_contract import CoveredElement
 from trytond.modules.insurance_process import DependantState
 from trytond.modules.insurance_process import CoopStateView
 
@@ -67,6 +67,50 @@ class Contract():
                 errs += errors
         return (res, errs)
 
+    def init_extension_life(self):
+        if not self.extension_life:
+            return True, ()
+
+        the_ext = self.extension_life[0]
+
+        CoveredElement = Pool().get(the_ext.get_covered_element_model())
+        CoveredData = Pool().get(CoveredElement.get_covered_data_model())
+
+        if not self.extension_life.covered_elements:
+            subscriber = CoveredElement()
+            subscriber.init_from_person(self.subscriber_as_person)
+
+        options = dict([(o.coverage.code, o) for o in self.options])
+
+        for elem in the_ext.covered_elements:
+            existing_datas = dict([(data.for_coverage.code, data)
+                for data in elem.covered_data])
+
+            elem.covered_data = []
+
+            to_delete = [data for data in existing_datas.itervalues()]
+
+            good_datas = []
+            for code, option in options:
+                if code in existing_datas:
+                    good_datas.append(existing_datas[code])
+                    to_delete.remove(existing_datas[code])
+                    continue
+                else:
+                    good_data = CoveredData()
+                    good_data.init_from_coverage(option.coverage)
+                    good_data.start_date = max(
+                        good_data.start_date, self.start_date)
+                    with Transaction().set_context({
+                            'current_contract': self.id}):
+                        good_data.init_dynamic_data(option.coverage, self)
+                    good_data.status_selection = True
+                    good_datas.append(good_data)
+
+            CoveredData.remove(to_delete)
+
+            elem.covered_data = good_datas
+
 
 class ExtensionLife(model.CoopSQL, GenericExtension):
     '''
@@ -81,7 +125,7 @@ class ExtensionLife(model.CoopSQL, GenericExtension):
         cls.covered_elements = copy.copy(cls.covered_elements)
         cls.covered_elements.model_name = 'life_contract.covered_person'
 
-    @staticmethod
+    @classmethod
     def get_covered_element_model():
         return 'life_contract.covered_person'
 
@@ -119,6 +163,13 @@ class CoveredPerson(model.CoopSQL, CoveredElement):
 
     def get_rec_name(self, value):
         return self.person.rec_name
+
+    @classmethod
+    def get_covered_data_model(cls):
+        return 'life_contract.covered_data'
+
+    def init_from_person(self, person):
+        self.person = person
 
 
 class LifeCoveredData(model.CoopSQL, CoveredData):

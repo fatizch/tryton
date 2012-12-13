@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tryton>
+  <data>
+    <record model="ir.ui.view" id="subscription_editable_option_tree">
+      <field name="model">ins_contract.option</field>
+      <field name="type">tree</field>
+      <field name="name">subscription_editable_option_tree</field>
+    </record>
+  </data>
+</tryton>

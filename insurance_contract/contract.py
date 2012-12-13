@@ -6,6 +6,9 @@ from trytond.model import fields
 from trytond.modules.coop_utils import model
 from trytond.modules.coop_utils import utils
 
+# Needed for processing
+from trytond.modules.process import ProcessFramework
+
 # Needed for getting models
 from trytond.pool import Pool
 
@@ -28,13 +31,13 @@ CONTRACTSTATUSES = [
     ('terminated', 'Terminated'),
     ]
 
-OPTIONSTATUS = [
-    ('Active', 'Active'),
-    ('Refused', 'Refused')
+OPTIONSTATUS = CONTRACTSTATUSES + [
+    ('refused', 'Refused'),
     ]
 
 
 class GenericExtension(model.CoopView):
+    'Mother class for extensions'
     '''
         This class is the mother class of all product-specific extensions.
         Extension classes will be defined in the proper module
@@ -82,8 +85,17 @@ class GenericExtension(model.CoopView):
         except KeyError:
             return None
 
+    def init_for_contract(self, contract):
+        self.dynamic_data = {}
+        self.contract = contract
 
-class GenericContract(model.CoopSQL, model.CoopView):
+    @classmethod
+    def get_covered_element_model(cls):
+        pass
+    
+
+class GenericContract(model.CoopSQL, ProcessFramework):
+    'Mother class for contracts'
     '''
         This class will provide the basics of all contracts :
             Contract Number
@@ -325,7 +337,8 @@ class Contract(GenericContract):
                 errs += errors
         return (res, errs)
 
-    def default_status(self):
+    @classmethod
+    def default_status(cls):
         return 'quote'
 
     def get_new_contract_number(self):
@@ -336,9 +349,10 @@ class Contract(GenericContract):
         self.contract_number = self.get_new_contract_number()
 
     def get_rec_name(self, val):
-        return '%s (%s) - %s' % (
-            self.contract_number, self.get_product().get_rec_name(val),
-            self.subscriber.get_rec_name(val))
+        if self.product and self.subscriber:
+            return '%s (%s) - %s' % (
+                self.contract_number, self.get_product().get_rec_name(val),
+                self.subscriber.get_rec_name(val))
 
     @classmethod
     def search_rec_name(cls, name, clause):
@@ -351,6 +365,7 @@ class Contract(GenericContract):
 
 
 class Option(model.CoopSQL, model.CoopView):
+    'Option'
     '''
     This class is an option, that is a global coverage which will be applied
     to all covered persons on the contract.
@@ -394,6 +409,10 @@ class Option(model.CoopSQL, model.CoopView):
     option_data = fields.Reference('Option Data',
                                    'get_data_model')
 
+    status = fields.Selection(OPTIONSTATUS,
+                              'Status',
+                              readonly=True)
+
     @staticmethod
     def get_data_model():
         return [(model__name__, model.get_option_data_name())
@@ -414,6 +433,11 @@ class Option(model.CoopSQL, model.CoopView):
 
     def get_name_for_billing(self):
         return self.get_coverage().name + ' - Base Price'
+
+    def init_from_coverage(self, coverage):
+        self.start_date = coverage.start_date
+        self.coverage = coverage
+        self.status = 'active'
 
 
 class PriceLine(model.CoopSQL, model.CoopView):
@@ -593,6 +617,7 @@ class PriceLine(model.CoopSQL, model.CoopView):
 
 
 class BillingManager(model.CoopSQL, model.CoopView):
+    'Billing Manager'
     '''
         This object will manage all billing-related content on the contract.
         It will be the target of all sql requests for automated bill
@@ -746,6 +771,10 @@ class CoveredElement(model.CoopView):
     def get_rec_name(self, value):
         return ''
 
+    @classmethod
+    def get_covered_data_model(cls):
+        return 'ins_contract.covered_data'
+
 
 class CoveredData(model.CoopView):
     'Coverage Data'
@@ -785,8 +814,25 @@ class CoveredData(model.CoopView):
         except KeyError:
             return None
 
+    def init_from_coverage(self, coverage):
+        self.for_coverage = coverage
+        self.start_date = coverage.start_date
+        self.end_date = coverage.end_date
+
+    def init_dynamic_data(self, coverage, contract):
+        self.dynamic_data = utils.init_dynamic_data(
+            contract.product.get_result(
+                'dynamic_data_getter',
+                {
+                    'date': self.start_date,
+                    'dd_args': {
+                        'options': coverage.code,
+                        'kind': 'sub_elem',
+                        'path': 'all'}})[0])
+
 
 class BrokerManager(model.CoopSQL, model.CoopView):
+    'Broker Manager'
     '''
         This entity will be used to manage the relation between the contract
         and its broker
