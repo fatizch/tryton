@@ -340,7 +340,13 @@ class Contract():
             setattr(self, ext_name, [ext_obj])
 
         return True, ()
-        
+
+    def activate_contract(self):
+        if not self.status == 'quote':
+            return
+
+        self.status = 'active'
+
 
 class Option():
     'Option'
