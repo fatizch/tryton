@@ -58,7 +58,7 @@
     <!-- Menu for process desc -->
     
     <record model="ir.action.act_window" id="act_process_desc">
-      <field name="name">process_desc_form</field>
+      <field name="name">Process Descriptors</field>
       <field name="res_model">process.process_desc</field>
     </record>
     <record model="ir.action.act_window.view" id="act_process_desc_view1">
@@ -77,7 +77,7 @@
     <!-- Menu for step desc -->
 
     <record model="ir.action.act_window" id="act_step_desc">
-      <field name="name">step_desc_form</field>
+      <field name="name">Step Descriptors</field>
       <field name="res_model">process.step_desc</field>
     </record>
     <record model="ir.action.act_window.view" id="act_step_desc_view1">
