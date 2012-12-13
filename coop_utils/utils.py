@@ -680,3 +680,9 @@ def init_dynamic_data(ids):
         elem = the_model(id)
         res[elem.technical_name] = elem.get_default_value(None)
     return res
+
+def set_default_dict(input_dict, data):
+    for k in data.iterkeys():
+        input_dict.setdefault(k, data[k])
+
+    return input_dict
