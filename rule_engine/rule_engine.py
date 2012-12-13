@@ -10,7 +10,7 @@ from StringIO import StringIO
 from decimal import Decimal
 
 from pyflakes.checker import Checker
-from pyflakes.messages import Message, UndefinedName, UnusedImport
+from pyflakes.messages import *
 
 from trytond.rpc import RPC
 
@@ -215,7 +215,9 @@ class Rule(ModelView, ModelSQL):
                 })
 
     def filter_errors(self, error):
-        if isinstance(error, UnusedImport):
+        if isinstance(error, (UnusedImport, RedefinedWhileUnused,
+                    ImportShadowedByLoopVar, ImportStarUsed, UndefinedExport,
+                    RedefinedFunction, LateFutureImport, UnusedVariable)):
             return False
         elif isinstance(error, UndefinedName) and \
                 error.message_args[0] in self.allowed_functions:
