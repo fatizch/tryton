@@ -3,7 +3,7 @@ from trytond.model import fields
 from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import utils
-from trytond.modules.transaction import Transaction
+from trytond.transaction import Transaction
 
 from trytond.modules.process import ClassAttr
 from trytond.modules.coop_party import ACTOR_KIND
