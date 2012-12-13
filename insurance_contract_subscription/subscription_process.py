@@ -94,6 +94,8 @@ class Contract():
             'option_not_eligible': 'Option %s is not eligible',
             'no_option': 'At least an option must be selected',
             'bad_start_date': 'Option %s must be subscribed after %s',
+            'need_option': 'At least one option must be selected for %s',
+            'need_covered': 'There must be at least one covered element',
         })
 
     def on_change_with_subscriber_desc(self, name=None):
@@ -330,6 +332,7 @@ class Contract():
                 good_ext = model()
                 good_ext.init_for_contract(self)
 
+            good_ext.update_dynamic_data(self, ext)
             good_exts[ext] = good_ext
 
         if to_delete:
@@ -341,11 +344,54 @@ class Contract():
 
         return True, ()
 
+    def check_at_least_one_covered(self):
+        errors = []
+        exts = False
+        for ext in self.get_extensions():
+            exts = True
+            for covered in ext.covered_elements:
+                found = False
+                for data in covered.covered_data:
+                    if data.status == 'active':
+                        found = True
+                        break
+                if not found:
+                    errors.append(('need_option', (covered.get_rec_name(''))))
+        
+        if not exts:
+            errors.append(('need_covered', ()))
+
+        if errors:
+            return False, errors
+        return True, ()
+    
+    def init_billing_manager(self):
+        if not (hasattr(self, 'billing_manager') and
+                self.billing_manager):
+            BillingManager = Pool().get(self.get_manager_model())
+            bm = BillingManager()
+            self.billing_manager = [bm]
+
+        return True, ()
+
+    def calculate_prices(self):
+        prices, errs = self.calculate_prices_at_all_dates()
+
+        if errs:
+            return False, errs
+
+        self.billing_manager[0].store_prices(prices)
+
+        return True, ()
+
+
     def activate_contract(self):
         if not self.status == 'quote':
-            return
+            return True, ()
 
         self.status = 'active'
+
+        return True, ()
 
 
 class Option():

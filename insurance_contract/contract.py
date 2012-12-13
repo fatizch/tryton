@@ -142,7 +142,25 @@ class GenericExtension(model.CoopView):
     @classmethod
     def get_covered_element_model(cls):
         pass
-    
+
+    def update_dynamic_data(self, contract, extension_field):
+        for_options = ';'.join([
+            o.coverage.code
+            for o in contract.options
+            if o.status == 'active'])
+
+        utils.set_default_dict(
+            self.dynamic_data,
+            utils.init_dynamic_data(
+                contract.product.get_result(
+                    'dynamic_data_getter',
+                    {
+                        'date': contract.start_date,
+                        'dd_args': {
+                            'options': for_options,
+                            'kind': 'main',
+                            'path': extension_field}})[0]))
+
 
 class GenericContract(model.CoopSQL, ProcessFramework):
     'Mother class for contracts'
@@ -363,28 +381,39 @@ class Contract(GenericContract):
     def get_product(self):
         return self.product
 
-    def check_sub_elem_eligibility(self, at_date, ext):
+    def check_sub_elem_eligibility(self, at_date=None, ext=None):
+        if not at_date:
+            at_date = self.start_date
+
+        if not ext:
+            exts = self.get_extensions()
+        elif isinstance(ext, str):
+            exts = getattr(self, ext)
+
+        errors = []
+
         options = dict([
             (option.coverage.code, option)
             for option in self.options
             ])
         res, errs = (True, [])
-        for covered_element in getattr(self, ext)[0].covered_elements:
-            for covered_data in covered_element.covered_data:
-                if (covered_data.start_date > at_date
-                        or hasattr(covered_data, 'end_date') and
-                        covered_data.end_date and
-                        covered_data.end_date > at_date):
-                    continue
-                eligibility, errors = covered_data.for_coverage.get_result(
-                    'sub_elem_eligibility',
-                    {'date': at_date,
-                    'sub_elem': covered_element,
-                    'data': covered_data,
-                    'option': options[covered_data.for_coverage.code]})
-                res = res and eligibility.eligible
-                errs += eligibility.details
-                errs += errors
+        for ext in exts:
+            for covered_element in ext.covered_elements:
+                for covered_data in covered_element.covered_data:
+                    if (covered_data.start_date > at_date
+                            or hasattr(covered_data, 'end_date') and
+                            covered_data.end_date and
+                            covered_data.end_date > at_date):
+                        continue
+                    eligibility, errors = covered_data.for_coverage.get_result(
+                        'sub_elem_eligibility',
+                        {'date': at_date,
+                        'sub_elem': covered_element,
+                        'data': covered_data,
+                        'option': options[covered_data.for_coverage.code]})
+                    res = res and eligibility.eligible
+                    errs += eligibility.details
+                    errs += errors
         return (res, errs)
 
     @classmethod
@@ -412,6 +441,17 @@ class Contract(GenericContract):
                 ('subscriber.name',) + clause[1:],
             ])
         return [('id', 'in', [c.id for c in contracts])]
+
+    def get_extensions(self):
+        for ext in [x for x in dir(self)
+                if x.startswith('extension_')]:
+            if not(hasattr(self, ext) and getattr(self, ext)):
+                continue
+
+            if not isinstance(self._fields[ext], fields.One2Many):
+                continue
+
+            yield getattr(self, ext)[0]
 
 
 class Option(model.CoopSQL, model.CoopView):
@@ -864,7 +904,7 @@ class CoveredData(model.CoopView):
     @classmethod
     def default_status(cls):
         return 'active'
-    
+
 
     def get_name_for_billing(self):
         return self.for_covered.get_name_for_billing()

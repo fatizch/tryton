@@ -42,29 +42,38 @@ class Contract():
         'Life Extension',
         size=1)
 
-    def check_covered_amounts(self, at_date, ext):
+    def check_covered_amounts(self, at_date=None, ext=None):
+        if not at_date:
+            at_date = self.start_date
+
+        if not ext:
+            exts = self.get_extensions()
+        elif isinstance(ext, str):
+            exts = getattr(self, ext)
+
         options = dict([
             (option.coverage.code, option)
             for option in self.options
             ])
         res, errs = (True, [])
-        for covered_element in getattr(self, ext)[0].covered_elements:
-            for covered_data in covered_element.covered_data:
-                if (covered_data.start_date > at_date
-                        or hasattr(covered_data, 'end_date') and
-                        covered_data.end_date and
-                        covered_data.end_date > at_date):
-                    continue
-                validity, errors = covered_data.for_coverage.get_result(
-                    'coverage_amount_validity',
-                    {'date': at_date,
-                    'sub_elem': covered_element,
-                    'data': covered_data,
-                    'option': options[covered_data.for_coverage.code],
-                    'contract': self})
-                res = res and validity[0]
-                errs += validity[1]
-                errs += errors
+        for ext in exts:
+            for covered_element in ext.covered_elements:
+                for covered_data in covered_element.covered_data:
+                    if (covered_data.start_date > at_date
+                            or hasattr(covered_data, 'end_date') and
+                            covered_data.end_date and
+                            covered_data.end_date > at_date):
+                        continue
+                    validity, errors = covered_data.for_coverage.get_result(
+                        'coverage_amount_validity',
+                        {'date': at_date,
+                        'sub_elem': covered_element,
+                        'data': covered_data,
+                        'option': options[covered_data.for_coverage.code],
+                        'contract': self})
+                    res = res and validity[0]
+                    errs += validity[1]
+                    errs += errors
         return (res, errs)
 
 
