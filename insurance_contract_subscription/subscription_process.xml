@@ -6,5 +6,11 @@
       <field name="type">tree</field>
       <field name="name">subscription_editable_option_tree</field>
     </record>
+
+    <record model="ir.ui.view" id="subscription_editable_covered_data_tree">
+      <field name="model">ins_contract.covered_data</field>
+      <field name="type">tree</field>
+      <field name="name">subscription_editable_covered_data_tree</field>
+    </record>
   </data>
 </tryton>

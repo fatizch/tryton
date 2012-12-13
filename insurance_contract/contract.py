@@ -5,6 +5,7 @@ from trytond.model import fields
 
 from trytond.modules.coop_utils import model
 from trytond.modules.coop_utils import utils
+from trytond.transaction import Transaction
 
 # Needed for processing
 from trytond.modules.process import ProcessFramework
@@ -88,6 +89,55 @@ class GenericExtension(model.CoopView):
     def init_for_contract(self, contract):
         self.dynamic_data = {}
         self.contract = contract
+
+        self.init_extension(contract)
+
+    def init_covered_elements(self, contract):
+        pass
+
+    def init_extension(self, contract):
+        CoveredElement = Pool().get(self.get_covered_element_model())
+        CoveredData = Pool().get(CoveredElement.get_covered_data_model())
+
+        if not (hasattr(self, 'covered_elements') and self.covered_elements):
+            self.init_covered_elements(contract)
+
+        if not (hasattr(self, 'covered_elements') and self.covered_elements):
+            return True, ()
+
+        options = dict([(o.coverage.code, o) for o in contract.options])
+
+        for elem in self.covered_elements:
+            if (hasattr(elem, 'covered_data') and elem.covered_data):
+                existing_datas = dict([(data.for_coverage.code, data)
+                    for data in elem.covered_data])
+            else:
+                existing_datas = {}
+
+            elem.covered_data = []
+
+            to_delete = [data for data in existing_datas.itervalues()]
+
+            good_datas = []
+            for code, option in options.iteritems():
+                if code in existing_datas:
+                    good_datas.append(existing_datas[code])
+                    to_delete.remove(existing_datas[code])
+                    continue
+                else:
+                    good_data = CoveredData()
+                    good_data.init_from_coverage(option.coverage)
+                    good_data.start_date = max(
+                        good_data.start_date, contract.start_date)
+                    with Transaction().set_context({
+                            'current_contract': contract.id}):
+                        good_data.init_dynamic_data(option.coverage, contract)
+                    good_data.status_selection = True
+                    good_datas.append(good_data)
+
+            CoveredData.delete(to_delete)
+
+            elem.covered_data = good_datas
 
     @classmethod
     def get_covered_element_model(cls):
@@ -395,6 +445,7 @@ class Option(model.CoopSQL, model.CoopView):
     # business rule of the offered coverage
     coverage = fields.Many2One('ins_product.coverage',
                                'Offered Coverage',
+                               readonly=True,
                                required=True)
 
     # Effective date is the date at which the option "starts" to be effective :
@@ -788,7 +839,9 @@ class CoveredData(model.CoopView):
     for_coverage = fields.Many2One(
         'ins_product.coverage',
         'Coverage',
-        ondelete='CASCADE')
+        ondelete='CASCADE',
+        readonly=True,
+    )
 
     for_covered = fields.Many2One(
         'ins_contract.covered_element',
@@ -802,6 +855,16 @@ class CoveredData(model.CoopView):
     start_date = fields.Date('Start Date')
 
     end_date = fields.Date('End Date')
+
+    status = fields.Selection(
+        OPTIONSTATUS,
+        'Status',
+    )
+
+    @classmethod
+    def default_status(cls):
+        return 'active'
+    
 
     def get_name_for_billing(self):
         return self.for_covered.get_name_for_billing()
