@@ -1,6 +1,6 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
-from trytond.model import ModelMeta
+from trytond.model.model import ModelMeta
 
 from trytond.tools import safe_eval
 
