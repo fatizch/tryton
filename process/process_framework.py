@@ -73,30 +73,22 @@ class DynamicButtonDict(dict):
         if not name.startswith(self.allowed_prefix):
             return super(AllowRPCDict, self).__getitem__(name)
 
-        # The 'name' is supposed to be the encoded ids of the steps which
-        # define the transition
-        from_id, to_id, = name[len(self.allowed_prefix):].split('_')
+        # The 'name' is supposed to be the encoded id of the transition
+        transition_id = name[len(self.allowed_prefix):].split('_')
 
-        # If they do not, there is a problem
-        if not (from_id and to_id):
+        # If there is nothing, there is a problem
+        if not transition_id:
             raise Exception
 
-        # If they are the same, the button is just here for aesthetics, set it
+        # If there is only one, the button is just here for aesthetics, set it
         # to readonly !
-        if from_id == to_id:
+        if len(transition_id) > 1:
             return {'readonly': True}
 
-        # Now we need to find the transition which matches the ids given
+        # Now we need to find the transition which matches the id given
         # through the name of the method.
         TransitionDesc = Pool().get('process.step_transition')
-        try:
-            good_transition, = TransitionDesc.search([
-                    ('from_step', '=', int(from_id)),
-                    ('to_step', '=', int(to_id)),
-                ], limit=1)
-        except:
-            # If no transition matches, there is a problem
-            raise
+        good_transition = TransitionDesc(transition_id[0])
 
         # We need to manage the authroizations on the transition
         auth_ids = map(lambda x: x.id, good_transition.authorizations)
@@ -122,12 +114,17 @@ class DynamicButtonDict(dict):
         elif good_transition.pyson:
             res = pyson
 
-        if not res:
-            return {}
-        else:
+        states = {}
+
+        if good_transition.is_readonly:
+            states['readonly'] = True
+
+        if res:
             encoder = PYSONEncoder()
             res = encoder.encode(safe_eval(res, CONTEXT))
-            return {'invisibe': safe_eval(res)}
+            states['invisible'] = res
+
+        return states
 
     def __contains__(self, name):
         # Names starting sith the allowed prefix are in, no matter what !
@@ -242,22 +239,14 @@ class ProcessFramework(ModelView):
 
     @classmethod
     def default_button_method(cls, button_name):
-        # button_name should look like :
-        #      id from + _ + id to
-        from_step, to_step = map(int, button_name.split('_'))
+        # button_name should be the transition's id
+        transition, = map(int, button_name.split('_'))
 
         # This is the method that will be called when clicking on the button
         def button_generic(works):
             # Pretty straightforward : we find the matching transition
             StepTransition = Pool().get('process.step_transition')
-
-            try:
-                good_trans, = StepTransition.search([
-                        ('from_step', '=', from_step),
-                        ('to_step', '=', to_step),
-                    ], limit=1)
-            except ValueError:
-                return
+            good_trans = StepTransition(transition)
 
             for work in works:
                 # Then execute it on each instance

@@ -22,139 +22,6 @@ __all__ = [
 ]
 
 
-class GenerateGraph(Report):
-    __name__ = 'process.graph_generation'
-
-    @classmethod
-    def execute(cls, ids, data):
-        import pydot
-
-        ActionReport = Pool().get('ir.action.report')
-
-        action_report_ids = ActionReport.search([
-            ('report_name', '=', cls.__name__)
-            ])
-        if not action_report_ids:
-            raise Exception('Error', 'Report (%s) not find!' % cls.__name__)
-        action_report = ActionReport(action_report_ids[0])
-
-        Process = Pool().get('process.process_desc')
-        the_process = Process(Transaction().context.get('active_id'))
-
-        graph = pydot.Dot(fontsize="8")
-        graph.set('center', '1')
-        graph.set('ratio', 'auto')
-        graph.set('splines', 'ortho')
-        #graph.set('concentrate', '1')
-
-        nodes = {}
-
-        for step in the_process.all_steps:
-            nodes[step.id] = pydot.Node(
-                step.fancy_name,
-                style='filled',
-                shape='rect',
-            )
-
-        edges = {}
-        for step in the_process.all_steps:
-            pyson = []
-            for transition in step.to_steps:
-                if transition.pyson:
-                    pyson += [transition.pyson]
-
-            has_start = False
-            if not pyson:
-                start_node = nodes[step.id]
-            else:
-                start_node = pydot.Node(
-                    'Condition :',
-                    style='filled',
-                    shape='diamond',
-                    fillcolor='orange',
-                    label='\n'.join(pyson))
-
-                nodes['%s,transition' % step.id] = start_node
-
-                start_edge = pydot.Edge(
-                    nodes[transition.from_step.id],
-                    start_node,
-                )
-
-                edges[(step.id, '%s,transition' % step.id)] = start_edge
-
-                has_start = True
-
-            for transition in step.to_steps:
-                good_edge = pydot.Edge(
-                    start_node,
-                    nodes[transition.to_step.id],
-                )
-
-                good_edge.set('len', '1.0')
-                good_edge.set('constraint', '1')
-                good_edge.set('weight', '1.0')
-
-                if has_start:
-                    edges[(
-                        '%s,transition' % step.id,
-                        transition.to_step.id)] = good_edge
-                else:
-                    edges[(
-                        step.id,
-                        transition.to_step.id)] = good_edge
-
-            if not step.to_steps:
-                nodes[step.id].set('style', 'filled')
-                nodes[step.id].set('shape', 'circle')
-                nodes[step.id].set('fillcolor', '#a2daf4')
-
-        for step in the_process.all_steps:
-            for transition in step.from_steps:
-                tr_fr, tr_to = transition.from_step.id, transition.to_step.id
-                if (tr_to, tr_fr) in edges:
-                    edges[(tr_to, tr_fr)].set('dir', 'both')
-                else:
-                    good_edge = pydot.Edge(
-                        nodes[transition.from_step.id],
-                        nodes[transition.to_step.id],
-                    )
-
-                    good_edge.set('constraint', '0')
-                    good_edge.set('weight', '0.2')
-
-                    edges[(tr_fr, tr_to)] = good_edge
-
-        nodes[the_process.first_step.id].set('style', 'filled')
-        nodes[the_process.first_step.id].set('shape', 'octagon')
-        nodes[the_process.first_step.id].set('fillcolor', '#0094d2')
-
-        for node in nodes.itervalues():
-            graph.add_node(node)
-
-        for edge in edges.itervalues():
-            graph.add_edge(edge)
-
-        data = graph.create(prog='dot', format='png')
-        return ('png', buffer(data), False, action_report.name)
-
-
-class GenerateGraphWizard(Wizard):
-    __name__ = 'process.generate_graph_wizard'
-
-    start_state = 'print_'
-
-    print_ = StateAction('process.report_generate_graph')
-
-    def transition_print_(self):
-        return 'end'
-
-    def do_print_(self, action):
-        return action, {
-            'id': Transaction().context.get('active_id'),
-            }
-
-
 class ProcessStepRelation(ModelSQL):
     'Process to Step relation'
 
@@ -571,6 +438,8 @@ class StepTransition(ModelSQL, ModelView):
 
     # We might want to have a little more control on whether we display a
     # transition or not.
+    # Could be useful if we need to find the dependencies of the pyson expr :
+    #  re.compile('Eval\(\'([a-zA-Z0-9._]*)\'', re.I|re.U) + finditer
     pyson = fields.Char(
         'Pyson Constraint',
     )
@@ -587,6 +456,9 @@ class StepTransition(ModelSQL, ModelView):
         'group',
         'Authorizations',
     )
+
+    # Sometimes we just want to display a readonly button for aesthetics
+    is_readonly = fields.Boolean('Readonly')
 
     def execute(self, target):
         # Executing a transition is easy : just apply all methods
@@ -610,10 +482,9 @@ class StepTransition(ModelSQL, ModelView):
         # Here we build the xml for the button associated to the transition.
         # What must be build is the button name, in which we encode the ids
         # of the from and to steps.
-        xml = '<button string="%s" name="_button_%s_%s"/>' % (
+        xml = '<button string="%s" name="_button_%s"/>' % (
             self.to_step.fancy_name,
-            self.from_step.id,
-            self.to_step.id)
+            self.id)
 
         return xml
 
@@ -726,3 +597,142 @@ class StepDesc(ModelSQL, ModelView):
         xml += '</group>'
 
         return xml
+
+
+class GenerateGraph(Report):
+    __name__ = 'process.graph_generation'
+
+    @classmethod
+    def execute(cls, ids, data):
+        import pydot
+
+        ActionReport = Pool().get('ir.action.report')
+
+        action_report_ids = ActionReport.search([
+            ('report_name', '=', cls.__name__)
+            ])
+        if not action_report_ids:
+            raise Exception('Error', 'Report (%s) not find!' % cls.__name__)
+        action_report = ActionReport(action_report_ids[0])
+
+        Process = Pool().get('process.process_desc')
+        the_process = Process(Transaction().context.get('active_id'))
+
+        graph = pydot.Dot(fontsize="8")
+        graph.set('center', '1')
+        graph.set('ratio', 'auto')
+        graph.set('splines', 'ortho')
+        #graph.set('concentrate', '1')
+
+        nodes = {}
+
+        for step in the_process.all_steps:
+            nodes[step.id] = pydot.Node(
+                step.fancy_name,
+                style='filled',
+                shape='rect',
+            )
+
+        edges = {}
+        for step in the_process.all_steps:
+            pyson = []
+            for transition in step.to_steps:
+                if transition.pyson:
+                    pyson += [transition.pyson]
+
+            has_start = False
+            if not pyson:
+                start_node = nodes[step.id]
+            else:
+                start_node = pydot.Node(
+                    'Condition :',
+                    style='filled',
+                    shape='diamond',
+                    fillcolor='orange',
+                    label='\n'.join(pyson))
+
+                nodes['%s,transition' % step.id] = start_node
+
+                start_edge = pydot.Edge(
+                    nodes[transition.from_step.id],
+                    start_node,
+                )
+
+                edges[(step.id, '%s,transition' % step.id)] = start_edge
+
+                has_start = True
+
+            for transition in step.to_steps:
+                if transition.is_readonly:
+                    continue
+                good_edge = pydot.Edge(
+                    start_node,
+                    nodes[transition.to_step.id],
+                )
+
+                good_edge.set('len', '1.0')
+                good_edge.set('constraint', '1')
+                good_edge.set('weight', '1.0')
+
+                if has_start:
+                    edges[(
+                        '%s,transition' % step.id,
+                        transition.to_step.id)] = good_edge
+                else:
+                    edges[(
+                        step.id,
+                        transition.to_step.id)] = good_edge
+
+            if not step.to_steps:
+                nodes[step.id].set('style', 'filled')
+                nodes[step.id].set('shape', 'circle')
+                nodes[step.id].set('fillcolor', '#a2daf4')
+
+        for step in the_process.all_steps:
+            for transition in step.from_steps:
+                if transition.is_readonly:
+                    continue
+                tr_fr, tr_to = transition.from_step.id, transition.to_step.id
+                if (tr_to, tr_fr) in edges:
+                    edges[(tr_to, tr_fr)].set('dir', 'both')
+                else:
+                    good_edge = pydot.Edge(
+                        nodes[transition.from_step.id],
+                        nodes[transition.to_step.id],
+                    )
+
+                    good_edge.set('constraint', '0')
+                    good_edge.set('weight', '0.2')
+
+                    edges[(tr_fr, tr_to)] = good_edge
+
+        nodes[the_process.first_step.id].set('style', 'filled')
+        nodes[the_process.first_step.id].set('shape', 'octagon')
+        nodes[the_process.first_step.id].set('fillcolor', '#0094d2')
+
+        for node in nodes.itervalues():
+            graph.add_node(node)
+
+        for edge in edges.itervalues():
+            graph.add_edge(edge)
+
+        data = graph.create(prog='dot', format='png')
+        return ('png', buffer(data), False, action_report.name)
+
+
+class GenerateGraphWizard(Wizard):
+    __name__ = 'process.generate_graph_wizard'
+
+    start_state = 'print_'
+
+    print_ = StateAction('process.report_generate_graph')
+
+    def transition_print_(self):
+        return 'end'
+
+    def do_print_(self, action):
+        return action, {
+            'id': Transaction().context.get('active_id'),
+            }
+
+

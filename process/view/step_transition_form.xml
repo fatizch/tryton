@@ -9,8 +9,10 @@
   <label name="kind" xalign="0"/>
   <field name="kind" colspan="3" readonly="1"/>
   <newline/>
+  <label name="is_readonly" xalign="0"/>
+  <field name="is_readonly"/>
   <label name="pyson" xalign="0"/>
-  <field name="pyson" colspan="3"/>
+  <field name="pyson"/>
   <newline/>
   <group id="methods" colspan="2" xexpand="1" xfill="1" yexpand="1" yfill="1">
     <separator name="methods"/>
