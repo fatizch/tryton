@@ -17,3 +17,11 @@ def register():
         Model,
         ProcessFramework,
         module='process', type_='model')
+
+    Pool.register(
+        GenerateGraphWizard,
+        module='process', type_='wizard')
+
+    Pool.register(
+        GenerateGraph,
+        module='process', type_='report')

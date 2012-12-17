@@ -1,23 +1,16 @@
 <?xml version="1.0"?>
 <tryton>
   <data>
-    
     <!-- Model override -->
-
     <record model="ir.ui.view" id="model_tree">
       <field name="model">ir.model</field>
       <field name="type">tree</field>
       <field name="inherit" ref="ir.model_view_tree"/>
       <field name="name">model_tree</field>
     </record>
-    
     <!-- Main Menu -->
-
     <menuitem name="Process Main Menu" id="process_menu_id" sequence="11"/>
-    
-    
     <!-- Process Desc entries -->
-    
     <record model="ir.ui.view" id="process_desc_form">
       <field name="model">process.process_desc</field>
       <field name="type">form</field>
@@ -28,9 +21,7 @@
       <field name="type">tree</field>
       <field name="name">process_desc_tree</field>
     </record>
-    
     <!-- Step Desc Entries -->
-    
     <record model="ir.ui.view" id="step_desc_form">
       <field name="model">process.step_desc</field>
       <field name="type">form</field>
@@ -41,9 +32,7 @@
       <field name="type">tree</field>
       <field name="name">step_desc_tree</field>
     </record>
-    
     <!-- Transitions entries -->
-    
     <record model="ir.ui.view" id="step_transition_form">
       <field name="model">process.step_transition</field>
       <field name="type">form</field>
@@ -54,9 +43,7 @@
       <field name="type">tree</field>
       <field name="name">step_transition_tree</field>
     </record>
-    
     <!-- Menu for process desc -->
-    
     <record model="ir.action.act_window" id="act_process_desc">
       <field name="name">Process Descriptors</field>
       <field name="res_model">process.process_desc</field>
@@ -71,11 +58,8 @@
       <field name="view" ref="process_desc_form"/>
       <field name="act_window" ref="act_process_desc"/>
     </record>
-    <menuitem parent="process_menu_id" sequence="10"
-      action="act_process_desc" id="menu_process_desc"/>
-    
+    <menuitem parent="process_menu_id" sequence="10" action="act_process_desc" id="menu_process_desc"/>
     <!-- Menu for step desc -->
-
     <record model="ir.action.act_window" id="act_step_desc">
       <field name="name">Step Descriptors</field>
       <field name="res_model">process.step_desc</field>
@@ -90,7 +74,22 @@
       <field name="view" ref="step_desc_form"/>
       <field name="act_window" ref="act_step_desc"/>
     </record>
-    <menuitem parent="process_menu_id" sequence="11"
-      action="act_step_desc" id="menu_step_desc"/>
+    <menuitem parent="process_menu_id" sequence="11" action="act_step_desc" id="menu_step_desc"/>
+    <!-- Visualization of process description -->
+    <record model="ir.action.report" id="report_generate_graph">
+      <field name="name">Graph</field>
+      <field name="model">process.process_desc</field>
+      <field name="report_name">process.graph_generation</field>
+    </record>
+    <record model="ir.action.wizard" id="generate_graph_wizard">
+      <field name="name">Graph</field>
+      <field name="wiz_name">process.generate_graph_wizard</field>
+      <field name="model">process.process_desc</field>
+    </record>
+    <record model="ir.action.keyword" id="generate_graph_wizard_keyword">
+      <field name="keyword">form_print</field>
+      <field name="model">process.process_desc,-1</field>
+      <field name="action" ref="generate_graph_wizard"/>
+    </record>
   </data>
 </tryton>
