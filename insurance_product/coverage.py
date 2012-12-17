@@ -12,8 +12,15 @@ from trytond.modules.insurance_product import EligibilityResultLine
 
 
 __all__ = [
-    'Coverage'
+    'Coverage',
+    'PackageCoverage',
     ]
+
+SUBSCRIPTION_BEHAVIOUR = [
+    ('mandatory', 'Mandatory'),
+    ('proposed', 'Proposed'),
+    ('optional', 'Optional'),
+]
 
 
 class Coverage(model.CoopSQL, Offered):
@@ -22,27 +29,54 @@ class Coverage(model.CoopSQL, Offered):
     __name__ = 'ins_product.coverage'
     _export_name = 'code'
 
-    insurer = fields.Many2One('party.insurer', 'Insurer')
+    insurer = fields.Many2One('party.insurer', 'Insurer',
+        states={
+            'invisible': Bool(Eval('is_package')),
+        },
+        depends=['is_package'])
     family = fields.Selection([('default', 'default')], 'Family',
-        required=True)
+        states={
+            'invisible': Bool(Eval('is_package')),
+            'required': Bool(~Eval('is_package')),
+        },
+        depends=['is_package'])
     benefits = fields.One2Many('ins_product.benefit', 'coverage', 'Benefits',
-        context={'start_date': Eval('start_date'),
-                 'currency_digits': Eval('currency_digits')},
-        states={'readonly': ~Bool(Eval('start_date'))},
+        context={
+            'start_date': Eval('start_date'),
+            'currency_digits': Eval('currency_digits'),
+        },
+        states={
+            'readonly': ~Bool(Eval('start_date')),
+            'invisible': Bool(Eval('is_package')),
+        },
         depends=['currency_digits'])
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
     coverage_amount_mgr = model.One2ManyDomain(
         'ins_product.business_rule_manager',
-        'offered', 'Coverage Amount Manager')
+        'offered', 'Coverage Amount Manager',
+        states={
+            'invisible': Bool(Eval('is_package')),
+        },)
     covered_dynamic_data_manager = model.One2ManyDomain(
         'ins_product.dynamic_data_manager',
         'master',
         'Covered Complementary Data Manager',
         context={
             'for_kind': 'sub_elem',
-            'schema_element_kind': 'sub_elem'},
+            'schema_element_kind': 'sub_elem',
+        },
         domain=[('kind', '=', 'sub_elem')],
         size=1)
+    subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
+        'Subscription Behaviour', sort=False)
+    is_package = fields.Boolean('Package')
+    coverages_in_package = fields.Many2Many('ins_product.package-coverage',
+        'package', 'coverage', 'Coverages In Package',
+        states={
+            'invisible': Bool(~Eval('is_package')),
+        },
+        depends=['is_package'],
+        domain=[('is_package', '=', False)])
 
     @classmethod
     def delete(cls, entities):
@@ -73,6 +107,14 @@ class Coverage(model.CoopSQL, Offered):
             cur_attr.context['for_family'] = Eval('family')
             cur_attr = copy.copy(cur_attr)
             setattr(cls, field_name, cur_attr)
+
+        cls.template = copy.copy(cls.template)
+        if not cls.template.domain:
+            cls.template.domain = []
+        cls.template.domain.append(('is_package', '=', Eval('is_package')))
+        if not cls.template.depends:
+            cls.template = []
+        cls.template.depends.append('is_package')
 
     def give_me_price(self, args):
         # This method is one of the core of the pricing system. It asks for the
@@ -266,3 +308,16 @@ class Coverage(model.CoopSQL, Offered):
             return []
         return self.covered_dynamic_data_manager[0].get_valid_schemas_ids(
             args['date']), []
+
+    @staticmethod
+    def default_subscription_behaviour():
+        return 'mandatory'
+
+
+class PackageCoverage(model.CoopSQL):
+    'Link Package Coverage'
+
+    __name__ = 'ins_product.package-coverage'
+
+    package = fields.Many2One('ins_product.coverage', 'Package')
+    coverage = fields.Many2One('ins_product.coverage', 'Coverage')

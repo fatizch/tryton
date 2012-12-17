@@ -9,13 +9,13 @@
     </group>
     <newline/>
     <group id="Rules" colspan="2" yexpand="1" yfill="1">
-        <field name="pricing_rule" mode="form"/>
-        <field name="eligibility_rule" mode="form"/>
-        <field name="benefit_rule" mode="form"/>
-        <field name="reserve_rule" mode="form"/>
-        <field name="coverage_amount_rule" mode="form" pre_validate="1"/>
-        <field name="deductible_rule" mode="form"/>
-        <field name="clause_rule" mode="form"/>
-        <field name="term_renewal_rule" mode="form"/>
+        <field name="pricing_rule" mode="form" expand_toolbar="0"/>
+        <field name="eligibility_rule" mode="form" expand_toolbar="0"/>
+        <field name="benefit_rule" mode="form" expand_toolbar="0"/>
+        <field name="reserve_rule" mode="form" expand_toolbar="0"/>
+        <field name="coverage_amount_rule" mode="form" pre_validate="1" expand_toolbar="0"/>
+        <field name="deductible_rule" mode="form" expand_toolbar="0"/>
+        <field name="clause_rule" mode="form" expand_toolbar="0"/>
+        <field name="term_renewal_rule" mode="form" expand_toolbar="0"/>
     </group>
 </form>

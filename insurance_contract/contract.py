@@ -488,7 +488,7 @@ class Option(model.CoopSQL, model.CoopView):
     # business rule of the offered coverage
     coverage = fields.Many2One('ins_product.coverage',
                                'Offered Coverage',
-                               readonly=True,
+#                               readonly=True,
                                required=True)
 
     # Effective date is the date at which the option "starts" to be effective :

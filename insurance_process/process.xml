@@ -48,8 +48,8 @@
 		
 		<!-- MenuItem allows us to add a subelement to an entrypoint of the
 			left part of the application (referenced by the 'parent') -->
-		<menuitem parent="menu_process" sequence="2" id="menu_suspended_process"
-			icon="tryton-list" action="suspended_process_form" />
+		<!--  <menuitem parent="menu_process" sequence="2" id="menu_suspended_process"
+			icon="tryton-list" action="suspended_process_form" /> -->
 
 		<record model="ir.action.wizard" id="resume_dummy_process">
             <field name="name">Resume Process</field>

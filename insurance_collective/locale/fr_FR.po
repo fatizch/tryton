@@ -59,8 +59,16 @@ msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_collective.enrollment:"
+msgid "Everything is good !"
+msgstr ""
+
+msgctxt "error:ins_collective.enrollment:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_collective.gbp_contract:"
+msgid "Everything is good !"
+msgstr ""
 
 msgctxt "error:ins_collective.gbp_contract:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -75,6 +83,10 @@ msgid "You can not have 2 business rules that overlaps!"
 msgstr "Vous ne pouvez pas avoir deux règles métiers qui se chevauchent"
 
 msgctxt "error:ins_collective.option:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_collective.package-coverage:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -120,7 +132,7 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:company.employee,college:"
 msgid "College"
-msgstr ""
+msgstr "Collège"
 
 msgctxt "field:ins_collective.benefit,benefit_mgr:"
 msgid "Benefit Manager"
@@ -518,6 +530,46 @@ msgctxt "field:ins_collective.clause_version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_collective.college_displayer,college:"
+msgid "College"
+msgstr "Collège"
+
+msgctxt "field:ins_collective.college_displayer,colleges:"
+msgid "Colleges"
+msgstr "Collèges"
+
+msgctxt "field:ins_collective.college_displayer,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:ins_collective.college_displayer,displayer:"
+msgid "Displayer"
+msgstr "Afficheur"
+
+msgctxt "field:ins_collective.college_displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.college_displayer,is_college:"
+msgid "College"
+msgstr "Collège"
+
+msgctxt "field:ins_collective.college_displayer,is_selected:"
+msgid "Selected"
+msgstr "Coché"
+
+msgctxt "field:ins_collective.college_displayer,name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_collective.college_selection,college_displayers:"
+msgid "Colleges"
+msgstr "Collèges"
+
+msgctxt "field:ins_collective.college_selection,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:ins_collective.coverage,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
@@ -533,6 +585,10 @@ msgstr "Code"
 msgctxt "field:ins_collective.coverage,coverage_amount_mgr:"
 msgid "Coverage Amount Manager"
 msgstr "Règles de Montant de Couverture"
+
+msgctxt "field:ins_collective.coverage,coverages_in_package:"
+msgid "Coverages In Package"
+msgstr "Garanties de la Formule"
 
 msgctxt "field:ins_collective.coverage,covered_dynamic_data_manager:"
 msgid "Covered Complementary Data Manager"
@@ -586,6 +642,10 @@ msgctxt "field:ins_collective.coverage,insurer:"
 msgid "Insurer"
 msgstr "Assureur"
 
+msgctxt "field:ins_collective.coverage,is_package:"
+msgid "Package"
+msgstr "Formule"
+
 msgctxt "field:ins_collective.coverage,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
@@ -613,6 +673,10 @@ msgstr "Nom"
 msgctxt "field:ins_collective.coverage,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
+
+msgctxt "field:ins_collective.coverage,subscription_behaviour:"
+msgid "Subscription Behaviour"
+msgstr "Comportement à la Souscription"
 
 msgctxt "field:ins_collective.coverage,summary:"
 msgid "Summary"
@@ -918,9 +982,21 @@ msgctxt "field:ins_collective.enrollment,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_collective.enrollment,cur_state:"
+msgid "Current State"
+msgstr ""
+
 msgctxt "field:ins_collective.enrollment,dynamic_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
+
+msgctxt "field:ins_collective.enrollment,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_collective.enrollment,gbp:"
+msgid "GBP Contract"
+msgstr "Contrat Collectif"
 
 msgctxt "field:ins_collective.enrollment,id:"
 msgid "ID"
@@ -941,6 +1017,10 @@ msgstr "Contrat Collectif"
 msgctxt "field:ins_collective.enrollment,options:"
 msgid "Options"
 msgstr "Garanties"
+
+msgctxt "field:ins_collective.enrollment,process_state:"
+msgid "Process State"
+msgstr ""
 
 msgctxt "field:ins_collective.enrollment,product:"
 msgid "Product"
@@ -967,8 +1047,8 @@ msgid "Status"
 msgstr "Statut"
 
 msgctxt "field:ins_collective.enrollment,subscriber:"
-msgid "Subscriber"
-msgstr "Souscripteur"
+msgid "Affiliated"
+msgstr "Affilié"
 
 msgctxt "field:ins_collective.enrollment,summary:"
 msgid "Summary"
@@ -1001,7 +1081,7 @@ msgstr "Statut"
 
 msgctxt "field:ins_collective.enrollment_process.option_selection,at_date:"
 msgid "At Date"
-msgstr ""
+msgstr "A la Date"
 
 msgctxt ""
 "field:ins_collective.enrollment_process.option_selection,dynamic_data:"
@@ -1142,6 +1222,14 @@ msgctxt "field:ins_collective.gbp_contract,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_collective.gbp_contract,cur_state:"
+msgid "Current State"
+msgstr ""
+
+msgctxt "field:ins_collective.gbp_contract,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
 msgctxt "field:ins_collective.gbp_contract,final_product:"
 msgid "Final Product"
 msgstr "Produit Final"
@@ -1153,6 +1241,10 @@ msgstr "ID"
 msgctxt "field:ins_collective.gbp_contract,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
+
+msgctxt "field:ins_collective.gbp_contract,process_state:"
+msgid "Process State"
+msgstr ""
 
 msgctxt "field:ins_collective.gbp_contract,rec_name:"
 msgid "Name"
@@ -1362,11 +1454,15 @@ msgstr "Créé par"
 
 msgctxt "field:ins_collective.option,end_date:"
 msgid "Effective_date"
-msgstr "Date d'Effet"
+msgstr "Date de Fin"
 
 msgctxt "field:ins_collective.option,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_collective.option,is_subscribed:"
+msgid "Subscribe ?"
+msgstr ""
 
 msgctxt "field:ins_collective.option,is_used:"
 msgid "Is Used"
@@ -1384,6 +1480,10 @@ msgctxt "field:ins_collective.option,start_date:"
 msgid "Effective Date"
 msgstr "Date d'Effet"
 
+msgctxt "field:ins_collective.option,status:"
+msgid "Status"
+msgstr "Statut"
+
 msgctxt "field:ins_collective.option,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -1392,9 +1492,45 @@ msgctxt "field:ins_collective.option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_collective.package-coverage,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:ins_collective.package-coverage,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.package-coverage,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.package-coverage,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.package-coverage,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_collective.package-coverage,package:"
+msgid "Package"
+msgstr "Formule"
+
+msgctxt "field:ins_collective.package-coverage,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_collective.package-coverage,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.package-coverage,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_collective.pricing_calculator,college:"
 msgid "College"
-msgstr ""
+msgstr "Collège"
 
 msgctxt "field:ins_collective.pricing_calculator,combine:"
 msgid "Combining Rule"
@@ -1587,6 +1723,10 @@ msgstr "Clausier"
 msgctxt "field:ins_collective.product,code:"
 msgid "Code"
 msgstr "Code"
+
+msgctxt "field:ins_collective.product,contract:"
+msgid "Contract"
+msgstr "Contrat"
 
 msgctxt "field:ins_collective.product,contract_generator:"
 msgid "Contract Number Generator"
@@ -1928,6 +2068,38 @@ msgctxt "field:ins_collective.term_renewal_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_collective.tranche_displayer,college:"
+msgid "College"
+msgstr "Collège"
+
+msgctxt "field:ins_collective.tranche_displayer,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:ins_collective.tranche_displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.tranche_displayer,rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:ins_collective.tranche_displayer,tranche:"
+msgid "Tranche"
+msgstr "Tranche"
+
+msgctxt "field:ins_collective.tranche_selection,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.tranche_selection,tranches:"
+msgid "Tranches"
+msgstr "Tranches"
+
+msgctxt "field:ins_collective.tranches_selection,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:party.college,code:"
 msgid "Code"
 msgstr "Code"
@@ -1958,7 +2130,7 @@ msgstr "Valeur"
 
 msgctxt "field:party.college,tranches:"
 msgid "Tranches"
-msgstr ""
+msgstr "Tranches"
 
 msgctxt "field:party.college,write_date:"
 msgid "Write Date"
@@ -1970,7 +2142,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:party.college_tranche,college:"
 msgid "College"
-msgstr ""
+msgstr "Collège"
 
 msgctxt "field:party.college_tranche,create_date:"
 msgid "Create Date"
@@ -2040,6 +2212,14 @@ msgctxt "model:ins_collective.clause_version,name:"
 msgid "Clause Version"
 msgstr "Version de Clause"
 
+msgctxt "model:ins_collective.college_displayer,name:"
+msgid "College Displayer"
+msgstr "Affichage du Collège"
+
+msgctxt "model:ins_collective.college_selection,name:"
+msgid "College Selection"
+msgstr "Sélection des Collèges"
+
 msgctxt "model:ins_collective.coverage,name:"
 msgid "Group Insurance Coverage"
 msgstr "Garantie Collective"
@@ -2066,8 +2246,8 @@ msgid "Eligibility Rule"
 msgstr "Règle d'Eligibilité"
 
 msgctxt "model:ins_collective.enrollment,name:"
-msgid "An enrollment represents the contract of an employee of a company"
-msgstr ""
+msgid "Enrollment"
+msgstr "Affiliation"
 
 msgctxt "model:ins_collective.enrollment_process.coverage_displayer,name:"
 msgid ""
@@ -2099,7 +2279,7 @@ msgid "The process state for the subscription process must have an abstract"
 msgstr ""
 
 msgctxt "model:ins_collective.gbp_subs_process.project,name:"
-msgid "This step should be the first one, as it asks the user which product"
+msgid "Subscriber Selection Step"
 msgstr ""
 
 msgctxt "model:ins_collective.generic_business_rule,name:"
@@ -2107,8 +2287,12 @@ msgid "Group Generic Business Rule"
 msgstr "Règle Métier"
 
 msgctxt "model:ins_collective.option,name:"
-msgid "Options on Enrollments are slightly different than standard options as"
-msgstr ""
+msgid "Option"
+msgstr "Garantie Souscrite"
+
+msgctxt "model:ins_collective.package-coverage,name:"
+msgid "Link Package Coverage"
+msgstr "Lien Formule Garantie"
 
 msgctxt "model:ins_collective.pricing_calculator,name:"
 msgid "Price Calculator"
@@ -2142,17 +2326,49 @@ msgctxt "model:ins_collective.term_renewal_rule,name:"
 msgid "Clause Rule"
 msgstr "Clause"
 
+msgctxt "model:ins_collective.tranche_displayer,name:"
+msgid "Tranche Displayer"
+msgstr "Affichage des Tranches"
+
+msgctxt "model:ins_collective.tranche_selection,name:"
+msgid "Tranches Selection"
+msgstr "Sélection des Tranches"
+
+msgctxt "model:ins_collective.tranches_selection,name:"
+msgid "Tranches Selection"
+msgstr "Sélection des Tranches"
+
 msgctxt "model:ir.action,name:act_coverage_form"
 msgid "Plan Coverages"
 msgstr "Garanties Collectives"
+
+msgctxt "model:ir.action,name:act_coverage_relate_form"
+msgid "Coverages"
+msgstr "Garanties"
 
 msgctxt "model:ir.action,name:act_enrollment_form"
 msgid "Enrollment"
 msgstr "Affiliation"
 
+msgctxt "model:ir.action,name:act_enrollment_relate_form"
+msgid "Enrollments"
+msgstr "Affiliations"
+
 msgctxt "model:ir.action,name:act_gbp_contract_form"
 msgid "GBP Contract"
 msgstr "Contrat Collectif"
+
+msgctxt "model:ir.action,name:act_option_form"
+msgid "option"
+msgstr "Garantie"
+
+msgctxt "model:ir.action,name:act_package_relate_form"
+msgid "Packages"
+msgstr "Formules"
+
+msgctxt "model:ir.action,name:act_pricing_rule_relate_form"
+msgid "Pricing"
+msgstr "Tarification"
 
 msgctxt "model:ir.action,name:act_product_form"
 msgid "Insurance Plan"
@@ -2173,6 +2389,10 @@ msgstr "Reprendre le Workflow"
 msgctxt "model:ir.action,name:resume_gbp_subs_process"
 msgid "Resume Process"
 msgstr "Reprendre le Workflow"
+
+msgctxt "model:ir.action,name:wizard_gbp_creation"
+msgid "GBP Tranche Calculation"
+msgstr "Saisie des Cotisations par Tranche"
 
 msgctxt "model:ir.ui.menu,name:None"
 msgid "Enrollment"
@@ -2224,7 +2444,7 @@ msgstr "Souscription Contrat Groupe"
 
 msgctxt "model:party.college,name:"
 msgid "College"
-msgstr ""
+msgstr "Collège"
 
 msgctxt "model:party.college_tranche,name:"
 msgid ""
@@ -2244,19 +2464,11 @@ msgstr "Indemnité Journalière"
 
 msgctxt "selection:ins_collective.benefit,template_behaviour:"
 msgid "Add"
-msgstr "Ajouter"
-
-msgctxt "selection:ins_collective.benefit,template_behaviour:"
-msgid "Override"
-msgstr "Remplacer"
+msgstr "Compléter"
 
 msgctxt "selection:ins_collective.benefit,template_behaviour:"
 msgid "Remove"
-msgstr "Supprimer"
-
-msgctxt "selection:ins_collective.benefit,template_behaviour:"
-msgid "Validate"
-msgstr "Valider"
+msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.benefit_rule,config_kind:"
 msgid "Rule Engine"
@@ -2276,35 +2488,19 @@ msgstr "Montant de Couverture"
 
 msgctxt "selection:ins_collective.benefit_rule,template_behaviour:"
 msgid "Add"
-msgstr "Ajouter"
-
-msgctxt "selection:ins_collective.benefit_rule,template_behaviour:"
-msgid "Override"
-msgstr "Remplacer"
+msgstr "Compléter"
 
 msgctxt "selection:ins_collective.benefit_rule,template_behaviour:"
 msgid "Remove"
-msgstr "Supprimer"
-
-msgctxt "selection:ins_collective.benefit_rule,template_behaviour:"
-msgid "Validate"
-msgstr "Valider"
+msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.business_rule_manager,template_behaviour:"
 msgid "Add"
-msgstr "Ajouter"
-
-msgctxt "selection:ins_collective.business_rule_manager,template_behaviour:"
-msgid "Override"
-msgstr "Remplacer"
+msgstr "Compléter"
 
 msgctxt "selection:ins_collective.business_rule_manager,template_behaviour:"
 msgid "Remove"
-msgstr "Supprimer"
-
-msgctxt "selection:ins_collective.business_rule_manager,template_behaviour:"
-msgid "Validate"
-msgstr "Valider"
+msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.clause_rule,config_kind:"
 msgid "Rule Engine"
@@ -2316,39 +2512,35 @@ msgstr "Simple"
 
 msgctxt "selection:ins_collective.clause_rule,template_behaviour:"
 msgid "Add"
-msgstr "Ajouter"
-
-msgctxt "selection:ins_collective.clause_rule,template_behaviour:"
-msgid "Override"
-msgstr "Remplacer"
+msgstr "Compléter"
 
 msgctxt "selection:ins_collective.clause_rule,template_behaviour:"
 msgid "Remove"
-msgstr "Supprimer"
-
-msgctxt "selection:ins_collective.clause_rule,template_behaviour:"
-msgid "Validate"
-msgstr "Valider"
+msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.coverage,family:"
 msgid "default"
 msgstr ""
 
-msgctxt "selection:ins_collective.coverage,template_behaviour:"
-msgid "Add"
-msgstr "Ajouter"
+msgctxt "selection:ins_collective.coverage,subscription_behaviour:"
+msgid "Mandatory"
+msgstr "Obligatoire"
+
+msgctxt "selection:ins_collective.coverage,subscription_behaviour:"
+msgid "Optional"
+msgstr "En Option"
+
+msgctxt "selection:ins_collective.coverage,subscription_behaviour:"
+msgid "Proposed"
+msgstr "Proposé par Défaut"
 
 msgctxt "selection:ins_collective.coverage,template_behaviour:"
-msgid "Override"
-msgstr "Remplacer"
+msgid "Add"
+msgstr "Compléter"
 
 msgctxt "selection:ins_collective.coverage,template_behaviour:"
 msgid "Remove"
-msgstr "Supprimer"
-
-msgctxt "selection:ins_collective.coverage,template_behaviour:"
-msgid "Validate"
-msgstr "Valider"
+msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.coverage_amount_rule,config_kind:"
 msgid "Rule Engine"
@@ -2368,19 +2560,11 @@ msgstr "Liste Calculé"
 
 msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
 msgid "Add"
-msgstr "Ajouter"
-
-msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
-msgid "Override"
-msgstr "Remplacer"
+msgstr "Compléter"
 
 msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
 msgid "Remove"
-msgstr "Supprimer"
-
-msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
-msgid "Validate"
-msgstr "Valider"
+msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.deductible_rule,config_kind:"
 msgid "Rule Engine"
@@ -2392,19 +2576,11 @@ msgstr "Simple"
 
 msgctxt "selection:ins_collective.deductible_rule,template_behaviour:"
 msgid "Add"
-msgstr "Ajouter"
-
-msgctxt "selection:ins_collective.deductible_rule,template_behaviour:"
-msgid "Override"
-msgstr "Remplacer"
+msgstr "Compléter"
 
 msgctxt "selection:ins_collective.deductible_rule,template_behaviour:"
 msgid "Remove"
-msgstr "Supprimer"
-
-msgctxt "selection:ins_collective.deductible_rule,template_behaviour:"
-msgid "Validate"
-msgstr "Valider"
+msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.dynamic_data_manager,kind:"
 msgid "Main"
@@ -2452,19 +2628,11 @@ msgstr "Personne"
 
 msgctxt "selection:ins_collective.eligibility_rule,template_behaviour:"
 msgid "Add"
-msgstr "Ajouter"
-
-msgctxt "selection:ins_collective.eligibility_rule,template_behaviour:"
-msgid "Override"
-msgstr "Remplacer"
+msgstr "Compléter"
 
 msgctxt "selection:ins_collective.eligibility_rule,template_behaviour:"
 msgid "Remove"
-msgstr "Supprimer"
-
-msgctxt "selection:ins_collective.eligibility_rule,template_behaviour:"
-msgid "Validate"
-msgstr "Valider"
+msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.enrollment,master:"
 msgid "Contract"
@@ -2497,8 +2665,23 @@ msgstr "Actif"
 
 msgctxt ""
 "selection:ins_collective.enrollment_process.coverage_displayer,status:"
+msgid "Hold"
+msgstr "Suspendre"
+
+msgctxt ""
+"selection:ins_collective.enrollment_process.coverage_displayer,status:"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt ""
+"selection:ins_collective.enrollment_process.coverage_displayer,status:"
 msgid "Refused"
 msgstr "Refusé"
+
+msgctxt ""
+"selection:ins_collective.enrollment_process.coverage_displayer,status:"
+msgid "Terminated"
+msgstr "Terminé"
 
 msgctxt ""
 "selection:ins_collective.enrollment_process.process_state,cur_action:"
@@ -2578,6 +2761,26 @@ msgctxt "selection:ins_collective.gbp_subs_process.process_state,cur_action:"
 msgid "suspend"
 msgstr "Suspendre"
 
+msgctxt "selection:ins_collective.option,status:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "selection:ins_collective.option,status:"
+msgid "Hold"
+msgstr "Suspendre"
+
+msgctxt "selection:ins_collective.option,status:"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt "selection:ins_collective.option,status:"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "selection:ins_collective.option,status:"
+msgid "Terminated"
+msgstr "Terminé"
+
 msgctxt "selection:ins_collective.pricing_calculator,key:"
 msgid "Covered Element Price"
 msgstr "Tarif par élément couvert"
@@ -2632,35 +2835,19 @@ msgstr "Annuel"
 
 msgctxt "selection:ins_collective.pricing_rule,template_behaviour:"
 msgid "Add"
-msgstr "Ajouter"
-
-msgctxt "selection:ins_collective.pricing_rule,template_behaviour:"
-msgid "Override"
-msgstr "Remplacer"
+msgstr "Compléter"
 
 msgctxt "selection:ins_collective.pricing_rule,template_behaviour:"
 msgid "Remove"
-msgstr "Supprimer"
-
-msgctxt "selection:ins_collective.pricing_rule,template_behaviour:"
-msgid "Validate"
-msgstr "Valider"
+msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.product,template_behaviour:"
 msgid "Add"
-msgstr "Ajouter"
-
-msgctxt "selection:ins_collective.product,template_behaviour:"
-msgid "Override"
-msgstr "Remplacer"
+msgstr "Compléter"
 
 msgctxt "selection:ins_collective.product,template_behaviour:"
 msgid "Remove"
-msgstr "Supprimer"
-
-msgctxt "selection:ins_collective.product,template_behaviour:"
-msgid "Validate"
-msgstr "Valider"
+msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.reserve_rule,config_kind:"
 msgid "Rule Engine"
@@ -2672,19 +2859,11 @@ msgstr "Simple"
 
 msgctxt "selection:ins_collective.reserve_rule,template_behaviour:"
 msgid "Add"
-msgstr "Ajouter"
-
-msgctxt "selection:ins_collective.reserve_rule,template_behaviour:"
-msgid "Override"
-msgstr "Remplacer"
+msgstr "Compléter"
 
 msgctxt "selection:ins_collective.reserve_rule,template_behaviour:"
 msgid "Remove"
-msgstr "Supprimer"
-
-msgctxt "selection:ins_collective.reserve_rule,template_behaviour:"
-msgid "Validate"
-msgstr "Valider"
+msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.schema_element,kind:"
 msgid "On Contract"
@@ -2760,19 +2939,11 @@ msgstr "Annuel"
 
 msgctxt "selection:ins_collective.term_renewal_rule,template_behaviour:"
 msgid "Add"
-msgstr "Ajouter"
-
-msgctxt "selection:ins_collective.term_renewal_rule,template_behaviour:"
-msgid "Override"
-msgstr "Remplacer"
+msgstr "Compléter"
 
 msgctxt "selection:ins_collective.term_renewal_rule,template_behaviour:"
 msgid "Remove"
-msgstr "Supprimer"
-
-msgctxt "selection:ins_collective.term_renewal_rule,template_behaviour:"
-msgid "Validate"
-msgstr "Valider"
+msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.term_renewal_rule,term_date_choice:"
 msgid "At subscription Time"
@@ -2788,15 +2959,11 @@ msgstr "Contrat"
 
 msgctxt "view:ins_collective.gbp_contract:"
 msgid "GBP Administration"
-msgstr ""
+msgstr "Administration"
 
 msgctxt "view:ins_collective.gbp_contract:"
-msgid "GBP Product"
-msgstr "Produit Collectif"
-
-msgctxt "view:ins_collective.gbp_contract:"
-msgid "contract"
-msgstr "contrat"
+msgid "Product"
+msgstr "Produit"
 
 msgctxt "view:ins_collective.gbp_subs_process.extension_gbp:"
 msgid "GBP Subscription Process - GBP"
@@ -2805,6 +2972,10 @@ msgstr "Souscription de Contrat Groupe"
 msgctxt "view:ins_collective.gbp_subs_process.project:"
 msgid "GBP Subscription Process - Project Step"
 msgstr ""
+
+msgctxt "view:ins_collective.product:"
+msgid "GBP Administration"
+msgstr "Administration"
 
 msgctxt ""
 "wizard_button:ins_collective.enrollment_process,option_selection,steps_cancel:"
@@ -2947,3 +3118,21 @@ msgstr "Précédent"
 msgctxt "wizard_button:ins_collective.gbp_subs_process,project,steps_suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
+
+msgctxt ""
+"wizard_button:ins_collective.gbp_wizard,college_sel,calculate_tranches:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "wizard_button:ins_collective.gbp_wizard,college_sel,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:ins_collective.gbp_wizard,display_tranches,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:ins_collective.gbp_wizard,display_tranches,validate_tranches:"
+msgid "Complete"
+msgstr "Terminer"

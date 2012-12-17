@@ -15,10 +15,8 @@ msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:ins_contract.contract,extension_life:"
-msgid ""
-msgstr ""
-"[[\"DC\",\"Décès\"], [\"PTIA\", \"PTIA\"], [\"INCAP\", \"Incapacité\"], "
-"[\"INVAL\", \"Invalidité\"], [\"CHOM\", \"Chômage\"]]"
+msgid "Life"
+msgstr "Prévoyance"
 
 msgctxt "field:life_contract.covered_data,coverage_amount:"
 msgid "Coverage Amount"
@@ -63,6 +61,10 @@ msgstr "Nom"
 msgctxt "field:life_contract.covered_data,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
+
+msgctxt "field:life_contract.covered_data,status:"
+msgid "Status"
+msgstr "Statut"
 
 msgctxt "field:life_contract.covered_data,write_date:"
 msgid "Write Date"
@@ -210,7 +212,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:life_contract.extension_life_state,at_date:"
 msgid "At Date"
-msgstr ""
+msgstr "A la Date"
 
 msgctxt "field:life_contract.extension_life_state,covered_elements:"
 msgid "Covered Elements"
@@ -255,6 +257,26 @@ msgstr ""
 msgctxt "model:life_contract.extension_life_state,name:"
 msgid "Life Extension"
 msgstr "Prévoyance"
+
+msgctxt "selection:life_contract.covered_data,status:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "selection:life_contract.covered_data,status:"
+msgid "Hold"
+msgstr "Suspendre"
+
+msgctxt "selection:life_contract.covered_data,status:"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt "selection:life_contract.covered_data,status:"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "selection:life_contract.covered_data,status:"
+msgid "Terminated"
+msgstr "Terminé"
 
 msgctxt "selection:life_contract.covered_desc,the_kind:"
 msgid "data"

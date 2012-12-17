@@ -1,22 +1,20 @@
 <?xml version="1.0"?>
 <form>
     <group id="Administrative data">
-        <label name="contract_number"/>
-        <field name="contract_number"/>
-        <label name="status"/>
-        <field name="status"/>
-        <label name="start_date"/>
-        <field name="start_date"/>
-        <newline/>
         <label name="subscriber"/>
         <field name="subscriber"/>
-        <label name="final_product"/>
-        <field name="final_product"/>
+        <label name="status"/>
+        <field name="status"/>
     </group>
     <notebook colspan="4">
-        <page id="GBP Administration" string="GBP Administration">
+        <page id='product' string="Product">
+            <field name="final_product" mode="form" expand_toolbar="0"/>
+        </page>
+        <page id='gbp' string="GBP Administration">
             <label name="contact"/>
             <field name="contact"/>
+            <label name="contract_number"/>
+            <field name="contract_number"/>
         </page>
     </notebook>
 </form>

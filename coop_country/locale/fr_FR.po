@@ -4,8 +4,8 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "model:ir.action,name:act_zipcode_form"
 msgid "ZipCode"
-msgstr ""
+msgstr "Code Postal"
 
 msgctxt "model:ir.ui.menu,name:menu_zipcode_form"
 msgid "ZipCode"
-msgstr ""
+msgstr "Code Postal"

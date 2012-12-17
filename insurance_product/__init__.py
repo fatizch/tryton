@@ -15,6 +15,7 @@ def register():
         BusinessRuleManager,
         Offered,
         Coverage,
+        PackageCoverage,
         Product,
         ProductOptionsCoverage,
         GenericBusinessRule,

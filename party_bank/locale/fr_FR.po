@@ -230,6 +230,10 @@ msgctxt "view:company.employee:"
 msgid "General"
 msgstr "Général"
 
+msgctxt "view:party.bank_account_number:"
+msgid "Account Number"
+msgstr "Numéro de Compte"
+
 msgctxt "view:party.party:"
 msgid "Bank accounts"
 msgstr "Comptes Bancaires"

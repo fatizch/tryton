@@ -8,7 +8,7 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:party.contact_mechanism:"
 msgid "Invalid Email !"
-msgstr ""
+msgstr "e-Mail Invalide"
 
 msgctxt "error:party.generic_actor:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -432,7 +432,7 @@ msgstr "Mis à jour par"
 
 msgctxt "model:country.zipcode,name:"
 msgid "ZipCode"
-msgstr ""
+msgstr "Code Postal"
 
 msgctxt "model:ir.action,name:None"
 msgid "Party"
@@ -468,7 +468,7 @@ msgstr "Personne"
 
 msgctxt "model:ir.ui.menu,name:None"
 msgid "Actors"
-msgstr ""
+msgstr "Tiers"
 
 msgctxt "model:ir.ui.menu,name:None"
 msgid "Party"

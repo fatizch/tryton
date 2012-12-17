@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<form>
+    <label name="gbp"/>
+    <field name="gbp"/>
+    <label name="product"/>
+    <field name="product"/>
+    <newline/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <newline/>
+    <label name="subscriber"/>
+    <field name="subscriber"/>
+    <field name="options" colspan="4" yfill="1"/>
+</form>

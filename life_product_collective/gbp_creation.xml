@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.action.wizard" id="wizard_gbp_creation">
+            <field name="name">GBP Tranche Calculation</field>
+            <field name="wiz_name">ins_collective.gbp_wizard</field>
+            <field name="model">ins_collective.gbp_contract</field>
+        </record>
+        <record model="ir.ui.view" id="gbp_college_selection_form">
+            <field name="model">ins_collective.college_selection</field>
+            <field name="type">form</field>
+            <field name="name">gbp_creation_college_selection_form</field>
+        </record>
+        <record model="ir.ui.view" id="gbp_college_displayer_tree">
+            <field name="model">ins_collective.college_displayer</field>
+            <field name="type">tree</field>
+            <field name="name">gbp_creation_college_displayer_tree</field>
+            <field name="field_childs">colleges</field>
+        </record>
+        <record model="ir.action.keyword" id="act_wizard_gbp_creation">
+            <field name="keyword">form_action</field>
+            <field name="model">ins_collective.gbp_contract,-1</field>
+            <field name="action" ref="wizard_gbp_creation"/>
+        </record>
+        <record model="ir.ui.view" id="gbp_tranche_selection_form">
+            <field name="model">ins_collective.tranche_selection</field>
+            <field name="type">form</field>
+            <field name="name">gbp_creation_tranche_selection_form</field>
+        </record>
+        <record model="ir.ui.view" id="gbp_tranche_displayer_tree">
+            <field name="model">ins_collective.tranche_displayer</field>
+            <field name="type">tree</field>
+            <field name="name">gbp_creation_tranche_displayer_tree</field>
+        </record>
+    </data>
+</tryton>

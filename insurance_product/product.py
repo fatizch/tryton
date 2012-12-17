@@ -1,5 +1,6 @@
 #-*- coding:utf-8 -*-
 import copy
+import functools
 
 from trytond.model import fields
 from trytond.pool import Pool
@@ -24,10 +25,8 @@ CONFIG_KIND = [
     ]
 
 TEMPLATE_BEHAVIOUR = [
-    ('override', 'Override'),
-    ('add', 'Add'),
-    ('remove', 'Remove'),
-    ('validate', 'Validate'),
+    ('pass', 'Add'),
+    ('override', 'Remove'),
     ]
 
 DEF_CUR_DIG = 2
@@ -54,7 +53,7 @@ class Templated(object):
         if hasattr(self, 'template') and self.template:
             if not hasattr(self, 'template_behaviour') or \
                     not self.template_behaviour:
-                return {'template_behaviour': 'override'}
+                return {'template_behaviour': 'pass'}
         else:
             return {'template_behaviour': None}
 
@@ -124,12 +123,16 @@ class Offered(model.CoopView, utils.GetResult, Templated):
             if not hasattr(cur_attr, 'model_name'):
                 continue
             cur_attr.domain = [('business_rules.kind', '=',
-                    '%s.%s_rule' %
-                        (utils.get_module_name(cls),
-                        field_name.split('_mgr')[0]))]
+                     '%s.%s_rule' %
+                         (utils.get_module_name(cls),
+                         field_name.split('_mgr')[0]))]
             cur_attr.size = 1
             cur_attr = copy.copy(cur_attr)
             setattr(cls, field_name, cur_attr)
+
+            #setting default method for all brm
+#            setattr(cls, 'default_%s' % field_name, functools.partial(
+#                cls.default_generic_brm, name=field_name))
 
         cls.template = copy.copy(cls.template)
         cls.template.model_name = cls.__name__
@@ -172,6 +175,11 @@ class Offered(model.CoopView, utils.GetResult, Templated):
         for se in good_se:
             res[se.technical_name] = se.get_default_value(None)
         return res
+
+#    @classmethod
+#    def default_generic_brm(cls, name):
+#        res = utils.create_inst_with_default_val(cls, name)
+#        return res
 
 
 class Product(model.CoopSQL, Offered):
@@ -319,7 +327,7 @@ class Product(model.CoopSQL, Offered):
         good_family = self.give_me_families(args)[0][0]
         return good_family.get_step_model(args['step_name']), []
 
-    def give_me_new_contract_number(self, args):
+    def give_me_new_contract_number(self, args=None):
         return self.contract_generator.get_id(self.contract_generator.id)
 
     def give_me_dynamic_data_ids_aggregate(self, args):
@@ -344,10 +352,6 @@ class Product(model.CoopSQL, Offered):
                 return self.give_me_dynamic_data_ids(args)
             dd_args['path'] = 'all'
         return self.give_me_dynamic_data_ids_aggregate(args)
-
-    @classmethod
-    def search_options(cls, name, clause):
-        super(Product, cls).search_options(name, clause)
 
 
 class ProductOptionsCoverage(model.CoopSQL):

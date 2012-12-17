@@ -257,5 +257,13 @@ def set_currency(cfg_dict):
         cfg_dict['currency'] = currencies[0]
     return cfg_dict
 
+
+def update_views(test_config_file):
+    cfg = get_config(get_test_cfg(test_config_file))
+    View = Model.get('ir.ui.view')
+    View.write([x.id for x in View.find([])], {}, {})
+
+
 if __name__ == '__main__':
+    #update_views('test_case.cfg')
     launch_proteus_test_case(os.path.join(DIR, 'test_case.cfg'))

@@ -4,15 +4,23 @@
         <form string="Coverage"/>
     </xpath>
     <xpath expr="/form/notebook/page[@id='managers']" position="after">
-        <page string="Benefits" id="benefits">
+        <page string="Benefits" id="benefits"
+            states="{'invisible': Bool(Eval('is_package'))}">
             <field name="benefits"/>
+        </page>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='managers']" position="before">
+        <page string="Coverages" id="package"
+            states="{'invisible': Bool(~Eval('is_package'))}">
+            <field name="coverages_in_package"/>
         </page>
     </xpath>
     <xpath
         expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']"
         position="before">
-        <page string="Coverage Amount" id="coverage_amount">
-            <field name="coverage_amount_mgr" mode="form"/>
+        <page string="Coverage Amount" id="coverage_amount"
+            states="{'invisible': Bool(Eval('is_package'))}">
+            <field name="coverage_amount_mgr" mode="form" expand_toolbar="0"/>
         </page>
     </xpath>
     <xpath
@@ -37,9 +45,14 @@
         <newline/>
         <label name="insurer"/>
         <field name="insurer" widget="selection"/>
+        <newline/>
+        <label name="subscription_behaviour"/>
+        <field name="subscription_behaviour"/>
+        <newline/>
     </xpath>
     <xpath expr="/form/label[@name='template']" position="before">
         <label name="family"/>
         <field name="family" xexpand="1"/>
+        <newline/>
     </xpath>
 </data>

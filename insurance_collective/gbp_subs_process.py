@@ -122,7 +122,7 @@ class ExtensionGBPState(CoopStep):
     def post_step_update_contract(wizard):
         contract = WithAbstract.get_abstract_objects(wizard, 'for_contract')
         contract.contact = wizard.extension_gbp.contact
-        contract.final_product = wizard.extension_gbp.final_product[0]
+        contract.final_product[0] = wizard.extension_gbp.final_product[0]
         WithAbstract.save_abstract_objects(wizard, ('for_contract', contract))
         return (True, [])
 

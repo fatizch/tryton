@@ -2,6 +2,9 @@
 import copy
 
 from trytond.model import fields
+from trytond.pyson import Eval
+from trytond.transaction import Transaction
+from trytond.pool import Pool
 
 from trytond.modules.insurance_product import product, business_rule, benefit
 from trytond.modules.insurance_product import coverage, clause
@@ -18,13 +21,47 @@ from trytond.modules.insurance_product import dynamic_data
 from trytond.modules.coop_utils import utils
 from trytond.modules.insurance_product.business_rule import pricing_rule
 
+IND_TO_COLL = {
+    'ins_product.benefit': 'ins_collective.benefit',
+    'ins_product.benefit_rule': 'ins_collective.benefit_rule',
+    'ins_product.business_rule_manager':\
+         'ins_collective.business_rule_manager',
+    'ins_product.clause': 'ins_collective.clause',
+    'ins_product.clause_relation': 'ins_collective.clause_relation',
+    'ins_product.clause_rule': 'ins_collective.clause_rule',
+    'ins_product.clause_version': 'ins_collective.clause_version',
+    'ins_product.coverage': 'ins_collective.coverage',
+    'ins_product.coverage_amount_rule': 'ins_collective.coverage_amount_rule',
+    'ins_product.deductible_rule': 'ins_collective.deductible_rule',
+    'ins_product.dynamic_data_manager': 'ins_collective.dynamic_data_manager',
+    'ins_product.eligibility_relation_kind':\
+        'ins_collective.eligibility_relation_kind',
+    'ins_product.eligibility_rule': 'ins_collective.eligibility_rule',
+    'ins_product.generic_business_rule':\
+        'ins_collective.generic_business_rule',
+    'ins_product.pricing_calculator': 'ins_collective.pricing_calculator',
+    'ins_product.pricing_data': 'ins_collective.pricing_data',
+    'ins_product.pricing_rule': 'ins_collective.pricing_rule',
+    'ins_product.product': 'ins_collective.product',
+    'ins_product.reserve_rule': 'ins_collective.reserve_rule',
+    'ins_product.schema_element': 'ins_collective.schema_element',
+    'ins_product.schema_element_relation':\
+        'ins_collective.schema_element_relation',
+    'ins_product.term_renewal_rule': 'ins_collective.term_renewal_rule',
+
+    'ins_contract.contract': 'ins_collective.enrollment',
+    'ins_contract.option': 'ins_collective.option',
+    'ins_product.package-coverage': 'ins_collective.package-coverage',
+}
+
 
 class GroupRoot(object):
 
     @classmethod
     def __setup__(cls):
         cls._table = None
-        utils.change_relation_links(cls, 'ins_product', 'ins_collective')
+
+        utils.change_relation_links(cls, convert_dict=IND_TO_COLL)
         super(GroupRoot, cls).__setup__()
 
 
@@ -33,12 +70,57 @@ class GroupInsurancePlan(GroupRoot, product.Product):
 
     __name__ = 'ins_collective.product'
 
+    contract = fields.Many2One('ins_collective.gbp_contract', 'Contract',
+        ondelete='CASCADE')
+
     @classmethod
     def __setup__(cls):
         super(GroupInsurancePlan, cls).__setup__()
         field = fields.One2Many('ins_collective.coverage',
             'product', 'Options')
         cls.options = field
+
+        cls.contract_generator = copy.copy(cls.contract_generator)
+        cls.contract_generator.required = False
+        cls.contract_generator.states['required'] = ~Eval('template')
+        cls.contract_generator.depends = ['template']
+
+        cls.template = copy.copy(cls.template)
+        cls.template.on_change = ['template', 'options', 'start_date']
+
+        cls.code = copy.copy(cls.code)
+
+    def on_change_template(self):
+        res = super(GroupInsurancePlan, self).on_change_template()
+        if not self.template:
+            res['options'] = []
+        else:
+            res['code'] = self.template.code
+            res['name'] = self.template.name
+            options = []
+            for option in self.template.options:
+                clone_option = utils.create_inst_with_default_val(
+                    self.__class__, 'options')[0]
+                clone_option['code'] = option.code
+                clone_option['name'] = option.name
+                clone_option['template'] = option.id
+                if option.family:
+                    clone_option['family'] = option.family
+                clone_option['is_package'] = option.is_package
+                #pricing_rules = {'add', [{'start_date': self.start_date}]}
+                #clone_option['pricing_mgr'] = [{}]
+#                benefits = []
+#                for benefit in option.benefits:
+#                    clone_benefit = utils.create_inst_with_default_val(
+#                        option.__class__, 'benefits')[0]
+#                    clone_benefit['code'] = benefit.code
+#                    clone_benefit['name'] = benefit.name
+#                    clone_benefit['template'] = benefit.id
+#                    benefits.append(clone_benefit)
+#                clone_option['benefits'] = {'add': [benefits]}
+                options.append(clone_option)
+            res['options'] = {'add': options}
+        return res
 
 
 class GroupInsuranceCoverage(GroupRoot, coverage.Coverage):
@@ -48,6 +130,12 @@ class GroupInsuranceCoverage(GroupRoot, coverage.Coverage):
 
     product = fields.Many2One('ins_collective.product', 'Product',
         ondelete='CASCADE')
+
+
+class GroupPackageCoverage(GroupRoot, coverage.PackageCoverage):
+    'Link Package Coverage'
+
+    __name__ = 'ins_collective.package-coverage'
 
 
 class GroupBusinessRuleManager(GroupRoot, business_rule.BusinessRuleManager):

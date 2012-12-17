@@ -19,6 +19,10 @@ msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_contract.contract:"
+msgid "Everything is good !"
+msgstr ""
+
+msgctxt "error:ins_contract.contract:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -374,9 +378,17 @@ msgctxt "field:ins_contract.contract,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_contract.contract,cur_state:"
+msgid "Current State"
+msgstr ""
+
 msgctxt "field:ins_contract.contract,dynamic_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
+
+msgctxt "field:ins_contract.contract,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
 
 msgctxt "field:ins_contract.contract,extension_life:"
 msgid "Life Extension"
@@ -397,6 +409,10 @@ msgstr "Maître"
 msgctxt "field:ins_contract.contract,options:"
 msgid "Options"
 msgstr "Garanties"
+
+msgctxt "field:ins_contract.contract,process_state:"
+msgid "Process State"
+msgstr ""
 
 msgctxt "field:ins_contract.contract,product:"
 msgid "Product"
@@ -478,6 +494,10 @@ msgctxt "field:ins_contract.covered_data,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
+msgctxt "field:ins_contract.covered_data,status:"
+msgid "Status"
+msgstr "Statut"
+
 msgctxt "field:ins_contract.covered_element,covered_data:"
 msgid "Coverage Data"
 msgstr "Coverage Data"
@@ -524,7 +544,7 @@ msgstr "Créé par"
 
 msgctxt "field:ins_contract.option,end_date:"
 msgid "Effective_date"
-msgstr "Date d'Effet"
+msgstr "Date de Fin"
 
 msgctxt "field:ins_contract.option,id:"
 msgid "ID"
@@ -545,6 +565,10 @@ msgstr "Nom"
 msgctxt "field:ins_contract.option,start_date:"
 msgid "Effective Date"
 msgstr "Date d'Effet"
+
+msgctxt "field:ins_contract.option,status:"
+msgid "Status"
+msgstr "Statut"
 
 msgctxt "field:ins_contract.option,write_date:"
 msgid "Write Date"
@@ -712,7 +736,7 @@ msgstr "Valeur"
 
 msgctxt "field:ins_contract.subs_process.option_selection,at_date:"
 msgid "At Date"
-msgstr ""
+msgstr "A la Date"
 
 msgctxt "field:ins_contract.subs_process.option_selection,dynamic_data:"
 msgid "Complementary Data"
@@ -839,8 +863,8 @@ msgid "Bill Line"
 msgstr "Ligne de Cotisation"
 
 msgctxt "model:ins_contract.billing_manager,name:"
-msgid "This object will manage all billing-related content on the contract."
-msgstr ""
+msgid "Billing Manager"
+msgstr "Cotisation"
 
 msgctxt "model:ins_contract.billing_process.bill_display,name:"
 msgid "Bill Displayer"
@@ -859,8 +883,8 @@ msgid "Billing Process State"
 msgstr ""
 
 msgctxt "model:ins_contract.broker_manager,name:"
-msgid "This entity will be used to manage the relation between the contract"
-msgstr ""
+msgid "Broker Manager"
+msgstr "Courtier"
 
 msgctxt "model:ins_contract.contract,name:"
 msgid "Contract"
@@ -879,13 +903,12 @@ msgid "Covered Element"
 msgstr "Elément Couvert"
 
 msgctxt "model:ins_contract.generic_extension,name:"
-msgid "This class is the mother class of all product-specific extensions."
-msgstr ""
+msgid "Mother class for extensions"
+msgstr "Extension"
 
 msgctxt "model:ins_contract.option,name:"
-msgid ""
-"This class is an option, that is a global coverage which will be applied"
-msgstr ""
+msgid "Coverage"
+msgstr "Garantie"
 
 msgctxt "model:ins_contract.price_line,name:"
 msgid "Price Line"
@@ -1044,8 +1067,60 @@ msgid "Active"
 msgstr "Actif"
 
 msgctxt "selection:ins_contract.coverage_displayer,status:"
+msgid "Hold"
+msgstr "Suspendre"
+
+msgctxt "selection:ins_contract.coverage_displayer,status:"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt "selection:ins_contract.coverage_displayer,status:"
 msgid "Refused"
 msgstr "Refusé"
+
+msgctxt "selection:ins_contract.coverage_displayer,status:"
+msgid "Terminated"
+msgstr "Terminé"
+
+msgctxt "selection:ins_contract.covered_data,status:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "selection:ins_contract.covered_data,status:"
+msgid "Hold"
+msgstr "Suspendre"
+
+msgctxt "selection:ins_contract.covered_data,status:"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt "selection:ins_contract.covered_data,status:"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "selection:ins_contract.covered_data,status:"
+msgid "Terminated"
+msgstr "Terminé"
+
+msgctxt "selection:ins_contract.option,status:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "selection:ins_contract.option,status:"
+msgid "Hold"
+msgstr "Suspendre"
+
+msgctxt "selection:ins_contract.option,status:"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt "selection:ins_contract.option,status:"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "selection:ins_contract.option,status:"
+msgid "Terminated"
+msgstr "Terminé"
 
 msgctxt "selection:ins_contract.price_line,kind:"
 msgid "Base"
@@ -1148,14 +1223,6 @@ msgid "Contract"
 msgstr "Contrat"
 
 msgctxt "view:ins_contract.contract:"
-msgid "Dynamic Data"
-msgstr ""
-
-msgctxt "view:ins_contract.contract:"
-msgid "Life Extension"
-msgstr "Prévoyance"
-
-msgctxt "view:ins_contract.contract:"
 msgid "Options"
 msgstr "Garanties"
 
@@ -1174,10 +1241,6 @@ msgstr "Données de Couverture"
 msgctxt "view:ins_contract.covered_data:"
 msgid "Data"
 msgstr "Données"
-
-msgctxt "view:ins_contract.covered_data:"
-msgid "data"
-msgstr ""
 
 msgctxt "view:ins_contract.covered_element:"
 msgid "Covered Element"

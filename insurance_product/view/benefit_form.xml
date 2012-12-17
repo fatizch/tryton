@@ -7,10 +7,10 @@
         expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']"
         position="before">
         <page string="Benefit" id="benefit">
-            <field name="benefit_mgr" colspan="4" mode="form"/>
+            <field name="benefit_mgr" colspan="4" mode="form" expand_toolbar="0"/>
         </page>
         <page string="Reserve" id="reserve">
-            <field name="reserve_mgr" colspan="4" mode="form"/>
+            <field name="reserve_mgr" colspan="4" mode="form" expand_toolbar="0"/>
         </page>
     </xpath>
     <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']" position="inside">

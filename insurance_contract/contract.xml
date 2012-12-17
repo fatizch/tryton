@@ -156,30 +156,14 @@
         <record model="ir.ui.view" id="option_view_tree">
             <field name="model">ins_contract.option</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">                 
-					<![CDATA[                 
-					<tree string="option">
-					<field name="contract"/>
-					<field name="coverage"/>
-					<field name="start_date"/>
-					<field name="end_date"/>
-					</tree>                 ]]>
-            </field>
+            <field name="name">option_tree</field>
         </record>
 
         <!-- form view -->
         <record model="ir.ui.view" id="option_view_form">
             <field name="model">ins_contract.option</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-					 <![CDATA[
-					 <form string="option">
-					 <label name="contract"/>
-					 <field name="contract" xexpand="1"/>
-					 <label name="coverage"/>
-					 <field name="coverage" xexpand="1"/>
-					 </form>               ]]>
-            </field>
+            <field name="name">option_form</field>
         </record>
 
         <!-- View for the main menu and the event -->

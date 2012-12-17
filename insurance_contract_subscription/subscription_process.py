@@ -418,7 +418,6 @@ class Option():
             return {'status': 'refused'}
 
     def get_status_selection(self, name):
-        print self.status
         if self.status == 'active':
             return 'active'
         return 'refused'
@@ -426,7 +425,7 @@ class Option():
     @classmethod
     def default_status_selection(cls):
         return 'active'
-    
+
     @classmethod
     def setter_void(cls, contracts, name, values):
         pass

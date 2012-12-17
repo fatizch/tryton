@@ -111,15 +111,19 @@ class ExportImportMixin(object):
             else:
                 new_values[field_name] = value
 
-        records = cls.search([(cls._export_name, '=', values['_export_name'])])
-        if records:
-            if len(records) > 1:
-                pass
-                print 'Too many values found for class %s (%s)' % (
-                    cls._export_name, values['_export_name'])
-            record, = records
-        else:
+        if cls.recreate_rather_than_update():
             record = None
+        else:
+            records = cls.search(
+                [(cls._export_name, '=', values['_export_name'])])
+            if records:
+                if len(records) > 1:
+                    pass
+                    print 'Too many values found for class %s (%s)' % (
+                        cls._export_name, values['_export_name'])
+                record, = records
+            else:
+                record = None
 
         for field_name, value in lines.iteritems():
             field = cls._fields[field_name]
@@ -177,6 +181,10 @@ class ExportImportMixin(object):
         else:
             record = cls.create(new_values)
         return record
+
+    @classmethod
+    def recreate_rather_than_update(cls):
+        return False
 
 
 class CoopSQL(ExportImportMixin, ModelSQL):
@@ -256,6 +264,22 @@ class CoopSQL(ExportImportMixin, ModelSQL):
                 cls.raise_user_error(error, error_args)
 
         super(CoopSQL, cls).delete(instances)
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        if (hasattr(cls, 'code')
+            and cls.search([('code',) + clause[1:]], limit=1)):
+            return [('code',) + clause[1:]]
+        return [(cls._rec_name,) + clause[1:]]
+
+    def get_rec_name(self, name):
+        res = ''
+        if hasattr(self, 'code'):
+            res = '%s ' % getattr(self, 'code')
+        res2 = super(CoopSQL, self).get_rec_name(name)
+        if res2 and res2 != '':
+            res += res2
+        return res
 
 
 class CoopView(ModelView):

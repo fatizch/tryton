@@ -9,8 +9,10 @@ from .enrollment_process import *
 def register():
     Pool.register(
         GroupBusinessRuleManager,
+        GBPContract,
         GroupInsurancePlan,
         GroupInsuranceCoverage,
+        GroupPackageCoverage,
         GroupGenericBusinessRule,
         GroupPricingRule,
         GroupPriceCalculator,
@@ -30,7 +32,6 @@ def register():
         GroupSchemaElement,
         GroupSchemaElementRelation,
         GroupDeductibleRule,
-        GBPContract,
         ProjectGBPState,
         ExtensionGBPState,
         GBPSubscriptionProcessState,

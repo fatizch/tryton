@@ -1,0 +1,419 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:process.process_framework:"
+msgid "Everything is good !"
+msgstr ""
+
+msgctxt "field:ir.model,is_workflow:"
+msgid "Is Workflow"
+msgstr ""
+
+msgctxt "field:process.process_desc,all_steps:"
+msgid "All Steps"
+msgstr "Toutes les Etapes"
+
+msgctxt "field:process.process_desc,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:process.process_desc,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:process.process_desc,fancy_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:process.process_desc,first_step:"
+msgid "First Step"
+msgstr "Première Etape"
+
+msgctxt "field:process.process_desc,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:process.process_desc,menu_item:"
+msgid "Menu Element"
+msgstr ""
+
+msgctxt "field:process.process_desc,menu_top:"
+msgid "Top Menu"
+msgstr "Menu Parent"
+
+msgctxt "field:process.process_desc,on_model:"
+msgid "On Model"
+msgstr ""
+
+msgctxt "field:process.process_desc,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:process.process_desc,technical_name:"
+msgid "Technical Name"
+msgstr "Nom Technique"
+
+msgctxt "field:process.process_desc,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:process.process_desc,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:process.process_desc,xml_footer:"
+msgid "XML"
+msgstr "Description de la Vue"
+
+msgctxt "field:process.process_desc,xml_header:"
+msgid "XML"
+msgstr "Description de la Vue"
+
+msgctxt "field:process.process_framework,cur_state:"
+msgid "Current State"
+msgstr ""
+
+msgctxt "field:process.process_framework,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:process.process_framework,process_state:"
+msgid "Process State"
+msgstr ""
+
+msgctxt "field:process.process_step_relation,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:process.process_step_relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:process.process_step_relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:process.process_step_relation,process:"
+msgid "Process"
+msgstr "Processus"
+
+msgctxt "field:process.process_step_relation,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:process.process_step_relation,step:"
+msgid "Step"
+msgstr "Pas"
+
+msgctxt "field:process.process_step_relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:process.process_step_relation,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:process.step_desc,authorizations:"
+msgid "Authorizations"
+msgstr "Autorisations"
+
+msgctxt "field:process.step_desc,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:process.step_desc,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:process.step_desc,fancy_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:process.step_desc,from_steps:"
+msgid "From Steps"
+msgstr "Depuis les Etapes"
+
+msgctxt "field:process.step_desc,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:process.step_desc,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:process.step_desc,step_xml:"
+msgid "XML"
+msgstr "Description de la Vue"
+
+msgctxt "field:process.step_desc,technical_name:"
+msgid "Technical Name"
+msgstr "Nom Technique"
+
+msgctxt "field:process.step_desc,to_steps:"
+msgid "To Steps"
+msgstr "Vers les Etapes"
+
+msgctxt "field:process.step_desc,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:process.step_desc,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:process.step_desc_authorization,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:process.step_desc_authorization,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:process.step_desc_authorization,group:"
+msgid "Group"
+msgstr "Groupe"
+
+msgctxt "field:process.step_desc_authorization,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:process.step_desc_authorization,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:process.step_desc_authorization,step_desc:"
+msgid "Step Desc"
+msgstr "Descripteur d'Etape"
+
+msgctxt "field:process.step_desc_authorization,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:process.step_desc_authorization,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:process.step_transition,authorizations:"
+msgid "Authorizations"
+msgstr "Autorisations"
+
+msgctxt "field:process.step_transition,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:process.step_transition,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:process.step_transition,from_step:"
+msgid "From Step"
+msgstr ""
+
+msgctxt "field:process.step_transition,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:process.step_transition,kind:"
+msgid "kind"
+msgstr "Type"
+
+msgctxt "field:process.step_transition,methods:"
+msgid "Methods"
+msgstr "Méthodes"
+
+msgctxt "field:process.step_transition,pyson:"
+msgid "Pyson Constraint"
+msgstr "Contraintes Pyson"
+
+msgctxt "field:process.step_transition,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:process.step_transition,to_step:"
+msgid "To Step"
+msgstr "Vers l'Etape"
+
+msgctxt "field:process.step_transition,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:process.step_transition,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:process.transition_authorization,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:process.transition_authorization,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:process.transition_authorization,group:"
+msgid "Group"
+msgstr "Groupe"
+
+msgctxt "field:process.transition_authorization,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:process.transition_authorization,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:process.transition_authorization,transition:"
+msgid "Transition"
+msgstr "Transition"
+
+msgctxt "field:process.transition_authorization,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:process.transition_authorization,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "model:ir.action,name:act_process_desc"
+msgid "process_desc_form"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_step_desc"
+msgid "step_desc_form"
+msgstr ""
+
+msgctxt "model:ir.ui.menu,name:menu_process_desc"
+msgid "process_desc_form"
+msgstr ""
+
+msgctxt "model:ir.ui.menu,name:menu_step_desc"
+msgid "step_desc_form"
+msgstr ""
+
+msgctxt "model:ir.ui.menu,name:process_menu_id"
+msgid "Process Main Menu"
+msgstr ""
+
+msgctxt "model:process.process_desc,name:"
+msgid "Process Descriptor"
+msgstr "Descripteur de Processus"
+
+msgctxt "model:process.process_framework,name:"
+msgid "Process Framework"
+msgstr ""
+
+msgctxt "model:process.process_step_relation,name:"
+msgid "Process to Step relation"
+msgstr ""
+
+msgctxt "model:process.step_desc,name:"
+msgid "Step Descriptor"
+msgstr "Descripteur d'Etape"
+
+msgctxt "model:process.step_desc_authorization,name:"
+msgid "Step Desc Authorization"
+msgstr "Autorisations pour l'Etape"
+
+msgctxt "model:process.step_transition,name:"
+msgid "Step Transition"
+msgstr "Transition d'Etape"
+
+msgctxt "model:process.transition_authorization,name:"
+msgid "Transition Authorization"
+msgstr "Autorisations pour les Transitions"
+
+msgctxt "selection:process.step_transition,kind:"
+msgid "Next Transition"
+msgstr "Prochaine Transition"
+
+msgctxt "selection:process.step_transition,kind:"
+msgid "Other Transition"
+msgstr "Autre Transition"
+
+msgctxt "selection:process.step_transition,kind:"
+msgid "Previous Transition"
+msgstr "Transition Précédente"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Billing"
+msgstr "Cotisation"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Cotisations"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "Options"
+msgstr "Garanties"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Process Souscription Individuelle (Moteur WF)"
+msgstr "Process Souscription Individuelle (Moteur WF)"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Sélection des Options"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "Sélection des Personnes Couvertes"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "Sélection du Produit"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "Validation du Contrat"
+msgstr ""
+
+msgctxt "view:process.process_desc:"
+msgid "Process Descriptor"
+msgstr "Descripteur de Processus"
+
+msgctxt "view:process.process_desc:"
+msgid "Process Descriptors"
+msgstr "Paramétrage des Processus"
+
+msgctxt "view:process.process_desc:"
+msgid "Steps"
+msgstr "Etapes"
+
+msgctxt "view:process.process_desc:"
+msgid "Update Menu"
+msgstr "Recharger le Menu"
+
+msgctxt "view:process.process_desc:"
+msgid "XML"
+msgstr "Description de la Vue"
+
+msgctxt "view:process.step_desc:"
+msgid "Authorizations"
+msgstr "Autorisations"
+
+msgctxt "view:process.step_desc:"
+msgid "Relations"
+msgstr "Relations"
+
+msgctxt "view:process.step_desc:"
+msgid "Step Descriptor"
+msgstr "Descripteur d'Etape"
+
+msgctxt "view:process.step_desc:"
+msgid "Step Descriptors"
+msgstr "Paramétrage des Etapes"
+
+msgctxt "view:process.step_desc:"
+msgid "XML"
+msgstr "Description de la Vue"
+
+msgctxt "view:process.step_transition:"
+msgid "Step Transition Descriptor"
+msgstr "Descripteur de Transition"
+
+msgctxt "view:process.step_transition:"
+msgid "Transitions"
+msgstr ""

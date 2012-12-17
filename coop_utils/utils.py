@@ -53,7 +53,8 @@ def get_module_name(cls):
     return cls.__name__.split('.')[0]
 
 
-def change_relation_links(cls, from_module, to_module):
+def change_relation_links(cls, from_module=None, to_module=None,
+        convert_dict=None):
     for field_name in cls._fields.iterkeys():
         field = copy.copy(getattr(cls, field_name))
         attr_name = ''
@@ -66,11 +67,16 @@ def change_relation_links(cls, from_module, to_module):
         if attr_name == '':
             continue
         model_name = getattr(field, attr_name)
-        if not (model_name.startswith(from_module)
-                and model_name.split('.', 1)[0] == from_module):
+        if (convert_dict and not model_name in convert_dict or
+            from_module and to_module and
+                not (model_name.startswith(from_module)
+                     and model_name.split('.', 1)[0] == from_module)):
             continue
-        setattr(field, attr_name,
-            to_module + model_name.split(from_module)[1])
+        if convert_dict:
+            converted_name = convert_dict[model_name]
+        elif from_module and to_module:
+            converted_name = to_module + model_name.split(from_module)[1]
+        setattr(field, attr_name, converted_name)
         setattr(cls, field_name, field)
 
 

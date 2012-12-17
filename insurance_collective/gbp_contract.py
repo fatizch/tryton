@@ -2,8 +2,10 @@
 import copy
 
 from trytond.model import fields
+from trytond.pyson import Eval
 
 from trytond.modules.insurance_contract import GenericContract
+from trytond.modules.coop_utils import utils
 
 __all__ = [
         'GBPContract',
@@ -32,9 +34,10 @@ class GBPContract(GenericContract):
     # uses this as a way to negociate particular conditions (pricing for
     # instance), which made each gbp contract a unique offered product for the
     # employees.
-    final_product = fields.Many2One(
-        'ins_collective.product',
-        'Final Product')
+    final_product = fields.One2Many('ins_collective.product', 'contract',
+        'Final Product', size=1,
+        states={'readonly': ~Eval('subscriber')},
+        depends=['subscriber'])
 
     @classmethod
     def __setup__(cls):
@@ -43,3 +46,14 @@ class GBPContract(GenericContract):
         if not cls.subscriber.domain:
             cls.subscriber.domain = []
         cls.subscriber.domain.append(('is_company', '=', True))
+
+    @classmethod
+    def default_final_product(cls):
+        return utils.create_inst_with_default_val(cls, 'final_product')
+
+    def get_rec_name(self, name=None):
+        if self.contract_number:
+            return self.contract_number
+        if self.final_product:
+            return self.final_product[0].get_rec_name(name)
+        return super(GBPContract, self).get_rec_name(name)

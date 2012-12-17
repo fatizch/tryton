@@ -58,7 +58,7 @@ class ProjectStateEnrollment(ProjectState):
     # Override as well, we want the product to come from the contract
     @staticmethod
     def post_step_update_abstract(wizard):
-        wizard.project.product = wizard.project.on_contract.final_product
+        wizard.project.product = wizard.project.on_contract.final_product[0]
         result = ProjectState.post_step_update_abstract(wizard)
         if result[0]:
             contract = WithAbstract.get_abstract_objects(

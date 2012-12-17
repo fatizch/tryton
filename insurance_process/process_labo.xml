@@ -7,7 +7,7 @@
 			Name => entry point label
 			id => string used for reference to the entry point
 			sequence => is used to sort the elements of the menu -->
-		<menuitem name="Process Lab" id="menu_process" sequence="50" />
+		<!--  <menuitem name="Process Lab" id="menu_process" sequence="50" />-->
 
 		<!-- Tree view -->
 		<record model="ir.ui.view" id="process_view_tree">
@@ -63,8 +63,8 @@
 		
 		<!-- MenuItem allows us to add a subelement to an entrypoint of the
 			left part of the application (referenced by the 'parent') -->
-		<menuitem parent="menu_process" sequence="1" id="menu_process_form"
-			icon="tryton-list" action="act_process_form" />
+		<!--  <menuitem parent="menu_process" sequence="1" id="menu_process_form"
+			icon="tryton-list" action="act_process_form" /> -->
 		
 		<!-- /Process -->
 		
