@@ -1,3 +1,5 @@
+import pydot
+
 from trytond.model import fields
 from trytond.model import ModelView, ModelSQL
 from trytond.wizard import Wizard, StateAction
@@ -419,7 +421,6 @@ class StepTransition(ModelSQL, ModelView):
         ondelete='CASCADE',
         # (they cannot be the same)
         domain=[('id', '!=', Eval('from_step'))],
-        required=True,
         depends=['from_step'],
     )
 
@@ -603,9 +604,69 @@ class GenerateGraph(Report):
     __name__ = 'process.graph_generation'
 
     @classmethod
-    def execute(cls, ids, data):
-        import pydot
+    def build_graph(cls, process):
+        graph = pydot.Dot(fontsize="8")
+        graph.set('center', '1')
+        graph.set('ratio', 'auto')
+        graph.set('splines', 'ortho')
+        graph.set('fontname', 'Inconsolata')
+        #graph.set('concentrate', '1')
+        #graph.set('rankdir', 'LR')
 
+        return graph
+
+    @classmethod
+    def build_step(cls, process, step, graph, nodes):
+        nodes[step.id] = pydot.Node(
+            step.fancy_name,
+            style='filled',
+            shape='rect',
+            fontname='Century Gothic',
+        )
+
+        if not step.to_steps:
+            nodes[step.id].set('style', 'filled')
+            nodes[step.id].set('shape', 'circle')
+            nodes[step.id].set('fillcolor', '#a2daf4')
+
+    @classmethod
+    def build_transition(cls, process, step, transition, graph, nodes, edges):
+        if transition.is_readonly:
+            return
+        
+        good_edge = pydot.Edge(
+            nodes[transition.from_step.id],
+            nodes[transition.to_step.id],
+        )
+
+        good_edge.set('len', '1.0')
+        good_edge.set('constraint', '1')
+        good_edge.set('weight', '1.0')
+
+        edges[(step.id, transition.to_step.id)] = good_edge
+
+    @classmethod
+    def build_inverse_transition(
+            cls, process, step, transition, graph, nodes, edges):
+        if transition.is_readonly:
+            return
+
+        tr_fr, tr_to = transition.from_step.id, transition.to_step.id
+        if (tr_to, tr_fr) in edges:
+            edges[(tr_to, tr_fr)].set('dir', 'both')
+        else:
+            good_edge = pydot.Edge(
+                nodes[transition.from_step.id],
+                nodes[transition.to_step.id],
+            )
+
+            good_edge.set('constraint', '0')
+            good_edge.set('weight', '0.2')
+
+            edges[(tr_fr, tr_to)] = good_edge
+    
+    @classmethod
+    def execute(cls, ids, data):
         ActionReport = Pool().get('ir.action.report')
 
         action_report_ids = ActionReport.search([
@@ -618,93 +679,24 @@ class GenerateGraph(Report):
         Process = Pool().get('process.process_desc')
         the_process = Process(Transaction().context.get('active_id'))
 
-        graph = pydot.Dot(fontsize="8")
-        graph.set('center', '1')
-        graph.set('ratio', 'auto')
-        graph.set('splines', 'ortho')
-        #graph.set('concentrate', '1')
+        graph = cls.build_graph(the_process)
 
         nodes = {}
 
         for step in the_process.all_steps:
-            nodes[step.id] = pydot.Node(
-                step.fancy_name,
-                style='filled',
-                shape='rect',
-            )
+            cls.build_step(the_process, step, graph, nodes)
 
         edges = {}
         for step in the_process.all_steps:
-            pyson = []
             for transition in step.to_steps:
-                if transition.pyson:
-                    pyson += [transition.pyson]
+                cls.build_transition(
+                    the_process, step, transition, graph, nodes, edges)
 
-            has_start = False
-            if not pyson:
-                start_node = nodes[step.id]
-            else:
-                start_node = pydot.Node(
-                    'Condition :',
-                    style='filled',
-                    shape='diamond',
-                    fillcolor='orange',
-                    label='\n'.join(pyson))
-
-                nodes['%s,transition' % step.id] = start_node
-
-                start_edge = pydot.Edge(
-                    nodes[transition.from_step.id],
-                    start_node,
-                )
-
-                edges[(step.id, '%s,transition' % step.id)] = start_edge
-
-                has_start = True
-
-            for transition in step.to_steps:
-                if transition.is_readonly:
-                    continue
-                good_edge = pydot.Edge(
-                    start_node,
-                    nodes[transition.to_step.id],
-                )
-
-                good_edge.set('len', '1.0')
-                good_edge.set('constraint', '1')
-                good_edge.set('weight', '1.0')
-
-                if has_start:
-                    edges[(
-                        '%s,transition' % step.id,
-                        transition.to_step.id)] = good_edge
-                else:
-                    edges[(
-                        step.id,
-                        transition.to_step.id)] = good_edge
-
-            if not step.to_steps:
-                nodes[step.id].set('style', 'filled')
-                nodes[step.id].set('shape', 'circle')
-                nodes[step.id].set('fillcolor', '#a2daf4')
 
         for step in the_process.all_steps:
             for transition in step.from_steps:
-                if transition.is_readonly:
-                    continue
-                tr_fr, tr_to = transition.from_step.id, transition.to_step.id
-                if (tr_to, tr_fr) in edges:
-                    edges[(tr_to, tr_fr)].set('dir', 'both')
-                else:
-                    good_edge = pydot.Edge(
-                        nodes[transition.from_step.id],
-                        nodes[transition.to_step.id],
-                    )
-
-                    good_edge.set('constraint', '0')
-                    good_edge.set('weight', '0.2')
-
-                    edges[(tr_fr, tr_to)] = good_edge
+                cls.build_inverse_transition(
+                    the_process, step, transition, graph, nodes, edges)
 
         nodes[the_process.first_step.id].set('style', 'filled')
         nodes[the_process.first_step.id].set('shape', 'octagon')
@@ -716,8 +708,11 @@ class GenerateGraph(Report):
         for edge in edges.itervalues():
             graph.add_edge(edge)
 
-        data = graph.create(prog='dot', format='png')
-        return ('png', buffer(data), False, action_report.name)
+        print '#' * 80
+        print 'Graph'
+        print graph.to_string()
+        data = graph.create(prog='dot', format='pdf')
+        return ('pdf', buffer(data), False, action_report.name)
 
 
 class GenerateGraphWizard(Wizard):
