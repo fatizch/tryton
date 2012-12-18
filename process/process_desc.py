@@ -489,6 +489,9 @@ class StepTransition(ModelSQL, ModelView):
 
         return xml
 
+    def get_rec_name(self, name):
+        return self.to_step.get_rec_name(name)
+
 
 class StepDescAuthorization(ModelSQL):
     'Step Desc Authorization'
@@ -637,6 +640,7 @@ class GenerateGraph(Report):
         good_edge = pydot.Edge(
             nodes[transition.from_step.id],
             nodes[transition.to_step.id],
+            fontname='Century Gothic',
         )
 
         good_edge.set('len', '1.0')
@@ -658,6 +662,7 @@ class GenerateGraph(Report):
             good_edge = pydot.Edge(
                 nodes[transition.from_step.id],
                 nodes[transition.to_step.id],
+                fontname='Century Gothic',
             )
 
             good_edge.set('constraint', '0')
@@ -708,9 +713,6 @@ class GenerateGraph(Report):
         for edge in edges.itervalues():
             graph.add_edge(edge)
 
-        print '#' * 80
-        print 'Graph'
-        print graph.to_string()
         data = graph.create(prog='dot', format='pdf')
         return ('pdf', buffer(data), False, action_report.name)
 
