@@ -223,13 +223,7 @@ class Contract():
         good_options = []
         to_delete = [elem for elem in existing.itervalues()]
 
-        print '#' * 80
-        print self.product
-        print '%s' % existing
-        print '%s' % to_delete
-
         OptionModel = Pool().get(self.give_option_model())
-        print OptionModel.__name__
         for coverage in self.product.options:
             if coverage.code in existing:
                 good_opt = existing[coverage.code]
@@ -247,15 +241,10 @@ class Contract():
 
             good_options.append(good_opt)
 
-        print to_delete
-
         if to_delete:
-            print 'delete !!!!'
             OptionModel.delete(to_delete)
 
         self.options = good_options
-        print '\n'.join(map(lambda x: x.coverage.code, self.options))
-        print self.options
 
         return True, ()
 
