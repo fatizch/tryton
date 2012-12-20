@@ -1,6 +1,5 @@
 #-*- coding:utf-8 -*-
 import copy
-import functools
 
 from trytond.model import fields
 from trytond.pool import Pool
@@ -173,7 +172,7 @@ class Offered(model.CoopView, utils.GetResult, Templated):
             ('kind', '=', 'product')])
         res = {}
         for se in good_se:
-            res[se.technical_name] = se.get_default_value(None)
+            res[se.name] = se.get_default_value(None)
         return res
 
 #    @classmethod
