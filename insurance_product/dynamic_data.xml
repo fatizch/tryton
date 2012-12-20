@@ -28,9 +28,9 @@
                 <![CDATA[
                     <tree string="Complementary Data Descriptors">
                         <field name="is_shared"/>
-                        <field name="name"/>
-                        <field name="type_"/>
                         <field name="string"/>
+                        <field name="type_"/>
+                        <field name="name"/>
                         <field name="start_date"/>
                         <field name="end_date"/>
                     </tree>
@@ -45,10 +45,10 @@
                 <![CDATA[
                     <form string="Complementary Data Desciptor">
                         <group id="names">
-                            <label name="name"/>
-                            <field name="name"/>
                             <label name="string"/>
                             <field name="string"/>
+                            <label name="name"/>
+                            <field name="name"/>
                         </group>
                         <newline/>
                         <group id="dates">

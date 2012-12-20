@@ -684,7 +684,7 @@ def init_dynamic_data(ids):
     res = {}
     for id in ids:
         elem = the_model(id)
-        res[elem.technical_name] = elem.get_default_value(None)
+        res[elem.name] = elem.get_default_value(None)
     return res
 
 def set_default_dict(input_dict, data):
@@ -692,3 +692,42 @@ def set_default_dict(input_dict, data):
         input_dict.setdefault(k, data[k])
 
     return input_dict
+
+def format_data(data, prefix='', prefix_inc='    ', is_init=True):
+    tmp = None
+    if isinstance(data, list):
+        tmp = [prefix + '[']
+        for elem in data:
+            tmp += format_data(elem, prefix + prefix_inc, is_init=False)
+        tmp += [prefix + ']']
+    elif isinstance(data, dict):
+        tmp = [prefix + '{']
+        for k, v in data.iteritems():
+            new_data = format_data(v, prefix + prefix_inc, is_init=False)
+            tmp_res = [prefix + prefix_inc + str(k) + ':' + 
+                new_data[0][len(prefix + prefix_inc) - 1:]]
+            if len(new_data) > 1:
+                tmp_res += new_data[1:]
+            tmp += tmp_res
+        tmp += [prefix + '}']
+    elif isinstance(data, (str, unicode)):
+        tmp = [prefix + '"' + str(data) + '"']
+    elif data is None:
+        tmp = [prefix + 'None']
+    else:
+        tmp = [prefix + str(data)]
+
+    if not tmp:
+        return prefix
+
+    if not is_init:
+        return tmp
+
+    return '\n'.join(tmp)
+
+    
+
+
+            
+
+

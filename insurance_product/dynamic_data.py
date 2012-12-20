@@ -114,6 +114,9 @@ class CoopSchemaElement(DictSchemaMixin, model.CoopSQL, model.CoopView):
         # Important : if you do not check (and set below) relation_selection,
         # There is a risk of infinite recursion if your code needs to do a
         # search (might only be a O2M / M2M)
+        print '#' * 80
+        print utils.format_data(Transaction().context)
+        print '%s' % Transaction().context
         if not('relation_selection' in Transaction().context) and \
                 'for_product' in Transaction().context and \
                 'at_date' in Transaction().context and \
