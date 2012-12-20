@@ -8,7 +8,7 @@ from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
     Button
 from trytond.modules.coop_utils import One2ManyDomain
-from trytond.modules.coop_utils import string
+from trytond.modules.coop_utils import coop_string
 
 __all__ = ['TableCell', 'TableDefinition',
     'TableDefinitionDimension', 'TableOpen2DAskDimensions',
@@ -108,7 +108,7 @@ class TableDefinition(ModelSQL, ModelView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return string.remove_blank_and_invalid_char(self.name)
+        return coop_string.remove_blank_and_invalid_char(self.name)
 
 
 def dimension_state(kind):

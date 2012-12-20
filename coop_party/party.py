@@ -8,7 +8,7 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coop_utils import CoopView, CoopSQL
 from trytond.modules.coop_utils import TableOfTable, utils
-from trytond.modules.coop_utils import string
+from trytond.modules.coop_utils import coop_string
 
 
 __all__ = ['Party', 'Company', 'Employee', 'Actor', 'Person',
@@ -156,13 +156,13 @@ class Party:
         res = cls.get_summary_header(parties, name=name, at_date=at_date,
             lang=lang)
         for party in parties:
-            res[party.id] += string.get_field_as_summary(party, 'addresses',
-                True, at_date, lang=lang)
-            res[party.id] += string.get_field_as_summary(party, 'relations',
-                True, at_date, lang=lang)
-            res[party.id] += string.get_field_as_summary(party,
+            res[party.id] += coop_string.get_field_as_summary(party,
+                'addresses', True, at_date, lang=lang)
+            res[party.id] += coop_string.get_field_as_summary(party,
+                'relations', True, at_date, lang=lang)
+            res[party.id] += coop_string.get_field_as_summary(party,
                 'in_relation_with', True, at_date, lang=lang)
-            res[party.id] += string.get_field_as_summary(party,
+            res[party.id] += coop_string.get_field_as_summary(party,
                 'generic_roles', True, at_date, lang=lang)
         return res
 
@@ -263,8 +263,8 @@ class GenericActor(CoopSQL, Actor):
     def get_summary(cls, actors, name=None, at_date=None, lang=None):
         res = {}
         for actor in actors:
-            res[actor.id] = string.get_field_as_summary(self, 'kind', True,
-                at_date, lang=lang)
+            res[actor.id] = coop_string.get_field_as_summary(self, 'kind',
+                True, at_date, lang=lang)
         return res
 
 
@@ -292,7 +292,7 @@ class Person(CoopSQL, Actor):
         cls._order.insert(0, ('name', 'ASC'))
 
     def get_rec_name(self, name):
-        return "%s %s %s" % (string.translate_value(self, 'gender'),
+        return "%s %s %s" % (coop_string.translate_value(self, 'gender'),
             self.name.upper(), self.first_name)
 
     def on_change_gender(self):
@@ -317,10 +317,13 @@ class Person(CoopSQL, Actor):
         res = {}
         for party in persons:
             res[party.id] = ''
-            res[party.id] += string.get_field_as_summary(party, 'ssn')
-            res[party.id] += string.get_field_as_summary(party, 'birth_date')
-            res[party.id] += string.get_field_as_summary(party, 'nationality')
-            res[party.id] += string.get_field_as_summary(party, 'maiden_name')
+            res[party.id] += coop_string.get_field_as_summary(party, 'ssn')
+            res[party.id] += coop_string.get_field_as_summary(party,
+                'birth_date')
+            res[party.id] += coop_string.get_field_as_summary(party,
+                'nationality')
+            res[party.id] += coop_string.get_field_as_summary(party,
+                'maiden_name')
         return res
 
     @classmethod

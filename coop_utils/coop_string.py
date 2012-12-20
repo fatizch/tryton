@@ -146,5 +146,11 @@ def remove_invalid_char(from_string):
         if unicodedata.category(c) != 'Mn'))
 
 
+def remove_all_but_alphanumeric_and_space(from_string):
+    import re
+    pattern = re.compile(r'([^\s\w]|_)+')
+    return pattern.sub('', from_string)
+
+
 def remove_blank_and_invalid_char(from_string):
     return remove_invalid_char(from_string).replace(' ', '_')

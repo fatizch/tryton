@@ -2,7 +2,7 @@
 from trytond.model import fields
 from trytond.pool import Pool
 from trytond.modules.coop_utils import CoopView, CoopSQL, TableOfTable
-from trytond.modules.coop_utils import utils, string
+from trytond.modules.coop_utils import utils, coop_string
 
 __all__ = ['PartyRelationKind', 'PartyRelation']
 
@@ -91,7 +91,7 @@ class PartyRelation(CoopSQL, CoopView):
             if name == 'in_relation_with':
                 link = 'reverse_kind'
                 party = relation.from_party
-            res[relation.id] = '%s %s' % (string.translate_value(relation,
+            res[relation.id] = '%s %s' % (coop_string.translate_value(relation,
                     link, lang=lang),
                 party.rec_name)
         return res

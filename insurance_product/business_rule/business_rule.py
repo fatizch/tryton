@@ -8,7 +8,7 @@ from trytond.rpc import RPC
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model, utils, date, string
+from trytond.modules.coop_utils import model, utils, date, coop_string
 from trytond.modules.insurance_product.product import CONFIG_KIND
 from trytond.modules.insurance_product.product import Templated, Offered
 
@@ -27,7 +27,8 @@ class BusinessRuleManager(model.CoopSQL, model.CoopView,
 
     offered = fields.Reference('Offered', selection='get_offered_models')
     business_rules = fields.One2Many('ins_product.generic_business_rule',
-        'manager', 'Business Rules') # on_change=['business_rules'])
+        'manager', 'Business Rules')
+    # on_change=['business_rules'])
 #    code = fields.Char('Code',
 #        on_change_with=['business_rules', 'offered'])
 
@@ -195,7 +196,7 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
 
     @staticmethod
     def get_kind():
-        return string.get_descendents_name(BusinessRuleRoot)
+        return coop_string.get_descendents_name(BusinessRuleRoot)
 
     def get_is_current(self, name):
         #first we need the model for the manager (depends on the module used

@@ -20,7 +20,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.tools.misc import _compile_source
 from trytond.pyson import Eval, And
-from trytond.modules.coop_utils import CoopView, utils, string
+from trytond.modules.coop_utils import CoopView, utils, coop_string
 from trytond.modules.coop_utils import date
 from trytond.modules.table import TableCell
 
@@ -483,7 +483,7 @@ class TreeElement(ModelView, ModelSQL):
 
     def on_change_with_translated_technical_name(self):
         if self.rule:
-            return string.remove_blank_and_invalid_char(self.rule.name)
+            return coop_string.remove_blank_and_invalid_char(self.rule.name)
 
 
 class ContextTreeElement(ModelSQL):
@@ -625,8 +625,14 @@ class TableDefinition():
 
         new_tree = TreeElement()
         new_tree.type = 'table'
-        new_tree.translated_technical_name = 'table_%s' % values['code']
-        new_tree.description = 'Table %s' % values['name']
+        if not 'TABLE' in values['code'].upper():
+            new_tree.translated_technical_name = 'table_%s' % values['code']
+        else:
+            new_tree.translated_technical_name = values['code']
+        if not 'TABLE' in values['name'].upper():
+            new_tree.description = 'Table %s' % values['name']
+        else:
+            new_tree.description = values['name']
         new_tree.language = utils.get_this_object(
             'ir.lang', ('code', '=', Transaction().language))
         new_tree.the_table = table.id
