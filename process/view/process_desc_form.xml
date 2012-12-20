@@ -23,11 +23,20 @@
       <field name="first_step" colspan="3"/>
     </page>
     <page string="XML" id="xml">
-      <separator name="xml_header"/>
-      <field name="xml_header"/>
-      <newline/>
-      <separator name="xml_footer"/>
-      <field name="xml_footer"/>
+      <group id="form_view" yexpand="1" yfill="1" xexpand="1" xfill="1">
+        <separator name="xml_header"/>
+        <newline/>
+        <field name="xml_header"/>
+        <newline/>
+        <separator name="xml_footer"/>
+        <newline/>
+        <field name="xml_footer"/>
+      </group>
+      <group id="tree_view" yexpand="1" yfill="1" xexpand="1" xfill="1">
+        <separator name="xml_tree"/>
+        <newline/>
+        <field name="xml_tree"/>
+      </group>
     </page>
   </notebook>
   <button string="Update Menu" name="update_view"/>

@@ -67,6 +67,10 @@ class ProcessStepRelation(ModelSQL, ModelView):
         ondelete='RESTRICT',
     )
 
+    def get_rec_name(self, name):
+        return self.process.get_rec_name(name) + ' - ' + \
+            self.status.get_rec_name(name)
+
 
 class ProcessDesc(ModelSQL, ModelView):
     'Process Descriptor'
@@ -115,6 +119,11 @@ class ProcessDesc(ModelSQL, ModelView):
     )
 
     xml_footer = fields.Text(
+        'XML',
+    )
+
+    # We also need a way to present the processes in tree views
+    xml_tree = fields.Text(
         'XML',
     )
 
@@ -336,45 +345,37 @@ class ProcessDesc(ModelSQL, ModelView):
         if not act_tree:
             act_tree = ActView()
 
-        # For the tree view, we use the model's default tree view :
+        # We look for the good tree view
         try:
             good_tree, = View.search([
                     ('model', '=', self.on_model.model),
                     ('type', '=', 'tree'),
-                    ('name', '!=', '%s_tree' % self.technical_name),
+                    ('name', '=', '%s_tree' % self.technical_name),
                 ], limit=1)
         except ValueError:
-            # If it does not exist, we look for a generic one
-            try:
-                good_tree, = View.search([
-                        ('model', '=', self.on_model.model),
-                        ('type', '=', 'tree'),
-                        ('name', '=', '%s_tree' % self.technical_name),
-                    ], limit=1)
-            except ValueError:
-                # or create it if needed.
-                good_tree = View()
+            # or create it if needed.
+            good_tree = View()
 
-            # We set the model, name and type of the view
-            good_tree.model = self.on_model.model
-            good_tree.name = '%s_tree' % self.technical_name
-            good_tree.type = 'tree'
+        # We set the model, name and type of the view
+        good_tree.model = self.on_model.model
+        good_tree.name = '%s_tree' % self.technical_name
+        good_tree.type = 'tree'
 
-            #TODO: Which modules should be used here ?
-            good_tree.module = 'process'
+        #TODO: Which modules should be used here ?
+        good_tree.module = 'process'
 
-            good_tree.priority = 10
+        good_tree.priority = 10
 
-            # Add some very basic xml
-            xml = '<?xml version="1.0"?>'
-            xml += '<tree string="%s">' % self.fancy_name
-            xml += '<field name="rec_name"/>'
-            xml += '</tree>'
+        # Add some very basic xml
+        xml = '<?xml version="1.0"?>'
+        xml += '<tree string="%s">' % self.fancy_name
+        xml += self.xml_tree
+        xml += '</tree>'
 
-            good_tree.arch = xml
+        good_tree.arch = xml
 
-            # save it
-            good_tree.save()
+        # save it
+        good_tree.save()
 
         act_tree.act_window = good_action
 
