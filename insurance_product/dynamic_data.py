@@ -3,7 +3,7 @@ import copy
 
 from trytond.model import fields
 from trytond.pool import Pool
-from trytond.ir.model import SchemaElementMixin
+from trytond.model import DictSchemaMixin
 from trytond.pyson import Eval, Bool, Or, Not
 from trytond.transaction import Transaction
 try:
@@ -21,7 +21,7 @@ __all__ = [
     ]
 
 
-class CoopSchemaElement(SchemaElementMixin, model.CoopSQL, model.CoopView):
+class CoopSchemaElement(DictSchemaMixin, model.CoopSQL, model.CoopView):
     'Complementary Data Definition'
 
     __name__ = 'ins_product.schema_element'

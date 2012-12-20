@@ -78,8 +78,14 @@ if __name__ == '__main__':
         if lines[-1][:-1] == 'OK':
             sum['errors'] = 0
         elif lines[-1][:6] == 'FAILED':
+            sum['errors'] = 0
             if lines[-1][8] == 'f':
-                sum['errors'] = int(lines[-1][17:-2])
+                fail = lines[-1].split('failures=')[1]
+                if len(fail) > 3:
+                    sum['errors'] += int(fail.split(',')[0])
+                    sum['errors'] += int(fail.split('errors=')[1][:-2])
+                else:
+                    sum['errors'] += int(fail[:-2])
             else:
                 sum['errors'] = int(lines[-1][15:-2])
         else:
