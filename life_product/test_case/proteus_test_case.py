@@ -7,6 +7,7 @@ import os
 
 from decimal import Decimal
 from proteus import Model
+import proteus_tools
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
@@ -33,11 +34,16 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['GBR'] = Model.get('ins_product.generic_business_rule')
     cfg_dict['Lang'] = Model.get('ir.lang')
     cfg_dict['Benefit'] = Model.get('ins_product.benefit')
+    cfg_dict['RuleEngine'] = Model.get('rule_engine')
+    cfg_dict['Context'] = Model.get('rule_engine.context')
+    cfg_dict['TreeElement'] = Model.get('rule_engine.tree_element')
+    cfg_dict['Tranche'] = Model.get('tranche.tranche')
     return cfg_dict
 
 
 def get_or_create_product(cfg_dict, code, name, options=None, date=None):
-    product = get_object_from_db(cfg_dict, 'Product', 'code', code)
+    product = proteus_tools.get_objects_from_db(cfg_dict,
+        'Product', 'code', code)
     if product:
         return product
     product = cfg_dict['Product']()
@@ -52,7 +58,7 @@ def get_or_create_product(cfg_dict, code, name, options=None, date=None):
 
 
 def get_or_create_generator(cfg_dict, code):
-    seq = get_object_from_db(cfg_dict, 'Sequence', 'code', code)
+    seq = proteus_tools.get_objects_from_db(cfg_dict, 'Sequence', 'code', code)
     if seq:
         return seq
     seq = cfg_dict['Sequence']()
@@ -65,21 +71,9 @@ def get_or_create_generator(cfg_dict, code):
     return seq
 
 
-def get_object_from_db(cfg_dict, model, key=None, value=None, domain=None,
-        force_search=False):
-    if not force_search and cfg_dict['re_create_if_already_exists']:
-        return None
-    if not domain:
-        domain = []
-    if key and value:
-        domain.append((key, '=', value))
-    instances = cfg_dict[model].find(domain, limit=1)
-    if instances:
-        return instances[0]
-
-
 def get_or_create_benefit(cfg_dict, code, name, kind=None, date=None):
-    benefit = get_object_from_db(cfg_dict, 'Benefit', 'code', code)
+    benefit = proteus_tools.get_objects_from_db(cfg_dict, 'Benefit', 'code',
+        code)
     if benefit:
         return benefit
     benefit = cfg_dict['Benefit']()
@@ -104,7 +98,8 @@ def try_to_save_object(cfg_dict, cur_object):
 
 def get_or_create_coverage(cfg_dict, code, name, date=None,
         family='life_product.definition'):
-    coverage = get_object_from_db(cfg_dict, 'Coverage', 'code', code)
+    coverage = proteus_tools.get_objects_from_db(cfg_dict, 'Coverage', 'code',
+        code)
     if coverage:
         return coverage
     coverage = cfg_dict['Coverage']()
@@ -115,13 +110,13 @@ def get_or_create_coverage(cfg_dict, code, name, date=None,
         coverage.start_date = date
     else:
         coverage.start_date = cfg_dict['Date'].today({})
-    coverage.insurer = get_object_from_db(cfg_dict, 'Insurer',
+    coverage.insurer = proteus_tools.get_objects_from_db(cfg_dict, 'Insurer',
         force_search=True)
     return coverage
 
 
 def get_or_create_tax(cfg_dict, code, name=None, vals=None):
-    tax = get_object_from_db(cfg_dict, 'Tax', 'code', code)
+    tax = proteus_tools.get_objects_from_db(cfg_dict, 'Tax', 'code', code)
     if tax:
         return tax
     tax = cfg_dict['Tax']()
@@ -140,7 +135,7 @@ def get_or_create_tax(cfg_dict, code, name=None, vals=None):
 
 
 def get_or_create_fee(cfg_dict, code, name, vals=None):
-    fee = get_object_from_db(cfg_dict, 'Fee', 'code', code)
+    fee = proteus_tools.get_objects_from_db(cfg_dict, 'Fee', 'code', code)
     if fee:
         return fee
     fee = cfg_dict['Fee']()
@@ -346,7 +341,7 @@ def get_or_create_tree_element(cfg_dict, cur_type, description,
         cur_domain.append(('name', '=', name))
     cur_domain.append(('language.code', '=', cfg_dict['language']))
     cur_domain.append(('translated_technical_name', '=', translated_technical))
-    tree_element = get_object_from_db(cfg_dict, 'TreeElement',
+    tree_element = proteus_tools.get_objects_from_db(cfg_dict, 'TreeElement',
         domain=cur_domain)
     if tree_element:
         return tree_element
@@ -384,18 +379,20 @@ def append_inexisting_elements(cur_object, list_name, the_list):
     return cur_object
 
 
-def get_or_create_context(cfg_dict, name):
-    ct = get_object_from_db(cfg_dict, 'Context', 'name', name)
+def get_or_create_context(cfg_dict, name=None):
+    ct = proteus_tools.get_objects_from_db(cfg_dict, 'Context', 'name', name)
     if ct:
         return ct
-    ct = cfg_dict['Context']()
-    ct.name = name
-    try_to_save_object(cfg_dict, ct)
-    return ct
+    if name:
+        ct = cfg_dict['Context']()
+        ct.name = name
+        try_to_save_object(cfg_dict, ct)
+        return ct
 
 
-def get_or_create_rule(cfg_dict, ct, name):
-    rule = get_object_from_db(cfg_dict, 'RuleEngine', 'name', name)
+def get_or_create_rule_for_birthdate_eligibility(cfg_dict, ct, name):
+    rule = proteus_tools.get_objects_from_db(cfg_dict, 'RuleEngine', 'name',
+        name)
     if rule:
         return rule
     rule = cfg_dict['RuleEngine']()
@@ -505,7 +502,8 @@ def create_rule_engine_data(cfg_dict):
 
     ct.save()
 
-    return get_or_create_rule(cfg_dict, ct, 'test_rule')
+    return get_or_create_rule_for_birthdate_eligibility(cfg_dict, ct,
+        'test_rule')
 
 
 def create_BBB_product(cfg_dict, code, name):
@@ -576,8 +574,8 @@ def create_BBB_product(cfg_dict, code, name):
 
 
 def get_or_create_currency(cfg_dict):
-    currency = get_object_from_db(cfg_dict, 'Currency', 'code', 'EUR',
-        force_search=True)
+    currency = proteus_tools.get_objects_from_db(cfg_dict, 'Currency', 'code',
+        'EUR', force_search=True)
     if currency:
         return currency
     currency = cfg_dict['Currency']()
@@ -734,7 +732,7 @@ Vous donnez les moyens de garantir à vos enfants le financement de leurs\
 
 
 def create_prev_product(cfg_dict):
-    if get_object_from_db(cfg_dict, 'Product', 'code', 'PREV'):
+    if proteus_tools.get_objects_from_db(cfg_dict, 'Product', 'code', 'PREV'):
         return
     at_date = datetime.date(2011, 1, 1)
     disability = create_disability_coverage(cfg_dict)
@@ -747,9 +745,74 @@ def create_prev_product(cfg_dict):
     return prod
 
 
+def get_or_create_rule(cfg_dict, name, algo, context_name=None,):
+    rule = proteus_tools.get_objects_from_db(cfg_dict, 'RuleEngine', 'name',
+        name)
+    if rule:
+        return rule
+    rule = cfg_dict['RuleEngine']()
+    rule.name = name
+    rule.context = get_or_create_context(cfg_dict, context_name)
+    rule.code = algo
+    rule.save()
+    return rule
+
+
+def get_tree_element(cfg_dict, name=None, table_code=None):
+    domain = []
+    if name:
+        domain.append(('name', '=', name))
+    if table_code:
+        domain.append(('the_table.code', '=', table_code))
+    elements = cfg_dict['TreeElement'].find(domain, limit=1)
+    if elements:
+        return elements[0]
+
+
+def write_ceiling_code(pss_multiplicator, pss_element):
+    res = ('PMSS = %s(aujourd_hui(), \'mensuel\')\n'
+            % pss_element.translated_technical_name)
+    res += '#TODO replace current date by calculation data\n'
+    res += 'PMSS = Decimal(\'.\'.join(PMSS.split(\',\')))\n'
+    res += 'return %s * PMSS\n' % pss_multiplicator
+    return res
+
+
+def get_or_create_tranche(cfg_dict, code, floor=None, ceiling=None):
+    res = proteus_tools.get_objects_from_db(cfg_dict, 'Tranche', 'code', code)
+    if res:
+        return res
+    res = cfg_dict['Tranche']()
+    res.code = code
+    for tranche_version in res.versions:
+        tranche_version.floor = floor
+        tranche_version.ceiling = ceiling
+    res.save()
+    return res
+
+
+def create_tranches(cfg_dict, pss_code):
+    pss = get_tree_element(cfg_dict, table_code=pss_code)
+    if not pss:
+        print 'Impossible to find tree element and/or table %s' % pss_code
+        return
+    TA = get_or_create_rule(cfg_dict, 'Plafond TA', write_ceiling_code(1, pss))
+    TB = get_or_create_rule(cfg_dict, 'Plafond TB', write_ceiling_code(4, pss))
+    TC = get_or_create_rule(cfg_dict, 'Plafond TC', write_ceiling_code(8, pss))
+    T2 = get_or_create_rule(cfg_dict, 'Plafond T2', write_ceiling_code(3, pss))
+
+    get_or_create_tranche(cfg_dict, 'TA', ceiling=TA)
+    get_or_create_tranche(cfg_dict, 'TB', floor=TA, ceiling=TB)
+    get_or_create_tranche(cfg_dict, 'TC', floor=TB, ceiling=TC)
+    get_or_create_tranche(cfg_dict, 'TD', floor=TC)
+    get_or_create_tranche(cfg_dict, 'T1', ceiling=TA)
+    get_or_create_tranche(cfg_dict, 'T2', floor=TA, ceiling=T2)
+
+
 def launch_test_case(cfg_dict):
     cfg_dict = update_cfg_dict_with_models(cfg_dict)
     get_or_create_currency(cfg_dict)
     create_AAA_Product(cfg_dict, 'AAA', 'Awesome Alternative Allowance')
     create_BBB_product(cfg_dict, 'BBB', 'Big Bad Bully')
     create_prev_product(cfg_dict)
+    create_tranches(cfg_dict, 'PSS')

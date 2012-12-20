@@ -51,3 +51,18 @@ def multiprocess_this(fun, the_args, cfg_dict, connexion_date):
         p.start()
         p.join()
         print 'Number of args remaining : %s' % len(the_args)
+
+
+def get_objects_from_db(cfg_dict, model, key=None, value=None, domain=None,
+        force_search=False, limit=1):
+    if not force_search and cfg_dict['re_create_if_already_exists']:
+        return None
+    if not domain:
+        domain = []
+    if key and value:
+        domain.append((key, '=', value))
+    instances = cfg_dict[model].find(domain, limit=limit)
+    if instances and limit == 1:
+        return instances[0]
+    else:
+        return instances
