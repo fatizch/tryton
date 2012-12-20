@@ -30,7 +30,7 @@
                         <field name="is_shared"/>
                         <field name="name"/>
                         <field name="type_"/>
-                        <field name="technical_name"/>
+                        <field name="string"/>
                         <field name="start_date"/>
                         <field name="end_date"/>
                     </tree>
@@ -47,8 +47,8 @@
                         <group id="names">
                             <label name="name"/>
                             <field name="name"/>
-                            <label name="technical_name"/>
-                            <field name="technical_name"/>
+                            <label name="string"/>
+                            <field name="string"/>
                         </group>
                         <newline/>
                         <group id="dates">
@@ -64,7 +64,7 @@
                             <newline/>
                             <label name="type_"/>
                             <field name="type_"/>
-                            <field name="choices" colspan="4"/>
+                            <field name="selection" colspan="4"/>
                         </group>
                         <newline/>
                         <group id="defaults">
