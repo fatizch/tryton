@@ -4,7 +4,7 @@ import copy
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.coop_utils import DynamicSelection, utils
-from trytond.modules.coop_utils import string, business
+from trytond.modules.coop_utils import coop_string, business
 
 __all__ = ['Address', 'AddresseKind']
 
@@ -19,6 +19,9 @@ class Address():
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     kind = fields.Selection('get_possible_address_kind', 'Kind')
+    zip_and_city = fields.Function(fields.Many2One('country.zipcode', 'Zip',
+            on_change=['zip', 'country', 'city', 'zip_and_city']),
+        'get_zip_and_city', 'set_zip_and_city')
 
     @classmethod
     def __setup__(cls):
@@ -33,6 +36,25 @@ class Address():
         utils.extend_inexisting(cls.city.autocomplete,
             ['zip', 'country'])
 
+        cls.zip = copy.copy(cls.zip)
+        if not cls.zip.on_change_with:
+            cls.zip.on_change_with = []
+        utils.extend_inexisting(cls.zip.on_change_with,
+            ['zip', 'country', 'city'])
+        if not cls.zip.autocomplete:
+            cls.zip.autocomplete = []
+        utils.extend_inexisting(cls.zip.autocomplete,
+            ['city', 'country'])
+
+        cls.city = copy.copy(cls.city)
+        if not cls.city.states:
+            cls.city.states = {}
+        cls.city.states['invisible'] = True
+        cls.zip = copy.copy(cls.zip)
+        if not cls.zip.states:
+            cls.zip.states = {}
+        cls.zip.states['invisible'] = True
+
     @classmethod
     def get_summary(cls, addresses, name=None, at_date=None, lang=None):
         res = {}
@@ -40,10 +62,10 @@ class Address():
             res[address.id] = ''
             indent = 0
             if address.kind:
-                res[address.id] = string.get_field_as_summary(address, 'kind',
-                    False, at_date, lang=lang)
+                res[address.id] = coop_string.get_field_as_summary(address,
+                    'kind', False, at_date, lang=lang)
                 indent = 1
-            res[address.id] += string.re_indent_text(
+            res[address.id] += coop_string.re_indent_text(
                 address.get_full_address(name), indent)
         return res
 
@@ -51,8 +73,8 @@ class Address():
     def default_start_date():
         return utils.today()
 
-    @staticmethod
-    def get_possible_address_kind():
+    @classmethod
+    def get_possible_address_kind(cls, vals=None):
         return AddresseKind.get_values_as_selection('party.address_kind')
 
     @staticmethod
@@ -67,32 +89,44 @@ class Address():
         domain.append(('country', '=', country))
         return utils.get_those_objects('country.zipcode', domain)
 
+    @staticmethod
+    def get_zips_from_city(city, country):
+        domain = []
+        domain.append(('country', '=', country))
+
+        return utils.get_those_objects('country.zipcode', domain)
+
     def on_change_with_city(self):
         if self.zip and self.country:
             cities = self.get_cities_from_zip(self.zip, self.country)
             if len(cities) > 0:
                 return cities[0].city
-        return self.city
 
-    @classmethod
-    def create(cls, vals):
-        address = super(Address, cls).create(vals)
-        if not all([elem in vals for elem in ['zip', 'country', 'city']]):
-            return address
-        ZipCode = Pool().get('country.zipcode')
-        if len(ZipCode.search(
-                [
-                    ('zip', '=', vals['zip']),
-                    ('country', '=', vals['country']),
-                ])) > 0:
-            return address
-        ZipCode.create(
-            {
-                'zip': vals['zip'],
-                'city': vals['city'],
-                'country': vals['country']
-            })
-        return address
+    def on_change_with_zip(self):
+        if self.city and self.country:
+            zips = self.get_zips_from_city(self.city, self.country)
+            if len(zips) > 0:
+                return zips[0].zip
+
+#    @classmethod
+#    def create(cls, vals):
+#        address = super(Address, cls).create(vals)
+#        if not all([elem in vals for elem in ['zip', 'country', 'city']]):
+#            return address
+#        ZipCode = Pool().get('country.zipcode')
+#        if len(ZipCode.search(
+#                [
+#                    ('zip', '=', vals['zip']),
+#                    ('country', '=', vals['country']),
+#                ])) > 0:
+#            return address
+#        ZipCode.create(
+#            {
+#                'zip': vals['zip'],
+#                'city': vals['city'],
+#                'country': vals['country']
+#            })
+#        return address
 
     @staticmethod
     def default_country():
@@ -104,6 +138,36 @@ class Address():
             return [x.city for x in cities]
         else:
             return ['']
+
+    def autocomplete_zip(self):
+        if self.city and self.country:
+            zips = self.get_zips_from_city(self.city, self.country)
+            return [x.zip for x in zips]
+        else:
+            return ['']
+
+    def get_zip_and_city(self, name):
+        Zip = Pool().get('country.zipcode')
+        domain = [
+            ('city', '=', self.city),
+            ('zip', '=', self.zip),
+        ]
+        if self.country:
+            domain.append(('country', '=', self.country.id))
+        zips = Zip.search(domain, limit=1)
+        if zips:
+            return zips[0].id
+
+    def on_change_zip_and_city(self):
+        res = {'city': '', 'zip': ''}
+        if self.zip_and_city:
+            res['city'] = self.zip_and_city.city
+            res['zip'] = self.zip_and_city.zip
+        return res
+
+    @classmethod
+    def set_zip_and_city(cls, addresses, name, vals):
+        pass
 
 
 class AddresseKind(DynamicSelection):

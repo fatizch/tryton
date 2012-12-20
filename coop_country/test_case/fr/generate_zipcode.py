@@ -1,20 +1,27 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 import urllib
 import sys
 from HTMLParser import HTMLParser
-import logging
 
 
-def get_cp(txtCommune, cdep=None):
+def get_cp(txtCommune=None, cdep=None, txtCP=None):
     #logging.info("looking for %s" % txtCommune)
-    params = urllib.urlencode({'txtCommune': txtCommune, 'selCritere': 'CP'})
+    params = {'selCritere': 'CP'}
+    if txtCommune:
+        params['txtCommune'] = txtCommune
+    if txtCP:
+        params['txtCP'] = txtCP
+        if not cdep:
+            cdep = txtCP[0:2]
+    params = urllib.urlencode(params)
     f = urllib.urlopen(
         'http://www.laposte.fr/sna/rubrique.php3?id_rubrique=59&recalcul=oui',
         params)
     reponse = f.read().decode('iso-8859-1')
-    #print reponse
     f.close()
-    #-- remove malformatted HTML
+    if reponse.find(u'Aucune réponse.') >= 0:
+        return None
     i = 0
     while i > -1:
         i = reponse.find('onclick=window.open')
@@ -75,68 +82,31 @@ class MyParser(HTMLParser):
                 self.result_found = False
 
 
-def normalize_commune(art, ncc):
-    #logging.info("normalizing %s %s" % (art, ncc))
-    resu = None
-    if art:
-        resu = art.strip('(').strip(')').strip("'")
-    if resu:
-        resu = "%s %s" % (resu, ncc)
-    else:
-        resu = ncc
-    resu = resu.replace('-', ' ').replace("'", " ")
-    if resu.startswith('SAINT '):
-        resu = 'ST ' + resu[6:]
-    if resu.startswith('SAINTE '):
-        resu = 'STE ' + resu[7:]
-    resu = resu.replace(' SAINT ', ' ST ')
-    resu = resu.replace(' SAINTE ', ' STE ')
-    return resu
-
-
-def write_cp(from_file, to_file):
-    logging.basicConfig(level=logging.INFO)
+def write_cp_by_zipcode(to_file):
     with open(to_file, 'w') as insee_cp:
-        with open(from_file) as insee:
-            first = True
-            for line in insee:
-                if first:
-                    first = False
-                    continue
-                splitted = line.split('\t')
-                dep = splitted[3]
-                com = splitted[4]
-                artmaj = splitted[8]
-                ncc = splitted[9]
-                txtCommune = normalize_commune(artmaj, ncc)
-                try:
-                    cp = get_cp(txtCommune, dep)
-                    #cp = get_cp('MARSEILLE', '13')
-                except:
-                    logging.info("Exception when searching CP for %s" %
-                        txtCommune)
-                    continue
-                cd_insee = dep + com
-#                if len(cp) > 1:
-#                    logging.warn("Plusieurs    CP")
-#                    logging.warn(cp)
-#                if len(cp) == 0:
-#                    logging.info("Impossible to find CP for %s in %s"
-#                            % (txtCommune, dep))
-                for cur_list in cp:
-                    if cur_list[1] != txtCommune:
-                        logging.info("Searching: %s Found: %s CP: %s INSEE: %s"
-                            % (txtCommune, cur_list[1], cur_list[0], cd_insee))
-                    insee_cp.write("%s\t%s\t%s" % (cur_list[1], cur_list[0],
-                        cd_insee))
-                    insee_cp.write("\n")
+        for dep in range(1, 100):
+            for commune in range(1000):
+                txtCP = '%s%s' % (str(dep).zfill(2), str(commune).zfill(3))
+                cps = get_cp(txtCP=txtCP)
+                if cps is not None and len(cps) == 0:
+                    print 'Pb retrieving CP %s' % txtCP
+                elif cps:
+                    for cur_list in cps:
+                        cedex = 'CEDEX' in cur_list[1].upper()
+                        line = "%s\t%s\t%s" % (cur_list[1], cur_list[0], cedex)
+                        insee_cp.write(line)
+                        insee_cp.write("\n")
 
+
+def test_CP():
+    print get_cp(txtCP='27630')
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        from_file = sys.argv[1]
+        #from_file = sys.argv[1]
         to_file = sys.argv[2]
     else:
-        from_file = 'comsimp2012.txt'
+        #from_file = 'comsimp2012.txt'
         to_file = 'zipcode_temp.csv'
-    write_cp(from_file, to_file)
+    #write_cp(from_file, to_file)
+    write_cp_by_zipcode(to_file)

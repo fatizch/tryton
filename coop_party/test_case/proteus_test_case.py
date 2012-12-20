@@ -45,19 +45,20 @@ def get_country(cfg_dict, name):
 
 
 def create_address(cfg_dict, party, party_kind):
-    res = cfg_dict['Address']()
-    res.party = party
     data = random.choice(cfg_dict['address_' + party_kind])
-    res.street = data['street']
-    res.streetbis = data['streetbis']
-    res.zip = data['zip'].zfill(5)
-    res.city = data['city']
-    cfg_dict, res.country = get_country(cfg_dict, data['country'])
     try:
+        res = cfg_dict['Address']()
+        res.party = party
+        res.street = data['street']
+        res.streetbis = data['streetbis']
+        res.zip = data['zip'].zfill(5)
+        res.city = data['city']
+        cfg_dict, res.country = get_country(cfg_dict, data['country'])
         res.save()
         return res
     except:
         print 'Impossible to store address % s' % res
+        print data
         return None
 
 

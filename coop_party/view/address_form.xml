@@ -10,4 +10,9 @@
         <label name="end_date"/>
         <field name="end_date"/>
     </xpath>
+    <xpath expr="/form/label[@name='zip']" position="before">
+        <label name="zip_and_city"/>
+        <field name="zip_and_city"/>
+        <newline/>
+    </xpath>
 </data>
