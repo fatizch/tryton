@@ -169,13 +169,21 @@ def get_dimension_kind(value):
     return res
 
 
-def load_table_from_csv(cfg_dict, path, name):
+def load_table_from_csv(cfg_dict, path, file_name):
     Table = cfg_dict['Table']
+    if ';' in file_name:
+        (code, name) = file_name.split(';')
+    else:
+        name = file_name
+        code = ''
+    code = code.strip()
+    name = name.strip()
     if get_object_from_db(Table, 'name', name):
         return
     reader = csv.reader(open(path, 'rb'), delimiter=';')
     line = 0
     table = Table()
+    table.code = code
     table.name = name
     table.save()
     Cell = cfg_dict['Cell']
