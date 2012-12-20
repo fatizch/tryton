@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<tree string="Process Steps" editable="bottom">
+  <field name="step"/>
+  <field name="status"/>
+</tree>

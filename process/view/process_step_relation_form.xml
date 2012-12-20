@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<form string="Process Relation">
+  <label name="step" xalign="0"/>
+  <field name="step" colspan="3"/>
+  <newline/>
+  <label name="status" xalign="0"/>
+  <field name="status" colspan="3"/>
+</form>

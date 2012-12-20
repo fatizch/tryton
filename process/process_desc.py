@@ -13,6 +13,7 @@ from trytond.modules.coop_utils import One2ManyDomain
 
 
 __all__ = [
+    'Status',
     'ProcessStepRelation',
     'ProcessDesc',
     'TransitionAuthorization',
@@ -24,7 +25,27 @@ __all__ = [
 ]
 
 
-class ProcessStepRelation(ModelSQL):
+class Status(ModelSQL, ModelView):
+    'Process Status'
+
+    __name__ = 'process.status'
+
+    name = fields.Char(
+        'Name',
+        required=True,
+    )
+
+    relations = fields.One2Many(
+        'process.process_step_relation',
+        'status',
+        'Relations',
+        states={
+            'readonly': True
+        },
+    )
+
+
+class ProcessStepRelation(ModelSQL, ModelView):
     'Process to Step relation'
 
     __name__ = 'process.process_step_relation'
@@ -38,6 +59,12 @@ class ProcessStepRelation(ModelSQL):
     step = fields.Many2One(
         'process.step_desc',
         'Step',
+    )
+
+    status = fields.Many2One(
+        'process.status',
+        'Status',
+        ondelete='RESTRICT',
     )
 
 
@@ -76,10 +103,9 @@ class ProcessDesc(ModelSQL, ModelView):
     )
 
     # We also need all the steps that will be used in the process
-    all_steps = fields.Many2Many(
+    all_steps = fields.One2Many(
         'process.process_step_relation',
         'process',
-        'step',
         'All Steps',
     )
 
@@ -128,6 +154,11 @@ class ProcessDesc(ModelSQL, ModelView):
             if isinstance(process, int):
                 process = cls(process)
             process.create_update_view()
+
+    def get_all_steps(self):
+        # We need a way to get all the steps.
+        for elem in self.all_steps:
+            yield elem.step
 
     def create_update_view(self):
         # Views are calculated depending on the process' steps and a few other
@@ -224,7 +255,7 @@ class ProcessDesc(ModelSQL, ModelView):
         xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1">'
 
         # Now we can build the steps' xml
-        for step in self.all_steps:
+        for step in self.get_all_steps():
             step_xml = "(Eval('cur_state', '') == '%s')" % (
                 step.technical_name)
 
@@ -563,12 +594,12 @@ class StepDesc(ModelSQL, ModelView):
         super(StepDesc, cls).write(steps, values)
 
         # If we write a step that's being used in the definition of a process
-        Process = Pool().get('process.process_desc')
+        ProcessStepRelation = Pool().get('process.process_step_relation')
         processes = set()
         for step in steps:
-            used_in = Process.search([
-                ('all_steps', '=', 'step')])
-            processes |= set(map(lambda x:x.id, used_in))
+            used_in = ProcessStepRelation.search([
+                ('step', '=', 'step')])
+            processes |= set(map(lambda x:x.process.id, used_in))
 
         # We need to update each of those processes view.
         for process in processes:
@@ -688,17 +719,17 @@ class GenerateGraph(Report):
 
         nodes = {}
 
-        for step in the_process.all_steps:
+        for step in the_process.get_all_steps():
             cls.build_step(the_process, step, graph, nodes)
 
         edges = {}
-        for step in the_process.all_steps:
+        for step in the_process.get_all_steps():
             for transition in step.to_steps:
                 cls.build_transition(
                     the_process, step, transition, graph, nodes, edges)
 
 
-        for step in the_process.all_steps:
+        for step in the_process.get_all_steps():
             for transition in step.from_steps:
                 cls.build_inverse_transition(
                     the_process, step, transition, graph, nodes, edges)

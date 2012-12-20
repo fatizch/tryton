@@ -6,6 +6,7 @@ from .process_framework import *
 def register():
     Pool.register(
         # From process_labo :
+        Status,
         StepDesc,
         StepTransition,
         TransitionAuthorization,

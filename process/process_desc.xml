@@ -1,23 +1,53 @@
 <?xml version="1.0"?>
 <tryton>
   <data>
-    
     <!-- Model override -->
-
     <record model="ir.ui.view" id="model_tree">
       <field name="model">ir.model</field>
       <field name="type">tree</field>
       <field name="inherit" ref="ir.model_view_tree"/>
       <field name="name">model_tree</field>
     </record>
-    
     <!-- Main Menu -->
-
     <menuitem name="Process Main Menu" id="process_menu_id" sequence="11"/>
-    
-    
+    <!-- Status Entries -->
+    <record model="ir.ui.view" id="process_status_form">
+      <field name="model">process.status</field>
+      <field name="type">form</field>
+      <field name="name">process_status_form</field>
+    </record>
+    <record model="ir.ui.view" id="process_status_tree">
+      <field name="model">process.status</field>
+      <field name="type">tree</field>
+      <field name="name">process_status_tree</field>
+    </record>
+    <record model="ir.action.act_window" id="act_process_status">
+      <field name="name">Process Status</field>
+      <field name="res_model">process.status</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_process_status_view1">
+      <field name="sequence" eval="16"/>
+      <field name="view" ref="process_status_tree"/>
+      <field name="act_window" ref="act_process_status"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_process_status_view2">
+      <field name="sequence" eval="16"/>
+      <field name="view" ref="process_status_form"/>
+      <field name="act_window" ref="act_process_status"/>
+    </record>
+    <menuitem parent="process_menu_id" sequence="16" action="act_process_status" id="menu_process_status"/>
+    <!-- Process Step Relation entries -->
+    <record model="ir.ui.view" id="process_step_relation_form">
+      <field name="model">process.process_step_relation</field>
+      <field name="type">form</field>
+      <field name="name">process_step_relation_form</field>
+    </record>
+    <record model="ir.ui.view" id="process_step_relation_tree">
+      <field name="model">process.process_step_relation</field>
+      <field name="type">tree</field>
+      <field name="name">process_step_relation_tree</field>
+    </record>
     <!-- Process Desc entries -->
-    
     <record model="ir.ui.view" id="process_desc_form">
       <field name="model">process.process_desc</field>
       <field name="type">form</field>
@@ -28,9 +58,7 @@
       <field name="type">tree</field>
       <field name="name">process_desc_tree</field>
     </record>
-    
     <!-- Step Desc Entries -->
-    
     <record model="ir.ui.view" id="step_desc_form">
       <field name="model">process.step_desc</field>
       <field name="type">form</field>
@@ -41,9 +69,7 @@
       <field name="type">tree</field>
       <field name="name">step_desc_tree</field>
     </record>
-    
     <!-- Transitions entries -->
-    
     <record model="ir.ui.view" id="step_transition_form">
       <field name="model">process.step_transition</field>
       <field name="type">form</field>
@@ -54,9 +80,7 @@
       <field name="type">tree</field>
       <field name="name">step_transition_tree</field>
     </record>
-    
     <!-- Menu for process desc -->
-    
     <record model="ir.action.act_window" id="act_process_desc">
       <field name="name">Process Descriptors</field>
       <field name="res_model">process.process_desc</field>
@@ -73,7 +97,6 @@
     </record>
     <menuitem parent="process_menu_id" sequence="10" action="act_process_desc" id="menu_process_desc"/>
     <!-- Menu for step desc -->
-
     <record model="ir.action.act_window" id="act_step_desc">
       <field name="name">Step Descriptors</field>
       <field name="res_model">process.step_desc</field>
