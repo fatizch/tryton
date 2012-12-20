@@ -194,8 +194,8 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
                 self.__class__, field_name, action='add')
         return res
 
-    @staticmethod
-    def get_kind():
+    @classmethod
+    def get_kind(cls, vals=None):
         return coop_string.get_descendents_name(BusinessRuleRoot)
 
     def get_is_current(self, name):

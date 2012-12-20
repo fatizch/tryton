@@ -254,8 +254,8 @@ class GenericActor(CoopSQL, Actor):
 
     kind = fields.Selection('get_possible_actor_kind', 'Kind', required=True)
 
-    @staticmethod
-    def get_possible_actor_kind():
+    @classmethod
+    def get_possible_actor_kind(cls, vals=None):
         return GenericActorKind.get_values_as_selection(
             'party.generic_actor_kind')
 

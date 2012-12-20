@@ -67,8 +67,8 @@ class ProcessDesc(model.CoopSQL, model.CoopView):
     # Each tuple contains the model_name (i.e. 'ins_process.dummy_process')
     # associated with the process' user friendly name provided by
     # coop_process_name.
-    @staticmethod
-    def get_process_model():
+    @classmethod
+    def get_process_model(cls, vals=None):
         result = []
         for model_name, model in Pool().iterobject(type='wizard'):
             # Evil hack to check model's class inheritance
@@ -249,8 +249,8 @@ class StepDesc(model.CoopSQL, model.CoopView):
     # Each tuple contains the model_name (i.e. 'ins_process.dummy_step')
     # associated with the step's user friendly name provided by
     # coop_step_name.
-    @staticmethod
-    def get_steps_model():
+    @classmethod
+    def get_steps_model(cls, vals=None):
         result = []
         for model_name, model in Pool().iterobject():
             # Evil hack to check model's class inheritance
@@ -306,8 +306,8 @@ class StepDesc(model.CoopSQL, model.CoopView):
         else:
             return self.step_model
 
-    @staticmethod
-    def get_product_steps():
+    @classmethod
+    def get_product_steps(cls, vals=None):
         result = set()
         for cls in DependantState.__subclasses__():
             result.add((lambda x: (x, x))(cls.depends_on_state()))
