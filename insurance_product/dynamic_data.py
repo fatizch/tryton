@@ -135,7 +135,7 @@ class CoopSchemaElement(DictSchemaMixin, model.CoopSQL, model.CoopView):
                 query_string=query_string)
 
     @classmethod
-    def describe_keys(cls, key_ids):
+    def get_keys(cls, key_ids):
         keys = []
         for key in cls.browse(key_ids):
             with Transaction().set_context(language='fr_FR'):
