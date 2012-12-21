@@ -180,24 +180,11 @@ class ProcessFramework(ModelView):
 
     __name__ = 'process.process_framework'
 
-    #This field will be used to store the current_state for each process which
-    #has been launched on this object so far.
-    #It will be used as a storage field ofr en encoded json dictionnary
-    process_state = fields.Char(
-        'Process State',
-    )
-
-    # The process_state field is nice, but it is not usable 'as is'. The
-    # cur_state field calculates the current state value depending on the
-    # process currently executed.
-    cur_state = fields.Function(
-        fields.Char(
-            'Current State',
-            states={
-                'invisible': True
-            },
-        ),
-        'get_cur_state',
+    # The current state is used to store which process is currently being
+    # executed and which step is the current step
+    current_state = fields.Many2One(
+        'process.process_step_relation',
+        'Current State',
     )
 
     @classmethod
@@ -253,13 +240,14 @@ class ProcessFramework(ModelView):
                 good_trans.execute(work)
 
                 # Do not forget to save !
+                print '#' * 80
+                print '%s' % work.current_state
                 work.save()
 
         return button_generic
 
     def set_state(self, value, process_name=None):
-        # Setting the state means updating the dictionnary encoded in the
-        # process_state field.
+        # Setting the state means updating the current_state attribute
 
         # To do that, we need to know the process on which we are working.
         # Either it is a parameter of the setter, either we look for it in the
@@ -268,60 +256,23 @@ class ProcessFramework(ModelView):
             process_name = Transaction().context.get('running_process')
             if not process_name:
                 return
+
+        ProcessDesc = Pool().get('process.process_desc')
+        process_desc, = ProcessDesc.search([
+                ('technical_name', '=', process_name),
+            ], limit=1)
         
-        # Now we get the current states if it exists, create it if it does not
-        if not (hasattr(self, 'process_state') and self.process_state):
-            cur_state = {}
-        else:
-            cur_state = json.loads(self.process_state)
-
-        # Set the value
-        cur_state[process_name] = value
-
-        # Then 'save' it in the process_state field
-        self.process_state = json.dumps(cur_state)
-
-    def get_state(self, process_name=None):
-        # The current state dpends on the process we are working on. Either it
-        # is provided as an argument, either we fetch it in the context
-        if not process_name:
-            process_name = Transaction().context.get('running_process')
-            if not process_name:
-                return ''
-        
-        # If no process_state is set (i.e. no process has ever been launched
-        # on the current instance), there is no state to get
-        if not (hasattr(self, 'process_state') and self.process_state):
-            if process_name:
-                return self.default_cur_state()
-            return ''
-
-        # We load the process_state
-        cur_state_dict = json.loads(self.process_state)
-
-        # If the current process key does not exists, it means that it has
-        # never been launched on the instance.
-        # As we are in a process context, we assume that we want the first
-        # step's name
-        if not process_name in cur_state_dict:
-            return self.default_cur_state()
-
-        # Else, we return the value we found in the proces_state field.
-        return cur_state_dict[process_name]
-
-    def get_cur_state(self, name):
-        # Just forward the request to the get_state method
-        return self.get_state()
+        self.current_state = process_desc.get_step_relation(value)
 
     @classmethod
-    def default_cur_state(cls):
+    def default_current_state(cls):
         # When we are first accessing the record, if we are in a process, we
         # need to get a default value so that the states work properly
         process_name = Transaction().context.get('running_process')
 
         # Of course, no proces means no need
         if not process_name:
-            return ''
+            return 
 
         ProcessDesc = Pool().get('process.process_desc')
 
@@ -331,16 +282,16 @@ class ProcessFramework(ModelView):
 
         # The good value is the name associated to the first step of the
         # current process
-        return process_desc.first_step.technical_name
+        return process_desc.get_first_state_relation().id
 
     def get_rec_name(self, name):
         # We append the current_state to the record name
         res = super(ProcessFramework, self).get_rec_name(name)
 
         if res:
-            return res + ' - ' + self.get_cur_state(name)
+            return res + ' - ' + self.current_state.get_rec_name(name)
 
-        return self.get_cur_state(name)
+        return self.current_state.get_rec_name(name)
 
     @classmethod
     def raise_user_error(cls, errors):

@@ -211,6 +211,10 @@ class ProcessDesc(ModelSQL, ModelView):
         good_action.context = "{'running_process': '%s'}" % (
             self.technical_name)
 
+        # We also have to filter the states:
+        good_action.domain = "[('current_state', 'in', [%s])]" % (
+            ','.join(map(lambda x: str(x.id), self.all_steps)))
+
         good_action.sequence = 10
 
         # Now we can save the action and the menu
@@ -255,18 +259,22 @@ class ProcessDesc(ModelSQL, ModelView):
         xml = '<?xml version="1.0"?>'
         xml += '<form string="%s">' % self.fancy_name
         xml += '<group name="process_header">'
+        xml += '</group>'
+        xml += '<newline/>'
+        xml += '<group name="current_state">'
         # We need to have cur_state in the view so our Pyson Eval can work 
         # properly
-        xml += '<field name="cur_state"/>'
+        xml += '<field name="current_state" invisible="1"/>'
         xml += '</group>'
         xml += '<newline/>'
         xml += '<group name="process_content" '
         xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1">'
 
         # Now we can build the steps' xml
-        for step in self.get_all_steps():
-            step_xml = "(Eval('cur_state', '') == '%s')" % (
-                step.technical_name)
+        for step_relation in self.all_steps:
+            step = step_relation.step
+            step_xml = "(Eval('current_state', 0) == %s)" % (
+                step_relation.id)
 
             if step.authorizations:
                 auth_xml = '('
@@ -391,6 +399,19 @@ class ProcessDesc(ModelSQL, ModelView):
         # We return the good_menu so that it can be set in the menu_item field
         return good_menu
 
+    def get_step_relation(self, step):
+        for elem in self.all_steps:
+            if elem.step.id == step.id:
+                return elem
+
+        return None
+    
+    def get_first_state_relation(self):
+        return self.get_step_relation(self.first_step)
+    
+    def get_rec_name(self, name):
+        return self.fancy_name
+
     @classmethod
     def create(cls, values):
         # When creating the process, we create the associated view
@@ -509,7 +530,7 @@ class StepTransition(ModelSQL, ModelView):
                 target.raise_user_error(errs)
 
         # Everything went right, update the state of the instance
-        target.set_state(self.to_step.technical_name)
+        target.set_state(self.to_step)
 
     def build_button(self):
         # Here we build the xml for the button associated to the transition.
