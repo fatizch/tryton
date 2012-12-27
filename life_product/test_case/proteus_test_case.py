@@ -157,6 +157,9 @@ def get_or_create_fee(cfg_dict, code, name, vals=None):
 
 def get_or_create_schema_element(cfg_dict, name, string=None, type_=None,
         kind=None, selection=None):
+    name = cfg_dict['translate'].get(name, name)
+    if string:
+        string = cfg_dict['translate'].get(string, string)
     schema_el = proteus_tools.get_objects_from_db(cfg_dict,
         'SchemaElement', 'name', name)
     if schema_el:
@@ -171,42 +174,10 @@ def get_or_create_schema_element(cfg_dict, name, string=None, type_=None,
     return schema_el
 
 
-def add_description(product):
+def add_description(cfg_dict, product):
     if product.description:
         return product
-    product.description = '''Une solution pour <b>compléter votre régime \
-obligatoire</b>
-<b>En cas d’arrêt de travail temporaire ou prolongé, maintenez votre \
-salaire à 100 %</b>
-    En cas d’arrêt de travail, seuls 50 % de vos revenus vous sont versés \
-par la Sécurité Sociale. Pour maintenir votre revenu et continuer à vivre\
- normalement, une indemnité journalière complète intégralement celle de \
-votre régime obligatoire jusqu’au 1095ème jour (3 ans, délai après lequel \
-vous êtes considéré comme invalide).
-
-<b>En cas d’invalidité, votre pouvoir d’achat est préservé</b>
-    Vous risquez de ne plus pouvoir exercer votre emploi. Nous complétons \
-votre rente de la Sécurité Sociale par une rente d’invalidité, jusqu’à \
-votre retraite (au plus tard jusqu’à votre 60ème anniversaire).
-
-<b>En cas de décès ou de Perte Totale et Irréversible d’Autonomie, \
-l’avenir de vos proches est assuré</b>
-    Des garanties financières pour votre foyer :
-            • Capital décès
-            Vous mettez vos proches à l’abri des soucis financiers.Vous \
-choisissez librement le montant du capital qui peut aller jusqu’à \
-600 000 € et n’est pas imposable dans la limite de 152 500 € \
-(selon la réglementation en vigueur).
-            • Rente de conjoint
-            Une rente plafonnée à 20 000 € par an est versée jusqu’au 65ème \
-anniversaire du conjoint ou concubin.Vous avez la certitude que \
-votre conjoint bénéficiera d’un complément de revenu régulier \
-jusqu’à sa retraite.
-            • Rente éducation
-            Vous donnez les moyens de garantir à vos enfants le financement \
-de leurs études quoiqu’il arrive.Vos enfants perçoivent une rente \
-pouvant atteindre 4 500 € par an et ce, jusqu’à la fin de \
-leurs études (au plus tard jusqu’à leur 26ème anniversaire).'''
+    product.description = cfg_dict['translate']['product_life_description']
 
 
 def create_AAA_Product(cfg_dict, code, name):
@@ -228,8 +199,9 @@ def create_AAA_Product(cfg_dict, code, name):
     pr_data1.kind = 'base'
     pr_data1.code = 'PP'
 
-    tax = get_or_create_tax(cfg_dict, 'CCSS',
-        u'Contribution prévue par le Code de la Sécurité sociale',
+    tax = get_or_create_tax(cfg_dict,
+        cfg_dict['translate']['IT'],
+        cfg_dict['translate']['Insurance Tax'],
         [{'value': 15}])
 
     pr_data11 = cfg_dict['PricingData']()
@@ -719,8 +691,8 @@ def create_invalidity_coverage(cfg_dict):
         kind='sub_elem')
     cd_mgr.shared_dynamic.append(
         get_or_create_schema_element(cfg_dict, name='CSP'))
-    salary = get_or_create_schema_element(cfg_dict, name='salaire',
-        string='Salaire Annuel', type_='char', kind='contract')
+    salary = get_or_create_schema_element(cfg_dict, name='salary',
+        string='Annual Salary', type_='char', kind='contract')
     cd_mgr.specific_dynamic.append(salary)
 
     ca_rule = add_rule(cfg_dict, cov, 'coverage_amount', at_date)
@@ -781,7 +753,7 @@ def create_death_coverage(cfg_dict):
 
     cd_mgr = get_or_create_complementary_data_mgr(cfg_dict, cov, kind='main')
     cd_mgr.shared_dynamic.append(
-        get_or_create_schema_element(cfg_dict, name='est_vip'))
+        get_or_create_schema_element(cfg_dict, name='is_vip'))
 
     ca_rule = add_rule(cfg_dict, cov, 'coverage_amount')
     ca_rule.kind = 'cal_list'
@@ -867,7 +839,7 @@ def create_prev_product(cfg_dict):
     inval = create_invalidity_coverage(cfg_dict)
     prod = get_or_create_product(cfg_dict, 'PREV', u'Prévoyance Indviduelle',
         options=[death, inval, disability], date=at_date)
-    add_description(prod)
+    add_description(cfg_dict, prod)
     prod.save()
     return prod
 
@@ -937,10 +909,10 @@ def create_tranches(cfg_dict, pss_code):
 
 
 def create_shared_schema_elements(cfg_dict):
-    get_or_create_schema_element(cfg_dict, name='est_vip', string='Est VIP',
+    get_or_create_schema_element(cfg_dict, name='is_vip', string='Is VIP',
         type_='boolean', kind='contract')
-    get_or_create_schema_element(cfg_dict, name='salaire',
-        string='Salaire Annuel', type_='char', kind='contract')
+    get_or_create_schema_element(cfg_dict, name='salary',
+        string='Annual Salary', type_='char', kind='contract')
     get_or_create_schema_element(cfg_dict, name='CSP',
         string='CSP', type_='selection', kind='contract',
         selection='''CSP1: CSP1

@@ -150,6 +150,17 @@ def generate_module_translation(cfg_dict, base_path, module_name):
         csv_file.write(export_wizard.form.file)
 
 
+def load_test_case_translations(cfg_dict, path):
+    import polib
+    if not 'translate' in cfg_dict.keys():
+        cfg_dict['translate'] = {}
+    for po_file in [f for f in os.listdir(path) if f.endswith('.po')]:
+        po = polib.pofile(os.path.join(path, po_file))
+        for entry in po.translated_entries():
+            cfg_dict['translate'][entry.msgid] = entry.msgstr
+    return cfg_dict
+
+
 def update_modules(cfg_dict):
     cfg_dict = set_currency(cfg_dict)
     modules = get_modules_to_update(cfg_dict['modules'])
@@ -174,8 +185,12 @@ def update_modules(cfg_dict):
         #try:
         module_dict = get_module_cfg(cur_path, cfg_dict)
         module_dict['dir'] = module_dir
-        module_dict['dir_loc'] = os.path.join(module_dir,
+        dir_loc = os.path.join(module_dir,
             module_dict.get('language', 'fr')[0:2].lower())
+        if os.path.exists(dir_loc):
+            module_dict['dir_loc'] = dir_loc
+            module_dict = load_test_case_translations(module_dict,
+                module_dict['dir_loc'])
         context = {'cfg_dict': module_dict}
         localcontext = {}
         exec code in context, localcontext
