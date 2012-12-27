@@ -7,8 +7,6 @@ import os
 import csv
 from proteus import Model
 
-DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
-
 
 def update_models(cfg_dict):
     cfg_dict['Person'] = Model.get('party.person')
@@ -21,8 +19,7 @@ def update_models(cfg_dict):
 
 
 def load_addresses(cfg_dict, party_kind):
-    path = os.path.join(DIR, cfg_dict.get('language', 'fr')[0:2].lower(),
-        'address_' + party_kind + '.csv')
+    path = os.path.join(cfg_dict['dir_loc'], 'address_' + party_kind + '.csv')
     reader = csv.DictReader(open(path, 'rb'), delimiter=';')
     cfg_dict['address_' + party_kind] = []
     for cur_line in reader:
@@ -67,7 +64,7 @@ def create_persons(cfg_dict, relations_kind, addresses_kind):
     total_nb = int(cfg_dict['total_nb'])
     nb_male = int(cfg_dict['nb_male'])
     nb_female = total_nb - nb_male
-    path = os.path.join(DIR, cfg_dict.get('language', 'fr')[0:2].lower())
+    path = cfg_dict['dir_loc']
     dicts['male'] = get_name_as_liste(
         os.path.join(path, 'male'), nb_male)
     dicts['female'] = get_name_as_liste(

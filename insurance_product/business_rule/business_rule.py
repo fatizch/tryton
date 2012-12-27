@@ -27,8 +27,7 @@ class BusinessRuleManager(model.CoopSQL, model.CoopView,
 
     offered = fields.Reference('Offered', selection='get_offered_models')
     business_rules = fields.One2Many('ins_product.generic_business_rule',
-        'manager', 'Business Rules')
-    # on_change=['business_rules'])
+        'manager', 'Business Rules', on_change=['business_rules'])
 #    code = fields.Char('Code',
 #        on_change_with=['business_rules', 'offered'])
 
@@ -45,38 +44,38 @@ class BusinessRuleManager(model.CoopSQL, model.CoopView,
         return [x for x in utils.get_descendents('ins_product.offered')
             if module_name in x[0]]
 
-#    def on_change_business_rules(self):
-#        res = {'business_rules': {}}
-#        res['business_rules'].setdefault('update', [])
-#        for business_rule1 in self.business_rules:
-#            #the idea is to always set the end_date
-#            #to the according next start_date
-#            for business_rule2 in self.business_rules:
-#                if (business_rule1 != business_rule2
-#                    and business_rule2.start_date
-#                    and business_rule1.start_date
-#                    and business_rule2.start_date > business_rule1.start_date
-#                    and (not business_rule1.end_date
-#                        or business_rule1.end_date >= business_rule2.start_date
-#                        )
-#                    ):
-#                    end_date = (business_rule2.start_date
-#                        - datetime.timedelta(days=1))
-#                    res['business_rules']['update'].append({
-#                        'id': business_rule1.id,
-#                        'end_date': end_date})
-#
-#            #if we change the start_date to a date after the end_date,
-#            #we reinitialize the end_date
-#            if (business_rule1.end_date
-#                and business_rule1.start_date
-#                and business_rule1.end_date < business_rule1.start_date):
-#                res['business_rules']['update'].append(
-#                    {
-#                        'id': business_rule1.id,
-#                        'end_date': None
-#                    })
-#        return res
+    def on_change_business_rules(self):
+        res = {'business_rules': {}}
+        res['business_rules'].setdefault('update', [])
+        for business_rule1 in self.business_rules:
+            #the idea is to always set the end_date
+            #to the according next start_date
+            for business_rule2 in self.business_rules:
+                if (business_rule1 != business_rule2
+                    and business_rule2.start_date
+                    and business_rule1.start_date
+                    and business_rule2.start_date > business_rule1.start_date
+                    and (not business_rule1.end_date
+                        or business_rule1.end_date >= business_rule2.start_date
+                        )
+                    ):
+                    end_date = (business_rule2.start_date
+                        - datetime.timedelta(days=1))
+                    res['business_rules']['update'].append({
+                        'id': business_rule1.id,
+                        'end_date': end_date})
+
+            #if we change the start_date to a date after the end_date,
+            #we reinitialize the end_date
+            if (business_rule1.end_date
+                and business_rule1.start_date
+                and business_rule1.end_date < business_rule1.start_date):
+                res['business_rules']['update'].append(
+                    {
+                        'id': business_rule1.id,
+                        'end_date': None
+                    })
+        return res
 
     def get_good_rule_at_date(self, data):
         # First we got to check that the fields that we will need to calculate

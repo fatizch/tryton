@@ -6,7 +6,6 @@ import csv
 import datetime
 from proteus import Model
 from decimal import Decimal
-DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
 
 def update_cfg_dict_with_models(cfg_dict):
@@ -73,8 +72,7 @@ def get_or_create_objects(cfg_dict, line):
 
 
 def create_objects(cfg_dict, name):
-    path = os.path.join(DIR, cfg_dict.get('language', 'fr')[0:2].lower(),
-        name)
+    path = os.path.join(cfg_dict['dir_loc'], name)
     reader = csv.reader(open(path, 'rb'), delimiter=';')
     n = 0
     for cur_line in reader:

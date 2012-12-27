@@ -6,8 +6,6 @@ import csv
 
 from proteus import Model
 
-DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
-
 
 def get_models():
     res = {}
@@ -32,8 +30,7 @@ def get_or_create_insurer(models, cfg_dict, code, name):
 
 
 def create_insurers(models, cfg_dict):
-    path = os.path.join(DIR, cfg_dict.get('language', 'fr')[0:2].lower(),
-        'insurer')
+    path = os.path.join(cfg_dict['dir_loc'], 'insurer')
     reader = csv.reader(open(path, 'rb'), delimiter=';')
     n = 0
     for insurer in reader:

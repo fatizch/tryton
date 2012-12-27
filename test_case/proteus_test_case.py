@@ -163,15 +163,20 @@ def update_modules(cfg_dict):
             generate_module_translation(cfg_dict, cur_path, cur_module)
         if not cfg_dict['create_data']:
             continue
-        if not os.path.isfile(os.path.join(
-                    cur_path, 'test_case', 'proteus_test_case.py')):
+        module_dir = os.path.join(cur_path, 'test_case')
+        if not os.path.isfile(os.path.join(module_dir,
+                    'proteus_test_case.py')):
             print 'Missing test case file for module %s' % cur_module
             continue
         print 'Running test case for module % s' % cur_module
 
         code = CODE_TEMPLATE % ('trytond.modules.' + cur_module + '.test_case')
         #try:
-        context = {'cfg_dict': get_module_cfg(cur_path, cfg_dict)}
+        module_dict = get_module_cfg(cur_path, cfg_dict)
+        module_dict['dir'] = module_dir
+        module_dict['dir_loc'] = os.path.join(module_dir,
+            module_dict.get('language', 'fr')[0:2].lower())
+        context = {'cfg_dict': module_dict}
         localcontext = {}
         exec code in context, localcontext
         #except:

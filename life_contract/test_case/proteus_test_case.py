@@ -28,14 +28,14 @@ def launch_test_case(cfg_dict):
         return
     Party = Model.get('party.person')
     Product = Model.get('ins_product.product')
-    on_product, = Product.find([('code', '=', 'AAA')], limit=1)
-    on_parties = Party.find()
-    the_args = []
-    for party in on_parties:
-        the_args.append([
-            party,
-            on_product,
-            len(the_args)])
+    for on_product in Product.find([]):
+        on_parties = Party.find()
+        the_args = []
+        for party in on_parties:
+            the_args.append([
+                party,
+                on_product,
+                len(the_args)])
 
     multiprocess_this(create_contract, the_args, cfg_dict,
         datetime.date.today() + datetime.timedelta(days=20))

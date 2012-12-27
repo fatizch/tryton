@@ -5,12 +5,9 @@ import os
 import csv
 from proteus import Model
 
-DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
-
 
 def load_dictionnary(cfg_dict):
-    path = os.path.join(DIR, cfg_dict.get('language', 'fr')[0:2].lower(),
-        'insurer')
+    path = os.path.join(cfg_dict['dir_loc'], 'insurer')
     reader = csv.reader(open(path, 'rb'), delimiter=';')
     if not 'dictionnary' in cfg_dict:
         cfg_dict['dictionnary'] = {}

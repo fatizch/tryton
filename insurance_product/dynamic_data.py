@@ -33,18 +33,12 @@ class CoopSchemaElement(DictSchemaMixin, model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     with_default_value = fields.Boolean('Default Value')
-    default_value_boolean = fields.Function(fields.Boolean(
-        'Default Value'),
-        'get_default_value',
-        'set_default_value')
-    default_value_char = fields.Function(fields.Char(
-        'Default Value'),
-        'get_default_value',
-        'set_default_value')
-    default_value_selection = fields.Function(fields.Char(
-        'Default Value'),
-        'get_default_value',
-        'set_default_value')
+    default_value_boolean = fields.Function(fields.Boolean('Default Value'),
+        'get_default_value', 'set_default_value')
+    default_value_char = fields.Function(fields.Char('Default Value'),
+        'get_default_value', 'set_default_value')
+    default_value_selection = fields.Function(fields.Char('Default Value'),
+        'get_default_value', 'set_default_value')
     default_value = fields.Char('Default Value')
     is_shared = fields.Function(fields.Boolean('Shared'), 'get_is_shared')
     kind = fields.Selection(

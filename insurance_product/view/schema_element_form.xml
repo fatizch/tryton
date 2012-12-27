@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<form string="Complementary Data Desciptor">
+    <label name="string"/>
+    <field name="string"/>
+    <label name="name"/>
+    <field name="name"/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <label name="kind"/>
+    <field name="kind"/>
+    <newline/>
+    <label name="type_"/>
+    <field name="type_"/>
+    <field name="selection" colspan="4"/>
+    <label name="digits"/>
+    <field name="digits"/>
+    <newline/>
+    <label name="with_default_value"/>
+    <group name="default value">
+        <field name="with_default_value" xexpand="0"/>
+        <field name="default_value_boolean" xexpand="0"/>
+        <field name="default_value_char"/>
+        <field name="default_value_selection"/>
+    </group>
+</form>

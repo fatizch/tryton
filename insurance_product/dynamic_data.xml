@@ -24,59 +24,13 @@
         <record model="ir.ui.view" id="schema_element_view_tree">
             <field name="model">ins_product.schema_element</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                    <tree string="Complementary Data Descriptors">
-                        <field name="is_shared"/>
-                        <field name="string"/>
-                        <field name="type_"/>
-                        <field name="name"/>
-                        <field name="start_date"/>
-                        <field name="end_date"/>
-                    </tree>
-                ]]>
-            </field>
+            <field name="name">schema_element_tree</field>
         </record>
 
         <record model="ir.ui.view" id="schema_element_view_form">
             <field name="model">ins_product.schema_element</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                    <form string="Complementary Data Desciptor">
-                        <group id="names">
-                            <label name="string"/>
-                            <field name="string"/>
-                            <label name="name"/>
-                            <field name="name"/>
-                        </group>
-                        <newline/>
-                        <group id="dates">
-                            <label name="start_date"/>
-                            <field name="start_date"/>
-                            <label name="end_date"/>
-                            <field name="end_date"/>
-                        </group>
-                        <newline/>
-                        <group id="types">
-                            <label name="kind"/>
-                            <field name="kind"/>
-                            <newline/>
-                            <label name="type_"/>
-                            <field name="type_"/>
-                            <field name="selection" colspan="4"/>
-                        </group>
-                        <newline/>
-                        <group id="defaults">
-                            <label name="with_default_value"/>
-                            <field name="with_default_value"/>
-                            <field name="default_value_boolean"/>
-                            <field name="default_value_char"/>
-                            <field name="default_value_selection"/>
-                        </group>
-                    </form>
-                ]]>
-            </field>
+            <field name="name">schema_element_form</field>
         </record>
 
         <record model="ir.action.act_window" id="act_model_coop_schema">

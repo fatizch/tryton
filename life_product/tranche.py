@@ -54,9 +54,10 @@ class TrancheVersion(CoopSQL, VersionObject):
 
     __name__ = 'tranche.tranche_version'
 
-    floor = fields.Many2One('rule_engine', 'Floor', help='Not Included')
+    floor = fields.Many2One('rule_engine', 'Floor', help='Not Included',
+        ondelete='RESTRICT')
     ceiling = fields.Many2One('rule_engine', 'Ceiling',
-        help='Included')
+        help='Included', ondelete='RESTRICT')
 
     @classmethod
     def main_model(cls):
