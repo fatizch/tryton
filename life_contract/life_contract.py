@@ -6,6 +6,7 @@ from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
+from trytond.rpc import RPC
 
 from trytond.modules.coop_utils import model
 from trytond.modules.coop_utils import utils
@@ -185,7 +186,8 @@ class LifeCoveredDesc(CoveredDesc):
     data_coverage_amount = fields.Selection(
         'get_allowed_amounts',
         'Coverage Amount',
-        context={'data_for_coverage': Eval('data_for_coverage')},
+        selection_parameters=['data_for_coverage', 'start_date'],
+	# context={'data_for_coverage': Eval('data_for_coverage')},
         depends=['data_for_coverage', 'start_date'],
         sort=False,
         states={
@@ -210,29 +212,27 @@ class LifeCoveredDesc(CoveredDesc):
         cls.elem_covered_data = copy.copy(cls.elem_covered_data)
         cls.elem_covered_data.model_name = \
             'life_contract.covered_desc'
+        cls.__rpc__.update({
+                'get_allowed_amounts': RPC(instantiate=0),
+                })
 
     def on_change_elem_person(self):
         if hasattr(self, 'elem_person') and self.elem_person:
             return {'data_coverage_name': self.elem_person.get_rec_name('')}
         return {}
 
-    @staticmethod
-    def get_allowed_amounts():
-        try:
-            coverage = Transaction().context.get('data_for_coverage')
-            if not coverage:
-                return []
-            wizard = LifeCoveredDesc.get_context()
-            the_coverage = utils.convert_ref_to_obj(coverage)
-            vals = the_coverage.get_result(
-                'allowed_amounts',
-                {
-                    'date': wizard.project.start_date,
-                    'contract': utils.WithAbstract.get_abstract_objects(
-                        wizard, 'for_contract')},)[0]
-            return map(lambda x: (x, x), map(lambda x: '%.2f' % x, vals))
-        except:
+    def get_allowed_amounts(self):
+        if not (hasattr(self, 'data_for_coverage') and self.data_for_coverage):
             return []
+        the_coverage = utils.convert_ref_to_obj(self.data_for_coverage)
+        vals = the_coverage.get_result(
+            'allowed_amounts',
+            {
+                'date': self.start_date,
+                #'contract': utils.WithAbstract.get_abstract_objects(
+                #    wizard, 'for_contract')
+	    },)[0]
+        return map(lambda x: (x, x), map(lambda x: '%.2f' % x, vals))
 
 
 class ExtensionLifeState(DependantState):

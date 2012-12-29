@@ -212,7 +212,7 @@ class CoverageDisplayer(CoopStepView):
     def init_from_coverage(self, for_coverage):
         self.coverage = for_coverage
         self.start_date = for_coverage.start_date
-        self.status = 'Active'
+        self.status = 'active'
 
 
 class OptionSelectionState(CoopStep):
@@ -301,7 +301,7 @@ class OptionSelectionState(CoopStep):
         errs = []
         eligible = True
         for displayer in wizard.option_selection.options:
-            if displayer.status == 'Active':
+            if displayer.status == 'active':
                 eligibility, errors = displayer.coverage.get_result(
                     'eligibility',
                     {'date': wizard.project.start_date,
@@ -318,7 +318,7 @@ class OptionSelectionState(CoopStep):
     @staticmethod
     def check_step_option_selected(wizard):
         for coverage in wizard.option_selection.options:
-            if coverage.status == 'Active':
+            if coverage.status == 'active':
                 return (True, [])
         return (False, ['At least one option must be active'])
 
@@ -343,7 +343,7 @@ class OptionSelectionState(CoopStep):
         list_options = []
         Option = Pool().get(contract.give_option_model())
         for option in wizard.option_selection.options:
-            if option.status != 'Active':
+            if option.status != 'active':
                 continue
             cur_option = Option()
             cur_option.coverage = option.coverage
