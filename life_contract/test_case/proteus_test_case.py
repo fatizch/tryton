@@ -28,6 +28,7 @@ def launch_test_case(cfg_dict):
         return
     Party = Model.get('party.person')
     Product = Model.get('ins_product.product')
+    return
     for on_product in Product.find([]):
         on_parties = Party.find()
         the_args = []
