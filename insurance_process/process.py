@@ -1206,7 +1206,7 @@ class SubscriptionProcess(Wizard):
             options.append({'for_coverage': coverage.id,
                             'from_date': max(coverage.start_date,
                                              session.project.start_date),
-                           'status': 'Active'})
+                           'status': 'active'})
         return {'options': options}
 
     # This function is automatically called when we click on the "next" step of

@@ -163,8 +163,6 @@ class GBPWizard(Wizard):
             good_opt[tranche.college.id] = good_college
             flatten[tranche.coverage.id] = good_opt
 
-        BRM = Pool().get('ins_collective.business_rule_manager')
-        GenericRule = Pool().get('ins_collective.generic_business_rule')
         Pricing = Pool().get('ins_collective.pricing_rule')
         Calculator = Pool().get('ins_collective.pricing_calculator')
         Component = Pool().get('ins_collective.pricing_data')
@@ -175,20 +173,10 @@ class GBPWizard(Wizard):
                 if option.id != option_id:
                     continue
 
-                if not option.pricing_mgr:
-                    good_mgr = BRM()
-                    option.pricing_mgr = [good_mgr]
-                    good_mgr.offered = '%s,%s' % (option.__name__, option.id)
-                else:
-                    good_mgr = option.pricing_mgr[0]
-
-                generic = GenericRule()
-                generic.kind = Pricing.__name__
                 pricing = Pricing()
                 pricing.start_date = gbp.start_date
                 pricing.calculators = []
-                generic.pricing_rule = [pricing]
-                good_mgr.business_rules = [generic]
+                option.pricing_rules.append(pricing)
 
                 for college_id, tranches in values.iteritems():
                     calculator = Calculator()
@@ -202,5 +190,4 @@ class GBPWizard(Wizard):
                         calculator.data.append(pricing_data)
                     pricing.calculators.append(calculator)
 
-                good_mgr.save()
         return 'end'
