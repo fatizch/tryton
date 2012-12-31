@@ -5,12 +5,12 @@ import datetime
 from trytond.model import fields
 from trytond.pool import Pool
 from trytond.rpc import RPC
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, utils, date, coop_string
 from trytond.modules.insurance_product.product import CONFIG_KIND
-from trytond.modules.insurance_product.product import Templated, Offered
+from trytond.modules.insurance_product.product import Templated
 
 __all__ = [
    'BusinessRuleManager',
@@ -76,24 +76,6 @@ class BusinessRuleManager(model.CoopSQL, model.CoopView,
                         'end_date': None
                     })
         return res
-
-    def get_good_rule_at_date(self, data):
-        # First we got to check that the fields that we will need to calculate
-        # which rule is appliable are available in the data dictionnary
-        try:
-            the_date = data['date']
-        except KeyError:
-            return None
-
-        try:
-            # We use the date field from the data argument to search for
-            # the good rule.
-            # (This is a given way to get a rule from a list, using the
-            # applicable date, it could be anything)
-            return utils.get_good_version_at_date(self, 'business_rules',
-                the_date)
-        except ValueError, _exception:
-            return None
 
     def get_offered(self):
         return self.offered
@@ -174,11 +156,6 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
             }
             setattr(cls, field_name, attr)
 
-        cls._order.insert(0, ('start_date', 'ASC'))
-        cls._constraints += [('check_dates', 'businessrule_overlaps')]
-        cls._error_messages.update({'businessrule_overlaps':
-            'You can not have 2 business rules that overlaps!'})
-
     def on_change_kind(self):
         res = {}
         for field_name, field in self._fields.iteritems():
@@ -193,9 +170,9 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
                 self.__class__, field_name, action='add')
         return res
 
-    @classmethod
-    def get_kind(cls, vals=None):
-        return coop_string.get_descendents_name(BusinessRuleRoot)
+#    @classmethod
+#    def get_kind(cls, vals=None):
+#        return coop_string.get_descendents_name(BusinessRuleRoot)
 
     def get_is_current(self, name):
         #first we need the model for the manager (depends on the module used
@@ -209,43 +186,8 @@ class GenericBusinessRule(model.CoopSQL, model.CoopView):
         return self == BRM.get_good_rule_at_date(self.manager,
                 {'date': date})
 
-    def check_dates(self):
-        cursor = Transaction().cursor
-        cursor.execute('SELECT id ' \
-                'FROM ' + self._table + ' ' \
-                'WHERE ((start_date <= %s AND end_date >= %s) ' \
-                        'OR (start_date <= %s AND end_date >= %s) ' \
-                        'OR (start_date >= %s AND end_date <= %s)) ' \
-                    'AND manager = %s ' \
-                    'AND id != %s',
-                (self.start_date, self.start_date,
-                    self.end_date, self.end_date,
-                    self.start_date, self.end_date,
-                    self.manager.id, self.id))
-        if cursor.fetchone():
-            return False
-        return True
-
-    @staticmethod
-    def default_start_date():
-        res = Transaction().context.get('start_date')
-        if not res:
-            date = utils.today()
-            res = date
-        return res
-
-    def get_good_rule_from_kind(self):
-        for field_name, field_desc in self._fields.iteritems():
-            if (hasattr(field_desc, 'model_name') and
-                    field_desc.model_name == self.kind):
-                return getattr(self, field_name)[0]
-
     def get_offered(self):
         return self.manager.get_offered()
-
-    @classmethod
-    def recreate_rather_than_update(cls):
-        return True
 
     @classmethod
     def default_kind(cls):
@@ -257,6 +199,9 @@ class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
 
     __name__ = 'ins_product.business_rule_root'
 
+    offered = fields.Reference('Offered', selection='get_offered_models')
+    start_date = fields.Date('From Date', required=True)
+    end_date = fields.Date('To Date')
     config_kind = fields.Selection(CONFIG_KIND,
         'Conf. kind', required=True)
     generic_rule = fields.Many2One('ins_product.generic_business_rule',
@@ -269,6 +214,13 @@ class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
         super(BusinessRuleRoot, cls).__setup__()
         cls.template = copy.copy(cls.template)
         cls.template.model_name = cls.__name__
+        if hasattr(cls, '_order'):
+            cls._order.insert(0, ('start_date', 'ASC'))
+        if hasattr(cls, '_constraints'):
+            cls._constraints += [('check_dates', 'businessrule_overlaps')]
+        if hasattr(cls, '_error_messages'):
+            cls._error_messages.update({'businessrule_overlaps':
+                'You can not have 2 business rules that overlaps!'})
 
     @staticmethod
     def default_config_kind():
@@ -278,5 +230,45 @@ class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
         return self.generic_rule.get_offered()
 
     @classmethod
+    def get_offered_models(cls):
+        module_name = utils.get_module_name(cls)
+        return [x for x in utils.get_descendents('ins_product.offered')
+            if module_name in x[0]]
+
+    @classmethod
     def recreate_rather_than_update(cls):
+        return True
+
+    def get_rec_name(self, name=None):
+        if self.config_kind == 'rule' and self.rule:
+            return self.rule.get_rec_name
+        return self.get_simple_rec_name()
+
+    def get_simple_rec_name(self):
+        return ''
+
+    @staticmethod
+    def default_start_date():
+        res = Transaction().context.get('start_date')
+        if not res:
+            date = utils.today()
+            res = date
+        return res
+
+    def check_dates(self):
+        cursor = Transaction().cursor
+        cursor.execute('SELECT id ' \
+            'FROM ' + self._table + ' ' \
+            'WHERE ((start_date <= %s AND end_date >= %s) ' \
+                    'OR (start_date <= %s AND end_date >= %s) ' \
+                    'OR (start_date >= %s AND end_date <= %s)) ' \
+                'AND offered = %s' \
+                'AND id != %s',
+            (self.start_date, self.start_date,
+             self.end_date, self.end_date,
+             self.start_date, self.end_date,
+             '%s,%s' % (self.offered.__class__.__name__, self.offered.id),
+              self.id))
+        if cursor.fetchone():
+            return False
         return True

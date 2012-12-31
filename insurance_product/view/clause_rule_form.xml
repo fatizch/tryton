@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form" position="replace_attributes">
+        <form string="Clause rule"/>
+    </xpath>
+    <xpath expr="/form/notebook" position="replace_attributes">
+        <notebook states="{'invisible': True}"/>
+    </xpath>
+    <xpath expr="/form" position="inside">
+        <field name="specific_clauses" xexpand="1" yexpand="1"/>
+        <field name="shared_clauses" xexpand="1" yexpand="1"/>
+    </xpath>
+</data>

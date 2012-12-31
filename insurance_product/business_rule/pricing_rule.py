@@ -302,23 +302,22 @@ class PriceCalculator(model.CoopSQL, model.CoopView):
 #            Pool().get('ins_product.pricing_calculator'), 'data')
 
 
-class PricingRule(model.CoopSQL, BusinessRuleRoot):
+class PricingRule(BusinessRuleRoot, model.CoopSQL):
     'Pricing Rule'
 
     __name__ = 'ins_product.pricing_rule'
 
-    calculators = fields.One2Many(
-        'ins_product.pricing_calculator',
-        'rule',
-        'Calculators')
+    calculators = fields.One2Many('ins_product.pricing_calculator',
+        'rule', 'Calculators',
+        states={'invisible': Eval('config_kind') == 'simple'})
 
-    price = fields.Function(fields.Many2One(
-            'ins_product.pricing_calculator',
+    price = fields.Function(
+        fields.Many2One('ins_product.pricing_calculator',
             'Price Calculator'),
         'get_calculator')
 
-    sub_price = fields.Function(fields.Many2One(
-            'ins_product.pricing_calculator',
+    sub_price = fields.Function(
+        fields.Many2One('ins_product.pricing_calculator',
             'Price Calculator'),
         'get_calculator')
 
@@ -328,8 +327,8 @@ class PricingRule(model.CoopSQL, BusinessRuleRoot):
         required=True)
 
     basic_price = fields.Function(
-        fields.Numeric(
-            'Amount',
+        fields.Numeric('Amount',
+            states={'invisible': Eval('config_kind') == 'rule'},
             digits=(16,
                 Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
             ),
@@ -337,9 +336,8 @@ class PricingRule(model.CoopSQL, BusinessRuleRoot):
         'set_basic_price')
 
     basic_tax = fields.Function(
-        fields.Many2One(
-            'coop_account.tax_desc',
-            'Tax'),
+        fields.Many2One('coop_account.tax_desc', 'Tax',
+            states={'invisible': Eval('config_kind') == 'rule'}),
         'get_basic_tax',
         'set_basic_tax')
 

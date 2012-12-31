@@ -111,8 +111,10 @@ class ProjectState(CoopStep):
             return (True, [])
         eligibility, errors = wizard.project.product.get_result(
             'eligibility',
-            {'subscriber': wizard.project.subscriber,
-            'date': wizard.project.start_date})
+            {
+                'subscriber': wizard.project.subscriber,
+                'date': wizard.project.start_date
+            })
         if eligibility:
             return (eligibility.eligible, eligibility.details + errors)
         return (True, [])
@@ -306,12 +308,13 @@ class OptionSelectionState(CoopStep):
                     'eligibility',
                     {'date': wizard.project.start_date,
                     'subscriber': wizard.project.subscriber})
-                if not eligibility.eligible:
+                if eligibility and not eligibility.eligible:
                     errs.append(
                         '%s option not eligible :' % displayer.coverage.code)
                     errs += ['\t' + elem
                         for elem in eligibility.details + errors]
-                eligible = eligible and eligibility.eligible
+                eligible = eligible and (not eligibility or
+                        eligibility.eligible)
         return (eligible, errs)
 
     # Here we check that at least one option has been selected
@@ -560,7 +563,6 @@ class SummaryState(CoopStep):
             wizard, 'for_contract')
 
         prices, errs = contract.calculate_prices_at_all_dates()
-
         if errs:
             return (False, errs)
         wizard.summary.lines = []

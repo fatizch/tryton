@@ -37,10 +37,8 @@ class ModuleTestCase(unittest.TestCase):
         self.Party = POOL.get('party.party')
         self.Person = POOL.get('party.person')
         self.Product = POOL.get('ins_product.product')
-        self.coverage = POOL.get('ins_product.coverage')
-        self.brm = POOL.get('ins_product.business_rule_manager')
-        self.gbr = POOL.get('ins_product.generic_business_rule')
-        self.pricing = POOL.get('ins_product.pricing_rule')
+        self.Coverage = POOL.get('ins_product.coverage')
+        self.Pricing = POOL.get('ins_product.pricing_rule')
         self.PricingData = POOL.get('ins_product.pricing_data')
         self.Calculator = POOL.get('ins_product.pricing_calculator')
         self.eligibility = POOL.get('ins_product.eligibility_rule')
@@ -287,17 +285,14 @@ return True'''
         pr_calc2.data = [pr_data2]
         pr_calc2.key = 'sub_price'
 
-        prm_a = self.pricing()
+        prm_a = self.Pricing()
         prm_a.config_kind = 'rule'
 
         prm_a.calculators = [pr_calc1, pr_calc2]
 
-        gbr_a = self.gbr()
-        gbr_a.kind = 'ins_product.pricing_rule'
-        gbr_a.start_date = datetime.date.today()
-        gbr_a.end_date = datetime.date.today() + \
+        prm_a.start_date = datetime.date.today()
+        prm_a.end_date = datetime.date.today() + \
                                         datetime.timedelta(days=10)
-        gbr_a.pricing_rule = [prm_a]
 
         pr_data3 = self.PricingData()
         pr_data3.config_kind = 'simple'
@@ -309,28 +304,22 @@ return True'''
         pr_calc3.data = [pr_data3]
         pr_calc3.key = 'price'
 
-        prm_b = self.pricing()
+        prm_b = self.Pricing()
         prm_b.calculators = [pr_calc3]
         prm_b.config_kind = 'rule'
 
-        gbr_b = self.gbr()
-        gbr_b.kind = 'ins_product.pricing_rule'
-        gbr_b.start_date = datetime.date.today() + \
+        prm_b.start_date = datetime.date.today() + \
                                         datetime.timedelta(days=11)
-        gbr_b.end_date = datetime.date.today() + \
+        prm_b.end_date = datetime.date.today() + \
                                         datetime.timedelta(days=20)
-        gbr_b.pricing_rule = [prm_b]
 
-        brm_a = self.brm()
-        brm_a.business_rules = [gbr_a, gbr_b]
-
-        coverage_a = self.coverage()
+        coverage_a = self.Coverage()
         coverage_a.code = 'ALP'
         coverage_a.name = 'Alpha Coverage'
         coverage_a.family = 'life_product.definition'
         coverage_a.start_date = datetime.date.today()
 
-        coverage_a.pricing_mgr = [brm_a]
+        coverage_a.pricing_rules = [prm_a, prm_b]
 
         coverage_a.save()
 
@@ -338,28 +327,22 @@ return True'''
 
         tax_1 = self.create_tax('TTA', 27)
 
-        prm_c = self.pricing()
+        prm_c = self.Pricing()
         prm_c.basic_price = 30
         prm_c.basic_tax = tax_1
 
-        gbr_c = self.gbr()
-        gbr_c.kind = 'ins_product.pricing_rule'
-        gbr_c.start_date = datetime.date.today()
-        gbr_c.end_date = datetime.date.today() + \
+        prm_c.start_date = datetime.date.today()
+        prm_c.end_date = datetime.date.today() + \
                                         datetime.timedelta(days=10)
-        gbr_c.pricing_rule = [prm_c]
 
-        brm_b = self.brm()
-        brm_b.business_rules = [gbr_c]
-
-        coverage_b = self.coverage()
+        coverage_b = self.Coverage()
         coverage_b.code = 'BET'
         coverage_b.name = 'Beta Coverage'
         coverage_b.family = 'life_product.definition'
         coverage_b.start_date = datetime.date.today() + \
                                         datetime.timedelta(days=5)
 
-        coverage_b.pricing_mgr = [brm_b]
+        coverage_b.pricing_rules = [prm_c]
 
         coverage_b.save()
 
@@ -370,21 +353,15 @@ return True'''
         erm_a.min_age = 100
         erm_a.rule = rule
 
-        gbr_d = self.gbr()
-        gbr_d.kind = 'ins_product.eligibility_rule'
-        gbr_d.start_date = datetime.date.today()
-        gbr_d.eligibility_rule = [erm_a]
+        erm_a.start_date = datetime.date.today()
 
-        brm_c = self.brm()
-        brm_c.business_rules = [gbr_d]
-
-        coverage_c = self.coverage()
+        coverage_c = self.Coverage()
         coverage_c.code = 'GAM'
         coverage_c.name = 'Gamma Coverage'
         coverage_c.family = 'life_product.definition'
         coverage_c.start_date = datetime.date.today()
 
-        coverage_c.eligibility_mgr = [brm_c]
+        coverage_c.eligibility_rules = [erm_a]
 
         coverage_c.save()
 
@@ -394,21 +371,15 @@ return True'''
         erm_d.config_kind = 'simple'
         erm_d.sub_min_age = 100
 
-        gbr_g = self.gbr()
-        gbr_g.kind = 'ins_product.eligibility_rule'
-        gbr_g.start_date = datetime.date.today()
-        gbr_g.eligibility_rule = [erm_d]
+        erm_d.start_date = datetime.date.today()
 
-        brm_f = self.brm()
-        brm_f.business_rules = [gbr_g]
-
-        coverage_d = self.coverage()
+        coverage_d = self.Coverage()
         coverage_d.code = 'DEL'
         coverage_d.name = 'Delta Coverage'
         coverage_d.family = 'life_product.definition'
         coverage_d.start_date = datetime.date.today()
 
-        coverage_d.eligibility_mgr = [brm_f]
+        coverage_d.eligibility_rules = [erm_d]
 
         coverage_d.save()
 
@@ -418,14 +389,7 @@ return True'''
         erm_b.config_kind = 'simple'
         erm_b.sub_min_age = 20
 
-        gbr_e = self.gbr()
-        gbr_e.kind = 'ins_product.eligibility_rule'
-        gbr_e.start_date = datetime.date.today()
-        gbr_e.eligibility_rule = [erm_b]
-
-        brm_d = self.brm()
-        brm_d.business_rules = [gbr_e]
-
+        erm_b.start_date = datetime.date.today()
         # Product
 
         product_a = self.Product()
@@ -434,7 +398,7 @@ return True'''
         product_a.start_date = datetime.date.today()
         product_a.options = [
             coverage_a, coverage_b, coverage_c, coverage_d]
-        product_a.eligibility_mgr = [brm_d]
+        product_a.eligibility_rules = [erm_b]
         product_a.contract_generator = ng
         product_a.save()
 
@@ -446,21 +410,14 @@ return True'''
         erm_c.config_kind = 'simple'
         erm_c.min_age = 100
 
-        gbr_f = self.gbr()
-        gbr_f.kind = 'ins_product.eligibility_rule'
-        gbr_f.start_date = datetime.date.today()
-        gbr_f.eligibility_rule = [erm_c]
-
-        brm_e = self.brm()
-        brm_e.business_rules = [gbr_f]
-
+        erm_c.start_date = datetime.date.today()
         # Fake Product
 
         product_b = self.Product()
         product_b.code = 'BBB'
         product_b.name = 'Big Bad Bully'
         product_b.start_date = datetime.date.today()
-        product_b.eligibility_mgr = [brm_e]
+        product_b.eligibility_rules = [erm_c]
         product_b.contract_generator = ng
 
         product_b.save()
@@ -496,6 +453,7 @@ return True'''
             wizard.process_state.cur_step_desc)
         self.assertEqual(tmp[0], False)
         self.assertEqual(tmp[1][0], 'Subscriber must be older than 100')
+
         on_product, = self.Product.search([('code', '=', 'AAA')])
         wizard.project.product = on_product
         tmp = wizard.project.check_step(
@@ -536,13 +494,14 @@ return True'''
         self.assertEqual(tmp[0], False)
         self.assertEqual(tmp[1][0], 'GAM option not eligible :')
         self.assertEqual(tmp[1][1], '\tSubscriber too old (max: 40)')
+
         wizard.option_selection.options[3].status = 'Refused'
         wizard.option_selection.options[1].status = 'Refused'
         tmp = wizard.option_selection.check_step(
             wizard,
             wizard.process_state.cur_step_desc)
         self.assertEqual(tmp[0], True)
-        wizard.option_selection.options[1].status = 'Active'
+        wizard.option_selection.options[1].status = 'active'
         wizard.transition_steps_next()
         wizard.transition_master_step()
         wizard.transition_steps_previous()
@@ -642,18 +601,10 @@ return True'''
             '\t\t\tbase - PP => 15.00',
             '']
 
-#        lines.sort()
-#        good_lines.sort()
-#
-#        print '\n'.join(lines)
-#        print '###################'
-#        print '\n'.join(good_lines)
-
         lines.sort()
         good_lines.sort()
 
         self.maxDiff = None
-
         self.assertListEqual(lines, good_lines)
 
         wizard.transition_steps_complete()
@@ -715,8 +666,6 @@ return True'''
             lines = []
             for elem in wizard.bill_display.bill_lines:
                 lines += print_line(elem)
-
-            # print '\n'.join(lines)
 
             wizard.transition_steps_complete()
             wizard.transition_master_step()

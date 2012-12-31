@@ -19,10 +19,11 @@ SUBSCRIBER_CLASSES = [
     ]
 
 
-class EligibilityRule(model.CoopSQL, BusinessRuleRoot):
+class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
     'Eligibility Rule'
 
     __name__ = 'ins_product.eligibility_rule'
+
     sub_elem_config_kind = fields.Selection(CONFIG_KIND,
         'Sub Elem Conf. kind', required=True)
     sub_elem_rule = fields.Many2One('rule_engine', 'Sub Elem Rule Engine',

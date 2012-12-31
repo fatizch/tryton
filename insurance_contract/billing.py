@@ -196,8 +196,8 @@ class Bill(model.CoopSQL, model.CoopView):
                 frequency_days, _ = cur_line.on_object.get_result(
                     'frequency_days',
                     {'date': start_date},
-                    manager='pricing')
-            except utils.NonExistingManagerException:
+                    kind='pricing')
+            except utils.NonExistingRuleKindException:
                 frequency_days = 365
             bill_line = GenericBillLine()
             bill_line.flat_init(start_date, end_date)

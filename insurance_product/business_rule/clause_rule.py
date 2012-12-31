@@ -12,7 +12,7 @@ __all__ = [
     ]
 
 
-class ClauseRule(model.CoopSQL, BusinessRuleRoot):
+class ClauseRule(BusinessRuleRoot, model.CoopSQL):
     'Clause Rule'
 
     __name__ = 'ins_product.clause_rule'

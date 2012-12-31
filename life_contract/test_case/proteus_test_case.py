@@ -29,7 +29,7 @@ def launch_test_case(cfg_dict):
     Party = Model.get('party.person')
     Product = Model.get('ins_product.product')
     return
-    for on_product in Product.find([]):
+    for on_product in Product.find([('code', '=', 'AAA')]):
         on_parties = Party.find()
         the_args = []
         for party in on_parties:

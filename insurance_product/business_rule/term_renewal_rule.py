@@ -11,7 +11,7 @@ __all__ = [
     ]
 
 
-class TermRenewalRule(model.CoopSQL, BusinessRuleRoot):
+class TermRenewalRule(BusinessRuleRoot, model.CoopSQL):
     'Term and Renewal Rule'
 
     __name__ = 'ins_product.term_renewal_rule'

@@ -4,42 +4,17 @@
         <!--  ******************************************* 
               ********  Term/Renewal Rule ***************
               *******************************************-->
+        <record model="ir.ui.view" id="term_renewal_rule_view_tree">
+            <field name="model">ins_product.term_renewal_rule</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="businessruleroot_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
         <record model="ir.ui.view" id="term_renewal_rule_view_form">
             <field name="model">ins_product.term_renewal_rule</field>
             <field name="type">form</field>
             <field name="inherit" ref="businessruleroot_view_form"/>
-            <field name="arch" type="xml">
-                <![CDATA[
-                    <data>
-                        <xpath expr="/form" position="replace_attributes">
-                            <form string="Term - Renewal rule"/>
-                        </xpath>
-                        <xpath expr="/form/notebook/page[@id='main']/group[@id='config_kind']"
-                         position="replace_attributes">
-                            <group id="config_kind" states="{'invisible': True}"/>
-                        </xpath>
-                        <xpath expr="/form/notebook/page[@id='main']/group[@id='simple']"
-                                position="inside">
-                            <group id="term">
-                                <label name="with_term"/>
-                                <field name="with_term"/>
-                                <newline/>
-                                <label name="term_date_choice"/>
-                                <field name="term_date_choice"/>
-                                <label name="date_for_sync"/>
-                                <field name="date_for_sync"/>
-                            </group>
-                            <newline/>
-                            <group id="renewal">
-                                <label name="can_be_renewed"/>
-                                <field name="can_be_renewed"/>
-                                <label name="frequency"/>
-                                <field name="frequency"/>
-                            </group>
-                        </xpath>
-                    </data>
-                ]]>
-            </field>
+            <field name="name">term_renewal_rule_form</field>
         </record>
     </data>
 </tryton>

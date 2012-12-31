@@ -38,32 +38,28 @@ OPTIONSTATUS = CONTRACTSTATUSES + [
 
 
 class GenericExtension(model.CoopView):
-    'Mother class for extensions'
-    '''
-        This class is the mother class of all product-specific extensions.
-        Extension classes will be defined in the proper module
-        (ex: life_contract) and must inherit from GenericExtension.
-
-        GenericExtension provides the covered_elements list, which contains
-        a list of covered elements whose model depends on the associated
-        product.
-
-        In sub-classes, it is necessary to override __setup__ to change
-        the model_name attribute of the 'covered_elements' field.
-    '''
+    'Generic Extension'
+#    'Mother class for extensions'
+#    '''
+#        This class is the mother class of all product-specific extensions.
+#        Extension classes will be defined in the proper module
+#        (ex: life_contract) and must inherit from GenericExtension.
+#
+#        GenericExtension provides the covered_elements list, which contains
+#        a list of covered elements whose model depends on the associated
+#        product.
+#
+#        In sub-classes, it is necessary to override __setup__ to change
+#        the model_name attribute of the 'covered_elements' field.
+#    '''
 
     __name__ = 'ins_contract.generic_extension'
 
     covered_elements = fields.One2Many('ins_contract.covered_element',
-                                       'extension',
-                                       'Coverages')
-    dynamic_data = fields.Dict(
-        'Complementary Data',
+        'extension', 'Coverages')
+    dynamic_data = fields.Dict('Complementary Data',
         schema_model='ins_product.schema_element')
-
-    contract = fields.Many2One(
-        'ins_contract.contract',
-        'The contract',
+    contract = fields.Many2One('ins_contract.contract', 'The contract',
         ondelete='CASCADE')
 
     def get_dates(self):
@@ -163,17 +159,18 @@ class GenericExtension(model.CoopView):
 
 
 class GenericContract(model.CoopSQL, ProcessFramework):
-    'Mother class for contracts'
-    '''
-        This class will provide the basics of all contracts :
-            Contract Number
-            Subscriber
-            Start_Date
-            Status
-            Management_Date
-            BillingManager
-            BrokerManager
-    '''
+    'Generic Contract'
+#    'Mother class for contracts'
+#    '''
+#        This class will provide the basics of all contracts :
+#            Contract Number
+#            Subscriber
+#            Start_Date
+#            Status
+#            Management_Date
+#            BillingManager
+#            BrokerManager
+#    '''
 
     # Effective date is the date at which the contract "starts" :
     #    The client pays its premium
@@ -361,8 +358,10 @@ class Contract(GenericContract):
     def calculate_price_at_date(self, date):
         prices, errs = self.product.get_result(
             'total_price',
-            {'date': date,
-            'contract': self})
+            {
+                'date': date,
+                'contract': self
+            })
         return (prices, errs)
 
     def calculate_prices_at_all_dates(self):
@@ -408,12 +407,15 @@ class Contract(GenericContract):
                         continue
                     eligibility, errors = covered_data.for_coverage.get_result(
                         'sub_elem_eligibility',
-                        {'date': at_date,
-                        'sub_elem': covered_element,
-                        'data': covered_data,
-                        'option': options[covered_data.for_coverage.code]})
-                    res = res and eligibility.eligible
-                    errs += eligibility.details
+                        {
+                            'date': at_date,
+                            'sub_elem': covered_element,
+                            'data': covered_data,
+                            'option': options[covered_data.for_coverage.code]
+                        })
+                    res = res and (not eligibility or eligibility.eligible)
+                    if eligibility:
+                        errs += eligibility.details
                     errs += errors
         return (res, errs)
 
@@ -427,7 +429,6 @@ class Contract(GenericContract):
 
     def finalize_contract(self):
         self.contract_number = self.get_new_contract_number()
-        
         return True, ()
 
     def get_rec_name(self, val):

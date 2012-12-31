@@ -121,8 +121,10 @@ class CoopSchemaElement(DictSchemaMixin, model.CoopSQL, model.CoopView):
                 with Transaction().set_context({'relation_selection': True}):
                     good_schemas = the_product.get_result(
                         'dynamic_data_getter',
-                        {'date': Transaction().context['at_date'],
-                         'dd_args': dd_args})
+                        {
+                            'date': Transaction().context['at_date'],
+                            'dd_args': dd_args
+                        })
                 domain.append(('id', 'in', good_schemas[0]))
         return super(CoopSchemaElement, cls).search(domain, offset=offset,
                 limit=limit, order=order, count=count,

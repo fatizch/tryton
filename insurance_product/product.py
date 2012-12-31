@@ -68,7 +68,8 @@ class Offered(model.CoopView, utils.GetResult, Templated):
     start_date = fields.Date('Start Date', required=True, select=1)
     end_date = fields.Date('End Date')
     description = fields.Text('Description')
-    #All mgr var must be the same as the business rule class and ends with mgr
+
+    #DEPRECATED_mgr
     pricing_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
         'offered', 'Pricing Manager')
     eligibility_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
@@ -77,6 +78,16 @@ class Offered(model.CoopView, utils.GetResult, Templated):
         'offered', 'Clause Manager')
     deductible_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
         'offered', 'Deductible Manager')
+    #end DEPRECATED_mgr
+
+    pricing_rules = fields.One2Many('ins_product.pricing_rule', 'offered',
+        'Pricing Rules')
+    eligibility_rules = fields.One2Many('ins_product.eligibility_rule',
+        'offered', 'Pricing Rules')
+    clause_rules = fields.One2Many('ins_product.clause_rule',
+        'offered', 'Clause Rules')
+    deductible_rules = fields.One2Many('ins_product.deductible_rule',
+        'offered', 'Deductible Rules')
     summary = fields.Function(fields.Text('Summary',
             states={
                 'invisible': ~Eval('summary',)
@@ -103,8 +114,11 @@ class Offered(model.CoopView, utils.GetResult, Templated):
     @classmethod
     def __setup__(cls):
         super(Offered, cls).__setup__()
-        for field_name in (mgr for mgr in dir(cls) if mgr.endswith('_mgr')):
-            cur_attr = copy.copy(getattr(cls, field_name))
+        for field_name in (r for r in dir(cls) if r.endswith('_rules')):
+            field = getattr(cls, field_name)
+            if not hasattr(field, 'model_name'):
+                continue
+            cur_attr = copy.copy(field)
             if not hasattr(cur_attr, 'context'):
                 continue
             if cur_attr.context is None:
@@ -119,19 +133,7 @@ class Offered(model.CoopView, utils.GetResult, Templated):
                 cur_attr.states = {}
             cur_attr.states['readonly'] = ~Bool(Eval('start_date'))
 
-            if not hasattr(cur_attr, 'model_name'):
-                continue
-            cur_attr.domain = [('business_rules.kind', '=',
-                     '%s.%s_rule' %
-                         (utils.get_module_name(cls),
-                         field_name.split('_mgr')[0]))]
-            cur_attr.size = 1
-            cur_attr = copy.copy(cur_attr)
             setattr(cls, field_name, cur_attr)
-
-            #setting default method for all brm
-#            setattr(cls, 'default_%s' % field_name, functools.partial(
-#                cls.default_generic_brm, name=field_name))
 
         cls.template = copy.copy(cls.template)
         cls.template.model_name = cls.__name__
@@ -175,10 +177,34 @@ class Offered(model.CoopView, utils.GetResult, Templated):
             res[se.name] = se.get_default_value(None)
         return res
 
-#    @classmethod
-#    def default_generic_brm(cls, name):
-#        res = utils.create_inst_with_default_val(cls, name)
-#        return res
+    def get_good_rule_at_date(self, data, kind):
+        # First we got to check that the fields that we will need to calculate
+        # which rule is appliable are available in the data dictionnary
+        try:
+            the_date = data['date']
+        except KeyError:
+            return None
+
+        try:
+            # We use the date field from the data argument to search for
+            # the good rule.
+            # (This is a given way to get a rule from a list, using the
+            # applicable date, it could be anything)
+            return utils.get_good_version_at_date(self, '%s_rules' % kind,
+                the_date)
+        except ValueError, _exception:
+            return None
+
+    @classmethod
+    def delete_rules(cls, entities):
+        for field_name in (r for r in dir(cls) if r.endswith('_rules')):
+            field = getattr(cls, field_name)
+            if not hasattr(field, 'model_name'):
+                continue
+            utils.delete_reference_backref(
+                entities,
+                field.model_name,
+                field.field)
 
 
 class Product(model.CoopSQL, Offered):
@@ -199,6 +225,8 @@ class Product(model.CoopSQL, Offered):
         ondelete='RESTRICT')
     term_renewal_mgr = model.One2ManyDomain(
         'ins_product.business_rule_manager', 'offered', 'Term - Renewal')
+    term_renewal_rules = fields.One2Many('ins_product.term_renewal_rule',
+        'offered', 'Term - Renewal')
 
     @classmethod
     def __setup__(cls):
@@ -210,10 +238,7 @@ class Product(model.CoopSQL, Offered):
 
     @classmethod
     def delete(cls, entities):
-        utils.delete_reference_backref(
-            entities,
-            'ins_product.business_rule_manager',
-            'offered')
+        cls.delete_rules(entities)
         utils.delete_reference_backref(
             entities,
             'ins_product.dynamic_data_manager',
@@ -257,8 +282,8 @@ class Product(model.CoopSQL, Offered):
         # There is a pricing manager on the products so we can just forward the
         # request.
         try:
-            res = self.get_result('price', args, manager='pricing')
-        except utils.NonExistingManagerException:
+            res = self.get_result('price', args, kind='pricing')
+        except utils.NonExistingRuleKindException:
             res = (False, [])
         if not res[0]:
             res = (PricingResultLine(), res[1])
@@ -288,8 +313,8 @@ class Product(model.CoopSQL, Offered):
 
     def give_me_eligibility(self, args):
         try:
-            res = self.get_result('eligibility', args, manager='eligibility')
-        except utils.NonExistingManagerException:
+            res = self.get_result('eligibility', args, kind='eligibility')
+        except utils.NonExistingRuleKindException:
             return (EligibilityResultLine(True), [])
         return res
 
@@ -307,14 +332,14 @@ class Product(model.CoopSQL, Offered):
         if not 'date' in args:
             raise Exception('A date must be provided')
         try:
-            return self.get_result('frequency', args, manager='pricing')
-        except utils.NonExistingManagerException:
+            return self.get_result('frequency', args, kind='pricing')
+        except utils.NonExistingRuleKindException:
             pass
         for coverage in self.get_valid_options():
             try:
                 return coverage.get_result(
-                    'frequency', args, manager='pricing')
-            except utils.NonExistingManagerException:
+                    'frequency', args, kind='pricing')
+            except utils.NonExistingRuleKindException:
                 pass
         return 'yearly', []
 

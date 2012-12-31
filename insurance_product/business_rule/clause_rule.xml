@@ -4,26 +4,17 @@
         <!--  ******************************************* 
               ********    Clause Rule    ***************
               *******************************************-->
+        <record model="ir.ui.view" id="clause_rule_view_tree">
+            <field name="model">ins_product.clause_rule</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="businessruleroot_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
         <record model="ir.ui.view" id="clause_rule_view_form">
             <field name="model">ins_product.clause_rule</field>
             <field name="type">form</field>
             <field name="inherit" ref="businessruleroot_view_form"/>
-            <field name="arch" type="xml">
-            <![CDATA[
-            <data>
-                <xpath expr="/form" position="replace_attributes">
-                    <form string="Clause rule"/>
-                </xpath>
-                <xpath expr="/form/notebook" position="replace_attributes">
-                    <notebook states="{'invisible': True}"/>
-                 </xpath>
-                 <xpath expr="/form" position="inside">
-                    <field name="specific_clauses" xexpand="1" yexpand="1"/>
-                    <field name="shared_clauses" xexpand="1" yexpand="1"/>
-                 </xpath>
-            </data>
-            ]]>
-            </field>
+            <field name="name">clause_rule_form</field>
         </record>
     </data>
 </tryton>

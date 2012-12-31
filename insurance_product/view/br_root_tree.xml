@@ -1,0 +1,5 @@
+<tree>
+    <field name="start_date"/>
+    <field name="end_date"/>
+    <field name="config_kind"/>
+</tree>

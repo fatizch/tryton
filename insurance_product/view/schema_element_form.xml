@@ -18,7 +18,7 @@
     <field name="digits"/>
     <newline/>
     <label name="with_default_value"/>
-    <group name="default value">
+    <group id="default value">
         <field name="with_default_value" xexpand="0"/>
         <field name="default_value_boolean" xexpand="0"/>
         <field name="default_value_char"/>

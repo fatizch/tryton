@@ -17,6 +17,8 @@ try:
 except ImportError:
     import json
 
+COULDNOTFINDAMATCHINGRULE = 'Could not find a matching rule'
+
 
 def get_child_models(from_class):
     if isinstance(from_class, str):
@@ -366,12 +368,14 @@ class WithAbstract(object):
                 WithAbstract.save_abstract_object(session, field, value)
 
 
-class NonExistingManagerException(Exception):
+class NonExistingRuleKindException(Exception):
     pass
 
 
 class GetResult(object):
-    def get_result(self, target, args, manager='', path=''):
+    def get_result(self, target, args, kind='', path=''):
+        if kind == 'pricing':
+            pass
         # This method is a generic entry point for getting parameters.
         #
         # Arguments are :
@@ -380,9 +384,9 @@ class GetResult(object):
         #  - The dict of arguments which will be used by the rule to compute.
         #    Another way to do this would be a link to a method on the caller
         #    which would provide said args on demand.
-        #  - The manager will usually be filled, it is a key to finding where
+        #  - The kind will usually be filled, it is a key to finding where
         #    the required data is stored. So if the target is "price", the
-        #    manager should be set to "pricing".
+        #    kind should be set to "pricing".
         #  - We can use the 'path' arg to specify the way to our data.
         #    Basically, we try to match the first part of path (which looks
         #    like a '.' delimited string ('alpha1.beta3.gamma2')) to one of the
@@ -410,32 +414,23 @@ class GetResult(object):
                 if path_elems[0] in (getattr(elem, attr) for attr in
                         sub_elem_data[1]):
                     if isinstance(elem, GetResult):
-                        return elem.get_result(target, args, manager,
+                        return elem.get_result(target, args, kind,
                             '.'.join(path_elems[1:]))
                     return (None, ['Sub element %s of %s cannot get_result !'
                         % (elem.name, self.name)])
             return (None, ['Could not find %s sub element in %s'
                 % (path_elems[0], self.name)])
 
-        if manager:
-            # A manager is specified, we look for it
-            for brm_name, brm in [(elem, getattr(self, elem))
-                    for elem in dir(self) if elem.endswith('_mgr')]:
-                if not brm_name.startswith(manager):
-                    continue
-                if brm is None or len(brm) == 0:
-                    break
-                # When found, we just call the get_result method with our args
-                try:
-                    good_rule = brm[0].get_good_rule_at_date(
-                        args).get_good_rule_from_kind()
-                except Exception:
-                    good_rule = None
-                if not good_rule:
-                    return (None, ['Could not find a matching manager'])
-                return good_rule.get_result(target, args)
-            # We did not found any manager matching the specified name
-            raise NonExistingManagerException
+        if kind:
+            try:
+                good_rule = self.get_good_rule_at_date(args, kind)
+            except Exception:
+                good_rule = None
+            if not good_rule:
+                return (None, [])
+            return good_rule.get_result(target, args)
+            # We did not found any rule matching the specified name
+            raise NonExistingRuleKindException
 
         # Now we look for our target, as it is at our level
         target_func = getattr(self, 'give_me_' + target)
@@ -687,11 +682,13 @@ def init_dynamic_data(ids):
         res[elem.name] = elem.get_default_value(None)
     return res
 
+
 def set_default_dict(input_dict, data):
     for k in data.iterkeys():
         input_dict.setdefault(k, data[k])
 
     return input_dict
+
 
 def format_data(data, prefix='', prefix_inc='    ', is_init=True):
     tmp = None
@@ -704,7 +701,7 @@ def format_data(data, prefix='', prefix_inc='    ', is_init=True):
         tmp = [prefix + '{']
         for k, v in data.iteritems():
             new_data = format_data(v, prefix + prefix_inc, is_init=False)
-            tmp_res = [prefix + prefix_inc + str(k) + ':' + 
+            tmp_res = [prefix + prefix_inc + str(k) + ':' +
                 new_data[0][len(prefix + prefix_inc) - 1:]]
             if len(new_data) > 1:
                 tmp_res += new_data[1:]
@@ -724,10 +721,3 @@ def format_data(data, prefix='', prefix_inc='    ', is_init=True):
         return tmp
 
     return '\n'.join(tmp)
-
-    
-
-
-            
-
-

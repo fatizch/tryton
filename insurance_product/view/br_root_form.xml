@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 <form string="Business Rule Root">
-    <group id="templating">
-        <label name="template"/>
-        <field name="template"/>
-        <field name="template_behaviour"/>
-    </group>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <newline/>
+    <label name="template"/>
+    <field name="template"/>
+    <field name="template_behaviour"/>
     <notebook>
         <page id="main" string="Main">
             <group id="config_kind" colspan="2">

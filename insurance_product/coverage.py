@@ -57,6 +57,12 @@ class Coverage(model.CoopSQL, Offered):
         states={
             'invisible': Bool(Eval('is_package')),
         },)
+    coverage_amount_rules = fields.One2Many(
+        'ins_product.coverage_amount_rule',
+        'offered', 'Coverage Amount Rules',
+        states={
+            'invisible': Bool(Eval('is_package')),
+        },)
     covered_dynamic_data_manager = model.One2ManyDomain(
         'ins_product.dynamic_data_manager',
         'master',
@@ -80,10 +86,7 @@ class Coverage(model.CoopSQL, Offered):
 
     @classmethod
     def delete(cls, entities):
-        utils.delete_reference_backref(
-            entities,
-            'ins_product.business_rule_manager',
-            'offered')
+        cls.delete_rules(entities)
         utils.delete_reference_backref(
             entities,
             'ins_product.dynamic_data_manager',
@@ -104,7 +107,7 @@ class Coverage(model.CoopSQL, Offered):
                 continue
             if cur_attr.context is None:
                 cur_attr.context = {}
-            cur_attr.context['for_family'] = Eval('family')
+            #cur_attr.context['for_family'] = Eval('family')
             cur_attr = copy.copy(cur_attr)
             setattr(cls, field_name, cur_attr)
 
@@ -127,7 +130,7 @@ class Coverage(model.CoopSQL, Offered):
         contract = data_dict['contract']
         date = data_dict['date']
 
-        # We need to chack that self is part of the subscribed coverages of the
+        # We need to check that self is part of the subscribed coverages of the
         # contract.
         coverages = contract.get_active_coverages_at_date(date)
         res = PricingResultLine(name=self.name)
@@ -136,8 +139,8 @@ class Coverage(model.CoopSQL, Offered):
             # It is computed by the pricing manager, so we just need to forward
             # the request.
             try:
-                _res, _errs = self.get_result('price', args, manager='pricing')
-            except utils.NonExistingManagerException:
+                _res, _errs = self.get_result('price', args, kind='pricing')
+            except utils.NonExistingRuleKindException:
                 _res = None
                 _errs = []
             if _res and _res.value:
@@ -177,8 +180,8 @@ class Coverage(model.CoopSQL, Offered):
                     _res, _errs = self.get_result(
                         'sub_elem_price',
                         tmp_args,
-                        manager='pricing')
-                except utils.NonExistingManagerException:
+                        kind='pricing')
+                except utils.NonExistingRuleKindException:
                     _res = None
                     _errs = []
                 if _res and _res.value:
@@ -195,8 +198,8 @@ class Coverage(model.CoopSQL, Offered):
                     res += _res
                     errs += _errs
             errs = list(set(errs))
-            if 'Could not find a matching manager' in errs:
-                errs.remove('Could not find a matching manager')
+            if utils.COULDNOTFINDAMATCHINGRULE in errs:
+                errs.remove(utils.COULDNOTFINDAMATCHINGRULE)
             return (res, list(set(errs)))
         return (None, [])
 
@@ -206,23 +209,22 @@ class Coverage(model.CoopSQL, Offered):
         # In 'real life', it is not systematic to update the pricing when a new
         # version of the rule is defined.
         res = set()
-        if self.pricing_mgr and len(self.pricing_mgr) == 1:
-            for rule in self.pricing_mgr[0].business_rules:
-                res.add(rule.start_date)
+        for rule in self.pricing_rules:
+            res.add(rule.start_date)
         return res
 
     def give_me_eligibility(self, args):
         try:
-            res = self.get_result('eligibility', args, manager='eligibility')
-        except utils.NonExistingManagerException:
+            res = self.get_result('eligibility', args, kind='eligibility')
+        except utils.NonExistingRuleKindException:
             return (EligibilityResultLine(True), [])
         return res
 
     def give_me_sub_elem_eligibility(self, args):
         try:
             res = self.get_result(
-                'sub_elem_eligibility', args, manager='eligibility')
-        except utils.NonExistingManagerException:
+                'sub_elem_eligibility', args, kind='eligibility')
+        except utils.NonExistingRuleKindException:
             return (EligibilityResultLine(True), [])
         return res
 
@@ -272,8 +274,8 @@ class Coverage(model.CoopSQL, Offered):
             return self.get_result(
                 'allowed_amounts',
                 args,
-                manager='coverage_amount')
-        except utils.NonExistingManagerException:
+                kind='coverage_amount')
+        except utils.NonExistingRuleKindException:
             return [], []
 
     def give_me_coverage_amount_validity(self, args):
@@ -281,8 +283,8 @@ class Coverage(model.CoopSQL, Offered):
             return self.get_result(
                 'coverage_amount_validity',
                 args,
-                manager='coverage_amount')
-        except utils.NonExistingManagerException:
+                kind='coverage_amount')
+        except utils.NonExistingRuleKindException:
             return (True, []), []
 
     def give_me_dynamic_data_ids_aggregate(self, args):

@@ -68,13 +68,16 @@ class Contract():
                         continue
                     validity, errors = covered_data.for_coverage.get_result(
                         'coverage_amount_validity',
-                        {'date': at_date,
-                        'sub_elem': covered_element,
-                        'data': covered_data,
-                        'option': options[covered_data.for_coverage.code],
-                        'contract': self})
-                    res = res and validity[0]
-                    errs += validity[1]
+                        {
+                            'date': at_date,
+                            'sub_elem': covered_element,
+                            'data': covered_data,
+                            'option': options[covered_data.for_coverage.code],
+                            'contract': self,
+                        })
+                    res = res and (not validity or validity[0])
+                    if validity:
+                        errs += validity[1]
                     errs += errors
         return (res, errs)
 
@@ -187,7 +190,7 @@ class LifeCoveredDesc(CoveredDesc):
         'get_allowed_amounts',
         'Coverage Amount',
         selection_parameters=['data_for_coverage', 'start_date'],
-	# context={'data_for_coverage': Eval('data_for_coverage')},
+        # context={'data_for_coverage': Eval('data_for_coverage')},
         depends=['data_for_coverage', 'start_date'],
         sort=False,
         states={
@@ -231,8 +234,10 @@ class LifeCoveredDesc(CoveredDesc):
                 'date': self.start_date,
                 #'contract': utils.WithAbstract.get_abstract_objects(
                 #    wizard, 'for_contract')
-	    },)[0]
-        return map(lambda x: (x, x), map(lambda x: '%.2f' % x, vals))
+            },)[0]
+        if vals:
+            return map(lambda x: (x, x), map(lambda x: '%.2f' % x, vals))
+        return ''
 
 
 class ExtensionLifeState(DependantState):
@@ -311,7 +316,7 @@ class ExtensionLifeState(DependantState):
         product = wizard.project.product
         options = ';'.join([opt.coverage.code
             for opt in wizard.option_selection.options
-            if opt.status == 'Active'])
+            if opt.status == 'active'])
         wizard.extension_life.dynamic_data = utils.init_dynamic_data(
             product.get_result(
                 'dynamic_data_getter',
@@ -320,7 +325,9 @@ class ExtensionLifeState(DependantState):
                     'dd_args': {
                         'options': options,
                         'kind': 'main',
-                        'path': 'extension_life'}})[0])
+                        'path': 'extension_life',
+                    }
+                 })[0])
         if wizard.extension_life.dynamic_data:
             wizard.extension_life.for_product = product
             wizard.extension_life.at_date = wizard.project.start_date

@@ -4,30 +4,23 @@
         <form string="Pricing rule"/>
     </xpath>
     <xpath expr="/form" position="inside">
-        <group id="calculators" yfill="1" yexpand="1"
-            states="{'invisible' : Eval('config_kind') == 'simple'}">
-            <field name="calculators" yfill="1" yexpand="1" xexpand="1"
-                colspan="4" mode="form, tree"/>
-        </group>
+        <field name="calculators" yfill="1" yexpand="1" xexpand="1"
+            colspan="4" mode="form, tree"/>
     </xpath>
     <xpath expr="/form/notebook" position="replace_attributes">
         <page id="main" states="{'invisible': True}"/>
     </xpath>
-    <xpath expr="/form/group[@id='templating']" position="after">
+    <xpath expr="/form/notebook" position="before">
         <newline/>
-        <group id="config_kind">
-            <label name="config_kind" xfill="1"/>
-            <field name="config_kind" xexpand="1"/>
-            <label name="frequency"/>
-            <field name="frequency" xexpand="1"/>
-        </group>
+        <label name="config_kind" xfill="1"/>
+        <field name="config_kind" xexpand="1"/>
+        <label name="frequency"/>
+        <field name="frequency" xexpand="1"/>
         <newline/>
-        <group id="basic" states="{'invisible': Eval('config_kind') == 'rule'}">
-            <label name="basic_price"/>
-            <field name="basic_price" xexpand="1"/>
-            <newline/>
-            <label name="basic_tax"/>
-            <field name="basic_tax" xexpand="1"/>
-        </group>
+        <label name="basic_price"/>
+        <field name="basic_price" xexpand="1"/>
+        <newline/>
+        <label name="basic_tax"/>
+        <field name="basic_tax" xexpand="1"/>
     </xpath>
 </data>

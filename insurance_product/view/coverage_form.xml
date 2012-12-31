@@ -20,7 +20,7 @@
         position="before">
         <page string="Coverage Amount" id="coverage_amount"
             states="{'invisible': Bool(Eval('is_package'))}">
-            <field name="coverage_amount_mgr" mode="form" expand_toolbar="0"/>
+            <field name="coverage_amount_rules"/>
         </page>
     </xpath>
     <xpath

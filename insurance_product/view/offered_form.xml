@@ -27,20 +27,16 @@
                         expand_toolbar="0"/>
                 </page>
                 <page string="Eligibility" id="eligibility">
-                    <field name="eligibility_mgr" colspan="4" mode="form"
-                        expand_toolbar="0"/>
+                    <field name="eligibility_rules" colspan="4"/>
                 </page>
                 <page string="Pricing" id="pricing">
-                    <field name="pricing_mgr" colspan="4" mode="form"
-                        expand_toolbar="0"/>
+                    <field name="pricing_rules" colspan="4"/>
                 </page>
                 <page string="Deductible" id="deductible">
-                    <field name="deductible_mgr" colspan="4" mode="form"
-                        expand_toolbar="0"/>
+                    <field name="deductible_rules" colspan="4"/>
                 </page>
                 <page string="Clause" id="clause">
-                    <field name="clause_mgr" colspan="4" mode="form"
-                        expand_toolbar="0"/>
+                    <field name="clause_rules" colspan="4"/>
                 </page>
             </notebook>
         </page>

@@ -28,8 +28,6 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['PricingData'] = Model.get('ins_product.pricing_data')
     cfg_dict['Calculator'] = Model.get('ins_product.pricing_calculator')
     cfg_dict['Sequence'] = Model.get('ir.sequence')
-    cfg_dict['BRM'] = Model.get('ins_product.business_rule_manager')
-    cfg_dict['GBR'] = Model.get('ins_product.generic_business_rule')
     cfg_dict['Lang'] = Model.get('ir.lang')
     cfg_dict['Benefit'] = Model.get('ins_product.benefit')
     cfg_dict['RuleEngine'] = Model.get('rule_engine')
@@ -184,122 +182,75 @@ def create_AAA_Product(cfg_dict, code, name):
     product_a = get_or_create_product(cfg_dict, code, name)
     if product_a.id > 0:
         return product_a
-    brm = Model.get('ins_product.business_rule_manager')
-    gbr = Model.get('ins_product.generic_business_rule')
 
-    gbr_a = gbr()
-    gbr_a.kind = 'ins_product.pricing_rule'
-    gbr_a.start_date = cfg_dict['Date'].today({})
-    gbr_a.end_date = cfg_dict['Date'].today({}) + \
-                                    datetime.timedelta(days=10)
-
-    pr_data1 = cfg_dict['PricingData']()
-    pr_data1.config_kind = 'simple'
-    pr_data1.fixed_amount = Decimal(12)
-    pr_data1.kind = 'base'
-    pr_data1.code = 'PP'
-
+    coverage_a = get_or_create_coverage(cfg_dict, 'ALP', 'Alpha Coverage')
     tax = get_or_create_tax(cfg_dict,
         cfg_dict['translate']['IT'],
         cfg_dict['translate']['Insurance Tax'],
         [{'value': 15}])
 
-    pr_data11 = cfg_dict['PricingData']()
-    pr_data11.kind = 'tax'
-    pr_data11.the_tax = tax
-
     fee = get_or_create_fee(cfg_dict, 'FG', u'Frais de gestion',
         [{'value': 4}])
 
-    pr_data12 = cfg_dict['PricingData']()
-    pr_data12.kind = 'fee'
-    pr_data12.the_fee = fee
+    pricing_rulea1 = create_pricing_rule(cfg_dict, coverage_a,
+         config_kind='rule', calc_key='price', components=[
+            {
+                'kind': 'base',
+                'code': 'PP',
+                'config_kind': 'simple',
+                'fixed_amount': Decimal(12),
+             },
+            {
+                'kind': 'tax',
+                'code': cfg_dict['translate']['IT'],
+                'config_kind': 'simple',
+             },
+            {
+                'kind': 'fee',
+                'code': 'FG',
+                'config_kind': 'simple',
+             },
+        ],
+        end_date=cfg_dict['Date'].today({}) + datetime.timedelta(days=10))
 
-    pr_calc1 = cfg_dict['Calculator']()
-    pr_calc1.data.append(pr_data1)
-    pr_calc1.data.append(pr_data11)
-    pr_calc1.data.append(pr_data12)
-    pr_calc1.key = 'price'
+    calc_a2 = create_calculator(cfg_dict, pricing_rulea1, calc_key='sub_price',
+        components=[
+            {
+             'kind': 'base',
+             'code': 'PP',
+             'config_kind': 'simple',
+             'fixed_amount': Decimal(1)
+             }])
 
-    pr_data2 = cfg_dict['PricingData']()
-    pr_data2.config_kind = 'simple'
-    pr_data2.fixed_amount = Decimal(1)
-    pr_data2.kind = 'base'
-    pr_data2.code = 'PP'
-
-    pr_calc2 = cfg_dict['Calculator']()
-    pr_calc2.data.append(pr_data2)
-    pr_calc2.key = 'sub_price'
-
-    prm_a = gbr_a.pricing_rule[0]
-    prm_a.config_kind = 'rule'
-    prm_a.calculators.append(pr_calc1)
-    prm_a.calculators.append(pr_calc2)
-
-    gbr_b = gbr()
-    gbr_b.kind = 'ins_product.pricing_rule'
-    gbr_b.start_date = cfg_dict['Date'].today({}) + \
-                                    datetime.timedelta(days=11)
-    gbr_b.end_date = cfg_dict['Date'].today({}) + \
-                                    datetime.timedelta(days=20)
-
-    pr_data3 = cfg_dict['PricingData']()
-    pr_data3.config_kind = 'simple'
-    pr_data3.fixed_amount = Decimal(15)
-    pr_data3.kind = 'base'
-    pr_data3.code = 'PP'
-
-    pr_data31 = cfg_dict['PricingData']()
-    pr_data31.kind = 'tax'
-    pr_data31.the_tax = tax
-
-    pr_calc3 = cfg_dict['Calculator']()
-    pr_calc3.data.append(pr_data3)
-    pr_calc3.data.append(pr_data31)
-    pr_calc3.key = 'price'
-
-    prm_b = gbr_b.pricing_rule[0]
-    prm_a.config_kind = 'rule'
-    prm_b.calculators.append(pr_calc3)
-
-    brm_a = brm()
-    brm_a.business_rules.append(gbr_a)
-    brm_a.business_rules.append(gbr_b)
-
-    coverage_a = get_or_create_coverage(cfg_dict, 'ALP', 'Alpha Coverage')
-    gbr_c = gbr()
-    gbr_c.kind = 'ins_product.pricing_rule'
-    gbr_c.start_date = cfg_dict['Date'].today({})
-    gbr_c.end_date = cfg_dict['Date'].today({}) + \
-                                    datetime.timedelta(days=10)
-
-    pr_data4 = cfg_dict['PricingData']()
-    pr_data4.config_kind = 'simple'
-    pr_data4.fixed_amount = Decimal(30)
-    pr_data4.kind = 'base'
-    pr_data4.code = 'PP'
-
-    pr_calc4 = cfg_dict['Calculator']()
-    pr_calc4.data.append(pr_data4)
-    pr_calc4.key = 'price'
-
-    prm_c = gbr_c.pricing_rule[0]
-    prm_a.config_kind = 'rule'
-    prm_c.calculators.append(pr_calc4)
-
-    brm_b = brm()
-    brm_b.business_rules.append(gbr_c)
-
-    try_to_save_object(cfg_dict, brm_b)
-    try_to_save_object(cfg_dict, brm_a)
+    pricing_rulea2 = create_pricing_rule(cfg_dict, coverage_a,
+         config_kind='rule', calc_key='price', components=[
+            {
+                'kind': 'base',
+                'code': 'PP',
+                'config_kind': 'simple',
+                'fixed_amount': Decimal(15),
+             },
+            {
+                'kind': 'tax',
+                'code': cfg_dict['translate']['IT'],
+                'config_kind': 'simple',
+             },
+        ],
+        start_date=cfg_dict['Date'].today({}) + datetime.timedelta(days=11),
+        end_date=cfg_dict['Date'].today({}) + datetime.timedelta(days=20))
 
     coverage_b = get_or_create_coverage(cfg_dict, 'BET', 'Beta Coverage',
         cfg_dict['Date'].today({}) + datetime.timedelta(days=5))
-
-#    coverage_b.pricing_mgr = []
-    coverage_b.pricing_mgr.append(brm_b)
-
-    coverage_a.pricing_mgr.append(brm_a)
+    pricing_ruleb1 = create_pricing_rule(cfg_dict, coverage_b,
+         config_kind='rule', calc_key='price', components=[
+            {
+                'kind': 'base',
+                'code': 'PP',
+                'config_kind': 'simple',
+                'fixed_amount': Decimal(30),
+             },
+        ],
+        end_date=cfg_dict['Date'].today({}) + datetime.timedelta(days=10))
 
     try_to_save_object(cfg_dict, coverage_a)
     try_to_save_object(cfg_dict, coverage_b)
@@ -480,8 +431,6 @@ def create_BBB_product(cfg_dict, code, name):
     if product_b.id > 0:
         return product_b
     coverage = Model.get('ins_product.coverage')
-    brm = Model.get('ins_product.business_rule_manager')
-    gbr = Model.get('ins_product.generic_business_rule')
 
     rule = get_or_create_rule_for_birthdate_eligibility(cfg_dict,
         get_or_create_context(cfg_dict, 'Default Context'),
@@ -491,46 +440,31 @@ def create_BBB_product(cfg_dict, code, name):
     coverage_b, = coverage.find([('code', '=', 'BET')], limit=1)
 
     # Coverage C
-    gbr_d = gbr()
-    gbr_d.kind = 'ins_product.eligibility_rule'
-    gbr_d.start_date = cfg_dict['Date'].today({})
-    erm_a = gbr_d.eligibility_rule[0]
+    erm_a = Model.get('ins_product.eligibility_rule')()
+    erm_a.start_date = cfg_dict['Date'].today({})
     erm_a.config_kind = 'rule'
     erm_a.rule = rule
 
-    brm_c = brm()
-    brm_c.business_rules.append(gbr_d)
-
     coverage_c = get_or_create_coverage(cfg_dict, 'GAM', 'Gamma Coverage')
     if not coverage_c.id > 0:
-        coverage_c.eligibility_mgr.append(brm_c)
+        coverage_c.eligibility_rules.append(erm_a)
         try_to_save_object(cfg_dict, coverage_c)
 
     # Coverage D
-    gbr_g = gbr()
-    gbr_g.kind = 'ins_product.eligibility_rule'
-    gbr_g.start_date = cfg_dict['Date'].today({})
-    erm_d = gbr_g.eligibility_rule[0]
+    erm_d = Model.get('ins_product.eligibility_rule')()
+    erm_d.start_date = cfg_dict['Date'].today({})
     erm_d.config_kind = 'simple'
     erm_d.sub_min_age = 100
 
-    brm_f = brm()
-    brm_f.business_rules.append(gbr_g)
-
     coverage_d = get_or_create_coverage(cfg_dict, 'DEL', 'Delta Coverage')
     if not coverage_d.id > 0:
-        coverage_d.eligibility_mgr.append(brm_f)
+        coverage_d.eligibility_rules.append(erm_d)
         try_to_save_object(cfg_dict, coverage_d)
 
     # Product Eligibility Manager
-    gbr_e = gbr()
-    gbr_e.kind = 'ins_product.eligibility_rule'
-    gbr_e.start_date = cfg_dict['Date'].today({})
-    erm_b = gbr_e.eligibility_rule[0]
+    erm_b = Model.get('ins_product.eligibility_rule')()
+    erm_b.start_date = cfg_dict['Date'].today({})
     erm_b.config_kind = 'simple'
-
-    brm_d = brm()
-    brm_d.business_rules.append(gbr_e)
 
     # Product
 
@@ -538,7 +472,7 @@ def create_BBB_product(cfg_dict, code, name):
     product_b.options.append(coverage_b)
     product_b.options.append(coverage_c)
     product_b.options.append(coverage_d)
-    product_b.eligibility_mgr.append(brm_d)
+    product_b.eligibility_rules.append(erm_b)
     product_b.contract_generator = get_or_create_generator(
         cfg_dict, 'ins_product.product')
     try_to_save_object(cfg_dict, product_b)
@@ -561,42 +495,43 @@ def get_module_name(instance):
     return instance.__class__.__name__.split('.')[0]
 
 
-def add_rule(cfg_dict, offered, kind, at_date=None):
+def add_rule(cfg_dict, offered, kind, at_date=None, end_date=None):
     if not at_date:
         at_date = cfg_dict['Date'].today({})
-    mgr_list = getattr(offered, '%s_mgr' % kind)
-    if len(mgr_list) == 0:
-        mgr = cfg_dict['BRM']()
-        mgr_list.append(mgr)
-    mgr = mgr_list[-1]
-
-    gbr = cfg_dict['GBR']()
-    gbr.start_date = at_date
-    mgr.business_rules.append(gbr)
-    model_name = '%s.%s_rule' % (get_module_name(offered), kind)
-    gbr.kind = model_name
-    rule = getattr(gbr, '%s_rule' % kind)[0]
-    return rule
+    res = Model.get('ins_product.%s_rule' % kind)()
+    res.start_date = at_date
+    res.end_date = end_date
+    rules = getattr(offered, '%s_rules' % kind)
+    rules.append(res)
+    return res
 
 
-def create_pricing_rule(cfg_dict, cov, config_kind='simple', calc_key='price',
-        calc_combi_rule=None, basic_price=None, basic_tax=None,
-        components=None):
+def create_calculator(cfg_dict, pricing_rule, calc_key='price',
+        calc_combi_rule=None, components=None):
 
-    res = add_rule(cfg_dict, cov, 'pricing')
-    res.config_kind = config_kind
-    res.basic_price = basic_price
-    res.basic_tax = basic_tax
     calculator = cfg_dict['Calculator']()
     calculator.key = calc_key
     calculator.simple = calc_combi_rule is None
     calculator.combine = calc_combi_rule
-    res.calculators.append(calculator)
+    pricing_rule.calculators.append(calculator)
     for comp_dict in components if components else []:
         component = cfg_dict['PricingData']()
         calculator.data.append(component)
         for key, value in comp_dict.iteritems():
             setattr(component, key, value)
+    return calculator
+
+
+def create_pricing_rule(cfg_dict, cov, config_kind='simple', calc_key='price',
+        calc_combi_rule=None, basic_price=None, basic_tax=None,
+        components=None, start_date=None, end_date=None):
+
+    res = add_rule(cfg_dict, cov, 'pricing', at_date=start_date,
+        end_date=end_date)
+    res.config_kind = config_kind
+    res.basic_price = basic_price
+    res.basic_tax = basic_tax
+    create_calculator(cfg_dict, res, calc_key, calc_combi_rule, components)
     return res
 
 
@@ -605,11 +540,13 @@ def create_disability_coverage(cfg_dict):
     cov = get_or_create_coverage(cfg_dict, 'INCAP', u'Incapacité',
         date=at_date)
 
-    ca_rule = add_rule(cfg_dict, cov, 'coverage_amount', at_date)
+    ca_rule = add_rule(cfg_dict, cov, 'coverage_amount', at_date,
+        end_date=datetime.date(2011, 12, 31))
     ca_rule.amounts = '40;90;140;190'
 
     at_date = datetime.date(2012, 1, 1)
-    ca_rule = add_rule(cfg_dict, cov, 'coverage_amount', at_date)
+    ca_rule = add_rule(cfg_dict, cov, 'coverage_amount', at_date,
+        end_date=datetime.date(2012, 12, 31))
     ca_rule.amounts = '50;100;150;200'
 
     at_date = datetime.date(2013, 1, 1)
@@ -927,7 +864,7 @@ def launch_test_case(cfg_dict):
     get_or_create_currency(cfg_dict)
     create_shared_schema_elements(cfg_dict)
     create_rule_engine_data(cfg_dict)
-    #create_AAA_Product(cfg_dict, 'AAA', 'Awesome Alternative Allowance')
+    create_AAA_Product(cfg_dict, 'AAA', 'Awesome Alternative Allowance')
     #create_BBB_product(cfg_dict, 'BBB', 'Big Bad Bully')
     create_prev_product(cfg_dict)
     create_tranches(cfg_dict, 'PSS')

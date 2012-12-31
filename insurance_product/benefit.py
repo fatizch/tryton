@@ -18,8 +18,12 @@ class Benefit(model.CoopSQL, Offered):
         ondelete='CASCADE')
     benefit_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
         'offered', 'Benefit Manager')
+    benefit_rules = fields.One2Many('ins_product.benefit_rule',
+        'offered', 'Benefit Rules')
     reserve_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
         'offered', 'Reserve Manager')
+    reserve_rules = fields.One2Many('ins_product.reserve_rule',
+        'offered', 'Reserve Rules')
     kind = fields.Selection(
         [
             ('capital', 'Capital'),
@@ -30,10 +34,7 @@ class Benefit(model.CoopSQL, Offered):
 
     @classmethod
     def delete(cls, entities):
-        utils.delete_reference_backref(
-            entities,
-            'ins_product.business_rule_manager',
-            'offered')
+        cls.delete_rules(entities)
         super(Benefit, cls).delete(entities)
 
     @staticmethod

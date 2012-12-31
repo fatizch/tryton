@@ -4,24 +4,17 @@
         <!--  ******************************************* 
               ********    Reserve Rule    ***************
               *******************************************-->
+        <record model="ir.ui.view" id="reserverule_view_tree">
+            <field name="model">ins_product.reserve_rule</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="businessruleroot_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
         <record model="ir.ui.view" id="reserverule_view_form">
             <field name="model">ins_product.reserve_rule</field>
             <field name="type">form</field>
             <field name="inherit" ref="businessruleroot_view_form"/>
-            <field name="arch" type="xml">
-            <![CDATA[
-            <data>
-                <xpath expr="/form" position="replace_attributes">
-                    <form string="Reserve rule"/>
-                </xpath>
-                <xpath expr="/form/notebook/page[@id='main']/group[@id='simple']"
-                 position="inside">
-                    <label name="amount"/>
-                    <field name="amount"/>
-                </xpath>
-            </data>
-            ]]>
-            </field>
+            <field name="name">reserve_rule_form</field>
         </record>
     </data>
 </tryton>

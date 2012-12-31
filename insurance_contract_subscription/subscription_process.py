@@ -201,9 +201,9 @@ class Contract():
     def init_dynamic_data(self):
         if not (hasattr(self, 'dynamic_data') and self.dynamic_data):
             self.dynamic_data = {}
-            
+
         utils.set_default_dict(
-            self.dynamic_data, 
+            self.dynamic_data,
             utils.init_dynamic_data(
                 self.product.get_result(
                     'dynamic_data_getter',

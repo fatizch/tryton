@@ -3,12 +3,18 @@ import copy
 
 from trytond.pool import PoolMeta
 from trytond.model import fields
+from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import utils
 from trytond.modules.coop_utils import date
 
 from trytond.modules.insurance_product import ProductDefinition
 from trytond.modules.insurance_product import EligibilityResultLine
+
+STATES = {
+    'invisible':
+        Eval('_parent_offered', {}).get('family') != 'life_product.definition'
+}
 
 __all__ = ['LifeCoverage', 'LifeProductDefinition', 'LifeEligibilityRule']
 
@@ -56,13 +62,13 @@ class LifeEligibilityRule():
 
     __name__ = 'ins_product.eligibility_rule'
 
-    min_age = fields.Integer('Minimum Age')
+    min_age = fields.Integer('Minimum Age', states=STATES)
 
-    max_age = fields.Integer('Maximum Age')
+    max_age = fields.Integer('Maximum Age', states=STATES)
 
-    sub_min_age = fields.Integer('Minimum Age')
+    sub_min_age = fields.Integer('Minimum Age', states=STATES)
 
-    sub_max_age = fields.Integer('Maximum Age')
+    sub_max_age = fields.Integer('Maximum Age', states=STATES)
 
     @classmethod
     def __setup__(cls):

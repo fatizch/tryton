@@ -11,9 +11,12 @@ __all__ = [
     ]
 
 
-class DeductibleRule(model.CoopSQL, BusinessRuleRoot):
+class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
     'Deductible Rule'
 
     __name__ = 'ins_product.deductible_rule'
 
     value = fields.Char('Value')
+
+    def get_simple_rec_name(self):
+        return self.value

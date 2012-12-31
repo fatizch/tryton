@@ -12,7 +12,7 @@ __all__ = [
     ]
 
 
-class CoverageAmountRule(model.CoopSQL, BusinessRuleRoot):
+class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
     'Coverage Amount Rule'
 
     __name__ = 'ins_product.coverage_amount_rule'
@@ -94,3 +94,6 @@ class CoverageAmountRule(model.CoopSQL, BusinessRuleRoot):
     @staticmethod
     def default_kind():
         return 'amount'
+
+    def get_simple_rec_name(self):
+        return self.give_me_allowed_amounts({})[0]

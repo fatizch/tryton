@@ -29,12 +29,10 @@ class ModuleTestCase(unittest.TestCase):
     def setUp(self):
         trytond.tests.test_tryton.install_module('life_product')
         self.Product = POOL.get('ins_product.product')
-        self.coverage = POOL.get('ins_product.coverage')
-        self.brm = POOL.get('ins_product.business_rule_manager')
-        self.gbr = POOL.get('ins_product.generic_business_rule')
-        self.pricing = POOL.get('ins_product.pricing_rule')
-        self.currency = POOL.get('currency.currency')
-        self.eligibility = POOL.get('ins_product.eligibility_rule')
+        self.Coverage = POOL.get('ins_product.coverage')
+        self.Pricing = POOL.get('ins_product.pricing_rule')
+        self.Currency = POOL.get('currency.currency')
+        self.Eligibility = POOL.get('ins_product.eligibility_rule')
         self.TreeElement = POOL.get('rule_engine.tree_element')
         self.Context = POOL.get('rule_engine.context')
         self.RuleEngine = POOL.get('rule_engine')
@@ -226,7 +224,7 @@ return True'''
 
             #We need to create the currency manually because it's needed
             #on the default currency for product and coverage
-            euro = self.currency()
+            euro = self.Currency()
             euro.name = 'Euro'
             euro.symbol = u'€'
             euro.code = 'EUR'
@@ -265,16 +263,13 @@ return True'''
             pr_calc2.data = [pr_data2]
             pr_calc2.key = 'sub_price'
 
-            prm_a = self.pricing()
+            pricing_rulea = self.Pricing()
 
-            prm_a.calculators = [pr_calc1, pr_calc2]
+            pricing_rulea.calculators = [pr_calc1, pr_calc2]
 
-            gbr_a = self.gbr()
-            gbr_a.kind = 'ins_product.pricing_rule'
-            gbr_a.start_date = datetime.date.today()
-            gbr_a.end_date = datetime.date.today() + \
+            pricing_rulea.start_date = datetime.date.today()
+            pricing_rulea.end_date = datetime.date.today() + \
                                             datetime.timedelta(days=10)
-            gbr_a.pricing_rule = [prm_a]
 
             pr_data3 = self.PricingData()
             pr_data3.config_kind = 'simple'
@@ -286,27 +281,21 @@ return True'''
             pr_calc3.data = [pr_data3]
             pr_calc3.key = 'price'
 
-            prm_b = self.pricing()
-            prm_b.calculators = [pr_calc3]
+            pricing_ruleb = self.Pricing()
+            pricing_ruleb.calculators = [pr_calc3]
 
-            gbr_b = self.gbr()
-            gbr_b.kind = 'ins_product.pricing_rule'
-            gbr_b.start_date = datetime.date.today() + \
+            pricing_ruleb.start_date = datetime.date.today() + \
                                             datetime.timedelta(days=11)
-            gbr_b.end_date = datetime.date.today() + \
+            pricing_ruleb.end_date = datetime.date.today() + \
                                             datetime.timedelta(days=20)
-            gbr_b.pricing_rule = [prm_b]
 
-            brm_a = self.brm()
-            brm_a.business_rules = [gbr_a, gbr_b]
-
-            coverage_a = self.coverage()
+            coverage_a = self.Coverage()
             coverage_a.family = coverage_a._fields['family'].selection[0][0]
             coverage_a.code = 'ALP'
             coverage_a.name = 'Alpha Coverage'
             coverage_a.start_date = datetime.date.today()
 
-            coverage_a.pricing_mgr = [brm_a]
+            coverage_a.pricing_rules = [pricing_rulea]
 
             coverage_a.save()
 
@@ -328,94 +317,70 @@ return True'''
             pr_calc4.data = [pr_data4, pr_data41]
             pr_calc4.key = 'price'
 
-            prm_c = self.pricing()
-            prm_c.config_kind = 'simple'
-            prm_c.calculators = [pr_calc4]
+            pricing_rulec = self.Pricing()
+            pricing_rulec.config_kind = 'simple'
+            pricing_rulec.calculators = [pr_calc4]
 
-            gbr_c = self.gbr()
-            gbr_c.kind = 'ins_product.pricing_rule'
-            gbr_c.start_date = datetime.date.today()
-            gbr_c.end_date = datetime.date.today() + \
+            pricing_rulec.start_date = datetime.date.today()
+            pricing_rulec.end_date = datetime.date.today() + \
                                             datetime.timedelta(days=10)
-            gbr_c.pricing_rule = [prm_c]
 
-            brm_b = self.brm()
-            brm_b.business_rules = [gbr_c]
-
-            coverage_b = self.coverage()
+            coverage_b = self.Coverage()
             coverage_b.code = 'BET'
             coverage_b.name = 'Beta Coverage'
             coverage_b.family = coverage_a._fields['family'].selection[0][0]
             coverage_b.start_date = datetime.date.today() + \
                                             datetime.timedelta(days=5)
 
-            coverage_b.pricing_mgr = [brm_b]
+            coverage_b.pricing_rules = [pricing_ruleb]
 
             coverage_b.save()
 
             # Coverage C
 
-            erm_a = self.eligibility()
-            erm_a.config_kind = 'rule'
-            erm_a.is_eligible = False
-            erm_a.rule = rule
+            eligibility_rule_a = self.Eligibility()
+            eligibility_rule_a.config_kind = 'rule'
+            eligibility_rule_a.is_eligible = False
+            eligibility_rule_a.rule = rule
 
-            gbr_d = self.gbr()
-            gbr_d.kind = 'ins_product.eligibility_rule'
-            gbr_d.start_date = datetime.date.today()
-            gbr_d.eligibility_rule = [erm_a]
+            eligibility_rule_a.start_date = datetime.date.today()
 
-            brm_c = self.brm()
-            brm_c.business_rules = [gbr_d]
-
-            coverage_c = self.coverage()
+            coverage_c = self.Coverage()
             coverage_c.code = 'GAM'
             coverage_c.name = 'Gamma Coverage'
             coverage_c.family = coverage_a._fields['family'].selection[0][0]
             coverage_c.start_date = datetime.date.today()
 
-            coverage_c.eligibility_mgr = [brm_c]
+            coverage_c.eligibility_rules = [eligibility_rule_a]
 
             coverage_c.save()
 
             # Coverage D
 
-            erm_d = self.eligibility()
-            erm_d.config_kind = 'simple'
-            erm_d.is_eligible = True
-            erm_d.is_sub_elem_eligible = False
+            eligibility_rule_d = self.Eligibility()
+            eligibility_rule_d.config_kind = 'simple'
+            eligibility_rule_d.is_eligible = True
+            eligibility_rule_d.is_sub_elem_eligible = False
 
-            gbr_g = self.gbr()
-            gbr_g.kind = 'ins_product.eligibility_rule'
-            gbr_g.start_date = datetime.date.today()
-            gbr_g.eligibility_rule = [erm_d]
+            eligibility_rule_d.start_date = datetime.date.today()
 
-            brm_f = self.brm()
-            brm_f.business_rules = [gbr_g]
-
-            coverage_d = self.coverage()
+            coverage_d = self.Coverage()
             coverage_d.code = 'DEL'
             coverage_d.name = 'Delta Coverage'
             coverage_d.family = coverage_a._fields['family'].selection[0][0]
             coverage_d.start_date = datetime.date.today()
 
-            coverage_d.eligibility_mgr = [brm_f]
+            coverage_d.eligibility_rules = [eligibility_rule_d]
 
             coverage_d.save()
 
             # Product Eligibility Manager
 
-            erm_b = self.eligibility()
-            erm_b.config_kind = 'simple'
-            erm_b.is_eligible = True
+            eligibility_rule_b = self.Eligibility()
+            eligibility_rule_b.config_kind = 'simple'
+            eligibility_rule_b.is_eligible = True
 
-            gbr_e = self.gbr()
-            gbr_e.kind = 'ins_product.eligibility_rule'
-            gbr_e.start_date = datetime.date.today()
-            gbr_e.eligibility_rule = [erm_b]
-
-            brm_d = self.brm()
-            brm_d.business_rules = [gbr_e]
+            eligibility_rule_b.start_date = datetime.date.today()
 
             # Product
 
@@ -425,7 +390,7 @@ return True'''
             product_a.start_date = datetime.date.today()
             product_a.options = [
                 coverage_a, coverage_b, coverage_c, coverage_d]
-            product_a.eligibility_mgr = [brm_d]
+            product_a.eligibility_rules = [eligibility_rule_b]
             product_a.contract_generator = ng
             product_a.save()
 

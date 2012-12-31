@@ -11,7 +11,7 @@
     <xpath expr="/form/notebook/page[@id='managers']/notebook/page[@id='pricing']"
         position="after">
         <page string="Term - Renewal" id="term_renewal">
-            <field name="term_renewal_mgr" colspan="4" mode="form" expand_toolbar="0"/>
+            <field name="term_renewal_rules" colspan="4"/>
         </page>
     </xpath>
     <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"

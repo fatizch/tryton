@@ -4,38 +4,17 @@
         <!--  ******************************************* 
               ********    Coverage Amount Rule    ***************
               *******************************************-->
+        <record model="ir.ui.view" id="coverage_amountrule_view_tree">
+            <field name="model">ins_product.coverage_amount_rule</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="businessruleroot_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
         <record model="ir.ui.view" id="coverage_amountrule_view_form">
             <field name="model">ins_product.coverage_amount_rule</field>
             <field name="type">form</field>
             <field name="inherit" ref="businessruleroot_view_form"/>
-            <field name="arch" type="xml">
-                <![CDATA[
-                    <data>
-                        <xpath expr="/form" position="replace_attributes">
-                            <form string="Coverage Amount rule"/>
-                        </xpath>
-                        <xpath expr="/form/notebook/page[@id='main']/group[@id='simple']"
-                         position="inside">
-                            <group id="kind" colspan="2">
-                                <label name="kind"/>
-                                <field name="kind" xexpand="0"/>
-                            </group>
-                            <newline/>
-                            <label name="amounts"/>
-                            <field name="amounts"/>
-                            <newline/>
-                            <group id="calc_list" col="6" colspan="4">
-                                <label name="amount_start"/>
-                                <field name="amount_start"/>
-                                <label name="amount_end"/>
-                                <field name="amount_end"/>
-                                <label name="amount_step"/>
-                                <field name="amount_step"/>
-                            </group>
-                        </xpath>
-                    </data>
-                ]]>
-            </field>
+            <field name="name">coverage_amount_rule_form</field>
         </record>
     </data>
 </tryton>

@@ -13,7 +13,7 @@ __all__ = [
     ]
 
 
-class ReserveRule(model.CoopSQL, BusinessRuleRoot):
+class ReserveRule(BusinessRuleRoot, model.CoopSQL):
     'Reserve Rule'
 
     __name__ = 'ins_product.reserve_rule'
