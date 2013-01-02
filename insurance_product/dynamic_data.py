@@ -180,11 +180,7 @@ class DynamicDataManager(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_product.dynamic_data_manager'
 
-    master = fields.Reference(
-        'Product',
-        selection=[
-            ('ins_product.product', 'Product'),
-            ('ins_product.coverage', 'Coverage')])
+    master = fields.Reference('Product', 'get_master_selection')
 
     specific_dynamic = fields.One2Many(
         'ins_product.schema_element',
@@ -226,3 +222,11 @@ class DynamicDataManager(model.CoopSQL, model.CoopView):
         if not 'for_kind' in Transaction().context:
             return 'main'
         return Transaction().context['for_kind']
+
+    @classmethod
+    def get_master_selection(cls):
+        module_name = utils.get_module_name(cls)
+        return [
+            ('%s.product' % module_name, 'Product'),
+            ('%s.coverage' % module_name, 'Coverage'),
+        ]
