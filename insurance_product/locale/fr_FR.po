@@ -70,11 +70,7 @@ msgctxt "error:ins_product.package-coverage:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_product.pricing_calculator:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.pricing_data:"
+msgctxt "error:ins_product.pricing_component:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -1098,115 +1094,67 @@ msgctxt "field:ins_product.package-coverage,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.pricing_calculator,combine:"
-msgid "Combining Rule"
-msgstr "Règle de combinaison"
-
-msgctxt "field:ins_product.pricing_calculator,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_product.pricing_calculator,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_product.pricing_calculator,data:"
-msgid "Price Components"
-msgstr "Eléments de tarification"
-
-msgctxt "field:ins_product.pricing_calculator,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_product.pricing_calculator,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_product.pricing_calculator,key:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:ins_product.pricing_calculator,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_product.pricing_calculator,rule:"
-msgid "Pricing Rule"
-msgstr "Tarification"
-
-msgctxt "field:ins_product.pricing_calculator,simple:"
-msgid "Basic Combination"
-msgstr "Combinaison simple"
-
-msgctxt "field:ins_product.pricing_calculator,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_product.pricing_calculator,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:ins_product.pricing_data,calculator:"
+msgctxt "field:ins_product.pricing_component,calculator:"
 msgid "Calculator"
 msgstr "Calculateur"
 
-msgctxt "field:ins_product.pricing_data,code:"
+msgctxt "field:ins_product.pricing_component,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:ins_product.pricing_data,config_kind:"
+msgctxt "field:ins_product.pricing_component,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
 
-msgctxt "field:ins_product.pricing_data,create_date:"
+msgctxt "field:ins_product.pricing_component,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.pricing_data,create_uid:"
+msgctxt "field:ins_product.pricing_component,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.pricing_data,fixed_amount:"
+msgctxt "field:ins_product.pricing_component,fixed_amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:ins_product.pricing_data,id:"
+msgctxt "field:ins_product.pricing_component,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.pricing_data,is_used:"
+msgctxt "field:ins_product.pricing_component,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-msgctxt "field:ins_product.pricing_data,kind:"
+msgctxt "field:ins_product.pricing_component,kind:"
 msgid "Line kind"
 msgstr "Type"
 
-msgctxt "field:ins_product.pricing_data,rec_name:"
+msgctxt "field:ins_product.pricing_component,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.pricing_data,rule:"
+msgctxt "field:ins_product.pricing_component,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:ins_product.pricing_data,summary:"
+msgctxt "field:ins_product.pricing_component,summary:"
 msgid "Value"
 msgstr "Valeur"
 
-msgctxt "field:ins_product.pricing_data,the_fee:"
+msgctxt "field:ins_product.pricing_component,fee:"
 msgid "Fee Descriptor"
 msgstr "Descripteur de Frais"
 
-msgctxt "field:ins_product.pricing_data,the_tax:"
+msgctxt "field:ins_product.pricing_component,tax:"
 msgid "Tax Descriptor"
 msgstr "Taxe"
 
-msgctxt "field:ins_product.pricing_data,write_date:"
+msgctxt "field:ins_product.pricing_component,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.pricing_data,write_uid:"
+msgctxt "field:ins_product.pricing_component,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -1771,11 +1719,8 @@ msgctxt "model:ins_product.package-coverage,name:"
 msgid "Link Package Coverage"
 msgstr "Lien Formule Garantie"
 
-msgctxt "model:ins_product.pricing_calculator,name:"
-msgid "Price Calculator"
-msgstr "Montant"
 
-msgctxt "model:ins_product.pricing_data,name:"
+msgctxt "model:ins_product.pricing_component,name:"
 msgid "Pricing Component"
 msgstr "Elément de Tarification"
 
@@ -2115,31 +2060,23 @@ msgctxt "selection:ins_product.offered,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:ins_product.pricing_calculator,key:"
-msgid "Covered Element Price"
-msgstr "Tarif par élément couvert"
-
-msgctxt "selection:ins_product.pricing_calculator,key:"
-msgid "Subscriber Price"
-msgstr "Tarif souscripteur"
-
-msgctxt "selection:ins_product.pricing_data,config_kind:"
+msgctxt "selection:ins_product.pricing_component,config_kind:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "selection:ins_product.pricing_data,config_kind:"
+msgctxt "selection:ins_product.pricing_component,config_kind:"
 msgid "Simple"
 msgstr "Simple"
 
-msgctxt "selection:ins_product.pricing_data,kind:"
+msgctxt "selection:ins_product.pricing_component,kind:"
 msgid "Base Price"
 msgstr "Prime de base"
 
-msgctxt "selection:ins_product.pricing_data,kind:"
+msgctxt "selection:ins_product.pricing_component,kind:"
 msgid "Fee"
 msgstr "Frais"
 
-msgctxt "selection:ins_product.pricing_data,kind:"
+msgctxt "selection:ins_product.pricing_component,kind:"
 msgid "Tax"
 msgstr "Taxe"
 
@@ -2415,19 +2352,11 @@ msgctxt "view:ins_product.offered:"
 msgid "Summary"
 msgstr "Synthèse"
 
-msgctxt "view:ins_product.pricing_calculator:"
-msgid "Calculators"
-msgstr "Calculateurs"
-
-msgctxt "view:ins_product.pricing_calculator:"
-msgid "Price Calculator"
-msgstr "Montant"
-
-msgctxt "view:ins_product.pricing_data:"
+msgctxt "view:ins_product.pricing_component:"
 msgid "Pricing Component"
 msgstr "Elément de tarification"
 
-msgctxt "view:ins_product.pricing_data:"
+msgctxt "view:ins_product.pricing_component:"
 msgid "Pricing Components"
 msgstr "Eléments de tarification"
 

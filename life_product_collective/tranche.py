@@ -26,7 +26,7 @@ class TrancheCalculator():
     __name__ = 'tranche.calculator'
     __metaclass__ = PoolMeta
 
-    pricing_data = fields.Many2One('ins_collective.pricing_data',
+    pricing_component = fields.Many2One('ins_collective.pricing_component',
         'Pricing Data', ondelete='CASCADE')
 
 

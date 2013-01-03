@@ -3,7 +3,7 @@ import copy
 
 from trytond.model import fields
 from trytond.pool import Pool
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Or, Bool
 
 from trytond.modules.coop_utils import utils, date, model
 from trytond.modules.insurance_product.product import DEF_CUR_DIG, CONFIG_KIND
@@ -13,8 +13,7 @@ from trytond.modules.insurance_product.business_rule.business_rule import \
 
 __all__ = [
     'PricingRule',
-    'PriceCalculator',
-    'PricingData',
+    'PricingComponent',
     ]
 
 PRICING_LINE_KINDS = [
@@ -30,234 +29,176 @@ PRICING_FREQUENCY = [
     ('monthly', 'Monthly')
     ]
 
+RATED_OBJECT_KIND = [
+    ('global', 'Global'),
+    ('sub_item', 'Covered Item'),
+]
 
-class PricingData(model.CoopSQL, model.CoopView):
-    'Pricing Component'
 
-    __name__ = 'ins_product.pricing_data'
+class PricingRule(BusinessRuleRoot, model.CoopSQL):
+    'Pricing Rule'
 
-    calculator = fields.Many2One(
-        'ins_product.pricing_calculator',
-        'Calculator',
-        ondelete='CASCADE')
+    __name__ = 'ins_product.pricing_rule'
 
-    fixed_amount = fields.Numeric(
-        'Amount',
-        digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
-        depends=['kind', 'config_kind'])
+    components = model.One2ManyDomain('ins_product.pricing_component',
+        'pricing_rule', 'Components',
+        domain=[('rated_object_kind', '=', 'global')],
+        states={'invisible': Eval('config_kind') == 'simple'}, )
 
-    config_kind = fields.Selection(CONFIG_KIND,
-        'Conf. kind', required=True)
+    sub_item_components = model.One2ManyDomain('ins_product.pricing_component',
+        'pricing_rule', 'Covered Item Components',
+        domain=[('rated_object_kind', '=', 'sub_item')], )
 
-    rule = fields.Many2One('rule_engine', 'Rule Engine',
-        depends=['config_kind', 'kind'])
-
-    kind = fields.Selection(
-        PRICING_LINE_KINDS,
-        'Line kind',
+    frequency = fields.Selection(
+        PRICING_FREQUENCY,
+        'Rate Frequency',
         required=True)
 
-    code = fields.Char('Code', required=True)
+    specific_combination_rule = fields.Many2One('rule_engine',
+        'Combination Rule')
 
-    the_tax = fields.Function(fields.Many2One(
-            'coop_account.tax_desc',
-            'Tax Descriptor'),
-        'get_tax',
-        'set_tax')
+    sub_item_specific_combination_rule = fields.Many2One('rule_engine',
+        'Sub Item Combination Rule')
 
-    the_fee = fields.Function(fields.Many2One(
-            'coop_account.fee_desc',
-            'Fee Descriptor'),
-        'get_fee',
-        'set_fee')
+    basic_price = fields.Function(
+        fields.Numeric('Amount',
+            states={'invisible': Eval('config_kind') == 'advanced'},
+            digits=(16,
+                Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
+            ),
+        'get_basic_price',
+        'set_basic_price')
 
-    summary = fields.Function(fields.Char('Value',
-                    on_change_with=['fixed_amount', 'config_kind', 'rule',
-                        'kind', 'the_tax', 'the_fee', 'code']),
-        'get_summary')
+    basic_tax = fields.Function(
+        fields.Many2One('coop_account.tax_desc', 'Tax',
+            states={'invisible': Eval('config_kind') == 'advanced'}),
+        'get_basic_tax',
+        'set_basic_tax')
 
-    def get_tax(self, name):
-        if not (self.kind == 'tax' and
-                hasattr(self, 'code') and self.code):
+    @classmethod
+    def set_basic_price(cls, pricing_rules, name, value):
+        if not value:
             return
-        tax = utils.get_those_objects(
-            'coop_account.tax_desc',
-            [('code', '=', self.code)], 1)
-        if tax:
-            return tax[0].id
+        Component = Pool().get('ins_product.pricing_component')
+        for pricing in pricing_rules:
+            Component.delete(
+                [component for component in pricing.components
+                    if component.kind == 'base']
+                + list(pricing.sub_item_components))
+            cls.write([pricing],
+                    {'components': [(
+                        'create', {
+                            'fixed_amount': value,
+                            'kind': 'base',
+                            'code': 'PP',
+                            'rated_object_kind':'global',
+                            })]})
 
     @classmethod
-    def set_tax(cls, calcs, name, value):
-        if value:
-            try:
-                tax, = utils.get_those_objects(
-                    'coop_account.tax_desc',
-                    [('id', '=', value)])
-                code = tax.code
-                cls.write(calcs, {'code': code})
-            except ValueError:
-                raise Exception(
-                    'Could not found the required Tax Desc')
-
-    def get_fee(self, name):
-        if not (self.kind == 'fee' and
-                hasattr(self, 'code') and self.code):
+    def set_basic_tax(cls, pricing_rules, name, value):
+        if not value:
             return
-        fee = utils.get_those_objects(
-            'coop_account.fee_desc',
-            [('code', '=', self.code)], 1)
-        if fee:
-            return fee[0].id
+        try:
+            tax, = utils.get_those_objects(
+                'coop_account.tax_desc',
+                [('id', '=', value)])
+        except ValueError:
+            raise Exception(
+                'Could not found a Tax Desc with code %s' % value)
+        Component = Pool().get('ins_product.pricing_component')
+        for pricing in pricing_rules:
+            Component.delete(
+                [component for component in pricing.components
+                    if component.kind == 'tax']
+                + list(pricing.sub_item_components))
+            cls.write([pricing],
+                    {'components': [(
+                        'create', {
+                            'kind': 'tax',
+                            'code': tax.code,
+                            'rated_object_kind':'global',
+                        })]})
 
-    @classmethod
-    def set_fee(cls, calcs, name, value):
-        if value:
-            try:
-                fee, = utils.get_those_objects(
-                    'coop_account.fee_desc',
-                    [('id', '=', value)])
-                code = fee.code
-                cls.write(calcs, {'code': code})
-            except ValueError:
-                raise Exception(
-                    'Could not found the required Fee desc')
+    def get_component_of_kind(self, kind='base', rated_object_kind='global'):
+        components = self.get_components(rated_object_kind)
+        return [comp for comp in components if comp.kind == kind]
 
-    @classmethod
-    def create(cls, values):
-        values = values.copy()
-        if 'the_tax' in values and values['the_tax']:
-            try:
-                tax, = utils.get_those_objects(
-                    'coop_account.tax_desc',
-                    [('id', '=', values['the_tax'])])
-                values['code'] = tax.code
-            except ValueError:
-                raise Exception(
-                    'Could not found the required Tax Desc')
-        elif 'the_fee' in values and values['the_fee']:
-            try:
-                fee, = utils.get_those_objects(
-                    'coop_account.fee_desc',
-                    [('id', '=', values['the_fee'])])
-                values['code'] = fee.code
-            except ValueError:
-                raise Exception(
-                    'Could not found the required Fee desc')
-        super(PricingData, cls).create(values)
+    def get_single_component_of_kind(self, kind='base',
+            rated_object_kind='global'):
+        components = self.get_component_of_kind(kind, rated_object_kind)
+        if components and len(components) == 1:
+            return components[0]
 
-    @staticmethod
-    def default_kind():
-        return 'base'
-
-    @staticmethod
-    def default_config_kind():
-        return 'simple'
-
-    def calculate_tax(self, args):
-        # No need to calculate here, it will be done at combination time
+    def get_basic_price(self, name, rated_object_kind='global'):
+        component = self.get_single_component_of_kind(kind='base',
+            rated_object_kind=rated_object_kind)
+        if component:
+            return component.fixed_amount
         return 0
 
-    def calculate_fee(self, args):
-        # No need to calculate here, it will be done at combination time
-        return 0
+    def get_basic_tax(self, name, rated_object_kind='global'):
+        component = self.get_single_component_of_kind(kind='tax',
+            rated_object_kind=rated_object_kind)
+        if component:
+            return component.tax.id
 
-    def get_amount(self, args):
+    def give_me_price(self, args):
+        return self.calculate_price(args, rated_object_kind='global')
+
+    def give_me_sub_elem_price(self, args):
+        return self.calculate_price(args, rated_object_kind='sub_item')
+
+    def give_me_frequency(self, args):
+        if hasattr(self, 'frequency') and self.frequency:
+            return self.frequency
+        return None
+
+    def give_me_frequency_days(self, args):
+        if not 'date' in args:
+            return (None, ['A base date must be provided !'])
+        the_date = args['date']
+        return date.number_of_days_between(
+            the_date,
+            utils.add_frequency(self.frequency, the_date))
+
+    @staticmethod
+    def default_frequency():
+        return 'yearly'
+
+    def get_components(self, rated_object_kind):
+        if rated_object_kind == 'global':
+            return self.components
+        elif rated_object_kind == 'sub_item':
+            return self.sub_item_components
+
+    def get_combination_rule(self, rated_object_kind):
+        if rated_object_kind == 'global':
+            return self.specific_combination_rule
+        elif rated_object_kind == 'sub_item':
+            return self.sub_item_specific_combination_rule
+
+    def calculate_price(self, args, rated_object_kind='global'):
+        result = PricingResultLine(value=0)
         errors = []
-        if self.kind == 'tax':
-            amount = self.calculate_tax(args)
-        elif self.kind == 'fee':
-            amount = self.calculate_fee(args)
-        elif self.config_kind == 'simple':
-            amount = self.fixed_amount
-        elif self.config_kind == 'rule' and self.rule:
-            res, mess, errs = self.rule.compute(args)
-            amount, errors = res, mess + errs
-        return amount, errors
-
-    def calculate_value(self, args):
-        kind = self.kind
-        amount, errors = self.get_amount(args)
-        code = self.code
-        name = kind + ' - ' + code
-        final_res = PricingResultLine(amount, name)
-        final_res.update_details({(kind, code): amount})
-        return final_res, errors
-
-    @classmethod
-    def get_summary(cls, pricings, name=None, with_label=False, at_date=None,
-                    lang=None):
-        res = {}
-        for pricing in pricings:
-            res[pricing.id] = ''
-            if pricing.kind == 'tax' and pricing.the_tax:
-                res[pricing.id] = pricing.the_tax.rec_name
-            elif pricing.kind == 'fee' and pricing.the_fee:
-                res[pricing.id] = pricing.the_fee.rec_name
-            else:
-                if pricing.config_kind == 'rule' and pricing.rule:
-                    res[pricing.id] = pricing.rule.rec_name
-                elif pricing.config_kind == 'simple':
-                    res[pricing.id] = str(pricing.fixed_amount)
-        return res
-
-    def get_rec_name(self, name=None):
-        return self.get_summary([self])[self.id]
-
-    def on_change_with_summary(self, name=None):
-        return self.get_summary([self])[self.id]
-
-
-class PriceCalculator(model.CoopSQL, model.CoopView):
-    'Price Calculator'
-
-    __name__ = 'ins_product.pricing_calculator'
-
-    data = fields.One2Many(
-        'ins_product.pricing_data',
-        'calculator',
-        'Price Components',
-        )
-
-    key = fields.Selection(
-        [('price', 'Subscriber Price'),
-        ('sub_price', 'Covered Element Price')],
-        'Kind')
-
-    rule = fields.Many2One(
-        'ins_product.pricing_rule',
-        'Pricing Rule',
-        ondelete='CASCADE')
-
-    simple = fields.Boolean('Basic Combination')
-
-    combine = fields.Many2One(
-        'rule_engine',
-        'Combining Rule',
-        states={
-            'invisible': Bool(Eval('simple')),
-            'required': ~Bool(Eval('simple'))})
-
-    def calculate_price(self, args):
-        result = PricingResultLine()
-        errors = []
-        for data in self.data:
-            res, errs = data.calculate_value(args)
+        errs = []
+        for component in self.get_components(rated_object_kind):
+            res, errs = component.calculate_value(args)
             result += res
             errors += errs
-        if not errors and not self.simple and \
-                hasattr(self, 'combine') and self.combine:
+        combination_rule = self.get_combination_rule(rated_object_kind)
+        if not errors and combination_rule:
             new_args = copy.copy(args)
             new_args['price_details'] = result.details
             final_details = {}
             for key in result.details.iterkeys():
                 final_details[key] = 0
             new_args['final_details'] = final_details
-            res, mess, errs = self.combine.compute(new_args)
+            res, mess, errs = combination_rule.compute(new_args)
             errors += mess + errs
             result = PricingResultLine(value=res)
             result.details = {}
             result.update_details(new_args['final_details'])
-        elif not errs and self.simple:
+        elif not errs and not combination_rule:
             result.value = 0
             sorted = dict([(key, []) for key, _ in PRICING_LINE_KINDS])
             result.desc = []
@@ -288,202 +229,124 @@ class PriceCalculator(model.CoopSQL, model.CoopView):
         result.create_descs_from_details()
         return result, errors
 
-    def get_rec_name(self, name):
-        return 'Price Calculator'
+
+class PricingComponent(model.CoopSQL, model.CoopView):
+    'Pricing Component'
+
+    __name__ = 'ins_product.pricing_component'
+
+    pricing_rule = fields.Many2One('ins_product.pricing_rule', 'Pricing Rule',
+        ondelete='CASCADE')
+
+    fixed_amount = fields.Numeric('Amount',
+        digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
+        depends=['kind', 'config_kind'],
+        states={'invisible':
+            Or(
+                Bool((Eval('kind') != 'base')),
+                Bool((Eval('config_kind') != 'simple'))
+            )
+        }, )
+
+    config_kind = fields.Selection(CONFIG_KIND,
+        'Conf. kind', required=True,
+        states={'invisible': Eval('kind') != 'base'}, )
+
+    rated_object_kind = fields.Selection(RATED_OBJECT_KIND,
+        'Rated Object Kind', required=True)
+
+    rule = fields.Many2One('rule_engine', 'Rule Engine',
+        depends=['config_kind', 'kind'],
+        states={'invisible':
+            Or(
+                Bool((Eval('kind') != 'base')),
+                Bool((Eval('config_kind') != 'advanced'))
+            )
+        }, )
+
+    kind = fields.Selection(PRICING_LINE_KINDS,
+        'Line kind', required=True)
+
+    code = fields.Char('Code', required=True,
+        on_change_with=['code', 'tax', 'fee'])
+
+    tax = fields.Many2One('coop_account.tax_desc', 'Tax',
+        states={'invisible': Eval('kind') != 'tax'}, )
+
+    fee = fields.Many2One('coop_account.fee_desc', 'Fee',
+        states={'invisible': Eval('kind') != 'fee'}, )
+
+    summary = fields.Function(
+        fields.Char('Value',
+            on_change_with=['fixed_amount', 'config_kind', 'rule',
+                'kind', 'tax', 'fee', 'code']),
+        'get_summary')
 
     @staticmethod
-    def default_simple():
-        return True
-
-#Not working for the moment
-#    @staticmethod
-#    def default_data():
-#        return utils.create_inst_with_default_val(
-#            Pool().get('ins_product.pricing_calculator'), 'data')
-
-
-class PricingRule(BusinessRuleRoot, model.CoopSQL):
-    'Pricing Rule'
-
-    __name__ = 'ins_product.pricing_rule'
-
-    calculators = fields.One2Many('ins_product.pricing_calculator',
-        'rule', 'Calculators',
-        states={'invisible': Eval('config_kind') == 'simple'})
-
-    price = fields.Function(
-        fields.Many2One('ins_product.pricing_calculator',
-            'Price Calculator'),
-        'get_calculator')
-
-    sub_price = fields.Function(
-        fields.Many2One('ins_product.pricing_calculator',
-            'Price Calculator'),
-        'get_calculator')
-
-    frequency = fields.Selection(
-        PRICING_FREQUENCY,
-        'Rate Frequency',
-        required=True)
-
-    basic_price = fields.Function(
-        fields.Numeric('Amount',
-            states={'invisible': Eval('config_kind') == 'rule'},
-            digits=(16,
-                Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
-            ),
-        'get_basic_price',
-        'set_basic_price')
-
-    basic_tax = fields.Function(
-        fields.Many2One('coop_account.tax_desc', 'Tax',
-            states={'invisible': Eval('config_kind') == 'rule'}),
-        'get_basic_tax',
-        'set_basic_tax')
+    def default_kind():
+        return 'base'
 
     @staticmethod
     def default_config_kind():
         return 'simple'
 
-    @classmethod
-    def set_basic_price(cls, prices, name, value):
-        if value:
-            Calc = Pool().get('ins_product.pricing_calculator')
-            Data = Pool().get('ins_product.pricing_data')
-            for price in prices:
-                if len(price.calculators) == 1:
-                    the_calc = price.calculators[0]
-                    Data.delete(
-                        [data for data in the_calc.data
-                            if data.kind == 'base'])
-                else:
-                    if len(price.calculators) > 1:
-                        Calc.delete(price.calculators)
-                    the_calc = Calc()
-                    the_calc.key = 'price'
-                    the_calc.data = []
-                if the_calc.id:
-                    the_calc.write([the_calc],
-                        {'data': [(
-                            'create', {
-                                'fixed_amount': value,
-                                'kind': 'base',
-                                'code': 'PP'})]})
-                else:
-                    price.write([price], {
-                        'calculators': [(
-                            'create', {
-                                'key': 'price',
-                                'data': [(
-                                    'create', {
-                                        'fixed_amount': value,
-                                        'code': 'PP',
-                                        'kind': 'base'})]})]})
+    def calculate_tax(self, args):
+        # No need to calculate here, it will be done at combination time
+        return 0
+
+    def calculate_fee(self, args):
+        # No need to calculate here, it will be done at combination time
+        return 0
+
+    def get_amount(self, args):
+        errors = []
+        if self.kind == 'tax':
+            amount = self.calculate_tax(args)
+        elif self.kind == 'fee':
+            amount = self.calculate_fee(args)
+        elif self.config_kind == 'simple':
+            amount = self.fixed_amount
+        elif self.config_kind == 'advanced' and self.rule:
+            res, mess, errs = self.rule.compute(args)
+            amount, errors = res, mess + errs
+        return amount, errors
+
+    def calculate_value(self, args):
+        kind = self.kind
+        amount, errors = self.get_amount(args)
+        code = self.code
+        name = kind + ' - ' + code
+        final_res = PricingResultLine(amount, name)
+        final_res.update_details({(kind, code): amount})
+        return final_res, errors
 
     @classmethod
-    def set_basic_tax(cls, prices, name, value):
-        if value:
-            try:
-                tax, = utils.get_those_objects(
-                    'coop_account.tax_desc',
-                    [('id', '=', value)])
-            except ValueError:
-                raise Exception(
-                    'Could not found a Tax Desc with code %s' % value)
-            Calc = Pool().get('ins_product.pricing_calculator')
-            Data = Pool().get('ins_product.pricing_data')
-            for price in prices:
-                if len(price.calculators) == 1:
-                    the_calc = price.calculators[0]
-                    Data.delete(
-                        [data for data in the_calc.data
-                            if data.kind == 'tax'])
-                else:
-                    if len(price.calculators) > 1:
-                        Calc.delete(price.calculators)
-                    the_calc = Calc()
-                    the_calc.key = 'price'
-                    the_calc.data = []
-                if the_calc.id:
-                    the_calc.write([the_calc],
-                        {'data': [(
-                            'create', {
-                                'kind': 'tax',
-                                'code': tax.code})]})
-                else:
-                    price.write([price], {
-                        'calculators': [(
-                            'create', {
-                                'key': 'price',
-                                'data': [(
-                                    'create', {
-                                        'code': tax.code,
-                                        'kind': 'tax'})]})]})
+    def get_summary(cls, pricings, name=None, with_label=False, at_date=None,
+                    lang=None):
+        res = {}
+        for pricing in pricings:
+            res[pricing.id] = ''
+            if pricing.kind == 'tax' and pricing.tax:
+                res[pricing.id] = pricing.tax.rec_name
+            elif pricing.kind == 'fee' and pricing.fee:
+                res[pricing.id] = pricing.fee.rec_name
+            else:
+                if pricing.config_kind == 'advanced' and pricing.rule:
+                    res[pricing.id] = pricing.rule.rec_name
+                elif pricing.config_kind == 'simple':
+                    res[pricing.id] = str(pricing.fixed_amount)
+        return res
 
-    def get_basic_price(self, name):
-        if not self.config_kind == 'simple':
-            return 0
-        calcs = [elem for elem in self.calculators if elem.key == 'price']
-        if not calcs or len(calcs) > 1:
-            return 0
-        calc = calcs[0]
-        datas = [data for data in calc.data if data.kind == 'base']
-        if not datas or len(datas) > 1:
-            return 0
-        return datas[0].fixed_amount
+    def get_rec_name(self, name=None):
+        return self.get_summary([self])[self.id]
 
-    def get_basic_tax(self, name):
-        if not self.config_kind == 'simple':
-            return
-        calcs = [elem for elem in self.calculators if elem.key == 'price']
-        if not calcs or len(calcs) > 1:
-            return
-        calc = calcs[0]
-        datas = [data for data in calc.data if data.kind == 'tax']
-        if not datas or len(datas) > 1:
-            return
-        tax = utils.get_those_objects(
-            'coop_account.tax_desc',
-            [('code', '=', datas[0].code)], 1)
-        if tax:
-            return tax[0].id
+    def on_change_with_summary(self, name=None):
+        return self.get_summary([self])[self.id]
 
-    def get_calculator(self, name):
-        if hasattr(self, 'calculators') and self.calculators:
-            for elem in self.calculators:
-                if elem.key == name:
-                    return utils.WithAbstract.serialize_field(elem)
-        return None
-
-    def give_me_price(self, args):
-        if self.price:
-            result, errors = self.price.calculate_price(args)
-        else:
-            result, errors = (PricingResultLine(value=0), [])
-
-        return result, errors
-
-    def give_me_sub_elem_price(self, args):
-        if self.sub_price:
-            result, errors = self.sub_price.calculate_price(args)
-        else:
-            result, errors = (PricingResultLine(value=0), [])
-
-        return result, errors
-
-    def give_me_frequency(self, args):
-        if hasattr(self, 'frequency') and self.frequency:
-            return self.frequency
-        return None
-
-    def give_me_frequency_days(self, args):
-        if not 'date' in args:
-            return (None, ['A base date must be provided !'])
-        the_date = args['date']
-        return date.number_of_days_between(
-            the_date,
-            utils.add_frequency(self.frequency, the_date))
-
-    @staticmethod
-    def default_frequency():
-        return 'yearly'
+    def on_change_with_code(self, name=None):
+        if self.code:
+            return self.code
+        if self.tax:
+            return self.tax.code
+        if self.fee:
+            return self.fee.code

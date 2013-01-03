@@ -17,7 +17,7 @@ try:
 except ImportError:
     import json
 
-COULDNOTFINDAMATCHINGRULE = 'Could not find a matching rule'
+COULD_NOT_FIND_A_MATCHING_RULE = 'Could not find a matching rule'
 
 
 def get_child_models(from_class):

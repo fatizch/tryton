@@ -7,20 +7,25 @@
         <field name="calculators" yfill="1" yexpand="1" xexpand="1"
             colspan="4" mode="form, tree"/>
     </xpath>
-    <xpath expr="/form/notebook" position="replace_attributes">
-        <page id="main" states="{'invisible': True}"/>
-    </xpath>
     <xpath expr="/form/notebook" position="before">
-        <newline/>
-        <label name="config_kind" xfill="1"/>
-        <field name="config_kind" xexpand="1"/>
         <label name="frequency"/>
         <field name="frequency" xexpand="1"/>
-        <newline/>
+    </xpath>
+    <xpath expr="/form/notebook/page/group[@id='simple']" position="inside">
         <label name="basic_price"/>
         <field name="basic_price" xexpand="1"/>
         <newline/>
         <label name="basic_tax"/>
         <field name="basic_tax" xexpand="1"/>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='global']" position="after">
+        <page id="sub" string="Covered Element">
+            <field name="sub_item_components"/>
+        </page>
+    </xpath>
+    <xpath expr="/form/notebook/page/group/label[@name='rule']" position="replace"/>
+    <xpath expr="/form/notebook/page/group/field[@name='rule']" position="replace"/>
+    <xpath expr="/form/notebook/page/group[@id='rule']" position="inside">
+        <field name="components" yexpand="1" yfill="1"/>
     </xpath>
 </data>

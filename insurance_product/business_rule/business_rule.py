@@ -240,7 +240,7 @@ class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
         return True
 
     def get_rec_name(self, name=None):
-        if self.config_kind == 'rule' and self.rule:
+        if self.config_kind == 'advanced' and self.rule:
             return self.rule.get_rec_name
         return self.get_simple_rec_name()
 

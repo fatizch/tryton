@@ -9,8 +9,8 @@ from trytond.modules.coop_utils import utils
 from trytond.modules.life_product import LifeCoverage
 __all__ = [
     'GroupLifeCoverage',
-    'GroupPricingData',
-    'GroupPriceCalculator',
+    'GroupPricingRule',
+    'GroupPricingComponent',
 ]
 
 
@@ -20,10 +20,33 @@ class GroupLifeCoverage(LifeCoverage):
     __name__ = 'ins_collective.coverage'
 
 
-class GroupPricingData():
+class GroupPricingRule():
+    'Pricing Rule'
+
+    __name__ = 'ins_collective.pricing_rule'
+    __metaclass__ = PoolMeta
+
+    college = fields.Many2One('party.college', 'College',
+        on_change=['college', 'component'])
+
+    def on_change_college(self):
+        if not self.college:
+            return {'components': []}
+        basic_element = utils.create_inst_with_default_val(self.__class__,
+            'components')[0]
+        res = []
+        for tranche in self.college.tranches:
+            cur_component = basic_element.copy()
+            cur_component['tranche'] = tranche.id
+            cur_component['code'] = '%s_%s' % (self.college.code, tranche.code)
+            res.append(cur_component)
+        return {'components': {'add': res}}
+
+
+class GroupPricingComponent():
     'Pricing Component'
 
-    __name__ = 'ins_collective.pricing_data'
+    __name__ = 'ins_collective.pricing_component'
     __metaclass__ = PoolMeta
 
     rate = fields.Numeric('Rate',
@@ -63,7 +86,7 @@ class GroupPricingData():
         #example 2 : {'TA':1578000, 'TB': 2500000, 'TC'.....}
         errors = []
         if self.kind != 'simple':
-            return super(GroupPricingData, self).get_amount(args)
+            return super(GroupPricingComponent, self).get_amount(args)
         if 'date' in args:
             at_date = args['date']
         #Either we have the payroll for all the company for the good tranche,
@@ -83,30 +106,3 @@ class GroupPricingData():
             errors.append('missing_param_salary_or_payroll')
             amount = 0
         return amount, errors
-
-
-class GroupPriceCalculator():
-    'Price Calculator'
-
-    __name__ = 'ins_collective.pricing_calculator'
-    __metaclass__ = PoolMeta
-
-    college = fields.Many2One('party.college', 'College',
-        on_change=['college', 'data'])
-
-    @staticmethod
-    def default_key():
-        return 'sub_price'
-
-    def on_change_college(self):
-        if not self.college:
-            return {'data': []}
-        basic_element = utils.create_inst_with_default_val(self.__class__,
-            'data')[0]
-        res = []
-        for tranche in self.college.tranches:
-            cur_data = basic_element.copy()
-            cur_data['tranche'] = tranche.id
-            cur_data['code'] = '%s_%s' % (self.college.code, tranche.code)
-            res.append(cur_data)
-        return {'data': {'add': res}}

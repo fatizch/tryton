@@ -3,7 +3,7 @@
     <xpath expr="/form" position="replace_attributes">
         <form string="Eligibility rule"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='main']" position="after">
+    <xpath expr="/form/notebook/page[@id='global']" position="after">
         <page id="sub" string="Covered Element">
             <group id="sub_elem_config_kind" colspan="2">
                 <label name="sub_elem_config_kind" xfill="1"/>
@@ -14,17 +14,17 @@
                 states="{'invisible': Eval('sub_elem_config_kind') != 'simple'}">
             </group>
             <group id="sub_rule" colspan="4"
-                states="{'invisible': Eval('sub_elem_config_kind') != 'rule'}">
+                states="{'invisible': Eval('sub_elem_config_kind') != 'advanced'}">
                 <label name="sub_elem_rule"/>
                 <field name="sub_elem_rule"/>
             </group>
             <field name="relation_kinds" colspan="4" xexpand="1" yfill="1"/>
         </page>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='main']/group[@id='simple']"
+    <xpath expr="/form/notebook/page[@id='global']/group[@id='simple']"
         position="inside">
     </xpath>
-    <xpath expr="/form/notebook/page[@id='main']" position="inside">
+    <xpath expr="/form/notebook/page[@id='global']" position="inside">
         <group id="subscriber_classes" colspan="2">
             <label name="subscriber_classes"/>
             <field name="subscriber_classes" xexpand="0"/>

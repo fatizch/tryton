@@ -7,29 +7,17 @@
             <field name="inherit" ref="insurance_product.pricingrule_view_form"/>
             <field name="arch" type="xml"/>
         </record>
-        <record model="ir.ui.view" id="calculator_view_form">
-            <field name="model">ins_collective.pricing_calculator</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="insurance_product.calculator_view_form"/>
-            <field name="name">pricing_calculator_form</field>
-        </record>
-        <record model="ir.ui.view" id="calculator_view_tree">
-            <field name="model">ins_collective.pricing_calculator</field>
+        <record model="ir.ui.view" id="pricing_component_view_tree">
+            <field name="model">ins_collective.pricing_component</field>
             <field name="type">tree</field>
-            <field name="inherit" ref="insurance_product.calculator_view_form"/>
-            <field name="arch" type="xml"/>
+            <field name="inherit" ref="insurance_product.pricing_component_view_tree"/>
+            <field name="name">pricing_component_tree</field>
         </record>
-        <record model="ir.ui.view" id="pricingdata_view_tree">
-            <field name="model">ins_collective.pricing_data</field>
-            <field name="type">tree</field>
-            <field name="inherit" ref="insurance_product.pricingdata_view_tree"/>
-            <field name="name">pricing_data_tree</field>
-        </record>
-        <record model="ir.ui.view" id="pricingdata_view_form">
-            <field name="model">ins_collective.pricing_data</field>
+        <record model="ir.ui.view" id="pricing_component_view_form">
+            <field name="model">ins_collective.pricing_component</field>
             <field name="type">form</field>
-            <field name="inherit" ref="insurance_product.pricingdata_view_form"/>
-            <field name="name">pricing_data_form</field>
+            <field name="inherit" ref="insurance_product.pricing_component_view_form"/>
+            <field name="name">pricing_component_form</field>
         </record>
     </data>
 </tryton>

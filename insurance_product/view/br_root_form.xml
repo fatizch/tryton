@@ -6,16 +6,19 @@
     <field name="end_date"/>
     <newline/>
     <label name="template"/>
-    <field name="template"/>
-    <field name="template_behaviour"/>
+    <group id="template" colspan="3" col="4">
+        <field name="template" colspan="3"/>
+        <field name="template_behaviour" xexpand="0"/>
+    </group>
     <notebook>
-        <page id="main" string="Main">
+        <page id="global" string="Global">
             <group id="config_kind" colspan="2">
                 <label name="config_kind" xfill="1"/>
                 <field name="config_kind" xfill="1" xexpand="0"/>
             </group>
             <group id="rule" colspan="4"
-                states="{'invisible': Eval('config_kind') != 'rule'}">
+                states="{'invisible': Eval('config_kind') != 'advanced'}" 
+                yfill="1" yexpand="1">
                 <label name="rule"/>
                 <field name="rule"/>
             </group>

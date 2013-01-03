@@ -164,8 +164,7 @@ class GBPWizard(Wizard):
             flatten[tranche.coverage.id] = good_opt
 
         Pricing = Pool().get('ins_collective.pricing_rule')
-        Calculator = Pool().get('ins_collective.pricing_calculator')
-        Component = Pool().get('ins_collective.pricing_data')
+        Component = Pool().get('ins_collective.pricing_component')
         gbp = GBP(gbp_id)
 
         for option_id, values in flatten.iteritems():
@@ -173,21 +172,17 @@ class GBPWizard(Wizard):
                 if option.id != option_id:
                     continue
 
-                pricing = Pricing()
-                pricing.start_date = gbp.start_date
-                pricing.calculators = []
-                option.pricing_rules.append(pricing)
-
                 for college_id, tranches in values.iteritems():
-                    calculator = Calculator()
-                    calculator.college = college_id
-                    calculator.data = []
+                    pricing = Pricing()
+                    pricing.start_date = gbp.start_date
+                    pricing.components = []
+                    option.pricing_rules.append(pricing)
+                    pricing.college = college_id
                     for tranche in tranches:
-                        pricing_data = Component()
-                        pricing_data.tranche = tranche.tranche
-                        pricing_data.rate = tranche.rate
-                        pricing_data.code = tranche.tranche.code
-                        calculator.data.append(pricing_data)
-                    pricing.calculators.append(calculator)
+                        pricing_component = Component()
+                        pricing_component.tranche = tranche.tranche
+                        pricing_component.rate = tranche.rate
+                        pricing_component.code = tranche.tranche.code
+                        pricing.components.append(pricing_component)
 
         return 'end'

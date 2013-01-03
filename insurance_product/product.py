@@ -20,7 +20,7 @@ __all__ = [
 
 CONFIG_KIND = [
     ('simple', 'Simple'),
-    ('rule', 'Rule Engine')
+    ('advanced', 'Advanced')
     ]
 
 TEMPLATE_BEHAVIOUR = [

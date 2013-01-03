@@ -90,11 +90,7 @@ msgctxt "error:ins_collective.package-coverage:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.pricing_calculator:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_collective.pricing_data:"
+msgctxt "error:ins_collective.pricing_component:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -1580,67 +1576,67 @@ msgctxt "field:ins_collective.pricing_calculator,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_collective.pricing_data,calculator:"
+msgctxt "field:ins_collective.pricing_component,calculator:"
 msgid "Calculator"
 msgstr "Calculateur"
 
-msgctxt "field:ins_collective.pricing_data,code:"
+msgctxt "field:ins_collective.pricing_component,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:ins_collective.pricing_data,config_kind:"
+msgctxt "field:ins_collective.pricing_component,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
 
-msgctxt "field:ins_collective.pricing_data,create_date:"
+msgctxt "field:ins_collective.pricing_component,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_collective.pricing_data,create_uid:"
+msgctxt "field:ins_collective.pricing_component,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_collective.pricing_data,fixed_amount:"
+msgctxt "field:ins_collective.pricing_component,fixed_amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:ins_collective.pricing_data,id:"
+msgctxt "field:ins_collective.pricing_component,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_collective.pricing_data,is_used:"
+msgctxt "field:ins_collective.pricing_component,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-msgctxt "field:ins_collective.pricing_data,kind:"
+msgctxt "field:ins_collective.pricing_component,kind:"
 msgid "Line kind"
 msgstr "Type"
 
-msgctxt "field:ins_collective.pricing_data,rec_name:"
+msgctxt "field:ins_collective.pricing_component,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_collective.pricing_data,rule:"
+msgctxt "field:ins_collective.pricing_component,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:ins_collective.pricing_data,summary:"
+msgctxt "field:ins_collective.pricing_component,summary:"
 msgid "Value"
 msgstr "Valeur"
 
-msgctxt "field:ins_collective.pricing_data,the_fee:"
+msgctxt "field:ins_collective.pricing_component,fee:"
 msgid "Fee Descriptor"
 msgstr "Descripteur de Frais"
 
-msgctxt "field:ins_collective.pricing_data,the_tax:"
+msgctxt "field:ins_collective.pricing_component,tax:"
 msgid "Tax Descriptor"
 msgstr "Taxe"
 
-msgctxt "field:ins_collective.pricing_data,write_date:"
+msgctxt "field:ins_collective.pricing_component,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_collective.pricing_data,write_uid:"
+msgctxt "field:ins_collective.pricing_component,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -2298,7 +2294,7 @@ msgctxt "model:ins_collective.pricing_calculator,name:"
 msgid "Price Calculator"
 msgstr "Règle de Tarification"
 
-msgctxt "model:ins_collective.pricing_data,name:"
+msgctxt "model:ins_collective.pricing_component,name:"
 msgid "Pricing Data"
 msgstr "Règle de Tarification"
 
@@ -2789,23 +2785,23 @@ msgctxt "selection:ins_collective.pricing_calculator,key:"
 msgid "Subscriber Price"
 msgstr "Prix basé sur le souscripteur"
 
-msgctxt "selection:ins_collective.pricing_data,config_kind:"
+msgctxt "selection:ins_collective.pricing_component,config_kind:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "selection:ins_collective.pricing_data,config_kind:"
+msgctxt "selection:ins_collective.pricing_component,config_kind:"
 msgid "Simple"
 msgstr "Simple"
 
-msgctxt "selection:ins_collective.pricing_data,kind:"
+msgctxt "selection:ins_collective.pricing_component,kind:"
 msgid "Base Price"
 msgstr "Prix de Base"
 
-msgctxt "selection:ins_collective.pricing_data,kind:"
+msgctxt "selection:ins_collective.pricing_component,kind:"
 msgid "Fee"
 msgstr "Frais"
 
-msgctxt "selection:ins_collective.pricing_data,kind:"
+msgctxt "selection:ins_collective.pricing_component,kind:"
 msgid "Tax"
 msgstr "Taxe"
 

@@ -39,8 +39,7 @@ class ModuleTestCase(unittest.TestCase):
         self.TestCase = POOL.get('rule_engine.test_case')
         self.TestCaseValue = POOL.get('rule_engine.test_case.value')
         self.RunTests = POOL.get('rule_engine.run_tests', type='wizard')
-        self.PricingData = POOL.get('ins_product.pricing_data')
-        self.Calculator = POOL.get('ins_product.pricing_calculator')
+        self.PricingComponent = POOL.get('ins_product.pricing_component')
         self.Tax = POOL.get('coop_account.tax_desc')
         self.TaxVersion = POOL.get('coop_account.tax_version')
         self.Fee = POOL.get('coop_account.fee_desc')
@@ -235,54 +234,51 @@ return True'''
             tax = self.create_tax('TT', 13)
             fee = self.create_fee('FEE', 20)
 
-            pr_data1 = self.PricingData()
-            pr_data1.config_kind = 'simple'
-            pr_data1.fixed_amount = 12
-            pr_data1.kind = 'base'
-            pr_data1.code = 'PP'
+            pricing_comp1 = self.PricingComponent()
+            pricing_comp1.config_kind = 'simple'
+            pricing_comp1.fixed_amount = 12
+            pricing_comp1.kind = 'base'
+            pricing_comp1.code = 'PP'
+            pricing_comp1.rated_object_kind = 'global'
 
-            pr_data11 = self.PricingData()
-            pr_data11.kind = 'tax'
-            pr_data11.the_tax = tax
+            pricing_comp11 = self.PricingComponent()
+            pricing_comp11.kind = 'tax'
+            pricing_comp11.tax = tax
+            pricing_comp11.code = tax.code
+            pricing_comp11.rated_object_kind = 'global'
 
-            pr_data12 = self.PricingData()
-            pr_data12.kind = 'fee'
-            pr_data12.the_fee = fee
+            pricing_comp12 = self.PricingComponent()
+            pricing_comp12.kind = 'fee'
+            pricing_comp12.fee = fee
+            pricing_comp12.code = fee.code
+            pricing_comp12.rated_object_kind = 'global'
 
-            pr_calc1 = self.Calculator()
-            pr_calc1.data = [pr_data1, pr_data11, pr_data12]
-            pr_calc1.key = 'price'
-
-            pr_data2 = self.PricingData()
-            pr_data2.config_kind = 'simple'
-            pr_data2.fixed_amount = 1
-            pr_data2.kind = 'base'
-            pr_data2.code = 'PP'
-
-            pr_calc2 = self.Calculator()
-            pr_calc2.data = [pr_data2]
-            pr_calc2.key = 'sub_price'
+            pricing_comp2 = self.PricingComponent()
+            pricing_comp2.config_kind = 'simple'
+            pricing_comp2.fixed_amount = 1
+            pricing_comp2.kind = 'base'
+            pricing_comp2.code = 'PP'
+            pricing_comp2.rated_object_kind = 'sub_item'
 
             pricing_rulea = self.Pricing()
 
-            pricing_rulea.calculators = [pr_calc1, pr_calc2]
+            pricing_rulea.components = [pricing_comp1, pricing_comp11,
+                pricing_comp12]
+            pricing_rulea.sub_item_components = [pricing_comp2]
 
             pricing_rulea.start_date = datetime.date.today()
             pricing_rulea.end_date = datetime.date.today() + \
                                             datetime.timedelta(days=10)
 
-            pr_data3 = self.PricingData()
-            pr_data3.config_kind = 'simple'
-            pr_data3.fixed_amount = 15
-            pr_data3.kind = 'base'
-            pr_data3.code = 'PP'
-
-            pr_calc3 = self.Calculator()
-            pr_calc3.data = [pr_data3]
-            pr_calc3.key = 'price'
+            pricing_comp3 = self.PricingComponent()
+            pricing_comp3.config_kind = 'simple'
+            pricing_comp3.fixed_amount = 15
+            pricing_comp3.kind = 'base'
+            pricing_comp3.code = 'PP'
+            pricing_comp3.rated_object_kind = 'global'
 
             pricing_ruleb = self.Pricing()
-            pricing_ruleb.calculators = [pr_calc3]
+            pricing_ruleb.components = [pricing_comp3]
 
             pricing_ruleb.start_date = datetime.date.today() + \
                                             datetime.timedelta(days=11)
@@ -303,23 +299,22 @@ return True'''
 
             tax_1 = self.create_tax('TTA', 27)
 
-            pr_data4 = self.PricingData()
-            pr_data4.config_kind = 'simple'
-            pr_data4.fixed_amount = 30
-            pr_data4.kind = 'base'
-            pr_data4.code = 'PP'
+            pricing_comp4 = self.PricingComponent()
+            pricing_comp4.config_kind = 'simple'
+            pricing_comp4.fixed_amount = 30
+            pricing_comp4.kind = 'base'
+            pricing_comp4.code = 'PP'
+            pricing_comp4.rated_object_kind = 'global'
 
-            pr_data41 = self.PricingData()
-            pr_data41.kind = 'tax'
-            pr_data41.the_tax = tax_1
-
-            pr_calc4 = self.Calculator()
-            pr_calc4.data = [pr_data4, pr_data41]
-            pr_calc4.key = 'price'
+            pricing_comp41 = self.PricingComponent()
+            pricing_comp41.kind = 'tax'
+            pricing_comp41.tax = tax_1
+            pricing_comp41.code = tax_1.code
+            pricing_comp41.rated_object_kind = 'global'
 
             pricing_rulec = self.Pricing()
             pricing_rulec.config_kind = 'simple'
-            pricing_rulec.calculators = [pr_calc4]
+            pricing_rulec.components = [pricing_comp4, pricing_comp41]
 
             pricing_rulec.start_date = datetime.date.today()
             pricing_rulec.end_date = datetime.date.today() + \
@@ -339,7 +334,7 @@ return True'''
             # Coverage C
 
             eligibility_rule_a = self.Eligibility()
-            eligibility_rule_a.config_kind = 'rule'
+            eligibility_rule_a.config_kind = 'advanced'
             eligibility_rule_a.is_eligible = False
             eligibility_rule_a.rule = rule
 

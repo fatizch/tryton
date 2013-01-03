@@ -25,8 +25,7 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['TaxVersion'] = Model.get('coop_account.tax_version')
     cfg_dict['Fee'] = Model.get('coop_account.fee_desc')
     cfg_dict['FeeVersion'] = Model.get('coop_account.fee_version')
-    cfg_dict['PricingData'] = Model.get('ins_product.pricing_data')
-    cfg_dict['Calculator'] = Model.get('ins_product.pricing_calculator')
+    cfg_dict['PricingComponent'] = Model.get('ins_product.pricing_component')
     cfg_dict['Sequence'] = Model.get('ir.sequence')
     cfg_dict['Lang'] = Model.get('ir.lang')
     cfg_dict['Benefit'] = Model.get('ins_product.benefit')
@@ -193,7 +192,7 @@ def create_AAA_Product(cfg_dict, code, name):
         [{'value': 4}])
 
     pricing_rulea1 = create_pricing_rule(cfg_dict, coverage_a,
-         config_kind='rule', calc_key='price', components=[
+         config_kind='advanced', rated_object_kind='global', components=[
             {
                 'kind': 'base',
                 'code': 'PP',
@@ -202,18 +201,18 @@ def create_AAA_Product(cfg_dict, code, name):
              },
             {
                 'kind': 'tax',
-                'code': cfg_dict['translate']['IT'],
+                'tax': tax,
                 'config_kind': 'simple',
              },
             {
                 'kind': 'fee',
-                'code': 'FG',
+                'fee': fee,
                 'config_kind': 'simple',
              },
         ],
         end_date=cfg_dict['Date'].today({}) + datetime.timedelta(days=10))
 
-    calc_a2 = create_calculator(cfg_dict, pricing_rulea1, calc_key='sub_price',
+    create_components(cfg_dict, pricing_rulea1, rated_object_kind='sub_item',
         components=[
             {
              'kind': 'base',
@@ -223,7 +222,7 @@ def create_AAA_Product(cfg_dict, code, name):
              }])
 
     pricing_rulea2 = create_pricing_rule(cfg_dict, coverage_a,
-         config_kind='rule', calc_key='price', components=[
+         config_kind='advanced', rated_object_kind='global', components=[
             {
                 'kind': 'base',
                 'code': 'PP',
@@ -232,7 +231,7 @@ def create_AAA_Product(cfg_dict, code, name):
              },
             {
                 'kind': 'tax',
-                'code': cfg_dict['translate']['IT'],
+                'tax': tax,
                 'config_kind': 'simple',
              },
         ],
@@ -242,7 +241,7 @@ def create_AAA_Product(cfg_dict, code, name):
     coverage_b = get_or_create_coverage(cfg_dict, 'BET', 'Beta Coverage',
         cfg_dict['Date'].today({}) + datetime.timedelta(days=5))
     pricing_ruleb1 = create_pricing_rule(cfg_dict, coverage_b,
-         config_kind='rule', calc_key='price', components=[
+         config_kind='advanced', rated_object_kind='global', components=[
             {
                 'kind': 'base',
                 'code': 'PP',
@@ -442,7 +441,7 @@ def create_BBB_product(cfg_dict, code, name):
     # Coverage C
     erm_a = Model.get('ins_product.eligibility_rule')()
     erm_a.start_date = cfg_dict['Date'].today({})
-    erm_a.config_kind = 'rule'
+    erm_a.config_kind = 'advanced'
     erm_a.rule = rule
 
     coverage_c = get_or_create_coverage(cfg_dict, 'GAM', 'Gamma Coverage')
@@ -506,32 +505,32 @@ def add_rule(cfg_dict, offered, kind, at_date=None, end_date=None):
     return res
 
 
-def create_calculator(cfg_dict, pricing_rule, calc_key='price',
-        calc_combi_rule=None, components=None):
+def create_components(cfg_dict, pricing_rule, rated_object_kind='global',
+        combi_rule=None, components=None):
 
-    calculator = cfg_dict['Calculator']()
-    calculator.key = calc_key
-    calculator.simple = calc_combi_rule is None
-    calculator.combine = calc_combi_rule
-    pricing_rule.calculators.append(calculator)
+    prefix = '%s_' % rated_object_kind if rated_object_kind != 'global' else ''
+    setattr(pricing_rule, '%sspecific_combination_rule' % prefix, combi_rule)
+    cur_list = getattr(pricing_rule, '%scomponents' % prefix)
     for comp_dict in components if components else []:
-        component = cfg_dict['PricingData']()
-        calculator.data.append(component)
+        component = cfg_dict['PricingComponent']()
+        cur_list.append(component)
+        component.rated_object_kind = rated_object_kind
         for key, value in comp_dict.iteritems():
             setattr(component, key, value)
-    return calculator
+    return pricing_rule
 
 
-def create_pricing_rule(cfg_dict, cov, config_kind='simple', calc_key='price',
-        calc_combi_rule=None, basic_price=None, basic_tax=None,
-        components=None, start_date=None, end_date=None):
+def create_pricing_rule(cfg_dict, cov, config_kind='simple',
+        rated_object_kind='global', combi_rule=None, basic_price=None,
+        basic_tax=None, components=None, start_date=None, end_date=None):
 
     res = add_rule(cfg_dict, cov, 'pricing', at_date=start_date,
         end_date=end_date)
     res.config_kind = config_kind
     res.basic_price = basic_price
     res.basic_tax = basic_tax
-    create_calculator(cfg_dict, res, calc_key, calc_combi_rule, components)
+    create_components(cfg_dict, res, rated_object_kind, combi_rule,
+        components)
     return res
 
 
@@ -559,6 +558,7 @@ def create_disability_coverage(cfg_dict):
 
     fee = get_or_create_fee(cfg_dict, 'FG', u'Frais de gestion',
         [{'value': 4}])
+    tax = get_or_create_tax(cfg_dict, 'TSCA')
 
     code = '''
 PP = valeur_de_composante('PP')
@@ -577,8 +577,9 @@ return PP + FG + RA + Tax
 '''
     combination_rule = get_or_create_rule(cfg_dict, u'Règle de combinaison',
         code, 'Rule Combination')
-    pricing_rule = create_pricing_rule(cfg_dict, cov, config_kind='rule',
-        calc_key='price', calc_combi_rule=combination_rule, components=[
+    pricing_rule = create_pricing_rule(cfg_dict, cov, config_kind='advanced',
+        rated_object_kind='global', combi_rule=combination_rule,
+        components=[
             {
                 'kind': 'base',
                 'code': 'PP',
@@ -593,12 +594,12 @@ return PP + FG + RA + Tax
              },
             {
                 'kind': 'tax',
-                'code': 'TSCA',
+                'tax': tax,
                 'config_kind': 'simple',
              },
             {
                 'kind': 'fee',
-                'code': 'FG',
+                'fee': fee,
                 'config_kind': 'simple',
              },
         ])
@@ -647,17 +648,17 @@ else:
 '''
     rule_engine = get_or_create_rule(cfg_dict, u'Tarif CSP', algo,
         'Default Context')
-    pricing_rule = create_pricing_rule(cfg_dict, cov, config_kind='rule',
-            calc_key='sub_price', components=[
+    pricing_rule = create_pricing_rule(cfg_dict, cov, config_kind='advanced',
+            rated_object_kind='sub_item', components=[
                 {
                     'kind': 'base',
                     'code': 'PP',
-                    'config_kind': 'rule',
+                    'config_kind': 'advanced',
                     'rule': rule_engine,
                  },
                 {
                     'kind': 'tax',
-                    'code': 'TSCA',
+                    'tax': get_or_create_tax(cfg_dict, 'TSCA'),
                     'config_kind': 'simple',
                  },
             ])
@@ -714,17 +715,17 @@ return result
     rule_engine = get_or_create_rule(cfg_dict,
         u'2% du Montant de couverture et 10% de reduc pour VIP', algo,
         'Default Context')
-    pricing_rule = create_pricing_rule(cfg_dict, cov, config_kind='rule',
-            calc_key='sub_price', components=[
+    pricing_rule = create_pricing_rule(cfg_dict, cov, config_kind='advanced',
+            rated_object_kind='sub_item', components=[
                 {
                     'kind': 'base',
                     'code': 'PP',
-                    'config_kind': 'rule',
+                    'config_kind': 'advanced',
                     'rule': rule_engine,
                  },
                 {
                     'kind': 'tax',
-                    'code': 'TSCA',
+                    'tax': get_or_create_tax(cfg_dict, 'TSCA'),
                     'config_kind': 'simple',
                  },
             ])

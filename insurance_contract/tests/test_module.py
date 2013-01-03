@@ -32,17 +32,16 @@ class ModuleTestCase(unittest.TestCase):
 
         self.Contract = POOL.get('ins_contract.contract')
         self.SubsProcess = POOL.get('ins_contract.subs_process',
-                                          type='wizard')
+            type='wizard')
         self.ProcessDesc = POOL.get('ins_process.process_desc')
         self.Party = POOL.get('party.party')
         self.Person = POOL.get('party.person')
         self.Product = POOL.get('ins_product.product')
         self.Coverage = POOL.get('ins_product.coverage')
         self.Pricing = POOL.get('ins_product.pricing_rule')
-        self.PricingData = POOL.get('ins_product.pricing_data')
-        self.Calculator = POOL.get('ins_product.pricing_calculator')
-        self.eligibility = POOL.get('ins_product.eligibility_rule')
-        self.currency = POOL.get('currency.currency')
+        self.PricingComponent = POOL.get('ins_product.pricing_component')
+        self.Eligibility = POOL.get('ins_product.eligibility_rule')
+        self.Currency = POOL.get('currency.currency')
         self.TreeElement = POOL.get('rule_engine.tree_element')
         self.Context = POOL.get('rule_engine.context')
         self.RuleEngine = POOL.get('rule_engine')
@@ -237,6 +236,26 @@ return True'''
 
         return rule
 
+    def create_pricing_component(self, pricing_rule, code=None,
+            config_kind='simple', fixed_amount=None,
+            rated_object_kind='global', kind='base', tax=None, fee=None):
+
+        res = self.PricingComponent()
+        res.config_kind = config_kind
+        res.fixed_amount = fixed_amount
+        res.rated_object_kind = rated_object_kind
+        res.kind = kind
+        res.code = code
+        res.pricing_rule = pricing_rule.id
+        if tax:
+            res.tax = tax
+            res.code = tax.code
+        if fee:
+            res.fee = fee
+            res.code = fee.code
+        res.save()
+        return res
+
     def create_product(self):
         '''
             Tests process desc creation
@@ -246,110 +265,80 @@ return True'''
 
         #We need to create the currency manually because it's needed
         #on the default currency for product and coverage
-        euro = self.currency()
+        euro = self.Currency()
         euro.name = 'Euro'
         euro.symbol = u'€'
         euro.code = 'EUR'
         euro.save()
 
         # Coverage A
-
-        tax = self.create_tax('TT', 13)
-        fee = self.create_fee('FEE', 20)
-
-        pr_data1 = self.PricingData()
-        pr_data1.config_kind = 'simple'
-        pr_data1.fixed_amount = 12
-        pr_data1.kind = 'base'
-        pr_data1.code = 'PP'
-
-        pr_data11 = self.PricingData()
-        pr_data11.kind = 'tax'
-        pr_data11.the_tax = tax
-
-        pr_data12 = self.PricingData()
-        pr_data12.kind = 'fee'
-        pr_data12.the_fee = fee
-
-        pr_calc1 = self.Calculator()
-        pr_calc1.data = [pr_data1, pr_data11, pr_data12]
-        pr_calc1.key = 'price'
-
-        pr_data2 = self.PricingData()
-        pr_data2.config_kind = 'simple'
-        pr_data2.fixed_amount = 1
-        pr_data2.kind = 'base'
-        pr_data2.code = 'PP'
-
-        pr_calc2 = self.Calculator()
-        pr_calc2.data = [pr_data2]
-        pr_calc2.key = 'sub_price'
-
-        prm_a = self.Pricing()
-        prm_a.config_kind = 'rule'
-
-        prm_a.calculators = [pr_calc1, pr_calc2]
-
-        prm_a.start_date = datetime.date.today()
-        prm_a.end_date = datetime.date.today() + \
-                                        datetime.timedelta(days=10)
-
-        pr_data3 = self.PricingData()
-        pr_data3.config_kind = 'simple'
-        pr_data3.fixed_amount = 15
-        pr_data3.kind = 'base'
-        pr_data3.code = 'PP'
-
-        pr_calc3 = self.Calculator()
-        pr_calc3.data = [pr_data3]
-        pr_calc3.key = 'price'
-
-        prm_b = self.Pricing()
-        prm_b.calculators = [pr_calc3]
-        prm_b.config_kind = 'rule'
-
-        prm_b.start_date = datetime.date.today() + \
-                                        datetime.timedelta(days=11)
-        prm_b.end_date = datetime.date.today() + \
-                                        datetime.timedelta(days=20)
-
         coverage_a = self.Coverage()
         coverage_a.code = 'ALP'
         coverage_a.name = 'Alpha Coverage'
         coverage_a.family = 'life_product.definition'
         coverage_a.start_date = datetime.date.today()
 
-        coverage_a.pricing_rules = [prm_a, prm_b]
+        pr_a = self.Pricing()
+        pr_a.config_kind = 'advanced'
+
+        #RSE 03/01/2012 For unknown reasons if you set both components and
+        #sub item components, only one list is stored. This issue only appears
+        #on unit test, not on proteus, nor on client
+        #pr_a.components = [pricing_comp1, pricing_comp11, pricing_comp12]
+        #pr_a.sub_item_components = [pricing_comp2]
+
+        pr_a.start_date = datetime.date.today()
+        pr_a.end_date = pr_a.start_date + datetime.timedelta(days=10)
+
+        pr_b = self.Pricing()
+        #pr_b.components = [pricing_comp3]
+        pr_b.config_kind = 'advanced'
+
+        pr_b.start_date = datetime.date.today() + datetime.timedelta(days=11)
+        pr_b.end_date = pr_b.start_date + datetime.timedelta(days=20)
+
+        coverage_a.pricing_rules = [pr_a, pr_b]
 
         coverage_a.save()
+        [pr_a, pr_b] = coverage_a.pricing_rules
+
+        tax = self.create_tax('TT', 13)
+        fee = self.create_fee('FEE', 20)
+
+        self.create_pricing_component(pr_a, code='PP', fixed_amount=12)
+        self.create_pricing_component(pr_a, kind='tax', tax=tax)
+        self.create_pricing_component(pr_a, kind='fee', fee=fee)
+        self.create_pricing_component(pr_a, code='PP', fixed_amount=1,
+            rated_object_kind='sub_item')
+
+        self.create_pricing_component(pr_b, code='PP', fixed_amount=15)
 
         # Coverage B
 
         tax_1 = self.create_tax('TTA', 27)
 
-        prm_c = self.Pricing()
-        prm_c.basic_price = 30
-        prm_c.basic_tax = tax_1
+        pr_c = self.Pricing()
+        pr_c.basic_price = 30
+        pr_c.basic_tax = tax_1
 
-        prm_c.start_date = datetime.date.today()
-        prm_c.end_date = datetime.date.today() + \
-                                        datetime.timedelta(days=10)
+        pr_c.start_date = datetime.date.today()
+        pr_c.end_date = pr_c.start_date + datetime.timedelta(days=10)
 
         coverage_b = self.Coverage()
         coverage_b.code = 'BET'
         coverage_b.name = 'Beta Coverage'
         coverage_b.family = 'life_product.definition'
-        coverage_b.start_date = datetime.date.today() + \
-                                        datetime.timedelta(days=5)
+        coverage_b.start_date = (datetime.date.today() +
+            datetime.timedelta(days=5))
 
-        coverage_b.pricing_rules = [prm_c]
+        coverage_b.pricing_rules = [pr_c]
 
         coverage_b.save()
 
         # Coverage C
 
-        erm_a = self.eligibility()
-        erm_a.config_kind = 'rule'
+        erm_a = self.Eligibility()
+        erm_a.config_kind = 'advanced'
         erm_a.min_age = 100
         erm_a.rule = rule
 
@@ -367,7 +356,7 @@ return True'''
 
         # Coverage D
 
-        erm_d = self.eligibility()
+        erm_d = self.Eligibility()
         erm_d.config_kind = 'simple'
         erm_d.sub_min_age = 100
 
@@ -385,7 +374,7 @@ return True'''
 
         # Product Eligibility Manager
 
-        erm_b = self.eligibility()
+        erm_b = self.Eligibility()
         erm_b.config_kind = 'simple'
         erm_b.sub_min_age = 20
 
@@ -406,7 +395,7 @@ return True'''
 
         # Fake Eligibility Manager
 
-        erm_c = self.eligibility()
+        erm_c = self.Eligibility()
         erm_c.config_kind = 'simple'
         erm_c.min_age = 100
 
@@ -514,9 +503,9 @@ return True'''
         covered = wizard.extension_life.covered_elements[0]
         self.assertEqual(covered.elem_person.party, on_party)
         self.assertEqual(len(covered.elem_covered_data), 3)
-        self.assertEqual(covered.elem_covered_data[0].data_start_date,
-                         wizard.project.start_date +
-                         datetime.timedelta(days=1))
+        self.assertEqual(
+            covered.elem_covered_data[0].data_start_date,
+            wizard.project.start_date + datetime.timedelta(days=1))
         tmp = wizard.extension_life.check_step(
             wizard,
             wizard.process_state.cur_step_desc)

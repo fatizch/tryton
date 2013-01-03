@@ -4,30 +4,15 @@
         <!--  ******************************************* 
               ********        PricingData        ********
               *******************************************-->
-        <record model="ir.ui.view" id="pricingdata_view_tree">
-            <field name="model">ins_product.pricing_data</field>
+        <record model="ir.ui.view" id="pricing_component_view_tree">
+            <field name="model">ins_product.pricing_component</field>
             <field name="type">tree</field>
-            <field name="name">pricing_data_tree</field>
+            <field name="name">pricing_component_tree</field>
         </record>
-        <record model="ir.ui.view" id="pricingdata_view_form">
-            <field name="model">ins_product.pricing_data</field>
+        <record model="ir.ui.view" id="pricing_component_view_form">
+            <field name="model">ins_product.pricing_component</field>
             <field name="type">form</field>
-            <field name="name">pricing_data_form</field>
-        </record>
-
-        <!--  ******************************************* 
-              ********        Calculator         ********
-              *******************************************-->
-
-        <record model="ir.ui.view" id="calculator_view_tree">
-            <field name="model">ins_product.pricing_calculator</field>
-            <field name="type">tree</field>
-            <field name="name">price_calculator_tree</field>
-        </record>
-        <record model="ir.ui.view" id="calculator_view_form">
-            <field name="model">ins_product.pricing_calculator</field>
-            <field name="type">form</field>
-            <field name="name">price_calculator_form</field>
+            <field name="name">pricing_component_form</field>
         </record>
 
         <!--  ******************************************* 

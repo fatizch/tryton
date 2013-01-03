@@ -39,8 +39,7 @@ IND_TO_COLL = {
     'ins_product.eligibility_rule': 'ins_collective.eligibility_rule',
     'ins_product.generic_business_rule':\
         'ins_collective.generic_business_rule',
-    'ins_product.pricing_calculator': 'ins_collective.pricing_calculator',
-    'ins_product.pricing_data': 'ins_collective.pricing_data',
+    'ins_product.pricing_component': 'ins_collective.pricing_component',
     'ins_product.pricing_rule': 'ins_collective.pricing_rule',
     'ins_product.product': 'ins_collective.product',
     'ins_product.reserve_rule': 'ins_collective.reserve_rule',
@@ -247,16 +246,10 @@ class GroupDynamicDataManager(GroupRoot, dynamic_data.DynamicDataManager):
     __name__ = 'ins_collective.dynamic_data_manager'
 
 
-class GroupPricingData(GroupRoot, pricing_rule.PricingData):
+class GroupPricingComponent(GroupRoot, pricing_rule.PricingComponent):
     'Pricing Data'
 
-    __name__ = 'ins_collective.pricing_data'
-
-
-class GroupPriceCalculator(GroupRoot, pricing_rule.PriceCalculator):
-    'Price Calculator'
-
-    __name__ = 'ins_collective.pricing_calculator'
+    __name__ = 'ins_collective.pricing_component'
 
 
 class GroupPricingRule(GroupRoot, pricing_rule.PricingRule):
@@ -276,4 +269,4 @@ class GroupPricingRule(GroupRoot, pricing_rule.PricingRule):
 
     @staticmethod
     def default_config_kind():
-        return 'rule'
+        return 'advanced'

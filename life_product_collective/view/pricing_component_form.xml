@@ -1,5 +1,5 @@
 <data>
-    <xpath expr="/form/group[@id='other']/group[@id='simple']" position="inside">
+    <xpath expr="/form" position="inside">
         <newline/>
         <label name="contribution_base"/>
         <field name="contribution_base"/>

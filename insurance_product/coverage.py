@@ -198,8 +198,8 @@ class Coverage(model.CoopSQL, Offered):
                     res += _res
                     errs += _errs
             errs = list(set(errs))
-            if utils.COULDNOTFINDAMATCHINGRULE in errs:
-                errs.remove(utils.COULDNOTFINDAMATCHINGRULE)
+            if utils.COULD_NOT_FIND_A_MATCHING_RULE in errs:
+                errs.remove(utils.COULD_NOT_FIND_A_MATCHING_RULE)
             return (res, list(set(errs)))
         return (None, [])
 

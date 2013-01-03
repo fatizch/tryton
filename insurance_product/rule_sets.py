@@ -189,7 +189,7 @@ class CoveredDataContext(RuleEngineContext):
 class RuleCombinationContext(RuleEngineContext):
     '''
         Context functions for combination of rule_engine results (see
-        ins_product.pricing_calculator
+        ins_product.pricing_rule
     '''
 
     __name__ = 'ins_product.rule_sets.rule_combination'

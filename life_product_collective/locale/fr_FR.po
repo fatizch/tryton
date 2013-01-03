@@ -2,15 +2,15 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:ins_collective.pricing_data,contribution_base:"
+msgctxt "field:ins_collective.pricing_component,contribution_base:"
 msgid "Contribution Base"
 msgstr ""
 
-msgctxt "field:ins_collective.pricing_data,rate:"
+msgctxt "field:ins_collective.pricing_component,rate:"
 msgid "Rate"
 msgstr "Taux"
 
-msgctxt "field:ins_collective.pricing_data,tranche:"
+msgctxt "field:ins_collective.pricing_component,tranche:"
 msgid "Tranche"
 msgstr ""
 
@@ -18,11 +18,11 @@ msgctxt "field:tranche.tranche,colleges:"
 msgid "Colleges"
 msgstr ""
 
-msgctxt "help:ins_collective.pricing_data,contribution_base:"
+msgctxt "help:ins_collective.pricing_component,contribution_base:"
 msgid "Value between 0 and 100"
 msgstr ""
 
-msgctxt "help:ins_collective.pricing_data,rate:"
+msgctxt "help:ins_collective.pricing_component,rate:"
 msgid "Value between 0 and 100"
 msgstr ""
 

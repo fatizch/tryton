@@ -167,18 +167,6 @@
             <field name="arch" type="xml"/>
         </record>
 
-        <record model="ir.ui.view" id="calculator_view_tree">
-            <field name="model">ins_collective.pricing_calculator</field>
-            <field name="type">tree</field>
-            <field name="inherit" ref="insurance_product.calculator_view_tree"/>
-            <field name="arch" type="xml"/>
-        </record>
-        <record model="ir.ui.view" id="calculator_view_form">
-            <field name="model">ins_collective.pricing_calculator</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="insurance_product.calculator_view_form"/>
-            <field name="arch" type="xml"/>
-        </record>
         <!-- *******************************************
             ******** EligibilityRule ********
             ******************************************* -->
