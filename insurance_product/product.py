@@ -69,17 +69,6 @@ class Offered(model.CoopView, utils.GetResult, Templated):
     end_date = fields.Date('End Date')
     description = fields.Text('Description')
 
-    #DEPRECATED_mgr
-    pricing_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
-        'offered', 'Pricing Manager')
-    eligibility_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
-        'offered', 'Eligibility Manager')
-    clause_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
-        'offered', 'Clause Manager')
-    deductible_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
-        'offered', 'Deductible Manager')
-    #end DEPRECATED_mgr
-
     pricing_rules = fields.One2Many('ins_product.pricing_rule', 'offered',
         'Pricing Rules')
     eligibility_rules = fields.One2Many('ins_product.eligibility_rule',
@@ -223,8 +212,6 @@ class Product(model.CoopSQL, Offered):
         context={'code': 'ins_product.product'},
         required=True,
         ondelete='RESTRICT')
-    term_renewal_mgr = model.One2ManyDomain(
-        'ins_product.business_rule_manager', 'offered', 'Term - Renewal')
     term_renewal_rules = fields.One2Many('ins_product.term_renewal_rule',
         'offered', 'Term - Renewal')
 

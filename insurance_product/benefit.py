@@ -16,12 +16,8 @@ class Benefit(model.CoopSQL, Offered):
 
     coverage = fields.Many2One('ins_product.coverage', 'Coverage',
         ondelete='CASCADE')
-    benefit_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
-        'offered', 'Benefit Manager')
     benefit_rules = fields.One2Many('ins_product.benefit_rule',
         'offered', 'Benefit Rules')
-    reserve_mgr = model.One2ManyDomain('ins_product.business_rule_manager',
-        'offered', 'Reserve Manager')
     reserve_rules = fields.One2Many('ins_product.reserve_rule',
         'offered', 'Reserve Rules')
     kind = fields.Selection(

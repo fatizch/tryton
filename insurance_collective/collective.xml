@@ -122,34 +122,6 @@
             <field name="arch" type="xml"/>
         </record>
         <!-- *******************************************
-            ******** BusinessRuleManager ********
-            ******************************************* -->
-        <record model="ir.ui.view" id="businessrulemanager_view_form">
-            <field name="model">ins_collective.business_rule_manager</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="insurance_product.businessrulemanager_view_form"/>
-            <field name="arch" type="xml"/>
-        </record>
-
-        <!-- *******************************************
-            ******** GenericBusinessRule ********
-            ******************************************* -->
-        <!-- GenericBusinessRule -->
-        <!-- form view -->
-        <record model="ir.ui.view" id="genericbusinessrule_view_form">
-            <field name="model">ins_collective.generic_business_rule</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="insurance_product.genericbusinessrule_view_form"/>
-            <field name="arch" type="xml"/>
-        </record>
-        <record model="ir.ui.view" id="genericbusinessrule_view_tree">
-            <field name="model">ins_collective.generic_business_rule</field>
-            <field name="type">tree</field>
-            <field name="inherit" ref="insurance_product.genericbusinessrule_view_tree"/>
-            <field name="arch" type="xml"/>
-        </record>
-
-        <!-- *******************************************
             ******** Coverage Amount Rule ********
             ******************************************* -->
         <record model="ir.ui.view" id="coverage_amountrule_view_form">

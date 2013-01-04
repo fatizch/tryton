@@ -2,15 +2,6 @@
 <tryton>
     <data>
         <!--  ******************************************* 
-              ********    BusinessRuleManager    ********
-              *******************************************-->
-        <record model="ir.ui.view" id="businessrulemanager_view_form">
-            <field name="model">ins_product.business_rule_manager</field>
-            <field name="type">form</field>
-            <field name="name">brm_form</field>
-        </record>
-
-        <!--  ******************************************* 
               ********    BusinessRuleRoot    ********
               *******************************************-->
         <record model="ir.ui.view" id="businessruleroot_view_form">
@@ -22,22 +13,6 @@
             <field name="model">ins_product.business_rule_root</field>
             <field name="type">tree</field>
             <field name="name">br_root_tree</field>
-        </record>
-
-        <!--  ******************************************* 
-              ********    GenericBusinessRule    ********
-              *******************************************-->
-        <!-- GenericBusinessRule -->
-        <!-- form view -->
-        <record model="ir.ui.view" id="genericbusinessrule_view_form">
-            <field name="model">ins_product.generic_business_rule</field>
-            <field name="type">form</field>
-            <field name="name">generic_br_form</field>
-        </record>
-        <record model="ir.ui.view" id="genericbusinessrule_view_tree">
-            <field name="model">ins_product.generic_business_rule</field>
-            <field name="type">tree</field>
-            <field name="name">generic_br_tree</field>
         </record>
     </data>
 </tryton>

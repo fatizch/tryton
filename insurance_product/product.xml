@@ -71,8 +71,8 @@
         <!--################################################################ -->
         <record model="ir.action.act_window" id="act_coverage_amount_rule_relate_form">
             <field name="name">Coverage Amount</field>
-            <field name="res_model">ins_product.generic_business_rule</field>
-            <field name="domain">[('manager.offered', '=', ('ins_product.coverage', Eval('active_id'))), ('kind', '=', 'ins_product.coverage_amount_rule')]</field>
+            <field name="res_model">ins_product.coverage_amount_rule</field>
+            <field name="domain">[('offered', '=', ('ins_product.coverage', Eval('active_id')))]</field>
         </record>
         <record model="ir.action.keyword" id="act_coverage_relate_keyword2">
             <field name="keyword">form_relate</field>
@@ -82,8 +82,8 @@
 
         <record model="ir.action.act_window" id="act_eligibility_rule_relate_form">
             <field name="name">Eligibility</field>
-            <field name="res_model">ins_product.generic_business_rule</field>
-            <field name="domain">[('manager.offered', '=', ('ins_product.coverage', Eval('active_id'))), ('kind', '=', 'ins_product.eligibility_rule')]</field>
+            <field name="res_model">ins_product.eligibility_rule</field>
+            <field name="domain">[('offered', '=', ('ins_product.coverage', Eval('active_id')))]</field>
         </record>
         <record model="ir.action.keyword" id="act_coverage_relate_keyword3">
             <field name="keyword">form_relate</field>
@@ -93,8 +93,8 @@
 
         <record model="ir.action.act_window" id="act_pricing_rule_relate_form">
             <field name="name">Pricing</field>
-            <field name="res_model">ins_product.generic_business_rule</field>
-            <field name="domain">[('manager.offered', '=', ('ins_product.coverage', Eval('active_id'))), ('kind', '=','ins_product.pricing_rule')]</field>
+            <field name="res_model">ins_product.pricing_rule</field>
+            <field name="domain">[('offered', '=', ('ins_product.coverage', Eval('active_id')))]</field>
         </record>
         <record model="ir.action.keyword" id="act_coverage_relate_keyword1">
             <field name="keyword">form_relate</field>

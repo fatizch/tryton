@@ -10,10 +10,6 @@ msgctxt "error:ins_product.benefit_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_product.business_rule_manager:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:ins_product.clause:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -57,14 +53,6 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "error:ins_product.eligibility_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.generic_business_rule:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.generic_business_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "Vous ne pouvez pas avoir deux règles métiers qui se chevauchent"
 
 msgctxt "error:ins_product.package-coverage:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -267,50 +255,6 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:ins_product.benefit_rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:ins_product.business_rule_manager,business_rules:"
-msgid "Business Rules"
-msgstr "Règles Métiers"
-
-msgctxt "field:ins_product.business_rule_manager,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_product.business_rule_manager,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_product.business_rule_manager,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_product.business_rule_manager,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_product.business_rule_manager,offered:"
-msgid "Offered"
-msgstr "Offre"
-
-msgctxt "field:ins_product.business_rule_manager,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_product.business_rule_manager,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:ins_product.business_rule_manager,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
-msgctxt "field:ins_product.business_rule_manager,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_product.business_rule_manager,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -911,86 +855,6 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:ins_product.eligibility_rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:ins_product.generic_business_rule,benefit_rule:"
-msgid "Benefit Rule"
-msgstr "Règle de Prestation"
-
-msgctxt "field:ins_product.generic_business_rule,clause_rule:"
-msgid "Clause Rule"
-msgstr "Clause"
-
-msgctxt "field:ins_product.generic_business_rule,coverage_amount_rule:"
-msgid "Coverage Amount Rule"
-msgstr "Montant de Couverture"
-
-msgctxt "field:ins_product.generic_business_rule,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_product.generic_business_rule,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_product.generic_business_rule,deductible_rule:"
-msgid "Deductible Rule"
-msgstr "Franchise"
-
-msgctxt "field:ins_product.generic_business_rule,eligibility_rule:"
-msgid "Eligibility Rule"
-msgstr "Eligibilite"
-
-msgctxt "field:ins_product.generic_business_rule,end_date:"
-msgid "To Date"
-msgstr "Date de Fin"
-
-msgctxt "field:ins_product.generic_business_rule,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_product.generic_business_rule,is_current:"
-msgid "Is current"
-msgstr "Courant"
-
-msgctxt "field:ins_product.generic_business_rule,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_product.generic_business_rule,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:ins_product.generic_business_rule,manager:"
-msgid "Manager"
-msgstr "Règles"
-
-msgctxt "field:ins_product.generic_business_rule,pricing_rule:"
-msgid "Pricing Rule"
-msgstr "Tarification"
-
-msgctxt "field:ins_product.generic_business_rule,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_product.generic_business_rule,reserve_rule:"
-msgid "Reserve Rule"
-msgstr "Provisionnement"
-
-msgctxt "field:ins_product.generic_business_rule,start_date:"
-msgid "From Date"
-msgstr "Date de Début"
-
-msgctxt "field:ins_product.generic_business_rule,term_renewal_rule:"
-msgid "Term - Renewal Rule"
-msgstr "Règle de Terme - Renouvellement"
-
-msgctxt "field:ins_product.generic_business_rule,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_product.generic_business_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -1658,10 +1522,6 @@ msgctxt "model:ins_product.benefit_rule,name:"
 msgid "Benefit Rule"
 msgstr "Prestation"
 
-msgctxt "model:ins_product.business_rule_manager,name:"
-msgid "Business Rule Manager"
-msgstr "Règles"
-
 msgctxt "model:ins_product.business_rule_root,name:"
 msgid "Business Rule Root"
 msgstr "Règle Métier Racine"
@@ -1706,10 +1566,6 @@ msgstr ""
 msgctxt "model:ins_product.eligibility_rule,name:"
 msgid "Eligibility Rule"
 msgstr "Eligibilite"
-
-msgctxt "model:ins_product.generic_business_rule,name:"
-msgid "Generic Business Rule"
-msgstr "Règle Métier"
 
 msgctxt "model:ins_product.offered,name:"
 msgid "Offered"
@@ -1889,14 +1745,6 @@ msgid "Add"
 msgstr "Compléter"
 
 msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
-
-msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:ins_product.business_rule_manager,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
@@ -2236,10 +2084,6 @@ msgctxt "view:ins_product.benefit_rule:"
 msgid "benefit rule"
 msgstr "Règle de Prestation"
 
-msgctxt "view:ins_product.business_rule_manager:"
-msgid "Business Rule Manager"
-msgstr "Règles"
-
 msgctxt "view:ins_product.business_rule_root:"
 msgid "Business Rule Root"
 msgstr "Règle Métier Racine"
@@ -2303,14 +2147,6 @@ msgstr "Elément Couvert"
 msgctxt "view:ins_product.eligibility_rule:"
 msgid "Eligibility rule"
 msgstr "Eligibilite"
-
-msgctxt "view:ins_product.generic_business_rule:"
-msgid "Business Rule"
-msgstr "Règle Métier"
-
-msgctxt "view:ins_product.generic_business_rule:"
-msgid "Generic Business Rule"
-msgstr "Règle Métier Générique"
 
 msgctxt "view:ins_product.offered:"
 msgid "Administration"

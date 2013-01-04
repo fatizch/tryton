@@ -3,10 +3,8 @@ import copy
 
 from trytond.model import fields
 from trytond.pyson import Eval
-from trytond.transaction import Transaction
-from trytond.pool import Pool
 
-from trytond.modules.insurance_product import product, business_rule, benefit
+from trytond.modules.insurance_product import product, benefit
 from trytond.modules.insurance_product import coverage, clause
 from trytond.modules.insurance_product.benefit import *
 from trytond.modules.insurance_product.business_rule import eligibility_rule
@@ -24,8 +22,6 @@ from trytond.modules.insurance_product.business_rule import pricing_rule
 IND_TO_COLL = {
     'ins_product.benefit': 'ins_collective.benefit',
     'ins_product.benefit_rule': 'ins_collective.benefit_rule',
-    'ins_product.business_rule_manager':\
-         'ins_collective.business_rule_manager',
     'ins_product.clause': 'ins_collective.clause',
     'ins_product.clause_relation': 'ins_collective.clause_relation',
     'ins_product.clause_rule': 'ins_collective.clause_rule',
@@ -37,8 +33,6 @@ IND_TO_COLL = {
     'ins_product.eligibility_relation_kind':\
         'ins_collective.eligibility_relation_kind',
     'ins_product.eligibility_rule': 'ins_collective.eligibility_rule',
-    'ins_product.generic_business_rule':\
-        'ins_collective.generic_business_rule',
     'ins_product.pricing_component': 'ins_collective.pricing_component',
     'ins_product.pricing_rule': 'ins_collective.pricing_rule',
     'ins_product.product': 'ins_collective.product',
@@ -135,22 +129,6 @@ class GroupPackageCoverage(GroupRoot, coverage.PackageCoverage):
     'Link Package Coverage'
 
     __name__ = 'ins_collective.package-coverage'
-
-
-class GroupBusinessRuleManager(GroupRoot, business_rule.BusinessRuleManager):
-    'Group Business Rule Manager'
-
-    __name__ = 'ins_collective.business_rule_manager'
-
-
-class GroupGenericBusinessRule(GroupRoot, business_rule.GenericBusinessRule):
-    'Group Generic Business Rule'
-
-    __name__ = 'ins_collective.generic_business_rule'
-
-    @classmethod
-    def __setup__(cls):
-        super(GroupGenericBusinessRule, cls).__setup__()
 
 
 class GroupEligibilityRule(GroupRoot, eligibility_rule.EligibilityRule):

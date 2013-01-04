@@ -12,13 +12,11 @@ from .clause import *
 def register():
     Pool.register(
         # from product
-        BusinessRuleManager,
         Offered,
         Coverage,
         PackageCoverage,
         Product,
         ProductOptionsCoverage,
-        GenericBusinessRule,
         BusinessRuleRoot,
         PricingRule,
         PricingComponent,

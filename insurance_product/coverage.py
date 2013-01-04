@@ -51,12 +51,6 @@ class Coverage(model.CoopSQL, Offered):
         },
         depends=['currency_digits'])
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
-    coverage_amount_mgr = model.One2ManyDomain(
-        'ins_product.business_rule_manager',
-        'offered', 'Coverage Amount Manager',
-        states={
-            'invisible': Bool(Eval('is_package')),
-        },)
     coverage_amount_rules = fields.One2Many(
         'ins_product.coverage_amount_rule',
         'offered', 'Coverage Amount Rules',
