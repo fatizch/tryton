@@ -2037,7 +2037,7 @@ msgid "All"
 msgstr "Tous"
 
 msgctxt "selection:ins_product.eligibility_rule,subscriber_classes:"
-msgid "Company"
+msgid "Society"
 msgstr "Société"
 
 msgctxt "selection:ins_product.eligibility_rule,subscriber_classes:"

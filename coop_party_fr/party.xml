@@ -11,9 +11,9 @@
               **************   Employee     *************
               *******************************************-->
         <record model="ir.ui.view" id="employee_view_form">
-            <field name="model">company.employee</field>
+            <field name="model">party.employee</field>
             <field name="type">form</field>
-            <field name="inherit" ref="company.employee_view_form"/>
+            <field name="inherit" ref="coop_party.employee_view_form"/>
             <field name="arch" type="xml">
                 <![CDATA[
                 <data>
@@ -25,12 +25,12 @@
                 ]]>
             </field>
         </record>
-        <!-- Company form view -->
-        <record model="ir.ui.view" id="company_view_form">
-            <field name="model">company.company</field>
+        <!-- Society form view -->
+        <record model="ir.ui.view" id="society_view_form">
+            <field name="model">party.society</field>
             <field name="type">form</field>
-            <field name="inherit" ref="coop_party.company_view_form"/>
-            <field name="arch" type="xml">
+            <field name="inherit" ref="coop_party.society_view_form"/>
+            <field name="arch" type="xml"/><!--  
                 <![CDATA[
                 <data>
                     <xpath expr="/form/notebook" position="before">
@@ -39,7 +39,7 @@
                 </xpath>
                 </data>
                 ]]>
-            </field>
+            </field>-->
         </record>
     </data>
 </tryton>

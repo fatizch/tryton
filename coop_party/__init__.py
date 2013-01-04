@@ -9,10 +9,10 @@ def register():
     Pool.register(
         Party,
         Address,
-        Company,
-        Employee,
         Actor,
         Person,
+        Society,
+        Employee,
         PartyRelationKind,
         PartyRelation,
         ContactMechanism,

@@ -80,7 +80,7 @@ class GroupPricingComponent():
     def get_amount(self, args):
         #this function take a dictionary as argument, with the 'date' for
         #calculation date and either the whole employee salary in 'salary'
-        #or the payroll of the company, tranche by tranche, with the tranche
+        #or the payroll of the society, tranche by tranche, with the tranche
         #code as the dictionary key
         #example 1 : {'salary':50000}
         #example 2 : {'TA':1578000, 'TB': 2500000, 'TC'.....}
@@ -89,7 +89,7 @@ class GroupPricingComponent():
             return super(GroupPricingComponent, self).get_amount(args)
         if 'date' in args:
             at_date = args['date']
-        #Either we have the payroll for all the company for the good tranche,
+        #Either we have the payroll for all the society for the good tranche,
         #or we have the whole employee salary, that we need to split in salary
         if self.tranche.code in args or 'salary' in args:
             if self.tranche.code in args:

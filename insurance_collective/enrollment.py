@@ -15,8 +15,8 @@ __all__ = [
 class Enrollment(GroupRoot, Contract):
     'Enrollment'
 #    '''
-#        An enrollment represents the contract of an employee of a company
-#        with the insurance company, which uses the GBP contract of the company
+#        An enrollment represents the contract of an employee of a society
+#        with the insurance society, which uses the GBP contract of the society
 #        as a product.
 #    '''
     __name__ = 'ins_collective.enrollment'

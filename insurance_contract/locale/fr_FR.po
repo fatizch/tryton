@@ -826,7 +826,7 @@ msgctxt "field:ins_contract.subs_process.project,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-msgctxt "field:ins_contract.subs_process.project,subscriber_as_company:"
+msgctxt "field:ins_contract.subs_process.project,subscriber_as_society:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
@@ -1171,7 +1171,7 @@ msgid "suspend"
 msgstr "Suspendre"
 
 msgctxt "selection:ins_contract.subs_process.project,subscriber_kind:"
-msgid "Company"
+msgid "Society"
 msgstr "Société"
 
 msgctxt "selection:ins_contract.subs_process.project,subscriber_kind:"

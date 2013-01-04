@@ -30,7 +30,7 @@
         <group id="employee" colspan="4" yexpand="1" yfill="1"
             states="{'invisible': Bool(~Eval('is_employee'))}">
             <field name="employee_role" mode="form"
-                view_ids="company.employee_view_form2"/>
+                view_ids="coop_party.employee_view_form2"/>
         </group>
     </xpath>
 

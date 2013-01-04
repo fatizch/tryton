@@ -126,7 +126,7 @@ msgctxt "error:party.college_tranche:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "field:company.employee,college:"
+msgctxt "field:party.employee,college:"
 msgid "College"
 msgstr "Collège"
 
@@ -1177,7 +1177,7 @@ msgid "Subscriber"
 msgstr "Souscripteur"
 
 msgctxt ""
-"field:ins_collective.enrollment_process.project,subscriber_as_company:"
+"field:ins_collective.enrollment_process.project,subscriber_as_society:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
@@ -2615,7 +2615,7 @@ msgid "All"
 msgstr "Tous"
 
 msgctxt "selection:ins_collective.eligibility_rule,subscriber_classes:"
-msgid "Company"
+msgid "Society"
 msgstr "Société"
 
 msgctxt "selection:ins_collective.eligibility_rule,subscriber_classes:"
@@ -2710,7 +2710,7 @@ msgid "suspend"
 msgstr "Suspendre"
 
 msgctxt "selection:ins_collective.enrollment_process.project,subscriber_kind:"
-msgid "Company"
+msgid "Society"
 msgstr "Société"
 
 msgctxt "selection:ins_collective.enrollment_process.project,subscriber_kind:"

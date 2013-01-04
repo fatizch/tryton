@@ -222,11 +222,11 @@ msgctxt "selection:party.bank_account_number,kind:"
 msgid "RIB"
 msgstr "RIB"
 
-msgctxt "view:company.company:"
+msgctxt "view:party.society:"
 msgid "Bank"
 msgstr "Bank"
 
-msgctxt "view:company.employee:"
+msgctxt "view:party.employee:"
 msgid "General"
 msgstr "Général"
 

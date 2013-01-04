@@ -9,7 +9,7 @@ __all__ = [
 
 class Employee():
     'Employee'
-    __name__ = 'company.employee'
+    __name__ = 'party.employee'
     __metaclass__ = PoolMeta
 
     college = fields.Many2One('party.college', 'College', required=True)

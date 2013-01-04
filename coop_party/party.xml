@@ -90,61 +90,64 @@
             ************** Employee *************
             ******************************************* -->
         <record model="ir.ui.view" id="employee_view_form">
-            <field name="model">company.employee</field>
+            <field name="model">party.employee</field>
             <field name="type">form</field>
-            <field name="inherit" ref="company.employee_view_form"/>
+            <field name="inherit" ref="party.party_view_form"/>
+            <field name="priority">10</field>
             <field name="name">employee_form</field>
         </record>
+        <record model="ir.ui.view" id="employee_view_form2">
+            <field name="model">party.employee</field>
+            <field name="type">form</field>
+            <field name="priority">20</field>
+            <field name="name">employee_form_2</field>
+        </record>
+        <record model="ir.ui.view" id="employee_view_tree">
+            <field name="model">party.employee</field>
+            <field name="type">tree</field>
+            <field name="name">employee_tree</field>
+        </record>
         <!-- *******************************************
-            ************ Company ***********
+            ************ Society ***********
             ******************************************* -->
 
         <!-- View for the main menu and the event -->
-        <record model="ir.action.act_window" id="act_company_form">
-            <field name="name">Company</field>
-            <field name="res_model">company.company</field>
+        <record model="ir.action.act_window" id="act_society_form">
+            <field name="name">Society</field>
+            <field name="res_model">party.society</field>
         </record>
 
-        <!-- Sub menu actors Company -->
+        <!-- Sub menu actors Society -->
         <menuitem parent="party.menu_party" sequence="0"
-            id="menu_company_form" icon="tryton-list" action="act_company_form"/>
+            id="menu_society_form" icon="tryton-list" action="act_society_form"/>
 
-        <!-- Company form view -->
-        <record model="ir.ui.view" id="company_view_form">
-            <field name="model">company.company</field>
+        <!-- Society form view -->
+        <record model="ir.ui.view" id="society_view_form">
+            <field name="model">party.society</field>
             <field name="type">form</field>
             <field name="inherit" ref="party_root_view_form"/>
-            <field name="name">company_form</field>
+            <field name="name">society_form</field>
         </record>
 
-        <!-- Company tree view -->
-        <record model="ir.ui.view" id="company_view_tree">
-            <field name="model">company.company</field>
+        <!-- Society tree view -->
+        <record model="ir.ui.view" id="society_view_tree">
+            <field name="model">party.society</field>
             <field name="type">tree</field>
             <field name="inherit" ref="party.party_view_tree"/>
-            <field name="name">company_tree</field>
+            <field name="name">society_tree</field>
         </record>
-        <!-- View for the edition or the company -->
-        <record model="ir.action.act_window.view" id="act_company_form_view">
+        <!-- View for the edition or the society -->
+        <record model="ir.action.act_window.view" id="act_society_form_view">
             <field name="sequence" eval="20"/>
-            <field name="view" ref="company_view_form"/>
-            <field name="act_window" ref="act_company_form"/>
+            <field name="view" ref="society_view_form"/>
+            <field name="act_window" ref="act_society_form"/>
         </record>
 
         <!-- View that connects the form in the tree with the specification -->
-        <record model="ir.action.act_window.view" id="act_company_tree_view">
+        <record model="ir.action.act_window.view" id="act_society_tree_view">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="company_view_tree"/>
-            <field name="act_window" ref="act_company_form"/>
-        </record>
-        <record model="ir.ui.menu" id="company.menu_employee_form">
-            <field name="active" eval="False"/>
-        </record>
-        <record model="ir.ui.menu" id="company.menu_company_tree">
-            <field name="active" eval="False"/>
-        </record>
-        <record model="ir.ui.menu" id="company.menu_company_list">
-            <field name="active" eval="False"/>
+            <field name="view" ref="society_view_tree"/>
+            <field name="act_window" ref="act_society_form"/>
         </record>
 
         <!-- *******************************************

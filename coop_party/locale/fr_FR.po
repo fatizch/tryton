@@ -230,8 +230,8 @@ msgctxt "field:party.generic_actor_kind,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:party.party,company:"
-msgid "Company"
+msgctxt "field:party.party,society:"
+msgid "Society"
 msgstr "Société"
 
 msgctxt "field:party.party,employee_role:"
@@ -246,8 +246,8 @@ msgctxt "field:party.party,in_relation_with:"
 msgid "in relation with"
 msgstr "En Relation avec"
 
-msgctxt "field:party.party,is_company:"
-msgid "Company"
+msgctxt "field:party.party,is_society:"
+msgid "Society"
 msgstr "Société"
 
 msgctxt "field:party.party,is_employee:"
@@ -446,8 +446,8 @@ msgctxt "model:ir.action,name:act_address_kind_form"
 msgid "Address Kind"
 msgstr "Type d'Adresse"
 
-msgctxt "model:ir.action,name:act_company_form"
-msgid "Company"
+msgctxt "model:ir.action,name:act_society_form"
+msgid "Society"
 msgstr "Société"
 
 msgctxt "model:ir.action,name:act_generic_actor_kind_form"
@@ -478,8 +478,8 @@ msgctxt "model:ir.ui.menu,name:menu_address_kind_form"
 msgid "Address Kind"
 msgstr "Type d'Adresse"
 
-msgctxt "model:ir.ui.menu,name:menu_company_form"
-msgid "Company"
+msgctxt "model:ir.ui.menu,name:menu_society_form"
+msgid "Society"
 msgstr "Société"
 
 msgctxt "model:ir.ui.menu,name:menu_generic_actor_kind_form"
@@ -554,11 +554,11 @@ msgctxt "selection:party.person,gender:"
 msgid "Mrs."
 msgstr "Mme"
 
-msgctxt "view:company.company:"
-msgid "Company"
+msgctxt "view:party.society:"
+msgid "Society"
 msgstr "Société"
 
-msgctxt "view:company.employee:"
+msgctxt "view:party.employee:"
 msgid "General"
 msgstr "Général"
 

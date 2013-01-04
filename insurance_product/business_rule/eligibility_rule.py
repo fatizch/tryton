@@ -14,7 +14,7 @@ __all__ = [
 
 SUBSCRIBER_CLASSES = [
     ('party.person', 'Person'),
-    ('party.company', 'Company'),
+    ('party.society', 'Society'),
     ('party.party', 'All'),
     ]
 
@@ -50,7 +50,7 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
         match_table = {
             'party.party': 'subscriber',
             'party.person': 'subscriber_person',
-            'party.company': 'subscriber_company'}
+            'party.society': 'subscriber_society'}
 
         # if it does not match, refusal
         if not match_table[self.subscriber_classes] in args:

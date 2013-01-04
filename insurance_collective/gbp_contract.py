@@ -21,14 +21,14 @@ class GBPContract(GenericContract):
     #usual contracts.
     __name__ = 'ins_collective.gbp_contract'
 
-    # GBP contract usually weigh a lot of money, so the subscribing company
-    # usually have a dedicated contact for the insurance company on this
+    # GBP contract usually weigh a lot of money, so the subscribing society
+    # usually have a dedicated contact for the insurance society on this
     # particular contract
     contact = fields.Many2One(
         'party.party',
         'Contact')
 
-    # A GBP contract is a way for a company to provide health and life
+    # A GBP contract is a way for a society to provide health and life
     # coverage for its employees.
     # As such, it weighs a lot in terms of revenue, and the subscriber often
     # uses this as a way to negociate particular conditions (pricing for
@@ -45,7 +45,7 @@ class GBPContract(GenericContract):
         cls.subscriber = copy.copy(cls.subscriber)
         if not cls.subscriber.domain:
             cls.subscriber.domain = []
-        cls.subscriber.domain.append(('is_company', '=', True))
+        cls.subscriber.domain.append(('is_society', '=', True))
 
     @classmethod
     def default_final_product(cls):

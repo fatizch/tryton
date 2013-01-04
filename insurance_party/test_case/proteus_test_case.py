@@ -10,7 +10,7 @@ from proteus import Model
 def get_models():
     res = {}
     res['Insurer'] = Model.get('party.insurer')
-    res['Company'] = Model.get('company.company')
+    res['Society'] = Model.get('party.society')
     return res
 
 
@@ -19,12 +19,12 @@ def get_or_create_insurer(models, cfg_dict, code, name):
     if len(insurers) > 0:
         return insurers[0]
     insurer = models['Insurer']()
-    company = models['Company']()
-    insurer.company.append(company)
+    society = models['Society']()
+    insurer.society.append(society)
     insurer.name = name
     insurer.code = code
     insurer.addresses[:] = []
-    company.currency = cfg_dict['currency']
+    society.currency = cfg_dict['currency']
     insurer.save()
     return insurer
 

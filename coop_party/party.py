@@ -1,7 +1,5 @@
 #-*- coding:utf-8 -*-
-import copy
-
-from trytond.model import fields, ModelSQL, ModelView
+from trytond.model import fields
 from trytond.pyson import Eval, Bool, Not
 
 from trytond.pool import PoolMeta, Pool
@@ -11,29 +9,29 @@ from trytond.modules.coop_utils import TableOfTable, utils
 from trytond.modules.coop_utils import coop_string
 
 
-__all__ = ['Party', 'Company', 'Employee', 'Actor', 'Person',
+__all__ = ['Party', 'Society', 'Employee', 'Actor', 'Person',
            'GenericActorKind', 'GenericActor', 'ACTOR_KIND']
-__metaclass__ = PoolMeta
 
 GENDER = [('M', 'Mr.'),
           ('F', 'Mrs.'),
             ]
 
 ACTOR_KIND = [('party.person', 'Person'),
-              ('company.company', 'Company')]
+              ('party.society', 'Society')]
 
 
 class Party:
     'Party'
 
     __name__ = 'party.party'
+    __metaclass__ = PoolMeta
 
     person = fields.One2Many('party.person', 'party', 'Person', size=1,
         states={'invisible': Not(Bool(Eval('person')))})
-    company = fields.One2Many('company.company',
-        'party', 'Company', size=1,
-        states={'invisible': Not(Bool(Eval('company')))})
-    employee_role = fields.One2Many('company.employee', 'party', 'Employee',
+    society = fields.One2Many('party.society',
+        'party', 'Society', size=1,
+        states={'invisible': Not(Bool(Eval('society')))})
+    employee_role = fields.One2Many('party.employee', 'party', 'Employee',
         size=1)
     generic_roles = fields.One2Many('party.generic_actor', 'party',
         'Generic Actor')
@@ -52,7 +50,7 @@ class Party:
         #this loop will add for each One2Many role, a function field is_role
         for field_name in dir(cls):
             if not (field_name.endswith('role') or field_name == 'person'
-                or field_name == 'company'):
+                or field_name == 'society'):
                 continue
             field = getattr(cls, field_name)
             if not hasattr(field, 'model_name'):
@@ -91,7 +89,7 @@ class Party:
     @staticmethod
     def get_actor_var_name(var_name):
         res = var_name.split('is_')[1]
-        if res not in ['person', 'company']:
+        if res not in ['person', 'society']:
             res += '_role'
         return res
 
@@ -131,8 +129,8 @@ class Party:
     def get_rec_name(self, name):
         if self.person:
             return self.person[0].get_rec_name(name)
-        elif self.company:
-            return self.company[0].get_rec_name(name)
+        elif self.society:
+            return self.society[0].get_rec_name(name)
         return super(Party, self).get_rec_name(name)
 
     def get_nationality(self):
@@ -170,60 +168,27 @@ class Party:
     def get_summary_header(cls, parties, name=None, at_date=None, lang=None):
         res = {}
         persons = []
-        companies = []
+        societies = []
         person_dict = {}
-        company_dict = {}
+        society_dict = {}
         for party in parties:
             res[party.id] = "<b>%s</b>\n" % party.get_rec_name(name)
-            if party.person and len(party.person) > 0:
+            if party.person:
                 persons.append(party.person[0])
                 person_dict[party.person[0].id] = party.id
-            if party.company and len(party.company) > 0:
-                companies.append(party.company[0])
-                company_dict[party.company[0].id] = party.id
+            if party.society:
+                societies.append(party.society[0])
+                society_dict[party.society[0].id] = party.id
         Person = Pool().get('party.person')
         for pers_id, pers_header in Person.get_summary_header(persons,
             at_date=at_date, lang=lang).iteritems():
             res[person_dict[pers_id]] += pers_header
 
-        Company = Pool().get('company.company')
-        for comp_id, comp_header in Company.get_summary_header(companies,
+        Society = Pool().get('party.society')
+        for comp_id, comp_header in Society.get_summary_header(societies,
             at_date=at_date, lang=lang).iteritems():
-            res[company_dict[comp_id]] += comp_header
+            res[society_dict[comp_id]] += comp_header
         return res
-
-
-class Company(ModelSQL, ModelView):
-    'Company'
-    __name__ = 'company.company'
-
-    @classmethod
-    def __setup__(cls):
-        super(Company, cls).__setup__()
-        cls.currency = copy.copy(cls.currency)
-        cls.currency.required = False
-        cls._order.insert(0, ('name', 'ASC'))
-
-    @classmethod
-    def get_summary_header(cls, companies, name=None, at_date=None, lang=None):
-        return dict([(company.id, '') for company in companies])
-
-
-class Employee(ModelSQL, ModelView):
-    'Employee'
-    __name__ = 'company.employee'
-
-    @classmethod
-    def __setup__(cls):
-        super(Employee, cls).__setup__()
-        cls.party = copy.copy(cls.party)
-        if not cls.party.domain:
-            cls.party.domain = []
-        cls.party.domain.append([('is_person', '=', True)])
-
-    @staticmethod
-    def default_person():
-        return [{}]
 
 
 class Actor(CoopView):
@@ -233,7 +198,7 @@ class Actor(CoopView):
 
     reference = fields.Char('Reference')
     party = fields.Many2One('party.party', 'Party',
-                    required=True, ondelete='CASCADE', select=True)
+        required=True, ondelete='CASCADE', select=True)
 
 
 class GenericActorKind(TableOfTable):
@@ -266,6 +231,33 @@ class GenericActor(CoopSQL, Actor):
             res[actor.id] = coop_string.get_field_as_summary(self, 'kind',
                 True, at_date, lang=lang)
         return res
+
+
+class Society(CoopSQL, Actor):
+    'Society'
+
+    __name__ = 'party.society'
+
+    parent = fields.Many2One('party.society', 'Parent')
+    childs = fields.One2Many('party.society', 'parent', 'Children')
+    employees = fields.One2Many('party.employee', 'society', 'Employees')
+
+    @classmethod
+    def __setup__(cls):
+        super(Society, cls).__setup__()
+        cls._order.insert(0, ('name', 'ASC'))
+
+    @classmethod
+    def get_summary_header(cls, societies, name=None, at_date=None, lang=None):
+        return dict([(society.id, '') for society in societies])
+
+
+class Employee(CoopSQL, Actor):
+    'Employee'
+
+    __name__ = 'party.employee'
+
+    society = fields.Many2One('party.society', 'Society', required=True)
 
 
 class Person(CoopSQL, Actor):

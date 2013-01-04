@@ -15,7 +15,7 @@ def update_cfg_dict(cfg_dict):
     cfg_dict['Party'] = Model.get('party.party')
     cfg_dict['BankAccount'] = Model.get('party.bank_account')
     cfg_dict['BankAccountNumber'] = Model.get('party.bank_account_number')
-    cfg_dict['Company'] = Model.get('company.company')
+    cfg_dict['Society'] = Model.get('party.society')
     return cfg_dict
 
 
@@ -40,11 +40,11 @@ def create_bank(cfg_dict):
             break
         try:
             bank = cfg_dict['Bank']()
-            company = cfg_dict['Company']()
-            company.currency = cfg_dict['currency']
-            if bank.company is None:
-                bank.company = []
-            bank.company.append(company)
+            society = cfg_dict['Society']()
+            society.currency = cfg_dict['currency']
+            if bank.society is None:
+                bank.society = []
+            bank.society.append(society)
             bank.name = line[11:51].strip()
             bank.code = line[51:61].strip()
             add_address(cfg_dict, line, bank, countries)

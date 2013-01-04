@@ -13,7 +13,7 @@ class Address(ModelSQL, ModelView):
         '''AFNOR - Line 2
         For individual : Delivery Point Access Data
         Door or Letterbox number, floor, staircase
-        For companies : Individual Identification Form of Address -
+        For societies : Individual Identification Form of Address -
         Given Name, Surname, function, Department''',
         states=STATES, depends=DEPENDS)
     line3 = fields.Char('Building', 38,
@@ -31,7 +31,7 @@ class Address(ModelSQL, ModelView):
         cls.name.help = '''AFNOR - Line 1
         For individual : Identity of the addressee -
         Form of address or given name or surname...
-        For companies : Organization identification -
+        For societies : Organization identification -
         Organization name, Legal Status'''
 
         cls.street = copy.copy(cls.street)

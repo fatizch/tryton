@@ -32,7 +32,7 @@ class Contract():
         fields.Selection(
             ACTOR_KIND,
             'Kind',
-            on_change=['subscriber_as_person','subscriber_as_company',],
+            on_change=['subscriber_as_person','subscriber_as_society',],
         ),
         'get_subscriber_kind',
         'setter_void',
@@ -51,23 +51,23 @@ class Contract():
         'setter_void',
     )
 
-    subscriber_as_company = fields.Function(
+    subscriber_as_society = fields.Function(
         fields.Many2One(
-            'company.company',
+            'party.society',
             'Subscriber',
             states={
-                'invisible': Eval('subscriber_kind') != 'company.company',
+                'invisible': Eval('subscriber_kind') != 'party.society',
             },
-            on_change=['subscriber', 'subscriber_as_company'],
+            on_change=['subscriber', 'subscriber_as_society'],
         ),
-        'get_subscriber_as_company',
+        'get_subscriber_as_society',
         'setter_void',
     )
 
     subscriber_desc = fields.Function(
         fields.Text(
             'Summary',
-            on_change_with=['subscriber_as_person', 'subscriber_as_company',
+            on_change_with=['subscriber_as_person', 'subscriber_as_society',
                 'subscriber',],
         ),
         'on_change_with_subscriber_desc',
@@ -116,15 +116,15 @@ class Contract():
             return res
 
         if self.subscriber_kind == 'party.person':
-            res['subscriber_as_company'] = None
-        elif self.subscriber_kind == 'company.company':
+            res['subscriber_as_society'] = None
+        elif self.subscriber_kind == 'party.society':
             res['subscriber_as_person'] = None
         return res
 
     def get_subscriber_kind(self, name):
-        if (hasattr(self, 'subscriber_as_company') and 
-                self.subscriber_as_company):
-            return 'company.company'
+        if (hasattr(self, 'subscriber_as_society') and 
+                self.subscriber_as_society):
+            return 'party.society'
         return 'party.person'
 
     def get_subscriber_as_person(self, name):
@@ -135,12 +135,12 @@ class Contract():
             res = self.subscriber.person[0]
             return res.id
 
-    def get_subscriber_as_company(self, name):
+    def get_subscriber_as_society(self, name):
         if not self.subscriber:
             return
 
-        if self.subscriber.company:
-            return self.subscriber.company[0].id
+        if self.subscriber.society:
+            return self.subscriber.society[0].id
 
     def on_change_subscriber_as_person(self):
         if (hasattr(self, 'subscriber_as_person') and 
@@ -148,10 +148,10 @@ class Contract():
             return {'subscriber': self.subscriber_as_person.party.id}
         return {}
 
-    def on_change_subscriber_as_company(self):
-        if (hasattr(self, 'subscriber_as_company') and 
-                self.subscriber_as_company):
-            return {'subscriber': self.subscriber_as_company.party.id}
+    def on_change_subscriber_as_society(self):
+        if (hasattr(self, 'subscriber_as_society') and 
+                self.subscriber_as_society):
+            return {'subscriber': self.subscriber_as_society.party.id}
         return {}
 
     @classmethod
