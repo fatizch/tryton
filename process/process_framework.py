@@ -151,7 +151,7 @@ class ClassAttr(ModelMeta):
             name = name[len(self.__allowed_buttons__):]
             # We return the methods computed with the generic method.
             return self.default_button_method(name)
-        raise AttributeError(name)
+        return super(ClassAttr, self).__getattr__(name)
 
 
 class Model():
@@ -294,7 +294,15 @@ class ProcessFramework(ModelView):
         return self.current_state.get_rec_name(name)
 
     @classmethod
-    def raise_user_error(cls, errors):
+    def raise_user_error(cls, errors, error_args=None,
+            error_description='', error_description_args=None,
+            raise_exception=True):
+        if error_args or error_description or error_description_args:
+            super(ProcessFramework, cls).raise_user_error(
+                errors, error_args, error_description, error_description_args,
+                raise_exception)
+            return
+
         # We need a custom user error management as the displaying of errors
         # will be delayed in order to display several errors at one time.
         Translation = Pool().get('ir.translation')
