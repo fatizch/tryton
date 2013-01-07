@@ -13,10 +13,16 @@ def register():
     Pool.register(
         # from product
         Offered,
+        ItemDescriptor,
         Coverage,
         PackageCoverage,
         Product,
         ProductOptionsCoverage,
+        DynamicDataManager,
+        CoopSchemaElement,
+        SchemaElementRelation,
+        ItemDescriptorComplementaryDataRelation,
+        ProductItemDescriptorRelation,
         BusinessRuleRoot,
         PricingRule,
         PricingComponent,
@@ -28,10 +34,7 @@ def register():
         CoverageAmountRule,
         DeductibleRule,
         ProductDefinition,
-        DynamicDataManager,
         TermRenewalRule,
-        CoopSchemaElement,
-        SchemaElementRelation,
         # from rule_sets
         SubscriberContext,
         PersonContext,

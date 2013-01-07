@@ -271,10 +271,10 @@ class PricingComponent(model.CoopSQL, model.CoopView):
         on_change_with=['code', 'tax', 'fee'])
 
     tax = fields.Many2One('coop_account.tax_desc', 'Tax',
-        states={'invisible': Eval('kind') != 'tax'}, )
+        states={'invisible': Eval('kind') != 'tax'}, ondelete='RESTRICT')
 
     fee = fields.Many2One('coop_account.fee_desc', 'Fee',
-        states={'invisible': Eval('kind') != 'fee'}, )
+        states={'invisible': Eval('kind') != 'fee'}, ondelete='RESTRICT')
 
     summary = fields.Function(
         fields.Char('Value',

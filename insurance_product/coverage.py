@@ -40,6 +40,7 @@ class Coverage(model.CoopSQL, Offered):
             'required': Bool(~Eval('is_package')),
         },
         depends=['is_package'])
+    item_desc = fields.Many2One('ins_product.item_desc', 'Item Descriptor')
     benefits = fields.One2Many('ins_product.benefit', 'coverage', 'Benefits',
         context={
             'start_date': Eval('start_date'),

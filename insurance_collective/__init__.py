@@ -12,6 +12,7 @@ def register():
         GroupInsurancePlan,
         GroupInsuranceCoverage,
         GroupPackageCoverage,
+        GroupProductItemDescriptorRelation,
         GroupPricingRule,
         GroupPricingComponent,
         GroupEligibilityRule,

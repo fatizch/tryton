@@ -4,7 +4,8 @@
         <form string="Product"/>
     </xpath>
     <xpath expr="/form/notebook/page[@id='managers']" position="before">
-        <page string="Options" id="option">
+        <page string="Items/Options" id="option">
+            <field name="item_descriptors"/>
             <field name="options"/>
         </page>
     </xpath>

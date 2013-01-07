@@ -237,51 +237,35 @@ class GenericContract(model.CoopSQL, ProcessFramework):
 
 class Contract(GenericContract):
     'Contract'
-#    '''
-#    This class represents the contract, and will be at the center of
-#    many business processes.
-#    '''
 
     __name__ = 'ins_contract.contract'
 
-    # The option list is very important, as it is what really "makes" the
-    # contract. Almost all the main actions on the contract will use either
-    # one or all options. If you want to generate an invoice, you need the
-    # options.
-    #
-    # If you want to pay for a claim, you got to check the options to know
-    # whether you got to do so or not, and if you do how much you will pay
-    options = fields.One2Many('ins_contract.option',
-                              'contract',
-                              'Options')
+    options = fields.One2Many('ins_contract.option', 'contract', 'Options')
 
     # Each contract will be build from an offered product, which will give
-    # access to a number of business rules. Those rules will be used all
-    # along the contract's life, so we need to easily get access to them,
-    # through a direct link to the product.
-    product = fields.Many2One('ins_product.product',
-                              'Product',
-                              required=True)
+    # access to a number of business rules.
+    product = fields.Many2One('ins_product.product', 'Product', required=True)
 
     # On the other hand, the Product Extension will represents all product
     # specific data, including coverages description. It will be one major
     # element used in most of the product specific business rules.
     product_extension = fields.Reference('Product Extension',
-                                         'get_extension_models')
+        'get_extension_models')
 
     # The master field is the object on which rules will be called.
     # Basically, we need an abstract way to call rules, because in some case
     # (typically in GBP rules might be managed on the group contract) the rules
     # will not be those of the product.
     master = fields.Reference('Master',
-                              [('ins_contract.contract', 'Contract'),
-                               ('ins_product.product', 'Product')])
+        [
+            ('ins_contract.contract', 'Contract'),
+            ('ins_product.product', 'Product'),
+        ])
 
     # This field will be used to store the answer to Complementary questions
     # asked at subscription time to the subscriber depending on the product
     # he chose.
-    dynamic_data = fields.Dict(
-        'Complementary Data',
+    dynamic_data = fields.Dict('Complementary Data',
         schema_model='ins_product.schema_element')
 
     @staticmethod
@@ -914,7 +898,6 @@ class CoveredData(model.CoopView):
     @classmethod
     def default_status(cls):
         return 'active'
-
 
     def get_name_for_billing(self):
         return self.for_covered.get_name_for_billing()

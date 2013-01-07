@@ -115,6 +115,41 @@
             <field name="group" ref="res.group_admin"/>
         </record>
 
+        <!--################################################################ -->
+        <!-- Item Descriptor -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="item_desc_view_form">
+            <field name="model">ins_product.item_desc</field>
+            <field name="type">form</field>
+            <field name="name">item_desc_form</field>
+        </record>
+        <record model="ir.ui.view" id="item_desc_view_tree">
+            <field name="model">ins_product.item_desc</field>
+            <field name="type">tree</field>
+            <field name="name">item_desc_tree</field>
+        </record>
+
+        <record model="ir.action.act_window" id="act_item_desc_form">
+            <field name="name">Item Descriptors</field>
+            <field name="res_model">ins_product.item_desc</field>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_item_desc_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="item_desc_view_tree"/>
+            <field name="act_window" ref="act_item_desc_form"/>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_item_desc_viem_tree">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="item_desc_view_form"/>
+            <field name="act_window" ref="act_item_desc_form"/>
+        </record>
+
+        <menuitem parent="menu_product_configuration" sequence="1"
+            id="menu_item_desc_form" icon="tryton-list"
+            action="act_item_desc_form"/>
+
         <!-- *******************************************
             ********* Dynamic Selection ***********
             ******************************************* -->

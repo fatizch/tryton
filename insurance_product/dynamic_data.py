@@ -30,6 +30,7 @@ class CoopSchemaElement(DictSchemaMixin, model.CoopSQL, model.CoopView):
         'ins_product.dynamic_data_manager',
         'Manager',
         ondelete='CASCADE')
+    linked_item = fields.Reference('Linked Item', 'get_possible_linked_item')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     with_default_value = fields.Boolean('Default Value')
@@ -163,6 +164,15 @@ class CoopSchemaElement(DictSchemaMixin, model.CoopSQL, model.CoopView):
             return Transaction().context['schema_element_kind']
         return 'contract'
 
+    @classmethod
+    def get_possible_linked_item(cls):
+        module_name = utils.get_module_name(cls)
+        return [
+            ('%s.product' % module_name, 'Product'),
+            ('%s.coverage' % module_name, 'Coverage'),
+            ('%s.item_desc' % module_name, 'Item Descriptor'),
+        ]
+
 
 class SchemaElementRelation(model.CoopSQL):
     'Relation between schema element and complementary data manager'
@@ -199,9 +209,11 @@ class DynamicDataManager(model.CoopSQL, model.CoopView):
             ('kind', '!=', 'product')],
         # Not needed but allows to force the display for O2MDomain validation
         depends=['kind'])
-    kind = fields.Selection([
-        ('main', 'Main'),
-        ('sub_elem', 'Sub Element')],
+    kind = fields.Selection(
+        [
+            ('main', 'Main'),
+            ('sub_elem', 'Sub Element'),
+        ],
         'Kind')
 
     def get_valid_schemas_ids(self, date):

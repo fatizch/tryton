@@ -40,6 +40,9 @@
     </xpath>
     <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"
         position="inside">
+        <label name="item_desc"/>
+        <field name="item_desc"/>
+        <newline/>
         <label name="currency"/>
         <field name="currency"/>
         <newline/>

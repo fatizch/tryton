@@ -45,6 +45,7 @@ IND_TO_COLL = {
     'ins_contract.contract': 'ins_collective.enrollment',
     'ins_contract.option': 'ins_collective.option',
     'ins_product.package-coverage': 'ins_collective.package-coverage',
+    'ins_product.product-item_desc': 'ins_collective.product-item_desc',
 }
 
 
@@ -114,6 +115,13 @@ class GroupInsurancePlan(GroupRoot, product.Product):
                 options.append(clone_option)
             res['options'] = {'add': options}
         return res
+
+
+class GroupProductItemDescriptorRelation(GroupRoot,
+        product.ProductItemDescriptorRelation):
+    'Relation between Product and Item Descriptor'
+
+    __name__ = 'ins_collective.product-item_desc'
 
 
 class GroupInsuranceCoverage(GroupRoot, coverage.Coverage):

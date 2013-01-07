@@ -130,6 +130,12 @@
             <field name="inherit" ref="insurance_product.coverage_amountrule_view_form"/>
             <field name="arch" type="xml"/>
         </record>
+        <record model="ir.ui.view" id="coverage_amountrule_view_tree">
+            <field name="model">ins_collective.coverage_amount_rule</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_product.coverage_amountrule_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
         <!-- *******************************************
             ******** PricingRule ********
             ******************************************* -->
@@ -137,6 +143,12 @@
             <field name="model">ins_collective.pricing_rule</field>
             <field name="type">form</field>
             <field name="inherit" ref="insurance_product.pricingrule_view_form"/>
+            <field name="arch" type="xml"/>
+        </record>
+        <record model="ir.ui.view" id="pricingrule_view_tree">
+            <field name="model">ins_collective.pricing_rule</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_product.pricingrule_view_tree"/>
             <field name="arch" type="xml"/>
         </record>
 
@@ -149,7 +161,12 @@
             <field name="inherit" ref="insurance_product.eligibilityrule_view_form"/>
             <field name="arch" type="xml"/>
         </record>
-
+        <record model="ir.ui.view" id="eligibilityrule_view_tree">
+            <field name="model">ins_collective.eligibility_rule</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_product.eligibilityrule_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
         <!-- *******************************************
             ******** Clause Rule ********
             ******************************************* -->
@@ -157,6 +174,12 @@
             <field name="model">ins_collective.clause_rule</field>
             <field name="type">form</field>
             <field name="inherit" ref="insurance_product.clause_rule_view_form"/>
+            <field name="arch" type="xml"/>
+        </record>
+        <record model="ir.ui.view" id="clause_rule_view_tree">
+            <field name="model">ins_collective.clause_rule</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_product.clause_rule_view_tree"/>
             <field name="arch" type="xml"/>
         </record>
 
@@ -169,6 +192,12 @@
             <field name="inherit" ref="insurance_product.benefit_rule_view_form"/>
             <field name="arch" type="xml"/>
         </record>
+        <record model="ir.ui.view" id="benefit_rule_view_tree">
+            <field name="model">ins_collective.benefit_rule</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_product.benefit_rule_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
 
         <!-- *******************************************
             ******** Deductible Rule ********
@@ -177,6 +206,12 @@
             <field name="model">ins_collective.deductible_rule</field>
             <field name="type">form</field>
             <field name="inherit" ref="insurance_product.deductible_rule_view_form"/>
+            <field name="arch" type="xml"/>
+        </record>
+        <record model="ir.ui.view" id="deductible_rule_view_tree">
+            <field name="model">ins_collective.deductible_rule</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_product.deductible_rule_view_tree"/>
             <field name="arch" type="xml"/>
         </record>
         <!-- *******************************************
@@ -188,6 +223,12 @@
             <field name="inherit" ref="insurance_product.term_renewal_rule_view_form"/>
             <field name="arch" type="xml"/>
         </record>
+        <record model="ir.ui.view" id="term_renewal_rule_view_tree">
+            <field name="model">ins_collective.term_renewal_rule</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_product.term_renewal_rule_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
 
         <menuitem parent="insurance_contract.menu_contract" name="Group"
             id="menu_group" sequence="20"/>
@@ -196,8 +237,8 @@
         <!--################################################################ -->
         <record model="ir.action.act_window" id="act_pricing_rule_relate_form">
             <field name="name">Pricing</field>
-            <field name="res_model">ins_collective.generic_business_rule</field>
-            <field name="domain">[('manager.offered', '=', ('ins_collective.coverage', Eval('active_id'))), ('kind', '=','ins_collective.pricing_rule')]</field>
+            <field name="res_model">ins_collective.pricing_rule</field>
+            <field name="domain">[('offered', '=', ('ins_collective.coverage', Eval('active_id')))]</field>
         </record>
         <record model="ir.action.keyword" id="act_coverage_relate_keyword1">
             <field name="keyword">form_relate</field>

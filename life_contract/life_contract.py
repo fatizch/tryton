@@ -84,18 +84,17 @@ class Contract():
 
 class PriceLine():
     'Price Line'
-    
+
     __metaclass__ = PoolMeta
-    
     __name__ = 'ins_contract.price_line'
 
     @classmethod
     def get_line_target_models(cls):
         res = super(PriceLine, cls).get_line_target_models()
-        
-        res.append(('life_contract.covered_data', 'life_contract.covered_data'))
-        
+        res.append(('life_contract.covered_data',
+            'life_contract.covered_data'))
         return res
+
 
 class ExtensionLife(model.CoopSQL, GenericExtension):
     '''
@@ -113,7 +112,6 @@ class ExtensionLife(model.CoopSQL, GenericExtension):
     @classmethod
     def get_covered_element_model(cls):
         return 'life_contract.covered_person'
-
 
     def init_covered_elements(self, contract):
         if (hasattr(self, 'covered_elements') and self.covered_elements):

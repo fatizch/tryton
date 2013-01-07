@@ -16,6 +16,9 @@ __all__ = [
    'Product',
    'ProductOptionsCoverage',
    'ProductDefinition',
+   'ItemDescriptor',
+   'ItemDescriptorComplementaryDataRelation',
+   'ProductItemDescriptorRelation',
     ]
 
 CONFIG_KIND = [
@@ -214,6 +217,8 @@ class Product(model.CoopSQL, Offered):
         ondelete='RESTRICT')
     term_renewal_rules = fields.One2Many('ins_product.term_renewal_rule',
         'offered', 'Term - Renewal')
+    item_descriptors = fields.Many2Many('ins_product.product-item_desc',
+        'product', 'item_desc', 'Item Descriptors')
 
     @classmethod
     def __setup__(cls):
@@ -385,3 +390,38 @@ class ProductDefinition(model.CoopView):
 
     def get_extension_model(self):
         raise NotImplementedError
+
+
+class ItemDescriptor(model.CoopSQL, model.CoopView):
+    'Item Descriptor'
+
+    __name__ = 'ins_product.item_desc'
+
+    code = fields.Char('Code', required=True)
+    name = fields.Char('Name')
+    complementary_data = fields.Many2Many(
+        'ins_product.item_desc-complementary_data',
+        'item_desc', 'complementary_data', 'Complementary Data',
+        domain=[('kind', '=', 'sub_elem')], )
+
+
+class ItemDescriptorComplementaryDataRelation(model.CoopSQL):
+    'Relation between Item Descriptor and Complementary Data'
+
+    __name__ = 'ins_product.item_desc-complementary_data'
+
+    item_desc = fields.Many2One('ins_product.item_desc', 'Item Desc',
+        ondelete='CASCADE', )
+    complementary_data = fields.Many2One('ins_product.schema_element',
+        'Complementary Data', ondelete='RESTRICT', )
+
+
+class ProductItemDescriptorRelation(model.CoopSQL):
+    'Relation between Product and Item Descriptor'
+
+    __name__ = 'ins_product.product-item_desc'
+
+    product = fields.Many2One('ins_product.product', 'Product',
+        ondelete='CASCADE')
+    item_desc = fields.Many2One('ins_product.item_desc', 'Item Descriptor',
+        ondelete='RESTRICT')
