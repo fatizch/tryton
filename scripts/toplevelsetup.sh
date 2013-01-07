@@ -4,7 +4,7 @@ SEP=------------------------------------------------
 echo $SEP
 echo Installing necessary packages
 echo $SEP
-sudo apt-get install python-pip postgresql python-dev gcc libxml2-dev libxslt-dev libpq-dev python-gtksourceview2
+sudo apt-get install python-pip postgresql python-dev gcc libxml2-dev libxslt-dev libpq-dev python-gtksourceview2 libldap2-dev libsasl2-dev libssl-dev
 echo $SEP
 echo Installing necessary dependencies
 echo $SEP
