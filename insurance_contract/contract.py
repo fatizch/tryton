@@ -441,6 +441,8 @@ class Contract(GenericContract):
 
             yield getattr(self, ext)[0]
 
+    def get_summary(cls, insurers, name=None, at_date=None, lang=None):
+        return ''
 
 class Option(model.CoopSQL, model.CoopView):
     'Coverage'
