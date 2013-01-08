@@ -279,6 +279,10 @@ msgid "Table Definition Dimension"
 msgstr "Dimension"
 
 msgctxt "selection:table.table_def,dimension_kind1:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:table.table_def,dimension_kind1:"
 msgid "Date"
 msgstr "Date"
 
@@ -295,6 +299,10 @@ msgid "Value"
 msgstr "Valeur"
 
 msgctxt "selection:table.table_def,dimension_kind2:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:table.table_def,dimension_kind2:"
 msgid "Date"
 msgstr "Date"
 
@@ -310,6 +318,9 @@ msgctxt "selection:table.table_def,dimension_kind2:"
 msgid "Value"
 msgstr "Valeur"
 
+msgctxt "selection:table.table_def,dimension_kind3:"
+msgid ""
+msgstr ""
 
 msgctxt "selection:table.table_def,dimension_kind3:"
 msgid "Date"
@@ -326,6 +337,10 @@ msgstr "Intervalle de Date"
 msgctxt "selection:table.table_def,dimension_kind3:"
 msgid "Value"
 msgstr "Valeur"
+
+msgctxt "selection:table.table_def,dimension_kind4:"
+msgid ""
+msgstr ""
 
 msgctxt "selection:table.table_def,dimension_kind4:"
 msgid "Date"

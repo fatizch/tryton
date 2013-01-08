@@ -100,7 +100,7 @@ msgstr "Date de Fin"
 
 msgctxt "field:tranche.tranche_version,floor:"
 msgid "Floor"
-msgstr ""
+msgstr "Seuil"
 
 msgctxt "field:tranche.tranche_version,id:"
 msgid "ID"
@@ -139,12 +139,12 @@ msgid "Not Included"
 msgstr ""
 
 msgctxt "model:ir.action,name:act_model_tranche"
-msgid "tranches"
-msgstr ""
+msgid "Tranches"
+msgstr "Tranches"
 
 msgctxt "model:ir.ui.menu,name:menu_model_tranche"
-msgid "tranches"
-msgstr ""
+msgid "Tranches"
+msgstr "Tranches"
 
 msgctxt "model:life_product.definition,name:"
 msgid "Life Product Definition"
@@ -152,7 +152,7 @@ msgstr "Définition du Produit"
 
 msgctxt "model:tranche.tranche,name:"
 msgid "Tranche"
-msgstr ""
+msgstr "Tranche"
 
 msgctxt "model:tranche.tranche_version,name:"
 msgid "Tranche Version"
@@ -164,7 +164,7 @@ msgstr "Prévoyance"
 
 msgctxt "view:tranche.tranche:"
 msgid "Tranche"
-msgstr ""
+msgstr "Tranche"
 
 msgctxt "view:tranche.tranche_version:"
 msgid "Tranche Version"

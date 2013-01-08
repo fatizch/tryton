@@ -75,7 +75,7 @@ class Offered(model.CoopView, utils.GetResult, Templated):
     pricing_rules = fields.One2Many('ins_product.pricing_rule', 'offered',
         'Pricing Rules')
     eligibility_rules = fields.One2Many('ins_product.eligibility_rule',
-        'offered', 'Pricing Rules')
+        'offered', 'Eligibility Rules')
     clause_rules = fields.One2Many('ins_product.clause_rule',
         'offered', 'Clause Rules')
     deductible_rules = fields.One2Many('ins_product.deductible_rule',

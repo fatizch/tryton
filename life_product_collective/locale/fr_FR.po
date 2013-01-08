@@ -2,28 +2,184 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:ins_collective.pricing_component,contribution_base:"
-msgid "Contribution Base"
+msgctxt "error:party.college:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:party.college_tranche:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:ins_collective.college_displayer,college:"
+msgid ""
 msgstr ""
 
-msgctxt "field:ins_collective.pricing_component,rate:"
-msgid "Rate"
-msgstr "Taux"
+msgctxt "field:ins_collective.college_displayer,colleges:"
+msgid ""
+msgstr ""
 
-msgctxt "field:ins_collective.pricing_component,tranche:"
-msgid "Tranche"
+msgctxt "field:ins_collective.college_displayer,coverage:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_collective.college_displayer,displayer:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_collective.college_displayer,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_collective.college_displayer,is_college:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_collective.college_displayer,is_selected:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_collective.college_displayer,name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_collective.college_selection,college_displayers:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_collective.college_selection,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_collective.pricing_rule,college:"
+msgid "College"
+msgstr "Collège"
+
+msgctxt "field:ins_collective.tranche_displayer,college:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_collective.tranche_displayer,coverage:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_collective.tranche_displayer,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_collective.tranche_displayer,rate:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_collective.tranche_displayer,tranche:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_collective.tranche_selection,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_collective.tranche_selection,tranches:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college,code:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college,is_used:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college,name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college,tranches:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college_tranche,college:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college_tranche,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college_tranche,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college_tranche,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college_tranche,is_used:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college_tranche,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college_tranche,tranche:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college_tranche,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.college_tranche,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.employee,college:"
+msgid ""
 msgstr ""
 
 msgctxt "field:tranche.tranche,colleges:"
 msgid "Colleges"
+msgstr "Collèges"
+
+msgctxt "model:ins_collective.college_displayer,name:"
+msgid ""
 msgstr ""
 
-msgctxt "help:ins_collective.pricing_component,contribution_base:"
-msgid "Value between 0 and 100"
+msgctxt "model:ins_collective.college_selection,name:"
+msgid ""
 msgstr ""
 
-msgctxt "help:ins_collective.pricing_component,rate:"
-msgid "Value between 0 and 100"
+msgctxt "model:ins_collective.tranche_displayer,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ins_collective.tranche_selection,name:"
+msgid ""
 msgstr ""
 
 msgctxt "model:ir.action,name:act_college_form"
@@ -34,10 +190,40 @@ msgctxt "model:ir.action,name:act_employee_form"
 msgid "College"
 msgstr "Collège"
 
+msgctxt "model:ir.action,name:wizard_gbp_creation"
+msgid "GBP Tranche Calculation"
+msgstr ""
+
 msgctxt "model:ir.ui.menu,name:menu_college_form"
 msgid "College"
 msgstr "Collège"
 
+msgctxt "model:party.college,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:party.college_tranche,name:"
+msgid ""
+msgstr ""
+
 msgctxt "selection:ins_collective.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
+
+msgctxt ""
+"wizard_button:ins_collective.gbp_wizard,college_sel,calculate_tranches:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "wizard_button:ins_collective.gbp_wizard,college_sel,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:ins_collective.gbp_wizard,display_tranches,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:ins_collective.gbp_wizard,display_tranches,validate_tranches:"
+msgid "Complete"
+msgstr "Terminer"

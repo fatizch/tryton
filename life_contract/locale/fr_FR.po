@@ -128,7 +128,7 @@ msgstr "ID"
 
 msgctxt "field:life_contract.covered_desc,the_kind:"
 msgid "The kind"
-msgstr ""
+msgstr "Type"
 
 msgctxt "field:life_contract.covered_person,covered_data:"
 msgid "Coverage Data"
@@ -228,7 +228,7 @@ msgstr "Garanties"
 
 msgctxt "field:life_contract.extension_life_state,for_product:"
 msgid "For Product"
-msgstr ""
+msgstr "Produit"
 
 msgctxt "field:life_contract.extension_life_state,id:"
 msgid "ID"

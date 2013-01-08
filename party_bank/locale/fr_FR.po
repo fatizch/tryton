@@ -222,18 +222,18 @@ msgctxt "selection:party.bank_account_number,kind:"
 msgid "RIB"
 msgstr "RIB"
 
-msgctxt "view:party.society:"
-msgid "Bank"
-msgstr "Bank"
+msgctxt "view:party.bank_account_number:"
+msgid "Account Number"
+msgstr "Numéro de Compte"
 
 msgctxt "view:party.employee:"
 msgid "General"
 msgstr "Général"
 
-msgctxt "view:party.bank_account_number:"
-msgid "Account Number"
-msgstr "Numéro de Compte"
-
 msgctxt "view:party.party:"
 msgid "Bank accounts"
 msgstr "Comptes Bancaires"
+
+msgctxt "view:party.society:"
+msgid "Bank"
+msgstr "Bank"

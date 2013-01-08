@@ -19,10 +19,6 @@ msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_contract.contract:"
-msgid "Everything is good !"
-msgstr ""
-
-msgctxt "error:ins_contract.contract:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -378,9 +374,9 @@ msgctxt "field:ins_contract.contract,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_contract.contract,cur_state:"
+msgctxt "field:ins_contract.contract,current_state:"
 msgid "Current State"
-msgstr ""
+msgstr "Etat Courant"
 
 msgctxt "field:ins_contract.contract,dynamic_data:"
 msgid "Complementary Data"
@@ -409,10 +405,6 @@ msgstr "Maître"
 msgctxt "field:ins_contract.contract,options:"
 msgid "Options"
 msgstr "Garanties"
-
-msgctxt "field:ins_contract.contract,process_state:"
-msgid "Process State"
-msgstr ""
 
 msgctxt "field:ins_contract.contract,product:"
 msgid "Product"
@@ -708,7 +700,7 @@ msgstr "ID"
 
 msgctxt "field:ins_contract.subs_process.covered_desc,the_kind:"
 msgid "The kind"
-msgstr ""
+msgstr "Type"
 
 msgctxt "field:ins_contract.subs_process.lines,childs:"
 msgid "Details"
@@ -744,7 +736,7 @@ msgstr "Données Complémentaires"
 
 msgctxt "field:ins_contract.subs_process.option_selection,for_product:"
 msgid "For Product"
-msgstr ""
+msgstr "Produit"
 
 msgctxt "field:ins_contract.subs_process.option_selection,id:"
 msgid "ID"
@@ -826,11 +818,11 @@ msgctxt "field:ins_contract.subs_process.project,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-msgctxt "field:ins_contract.subs_process.project,subscriber_as_society:"
+msgctxt "field:ins_contract.subs_process.project,subscriber_as_person:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-msgctxt "field:ins_contract.subs_process.project,subscriber_as_person:"
+msgctxt "field:ins_contract.subs_process.project,subscriber_as_society:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
@@ -903,7 +895,7 @@ msgid "Covered Element"
 msgstr "Elément Couvert"
 
 msgctxt "model:ins_contract.generic_extension,name:"
-msgid "Mother class for extensions"
+msgid "Generic Extension"
 msgstr "Extension"
 
 msgctxt "model:ins_contract.option,name:"
@@ -1171,12 +1163,12 @@ msgid "suspend"
 msgstr "Suspendre"
 
 msgctxt "selection:ins_contract.subs_process.project,subscriber_kind:"
-msgid "Society"
-msgstr "Société"
-
-msgctxt "selection:ins_contract.subs_process.project,subscriber_kind:"
 msgid "Person"
 msgstr "Personne Physique"
+
+msgctxt "selection:ins_contract.subs_process.project,subscriber_kind:"
+msgid "Society"
+msgstr "Société"
 
 msgctxt "view:ins_contract.billing.bill:"
 msgid "Bill Summary"

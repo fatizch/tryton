@@ -253,7 +253,7 @@ class PricingComponent(model.CoopSQL, model.CoopView):
         states={'invisible': Eval('kind') != 'base'}, )
 
     rated_object_kind = fields.Selection(RATED_OBJECT_KIND,
-        'Rated Object Kind', required=True)
+        'Rated Object Level', required=True)
 
     rule = fields.Many2One('rule_engine', 'Rule Engine',
         depends=['config_kind', 'kind'],

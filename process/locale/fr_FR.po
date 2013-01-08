@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:process.process_framework:"
-msgid "Everything is good !"
-msgstr ""
-
 msgctxt "field:ir.model,is_workflow:"
 msgid "Is Workflow"
 msgstr ""
@@ -36,7 +32,7 @@ msgstr "ID"
 
 msgctxt "field:process.process_desc,menu_item:"
 msgid "Menu Element"
-msgstr ""
+msgstr "Menu"
 
 msgctxt "field:process.process_desc,menu_top:"
 msgid "Top Menu"
@@ -44,7 +40,7 @@ msgstr "Menu Parent"
 
 msgctxt "field:process.process_desc,on_model:"
 msgid "On Model"
-msgstr ""
+msgstr "Modèle"
 
 msgctxt "field:process.process_desc,rec_name:"
 msgid "Name"
@@ -70,17 +66,17 @@ msgctxt "field:process.process_desc,xml_header:"
 msgid "XML"
 msgstr "Description de la Vue"
 
-msgctxt "field:process.process_framework,cur_state:"
+msgctxt "field:process.process_desc,xml_tree:"
+msgid "XML"
+msgstr "Description de la Vue"
+
+msgctxt "field:process.process_framework,current_state:"
 msgid "Current State"
-msgstr ""
+msgstr "Etat Courant"
 
 msgctxt "field:process.process_framework,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:process.process_framework,process_state:"
-msgid "Process State"
-msgstr ""
 
 msgctxt "field:process.process_step_relation,create_date:"
 msgid "Create Date"
@@ -102,15 +98,51 @@ msgctxt "field:process.process_step_relation,rec_name:"
 msgid "Name"
 msgstr "Valeur"
 
+msgctxt "field:process.process_step_relation,status:"
+msgid "Status"
+msgstr "Statut"
+
 msgctxt "field:process.process_step_relation,step:"
 msgid "Step"
-msgstr "Pas"
+msgstr "Etape"
 
 msgctxt "field:process.process_step_relation,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:process.process_step_relation,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:process.status,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:process.status,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:process.status,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:process.status,name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:process.status,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:process.status,relations:"
+msgid "Relations"
+msgstr "Relations"
+
+msgctxt "field:process.status,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:process.status,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -208,11 +240,15 @@ msgstr "Créé par"
 
 msgctxt "field:process.step_transition,from_step:"
 msgid "From Step"
-msgstr ""
+msgstr "Depuis l'Etape"
 
 msgctxt "field:process.step_transition,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:process.step_transition,is_readonly:"
+msgid "Readonly"
+msgstr "En Lecture Seule"
 
 msgctxt "field:process.step_transition,kind:"
 msgid "kind"
@@ -275,24 +311,40 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "model:ir.action,name:act_process_desc"
-msgid "process_desc_form"
-msgstr ""
+msgid "Process Descriptors"
+msgstr "Paramétrage des Processus"
+
+msgctxt "model:ir.action,name:act_process_status"
+msgid "Process Status"
+msgstr "Statuts des Etapes"
 
 msgctxt "model:ir.action,name:act_step_desc"
-msgid "step_desc_form"
-msgstr ""
+msgid "Step Descriptors"
+msgstr "Paramétrage des Etapes"
+
+msgctxt "model:ir.action,name:generate_graph_wizard"
+msgid "Graph"
+msgstr "Graphique"
+
+msgctxt "model:ir.action,name:report_generate_graph"
+msgid "Graph"
+msgstr "Graphique"
 
 msgctxt "model:ir.ui.menu,name:menu_process_desc"
-msgid "process_desc_form"
-msgstr ""
+msgid "Process Descriptors"
+msgstr "Paramétrage des Processus"
+
+msgctxt "model:ir.ui.menu,name:menu_process_status"
+msgid "Process Status"
+msgstr "Statuts des Etapes"
 
 msgctxt "model:ir.ui.menu,name:menu_step_desc"
-msgid "step_desc_form"
-msgstr ""
+msgid "Step Descriptors"
+msgstr "Paramétrage des Etapes"
 
 msgctxt "model:ir.ui.menu,name:process_menu_id"
 msgid "Process Main Menu"
-msgstr ""
+msgstr "Moteur de Processus"
 
 msgctxt "model:process.process_desc,name:"
 msgid "Process Descriptor"
@@ -304,7 +356,11 @@ msgstr ""
 
 msgctxt "model:process.process_step_relation,name:"
 msgid "Process to Step relation"
-msgstr ""
+msgstr "Relation Processus - Etape"
+
+msgctxt "model:process.status,name:"
+msgid "Process Status"
+msgstr "Statuts des Etapes"
 
 msgctxt "model:process.step_desc,name:"
 msgid "Step Descriptor"
@@ -344,7 +400,7 @@ msgstr "Données Complémentaires"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Cotisations"
-msgstr ""
+msgstr "Cotisations"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Options"
@@ -356,19 +412,19 @@ msgstr "Process Souscription Individuelle (Moteur WF)"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Sélection des Options"
-msgstr ""
+msgstr "Sélection des Options"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Sélection des Personnes Couvertes"
-msgstr ""
+msgstr "Sélection des Personnes Couvertes"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Sélection du Produit"
-msgstr ""
+msgstr "Sélection du Produit"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Validation du Contrat"
-msgstr ""
+msgstr "Validation du Contrat"
 
 msgctxt "view:process.process_desc:"
 msgid "Process Descriptor"
@@ -389,6 +445,18 @@ msgstr "Recharger le Menu"
 msgctxt "view:process.process_desc:"
 msgid "XML"
 msgstr "Description de la Vue"
+
+msgctxt "view:process.process_step_relation:"
+msgid "Process Relation"
+msgstr ""
+
+msgctxt "view:process.process_step_relation:"
+msgid "Process Steps"
+msgstr ""
+
+msgctxt "view:process.status:"
+msgid "Status"
+msgstr "Statut"
 
 msgctxt "view:process.step_desc:"
 msgid "Authorizations"
@@ -416,4 +484,4 @@ msgstr "Descripteur de Transition"
 
 msgctxt "view:process.step_transition:"
 msgid "Transitions"
-msgstr ""
+msgstr "Transitions"

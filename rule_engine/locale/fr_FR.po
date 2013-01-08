@@ -304,7 +304,7 @@ msgstr "Règle"
 
 msgctxt "field:rule_engine.tree_element,the_table:"
 msgid "For Table"
-msgstr ""
+msgstr "Table"
 
 msgctxt "field:rule_engine.tree_element,translated_technical_name:"
 msgid "Translated technical name"

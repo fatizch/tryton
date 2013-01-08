@@ -240,8 +240,6 @@ class ProcessFramework(ModelView):
                 good_trans.execute(work)
 
                 # Do not forget to save !
-                print '#' * 80
-                print '%s' % work.current_state
                 work.save()
 
         return button_generic
@@ -261,7 +259,6 @@ class ProcessFramework(ModelView):
         process_desc, = ProcessDesc.search([
                 ('technical_name', '=', process_name),
             ], limit=1)
-        
         self.current_state = process_desc.get_step_relation(value)
 
     @classmethod
