@@ -162,7 +162,10 @@ class ProcessDesc(ModelSQL, ModelView):
         for process in processes:
             if isinstance(process, int):
                 process = cls(process)
-            process.create_update_view()
+            good_menu = process.create_update_view()
+            if good_menu:
+                process.menu_item = good_menu
+                process.save()
 
     def get_all_steps(self):
         # We need a way to get all the steps.
@@ -234,6 +237,8 @@ class ProcessDesc(ModelSQL, ModelView):
                 if not act.view.type == 'form':
                     continue
                 act_form = act
+                print '#' * 80
+                print 'ACTION HAZ FORM VIEW !!!!'
                 break
 
         except ValueError:
@@ -261,11 +266,10 @@ class ProcessDesc(ModelSQL, ModelView):
         xml += '<group name="process_header">'
         xml += '</group>'
         xml += '<newline/>'
-        xml += '<group name="current_state">'
+
         # We need to have cur_state in the view so our Pyson Eval can work 
         # properly
         xml += '<field name="current_state" invisible="1"/>'
-        xml += '</group>'
         xml += '<newline/>'
         xml += '<group name="process_content" '
         xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1">'
