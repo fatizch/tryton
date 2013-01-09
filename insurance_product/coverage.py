@@ -273,6 +273,14 @@ class Coverage(model.CoopSQL, Offered):
         except utils.NonExistingRuleKindException:
             return [], []
 
+    def give_me_must_have_coverage_amount(self, args):
+        result = self.get_good_rule_at_date(args, 'coverage_amount')
+
+        if not result:
+            return False, []
+        return True, []
+
+
     def give_me_coverage_amount_validity(self, args):
         try:
             return self.get_result(

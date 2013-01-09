@@ -94,7 +94,7 @@
                      <![CDATA[
                         <data>
                             <xpath expr="/tree" position="inside">
-                                <field name="coverage_amount"/>
+                                <field name="coverage_amount_selection"/>
                             </xpath>
                         </data>
                      ]]>
@@ -110,8 +110,9 @@
                         <data>
                             <xpath expr="/form/group[@id='specific']"
                             position="inside">
-                                <label name="coverage_amount"/>
-                                <field name="coverage_amount"/>
+                                <field name="coverage_amount" invisible="1"/>
+                                <label name="coverage_amount_selection"/>
+                                <field name="coverage_amount_selection"/>
                             </xpath>
                         </data>
                      ]]>
