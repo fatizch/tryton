@@ -386,6 +386,8 @@ class Contract():
 
         self.billing_manager[0].store_prices(prices)
 
+        self.billing_manager[0].save()
+
         return True, ()
 
 
