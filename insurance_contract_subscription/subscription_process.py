@@ -384,8 +384,13 @@ class Contract():
         if errs:
             return False, errs
 
+        print '#' * 80
+        print 'STORE PRICES'
+        #print len(prices[0].details)
         self.billing_manager[0].store_prices(prices)
 
+        print '#' * 80
+        print 'SAVE PRICES'
         self.billing_manager[0].save()
 
         return True, ()

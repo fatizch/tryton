@@ -751,7 +751,7 @@ class BillingManager(model.CoopSQL, model.CoopView):
                 pass
             result_prices.append(pl)
         self.prices = result_prices
-    
+
     @classmethod
     def get_price_line_model(cls):
         return cls._fields['prices'].model_name
@@ -876,7 +876,7 @@ class CoveredData(model.CoopView):
         'ins_product.coverage',
         'Coverage',
         ondelete='CASCADE',
-        readonly=True,
+        #readonly=True,
     )
 
     for_covered = fields.Many2One(
