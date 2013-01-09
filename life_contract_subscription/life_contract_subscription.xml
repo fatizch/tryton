@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<tryton>
+  <data>
+    <record model="ir.ui.view" id="subscription_extension_life_form">
+      <field name="model">life_contract.extension</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="life_contract.life_extension_view_form"/>
+      <field name="name">subscription_extension_life_form</field>
+    </record>
+    <record model="ir.ui.view" id="subscription_covered_person_form">
+      <field name="model">life_contract.covered_person</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="life_contract.covered_person_view_form"/>
+      <field name="name">subscription_covered_person_form</field>
+    </record>
+    <record model="ir.ui.view" id="subscription_covered_data_editable_tree">
+      <field name="model">life_contract.covered_data</field>
+      <field name="type">tree</field>
+      <field name="inherit" ref="insurance_contract_subscription.subscription_editable_covered_data_tree"/>
+      <field name="name">subscription_covered_data_editable_tree</field>
+    </record>
+  </data>
+</tryton>

@@ -42,6 +42,7 @@ class Contract():
         'life_contract.extension',
         'contract',
         'Life Extension',
+        context={'current_contract': Eval('id')},
         size=1)
 
     def check_covered_amounts(self, at_date=None, ext=None):
@@ -172,60 +173,11 @@ class LifeCoveredData(model.CoopSQL, CoveredData):
 
     coverage_amount = fields.Numeric('Coverage Amount')
 
-    coverage_amount_selection = fields.Function(
-        fields.Selection(
-            'get_allowed_amounts',
-            'Coverage Amount',
-            selection_parameters=['for_coverage', 'start_date'],
-            depends=['for_coverage', 'start_date', 'coverage_amount'],
-            sort=False,
-            on_change=['coverage_amount', 'coverage_amount_selection'],
-        ),
-        'get_coverage_amount_selection',
-        'setter_void',
-    )
-
     @classmethod
     def __setup__(cls):
         super(LifeCoveredData, cls).__setup__()
         cls.for_covered = copy.copy(cls.for_covered)
         cls.for_covered.model_name = 'life_contract.covered_person'
-        cls.__rpc__.update({
-            'get_allowed_amounts': RPC(instantiate=0),
-        })
-        cls._error_messages.update({
-            'coverage_amount_needed': 'A coverage amount must be provided :'})
-
-    def get_allowed_amounts(self):
-        if not (hasattr(self, 'for_coverage') and self.for_coverage):
-            return []
-        the_coverage = self.for_coverage
-        vals = the_coverage.get_result(
-            'allowed_amounts',
-            {
-                'date': self.start_date,
-                #'contract': utils.WithAbstract.get_abstract_objects(
-                #    wizard, 'for_contract')
-            },)[0]
-        if vals:
-            return map(lambda x: (x, x), map(lambda x: '%.2f' % x, vals))
-        return ''
-
-    def get_coverage_amount_selection(self, name):
-        if (hasattr(self, 'coverage_amount') and self.coverage_amount):
-            return '%.2f' % self.coverage_amount
-        return ''
-
-    def on_change_coverage_amount_selection(self):
-        if hasattr(self, 'coverage_amount_selection') and \
-                self.coverage_amount_selection:
-            return {'coverage_amount': Decimal(self.coverage_amount_selection)}
-        else:
-            return {'coverage_amount': None}
-
-    @classmethod
-    def setter_void(cls, covered_datas, name, values):
-        pass
 
 
 class LifeCoveredDesc(CoveredDesc):

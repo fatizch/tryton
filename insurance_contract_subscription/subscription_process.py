@@ -451,7 +451,7 @@ class CoveredElement():
 
         Contract = Pool().get('ins_contract.contract')
         contract = Contract(contract)
-        
+
         CoveredData = Pool().get(
             cls._fields['covered_data'].model_name)
 
@@ -503,6 +503,4 @@ class CoveredData():
     @classmethod
     def setter_void(cls, contracts, name, values):
         pass
-
-
 
