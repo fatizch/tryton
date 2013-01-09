@@ -728,8 +728,10 @@ class BillingManager(model.CoopSQL, model.CoopView):
         if not prices:
             return
         PriceLine = Pool().get(self.get_price_line_model())
+        to_delete = []
         if hasattr(self, 'prices') and self.prices:
-            PriceLine.delete(self.prices)
+            for price in self.prices:
+                to_delete.append(price)
             
         result_prices = []
         dates = [utils.to_date(key) for key in prices.iterkeys()]
@@ -751,6 +753,10 @@ class BillingManager(model.CoopSQL, model.CoopView):
                 pass
             result_prices.append(pl)
         self.prices = result_prices
+
+        self.save()
+
+        PriceLine.delete(to_delete)
 
     @classmethod
     def get_price_line_model(cls):
@@ -876,6 +882,8 @@ class CoveredData(model.CoopView):
         'ins_product.coverage',
         'Coverage',
         ondelete='CASCADE',
+        # TODO: should be readonly, but no other way to get selection fields
+        # working as they are not given
         #readonly=True,
     )
 
