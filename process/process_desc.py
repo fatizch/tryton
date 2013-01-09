@@ -237,8 +237,6 @@ class ProcessDesc(ModelSQL, ModelView):
                 if not act.view.type == 'form':
                     continue
                 act_form = act
-                print '#' * 80
-                print 'ACTION HAZ FORM VIEW !!!!'
                 break
 
         except ValueError:
@@ -622,14 +620,19 @@ class StepDesc(ModelSQL, ModelView):
         # If we write a step that's being used in the definition of a process
         ProcessStepRelation = Pool().get('process.process_step_relation')
         processes = set()
+
         for step in steps:
             used_in = ProcessStepRelation.search([
-                ('step', '=', 'step')])
+                ('step', '=', step)])
             processes |= set(map(lambda x:x.process.id, used_in))
 
+        if not processes:
+            return
+
+        Process = Pool().get('process.process_desc')
         # We need to update each of those processes view.
         for process in processes:
-            process.create_update_view()
+            Process(process).create_update_view()
 
     def calculate_form_view(self):
         # Here is the xml definition for this step.
