@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <data>
   <xpath expr="/form/group[@id='covered_data']/field[@name='covered_data']" position="replace_attributes">
-    <field name="covered_data" view_ids="life_contract_subscription.subscription_covered_data_editable_tree,life_contract.life_covered_data_desc_view_tree"
+    <field name="covered_data" view_ids="life_contract_subscription.subscription_covered_data_editable_tree,life_contract.life_covered_data_desc_view_form"
       mode="tree,form"/>
   </xpath>
 </data>
