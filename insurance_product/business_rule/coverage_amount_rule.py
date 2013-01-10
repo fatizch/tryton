@@ -1,11 +1,11 @@
 #-*- coding:utf-8 -*-
 from trytond.model import fields
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Or
 
 from trytond.modules.coop_utils import model
 from trytond.modules.insurance_product.product import DEF_CUR_DIG
 from trytond.modules.insurance_product.business_rule.business_rule import \
-    BusinessRuleRoot
+    BusinessRuleRoot, STATE_SIMPLE
 
 __all__ = [
     'CoverageAmountRule',
@@ -22,18 +22,38 @@ class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
             ('amount', 'Amount'),
             ('cal_list', 'Calculated List')
         ],
-        'Kind')
+        'Kind', states={'invisible': STATE_SIMPLE}, )
     amounts = fields.Char('Amounts', help='Specify amounts separated by ;',
-        states={'invisible': Eval('kind') != 'amount'},)
+        states={
+            'invisible': Or(
+                (Eval('kind') != 'amount'),
+                (Eval('config_kind') != 'simple'),
+                ),
+        }, depends=['config_kind', 'kind'])
     amount_start = fields.Numeric('From',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
-        states={'invisible': Eval('kind') != 'cal_list'})
+        states={
+            'invisible': Or(
+                (Eval('kind') != 'cal_list'),
+                (Eval('config_kind') != 'simple'),
+                ),
+        }, depends=['config_kind', 'kind'])
     amount_end = fields.Numeric('To',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
-        states={'invisible': Eval('kind') != 'cal_list'})
+        states={
+            'invisible': Or(
+                (Eval('kind') != 'cal_list'),
+                (Eval('config_kind') != 'simple'),
+                ),
+        }, depends=['config_kind', 'kind'])
     amount_step = fields.Numeric('Step',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
-        states={'invisible': Eval('kind') != 'cal_list'})
+        states={
+            'invisible': Or(
+                (Eval('kind') != 'cal_list'),
+                (Eval('config_kind') != 'simple'),
+                ),
+        })
 
     @classmethod
     def __setup__(cls):

@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
 from trytond.model import fields
-
+from trytond.pyson import Eval
 from trytond.modules.coop_utils import model, business
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot
@@ -33,7 +33,9 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
         'Can be subscribed',
         required=True)
     relation_kinds = fields.Many2Many('ins_product.eligibility_relation_kind',
-        'eligibility_rule', 'relation_kind', 'Relations Authorized')
+        'eligibility_rule', 'relation_kind', 'Relations Authorized',
+        states={'invisible': Eval('sub_elem_config_kind') != 'simple'},
+        depends=['sub_elem_config_kind'])
 
     def give_me_eligibility(self, args):
         # First of all, we look for a subscriber data in the args and update

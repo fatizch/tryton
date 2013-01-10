@@ -1935,10 +1935,6 @@ msgctxt "model:ir.sequence.type,name:sequence_type_contract_number"
 msgid "Contract Number"
 msgstr "Numéro de Contrat"
 
-msgctxt "model:ir.ui.menu,name:None"
-msgid "item_descs"
-msgstr ""
-
 msgctxt "model:ir.ui.menu,name:menu_coverage_form"
 msgid "Coverages"
 msgstr "Garanties"

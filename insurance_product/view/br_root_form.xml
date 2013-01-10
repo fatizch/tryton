@@ -10,21 +10,9 @@
         <field name="template" colspan="3"/>
         <field name="template_behaviour" xexpand="0"/>
     </group>
-    <notebook>
-        <page id="global" string="Global">
-            <group id="config_kind" colspan="2">
-                <label name="config_kind" xfill="1"/>
-                <field name="config_kind" xfill="1" xexpand="0"/>
-            </group>
-            <group id="rule" colspan="4"
-                states="{'invisible': Eval('config_kind') != 'advanced'}" 
-                yfill="1" yexpand="1">
-                <label name="rule"/>
-                <field name="rule"/>
-            </group>
-            <group id="simple" colspan="4"
-                states="{'invisible': Eval('config_kind') != 'simple'}">
-            </group>
-        </page>
-    </notebook>
+    <label name="config_kind"/>
+    <field name="config_kind" xexpand="0"/>
+    <newline/>
+    <label name="rule"/>
+    <field name="rule" colspan="3"/>
 </form>

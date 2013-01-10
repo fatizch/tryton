@@ -3,31 +3,29 @@
     <xpath expr="/form" position="replace_attributes">
         <form string="Pricing rule"/>
     </xpath>
-    <xpath expr="/form/notebook" position="before">
-        <label name="config_kind"/>
-        <field name="config_kind"/>
+    <xpath expr="/form/field[@name='config_kind']" position="after">
         <label name="frequency"/>
         <field name="frequency" xexpand="1"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='global']/group/label[@name='config_kind']"
-        position="replace"/>
-    <xpath expr="/form/notebook/page[@id='global']/group/field[@name='config_kind']"
-        position="replace"/>
-    <xpath expr="/form/notebook/page/group[@id='simple']" position="inside">
+    <xpath expr="/form/label[@name='rule']" position="before">
         <label name="basic_price"/>
         <field name="basic_price" xexpand="1"/>
         <newline/>
         <label name="basic_tax"/>
         <field name="basic_tax" xexpand="1"/>
+        <field name="components" yexpand="1" yfill="1" colspan="4"/>
+        <label name="specific_combination_rule"/>
+        <field name="specific_combination_rule"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='global']" position="after">
-        <page id="sub" string="Covered Element" states="{'invisible': Eval('config_kind') == 'simple'}">
-            <field name="sub_item_components"/>
-        </page>
-    </xpath>
-    <xpath expr="/form/notebook/page/group/label[@name='rule']" position="replace"/>
-    <xpath expr="/form/notebook/page/group/field[@name='rule']" position="replace"/>
-    <xpath expr="/form/notebook/page/group[@id='rule']" position="inside">
-        <field name="components" yexpand="1" yfill="1"/>
+    <xpath expr="/form/label[@name='rule']" position="replace"/>
+    <xpath expr="/form/field[@name='rule']" position="replace"/>
+    <xpath expr="/form" position="inside">
+        <group id="sub" string="Covered Element"
+            states="{'invisible': Eval('config_kind') != 'advanced'}" yfill="1"
+            yexpand="1" colspan="4">
+            <field name="sub_item_components" colspan="4"/>
+            <label name="sub_item_specific_combination_rule"/>
+            <field name="sub_item_specific_combination_rule"/>
+        </group>
     </xpath>
 </data>

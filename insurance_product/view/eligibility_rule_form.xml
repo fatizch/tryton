@@ -3,8 +3,14 @@
     <xpath expr="/form" position="replace_attributes">
         <form string="Eligibility rule"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='global']" position="after">
-        <page id="sub" string="Covered Element">
+    <xpath expr="/form/label[@name='config_kind']" position="before">
+        <label name="subscriber_classes"/>
+        <field name="subscriber_classes" xexpand="0"/>
+        <newline/>
+    </xpath>
+    <xpath expr="/form/field[@name='rule']" position="after">
+        <group id="sub_elem" string="Covered Element" yfill="1" yexpand="1"
+            colspan="4">
             <group id="sub_elem_config_kind" colspan="2">
                 <label name="sub_elem_config_kind" xfill="1"/>
                 <field name="sub_elem_config_kind" xfill="1" xexpand="0"/>
@@ -19,15 +25,6 @@
                 <field name="sub_elem_rule"/>
             </group>
             <field name="relation_kinds" colspan="4" xexpand="1" yfill="1"/>
-        </page>
-    </xpath>
-    <xpath expr="/form/notebook/page[@id='global']/group[@id='simple']"
-        position="inside">
-    </xpath>
-    <xpath expr="/form/notebook/page[@id='global']" position="inside">
-        <group id="subscriber_classes" colspan="2">
-            <label name="subscriber_classes"/>
-            <field name="subscriber_classes" xexpand="0"/>
         </group>
     </xpath>
 </data>

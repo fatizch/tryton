@@ -3,27 +3,21 @@
     <xpath expr="/form" position="replace_attributes">
         <form string="Term - Renewal rule"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='global']/group[@id='config_kind']"
-        position="replace_attributes">
+    <xpath expr="/form" position="replace_attributes">
         <group id="config_kind" states="{'invisible': True}"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='global']/group[@id='simple']"
-        position="inside">
-        <group id="term">
-            <label name="with_term"/>
-            <field name="with_term"/>
-            <newline/>
-            <label name="term_date_choice"/>
-            <field name="term_date_choice"/>
-            <label name="date_for_sync"/>
-            <field name="date_for_sync"/>
-        </group>
+    <xpath expr="/form/label[@name='rule']" position="before">
+        <label name="with_term"/>
+        <field name="with_term"/>
         <newline/>
-        <group id="renewal">
-            <label name="can_be_renewed"/>
-            <field name="can_be_renewed"/>
-            <label name="frequency"/>
-            <field name="frequency"/>
-        </group>
+        <label name="term_date_choice"/>
+        <field name="term_date_choice"/>
+        <label name="date_for_sync"/>
+        <field name="date_for_sync"/>
+        <newline/>
+        <label name="can_be_renewed"/>
+        <field name="can_be_renewed"/>
+        <label name="frequency"/>
+        <field name="frequency"/>
     </xpath>
 </data>

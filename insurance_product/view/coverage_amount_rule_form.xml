@@ -3,23 +3,21 @@
     <xpath expr="/form" position="replace_attributes">
         <form string="Coverage Amount rule"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='global']/group[@id='simple']"
-        position="inside">
-        <group id="kind" colspan="2">
-            <label name="kind"/>
-            <field name="kind" xexpand="0"/>
-        </group>
+    <xpath expr="/form/label[@name='rule']" position="before">
+        <label name="kind"/>
+        <field name="kind" xexpand="0"/>
         <newline/>
         <label name="amounts"/>
         <field name="amounts"/>
         <newline/>
-        <group id="calc_list" col="6" colspan="4">
-            <label name="amount_start"/>
-            <field name="amount_start"/>
-            <label name="amount_end"/>
-            <field name="amount_end"/>
-            <label name="amount_step"/>
-            <field name="amount_step"/>
-        </group>
+        <label name="amount_start"/>
+        <field name="amount_start"/>
+        <newline/>
+        <label name="amount_end"/>
+        <field name="amount_end"/>
+        <newline/>
+        <label name="amount_step"/>
+        <field name="amount_step"/>
+        <newline/>
     </xpath>
 </data>

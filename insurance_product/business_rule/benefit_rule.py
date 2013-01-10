@@ -1,10 +1,10 @@
 #-*- coding:utf-8 -*-
 from trytond.model import fields
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Or
 
 from trytond.modules.coop_utils import model, coop_string
 from trytond.modules.insurance_product.business_rule.business_rule import \
-    BusinessRuleRoot
+    BusinessRuleRoot, STATE_SIMPLE
 from trytond.modules.insurance_product.product import DEF_CUR_DIG
 
 
@@ -28,12 +28,12 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
     amount = fields.Numeric(
         'Amount',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
-        states={'invisible': Eval('kind') != 'amount'},
+        states={'invisible': Or(STATE_SIMPLE, Eval('kind') != 'amount')},
         )
 
     coef_coverage_amount = fields.Numeric(
         'Multiplier',
-        states={'invisible': Eval('kind') != 'cov_amount'},
+        states={'invisible': Or(STATE_SIMPLE, Eval('kind') != 'cov_amount')},
         help='Add a multiplier to apply to the coverage amount',
         )
 

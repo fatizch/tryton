@@ -1,16 +1,17 @@
 #-*- coding:utf-8 -*-
 import copy
-import datetime
 
 from trytond.model import fields
-from trytond.pool import Pool
-from trytond.rpc import RPC
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model, utils, date, coop_string
+from trytond.modules.coop_utils import model, utils, date
 from trytond.modules.insurance_product.product import CONFIG_KIND
 from trytond.modules.insurance_product.product import Templated
+
+STATE_ADVANCED = Eval('config_kind') != 'advanced'
+STATE_SIMPLE = Eval('config_kind') != 'simple'
+STATE_SUB_SIMPLE = Eval('sub_elem_config_kind') != 'simple'
 
 __all__ = [
    'BusinessRuleRoot',
@@ -52,7 +53,6 @@ __all__ = [
 #                    and business_rule1.start_date
 #                    and business_rule2.start_date > business_rule1.start_date
 #                    and (not business_rule1.end_date
-#                        
 #                    or business_rule1.end_date >= business_rule2.start_date
 #                        )
 #                    ):
@@ -202,6 +202,7 @@ class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
     config_kind = fields.Selection(CONFIG_KIND,
         'Conf. kind', required=True)
     rule = fields.Many2One('rule_engine', 'Rule Engine',
+        states={'invisible': STATE_ADVANCED},
         depends=['config_kind'])
 
     @classmethod
