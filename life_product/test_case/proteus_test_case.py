@@ -633,8 +633,8 @@ def create_invalidity_coverage(cfg_dict):
         string='Annual Salary', type_='char', kind='contract')
     cd_mgr.specific_dynamic.append(salary)
 
-    ca_rule = add_rule(cfg_dict, cov, 'coverage_amount', at_date)
-    ca_rule.amounts = '0'
+#    ca_rule = add_rule(cfg_dict, cov, 'coverage_amount', at_date)
+#    ca_rule.amounts = '0'
 
     elig_rule = add_rule(cfg_dict, cov, 'eligibility')
     elig_rule.min_age = 18
