@@ -55,10 +55,7 @@ class ModuleTestCase(unittest.TestCase):
                 res = person.id > 0
             except:
                 res = False
-            if res != expected_return:
-                print 'Error for %s, expected : %s, found : %s' % (
-                        ssn, expected_return, res)
-            self.assert_(res == expected_return)
+            self.assertEqual(res, expected_return)
 
     def test0010ssn(self):
         '''
