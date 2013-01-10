@@ -35,6 +35,11 @@ class Status(ModelSQL, ModelView):
         required=True,
     )
 
+    code = fields.Char(
+        'Code',
+        required=True,
+    )
+
     relations = fields.One2Many(
         'process.process_step_relation',
         'status',

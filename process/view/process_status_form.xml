@@ -3,5 +3,8 @@
   <label name="name" xalign="0"/>
   <field name="name" colspan="3"/>
   <newline/>
+  <label name="code" xalign="0"/>
+  <field name="code"/>
+  <newline/>
   <field name="relations" colspan="4"/>
 </form>
