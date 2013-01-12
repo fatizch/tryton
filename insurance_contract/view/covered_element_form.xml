@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<form string="Covered Element">
+    <label name="item_desc"/>
+    <field name="item_desc"/>
+    <newline/>
+    <field name="complementary_data"/>
+    <newline/>
+    <field name="covered_data" colspan="4"/>
+    <field name="sub_covered_elements" colspan="4"/>
+</form>

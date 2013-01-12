@@ -27,7 +27,7 @@ class CoopSchemaElement(DictSchemaMixin, model.CoopSQL, model.CoopView):
     __name__ = 'ins_product.schema_element'
 
     manager = fields.Many2One(
-        'ins_product.dynamic_data_manager',
+        'ins_product.complementary_data_manager',
         'Manager',
         ondelete='CASCADE')
     linked_item = fields.Reference('Linked Item', 'get_possible_linked_item')
@@ -121,7 +121,7 @@ class CoopSchemaElement(DictSchemaMixin, model.CoopSQL, model.CoopView):
                     [('id', '=', Transaction().context['for_product'])])
                 with Transaction().set_context({'relation_selection': True}):
                     good_schemas = the_product.get_result(
-                        'dynamic_data_getter',
+                        'complementary_data_getter',
                         {
                             'date': Transaction().context['at_date'],
                             'dd_args': dd_args
@@ -179,7 +179,7 @@ class SchemaElementRelation(model.CoopSQL):
 
     __name__ = 'ins_product.schema_element_relation'
 
-    the_manager = fields.Many2One('ins_product.dynamic_data_manager',
+    the_manager = fields.Many2One('ins_product.complementary_data_manager',
         'Manager', select=1, required=True, ondelete='CASCADE')
     schema_element = fields.Many2One('ins_product.schema_element',
         'Schema Element', select=1, required=True, ondelete='RESTRICT')
@@ -188,7 +188,7 @@ class SchemaElementRelation(model.CoopSQL):
 class DynamicDataManager(model.CoopSQL, model.CoopView):
     'Complementary Data Manager'
 
-    __name__ = 'ins_product.dynamic_data_manager'
+    __name__ = 'ins_product.complementary_data_manager'
 
     master = fields.Reference('Product', 'get_master_selection')
 

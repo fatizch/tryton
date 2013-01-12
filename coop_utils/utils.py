@@ -223,6 +223,9 @@ class WithAbstract(object):
                 # We go through each value of the dictionnary an set it.
                 if not key in for_object._fields:
                     # After checking that it matches, of course...
+                    print '*' * 80
+                    print key, for_object._fields
+                    print '*' * 80
                     raise BadDataKeyError
                 setattr(for_object,
                         key,
@@ -521,7 +524,7 @@ def limit_dates(dates, start=None, end=None):
     res.sort()
     final_res = []
     for elem in res:
-        if (not start or elem > start) and (not end or elem <= end):
+        if elem and (not start or elem > start) and (not end or elem <= end):
             final_res.append(elem)
     if start and (not final_res or final_res[0] and final_res[0] != start):
         final_res.insert(0, start)

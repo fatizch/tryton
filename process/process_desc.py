@@ -522,6 +522,7 @@ class StepTransition(ModelSQL, ModelView):
     is_readonly = fields.Boolean('Readonly')
 
     def execute(self, target):
+        print 'sdddddddddddddddddddddddddddddddddd'
         # Executing a transition is easy : just apply all methods
         for method in self.methods.split('\n'):
             if not method:
@@ -530,6 +531,7 @@ class StepTransition(ModelSQL, ModelView):
                 # All methods should return a result, and errors
                 res, errs = getattr(target, method)()
             except:
+                print 'Error for method ', method
                 raise
 
             # In case of errors, display them !
@@ -629,7 +631,7 @@ class StepDesc(ModelSQL, ModelView):
         for step in steps:
             used_in = ProcessStepRelation.search([
                 ('step', '=', step)])
-            processes |= set(map(lambda x:x.process.id, used_in))
+            processes |= set(map(lambda x: x.process.id, used_in))
 
         if not processes:
             return
@@ -650,7 +652,6 @@ class StepDesc(ModelSQL, ModelView):
 
         # Then we add all the buttons for this step
         xml += '<group name="%s_buttons">' % self.technical_name
-        
         # The "previous" buttons
         for trans in self.from_steps:
             xml += trans.build_button()

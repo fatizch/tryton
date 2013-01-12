@@ -24,65 +24,36 @@ __all__ = [
 class Contract():
     'Contract'
 
+    __name__ = 'ins_contract.contract'
     __metaclass__ = ClassAttr
 
-    __name__ = 'ins_contract.contract'
-
     subscriber_kind = fields.Function(
-        fields.Selection(
-            ACTOR_KIND,
-            'Kind',
-            on_change=['subscriber_as_person','subscriber_as_society',],
-        ),
-        'get_subscriber_kind',
-        'setter_void',
-    )
-
+        fields.Selection(ACTOR_KIND, 'Kind',
+            on_change=['subscriber_as_person', 'subscriber_as_society', ],
+        ), 'get_subscriber_kind', 'setter_void', )
     subscriber_as_person = fields.Function(
-        fields.Many2One(
-            'party.person',
-            'Subscriber',
+        fields.Many2One('party.person', 'Subscriber',
             states={
                 'invisible': Eval('subscriber_kind') != 'party.person',
             },
-            on_change=['subscriber', 'subscriber_as_person',],
-        ),
-        'get_subscriber_as_person',
-        'setter_void',
-    )
-
+            on_change=['subscriber', 'subscriber_as_person', ],
+        ), 'get_subscriber_as_person', 'setter_void', )
     subscriber_as_society = fields.Function(
-        fields.Many2One(
-            'party.society',
-            'Subscriber',
+        fields.Many2One('party.society', 'Subscriber',
             states={
                 'invisible': Eval('subscriber_kind') != 'party.society',
             },
             on_change=['subscriber', 'subscriber_as_society'],
-        ),
-        'get_subscriber_as_society',
-        'setter_void',
-    )
-
+        ), 'get_subscriber_as_society', 'setter_void', )
     subscriber_desc = fields.Function(
-        fields.Text(
-            'Summary',
+        fields.Text('Summary',
             on_change_with=['subscriber_as_person', 'subscriber_as_society',
-                'subscriber',],
-        ),
-        'on_change_with_subscriber_desc',
-        'setter_void',
-    )
-
+                'subscriber', ],
+        ), 'on_change_with_subscriber_desc', 'setter_void', )
     product_desc = fields.Function(
-        fields.Text(
-            'Description',
-            on_change_with=['product',],
-        ),
-        'on_change_with_product_desc',
-        'setter_void',
-    )
-    
+        fields.Text('Description', on_change_with=['offered', ],
+        ), 'on_change_with_product_desc', 'setter_void', )
+
     @classmethod
     def __setup__(cls):
         super(Contract, cls).__setup__()
@@ -103,18 +74,17 @@ class Contract():
         if self.subscriber:
             res = self.subscriber.summary
         return res
-    
+
     def on_change_with_product_desc(self, name=None):
         res = ''
-        if self.product:
-            res = self.product.description
+        if self.offered:
+            res = self.offered.description
         return res
 
     def on_change_subscriber_kind(self):
         res = {}
         if not (hasattr(self, 'subscriber_kind') and self.subscriber_kind):
             return res
-
         if self.subscriber_kind == 'party.person':
             res['subscriber_as_society'] = None
         elif self.subscriber_kind == 'party.society':
@@ -122,7 +92,7 @@ class Contract():
         return res
 
     def get_subscriber_kind(self, name):
-        if (hasattr(self, 'subscriber_as_society') and 
+        if (hasattr(self, 'subscriber_as_society') and
                 self.subscriber_as_society):
             return 'party.society'
         return 'party.person'
@@ -130,7 +100,6 @@ class Contract():
     def get_subscriber_as_person(self, name):
         if not self.subscriber:
             return
-
         if self.subscriber.person:
             res = self.subscriber.person[0]
             return res.id
@@ -138,18 +107,17 @@ class Contract():
     def get_subscriber_as_society(self, name):
         if not self.subscriber:
             return
-
         if self.subscriber.society:
             return self.subscriber.society[0].id
 
     def on_change_subscriber_as_person(self):
-        if (hasattr(self, 'subscriber_as_person') and 
+        if (hasattr(self, 'subscriber_as_person') and
                 self.subscriber_as_person):
             return {'subscriber': self.subscriber_as_person.party.id}
         return {}
 
     def on_change_subscriber_as_society(self):
-        if (hasattr(self, 'subscriber_as_society') and 
+        if (hasattr(self, 'subscriber_as_society') and
                 self.subscriber_as_society):
             return {'subscriber': self.subscriber_as_society.party.id}
         return {}
@@ -163,7 +131,8 @@ class Contract():
         pass
 
     def check_product_not_null(self):
-        if not (hasattr(self, 'product') and self.product):
+        print '*' * 80
+        if not (hasattr(self, 'offered') and self.offered):
             return False, (('no_product', ()),)
         return True, ()
 
@@ -175,23 +144,23 @@ class Contract():
     def check_start_date_valid(self):
         if not (hasattr(self, 'start_date') and self.start_date):
             return False, (('no_start_date', ()),)
-
-        if self.start_date >= self.product.start_date and (
-                not self.product.end_date
-                or self.start_date < self.product.end_date):
+        if self.start_date >= self.offered.start_date and (
+                not self.offered.end_date
+                or self.start_date < self.offered.end_date):
             return True, ()
 
         return False, (('bad_date', (
-            self.start_date, self.product.get_rec_name(None))),)
+            self.start_date, self.offered.get_rec_name(None))),)
 
     def check_product_eligibility(self):
-        eligibility, errors = self.product.get_result(
+        eligibility, errors = self.offered.get_result(
             'eligibility',
             {
                 'subscriber': self.subscriber,
                 'date': self.start_date
             })
-
+        print '*' * 80
+        
         if eligibility:
             return eligibility.eligible, eligibility.details + errors
         return True, ()
@@ -199,32 +168,32 @@ class Contract():
         return eligibility.eligible, errors
 
     def init_dynamic_data(self):
-        if not (hasattr(self, 'dynamic_data') and self.dynamic_data):
-            self.dynamic_data = {}
+        if (not (hasattr(self, 'complementary_data')
+            and self.complementary_data)):
+            self.complementary_data = {}
 
         utils.set_default_dict(
-            self.dynamic_data,
+            self.complementary_data,
             utils.init_dynamic_data(
-                self.product.get_result(
-                    'dynamic_data_getter',
+                self.offered.get_result(
+                    'complementary_data_getter',
                     {
                         'date': self.start_date,
                         'dd_args': {
                             'kind': 'main'}})[0]))
-
         return True, ()
 
     def init_options(self):
         existing = {}
         if (hasattr(self, 'options') and self.options):
             for opt in self.options:
-                existing[opt.coverage.code] = opt
+                existing[opt.offered.code] = opt
 
         good_options = []
         to_delete = [elem for elem in existing.itervalues()]
 
         OptionModel = Pool().get(self.give_option_model())
-        for coverage in self.product.options:
+        for coverage in self.offered.options:
             if coverage.code in existing:
                 good_opt = existing[coverage.code]
                 to_delete.remove(good_opt)
@@ -256,7 +225,7 @@ class Contract():
             if option.status != 'active':
                 continue
 
-            eligibility, errors = option.coverage.get_result(
+            eligibility, errors = option.offered.get_result(
                 'eligibility',
                 {
                     'date': self.start_date,
@@ -264,7 +233,7 @@ class Contract():
                 })
 
             if not eligibility.eligible:
-                errs.append(('option_not_eligible', (option.coverage.code)))
+                errs.append(('option_not_eligible', (option.offered.code)))
                 errs += (
                     ('%s' % elem, ())
                     for elem in eligibility.details + errors)
@@ -288,87 +257,17 @@ class Contract():
                 result = False
                 errs.append((
                     'bad_start_date', (
-                        option.coverage.code,
+                        option.offered.code,
                         self.start_date)))
-            elif option.start_date < option.coverage.start_date:
+            elif option.start_date < option.offered.start_date:
                 result = False
                 errs.append((
                     'bad_start_date', (
-                        option.coverage_code,
-                        option.coverage.start_date)))
+                        option.offered.code,
+                        option.offered.start_date)))
 
         return result, errs
 
-    def init_extensions(self):
-        existing = {}
-        for ext in [x for x in dir(self)
-                if x.startswith('extension_')]:
-            if not(hasattr(self, ext) and getattr(self, ext)):
-                continue
-
-            if not isinstance(self._fields[ext], fields.One2Many):
-                continue
-
-            existing[ext] = getattr(self, ext)[0]
-
-            setattr(self, ext, [])
-        
-        good_exts = {} 
-        to_delete = [elem for elem in existing.itervalues()]
-
-        ext_models = {}
-        for option in self.options:
-            if not option.status == 'active':
-                continue
-
-            extension_field = option.coverage.get_result(
-                'extension_field',
-                {'date': self.start_date, 'contract': self})[0]
-            if not extension_field in ext_models.keys():
-                ext_models[extension_field] = Pool().get(
-                    self._fields[extension_field].model_name)
-
-        for ext, model in ext_models.iteritems():
-            if ext in existing:
-                good_ext = existing[ext]
-                to_delete.remove(good_ext)
-            else:
-                good_ext = model()
-                good_ext.init_for_contract(self)
-
-            good_ext.update_dynamic_data(self, ext)
-            good_exts[ext] = good_ext
-
-        if to_delete:
-            for ext in to_delete:
-                ext.delete([ext])
-
-        for ext_name, ext_obj in good_exts.iteritems():
-            setattr(self, ext_name, [ext_obj])
-
-        return True, ()
-
-    def check_at_least_one_covered(self):
-        errors = []
-        exts = False
-        for ext in self.get_extensions():
-            exts = True
-            for covered in ext.covered_elements:
-                found = False
-                for data in covered.covered_data:
-                    if data.status == 'active':
-                        found = True
-                        break
-                if not found:
-                    errors.append(('need_option', (covered.get_rec_name(''))))
-        
-        if not exts:
-            errors.append(('need_covered', ()))
-
-        if errors:
-            return False, errors
-        return True, ()
-    
     def init_billing_manager(self):
         if not (hasattr(self, 'billing_manager') and
                 self.billing_manager):
@@ -384,17 +283,11 @@ class Contract():
         if errs:
             return False, errs
 
-        print '#' * 80
-        print 'STORE PRICES'
         #print len(prices[0].details)
         self.billing_manager[0].store_prices(prices)
-
-        print '#' * 80
-        print 'SAVE PRICES'
         self.billing_manager[0].save()
 
         return True, ()
-
 
     def activate_contract(self):
         if not self.status == 'quote':
@@ -465,14 +358,12 @@ class CoveredElement():
         covered_datas = []
         for option in contract.options:
             good_data = CoveredData()
-            good_data.init_from_coverage(option.coverage)
+            good_data.init_from_coverage(option.offered)
             good_data.start_date = max(
                 good_data.start_date, contract.start_date)
-            good_data.init_dynamic_data(option.coverage, contract)
+            good_data.init_dynamic_data(option.offered, contract)
             good_data.status_selection = True
-
             covered_datas.append(good_data)
-        
         return utils.WithAbstract.serialize_field(covered_datas)
 
 

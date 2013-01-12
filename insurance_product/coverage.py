@@ -59,7 +59,7 @@ class Coverage(model.CoopSQL, Offered):
             'invisible': Bool(Eval('is_package')),
         },)
     covered_dynamic_data_manager = model.One2ManyDomain(
-        'ins_product.dynamic_data_manager',
+        'ins_product.complementary_data_manager',
         'master',
         'Covered Complementary Data Manager',
         context={
@@ -84,7 +84,7 @@ class Coverage(model.CoopSQL, Offered):
         cls.delete_rules(entities)
         utils.delete_reference_backref(
             entities,
-            'ins_product.dynamic_data_manager',
+            'ins_product.complementary_data_manager',
             'master')
         super(Coverage, cls).delete(entities)
 
@@ -244,9 +244,9 @@ class Coverage(model.CoopSQL, Offered):
             # We must check that the current covered element is
             # covered by self.
             for covered_data in covered.covered_data:
-                for_coverage = utils.convert_ref_to_obj(
-                    covered_data.for_coverage)
-                if not for_coverage.code == self.code:
+                coverage = utils.convert_ref_to_obj(
+                    covered_data.coverage)
+                if not coverage.code == self.code:
                     continue
 
                 # And that this coverage is effective at the requested
@@ -280,7 +280,6 @@ class Coverage(model.CoopSQL, Offered):
             return False, []
         return True, []
 
-
     def give_me_coverage_amount_validity(self, args):
         try:
             return self.get_result(
@@ -290,7 +289,7 @@ class Coverage(model.CoopSQL, Offered):
         except utils.NonExistingRuleKindException:
             return (True, []), []
 
-    def give_me_dynamic_data_ids_aggregate(self, args):
+    def give_me_complementary_data_ids_aggregate(self, args):
         if not 'dd_args' in args:
             return [], []
         dd_args = args['dd_args']
@@ -301,7 +300,7 @@ class Coverage(model.CoopSQL, Offered):
                 self.code in dd_args['options'].split(';')):
             return [], []
         if dd_args['kind'] == 'main':
-            return self.give_me_dynamic_data_ids(args)
+            return self.give_me_complementary_data_ids(args)
         elif dd_args['kind'] == 'sub_elem':
             return self.give_me_covered_dynamic_data_ids(args)
         return [], []

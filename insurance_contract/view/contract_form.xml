@@ -10,18 +10,19 @@
         <newline/>
         <label name="subscriber"/>
         <field name="subscriber"/>
-        <label name="product"/>
-        <field name="product"/>
+        <label name="offered"/>
+        <field name="offered"/>
     </group>
     <notebook colspan="4">
-        <page string="Options" id="options">
+        <page string="Covered Elements/Options" id="options">
+            <field name="covered_elements"/>
             <field name="options" />
         </page>
         <page string="Billing" id="billing">
             <field name="billing_manager" mode="form" />
         </page>
-        <page string="Complementary Data" id="dynamic_data">
-            <field name="dynamic_data"/>
+        <page string="Complementary Data" id="complementary_data">
+            <field name="complementary_data"/>
         </page>
     </notebook>
 </form>

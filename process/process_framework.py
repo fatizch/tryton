@@ -70,6 +70,8 @@ class DynamicButtonDict(dict):
 
     def __getitem__(self, name):
         # If the name does not match the specified prefix, business as usual !
+        print '$' * 80
+        print name, self.allowed_prefix
         if not name.startswith(self.allowed_prefix):
             return super(AllowRPCDict, self).__getitem__(name)
 
@@ -104,7 +106,7 @@ class DynamicButtonDict(dict):
             pyson = False
         else:
             pyson = good_transition.pyson
-
+        print 'pyson %s\n' % pyson
         # To get the good pyson, we combine everything.
         res = None
         if auth_ids:
@@ -123,7 +125,8 @@ class DynamicButtonDict(dict):
             encoder = PYSONEncoder()
             res = encoder.encode(safe_eval(res, CONTEXT))
             states['invisible'] = res
-
+        print states
+        print '$' * 80
         return states
 
     def __contains__(self, name):
@@ -207,7 +210,6 @@ class ProcessFramework(ModelView):
                 'everything_ok': 'Everything is good !'
                 })
 
-
     @classmethod
     def __register__(cls, module_name):
         # We need to define the fact that this class is a Workflow class in the
@@ -226,11 +228,13 @@ class ProcessFramework(ModelView):
 
     @classmethod
     def default_button_method(cls, button_name):
+        print 'efdddfdfdfd'
         # button_name should be the transition's id
         transition, = map(int, button_name.split('_'))
 
         # This is the method that will be called when clicking on the button
         def button_generic(works):
+            print 'fdfdfdffdffd'
             # Pretty straightforward : we find the matching transition
             StepTransition = Pool().get('process.step_transition')
             good_trans = StepTransition(transition)

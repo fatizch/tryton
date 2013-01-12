@@ -1,29 +1,13 @@
 import datetime
+import copy
 
-# Needed for storing and displaying objects
 from trytond.model import fields
+from trytond.pool import Pool
+from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model
 from trytond.modules.coop_utils import utils
-from trytond.transaction import Transaction
-
-# Needed for processing
 from trytond.modules.process import ProcessFramework
-
-# Needed for getting models
-from trytond.pool import Pool
-
-__all__ = [
-    'GenericExtension',
-    'GenericContract',
-    'Contract',
-    'Option',
-    'PriceLine',
-    'BillingManager',
-    'CoveredElement',
-    'CoveredData',
-    'BrokerManager',
-    ]
 
 CONTRACTSTATUSES = [
     ('quote', 'Quote'),
@@ -36,120 +20,56 @@ OPTIONSTATUS = CONTRACTSTATUSES + [
     ('refused', 'Refused'),
     ]
 
+__all__ = [
+    'Contract',
+    'Option',
+    'PriceLine',
+    'BillingManager',
+    'CoveredElement',
+    'CoveredData',
+    'BrokerManager',
+    ]
+
 
 class GenericExtension(model.CoopView):
     'Generic Extension'
-#    'Mother class for extensions'
-#    '''
-#        This class is the mother class of all product-specific extensions.
-#        Extension classes will be defined in the proper module
-#        (ex: life_contract) and must inherit from GenericExtension.
-#
-#        GenericExtension provides the covered_elements list, which contains
-#        a list of covered elements whose model depends on the associated
-#        product.
-#
-#        In sub-classes, it is necessary to override __setup__ to change
-#        the model_name attribute of the 'covered_elements' field.
-#    '''
 
     __name__ = 'ins_contract.generic_extension'
 
     covered_elements = fields.One2Many('ins_contract.covered_element',
         'extension', 'Coverages')
-    dynamic_data = fields.Dict('Complementary Data',
+    complementary_data = fields.Dict('Complementary Data',
         schema_model='ins_product.schema_element')
     contract = fields.Many2One('ins_contract.contract', 'The contract',
         ondelete='CASCADE')
-
-    def get_dates(self):
-        res = set()
-        for covered in self.covered_elements:
-            for data in covered.covered_data:
-                res.add(data.start_date)
-                if hasattr(data, 'end_date') and data.end_date:
-                    res.add(data.end_date)
-        return res
 
     def get_extension_name(self):
         return ''
 
     def get_dynamic_data_value(self, at_date, value):
-        if not(hasattr(self, 'dynamic_data') and self.dynamic_data):
+        if (not(hasattr(self, 'complementary_data')
+            and self.complementary_data)):
             return None
         try:
-            return self.dynamic_data[value]
+            return self.complementary_data[value]
         except KeyError:
             return None
 
     def init_for_contract(self, contract):
-        self.dynamic_data = {}
+        self.complementary_data = {}
         self.contract = contract
 
         self.init_extension(contract)
 
-    def init_covered_elements(self, contract):
-        pass
-
-    def init_extension(self, contract):
-        CoveredElement = Pool().get(self.get_covered_element_model())
-        CoveredData = Pool().get(CoveredElement.get_covered_data_model())
-
-        if not (hasattr(self, 'covered_elements') and self.covered_elements):
-            self.init_covered_elements(contract)
-
-        if not (hasattr(self, 'covered_elements') and self.covered_elements):
-            return True, ()
-
-        options = dict([(o.coverage.code, o) for o in contract.options])
-
-        for elem in self.covered_elements:
-            if (hasattr(elem, 'covered_data') and elem.covered_data):
-                existing_datas = dict([(data.for_coverage.code, data)
-                    for data in elem.covered_data])
-            else:
-                existing_datas = {}
-
-            elem.covered_data = []
-
-            to_delete = [data for data in existing_datas.itervalues()]
-
-            good_datas = []
-            for code, option in options.iteritems():
-                if code in existing_datas:
-                    good_datas.append(existing_datas[code])
-                    to_delete.remove(existing_datas[code])
-                    continue
-                else:
-                    good_data = CoveredData()
-                    good_data.init_from_coverage(option.coverage)
-                    good_data.start_date = max(
-                        good_data.start_date, contract.start_date)
-                    with Transaction().set_context({
-                            'current_contract': contract.id}):
-                        good_data.init_dynamic_data(option.coverage, contract)
-                    good_data.status_selection = True
-                    good_datas.append(good_data)
-
-            CoveredData.delete(to_delete)
-
-            elem.covered_data = good_datas
-
-    @classmethod
-    def get_covered_element_model(cls):
-        pass
-
     def update_dynamic_data(self, contract, extension_field):
         for_options = ';'.join([
-            o.coverage.code
-            for o in contract.options
-            if o.status == 'active'])
+            o.offered.code for o in contract.options if o.status == 'active'])
 
         utils.set_default_dict(
-            self.dynamic_data,
+            self.complementary_data,
             utils.init_dynamic_data(
-                contract.product.get_result(
-                    'dynamic_data_getter',
+                contract.offered.get_result(
+                    'complementary_data_getter',
                     {
                         'date': contract.start_date,
                         'dd_args': {
@@ -158,100 +78,58 @@ class GenericExtension(model.CoopView):
                             'path': extension_field}})[0]))
 
 
-class GenericContract(model.CoopSQL, ProcessFramework):
-    'Generic Contract'
-#    'Mother class for contracts'
-#    '''
-#        This class will provide the basics of all contracts :
-#            Contract Number
-#            Subscriber
-#            Start_Date
-#            Status
-#            Management_Date
-#            BillingManager
-#            BrokerManager
-#    '''
+class Subscribed(ProcessFramework):
+    'Subscribed'
 
-    # Effective date is the date at which the contract "starts" :
-    #    The client pays its premium
-    #    Claims can be declared
+    offered = fields.Many2One(None, 'Offered', required=True)
     start_date = fields.Date('Effective Date', required=True)
-    end_date = fields.Date('End Date')
-
+    end_date = fields.Date('End Date',
+        domain=[('start_date', '<=', 'end_date')])
     # Management date is the date at which the society started to manage the
     # contract. Default value is start_date
     start_management_date = fields.Date('Management Date')
-
-    # Contract Number will be the number which will be used to reference the
-    # contract for external uses (forms, other softwares...)
-    contract_number = fields.Char('Contract Number',
-                                  # required=True,
-                                  select=1)
-
-    # The subscriber is the client which did (or will) sign the contract.
-    # It is an important part of the contract life, as he usually is the
-    # recipient of the letters of the contract, he will pay the premium etc...
-    #
-    # Some business rules might need some of the subscriber's data to compute.
-    subscriber = fields.Many2One('party.party',
-                                 'Subscriber',
-                                 select='0')
-
-    # Status represents the contract state at current time.
-    status = fields.Selection(CONTRACTSTATUSES,
-                              'Status',
-                              readonly=True)
-
-    # The broker manager will be used to describe the relation between the
-    # contract and its broker (if it exists)
-    broker_manager = fields.Many2One('ins_contract.broker_manager',
-                                     'Broker Manager')
-
-    # The billing manager will be in charge of all billing-related actions.
-    # The select statements for billing will use this object to get the list
-    # of tasks
-    billing_manager = fields.One2Many('ins_contract.billing_manager',
-                                      'contract',
-                                      'Billing Manager')
-
-    # This field will be used to compute a textuel synthesis of the contract
-    # that will be displayed on top of the contract forms
+    status = fields.Selection('get_possible_status', 'Status', readonly=True)
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
 
-    def get_new_contract_number(self):
-        raise NotImplementedError
+    @classmethod
+    def __setup__(cls):
+        cls.offered = copy.copy(cls.offered)
+        suffix, cls.offered.model_name = cls.get_offered_name()
+        cls.offered.model_name = ('%s.%s' %
+            (cls.get_offered_module_prefix(), suffix))
+        super(Subscribed, cls).__setup__()
 
-    def get_manager_model(self):
-        return 'ins_contract.billing_manager'
-
-    def get_product(self):
-        pass
-
-    def finalize_contract(self):
-        raise NotImplementedError
+    @classmethod
+    def get_offered_module_prefix(cls):
+        return 'ins_product'
 
     @staticmethod
     def default_start_date():
         return utils.today()
 
+    @classmethod
+    def get_offered_name(cls):
+        '''
+        returns a tuple of key (without module), string for offered class name
+        '''
+        raise NotImplementedError
 
-class Contract(GenericContract):
+    @classmethod
+    def get_possible_status(cls, name=None):
+        raise NotImplementedError
+
+
+class Contract(model.CoopSQL, Subscribed):
     'Contract'
 
     __name__ = 'ins_contract.contract'
+    _rec_name = 'contract_number'
 
     options = fields.One2Many('ins_contract.option', 'contract', 'Options')
-
-    # Each contract will be build from an offered product, which will give
-    # access to a number of business rules.
-    product = fields.Many2One('ins_product.product', 'Product', required=True)
-
-    # On the other hand, the Product Extension will represents all product
-    # specific data, including coverages description. It will be one major
-    # element used in most of the product specific business rules.
-    product_extension = fields.Reference('Product Extension',
-        'get_extension_models')
-
+    covered_elements = fields.One2Many('ins_contract.covered_element',
+        'contract', 'Covered Elements')
+    contract_number = fields.Char('Contract Number', required=True, select=1)
+    subscriber = fields.Many2One('party.party', 'Subscriber')
     # The master field is the object on which rules will be called.
     # Basically, we need an abstract way to call rules, because in some case
     # (typically in GBP rules might be managed on the group contract) the rules
@@ -261,24 +139,17 @@ class Contract(GenericContract):
             ('ins_contract.contract', 'Contract'),
             ('ins_product.product', 'Product'),
         ])
-
-    # This field will be used to store the answer to Complementary questions
-    # asked at subscription time to the subscriber depending on the product
-    # he chose.
-    dynamic_data = fields.Dict('Complementary Data',
+    broker_manager = fields.Many2One('ins_contract.broker_manager',
+        'Broker Manager')
+    billing_manager = fields.One2Many('ins_contract.billing_manager',
+        'contract', 'Billing Manager')
+    complementary_data = fields.Dict('Complementary Data',
         schema_model='ins_product.schema_element')
 
     @staticmethod
     def get_master(master):
         res = master.split(',')
         return res[0], int(res[1])
-
-    @staticmethod
-    def get_extension_models():
-        return [(model__name__, model.get_extension__name__())
-                for (model__name__, model) in Pool().iterobject()
-                if hasattr(model, 'get_extension__name__')
-                    and model.get_extension__name__() != '']
 
     def give_option_model(self):
         return self._fields['options'].model_name
@@ -302,24 +173,12 @@ class Contract(GenericContract):
         return [elem.get_coverage()
             for elem in self.get_active_options_at_date(at_date)]
 
-    def get_active_extensions(self):
-        for elem in dir(self):
-            if hasattr(self, elem) and elem.startswith('extension_'):
-                attr = getattr(self, elem)
-                if attr:
-                    yield attr[0]
-
-    def get_extensions_dates(self):
-        res = set()
-        for ext in self.get_active_extensions():
-            res.update(ext.get_dates())
-        return res
-
     def get_dynamic_data_value(self, at_date, value):
-        if not(hasattr(self, 'dynamic_data') and self.dynamic_data):
+        if (not(hasattr(self, 'complementary_data')
+            and self.complementary_data)):
             return None
         try:
-            return self.dynamic_data[value]
+            return self.complementary_data[value]
         except KeyError:
             return None
 
@@ -334,13 +193,13 @@ class Contract(GenericContract):
     def get_dates(self, start=None, end=None):
         res = set()
         res.add(self.start_date)
-        res.update(self.get_extensions_dates())
-        for cur_option in self.options:
-            res.update(cur_option.get_dates())
+        for covered in self.covered_elements:
+            res.update(covered.get_dates(start, end))
+        res.add(self.end_date)
         return utils.limit_dates(res, start, end)
 
     def calculate_price_at_date(self, date):
-        prices, errs = self.product.get_result(
+        prices, errs = self.offered.get_result(
             'total_price',
             {
                 'date': date,
@@ -360,47 +219,37 @@ class Contract(GenericContract):
         return prices, errs
 
     def get_name_for_billing(self):
-        return self.product.name + ' - Base Price'
+        return self.offered.name + ' - Base Price'
 
     def get_product(self):
-        return self.product
+        return self.offered
 
     def check_sub_elem_eligibility(self, at_date=None, ext=None):
+        errors = []
         if not at_date:
             at_date = self.start_date
-
-        if not ext:
-            exts = self.get_extensions()
-        elif isinstance(ext, str):
-            exts = getattr(self, ext)
-
-        errors = []
-
-        options = dict([
-            (option.coverage.code, option)
-            for option in self.options
-            ])
+        options = dict(
+            [(option.offered.code, option) for option in self.options])
         res, errs = (True, [])
-        for ext in exts:
-            for covered_element in ext.covered_elements:
-                for covered_data in covered_element.covered_data:
-                    if (covered_data.start_date > at_date
-                            or hasattr(covered_data, 'end_date') and
-                            covered_data.end_date and
-                            covered_data.end_date > at_date):
-                        continue
-                    eligibility, errors = covered_data.for_coverage.get_result(
-                        'sub_elem_eligibility',
-                        {
-                            'date': at_date,
-                            'sub_elem': covered_element,
-                            'data': covered_data,
-                            'option': options[covered_data.for_coverage.code]
-                        })
-                    res = res and (not eligibility or eligibility.eligible)
-                    if eligibility:
-                        errs += eligibility.details
-                    errs += errors
+        for covered_element in self.covered_elements:
+            for covered_data in covered_element.covered_data:
+                if (covered_data.start_date > at_date
+                        or hasattr(covered_data, 'end_date') and
+                        covered_data.end_date and
+                        covered_data.end_date > at_date):
+                    continue
+                eligibility, errors = covered_data.coverage.get_result(
+                    'sub_elem_eligibility',
+                    {
+                        'date': at_date,
+                        'sub_elem': covered_element,
+                        'data': covered_data,
+                        'option': options[covered_data.coverage.code]
+                    })
+                res = res and (not eligibility or eligibility.eligible)
+                if eligibility:
+                    errs += eligibility.details
+                errs += errors
         return (res, errs)
 
     @staticmethod
@@ -416,7 +265,7 @@ class Contract(GenericContract):
         return True, ()
 
     def get_rec_name(self, val):
-        if self.product and self.subscriber:
+        if self.offered and self.subscriber:
             return '%s (%s) - %s' % (
                 self.contract_number, self.get_product().get_rec_name(val),
                 self.subscriber.get_rec_name(val))
@@ -441,75 +290,86 @@ class Contract(GenericContract):
 
             yield getattr(self, ext)[0]
 
+    @classmethod
     def get_summary(cls, insurers, name=None, at_date=None, lang=None):
         return ''
 
-class Option(model.CoopSQL, model.CoopView):
+    @classmethod
+    def get_offered_module_prefix(cls):
+        return 'ins_product'
+
+    @classmethod
+    def get_offered_name(cls):
+        return 'product', 'Product'
+
+    @classmethod
+    def get_possible_status(cls, name=None):
+        return CONTRACTSTATUSES
+
+    def get_manager_model(self):
+        return 'ins_contract.billing_manager'
+
+    def check_at_least_one_covered(self):
+        errors = []
+        for covered in self.covered_elements:
+            found, errors = covered.check_at_least_one_covered(errors)
+            if found:
+                break
+        if errors:
+            return False, errors
+        return True, ()
+
+    def init_covered_elements(self):
+        CoveredElement = Pool().get(self.get_covered_element_model())
+        CoveredData = Pool().get(CoveredElement.get_covered_data_model())
+
+        options = dict([(o.offered.code, o) for o in self.options])
+
+        for elem in self.covered_elements:
+            if (hasattr(elem, 'covered_data') and elem.covered_data):
+                existing_datas = dict([(data.coverage.code, data)
+                    for data in elem.covered_data])
+            else:
+                existing_datas = {}
+            elem.covered_data = []
+            to_delete = [data for data in existing_datas.itervalues()]
+            good_datas = []
+            for code, option in options.iteritems():
+                if code in existing_datas:
+                    good_datas.append(existing_datas[code])
+                    to_delete.remove(existing_datas[code])
+                    continue
+                else:
+                    good_data = CoveredData()
+                    good_data.init_from_coverage(option.offered)
+                    good_data.start_date = max(
+                        good_data.start_date, self.start_date)
+                    with Transaction().set_context({
+                            'current_contract': self.id}):
+                        good_data.init_dynamic_data(option.offered, self)
+                    good_data.status_selection = True
+                    good_datas.append(good_data)
+            CoveredData.delete(to_delete)
+            elem.covered_data = good_datas
+
+
+class Option(model.CoopSQL, Subscribed):
     'Coverage'
-#    '''
-#    This class is an option, that is a global coverage which will be applied
-#    to all covered persons on the contract.
-#
-#    An instance is based on a product.coverage, which is then customized at
-#    subscription time in order to let the client decide precisely what
-#    he wants.
-#
-#    Typically, on a life contract, the product.coverage might allow a choice
-#    of coverage amount. The Option will store the choice of the client at
-#    subscription time, so that it can be used later when calculating premium
-#    or benefit.
-#    '''
+
     __name__ = 'ins_contract.option'
 
-    # Every option is linked to a contract (and only one !)
-    # Also, if the contract is destroyed, so should the option
-    contract = fields.Many2One('ins_contract.contract',
-                               'Contract',
-                               ondelete='CASCADE')
-
-    # The option is build from a model, the product.coverage, and then
-    # customized depending on the client's desiderata. But the offered
-    # coverage provides all the business rules for the option life :
-    # premium calculation rules, benefit rules eligibility rules, etc...
-    # Almost all actions performed on an option will require a call to a
-    # business rule of the offered coverage
-    coverage = fields.Many2One('ins_product.coverage',
-                               'Offered Coverage',
-#                               readonly=True,
-                               required=True)
-
-    # Effective date is the date at which the option "starts" to be effective :
-    #    The client pays its premium for it
-    #    Claims can be declared and benefits paid on the coverage
-    start_date = fields.Date('Effective Date', required=True)
-
-    # To go with it, there is the end_date wich marks the end of coverage :
-    end_date = fields.Date('Effective_date',
-                           domain=[('start_date', '<=', 'end_date')])
-
-    option_data = fields.Reference('Option Data',
-                                   'get_data_model')
-
-    status = fields.Selection(OPTIONSTATUS,
-                              'Status',
-                              readonly=True)
-
-    @staticmethod
-    def get_data_model():
-        return [(model__name__, model.get_option_data_name())
-                for (model__name__, model) in Pool().iterobject()
-                if hasattr(model, 'get_option_data_name')
-                    and model.get_option_data_name() != '']
+    contract = fields.Many2One('ins_contract.contract', 'Contract',
+       ondelete='CASCADE')
 
     def get_coverage(self):
-        return self.coverage
+        return self.offered
 
     def get_dates(self):
         res = set()
         res.add(self.start_date)
         if hasattr(self, 'end_date') and self.end_date:
             res.add(self.end_date)
-        res.update(self.coverage.get_dates())
+        res.update(self.offered.get_dates())
         return res
 
     def get_name_for_billing(self):
@@ -517,81 +377,51 @@ class Option(model.CoopSQL, model.CoopView):
 
     def init_from_coverage(self, coverage):
         self.start_date = coverage.start_date
-        self.coverage = coverage
+        self.offered = coverage
         self.status = 'active'
+
+    @classmethod
+    def get_offered_name(cls):
+        return 'coverage', 'Coverage'
+
+    @classmethod
+    def get_possible_status(cls, name=None):
+        return OPTIONSTATUS
 
 
 class PriceLine(model.CoopSQL, model.CoopView):
     'Price Line'
-    # We need an object to present pricing line, even though it is just for
-    # dsplaying.
+
     __name__ = 'ins_contract.price_line'
 
-    # First are the 'real' fields :
-
     amount = fields.Numeric('Amount')
-
     name = fields.Char('Short Description')
-
-    master = fields.Many2One(
-        'ins_contract.price_line',
-        'Master Line')
-
+    master = fields.Many2One('ins_contract.price_line', 'Master Line')
     kind = fields.Selection(
-        [('main', 'Line'),
-        ('base', 'Base'),
-        ('tax', 'Tax'),
-        ('fee', 'Fee')],
-        'Kind',
-        readonly='True')
-
-    on_object = fields.Reference(
-        'Priced object',
-        'get_line_target_models')
-
-    billing_manager = fields.Many2One(
-        'ins_contract.billing_manager',
+        [
+            ('main', 'Line'),
+            ('base', 'Base'),
+            ('tax', 'Tax'),
+            ('fee', 'Fee')
+        ], 'Kind', readonly='True')
+    on_object = fields.Reference('Priced object', 'get_line_target_models')
+    billing_manager = fields.Many2One('ins_contract.billing_manager',
         'Billing Manager')
-
     start_date = fields.Date('Start Date')
-
     end_date = fields.Date('End Date')
-
-    all_lines = fields.One2Many(
-        'ins_contract.price_line',
-        'master',
-        'Lines',
-        readonly=True)
-
-    # Now some display fields :
-
+    all_lines = fields.One2Many('ins_contract.price_line', 'master',
+        'Lines', readonly=True)
     taxes = fields.Function(fields.Numeric('Taxes'), 'get_total_taxes')
-
     amount_for_display = fields.Function(
         fields.Numeric('Amount'), 'get_amount_for_display')
-
     start_date_calculated = fields.Function(fields.Date(
         'Start Date'), 'get_start_date')
-
     end_date_calculated = fields.Function(fields.Date(
         'End Date'), 'get_end_date')
-
-    # Two special fields : they use the all_lines One2Many field as a base
-    # for two Domain-Dependant One2Many :
-
-    details = model.One2ManyDomain(
-        'ins_contract.price_line',
-        'master',
-        'Details',
-        domain=[('kind', '!=', 'main')],
-        readonly=True)
-
-    child_lines = model.One2ManyDomain(
-        'ins_contract.price_line',
-        'master',
-        'Sub-Lines',
-        domain=[('kind', '=', 'main')],
-        readonly=True)
+    details = model.One2ManyDomain('ins_contract.price_line', 'master',
+        'Details', domain=[('kind', '!=', 'main')], readonly=True)
+    child_lines = model.One2ManyDomain('ins_contract.price_line', 'master',
+        'Sub-Lines', domain=[('kind', '=', 'main')], readonly=True)
 
     def get_id(self):
         if hasattr(self, 'on_object') and self.on_object:
@@ -732,7 +562,6 @@ class BillingManager(model.CoopSQL, model.CoopView):
         if hasattr(self, 'prices') and self.prices:
             for price in self.prices:
                 to_delete.append(price)
-            
         result_prices = []
         dates = [utils.to_date(key) for key in prices.iterkeys()]
         dates.sort()
@@ -763,7 +592,7 @@ class BillingManager(model.CoopSQL, model.CoopView):
         return cls._fields['prices'].model_name
 
     def get_product_frequency(self, at_date):
-        res, errs = self.contract.product.get_result(
+        res, errs = self.contract.offered.get_result(
             'frequency',
             {'date': at_date})
         if not errs:
@@ -833,27 +662,28 @@ class BillingManager(model.CoopSQL, model.CoopView):
         return the_bill
 
 
-class CoveredElement(model.CoopView):
+class CoveredElement(model.CoopSQL, model.CoopView):
     'Covered Element'
     '''
         Covered elements represents anything which is covered by at least one
         option of the contract.
-
-        It got a link with a dependant element, which is product dependant. It
-        also has a list of covered datas which describes which options covers
+        It has a list of covered datas which describes which options covers
         element and in which conditions.
+        It could contains recursively sub covered element (fleet or population)
     '''
 
     __name__ = 'ins_contract.covered_element'
 
-    covered_data = fields.One2Many('ins_contract.covered_data',
-                                   'for_covered',
-                                   'Coverage Data')
-
-    extension = fields.Many2One(
-        'ins_contract.generic_extension',
-        'Extension',
+    contract = fields.Many2One('ins_contract.contract', 'Contract',
         ondelete='CASCADE')
+    item_desc = fields.Many2One('ins_product.item_desc', 'Item Desc')
+    covered_data = fields.One2Many('ins_contract.covered_data',
+        'covered_element', 'Covered Element Data')
+    parent = fields.Many2One('ins_contract.covered_element', 'Parent')
+    sub_covered_elements = fields.One2Many('ins_contract.covered_element',
+        'parent', 'Sub Covered Elements')
+    complementary_data = fields.Dict('Complementary Data',
+        schema_model='ins_product.schema_element')
 
     def get_name_for_billing(self):
         pass
@@ -862,73 +692,74 @@ class CoveredElement(model.CoopView):
         pass
 
     def get_rec_name(self, value):
-        return ''
+        res = super(CoveredElement, self).get_rec_name(value)
+        if self.item_desc:
+            res = '%s %s' % (self.item_desc.get_rec_name(value), res)
+        return res
 
-    @classmethod
-    def get_covered_data_model(cls):
-        return 'ins_contract.covered_data'
+    def get_dates(self, start=None, end=None):
+        res = set()
+        for data in self.covered_data:
+            res.update(data.get_dates(start, end))
+        for sub_elem in self.sub_covered_elements:
+            res.update(sub_elem.get_dates(start, end))
+        return res
+
+    def check_at_least_one_covered(self, errors=None):
+        if not errors:
+            errors = []
+        found = False
+        for data in self.covered_data:
+            if data.status == 'active':
+                found = True
+                break
+        if not found:
+            errors.append(('need_option', (self.get_rec_name(''))))
+        if errors:
+            return False, errors
+        return True, ()
 
 
 class CoveredData(model.CoopView):
-    'Coverage Data'
-    '''
-        Covered Datas are the link between covered elements and options.
+    'Covered Data'
 
-        Basically, it is the start and end date of covering.
-    '''
     __name__ = 'ins_contract.covered_data'
 
-    for_coverage = fields.Many2One(
-        'ins_product.coverage',
-        'Coverage',
-        ondelete='CASCADE',
-        # TODO: should be readonly, but no other way to get selection fields
-        # working as they are not given
-        #readonly=True,
-    )
-
-    for_covered = fields.Many2One(
-        'ins_contract.covered_element',
-        'Covered Element',
-        ondelete='CASCADE')
-
-    dynamic_data = fields.Dict(
-        'Complementary Data',
+    coverage = fields.Many2One('ins_product.coverage', 'Coverage',
+        ondelete='RESTRICT', )
+    covered_element = fields.Many2One('ins_contract.covered_element',
+        'Covered Element', ondelete='CASCADE')
+    complementary_data = fields.Dict('Complementary Data',
         schema_model='ins_product.schema_element')
-
     start_date = fields.Date('Start Date')
-
     end_date = fields.Date('End Date')
-
-    status = fields.Selection(
-        OPTIONSTATUS,
-        'Status',
-    )
+    status = fields.Selection(OPTIONSTATUS, 'Status')
 
     @classmethod
     def default_status(cls):
         return 'active'
 
     def get_name_for_billing(self):
-        return self.for_covered.get_name_for_billing()
+        return self.covered_element.get_name_for_billing()
 
     def get_dynamic_data_value(self, at_date, value):
-        if not(hasattr(self, 'dynamic_data') and self.dynamic_data):
+        if (not(hasattr(self, 'complementary_data')
+            and self.complementary_data)):
             return None
         try:
-            return self.dynamic_data[value]
+            return self.complementary_data[value]
         except KeyError:
             return None
 
     def init_from_coverage(self, coverage):
-        self.for_coverage = coverage
+        self.coverage = coverage
         self.start_date = coverage.start_date
         self.end_date = coverage.end_date
 
     def init_dynamic_data(self, coverage, contract):
-        self.dynamic_data = utils.init_dynamic_data(
-            contract.product.get_result(
-                'dynamic_data_getter',
+        self.complementary_data = utils.init_dynamic_data(
+            contract.offered.get_result(
+                'complementary_data_getter',
                 {
                     'date': self.start_date,
                     'dd_args': {
@@ -936,12 +767,16 @@ class CoveredData(model.CoopView):
                         'kind': 'sub_elem',
                         'path': 'all'}})[0])
 
+    def get_dates(self, start=None, end=None):
+        res = set()
+        res.add(self.start_date)
+        res.add(self.end_date)
+        return utils.limit_dates(res, start, end)
+
 
 class BrokerManager(model.CoopSQL, model.CoopView):
     'Broker Manager'
-#    '''
-#        This entity will be used to manage the relation between the contract
-#        and its broker
-#    '''
+
     __name__ = 'ins_contract.broker_manager'
+
     broker = fields.Many2One('party.party', 'Broker')

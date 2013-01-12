@@ -3,8 +3,8 @@
     <label name="contract"/>
     <field name="contract"/>
     <newline/>
-    <label name="coverage"/>
-    <field name="coverage"/>
+    <label name="offered"/>
+    <field name="offered"/>
     <newline/>
     <label name="start_date"/>
     <field name="start_date"/>

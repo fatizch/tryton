@@ -16,8 +16,8 @@
                             <field name="covered_elements" yfill="1" yexpand="1"/>
                          </group>
                          <newline/>
-                         <group id="dynamic_data">
-                             <field name="dynamic_data"/>
+                         <group id="complementary_data">
+                             <field name="complementary_data"/>
                          </group>
                      </form>               ]]>
             </field>
@@ -193,42 +193,13 @@
         <record model="ir.ui.view" id="covered_data_view_tree">
             <field name="model">ins_contract.covered_data</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">                 
-                    <![CDATA[                 
-                    <tree string="Data">
-                        <field name="start_date"/>
-                        <field name="end_date"/>
-                        <field name="for_coverage"/>
-                    </tree>                 ]]>
-            </field>
+            <field name="name">covered_data_tree</field>
         </record>
 
         <record model="ir.ui.view" id="covered_data_view_form">
             <field name="model">ins_contract.covered_data</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                    <![CDATA[
-                    <form string="Covered Data">
-                        <group id="dates">
-                            <label name="start_date"/>
-                            <field name="start_date"/>
-                            <label name="end_date"/>
-                            <field name="end_date"/>
-                        </group>
-                        <newline/>
-                        <group id="coverage">
-                            <label name="for_coverage"/>
-                            <field name="for_coverage" xfill="1"/>
-                        </group>
-                        <newline/>
-                        <group id="specific">
-                        </group>
-                        <newline/>
-                        <group id="dynamic_data">
-                            <field name="dynamic_data"/>
-                        </group>
-                    </form>               ]]>
-            </field>
+            <field name="name">covered_data_form</field>
         </record>
 
         <!--################################################################ -->
@@ -238,39 +209,22 @@
         <record model="ir.ui.view" id="covered_element_view_tree">
             <field name="model">ins_contract.covered_element</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">                 
-                    <![CDATA[                 
-                    <tree string="Covered Elements">
-                    </tree>                 ]]>
-            </field>
+            <field name="name">covered_element_tree</field>
         </record>
 
         <record model="ir.ui.view" id="covered_element_view_form">
             <field name="model">ins_contract.covered_element</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                     <![CDATA[
-                     <form string="Covered Element">
-                         <group id="product">
-                         </group>
-                         <newline/>
-                         <group id="covered_data" yfill="1" yexpand="1">
-                            <field name="covered_data" xfill="1" yfill="1" yexpand="1"/>
-                         </group>
-                     </form>               ]]>
-            </field>
+            <field name="name">covered_element_form</field>
         </record>
 
         <!--################################################################ -->
         <!-- Menus -->
         <!--################################################################ -->
-
-        <!-- Application Entry point -->
         <menuitem name="Contract" id="menu_contract" sequence="11"/>
         <menuitem parent="menu_contract" name="Individual Policy" id="menu_individual"
             sequence="10"/>
         <menuitem parent="menu_individual" sequence="1"
             id="menu_contract_form" icon="tryton-list" action="act_contract_form"/>
-
     </data>
 </tryton>

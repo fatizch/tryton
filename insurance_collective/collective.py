@@ -15,7 +15,7 @@ from trytond.modules.insurance_product.business_rule import \
 from trytond.modules.insurance_product.business_rule import clause_rule
 from trytond.modules.insurance_product.business_rule import deductible_rule
 from trytond.modules.insurance_product.business_rule import term_renewal_rule
-from trytond.modules.insurance_product import dynamic_data
+from trytond.modules.insurance_product import complementary_data
 from trytond.modules.coop_utils import utils
 from trytond.modules.insurance_product.business_rule import pricing_rule
 
@@ -29,7 +29,7 @@ IND_TO_COLL = {
     'ins_product.coverage': 'ins_collective.coverage',
     'ins_product.coverage_amount_rule': 'ins_collective.coverage_amount_rule',
     'ins_product.deductible_rule': 'ins_collective.deductible_rule',
-    'ins_product.dynamic_data_manager': 'ins_collective.dynamic_data_manager',
+    'ins_product.complementary_data_manager': 'ins_collective.complementary_data_manager',
     'ins_product.eligibility_relation_kind':\
         'ins_collective.eligibility_relation_kind',
     'ins_product.eligibility_rule': 'ins_collective.eligibility_rule',
@@ -213,23 +213,23 @@ class GroupTermRenewalRule(GroupRoot, term_renewal_rule.TermRenewalRule):
     __name__ = 'ins_collective.term_renewal_rule'
 
 
-class GroupSchemaElement(GroupRoot, dynamic_data.CoopSchemaElement):
+class GroupSchemaElement(GroupRoot, complementary_data.CoopSchemaElement):
     'Complementary Data Definition'
 
     __name__ = 'ins_collective.schema_element'
 
 
 class GroupSchemaElementRelation(GroupRoot,
-        dynamic_data.SchemaElementRelation):
+        complementary_data.SchemaElementRelation):
     'Relation between schema element and complementary data manager'
 
     __name__ = 'ins_collective.schema_element_relation'
 
 
-class GroupDynamicDataManager(GroupRoot, dynamic_data.DynamicDataManager):
+class GroupDynamicDataManager(GroupRoot, complementary_data.DynamicDataManager):
     'Complementary Data Manager'
 
-    __name__ = 'ins_collective.dynamic_data_manager'
+    __name__ = 'ins_collective.complementary_data_manager'
 
 
 class GroupPricingComponent(GroupRoot, pricing_rule.PricingComponent):

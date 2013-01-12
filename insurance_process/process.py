@@ -1203,7 +1203,7 @@ class SubscriptionProcess(Wizard):
             # We create a list of coverage_displayer, whose model is
             # calculated as it is specified in the definition of the
             # option field of coverage_displayer
-            options.append({'for_coverage': coverage.id,
+            options.append({'coverage': coverage.id,
                             'from_date': max(coverage.start_date,
                                              session.project.start_date),
                            'status': 'active'})
@@ -1223,7 +1223,7 @@ class SubscriptionProcess(Wizard):
             # to create the options.
             options.append(('create',
                             {'start_date': option.from_date,
-                             'coverage': option.for_coverage.id,
+                             'coverage': option.coverage.id,
                              }))
 
         # Once the options are prepared, we can create the contract. To do so,

@@ -3,7 +3,7 @@
     <xpath expr="/tree" position="replace_attributes">
         <tree editable="bottom"/>
     </xpath>
-    <xpath expr="/tree/field[@name='coverage']" position="before">
+    <xpath expr="/tree/field[@name='offered']" position="before">
         <field name="is_subscribed"/>
     </xpath>
 </data>

@@ -2,8 +2,8 @@
 <form>
     <label name="gbp"/>
     <field name="gbp"/>
-    <label name="product"/>
-    <field name="product"/>
+    <label name="offered"/>
+    <field name="offered"/>
     <newline/>
     <label name="start_date"/>
     <field name="start_date"/>

@@ -100,7 +100,7 @@ class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
             if not amount in self.give_me_allowed_amounts(args)[0]:
                 errs = ['Amount %.2f not allowed on coverage %s' % (
                     amount,
-                    args['data'].for_coverage.code)]
+                    args['data'].coverage.code)]
                 return (False, errs), []
         return (True, []), []
 

@@ -4,6 +4,6 @@
     <field name="subscriber"/>
     <field name="status"/>
     <field name="start_date"/>
-    <field name="product"/>
+    <field name="offered"/>
 </tree>
  

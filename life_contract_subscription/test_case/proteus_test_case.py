@@ -135,7 +135,7 @@ def launch_test_case(cfg_dict):
         })
     status_validated = get_or_create_status(
         cfg_dict, {
-            'code': 'ctr_validated', 
+            'code': 'ctr_validated',
             'name': 'Validated',
         })
     subscriber_sel_step = get_or_create_step_desc(
@@ -146,8 +146,8 @@ def launch_test_case(cfg_dict):
 <label name="start_date"/>
 <field name="start_date" xfill="1"/>
 <newline/>
-<label name="product"/>
-<field name="product" xfill="1" colspan="3"/>
+<label name="offered"/>
+<field name="offered" xfill="1" colspan="3"/>
 <newline/>
 <label name="subscriber_kind"/>
 <field name="subscriber_kind" colspan="3"/>
@@ -155,11 +155,11 @@ def launch_test_case(cfg_dict):
 <label name="subscriber"/>
 <group id="subscriber" colspan="3" col="1">
   <field name="subscriber_as_person"/>
-  <field name="subscriber_as_company"/>
+  <field name="subscriber_as_society"/>
 </group>
 <newline/>
-<field name="subscriber_desc" widget="richtext" colspan="2"/>
 <field name="product_desc" widget="richtext" colspan="2"/>
+<field name="subscriber_desc" widget="richtext" colspan="2"/>
 ''',
         })
     option_sel_step = get_or_create_step_desc(
@@ -167,10 +167,10 @@ def launch_test_case(cfg_dict):
             'technical_name': 'option_selection',
             'fancy_name': 'Options Selection',
             'step_xml': '''
-<field name="options" mode="tree" 
+<field name="options" mode="tree"
  view_ids="insurance_contract_subscription.subscription_editable_option_tree"/>
 <newline/>
-<field name="dynamic_data"/>
+<field name="complementary_data"/>
 ''',
         })
     covered_pers_sel_step = get_or_create_step_desc(
@@ -178,8 +178,7 @@ def launch_test_case(cfg_dict):
             'technical_name': 'covered_person_selection',
             'fancy_name': 'Covered Person Selection',
             'step_xml': '''
-<field name="extension_life"  expand_toolbar="0" mode="form" 
-  view_ids="life_contract_subscription.subscription_extension_life_form"/>
+<field name="covered_elements"/>
   ''',
         })
     pricing_step = get_or_create_step_desc(
@@ -205,8 +204,8 @@ def launch_test_case(cfg_dict):
   <newline/>
   <label name="subscriber"/>
   <field name="subscriber"/>
-  <label name="product"/>
-  <field name="product"/>
+  <label name="offered"/>
+  <field name="offered"/>
 </group>
 <notebook colspan="4">
   <page string="Options" id="options">
@@ -215,8 +214,8 @@ def launch_test_case(cfg_dict):
   <page string="Billing" id="billing">
     <field name="billing_manager" mode="form"/>
   </page>
-  <page string="Complementary Data" id="dynamic_data">
-    <field name="dynamic_data"/>
+  <page string="Complementary Data" id="complementary_data">
+    <field name="complementary_data"/>
   </page>
 </notebook>
 ''',
@@ -248,7 +247,7 @@ init_options
 check_options_eligibility
 check_option_selected
 check_option_dates
-init_extensions
+init_covered_elements
 ''',
         })
     get_or_create_transition(cfg_dict, {
@@ -264,7 +263,7 @@ init_extensions
 check_options_eligibility
 check_option_selected
 check_option_dates
-init_extensions
+init_covered_elements
 ''',
         })
     get_or_create_transition(cfg_dict, {
@@ -320,12 +319,12 @@ finalize_contract
         'fancy_name': 'Individual Subscription Process',
         'on_model': contract_model,
         'xml_tree': '''
-<field name="current_state"/>    
+<field name="current_state"/>
 <field name="contract_number"/>
 <field name="subscriber"/>
 <field name="status"/>
 <field name="start_date"/>
-<field name="product"/>
+<field name="offered"/>
 ''',
         'menu_top': top_menu,
         'first_step': subscriber_sel_step,

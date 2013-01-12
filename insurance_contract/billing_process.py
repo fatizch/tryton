@@ -5,7 +5,7 @@ from trytond.modules.coop_utils import convert_ref_to_obj
 from trytond.modules.insurance_process import CoopProcess
 from trytond.modules.insurance_process import ProcessState, CoopStepView
 from trytond.model import fields
-from trytond.modules.insurance_contract import GenericContract
+from trytond.modules.insurance_contract import Contract
 from trytond.modules.insurance_process import CoopStep, CoopStateView
 from trytond.transaction import Transaction
 
@@ -36,7 +36,7 @@ class BillParameters(CoopStep):
     @staticmethod
     def before_step_init(wizard):
         if Transaction().context['active_model'] \
-                                in get_descendents(GenericContract, True):
+                                in get_descendents(Contract, True):
             wizard.process_state.for_contract = '%s,%s' % (
                 Transaction().context['active_model'],
                 Transaction().context['active_id'])
@@ -166,7 +166,7 @@ class BillingProcessState(ProcessState, WithAbstract):
 
     @staticmethod
     def get_contract_models():
-        return get_descendents(GenericContract)
+        return get_descendents(Contract)
 
     def get_contract(self):
         if self.for_contract:

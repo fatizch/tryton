@@ -103,7 +103,7 @@ def translate(model, var_name, src, ttype, lang=None):
 
 
 def translate_model_name(model, lang=None):
-    return translate(model, 'name', model.__doc__.splitlines()[0],
+    return translate(model, 'name', model._get_name(),
         ttype='model', lang=lang)
 
 

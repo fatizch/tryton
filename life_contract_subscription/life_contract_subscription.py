@@ -15,12 +15,12 @@ __all__ = [
 ]
 
 
-class CoveredPersonSubs(CoveredElement):
+class CoveredPersonSubs():
     'Covered Person'
 
     __metaclass__ = PoolMeta
 
-    __name__ = 'life_contract.covered_person'
+    __name__ = 'ins_contract.covered_element'
 
 
 class CoveredDataSubs(CoveredData):
@@ -34,8 +34,8 @@ class CoveredDataSubs(CoveredData):
         fields.Selection(
             'get_allowed_amounts',
             'Coverage Amount',
-            selection_parameters=['for_coverage', 'start_date'],
-            depends=['for_coverage', 'start_date', 'coverage_amount'],
+            selection_parameters=['coverage', 'start_date'],
+            depends=['coverage', 'start_date', 'coverage_amount'],
             sort=False,
             on_change=['coverage_amount', 'coverage_amount_selection'],
         ),
@@ -46,8 +46,8 @@ class CoveredDataSubs(CoveredData):
     @classmethod
     def __setup__(cls):
         super(CoveredDataSubs, cls).__setup__()
-        cls.for_covered = copy.copy(cls.for_covered)
-        cls.for_covered.model_name = 'life_contract.covered_person'
+#        cls.covered_element = copy.copy(cls.covered_element)
+#        cls.covered_element.model_name = 'life_contract.covered_person'
         cls.__rpc__.update({
             'get_allowed_amounts': RPC(instantiate=0),
         })
@@ -55,9 +55,9 @@ class CoveredDataSubs(CoveredData):
             'coverage_amount_needed': 'A coverage amount must be provided :'})
 
     def get_allowed_amounts(self):
-        if not (hasattr(self, 'for_coverage') and self.for_coverage):
+        if not (hasattr(self, 'coverage') and self.coverage):
             return []
-        the_coverage = self.for_coverage
+        the_coverage = self.coverage
         vals = the_coverage.get_result(
             'allowed_amounts',
             {
@@ -84,4 +84,3 @@ class CoveredDataSubs(CoveredData):
     @classmethod
     def setter_void(cls, covered_datas, name, values):
         pass
-

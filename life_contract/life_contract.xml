@@ -172,7 +172,7 @@
             <field name="arch" type="xml">
                     <![CDATA[
                         <form string="Subscription Process - Life Extension">
-                            <field name="dynamic_data"/>
+                            <field name="complementary_data"/>
                             <newline/>
                             <field name="covered_elements" mode="tree"/>
                             <field name="session_id"/>

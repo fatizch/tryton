@@ -34,7 +34,7 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['TreeElement'] = Model.get('rule_engine.tree_element')
     cfg_dict['Tranche'] = Model.get('tranche.tranche')
     cfg_dict['SchemaElement'] = Model.get('ins_product.schema_element')
-    cfg_dict['CDM'] = Model.get('ins_product.dynamic_data_manager')
+    cfg_dict['CDM'] = Model.get('ins_product.complementary_data_manager')
     return cfg_dict
 
 
@@ -678,11 +678,11 @@ retraite (au plus tard jusqu’à votre 60ème anniversaire).'''
 
 
 def get_or_create_complementary_data_mgr(cfg_dict, offered, kind=None):
-    if not offered.dynamic_data_manager:
+    if not offered.complementary_data_manager:
         mgr = cfg_dict['CDM']()
         mgr.kind = kind
-        offered.dynamic_data_manager.append(mgr)
-    return offered.dynamic_data_manager[-1]
+        offered.complementary_data_manager.append(mgr)
+    return offered.complementary_data_manager[-1]
 
 
 def create_death_coverage(cfg_dict):
