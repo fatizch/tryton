@@ -198,12 +198,15 @@ class Coverage(model.CoopSQL, Offered):
             return (res, list(set(errs)))
         return (None, [])
 
-    def get_dates(self):
+    def get_dates(self, dates=None, start=None, end=None):
         # This is a temporary functionnality that is provided to ease the
         # checking of the pricing calculations.
         # In 'real life', it is not systematic to update the pricing when a new
-        # version of the rule is defined.
-        res = set()
+        # version of the rule is defined
+        if dates:
+            res = set(dates)
+        else:
+            res = set()
         for rule in self.pricing_rules:
             res.add(rule.start_date)
         return res
@@ -237,10 +240,7 @@ class Coverage(model.CoopSQL, Offered):
         contract = args['contract']
         date = args['date']
         res = []
-        good_ext = self.give_me_extension_field(args)
-        if not good_ext or not hasattr(contract, good_ext):
-            return [], ['Extension not found']
-        for covered in getattr(contract, good_ext)[0].covered_elements:
+        for covered in contract.covered_elements:
             # We must check that the current covered element is
             # covered by self.
             for covered_data in covered.covered_data:

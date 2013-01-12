@@ -159,8 +159,6 @@ class Contract():
                 'subscriber': self.subscriber,
                 'date': self.start_date
             })
-        print '*' * 80
-        
         if eligibility:
             return eligibility.eligible, eligibility.details + errors
         return True, ()
@@ -282,8 +280,6 @@ class Contract():
 
         if errs:
             return False, errs
-
-        #print len(prices[0].details)
         self.billing_manager[0].store_prices(prices)
         self.billing_manager[0].save()
 
@@ -352,8 +348,7 @@ class CoveredElement():
         Contract = Pool().get('ins_contract.contract')
         contract = Contract(contract)
 
-        CoveredData = Pool().get(
-            cls._fields['covered_data'].model_name)
+        CoveredData = Pool().get('ins_contract.covered_data')
 
         covered_datas = []
         for option in contract.options:
@@ -370,9 +365,8 @@ class CoveredElement():
 class CoveredData():
     'Coverage Data'
 
-    __metaclass__ = PoolMeta
-
     __name__ = 'ins_contract.covered_data'
+    __metaclass__ = PoolMeta
 
     status_selection = fields.Function(
         fields.Boolean(
@@ -397,8 +391,7 @@ class CoveredData():
     @classmethod
     def default_status_selection(cls):
         return True
-    
+
     @classmethod
     def setter_void(cls, contracts, name, values):
         pass
-

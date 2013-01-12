@@ -524,7 +524,7 @@ def limit_dates(dates, start=None, end=None):
     res.sort()
     final_res = []
     for elem in res:
-        if elem and (not start or elem > start) and (not end or elem <= end):
+        if (not start or elem > start) and (not end or elem <= end):
             final_res.append(elem)
     if start and (not final_res or final_res[0] and final_res[0] != start):
         final_res.insert(0, start)

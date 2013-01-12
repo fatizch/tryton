@@ -132,10 +132,11 @@ class CoveredPerson():
         self.person = person
 
 
-class LifeCoveredData(model.CoopSQL, CoveredData):
+class LifeCoveredData():
     'Covered Data'
 
-    __name__ = 'life_contract.covered_data'
+    __name__ = 'ins_contract.covered_data'
+    __metaclass__ = PoolMeta
 
     coverage_amount = fields.Numeric('Coverage Amount')
 
@@ -323,14 +324,9 @@ class ExtensionLifeState(DependantState):
     def post_step_update_contract(wizard):
         contract = utils.WithAbstract.get_abstract_objects(
             wizard, 'for_contract')
-        ExtensionLife = Pool().get('life_contract.extension')
         CoveredPerson = Pool().get('ins_contract.covered_element')
-        CoveredData = Pool().get('life_contract.covered_data')
-        if hasattr(contract, 'extension_life') and contract.extension_life:
-            ext = contract.extension_life[0]
-        else:
-            ext = ExtensionLife()
-        ext.covered_elements = []
+        CoveredData = Pool().get('ins_contract.covered_data')
+        contract.covered_elements = []
         for covered_element in wizard.extension_life.covered_elements:
             cur_element = CoveredPerson()
             cur_element.covered_data = []
@@ -356,12 +352,12 @@ class ExtensionLifeState(DependantState):
                     cur_data.complementary_data = covered_data.data_dynamic_data
                 cur_element.covered_data.append(cur_data)
             cur_element.person = covered_element.elem_person
-            ext.covered_elements.append(cur_element)
+            contract.covered_elements.append(cur_element)
 
-        if not(hasattr(ext, 'complementary_data') and ext.complementary_data):
-            ext.complementary_data = {}
-        ext.complementary_data.update(wizard.extension_life.complementary_data)
-        contract.extension_life = [ext]
+#        if not(hasattr(ext, 'complementary_data') and ext.complementary_data):
+#            ext.complementary_data = {}
+#        ext.complementary_data.update(wizard.extension_life.complementary_data)
+#        contract.extension_life = [ext]
         res = contract.check_sub_elem_eligibility(wizard.project.start_date)
         if res[0]:
             res1 = contract.check_covered_amounts(wizard.project.start_date)

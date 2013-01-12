@@ -18,17 +18,15 @@ __all__ = [
 class CoveredPersonSubs():
     'Covered Person'
 
-    __metaclass__ = PoolMeta
-
     __name__ = 'ins_contract.covered_element'
+    __metaclass__ = PoolMeta
 
 
 class CoveredDataSubs(CoveredData):
     'Covered Data'
 
+    __name__ = 'ins_contract.covered_data'
     __metaclass__ = PoolMeta
-
-    __name__ = 'life_contract.covered_data'
 
     coverage_amount_selection = fields.Function(
         fields.Selection(

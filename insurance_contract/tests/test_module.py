@@ -594,6 +594,7 @@ return True'''
         good_lines.sort()
 
         self.maxDiff = None
+        #print lines, good_lines
         self.assertListEqual(lines, good_lines)
 
         wizard.transition_steps_complete()

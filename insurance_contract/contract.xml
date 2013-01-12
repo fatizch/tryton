@@ -1,28 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tryton>
     <data>
-
-        <!--################################################################ -->
-        <!-- Generic Extension -->
-        <!--################################################################ -->
-
-        <record model="ir.ui.view" id="generic_extension_view_form">
-            <field name="model">ins_contract.generic_extension</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                     <![CDATA[
-                     <form string="Extension">
-                         <group id="elements" yfill="1" yexpand="1">
-                            <field name="covered_elements" yfill="1" yexpand="1"/>
-                         </group>
-                         <newline/>
-                         <group id="complementary_data">
-                             <field name="complementary_data"/>
-                         </group>
-                     </form>               ]]>
-            </field>
-        </record>
-
         <!--################################################################ -->
         <!-- Price Lines -->
         <!--################################################################ -->

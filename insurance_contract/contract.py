@@ -118,6 +118,16 @@ class Subscribed(ProcessFramework):
     def get_possible_status(cls, name=None):
         raise NotImplementedError
 
+    def get_dates(self, dates=None, start=None, end=None):
+        if dates:
+            res = set(dates)
+        else:
+            res = set()
+        res.add(self.start_date)
+        if hasattr(self, 'end_date') and self.end_date:
+            res.add(self.end_date)
+        return utils.limit_dates(res, start, end)
+
 
 class Contract(model.CoopSQL, Subscribed):
     'Contract'
@@ -190,13 +200,16 @@ class Contract(model.CoopSQL, Subscribed):
                 return res
         return res
 
-    def get_dates(self, start=None, end=None):
-        res = set()
-        res.add(self.start_date)
+    def get_dates(self, dates=None, start=None, end=None):
+        if dates:
+            res = set(dates)
+        else:
+            res = set()
         for covered in self.covered_elements:
             res.update(covered.get_dates(start, end))
-        res.add(self.end_date)
-        return utils.limit_dates(res, start, end)
+        for option in self.options:
+            res.update(option.get_dates(start, end))
+        return super(Contract, self).get_dates(res, start, end)
 
     def calculate_price_at_date(self, date):
         prices, errs = self.offered.get_result(
@@ -364,13 +377,13 @@ class Option(model.CoopSQL, Subscribed):
     def get_coverage(self):
         return self.offered
 
-    def get_dates(self):
-        res = set()
-        res.add(self.start_date)
-        if hasattr(self, 'end_date') and self.end_date:
-            res.add(self.end_date)
-        res.update(self.offered.get_dates())
-        return res
+    def get_dates(self, dates=None, start=None, end=None):
+        if dates:
+            res = set(dates)
+        else:
+            res = set()
+        res.update(self.offered.get_dates(dates, start, end))
+        return super(Option, self).get_dates(res, start, end)
 
     def get_name_for_billing(self):
         return self.get_coverage().name + ' - Base Price'
@@ -697,12 +710,16 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             res = '%s %s' % (self.item_desc.get_rec_name(value), res)
         return res
 
-    def get_dates(self, start=None, end=None):
-        res = set()
+    def get_dates(self, dates=None, start=None, end=None):
+        if dates:
+            res = set(dates)
+        else:
+            res = set()
         for data in self.covered_data:
-            res.update(data.get_dates(start, end))
-        for sub_elem in self.sub_covered_elements:
-            res.update(sub_elem.get_dates(start, end))
+            res.update(data.get_dates(dates, start, end))
+        if hasattr(self, 'sub_covered_elements'):
+            for sub_elem in self.sub_covered_elements:
+                res.update(sub_elem.get_dates(dates, start, end))
         return res
 
     def check_at_least_one_covered(self, errors=None):
@@ -720,7 +737,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         return True, ()
 
 
-class CoveredData(model.CoopView):
+class CoveredData(model.CoopSQL, model.CoopView):
     'Covered Data'
 
     __name__ = 'ins_contract.covered_data'
@@ -767,10 +784,14 @@ class CoveredData(model.CoopView):
                         'kind': 'sub_elem',
                         'path': 'all'}})[0])
 
-    def get_dates(self, start=None, end=None):
-        res = set()
+    def get_dates(self, dates=None, start=None, end=None):
+        if dates:
+            res = set(dates)
+        else:
+            res = set()
         res.add(self.start_date)
-        res.add(self.end_date)
+        if hasattr(self, 'end_date') and self.end_date:
+            res.add(self.end_date)
         return utils.limit_dates(res, start, end)
 
 
