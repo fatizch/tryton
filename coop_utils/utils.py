@@ -697,6 +697,11 @@ def format_data(data, prefix='', prefix_inc='    ', is_init=True):
         for elem in data:
             tmp += format_data(elem, prefix + prefix_inc, is_init=False)
         tmp += [prefix + ']']
+    elif isinstance(data, (set, tuple)):
+        tmp = [prefix + '(']
+        for elem in data:
+            tmp += format_data(elem, prefix + prefix_inc, is_init=False)
+        tmp += [prefix + ')']
     elif isinstance(data, dict):
         tmp = [prefix + '{']
         for k, v in data.iteritems():
