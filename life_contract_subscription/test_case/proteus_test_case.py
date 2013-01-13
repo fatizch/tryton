@@ -19,29 +19,6 @@ def update_cfg_dict_with_models(cfg_dict):
         'process.step_desc_authorization')
 
 
-def get_or_create_this(cfg_dict, class_key, data, sel_val='', domain=None,
-        to_store=True):
-    if sel_val:
-        the_object = proteus_tools.get_objects_from_db(
-            cfg_dict, class_key, sel_val, data[sel_val])
-    elif domain:
-        the_object = proteus_tools.get_objects_from_db(
-            cfg_dict, class_key, domain=domain)
-
-    if the_object:
-        return the_object
-
-    the_object = cfg_dict[class_key]()
-
-    for key, value in data.iteritems():
-        setattr(the_object, key, value)
-
-    if to_store:
-        the_object.save()
-
-    return the_object
-
-
 def get_or_create_status(cfg_dict, data):
     status = proteus_tools.get_objects_from_db(
         cfg_dict, 'Status', 'code', data['code'])
@@ -133,10 +110,15 @@ def launch_test_case(cfg_dict):
             'code': 'ctr_ongoing',
             'name': 'On going',
         })
-    status_validated = get_or_create_status(
+    status_validation = get_or_create_status(
         cfg_dict, {
-            'code': 'ctr_validated', 
-            'name': 'Validated',
+            'code': 'ctr_validation', 
+            'name': 'Validation',
+        })
+    status_basic_data = get_or_create_status(
+        cfg_dict, {
+            'code': 'ctr_basic_data_input', 
+            'name': 'Administrative Data',
         })
     subscriber_sel_step = get_or_create_step_desc(
         cfg_dict, {
@@ -334,7 +316,7 @@ finalize_contract
     get_or_create_process_step_relation(cfg_dict, {
         'process': subs_process_desc,
         'step': subscriber_sel_step,
-        'status': status_ongoing,
+        'status': status_basic_data,
         })
 
     get_or_create_process_step_relation(cfg_dict, {
@@ -358,7 +340,7 @@ finalize_contract
     get_or_create_process_step_relation(cfg_dict, {
         'process': subs_process_desc,
         'step': validation_step,
-        'status': status_validated,
+        'status': status_validation,
         })
 
     cfg_dict['ProcessDesc'].update_view([subs_process_desc.id], {})
