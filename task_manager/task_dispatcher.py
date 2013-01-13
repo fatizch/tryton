@@ -32,6 +32,9 @@ class TaskDispatcher(Wizard):
             Action = Pool().get('ir.action')
 
             act = the_user.team.get_next_action(the_user)
+            
+            if not act:
+                return None
 
             return Action.get_action_values(
                 act[0].__name__, 
@@ -39,9 +42,16 @@ class TaskDispatcher(Wizard):
 
     calculate_action = LaunchStateAction()
 
+    @classmethod
+    def __setup__(cls):
+        super(TaskDispatcher, cls).__setup__()
+        cls._error_messages.update({
+            'no_task_available': 'There is no task available right now.',
+        })
+
     def do_calculate_action(self, action):
         if not action:
-            return None
+            self.raise_user_error('no_task_available')
 
         act, good_id, good_model = action
         views = act['views']

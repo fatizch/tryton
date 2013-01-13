@@ -93,6 +93,11 @@ class Team(ModelSQL, ModelView):
         required=True,
     )
 
+    code = fields.Char(
+        'Code',
+        required=True,
+    )
+
     members = fields.One2Many(
         'res.user',
         'team',
