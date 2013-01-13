@@ -87,8 +87,8 @@ class Offered(model.CoopView, utils.GetResult, Templated):
         'get_summary')
     currency_digits = fields.Function(fields.Integer('Currency Digits'),
         'get_currency_digits')
-    dynamic_data_manager = model.One2ManyDomain(
-        'ins_product.dynamic_data_manager',
+    complementary_data_manager = model.One2ManyDomain(
+        'ins_product.complementary_data_manager',
         'master',
         'Complementary Data Manager',
         context={
@@ -153,11 +153,11 @@ class Offered(model.CoopView, utils.GetResult, Templated):
         else:
             return Transaction().context.get('currency_digits')
 
-    def give_me_dynamic_data_ids(self, args):
+    def give_me_complementary_data_ids(self, args):
         if not(hasattr(self,
-                'dynamic_data_manager') and self.dynamic_data_manager):
+                'complementary_data_manager') and self.complementary_data_manager):
             return []
-        return self.dynamic_data_manager[0].get_valid_schemas_ids(
+        return self.complementary_data_manager[0].get_valid_schemas_ids(
             args['date']), []
 
     @staticmethod
@@ -209,11 +209,9 @@ class Product(model.CoopSQL, Offered):
         domain=[('currency', '=', Eval('currency'))],
         depends=['currency'])
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
-    contract_generator = fields.Many2One(
-        'ir.sequence',
+    contract_generator = fields.Many2One('ir.sequence',
         'Contract Number Generator',
-        context={'code': 'ins_product.product'},
-        required=True,
+        context={'code': 'ins_product.product'}, required=True,
         ondelete='RESTRICT')
     term_renewal_rules = fields.One2Many('ins_product.term_renewal_rule',
         'offered', 'Term - Renewal')
@@ -233,7 +231,7 @@ class Product(model.CoopSQL, Offered):
         cls.delete_rules(entities)
         utils.delete_reference_backref(
             entities,
-            'ins_product.dynamic_data_manager',
+            'ins_product.complementary_data_manager',
             'master')
         super(Product, cls).delete(entities)
 
@@ -346,28 +344,28 @@ class Product(model.CoopSQL, Offered):
     def give_me_new_contract_number(self, args=None):
         return self.contract_generator.get_id(self.contract_generator.id)
 
-    def give_me_dynamic_data_ids_aggregate(self, args):
+    def give_me_complementary_data_ids_aggregate(self, args):
         if not 'dd_args' in args:
             return [], []
         res = set()
         errs = []
         for opt in self.options:
             result, errors = opt.get_result(
-                'dynamic_data_ids_aggregate',
+                'complementary_data_ids_aggregate',
                 args)
             map(lambda x: res.add(x), result)
             errs += errors
         return list(res), errs
 
-    def give_me_dynamic_data_getter(self, args):
+    def give_me_complementary_data_getter(self, args):
         if not 'dd_args' in args:
             return [], []
         dd_args = args['dd_args']
         if not 'path' in dd_args:
             if not 'options' in dd_args:
-                return self.give_me_dynamic_data_ids(args)
+                return self.give_me_complementary_data_ids(args)
             dd_args['path'] = 'all'
-        return self.give_me_dynamic_data_ids_aggregate(args)
+        return self.give_me_complementary_data_ids_aggregate(args)
 
 
 class ProductOptionsCoverage(model.CoopSQL):

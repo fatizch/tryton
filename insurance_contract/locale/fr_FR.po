@@ -378,7 +378,7 @@ msgctxt "field:ins_contract.contract,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
 
-msgctxt "field:ins_contract.contract,dynamic_data:"
+msgctxt "field:ins_contract.contract,complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -462,7 +462,7 @@ msgctxt "field:ins_contract.coverage_displayer,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:ins_contract.covered_data,dynamic_data:"
+msgctxt "field:ins_contract.covered_data,complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -470,11 +470,11 @@ msgctxt "field:ins_contract.covered_data,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_contract.covered_data,for_coverage:"
+msgctxt "field:ins_contract.covered_data,coverage:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "field:ins_contract.covered_data,for_covered:"
+msgctxt "field:ins_contract.covered_data,covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
@@ -510,7 +510,7 @@ msgctxt "field:ins_contract.generic_extension,covered_elements:"
 msgid "Coverages"
 msgstr "Garanties"
 
-msgctxt "field:ins_contract.generic_extension,dynamic_data:"
+msgctxt "field:ins_contract.generic_extension,complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -730,7 +730,7 @@ msgctxt "field:ins_contract.subs_process.option_selection,at_date:"
 msgid "At Date"
 msgstr "A la Date"
 
-msgctxt "field:ins_contract.subs_process.option_selection,dynamic_data:"
+msgctxt "field:ins_contract.subs_process.option_selection,complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 

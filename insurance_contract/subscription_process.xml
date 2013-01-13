@@ -48,7 +48,7 @@
                     <![CDATA[
                         <tree string="Coverage Choices Tree" editable="top">
                             <field name="status"/>
-                            <field name="coverage"/>
+                            <field name="offered"/>
                             <field name="start_date"/>
                         </tree>
                     ]]>
@@ -69,7 +69,7 @@
                             <field name="for_product"/>
                             <field name="at_date"/>
                             <newline/>
-                            <field name="dynamic_data"/>
+                            <field name="complementary_data"/>
                         </form>
                     ]]>
             </field>
@@ -114,7 +114,7 @@
                             <group id="specific">
                             </group>
                             <newline/>
-                            <group id="dynamic_data">
+                            <group id="complementary_data">
                                 <field name="data_dynamic_data"/>
                                 <field name="data_for_option_char"/>
                             </group>

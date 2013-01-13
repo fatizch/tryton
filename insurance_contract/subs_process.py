@@ -136,7 +136,7 @@ class ProjectState(CoopStep):
         BrokerManager = Pool().get('ins_contract.broker_manager')
         contract = utils.WithAbstract.get_abstract_objects(
             wizard, 'for_contract')
-        contract.product = wizard.project.product
+        contract.offered = wizard.project.product
         contract.start_date = wizard.project.start_date
         contract.subscriber = wizard.project.subscriber
         if hasattr(wizard.project, 'broker'):
@@ -198,22 +198,22 @@ class CoverageDisplayer(CoopStepView):
     # to be stored, and is not supposed to be.
 
     __name__ = 'ins_contract.coverage_displayer'
-    coverage = fields.Many2One('ins_product.coverage',
-                                   'Coverage',
+    offered = fields.Many2One('ins_product.coverage',
+                                   'offered',
                                    readonly=True)
     start_date = fields.Date(
                         'From Date',
-                        domain=[('coverage.start_date',
+                        domain=[('offered.start_date',
                                  '<=',
                                  'start_date')],
-                        depends=['coverage', ],
+                        depends=['offered', ],
                         required=True)
     status = fields.Selection(OPTIONSTATUS,
                               'Status')
 
-    def init_from_coverage(self, for_coverage):
-        self.coverage = for_coverage
-        self.start_date = for_coverage.start_date
+    def init_from_coverage(self, coverage):
+        self.offered = coverage
+        self.start_date = coverage.start_date
         self.status = 'active'
 
 
@@ -231,7 +231,7 @@ class OptionSelectionState(CoopStep):
     options = fields.One2Many('ins_contract.coverage_displayer',
                                None,
                                'Options Choices')
-    dynamic_data = fields.Dict(
+    complementary_data = fields.Dict(
         'Complementary Data',
         schema_model='ins_product.schema_element',
         context={
@@ -272,9 +272,9 @@ class OptionSelectionState(CoopStep):
         # which will be used to ask for input from the user.
         product = wizard.project.product
         CoverageDisplayer = Pool().get(wizard.give_displayer_model())
-        for coverage in product.options:
+        for offered in product.options:
             cur_displayer = CoverageDisplayer()
-            cur_displayer.init_from_coverage(coverage)
+            cur_displayer.init_from_coverage(offered)
             cur_displayer.start_date = max(
                 cur_displayer.start_date,
                 wizard.project.start_date)
@@ -286,14 +286,14 @@ class OptionSelectionState(CoopStep):
     @staticmethod
     def before_step_init_dynamic_data(wizard):
         product = wizard.project.product
-        wizard.option_selection.dynamic_data = utils.init_dynamic_data(
+        wizard.option_selection.complementary_data = utils.init_dynamic_data(
             product.get_result(
-                'dynamic_data_getter',
+                'complementary_data_getter',
                 {
                     'date': wizard.project.start_date,
                     'dd_args': {
                         'kind': 'main'}})[0])
-        if wizard.option_selection.dynamic_data:
+        if wizard.option_selection.complementary_data:
             wizard.option_selection.for_product = product
             wizard.option_selection.at_date = wizard.project.start_date
         return (True, [])
@@ -304,13 +304,13 @@ class OptionSelectionState(CoopStep):
         eligible = True
         for displayer in wizard.option_selection.options:
             if displayer.status == 'active':
-                eligibility, errors = displayer.coverage.get_result(
+                eligibility, errors = displayer.offered.get_result(
                     'eligibility',
                     {'date': wizard.project.start_date,
                     'subscriber': wizard.project.subscriber})
                 if eligibility and not eligibility.eligible:
                     errs.append(
-                        '%s option not eligible :' % displayer.coverage.code)
+                        '%s option not eligible :' % displayer.offered.code)
                     errs += ['\t' + elem
                         for elem in eligibility.details + errors]
                 eligible = eligible and (not eligibility or
@@ -320,8 +320,8 @@ class OptionSelectionState(CoopStep):
     # Here we check that at least one option has been selected
     @staticmethod
     def check_step_option_selected(wizard):
-        for coverage in wizard.option_selection.options:
-            if coverage.status == 'active':
+        for offered in wizard.option_selection.options:
+            if offered.status == 'active':
                 return (True, [])
         return (False, ['At least one option must be active'])
 
@@ -329,14 +329,14 @@ class OptionSelectionState(CoopStep):
     # future contract's effective date.
     @staticmethod
     def check_step_options_date(wizard):
-        for coverage in wizard.option_selection.options:
-            if coverage.start_date < wizard.project.start_date:
+        for offered in wizard.option_selection.options:
+            if offered.start_date < wizard.project.start_date:
                 return (False, ['Options must be subscribed after %s'
                                  % wizard.project.start_date])
-            elif coverage.start_date < coverage.coverage.start_date:
+            elif offered.start_date < offered.offered.start_date:
                 return (False, ['%s must be subscribed after %s'
-                                % (coverage.coverage.name,
-                                   coverage.coverage.start_date)])
+                                % (offered.offered.name,
+                                   offered.offered.start_date)])
         return (True, [])
 
     @staticmethod
@@ -349,14 +349,14 @@ class OptionSelectionState(CoopStep):
             if option.status != 'active':
                 continue
             cur_option = Option()
-            cur_option.coverage = option.coverage
+            cur_option.offered = option.offered
             cur_option.start_date = option.start_date
             list_options.append(cur_option)
         contract.options = list_options
-        contract.dynamic_data = {}
-        if hasattr(wizard.option_selection, 'dynamic_data') and \
-                wizard.option_selection.dynamic_data:
-            contract.dynamic_data.update(wizard.option_selection.dynamic_data)
+        contract.complementary_data = {}
+        if hasattr(wizard.option_selection, 'complementary_data') and \
+                wizard.option_selection.complementary_data:
+            contract.complementary_data.update(wizard.option_selection.complementary_data)
         utils.WithAbstract.save_abstract_objects(
             wizard, ('for_contract', contract))
         return (True, [])
@@ -414,12 +414,12 @@ class CoveredDesc(CoopStepView):
             'readonly': Eval('the_kind') != 'data'})
 
     data_for_coverage = fields.Reference(
-        'For coverage',
+        'For offered',
         'get_coverages_model',
         readonly=True)
 
     data_coverage_name = fields.Char(
-        'Coverage',
+        'offered',
         depends=['data_for_coverage'],
         on_change_with=['data_for_coverage'],
         readonly=True)
@@ -463,11 +463,11 @@ class CoveredDesc(CoopStepView):
             covered_data.init_from_coverage(covered)
             covered_data.data_dynamic_data = utils.init_dynamic_data(
                 from_wizard.project.product.get_result(
-                    'dynamic_data_getter',
+                    'complementary_data_getter',
                     {
                         'date': covered_data.data_start_date,
                         'dd_args': {
-                            'options': covered.coverage.code,
+                            'options': covered.offered.code,
                             'kind': 'sub_elem',
                             'path': 'all'}})[0])
             covered_data.data_status = True
@@ -480,9 +480,9 @@ class CoveredDesc(CoopStepView):
         res.append((Coverage.__name__, Coverage.__name__))
         return res
 
-    def init_from_coverage(self, for_coverage):
-        self.data_start_date = for_coverage.start_date
-        self.data_for_coverage = for_coverage.coverage
+    def init_from_coverage(self, coverage):
+        self.data_start_date = coverage.start_date
+        self.data_for_coverage = coverage.offered
         self.data_for_option_char = self.data_for_coverage.code
         self.data_coverage_name = self.data_for_coverage.get_rec_name('')
 
@@ -561,7 +561,6 @@ class SummaryState(CoopStep):
         PricingLine = Pool().get('ins_contract.subs_process.lines')
         contract = utils.WithAbstract.get_abstract_objects(
             wizard, 'for_contract')
-
         prices, errs = contract.calculate_prices_at_all_dates()
         if errs:
             return (False, errs)

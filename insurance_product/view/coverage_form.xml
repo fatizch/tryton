@@ -24,14 +24,14 @@
         </page>
     </xpath>
     <xpath
-        expr="/form/notebook/page[@id='managers']/notebook/page[@id='dynamic_data']/field[@name='dynamic_data_manager']"
+        expr="/form/notebook/page[@id='managers']/notebook/page[@id='complementary_data']/field[@name='complementary_data_manager']"
         position="replace"/>
     <xpath
-        expr="/form/notebook/page[@id='managers']/notebook/page[@id='dynamic_data']"
+        expr="/form/notebook/page[@id='managers']/notebook/page[@id='complementary_data']"
         position="inside">
         <notebook>
             <page id="coverage" string="Coverage">
-                <field name="dynamic_data_manager" mode="form"/>
+                <field name="complementary_data_manager" mode="form"/>
             </page>
             <page id="covered" string="Covered Element">
                 <field name="covered_dynamic_data_manager" mode="form"/>

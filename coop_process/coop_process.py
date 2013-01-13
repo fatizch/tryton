@@ -109,6 +109,7 @@ class StepTransition():
         return 'standard'
 
     def execute(self, target):
+        print 'RSE*******************************'
         if self.transition_kind != 'choice':
             super(StepTransition, self).execute(target)
             return

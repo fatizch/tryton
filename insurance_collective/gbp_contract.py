@@ -4,7 +4,7 @@ import copy
 from trytond.model import fields
 from trytond.pyson import Eval
 
-from trytond.modules.insurance_contract import GenericContract
+from trytond.modules.insurance_contract import Contract
 from trytond.modules.coop_utils import utils
 
 __all__ = [
@@ -12,7 +12,7 @@ __all__ = [
         ]
 
 
-class GBPContract(GenericContract):
+class GBPContract(Contract):
     'GBP Contract'
     #A GBP contract is slightly different from usual contract, as it does
     #not really have neither a product nor associated options.
@@ -57,3 +57,7 @@ class GBPContract(GenericContract):
         if self.final_product:
             return self.final_product[0].get_rec_name(name)
         return super(GBPContract, self).get_rec_name(name)
+
+    @classmethod
+    def get_offered_module_prefix(cls):
+        return 'ins_collective'

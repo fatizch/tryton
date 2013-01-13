@@ -9,38 +9,7 @@
             <field name="model">ins_contract.contract</field>
             <field name="type">form</field>
             <field name="inherit" ref="insurance_contract.contract_view_form"/>
-            <field name="arch" type="xml">
-                     <![CDATA[
-                        <data>
-                            <xpath expr="/form/notebook" position="inside">
-                                <page string="Extension Life" id="life"
-                                        states="{'invisible':~Eval('extension_life')}">
-                                    <field name="extension_life" xexpand="1" yexpand="1"
-                                        mode="form"/>
-                                </page>
-                            </xpath>
-                        </data>
-                     ]]>
-            </field>
-        </record>
-
-    <!--################################################################-->
-    <!--                         Life Extension                         -->
-    <!--################################################################-->
-
-        <record model="ir.ui.view" id="life_extension_view_form">
-            <field name="model">life_contract.extension</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="insurance_contract.generic_extension_view_form"/>
-            <field name="arch" type="xml">
-                     <![CDATA[
-                        <data>
-                            <xpath expr="/form" position="replace_attributes">
-                                <form string="Extension Life"/>
-                            </xpath>
-                        </data>
-                     ]]>
-            </field>
+            <field name="arch" type="xml"/>
         </record>
 
     <!--################################################################-->
@@ -48,75 +17,17 @@
     <!--################################################################-->
 
         <record model="ir.ui.view" id="covered_person_tree_form">
-            <field name="model">life_contract.covered_person</field>
+            <field name="model">ins_contract.covered_element</field>
             <field name="type">tree</field>
             <field name="inherit" ref="insurance_contract.covered_element_view_tree"/>
-            <field name="arch" type="xml">
-                     <![CDATA[
-                        <data>
-                            <xpath expr="/tree" position="inside">
-                                <field name="person"/>
-                            </xpath>
-                        </data>
-                     ]]>
-            </field>
+            <field name="name">covered_person_tree</field>
         </record>
 
         <record model="ir.ui.view" id="covered_person_view_form">
-            <field name="model">life_contract.covered_person</field>
+            <field name="model">ins_contract.covered_element</field>
             <field name="type">form</field>
             <field name="inherit" ref="insurance_contract.covered_element_view_form"/>
-            <field name="arch" type="xml">
-                     <![CDATA[
-                        <data>
-                            <xpath expr="/form" position="replace_attributes">
-                                <form string="Covered Person"/>
-                            </xpath>
-                            <xpath expr="/form/group[@id='product']"
-                                    position="inside">
-                                <label name="person"/>
-                                <field name="person"/>
-                            </xpath>
-                        </data>
-                     ]]>
-            </field>
-        </record>
-
-    <!--################################################################-->
-    <!--                     Life Covered Data                          -->
-    <!--################################################################-->
-        
-        <record model="ir.ui.view" id="life_covered_data_desc_view_tree">
-            <field name="model">life_contract.covered_data</field>
-            <field name="type">tree</field>
-            <field name="inherit" ref="insurance_contract.covered_data_view_tree"/>
-            <field name="arch" type="xml">                 
-                     <![CDATA[
-                        <data>
-                            <xpath expr="/tree" position="inside">
-                                <field name="coverage_amount_selection"/>
-                            </xpath>
-                        </data>
-                     ]]>
-            </field>
-        </record>
-
-        <record model="ir.ui.view" id="life_covered_data_desc_view_form">
-            <field name="model">life_contract.covered_data</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="insurance_contract.covered_data_view_form"/>
-            <field name="arch" type="xml">                 
-                     <![CDATA[
-                        <data>
-                            <xpath expr="/form/group[@id='specific']"
-                            position="inside">
-                                <field name="coverage_amount" invisible="1"/>
-                                <label name="coverage_amount_selection"/>
-                                <field name="coverage_amount_selection"/>
-                            </xpath>
-                        </data>
-                     ]]>
-            </field>
+            <field name="name">covered_person_form</field>
         </record>
 
     <!--################################################################-->
@@ -172,7 +83,7 @@
             <field name="arch" type="xml">
                     <![CDATA[
                         <form string="Subscription Process - Life Extension">
-                            <field name="dynamic_data"/>
+                            <field name="complementary_data"/>
                             <newline/>
                             <field name="covered_elements" mode="tree"/>
                             <field name="session_id"/>

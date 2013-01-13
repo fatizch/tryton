@@ -451,7 +451,7 @@ return True'''
         self.assertEqual(tmp[0], True)
         wizard.transition_steps_next()
         wizard.transition_master_step()
-        tmp = set([elem.coverage.code for elem in
+        tmp = set([elem.offered.code for elem in
                     wizard.option_selection.options])
         self.assertEqual(len(tmp), len(on_product.options))
         self.assertEqual(tmp,
@@ -594,6 +594,7 @@ return True'''
         good_lines.sort()
 
         self.maxDiff = None
+        #print lines, good_lines
         self.assertListEqual(lines, good_lines)
 
         wizard.transition_steps_complete()

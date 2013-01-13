@@ -11,7 +11,6 @@ from trytond.rpc import RPC
 from trytond.modules.coop_utils import model
 from trytond.modules.coop_utils import utils
 
-from trytond.modules.insurance_contract import GenericExtension
 from trytond.modules.insurance_contract import CoveredDesc
 from trytond.modules.insurance_contract import CoveredData
 from trytond.modules.insurance_contract import CoveredElement
@@ -21,7 +20,6 @@ from trytond.modules.insurance_process import CoopStateView
 
 __all__ = [
     'Contract',
-    'ExtensionLife',
     'CoveredPerson',
     'LifeCoveredData',
     'LifeCoveredDesc',
@@ -34,60 +32,43 @@ __all__ = [
 class Contract():
     'Contract'
 
+    __name__ = 'ins_contract.contract'
     __metaclass__ = PoolMeta
 
-    __name__ = 'ins_contract.contract'
-
-    extension_life = fields.One2Many(
-        'life_contract.extension',
-        'contract',
-        'Life Extension',
-        context={'current_contract': Eval('id')},
-        size=1)
-
-    def check_covered_amounts(self, at_date=None, ext=None):
+    def check_covered_amounts(self, at_date=None):
         if not at_date:
             at_date = self.start_date
-
-        if not ext:
-            exts = self.get_extensions()
-        elif isinstance(ext, str):
-            exts = getattr(self, ext)
-
         options = dict([
-            (option.coverage.code, option)
-            for option in self.options
-            ])
+            (option.offered.code, option) for option in self.options])
         res, errs = (True, [])
-        for ext in exts:
-            for covered_element in ext.covered_elements:
-                for covered_data in covered_element.covered_data:
-                    if (covered_data.start_date > at_date
-                            or hasattr(covered_data, 'end_date') and
-                            covered_data.end_date and
-                            covered_data.end_date > at_date):
-                        continue
-                    validity, errors = covered_data.for_coverage.get_result(
-                        'coverage_amount_validity',
-                        {
-                            'date': at_date,
-                            'sub_elem': covered_element,
-                            'data': covered_data,
-                            'option': options[covered_data.for_coverage.code],
-                            'contract': self,
-                        })
-                    res = res and (not validity or validity[0])
-                    if validity:
-                        errs += validity[1]
-                    errs += errors
+        for covered_element in self.covered_elements:
+            for covered_data in covered_element.covered_data:
+                if (covered_data.start_date > at_date
+                        or hasattr(covered_data, 'end_date') and
+                        covered_data.end_date and
+                        covered_data.end_date > at_date):
+                    continue
+                validity, errors = covered_data.coverage.get_result(
+                    'coverage_amount_validity',
+                    {
+                        'date': at_date,
+                        'sub_elem': covered_element,
+                        'data': covered_data,
+                        'option': options[covered_data.coverage.code],
+                        'contract': self,
+                    })
+                res = res and (not validity or validity[0])
+                if validity:
+                    errs += validity[1]
+                errs += errors
         return (res, errs)
 
 
 class PriceLine():
     'Price Line'
 
-    __metaclass__ = PoolMeta
     __name__ = 'ins_contract.price_line'
+    __metaclass__ = PoolMeta
 
     @classmethod
     def get_line_target_models(cls):
@@ -96,58 +77,43 @@ class PriceLine():
             'life_contract.covered_data'))
         return res
 
+#class ExtensionLife(model.CoopSQL, GenericExtension):
+#    '''
+#        This is a particular case of contract extension designed for Life
+#        insurance products.
+#    '''
+#    __name__ = 'life_contract.extension'
 
-class ExtensionLife(model.CoopSQL, GenericExtension):
-    '''
-        This is a particular case of contract extension designed for Life
-        insurance products.
-    '''
-    __name__ = 'life_contract.extension'
-
-    @classmethod
-    def __setup__(cls):
-        super(ExtensionLife, cls).__setup__()
-        cls.covered_elements = copy.copy(cls.covered_elements)
-        cls.covered_elements.model_name = 'life_contract.covered_person'
-
-    @classmethod
-    def get_covered_element_model(cls):
-        return 'life_contract.covered_person'
-
-    def init_covered_elements(self, contract):
-        if (hasattr(self, 'covered_elements') and self.covered_elements):
-            return
-
-        CoveredElement = Pool().get(self.get_covered_element_model())
-        subscriber = CoveredElement()
-        subscriber.init_from_person(contract.subscriber_as_person)
-        self.covered_elements = [subscriber]
+#    @classmethod
+#    def __setup__(cls):
+#        super(ExtensionLife, cls).__setup__()
+#        cls.covered_elements = copy.copy(cls.covered_elements)
+#        cls.covered_elements.model_name = 'life_contract.covered_person'
+#
+#    @classmethod
+#    def get_covered_element_model(cls):
+#        return 'life_contract.covered_person'
+#
+#    def init_covered_elements(self, contract):
+#        if (hasattr(self, 'covered_elements') and self.covered_elements):
+#            return
+#
+#        CoveredElement = Pool().get(self.get_covered_element_model())
+#        subscriber = CoveredElement()
+#        subscriber.init_from_person(contract.subscriber_as_person)
+#        self.covered_elements = [subscriber]
 
 
-class CoveredPerson(model.CoopSQL, CoveredElement):
+class CoveredPerson():
     'Covered Person'
     '''
-        This is an extension of covered element in the case of a life product.
-
-        In life insurance, we cover persons, so here is a covered person...
+        In life, covered item is a covered person
     '''
-    __name__ = 'life_contract.covered_person'
 
-    person = fields.Many2One('party.person',
-                             'Person',
-                             required=True)
+    __name__ = 'ins_contract.covered_element'
+    __metaclass__ = PoolMeta
 
-    @classmethod
-    def __setup__(cls):
-        super(CoveredPerson, cls).__setup__()
-        cls.extension = copy.copy(cls.extension)
-        cls.extension.model_name = 'life_contract.extension'
-        cls.covered_data = copy.copy(cls.covered_data)
-        cls.covered_data.model_name = 'life_contract.covered_data'
-
-    @staticmethod
-    def get_specific_model_name():
-        return 'Covered Person'
+    person = fields.Many2One('party.person', 'Person', required=True)
 
     def get_name_for_billing(self):
         return self.person.rec_name
@@ -166,18 +132,19 @@ class CoveredPerson(model.CoopSQL, CoveredElement):
         self.person = person
 
 
-class LifeCoveredData(model.CoopSQL, CoveredData):
+class LifeCoveredData():
     'Covered Data'
 
-    __name__ = 'life_contract.covered_data'
+    __name__ = 'ins_contract.covered_data'
+    __metaclass__ = PoolMeta
 
     coverage_amount = fields.Numeric('Coverage Amount')
 
-    @classmethod
-    def __setup__(cls):
-        super(LifeCoveredData, cls).__setup__()
-        cls.for_covered = copy.copy(cls.for_covered)
-        cls.for_covered.model_name = 'life_contract.covered_person'
+#    @classmethod
+#    def __setup__(cls):
+#        super(LifeCoveredData, cls).__setup__()
+#        cls.covered_element = copy.copy(cls.covered_element)
+#        cls.covered_element.model_name = 'life_contract.covered_person'
 
 
 class LifeCoveredDesc(CoveredDesc):
@@ -255,7 +222,7 @@ class ExtensionLifeState(DependantState):
             'at_date': Eval('at_date'),
             'kind': 'elem'},
         depends=['covered_elements'])
-    dynamic_data = fields.Dict(
+    complementary_data = fields.Dict(
         'Complementary Data',
         schema_model='ins_product.schema_element',
         context={
@@ -291,7 +258,7 @@ class ExtensionLifeState(DependantState):
         if hasattr(wizard.extension_life, 'covered_elements') and \
                 wizard.extension_life.covered_elements:
             # Later, an update procedure should be written.
-            options = [o.coverage.code for o in contract.options]
+            options = [o.offered.code for o in contract.options]
             for elem in wizard.extension_life.covered_elements:
                 for data in elem.elem_covered_data:
                     if not data.data_for_coverage.code in options:
@@ -313,12 +280,12 @@ class ExtensionLifeState(DependantState):
     @staticmethod
     def before_step_init_dynamic_data(wizard):
         product = wizard.project.product
-        options = ';'.join([opt.coverage.code
+        options = ';'.join([opt.offered.code
             for opt in wizard.option_selection.options
             if opt.status == 'active'])
-        wizard.extension_life.dynamic_data = utils.init_dynamic_data(
+        wizard.extension_life.complementary_data = utils.init_dynamic_data(
             product.get_result(
-                'dynamic_data_getter',
+                'complementary_data_getter',
                 {
                     'date': wizard.project.start_date,
                     'dd_args': {
@@ -327,7 +294,7 @@ class ExtensionLifeState(DependantState):
                         'path': 'extension_life',
                     }
                  })[0])
-        if wizard.extension_life.dynamic_data:
+        if wizard.extension_life.complementary_data:
             wizard.extension_life.for_product = product
             wizard.extension_life.at_date = wizard.project.start_date
             wizard.extension_life.for_options = options
@@ -357,14 +324,9 @@ class ExtensionLifeState(DependantState):
     def post_step_update_contract(wizard):
         contract = utils.WithAbstract.get_abstract_objects(
             wizard, 'for_contract')
-        ExtensionLife = Pool().get('life_contract.extension')
-        CoveredPerson = Pool().get('life_contract.covered_person')
-        CoveredData = Pool().get('life_contract.covered_data')
-        if hasattr(contract, 'extension_life') and contract.extension_life:
-            ext = contract.extension_life[0]
-        else:
-            ext = ExtensionLife()
-        ext.covered_elements = []
+        CoveredPerson = Pool().get('ins_contract.covered_element')
+        CoveredData = Pool().get('ins_contract.covered_data')
+        contract.covered_elements = []
         for covered_element in wizard.extension_life.covered_elements:
             cur_element = CoveredPerson()
             cur_element.covered_data = []
@@ -375,7 +337,7 @@ class ExtensionLifeState(DependantState):
                 cur_data.start_date = covered_data.data_start_date
                 if hasattr(covered_data, 'data_end_date'):
                     cur_data.end_date = covered_data.data_end_date
-                cur_data.for_coverage = covered_data.data_for_coverage
+                cur_data.coverage = covered_data.data_for_coverage
                 if hasattr(covered_data, 'data_coverage_amount') and \
                         covered_data.data_coverage_amount:
                     try:
@@ -387,22 +349,18 @@ class ExtensionLifeState(DependantState):
                     cur_data.coverage_amount = Decimal(0)
                 if hasattr(covered_data, 'data_dynamic_data') and \
                         covered_data.data_dynamic_data:
-                    cur_data.dynamic_data = covered_data.data_dynamic_data
+                    cur_data.complementary_data = covered_data.data_dynamic_data
                 cur_element.covered_data.append(cur_data)
             cur_element.person = covered_element.elem_person
-            ext.covered_elements.append(cur_element)
+            contract.covered_elements.append(cur_element)
 
-        if not(hasattr(ext, 'dynamic_data') and ext.dynamic_data):
-            ext.dynamic_data = {}
-        ext.dynamic_data.update(wizard.extension_life.dynamic_data)
-        contract.extension_life = [ext]
-        res = contract.check_sub_elem_eligibility(
-            wizard.project.start_date,
-            'extension_life')
+#        if not(hasattr(ext, 'complementary_data') and ext.complementary_data):
+#            ext.complementary_data = {}
+#        ext.complementary_data.update(wizard.extension_life.complementary_data)
+#        contract.extension_life = [ext]
+        res = contract.check_sub_elem_eligibility(wizard.project.start_date)
         if res[0]:
-            res1 = contract.check_covered_amounts(
-                wizard.project.start_date,
-                'extension_life')
+            res1 = contract.check_covered_amounts(wizard.project.start_date)
         else:
             return res
         if res[0] and res1[0]:

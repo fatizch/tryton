@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <tree string="Covered Data" editable="bottom" sequence="1">
   <field name="status_selection"/>
-  <field name="for_coverage"/>
+  <field name="coverage"/>
   <field name="start_date"/>
   <field name="end_date"/>
 </tree>

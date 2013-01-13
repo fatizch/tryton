@@ -1,5 +1,5 @@
 from trytond.model import fields
-from trytond.modules.insurance_contract import GenericContract
+from trytond.modules.insurance_contract import Contract
 
 from trytond.modules.coop_utils import utils
 from trytond.modules.coop_utils import date
@@ -173,12 +173,12 @@ class Bill(model.CoopSQL, model.CoopView):
         self.amount_ttc = 0
         if isinstance(contract, str):
             self.for_contract = contract
-        elif isinstance(contract, GenericContract):
+        elif isinstance(contract, Contract):
             self.for_contract = '%s,%s' % (contract.__name__, contract.id)
 
     @staticmethod
     def get_contract_models():
-        return utils.get_descendents(GenericContract)
+        return utils.get_descendents(Contract)
 
     def get_bill_line_model(self):
         return 'ins_contract.billing.generic_line'

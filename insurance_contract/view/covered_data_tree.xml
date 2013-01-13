@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
-<tree string="option">
-    <field name="contract"/>
-    <field name="offered"/>
+<tree string="Data">
     <field name="start_date"/>
     <field name="end_date"/>
+    <field name="coverage"/>
 </tree>

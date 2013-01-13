@@ -58,7 +58,7 @@ msgctxt "error:ins_product.deductible_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr ""
 
-msgctxt "error:ins_product.dynamic_data_manager:"
+msgctxt "error:ins_product.complementary_data_manager:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -174,7 +174,7 @@ msgctxt "field:ins_product.benefit,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:ins_product.benefit,dynamic_data_manager:"
+msgctxt "field:ins_product.benefit,complementary_data_manager:"
 msgid "Complementary Data Manager"
 msgstr "Données Complémentaires"
 
@@ -586,7 +586,7 @@ msgctxt "field:ins_product.coverage,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:ins_product.coverage,dynamic_data_manager:"
+msgctxt "field:ins_product.coverage,complementary_data_manager:"
 msgid "Complementary Data Manager"
 msgstr "Données Complémentaires"
 
@@ -802,47 +802,47 @@ msgctxt "field:ins_product.deductible_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.dynamic_data_manager,create_date:"
+msgctxt "field:ins_product.complementary_data_manager,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.dynamic_data_manager,create_uid:"
+msgctxt "field:ins_product.complementary_data_manager,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.dynamic_data_manager,id:"
+msgctxt "field:ins_product.complementary_data_manager,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.dynamic_data_manager,is_used:"
+msgctxt "field:ins_product.complementary_data_manager,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-msgctxt "field:ins_product.dynamic_data_manager,kind:"
+msgctxt "field:ins_product.complementary_data_manager,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:ins_product.dynamic_data_manager,master:"
+msgctxt "field:ins_product.complementary_data_manager,master:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "field:ins_product.dynamic_data_manager,rec_name:"
+msgctxt "field:ins_product.complementary_data_manager,rec_name:"
 msgid "Name"
 msgstr "Valeur"
 
-msgctxt "field:ins_product.dynamic_data_manager,shared_dynamic:"
+msgctxt "field:ins_product.complementary_data_manager,shared_dynamic:"
 msgid "Shared Complementary Data"
 msgstr "Donnée Complémentaires Partagées"
 
-msgctxt "field:ins_product.dynamic_data_manager,specific_dynamic:"
+msgctxt "field:ins_product.complementary_data_manager,specific_dynamic:"
 msgid "Specific Complementary Data"
 msgstr "Données Complémentaires Spécifiques"
 
-msgctxt "field:ins_product.dynamic_data_manager,write_date:"
+msgctxt "field:ins_product.complementary_data_manager,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.dynamic_data_manager,write_uid:"
+msgctxt "field:ins_product.complementary_data_manager,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -1050,7 +1050,7 @@ msgctxt "field:ins_product.offered,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:ins_product.offered,dynamic_data_manager:"
+msgctxt "field:ins_product.offered,complementary_data_manager:"
 msgid "Complementary Data Manager"
 msgstr "Données Complémentaires"
 
@@ -1318,7 +1318,7 @@ msgctxt "field:ins_product.product,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:ins_product.product,dynamic_data_manager:"
+msgctxt "field:ins_product.product,complementary_data_manager:"
 msgid "Complementary Data Manager"
 msgstr "Données Complémentaires"
 
@@ -1806,7 +1806,7 @@ msgctxt "model:ins_product.deductible_rule,name:"
 msgid "Deductible Rule"
 msgstr "Franchise"
 
-msgctxt "model:ins_product.dynamic_data_manager,name:"
+msgctxt "model:ins_product.complementary_data_manager,name:"
 msgid "Complementary Data Manager"
 msgstr "Données Complémentaires"
 
@@ -2107,19 +2107,19 @@ msgctxt "selection:ins_product.deductible_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:ins_product.dynamic_data_manager,kind:"
+msgctxt "selection:ins_product.complementary_data_manager,kind:"
 msgid "Main"
 msgstr "Principale"
 
-msgctxt "selection:ins_product.dynamic_data_manager,kind:"
+msgctxt "selection:ins_product.complementary_data_manager,kind:"
 msgid "Sub Element"
 msgstr "Elément Couvert"
 
-msgctxt "selection:ins_product.dynamic_data_manager,master:"
+msgctxt "selection:ins_product.complementary_data_manager,master:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "selection:ins_product.dynamic_data_manager,master:"
+msgctxt "selection:ins_product.complementary_data_manager,master:"
 msgid "Product"
 msgstr "Produit"
 
@@ -2395,7 +2395,7 @@ msgctxt "view:ins_product.deductible_rule:"
 msgid "Deductible rule"
 msgstr "Franchise"
 
-msgctxt "view:ins_product.dynamic_data_manager:"
+msgctxt "view:ins_product.complementary_data_manager:"
 msgid "Complementary Data Manager"
 msgstr "Données Complémentaires"
 

@@ -18,7 +18,7 @@ echo $SEP
 #env UBUNTU_MENUPROXY= $TRYTON_PATH/tryton -c $TRYTON_CONF &
 
 #Debug Mode
-env UBUNTU_MENUPROXY= $TRYTON_PATH/tryton -c $TRYTON_CONF -l DEBUG -d  &
+env UBUNTU_MENUPROXY= $TRYTON_PATH/tryton -c $TRYTON_CONF -l DEBUG -d -v &
 sleep 2
 echo $SEP
 echo "Client ready"

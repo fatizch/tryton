@@ -5,10 +5,10 @@
     <!--                       Complementary Data Manager                     -->
     <!--################################################################-->
 
-        <record model="ir.ui.view" id="dynamic_data_view_form">
-            <field name="model">ins_collective.dynamic_data_manager</field>
+        <record model="ir.ui.view" id="complementary_data_view_form">
+            <field name="model">ins_collective.complementary_data_manager</field>
             <field name="type">form</field>
-            <field name="inherit" ref="insurance_product.dynamic_data_view_form"/>
+            <field name="inherit" ref="insurance_product.complementary_data_view_form"/>
             <field name="arch" type="xml"/>
         </record>
     <!--################################################################-->

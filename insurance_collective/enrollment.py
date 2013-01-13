@@ -61,8 +61,8 @@ class EnrollmentOption(GroupRoot, Option):
         'get_is_subscribed', 'set_is_subscribed')
 
     def get_is_subscribed(self, name=None):
-        return self.id > 0 or (self.coverage and
-            self.coverage.subscription_behaviour in ['mandatory', 'proposed'])
+        return self.id > 0 or (self.offered and
+            self.offered.subscription_behaviour in ['mandatory', 'proposed'])
 
     @classmethod
     def set_is_subscribed(cls, options, name, value):

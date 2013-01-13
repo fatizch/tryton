@@ -223,6 +223,9 @@ class WithAbstract(object):
                 # We go through each value of the dictionnary an set it.
                 if not key in for_object._fields:
                     # After checking that it matches, of course...
+                    print '*' * 80
+                    print key, for_object._fields
+                    print '*' * 80
                     raise BadDataKeyError
                 setattr(for_object,
                         key,
