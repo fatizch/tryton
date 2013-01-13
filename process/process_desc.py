@@ -164,13 +164,14 @@ class ProcessDesc(ModelSQL, ModelView):
     def update_view(cls, processes):
         # This button is just used to trigger the update process of the view
         # associated to the process
-        for process in processes:
-            if isinstance(process, int):
-                process = cls(process)
-            good_menu = process.create_update_view()
-            if good_menu:
-                process.menu_item = good_menu
-                process.save()
+        with Transaction().set_user(0):
+            for process in processes:
+                if isinstance(process, int):
+                    process = cls(process)
+                good_menu = process.create_update_view()
+                if good_menu:
+                    process.menu_item = good_menu
+                    process.save()
 
     def get_all_steps(self):
         # We need a way to get all the steps.
@@ -323,7 +324,21 @@ class ProcessDesc(ModelSQL, ModelView):
  in a state (%s) that you are not allowed to view."/>' % step.fancy_name
                 xml += '</group>'
 
+        xml += '<newline/>'
+        # We need a special form to explain that the current record
+        # completed the process
+        xml += '<group name="group_tech_complete" '
+        xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1" '
+        xml += 'states="{'
+        xml += "'invisible': ~~Eval('current_state')"
+        xml += '}">'
+
+        xml += '<label id="complete_text" string="The current record \
+completed the current process, please go ahead"/>'
         xml += '</group>'
+
+        xml += '</group>'
+
         xml += '<newline/>'
         xml += '<group name="process_footer">'
         xml += '</group>'
@@ -422,15 +437,16 @@ class ProcessDesc(ModelSQL, ModelView):
     @classmethod
     def create(cls, values):
         # When creating the process, we create the associated view
-        process = super(ProcessDesc, cls).create(values)
+        processes = super(ProcessDesc, cls).create(values)
 
-        menu = process.create_update_view()
+        for process in processes:
+            menu = process.create_update_view()
 
-        # Then save the menu in the menu_item field
-        if not process.menu_item:
-            cls.write([process], {'menu_item': menu})
+            # Then save the menu in the menu_item field
+            if not process.menu_item:
+                cls.write([process], {'menu_item': menu})
 
-        return process
+        return processes
 
     @classmethod
     def write(cls, instances, values):
@@ -552,6 +568,10 @@ class StepTransition(ModelSQL, ModelView):
     def get_rec_name(self, name):
         return self.to_step.get_rec_name(name)
 
+    @classmethod
+    def default_methods(cls):
+        return ''
+
 
 class StepDescAuthorization(ModelSQL):
     'Step Desc Authorization'
@@ -655,13 +675,18 @@ class StepDesc(ModelSQL, ModelView):
         for trans in self.from_steps:
             xml += trans.build_button()
 
-        # The "current state" button
-        xml += '<button string="%s" name="_button_%s_%s"/>' % (
-            self.fancy_name, self.id, self.id)
+        if self.to_steps:
+            # The "current state" button
+            xml += '<button string="%s" name="_button_%s_%s"/>' % (
+                self.fancy_name, self.id, self.id)
 
-        # And the "next buttons"
-        for trans in self.to_steps:
-            xml += trans.build_button()
+            # And the "next buttons"
+            for trans in self.to_steps:
+                xml += trans.build_button()
+        else:
+            # If there are no "next" buttons, we need an exit point.
+            xml += '<button string="%s" name="_button_%s_complete"/>' % (
+                'Complete Process', self.id)
 
         xml += '</group>'
 

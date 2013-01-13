@@ -73,17 +73,23 @@ class DynamicButtonDict(dict):
         if not name.startswith(self.allowed_prefix):
             return super(AllowRPCDict, self).__getitem__(name)
 
-        # The 'name' is supposed to be the encoded id of the transition
+        # The 'name' is supposed to be the encoded id of the transition, or
+        # a specific instruction ('complete')
         transition_id = name[len(self.allowed_prefix):].split('_')
 
         # If there is nothing, there is a problem
         if not transition_id:
             raise Exception
 
-        # If there is only one, the button is just here for aesthetics, set it
-        # to readonly !
+        # The pattern for readonly (current_state) steps is 
+        # "<step_id>_<step_id>"
+        # The pattern for instructions is "<step_id>_<instruction>"
         if len(transition_id) > 1:
-            return {'readonly': True}
+            if transition_id[0] == transition_id[1]:
+                return {'readonly': True}
+            else:
+                if transition_id[1] == 'complete':
+                    return {}
 
         # Now we need to find the transition which matches the id given
         # through the name of the method.
@@ -226,23 +232,38 @@ class ProcessFramework(ModelView):
 
     @classmethod
     def default_button_method(cls, button_name):
-        # button_name should be the transition's id
-        transition, = map(int, button_name.split('_'))
+        # If the button is a transition, the name should be its id
+        # If it is an instruction, we look for it
+        transition_data = button_name.split('_')
+        if len(transition_data) == 1:
+            # Only one means it is a standard transition
+            transition = int(transition_data[0])
 
-        # This is the method that will be called when clicking on the button
-        def button_generic(works):
-            # Pretty straightforward : we find the matching transition
-            StepTransition = Pool().get('process.step_transition')
-            good_trans = StepTransition(transition)
+            # This is the method that will be called when clicking on the button
+            def button_generic(works):
+                # Pretty straightforward : we find the matching transition
+                StepTransition = Pool().get('process.step_transition')
+                good_trans = StepTransition(transition)
 
-            for work in works:
-                # Then execute it on each instance
-                good_trans.execute(work)
+                for work in works:
+                    # Then execute it on each instance
+                    good_trans.execute(work)
 
-                # Do not forget to save !
-                work.save()
+                    # Do not forget to save !
+                    work.save()
 
-        return button_generic
+            return button_generic
+        else:
+            # The second part should be the instruction:
+            instruction = transition_data[1]
+            if instruction == 'complete':
+                # Complete means that the process shoud be exited
+                def complete(works):
+                    for work in works:
+                        work.current_state = None
+                        work.save()
+
+                return complete
 
     def set_state(self, value, process_name=None):
         # Setting the state means updating the current_state attribute
