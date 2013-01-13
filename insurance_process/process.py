@@ -567,7 +567,7 @@ class CoopProcess(Wizard):
                                        data_dict)
             else:
                 # Does not exist, create it !
-                process = SuspendedProcess.create(data_dict)
+                process, = SuspendedProcess.create([data_dict])
                 if not process:
                     self.raise_user_error('Could not store process !')
             return 'end'
@@ -1222,9 +1222,9 @@ class SubscriptionProcess(Wizard):
             # to the contract_obj.create method to gives it the data it needs
             # to create the options.
             options.append(('create',
-                            {'start_date': option.from_date,
+                            [{'start_date': option.from_date,
                              'coverage': option.for_coverage.id,
-                             }))
+                             }]))
 
         # Once the options are prepared, we can create the contract. To do so,
         # we use the create method from the contract_obj model, giving it a
@@ -1232,12 +1232,12 @@ class SubscriptionProcess(Wizard):
         # a list, we give it the list of tuple we just created, which will
         # provide the create method with all the data it needs to create the
         # contract record.
-        contract_obj.create({'options': options,
+        contract_obj.create([{'options': options,
                              'product': session.project.product.id,
                              'start_date': session.project.start_date,
                              'contract_number': contract_obj.
                                                     get_new_contract_number()
-                             })
+                             }])
 
         # We do not forget to return the name of the next step. 'end' is the
         # technical step marking the end of the process.

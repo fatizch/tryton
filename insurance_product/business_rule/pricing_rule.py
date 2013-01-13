@@ -88,12 +88,12 @@ class PricingRule(BusinessRuleRoot, model.CoopSQL):
                 + list(pricing.sub_item_components))
             cls.write([pricing],
                     {'components': [(
-                        'create', {
+                        'create', [{
                             'fixed_amount': value,
                             'kind': 'base',
                             'code': 'PP',
                             'rated_object_kind':'global',
-                            })]})
+                            }])]})
 
     @classmethod
     def set_basic_tax(cls, pricing_rules, name, value):
@@ -114,11 +114,11 @@ class PricingRule(BusinessRuleRoot, model.CoopSQL):
                 + list(pricing.sub_item_components))
             cls.write([pricing],
                     {'components': [(
-                        'create', {
+                        'create', [{
                             'kind': 'tax',
                             'code': tax.code,
                             'rated_object_kind':'global',
-                        })]})
+                        }])]})
 
     def get_component_of_kind(self, kind='base', rated_object_kind='global'):
         components = self.get_components(rated_object_kind)

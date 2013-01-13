@@ -155,7 +155,7 @@ class ExportImportMixin(object):
                             adds.append(target.id)
                             continue
                     creates.append(
-                        ('create', Target._import_json(line)))
+                        ('create', [Target._import_json(line)]))
             if existing_lines:
                 deletes.append(
                     ('delete', [l.id for l in existing_lines.itervalues()]))
@@ -179,7 +179,7 @@ class ExportImportMixin(object):
             record, = records
             cls.write(records, new_values)
         else:
-            record = cls.create(new_values)
+            record, = cls.create([new_values])
         return record
 
     @classmethod

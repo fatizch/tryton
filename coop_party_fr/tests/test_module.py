@@ -44,14 +44,14 @@ class ModuleTestCase(unittest.TestCase):
         with Transaction().start(DB_NAME, USER,
            context=CONTEXT):
             try:
-                person = self.Person.create({
+                person, = self.Person.create([{
                     'name': 'Person %s' % i,
                     'first_name': 'first name %s' % i,
                     'ssn': ssn,
                     'birth_date': birth_date,
                     'gender': gender,
                     'addresses': []
-                    })
+                    }])
                 res = person.id > 0
             except:
                 res = False

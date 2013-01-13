@@ -46,10 +46,10 @@ class ModuleTestCase(unittest.TestCase):
         Test Definition.get.
         '''
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
-            definition = self.definition.create({
+            definition, = self.definition.create([{
                     'name': 'Test',
                     'code': 'test0'
-                    })
+                    }])
             self.assertEqual(self.definition.get('Test'), definition)
             self.assertRaises(IndexError, self.definition.get, 'foo')
 
@@ -58,27 +58,27 @@ class ModuleTestCase(unittest.TestCase):
         Test TableCell.get with 1 dimension of value.
         '''
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
-            definition = self.definition.create({
+            definition, = self.definition.create([{
                     'name': 'Test',
                     'code': 'test1',
                     'dimension_kind1': 'value',
-                    })
-            dim1_foo = self.dimension.create({
+                    }])
+            dim1_foo, = self.dimension.create([{
                     'definition': definition.id,
                     'type': 'dimension1',
                     'value': 'foo',
-                    })
-            dim1_bar = self.dimension.create({
+                    }])
+            dim1_bar, = self.dimension.create([{
                     'definition': definition.id,
                     'type': 'dimension1',
                     'value': 'bar',
-                    })
+                    }])
             for values in ({'dimension1': dim1_foo.id, 'value': 'ham'},
                     {'dimension1': dim1_bar.id, 'value': 'spam'}):
                 values.update({
                         'definition': definition.id,
                         })
-                self.cell.create(values)
+                self.cell.create([values])
             for query, result in (
                     (('foo',), 'ham'),
                     (('bar',), 'spam'),
@@ -92,27 +92,27 @@ class ModuleTestCase(unittest.TestCase):
         Test TableCell.get with 1 dimension of date.
         '''
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
-            definition = self.definition.create({
+            definition, = self.definition.create([{
                     'name': 'Test',
                     'code': 'test2',
                     'dimension_kind1': 'date',
-                    })
-            dim1_foo = self.dimension.create({
+                    }])
+            dim1_foo, = self.dimension.create([{
                     'definition': definition.id,
                     'type': 'dimension1',
                     'date': datetime.date(2012, 12, 21),
-                    })
-            dim1_bar = self.dimension.create({
+                    }])
+            dim1_bar, = self.dimension.create([{
                     'definition': definition.id,
                     'type': 'dimension1',
                     'date': datetime.date(2012, 9, 21),
-                    })
+                    }])
             for values in ({'dimension1': dim1_foo.id, 'value': 'ham'},
                     {'dimension1': dim1_bar.id, 'value': 'spam'}):
                 values.update({
                         'definition': definition.id,
                         })
-                self.cell.create(values)
+                self.cell.create([values])
             for query, result in (
                     ((datetime.date(2012, 12, 21),), 'ham'),
                     ((datetime.date(2012, 9, 21),), 'spam'),
@@ -126,29 +126,29 @@ class ModuleTestCase(unittest.TestCase):
         Test TableCell.get with 1 dimension of range.
         '''
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
-            definition = self.definition.create({
+            definition, = self.definition.create([{
                     'name': 'Test',
                     'code': 'test3',
                     'dimension_kind1': 'range',
-                    })
-            dim1_foo = self.dimension.create({
+                    }])
+            dim1_foo, = self.dimension.create([{
                     'definition': definition.id,
                     'type': 'dimension1',
                     'start': 1,
                     'end': 10,
-                    })
-            dim1_bar = self.dimension.create({
+                    }])
+            dim1_bar, = self.dimension.create([{
                     'definition': definition.id,
                     'type': 'dimension1',
                     'start': 20,
                     'end': 42,
-                    })
+                    }])
             for values in ({'dimension1': dim1_foo.id, 'value': 'ham'},
                     {'dimension1': dim1_bar.id, 'value': 'spam'}):
                 values.update({
                         'definition': definition.id,
                         })
-                self.cell.create(values)
+                self.cell.create([values])
             for query, result in (
                     ((0,), None),
                     ((1,), 'ham'),
@@ -161,29 +161,29 @@ class ModuleTestCase(unittest.TestCase):
                     result, (query, result))
 
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
-            definition = self.definition.create({
+            definition, = self.definition.create([{
                     'name': 'Test',
                     'code': 'test',
                     'dimension_kind1': 'range',
-                    })
-            dim1_foo = self.dimension.create({
+                    }])
+            dim1_foo, = self.dimension.create([{
                     'definition': definition.id,
                     'type': 'dimension1',
                     'start': None,
                     'end': 10,
-                    })
-            dim1_bar = self.dimension.create({
+                    }])
+            dim1_bar, = self.dimension.create([{
                     'definition': definition.id,
                     'type': 'dimension1',
                     'start': 20,
                     'end': None,
-                    })
+                    }])
             for values in ({'dimension1': dim1_foo.id, 'value': 'ham'},
                     {'dimension1': dim1_bar.id, 'value': 'spam'}):
                 values.update({
                         'definition': definition.id,
                         })
-                self.cell.create(values)
+                self.cell.create([values])
             for query, result in (
                     ((0,), 'ham'),
                     ((5,), 'ham'),
@@ -199,29 +199,29 @@ class ModuleTestCase(unittest.TestCase):
         Test TableCell.get with 1 dimension of range-date.
         '''
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
-            definition = self.definition.create({
+            definition, = self.definition.create([{
                     'name': 'Test',
                     'code': 'test4',
                     'dimension_kind1': 'range-date',
-                    })
-            dim1_foo = self.dimension.create({
+                    }])
+            dim1_foo, = self.dimension.create([{
                     'definition': definition.id,
                     'type': 'dimension1',
                     'start_date': datetime.date(2012, 1, 1),
                     'end_date': datetime.date(2012, 12, 31),
-                    })
-            dim1_bar = self.dimension.create({
+                    }])
+            dim1_bar, = self.dimension.create([{
                     'definition': definition.id,
                     'type': 'dimension1',
                     'start_date': datetime.date(2013, 6, 1),
                     'end_date': datetime.date(2013, 8, 1),
-                    })
+                    }])
             for values in ({'dimension1': dim1_foo.id, 'value': 'ham'},
                     {'dimension1': dim1_bar.id, 'value': 'spam'}):
                 values.update({
                         'definition': definition.id,
                         })
-                self.cell.create(values)
+                self.cell.create([values])
             for query, result in (
                     ((datetime.date(2011, 1, 1),), None),
                     ((datetime.date(2012, 1, 1),), 'ham'),
@@ -234,29 +234,29 @@ class ModuleTestCase(unittest.TestCase):
                     result, (query, result))
 
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
-            definition = self.definition.create({
+            definition, = self.definition.create([{
                     'name': 'Test',
                     'code': 'test',
                     'dimension_kind1': 'range-date',
-                    })
-            dim1_foo = self.dimension.create({
+                    }])
+            dim1_foo, = self.dimension.create([{
                     'definition': definition.id,
                     'type': 'dimension1',
                     'start_date': None,
                     'end_date': datetime.date(2012, 12, 31),
-                    })
-            dim1_bar = self.dimension.create({
+                    }])
+            dim1_bar, = self.dimension.create([{
                     'definition': definition.id,
                     'type': 'dimension1',
                     'start_date': datetime.date(2013, 6, 1),
                     'end_date': None,
-                    })
+                    }])
             for values in ({'dimension1': dim1_foo.id, 'value': 'ham'},
                     {'dimension1': dim1_bar.id, 'value': 'spam'}):
                 values.update({
                         'definition': definition.id,
                         })
-                self.cell.create(values)
+                self.cell.create([values])
             for query, result in (
                     ((datetime.date(2011, 1, 1),), 'ham'),
                     ((datetime.date(2012, 3, 1),), 'ham'),
@@ -272,34 +272,34 @@ class ModuleTestCase(unittest.TestCase):
         Test TableCell.get with 2 dimensions of value.
         '''
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
-            definition = self.definition.create({
+            definition, = self.definition.create([{
                     'name': 'Test',
                     'code': 'test_code',
                     'dimension_kind1': 'value',
                     'dimension_kind2': 'range',
-                    })
-            dim1_foo = self.dimension.create({
+                    }])
+            dim1_foo, = self.dimension.create([{
                     'definition': definition.id,
                     'type': 'dimension1',
                     'value': 'foo',
-                    })
-            dim1_bar = self.dimension.create({
+                    }])
+            dim1_bar, = self.dimension.create([{
                     'definition': definition.id,
                     'type': 'dimension1',
                     'value': 'bar',
-                    })
-            dim2_foo = self.dimension.create({
+                    }])
+            dim2_foo, = self.dimension.create([{
                     'definition': definition.id,
                     'type': 'dimension2',
                     'start': 1,
                     'end': 10,
-                    })
-            dim2_bar = self.dimension.create({
+                    }])
+            dim2_bar, = self.dimension.create([{
                     'definition': definition.id,
                     'type': 'dimension2',
                     'start': 20,
                     'end': 42,
-                    })
+                    }])
             for values in (
                     {'dimension1': dim1_foo.id, 'dimension2': dim2_foo.id,
                         'value': 'ham'},
@@ -312,7 +312,7 @@ class ModuleTestCase(unittest.TestCase):
                 values.update({
                         'definition': definition.id,
                         })
-                self.cell.create(values)
+                self.cell.create([values])
 
             for query, result in (
                     (('foo', 1), 'ham'),

@@ -220,19 +220,19 @@ class ModuleTestCase(unittest.TestCase):
             self.register_pool()
             self.add_pool()
             steps = []
-            steps.append(('create', {
+            steps.append(('create', [{
                 'sequence': 1,
                 'step_model': self.dummy_step.__name__
-                                    }))
-            steps.append(('create', {
+                                    }]))
+            steps.append(('create', [{
                 'sequence': 2,
                 'step_model': self.dummy_step1.__name__
-                                     }))
-            process_desc = self.process_desc.create({
+                                     }]))
+            process_desc, = self.process_desc.create([{
                 'name': 'Contract Subscription',
                 'steps': steps,
                 'process_model': self.dummy_process.__name__
-                                                           })
+                                                           }])
             self.assert_(process_desc.id)
             transaction.cursor.commit()
             self.process_desc = process_desc

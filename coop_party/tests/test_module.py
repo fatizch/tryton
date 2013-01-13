@@ -42,10 +42,10 @@ class ModuleTestCase(unittest.TestCase):
         test_depends()
 
     def createParty(self, name):
-        party = self.Party.create({
+        party, = self.Party.create([{
             'name': name,
             'addresses': []
-            })
+            }])
         return party
 
     def test0010relations(self):

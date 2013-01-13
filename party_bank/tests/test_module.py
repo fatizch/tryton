@@ -50,9 +50,9 @@ class ModuleTestCase(unittest.TestCase):
         '''
         with Transaction().start(DB_NAME, USER,
                 context=CONTEXT) as transaction:
-            bank1 = self.Bank.create({
+            bank1, = self.Bank.create([{
                     'name': 'Bank 1', 'addresses': []
-                })
+                }])
             self.assert_(bank1.id)
             transaction.cursor.commit()
 
@@ -72,11 +72,11 @@ class ModuleTestCase(unittest.TestCase):
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             party1, = self.Party.search([], limit=1)
 
-            currency = self.Currency.create({
+            currency, = self.Currency.create([{
                     'name': 'Euro',
                     'code': 'EUR',
                     'symbol': u'€',
-                    })
+                    }])
 
             bank_account = self.BankAccount()
             bank_account.party = party1.id

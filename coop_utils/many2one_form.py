@@ -59,7 +59,7 @@ class Many2OneForm(fields.Function):
         records = model.browse(ids)
         for action in values:
             if action[0] == 'create':
-                new_target = Target.create(action[1])
+                new_target, = Target.create([action[1]])
                 model.write(records, {
                         self.many2one.name: new_target,
                         })

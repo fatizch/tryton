@@ -603,11 +603,11 @@ class Table2D(ModelSQL, ModelView):
                         })
             to_creates = set(dim1_ids) - set(i.id for i in cells)
             for dim1_id in to_creates:
-                TableCell.create({
+                TableCell.create([{
                         'definition': definition_id,
                         'dimension1': dim1_id,
                         'dimension2': dim2_id,
                         'dimension3': Transaction().context.get('dimension3'),
                         'dimension4': Transaction().context.get('dimension4'),
                         'value': value,
-                        })
+                        }])

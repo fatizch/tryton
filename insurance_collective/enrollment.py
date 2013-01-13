@@ -70,5 +70,6 @@ class EnrollmentOption(GroupRoot, Option):
 
     @classmethod
     def create(cls, vals):
-        if vals['is_subscribed']:
-            return super(EnrollmentOption, cls).create(vals)
+        for option in vals:
+            if option['is_subscribed']:
+                return super(EnrollmentOption, cls).create([option])

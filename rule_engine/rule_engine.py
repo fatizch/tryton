@@ -607,7 +607,7 @@ class TableDefinition():
 
     @classmethod
     def create(cls, values):
-        table = super(TableDefinition, cls).create(values)
+        tables = super(TableDefinition, cls).create(values)
         TreeElement = Pool().get('rule_engine.tree_element')
         folder = utils.get_those_objects(
             'rule_engine.tree_element',
@@ -623,22 +623,24 @@ class TableDefinition():
         else:
             folder = folder[0]
 
-        new_tree = TreeElement()
-        new_tree.type = 'table'
-        if not 'TABLE' in values['code'].upper():
-            new_tree.translated_technical_name = 'table_%s' % values['code']
-        else:
-            new_tree.translated_technical_name = values['code']
-        if not 'TABLE' in values['name'].upper():
-            new_tree.description = 'Table %s' % values['name']
-        else:
-            new_tree.description = values['name']
-        new_tree.language = utils.get_this_object(
-            'ir.lang', ('code', '=', Transaction().language))
-        new_tree.the_table = table.id
-        new_tree.parent = folder
-        new_tree.save()
-        return table
+        for table in tables:
+            new_tree = TreeElement()
+            new_tree.type = 'table'
+            if not 'TABLE' in table.code.upper():
+                new_tree.translated_technical_name = 'table_%s' % table.code
+            else:
+                new_tree.translated_technical_name = table.code
+            if not 'TABLE' in table.name.upper():
+                new_tree.description = 'Table %s' % table.name
+            else:
+                new_tree.description = table.name
+            new_tree.language = utils.get_this_object(
+                'ir.lang', ('code', '=', Transaction().language))
+            new_tree.the_table = table.id
+            new_tree.parent = folder
+            new_tree.save()
+
+        return tables
 
 
 class CreateTestCaseStart(ModelView):
@@ -721,12 +723,12 @@ class CreateTestCase(Wizard):
         return rule.compute(test_context)
 
     def transition_create_test_case(self):
-        TestCase = Pool().get('rule_engine.test_case')
-        TestCase.create({
-                'description': self.ask_description.description,
-                'rule': Transaction().context['active_id'],
-                'values': [('create', {'name': tv.name, 'value': tv.value})
-                    for tv in self.start.test_values],
-                'expected_result': str(self.compute_value()),
-                })
+        testcase = pool().get('rule_engine.test_case')
+        testcase.create([{
+            'description': self.ask_description.description,
+            'rule': transaction().context['active_id'],
+            'values': [('create', [{'name': tv.name, 'value': tv.value}])
+                for tv in self.start.test_values],
+            'expected_result': str(self.compute_value()),
+            }])
         return 'end'

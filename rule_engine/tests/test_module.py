@@ -48,34 +48,34 @@ class ModuleTestCase(unittest.TestCase):
         test_depends()
 
     def create_test_table(self):
-        definition = self.definition.create({
-                'name': 'Test',
-                'code': 'test_table_awesome',
-                'dimension_kind1': 'value',
-                'dimension_kind2': 'range',
-                })
-        dim1_foo = self.dimension.create({
+        definition, = self.definition.create([{
+            'name': 'test',
+            'code': 'test_table_awesome',
+            'dimension_kind1': 'value',
+            'dimension_kind2': 'range',
+            }])
+        dim1_foo, = self.dimension.create([{
                 'definition': definition.id,
                 'type': 'dimension1',
                 'value': 'foo',
-                })
-        dim1_bar = self.dimension.create({
+                }])
+        dim1_bar, = self.dimension.create([{
                 'definition': definition.id,
                 'type': 'dimension1',
                 'value': 'bar',
-                })
-        dim2_foo = self.dimension.create({
+                }])
+        dim2_foo, = self.dimension.create([{
                 'definition': definition.id,
                 'type': 'dimension2',
                 'start': 1,
                 'end': 10,
-                })
-        dim2_bar = self.dimension.create({
+                }])
+        dim2_bar, = self.dimension.create([{
                 'definition': definition.id,
                 'type': 'dimension2',
                 'start': 20,
                 'end': 42,
-                })
+                }])
         for values in (
                 {'dimension1': dim1_foo.id, 'dimension2': dim2_foo.id,
                     'value': 'ham'},
@@ -88,7 +88,7 @@ class ModuleTestCase(unittest.TestCase):
             values.update({
                     'definition': definition.id,
                     })
-            self.cell.create(values)
+            self.cell.create([values])
 
         return definition
 
