@@ -1,6 +1,8 @@
 import multiprocessing
+import functools
 
 from proteus import config as pconfig
+from proteus import Model
 
 
 def get_config(cfg_dict, connexion_date):
@@ -61,8 +63,62 @@ def get_objects_from_db(cfg_dict, model, key=None, value=None, domain=None,
         domain = []
     if key and value:
         domain.append((key, '=', value))
+
     instances = cfg_dict[model].find(domain, limit=limit)
     if instances and limit == 1:
         return instances[0]
     else:
         return instances
+
+
+def get_or_create_this(data, cfg_dict, class_key, sel_val='', domain=None,
+        to_store=True, only_get=False):
+    if sel_val:
+        the_object = get_objects_from_db(
+            cfg_dict, class_key, sel_val, data[sel_val])
+    elif domain:
+        def prepare_search(data):
+            if isinstance(data, Model):
+                return data.id
+            return data
+
+        the_object = get_objects_from_db(
+            cfg_dict, class_key, domain=[
+                ('%s' % k, '=', prepare_search(data[k])) 
+                    for k in domain
+                    if k in data])
+
+    if the_object:
+        return the_object
+    elif only_get:
+        return None
+
+    the_object = cfg_dict[class_key]()
+
+    for key, value in data.iteritems():
+        try:
+            if isinstance(value, list):
+                getattr(the_object, key).extend(value)
+            else:
+                setattr(the_object, key, value)
+        except AttributeError:
+            print key
+            print value
+            raise
+
+    if to_store:
+        the_object.save()
+
+    return the_object
+
+
+def generate_creation_method(cfg_dict, class_key, sel_val='', domain=None,
+        to_store=True, only_get=False):
+    return functools.partial(
+        get_or_create_this,
+        cfg_dict=cfg_dict,
+        class_key=class_key,
+        sel_val=sel_val,
+        domain=domain,
+        to_store=to_store,
+        only_get=only_get)
