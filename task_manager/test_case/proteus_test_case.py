@@ -72,6 +72,10 @@ def launch_test_case(cfg_dict):
         'model': 'ins_product.product',
         })
     
+    coverage_mod = meths['Model']({
+        'model': 'ins_product.coverage',
+        })
+
     society_mod = meths['Model']({
         'model': 'party.society',
         })
@@ -98,6 +102,9 @@ def launch_test_case(cfg_dict):
             cfg_dict['Menu'](meths['ModelData']({
                 'module': 'insurance_product',
                 'fs_id': 'menu_product_form'}).db_id),
+            cfg_dict['Menu'](meths['ModelData']({
+                'module': 'insurance_product',
+                'fs_id': 'menu_coverage_form'}).db_id),
             subs_process.menu_item,],
         'users': [
             admin_user,],
@@ -105,6 +112,12 @@ def launch_test_case(cfg_dict):
 
     meths['ModelAccess']({
         'model': product_mod,
+        'group': contract_admin_grp,
+        'perm_read': True,
+        })
+
+    meths['ModelAccess']({
+        'model': coverage_mod,
         'group': contract_admin_grp,
         'perm_read': True,
         })
