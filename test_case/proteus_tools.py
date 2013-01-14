@@ -124,7 +124,7 @@ def generate_creation_method(cfg_dict, class_key, sel_val='', domain=None,
         only_get=only_get)
 
 
-def get_translation(cfg_dict, string):
+def get_translation(string, cfg_dict):
     return cfg_dict['translate'].get(string, string)
 
 
