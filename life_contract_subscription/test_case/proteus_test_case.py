@@ -143,7 +143,6 @@ def launch_test_case(cfg_dict):
 <newline/>
 <field name="product_desc" widget="richtext" colspan="2"/>
 <field name="subscriber_desc" widget="richtext" colspan="2"/>
-<field name="product_desc" widget="richtext" colspan="2"/>
 ''',
         })
     option_sel_step = get_or_create_step_desc(
