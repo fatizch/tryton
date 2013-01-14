@@ -545,11 +545,16 @@ class StepTransition(ModelSQL, ModelView):
                     continue
                 try:
                     # All methods should return a result, and errors
-                    res, errs = getattr(target, method)()
+                    result = getattr(target, method.strip())()
                 except:
                     print 'Error for method ', method
                     raise
+
+                if not isinstance(result, (list, tuple)) and result == True:
+                    continue
+
                 # In case of errors, display them !
+                res, errs = result
                 if not res or errs:
                     target.raise_user_error(errs)
 
