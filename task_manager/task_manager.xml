@@ -2,7 +2,7 @@
 <tryton>
   <data>
     <!-- Menu entries -->
-    <menuitem name="Task Manager" id="menu_task" sequence="40"/>
+    <menuitem name="Task Manager" id="menu_task" sequence="-1"/>
     <!-- User entries -->
     <record model="ir.ui.view" id="task_user_form">
       <field name="model">res.user</field>
