@@ -131,7 +131,6 @@ class Contract():
         pass
 
     def check_product_not_null(self):
-        print '*' * 80
         if not (hasattr(self, 'offered') and self.offered):
             return False, (('no_product', ()),)
         return True, ()
@@ -197,15 +196,10 @@ class Contract():
                 to_delete.remove(good_opt)
             else:
                 good_opt = OptionModel()
-                good_opt.init_from_coverage(coverage)
+                good_opt.init_from_offered(coverage, self.start_date)
                 good_opt.contract = self
 
-            good_opt.start_date = max(
-                good_opt.start_date,
-                self.start_date)
-
             good_opt.save()
-
             good_options.append(good_opt)
 
         if to_delete:
@@ -353,9 +347,9 @@ class CoveredElement():
         covered_datas = []
         for option in contract.options:
             good_data = CoveredData()
-            good_data.init_from_coverage(option.offered)
-            good_data.start_date = max(
-                good_data.start_date, contract.start_date)
+            good_data.init_from_option(option)
+#            good_data.start_date = max(
+#                good_data.start_date, contract.start_date)
             good_data.init_dynamic_data(option.offered, contract)
             good_data.status_selection = True
             covered_datas.append(good_data)

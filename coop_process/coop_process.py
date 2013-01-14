@@ -109,7 +109,6 @@ class StepTransition():
         return 'standard'
 
     def execute(self, target):
-        print 'RSE*******************************'
         if self.transition_kind != 'choice':
             super(StepTransition, self).execute(target)
             return
@@ -123,13 +122,13 @@ class StepTransition():
         env['time'] = time
         env['context'] = Transaction().context
         env['active_id'] = target.id
-        result = PYSONDecoder(env).decode(the_pyson )
+        result = PYSONDecoder(env).decode(the_pyson)
 
         if result:
             self.choice_if_true.execute(target)
         else:
             self.choice_if_false.execute(target)
-    
+
     def get_rec_name(self, name):
         if self.transition_kind != 'choice':
             return super(StepTransition, self).get_rec_name(name)

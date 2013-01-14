@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<tree string="Contract">
-    <field name="contract_number"/>
-    <field name="start_date"/>
-    <field name="status"/>
-    <field name="subscriber"/>
-</tree>

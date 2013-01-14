@@ -108,7 +108,7 @@ class GBPWizard(Wizard):
             ])
 
     def transition_start(self):
-        GBP = Pool().get('ins_collective.gbp_contract')
+        GBP = Pool().get('ins_collective.contract')
         College = Pool().get('party.college')
         CollegeDisplayer = Pool().get('ins_collective.college_displayer')
 
@@ -150,7 +150,7 @@ class GBPWizard(Wizard):
         return 'display_tranches'
 
     def transition_validate_tranches(self):
-        GBP = Pool().get('ins_collective.gbp_contract')
+        GBP = Pool().get('ins_collective.contract')
         gbp_id = Transaction().context.get('active_id', None)
         if not gbp_id:
             return

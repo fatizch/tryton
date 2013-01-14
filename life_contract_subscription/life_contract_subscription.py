@@ -6,8 +6,6 @@ from trytond.model import fields
 from trytond.pool import PoolMeta
 from trytond.rpc import RPC
 
-from trytond.modules.insurance_contract_subscription import CoveredData
-from trytond.modules.insurance_contract_subscription import CoveredElement
 
 __all__ = [
     'CoveredPersonSubs',
@@ -22,7 +20,7 @@ class CoveredPersonSubs():
     __metaclass__ = PoolMeta
 
 
-class CoveredDataSubs(CoveredData):
+class CoveredDataSubs():
     'Covered Data'
 
     __name__ = 'ins_contract.covered_data'

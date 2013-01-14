@@ -522,21 +522,20 @@ class StepTransition(ModelSQL, ModelView):
     is_readonly = fields.Boolean('Readonly')
 
     def execute(self, target):
-        print 'sdddddddddddddddddddddddddddddddddd'
         # Executing a transition is easy : just apply all methods
-        for method in self.methods.split('\n'):
-            if not method:
-                continue
-            try:
-                # All methods should return a result, and errors
-                res, errs = getattr(target, method)()
-            except:
-                print 'Error for method ', method
-                raise
-
-            # In case of errors, display them !
-            if not res or errs:
-                target.raise_user_error(errs)
+        if self.methods:
+            for method in self.methods.split('\n'):
+                if not method:
+                    continue
+                try:
+                    # All methods should return a result, and errors
+                    res, errs = getattr(target, method)()
+                except:
+                    print 'Error for method ', method
+                    raise
+                # In case of errors, display them !
+                if not res or errs:
+                    target.raise_user_error(errs)
 
         # Everything went right, update the state of the instance
         target.set_state(self.to_step)

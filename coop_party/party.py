@@ -190,6 +190,14 @@ class Party:
             res[society_dict[comp_id]] += comp_header
         return res
 
+    def get_person(self):
+        if self.person:
+            return self.person[0]
+
+    def get_society(self):
+        if self.society:
+            return self.society[0]
+
 
 class Actor(CoopView):
     'Actor'

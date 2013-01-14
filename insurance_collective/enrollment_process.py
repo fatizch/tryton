@@ -45,7 +45,7 @@ class ProjectStateEnrollment(ProjectState):
                               'Product')
 
     on_contract = fields.Many2One(
-        'ins_collective.gbp_contract',
+        'ins_collective.contract',
         'GBP Contract')
 
     # Override this control, it is not the same as before.

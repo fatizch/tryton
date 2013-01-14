@@ -154,8 +154,8 @@ class Offered(model.CoopView, utils.GetResult, Templated):
             return Transaction().context.get('currency_digits')
 
     def give_me_complementary_data_ids(self, args):
-        if not(hasattr(self,
-                'complementary_data_manager') and self.complementary_data_manager):
+        if not(hasattr(self, 'complementary_data_manager')
+            and self.complementary_data_manager):
             return []
         return self.complementary_data_manager[0].get_valid_schemas_ids(
             args['date']), []

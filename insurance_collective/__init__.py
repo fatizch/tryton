@@ -1,6 +1,6 @@
 from trytond.pool import Pool
 from .collective import *
-from .gbp_contract import *
+from .contract import *
 from .enrollment import *
 from .gbp_subs_process import *
 from .enrollment_process import *
@@ -8,10 +8,13 @@ from .enrollment_process import *
 
 def register():
     Pool.register(
-        GBPContract,
-        GroupInsurancePlan,
-        GroupInsuranceCoverage,
+        GroupProduct,
+        GroupCoverage,
+        GroupProductCoverageRelation,
         GroupPackageCoverage,
+        GroupContract,
+        GroupCoveredElement,
+        GroupCoveredData,
         GroupProductItemDescriptorRelation,
         GroupPricingRule,
         GroupPricingComponent,

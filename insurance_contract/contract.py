@@ -3,9 +3,10 @@ import copy
 
 from trytond.model import fields
 from trytond.pool import Pool
+from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model
+from trytond.modules.coop_utils import model, coop_string
 from trytond.modules.coop_utils import utils
 from trytond.modules.process import ProcessFramework
 
@@ -58,7 +59,6 @@ class GenericExtension(model.CoopView):
     def init_for_contract(self, contract):
         self.complementary_data = {}
         self.contract = contract
-
         self.init_extension(contract)
 
     def update_dynamic_data(self, contract, extension_field):
@@ -81,7 +81,8 @@ class GenericExtension(model.CoopView):
 class Subscribed(ProcessFramework):
     'Subscribed'
 
-    offered = fields.Many2One(None, 'Offered', required=True)
+    offered = fields.Many2One(None, 'Offered', required=True,
+        ondelete='RESTRICT')
     start_date = fields.Date('Effective Date', required=True)
     end_date = fields.Date('End Date',
         domain=[('start_date', '<=', 'end_date')])
@@ -128,6 +129,18 @@ class Subscribed(ProcessFramework):
             res.add(self.end_date)
         return utils.limit_dates(res, start, end)
 
+    def init_from_offered(self, offered, start_date=None, end_date=None):
+        self.offered = offered
+        if start_date:
+            self.start_date = max(offered.start_date, start_date)
+        else:
+            self.start_date = offered.start_date
+        if end_date:
+            self.end_date = min(offered.end_date, end_date)
+        else:
+            self.end_date = offered.end_date
+        self.status = 'active'
+
 
 class Contract(model.CoopSQL, Subscribed):
     'Contract'
@@ -138,7 +151,9 @@ class Contract(model.CoopSQL, Subscribed):
     options = fields.One2Many('ins_contract.option', 'contract', 'Options')
     covered_elements = fields.One2Many('ins_contract.covered_element',
         'contract', 'Covered Elements')
-    contract_number = fields.Char('Contract Number', required=True, select=1)
+    contract_number = fields.Char('Contract Number', select=1,
+        states={'required': Eval('status') == 'active'},
+        depends=['status'])
     subscriber = fields.Many2One('party.party', 'Subscriber')
     # The master field is the object on which rules will be called.
     # Basically, we need an abstract way to call rules, because in some case
@@ -155,6 +170,8 @@ class Contract(model.CoopSQL, Subscribed):
         'contract', 'Billing Manager')
     complementary_data = fields.Dict('Complementary Data',
         schema_model='ins_product.schema_element')
+    #TODO replace single contact by date versionned list
+    contact = fields.Many2One('party.party', 'Contact')
 
     @staticmethod
     def get_master(master):
@@ -251,13 +268,13 @@ class Contract(model.CoopSQL, Subscribed):
                         covered_data.end_date and
                         covered_data.end_date > at_date):
                     continue
-                eligibility, errors = covered_data.coverage.get_result(
+                eligibility, errors = covered_data.get_coverage().get_result(
                     'sub_elem_eligibility',
                     {
                         'date': at_date,
                         'sub_elem': covered_element,
                         'data': covered_data,
-                        'option': options[covered_data.coverage.code]
+                        'option': options[covered_data.get_coverage().code]
                     })
                 res = res and (not eligibility or eligibility.eligible)
                 if eligibility:
@@ -333,14 +350,11 @@ class Contract(model.CoopSQL, Subscribed):
         return True, ()
 
     def init_covered_elements(self):
-        CoveredElement = Pool().get(self.get_covered_element_model())
-        CoveredData = Pool().get(CoveredElement.get_covered_data_model())
-
+        CoveredData = Pool().get('ins_contract.covered_data')
         options = dict([(o.offered.code, o) for o in self.options])
-
         for elem in self.covered_elements:
             if (hasattr(elem, 'covered_data') and elem.covered_data):
-                existing_datas = dict([(data.coverage.code, data)
+                existing_datas = dict([(data.get_coverage().code, data)
                     for data in elem.covered_data])
             else:
                 existing_datas = {}
@@ -354,9 +368,7 @@ class Contract(model.CoopSQL, Subscribed):
                     continue
                 else:
                     good_data = CoveredData()
-                    good_data.init_from_coverage(option.offered)
-                    good_data.start_date = max(
-                        good_data.start_date, self.start_date)
+                    good_data.init_from_option(option)
                     with Transaction().set_context({
                             'current_contract': self.id}):
                         good_data.init_dynamic_data(option.offered, self)
@@ -364,6 +376,15 @@ class Contract(model.CoopSQL, Subscribed):
                     good_datas.append(good_data)
             CoveredData.delete(to_delete)
             elem.covered_data = good_datas
+        return True, ()
+
+    def get_policy_owner(self, at_date=None):
+        '''
+        the owner of a contract could change over time, you should never use
+        the direct link subscriber
+        '''
+        #TODO to enhance
+        return self.subscriber
 
 
 class Option(model.CoopSQL, Subscribed):
@@ -373,6 +394,8 @@ class Option(model.CoopSQL, Subscribed):
 
     contract = fields.Many2One('ins_contract.contract', 'Contract',
        ondelete='CASCADE')
+    covered_data = fields.One2Many('ins_contract.covered_data', 'option',
+        'Covered Data')
 
     def get_coverage(self):
         return self.offered
@@ -388,11 +411,6 @@ class Option(model.CoopSQL, Subscribed):
     def get_name_for_billing(self):
         return self.get_coverage().name + ' - Base Price'
 
-    def init_from_coverage(self, coverage):
-        self.start_date = coverage.start_date
-        self.offered = coverage
-        self.status = 'active'
-
     @classmethod
     def get_offered_name(cls):
         return 'coverage', 'Coverage'
@@ -400,6 +418,11 @@ class Option(model.CoopSQL, Subscribed):
     @classmethod
     def get_possible_status(cls, name=None):
         return OPTIONSTATUS
+
+    def get_rec_name(self, name):
+        if self.offered:
+            return self.offered.get_rec_name(name)
+        return super(Option, self).get_rec_name(name)
 
 
 class PriceLine(model.CoopSQL, model.CoopView):
@@ -692,6 +715,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     item_desc = fields.Many2One('ins_product.item_desc', 'Item Desc')
     covered_data = fields.One2Many('ins_contract.covered_data',
         'covered_element', 'Covered Element Data')
+    name = fields.Char('Name')
     parent = fields.Many2One('ins_contract.covered_element', 'Parent')
     sub_covered_elements = fields.One2Many('ins_contract.covered_element',
         'parent', 'Sub Covered Elements')
@@ -707,7 +731,12 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     def get_rec_name(self, value):
         res = super(CoveredElement, self).get_rec_name(value)
         if self.item_desc:
-            res = '%s %s' % (self.item_desc.get_rec_name(value), res)
+            res = coop_string.concat_strings(
+                self.item_desc.get_rec_name(value), res)
+            if self.name:
+                res = '%s : %s' % (res, self.name)
+        elif self.name:
+            res = coop_string.concat_strings(res, self.name)
         return res
 
     def get_dates(self, dates=None, start=None, end=None):
@@ -742,6 +771,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.covered_data'
 
+    option = fields.Many2One('ins_contract.option', 'Subscribed Coverage')
     coverage = fields.Many2One('ins_product.coverage', 'Coverage',
         ondelete='RESTRICT', )
     covered_element = fields.Many2One('ins_contract.covered_element',
@@ -751,6 +781,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     status = fields.Selection(OPTIONSTATUS, 'Status')
+    coverage_amount = fields.Numeric('Coverage Amount')
 
     @classmethod
     def default_status(cls):
@@ -768,10 +799,11 @@ class CoveredData(model.CoopSQL, model.CoopView):
         except KeyError:
             return None
 
-    def init_from_coverage(self, coverage):
-        self.coverage = coverage
-        self.start_date = coverage.start_date
-        self.end_date = coverage.end_date
+    def init_from_option(self, option):
+        self.option = option
+        self.coverage = option.offered
+        self.start_date = option.start_date
+        self.end_date = option.end_date
 
     def init_dynamic_data(self, coverage, contract):
         self.complementary_data = utils.init_dynamic_data(
@@ -793,6 +825,12 @@ class CoveredData(model.CoopSQL, model.CoopView):
         if hasattr(self, 'end_date') and self.end_date:
             res.add(self.end_date)
         return utils.limit_dates(res, start, end)
+
+    def get_coverage(self):
+        if self.coverage:
+            return self.coverage
+        if self.option:
+            return self.option.offered
 
 
 class BrokerManager(model.CoopSQL, model.CoopView):

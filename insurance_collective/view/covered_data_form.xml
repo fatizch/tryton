@@ -11,8 +11,5 @@
     <label name="covered_element"/>
     <field name="covered_element"/>
     <newline/>
-    <label name="coverage_amount"/>
-    <field name="coverage_amount"/>
-    <newline/>
     <field name="complementary_data" colspan="2"/>
 </form>

@@ -7,7 +7,6 @@ def register():
         # from life_contract
         Contract,
         CoveredPerson,
-        LifeCoveredData,
         LifeCoveredDesc,
         ExtensionLifeState,
         PriceLine,

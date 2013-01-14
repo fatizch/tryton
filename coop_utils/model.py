@@ -15,7 +15,7 @@ from trytond.rpc import RPC
 from trytond.protocols.jsonrpc import JSONEncoder, object_hook
 
 import utils
-from trytond.modules.coop_utils import translate_model_name
+from trytond.modules.coop_utils import coop_string
 
 
 class NotExportImport(Exception):
@@ -275,11 +275,9 @@ class CoopSQL(ExportImportMixin, ModelSQL):
     def get_rec_name(self, name):
         res = ''
         if hasattr(self, 'code'):
-            res = '%s ' % getattr(self, 'code')
-        res2 = super(CoopSQL, self).get_rec_name(name)
-        if res2 and res2 != '':
-            res += res2
-        return res
+            res = '%s' % getattr(self, 'code')
+        return coop_string.concat_strings(
+            res, super(CoopSQL, self).get_rec_name(name))
 
 
 class CoopView(ModelView):

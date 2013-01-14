@@ -136,7 +136,7 @@ class GBPSubscriptionProcessState(ProcessState, WithAbstract):
         The process state for the subscription process must have an abstract
         contract.
     '''
-    __abstracts__ = [('for_contract', 'ins_collective.gbp_contract')]
+    __abstracts__ = [('for_contract', 'ins_collective.contract')]
     __name__ = 'ins_collective.gbp_subs_process.process_state'
 
 

@@ -8,12 +8,9 @@ from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
-from trytond.modules.coop_utils import model
 from trytond.modules.coop_utils import utils
 
 from trytond.modules.insurance_contract import CoveredDesc
-from trytond.modules.insurance_contract import CoveredData
-from trytond.modules.insurance_contract import CoveredElement
 from trytond.modules.insurance_process import DependantState
 from trytond.modules.insurance_process import CoopStateView
 
@@ -21,7 +18,6 @@ from trytond.modules.insurance_process import CoopStateView
 __all__ = [
     'Contract',
     'CoveredPerson',
-    'LifeCoveredData',
     'LifeCoveredDesc',
     'ExtensionLifeState',
     'SubscriptionProcess',
@@ -63,6 +59,17 @@ class Contract():
                 errs += errors
         return (res, errs)
 
+    def init_covered_elements(self):
+        if self.covered_elements:
+            return super(Contract, self).init_covered_elements()
+        subscriber = self.get_policy_owner(self.start_date)
+        if not subscriber.is_person:
+            return super(Contract, self).init_covered_elements()
+        covered_element = Pool().get('ins_contract.covered_element')()
+        covered_element.person = subscriber.get_person().id
+        self.covered_elements = [covered_element]
+        return super(Contract, self).init_covered_elements()
+
 
 class PriceLine():
     'Price Line'
@@ -77,32 +84,6 @@ class PriceLine():
             'life_contract.covered_data'))
         return res
 
-#class ExtensionLife(model.CoopSQL, GenericExtension):
-#    '''
-#        This is a particular case of contract extension designed for Life
-#        insurance products.
-#    '''
-#    __name__ = 'life_contract.extension'
-
-#    @classmethod
-#    def __setup__(cls):
-#        super(ExtensionLife, cls).__setup__()
-#        cls.covered_elements = copy.copy(cls.covered_elements)
-#        cls.covered_elements.model_name = 'life_contract.covered_person'
-#
-#    @classmethod
-#    def get_covered_element_model(cls):
-#        return 'life_contract.covered_person'
-#
-#    def init_covered_elements(self, contract):
-#        if (hasattr(self, 'covered_elements') and self.covered_elements):
-#            return
-#
-#        CoveredElement = Pool().get(self.get_covered_element_model())
-#        subscriber = CoveredElement()
-#        subscriber.init_from_person(contract.subscriber_as_person)
-#        self.covered_elements = [subscriber]
-
 
 class CoveredPerson():
     'Covered Person'
@@ -113,7 +94,7 @@ class CoveredPerson():
     __name__ = 'ins_contract.covered_element'
     __metaclass__ = PoolMeta
 
-    person = fields.Many2One('party.person', 'Person', required=True)
+    person = fields.Many2One('party.person', 'Person')
 
     def get_name_for_billing(self):
         return self.person.rec_name
@@ -130,21 +111,6 @@ class CoveredPerson():
 
     def init_from_person(self, person):
         self.person = person
-
-
-class LifeCoveredData():
-    'Covered Data'
-
-    __name__ = 'ins_contract.covered_data'
-    __metaclass__ = PoolMeta
-
-    coverage_amount = fields.Numeric('Coverage Amount')
-
-#    @classmethod
-#    def __setup__(cls):
-#        super(LifeCoveredData, cls).__setup__()
-#        cls.covered_element = copy.copy(cls.covered_element)
-#        cls.covered_element.model_name = 'life_contract.covered_person'
 
 
 class LifeCoveredDesc(CoveredDesc):
