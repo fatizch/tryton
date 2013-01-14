@@ -105,25 +105,26 @@ def get_or_create_process_step_relation(cfg_dict, data):
 
 def launch_test_case(cfg_dict):
     update_cfg_dict_with_models(cfg_dict)
+    translater = proteus_tools.translate_this(cfg_dict)
     status_ongoing = get_or_create_status(
         cfg_dict, {
             'code': 'ctr_ongoing',
-            'name': 'On going',
+            'name': translater('On going'),
         })
     status_validation = get_or_create_status(
         cfg_dict, {
             'code': 'ctr_validation', 
-            'name': 'Validation',
+            'name': translater('Validation'),
         })
     status_basic_data = get_or_create_status(
         cfg_dict, {
             'code': 'ctr_basic_data_input', 
-            'name': 'Administrative Data',
+            'name': translater('Administrative Data'),
         })
     subscriber_sel_step = get_or_create_step_desc(
         cfg_dict, {
             'technical_name': 'subscriber_selection',
-            'fancy_name': 'Subscriber Selection',
+            'fancy_name': translater('Subscriber Selection'),
             'step_xml': '''
 <label name="start_date"/>
 <field name="start_date" xfill="1"/>
@@ -148,7 +149,7 @@ def launch_test_case(cfg_dict):
     option_sel_step = get_or_create_step_desc(
         cfg_dict, {
             'technical_name': 'option_selection',
-            'fancy_name': 'Options Selection',
+            'fancy_name': translater('Options Selection'),
             'step_xml': '''
 <field name="options" mode="tree"
  view_ids="insurance_contract_subscription.subscription_editable_option_tree"/>
@@ -159,7 +160,7 @@ def launch_test_case(cfg_dict):
     covered_pers_sel_step = get_or_create_step_desc(
         cfg_dict, {
             'technical_name': 'covered_person_selection',
-            'fancy_name': 'Covered Person Selection',
+            'fancy_name': translater('Covered Person Selection'),
             'step_xml': '''
 <field name="covered_elements"/>
   ''',
@@ -167,7 +168,7 @@ def launch_test_case(cfg_dict):
     pricing_step = get_or_create_step_desc(
         cfg_dict, {
             'technical_name': 'pricing',
-            'fancy_name': 'Pricing',
+            'fancy_name': translater('Pricing'),
             'step_xml': '''
 <field name="billing_manager" mode="form" />
 ''',
@@ -175,7 +176,7 @@ def launch_test_case(cfg_dict):
     validation_step = get_or_create_step_desc(
         cfg_dict, {
             'technical_name': 'ctr_validation',
-            'fancy_name': 'Contract Validation',
+            'fancy_name': translater('Contract Validation'),
             'step_xml': '''
 <group id="Administrative data">
   <label name="contract_number"/>
@@ -299,7 +300,7 @@ finalize_contract
 
     subs_process_desc = get_or_create_process_desc(cfg_dict, {
         'technical_name': 'individual_subscription',
-        'fancy_name': 'Individual Subscription Process',
+        'fancy_name': translater('Individual Subscription Process'),
         'on_model': contract_model,
         'xml_tree': '''
 <field name="current_state"/>
