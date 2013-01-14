@@ -22,6 +22,14 @@ msgctxt "error:ins_contract.contract:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_contract.covered_data:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.covered_element:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:ins_contract.option:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -362,9 +370,21 @@ msgctxt "field:ins_contract.contract,broker_manager:"
 msgid "Broker Manager"
 msgstr "Courtier"
 
+msgctxt "field:ins_contract.contract,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_contract.contract,contact:"
+msgid "Contact"
+msgstr "Contact"
+
 msgctxt "field:ins_contract.contract,contract_number:"
 msgid "Contract Number"
 msgstr "Numéro de Contrat"
+
+msgctxt "field:ins_contract.contract,covered_elements:"
+msgid "Covered Elements"
+msgstr "Eléments Couverts"
 
 msgctxt "field:ins_contract.contract,create_date:"
 msgid "Create Date"
@@ -378,17 +398,9 @@ msgctxt "field:ins_contract.contract,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
 
-msgctxt "field:ins_contract.contract,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
 msgctxt "field:ins_contract.contract,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
-
-msgctxt "field:ins_contract.contract,extension_life:"
-msgid "Life Extension"
-msgstr "Prévoyance"
 
 msgctxt "field:ins_contract.contract,id:"
 msgid "ID"
@@ -402,17 +414,13 @@ msgctxt "field:ins_contract.contract,master:"
 msgid "Master"
 msgstr "Maître"
 
+msgctxt "field:ins_contract.contract,offered:"
+msgid "Offered"
+msgstr "Offre"
+
 msgctxt "field:ins_contract.contract,options:"
 msgid "Options"
 msgstr "Garanties"
-
-msgctxt "field:ins_contract.contract,product:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "field:ins_contract.contract,product_extension:"
-msgid "Product Extension"
-msgstr "Extension Produit"
 
 msgctxt "field:ins_contract.contract,rec_name:"
 msgid "Name"
@@ -446,13 +454,13 @@ msgctxt "field:ins_contract.contract,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_contract.coverage_displayer,coverage:"
-msgid "Coverage"
-msgstr "Garantie"
-
 msgctxt "field:ins_contract.coverage_displayer,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_contract.coverage_displayer,offered:"
+msgid "offered"
+msgstr "Garantie"
 
 msgctxt "field:ins_contract.coverage_displayer,start_date:"
 msgid "From Date"
@@ -466,10 +474,6 @@ msgctxt "field:ins_contract.covered_data,complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:ins_contract.covered_data,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
 msgctxt "field:ins_contract.covered_data,coverage:"
 msgid "Coverage"
 msgstr "Garantie"
@@ -478,9 +482,33 @@ msgctxt "field:ins_contract.covered_data,covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
+msgctxt "field:ins_contract.covered_data,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.covered_data,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.covered_data,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
 msgctxt "field:ins_contract.covered_data,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_contract.covered_data,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.covered_data,option:"
+msgid "Subscribed Coverage"
+msgstr "Garantie Souscrite"
+
+msgctxt "field:ins_contract.covered_data,rec_name:"
+msgid "Name"
+msgstr "Valeur"
 
 msgctxt "field:ins_contract.covered_data,start_date:"
 msgid "Start Date"
@@ -490,41 +518,77 @@ msgctxt "field:ins_contract.covered_data,status:"
 msgid "Status"
 msgstr "Statut"
 
+msgctxt "field:ins_contract.covered_data,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.covered_data,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.covered_element,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_contract.covered_element,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
 msgctxt "field:ins_contract.covered_element,covered_data:"
-msgid "Coverage Data"
+msgid "Covered Element Data"
 msgstr "Coverage Data"
 
-msgctxt "field:ins_contract.covered_element,extension:"
-msgid "Extension"
-msgstr "Extension"
+msgctxt "field:ins_contract.covered_element,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.covered_element,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
 
 msgctxt "field:ins_contract.covered_element,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_contract.generic_extension,contract:"
-msgid "The contract"
-msgstr "Contrat"
+msgctxt "field:ins_contract.covered_element,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
-msgctxt "field:ins_contract.generic_extension,covered_elements:"
-msgid "Coverages"
-msgstr "Garanties"
+msgctxt "field:ins_contract.covered_element,item_desc:"
+msgid "Item Desc"
+msgstr "Desc Risque"
 
-msgctxt "field:ins_contract.generic_extension,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
+msgctxt "field:ins_contract.covered_element,name:"
+msgid "Name"
+msgstr "Valeur"
 
-msgctxt "field:ins_contract.generic_extension,id:"
-msgid "ID"
-msgstr "ID"
+msgctxt "field:ins_contract.covered_element,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:ins_contract.covered_element,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_contract.covered_element,sub_covered_elements:"
+msgid "Sub Covered Elements"
+msgstr "Sous Eléments Couverts"
+
+msgctxt "field:ins_contract.covered_element,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.covered_element,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
 
 msgctxt "field:ins_contract.option,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:ins_contract.option,coverage:"
-msgid "Offered Coverage"
-msgstr "Garantie"
+msgctxt "field:ins_contract.option,covered_data:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
 
 msgctxt "field:ins_contract.option,create_date:"
 msgid "Create Date"
@@ -534,8 +598,12 @@ msgctxt "field:ins_contract.option,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_contract.option,current_state:"
+msgid "Current State"
+msgstr "Etat Courant"
+
 msgctxt "field:ins_contract.option,end_date:"
-msgid "Effective_date"
+msgid "End Date"
 msgstr "Date de Fin"
 
 msgctxt "field:ins_contract.option,id:"
@@ -546,9 +614,9 @@ msgctxt "field:ins_contract.option,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-msgctxt "field:ins_contract.option,option_data:"
-msgid "Option Data"
-msgstr "Garantie"
+msgctxt "field:ins_contract.option,offered:"
+msgid "Offered"
+msgstr "Offre"
 
 msgctxt "field:ins_contract.option,rec_name:"
 msgid "Name"
@@ -558,9 +626,17 @@ msgctxt "field:ins_contract.option,start_date:"
 msgid "Effective Date"
 msgstr "Date d'Effet"
 
+msgctxt "field:ins_contract.option,start_management_date:"
+msgid "Management Date"
+msgstr "Date de Début de Gestion"
+
 msgctxt "field:ins_contract.option,status:"
 msgid "Status"
 msgstr "Statut"
+
+msgctxt "field:ins_contract.option,summary:"
+msgid "Summary"
+msgstr "Synthèse"
 
 msgctxt "field:ins_contract.option,write_date:"
 msgid "Write Date"
@@ -659,7 +735,7 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:ins_contract.subs_process.covered_desc,data_coverage_name:"
-msgid "Coverage"
+msgid "offered"
 msgstr "Garantie"
 
 msgctxt "field:ins_contract.subs_process.covered_desc,data_covered_element:"
@@ -675,7 +751,7 @@ msgid "End Date"
 msgstr "Date de Fin"
 
 msgctxt "field:ins_contract.subs_process.covered_desc,data_for_coverage:"
-msgid "For coverage"
+msgid "For offered"
 msgstr "Garantie"
 
 msgctxt "field:ins_contract.subs_process.covered_desc,data_for_option_char:"
@@ -887,19 +963,15 @@ msgid "Coverage Description"
 msgstr ""
 
 msgctxt "model:ins_contract.covered_data,name:"
-msgid "Coverage Data"
+msgid "Covered Data"
 msgstr "Données de Couverture"
 
 msgctxt "model:ins_contract.covered_element,name:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
-msgctxt "model:ins_contract.generic_extension,name:"
-msgid "Generic Extension"
-msgstr "Extension"
-
 msgctxt "model:ins_contract.option,name:"
-msgid "Coverage"
+msgid "Subscribed Coverage"
 msgstr "Garantie"
 
 msgctxt "model:ins_contract.price_line,name:"
@@ -1215,6 +1287,10 @@ msgid "Contract"
 msgstr "Contrat"
 
 msgctxt "view:ins_contract.contract:"
+msgid "Covered Elements/Options"
+msgstr "Eléments Couverts/Garanties"
+
+msgctxt "view:ins_contract.contract:"
 msgid "Options"
 msgstr "Garanties"
 
@@ -1241,10 +1317,6 @@ msgstr "Elément Couvert"
 msgctxt "view:ins_contract.covered_element:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
-
-msgctxt "view:ins_contract.generic_extension:"
-msgid "Extension"
-msgstr "Extension"
 
 msgctxt "view:ins_contract.option:"
 msgid "option"

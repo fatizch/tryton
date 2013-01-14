@@ -1,0 +1,91 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:ins_contract.contract:"
+msgid "%s is not a valid start date for product %s"
+msgstr "%s n'est pas une date d'effet compatible avec le produit %s"
+
+msgctxt "error:ins_contract.contract:"
+msgid "A product must be provided"
+msgstr "Saisir un produit"
+
+msgctxt "error:ins_contract.contract:"
+msgid "A start date must be provided"
+msgstr "Saisir la date d'effet"
+
+msgctxt "error:ins_contract.contract:"
+msgid "A subscriber must be provided"
+msgstr "Saisir le Souscripteur"
+
+msgctxt "error:ins_contract.contract:"
+msgid "At least an option must be selected"
+msgstr "Saisir une garantie"
+
+msgctxt "error:ins_contract.contract:"
+msgid "At least one option must be selected for %s"
+msgstr "Saisir au moins une garantie pour %s"
+
+msgctxt "error:ins_contract.contract:"
+msgid "Option %s is not eligible"
+msgstr "La garantie %s n'est pas éligible"
+
+msgctxt "error:ins_contract.contract:"
+msgid "Option %s must be subscribed after %s"
+msgstr "La Garantie %s doit être souscrite après le %s"
+
+msgctxt "error:ins_contract.contract:"
+msgid "There must be at least one covered element"
+msgstr "Saisir un élement couvert"
+
+msgctxt "field:ins_contract.contract,product_desc:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:ins_contract.contract,subscriber_as_person:"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
+msgctxt "field:ins_contract.contract,subscriber_as_society:"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
+msgctxt "field:ins_contract.contract,subscriber_desc:"
+msgid "Summary"
+msgstr "Synthèse"
+
+msgctxt "field:ins_contract.contract,subscriber_kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_contract.covered_data,status_selection:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:ins_contract.option,status_selection:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "selection:ins_contract.contract,subscriber_kind:"
+msgid "Person"
+msgstr "Personne Physique"
+
+msgctxt "selection:ins_contract.contract,subscriber_kind:"
+msgid "Society"
+msgstr "Société"
+
+msgctxt "selection:ins_contract.option,status_selection:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "selection:ins_contract.option,status_selection:"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "view:ins_contract.covered_data:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
+msgctxt "view:ins_contract.option:"
+msgid "Options"
+msgstr "Garanties"

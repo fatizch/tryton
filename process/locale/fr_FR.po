@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:process.step_transition:"
+msgid "Both choices must be filled !"
+msgstr "Saisir les deux choix"
+
+msgctxt "error:process.step_transition:"
+msgid "Pyson expression and description is mandatory"
+msgstr "Expression Pyson et la description sont obligatoires"
+
 msgctxt "field:ir.model,is_workflow:"
 msgid "Is Workflow"
 msgstr ""
@@ -113,6 +121,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:process.process_step_relation,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:process.status,code:"
+msgid "Code"
+msgstr "Code"
 
 msgctxt "field:process.status,create_date:"
 msgid "Create Date"
@@ -230,6 +242,14 @@ msgctxt "field:process.step_transition,authorizations:"
 msgid "Authorizations"
 msgstr "Autorisations"
 
+msgctxt "field:process.step_transition,choice_if_false:"
+msgid "Transition if False"
+msgstr "Transition Si Faux"
+
+msgctxt "field:process.step_transition,choice_if_true:"
+msgid "Transition if True"
+msgstr "Transition Si Vrai"
+
 msgctxt "field:process.step_transition,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -262,6 +282,14 @@ msgctxt "field:process.step_transition,pyson:"
 msgid "Pyson Constraint"
 msgstr "Contraintes Pyson"
 
+msgctxt "field:process.step_transition,pyson_choice:"
+msgid "Choice"
+msgstr "Choix"
+
+msgctxt "field:process.step_transition,pyson_description:"
+msgid "Pyson Description"
+msgstr "Description Pyson"
+
 msgctxt "field:process.step_transition,rec_name:"
 msgid "Name"
 msgstr "Valeur"
@@ -269,6 +297,10 @@ msgstr "Valeur"
 msgctxt "field:process.step_transition,to_step:"
 msgid "To Step"
 msgstr "Vers l'Etape"
+
+msgctxt "field:process.step_transition,transition_kind:"
+msgid "Transition Kind"
+msgstr "Type de Transition"
 
 msgctxt "field:process.step_transition,write_date:"
 msgid "Write Date"
@@ -379,6 +411,10 @@ msgid "Transition Authorization"
 msgstr "Autorisations pour les Transitions"
 
 msgctxt "selection:process.step_transition,kind:"
+msgid "Calculated"
+msgstr "Calculé"
+
+msgctxt "selection:process.step_transition,kind:"
 msgid "Next Transition"
 msgstr "Prochaine Transition"
 
@@ -390,6 +426,65 @@ msgctxt "selection:process.step_transition,kind:"
 msgid "Previous Transition"
 msgstr "Transition Précédente"
 
+msgctxt "selection:process.step_transition,transition_kind:"
+msgid "Choice"
+msgstr "Choix"
+
+msgctxt "selection:process.step_transition,transition_kind:"
+msgid "Standard"
+msgstr "Standard"
+
+msgctxt "view:ins_collective.contract:"
+msgid "Activation"
+msgstr ""
+
+msgctxt "view:ins_collective.contract:"
+msgid "Adhérent"
+msgstr ""
+
+msgctxt "view:ins_collective.contract:"
+msgid "Choix du Produit"
+msgstr ""
+
+msgctxt "view:ins_collective.contract:"
+msgid "Complete Process"
+msgstr "Terminer le processus"
+
+msgctxt "view:ins_collective.contract:"
+msgid "Eléments Couverts"
+msgstr ""
+
+msgctxt "view:ins_collective.contract:"
+msgid "Garanties"
+msgstr "Garanties"
+
+msgctxt "view:ins_collective.contract:"
+msgid "Modification du Produit"
+msgstr "Modification du Produit"
+
+msgctxt "view:ins_collective.contract:"
+msgid "Produit Sur Mesure"
+msgstr ""
+
+msgctxt "view:ins_collective.contract:"
+msgid "Souscription Contrat Groupe (Moteur WF)"
+msgstr "Souscription Contrat Groupe (Moteur WF)"
+
+msgctxt "view:ins_collective.contract:"
+msgid "Synthèse"
+msgstr ""
+
+msgctxt "view:ins_collective.contract:"
+msgid "The current record completed the current process, please go ahead"
+msgstr "Processus Terminé. Commencez une nouvelle tâche"
+
+msgctxt "view:ins_collective.contract:"
+msgid ""
+"The current record is in a state (Activation) that you are not allowed to "
+"view."
+msgstr ""
+"Vous n'avez pas les habilitations nécessaires pour terminer ce processus"
+
 msgctxt "view:ins_contract.contract:"
 msgid "Billing"
 msgstr "Cotisation"
@@ -399,16 +494,44 @@ msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
 msgctxt "view:ins_contract.contract:"
+msgid "Complete Process"
+msgstr "Terminer le processus"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Contract Validation"
+msgstr "Validation du Contrat"
+
+msgctxt "view:ins_contract.contract:"
 msgid "Cotisations"
 msgstr "Cotisations"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Covered Person Selection"
+msgstr "Sélection des Personnes Couvertes"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Individual Subscription Process"
+msgstr "Individual Subscription Process"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Options"
 msgstr "Garanties"
 
 msgctxt "view:ins_contract.contract:"
+msgid "Options Selection"
+msgstr "Garantie"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Pricing"
+msgstr "Cotisation"
+
+msgctxt "view:ins_contract.contract:"
 msgid "Process Souscription Individuelle (Moteur WF)"
 msgstr "Process Souscription Individuelle (Moteur WF)"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Subscriber Selection"
+msgstr "Souscripteur"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Sélection des Options"
@@ -423,8 +546,31 @@ msgid "Sélection du Produit"
 msgstr "Sélection du Produit"
 
 msgctxt "view:ins_contract.contract:"
+msgid "The current record completed the current process, please go ahead"
+msgstr "Processus Terminé. Commencez une nouvelle tâche"
+
+msgctxt "view:ins_contract.contract:"
+msgid ""
+"The current record is in a state (Contract Validation) that you are not "
+"allowed to view."
+msgstr ""
+"Vous n'avez pas les habilitations nécessaires pour terminer ce processus"
+
+msgctxt "view:ins_contract.contract:"
 msgid "Validation du Contrat"
 msgstr "Validation du Contrat"
+
+msgctxt "view:ins_contract.contract:"
+msgid "offered"
+msgstr "Garantie"
+
+msgctxt "view:ins_contract.contract:"
+msgid "subscriber"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "test"
+msgstr "test"
 
 msgctxt "view:process.process_desc:"
 msgid "Process Descriptor"

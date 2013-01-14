@@ -2,84 +2,20 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:life_contract.covered_data:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:life_contract.covered_person:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:life_contract.extension:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "field:ins_contract.contract,extension_life:"
-msgid "Life"
-msgstr "Prévoyance"
-
-msgctxt "field:life_contract.covered_data,coverage_amount:"
+msgctxt "field:ins_contract.covered_data,coverage_amount:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"
 
-msgctxt "field:life_contract.covered_data,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:life_contract.covered_data,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:life_contract.covered_data,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "field:life_contract.covered_data,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:life_contract.covered_data,coverage:"
-msgid "Coverage"
-msgstr "Garantie"
-
-msgctxt "field:life_contract.covered_data,covered_element:"
-msgid "Covered Element"
-msgstr "Elément Couvert"
-
-msgctxt "field:life_contract.covered_data,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:life_contract.covered_data,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:life_contract.covered_data,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:life_contract.covered_data,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:life_contract.covered_data,status:"
-msgid "Status"
-msgstr "Statut"
-
-msgctxt "field:life_contract.covered_data,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:life_contract.covered_data,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
+msgctxt "field:ins_contract.covered_element,person:"
+msgid "Person"
+msgstr "Personne Physique"
 
 msgctxt "field:life_contract.covered_desc,data_coverage_amount:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"
 
 msgctxt "field:life_contract.covered_desc,data_coverage_name:"
-msgid "Coverage"
+msgid "offered"
 msgstr "Garantie"
 
 msgctxt "field:life_contract.covered_desc,data_covered_element:"
@@ -95,7 +31,7 @@ msgid "End Date"
 msgstr "Date de Fin"
 
 msgctxt "field:life_contract.covered_desc,data_for_coverage:"
-msgid "For coverage"
+msgid "For offered"
 msgstr "Garantie"
 
 msgctxt "field:life_contract.covered_desc,data_for_option_char:"
@@ -130,97 +66,17 @@ msgctxt "field:life_contract.covered_desc,the_kind:"
 msgid "The kind"
 msgstr "Type"
 
-msgctxt "field:life_contract.covered_person,covered_data:"
-msgid "Coverage Data"
-msgstr "Données de Couverture"
-
-msgctxt "field:life_contract.covered_person,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:life_contract.covered_person,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:life_contract.covered_person,extension:"
-msgid "Extension"
-msgstr "Extension"
-
-msgctxt "field:life_contract.covered_person,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:life_contract.covered_person,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:life_contract.covered_person,person:"
-msgid "Person"
-msgstr "Personne"
-
-msgctxt "field:life_contract.covered_person,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:life_contract.covered_person,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:life_contract.covered_person,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:life_contract.extension,contract:"
-msgid "The contract"
-msgstr "Contrat"
-
-msgctxt "field:life_contract.extension,covered_elements:"
-msgid "Coverages"
-msgstr "Garanties"
-
-msgctxt "field:life_contract.extension,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:life_contract.extension,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:life_contract.extension,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "field:life_contract.extension,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:life_contract.extension,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:life_contract.extension,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:life_contract.extension,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:life_contract.extension,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:life_contract.extension_life_state,at_date:"
 msgid "At Date"
 msgstr "A la Date"
 
-msgctxt "field:life_contract.extension_life_state,covered_elements:"
-msgid "Covered Elements"
-msgstr "Eléments Couverts"
-
 msgctxt "field:life_contract.extension_life_state,complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
+
+msgctxt "field:life_contract.extension_life_state,covered_elements:"
+msgid "Covered Elements"
+msgstr "Eléments Couverts"
 
 msgctxt "field:life_contract.extension_life_state,for_options:"
 msgid "For Options"
@@ -238,45 +94,13 @@ msgctxt "field:life_contract.extension_life_state,session_id:"
 msgid "Session Id"
 msgstr "Session Id"
 
-msgctxt "model:life_contract.covered_data,name:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
-
 msgctxt "model:life_contract.covered_desc,name:"
 msgid "Covered Desc"
-msgstr ""
-
-msgctxt "model:life_contract.covered_person,name:"
-msgid "Covered Person"
-msgstr "Personne Couverte"
-
-msgctxt "model:life_contract.extension,name:"
-msgid "This is a particular case of contract extension designed for Life"
 msgstr ""
 
 msgctxt "model:life_contract.extension_life_state,name:"
 msgid "Life Extension"
 msgstr "Prévoyance"
-
-msgctxt "selection:life_contract.covered_data,status:"
-msgid "Active"
-msgstr "Actif"
-
-msgctxt "selection:life_contract.covered_data,status:"
-msgid "Hold"
-msgstr "Suspendre"
-
-msgctxt "selection:life_contract.covered_data,status:"
-msgid "Quote"
-msgstr "Devis"
-
-msgctxt "selection:life_contract.covered_data,status:"
-msgid "Refused"
-msgstr "Refusé"
-
-msgctxt "selection:life_contract.covered_data,status:"
-msgid "Terminated"
-msgstr "Terminé"
 
 msgctxt "selection:life_contract.covered_desc,the_kind:"
 msgid "data"
@@ -290,13 +114,9 @@ msgctxt "view:ins_contract.contract:"
 msgid "Extension Life"
 msgstr "Prévoyance"
 
-msgctxt "view:life_contract.covered_person:"
+msgctxt "view:ins_contract.covered_element:"
 msgid "Covered Person"
 msgstr "Personne Couverte"
-
-msgctxt "view:life_contract.extension:"
-msgid "Extension Life"
-msgstr "Prévoyance"
 
 msgctxt "view:life_contract.extension_life_state:"
 msgid "Subscription Process - Life Extension"

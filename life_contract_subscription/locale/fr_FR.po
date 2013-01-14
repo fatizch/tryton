@@ -1,0 +1,11 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:ins_contract.covered_data:"
+msgid "A coverage amount must be provided :"
+msgstr "Saisir le Montant de Couverture"
+
+msgctxt "field:ins_contract.covered_data,coverage_amount_selection:"
+msgid "Coverage Amount"
+msgstr "Montant de Couverture"

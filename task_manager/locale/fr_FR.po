@@ -1,0 +1,211 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:task_manager.task_dispatcher:"
+msgid "There is no task available right now."
+msgstr "Pas de tâches disponibles pour le moment"
+
+msgctxt "field:res.user,team:"
+msgid "Team"
+msgstr "Equipe"
+
+msgctxt "field:task_manager.priority,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:task_manager.priority,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:task_manager.priority,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:task_manager.priority,priority:"
+msgid "Priority"
+msgstr "Priorité"
+
+msgctxt "field:task_manager.priority,process_step:"
+msgid "Process Step"
+msgstr "Etape"
+
+msgctxt "field:task_manager.priority,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:task_manager.priority,team:"
+msgid "Team"
+msgstr "Equipe"
+
+msgctxt "field:task_manager.priority,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:task_manager.priority,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:task_manager.select_user,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:task_manager.select_user,user:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:task_manager.select_user,user_ok:"
+msgid "User Ok"
+msgstr "Utilisateur Ok"
+
+msgctxt "field:task_manager.team,authorizations:"
+msgid "Authorizations"
+msgstr "Autorisations"
+
+msgctxt "field:task_manager.team,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:task_manager.team,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:task_manager.team,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:task_manager.team,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:task_manager.team,members:"
+msgid "Members"
+msgstr "Membres"
+
+msgctxt "field:task_manager.team,name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:task_manager.team,priorities:"
+msgid "Priorities"
+msgstr "Priorités"
+
+msgctxt "field:task_manager.team,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:task_manager.team,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:task_manager.team,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:task_manager.team_group_relation,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:task_manager.team_group_relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:task_manager.team_group_relation,group:"
+msgid "Group"
+msgstr "Groupe"
+
+msgctxt "field:task_manager.team_group_relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:task_manager.team_group_relation,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:task_manager.team_group_relation,team:"
+msgid "Team"
+msgstr "Equipe"
+
+msgctxt "field:task_manager.team_group_relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:task_manager.team_group_relation,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "model:ir.action,name:act_task_dispatcher"
+msgid "New Task"
+msgstr "Nouvelle Tâche"
+
+msgctxt "model:ir.action,name:act_team"
+msgid "Team"
+msgstr "Equipe"
+
+msgctxt "model:ir.action,name:wizard_add_user"
+msgid "Add Team User"
+msgstr "Ajouter un membre d'équipe"
+
+msgctxt "model:ir.ui.menu,name:menu_task"
+msgid "Task Manager"
+msgstr "Gestion des Tâches"
+
+msgctxt "model:ir.ui.menu,name:menu_task_dispatcher"
+msgid "New Task"
+msgstr "Nouvelle Tâche"
+
+msgctxt "model:ir.ui.menu,name:menu_team"
+msgid "Team"
+msgstr "Equipe"
+
+msgctxt "model:task_manager.priority,name:"
+msgid "Priority"
+msgstr "Priorité"
+
+msgctxt "model:task_manager.select_user,name:"
+msgid "Select User"
+msgstr "Saisir un utilisateur"
+
+msgctxt "model:task_manager.team,name:"
+msgid "Team"
+msgstr "Equipe"
+
+msgctxt "model:task_manager.team_group_relation,name:"
+msgid "Team - Group Relation"
+msgstr "Relation Equipe - Groupe"
+
+msgctxt "view:res.user:"
+msgid "Team management"
+msgstr "Gestion de l'Equipe"
+
+msgctxt "view:task_manager.priority:"
+msgid "Priorities"
+msgstr "Priorités"
+
+msgctxt "view:task_manager.priority:"
+msgid "Priority"
+msgstr "Priorité"
+
+msgctxt "view:task_manager.select_user:"
+msgid "Add User"
+msgstr "Ajouter l'Utilisateur"
+
+msgctxt "view:task_manager.team:"
+msgid "Add User"
+msgstr "Ajouter l'Utilisateur"
+
+msgctxt "view:task_manager.team:"
+msgid "Team"
+msgstr "Equipe"
+
+msgctxt "view:task_manager.team:"
+msgid "Teams"
+msgstr "Equipes"
+
+msgctxt "wizard_button:task_manager.add_user,select_user,add_user:"
+msgid "Add User"
+msgstr "Ajouter l'Utilisateur"
+
+msgctxt "wizard_button:task_manager.add_user,select_user,end:"
+msgid "Cancel"
+msgstr "Annuler"

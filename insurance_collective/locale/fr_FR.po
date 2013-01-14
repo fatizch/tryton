@@ -10,10 +10,6 @@ msgctxt "error:ins_collective.benefit_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.benefit_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr ""
-
 msgctxt "error:ins_collective.clause:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -26,11 +22,15 @@ msgctxt "error:ins_collective.clause_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.clause_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr ""
-
 msgctxt "error:ins_collective.clause_version:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_collective.contract:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_collective.coverage-schema_elements:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -46,19 +46,15 @@ msgctxt "error:ins_collective.coverage_amount_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.coverage_amount_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr ""
+msgctxt "error:ins_collective.covered_data:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.deductible_rule:"
+msgctxt "error:ins_collective.covered_element:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_collective.deductible_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr ""
-
-msgctxt "error:ins_collective.complementary_data_manager:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -70,15 +66,11 @@ msgctxt "error:ins_collective.eligibility_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.eligibility_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr ""
-
 msgctxt "error:ins_collective.enrollment:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.contract:"
+msgctxt "error:ins_collective.enrollment_option:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -98,11 +90,15 @@ msgctxt "error:ins_collective.pricing_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.pricing_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr ""
+msgctxt "error:ins_collective.product-coverage:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_collective.product-item_desc:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_collective.product-schema_elements:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -114,25 +110,9 @@ msgctxt "error:ins_collective.reserve_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.reserve_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr ""
-
-msgctxt "error:ins_collective.schema_element:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_collective.schema_element_relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:ins_collective.term_renewal_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_collective.term_renewal_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr ""
 
 msgctxt "error:party.college:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -153,6 +133,10 @@ msgstr "Clauses"
 msgctxt "field:ins_collective.benefit,code:"
 msgid "Code"
 msgstr "Code"
+
+msgctxt "field:ins_collective.benefit,complementary_data_manager:"
+msgid "Complementary Data Manager"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.benefit,coverage:"
 msgid "Coverage"
@@ -177,10 +161,6 @@ msgstr "Franchises"
 msgctxt "field:ins_collective.benefit,description:"
 msgid "Description"
 msgstr "Description"
-
-msgctxt "field:ins_collective.benefit,complementary_data_manager:"
-msgid "Complementary Data Manager"
-msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.benefit,eligibility_rules:"
 msgid "Eligibility Rules"
@@ -550,6 +530,102 @@ msgctxt "field:ins_collective.college_selection,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_collective.contract,billing_manager:"
+msgid "Billing Manager"
+msgstr "Cotisation"
+
+msgctxt "field:ins_collective.contract,broker_manager:"
+msgid "Broker Manager"
+msgstr "Courtier"
+
+msgctxt "field:ins_collective.contract,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_collective.contract,contact:"
+msgid "Contact"
+msgstr "Contact"
+
+msgctxt "field:ins_collective.contract,contract_number:"
+msgid "Contract Number"
+msgstr "Numéro de Contrat"
+
+msgctxt "field:ins_collective.contract,covered_elements:"
+msgid "Covered Elements"
+msgstr "Eléments Couverts"
+
+msgctxt "field:ins_collective.contract,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.contract,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.contract,current_state:"
+msgid "Current State"
+msgstr "Etat Courant"
+
+msgctxt "field:ins_collective.contract,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_collective.contract,enrollments:"
+msgid "Enrollments"
+msgstr "Affiliations"
+
+msgctxt "field:ins_collective.contract,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.contract,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_collective.contract,master:"
+msgid "Master"
+msgstr "Maître"
+
+msgctxt "field:ins_collective.contract,offered:"
+msgid "Offered"
+msgstr "Offre"
+
+msgctxt "field:ins_collective.contract,options:"
+msgid "Options"
+msgstr "Garanties"
+
+msgctxt "field:ins_collective.contract,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_collective.contract,start_date:"
+msgid "Effective Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:ins_collective.contract,start_management_date:"
+msgid "Management Date"
+msgstr "Date de Début de Gestion"
+
+msgctxt "field:ins_collective.contract,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:ins_collective.contract,subscriber:"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
+msgctxt "field:ins_collective.contract,summary:"
+msgid "Summary"
+msgstr "Synthèse"
+
+msgctxt "field:ins_collective.contract,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.contract,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_collective.coverage,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
@@ -562,9 +638,13 @@ msgctxt "field:ins_collective.coverage,code:"
 msgid "Code"
 msgstr "Code"
 
+msgctxt "field:ins_collective.coverage,complementary_data_manager:"
+msgid "Complementary Data Manager"
+msgstr "Données Complémentaires"
+
 msgctxt "field:ins_collective.coverage,coverage_amount_rules:"
 msgid "Coverage Amount Rules"
-msgstr ""
+msgstr "Règles de Montant de Couverture"
 
 msgctxt "field:ins_collective.coverage,coverages_in_package:"
 msgid "Coverages In Package"
@@ -597,10 +677,6 @@ msgstr "Franchises"
 msgctxt "field:ins_collective.coverage,description:"
 msgid "Description"
 msgstr "Description"
-
-msgctxt "field:ins_collective.coverage,complementary_data_manager:"
-msgid "Complementary Data Manager"
-msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.coverage,eligibility_rules:"
 msgid "Eligibility Rules"
@@ -646,13 +722,13 @@ msgctxt "field:ins_collective.coverage,pricing_rules:"
 msgid "Pricing Rules"
 msgstr "Règles de Cotisation"
 
-msgctxt "field:ins_collective.coverage,product:"
-msgid "Product"
-msgstr "Produit"
-
 msgctxt "field:ins_collective.coverage,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:ins_collective.coverage,schema_elements:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.coverage,start_date:"
 msgid "Start Date"
@@ -679,6 +755,42 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:ins_collective.coverage,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.coverage-schema_elements,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:ins_collective.coverage-schema_elements,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.coverage-schema_elements,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.coverage-schema_elements,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.coverage-schema_elements,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_collective.coverage-schema_elements,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_collective.coverage-schema_elements,schema_element:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_collective.coverage-schema_elements,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.coverage-schema_elements,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -758,6 +870,122 @@ msgctxt "field:ins_collective.coverage_amount_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_collective.covered_data,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_collective.covered_data,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:ins_collective.covered_data,coverage_amount:"
+msgid "Coverage Amount"
+msgstr "Montant de Couverture"
+
+msgctxt "field:ins_collective.covered_data,covered_element:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "field:ins_collective.covered_data,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.covered_data,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.covered_data,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_collective.covered_data,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.covered_data,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_collective.covered_data,option:"
+msgid "Subscribed Coverage"
+msgstr "Garantie Souscrite"
+
+msgctxt "field:ins_collective.covered_data,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_collective.covered_data,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_collective.covered_data,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:ins_collective.covered_data,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.covered_data,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.covered_element,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_collective.covered_element,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:ins_collective.covered_element,covered_data:"
+msgid "Covered Element Data"
+msgstr "Coverage Data"
+
+msgctxt "field:ins_collective.covered_element,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.covered_element,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.covered_element,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.covered_element,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_collective.covered_element,item_desc:"
+msgid "Item Desc"
+msgstr "Desc Risque"
+
+msgctxt "field:ins_collective.covered_element,name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_collective.covered_element,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:ins_collective.covered_element,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_collective.covered_element,sub_covered_elements:"
+msgid "Sub Covered Elements"
+msgstr "Sous Eléments Couverts"
+
+msgctxt "field:ins_collective.covered_element,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.covered_element,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_collective.deductible_rule,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
@@ -815,50 +1043,6 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:ins_collective.deductible_rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:ins_collective.complementary_data_manager,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_collective.complementary_data_manager,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_collective.complementary_data_manager,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_collective.complementary_data_manager,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_collective.complementary_data_manager,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:ins_collective.complementary_data_manager,master:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "field:ins_collective.complementary_data_manager,rec_name:"
-msgid "Name"
-msgstr "Valeur"
-
-msgctxt "field:ins_collective.complementary_data_manager,shared_dynamic:"
-msgid "Shared Complementary Data"
-msgstr "Données Complémentaires Partagées"
-
-msgctxt "field:ins_collective.complementary_data_manager,specific_dynamic:"
-msgid "Specific Complementary Data"
-msgstr "Données Complémentaires Spécifiques"
-
-msgctxt "field:ins_collective.complementary_data_manager,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_collective.complementary_data_manager,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -978,9 +1162,21 @@ msgctxt "field:ins_collective.enrollment,broker_manager:"
 msgid "Broker Manager"
 msgstr "Courtier"
 
+msgctxt "field:ins_collective.enrollment,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_collective.enrollment,contact:"
+msgid "Contact"
+msgstr "Contact"
+
 msgctxt "field:ins_collective.enrollment,contract_number:"
 msgid "Contract Number"
 msgstr "Numéro de Contrat"
+
+msgctxt "field:ins_collective.enrollment,covered_elements:"
+msgid "Covered Elements"
+msgstr "Eléments Couverts"
 
 msgctxt "field:ins_collective.enrollment,create_date:"
 msgid "Create Date"
@@ -993,10 +1189,6 @@ msgstr "Créé par"
 msgctxt "field:ins_collective.enrollment,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
-
-msgctxt "field:ins_collective.enrollment,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.enrollment,end_date:"
 msgid "End Date"
@@ -1018,17 +1210,13 @@ msgctxt "field:ins_collective.enrollment,master:"
 msgid "Master"
 msgstr "Maître"
 
+msgctxt "field:ins_collective.enrollment,offered:"
+msgid "Offered"
+msgstr "Offre"
+
 msgctxt "field:ins_collective.enrollment,options:"
 msgid "Options"
 msgstr "Garanties"
-
-msgctxt "field:ins_collective.enrollment,product:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "field:ins_collective.enrollment,product_extension:"
-msgid "Product Extension"
-msgstr "Extension Produit"
 
 msgctxt "field:ins_collective.enrollment,rec_name:"
 msgid "Name"
@@ -1062,6 +1250,74 @@ msgctxt "field:ins_collective.enrollment,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_collective.enrollment_option,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:ins_collective.enrollment_option,covered_data:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
+msgctxt "field:ins_collective.enrollment_option,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.enrollment_option,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.enrollment_option,current_state:"
+msgid "Current State"
+msgstr "Etat Courant"
+
+msgctxt "field:ins_collective.enrollment_option,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_collective.enrollment_option,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.enrollment_option,is_subscribed:"
+msgid "Subscribe ?"
+msgstr "Souscrire?"
+
+msgctxt "field:ins_collective.enrollment_option,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_collective.enrollment_option,offered:"
+msgid "Offered"
+msgstr "Offre"
+
+msgctxt "field:ins_collective.enrollment_option,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_collective.enrollment_option,start_date:"
+msgid "Effective Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:ins_collective.enrollment_option,start_management_date:"
+msgid "Management Date"
+msgstr "Date de Début de Gestion"
+
+msgctxt "field:ins_collective.enrollment_option,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:ins_collective.enrollment_option,summary:"
+msgid "Summary"
+msgstr "Synthèse"
+
+msgctxt "field:ins_collective.enrollment_option,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.enrollment_option,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_collective.enrollment_process.coverage_displayer,coverage:"
 msgid "Coverage"
 msgstr "Garantie"
@@ -1069,6 +1325,10 @@ msgstr "Garantie"
 msgctxt "field:ins_collective.enrollment_process.coverage_displayer,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_collective.enrollment_process.coverage_displayer,offered:"
+msgid "offered"
+msgstr "Garantie"
 
 msgctxt ""
 "field:ins_collective.enrollment_process.coverage_displayer,start_date:"
@@ -1198,82 +1458,6 @@ msgctxt "field:ins_collective.enrollment_process.project,subscriber_kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:ins_collective.contract,billing_manager:"
-msgid "Billing Manager"
-msgstr "Cotisation"
-
-msgctxt "field:ins_collective.contract,broker_manager:"
-msgid "Broker Manager"
-msgstr "Courtier"
-
-msgctxt "field:ins_collective.contract,contact:"
-msgid "Contact"
-msgstr "Contact"
-
-msgctxt "field:ins_collective.contract,contract_number:"
-msgid "Contract Number"
-msgstr "Numéro de Contrat"
-
-msgctxt "field:ins_collective.contract,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_collective.contract,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_collective.contract,current_state:"
-msgid "Current State"
-msgstr "Etat Courant"
-
-msgctxt "field:ins_collective.contract,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:ins_collective.contract,final_product:"
-msgid "Final Product"
-msgstr "Produit Final"
-
-msgctxt "field:ins_collective.contract,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_collective.contract,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_collective.contract,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_collective.contract,start_date:"
-msgid "Effective Date"
-msgstr "Date d'Effet"
-
-msgctxt "field:ins_collective.contract,start_management_date:"
-msgid "Management Date"
-msgstr "Date de Début de Gestion"
-
-msgctxt "field:ins_collective.contract,status:"
-msgid "Status"
-msgstr "Statut"
-
-msgctxt "field:ins_collective.contract,subscriber:"
-msgid "Subscriber"
-msgstr "Souscripteur"
-
-msgctxt "field:ins_collective.contract,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
-msgctxt "field:ins_collective.contract,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_collective.contract,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:ins_collective.gbp_subs_process.extension_gbp,contact:"
 msgid "Subscriber Contact"
 msgstr "Contact Souscripteur"
@@ -1356,9 +1540,9 @@ msgctxt "field:ins_collective.option,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:ins_collective.option,coverage:"
-msgid "Offered Coverage"
-msgstr "Garantie"
+msgctxt "field:ins_collective.option,covered_data:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
 
 msgctxt "field:ins_collective.option,create_date:"
 msgid "Create Date"
@@ -1368,25 +1552,25 @@ msgctxt "field:ins_collective.option,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_collective.option,current_state:"
+msgid "Current State"
+msgstr "Etat Courant"
+
 msgctxt "field:ins_collective.option,end_date:"
-msgid "Effective_date"
+msgid "End Date"
 msgstr "Date de Fin"
 
 msgctxt "field:ins_collective.option,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_collective.option,is_subscribed:"
-msgid "Subscribe ?"
-msgstr ""
-
 msgctxt "field:ins_collective.option,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-msgctxt "field:ins_collective.option,option_data:"
-msgid "Option Data"
-msgstr "Garantie"
+msgctxt "field:ins_collective.option,offered:"
+msgid "Offered"
+msgstr "Offre"
 
 msgctxt "field:ins_collective.option,rec_name:"
 msgid "Name"
@@ -1396,9 +1580,17 @@ msgctxt "field:ins_collective.option,start_date:"
 msgid "Effective Date"
 msgstr "Date d'Effet"
 
+msgctxt "field:ins_collective.option,start_management_date:"
+msgid "Management Date"
+msgstr "Date de Début de Gestion"
+
 msgctxt "field:ins_collective.option,status:"
 msgid "Status"
 msgstr "Statut"
+
+msgctxt "field:ins_collective.option,summary:"
+msgid "Summary"
+msgstr "Synthèse"
 
 msgctxt "field:ins_collective.option,write_date:"
 msgid "Write Date"
@@ -1605,9 +1797,9 @@ msgctxt "field:ins_collective.product,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:ins_collective.product,contract:"
-msgid "Contract"
-msgstr "Contrat"
+msgctxt "field:ins_collective.product,complementary_data_manager:"
+msgid "Complementary Data Manager"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.product,contract_generator:"
 msgid "Contract Number Generator"
@@ -1636,10 +1828,6 @@ msgstr "Franchises"
 msgctxt "field:ins_collective.product,description:"
 msgid "Description"
 msgstr "Description"
-
-msgctxt "field:ins_collective.product,complementary_data_manager:"
-msgid "Complementary Data Manager"
-msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.product,eligibility_rules:"
 msgid "Eligibility Rules"
@@ -1681,6 +1869,10 @@ msgctxt "field:ins_collective.product,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:ins_collective.product,schema_elements:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
 msgctxt "field:ins_collective.product,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
@@ -1706,6 +1898,42 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:ins_collective.product,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.product-coverage,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:ins_collective.product-coverage,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.product-coverage,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.product-coverage,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.product-coverage,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_collective.product-coverage,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:ins_collective.product-coverage,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_collective.product-coverage,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.product-coverage,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -1742,6 +1970,42 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:ins_collective.product-item_desc,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_collective.product-schema_elements,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_collective.product-schema_elements,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_collective.product-schema_elements,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_collective.product-schema_elements,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_collective.product-schema_elements,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:ins_collective.product-schema_elements,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_collective.product-schema_elements,schema_element:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_collective.product-schema_elements,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_collective.product-schema_elements,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -1802,138 +2066,6 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:ins_collective.reserve_rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:ins_collective.schema_element,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_collective.schema_element,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_collective.schema_element,default_value:"
-msgid "Default Value"
-msgstr "Valeur par Défaut"
-
-msgctxt "field:ins_collective.schema_element,default_value_boolean:"
-msgid "Default Value"
-msgstr "Valeur par Défaut"
-
-msgctxt "field:ins_collective.schema_element,default_value_char:"
-msgid "Default Value"
-msgstr "Valeur par Défaut"
-
-msgctxt "field:ins_collective.schema_element,default_value_selection:"
-msgid "Default Value"
-msgstr "Valeur par Défaut"
-
-msgctxt "field:ins_collective.schema_element,digits:"
-msgid "Digits"
-msgstr "Précision"
-
-msgctxt "field:ins_collective.schema_element,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:ins_collective.schema_element,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_collective.schema_element,is_shared:"
-msgid "Shared"
-msgstr "Partagé"
-
-msgctxt "field:ins_collective.schema_element,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_collective.schema_element,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:ins_collective.schema_element,linked_item:"
-msgid "Linked Item"
-msgstr "Objet Lié"
-
-msgctxt "field:ins_collective.schema_element,manager:"
-msgid "Manager"
-msgstr "Manager"
-
-msgctxt "field:ins_collective.schema_element,name:"
-msgid "Name"
-msgstr "Valeur"
-
-msgctxt "field:ins_collective.schema_element,rec_name:"
-msgid "Name"
-msgstr "Valeur"
-
-msgctxt "field:ins_collective.schema_element,selection:"
-msgid "Selection"
-msgstr "Sélection"
-
-msgctxt "field:ins_collective.schema_element,selection_json:"
-msgid "Selection JSON"
-msgstr ""
-
-msgctxt "field:ins_collective.schema_element,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:ins_collective.schema_element,string:"
-msgid "String"
-msgstr "Nom"
-
-msgctxt "field:ins_collective.schema_element,type_:"
-msgid "Type"
-msgstr "Type"
-
-msgctxt "field:ins_collective.schema_element,with_default_value:"
-msgid "Default Value"
-msgstr "Valeur par Défaut"
-
-msgctxt "field:ins_collective.schema_element,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_collective.schema_element,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:ins_collective.schema_element_relation,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_collective.schema_element_relation,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_collective.schema_element_relation,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_collective.schema_element_relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_collective.schema_element_relation,rec_name:"
-msgid "Name"
-msgstr "Valeur"
-
-msgctxt "field:ins_collective.schema_element_relation,schema_element:"
-msgid "Schema Element"
-msgstr "Données Complémentaires"
-
-msgctxt "field:ins_collective.schema_element_relation,the_manager:"
-msgid "Manager"
-msgstr "Manager"
-
-msgctxt "field:ins_collective.schema_element_relation,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_collective.schema_element_relation,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -2161,21 +2293,33 @@ msgctxt "model:ins_collective.college_selection,name:"
 msgid "College Selection"
 msgstr "Sélection des Collèges"
 
+msgctxt "model:ins_collective.contract,name:"
+msgid "Group Contract"
+msgstr "Contrat Collectif"
+
 msgctxt "model:ins_collective.coverage,name:"
 msgid "Group Insurance Coverage"
 msgstr "Garantie Collective"
+
+msgctxt "model:ins_collective.coverage-schema_elements,name:"
+msgid "Relation between Coverage and Schema Element"
+msgstr "Relation Garantie - Schema Element"
 
 msgctxt "model:ins_collective.coverage_amount_rule,name:"
 msgid "Coverage Amount Rule"
 msgstr "Règle de Montant de Couverture"
 
+msgctxt "model:ins_collective.covered_data,name:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
+msgctxt "model:ins_collective.covered_element,name:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
 msgctxt "model:ins_collective.deductible_rule,name:"
 msgid "Deductible Rule"
 msgstr "Franchise"
-
-msgctxt "model:ins_collective.complementary_data_manager,name:"
-msgid "Complementary Data Manager"
-msgstr "Données Complémentaires"
 
 msgctxt "model:ins_collective.eligibility_relation_kind,name:"
 msgid "Define relation between eligibility rule and relation kind authorized"
@@ -2189,6 +2333,10 @@ msgstr "Règle d'Eligibilité"
 msgctxt "model:ins_collective.enrollment,name:"
 msgid "Enrollment"
 msgstr "Affiliation"
+
+msgctxt "model:ins_collective.enrollment_option,name:"
+msgid "Subscribed Option"
+msgstr "Garantie Souscrite"
 
 msgctxt "model:ins_collective.enrollment_process.coverage_displayer,name:"
 msgid ""
@@ -2207,10 +2355,6 @@ msgctxt "model:ins_collective.enrollment_process.project,name:"
 msgid "This step should be the first one, as it asks the user which product"
 msgstr ""
 
-msgctxt "model:ins_collective.contract,name:"
-msgid "GBP Contract"
-msgstr "Contrat Collectif"
-
 msgctxt "model:ins_collective.gbp_subs_process.extension_gbp,name:"
 msgid "This a process step which will be used for Life product subscriptions."
 msgstr ""
@@ -2224,7 +2368,7 @@ msgid "Subscriber Selection Step"
 msgstr ""
 
 msgctxt "model:ins_collective.option,name:"
-msgid "Option"
+msgid "Subscribed Coverage"
 msgstr "Garantie Souscrite"
 
 msgctxt "model:ins_collective.package-coverage,name:"
@@ -2232,7 +2376,7 @@ msgid "Link Package Coverage"
 msgstr "Lien Formule Garantie"
 
 msgctxt "model:ins_collective.pricing_component,name:"
-msgid "Pricing Component"
+msgid "Pricing Data"
 msgstr "Composante de Cotisation"
 
 msgctxt "model:ins_collective.pricing_rule,name:"
@@ -2243,21 +2387,21 @@ msgctxt "model:ins_collective.product,name:"
 msgid "Group Insurance Plan"
 msgstr "Produit Collectif"
 
+msgctxt "model:ins_collective.product-coverage,name:"
+msgid "Define Product - Coverage relations"
+msgstr "Relations Produit Garantie"
+
 msgctxt "model:ins_collective.product-item_desc,name:"
 msgid "Relation between Product and Item Descriptor"
 msgstr "Relation Produit-Risque"
 
+msgctxt "model:ins_collective.product-schema_elements,name:"
+msgid "Relation between Product and Schema Element"
+msgstr "Produit-Schema Element Relation"
+
 msgctxt "model:ins_collective.reserve_rule,name:"
 msgid "Reserve Rule"
 msgstr "Règle de Provisionnement"
-
-msgctxt "model:ins_collective.schema_element,name:"
-msgid "Complementary Data Definition"
-msgstr "Définition de Données Complémentaires"
-
-msgctxt "model:ins_collective.schema_element_relation,name:"
-msgid "Relation between schema element and complementary data manager"
-msgstr "Table intermédiaire pour les données complémentaires"
 
 msgctxt "model:ins_collective.term_renewal_rule,name:"
 msgid "Clause Rule"
@@ -2270,6 +2414,10 @@ msgstr "Affichage des Tranches"
 msgctxt "model:ins_collective.tranche_selection,name:"
 msgid "Tranches Selection"
 msgstr "Sélection des Tranches"
+
+msgctxt "model:ir.action,name:act_contract_form"
+msgid "Group Contract"
+msgstr "Contrat Collectif"
 
 msgctxt "model:ir.action,name:act_coverage_form"
 msgid "Plan Coverages"
@@ -2286,14 +2434,6 @@ msgstr "Affiliation"
 msgctxt "model:ir.action,name:act_enrollment_relate_form"
 msgid "Enrollments"
 msgstr "Affiliations"
-
-msgctxt "model:ir.action,name:act_contract_form"
-msgid "GBP Contract"
-msgstr "Contrat Collectif"
-
-msgctxt "model:ir.action,name:act_model_coop_schema"
-msgid "Collective Complementary Data"
-msgstr "Données Complémentaires Collective"
 
 msgctxt "model:ir.action,name:act_option_form"
 msgid "option"
@@ -2327,6 +2467,10 @@ msgctxt "model:ir.action,name:resume_gbp_subs_process"
 msgid "Resume Process"
 msgstr "Reprendre le Workflow"
 
+msgctxt "model:ir.ui.menu,name:menu_contract_form"
+msgid "Group Contract"
+msgstr "Contrat Collectif"
+
 msgctxt "model:ir.ui.menu,name:menu_coverage_form"
 msgid "Plan Coverages"
 msgstr "Garanties Collectives"
@@ -2335,17 +2479,9 @@ msgctxt "model:ir.ui.menu,name:menu_enrollment_form"
 msgid "Enrollment"
 msgstr "Affiliation"
 
-msgctxt "model:ir.ui.menu,name:menu_contract_form"
-msgid "GBP Contract"
-msgstr "Contrat Collectif"
-
 msgctxt "model:ir.ui.menu,name:menu_group"
 msgid "Group"
 msgstr "Collectif"
-
-msgctxt "model:ir.ui.menu,name:menu_model_coop_schema"
-msgid "Collective Complementary Data"
-msgstr "Données Complémentaires Collective"
 
 msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Insurance Plan"
@@ -2427,6 +2563,30 @@ msgctxt "selection:ins_collective.clause_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
+msgctxt "selection:ins_collective.contract,master:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:ins_collective.contract,master:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "selection:ins_collective.contract,status:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "selection:ins_collective.contract,status:"
+msgid "Hold"
+msgstr "Suspendre"
+
+msgctxt "selection:ins_collective.contract,status:"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt "selection:ins_collective.contract,status:"
+msgid "Terminated"
+msgstr "Terminé"
+
 msgctxt "selection:ins_collective.coverage,subscription_behaviour:"
 msgid "Mandatory"
 msgstr "Obligatoire"
@@ -2471,6 +2631,26 @@ msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
+msgctxt "selection:ins_collective.covered_data,status:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "selection:ins_collective.covered_data,status:"
+msgid "Hold"
+msgstr "Suspendre"
+
+msgctxt "selection:ins_collective.covered_data,status:"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt "selection:ins_collective.covered_data,status:"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "selection:ins_collective.covered_data,status:"
+msgid "Terminated"
+msgstr "Terminé"
+
 msgctxt "selection:ins_collective.deductible_rule,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
@@ -2486,22 +2666,6 @@ msgstr "Compléter"
 msgctxt "selection:ins_collective.deductible_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
-
-msgctxt "selection:ins_collective.complementary_data_manager,kind:"
-msgid "Main"
-msgstr "Principale"
-
-msgctxt "selection:ins_collective.complementary_data_manager,kind:"
-msgid "Sub Element"
-msgstr "Elément Couvert"
-
-msgctxt "selection:ins_collective.complementary_data_manager,master:"
-msgid "Coverage"
-msgstr "Garantie"
-
-msgctxt "selection:ins_collective.complementary_data_manager,master:"
-msgid "Product"
-msgstr "Produit"
 
 msgctxt "selection:ins_collective.eligibility_rule,config_kind:"
 msgid "Advanced"
@@ -2625,22 +2789,6 @@ msgstr "Personne Physique"
 msgctxt "selection:ins_collective.enrollment_process.project,subscriber_kind:"
 msgid "Society"
 msgstr "Société"
-
-msgctxt "selection:ins_collective.contract,status:"
-msgid "Active"
-msgstr "Actif"
-
-msgctxt "selection:ins_collective.contract,status:"
-msgid "Hold"
-msgstr "Suspendre"
-
-msgctxt "selection:ins_collective.contract,status:"
-msgid "Quote"
-msgstr "Devis"
-
-msgctxt "selection:ins_collective.contract,status:"
-msgid "Terminated"
-msgstr "Terminé"
 
 msgctxt "selection:ins_collective.gbp_subs_process.process_state,cur_action:"
 msgid "cancel"
@@ -2770,42 +2918,6 @@ msgctxt "selection:ins_collective.reserve_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:ins_collective.schema_element,kind:"
-msgid "On Contract"
-msgstr "Contrat"
-
-msgctxt "selection:ins_collective.schema_element,kind:"
-msgid "On Product"
-msgstr "Produit"
-
-msgctxt "selection:ins_collective.schema_element,kind:"
-msgid "On Sub Element"
-msgstr "Elèment Couvert"
-
-msgctxt "selection:ins_collective.schema_element,type_:"
-msgid "Boolean"
-msgstr "Booléen"
-
-msgctxt "selection:ins_collective.schema_element,type_:"
-msgid "Char"
-msgstr "Alphanumérique"
-
-msgctxt "selection:ins_collective.schema_element,type_:"
-msgid "Date"
-msgstr "Date"
-
-msgctxt "selection:ins_collective.schema_element,type_:"
-msgid "Integer"
-msgstr "Entier"
-
-msgctxt "selection:ins_collective.schema_element,type_:"
-msgid "Numeric"
-msgstr "Numérique"
-
-msgctxt "selection:ins_collective.schema_element,type_:"
-msgid "Selection"
-msgstr "Sélection"
-
 msgctxt "selection:ins_collective.term_renewal_rule,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
@@ -2855,12 +2967,32 @@ msgid "Contract"
 msgstr "Contrat"
 
 msgctxt "view:ins_collective.contract:"
+msgid "Enrollments"
+msgstr "Affiliations"
+
+msgctxt "view:ins_collective.contract:"
 msgid "GBP Administration"
 msgstr "Administration"
 
 msgctxt "view:ins_collective.contract:"
 msgid "Product"
 msgstr "Produit"
+
+msgctxt "view:ins_collective.covered_data:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
+msgctxt "view:ins_collective.covered_data:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "view:ins_collective.covered_element:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "view:ins_collective.covered_element:"
+msgid "Covered Elements"
+msgstr "Eléments Couverts"
 
 msgctxt "view:ins_collective.gbp_subs_process.extension_gbp:"
 msgid "GBP Subscription Process - GBP"
@@ -2873,6 +3005,10 @@ msgstr ""
 msgctxt "view:ins_collective.product:"
 msgid "GBP Administration"
 msgstr "Administration"
+
+msgctxt "view:ins_contract.covered_element:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
 
 msgctxt ""
 "wizard_button:ins_collective.enrollment_process,option_selection,steps_cancel:"
