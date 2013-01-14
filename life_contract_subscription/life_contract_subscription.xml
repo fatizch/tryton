@@ -33,21 +33,5 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="life_covered_data_desc_view_form">
-            <field name="model">ins_contract.covered_data</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="insurance_contract.covered_data_view_form"/>
-            <field name="arch" type="xml">                 
-                     <![CDATA[
-                        <data>
-                            <xpath expr="/form" position="inside">
-                                <field name="coverage_amount" invisible="1"/>
-                                <label name="coverage_amount_selection"/>
-                                <field name="coverage_amount_selection"/>
-                            </xpath>
-                        </data>
-                     ]]>
-            </field>
-        </record>
   </data>
 </tryton>

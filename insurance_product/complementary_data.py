@@ -11,7 +11,7 @@ try:
 except ImportError:
     import json
 
-from trytond.modules.coop_utils import model, utils
+from trytond.modules.coop_utils import model, utils, coop_string
 
 
 __all__ = [
@@ -74,6 +74,12 @@ class CoopSchemaElement(DictSchemaMixin, model.CoopSQL, model.CoopView):
         utils.remove_tuple_from_list(cls.type_.selection, 'timestamp')
         utils.remove_tuple_from_list(cls.type_.selection, 'time')
         utils.remove_tuple_from_list(cls.type_.selection, 'binary')
+
+        cls.string = copy.copy(cls.string)
+        if not cls.name.on_change_with:
+            cls.name.on_change_with = []
+        cls.name.on_change_with.append('string')
+        cls.name.on_change_with.append('name')
 
     @staticmethod
     def default_start_date():
@@ -172,6 +178,11 @@ class CoopSchemaElement(DictSchemaMixin, model.CoopSQL, model.CoopView):
             ('%s.coverage' % module_name, 'Coverage'),
             ('%s.item_desc' % module_name, 'Item Descriptor'),
         ]
+
+    def on_change_with_name(self):
+        if not self.name and self.string:
+            return coop_string.remove_blank_and_invalid_char(self.string)
+        return self.name
 
 
 class SchemaElementRelation(model.CoopSQL):

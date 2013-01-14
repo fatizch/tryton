@@ -198,18 +198,12 @@ class CoverageDisplayer(CoopStepView):
     # to be stored, and is not supposed to be.
 
     __name__ = 'ins_contract.coverage_displayer'
-    offered = fields.Many2One('ins_product.coverage',
-                                   'offered',
-                                   readonly=True)
-    start_date = fields.Date(
-                        'From Date',
-                        domain=[('offered.start_date',
-                                 '<=',
-                                 'start_date')],
-                        depends=['offered', ],
-                        required=True)
-    status = fields.Selection(OPTIONSTATUS,
-                              'Status')
+    offered = fields.Many2One('ins_product.coverage', 'offered',
+        readonly=True)
+    start_date = fields.Date('From Date',
+        domain=[('offered.start_date', '<=', 'start_date')],
+        depends=['offered', ], required=True)
+    status = fields.Selection(OPTIONSTATUS, 'Status')
 
     def init_from_coverage(self, coverage):
         self.offered = coverage
@@ -457,17 +451,17 @@ class CoveredDesc(CoopStepView):
         contract = utils.WithAbstract.get_abstract_objects(
             from_wizard, 'for_contract')
         covered_datas = []
-        for covered in contract.options:
+        for option in contract.options:
             covered_data = cls()
             covered_data.the_kind = 'data'
-            covered_data.init_from_coverage(covered)
+            covered_data.init_from_option(option)
             covered_data.data_dynamic_data = utils.init_dynamic_data(
                 from_wizard.project.product.get_result(
                     'complementary_data_getter',
                     {
                         'date': covered_data.data_start_date,
                         'dd_args': {
-                            'options': covered.offered.code,
+                            'options': option.offered.code,
                             'kind': 'sub_elem',
                             'path': 'all'}})[0])
             covered_data.data_status = True
@@ -480,9 +474,10 @@ class CoveredDesc(CoopStepView):
         res.append((Coverage.__name__, Coverage.__name__))
         return res
 
-    def init_from_coverage(self, coverage):
-        self.data_start_date = coverage.start_date
-        self.data_for_coverage = coverage.offered
+    def init_from_option(self, option):
+        self.data_start_date = option.start_date
+        self.option = option
+        self.data_for_coverage = option.offered
         self.data_for_option_char = self.data_for_coverage.code
         self.data_coverage_name = self.data_for_coverage.get_rec_name('')
 
@@ -621,33 +616,28 @@ class SubscriptionProcess(CoopProcess):
         contract = utils.WithAbstract.get_abstract_objects(
             self, 'for_contract')
         Contract = Pool().get(contract.__name__)
-
         contract.finalize_contract()
-
         if not (hasattr(contract, 'billing_manager') and
                 contract.billing_manager):
             BillingManager = Pool().get(contract.get_manager_model())
             bm = BillingManager()
             contract.billing_manager = [bm]
-
+        for covered_element in contract.covered_elements:
+            for covered_data in covered_element.covered_data:
+                for option in contract.options:
+                    if covered_data.coverage == option.offered:
+                        covered_data.option = option
+                        break
         contract.status = 'active'
-
         contract.save()
-
         contract = Contract(contract.id)
-
         # We need to recalculate the pricing in order to be able to set the
         # links with the covered elements
-
         prices, errs = contract.calculate_prices_at_all_dates()
-
         if errs:
             return (False, errs)
-
         contract.billing_manager[0].store_prices(prices)
-
         contract.billing_manager[0].save()
-
         # Do not forget to return a 'everything went right' signal !
         return (True, [])
 

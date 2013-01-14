@@ -152,5 +152,18 @@ def remove_all_but_alphanumeric_and_space(from_string):
     return pattern.sub('', from_string)
 
 
-def remove_blank_and_invalid_char(from_string):
-    return remove_invalid_char(from_string).replace(' ', '_')
+def remove_blank_and_invalid_char(from_string, lower_case=True):
+    res = remove_invalid_char(from_string).replace(' ', '_')
+    if lower_case:
+        res = res.lower()
+    return res
+
+
+def concat_strings(this, that):
+    if this and that:
+        res = '%s %s' % (this, that)
+    elif this:
+        res = this
+    elif that:
+        res = that
+    return res

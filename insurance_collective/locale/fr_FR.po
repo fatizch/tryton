@@ -78,7 +78,7 @@ msgctxt "error:ins_collective.enrollment:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.gbp_contract:"
+msgctxt "error:ins_collective.contract:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -1198,79 +1198,79 @@ msgctxt "field:ins_collective.enrollment_process.project,subscriber_kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:ins_collective.gbp_contract,billing_manager:"
+msgctxt "field:ins_collective.contract,billing_manager:"
 msgid "Billing Manager"
 msgstr "Cotisation"
 
-msgctxt "field:ins_collective.gbp_contract,broker_manager:"
+msgctxt "field:ins_collective.contract,broker_manager:"
 msgid "Broker Manager"
 msgstr "Courtier"
 
-msgctxt "field:ins_collective.gbp_contract,contact:"
+msgctxt "field:ins_collective.contract,contact:"
 msgid "Contact"
 msgstr "Contact"
 
-msgctxt "field:ins_collective.gbp_contract,contract_number:"
+msgctxt "field:ins_collective.contract,contract_number:"
 msgid "Contract Number"
 msgstr "Numéro de Contrat"
 
-msgctxt "field:ins_collective.gbp_contract,create_date:"
+msgctxt "field:ins_collective.contract,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_collective.gbp_contract,create_uid:"
+msgctxt "field:ins_collective.contract,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_collective.gbp_contract,current_state:"
+msgctxt "field:ins_collective.contract,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
 
-msgctxt "field:ins_collective.gbp_contract,end_date:"
+msgctxt "field:ins_collective.contract,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_collective.gbp_contract,final_product:"
+msgctxt "field:ins_collective.contract,final_product:"
 msgid "Final Product"
 msgstr "Produit Final"
 
-msgctxt "field:ins_collective.gbp_contract,id:"
+msgctxt "field:ins_collective.contract,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_collective.gbp_contract,is_used:"
+msgctxt "field:ins_collective.contract,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-msgctxt "field:ins_collective.gbp_contract,rec_name:"
+msgctxt "field:ins_collective.contract,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_collective.gbp_contract,start_date:"
+msgctxt "field:ins_collective.contract,start_date:"
 msgid "Effective Date"
 msgstr "Date d'Effet"
 
-msgctxt "field:ins_collective.gbp_contract,start_management_date:"
+msgctxt "field:ins_collective.contract,start_management_date:"
 msgid "Management Date"
 msgstr "Date de Début de Gestion"
 
-msgctxt "field:ins_collective.gbp_contract,status:"
+msgctxt "field:ins_collective.contract,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:ins_collective.gbp_contract,subscriber:"
+msgctxt "field:ins_collective.contract,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-msgctxt "field:ins_collective.gbp_contract,summary:"
+msgctxt "field:ins_collective.contract,summary:"
 msgid "Summary"
 msgstr "Synthèse"
 
-msgctxt "field:ins_collective.gbp_contract,write_date:"
+msgctxt "field:ins_collective.contract,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_collective.gbp_contract,write_uid:"
+msgctxt "field:ins_collective.contract,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -2207,7 +2207,7 @@ msgctxt "model:ins_collective.enrollment_process.project,name:"
 msgid "This step should be the first one, as it asks the user which product"
 msgstr ""
 
-msgctxt "model:ins_collective.gbp_contract,name:"
+msgctxt "model:ins_collective.contract,name:"
 msgid "GBP Contract"
 msgstr "Contrat Collectif"
 
@@ -2287,7 +2287,7 @@ msgctxt "model:ir.action,name:act_enrollment_relate_form"
 msgid "Enrollments"
 msgstr "Affiliations"
 
-msgctxt "model:ir.action,name:act_gbp_contract_form"
+msgctxt "model:ir.action,name:act_contract_form"
 msgid "GBP Contract"
 msgstr "Contrat Collectif"
 
@@ -2335,7 +2335,7 @@ msgctxt "model:ir.ui.menu,name:menu_enrollment_form"
 msgid "Enrollment"
 msgstr "Affiliation"
 
-msgctxt "model:ir.ui.menu,name:menu_gbp_contract_form"
+msgctxt "model:ir.ui.menu,name:menu_contract_form"
 msgid "GBP Contract"
 msgstr "Contrat Collectif"
 
@@ -2626,19 +2626,19 @@ msgctxt "selection:ins_collective.enrollment_process.project,subscriber_kind:"
 msgid "Society"
 msgstr "Société"
 
-msgctxt "selection:ins_collective.gbp_contract,status:"
+msgctxt "selection:ins_collective.contract,status:"
 msgid "Active"
 msgstr "Actif"
 
-msgctxt "selection:ins_collective.gbp_contract,status:"
+msgctxt "selection:ins_collective.contract,status:"
 msgid "Hold"
 msgstr "Suspendre"
 
-msgctxt "selection:ins_collective.gbp_contract,status:"
+msgctxt "selection:ins_collective.contract,status:"
 msgid "Quote"
 msgstr "Devis"
 
-msgctxt "selection:ins_collective.gbp_contract,status:"
+msgctxt "selection:ins_collective.contract,status:"
 msgid "Terminated"
 msgstr "Terminé"
 
@@ -2850,15 +2850,15 @@ msgctxt "selection:ins_collective.term_renewal_rule,term_date_choice:"
 msgid "At this Date"
 msgstr "À Cette Date"
 
-msgctxt "view:ins_collective.gbp_contract:"
+msgctxt "view:ins_collective.contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "view:ins_collective.gbp_contract:"
+msgctxt "view:ins_collective.contract:"
 msgid "GBP Administration"
 msgstr "Administration"
 
-msgctxt "view:ins_collective.gbp_contract:"
+msgctxt "view:ins_collective.contract:"
 msgid "Product"
 msgstr "Produit"
 

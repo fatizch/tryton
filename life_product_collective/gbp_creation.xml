@@ -4,7 +4,7 @@
         <record model="ir.action.wizard" id="wizard_gbp_creation">
             <field name="name">GBP Tranche Calculation</field>
             <field name="wiz_name">ins_collective.gbp_wizard</field>
-            <field name="model">ins_collective.gbp_contract</field>
+            <field name="model">ins_collective.contract</field>
         </record>
         <record model="ir.ui.view" id="gbp_college_selection_form">
             <field name="model">ins_collective.college_selection</field>
@@ -19,7 +19,7 @@
         </record>
         <record model="ir.action.keyword" id="act_wizard_gbp_creation">
             <field name="keyword">form_action</field>
-            <field name="model">ins_collective.gbp_contract,-1</field>
+            <field name="model">ins_collective.contract,-1</field>
             <field name="action" ref="wizard_gbp_creation"/>
         </record>
         <record model="ir.ui.view" id="gbp_tranche_selection_form">

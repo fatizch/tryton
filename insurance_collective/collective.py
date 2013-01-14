@@ -29,23 +29,27 @@ IND_TO_COLL = {
     'ins_product.coverage': 'ins_collective.coverage',
     'ins_product.coverage_amount_rule': 'ins_collective.coverage_amount_rule',
     'ins_product.deductible_rule': 'ins_collective.deductible_rule',
-    'ins_product.complementary_data_manager': 'ins_collective.complementary_data_manager',
+    'ins_product.complementary_data_manager':\
+        'ins_collective.complementary_data_manager',
     'ins_product.eligibility_relation_kind':\
         'ins_collective.eligibility_relation_kind',
     'ins_product.eligibility_rule': 'ins_collective.eligibility_rule',
     'ins_product.pricing_component': 'ins_collective.pricing_component',
     'ins_product.pricing_rule': 'ins_collective.pricing_rule',
     'ins_product.product': 'ins_collective.product',
+    'ins_product.product-options-coverage': 'ins_collective.product-coverage',
     'ins_product.reserve_rule': 'ins_collective.reserve_rule',
     'ins_product.schema_element': 'ins_collective.schema_element',
     'ins_product.schema_element_relation':\
         'ins_collective.schema_element_relation',
     'ins_product.term_renewal_rule': 'ins_collective.term_renewal_rule',
 
-    'ins_contract.contract': 'ins_collective.enrollment',
+    'ins_contract.contract': 'ins_collective.contract',
     'ins_contract.option': 'ins_collective.option',
     'ins_product.package-coverage': 'ins_collective.package-coverage',
     'ins_product.product-item_desc': 'ins_collective.product-item_desc',
+    'ins_contract.covered_element': 'ins_collective.covered_element',
+    'ins_contract.covered_data': 'ins_collective.covered_data',
 }
 
 
@@ -59,20 +63,14 @@ class GroupRoot(object):
         super(GroupRoot, cls).__setup__()
 
 
-class GroupInsurancePlan(GroupRoot, product.Product):
+class GroupProduct(GroupRoot, product.Product):
     'Group Insurance Plan'
 
     __name__ = 'ins_collective.product'
 
-    contract = fields.Many2One('ins_collective.gbp_contract', 'Contract',
-        ondelete='CASCADE')
-
     @classmethod
     def __setup__(cls):
-        super(GroupInsurancePlan, cls).__setup__()
-        field = fields.One2Many('ins_collective.coverage',
-            'product', 'Options')
-        cls.options = field
+        super(GroupProduct, cls).__setup__()
 
         cls.contract_generator = copy.copy(cls.contract_generator)
         cls.contract_generator.required = False
@@ -85,7 +83,7 @@ class GroupInsurancePlan(GroupRoot, product.Product):
         cls.code = copy.copy(cls.code)
 
     def on_change_template(self):
-        res = super(GroupInsurancePlan, self).on_change_template()
+        res = super(GroupProduct, self).on_change_template()
         if not self.template:
             res['options'] = []
         else:
@@ -124,13 +122,16 @@ class GroupProductItemDescriptorRelation(GroupRoot,
     __name__ = 'ins_collective.product-item_desc'
 
 
-class GroupInsuranceCoverage(GroupRoot, coverage.Coverage):
+class GroupCoverage(GroupRoot, coverage.Coverage):
     'Group Insurance Coverage'
 
     __name__ = 'ins_collective.coverage'
 
-    product = fields.Many2One('ins_collective.product', 'Product',
-        ondelete='CASCADE')
+
+class GroupProductCoverageRelation(GroupRoot, product.ProductOptionsCoverage):
+    'Define Product - Coverage relations'
+
+    __name__ = 'ins_collective.product-coverage'
 
 
 class GroupPackageCoverage(GroupRoot, coverage.PackageCoverage):
@@ -226,7 +227,8 @@ class GroupSchemaElementRelation(GroupRoot,
     __name__ = 'ins_collective.schema_element_relation'
 
 
-class GroupDynamicDataManager(GroupRoot, complementary_data.DynamicDataManager):
+class GroupDynamicDataManager(GroupRoot,
+        complementary_data.DynamicDataManager):
     'Complementary Data Manager'
 
     __name__ = 'ins_collective.complementary_data_manager'

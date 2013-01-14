@@ -21,7 +21,7 @@ class Enrollment(GroupRoot, Contract):
 #    '''
     __name__ = 'ins_collective.enrollment'
 
-    gbp = fields.Many2One('ins_collective.gbp_contract', 'GBP Contract',
+    gbp = fields.Many2One('ins_collective.contract', 'GBP Contract',
         on_change=['gbp', 'start_date', 'options'])
 
     @classmethod
