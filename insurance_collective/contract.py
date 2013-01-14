@@ -10,6 +10,7 @@ from trytond.modules.coop_utils import utils
 
 __all__ = [
         'GroupContract',
+        'GroupOption',
         'GroupCoveredElement',
         'GroupCoveredData',
         ]
@@ -39,6 +40,12 @@ class GroupContract(GroupRoot, contract.Contract):
     @classmethod
     def get_offered_module_prefix(cls):
         return 'ins_collective'
+
+
+class GroupOption(GroupRoot, contract.Option):
+    'Subscribed Coverage'
+
+    __name__ = 'ins_collective.option'
 
 
 class GroupCoveredElement(GroupRoot, contract.CoveredElement):
