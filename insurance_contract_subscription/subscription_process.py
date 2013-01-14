@@ -14,14 +14,14 @@ OPTION_SELECTION_STATUS = [
 ]
 
 __all__ = [
-    'Contract',
+    'ContractSubscription',
     'Option',
     'CoveredData',
     'CoveredElement',
 ]
 
 
-class Contract():
+class ContractSubscription():
     'Contract'
 
     __name__ = 'ins_contract.contract'
@@ -56,7 +56,7 @@ class Contract():
 
     @classmethod
     def __setup__(cls):
-        super(Contract, cls).__setup__()
+        super(ContractSubscription, cls).__setup__()
         cls._error_messages.update({
             'no_product': 'A product must be provided',
             'no_subscriber': 'A subscriber must be provided',
@@ -276,14 +276,6 @@ class Contract():
             return False, errs
         self.billing_manager[0].store_prices(prices)
         self.billing_manager[0].save()
-
-        return True, ()
-
-    def activate_contract(self):
-        if not self.status == 'quote':
-            return True, ()
-
-        self.status = 'active'
 
         return True, ()
 

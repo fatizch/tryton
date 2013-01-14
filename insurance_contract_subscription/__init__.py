@@ -4,7 +4,7 @@ from subscription_process import *
 
 def register():
     Pool.register(
-        Contract,
+        ContractSubscription,
         Option,
         CoveredElement,
         CoveredData,

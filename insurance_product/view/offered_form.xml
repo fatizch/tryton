@@ -23,8 +23,7 @@
         <page string="Managers" id="managers">
             <notebook>
                 <page string="Complementary Data" id="complementary_data">
-                    <field name="complementary_data_manager" mode="form"
-                        expand_toolbar="0"/>
+                    <field name="schema_elements" colspan="4"/>
                 </page>
                 <page string="Eligibility" id="eligibility">
                     <field name="eligibility_rules" colspan="4"/>

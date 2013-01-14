@@ -34,7 +34,6 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['TreeElement'] = Model.get('rule_engine.tree_element')
     cfg_dict['Tranche'] = Model.get('tranche.tranche')
     cfg_dict['SchemaElement'] = Model.get('ins_product.schema_element')
-    cfg_dict['CDM'] = Model.get('ins_product.complementary_data_manager')
     return cfg_dict
 
 
@@ -625,16 +624,11 @@ def create_invalidity_coverage(cfg_dict):
     cov = get_or_create_coverage(cfg_dict, 'INVAL', u'Invalidité',
         date=at_date)
 
-    cd_mgr = get_or_create_complementary_data_mgr(cfg_dict, cov,
-        kind='sub_elem')
-    cd_mgr.shared_dynamic.append(
-        get_or_create_schema_element(cfg_dict, name='CSP'))
+    CSP = get_or_create_schema_element(cfg_dict, name='CSP')
     salary = get_or_create_schema_element(cfg_dict, name='salary',
         string='Annual Salary', type_='char', kind='contract')
-    cd_mgr.specific_dynamic.append(salary)
-
-#    ca_rule = add_rule(cfg_dict, cov, 'coverage_amount', at_date)
-#    ca_rule.amounts = '0'
+    cov.schema_elements.append(CSP)
+    cov.schema_elements.append(salary)
 
     elig_rule = add_rule(cfg_dict, cov, 'eligibility')
     elig_rule.min_age = 18
@@ -677,20 +671,11 @@ retraite (au plus tard jusqu’à votre 60ème anniversaire).'''
     return cov
 
 
-def get_or_create_complementary_data_mgr(cfg_dict, offered, kind=None):
-    if not offered.complementary_data_manager:
-        mgr = cfg_dict['CDM']()
-        mgr.kind = kind
-        offered.complementary_data_manager.append(mgr)
-    return offered.complementary_data_manager[-1]
-
-
 def create_death_coverage(cfg_dict):
     at_date = datetime.date(2011, 1, 1)
     cov = get_or_create_coverage(cfg_dict, 'DC', u'Décès', date=at_date)
 
-    cd_mgr = get_or_create_complementary_data_mgr(cfg_dict, cov, kind='main')
-    cd_mgr.shared_dynamic.append(
+    cov.schema_elements.append(
         get_or_create_schema_element(cfg_dict, name='is_vip'))
 
     ca_rule = add_rule(cfg_dict, cov, 'coverage_amount')

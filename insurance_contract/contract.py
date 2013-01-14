@@ -81,8 +81,8 @@ class GenericExtension(model.CoopView):
 class Subscribed(ProcessFramework):
     'Subscribed'
 
-    offered = fields.Many2One(None, 'Offered', required=True,
-        ondelete='RESTRICT')
+    offered = fields.Many2One(None, 'Offered', ondelete='RESTRICT',
+        states={'required': Eval('status') == 'active'})
     start_date = fields.Date('Effective Date', required=True)
     end_date = fields.Date('End Date',
         domain=[('start_date', '<=', 'end_date')])
@@ -95,7 +95,7 @@ class Subscribed(ProcessFramework):
     @classmethod
     def __setup__(cls):
         cls.offered = copy.copy(cls.offered)
-        suffix, cls.offered.model_name = cls.get_offered_name()
+        suffix, cls.offered.string = cls.get_offered_name()
         cls.offered.model_name = ('%s.%s' %
             (cls.get_offered_module_prefix(), suffix))
         super(Subscribed, cls).__setup__()
@@ -287,8 +287,7 @@ class Contract(model.CoopSQL, Subscribed):
         return 'quote'
 
     def get_new_contract_number(self):
-        return self.get_product().get_result(
-            'new_contract_number', {})[0]
+        return self.get_product().get_result('new_contract_number', {})[0]
 
     def finalize_contract(self):
         self.contract_number = self.get_new_contract_number()
@@ -386,6 +385,26 @@ class Contract(model.CoopSQL, Subscribed):
         #TODO to enhance
         return self.subscriber
 
+    def init_options_from_covered_elements(self):
+        if self.options:
+            return True, ()
+        self.options = []
+        for coverage in self.offered.options:
+            option = utils.instanciate_relation(self.__class__, 'options')
+            option.init_from_offered(coverage, self.start_date)
+            for covered_element in self.covered_elements:
+                option.append_covered_data(covered_element)
+            self.options.append(option)
+        return True, ()
+
+    def activate_contract(self):
+        if not self.status == 'quote':
+            return True, ()
+
+        self.status = 'active'
+
+        return True, ()
+
 
 class Option(model.CoopSQL, Subscribed):
     'Subscribed Coverage'
@@ -423,6 +442,15 @@ class Option(model.CoopSQL, Subscribed):
         if self.offered:
             return self.offered.get_rec_name(name)
         return super(Option, self).get_rec_name(name)
+
+    def append_covered_data(self, covered_element=None):
+        res = utils.instanciate_relation(self.__class__, 'covered_data')
+        if not hasattr(self, 'covered_data'):
+            self.covered_data = []
+        self.covered_data.append(res)
+        res.init_from_option(self)
+        res.init_from_covered_element(covered_element)
+        return res
 
 
 class PriceLine(model.CoopSQL, model.CoopView):
@@ -770,7 +798,8 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         if self.complementary_data:
             return self.complementary_data
         elif self.item_desc:
-            return utils.init_dynamic_data([x.id for x in self.item_desc.complementary_data])
+            return utils.init_dynamic_data(
+                [x.id for x in self.item_desc.complementary_data])
 
 
 class CoveredData(model.CoopSQL, model.CoopView):
@@ -807,10 +836,19 @@ class CoveredData(model.CoopSQL, model.CoopView):
             return None
 
     def init_from_option(self, option):
-        self.option = option
+        #self.option = option
         self.coverage = option.offered
         self.start_date = option.start_date
         self.end_date = option.end_date
+        schema_elements = option.offered.get_schema_elements(['sub_elem'])
+        print "#" * 40
+        print schema_elements
+        print "#" * 40
+        self.complementary_data = utils.init_dynamic_data(
+            [x.id for x in schema_elements])
+
+    def init_from_covered_element(self, covered_element):
+        self.covered_element = covered_element
 
     def init_dynamic_data(self, coverage, contract):
         self.complementary_data = utils.init_dynamic_data(

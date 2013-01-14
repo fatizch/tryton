@@ -647,21 +647,39 @@ def get_user_language():
     return get_this_object('ir.lang', [('code', '=', Transaction().language)])
 
 
-def create_inst_with_default_val(from_class, field_name, action=None):
-    res = {}
+def get_relation_model_name(from_class, field_name):
     field = getattr(from_class, field_name)
     if not hasattr(field, 'model_name') and hasattr(field, 'relation_name'):
         #M2M
         relation = Pool().get(field.relation_name)
         target_field = getattr(relation, field.origin)
-        model_name = target_field.model_name
+        res = target_field.model_name
     else:
-        model_name = field.model_name
+        res = field.model_name
+    return res
+
+
+def get_relation_model(from_class, field_name):
+    model_name = get_relation_model_name(from_class, field_name)
+    if model_name:
+        return Pool().get(model_name)
+
+
+def instanciate_relation(from_class, field_name):
+    Model = get_relation_model(from_class, field_name)
+    if Model:
+        return Model()
+
+
+def create_inst_with_default_val(from_class, field_name, action=None):
+    res = {}
+    model_name = get_relation_model_name(from_class, field_name)
     CurModel = Pool().get(model_name)
     fields_names = list(x for x in set(CurModel._fields.keys()
             + CurModel._inherit_fields.keys())
     if x not in ['id', 'create_uid', 'create_date',
         'write_uid', 'write_date'])
+    field = getattr(from_class, field_name)
     if not isinstance(field, fields.Many2One):
         if action:
             res = {action: [CurModel.default_get(fields_names)]}

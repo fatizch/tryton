@@ -89,7 +89,11 @@
             <field name="type">form</field>
             <field name="name">covered_element_form</field>
         </record>
-
+        <record model="ir.ui.view" id="covered_element_view_form_simple">
+            <field name="model">ins_collective.covered_element</field>
+            <field name="type">form</field>
+            <field name="name">covered_element_form_simple</field>
+        </record>
         <!--################################################################ -->
         <!-- Covered Data -->
         <!--################################################################ -->

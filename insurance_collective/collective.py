@@ -2,7 +2,9 @@
 import copy
 
 from trytond.model import fields
+from trytond.pool import Pool
 from trytond.pyson import Eval
+from trytond.transaction import Transaction
 
 from trytond.modules.insurance_product import product, benefit
 from trytond.modules.insurance_product import coverage, clause
@@ -29,8 +31,6 @@ IND_TO_COLL = {
     'ins_product.coverage': 'ins_collective.coverage',
     'ins_product.coverage_amount_rule': 'ins_collective.coverage_amount_rule',
     'ins_product.deductible_rule': 'ins_collective.deductible_rule',
-    'ins_product.complementary_data_manager':\
-        'ins_collective.complementary_data_manager',
     'ins_product.eligibility_relation_kind':\
         'ins_collective.eligibility_relation_kind',
     'ins_product.eligibility_rule': 'ins_collective.eligibility_rule',
@@ -39,9 +39,6 @@ IND_TO_COLL = {
     'ins_product.product': 'ins_collective.product',
     'ins_product.product-options-coverage': 'ins_collective.product-coverage',
     'ins_product.reserve_rule': 'ins_collective.reserve_rule',
-    'ins_product.schema_element': 'ins_collective.schema_element',
-    'ins_product.schema_element_relation':\
-        'ins_collective.schema_element_relation',
     'ins_product.term_renewal_rule': 'ins_collective.term_renewal_rule',
 
     'ins_contract.contract': 'ins_collective.contract',
@@ -50,6 +47,10 @@ IND_TO_COLL = {
     'ins_product.product-item_desc': 'ins_collective.product-item_desc',
     'ins_contract.covered_element': 'ins_collective.covered_element',
     'ins_contract.covered_data': 'ins_collective.covered_data',
+    'ins_product.product-schema_elements':\
+        'ins_collective.product-schema_elements',
+    'ins_product.coverage-schema_elements':\
+        'ins_collective.coverage-schema_elements',
 }
 
 
@@ -61,6 +62,10 @@ class GroupRoot(object):
 
         utils.change_relation_links(cls, convert_dict=IND_TO_COLL)
         super(GroupRoot, cls).__setup__()
+
+    @classmethod
+    def get_offered_module_prefix(cls):
+        return 'ins_collective'
 
 
 class GroupProduct(GroupRoot, product.Product):
@@ -82,19 +87,32 @@ class GroupProduct(GroupRoot, product.Product):
 
         cls.code = copy.copy(cls.code)
 
+    def get_subscriber(self):
+        subscriber_id = Transaction().context.get('subscriber')
+        if not subscriber_id:
+            return
+        return Pool().get('party.party')(subscriber_id)
+
     def on_change_template(self):
+        print "%" * 80
+        print Transaction().context
+        print "%" * 80
         res = super(GroupProduct, self).on_change_template()
         if not self.template:
             res['options'] = []
         else:
-            res['code'] = self.template.code
-            res['name'] = self.template.name
+            subscriber = self.get_subscriber()
+            prefix = ''
+            if subscriber:
+                prefix = subscriber.code
+            res['code'] = prefix + self.template.code
+            res['name'] = prefix + self.template.name
             options = []
             for option in self.template.options:
                 clone_option = utils.create_inst_with_default_val(
                     self.__class__, 'options')[0]
-                clone_option['code'] = option.code
-                clone_option['name'] = option.name
+                clone_option['code'] = prefix + option.code
+                clone_option['name'] = prefix + option.name
                 clone_option['template'] = option.id
                 if option.family:
                     clone_option['family'] = option.family
@@ -214,26 +232,6 @@ class GroupTermRenewalRule(GroupRoot, term_renewal_rule.TermRenewalRule):
     __name__ = 'ins_collective.term_renewal_rule'
 
 
-class GroupSchemaElement(GroupRoot, complementary_data.CoopSchemaElement):
-    'Complementary Data Definition'
-
-    __name__ = 'ins_collective.schema_element'
-
-
-class GroupSchemaElementRelation(GroupRoot,
-        complementary_data.SchemaElementRelation):
-    'Relation between schema element and complementary data manager'
-
-    __name__ = 'ins_collective.schema_element_relation'
-
-
-class GroupDynamicDataManager(GroupRoot,
-        complementary_data.DynamicDataManager):
-    'Complementary Data Manager'
-
-    __name__ = 'ins_collective.complementary_data_manager'
-
-
 class GroupPricingComponent(GroupRoot, pricing_rule.PricingComponent):
     'Pricing Data'
 
@@ -258,3 +256,17 @@ class GroupPricingRule(GroupRoot, pricing_rule.PricingRule):
     @staticmethod
     def default_config_kind():
         return 'advanced'
+
+
+class GroupProductSchemaElementRelation(GroupRoot,
+        product.ProductSchemaElementRelation):
+    'Relation between Product and Schema Element'
+
+    __name__ = 'ins_collective.product-schema_elements'
+
+
+class GroupCoverageSchemaElementRelation(GroupRoot,
+        coverage.CoverageSchemaElementRelation):
+    'Relation between Coverage and Schema Element'
+
+    __name__ = 'ins_collective.coverage-schema_elements'

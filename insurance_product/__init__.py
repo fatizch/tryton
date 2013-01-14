@@ -46,4 +46,6 @@ def register():
         Clause,
         ClauseRelation,
         ClauseVersion,
+        ProductSchemaElementRelation,
+        CoverageSchemaElementRelation,
         module='insurance_product', type_='model')

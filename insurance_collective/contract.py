@@ -31,15 +31,18 @@ class GroupContract(GroupRoot, contract.Contract):
         if not cls.subscriber.domain:
             cls.subscriber.domain = []
         cls.subscriber.domain.append(('is_society', '=', True))
+        cls.offered = copy.copy(cls.offered)
+        if not cls.offered.context:
+            cls.offered.context = {}
+        cls.offered.context['subscriber'] = Eval('subscriber')
+        if not cls.offered.depends:
+            cls.offered.depends = []
+        cls.offered.depends = ['subscriber']
 
     def get_rec_name(self, name=None):
         if self.contract_number:
             return self.contract_number
         return super(GroupContract, self).get_rec_name(name)
-
-    @classmethod
-    def get_offered_module_prefix(cls):
-        return 'ins_collective'
 
 
 class GroupOption(GroupRoot, contract.Option):

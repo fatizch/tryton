@@ -19,6 +19,7 @@ __all__ = [
    'ItemDescriptor',
    'ItemDescriptorComplementaryDataRelation',
    'ProductItemDescriptorRelation',
+   'ProductSchemaElementRelation',
     ]
 
 CONFIG_KIND = [
@@ -198,6 +199,9 @@ class Offered(model.CoopView, utils.GetResult, Templated):
                 field.model_name,
                 field.field)
 
+    def get_schema_elements(self, kinds=None):
+        return [x for x in self.schema_elements if not kinds or x.kind in kinds]
+
 
 class Product(model.CoopSQL, Offered):
     'Product'
@@ -217,6 +221,8 @@ class Product(model.CoopSQL, Offered):
         'offered', 'Term - Renewal')
     item_descriptors = fields.Many2Many('ins_product.product-item_desc',
         'product', 'item_desc', 'Item Descriptors')
+    schema_elements = fields.Many2Many('ins_product.product-schema_elements',
+        'product', 'schema_element', 'Complementary Data')
 
     @classmethod
     def __setup__(cls):
@@ -423,3 +429,14 @@ class ProductItemDescriptorRelation(model.CoopSQL):
         ondelete='CASCADE')
     item_desc = fields.Many2One('ins_product.item_desc', 'Item Descriptor',
         ondelete='RESTRICT')
+
+
+class ProductSchemaElementRelation(model.CoopSQL):
+    'Relation between Product and Schema Element'
+
+    __name__ = 'ins_product.product-schema_elements'
+
+    product = fields.Many2One('ins_product.product', 'Product',
+        ondelete='CASCADE')
+    schema_element = fields.Many2One('ins_product.schema_element',
+        'Complementary Data', ondelete='RESTRICT')

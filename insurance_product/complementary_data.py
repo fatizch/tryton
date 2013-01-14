@@ -253,3 +253,10 @@ class DynamicDataManager(model.CoopSQL, model.CoopView):
             ('%s.product' % module_name, 'Product'),
             ('%s.coverage' % module_name, 'Coverage'),
         ]
+
+    def get_schema_elements(self, kinds=None):
+        res = []
+        for schema_element in self.specific_dynamic + self.shared_dynamic:
+            if not kinds or schema_element.kind in kinds:
+                res.append(schema_element)
+        return res

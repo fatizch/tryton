@@ -14,6 +14,7 @@ from trytond.modules.insurance_product import EligibilityResultLine
 __all__ = [
     'Coverage',
     'PackageCoverage',
+    'CoverageSchemaElementRelation',
     ]
 
 SUBSCRIPTION_BEHAVIOUR = [
@@ -78,6 +79,8 @@ class Coverage(model.CoopSQL, Offered):
         },
         depends=['is_package'],
         domain=[('is_package', '=', False)])
+    schema_elements = fields.Many2Many('ins_product.coverage-schema_elements',
+        'coverage', 'schema_element', 'Complementary Data')
 
     @classmethod
     def delete(cls, entities):
@@ -325,3 +328,14 @@ class PackageCoverage(model.CoopSQL):
 
     package = fields.Many2One('ins_product.coverage', 'Package')
     coverage = fields.Many2One('ins_product.coverage', 'Coverage')
+
+
+class CoverageSchemaElementRelation(model.CoopSQL):
+    'Relation between Coverage and Schema Element'
+
+    __name__ = 'ins_product.coverage-schema_elements'
+
+    coverage = fields.Many2One('ins_product.coverage', 'Coverage',
+        ondelete='CASCADE')
+    schema_element = fields.Many2One('ins_product.schema_element',
+        'Complementary Data', ondelete='RESTRICT')
