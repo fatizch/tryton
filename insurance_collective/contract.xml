@@ -44,7 +44,7 @@
             <field name="model">ins_collective.option</field>
             <field name="type">tree</field>
             <field name="inherit" ref="insurance_contract.option_view_tree"/>
-            <field name="name">option_tree</field>
+            <field name="arch" type="xml"/>
         </record>
 
         <!-- form view -->

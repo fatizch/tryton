@@ -720,7 +720,8 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     sub_covered_elements = fields.One2Many('ins_contract.covered_element',
         'parent', 'Sub Covered Elements')
     complementary_data = fields.Dict('Complementary Data',
-        schema_model='ins_product.schema_element')
+        schema_model='ins_product.schema_element',
+        on_change_with=['item_desc', 'complementary_data'])
 
     def get_name_for_billing(self):
         pass
@@ -764,6 +765,12 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         if errors:
             return False, errors
         return True, ()
+
+    def on_change_with_complementary_data(self):
+        if self.complementary_data:
+            return self.complementary_data
+        elif self.item_desc:
+            return utils.init_dynamic_data([x.id for x in self.item_desc.complementary_data])
 
 
 class CoveredData(model.CoopSQL, model.CoopView):
