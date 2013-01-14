@@ -29,12 +29,15 @@ class TaskDispatcher(Wizard):
             User = Pool().get('res.user')
             the_user = User(Transaction().user)
 
-            Action = Pool().get('ir.action')
+            if not (hasattr(the_user, 'team') and the_user.team):
+                return None
 
             act = the_user.team.get_next_action(the_user)
             
             if not act:
                 return None
+
+            Action = Pool().get('ir.action')
 
             return Action.get_action_values(
                 act[0].__name__, 
