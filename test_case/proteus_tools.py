@@ -122,3 +122,11 @@ def generate_creation_method(cfg_dict, class_key, sel_val='', domain=None,
         domain=domain,
         to_store=to_store,
         only_get=only_get)
+
+
+def get_translation(cfg_dict, string):
+    return cfg_dict['translate'].get(string, string)
+
+
+def translate_this(cfg_dict):
+    return functools.partial(get_translation, cfg_dict=cfg_dict)

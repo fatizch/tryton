@@ -63,6 +63,7 @@ def create_methods(cfg_dict):
 def launch_test_case(cfg_dict):
     update_cfg_dict_with_models(cfg_dict)
     meths = create_methods(cfg_dict)
+    translater = proteus_tools.translate_this(cfg_dict)
 
     admin_user = meths['User']({
         'login': 'admin',
@@ -85,7 +86,7 @@ def launch_test_case(cfg_dict):
         })
 
     contract_admin_grp = meths['Group']({
-        'name': 'Contract Administration',
+        'name': translater('Contract Administration'),
         'menu_access': [
             cfg_dict['Menu'](meths['ModelData']({
                 'module': 'insurance_contract',
@@ -144,7 +145,7 @@ def launch_test_case(cfg_dict):
         })
 
     param_grp = meths['Group']({
-        'name': 'Functional Admin',
+        'name': translater('Functional Admin'),
         'menu_access': [
             cfg_dict['Menu'](meths['ModelData']({
                 'module': 'insurance_product',
@@ -251,7 +252,7 @@ def launch_test_case(cfg_dict):
     param_user = meths['User']({
         'login': 'param',
         'password': 'param',
-        'name': 'Lab Manager',
+        'name': translater('Lab Manager'),
         'groups': [
             param_grp,
         ]})
@@ -259,13 +260,13 @@ def launch_test_case(cfg_dict):
     ctr_adm_user = meths['User']({
         'login': 'contract',
         'password': 'contract',
-        'name': 'Contract Administrator',
+        'name': translater('Contract Administrator'),
         'groups': [
             contract_admin_grp,
         ]})
 
     ctr_valid_grp = meths['Group']({
-        'name': 'Contract Validation',
+        'name': translater('Contract Validation'),
         'users': [
             admin_user,],
         })
@@ -273,7 +274,7 @@ def launch_test_case(cfg_dict):
     ctr_validation_user = meths['User']({
         'login': 'contract_validation',
         'password':'contract_validation',
-        'name': 'Contract Validation',
+        'name': translater('Contract Validation'),
         'groups': [
             contract_admin_grp,
             ctr_valid_grp,
