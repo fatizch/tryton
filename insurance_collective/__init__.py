@@ -13,6 +13,7 @@ def register():
         GroupProductCoverageRelation,
         GroupPackageCoverage,
         GroupContract,
+        GroupOption,
         GroupCoveredElement,
         GroupCoveredData,
         GroupProductItemDescriptorRelation,

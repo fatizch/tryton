@@ -388,7 +388,7 @@ class Contract(model.CoopSQL, Subscribed):
 
 
 class Option(model.CoopSQL, Subscribed):
-    'Coverage'
+    'Subscribed Coverage'
 
     __name__ = 'ins_contract.option'
 

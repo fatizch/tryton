@@ -49,12 +49,12 @@ class Enrollment(GroupRoot, Contract):
 
 
 class EnrollmentOption(GroupRoot, Option):
-    'Option'
+    'Subscribed Option'
 #    '''
 #        Options on Enrollments are slightly different than standard options as
 #        they use GBP coverages rather than standard coverages.
 #    '''
-    __name__ = 'ins_collective.option'
+    __name__ = 'ins_collective.enrollment_option'
 
     is_subscribed = fields.Function(fields.Boolean('Subscribe ?',
             states={'readonly': Bool(Eval('id', -1) >= 0)}),
