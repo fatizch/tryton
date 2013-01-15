@@ -674,8 +674,13 @@ class StepDesc(ModelSQL, ModelView):
         xml += '</group>'
         xml += '<newline/>'
 
+        # We need to know how many buttons there will be
+        nb_buttons = len(self.from_steps) + len(self.to_steps) + 1
+
         # Then we add all the buttons for this step
-        xml += '<group name="%s_buttons">' % self.technical_name
+        xml += '<group name="%s_buttons" col="%s">' % (
+            self.technical_name, nb_buttons)
+
         # The "previous" buttons
         for trans in self.from_steps:
             xml += trans.build_button()
