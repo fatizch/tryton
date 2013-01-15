@@ -537,6 +537,11 @@ class StepTransition(ModelSQL, ModelView):
     # Sometimes we just want to display a readonly button for aesthetics
     is_readonly = fields.Boolean('Readonly')
 
+    # We need to be able to order the transitions
+    priority = fields.Integer(
+        'Priority',
+    )
+
     def execute(self, target):
         # Executing a transition is easy : just apply all methods
         if self.methods:
@@ -622,6 +627,7 @@ class StepDesc(ModelSQL, ModelView):
         'From Steps',
         domain=[
             ('kind', '=', 'previous')],
+        order=[('priority', 'ASC')],
     )
 
     # As well as those which will start from this step
@@ -630,6 +636,7 @@ class StepDesc(ModelSQL, ModelView):
         'from_step',
         'To Steps',
         domain=[('kind', '=', 'next')],
+        order=[('priority', 'ASC')],
     )
 
     # Finally, the xml which will be displayed on the current state.
