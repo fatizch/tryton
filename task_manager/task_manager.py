@@ -45,7 +45,7 @@ class Priority(ModelSQL, ModelView):
         ondelete='CASCADE',
     )
     
-    priority = fields.Integer('Priority', required=True)
+    priority = fields.Integer('Priority')
 
     def get_task(self, user):
         if not self.process_step:
