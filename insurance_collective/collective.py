@@ -59,13 +59,17 @@ class GroupRoot(object):
     @classmethod
     def __setup__(cls):
         cls._table = None
-
-        utils.change_relation_links(cls, convert_dict=IND_TO_COLL)
+        print cls.__name__
+        utils.change_relation_links(cls, convert_dict=cls.get_convert_dict())
         super(GroupRoot, cls).__setup__()
 
     @classmethod
     def get_offered_module_prefix(cls):
         return 'ins_collective'
+
+    @classmethod
+    def get_convert_dict(cls):
+        return IND_TO_COLL
 
 
 class GroupProduct(GroupRoot, product.Product):
@@ -94,9 +98,6 @@ class GroupProduct(GroupRoot, product.Product):
         return Pool().get('party.party')(subscriber_id)
 
     def on_change_template(self):
-        print "%" * 80
-        print Transaction().context
-        print "%" * 80
         res = super(GroupProduct, self).on_change_template()
         if not self.template:
             res['options'] = []

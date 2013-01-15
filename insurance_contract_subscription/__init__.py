@@ -8,4 +8,5 @@ def register():
         Option,
         CoveredElement,
         CoveredData,
+        SubscriptionManager,
         module='insurance_contract_subscription', type_='model')

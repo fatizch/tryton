@@ -1,9 +1,9 @@
 from trytond.pool import Pool, PoolMeta
 from trytond.model import fields
 from trytond.pyson import Eval
-
-from trytond.modules.coop_utils import utils
 from trytond.transaction import Transaction
+
+from trytond.modules.coop_utils import utils, model
 
 from trytond.modules.process import ClassAttr
 from trytond.modules.coop_party import ACTOR_KIND
@@ -18,6 +18,7 @@ __all__ = [
     'Option',
     'CoveredData',
     'CoveredElement',
+    'SubscriptionManager',
 ]
 
 
@@ -53,6 +54,8 @@ class ContractSubscription():
     product_desc = fields.Function(
         fields.Text('Description', on_change_with=['offered', ],
         ), 'on_change_with_product_desc', 'setter_void', )
+    subscription_mgr = fields.One2Many('ins_contract.subscription_mgr',
+        'contract', 'Subscription Manager')
 
     @classmethod
     def __setup__(cls):
@@ -279,6 +282,13 @@ class ContractSubscription():
 
         return True, ()
 
+    def finalize_contract(self):
+        res = super(ContractSubscription, self).finalize_contract()
+        return res
+#        Model = utils.get_relation_model(self.__class__, 'subscription_mgr')
+#        Model.delete([self.subscription_mgr])
+#        return res
+
 
 class Option():
     'Option'
@@ -381,3 +391,15 @@ class CoveredData():
     @classmethod
     def setter_void(cls, contracts, name, values):
         pass
+
+
+class SubscriptionManager(model.CoopSQL):
+    'Subscription Manager'
+    '''Temporary object used during the subscription, it is dropped as soon
+    as the contract is activated'''
+
+    __name__ = 'ins_contract.subscription_mgr'
+
+    contract = fields.Reference('Contract',
+            [('ins_contract.contract', 'Contract'), ('ins_collective.contract', 'Contract')], )
+    is_custom = fields.Boolean('Custom')
