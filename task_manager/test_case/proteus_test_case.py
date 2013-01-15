@@ -289,7 +289,7 @@ def launch_test_case(cfg_dict):
     valid_step.save()
 
     basic_team = meths['Team']({
-        'name': 'Contract Data Team',
+        'name': translater('Contract Data Team'),
         'code': 'ctr_data_team',
         'members': [ctr_adm_user],
         'priorities': [
@@ -329,7 +329,7 @@ def launch_test_case(cfg_dict):
         })
 
     valid_team = meths['Team']({
-        'name': 'Validation Team',
+        'name': translater('Validation Team'),
         'code': 'ctr_valid_team',
         'members': [ctr_validation_user],
         'priorities': [
