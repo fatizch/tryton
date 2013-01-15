@@ -90,6 +90,7 @@ class DynamicButtonDict(dict):
             else:
                 if transition_id[1] == 'complete':
                     return {}
+                return {'readonly': True}
 
         # Now we need to find the transition which matches the id given
         # through the name of the method.
