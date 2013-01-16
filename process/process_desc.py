@@ -178,6 +178,46 @@ class ProcessDesc(ModelSQL, ModelView):
         for elem in self.all_steps:
             yield elem.step
 
+    def build_steps_tree(self):
+        steps = dict([(elem.id, {'from': set([]), 'to': set([])}) 
+            for elem in self.get_all_steps()])
+        for step_rel in self.all_steps:
+            step = step_rel.step
+            for prev_trans in step.from_steps:
+                if prev_trans.to_step in steps.keys():
+                    steps[step.id]['from'].add(prev_trans.to_step.id)
+                    steps[prev_trans.to_step.id]['to'].add(step.id)
+                        
+            for next_trans in step.to_steps:
+                if next_trans.to_step.id in steps.keys():
+                    steps[step.id]['to'].add(next_trans.to_step.id)
+                    steps[next_trans.to_step.id]['from'].add(step.id)
+        
+        res = {}
+        for step in self.all_steps:
+            used_steps = set([step.id])
+
+            def get_tree(step_id, used, kind, step_first=True):
+                used.add(step_id)
+                if not steps[step_id][kind] and not step_id in used:
+                    return [step_id]
+                res = []
+                for elem in steps[step_id][kind]:
+                    res.extend(get_tree(elem, used, kind, step_first))
+
+                if step_first:
+                    return step_id, res
+                else:
+                    return res, step_id
+
+            # Remove the current step from the lists:
+            res[step.id] = {
+                    'from': get_tree(step.id, used_steps, 'from', False)[:-1],
+                    'to': get_tree(step.id, used_steps, 'to')[1:],
+                }
+
+        return res
+
     def create_update_view(self):
         # Views are calculated depending on the process' steps and a few other
         # things. In order to avoid runtime calculation, we store the views in
