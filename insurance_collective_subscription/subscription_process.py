@@ -23,7 +23,6 @@ class GroupContractSubscription(GroupRoot, ContractSubscription):
 
     @classmethod
     def __setup__(cls):
-        print cls.get_convert_dict()
         super(GroupContractSubscription, cls).__setup__()
 
     def get_is_custom(self, name):
@@ -33,11 +32,7 @@ class GroupContractSubscription(GroupRoot, ContractSubscription):
 
     @classmethod
     def set_is_custom(cls, contracts, name, vals):
-        print '#' * 80
-        print vals
-        print '#' * 80
         Model = utils.get_relation_model(cls, 'subscription_mgr')
-        print Model.__name__
         for contract in contracts:
             if not contract.subscription_mgr:
                 Model.create(
@@ -78,10 +73,7 @@ class GroupSubscriptionManager(GroupRoot, SubscriptionManager):
 
     @classmethod
     def get_convert_dict(cls):
-        print '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
         res = super(GroupSubscriptionManager, cls).get_convert_dict()
         res['ins_contract.subscription_mgr'] = (
             'ins_collective.subscription_mgr')
-        print '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-        print res
         return res

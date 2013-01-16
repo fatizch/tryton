@@ -59,7 +59,6 @@ class GroupRoot(object):
     @classmethod
     def __setup__(cls):
         cls._table = None
-        print cls.__name__
         utils.change_relation_links(cls, convert_dict=cls.get_convert_dict())
         super(GroupRoot, cls).__setup__()
 
