@@ -302,7 +302,7 @@ class ProcessDesc(ModelSQL, ModelView):
         #TODO: Which modules should be used here ?
         good_form.module = 'process'
 
-        good_form.priority = 10
+        good_form.priority = 100
 
         # Now we can build the xml !
         xml = '<?xml version="1.0"?>'
@@ -434,7 +434,7 @@ completed the current process, please go ahead"/>'
         #TODO: Which modules should be used here ?
         good_tree.module = 'process'
 
-        good_tree.priority = 10
+        good_tree.priority = 100
 
         # Add some very basic xml
         xml = '<?xml version="1.0"?>'
