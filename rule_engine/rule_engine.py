@@ -606,6 +606,65 @@ class TableDefinition():
     __name__ = 'table.table_def'
 
     @classmethod
+    def get_or_create_table_folder(cls):
+        TreeElement = Pool().get('rule_engine.tree_element')
+        good_language, = utils.get_this_object(
+            'ir.lang', ('code', '=', Transaction().language))
+        folder, = utils.get_those_objects(
+            'rule_engine.tree_element',
+            [('type', '=', 'folder'), ('description', '=', 'Tables'), 
+                ('language', '=', good_language)])
+        if not folder:
+            folder = TreeElement()
+            folder.type = 'folder'
+            folder.description = 'Tables'
+            folder.translated_technical_name = 'table_folder'
+            folder.language = good_language
+            folder.save()
+        else:
+            folder = folder[0]
+
+        return folder
+
+    def get_good_tree_element(self):
+        TreeElement = Pool().get('rule_engine.tree_element')
+        good_language = utils.get_this_object(
+            'ir.lang', ('code', '=', Transaction().language))
+        print good_language
+        return utils.get_those_objects(
+            TreeElement.__name__,
+            [('the_table', '=', self), ('language', '=', good_language)])[0]
+
+    @classmethod
+    def write(cls, tables, values):
+        super(TableDefinition, cls).write(tables, values)
+
+        if not ('dimension_name1' in values or 'dimension_name2' in values or
+                'dimension_name3' in values or 'dimension_name4' in values):
+            return
+
+        dimension_names = []
+        for table in tables:
+            good_te = table.get_good_tree_element()
+            for idx in (1, 2, 3, 4):
+                try:
+                    dim = getattr(table, 'dimension_kind%s' % idx)
+                except AttributeError:
+                    break
+                if not dim:
+                    break
+                
+                try:
+                    dim_name = getattr(table, 'dimension_name%s' % idx) 
+                except AttributeError:
+                    dim_name = 'Col #%s' % idx
+
+                dimension_names.append(dim_name)
+
+            good_te.fct_args = ', '.join(dimension_names)
+            good_te.save()
+
+    @classmethod
     def create(cls, values):
         tables = super(TableDefinition, cls).create(values)
         TreeElement = Pool().get('rule_engine.tree_element')
@@ -638,6 +697,23 @@ class TableDefinition():
                 'ir.lang', ('code', '=', Transaction().language))
             new_tree.the_table = table.id
             new_tree.parent = folder
+            dimension_names = []
+            for idx in (1, 2, 3, 4):
+                try:
+                    dim = getattr(table, 'dimension_kind%s' % idx)
+                except AttributeError:
+                    break
+                if not dim:
+                    break
+                
+                try:
+                    dim_name = getattr(table, 'dimension_name%s' % idx) 
+                except AttributeError:
+                    dim_name = 'Col #%s' % idx
+
+                dimension_names.append(dim_name)
+
+            new_tree.fct_args = ', '.join(dimension_names)
             new_tree.save()
 
         return tables

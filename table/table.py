@@ -73,6 +73,30 @@ class TableDefinition(ModelSQL, ModelView):
             'invisible': ~Eval('dimension_kind4'),
             },
         depends=['dimension_kind3'])
+    dimension_name1 = fields.Char(
+        'Name',
+        states={
+            'invisible': ~Eval('dimension_kind1'),
+            },
+    )
+    dimension_name2 = fields.Char(
+        'Name',
+        states={
+            'invisible': ~Eval('dimension_kind2'),
+            },
+    )
+    dimension_name3 = fields.Char(
+        'Name',
+        states={
+            'invisible': ~Eval('dimension_kind3'),
+            },
+    )
+    dimension_name4 = fields.Char(
+        'Name',
+        states={
+            'invisible': ~Eval('dimension_kind4'),
+            },
+    )
     kind = fields.Function(fields.Char('Kind'), 'get_kind')
 
     @classmethod

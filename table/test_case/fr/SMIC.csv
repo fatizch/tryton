@@ -1,4 +1,4 @@
-Date\Frequence;Horaire;Mensuel
+Date[value]|Frequence[value];Horaire;Mensuel
 29/06/2001;6,67;1127,23
 28/06/2002;6,83;1154,27
 28/06/2003;7,19;1215,11

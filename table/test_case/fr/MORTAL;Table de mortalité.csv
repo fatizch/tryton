@@ -1,4 +1,4 @@
-Age;Femme;Homme;Les deux sexes
+Age[value]|Sexe[value];Femme;Homme;Les deux sexes
 0;84,51;77,81;80,93
 1;83,78;77,11;80,22
 20;64,96;58,38;61,59

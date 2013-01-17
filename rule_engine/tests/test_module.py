@@ -52,8 +52,17 @@ class ModuleTestCase(unittest.TestCase):
             'name': 'test',
             'code': 'test_table_awesome',
             'dimension_kind1': 'value',
+            'dimension_name1': 'Value',
             'dimension_kind2': 'range',
+            'dimension_name2': 'Range',
             }])
+
+        tree_elem, = self.TreeElement.search([
+                ('the_table', '=', definition),
+            ], limit=1)
+
+        self.assertEqual(tree_elem.fct_args, 'Value, Range')
+
         dim1_foo, = self.dimension.create([{
                 'definition': definition.id,
                 'type': 'dimension1',

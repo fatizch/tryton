@@ -1,4 +1,4 @@
-Date;Point;Salaire
+Date[range-date]|Type[value];Point;Salaire
 01/01/2002;1,0530;11,8949
 01/01/2003;1,0698;12,0852
 01/01/2004;1,0886;12,3632

@@ -1,4 +1,4 @@
-Date;annuel;hebdomaire;horaire;journalier;mensuel;quinzaine;trimestriel
+Date[range-date]|Frequence[value];annuel;hebdomaire;horaire;journalier;mensuel;quinzaine;trimestriel
 01/01/2009;34308;660;21;157;2859;1430;8577
 01/01/2010;34620;666;22;159;2885;1443;8655
 01/01/2011;35352;680;22;162;2946;1473;8838

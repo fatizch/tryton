@@ -54,10 +54,11 @@ def get_or_create_table(cfg_dict, name, dim_dict, code=None):
     if code:
         res.code = code
     for i in range(1, 5):
-        kind, values = dim_dict.get(str(i), (None, None))
+        kind, name, values = dim_dict.get(str(i), (None, None, None))
         if not kind:
             continue
         setattr(res, 'dimension_kind%s' % i, kind)
+        setattr(res, 'dimension_name%s' % i, name)
         n = len(values)
         for j in range(n):
             end = None
@@ -88,8 +89,8 @@ def get_object_from_db(model, var_name, value):
 def create_table_10_100(cfg_dict):
     table = get_or_create_table(cfg_dict, 'Table 10x100',
         {
-            '1': ('value', range(100)),
-            '2': ('value', range(10))
+            '1': ('value', '100', range(100)),
+            '2': ('value', '10', range(10))
         },
         'Table_10_100')
     if table.id > 0:
@@ -103,11 +104,11 @@ def create_table_10_100(cfg_dict):
 def create_table_cotisation(cfg_dict):
     table = get_or_create_table(cfg_dict, 'Cotisation Retraite',
         {
-            '1': ('value', ['Arrco', 'Agirc', 'AGFF', 'CET']),
-            '2': ('value', ['Tranche 1', 'Tranche 2', 'Tranche A', 'Tranche B',
-                'Tranche C']),
-            '3': ('value', ['cadre', 'non cadre']),
-            '4': ('range-date', ['01/01/2012'])
+            '1': ('value', 'Régime', ['Arrco', 'Agirc', 'AGFF', 'CET']),
+            '2': ('value', 'Tranche', ['Tranche 1', 'Tranche 2', 'Tranche A',
+                'Tranche B', 'Tranche C']),
+            '3': ('value', 'Cadre ?', ['cadre', 'non cadre']),
+            '4': ('range-date', 'Date', ['01/01/2012'])
         },
         )
     if table.id > 0:
@@ -169,6 +170,17 @@ def get_dimension_kind(value):
     return res
 
 
+def create_dims(table, first_cell):
+    dims = first_cell.split('|')
+    for idx in range(len(dims)):
+        name, kind = dims[idx].split('[')
+        kind = kind[:-1]
+        setattr(table, 'dimension_name%s' % str(idx + 1), name)
+        setattr(table, 'dimension_kind%s' % str(idx + 1), kind)
+
+    table.save()
+
+
 def load_table_from_csv(cfg_dict, path, file_name):
     Table = cfg_dict['Table']
     if ';' in file_name:
@@ -193,9 +205,9 @@ def load_table_from_csv(cfg_dict, path, file_name):
         line += 1
         if line == 1:
             nb_dim = 2 if len(cur_line) > 2 else 1
+            create_dims(table, cur_line[0])
             if nb_dim == 2:
                 dim2_values = cur_line[1:]
-                table.dimension_kind2 = get_dimension_kind(dim2_values[0])
                 for val in dim2_values:
                     dim2 = create_dim_value(
                             cfg_dict, 2, val, table.dimension_kind2)
@@ -254,6 +266,7 @@ def load_tables_from_csv(cfg_dict):
             load_table_from_csv(cfg_dict, cur_file, name)
         except:
             print 'Impossible to load file %s' % cur_file
+            raise
 
 
 def create_objects(cfg_dict):
