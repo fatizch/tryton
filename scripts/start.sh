@@ -11,7 +11,7 @@ cd tryton-workspace/conf
 . ./scripts.conf
 cd ../coopbusiness/scripts
 SCRIPT_NAME=$1
-while getopts ":rckldsht" opt; do
+while getopts ":rckldsuht" opt; do
    case $opt in
       r)
          SCRIPT_NAME=resetdb ;;
@@ -22,9 +22,11 @@ while getopts ":rckldsht" opt; do
       d)
          SCRIPT_NAME=updatedatabase ;;
       s)
-	 SCRIPT_NAME=sync_coop ;;
+         SCRIPT_NAME=sync_coop ;;
       t)
          SCRIPT_NAME=test_case ;;
+      u)
+         SCRIPT_NAME=unittest ;;
       h)
          echo "
 -r reset 
