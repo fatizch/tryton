@@ -130,3 +130,26 @@ def get_translation(string, cfg_dict):
 
 def translate_this(cfg_dict):
     return functools.partial(get_translation, cfg_dict=cfg_dict)
+
+
+def read_data_file(filename, sep='|'):
+    res = {}
+    cur_model = ''
+    cur_data = []
+    lines = open(filename).readlines()
+    for line in lines:
+        line = line[:-1]
+        line.rstrip()
+        if line == '':
+            continue
+        if line[0] == '[' and line[-1] == ']':
+            if cur_model and cur_data:
+                res[cur_model] = cur_data
+            cur_model = line[1:-1]
+            cur_data = []
+            continue
+        cur_data.append(line.split(sep))
+
+    res[cur_model] = cur_data
+
+    return res

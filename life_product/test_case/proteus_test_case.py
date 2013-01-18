@@ -262,7 +262,7 @@ def create_AAA_Product(cfg_dict, code, name):
 
 
 def get_or_create_tree_element(cfg_dict, cur_type, description,
-        translated_technical, name=None, namespace=None):
+        translated_technical, fct_args='', name=None, namespace=None):
     cur_domain = []
     if cur_type == 'function':
         cur_domain.append(('namespace', '=', namespace))
@@ -280,6 +280,8 @@ def get_or_create_tree_element(cfg_dict, cur_type, description,
     te.type = cur_type
     te.name = name
     te.description = description
+    if fct_args:
+        te.fct_args = ', '.join(fct_args.split(','))
     te.translated_technical_name = translated_technical
     te.namespace = namespace
     te.language = lang
@@ -368,29 +370,42 @@ def create_folder_from_set(cfg_dict, set_name, descs):
     functions = the_set.get_rules({})
     tes = []
     for fun in functions:
-        full_name = set_name + '.' + fun['name']
         cur_te = get_or_create_tree_element(
-            cfg_dict, 'function', descs[full_name + '.desc'],
-            descs[full_name + '.tech_name'], fun['name'], set_name)
+            cfg_dict, 
+            'function',
+            descs[set_name][fun['name']][0],
+            descs[set_name][fun['name']][1],
+            descs[set_name][fun['name']][2],
+            fun['name'],
+            set_name)
         tes.append(cur_te)
     te_top = get_or_create_tree_element(
-        cfg_dict, 'folder', descs[set_name + '.desc'],
-        descs[set_name + '.tech_name'])
+        cfg_dict, 'folder',
+        descs[set_name][set_name][0],
+        descs[set_name][set_name][1])
     append_inexisting_elements(te_top, 'children', tes)
     te_top.save()
     return te_top
 
 
-def get_file_as_dict(filename):
-    cfg_parser = ConfigParser.ConfigParser()
-    with open(filename) as fp:
-        cfg_parser.readfp(fp)
-    cfg_dict = dict(cfg_parser.items('tree_name'))
-    return cfg_dict
+def parse_tree_names(cfg_dict):
+    base_data = proteus_tools.read_data_file(
+        os.path.join(cfg_dict['dir_loc'], 'tree_names'))
+
+    final_data = {}
+    for k, v in base_data.iteritems():
+        if not k in final_data:
+            final_data[k] = {} 
+
+        for elem in v:
+            final_data[k][elem[0]] = elem[1:]
+
+    return final_data
 
 
 def create_rule_engine_data(cfg_dict):
-    descs = get_file_as_dict(os.path.join(cfg_dict['dir_loc'], 'tree_names'))
+    #descs = get_file_as_dict(os.path.join(cfg_dict['dir_loc'], 'tree_names'))
+    descs = parse_tree_names(cfg_dict)
     tools = create_folder_from_set(cfg_dict,
         'rule_engine.tools_functions', descs)
 

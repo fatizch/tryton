@@ -1,61 +1,43 @@
-[tree_name]
-rule_engine.tools_functions.desc = Outils
-rule_engine.tools_functions.tech_name = dossier_outils
-ins_product.rule_sets.person.desc = Personne Couverte
-ins_product.rule_sets.person.tech_name = dossier_personne_couverte
-ins_product.rule_sets.subscriber.desc = Souscripteur
-ins_product.rule_sets.subscriber.tech_name = dossier_souscripteur
-ins_product.rule_sets.covered_data.desc = Données de Couverture
-ins_product.rule_sets.covered_data.tech_name = dossier_donnees_couverture
-ins_product.rule_sets.rule_combination.desc = Combinaison de règles
-ins_product.rule_sets.rule_combination.tech_name = dossier_rule_combination
-ins_product.rule_sets.contract.desc = Contrat
-ins_product.rule_sets.contract.tech_name = dossier_contrat
-ins_product.rule_sets.option.desc = Option
-ins_product.rule_sets.option.tech_name = dossier_option
-rule_engine.tools_functions._re_message.desc = Ajouter Message
-rule_engine.tools_functions._re_message.tech_name = ajouter_message
-rule_engine.tools_functions._re_today.desc = Aujourd'hui
-rule_engine.tools_functions._re_today.tech_name = aujourd_hui
-rule_engine.tools_functions._re_years_between.desc = Nombre d'années entre...
-rule_engine.tools_functions._re_years_between.tech_name = annees_entre
-ins_product.rule_sets.person._re_get_person_birthdate.desc = Date de naissance
-ins_product.rule_sets.person._re_get_person_birthdate.tech_name = date_de_naissance
-ins_product.rule_sets.person._re_get_person_living_country.desc = Pays de résidence
-ins_product.rule_sets.person._re_get_person_living_country.tech_name = pays_de_residence
-ins_product.rule_sets.person._re_get_person_nationality.desc = Nationalité
-ins_product.rule_sets.person._re_get_person_nationality.tech_name = nationalite
-ins_product.rule_sets.person._re_is_person_of_age.desc = Est majeur ?
-ins_product.rule_sets.person._re_is_person_of_age.tech_name = est_majeur
-ins_product.rule_sets.person._re_link_with_subscriber.desc = Relation avec le souscripteur
-ins_product.rule_sets.person._re_link_with_subscriber.tech_name = relation_avec_souscripteur
-ins_product.rule_sets.person._re_person_subscribed.desc = A souscrit le produit...
-ins_product.rule_sets.person._re_person_subscribed.tech_name = a_souscrit_le_produit
-ins_product.rule_sets.subscriber._re_get_subscriber_birthdate.desc = Date de naissance
-ins_product.rule_sets.subscriber._re_get_subscriber_birthdate.tech_name = date_de_naissance_souscripteur
-ins_product.rule_sets.subscriber._re_get_subscriber_living_country.desc = Pays de résidence
-ins_product.rule_sets.subscriber._re_get_subscriber_living_country.tech_name = pays_de_residence_souscripteur
-ins_product.rule_sets.subscriber._re_get_subscriber_nationality.desc = Nationalité
-ins_product.rule_sets.subscriber._re_get_subscriber_nationality.tech_name = nationalite_souscripteur
-ins_product.rule_sets.subscriber._re_subscriber_subscribed.desc = A souscrit le produit...
-ins_product.rule_sets.subscriber._re_subscriber_subscribed.tech_name = souscripteur_a_souscrit_produit
-ins_product.rule_sets.covered_data._re_get_initial_subscription_date.desc = Date d'effet du contrat
-ins_product.rule_sets.covered_data._re_get_initial_subscription_date.tech_name = date_effet_du_contract
-ins_product.rule_sets.covered_data._re_get_subscription_end_date.desc = Date de fin du contrat
-ins_product.rule_sets.covered_data._re_get_subscription_end_date.tech_name = date_fin_du_contrat
-ins_product.rule_sets.covered_data._re_get_coverage_amount.desc = Montant de couverture
-ins_product.rule_sets.covered_data._re_get_coverage_amount.tech_name = montant_de_couverture
-ins_product.rule_sets.covered_data._re_covered_data_dynamic_data.desc = Récupérer la donnée dynamique
-ins_product.rule_sets.covered_data._re_covered_data_dynamic_data.tech_name = donnee_dynamique_element_couvert
-ins_product.rule_sets.rule_combination._re_append_detail.desc = Ajouter un détail
-ins_product.rule_sets.rule_combination._re_append_detail.tech_name = ajouter_detail
-ins_product.rule_sets.rule_combination._re_apply_fee.desc = Appliquer le frais
-ins_product.rule_sets.rule_combination._re_apply_fee.tech_name = appliquer_frais
-ins_product.rule_sets.rule_combination._re_apply_tax.desc = Appliquer la taxe
-ins_product.rule_sets.rule_combination._re_apply_tax.tech_name = appliquer_taxe
-ins_product.rule_sets.rule_combination._re_get_sub_component.desc = Valeur de la composante
-ins_product.rule_sets.rule_combination._re_get_sub_component.tech_name = valeur_de_composante
-ins_product.rule_sets.contract._re_contract_dynamic_data.desc = Récupérer la donnée dynamique
-ins_product.rule_sets.contract._re_contract_dynamic_data.tech_name = donnee_dynamique_contrat
-ins_product.rule_sets.option._re_option_dynamic_data.desc = Récupérer la donnée dynamique
-ins_product.rule_sets.option._re_option_dynamic_data.tech_name = donnee_dynamique_option
+[rule_engine.tools_functions]
+rule_engine.tools_functions|Outils|dossier_outils
+_re_message|Ajouter Message|ajouter_message|Message
+_re_today|Aujourd'hui|aujourd_hui|
+_re_years_between|Nombre d'années entre...|annees_entre|Début,Fin
+
+[ins_product.rule_sets.person]
+ins_product.rule_sets.person|Personne Couverte|dossier_personne_couverte
+_re_get_person_birthdate|Date de naissance|date_de_naissance|
+_re_get_person_living_country|Pays de résidence|pays_de_residence|
+_re_get_person_nationality|Nationalité|nationalite|
+_re_is_person_of_age|Est majeur ?|est_majeur|
+_re_link_with_subscriber|Relation avec le souscripteur|relation_avec_souscripteur|
+_re_person_subscribed|A souscrit le produit...|a_souscrit_le_produit|Code Produit
+
+[ins_product.rule_sets.subscriber]
+ins_product.rule_sets.subscriber|Souscripteur|dossier_souscripteur
+_re_get_subscriber_birthdate|Date de naissance|date_de_naissance_souscripteur|
+_re_get_subscriber_living_country|Pays de résidence|pays_de_residence_souscripteur|
+_re_get_subscriber_nationality|Nationalité|nationalite_souscripteur|
+_re_subscriber_subscribed|A souscrit le produit|souscripteur_a_souscrit_produit|
+
+[ins_product.rule_sets.covered_data]
+ins_product.rule_sets.covered_data|Données de couverture|dossier_donnees_couverture
+_re_get_initial_subscription_date|Date d'effet du contrat|date_debut_souscription|
+_re_get_subscription_end_date|Date de fin du contrat|date_fin_souscription|
+_re_get_coverage_amount|Montant de couverture|montant_de_couverture|
+_re_covered_data_dynamic_data|Récupérer la donnée dynamique|donnee_dynamique_element_couvert|Code donnée dynamique
+
+[ins_product.rule_sets.rule_combination]
+ins_product.rule_sets.rule_combination|Combinaison de règles|dossier_rule_combination
+_re_append_detail|Ajouter un détail|ajouter_detail|Code détail,Montant
+_re_apply_fee|Appliquer le frais|appliquer_frais|Code Frais,Assiette
+_re_apply_tax|Appliquer la taxe|appliquer_taxe|Code Taxe,Assiette
+_re_get_sub_component|Valeur de la composante|valeur_de_composante|Code composante
+
+[ins_product.rule_sets.contract]
+ins_product.rule_sets.contract|Contrat|dossier_contrat
+_re_contract_dynamic_data|Récupérer la donnée dynamique|donnee_dynamique_contrat|Code donnée dynamique
+
+[ins_product.rule_sets.option]
+ins_product.rule_sets.option|Option|dossier_option
+_re_option_dynamic_data|Récupérer la donnée dynamique|donnee_dynamique_option|Code donnée dynamique
