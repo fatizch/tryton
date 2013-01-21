@@ -690,6 +690,7 @@ class Table2D(ModelSQL, ModelView):
         dim1_ids = [r.id for r in rows]
         definition_id = int(
             Transaction().context.get('table.table_def', -1))
+        to_creates = []
         for col, value in values.iteritems():
             dim2_id = int(col[3:])
             cells = TableCell.search([
@@ -705,16 +706,17 @@ class Table2D(ModelSQL, ModelView):
                 TableCell.write(cells, {
                         'value': value,
                         })
-            to_creates = set(dim1_ids) - set(i.id for i in cells)
-            for dim1_id in to_creates:
-                TableCell.create([{
+            for dim1_id in (set(dim1_ids) - set(i.id for i in cells)):
+                to_creates.append({
                         'definition': definition_id,
                         'dimension1': dim1_id,
                         'dimension2': dim2_id,
                         'dimension3': Transaction().context.get('dimension3'),
                         'dimension4': Transaction().context.get('dimension4'),
                         'value': value,
-                        }])
+                        })
+        if to_creates:
+            TableCell.create(to_creates)
 
     @classmethod
     def read(cls, ids, fields_names=None):
