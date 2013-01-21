@@ -351,7 +351,7 @@ class TableCell(ModelSQL, ModelView):
 
     @classmethod
     def create(cls, values):
-        values = cls._dump_value(values)
+        values = [cls._dump_value(v) for v in values]
         return super(TableCell, cls).create(values)
 
     @classmethod
