@@ -81,7 +81,7 @@ class TableDefinition(ModelSQL, ModelView):
         states={
             'invisible': ~Eval('dimension_kind4'),
             },
-        depends=['dimension_kind3'])
+        depends=['dimension_kind4'])
     dimension_name1 = fields.Char(
         'Name',
         states={
