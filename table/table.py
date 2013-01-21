@@ -1,4 +1,6 @@
 import copy
+from datetime import datetime
+from decimal import Decimal
 
 from trytond.backend import TableHandler
 from trytond.model import ModelSQL, ModelView, fields
@@ -33,6 +35,13 @@ class TableDefinition(ModelSQL, ModelView):
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True,
         on_change_with=['name', 'code'])
+    type_ = fields.Selection([
+            ('char', 'Char'),
+            ('integer', 'Integer'),
+            ('numeric', 'Numeric'),
+            ('boolean', 'Boolean'),
+            ('date', 'Date'),
+            ], 'Type', required=True)
     dimension_kind1 = fields.Selection(KIND, 'Dimension Kind 1',
         states={
             'readonly': Bool(Eval('dimension1')),
@@ -66,7 +75,7 @@ class TableDefinition(ModelSQL, ModelView):
         states={
             'invisible': ~Eval('dimension_kind3'),
             },
-        depends=['dimension_kind3'])
+        depends=['dimension_kind4'])
     dimension4 = One2ManyDomain('table.table_dimension',
         'definition', 'Dimension 4', domain=[('type', '=', 'dimension4')],
         states={
@@ -107,6 +116,10 @@ class TableDefinition(ModelSQL, ModelView):
                 'The name of "Table Definition" must be unique'),
             ]
         cls._order.insert(0, ('name', 'ASC'))
+
+    @staticmethod
+    def default_type_():
+        return 'char'
 
     @classmethod
     def get(cls, name):
@@ -302,6 +315,73 @@ class TableCell(ModelSQL, ModelView):
                 'dimension1', 'dimension2', 'dimension3', 'dimension4'], 'add')
 
     @classmethod
+    def fields_get(cls, fields_names=None):
+        pool = Pool()
+        TableDefinition = pool.get('table.table_def')
+        result = super(TableCell, cls).fields_get(fields_names=fields_names)
+        if Transaction().context.get('table.table_def') and 'value' in result:
+            table_definition = \
+                TableDefinition(Transaction().context['table.table_def'])
+            result['value']['type'] = table_definition.type_
+        return result
+
+    @staticmethod
+    def _dump_value(values):
+        if 'value' in values:
+            values = values.copy()
+            if values['value'] is not None:
+                values['value'] = str(values['value'])
+        return values
+
+    @staticmethod
+    def _load_value(value, type_):
+        if value is None:
+            return value
+        elif type_ == 'integer':
+            return int(value)
+        elif type_ == 'numeric':
+            return Decimal(value)
+        elif type_ == 'boolean':
+            if value == 'True':
+                return True
+            return False
+        elif type_ == 'date':
+            return datetime.strptime(value, '%Y-%m-%d').date()
+        return value
+
+    @classmethod
+    def create(cls, values):
+        values = cls._dump_value(values)
+        return super(TableCell, cls).create(values)
+
+    @classmethod
+    def write(cls, records, values):
+        values = cls._dump_value(values)
+        return super(TableCell, cls).write(records, values)
+
+    @classmethod
+    def read(cls, ids, fields_names=None):
+        pool = Pool()
+        TableDefinition = pool.get('table.table_def')
+        to_remove = []
+        if fields_names and 'definition' not in fields_names:
+            fields_names = fields_names[:]
+            fields_names.append('definition')
+            to_remove.append('definition')
+        result = super(TableCell, cls).read(ids, fields_names=fields_names)
+        if not fields_names or 'value' in fields_names:
+            definitions = TableDefinition.browse(
+                list(set(v['definition'] for v in result)))
+            id2definition = dict((d.id, d) for d in definitions)
+            for value in result:
+                definition = id2definition[value['definition']]
+                value['value'] = cls._load_value(value['value'],
+                    definition.type_)
+                for field in to_remove:
+                    del value[field]
+        return result
+
+    @classmethod
     def get(cls, definition, *values):
         """
         Return the value for the tuple dimensions values.
@@ -357,7 +437,7 @@ class TableCell(ModelSQL, ModelView):
             cell, = cls.search(domain)
         except ValueError:
             return None
-        return cell.value
+        return cls._load_value(cell.value, definition.type_)
 
 
 class TableOpen2DAskDimensions(ModelView):
@@ -635,3 +715,19 @@ class Table2D(ModelSQL, ModelView):
                         'dimension4': Transaction().context.get('dimension4'),
                         'value': value,
                         }])
+
+    @classmethod
+    def read(cls, ids, fields_names=None):
+        pool = Pool()
+        TableDefinition = pool.get('table.table_def')
+        TableCell = pool.get('table.table_cell')
+        result = super(Table2D, cls).read(ids, fields_names=fields_names)
+        definition_id = int(
+            Transaction().context.get('table.table_def', -1))
+        definition = TableDefinition(definition_id)
+        for value in result:
+            for field in value:
+                if field.startswith('col'):
+                    value[field] = TableCell._load_value(value[field],
+                        definition.type_)
+        return result

@@ -5,6 +5,8 @@
         <field name="name" colspan="3" xfill="1"/>
         <label name="code"/>
         <field name="code" colspan="3" xfill="1"/>
+        <label name="type_"/>
+        <field name="type_" colspan="3" xfill="1"/>
     </group>
     <group id="dim1" colspan="2" col="2" yfill="1" yexpand="1">
         <label name="dimension_kind1"/>

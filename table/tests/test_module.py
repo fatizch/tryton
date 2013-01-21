@@ -8,6 +8,8 @@ if os.path.isdir(DIR):
 
 import unittest
 import datetime
+from decimal import Decimal
+
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT, test_view,\
     test_depends
@@ -323,6 +325,28 @@ class ModuleTestCase(unittest.TestCase):
                     ):
                 self.assertEqual(self.cell.get(definition, *query),
                     result, (query, result))
+
+    def test0070load_dump_value(self):
+        '''
+        Test load/dump value.
+        '''
+        with Transaction().start(DB_NAME, USER, context=CONTEXT):
+            for value, type_ in (
+                    (None, 'char'),
+                    ('test', 'char'),
+                    ('', 'char'),
+                    (None, 'integer'),
+                    (1, 'integer'),
+                    (None, 'numeric'),
+                    (Decimal('1.5'), 'numeric'),
+                    (False, 'boolean'),
+                    (True, 'boolean'),
+                    (None, 'date'),
+                    (datetime.date(2012, 12, 12), 'date'),
+                    ):
+                self.assertEqual(self.cell._load_value(
+                        self.cell._dump_value({'value': value})['value'],
+                        type_), value)
 
 
 def suite():

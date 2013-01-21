@@ -43,7 +43,7 @@ def create_dim_value(cfg_dict, dim_number, value, kind='value', end=None):
     return res
 
 
-def get_or_create_table(cfg_dict, name, dim_dict, code=None):
+def get_or_create_table(cfg_dict, name, kind, dim_dict, code=None):
 
     Table = cfg_dict['Table']
     res = get_object_from_db(Table, 'name', name)
@@ -51,6 +51,7 @@ def get_or_create_table(cfg_dict, name, dim_dict, code=None):
         return res
     res = Table()
     res.name = name
+    res.type_ = kind
     if code:
         res.code = code
     for i in range(1, 5):
@@ -87,7 +88,7 @@ def get_object_from_db(model, var_name, value):
 
 
 def create_table_10_100(cfg_dict):
-    table = get_or_create_table(cfg_dict, 'Table 10x100',
+    table = get_or_create_table(cfg_dict, 'Table 10x100', 'numeric', 
         {
             '1': ('value', '100', range(100)),
             '2': ('value', '10', range(10))
@@ -102,7 +103,7 @@ def create_table_10_100(cfg_dict):
 
 
 def create_table_cotisation(cfg_dict):
-    table = get_or_create_table(cfg_dict, 'Cotisation Retraite',
+    table = get_or_create_table(cfg_dict, 'Cotisation Retraite', 'numeric',
         {
             '1': ('value', 'Régime', ['Arrco', 'Agirc', 'AGFF', 'CET']),
             '2': ('value', 'Tranche', ['Tranche 1', 'Tranche 2', 'Tranche A',
@@ -184,10 +185,11 @@ def create_dims(table, first_cell):
 def load_table_from_csv(cfg_dict, path, file_name):
     Table = cfg_dict['Table']
     if ';' in file_name:
-        (code, name) = file_name.split(';')
+        (code, name, kind) = file_name.split(';')
     else:
         name = file_name
         code = ''
+        kind = 'char'
     code = code.strip()
     name = name.strip()
     if get_object_from_db(Table, 'name', name):
@@ -197,6 +199,7 @@ def load_table_from_csv(cfg_dict, path, file_name):
     table = Table()
     table.code = code
     table.name = name
+    table.type_ = kind
     table.save()
     Cell = cfg_dict['Cell']
     for cur_line in reader:
@@ -224,7 +227,10 @@ def load_table_from_csv(cfg_dict, path, file_name):
         cell = Cell()
         cell.definition = table
         cell.dimension1 = dim1
-        cell.value = cur_line[1]
+        if kind == 'numeric':
+            cell.value = '.'.join(cur_line[1].split(','))
+        else:
+            cell.value = cur_line[1]
         if nb_dim == 2:
             j = 0
             for dim2 in table.dimension2:
@@ -237,7 +243,10 @@ def load_table_from_csv(cfg_dict, path, file_name):
                 cell.definition = table
                 cell.dimension1 = dim1
                 cell.dimension2 = dim2
-                cell.value = cur_line[j]
+                if kind == 'numeric':
+                    cell.value = '.'.join(cur_line[j].split(','))
+                else:
+                    cell.value = cur_line[j]
                 cell.save()
         else:
             cell.save()

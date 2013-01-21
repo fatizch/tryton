@@ -90,6 +90,7 @@
             <field name="name">Cells</field>
             <field name="res_model">table.table_cell</field>
             <field name="domain">[('definition', '=', Eval('active_id'))]</field>
+            <field name="context">{'table.table_def': Eval('active_id')}</field>
         </record>
         <record model="ir.action.keyword"
             id="act_table_relate_keyword1">
