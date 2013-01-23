@@ -98,7 +98,11 @@ def get_or_create_this(data, cfg_dict, class_key, sel_val='', domain=None,
     for key, value in data.iteritems():
         try:
             if isinstance(value, list):
-                getattr(the_object, key).extend(value)
+                tmp_list = []
+                for elem in value:
+                    tmp_list.append(elem.__class__(elem.id))
+
+                getattr(the_object, key).extend(tmp_list)
             else:
                 setattr(the_object, key, value)
         except AttributeError:
@@ -153,3 +157,14 @@ def read_data_file(filename, sep='|'):
     res[cur_model] = cur_data
 
     return res
+
+
+def proteus_append_extend(obj, field_name, the_data):
+    if isinstance(the_data, list):
+        tmp_list = []
+        for elem in the_data:
+            tmp_list.append(elem.__class__(elem.id))
+    else:
+        tmp_list = [the_data]
+
+    getattr(obj, field_name).extend(tmp_list)
