@@ -284,7 +284,9 @@ def launch_test_case(cfg_dict):
         'technical_name': 'ctr_validation'
         })
 
-    valid_step.authorizations.append(ctr_valid_grp)
+    proteus_tools.proteus_append_extend(
+        valid_step, 'authorizations', ctr_valid_grp)
+    #valid_step.authorizations.append(ctr_valid_grp)
 
     valid_step.save()
 
