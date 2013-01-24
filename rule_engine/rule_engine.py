@@ -613,7 +613,7 @@ class TableDefinition():
             'ir.lang', ('code', '=', Transaction().language))
         folder, = utils.get_those_objects(
             'rule_engine.tree_element',
-            [('type', '=', 'folder'), ('description', '=', 'Tables'), 
+            [('type', '=', 'folder'), ('description', '=', 'Tables'),
                 ('language', '=', good_language)])
         if not folder:
             folder = TreeElement()
@@ -654,9 +654,9 @@ class TableDefinition():
                     break
                 if not dim:
                     break
-                
+
                 try:
-                    dim_name = getattr(table, 'dimension_name%s' % idx) 
+                    dim_name = getattr(table, 'dimension_name%s' % idx)
                 except AttributeError:
                     dim_name = 'Col #%s' % idx
 
@@ -706,9 +706,9 @@ class TableDefinition():
                     break
                 if not dim:
                     break
-                
+
                 try:
-                    dim_name = getattr(table, 'dimension_name%s' % idx) 
+                    dim_name = getattr(table, 'dimension_name%s' % idx)
                 except AttributeError:
                     dim_name = 'Col #%s' % idx
 
@@ -800,10 +800,10 @@ class CreateTestCase(Wizard):
         return rule.compute(test_context)
 
     def transition_create_test_case(self):
-        testcase = pool().get('rule_engine.test_case')
+        testcase = Pool().get('rule_engine.test_case')
         testcase.create([{
             'description': self.ask_description.description,
-            'rule': transaction().context['active_id'],
+            'rule': Transaction().context['active_id'],
             'values': [('create', [{'name': tv.name, 'value': tv.value}])
                 for tv in self.start.test_values],
             'expected_result': str(self.compute_value()),
