@@ -24,15 +24,14 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['Priority'] = Model.get('task_manager.priority')
     cfg_dict['ProcessStepRelation'] = Model.get(
         'process.process_step_relation')
-    
 
 
 def create_methods(cfg_dict):
     res = {}
     res['Model'] = proteus_tools.generate_creation_method(
-        cfg_dict, 'Model', 'model', only_get=True) 
+        cfg_dict, 'Model', 'model', only_get=True)
     res['Group'] = proteus_tools.generate_creation_method(
-        cfg_dict, 'Group', 'name') 
+        cfg_dict, 'Group', 'name')
     res['ModelAccess'] = proteus_tools.generate_creation_method(
         cfg_dict, 'ModelAccess', domain=['model', 'group'])
     res['ModelData'] = proteus_tools.generate_creation_method(
@@ -67,23 +66,23 @@ def launch_test_case(cfg_dict):
 
     admin_user = meths['User']({
         'login': 'admin',
-        })
+    })
 
     product_mod = meths['Model']({
         'model': 'ins_product.product',
-        })
-    
+    })
+
     coverage_mod = meths['Model']({
         'model': 'ins_product.coverage',
-        })
+    })
 
     society_mod = meths['Model']({
         'model': 'party.society',
-        })
+    })
 
     subs_process = meths['ProcessDesc']({
         'technical_name': 'individual_subscription',
-        })
+    })
 
     contract_admin_grp = meths['Group']({
         'name': translater('Contract Administration'),
@@ -106,22 +105,22 @@ def launch_test_case(cfg_dict):
             cfg_dict['Menu'](meths['ModelData']({
                 'module': 'insurance_product',
                 'fs_id': 'menu_coverage_form'}).db_id),
-            subs_process.menu_item,],
-        'users': [
-            admin_user,],
-        })
+            subs_process.menu_item,
+        ],
+        'users': [admin_user],
+    })
 
     meths['ModelAccess']({
         'model': product_mod,
         'group': contract_admin_grp,
         'perm_read': True,
-        })
+    })
 
     meths['ModelAccess']({
         'model': coverage_mod,
         'group': contract_admin_grp,
         'perm_read': True,
-        })
+    })
 
     meths['ModelAccess']({
         'model': society_mod,
@@ -130,19 +129,19 @@ def launch_test_case(cfg_dict):
         'perm_write': True,
         'perm_create': True,
         'perm_delete': True,
-        })
-    
+    })
+
     coverage_mod = meths['Model']({
         'model': 'ins_product.coverage',
-        })
+    })
 
     menu_mod = meths['Model']({
         'model': 'ir.ui.menu',
-        })
+    })
 
     act_win_mod = meths['Model']({
         'model': 'ir.action.act_window',
-        })
+    })
 
     param_grp = meths['Group']({
         'name': translater('Functional Admin'),
@@ -192,10 +191,10 @@ def launch_test_case(cfg_dict):
             cfg_dict['Menu'](meths['ModelData']({
                 'module': 'process',
                 'fs_id': 'menu_step_desc'}).db_id),
-            subs_process.menu_item,],
-        'users': [
-            admin_user,],
-        })
+            subs_process.menu_item,
+        ],
+        'users': [admin_user],
+    })
 
     meths['ModelAccess']({
         'model': product_mod,
@@ -204,8 +203,8 @@ def launch_test_case(cfg_dict):
         'perm_write': True,
         'perm_create': True,
         'perm_delete': True,
-        })
-    
+    })
+
     meths['ModelAccess']({
         'model': coverage_mod,
         'group': param_grp,
@@ -213,7 +212,7 @@ def launch_test_case(cfg_dict):
         'perm_write': True,
         'perm_create': True,
         'perm_delete': True,
-        })
+    })
 
     meths['ModelAccess']({
         'model': menu_mod,
@@ -222,7 +221,7 @@ def launch_test_case(cfg_dict):
         'perm_write': True,
         'perm_create': True,
         'perm_delete': True,
-        })
+    })
 
     meths['ModelAccess']({
         'model': act_win_mod,
@@ -231,14 +230,14 @@ def launch_test_case(cfg_dict):
         'perm_write': True,
         'perm_create': True,
         'perm_delete': True,
-        })
+    })
 
     menu_item_fld = meths['Field']({
         'model': meths['Model']({
             'model': 'process.process_desc',
-            }),
+        }),
         'name': 'menu_item',
-        })
+    })
 
     meths['FieldAccess']({
         'field': menu_item_fld,
@@ -247,8 +246,8 @@ def launch_test_case(cfg_dict):
         'perm_write': True,
         'perm_create': True,
         'perm_delete': True,
-        })
-    
+    })
+
     param_user = meths['User']({
         'login': 'param',
         'password': 'param',
@@ -267,13 +266,12 @@ def launch_test_case(cfg_dict):
 
     ctr_valid_grp = meths['Group']({
         'name': translater('Contract Validation'),
-        'users': [
-            admin_user,],
-        })
+        'users': [admin_user],
+    })
 
     ctr_validation_user = meths['User']({
         'login': 'contract_validation',
-        'password':'contract_validation',
+        'password': 'contract_validation',
         'name': translater('Contract Validation'),
         'groups': [
             contract_admin_grp,
@@ -282,7 +280,7 @@ def launch_test_case(cfg_dict):
 
     valid_step = meths['StepDesc']({
         'technical_name': 'ctr_validation'
-        })
+    })
 
     proteus_tools.proteus_append_extend(
         valid_step, 'authorizations', ctr_valid_grp)
@@ -300,34 +298,34 @@ def launch_test_case(cfg_dict):
                     'process': subs_process,
                     'step': meths['StepDesc']({
                         'technical_name': 'pricing'}),
-                    }),
                 }),
+            }),
             meths['Priority']({
                 'priority': 2,
                 'process_step': meths['ProcessStepRelation']({
                     'process': subs_process,
                     'step': meths['StepDesc']({
                         'technical_name': 'covered_person_selection'}),
-                    }),
                 }),
+            }),
             meths['Priority']({
                 'priority': 3,
                 'process_step': meths['ProcessStepRelation']({
                     'process': subs_process,
                     'step': meths['StepDesc']({
                         'technical_name': 'option_selection'}),
-                    }),
                 }),
+            }),
             meths['Priority']({
                 'priority': 4,
                 'process_step': meths['ProcessStepRelation']({
                     'process': subs_process,
                     'step': meths['StepDesc']({
                         'technical_name': 'subscriber_selection'}),
-                    }),
                 }),
-            ],
-        })
+            }),
+        ],
+    })
 
     valid_team = meths['Team']({
         'name': translater('Validation Team'),
@@ -340,9 +338,7 @@ def launch_test_case(cfg_dict):
                     'process': subs_process,
                     'step': meths['StepDesc']({
                         'technical_name': 'ctr_validation'}),
-                    }),
                 }),
-            ],
-        })
-
-
+            }),
+        ],
+    })
