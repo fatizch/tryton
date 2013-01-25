@@ -631,7 +631,6 @@ class TableDefinition():
         TreeElement = Pool().get('rule_engine.tree_element')
         good_language = utils.get_this_object(
             'ir.lang', ('code', '=', Transaction().language))
-        print good_language
         return utils.get_those_objects(
             TreeElement.__name__,
             [('the_table', '=', self), ('language', '=', good_language)])[0]
