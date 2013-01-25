@@ -81,7 +81,7 @@ class DynamicButtonDict(dict):
         if not transition_id:
             raise Exception
 
-        # The pattern for readonly (current_state) steps is 
+        # The pattern for readonly (current_state) steps is
         # "<step_id>_<step_id>"
         # The pattern for instructions is "<step_id>_<instruction>"
         if len(transition_id) > 1:
@@ -212,8 +212,7 @@ class ProcessFramework(ModelView):
         cls._error_messages.update(
             {
                 'everything_ok': 'Everything is good !'
-                })
-
+            })
 
     @classmethod
     def __register__(cls, module_name):
@@ -240,7 +239,8 @@ class ProcessFramework(ModelView):
             # Only one means it is a standard transition
             transition = int(transition_data[0])
 
-            # This is the method that will be called when clicking on the button
+            # This is the method that will be called when clicking on the
+            # button
             def button_generic(works):
                 # Pretty straightforward : we find the matching transition
                 StepTransition = Pool().get('process.step_transition')
@@ -279,8 +279,8 @@ class ProcessFramework(ModelView):
 
         ProcessDesc = Pool().get('process.process_desc')
         process_desc, = ProcessDesc.search([
-                ('technical_name', '=', process_name),
-            ], limit=1)
+            ('technical_name', '=', process_name),
+        ], limit=1)
         self.current_state = process_desc.get_step_relation(value)
 
     @classmethod
@@ -291,13 +291,13 @@ class ProcessFramework(ModelView):
 
         # Of course, no proces means no need
         if not process_name:
-            return 
+            return
 
         ProcessDesc = Pool().get('process.process_desc')
 
         process_desc, = ProcessDesc.search([
-                ('technical_name', '=', process_name),
-            ], limit=1)
+            ('technical_name', '=', process_name),
+        ], limit=1)
 
         # The good value is the name associated to the first step of the
         # current process
@@ -314,8 +314,8 @@ class ProcessFramework(ModelView):
 
     @classmethod
     def raise_user_error(cls, errors, error_args=None,
-            error_description='', error_description_args=None,
-            raise_exception=True):
+                         error_description='', error_description_args=None,
+                         raise_exception=True):
         if error_args or error_description or error_description_args:
             super(ProcessFramework, cls).raise_user_error(
                 errors, error_args, error_description, error_description_args,
@@ -358,5 +358,5 @@ class ProcessFramework(ModelView):
             result.append(error)
 
         # We display the resulting list of strings
-        #super(ProcessFramework, cls).raise_user_error('\n'.join(result))
+        # super(ProcessFramework, cls).raise_user_error('\n'.join(result))
         raise UserError('\n'.join(result))
