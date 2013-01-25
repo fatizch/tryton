@@ -44,7 +44,7 @@ class Priority(ModelSQL, ModelView):
         'Team',
         ondelete='CASCADE',
     )
-    
+
     priority = fields.Integer('Priority')
 
     def get_task(self, user):
@@ -73,13 +73,13 @@ class TeamGroupRelation(ModelSQL):
     team = fields.Many2One(
         'task_manager.team',
         'Team',
-        ondelete='CASCADE', 
+        ondelete='CASCADE',
     )
 
     group = fields.Many2One(
         'res.group',
         'Group',
-        ondelete='CASCADE', 
+        ondelete='CASCADE',
     )
 
 
@@ -146,7 +146,7 @@ class SelectUser(ModelView):
     'Select User'
 
     __name__ = 'task_manager.select_user'
-    
+
     user = fields.Many2One(
         'res.user',
         'User',
@@ -162,7 +162,7 @@ class SelectUser(ModelView):
 
     def on_change_with_user_ok(self):
         if not (hasattr(self, 'user') and self.user):
-            return '' 
+            return ''
 
         if self.user.team:
             return 'User is already a member of team %s' % (
