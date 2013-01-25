@@ -174,6 +174,7 @@ class CoopSchemaElement(DictSchemaMixin, model.CoopSQL, model.CoopView):
     def get_possible_linked_item(cls):
         module_name = utils.get_module_name(cls)
         return [
+            ('', ''),
             ('%s.product' % module_name, 'Product'),
             ('%s.coverage' % module_name, 'Coverage'),
             ('%s.item_desc' % module_name, 'Item Descriptor'),

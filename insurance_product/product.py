@@ -12,25 +12,26 @@ from trytond.modules.insurance_product import EligibilityResultLine
 
 
 __all__ = [
-   'Offered',
-   'Product',
-   'ProductOptionsCoverage',
-   'ProductDefinition',
-   'ItemDescriptor',
-   'ItemDescriptorComplementaryDataRelation',
-   'ProductItemDescriptorRelation',
-   'ProductSchemaElementRelation',
-    ]
+    'Offered',
+    'Product',
+    'ProductOptionsCoverage',
+    'ProductDefinition',
+    'ItemDescriptor',
+    'ItemDescriptorComplementaryDataRelation',
+    'ProductItemDescriptorRelation',
+    'ProductSchemaElementRelation',
+]
 
 CONFIG_KIND = [
     ('simple', 'Simple'),
     ('advanced', 'Advanced')
-    ]
+]
 
 TEMPLATE_BEHAVIOUR = [
+    ('', ''),
     ('pass', 'Add'),
     ('override', 'Remove'),
-    ]
+]
 
 DEF_CUR_DIG = 2
 
@@ -156,7 +157,7 @@ class Offered(model.CoopView, utils.GetResult, Templated):
 
     def give_me_complementary_data_ids(self, args):
         if not(hasattr(self, 'complementary_data_manager')
-            and self.complementary_data_manager):
+               and self.complementary_data_manager):
             return []
         return self.complementary_data_manager[0].get_valid_schemas_ids(
             args['date']), []
@@ -227,7 +228,7 @@ class Product(model.CoopSQL, Offered):
     @classmethod
     def __setup__(cls):
         super(Product, cls).__setup__()
-        #Temporary remove, while impossible to duplicate whith same code
+        # Temporary remove, while impossible to duplicate whith same code
 #        cls._sql_constraints += [
 #            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
 #        ]

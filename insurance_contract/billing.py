@@ -68,6 +68,7 @@ class GenericBillLine(model.CoopSQL, model.CoopView):
     def get_on_object_model():
         f = lambda x: (x, x)
         res = [
+            f(''),
             f('ins_product.product'),
             f('ins_product.coverage'),
             f('ins_contract.contract'),

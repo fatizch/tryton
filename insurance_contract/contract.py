@@ -11,6 +11,7 @@ from trytond.modules.coop_utils import utils
 from trytond.modules.process import ProcessFramework
 
 CONTRACTSTATUSES = [
+    ('', ''),
     ('quote', 'Quote'),
     ('active', 'Active'),
     ('hold', 'Hold'),
@@ -161,6 +162,7 @@ class Contract(model.CoopSQL, Subscribed):
     # will not be those of the product.
     master = fields.Reference('Master',
         [
+            ('', ''),
             ('ins_contract.contract', 'Contract'),
             ('ins_product.product', 'Product'),
         ])
@@ -564,6 +566,7 @@ class PriceLine(model.CoopSQL, model.CoopView):
     def get_line_target_models(cls):
         f = lambda x: (x, x)
         res = [
+            f(''),
             f('ins_product.product'),
             f('ins_product.coverage'),
             f('ins_contract.contract'),

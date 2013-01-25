@@ -20,20 +20,20 @@ __all__ = ['ProcessDesc', 'StepDesc', 'StepMethodDesc']
 
 # For now, just step_over and checks are customizable
 METHOD_TYPES = [
-                ('0_step_over', 'Must Step Over'),
-                # ('1_before_step', 'Before Step Execution'),
-                ('2_check_step', 'Step Validation'),
-                # ('3_post_step', 'Step Completion')
-                ]
+    ('0_step_over', 'Must Step Over'),
+    # ('1_before_step', 'Before Step Execution'),
+    ('2_check_step', 'Step Validation'),
+    # ('3_post_step', 'Step Completion')
+]
 
 BUTTONS = [
-           ('button_next', "'Next' Button"),
-           ('button_previous', "'Previous' Button"),
-           ('button_check', "'Check' Button"),
-           ('button_complete', "'Complete' Button"),
-           ('button_cancel', "'Cancel' Button"),
-           ('button_suspend', "'Suspend' Button"),
-           ]
+    ('button_next', "'Next' Button"),
+    ('button_previous', "'Previous' Button"),
+    ('button_check', "'Check' Button"),
+    ('button_complete', "'Complete' Button"),
+    ('button_cancel', "'Cancel' Button"),
+    ('button_suspend', "'Suspend' Button"),
+]
 
 
 class ProcessDesc(model.CoopSQL, model.CoopView):
@@ -73,7 +73,7 @@ class ProcessDesc(model.CoopSQL, model.CoopView):
         for model_name, model in Pool().iterobject(type='wizard'):
             # Evil hack to check model's class inheritance
             if (hasattr(model, 'coop_process_name')
-                and model.coop_process_name() != ''):
+                    and model.coop_process_name() != ''):
                 result.append((model_name, model.coop_process_name()))
         return result
 
@@ -140,8 +140,8 @@ class StepDesc(model.CoopSQL, model.CoopView):
                               'step',
                               'Methods',
                               states={
-                                      'required': Bool(Eval('virtual_step')),
-                                      },
+                                  'required': Bool(Eval('virtual_step')),
+                              },
                               depends=['virtual_step'])
 
     # Virtual_step makes the step 'virtual', that is without any form. It is
@@ -242,8 +242,8 @@ class StepDesc(model.CoopSQL, model.CoopView):
                 buttons_list[buttons_names.index(name)] = res
             buttons = ''.join(buttons_list)
             StepDesc.write([step], {
-                            'buttons_storage': buttons,
-                            })
+                'buttons_storage': buttons,
+            })
 
     # Here we create the list of tuple which will be available for selection.
     # Each tuple contains the model_name (i.e. 'ins_process.dummy_step')
@@ -251,11 +251,11 @@ class StepDesc(model.CoopSQL, model.CoopView):
     # coop_step_name.
     @classmethod
     def get_steps_model(cls, vals=None):
-        result = []
+        result = [('', '')]
         for model_name, model in Pool().iterobject():
             # Evil hack to check model's class inheritance
             if (hasattr(model, 'coop_step_name')
-                and model.coop_step_name() != ''):
+                    and model.coop_step_name() != ''):
                 result.append((model_name, model.coop_step_name()))
         return result
 
@@ -308,7 +308,7 @@ class StepDesc(model.CoopSQL, model.CoopView):
 
     @classmethod
     def get_product_steps(cls, vals=None):
-        result = set()
+        result = set([('', '')])
         for cls in DependantState.__subclasses__():
             result.add((lambda x: (x, x))(cls.depends_on_state()))
         return list(result)
