@@ -262,7 +262,8 @@ def create_AAA_Product(cfg_dict, code, name):
 
 
 def get_or_create_tree_element(cfg_dict, cur_type, description,
-        translated_technical, fct_args='', name=None, namespace=None):
+        translated_technical, fct_args='', name=None, namespace=None,
+        long_desc=''):
     cur_domain = []
     if cur_type == 'function':
         cur_domain.append(('namespace', '=', namespace))
@@ -280,6 +281,7 @@ def get_or_create_tree_element(cfg_dict, cur_type, description,
     te.type = cur_type
     te.name = name
     te.description = description
+    te.long_description = long_desc
     if fct_args:
         te.fct_args = ', '.join(fct_args.split(','))
     te.translated_technical_name = translated_technical
@@ -371,13 +373,14 @@ def create_folder_from_set(cfg_dict, set_name, descs):
     tes = []
     for fun in functions:
         cur_te = get_or_create_tree_element(
-            cfg_dict, 
+            cfg_dict,
             'function',
             descs[set_name][fun['name']][0],
             descs[set_name][fun['name']][1],
             descs[set_name][fun['name']][2],
             fun['name'],
-            set_name)
+            set_name,
+            descs[set_name][fun['name']][3])
         tes.append(cur_te)
     te_top = get_or_create_tree_element(
         cfg_dict, 'folder',
@@ -395,7 +398,7 @@ def parse_tree_names(cfg_dict):
     final_data = {}
     for k, v in base_data.iteritems():
         if not k in final_data:
-            final_data[k] = {} 
+            final_data[k] = {}
 
         for elem in v:
             final_data[k][elem[0]] = elem[1:]
