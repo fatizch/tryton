@@ -22,4 +22,6 @@
     <field name="translated_technical_name"/>
     <label name="fct_args"/>
     <field name="fct_args"/>
+    <label name="long_description" xalign="0"/>
+    <field name="long_description" colspan="3"/>
 </form>

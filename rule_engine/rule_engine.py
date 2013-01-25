@@ -430,6 +430,9 @@ class TreeElement(ModelView, ModelSQL):
             'required': Eval('type') == 'table'},
         on_change=['translated_technical_name', 'description', 'the_table'],
         ondelete='CASCADE')
+    long_description = fields.Text(
+        'Long Description',
+    )
 
     @staticmethod
     def default_type():
@@ -457,6 +460,7 @@ class TreeElement(ModelView, ModelSQL):
         tree['description'] = self.description
         tree['type'] = self.type
         tree['children'] = [child.as_tree() for child in self.children]
+        tree['long_description'] = self.long_description
         return tree
 
     def as_functions_list(self):
@@ -485,6 +489,10 @@ class TreeElement(ModelView, ModelSQL):
     def on_change_with_translated_technical_name(self):
         if self.rule:
             return coop_string.remove_blank_and_invalid_char(self.rule.name)
+
+    @staticmethod
+    def default_long_description():
+        return ''
 
 
 class ContextTreeElement(ModelSQL):
