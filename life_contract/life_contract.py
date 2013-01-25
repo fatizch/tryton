@@ -121,7 +121,7 @@ class LifeCoveredDesc(CoveredDesc):
     data_coverage_amount = fields.Selection(
         'get_allowed_amounts',
         'Coverage Amount',
-        selection_parameters=['data_for_coverage', 'start_date'],
+        selection_change_with=['data_for_coverage', 'start_date'],
         # context={'data_for_coverage': Eval('data_for_coverage')},
         depends=['data_for_coverage', 'start_date'],
         sort=False,

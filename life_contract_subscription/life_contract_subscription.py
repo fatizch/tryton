@@ -30,7 +30,7 @@ class CoveredDataSubs():
         fields.Selection(
             'get_allowed_amounts',
             'Coverage Amount',
-            selection_parameters=['coverage', 'start_date'],
+            selection_change_with=['coverage', 'start_date'],
             depends=['coverage', 'start_date', 'coverage_amount'],
             sort=False,
             on_change=['coverage_amount', 'coverage_amount_selection'],
