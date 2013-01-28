@@ -75,8 +75,9 @@ def get_cfg_as_dict(cfg, section, items_as_list=None):
 
 def get_test_cfg(test_config_file):
     cfg_dict = get_cfg_as_dict(test_config_file, 'options', ['modules'])
+    cfg_dict['config_path'] = os.path.abspath(cfg_dict['config_path'])
     cfg_dict['config_file'] = os.path.abspath(
-            os.path.join(DIR, cfg_dict['config_file'], 'trytond.conf'))
+            os.path.join(DIR, cfg_dict['config_path'], 'trytond.conf'))
 
     trytond_cfg_dict = get_cfg_as_dict(cfg_dict['config_file'], 'options')
 
@@ -86,7 +87,7 @@ def get_test_cfg(test_config_file):
 def delete_db_if_necessary(cfg_dict):
     if cfg_dict['create_db']:
         db = os.path.join(cfg_dict['data_path'],
-            cfg_dict['database_name'] + '.' + cfg_dict['db_type'])
+            get_database_name(cfg_dict) + '.' + cfg_dict['db_type'])
         if os.path.isfile(db):
             print 'Deleting DB : %s' % db
             os.remove(db)
@@ -229,13 +230,24 @@ def get_config(cfg_dict):
             logging.getLogger().setLevel(logging.INFO)
 
     return pconfig.set_trytond(
-        database_name=cfg_dict['database_name'],
+        database_name=get_database_name(cfg_dict),
         user=cfg_dict['user'],
         database_type=cfg_dict['db_type'],
         language=cfg_dict['language'],
         password=cfg_dict['password'],
         config_file=cfg_dict['config_file'],
     )
+
+
+def get_database_name(cfg_dict):
+    if 'database_name' in cfg_dict:
+        return cfg_dict['database_name']
+    config_file = os.path.join(cfg_dict['config_path'], 'scripts.conf')
+    if os.path.isfile(config_file):
+        with open(config_file, 'r') as f:
+            for line in f.readlines():
+                if line.startswith('DATABASE_NAME'):
+                    return line.split('=')[1].strip()
 
 
 def launch_proteus_test_case(test_config_file):
