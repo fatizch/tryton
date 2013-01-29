@@ -201,7 +201,8 @@ class Offered(model.CoopView, utils.GetResult, Templated):
                 field.field)
 
     def get_schema_elements(self, kinds=None):
-        return [x for x in self.schema_elements if not kinds or x.kind in kinds]
+        return [x for x in self.schema_elements
+            if not kinds or x.kind in kinds]
 
 
 class Product(model.CoopSQL, Offered):
@@ -228,10 +229,9 @@ class Product(model.CoopSQL, Offered):
     @classmethod
     def __setup__(cls):
         super(Product, cls).__setup__()
-        # Temporary remove, while impossible to duplicate whith same code
-#        cls._sql_constraints += [
-#            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
-#        ]
+        cls._sql_constraints += [
+            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+        ]
 
     @classmethod
     def delete(cls, entities):
@@ -241,6 +241,22 @@ class Product(model.CoopSQL, Offered):
             'ins_product.complementary_data_manager',
             'master')
         super(Product, cls).delete(entities)
+
+    @classmethod
+    def copy(cls, products, default=None):
+        if default is None:
+            default = {}
+        default = default.copy()
+        default['code'] = 'temp_copy'
+        res = super(Product, cls).copy(products, default=default)
+        for clone, original in zip(res, products):
+            i = 1
+            while cls.search(
+                [('code', '=', '%s_(%s)' % (original.code, i))]):
+                i += 1
+            clone.code = '%s_(%s)' % (original.code, i)
+            clone.save()
+        return res
 
     def get_valid_options(self):
         for option in self.options:

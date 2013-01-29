@@ -94,10 +94,9 @@ class Coverage(model.CoopSQL, Offered):
     @classmethod
     def __setup__(cls):
         super(Coverage, cls).__setup__()
-        #Temporary remove, while impossible to duplicate whith same code
-#        cls._sql_constraints += [
-#            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
-#        ]
+        cls._sql_constraints += [
+            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+        ]
         for field_name in (mgr for mgr in dir(cls) if mgr.endswith('_mgr')):
             cur_attr = copy.copy(getattr(cls, field_name))
             if not hasattr(cur_attr, 'context') or not isinstance(
@@ -116,6 +115,22 @@ class Coverage(model.CoopSQL, Offered):
         if not cls.template.depends:
             cls.template = []
         cls.template.depends.append('is_package')
+
+    @classmethod
+    def copy(cls, products, default=None):
+        if default is None:
+            default = {}
+        default = default.copy()
+        default['code'] = 'temp_copy'
+        res = super(Coverage, cls).copy(products, default=default)
+        for clone, original in zip(res, products):
+            i = 1
+            while cls.search(
+                [('code', '=', '%s_(%s)' % (original.code, i))]):
+                i += 1
+            clone.code = '%s_(%s)' % (original.code, i)
+            clone.save()
+        return res
 
     def give_me_price(self, args):
         # This method is one of the core of the pricing system. It asks for the
