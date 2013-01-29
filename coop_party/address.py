@@ -92,21 +92,25 @@ class Address():
     @staticmethod
     def get_zips_from_city(city, country):
         domain = []
+        domain.append(('city', '=', city))
         domain.append(('country', '=', country))
-
         return utils.get_those_objects('country.zipcode', domain)
 
     def on_change_with_city(self):
         if self.zip and self.country:
             cities = self.get_cities_from_zip(self.zip, self.country)
-            if len(cities) > 0:
+            if cities:
                 return cities[0].city
+            else:
+                return self.city
 
     def on_change_with_zip(self):
         if self.city and self.country:
             zips = self.get_zips_from_city(self.city, self.country)
-            if len(zips) > 0:
+            if zips:
                 return zips[0].zip
+            else:
+                return self.zip
 
 #    @classmethod
 #    def create(cls, vals):

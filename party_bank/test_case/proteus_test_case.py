@@ -4,6 +4,7 @@ import random
 import warnings
 
 from proteus import Model
+import proteus_tools
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
@@ -88,6 +89,7 @@ def add_address(cfg_dict, line, bank, countries):
     address.zip = line[184:189].strip().upper()
     address.city = line[190:216].strip().upper()
     country_code = check_pattern(line[240:242], r'^[A-Z]{2}')
+    proteus_tools.create_zip_code_if_necessary(address)
     if country_code:
         address.country = get_country(cfg_dict, country_code, countries)
 

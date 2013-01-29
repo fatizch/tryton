@@ -6,6 +6,7 @@ import random
 import os
 import csv
 from proteus import Model
+import proteus_tools
 
 
 def update_models(cfg_dict):
@@ -29,16 +30,16 @@ def load_addresses(cfg_dict, party_kind):
 
 def get_country(cfg_dict, name):
     if name == '':
-        return cfg_dict, None
+        return None
     if not cfg_dict.get('countries', None):
         cfg_dict['countries'] = {}
     if cfg_dict['countries'].get(name, None):
-        return cfg_dict, cfg_dict['countries'][name]
+        return cfg_dict['countries'][name]
     Country = cfg_dict['Country']
     countries = Country.find([('name', 'ilike', name.upper())], limit=1)
     if len(countries) > 0:
         cfg_dict['countries'][name] = countries[0]
-        return cfg_dict, countries[0]
+        return countries[0]
 
 
 def create_address(cfg_dict, party, party_kind):
@@ -48,9 +49,10 @@ def create_address(cfg_dict, party, party_kind):
         res.party = party
         res.street = data['street']
         res.streetbis = data['streetbis']
+        res.country = get_country(cfg_dict, data['country'])
         res.zip = data['zip'].zfill(5)
         res.city = data['city']
-        cfg_dict, res.country = get_country(cfg_dict, data['country'])
+        proteus_tools.create_zip_code_if_necessary(res)
         res.save()
         return res
     except:

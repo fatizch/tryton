@@ -164,3 +164,21 @@ def proteus_append_extend(obj, field, data):
         tmp_list = [data]
 
     getattr(obj, field).extend(tmp_list)
+
+
+def create_zip_code_if_necessary(address):
+    if not (address.zip and address.country and address.city):
+        return
+    Zip = Model.get('country.zipcode')
+    domain = [
+        ('city', '=', address.city),
+        ('zip', '=', address.zip),
+        ('country', '=', address.country.id)
+    ]
+    if Zip.find(domain):
+        return
+    zipcode = Zip()
+    zipcode.city = address.city
+    zipcode.country = address.country
+    zipcode.zip = address.zip
+    zipcode.save()
