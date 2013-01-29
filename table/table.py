@@ -260,7 +260,8 @@ class TableDefinitionDimension(ModelSQL, ModelView):
                         Lang.strftime(dimension.end_date, lang.code,
                             lang.date))
             if (getattr(dimension.definition, kind)
-                and getattr(dimension.definition, kind).startswith('range')):
+                    and getattr(dimension.definition,
+                        kind).startswith('range')):
                 names[dimension.id] = '[%s[' % names[dimension.id]
         return names
 
