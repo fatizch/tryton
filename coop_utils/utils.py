@@ -377,8 +377,6 @@ class NonExistingRuleKindException(Exception):
 
 class GetResult(object):
     def get_result(self, target, args, kind='', path=''):
-        if kind == 'pricing':
-            pass
         # This method is a generic entry point for getting parameters.
         #
         # Arguments are :

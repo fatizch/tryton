@@ -90,7 +90,10 @@ def launch_test_case(cfg_dict):
         'technical_name': 'covered_person_selection',
         'fancy_name': translater('Covered Person Selection'),
         'step_xml': '''
-<field name="covered_elements"/>
+<field name="covered_elements"
+ mode="tree,form"
+ view_ids="life_contract.covered_person_view_tree,
+life_contract_subscription.subscription_covered_person_form"/>
   ''',
     })
     pricing_step = meths['StepDesc']({
