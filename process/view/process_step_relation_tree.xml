@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<tree string="Process Steps" editable="bottom">
+<tree string="Process Steps" editable="bottom" sequence="order">
+  <field name="order" tree_invisible="1"/>
   <field name="step"/>
   <field name="status"/>
 </tree>

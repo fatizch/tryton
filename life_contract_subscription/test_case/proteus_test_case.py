@@ -19,113 +19,44 @@ def update_cfg_dict_with_models(cfg_dict):
         'process.step_desc_authorization')
 
 
-def get_or_create_status(cfg_dict, data):
-    status = proteus_tools.get_objects_from_db(
-        cfg_dict, 'Status', 'code', data['code'])
-    if status:
-        return status
+def create_methods(cfg_dict):
+    res = {}
 
-    status = cfg_dict['Status']()
+    res['Status'] = proteus_tools.generate_creation_method(
+        cfg_dict, 'Status', 'code')
+    res['StepDesc'] = proteus_tools.generate_creation_method(
+        cfg_dict, 'StepDesc', 'technical_name')
+    res['StepTransition'] = proteus_tools.generate_creation_method(
+        cfg_dict, 'StepTransition', domain=['from_step', 'to_step', 'kind'])
+    res['ProcessDesc'] = proteus_tools.generate_creation_method(
+        cfg_dict, 'ProcessDesc', 'technical_name')
+    res['ProcessStepRelation'] = proteus_tools.generate_creation_method(
+        cfg_dict, 'ProcessStepRelation', domain=['process', 'step'])
 
-    for key, value in data.iteritems():
-        setattr(status, key, value)
-
-    status.save()
-
-    return status
-
-
-def get_or_create_step_desc(cfg_dict, data):
-    step = proteus_tools.get_objects_from_db(
-        cfg_dict, 'StepDesc', 'technical_name', data['technical_name'])
-    if step:
-        return step
-
-    step = cfg_dict['StepDesc']()
-
-    for key, value in data.iteritems():
-        setattr(step, key, value)
-
-    step.save()
-
-    return step
-
-
-def get_or_create_transition(cfg_dict, data):
-    trans = proteus_tools.get_objects_from_db(
-        cfg_dict, 'StepTransition', domain=[
-            ('from_step', '=', data['from_step'].id),
-            ('to_step', '=', data['to_step'].id)])
-    if trans:
-        return trans
-
-    trans = cfg_dict['StepTransition']()
-
-    for key, value in data.iteritems():
-        setattr(trans, key, value)
-
-    trans.save()
-
-    return trans
-
-
-def get_or_create_process_desc(cfg_dict, data):
-    process = proteus_tools.get_objects_from_db(
-        cfg_dict, 'ProcessDesc', 'technical_name', data['technical_name'])
-    if process:
-        return process
-
-    process = cfg_dict['ProcessDesc']()
-
-    for key, value in data.iteritems():
-        setattr(process, key, value)
-
-    process.save()
-
-    return process
-    
-
-def get_or_create_process_step_relation(cfg_dict, data):
-    relation = proteus_tools.get_objects_from_db(
-        cfg_dict, 'ProcessStepRelation', domain=[
-            ('process', '=', data['process'].id),
-            ('step', '=', data['step'].id)])
-    if relation:
-        return relation
-
-    relation = cfg_dict['ProcessStepRelation']()
-
-    for key, value in data.iteritems():
-        setattr(relation, key, value)
-
-    relation.save()
-
-    return relation
+    return res
 
 
 def launch_test_case(cfg_dict):
     update_cfg_dict_with_models(cfg_dict)
+    meths = create_methods(cfg_dict)
     translater = proteus_tools.translate_this(cfg_dict)
-    status_ongoing = get_or_create_status(
-        cfg_dict, {
-            'code': 'ctr_ongoing',
-            'name': translater('On going'),
-        })
-    status_validation = get_or_create_status(
-        cfg_dict, {
-            'code': 'ctr_validation', 
-            'name': translater('Validation'),
-        })
-    status_basic_data = get_or_create_status(
-        cfg_dict, {
-            'code': 'ctr_basic_data_input', 
-            'name': translater('Administrative Data'),
-        })
-    subscriber_sel_step = get_or_create_step_desc(
-        cfg_dict, {
-            'technical_name': 'subscriber_selection',
-            'fancy_name': translater('Subscriber Selection'),
-            'step_xml': '''
+
+    status_ongoing = meths['Status']({
+        'code': 'ctr_ongoing',
+        'name': translater('On going'),
+    })
+    status_validation = meths['Status']({
+        'code': 'ctr_validation',
+        'name': translater('Validation'),
+    })
+    status_basic_data = meths['Status']({
+        'code': 'ctr_basic_data_input',
+        'name': translater('Administrative Data'),
+    })
+    subscriber_sel_step = meths['StepDesc']({
+        'technical_name': 'subscriber_selection',
+        'fancy_name': translater('Subscriber Selection'),
+        'step_xml': '''
 <label name="start_date"/>
 <field name="start_date" xfill="1"/>
 <newline/>
@@ -144,39 +75,35 @@ def launch_test_case(cfg_dict):
 <field name="product_desc" widget="richtext" colspan="2"/>
 <field name="subscriber_desc" widget="richtext" colspan="2"/>
 ''',
-        })
-    option_sel_step = get_or_create_step_desc(
-        cfg_dict, {
-            'technical_name': 'option_selection',
-            'fancy_name': translater('Options Selection'),
-            'step_xml': '''
+    })
+    option_sel_step = meths['StepDesc']({
+        'technical_name': 'option_selection',
+        'fancy_name': translater('Options Selection'),
+        'step_xml': '''
 <field name="options" mode="tree"
  view_ids="insurance_contract_subscription.subscription_editable_option_tree"/>
 <newline/>
 <field name="complementary_data"/>
 ''',
-        })
-    covered_pers_sel_step = get_or_create_step_desc(
-        cfg_dict, {
-            'technical_name': 'covered_person_selection',
-            'fancy_name': translater('Covered Person Selection'),
-            'step_xml': '''
+    })
+    covered_pers_sel_step = meths['StepDesc']({
+        'technical_name': 'covered_person_selection',
+        'fancy_name': translater('Covered Person Selection'),
+        'step_xml': '''
 <field name="covered_elements"/>
   ''',
-        })
-    pricing_step = get_or_create_step_desc(
-        cfg_dict, {
-            'technical_name': 'pricing',
-            'fancy_name': translater('Pricing'),
-            'step_xml': '''
+    })
+    pricing_step = meths['StepDesc']({
+        'technical_name': 'pricing',
+        'fancy_name': translater('Pricing'),
+        'step_xml': '''
 <field name="billing_manager" mode="form" />
 ''',
-        })
-    validation_step = get_or_create_step_desc(
-        cfg_dict, {
-            'technical_name': 'ctr_validation',
-            'fancy_name': translater('Contract Validation'),
-            'step_xml': '''
+    })
+    validation_step = meths['StepDesc']({
+        'technical_name': 'ctr_validation',
+        'fancy_name': translater('Contract Validation'),
+        'step_xml': '''
 <group id="Administrative data">
   <label name="contract_number"/>
   <field name="contract_number"/>
@@ -202,89 +129,7 @@ def launch_test_case(cfg_dict):
   </page>
 </notebook>
 ''',
-        })
-    get_or_create_transition(cfg_dict, {
-        'from_step': subscriber_sel_step,
-        'to_step': option_sel_step,
-        'kind': 'next',
-        'methods': '''
-check_product_not_null
-check_subscriber_not_null
-check_start_date_valid
-check_product_eligibility
-init_dynamic_data
-init_options
-''',
-        })
-    get_or_create_transition(cfg_dict, {
-        'from_step': subscriber_sel_step,
-        'to_step': covered_pers_sel_step,
-        'kind': 'next',
-        'methods': '''
-check_product_not_null
-check_subscriber_not_null
-check_start_date_valid
-check_product_eligibility
-init_dynamic_data
-init_options
-check_options_eligibility
-check_option_selected
-check_option_dates
-init_covered_elements
-''',
-        })
-    get_or_create_transition(cfg_dict, {
-        'from_step': option_sel_step,
-        'to_step': subscriber_sel_step,
-        'kind': 'previous',
-        })
-    get_or_create_transition(cfg_dict, {
-        'from_step': option_sel_step,
-        'to_step': covered_pers_sel_step,
-        'kind': 'next',
-        'methods': '''
-check_options_eligibility
-check_option_selected
-check_option_dates
-init_covered_elements
-''',
-        })
-    get_or_create_transition(cfg_dict, {
-        'from_step': covered_pers_sel_step,
-        'to_step': subscriber_sel_step,
-        'kind': 'previous',
-        })
-    get_or_create_transition(cfg_dict, {
-        'from_step': covered_pers_sel_step,
-        'to_step': option_sel_step,
-        'kind': 'previous',
-        })
-    get_or_create_transition(cfg_dict, {
-        'from_step': covered_pers_sel_step,
-        'to_step': pricing_step,
-        'kind': 'next',
-        'methods': '''
-check_at_least_one_covered
-check_sub_elem_eligibility
-check_covered_amounts
-init_billing_manager
-calculate_prices
-''',
-        })
-    get_or_create_transition(cfg_dict, {
-        'from_step': pricing_step,
-        'to_step': covered_pers_sel_step,
-        'kind': 'previous',
-        })
-    get_or_create_transition(cfg_dict, {
-        'from_step': pricing_step,
-        'to_step': validation_step,
-        'kind': 'next',
-        'methods': '''
-activate_contract
-finalize_contract
-''',
-        })
+    })
 
     contract_model = Model.get('ir.model').find(
         [('model', '=', 'ins_contract.contract')])[0]
@@ -297,7 +142,7 @@ finalize_contract
 
     top_menu = Model.get('ir.ui.menu')(top_menu_tmp.db_id)
 
-    subs_process_desc = get_or_create_process_desc(cfg_dict, {
+    subs_process_desc = meths['ProcessDesc']({
         'technical_name': 'individual_subscription',
         'fancy_name': translater('Individual Subscription Process'),
         'on_model': contract_model,
@@ -311,36 +156,138 @@ finalize_contract
 ''',
         'menu_top': top_menu,
         'first_step': subscriber_sel_step,
-        })
+    })
 
-    get_or_create_process_step_relation(cfg_dict, {
+    meths['ProcessStepRelation']({
         'process': subs_process_desc,
         'step': subscriber_sel_step,
         'status': status_basic_data,
-        })
+        'order': 1,
+    })
 
-    get_or_create_process_step_relation(cfg_dict, {
+    meths['ProcessStepRelation']({
         'process': subs_process_desc,
         'step': option_sel_step,
         'status': status_ongoing,
-        })
+        'order': 2,
+    })
 
-    get_or_create_process_step_relation(cfg_dict, {
+    meths['ProcessStepRelation']({
         'process': subs_process_desc,
         'step': covered_pers_sel_step,
         'status': status_ongoing,
-        })
+        'order': 3,
+    })
 
-    get_or_create_process_step_relation(cfg_dict, {
+    meths['ProcessStepRelation']({
         'process': subs_process_desc,
         'step': pricing_step,
         'status': status_ongoing,
-        })
+        'order': 4,
+    })
 
-    get_or_create_process_step_relation(cfg_dict, {
+    meths['ProcessStepRelation']({
         'process': subs_process_desc,
         'step': validation_step,
         'status': status_validation,
-        })
+        'order': 5,
+    })
+
+    meths['StepTransition']({
+        'from_step': subscriber_sel_step,
+        'to_step': option_sel_step,
+        'on_process': subs_process_desc,
+        'kind': 'next',
+        'methods': '''
+check_product_not_null
+check_subscriber_not_null
+check_start_date_valid
+check_product_eligibility
+init_dynamic_data
+init_options
+''',
+    })
+    meths['StepTransition']({
+        'from_step': subscriber_sel_step,
+        'to_step': covered_pers_sel_step,
+        'on_process': subs_process_desc,
+        'kind': 'next',
+        'methods': '''
+check_product_not_null
+check_subscriber_not_null
+check_start_date_valid
+check_product_eligibility
+init_dynamic_data
+init_options
+check_options_eligibility
+check_option_selected
+check_option_dates
+init_covered_elements
+''',
+    })
+    meths['StepTransition']({
+        'from_step': option_sel_step,
+        'to_step': subscriber_sel_step,
+        'on_process': subs_process_desc,
+        'kind': 'previous',
+    })
+    meths['StepTransition']({
+        'from_step': option_sel_step,
+        'to_step': covered_pers_sel_step,
+        'on_process': subs_process_desc,
+        'kind': 'next',
+        'methods': '''
+check_options_eligibility
+check_option_selected
+check_option_dates
+init_covered_elements
+''',
+    })
+    meths['StepTransition']({
+        'from_step': covered_pers_sel_step,
+        'to_step': subscriber_sel_step,
+        'on_process': subs_process_desc,
+        'kind': 'previous',
+    })
+    meths['StepTransition']({
+        'from_step': covered_pers_sel_step,
+        'to_step': option_sel_step,
+        'on_process': subs_process_desc,
+        'kind': 'previous',
+    })
+    meths['StepTransition']({
+        'from_step': covered_pers_sel_step,
+        'to_step': pricing_step,
+        'on_process': subs_process_desc,
+        'kind': 'next',
+        'methods': '''
+check_at_least_one_covered
+check_sub_elem_eligibility
+check_covered_amounts
+init_billing_manager
+calculate_prices
+''',
+    })
+    meths['StepTransition']({
+        'from_step': pricing_step,
+        'to_step': covered_pers_sel_step,
+        'on_process': subs_process_desc,
+        'kind': 'previous',
+    })
+    meths['StepTransition']({
+        'from_step': pricing_step,
+        'to_step': validation_step,
+        'on_process': subs_process_desc,
+        'kind': 'next',
+    })
+    meths['StepTransition']({
+        'from_step': validation_step,
+        'on_process': subs_process_desc,
+        'kind': 'complete',
+        'methods': '''
+activate_contract
+finalize_contract
+''',
+    })
 
     cfg_dict['ProcessDesc'].update_view([subs_process_desc.id], {})

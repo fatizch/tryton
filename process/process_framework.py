@@ -268,6 +268,9 @@ class ProcessFramework(ModelView):
 
     def set_state(self, value, process_name=None):
         # Setting the state means updating the current_state attribute
+        if value is None:
+            self.current_state = None
+            return
 
         # To do that, we need to know the process on which we are working.
         # Either it is a parameter of the setter, either we look for it in the

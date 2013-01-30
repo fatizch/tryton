@@ -9,8 +9,6 @@ from trytond.pyson import Eval
 
 from trytond.pool import Pool
 
-from trytond.modules.coop_utils import One2ManyDomain
-
 
 __all__ = [
     'Status',
@@ -72,6 +70,10 @@ class ProcessStepRelation(ModelSQL, ModelView):
         ondelete='RESTRICT',
     )
 
+    order = fields.Integer(
+        'Order',
+    )
+
     def get_rec_name(self, name):
         return self.process.get_rec_name(name) + ' - ' + \
             self.status.get_rec_name(name)
@@ -104,18 +106,18 @@ class ProcessDesc(ModelSQL, ModelView):
         ],
     )
 
-    # We need to distinguish the first step from the others. We need to know
-    # where to start.
-    first_step = fields.Many2One(
-        'process.step_desc',
-        'First Step',
-    )
-
     # We also need all the steps that will be used in the process
     all_steps = fields.One2Many(
         'process.process_step_relation',
         'process',
         'All Steps',
+        order=[('order', 'ASC')],
+    )
+
+    transitions = fields.One2Many(
+        'process.step_transition',
+        'on_process',
+        'Transitions',
     )
 
     # We might want to cusomize our process screen
@@ -178,45 +180,22 @@ class ProcessDesc(ModelSQL, ModelView):
         for elem in self.all_steps:
             yield elem.step
 
-    def build_steps_tree(self):
-        steps = dict([(elem.id, {'from': set([]), 'to': set([])}) 
-            for elem in self.get_all_steps()])
-        for step_rel in self.all_steps:
-            step = step_rel.step
-            for prev_trans in step.from_steps:
-                if prev_trans.to_step in steps.keys():
-                    steps[step.id]['from'].add(prev_trans.to_step.id)
-                    steps[prev_trans.to_step.id]['to'].add(step.id)
-                        
-            for next_trans in step.to_steps:
-                if next_trans.to_step.id in steps.keys():
-                    steps[step.id]['to'].add(next_trans.to_step.id)
-                    steps[next_trans.to_step.id]['from'].add(step.id)
-        
-        res = {}
-        for step in self.all_steps:
-            used_steps = set([step.id])
+    def calculate_buttons_for_step(self, for_step):
+        result = {}
+        for idx in range(len(self.all_steps)):
+            cur_step = self.all_steps[idx].step
+            for trans in self.transitions:
+                if trans.from_step == for_step and \
+                        trans.to_step == cur_step:
+                    result[cur_step.id] = trans
+                    break
 
-            def get_tree(step_id, used, kind, step_first=True):
-                used.add(step_id)
-                if not steps[step_id][kind] and not step_id in used:
-                    return [step_id]
-                res = []
-                for elem in steps[step_id][kind]:
-                    res.extend(get_tree(elem, used, kind, step_first))
+        for trans in self.transitions:
+            if trans.from_step == for_step and trans.kind == 'complete':
+                result['complete'] = trans
+                break
 
-                if step_first:
-                    return step_id, res
-                else:
-                    return res, step_id
-
-            # Remove the current step from the lists:
-            res[step.id] = {
-                    'from': get_tree(step.id, used_steps, 'from', False)[:-1],
-                    'to': get_tree(step.id, used_steps, 'to')[1:],
-                }
-
-        return res
+        return result
 
     def create_update_view(self):
         # Views are calculated depending on the process' steps and a few other
@@ -276,8 +255,8 @@ class ProcessDesc(ModelSQL, ModelView):
         # Now we look for the act_form that match our process
         try:
             act_forms = ActView.search([
-                    ('act_window', '=', good_action),
-                ])
+                ('act_window', '=', good_action),
+            ])
             act_form = None
             for act in act_forms:
                 if not act.view.type == 'form':
@@ -311,7 +290,7 @@ class ProcessDesc(ModelSQL, ModelView):
         xml += '</group>'
         xml += '<newline/>'
 
-        # We need to have cur_state in the view so our Pyson Eval can work 
+        # We need to have cur_state in the view so our Pyson Eval can work
         # properly
         xml += '<field name="current_state" invisible="1"/>'
         xml += '<newline/>'
@@ -349,8 +328,12 @@ class ProcessDesc(ModelSQL, ModelView):
 
             xml += '}">'
 
+            # We need to calculate the buttons for the step
+            the_buttons = self.calculate_buttons_for_step(step)
+
             # Inside the group, we get the xml calculated on the step
-            xml += step.calculate_form_view()
+            xml += step.calculate_form_view(self, the_buttons)
+
             xml += '</group>'
 
             if auth_xml:
@@ -383,7 +366,7 @@ completed the current process, please go ahead"/>'
         xml += '<group name="process_footer">'
         xml += '</group>'
         xml += '</form>'
-        
+
         # Our xml is complete, we set it on the good view, then save it.
         good_form.arch = xml
         good_form.save()
@@ -400,8 +383,8 @@ completed the current process, please go ahead"/>'
         # Now we look for (or create) the act_tree for our process :
         try:
             act_trees = ActView.search([
-                    ('act_window', '=', good_action),
-                ])
+                ('act_window', '=', good_action),
+            ])
             act_tree = None
             for act in act_trees:
                 if not act.view.type == 'tree':
@@ -418,10 +401,10 @@ completed the current process, please go ahead"/>'
         # We look for the good tree view
         try:
             good_tree, = View.search([
-                    ('model', '=', self.on_model.model),
-                    ('type', '=', 'tree'),
-                    ('name', '=', '%s_tree' % self.technical_name),
-                ], limit=1)
+                ('model', '=', self.on_model.model),
+                ('type', '=', 'tree'),
+                ('name', '=', '%s_tree' % self.technical_name),
+            ], limit=1)
         except ValueError:
             # or create it if needed.
             good_tree = View()
@@ -467,10 +450,13 @@ completed the current process, please go ahead"/>'
                 return elem
 
         return None
-    
+
     def get_first_state_relation(self):
-        return self.get_step_relation(self.first_step)
-    
+        return self.get_step_relation(self.first_step())
+
+    def first_step(self):
+        return self.all_steps[0]
+
     def get_rec_name(self, name):
         return self.fancy_name
 
@@ -523,11 +509,19 @@ class StepTransition(ModelSQL, ModelView):
 
     __name__ = 'process.step_transition'
 
+    on_process = fields.Many2One(
+        'process.process_desc',
+        'On Process',
+        required=True,
+        ondelete='CASCADE',
+    )
+
     # Transitions go FROM one step...
     from_step = fields.Many2One(
         'process.step_desc',
         'From Step',
         ondelete='CASCADE',
+        required='True',
     )
 
     # TO another
@@ -546,8 +540,7 @@ class StepTransition(ModelSQL, ModelView):
         [
             ('previous', 'Previous Transition'),
             ('next', 'Next Transition'),
-            # Some special steps need to be distinguished.
-            ('other', 'Other Transition'),
+            ('complete', 'Complete Process'),
         ],
         'kind',
         required=True,
@@ -564,6 +557,12 @@ class StepTransition(ModelSQL, ModelView):
     # The purpose of a transition is to execute some code, let's do this !
     methods = fields.Text(
         'Methods',
+    )
+
+    method_kind = fields.Selection(
+        [('replace', 'Replace Step Methods'),
+            ('add', 'Executed between steps')],
+        'Method Behaviour',
     )
 
     # And authorizations are needed to filter users
@@ -583,6 +582,9 @@ class StepTransition(ModelSQL, ModelView):
     )
 
     def execute(self, target):
+        if (self.kind == 'next' or self.kind == 'complete') and \
+                self.method_kind == 'add':
+            self.from_step.execute_after(target)
         # Executing a transition is easy : just apply all methods
         if self.methods:
             for method in self.methods.split('\n'):
@@ -595,7 +597,7 @@ class StepTransition(ModelSQL, ModelView):
                     print 'Error for method ', method
                     raise
 
-                if not isinstance(result, (list, tuple)) and result == True:
+                if not isinstance(result, (list, tuple)) and result is True:
                     continue
 
                 # In case of errors, display them !
@@ -603,10 +605,25 @@ class StepTransition(ModelSQL, ModelView):
                 if not res or errs:
                     target.raise_user_error(errs)
 
+        if self.kind == 'previous' and self.method_kind == 'add':
+            self.to_step.execute_before(target)
+
         # Everything went right, update the state of the instance
-        target.set_state(self.to_step)
+        if not self.kind == 'complete':
+            target.set_state(self.to_step)
+        else:
+            target.set_state(None)
+
+    @classmethod
+    def default_method_kind(cls):
+        return 'add'
 
     def build_button(self):
+        # First deal with the easier case :
+        if self.kind == 'complete':
+            xml = '<button string="Complete" name="_button_%s"/>' % self.id
+            return xml
+
         # Here we build the xml for the button associated to the transition.
         # What must be build is the button name, in which we encode the ids
         # of the from and to steps.
@@ -617,6 +634,11 @@ class StepTransition(ModelSQL, ModelView):
         return xml
 
     def get_rec_name(self, name):
+        if not (hasattr(self, 'to_step') and self.to_step):
+            if self.kind == 'complete':
+                return 'Complete'
+            return '...'
+
         return self.to_step.get_rec_name(name)
 
     @classmethod
@@ -660,25 +682,6 @@ class StepDesc(ModelSQL, ModelView):
         'Name',
     )
 
-    # We need the list of transitions which will be end on this step
-    from_steps = One2ManyDomain(
-        'process.step_transition',
-        'from_step',
-        'From Steps',
-        domain=[
-            ('kind', '=', 'previous')],
-        order=[('priority', 'ASC')],
-    )
-
-    # As well as those which will start from this step
-    to_steps = One2ManyDomain(
-        'process.step_transition',
-        'from_step',
-        'To Steps',
-        domain=[('kind', '=', 'next')],
-        order=[('priority', 'ASC')],
-    )
-
     # Finally, the xml which will be displayed on the current state.
     step_xml = fields.Text(
         'XML',
@@ -689,6 +692,14 @@ class StepDesc(ModelSQL, ModelView):
         'step_desc',
         'group',
         'Authorizations',
+    )
+
+    code_before = fields.Text(
+        'Exectuted Before Step',
+    )
+
+    code_after = fields.Text(
+        'Executed After Step',
     )
 
     @classmethod
@@ -712,7 +723,38 @@ class StepDesc(ModelSQL, ModelView):
         for process in processes:
             Process(process).create_update_view()
 
-    def calculate_form_view(self):
+    def execute_code(self, target, code):
+        for method in code.split('\n'):
+            if not method:
+                continue
+            try:
+                # All methods should return a result, and errors
+                result = getattr(target, method.strip())()
+            except:
+                print 'Error for method ', method
+                raise
+
+            if not isinstance(result, (list, tuple)) and result is True:
+                continue
+
+            # In case of errors, display them !
+            res, errs = result
+            if not res or errs:
+                target.raise_user_error(errs)
+
+    def execute_before(self, target):
+        if not self.code_before:
+            return
+
+        self.execute_code(target, self.code_before)
+
+    def execute_after(self, target):
+        if not self.code_after:
+            return
+
+        self.execute_code(target, self.code_after)
+
+    def calculate_form_view(self, process, buttons):
         # Here is the xml definition for this step.
         # First there is the db defined xml :
         xml = '<group name="%s_form" xfill="1" ' % self.technical_name
@@ -722,28 +764,31 @@ class StepDesc(ModelSQL, ModelView):
         xml += '<newline/>'
 
         # We need to know how many buttons there will be
-        nb_buttons = len(self.from_steps) + len(self.to_steps) + 1
+        nb_buttons = len(process.all_steps)
+        if 'complete' in buttons:
+            nb_buttons += 1
 
         # Then we add all the buttons for this step
         xml += '<group name="%s_buttons" col="%s">' % (
             self.technical_name, nb_buttons)
 
-        # The "previous" buttons
-        for trans in self.from_steps:
-            xml += trans.build_button()
+        for cur_step in process.all_steps:
+            the_step = cur_step.step
+            if the_step == self:
+                # The "current state" button
+                xml += '<button string="%s" name="_button_%s_%s"/>' % (
+                    self.fancy_name, self.id, self.id)
+                continue
 
-        if self.to_steps:
-            # The "current state" button
+            if the_step.id in buttons:
+                xml += buttons[the_step.id].build_button()
+                continue
+
             xml += '<button string="%s" name="_button_%s_%s"/>' % (
-                self.fancy_name, self.id, self.id)
+                the_step.fancy_name, the_step.id, the_step.id)
 
-            # And the "next buttons"
-            for trans in self.to_steps:
-                xml += trans.build_button()
-        else:
-            # If there are no "next" buttons, we need an exit point.
-            xml += '<button string="%s" name="_button_%s_complete"/>' % (
-                'Complete Process', self.id)
+        if 'complete' in buttons:
+            xml += buttons['complete'].build_button()
 
         xml += '</group>'
 
@@ -783,7 +828,7 @@ class GenerateGraph(Report):
     def build_transition(cls, process, step, transition, graph, nodes, edges):
         if transition.is_readonly:
             return
-        
+
         good_edge = pydot.Edge(
             nodes[transition.from_step.id],
             nodes[transition.to_step.id],
@@ -816,14 +861,14 @@ class GenerateGraph(Report):
             good_edge.set('weight', '0.2')
 
             edges[(tr_fr, tr_to)] = good_edge
-    
+
     @classmethod
     def execute(cls, ids, data):
         ActionReport = Pool().get('ir.action.report')
 
         action_report_ids = ActionReport.search([
             ('report_name', '=', cls.__name__)
-            ])
+        ])
         if not action_report_ids:
             raise Exception('Error', 'Report (%s) not find!' % cls.__name__)
         action_report = ActionReport(action_report_ids[0])
@@ -844,15 +889,14 @@ class GenerateGraph(Report):
                 cls.build_transition(
                     the_process, step, transition, graph, nodes, edges)
 
-
         for step in the_process.get_all_steps():
             for transition in step.from_steps:
                 cls.build_inverse_transition(
                     the_process, step, transition, graph, nodes, edges)
 
-        nodes[the_process.first_step.id].set('style', 'filled')
-        nodes[the_process.first_step.id].set('shape', 'octagon')
-        nodes[the_process.first_step.id].set('fillcolor', '#0094d2')
+        nodes[the_process.first_step().id].set('style', 'filled')
+        nodes[the_process.first_step().id].set('shape', 'octagon')
+        nodes[the_process.first_step().id].set('fillcolor', '#0094d2')
 
         for node in nodes.itervalues():
             graph.add_node(node)
@@ -877,6 +921,4 @@ class GenerateGraphWizard(Wizard):
     def do_print_(self, action):
         return action, {
             'id': Transaction().context.get('active_id'),
-            }
-
-
+        }

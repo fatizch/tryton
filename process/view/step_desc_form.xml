@@ -8,9 +8,11 @@
   </group>
   <newline/>
   <notebook>
-    <page string="Relations" id="relations">
-      <field name="from_steps" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
-      <field name="to_steps" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
+    <page string="Code" id="code">
+      <separator name="code_before"/>
+      <field name="code_before"/>
+      <separator name="code_after"/>
+      <field name="code_after"/>
     </page>
     <page string="XML" id="XML">
       <field name="step_xml" xexpand="1" xfill="1" yexpand="1" yfill="1"/>

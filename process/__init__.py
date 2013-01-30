@@ -8,9 +8,9 @@ def register():
         # From process_labo :
         Status,
         StepDesc,
+        ProcessDesc,
         StepTransition,
         TransitionAuthorization,
-        ProcessDesc,
         ProcessStepRelation,
         StepDescAuthorization,
 
