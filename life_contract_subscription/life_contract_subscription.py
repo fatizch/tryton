@@ -1,5 +1,3 @@
-import copy
-
 from decimal import Decimal
 
 from trytond.model import fields
@@ -62,6 +60,7 @@ class CoveredDataSubs():
                 #    wizard, 'for_contract')
             },)[0]
         if vals:
+            vals = [''].extend(vals)
             return map(lambda x: (x, x), map(lambda x: '%.2f' % x, vals))
         return ''
 
