@@ -50,7 +50,7 @@ class CoveredDataSubs():
 
     def get_allowed_amounts(self):
         if not (hasattr(self, 'coverage') and self.coverage):
-            return []
+            return [('', '')]
         the_coverage = self.coverage
         vals = the_coverage.get_result(
             'allowed_amounts',
@@ -62,7 +62,7 @@ class CoveredDataSubs():
         if vals:
             vals = [''].extend(vals)
             return map(lambda x: (x, x), map(lambda x: '%.2f' % x, vals))
-        return ''
+        return [('', '')]
 
     def get_coverage_amount_selection(self, name):
         if (hasattr(self, 'coverage_amount') and self.coverage_amount):
