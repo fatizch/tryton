@@ -75,7 +75,8 @@ def get_cfg_as_dict(cfg, section, items_as_list=None):
 
 def get_test_cfg(test_config_file):
     cfg_dict = get_cfg_as_dict(test_config_file, 'options', ['modules'])
-    cfg_dict['config_path'] = os.path.abspath(cfg_dict['config_path'])
+    cfg_dict['config_path'] = os.path.abspath(
+        os.path.join(DIR, cfg_dict['config_path']))
     cfg_dict['config_file'] = os.path.abspath(
             os.path.join(DIR, cfg_dict['config_path'], 'trytond.conf'))
 
