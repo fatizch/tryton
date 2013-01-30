@@ -60,8 +60,8 @@ class CoveredDataSubs():
                 #    wizard, 'for_contract')
             },)[0]
         if vals:
-            vals = [''].extend(vals)
-            return map(lambda x: (x, x), map(lambda x: '%.2f' % x, vals))
+            res = map(lambda x: (x, x), map(lambda x: '%.2f' % x, vals))
+            return [('', '')] + res
         return [('', '')]
 
     def get_coverage_amount_selection(self, name):
