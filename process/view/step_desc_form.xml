@@ -10,8 +10,11 @@
   <notebook>
     <page string="Code" id="code">
       <separator name="code_before"/>
+      <newline/>
       <field name="code_before"/>
+      <newline/>
       <separator name="code_after"/>
+      <newline/>
       <field name="code_after"/>
     </page>
     <page string="XML" id="XML">
