@@ -93,7 +93,7 @@ def launch_test_case(cfg_dict):
 <field name="covered_elements"
  mode="form,tree"
  view_ids="life_contract_subscription.subscription_covered_person_form,
- life_contract.covered_person_view_tree"/>
+life_contract.covered_person_view_tree"/>
   ''',
     })
     pricing_step = meths['StepDesc']({
