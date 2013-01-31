@@ -521,7 +521,7 @@ class StepTransition(ModelSQL, ModelView):
         'process.step_desc',
         'From Step',
         ondelete='CASCADE',
-        required='True',
+        required=True,
     )
 
     # TO another
