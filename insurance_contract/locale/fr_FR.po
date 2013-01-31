@@ -742,7 +742,7 @@ msgctxt "field:ins_contract.subs_process.covered_desc,data_covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
-msgctxt "field:ins_contract.subs_process.covered_desc,data_dynamic_data:"
+msgctxt "field:ins_contract.subs_process.covered_desc,data_complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 

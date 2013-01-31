@@ -167,51 +167,6 @@ class ContractSubscription():
 
         return eligibility.eligible, errors
 
-    def init_dynamic_data(self):
-        if (not (hasattr(self, 'complementary_data')
-            and self.complementary_data)):
-            self.complementary_data = {}
-
-        utils.set_default_dict(
-            self.complementary_data,
-            utils.init_dynamic_data(
-                self.offered.get_result(
-                    'complementary_data_getter',
-                    {
-                        'date': self.start_date,
-                        'dd_args': {
-                            'kind': 'main'}})[0]))
-        return True, ()
-
-    def init_options(self):
-        existing = {}
-        if (hasattr(self, 'options') and self.options):
-            for opt in self.options:
-                existing[opt.offered.code] = opt
-
-        good_options = []
-        to_delete = [elem for elem in existing.itervalues()]
-
-        OptionModel = Pool().get(self.give_option_model())
-        for coverage in self.offered.options:
-            if coverage.code in existing:
-                good_opt = existing[coverage.code]
-                to_delete.remove(good_opt)
-            else:
-                good_opt = OptionModel()
-                good_opt.init_from_offered(coverage, self.start_date)
-                good_opt.contract = self
-
-            good_opt.save()
-            good_options.append(good_opt)
-
-        if to_delete:
-            OptionModel.delete(to_delete)
-
-        self.options = good_options
-
-        return True, ()
-
     def check_options_eligibility(self):
         errs = []
         eligible = True
@@ -352,7 +307,7 @@ class CoveredElement():
             good_data.init_from_option(option)
 #            good_data.start_date = max(
 #                good_data.start_date, contract.start_date)
-            good_data.init_dynamic_data(option.offered, contract)
+            good_data.init_complementary_data(option.offered, contract)
             good_data.status_selection = True
             covered_datas.append(good_data)
         return utils.WithAbstract.serialize_field(covered_datas)

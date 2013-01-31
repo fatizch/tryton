@@ -15,21 +15,16 @@ from trytond.modules.coop_utils import model, utils, coop_string
 
 
 __all__ = [
-    'CoopSchemaElement',
-    'SchemaElementRelation',
-    'DynamicDataManager',
+    'ComplementaryDataDefinition',
     ]
 
 
-class CoopSchemaElement(DictSchemaMixin, model.CoopSQL, model.CoopView):
+class ComplementaryDataDefinition(DictSchemaMixin, model.CoopSQL,
+        model.CoopView):
     'Complementary Data Definition'
 
-    __name__ = 'ins_product.schema_element'
+    __name__ = 'ins_product.complementary_data_def'
 
-    manager = fields.Many2One(
-        'ins_product.complementary_data_manager',
-        'Manager',
-        ondelete='CASCADE')
     linked_item = fields.Reference('Linked Item', 'get_possible_linked_item')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
@@ -52,7 +47,7 @@ class CoopSchemaElement(DictSchemaMixin, model.CoopSQL, model.CoopView):
 
     @classmethod
     def __setup__(cls):
-        super(CoopSchemaElement, cls).__setup__()
+        super(ComplementaryDataDefinition, cls).__setup__()
 
         def update_field(field_name, field):
             if not hasattr(field, 'states'):
@@ -86,7 +81,7 @@ class CoopSchemaElement(DictSchemaMixin, model.CoopSQL, model.CoopView):
         return utils.today()
 
     def get_is_shared(self, name):
-        return self.id and not self.manager is None
+        return False
 
     def get_default_value(self, name):
         if name is None:
@@ -133,41 +128,23 @@ class CoopSchemaElement(DictSchemaMixin, model.CoopSQL, model.CoopView):
                             'dd_args': dd_args
                         })
                 domain.append(('id', 'in', good_schemas[0]))
-        return super(CoopSchemaElement, cls).search(domain, offset=offset,
-                limit=limit, order=order, count=count,
+        return super(ComplementaryDataDefinition, cls).search(domain,
+                offset=offset, limit=limit, order=order, count=count,
                 query_string=query_string)
 
-    @classmethod
-    def get_keys(cls, key_ids):
-        keys = []
-        for key in cls.browse(key_ids):
-            with Transaction().set_context(language='fr_FR'):
-                english_key = cls(key.id)
-                json_ = json.loads(english_key.selection_json or '[]')
-                selection = dict(json_)
-            selection.update(dict(json.loads(key.selection_json or '[]')))
-            new_key = {
-                'name': key.name,
-                'string': key.string,
-                'type_': key.type_,
-                'selection': selection.items(),
-            }
-            keys.append(new_key)
-        return keys
-
     def valid_at_date(self, at_date):
-        if hasattr(self, 'start_date') and self.start_date:
+        if at_date and hasattr(self, 'start_date') and self.start_date:
             if self.start_date > at_date:
                 return False
-        if hasattr(self, 'end_date') and self.end_date:
+        if at_date and hasattr(self, 'end_date') and self.end_date:
             if self.end_date < at_date:
                 return False
         return True
 
     @staticmethod
     def default_kind():
-        if 'schema_element_kind' in Transaction().context:
-            return Transaction().context['schema_element_kind']
+        if 'complementary_data_kind' in Transaction().context:
+            return Transaction().context['complementary_data_kind']
         return 'contract'
 
     @classmethod
@@ -184,80 +161,3 @@ class CoopSchemaElement(DictSchemaMixin, model.CoopSQL, model.CoopView):
         if not self.name and self.string:
             return coop_string.remove_blank_and_invalid_char(self.string)
         return self.name
-
-
-class SchemaElementRelation(model.CoopSQL):
-    'Relation between schema element and complementary data manager'
-
-    __name__ = 'ins_product.schema_element_relation'
-
-    the_manager = fields.Many2One('ins_product.complementary_data_manager',
-        'Manager', select=1, required=True, ondelete='CASCADE')
-    schema_element = fields.Many2One('ins_product.schema_element',
-        'Schema Element', select=1, required=True, ondelete='RESTRICT')
-
-
-class DynamicDataManager(model.CoopSQL, model.CoopView):
-    'Complementary Data Manager'
-
-    __name__ = 'ins_product.complementary_data_manager'
-
-    master = fields.Reference('Product', 'get_master_selection')
-
-    specific_dynamic = fields.One2Many(
-        'ins_product.schema_element',
-        'manager',
-        'Specific Complementary Data',
-        domain=[
-            ('kind', '!=', 'product')])
-
-    shared_dynamic = fields.Many2Many(
-        'ins_product.schema_element_relation',
-        'the_manager',
-        'schema_element',
-        'Shared Complementary Data',
-        domain=[
-            ('manager', '=', None),
-            ('kind', '!=', 'product')],
-        # Not needed but allows to force the display for O2MDomain validation
-        depends=['kind'])
-    kind = fields.Selection(
-        [
-            ('main', 'Main'),
-            ('sub_elem', 'Sub Element'),
-        ],
-        'Kind')
-
-    def get_valid_schemas_ids(self, date):
-        return map(lambda x: x.id, self.get_valid_schemas(date))
-
-    def get_valid_schemas(self, date):
-        res = []
-        for elem in self.specific_dynamic:
-            if elem.valid_at_date(date):
-                res.append(elem)
-        for elem in self.shared_dynamic:
-            if elem.valid_at_date(date):
-                res.append(elem)
-        return res
-
-    @staticmethod
-    def default_kind():
-        if not 'for_kind' in Transaction().context:
-            return 'main'
-        return Transaction().context['for_kind']
-
-    @classmethod
-    def get_master_selection(cls):
-        module_name = utils.get_module_name(cls)
-        return [
-            ('%s.product' % module_name, 'Product'),
-            ('%s.coverage' % module_name, 'Coverage'),
-        ]
-
-    def get_schema_elements(self, kinds=None):
-        res = []
-        for schema_element in self.specific_dynamic + self.shared_dynamic:
-            if not kinds or schema_element.kind in kinds:
-                res.append(schema_element)
-        return res

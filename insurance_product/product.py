@@ -19,7 +19,7 @@ __all__ = [
     'ItemDescriptor',
     'ItemDescriptorComplementaryDataRelation',
     'ProductItemDescriptorRelation',
-    'ProductSchemaElementRelation',
+    'ProductComplementaryDataRelation',
 ]
 
 CONFIG_KIND = [
@@ -82,27 +82,19 @@ class Offered(model.CoopView, utils.GetResult, Templated):
         'offered', 'Clause Rules')
     deductible_rules = fields.One2Many('ins_product.deductible_rule',
         'offered', 'Deductible Rules')
-    summary = fields.Function(fields.Text('Summary',
-            states={
-                'invisible': ~Eval('summary',)
-            }),
+    summary = fields.Function(
+            fields.Text('Summary',
+                states={
+                    'invisible': ~Eval('summary',)
+                }),
         'get_summary')
-    currency_digits = fields.Function(fields.Integer('Currency Digits'),
+    currency_digits = fields.Function(
+            fields.Integer('Currency Digits'),
         'get_currency_digits')
-    complementary_data_manager = model.One2ManyDomain(
-        'ins_product.complementary_data_manager',
-        'master',
-        'Complementary Data Manager',
+    complementary_data = fields.Dict('Offered Kind',
+        schema_model='ins_product.complementary_data_def',
         context={
-            'schema_element_kind': 'contract',
-            'for_kind': 'main'},
-        domain=[('kind', '=', 'main')],
-        size=1)
-    offered_dynamic_data = fields.Dict(
-        'Offered Kind',
-        schema_model='ins_product.schema_element',
-        context={
-            'schema_element_kind': 'product'},
+            'complementary_data_kind': 'product'},
         domain=[('kind', '=', 'product')])
 
     @classmethod
@@ -156,15 +148,11 @@ class Offered(model.CoopView, utils.GetResult, Templated):
             return Transaction().context.get('currency_digits')
 
     def give_me_complementary_data_ids(self, args):
-        if not(hasattr(self, 'complementary_data_manager')
-               and self.complementary_data_manager):
-            return []
-        return self.complementary_data_manager[0].get_valid_schemas_ids(
-            args['date']), []
+        return self.get_complementary_data_def(['main'], args['date'])
 
     @staticmethod
-    def default_offered_dynamic_data():
-        good_se = Pool().get('ins_product.schema_element').search([
+    def default_complementary_data():
+        good_se = Pool().get('ins_product.complementary_data_def').search([
             ('kind', '=', 'product')])
         res = {}
         for se in good_se:
@@ -200,9 +188,9 @@ class Offered(model.CoopView, utils.GetResult, Templated):
                 field.model_name,
                 field.field)
 
-    def get_schema_elements(self, kinds=None):
-        return [x for x in self.schema_elements
-            if not kinds or x.kind in kinds]
+    def get_complementary_data_def(self, kinds=None, at_date=None):
+        return [x for x in self.complementary_data_def
+            if x.valid_at_date(at_date) and (not kinds or x.kind in kinds)]
 
 
 class Product(model.CoopSQL, Offered):
@@ -223,8 +211,9 @@ class Product(model.CoopSQL, Offered):
         'offered', 'Term - Renewal')
     item_descriptors = fields.Many2Many('ins_product.product-item_desc',
         'product', 'item_desc', 'Item Descriptors')
-    schema_elements = fields.Many2Many('ins_product.product-schema_elements',
-        'product', 'schema_element', 'Complementary Data')
+    complementary_data_def = fields.Many2Many(
+        'ins_product.product-complementary_data_def',
+        'product', 'complementary_data_def', 'Complementary Data')
 
     @classmethod
     def __setup__(cls):
@@ -234,20 +223,12 @@ class Product(model.CoopSQL, Offered):
         ]
 
     @classmethod
-    def delete(cls, entities):
-        cls.delete_rules(entities)
-        utils.delete_reference_backref(
-            entities,
-            'ins_product.complementary_data_manager',
-            'master')
-        super(Product, cls).delete(entities)
-
-    @classmethod
     def copy(cls, products, default=None):
         if default is None:
             default = {}
         default = default.copy()
-        default['code'] = 'temp_copy'
+        #Code must be unique and action "copy" store in db during the process
+        default['code'] = 'temp_for_copy'
         res = super(Product, cls).copy(products, default=default)
         for clone, original in zip(res, products):
             i = 1
@@ -420,20 +401,21 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name')
-    complementary_data = fields.Many2Many(
-        'ins_product.item_desc-complementary_data',
-        'item_desc', 'complementary_data', 'Complementary Data',
+    complementary_data_def = fields.Many2Many(
+        'ins_product.item_desc-complementary_data_def',
+        'item_desc', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'sub_elem')], )
 
 
 class ItemDescriptorComplementaryDataRelation(model.CoopSQL):
     'Relation between Item Descriptor and Complementary Data'
 
-    __name__ = 'ins_product.item_desc-complementary_data'
+    __name__ = 'ins_product.item_desc-complementary_data_def'
 
     item_desc = fields.Many2One('ins_product.item_desc', 'Item Desc',
         ondelete='CASCADE', )
-    complementary_data = fields.Many2One('ins_product.schema_element',
+    complementary_data_def = fields.Many2One(
+        'ins_product.complementary_data_def',
         'Complementary Data', ondelete='RESTRICT', )
 
 
@@ -448,12 +430,13 @@ class ProductItemDescriptorRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class ProductSchemaElementRelation(model.CoopSQL):
-    'Relation between Product and Schema Element'
+class ProductComplementaryDataRelation(model.CoopSQL):
+    'Relation between Product and Complementary Data'
 
-    __name__ = 'ins_product.product-schema_elements'
+    __name__ = 'ins_product.product-complementary_data_def'
 
     product = fields.Many2One('ins_product.product', 'Product',
         ondelete='CASCADE')
-    schema_element = fields.Many2One('ins_product.schema_element',
+    complementary_data_def = fields.Many2One(
+        'ins_product.complementary_data_def',
         'Complementary Data', ondelete='RESTRICT')

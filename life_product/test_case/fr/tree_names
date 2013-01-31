@@ -25,7 +25,7 @@ ins_product.rule_sets.covered_data|Données de couverture|dossier_donnees_couver
 _re_get_initial_subscription_date|Date d'effet du contrat|date_debut_souscription||
 _re_get_subscription_end_date|Date de fin du contrat|date_fin_souscription||
 _re_get_coverage_amount|Montant de couverture|montant_de_couverture||
-_re_covered_data_dynamic_data|Récupérer la donnée dynamique|donnee_dynamique_element_couvert|Code donnée dynamique|
+_re_covered_data_complementary_data|Récupérer la donnée complémentaire|donnee_dynamique_element_couvert|Code donnée complémentaire|
 
 [ins_product.rule_sets.rule_combination]
 ins_product.rule_sets.rule_combination|Combinaison de règles|dossier_rule_combination|
@@ -36,8 +36,8 @@ _re_get_sub_component|Valeur de la composante|valeur_de_composante|Code composan
 
 [ins_product.rule_sets.contract]
 ins_product.rule_sets.contract|Contrat|dossier_contrat|
-_re_contract_dynamic_data|Récupérer la donnée dynamique|donnee_dynamique_contrat|Code donnée dynamique|
+_re_contract_complementary_data|Récupérer la donnée complémentaire|donnee_dynamique_contrat|Code donnée complémentaire|
 
 [ins_product.rule_sets.option]
 ins_product.rule_sets.option|Option|dossier_option|
-_re_option_dynamic_data|Récupérer la donnée dynamique|donnee_dynamique_option|Code donnée dynamique|
+_re_option_complementary_data|Récupérer la donnée complémentaire|donnee_dynamique_option|Code donnée complémentaire|

@@ -91,9 +91,9 @@ def launch_test_case(cfg_dict):
         'fancy_name': translater('Covered Person Selection'),
         'step_xml': '''
 <field name="covered_elements"
- mode="tree,form"
- view_ids="life_contract.covered_person_view_tree,
-life_contract_subscription.subscription_covered_person_form"/>
+ mode="form,tree"
+ view_ids="life_contract_subscription.subscription_covered_person_form,
+ life_contract.covered_person_view_tree"/>
   ''',
     })
     pricing_step = meths['StepDesc']({
@@ -206,8 +206,8 @@ check_product_not_null
 check_subscriber_not_null
 check_start_date_valid
 check_product_eligibility
-init_dynamic_data
 init_options
+init_complementary_data
 ''',
     })
     meths['StepTransition']({
@@ -220,8 +220,8 @@ check_product_not_null
 check_subscriber_not_null
 check_start_date_valid
 check_product_eligibility
-init_dynamic_data
 init_options
+init_complementary_data
 check_options_eligibility
 check_option_selected
 check_option_dates

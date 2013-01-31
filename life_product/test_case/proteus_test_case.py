@@ -33,7 +33,7 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['Context'] = Model.get('rule_engine.context')
     cfg_dict['TreeElement'] = Model.get('rule_engine.tree_element')
     cfg_dict['Tranche'] = Model.get('tranche.tranche')
-    cfg_dict['SchemaElement'] = Model.get('ins_product.schema_element')
+    cfg_dict['ComplementaryData'] = Model.get('ins_product.complementary_data_def')
     return cfg_dict
 
 
@@ -151,16 +151,16 @@ def get_or_create_fee(cfg_dict, code, name, vals=None):
     return fee
 
 
-def get_or_create_schema_element(cfg_dict, name, string=None, type_=None,
+def get_or_create_complementary_data(cfg_dict, name, string=None, type_=None,
         kind=None, selection=None):
     name = cfg_dict['translate'].get(name, name)
     if string:
         string = cfg_dict['translate'].get(string, string)
     schema_el = proteus_tools.get_objects_from_db(cfg_dict,
-        'SchemaElement', 'name', name)
+        'ComplementaryData', 'name', name)
     if schema_el:
         return schema_el
-    schema_el = cfg_dict['SchemaElement']()
+    schema_el = cfg_dict['ComplementaryData']()
     schema_el.name = name
     schema_el.string = string
     schema_el.type_ = type_
@@ -642,11 +642,11 @@ def create_invalidity_coverage(cfg_dict):
     cov = get_or_create_coverage(cfg_dict, 'INVAL', u'Invalidité',
         date=at_date)
 
-    CSP = get_or_create_schema_element(cfg_dict, name='CSP')
-    salary = get_or_create_schema_element(cfg_dict, name='salary',
-        string='Annual Salary', type_='char', kind='contract')
-    cov.schema_elements.append(CSP)
-    cov.schema_elements.append(salary)
+    CSP = get_or_create_complementary_data(cfg_dict, name='CSP')
+    salary = get_or_create_complementary_data(cfg_dict, name='salary',
+        string='Annual Salary', type_='char', kind='sub_elem')
+    cov.complementary_data_def.append(CSP)
+    cov.complementary_data_def.append(salary)
 
     elig_rule = add_rule(cfg_dict, cov, 'eligibility')
     elig_rule.min_age = 18
@@ -693,8 +693,8 @@ def create_death_coverage(cfg_dict):
     at_date = datetime.date(2011, 1, 1)
     cov = get_or_create_coverage(cfg_dict, 'DC', u'Décès', date=at_date)
 
-    cov.schema_elements.append(
-        get_or_create_schema_element(cfg_dict, name='is_vip'))
+    cov.complementary_data_def.append(
+        get_or_create_complementary_data(cfg_dict, name='is_vip'))
 
     ca_rule = add_rule(cfg_dict, cov, 'coverage_amount')
     ca_rule.kind = 'cal_list'
@@ -708,7 +708,6 @@ def create_death_coverage(cfg_dict):
 
     algo = '''esperance = table_MORTAL(annees_entre(\
 date_de_naissance(),aujourd_hui()), 'Les deux sexes')
-esperance = Decimal('.'.join(esperance.split(',')))
 
 result = montant_de_couverture() * (100 - esperance) / 100 * 0.008
 if donnee_dynamique_option('est_vip'):
@@ -849,13 +848,13 @@ def create_tranches(cfg_dict, pss_code):
     get_or_create_tranche(cfg_dict, 'T2', floor=TA, ceiling=T2)
 
 
-def create_shared_schema_elements(cfg_dict):
-    get_or_create_schema_element(cfg_dict, name='is_vip', string='Is VIP',
+def create_shared_complementary_data(cfg_dict):
+    get_or_create_complementary_data(cfg_dict, name='is_vip', string='Is VIP',
         type_='boolean', kind='contract')
-    get_or_create_schema_element(cfg_dict, name='salary',
-        string='Annual Salary', type_='char', kind='contract')
-    get_or_create_schema_element(cfg_dict, name='CSP',
-        string='CSP', type_='selection', kind='contract',
+    get_or_create_complementary_data(cfg_dict, name='salary',
+        string='Annual Salary', type_='char', kind='sub_elem')
+    get_or_create_complementary_data(cfg_dict, name='CSP',
+        string='CSP', type_='selection', kind='sub_elem',
         selection='''CSP1: CSP1
 CSP2: CSP2
 CSP3: CSP3
@@ -866,7 +865,7 @@ CSP4: CSP4
 def launch_test_case(cfg_dict):
     cfg_dict = update_cfg_dict_with_models(cfg_dict)
     get_or_create_currency(cfg_dict)
-    create_shared_schema_elements(cfg_dict)
+    create_shared_complementary_data(cfg_dict)
     create_rule_engine_data(cfg_dict)
     create_AAA_Product(cfg_dict, 'AAA', 'Awesome Alternative Allowance')
     #create_BBB_product(cfg_dict, 'BBB', 'Big Bad Bully')

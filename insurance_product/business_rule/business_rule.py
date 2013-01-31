@@ -268,3 +268,7 @@ class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
         if cursor.fetchone():
             return False
         return True
+
+    @classmethod
+    def copy(cls, rules, default):
+        return super(BusinessRuleRoot, cls).copy(rules, default=default)

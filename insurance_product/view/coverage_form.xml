@@ -3,6 +3,13 @@
     <xpath expr="/form" position="replace_attributes">
         <form string="Coverage"/>
     </xpath>
+    <xpath
+        expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']"
+        position="before">
+        <page string="Complementary Data" id="complementary_data">
+            <field name="complementary_data_def" colspan="4"/>
+        </page>
+    </xpath>
     <xpath expr="/form/notebook/page[@id='managers']" position="after">
         <page string="Benefits" id="benefits"
             states="{'invisible': Bool(Eval('is_package'))}">

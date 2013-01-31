@@ -6,8 +6,9 @@ from trytond.pool import Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model, coop_string
+from trytond.modules.coop_utils import model
 from trytond.modules.coop_utils import utils
+from trytond.modules.coop_utils import coop_string
 from trytond.modules.process import ProcessFramework
 
 CONTRACTSTATUSES = [
@@ -40,43 +41,16 @@ class GenericExtension(model.CoopView):
 
     covered_elements = fields.One2Many('ins_contract.covered_element',
         'extension', 'Coverages')
-    complementary_data = fields.Dict('Complementary Data',
-        schema_model='ins_product.schema_element')
     contract = fields.Many2One('ins_contract.contract', 'The contract',
         ondelete='CASCADE')
 
     def get_extension_name(self):
         return ''
 
-    def get_dynamic_data_value(self, at_date, value):
-        if (not(hasattr(self, 'complementary_data')
-            and self.complementary_data)):
-            return None
-        try:
-            return self.complementary_data[value]
-        except KeyError:
-            return None
-
     def init_for_contract(self, contract):
         self.complementary_data = {}
         self.contract = contract
         self.init_extension(contract)
-
-    def update_dynamic_data(self, contract, extension_field):
-        for_options = ';'.join([
-            o.offered.code for o in contract.options if o.status == 'active'])
-
-        utils.set_default_dict(
-            self.complementary_data,
-            utils.init_dynamic_data(
-                contract.offered.get_result(
-                    'complementary_data_getter',
-                    {
-                        'date': contract.start_date,
-                        'dd_args': {
-                            'options': for_options,
-                            'kind': 'main',
-                            'path': extension_field}})[0]))
 
 
 class Subscribed(ProcessFramework):
@@ -171,7 +145,7 @@ class Contract(model.CoopSQL, Subscribed):
     billing_manager = fields.One2Many('ins_contract.billing_manager',
         'contract', 'Billing Manager')
     complementary_data = fields.Dict('Complementary Data',
-        schema_model='ins_product.schema_element')
+        schema_model='ins_product.complementary_data_def')
     #TODO replace single contact by date versionned list
     contact = fields.Many2One('party.party', 'Contact')
 
@@ -202,7 +176,7 @@ class Contract(model.CoopSQL, Subscribed):
         return [elem.get_coverage()
             for elem in self.get_active_options_at_date(at_date)]
 
-    def get_dynamic_data_value(self, at_date, value):
+    def get_complementary_data_value(self, at_date, value):
         if (not(hasattr(self, 'complementary_data')
             and self.complementary_data)):
             return None
@@ -210,14 +184,6 @@ class Contract(model.CoopSQL, Subscribed):
             return self.complementary_data[value]
         except KeyError:
             return None
-
-    def get_ext_dynamic_data_value(self, at_date, value):
-        res = None
-        for ext in self.get_active_extensions():
-            res = ext.get_dynamic_data_value(at_date, value)
-            if res:
-                return res
-        return res
 
     def get_dates(self, dates=None, start=None, end=None):
         if dates:
@@ -370,9 +336,6 @@ class Contract(model.CoopSQL, Subscribed):
                 else:
                     good_data = CoveredData()
                     good_data.init_from_option(option)
-                    with Transaction().set_context({
-                            'current_contract': self.id}):
-                        good_data.init_dynamic_data(option.offered, self)
                     good_data.status_selection = True
                     good_datas.append(good_data)
             CoveredData.delete(to_delete)
@@ -404,6 +367,49 @@ class Contract(model.CoopSQL, Subscribed):
             return True, ()
 
         self.status = 'active'
+
+        return True, ()
+
+    def init_complementary_data(self):
+        if (not (hasattr(self, 'complementary_data')
+            and self.complementary_data)):
+            self.complementary_data = {}
+        compl_data_defs = self.offered.get_complementary_data_def(
+            ['contract'], at_date=self.start_date)
+        for option in self.options:
+            compl_data_defs.extend(
+                option.offered.get_complementary_data_def(['contract'],
+                    at_date=option.start_date))
+        self.complementary_data = utils.init_complementary_data(
+            set(compl_data_defs))
+        return True, ()
+
+    def init_options(self):
+        existing = {}
+        if (hasattr(self, 'options') and self.options):
+            for opt in self.options:
+                existing[opt.offered.code] = opt
+
+        good_options = []
+        to_delete = [elem for elem in existing.itervalues()]
+
+        OptionModel = Pool().get(self.give_option_model())
+        for coverage in self.offered.options:
+            if coverage.code in existing:
+                good_opt = existing[coverage.code]
+                to_delete.remove(good_opt)
+            else:
+                good_opt = OptionModel()
+                good_opt.init_from_offered(coverage, self.start_date)
+                good_opt.contract = self
+
+            good_opt.save()
+            good_options.append(good_opt)
+
+        if to_delete:
+            OptionModel.delete(to_delete)
+
+        self.options = good_options
 
         return True, ()
 
@@ -751,7 +757,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     sub_covered_elements = fields.One2Many('ins_contract.covered_element',
         'parent', 'Sub Covered Elements')
     complementary_data = fields.Dict('Complementary Data',
-        schema_model='ins_product.schema_element',
+        schema_model='ins_product.complementary_data_def',
         on_change_with=['item_desc', 'complementary_data'])
 
     def get_name_for_billing(self):
@@ -801,8 +807,8 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         if self.complementary_data:
             return self.complementary_data
         elif self.item_desc:
-            return utils.init_dynamic_data(
-                [x.id for x in self.item_desc.complementary_data])
+            return utils.init_complementary_data(
+                self.item_desc.complementary_data_def)
 
 
 class CoveredData(model.CoopSQL, model.CoopView):
@@ -816,7 +822,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
     covered_element = fields.Many2One('ins_contract.covered_element',
         'Covered Element', ondelete='CASCADE')
     complementary_data = fields.Dict('Complementary Data',
-        schema_model='ins_product.schema_element')
+        schema_model='ins_product.complementary_data_def')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     status = fields.Selection(OPTIONSTATUS, 'Status')
@@ -829,7 +835,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
     def get_name_for_billing(self):
         return self.covered_element.get_name_for_billing()
 
-    def get_dynamic_data_value(self, at_date, value):
+    def get_complementary_data_value(self, at_date, value):
         if (not(hasattr(self, 'complementary_data')
             and self.complementary_data)):
             return None
@@ -839,30 +845,18 @@ class CoveredData(model.CoopSQL, model.CoopView):
             return None
 
     def init_from_option(self, option):
-        #self.option = option
+        #we can't set the option field, as it will be set by back ref when
+        #adding the covered data in option list
+        self.option = option
         self.coverage = option.offered
         self.start_date = option.start_date
         self.end_date = option.end_date
-        schema_elements = option.offered.get_schema_elements(['sub_elem'])
-        print "#" * 40
-        print schema_elements
-        print "#" * 40
-        self.complementary_data = utils.init_dynamic_data(
-            [x.id for x in schema_elements])
+        self.complementary_data = utils.init_complementary_data(
+            option.offered.get_complementary_data_def(
+                ['sub_elem'], at_date=self.start_date))
 
     def init_from_covered_element(self, covered_element):
         self.covered_element = covered_element
-
-    def init_dynamic_data(self, coverage, contract):
-        self.complementary_data = utils.init_dynamic_data(
-            contract.offered.get_result(
-                'complementary_data_getter',
-                {
-                    'date': self.start_date,
-                    'dd_args': {
-                        'options': coverage.code,
-                        'kind': 'sub_elem',
-                        'path': 'all'}})[0])
 
     def get_dates(self, dates=None, start=None, end=None):
         if dates:

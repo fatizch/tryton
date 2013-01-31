@@ -22,7 +22,7 @@ msgctxt "field:life_contract.covered_desc,data_covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
-msgctxt "field:life_contract.covered_desc,data_dynamic_data:"
+msgctxt "field:life_contract.covered_desc,data_complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 

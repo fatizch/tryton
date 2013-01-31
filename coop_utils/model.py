@@ -15,7 +15,7 @@ from trytond.rpc import RPC
 from trytond.protocols.jsonrpc import JSONEncoder, object_hook
 
 import utils
-from trytond.modules.coop_utils import coop_string
+import coop_string
 
 
 class NotExportImport(Exception):
@@ -249,7 +249,8 @@ class CoopSQL(ExportImportMixin, ModelSQL):
                     (
                         instance.rec_name,
                         using_instance.rec_name,
-                        translate_model_name(using_instance.__class__),
+                        coop_string.translate_model_name(
+                            using_instance.__class__),
                         using_instance.id,
                         ))
                 continue

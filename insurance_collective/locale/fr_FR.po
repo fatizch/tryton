@@ -30,7 +30,7 @@ msgctxt "error:ins_collective.contract:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.coverage-schema_elements:"
+msgctxt "error:ins_collective.coverage-complementary_data_def:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -98,7 +98,7 @@ msgctxt "error:ins_collective.product-item_desc:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.product-schema_elements:"
+msgctxt "error:ins_collective.product-complementary_data_def:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -133,10 +133,6 @@ msgstr "Clauses"
 msgctxt "field:ins_collective.benefit,code:"
 msgid "Code"
 msgstr "Code"
-
-msgctxt "field:ins_collective.benefit,complementary_data_manager:"
-msgid "Complementary Data Manager"
-msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.benefit,coverage:"
 msgid "Coverage"
@@ -186,7 +182,7 @@ msgctxt "field:ins_collective.benefit,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_collective.benefit,offered_dynamic_data:"
+msgctxt "field:ins_collective.benefit,complementary_data:"
 msgid "Offered Kind"
 msgstr "Typage"
 
@@ -638,10 +634,6 @@ msgctxt "field:ins_collective.coverage,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:ins_collective.coverage,complementary_data_manager:"
-msgid "Complementary Data Manager"
-msgstr "Données Complémentaires"
-
 msgctxt "field:ins_collective.coverage,coverage_amount_rules:"
 msgid "Coverage Amount Rules"
 msgstr "Règles de Montant de Couverture"
@@ -649,10 +641,6 @@ msgstr "Règles de Montant de Couverture"
 msgctxt "field:ins_collective.coverage,coverages_in_package:"
 msgid "Coverages In Package"
 msgstr "Garanties de la Formule"
-
-msgctxt "field:ins_collective.coverage,covered_dynamic_data_manager:"
-msgid "Covered Complementary Data Manager"
-msgstr "Données Complémentaires Eléments Couverts"
 
 msgctxt "field:ins_collective.coverage,create_date:"
 msgid "Create Date"
@@ -714,7 +702,7 @@ msgctxt "field:ins_collective.coverage,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_collective.coverage,offered_dynamic_data:"
+msgctxt "field:ins_collective.coverage,complementary_data:"
 msgid "Offered Kind"
 msgstr "Typage"
 
@@ -726,7 +714,7 @@ msgctxt "field:ins_collective.coverage,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_collective.coverage,schema_elements:"
+msgctxt "field:ins_collective.coverage,complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -758,39 +746,39 @@ msgctxt "field:ins_collective.coverage,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_collective.coverage-schema_elements,coverage:"
+msgctxt "field:ins_collective.coverage-complementary_data_def,coverage:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "field:ins_collective.coverage-schema_elements,create_date:"
+msgctxt "field:ins_collective.coverage-complementary_data_def,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_collective.coverage-schema_elements,create_uid:"
+msgctxt "field:ins_collective.coverage-complementary_data_def,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_collective.coverage-schema_elements,id:"
+msgctxt "field:ins_collective.coverage-complementary_data_def,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_collective.coverage-schema_elements,is_used:"
+msgctxt "field:ins_collective.coverage-complementary_data_def,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-msgctxt "field:ins_collective.coverage-schema_elements,rec_name:"
+msgctxt "field:ins_collective.coverage-complementary_data_def,rec_name:"
 msgid "Name"
 msgstr "Valeur"
 
-msgctxt "field:ins_collective.coverage-schema_elements,schema_element:"
+msgctxt "field:ins_collective.coverage-complementary_data_def,complementary_data_def:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:ins_collective.coverage-schema_elements,write_date:"
+msgctxt "field:ins_collective.coverage-complementary_data_def,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_collective.coverage-schema_elements,write_uid:"
+msgctxt "field:ins_collective.coverage-complementary_data_def,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -1797,10 +1785,6 @@ msgctxt "field:ins_collective.product,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:ins_collective.product,complementary_data_manager:"
-msgid "Complementary Data Manager"
-msgstr "Données Complémentaires"
-
 msgctxt "field:ins_collective.product,contract_generator:"
 msgid "Contract Number Generator"
 msgstr "Générateur de N° de Contrat"
@@ -1853,7 +1837,7 @@ msgctxt "field:ins_collective.product,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_collective.product,offered_dynamic_data:"
+msgctxt "field:ins_collective.product,complementary_data:"
 msgid "Offered Kind"
 msgstr "Typage"
 
@@ -1869,7 +1853,7 @@ msgctxt "field:ins_collective.product,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_collective.product,schema_elements:"
+msgctxt "field:ins_collective.product,complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -1973,39 +1957,39 @@ msgctxt "field:ins_collective.product-item_desc,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_collective.product-schema_elements,create_date:"
+msgctxt "field:ins_collective.product-complementary_data_def,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_collective.product-schema_elements,create_uid:"
+msgctxt "field:ins_collective.product-complementary_data_def,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_collective.product-schema_elements,id:"
+msgctxt "field:ins_collective.product-complementary_data_def,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_collective.product-schema_elements,is_used:"
+msgctxt "field:ins_collective.product-complementary_data_def,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-msgctxt "field:ins_collective.product-schema_elements,product:"
+msgctxt "field:ins_collective.product-complementary_data_def,product:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "field:ins_collective.product-schema_elements,rec_name:"
+msgctxt "field:ins_collective.product-complementary_data_def,rec_name:"
 msgid "Name"
 msgstr "Valeur"
 
-msgctxt "field:ins_collective.product-schema_elements,schema_element:"
+msgctxt "field:ins_collective.product-complementary_data_def,complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:ins_collective.product-schema_elements,write_date:"
+msgctxt "field:ins_collective.product-complementary_data_def,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_collective.product-schema_elements,write_uid:"
+msgctxt "field:ins_collective.product-complementary_data_def,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -2301,9 +2285,9 @@ msgctxt "model:ins_collective.coverage,name:"
 msgid "Group Insurance Coverage"
 msgstr "Garantie Collective"
 
-msgctxt "model:ins_collective.coverage-schema_elements,name:"
-msgid "Relation between Coverage and Schema Element"
-msgstr "Relation Garantie - Schema Element"
+msgctxt "model:ins_collective.coverage-complementary_data_def,name:"
+msgid "Relation between Coverage and Complementary Data"
+msgstr "Relation Garantie - Complementary Data"
 
 msgctxt "model:ins_collective.coverage_amount_rule,name:"
 msgid "Coverage Amount Rule"
@@ -2395,9 +2379,9 @@ msgctxt "model:ins_collective.product-item_desc,name:"
 msgid "Relation between Product and Item Descriptor"
 msgstr "Relation Produit-Risque"
 
-msgctxt "model:ins_collective.product-schema_elements,name:"
-msgid "Relation between Product and Schema Element"
-msgstr "Produit-Schema Element Relation"
+msgctxt "model:ins_collective.product-complementary_data_def,name:"
+msgid "Relation between Product and Complementary Data"
+msgstr "Produit-Complementary Data Relation"
 
 msgctxt "model:ins_collective.reserve_rule,name:"
 msgid "Reserve Rule"

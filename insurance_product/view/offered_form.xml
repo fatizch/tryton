@@ -21,10 +21,7 @@
             <field name="summary" widget="richtext" colspan="4"/>
         </page>
         <page string="Managers" id="managers">
-            <notebook>
-                <page string="Complementary Data" id="complementary_data">
-                    <field name="complementary_data_manager" colspan="4"/>
-                </page>
+            <notebook>  
                 <page string="Eligibility" id="eligibility">
                     <field name="eligibility_rules" colspan="4"/>
                 </page>
@@ -43,7 +40,7 @@
             <group id="left" colspan="2" yfill="1" yexpand="1">
             </group>
             <group id="right" colspan="2" yfill="1" yexpand="1">
-                <field name="offered_dynamic_data"/>
+                <field name="complementary_data"/>
             </group>
         </page>
     </notebook>

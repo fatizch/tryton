@@ -247,7 +247,7 @@ class Rule(ModelView, ModelSQL):
         except InternalRuleEngineError:
             result = None
         except:
-            #raise
+            raise
             context['errors'].append('Critical Internal Rule Engine Error')
             result = None
         messages = context['messages']

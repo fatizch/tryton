@@ -227,7 +227,7 @@ class OptionSelectionState(CoopStep):
                                'Options Choices')
     complementary_data = fields.Dict(
         'Complementary Data',
-        schema_model='ins_product.schema_element',
+        schema_model='ins_product.complementary_data_def',
         context={
             'for_product': Eval('for_product'),
             'at_date': Eval('at_date'),
@@ -278,9 +278,9 @@ class OptionSelectionState(CoopStep):
         return (True, [])
 
     @staticmethod
-    def before_step_init_dynamic_data(wizard):
+    def before_step_init_complementary_data(wizard):
         product = wizard.project.product
-        wizard.option_selection.complementary_data = utils.init_dynamic_data(
+        wizard.option_selection.complementary_data = utils.init_complementary_data_from_ids(
             product.get_result(
                 'complementary_data_getter',
                 {
@@ -418,9 +418,9 @@ class CoveredDesc(CoopStepView):
         on_change_with=['data_for_coverage'],
         readonly=True)
 
-    data_dynamic_data = fields.Dict(
+    data_complementary_data = fields.Dict(
         'Complementary Data',
-        schema_model='ins_product.schema_element',
+        schema_model='ins_product.complementary_data_def',
         context={
             'at_date': Eval('data_start_date'),
             'dd_args': {
@@ -455,7 +455,7 @@ class CoveredDesc(CoopStepView):
             covered_data = cls()
             covered_data.the_kind = 'data'
             covered_data.init_from_option(option)
-            covered_data.data_dynamic_data = utils.init_dynamic_data(
+            covered_data.data_complementary_data = utils.init_complementary_data_from_ids(
                 from_wizard.project.product.get_result(
                     'complementary_data_getter',
                     {

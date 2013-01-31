@@ -14,7 +14,7 @@ from trytond.modules.insurance_product import EligibilityResultLine
 __all__ = [
     'Coverage',
     'PackageCoverage',
-    'CoverageSchemaElementRelation',
+    'CoverageComplementaryDataRelation',
     ]
 
 SUBSCRIPTION_BEHAVIOUR = [
@@ -59,16 +59,6 @@ class Coverage(model.CoopSQL, Offered):
         states={
             'invisible': Bool(Eval('is_package')),
         },)
-    covered_dynamic_data_manager = model.One2ManyDomain(
-        'ins_product.complementary_data_manager',
-        'master',
-        'Covered Complementary Data Manager',
-        context={
-            'for_kind': 'sub_elem',
-            'schema_element_kind': 'sub_elem',
-        },
-        domain=[('kind', '=', 'sub_elem')],
-        size=1)
     subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
         'Subscription Behaviour', sort=False)
     is_package = fields.Boolean('Package')
@@ -79,17 +69,9 @@ class Coverage(model.CoopSQL, Offered):
         },
         depends=['is_package'],
         domain=[('is_package', '=', False)])
-    schema_elements = fields.Many2Many('ins_product.coverage-schema_elements',
-        'coverage', 'schema_element', 'Complementary Data')
-
-    @classmethod
-    def delete(cls, entities):
-        cls.delete_rules(entities)
-        utils.delete_reference_backref(
-            entities,
-            'ins_product.complementary_data_manager',
-            'master')
-        super(Coverage, cls).delete(entities)
+    complementary_data_def = fields.Many2Many(
+        'ins_product.coverage-complementary_data_def',
+        'coverage', 'complementary_data_def', 'Complementary Data')
 
     @classmethod
     def __setup__(cls):
@@ -217,7 +199,7 @@ class Coverage(model.CoopSQL, Offered):
         return (None, [])
 
     def get_dates(self, dates=None, start=None, end=None):
-        # This is a temporary functionnality that is provided to ease the
+        # This is a temporary functionality that is provided to ease the
         # checking of the pricing calculations.
         # In 'real life', it is not systematic to update the pricing when a new
         # version of the rule is defined
@@ -317,19 +299,7 @@ class Coverage(model.CoopSQL, Offered):
         if not('options' in dd_args and dd_args['options'] != '' and
                 self.code in dd_args['options'].split(';')):
             return [], []
-        if dd_args['kind'] == 'main':
-            return self.give_me_complementary_data_ids(args)
-        elif dd_args['kind'] == 'sub_elem':
-            return self.give_me_covered_dynamic_data_ids(args)
-        return [], []
-
-    def give_me_covered_dynamic_data_ids(self, args):
-        if not(hasattr(self,
-                'covered_dynamic_data_manager') and
-                self.covered_dynamic_data_manager):
-            return []
-        return self.covered_dynamic_data_manager[0].get_valid_schemas_ids(
-            args['date']), []
+        return self.get_complementary_data_def([dd_args['kind']], args['date']), []
 
     @staticmethod
     def default_subscription_behaviour():
@@ -345,12 +315,13 @@ class PackageCoverage(model.CoopSQL):
     coverage = fields.Many2One('ins_product.coverage', 'Coverage')
 
 
-class CoverageSchemaElementRelation(model.CoopSQL):
-    'Relation between Coverage and Schema Element'
+class CoverageComplementaryDataRelation(model.CoopSQL):
+    'Relation between Coverage and Complementary Data'
 
-    __name__ = 'ins_product.coverage-schema_elements'
+    __name__ = 'ins_product.coverage-complementary_data_def'
 
     coverage = fields.Many2One('ins_product.coverage', 'Coverage',
         ondelete='CASCADE')
-    schema_element = fields.Many2One('ins_product.schema_element',
+    complementary_data_def = fields.Many2One(
+        'ins_product.complementary_data_def',
         'Complementary Data', ondelete='RESTRICT')

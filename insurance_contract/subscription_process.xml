@@ -115,7 +115,7 @@
                             </group>
                             <newline/>
                             <group id="complementary_data">
-                                <field name="data_dynamic_data"/>
+                                <field name="data_complementary_data"/>
                                 <field name="data_for_option_char"/>
                             </group>
                         </group>

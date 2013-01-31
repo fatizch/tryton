@@ -190,7 +190,7 @@ class ExtensionLifeState(DependantState):
         depends=['covered_elements'])
     complementary_data = fields.Dict(
         'Complementary Data',
-        schema_model='ins_product.schema_element',
+        schema_model='ins_product.complementary_data_def',
         context={
             'for_product': Eval('for_product'),
             'at_date': Eval('at_date'),
@@ -244,12 +244,12 @@ class ExtensionLifeState(DependantState):
         return (True, [])
 
     @staticmethod
-    def before_step_init_dynamic_data(wizard):
+    def before_step_init_complementary_data(wizard):
         product = wizard.project.product
         options = ';'.join([opt.offered.code
             for opt in wizard.option_selection.options
             if opt.status == 'active'])
-        wizard.extension_life.complementary_data = utils.init_dynamic_data(
+        wizard.extension_life.complementary_data = utils.init_complementary_data_from_ids(
             product.get_result(
                 'complementary_data_getter',
                 {
@@ -313,9 +313,9 @@ class ExtensionLifeState(DependantState):
                         return False, ['Invalid amount']
                 else:
                     cur_data.coverage_amount = Decimal(0)
-                if hasattr(covered_data, 'data_dynamic_data') and \
-                        covered_data.data_dynamic_data:
-                    cur_data.complementary_data = covered_data.data_dynamic_data
+                if hasattr(covered_data, 'data_complementary_data') and \
+                        covered_data.data_complementary_data:
+                    cur_data.complementary_data = covered_data.data_complementary_data
                 cur_element.covered_data.append(cur_data)
             cur_element.person = covered_element.elem_person
             contract.covered_elements.append(cur_element)

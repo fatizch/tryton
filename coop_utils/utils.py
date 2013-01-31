@@ -64,8 +64,8 @@ def change_relation_links(cls, from_module=None, to_module=None,
             attr_name = 'model_name'
         if hasattr(field, 'relation_name'):
             attr_name = 'relation_name'
-        if hasattr(field, 'schema_element'):
-            attr_name = 'schema_element'
+        if hasattr(field, 'schema_model'):
+            attr_name = 'schema_model'
         if attr_name == '':
             continue
         model_name = getattr(field, attr_name)
@@ -700,8 +700,15 @@ def extend_inexisting(into_list, elements):
     return into_list
 
 
-def init_dynamic_data(ids):
-    the_model = Pool().get('ins_product.schema_element')
+def init_complementary_data(compl_data_defs):
+    res = {}
+    for compl_data_def in compl_data_defs:
+        res[compl_data_def.name] = compl_data_def.get_default_value(None)
+    return res
+
+
+def init_complementary_data_from_ids(ids):
+    the_model = Pool().get('ins_product.complementary_data_def')
     res = {}
     for id in ids:
         elem = the_model(id)

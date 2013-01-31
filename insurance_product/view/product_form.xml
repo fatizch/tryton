@@ -3,6 +3,13 @@
     <xpath expr="/form" position="replace_attributes">
         <form string="Product"/>
     </xpath>
+    <xpath
+        expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']"
+        position="before">
+        <page string="Complementary Data" id="complementary_data">
+            <field name="complementary_data_def" colspan="4"/>
+        </page>
+    </xpath>
     <xpath expr="/form/notebook/page[@id='managers']" position="before">
         <page string="Items/Options" id="option">
             <field name="item_descriptors"/>

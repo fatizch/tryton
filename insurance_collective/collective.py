@@ -17,7 +17,6 @@ from trytond.modules.insurance_product.business_rule import \
 from trytond.modules.insurance_product.business_rule import clause_rule
 from trytond.modules.insurance_product.business_rule import deductible_rule
 from trytond.modules.insurance_product.business_rule import term_renewal_rule
-from trytond.modules.insurance_product import complementary_data
 from trytond.modules.coop_utils import utils
 from trytond.modules.insurance_product.business_rule import pricing_rule
 
@@ -47,10 +46,10 @@ IND_TO_COLL = {
     'ins_product.product-item_desc': 'ins_collective.product-item_desc',
     'ins_contract.covered_element': 'ins_collective.covered_element',
     'ins_contract.covered_data': 'ins_collective.covered_data',
-    'ins_product.product-schema_elements':\
-        'ins_collective.product-schema_elements',
-    'ins_product.coverage-schema_elements':\
-        'ins_collective.coverage-schema_elements',
+    'ins_product.product-complementary_data_def':\
+        'ins_collective.product-complementary_data_def',
+    'ins_product.coverage-complementary_data_def':\
+        'ins_collective.coverage-complementary_data_def',
 }
 
 
@@ -258,15 +257,15 @@ class GroupPricingRule(GroupRoot, pricing_rule.PricingRule):
         return 'advanced'
 
 
-class GroupProductSchemaElementRelation(GroupRoot,
-        product.ProductSchemaElementRelation):
-    'Relation between Product and Schema Element'
+class GroupProductComplementaryDataRelation(GroupRoot,
+        product.ProductComplementaryDataRelation):
+    'Relation between Product and Complementary Data'
 
-    __name__ = 'ins_collective.product-schema_elements'
+    __name__ = 'ins_collective.product-complementary_data_def'
 
 
-class GroupCoverageSchemaElementRelation(GroupRoot,
-        coverage.CoverageSchemaElementRelation):
-    'Relation between Coverage and Schema Element'
+class GroupCoverageComplementaryDataRelation(GroupRoot,
+        coverage.CoverageComplementaryDataRelation):
+    'Relation between Coverage and Complementary Data'
 
-    __name__ = 'ins_collective.coverage-schema_elements'
+    __name__ = 'ins_collective.coverage-complementary_data_def'

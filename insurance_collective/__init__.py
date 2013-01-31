@@ -40,8 +40,8 @@ def register():
         CoverageDisplayerForEnrollment,
         OptionSelectionStateForEnrollment,
         EnrollmentOption,
-        GroupProductSchemaElementRelation,
-        GroupCoverageSchemaElementRelation,
+        GroupProductComplementaryDataRelation,
+        GroupCoverageComplementaryDataRelation,
         module='insurance_collective', type_='model')
     Pool.register(
         GBPSubscriptionProcess,
