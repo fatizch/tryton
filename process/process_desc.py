@@ -819,10 +819,10 @@ class GenerateGraph(Report):
             fontname='Century Gothic',
         )
 
-        if not step.to_steps:
-            nodes[step.id].set('style', 'filled')
-            nodes[step.id].set('shape', 'circle')
-            nodes[step.id].set('fillcolor', '#a2daf4')
+        # if not step.to_steps:
+            # nodes[step.id].set('style', 'filled')
+            # nodes[step.id].set('shape', 'circle')
+            # nodes[step.id].set('fillcolor', '#a2daf4')
 
     @classmethod
     def build_transition(cls, process, step, transition, graph, nodes, edges):
@@ -863,6 +863,26 @@ class GenerateGraph(Report):
             edges[(tr_fr, tr_to)] = good_edge
 
     @classmethod
+    def build_complete_transition(
+            cls, process, step, transition, graph, nodes, edges):
+        nodes['tr%s' % transition.id] = pydot.Node(
+            'Complete',
+            style='filled',
+            shape='circle',
+            fontname='Century Gothic',
+            fillcolor='#ff0000',
+        )
+
+        edges[(transition.from_step.id, 'tr%s' % transition.id)] = pydot.Edge(
+            nodes[transition.from_step.id],
+            nodes['tr%s' % transition.id],
+            fontname='Century Gothic',
+            len=1.0,
+            constraint=1,
+            weight=1.0
+        )
+
+    @classmethod
     def execute(cls, ids, data):
         ActionReport = Pool().get('ir.action.report')
 
@@ -884,14 +904,20 @@ class GenerateGraph(Report):
             cls.build_step(the_process, step, graph, nodes)
 
         edges = {}
-        for step in the_process.get_all_steps():
-            for transition in step.to_steps:
+
+        for transition in the_process.transitions:
+            if transition.kind == 'next':
                 cls.build_transition(
                     the_process, step, transition, graph, nodes, edges)
 
-        for step in the_process.get_all_steps():
-            for transition in step.from_steps:
+        for transition in the_process.transitions:
+            if transition.kind == 'previous':
                 cls.build_inverse_transition(
+                    the_process, step, transition, graph, nodes, edges)
+
+        for transition in the_process.transitions:
+            if transition.kind == 'complete':
+                cls.build_complete_transition(
                     the_process, step, transition, graph, nodes, edges)
 
         nodes[the_process.first_step().id].set('style', 'filled')
