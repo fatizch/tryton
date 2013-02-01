@@ -84,17 +84,15 @@ class Offered(model.CoopView, utils.GetResult, Templated):
         'offered', 'Deductible Rules')
     summary = fields.Function(
             fields.Text('Summary',
-                states={
-                    'invisible': ~Eval('summary',)
-                }),
+                states={'invisible': ~Eval('summary',)}
+            ),
         'get_summary')
     currency_digits = fields.Function(
             fields.Integer('Currency Digits'),
         'get_currency_digits')
     complementary_data = fields.Dict('Offered Kind',
         schema_model='ins_product.complementary_data_def',
-        context={
-            'complementary_data_kind': 'product'},
+        context={'complementary_data_kind': 'product'},
         domain=[('kind', '=', 'product')])
 
     @classmethod

@@ -34,25 +34,6 @@ __all__ = [
     ]
 
 
-class GenericExtension(model.CoopView):
-    'Generic Extension'
-
-    __name__ = 'ins_contract.generic_extension'
-
-    covered_elements = fields.One2Many('ins_contract.covered_element',
-        'extension', 'Coverages')
-    contract = fields.Many2One('ins_contract.contract', 'The contract',
-        ondelete='CASCADE')
-
-    def get_extension_name(self):
-        return ''
-
-    def init_for_contract(self, contract):
-        self.complementary_data = {}
-        self.contract = contract
-        self.init_extension(contract)
-
-
 class Subscribed(ProcessFramework):
     'Subscribed'
 
@@ -275,17 +256,6 @@ class Contract(model.CoopSQL, Subscribed):
                 ('subscriber.name',) + clause[1:],
             ])
         return [('id', 'in', [c.id for c in contracts])]
-
-    def get_extensions(self):
-        for ext in [x for x in dir(self)
-                if x.startswith('extension_')]:
-            if not(hasattr(self, ext) and getattr(self, ext)):
-                continue
-
-            if not isinstance(self._fields[ext], fields.One2Many):
-                continue
-
-            yield getattr(self, ext)[0]
 
     @classmethod
     def get_summary(cls, insurers, name=None, at_date=None, lang=None):

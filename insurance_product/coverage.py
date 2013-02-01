@@ -233,9 +233,6 @@ class Coverage(model.CoopSQL, Offered):
     def give_me_family(self, args):
         return (Pool().get(self.family), [])
 
-    def give_me_extension_field(self, args):
-        return self.give_me_family(args)[0].get_extension_model()
-
     def give_me_covered_elements_at_date(self, args):
         contract = args['contract']
         date = args['date']
@@ -293,13 +290,11 @@ class Coverage(model.CoopSQL, Offered):
         if not 'dd_args' in args:
             return [], []
         dd_args = args['dd_args']
-        if not self.give_me_family(args)[0].get_extension_model() \
-                == dd_args['path'] and not dd_args['path'] == 'all':
-            return [], []
         if not('options' in dd_args and dd_args['options'] != '' and
                 self.code in dd_args['options'].split(';')):
             return [], []
-        return self.get_complementary_data_def([dd_args['kind']], args['date']), []
+        return self.get_complementary_data_def(
+            [dd_args['kind']], args['date']), []
 
     @staticmethod
     def default_subscription_behaviour():
