@@ -10,6 +10,8 @@ from trytond.transaction import Transaction
 
 from trytond.exceptions import UserError
 
+from trytond.modules.coop_utils import utils
+
 try:
     import simplejson as json
 except ImportError:
@@ -61,12 +63,13 @@ class DynamicButtonDict(dict):
         states for the generic buttons of the class.
     '''
 
-    def __init__(self, allowed_prefix, previous_dict):
+    def __init__(self, allowed_prefix, previous_dict, for_class):
         # This class must be initialized with the prefix that will be used to
         # distinguish generic methods from everything else.
         super(DynamicButtonDict, self).__init__()
         self.allowed_prefix = allowed_prefix
         self.update(previous_dict)
+        self.for_class = for_class
 
     def __getitem__(self, name):
         # If the name does not match the specified prefix, business as usual !
@@ -77,61 +80,7 @@ class DynamicButtonDict(dict):
         # a specific instruction ('complete')
         transition_id = name[len(self.allowed_prefix):].split('_')
 
-        # If there is nothing, there is a problem
-        if not transition_id:
-            raise Exception
-
-        # The pattern for readonly (current_state) steps is
-        # "<step_id>_<step_id>"
-        # The pattern for instructions is "<step_id>_<instruction>"
-        if len(transition_id) > 1:
-            if transition_id[0] == transition_id[1]:
-                return {'readonly': True}
-            else:
-                if transition_id[1] == 'complete':
-                    return {}
-                return {'readonly': True}
-
-        # Now we need to find the transition which matches the id given
-        # through the name of the method.
-        TransitionDesc = Pool().get('process.step_transition')
-        good_transition = TransitionDesc(transition_id[0])
-
-        # We need to manage the authroizations on the transition
-        auth_ids = map(lambda x: x.id, good_transition.authorizations)
-
-        # So we build the corresponding pyson
-        if auth_ids:
-            auth_pyson = Eval('groups', []).contains(auth_ids)
-        else:
-            auth_pyson = True
-
-        # We also got to take into account the custom pyson
-        if not good_transition.pyson:
-            pyson = False
-        else:
-            pyson = good_transition.pyson
-
-        # To get the good pyson, we combine everything.
-        res = None
-        if auth_ids:
-            res = auth_pyson
-            if good_transition.pyson:
-                res = res and pyson
-        elif good_transition.pyson:
-            res = pyson
-
-        states = {}
-
-        if good_transition.is_readonly:
-            states['readonly'] = True
-
-        if res:
-            encoder = PYSONEncoder()
-            res = encoder.encode(safe_eval(res, CONTEXT))
-            states['invisible'] = res
-
-        return states
+        return self.for_class.calculate_button_states(transition_id)
 
     def __contains__(self, name):
         # Names starting sith the allowed prefix are in, no matter what !
@@ -206,7 +155,8 @@ class ProcessFramework(ModelView):
 
         # We also need to plug in a way to properly set the states for
         # thsoe buttons
-        cls._buttons = DynamicButtonDict(cls.__allowed_buttons__, cls._buttons)
+        cls._buttons = DynamicButtonDict(
+            cls.__allowed_buttons__, cls._buttons, cls)
 
         # The Error you want to see !
         cls._error_messages.update(
@@ -231,6 +181,33 @@ class ProcessFramework(ModelView):
         good_model.save()
 
     @classmethod
+    def build_generic_transition_method(cls, transition):
+        def button_generic(works):
+            # Pretty straightforward : we find the matching transition
+            StepTransition = Pool().get('process.step_transition')
+            good_trans = StepTransition(transition)
+
+            for work in works:
+                # Then execute it on each instance
+                good_trans.execute(work)
+
+                # Do not forget to save !
+                work.save()
+
+        return button_generic
+
+    @classmethod
+    def build_instruction_method(cls, instruction):
+        if instruction == 'complete':
+            # Complete means that the process shoud be exited
+            def complete(works):
+                for work in works:
+                    work.current_state = None
+                    work.save()
+
+            return complete
+
+    @classmethod
     def default_button_method(cls, button_name):
         # If the button is a transition, the name should be its id
         # If it is an instruction, we look for it
@@ -239,32 +216,11 @@ class ProcessFramework(ModelView):
             # Only one means it is a standard transition
             transition = int(transition_data[0])
 
-            # This is the method that will be called when clicking on the
-            # button
-            def button_generic(works):
-                # Pretty straightforward : we find the matching transition
-                StepTransition = Pool().get('process.step_transition')
-                good_trans = StepTransition(transition)
-
-                for work in works:
-                    # Then execute it on each instance
-                    good_trans.execute(work)
-
-                    # Do not forget to save !
-                    work.save()
-
-            return button_generic
+            return cls.build_generic_transition_method(transition)
         else:
             # The second part should be the instruction:
             instruction = transition_data[1]
-            if instruction == 'complete':
-                # Complete means that the process shoud be exited
-                def complete(works):
-                    for work in works:
-                        work.current_state = None
-                        work.save()
-
-                return complete
+            return cls.build_instruction_method(instruction)
 
     def set_state(self, value, process_name=None):
         # Setting the state means updating the current_state attribute
@@ -363,3 +319,75 @@ class ProcessFramework(ModelView):
         # We display the resulting list of strings
         # super(ProcessFramework, cls).raise_user_error('\n'.join(result))
         raise UserError('\n'.join(result))
+
+    def is_button_available(self, transition):
+        good_button = self._buttons['_button_%s' % transition.id]
+        if good_button is None:
+            return False
+        if good_button == {}:
+            return True
+        return not(
+            utils.pyson_result(good_button['readonly'], self, evaled=True) or
+            utils.pyson_result(good_button['invisible'], self, evaled=True))
+
+    @classmethod
+    def special_button_states(cls, transition_id):
+        if transition_id[0] == transition_id[1]:
+            return {'readonly': True}
+        else:
+            if transition_id[1] == 'complete':
+                return {}
+            return {'readonly': True}
+
+    @classmethod
+    def calculate_button_states(cls, transition_id):
+        # If there is nothing, there is a problem
+        if not transition_id:
+            raise Exception
+
+        # The pattern for readonly (current_state) steps is
+        # "<step_id>_<step_id>"
+        # The pattern for instructions is "<step_id>_<instruction>"
+        if len(transition_id) > 1:
+            return cls.special_button_states(transition_id)
+
+        # Now we need to find the transition which matches the id given
+        # through the name of the method.
+        TransitionDesc = Pool().get('process.step_transition')
+        good_transition = TransitionDesc(transition_id[0])
+
+        # We need to manage the authroizations on the transition
+        auth_ids = map(lambda x: x.id, good_transition.authorizations)
+
+        # So we build the corresponding pyson
+        if auth_ids:
+            auth_pyson = Eval('groups', []).contains(auth_ids)
+        else:
+            auth_pyson = True
+
+        # We also got to take into account the custom pyson
+        if not good_transition.pyson:
+            pyson = False
+        else:
+            pyson = good_transition.pyson
+
+        # To get the good pyson, we combine everything.
+        res = None
+        if auth_ids:
+            res = auth_pyson
+            if good_transition.pyson:
+                res = res and pyson
+        elif good_transition.pyson:
+            res = pyson
+
+        states = {}
+
+        if good_transition.is_readonly:
+            states['readonly'] = True
+
+        if res:
+            encoder = PYSONEncoder()
+            res = encoder.encode(safe_eval(res, CONTEXT))
+            states['invisible'] = res
+
+        return states

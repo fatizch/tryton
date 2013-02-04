@@ -1,25 +1,23 @@
 import copy
-import datetime
-import time
-
+import sys
 import pydot
 
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval, And, PYSONDecoder, PYSONEncoder, CONTEXT
-from trytond.tools import safe_eval
-
-from trytond.transaction import Transaction
-
-from trytond.model.modelstorage import EvalEnvironment
-
-
+from trytond.pyson import Eval, And
 
 from trytond.model import fields
+
+from trytond.modules.coop_utils import utils
+
+from trytond.modules.process import ProcessFramework
 
 
 __all__ = [
     'StepTransition',
     'GenerateGraph',
+    'CoopProcessFramework',
+    'ProcessDesc',
+    'StepDesc',
 ]
 
 
@@ -113,16 +111,7 @@ class StepTransition():
             super(StepTransition, self).execute(target)
             return
 
-        encoder = PYSONEncoder()
-        the_pyson = encoder.encode(safe_eval(self.pyson_choice, CONTEXT))
-
-        env = EvalEnvironment(target, target.__class__)
-        env.update(Transaction().context)
-        env['current_date'] = datetime.datetime.today()
-        env['time'] = time
-        env['context'] = Transaction().context
-        env['active_id'] = target.id
-        result = PYSONDecoder(env).decode(the_pyson)
+        result = utils.pyson_result(self.pyson_choice, target)
 
         if result:
             self.choice_if_true.execute(target)
@@ -155,7 +144,7 @@ class StepTransition():
         return True
 
     def check_choices(self):
-        if self.transition_kind !='choice':
+        if self.transition_kind != 'choice':
             return True
 
         if not self.choice_if_true or not self.choice_if_false:
@@ -185,7 +174,7 @@ class GenerateGraph():
             fillcolor='orange',
             fontname='Century Gothic',
         )
-        
+
         nodes['tr%s' % transition.id] = choice_node
 
         choice_edge = pydot.Edge(
@@ -205,7 +194,7 @@ class GenerateGraph():
         true_edge.set('len', '1.0')
         true_edge.set('constraint', '1')
         true_edge.set('weight', '0.5')
-        #true_edge.set('label', 'Yes')
+        true_edge.set('label', 'Yes')
         true_edge.set('color', 'green')
 
         edges[(
@@ -221,10 +210,166 @@ class GenerateGraph():
         false_edge.set('len', '1.0')
         false_edge.set('constraint', '1')
         false_edge.set('weight', '0.5')
-        #false_edge.set('label', 'No')
+        false_edge.set('label', 'No')
         false_edge.set('color', 'red')
 
         edges[(
             'tr%s' % transition.id,
             transition.choice_if_false.to_step.id)] = false_edge
 
+
+class CoopProcessFramework(ProcessFramework):
+    'Coop Process Framework'
+
+    def get_next_transition(self):
+        if not self.current_state:
+            return
+
+        from_step = self.current_state.step
+        for_process = self.current_state.process
+
+        return for_process.get_next_transition(from_step, self)
+
+    def get_previous_transition(self):
+        if not self.current_state:
+            return
+
+        from_step = self.current_state.step
+        for_process = self.current_state.process
+
+        return for_process.get_previous_transition(from_step, self)
+
+    @classmethod
+    def build_instruction_method(cls, instruction):
+        if instruction == 'next':
+            def next(works):
+                for work in works:
+                    good_trans = work.get_next_transition()
+                    if good_trans:
+                        good_trans.execute(work)
+                        work.save()
+
+            return next
+        elif instruction == 'previous':
+            def previous(works):
+                for work in works:
+                    good_trans = work.get_previous_transition()
+                    if good_trans:
+                        good_trans.execute(work)
+                        work.save()
+
+            return previous
+        else:
+            return super(CoopProcessFramework, cls).build_instruction_method(
+                instruction)
+
+    @classmethod
+    def special_button_states(cls, transition_id):
+        if transition_id[1] in ('next', 'previous'):
+            return {}
+
+        return super(CoopProcessFramework, cls).special_button_states(
+            transition_id)
+
+
+class ProcessDesc():
+    'Process Descriptor'
+
+    __metaclass__ = PoolMeta
+
+    __name__ = 'process.process_desc'
+
+    with_prev_next = fields.Boolean(
+        'With Previous / Next button',
+    )
+
+    @classmethod
+    def default_with_prev_next(cls):
+        return True
+
+    def get_next_transition(self, from_step, for_task):
+        step_order = dict(
+            [(rel.step.id, rel.order) for rel in self.all_steps])
+
+        def get_priority(step):
+            return step_order[step.id]
+
+        good_values = []
+        for transition in self.transitions:
+            if not transition.from_step == from_step:
+                continue
+            if transition.transition_kind == 'standard':
+                if transition.kind == 'next':
+                    good_values.append(
+                        (get_priority(transition.to_step), transition))
+                elif transition.kind == 'complete':
+                    good_values.append(
+                        (sys.maxint, transition))
+            elif transition.transition_kind == 'choice':
+                good_values.append((
+                    min(get_priority(transition.choice_if_true),
+                        get_priority(transition.choice_if_false)),
+                    transition))
+
+        if not good_values:
+            return
+
+        good_values.sort(key=lambda x: x[0])
+
+        for _, trans in good_values:
+            if not for_task.is_button_available(trans):
+                continue
+
+            return trans
+
+    def get_previous_transition(self, from_step, for_task):
+        step_order = dict(
+            [(rel.step.id, rel.order) for rel in self.all_steps])
+
+        def get_priority(step):
+            return step_order[step.id]
+
+        good_values = []
+        for transition in self.transitions:
+            if not transition.from_step == from_step:
+                continue
+
+            if transition.transition_kind == 'standard':
+                if transition.kind == 'previous':
+                    good_values.append(
+                        (get_priority(transition.to_step), transition))
+
+        if not good_values:
+            return
+
+        good_values.sort(key=lambda x: x[0])
+
+        for _, trans in reversed(good_values):
+            if not for_task.is_button_available(trans):
+                continue
+
+            return trans
+
+
+class StepDesc():
+    'Step Desc'
+
+    __metaclass__ = PoolMeta
+
+    __name__ = 'process.step_desc'
+
+    def calculate_form_view(self, process, buttons):
+        result = super(StepDesc, self).calculate_form_view(process, buttons)
+        if not process.with_prev_next:
+            return result
+
+        result += '<newline/>'
+        result += '<group name="group_%s_prevnext">' % self.id
+        if not process.first_step().step.id == self.id:
+            result += '<button string="Previous"'
+            result += ' name="_button_%s_previous"/>' % self.id
+        result += '<button string="Next" name="_button_%s_next"/>' % (
+            self.id)
+        result += '</group>'
+
+        return result

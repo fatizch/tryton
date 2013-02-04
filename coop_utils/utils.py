@@ -1,6 +1,7 @@
 import ConfigParser
 import os
 import datetime
+import time
 import copy
 from dateutil.relativedelta import relativedelta
 
@@ -10,6 +11,11 @@ from trytond.transaction import Transaction
 from trytond.model import fields
 # Needed for proper encoding / decoding of objects as strings
 from trytond.protocols.jsonrpc import JSONEncoder, object_hook
+
+# Needed for Pyson evaluation
+from trytond.pyson import PYSONDecoder, PYSONEncoder, CONTEXT
+from trytond.tools import safe_eval
+from trytond.model.modelstorage import EvalEnvironment
 
 # Needed for serializing data
 try:
@@ -590,7 +596,7 @@ def get_good_versions_at_date(instance, var_name, at_date=None):
     element_added = False
     for element in reversed(getattr(instance, var_name)):
         if (not hasattr(element, 'end_date')
-            and hasattr(element, 'start_date)')):
+                and hasattr(element, 'start_date)')):
             if not element.start_date:
                 res.insert(0, element)
             elif at_date >= element.start_date and not element_added:
@@ -598,7 +604,7 @@ def get_good_versions_at_date(instance, var_name, at_date=None):
                 element_added = True
         elif hasattr(element, 'start_date') and hasattr(element, 'end_date'):
             if (not element.start_date or at_date >= element.start_date) and (
-                not element.end_date or at_date <= element.end_date):
+                    not element.end_date or at_date <= element.end_date):
                 res.insert(0, element)
         else:
             res.insert(0, element)
@@ -648,7 +654,7 @@ def get_user_language():
 def get_relation_model_name(from_class, field_name):
     field = getattr(from_class, field_name)
     if not hasattr(field, 'model_name') and hasattr(field, 'relation_name'):
-        #M2M
+        # M2M
         relation = Pool().get(field.relation_name)
         target_field = getattr(relation, field.origin)
         res = target_field.model_name
@@ -759,3 +765,21 @@ def format_data(data, prefix='', prefix_inc='    ', is_init=True):
         return tmp
 
     return '\n'.join(tmp)
+
+
+def pyson_result(pyson_expr, target, evaled=False):
+    if not evaled:
+        encoder = PYSONEncoder()
+        the_pyson = encoder.encode(safe_eval(pyson_expr, CONTEXT))
+    else:
+        the_pyson = target
+
+    env = EvalEnvironment(target, target.__class__)
+    env.update(Transaction().context)
+    env['current_date'] = datetime.datetime.today()
+    env['time'] = time
+    env['context'] = Transaction().context
+    env['active_id'] = target.id
+    result = PYSONDecoder(env).decode(the_pyson)
+
+    return result
