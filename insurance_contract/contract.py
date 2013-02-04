@@ -4,12 +4,11 @@ import copy
 from trytond.model import fields
 from trytond.pool import Pool
 from trytond.pyson import Eval
-from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model
 from trytond.modules.coop_utils import utils
 from trytond.modules.coop_utils import coop_string
-from trytond.modules.process import ProcessFramework
+from trytond.modules.coop_process import CoopProcessFramework
 
 CONTRACTSTATUSES = [
     ('', ''),
@@ -17,11 +16,11 @@ CONTRACTSTATUSES = [
     ('active', 'Active'),
     ('hold', 'Hold'),
     ('terminated', 'Terminated'),
-    ]
+]
 
 OPTIONSTATUS = CONTRACTSTATUSES + [
     ('refused', 'Refused'),
-    ]
+]
 
 __all__ = [
     'Contract',
@@ -31,17 +30,18 @@ __all__ = [
     'CoveredElement',
     'CoveredData',
     'BrokerManager',
-    ]
+]
 
 
-class Subscribed(ProcessFramework):
+class Subscribed(CoopProcessFramework):
     'Subscribed'
 
-    offered = fields.Many2One(None, 'Offered', ondelete='RESTRICT',
-        states={'required': Eval('status') == 'active'})
+    offered = fields.Many2One(
+        None, 'Offered', ondelete='RESTRICT', states={
+            'required': Eval('status') == 'active'})
     start_date = fields.Date('Effective Date', required=True)
-    end_date = fields.Date('End Date',
-        domain=[('start_date', '<=', 'end_date')])
+    end_date = fields.Date(
+        'End Date', domain=[('start_date', '<=', 'end_date')])
     # Management date is the date at which the society started to manage the
     # contract. Default value is start_date
     start_management_date = fields.Date('Management Date')
@@ -52,8 +52,8 @@ class Subscribed(ProcessFramework):
     def __setup__(cls):
         cls.offered = copy.copy(cls.offered)
         suffix, cls.offered.string = cls.get_offered_name()
-        cls.offered.model_name = ('%s.%s' %
-            (cls.get_offered_module_prefix(), suffix))
+        cls.offered.model_name = (
+            '%s.%s' % (cls.get_offered_module_prefix(), suffix))
         super(Subscribed, cls).__setup__()
 
     @classmethod
@@ -105,29 +105,31 @@ class Contract(model.CoopSQL, Subscribed):
     _rec_name = 'contract_number'
 
     options = fields.One2Many('ins_contract.option', 'contract', 'Options')
-    covered_elements = fields.One2Many('ins_contract.covered_element',
-        'contract', 'Covered Elements')
-    contract_number = fields.Char('Contract Number', select=1,
-        states={'required': Eval('status') == 'active'},
+    covered_elements = fields.One2Many(
+        'ins_contract.covered_element', 'contract', 'Covered Elements')
+    contract_number = fields.Char(
+        'Contract Number', select=1, states={
+            'required': Eval('status') == 'active'},
         depends=['status'])
     subscriber = fields.Many2One('party.party', 'Subscriber')
     # The master field is the object on which rules will be called.
     # Basically, we need an abstract way to call rules, because in some case
     # (typically in GBP rules might be managed on the group contract) the rules
     # will not be those of the product.
-    master = fields.Reference('Master',
-        [
+    master = fields.Reference(
+        'Master', [
             ('', ''),
             ('ins_contract.contract', 'Contract'),
             ('ins_product.product', 'Product'),
         ])
-    broker_manager = fields.Many2One('ins_contract.broker_manager',
-        'Broker Manager')
-    billing_manager = fields.One2Many('ins_contract.billing_manager',
-        'contract', 'Billing Manager')
-    complementary_data = fields.Dict('Complementary Data',
+    broker_manager = fields.Many2One(
+        'ins_contract.broker_manager', 'Broker Manager')
+    billing_manager = fields.One2Many(
+        'ins_contract.billing_manager', 'contract', 'Billing Manager')
+    complementary_data = fields.Dict(
+        'Complementary Data',
         schema_model='ins_product.complementary_data_def')
-    #TODO replace single contact by date versionned list
+    # TODO replace single contact by date versionned list
     contact = fields.Many2One('party.party', 'Contact')
 
     @staticmethod
@@ -154,12 +156,13 @@ class Contract(model.CoopSQL, Subscribed):
         return None
 
     def get_active_coverages_at_date(self, at_date):
-        return [elem.get_coverage()
+        return [
+            elem.get_coverage()
             for elem in self.get_active_options_at_date(at_date)]
 
     def get_complementary_data_value(self, at_date, value):
         if (not(hasattr(self, 'complementary_data')
-            and self.complementary_data)):
+                and self.complementary_data)):
             return None
         try:
             return self.complementary_data[value]
@@ -251,10 +254,10 @@ class Contract(model.CoopSQL, Subscribed):
     @classmethod
     def search_rec_name(cls, name, clause):
         contracts = cls.search([
-                'OR',
-                ('contract_number',) + clause[1:],
-                ('subscriber.name',) + clause[1:],
-            ])
+            'OR',
+            ('contract_number',) + clause[1:],
+            ('subscriber.name',) + clause[1:],
+        ])
         return [('id', 'in', [c.id for c in contracts])]
 
     @classmethod
@@ -291,7 +294,8 @@ class Contract(model.CoopSQL, Subscribed):
         options = dict([(o.offered.code, o) for o in self.options])
         for elem in self.covered_elements:
             if (hasattr(elem, 'covered_data') and elem.covered_data):
-                existing_datas = dict([(data.get_coverage().code, data)
+                existing_datas = dict([
+                    (data.get_coverage().code, data)
                     for data in elem.covered_data])
             else:
                 existing_datas = {}
@@ -317,7 +321,7 @@ class Contract(model.CoopSQL, Subscribed):
         the owner of a contract could change over time, you should never use
         the direct link subscriber
         '''
-        #TODO to enhance
+        # TODO to enhance
         return self.subscriber
 
     def init_options_from_covered_elements(self):
@@ -341,15 +345,15 @@ class Contract(model.CoopSQL, Subscribed):
         return True, ()
 
     def init_complementary_data(self):
-        if (not (hasattr(self, 'complementary_data')
-            and self.complementary_data)):
+        if not (hasattr(self, 'complementary_data') and
+                self.complementary_data):
             self.complementary_data = {}
         compl_data_defs = self.offered.get_complementary_data_def(
             ['contract'], at_date=self.start_date)
         for option in self.options:
             compl_data_defs.extend(
-                option.offered.get_complementary_data_def(['contract'],
-                    at_date=option.start_date))
+                option.offered.get_complementary_data_def(
+                    ['contract'], at_date=option.start_date))
         self.complementary_data = utils.init_complementary_data(
             set(compl_data_defs))
         return True, ()
@@ -389,10 +393,10 @@ class Option(model.CoopSQL, Subscribed):
 
     __name__ = 'ins_contract.option'
 
-    contract = fields.Many2One('ins_contract.contract', 'Contract',
-       ondelete='CASCADE')
-    covered_data = fields.One2Many('ins_contract.covered_data', 'option',
-        'Covered Data')
+    contract = fields.Many2One(
+        'ins_contract.contract', 'Contract', ondelete='CASCADE')
+    covered_data = fields.One2Many(
+        'ins_contract.covered_data', 'option', 'Covered Data')
 
     def get_coverage(self):
         return self.offered
@@ -447,12 +451,12 @@ class PriceLine(model.CoopSQL, model.CoopView):
             ('fee', 'Fee')
         ], 'Kind', readonly='True')
     on_object = fields.Reference('Priced object', 'get_line_target_models')
-    billing_manager = fields.Many2One('ins_contract.billing_manager',
-        'Billing Manager')
+    billing_manager = fields.Many2One(
+        'ins_contract.billing_manager', 'Billing Manager')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    all_lines = fields.One2Many('ins_contract.price_line', 'master',
-        'Lines', readonly=True)
+    all_lines = fields.One2Many(
+        'ins_contract.price_line', 'master', 'Lines', readonly=True)
     taxes = fields.Function(fields.Numeric('Taxes'), 'get_total_taxes')
     amount_for_display = fields.Function(
         fields.Numeric('Amount'), 'get_amount_for_display')
@@ -460,10 +464,12 @@ class PriceLine(model.CoopSQL, model.CoopView):
         'Start Date'), 'get_start_date')
     end_date_calculated = fields.Function(fields.Date(
         'End Date'), 'get_end_date')
-    details = model.One2ManyDomain('ins_contract.price_line', 'master',
-        'Details', domain=[('kind', '!=', 'main')], readonly=True)
-    child_lines = model.One2ManyDomain('ins_contract.price_line', 'master',
-        'Sub-Lines', domain=[('kind', '=', 'main')], readonly=True)
+    details = model.One2ManyDomain(
+        'ins_contract.price_line', 'master', 'Details', domain=[
+            ('kind', '!=', 'main')], readonly=True)
+    child_lines = model.One2ManyDomain(
+        'ins_contract.price_line', 'master', 'Sub-Lines', domain=[
+            ('kind', '=', 'main')], readonly=True)
 
     def get_id(self):
         if hasattr(self, 'on_object') and self.on_object:
@@ -651,8 +657,8 @@ class BillingManager(model.CoopSQL, model.CoopView):
         return 'ins_contract.billing.bill'
 
     def get_prices_dates(self):
-        return [elem.start_date
-            for elem in self.prices].append(self.prices[-1].end_date)
+        return [elem.start_date for elem in self.prices].append(
+            self.prices[-1].end_date)
 
     def create_price_list(self, start_date, end_date):
         dated_prices = [
@@ -717,16 +723,17 @@ class CoveredElement(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.covered_element'
 
-    contract = fields.Many2One('ins_contract.contract', 'Contract',
-        ondelete='CASCADE')
+    contract = fields.Many2One(
+        'ins_contract.contract', 'Contract', ondelete='CASCADE')
     item_desc = fields.Many2One('ins_product.item_desc', 'Item Desc')
-    covered_data = fields.One2Many('ins_contract.covered_data',
-        'covered_element', 'Covered Element Data')
+    covered_data = fields.One2Many(
+        'ins_contract.covered_data', 'covered_element', 'Covered Element Data')
     name = fields.Char('Name')
     parent = fields.Many2One('ins_contract.covered_element', 'Parent')
-    sub_covered_elements = fields.One2Many('ins_contract.covered_element',
-        'parent', 'Sub Covered Elements')
-    complementary_data = fields.Dict('Complementary Data',
+    sub_covered_elements = fields.One2Many(
+        'ins_contract.covered_element', 'parent', 'Sub Covered Elements')
+    complementary_data = fields.Dict(
+        'Complementary Data',
         schema_model='ins_product.complementary_data_def',
         on_change_with=['item_desc', 'complementary_data'])
 
@@ -787,11 +794,12 @@ class CoveredData(model.CoopSQL, model.CoopView):
     __name__ = 'ins_contract.covered_data'
 
     option = fields.Many2One('ins_contract.option', 'Subscribed Coverage')
-    coverage = fields.Many2One('ins_product.coverage', 'Coverage',
-        ondelete='RESTRICT', )
-    covered_element = fields.Many2One('ins_contract.covered_element',
-        'Covered Element', ondelete='CASCADE')
-    complementary_data = fields.Dict('Complementary Data',
+    coverage = fields.Many2One(
+        'ins_product.coverage', 'Coverage', ondelete='RESTRICT')
+    covered_element = fields.Many2One(
+        'ins_contract.covered_element', 'Covered Element', ondelete='CASCADE')
+    complementary_data = fields.Dict(
+        'Complementary Data',
         schema_model='ins_product.complementary_data_def')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
@@ -806,8 +814,8 @@ class CoveredData(model.CoopSQL, model.CoopView):
         return self.covered_element.get_name_for_billing()
 
     def get_complementary_data_value(self, at_date, value):
-        if (not(hasattr(self, 'complementary_data')
-            and self.complementary_data)):
+        if not(hasattr(self, 'complementary_data')
+                and self.complementary_data):
             return None
         try:
             return self.complementary_data[value]
