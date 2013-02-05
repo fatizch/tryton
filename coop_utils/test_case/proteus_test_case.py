@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-import csv
 from proteus import Model
 import proteus_tools
 
@@ -67,10 +65,10 @@ def update_models(cfg_dict):
 
 def set_global_search_options(cfg_dict):
     for model_name in cfg_dict['models'].strip().splitlines():
-        model = proteus_tools.get_objects_from_db(cfg_dict, 'Model', 'model',
-            model_name)
+        model = proteus_tools.get_objects_from_db(
+            cfg_dict, 'Model', 'model', model_name)
         if not model.global_search_p:
-            print 'Set global search for %s' % model_name
+            # print 'Set global search for %s' % model_name
             model.global_search_p = True
             model.save()
 
