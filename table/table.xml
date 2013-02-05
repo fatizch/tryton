@@ -49,6 +49,12 @@
             <field name="name">table_dimension_tree</field>
         </record>
 
+        <record model="ir.ui.view" id="table_definition_dimension_list_sequence_view">
+            <field name="model">table.table_dimension</field>
+            <field name="type">tree</field>
+            <field name="name">table_dimension_tree_sequence</field>
+        </record>
+
         <record model="ir.ui.view" id="cell_form_view">
             <field name="model">table.table_cell</field>
             <field name="type">form</field>

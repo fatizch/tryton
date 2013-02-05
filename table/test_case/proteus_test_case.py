@@ -26,8 +26,8 @@ def convert_date(cfg_dict, value):
     return datetime.datetime.strptime(value, formating)
 
 
-def create_dim_value(cfg_dict, dim_number, value, kind='value', end=None):
-
+def create_dim_value(
+        cfg_dict, dim_number, value, sequence, kind='value', end=None):
     res = cfg_dict['Dimension']()
     res.type = 'dimension%s' % dim_number
     if kind == 'value':
@@ -40,6 +40,7 @@ def create_dim_value(cfg_dict, dim_number, value, kind='value', end=None):
     if kind == 'range-date':
         res.start_date = convert_date(cfg_dict, value)
         res.end_date = convert_date(cfg_dict, end) if end else None
+    res.sequence = sequence
     return res
 
 
@@ -65,8 +66,8 @@ def get_or_create_table(cfg_dict, name, kind, dim_dict, code=None):
             end = None
             if kind.startswith('range'):
                 end = values[j + 1] if j < n - 1 else None
-            getattr(res, 'dimension%s' % i).append(create_dim_value(cfg_dict,
-                    i, values[j], kind, end))
+            getattr(res, 'dimension%s' % i).append(create_dim_value(
+                cfg_dict, i, values[j], j, kind, end))
     return res
 
 
@@ -88,8 +89,8 @@ def get_object_from_db(model, var_name, value):
 
 
 def create_table_10_100(cfg_dict):
-    table = get_or_create_table(cfg_dict, 'Table 10x100', 'numeric', 
-        {
+    table = get_or_create_table(
+        cfg_dict, 'Table 10x100', 'numeric', {
             '1': ('value', '100', range(100)),
             '2': ('value', '10', range(10))
         },
@@ -103,15 +104,15 @@ def create_table_10_100(cfg_dict):
 
 
 def create_table_cotisation(cfg_dict):
-    table = get_or_create_table(cfg_dict, 'Cotisation Retraite', 'numeric',
-        {
+    table = get_or_create_table(
+        cfg_dict, 'Cotisation Retraite', 'numeric', {
             '1': ('value', 'Régime', ['Arrco', 'Agirc', 'AGFF', 'CET']),
-            '2': ('value', 'Tranche', ['Tranche 1', 'Tranche 2', 'Tranche A',
-                'Tranche B', 'Tranche C']),
+            '2': ('value', 'Tranche', [
+                'Tranche 1', 'Tranche 2', 'Tranche A', 'Tranche B',
+                'Tranche C']),
             '3': ('value', 'Cadre ?', ['cadre', 'non cadre']),
             '4': ('range-date', 'Date', ['01/01/2012'])
-        },
-        )
+        })
     if table.id > 0:
         return table
     table.save()
@@ -132,37 +133,37 @@ def create_table_cotisation(cfg_dict):
         res.save()
 
     Cell = cfg_dict['Cell']
-    create_cell(Cell, table, dims, ['Arrco', 'Tranche 1', 'non cadre', 'dim4'],
-        7.5)
-    create_cell(Cell, table, dims, ['Arrco', 'Tranche 2', 'non cadre', 'dim4'],
-        20)
-    create_cell(Cell, table, dims, ['AGFF', 'Tranche 1', 'non cadre', 'dim4'],
-        2)
-    create_cell(Cell, table, dims, ['AGFF', 'Tranche 2', 'non cadre', 'dim4'],
-        2.2)
-    create_cell(Cell, table, dims, ['Arrco', 'Tranche 1', 'cadre', 'dim4'],
-        7.5)
-    create_cell(Cell, table, dims, ['Agirc', 'Tranche B', 'cadre', 'dim4'],
-        20.3)
-    create_cell(Cell, table, dims, ['Agirc', 'Tranche C', 'cadre', 'dim4'],
-        20.3)
-    create_cell(Cell, table, dims, ['CET', 'Tranche 1', 'cadre', 'dim4'],
-        0.35)
-    create_cell(Cell, table, dims, ['CET', 'Tranche B', 'cadre', 'dim4'],
-        0.35)
-    create_cell(Cell, table, dims, ['CET', 'Tranche C', 'cadre', 'dim4'],
-        0.35)
-    create_cell(Cell, table, dims, ['AGFF', 'Tranche 1', 'cadre', 'dim4'],
-        2)
-    create_cell(Cell, table, dims, ['AGFF', 'Tranche B', 'cadre', 'dim4'],
-        2.2)
+    create_cell(
+        Cell, table, dims, ['Arrco', 'Tranche 1', 'non cadre', 'dim4'], 7.5)
+    create_cell(
+        Cell, table, dims, ['Arrco', 'Tranche 2', 'non cadre', 'dim4'], 20)
+    create_cell(
+        Cell, table, dims, ['AGFF', 'Tranche 1', 'non cadre', 'dim4'], 2)
+    create_cell(
+        Cell, table, dims, ['AGFF', 'Tranche 2', 'non cadre', 'dim4'], 2.2)
+    create_cell(
+        Cell, table, dims, ['Arrco', 'Tranche 1', 'cadre', 'dim4'], 7.5)
+    create_cell(
+        Cell, table, dims, ['Agirc', 'Tranche B', 'cadre', 'dim4'], 20.3)
+    create_cell(
+        Cell, table, dims, ['Agirc', 'Tranche C', 'cadre', 'dim4'], 20.3)
+    create_cell(
+        Cell, table, dims, ['CET', 'Tranche 1', 'cadre', 'dim4'], 0.35)
+    create_cell(
+        Cell, table, dims, ['CET', 'Tranche B', 'cadre', 'dim4'], 0.35)
+    create_cell(
+        Cell, table, dims, ['CET', 'Tranche C', 'cadre', 'dim4'], 0.35)
+    create_cell(
+        Cell, table, dims, ['AGFF', 'Tranche 1', 'cadre', 'dim4'], 2)
+    create_cell(
+        Cell, table, dims, ['AGFF', 'Tranche B', 'cadre', 'dim4'], 2.2)
 
 
 def get_dimension_kind(value):
     res = 'value'
     try:
-        i = float(value)
-    except ValueError, TypeError:
+        float(value)
+    except (ValueError, TypeError):
         pass
     else:
         return 'range'
@@ -178,6 +179,7 @@ def create_dims(table, first_cell):
         kind = kind[:-1]
         setattr(table, 'dimension_name%s' % str(idx + 1), name)
         setattr(table, 'dimension_kind%s' % str(idx + 1), kind)
+        setattr(table, 'dimension_order%s' % str(idx + 1), 'sequence')
 
     table.save()
 
@@ -211,16 +213,18 @@ def load_table_from_csv(cfg_dict, path, file_name):
             create_dims(table, cur_line[0])
             if nb_dim == 2:
                 dim2_values = cur_line[1:]
+                idx = 1
                 for val in dim2_values:
                     dim2 = create_dim_value(
-                            cfg_dict, 2, val, table.dimension_kind2)
+                        cfg_dict, 2, val, idx, table.dimension_kind2)
                     table.dimension2.append(dim2)
                     table.save()
+                    idx += 1
             continue
         if line == 2:
             table.dimension_kind1 = get_dimension_kind(cur_line[0])
         table.dimension1.append(create_dim_value(
-                cfg_dict, 1, cur_line[0], table.dimension_kind1))
+            cfg_dict, 1, cur_line[0], line, table.dimension_kind1))
         table.save()
         dim1 = table.dimension1[-1]
 

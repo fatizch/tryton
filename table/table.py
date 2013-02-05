@@ -12,7 +12,8 @@ from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
 from trytond.modules.coop_utils import One2ManyDomain
 from trytond.modules.coop_utils import coop_string
 
-__all__ = ['TableCell', 'TableDefinition',
+__all__ = [
+    'TableCell', 'TableDefinition',
     'TableDefinitionDimension', 'TableOpen2DAskDimensions',
     'TableOpen2D', 'Table2D']
 
@@ -22,7 +23,12 @@ KIND = [
     ('date', 'Date'),
     ('range', 'Range'),
     ('range-date', 'Range-Date'),
-    ]
+]
+
+ORDER = [
+    ('alpha', 'Alphabetical'),
+    ('sequence', 'Sequence'),
+]
 
 DIMENSION_MAX = 4
 
@@ -36,75 +42,99 @@ class TableDefinition(ModelSQL, ModelView):
     code = fields.Char('Code', required=True,
         on_change_with=['name', 'code'])
     type_ = fields.Selection([
-            ('char', 'Char'),
-            ('integer', 'Integer'),
-            ('numeric', 'Numeric'),
-            ('boolean', 'Boolean'),
-            ('date', 'Date'),
-            ], 'Type', required=True)
+        ('char', 'Char'),
+        ('integer', 'Integer'),
+        ('numeric', 'Numeric'),
+        ('boolean', 'Boolean'),
+        ('date', 'Date'),
+    ], 'Type', required=True)
+    dimension_order1 = fields.Selection(ORDER, 'Dimension Order 1',
+        states={
+            'invisible': ~Eval('dimension_kind1'),
+            'required': Bool(Eval('dimension_kind1')),
+        },
+        depends=['dimension_kind1'])
+    dimension_order2 = fields.Selection(ORDER, 'Dimension Order 2',
+        states={
+            'invisible': ~Eval('dimension_kind2'),
+            'required': Bool(Eval('dimension_kind2')),
+        },
+        depends=['dimension_kind2'])
+    dimension_order3 = fields.Selection(ORDER, 'Dimension Order 3',
+        states={
+            'invisible': ~Eval('dimension_kind3'),
+            'required': Bool(Eval('dimension_kind3')),
+        },
+        depends=['dimension_kind3'])
+    dimension_order4 = fields.Selection(ORDER, 'Dimension Order 4',
+        states={
+            'invisible': ~Eval('dimension_kind3'),
+            'required': Bool(Eval('dimension_kind3')),
+        },
+        depends=['dimension_kind3'])
     dimension_kind1 = fields.Selection(KIND, 'Dimension Kind 1',
         states={
             'readonly': Bool(Eval('dimension1')),
-            })
+        })
     dimension_kind2 = fields.Selection(KIND, 'Dimension Kind 2',
         states={
             'readonly': Bool(Eval('dimension2')),
-            })
+        })
     dimension_kind3 = fields.Selection(KIND, 'Dimension Kind 3',
         states={
             'readonly': Bool(Eval('dimension3')),
-            })
+        })
     dimension_kind4 = fields.Selection(KIND, 'Dimension Kind 4',
         states={
             'readonly': Bool(Eval('dimension4')),
-            })
+        })
     dimension1 = One2ManyDomain('table.table_dimension',
         'definition', 'Dimension 1', domain=[('type', '=', 'dimension1')],
         states={
             'invisible': ~Eval('dimension_kind1'),
-            },
+        },
         depends=['dimension_kind1'])
     dimension2 = One2ManyDomain('table.table_dimension',
         'definition', 'Dimension 2', domain=[('type', '=', 'dimension2')],
         states={
             'invisible': ~Eval('dimension_kind2'),
-            },
+        },
         depends=['dimension_kind2'])
     dimension3 = One2ManyDomain('table.table_dimension',
         'definition', 'Dimension 3', domain=[('type', '=', 'dimension3')],
         states={
             'invisible': ~Eval('dimension_kind3'),
-            },
+        },
         depends=['dimension_kind4'])
     dimension4 = One2ManyDomain('table.table_dimension',
         'definition', 'Dimension 4', domain=[('type', '=', 'dimension4')],
         states={
             'invisible': ~Eval('dimension_kind4'),
-            },
+        },
         depends=['dimension_kind4'])
     dimension_name1 = fields.Char(
         'Name',
         states={
             'invisible': ~Eval('dimension_kind1'),
-            },
+        },
     )
     dimension_name2 = fields.Char(
         'Name',
         states={
             'invisible': ~Eval('dimension_kind2'),
-            },
+        },
     )
     dimension_name3 = fields.Char(
         'Name',
         states={
             'invisible': ~Eval('dimension_kind3'),
-            },
+        },
     )
     dimension_name4 = fields.Char(
         'Name',
         states={
             'invisible': ~Eval('dimension_kind4'),
-            },
+        },
     )
     kind = fields.Function(fields.Char('Kind'), 'get_kind')
 
@@ -114,12 +144,29 @@ class TableDefinition(ModelSQL, ModelView):
         cls._sql_constraints = [
             ('name_unique', 'UNIQUE(name)',
                 'The name of "Table Definition" must be unique'),
-            ]
+        ]
         cls._order.insert(0, ('name', 'ASC'))
+
+    @staticmethod
+    def default_dimension_order1():
+        return 'alpha'
+    default_dimension_order2 = default_dimension_order1
+    default_dimension_order3 = default_dimension_order1
+    default_dimension_order4 = default_dimension_order1
 
     @staticmethod
     def default_type_():
         return 'char'
+
+    @classmethod
+    def write(cls, records, values):
+        pool = Pool()
+        TableDefinitionDimension = pool.get('table.table_dimension')
+        super(TableDefinition, cls).write(records, values)
+        if any(k for k in values if k.startswith('dimension_order')):
+            dimensions = [d for r in records for i in xrange(DIMENSION_MAX)
+                          for d in getattr(r, 'dimension%s' % (i + 1)) or []]
+            TableDefinitionDimension.clean_sequence(dimensions)
 
     @classmethod
     def get(cls, name):
@@ -127,8 +174,8 @@ class TableDefinition(ModelSQL, ModelView):
         Return the definition instance for the name.
         """
         return cls.search([
-                ('name', '=', name),
-                ])[0]
+            ('name', '=', name),
+        ])[0]
 
     def get_kind(self, name):
         nb_dim = 0
@@ -160,7 +207,7 @@ def dimension_state(kind):
                             kind),
                         Eval('_parent_definition', {}).get('dimension_kind4',
                             kind)))) != kind),
-        }
+    }
 
 DIMENSION_DEPENDS = ['type']
 
@@ -171,6 +218,20 @@ class TableDefinitionDimension(ModelSQL, ModelView):
     __name__ = 'table.table_dimension'
     _order_name = 'rec_name'
 
+    sequence = fields.Integer('Sequence',
+        states={
+            'invisible': (If(Eval('type') == 'dimension1',
+                    Eval('_parent_definition', {}).get('dimension_order1'),
+                    If(Eval('type') == 'dimension2',
+                        Eval('_parent_definition', {}).get('dimension_order2'),
+                        If(Eval('type') == 'dimension3',
+                            Eval('_parent_definition',
+                                {}).get('dimension_order3'),
+                            Eval('_parent_definition',
+                                {}).get('dimension_order4'))))
+                == 'alpha'),
+        },
+        depends=['type'])
     definition = fields.Many2One('table.table_def', 'Definition',
         required=True, ondelete='CASCADE')
     type = fields.Selection([
@@ -178,7 +239,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
             ('dimension2', 'Dimension 2'),
             ('dimension3', 'Dimension 3'),
             ('dimension4', 'Dimension 4'),
-            ], 'Type', required=True)
+        ], 'Type', required=True)
     value = fields.Char('Value', states=dimension_state('value'),
         depends=DIMENSION_DEPENDS)
     date = fields.Date('Date', states=dimension_state('date'),
@@ -197,7 +258,10 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         super(TableDefinitionDimension, cls).__setup__()
 
         cls._order.insert(0, ('rec_name', 'ASC'))
-        cls.rec_name.order_field = ("%(table)s.value %(order)s, "
+        cls.rec_name.order_field = (
+            "%(table)s.sequence IS NULL %(order)s, "
+            "%(table)s.sequence %(order)s, "
+            "%(table)s.value %(order)s, "
             "%(table)s.date %(order)s, "
             "%(table)s.start %(order)s, %(table)s.end %(order)s, "
             "%(table)s.start_date %(order)s, %(table)s.end_date %(order)s")
@@ -220,6 +284,30 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         table = TableHandler(cursor, cls, module_name)
         table.index_action(['definition', 'type'], 'add')
 
+    @classmethod
+    def clean_sequence(cls, records):
+        to_clean = []
+        for record in records:
+            order_name = 'dimension_order' + record.type[len('dimension'):]
+            order = getattr(record.definition, order_name)
+            if order == 'alpha' and record.sequence is not None:
+                to_clean.append(record)
+        if to_clean:
+            cls.write(to_clean, {
+                    'sequence': None,
+                })
+
+    @classmethod
+    def create(cls, vlist):
+        records = super(TableDefinitionDimension, cls).create(vlist)
+        cls.clean_sequence(records)
+        return records
+
+    @classmethod
+    def write(cls, records, values):
+        super(TableDefinitionDimension, cls).write(records, values)
+        cls.clean_sequence(records)
+
     def on_change_with_rec_name(self):
         return self.get_rec_name([self], 'rec_name')[self.id]
 
@@ -230,7 +318,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
 
         lang, = Lang.search([
                 ('code', '=', Transaction().language),
-                ])
+            ])
         names = {}
         for dimension in dimensions:
             kind = 'dimension_kind%s' % dimension.type[-1]
@@ -280,28 +368,28 @@ class TableCell(ModelSQL, ModelView):
         domain=[
             ('definition', '=', Eval('definition')),
             ('type', '=', 'dimension1'),
-            ],
+        ],
         depends=['definition'])
     dimension2 = fields.Many2One('table.table_dimension',
         'Dimension 2', ondelete='CASCADE',
         domain=[
             ('definition', '=', Eval('definition')),
             ('type', '=', 'dimension2'),
-            ],
+        ],
         depends=['definition'])
     dimension3 = fields.Many2One('table.table_dimension',
         'Dimension 3', ondelete='CASCADE',
         domain=[
             ('definition', '=', Eval('definition')),
             ('type', '=', 'dimension3'),
-            ],
+        ],
         depends=['definition'])
     dimension4 = fields.Many2One('table.table_dimension',
         'Dimension 4', ondelete='CASCADE',
         domain=[
             ('definition', '=', Eval('definition')),
             ('type', '=', 'dimension4'),
-            ],
+        ],
         depends=['definition'])
     value = fields.Char('Value')
 
@@ -402,7 +490,7 @@ class TableCell(ModelSQL, ModelView):
             clause = [
                 ('definition', '=', definition.id),
                 ('type', '=', 'dimension%d' % (i + 1)),
-                ]
+            ]
             if kind == 'value':
                 clause.append(('value', '=', str(value)))
             elif kind == 'date':
@@ -451,11 +539,11 @@ class TableOpen2DAskDimensions(ModelView):
         domain=[
             ('definition', '=', Eval('definition')),
             ('type', '=', 'dimension3'),
-            ],
+        ],
         states={
             'required': Eval('dimension3_required', False),
             'invisible': ~Eval('dimension3_required'),
-            },
+        },
         depends=['definition', 'dimension3_required'])
     dimension3_required = fields.Boolean('Dimension 3 Required', readonly=True)
     dimension4 = fields.Many2One('table.table_dimension',
@@ -463,11 +551,11 @@ class TableOpen2DAskDimensions(ModelView):
         domain=[
             ('definition', '=', Eval('definition')),
             ('type', '=', 'dimension4'),
-            ],
+        ],
         states={
             'required': Eval('dimension4_required', False),
             'invisible': ~Eval('dimension4_required'),
-            },
+        },
         depends=['definition', 'dimension4_required'])
     dimension4_required = fields.Boolean('Dimension 4 Required', readonly=True)
 
@@ -519,7 +607,7 @@ class TableOpen2D(Wizard):
     def do_open_(self, action):
         context = {
             'table.table_def': Transaction().context['active_id'],
-            }
+        }
         if getattr(self.ask_dimensions, 'dimension3', None):
             context['dimension3'] = self.ask_dimensions.dimension3.id
         if getattr(self.ask_dimensions, 'dimension4', None):
@@ -571,7 +659,7 @@ class Table2D(ModelSQL, ModelView):
         super(Table2D, cls).__setup__()
         cls._error_messages.update({
                 'not_2d': 'The table is not 2D',
-                })
+            })
 
     @classmethod
     def __post_setup__(cls):
@@ -599,7 +687,7 @@ class Table2D(ModelSQL, ModelView):
         dimensions2 = TableDefinitionDimension.search([
                 ('type', '=', 'dimension2'),
                 ('definition', '=', definition_id),
-                ])
+            ])
         cols = ', '.join('col%d VARCHAR' % d.id for d in dimensions2)
         if cols:
             cols = ', ' + cols
@@ -625,7 +713,8 @@ class Table2D(ModelSQL, ModelView):
             'FROM "' + TableDefinitionDimension._table + '" '
             "WHERE type = ''dimension2'' "
                 + ("AND definition = %s " % definition_id)
-            + " ORDER BY value ASC, date ASC, start ASC, \"end\" ASC, "
+            + " ORDER BY sequence IS NULL, sequence ASC, value ASC, "
+                "date ASC, start ASC, \"end\" ASC, "
                 "start_date ASC, end_date ASC') "
             "AS ct(id INTEGER" + cols + ")", dimensions_args)
 
@@ -644,7 +733,7 @@ class Table2D(ModelSQL, ModelView):
         dimensions2 = TableDefinitionDimension.search([
                 ('type', '=', 'dimension2'),
                 ('definition', '=', definition_id),
-                ])
+            ])
         fields = {}
         fields['row'] = cls.fields_get(['row'])['row']
         xml = '<?xml version="1.0"?>'
@@ -681,7 +770,7 @@ class Table2D(ModelSQL, ModelView):
             'fields': fields,
             'field_childs': False,
             'view_id': 0,
-            }
+        }
 
     @classmethod
     def write(cls, rows, values):
@@ -702,11 +791,11 @@ class Table2D(ModelSQL, ModelView):
                     ('dimension4', '=',
                         Transaction().context.get('dimension4')),
                     ('definition', '=', definition_id),
-                    ])
+                ])
             if cells:
                 TableCell.write(cells, {
                         'value': value,
-                        })
+                    })
             for dim1_id in (set(dim1_ids) - set(i.id for i in cells)):
                 to_creates.append({
                         'definition': definition_id,
@@ -715,7 +804,7 @@ class Table2D(ModelSQL, ModelView):
                         'dimension3': Transaction().context.get('dimension3'),
                         'dimension4': Transaction().context.get('dimension4'),
                         'value': value,
-                        })
+                    })
         if to_creates:
             TableCell.create(to_creates)
 

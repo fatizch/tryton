@@ -3,6 +3,9 @@
     <label name="definition"/>
     <field name="definition"/>
     <newline/>
+    <label name="sequence"/>
+    <field name="sequence"/>
+    <newline/>
     <label name="value"/>
     <field name="value"/>
     <newline/>
