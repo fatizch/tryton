@@ -147,6 +147,21 @@ class TableDefinition(ModelSQL, ModelView):
         ]
         cls._order.insert(0, ('name', 'ASC'))
 
+    @classmethod
+    def __register__(cls, module_name):
+        super(TableDefinition, cls).__register__(module_name)
+
+        # The following must be called once (and only once) per register, as
+        # it causes a global change on the db.
+        if not cls is TableDefinition:
+            return
+
+        try:
+            cursor = Transaction().cursor
+            cursor.execute('CREATE EXTENSION tablefunc', ())
+        except:
+            pass
+
     @staticmethod
     def default_dimension_order1():
         return 'alpha'
