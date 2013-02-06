@@ -2,6 +2,7 @@ import copy
 from datetime import datetime
 from decimal import Decimal
 
+from trytond.config import CONFIG
 from trytond.backend import TableHandler
 from trytond.model import ModelSQL, ModelView, fields
 from trytond.pool import Pool
@@ -151,11 +152,11 @@ class TableDefinition(ModelSQL, ModelView):
     def __register__(cls, module_name):
         super(TableDefinition, cls).__register__(module_name)
 
-        try:
-            cursor = Transaction().cursor
-            cursor.execute('CREATE EXTENSION IF NOT EXISTS tablefunc', ())
-        except:
-            pass
+        if not CONFIG['db_type'] == 'postgresql':
+            return
+
+        cursor = Transaction().cursor
+        cursor.execute('CREATE EXTENSION IF NOT EXISTS tablefunc', ())
 
     @staticmethod
     def default_dimension_order1():
