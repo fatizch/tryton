@@ -110,7 +110,7 @@ class Loss(model.CoopSQL, model.CoopView):
         schema_model='ins_product.complementary_data_def',
         on_change_with=['loss_desc', 'complementary_data'])
 
-    def on_change_with_with_end_date(self, name):
+    def on_change_with_with_end_date(self, name=None):
         res = False
         if self.loss_desc:
             res = self.loss_desc.with_end_date
