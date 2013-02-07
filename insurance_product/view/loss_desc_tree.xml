@@ -2,5 +2,5 @@
 <tree>
     <field name="code"/>
     <field name="name"/>
-    <field name="kind"/>
+    <field name="item_kind"/>
 </tree>

@@ -79,7 +79,7 @@
             <field name="act_window" ref="act_package_form" />
         </record>
 
-        <menuitem parent="menu_product" sequence="3" id="menu_package_form"
+        <menuitem parent="menu_product" sequence="4" id="menu_package_form"
             icon="tryton-list" action="act_package_form" />
         <!--/package -->
     </data>

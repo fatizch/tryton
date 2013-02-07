@@ -6,5 +6,6 @@
     <xpath expr="/form/label[@name='rule']" position="before">
         <label name="amount"/>
         <field name="amount"/>
+        <newline/>
     </xpath>
 </data>

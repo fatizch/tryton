@@ -13,8 +13,11 @@
             <field name="reserve_rules" colspan="4"/>
         </page>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']" position="inside">
-        <label name="kind"/>
-        <field name="kind" xexpand="0"/>
+    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"
+        position="inside">
+        <label name="indemnification_kind"/>
+        <field name="indemnification_kind"/>
+        <newline/>
+        <field name="loss_descs" colspan="4"/>
     </xpath>
 </data>

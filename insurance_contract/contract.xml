@@ -204,5 +204,19 @@
             sequence="10"/>
         <menuitem parent="menu_individual" sequence="1"
             id="menu_contract_form" icon="tryton-list" action="act_contract_form"/>
+
+        <!--################################################################ -->
+        <!-- Delivered Service -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="delivered_service_view_form">
+            <field name="model">ins_contract.delivered_service</field>
+            <field name="type">form</field>
+            <field name="name">delivered_service_form</field>
+        </record>
+        <record model="ir.ui.view" id="delivered_service_view_tree">
+            <field name="model">ins_contract.delivered_service</field>
+            <field name="type">tree</field>
+            <field name="name">delivered_service_tree</field>
+        </record>
     </data>
 </tryton>

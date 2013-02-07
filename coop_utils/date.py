@@ -1,6 +1,22 @@
 import datetime
 from dateutil.relativedelta import relativedelta
 
+HOURLY_DURATION = [
+    ('second', 'Second'),
+    ('minute', 'Minute'),
+    ('hour', 'Hour'),
+]
+
+DAILY_DURATION = [
+    ('', ''),
+    ('day', 'Day'),
+    ('week', 'Week'),
+    ('month', 'Month'),
+    ('quarter', 'Quarter'),
+    ('half_year', 'Half-year'),
+    ('year', 'Year'),
+]
+
 
 def add_days(date, nb):
     return date + datetime.timedelta(days=nb)

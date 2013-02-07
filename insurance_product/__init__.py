@@ -26,7 +26,12 @@ def register():
         PricingComponent,
         EligibilityRule,
         EligibilityRelationKind,
+        EventDesc,
+        LossDesc,
+        EventDescLossDescRelation,
         Benefit,
+        CoverageBenefitRelation,
+        BenefitLossDescRelation,
         BenefitRule,
         ReserveRule,
         CoverageAmountRule,
@@ -46,4 +51,5 @@ def register():
         ClauseVersion,
         ProductComplementaryDataRelation,
         CoverageComplementaryDataRelation,
+        LossDescComplementaryDataRelation,
         module='insurance_product', type_='model')

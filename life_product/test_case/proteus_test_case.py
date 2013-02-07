@@ -33,7 +33,8 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['Context'] = Model.get('rule_engine.context')
     cfg_dict['TreeElement'] = Model.get('rule_engine.tree_element')
     cfg_dict['Tranche'] = Model.get('tranche.tranche')
-    cfg_dict['ComplementaryData'] = Model.get('ins_product.complementary_data_def')
+    cfg_dict['ComplementaryData'] = Model.get(
+        'ins_product.complementary_data_def')
     return cfg_dict
 
 
@@ -77,7 +78,11 @@ def get_or_create_benefit(cfg_dict, code, name, kind=None, date=None):
     benefit.name = name
     benefit.start_date = date if date else cfg_dict['Date'].today({})
     if kind:
-        benefit.kind = kind
+        if kind == 'capital':
+            benefit.indemnification_kind = kind
+        else:
+            benefit.indemnification_kind = 'period'
+            benefit.indemnification_calc_unit = kind
     return benefit
 
 
@@ -622,7 +627,7 @@ return PP + FG + RA + Tax
         ])
 
     benefit = get_or_create_benefit(cfg_dict, 'IJ',
-        'Indémnité Journalière', 'per_diem')
+        'Indémnité Journalière', 'day')
     benefit_rule = add_rule(cfg_dict, benefit, 'benefit')
     cov.benefits.append(benefit)
 
@@ -676,7 +681,7 @@ else:
             ])
 
     benefit = get_or_create_benefit(cfg_dict, 'RENT_INVAL',
-        'Rente d\'invalidité', 'annuity')
+        'Rente d\'invalidité', 'quarter')
     benefit_rule = add_rule(cfg_dict, benefit, 'benefit')
     cov.benefits.append(benefit)
 

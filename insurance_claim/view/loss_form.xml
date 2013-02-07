@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<form string="Loss">
+    <label name="loss_desc"/>
+    <field name="loss_desc" widget="selection"/>
+    <label name="event_desc"/>
+    <field name="event_desc" widget="selection"/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <newline/>
+    <field name="complementary_data" colspan="2"/>
+    <field name="delivered_services" colspan="4"/>
+</form>

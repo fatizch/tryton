@@ -42,7 +42,8 @@ class Coverage(model.CoopSQL, Offered):
         },
         depends=['is_package'])
     item_desc = fields.Many2One('ins_product.item_desc', 'Item Descriptor')
-    benefits = fields.One2Many('ins_product.benefit', 'coverage', 'Benefits',
+    benefits = fields.Many2Many('ins_product.coverage-benefit', 'coverage',
+        'benefit', 'Benefits',
         context={
             'start_date': Eval('start_date'),
             'currency_digits': Eval('currency_digits'),

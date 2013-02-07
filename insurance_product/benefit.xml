@@ -4,7 +4,6 @@
         <!-- *******************************************
             ************* Benefit *********
             ******************************************* -->
-        <!-- form view -->
         <record model="ir.ui.view" id="benefit_view_form">
             <field name="model">ins_product.benefit</field>
             <field name="type">form</field>
@@ -17,5 +16,84 @@
             <field name="inherit" ref="offered_view_tree"/>
             <field name="name">benefit_tree</field>
         </record>
+        <record model="ir.action.act_window" id="act_benefit_form">
+            <field name="name">Benefits</field>
+            <field name="res_model">ins_product.benefit</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_benefit_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="benefit_view_tree"/>
+            <field name="act_window" ref="act_benefit_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_benefit_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="benefit_view_form"/>
+            <field name="act_window" ref="act_benefit_form"/>
+        </record>
+        <menuitem parent="menu_product" sequence="1"
+            id="menu_benefit_form" icon="tryton-list" action="act_benefit_form"/>
+
+        <!-- *******************************************
+            ************* Event Desc *********
+            ******************************************* -->
+        <record model="ir.ui.view" id="event_desc_view_form">
+            <field name="model">ins_product.event_desc</field>
+            <field name="type">form</field>
+            <field name="name">event_desc_form</field>
+        </record>
+        <record model="ir.ui.view" id="event_desc_view_tree">
+            <field name="model">ins_product.event_desc</field>
+            <field name="type">tree</field>
+            <field name="name">event_desc_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_event_desc_form">
+            <field name="name">Events</field>
+            <field name="res_model">ins_product.event_desc</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_event_desc_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="event_desc_view_tree"/>
+            <field name="act_window" ref="act_event_desc_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_event_desc_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="event_desc_view_form"/>
+            <field name="act_window" ref="act_event_desc_form"/>
+        </record>
+        <menuitem parent="menu_product_configuration" sequence="11"
+            id="menu_event_desc_form" icon="tryton-list" action="act_event_desc_form"/>
+
+        <!-- *******************************************
+            ************* Loss Desc *********
+            ******************************************* -->
+        <record model="ir.ui.view" id="loss_desc_view_form">
+            <field name="model">ins_product.loss_desc</field>
+            <field name="type">form</field>
+            <field name="name">loss_desc_form</field>
+        </record>
+        <record model="ir.ui.view" id="loss_desc_view_tree">
+            <field name="model">ins_product.loss_desc</field>
+            <field name="type">tree</field>
+            <field name="name">loss_desc_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_loss_desc_form">
+            <field name="name">Losses</field>
+            <field name="res_model">ins_product.loss_desc</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_loss_desc_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="loss_desc_view_tree"/>
+            <field name="act_window" ref="act_loss_desc_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_loss_desc_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="loss_desc_view_form"/>
+            <field name="act_window" ref="act_loss_desc_form"/>
+        </record>
+        <menuitem parent="menu_product_configuration" sequence="11"
+            id="menu_loss_desc_form" icon="tryton-list" action="act_loss_desc_form"/>
     </data>
 </tryton>
+
+
+

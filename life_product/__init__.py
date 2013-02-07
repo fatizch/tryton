@@ -5,10 +5,11 @@ from .tranche import *
 
 def register():
     Pool.register(
-        # from life_product
+        LifeItemDescriptor,
         LifeCoverage,
         LifeProductDefinition,
         LifeEligibilityRule,
         Tranche,
         TrancheVersion,
+        LifeLossDesc,
         module='life_product', type_='model')

@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- *******************************************
+            ************** Claim **************
+            ******************************************* -->
+        <record model="ir.ui.view" id="claim_view_form">
+            <field name="model">ins_claim.claim</field>
+            <field name="type">form</field>
+            <field name="name">claim_form</field>
+        </record>
+        <record model="ir.ui.view" id="claim_view_tree">
+            <field name="model">ins_claim.claim</field>
+            <field name="type">tree</field>
+            <field name="name">claim_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_claim_form">
+            <field name="name">Claims</field>
+            <field name="res_model">ins_claim.claim</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_claim_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="claim_view_tree"/>
+            <field name="act_window" ref="act_claim_form"/>
+        </record>
+        <!-- View for the edition or the Form of claim -->
+        <record model="ir.action.act_window.view" id="act_claim_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="claim_view_form"/>
+            <field name="act_window" ref="act_claim_form"/>
+        </record>
+        <menuitem name="Claim" id="menu_claim" sequence="15"/>
+        <menuitem parent="menu_claim" sequence="4" id="menu_claim_form"
+            icon="tryton-list" action="act_claim_form"/>
+
+        <!-- *******************************************
+            ************** Loss **************
+            ******************************************* -->
+        <record model="ir.ui.view" id="loss_view_form">
+            <field name="model">ins_claim.loss</field>
+            <field name="type">form</field>
+            <field name="name">loss_form</field>
+        </record>
+        <record model="ir.ui.view" id="loss_view_tree">
+            <field name="model">ins_claim.loss</field>
+            <field name="type">tree</field>
+            <field name="name">loss_tree</field>
+        </record>
+        <!--################################################################ -->
+        <!-- Delivered Service -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="delivered_service_view_form">
+            <field name="model">ins_contract.delivered_service</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_contract.delivered_service_view_form"/>
+            <field name="name">delivered_service_form</field>
+        </record>
+        <record model="ir.ui.view" id="delivered_service_view_tree">
+            <field name="model">ins_contract.delivered_service</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_contract.delivered_service_view_tree"/>
+            <field name="name">delivered_service_tree</field>
+        </record>
+    </data>
+</tryton>

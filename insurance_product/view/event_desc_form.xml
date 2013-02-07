@@ -1,11 +1,9 @@
 <?xml version="1.0"?>
-<form>
+<form string="Event Descriptor">
     <label name="code"/>
     <field name="code"/>
     <label name="name"/>
     <field name="name"/>
     <newline/>
-    <label name="kind"/>
-    <field name="kind"/>
-    <field name="complementary_data_def" colspan="4"/>
+    <field name="loss_descs" colspan="4"/>
 </form>

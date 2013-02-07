@@ -403,6 +403,11 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
         'ins_product.item_desc-complementary_data_def',
         'item_desc', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'sub_elem')], )
+    kind = fields.Selection('get_possible_item_kind', 'Kind')
+
+    @classmethod
+    def get_possible_item_kind(cls):
+        return [('', '')]
 
 
 class ItemDescriptorComplementaryDataRelation(model.CoopSQL):

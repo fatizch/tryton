@@ -16,15 +16,33 @@ from trytond.modules.insurance_product.business_rule.business_rule import \
 STATE_LIFE = (Eval('_parent_offered', {}).get('family') !=
     'life_product.definition')
 
-__all__ = ['LifeCoverage', 'LifeProductDefinition', 'LifeEligibilityRule']
+__all__ = [
+    'LifeItemDescriptor',
+    'LifeCoverage',
+    'LifeProductDefinition',
+    'LifeEligibilityRule',
+    'LifeLossDesc',
+]
+
+
+class LifeItemDescriptor():
+    'Item Descriptor'
+
+    __name__ = 'ins_product.item_desc'
+    __metaclass__ = PoolMeta
+
+    @classmethod
+    def get_possible_item_kind(cls):
+        res = super(LifeItemDescriptor, cls).get_possible_item_kind()
+        res.append(('person', 'Person'))
+        return res
 
 
 class LifeCoverage():
     'Coverage'
 
-    __metaclass__ = PoolMeta
-
     __name__ = 'ins_product.coverage'
+    __metaclass__ = PoolMeta
 
     @classmethod
     def __setup__(cls):
@@ -64,7 +82,6 @@ class LifeEligibilityRule():
 
     min_age = fields.Integer('Minimum Age',
         states={'invisible': Or(STATE_LIFE, STATE_SIMPLE)})
-
     max_age = fields.Integer('Maximum Age',
         states={'invisible': Or(STATE_LIFE, STATE_SIMPLE)})
     sub_min_age = fields.Integer('Minimum Age',
@@ -131,3 +148,16 @@ class LifeEligibilityRule():
                 '%s must be younger than %s' % (
                     person.name, self.sub_max_age))
         return (EligibilityResultLine(eligible=res, details=details), errs)
+
+
+class LifeLossDesc():
+    'Loss Desc'
+
+    __name__ = 'ins_product.loss_desc'
+    __metaclass__ = PoolMeta
+
+    @classmethod
+    def get_possible_item_kind(cls):
+        res = super(LifeLossDesc, cls).get_possible_item_kind()
+        res.append(('person', 'Person'))
+        return res

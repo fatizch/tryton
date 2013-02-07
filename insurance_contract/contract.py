@@ -30,6 +30,7 @@ __all__ = [
     'CoveredElement',
     'CoveredData',
     'BrokerManager',
+    'DeliveredService',
 ]
 
 
@@ -585,22 +586,12 @@ class BillingManager(model.CoopSQL, model.CoopView):
     '''
     __name__ = 'ins_contract.billing_manager'
 
-    # This is the related contract for which the current billing manager is
-    # defined. It is necessary to have this link as the billing manager is just
-    # an interface for billing-related actions, the critical are stored on the
-    # contract.
-    contract = fields.Many2One('ins_contract.contract',
-                               'Contract')
-
-    # This is a critical field. It MUST be updated every time a billing is
+    contract = fields.Many2One('ins_contract.contract', 'Contract')
+    #It MUST be updated every time a billing is
     # done, so that the next batch will have up-to-date information on whether
     # or not it needs to work on this contract.
     next_billing_date = fields.Date('Next Billing Date')
-
-    # We need a way to present our prices.
-    prices = fields.One2Many(
-        'ins_contract.price_line',
-        'billing_manager',
+    prices = fields.One2Many('ins_contract.price_line', 'billing_manager',
         'Prices')
 
     def store_prices(self, prices):
@@ -859,3 +850,11 @@ class BrokerManager(model.CoopSQL, model.CoopView):
     __name__ = 'ins_contract.broker_manager'
 
     broker = fields.Many2One('party.party', 'Broker')
+
+
+class DeliveredService(model.CoopSQL, model.CoopView):
+    'Delivered Service'
+
+    __name__ = 'ins_contract.delivered_service'
+
+    subscribed_service = fields.Many2One('ins_contract.option', 'Coverage')

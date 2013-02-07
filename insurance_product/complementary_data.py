@@ -25,7 +25,6 @@ class ComplementaryDataDefinition(DictSchemaMixin, model.CoopSQL,
 
     __name__ = 'ins_product.complementary_data_def'
 
-    linked_item = fields.Reference('Linked Item', 'get_possible_linked_item')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     with_default_value = fields.Boolean('Default Value')
@@ -41,7 +40,8 @@ class ComplementaryDataDefinition(DictSchemaMixin, model.CoopSQL,
         [
             ('contract', 'On Contract'),
             ('product', 'On Product'),
-            ('sub_elem', 'On Sub Element')
+            ('sub_elem', 'On Sub Element'),
+            ('loss', 'On Loss'),
         ],
         'Kind')
 
@@ -146,16 +146,6 @@ class ComplementaryDataDefinition(DictSchemaMixin, model.CoopSQL,
         if 'complementary_data_kind' in Transaction().context:
             return Transaction().context['complementary_data_kind']
         return 'contract'
-
-    @classmethod
-    def get_possible_linked_item(cls):
-        module_name = utils.get_module_name(cls)
-        return [
-            ('', ''),
-            ('%s.product' % module_name, 'Product'),
-            ('%s.coverage' % module_name, 'Coverage'),
-            ('%s.item_desc' % module_name, 'Item Descriptor'),
-        ]
 
     def on_change_with_name(self):
         if not self.name and self.string:
