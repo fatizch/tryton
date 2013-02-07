@@ -15,7 +15,7 @@ __all__ = [
     'Coverage',
     'PackageCoverage',
     'CoverageComplementaryDataRelation',
-    ]
+]
 
 SUBSCRIPTION_BEHAVIOUR = [
     ('mandatory', 'Mandatory'),
@@ -219,14 +219,6 @@ class Coverage(model.CoopSQL, Offered):
             return (EligibilityResultLine(True), [])
         return res
 
-    def give_me_sub_elem_eligibility(self, args):
-        try:
-            res = self.get_result(
-                'sub_elem_eligibility', args, kind='eligibility')
-        except utils.NonExistingRuleKindException:
-            return (EligibilityResultLine(True), [])
-        return res
-
     @staticmethod
     def default_currency():
         return business.get_default_currency()
@@ -270,6 +262,18 @@ class Coverage(model.CoopSQL, Offered):
                 kind='coverage_amount')
         except utils.NonExistingRuleKindException:
             return [], []
+
+    def give_me_documents(self, args):
+        try:
+            if 'kind' in args and args['kind'] == 'sub':
+                res, errs = self.get_result(
+                    'documents', args, kind='sub_document')
+            else:
+                res, errs = self.get_result('documents', args, kind='document')
+        except utils.NonExistingRuleKindException:
+            return [], []
+
+        return res, errs
 
     def give_me_must_have_coverage_amount(self, args):
         result = self.get_good_rule_at_date(args, 'coverage_amount')

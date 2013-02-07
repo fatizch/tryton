@@ -30,6 +30,11 @@
             <field name="coverage_amount_rules"/>
         </page>
     </xpath>
+    <xpath
+        expr="/form/notebook/page[@id='managers']/notebook/page[@id='documents']/field[@name='document_rules']"
+        position="after">
+            <field name="sub_document_rules"/>
+    </xpath>
     <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"
         position="inside">
         <label name="item_desc"/>

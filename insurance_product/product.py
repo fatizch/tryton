@@ -74,23 +74,31 @@ class Offered(model.CoopView, utils.GetResult, Templated):
     end_date = fields.Date('End Date')
     description = fields.Text('Description')
 
-    pricing_rules = fields.One2Many('ins_product.pricing_rule', 'offered',
-        'Pricing Rules')
-    eligibility_rules = fields.One2Many('ins_product.eligibility_rule',
-        'offered', 'Eligibility Rules')
-    clause_rules = fields.One2Many('ins_product.clause_rule',
-        'offered', 'Clause Rules')
-    deductible_rules = fields.One2Many('ins_product.deductible_rule',
-        'offered', 'Deductible Rules')
+    pricing_rules = fields.One2Many(
+        'ins_product.pricing_rule', 'offered', 'Pricing Rules')
+    eligibility_rules = fields.One2Many(
+        'ins_product.eligibility_rule', 'offered', 'Eligibility Rules')
+    clause_rules = fields.One2Many(
+        'ins_product.clause_rule', 'offered', 'Clause Rules')
+    deductible_rules = fields.One2Many(
+        'ins_product.deductible_rule', 'offered', 'Deductible Rules')
+    document_rules = model.One2ManyDomain(
+        'ins_product.document_rule', 'offered', 'Document Rules',
+        context={'doc_rule_kind': 'main'},
+        domain=[('kind', '=', 'main')])
+    sub_document_rules = model.One2ManyDomain(
+        'ins_product.document_rule', 'offered', 'Sub Document Rules',
+        context={'doc_rule_kind': 'sub'},
+        domain=[('kind', '=', 'sub')])
     summary = fields.Function(
-            fields.Text('Summary',
-                states={'invisible': ~Eval('summary',)}
-            ),
+        fields.Text(
+            'Summary', states={'invisible': ~Eval('summary',)}),
         'get_summary')
     currency_digits = fields.Function(
-            fields.Integer('Currency Digits'),
+        fields.Integer('Currency Digits'),
         'get_currency_digits')
-    complementary_data = fields.Dict('Offered Kind',
+    complementary_data = fields.Dict(
+        'Offered Kind',
         schema_model='ins_product.complementary_data_def',
         context={'complementary_data_kind': 'product'},
         domain=[('kind', '=', 'product')])
@@ -172,7 +180,7 @@ class Offered(model.CoopView, utils.GetResult, Templated):
             # applicable date, it could be anything)
             return utils.get_good_version_at_date(self, '%s_rules' % kind,
                 the_date)
-        except ValueError, _exception:
+        except ValueError:
             return None
 
     @classmethod
@@ -189,6 +197,14 @@ class Offered(model.CoopView, utils.GetResult, Templated):
     def get_complementary_data_def(self, kinds=None, at_date=None):
         return [x for x in self.complementary_data_def
             if x.valid_at_date(at_date) and (not kinds or x.kind in kinds)]
+
+    def give_me_sub_elem_eligibility(self, args):
+        try:
+            res = self.get_result(
+                'sub_elem_eligibility', args, kind='eligibility')
+        except utils.NonExistingRuleKindException:
+            return (EligibilityResultLine(True), [])
+        return res
 
 
 class Product(model.CoopSQL, Offered):
@@ -231,7 +247,7 @@ class Product(model.CoopSQL, Offered):
         for clone, original in zip(res, products):
             i = 1
             while cls.search(
-                [('code', '=', '%s_(%s)' % (original.code, i))]):
+                    [('code', '=', '%s_(%s)' % (original.code, i))]):
                 i += 1
             clone.code = '%s_(%s)' % (original.code, i)
             clone.save()
@@ -368,6 +384,19 @@ class Product(model.CoopSQL, Offered):
                 return self.give_me_complementary_data_ids(args)
             dd_args['path'] = 'all'
         return self.give_me_complementary_data_ids_aggregate(args)
+
+    def give_me_documents(self, args):
+        print '#' * 80
+        print 'GMPRODUCT'
+        print utils.format_data(args)
+        if 'option' in args:
+            for opt in self.options:
+                if opt.code == args['option']:
+                    return opt.give_me_documents(args)
+        else:
+            return self.get_result(
+                'documents', args, kind='document')
+        return [], ()
 
 
 class ProductOptionsCoverage(model.CoopSQL):

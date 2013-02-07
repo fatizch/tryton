@@ -382,12 +382,9 @@ class ProcessFramework(ModelView):
 
         states = {}
 
-        if good_transition.is_readonly:
-            states['readonly'] = True
-
         if res:
             encoder = PYSONEncoder()
             res = encoder.encode(safe_eval(res, CONTEXT))
-            states['invisible'] = res
+            states['readonly'] = eval(res)
 
         return states

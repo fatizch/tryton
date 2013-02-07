@@ -7,7 +7,7 @@
   <field name="to_step" colspan="3"/>
   <newline/>
   <label name="kind" xalign="0"/>
-  <field name="kind" colspan="3" readonly="1"/>
+  <field name="kind" colspan="3"/>
   <newline/>
   <label name="is_readonly" xalign="0"/>
   <field name="is_readonly"/>

@@ -79,6 +79,7 @@ class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
                 res = range(start, self.amount_end + 1, step)
                 return res, []
         elif self.config_kind == 'advanced' and self.rule:
+            mess = []
             try:
                 res, mess, errs = self.rule.compute(args)
                 if res:

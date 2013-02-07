@@ -783,3 +783,7 @@ def pyson_result(pyson_expr, target, evaled=False):
     result = PYSONDecoder(env).decode(the_pyson)
 
     return result
+
+
+def convert_to_reference(target):
+    return '%s,%s' % (target.__name__, target.id)

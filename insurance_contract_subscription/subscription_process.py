@@ -29,33 +29,42 @@ class ContractSubscription():
     __metaclass__ = ClassAttr
 
     subscriber_kind = fields.Function(
-        fields.Selection(ACTOR_KIND, 'Kind',
-            on_change=['subscriber_as_person', 'subscriber_as_society', ],
+        fields.Selection(ACTOR_KIND, 'Kind', on_change=[
+            'subscriber_as_person', 'subscriber_as_society', ],
         ), 'get_subscriber_kind', 'setter_void', )
     subscriber_as_person = fields.Function(
-        fields.Many2One('party.person', 'Subscriber',
+        fields.Many2One(
+            'party.person', 'Subscriber',
             states={
                 'invisible': Eval('subscriber_kind') != 'party.person',
             },
             on_change=['subscriber', 'subscriber_as_person', ],
         ), 'get_subscriber_as_person', 'setter_void', )
     subscriber_as_society = fields.Function(
-        fields.Many2One('party.society', 'Subscriber',
+        fields.Many2One(
+            'party.society', 'Subscriber',
             states={
                 'invisible': Eval('subscriber_kind') != 'party.society',
             },
             on_change=['subscriber', 'subscriber_as_society'],
         ), 'get_subscriber_as_society', 'setter_void', )
     subscriber_desc = fields.Function(
-        fields.Text('Summary',
-            on_change_with=['subscriber_as_person', 'subscriber_as_society',
-                'subscriber', ],
+        fields.Text('Summary', on_change_with=[
+            'subscriber_as_person', 'subscriber_as_society', 'subscriber', ],
         ), 'on_change_with_subscriber_desc', 'setter_void', )
     product_desc = fields.Function(
-        fields.Text('Description', on_change_with=['offered', ],
-        ), 'on_change_with_product_desc', 'setter_void', )
-    subscription_mgr = fields.One2Many('ins_contract.subscription_mgr',
-        'contract', 'Subscription Manager')
+        fields.Text(
+            'Description', on_change_with=['offered', ],
+        ),
+        'on_change_with_product_desc', 'setter_void', )
+    subscription_mgr = fields.One2Many(
+        'ins_contract.subscription_mgr', 'contract', 'Subscription Manager')
+    doc_received = fields.Function(
+        fields.Boolean(
+            'All Document Received',
+            depends=['documents'],
+            on_change_with=['documents']),
+        'on_change_with_doc_received')
 
     @classmethod
     def __setup__(cls):
@@ -80,8 +89,8 @@ class ContractSubscription():
 
     def on_change_with_product_desc(self, name=None):
         res = ''
-        if self.offered:
-            res = self.offered.description
+        if self.get_product():
+            res = self.get_product().description
         return res
 
     def on_change_subscriber_kind(self):
@@ -125,6 +134,16 @@ class ContractSubscription():
             return {'subscriber': self.subscriber_as_society.party.id}
         return {}
 
+    def on_change_with_doc_received(self, name=None):
+        if not (hasattr(self, 'documents') and self.documents):
+            return False
+
+        for doc in self.documents:
+            if not doc.is_complete:
+                return False
+
+        return True
+
     @classmethod
     def default_subscriber_kind(cls):
         return 'party.person'
@@ -155,7 +174,7 @@ class ContractSubscription():
             self.start_date, self.offered.get_rec_name(None))),)
 
     def check_product_eligibility(self):
-        eligibility, errors = self.offered.get_result(
+        eligibility, errors = self.get_product().get_result(
             'eligibility',
             {
                 'subscriber': self.subscriber,
@@ -243,6 +262,103 @@ class ContractSubscription():
 #        Model = utils.get_relation_model(self.__class__, 'subscription_mgr')
 #        Model.delete([self.subscription_mgr])
 #        return res
+
+    def init_subscription_document_request(self):
+        DocRequest = Pool().get('ins_product.document_request')
+
+        if not (hasattr(self, 'documents') and self.documents):
+            good_req = DocRequest()
+            good_req.needed_by = self
+            good_req.save()
+            cur_docs = {}
+        else:
+            good_req = self.documents[0]
+            cur_docs = dict([(
+                (
+                    doc.document_desc.id,
+                    doc.for_object.__name__,
+                    doc.for_object.id), doc)
+                for doc in good_req.documents])
+
+        Document = Pool().get('ins_product.document')
+
+        documents = {}
+        product_docs, errs = self.get_product().get_result(
+            'documents', {
+                'contract': self,
+                'date': self.start_date})
+
+        if errs:
+            return False, errs
+
+        for doc_desc in product_docs:
+            good_doc = Document()
+            good_doc.document_desc = doc_desc
+            good_doc.for_object = self
+            documents[(
+                good_doc.document_desc.id,
+                good_doc.for_object.__name__,
+                good_doc.for_object.id)] = good_doc
+
+        for option in self.options:
+            if not option.status == 'active':
+                continue
+            option_docs, errs = self.get_product().get_result(
+                'documents', {
+                    'contract': self,
+                    'option': option.get_coverage().code,
+                    'date': self.start_date})
+
+            if errs:
+                return False, errs
+
+            if not option_docs:
+                continue
+
+            for doc_desc in option_docs:
+                good_doc = Document()
+                good_doc.document_desc = doc_desc
+                good_doc.for_object = self
+                documents[(
+                    good_doc.document_desc.id,
+                    good_doc.for_object.__name__,
+                    good_doc.for_object.id)] = good_doc
+
+        for elem in self.covered_elements:
+            for data in elem.covered_data:
+                if not data.status == 'active':
+                    continue
+                sub_docs, errs = self.get_product().get_result(
+                    'documents', {
+                        'contract': self,
+                        'option': data.option.get_coverage().code,
+                        'date': self.start_date,
+                        'kind': 'sub',
+                        'sub_elem': elem})
+                if errs:
+                    return False, errs
+                if not sub_docs:
+                    continue
+                for doc_desc in sub_docs:
+                    good_doc = Document()
+                    good_doc.document_desc = doc_desc
+                    good_doc.for_object = elem
+                    documents[(
+                        good_doc.document_desc.id,
+                        good_doc.for_object.__name__,
+                        good_doc.for_object.id)] = good_doc
+
+        for k, doc in documents.iteritems():
+            if k in cur_docs:
+                continue
+            doc.request = good_req
+            doc.save()
+
+        for k, doc in cur_docs.iteritems():
+            if k not in documents:
+                doc.delete([doc])
+
+        return True, ()
 
 
 class Option():
@@ -355,6 +471,10 @@ class SubscriptionManager(model.CoopSQL):
 
     __name__ = 'ins_contract.subscription_mgr'
 
-    contract = fields.Reference('Contract',
-            [('ins_contract.contract', 'Contract'), ('ins_collective.contract', 'Contract')], )
+    contract = fields.Reference(
+        'Contract',
+        [
+            ('ins_contract.contract', 'Contract'),
+            ('ins_collective.contract', 'Contract')],
+    )
     is_custom = fields.Boolean('Custom')

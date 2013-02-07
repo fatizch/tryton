@@ -15,6 +15,8 @@ def register():
         CoveredElement,
         CoveredData,
         PriceLine,
+        Document,
+        DocumentRequest,
         # subs_process.py classes
         ProjectState,
         CoverageDisplayer,

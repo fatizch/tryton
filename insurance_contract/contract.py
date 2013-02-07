@@ -2,7 +2,7 @@ import datetime
 import copy
 
 from trytond.model import fields
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import model
@@ -30,6 +30,8 @@ __all__ = [
     'CoveredElement',
     'CoveredData',
     'BrokerManager',
+    'Document',
+    'DocumentRequest',
     'DeliveredService',
 ]
 
@@ -132,6 +134,11 @@ class Contract(model.CoopSQL, Subscribed):
         schema_model='ins_product.complementary_data_def')
     # TODO replace single contact by date versionned list
     contact = fields.Many2One('party.party', 'Contact')
+    documents = fields.One2Many(
+        'ins_product.document_request',
+        'needed_by',
+        'Documents',
+    )
 
     @staticmethod
     def get_master(master):
@@ -591,7 +598,11 @@ class BillingManager(model.CoopSQL, model.CoopView):
     # done, so that the next batch will have up-to-date information on whether
     # or not it needs to work on this contract.
     next_billing_date = fields.Date('Next Billing Date')
-    prices = fields.One2Many('ins_contract.price_line', 'billing_manager',
+
+    # We need a way to present our prices.
+    prices = fields.One2Many(
+        'ins_contract.price_line',
+        'billing_manager',
         'Prices')
 
     def store_prices(self, prices):
@@ -857,4 +868,42 @@ class DeliveredService(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.delivered_service'
 
-    subscribed_service = fields.Many2One('ins_contract.option', 'Coverage')
+   subscribed_service = fields.Many2One('ins_contract.option', 'Coverage')
+
+
+class DocumentRequest():
+    'Document Request'
+
+    __metaclass__ = PoolMeta
+
+    __name__ = 'ins_product.document_request'
+
+    @classmethod
+    def __setup__(cls):
+        super(DocumentRequest, cls).__setup__()
+
+        cls.needed_by = copy.copy(cls.needed_by)
+
+        cls.needed_by.selection.append(
+            ('ins_contract.contract', 'Contract'))
+
+
+class Document():
+    'Document'
+
+    __metaclass__ = PoolMeta
+
+    __name__ = 'ins_product.document'
+
+    @classmethod
+    def __setup__(cls):
+        super(Document, cls).__setup__()
+
+        cls.for_object = copy.copy(cls.for_object)
+
+        cls.for_object.selection.append(
+            ('ins_contract.contract', 'Contract'))
+        cls.for_object.selection.append(
+            ('ins_contract.option', 'Option'))
+        cls.for_object.selection.append(
+            ('ins_contract.covered_element', 'Covered Element'))
