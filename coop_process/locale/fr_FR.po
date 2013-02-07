@@ -10,6 +10,10 @@ msgctxt "error:process.step_transition:"
 msgid "Pyson expression and description is mandatory"
 msgstr "Expression Pyson et la description sont obligatoires"
 
+msgctxt "field:process.process_desc,with_prev_next:"
+msgid "With Previous / Next button"
+msgstr ""
+
 msgctxt "field:process.step_transition,choice_if_false:"
 msgid ""
 msgstr ""

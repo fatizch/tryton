@@ -114,6 +114,10 @@ msgctxt "error:ins_product.item_desc:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_product.loss_desc-complementary_data_def:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:ins_product.loss_desc:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -226,6 +230,14 @@ msgctxt "field:ins_product.benefit,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_product.benefit,indemnification_calc_unit:"
+msgid "Indemnification Calculation Unit"
+msgstr "Unité de calcul de l'indemnisation"
+
+msgctxt "field:ins_product.benefit,indemnification_kind:"
+msgid "Indemnification Kind"
+msgstr "Type d'Indemnisation"
+
 msgctxt "field:ins_product.benefit,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
@@ -300,7 +312,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.benefit-loss_desc,loss_desc:"
 msgid "Loss Desc"
-msgstr ""
+msgstr "Descripteur de Préjudice"
 
 msgctxt "field:ins_product.benefit-loss_desc,rec_name:"
 msgid "Name"
@@ -341,6 +353,10 @@ msgstr "Date de Fin"
 msgctxt "field:ins_product.benefit_rule,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_product.benefit_rule,indemnification_calc_unit:"
+msgid "Indemnification Calculation Unit"
+msgstr "Unité de calcul de l'indemnisation"
 
 msgctxt "field:ins_product.benefit_rule,is_used:"
 msgid "Is Used"
@@ -1254,7 +1270,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.event_desc-loss_desc,loss_desc:"
 msgid "Loss Desc"
-msgstr ""
+msgstr "Descripteur de Préjudice"
 
 msgctxt "field:ins_product.event_desc-loss_desc,rec_name:"
 msgid "Name"
@@ -1358,6 +1374,10 @@ msgctxt "field:ins_product.loss_desc,code:"
 msgid "Code"
 msgstr "Code"
 
+msgctxt "field:ins_product.loss_desc,complementary_data_def:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
 msgctxt "field:ins_product.loss_desc,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -1378,6 +1398,14 @@ msgctxt "field:ins_product.loss_desc,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_product.loss_desc,indemnification_calc_unit:"
+msgid "Indemnification Calculation Unit"
+msgstr "Unité de calcul de l'indemnisation"
+
+msgctxt "field:ins_product.loss_desc,indemnification_kind:"
+msgid "Indemnification Kind"
+msgstr "Type d'Indemnisation"
+
 msgctxt "field:ins_product.loss_desc,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
@@ -1385,6 +1413,10 @@ msgstr "Est Utilisé"
 msgctxt "field:ins_product.loss_desc,item_desc:"
 msgid "Item Descriptor"
 msgstr "Description du Risque"
+
+msgctxt "field:ins_product.loss_desc,item_kind:"
+msgid "Kind"
+msgstr "Type"
 
 msgctxt "field:ins_product.loss_desc,name:"
 msgid "Name"
@@ -1394,11 +1426,52 @@ msgctxt "field:ins_product.loss_desc,rec_name:"
 msgid "Name"
 msgstr "Valeur"
 
+msgctxt "field:ins_product.loss_desc,with_end_date:"
+msgid "With End Date"
+msgstr "Avec Date de Fin"
+
 msgctxt "field:ins_product.loss_desc,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:ins_product.loss_desc,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt ""
+"field:ins_product.loss_desc-complementary_data_def,complementary_data_def:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_product.loss_desc-complementary_data_def,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.loss_desc-complementary_data_def,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.loss_desc-complementary_data_def,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.loss_desc-complementary_data_def,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.loss_desc-complementary_data_def,loss_desc:"
+msgid "Loss Desc"
+msgstr "Descripteur de Préjudice"
+
+msgctxt "field:ins_product.loss_desc-complementary_data_def,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.loss_desc-complementary_data_def,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.loss_desc-complementary_data_def,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -2138,6 +2211,10 @@ msgstr "Relation Risque - Données Complémentaires"
 
 msgctxt "model:ins_product.loss_desc,name:"
 msgid "Loss Desc"
+msgstr "Descripteur de Préjudice"
+
+msgctxt "model:ins_product.loss_desc-complementary_data_def,name:"
+msgid "Relation between Loss Desc and Complementary Data"
 msgstr ""
 
 msgctxt "model:ins_product.offered,name:"
@@ -2300,6 +2377,42 @@ msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Products"
 msgstr "Produits"
 
+msgctxt "selection:ins_product.benefit,indemnification_calc_unit:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:ins_product.benefit,indemnification_calc_unit:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "selection:ins_product.benefit,indemnification_calc_unit:"
+msgid "Half-year"
+msgstr "Semestre"
+
+msgctxt "selection:ins_product.benefit,indemnification_calc_unit:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "selection:ins_product.benefit,indemnification_calc_unit:"
+msgid "Quarter"
+msgstr "Trimestre"
+
+msgctxt "selection:ins_product.benefit,indemnification_calc_unit:"
+msgid "Week"
+msgstr "Semaine"
+
+msgctxt "selection:ins_product.benefit,indemnification_calc_unit:"
+msgid "Year"
+msgstr "Année"
+
+msgctxt "selection:ins_product.benefit,indemnification_kind:"
+msgid "Capital"
+msgstr "Capital"
+
+msgctxt "selection:ins_product.benefit,indemnification_kind:"
+msgid "Period"
+msgstr "Période"
+
 msgctxt "selection:ins_product.benefit,kind:"
 msgid "Annuity"
 msgstr "Rente"
@@ -2331,6 +2444,34 @@ msgstr "Avancé"
 msgctxt "selection:ins_product.benefit_rule,config_kind:"
 msgid "Simple"
 msgstr "Simple"
+
+msgctxt "selection:ins_product.benefit_rule,indemnification_calc_unit:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:ins_product.benefit_rule,indemnification_calc_unit:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "selection:ins_product.benefit_rule,indemnification_calc_unit:"
+msgid "Half-year"
+msgstr "Semestre"
+
+msgctxt "selection:ins_product.benefit_rule,indemnification_calc_unit:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "selection:ins_product.benefit_rule,indemnification_calc_unit:"
+msgid "Quarter"
+msgstr "Trimestre"
+
+msgctxt "selection:ins_product.benefit_rule,indemnification_calc_unit:"
+msgid "Week"
+msgstr "Semaine"
+
+msgctxt "selection:ins_product.benefit_rule,indemnification_calc_unit:"
+msgid "Year"
+msgstr "Année"
 
 msgctxt "selection:ins_product.benefit_rule,kind:"
 msgid "Amount"
@@ -2395,6 +2536,10 @@ msgstr "Remplacer"
 msgctxt "selection:ins_product.complementary_data_def,kind:"
 msgid "On Contract"
 msgstr "Contrat"
+
+msgctxt "selection:ins_product.complementary_data_def,kind:"
+msgid "On Loss"
+msgstr "Préjudice"
 
 msgctxt "selection:ins_product.complementary_data_def,kind:"
 msgid "On Product"
@@ -2547,6 +2692,38 @@ msgstr "Compléter"
 msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
+
+msgctxt "selection:ins_product.loss_desc,indemnification_calc_unit:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "selection:ins_product.loss_desc,indemnification_calc_unit:"
+msgid "Half-year"
+msgstr "Semestre"
+
+msgctxt "selection:ins_product.loss_desc,indemnification_calc_unit:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "selection:ins_product.loss_desc,indemnification_calc_unit:"
+msgid "Quarter"
+msgstr "Trimestre"
+
+msgctxt "selection:ins_product.loss_desc,indemnification_calc_unit:"
+msgid "Week"
+msgstr "Semaine"
+
+msgctxt "selection:ins_product.loss_desc,indemnification_calc_unit:"
+msgid "Year"
+msgstr "Année"
+
+msgctxt "selection:ins_product.loss_desc,indemnification_kind:"
+msgid "Capital"
+msgstr "Capital"
+
+msgctxt "selection:ins_product.loss_desc,indemnification_kind:"
+msgid "Period"
+msgstr "Période"
 
 msgctxt "selection:ins_product.offered,template_behaviour:"
 msgid ""

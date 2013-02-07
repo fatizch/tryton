@@ -34,6 +34,10 @@ msgctxt "error:ins_contract.covered_element:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_contract.delivered_service:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:ins_contract.option:"
 msgid "Everything is good !"
 msgstr ""
@@ -594,6 +598,38 @@ msgctxt "field:ins_contract.covered_element,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_contract.delivered_service,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.delivered_service,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.delivered_service,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.delivered_service,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.delivered_service,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.delivered_service,subscribed_service:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:ins_contract.delivered_service,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.delivered_service,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_contract.option,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -983,6 +1019,10 @@ msgctxt "model:ins_contract.covered_element,name:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
+msgctxt "model:ins_contract.delivered_service,name:"
+msgid "Delivered Service"
+msgstr "Prestation Fournie"
+
 msgctxt "model:ins_contract.option,name:"
 msgid "Subscribed Coverage"
 msgstr "Garantie"
@@ -1342,6 +1382,10 @@ msgstr "Elément Couvert"
 msgctxt "view:ins_contract.covered_element:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
+
+msgctxt "view:ins_contract.delivered_service:"
+msgid "Delivered Service"
+msgstr "Prestation Fournie"
 
 msgctxt "view:ins_contract.option:"
 msgid "option"

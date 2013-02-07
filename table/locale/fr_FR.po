@@ -170,6 +170,22 @@ msgctxt "field:table.table_def,dimension_name4:"
 msgid "Name"
 msgstr "Valeur"
 
+msgctxt "field:table.table_def,dimension_order1:"
+msgid "Dimension Order 1"
+msgstr ""
+
+msgctxt "field:table.table_def,dimension_order2:"
+msgid "Dimension Order 2"
+msgstr ""
+
+msgctxt "field:table.table_def,dimension_order3:"
+msgid "Dimension Order 3"
+msgstr ""
+
+msgctxt "field:table.table_def,dimension_order4:"
+msgid "Dimension Order 4"
+msgstr ""
+
 msgctxt "field:table.table_def,id:"
 msgid "ID"
 msgstr "ID"
@@ -229,6 +245,10 @@ msgstr "ID"
 msgctxt "field:table.table_dimension,rec_name:"
 msgid "Name"
 msgstr "Valeur"
+
+msgctxt "field:table.table_dimension,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
 
 msgctxt "field:table.table_dimension,start:"
 msgid "Start"
@@ -377,6 +397,38 @@ msgstr "Plage de Date"
 msgctxt "selection:table.table_def,dimension_kind4:"
 msgid "Value"
 msgstr "Valeur"
+
+msgctxt "selection:table.table_def,dimension_order1:"
+msgid "Alphabetical"
+msgstr ""
+
+msgctxt "selection:table.table_def,dimension_order1:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "selection:table.table_def,dimension_order2:"
+msgid "Alphabetical"
+msgstr ""
+
+msgctxt "selection:table.table_def,dimension_order2:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "selection:table.table_def,dimension_order3:"
+msgid "Alphabetical"
+msgstr ""
+
+msgctxt "selection:table.table_def,dimension_order3:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "selection:table.table_def,dimension_order4:"
+msgid "Alphabetical"
+msgstr ""
+
+msgctxt "selection:table.table_def,dimension_order4:"
+msgid "Sequence"
+msgstr "Séquence"
 
 msgctxt "selection:table.table_def,type_:"
 msgid "Boolean"

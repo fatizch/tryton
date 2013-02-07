@@ -1,0 +1,363 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:ins_claim.claim:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_claim.indemnification:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_claim.indemnification_detail:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_claim.loss:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:ins_claim.claim,claimant:"
+msgid "Claimant"
+msgstr "Déclarant"
+
+msgctxt "field:ins_claim.claim,closed_reason:"
+msgid "Closed Reason"
+msgstr "Raison de Clôture"
+
+msgctxt "field:ins_claim.claim,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_claim.claim,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_claim.claim,declaration_date:"
+msgid "Declaration Date"
+msgstr "Date de Déclaration"
+
+msgctxt "field:ins_claim.claim,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_claim.claim,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_claim.claim,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_claim.claim,losses:"
+msgid "Losses"
+msgstr "Préjudices"
+
+msgctxt "field:ins_claim.claim,name:"
+msgid "Number"
+msgstr "Numéro"
+
+msgctxt "field:ins_claim.claim,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_claim.claim,start_date:"
+msgid "Event Date"
+msgstr ""
+
+msgctxt "field:ins_claim.claim,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:ins_claim.claim,sub_status:"
+msgid "Sub Status"
+msgstr "Sous Statut"
+
+msgctxt "field:ins_claim.claim,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_claim.claim,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_claim.indemnification,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:ins_claim.indemnification,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_claim.indemnification,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_claim.indemnification,delivered_service:"
+msgid "Delivered Service"
+msgstr "Prestation Fournie"
+
+msgctxt "field:ins_claim.indemnification,details:"
+msgid "Details"
+msgstr "Détails"
+
+msgctxt "field:ins_claim.indemnification,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_claim.indemnification,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_claim.indemnification,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_claim.indemnification,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_claim.indemnification,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_claim.indemnification,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_claim.indemnification,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:ins_claim.indemnification,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_claim.indemnification,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_claim.indemnification_detail,amount_per_period:"
+msgid "Amount per Period"
+msgstr "Montant par unité de calcul"
+
+msgctxt "field:ins_claim.indemnification_detail,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_claim.indemnification_detail,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_claim.indemnification_detail,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_claim.indemnification_detail,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_claim.indemnification_detail,indemnification:"
+msgid "Indemnification"
+msgstr "Indemnisation"
+
+msgctxt "field:ins_claim.indemnification_detail,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_claim.indemnification_detail,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_claim.indemnification_detail,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_claim.indemnification_detail,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_claim.indemnification_detail,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_claim.indemnification_detail,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_claim.loss,claim:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "field:ins_claim.loss,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_claim.loss,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_claim.loss,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_claim.loss,delivered_services:"
+msgid "Delivered Services"
+msgstr "Prestations Fournies"
+
+msgctxt "field:ins_claim.loss,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_claim.loss,event_desc:"
+msgid "Event"
+msgstr "Fait Générateur"
+
+msgctxt "field:ins_claim.loss,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_claim.loss,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_claim.loss,loss_desc:"
+msgid "Loss Descriptor"
+msgstr ""
+
+msgctxt "field:ins_claim.loss,main_loss:"
+msgid "Main Loss"
+msgstr "Préjudice Initial"
+
+msgctxt "field:ins_claim.loss,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_claim.loss,start_date:"
+msgid "Loss Date"
+msgstr "Date du préjudice"
+
+msgctxt "field:ins_claim.loss,sub_losses:"
+msgid "Sub Losses"
+msgstr "Préjudices liés"
+
+msgctxt "field:ins_claim.loss,with_end_date:"
+msgid "With End Date"
+msgstr "Avec Date de Fin"
+
+msgctxt "field:ins_claim.loss,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_claim.loss,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.delivered_service,benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:ins_contract.delivered_service,indemnifications:"
+msgid "Indemnifications"
+msgstr "indemnisations"
+
+msgctxt "field:ins_contract.delivered_service,loss:"
+msgid "Loss"
+msgstr "Préjudice"
+
+msgctxt "model:ins_claim.claim,name:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "model:ins_claim.indemnification,name:"
+msgid "Indemnification"
+msgstr "Indemnisation"
+
+msgctxt "model:ins_claim.indemnification_detail,name:"
+msgid "Indemnification Detail"
+msgstr "Détail de l'indemnisation"
+
+msgctxt "model:ins_claim.loss,name:"
+msgid "Loss"
+msgstr "Préjudice"
+
+msgctxt "model:ir.action,name:act_claim_form"
+msgid "Claims"
+msgstr "Sinistres"
+
+msgctxt "model:ir.ui.menu,name:menu_claim"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "model:ir.ui.menu,name:menu_claim_form"
+msgid "Claims"
+msgstr "Sinistres"
+
+msgctxt "selection:ins_claim.claim,closed_reason:"
+msgid "Paid"
+msgstr "Payé"
+
+msgctxt "selection:ins_claim.claim,closed_reason:"
+msgid "Refusal"
+msgstr "Refus"
+
+msgctxt "selection:ins_claim.claim,status:"
+msgid "Closed"
+msgstr "Fermé"
+
+msgctxt "selection:ins_claim.claim,status:"
+msgid "In Progress"
+msgstr "En Cours"
+
+msgctxt "selection:ins_claim.claim,status:"
+msgid "Waiting from Client"
+msgstr "En Attente Client"
+
+msgctxt "selection:ins_claim.claim,status:"
+msgid "litigation"
+msgstr "En Litige"
+
+msgctxt "selection:ins_claim.indemnification,kind:"
+msgid "Capital"
+msgstr "Capital"
+
+msgctxt "selection:ins_claim.indemnification,kind:"
+msgid "Period"
+msgstr "Période"
+
+msgctxt "selection:ins_claim.indemnification,status:"
+msgid "Calculated"
+msgstr "Calculé"
+
+msgctxt "selection:ins_claim.indemnification,status:"
+msgid "Paid"
+msgstr "Payé"
+
+msgctxt "selection:ins_claim.indemnification,status:"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "selection:ins_claim.indemnification,status:"
+msgid "Validated"
+msgstr "Validé"
+
+msgctxt "selection:ins_claim.indemnification_detail,kind:"
+msgid "Deductible"
+msgstr "Franchise"
+
+msgctxt "selection:ins_claim.indemnification_detail,kind:"
+msgid "Included"
+msgstr ""
+
+msgctxt "selection:ins_claim.indemnification_detail,kind:"
+msgid "Limit"
+msgstr "Plafond"
+
+msgctxt "selection:ins_claim.indemnification_detail,kind:"
+msgid "Waiting Period"
+msgstr "Franchise"
+
+msgctxt "view:ins_claim.loss:"
+msgid "Loss"
+msgstr "Préjudice"
