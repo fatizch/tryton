@@ -868,7 +868,7 @@ class DeliveredService(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.delivered_service'
 
-   subscribed_service = fields.Many2One('ins_contract.option', 'Coverage')
+    subscribed_service = fields.Many2One('ins_contract.option', 'Coverage')
 
 
 class DocumentRequest():
