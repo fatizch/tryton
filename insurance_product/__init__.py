@@ -34,6 +34,7 @@ def register():
         EligibilityRelationKind,
         EventDesc,
         LossDesc,
+        LossDescDocumentsRelation,
         EventDescLossDescRelation,
         Benefit,
         CoverageBenefitRelation,

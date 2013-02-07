@@ -17,7 +17,7 @@
       <field name="complementary_data_def"/>
     </page>
     <page string="Documents" id="documents">
-      <field name="document_rules"/>
+      <field name="documents"/>
     </page>
   </notebook>
 </form>

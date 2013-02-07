@@ -6,6 +6,7 @@ from trytond.modules.insurance_product import Offered
 
 __all__ = [
     'EventDesc',
+    'LossDescDocumentsRelation',
     'LossDesc',
     'EventDescLossDescRelation',
     'Benefit',
@@ -31,7 +32,25 @@ class EventDesc(model.CoopSQL, model.CoopView):
         'event_desc', 'loss_desc', 'Loss Descriptions')
 
 
-class LossDesc(model.CoopSQL, model.CoopView, utils.GetResult):
+class LossDescDocumentsRelation(model.CoopSQL):
+    'Loss Desc to Document relation'
+
+    __name__ = 'ins_product.loss-document-relation'
+
+    document = fields.Many2One(
+        'ins_product.document_desc',
+        'Document',
+        ondelete='CASCADE',
+    )
+
+    loss = fields.Many2One(
+        'ins_product.loss_desc',
+        'Loss',
+        ondelete='CASCADE',
+    )
+
+
+class LossDesc(model.CoopSQL, model.CoopView):
     'Loss Desc'
 
     __name__ = 'ins_product.loss_desc'
@@ -46,21 +65,22 @@ class LossDesc(model.CoopSQL, model.CoopView, utils.GetResult):
         'ins_product.loss_desc-complementary_data_def',
         'loss_desc', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'loss')], )
-    document_rules = model.One2ManyDomain(
-        'ins_product.document_rule', 'offered', 'Document Rules',
-        context={'doc_rule_kind': 'loss'},
-        domain=[('kind', '=', 'loss')])
+    documents = fields.Many2Many(
+        'ins_product.loss-document-relation',
+        'loss',
+        'document',
+        'Documents',
+    )
 
     @classmethod
     def get_possible_item_kind(cls):
         return [('', '')]
 
-    def give_me_documents(self, args):
-        try:
-            return self.get_result(
-                'documents', args, kind='document')
-        except utils.NonExistingRuleKindException:
-            return [], ()
+    def get_documents(self):
+        if not (hasattr(self, 'documents') and self.documents):
+            return []
+
+        return self.documents
 
 
 class LossDescComplementaryDataRelation(model.CoopSQL):
