@@ -21,7 +21,13 @@ def register():
         ComplementaryDataDefinition,
         ItemDescriptorComplementaryDataRelation,
         ProductItemDescriptorRelation,
+        # from business_rule
         BusinessRuleRoot,
+        DocumentDesc,
+        DocumentRule,
+        DocumentRuleRelation,
+        DocumentRequest,
+        Document,
         PricingRule,
         PricingComponent,
         EligibilityRule,
@@ -52,10 +58,4 @@ def register():
         ProductComplementaryDataRelation,
         CoverageComplementaryDataRelation,
         LossDescComplementaryDataRelation,
-        # from business_rule
-        DocumentDesc,
-        DocumentRule,
-        DocumentRuleRelation,
-        DocumentRequest,
-        Document,
         module='insurance_product', type_='model')

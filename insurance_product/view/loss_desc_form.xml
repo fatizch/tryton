@@ -10,5 +10,6 @@
     <field name="with_end_date"/>
     <newline/>
     <field name="event_descs" colspan="2"/>
-    <field name="complementary_data_def" colspan="2"/>
+    <field name="complementary_data_def" rowspan="2" colspan="2"/>
+    <!-- <field name="document_rules" colspan="2"/> -->
 </form>

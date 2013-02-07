@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<form string="Document">
+  <label name="code" xalign="0"/>
+  <field name="code"/>
+  <label name="name" xalign="0"/>
+  <field name="name"/>
+</form>

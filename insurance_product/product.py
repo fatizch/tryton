@@ -386,16 +386,16 @@ class Product(model.CoopSQL, Offered):
         return self.give_me_complementary_data_ids_aggregate(args)
 
     def give_me_documents(self, args):
-        print '#' * 80
-        print 'GMPRODUCT'
-        print utils.format_data(args)
         if 'option' in args:
             for opt in self.options:
                 if opt.code == args['option']:
                     return opt.give_me_documents(args)
         else:
-            return self.get_result(
-                'documents', args, kind='document')
+            try:
+                return self.get_result(
+                    'documents', args, kind='document')
+            except utils.NonExistingRuleKindException:
+                return [], ()
         return [], ()
 
 

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Requests">
+    <field name="is_complete"/>
+    <field name="send_date"/>
+    <field name="reception_date"/>
+</tree>
