@@ -46,10 +46,10 @@ class LossDesc(model.CoopSQL, model.CoopView, utils.GetResult):
         'ins_product.loss_desc-complementary_data_def',
         'loss_desc', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'loss')], )
-    # document_rules = model.One2ManyDomain(
-        # 'ins_product.document_rule', 'offered', 'Document Rules',
-        # context={'doc_rule_kind': 'loss'},
-        # domain=[('kind', '=', 'loss')])
+    document_rules = model.One2ManyDomain(
+        'ins_product.document_rule', 'offered', 'Document Rules',
+        context={'doc_rule_kind': 'loss'},
+        domain=[('kind', '=', 'loss')])
 
     @classmethod
     def get_possible_item_kind(cls):

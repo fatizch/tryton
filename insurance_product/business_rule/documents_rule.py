@@ -54,12 +54,10 @@ class DocumentRule(BusinessRuleRoot, model.CoopSQL):
     )
 
     @classmethod
-    def __setup__(cls):
-        super(DocumentRule, cls).__setup__()
-
-        cls.offered = copy.copy(cls.offered)
-
-        cls.offered.selection.append(('ins_product.loss_desc', 'Loss Desc'))
+    def get_offered_models(cls):
+        res = super(DocumentRule, cls).get_offered_models()
+        res.append(('ins_product.loss_desc', 'Loss Desc'))
+        return res
 
     def give_me_documents(self, args):
         if self.config_kind == 'simple':

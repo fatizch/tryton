@@ -1,15 +1,23 @@
 <?xml version="1.0"?>
 <form string="Loss Descriptor">
-    <label name="code"/>
-    <field name="code"/>
-    <label name="name"/>
-    <field name="name"/>
-    <label name="item_kind"/>
-    <field name="item_kind"/>
-    <label name="with_end_date"/>
-    <field name="with_end_date"/>
-    <newline/>
-    <field name="event_descs" colspan="2"/>
-    <field name="complementary_data_def" rowspan="2" colspan="2"/>
-    <!-- <field name="document_rules" colspan="2"/> -->
+  <label name="code"/>
+  <field name="code"/>
+  <label name="name"/>
+  <field name="name"/>
+  <label name="item_kind"/>
+  <field name="item_kind"/>
+  <label name="with_end_date"/>
+  <field name="with_end_date"/>
+  <newline/>
+  <notebook>
+    <page string="Events" id="events">
+      <field name="event_descs"/>
+    </page>
+    <page string="Complementary Data" id="complementary_data">
+      <field name="complementary_data_def"/>
+    </page>
+    <page string="Documents" id="documents">
+      <field name="document_rules"/>
+    </page>
+  </notebook>
 </form>
