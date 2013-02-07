@@ -19,6 +19,10 @@ msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_contract.contract:"
+msgid "Everything is good !"
+msgstr ""
+
+msgctxt "error:ins_contract.contract:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -29,6 +33,10 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "error:ins_contract.covered_element:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.option:"
+msgid "Everything is good !"
+msgstr ""
 
 msgctxt "error:ins_contract.option:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -415,7 +423,7 @@ msgid "Master"
 msgstr "Maître"
 
 msgctxt "field:ins_contract.contract,offered:"
-msgid "Offered"
+msgid "Product"
 msgstr "Offre"
 
 msgctxt "field:ins_contract.contract,options:"
@@ -477,6 +485,10 @@ msgstr "Données Complémentaires"
 msgctxt "field:ins_contract.covered_data,coverage:"
 msgid "Coverage"
 msgstr "Garantie"
+
+msgctxt "field:ins_contract.covered_data,coverage_amount:"
+msgid ""
+msgstr ""
 
 msgctxt "field:ins_contract.covered_data,covered_element:"
 msgid "Covered Element"
@@ -615,7 +627,7 @@ msgid "Is Used"
 msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.option,offered:"
-msgid "Offered"
+msgid "Coverage"
 msgstr "Offre"
 
 msgctxt "field:ins_contract.option,rec_name:"
@@ -734,6 +746,11 @@ msgctxt "field:ins_contract.price_line,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt ""
+"field:ins_contract.subs_process.covered_desc,data_complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
 msgctxt "field:ins_contract.subs_process.covered_desc,data_coverage_name:"
 msgid "offered"
 msgstr "Garantie"
@@ -741,10 +758,6 @@ msgstr "Garantie"
 msgctxt "field:ins_contract.subs_process.covered_desc,data_covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
-
-msgctxt "field:ins_contract.subs_process.covered_desc,data_complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
 
 msgctxt "field:ins_contract.subs_process.covered_desc,data_end_date:"
 msgid "End Date"
@@ -1103,6 +1116,10 @@ msgid "suspend"
 msgstr "Suspendre"
 
 msgctxt "selection:ins_contract.contract,master:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:ins_contract.contract,master:"
 msgid "Contract"
 msgstr "Contrat"
 
@@ -1127,6 +1144,10 @@ msgid "Terminated"
 msgstr "Terminé"
 
 msgctxt "selection:ins_contract.coverage_displayer,status:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:ins_contract.coverage_displayer,status:"
 msgid "Active"
 msgstr "Actif"
 
@@ -1145,6 +1166,10 @@ msgstr "Refusé"
 msgctxt "selection:ins_contract.coverage_displayer,status:"
 msgid "Terminated"
 msgstr "Terminé"
+
+msgctxt "selection:ins_contract.covered_data,status:"
+msgid ""
+msgstr ""
 
 msgctxt "selection:ins_contract.covered_data,status:"
 msgid "Active"

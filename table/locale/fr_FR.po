@@ -154,6 +154,22 @@ msgctxt "field:table.table_def,dimension_kind4:"
 msgid "Dimension Kind 4"
 msgstr "Type Dim 4"
 
+msgctxt "field:table.table_def,dimension_name1:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:table.table_def,dimension_name2:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:table.table_def,dimension_name3:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:table.table_def,dimension_name4:"
+msgid "Name"
+msgstr "Valeur"
+
 msgctxt "field:table.table_def,id:"
 msgid "ID"
 msgstr "ID"
@@ -169,6 +185,10 @@ msgstr "Nom"
 msgctxt "field:table.table_def,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:table.table_def,type_:"
+msgid "Type"
+msgstr "Type"
 
 msgctxt "field:table.table_def,write_date:"
 msgid "Write Date"
@@ -357,6 +377,26 @@ msgstr "Plage de Date"
 msgctxt "selection:table.table_def,dimension_kind4:"
 msgid "Value"
 msgstr "Valeur"
+
+msgctxt "selection:table.table_def,type_:"
+msgid "Boolean"
+msgstr "Booléen"
+
+msgctxt "selection:table.table_def,type_:"
+msgid "Char"
+msgstr "Alphanumérique"
+
+msgctxt "selection:table.table_def,type_:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "selection:table.table_def,type_:"
+msgid "Integer"
+msgstr "Entier"
+
+msgctxt "selection:table.table_def,type_:"
+msgid "Numeric"
+msgstr "Numérique"
 
 msgctxt "selection:table.table_dimension,type:"
 msgid "Dimension 1"

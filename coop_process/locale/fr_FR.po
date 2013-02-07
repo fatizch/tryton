@@ -1,0 +1,43 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:process.step_transition:"
+msgid "Both choices must be filled !"
+msgstr "Saisir les deux choix"
+
+msgctxt "error:process.step_transition:"
+msgid "Pyson expression and description is mandatory"
+msgstr "Expression Pyson et la description sont obligatoires"
+
+msgctxt "field:process.step_transition,choice_if_false:"
+msgid ""
+msgstr ""
+
+msgctxt "field:process.step_transition,choice_if_true:"
+msgid ""
+msgstr ""
+
+msgctxt "field:process.step_transition,pyson_choice:"
+msgid ""
+msgstr ""
+
+msgctxt "field:process.step_transition,pyson_description:"
+msgid ""
+msgstr ""
+
+msgctxt "field:process.step_transition,transition_kind:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:process.step_transition,kind:"
+msgid "Calculated"
+msgstr "Calculé"
+
+msgctxt "selection:process.step_transition,transition_kind:"
+msgid "Choice"
+msgstr "Choix"
+
+msgctxt "selection:process.step_transition,transition_kind:"
+msgid "Standard"
+msgstr "Standard"

@@ -10,6 +10,10 @@ msgctxt "field:ins_contract.covered_element,person:"
 msgid "Person"
 msgstr "Personne Physique"
 
+msgctxt "field:life_contract.covered_desc,data_complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
 msgctxt "field:life_contract.covered_desc,data_coverage_amount:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"
@@ -21,10 +25,6 @@ msgstr "Garantie"
 msgctxt "field:life_contract.covered_desc,data_covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
-
-msgctxt "field:life_contract.covered_desc,data_complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
 
 msgctxt "field:life_contract.covered_desc,data_end_date:"
 msgid "End Date"

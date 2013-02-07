@@ -62,6 +62,10 @@ msgctxt "field:ins_collective.contract,subscriber_kind:"
 msgid "Kind"
 msgstr "Type"
 
+msgctxt "field:ins_collective.contract,subscription_mgr:"
+msgid "Subscription Manager"
+msgstr ""
+
 msgctxt "selection:ins_collective.contract,subscriber_kind:"
 msgid "Person"
 msgstr "Personne Physique"

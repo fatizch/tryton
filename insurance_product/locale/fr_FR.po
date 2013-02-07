@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:ins_product.benefit-loss_desc:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:ins_product.benefit:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -9,6 +13,14 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "error:ins_product.benefit_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.benefit_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr ""
+
+msgctxt "error:ins_product.business_rule_root:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr ""
 
 msgctxt "error:ins_product.clause:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -22,13 +34,33 @@ msgctxt "error:ins_product.clause_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_product.clause_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr ""
+
 msgctxt "error:ins_product.clause_version:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.complementary_data_def:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.complementary_data_relation:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.coverage-benefit:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_product.coverage-complementary_data_def:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.coverage:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
 
 msgctxt "error:ins_product.coverage:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -42,9 +74,17 @@ msgctxt "error:ins_product.coverage_amount_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_product.coverage_amount_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr ""
+
 msgctxt "error:ins_product.deductible_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.deductible_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr ""
 
 msgctxt "error:ins_product.eligibility_relation_kind:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -54,11 +94,27 @@ msgctxt "error:ins_product.eligibility_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_product.eligibility_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr ""
+
+msgctxt "error:ins_product.event_desc-loss_desc:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.event_desc:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:ins_product.item_desc-complementary_data_def:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_product.item_desc:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.loss_desc:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -74,6 +130,14 @@ msgctxt "error:ins_product.pricing_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_product.pricing_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr ""
+
+msgctxt "error:ins_product.product-complementary_data_def:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:ins_product.product-item_desc:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -82,9 +146,9 @@ msgctxt "error:ins_product.product-options-coverage:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_product.product-complementary_data_def:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+msgctxt "error:ins_product.product:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
 
 msgctxt "error:ins_product.product:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -94,17 +158,17 @@ msgctxt "error:ins_product.reserve_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_product.complementary_data_def:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.complementary_data_relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+msgctxt "error:ins_product.reserve_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr ""
 
 msgctxt "error:ins_product.term_renewal_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.term_renewal_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr ""
 
 msgctxt "field:ProductDefinition,id:"
 msgid "ID"
@@ -121,6 +185,10 @@ msgstr "Clauses"
 msgctxt "field:ins_product.benefit,code:"
 msgid "Code"
 msgstr "Code"
+
+msgctxt "field:ins_product.benefit,complementary_data:"
+msgid "Offered Kind"
+msgstr "Typage"
 
 msgctxt "field:ins_product.benefit,coverage:"
 msgid "Coverage"
@@ -166,13 +234,13 @@ msgctxt "field:ins_product.benefit,kind:"
 msgid "Kind"
 msgstr "Type"
 
+msgctxt "field:ins_product.benefit,loss_descs:"
+msgid "Loss Descriptions"
+msgstr ""
+
 msgctxt "field:ins_product.benefit,name:"
 msgid "Name"
 msgstr "Nom"
-
-msgctxt "field:ins_product.benefit,complementary_data:"
-msgid "Offered Kind"
-msgstr "Typage"
 
 msgctxt "field:ins_product.benefit,pricing_rules:"
 msgid "Pricing Rules"
@@ -207,6 +275,42 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:ins_product.benefit,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.benefit-loss_desc,benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:ins_product.benefit-loss_desc,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.benefit-loss_desc,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.benefit-loss_desc,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.benefit-loss_desc,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.benefit-loss_desc,loss_desc:"
+msgid "Loss Desc"
+msgstr ""
+
+msgctxt "field:ins_product.benefit-loss_desc,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_product.benefit-loss_desc,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.benefit-loss_desc,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -506,6 +610,138 @@ msgctxt "field:ins_product.clause_version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_product.complementary_data_def,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.complementary_data_def,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.complementary_data_def,default_value:"
+msgid "Default Value"
+msgstr "Valeur par Défaut"
+
+msgctxt "field:ins_product.complementary_data_def,default_value_boolean:"
+msgid "Default Value"
+msgstr "Valeur par Défaut"
+
+msgctxt "field:ins_product.complementary_data_def,default_value_char:"
+msgid "Default Value"
+msgstr "Valeur par Défaut"
+
+msgctxt "field:ins_product.complementary_data_def,default_value_selection:"
+msgid "Default Value"
+msgstr "Valeur par Défaut"
+
+msgctxt "field:ins_product.complementary_data_def,digits:"
+msgid "Digits"
+msgstr "Précision"
+
+msgctxt "field:ins_product.complementary_data_def,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_product.complementary_data_def,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.complementary_data_def,is_shared:"
+msgid "Shared"
+msgstr "Partagé"
+
+msgctxt "field:ins_product.complementary_data_def,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.complementary_data_def,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_product.complementary_data_def,linked_item:"
+msgid "Linked Item"
+msgstr "Objet Lié"
+
+msgctxt "field:ins_product.complementary_data_def,manager:"
+msgid "Manager"
+msgstr "Règles"
+
+msgctxt "field:ins_product.complementary_data_def,name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_product.complementary_data_def,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_product.complementary_data_def,selection:"
+msgid "Selection"
+msgstr "Sélection"
+
+msgctxt "field:ins_product.complementary_data_def,selection_json:"
+msgid "Selection JSON"
+msgstr ""
+
+msgctxt "field:ins_product.complementary_data_def,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_product.complementary_data_def,string:"
+msgid "String"
+msgstr "Nom"
+
+msgctxt "field:ins_product.complementary_data_def,type_:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "field:ins_product.complementary_data_def,with_default_value:"
+msgid "Default Value"
+msgstr "Valeur par Défaut"
+
+msgctxt "field:ins_product.complementary_data_def,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.complementary_data_def,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.complementary_data_relation,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_product.complementary_data_relation,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.complementary_data_relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.complementary_data_relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.complementary_data_relation,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.complementary_data_relation,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_product.complementary_data_relation,the_manager:"
+msgid "Manager"
+msgstr "Règles"
+
+msgctxt "field:ins_product.complementary_data_relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.complementary_data_relation,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_product.coverage,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
@@ -517,6 +753,18 @@ msgstr "Clauses"
 msgctxt "field:ins_product.coverage,code:"
 msgid "Code"
 msgstr "Code"
+
+msgctxt "field:ins_product.coverage,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_product.coverage,complementary_data:"
+msgid "Offered Kind"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_product.coverage,complementary_data_def:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_product.coverage,coverage_amount_rules:"
 msgid "Coverage Amount Rules"
@@ -586,10 +834,6 @@ msgctxt "field:ins_product.coverage,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.coverage,complementary_data:"
-msgid "Offered Kind"
-msgstr "Typage"
-
 msgctxt "field:ins_product.coverage,pricing_rules:"
 msgid "Pricing Rules"
 msgstr "Règles de Cotisation"
@@ -597,10 +841,6 @@ msgstr "Règles de Cotisation"
 msgctxt "field:ins_product.coverage,rec_name:"
 msgid "Name"
 msgstr "Nom"
-
-msgctxt "field:ins_product.coverage,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
 
 msgctxt "field:ins_product.coverage,start_date:"
 msgid "Start Date"
@@ -630,6 +870,52 @@ msgctxt "field:ins_product.coverage,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_product.coverage-benefit,benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:ins_product.coverage-benefit,coverage:"
+msgid "Coverage"
+msgstr "Offre"
+
+msgctxt "field:ins_product.coverage-benefit,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.coverage-benefit,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.coverage-benefit,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.coverage-benefit,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.coverage-benefit,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_product.coverage-benefit,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.coverage-benefit,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt ""
+"field:ins_product.coverage-complementary_data_def,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt ""
+"field:ins_product.coverage-complementary_data_def,complementary_data_def:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
 msgctxt "field:ins_product.coverage-complementary_data_def,coverage:"
 msgid "Coverage"
 msgstr "Garantie"
@@ -653,10 +939,6 @@ msgstr "Est Utilisé"
 msgctxt "field:ins_product.coverage-complementary_data_def,rec_name:"
 msgid "Name"
 msgstr "Valeur"
-
-msgctxt "field:ins_product.coverage-complementary_data_def,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
 
 msgctxt "field:ins_product.coverage-complementary_data_def,write_date:"
 msgid "Write Date"
@@ -910,11 +1192,91 @@ msgctxt "field:ins_product.eligibility_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_product.event_desc,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:ins_product.event_desc,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.event_desc,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.event_desc,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.event_desc,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.event_desc,loss_descs:"
+msgid "Loss Descriptions"
+msgstr ""
+
+msgctxt "field:ins_product.event_desc,name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_product.event_desc,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_product.event_desc,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.event_desc,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.event_desc-loss_desc,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.event_desc-loss_desc,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.event_desc-loss_desc,event_desc:"
+msgid "Event Desc"
+msgstr ""
+
+msgctxt "field:ins_product.event_desc-loss_desc,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.event_desc-loss_desc,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.event_desc-loss_desc,loss_desc:"
+msgid "Loss Desc"
+msgstr ""
+
+msgctxt "field:ins_product.event_desc-loss_desc,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_product.event_desc-loss_desc,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.event_desc-loss_desc,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_product.item_desc,code:"
 msgid "Code"
 msgstr "Code"
 
 msgctxt "field:ins_product.item_desc,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_product.item_desc,complementary_data_def:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -950,7 +1312,13 @@ msgctxt "field:ins_product.item_desc,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.item_desc-complementary_data_def,complementary_data:"
+msgctxt ""
+"field:ins_product.item_desc-complementary_data_def,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt ""
+"field:ins_product.item_desc-complementary_data_def,complementary_data_def:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -986,6 +1354,54 @@ msgctxt "field:ins_product.item_desc-complementary_data_def,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_product.loss_desc,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:ins_product.loss_desc,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.loss_desc,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.loss_desc,event_desc:"
+msgid "Events Descriptions"
+msgstr ""
+
+msgctxt "field:ins_product.loss_desc,event_descs:"
+msgid "Events Descriptions"
+msgstr ""
+
+msgctxt "field:ins_product.loss_desc,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.loss_desc,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.loss_desc,item_desc:"
+msgid "Item Descriptor"
+msgstr "Description du Risque"
+
+msgctxt "field:ins_product.loss_desc,name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_product.loss_desc,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_product.loss_desc,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.loss_desc,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_product.offered,clause_rules:"
 msgid "Clause Rules"
 msgstr "Clauses"
@@ -993,6 +1409,10 @@ msgstr "Clauses"
 msgctxt "field:ins_product.offered,code:"
 msgid "Code"
 msgstr "Code"
+
+msgctxt "field:ins_product.offered,complementary_data:"
+msgid "Offered Kind"
+msgstr "Typage"
 
 msgctxt "field:ins_product.offered,currency_digits:"
 msgid "Currency Digits"
@@ -1021,10 +1441,6 @@ msgstr "ID"
 msgctxt "field:ins_product.offered,name:"
 msgid "Name"
 msgstr "Nom"
-
-msgctxt "field:ins_product.offered,complementary_data:"
-msgid "Offered Kind"
-msgstr "Typage"
 
 msgctxt "field:ins_product.offered,pricing_rules:"
 msgid "Pricing Rules"
@@ -1242,6 +1658,18 @@ msgctxt "field:ins_product.product,code:"
 msgid "Code"
 msgstr "Code"
 
+msgctxt "field:ins_product.product,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_product.product,complementary_data:"
+msgid "Offered Kind"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_product.product,complementary_data_def:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
 msgctxt "field:ins_product.product,contract_generator:"
 msgid "Contract Number Generator"
 msgstr "Générateur de N° de Contrat"
@@ -1294,10 +1722,6 @@ msgctxt "field:ins_product.product,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.product,complementary_data:"
-msgid "Offered Kind"
-msgstr "Typage"
-
 msgctxt "field:ins_product.product,options:"
 msgid "Options"
 msgstr "Garanties"
@@ -1309,10 +1733,6 @@ msgstr "Règles de Cotisation"
 msgctxt "field:ins_product.product,rec_name:"
 msgid "Name"
 msgstr "Nom"
-
-msgctxt "field:ins_product.product,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
 
 msgctxt "field:ins_product.product,start_date:"
 msgid "Start Date"
@@ -1339,6 +1759,47 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:ins_product.product,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.product-complementary_data_def,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt ""
+"field:ins_product.product-complementary_data_def,complementary_data_def:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_product.product-complementary_data_def,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.product-complementary_data_def,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.product-complementary_data_def,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.product-complementary_data_def,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.product-complementary_data_def,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:ins_product.product-complementary_data_def,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_product.product-complementary_data_def,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.product-complementary_data_def,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -1411,42 +1872,6 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:ins_product.product-options-coverage,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:ins_product.product-complementary_data_def,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_product.product-complementary_data_def,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_product.product-complementary_data_def,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_product.product-complementary_data_def,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_product.product-complementary_data_def,product:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "field:ins_product.product-complementary_data_def,rec_name:"
-msgid "Name"
-msgstr "Valeur"
-
-msgctxt "field:ins_product.product-complementary_data_def,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "field:ins_product.product-complementary_data_def,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_product.product-complementary_data_def,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -1534,138 +1959,6 @@ msgctxt "field:ins_product.rule_sets.subscriber,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.complementary_data_def,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_product.complementary_data_def,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_product.complementary_data_def,default_value:"
-msgid "Default Value"
-msgstr "Valeur par Défaut"
-
-msgctxt "field:ins_product.complementary_data_def,default_value_boolean:"
-msgid "Default Value"
-msgstr "Valeur par Défaut"
-
-msgctxt "field:ins_product.complementary_data_def,default_value_char:"
-msgid "Default Value"
-msgstr "Valeur par Défaut"
-
-msgctxt "field:ins_product.complementary_data_def,default_value_selection:"
-msgid "Default Value"
-msgstr "Valeur par Défaut"
-
-msgctxt "field:ins_product.complementary_data_def,digits:"
-msgid "Digits"
-msgstr "Précision"
-
-msgctxt "field:ins_product.complementary_data_def,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:ins_product.complementary_data_def,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_product.complementary_data_def,is_shared:"
-msgid "Shared"
-msgstr "Partagé"
-
-msgctxt "field:ins_product.complementary_data_def,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_product.complementary_data_def,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:ins_product.complementary_data_def,linked_item:"
-msgid "Linked Item"
-msgstr "Objet Lié"
-
-msgctxt "field:ins_product.complementary_data_def,manager:"
-msgid "Manager"
-msgstr "Règles"
-
-msgctxt "field:ins_product.complementary_data_def,name:"
-msgid "Name"
-msgstr "Valeur"
-
-msgctxt "field:ins_product.complementary_data_def,rec_name:"
-msgid "Name"
-msgstr "Valeur"
-
-msgctxt "field:ins_product.complementary_data_def,selection:"
-msgid "Selection"
-msgstr "Sélection"
-
-msgctxt "field:ins_product.complementary_data_def,selection_json:"
-msgid "Selection JSON"
-msgstr ""
-
-msgctxt "field:ins_product.complementary_data_def,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:ins_product.complementary_data_def,string:"
-msgid "String"
-msgstr "Nom"
-
-msgctxt "field:ins_product.complementary_data_def,type_:"
-msgid "Type"
-msgstr "Type"
-
-msgctxt "field:ins_product.complementary_data_def,with_default_value:"
-msgid "Default Value"
-msgstr "Valeur par Défaut"
-
-msgctxt "field:ins_product.complementary_data_def,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_product.complementary_data_def,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:ins_product.complementary_data_relation,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_product.complementary_data_relation,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_product.complementary_data_relation,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_product.complementary_data_relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_product.complementary_data_relation,rec_name:"
-msgid "Name"
-msgstr "Valeur"
-
-msgctxt "field:ins_product.complementary_data_relation,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "field:ins_product.complementary_data_relation,the_manager:"
-msgid "Manager"
-msgstr "Règles"
-
-msgctxt "field:ins_product.complementary_data_relation,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_product.complementary_data_relation,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:ins_product.term_renewal_rule,can_be_renewed:"
 msgid "Can be renewed"
 msgstr "Peut Etre Renouvelé"
@@ -1746,6 +2039,10 @@ msgctxt "help:ins_product.benefit_rule,coef_coverage_amount:"
 msgid "Add a multiplier to apply to the coverage amount"
 msgstr "Ajouter un coefficient multiplicateur au montant de couverture"
 
+msgctxt "help:ins_product.complementary_data_def,selection:"
+msgid "A couple of key and label separated by \":\" per line"
+msgstr ""
+
 msgctxt "help:ins_product.coverage_amount_rule,amounts:"
 msgid "Specify amounts separated by ;"
 msgstr "Spécifier les montants séparés par des ;"
@@ -1757,6 +2054,10 @@ msgstr "Définition Produit"
 msgctxt "model:ins_product.benefit,name:"
 msgid "Benefit"
 msgstr "Prestation"
+
+msgctxt "model:ins_product.benefit-loss_desc,name:"
+msgid "Benefit Loss Desc Relation"
+msgstr ""
 
 msgctxt "model:ins_product.benefit_rule,name:"
 msgid "Benefit Rule"
@@ -1782,9 +2083,21 @@ msgctxt "model:ins_product.clause_version,name:"
 msgid "Clause Version"
 msgstr "Version de Clause"
 
+msgctxt "model:ins_product.complementary_data_def,name:"
+msgid "Complementary Data Definition"
+msgstr "Définition de Données Complémentaires"
+
+msgctxt "model:ins_product.complementary_data_relation,name:"
+msgid "Relation between Complementary Data and complementary data manager"
+msgstr "Table intermédiaire pour les données complémentaires"
+
 msgctxt "model:ins_product.coverage,name:"
 msgid "Coverage"
 msgstr "Garantie"
+
+msgctxt "model:ins_product.coverage-benefit,name:"
+msgid "Coverage Benefit Relation"
+msgstr ""
 
 msgctxt "model:ins_product.coverage-complementary_data_def,name:"
 msgid "Relation between Coverage and Complementary Data"
@@ -1807,6 +2120,14 @@ msgctxt "model:ins_product.eligibility_rule,name:"
 msgid "Eligibility Rule"
 msgstr "Eligibilite"
 
+msgctxt "model:ins_product.event_desc,name:"
+msgid "Event Desc"
+msgstr ""
+
+msgctxt "model:ins_product.event_desc-loss_desc,name:"
+msgid "Event Desc - Loss Desc Relation"
+msgstr ""
+
 msgctxt "model:ins_product.item_desc,name:"
 msgid "Item Descriptor"
 msgstr "Description du Risque"
@@ -1814,6 +2135,10 @@ msgstr "Description du Risque"
 msgctxt "model:ins_product.item_desc-complementary_data_def,name:"
 msgid "Relation between Item Descriptor and Complementary Data"
 msgstr "Relation Risque - Données Complémentaires"
+
+msgctxt "model:ins_product.loss_desc,name:"
+msgid "Loss Desc"
+msgstr ""
 
 msgctxt "model:ins_product.offered,name:"
 msgid "Offered"
@@ -1835,6 +2160,10 @@ msgctxt "model:ins_product.product,name:"
 msgid "Product"
 msgstr "Produit"
 
+msgctxt "model:ins_product.product-complementary_data_def,name:"
+msgid "Relation between Product and Complementary Data"
+msgstr "Relation Produit-Données Complémantaires"
+
 msgctxt "model:ins_product.product-item_desc,name:"
 msgid "Relation between Product and Item Descriptor"
 msgstr "Relation Produit-Risque"
@@ -1842,10 +2171,6 @@ msgstr "Relation Produit-Risque"
 msgctxt "model:ins_product.product-options-coverage,name:"
 msgid "Define Product - Coverage relations"
 msgstr "Relations Produit Garantie"
-
-msgctxt "model:ins_product.product-complementary_data_def,name:"
-msgid "Relation between Product and Complementary Data"
-msgstr ""
 
 msgctxt "model:ins_product.reserve_rule,name:"
 msgid "Reserve Rule"
@@ -1875,17 +2200,13 @@ msgctxt "model:ins_product.rule_sets.subscriber,name:"
 msgid "Context functions for Contracts."
 msgstr ""
 
-msgctxt "model:ins_product.complementary_data_def,name:"
-msgid "Complementary Data Definition"
-msgstr "Définition de Données Complémentaires"
-
-msgctxt "model:ins_product.complementary_data_relation,name:"
-msgid "Relation between Complementary Data and complementary data manager"
-msgstr "Table intermédiaire pour les données complémentaires"
-
 msgctxt "model:ins_product.term_renewal_rule,name:"
 msgid "Term and Renewal Rule"
 msgstr "Règle de Terme - Renouvellement"
+
+msgctxt "model:ir.action,name:act_benefit_form"
+msgid "Benefits"
+msgstr "Prestations"
 
 msgctxt "model:ir.action,name:act_coverage_amount_rule_relate_form"
 msgid "Coverage Amount"
@@ -1899,9 +2220,17 @@ msgctxt "model:ir.action,name:act_eligibility_rule_relate_form"
 msgid "Eligibility"
 msgstr "Eligibilité"
 
+msgctxt "model:ir.action,name:act_event_desc_form"
+msgid "event_descs"
+msgstr ""
+
 msgctxt "model:ir.action,name:act_item_desc_form"
 msgid "Item Descriptors"
 msgstr "Descriptions des Risques"
+
+msgctxt "model:ir.action,name:act_loss_desc_form"
+msgid "loss_descs"
+msgstr ""
 
 msgctxt "model:ir.action,name:act_model_clause"
 msgid "Clauses"
@@ -1927,13 +2256,25 @@ msgctxt "model:ir.sequence.type,name:sequence_type_contract_number"
 msgid "Contract Number"
 msgstr "Numéro de Contrat"
 
+msgctxt "model:ir.ui.menu,name:menu_benefit_form"
+msgid "Benefits"
+msgstr "Prestations"
+
 msgctxt "model:ir.ui.menu,name:menu_coverage_form"
 msgid "Coverages"
 msgstr "Garanties"
 
+msgctxt "model:ir.ui.menu,name:menu_event_desc_form"
+msgid "event_descs"
+msgstr ""
+
 msgctxt "model:ir.ui.menu,name:menu_item_desc_form"
 msgid "Item Descriptors"
 msgstr "Descriptions des Risques"
+
+msgctxt "model:ir.ui.menu,name:menu_loss_desc_form"
+msgid "loss_descs"
+msgstr ""
 
 msgctxt "model:ir.ui.menu,name:menu_model_clause"
 msgid "Clauses"
@@ -1972,6 +2313,10 @@ msgid "Per Diem"
 msgstr "Indemnité Journalière"
 
 msgctxt "selection:ins_product.benefit,template_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:ins_product.benefit,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
@@ -1996,6 +2341,10 @@ msgid "Coverage Amount"
 msgstr "Montant de Couverture"
 
 msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
@@ -2012,6 +2361,10 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
@@ -2028,6 +2381,10 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:ins_product.clause_rule,template_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:ins_product.clause_rule,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
@@ -2035,9 +2392,49 @@ msgctxt "selection:ins_product.clause_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
+msgctxt "selection:ins_product.complementary_data_def,kind:"
+msgid "On Contract"
+msgstr "Contrat"
+
+msgctxt "selection:ins_product.complementary_data_def,kind:"
+msgid "On Product"
+msgstr "Produit"
+
+msgctxt "selection:ins_product.complementary_data_def,kind:"
+msgid "On Sub Element"
+msgstr "Elèment Couvert"
+
+msgctxt "selection:ins_product.complementary_data_def,type_:"
+msgid "Boolean"
+msgstr "Booléen"
+
+msgctxt "selection:ins_product.complementary_data_def,type_:"
+msgid "Char"
+msgstr "Alphanumérique"
+
+msgctxt "selection:ins_product.complementary_data_def,type_:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "selection:ins_product.complementary_data_def,type_:"
+msgid "Integer"
+msgstr "Entier"
+
+msgctxt "selection:ins_product.complementary_data_def,type_:"
+msgid "Numeric"
+msgstr "Numérique"
+
+msgctxt "selection:ins_product.complementary_data_def,type_:"
+msgid "Selection"
+msgstr "Sélection"
+
 msgctxt "selection:ins_product.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
+
+msgctxt "selection:ins_product.coverage,family:"
+msgid "default"
+msgstr ""
 
 msgctxt "selection:ins_product.coverage,subscription_behaviour:"
 msgid "Mandatory"
@@ -2050,6 +2447,10 @@ msgstr "En Option"
 msgctxt "selection:ins_product.coverage,subscription_behaviour:"
 msgid "Proposed"
 msgstr "Proposé par Défaut"
+
+msgctxt "selection:ins_product.coverage,template_behaviour:"
+msgid ""
+msgstr ""
 
 msgctxt "selection:ins_product.coverage,template_behaviour:"
 msgid "Add"
@@ -2076,6 +2477,10 @@ msgid "Calculated List"
 msgstr "Liste Calculé"
 
 msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
@@ -2090,6 +2495,10 @@ msgstr "Avancé"
 msgctxt "selection:ins_product.deductible_rule,config_kind:"
 msgid "Simple"
 msgstr "Simple"
+
+msgctxt "selection:ins_product.deductible_rule,template_behaviour:"
+msgid ""
+msgstr ""
 
 msgctxt "selection:ins_product.deductible_rule,template_behaviour:"
 msgid "Add"
@@ -2128,12 +2537,20 @@ msgid "Society"
 msgstr "Société"
 
 msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
 msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
+
+msgctxt "selection:ins_product.offered,template_behaviour:"
+msgid ""
+msgstr ""
 
 msgctxt "selection:ins_product.offered,template_behaviour:"
 msgid "Add"
@@ -2196,12 +2613,20 @@ msgid "Yearly"
 msgstr "Annuel"
 
 msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
 msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
+
+msgctxt "selection:ins_product.product,template_behaviour:"
+msgid ""
+msgstr ""
 
 msgctxt "selection:ins_product.product,template_behaviour:"
 msgid "Add"
@@ -2220,48 +2645,16 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
 msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
-
-msgctxt "selection:ins_product.complementary_data_def,kind:"
-msgid "On Contract"
-msgstr "Contrat"
-
-msgctxt "selection:ins_product.complementary_data_def,kind:"
-msgid "On Product"
-msgstr "Produit"
-
-msgctxt "selection:ins_product.complementary_data_def,kind:"
-msgid "On Sub Element"
-msgstr "Elèment Couvert"
-
-msgctxt "selection:ins_product.complementary_data_def,type_:"
-msgid "Boolean"
-msgstr "Booléen"
-
-msgctxt "selection:ins_product.complementary_data_def,type_:"
-msgid "Char"
-msgstr "Alphanumérique"
-
-msgctxt "selection:ins_product.complementary_data_def,type_:"
-msgid "Date"
-msgstr "Date"
-
-msgctxt "selection:ins_product.complementary_data_def,type_:"
-msgid "Integer"
-msgstr "Entier"
-
-msgctxt "selection:ins_product.complementary_data_def,type_:"
-msgid "Numeric"
-msgstr "Numérique"
-
-msgctxt "selection:ins_product.complementary_data_def,type_:"
-msgid "Selection"
-msgstr "Sélection"
 
 msgctxt "selection:ins_product.term_renewal_rule,config_kind:"
 msgid "Advanced"
@@ -2290,6 +2683,10 @@ msgstr "Trimestriel"
 msgctxt "selection:ins_product.term_renewal_rule,frequency:"
 msgid "Yearly"
 msgstr "Annuel"
+
+msgctxt "selection:ins_product.term_renewal_rule,template_behaviour:"
+msgid ""
+msgstr ""
 
 msgctxt "selection:ins_product.term_renewal_rule,template_behaviour:"
 msgid "Add"
@@ -2343,9 +2740,21 @@ msgctxt "view:ins_product.clause_version:"
 msgid "Clause rule"
 msgstr "Clause"
 
+msgctxt "view:ins_product.complementary_data_def:"
+msgid "Complementary Data Desciptor"
+msgstr "Descripteur de Données Complémentaires"
+
+msgctxt "view:ins_product.complementary_data_def:"
+msgid "Complementary Data Descriptors"
+msgstr "Descripteur de Données Complémentaires"
+
 msgctxt "view:ins_product.coverage:"
 msgid "Benefits"
 msgstr "Prestations"
+
+msgctxt "view:ins_product.coverage:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
 
 msgctxt "view:ins_product.coverage:"
 msgid "Coverage"
@@ -2378,6 +2787,14 @@ msgstr "Elément Couvert"
 msgctxt "view:ins_product.eligibility_rule:"
 msgid "Eligibility rule"
 msgstr "Eligibilite"
+
+msgctxt "view:ins_product.event_desc:"
+msgid "Event Descriptor"
+msgstr ""
+
+msgctxt "view:ins_product.loss_desc:"
+msgid "Loss Descriptor"
+msgstr ""
 
 msgctxt "view:ins_product.offered:"
 msgid "Administration"
@@ -2436,6 +2853,10 @@ msgid "Pricing rule"
 msgstr "Règle de Cotisation"
 
 msgctxt "view:ins_product.product:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "view:ins_product.product:"
 msgid "Items/Options"
 msgstr "Risques/Garanties"
 
@@ -2450,14 +2871,6 @@ msgstr "Terme - Renouvellement"
 msgctxt "view:ins_product.reserve_rule:"
 msgid "Reserve rule"
 msgstr "Provisionnement"
-
-msgctxt "view:ins_product.complementary_data_def:"
-msgid "Complementary Data Desciptor"
-msgstr "Descripteur de Données Complémentaires"
-
-msgctxt "view:ins_product.complementary_data_def:"
-msgid "Complementary Data Descriptors"
-msgstr "Descripteur de Données Complémentaires"
 
 msgctxt "view:ins_product.term_renewal_rule:"
 msgid "Term - Renewal rule"

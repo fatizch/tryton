@@ -282,6 +282,10 @@ msgctxt "field:rule_engine.tree_element,language:"
 msgid "Language"
 msgstr "Langues"
 
+msgctxt "field:rule_engine.tree_element,long_description:"
+msgid "Long Description"
+msgstr ""
+
 msgctxt "field:rule_engine.tree_element,name:"
 msgid "Name"
 msgstr "Nom"
