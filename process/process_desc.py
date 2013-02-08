@@ -452,7 +452,7 @@ completed the current process, please go ahead"/>'
         return None
 
     def get_first_state_relation(self):
-        return self.get_step_relation(self.first_step())
+        return self.all_steps[0]
 
     def first_step(self):
         return self.all_steps[0]
