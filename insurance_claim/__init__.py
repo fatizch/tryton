@@ -9,4 +9,6 @@ def register():
         ClaimDeliveredService,
         Indemnification,
         IndemnificationDetail,
+        Document,
+        DocumentRequest,
         module='insurance_claim', type_='model')

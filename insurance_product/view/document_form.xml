@@ -1,16 +1,17 @@
 <?xml version="1.0"?>
-<form string="Document">
+<form string="Document" col="6">
   <label name="document_desc" xalign="0"/>
-  <field name="document_desc"/>
+  <field name="document_desc" colspan="3"/>
   <label name="received" xalign="0"/>
   <field name="received"/>
-  <newline/>
+  <label name="request_date" xalign="0"/>
+  <field name="request_date"/>
+  <label name="send_date" xalign="0"/>
+  <field name="send_date"/>
+  <label name="reception_date" xalign="0"/>
+  <field name="reception_date"/>
   <label name="for_object" xalign="0"/>
-  <field name="for_object" colspan="3"/>
-  <newline/>
+  <field name="for_object" colspan="5"/>
   <label name="attachment" xalign="0"/>
-  <field name="attachment" colspan="3"/>
-  <newline/>
-  <label name="last_modification" xalign="0"/>
-  <field name="last_modification" colspan="3"/>
+  <field name="attachment" colspan="5"/>
 </form>

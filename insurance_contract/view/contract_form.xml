@@ -1,28 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form string="contract">
-    <group id="Administrative data">
-        <label name="contract_number"/>
-        <field name="contract_number"/>
-        <label name="status"/>
-        <field name="status"/>
-        <label name="start_date"/>
-        <field name="start_date"/>
-        <newline/>
-        <label name="subscriber"/>
-        <field name="subscriber"/>
-        <label name="offered"/>
-        <field name="offered"/>
-    </group>
-    <notebook colspan="4">
-        <page string="Covered Elements/Options" id="options">
-            <field name="covered_elements"/>
-            <field name="options" />
-        </page>
-        <page string="Billing" id="billing">
-            <field name="billing_manager" mode="form" />
-        </page>
-        <page string="Complementary Data" id="complementary_data">
-            <field name="complementary_data"/>
-        </page>
-    </notebook>
+  <group id="Administrative data">
+    <label name="contract_number"/>
+    <field name="contract_number"/>
+    <label name="status"/>
+    <field name="status"/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <newline/>
+    <label name="subscriber"/>
+    <field name="subscriber"/>
+    <label name="offered"/>
+    <field name="offered"/>
+  </group>
+  <notebook colspan="4">
+    <page string="Covered Elements/Options" id="options">
+      <field name="covered_elements"/>
+      <field name="options"/>
+    </page>
+    <page string="Billing" id="billing">
+      <field name="billing_manager" mode="form"/>
+    </page>
+    <page string="Complementary Data" id="complementary_data">
+      <field name="complementary_data"/>
+    </page>
+    <page string="Documents" id="documents">
+      <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" mode="form"/>
+    </page>
+  </notebook>
 </form>

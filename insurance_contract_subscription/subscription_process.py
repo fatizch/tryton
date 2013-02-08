@@ -273,16 +273,8 @@ class ContractSubscription():
             cur_docs = {}
         else:
             good_req = self.documents[0]
-            cur_docs = dict([(
-                (
-                    doc.document_desc.id,
-                    doc.for_object.__name__,
-                    doc.for_object.id), doc)
-                for doc in good_req.documents])
 
-        Document = Pool().get('ins_product.document')
-
-        documents = {}
+        documents = []
         product_docs, errs = self.get_product().get_result(
             'documents', {
                 'contract': self,
@@ -291,14 +283,7 @@ class ContractSubscription():
         if errs:
             return False, errs
 
-        for doc_desc in product_docs:
-            good_doc = Document()
-            good_doc.document_desc = doc_desc
-            good_doc.for_object = self
-            documents[(
-                good_doc.document_desc.id,
-                good_doc.for_object.__name__,
-                good_doc.for_object.id)] = good_doc
+        documents.extend([(doc_desc, self) for doc_desc in product_docs])
 
         for option in self.options:
             if not option.status == 'active':
@@ -315,14 +300,7 @@ class ContractSubscription():
             if not option_docs:
                 continue
 
-            for doc_desc in option_docs:
-                good_doc = Document()
-                good_doc.document_desc = doc_desc
-                good_doc.for_object = self
-                documents[(
-                    good_doc.document_desc.id,
-                    good_doc.for_object.__name__,
-                    good_doc.for_object.id)] = good_doc
+            documents.extend([(doc_desc, self) for doc_desc in option_docs])
 
         for elem in self.covered_elements:
             for data in elem.covered_data:
@@ -339,24 +317,12 @@ class ContractSubscription():
                     return False, errs
                 if not sub_docs:
                     continue
-                for doc_desc in sub_docs:
-                    good_doc = Document()
-                    good_doc.document_desc = doc_desc
-                    good_doc.for_object = elem
-                    documents[(
-                        good_doc.document_desc.id,
-                        good_doc.for_object.__name__,
-                        good_doc.for_object.id)] = good_doc
 
-        for k, doc in documents.iteritems():
-            if k in cur_docs:
-                continue
-            doc.request = good_req
-            doc.save()
+                documents.extend([(doc_desc, elem) for doc_desc in sub_docs])
 
-        for k, doc in cur_docs.iteritems():
-            if k not in documents:
-                doc.delete([doc])
+        good_req.add_documents(self.start_date, documents)
+
+        good_req.clean_extras(documents)
 
         return True, ()
 

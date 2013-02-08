@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
-<tree string="Documents">
+<tree string="Documents" editable="bottom">
     <field name="received"/>
-    <field name="rec_name"/>
-    <field name="last_modification"/>
+    <field name="request_date"/>
+    <field name="send_date"/>
+    <field name="reception_date"/>
+    <field name="document_desc"/>
+    <field name="for_object"/>
 </tree>

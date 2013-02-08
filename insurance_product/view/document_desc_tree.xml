@@ -2,4 +2,6 @@
 <tree string="Documents">
   <field name="code"/>
   <field name="name"/>
+  <field name="start_date"/>
+  <field name="end_date"/>
 </tree>

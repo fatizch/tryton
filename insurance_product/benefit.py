@@ -40,7 +40,7 @@ class LossDescDocumentsRelation(model.CoopSQL):
     document = fields.Many2One(
         'ins_product.document_desc',
         'Document',
-        ondelete='CASCADE',
+        ondelete='RESTRICT',
     )
 
     loss = fields.Many2One(

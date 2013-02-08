@@ -12,6 +12,8 @@ __all__ = [
     'ClaimDeliveredService',
     'Indemnification',
     'IndemnificationDetail',
+    'DocumentRequest',
+    'Document',
 ]
 
 CLAIM_STATUS = [
@@ -60,6 +62,11 @@ class Claim(model.CoopSQL, model.CoopView):
         'get_closed_reason')
     claimant = fields.Many2One('party.party', 'Claimant')
     losses = fields.One2Many('ins_claim.loss', 'claim', 'Losses')
+    documents = fields.One2Many(
+        'ins_product.document_request',
+        'needed_by',
+        'Documents',
+    )
 
     def get_possible_sub_status(self):
         if self.status == 'closed':
@@ -185,3 +192,39 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView):
                 'period'})
     kind = fields.Selection(INDEMNIFICATION_DETAIL_KIND, 'Kind', sort=False)
     amount_per_period = fields.Numeric('Amount per Period')
+
+
+class DocumentRequest():
+    'Document Request'
+
+    __metaclass__ = PoolMeta
+
+    __name__ = 'ins_product.document_request'
+
+    @classmethod
+    def __setup__(cls):
+        super(DocumentRequest, cls).__setup__()
+
+        cls.needed_by = copy.copy(cls.needed_by)
+
+        cls.needed_by.selection.append(
+            ('ins_claim.claim', 'Claim'))
+
+
+class Document():
+    'Document'
+
+    __metaclass__ = PoolMeta
+
+    __name__ = 'ins_product.document'
+
+    @classmethod
+    def __setup__(cls):
+        super(Document, cls).__setup__()
+
+        cls.for_object = copy.copy(cls.for_object)
+
+        cls.for_object.selection.append(
+            ('ins_claim.claim', 'Claim'))
+        cls.for_object.selection.append(
+            ('ins_claim.delivered_service', 'Delivered Service'))

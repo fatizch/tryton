@@ -1,11 +1,6 @@
 <?xml version="1.0"?>
 <form string="Document Request" col="6">
+  <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" colspan="6"/>
   <label name="is_complete" xalign="0"/>
   <field name="is_complete"/>
-  <label name="send_date" xalign="0"/>
-  <field name="send_date"/>
-  <label name="reception_date" xalign="0"/>
-  <field name="reception_date"/>
-  <newline/>
-  <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" colspan="6"/>
 </form>

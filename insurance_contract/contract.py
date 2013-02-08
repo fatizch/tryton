@@ -138,6 +138,7 @@ class Contract(model.CoopSQL, Subscribed):
         'ins_product.document_request',
         'needed_by',
         'Documents',
+        size=1,
     )
 
     @staticmethod

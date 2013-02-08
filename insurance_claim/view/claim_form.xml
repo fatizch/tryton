@@ -1,21 +1,28 @@
 <?xml version="1.0"?>
 <form>
-    <label name="name"/>
-    <field name="name"/>
-    <label name="status"/>
-    <group id="status">
-        <field name="status"/>
-        <label name="closed_reason"/>
-        <field name="closed_reason"/>
-    </group>
-    <newline/>
-    <label name="declaration_date"/>
-    <field name="declaration_date"/>
-    <label name="end_date"/>
-    <field name="end_date"/>
-    <newline/>
-    <label name="claimant"/>
-    <field name="claimant"/>
-    <newline/>
-    <field name="losses" colspan="4" mode="form, tree"/>
+  <label name="name"/>
+  <field name="name"/>
+  <label name="status"/>
+  <group id="status">
+    <field name="status"/>
+    <label name="closed_reason"/>
+    <field name="closed_reason"/>
+  </group>
+  <newline/>
+  <label name="declaration_date"/>
+  <field name="declaration_date"/>
+  <label name="end_date"/>
+  <field name="end_date"/>
+  <newline/>
+  <label name="claimant"/>
+  <field name="claimant"/>
+  <newline/>
+  <notebook>
+    <page string="Losses" id="losses">
+      <field name="losses" colspan="4" mode="form, tree"/>
+    </page>
+    <page string="Documents" id="documents">
+      <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" mode="form"/>
+    </page>
+  </notebook>
 </form>
