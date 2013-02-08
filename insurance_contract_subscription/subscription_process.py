@@ -270,7 +270,6 @@ class ContractSubscription():
             good_req = DocRequest()
             good_req.needed_by = self
             good_req.save()
-            cur_docs = {}
         else:
             good_req = self.documents[0]
 

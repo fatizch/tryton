@@ -396,6 +396,9 @@ class Contract(model.CoopSQL, Subscribed):
 
         return True, ()
 
+    def get_main_contact(self):
+        return self.subscriber
+
 
 class Option(model.CoopSQL, Subscribed):
     'Subscribed Coverage'

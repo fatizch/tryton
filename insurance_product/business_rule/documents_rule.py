@@ -1,8 +1,10 @@
 #-*- coding:utf-8 -*-
-from trytond.model import fields
-from trytond.pool import Pool
-from trytond.wizard import Wizard, StateAction
+import copy
+
+from trytond.model import fields, ModelSQL
+from trytond.pool import Pool, PoolMeta
 from trytond.report import Report
+from trytond.ir import Attachment
 
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -16,7 +18,148 @@ __all__ = [
     'DocumentRuleRelation',
     'Document',
     'DocumentRequest',
+    'DocumentRequestReport',
+    'LetterModel',
+    'LetterVersion',
+    'Printable',
+    'Model',
 ]
+
+
+class LetterModel(model.CoopSQL, model.CoopView):
+    'Letter Model'
+
+    __name__ = 'ins_product.letter_model'
+
+    name = fields.Char(
+        'Name',
+        required=True,
+    )
+
+    on_model = fields.Many2One(
+        'ir.model',
+        'Model',
+        domain=[('printable', '=', True)],
+        required=True,
+    )
+
+    code = fields.Char(
+        'Code',
+        required=True,
+    )
+
+    versions = fields.One2Many(
+        'ins_product.letter_version',
+        'resource',
+        'Versions',
+    )
+
+    kind = fields.Selection(
+        [
+            ('', ''),
+            ('doc_request', 'Document Request'),
+        ],
+        'name',
+    )
+
+    def get_good_version(self, date, language):
+        for version in self.versions:
+            if not version.language == language:
+                continue
+
+            if version.start_date > date:
+                continue
+
+            if not version.end_date:
+                return version
+
+            if version.end_date >= date:
+                return version
+
+
+class LetterVersion(Attachment):
+    'Letter Version'
+
+    __name__ = 'ins_product.letter_version'
+
+    start_date = fields.Date(
+        'Start date',
+    )
+
+    end_date = fields.Date(
+        'End date',
+    )
+
+    language = fields.Many2One(
+        'ir.lang',
+        'Language',
+    )
+
+    @classmethod
+    def __setup__(cls):
+        super(LetterVersion, cls).__setup__()
+
+        cls.type = copy.copy(cls.type)
+        cls.type.states = {'readonly': True}
+
+        cls.resource = copy.copy(cls.resource)
+        cls.resource.selection = [(
+            'ins_product.letter_model', 'Letter Model')]
+
+    @classmethod
+    def default_type(cls):
+        return 'data'
+
+
+class Model():
+    'Model'
+
+    __metaclass__ = PoolMeta
+
+    __name__ = 'ir.model'
+
+    printable = fields.Boolean(
+        'Printable',
+    )
+
+
+class Printable(ModelSQL):
+    @classmethod
+    def __register__(cls, module_name):
+        # We need to store the fact that this class is a Printable class in the
+        # database.
+        super(Printable, cls).__register__(module_name)
+
+        GoodModel = Pool().get('ir.model')
+
+        good_model, = GoodModel.search([
+            ('model', '=', cls.__name__)], limit=1)
+
+        # Basically, that is just setting 'is_workflow' to True
+        good_model.printable = True
+
+        good_model.save()
+
+    def get_contact(self):
+        raise NotImplementedError
+
+    def get_lang(self):
+        try:
+            return self.get_contact().lang.code
+        except:
+            return 'en_us'
+
+    def get_address(self, kind=None):
+        contact = self.get_contact()
+        if not contact:
+            return ''
+
+        if kind:
+            address = [adr for adr in contact.addresses if adr.kind == kind][0]
+        else:
+            address = contact.addresses[0]
+
+        return address.full_address
 
 
 class DocumentDesc(model.CoopSQL, model.CoopView):
@@ -116,7 +259,7 @@ class Document(model.CoopSQL, model.CoopView):
         'Needed For',
         [('', '')],
         states={
-            'readonly': True
+            'readonly': ~~Eval('for_object')
         },
     )
 
@@ -174,10 +317,7 @@ class Document(model.CoopSQL, model.CoopView):
             else:
                 return {'reception_date': utils.today()}
         else:
-            if (hasattr(self, 'reception_date') and self.reception_date):
-                return {'reception_date': None}
-            else:
-                return {'reception_date': utils.today()}
+            return {'reception_date': None}
 
     def on_change_with_reception_date(self, name=None):
         if (hasattr(self, 'attachment') and self.attachment):
@@ -186,7 +326,7 @@ class Document(model.CoopSQL, model.CoopView):
             else:
                 return utils.today()
 
-    def get_rec_name(self, name):
+    def get_rec_name(self, name=None):
         if not (hasattr(self, 'document_desc') and self.document_desc):
             return ''
 
@@ -204,8 +344,23 @@ class Document(model.CoopSQL, model.CoopView):
     def setter_void(cls, docs, values, name):
         pass
 
+    @classmethod
+    def default_for_object(cls):
+        if not 'request_owner' in Transaction().context:
+            return ''
 
-class DocumentRequest(model.CoopSQL, model.CoopView):
+        needed_by = Transaction().context.get('request_owner')
+
+        the_model, the_id = needed_by.split(',')
+
+        if not the_model in [
+                k for k, v in cls._fields['for_object'].selection]:
+            return ''
+
+        return needed_by
+
+
+class DocumentRequest(model.CoopSQL, model.CoopView, Printable):
     'Document Request'
 
     __name__ = 'ins_product.document_request'
@@ -221,6 +376,7 @@ class DocumentRequest(model.CoopSQL, model.CoopView):
         'Documents',
         depends=['needed_by_str'],
         on_change=['documents', 'is_complete'],
+        context={'request_owner': Eval('needed_by_str')},
     )
 
     is_complete = fields.Function(
@@ -245,6 +401,45 @@ class DocumentRequest(model.CoopSQL, model.CoopView):
         ),
         'on_change_with_needed_by_str',
     )
+
+    contact_party = fields.Function(
+        fields.Many2One(
+            'party.party',
+            'Contact Party',
+        ),
+        'get_contact_party',
+    )
+
+    request_description = fields.Function(
+        fields.Char(
+            'Request Description',
+            depends=['needed_by'],
+            on_change_with=['needed_by'],
+        ),
+        'on_change_with_request_description',
+    )
+
+    @classmethod
+    def __setup__(cls):
+        super(DocumentRequest, cls).__setup__()
+
+        cls._buttons.update({
+            'create_document_request': {}})
+
+    def get_request_date(self):
+        return utils.today()
+
+    def on_change_with_request_description(self, name=None):
+        return 'Document Request for %s' % self.needed_by.get_rec_name(name)
+
+    def get_contact_party(self, name):
+        if not (hasattr(self, 'needed_by') and self.needed_by):
+            return None
+
+        try:
+            return self.needed_by.get_main_contact().id
+        except AttributeError:
+            return None
 
     def on_change_with_needed_by_str(self, name=None):
         if not (hasattr(self, 'needed_by') and self.needed_by):
@@ -316,73 +511,14 @@ class DocumentRequest(model.CoopSQL, model.CoopView):
 
         Document.delete(to_del)
 
-
-class GenerateGraph(Report):
-    __name__ = 'process.graph_generation'
-
     @classmethod
-    def execute(cls, ids, data):
-        ActionReport = Pool().get('ir.action.report')
+    @model.CoopView.button_action('insurance_product.report_document_request')
+    def create_document_request(cls, requests):
+        pass
 
-        action_report_ids = ActionReport.search([
-            ('report_name', '=', cls.__name__)
-        ])
-        if not action_report_ids:
-            raise Exception('Error', 'Report (%s) not find!' % cls.__name__)
-        action_report = ActionReport(action_report_ids[0])
-
-        Process = Pool().get('process.process_desc')
-        the_process = Process(Transaction().context.get('active_id'))
-
-        graph = cls.build_graph(the_process)
-
-        nodes = {}
-
-        for step in the_process.get_all_steps():
-            cls.build_step(the_process, step, graph, nodes)
-
-        edges = {}
-
-        for transition in the_process.transitions:
-            if transition.kind == 'next':
-                cls.build_transition(
-                    the_process, step, transition, graph, nodes, edges)
-
-        for transition in the_process.transitions:
-            if transition.kind == 'previous':
-                cls.build_inverse_transition(
-                    the_process, step, transition, graph, nodes, edges)
-
-        for transition in the_process.transitions:
-            if transition.kind == 'complete':
-                cls.build_complete_transition(
-                    the_process, step, transition, graph, nodes, edges)
-
-        nodes[the_process.first_step().id].set('style', 'filled')
-        nodes[the_process.first_step().id].set('shape', 'octagon')
-        nodes[the_process.first_step().id].set('fillcolor', '#0094d2')
-
-        for node in nodes.itervalues():
-            graph.add_node(node)
-
-        for edge in edges.itervalues():
-            graph.add_edge(edge)
-
-        data = graph.create(prog='dot', format='pdf')
-        return ('pdf', buffer(data), False, action_report.name)
+    def get_waiting_documents(self):
+        return len([doc for doc in self.documents if not doc.received])
 
 
-class GenerateGraphWizard(Wizard):
-    __name__ = 'process.generate_graph_wizard'
-
-    start_state = 'print_'
-
-    print_ = StateAction('process.report_generate_graph')
-
-    def transition_print_(self):
-        return 'end'
-
-    def do_print_(self, action):
-        return action, {
-            'id': Transaction().context.get('active_id'),
-        }
+class DocumentRequestReport(Report):
+    __name__ = 'ins_product.document_request'

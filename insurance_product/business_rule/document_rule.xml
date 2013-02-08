@@ -62,5 +62,55 @@
       <field name="type">tree</field>
       <field name="name">document_request_tree</field>
     </record>
+    <!-- Report -->
+    <record model="ir.action.report" id="report_document_request">
+      <field name="name">Request</field>
+      <field name="model">ins_product.document_request</field>
+      <field name="report_name">ins_product.document_request</field>
+      <field name="report">insurance_product/document_request.odt</field>
+    </record>
+    <record model="ir.action.keyword" id="report_document_request_keyword">
+      <field name="keyword">form_print</field>
+      <field name="model">ins_product.document_request,-1</field>
+      <field name="action" ref="report_document_request"/>
+    </record>
+    <!-- Letter Model -->
+    <record model="ir.ui.view" id="letter_model_form">
+      <field name="model">ins_product.letter_model</field>
+      <field name="type">form</field>
+      <field name="name">letter_model_form</field>
+    </record>
+    <record model="ir.ui.view" id="letter_model_tree">
+      <field name="model">ins_product.letter_model</field>
+      <field name="type">tree</field>
+      <field name="name">letter_model_tree</field>
+    </record>
+    <record model="ir.action.act_window" id="act_letter_model">
+      <field name="name">Letter Models</field>
+      <field name="res_model">ins_product.letter_model</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_letter_model_view1">
+      <field name="sequence" eval="16"/>
+      <field name="view" ref="letter_model_tree"/>
+      <field name="act_window" ref="act_letter_model"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_letter_model_view2">
+      <field name="sequence" eval="16"/>
+      <field name="view" ref="letter_model_form"/>
+      <field name="act_window" ref="act_letter_model"/>
+    </record>
+    <menuitem parent="menu_product_configuration" sequence="30"
+      action="act_letter_model" id="menu_letter_model"/>
+    <!-- Letter Version -->
+    <record model="ir.ui.view" id="letter_version_form">
+      <field name="model">ins_product.letter_version</field>
+      <field name="type">form</field>
+      <field name="name">letter_version_form</field>
+    </record>
+    <record model="ir.ui.view" id="letter_version_tree">
+      <field name="model">ins_product.letter_version</field>
+      <field name="type">tree</field>
+      <field name="name">letter_version_tree</field>
+    </record>
   </data>
 </tryton>

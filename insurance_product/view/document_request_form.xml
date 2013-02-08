@@ -3,4 +3,5 @@
   <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" colspan="6"/>
   <label name="is_complete" xalign="0"/>
   <field name="is_complete"/>
+  <button string="Send Request" name="create_document_request"/>
 </form>

@@ -23,6 +23,9 @@ def register():
         ProductItemDescriptorRelation,
         # from business_rule
         BusinessRuleRoot,
+        Model,
+        LetterModel,
+        LetterVersion,
         DocumentDesc,
         DocumentRule,
         DocumentRuleRelation,
@@ -60,3 +63,6 @@ def register():
         CoverageComplementaryDataRelation,
         LossDescComplementaryDataRelation,
         module='insurance_product', type_='model')
+    Pool.register(
+        DocumentRequestReport,
+        module='insurance_product', type_='report')
