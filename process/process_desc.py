@@ -560,7 +560,8 @@ class StepTransition(ModelSQL, ModelView):
     )
 
     method_kind = fields.Selection(
-        [('replace', 'Replace Step Methods'),
+        [
+            ('replace', 'Replace Step Methods'),
             ('add', 'Executed between steps')],
         'Method Behaviour',
     )

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<form string="Step Transition Descriptor" col="4">
+<form string="Step Transition Descriptor">
   <label name="from_step" xalign="0"/>
   <field name="from_step" colspan="3"/>
   <newline/>
@@ -14,10 +14,13 @@
   <label name="pyson" xalign="0"/>
   <field name="pyson"/>
   <newline/>
-  <group id="methods" colspan="4" xexpand="1" xfill="1" yexpand="1" yfill="1">
-    <separator name="methods"/>
+  <group id="methods" xexpand="1" xfill="1" yexpand="1" yfill="1">
+    <label name="method_kind" xalign="0"/>
+    <field name="method_kind" colspan="3" xexpand="1" xfill="1"/>
+    <separator name="methods" colspan="4" xexpand="1" xfill="1"/>
     <newline/>
-    <field name="methods" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
+    <field name="methods" colspan="4" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
   </group>
-  <field name="authorizations" xexpand="1" xfill="1" yexpand="1" yfill="1" colspan="2"/>
+  <newline/>
+  <field name="authorizations" xexpand="1" xfill="1" yexpand="1" yfill="1" colspan="4"/>
 </form>
