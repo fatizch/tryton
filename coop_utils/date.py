@@ -22,6 +22,10 @@ def add_days(date, nb):
     return date + datetime.timedelta(days=nb)
 
 
+def add_month(date, nb):
+    return date + relativedelta(months=nb)
+
+
 def convert_to_periods(dates):
     tmp_dates = dates
     tmp_dates.sort()

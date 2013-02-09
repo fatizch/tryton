@@ -69,10 +69,10 @@ class Offered(model.CoopView, utils.GetResult, Templated):
     _export_name = 'code'
 
     code = fields.Char('Code', required=True, select=1)
-    name = fields.Char('Name', required=True, select=1)
+    name = fields.Char('Name', required=True, select=1, translate=True)
     start_date = fields.Date('Start Date', required=True, select=1)
     end_date = fields.Date('End Date')
-    description = fields.Text('Description')
+    description = fields.Text('Description', translate=True)
 
     pricing_rules = fields.One2Many(
         'ins_product.pricing_rule', 'offered', 'Pricing Rules')

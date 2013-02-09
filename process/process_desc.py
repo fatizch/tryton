@@ -92,7 +92,7 @@ class ProcessDesc(ModelSQL, ModelView):
 
     # We also need a name which we can display to the final user
     fancy_name = fields.Char(
-        'Name',
+        'Name', translate=True
     )
 
     # A given process can only be used on a given model
@@ -680,7 +680,7 @@ class StepDesc(ModelSQL, ModelView):
 
     # We also need a really fancy way to present the current state
     fancy_name = fields.Char(
-        'Name',
+        'Name', translate=True,
     )
 
     # Finally, the xml which will be displayed on the current state.

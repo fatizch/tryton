@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<form string="Loan">
+    <label name="kind"/>
+    <field name="kind"/>
+    <label name="fixed_rate"/>
+    <field name="fixed_rate"/>
+    <newline/>
+    <label name="contract"/>
+    <field name="contract"/>
+    <newline/>
+    <label name="amount"/>
+    <field name="amount"/>
+    <newline/>
+    <label name="monthly_payment_number"/>
+    <field name="monthly_payment_number"/>
+    <label name="monthly_payment_amount"/>
+    <field name="monthly_payment_amount"/>
+    <newline/>
+
+    <label name="funds_release_date"/>
+    <field name="funds_release_date"/>
+    <label name="first_payment_date"/>
+    <field name="first_payment_date"/>
+    <newline/>
+    <field name="loan_shares" colspan="4" mode="tree,form"
+        view_ids="loan_contract.loan_share_view_tree_editable,loan_contract.loan_share_view_form"/>
+</form>

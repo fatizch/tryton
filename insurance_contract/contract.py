@@ -3,7 +3,7 @@ import copy
 
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 
 from trytond.modules.coop_utils import model
 from trytond.modules.coop_utils import utils
@@ -319,6 +319,7 @@ class Contract(model.CoopSQL, Subscribed):
                 else:
                     good_data = CoveredData()
                     good_data.init_from_option(option)
+                    good_data.init_from_covered_element(elem)
                     good_data.status_selection = True
                     good_datas.append(good_data)
             CoveredData.delete(to_delete)
@@ -810,7 +811,9 @@ class CoveredData(model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     status = fields.Selection(OPTIONSTATUS, 'Status')
-    coverage_amount = fields.Numeric('Coverage Amount')
+    coverage_amount = fields.Numeric('Coverage Amount',
+        states={'invisible': Bool(~Eval('_parent_coverage', {}).get(
+            'is_coverage_amount_needed'))})
 
     @classmethod
     def default_status(cls):
@@ -829,8 +832,6 @@ class CoveredData(model.CoopSQL, model.CoopView):
             return None
 
     def init_from_option(self, option):
-        #we can't set the option field, as it will be set by back ref when
-        #adding the covered data in option list
         self.option = option
         self.coverage = option.offered
         self.start_date = option.start_date
@@ -840,7 +841,8 @@ class CoveredData(model.CoopSQL, model.CoopView):
                 ['sub_elem'], at_date=self.start_date))
 
     def init_from_covered_element(self, covered_element):
-        self.covered_element = covered_element
+        #self.covered_element = covered_element
+        pass
 
     def get_dates(self, dates=None, start=None, end=None):
         if dates:

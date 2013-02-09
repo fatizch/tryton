@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="loan_view_form">
+            <field name="model">ins_contract.loan</field>
+            <field name="type">form</field>
+            <field name="name">loan_form</field>
+        </record>
+        <record model="ir.ui.view" id="loan_view_tree">
+            <field name="model">ins_contract.loan</field>
+            <field name="type">tree</field>
+            <field name="name">loan_tree</field>
+        </record>
+        <record model="ir.ui.view" id="contract_view_form">
+            <field name="model">ins_contract.contract</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_contract.contract_view_form"/>
+            <field name="name">contract_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_view_tree">
+            <field name="model">ins_contract.contract</field>
+            <field name="inherit" ref="insurance_contract.contract_view_tree"/>
+            <field name="type">tree</field>
+            <field name="arch" type="xml"/>
+        </record>
+        <record model="ir.ui.view" id="option_view_form">
+            <field name="model">ins_contract.option</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_contract.option_view_form"/>
+            <field name="name">option_form</field>
+        </record>
+        <record model="ir.ui.view" id="loan_share_view_form">
+            <field name="model">ins_contract.loan_share</field>
+            <field name="type">form</field>
+            <field name="name">loan_share_form</field>
+        </record>
+        <record model="ir.ui.view" id="loan_share_view_tree">
+            <field name="model">ins_contract.loan_share</field>
+            <field name="priority" eval="10"/>
+            <field name="type">tree</field>
+            <field name="name">loan_share_tree</field>
+        </record>
+        <record model="ir.ui.view" id="loan_share_view_tree_editable">
+            <field name="model">ins_contract.loan_share</field>
+            <field name="priority" eval="20"/>
+            <field name="type">tree</field>
+            <field name="name">loan_share_editable_tree</field>
+        </record>
+        <record model="ir.ui.view" id="covered_data_view_form">
+            <field name="model">ins_contract.covered_data</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_contract.covered_data_view_form"/>
+            <field name="name">covered_data_form</field>
+        </record>
+    </data>
+</tryton>

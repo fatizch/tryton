@@ -1,8 +1,9 @@
 from trytond.pool import Pool
-from .product import *
+from .loan_product import *
 
 
 def register():
     Pool.register(
-        Coverage,
+        LoanProduct,
+        LoanCoverage,
         module='loan_product', type_='model')

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tree>
+    <field name="kind"/>
+    <field name="monthly_payment_number"/>
+    <field name="monthly_payment_amount"/>
+    <field name="amount"/>
+    <field name="funds_release_date"/>
+    <field name="first_payment_date"/>
+</tree>

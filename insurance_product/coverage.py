@@ -3,7 +3,7 @@ import copy
 
 from trytond.model import fields
 from trytond.pool import Pool
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, Or
 
 from trytond.modules.coop_utils import model, business, utils
 from trytond.modules.insurance_product import Offered
@@ -57,9 +57,10 @@ class Coverage(model.CoopSQL, Offered):
     coverage_amount_rules = fields.One2Many(
         'ins_product.coverage_amount_rule',
         'offered', 'Coverage Amount Rules',
-        states={
-            'invisible': Bool(Eval('is_package')),
-        },)
+        states={'invisible': Bool(~Eval('is_coverage_amount_needed'))},)
+    is_coverage_amount_needed = fields.Function(
+        fields.Boolean('Coverage Amount Needed', states={'invisible': True}),
+        'get_is_coverage_amount_needed')
     subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
         'Subscription Behaviour', sort=False)
     is_package = fields.Boolean('Package')
@@ -304,6 +305,9 @@ class Coverage(model.CoopSQL, Offered):
     @staticmethod
     def default_subscription_behaviour():
         return 'mandatory'
+
+    def get_is_coverage_amount_needed(self, name=None):
+        return not self.is_package
 
 
 class PackageCoverage(model.CoopSQL):
