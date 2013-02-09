@@ -28,24 +28,10 @@ class Status(ModelSQL, ModelView):
 
     __name__ = 'process.status'
 
-    name = fields.Char(
-        'Name',
-        required=True,
-    )
-
-    code = fields.Char(
-        'Code',
-        required=True,
-    )
-
-    relations = fields.One2Many(
-        'process.process_step_relation',
-        'status',
-        'Relations',
-        states={
-            'readonly': True
-        },
-    )
+    name = fields.Char('Name', required=True, translate=True)
+    code = fields.Char('Code', required=True)
+    relations = fields.One2Many('process.process_step_relation', 'status',
+        'Relations', states={'readonly': True})
 
 
 class ProcessStepRelation(ModelSQL, ModelView):
