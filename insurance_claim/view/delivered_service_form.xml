@@ -2,7 +2,7 @@
 <data>
     <xpath expr="/form" position="inside">
         <label name="benefit"/>
-        <field name="benefit" widget="selection"/>
+        <field name="benefit"/>
         <field name="indemnifications" colspan="4"/>
     </xpath>
 </data>

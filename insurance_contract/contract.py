@@ -40,8 +40,8 @@ class Subscribed(CoopProcessFramework):
     'Subscribed'
 
     offered = fields.Many2One(
-        None, 'Offered', ondelete='RESTRICT', states={
-            'required': Eval('status') == 'active'})
+        None, 'Offered', ondelete='RESTRICT',
+        states={'required': Eval('status') == 'active'})
     start_date = fields.Date('Effective Date', required=True)
     end_date = fields.Date(
         'End Date', domain=[('start_date', '<=', 'end_date')])
@@ -434,8 +434,10 @@ class Option(model.CoopSQL, Subscribed):
         return OPTIONSTATUS
 
     def get_rec_name(self, name):
+        if self.contract:
+            res = self.contract.get_rec_name(name)
         if self.offered:
-            return self.offered.get_rec_name(name)
+            return '%s (%s)' % (res, self.offered.get_rec_name(name))
         return super(Option, self).get_rec_name(name)
 
     def append_covered_data(self, covered_element=None):
@@ -730,17 +732,16 @@ class CoveredElement(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.covered_element'
 
-    contract = fields.Many2One(
-        'ins_contract.contract', 'Contract', ondelete='CASCADE')
+    contract = fields.Many2One('ins_contract.contract', 'Contract',
+        ondelete='CASCADE')
     item_desc = fields.Many2One('ins_product.item_desc', 'Item Desc')
-    covered_data = fields.One2Many(
-        'ins_contract.covered_data', 'covered_element', 'Covered Element Data')
+    covered_data = fields.One2Many('ins_contract.covered_data',
+        'covered_element', 'Covered Element Data')
     name = fields.Char('Name')
     parent = fields.Many2One('ins_contract.covered_element', 'Parent')
-    sub_covered_elements = fields.One2Many(
-        'ins_contract.covered_element', 'parent', 'Sub Covered Elements')
-    complementary_data = fields.Dict(
-        'Complementary Data',
+    sub_covered_elements = fields.One2Many('ins_contract.covered_element',
+        'parent', 'Sub Covered Elements')
+    complementary_data = fields.Dict('Complementary Data',
         schema_model='ins_product.complementary_data_def',
         on_change_with=['item_desc', 'complementary_data'])
 

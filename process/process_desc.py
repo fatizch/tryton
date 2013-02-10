@@ -6,9 +6,9 @@ from trytond.wizard import Wizard, StateAction
 from trytond.report import Report
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
-
 from trytond.pool import Pool
 
+from trytond.modules.coop_utils import coop_string
 
 __all__ = [
     'Status',
@@ -655,19 +655,14 @@ class StepDesc(ModelSQL, ModelView):
     'Step Descriptor'
 
     __name__ = 'process.step_desc'
-
     _rec_name = 'fancy_name'
 
     # The technical_name is a functional name to identify the step desc in a
     # friendlier way than just the id.
-    technical_name = fields.Char(
-        'Technical Name',
-    )
-
+    technical_name = fields.Char('Technical Name',
+        on_change_with=['technical_name', 'fancy_name'])
     # We also need a really fancy way to present the current state
-    fancy_name = fields.Char(
-        'Name', translate=True,
-    )
+    fancy_name = fields.Char('Name', translate=True)
 
     # Finally, the xml which will be displayed on the current state.
     step_xml = fields.Text(
@@ -780,6 +775,12 @@ class StepDesc(ModelSQL, ModelView):
         xml += '</group>'
 
         return xml
+
+    def on_change_with_technical_name(self, name=None):
+        if self.technical_name:
+            return self.technical_name
+        elif self.fancy_name:
+            return coop_string.remove_blank_and_invalid_char(self.fancy_name)
 
 
 class GenerateGraph(Report):

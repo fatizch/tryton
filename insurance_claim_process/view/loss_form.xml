@@ -13,5 +13,5 @@
     <field name="end_date"/>
     <newline/>
     <field name="complementary_data" colspan="2"/>
-    <field name="delivered_services" colspan="4"/>
+    <field name="benefits" colspan="4"/>
 </form>

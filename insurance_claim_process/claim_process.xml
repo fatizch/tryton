@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="loss_view_form">
+            <field name="model">ins_claim.loss</field>
+            <field name="type">form</field>
+            <field name="priority" eval="20"/>
+            <field name="name">loss_form</field>
+        </record>
+        <record model="ir.ui.view" id="loss_delivered_services_view_form">
+            <field name="model">ins_claim.loss</field>
+            <field name="type">form</field>
+            <field name="priority" eval="30"/>
+            <field name="name">loss_delivered_services_form</field>
+        </record>
+    </data>
+</tryton>

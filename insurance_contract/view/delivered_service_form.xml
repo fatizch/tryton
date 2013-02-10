@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <form string="Delivered Service">
     <label name="subscribed_service"/>
-    <field name="subscribed_service" widget="selection"/>
+    <field name="subscribed_service"/>
 </form>

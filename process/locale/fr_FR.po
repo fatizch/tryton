@@ -580,7 +580,7 @@ msgid "Validation du contract"
 msgstr ""
 
 msgctxt "view:process.process_desc:"
-msgid "Descrption"
+msgid "Description"
 msgstr ""
 
 msgctxt "view:process.process_desc:"

@@ -5,6 +5,7 @@ from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import model, utils
+from trytond.modules.coop_process import CoopProcessFramework
 from trytond.modules.insurance_product.benefit import INDEMNIFICATION_KIND
 __all__ = [
     'Claim',
@@ -44,7 +45,7 @@ INDEMNIFICATION_DETAIL_KIND = [
 ]
 
 
-class Claim(model.CoopSQL, model.CoopView):
+class Claim(model.CoopSQL, CoopProcessFramework):
     'Claim'
 
     __name__ = 'ins_claim.claim'
@@ -85,6 +86,14 @@ class Claim(model.CoopSQL, model.CoopView):
     @staticmethod
     def default_status():
         return 'in_progress'
+
+    def init_loss(self):
+        if hasattr(self, 'losses') and self.losses:
+            return True
+        loss = utils.instanciate_relation(self.__class__, 'losses')
+        loss.init_from_claim(self)
+        self.losses = [loss]
+        return True
 
 
 class Loss(model.CoopSQL, model.CoopView):
@@ -130,6 +139,20 @@ class Loss(model.CoopSQL, model.CoopView):
                 self.loss_desc.complementary_data_def)
         return res
 
+    def init_from_claim(self, claim):
+        pass
+
+    def init_delivered_services(self, option, benefits):
+        for benefit in benefits:
+            del_service = utils.instanciate_relation(self.__class__,
+                'delivered_services')
+            del_service.subscribed_service = option
+            del_service.init_from_loss(self, benefit)
+            if (not hasattr(self, 'delivered_services')
+                 or not self.delivered_services):
+                self.delivered_services = []
+            self.delivered_services.append(del_service)
+
 
 class ClaimDeliveredService():
     'Claim Delivered Service'
@@ -140,9 +163,10 @@ class ClaimDeliveredService():
     loss = fields.Many2One('ins_claim.loss', 'Loss', ondelete='CASCADE')
     benefit = fields.Many2One('ins_product.benefit', 'Benefit',
         ondelete='RESTRICT',
-        domain=[
-            ('loss_descs', '=', Eval('_parent_loss', {}).get('loss_desc'))
-        ])
+#        domain=[
+#            ('loss_descs', '=', Eval('_parent_loss', {}).get('loss_desc'))
+#        ],
+                              )
     indemnifications = fields.One2Many('ins_claim.indemnification',
         'delivered_service', 'Indemnifications')
 
@@ -155,6 +179,9 @@ class ClaimDeliveredService():
         domain = ('offered.benefits.loss_descs', '=',
             Eval('_parent_loss', {}).get('loss_desc'))
         cls.subscribed_service.domain.append(domain)
+
+    def init_from_loss(self, loss, benefit):
+        self.benefit = benefit
 
 
 class Indemnification(model.CoopSQL, model.CoopView):

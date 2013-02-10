@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
 <form string="Status">
-  <label name="name" xalign="0"/>
-  <field name="name" colspan="3"/>
-  <newline/>
-  <label name="code" xalign="0"/>
+  <label name="name"/>
+  <field name="name"/>
+  <label name="code"/>
   <field name="code"/>
   <newline/>
   <field name="relations" colspan="4"/>

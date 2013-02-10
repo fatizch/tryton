@@ -1,9 +1,11 @@
 from trytond.pool import Pool
 from .claim import *
+from .product import *
 
 
 def register():
     Pool.register(
+        ClaimCoverage,
         Claim,
         Loss,
         ClaimDeliveredService,

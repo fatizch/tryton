@@ -27,7 +27,7 @@ class EventDesc(model.CoopSQL, model.CoopView):
     __name__ = 'ins_product.event_desc'
 
     code = fields.Char('Code', required=True)
-    name = fields.Char('Name')
+    name = fields.Char('Name', translate=True)
     loss_descs = fields.Many2Many('ins_product.event_desc-loss_desc',
         'event_desc', 'loss_desc', 'Loss Descriptions')
 
@@ -56,7 +56,7 @@ class LossDesc(model.CoopSQL, model.CoopView):
     __name__ = 'ins_product.loss_desc'
 
     code = fields.Char('Code', required=True)
-    name = fields.Char('Name')
+    name = fields.Char('Name', translate=True)
     event_descs = fields.Many2Many('ins_product.event_desc-loss_desc',
         'loss_desc', 'event_desc', 'Events Descriptions')
     item_kind = fields.Selection('get_possible_item_kind', 'Kind')
