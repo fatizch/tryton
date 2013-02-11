@@ -183,6 +183,9 @@ class ClaimDeliveredService():
     def init_from_loss(self, loss, benefit):
         self.benefit = benefit
 
+    def get_contract(self):
+        return self.subscribed_service.get_contract()
+
 
 class Indemnification(model.CoopSQL, model.CoopView):
     'Indemnification'
@@ -236,6 +239,8 @@ class DocumentRequest():
 
         cls.needed_by.selection.append(
             ('ins_claim.claim', 'Claim'))
+        cls.needed_by.selection.append(
+            ('ins_contract.delivered_service', 'Delivered Service'))
 
 
 class Document():

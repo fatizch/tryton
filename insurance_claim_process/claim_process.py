@@ -40,6 +40,56 @@ class ClaimProcess():
             loss.save()
         return True
 
+    def init_subscription_document_request(self):
+        DocRequest = Pool().get('ins_product.document_request')
+
+        if not (hasattr(self, 'documents') and self.documents):
+            good_req = DocRequest()
+            good_req.needed_by = self
+            good_req.save()
+        else:
+            good_req = self.documents[0]
+
+        documents = []
+
+        for loss in self.losses:
+            loss_docs = loss.loss_desc.get_documents()
+
+            if loss_docs:
+                documents.extend([(doc_desc, self) for doc_desc in loss_docs])
+
+            for delivered in loss.delivered_services:
+                if not (hasattr(delivered, 'benefit') and delivered.benefit):
+                    continue
+
+                contract = delivered.get_contract()
+                product = contract.get_offered()
+                if not product:
+                    continue
+
+                benefit_docs, errs = delivered.benefit.get_result(
+                    'documents', {
+                        'product': product,
+                        'contract': contract,
+                        'loss': loss,
+                        'claim': self,
+                    })
+
+                if errs:
+                    return False, errs
+
+                if not benefit_docs:
+                    continue
+
+                documents.extend([
+                    (doc_desc, delivered) for doc_desc in benefit_docs])
+
+        good_req.add_documents(self.start_date, documents)
+
+        # good_req.clean_extras(documents)
+
+        return True, ()
+
 
 class LossProcess():
     'Loss'

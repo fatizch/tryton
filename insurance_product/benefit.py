@@ -131,6 +131,13 @@ class Benefit(model.CoopSQL, Offered):
     def default_kind():
         return 'capital'
 
+    def give_me_documents(self, args):
+        try:
+            return self.get_result(
+                'documents', args, kind='document')
+        except utils.NonExistingRuleKindException:
+            return [], ()
+
 
 class BenefitLossDescRelation(model.CoopSQL):
     'Benefit Loss Desc Relation'

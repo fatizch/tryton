@@ -101,6 +101,11 @@ class Subscribed(CoopProcessFramework):
             self.end_date = offered.end_date
         self.status = 'active'
 
+    def get_offered(self):
+        if not (hasattr(self, 'offered') and self.offered):
+            return None
+        return self.offered
+
 
 class Contract(model.CoopSQL, Subscribed, Printable):
     'Contract'
@@ -452,6 +457,9 @@ class Option(model.CoopSQL, Subscribed):
         res.init_from_option(self)
         res.init_from_covered_element(covered_element)
         return res
+
+    def get_contract(self):
+        return self.contract
 
 
 class PriceLine(model.CoopSQL, model.CoopView):
