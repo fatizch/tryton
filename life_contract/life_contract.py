@@ -66,7 +66,7 @@ class Contract():
         if not subscriber.is_person:
             return super(Contract, self).init_covered_elements()
         covered_element = Pool().get('ins_contract.covered_element')()
-        covered_element.person = subscriber.get_person().id
+        covered_element.person = subscriber.id
         self.covered_elements = [covered_element]
         return super(Contract, self).init_covered_elements()
 
@@ -94,7 +94,8 @@ class CoveredPerson():
     __name__ = 'ins_contract.covered_element'
     __metaclass__ = PoolMeta
 
-    person = fields.Many2One('party.person', 'Person')
+    person = fields.Many2One('party.party', 'Person',
+        domain=[('is_person', '=', True)], ondelete='RESTRICT')
 
     def get_name_for_billing(self):
         return self.person.rec_name
@@ -129,7 +130,7 @@ class LifeCoveredDesc(CoveredDesc):
             'readonly': Eval('the_kind') != 'data'})
 
     elem_person = fields.Many2One(
-        'party.person',
+        'party.party',
         'Covered Person',
         depends=['data_coverage_name'],
         on_change=['elem_person'])
@@ -237,7 +238,7 @@ class ExtensionLifeState(DependantState):
                 'kind': 'elem'}):
             covered_person.elem_covered_data = \
                 CoveredDesc.default_elem_covered_data(wizard)
-        covered_person.elem_person = wizard.project.subscriber.person[0].id
+        covered_person.elem_person = wizard.project.subscriber.id
         covered_person.data_coverage_name = \
             covered_person.elem_person.get_rec_name('')
         wizard.extension_life.covered_elements = [covered_person]

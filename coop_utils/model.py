@@ -280,6 +280,15 @@ class CoopSQL(ExportImportMixin, ModelSQL):
         return coop_string.concat_strings(
             res, super(CoopSQL, self).get_rec_name(name))
 
+    @classmethod
+    def search(cls, domain, offset=0, limit=None, order=None, count=False,
+            query_string=False):
+        #Set your class here to see the domain on the search
+#        if cls.__name__ == 'ins_contract.option':
+#            print domain
+        return super(CoopSQL, cls).search(domain=domain, offset=offset,
+            limit=limit, order=order, count=count, query_string=query_string)
+
 
 class CoopView(ModelView):
     pass

@@ -130,7 +130,7 @@ class LifeEligibilityRule():
             # If no Subscriber is found, automatic refusal
             return (EligibilityResultLine(
                 False, ['Sub Element not defined in args']), [])
-        person = args['person'] = sub_elem.person
+        person = args['person'] = sub_elem.person.get_person()
         age = date.number_of_years_between(
             person.birth_date, args['date'])
         res = True
