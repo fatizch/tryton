@@ -62,5 +62,31 @@
             <field name="inherit" ref="insurance_contract.delivered_service_view_tree"/>
             <field name="name">delivered_service_tree</field>
         </record>
+        <!--################################################################ -->
+        <!-- Indemnification -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="indemnification_view_form">
+            <field name="model">ins_claim.indemnification</field>
+            <field name="type">form</field>
+            <field name="name">indemnification_form</field>
+        </record>
+        <record model="ir.ui.view" id="indemnification_view_tree">
+            <field name="model">ins_claim.indemnification</field>
+            <field name="type">tree</field>
+            <field name="name">indemnification_tree</field>
+        </record>
+        <!--################################################################ -->
+        <!-- Indemnification Detail-->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="indemnification_detail_view_form">
+            <field name="model">ins_claim.indemnification_detail</field>
+            <field name="type">form</field>
+            <field name="name">indemnification_detail_form</field>
+        </record>
+        <record model="ir.ui.view" id="indemnification_detail_view_tree">
+            <field name="model">ins_claim.indemnification_detail</field>
+            <field name="type">tree</field>
+            <field name="name">indemnification_detail_tree</field>
+        </record>
     </data>
 </tryton>
