@@ -21,6 +21,12 @@ class ClaimProcess():
         fields.One2Many('ins_contract.contract', None, 'Contracts',
             on_change_with=['claimant']),
         'on_change_with_contracts')
+    doc_received = fields.Function(
+        fields.Boolean(
+            'All Document Received',
+            depends=['documents'],
+            on_change_with=['documents']),
+        'on_change_with_doc_received')
 
     def get_possible_contracts(self):
         if not self.claimant:
@@ -40,7 +46,7 @@ class ClaimProcess():
             loss.save()
         return True
 
-    def init_subscription_document_request(self):
+    def init_declaration_document_request(self):
         DocRequest = Pool().get('ins_product.document_request')
 
         if not (hasattr(self, 'documents') and self.documents):
@@ -73,6 +79,7 @@ class ClaimProcess():
                         'contract': contract,
                         'loss': loss,
                         'claim': self,
+                        'date': loss.start_date,
                     })
 
                 if errs:
@@ -84,11 +91,21 @@ class ClaimProcess():
                 documents.extend([
                     (doc_desc, delivered) for doc_desc in benefit_docs])
 
-        good_req.add_documents(self.start_date, documents)
+        good_req.add_documents(utils.today(), documents)
 
         # good_req.clean_extras(documents)
 
         return True, ()
+
+    def on_change_with_doc_received(self, name=None):
+        if not (hasattr(self, 'documents') and self.documents):
+            return False
+
+        for doc in self.documents:
+            if not doc.is_complete:
+                return False
+
+        return True
 
 
 class LossProcess():

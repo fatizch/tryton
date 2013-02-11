@@ -95,6 +95,9 @@ class Claim(model.CoopSQL, CoopProcessFramework):
         self.losses = [loss]
         return True
 
+    def get_main_contact(self):
+        return self.claimant
+
 
 class Loss(model.CoopSQL, model.CoopView):
     'Loss'
@@ -259,4 +262,4 @@ class Document():
         cls.for_object.selection.append(
             ('ins_claim.claim', 'Claim'))
         cls.for_object.selection.append(
-            ('ins_claim.delivered_service', 'Delivered Service'))
+            ('ins_contract.delivered_service', 'Delivered Service'))
