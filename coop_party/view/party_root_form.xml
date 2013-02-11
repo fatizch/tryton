@@ -11,6 +11,8 @@
         <page string="Contact" id="general">
             <field name="addresses" mode="form,tree" colspan="4"
                 view_ids="party.address_view_form,party.address_view_tree_sequence"/>
+            <label name="lang"/>
+            <field name="lang" widget="selection"/>
             <field name="contact_mechanisms" colspan="4"
                 view_ids="party.contact_mechanism_view_tree_sequence"
                 pre_validate="1"/>

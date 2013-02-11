@@ -16,6 +16,7 @@ def update_models(cfg_dict):
     cfg_dict['AddressKind'] = Model.get('party.address_kind')
     cfg_dict['Address'] = Model.get('party.address')
     cfg_dict['Country'] = Model.get('country.country')
+    cfg_dict['Language'] = Model.get('ir.lang')
     return cfg_dict
 
 
@@ -61,18 +62,16 @@ def create_address(cfg_dict, party, party_kind):
         return None
 
 
-def create_persons(cfg_dict, relations_kind, addresses_kind):
+def create_persons(cfg_dict, nb_male, nb_female, relations_kind,
+        addresses_kind):
     dicts = {}
-    total_nb = int(cfg_dict['total_nb'])
-    nb_male = int(cfg_dict['nb_male'])
-    nb_female = total_nb - nb_male
     path = cfg_dict['dir_loc']
     dicts['male'] = get_name_as_liste(
         os.path.join(path, 'male'), nb_male)
     dicts['female'] = get_name_as_liste(
         os.path.join(path, 'female'), nb_female)
     dicts['last_name'] = get_name_as_liste(
-        os.path.join(path, 'last_name'), total_nb)
+        os.path.join(path, 'last_name'), nb_male + nb_female)
     adult_date_interv = calculate_date_interval(cfg_dict,
         cfg_dict['adult_age_min'], cfg_dict['adult_age_max'])
     children_date_interv = calculate_date_interval(cfg_dict, 1, 18)
@@ -102,7 +101,7 @@ def create_persons(cfg_dict, relations_kind, addresses_kind):
         name = random.choice(dicts['last_name'])
         add_person(cfg_dict, name, dicts, adult_date_interv, 'F')
 
-    print 'Successfully created %s parties' % total_nb
+    print 'Successfully created %s parties' % nb_male + nb_female
 
 
 def create_relation(cfg_dict, from_actor, to_actor, kind, start_date=None):
@@ -123,8 +122,20 @@ def launch_test_case(cfg_dict):
     cfg_dict = update_models(cfg_dict)
     relations_kind = get_relations_kind(cfg_dict)
     addresses_kind = create_address_kind(cfg_dict)
-    if is_table_empty(cfg_dict['Person']):
-        create_persons(cfg_dict, relations_kind, addresses_kind)
+    nb_male = 0
+    nb_female = 0
+    for person in proteus_tools.get_objects_from_db(cfg_dict, 'Person',
+        limit=None):
+        if person.gender == 'M':
+            nb_male += 1
+        if person.gender == 'F':
+            nb_female += 1
+    if nb_male + nb_female < int(cfg_dict['total_nb']):
+        total_nb = max(0, int(cfg_dict['total_nb']) - nb_male - nb_female)
+        nb_male = max(0, int(cfg_dict['nb_male']) - nb_male)
+        nb_female = max(0, total_nb - nb_male - nb_female)
+        create_persons(cfg_dict, nb_male, nb_female, relations_kind,
+            addresses_kind)
 
 
 def calculate_date_interval(cfg_dict, age_min, age_max):
@@ -135,6 +146,19 @@ def calculate_date_interval(cfg_dict, age_min, age_max):
     end_date = end_date.replace(year=end_date.year
         - int(age_min)).toordinal()
     return [start_date, end_date]
+
+
+def get_language(cfg_dict, code):
+    if not 'languages' in cfg_dict:
+        cfg_dict['languages'] = {}
+    if not code in cfg_dict['languages']:
+        lang = proteus_tools.get_objects_from_db(cfg_dict, 'Language', 'code',
+            code)
+        if lang:
+            cfg_dict['languages'][code] = lang
+        else:
+            return
+    return cfg_dict['languages'][code]
 
 
 def add_person(cfg_dict, name, dicts, date_interv, sex=None):
@@ -151,6 +175,7 @@ def add_person(cfg_dict, name, dicts, date_interv, sex=None):
     person.birth_date = date.fromordinal(
         random.randint(date_interv[0], date_interv[1]))
     person.addresses[:] = []
+    person.lang = get_language(cfg_dict, cfg_dict['language'])
     person.save()
     return person
 
