@@ -96,6 +96,15 @@ def launch_test_case(cfg_dict):
 life_contract.covered_person_view_tree"/>
   ''',
     })
+    document_step = meths['StepDesc']({
+        'technical_name': 'contract_document_request',
+        'fancy_name': translater('Document Request'),
+        'step_xml': '''
+<field name="documents" xfill="1" xexpand="1" yfill="1" \
+yexpand="1" mode="form"/>
+<field name="doc_received" invisible="1"/>
+''',
+    })
     pricing_step = meths['StepDesc']({
         'technical_name': 'pricing',
         'fancy_name': translater('Pricing'),
@@ -184,16 +193,23 @@ life_contract.covered_person_view_tree"/>
 
     meths['ProcessStepRelation']({
         'process': subs_process_desc,
-        'step': pricing_step,
+        'step': document_step,
         'status': status_ongoing,
         'order': 4,
     })
 
     meths['ProcessStepRelation']({
         'process': subs_process_desc,
+        'step': pricing_step,
+        'status': status_ongoing,
+        'order': 5,
+    })
+
+    meths['ProcessStepRelation']({
+        'process': subs_process_desc,
         'step': validation_step,
         'status': status_validation,
-        'order': 5,
+        'order': 6,
     })
 
     meths['StepTransition']({
@@ -260,20 +276,35 @@ init_covered_elements
     })
     meths['StepTransition']({
         'from_step': covered_pers_sel_step,
-        'to_step': pricing_step,
+        'to_step': document_step,
         'on_process': subs_process_desc,
         'kind': 'next',
         'methods': '''
 check_at_least_one_covered
 check_sub_elem_eligibility
 check_covered_amounts
+init_subscription_document_request
+''',
+    })
+    meths['StepTransition']({
+        'from_step': document_step,
+        'to_step': covered_pers_sel_step,
+        'on_process': subs_process_desc,
+        'kind': 'previous',
+    })
+    meths['StepTransition']({
+        'from_step': document_step,
+        'to_step': pricing_step,
+        'on_process': subs_process_desc,
+        'kind': 'next',
+        'methods': '''
 init_billing_manager
 calculate_prices
 ''',
     })
     meths['StepTransition']({
         'from_step': pricing_step,
-        'to_step': covered_pers_sel_step,
+        'to_step': document_step,
         'on_process': subs_process_desc,
         'kind': 'previous',
     })

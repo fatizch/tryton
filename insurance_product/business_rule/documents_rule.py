@@ -1,8 +1,9 @@
 #-*- coding:utf-8 -*-
 import copy
 
-from trytond.model import fields, ModelSQL
+from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
+from trytond.wizard import Wizard, StateAction, StateView, Button
 from trytond.report import Report
 from trytond.ir import Attachment
 
@@ -18,11 +19,14 @@ __all__ = [
     'DocumentRuleRelation',
     'Document',
     'DocumentRequest',
-    'DocumentRequestReport',
     'LetterModel',
     'LetterVersion',
     'Printable',
     'Model',
+    'LetterModelDisplayer',
+    'LetterModelSelection',
+    'LetterReport',
+    'LetterGeneration',
 ]
 
 
@@ -59,12 +63,20 @@ class LetterModel(model.CoopSQL, model.CoopView):
             ('', ''),
             ('doc_request', 'Document Request'),
         ],
-        'name',
+        'Kind',
     )
+
+    @classmethod
+    def __setup__(cls):
+        super(LetterModel, cls).__setup__()
+        cls._error_messages.update({
+            'no_document_version_match': 'Could not find a good version for \
+document %s'})
 
     def get_good_version(self, date, language):
         for version in self.versions:
-            if not version.language == language:
+            if not (version.language == language or
+                    language == version.language.code):
                 continue
 
             if version.start_date > date:
@@ -75,6 +87,18 @@ class LetterModel(model.CoopSQL, model.CoopView):
 
             if version.end_date >= date:
                 return version
+
+        for version in self.versions:
+            if version.start_date > date:
+                continue
+
+            if not version.end_date:
+                return version
+
+            if version.end_date >= date:
+                return version
+
+        self.raise_user_error('no_document_version_match', (self.name))
 
 
 class LetterVersion(Attachment):
@@ -123,7 +147,7 @@ class Model():
     )
 
 
-class Printable(ModelSQL):
+class Printable(object):
     @classmethod
     def __register__(cls, module_name):
         # We need to store the fact that this class is a Printable class in the
@@ -140,6 +164,11 @@ class Printable(ModelSQL):
 
         good_model.save()
 
+    @classmethod
+    @model.CoopView.button_action('insurance_product.letter_generation_wizard')
+    def generic_send_letter(cls, objs):
+        pass
+
     def get_contact(self):
         raise NotImplementedError
 
@@ -147,7 +176,7 @@ class Printable(ModelSQL):
         try:
             return self.get_contact().lang.code
         except:
-            return 'en_us'
+            return 'en_US'
 
     def get_address(self, kind=None):
         contact = self.get_contact()
@@ -160,6 +189,21 @@ class Printable(ModelSQL):
             address = contact.addresses[0]
 
         return address.full_address
+
+    def get_available_letter_models(self, kind=None):
+        LetterModel = Pool().get('ins_product.letter_model')
+        domain = [
+            ('on_model.model', '=', self.__name__),
+            ['OR',
+                ('kind', '=', kind or self.get_letter_model_kind()),
+                ('kind', '=', None)]]
+        print '#' * 80
+        print '%s' % domain
+
+        return LetterModel.search(domain)
+
+    def get_letter_model_kind(self):
+        return None
 
 
 class DocumentDesc(model.CoopSQL, model.CoopView):
@@ -402,14 +446,6 @@ class DocumentRequest(model.CoopSQL, model.CoopView, Printable):
         'on_change_with_needed_by_str',
     )
 
-    contact_party = fields.Function(
-        fields.Many2One(
-            'party.party',
-            'Contact Party',
-        ),
-        'get_contact_party',
-    )
-
     request_description = fields.Function(
         fields.Char(
             'Request Description',
@@ -424,7 +460,7 @@ class DocumentRequest(model.CoopSQL, model.CoopView, Printable):
         super(DocumentRequest, cls).__setup__()
 
         cls._buttons.update({
-            'create_document_request': {}})
+            'generic_send_letter': {}})
 
     def get_request_date(self):
         return utils.today()
@@ -432,12 +468,12 @@ class DocumentRequest(model.CoopSQL, model.CoopView, Printable):
     def on_change_with_request_description(self, name=None):
         return 'Document Request for %s' % self.needed_by.get_rec_name(name)
 
-    def get_contact_party(self, name):
+    def get_contact(self, name=None):
         if not (hasattr(self, 'needed_by') and self.needed_by):
             return None
 
         try:
-            return self.needed_by.get_main_contact().id
+            return self.needed_by.get_main_contact()
         except AttributeError:
             return None
 
@@ -449,7 +485,7 @@ class DocumentRequest(model.CoopSQL, model.CoopView, Printable):
 
     def on_change_with_is_complete(self, name=None):
         if not (hasattr(self, 'documents') and self.documents):
-            return False
+            return True
 
         for doc in self.documents:
             if not doc.received:
@@ -462,6 +498,9 @@ class DocumentRequest(model.CoopSQL, model.CoopView, Printable):
 
     def on_change_is_complete(self):
         if not (hasattr(self, 'is_complete') or not self.is_complete):
+            return {}
+
+        if not (hasattr(self, 'documents') and self.documents):
             return {}
 
         return {
@@ -477,6 +516,8 @@ class DocumentRequest(model.CoopSQL, model.CoopView, Printable):
         pass
 
     def get_current_docs(self):
+        if not (hasattr(self, 'documents') and self.documents):
+            return {}
         res = {}
         for elem in self.documents:
             res[(
@@ -511,14 +552,142 @@ class DocumentRequest(model.CoopSQL, model.CoopView, Printable):
 
         Document.delete(to_del)
 
-    @classmethod
-    @model.CoopView.button_action('insurance_product.report_document_request')
-    def create_document_request(cls, requests):
-        pass
-
     def get_waiting_documents(self):
         return len([doc for doc in self.documents if not doc.received])
 
+    def get_letter_model_kind(self):
+        return 'doc_request'
 
-class DocumentRequestReport(Report):
-    __name__ = 'ins_product.document_request'
+
+class LetterModelDisplayer(model.CoopView):
+    'Letter Model Displayer'
+
+    __name__ = 'ins_product.letter_model_displayer'
+
+    letter_model = fields.Many2One(
+        'ins_product.letter_model',
+        'Letter Model',
+    )
+
+    selected = fields.Boolean(
+        'Selected',
+    )
+
+
+class LetterModelSelection(model.CoopView):
+    'Letter Model Selection'
+
+    __name__ = 'ins_product.letter_model_selection'
+
+    models = fields.One2Many(
+        'ins_product.letter_model_displayer',
+        '',
+        'Models',
+    )
+
+    def get_active_model(self):
+        for elem in self.models:
+            if elem.selected:
+                return elem.letter_model.id
+
+
+class LetterReport(Report):
+    __name__ = 'ins_product.letter_report'
+
+    @classmethod
+    def execute(cls, ids, data):
+        pool = Pool()
+        ActionReport = pool.get('ir.action.report')
+        action_reports = ActionReport.search([
+            ('report_name', '=', cls.__name__)
+        ])
+        if not action_reports:
+            raise Exception('Error', 'Report (%s) not find!' % cls.__name__)
+        action_report = action_reports[0]
+        records = None
+        records = cls._get_records(
+            ids, data['model'], data)
+        try:
+            type, data = cls.parse(action_report, records, data, {})
+        except:
+            import traceback
+            traceback.print_exc()
+            raise
+        return (
+            type, buffer(data), action_report.direct_print, action_report.name)
+
+    @classmethod
+    def parse(cls, report, records, data, localcontext):
+        GoodModel = Pool().get(data['model'])
+        good_obj = GoodModel(data['id'])
+        LetterModel = Pool().get('ins_product.letter_model')
+        good_letter = LetterModel(data['letter_model'])
+        report.report_content = good_letter.get_good_version(
+            utils.today(), good_obj.get_lang()).data
+        return super(LetterReport, cls).parse(
+            report, records, data, localcontext)
+
+
+class LetterGeneration(Wizard):
+    __name__ = 'ins_product.letter_creation_wizard'
+
+    class SpecialStateAction(StateAction):
+
+        def __init__(self):
+            StateAction.__init__(self, None)
+
+        def get_action(self):
+            Action = Pool().get('ir.action')
+            ActionReport = Pool().get('ir.action.report')
+            good_report, = ActionReport.search([
+                ('report_name', '=', 'ins_product.letter_report')
+                ('model', '=', Transaction().context.get('active_model')),
+            ], limit=1)
+            return Action.get_action_values(
+                'ir.action.report', good_report.id)
+
+    start_state = 'select_model'
+
+    generate = StateAction('insurance_product.letter_generation_report')
+
+    select_model = StateView(
+        'ins_product.letter_model_selection',
+        'insurance_product.letter_model_selection_form',
+        [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Generate', 'generate', 'tryton-ok')])
+
+    def transition_print_(self):
+        return 'end'
+
+    def do_generate(self, action):
+        return action, {
+            'id': Transaction().context.get('active_id'),
+            'ids': Transaction().context.get('active_ids'),
+            'model': Transaction().context.get('active_model'),
+            'letter_model': self.select_model.get_active_model(),
+        }
+
+    def default_select_model(self, fields):
+        ActiveModel = Pool().get(Transaction().context.get('active_model'))
+
+        good_model = ActiveModel(Transaction().context.get('active_id'))
+
+        if not good_model:
+            print '#' * 80
+            print 'BADDDDD'
+            return {}
+
+        letters = []
+        has_selection = True
+        for elem in good_model.get_available_letter_models():
+            print 'YES'
+            letters.append({
+                'letter_model': elem.id,
+                'selected': has_selection})
+            has_selection = False
+
+        if letters:
+            return {'models': letters}
+        else:
+            return {}

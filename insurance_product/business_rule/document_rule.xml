@@ -63,16 +63,18 @@
       <field name="name">document_request_tree</field>
     </record>
     <!-- Report -->
-    <record model="ir.action.report" id="report_document_request">
-      <field name="name">Request</field>
-      <field name="model">ins_product.document_request</field>
-      <field name="report_name">ins_product.document_request</field>
-      <field name="report">insurance_product/document_request.odt</field>
+    <record model="ir.action.wizard" id="letter_generation_wizard">
+        <field name="name">Letter Generation</field>
+        <field name="wiz_name">ins_product.letter_creation_wizard</field>
+    </record>
+    <record model="ir.action.report" id="letter_generation_report">
+      <field name="name">Letter Report</field>
+      <field name="report_name">ins_product.letter_report</field>
     </record>
     <record model="ir.action.keyword" id="report_document_request_keyword">
-      <field name="keyword">form_print</field>
+      <field name="keyword">form_action</field>
       <field name="model">ins_product.document_request,-1</field>
-      <field name="action" ref="report_document_request"/>
+      <field name="action" ref="letter_generation_wizard"/>
     </record>
     <!-- Letter Model -->
     <record model="ir.ui.view" id="letter_model_form">
@@ -111,6 +113,17 @@
       <field name="model">ins_product.letter_version</field>
       <field name="type">tree</field>
       <field name="name">letter_version_tree</field>
+    </record>
+    <!-- Letter Model Selection -->
+    <record model="ir.ui.view" id="letter_model_selection_form">
+      <field name="model">ins_product.letter_model_selection</field>
+      <field name="type">form</field>
+      <field name="name">letter_model_selection_form</field>
+    </record>
+    <record model="ir.ui.view" id="letter_model_displayer_tree">
+      <field name="model">ins_product.letter_model_displayer</field>
+      <field name="type">tree</field>
+      <field name="name">letter_model_displayer_tree</field>
     </record>
   </data>
 </tryton>

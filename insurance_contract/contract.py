@@ -9,6 +9,7 @@ from trytond.modules.coop_utils import model
 from trytond.modules.coop_utils import utils
 from trytond.modules.coop_utils import coop_string
 from trytond.modules.coop_process import CoopProcessFramework
+from trytond.modules.insurance_product import Printable
 
 CONTRACTSTATUSES = [
     ('', ''),
@@ -101,7 +102,7 @@ class Subscribed(CoopProcessFramework):
         self.status = 'active'
 
 
-class Contract(model.CoopSQL, Subscribed):
+class Contract(model.CoopSQL, Subscribed, Printable):
     'Contract'
 
     __name__ = 'ins_contract.contract'
@@ -398,6 +399,9 @@ class Contract(model.CoopSQL, Subscribed):
         return True, ()
 
     def get_main_contact(self):
+        return self.subscriber
+
+    def get_contact(self):
         return self.subscriber
 
 

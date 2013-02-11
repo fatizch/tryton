@@ -282,7 +282,8 @@ class ContractSubscription():
         if errs:
             return False, errs
 
-        documents.extend([(doc_desc, self) for doc_desc in product_docs])
+        if product_docs:
+            documents.extend([(doc_desc, self) for doc_desc in product_docs])
 
         for option in self.options:
             if not option.status == 'active':

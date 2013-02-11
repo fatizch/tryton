@@ -31,6 +31,8 @@ def register():
         DocumentRuleRelation,
         DocumentRequest,
         Document,
+        LetterModelDisplayer,
+        LetterModelSelection,
         PricingRule,
         PricingComponent,
         EligibilityRule,
@@ -64,5 +66,8 @@ def register():
         LossDescComplementaryDataRelation,
         module='insurance_product', type_='model')
     Pool.register(
-        DocumentRequestReport,
+        LetterReport,
         module='insurance_product', type_='report')
+    Pool.register(
+        LetterGeneration,
+        module='insurance_product', type_='wizard')
