@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<form string="Indemnification">
+    <label name="delivered_service"/>
+    <field name="delivered_service"/>
+    <newline/>
+    <label name="kind"/>
+    <field name="kind"/>
+    <label name="status"/>
+    <field name="status"/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <newline/>
+    <label name="amount"/>
+    <field name="amount"/>
+    <field name="details" colspan="4"/>
+</form>

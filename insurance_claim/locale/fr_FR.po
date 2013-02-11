@@ -356,7 +356,7 @@ msgstr "Plafond"
 
 msgctxt "selection:ins_claim.indemnification_detail,kind:"
 msgid "Waiting Period"
-msgstr "Franchise"
+msgstr "Carence"
 
 msgctxt "selection:ins_product.document,for_object:"
 msgid "Claim"
