@@ -38,6 +38,10 @@ msgctxt "error:ins_collective.contract:"
 msgid "There must be at least one covered element"
 msgstr "Saisir un élement couvert"
 
+msgctxt "field:ins_collective.contract,doc_received:"
+msgid "All Document Received"
+msgstr ""
+
 msgctxt "field:ins_collective.contract,is_custom:"
 msgid "Custom"
 msgstr "Sur Mesure"

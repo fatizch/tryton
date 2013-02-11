@@ -1,0 +1,19 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:ins_claim.claim,contracts:"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "field:ins_claim.claim,current_state:"
+msgid "Current State"
+msgstr "Etat Courant"
+
+msgctxt "field:ins_claim.loss,benefits:"
+msgid "Benefits"
+msgstr "Prestations"
+
+msgctxt "view:ins_claim.loss:"
+msgid "Loss"
+msgstr "Préjudice"

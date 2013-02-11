@@ -19,10 +19,6 @@ msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_contract.contract:"
-msgid "Everything is good !"
-msgstr ""
-
-msgctxt "error:ins_contract.contract:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -37,10 +33,6 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "error:ins_contract.delivered_service:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.option:"
-msgid "Everything is good !"
-msgstr ""
 
 msgctxt "error:ins_contract.option:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -1306,6 +1298,22 @@ msgstr "Personne Physique"
 msgctxt "selection:ins_contract.subs_process.project,subscriber_kind:"
 msgid "Society"
 msgstr "Société"
+
+msgctxt "selection:ins_product.document,for_object:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:ins_product.document,for_object:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "selection:ins_product.document,for_object:"
+msgid "Option"
+msgstr "Garantie"
+
+msgctxt "selection:ins_product.document_request,needed_by:"
+msgid "Contract"
+msgstr "Contrat"
 
 msgctxt "view:ins_contract.billing.bill:"
 msgid "Bill Summary"

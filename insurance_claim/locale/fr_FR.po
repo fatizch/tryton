@@ -38,6 +38,10 @@ msgctxt "field:ins_claim.claim,declaration_date:"
 msgid "Declaration Date"
 msgstr "Date de Déclaration"
 
+msgctxt "field:ins_claim.claim,documents:"
+msgid "Documents"
+msgstr "Documents"
+
 msgctxt "field:ins_claim.claim,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -61,10 +65,6 @@ msgstr "Numéro"
 msgctxt "field:ins_claim.claim,rec_name:"
 msgid "Name"
 msgstr "Nom"
-
-msgctxt "field:ins_claim.claim,start_date:"
-msgid "Event Date"
-msgstr ""
 
 msgctxt "field:ins_claim.claim,status:"
 msgid "Status"
@@ -224,7 +224,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_claim.loss,loss_desc:"
 msgid "Loss Descriptor"
-msgstr ""
+msgstr "Description du Préjudice"
 
 msgctxt "field:ins_claim.loss,main_loss:"
 msgid "Main Loss"
@@ -357,6 +357,18 @@ msgstr "Plafond"
 msgctxt "selection:ins_claim.indemnification_detail,kind:"
 msgid "Waiting Period"
 msgstr "Franchise"
+
+msgctxt "selection:ins_product.document,for_object:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "selection:ins_product.document,for_object:"
+msgid "Delivered Service"
+msgstr "Prestation Fournie"
+
+msgctxt "selection:ins_product.document_request,needed_by:"
+msgid "Claim"
+msgstr "Sinistre"
 
 msgctxt "view:ins_claim.loss:"
 msgid "Loss"

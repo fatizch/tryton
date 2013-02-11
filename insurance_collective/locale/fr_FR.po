@@ -10,10 +10,6 @@ msgctxt "error:ins_collective.benefit_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.benefit_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr ""
-
 msgctxt "error:ins_collective.clause:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -26,17 +22,9 @@ msgctxt "error:ins_collective.clause_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.clause_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr ""
-
 msgctxt "error:ins_collective.clause_version:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_collective.contract:"
-msgid "Everything is good !"
-msgstr ""
 
 msgctxt "error:ins_collective.contract:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -62,10 +50,6 @@ msgctxt "error:ins_collective.coverage_amount_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.coverage_amount_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr ""
-
 msgctxt "error:ins_collective.covered_data:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -78,10 +62,6 @@ msgctxt "error:ins_collective.deductible_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.deductible_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr ""
-
 msgctxt "error:ins_collective.eligibility_relation_kind:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -90,29 +70,13 @@ msgctxt "error:ins_collective.eligibility_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.eligibility_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr ""
-
-msgctxt "error:ins_collective.enrollment:"
-msgid "Everything is good !"
-msgstr ""
-
 msgctxt "error:ins_collective.enrollment:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_collective.enrollment_option:"
-msgid "Everything is good !"
-msgstr ""
-
-msgctxt "error:ins_collective.enrollment_option:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_collective.option:"
-msgid "Everything is good !"
-msgstr ""
 
 msgctxt "error:ins_collective.option:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -129,10 +93,6 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "error:ins_collective.pricing_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_collective.pricing_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr ""
 
 msgctxt "error:ins_collective.product-complementary_data_def:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -158,17 +118,9 @@ msgctxt "error:ins_collective.reserve_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_collective.reserve_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr ""
-
 msgctxt "error:ins_collective.term_renewal_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_collective.term_renewal_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr ""
 
 msgctxt "error:party.college:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -218,6 +170,10 @@ msgctxt "field:ins_collective.benefit,description:"
 msgid "Description"
 msgstr "Description"
 
+msgctxt "field:ins_collective.benefit,document_rules:"
+msgid "Document Rules"
+msgstr ""
+
 msgctxt "field:ins_collective.benefit,eligibility_rules:"
 msgid "Eligibility Rules"
 msgstr "Règles d'Eligibilité"
@@ -230,10 +186,6 @@ msgctxt "field:ins_collective.benefit,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_collective.benefit,indemnification_calc_unit:"
-msgid "Indemnification Calculation Unit"
-msgstr "Unité de calcul de l'indemnisation"
-
 msgctxt "field:ins_collective.benefit,indemnification_kind:"
 msgid "Indemnification Kind"
 msgstr "Type d'Indemnisation"
@@ -241,10 +193,6 @@ msgstr "Type d'Indemnisation"
 msgctxt "field:ins_collective.benefit,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
-
-msgctxt "field:ins_collective.benefit,kind:"
-msgid "Kind"
-msgstr "Type"
 
 msgctxt "field:ins_collective.benefit,loss_descs:"
 msgid "Loss Descriptions"
@@ -269,6 +217,10 @@ msgstr "Règle de Provisions"
 msgctxt "field:ins_collective.benefit,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
+
+msgctxt "field:ins_collective.benefit,sub_document_rules:"
+msgid "Sub Document Rules"
+msgstr ""
 
 msgctxt "field:ins_collective.benefit,summary:"
 msgid "Summary"
@@ -634,6 +586,10 @@ msgctxt "field:ins_collective.contract,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
 
+msgctxt "field:ins_collective.contract,documents:"
+msgid "Documents"
+msgstr "Documents"
+
 msgctxt "field:ins_collective.contract,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -707,10 +663,6 @@ msgid "Code"
 msgstr "Code"
 
 msgctxt "field:ins_collective.coverage,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "field:ins_collective.coverage,complementary_data:"
 msgid "Offered Kind"
 msgstr "Données Complémentaires"
 
@@ -750,6 +702,10 @@ msgctxt "field:ins_collective.coverage,description:"
 msgid "Description"
 msgstr "Description"
 
+msgctxt "field:ins_collective.coverage,document_rules:"
+msgid "Document Rules"
+msgstr ""
+
 msgctxt "field:ins_collective.coverage,eligibility_rules:"
 msgid "Eligibility Rules"
 msgstr "Règles d'Eligibilité"
@@ -769,6 +725,10 @@ msgstr "ID"
 msgctxt "field:ins_collective.coverage,insurer:"
 msgid "Insurer"
 msgstr "Assureur"
+
+msgctxt "field:ins_collective.coverage,is_coverage_amount_needed:"
+msgid "Coverage Amount Needed"
+msgstr ""
 
 msgctxt "field:ins_collective.coverage,is_package:"
 msgid "Package"
@@ -797,6 +757,10 @@ msgstr "Nom"
 msgctxt "field:ins_collective.coverage,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
+
+msgctxt "field:ins_collective.coverage,sub_document_rules:"
+msgid "Sub Document Rules"
+msgstr ""
 
 msgctxt "field:ins_collective.coverage,subscription_behaviour:"
 msgid "Subscription Behaviour"
@@ -1254,6 +1218,10 @@ msgstr "Créé par"
 msgctxt "field:ins_collective.enrollment,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
+
+msgctxt "field:ins_collective.enrollment,documents:"
+msgid "Documents"
+msgstr "Documents"
 
 msgctxt "field:ins_collective.enrollment,end_date:"
 msgid "End Date"
@@ -1863,10 +1831,6 @@ msgid "Code"
 msgstr "Code"
 
 msgctxt "field:ins_collective.product,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "field:ins_collective.product,complementary_data:"
 msgid "Offered Kind"
 msgstr "Données Complémentaires"
 
@@ -1901,6 +1865,10 @@ msgstr "Franchises"
 msgctxt "field:ins_collective.product,description:"
 msgid "Description"
 msgstr "Description"
+
+msgctxt "field:ins_collective.product,document_rules:"
+msgid "Document Rules"
+msgstr ""
 
 msgctxt "field:ins_collective.product,eligibility_rules:"
 msgid "Eligibility Rules"
@@ -1942,6 +1910,10 @@ msgctxt "field:ins_collective.product,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
+msgctxt "field:ins_collective.product,sub_document_rules:"
+msgid "Sub Document Rules"
+msgstr ""
+
 msgctxt "field:ins_collective.product,summary:"
 msgid "Summary"
 msgstr "Synthèse"
@@ -1965,11 +1937,6 @@ msgstr "Date de mise à jour"
 msgctxt "field:ins_collective.product,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
-
-msgctxt ""
-"field:ins_collective.product-complementary_data_def,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
 
 msgctxt ""
 "field:ins_collective.product-complementary_data_def,complementary_data_def:"
@@ -2574,34 +2541,6 @@ msgctxt "model:party.college_tranche,name:"
 msgid ""
 msgstr ""
 
-msgctxt "selection:ins_collective.benefit,indemnification_calc_unit:"
-msgid ""
-msgstr ""
-
-msgctxt "selection:ins_collective.benefit,indemnification_calc_unit:"
-msgid "Day"
-msgstr "Jour"
-
-msgctxt "selection:ins_collective.benefit,indemnification_calc_unit:"
-msgid "Half-year"
-msgstr "Semestre"
-
-msgctxt "selection:ins_collective.benefit,indemnification_calc_unit:"
-msgid "Month"
-msgstr "Mois"
-
-msgctxt "selection:ins_collective.benefit,indemnification_calc_unit:"
-msgid "Quarter"
-msgstr "Trimestre"
-
-msgctxt "selection:ins_collective.benefit,indemnification_calc_unit:"
-msgid "Week"
-msgstr "Semaine"
-
-msgctxt "selection:ins_collective.benefit,indemnification_calc_unit:"
-msgid "Year"
-msgstr "Année"
-
 msgctxt "selection:ins_collective.benefit,indemnification_kind:"
 msgid "Capital"
 msgstr "Capital"
@@ -2609,18 +2548,6 @@ msgstr "Capital"
 msgctxt "selection:ins_collective.benefit,indemnification_kind:"
 msgid "Period"
 msgstr "Période"
-
-msgctxt "selection:ins_collective.benefit,kind:"
-msgid "Annuity"
-msgstr "Rente"
-
-msgctxt "selection:ins_collective.benefit,kind:"
-msgid "Capital"
-msgstr "Capital"
-
-msgctxt "selection:ins_collective.benefit,kind:"
-msgid "Per Diem"
-msgstr "Indemnité Journalière"
 
 msgctxt "selection:ins_collective.benefit,template_behaviour:"
 msgid ""
@@ -2737,10 +2664,6 @@ msgstr "Devis"
 msgctxt "selection:ins_collective.contract,status:"
 msgid "Terminated"
 msgstr "Terminé"
-
-msgctxt "selection:ins_collective.coverage,family:"
-msgid "default"
-msgstr ""
 
 msgctxt "selection:ins_collective.coverage,subscription_behaviour:"
 msgid "Mandatory"

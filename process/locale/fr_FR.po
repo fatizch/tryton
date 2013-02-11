@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:process.process_framework:"
-msgid "Everything is good !"
-msgstr ""
-
 msgctxt "error:process.step_transition:"
 msgid "Both choices must be filled !"
 msgstr "Saisir les deux choix"
@@ -33,10 +29,6 @@ msgstr "Créé par"
 msgctxt "field:process.process_desc,fancy_name:"
 msgid "Name"
 msgstr "Valeur"
-
-msgctxt "field:process.process_desc,first_step:"
-msgid "First Step"
-msgstr "Première Etape"
 
 msgctxt "field:process.process_desc,id:"
 msgid "ID"
@@ -194,10 +186,6 @@ msgctxt "field:process.step_desc,fancy_name:"
 msgid "Name"
 msgstr "Valeur"
 
-msgctxt "field:process.step_desc,from_steps:"
-msgid "From Steps"
-msgstr "Depuis les Etapes"
-
 msgctxt "field:process.step_desc,id:"
 msgid "ID"
 msgstr "ID"
@@ -213,10 +201,6 @@ msgstr "Description de la Vue"
 msgctxt "field:process.step_desc,technical_name:"
 msgid "Technical Name"
 msgstr "Nom Technique"
-
-msgctxt "field:process.step_desc,to_steps:"
-msgid "To Steps"
-msgstr "Vers les Etapes"
 
 msgctxt "field:process.step_desc,write_date:"
 msgid "Write Date"
@@ -455,10 +439,6 @@ msgid "Next Transition"
 msgstr "Prochaine Transition"
 
 msgctxt "selection:process.step_transition,kind:"
-msgid "Other Transition"
-msgstr "Autre Transition"
-
-msgctxt "selection:process.step_transition,kind:"
 msgid "Previous Transition"
 msgstr "Transition Précédente"
 
@@ -477,6 +457,42 @@ msgstr "Choix"
 msgctxt "selection:process.step_transition,transition_kind:"
 msgid "Standard"
 msgstr "Standard"
+
+msgctxt "view:ins_claim.claim:"
+msgid "Claim Declaration"
+msgstr "Claim Declaration"
+
+msgctxt "view:ins_claim.claim:"
+msgid "Claimant"
+msgstr "Déclarant"
+
+msgctxt "view:ins_claim.claim:"
+msgid "Delivered Services"
+msgstr "Prestations Fournies"
+
+msgctxt "view:ins_claim.claim:"
+msgid "Indemnification Calculation"
+msgstr "Calcul de l'Indemnisation"
+
+msgctxt "view:ins_claim.claim:"
+msgid "Loss"
+msgstr "Préjudice"
+
+msgctxt "view:ins_claim.claim:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "view:ins_claim.claim:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "view:ins_claim.claim:"
+msgid "Required Documents"
+msgstr "Documents requis"
+
+msgctxt "view:ins_claim.claim:"
+msgid "The current record completed the current process, please go ahead"
+msgstr "Processus Terminé. Commencez une nouvelle tâche"
 
 msgctxt "view:ins_collective.contract:"
 msgid "Activation"
@@ -550,6 +566,14 @@ msgid "Complete"
 msgstr "Terminer"
 
 msgctxt "view:ins_contract.contract:"
+msgid "Loans"
+msgstr "Prêts"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "view:ins_contract.contract:"
 msgid "Options"
 msgstr "Garanties"
 
@@ -558,8 +582,20 @@ msgid "Options Selection"
 msgstr ""
 
 msgctxt "view:ins_contract.contract:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "view:ins_contract.contract:"
 msgid "Processus de souscription individuel"
 msgstr "Processus de souscription individuel"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Prêt"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "Souscription Emprunteur"
+msgstr "Souscription Emprunteur"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Tarif"
@@ -581,7 +617,15 @@ msgstr ""
 
 msgctxt "view:process.process_desc:"
 msgid "Description"
-msgstr ""
+msgstr "Description"
+
+msgctxt "view:process.process_desc:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "view:process.process_desc:"
+msgid "Description"
+msgstr "Description"
 
 msgctxt "view:process.process_desc:"
 msgid "Process Descriptor"
