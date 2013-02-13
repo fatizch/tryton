@@ -48,7 +48,7 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
         else:
             return None, []
 
-    def give_me_deductible(self, args):
+    def get_deductible_duration(self, args):
         errs = []
         res = {}
         if self.kind != 'duration':
@@ -57,13 +57,30 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
             errs += 'missing_date'
             return None, errs
         res['start_date'] = args['start_date']
-        end_date = date.add_duration(args['start_date'], self.duration,
-            self.duration_unit)
+        (duration, unit), cur_errs = self.give_me_result(args)
+        errs += cur_errs
+        if not duration or not unit:
+            errs = 'missing_duration_or_duration_unit'
+            return None, errs
+        end_date = date.add_duration(args['start_date'], duration, unit)
         if 'end_date' in args and args['end_date']:
             end_date = min(end_date, args['end_date'])
         res['end_date'] = end_date
         res['nb_of_unit'] = date.duration_between(res['start_date'],
             res['end_date'], 'day')
-        res['unit'] = self.duration_unit
+        res['unit'] = unit
         res['amount_per_unit'] = 0
         return res, errs
+
+    def get_deductible_amount(self, args):
+        res = {}
+        errs = []
+        res['amount_per_unit'] = self.give_me_result(args)
+        res['nb_of_unit'] = 1
+        return res, errs
+
+    def give_me_deductible(self, args):
+        if self.kind == 'duration':
+            return self.get_deductible_duration(args)
+        else:
+            return self.give_me_result(args)
