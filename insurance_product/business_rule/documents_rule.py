@@ -30,6 +30,7 @@ __all__ = [
     'LetterReport',
     'LetterGeneration',
     'RequestFinder',
+    'AttachmentSetter',
     'DocumentRequestDisplayer',
     'ReceiveDocuments',
 ]
@@ -331,7 +332,18 @@ class Document(model.CoopSQL, model.CoopView):
         domain=[
             ('resource', '=', Eval('_parent_request', {}).get(
                 'needed_by_str'))],
+        on_change=['attachment', 'reception_date', 'received'],
     )
+
+    def on_change_attachment(self):
+        if not (hasattr(self, 'attachment') and self.attachment):
+            return {}
+
+        return {
+            'received': True,
+            'reception_date': (
+                hasattr(self, 'reception_date') and
+                self.reception_date) or utils.today()}
 
     def on_change_with_received(self, name=None):
         if not (hasattr(self, 'reception_date') and self.reception_date):
@@ -731,7 +743,7 @@ class RequestFinder(model.CoopView):
         idx = 0
         for k, v in cls.allowed_values().iteritems():
             cls.kind.selection.append((k, v[0]))
-            good_domain = [(v[1], '=', Eval('value'))]
+            # good_domain = [(v[1], '=', Eval('value'))]
             tmp = fields.Many2One(
                 k, v[0],
                 states={'invisible': Eval('kind') != k},
@@ -798,6 +810,26 @@ class RequestFinder(model.CoopView):
         return result
 
 
+class AttachmentSetter(model.CoopView):
+    'Attachment Setter'
+
+    __name__ = 'ins_product.attachment_setter'
+
+    attachments = fields.One2Many(
+        'ir.attachment',
+        '',
+        'Attachments',
+        context={'resource': Eval('resource')},
+    )
+
+    resource = fields.Char(
+        'Resource',
+        states={
+            'invisible': True
+        },
+    )
+
+
 class DocumentRequestDisplayer(model.CoopView):
     'Document Request Displayer'
 
@@ -816,14 +848,14 @@ class ReceiveDocuments(Wizard):
 
     __name__ = 'ins_product.receive_document_wizard'
 
-    start_state = 'select_instance'
+    start_state = 'start'
 
     select_instance = StateView(
         'ins_product.request_finder',
         'insurance_product.request_finder_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Continue', 'input_document', 'tryton-ok')])
+            Button('Continue', 'attachment_setter', 'tryton-ok')])
 
     input_document = StateView(
         'ins_product.document_request_displayer',
@@ -832,9 +864,20 @@ class ReceiveDocuments(Wizard):
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Complete', 'notify_request', 'tryton-ok')])
 
+    attachment_setter = StateView(
+        'ins_product.attachment_setter',
+        'insurance_product.attachment_setter_form',
+        [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Next', 'store_attachments', 'tryton-go-next')])
+
+    store_attachments = StateTransition()
+
     notify_request = StateTransition()
 
     try_to_go_forward = StateTransition()
+
+    start = StateTransition()
 
     @classmethod
     def __setup__(cls):
@@ -845,11 +888,6 @@ class ReceiveDocuments(Wizard):
 this object'})
 
     def default_select_instance(self, name):
-        print '#' * 80
-        print 'TRANS'
-        print Transaction().context.get('active_model')
-        print Transaction().context.get('active_id')
-        print self.select_instance._fields['kind'].selection
         if not(Transaction().context.get('active_model', 'z') in [
                 k[0] for k in self.select_instance._fields['kind'].selection]):
             return {}
@@ -869,11 +907,61 @@ this object'})
                     self.raise_user_error('no_document_request_found')
                 break
 
-        print result
         return result
+
+    def transition_start(self):
+        if Transaction().context.get('active_model', '') == 'ir.ui.menu':
+            return 'select_instance'
+
+        GoodModel = Pool().get(Transaction().context.get('active_model'))
+        good_id = Transaction().context.get('active_id')
+
+        self.select_instance.kind = Transaction().context.get('active_model')
+        for key, field in self.select_instance._fields.iteritems():
+            if not key.startswith('tmp_'):
+                continue
+            if field.model_name == Transaction().context.get('active_model'):
+                setattr(
+                    self.select_instance, key,
+                    Transaction().context.get('active_id'))
+                try:
+                    self.select_instance.request = \
+                        GoodModel(good_id).documents[0].id
+                except:
+                    self.raise_user_error('no_document_request_found')
+                break
+
+        return 'attachment_setter'
+
+    def default_attachment_setter(self, name):
+        Attachment = Pool().get('ir.attachment')
+        good_obj = self.select_instance.request.needed_by
+        good_obj = utils.convert_to_reference(good_obj)
+        return {
+            'resource': good_obj,
+            'attachments': [att.id for att in Attachment.search(
+                [
+                    ('resource', '=', good_obj),
+                ])]}
 
     def default_input_document(self, name):
         return {'documents': [self.select_instance.request.id]}
+
+    def transition_store_attachments(self):
+        Attachment = Pool().get('ir.attachment')
+        good_obj = self.select_instance.request.needed_by
+        good_obj = utils.convert_to_reference(good_obj)
+        previous = Attachment.search([('resource', '=', good_obj)])
+        current = [k.id for k in self.attachment_setter.attachments]
+        for prev_att in previous:
+            if prev_att.id not in current:
+                prev_att.delete([prev_att])
+        for att in self.attachment_setter.attachments:
+            if isinstance(att.data, int):
+                continue
+            att.save()
+
+        return 'input_document'
 
     def transition_notify_request(self):
         for doc in self.input_document.documents[0].documents:

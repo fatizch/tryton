@@ -136,6 +136,11 @@
       <field name="type">form</field>
       <field name="name">document_request_displayer_form</field>
     </record>
+    <record model="ir.ui.view" id="attachment_setter_form">
+      <field name="model">ins_product.attachment_setter</field>
+      <field name="type">form</field>
+      <field name="name">attachment_setter_form</field>
+    </record>
     <record model="ir.action.wizard" id="receive_documents_wizard">
         <field name="name">Document Reception</field>
         <field name="wiz_name">ins_product.receive_document_wizard</field>

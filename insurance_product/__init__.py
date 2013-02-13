@@ -34,6 +34,7 @@ def register():
         LetterModelDisplayer,
         LetterModelSelection,
         RequestFinder,
+        AttachmentSetter,
         DocumentRequestDisplayer,
         PricingRule,
         PricingComponent,
