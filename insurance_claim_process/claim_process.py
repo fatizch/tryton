@@ -29,7 +29,7 @@ class ClaimProcess():
         'on_change_with_doc_received')
     indemnifications = fields.Function(
         fields.One2Many('ins_claim.indemnification', None, 'Indemnifications'),
-        'get_indemnifications')
+        'get_indemnifications', 'set_toto')
 
     def get_possible_contracts(self):
         if not self.claimant:
@@ -142,6 +142,16 @@ class ClaimProcess():
         self.sub_status = 'paid'
         self.end_date = utils.today()
         return True
+
+    @classmethod
+    def set_toto(cls, instances, name, vals):
+        Indemnification = Pool().get('ins_claim.indemnification')
+        vals_as_dict = dict([(k[0], k[1:]) for k in vals])
+        if 'write' in vals_as_dict:
+            objects = Indemnification.browse(vals_as_dict['write'][0])
+            Indemnification.write(
+                objects,
+                vals_as_dict['write'][1])
 
 
 class LossProcess():

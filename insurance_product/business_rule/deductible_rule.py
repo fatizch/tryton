@@ -24,7 +24,7 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
     __name__ = 'ins_product.deductible_rule'
 
     kind = fields.Selection(DEDUCTIBLE_KIND, 'Kind', sort=False)
-    amount = fields.Char('Amount',
+    amount = fields.Numeric('Amount',
         states={'invisible': Or(STATE_SIMPLE, Eval('kind') != 'amount')})
     duration = fields.Integer('Duration',
         states={'invisible': Or(STATE_SIMPLE, Eval('kind') != 'duration')})
@@ -35,13 +35,14 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
         res = self.get_simple_result()[0]
         if not res:
             return ''
-        if len(res) > 1:
+        if self.kind == 'duration' and len(res) > 1:
             return '%s %s' % (res[0], res[1])
         else:
             return str(res)
 
     def get_simple_result(self, args=None):
         if self.kind == 'amount':
+            print self.amount, type(self.amount)
             return self.amount, []
         elif self.kind == 'duration':
             return (self.duration, self.duration_unit), []
@@ -74,13 +75,12 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
 
     def get_deductible_amount(self, args):
         res = {}
-        errs = []
-        res['amount_per_unit'] = self.give_me_result(args)
-        res['nb_of_unit'] = 1
+        res['amount_per_unit'], errs = self.give_me_result(args)
+        res['nb_of_unit'] = -1
         return res, errs
 
     def give_me_deductible(self, args):
         if self.kind == 'duration':
             return self.get_deductible_duration(args)
         else:
-            return self.give_me_result(args)
+            return self.get_deductible_amount(args)

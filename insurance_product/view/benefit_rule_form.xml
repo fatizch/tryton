@@ -9,8 +9,8 @@
         <newline/>
     </xpath>
     <xpath expr="/form/label[@name='rule']" position="before">
-        <label name="kind"/>
-        <field name="kind" xexpand="0"/>
+        <label name="amount_kind"/>
+        <field name="amount_kind" xexpand="0"/>
         <newline/>
         <label name="amount"/>
         <field name="amount"/>

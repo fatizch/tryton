@@ -31,4 +31,25 @@ class LoanContext(RuleEngineContext):
     def _re_get_loan_monthly_payment_amount(cls, args):
         loan = args['loan']
         if hasattr(loan, 'monthly_payment_amount'):
-            return loan.monthly_payment_number
+            return loan.monthly_payment_amount
+
+    @classmethod
+    @check_args('loan')
+    def _re_get_loan_amount(cls, args):
+        loan = args['loan']
+        if hasattr(loan, 'amount'):
+            return loan.amount
+
+    @classmethod
+    @check_args('loan')
+    def _re_get_loan_funds_release_date(cls, args):
+        loan = args['loan']
+        if hasattr(loan, 'funds_release_date'):
+            return loan.funds_release_date
+
+    @classmethod
+    @check_args('loan')
+    def _re_get_loan_first_payment_date(cls, args):
+        loan = args['loan']
+        if hasattr(loan, 'first_payment_date'):
+            return loan.first_payment_date

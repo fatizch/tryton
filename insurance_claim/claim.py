@@ -201,14 +201,17 @@ class ClaimDeliveredService():
     def get_contract(self):
         return self.subscribed_service.get_contract()
 
+    def init_dict_for_rule_engine(self, cur_dict):
+        cur_dict['date'] = self.loss.start_date
+        cur_dict['start_date'] = self.loss.start_date
+        cur_dict['end_date'] = self.loss.end_date
+        cur_dict['loss'] = self.loss
+
     def calculate(self):
+        cur_dict = {}
+        self.init_dict_for_rule_engine(cur_dict)
         details_dict, errors = self.benefit.get_result('indemnification',
-            {
-                'date': self.loss.start_date,
-                'start_date': self.loss.start_date,
-                'end_date': self.loss.end_date,
-                'loss': self.loss,
-            })
+            cur_dict)
         if errors:
             return None, errors
         indemnification = utils.instanciate_relation(self.__class__,
@@ -272,8 +275,11 @@ class Indemnification(model.CoopSQL, model.CoopView):
 
     def calculate_amount_from_details(self):
         self.amount = 0
+        if not hasattr(self, 'details'):
+            return
         for detail in self.details:
             detail.calculate_amount()
+            print detail.amount
             self.amount += detail.amount
 
 
@@ -302,6 +308,8 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView):
         pass
 
     def calculate_amount(self):
+        print self.amount_per_unit
+        print self.nb_of_unit
         self.amount = self.amount_per_unit * self.nb_of_unit
 
 
