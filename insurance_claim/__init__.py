@@ -14,4 +14,5 @@ def register():
         Document,
         DocumentRequest,
         RequestFinder,
+        ContactHistory,
         module='insurance_claim', type_='model')

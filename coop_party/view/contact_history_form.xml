@@ -23,5 +23,8 @@
     <newline/>
     <label name="attachment"/>
     <field name="attachment"/>
+    <label name="for_object_ref" xalign="0"/>
+    <field name="for_object_ref"/>
+    <field name="for_object"/>
     <field name="comment" colspan="4" widget="richtext"/>
 </form>

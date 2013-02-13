@@ -74,7 +74,8 @@ class LetterModel(model.CoopSQL, model.CoopView):
 
     def get_good_version(self, date, language):
         for version in self.versions:
-            if not version.language == language:
+            if (not version.language == language
+                    and not version.language.code == language):
                 continue
 
             if version.start_date > date:
@@ -179,17 +180,22 @@ class Printable(object):
     def get_available_letter_models(self, kind=None):
         LetterModel = Pool().get('ins_product.letter_model')
 
-        return LetterModel.search([
+        domain = [
             ('on_model.model', '=', self.__name__),
             ['OR',
                 ('kind', '=', kind or self.get_letter_model_kind()),
-                ('kind', '=', '')]])
+                ('kind', '=', '')]]
+
+        return LetterModel.search(domain)
 
     def get_letter_model_kind(self):
         return None
 
     def post_generation(self):
         pass
+
+    def get_object_for_contact(self):
+        raise NotImplementedError
 
 
 class DocumentDesc(model.CoopSQL, model.CoopView):
@@ -554,12 +560,18 @@ class DocumentRequest(model.CoopSQL, model.CoopView, Printable):
 
     def post_generation(self):
         for document in self.documents:
-            if document.send_date is None:
+            if document.send_date is None and not document.received:
                 document.send_date = utils.today()
                 document.save()
 
     def notify_completed(self):
         pass
+
+    def get_letter_model_kind(self):
+        return 'doc_request'
+
+    def get_object_for_contact(self):
+        return self.needed_by
 
 
 class LetterModelDisplayer(model.CoopView):
@@ -588,26 +600,28 @@ class LetterModelSelection(model.CoopView):
         'Models',
     )
 
-    def get_active_model(self):
+    good_address = fields.Many2One(
+        'party.address',
+        'Mail Address',
+        domain=[('party', '=', Eval('party'))],
+        required=True,
+    )
+
+    party = fields.Many2One(
+        'party.party',
+        'Party',
+        states={
+            'invisible': True
+        },
+    )
+
+    def get_active_model(self, id_only=True):
         for elem in self.models:
             if elem.selected:
-                return elem.letter_model.id
-
-
-class ActionReportOverride(object):
-    def __init__(self, action_report):
-        self._the_report = action_report
-
-    def __getattr__(self, name):
-        if name == '_the_report':
-            return self.__getitem__(name)
-        elif name == 'report_content':
-            GoodModel = Pool().get(Transaction().context.get('active_model'))
-            good_obj = GoodModel(Transaction().context.get('active_id'))
-            return Transaction().context.get(
-                'letter_model').get_good_version(
-                    utils.today(), good_obj.get_lang()).data
-        return getattr(self._the_report, name)
+                if id_only:
+                    return elem.letter_model.id
+                else:
+                    return elem.letter_model
 
 
 class LetterReport(Report):
@@ -626,12 +640,19 @@ class LetterReport(Report):
         records = None
         records = cls._get_records(
             ids, data['model'], data)
-        type, data = cls.parse(action_report, records, data, {})
+        try:
+            type, data = cls.parse(action_report, records, data, {})
+        except:
+            import traceback
+            traceback.print_exc()
+            raise
         return (
             type, buffer(data), action_report.direct_print, action_report.name)
 
     @classmethod
     def parse(cls, report, records, data, localcontext):
+        localcontext['Party'] = Pool().get('party.party')(data['party'])
+        localcontext['Address'] = Pool().get('party.address')(data['address'])
         GoodModel = Pool().get(data['model'])
         good_obj = GoodModel(data['id'])
         LetterModel = Pool().get('ins_product.letter_model')
@@ -673,8 +694,8 @@ class LetterGeneration(Wizard):
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Generate', 'generate', 'tryton-ok')])
 
-    def transition_print_(self):
-        return 'end'
+    def transition_generate(self):
+        return 'post_generation'
 
     def do_generate(self, action):
         return action, {
@@ -682,6 +703,8 @@ class LetterGeneration(Wizard):
             'ids': Transaction().context.get('active_ids'),
             'model': Transaction().context.get('active_model'),
             'letter_model': self.select_model.get_active_model(),
+            'party': self.select_model.party.id,
+            'address': self.select_model.good_address.id,
         }
 
     def default_select_model(self, fields):
@@ -701,14 +724,29 @@ class LetterGeneration(Wizard):
             has_selection = False
 
         if letters:
-            return {'models': letters}
+            result = {'models': letters}
         else:
-            return {}
+            result = {}
+
+        result['party'] = good_model.get_contact().id
+        if good_model.get_contact().addresses:
+            result['good_address'] = good_model.get_contact().addresses[0].id
+
+        return result
 
     def transition_post_generation(self):
         GoodModel = Pool().get(Transaction().context.get('active_model'))
         good_obj = GoodModel(Transaction().context.get('active_id'))
         good_obj.post_generation()
+
+        ContactHistory = Pool().get('party.contact_history')
+        contact = ContactHistory()
+        contact.party = good_obj.get_contact()
+        contact.media = 'mail'
+        contact.address = self.select_model.good_address
+        contact.title = self.select_model.get_active_model(False).name
+        contact.for_object_ref = good_obj.get_object_for_contact()
+        contact.save()
         return 'end'
 
 

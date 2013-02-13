@@ -6,7 +6,7 @@ from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
 from trytond.modules.party.contact_mechanism import _TYPES
-from trytond.modules.coop_utils import model
+from trytond.modules.coop_utils import model, utils
 
 MEDIA = _TYPES + [
     ('mail', 'Mail')
@@ -57,7 +57,10 @@ class ContactHistory(model.CoopSQL, model.CoopView):
     __name__ = 'party.contact_history'
 
     party = fields.Many2One('party.party', 'Actor',
-        ondelete='CASCADE')
+        ondelete='CASCADE',
+        states={
+            'readonly': True
+        })
     title = fields.Char('Title')
     media = fields.Selection(MEDIA, 'Media')
     contact_mechanism = fields.Many2One('party.contact_mechanism',
@@ -77,11 +80,67 @@ class ContactHistory(model.CoopSQL, model.CoopView):
     user_name = fields.Char('User Name')
     contact_datetime = fields.DateTime('Date and Time')
     comment = fields.Text('Comment')
-    attachment = fields.Many2One('ir.attachment', 'Attachment')
+    attachment = fields.Many2One(
+        'ir.attachment', 'Attachment',
+        domain=[('resource', '=', Eval('for_object'))],
+        depends=['for_object'],
+        context={'resource': Eval('for_object')})
+    for_object = fields.Function(
+        fields.Char(
+            'For Object',
+            states={
+                'invisible': True
+            },
+            on_change_with=['for_object_ref']),
+        'on_change_with_for_object')
+    for_object_ref = fields.Reference(
+        'For Object',
+        [('party.party', 'Party')],
+        states={
+            'readonly': True
+        },
+        on_change_with=['party', 'for_object_ref'])
 
     @staticmethod
     def default_user():
         return Transaction().user
+
+    @classmethod
+    def default_party(cls):
+        if not 'from_party' in Transaction().context:
+            return None
+
+        GoodModel = Pool().get(Transaction().context.get('from_model'))
+        good_id = Transaction().context.get('from_party')
+
+        if GoodModel.__name__ == 'party.party':
+            return good_id
+
+        good_obj = GoodModel(good_id)
+        if not (hasattr(good_obj, 'party') and good_obj.party):
+            return None
+
+        return good_obj.party.id
+
+    @classmethod
+    def default_for_object_ref(cls):
+        return 'party.party,%s' % cls.default_party()
+
+    @classmethod
+    def default_for_object(cls):
+        return cls.default_for_object_ref()
+
+
+    def on_change_with_for_object_ref(self):
+        if (hasattr(self, 'for_object_ref') and self.for_object_ref):
+            return self.for_object_ref
+        if (hasattr(self, 'party') and self.party):
+            return self.party
+
+    def on_change_with_for_object(self, name=None):
+        if not (hasattr(self, 'for_object_ref') and self.for_object_ref):
+            return ''
+        return utils.convert_to_reference(self.for_object_ref)
 
     @staticmethod
     def default_user_name():

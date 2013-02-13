@@ -22,6 +22,7 @@
             <field name="name">Contact History</field>
             <field name="res_model">party.contact_history</field>
             <field name="domain">[('party', '=', Eval('active_id'))]</field>
+            <field name="context">{'from_party': Eval('active_id'), 'from_model': Eval('active_model')}</field>
         </record>
         <record model="ir.action.keyword" id="act_contact_history_relate_keyword">
             <field name="keyword">form_relate</field>
@@ -32,6 +33,7 @@
             <field name="name">Contact History</field>
             <field name="res_model">party.contact_history</field>
             <field name="domain">[('party.society', '=', Eval('active_id'))]</field>
+            <field name="context">{'from_party': Eval('active_id'), 'from_model': Eval('active_model')}</field>
         </record>
         <record model="ir.action.keyword" id="act_contact_history_relate_keyword2">
             <field name="keyword">form_relate</field>
@@ -42,6 +44,7 @@
             <field name="name">Contact History</field>
             <field name="res_model">party.contact_history</field>
             <field name="domain">[('party.person', '=', Eval('active_id'))]</field>
+            <field name="context">{'from_party': Eval('active_id'), 'from_model': Eval('active_model')}</field>
         </record>
         <record model="ir.action.keyword" id="act_contact_history_relate_keyword3">
             <field name="keyword">form_relate</field>
