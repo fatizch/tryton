@@ -3,5 +3,6 @@
     <field name="party"/>
     <field name="contact_datetime"/>
     <field name="media"/>
+    <field name="title"/>
     <field name="user_name"/>
 </tree>

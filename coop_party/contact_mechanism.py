@@ -58,6 +58,7 @@ class ContactHistory(model.CoopSQL, model.CoopView):
 
     party = fields.Many2One('party.party', 'Actor',
         ondelete='CASCADE')
+    title = fields.Char('Title')
     media = fields.Selection(MEDIA, 'Media')
     contact_mechanism = fields.Many2One('party.contact_mechanism',
         'Contact Mechanism',
@@ -89,4 +90,5 @@ class ContactHistory(model.CoopSQL, model.CoopView):
 
     @staticmethod
     def default_contact_datetime():
+        #TODO: use functional date
         return datetime.datetime.now()

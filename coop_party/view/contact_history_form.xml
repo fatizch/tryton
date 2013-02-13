@@ -4,6 +4,10 @@
     <field name="contact_datetime"/>
     <label name="party"/>
     <field name="party"/>
+    <newline/>
+    <label name="title"/>
+    <field name="title" colspan="3"/>
+    <newline/>
     <label name="media"/>
     <field name="media"/>
     <newline/>
