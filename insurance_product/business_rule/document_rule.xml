@@ -150,8 +150,8 @@
       <field name="model">ins_product.document_request,-1</field>
       <field name="action" ref="receive_documents_wizard"/>
     </record>
-    <menuitem name="GED" id="menu_ged" sequence="2"/>
+    <menuitem name="EDM" id="menu_edm" sequence="2"/>
     <menuitem name="Document Received" id="menu_receive_documents" sequence="15"
-        parent="menu_ged" action="receive_documents_wizard"/>
+        parent="menu_edm" action="receive_documents_wizard"/>
   </data>
 </tryton>
