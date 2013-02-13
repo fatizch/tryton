@@ -768,9 +768,12 @@ def format_data(data, prefix='', prefix_inc='    ', is_init=True):
 
 
 def pyson_result(pyson_expr, target, evaled=False):
-    if not evaled:
+    if isinstance(pyson_expr, str):
         encoder = PYSONEncoder()
         the_pyson = encoder.encode(safe_eval(pyson_expr, CONTEXT))
+    elif isinstance(pyson_expr, dict):
+        encoder = PYSONEncoder()
+        the_pyson = encoder.encode(safe_eval(str(pyson_expr), CONTEXT))
     else:
         the_pyson = target
 

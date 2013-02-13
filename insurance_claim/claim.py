@@ -17,6 +17,7 @@ __all__ = [
     'IndemnificationDetail',
     'DocumentRequest',
     'Document',
+    'RequestFinder',
 ]
 
 CLAIM_STATUS = [
@@ -92,6 +93,10 @@ class Claim(model.CoopSQL, CoopProcessFramework):
 
     def get_main_contact(self):
         return self.claimant
+
+    def set_claim_number(self):
+        self.name = 'CL0213000004'
+        return True
 
 
 class Loss(model.CoopSQL, model.CoopView):
@@ -325,3 +330,19 @@ class Document():
             ('ins_claim.claim', 'Claim'))
         cls.for_object.selection.append(
             ('ins_contract.delivered_service', 'Delivered Service'))
+
+
+class RequestFinder():
+    'Request Finder'
+
+    __metaclass__ = PoolMeta
+
+    __name__ = 'ins_product.request_finder'
+
+    @classmethod
+    def allowed_values(cls):
+        result = super(RequestFinder, cls).allowed_values()
+        result.update({
+            'ins_claim.claim': (
+                'Claim', 'name')})
+        return result

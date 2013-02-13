@@ -34,6 +34,7 @@ __all__ = [
     'Document',
     'DocumentRequest',
     'DeliveredService',
+    'RequestFinder',
 ]
 
 
@@ -927,3 +928,19 @@ class Document():
             ('ins_contract.option', 'Option'))
         cls.for_object.selection.append(
             ('ins_contract.covered_element', 'Covered Element'))
+
+
+class RequestFinder():
+    'Request Finder'
+
+    __metaclass__ = PoolMeta
+
+    __name__ = 'ins_product.request_finder'
+
+    @classmethod
+    def allowed_values(cls):
+        result = super(RequestFinder, cls).allowed_values()
+        result.update({
+            'ins_contract.contract': (
+                'Contract', 'contract_number')})
+        return result

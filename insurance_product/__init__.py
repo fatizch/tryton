@@ -33,6 +33,8 @@ def register():
         Document,
         LetterModelDisplayer,
         LetterModelSelection,
+        RequestFinder,
+        DocumentRequestDisplayer,
         PricingRule,
         PricingComponent,
         EligibilityRule,
@@ -70,4 +72,5 @@ def register():
         module='insurance_product', type_='report')
     Pool.register(
         LetterGeneration,
+        ReceiveDocuments,
         module='insurance_product', type_='wizard')

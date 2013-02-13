@@ -68,6 +68,9 @@ class ClaimProcess():
         documents = []
 
         for loss in self.losses:
+            if not loss.loss_desc:
+                continue
+
             loss_docs = loss.loss_desc.get_documents()
 
             if loss_docs:

@@ -33,14 +33,14 @@ class TaskDispatcher(Wizard):
                 return None
 
             act = the_user.team.get_next_action(the_user)
-            
+
             if not act:
                 return None
 
             Action = Pool().get('ir.action')
 
             return Action.get_action_values(
-                act[0].__name__, 
+                act[0].__name__,
                 [act[0].id])[0], act[1], act[2]
 
     calculate_action = LaunchStateAction()

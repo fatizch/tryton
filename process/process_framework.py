@@ -233,13 +233,16 @@ class ProcessFramework(ModelView):
         # current context
         if not process_name:
             process_name = Transaction().context.get('running_process')
-            if not process_name:
-                return
 
-        ProcessDesc = Pool().get('process.process_desc')
-        process_desc, = ProcessDesc.search([
-            ('technical_name', '=', process_name),
-        ], limit=1)
+        if not process_name and self.current_state:
+            # We calculate it from the current_state
+            process_desc = self.current_state.process
+        else:
+            ProcessDesc = Pool().get('process.process_desc')
+            process_desc, = ProcessDesc.search([
+                ('technical_name', '=', process_name),
+            ], limit=1)
+
         self.current_state = process_desc.get_step_relation(value)
 
     @classmethod
@@ -327,7 +330,9 @@ class ProcessFramework(ModelView):
         if good_button == {}:
             return True
         return not(
+            'readonly' in good_button and
             utils.pyson_result(good_button['readonly'], self, evaled=True) or
+            'invisible' in good_button and
             utils.pyson_result(good_button['invisible'], self, evaled=True))
 
     @classmethod

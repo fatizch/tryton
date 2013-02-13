@@ -1,9 +1,11 @@
 #-*- coding:utf-8 -*-
 import copy
+import functools
 
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard, StateAction, StateView, Button
+from trytond.wizard import StateTransition
 from trytond.report import Report
 from trytond.ir import Attachment
 
@@ -27,6 +29,9 @@ __all__ = [
     'LetterModelSelection',
     'LetterReport',
     'LetterGeneration',
+    'RequestFinder',
+    'DocumentRequestDisplayer',
+    'ReceiveDocuments',
 ]
 
 
@@ -63,20 +68,12 @@ class LetterModel(model.CoopSQL, model.CoopView):
             ('', ''),
             ('doc_request', 'Document Request'),
         ],
-        'Kind',
+        'name',
     )
-
-    @classmethod
-    def __setup__(cls):
-        super(LetterModel, cls).__setup__()
-        cls._error_messages.update({
-            'no_document_version_match': 'Could not find a good version for \
-document %s'})
 
     def get_good_version(self, date, language):
         for version in self.versions:
-            if not (version.language == language or
-                    language == version.language.code):
+            if not version.language == language:
                 continue
 
             if version.start_date > date:
@@ -87,18 +84,6 @@ document %s'})
 
             if version.end_date >= date:
                 return version
-
-        for version in self.versions:
-            if version.start_date > date:
-                continue
-
-            if not version.end_date:
-                return version
-
-            if version.end_date >= date:
-                return version
-
-        self.raise_user_error('no_document_version_match', (self.name))
 
 
 class LetterVersion(Attachment):
@@ -176,7 +161,7 @@ class Printable(object):
         try:
             return self.get_contact().lang.code
         except:
-            return 'en_US'
+            return 'en_us'
 
     def get_address(self, kind=None):
         contact = self.get_contact()
@@ -192,18 +177,18 @@ class Printable(object):
 
     def get_available_letter_models(self, kind=None):
         LetterModel = Pool().get('ins_product.letter_model')
-        domain = [
+
+        return LetterModel.search([
             ('on_model.model', '=', self.__name__),
             ['OR',
                 ('kind', '=', kind or self.get_letter_model_kind()),
-                ('kind', '=', None)]]
-        print '#' * 80
-        print '%s' % domain
-
-        return LetterModel.search(domain)
+                ('kind', '=', '')]])
 
     def get_letter_model_kind(self):
         return None
+
+    def post_generation(self):
+        pass
 
 
 class DocumentDesc(model.CoopSQL, model.CoopView):
@@ -555,8 +540,14 @@ class DocumentRequest(model.CoopSQL, model.CoopView, Printable):
     def get_waiting_documents(self):
         return len([doc for doc in self.documents if not doc.received])
 
-    def get_letter_model_kind(self):
-        return 'doc_request'
+    def post_generation(self):
+        for document in self.documents:
+            if document.send_date is None:
+                document.send_date = utils.today()
+                document.save()
+
+    def notify_completed(self):
+        pass
 
 
 class LetterModelDisplayer(model.CoopView):
@@ -591,6 +582,22 @@ class LetterModelSelection(model.CoopView):
                 return elem.letter_model.id
 
 
+class ActionReportOverride(object):
+    def __init__(self, action_report):
+        self._the_report = action_report
+
+    def __getattr__(self, name):
+        if name == '_the_report':
+            return self.__getitem__(name)
+        elif name == 'report_content':
+            GoodModel = Pool().get(Transaction().context.get('active_model'))
+            good_obj = GoodModel(Transaction().context.get('active_id'))
+            return Transaction().context.get(
+                'letter_model').get_good_version(
+                    utils.today(), good_obj.get_lang()).data
+        return getattr(self._the_report, name)
+
+
 class LetterReport(Report):
     __name__ = 'ins_product.letter_report'
 
@@ -607,12 +614,7 @@ class LetterReport(Report):
         records = None
         records = cls._get_records(
             ids, data['model'], data)
-        try:
-            type, data = cls.parse(action_report, records, data, {})
-        except:
-            import traceback
-            traceback.print_exc()
-            raise
+        type, data = cls.parse(action_report, records, data, {})
         return (
             type, buffer(data), action_report.direct_print, action_report.name)
 
@@ -650,6 +652,8 @@ class LetterGeneration(Wizard):
 
     generate = StateAction('insurance_product.letter_generation_report')
 
+    post_generation = StateTransition()
+
     select_model = StateView(
         'ins_product.letter_model_selection',
         'insurance_product.letter_model_selection_form',
@@ -674,14 +678,11 @@ class LetterGeneration(Wizard):
         good_model = ActiveModel(Transaction().context.get('active_id'))
 
         if not good_model:
-            print '#' * 80
-            print 'BADDDDD'
             return {}
 
         letters = []
         has_selection = True
         for elem in good_model.get_available_letter_models():
-            print 'YES'
             letters.append({
                 'letter_model': elem.id,
                 'selected': has_selection})
@@ -691,3 +692,203 @@ class LetterGeneration(Wizard):
             return {'models': letters}
         else:
             return {}
+
+    def transition_post_generation(self):
+        GoodModel = Pool().get(Transaction().context.get('active_model'))
+        good_obj = GoodModel(Transaction().context.get('active_id'))
+        good_obj.post_generation()
+        return 'end'
+
+
+class RequestFinder(model.CoopView):
+    'Request Finder'
+
+    __name__ = 'ins_product.request_finder'
+
+    kind = fields.Selection(
+        [
+            ('', '')
+        ],
+        'Kind',
+        on_change=['kind'],
+    )
+
+    value = fields.Char(
+        'Value',
+    )
+
+    request = fields.Many2One(
+        'ins_product.document_request',
+        'Request',
+        states={
+            'invisible': True
+        })
+
+    @classmethod
+    def __setup__(cls):
+        super(RequestFinder, cls).__setup__()
+        cls.kind = copy.copy(cls.kind)
+        idx = 0
+        for k, v in cls.allowed_values().iteritems():
+            cls.kind.selection.append((k, v[0]))
+            good_domain = [(v[1], '=', Eval('value'))]
+            tmp = fields.Many2One(
+                k, v[0],
+                states={'invisible': Eval('kind') != k},
+                # domain=good_domain,
+                depends=['kind', 'value'],
+                on_change=['request', 'tmp_%s' % idx])
+            setattr(cls, 'tmp_%s' % idx, tmp)
+
+            def on_change_tmp(self, name=''):
+                if not (hasattr(self, name) and getattr(self, name)):
+                    return {}
+
+                relation = getattr(self, name)
+                if not (hasattr(relation, 'documents') and relation.documents):
+                    return {}
+
+                return {'request': relation.documents[0].id}
+
+            setattr(cls, 'on_change_tmp_%s' % idx, functools.partial(
+                on_change_tmp, name='tmp_%s' % idx))
+            idx += 1
+
+    @classmethod
+    def allowed_values(cls):
+        return {}
+
+    def on_change_kind(self):
+        result = {}
+        for k, v in self._fields.iteritems():
+            if not k.startswith('tmp_'):
+                continue
+
+            result[k] = None
+        return result
+
+    @classmethod
+    def fields_view_get(cls, view_id=None, view_type='form'):
+        result = super(RequestFinder, cls).fields_view_get(view_id, view_type)
+
+        fields = ['kind', 'value', 'request']
+
+        xml = '<?xml version="1.0"?>'
+        xml += '<form string="%s">' % cls.__name__
+        xml += '<label name="kind" xalign="0"/>'
+        xml += '<field name="kind" colspan="3"/>'
+        xml += '<field name="value" invisible="1"/>'
+        xml += '<newline/>'
+        xml += '<field name="request"/>'
+
+        for k, v in cls._fields.iteritems():
+            if not k.startswith('tmp_'):
+                continue
+
+            xml += '<newline/>'
+            xml += '<field name="%s" colspan="4"/>' % k
+
+            fields.append(k)
+
+        xml += '</form>'
+
+        result['arch'] = xml
+        result['fields'] = cls.fields_get(fields_names=fields)
+
+        return result
+
+
+class DocumentRequestDisplayer(model.CoopView):
+    'Document Request Displayer'
+
+    __name__ = 'ins_product.document_request_displayer'
+
+    documents = fields.One2Many(
+        'ins_product.document_request',
+        '',
+        'Documents',
+        size=1,
+    )
+
+
+class ReceiveDocuments(Wizard):
+    'Receive Documents Wizard'
+
+    __name__ = 'ins_product.receive_document_wizard'
+
+    start_state = 'select_instance'
+
+    select_instance = StateView(
+        'ins_product.request_finder',
+        'insurance_product.request_finder_form',
+        [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Continue', 'input_document', 'tryton-ok')])
+
+    input_document = StateView(
+        'ins_product.document_request_displayer',
+        'insurance_product.document_request_displayer_form',
+        [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Complete', 'notify_request', 'tryton-ok')])
+
+    notify_request = StateTransition()
+
+    try_to_go_forward = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        super(ReceiveDocuments, cls).__setup__()
+
+        cls._error_messages.update({
+            'no_document_request_found': 'No document request found for \
+this object'})
+
+    def default_select_instance(self, name):
+        print '#' * 80
+        print 'TRANS'
+        print Transaction().context.get('active_model')
+        print Transaction().context.get('active_id')
+        print self.select_instance._fields['kind'].selection
+        if not(Transaction().context.get('active_model', 'z') in [
+                k[0] for k in self.select_instance._fields['kind'].selection]):
+            return {}
+
+        GoodModel = Pool().get(Transaction().context.get('active_model'))
+        good_id = Transaction().context.get('active_id')
+
+        result = {'kind': Transaction().context.get('active_model')}
+        for key, field in self.select_instance._fields.iteritems():
+            if not key.startswith('tmp_'):
+                continue
+            if field.model_name == Transaction().context.get('active_model'):
+                result[key] = Transaction().context.get('active_id')
+                try:
+                    result['request'] = GoodModel(good_id).documents[0].id
+                except:
+                    self.raise_user_error('no_document_request_found')
+                break
+
+        print result
+        return result
+
+    def default_input_document(self, name):
+        return {'documents': [self.select_instance.request.id]}
+
+    def transition_notify_request(self):
+        for doc in self.input_document.documents[0].documents:
+            doc.save()
+        self.input_document.documents[0].save()
+        if self.input_document.documents[0].is_complete:
+            self.input_document.documents[0].notify_completed()
+
+        return 'try_to_go_forward'
+
+    def transition_try_to_go_forward(self):
+        # try:
+            # obj = self.select_instance.request.needed_by
+            # obj.build_instruction_method('next')([obj])
+        # except AttributeError:
+            # pass
+
+        return 'end'

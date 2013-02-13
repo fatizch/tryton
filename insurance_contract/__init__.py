@@ -34,6 +34,7 @@ def register():
         BillDisplay,
         BillingProcessState,
         DeliveredService,
+        RequestFinder,
         module='insurance_contract', type_='model')
     Pool.register(
         # subs_process.py classes

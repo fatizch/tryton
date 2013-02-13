@@ -13,4 +13,5 @@ def register():
         IndemnificationDetail,
         Document,
         DocumentRequest,
+        RequestFinder,
         module='insurance_claim', type_='model')

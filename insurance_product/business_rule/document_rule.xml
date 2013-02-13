@@ -125,5 +125,28 @@
       <field name="type">tree</field>
       <field name="name">letter_model_displayer_tree</field>
     </record>
+    <!-- Receive Document -->
+    <record model="ir.ui.view" id="request_finder_form">
+      <field name="model">insurance_product.request_finder</field>
+      <field name="type">form</field>
+      <field name="arch"></field>
+    </record>
+    <record model="ir.ui.view" id="document_request_displayer_form">
+      <field name="model">ins_product.document_request_displayer</field>
+      <field name="type">form</field>
+      <field name="name">document_request_displayer_form</field>
+    </record>
+    <record model="ir.action.wizard" id="receive_documents_wizard">
+        <field name="name">Document Reception</field>
+        <field name="wiz_name">ins_product.receive_document_wizard</field>
+    </record>
+    <record model="ir.action.keyword" id="receive_documents_wizard_keyword">
+      <field name="keyword">form_action</field>
+      <field name="model">ins_product.document_request,-1</field>
+      <field name="action" ref="receive_documents_wizard"/>
+    </record>
+    <menuitem name="GED" id="menu_ged" sequence="2"/>
+    <menuitem name="Document Received" id="menu_receive_documents" sequence="15"
+        parent="menu_ged" action="receive_documents_wizard"/>
   </data>
 </tryton>

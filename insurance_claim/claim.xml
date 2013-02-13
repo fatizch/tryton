@@ -151,5 +151,11 @@
             <field name="model">party.society,-1</field>
             <field name="action" ref="act_indemnification_relate_form3"/>
         </record>
+        <!-- Receive Documents -->
+    <record model="ir.action.keyword" id="receive_documents_wizard_keyword">
+      <field name="keyword">form_action</field>
+      <field name="model">ins_claim.claim,-1</field>
+      <field name="action" ref="insurance_product.receive_documents_wizard"/>
+    </record>
     </data>
 </tryton>
