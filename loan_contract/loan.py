@@ -99,6 +99,8 @@ class Loan(model.CoopSQL, model.CoopView):
     outstanding_capital = fields.Numeric('Outstanding Capital')
     fixed_rate = fields.Numeric('Fixed Rate',
         states={'invisible': Eval('kind') != 'fixed_rate'})
+    lender = fields.Many2One('party.party', 'Lender',
+        domain=[('bank_role', '>', 0)])
 
     @classmethod
     def default_kind(cls):

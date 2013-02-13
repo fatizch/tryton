@@ -12,6 +12,11 @@
     <label name="end_date"/>
     <field name="end_date"/>
     <newline/>
+    <label name="customer"/>
+    <field name="customer"/>
+    <label name="beneficiary"/>
+    <field name="beneficiary"/>
+    <newline/>
     <label name="amount"/>
     <field name="amount"/>
     <field name="details" colspan="4"/>

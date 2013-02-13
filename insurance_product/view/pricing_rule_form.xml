@@ -3,7 +3,7 @@
     <xpath expr="/form" position="replace_attributes">
         <form string="Pricing rule"/>
     </xpath>
-    <xpath expr="/form/field[@name='config_kind']" position="after">
+    <xpath expr="/form/label[@name='config_kind']" position="before">
         <label name="frequency"/>
         <field name="frequency" xexpand="1"/>
     </xpath>

@@ -555,7 +555,7 @@ return True'''
             lines += ['']
 
         def date_from_today(nb):
-            return add_days(datetime.date.today(), nb)
+            return add_day(datetime.date.today(), nb)
 
         good_lines = [
             date_from_today(5).isoformat() + ' => 63.00 (Tx : 12.26)',

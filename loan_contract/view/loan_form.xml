@@ -22,6 +22,8 @@
     <label name="first_payment_date"/>
     <field name="first_payment_date"/>
     <newline/>
+    <label name="lender"/>
+    <field name="lender"/>
     <field name="loan_shares" colspan="4" mode="tree,form"
         view_ids="loan_contract.loan_share_view_tree_editable,loan_contract.loan_share_view_form"/>
 </form>

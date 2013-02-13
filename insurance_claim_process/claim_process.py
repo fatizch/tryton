@@ -27,6 +27,9 @@ class ClaimProcess():
             depends=['documents'],
             on_change_with=['documents']),
         'on_change_with_doc_received')
+    indemnifications = fields.Function(
+        fields.One2Many('ins_claim.indemnification', None, 'Indemnifications'),
+        'get_indemnifications')
 
     def get_possible_contracts(self):
         if not self.claimant:
@@ -42,8 +45,14 @@ class ClaimProcess():
         for loss in self.losses:
             for option_id, benefits in loss.get_possible_benefits().items():
                 loss.init_delivered_services(Option(option_id), benefits)
-            #Why do we need to save now?
             loss.save()
+        return True
+
+    def calculate_indemnification(self):
+        for loss in self.losses:
+            for delivered_service in loss.delivered_services:
+                delivered_service.calculate()
+                delivered_service.save()
         return True
 
     def init_declaration_document_request(self):
@@ -105,6 +114,30 @@ class ClaimProcess():
             if not doc.is_complete:
                 return False
 
+        return True
+
+    def get_indemnifications(self, name=None):
+        res = []
+        for loss in self.losses:
+            for delivered_service in loss.delivered_services:
+                for indemnification in delivered_service.indemnifications:
+                    res.append(indemnification.id)
+        return res
+
+    def validate_indemnifications(self):
+        for loss in self.losses:
+            for delivered_service in loss.delivered_services:
+                for indemnification in delivered_service.indemnifications:
+                    print indemnification.status
+                    if indemnification.status == 'validated':
+                        indemnification.status = 'paid'
+                        indemnification.save()
+        return True
+
+    def close_claim(self):
+        self.status = 'closed'
+        self.sub_status = 'paid'
+        self.end_date = utils.today()
         return True
 
 

@@ -13,6 +13,8 @@
     <newline/>
     <label name="nb_of_unit"/>
     <field name="nb_of_unit"/>
+    <label name="unit"/>
+    <field name="unit"/>
     <label name="amount_per_unit"/>
     <field name="amount_per_unit"/>
     <newline/>

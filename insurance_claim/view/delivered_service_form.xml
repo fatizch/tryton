@@ -3,6 +3,7 @@
     <xpath expr="/form" position="inside">
         <label name="benefit"/>
         <field name="benefit"/>
-        <field name="indemnifications" colspan="4"/>
+        <field name="indemnifications" colspan="4" mode="form,tree"
+            expand_toolbar="0"/>
     </xpath>
 </data>

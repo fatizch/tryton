@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 from trytond.model import fields
 
-from trytond.modules.coop_utils import model, utils
+from trytond.modules.coop_utils import model, utils, date
 from trytond.modules.insurance_product import Offered
 
 __all__ = [
@@ -18,6 +18,12 @@ __all__ = [
 INDEMNIFICATION_KIND = [
     ('capital', 'Capital'),
     ('period', 'Period'),
+]
+INDEMNIFICATION_DETAIL_KIND = [
+    ('waiting_period', 'Waiting Period'),
+    ('deductible', 'Deductible'),
+    ('benefit', 'Indemnified'),
+    ('limit', 'Limit'),
 ]
 
 
@@ -131,12 +137,18 @@ class Benefit(model.CoopSQL, Offered):
     def default_kind():
         return 'capital'
 
-    def give_me_documents(self, args):
-        try:
-            return self.get_result(
-                'documents', args, kind='document')
-        except utils.NonExistingRuleKindException:
-            return [], ()
+    def give_me_indemnification(self, args):
+        res = {}
+        errs = []
+        for key, fancy_name in INDEMNIFICATION_DETAIL_KIND:
+            indemn_dict, indemn_errs = self.get_result(key, args, key)
+            errs += indemn_errs
+            if not indemn_dict:
+                continue
+            res[key] = indemn_dict
+            if 'end_date' in indemn_dict:
+                args['start_date'] = date.add_day(indemn_dict['end_date'], 1)
+        return res, errs
 
 
 class BenefitLossDescRelation(model.CoopSQL):

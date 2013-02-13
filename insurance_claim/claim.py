@@ -4,9 +4,11 @@ from trytond.model import fields
 from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta
 
-from trytond.modules.coop_utils import model, utils
+from trytond.modules.coop_utils import model, utils, date
 from trytond.modules.coop_process import CoopProcessFramework
-from trytond.modules.insurance_product.benefit import INDEMNIFICATION_KIND
+from trytond.modules.insurance_product.benefit import INDEMNIFICATION_KIND, \
+    INDEMNIFICATION_DETAIL_KIND
+
 __all__ = [
     'Claim',
     'Loss',
@@ -35,13 +37,6 @@ INDEMNIFICATION_STATUS = [
     ('validated', 'Validated'),
     ('refused', 'Refused'),
     ('paid', 'Paid'),
-]
-
-INDEMNIFICATION_DETAIL_KIND = [
-    ('waiting_period', 'Waiting Period'),
-    ('deductible', 'Deductible'),
-    ('limit', 'Limit'),
-    ('included', 'Included'),
 ]
 
 
@@ -146,14 +141,16 @@ class Loss(model.CoopSQL, model.CoopView):
         pass
 
     def init_delivered_services(self, option, benefits):
+        if (not hasattr(self, 'delivered_services')
+            or not self.delivered_services):
+            self.delivered_services = []
+        else:
+            self.delivered_services = list(self.delivered_services)
         for benefit in benefits:
             del_service = utils.instanciate_relation(self.__class__,
                 'delivered_services')
             del_service.subscribed_service = option
             del_service.init_from_loss(self, benefit)
-            if (not hasattr(self, 'delivered_services')
-                 or not self.delivered_services):
-                self.delivered_services = []
             self.delivered_services.append(del_service)
 
 
@@ -166,10 +163,9 @@ class ClaimDeliveredService():
     loss = fields.Many2One('ins_claim.loss', 'Loss', ondelete='CASCADE')
     benefit = fields.Many2One('ins_product.benefit', 'Benefit',
         ondelete='RESTRICT',
-#        domain=[
-#            ('loss_descs', '=', Eval('_parent_loss', {}).get('loss_desc'))
-#        ],
-                              )
+        domain=[
+            ('loss_descs', '=', Eval('_parent_loss', {}).get('loss_desc'))
+        ], )
     indemnifications = fields.One2Many('ins_claim.indemnification',
         'delivered_service', 'Indemnifications')
 
@@ -189,15 +185,38 @@ class ClaimDeliveredService():
     def get_contract(self):
         return self.subscribed_service.get_contract()
 
+    def calculate(self):
+        details_dict, errors = self.benefit.get_result('indemnification',
+            {
+                'date': self.loss.start_date,
+                'start_date': self.loss.start_date,
+                'end_date': self.loss.end_date,
+                'loss': self.loss,
+            })
+        if errors:
+            return None, errors
+        indemnification = utils.instanciate_relation(self.__class__,
+            'indemnifications')
+        indemnification.init_from_delivered_service(self)
+        if not hasattr(self, 'indemnifications') or not self.indemnifications:
+            self.indemnifications = []
+        self.indemnifications.append(indemnification)
+        indemnification.create_details_from_dict(details_dict)
+
 
 class Indemnification(model.CoopSQL, model.CoopView):
     'Indemnification'
 
     __name__ = 'ins_claim.indemnification'
 
+    beneficiary = fields.Many2One('party.party', 'Beneficiary',
+        ondelete='RESTRICT')
+    customer = fields.Many2One('party.party', 'Customer', ondelete='RESTRICT')
     delivered_service = fields.Many2One('ins_contract.delivered_service',
         'Delivered Service', ondelete='CASCADE')
-    kind = fields.Selection(INDEMNIFICATION_KIND, 'Kind', sort=False)
+    kind = fields.Function(
+        fields.Selection(INDEMNIFICATION_KIND, 'Kind', sort=False),
+        'get_kind')
     start_date = fields.Date('Start Date',
         states={'invisible': Eval('kind') != 'period'})
     end_date = fields.Date('End Date',
@@ -206,6 +225,40 @@ class Indemnification(model.CoopSQL, model.CoopView):
     amount = fields.Numeric('Amount')
     details = fields.One2Many('ins_claim.indemnification_detail',
         'indemnification', 'Details')
+
+    def init_from_delivered_service(self, delivered_service):
+        self.status = 'calculated'
+        self.start_date = delivered_service.loss.start_date
+        self.end_date = delivered_service.loss.end_date
+        self.customer = delivered_service.loss.claim.claimant
+        self.beneficiary = delivered_service.loss.claim.claimant
+
+    def get_kind(self, name=None):
+        res = ''
+        if not self.delivered_service:
+            return res
+        return self.delivered_service.benefit.indemnification_kind
+
+    def create_details_from_dict(self, details_dict):
+        for key, fancy_name in INDEMNIFICATION_DETAIL_KIND:
+            if not key in details_dict:
+                continue
+            detail = utils.instanciate_relation(self.__class__,
+                'details')
+            detail.init_from_indemnification(self)
+            if not hasattr(self, 'details') or not self.details:
+                self.details = []
+            self.details.append(detail)
+            detail.kind = key
+            for field_name, value in details_dict[key].iteritems():
+                setattr(detail, field_name, value)
+        self.calculate_amount_from_details()
+
+    def calculate_amount_from_details(self):
+        self.amount = 0
+        for detail in self.details:
+            detail.calculate_amount()
+            self.amount += detail.amount
 
 
 class IndemnificationDetail(model.CoopSQL, model.CoopView):
@@ -224,7 +277,16 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView):
             'invisible': Eval('_parent_indemnification', {}).get('kind') !=
                 'period'})
     kind = fields.Selection(INDEMNIFICATION_DETAIL_KIND, 'Kind', sort=False)
-    amount_per_period = fields.Numeric('Amount per Period')
+    amount_per_unit = fields.Numeric('Amount per Unit')
+    nb_of_unit = fields.Numeric('Nb of Unit')
+    unit = fields.Selection(date.DAILY_DURATION, 'Unit')
+    amount = fields.Numeric('Amount')
+
+    def init_from_indemnification(self, indemnification):
+        pass
+
+    def calculate_amount(self):
+        self.amount = self.amount_per_unit * self.nb_of_unit
 
 
 class DocumentRequest():

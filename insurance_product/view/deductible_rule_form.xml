@@ -3,9 +3,20 @@
     <xpath expr="/form" position="replace_attributes">
         <form string="Deductible rule"/>
     </xpath>
+    <xpath expr="/form/label[@name='config_kind']" position="before">
+        <label name="kind"/>
+        <field name="kind"/>
+        <newline/>
+    </xpath>
     <xpath expr="/form/label[@name='rule']" position="before">
-        <label name="value"/>
-        <field name="value"/>
+        <label name="amount"/>
+        <field name="amount"/>
+        <newline/>
+        <label name="duration"/>
+        <group id="duration">
+            <field name="duration"/>
+            <field name="duration_unit" xalign="0"/>
+        </group>
         <newline/>
     </xpath>
 </data>

@@ -57,3 +57,28 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
     @staticmethod
     def default_indemnification_calc_unit():
         return 'day'
+
+    def get_amount(self, args):
+        if self.kind == 'amount':
+            return self.amount
+        else:
+            #TODO: retrive coverage amount
+            raise NotImplementedError
+
+    def give_me_benefit(self, args):
+        errs = []
+        res = {}
+        if not 'start_date' in args:
+            errs += 'missing_date'
+        else:
+            res['start_date'] = args['start_date']
+        if not 'end_date' in args:
+            nb = 1
+        else:
+            nb = date.duration_between(args['start_date'], args['end_date'],
+            self.indemnification_calc_unit)
+            res['end_date'] = args['end_date']
+        res['nb_of_unit'] = nb
+        res['unit'] = self.indemnification_calc_unit
+        res['amount_per_unit'] = self.get_amount(args)
+        return res, errs

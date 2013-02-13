@@ -218,6 +218,20 @@ class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
             cls._error_messages.update({'businessrule_overlaps':
                 'You can not have 2 business rules that overlaps!'})
 
+    def get_rule_result(self, args):
+        if self.rule:
+            res, mess, errs = self.rule.compute(args)
+            return res, mess + errs
+
+    def get_simple_result(self, args):
+        return None, None
+
+    def give_me_result(self, args):
+        if self.config_kind == 'advanced':
+            return self.get_rule_result(args)
+        else:
+            return self.get_simple_result(args)
+
     @staticmethod
     def default_config_kind():
         return 'simple'

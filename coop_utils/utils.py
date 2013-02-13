@@ -382,7 +382,7 @@ class NonExistingRuleKindException(Exception):
 
 
 class GetResult(object):
-    def get_result(self, target, args, kind='', path=''):
+    def get_result(self, target='result', args=None, kind='', path=''):
         # This method is a generic entry point for getting parameters.
         #
         # Arguments are :
