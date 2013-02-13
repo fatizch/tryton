@@ -19,4 +19,5 @@ def register():
         GenericActorKind,
         GenericActor,
         AddresseKind,
+        ContactHistory,
         module='coop_party', type_='model')

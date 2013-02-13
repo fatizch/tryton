@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<form string="Communication Log">
+    <label name="contact_datetime"/>
+    <field name="contact_datetime"/>
+    <label name="party"/>
+    <field name="party"/>
+    <label name="media"/>
+    <field name="media"/>
+    <newline/>
+    <label name="user"/>
+    <field name="user"/>
+    <label name="user_name"/>
+    <field name="user_name"/>
+    <label name="contact_mechanism"/>
+    <field name="contact_mechanism"/>
+    <newline/>
+    <label name="address"/>
+    <field name="address"/>
+    <newline/>
+    <label name="attachment"/>
+    <field name="attachment"/>
+    <field name="comment" colspan="4" widget="richtext"/>
+</form>
