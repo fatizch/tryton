@@ -653,6 +653,10 @@ class LetterReport(Report):
     def parse(cls, report, records, data, localcontext):
         localcontext['Party'] = Pool().get('party.party')(data['party'])
         localcontext['Address'] = Pool().get('party.address')(data['address'])
+        try:
+            localcontext['Lang'] = localcontext['Party'].lang.code
+        except AttributeError:
+            localcontext['Lang'] = 'en_US'
         GoodModel = Pool().get(data['model'])
         good_obj = GoodModel(data['id'])
         LetterModel = Pool().get('ins_product.letter_model')
