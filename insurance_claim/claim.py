@@ -2,7 +2,7 @@
 import copy
 from trytond.model import fields
 from trytond.pyson import Eval, Bool
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coop_utils import model, utils, date
 from trytond.modules.coop_process import CoopProcessFramework
@@ -47,8 +47,14 @@ class Claim(model.CoopSQL, CoopProcessFramework):
 
     __name__ = 'ins_claim.claim'
 
-    name = fields.Char('Number', select=True)
-    status = fields.Selection(CLAIM_STATUS, 'Status', sort=False)
+    name = fields.Char('Number', select=True,
+        states={
+            'readonly': True
+        },)
+    status = fields.Selection(CLAIM_STATUS, 'Status', sort=False,
+        states={
+            'readonly': True
+        },)
     sub_status = fields.Selection('get_possible_sub_status', 'Sub Status',
         selection_change_with=['status'])
     declaration_date = fields.Date('Declaration Date')
@@ -96,7 +102,11 @@ class Claim(model.CoopSQL, CoopProcessFramework):
         return self.claimant
 
     def set_claim_number(self):
-        self.name = 'CL0213000004'
+        Generator = Pool().get('ir.sequence')
+        good_gen, = Generator.search([
+            ('code', '=', 'ins_claim.claim'),
+        ], limit=1)
+        self.name = good_gen.get_id(good_gen.id)
         return True
 
 
