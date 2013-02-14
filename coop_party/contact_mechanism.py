@@ -40,6 +40,8 @@ class ContactMechanism():
             'invalid_email': 'Invalid Email !'})
 
     def check_email(self):
+        if not (hasattr(self, 'type') and self.type == 'email'):
+            return True
         if hasattr(self, 'email') and self.email:
             import re
             if not re.match(r"[^@]+@[^@]+\.[^@]+", self.email):
