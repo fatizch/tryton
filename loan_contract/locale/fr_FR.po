@@ -78,6 +78,10 @@ msgctxt "field:ins_contract.loan,kind:"
 msgid "Kind"
 msgstr "Type"
 
+msgctxt "field:ins_contract.loan,lender:"
+msgid "Lender"
+msgstr "Organisme Prêteur"
+
 msgctxt "field:ins_contract.loan,loan_shares:"
 msgid "Loan Shares"
 msgstr "Quotités"

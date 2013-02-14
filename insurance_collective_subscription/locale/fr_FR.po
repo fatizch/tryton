@@ -40,7 +40,7 @@ msgstr "Saisir un élement couvert"
 
 msgctxt "field:ins_collective.contract,doc_received:"
 msgid "All Document Received"
-msgstr ""
+msgstr "Documents Reçus"
 
 msgctxt "field:ins_collective.contract,is_custom:"
 msgid "Custom"

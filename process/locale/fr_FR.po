@@ -28,7 +28,7 @@ msgstr "Créé par"
 
 msgctxt "field:process.process_desc,fancy_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:process.process_desc,id:"
 msgid "ID"
@@ -48,7 +48,7 @@ msgstr "Modèle"
 
 msgctxt "field:process.process_desc,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:process.process_desc,technical_name:"
 msgid "Technical Name"
@@ -108,7 +108,7 @@ msgstr "Processus"
 
 msgctxt "field:process.process_step_relation,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:process.process_step_relation,status:"
 msgid "Status"
@@ -144,11 +144,11 @@ msgstr "ID"
 
 msgctxt "field:process.status,name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:process.status,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:process.status,relations:"
 msgid "Relations"
@@ -184,7 +184,7 @@ msgstr "Créé par"
 
 msgctxt "field:process.step_desc,fancy_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:process.step_desc,id:"
 msgid "ID"
@@ -192,7 +192,7 @@ msgstr "ID"
 
 msgctxt "field:process.step_desc,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:process.step_desc,step_xml:"
 msgid "XML"
@@ -228,7 +228,7 @@ msgstr "ID"
 
 msgctxt "field:process.step_desc_authorization,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:process.step_desc_authorization,step_desc:"
 msgid "Step Desc"
@@ -308,7 +308,7 @@ msgstr "Description Pyson"
 
 msgctxt "field:process.step_transition,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:process.step_transition,to_step:"
 msgid "To Step"
@@ -344,7 +344,7 @@ msgstr "ID"
 
 msgctxt "field:process.transition_authorization,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:process.transition_authorization,transition:"
 msgid "Transition"
@@ -459,36 +459,52 @@ msgid "Standard"
 msgstr "Standard"
 
 msgctxt "view:ins_claim.claim:"
+msgid "Calcul de l'Indemnisation"
+msgstr ""
+
+msgctxt "view:ins_claim.claim:"
 msgid "Claim Declaration"
 msgstr "Claim Declaration"
 
 msgctxt "view:ins_claim.claim:"
-msgid "Claimant"
-msgstr "Déclarant"
+msgid "Clôture"
+msgstr ""
 
 msgctxt "view:ins_claim.claim:"
-msgid "Delivered Services"
-msgstr "Prestations Fournies"
+msgid "Complete"
+msgstr "Terminer"
 
 msgctxt "view:ins_claim.claim:"
-msgid "Indemnification Calculation"
-msgstr "Calcul de l'Indemnisation"
+msgid "Documents requis"
+msgstr ""
 
 msgctxt "view:ins_claim.claim:"
-msgid "Loss"
-msgstr "Préjudice"
+msgid "Déclarant"
+msgstr ""
+
+msgctxt "view:ins_claim.claim:"
+msgid "Déclaration Sinistre"
+msgstr "Déclaration Sinistre"
 
 msgctxt "view:ins_claim.claim:"
 msgid "Next"
 msgstr "Suivant"
 
 msgctxt "view:ins_claim.claim:"
+msgid "Prestations"
+msgstr "Prestations"
+
+msgctxt "view:ins_claim.claim:"
 msgid "Previous"
 msgstr "Précédent"
 
 msgctxt "view:ins_claim.claim:"
-msgid "Required Documents"
-msgstr "Documents requis"
+msgid "Préjudice"
+msgstr "Préjudice"
+
+msgctxt "view:ins_claim.claim:"
+msgid "Remboursement"
+msgstr ""
 
 msgctxt "view:ins_claim.claim:"
 msgid "The current record completed the current process, please go ahead"
@@ -566,6 +582,10 @@ msgid "Complete"
 msgstr "Terminer"
 
 msgctxt "view:ins_contract.contract:"
+msgid "Document Request"
+msgstr "Document Request"
+
+msgctxt "view:ins_contract.contract:"
 msgid "Loans"
 msgstr "Prêts"
 
@@ -626,6 +646,14 @@ msgstr "Description"
 msgctxt "view:process.process_desc:"
 msgid "Description"
 msgstr "Description"
+
+msgctxt "view:process.process_desc:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "view:process.process_desc:"
+msgid "Descrption"
+msgstr ""
 
 msgctxt "view:process.process_desc:"
 msgid "Process Descriptor"

@@ -132,7 +132,7 @@ msgstr "ID"
 
 msgctxt "field:utils.versionned_object,versions:"
 msgid "Versions"
-msgstr "Taux Versionnés"
+msgstr "Versions"
 
 msgctxt "model:coop.dyn_selection,name:"
 msgid "Dynamic Selection"

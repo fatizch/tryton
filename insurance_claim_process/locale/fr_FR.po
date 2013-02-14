@@ -10,6 +10,14 @@ msgctxt "field:ins_claim.claim,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
 
+msgctxt "field:ins_claim.claim,doc_received:"
+msgid "All Document Received"
+msgstr "Documents Reçus"
+
+msgctxt "field:ins_claim.claim,indemnifications:"
+msgid "Indemnifications"
+msgstr "indemnisations"
+
 msgctxt "field:ins_claim.loss,benefits:"
 msgid "Benefits"
 msgstr "Prestations"

@@ -6,6 +6,10 @@ msgctxt "error:party.address_kind:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:party.contact_history:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:party.contact_mechanism:"
 msgid "Invalid Email !"
 msgstr "e-Mail Invalide"
@@ -64,7 +68,7 @@ msgstr "ID"
 
 msgctxt "field:country.zipcode,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:country.zipcode,write_date:"
 msgid "Write Date"
@@ -154,6 +158,82 @@ msgctxt "field:party.address_kind,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:party.contact_history,address:"
+msgid "Address"
+msgstr "Adresse"
+
+msgctxt "field:party.contact_history,attachment:"
+msgid "Attachment"
+msgstr "Pièce jointe"
+
+msgctxt "field:party.contact_history,comment:"
+msgid "Comment"
+msgstr "Commentaire"
+
+msgctxt "field:party.contact_history,contact_datetime:"
+msgid "Date and Time"
+msgstr "Date et Heure"
+
+msgctxt "field:party.contact_history,contact_mechanism:"
+msgid "Contact Mechanism"
+msgstr "Moyen de contact"
+
+msgctxt "field:party.contact_history,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:party.contact_history,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.contact_history,for_object:"
+msgid "For Object"
+msgstr ""
+
+msgctxt "field:party.contact_history,for_object_ref:"
+msgid "For Object"
+msgstr ""
+
+msgctxt "field:party.contact_history,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.contact_history,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:party.contact_history,media:"
+msgid "Media"
+msgstr ""
+
+msgctxt "field:party.contact_history,party:"
+msgid "Actor"
+msgstr "Acteur"
+
+msgctxt "field:party.contact_history,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.contact_history,title:"
+msgid "Title"
+msgstr "Titre"
+
+msgctxt "field:party.contact_history,user:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:party.contact_history,user_name:"
+msgid "User Name"
+msgstr ""
+
+msgctxt "field:party.contact_history,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.contact_history,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:party.employee,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -176,7 +256,7 @@ msgstr "Tiers"
 
 msgctxt "field:party.employee,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:party.employee,reference:"
 msgid "Reference"
@@ -516,7 +596,7 @@ msgstr "Tiers"
 
 msgctxt "field:party.society,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:party.society,reference:"
 msgid "Reference"
@@ -537,6 +617,18 @@ msgstr "Code Postal"
 msgctxt "model:ir.action,name:act_address_kind_form"
 msgid "Address Kind"
 msgstr "Type d'Adresse"
+
+msgctxt "model:ir.action,name:act_contact_history_relate_form"
+msgid "Contact History"
+msgstr "Historique des Contacts"
+
+msgctxt "model:ir.action,name:act_contact_history_relate_form2"
+msgid "Communication Logs"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_contact_history_relate_form3"
+msgid "Communication Logs"
+msgstr ""
 
 msgctxt "model:ir.action,name:act_generic_actor_kind_form"
 msgid "Generic Actor"
@@ -598,6 +690,10 @@ msgctxt "model:party.address_kind,name:second"
 msgid "Secondary"
 msgstr "Secondaire"
 
+msgctxt "model:party.contact_history,name:"
+msgid "Contact History"
+msgstr "Historique des Contacts"
+
 msgctxt "model:party.employee,name:"
 msgid "Employee"
 msgstr "Employé"
@@ -637,6 +733,54 @@ msgstr "Personne"
 msgctxt "model:party.society,name:"
 msgid "Society"
 msgstr "Société"
+
+msgctxt "selection:party.contact_history,for_object_ref:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "selection:party.contact_history,media:"
+msgid "E-Mail"
+msgstr "E-Mail"
+
+msgctxt "selection:party.contact_history,media:"
+msgid "Fax"
+msgstr "Fax"
+
+msgctxt "selection:party.contact_history,media:"
+msgid "IRC"
+msgstr ""
+
+msgctxt "selection:party.contact_history,media:"
+msgid "Jabber"
+msgstr ""
+
+msgctxt "selection:party.contact_history,media:"
+msgid "Mail"
+msgstr "Courrier"
+
+msgctxt "selection:party.contact_history,media:"
+msgid "Mobile"
+msgstr "Mobile"
+
+msgctxt "selection:party.contact_history,media:"
+msgid "Other"
+msgstr "Autre"
+
+msgctxt "selection:party.contact_history,media:"
+msgid "Phone"
+msgstr "Téléphone"
+
+msgctxt "selection:party.contact_history,media:"
+msgid "SIP"
+msgstr "SIP"
+
+msgctxt "selection:party.contact_history,media:"
+msgid "Skype"
+msgstr "Skype"
+
+msgctxt "selection:party.contact_history,media:"
+msgid "Website"
+msgstr "Site web"
 
 msgctxt "selection:party.person,gender:"
 msgid "Mr."

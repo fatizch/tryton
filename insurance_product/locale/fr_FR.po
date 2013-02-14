@@ -159,6 +159,10 @@ msgctxt "error:ins_product.product:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_product.receive_document_wizard:"
+msgid "No document request found for this object"
+msgstr ""
+
 msgctxt "error:ins_product.reserve_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -170,6 +174,18 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "field:ProductDefinition,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_product.attachment_setter,attachments:"
+msgid "Attachments"
+msgstr "Pièces jointes"
+
+msgctxt "field:ins_product.attachment_setter,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.attachment_setter,resource:"
+msgid "Resource"
+msgstr "Ressource"
 
 msgctxt "field:ins_product.benefit,benefit_rules:"
 msgid "Benefit Rules"
@@ -323,6 +339,10 @@ msgctxt "field:ins_product.benefit_rule,amount:"
 msgid "Amount"
 msgstr "Montant"
 
+msgctxt "field:ins_product.benefit_rule,amount_kind:"
+msgid "Amount Kind"
+msgstr "Type de Montant"
+
 msgctxt "field:ins_product.benefit_rule,coef_coverage_amount:"
 msgid "Multiplier"
 msgstr "Coef. Multiplicateur"
@@ -354,10 +374,6 @@ msgstr "Unité de calcul de l'indemnisation"
 msgctxt "field:ins_product.benefit_rule,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
-
-msgctxt "field:ins_product.benefit_rule,kind:"
-msgid "Kind"
-msgstr "Type"
 
 msgctxt "field:ins_product.benefit_rule,offered:"
 msgid "Offered"
@@ -449,11 +465,11 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.clause,name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_product.clause,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_product.clause,rule:"
 msgid "Rule"
@@ -465,7 +481,7 @@ msgstr "Titre"
 
 msgctxt "field:ins_product.clause,versions:"
 msgid "Versions"
-msgstr "Taux Versionnés"
+msgstr "Versions"
 
 msgctxt "field:ins_product.clause,write_date:"
 msgid "Write Date"
@@ -497,7 +513,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.clause_relation,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_product.clause_relation,rule:"
 msgid "Rule"
@@ -541,7 +557,7 @@ msgstr "Offre"
 
 msgctxt "field:ins_product.clause_rule,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_product.clause_rule,rule:"
 msgid "Rule Engine"
@@ -605,7 +621,7 @@ msgstr "Descripteur"
 
 msgctxt "field:ins_product.clause_version,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_product.clause_version,start_date:"
 msgid "Start Date"
@@ -906,7 +922,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.coverage-complementary_data_def,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_product.coverage-complementary_data_def,write_date:"
 msgid "Write Date"
@@ -992,6 +1008,10 @@ msgctxt "field:ins_product.coverage_amount_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_product.deductible_rule,amount:"
+msgid "Amount"
+msgstr "Montant"
+
 msgctxt "field:ins_product.deductible_rule,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
@@ -1003,6 +1023,14 @@ msgstr "Date de création"
 msgctxt "field:ins_product.deductible_rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:ins_product.deductible_rule,duration:"
+msgid "Duration"
+msgstr "Durée"
+
+msgctxt "field:ins_product.deductible_rule,duration_unit:"
+msgid "Duration Unit"
+msgstr "Unité de la Durée"
 
 msgctxt "field:ins_product.deductible_rule,end_date:"
 msgid "To Date"
@@ -1016,13 +1044,17 @@ msgctxt "field:ins_product.deductible_rule,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
+msgctxt "field:ins_product.deductible_rule,kind:"
+msgid "Kind"
+msgstr "Type"
+
 msgctxt "field:ins_product.deductible_rule,offered:"
 msgid "Offered"
 msgstr "Offre"
 
 msgctxt "field:ins_product.deductible_rule,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_product.deductible_rule,rule:"
 msgid "Rule Engine"
@@ -1039,10 +1071,6 @@ msgstr "Modèle"
 msgctxt "field:ins_product.deductible_rule,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
-
-msgctxt "field:ins_product.deductible_rule,value:"
-msgid "Value"
-msgstr "Valeur"
 
 msgctxt "field:ins_product.deductible_rule,write_date:"
 msgid "Write Date"
@@ -1192,10 +1220,6 @@ msgctxt "field:ins_product.document_desc,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.document_request,contact_party:"
-msgid "Contact Party"
-msgstr ""
-
 msgctxt "field:ins_product.document_request,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -1214,7 +1238,7 @@ msgstr "ID"
 
 msgctxt "field:ins_product.document_request,is_complete:"
 msgid "Is Complete"
-msgstr ""
+msgstr "Tout reçu"
 
 msgctxt "field:ins_product.document_request,is_used:"
 msgid "Is Used"
@@ -1243,6 +1267,14 @@ msgstr "Date de mise à jour"
 msgctxt "field:ins_product.document_request,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.document_request_displayer,documents:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "field:ins_product.document_request_displayer,id:"
+msgid "ID"
+msgstr "ID"
 
 msgctxt "field:ins_product.document_rule,config_kind:"
 msgid "Conf. kind"
@@ -1518,7 +1550,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.item_desc,name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_product.item_desc,rec_name:"
 msgid "Name"
@@ -1607,7 +1639,7 @@ msgstr "Valeur"
 
 msgctxt "field:ins_product.letter_model,versions:"
 msgid "Versions"
-msgstr "Taux Versionnés"
+msgstr "Versions"
 
 msgctxt "field:ins_product.letter_model,write_date:"
 msgid "Write Date"
@@ -1616,6 +1648,34 @@ msgstr "Date de mise à jour"
 msgctxt "field:ins_product.letter_model,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.letter_model_displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.letter_model_displayer,letter_model:"
+msgid "Letter Model"
+msgstr "Modèle de Lettre"
+
+msgctxt "field:ins_product.letter_model_displayer,selected:"
+msgid "Selected"
+msgstr "Coché"
+
+msgctxt "field:ins_product.letter_model_selection,good_address:"
+msgid "Mail Address"
+msgstr "Adresse du courrier"
+
+msgctxt "field:ins_product.letter_model_selection,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.letter_model_selection,models:"
+msgid "Models"
+msgstr "Modèles"
+
+msgctxt "field:ins_product.letter_model_selection,party:"
+msgid "Party"
+msgstr "Tiers"
 
 msgctxt "field:ins_product.letter_version,collision:"
 msgid "Collision"
@@ -2311,6 +2371,22 @@ msgctxt "field:ins_product.product-options-coverage,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_product.request_finder,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.request_finder,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_product.request_finder,request:"
+msgid "Request"
+msgstr "Demande"
+
+msgctxt "field:ins_product.request_finder,value:"
+msgid "Value"
+msgstr "Nom"
+
 msgctxt "field:ins_product.reserve_rule,amount:"
 msgid "Amount"
 msgstr "Montant"
@@ -2491,6 +2567,10 @@ msgctxt "model:ProductDefinition,name:"
 msgid "Product Definition"
 msgstr "Définition Produit"
 
+msgctxt "model:ins_product.attachment_setter,name:"
+msgid "Attachment Setter"
+msgstr ""
+
 msgctxt "model:ins_product.benefit,name:"
 msgid "Benefit"
 msgstr "Prestation"
@@ -2563,6 +2643,10 @@ msgctxt "model:ins_product.document_request,name:"
 msgid "Document Request"
 msgstr "Demande de Documents"
 
+msgctxt "model:ins_product.document_request_displayer,name:"
+msgid "Document Request Displayer"
+msgstr "Document en attente"
+
 msgctxt "model:ins_product.document_rule,name:"
 msgid "Document Managing Rule"
 msgstr ""
@@ -2595,6 +2679,14 @@ msgstr "Relation Risque - Données Complémentaires"
 msgctxt "model:ins_product.letter_model,name:"
 msgid "Letter Model"
 msgstr "Modèle de Lettre"
+
+msgctxt "model:ins_product.letter_model_displayer,name:"
+msgid "Letter Model Displayer"
+msgstr ""
+
+msgctxt "model:ins_product.letter_model_selection,name:"
+msgid "Letter Model Selection"
+msgstr "Sélection du modèle de Lettre"
 
 msgctxt "model:ins_product.letter_version,name:"
 msgid "Letter Version"
@@ -2643,6 +2735,10 @@ msgstr "Relation Produit-Risque"
 msgctxt "model:ins_product.product-options-coverage,name:"
 msgid "Define Product - Coverage relations"
 msgstr "Relations Produit Garantie"
+
+msgctxt "model:ins_product.request_finder,name:"
+msgid "Request Finder"
+msgstr ""
 
 msgctxt "model:ins_product.reserve_rule,name:"
 msgid "Reserve Rule"
@@ -2732,9 +2828,17 @@ msgctxt "model:ir.action,name:act_product_form"
 msgid "Products"
 msgstr "Produits"
 
-msgctxt "model:ir.action,name:report_document_request"
-msgid "Request"
-msgstr "Demande"
+msgctxt "model:ir.action,name:letter_generation_report"
+msgid "Letter Report"
+msgstr ""
+
+msgctxt "model:ir.action,name:letter_generation_wizard"
+msgid "Letter Generation"
+msgstr ""
+
+msgctxt "model:ir.action,name:receive_documents_wizard"
+msgid "Document Reception"
+msgstr "Réception de Document"
 
 msgctxt "model:ir.sequence.type,name:sequence_type_contract_number"
 msgid "Contract Number"
@@ -2751,6 +2855,10 @@ msgstr "Garanties"
 msgctxt "model:ir.ui.menu,name:menu_document_desc"
 msgid "Document Descriptors"
 msgstr ""
+
+msgctxt "model:ir.ui.menu,name:menu_edm"
+msgid "EDM"
+msgstr "GED"
 
 msgctxt "model:ir.ui.menu,name:menu_event_desc_form"
 msgid "event_descs"
@@ -2792,6 +2900,10 @@ msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Products"
 msgstr "Produits"
 
+msgctxt "model:ir.ui.menu,name:menu_receive_documents"
+msgid "Document Received"
+msgstr "Document reçu"
+
 msgctxt "selection:ins_product.benefit,indemnification_kind:"
 msgid "Capital"
 msgstr "Capital"
@@ -2811,6 +2923,14 @@ msgstr "Compléter"
 msgctxt "selection:ins_product.benefit,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
+
+msgctxt "selection:ins_product.benefit_rule,amount_kind:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "selection:ins_product.benefit_rule,amount_kind:"
+msgid "Coverage Amount"
+msgstr "Montant de Couverture"
 
 msgctxt "selection:ins_product.benefit_rule,config_kind:"
 msgid "Advanced"
@@ -2847,14 +2967,6 @@ msgstr "Semaine"
 msgctxt "selection:ins_product.benefit_rule,indemnification_calc_unit:"
 msgid "Year"
 msgstr "Année"
-
-msgctxt "selection:ins_product.benefit_rule,kind:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "selection:ins_product.benefit_rule,kind:"
-msgid "Coverage Amount"
-msgstr "Montant de Couverture"
 
 msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
 msgid ""
@@ -3011,6 +3123,42 @@ msgstr "Avancé"
 msgctxt "selection:ins_product.deductible_rule,config_kind:"
 msgid "Simple"
 msgstr "Simple"
+
+msgctxt "selection:ins_product.deductible_rule,duration_unit:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:ins_product.deductible_rule,duration_unit:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "selection:ins_product.deductible_rule,duration_unit:"
+msgid "Half-year"
+msgstr "Semestre"
+
+msgctxt "selection:ins_product.deductible_rule,duration_unit:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "selection:ins_product.deductible_rule,duration_unit:"
+msgid "Quarter"
+msgstr "Trimestre"
+
+msgctxt "selection:ins_product.deductible_rule,duration_unit:"
+msgid "Week"
+msgstr "Semaine"
+
+msgctxt "selection:ins_product.deductible_rule,duration_unit:"
+msgid "Year"
+msgstr "Année"
+
+msgctxt "selection:ins_product.deductible_rule,kind:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "selection:ins_product.deductible_rule,kind:"
+msgid "Duration"
+msgstr "Durée"
 
 msgctxt "selection:ins_product.deductible_rule,template_behaviour:"
 msgid ""
@@ -3216,6 +3364,10 @@ msgctxt "selection:ins_product.product,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
+msgctxt "selection:ins_product.request_finder,kind:"
+msgid ""
+msgstr ""
+
 msgctxt "selection:ins_product.reserve_rule,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
@@ -3283,6 +3435,10 @@ msgstr "À La Souscription"
 msgctxt "selection:ins_product.term_renewal_rule,term_date_choice:"
 msgid "At this Date"
 msgstr "À Cette Date"
+
+msgctxt "view:ins_product.attachment_setter:"
+msgid "Attachments"
+msgstr "Pièces jointes"
 
 msgctxt "view:ins_product.benefit:"
 msgid "Benefit"
@@ -3384,6 +3540,14 @@ msgctxt "view:ins_product.document_request:"
 msgid "Requests"
 msgstr "Demandes"
 
+msgctxt "view:ins_product.document_request:"
+msgid "Send Request"
+msgstr "Envoyer la demande"
+
+msgctxt "view:ins_product.document_request_displayer:"
+msgid "Document Request"
+msgstr "Document Request"
+
 msgctxt "view:ins_product.document_rule:"
 msgid "Document Rule"
 msgstr ""
@@ -3405,6 +3569,14 @@ msgid "Letter Model"
 msgstr "Modèle de Lettre"
 
 msgctxt "view:ins_product.letter_model:"
+msgid "Letter Models"
+msgstr "Modèles de Lettre"
+
+msgctxt "view:ins_product.letter_model_displayer:"
+msgid "Letter Models"
+msgstr "Modèles de Lettre"
+
+msgctxt "view:ins_product.letter_model_selection:"
 msgid "Letter Models"
 msgstr "Modèles de Lettre"
 
@@ -3499,3 +3671,42 @@ msgstr "Provisionnement"
 msgctxt "view:ins_product.term_renewal_rule:"
 msgid "Term - Renewal rule"
 msgstr "Règle de Terme - Renouvellement"
+
+msgctxt "wizard_button:ins_product.letter_creation_wizard,select_model,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:ins_product.letter_creation_wizard,select_model,generate:"
+msgid "Generate"
+msgstr "Générer"
+
+msgctxt ""
+"wizard_button:ins_product.receive_document_wizard,attachment_setter,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:ins_product.receive_document_wizard,attachment_setter,store_attachments:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:ins_product.receive_document_wizard,input_document,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:ins_product.receive_document_wizard,input_document,notify_request:"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt ""
+"wizard_button:ins_product.receive_document_wizard,select_instance,attachment_setter:"
+msgid "Continue"
+msgstr ""
+
+msgctxt ""
+"wizard_button:ins_product.receive_document_wizard,select_instance,end:"
+msgid "Cancel"
+msgstr "Annuler"

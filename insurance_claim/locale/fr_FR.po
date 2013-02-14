@@ -86,6 +86,10 @@ msgctxt "field:ins_claim.indemnification,amount:"
 msgid "Amount"
 msgstr "Montant"
 
+msgctxt "field:ins_claim.indemnification,beneficiary:"
+msgid "Beneficiary"
+msgstr "Bénéficiaire"
+
 msgctxt "field:ins_claim.indemnification,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -93,6 +97,10 @@ msgstr "Date de création"
 msgctxt "field:ins_claim.indemnification,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:ins_claim.indemnification,customer:"
+msgid "Customer"
+msgstr "Client"
 
 msgctxt "field:ins_claim.indemnification,delivered_service:"
 msgid "Delivered Service"
@@ -138,9 +146,13 @@ msgctxt "field:ins_claim.indemnification,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_claim.indemnification_detail,amount_per_period:"
-msgid "Amount per Period"
-msgstr "Montant par unité de calcul"
+msgctxt "field:ins_claim.indemnification_detail,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:ins_claim.indemnification_detail,amount_per_unit:"
+msgid "Amount per Unit"
+msgstr "Montant par Unité"
 
 msgctxt "field:ins_claim.indemnification_detail,create_date:"
 msgid "Create Date"
@@ -170,6 +182,10 @@ msgctxt "field:ins_claim.indemnification_detail,kind:"
 msgid "Kind"
 msgstr "Type"
 
+msgctxt "field:ins_claim.indemnification_detail,nb_of_unit:"
+msgid "Nb of Unit"
+msgstr "Nombre d'Unité"
+
 msgctxt "field:ins_claim.indemnification_detail,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -177,6 +193,10 @@ msgstr "Nom"
 msgctxt "field:ins_claim.indemnification_detail,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
+
+msgctxt "field:ins_claim.indemnification_detail,unit:"
+msgid "Unit"
+msgstr "Unité"
 
 msgctxt "field:ins_claim.indemnification_detail,write_date:"
 msgid "Write Date"
@@ -266,6 +286,10 @@ msgctxt "field:ins_contract.delivered_service,loss:"
 msgid "Loss"
 msgstr "Préjudice"
 
+msgctxt "field:ins_product.request_finder,tmp_1:"
+msgid "Claim"
+msgstr "Sinistre"
+
 msgctxt "model:ins_claim.claim,name:"
 msgid "Claim"
 msgstr "Sinistre"
@@ -285,6 +309,38 @@ msgstr "Préjudice"
 msgctxt "model:ir.action,name:act_claim_form"
 msgid "Claims"
 msgstr "Sinistres"
+
+msgctxt "model:ir.action,name:act_claim_relate_form"
+msgid "Claims"
+msgstr "Sinistres"
+
+msgctxt "model:ir.action,name:act_claim_relate_form2"
+msgid "Claims"
+msgstr "Sinistres"
+
+msgctxt "model:ir.action,name:act_claim_relate_form3"
+msgid "Claims"
+msgstr "Sinistres"
+
+msgctxt "model:ir.action,name:act_indemnification_relate_form"
+msgid "Indemnifications"
+msgstr "indemnisations"
+
+msgctxt "model:ir.action,name:act_indemnification_relate_form2"
+msgid "Indemnifications"
+msgstr "indemnisations"
+
+msgctxt "model:ir.action,name:act_indemnification_relate_form3"
+msgid "Indemnifications"
+msgstr "indemnisations"
+
+msgctxt "model:ir.sequence,name:claim_sequence"
+msgid "Claim Sequence"
+msgstr ""
+
+msgctxt "model:ir.sequence.type,name:sequence_type_claim_number"
+msgid "Claim Number"
+msgstr "Numéro de Sinistre"
 
 msgctxt "model:ir.ui.menu,name:menu_claim"
 msgid "Claim"
@@ -347,8 +403,8 @@ msgid "Deductible"
 msgstr "Franchise"
 
 msgctxt "selection:ins_claim.indemnification_detail,kind:"
-msgid "Included"
-msgstr ""
+msgid "Indemnified"
+msgstr "Indemnisé"
 
 msgctxt "selection:ins_claim.indemnification_detail,kind:"
 msgid "Limit"
@@ -357,6 +413,34 @@ msgstr "Plafond"
 msgctxt "selection:ins_claim.indemnification_detail,kind:"
 msgid "Waiting Period"
 msgstr "Carence"
+
+msgctxt "selection:ins_claim.indemnification_detail,unit:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:ins_claim.indemnification_detail,unit:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "selection:ins_claim.indemnification_detail,unit:"
+msgid "Half-year"
+msgstr "Semestre"
+
+msgctxt "selection:ins_claim.indemnification_detail,unit:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "selection:ins_claim.indemnification_detail,unit:"
+msgid "Quarter"
+msgstr "Trimestre"
+
+msgctxt "selection:ins_claim.indemnification_detail,unit:"
+msgid "Week"
+msgstr "Semaine"
+
+msgctxt "selection:ins_claim.indemnification_detail,unit:"
+msgid "Year"
+msgstr "Année"
 
 msgctxt "selection:ins_product.document,for_object:"
 msgid "Claim"
@@ -369,6 +453,26 @@ msgstr "Prestation Fournie"
 msgctxt "selection:ins_product.document_request,needed_by:"
 msgid "Claim"
 msgstr "Sinistre"
+
+msgctxt "selection:ins_product.document_request,needed_by:"
+msgid "Delivered Service"
+msgstr "Prestation Fournie"
+
+msgctxt "selection:ins_product.request_finder,kind:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "selection:party.contact_history,for_object_ref:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "view:ins_claim.indemnification:"
+msgid "Indemnification"
+msgstr "Indemnisation"
+
+msgctxt "view:ins_claim.indemnification_detail:"
+msgid "Indemnification Detail"
+msgstr "Détail de l'indemnisation"
 
 msgctxt "view:ins_claim.loss:"
 msgid "Loss"

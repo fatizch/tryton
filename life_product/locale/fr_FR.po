@@ -76,7 +76,7 @@ msgstr "Valeur"
 
 msgctxt "field:tranche.tranche,versions:"
 msgid "Versions"
-msgstr "Taux Versionnés"
+msgstr "Versions"
 
 msgctxt "field:tranche.tranche,write_date:"
 msgid "Write Date"

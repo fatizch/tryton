@@ -963,6 +963,10 @@ msgctxt "field:ins_contract.subs_process.summary,session_id:"
 msgid "Session Id"
 msgstr "Session Id"
 
+msgctxt "field:ins_product.request_finder,tmp_0:"
+msgid "Contract"
+msgstr "Contrat"
+
 msgctxt "model:ins_contract.billing.bill,name:"
 msgid "Bill"
 msgstr "Cotisation"
@@ -1058,6 +1062,18 @@ msgstr "Cotisations par Contrat"
 msgctxt "model:ir.action,name:act_contract_form"
 msgid "Contract"
 msgstr "Contrat"
+
+msgctxt "model:ir.action,name:act_contract_relate_form"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "model:ir.action,name:act_contract_relate_form2"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "model:ir.action,name:act_contract_relate_form3"
+msgid "Contracts"
+msgstr "Contrats"
 
 msgctxt "model:ir.action,name:act_generic_line_form"
 msgid "Bill Line"
@@ -1312,6 +1328,10 @@ msgid "Option"
 msgstr "Garantie"
 
 msgctxt "selection:ins_product.document_request,needed_by:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:ins_product.request_finder,kind:"
 msgid "Contract"
 msgstr "Contrat"
 

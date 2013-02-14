@@ -64,7 +64,7 @@ msgstr "Nom"
 
 msgctxt "field:coop_account.fee_desc,versions:"
 msgid "Versions"
-msgstr "Taux Versionnés"
+msgstr "Versions"
 
 msgctxt "field:coop_account.fee_desc,write_date:"
 msgid "Write Date"
@@ -160,7 +160,7 @@ msgstr "Nom"
 
 msgctxt "field:coop_account.tax_desc,versions:"
 msgid "Versions"
-msgstr "Taux Versionnés"
+msgstr "Versions"
 
 msgctxt "field:coop_account.tax_desc,write_date:"
 msgid "Write Date"

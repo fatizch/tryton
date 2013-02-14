@@ -244,7 +244,7 @@ msgstr "ID"
 
 msgctxt "field:table.table_dimension,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:table.table_dimension,sequence:"
 msgid "Sequence"
