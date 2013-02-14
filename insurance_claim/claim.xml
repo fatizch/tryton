@@ -155,6 +155,12 @@
       <field name="model">ins_claim.claim,-1</field>
       <field name="action" ref="insurance_product.receive_documents_wizard"/>
     </record>
+    <!-- Send Document -->
+    <record model="ir.action.keyword" id="letter_generation_claim_keyword">
+      <field name="keyword">form_action</field>
+      <field name="model">ins_claim.claim,-1</field>
+      <field name="action" ref="insurance_product.letter_generation_wizard"/>
+    </record>
     <!-- Claim Number Generator -->
     <record model="ir.sequence.type" id="sequence_type_claim_number">
       <field name="name">Claim Number</field>

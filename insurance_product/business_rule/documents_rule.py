@@ -604,6 +604,7 @@ class LetterModelSelection(model.CoopView):
         'party.address',
         'Mail Address',
         domain=[('party', '=', Eval('party'))],
+        depends=['party'],
         required=True,
     )
 
@@ -657,6 +658,7 @@ class LetterReport(Report):
             localcontext['Lang'] = localcontext['Party'].lang.code
         except AttributeError:
             localcontext['Lang'] = 'en_US'
+        localcontext['Today'] = utils.today()
         GoodModel = Pool().get(data['model'])
         good_obj = GoodModel(data['id'])
         LetterModel = Pool().get('ins_product.letter_model')

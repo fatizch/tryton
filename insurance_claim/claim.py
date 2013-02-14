@@ -8,6 +8,7 @@ from trytond.modules.coop_utils import model, utils, date
 from trytond.modules.coop_process import CoopProcessFramework
 from trytond.modules.insurance_product.benefit import INDEMNIFICATION_KIND, \
     INDEMNIFICATION_DETAIL_KIND
+from trytond.modules.insurance_product import Printable
 
 __all__ = [
     'Claim',
@@ -42,7 +43,7 @@ INDEMNIFICATION_STATUS = [
 ]
 
 
-class Claim(model.CoopSQL, CoopProcessFramework):
+class Claim(model.CoopSQL, CoopProcessFramework, Printable):
     'Claim'
 
     __name__ = 'ins_claim.claim'
@@ -108,6 +109,12 @@ class Claim(model.CoopSQL, CoopProcessFramework):
         ], limit=1)
         self.name = good_gen.get_id(good_gen.id)
         return True
+
+    def get_contact(self):
+        return self.claimant
+
+    def get_object_for_contact(self):
+        return self
 
 
 class Loss(model.CoopSQL, model.CoopView):
