@@ -30,6 +30,9 @@ class ClaimProcess():
     indemnifications = fields.Function(
         fields.One2Many('ins_claim.indemnification', None, 'Indemnifications'),
         'get_indemnifications', 'set_toto')
+    indemnifications_consult = fields.Function(
+        fields.One2Many('ins_claim.indemnification', None, 'Indemnifications'),
+        'get_indemnifications')
 
     def get_possible_contracts(self):
         if not self.claimant:
@@ -152,6 +155,12 @@ class ClaimProcess():
             Indemnification.write(
                 objects,
                 vals_as_dict['write'][1])
+
+    def reject_and_close_claim(self):
+        self.status = 'closed'
+        self.sub_status = 'refusal'
+        self.end_date = utils.today()
+        return True
 
 
 class LossProcess():

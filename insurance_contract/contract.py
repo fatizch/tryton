@@ -891,6 +891,11 @@ class DeliveredService(model.CoopSQL, model.CoopView):
     subscribed_service = fields.Many2One('ins_contract.option', 'Coverage',
         ondelete='RESTRICT')
 
+    def get_rec_name(self, name=None):
+        if self.subscribed_service:
+            return self.subscribed_service.get_rec_name(name)
+        return super(DeliveredService, self).get_rec_name(name)
+
 
 class DocumentRequest():
     'Document Request'

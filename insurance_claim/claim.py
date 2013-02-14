@@ -103,6 +103,8 @@ class Claim(model.CoopSQL, CoopProcessFramework, Printable):
         return self.claimant
 
     def set_claim_number(self):
+        if hasattr(self, 'name') and self.name:
+            return True
         Generator = Pool().get('ir.sequence')
         good_gen, = Generator.search([
             ('code', '=', 'ins_claim.claim'),
@@ -176,6 +178,11 @@ class Loss(model.CoopSQL, model.CoopView):
             del_service.init_from_loss(self, benefit)
             self.delivered_services.append(del_service)
 
+    def get_rec_name(self, name=None):
+        if self.loss_desc:
+            return self.loss_desc.get_rec_name(name)
+        return super(Loss, self).get_rec_name(name)
+
 
 class ClaimDeliveredService():
     'Claim Delivered Service'
@@ -228,6 +235,11 @@ class ClaimDeliveredService():
             self.indemnifications = []
         self.indemnifications.append(indemnification)
         indemnification.create_details_from_dict(details_dict)
+
+    def get_rec_name(self, name=None):
+        if self.benefit:
+            return self.benefit.get_rec_name(name)
+        return super(ClaimDeliveredService, self).get_rec_name(name)
 
 
 class Indemnification(model.CoopSQL, model.CoopView):

@@ -43,7 +43,7 @@ class LetterModel(model.CoopSQL, model.CoopView):
 
     name = fields.Char(
         'Name',
-        required=True,
+        required=True, translate=True
     )
 
     on_model = fields.Many2One(
@@ -205,7 +205,7 @@ class DocumentDesc(model.CoopSQL, model.CoopView):
 
     code = fields.Char('Code', required=True)
 
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
 
     start_date = fields.Date('Start Date')
 

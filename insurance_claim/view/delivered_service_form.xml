@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <data>
     <xpath expr="/form" position="inside">
+        <label name="loss"/>
+        <field name="loss"/>
+        <newline/>
         <label name="benefit"/>
         <field name="benefit"/>
         <field name="indemnifications" colspan="4" mode="form,tree"
