@@ -11,7 +11,7 @@ from trytond.ir import Attachment
 
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
-from trytond.modules.coop_utils import model, utils
+from trytond.modules.coop_utils import model, utils, coop_string
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_SIMPLE
 
@@ -135,7 +135,7 @@ class Model():
     )
 
 
-class Printable(object):
+class Printable(Model):
     @classmethod
     def __register__(cls, module_name):
         # We need to store the fact that this class is a Printable class in the
@@ -574,6 +574,9 @@ class DocumentRequest(model.CoopSQL, model.CoopView, Printable):
     def get_object_for_contact(self):
         return self.needed_by
 
+    def get_rec_name(self, name):
+        return self.needed_by.get_rec_name(name)
+
 
 class LetterModelDisplayer(model.CoopView):
     'Letter Model Displayer'
@@ -642,6 +645,13 @@ class LetterReport(Report):
         records = None
         records = cls._get_records(
             ids, data['model'], data)
+        LetterModel = Pool().get('ins_product.letter_model')
+        good_letter = LetterModel(data['letter_model'])
+        GoodModel = Pool().get(data['model'])
+        good_obj = GoodModel(data['id'])
+        good_party = Pool().get('party.party')(data['party'])
+        filename = good_letter.name + ' - ' + good_obj.get_rec_name('') + \
+            ' - ' + coop_string.date_as_string(utils.today(), good_party.lang)
         try:
             type, data = cls.parse(action_report, records, data, {})
         except:
@@ -649,7 +659,7 @@ class LetterReport(Report):
             traceback.print_exc()
             raise
         return (
-            type, buffer(data), action_report.direct_print, action_report.name)
+            type, buffer(data), action_report.direct_print, filename)
 
     @classmethod
     def parse(cls, report, records, data, localcontext):
