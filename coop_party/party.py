@@ -12,12 +12,15 @@ from trytond.modules.coop_utils import coop_string
 __all__ = ['Party', 'Society', 'Employee', 'Actor', 'Person',
            'GenericActorKind', 'GenericActor', 'ACTOR_KIND']
 
-GENDER = [('M', 'Mr.'),
-          ('F', 'Mrs.'),
-            ]
+GENDER = [
+    ('M', 'Mr.'),
+    ('F', 'Mrs.'),
+]
 
-ACTOR_KIND = [('party.person', 'Person'),
-              ('party.society', 'Society')]
+ACTOR_KIND = [
+    ('party.person', 'Person'),
+    ('party.society', 'Society')
+]
 
 
 class Party:
@@ -53,7 +56,7 @@ class Party:
         #this loop will add for each One2Many role, a function field is_role
         for field_name in dir(cls):
             if not (field_name.endswith('role') or field_name == 'person'
-                or field_name == 'society'):
+                    or field_name == 'society'):
                 continue
             field = getattr(cls, field_name)
             if not hasattr(field, 'model_name'):
@@ -62,8 +65,9 @@ class Party:
             searcher = None
             if not field_name.endswith('_role'):
                 searcher = 'search_is_actor'
-            field = fields.Function(fields.Boolean(field.string,
-                    on_change=[field_name, is_actor_var_name]),
+            field = fields.Function(
+                fields.Boolean(
+                    field.string, on_change=[field_name, is_actor_var_name]),
                 'get_is_actor',
                 setter='set_is_actor',
                 searcher=searcher)
@@ -77,8 +81,8 @@ class Party:
 
             on_change_method = 'on_change_%s' % is_actor_var_name
             if not getattr(cls, on_change_method, None):
-                setattr(cls, on_change_method,
-                    get_on_change(is_actor_var_name))
+                setattr(
+                    cls, on_change_method, get_on_change(is_actor_var_name))
 
     @staticmethod
     def get_is_actor_var_name(var_name):
@@ -118,9 +122,9 @@ class Party:
         res[role] = {}
         if type(getattr(self, role)) == bool:
             return res
-        if getattr(self, is_role) == True and len(getattr(self, role)) == 0:
+        if getattr(self, is_role) is True and len(getattr(self, role)) == 0:
             res[role]['add'] = [{}]
-        elif getattr(self, is_role) == False and len(getattr(self, role)) > 0:
+        elif getattr(self, is_role) is False and len(getattr(self, role)) > 0:
             res[role].setdefault('remove', [])
             res[role]['remove'].append(getattr(self, role)[0].id)
         return res
@@ -154,17 +158,17 @@ class Party:
     def get_summary(cls, parties, name=None, at_date=None, lang=None):
         if not lang:
             lang = utils.get_user_language()
-        res = cls.get_summary_header(parties, name=name, at_date=at_date,
-            lang=lang)
+        res = cls.get_summary_header(
+            parties, name=name, at_date=at_date, lang=lang)
         for party in parties:
-            res[party.id] += coop_string.get_field_as_summary(party,
-                'addresses', True, at_date, lang=lang)
-            res[party.id] += coop_string.get_field_as_summary(party,
-                'relations', True, at_date, lang=lang)
-            res[party.id] += coop_string.get_field_as_summary(party,
-                'in_relation_with', True, at_date, lang=lang)
-            res[party.id] += coop_string.get_field_as_summary(party,
-                'generic_roles', True, at_date, lang=lang)
+            res[party.id] += coop_string.get_field_as_summary(
+                party, 'addresses', True, at_date, lang=lang)
+            res[party.id] += coop_string.get_field_as_summary(
+                party, 'relations', True, at_date, lang=lang)
+            res[party.id] += coop_string.get_field_as_summary(
+                party, 'in_relation_with', True, at_date, lang=lang)
+            res[party.id] += coop_string.get_field_as_summary(
+                party, 'generic_roles', True, at_date, lang=lang)
         return res
 
     @classmethod
@@ -183,13 +187,13 @@ class Party:
                 societies.append(party.society[0])
                 society_dict[party.society[0].id] = party.id
         Person = Pool().get('party.person')
-        for pers_id, pers_header in Person.get_summary_header(persons,
-            at_date=at_date, lang=lang).iteritems():
+        for pers_id, pers_header in Person.get_summary_header(
+                persons, at_date=at_date, lang=lang).iteritems():
             res[person_dict[pers_id]] += pers_header
 
         Society = Pool().get('party.society')
-        for comp_id, comp_header in Society.get_summary_header(societies,
-            at_date=at_date, lang=lang).iteritems():
+        for comp_id, comp_header in Society.get_summary_header(
+                societies, at_date=at_date, lang=lang).iteritems():
             res[society_dict[comp_id]] += comp_header
         return res
 
@@ -204,13 +208,18 @@ class Party:
     def address_get(self, type=None, at_date=None, kind=None):
         addresses = utils.get_good_versions_at_date(self, 'addresses', at_date)
         for address in addresses:
-            if ((not type or getattr(address, type)) and (not kind or address.kind == kind)):
+            if ((not type or getattr(address, type)) and
+                    (not kind or address.kind == kind)):
                 return address
 
     def get_main_address_as_char(self, name=None, at_date=None):
         address = self.address_get(at_date=at_date)
         if address:
             return address.get_address_as_char(name)
+
+    @classmethod
+    def default_lang(cls):
+        return utils.get_user_language()
 
 
 class Actor(CoopView):
@@ -219,8 +228,8 @@ class Actor(CoopView):
     __name__ = 'party.actor'
 
     reference = fields.Char('Reference')
-    party = fields.Many2One('party.party', 'Party',
-        required=True, ondelete='CASCADE', select=True)
+    party = fields.Many2One(
+        'party.party', 'Party', required=True, ondelete='CASCADE', select=True)
 
 
 class GenericActorKind(TableOfTable):
@@ -250,8 +259,8 @@ class GenericActor(CoopSQL, Actor):
     def get_summary(cls, actors, name=None, at_date=None, lang=None):
         res = {}
         for actor in actors:
-            res[actor.id] = coop_string.get_field_as_summary(self, 'kind',
-                True, at_date, lang=lang)
+            res[actor.id] = coop_string.get_field_as_summary(
+                cls, 'kind', True, at_date, lang=lang)
         return res
 
 
@@ -287,12 +296,11 @@ class Person(CoopSQL, Actor):
 
     __name__ = 'party.person'
 
-    gender = fields.Selection(GENDER, 'Gender',
-        required=True,
-        on_change=['gender'])
+    gender = fields.Selection(
+        GENDER, 'Gender', required=True, on_change=['gender'])
     first_name = fields.Char('First Name', required=True)
-    maiden_name = fields.Char('Maiden Name',
-        states={'readonly': Eval('gender') != 'F'},
+    maiden_name = fields.Char(
+        'Maiden Name', states={'readonly': Eval('gender') != 'F'},
         depends=['gender'])
     birth_date = fields.Date('Birth Date', required=True)
     ssn = fields.Char('SSN')
@@ -332,12 +340,12 @@ class Person(CoopSQL, Actor):
         for party in persons:
             res[party.id] = ''
             res[party.id] += coop_string.get_field_as_summary(party, 'ssn')
-            res[party.id] += coop_string.get_field_as_summary(party,
-                'birth_date')
-            res[party.id] += coop_string.get_field_as_summary(party,
-                'nationality')
-            res[party.id] += coop_string.get_field_as_summary(party,
-                'maiden_name')
+            res[party.id] += coop_string.get_field_as_summary(
+                party, 'birth_date')
+            res[party.id] += coop_string.get_field_as_summary(
+                party, 'nationality')
+            res[party.id] += coop_string.get_field_as_summary(
+                party, 'maiden_name')
         return res
 
     @classmethod
