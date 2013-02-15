@@ -47,6 +47,7 @@ else
 	echo "DATABASE_NAME=Test" >> scripts.conf
 	echo "DATABASE_EXTENSION=sqlite" >> scripts.conf
 	echo "TRYTOND_CONF=\$ENV_FOLDER/tryton-workspace/conf/trytond.conf" >> scripts.conf
+	echo "TRYTON_CONF=\$ENV_FOLDER/tryton-workspace/conf/tryton.conf" >> scripts.conf
 	echo "REPOS_ROOT=\$ENV_FOLDER/tryton-workspace/" >> scripts.conf
 	echo "TRYTOND_PATH=\$ENV_FOLDER/tryton-workspace/trytond/bin" >> scripts.conf
 	echo "TRYTON_PATH=\$ENV_FOLDER/tryton-workspace/tryton/bin" >> scripts.conf
@@ -56,6 +57,7 @@ else
 	echo "export DATABASE_NAME" >> scripts.conf
 	echo "export DATABASE_EXTENSION" >> scripts.conf
 	echo "export TRYTOND_CONF" >> scripts.conf
+	echo "export TRYTON_CONF" >> scripts.conf
 	echo "export REPOS_ROOT" >> scripts.conf
 	echo "export TRYTOND_PATH" >> scripts.conf
 	echo "export TRYTON_PATH" >> scripts.conf
