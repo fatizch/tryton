@@ -136,7 +136,7 @@ msgstr "Mis à jour par"
 
 msgctxt "help:tranche.tranche_version,ceiling:"
 msgid "Included"
-msgstr ""
+msgstr "Inclus"
 
 msgctxt "help:tranche.tranche_version,floor:"
 msgid "Not Included"

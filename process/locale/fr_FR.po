@@ -648,10 +648,6 @@ msgid "Description"
 msgstr "Description"
 
 msgctxt "view:process.process_desc:"
-msgid "Description"
-msgstr "Description"
-
-msgctxt "view:process.process_desc:"
 msgid "Descrption"
 msgstr ""
 

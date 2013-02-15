@@ -402,6 +402,10 @@ msgctxt "field:ins_contract.contract,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
 
+msgctxt "field:ins_contract.contract,documents:"
+msgid "Documents"
+msgstr "Documents"
+
 msgctxt "field:ins_contract.contract,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -420,7 +424,7 @@ msgstr "Maître"
 
 msgctxt "field:ins_contract.contract,offered:"
 msgid "Product"
-msgstr "Offre"
+msgstr "Produit"
 
 msgctxt "field:ins_contract.contract,options:"
 msgid "Options"
@@ -656,7 +660,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.option,offered:"
 msgid "Coverage"
-msgstr "Offre"
+msgstr "Garantie"
 
 msgctxt "field:ins_contract.option,rec_name:"
 msgid "Name"

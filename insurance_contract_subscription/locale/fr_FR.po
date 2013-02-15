@@ -42,6 +42,10 @@ msgctxt "error:ins_contract.subscription_mgr:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "field:ins_contract.contract,doc_received:"
+msgid "All Document Received"
+msgstr "Documents Reçus"
+
 msgctxt "field:ins_contract.contract,product_desc:"
 msgid "Description"
 msgstr "Description"

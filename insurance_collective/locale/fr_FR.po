@@ -194,6 +194,10 @@ msgctxt "field:ins_collective.benefit,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
+msgctxt "field:ins_collective.benefit,kind:"
+msgid "Kind"
+msgstr "Type"
+
 msgctxt "field:ins_collective.benefit,loss_descs:"
 msgid "Loss Descriptions"
 msgstr ""
@@ -281,6 +285,10 @@ msgstr "Unité de calcul de l'indemnisation"
 msgctxt "field:ins_collective.benefit_rule,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
+
+msgctxt "field:ins_collective.benefit_rule,kind:"
+msgid "Kind"
+msgstr "Type"
 
 msgctxt "field:ins_collective.benefit_rule,offered:"
 msgid "Offered"
@@ -612,7 +620,7 @@ msgstr "Maître"
 
 msgctxt "field:ins_collective.contract,offered:"
 msgid "Product"
-msgstr "Offre"
+msgstr "Produit"
 
 msgctxt "field:ins_collective.contract,options:"
 msgid "Options"
@@ -661,6 +669,10 @@ msgstr "Clauses"
 msgctxt "field:ins_collective.coverage,code:"
 msgid "Code"
 msgstr "Code"
+
+msgctxt "field:ins_collective.coverage,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.coverage,complementary_data:"
 msgid "Offered Kind"
@@ -1079,6 +1091,10 @@ msgctxt "field:ins_collective.deductible_rule,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
 
+msgctxt "field:ins_collective.deductible_rule,value:"
+msgid "Value"
+msgstr "Valeur"
+
 msgctxt "field:ins_collective.deductible_rule,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -1257,7 +1273,7 @@ msgstr "Maître"
 
 msgctxt "field:ins_collective.enrollment,offered:"
 msgid "Product"
-msgstr "Offre"
+msgstr "Produit"
 
 msgctxt "field:ins_collective.enrollment,options:"
 msgid "Options"
@@ -1333,7 +1349,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_collective.enrollment_option,offered:"
 msgid "Coverage"
-msgstr "Offre"
+msgstr "Garantie"
 
 msgctxt "field:ins_collective.enrollment_option,rec_name:"
 msgid "Name"
@@ -1615,7 +1631,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_collective.option,offered:"
 msgid "Coverage"
-msgstr "Offre"
+msgstr "Garantie"
 
 msgctxt "field:ins_collective.option,rec_name:"
 msgid "Name"
@@ -1841,6 +1857,10 @@ msgstr "Clauses"
 msgctxt "field:ins_collective.product,code:"
 msgid "Code"
 msgstr "Code"
+
+msgctxt "field:ins_collective.product,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.product,complementary_data:"
 msgid "Offered Kind"
@@ -2561,6 +2581,18 @@ msgctxt "selection:ins_collective.benefit,indemnification_kind:"
 msgid "Period"
 msgstr "Période"
 
+msgctxt "selection:ins_collective.benefit,kind:"
+msgid "Annuity"
+msgstr "Rente"
+
+msgctxt "selection:ins_collective.benefit,kind:"
+msgid "Capital"
+msgstr "Capital"
+
+msgctxt "selection:ins_collective.benefit,kind:"
+msgid "Per Diem"
+msgstr "Indemnité Journalière"
+
 msgctxt "selection:ins_collective.benefit,template_behaviour:"
 msgid ""
 msgstr ""
@@ -2616,6 +2648,14 @@ msgstr "Semaine"
 msgctxt "selection:ins_collective.benefit_rule,indemnification_calc_unit:"
 msgid "Year"
 msgstr "Année"
+
+msgctxt "selection:ins_collective.benefit_rule,kind:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "selection:ins_collective.benefit_rule,kind:"
+msgid "Coverage Amount"
+msgstr "Montant de Couverture"
 
 msgctxt "selection:ins_collective.benefit_rule,template_behaviour:"
 msgid ""
@@ -2676,6 +2716,10 @@ msgstr "Devis"
 msgctxt "selection:ins_collective.contract,status:"
 msgid "Terminated"
 msgstr "Terminé"
+
+msgctxt "selection:ins_collective.coverage,family:"
+msgid "default"
+msgstr "Par défaut"
 
 msgctxt "selection:ins_collective.coverage,subscription_behaviour:"
 msgid "Mandatory"

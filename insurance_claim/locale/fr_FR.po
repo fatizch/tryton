@@ -34,6 +34,10 @@ msgctxt "field:ins_claim.claim,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_claim.claim,current_state:"
+msgid "Current State"
+msgstr "Etat Courant"
+
 msgctxt "field:ins_claim.claim,declaration_date:"
 msgid "Declaration Date"
 msgstr "Date de Déclaration"
@@ -149,6 +153,10 @@ msgstr "Mis à jour par"
 msgctxt "field:ins_claim.indemnification_detail,amount:"
 msgid "Amount"
 msgstr "Montant"
+
+msgctxt "field:ins_claim.indemnification_detail,amount_per_period:"
+msgid "Amount per Period"
+msgstr "Montant par période"
 
 msgctxt "field:ins_claim.indemnification_detail,amount_per_unit:"
 msgid "Amount per Unit"
@@ -401,6 +409,10 @@ msgstr "Validé"
 msgctxt "selection:ins_claim.indemnification_detail,kind:"
 msgid "Deductible"
 msgstr "Franchise"
+
+msgctxt "selection:ins_claim.indemnification_detail,kind:"
+msgid "Included"
+msgstr "Inclus"
 
 msgctxt "selection:ins_claim.indemnification_detail,kind:"
 msgid "Indemnified"

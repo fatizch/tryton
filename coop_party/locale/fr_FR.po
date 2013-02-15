@@ -386,6 +386,10 @@ msgctxt "field:party.party,is_society:"
 msgid "Society"
 msgstr "Société"
 
+msgctxt "field:party.party,main_address:"
+msgid "Address"
+msgstr "Adresse"
+
 msgctxt "field:party.party,person:"
 msgid "Person"
 msgstr "Personne"
@@ -623,12 +627,12 @@ msgid "Contact History"
 msgstr "Historique des Contacts"
 
 msgctxt "model:ir.action,name:act_contact_history_relate_form2"
-msgid "Communication Logs"
-msgstr ""
+msgid "Contact History"
+msgstr "Historique des Contacts"
 
 msgctxt "model:ir.action,name:act_contact_history_relate_form3"
-msgid "Communication Logs"
-msgstr ""
+msgid "Contact History"
+msgstr "Historique des Contacts"
 
 msgctxt "model:ir.action,name:act_generic_actor_kind_form"
 msgid "Generic Actor"
@@ -748,11 +752,11 @@ msgstr "Fax"
 
 msgctxt "selection:party.contact_history,media:"
 msgid "IRC"
-msgstr ""
+msgstr "IRC"
 
 msgctxt "selection:party.contact_history,media:"
 msgid "Jabber"
-msgstr ""
+msgstr "Jabber"
 
 msgctxt "selection:party.contact_history,media:"
 msgid "Mail"
@@ -793,6 +797,10 @@ msgstr "Mme"
 msgctxt "view:party.actor:"
 msgid "Roles"
 msgstr "Rôles"
+
+msgctxt "view:party.contact_history:"
+msgid "Communication Log"
+msgstr "Historique des Contacts"
 
 msgctxt "view:party.employee:"
 msgid "Employee"
