@@ -18,10 +18,7 @@ from trytond.tools import safe_eval
 from trytond.model.modelstorage import EvalEnvironment
 
 # Needed for serializing data
-try:
-    import simplejson as json
-except ImportError:
-    import json
+import json
 
 COULD_NOT_FIND_A_MATCHING_RULE = 'Could not find a matching rule'
 
@@ -61,8 +58,8 @@ def get_module_name(cls):
     return cls.__name__.split('.')[0]
 
 
-def change_relation_links(cls, from_module=None, to_module=None,
-        convert_dict=None):
+def change_relation_links(
+        cls, from_module=None, to_module=None, convert_dict=None):
     for field_name in cls._fields.iterkeys():
         field = copy.copy(getattr(cls, field_name))
         attr_name = ''
@@ -181,13 +178,13 @@ class WithAbstract(object):
             else:
                 # If you try to assign a Model to another field kind, error.
                 raise BadDataKeyError
-        elif isinstance(value, dict) and isinstance(field_desc,
-                (fields.Many2One, fields.Reference)):
+        elif isinstance(value, dict) and isinstance(
+                field_desc, (fields.Many2One, fields.Reference)):
             # If the value is a dict and the expected field value an instance,
             # we assume that we can create it then go !
             res = WithAbstract.create_abstract(field_desc.model_name, value)
-        elif isinstance(value, str) and isinstance(field_desc,
-                (fields.Reference)):
+        elif isinstance(value, str) and isinstance(
+                field_desc, (fields.Reference)):
             try:
                 model_name, id = value.split(',')
             except Exception:
@@ -338,8 +335,9 @@ class WithAbstract(object):
 
         res = []
         # We just need to look for the '_db' pattern in our fields
-        for field in [field for field in dir(session.process_state)
-                                if field[-3:] == '_db']:
+        for field in [
+                field for field in dir(session.process_state)
+                if field[-3:] == '_db']:
             res.append(field[:-3])
         return res
 
@@ -411,22 +409,23 @@ class GetResult(object):
 
             if not sub_elem_data:
                 # If it does not exist, someone failed...
-                return (None, ['Object %s does not have any sub_data.'
-                    % (self.name)])
+                return (None, ['Object %s does not have any sub_data.' % (
+                    self.name)])
 
             path_elems = path.split('.')
 
             for elem in getattr(self, sub_elem_data[0]):
                 # Now we iterate on the specified field
-                if path_elems[0] in (getattr(elem, attr) for attr in
-                        sub_elem_data[1]):
+                if path_elems[0] in (
+                        getattr(elem, attr) for attr in sub_elem_data[1]):
                     if isinstance(elem, GetResult):
-                        return elem.get_result(target, args, kind,
-                            '.'.join(path_elems[1:]))
-                    return (None, ['Sub element %s of %s cannot get_result !'
-                        % (elem.name, self.name)])
-            return (None, ['Could not find %s sub element in %s'
-                % (path_elems[0], self.name)])
+                        return elem.get_result(
+                            target, args, kind, '.'.join(path_elems[1:]))
+                    return (
+                        None, ['Sub element %s of %s cannot get_result !' % (
+                            elem.name, self.name)])
+            return (None, ['Could not find %s sub element in %s' % (
+                path_elems[0], self.name)])
 
         if kind:
             try:
@@ -563,8 +562,8 @@ def remove_tuple_from_list(cur_list, key):
 
 
 def get_module_path(module_name):
-    module_path = os.path.abspath(os.path.join(os.path.normpath(__file__),
-        '..', '..', module_name))
+    module_path = os.path.abspath(os.path.join(
+        os.path.normpath(__file__), '..', '..', module_name))
     if os.path.isdir(module_path):
         return module_path
 
@@ -590,8 +589,8 @@ def get_good_versions_at_date(instance, var_name, at_date=None):
     if not at_date:
         at_date = today()
     if hasattr(instance, 'get_good_versions_at_date'):
-        return getattr(instance, 'get_good_versions_at_date')(var_name,
-            at_date)
+        return getattr(instance, 'get_good_versions_at_date')(
+            var_name, at_date)
     res = []
     element_added = False
     for element in reversed(getattr(instance, var_name)):
@@ -679,10 +678,10 @@ def create_inst_with_default_val(from_class, field_name, action=None):
     res = {}
     model_name = get_relation_model_name(from_class, field_name)
     CurModel = Pool().get(model_name)
-    fields_names = list(x for x in set(CurModel._fields.keys()
-            + CurModel._inherit_fields.keys())
-    if x not in ['id', 'create_uid', 'create_date',
-        'write_uid', 'write_date'])
+    fields_names = list(x for x in set(
+        CurModel._fields.keys() + CurModel._inherit_fields.keys())
+        if x not in [
+            'id', 'create_uid', 'create_date', 'write_uid', 'write_date'])
     field = getattr(from_class, field_name)
     if not isinstance(field, fields.Many2One):
         if action:
@@ -745,7 +744,8 @@ def format_data(data, prefix='', prefix_inc='    ', is_init=True):
         tmp = [prefix + '{']
         for k, v in data.iteritems():
             new_data = format_data(v, prefix + prefix_inc, is_init=False)
-            tmp_res = [prefix + prefix_inc + str(k) + ':' +
+            tmp_res = [
+                prefix + prefix_inc + str(k) + ':' +
                 new_data[0][len(prefix + prefix_inc) - 1:]]
             if len(new_data) > 1:
                 tmp_res += new_data[1:]
