@@ -25,8 +25,8 @@ def get_field_as_summary(instance, var_name, with_label=True, at_date=None,
         return ''
     res = ''
     if type(getattr(instance, var_name)) is tuple:
-        list_at_date = utils.get_good_versions_at_date(instance, var_name,
-            at_date)
+        list_at_date = utils.get_good_versions_at_date(
+            instance, var_name, at_date)
         for element in list_at_date:
             if not hasattr(element.__class__, 'get_summary'):
                 continue
@@ -35,13 +35,13 @@ def get_field_as_summary(instance, var_name, with_label=True, at_date=None,
                 res += '\n'
             if with_label:
                 if res == '':
-                    res = '<b>%s :</b>\n' % translate_label(instance, var_name,
-                        lang=lang)
+                    res = '<b>%s :</b>\n' % translate_label(
+                        instance, var_name, lang=lang)
                 sub_indent = 1
-            summary_dict = element.__class__.get_summary([element],
-                    name=var_name, at_date=at_date, lang=lang)
-            res += re_indent_text('%s\n' % summary_dict[element.id],
-                sub_indent)
+            summary_dict = element.__class__.get_summary(
+                [element], name=var_name, at_date=at_date, lang=lang)
+            res += re_indent_text(
+                '%s\n' % summary_dict[element.id], sub_indent)
     else:
         if with_label:
             res = '%s : ' % translate_label(instance, var_name, lang=lang)
@@ -93,18 +93,15 @@ def translate(model, var_name, src, ttype, lang=None):
         language = Transaction().language
     Translation = Pool().get('ir.translation')
     res = Translation.get_source(
-            '%s,%s' % (model.__name__, var_name),
-             ttype,
-             language,
-             src)
+        '%s,%s' % (model.__name__, var_name), ttype, language, src)
     if not res:
         return src
     return res
 
 
 def translate_model_name(model, lang=None):
-    return translate(model, 'name', model._get_name(),
-        ttype='model', lang=lang)
+    return translate(
+        model, 'name', model._get_name(), ttype='model', lang=lang)
 
 
 def get_descendents_name(from_class):
@@ -141,8 +138,8 @@ def date_as_string(date, lang=None):
 
 def remove_invalid_char(from_string):
     import unicodedata
-    return ''.join(
-        (c for c in unicodedata.normalize('NFD', unicode(from_string))
+    return ''.join((
+        c for c in unicodedata.normalize('NFD', unicode(from_string))
         if unicodedata.category(c) != 'Mn'))
 
 
