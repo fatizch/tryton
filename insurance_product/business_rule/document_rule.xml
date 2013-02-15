@@ -120,6 +120,11 @@
       <field name="type">form</field>
       <field name="name">letter_model_selection_form</field>
     </record>
+    <record model="ir.ui.view" id="attach_letter_form">
+      <field name="model">ins_product.attach_letter</field>
+      <field name="type">form</field>
+      <field name="name">attach_letter_form</field>
+    </record>
     <record model="ir.ui.view" id="letter_model_displayer_tree">
       <field name="model">ins_product.letter_model_displayer</field>
       <field name="type">tree</field>

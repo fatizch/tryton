@@ -33,6 +33,11 @@ class ClaimProcess():
     indemnifications_consult = fields.Function(
         fields.One2Many('ins_claim.indemnification', None, 'Indemnifications'),
         'get_indemnifications')
+    contact_history = fields.Function(
+        fields.One2Many(
+            'party.contact_history', '', 'History',
+            on_change_with=['claimant'], depends=['claimant']),
+        'on_change_with_contact_history')
 
     def get_possible_contracts(self):
         if not self.claimant:
@@ -42,6 +47,13 @@ class ClaimProcess():
 
     def on_change_with_contracts(self, name=None):
         return [x.id for x in self.get_possible_contracts()]
+
+    def on_change_with_contact_history(self, name=None):
+        if not (hasattr(self, 'claimant') and self.claimant):
+            return []
+        ContactHistory = Pool().get('party.contact_history')
+        return [x.id for x in ContactHistory.search(
+            [('party', '=', self.claimant)])]
 
     def init_delivered_services(self):
         Option = Pool().get('ins_contract.option')

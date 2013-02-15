@@ -33,6 +33,7 @@ __all__ = [
     'AttachmentSetter',
     'DocumentRequestDisplayer',
     'ReceiveDocuments',
+    'AttachmentCreation',
 ]
 
 
@@ -669,6 +670,15 @@ class LetterReport(Report):
             report, records, data, localcontext)
 
 
+class AttachmentCreation(model.CoopView):
+    'Attachment Creation'
+
+    __name__ = 'ins_product.attach_letter'
+
+    attachment = fields.Binary('Data File', filename='name')
+    name = fields.Char('Filename')
+
+
 class LetterGeneration(Wizard):
     __name__ = 'ins_product.letter_creation_wizard'
 
@@ -698,10 +708,21 @@ class LetterGeneration(Wizard):
         'insurance_product.letter_model_selection_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Generate', 'generate', 'tryton-ok')])
+            Button('Generate', 'generate', 'tryton-ok'),
+            Button('Attach', 'attach', 'tryton-go-next'),
+            Button('Complete', 'post-generation', 'tryton-ok')])
+
+    attach = StateView(
+        'ins_product.attach_letter',
+        'insurance_product.attach_letter_form',
+        [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Attach', 'post_generation', 'tryton-ok')])
+
+    attach_to_contact = StateTransition()
 
     def transition_generate(self):
-        return 'post_generation'
+        return 'select_model'
 
     def do_generate(self, action):
         return action, {
@@ -752,6 +773,15 @@ class LetterGeneration(Wizard):
         contact.address = self.select_model.good_address
         contact.title = self.select_model.get_active_model(False).name
         contact.for_object_ref = good_obj.get_object_for_contact()
+        if (hasattr(self, 'attach') and self.attach):
+            if self.attach.attachment:
+                Attachment = Pool().get('ir.attachment')
+                attachment = Attachment()
+                attachment.resource = contact.for_object_ref
+                attachment.data = self.attach.attachment
+                attachment.name = self.attach.name
+                attachment.save()
+                contact.attachment = attachment
         contact.save()
         return 'end'
 

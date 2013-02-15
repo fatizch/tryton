@@ -33,6 +33,7 @@ def register():
         Document,
         LetterModelDisplayer,
         LetterModelSelection,
+        AttachmentCreation,
         RequestFinder,
         AttachmentSetter,
         DocumentRequestDisplayer,
