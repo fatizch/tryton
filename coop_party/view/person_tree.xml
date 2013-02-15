@@ -5,4 +5,5 @@
     <field name="first_name"/>
     <field name="birth_date"/>
     <field name="is_employee"/>
+    <field name="main_address"/>
 </tree>

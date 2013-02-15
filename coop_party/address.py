@@ -173,6 +173,38 @@ class Address():
     def set_zip_and_city(cls, addresses, name, vals):
         pass
 
+    def get_address_as_char(self, name, with_return_carriage=False):
+        full_address = ''
+        if self.street:
+            if full_address:
+                full_address += '\n'
+            full_address += self.street
+        if self.streetbis:
+            if full_address:
+                full_address += '\n'
+            full_address += self.streetbis
+        if self.zip or self.city:
+            if full_address:
+                full_address += '\n'
+            if self.zip:
+                full_address += self.zip
+            if self.city:
+                if full_address[-1:] != '\n':
+                    full_address += ' '
+                full_address += self.city
+        if self.country or self.subdivision:
+            if full_address:
+                full_address += '\n'
+            if self.subdivision:
+                full_address += self.subdivision.name
+            if self.country:
+                if full_address[-1:] != '\n':
+                    full_address += ' '
+                full_address += self.country.name
+        if not with_return_carriage:
+            full_address = full_address.replace('\n', ' ')
+        return full_address
+
 
 class AddresseKind(DynamicSelection):
     'Addresse Kind'

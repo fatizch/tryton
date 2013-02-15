@@ -40,6 +40,9 @@ class Party:
     in_relation_with = fields.One2Many('party.party-relation',
         'to_party', 'in relation with', context={'direction': 'reverse'})
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
+    main_address = fields.Function(
+        fields.Char('Address'),
+        'get_main_address_as_char')
 
     @classmethod
     def __setup__(cls):
@@ -197,6 +200,17 @@ class Party:
     def get_society(self):
         if self.society:
             return self.society[0]
+
+    def address_get(self, type=None, at_date=None, kind=None):
+        addresses = utils.get_good_versions_at_date(self, 'addresses', at_date)
+        for address in addresses:
+            if ((not type or getattr(address, type)) and (not kind or address.kind == kind)):
+                return address
+
+    def get_main_address_as_char(self, name=None, at_date=None):
+        address = self.address_get(at_date=at_date)
+        if address:
+            return address.get_address_as_char(name)
 
 
 class Actor(CoopView):
