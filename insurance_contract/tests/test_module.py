@@ -3,8 +3,8 @@ import sys
 import os
 import datetime
 from decimal import Decimal
-DIR = os.path.abspath(os.path.normpath(os.path.join(__file__,
-    '..', '..', '..', '..', '..', 'trytond')))
+DIR = os.path.abspath(os.path.normpath(os.path.join(
+    __file__, '..', '..', '..', '..', '..', 'trytond')))
 if os.path.isdir(DIR):
     sys.path.insert(0, os.path.dirname(DIR))
 
@@ -18,8 +18,7 @@ from trytond.transaction import Transaction
 
 
 MODULE_NAME = os.path.basename(
-                  os.path.abspath(
-                      os.path.join(os.path.normpath(__file__), '..', '..')))
+    os.path.abspath(os.path.join(os.path.normpath(__file__), '..', '..')))
 
 
 class ModuleTestCase(unittest.TestCase):
@@ -31,8 +30,7 @@ class ModuleTestCase(unittest.TestCase):
         trytond.tests.test_tryton.install_module('life_contract')
 
         self.Contract = POOL.get('ins_contract.contract')
-        self.SubsProcess = POOL.get('ins_contract.subs_process',
-            type='wizard')
+        self.SubsProcess = POOL.get('ins_contract.subs_process', type='wizard')
         self.ProcessDesc = POOL.get('ins_process.process_desc')
         self.Party = POOL.get('party.party')
         self.Person = POOL.get('party.person')
@@ -61,7 +59,7 @@ class ModuleTestCase(unittest.TestCase):
                                  USER,
                                  context=CONTEXT) as transaction:
             subs_process_desc, = self.ProcessDesc.search([
-                        ('process_model', '=', 'ins_contract.subs_process')])
+                ('process_model', '=', 'ins_contract.subs_process')])
             self.assert_(subs_process_desc.id)
 
     def test0005views(self):
@@ -415,8 +413,6 @@ return True'''
         '''
             Tests subscription process
         '''
-        from trytond.modules.coop_utils import add_days
-
         self.create_person()
         self.create_product()
         on_party, = self.Party.search([('name', '=', 'Toto')])
@@ -501,7 +497,7 @@ return True'''
         self.assert_(tmp)
         self.assertEqual(len(wizard.extension_life.covered_elements), 1)
         covered = wizard.extension_life.covered_elements[0]
-        self.assertEqual(covered.elem_person.party, on_party)
+        self.assertEqual(covered.elem_person, on_party)
         self.assertEqual(len(covered.elem_covered_data), 3)
         self.assertEqual(
             covered.elem_covered_data[0].data_start_date,
@@ -555,7 +551,8 @@ return True'''
             lines += ['']
 
         def date_from_today(nb):
-            return add_day(datetime.date.today(), nb)
+            from trytond.modules.coop_utils import date
+            return date.add_day(datetime.date.today(), nb)
 
         good_lines = [
             date_from_today(5).isoformat() + ' => 63.00 (Tx : 12.26)',
