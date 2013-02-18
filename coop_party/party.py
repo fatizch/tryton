@@ -219,7 +219,7 @@ class Party:
 
     @classmethod
     def default_lang(cls):
-        return utils.get_user_language()
+        return utils.get_user_language().id
 
 
 class Actor(CoopView):
