@@ -611,6 +611,10 @@ class StepTransition(ModelSQL, ModelView):
     def default_method_kind(cls):
         return 'add'
 
+    @classmethod
+    def default_kind(cls):
+        return 'standard'
+
     def build_button(self):
         # First deal with the easier case :
         if self.kind == 'complete':
