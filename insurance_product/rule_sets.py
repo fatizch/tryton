@@ -33,12 +33,6 @@ class SubscriberContext(RuleEngineContext):
         raise InternalRuleEngineError
 
     @classmethod
-    @check_args('subscriber_person')
-    def _re_get_subscriber_nationality(cls, args):
-        country = args['subscriber_person'].get_nationality()
-        return country.code
-
-    @classmethod
     @check_args('contract')
     def _re_get_subscriber_living_country(cls, args):
         address = args['contract'].subscriber.address_get()
@@ -78,11 +72,6 @@ class PersonContext(RuleEngineContext):
         raise InternalRuleEngineError
 
     @classmethod
-    def _re_get_person_nationality(cls, args):
-        country = cls.get_person(args).get_nationality()
-        return country.code
-
-    @classmethod
     def _re_get_person_living_country(cls, args):
         address = cls.get_person(args).address_get()
         return address.country
@@ -98,9 +87,6 @@ class PersonContext(RuleEngineContext):
     def _re_is_person_of_age(cls, args):
         person = cls.get_person(args)
         birthdate = cls.get_person_birthdate({'person': person})
-        country = cls.get_person_nationality({'person': person})
-        # Will be plugged in later
-        # limit_age = country.get_majority_age()
         limit_age = 18
         return RuleTools.years_between(
             args,

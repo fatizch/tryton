@@ -140,8 +140,6 @@ class Party:
             return self.society[0].get_rec_name(name)
         return super(Party, self).get_rec_name(name)
 
-    def get_nationality(self):
-        pass
 
     def get_subscribed_contracts(self):
         Contract = Pool().get('ins_contract.contract')
@@ -304,9 +302,6 @@ class Person(CoopSQL, Actor):
         depends=['gender'])
     birth_date = fields.Date('Birth Date', required=True)
     ssn = fields.Char('SSN')
-    nationality = fields.Many2One(
-        'country.country',
-        'Nationality')
 
     @classmethod
     def __setup__(cls):
@@ -331,9 +326,6 @@ class Person(CoopSQL, Actor):
     def get_gender_as_int(self):
         return self.gender_as_int(self.gender)
 
-    def get_nationality(self):
-        return self.nationality
-
     @classmethod
     def get_summary_header(cls, persons, name=None, at_date=None, lang=None):
         res = {}
@@ -342,8 +334,6 @@ class Person(CoopSQL, Actor):
             res[party.id] += coop_string.get_field_as_summary(party, 'ssn')
             res[party.id] += coop_string.get_field_as_summary(
                 party, 'birth_date')
-            res[party.id] += coop_string.get_field_as_summary(
-                party, 'nationality')
             res[party.id] += coop_string.get_field_as_summary(
                 party, 'maiden_name')
         return res

@@ -538,10 +538,6 @@ msgctxt "field:party.person,maiden_name:"
 msgid "Maiden Name"
 msgstr "Nom de Jeune Fille"
 
-msgctxt "field:party.person,nationality:"
-msgid "Nationality"
-msgstr "Nationalité"
-
 msgctxt "field:party.person,party:"
 msgid "Party"
 msgstr "Tiers"

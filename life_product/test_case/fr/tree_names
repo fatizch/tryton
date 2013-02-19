@@ -8,7 +8,6 @@ _re_years_between|Nombre d'années entre...|annees_entre|Début,Fin|Calcul le no
 ins_product.rule_sets.person|Personne Couverte|dossier_personne_couverte|
 _re_get_person_birthdate|Date de naissance|date_de_naissance||
 _re_get_person_living_country|Pays de résidence|pays_de_residence||
-_re_get_person_nationality|Nationalité|nationalite||
 _re_is_person_of_age|Est majeur ?|est_majeur||Renvoie True si la personne est majeure
 _re_link_with_subscriber|Relation avec le souscripteur|relation_avec_souscripteur||Précise la nature de la relation avec le souscripteur
 _re_person_subscribed|A souscrit le produit...|a_souscrit_le_produit|Code Produit|Indique si le souscripteur a souscrit le produit
@@ -17,7 +16,6 @@ _re_person_subscribed|A souscrit le produit...|a_souscrit_le_produit|Code Produi
 ins_product.rule_sets.subscriber|Souscripteur|dossier_souscripteur|
 _re_get_subscriber_birthdate|Date de naissance|date_de_naissance_souscripteur||
 _re_get_subscriber_living_country|Pays de résidence|pays_de_residence_souscripteur||
-_re_get_subscriber_nationality|Nationalité|nationalite_souscripteur||
 _re_subscriber_subscribed|A souscrit le produit|souscripteur_a_souscrit_produit||
 
 [ins_product.rule_sets.covered_data]
