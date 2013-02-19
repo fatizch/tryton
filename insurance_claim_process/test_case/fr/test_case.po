@@ -1,0 +1,35 @@
+msgid "Claim Declaration"
+msgstr "Déclaration de sinistre"
+
+msgid "Waiting for documents"
+msgstr "En attente de documents"
+
+msgid "Being Calculated"
+msgstr "En cours de calcul"
+
+msgid "Validation"
+msgstr "Validation"
+
+msgid "Closing"
+msgstr "Clôture"
+
+msgid "Claimant Selection"
+msgstr "Sélection du déclarant"
+
+msgid "Loss Selection"
+msgstr "Sélection du préjudice"
+
+msgid "Documents"
+msgstr "Documents"
+
+msgid "Delivered Services"
+msgstr "Prestations"
+
+msgid "Indemnification Validation"
+msgstr "Validation de l'indemnisation"
+
+msgid "Disbursment"
+msgstr "Remboursement"
+
+msgid "Claim Declaration"
+msgstr "Déclaration de Sinistre"
