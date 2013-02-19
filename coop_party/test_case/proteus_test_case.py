@@ -101,7 +101,7 @@ def create_persons(cfg_dict, nb_male, nb_female, relations_kind,
         name = random.choice(dicts['last_name'])
         add_person(cfg_dict, name, dicts, adult_date_interv, 'F')
 
-    print 'Successfully created %s parties' % nb_male + nb_female
+    print 'Successfully created %s parties' % (nb_male + nb_female)
 
 
 def create_relation(cfg_dict, from_actor, to_actor, kind, start_date=None):
