@@ -518,17 +518,19 @@ class StepTransition(ModelSQL, ModelView):
         # (they cannot be the same)
         domain=[('id', '!=', Eval('from_step'))],
         depends=['from_step'],
+        states={
+            'invisible': Eval('kind') != 'standard',
+        },
     )
 
     # Theoratically, there might be a difference between going from B to A
     # depending on whether we alredy went through A or not
     kind = fields.Selection(
         [
-            ('previous', 'Previous Transition'),
-            ('next', 'Next Transition'),
+            ('standard', 'Standard Transition'),
             ('complete', 'Complete Process'),
         ],
-        'kind',
+        'Transition Kind',
         required=True,
     )
 
@@ -543,6 +545,9 @@ class StepTransition(ModelSQL, ModelView):
     # The purpose of a transition is to execute some code, let's do this !
     methods = fields.Text(
         'Methods',
+        states={
+            'invisible': Eval('kind') != 'standard',
+        },
     )
 
     method_kind = fields.Selection(
@@ -550,6 +555,9 @@ class StepTransition(ModelSQL, ModelView):
             ('replace', 'Replace Step Methods'),
             ('add', 'Executed between steps')],
         'Method Behaviour',
+        states={
+            'invisible': Eval('kind') != 'standard',
+        },
     )
 
     # And authorizations are needed to filter users
@@ -560,17 +568,14 @@ class StepTransition(ModelSQL, ModelView):
         'Authorizations',
     )
 
-    # Sometimes we just want to display a readonly button for aesthetics
-    is_readonly = fields.Boolean('Readonly')
-
     # We need to be able to order the transitions
     priority = fields.Integer(
         'Priority',
     )
 
     def execute(self, target):
-        if (self.kind == 'next' or self.kind == 'complete') and \
-                self.method_kind == 'add':
+        if (self.kind == 'standard' and self.is_forward() or
+                self.kind == 'complete') and self.method_kind == 'add':
             self.from_step.execute_after(target)
         # Executing a transition is easy : just apply all methods
         if self.methods:
@@ -592,7 +597,8 @@ class StepTransition(ModelSQL, ModelView):
                 if not res or errs:
                     target.raise_user_error(errs)
 
-        if self.kind == 'previous' and self.method_kind == 'add':
+        if self.kind == 'standard' and self.is_forward and \
+                self.method_kind == 'add':
             self.to_step.execute_before(target)
 
         # Everything went right, update the state of the instance
@@ -631,6 +637,12 @@ class StepTransition(ModelSQL, ModelView):
     @classmethod
     def default_methods(cls):
         return ''
+
+    def is_forward(self):
+        if (self.on_process.get_step_relation(self.from_step).order <
+                self.on_process.get_step_relation(self.to_step).order):
+            return True
+        return False
 
 
 class StepDescAuthorization(ModelSQL):
@@ -814,15 +826,11 @@ class GenerateGraph(Report):
 
     @classmethod
     def build_transition(cls, process, step, transition, graph, nodes, edges):
-        if transition.is_readonly:
-            return
-
         good_edge = pydot.Edge(
             nodes[transition.from_step.id],
             nodes[transition.to_step.id],
             fontname='Century Gothic',
         )
-
         good_edge.set('len', '1.0')
         good_edge.set('constraint', '1')
         good_edge.set('weight', '1.0')
@@ -832,9 +840,6 @@ class GenerateGraph(Report):
     @classmethod
     def build_inverse_transition(
             cls, process, step, transition, graph, nodes, edges):
-        if transition.is_readonly:
-            return
-
         tr_fr, tr_to = transition.from_step.id, transition.to_step.id
         if (tr_to, tr_fr) in edges:
             edges[(tr_to, tr_fr)].set('dir', 'both')
@@ -894,12 +899,12 @@ class GenerateGraph(Report):
         edges = {}
 
         for transition in the_process.transitions:
-            if transition.kind == 'next':
+            if transition.kind == 'standard' and transition.is_forward():
                 cls.build_transition(
                     the_process, step, transition, graph, nodes, edges)
 
         for transition in the_process.transitions:
-            if transition.kind == 'previous':
+            if transition.kind == 'standard' and transition.is_forward():
                 cls.build_inverse_transition(
                     the_process, step, transition, graph, nodes, edges)
 

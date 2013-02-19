@@ -2,9 +2,6 @@
 <data>
   <xpath expr="/form/field[@name='from_step']" position="after">
     <newline/>
-    <label name="transition_kind" xalign="0"/>
-    <field name="transition_kind" colspan="3"/>
-    <newline/>
     <label name="pyson_choice" xalign="0"/>
     <field name="pyson_choice"/>
     <label name="pyson_description" xalign="0"/>
@@ -16,7 +13,7 @@
     <field name="choice_if_false"/>
   </xpath>
   <xpath expr="/form/group[@id='methods']" position="replace_attributes">
-    <group id="methods" colspan="2" xexpand="1" xfill="1" yexpand="1" yfill="1" states="{'invisible': Eval('transition_kind') == 'choice'}"/>
+    <group id="methods" colspan="2" xexpand="1" xfill="1" yexpand="1" yfill="1" states="{'invisible': Eval('kind') == 'choice'}"/>
   </xpath>
   <xpath expr="/form/field[@name='authorizations']" position="replace_attributes">
     <field name="authorizations" xexpand="1" xfill="1" yexpand="1" yfill="1" colspan="4"/>

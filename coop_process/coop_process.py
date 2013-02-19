@@ -3,7 +3,7 @@ import sys
 import pydot
 
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval, And
+from trytond.pyson import Eval
 
 from trytond.model import fields
 
@@ -28,25 +28,17 @@ class StepTransition():
 
     __name__ = 'process.step_transition'
 
-    transition_kind = fields.Selection(
-        [
-            ('standard', 'Standard'),
-            ('choice', 'Choice')
-        ],
-        'Transition Kind',
-    )
-
     pyson_choice = fields.Char(
         'Choice',
         states={
-            'invisible': Eval('transition_kind') != 'choice',
+            'invisible': Eval('kind') != 'choice',
         },
     )
 
     pyson_description = fields.Char(
         'Pyson Description',
         states={
-            'invisible': Eval('transition_kind') != 'choice',
+            'invisible': Eval('kind') != 'choice',
         },
     )
 
@@ -54,7 +46,7 @@ class StepTransition():
         'process.step_transition',
         'Transition if True',
         states={
-            'invisible': Eval('transition_kind') != 'choice',
+            'invisible': Eval('kind') != 'choice',
         },
         domain=[('kind', '=', 'calculated')],
     )
@@ -63,7 +55,7 @@ class StepTransition():
         'process.step_transition',
         'Transition if False',
         states={
-            'invisible': Eval('transition_kind') != 'choice',
+            'invisible': Eval('kind') != 'choice',
         },
         domain=[('kind', '=', 'calculated')],
     )
@@ -71,23 +63,6 @@ class StepTransition():
     @classmethod
     def __setup__(cls):
         super(StepTransition, cls).__setup__()
-        for attr in ('to_step', 'methods'):
-            the_attr = copy.copy(getattr(cls, attr))
-            if not the_attr.states:
-                the_attr.states = {}
-            if not 'invisible' in the_attr.states:
-                the_attr.states['invisible'] = ''
-
-            if not the_attr.states['invisible']:
-                the_attr.states['invisible'] = \
-                    Eval('transition_kind') == 'choice'
-            else:
-                the_attr.states['invisible'] = And(
-                    the_attr.states['invisible'],
-                    Eval('transition_kind') == 'choice')
-
-            setattr(cls, attr, the_attr)
-
         kind = copy.copy(cls.kind)
         kind.selection.append(('calculated', 'Calculated'))
         setattr(cls, 'kind', kind)
@@ -102,12 +77,8 @@ class StepTransition():
             ('check_choices', 'missing_choice'),
         ]
 
-    @classmethod
-    def default_transition_kind(cls):
-        return 'standard'
-
     def execute(self, target):
-        if self.transition_kind != 'choice':
+        if self.kind != 'choice':
             super(StepTransition, self).execute(target)
             return
 
@@ -119,13 +90,13 @@ class StepTransition():
             self.choice_if_false.execute(target)
 
     def get_rec_name(self, name):
-        if self.transition_kind != 'choice':
+        if self.kind != 'choice':
             return super(StepTransition, self).get_rec_name(name)
 
         return self.pyson_description
 
     def build_button(self):
-        if self.transition_kind != 'choice':
+        if self.kind != 'choice':
             return super(StepTransition, self).build_button()
 
         xml = '<button string="%s" name="_button_%s"/>' % (
@@ -135,7 +106,7 @@ class StepTransition():
         return xml
 
     def check_pyson(self):
-        if self.transition_kind != 'choice':
+        if self.kind != 'choice':
             return True
 
         if not self.pyson_choice or not self.pyson_description:
@@ -144,7 +115,7 @@ class StepTransition():
         return True
 
     def check_choices(self):
-        if self.transition_kind != 'choice':
+        if self.kind != 'choice':
             return True
 
         if not self.choice_if_true or not self.choice_if_false:
@@ -162,7 +133,7 @@ class GenerateGraph():
 
     @classmethod
     def build_transition(cls, process, step, transition, graph, nodes, edges):
-        if not transition.transition_kind == 'choice':
+        if not transition.kind == 'choice':
             super(GenerateGraph, cls).build_transition(
                 process, step, transition, graph, nodes, edges)
             return
@@ -298,14 +269,14 @@ class ProcessDesc():
         for transition in self.transitions:
             if not transition.from_step == from_step:
                 continue
-            if transition.transition_kind == 'standard':
-                if transition.kind == 'next':
+            if transition.kind == 'standard':
+                if transition.is_forward():
                     good_values.append(
                         (get_priority(transition.to_step), transition))
                 elif transition.kind == 'complete':
                     good_values.append(
                         (sys.maxint, transition))
-            elif transition.transition_kind == 'choice':
+            elif transition.kind == 'choice':
                 good_values.append((
                     min(get_priority(transition.choice_if_true),
                         get_priority(transition.choice_if_false)),
@@ -334,8 +305,8 @@ class ProcessDesc():
             if not transition.from_step == from_step:
                 continue
 
-            if transition.transition_kind == 'standard':
-                if transition.kind == 'previous':
+            if transition.kind == 'standard':
+                if not transition.is_forward():
                     good_values.append(
                         (get_priority(transition.to_step), transition))
 

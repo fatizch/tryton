@@ -8,13 +8,10 @@
   <newline/>
   <label name="kind" xalign="0"/>
   <field name="kind" colspan="3"/>
-  <newline/>
-  <label name="is_readonly" xalign="0"/>
-  <field name="is_readonly"/>
   <label name="pyson" xalign="0"/>
   <field name="pyson"/>
   <newline/>
-  <group id="methods" xexpand="1" xfill="1" yexpand="1" yfill="1">
+  <group id="methods" xexpand="1" xfill="1" yexpand="1" yfill="1" states="{'invisible': Eval('kind') != 'standard'}">
     <label name="method_kind" xalign="0"/>
     <field name="method_kind" colspan="3" xexpand="1" xfill="1"/>
     <separator name="methods" colspan="4" xexpand="1" xfill="1"/>
