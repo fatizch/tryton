@@ -30,6 +30,7 @@ CLAIM_STATUS = [
 ]
 
 CLAIM_CLOSED_REASON = [
+    ('', ''),
     ('refusal', 'Refusal'),
     ('paid', 'Paid'),
 ]
@@ -81,7 +82,7 @@ class Claim(model.CoopSQL, CoopProcessFramework, Printable):
     def get_closed_reason(self, name):
         if self.status == 'closed':
             return self.sub_status
-        return [('', '')]
+        return ''
 
     @staticmethod
     def default_declaration_date():
