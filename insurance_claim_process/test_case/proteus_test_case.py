@@ -124,7 +124,7 @@ insurance_claim.loss_view_tree"/>''',
 view_ids="insurance_claim_process.loss_delivered_services_view_form,\
 insurance_claim.loss_view_tree"/>
 <field name="doc_received" invisible="1"/>''',
-        'code_before': 'init_delivered_service',
+        'code_before': 'init_delivered_services',
     })
     step_indemnification = meths['StepDesc']({
         'technical_name': 'indemnification_calculation',
@@ -142,7 +142,7 @@ insurance_claim.loss_view_tree"/>
 expand_toolbar="0" />
 ''',
         'code_before': 'calculate_indemnification',
-        'code_after': 'validate_indemnification',
+        'code_after': 'validate_indemnifications',
     })
     step_disbursment = meths['StepDesc']({
         'technical_name': 'disbursment',
@@ -158,7 +158,7 @@ expand_toolbar="0" />
 <field name="declaration_date"/>
 <field name="indemnifications" colspan="4" mode="form,tree" \
 expand_toolbar="0" />''',
-        'code_after': 'validate_indemnification',
+        'code_after': 'validate_indemnifications',
     })
     step_closing = meths['StepDesc']({
         'technical_name': 'closing',
