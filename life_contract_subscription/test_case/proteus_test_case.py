@@ -167,7 +167,6 @@ yexpand="1" mode="form"/>
 <field name="offered"/>
 ''',
         'menu_top': top_menu,
-        'first_step': subscriber_sel_step,
     })
 
     meths['ProcessStepRelation']({
@@ -216,7 +215,6 @@ yexpand="1" mode="form"/>
         'from_step': subscriber_sel_step,
         'to_step': option_sel_step,
         'on_process': subs_process_desc,
-        'kind': 'standard',
         'methods': '''
 check_product_not_null
 check_subscriber_not_null
@@ -230,7 +228,6 @@ init_complementary_data
         'from_step': subscriber_sel_step,
         'to_step': covered_pers_sel_step,
         'on_process': subs_process_desc,
-        'kind': 'standard',
         'methods': '''
 check_product_not_null
 check_subscriber_not_null
@@ -248,13 +245,11 @@ init_covered_elements
         'from_step': option_sel_step,
         'to_step': subscriber_sel_step,
         'on_process': subs_process_desc,
-        'kind': 'standard',
     })
     meths['StepTransition']({
         'from_step': option_sel_step,
         'to_step': covered_pers_sel_step,
         'on_process': subs_process_desc,
-        'kind': 'standard',
         'methods': '''
 check_options_eligibility
 check_option_selected
@@ -266,19 +261,16 @@ init_covered_elements
         'from_step': covered_pers_sel_step,
         'to_step': subscriber_sel_step,
         'on_process': subs_process_desc,
-        'kind': 'standard',
     })
     meths['StepTransition']({
         'from_step': covered_pers_sel_step,
         'to_step': option_sel_step,
         'on_process': subs_process_desc,
-        'kind': 'standard',
     })
     meths['StepTransition']({
         'from_step': covered_pers_sel_step,
         'to_step': document_step,
         'on_process': subs_process_desc,
-        'kind': 'standard',
         'methods': '''
 check_at_least_one_covered
 check_sub_elem_eligibility
@@ -290,13 +282,11 @@ init_subscription_document_request
         'from_step': document_step,
         'to_step': covered_pers_sel_step,
         'on_process': subs_process_desc,
-        'kind': 'standard',
     })
     meths['StepTransition']({
         'from_step': document_step,
         'to_step': pricing_step,
         'on_process': subs_process_desc,
-        'kind': 'standard',
         'methods': '''
 init_billing_manager
 calculate_prices
@@ -306,13 +296,11 @@ calculate_prices
         'from_step': pricing_step,
         'to_step': document_step,
         'on_process': subs_process_desc,
-        'kind': 'standard',
     })
     meths['StepTransition']({
         'from_step': pricing_step,
         'to_step': validation_step,
         'on_process': subs_process_desc,
-        'kind': 'standard',
     })
     meths['StepTransition']({
         'from_step': validation_step,
