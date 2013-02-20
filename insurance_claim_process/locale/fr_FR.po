@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:ins_claim.claim,contact_history:"
+msgid "History"
+msgstr "Historique"
+
 msgctxt "field:ins_claim.claim,contracts:"
 msgid "Contracts"
 msgstr "Contrats"
@@ -16,7 +20,11 @@ msgstr "Documents Reçus"
 
 msgctxt "field:ins_claim.claim,indemnifications:"
 msgid "Indemnifications"
-msgstr "indemnisations"
+msgstr "Indemnisations"
+
+msgctxt "field:ins_claim.claim,indemnifications_consult:"
+msgid "Indemnifications"
+msgstr "Indemnisations"
 
 msgctxt "field:ins_claim.loss,benefits:"
 msgid "Benefits"
