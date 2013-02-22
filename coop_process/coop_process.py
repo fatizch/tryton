@@ -14,6 +14,7 @@ __all__ = [
     'StepTransition',
     'GenerateGraph',
     'CoopProcessFramework',
+    'ProcessStepRelation',
     'ProcessDesc',
     'XMLViewDesc',
     'StepDesc',
@@ -47,7 +48,9 @@ class StepTransition():
         states={
             'invisible': Eval('kind') != 'choice',
         },
-        domain=[('kind', '=', 'calculated')],
+        domain=[
+            ('kind', '=', 'calculated'),
+            ('main_model', '=', Eval('context', {}).get('process_model'))],
     )
 
     choice_if_false = fields.Many2One(
@@ -56,7 +59,9 @@ class StepTransition():
         states={
             'invisible': Eval('kind') != 'choice',
         },
-        domain=[('kind', '=', 'calculated')],
+        domain=[
+            ('kind', '=', 'calculated'),
+            ('main_model', '=', Eval('context', {}).get('process_model'))],
     )
 
     @classmethod
@@ -65,6 +70,12 @@ class StepTransition():
         kind = copy.copy(cls.kind)
         kind.selection.append(('calculated', 'Calculated'))
         setattr(cls, 'kind', kind)
+        cls.from_step = copy.copy(cls.from_step)
+        cls.from_step.domain.extend([
+            ('main_model', '=', Eval('context', {}).get('process_model'))])
+        cls.to_step = copy.copy(cls.to_step)
+        cls.to_step.domain.extend([
+            ('main_model', '=', Eval('context', {}).get('process_model'))])
 
         cls._error_messages.update({
             'missing_pyson': 'Pyson expression and description is mandatory',
@@ -255,7 +266,14 @@ class ProcessDesc():
         super(ProcessDesc, cls).__setup__()
         cls.transitions = copy.copy(cls.transitions)
         cls.transitions.states['invisible'] = ~Eval('custom_transitions')
+        cls.transitions.context.update({
+            'process_model': Eval('on_model', 0)})
         cls.transitions.depends.append('custom_transitions')
+        cls.transitions.depends.append('on_model')
+        cls.all_steps = copy.copy(cls.all_steps)
+        cls.all_steps.context.update({
+            'process_model': Eval('on_model', 0)})
+        cls.all_steps.depends.append('on_model')
 
     @classmethod
     def default_with_prev_next(cls):
@@ -351,6 +369,21 @@ class ProcessDesc():
             nb += 1
 
         return nb, result
+
+
+class ProcessStepRelation():
+    'Process to Step relation'
+
+    __metaclass__ = PoolMeta
+
+    __name__ = 'process.process_step_relation'
+
+    @classmethod
+    def __setup__(cls):
+        super(ProcessStepRelation, cls).__setup__()
+        cls.step = copy.copy(cls.step)
+        cls.step.domain.extend([(
+            'main_model', '=', Eval('context', {}).get('process_model', 0))])
 
 
 class XMLViewDesc(model.CoopSQL, model.CoopView):
@@ -596,6 +629,14 @@ class StepDesc():
         context={'for_step_name': Eval('technical_name', '')},
         states={
             'readonly': ~Eval('technical_name'),
+        },
+    )
+
+    main_model = fields.Many2One(
+        'ir.model',
+        'Main Model',
+        states={
+            'readonly': ~~Eval('id')
         },
     )
 

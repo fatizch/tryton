@@ -53,9 +53,14 @@ def launch_test_case(cfg_dict):
         'code': 'ctr_basic_data_input',
         'name': translater('Administrative Data'),
     })
+
+    contract_model = Model.get('ir.model').find(
+        [('model', '=', 'ins_contract.contract')])[0]
+
     subscriber_sel_step = meths['StepDesc']({
         'technical_name': 'subscriber_selection',
         'fancy_name': translater('Subscriber Selection'),
+        'main_model': contract_model,
         'step_xml': '''
 <label name="start_date"/>
 <field name="start_date" xfill="1"/>
@@ -79,6 +84,7 @@ def launch_test_case(cfg_dict):
     option_sel_step = meths['StepDesc']({
         'technical_name': 'option_selection',
         'fancy_name': translater('Options Selection'),
+        'main_model': contract_model,
         'step_xml': '''
 <field name="options" mode="tree"
  view_ids="insurance_contract_subscription.subscription_editable_option_tree"/>
@@ -89,6 +95,7 @@ def launch_test_case(cfg_dict):
     covered_pers_sel_step = meths['StepDesc']({
         'technical_name': 'covered_person_selection',
         'fancy_name': translater('Covered Person Selection'),
+        'main_model': contract_model,
         'step_xml': '''
 <field name="covered_elements"
  mode="form,tree"
@@ -99,6 +106,7 @@ life_contract.covered_person_view_tree"/>
     document_step = meths['StepDesc']({
         'technical_name': 'contract_document_request',
         'fancy_name': translater('Document Request'),
+        'main_model': contract_model,
         'step_xml': '''
 <field name="documents" xfill="1" xexpand="1" yfill="1" \
 yexpand="1" mode="form"/>
@@ -108,6 +116,7 @@ yexpand="1" mode="form"/>
     pricing_step = meths['StepDesc']({
         'technical_name': 'pricing',
         'fancy_name': translater('Pricing'),
+        'main_model': contract_model,
         'step_xml': '''
 <field name="billing_manager" mode="form" />
 ''',
@@ -115,6 +124,7 @@ yexpand="1" mode="form"/>
     validation_step = meths['StepDesc']({
         'technical_name': 'ctr_validation',
         'fancy_name': translater('Contract Validation'),
+        'main_model': contract_model,
         'step_xml': '''
 <group id="Administrative data">
   <label name="contract_number"/>
@@ -143,9 +153,6 @@ yexpand="1" mode="form"/>
 ''',
     })
 
-    contract_model = Model.get('ir.model').find(
-        [('model', '=', 'ins_contract.contract')])[0]
-
     top_menu_tmp = Model.get('ir.model.data').find(
         [
             ('module', '=', 'insurance_contract'),
@@ -158,6 +165,8 @@ yexpand="1" mode="form"/>
         'technical_name': 'individual_subscription',
         'fancy_name': translater('Individual Subscription Process'),
         'on_model': contract_model,
+        'custom_transitions': True,
+        'steps_implicitly_available': False,
         'xml_tree': '''
 <field name="current_state"/>
 <field name="contract_number"/>
@@ -169,53 +178,66 @@ yexpand="1" mode="form"/>
         'menu_top': top_menu,
     })
 
-    meths['ProcessStepRelation']({
-        'process': subs_process_desc,
-        'step': subscriber_sel_step,
-        'status': status_basic_data,
-        'order': 1,
-    })
+    meths['ProcessStepRelation'](
+        {
+            'process': subs_process_desc,
+            'step': subscriber_sel_step,
+            'status': status_basic_data,
+            'order': 1,
+        },
+        {'process_model': contract_model.id})
 
-    meths['ProcessStepRelation']({
-        'process': subs_process_desc,
-        'step': option_sel_step,
-        'status': status_ongoing,
-        'order': 2,
-    })
+    meths['ProcessStepRelation'](
+        {
+            'process': subs_process_desc,
+            'step': option_sel_step,
+            'status': status_ongoing,
+            'order': 2,
+        },
+        {'process_model': contract_model.id})
 
-    meths['ProcessStepRelation']({
-        'process': subs_process_desc,
-        'step': covered_pers_sel_step,
-        'status': status_ongoing,
-        'order': 3,
-    })
+    meths['ProcessStepRelation'](
+        {
+            'process': subs_process_desc,
+            'step': covered_pers_sel_step,
+            'status': status_ongoing,
+            'order': 3,
+        },
+        {'process_model': contract_model.id})
 
-    meths['ProcessStepRelation']({
-        'process': subs_process_desc,
-        'step': document_step,
-        'status': status_ongoing,
-        'order': 4,
-    })
+    meths['ProcessStepRelation'](
+        {
+            'process': subs_process_desc,
+            'step': document_step,
+            'status': status_ongoing,
+            'order': 4,
+        },
+        {'process_model': contract_model.id})
 
-    meths['ProcessStepRelation']({
-        'process': subs_process_desc,
-        'step': pricing_step,
-        'status': status_ongoing,
-        'order': 5,
-    })
+    meths['ProcessStepRelation'](
+        {
+            'process': subs_process_desc,
+            'step': pricing_step,
+            'status': status_ongoing,
+            'order': 5,
+        },
+        {'process_model': contract_model.id})
 
-    meths['ProcessStepRelation']({
-        'process': subs_process_desc,
-        'step': validation_step,
-        'status': status_validation,
-        'order': 6,
-    })
+    meths['ProcessStepRelation'](
+        {
+            'process': subs_process_desc,
+            'step': validation_step,
+            'status': status_validation,
+            'order': 6,
+        },
+        {'process_model': contract_model.id})
 
-    meths['StepTransition']({
-        'from_step': subscriber_sel_step,
-        'to_step': option_sel_step,
-        'on_process': subs_process_desc,
-        'methods': '''
+    meths['StepTransition'](
+        {
+            'from_step': subscriber_sel_step,
+            'to_step': option_sel_step,
+            'on_process': subs_process_desc,
+            'methods': '''
 check_product_not_null
 check_subscriber_not_null
 check_start_date_valid
@@ -223,12 +245,14 @@ check_product_eligibility
 init_options
 init_complementary_data
 ''',
-    })
-    meths['StepTransition']({
-        'from_step': subscriber_sel_step,
-        'to_step': covered_pers_sel_step,
-        'on_process': subs_process_desc,
-        'methods': '''
+        },
+        {'process_model': contract_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': subscriber_sel_step,
+            'to_step': covered_pers_sel_step,
+            'on_process': subs_process_desc,
+            'methods': '''
 check_product_not_null
 check_subscriber_not_null
 check_start_date_valid
@@ -240,76 +264,97 @@ check_option_selected
 check_option_dates
 init_covered_elements
 ''',
-    })
-    meths['StepTransition']({
-        'from_step': option_sel_step,
-        'to_step': subscriber_sel_step,
-        'on_process': subs_process_desc,
-    })
-    meths['StepTransition']({
-        'from_step': option_sel_step,
-        'to_step': covered_pers_sel_step,
-        'on_process': subs_process_desc,
-        'methods': '''
+        },
+        {'process_model': contract_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': option_sel_step,
+            'to_step': subscriber_sel_step,
+            'on_process': subs_process_desc,
+        },
+        {'process_model': contract_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': option_sel_step,
+            'to_step': covered_pers_sel_step,
+            'on_process': subs_process_desc,
+            'methods': '''
 check_options_eligibility
 check_option_selected
 check_option_dates
 init_covered_elements
 ''',
-    })
-    meths['StepTransition']({
-        'from_step': covered_pers_sel_step,
-        'to_step': subscriber_sel_step,
-        'on_process': subs_process_desc,
-    })
-    meths['StepTransition']({
-        'from_step': covered_pers_sel_step,
-        'to_step': option_sel_step,
-        'on_process': subs_process_desc,
-    })
-    meths['StepTransition']({
-        'from_step': covered_pers_sel_step,
-        'to_step': document_step,
-        'on_process': subs_process_desc,
-        'methods': '''
+        },
+        {'process_model': contract_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': covered_pers_sel_step,
+            'to_step': subscriber_sel_step,
+            'on_process': subs_process_desc,
+        },
+        {'process_model': contract_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': covered_pers_sel_step,
+            'to_step': option_sel_step,
+            'on_process': subs_process_desc,
+        },
+        {'process_model': contract_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': covered_pers_sel_step,
+            'to_step': document_step,
+            'on_process': subs_process_desc,
+            'methods': '''
 check_at_least_one_covered
 check_sub_elem_eligibility
 check_covered_amounts
 init_subscription_document_request
 ''',
-    })
-    meths['StepTransition']({
-        'from_step': document_step,
-        'to_step': covered_pers_sel_step,
-        'on_process': subs_process_desc,
-    })
-    meths['StepTransition']({
-        'from_step': document_step,
-        'to_step': pricing_step,
-        'on_process': subs_process_desc,
-        'methods': '''
+        },
+        {'process_model': contract_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': document_step,
+            'to_step': covered_pers_sel_step,
+            'on_process': subs_process_desc,
+        },
+        {'process_model': contract_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': document_step,
+            'to_step': pricing_step,
+            'on_process': subs_process_desc,
+            'methods': '''
 init_billing_manager
 calculate_prices
 ''',
-    })
-    meths['StepTransition']({
-        'from_step': pricing_step,
-        'to_step': document_step,
-        'on_process': subs_process_desc,
-    })
-    meths['StepTransition']({
-        'from_step': pricing_step,
-        'to_step': validation_step,
-        'on_process': subs_process_desc,
-    })
-    meths['StepTransition']({
-        'from_step': validation_step,
-        'on_process': subs_process_desc,
-        'kind': 'complete',
-        'methods': '''
+        },
+        {'process_model': contract_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': pricing_step,
+            'to_step': document_step,
+            'on_process': subs_process_desc,
+        },
+        {'process_model': contract_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': pricing_step,
+            'to_step': validation_step,
+            'on_process': subs_process_desc,
+        },
+        {'process_model': contract_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': validation_step,
+            'on_process': subs_process_desc,
+            'kind': 'complete',
+            'methods': '''
 activate_contract
 finalize_contract
 ''',
-    })
+        },
+        {'process_model': contract_model.id})
 
     cfg_dict['ProcessDesc'].update_view([subs_process_desc.id], {})

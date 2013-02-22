@@ -5,6 +5,7 @@ from .coop_process import *
 def register():
     Pool.register(
         StepTransition,
+        ProcessStepRelation,
         ProcessDesc,
         XMLViewDesc,
         StepDesc,

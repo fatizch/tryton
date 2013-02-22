@@ -92,6 +92,7 @@ class ProcessDesc(ModelSQL, ModelView):
             ('is_workflow', '=', True),
             ('model', '!=', 'process.process_framework')
         ],
+        required=True,
     )
 
     # We also need all the steps that will be used in the process
@@ -161,7 +162,7 @@ class ProcessDesc(ModelSQL, ModelView):
 
     @classmethod
     def default_step_button_group_position(cls):
-        return 'bottom'
+        return 'right'
 
     @classmethod
     def default_menu_icon(cls):

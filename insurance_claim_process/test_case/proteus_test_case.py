@@ -62,9 +62,13 @@ def launch_test_case(cfg_dict):
         'name': translater('Closing'),
     })
 
+    claim_model = Model.get('ir.model').find(
+        [('model', '=', 'ins_claim.claim')])[0]
+
     step_claimant = meths['StepDesc']({
         'technical_name': 'claimant',
         'fancy_name': translater('Claimant Selection'),
+        'main_model': claim_model,
         'step_xml': '''
 <label name="declaration_date"/>
 <field name="declaration_date"/>
@@ -79,6 +83,7 @@ def launch_test_case(cfg_dict):
     step_loss = meths['StepDesc']({
         'technical_name': 'loss',
         'fancy_name': translater('Loss Selection'),
+        'main_model': claim_model,
         'step_xml': '''
 <label name="name"/>
 <field name="name"/>
@@ -96,6 +101,7 @@ insurance_claim.loss_view_tree"/>''',
     step_documents = meths['StepDesc']({
         'technical_name': 'required_documents',
         'fancy_name': translater('Documents'),
+        'main_model': claim_model,
         'step_xml': '''
 <label name="name"/>
 <field name="name"/>
@@ -111,6 +117,7 @@ insurance_claim.loss_view_tree"/>''',
     step_delivered_service = meths['StepDesc']({
         'technical_name': 'delivered_services',
         'fancy_name': translater('Delivered Services'),
+        'main_model': claim_model,
         'step_xml': '''
 <label name="name"/>
 <field name="name"/>
@@ -129,6 +136,7 @@ insurance_claim.loss_view_tree"/>
     step_indemnification = meths['StepDesc']({
         'technical_name': 'indemnification_calculation',
         'fancy_name': translater('Indemnification Validation'),
+        'main_model': claim_model,
         'step_xml': '''
 <label name="name"/>
 <field name="name"/>
@@ -147,6 +155,7 @@ expand_toolbar="0" />
     step_disbursment = meths['StepDesc']({
         'technical_name': 'disbursment',
         'fancy_name': translater('Disbursment'),
+        'main_model': claim_model,
         'step_xml': '''
 <label name="name"/>
 <field name="name"/>
@@ -163,6 +172,7 @@ expand_toolbar="0" />''',
     step_closing = meths['StepDesc']({
         'technical_name': 'closing',
         'fancy_name': translater('Closing'),
+        'main_model': claim_model,
         'step_xml': '''
 <label name="name"/>
 <field name="name"/>
@@ -176,8 +186,6 @@ expand_toolbar="0" />''',
 expand_toolbar="0" />''',
     })
 
-    claim_model = Model.get('ir.model').find(
-        [('model', '=', 'ins_claim.claim')])[0]
     top_menu_tmp = Model.get('ir.model.data').find(
         [
             ('module', '=', 'insurance_claim'),
@@ -197,110 +205,148 @@ expand_toolbar="0" />''',
         'menu_top': top_menu,
     })
 
-    meths['ProcessStepRelation']({
-        'process': process_claim,
-        'step': step_claimant,
-        'status': status_declaration,
-        'order': 1,
-    })
-    meths['ProcessStepRelation']({
-        'process': process_claim,
-        'step': step_loss,
-        'status': status_declaration,
-        'order': 2,
-    })
-    meths['ProcessStepRelation']({
-        'process': process_claim,
-        'step': step_documents,
-        'status': status_documents,
-        'order': 3,
-    })
-    meths['ProcessStepRelation']({
-        'process': process_claim,
-        'step': step_delivered_service,
-        'status': status_calculation,
-        'order': 4,
-    })
-    meths['ProcessStepRelation']({
-        'process': process_claim,
-        'step': step_indemnification,
-        'status': status_calculation,
-        'order': 5,
-    })
-    meths['ProcessStepRelation']({
-        'process': process_claim,
-        'step': step_disbursment,
-        'status': status_validation,
-        'order': 6,
-    })
-    meths['ProcessStepRelation']({
-        'process': process_claim,
-        'step': step_closing,
-        'status': status_closing,
-        'order': 7,
-    })
+    meths['ProcessStepRelation'](
+        {
+            'process': process_claim,
+            'step': step_claimant,
+            'status': status_declaration,
+            'order': 1,
+        },
+        {'process_model': claim_model.id})
+    meths['ProcessStepRelation'](
+        {
+            'process': process_claim,
+            'step': step_loss,
+            'status': status_declaration,
+            'order': 2,
+        },
+        {'process_model': claim_model.id})
+    meths['ProcessStepRelation'](
+        {
+            'process': process_claim,
+            'step': step_documents,
+            'status': status_documents,
+            'order': 3,
+        },
+        {'process_model': claim_model.id})
+    meths['ProcessStepRelation'](
+        {
+            'process': process_claim,
+            'step': step_delivered_service,
+            'status': status_calculation,
+            'order': 4,
+        },
+        {'process_model': claim_model.id})
+    meths['ProcessStepRelation'](
+        {
+            'process': process_claim,
+            'step': step_indemnification,
+            'status': status_calculation,
+            'order': 5,
+        },
+        {'process_model': claim_model.id})
+    meths['ProcessStepRelation'](
+        {
+            'process': process_claim,
+            'step': step_disbursment,
+            'status': status_validation,
+            'order': 6,
+        },
+        {'process_model': claim_model.id})
+    meths['ProcessStepRelation'](
+        {
+            'process': process_claim,
+            'step': step_closing,
+            'status': status_closing,
+            'order': 7,
+        },
+        {'process_model': claim_model.id})
 
-    meths['StepTransition']({
-        'from_step': step_claimant,
-        'to_step': step_loss,
-        'on_process': process_claim,
-        'pyson': "~Eval('contracts')",
-    })
-    meths['StepTransition']({
-        'from_step': step_loss,
-        'to_step': step_claimant,
-        'on_process': process_claim,
-    })
-    meths['StepTransition']({
-        'from_step': step_loss,
-        'to_step': step_documents,
-        'on_process': process_claim,
-    })
-    meths['StepTransition']({
-        'from_step': step_documents,
-        'to_step': step_loss,
-        'on_process': process_claim,
-    })
-    meths['StepTransition']({
-        'from_step': step_documents,
-        'to_step': step_claimant,
-        'on_process': process_claim,
-    })
-    meths['StepTransition']({
-        'from_step': step_documents,
-        'to_step': step_delivered_service,
-        'on_process': process_claim,
-        'pyson': "~Eval('doc_received')",
-    })
-    meths['StepTransition']({
-        'from_step': step_loss,
-        'to_step': step_documents,
-        'on_process': process_claim,
-    })
-    meths['StepTransition']({
-        'from_step': step_delivered_service,
-        'to_step': step_indemnification,
-        'on_process': process_claim,
-    })
-    meths['StepTransition']({
-        'from_step': step_indemnification,
-        'to_step': step_delivered_service,
-        'on_process': process_claim,
-    })
-    meths['StepTransition']({
-        'from_step': step_indemnification,
-        'to_step': step_disbursment,
-        'on_process': process_claim,
-    })
-    meths['StepTransition']({
-        'from_step': step_disbursment,
-        'to_step': step_closing,
-        'on_process': process_claim,
-    })
-    meths['StepTransition']({
-        'from_step': step_closing,
-        'on_process': process_claim,
-        'kind': 'complete',
-    })
+    meths['StepTransition'](
+        {
+            'from_step': step_claimant,
+            'to_step': step_loss,
+            'on_process': process_claim,
+            'pyson': "~Eval('contracts')",
+        },
+        {'process_model': claim_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': step_loss,
+            'to_step': step_claimant,
+            'on_process': process_claim,
+        },
+        {'process_model': claim_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': step_loss,
+            'to_step': step_documents,
+            'on_process': process_claim,
+        },
+        {'process_model': claim_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': step_documents,
+            'to_step': step_loss,
+            'on_process': process_claim,
+        },
+        {'process_model': claim_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': step_documents,
+            'to_step': step_claimant,
+            'on_process': process_claim,
+        },
+        {'process_model': claim_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': step_documents,
+            'to_step': step_delivered_service,
+            'on_process': process_claim,
+            'pyson': "~Eval('doc_received')",
+        },
+        {'process_model': claim_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': step_loss,
+            'to_step': step_documents,
+            'on_process': process_claim,
+        },
+        {'process_model': claim_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': step_delivered_service,
+            'to_step': step_indemnification,
+            'on_process': process_claim,
+        },
+        {'process_model': claim_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': step_indemnification,
+            'to_step': step_delivered_service,
+            'on_process': process_claim,
+        },
+        {'process_model': claim_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': step_indemnification,
+            'to_step': step_disbursment,
+            'on_process': process_claim,
+        },
+        {'process_model': claim_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': step_disbursment,
+            'to_step': step_closing,
+            'on_process': process_claim,
+        },
+        {'process_model': claim_model.id})
+    meths['StepTransition'](
+        {
+            'from_step': step_closing,
+            'on_process': process_claim,
+            'kind': 'complete',
+        },
+        {'process_model': claim_model.id})
 
     cfg_dict['ProcessDesc'].update_view([process_claim.id], {})

@@ -3,6 +3,8 @@
   <xpath expr="/form/group[@id='global_part']/field[@name='technical_name']" position="after">
     <label name="pyson" xalign="0"/>
     <field name="pyson"/>
+    <label name="main_model" xalign="0"/>
+    <field name="main_model"/>
   </xpath>
   <xpath expr="/form/notebook/page[@id='XML']" position="after">
     <page string="Custom Views" id="custom_views">

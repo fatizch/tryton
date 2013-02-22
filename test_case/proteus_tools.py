@@ -6,7 +6,7 @@ import logging.handlers
 import time
 import sys
 
-from proteus import Model, Wizard
+from proteus import Model
 from proteus import config as pconfig
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
@@ -18,8 +18,8 @@ def get_config(cfg_dict):
     if logf:
         format = '[%(asctime)s] %(levelname)s:%(name)s:%(message)s'
         datefmt = '%a %b %d %H:%M:%S %Y'
-        logging.basicConfig(level=logging.INFO, format=format,
-                datefmt=datefmt)
+        logging.basicConfig(
+            level=logging.INFO, format=format, datefmt=datefmt)
 
         # test if the directories exist, else create them
         try:
@@ -30,9 +30,9 @@ def get_config(cfg_dict):
                 logf, 'D', 1, 30)
             handler.rolloverAt -= diff
         except Exception, exception:
-            sys.stderr.write(\
-                    "ERROR: couldn't create the logfile directory:" \
-                    + str(exception))
+            sys.stderr.write(
+                "ERROR: couldn't create the logfile directory:"
+                + str(exception))
         else:
             formatter = logging.Formatter(format, datefmt)
             # tell the handler to use this format
@@ -100,7 +100,8 @@ def multiprocess_this(fun, the_args, cfg_dict, connexion_date):
         print 'Number of args remaining : %s' % len(the_args)
 
 
-def get_objects_from_db(cfg_dict, model, key=None, value=None, domain=None,
+def get_objects_from_db(
+        cfg_dict, model, key=None, value=None, domain=None,
         force_search=False, limit=1):
     if not force_search and cfg_dict['re_create_if_already_exists']:
         return None
@@ -116,7 +117,8 @@ def get_objects_from_db(cfg_dict, model, key=None, value=None, domain=None,
         return instances
 
 
-def get_or_create_this(data, cfg_dict, class_key, sel_val='', domain=None,
+def get_or_create_this(
+        data, ctx={}, cfg_dict={}, class_key='', sel_val='', domain=None,
         to_store=True, only_get=False):
     if sel_val:
         the_object = get_objects_from_db(
@@ -130,34 +132,36 @@ def get_or_create_this(data, cfg_dict, class_key, sel_val='', domain=None,
         the_object = get_objects_from_db(
             cfg_dict, class_key, domain=[
                 ('%s' % k, '=', prepare_search(data[k]))
-                    for k in domain
-                    if k in data])
+                for k in domain
+                if k in data])
 
     if the_object:
         return the_object
     elif only_get:
         return None
 
-    the_object = cfg_dict[class_key]()
+    with cfg_dict[class_key]._config.set_context(ctx):
+        the_object = cfg_dict[class_key]()
 
-    for key, value in data.iteritems():
-        try:
-            if isinstance(value, list):
-                proteus_append_extend(the_object, key, value)
-            else:
-                setattr(the_object, key, value)
-        except AttributeError:
-            print key
-            print value
-            raise
+        for key, value in data.iteritems():
+            try:
+                if isinstance(value, list):
+                    proteus_append_extend(the_object, key, value)
+                else:
+                    setattr(the_object, key, value)
+            except AttributeError:
+                print key
+                print value
+                raise
 
-    if to_store:
-        the_object.save()
+        if to_store:
+            the_object.save()
 
     return the_object
 
 
-def generate_creation_method(cfg_dict, class_key, sel_val='', domain=None,
+def generate_creation_method(
+        cfg_dict, class_key, sel_val='', domain=None,
         to_store=True, only_get=False):
     return functools.partial(
         get_or_create_this,
@@ -270,7 +274,7 @@ def get_test_cfg(test_config_file):
     cfg_dict['config_path'] = os.path.abspath(
         os.path.join(DIR, cfg_dict['config_path']))
     cfg_dict['config_file'] = os.path.abspath(
-            os.path.join(DIR, cfg_dict['config_path'], 'trytond.conf'))
+        os.path.join(DIR, cfg_dict['config_path'], 'trytond.conf'))
 
     trytond_cfg_dict = get_cfg_as_dict(cfg_dict['config_file'], 'options')
 
