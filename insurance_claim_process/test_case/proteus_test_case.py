@@ -70,7 +70,7 @@ def launch_test_case(cfg_dict):
 <field name="declaration_date"/>
 <newline/>
 <label name="claimant"/>
-<field name="claimant"/>
+<field name="claimant" colspan="3"/>
 <newline/>
 <field name="contracts" colspan="2"/>
 <field name="contact_history" colspan="2"/>''',

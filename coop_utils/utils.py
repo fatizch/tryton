@@ -774,6 +774,10 @@ def pyson_result(pyson_expr, target, evaled=False):
     elif isinstance(pyson_expr, dict):
         encoder = PYSONEncoder()
         the_pyson = encoder.encode(safe_eval(str(pyson_expr), CONTEXT))
+    elif pyson_expr is True:
+        return True
+    elif pyson_expr is False:
+        return False
     else:
         the_pyson = target
 
@@ -786,6 +790,19 @@ def pyson_result(pyson_expr, target, evaled=False):
     result = PYSONDecoder(env).decode(the_pyson)
 
     return result
+
+
+def pyson_encode(pyson_expr, do_eval=False):
+    encoder = PYSONEncoder()
+    res = encoder.encode(safe_eval(pyson_expr, CONTEXT))
+    # TODO : Make this safer
+    res = res.replace('true', 'True')
+    res = res.replace('false', 'False')
+
+    if not do_eval:
+        return res
+    else:
+        return eval(res)
 
 
 def convert_to_reference(target):

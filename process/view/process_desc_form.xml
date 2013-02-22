@@ -8,31 +8,33 @@
     <newline/>
     <label name="on_model" xalign="0"/>
     <field name="on_model" colspan="3"/>
-    <newline/>
-    <label name="menu_top" xalign="0"/>
-    <field name="menu_top" colspan="3"/>
-    <label name="menu_item" xalign="0"/>
-    <field name="menu_item" colspan="3"/>
   </group>
   <newline/>
   <notebook>
-    <page string="Descrption" id="steps" col="4">
+    <page string="Description" id="steps" col="4">
       <field name="all_steps" yexpand="1" yfill="1" xexpand="1" xfill="1" colspan="2"/>
       <field name="transitions" yexpand="1" yfill="1" xexpand="1" xfill="1" colspan="2"/>
     </page>
     <page string="XML" id="xml">
-      <group id="form_view" yexpand="1" yfill="1" xexpand="1" xfill="1">
-        <separator name="xml_header"/>
-        <newline/>
-        <field name="xml_header"/>
-        <newline/>
-        <separator name="xml_footer"/>
-        <newline/>
-        <field name="xml_footer"/>
+      <group id="form_customization" col="2">
+        <label name="menu_item" xalign="0"/>
+        <field name="menu_item" readonly="1"/>
+        <label name="menu_top" xalign="0"/>
+        <field name="menu_top"/>
+        <label name="menu_icon" xalign="0"/>
+        <field name="menu_icon"/>
+        <label name="menu_name" xalign="0"/>
+        <field name="menu_name"/>
+        <label name="step_button_group_position" xalign="0"/>
+        <field name="step_button_group_position"/>
       </group>
-      <group id="tree_view" yexpand="1" yfill="1" xexpand="1" xfill="1">
+      <newline/>
+      <group id="xml" xexpand="1" xfill="1" yexpand="1" yfill="1" col="3">
+        <separator name="xml_header"/>
+        <separator name="xml_footer"/>
         <separator name="xml_tree"/>
-        <newline/>
+        <field name="xml_header"/>
+        <field name="xml_footer"/>
         <field name="xml_tree"/>
       </group>
     </page>

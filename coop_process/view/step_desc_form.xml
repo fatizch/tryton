@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<data>
+  <xpath expr="/form/group[@id='global_part']/field[@name='technical_name']" position="after">
+    <label name="pyson" xalign="0"/>
+    <field name="pyson"/>
+  </xpath>
+</data>

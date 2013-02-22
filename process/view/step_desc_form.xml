@@ -8,6 +8,12 @@
   </group>
   <newline/>
   <notebook>
+    <page string="XML" id="XML">
+      <label name="colspan" xalign="0"/>
+      <field name="colspan" colspan="3"/>
+      <newline/>
+      <field name="step_xml" xexpand="1" xfill="1" yexpand="1" yfill="1" colspan="4"/>
+    </page>
     <page string="Code" id="code">
       <separator name="code_before"/>
       <newline/>
@@ -16,9 +22,6 @@
       <separator name="code_after"/>
       <newline/>
       <field name="code_after"/>
-    </page>
-    <page string="XML" id="XML">
-      <field name="step_xml" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
     </page>
     <page string="Authorizations" id="authorizations">
       <field name="authorizations" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
