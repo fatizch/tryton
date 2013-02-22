@@ -4,4 +4,9 @@
     <label name="pyson" xalign="0"/>
     <field name="pyson"/>
   </xpath>
+  <xpath expr="/form/notebook/page[@id='XML']" position="after">
+    <page string="Custom Views" id="custom_views">
+      <field name="custom_views" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
+    </page>
+  </xpath>
 </data>

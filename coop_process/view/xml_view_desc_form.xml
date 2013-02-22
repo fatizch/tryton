@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<form string="View Descriptor">
+  <label name="the_view" xalign="0"/>
+  <field name="the_view" colspan="3"/>
+  <label name="view_name" xalign="0"/>
+  <field name="view_name"/>
+  <field name="view_final_name" colspan="2"/>
+  <label name="view_model" xalign="0"/>
+  <field name="view_model" colspan="3"/>
+  <label name="view_kind" xalign="0"/>
+  <field name="view_kind"/>
+  <label name="input_mode" xalign="0"/>
+  <field name="input_mode"/>
+  <label name="header_line" xalign="0"/>
+  <field name="header_line" colspan="3"/>
+  <label name="view_string" xalign="0"/>
+  <field name="view_string"/>
+  <label name="nb_col" xalign="0"/>
+  <field name="nb_col"/>
+  <separator name="view_content" colspan="4"/>
+  <field name="view_content" colspan="4" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
+</form>

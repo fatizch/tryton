@@ -6,6 +6,7 @@ def register():
     Pool.register(
         StepTransition,
         ProcessDesc,
+        XMLViewDesc,
         StepDesc,
         module='coop_process', type_='model')
 

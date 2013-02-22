@@ -49,6 +49,7 @@ class ProcessStepRelation(ModelSQL, ModelView):
     step = fields.Many2One(
         'process.step_desc',
         'Step',
+        ondelete='RESTRICT',
     )
 
     status = fields.Many2One(
@@ -154,6 +155,9 @@ class ProcessDesc(ModelSQL, ModelView):
         cls._buttons.update({
             'update_view': {
                 'invisible': ~Eval('id')}})
+        cls._sql_constraints += [(
+            'unique_tech_name', 'UNIQUE(technical_name)',
+            'The technical name must be unique')]
 
     @classmethod
     def default_step_button_group_position(cls):
@@ -789,6 +793,13 @@ class StepDesc(ModelSQL, ModelView):
         'View columns',
         required=True,
     )
+
+    @classmethod
+    def __setup__(cls):
+        super(StepDesc, cls).__setup__()
+        cls._sql_constraints += [(
+            'unique_tech_name', 'UNIQUE(technical_name)',
+            'The technical name must be unique')]
 
     @classmethod
     def write(cls, steps, values):

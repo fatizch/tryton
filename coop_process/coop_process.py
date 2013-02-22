@@ -2,10 +2,11 @@ import copy
 import pydot
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Not, And
 from trytond.model import fields
+from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import utils
+from trytond.modules.coop_utils import utils, model
 from trytond.modules.process import ProcessFramework
 
 
@@ -14,6 +15,7 @@ __all__ = [
     'GenerateGraph',
     'CoopProcessFramework',
     'ProcessDesc',
+    'XMLViewDesc',
     'StepDesc',
 ]
 
@@ -268,15 +270,10 @@ class ProcessDesc():
         return True
 
     def get_next_execution(self, from_step, for_task):
-        print '#' * 80
-        print '%s' % self.custom_transitions
-        print from_step
-
         from_step.execute_after(for_task)
 
         cur_step_found = False
         for step_relation in self.all_steps:
-            print step_relation
             if step_relation.step == from_step:
                 cur_step_found = True
                 continue
@@ -284,13 +281,11 @@ class ProcessDesc():
                 continue
             # First we look for a matching transition
             if self.custom_transitions:
-                print step_relation.step.fancy_name
                 for trans in self.transitions:
                     if not trans.from_step == from_step:
                         continue
                     if not trans.to_step == step_relation.step:
                         continue
-                    print 'FOUND'
                     if not for_task.is_button_available(self, trans):
                         continue
                     return trans
@@ -358,6 +353,233 @@ class ProcessDesc():
         return nb, result
 
 
+class XMLViewDesc(model.CoopSQL, model.CoopView):
+    'XML View Descriptor'
+
+    __name__ = 'coop_process.xml_view_desc'
+
+    the_view = fields.Many2One(
+        'ir.ui.view',
+        'View',
+        states={
+            'readonly': True
+        },
+    )
+
+    view_name = fields.Char(
+        'View Name',
+        required=True,
+        states={
+            'readonly': Eval('id', 0) > 0
+        },
+        on_change_with=['view_name', 'view_model'],
+        depends=['view_name', 'view_model'],
+    )
+
+    view_final_name = fields.Function(
+        fields.Char(
+            'View Name',
+            states={
+                'readonly': True
+            },
+            on_change_with=['view_name', 'view_kind'],
+            depends=['view_name', 'view_kind', 'view_model'],
+        ),
+        'on_change_with_view_final_name',
+    )
+
+    view_kind = fields.Selection(
+        [('form', 'Form'), ('tree', 'Tree')],
+        'View Kind',
+    )
+
+    input_mode = fields.Selection(
+        [('classic', 'Classic'), ('expert', 'Expert')],
+        'Input Mode',
+    )
+
+    header_line = fields.Char(
+        'Header Line',
+        states={
+            'invisible': Eval('input_mode', '') != 'expert',
+        },
+        on_change_with=[
+            'view_string', 'nb_col', 'input_mode', 'header_line', 'view_kind'],
+        depends=[
+            'view_string', 'nb_col', 'input_mode', 'header_line', 'view_kind'],
+    )
+
+    view_string = fields.Char(
+        'View String',
+        states={
+            'invisible': Eval('input_mode', '') != 'classic',
+        },
+        on_change_with=['view_model'],
+        depends=['input_mode', 'view_model'],
+    )
+
+    nb_col = fields.Integer(
+        'Number of columns',
+        states={
+            'invisible': Not(And(
+                Eval('input_mode', '') == 'classic',
+                Eval('view_kind', '') == 'form')),
+        },
+        depends=['view_kind', 'input_mode'],
+    )
+
+    view_content = fields.Text(
+        'View Content',
+    )
+
+    view_model = fields.Many2One(
+        'ir.model',
+        'View Model',
+        required=True,
+        states={
+            'readonly': Eval('id', 0) > 0
+        },
+    )
+
+    for_step = fields.Many2One(
+        'process.step_desc',
+        'For Step',
+        ondelete='CASCADE',
+    )
+
+    @classmethod
+    def __setup__(cls):
+        super(XMLViewDesc, cls).__setup__()
+        cls._sql_constraints += [
+            ('unique_fs_id', 'UNIQUE(view_name, for_step, view_kind)',
+                'The functional id must be unique !')]
+
+    @classmethod
+    def default_nb_col(cls):
+        return 4
+
+    @classmethod
+    def default_view_kind(cls):
+        return 'form'
+
+    @classmethod
+    def default_input_mode(cls):
+        return 'classic'
+
+    @classmethod
+    def default_view_final_name(cls):
+        return 'step_%s__form' % Transaction().context.get('for_step_name', '')
+
+    def on_change_with_header_line(self):
+        if self.input_mode == 'expert':
+            return self.header_line
+
+        if self.view_kind == 'tree':
+            xml = '<tree '
+        elif self.view_kind == 'form':
+            xml = '<form '
+
+        xml += 'string="%s" ' % self.view_string
+        if self.view_kind == 'form':
+            xml += 'col="%s" ' % self.nb_col
+        xml += '>'
+        return xml
+
+    def on_change_with_view_string(self):
+        if not (hasattr(self, 'view_model') and self.view_model):
+            return ''
+        # TODO : Get the good (translated) name
+        return self.view_model.name
+
+    def on_change_with_view_name(self):
+        if (hasattr(self, 'view_model') and self.view_model):
+            if not (hasattr(self, 'attribute') and self.attribute):
+                return self.view_model.model.split('.')[1].replace('.', '_')
+
+    def on_change_with_view_final_name(self, name=None):
+        if (hasattr(self, 'for_step') and self.for_step):
+            the_step = self.for_step.technical_name
+        else:
+            the_step = Transaction().context.get('for_step_name', '')
+
+        return 'step_%s_%s_%s' % (the_step, self.view_name, self.view_kind)
+
+    def create_update_view(self):
+        if (hasattr(self, 'the_view') and self.the_view):
+            the_view = self.the_view
+        else:
+            View = Pool().get('ir.ui.view')
+            the_view = View()
+            the_view.module = 'process'
+            the_view.name = self.on_change_with_view_final_name()
+
+        the_view.model = self.view_model.model
+        the_view.priority = 1000
+        the_view.type = self.view_kind
+        the_view.data = '<?xml version="1.0"?>'
+        the_view.data += self.on_change_with_header_line()
+        the_view.data += self.view_content
+        if self.view_kind == 'form':
+            the_view.data += '</form>'
+        elif self.view_kind == 'tree':
+            the_view.data += '</tree>'
+
+        the_view.save()
+
+        ModelData = Pool().get('ir.model.data')
+        good_data = ModelData.search([
+            ('module', '=', 'process'),
+            ('fs_id', '=', the_view.name),
+            ('model', '=', 'ir.ui.view')])
+
+        if not good_data:
+            data = ModelData()
+            data.module = 'process'
+            data.model = 'ir.ui.view'
+            data.fs_id = the_view.name
+            data.db_id = the_view.id
+            data.save()
+
+        return the_view
+
+    @classmethod
+    def create(cls, values):
+        view_descs = super(XMLViewDesc, cls).create(values)
+
+        for view_desc in view_descs:
+            the_view = view_desc.create_update_view()
+            if not view_desc.the_view:
+                cls.write([view_desc], {'the_view': the_view})
+
+        return view_descs
+
+    @classmethod
+    def write(cls, instances, values):
+        super(XMLViewDesc, cls).write(instances, values)
+
+        if 'the_view' in values:
+            return
+
+        for view_desc in instances:
+            the_view = view_desc.create_update_view()
+            if not view_desc.the_view:
+                cls.write([view_desc], {'the_view': the_view})
+
+    @classmethod
+    def delete(cls, records):
+        to_delete = [rec.the_view for rec in records if rec.the_view]
+        super(XMLViewDesc, cls).delete(records)
+        ModelData = Pool().get('ir.model.data')
+        good_data = ModelData.search([
+            ('module', '=', 'process'),
+            ('model', '=', 'ir.ui.view'),
+            ('db_id', 'in', [x.id for x in to_delete])])
+
+        ModelData.delete(good_data)
+        View = Pool().get('ir.ui.view')
+        View.delete(to_delete)
+
+
 class StepDesc():
     'Step Desc'
 
@@ -366,6 +588,16 @@ class StepDesc():
     __name__ = 'process.step_desc'
 
     pyson = fields.Char('Pyson Constraint')
+
+    custom_views = fields.One2Many(
+        'coop_process.xml_view_desc',
+        'for_step',
+        'Custom Views',
+        context={'for_step_name': Eval('technical_name', '')},
+        states={
+            'readonly': ~Eval('technical_name'),
+        },
+    )
 
     def get_pyson_for_button(self):
         return self.pyson or ''

@@ -19,5 +19,15 @@
       <field name="inherit" ref="process.step_desc_form"/>
       <field name="name">step_desc_form</field>
     </record>
+    <record model="ir.ui.view" id="xml_view_desc_form">
+      <field name="model">coop_process.xml_view_desc</field>
+      <field name="type">form</field>
+      <field name="name">xml_view_desc_form</field>
+    </record>
+    <record model="ir.ui.view" id="xml_view_desc_tree">
+      <field name="model">coop_process.xml_view_desc</field>
+      <field name="type">tree</field>
+      <field name="name">xml_view_desc_tree</field>
+    </record>
   </data>
 </tryton>
