@@ -33,7 +33,6 @@ class ModuleTestCase(unittest.TestCase):
         self.SubsProcess = POOL.get('ins_contract.subs_process', type='wizard')
         self.ProcessDesc = POOL.get('ins_process.process_desc')
         self.Party = POOL.get('party.party')
-        self.Person = POOL.get('party.person')
         self.Product = POOL.get('ins_product.product')
         self.Coverage = POOL.get('ins_product.coverage')
         self.Pricing = POOL.get('ins_product.pricing_rule')
@@ -120,11 +119,12 @@ class ModuleTestCase(unittest.TestCase):
         address_kind.name = 'Main'
         address_kind.save()
 
-        party = self.Person()
+        party = self.Party()
+        party.is_person = True
         party.name = 'Toto'
         party.first_name = 'titi'
         party.birth_date = datetime.date(1950, 12, 04)
-        party.gender = 'M'
+        party.gender = 'male'
         party.save()
 
         party, = self.Party.search([('name', '=', 'Toto')])

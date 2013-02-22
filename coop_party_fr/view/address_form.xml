@@ -6,16 +6,13 @@
         <newline/>
         <label name="name"/>
         <field name="name"/>
+        <newline/>
         <label name="line2"/>
         <field name="line2"/>
         <newline/>
         <label name="line3"/>
         <field name="line3"/>
     </xpath>
-    <xpath expr="/form/label[@name='siret']" position="replace"/>
-    <xpath expr="/form/field[@name='siret']" position="replace"/>
-    <xpath expr="/form/label[@name='siret_nic']" position="replace"/>
-    <xpath expr="/form/field[@name='siret_nic']" position="replace"/>
     <xpath expr="/form/label[@name='subdivision']" position="replace"/>
     <xpath expr="/form/field[@name='subdivision']" position="replace"/>
 </data>

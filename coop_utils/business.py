@@ -33,14 +33,8 @@ def update_args_with_subscriber(args):
     if not subscriber:
         raise ArgsDoNotMatchException
     if subscriber.__name__ == 'party.party':
-        if hasattr(subscriber, 'person') and subscriber.person:
-            args['subscriber_person'] = subscriber.person[0]
-        elif hasattr(subscriber, 'society') and subscriber.society:
-            args['subscriber_society'] = subscriber.society[0]
-        return
-    elif subscriber.__name__ == 'party.person':
-        args['subscriber_person'] = subscriber.person[0]
-        return
-    elif subscriber.__name__ == 'party.society':
-        args['subscriber_society'] = subscriber.society[0]
+        if hasattr(subscriber, 'is_person') and subscriber.is_person:
+            args['subscriber_person'] = subscriber
+        elif hasattr(subscriber, 'is_society') and subscriber.is_society:
+            args['subscriber_society'] = subscriber
         return

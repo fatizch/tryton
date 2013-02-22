@@ -362,9 +362,21 @@ msgctxt "field:party.generic_actor_kind,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:party.party,birth_date:"
+msgid "Birth Date"
+msgstr "Date de Naissance"
+
 msgctxt "field:party.party,employee_role:"
 msgid "Employee"
 msgstr "Employé"
+
+msgctxt "field:party.party,first_name:"
+msgid "First Name"
+msgstr "Prénom"
+
+msgctxt "field:party.party,gender:"
+msgid "Gender"
+msgstr "Genre"
 
 msgctxt "field:party.party,generic_roles:"
 msgid "Generic Actor"
@@ -386,6 +398,10 @@ msgctxt "field:party.party,is_society:"
 msgid "Society"
 msgstr "Société"
 
+msgctxt "field:party.party,maiden_name:"
+msgid "Maiden Name"
+msgstr "Nom de Jeune Fille"
+
 msgctxt "field:party.party,main_address:"
 msgid "Address"
 msgstr "Adresse"
@@ -401,6 +417,10 @@ msgstr "Relations"
 msgctxt "field:party.party,society:"
 msgid "Society"
 msgstr "Société"
+
+msgctxt "field:party.party,ssn:"
+msgid "SSN"
+msgstr "NIR"
 
 msgctxt "field:party.party,summary:"
 msgid "Summary"
@@ -506,10 +526,6 @@ msgctxt "field:party.party_relation_kind,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:party.person,birth_date:"
-msgid "Birth Date"
-msgstr "Date de Naissance"
-
 msgctxt "field:party.person,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -518,14 +534,6 @@ msgctxt "field:party.person,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:party.person,first_name:"
-msgid "First Name"
-msgstr "Prénom"
-
-msgctxt "field:party.person,gender:"
-msgid "Gender"
-msgstr "Genre"
-
 msgctxt "field:party.person,id:"
 msgid "ID"
 msgstr "ID"
@@ -533,10 +541,6 @@ msgstr "ID"
 msgctxt "field:party.person,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
-
-msgctxt "field:party.person,maiden_name:"
-msgid "Maiden Name"
-msgstr "Nom de Jeune Fille"
 
 msgctxt "field:party.person,party:"
 msgid "Party"
@@ -549,10 +553,6 @@ msgstr "Nom"
 msgctxt "field:party.person,reference:"
 msgid "Reference"
 msgstr "Référence"
-
-msgctxt "field:party.person,ssn:"
-msgid "SSN"
-msgstr "NIR"
 
 msgctxt "field:party.person,write_date:"
 msgid "Write Date"
@@ -622,33 +622,13 @@ msgctxt "model:ir.action,name:act_contact_history_relate_form"
 msgid "Contact History"
 msgstr "Historique des Contacts"
 
-msgctxt "model:ir.action,name:act_contact_history_relate_form2"
-msgid "Contact History"
-msgstr "Historique des Contacts"
-
-msgctxt "model:ir.action,name:act_contact_history_relate_form3"
-msgid "Contact History"
-msgstr "Historique des Contacts"
-
 msgctxt "model:ir.action,name:act_generic_actor_kind_form"
 msgid "Generic Actor"
 msgstr "Acteur Générique"
 
-msgctxt "model:ir.action,name:act_party_form"
-msgid "Party"
-msgstr "Tiers"
-
 msgctxt "model:ir.action,name:act_party_relation_kind_form"
 msgid "Party Relation Kind"
 msgstr "Type de Relation entre Tiers"
-
-msgctxt "model:ir.action,name:act_person_form"
-msgid "Person"
-msgstr "Personne"
-
-msgctxt "model:ir.action,name:act_society_form"
-msgid "Society"
-msgstr "Société"
 
 msgctxt "model:ir.ui.menu,name:menu_address_kind_form"
 msgid "Address Kind"
@@ -661,14 +641,6 @@ msgstr "Acteur Générique"
 msgctxt "model:ir.ui.menu,name:menu_party_relation_kind_form"
 msgid "Party Relation Kind"
 msgstr "Type de Relation entre Tiers"
-
-msgctxt "model:ir.ui.menu,name:menu_person_form"
-msgid "Person"
-msgstr "Personne"
-
-msgctxt "model:ir.ui.menu,name:menu_society_form"
-msgid "Society"
-msgstr "Société"
 
 msgctxt "model:party.actor,name:"
 msgid "Actor"
@@ -811,6 +783,10 @@ msgid "Contact"
 msgstr "Contact"
 
 msgctxt "view:party.party:"
+msgid "Employee"
+msgstr "Employé"
+
+msgctxt "view:party.party:"
 msgid "Party"
 msgstr "Tiers"
 
@@ -829,10 +805,6 @@ msgstr "Synthèse"
 msgctxt "view:party.party_relation_kind:"
 msgid "Party Relation Kind"
 msgstr "Type de Relation entre Tiers"
-
-msgctxt "view:party.person:"
-msgid "Employee"
-msgstr "Employé"
 
 msgctxt "view:party.society:"
 msgid "Society"

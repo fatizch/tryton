@@ -158,18 +158,18 @@ msgctxt "model:party.insurer,name:"
 msgid "Insurer"
 msgstr "Assureur"
 
-msgctxt "view:party.person:"
-msgid "Customer"
-msgstr "Client"
-
-msgctxt "view:party.society:"
+msgctxt "view:party.party:"
 msgid "Broker"
 msgstr "Courtier"
 
-msgctxt "view:party.society:"
+msgctxt "view:party.party:"
 msgid "Customer"
 msgstr "Client"
 
-msgctxt "view:party.society:"
+msgctxt "view:party.party:"
+msgid "Customer"
+msgstr "Client"
+
+msgctxt "view:party.party:"
 msgid "Insurer"
 msgstr "Assureur"

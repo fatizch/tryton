@@ -132,7 +132,6 @@ class ContactHistory(model.CoopSQL, model.CoopView):
     def default_for_object(cls):
         return cls.default_for_object_ref()
 
-
     def on_change_with_for_object_ref(self):
         if (hasattr(self, 'for_object_ref') and self.for_object_ref):
             return self.for_object_ref

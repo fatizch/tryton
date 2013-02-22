@@ -6,5 +6,5 @@ from .party import *
 def register():
     Pool.register(
         Address,
-        Person,
+        FrenchParty,
         module='coop_party_fr', type_='model')

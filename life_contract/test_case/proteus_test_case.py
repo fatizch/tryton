@@ -26,7 +26,7 @@ def launch_test_case(cfg_dict):
     Contract = Model.get('ins_contract.contract')
     if len(Contract.find()) >= int(cfg_dict['total_nb']):
         return
-    Party = Model.get('party.person')
+    Party = Model.get('party.party')
     Product = Model.get('ins_product.product')
     return
     for on_product in Product.find([('code', '=', 'AAA')]):

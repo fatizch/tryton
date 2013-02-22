@@ -2,5 +2,5 @@
     <field name="start_date"/>
     <field name="end_date"/>
     <field name="config_kind"/>
-    <field name="rec_name"/>
+    <field name="view_rec_name"/>
 </tree>

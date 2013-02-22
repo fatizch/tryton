@@ -99,26 +99,6 @@
       <field name="model">party.party,-1</field>
       <field name="action" ref="act_claim_relate_form"/>
     </record>
-    <record model="ir.action.act_window" id="act_claim_relate_form2">
-      <field name="name">Claims</field>
-      <field name="res_model">ins_claim.claim</field>
-      <field name="domain">[('claimant.person', '=', Eval('active_id'))]</field>
-    </record>
-    <record model="ir.action.keyword" id="act_claim_relate_keyword2">
-      <field name="keyword">form_relate</field>
-      <field name="model">party.person,-1</field>
-      <field name="action" ref="act_claim_relate_form2"/>
-    </record>
-    <record model="ir.action.act_window" id="act_claim_relate_form3">
-      <field name="name">Claims</field>
-      <field name="res_model">ins_claim.claim</field>
-      <field name="domain">[('claimant.society', '=', Eval('active_id'))]</field>
-    </record>
-    <record model="ir.action.keyword" id="act_claim_relate_keyword3">
-      <field name="keyword">form_relate</field>
-      <field name="model">party.society,-1</field>
-      <field name="action" ref="act_claim_relate_form3"/>
-    </record>
     <record model="ir.action.act_window" id="act_indemnification_relate_form">
       <field name="name">Indemnifications</field>
       <field name="res_model">ins_claim.indemnification</field>
@@ -128,26 +108,6 @@
       <field name="keyword">form_relate</field>
       <field name="model">party.party,-1</field>
       <field name="action" ref="act_indemnification_relate_form"/>
-    </record>
-    <record model="ir.action.act_window" id="act_indemnification_relate_form2">
-      <field name="name">Indemnifications</field>
-      <field name="res_model">ins_claim.indemnification</field>
-      <field name="domain">[('customer.person', '=', Eval('active_id'))]</field>
-    </record>
-    <record model="ir.action.keyword" id="act_indemnification_relate_keyword2">
-      <field name="keyword">form_relate</field>
-      <field name="model">party.person,-1</field>
-      <field name="action" ref="act_indemnification_relate_form2"/>
-    </record>
-    <record model="ir.action.act_window" id="act_indemnification_relate_form3">
-      <field name="name">Indemnifications</field>
-      <field name="res_model">ins_claim.indemnification</field>
-      <field name="domain">[('customer.society', '=', Eval('active_id'))]</field>
-    </record>
-    <record model="ir.action.keyword" id="act_indemnification_relate_keyword3">
-      <field name="keyword">form_relate</field>
-      <field name="model">party.society,-1</field>
-      <field name="action" ref="act_indemnification_relate_form3"/>
     </record>
     <!-- Receive Documents -->
     <record model="ir.action.keyword" id="receive_documents_wizard_keyword">

@@ -132,9 +132,9 @@
     </record>
     <!-- Receive Document -->
     <record model="ir.ui.view" id="request_finder_form">
-      <field name="model">insurance_product.request_finder</field>
+      <field name="model">ins_product.request_finder</field>
       <field name="type">form</field>
-      <field name="arch"></field>
+      <field name="name">request_finder_form</field>
     </record>
     <record model="ir.ui.view" id="document_request_displayer_form">
       <field name="model">ins_product.document_request_displayer</field>

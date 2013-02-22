@@ -14,7 +14,7 @@ from trytond.modules.insurance_process import CoopStateView
 from trytond.modules.insurance_process import CoopStepView
 
 from trytond.modules.coop_utils import utils
-from trytond.modules.coop_party import ACTOR_KIND
+from trytond.modules.coop_party.party import ACTOR_KIND
 
 from contract import OPTIONSTATUS
 
@@ -60,11 +60,12 @@ class ProjectState(CoopStep):
         on_change_with=['subscriber_as_person', 'subscriber_as_society',
             'subscriber_kind']
         )
-    subscriber_as_person = fields.Many2One('party.person', 'Subscriber',
-        states={'invisible': Eval('subscriber_kind') != 'party.person',
-            })
-    subscriber_as_society = fields.Many2One('party.society', 'Subscriber',
-        states={'invisible': Eval('subscriber_kind') != 'party.society'})
+    subscriber_as_person = fields.Many2One('party.party', 'Subscriber',
+        states={'invisible': Eval('subscriber_kind') != 'person',
+            }, domain=[('is_person', '=', True)])
+    subscriber_as_society = fields.Many2One('party.party', 'Subscriber',
+        states={'invisible': Eval('subscriber_kind') != 'society'},
+        domain=[('is_society', '=', True)])
 
     subscriber_desc = fields.Function(fields.Text('Summary',
             on_change_with=['subscriber_as_person', 'subscriber_as_society',
@@ -170,23 +171,23 @@ class ProjectState(CoopStep):
 
     def on_change_with_subscriber(self):
         if (self.subscriber_as_person
-                and self.subscriber_kind == 'party.person'):
-            return self.subscriber_as_person.party.id
+                and self.subscriber_kind == 'person'):
+            return self.subscriber_as_person.id
         elif (self.subscriber_as_society
-                and self.subscriber_kind == 'party.society'):
-            return self.subscriber_as_society.party.id
+                and self.subscriber_kind == 'society'):
+            return self.subscriber_as_society.id
 
     def on_change_subscriber_kind(self):
         res = {}
-        if self.subscriber_kind == 'party.person':
+        if self.subscriber_kind == 'person':
             res['subscriber_as_society'] = None
-        elif self.subscriber_kind == 'party.society':
+        elif self.subscriber_kind == 'society':
             res['subscriber_as_person'] = None
         return res
 
     @staticmethod
     def default_subscriber_kind():
-        return 'party.person'
+        return 'is_person'
 
 
 class CoverageDisplayer(CoopStepView):

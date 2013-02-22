@@ -2,19 +2,19 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:party.person:"
+msgctxt "error:party.party:"
 msgid "Incompatible birth date and SSN"
 msgstr "Date de naissance et numéro de Sécu incompatibles"
 
-msgctxt "error:party.person:"
+msgctxt "error:party.party:"
 msgid "Incompatible gender and SSN"
 msgstr "Genre et numéro de sécu incompatibles"
 
-msgctxt "error:party.person:"
+msgctxt "error:party.party:"
 msgid "Invalid SSN Key"
 msgstr "Clé de numéro de sécu non valide"
 
-msgctxt "error:party.person:"
+msgctxt "error:party.party:"
 msgid "Invalid format for SSN"
 msgstr "Format non valide pour le numéro de sécu"
 
@@ -30,11 +30,11 @@ msgctxt "field:party.address,name:"
 msgid "Recipient"
 msgstr "Destinataire"
 
-msgctxt "field:party.person,ssn_key:"
+msgctxt "field:party.party,ssn_key:"
 msgid "SSN Key"
 msgstr "Clé NIR"
 
-msgctxt "field:party.person,ssn_no_key:"
+msgctxt "field:party.party,ssn_no_key:"
 msgid "SSN"
 msgstr "NIR"
 

@@ -4,5 +4,7 @@
     <xpath expr="/tree/field[@name='vat_code']" position="replace"/>
     <xpath expr="/tree" position="inside">
         <field name="is_person"/>
+        <field name="main_address"/>
+        <field name="birth_date"/>
     </xpath>
 </data>

@@ -1,45 +1,11 @@
 <tryton>
     <data>
         <!-- Person form view -->
-        <record model="ir.ui.view" id="person_view_form">
-            <field name="model">party.person</field>
+        <record model="ir.ui.view" id="party_view_form">
+            <field name="model">party.party</field>
             <field name="type">form</field>
-            <field name="inherit" ref="coop_party.person_view_form"/>
-            <field name="name">person_form</field>
-        </record>
-        <!--  ******************************************* 
-              **************   Employee     *************
-              *******************************************-->
-        <record model="ir.ui.view" id="employee_view_form">
-            <field name="model">party.employee</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="coop_party.employee_view_form"/>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <data>
-                    <xpath expr="/form/label[@name='siren']" position="replace">
-                    </xpath>
-                    <xpath expr="/form/field[@name='siren']" position="replace">
-                    </xpath>
-                </data>
-                ]]>
-            </field>
-        </record>
-        <!-- Society form view -->
-        <record model="ir.ui.view" id="society_view_form">
-            <field name="model">party.society</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="coop_party.society_view_form"/>
-            <field name="arch" type="xml"/><!--  
-                <![CDATA[
-                <data>
-                    <xpath expr="/form/notebook" position="before">
-                        <label name="siren"/>
-                        <field name="siren"/>
-                </xpath>
-                </data>
-                ]]>
-            </field>-->
+            <field name="inherit" ref="party.party_view_form"/>
+            <field name="name">party_form</field>
         </record>
     </data>
 </tryton>

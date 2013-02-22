@@ -1,13 +1,17 @@
 import copy
 
-from trytond.model import ModelView, ModelSQL, fields
+from trytond.model import fields
+from trytond.pool import PoolMeta
+from trytond.pyson import Eval, Bool
 from trytond.modules.party.address import STATES, DEPENDS
 __all__ = ['Address']
 
 
-class Address(ModelSQL, ModelView):
-    "Address"
+class Address():
+    'Address'
+
     __name__ = 'party.address'
+    __metaclass__ = PoolMeta
 
     line2 = fields.Char('Add. complement', 38,
         '''AFNOR - Line 2
@@ -58,6 +62,12 @@ class Address(ModelSQL, ModelView):
         if cls.city.on_change is None:
             cls.city.on_change = []
         cls.city.on_change.append('city')
+        #Set Siret invisible for person
+        cls.siret = copy.copy(cls.siret)
+        cls.siret.states = {
+            'invisible': Bool(~Eval('_parent_party', {}).get('is_society'))}
+        cls.siret_nic.states = {
+            'invisible': Bool(~Eval('_parent_party', {}).get('is_society'))}
 
     def on_change_street(self):
         #AFNOR rule, no comma after street number and line 4 should be upper

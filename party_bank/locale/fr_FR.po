@@ -231,9 +231,9 @@ msgid "General"
 msgstr "Général"
 
 msgctxt "view:party.party:"
-msgid "Bank accounts"
-msgstr "Comptes Bancaires"
-
-msgctxt "view:party.society:"
 msgid "Bank"
 msgstr "Bank"
+
+msgctxt "view:party.party:"
+msgid "Bank accounts"
+msgstr "Comptes Bancaires"

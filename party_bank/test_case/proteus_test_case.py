@@ -16,16 +16,8 @@ def update_cfg_dict(cfg_dict):
     cfg_dict['Party'] = Model.get('party.party')
     cfg_dict['BankAccount'] = Model.get('party.bank_account')
     cfg_dict['BankAccountNumber'] = Model.get('party.bank_account_number')
-    cfg_dict['Society'] = Model.get('party.society')
+    cfg_dict['Society'] = Model.get('party.party')
     return cfg_dict
-
-
-def launch_test_case(cfg_dict):
-    cfg_dict = update_cfg_dict(cfg_dict)
-
-    if is_table_empty(cfg_dict['Bank']):
-        create_bank(cfg_dict)
-    create_bank_accounts(cfg_dict)
 
 
 def is_table_empty(model):
@@ -42,12 +34,11 @@ def create_bank(cfg_dict):
         try:
             bank = cfg_dict['Bank']()
             society = cfg_dict['Society']()
+            society.is_society = True
             society.currency = cfg_dict['currency']
-            if bank.society is None:
-                bank.society = []
-            bank.society.append(society)
+            society.bank_role.append(bank)
             bank.name = line[11:51].strip()
-            bank.code = line[51:61].strip()
+            society.short_name = line[51:61].strip()
             add_address(cfg_dict, line, bank, countries)
             add_bank_info(line, bank)
             bank.save()
@@ -138,6 +129,13 @@ def add_bank_account(cfg_dict, party, banks):
             + 3 * int(bank_account_nb.account_number)) % 97).zfill(2)
 
 
+def migrate_banks(cfg_dict):
+    for bank in cfg_dict['Bank'].find([]):
+        if not bank.party.is_society:
+            bank.party.is_society = True
+            bank.party.save()
+
+
 def load_bank_code(cfg_dict):
     f = open(os.path.join(
             DIR, cfg_dict['language'][0:2].lower(), 'bank.txt'),
@@ -149,3 +147,11 @@ def load_bank_code(cfg_dict):
         n += 1
     f.close()
     return res
+
+
+def launch_test_case(cfg_dict):
+    update_cfg_dict(cfg_dict)
+    migrate_banks(cfg_dict)
+    if is_table_empty(cfg_dict['Bank']):
+        create_bank(cfg_dict)
+    create_bank_accounts(cfg_dict)

@@ -11,16 +11,20 @@ DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
 def get_models():
     res = {}
-    res['Person'] = Model.get('party.person')
+    res['Person'] = Model.get('party.party')
     return res
 
 
 def update_persons(cfg_dict, models):
     n = 0
-    for cur_pers in models['Person'].find([('ssn', '=', None)]):
-        if cur_pers.gender == 'M':
+    for cur_pers in models['Person'].find(
+        [
+            ('ssn', '=', None),
+            ('is_person', '=', True),
+        ]):
+        if cur_pers.gender == 'male':
             ssn = '1'
-        elif cur_pers.gender == 'F':
+        elif cur_pers.gender == 'female':
             ssn = '2'
         else:
             continue

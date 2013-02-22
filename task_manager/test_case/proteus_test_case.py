@@ -77,7 +77,7 @@ def launch_test_case(cfg_dict):
     })
 
     society_mod = meths['Model']({
-        'model': 'party.society',
+        'model': 'party.party',
     })
 
     subs_process = meths['ProcessDesc']({

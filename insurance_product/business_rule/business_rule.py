@@ -204,6 +204,9 @@ class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
     rule = fields.Many2One('rule_engine', 'Rule Engine',
         states={'invisible': STATE_ADVANCED},
         depends=['config_kind'])
+    view_rec_name = fields.Function(
+        fields.Char('Name'),
+        'get_rec_name')
 
     @classmethod
     def __setup__(cls):

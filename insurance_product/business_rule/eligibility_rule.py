@@ -13,9 +13,9 @@ __all__ = [
     ]
 
 SUBSCRIBER_CLASSES = [
-    ('party.person', 'Person'),
-    ('party.society', 'Society'),
-    ('party.party', 'All'),
+    ('person', 'Person'),
+    ('society', 'Society'),
+    ('all', 'All'),
     ]
 
 
@@ -50,9 +50,9 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
         # We define a match_table which will tell what data to look for
         # depending on the subscriber_eligibility attribute value.
         match_table = {
-            'party.party': 'subscriber',
-            'party.person': 'subscriber_person',
-            'party.society': 'subscriber_society'}
+            'all': 'subscriber',
+            'person': 'subscriber_person',
+            'society': 'subscriber_society'}
 
         # if it does not match, refusal
         if not match_table[self.subscriber_classes] in args:
@@ -92,7 +92,7 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
 
     @staticmethod
     def default_subscriber_classes():
-        return 'party.person'
+        return 'person'
 
 
 class EligibilityRelationKind(model.CoopSQL):

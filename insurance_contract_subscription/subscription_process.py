@@ -6,7 +6,7 @@ from trytond.transaction import Transaction
 from trytond.modules.coop_utils import utils, model
 
 from trytond.modules.process import ClassAttr
-from trytond.modules.coop_party import ACTOR_KIND
+from trytond.modules.coop_party.party import ACTOR_KIND
 
 OPTION_SELECTION_STATUS = [
     ('active', 'Active'),
@@ -34,18 +34,19 @@ class ContractSubscription():
         ), 'get_subscriber_kind', 'setter_void', )
     subscriber_as_person = fields.Function(
         fields.Many2One(
-            'party.person', 'Subscriber',
+            'party.party', 'Subscriber',
             states={
-                'invisible': Eval('subscriber_kind') != 'party.person',
+                'invisible': Eval('subscriber_kind') != 'person',
             },
             on_change=['subscriber', 'subscriber_as_person', ],
+            domain=[('is_person', '=', True)],
         ), 'get_subscriber_as_person', 'setter_void', )
     subscriber_as_society = fields.Function(
         fields.Many2One(
-            'party.society', 'Subscriber',
+            'party.party', 'Subscriber',
             states={
-                'invisible': Eval('subscriber_kind') != 'party.society',
-            },
+                'invisible': Eval('subscriber_kind') != 'society',
+            }, domain=[('is_society', '=', True)],
             on_change=['subscriber', 'subscriber_as_society'],
         ), 'get_subscriber_as_society', 'setter_void', )
     subscriber_desc = fields.Function(
@@ -97,41 +98,40 @@ class ContractSubscription():
         res = {}
         if not (hasattr(self, 'subscriber_kind') and self.subscriber_kind):
             return res
-        if self.subscriber_kind == 'party.person':
+        if self.subscriber_kind == 'person':
             res['subscriber_as_society'] = None
-        elif self.subscriber_kind == 'party.society':
+        elif self.subscriber_kind == 'society':
             res['subscriber_as_person'] = None
         return res
 
     def get_subscriber_kind(self, name):
         if (hasattr(self, 'subscriber_as_society') and
                 self.subscriber_as_society):
-            return 'party.society'
-        return 'party.person'
+            return 'society'
+        return 'person'
 
     def get_subscriber_as_person(self, name):
         if not self.subscriber:
             return
-        if self.subscriber.person:
-            res = self.subscriber.person[0]
-            return res.id
+        if self.subscriber.is_person:
+            return self.subscriber.id
 
     def get_subscriber_as_society(self, name):
         if not self.subscriber:
             return
-        if self.subscriber.society:
-            return self.subscriber.society[0].id
+        if self.subscriber.is_society:
+            return self.subscriber
 
     def on_change_subscriber_as_person(self):
         if (hasattr(self, 'subscriber_as_person') and
                 self.subscriber_as_person):
-            return {'subscriber': self.subscriber_as_person.party.id}
+            return {'subscriber': self.subscriber_as_person.id}
         return {}
 
     def on_change_subscriber_as_society(self):
         if (hasattr(self, 'subscriber_as_society') and
                 self.subscriber_as_society):
-            return {'subscriber': self.subscriber_as_society.party.id}
+            return {'subscriber': self.subscriber_as_society.id}
         return {}
 
     def on_change_with_doc_received(self, name=None):
@@ -146,7 +146,7 @@ class ContractSubscription():
 
     @classmethod
     def default_subscriber_kind(cls):
-        return 'party.person'
+        return 'person'
 
     @classmethod
     def setter_void(cls, contracts, name, values):

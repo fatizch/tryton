@@ -4,65 +4,8 @@
         <record model="ir.ui.view" id="party_bank_view_form">
             <field name="model">party.party</field>
             <field name="type">form</field>
-            <field name="inherit" ref="coop_party.party_root_view_form"/>
-            <field name="arch" type="xml"> 
-             <![CDATA[
-             <data>
-                <xpath expr="/form/notebook" position="inside">
-                    <page string="Bank accounts" id="bank_account">
-                        <field name="bank_accounts" mode="form,tree"/>
-                    </page>
-                </xpath>
-             </data>
-             ]]>
-            </field>
-        </record>
-        <!-- Society form view -->
-        <record model="ir.ui.view" id="society_view_form">
-            <field name="model">party.society</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="coop_party.society_view_form"/>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <data>
-                    <xpath expr="/form/notebook/page[@id='role']/group[@id='role_group']" 
-                    position="inside">
-                        <label name="is_bank"/>
-                        <field name="is_bank" xexpand="0" width="25"/>
-                    </xpath>
-                    <xpath expr="/form/notebook/page[@id='role']/group[@id='role_group']"
-                    position="after">
-                    <group id="bank" colspan="4" yexpand="1" yfill="1"
-                    states="{'invisible': Bool(~Eval('is_bank'))}">
-                        <field name="bank_role" mode="form"/>
-                    </group>
-                </xpath>
-                </data>
-                ]]>
-            </field>
-        </record>
-        <record model="ir.ui.view" id="employee_view_form">
-            <field name="model">party.employee</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="coop_party.person_view_form"/>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <data>
-                    <xpath 
-                        expr="/form/notebook/page[@id='general']"
-                        position="replace_attributes">
-                        <page string="General" id="general"
-                            states="{'invisible':True}"/>
-                    </xpath>
-                    <xpath 
-                        expr="/form/notebook/page[@id='bank_account']"
-                        position="replace_attributes">
-                        <page id="bank_account"
-                            states="{'invisible':True}"/>
-                    </xpath>
-                </data>
-                ]]>
-            </field>
+            <field name="inherit" ref="party.party_view_form"/>
+            <field name="name">party_form</field>
         </record>
     </data>
 </tryton>

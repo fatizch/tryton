@@ -14,76 +14,27 @@
         <record model="ir.ui.view" id="party_view_form">
             <field name="model">party.party</field>
             <field name="type">form</field>
+            <field name="inherit" ref="party.party_view_form"/>
             <field name="name">party_form</field>
         </record>
-        <!-- View for the main menu and the event -->
-        <record model="ir.action.act_window" id="act_party_form">
-            <field name="name">Party</field>
-            <field name="res_model">party.party</field>
-        </record>
-        <!-- Sub menu actors Party -->
-        <menuitem id="party.menu_party_form" sequence="3" action="act_party_form"/>
 
-        <record model="ir.action.act_window.view" id="act_party_form_view1">
-            <field name="sequence" eval="10"/>
-            <field name="view" ref="party_view_tree"/>
-            <field name="act_window" ref="act_party_form"/>
-        </record>
-        <!-- View for the edition of the party -->
-        <record model="ir.action.act_window.view" id="act_party_form_view2">
-            <field name="sequence" eval="20"/>
-            <field name="view" ref="party_view_form"/>
-            <field name="act_window" ref="act_party_form"/>
-        </record>
-
-        <!-- Generic actor form view -->
-        <record model="ir.ui.view" id="party_root_view_form">
-            <field name="model">party.party</field>
-            <field name="type">form</field>
-            <field name="name">party_root_form</field>
-        </record>
-
-        <!-- *******************************************
-            ************** Person ***************
-            ******************************************* -->
-
-        <!-- View for the main menu and the event -->
-        <record model="ir.action.act_window" id="act_person_form">
+        <record model="ir.action.act_window.domain" id="act_party_form_domain_person">
             <field name="name">Person</field>
-            <field name="res_model">party.person</field>
-        </record>
-
-        <!-- Sub menu actors Person -->
-        <menuitem parent="party.menu_party" sequence="1"
-            id="menu_person_form" icon="tryton-list" action="act_person_form"/>
-
-        <!-- Person form view -->
-        <record model="ir.ui.view" id="person_view_form">
-            <field name="model">party.person</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="party_root_view_form"/>
-            <field name="name">person_form</field>
-        </record>
-
-        <!-- Person tree view -->
-        <record model="ir.ui.view" id="person_view_tree">
-            <field name="model">party.person</field>
-            <field name="type">tree</field>
-            <field name="name">person_tree</field>
-        </record>
-
-        <!-- View for the edition of the person -->
-        <record model="ir.action.act_window.view" id="act_person_form_view">
-            <field name="sequence" eval="20"/>
-            <field name="view" ref="person_view_form"/>
-            <field name="act_window" ref="act_person_form"/>
-        </record>
-
-        <!-- View that connects the form in the tree with the specification -->
-        <record model="ir.action.act_window.view" id="act_person_tree_view">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="person_view_tree"/>
-            <field name="act_window" ref="act_person_form"/>
+            <field name="domain">[('is_person', '=', True)]</field>
+            <field name="act_window" ref="party.act_party_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_party_form_domain_society">
+            <field name="name">Society</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain">[('is_society', '=', True)]</field>
+            <field name="act_window" ref="party.act_party_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_party_form_domain_all">
+            <field name="name">All</field>
+            <field name="sequence" eval="9999"/>
+            <field name="domain"></field>
+            <field name="act_window" ref="party.act_party_form"/>
         </record>
 
         <!-- *******************************************
@@ -106,48 +57,6 @@
             <field name="model">party.employee</field>
             <field name="type">tree</field>
             <field name="name">employee_tree</field>
-        </record>
-        <!-- *******************************************
-            ************ Society ***********
-            ******************************************* -->
-
-        <!-- View for the main menu and the event -->
-        <record model="ir.action.act_window" id="act_society_form">
-            <field name="name">Society</field>
-            <field name="res_model">party.society</field>
-        </record>
-
-        <!-- Sub menu actors Society -->
-        <menuitem parent="party.menu_party" sequence="0"
-            id="menu_society_form" icon="tryton-list" action="act_society_form"/>
-
-        <!-- Society form view -->
-        <record model="ir.ui.view" id="society_view_form">
-            <field name="model">party.society</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="party_root_view_form"/>
-            <field name="name">society_form</field>
-        </record>
-
-        <!-- Society tree view -->
-        <record model="ir.ui.view" id="society_view_tree">
-            <field name="model">party.society</field>
-            <field name="type">tree</field>
-            <field name="inherit" ref="party.party_view_tree"/>
-            <field name="name">society_tree</field>
-        </record>
-        <!-- View for the edition or the society -->
-        <record model="ir.action.act_window.view" id="act_society_form_view">
-            <field name="sequence" eval="20"/>
-            <field name="view" ref="society_view_form"/>
-            <field name="act_window" ref="act_society_form"/>
-        </record>
-
-        <!-- View that connects the form in the tree with the specification -->
-        <record model="ir.action.act_window.view" id="act_society_tree_view">
-            <field name="sequence" eval="10"/>
-            <field name="view" ref="society_view_tree"/>
-            <field name="act_window" ref="act_society_form"/>
         </record>
 
         <!-- *******************************************

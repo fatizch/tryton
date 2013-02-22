@@ -3,17 +3,18 @@ import copy
 import re
 
 from trytond.model import fields
-from trytond.modules.coop_utils import CoopSQL
-from trytond.modules.coop_party import Actor
+from trytond.pool import PoolMeta
+from trytond.pyson import Eval, Bool
 from trytond.modules.coop_utils import utils
 
 SSN_LENGTH = 15
 
 
-class Person(CoopSQL, Actor):
-    'Person'
+class FrenchParty():
+    'French Party'
 
-    __name__ = 'party.person'
+    __name__ = 'party.party'
+    __metaclass__ = PoolMeta
 
     ssn_no_key = fields.Function(fields.Char('SSN', size=13),
         'get_ssn', setter='set_ssn')
@@ -22,7 +23,7 @@ class Person(CoopSQL, Actor):
 
     @classmethod
     def __setup__(cls):
-        super(Person, cls).__setup__()
+        super(FrenchParty, cls).__setup__()
         cls.ssn = copy.copy(cls.ssn)
         cls.ssn.size = 15
         if cls.ssn.on_change_with is None:
@@ -35,12 +36,16 @@ class Person(CoopSQL, Actor):
             ('check_ssn_birth_date', 'invalid_ssn_birth_date'),
             ('check_ssn_gender', 'invalid_ssn_gender'),
             ]
-        cls._error_messages.update({
+        cls._error_messages.update(
+            {
                 'invalid_ssn': 'Invalid format for SSN',
                 'invalid_ssn_key': 'Invalid SSN Key',
                 'invalid_ssn_birth_date': 'Incompatible birth date and SSN',
                 'invalid_ssn_gender': 'Incompatible gender and SSN',
-                })
+            })
+        #Do not display SIREN for person
+        cls.siren = copy.copy(cls.siren)
+        cls.siren.states = {'invisible': Bool(~Eval('is_society'))}
 
     @staticmethod
     def calculate_ssn_key(ssn_no_key):

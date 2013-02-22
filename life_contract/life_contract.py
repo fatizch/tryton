@@ -120,21 +120,15 @@ class LifeCoveredDesc(CoveredDesc):
     __name__ = 'life_contract.covered_desc'
 
     data_coverage_amount = fields.Selection(
-        'get_allowed_amounts',
-        'Coverage Amount',
+        'get_allowed_amounts', 'Coverage Amount',
         selection_change_with=['data_for_coverage', 'start_date'],
         # context={'data_for_coverage': Eval('data_for_coverage')},
-        depends=['data_for_coverage', 'start_date'],
-        sort=False,
+        depends=['data_for_coverage', 'start_date'], sort=False,
         states={
             'readonly': Eval('the_kind') != 'data'})
-
     elem_person = fields.Many2One(
-        'party.party',
-        'Covered Person',
-        depends=['data_coverage_name'],
-        on_change=['elem_person'])
-
+        'party.party', 'Covered Person',
+        depends=['data_coverage_name'], on_change=['elem_person'])
     elem_life_state = fields.Many2One(
         'life_contract.extension_life_state',
         'Life State')

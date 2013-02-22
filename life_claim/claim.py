@@ -19,6 +19,7 @@ class LifeClaimDeliveredService():
         cls.subscribed_service = copy.copy(cls.subscribed_service)
         if not cls.subscribed_service.domain:
             cls.subscribed_service.domain = []
+        #TODO : Claimant could be a different person than covered person
         domain = ('covered_data.covered_element.person', '=',
             Eval('_parent_loss', {}).get('_parent_claim', {}).get('claimant'))
         cls.subscribed_service.domain.append(domain)

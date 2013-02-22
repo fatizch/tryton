@@ -143,7 +143,8 @@ class LoanShare(model.CoopSQL, model.CoopView):
     end_date = fields.Date('End Date')
     loan = fields.Many2One('ins_contract.loan', 'Loan', ondelete='CASCADE')
     share = fields.Numeric('Loan Share')
-    person = fields.Many2One('party.party', 'Person', ondelete='RESTRICT')
+    person = fields.Many2One('party.party', 'Person', ondelete='RESTRICT',
+        domain=[('is_person', '=', True)])
 
     @staticmethod
     def default_share():

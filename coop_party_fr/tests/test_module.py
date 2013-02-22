@@ -26,7 +26,7 @@ class ModuleTestCase(unittest.TestCase):
 
     def setUp(self):
         trytond.tests.test_tryton.install_module(MODULE_NAME)
-        self.Person = POOL.get('party.person')
+        self.Person = POOL.get('party.party')
 
     def test0005views(self):
         '''
@@ -40,11 +40,13 @@ class ModuleTestCase(unittest.TestCase):
         '''
         test_depends()
 
-    def createPerson(self, birth_date, ssn, expected_return, gender='M', i=0):
+    def createPerson(
+            self, birth_date, ssn, expected_return, gender='male', i=0):
         with Transaction().start(DB_NAME, USER,
            context=CONTEXT):
             try:
                 person, = self.Person.create([{
+                    'is_person': True,
                     'name': 'Person %s' % i,
                     'first_name': 'first name %s' % i,
                     'ssn': ssn,
@@ -74,9 +76,9 @@ class ModuleTestCase(unittest.TestCase):
             )
         for i, (value, test) in enumerate(values):
             birth_date = date(int('19' + value[1:3]), int(value[3:5]), 1)
-            gender = 'M'
+            gender = 'male'
             if value[0:1] == '2':
-                gender = 'F'
+                gender = 'female'
             self.createPerson(birth_date, value, test, gender, i)
 
     def test0020ssnbirthdate(self):
@@ -97,10 +99,10 @@ class ModuleTestCase(unittest.TestCase):
         '''
         ssn = '245062B12312388'
         birth_date = date(int('19' + ssn[1:3]), int(ssn[3:5]), 1)
-        self.createPerson(birth_date, ssn, True, gender='F')
-        self.createPerson(birth_date, ssn, False, gender='M')
+        self.createPerson(birth_date, ssn, True, gender='female')
+        self.createPerson(birth_date, ssn, False, gender='male')
         ssn = '145062B12312341'
-        self.createPerson(birth_date, ssn, False, gender='F')
+        self.createPerson(birth_date, ssn, False, gender='female')
 
 
 def suite():

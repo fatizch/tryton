@@ -11,6 +11,8 @@ import proteus_tools
 
 def update_models(cfg_dict):
     cfg_dict['Person'] = Model.get('party.person')
+    cfg_dict['Society'] = Model.get('party.society')
+    cfg_dict['Party'] = Model.get('party.party')
     cfg_dict['RelationKind'] = Model.get('party.party_relation_kind')
     cfg_dict['Relation'] = Model.get('party.party-relation')
     cfg_dict['AddressKind'] = Model.get('party.address_kind')
@@ -79,13 +81,14 @@ def create_persons(cfg_dict, nb_male, nb_female, relations_kind,
 
     for _i in range(nb_male):
         name = random.choice(dicts['last_name'])
-        person1 = add_person(cfg_dict, name, dicts, adult_date_interv, 'M')
-        while not create_address(cfg_dict, person1.party, 'person'):
+        person1 = add_person(cfg_dict, name, dicts, adult_date_interv, 'male')
+        while not create_address(cfg_dict, person1, 'person'):
             print 'Erreur in address, retrying'
         if launch_dice(cfg_dict, 'percent_of_couple'):
             if not launch_dice(cfg_dict, 'percent_of_couple_with_same_name'):
                 name = random.choice(dicts['last_name'])
-            person2 = add_person(cfg_dict, name, dicts, adult_date_interv, 'F')
+            person2 = add_person(cfg_dict, name, dicts, adult_date_interv,
+                'female')
             nb_female -= 1
             create_relation(cfg_dict, person1, person2,
                 relations_kind['spouse'].key)
@@ -99,15 +102,15 @@ def create_persons(cfg_dict, nb_male, nb_female, relations_kind,
 
     for _j in range(nb_female):
         name = random.choice(dicts['last_name'])
-        add_person(cfg_dict, name, dicts, adult_date_interv, 'F')
+        add_person(cfg_dict, name, dicts, adult_date_interv, 'female')
 
     print 'Successfully created %s parties' % (nb_male + nb_female)
 
 
 def create_relation(cfg_dict, from_actor, to_actor, kind, start_date=None):
     relation = cfg_dict['Relation']()
-    relation.from_party = from_actor.party
-    relation.to_party = to_actor.party
+    relation.from_party = from_actor
+    relation.to_party = to_actor
     relation.kind = kind
     if start_date:
         relation.start_date = start_date
@@ -116,26 +119,6 @@ def create_relation(cfg_dict, from_actor, to_actor, kind, start_date=None):
 
 def launch_dice(cfg_dict, probability_name):
     return random.randint(0, 99) < int(cfg_dict[probability_name])
-
-
-def launch_test_case(cfg_dict):
-    cfg_dict = update_models(cfg_dict)
-    relations_kind = get_relations_kind(cfg_dict)
-    addresses_kind = create_address_kind(cfg_dict)
-    nb_male = 0
-    nb_female = 0
-    for person in proteus_tools.get_objects_from_db(cfg_dict, 'Person',
-        limit=None):
-        if person.gender == 'M':
-            nb_male += 1
-        if person.gender == 'F':
-            nb_female += 1
-    if nb_male + nb_female < int(cfg_dict['total_nb']):
-        total_nb = max(0, int(cfg_dict['total_nb']) - nb_male - nb_female)
-        nb_male = max(0, int(cfg_dict['nb_male']) - nb_male)
-        nb_female = max(0, total_nb - nb_male - nb_female)
-        create_persons(cfg_dict, nb_male, nb_female, relations_kind,
-            addresses_kind)
 
 
 def calculate_date_interval(cfg_dict, age_min, age_max):
@@ -162,16 +145,13 @@ def get_language(cfg_dict, code):
 
 
 def add_person(cfg_dict, name, dicts, date_interv, sex=None):
-    person = cfg_dict['Person']()
+    person = cfg_dict['Party']()
+    person.is_person = True
     person.name = name
     if not sex:
-        sex = random.choice(['M', 'F'])
+        sex = random.choice(['male', 'female'])
     person.gender = sex
-    if sex == 'M':
-        the_dict = 'male'
-    elif sex == 'F':
-        the_dict = 'female'
-    person.first_name = random.choice(dicts[the_dict])
+    person.first_name = random.choice(dicts[person.gender])
     person.birth_date = date.fromordinal(
         random.randint(date_interv[0], date_interv[1]))
     person.addresses[:] = []
@@ -224,3 +204,49 @@ def create_address_kind(cfg_dict):
     res['2nd'] = get_address_kind(cfg_dict, '2nd')
     res['job'] = get_address_kind(cfg_dict, 'job')
     return res
+
+
+def create_parties(cfg_dict):
+    relations_kind = get_relations_kind(cfg_dict)
+    addresses_kind = create_address_kind(cfg_dict)
+    nb_male = 0
+    nb_female = 0
+    for person in proteus_tools.get_objects_from_db(cfg_dict, 'Party',
+        limit=None, domain=[('is_person', '=', True)]):
+        if person.gender == 'male':
+            nb_male += 1
+        if person.gender == 'female':
+            nb_female += 1
+    if nb_male + nb_female < int(cfg_dict['total_nb']):
+        total_nb = max(0, int(cfg_dict['total_nb']) - nb_male - nb_female)
+        nb_male = max(0, int(cfg_dict['nb_male']) - nb_male)
+        nb_female = max(0, total_nb - nb_male - nb_female)
+        create_persons(cfg_dict, nb_male, nb_female, relations_kind,
+            addresses_kind)
+
+
+def migrate_parties(cfg_dict):
+    persons = proteus_tools.get_objects_from_db(cfg_dict, 'Person', limit=None)
+    for person in persons:
+        party = person.party
+        party.is_person = True
+        if person.gender == 'M' or person.gender == 'male':
+            party.gender = 'male'
+        elif person.gender == 'F' or person.gender == 'female':
+            party.gender = 'female'
+        party.first_name = person.first_name
+        party.maiden_name = person.maiden_name
+        party.ssn = person.ssn
+        party.birth_date = person.birth_date
+        party.save()
+    for society in proteus_tools.get_objects_from_db(
+            cfg_dict, 'Society', limit=None):
+        party = society.party
+        party.is_society = True
+        party.save()
+
+
+def launch_test_case(cfg_dict):
+    update_models(cfg_dict)
+    migrate_parties(cfg_dict)
+    create_parties(cfg_dict)

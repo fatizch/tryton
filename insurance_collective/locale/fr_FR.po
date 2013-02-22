@@ -671,10 +671,6 @@ msgid "Code"
 msgstr "Code"
 
 msgctxt "field:ins_collective.coverage,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "field:ins_collective.coverage,complementary_data:"
 msgid "Offered Kind"
 msgstr "Données Complémentaires"
 
@@ -1857,10 +1853,6 @@ msgstr "Clauses"
 msgctxt "field:ins_collective.product,code:"
 msgid "Code"
 msgstr "Code"
-
-msgctxt "field:ins_collective.product,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.product,complementary_data:"
 msgid "Offered Kind"

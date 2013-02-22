@@ -10,17 +10,18 @@ from proteus import Model
 def get_models():
     res = {}
     res['Insurer'] = Model.get('party.insurer')
-    res['Society'] = Model.get('party.society')
+    res['Society'] = Model.get('party.party')
     return res
 
 
 def get_or_create_insurer(models, cfg_dict, code, name):
     insurers = models['Insurer'].find([('name', '=', name)])
-    if len(insurers) > 0:
+    if insurers:
         return insurers[0]
     insurer = models['Insurer']()
     society = models['Society']()
-    insurer.society.append(society)
+    society.is_society = True
+    society.insurer_role.append(insurer)
     insurer.name = name
     insurer.code = code
     insurer.addresses[:] = []

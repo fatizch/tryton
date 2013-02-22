@@ -6,13 +6,18 @@
         <field name="kind"/>
         <newline/>
         <label name="start_date"/>
-        <field name="start_date"/>
-        <label name="end_date"/>
-        <field name="end_date"/>
+        <group id="date">
+            <field name="start_date"/>
+            <label name="end_date"/>
+            <field name="end_date"/>
+        </group>
     </xpath>
     <xpath expr="/form/label[@name='zip']" position="before">
         <label name="zip_and_city"/>
         <field name="zip_and_city"/>
+        <newline/>
+    </xpath>
+    <xpath expr="/form/label[@name='streetbis']" position="before">
         <newline/>
     </xpath>
 </data>

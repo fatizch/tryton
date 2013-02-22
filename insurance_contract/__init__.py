@@ -3,11 +3,13 @@ from contract import *
 from subs_process import *
 from billing import *
 from billing_process import *
+from .party import *
 
 
 def register():
     Pool.register(
         # contract.py classes
+        Party,
         BrokerManager,
         Contract,
         Option,

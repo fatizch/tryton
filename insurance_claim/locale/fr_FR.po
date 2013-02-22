@@ -322,23 +322,7 @@ msgctxt "model:ir.action,name:act_claim_relate_form"
 msgid "Claims"
 msgstr "Sinistres"
 
-msgctxt "model:ir.action,name:act_claim_relate_form2"
-msgid "Claims"
-msgstr "Sinistres"
-
-msgctxt "model:ir.action,name:act_claim_relate_form3"
-msgid "Claims"
-msgstr "Sinistres"
-
 msgctxt "model:ir.action,name:act_indemnification_relate_form"
-msgid "Indemnifications"
-msgstr "indemnisations"
-
-msgctxt "model:ir.action,name:act_indemnification_relate_form2"
-msgid "Indemnifications"
-msgstr "indemnisations"
-
-msgctxt "model:ir.action,name:act_indemnification_relate_form3"
 msgid "Indemnifications"
 msgstr "indemnisations"
 

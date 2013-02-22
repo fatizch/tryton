@@ -57,7 +57,12 @@ def get_field_as_summary(instance, var_name, with_label=True, at_date=None,
 
 def translate_label(instance, var_name, lang=None):
     field = getattr(instance.__class__, var_name)
-    return translate_field(instance, var_name, field.string, lang=lang)
+    #function field
+    if not hasattr(field, 'string') and hasattr(field, 'field'):
+        string = field.field.string
+    else:
+        string = field.string
+    return translate_field(instance, var_name, string, lang=lang)
 
 
 def translate_value(instance, var_name, lang=None):

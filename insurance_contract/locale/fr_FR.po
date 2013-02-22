@@ -1071,14 +1071,6 @@ msgctxt "model:ir.action,name:act_contract_relate_form"
 msgid "Contracts"
 msgstr "Contrats"
 
-msgctxt "model:ir.action,name:act_contract_relate_form2"
-msgid "Contracts"
-msgstr "Contrats"
-
-msgctxt "model:ir.action,name:act_contract_relate_form3"
-msgid "Contracts"
-msgstr "Contrats"
-
 msgctxt "model:ir.action,name:act_generic_line_form"
 msgid "Bill Line"
 msgstr "Ligne de Cotisation"
