@@ -98,8 +98,7 @@ class Offered(model.CoopView, utils.GetResult, Templated):
         fields.Integer('Currency Digits'),
         'get_currency_digits')
     complementary_data = fields.Dict(
-        'Offered Kind',
-        schema_model='ins_product.complementary_data_def',
+        'ins_product.complementary_data_def', 'Offered Kind',
         context={'complementary_data_kind': 'product'},
         domain=[('kind', '=', 'product')])
 

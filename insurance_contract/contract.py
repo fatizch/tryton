@@ -137,8 +137,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     billing_manager = fields.One2Many(
         'ins_contract.billing_manager', 'contract', 'Billing Manager')
     complementary_data = fields.Dict(
-        'Complementary Data',
-        schema_model='ins_product.complementary_data_def')
+        'ins_product.complementary_data_def', 'Complementary Data')
     # TODO replace single contact by date versionned list
     contact = fields.Many2One('party.party', 'Contact')
     documents = fields.One2Many(
@@ -754,8 +753,8 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     parent = fields.Many2One('ins_contract.covered_element', 'Parent')
     sub_covered_elements = fields.One2Many('ins_contract.covered_element',
         'parent', 'Sub Covered Elements')
-    complementary_data = fields.Dict('Complementary Data',
-        schema_model='ins_product.complementary_data_def',
+    complementary_data = fields.Dict(
+        'ins_product.complementary_data_def', 'Complementary Data',
         on_change_with=['item_desc', 'complementary_data'])
 
     def get_name_for_billing(self):
@@ -820,8 +819,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
     covered_element = fields.Many2One(
         'ins_contract.covered_element', 'Covered Element', ondelete='CASCADE')
     complementary_data = fields.Dict(
-        'Complementary Data',
-        schema_model='ins_product.complementary_data_def')
+        'ins_product.complementary_data_def', 'Complementary Data')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     status = fields.Selection(OPTIONSTATUS, 'Status')

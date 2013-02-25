@@ -227,8 +227,7 @@ class OptionSelectionState(CoopStep):
                                None,
                                'Options Choices')
     complementary_data = fields.Dict(
-        'Complementary Data',
-        schema_model='ins_product.complementary_data_def',
+        'ins_product.complementary_data_def', 'Complementary Data',
         context={
             'for_product': Eval('for_product'),
             'at_date': Eval('at_date'),
@@ -420,8 +419,7 @@ class CoveredDesc(CoopStepView):
         readonly=True)
 
     data_complementary_data = fields.Dict(
-        'Complementary Data',
-        schema_model='ins_product.complementary_data_def',
+        'ins_product.complementary_data_def', 'Complementary Data',
         context={
             'at_date': Eval('data_start_date'),
             'dd_args': {

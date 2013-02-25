@@ -146,8 +146,7 @@ class Loss(model.CoopSQL, model.CoopView):
         fields.Boolean('With End Date', on_change_with=['loss_desc']),
         'on_change_with_with_end_date')
     complementary_data = fields.Dict(
-        'Complementary Data',
-        schema_model='ins_product.complementary_data_def',
+        'ins_product.complementary_data_def', 'Complementary Data',
         on_change_with=['loss_desc', 'complementary_data'])
 
     def on_change_with_with_end_date(self, name=None):

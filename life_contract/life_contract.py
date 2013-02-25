@@ -184,8 +184,7 @@ class ExtensionLifeState(DependantState):
             'kind': 'elem'},
         depends=['covered_elements'])
     complementary_data = fields.Dict(
-        'Complementary Data',
-        schema_model='ins_product.complementary_data_def',
+        'ins_product.complementary_data_def', 'Complementary Data',
         context={
             'for_product': Eval('for_product'),
             'at_date': Eval('at_date'),

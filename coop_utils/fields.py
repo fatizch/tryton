@@ -70,5 +70,3 @@ class One2One(fields.One2One):
 
 class Dict(fields.Dict):
     pass
-
-
