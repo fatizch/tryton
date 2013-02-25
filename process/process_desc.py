@@ -795,6 +795,12 @@ class StepDesc(ModelSQL, ModelView):
         required=True,
     )
 
+    processes = fields.One2Many(
+        'process.process_step_relation',
+        'step',
+        'Transitions',
+    )
+
     @classmethod
     def __setup__(cls):
         super(StepDesc, cls).__setup__()

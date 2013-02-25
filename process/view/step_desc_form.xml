@@ -26,5 +26,8 @@
     <page string="Authorizations" id="authorizations">
       <field name="authorizations" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
     </page>
+    <page string="Usage" id="usage">
+      <field name="processes" xexpand="1" xfill="1" yexpand="1" yfill="1" readonly="1"/>
+    </page>
   </notebook>
 </form>
