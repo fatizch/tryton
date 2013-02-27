@@ -9,8 +9,13 @@ def register():
         ProcessDesc,
         XMLViewDesc,
         StepDesc,
+        ProcessParameters,
         module='coop_process', type_='model')
 
     Pool.register(
         GenerateGraph,
         module='coop_process', type_='report')
+
+    Pool.register(
+        ProcessFinder,
+        module='coop_process', type_='wizard')

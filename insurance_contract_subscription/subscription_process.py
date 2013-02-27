@@ -1,3 +1,5 @@
+import copy
+
 from trytond.pool import Pool, PoolMeta
 from trytond.model import fields
 from trytond.pyson import Eval
@@ -6,6 +8,7 @@ from trytond.transaction import Transaction
 from trytond.modules.coop_utils import utils, model
 
 from trytond.modules.process import ClassAttr
+from trytond.modules.coop_process import ProcessFinder, ProcessParameters
 from trytond.modules.coop_party.party import ACTOR_KIND
 
 OPTION_SELECTION_STATUS = [
@@ -19,6 +22,9 @@ __all__ = [
     'CoveredData',
     'CoveredElement',
     'SubscriptionManager',
+    'ProcessDesc',
+    'SubscriptionProcessParameters',
+    'SubscriptionProcessFinder'
 ]
 
 
@@ -444,3 +450,71 @@ class SubscriptionManager(model.CoopSQL):
             ('ins_collective.contract', 'Contract')],
     )
     is_custom = fields.Boolean('Custom')
+
+
+class ProcessDesc():
+    'Process Desc'
+
+    __metaclass__ = PoolMeta
+
+    __name__ = 'process.process_desc'
+
+    @classmethod
+    def __setup__(cls):
+        super(ProcessDesc, cls).__setup__()
+        cls.kind = copy.copy(cls.kind)
+        cls.kind.selection.append(('subscription', 'Contract Subscription'))
+
+
+class SubscriptionProcessParameters(ProcessParameters):
+    'Subscription Process Parameters'
+
+    __name__ = 'ins_contract.subscription_process_parameters'
+
+    product = fields.Many2One(
+        'ins_product.product',
+        'Product',
+    )
+
+    @classmethod
+    def build_process_domain(cls):
+        result = super(
+            SubscriptionProcessParameters, cls).build_process_domain()
+        result.append(('for_products', '=', Eval('product')))
+        result.append(('kind', '=', 'subscription'))
+        return result
+
+    @classmethod
+    def build_process_depends(cls):
+        result = super(
+            SubscriptionProcessParameters, cls).build_process_depends()
+        result.append('product')
+        return result
+
+    @classmethod
+    def default_model(cls):
+        Model = Pool().get('ir.model')
+        return Model.search([('model', '=', 'ins_contract.contract')])[0].id
+
+
+class SubscriptionProcessFinder(ProcessFinder):
+    'Subscription Process Finder'
+
+    __name__ = 'ins_contract.subscription_process_finder'
+
+    @classmethod
+    def get_parameters_model(cls):
+        return 'ins_contract.subscription_process_parameters'
+
+    @classmethod
+    def get_parameters_view(cls):
+        return '%s.%s' % (
+            'insurance_contract_subscription',
+            'subscription_process_parameters_form')
+
+    def instanciate_main_object(self):
+        contract = super(
+            SubscriptionProcessFinder, self).instanciate_main_object()
+        contract.start_date = self.process_parameters.date
+        contract.offered = self.process_parameters.product
+        return contract

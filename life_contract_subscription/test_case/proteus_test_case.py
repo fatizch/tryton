@@ -161,10 +161,16 @@ yexpand="1" mode="form"/>
 
     top_menu = Model.get('ir.ui.menu')(top_menu_tmp.db_id)
 
+    prev_product = Model.get('ins_product.product').find(
+        [('code', '=', 'PREV')])[0]
+
     subs_process_desc = meths['ProcessDesc']({
         'technical_name': 'individual_subscription',
         'fancy_name': translater('Individual Subscription Process'),
         'on_model': contract_model,
+        'start_date': cfg_dict['Date'].today({}),
+        'kind': 'subscription',
+        'for_products': [prev_product],
         'custom_transitions': True,
         'steps_implicitly_available': False,
         'xml_tree': '''
@@ -176,6 +182,7 @@ yexpand="1" mode="form"/>
 <field name="offered"/>
 ''',
         'menu_top': top_menu,
+        'step_button_group_position': 'right',
     })
 
     meths['ProcessStepRelation'](

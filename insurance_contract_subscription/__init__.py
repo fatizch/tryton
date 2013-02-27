@@ -9,4 +9,10 @@ def register():
         CoveredElement,
         CoveredData,
         SubscriptionManager,
+        ProcessDesc,
+        SubscriptionProcessParameters,
         module='insurance_contract_subscription', type_='model')
+
+    Pool.register(
+        SubscriptionProcessFinder,
+        module='insurance_contract_subscription', type_='wizard')

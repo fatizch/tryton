@@ -6,11 +6,22 @@
       <field name="type">tree</field>
       <field name="name">subscription_editable_option_tree</field>
     </record>
-
     <record model="ir.ui.view" id="subscription_editable_covered_data_tree">
       <field name="model">ins_contract.covered_data</field>
       <field name="type">tree</field>
       <field name="name">subscription_editable_covered_data_tree</field>
     </record>
+    <record model="ir.ui.view" id="subscription_process_parameters_form">
+      <field name="model">ins_contract.subscription_process_parameters</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="coop_process.process_parameters_form"/>
+      <field name="name">subscription_process_parameters_form</field>
+    </record>
+    <record model="ir.action.wizard" id="subscription_process_launcher">
+        <field name="name">Start Subscription</field>
+        <field name="wiz_name">ins_contract.subscription_process_finder</field>
+    </record>
+    <menuitem parent="insurance_contract.menu_contract" sequence="1"
+      action="subscription_process_launcher" id="menu_start_subscription"/>
   </data>
 </tryton>

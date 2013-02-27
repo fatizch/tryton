@@ -6,4 +6,10 @@ def register():
     Pool.register(
         ClaimProcess,
         LossProcess,
+        ProcessDesc,
+        DeclarationProcessParameters,
         module='insurance_claim_process', type_='model')
+
+    Pool.register(
+        DeclarationProcessFinder,
+        module='insurance_claim_process', type_='wizard')

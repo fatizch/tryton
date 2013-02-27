@@ -5,8 +5,9 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Not, And
 from trytond.model import fields
 from trytond.transaction import Transaction
+from trytond.wizard import Wizard, StateAction, StateView, Button
 
-from trytond.modules.coop_utils import utils, model
+from trytond.modules.coop_utils import utils, model, date
 from trytond.modules.process import ProcessFramework
 
 
@@ -18,6 +19,8 @@ __all__ = [
     'ProcessDesc',
     'XMLViewDesc',
     'StepDesc',
+    'ProcessParameters',
+    'ProcessFinder',
 ]
 
 
@@ -261,6 +264,20 @@ class ProcessDesc():
         },
     )
 
+    kind = fields.Selection(
+        [('', '')],
+        'Kind',
+    )
+
+    start_date = fields.Date(
+        'Start Date',
+        required=True,
+    )
+
+    end_date = fields.Date(
+        'End Date',
+    )
+
     @classmethod
     def __setup__(cls):
         super(ProcessDesc, cls).__setup__()
@@ -369,6 +386,20 @@ class ProcessDesc():
             nb += 1
 
         return nb, result
+
+    @classmethod
+    def create(cls, values):
+        for process in values:
+            last_version = cls.search([
+                ('on_model', '=', process['on_model']),
+                ('kind', '=', process['kind']),
+                ('end_date', '=', None),
+                ('start_date', '<', process['start_date'])])
+            if last_version:
+                cls.write(last_version, {
+                    'end_date': date.add_day(process['start_date'], -1)})
+
+        return super(ProcessDesc, cls).create(values)
 
 
 class ProcessStepRelation():
@@ -650,6 +681,135 @@ class StepDesc():
         self.execute_before(target)
 
         target.set_state(self)
+
+
+class ProcessParameters(model.CoopView):
+    'Process Parameters'
+
+    __name__ = 'coop_process.process_parameters'
+
+    date = fields.Date(
+        'Date',
+    )
+
+    model = fields.Many2One(
+        'ir.model',
+        'Model',
+        domain=[('is_workflow', '=', 'True')],
+        states={
+            'readonly': True
+        },
+    )
+
+    good_process = fields.Many2One(
+        'process.process_desc',
+        'Good Process',
+        on_change_with=['date, model'],
+        depends=['date', 'model'],
+    )
+
+    @classmethod
+    def __setup__(cls):
+        super(ProcessParameters, cls).__setup__()
+        cls.good_process = copy.copy(cls.good_process)
+        cls.good_process.domain = cls.build_process_domain()
+        cls.good_process.depends = cls.build_process_depends()
+        cls.good_process.on_change_with = cls.build_process_depends()
+
+    @classmethod
+    def build_process_domain(cls):
+        return [
+            ('on_model', '=', Eval('model')),
+            ('OR',
+                (
+                    ('end_date', '=', None),
+                    ('start_date', '<=', Eval('date'))),
+                (
+                    ('end_date', '!=', None),
+                    ('start_date', '<=', Eval('date')),
+                    ('end_date', '>=', Eval('date'))))]
+
+    @classmethod
+    def build_process_depends(cls):
+        return ['model', 'date']
+
+    @classmethod
+    def default_date(cls):
+        return utils.today()
+
+    @classmethod
+    def default_model(cls):
+        raise NotImplementedError
+
+    def on_change_with_good_process(self):
+        try:
+            good_process = utils.get_domain_instances(self, 'good_process')
+            if not good_process or len(good_process) > 1:
+                return None
+            return good_process[0].id
+        except Exception:
+            return None
+
+
+class ProcessFinder(Wizard):
+    'Process Finder'
+
+    class VoidStateAction(StateAction):
+        def __init__(self):
+            StateAction.__init__(self, None)
+
+        def get_action(self):
+            return None
+
+    start_state = 'process_parameters'
+
+    process_parameters = StateView(
+        'coop_process.process_parameters',
+        'coop_process.process_parameters_form',
+        [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Start Process', 'action', 'tryton-go-next')])
+
+    action = VoidStateAction()
+
+    @classmethod
+    def __setup__(cls):
+        super(ProcessFinder, cls).__setup__()
+        cls.process_parameters = copy.copy(cls.process_parameters)
+        cls.process_parameters.model_name = cls.get_parameters_model()
+        cls.process_parameters.view = cls.get_parameters_view()
+
+    def do_action(self, action):
+        ActWindow = Pool().get('ir.action.act_window')
+        Action = Pool().get('ir.action')
+        good_view = self.process_parameters.good_process.get_act_window()
+        good_action = ActWindow(good_view)
+        good_values = Action.get_action_values(
+            'ir.action.act_window', [good_action.id])
+        good_values[0]['views'] = [
+            view for view in good_values[0]['views'] if view[1] == 'form']
+
+        with Transaction().set_user(0):
+            good_obj = self.instanciate_main_object()
+            good_obj.save()
+
+        return good_values[0], {
+            'res_id': good_obj.id}
+
+    def instanciate_main_object(self):
+        GoodModel = Pool().get(self.process_parameters.model.model)
+        good_obj = GoodModel()
+        good_obj.current_state = \
+            self.process_parameters.good_process.all_steps[0]
+        return good_obj
+
+    @classmethod
+    def get_parameters_model(cls):
+        return 'coop_process.process_parameters'
+
+    @classmethod
+    def get_parameters_view(cls):
+        return 'coop_process.process_parameters_form'
 
 
 class GenerateGraph():

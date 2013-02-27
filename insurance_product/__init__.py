@@ -7,6 +7,7 @@ from .business_rule import *
 from .coverage import *
 from .benefit import *
 from .clause import *
+from .process import *
 
 
 def register():
@@ -68,6 +69,9 @@ def register():
         ProductComplementaryDataRelation,
         CoverageComplementaryDataRelation,
         LossDescComplementaryDataRelation,
+        # from process
+        ProcessProductRelation,
+        ProcessDesc,
         module='insurance_product', type_='model')
     Pool.register(
         LetterReport,

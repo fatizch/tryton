@@ -1,13 +1,19 @@
+import copy
+
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
-from trytond.modules.coop_utils import utils, model
+from trytond.modules.coop_utils import utils
 
 from trytond.modules.process import ClassAttr
+from trytond.modules.coop_process import ProcessFinder, ProcessParameters
 
 
 __all__ = [
     'ClaimProcess',
     'LossProcess',
+    'ProcessDesc',
+    'DeclarationProcessParameters',
+    'DeclarationProcessFinder',
 ]
 
 
@@ -18,7 +24,8 @@ class ClaimProcess():
     __metaclass__ = ClassAttr
 
     contracts = fields.Function(
-        fields.One2Many('ins_contract.contract', None, 'Contracts',
+        fields.One2Many(
+            'ins_contract.contract', None, 'Contracts',
             on_change_with=['claimant']),
         'on_change_with_contracts')
     doc_received = fields.Function(
@@ -182,7 +189,8 @@ class LossProcess():
     __metaclass__ = PoolMeta
 
     benefits = fields.Function(
-        fields.One2Many('ins_product.benefit', None, 'Benefits',
+        fields.One2Many(
+            'ins_product.benefit', None, 'Benefits',
             on_change_with=['loss_desc', 'event_desc', 'start_date', 'claim']),
         'on_change_with_benefits')
 
@@ -203,3 +211,57 @@ class LossProcess():
         for x in self.get_possible_benefits().values():
             res += [benefit.id for benefit in x]
         return list(set(res))
+
+
+class ProcessDesc():
+    'Process Desc'
+
+    __metaclass__ = PoolMeta
+
+    __name__ = 'process.process_desc'
+
+    @classmethod
+    def __setup__(cls):
+        super(ProcessDesc, cls).__setup__()
+        cls.kind = copy.copy(cls.kind)
+        cls.kind.selection.append(('claim_declaration', 'Claim Declaration'))
+
+
+class DeclarationProcessParameters(ProcessParameters):
+    'Declaration Process Parameters'
+
+    __name__ = 'ins_claim.declaration_process_parameters'
+
+    @classmethod
+    def build_process_domain(cls):
+        result = super(
+            DeclarationProcessParameters, cls).build_process_domain()
+        result.append(('kind', '=', 'claim_declaration'))
+        return result
+
+    @classmethod
+    def default_model(cls):
+        Model = Pool().get('ir.model')
+        return Model.search([('model', '=', 'ins_claim.claim')])[0].id
+
+
+class DeclarationProcessFinder(ProcessFinder):
+    'Declaration Process Finder'
+
+    __name__ = 'ins_claim.declaration_process_finder'
+
+    @classmethod
+    def get_parameters_model(cls):
+        return 'ins_claim.declaration_process_parameters'
+
+    @classmethod
+    def get_parameters_view(cls):
+        return '%s.%s' % (
+            'insurance_claim_process',
+            'declaration_process_parameters_form')
+
+    def instanciate_main_object(self):
+        claim = super(
+            DeclarationProcessFinder, self).instanciate_main_object()
+        claim.declaration_date = self.process_parameters.date
+        return claim

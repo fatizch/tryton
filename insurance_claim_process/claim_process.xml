@@ -1,23 +1,33 @@
 <?xml version="1.0"?>
 <tryton>
-    <data>
-        <record model="ir.ui.view" id="loss_view_form">
-            <field name="model">ins_claim.loss</field>
-            <field name="type">form</field>
-            <field name="priority" eval="20"/>
-            <field name="name">loss_form</field>
-        </record>
-        <record model="ir.ui.view" id="loss_delivered_services_view_form">
-            <field name="model">ins_claim.loss</field>
-            <field name="type">form</field>
-            <field name="priority" eval="30"/>
-            <field name="name">loss_delivered_services_form</field>
-        </record>
-        <record model="ir.ui.view" id="loss_indemnification_view_form">
-            <field name="model">ins_claim.loss</field>
-            <field name="type">form</field>
-            <field name="priority" eval="40"/>
-            <field name="name">loss_indemnification_form</field>
-        </record>
-    </data>
+  <data>
+    <record model="ir.ui.view" id="loss_view_form">
+      <field name="model">ins_claim.loss</field>
+      <field name="type">form</field>
+      <field name="priority" eval="20"/>
+      <field name="name">loss_form</field>
+    </record>
+    <record model="ir.ui.view" id="loss_delivered_services_view_form">
+      <field name="model">ins_claim.loss</field>
+      <field name="type">form</field>
+      <field name="priority" eval="30"/>
+      <field name="name">loss_delivered_services_form</field>
+    </record>
+    <record model="ir.ui.view" id="loss_indemnification_view_form">
+      <field name="model">ins_claim.loss</field>
+      <field name="type">form</field>
+      <field name="priority" eval="40"/>
+      <field name="name">loss_indemnification_form</field>
+    </record>
+    <record model="ir.ui.view" id="declaration_process_parameters_form">
+      <field name="model">ins_claim.declaration_process_parameters</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="coop_process.process_parameters_form"/>
+    </record>
+    <record model="ir.action.wizard" id="declaration_process_launcher">
+      <field name="name">Start Declaration</field>
+      <field name="wiz_name">ins_claim.declaration_process_finder</field>
+    </record>
+    <menuitem parent="insurance_claim.menu_claim" sequence="1" action="declaration_process_launcher" id="menu_start_declaration"/>
+  </data>
 </tryton>

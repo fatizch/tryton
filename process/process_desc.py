@@ -546,6 +546,11 @@ completed the current process, please go ahead"/>'
 
         super(ProcessDesc, cls).delete(processes)
 
+    def get_act_window(self):
+        if not self.menu_item:
+            return None
+        return self.menu_item.action
+
 
 class TransitionAuthorization(ModelSQL):
     'Transition Authorization'

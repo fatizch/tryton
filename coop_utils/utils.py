@@ -805,5 +805,22 @@ def pyson_encode(pyson_expr, do_eval=False):
         return eval(res)
 
 
+def get_domain_instances(record, field_name):
+    field = record._fields[field_name]
+    if not isinstance(field, fields.Many2One):
+        return []
+
+    pyson_domain = PYSONEncoder().encode(field.domain)
+    env = EvalEnvironment(record, record.__class__)
+    env.update(Transaction().context)
+    env['current_date'] = today()
+    env['time'] = time
+    env['context'] = Transaction().context
+    env['active_id'] = record.id
+    domain = PYSONDecoder(env).decode(pyson_domain)
+
+    GoodModel = Pool().get(field.model_name)
+    return GoodModel.search(domain)
+
 def convert_to_reference(target):
     return '%s,%s' % (target.__name__, target.id)

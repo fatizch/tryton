@@ -192,10 +192,17 @@ expand_toolbar="0" />''',
             ('fs_id', '=', 'menu_claim'),
         ])[0]
     top_menu = Model.get('ir.ui.menu')(top_menu_tmp.db_id)
+
+    prev_product = Model.get('ins_product.product').find(
+        [('code', '=', 'PREV')])[0]
+
     process_claim = meths['ProcessDesc']({
         'technical_name': 'claim_declaration',
         'fancy_name': translater('Claim Declaration'),
         'on_model': claim_model,
+        'start_date': cfg_dict['Date'].today({}),
+        'kind': 'claim_declaration',
+        'for_products': [prev_product],
         'xml_tree': '''
 <field name="current_state"/>
 <field name="name"/>
@@ -203,6 +210,7 @@ expand_toolbar="0" />''',
 <field name="status"/>
 ''',
         'menu_top': top_menu,
+        'step_button_group_position': 'right',
     })
 
     meths['ProcessStepRelation'](

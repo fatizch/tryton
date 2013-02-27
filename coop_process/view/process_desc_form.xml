@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 <data>
   <xpath expr="/form/group[@id='global_part']/field[@name='on_model']" position="after">
+    <label name="kind" xalign="0"/>
+    <field name="kind"/>
+    <label name="start_date" xalign="0"/>
+    <field name="start_date"/>
+    <label name="end_date" xalign="0"/>
+    <field name="end_date"/>
     <label name="custom_transitions" xalign="0"/>
     <field name="custom_transitions"/>
     <label name="steps_implicitly_available" xalign="0"/>
