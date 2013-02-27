@@ -309,14 +309,14 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView):
 
     indemnification = fields.Many2One('ins_claim.indemnification',
         'Indemnification', ondelete='CASCADE')
-    start_date = fields.Date('Start Date',
-        states={
-            'invisible': Eval('_parent_indemnification', {}).get('kind') !=
-                'period'})
-    end_date = fields.Date('End Date',
-       states={
-            'invisible': Eval('_parent_indemnification', {}).get('kind') !=
-                'period'})
+    start_date = fields.Date('Start Date', states={
+            'invisible':
+                Eval('_parent_indemnification', {}).get('kind') != 'period'
+        })
+    end_date = fields.Date('End Date', states={
+            'invisible':
+                Eval('_parent_indemnification', {}).get('kind') != 'period'
+        })
     kind = fields.Selection(INDEMNIFICATION_DETAIL_KIND, 'Kind', sort=False)
     amount_per_unit = fields.Numeric('Amount per Unit')
     nb_of_unit = fields.Numeric('Nb of Unit')
@@ -335,18 +335,14 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView):
 class DocumentRequest():
     'Document Request'
 
-    __metaclass__ = PoolMeta
-
     __name__ = 'ins_product.document_request'
+    __metaclass__ = PoolMeta
 
     @classmethod
     def __setup__(cls):
         super(DocumentRequest, cls).__setup__()
-
         cls.needed_by = copy.copy(cls.needed_by)
-
-        cls.needed_by.selection.append(
-            ('ins_claim.claim', 'Claim'))
+        cls.needed_by.selection.append(('ins_claim.claim', 'Claim'))
         cls.needed_by.selection.append(
             ('ins_contract.delivered_service', 'Delivered Service'))
 
@@ -354,18 +350,14 @@ class DocumentRequest():
 class Document():
     'Document'
 
-    __metaclass__ = PoolMeta
-
     __name__ = 'ins_product.document'
+    __metaclass__ = PoolMeta
 
     @classmethod
     def __setup__(cls):
         super(Document, cls).__setup__()
-
         cls.for_object = copy.copy(cls.for_object)
-
-        cls.for_object.selection.append(
-            ('ins_claim.claim', 'Claim'))
+        cls.for_object.selection.append(('ins_claim.claim', 'Claim'))
         cls.for_object.selection.append(
             ('ins_contract.delivered_service', 'Delivered Service'))
 
@@ -373,9 +365,8 @@ class Document():
 class RequestFinder():
     'Request Finder'
 
-    __metaclass__ = PoolMeta
-
     __name__ = 'ins_product.request_finder'
+    __metaclass__ = PoolMeta
 
     @classmethod
     def allowed_values(cls):
@@ -389,14 +380,11 @@ class RequestFinder():
 class ContactHistory():
     'Contact History'
 
-    __metaclass__ = PoolMeta
-
     __name__ = 'party.contact_history'
+    __metaclass__ = PoolMeta
 
     @classmethod
     def __setup__(cls):
         super(ContactHistory, cls).__setup__()
         cls.for_object_ref = copy.copy(cls.for_object_ref)
-
-        cls.for_object_ref.selection.append(
-            ['ins_claim.claim', 'Claim'])
+        cls.for_object_ref.selection.append(['ins_claim.claim', 'Claim'])
