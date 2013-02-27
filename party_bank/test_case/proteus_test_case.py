@@ -37,7 +37,7 @@ def create_bank(cfg_dict):
             company.is_company = True
             company.currency = cfg_dict['currency']
             company.bank_role.append(bank)
-            bank.name = line[11:51].strip()
+            company.name = line[11:51].strip()
             company.short_name = line[51:61].strip()
             add_address(cfg_dict, line, bank, countries)
             add_bank_info(line, bank)
