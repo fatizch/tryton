@@ -41,8 +41,8 @@ def create_bank(cfg_dict):
             company.short_name = line[51:61].strip()
             add_address(cfg_dict, line, bank, countries)
             add_bank_info(line, bank)
-            bank.save()
             company.save()
+            # bank.save()
             n += 1
         except:
             warnings.warn('Impossible to create bank %s' % line[11:51].strip(),
