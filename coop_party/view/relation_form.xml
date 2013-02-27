@@ -13,4 +13,11 @@
     <field name="from_party"/>
     <label name="to_party"/>
     <field name="to_party"/>
+    <!--
+        <label name="parent"/>
+        <field name="parent"/>
+        <field name="children" colspan="4"
+        view_ids="coop_party.party_relation_view_tree_hierarchical,coop_party.party_relation_view_form"
+        mode="tree,form"/>
+    -->
 </form>

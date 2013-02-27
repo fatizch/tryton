@@ -1,9 +1,11 @@
 <?xml version="1.0"?>
 <tree>
-    <field name="ssn"/>
+    <field name="code"/>
+    <field name="gender"/>
     <field name="name"/>
     <field name="first_name"/>
     <field name="birth_date"/>
     <field name="is_employee"/>
     <field name="main_address"/>
+    <field name="is_person"/>
 </tree>

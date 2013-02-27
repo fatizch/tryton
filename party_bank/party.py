@@ -7,7 +7,7 @@ from trytond.pyson import Not
 
 from trytond.modules.coop_utils import CoopSQL, coop_string
 from trytond.modules.coop_party import Actor
-from trytond.modules.coop_party.party import STATES_SOCIETY
+from trytond.modules.coop_party.party import STATES_COMPANY
 
 __all__ = [
     'Party',
@@ -23,7 +23,7 @@ class Party:
 
     bank_role = fields.One2Many(
         'party.bank', 'party', 'Bank', size=1, states={
-            'invisible': Not(STATES_SOCIETY),
+            'invisible': Not(STATES_COMPANY),
         })
     bank_accounts = fields.One2Many(
         'party.bank_account', 'party', 'Bank Accounts')

@@ -110,6 +110,8 @@ def get_objects_from_db(
     if key and value:
         domain.append((key, '=', value))
 
+    if not cfg_dict[model]:
+        return None
     instances = cfg_dict[model].find(domain, limit=limit)
     if instances and limit == 1:
         return instances[0]

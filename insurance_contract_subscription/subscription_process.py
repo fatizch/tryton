@@ -30,7 +30,7 @@ class ContractSubscription():
 
     subscriber_kind = fields.Function(
         fields.Selection(ACTOR_KIND, 'Kind', on_change=[
-            'subscriber_as_person', 'subscriber_as_society', ],
+            'subscriber_as_person', 'subscriber_as_company', ],
         ), 'get_subscriber_kind', 'setter_void', )
     subscriber_as_person = fields.Function(
         fields.Many2One(
@@ -41,17 +41,17 @@ class ContractSubscription():
             on_change=['subscriber', 'subscriber_as_person', ],
             domain=[('is_person', '=', True)],
         ), 'get_subscriber_as_person', 'setter_void', )
-    subscriber_as_society = fields.Function(
+    subscriber_as_company = fields.Function(
         fields.Many2One(
             'party.party', 'Subscriber',
             states={
-                'invisible': Eval('subscriber_kind') != 'society',
-            }, domain=[('is_society', '=', True)],
-            on_change=['subscriber', 'subscriber_as_society'],
-        ), 'get_subscriber_as_society', 'setter_void', )
+                'invisible': Eval('subscriber_kind') != 'company',
+            }, domain=[('is_company', '=', True)],
+            on_change=['subscriber', 'subscriber_as_company'],
+        ), 'get_subscriber_as_company', 'setter_void', )
     subscriber_desc = fields.Function(
         fields.Text('Summary', on_change_with=[
-            'subscriber_as_person', 'subscriber_as_society', 'subscriber', ],
+            'subscriber_as_person', 'subscriber_as_company', 'subscriber', ],
         ), 'on_change_with_subscriber_desc', 'setter_void', )
     product_desc = fields.Function(
         fields.Text(
@@ -99,15 +99,15 @@ class ContractSubscription():
         if not (hasattr(self, 'subscriber_kind') and self.subscriber_kind):
             return res
         if self.subscriber_kind == 'person':
-            res['subscriber_as_society'] = None
-        elif self.subscriber_kind == 'society':
+            res['subscriber_as_company'] = None
+        elif self.subscriber_kind == 'company':
             res['subscriber_as_person'] = None
         return res
 
     def get_subscriber_kind(self, name):
-        if (hasattr(self, 'subscriber_as_society') and
-                self.subscriber_as_society):
-            return 'society'
+        if (hasattr(self, 'subscriber_as_company') and
+                self.subscriber_as_company):
+            return 'company'
         return 'person'
 
     def get_subscriber_as_person(self, name):
@@ -116,10 +116,10 @@ class ContractSubscription():
         if self.subscriber.is_person:
             return self.subscriber.id
 
-    def get_subscriber_as_society(self, name):
+    def get_subscriber_as_company(self, name):
         if not self.subscriber:
             return
-        if self.subscriber.is_society:
+        if self.subscriber.is_company:
             return self.subscriber
 
     def on_change_subscriber_as_person(self):
@@ -128,10 +128,10 @@ class ContractSubscription():
             return {'subscriber': self.subscriber_as_person.id}
         return {}
 
-    def on_change_subscriber_as_society(self):
-        if (hasattr(self, 'subscriber_as_society') and
-                self.subscriber_as_society):
-            return {'subscriber': self.subscriber_as_society.id}
+    def on_change_subscriber_as_company(self):
+        if (hasattr(self, 'subscriber_as_company') and
+                self.subscriber_as_company):
+            return {'subscriber': self.subscriber_as_company.id}
         return {}
 
     def on_change_with_doc_received(self, name=None):

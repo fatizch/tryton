@@ -11,7 +11,7 @@ from trytond.modules.coop_utils import coop_string
 
 __all__ = [
     'Party',
-    'Society',
+    'Company',
     'Employee',
     'Actor',
     'Person',
@@ -27,11 +27,11 @@ GENDER = [
 
 ACTOR_KIND = [
     ('person', 'Person'),
-    ('society', 'Society')
+    ('company', 'Company')
 ]
 
 STATES_PERSON = Bool(Eval('is_person'))
-STATES_SOCIETY = Bool(Eval('is_society'))
+STATES_COMPANY = Bool(Eval('is_company'))
 
 
 class Party:
@@ -41,7 +41,10 @@ class Party:
     __metaclass__ = PoolMeta
 
     is_person = fields.Boolean('Person')
-    is_society = fields.Boolean('Society')
+    is_company = fields.Boolean('Company')
+    #ToBeDeleted
+    is_society = fields.Boolean('Company')
+    #/ToBeDeleted
 
     generic_roles = fields.One2Many('party.generic_actor', 'party',
         'Generic Actor')
@@ -55,18 +58,16 @@ class Party:
         'get_main_address_as_char')
     ####################################
     #Person information
-    gender = fields.Selection(
-        GENDER, 'Gender', on_change=['gender'], states={
+    gender = fields.Selection(GENDER, 'Gender',
+        on_change=['gender'], states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
         })
-    first_name = fields.Char(
-        'First Name', states={
+    first_name = fields.Char('First Name', states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
         })
-    maiden_name = fields.Char(
-        'Maiden Name', states={
+    maiden_name = fields.Char('Maiden Name', states={
             'readonly': Eval('gender') != 'female',
             'invisible': ~STATES_PERSON
         })
@@ -78,9 +79,18 @@ class Party:
     employee_role = fields.One2Many('party.employee', 'party', 'Employee',
         size=1, states={'invisible': ~STATES_PERSON})
     ####################################
-    #Society information
+    #Company information
     short_name = fields.Char(
-        'Short Name', states={'invisible': ~STATES_SOCIETY})
+        'Short Name', states={'invisible': ~STATES_COMPANY},
+        depends=['is_company'])
+    parent = fields.Many2One('party.party', 'Parent',
+        #domain=[('is_company', '=', True)],
+        states={'invisible': ~STATES_COMPANY})
+    children = fields.One2Many('party.party', 'parent', 'Children',
+        states={'invisible': ~STATES_COMPANY})
+    employees = fields.One2Many('party.employee', 'company', 'Employees',
+        states={'invisible': ~STATES_COMPANY},
+        domain=[('is_person', '=', True)])
     ####################################
 
     @classmethod
@@ -166,7 +176,7 @@ class Party:
         if self.is_person:
             res = "%s %s %s" % (coop_string.translate_value(
                 self, 'gender'), self.name.upper(), self.first_name)
-        if self.is_society:
+        if self.is_company:
             res = super(Party, self).get_rec_name(name)
         return res
 
@@ -197,7 +207,7 @@ class Party:
                     party, 'birth_date')
                 res[party.id] += coop_string.get_field_as_summary(
                     party, 'maiden_name')
-            if party.is_society:
+            if party.is_company:
                 pass
             res[party.id] += coop_string.get_field_as_summary(
                 party, 'addresses', True, at_date, lang=lang)
@@ -221,9 +231,9 @@ class Party:
         if self.is_person:
             return self
 
-    def get_society(self):
-        if self.is_society:
-            return self.society
+    def get_company(self):
+        if self.is_company:
+            return self.company
 
     def address_get(self, type=None, at_date=None, kind=None):
         addresses = utils.get_good_versions_at_date(self, 'addresses', at_date)
@@ -291,14 +301,13 @@ class GenericActor(CoopSQL, Actor):
         return res
 
 
-class Society(CoopSQL, Actor):
-    'Society'
+class Company(CoopSQL, Actor):
+    'Company'
 
     __name__ = 'party.society'
 
     parent = fields.Many2One('party.society', 'Parent')
     childs = fields.One2Many('party.society', 'parent', 'Children')
-    employees = fields.One2Many('party.employee', 'society', 'Employees')
 
 
 class Employee(CoopSQL, Actor):
@@ -306,7 +315,7 @@ class Employee(CoopSQL, Actor):
 
     __name__ = 'party.employee'
 
-    society = fields.Many2One('party.society', 'Society', required=True)
+    company = fields.Many2One('party.party', 'Company', required=True)
 
 
 class Person(CoopSQL, Actor):

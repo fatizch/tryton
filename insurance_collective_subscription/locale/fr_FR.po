@@ -54,7 +54,7 @@ msgctxt "field:ins_collective.contract,subscriber_as_person:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-msgctxt "field:ins_collective.contract,subscriber_as_society:"
+msgctxt "field:ins_collective.contract,subscriber_as_company:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 

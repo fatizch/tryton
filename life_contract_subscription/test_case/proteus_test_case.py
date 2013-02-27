@@ -74,7 +74,7 @@ def launch_test_case(cfg_dict):
 <label name="subscriber"/>
 <group id="subscriber" colspan="3" col="1">
   <field name="subscriber_as_person"/>
-  <field name="subscriber_as_society"/>
+  <field name="subscriber_as_company"/>
 </group>
 <newline/>
 <field name="product_desc" widget="richtext" colspan="2"/>

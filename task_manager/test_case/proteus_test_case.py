@@ -76,7 +76,7 @@ def launch_test_case(cfg_dict):
         'model': 'ins_product.coverage',
     })
 
-    society_mod = meths['Model']({
+    company_mod = meths['Model']({
         'model': 'party.party',
     })
 
@@ -123,7 +123,7 @@ def launch_test_case(cfg_dict):
     })
 
     meths['ModelAccess']({
-        'model': society_mod,
+        'model': company_mod,
         'group': contract_admin_grp,
         'perm_read': True,
         'perm_write': True,

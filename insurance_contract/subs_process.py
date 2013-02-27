@@ -57,18 +57,18 @@ class ProjectState(CoopStep):
             'subscriber_kind'])
     # The subscriber is the client which wants to subscribe to a contract.
     subscriber = fields.Many2One('party.party', 'Subscriber',
-        on_change_with=['subscriber_as_person', 'subscriber_as_society',
+        on_change_with=['subscriber_as_person', 'subscriber_as_company',
             'subscriber_kind']
         )
     subscriber_as_person = fields.Many2One('party.party', 'Subscriber',
         states={'invisible': Eval('subscriber_kind') != 'person',
             }, domain=[('is_person', '=', True)])
-    subscriber_as_society = fields.Many2One('party.party', 'Subscriber',
-        states={'invisible': Eval('subscriber_kind') != 'society'},
-        domain=[('is_society', '=', True)])
+    subscriber_as_company = fields.Many2One('party.party', 'Subscriber',
+        states={'invisible': Eval('subscriber_kind') != 'company'},
+        domain=[('is_company', '=', True)])
 
     subscriber_desc = fields.Function(fields.Text('Summary',
-            on_change_with=['subscriber_as_person', 'subscriber_as_society',
+            on_change_with=['subscriber_as_person', 'subscriber_as_company',
                 'subscriber']),
         'on_change_with_subscriber_desc')
 
@@ -173,15 +173,15 @@ class ProjectState(CoopStep):
         if (self.subscriber_as_person
                 and self.subscriber_kind == 'person'):
             return self.subscriber_as_person.id
-        elif (self.subscriber_as_society
-                and self.subscriber_kind == 'society'):
-            return self.subscriber_as_society.id
+        elif (self.subscriber_as_company
+                and self.subscriber_kind == 'company'):
+            return self.subscriber_as_company.id
 
     def on_change_subscriber_kind(self):
         res = {}
         if self.subscriber_kind == 'person':
-            res['subscriber_as_society'] = None
-        elif self.subscriber_kind == 'society':
+            res['subscriber_as_company'] = None
+        elif self.subscriber_kind == 'company':
             res['subscriber_as_person'] = None
         return res
 

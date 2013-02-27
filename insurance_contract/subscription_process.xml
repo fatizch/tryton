@@ -23,7 +23,7 @@
                             <label name="subscriber"/>
                             <group id="subscriber" colspan="3" col="1">
                                 <field name="subscriber_as_person"/>
-                                <field name="subscriber_as_society"/>
+                                <field name="subscriber_as_company"/>
                             </group>
                             <newline/>
                             <label name="product"/>

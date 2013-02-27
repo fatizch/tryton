@@ -30,7 +30,7 @@ class GroupContract(GroupRoot, contract.Contract):
         cls.subscriber = copy.copy(cls.subscriber)
         if not cls.subscriber.domain:
             cls.subscriber.domain = []
-        cls.subscriber.domain.append(('is_society', '=', True))
+        cls.subscriber.domain.append(('is_company', '=', True))
         cls.offered = copy.copy(cls.offered)
         if not cls.offered.context:
             cls.offered.context = {}

@@ -35,6 +35,6 @@ def update_args_with_subscriber(args):
     if subscriber.__name__ == 'party.party':
         if hasattr(subscriber, 'is_person') and subscriber.is_person:
             args['subscriber_person'] = subscriber
-        elif hasattr(subscriber, 'is_society') and subscriber.is_society:
-            args['subscriber_society'] = subscriber
+        elif hasattr(subscriber, 'is_company') and subscriber.is_company:
+            args['subscriber_company'] = subscriber
         return

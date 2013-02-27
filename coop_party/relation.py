@@ -64,6 +64,9 @@ class PartyRelation(CoopSQL, CoopView):
 #                Eval('context', {}).get('direction') != 'reverse'},
         ), 'get_reverse_kind')
 
+#    parent = fields.Many2One('party.party-relation', 'Parent')
+#    children = fields.One2Many('party.party-relation', 'parent', 'Children')
+
     @classmethod
     def get_relation_kind(cls, vals=None):
         return PartyRelationKind.get_values_as_selection(

@@ -12,8 +12,8 @@
         <field name="code" xexpand="0"/>
         <label name="is_person"/>
         <field name="is_person" xexpand="0"/>
-        <label name="is_society"/>
-        <field name="is_society" xexpand="0"/>
+        <label name="is_company"/>
+        <field name="is_company" xexpand="0"/>
     </xpath>
     <xpath expr="/form/group[@id='checkboxes']" position="after">
         <group id="person" colspan="6" col="6"
@@ -33,8 +33,8 @@
         </group>
     </xpath>
     <xpath expr="/form/group[@id='checkboxes']" position="after">
-        <group id="society" colspan="6" col="6"
-            states="{'invisible':Bool(~Eval('is_society'))}">
+        <group id="company" colspan="6" col="6"
+            states="{'invisible':Bool(~Eval('is_company'))}">
             <label name="short_name"/>
             <field name="short_name"/>
             <label name="name"/>
@@ -46,13 +46,23 @@
     <xpath expr="/form/field[@name='code']" position="replace"/>
     <xpath expr="/form/label[@name='code']" position="replace"/>
     <xpath expr="/form/notebook/page[@id='accounting']" position="replace_attributes">
-        <page id="accounting" states="{'invisible':Bool(~Eval('is_society'))}"/>
+        <page id="accounting" states="{'invisible':Bool(~Eval('is_company'))}"/>
     </xpath>
     <xpath expr="/form/notebook" position="inside">
-        <page string="Relations" id="rel">
-            <field name="relations" view_ids="coop_party.party_relation_view_tree_from"/>
+        <page string="Company" id="tree" states="{'invisible': ~Eval('is_company')}">
+            <label name="parent"/>
+            <field name="parent"/>
             <newline/>
-            <field name="in_relation_with" view_ids="coop_party.party_relation_view_tree_to"/>
+            <field name="children" colspan="4"
+                view_ids="coop_party.company_view_tree_hierarchical,coop_party.company_view_form"
+                    mode="tree,form"/>
+            <field name="employees" colspan="4"/>
+        </page>
+        <page string="Relations" id="rel">
+            <field name="relations" view_ids="coop_party.party_relation_view_tree_from"
+                colspan="4"/>
+            <field name="in_relation_with" view_ids="coop_party.party_relation_view_tree_to"
+                colspan="4"/>
         </page>
         <page string="Roles" id="role">
             <group id="role_group" colspan="4">

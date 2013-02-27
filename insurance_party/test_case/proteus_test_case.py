@@ -19,13 +19,13 @@ def get_or_create_insurer(models, cfg_dict, code, name):
     if insurers:
         return insurers[0]
     insurer = models['Insurer']()
-    society = models['Society']()
-    society.is_society = True
-    society.insurer_role.append(insurer)
+    company = models['Society']()
+    company.is_company = True
+    company.insurer_role.append(insurer)
     insurer.name = name
     insurer.code = code
     insurer.addresses[:] = []
-    society.currency = cfg_dict['currency']
+    company.currency = cfg_dict['currency']
     insurer.save()
     return insurer
 

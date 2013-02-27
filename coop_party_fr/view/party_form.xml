@@ -7,7 +7,7 @@
         </group>
     </xpath>
     <xpath expr="/form/group/field[@name='ssn']" position="replace"/>
-    <xpath expr="/form/group[@id='society']" position="inside">
+    <xpath expr="/form/group[@id='company']" position="inside">
         <label name="siren"/>
         <field name="siren"/>
     </xpath>

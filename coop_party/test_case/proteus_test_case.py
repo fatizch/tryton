@@ -11,7 +11,7 @@ import proteus_tools
 
 def update_models(cfg_dict):
     cfg_dict['Person'] = Model.get('party.person')
-    cfg_dict['Society'] = Model.get('party.society')
+    cfg_dict['Company'] = Model.get('party.society')
     cfg_dict['Party'] = Model.get('party.party')
     cfg_dict['RelationKind'] = Model.get('party.party_relation_kind')
     cfg_dict['Relation'] = Model.get('party.party-relation')
@@ -225,6 +225,31 @@ def create_parties(cfg_dict):
             addresses_kind)
 
 
+def create_company(cfg_dict, name, short_name=None, parent=None,
+        children_level=None, children_depth=None):
+    res = cfg_dict['Party']()
+    res.is_company = True
+    res.name = name
+    res.short_name = short_name
+    if parent:
+        res.parent = parent
+    res.save()
+    if children_depth and children_depth > 0:
+        for i in range(1, 3):
+            create_company(cfg_dict,
+                'subsidiary %s%s' % (children_level, i),
+                '%s%s' % (children_level, i), res, children_level + 1,
+                children_depth - 1)
+    return res
+
+
+def create_hierarchy(cfg_dict):
+    if proteus_tools.get_objects_from_db(cfg_dict, 'Party', key='name',
+        value='Mother House'):
+        return
+    create_company(cfg_dict, 'Mother House', 'MH', None, 1, 4)
+
+
 def migrate_parties(cfg_dict):
     persons = proteus_tools.get_objects_from_db(cfg_dict, 'Person', limit=None)
     for person in persons:
@@ -239,14 +264,21 @@ def migrate_parties(cfg_dict):
         party.ssn = person.ssn
         party.birth_date = person.birth_date
         party.save()
-    for society in proteus_tools.get_objects_from_db(
-            cfg_dict, 'Society', limit=None):
-        party = society.party
-        party.is_society = True
+    for company in proteus_tools.get_objects_from_db(
+            cfg_dict, 'Company', limit=None):
+        party = company.party
+        party.is_company = True
         party.save()
+    for company in proteus_tools.get_objects_from_db(cfg_dict, 'Party',
+        limit=None, domain=[('is_society', '=', True)]):
+        print company.name
+        company.is_company = True
+        company.is_society = False
+        company.save()
 
 
 def launch_test_case(cfg_dict):
     update_models(cfg_dict)
     migrate_parties(cfg_dict)
     create_parties(cfg_dict)
+    create_hierarchy(cfg_dict)

@@ -4,8 +4,8 @@
         <form string="Employee"/>
     </xpath>
     <xpath expr="/form/group/label[@name='active']" position="before">
-        <label name="society"/>
-        <field name="society"/>
+        <label name="company"/>
+        <field name="company"/>
     </xpath>
     <xpath expr="/form" position="replace_attributes">
         <form col="4"/>

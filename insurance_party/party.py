@@ -5,7 +5,7 @@ from trytond.pyson import Not
 
 from trytond.modules.coop_utils import CoopSQL, coop_string
 from trytond.modules.coop_party import Actor
-from trytond.modules.coop_party.party import  STATES_SOCIETY
+from trytond.modules.coop_party.party import  STATES_COMPANY
 
 __all__ = [
     'Party',
@@ -22,7 +22,7 @@ class Party:
     __metaclass__ = PoolMeta
 
     insurer_role = fields.One2Many('party.insurer', 'party', 'Insurer', size=1,
-        states={'invisible': Not(STATES_SOCIETY)})
+        states={'invisible': Not(STATES_COMPANY)})
     broker_role = fields.One2Many('party.broker', 'party', 'Broker', size=1)
     customer_role = fields.One2Many('party.customer', 'party', 'Customer',
         size=1)

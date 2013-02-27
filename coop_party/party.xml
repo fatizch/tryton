@@ -5,6 +5,9 @@
         <menuitem name="Configuration" id="party.menu_configuration"
             sequence="100"/>
 
+        <!-- *******************************************
+            ******** Party **********
+            ******************************************* -->
         <record model="ir.ui.view" id="party_view_tree">
             <field name="model">party.party</field>
             <field name="type">tree</field>
@@ -17,26 +20,76 @@
             <field name="inherit" ref="party.party_view_form"/>
             <field name="name">party_form</field>
         </record>
-
-        <record model="ir.action.act_window.domain" id="act_party_form_domain_person">
-            <field name="name">Person</field>
-            <field name="sequence" eval="10"/>
+        <!-- *******************************************
+            ******** Person **********
+            ******************************************* -->
+        <record model="ir.ui.view" id="person_view_tree">
+            <field name="model">party.party</field>
+            <field name="type">tree</field>
+            <field name="name">person_tree</field>
+        </record>
+        <record model="ir.ui.view" id="person_view_form">
+            <field name="model">party.party</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="party.party_view_form"/>
+            <field name="arch" type="xml"/>
+        </record>
+        <record model="ir.action.act_window" id="act_person_form">
+            <field name="name">Persons</field>
+            <field name="res_model">party.party</field>
             <field name="domain">[('is_person', '=', True)]</field>
-            <field name="act_window" ref="party.act_party_form"/>
         </record>
-        <record model="ir.action.act_window.domain" id="act_party_form_domain_society">
-            <field name="name">Society</field>
+        <record model="ir.action.act_window.view" id="act_person_tree_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="person_view_tree"/>
+            <field name="act_window" ref="act_person_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_person_form_view">
             <field name="sequence" eval="20"/>
-            <field name="domain">[('is_society', '=', True)]</field>
-            <field name="act_window" ref="party.act_party_form"/>
+            <field name="view" ref="person_view_form"/>
+            <field name="act_window" ref="act_person_form"/>
         </record>
-        <record model="ir.action.act_window.domain" id="act_party_form_domain_all">
-            <field name="name">All</field>
-            <field name="sequence" eval="9999"/>
-            <field name="domain"></field>
-            <field name="act_window" ref="party.act_party_form"/>
-        </record>
+        <menuitem parent="party.menu_party" sequence="0" id="menu_person_form"
+            icon="tryton-list" action="act_person_form"/>
 
+        <!-- *******************************************
+            ******** Company **********
+            ******************************************* -->
+        <record model="ir.ui.view" id="company_view_tree">
+            <field name="model">party.party</field>
+            <field name="type">tree</field>
+            <field name="name">company_tree</field>
+        </record>
+        <record model="ir.ui.view" id="company_view_form">
+            <field name="model">party.party</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="party.party_view_form"/>
+            <field name="arch" type="xml"/>
+        </record>
+        <record model="ir.action.act_window" id="act_company_form">
+            <field name="name">Companies</field>
+            <field name="res_model">party.party</field>
+            <field name="domain">[('is_company', '=', True)]</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_company_tree_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="company_view_tree"/>
+            <field name="act_window" ref="act_company_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_company_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="company_view_form"/>
+            <field name="act_window" ref="act_company_form"/>
+        </record>
+        <menuitem parent="party.menu_party" sequence="0" id="menu_company_form"
+            icon="tryton-list" action="act_company_form"/>
+
+        <record model="ir.ui.view" id="company_view_tree_hierarchical">
+            <field name="model">party.party</field>
+            <field name="type">tree</field>
+            <field name="field_childs">children</field>
+            <field name="name">company_tree_hierarchical</field>
+        </record>
         <!-- *******************************************
             ************** Employee *************
             ******************************************* -->

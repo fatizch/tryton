@@ -33,15 +33,16 @@ def create_bank(cfg_dict):
             break
         try:
             bank = cfg_dict['Bank']()
-            society = cfg_dict['Society']()
-            society.is_society = True
-            society.currency = cfg_dict['currency']
-            society.bank_role.append(bank)
+            company = cfg_dict['Society']()
+            company.is_company = True
+            company.currency = cfg_dict['currency']
+            company.bank_role.append(bank)
             bank.name = line[11:51].strip()
-            society.short_name = line[51:61].strip()
+            company.short_name = line[51:61].strip()
             add_address(cfg_dict, line, bank, countries)
             add_bank_info(line, bank)
             bank.save()
+            company.save()
             n += 1
         except:
             warnings.warn('Impossible to create bank %s' % line[11:51].strip(),
@@ -131,8 +132,8 @@ def add_bank_account(cfg_dict, party, banks):
 
 def migrate_banks(cfg_dict):
     for bank in cfg_dict['Bank'].find([]):
-        if not bank.party.is_society:
-            bank.party.is_society = True
+        if not bank.party.is_company:
+            bank.party.is_company = True
             bank.party.save()
 
 

@@ -15,12 +15,14 @@ def migrate_eligibility_rules(cfg_dict):
             'OR',
             [('subscriber_classes', '=', 'party.person')],
             [('subscriber_classes', '=', 'party.party')],
-            [('subscriber_classes', '=', 'party.society')],
+            [('subscriber_classes', '=', 'party.company')],
         ]):
         if rule.subscriber_classes == 'party.person':
             rule.subscriber_classes = 'person'
         elif rule.subscriber_classes == 'party.society':
-            rule.subscriber_classes = 'society'
+            rule.subscriber_classes = 'company'
+        elif rule.subscriber_classes == 'society':
+            rule.subscriber_classes = 'company'
         elif rule.subscriber_classes == 'party.party':
             rule.subscriber_classes = 'all'
         rule.save()

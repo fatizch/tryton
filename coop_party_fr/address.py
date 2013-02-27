@@ -17,7 +17,7 @@ class Address():
         '''AFNOR - Line 2
         For individual : Delivery Point Access Data
         Door or Letterbox number, floor, staircase
-        For societies : Individual Identification Form of Address -
+        For companies : Individual Identification Form of Address -
         Given Name, Surname, function, Department''',
         states=STATES, depends=DEPENDS)
     line3 = fields.Char('Building', 38,
@@ -35,7 +35,7 @@ class Address():
         cls.name.help = '''AFNOR - Line 1
         For individual : Identity of the addressee -
         Form of address or given name or surname...
-        For societies : Organization identification -
+        For companies : Organization identification -
         Organization name, Legal Status'''
 
         cls.street = copy.copy(cls.street)
@@ -65,9 +65,9 @@ class Address():
         #Set Siret invisible for person
         cls.siret = copy.copy(cls.siret)
         cls.siret.states = {
-            'invisible': Bool(~Eval('_parent_party', {}).get('is_society'))}
+            'invisible': Bool(~Eval('_parent_party', {}).get('is_company'))}
         cls.siret_nic.states = {
-            'invisible': Bool(~Eval('_parent_party', {}).get('is_society'))}
+            'invisible': Bool(~Eval('_parent_party', {}).get('is_company'))}
 
     def on_change_street(self):
         #AFNOR rule, no comma after street number and line 4 should be upper

@@ -29,7 +29,7 @@ class ProjectGBPState(CoopStep):
 
     # The subscriber is the client which wants to subscribe to a contract.
     subscriber = fields.Many2One('party.party', 'Subscriber',
-        domain=[('is_society', '=', True)])
+        domain=[('is_company', '=', True)])
 
     broker = fields.Many2One('party.party',
                              'Broker')

@@ -1,6 +1,6 @@
 <form string="Employee">
     <label name="party"/>
     <field name="party"/>
-    <label name="society"/>
-    <field name="society"/>
+    <label name="company"/>
+    <field name="company"/>
 </form>

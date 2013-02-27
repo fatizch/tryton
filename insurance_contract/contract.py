@@ -47,7 +47,7 @@ class Subscribed(CoopProcessFramework):
     start_date = fields.Date('Effective Date', required=True)
     end_date = fields.Date(
         'End Date', domain=[('start_date', '<=', 'end_date')])
-    # Management date is the date at which the society started to manage the
+    # Management date is the date at which the company started to manage the
     # contract. Default value is start_date
     start_management_date = fields.Date('Management Date')
     status = fields.Selection('get_possible_status', 'Status', readonly=True)

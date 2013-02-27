@@ -11,7 +11,7 @@ def register():
         Address,
         Actor,
         Person,
-        Society,
+        Company,
         Employee,
         PartyRelationKind,
         PartyRelation,

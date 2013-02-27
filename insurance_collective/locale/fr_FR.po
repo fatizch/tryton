@@ -1503,7 +1503,7 @@ msgid "Subscriber"
 msgstr "Souscripteur"
 
 msgctxt ""
-"field:ins_collective.enrollment_process.project,subscriber_as_society:"
+"field:ins_collective.enrollment_process.project,subscriber_as_company:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 

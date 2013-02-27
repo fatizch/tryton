@@ -2,7 +2,7 @@ from trytond.pool import Pool
 from .product import *
 from .tranche import *
 from .college import *
-from .society import *
+from .company import *
 from .gbp_creation import *
 
 

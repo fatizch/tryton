@@ -45,7 +45,7 @@ class FrenchParty():
             })
         #Do not display SIREN for person
         cls.siren = copy.copy(cls.siren)
-        cls.siren.states = {'invisible': Bool(~Eval('is_society'))}
+        cls.siren.states = {'invisible': Bool(~Eval('is_company'))}
 
     @staticmethod
     def calculate_ssn_key(ssn_no_key):
