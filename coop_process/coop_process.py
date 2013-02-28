@@ -24,7 +24,7 @@ __all__ = [
 ]
 
 
-class StepTransition():
+class StepTransition(model.CoopSQL):
     'Step Transition'
 
     __metaclass__ = PoolMeta
@@ -208,7 +208,7 @@ class CoopProcessFramework(ProcessFramework):
         return button_complete_generic
 
 
-class ProcessDesc():
+class ProcessDesc(model.CoopSQL):
     'Process Descriptor'
 
     __metaclass__ = PoolMeta
@@ -339,7 +339,7 @@ class ProcessDesc():
         return super(ProcessDesc, cls).create(values)
 
 
-class ProcessStepRelation():
+class ProcessStepRelation(model.CoopSQL):
     'Process to Step relation'
 
     __metaclass__ = PoolMeta
@@ -543,7 +543,7 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
         View.delete(to_delete)
 
 
-class StepDesc():
+class StepDesc(model.CoopSQL):
     'Step Desc'
 
     __metaclass__ = PoolMeta
