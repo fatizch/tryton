@@ -248,10 +248,18 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <![CDATA[
-                <form string="Create Test Case">
-                    <field name="test_values" colspan="4"/>
-                    <label name="result"/>
-                    <field name="result" colspan="3"/>
+                <form string="Create Test Case" col="3">
+                    <field name="test_values" colspan="3" yexpand="1" yfill="1"/>
+                     <group id="result" yexpand="0" yfill="0" col="3">
+                    <label name="result_value"/>
+                    <field name="result_value" colspan="2"/>
+                    <separator name="result_messages"/>
+                    <separator name="result_errors"/>
+                    <separator name="debug"/>
+                    <field name="result_messages" yexpand="0" yfill="0"/>
+                    <field name="result_errors" yexpand="0" yfill="0"/>
+                    <field name="debug" yexpand="0" yfill="0"/>
+                    </group>
                 </form>
                 ]]>
             </field>

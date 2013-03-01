@@ -171,7 +171,12 @@ class RuleTools(RuleEngineContext):
 
     @classmethod
     def _re_message(cls, args, the_message):
-        args['messages'].append(the_message)
+        args['messages'].append(str(the_message))
+
+    @classmethod
+    def _re_debug(cls, args, the_message):
+        if Transaction().context.get('debug'):
+            args['debug'].append(str(the_message))
 
 
 class FunctionFinder(ast.NodeVisitor):
@@ -235,24 +240,30 @@ class Rule(ModelView, ModelSQL):
     def default_status():
         return 'draft'
 
-    def compute(self, evaluation_context):
-        context = self.context.get_context()
-        context.update(evaluation_context)
-        context['context'] = context
-        localcontext = {}
-        try:
-            exec self.as_function in context, localcontext
-            result = localcontext[('result_%s' %
-                    hash(self.name)).replace('-', '_')]
-        except InternalRuleEngineError:
-            result = None
-        except:
-            raise
-            context['errors'].append('Critical Internal Rule Engine Error')
-            result = None
+    def compute(self, evaluation_context, debug_mode=False):
+        with Transaction().set_context(debug=debug_mode):
+            context = self.context.get_context()
+            context.update(evaluation_context)
+            context['context'] = context
+            localcontext = {}
+            try:
+                exec self.as_function in context, localcontext
+                result = localcontext[('result_%s' %
+                        hash(self.name)).replace('-', '_')]
+            except InternalRuleEngineError:
+                result = None
+            except:
+                raise
+                context['errors'].append('Critical Internal Rule Engine Error')
+                result = None
+
         messages = context['messages']
         errors = context['errors']
-        return (result, messages, errors)
+        if debug_mode:
+            debug = context['debug']
+            return (result, messages, errors, debug)
+        else:
+            return (result, messages, errors)
 
     def on_change_context(self):
         return {
@@ -303,7 +314,7 @@ class TestCase(ModelView, ModelSQL):
 
     description = fields.Char('Description', required=True)
     rule = fields.Many2One('rule_engine', 'Rule', required=True,
-        ondelete='CASCADE')
+        ondelete='CASCADE', context={'rule_id': Eval('rule')})
     values = fields.One2Many('rule_engine.test_case.value', 'test_case',
         'Values')
     expected_result = fields.Char('Expected Result')
@@ -317,6 +328,13 @@ class TestCase(ModelView, ModelSQL):
             for key, value in test_context.items()}
         try:
             test_value = self.rule.compute(test_context)
+            for key, noargs in test_context.iteritems():
+                try:
+                    noargs()
+                except StopIteration:
+                    pass
+                else:
+                    raise TypeError('Too few calls to {}'.format(key))
         except InternalRuleEngineError:
             pass
         except:
@@ -335,10 +353,55 @@ class TestCaseValue(ModelView, ModelSQL):
     "Test Case Value"
     __name__ = 'rule_engine.test_case.value'
 
-    name = fields.Char('Name')
+    name = fields.Selection('get_selection', 'Name',
+        selection_change_with=['rule'], depends=['rule'])
     value = fields.Char('Value')
     test_case = fields.Many2One('rule_engine.test_case', 'Test Case',
         ondelete='CASCADE')
+    rule = fields.Function(
+        fields.Many2One(
+            'rule_engine',
+            'Rule',
+        ),
+        'get_rule',
+    )
+
+    @classmethod
+    def __setup__(cls):
+        super(TestCaseValue, cls).__setup__()
+        cls.__rpc__.update({
+            'get_selection': RPC(instantiate=0),
+        })
+
+    def get_rule(self, name):
+        if (hasattr(self, 'test_case') and self.test_case) and (
+                hasattr(self.test_case, 'rule') and self.test_case.rule):
+            return self.test_case.rule.id
+        elif 'rule_id' in Transaction().context:
+            return Transaction().context.get('rule_id')
+        else:
+            return None
+
+    @classmethod
+    def default_rule(cls):
+        if 'rule_id' in Transaction().context:
+            return Transaction().context.get('rule_id')
+        else:
+            return None
+
+    def get_selection(self):
+        if not (hasattr(self, 'rule') and self.rule):
+            return [('', '')]
+        rule = self.rule
+        rule_name = ('fct_%s' % hash(rule.name)).replace('-', '_')
+        func_finder = FunctionFinder(
+            ['Decimal', rule_name] + rule.allowed_functions)
+        ast_node = ast.parse(rule.as_function)
+        func_finder.visit(ast_node)
+        test_values = list(set([
+            (n, n) for n in func_finder.functions
+            if n not in (rule_name, 'Decimal')]))
+        return test_values + [('', '')]
 
 
 class Context(ModelView, ModelSQL):
@@ -376,6 +439,7 @@ class Context(ModelView, ModelSQL):
         context = {}
         context['messages'] = []
         context['errors'] = []
+        context['debug'] = []
         for element in self.allowed_elements:
             element.as_context(context)
         return context
@@ -735,8 +799,12 @@ class CreateTestCaseStart(ModelView):
     unknown_values = fields.Integer('Unknown Values')
     test_values = fields.One2Many('rule_engine.test_case.value', None,
         'Values', size=Eval('unknown_values', 0),
-        on_change=['test_values', 'rule'], depends=['unknown_values', 'rule'])
-    result = fields.Char('Result', readonly=True)
+        on_change=['test_values', 'rule'], depends=['unknown_values', 'rule'],
+        context={'rule_id': Eval('rule')})
+    result_value = fields.Char('Result Value', readonly=True)
+    result_messages = fields.Text('Result Messages', readonly=True)
+    result_errors = fields.Text('Result Errors', readonly=True)
+    debug = fields.Text('Debug Info', readonly=True)
 
     def on_change_test_values(self):
         test_context = {}
@@ -746,14 +814,23 @@ class CreateTestCaseStart(ModelView):
         test_context = {key: noargs_func(value)
             for key, value in test_context.items()}
         try:
-            test_value = self.rule.compute(test_context)
-            result = (str(test_value[0]) if test_value[0] is not None
-                else test_value[1])
+            test_value = self.rule.compute(test_context, debug_mode=True)
+            result_value = str(test_value[0])
+            result_messages, result_errors, debug = test_value[1:]
         except Exception as exc:
-            result = 'ERROR: {}'.format(exc)
-        return {
-            'result': result
+            result_value = 'ERROR: {}'.format(exc)
+            return {
+                'result_value': result_value,
+                'result_messages': '',
+                'result_errors': '',
+                'debug': '',
             }
+        return {
+            'result_value': result_value,
+            'result_messages': '\n'.join(result_messages),
+            'result_errors': '\n'.join(result_errors),
+            'debug': '\n'.join(debug),
+        }
 
 
 class CreateTestCaseAskDescription(ModelView):
@@ -780,19 +857,8 @@ class CreateTestCase(Wizard):
     create_test_case = StateTransition()
 
     def default_start(self, fields):
-        Rule = Pool().get('rule_engine')
-        rule, = Rule.browse([Transaction().context['active_id']])
-        rule_name = ('fct_%s' % hash(rule.name)).replace('-', '_')
-        func_finder = FunctionFinder(['Decimal', rule_name]
-            + rule.allowed_functions)
-        ast_node = ast.parse(rule.as_function)
-        func_finder.visit(ast_node)
-        test_values = [{'name': n} for n in func_finder.functions
-            if n not in (rule_name, 'Decimal')]
         return {
-            'rule': rule.id,
-            'test_values': test_values,
-            'unknown_values': len(test_values),
+            'rule': Transaction().context['active_id'],
             }
 
     def compute_value(self):

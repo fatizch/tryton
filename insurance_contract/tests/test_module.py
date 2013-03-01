@@ -211,7 +211,7 @@ if annees_entre(birthdate, aujourd_hui()) > 40.0:
 return True'''
 
         tcv = self.TestCaseValue()
-        tcv.name = 'get_subscriber_birthdate'
+        tcv.name = 'date_de_naissance_souscripteur'
         tcv.value = 'datetime.date(2000, 11, 02)'
 
         tc = self.TestCase()
@@ -220,7 +220,7 @@ return True'''
         tc.expected_result = '(True, [], [])'
 
         tcv1 = self.TestCaseValue()
-        tcv1.name = 'get_subscriber_birthdate'
+        tcv1.name = 'date_de_naissance_souscripteur'
         tcv1.value = 'datetime.date(1950, 11, 02)'
 
         tc1 = self.TestCase()
