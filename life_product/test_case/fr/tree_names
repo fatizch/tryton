@@ -2,7 +2,8 @@
 rule_engine.tools_functions|Outils|dossier_outils|
 _re_message|Ajouter Message|ajouter_message|Message|Ajoute un message qui sera affiché à l'utilisateur
 _re_today|Aujourd'hui|aujourd_hui||Retourne la date du jour
-_re_years_between|Nombre d'années entre...|annees_entre|Début,Fin|Calcul le nombre d'années entre deux dates
+_re_years_between|Nombre d'années entre...|annees_entre|Début,Fin|Calcule le nombre d'années entre deux dates
+_re_debug|Message de debug|message_debug|Message|Ajoute un message de debug qui sera affichée lors de la création des cas de test
 
 [ins_product.rule_sets.person]
 ins_product.rule_sets.person|Personne Couverte|dossier_personne_couverte|
