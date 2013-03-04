@@ -10,7 +10,7 @@ from StringIO import StringIO
 from decimal import Decimal
 
 from pyflakes.checker import Checker
-from pyflakes.messages import *
+import pyflakes.messages
 
 from trytond.rpc import RPC
 
@@ -45,12 +45,28 @@ def check_code(code):
     try:
         tree = compile(code, 'test', 'exec', _ast.PyCF_ONLY_AST)
     except SyntaxError, syn_error:
-        error = Message('test', syn_error.lineno)
+        error = pyflakes.messages.Message('test', syn_error.lineno)
         error.message = 'Syntax Error'
         return [error]
     else:
         warnings = Checker(tree, 'test')
         return warnings.messages
+
+WARNINGS = []
+for name in (
+        'UnusedImport',
+        'RedefinedWhileUnused',
+        'ImportShadowedByLoopVar',
+        'ImportStarUsed',
+        'UndefinedExport',
+        'RedefinedFunction',
+        'LateFutureImport',
+        'UnusedVariable',
+        ):
+    message = getattr(pyflakes.messages, name, None)
+    if message is not None:
+        WARNINGS.append(message)
+WARNINGS = tuple(WARNINGS)
 
 
 # code snippet taken from http://docs.python.org/library/tokenize.html
@@ -221,12 +237,10 @@ class Rule(ModelView, ModelSQL):
                 })
 
     def filter_errors(self, error):
-        if isinstance(error, (UnusedImport, RedefinedWhileUnused,
-                    ImportShadowedByLoopVar, ImportStarUsed, UndefinedExport,
-                    RedefinedFunction, LateFutureImport, UnusedVariable)):
+        if isinstance(error, WARNINGS):
             return False
-        elif isinstance(error, UndefinedName) and \
-                error.message_args[0] in self.allowed_functions:
+        elif (isinstance(error, pyflakes.messages.UndefinedName)
+                and error.message_args[0] in self.allowed_functions):
             return False
         else:
             return True
