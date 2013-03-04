@@ -2,7 +2,7 @@
 import copy
 import functools
 
-from trytond.model import fields
+from trytond.model import fields, Model
 from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard, StateAction, StateView, Button
 from trytond.wizard import StateTransition
@@ -24,7 +24,7 @@ __all__ = [
     'LetterModel',
     'LetterVersion',
     'Printable',
-    'Model',
+    'OverridenModel',
     'LetterModelDisplayer',
     'LetterModelSelection',
     'LetterReport',
@@ -123,7 +123,7 @@ class LetterVersion(Attachment):
         return 'data'
 
 
-class Model():
+class OverridenModel():
     'Model'
 
     __metaclass__ = PoolMeta
@@ -147,7 +147,7 @@ class Printable(Model):
         good_model, = GoodModel.search([
             ('model', '=', cls.__name__)], limit=1)
 
-        # Basically, that is just setting 'is_workflow' to True
+        # Basically, that is just setting 'printable' to True
         good_model.printable = True
 
         good_model.save()

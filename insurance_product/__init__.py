@@ -24,7 +24,7 @@ def register():
         ProductItemDescriptorRelation,
         # from business_rule
         BusinessRuleRoot,
-        Model,
+        OverridenModel,
         LetterModel,
         LetterVersion,
         DocumentDesc,
