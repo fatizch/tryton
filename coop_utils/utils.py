@@ -13,7 +13,7 @@ from trytond.model import fields
 from trytond.protocols.jsonrpc import JSONEncoder, object_hook
 
 # Needed for Pyson evaluation
-from trytond.pyson import PYSONDecoder, PYSONEncoder, CONTEXT
+from trytond.pyson import PYSONDecoder, PYSONEncoder, CONTEXT, Eval
 from trytond.tools import safe_eval
 from trytond.model.modelstorage import EvalEnvironment
 
@@ -822,5 +822,20 @@ def get_domain_instances(record, field_name):
     GoodModel = Pool().get(field.model_name)
     return GoodModel.search(domain)
 
+
 def convert_to_reference(target):
     return '%s,%s' % (target.__name__, target.id)
+
+
+def get_versioning_domain(start_date, end_date=None):
+    if not end_date:
+        end_date = start_date
+    return (
+        'OR',
+        (
+            ('end_date', '=', None),
+            ('start_date', '<=', Eval(start_date))),
+        (
+            ('end_date', '!=', None),
+            ('start_date', '<=', Eval(start_date)),
+            ('end_date', '>=', Eval(end_date))))

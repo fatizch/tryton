@@ -150,7 +150,6 @@ class CoopProcessFramework(ProcessFramework):
                     if good_exec == 'complete':
                         cls.build_instruction_complete_method(process, None)(
                             [work])
-                        work.save()
                     else:
                         good_exec.execute(work)
                         work.save()
@@ -181,11 +180,20 @@ class CoopProcessFramework(ProcessFramework):
 
     @classmethod
     def button_next_states(cls, process, data):
-        return {}
+        result = []
+        for step_relation in process.all_steps:
+            step = step_relation.step
+            step_pyson, auth_pyson = step.get_pyson_for_display(step_relation)
+            if auth_pyson:
+                result.append('And(%s, %s)' % (step_pyson, auth_pyson))
+            else:
+                result.append('%s' % step_pyson)
+        final_result = 'Not(Or(%s))' % ', '.join(result)
+        return {'invisible': utils.pyson_encode(final_result, True)}
 
     @classmethod
     def button_previous_states(cls, process, data):
-        return {}
+        return cls.button_next_states(process, data)
 
     @classmethod
     def button_step_states(cls, process, step_data):
@@ -208,7 +216,7 @@ class CoopProcessFramework(ProcessFramework):
         def button_complete_generic(works):
             for work in works:
                 work.current_state = None
-                work.save
+                work.save()
 
         return button_complete_generic
 
@@ -615,14 +623,7 @@ class ProcessParameters(model.CoopView):
     def build_process_domain(cls):
         return [
             ('on_model', '=', Eval('model')),
-            ('OR',
-                (
-                    ('end_date', '=', None),
-                    ('start_date', '<=', Eval('date'))),
-                (
-                    ('end_date', '!=', None),
-                    ('start_date', '<=', Eval('date')),
-                    ('end_date', '>=', Eval('date'))))]
+            utils.get_versioning_domain('date')]
 
     @classmethod
     def build_process_depends(cls):
