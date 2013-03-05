@@ -22,6 +22,7 @@ __all__ = [
     'LifeProductDefinition',
     'LifeEligibilityRule',
     'LifeLossDesc',
+    'LifeBenefitRule',
 ]
 
 
@@ -161,3 +162,14 @@ class LifeLossDesc():
         res = super(LifeLossDesc, cls).get_possible_item_kind()
         res.append(('person', 'Person'))
         return res
+
+
+class LifeBenefitRule():
+    'Life Benefit Rule'
+
+    __name__ = 'ins_product.benefit_rule'
+    __metaclass__ = PoolMeta
+
+    def get_coverage_amount(self, args):
+        if 'option' in args and 'covered_person' in args:
+            return args['option'].get_coverage_amount(args['covered_person'])

@@ -220,6 +220,7 @@ class ClaimDeliveredService():
         cur_dict['start_date'] = self.loss.start_date
         cur_dict['end_date'] = self.loss.end_date
         cur_dict['loss'] = self.loss
+        cur_dict['option'] = self.subscribed_service
 
     def calculate(self):
         cur_dict = {}

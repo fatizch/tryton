@@ -4,9 +4,10 @@ import copy
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Bool
+from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model
-from trytond.modules.coop_utils import utils
+from trytond.modules.coop_utils import utils, date
 from trytond.modules.coop_utils import coop_string
 from trytond.modules.coop_process import CoopProcessFramework
 from trytond.modules.insurance_product import Printable
@@ -26,6 +27,7 @@ OPTIONSTATUS = CONTRACTSTATUSES + [
 __all__ = [
     'Contract',
     'Option',
+    'StatusHistory',
     'PriceLine',
     'BillingManager',
     'CoveredElement',
@@ -51,7 +53,15 @@ class Subscribed(CoopProcessFramework):
     # contract. Default value is start_date
     start_management_date = fields.Date('Management Date')
     status = fields.Selection('get_possible_status', 'Status', readonly=True)
+    status_history = fields.One2Many('ins_contract.status_history',
+        'reference', 'Status History')
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
+    currency = fields.Function(
+        fields.Many2One('currency.currency', 'Currency'),
+        'get_currency')
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'get_currency_digits')
 
     @classmethod
     def __setup__(cls):
@@ -100,12 +110,39 @@ class Subscribed(CoopProcessFramework):
             self.end_date = min(offered.end_date, end_date)
         else:
             self.end_date = offered.end_date
-        self.status = 'active'
+        self.update_status('active', self.start_date)
 
     def get_offered(self):
         if not (hasattr(self, 'offered') and self.offered):
             return None
         return self.offered
+
+    @staticmethod
+    def get_status_transition_authorized(from_status):
+        res = []
+        if from_status == 'quote':
+            res = ['active', 'refused']
+        elif from_status == 'active':
+            res = ['terminated']
+        return res
+
+    def update_status(self, to_status, at_date):
+        if (hasattr(self, 'status') and not to_status in
+                self.get_status_transition_authorized(self.status)):
+            return False, [
+                ('transition_unauthorized', (self.status, to_status))]
+        if not hasattr(self, 'status_history') or not self.status_history:
+            self.status_history = []
+        status_history = utils.instanciate_relation(
+                self.__class__, 'status_history')
+        status_history.init_from_reference(self, to_status, at_date)
+        self.status_history.append(status_history)
+        self.status = to_status
+        return True, []
+
+    def get_currency_digits(self, name):
+        if hasattr(self, 'currency') and self.currency:
+            return self.currency.digits
 
 
 class Contract(model.CoopSQL, Subscribed, Printable):
@@ -355,9 +392,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def activate_contract(self):
         if not self.status == 'quote':
             return True, ()
-
-        self.status = 'active'
-
+        self.update_status('active', self.start_date)
         return True, ()
 
     def init_complementary_data(self):
@@ -408,6 +443,10 @@ class Contract(model.CoopSQL, Subscribed, Printable):
 
     def get_contact(self):
         return self.subscriber
+
+    def get_currency(self, name):
+        if hasattr(self, 'offered') and self.offered:
+            return self.offered.get_currency(name)
 
 
 class Option(model.CoopSQL, Subscribed):
@@ -460,6 +499,42 @@ class Option(model.CoopSQL, Subscribed):
 
     def get_contract(self):
         return self.contract
+
+    def get_covered_data(self):
+        raise NotImplementedError
+
+    def get_coverage_amount(self):
+        raise NotImplementedError
+
+
+class StatusHistory(model.CoopSQL, model.CoopView):
+    'Status History'
+
+    __name__ = 'ins_contract.status_history'
+
+    reference = fields.Reference('Reference', 'get_possible_reference')
+    status = fields.Char('Status')
+    start_date = fields.Date('Start Date')
+    end_date = fields.Date('End Date')
+
+    @classmethod
+    def get_possible_reference(cls):
+        res = []
+        res.append(('ins_contract.contract', 'Contract'))
+        res.append(('ins_contract.option', 'Option'))
+        return res
+
+    def init_from_reference(self, reference, to_status, at_date):
+        self.status = to_status
+        self.start_date = at_date
+        if not reference.status_history:
+            return
+        previous_status = reference.status_history[-1]
+        if not previous_status:
+            return
+        previous_status.end_date = date.add_day(at_date, -1)
+        if previous_status == 'active':
+            reference.end_date = previous_status.end_date
 
 
 class PriceLine(model.CoopSQL, model.CoopView):
@@ -824,8 +899,10 @@ class CoveredData(model.CoopSQL, model.CoopView):
     end_date = fields.Date('End Date')
     status = fields.Selection(OPTIONSTATUS, 'Status')
     coverage_amount = fields.Numeric('Coverage Amount',
-        states={'invisible': Bool(~Eval('_parent_coverage', {}).get(
-            'is_coverage_amount_needed'))})
+        states={
+            'invisible': Bool(~Eval('_parent_coverage', {}).get(
+                    'is_coverage_amount_needed'))
+        })
 
     @classmethod
     def default_status(cls):

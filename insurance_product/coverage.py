@@ -309,6 +309,9 @@ class Coverage(model.CoopSQL, Offered):
     def get_is_coverage_amount_needed(self, name=None):
         return not self.is_package
 
+    def get_currency(self, name):
+        return self.currency.id
+
 
 class PackageCoverage(model.CoopSQL):
     'Link Package Coverage'

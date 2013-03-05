@@ -17,6 +17,7 @@ from trytond.modules.insurance_process import CoopStateView
 
 __all__ = [
     'Contract',
+    'LifeOption',
     'CoveredPerson',
     'LifeCoveredDesc',
     'ExtensionLifeState',
@@ -69,6 +70,26 @@ class Contract():
         covered_element.person = subscriber.id
         self.covered_elements = [covered_element]
         return super(Contract, self).init_covered_elements()
+
+
+class LifeOption():
+    'Subscribed Life Coverage'
+
+    __name__ = 'ins_contract.option'
+    __metaclass__ = PoolMeta
+
+    def get_covered_data(self, covered_person):
+        for covered_data in self.covered_data:
+            if not hasattr(covered_data.covered_element, 'person'):
+                continue
+            if covered_data.covered_element.person == covered_person:
+                return covered_data
+
+    def get_coverage_amount(self, covered_person):
+        covered_data = self.get_covered_data(covered_person)
+        if covered_data:
+            return covered_data.coverage_amount
+        return 0
 
 
 class PriceLine():

@@ -14,10 +14,10 @@ msgid "Closing"
 msgstr "Clôture"
 
 msgid "Claimant Selection"
-msgstr "Sélection du déclarant"
+msgstr "Déclarant"
 
 msgid "Loss Selection"
-msgstr "Sélection du préjudice"
+msgstr "Décl. du Préjudice"
 
 msgid "Documents"
 msgstr "Documents"

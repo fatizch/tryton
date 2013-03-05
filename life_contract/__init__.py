@@ -6,6 +6,7 @@ def register():
     Pool.register(
         # from life_contract
         Contract,
+        LifeOption,
         CoveredPerson,
         LifeCoveredDesc,
         ExtensionLifeState,

@@ -13,6 +13,7 @@ def register():
         BrokerManager,
         Contract,
         Option,
+        StatusHistory,
         BillingManager,
         CoveredElement,
         CoveredData,

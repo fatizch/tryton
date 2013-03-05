@@ -397,6 +397,9 @@ class Product(model.CoopSQL, Offered):
                 return [], ()
         return [], ()
 
+    def get_currency(self, name):
+        return self.currency.id
+
 
 class ProductOptionsCoverage(model.CoopSQL):
     'Define Product - Coverage relations'

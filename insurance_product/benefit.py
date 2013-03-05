@@ -43,17 +43,10 @@ class LossDescDocumentsRelation(model.CoopSQL):
 
     __name__ = 'ins_product.loss-document-relation'
 
-    document = fields.Many2One(
-        'ins_product.document_desc',
-        'Document',
-        ondelete='RESTRICT',
-    )
-
-    loss = fields.Many2One(
-        'ins_product.loss_desc',
-        'Loss',
-        ondelete='CASCADE',
-    )
+    document = fields.Many2One('ins_product.document_desc', 'Document',
+        ondelete='RESTRICT')
+    loss = fields.Many2One('ins_product.loss_desc', 'Loss',
+        ondelete='CASCADE')
 
 
 class LossDesc(model.CoopSQL, model.CoopView):
@@ -71,12 +64,8 @@ class LossDesc(model.CoopSQL, model.CoopView):
         'ins_product.loss_desc-complementary_data_def',
         'loss_desc', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'loss')], )
-    documents = fields.Many2Many(
-        'ins_product.loss-document-relation',
-        'loss',
-        'document',
-        'Documents',
-    )
+    documents = fields.Many2Many('ins_product.loss-document-relation',
+        'loss', 'document', 'Documents')
 
     @classmethod
     def get_possible_item_kind(cls):

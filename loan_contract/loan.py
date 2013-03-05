@@ -4,7 +4,7 @@ import math
 
 from decimal import Decimal
 from trytond.model import fields
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or
 from trytond.transaction import Transaction
 
@@ -45,7 +45,8 @@ class LoanContract():
         'get_is_loan_contract')
     loans = fields.One2Many('ins_contract.loan', 'contract', 'Loans',
         states={'invisible': ~Eval('is_loan_contract')},
-        depends=['is_loan_contract'])
+        depends=['is_loan_contract', 'currency'],
+        context={'currency': Eval('currency')})
 
     def get_is_loan_contract(self, name=None):
         if not self.options and self.offered:
@@ -101,6 +102,15 @@ class Loan(model.CoopSQL, model.CoopView):
         states={'invisible': Eval('kind') != 'fixed_rate'})
     lender = fields.Many2One('party.party', 'Lender',
         domain=[('bank_role', '>', 0)])
+    currency = fields.Function(
+        fields.Many2One('currency.currency', 'Currency'),
+        'get_currency')
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'get_currency_digits')
+    currency_symbol = fields.Function(
+        fields.Char('Symbol'),
+        'get_currency_symbol')
 
     @classmethod
     def default_kind(cls):
@@ -131,6 +141,31 @@ class Loan(model.CoopSQL, model.CoopView):
     def init_from_contract(self, contract):
         self.funds_release_date = contract.start_date
         self.first_payment_date = date.add_month(self.funds_release_date, 1)
+
+    def get_currency_digits(self, name):
+        if hasattr(self, 'currency') and self.currency:
+            return self.currency.digits
+
+    @staticmethod
+    def default_currency():
+        return Transaction().context.get('currency')
+
+    def get_currency(self, name):
+        if hasattr(self, 'contract') and self.contract:
+            return self.contract.get_currency(name)
+
+    @staticmethod
+    def default_currency_symbol():
+        Currency = Pool().get('currency.currency')
+        currency = Currency(Transaction().context.get('currency'))
+        if currency and hasattr(currency, 'symbol'):
+            return currency.symbol
+        return ''
+
+    def get_currency_symbol(self, name):
+        if hasattr(self, 'currency') and self.currency:
+            return self.currency.symbol
+        return ''
 
 
 class LoanShare(model.CoopSQL, model.CoopView):

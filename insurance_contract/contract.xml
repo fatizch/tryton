@@ -191,6 +191,19 @@
             <field name="name">delivered_service_tree</field>
         </record>
         <!--################################################################ -->
+        <!-- Status History -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="status_history_view_form">
+            <field name="model">ins_contract.status_history</field>
+            <field name="type">form</field>
+            <field name="name">status_history_form</field>
+        </record>
+        <record model="ir.ui.view" id="status_history_view_tree">
+            <field name="model">ins_contract.status_history</field>
+            <field name="type">tree</field>
+            <field name="name">status_history_tree</field>
+        </record>
+        <!--################################################################ -->
         <!-- Relate -->
         <!--################################################################ -->
         <record model="ir.action.act_window" id="act_contract_relate_form">
@@ -202,6 +215,16 @@
             <field name="keyword">form_relate</field>
             <field name="model">party.party,-1</field>
             <field name="action" ref="act_contract_relate_form"/>
+        </record>
+        <record model="ir.action.act_window" id="act_contract_status_history_relate_form">
+            <field name="name">Status History</field>
+            <field name="res_model">ins_contract.status_history</field>
+            <field name="domain">[('reference', '=', ('ins_contract.contract', Eval('active_id')))]</field>
+        </record>
+        <record model="ir.action.keyword" id="act_contract_status_history_relate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">ins_contract.contract,-1</field>
+            <field name="action" ref="act_contract_status_history_relate_form"/>
         </record>
     </data>
 </tryton>

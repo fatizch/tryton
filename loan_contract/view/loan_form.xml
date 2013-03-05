@@ -3,13 +3,19 @@
     <label name="kind"/>
     <field name="kind"/>
     <label name="fixed_rate"/>
-    <field name="fixed_rate"/>
+    <group id="fixed_rate">
+        <field name="fixed_rate" xexpand="0"/>
+        <label string="%" xexpand="0" xalign="0"/>
+    </group>
     <newline/>
     <label name="contract"/>
     <field name="contract"/>
     <newline/>
     <label name="amount"/>
-    <field name="amount"/>
+    <group id="amount">
+        <field name="amount" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
     <newline/>
     <label name="monthly_payment_number"/>
     <field name="monthly_payment_number"/>

@@ -42,36 +42,16 @@ class LetterModel(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_product.letter_model'
 
-    name = fields.Char(
-        'Name',
-        required=True, translate=True
-    )
-
-    on_model = fields.Many2One(
-        'ir.model',
-        'Model',
-        domain=[('printable', '=', True)],
-        required=True,
-    )
-
-    code = fields.Char(
-        'Code',
-        required=True,
-    )
-
-    versions = fields.One2Many(
-        'ins_product.letter_version',
-        'resource',
-        'Versions',
-    )
-
-    kind = fields.Selection(
-        [
+    name = fields.Char('Name', required=True, translate=True)
+    on_model = fields.Many2One('ir.model', 'Model',
+        domain=[('printable', '=', True)], required=True)
+    code = fields.Char('Code', required=True)
+    versions = fields.One2Many('ins_product.letter_version',
+        'resource', 'Versions')
+    kind = fields.Selection([
             ('', ''),
             ('doc_request', 'Document Request'),
-        ],
-        'name',
-    )
+        ], 'name')
 
     def get_good_version(self, date, language):
         for version in self.versions:
@@ -94,18 +74,9 @@ class LetterVersion(Attachment):
 
     __name__ = 'ins_product.letter_version'
 
-    start_date = fields.Date(
-        'Start date',
-    )
-
-    end_date = fields.Date(
-        'End date',
-    )
-
-    language = fields.Many2One(
-        'ir.lang',
-        'Language',
-    )
+    start_date = fields.Date('Start date')
+    end_date = fields.Date('End date')
+    language = fields.Many2One('ir.lang', 'Language')
 
     @classmethod
     def __setup__(cls):
@@ -126,13 +97,10 @@ class LetterVersion(Attachment):
 class OverridenModel():
     'Model'
 
+    __name__ = 'ir.model'
     __metaclass__ = PoolMeta
 
-    __name__ = 'ir.model'
-
-    printable = fields.Boolean(
-        'Printable',
-    )
+    printable = fields.Boolean('Printable')
 
 
 class Printable(Model):
@@ -147,7 +115,7 @@ class Printable(Model):
         good_model, = GoodModel.search([
             ('model', '=', cls.__name__)], limit=1)
 
-        # Basically, that is just setting 'printable' to True
+        # Basically, that is just setting 'is_workflow' to True
         good_model.printable = True
 
         good_model.save()
@@ -205,11 +173,8 @@ class DocumentDesc(model.CoopSQL, model.CoopView):
     __name__ = 'ins_product.document_desc'
 
     code = fields.Char('Code', required=True)
-
     name = fields.Char('Name', required=True, translate=True)
-
     start_date = fields.Date('Start Date')
-
     end_date = fields.Date('End Date')
 
 
@@ -224,32 +189,20 @@ class DocumentRule(BusinessRuleRoot, model.CoopSQL):
             ('sub', 'Sub Elem'),
             ('loss', 'Loss'),
             ('', ''),
-        ],
-        'Kind',
-    )
-
-    documents = fields.Many2Many(
-        'ins_product.document-rule-relation',
-        'rule',
-        'document',
-        'Documents',
-        states={
-            'invisible': STATE_SIMPLE,
-        },
-    )
+        ], 'Kind')
+    documents = fields.Many2Many('ins_product.document-rule-relation',
+        'rule', 'document', 'Documents',
+        states={'invisible': STATE_SIMPLE})
 
     def give_me_documents(self, args):
         if self.config_kind == 'simple':
             return self.documents, []
-
         if not self.rule:
             return [], []
-
         try:
             res, mess, errs = self.rule.compute(args)
         except Exception:
             return [], ['Invalid rule']
-
         try:
             result = utils.get_those_objects(
                 'ins_product.document', [
@@ -268,17 +221,10 @@ class DocumentRuleRelation(model.CoopSQL):
 
     __name__ = 'ins_product.document-rule-relation'
 
-    rule = fields.Many2One(
-        'ins_product.document_rule',
-        'Rule',
-        ondelete='CASCADE',
-    )
-
-    document = fields.Many2One(
-        'ins_product.document_desc',
-        'Document',
-        ondelete='RESTRICT',
-    )
+    rule = fields.Many2One('ins_product.document_rule',
+        'Rule', ondelete='CASCADE')
+    document = fields.Many2One('ins_product.document_desc',
+        'Document', ondelete='RESTRICT')
 
 
 class Document(model.CoopSQL, model.CoopView):
@@ -286,19 +232,11 @@ class Document(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_product.document'
 
-    document_desc = fields.Many2One(
-        'ins_product.document_desc',
-        'Document Definition',
-        required=True,
-    )
-
-    for_object = fields.Reference(
-        'Needed For',
+    document_desc = fields.Many2One('ins_product.document_desc',
+        'Document Definition', required=True)
+    for_object = fields.Reference('Needed For',
         [('', '')],
-        states={
-            'readonly': ~~Eval('for_object')
-        },
-    )
+        states={'readonly': ~~Eval('for_object')})
 
     send_date = fields.Date(
         'Send Date',
@@ -408,7 +346,7 @@ class Document(model.CoopSQL, model.CoopView):
         return needed_by
 
 
-class DocumentRequest(model.CoopSQL, model.CoopView, Printable):
+class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
     'Document Request'
 
     __name__ = 'ins_product.document_request'

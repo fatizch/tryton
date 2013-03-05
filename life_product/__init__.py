@@ -12,4 +12,5 @@ def register():
         Tranche,
         TrancheVersion,
         LifeLossDesc,
+        LifeBenefitRule,
         module='life_product', type_='model')

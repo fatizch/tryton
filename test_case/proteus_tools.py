@@ -162,6 +162,25 @@ def get_or_create_this(
     return the_object
 
 
+def append_from_key(cfg_dict, from_obj, list_name, object_class_key, key,
+        values):
+    '''
+    This function allows to add instances to a list from their functional key
+    object_class_key is the cfg_dict key for the model of instances we are
+    trying to set on the list
+    '''
+    if not values:
+        return
+    to_list = getattr(from_obj, list_name)
+    for code in values:
+        if not code in [x.code for x in to_list]:
+            event_obj = get_objects_from_db(
+                cfg_dict, object_class_key, key, code)
+            if event_obj:
+                to_list.append(event_obj)
+    from_obj.save()
+
+
 def generate_creation_method(
         cfg_dict, class_key, sel_val='', domain=None,
         to_store=True, only_get=False):

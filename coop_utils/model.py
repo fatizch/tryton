@@ -289,6 +289,10 @@ class CoopSQL(ExportImportMixin, ModelSQL):
         return super(CoopSQL, cls).search(domain=domain, offset=offset,
             limit=limit, order=order, count=count, query_string=query_string)
 
+    def get_currency(self, name):
+        print self.__name__
+        raise NotImplementedError
+
 
 class CoopView(ModelView):
     pass

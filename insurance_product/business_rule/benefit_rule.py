@@ -71,12 +71,15 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
     def default_indemnification_calc_unit():
         return 'day'
 
+    def get_coverage_amount(self, args):
+        if 'option' in args:
+            return args['option'].get_coverage_amount()
+
     def get_simple_result(self, args):
         if self.amount_kind == 'amount':
             return self.amount
-        else:
-            #TODO: retrive coverage amount
-            raise NotImplementedError
+        elif self.amount_kind == 'cov_amount':
+            return self.get_coverage_amount(args)
 
     def get_indemnification_for_period(self, args):
         errs = []

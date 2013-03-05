@@ -1,5 +1,5 @@
 from trytond.pool import Pool
-from .claim import *
+from .life_claim import *
 
 
 def register():
