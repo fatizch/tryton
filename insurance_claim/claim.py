@@ -172,6 +172,13 @@ class Loss(model.CoopSQL, model.CoopView):
         else:
             self.delivered_services = list(self.delivered_services)
         for benefit in benefits:
+            del_service = None
+            for other_del_service in self.delivered_services:
+                if (other_del_service.benefit == benefit
+                    and other_del_service.subscribed_service == option):
+                    del_service = other_del_service
+            if del_service:
+                continue
             del_service = utils.instanciate_relation(self.__class__,
                 'delivered_services')
             del_service.subscribed_service = option
@@ -197,7 +204,11 @@ class ClaimDeliveredService():
             ('loss_descs', '=', Eval('_parent_loss', {}).get('loss_desc'))
         ], )
     indemnifications = fields.One2Many('ins_claim.indemnification',
-        'delivered_service', 'Indemnifications')
+        'delivered_service', 'Indemnifications',
+        states={'invisible': ~Eval('indemnifications')})
+    complementary_data = fields.Dict(
+        'ins_product.complementary_data_def', 'Complementary Data',
+        on_change_with=['benefit', 'complementary_data'])
 
     @classmethod
     def __setup__(cls):
@@ -211,6 +222,7 @@ class ClaimDeliveredService():
 
     def init_from_loss(self, loss, benefit):
         self.benefit = benefit
+        self.complementary_data = self.on_change_with_complementary_data()
 
     def get_contract(self):
         return self.subscribed_service.get_contract()
@@ -221,6 +233,7 @@ class ClaimDeliveredService():
         cur_dict['end_date'] = self.loss.end_date
         cur_dict['loss'] = self.loss
         cur_dict['option'] = self.subscribed_service
+        cur_dict['delivered_service'] = self
 
     def calculate(self):
         cur_dict = {}
@@ -234,6 +247,8 @@ class ClaimDeliveredService():
         indemnification.init_from_delivered_service(self)
         if not hasattr(self, 'indemnifications') or not self.indemnifications:
             self.indemnifications = []
+        else:
+            self.indemnifications = list(self.indemnifications)
         self.indemnifications.append(indemnification)
         indemnification.create_details_from_dict(details_dict)
 
@@ -241,6 +256,22 @@ class ClaimDeliveredService():
         if self.benefit:
             return self.benefit.get_rec_name(name)
         return super(ClaimDeliveredService, self).get_rec_name(name)
+
+    def on_change_with_complementary_data(self):
+        res = {}
+        if self.benefit:
+            res = utils.init_complementary_data(
+                self.benefit.complementary_data_def)
+        return res
+
+    def get_complementary_data_value(self, at_date, value):
+        if (not(hasattr(self, 'complementary_data')
+                and self.complementary_data)):
+            return None
+        try:
+            return self.complementary_data[value]
+        except KeyError:
+            return None
 
 
 class Indemnification(model.CoopSQL, model.CoopView):

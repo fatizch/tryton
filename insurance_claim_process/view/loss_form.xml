@@ -3,6 +3,10 @@
     <label name="claim"/>
     <field name="claim"/>
     <newline/>
+    <!-- ToDO: Temporary hack -->
+    <label name="covered_person"/>
+    <field name="covered_person" widget="selection"/>
+    <newline/>
     <label name="loss_desc"/>
     <field name="loss_desc" widget="selection"/>
     <label name="event_desc"/>

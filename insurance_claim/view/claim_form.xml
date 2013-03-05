@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<form>
+<form string="Claim">
   <label name="name"/>
   <field name="name"/>
   <label name="status"/>

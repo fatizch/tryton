@@ -38,10 +38,11 @@ class ComplementaryDataDefinition(DictSchemaMixin, model.CoopSQL,
     is_shared = fields.Function(fields.Boolean('Shared'), 'get_is_shared')
     kind = fields.Selection(
         [
-            ('contract', 'On Contract'),
-            ('product', 'On Product'),
-            ('sub_elem', 'On Sub Element'),
-            ('loss', 'On Loss'),
+            ('contract', 'Contract'),
+            ('product', 'Product'),
+            ('sub_elem', 'Sub Element'),
+            ('loss', 'Loss'),
+            ('benefit', 'Benefit')
         ],
         'Kind')
 

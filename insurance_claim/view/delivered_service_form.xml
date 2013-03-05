@@ -6,6 +6,8 @@
         <newline/>
         <label name="benefit"/>
         <field name="benefit"/>
+        <newline/>
+        <field name="complementary_data" colspan="2"/>
         <field name="indemnifications" colspan="4" mode="form,tree"
             expand_toolbar="0"/>
     </xpath>

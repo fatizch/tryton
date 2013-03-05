@@ -178,7 +178,9 @@ class Party:
                 self, 'gender'), self.name.upper(), self.first_name)
         if self.is_company:
             res = super(Party, self).get_rec_name(name)
-        return res
+        if res:
+            return res
+        return super(Party, self).get_rec_name()
 
     def get_relation_with(self, target):
         kind = set([elem.kind for elem in self.relations

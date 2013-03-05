@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/field[@name='claim']" position="after">
+        <newline/>
+        <label name="covered_person"/>
+        <field name="covered_person"/>
+        <newline/>
+    </xpath>
+</data>

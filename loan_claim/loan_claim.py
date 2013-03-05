@@ -18,9 +18,14 @@ class LoanClaimDeliveredService():
             for share in covered_data.loan_shares:
                 return share.loan
 
+    def is_loan(self):
+        return self.subscribed_service.is_loan_option
+
     def init_dict_for_rule_engine(self, cur_dict):
         super(LoanClaimDeliveredService, self).init_dict_for_rule_engine(
             cur_dict)
+        if not self.is_loan():
+            return
         cur_dict['loan'] = self.get_loan()
 
 
@@ -33,4 +38,6 @@ class LoanIndemnification():
     def init_from_delivered_service(self, delivered_service):
         super(LoanIndemnification, self).init_from_delivered_service(
             delivered_service)
+        if not delivered_service.is_loan():
+            return
         self.beneficiary = delivered_service.get_loan().lender

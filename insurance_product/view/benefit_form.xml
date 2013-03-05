@@ -6,6 +6,13 @@
     <xpath
         expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']"
         position="before">
+        <page string="Complementary Data" id="complementary_data">
+            <field name="complementary_data_def" colspan="4"/>
+        </page>
+    </xpath>
+    <xpath
+        expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']"
+        position="before">
         <page string="Benefit" id="benefit">
             <field name="benefit_rules" colspan="4"/>
         </page>

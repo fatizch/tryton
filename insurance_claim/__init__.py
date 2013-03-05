@@ -2,6 +2,7 @@ from trytond.pool import Pool
 from .claim import *
 from .product import *
 from .contract import *
+from .claim_rule_sets import *
 
 
 def register():
@@ -17,4 +18,5 @@ def register():
         RequestFinder,
         ContactHistory,
         ClaimContract,
+        ClaimContext,
         module='insurance_claim', type_='model')

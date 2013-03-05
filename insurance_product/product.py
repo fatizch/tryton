@@ -205,6 +205,12 @@ class Offered(model.CoopView, utils.GetResult, Templated):
             return (EligibilityResultLine(True), [])
         return res
 
+    def give_me_documents(self, args):
+        try:
+            return self.get_result('documents', args, kind='document')
+        except utils.NonExistingRuleKindException:
+            return [], ()
+
 
 class Product(model.CoopSQL, Offered):
     'Product'

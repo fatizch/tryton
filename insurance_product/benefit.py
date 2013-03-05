@@ -13,6 +13,7 @@ __all__ = [
     'BenefitLossDescRelation',
     'CoverageBenefitRelation',
     'LossDescComplementaryDataRelation',
+    'BenefitComplementaryDataRelation',
 ]
 
 INDEMNIFICATION_KIND = [
@@ -116,6 +117,10 @@ class Benefit(model.CoopSQL, Offered):
         'Indemnification Kind', sort=False)
     loss_descs = fields.Many2Many('ins_product.benefit-loss_desc',
         'benefit', 'loss_desc', 'Loss Descriptions')
+    complementary_data_def = fields.Many2Many(
+        'ins_product.benefit-complementary_data_def',
+        'benefit', 'complementary_data_def', 'Complementary Data',
+        domain=[('kind', '=', 'benefit')])
 
     @classmethod
     def delete(cls, entities):
@@ -162,3 +167,15 @@ class CoverageBenefitRelation(model.CoopSQL):
         ondelete='CASCADE')
     benefit = fields.Many2One('ins_product.benefit', 'Benefit',
         ondelete='RESTRICT')
+
+
+class BenefitComplementaryDataRelation(model.CoopSQL):
+    'Relation between Benefit and Complementary Data'
+
+    __name__ = 'ins_product.benefit-complementary_data_def'
+
+    benefit = fields.Many2One('ins_product.benefit', 'Benefit',
+        ondelete='CASCADE')
+    complementary_data_def = fields.Many2One(
+        'ins_product.complementary_data_def',
+        'Complementary Data', ondelete='RESTRICT')

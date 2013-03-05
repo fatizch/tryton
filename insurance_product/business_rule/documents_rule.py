@@ -981,6 +981,7 @@ this object'})
         for att in self.attachment_setter.attachments:
             if isinstance(att.data, int):
                 continue
+            att.resource = good_obj
             att.save()
 
         return 'input_document'

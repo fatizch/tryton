@@ -77,9 +77,9 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
 
     def get_simple_result(self, args):
         if self.amount_kind == 'amount':
-            return self.amount
+            return self.amount, []
         elif self.amount_kind == 'cov_amount':
-            return self.get_coverage_amount(args)
+            return self.get_coverage_amount(args), []
 
     def get_indemnification_for_period(self, args):
         errs = []

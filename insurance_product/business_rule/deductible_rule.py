@@ -42,7 +42,6 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
 
     def get_simple_result(self, args=None):
         if self.kind == 'amount':
-            print self.amount, type(self.amount)
             return self.amount, []
         elif self.kind == 'duration':
             return (self.duration, self.duration_unit), []

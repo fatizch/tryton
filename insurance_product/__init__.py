@@ -49,6 +49,7 @@ def register():
         Benefit,
         CoverageBenefitRelation,
         BenefitLossDescRelation,
+        BenefitComplementaryDataRelation,
         BenefitRule,
         ReserveRule,
         CoverageAmountRule,
