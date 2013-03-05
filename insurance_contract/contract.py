@@ -3,7 +3,7 @@ import copy
 
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, If
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model
@@ -32,7 +32,8 @@ __all__ = [
     'BillingManager',
     'CoveredElement',
     'CoveredData',
-    'BrokerManager',
+    'ManagementProtocol',
+    'ManagementRole',
     'Document',
     'DocumentRequest',
     'DeliveredService',
@@ -169,8 +170,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             ('ins_contract.contract', 'Contract'),
             ('ins_product.product', 'Product'),
         ])
-    broker_manager = fields.Many2One(
-        'ins_contract.broker_manager', 'Broker Manager')
+    management = fields.One2Many(
+        'ins_contract.management_role', 'contract', 'Management Roles')
     billing_manager = fields.One2Many(
         'ins_contract.billing_manager', 'contract', 'Billing Manager')
     complementary_data = fields.Dict(
@@ -819,15 +820,15 @@ class CoveredElement(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.covered_element'
 
-    contract = fields.Many2One('ins_contract.contract', 'Contract',
-        ondelete='CASCADE')
+    contract = fields.Many2One(
+        'ins_contract.contract', 'Contract', ondelete='CASCADE')
     item_desc = fields.Many2One('ins_product.item_desc', 'Item Desc')
-    covered_data = fields.One2Many('ins_contract.covered_data',
-        'covered_element', 'Covered Element Data')
+    covered_data = fields.One2Many(
+        'ins_contract.covered_data', 'covered_element', 'Covered Element Data')
     name = fields.Char('Name')
     parent = fields.Many2One('ins_contract.covered_element', 'Parent')
-    sub_covered_elements = fields.One2Many('ins_contract.covered_element',
-        'parent', 'Sub Covered Elements')
+    sub_covered_elements = fields.One2Many(
+        'ins_contract.covered_element', 'parent', 'Sub Covered Elements')
     complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Complementary Data',
         on_change_with=['item_desc', 'complementary_data'])
@@ -898,11 +899,10 @@ class CoveredData(model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     status = fields.Selection(OPTIONSTATUS, 'Status')
-    coverage_amount = fields.Numeric('Coverage Amount',
-        states={
-            'invisible': Bool(~Eval('_parent_coverage', {}).get(
-                    'is_coverage_amount_needed'))
-        })
+    coverage_amount = fields.Numeric('Coverage Amount', states={
+        'invisible': Bool(~Eval('_parent_coverage', {}).get(
+            'is_coverage_amount_needed'))
+    })
 
     @classmethod
     def default_status(cls):
@@ -950,12 +950,45 @@ class CoveredData(model.CoopSQL, model.CoopView):
             return self.option.offered
 
 
-class BrokerManager(model.CoopSQL, model.CoopView):
-    'Broker Manager'
+class ManagementProtocol(model.CoopSQL, model.CoopView):
+    'Management Protocol'
 
-    __name__ = 'ins_contract.broker_manager'
+    __name__ = 'ins_contract.management_protocol'
 
-    broker = fields.Many2One('party.party', 'Broker')
+    kind = fields.Selection(
+        [
+            ('provider', 'Business Provider'),
+            ('claim_manager', 'Claim Manager'),
+            ('contract_manager', 'Contract Manager'),
+        ],
+        'Kind',
+        required=True,
+    )
+    start_date = fields.Date('Start Date')
+    end_date = fields.Date('End Date')
+    party = fields.Many2One(
+        'party.party',
+        'Party',
+        domain=[
+            If(
+                Eval('kind') in ('claim_manager', 'contract_manager'),
+                ('OR', ('is_insurer', '=', True), ('is_broker', '=', True)),
+                ('id', '>', 0))]
+    )
+
+
+class ManagementRole(model.CoopSQL, model.CoopView):
+    'Management Role'
+
+    __name__ = 'ins_contract.management_role'
+
+    start_date = fields.Date('Start Date', required=True)
+    end_date = fields.Date('End Date')
+    protocol = fields.Many2One(
+        'ins_contract.management_protocol', 'Protocol', required=True,
+        domain=[utils.get_versioning_domain('start_date', 'end_date')])
+    contract = fields.Many2One(
+        'ins_contract.contract', 'Contract', ondelete='CASCADE')
 
 
 class DeliveredService(model.CoopSQL, model.CoopView):
@@ -963,8 +996,8 @@ class DeliveredService(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.delivered_service'
 
-    subscribed_service = fields.Many2One('ins_contract.option', 'Coverage',
-        ondelete='RESTRICT')
+    subscribed_service = fields.Many2One(
+        'ins_contract.option', 'Coverage', ondelete='RESTRICT')
 
     def get_rec_name(self, name=None):
         if self.subscribed_service:
