@@ -316,8 +316,8 @@ in a state (%s) that you are not allowed to view."/>' % step.fancy_name
             the_step = cur_relation.step
             if cur_relation == step_relation:
                 # The "current state" button
-                xml += '<button string="%s" name="_button_current_%s"/>' % (
-                    the_step.fancy_name, self.id)
+                xml += '<button string="%s %s" name="_button_current_%s"/>' % (
+                    '==>', the_step.fancy_name, self.id)
                 continue
             if the_buttons[the_step.id][0] == 'trans':
                 xml += the_buttons[the_step.id][1].build_button()

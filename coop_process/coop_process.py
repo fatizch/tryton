@@ -576,7 +576,7 @@ class StepDesc(model.CoopSQL):
     main_model = fields.Many2One(
         'ir.model',
         'Main Model',
-        states={'readonly': ~~Eval('id')},
+        states={'readonly': ~~Eval('main_model')},
     )
 
     def get_pyson_for_button(self):
