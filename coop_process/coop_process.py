@@ -41,7 +41,8 @@ class StepTransition(model.CoopSQL):
         states={'invisible': Eval('kind') != 'choice'},
         domain=[
             ('kind', '=', 'calculated'),
-            ('main_model', '=', Eval('context', {}).get('process_model'))],
+            ('main_model', '=', Eval('_parent_on_process', {}).get(
+                'on_model'))],
     )
     choice_if_false = fields.Many2One(
         'process.step_transition',
@@ -49,7 +50,8 @@ class StepTransition(model.CoopSQL):
         states={'invisible': Eval('kind') != 'choice'},
         domain=[
             ('kind', '=', 'calculated'),
-            ('main_model', '=', Eval('context', {}).get('process_model'))],
+            ('main_model', '=', Eval('_parent_on_process', {}).get(
+                'on_model'))],
     )
 
     @classmethod
@@ -60,10 +62,12 @@ class StepTransition(model.CoopSQL):
         setattr(cls, 'kind', kind)
         cls.from_step = copy.copy(cls.from_step)
         cls.from_step.domain.extend([
-            ('main_model', '=', Eval('context', {}).get('process_model'))])
+            ('main_model', '=', Eval('_parent_on_process', {}).get(
+                'on_model'))])
         cls.to_step = copy.copy(cls.to_step)
         cls.to_step.domain.extend([
-            ('main_model', '=', Eval('context', {}).get('process_model'))])
+            ('main_model', '=', Eval('_parent_on_process', {}).get(
+                'on_model'))])
 
         cls._error_messages.update({
             'missing_pyson': 'Pyson expression and description is mandatory',
@@ -242,14 +246,7 @@ class ProcessDesc(model.CoopSQL):
         super(ProcessDesc, cls).__setup__()
         cls.transitions = copy.copy(cls.transitions)
         cls.transitions.states['invisible'] = ~Eval('custom_transitions')
-        cls.transitions.context.update({
-            'process_model': Eval('on_model', 0)})
         cls.transitions.depends.append('custom_transitions')
-        cls.transitions.depends.append('on_model')
-        cls.all_steps = copy.copy(cls.all_steps)
-        cls.all_steps.context.update({
-            'process_model': Eval('on_model', 0)})
-        cls.all_steps.depends.append('on_model')
 
     @classmethod
     def default_with_prev_next(cls):
@@ -368,7 +365,8 @@ class ProcessStepRelation(model.CoopSQL):
         super(ProcessStepRelation, cls).__setup__()
         cls.step = copy.copy(cls.step)
         cls.step.domain.extend([(
-            'main_model', '=', Eval('context', {}).get('process_model', 0))])
+            'main_model', '=', Eval('_parent_process', {}).get(
+                'on_model', 0))])
 
 
 class XMLViewDesc(model.CoopSQL, model.CoopView):
