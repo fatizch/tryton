@@ -134,7 +134,7 @@ class ProjectState(CoopStep):
 
     @staticmethod
     def post_step_update_abstract(wizard):
-        BrokerManager = Pool().get('ins_contract.broker_manager')
+        BrokerManager = Pool().get('ins_contract.management_role')
         contract = utils.WithAbstract.get_abstract_objects(
             wizard, 'for_contract')
         contract.offered = wizard.project.product
@@ -142,8 +142,8 @@ class ProjectState(CoopStep):
         contract.subscriber = wizard.project.subscriber
         if hasattr(wizard.project, 'broker'):
             broker_manager = BrokerManager()
-            broker_manager.broker = wizard.project.broker
-            contract.broker_manager = broker_manager
+            broker_manager.party = wizard.project.broker
+            contract.management = [broker_manager]
         utils.WithAbstract.save_abstract_objects(
             wizard, ('for_contract', contract))
         return (True, [])

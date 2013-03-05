@@ -973,7 +973,8 @@ class ManagementProtocol(model.CoopSQL, model.CoopView):
             If(
                 Eval('kind') in ('claim_manager', 'contract_manager'),
                 ('OR', ('is_insurer', '=', True), ('is_broker', '=', True)),
-                ('id', '>', 0))]
+                ('id', '>', 0))],
+        depends=['kind'],
     )
 
 
@@ -986,7 +987,8 @@ class ManagementRole(model.CoopSQL, model.CoopView):
     end_date = fields.Date('End Date')
     protocol = fields.Many2One(
         'ins_contract.management_protocol', 'Protocol', required=True,
-        domain=[utils.get_versioning_domain('start_date', 'end_date')])
+        domain=[utils.get_versioning_domain('start_date', 'end_date')],
+        depends=['start_date', 'end_date'])
     contract = fields.Many2One(
         'ins_contract.contract', 'Contract', ondelete='CASCADE')
 
