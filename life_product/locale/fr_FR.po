@@ -68,11 +68,11 @@ msgstr "Est Utilisé"
 
 msgctxt "field:tranche.tranche,name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:tranche.tranche,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:tranche.tranche,versions:"
 msgid "Versions"
@@ -120,7 +120,7 @@ msgstr "Descripteur"
 
 msgctxt "field:tranche.tranche_version,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:tranche.tranche_version,start_date:"
 msgid "Start Date"

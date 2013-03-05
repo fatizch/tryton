@@ -10,6 +10,10 @@ msgctxt "error:ins_collective.benefit_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_collective.benefit_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "Deux règles se chevauchent!"
+
 msgctxt "error:ins_collective.clause:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -22,9 +26,17 @@ msgctxt "error:ins_collective.clause_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_collective.clause_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "Deux règles se chevauchent!"
+
 msgctxt "error:ins_collective.clause_version:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_collective.contract:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
 
 msgctxt "error:ins_collective.contract:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -50,6 +62,10 @@ msgctxt "error:ins_collective.coverage_amount_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_collective.coverage_amount_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "Deux règles se chevauchent!"
+
 msgctxt "error:ins_collective.covered_data:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -62,6 +78,10 @@ msgctxt "error:ins_collective.deductible_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_collective.deductible_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "Deux règles se chevauchent!"
+
 msgctxt "error:ins_collective.eligibility_relation_kind:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -70,13 +90,29 @@ msgctxt "error:ins_collective.eligibility_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_collective.eligibility_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "Deux règles se chevauchent!"
+
+msgctxt "error:ins_collective.enrollment:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
 msgctxt "error:ins_collective.enrollment:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_collective.enrollment_option:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
+msgctxt "error:ins_collective.enrollment_option:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_collective.option:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
 
 msgctxt "error:ins_collective.option:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -93,6 +129,10 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "error:ins_collective.pricing_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_collective.pricing_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "Deux règles se chevauchent!"
 
 msgctxt "error:ins_collective.product-complementary_data_def:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -118,9 +158,17 @@ msgctxt "error:ins_collective.reserve_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_collective.reserve_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "Deux règles se chevauchent!"
+
 msgctxt "error:ins_collective.term_renewal_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_collective.term_renewal_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "Deux règles se chevauchent!"
 
 msgctxt "error:party.college:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -145,6 +193,10 @@ msgstr "Code"
 msgctxt "field:ins_collective.benefit,complementary_data:"
 msgid "Offered Kind"
 msgstr "Typage"
+
+msgctxt "field:ins_collective.benefit,complementary_data_def:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_collective.benefit,coverage:"
 msgid "Coverage"
@@ -314,6 +366,10 @@ msgctxt "field:ins_collective.benefit_rule,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
 
+msgctxt "field:ins_collective.benefit_rule,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
+
 msgctxt "field:ins_collective.benefit_rule,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -348,11 +404,11 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_collective.clause,name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.clause,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.clause,rule:"
 msgid "Rule"
@@ -396,7 +452,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_collective.clause_relation,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.clause_relation,rule:"
 msgid "Rule"
@@ -440,7 +496,7 @@ msgstr "Offre"
 
 msgctxt "field:ins_collective.clause_rule,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.clause_rule,rule:"
 msgid "Rule Engine"
@@ -465,6 +521,10 @@ msgstr "Modèle"
 msgctxt "field:ins_collective.clause_rule,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
+
+msgctxt "field:ins_collective.clause_rule,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.clause_rule,write_date:"
 msgid "Write Date"
@@ -504,7 +564,7 @@ msgstr "Descripteur"
 
 msgctxt "field:ins_collective.clause_version,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.clause_version,start_date:"
 msgid "Start Date"
@@ -548,7 +608,7 @@ msgstr "Coché"
 
 msgctxt "field:ins_collective.college_displayer,name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.college_selection,college_displayers:"
 msgid "Colleges"
@@ -590,6 +650,14 @@ msgctxt "field:ins_collective.contract,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_collective.contract,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_collective.contract,currency_digits:"
+msgid "Currency Digits"
+msgstr "Nbre de chiffres après la virgule"
+
 msgctxt "field:ins_collective.contract,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
@@ -626,6 +694,10 @@ msgctxt "field:ins_collective.contract,options:"
 msgid "Options"
 msgstr "Garanties"
 
+msgctxt "field:ins_collective.contract,printable:"
+msgid "Printable"
+msgstr "Imprimable"
+
 msgctxt "field:ins_collective.contract,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -641,6 +713,10 @@ msgstr "Date de Début de Gestion"
 msgctxt "field:ins_collective.contract,status:"
 msgid "Status"
 msgstr "Statut"
+
+msgctxt "field:ins_collective.contract,status_history:"
+msgid "Status History"
+msgstr "Historique des Statuts"
 
 msgctxt "field:ins_collective.contract,subscriber:"
 msgid "Subscriber"
@@ -821,7 +897,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_collective.coverage-complementary_data_def,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.coverage-complementary_data_def,write_date:"
 msgid "Write Date"
@@ -899,6 +975,10 @@ msgctxt "field:ins_collective.coverage_amount_rule,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
 
+msgctxt "field:ins_collective.coverage_amount_rule,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
+
 msgctxt "field:ins_collective.coverage_amount_rule,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -949,7 +1029,7 @@ msgstr "Garantie Souscrite"
 
 msgctxt "field:ins_collective.covered_data,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.covered_data,start_date:"
 msgid "Start Date"
@@ -1001,7 +1081,7 @@ msgstr "Desc Risque"
 
 msgctxt "field:ins_collective.covered_element,name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.covered_element,parent:"
 msgid "Parent"
@@ -1009,7 +1089,7 @@ msgstr "Parent"
 
 msgctxt "field:ins_collective.covered_element,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.covered_element,sub_covered_elements:"
 msgid "Sub Covered Elements"
@@ -1069,7 +1149,7 @@ msgstr "Offre"
 
 msgctxt "field:ins_collective.deductible_rule,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.deductible_rule,rule:"
 msgid "Rule Engine"
@@ -1090,6 +1170,10 @@ msgstr "Comportement du Modèle"
 msgctxt "field:ins_collective.deductible_rule,value:"
 msgid "Value"
 msgstr "Valeur"
+
+msgctxt "field:ins_collective.deductible_rule,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.deductible_rule,write_date:"
 msgid "Write Date"
@@ -1199,6 +1283,10 @@ msgctxt "field:ins_collective.eligibility_rule,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
 
+msgctxt "field:ins_collective.eligibility_rule,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
+
 msgctxt "field:ins_collective.eligibility_rule,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -1239,6 +1327,14 @@ msgctxt "field:ins_collective.enrollment,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_collective.enrollment,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_collective.enrollment,currency_digits:"
+msgid "Currency Digits"
+msgstr "Nbre de chiffres après la virgule"
+
 msgctxt "field:ins_collective.enrollment,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
@@ -1275,6 +1371,10 @@ msgctxt "field:ins_collective.enrollment,options:"
 msgid "Options"
 msgstr "Garanties"
 
+msgctxt "field:ins_collective.enrollment,printable:"
+msgid "Printable"
+msgstr "Imprimable"
+
 msgctxt "field:ins_collective.enrollment,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -1290,6 +1390,10 @@ msgstr "Date de Début de Gestion"
 msgctxt "field:ins_collective.enrollment,status:"
 msgid "Status"
 msgstr "Statut"
+
+msgctxt "field:ins_collective.enrollment,status_history:"
+msgid "Status History"
+msgstr "Historique des Statuts"
 
 msgctxt "field:ins_collective.enrollment,subscriber:"
 msgid "Affiliated"
@@ -1323,6 +1427,14 @@ msgctxt "field:ins_collective.enrollment_option,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_collective.enrollment_option,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_collective.enrollment_option,currency_digits:"
+msgid "Currency Digits"
+msgstr "Nbre de chiffres après la virgule"
+
 msgctxt "field:ins_collective.enrollment_option,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
@@ -1349,7 +1461,7 @@ msgstr "Garantie"
 
 msgctxt "field:ins_collective.enrollment_option,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.enrollment_option,start_date:"
 msgid "Effective Date"
@@ -1362,6 +1474,10 @@ msgstr "Date de Début de Gestion"
 msgctxt "field:ins_collective.enrollment_option,status:"
 msgid "Status"
 msgstr "Statut"
+
+msgctxt "field:ins_collective.enrollment_option,status_history:"
+msgid "Status History"
+msgstr "Historique des Statuts"
 
 msgctxt "field:ins_collective.enrollment_option,summary:"
 msgid "Summary"
@@ -1498,12 +1614,12 @@ msgid "Subscriber"
 msgstr "Souscripteur"
 
 msgctxt ""
-"field:ins_collective.enrollment_process.project,subscriber_as_person:"
+"field:ins_collective.enrollment_process.project,subscriber_as_company:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
 msgctxt ""
-"field:ins_collective.enrollment_process.project,subscriber_as_company:"
+"field:ins_collective.enrollment_process.project,subscriber_as_person:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
@@ -1609,6 +1725,14 @@ msgctxt "field:ins_collective.option,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_collective.option,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_collective.option,currency_digits:"
+msgid "Currency Digits"
+msgstr "Nbre de chiffres après la virgule"
+
 msgctxt "field:ins_collective.option,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
@@ -1644,6 +1768,10 @@ msgstr "Date de Début de Gestion"
 msgctxt "field:ins_collective.option,status:"
 msgid "Status"
 msgstr "Statut"
+
+msgctxt "field:ins_collective.option,status_history:"
+msgid "Status History"
+msgstr "Historique des Statuts"
 
 msgctxt "field:ins_collective.option,summary:"
 msgid "Summary"
@@ -1683,7 +1811,7 @@ msgstr "Formule"
 
 msgctxt "field:ins_collective.package-coverage,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.package-coverage,write_date:"
 msgid "Write Date"
@@ -1838,6 +1966,10 @@ msgctxt "field:ins_collective.pricing_rule,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
 
+msgctxt "field:ins_collective.pricing_rule,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
+
 msgctxt "field:ins_collective.pricing_rule,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -1989,7 +2121,7 @@ msgstr "Produit"
 
 msgctxt "field:ins_collective.product-complementary_data_def,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.product-complementary_data_def,write_date:"
 msgid "Write Date"
@@ -2025,7 +2157,7 @@ msgstr "Produit"
 
 msgctxt "field:ins_collective.product-coverage,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.product-coverage,write_date:"
 msgid "Write Date"
@@ -2061,7 +2193,7 @@ msgstr "Produit"
 
 msgctxt "field:ins_collective.product-item_desc,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.product-item_desc,write_date:"
 msgid "Write Date"
@@ -2123,6 +2255,10 @@ msgctxt "field:ins_collective.reserve_rule,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
 
+msgctxt "field:ins_collective.reserve_rule,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
+
 msgctxt "field:ins_collective.reserve_rule,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -2173,7 +2309,7 @@ msgstr "Offre"
 
 msgctxt "field:ins_collective.term_renewal_rule,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.term_renewal_rule,rule:"
 msgid "Rule Engine"
@@ -2194,6 +2330,10 @@ msgstr "Comportement du Modèle"
 msgctxt "field:ins_collective.term_renewal_rule,term_date_choice:"
 msgid "Term Date Selection"
 msgstr "Date de Terme"
+
+msgctxt "field:ins_collective.term_renewal_rule,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
 
 msgctxt "field:ins_collective.term_renewal_rule,with_term:"
 msgid "With Term"
@@ -2257,11 +2397,11 @@ msgstr "Est Utilisé"
 
 msgctxt "field:party.college,name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:party.college,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:party.college,tranches:"
 msgid "Tranches"
@@ -2297,7 +2437,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:party.college_tranche,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:party.college_tranche,tranche:"
 msgid "Tranche"
@@ -2587,7 +2727,7 @@ msgstr "Indemnité Journalière"
 
 msgctxt "selection:ins_collective.benefit,template_behaviour:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_collective.benefit,template_behaviour:"
 msgid "Add"
@@ -2615,7 +2755,7 @@ msgstr "Simple"
 
 msgctxt "selection:ins_collective.benefit_rule,indemnification_calc_unit:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_collective.benefit_rule,indemnification_calc_unit:"
 msgid "Day"
@@ -2651,7 +2791,7 @@ msgstr "Montant de Couverture"
 
 msgctxt "selection:ins_collective.benefit_rule,template_behaviour:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_collective.benefit_rule,template_behaviour:"
 msgid "Add"
@@ -2671,7 +2811,7 @@ msgstr "Simple"
 
 msgctxt "selection:ins_collective.clause_rule,template_behaviour:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_collective.clause_rule,template_behaviour:"
 msgid "Add"
@@ -2683,7 +2823,7 @@ msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.contract,master:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_collective.contract,master:"
 msgid "Contract"
@@ -2727,7 +2867,7 @@ msgstr "Proposé par Défaut"
 
 msgctxt "selection:ins_collective.coverage,template_behaviour:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_collective.coverage,template_behaviour:"
 msgid "Add"
@@ -2755,7 +2895,7 @@ msgstr "Liste Calculé"
 
 msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_collective.coverage_amount_rule,template_behaviour:"
 msgid "Add"
@@ -2767,7 +2907,7 @@ msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.covered_data,status:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_collective.covered_data,status:"
 msgid "Active"
@@ -2799,7 +2939,7 @@ msgstr "Simple"
 
 msgctxt "selection:ins_collective.deductible_rule,duration_unit:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_collective.deductible_rule,duration_unit:"
 msgid "Day"
@@ -2835,7 +2975,7 @@ msgstr "Durée"
 
 msgctxt "selection:ins_collective.deductible_rule,template_behaviour:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_collective.deductible_rule,template_behaviour:"
 msgid "Add"
@@ -2875,7 +3015,7 @@ msgstr "Société"
 
 msgctxt "selection:ins_collective.eligibility_rule,template_behaviour:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_collective.eligibility_rule,template_behaviour:"
 msgid "Add"
@@ -2887,7 +3027,7 @@ msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.enrollment,master:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_collective.enrollment,master:"
 msgid "Contract"
@@ -2916,7 +3056,7 @@ msgstr "Terminé"
 msgctxt ""
 "selection:ins_collective.enrollment_process.coverage_displayer,status:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt ""
 "selection:ins_collective.enrollment_process.coverage_displayer,status:"
@@ -2972,6 +3112,10 @@ msgctxt ""
 "selection:ins_collective.enrollment_process.process_state,cur_action:"
 msgid "suspend"
 msgstr "Suspendre"
+
+msgctxt "selection:ins_collective.enrollment_process.project,subscriber_kind:"
+msgid "Company"
+msgstr "Société"
 
 msgctxt "selection:ins_collective.enrollment_process.project,subscriber_kind:"
 msgid "Person"
@@ -3079,7 +3223,7 @@ msgstr "Annuel"
 
 msgctxt "selection:ins_collective.pricing_rule,template_behaviour:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_collective.pricing_rule,template_behaviour:"
 msgid "Add"
@@ -3091,7 +3235,7 @@ msgstr "Remplacer"
 
 msgctxt "selection:ins_collective.product,template_behaviour:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_collective.product,template_behaviour:"
 msgid "Add"
@@ -3111,7 +3255,7 @@ msgstr "Simple"
 
 msgctxt "selection:ins_collective.reserve_rule,template_behaviour:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_collective.reserve_rule,template_behaviour:"
 msgid "Add"
@@ -3151,7 +3295,7 @@ msgstr "Annuel"
 
 msgctxt "selection:ins_collective.term_renewal_rule,template_behaviour:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_collective.term_renewal_rule,template_behaviour:"
 msgid "Add"

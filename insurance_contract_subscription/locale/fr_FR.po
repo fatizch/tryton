@@ -50,11 +50,11 @@ msgctxt "field:ins_contract.contract,product_desc:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:ins_contract.contract,subscriber_as_person:"
+msgctxt "field:ins_contract.contract,subscriber_as_company:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-msgctxt "field:ins_contract.contract,subscriber_as_company:"
+msgctxt "field:ins_contract.contract,subscriber_as_person:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
@@ -104,7 +104,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.subscription_mgr,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_contract.subscription_mgr,write_date:"
 msgid "Write Date"
@@ -114,9 +114,45 @@ msgctxt "field:ins_contract.subscription_mgr,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_contract.subscription_process_parameters,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:ins_contract.subscription_process_parameters,good_process:"
+msgid "Good Process"
+msgstr "Processus"
+
+msgctxt "field:ins_contract.subscription_process_parameters,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.subscription_process_parameters,model:"
+msgid "Model"
+msgstr "Modèle"
+
+msgctxt "field:ins_contract.subscription_process_parameters,product:"
+msgid "Product"
+msgstr "Produit"
+
 msgctxt "model:ins_contract.subscription_mgr,name:"
 msgid "Subscription Manager"
 msgstr ""
+
+msgctxt "model:ins_contract.subscription_process_parameters,name:"
+msgid "Subscription Process Parameters"
+msgstr "Paramètres du Processus de Souscription"
+
+msgctxt "model:ir.action,name:subscription_process_launcher"
+msgid "Start Subscription"
+msgstr "Démarrer la Souscription"
+
+msgctxt "model:ir.ui.menu,name:menu_start_subscription"
+msgid "Start Subscription"
+msgstr "Démarrer la Souscription"
+
+msgctxt "selection:ins_contract.contract,subscriber_kind:"
+msgid "Company"
+msgstr "Société"
 
 msgctxt "selection:ins_contract.contract,subscriber_kind:"
 msgid "Person"
@@ -138,6 +174,10 @@ msgctxt "selection:ins_contract.subscription_mgr,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "selection:process.process_desc,kind:"
+msgid "Contract Subscription"
+msgstr "Souscription Contrat"
+
 msgctxt "view:ins_contract.covered_data:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
@@ -145,3 +185,13 @@ msgstr "Données de Couverture"
 msgctxt "view:ins_contract.option:"
 msgid "Options"
 msgstr "Garanties"
+
+msgctxt ""
+"wizard_button:ins_contract.subscription_process_finder,process_parameters,action:"
+msgid "Start Process"
+msgstr "Démarrer le processus"
+
+msgctxt ""
+"wizard_button:ins_contract.subscription_process_finder,process_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"

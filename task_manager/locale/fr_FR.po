@@ -32,7 +32,7 @@ msgstr "Etape"
 
 msgctxt "field:task_manager.priority,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:task_manager.priority,team:"
 msgid "Team"
@@ -84,7 +84,7 @@ msgstr "Membres"
 
 msgctxt "field:task_manager.team,name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:task_manager.team,priorities:"
 msgid "Priorities"
@@ -92,7 +92,7 @@ msgstr "Priorités"
 
 msgctxt "field:task_manager.team,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:task_manager.team,write_date:"
 msgid "Write Date"
@@ -120,7 +120,7 @@ msgstr "ID"
 
 msgctxt "field:task_manager.team_group_relation,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:task_manager.team_group_relation,team:"
 msgid "Team"

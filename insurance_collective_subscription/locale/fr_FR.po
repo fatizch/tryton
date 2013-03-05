@@ -50,11 +50,11 @@ msgctxt "field:ins_collective.contract,product_desc:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:ins_collective.contract,subscriber_as_person:"
+msgctxt "field:ins_collective.contract,subscriber_as_company:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-msgctxt "field:ins_collective.contract,subscriber_as_company:"
+msgctxt "field:ins_collective.contract,subscriber_as_person:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
@@ -69,6 +69,10 @@ msgstr "Type"
 msgctxt "field:ins_collective.contract,subscription_mgr:"
 msgid "Subscription Manager"
 msgstr ""
+
+msgctxt "selection:ins_collective.contract,subscriber_kind:"
+msgid "Company"
+msgstr "Société"
 
 msgctxt "selection:ins_collective.contract,subscriber_kind:"
 msgid "Person"

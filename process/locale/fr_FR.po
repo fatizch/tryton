@@ -2,6 +2,18 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:process.process_desc:"
+msgid "The technical name must be unique"
+msgstr "Le nom technique doit être unique"
+
+msgctxt "error:process.process_framework:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
+msgctxt "error:process.step_desc:"
+msgid "The technical name must be unique"
+msgstr "Le nom technique doit être unique"
+
 msgctxt "error:process.step_transition:"
 msgid "Both choices must be filled !"
 msgstr "Saisir les deux choix"
@@ -34,9 +46,17 @@ msgctxt "field:process.process_desc,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:process.process_desc,menu_icon:"
+msgid "Menu Icon"
+msgstr "Icône du Menu"
+
 msgctxt "field:process.process_desc,menu_item:"
 msgid "Menu Element"
 msgstr "Menu"
+
+msgctxt "field:process.process_desc,menu_name:"
+msgid "Menu name"
+msgstr "Nom du Menu"
 
 msgctxt "field:process.process_desc,menu_top:"
 msgid "Top Menu"
@@ -49,6 +69,10 @@ msgstr "Modèle"
 msgctxt "field:process.process_desc,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:process.process_desc,step_button_group_position:"
+msgid "Process Overview Positioning"
+msgstr "Position des Boutons"
 
 msgctxt "field:process.process_desc,technical_name:"
 msgid "Technical Name"
@@ -67,15 +91,15 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:process.process_desc,xml_footer:"
-msgid "XML"
-msgstr "Description de la Vue"
+msgid "Footer XML"
+msgstr "Pied de Page XML"
 
 msgctxt "field:process.process_desc,xml_header:"
-msgid "XML"
+msgid "Header XML"
 msgstr "Description de la Vue"
 
 msgctxt "field:process.process_desc,xml_tree:"
-msgid "XML"
+msgid "Tree View XML"
 msgstr "Description de la Vue"
 
 msgctxt "field:process.process_framework,current_state:"
@@ -174,6 +198,10 @@ msgctxt "field:process.step_desc,code_before:"
 msgid "Exectuted Before Step"
 msgstr ""
 
+msgctxt "field:process.step_desc,colspan:"
+msgid "View columns"
+msgstr "Colonnes de la Vue"
+
 msgctxt "field:process.step_desc,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -189,6 +217,10 @@ msgstr "Nom"
 msgctxt "field:process.step_desc,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:process.step_desc,processes:"
+msgid "Transitions"
+msgstr "Transitions"
 
 msgctxt "field:process.step_desc,rec_name:"
 msgid "Name"
@@ -275,7 +307,7 @@ msgid "Readonly"
 msgstr "En Lecture Seule"
 
 msgctxt "field:process.step_transition,kind:"
-msgid "kind"
+msgid "Transition Kind"
 msgstr "Type"
 
 msgctxt "field:process.step_transition,method_kind:"
@@ -426,6 +458,18 @@ msgctxt "model:process.transition_authorization,name:"
 msgid "Transition Authorization"
 msgstr "Autorisations pour les Transitions"
 
+msgctxt "selection:process.process_desc,step_button_group_position:"
+msgid "Bottom"
+msgstr "Bas"
+
+msgctxt "selection:process.process_desc,step_button_group_position:"
+msgid "None"
+msgstr "Aucun"
+
+msgctxt "selection:process.process_desc,step_button_group_position:"
+msgid "Right"
+msgstr "Droite"
+
 msgctxt "selection:process.step_transition,kind:"
 msgid "Calculated"
 msgstr "Calculé"
@@ -441,6 +485,10 @@ msgstr "Prochaine Transition"
 msgctxt "selection:process.step_transition,kind:"
 msgid "Previous Transition"
 msgstr "Transition Précédente"
+
+msgctxt "selection:process.step_transition,kind:"
+msgid "Standard Transition"
+msgstr "Transition Standard"
 
 msgctxt "selection:process.step_transition,method_kind:"
 msgid "Executed between steps"
@@ -468,7 +516,7 @@ msgstr "Claim Declaration"
 
 msgctxt "view:ins_claim.claim:"
 msgid "Clôture"
-msgstr ""
+msgstr "Clôture"
 
 msgctxt "view:ins_claim.claim:"
 msgid "Complete"
@@ -504,7 +552,7 @@ msgstr "Préjudice"
 
 msgctxt "view:ins_claim.claim:"
 msgid "Remboursement"
-msgstr ""
+msgstr "Remboursement"
 
 msgctxt "view:ins_claim.claim:"
 msgid "The current record completed the current process, please go ahead"
@@ -567,11 +615,11 @@ msgstr "Cotisation"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Choix des personnes couvertes"
-msgstr ""
+msgstr "Choix des personnes couvertes"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Choix du souscripteur"
-msgstr ""
+msgstr "Choix du souscripteur"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Complementary Data"
@@ -599,7 +647,7 @@ msgstr "Garanties"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Options Selection"
-msgstr ""
+msgstr "Options Selection"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Previous"
@@ -619,7 +667,7 @@ msgstr "Souscription Emprunteur"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Tarif"
-msgstr ""
+msgstr "Tarif"
 
 msgctxt "view:ins_contract.contract:"
 msgid "The current record completed the current process, please go ahead"
@@ -633,7 +681,7 @@ msgstr ""
 
 msgctxt "view:ins_contract.contract:"
 msgid "Validation du contract"
-msgstr ""
+msgstr "Validation du contract"
 
 msgctxt "view:process.process_desc:"
 msgid "Description"

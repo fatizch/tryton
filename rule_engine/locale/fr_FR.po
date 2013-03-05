@@ -130,6 +130,10 @@ msgctxt "field:rule_engine.create_test_case.ask_description,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:rule_engine.create_test_case.start,debug:"
+msgid "Debug Info"
+msgstr "Information de débogage"
+
 msgctxt "field:rule_engine.create_test_case.start,id:"
 msgid "ID"
 msgstr "ID"
@@ -137,6 +141,18 @@ msgstr "ID"
 msgctxt "field:rule_engine.create_test_case.start,result:"
 msgid "Result"
 msgstr "Résultat"
+
+msgctxt "field:rule_engine.create_test_case.start,result_errors:"
+msgid "Result Errors"
+msgstr "Erreurs du Résultat"
+
+msgctxt "field:rule_engine.create_test_case.start,result_messages:"
+msgid "Result Messages"
+msgstr "Messages du Résultat"
+
+msgctxt "field:rule_engine.create_test_case.start,result_value:"
+msgid "Result Value"
+msgstr "Valeur du Résultat"
 
 msgctxt "field:rule_engine.create_test_case.start,rule:"
 msgid "Rule"
@@ -217,6 +233,10 @@ msgstr "Nom"
 msgctxt "field:rule_engine.test_case.value,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:rule_engine.test_case.value,rule:"
+msgid "Rule"
+msgstr "Règle"
 
 msgctxt "field:rule_engine.test_case.value,test_case:"
 msgid "Test Case"

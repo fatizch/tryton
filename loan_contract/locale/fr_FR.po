@@ -54,6 +54,18 @@ msgctxt "field:ins_contract.loan,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_contract.loan,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_contract.loan,currency_digits:"
+msgid "Currency Digits"
+msgstr "Nbre de chiffres après la virgule"
+
+msgctxt "field:ins_contract.loan,currency_symbol:"
+msgid "Symbol"
+msgstr "Symbole"
+
 msgctxt "field:ins_contract.loan,first_payment_date:"
 msgid "First Payment Date"
 msgstr "Date de 1er Paiement"
@@ -100,7 +112,7 @@ msgstr "Capital Restant Du"
 
 msgctxt "field:ins_contract.loan,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_contract.loan,write_date:"
 msgid "Write Date"
@@ -136,7 +148,7 @@ msgstr "Quotité"
 
 msgctxt "field:ins_contract.loan_covered_data-loan_share,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_contract.loan_covered_data-loan_share,write_date:"
 msgid "Write Date"
@@ -176,7 +188,7 @@ msgstr "Personne Physique"
 
 msgctxt "field:ins_contract.loan_share,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_contract.loan_share,share:"
 msgid "Loan Share"

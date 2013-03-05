@@ -320,7 +320,7 @@ msgstr "Dimension"
 
 msgctxt "selection:table.table_def,dimension_kind1:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:table.table_def,dimension_kind1:"
 msgid "Date"
@@ -340,7 +340,7 @@ msgstr "Valeur"
 
 msgctxt "selection:table.table_def,dimension_kind2:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:table.table_def,dimension_kind2:"
 msgid "Date"
@@ -360,7 +360,7 @@ msgstr "Valeur"
 
 msgctxt "selection:table.table_def,dimension_kind3:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:table.table_def,dimension_kind3:"
 msgid "Date"
@@ -380,7 +380,7 @@ msgstr "Valeur"
 
 msgctxt "selection:table.table_def,dimension_kind4:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:table.table_def,dimension_kind4:"
 msgid "Date"

@@ -19,6 +19,10 @@ msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_contract.contract:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
+msgctxt "error:ins_contract.contract:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -35,10 +39,18 @@ msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_contract.option:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
+msgctxt "error:ins_contract.option:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_contract.price_line:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.status_history:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -398,6 +410,14 @@ msgctxt "field:ins_contract.contract,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_contract.contract,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_contract.contract,currency_digits:"
+msgid "Currency Digits"
+msgstr "Nbre de chiffres après la virgule"
+
 msgctxt "field:ins_contract.contract,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
@@ -430,6 +450,10 @@ msgctxt "field:ins_contract.contract,options:"
 msgid "Options"
 msgstr "Garanties"
 
+msgctxt "field:ins_contract.contract,printable:"
+msgid "Printable"
+msgstr "Imprimable"
+
 msgctxt "field:ins_contract.contract,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -445,6 +469,10 @@ msgstr "Date de Début de Gestion"
 msgctxt "field:ins_contract.contract,status:"
 msgid "Status"
 msgstr "Statut"
+
+msgctxt "field:ins_contract.contract,status_history:"
+msgid "Status History"
+msgstr "Historique des Statuts"
 
 msgctxt "field:ins_contract.contract,subscriber:"
 msgid "Subscriber"
@@ -488,7 +516,7 @@ msgstr "Garantie"
 
 msgctxt "field:ins_contract.covered_data,coverage_amount:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:ins_contract.covered_data,covered_element:"
 msgid "Covered Element"
@@ -520,7 +548,7 @@ msgstr "Garantie Souscrite"
 
 msgctxt "field:ins_contract.covered_data,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_contract.covered_data,start_date:"
 msgid "Start Date"
@@ -572,7 +600,7 @@ msgstr "Desc Risque"
 
 msgctxt "field:ins_contract.covered_element,name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_contract.covered_element,parent:"
 msgid "Parent"
@@ -580,7 +608,7 @@ msgstr "Parent"
 
 msgctxt "field:ins_contract.covered_element,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_contract.covered_element,sub_covered_elements:"
 msgid "Sub Covered Elements"
@@ -642,6 +670,14 @@ msgctxt "field:ins_contract.option,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_contract.option,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_contract.option,currency_digits:"
+msgid "Currency Digits"
+msgstr "Nbre de chiffres après la virgule"
+
 msgctxt "field:ins_contract.option,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
@@ -677,6 +713,10 @@ msgstr "Date de Début de Gestion"
 msgctxt "field:ins_contract.option,status:"
 msgid "Status"
 msgstr "Statut"
+
+msgctxt "field:ins_contract.option,status_history:"
+msgid "Status History"
+msgstr "Historique des Statuts"
 
 msgctxt "field:ins_contract.option,summary:"
 msgid "Summary"
@@ -775,6 +815,50 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:ins_contract.price_line,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.status_history,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.status_history,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.status_history,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.status_history,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.status_history,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.status_history,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.status_history,reference:"
+msgid "Reference"
+msgstr "Référence"
+
+msgctxt "field:ins_contract.status_history,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.status_history,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:ins_contract.status_history,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.status_history,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -939,11 +1023,11 @@ msgctxt "field:ins_contract.subs_process.project,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-msgctxt "field:ins_contract.subs_process.project,subscriber_as_person:"
+msgctxt "field:ins_contract.subs_process.project,subscriber_as_company:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-msgctxt "field:ins_contract.subs_process.project,subscriber_as_company:"
+msgctxt "field:ins_contract.subs_process.project,subscriber_as_person:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
@@ -1031,6 +1115,10 @@ msgctxt "model:ins_contract.price_line,name:"
 msgid "Price Line"
 msgstr "Ligne de Cotisation"
 
+msgctxt "model:ins_contract.status_history,name:"
+msgid "Status History"
+msgstr "Historique des Statuts"
+
 msgctxt "model:ins_contract.subs_process.covered_desc,name:"
 msgid "Covered Desc"
 msgstr ""
@@ -1070,6 +1158,10 @@ msgstr "Contrat"
 msgctxt "model:ir.action,name:act_contract_relate_form"
 msgid "Contracts"
 msgstr "Contrats"
+
+msgctxt "model:ir.action,name:act_contract_status_history_relate_form"
+msgid "Status History"
+msgstr "Historique des Statuts"
 
 msgctxt "model:ir.action,name:act_generic_line_form"
 msgid "Bill Line"
@@ -1161,7 +1253,7 @@ msgstr "Suspendre"
 
 msgctxt "selection:ins_contract.contract,master:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_contract.contract,master:"
 msgid "Contract"
@@ -1189,7 +1281,7 @@ msgstr "Terminé"
 
 msgctxt "selection:ins_contract.coverage_displayer,status:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_contract.coverage_displayer,status:"
 msgid "Active"
@@ -1213,7 +1305,7 @@ msgstr "Terminé"
 
 msgctxt "selection:ins_contract.covered_data,status:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_contract.covered_data,status:"
 msgid "Active"
@@ -1302,6 +1394,10 @@ msgstr "Précédent"
 msgctxt "selection:ins_contract.subs_process.process_state,cur_action:"
 msgid "suspend"
 msgstr "Suspendre"
+
+msgctxt "selection:ins_contract.subs_process.project,subscriber_kind:"
+msgid "Company"
+msgstr "Société"
 
 msgctxt "selection:ins_contract.subs_process.project,subscriber_kind:"
 msgid "Person"

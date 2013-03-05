@@ -6,6 +6,10 @@ msgctxt "error:party.address_kind:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:party.company:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:party.contact_history:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -42,7 +46,7 @@ msgctxt "error:party.person:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:party.company:"
+msgctxt "error:party.society:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -158,6 +162,54 @@ msgctxt "field:party.address_kind,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:party.company,childs:"
+msgid "Children"
+msgstr "Enfants"
+
+msgctxt "field:party.company,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:party.company,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.company,employees:"
+msgid "Employees"
+msgstr "Employés"
+
+msgctxt "field:party.company,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.company,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:party.company,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.company,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:party.company,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.company,reference:"
+msgid "Reference"
+msgstr "Référence"
+
+msgctxt "field:party.company,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.company,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:party.contact_history,address:"
 msgid "Address"
 msgstr "Adresse"
@@ -234,6 +286,10 @@ msgctxt "field:party.contact_history,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:party.employee,company:"
+msgid "Company"
+msgstr "Société"
+
 msgctxt "field:party.employee,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -261,10 +317,6 @@ msgstr "Nom"
 msgctxt "field:party.employee,reference:"
 msgid "Reference"
 msgstr "Référence"
-
-msgctxt "field:party.employee,company:"
-msgid "Company"
-msgstr "Société"
 
 msgctxt "field:party.employee,write_date:"
 msgid "Write Date"
@@ -366,9 +418,21 @@ msgctxt "field:party.party,birth_date:"
 msgid "Birth Date"
 msgstr "Date de Naissance"
 
+msgctxt "field:party.party,children:"
+msgid "Children"
+msgstr "Enfants"
+
+msgctxt "field:party.party,company:"
+msgid "Company"
+msgstr "Société"
+
 msgctxt "field:party.party,employee_role:"
 msgid "Employee"
 msgstr "Employé"
+
+msgctxt "field:party.party,employees:"
+msgid "Employees"
+msgstr "Employés"
 
 msgctxt "field:party.party,first_name:"
 msgid "First Name"
@@ -386,6 +450,10 @@ msgctxt "field:party.party,in_relation_with:"
 msgid "in relation with"
 msgstr "En Relation avec"
 
+msgctxt "field:party.party,is_company:"
+msgid "Company"
+msgstr "Société"
+
 msgctxt "field:party.party,is_employee:"
 msgid "Employee"
 msgstr "Employé"
@@ -394,7 +462,7 @@ msgctxt "field:party.party,is_person:"
 msgid "Person"
 msgstr "Personne"
 
-msgctxt "field:party.party,is_company:"
+msgctxt "field:party.party,is_society:"
 msgid "Company"
 msgstr "Société"
 
@@ -406,6 +474,10 @@ msgctxt "field:party.party,main_address:"
 msgid "Address"
 msgstr "Adresse"
 
+msgctxt "field:party.party,parent:"
+msgid "Parent"
+msgstr "Parent"
+
 msgctxt "field:party.party,person:"
 msgid "Person"
 msgstr "Personne"
@@ -414,9 +486,9 @@ msgctxt "field:party.party,relations:"
 msgid "Relations"
 msgstr "Relations"
 
-msgctxt "field:party.party,company:"
-msgid "Company"
-msgstr "Société"
+msgctxt "field:party.party,short_name:"
+msgid "Short Name"
+msgstr "Nom Court"
 
 msgctxt "field:party.party,ssn:"
 msgid "SSN"
@@ -526,6 +598,10 @@ msgctxt "field:party.party_relation_kind,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:party.person,birth_date:"
+msgid "Birth Date"
+msgstr "Date de Naissance"
+
 msgctxt "field:party.person,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -534,6 +610,14 @@ msgctxt "field:party.person,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:party.person,first_name:"
+msgid "First Name"
+msgstr "Prénom"
+
+msgctxt "field:party.person,gender:"
+msgid "Gender"
+msgstr "Genre"
+
 msgctxt "field:party.person,id:"
 msgid "ID"
 msgstr "ID"
@@ -541,6 +625,10 @@ msgstr "ID"
 msgctxt "field:party.person,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
+
+msgctxt "field:party.person,maiden_name:"
+msgid "Maiden Name"
+msgstr "Nom de Jeune Fille"
 
 msgctxt "field:party.person,party:"
 msgid "Party"
@@ -554,6 +642,10 @@ msgctxt "field:party.person,reference:"
 msgid "Reference"
 msgstr "Référence"
 
+msgctxt "field:party.person,ssn:"
+msgid "SSN"
+msgstr "NIR"
+
 msgctxt "field:party.person,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -562,51 +654,47 @@ msgctxt "field:party.person,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:party.company,childs:"
+msgctxt "field:party.society,childs:"
 msgid "Children"
 msgstr "Enfants"
 
-msgctxt "field:party.company,create_date:"
+msgctxt "field:party.society,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:party.company,create_uid:"
+msgctxt "field:party.society,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:party.company,employees:"
-msgid "Employees"
-msgstr "Employés"
-
-msgctxt "field:party.company,id:"
+msgctxt "field:party.society,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.company,is_used:"
+msgctxt "field:party.society,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-msgctxt "field:party.company,parent:"
+msgctxt "field:party.society,parent:"
 msgid "Parent"
 msgstr "Parent"
 
-msgctxt "field:party.company,party:"
+msgctxt "field:party.society,party:"
 msgid "Party"
 msgstr "Tiers"
 
-msgctxt "field:party.company,rec_name:"
+msgctxt "field:party.society,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:party.company,reference:"
+msgctxt "field:party.society,reference:"
 msgid "Reference"
 msgstr "Référence"
 
-msgctxt "field:party.company,write_date:"
+msgctxt "field:party.society,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:party.company,write_uid:"
+msgctxt "field:party.society,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -617,6 +705,10 @@ msgstr "Code Postal"
 msgctxt "model:ir.action,name:act_address_kind_form"
 msgid "Address Kind"
 msgstr "Type d'Adresse"
+
+msgctxt "model:ir.action,name:act_company_form"
+msgid "Companies"
+msgstr "Sociétés"
 
 msgctxt "model:ir.action,name:act_contact_history_relate_form"
 msgid "Contact History"
@@ -630,9 +722,17 @@ msgctxt "model:ir.action,name:act_party_relation_kind_form"
 msgid "Party Relation Kind"
 msgstr "Type de Relation entre Tiers"
 
+msgctxt "model:ir.action,name:act_person_form"
+msgid "Persons"
+msgstr "Personnes"
+
 msgctxt "model:ir.ui.menu,name:menu_address_kind_form"
 msgid "Address Kind"
 msgstr "Type d'Adresse"
+
+msgctxt "model:ir.ui.menu,name:menu_company_form"
+msgid "Companies"
+msgstr "Sociétés"
 
 msgctxt "model:ir.ui.menu,name:menu_generic_actor_kind_form"
 msgid "Generic Actor"
@@ -641,6 +741,10 @@ msgstr "Acteur Générique"
 msgctxt "model:ir.ui.menu,name:menu_party_relation_kind_form"
 msgid "Party Relation Kind"
 msgstr "Type de Relation entre Tiers"
+
+msgctxt "model:ir.ui.menu,name:menu_person_form"
+msgid "Persons"
+msgstr "Personnes"
 
 msgctxt "model:party.actor,name:"
 msgid "Actor"
@@ -661,6 +765,10 @@ msgstr "Principale"
 msgctxt "model:party.address_kind,name:second"
 msgid "Secondary"
 msgstr "Secondaire"
+
+msgctxt "model:party.company,name:"
+msgid "Company"
+msgstr "Société"
 
 msgctxt "model:party.contact_history,name:"
 msgid "Contact History"
@@ -702,7 +810,7 @@ msgctxt "model:party.person,name:"
 msgid "Person"
 msgstr "Personne"
 
-msgctxt "model:party.company,name:"
+msgctxt "model:party.society,name:"
 msgid "Company"
 msgstr "Société"
 
@@ -754,6 +862,22 @@ msgctxt "selection:party.contact_history,media:"
 msgid "Website"
 msgstr "Site web"
 
+msgctxt "selection:party.party,gender:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:party.party,gender:"
+msgid "Mr."
+msgstr "Mr"
+
+msgctxt "selection:party.party,gender:"
+msgid "Mrs."
+msgstr "Mme"
+
+msgctxt "selection:party.person,gender:"
+msgid ""
+msgstr " "
+
 msgctxt "selection:party.person,gender:"
 msgid "Mr."
 msgstr "Mr"
@@ -765,6 +889,10 @@ msgstr "Mme"
 msgctxt "view:party.actor:"
 msgid "Roles"
 msgstr "Rôles"
+
+msgctxt "view:party.company:"
+msgid "Company"
+msgstr "Société"
 
 msgctxt "view:party.contact_history:"
 msgid "Communication Log"
@@ -805,7 +933,3 @@ msgstr "Synthèse"
 msgctxt "view:party.party_relation_kind:"
 msgid "Party Relation Kind"
 msgstr "Type de Relation entre Tiers"
-
-msgctxt "view:party.company:"
-msgid "Company"
-msgstr "Société"

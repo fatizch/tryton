@@ -3,6 +3,10 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:ins_claim.claim:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
+msgctxt "error:ins_claim.claim:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -65,6 +69,10 @@ msgstr "Préjudices"
 msgctxt "field:ins_claim.claim,name:"
 msgid "Number"
 msgstr "Numéro"
+
+msgctxt "field:ins_claim.claim,printable:"
+msgid "Printable"
+msgstr "Imprimable"
 
 msgctxt "field:ins_claim.claim,rec_name:"
 msgid "Name"
@@ -286,6 +294,10 @@ msgctxt "field:ins_contract.delivered_service,benefit:"
 msgid "Benefit"
 msgstr "Prestation"
 
+msgctxt "field:ins_contract.delivered_service,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
 msgctxt "field:ins_contract.delivered_service,indemnifications:"
 msgid "Indemnifications"
 msgstr "indemnisations"
@@ -297,6 +309,10 @@ msgstr "Préjudice"
 msgctxt "field:ins_product.request_finder,tmp_1:"
 msgid "Claim"
 msgstr "Sinistre"
+
+msgctxt "field:ins_product.rule_sets.claim,id:"
+msgid "ID"
+msgstr "ID"
 
 msgctxt "model:ins_claim.claim,name:"
 msgid "Claim"
@@ -313,6 +329,10 @@ msgstr "Détail de l'indemnisation"
 msgctxt "model:ins_claim.loss,name:"
 msgid "Loss"
 msgstr "Préjudice"
+
+msgctxt "model:ins_product.rule_sets.claim,name:"
+msgid "Context functions for Claims."
+msgstr "Fonctions contextuels pour les sinistres"
 
 msgctxt "model:ir.action,name:act_claim_form"
 msgid "Claims"
@@ -341,6 +361,10 @@ msgstr "Sinistre"
 msgctxt "model:ir.ui.menu,name:menu_claim_form"
 msgid "Claims"
 msgstr "Sinistres"
+
+msgctxt "selection:ins_claim.claim,closed_reason:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:ins_claim.claim,closed_reason:"
 msgid "Paid"
@@ -412,7 +436,7 @@ msgstr "Carence"
 
 msgctxt "selection:ins_claim.indemnification_detail,unit:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_claim.indemnification_detail,unit:"
 msgid "Day"
