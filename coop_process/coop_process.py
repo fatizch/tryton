@@ -577,6 +577,10 @@ class StepDesc(model.CoopSQL):
         'ir.model',
         'Main Model',
         states={'readonly': ~~Eval('main_model')},
+        domain=[
+            ('is_workflow', '=', True),
+            ('model', '!=', 'process.process_framework')
+        ],
     )
 
     def get_pyson_for_button(self):
