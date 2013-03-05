@@ -147,8 +147,13 @@ class CoopProcessFramework(ProcessFramework):
             for work in works:
                 good_exec = work.get_next_execution()
                 if good_exec:
-                    good_exec.execute(work)
-                    work.save()
+                    if good_exec == 'complete':
+                        cls.build_instruction_complete_method(process, None)(
+                            [work])
+                        work.save()
+                    else:
+                        good_exec.execute(work)
+                        work.save()
 
         return next
 
@@ -256,6 +261,11 @@ class ProcessDesc(model.CoopSQL):
         for step_relation in self.all_steps:
             if step_relation.step == from_step:
                 cur_step_found = True
+                if from_step.id == self.all_steps[-1].step.id:
+                    # Check there is no "complete" button
+                    if for_task.button_is_active('_button_complete_%s_%s' % (
+                            self.id, self.all_steps[-1].id)):
+                        return 'complete'
                 continue
             if not cur_step_found:
                 continue

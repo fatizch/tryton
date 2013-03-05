@@ -310,26 +310,25 @@ class ProcessFramework(ModelView):
         # super(ProcessFramework, cls).raise_user_error('\n'.join(result))
         raise UserError('\n'.join(result))
 
-    def is_button_available(self, process, executable):
-        print executable
-        if executable.__name__ == 'process.step_desc':
-            good_button = self._buttons['_button_step_%s_%s' % (
-                process.id, executable.id)]
-        elif executable.__name__ == 'process.step_transition':
-            good_button = self._buttons[
-                '_button_transition_%s_%s' % (process.id, executable.id)]
+    def button_is_active(self, button_name):
+        good_button = self._buttons[button_name]
         if good_button is None:
             return False
         if good_button == {}:
             return True
-
-        print good_button
-        print self.doc_received
         return not(
             'readonly' in good_button and
             utils.pyson_result(good_button['readonly'], self, evaled=True) or
             'invisible' in good_button and
             utils.pyson_result(good_button['invisible'], self, evaled=True))
+
+    def is_button_available(self, process, executable):
+        if executable.__name__ == 'process.step_desc':
+            button_name = '_button_step_%s_%s' % (process.id, executable.id)
+        elif executable.__name__ == 'process.step_transition':
+            button_name = '_button_transition_%s_%s' % (
+                process.id, executable.id)
+        return self.button_is_active(button_name)
 
     @classmethod
     def button_transition_states(cls, process, transition_data):
