@@ -1,5 +1,6 @@
 #-*- coding:utf-8 -*-
 import copy
+import StringIO
 import functools
 
 from trytond.model import fields, Model
@@ -164,7 +165,32 @@ class Printable(Model):
         pass
 
     def get_object_for_contact(self):
-        raise NotImplementedError
+        return self
+
+    def get_appliable_logo(self, kind=''):
+        print '#' * 80
+        print 'LOGOGETTER'
+        sender = self.get_sender()
+        if not sender or not sender.logo:
+            print 'MEI YOU'
+            return ''
+        print 'YOU'
+        return sender.logo
+
+    def format_logo(self):
+        good_logo = self.get_appliable_logo()
+        if not good_logo:
+            return None
+        return StringIO.StringIO(str(good_logo))
+
+    def get_sender(self):
+        return self.get_object_for_contact().get_sender()
+
+    def get_sender_address(self):
+        sender = self.get_sender()
+        if not sender or not sender.addresses:
+            return None
+        return sender.addresses[0]
 
 
 class DocumentDesc(model.CoopSQL, model.CoopView):
@@ -607,6 +633,12 @@ class LetterReport(Report):
             localcontext['Lang'] = localcontext['Party'].lang.code
         except AttributeError:
             localcontext['Lang'] = 'en_US'
+        if data['sender']:
+            localcontext['Sender'] = Pool().get('party.party')(data['sender'])
+        if data['sender_address']:
+            localcontext['SenderAddress'] = Pool().get(
+                'party.address')(data['sender_address'])
+        # localcontext['Logo'] = data['logo']
         localcontext['Today'] = utils.today()
         GoodModel = Pool().get(data['model'])
         good_obj = GoodModel(data['id'])
@@ -673,6 +705,15 @@ class LetterGeneration(Wizard):
         return 'select_model'
 
     def do_generate(self, action):
+        ActiveModel = Pool().get(Transaction().context.get('active_model'))
+        good_model = ActiveModel(Transaction().context.get('active_id'))
+        print '#' * 80
+        print 'TITITI'
+        print good_model
+        sender = good_model.get_sender()
+        sender_address = good_model.get_sender_address().id
+        # logo = good_model.format_logo()
+
         return action, {
             'id': Transaction().context.get('active_id'),
             'ids': Transaction().context.get('active_ids'),
@@ -680,11 +721,13 @@ class LetterGeneration(Wizard):
             'letter_model': self.select_model.get_active_model(),
             'party': self.select_model.party.id,
             'address': self.select_model.good_address.id,
+            'sender': sender.id if sender else None,
+            'sender_address': sender_address,
+            # 'logo': logo,
         }
 
     def default_select_model(self, fields):
         ActiveModel = Pool().get(Transaction().context.get('active_model'))
-
         good_model = ActiveModel(Transaction().context.get('active_id'))
 
         if not good_model:

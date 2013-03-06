@@ -91,6 +91,7 @@ class Party:
     employees = fields.One2Many('party.employee', 'company', 'Employees',
         states={'invisible': ~STATES_COMPANY},
         domain=[('is_person', '=', True)])
+    logo = fields.Binary('Logo', states={'invisible': ~STATES_COMPANY})
     ####################################
 
     @classmethod

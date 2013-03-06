@@ -57,6 +57,8 @@
                 view_ids="coop_party.company_view_tree_hierarchical,coop_party.company_view_form"
                     mode="tree,form"/>
             <field name="employees" colspan="4"/>
+            <label name="logo" xalign="0"/>
+            <field name="logo" colspan="3"/>
         </page>
         <page string="Relations" id="rel">
             <field name="relations" view_ids="coop_party.party_relation_view_tree_from"

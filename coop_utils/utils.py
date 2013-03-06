@@ -827,15 +827,26 @@ def convert_to_reference(target):
     return '%s,%s' % (target.__name__, target.id)
 
 
-def get_versioning_domain(start_date, end_date=None):
+def get_versioning_domain(start_date, end_date=None, do_eval=True):
     if not end_date:
         end_date = start_date
-    return (
-        'OR',
-        (
-            ('end_date', '=', None),
-            ('start_date', '<=', Eval(start_date))),
-        (
-            ('end_date', '!=', None),
-            ('start_date', '<=', Eval(start_date)),
-            ('end_date', '>=', Eval(end_date))))
+    if do_eval:
+        return [
+            'OR',
+            [
+                ('end_date', '=', None),
+                ('start_date', '<=', Eval(start_date))],
+            [
+                ('end_date', '!=', None),
+                ('start_date', '<=', Eval(start_date)),
+                ('end_date', '>=', Eval(end_date))]]
+    else:
+        return [
+            'OR',
+            [
+                ('end_date', '=', None),
+                ('start_date', '<=', start_date)],
+            [
+                ('end_date', '!=', None),
+                ('start_date', '<=', start_date),
+                ('end_date', '>=', end_date)]]

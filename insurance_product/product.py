@@ -233,6 +233,11 @@ class Product(model.CoopSQL, Offered):
     complementary_data_def = fields.Many2Many(
         'ins_product.product-complementary_data_def',
         'product', 'complementary_data_def', 'Complementary Data')
+    # Temporary
+    tmp_claim_manager = fields.Many2One(
+        'party.party', 'Claim Manager', domain=[('is_company', '=', True)])
+    tmp_contract_manager = fields.Many2One(
+        'party.party', 'Contract Manager', domain=[('is_company', '=', True)])
 
     @classmethod
     def __setup__(cls):

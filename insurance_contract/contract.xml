@@ -226,5 +226,27 @@
             <field name="model">ins_contract.contract,-1</field>
             <field name="action" ref="act_contract_status_history_relate_form"/>
         </record>
+        <!-- Management Role -->
+        <record model="ir.ui.view" id="management_role_form">
+          <field name="model">ins_contract.management_role</field>
+          <field name="type">form</field>
+          <field name="name">management_role_form</field>
+        </record>
+        <record model="ir.ui.view" id="management_role_tree">
+          <field name="model">ins_contract.management_role</field>
+          <field name="type">tree</field>
+          <field name="name">management_role_tree</field>
+      </record>
+      <!-- Management Protocol -->
+      <record model="ir.ui.view" id="management_protocol_form">
+        <field name="model">ins_contract.management_protocol</field>
+        <field name="type">form</field>
+        <field name="name">management_protocol_form</field>
+      </record>
+      <record model="ir.ui.view" id="management_protocol_tree">
+        <field name="model">ins_contract.management_protocol</field>
+        <field name="type">tree</field>
+        <field name="name">management_protocol_tree</field>
+      </record>
     </data>
 </tryton>

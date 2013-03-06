@@ -116,8 +116,26 @@ class Claim(model.CoopSQL, CoopProcessFramework, Printable):
     def get_contact(self):
         return self.claimant
 
-    def get_object_for_contact(self):
-        return self
+    def get_main_loss(self):
+        if not self.losses:
+            return None
+        return self.losses[0]
+
+    def get_main_contract(self):
+        loss = self.get_main_loss()
+        if not loss or not loss.delivered_services:
+            return None
+        delivered_service = loss.delivered_services[0]
+        return delivered_service.subscribed_service.contract
+
+    def get_sender(self):
+        contract = self.get_main_contract()
+        if not contract:
+            return None
+        good_role = contract.get_management_role('claim_manager')
+        if not good_role:
+            return None
+        return good_role.protocol.party
 
 
 class Loss(model.CoopSQL, model.CoopView):

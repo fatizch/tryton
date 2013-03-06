@@ -449,6 +449,21 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         if hasattr(self, 'offered') and self.offered:
             return self.offered.get_currency(name)
 
+    def get_sender(self):
+        return self.get_management_role('contract_manager').protocol.party
+
+    def get_management_role(self, role, good_date=None):
+        if not good_date:
+            good_date = utils.today()
+        Role = Pool().get('ins_contract.management_role')
+        domain = [
+            utils.get_versioning_domain(good_date, do_eval=False),
+            ('protocol.kind', '=', role)]
+        good_roles = Role.search(domain)
+        if not good_roles:
+            return None
+        return good_roles[0]
+
 
 class Option(model.CoopSQL, Subscribed):
     'Subscribed Coverage'
@@ -966,16 +981,10 @@ class ManagementProtocol(model.CoopSQL, model.CoopView):
     )
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    party = fields.Many2One(
-        'party.party',
-        'Party',
-        domain=[
-            If(
-                Eval('kind') in ('claim_manager', 'contract_manager'),
-                ('OR', ('is_insurer', '=', True), ('is_broker', '=', True)),
-                ('id', '>', 0))],
-        depends=['kind'],
-    )
+    party = fields.Many2One('party.party', 'Party')
+
+    def get_rec_name(self, name):
+        return self.party.get_rec_name(name)
 
 
 class ManagementRole(model.CoopSQL, model.CoopView):
@@ -988,9 +997,23 @@ class ManagementRole(model.CoopSQL, model.CoopView):
     protocol = fields.Many2One(
         'ins_contract.management_protocol', 'Protocol', required=True,
         domain=[utils.get_versioning_domain('start_date', 'end_date')],
-        depends=['start_date', 'end_date'])
+        depends=['start_date', 'end_date'],
+        ondelete='RESTRICT',)
     contract = fields.Many2One(
         'ins_contract.contract', 'Contract', ondelete='CASCADE')
+    kind = fields.Function(
+        fields.Char(
+            'Kind',
+            on_change_with=['protocol'],
+            depends=['protocol'],
+        ),
+        'on_change_with_kind',
+    )
+
+    def on_change_with_kind(self, name=None):
+        if not (hasattr(self, 'protocol') and self.protocol):
+            return ''
+        return self.protocol.kind
 
 
 class DeliveredService(model.CoopSQL, model.CoopView):

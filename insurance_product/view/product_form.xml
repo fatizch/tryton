@@ -29,5 +29,11 @@
         <newline/>
         <label name="currency"/>
         <field name="currency"/>
+        <newline/>
+        <label name="tmp_claim_manager" xalign="0"/>
+        <field name="tmp_claim_manager"/>
+        <newline/>
+        <label name="tmp_contract_manager" xalign="0"/>
+        <field name="tmp_contract_manager"/>
     </xpath>
 </data>
