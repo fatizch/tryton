@@ -168,13 +168,9 @@ class Printable(Model):
         return self
 
     def get_appliable_logo(self, kind=''):
-        print '#' * 80
-        print 'LOGOGETTER'
         sender = self.get_sender()
         if not sender or not sender.logo:
-            print 'MEI YOU'
             return ''
-        print 'YOU'
         return sender.logo
 
     def format_logo(self):
@@ -707,9 +703,6 @@ class LetterGeneration(Wizard):
     def do_generate(self, action):
         ActiveModel = Pool().get(Transaction().context.get('active_model'))
         good_model = ActiveModel(Transaction().context.get('active_id'))
-        print '#' * 80
-        print 'TITITI'
-        print good_model
         sender = good_model.get_sender()
         sender_address = good_model.get_sender_address().id
         # logo = good_model.format_logo()
