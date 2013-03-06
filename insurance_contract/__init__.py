@@ -10,9 +10,9 @@ def register():
     Pool.register(
         # contract.py classes
         Party,
+        Contract,
         ManagementProtocol,
         ManagementRole,
-        Contract,
         Option,
         StatusHistory,
         BillingManager,
