@@ -22,6 +22,10 @@ msgctxt "error:ins_claim.loss:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_contract.expense:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "field:ins_claim.claim,claimant:"
 msgid "Claimant"
 msgstr "Déclarant"
@@ -250,6 +254,10 @@ msgctxt "field:ins_claim.loss,event_desc:"
 msgid "Event"
 msgstr "Fait Générateur"
 
+msgctxt "field:ins_claim.loss,expenses:"
+msgid "Expenses"
+msgstr "Frais"
+
 msgctxt "field:ins_claim.loss,id:"
 msgid "ID"
 msgstr "ID"
@@ -306,6 +314,38 @@ msgctxt "field:ins_contract.delivered_service,loss:"
 msgid "Loss"
 msgstr "Préjudice"
 
+msgctxt "field:ins_contract.expense,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.expense,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.expense,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.expense,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.expense,loss:"
+msgid "Loss"
+msgstr "Préjudice"
+
+msgctxt "field:ins_contract.expense,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_contract.expense,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.expense,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_product.request_finder,tmp_1:"
 msgid "Claim"
 msgstr "Sinistre"
@@ -329,6 +369,10 @@ msgstr "Détail de l'indemnisation"
 msgctxt "model:ins_claim.loss,name:"
 msgid "Loss"
 msgstr "Préjudice"
+
+msgctxt "model:ins_contract.expense,name:"
+msgid "Expense"
+msgstr "Frais"
 
 msgctxt "model:ins_product.rule_sets.claim,name:"
 msgid "Context functions for Claims."

@@ -73,6 +73,7 @@ def register():
         # from process
         ProcessProductRelation,
         ProcessDesc,
+        ExpenseKind,
         module='insurance_product', type_='model')
     Pool.register(
         LetterReport,

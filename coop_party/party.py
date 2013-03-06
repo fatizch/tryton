@@ -181,7 +181,7 @@ class Party:
             res = super(Party, self).get_rec_name(name)
         if res:
             return res
-        return super(Party, self).get_rec_name()
+        return super(Party, self).get_rec_name(name)
 
     def get_relation_with(self, target):
         kind = set([elem.kind for elem in self.relations

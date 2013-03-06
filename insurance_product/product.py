@@ -20,6 +20,7 @@ __all__ = [
     'ItemDescriptorComplementaryDataRelation',
     'ProductItemDescriptorRelation',
     'ProductComplementaryDataRelation',
+    'ExpenseKind',
 ]
 
 CONFIG_KIND = [
@@ -485,3 +486,19 @@ class ProductComplementaryDataRelation(model.CoopSQL):
     complementary_data_def = fields.Many2One(
         'ins_product.complementary_data_def',
         'Complementary Data', ondelete='RESTRICT')
+
+
+class ExpenseKind(model.CoopSQL, model.CoopView):
+    'Expense Kind'
+
+    __name__ = 'ins_product.expense_kind'
+
+    kind = fields.Selection(
+        [
+            ('medical', 'Medical'),
+            ('expert', 'Expert'),
+            ('judiciary', 'Judiciary'),
+            ('other', 'Other'),
+        ], 'Kind')
+    code = fields.Char('Code', required=True)
+    name = fields.Char('Name')

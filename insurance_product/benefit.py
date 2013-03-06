@@ -136,7 +136,6 @@ class Benefit(model.CoopSQL, Offered):
         errs = []
         for key, fancy_name in INDEMNIFICATION_DETAIL_KIND:
             indemn_dict, indemn_errs = self.get_result(key, args, key)
-            print key, indemn_dict, indemn_errs
             errs += indemn_errs
             if not indemn_dict:
                 continue

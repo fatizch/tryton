@@ -134,6 +134,10 @@ msgctxt "error:ins_product.event_desc:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_product.expense_kind:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:ins_product.item_desc-complementary_data_def:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -1717,6 +1721,46 @@ msgctxt "field:ins_product.event_desc-loss_desc,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_product.expense_kind,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:ins_product.expense_kind,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.expense_kind,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.expense_kind,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.expense_kind,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.expense_kind,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_product.expense_kind,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.expense_kind,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.expense_kind,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.expense_kind,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_product.item_desc,code:"
 msgid "Code"
 msgstr "Code"
@@ -2905,6 +2949,10 @@ msgctxt "model:ins_product.event_desc-loss_desc,name:"
 msgid "Event Desc - Loss Desc Relation"
 msgstr ""
 
+msgctxt "model:ins_product.expense_kind,name:"
+msgid "Expense Kind"
+msgstr "Type de Frais"
+
 msgctxt "model:ins_product.item_desc,name:"
 msgid "Item Descriptor"
 msgstr "Description du Risque"
@@ -3053,6 +3101,10 @@ msgctxt "model:ir.action,name:act_model_coop_schema"
 msgid "Complementary Data Complementary Datas"
 msgstr "Données Complémentaires"
 
+msgctxt "model:ir.action,name:act_model_expense_kind"
+msgid "Expenses Kind"
+msgstr "Type de Frais"
+
 msgctxt "model:ir.action,name:act_package_form"
 msgid "Packages"
 msgstr "Formules"
@@ -3120,6 +3172,10 @@ msgstr "Clauses"
 msgctxt "model:ir.ui.menu,name:menu_model_coop_schema"
 msgid "Complementary Data Complementary Datas"
 msgstr "Données Complémentaires"
+
+msgctxt "model:ir.ui.menu,name:menu_model_expense_kind"
+msgid "Expenses Kind"
+msgstr "Type de Frais"
 
 msgctxt "model:ir.ui.menu,name:menu_package_form"
 msgid "Packages"
@@ -3536,6 +3592,22 @@ msgstr "Compléter"
 msgctxt "selection:ins_product.eligibility_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
+
+msgctxt "selection:ins_product.expense_kind,kind:"
+msgid "Expert"
+msgstr "Avancé"
+
+msgctxt "selection:ins_product.expense_kind,kind:"
+msgid "Judiciary"
+msgstr "Judiciaire"
+
+msgctxt "selection:ins_product.expense_kind,kind:"
+msgid "Medical"
+msgstr "Médical"
+
+msgctxt "selection:ins_product.expense_kind,kind:"
+msgid "Other"
+msgstr "Autre"
 
 msgctxt "selection:ins_product.letter_model,kind:"
 msgid ""

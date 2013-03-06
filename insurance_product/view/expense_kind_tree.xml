@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Expense Kind">
+    <field name="kind"/>
+    <field name="code"/>
+    <field name="name"/>
+</tree>

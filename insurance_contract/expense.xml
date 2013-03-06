@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!--################################################################ -->
+        <!-- Expenses-->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="expense_view_tree">
+            <field name="model">ins_contract.expense</field>
+            <field name="type">tree</field>
+            <field name="name">expense_tree</field>
+        </record>
+        <record model="ir.ui.view" id="expense_view_form">
+            <field name="model">ins_contract.expense</field>
+            <field name="type">form</field>
+            <field name="name">expense_form</field>
+        </record>
+    </data>
+</tryton>

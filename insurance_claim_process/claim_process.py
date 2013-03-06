@@ -153,7 +153,6 @@ class ClaimProcess():
         for loss in self.losses:
             for delivered_service in loss.delivered_services:
                 for indemnification in delivered_service.indemnifications:
-                    print indemnification.status
                     if indemnification.status == 'validated':
                         indemnification.status = 'paid'
                         indemnification.save()
@@ -168,12 +167,12 @@ class ClaimProcess():
     @classmethod
     def set_toto(cls, instances, name, vals):
         Indemnification = Pool().get('ins_claim.indemnification')
-        vals_as_dict = dict([(k[0], k[1:]) for k in vals])
-        if 'write' in vals_as_dict:
-            objects = Indemnification.browse(vals_as_dict['write'][0])
+        for val in vals:
+            if not val[0] == 'write':
+                continue
             Indemnification.write(
-                objects,
-                vals_as_dict['write'][1])
+                Indemnification.browse(val[1]),
+                val[2])
 
     def reject_and_close_claim(self):
         self.status = 'closed'

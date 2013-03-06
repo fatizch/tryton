@@ -7,10 +7,11 @@ from trytond.pyson import Eval, Bool, If
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model
-from trytond.modules.coop_utils import utils, date
+from trytond.modules.coop_utils import utils, date, business
 from trytond.modules.coop_utils import coop_string
 from trytond.modules.coop_process import CoopProcessFramework
 from trytond.modules.insurance_product import Printable
+from trytond.modules.insurance_product.product import DEF_CUR_DIG
 
 CONTRACTSTATUSES = [
     ('', ''),
@@ -38,6 +39,7 @@ __all__ = [
     'DocumentRequest',
     'DeliveredService',
     'RequestFinder',
+    'Expense',
 ]
 
 
@@ -1023,11 +1025,52 @@ class DeliveredService(model.CoopSQL, model.CoopView):
 
     subscribed_service = fields.Many2One(
         'ins_contract.option', 'Coverage', ondelete='RESTRICT')
+    expenses = fields.One2Many('ins_contract.expense',
+        'delivered_service', 'Expenses')
 
     def get_rec_name(self, name=None):
         if self.subscribed_service:
             return self.subscribed_service.get_rec_name(name)
         return super(DeliveredService, self).get_rec_name(name)
+
+    def get_expense(self, code):
+        for expense in self.expenses:
+            if expense.kind and expense.kind.code == code:
+                return expense.amount, expense.currency
+
+    def get_total_expense(self):
+        res = [0, None]
+        for expense in self.expenses:
+            if not res[1]:
+                res[1] = expense.currency
+            if res[1] == expense.currency:
+                res[0] += expense.amount
+        return res
+
+
+class Expense(model.CoopSQL, model.CoopView):
+    'Expense'
+
+    __name__ = 'ins_contract.expense'
+
+    delivered_service = fields.Many2One(
+        'ins_contract.delivered_service', 'Delivered Service',
+        ondelete='CASCADE')
+    kind = fields.Many2One('ins_product.expense_kind', 'Kind')
+    amount = fields.Numeric('Amount', required=True,
+        digits=(16, Eval('currency_digits', DEF_CUR_DIG)))
+    currency = fields.Many2One('currency.currency', 'Currency', required=True)
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits', states={'invisible': True}),
+        'get_currency_digits')
+
+    @staticmethod
+    def default_currency():
+        return business.get_default_currency()
+
+    def get_currency_digits(self, name):
+        if hasattr(self, 'currency') and self.currency:
+            return self.currency.digits
 
 
 class DocumentRequest():

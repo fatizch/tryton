@@ -260,14 +260,16 @@ class ClaimDeliveredService():
             cur_dict)
         if errors:
             return None, errors
-        indemnification = utils.instanciate_relation(self.__class__,
-            'indemnifications')
-        indemnification.init_from_delivered_service(self)
+        indemnification = self.get_indemnification_being_calculated()
         if not hasattr(self, 'indemnifications') or not self.indemnifications:
             self.indemnifications = []
         else:
             self.indemnifications = list(self.indemnifications)
-        self.indemnifications.append(indemnification)
+        if not indemnification:
+            indemnification = utils.instanciate_relation(
+                self.__class__, 'indemnifications')
+            self.indemnifications.append(indemnification)
+        indemnification.init_from_delivered_service(self)
         indemnification.create_details_from_dict(details_dict)
 
     def get_rec_name(self, name=None):
@@ -290,6 +292,13 @@ class ClaimDeliveredService():
             return self.complementary_data[value]
         except KeyError:
             return None
+
+    def get_indemnification_being_calculated(self):
+        if not hasattr(self, 'indemnifications'):
+            return None
+        for indemnification in self.indemnifications:
+            if indemnification.status == 'calculated':
+                return indemnification
 
 
 class Indemnification(model.CoopSQL, model.CoopView):
@@ -328,14 +337,17 @@ class Indemnification(model.CoopSQL, model.CoopView):
         return self.delivered_service.benefit.indemnification_kind
 
     def create_details_from_dict(self, details_dict):
+        if not hasattr(self, 'details'):
+            self.details = []
+        else:
+            self.details = list(self.details)
+            self.details[:] = []
         for key, fancy_name in INDEMNIFICATION_DETAIL_KIND:
             if not key in details_dict:
                 continue
             detail = utils.instanciate_relation(self.__class__,
                 'details')
             detail.init_from_indemnification(self)
-            if not hasattr(self, 'details') or not self.details:
-                self.details = []
             self.details.append(detail)
             detail.kind = key
             for field_name, value in details_dict[key].iteritems():
@@ -348,7 +360,6 @@ class Indemnification(model.CoopSQL, model.CoopView):
             return
         for detail in self.details:
             detail.calculate_amount()
-            print detail.amount
             self.amount += detail.amount
 
 
@@ -377,8 +388,6 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView):
         pass
 
     def calculate_amount(self):
-        print self.amount_per_unit
-        print self.nb_of_unit
         self.amount = self.amount_per_unit * self.nb_of_unit
 
 

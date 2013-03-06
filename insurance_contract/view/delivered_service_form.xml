@@ -2,4 +2,5 @@
 <form string="Delivered Service">
     <label name="subscribed_service"/>
     <field name="subscribed_service"/>
+    <field name="expenses" colspan="4"/>
 </form>

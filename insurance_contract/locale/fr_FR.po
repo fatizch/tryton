@@ -642,6 +642,10 @@ msgctxt "field:ins_contract.delivered_service,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_contract.delivered_service,expenses:"
+msgid "Expenses"
+msgstr "Frais"
+
 msgctxt "field:ins_contract.delivered_service,id:"
 msgid "ID"
 msgstr "ID"
@@ -665,6 +669,30 @@ msgstr "Date de mise à jour"
 msgctxt "field:ins_contract.delivered_service,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.expense,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:ins_contract.expense,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_contract.expense,currency_digits:"
+msgid "Currency Digits"
+msgstr "Nbre de chiffres après la virgule"
+
+msgctxt "field:ins_contract.expense,delivered_service:"
+msgid "Delivered Service"
+msgstr "Prestation Fournie"
+
+msgctxt "field:ins_contract.expense,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_contract.expense,subscribed_service:"
+msgid "Subscribed Service"
+msgstr ""
 
 msgctxt "field:ins_contract.management_protocol,create_date:"
 msgid "Create Date"
