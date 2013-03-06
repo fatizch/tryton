@@ -1013,7 +1013,7 @@ class ManagementRole(model.CoopSQL, model.CoopView):
     def on_change_with_kind(self, name=None):
         if not (hasattr(self, 'protocol') and self.protocol):
             return ''
-        return self.protocol.kind
+        return coop_string.translate_value(self.protocol, 'kind')
 
 
 class DeliveredService(model.CoopSQL, model.CoopView):
