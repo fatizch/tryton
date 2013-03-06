@@ -2459,6 +2459,14 @@ msgctxt "field:ins_product.product,term_renewal_rules:"
 msgid "Term - Renewal"
 msgstr "Terme - Renouvellement"
 
+msgctxt "field:ins_product.product,tmp_claim_manager:"
+msgid "Claim Manager"
+msgstr "Gestionnaire de sinistres"
+
+msgctxt "field:ins_product.product,tmp_contract_manager:"
+msgid "Contract Manager"
+msgstr "Gestionnaire de contrat"
+
 msgctxt "field:ins_product.product,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -3270,6 +3278,18 @@ msgid "Remove"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_product.complementary_data_def,kind:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "selection:ins_product.complementary_data_def,kind:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:ins_product.complementary_data_def,kind:"
+msgid "Loss"
+msgstr "Préjudice"
+
+msgctxt "selection:ins_product.complementary_data_def,kind:"
 msgid "On Contract"
 msgstr "Contrat"
 
@@ -3284,6 +3304,14 @@ msgstr "Produit"
 msgctxt "selection:ins_product.complementary_data_def,kind:"
 msgid "On Sub Element"
 msgstr "Elèment Couvert"
+
+msgctxt "selection:ins_product.complementary_data_def,kind:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "selection:ins_product.complementary_data_def,kind:"
+msgid "Sub Element"
+msgstr "Sous Eléments"
 
 msgctxt "selection:ins_product.complementary_data_def,type_:"
 msgid "Boolean"

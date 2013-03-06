@@ -38,6 +38,14 @@ msgctxt "error:ins_contract.delivered_service:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_contract.management_protocol:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.management_role:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:ins_contract.option:"
 msgid "Everything is good !"
 msgstr "Tout est bon!"
@@ -438,6 +446,10 @@ msgctxt "field:ins_contract.contract,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
+msgctxt "field:ins_contract.contract,management:"
+msgid "Management Roles"
+msgstr "Gestionnaires"
+
 msgctxt "field:ins_contract.contract,master:"
 msgid "Master"
 msgstr "Maître"
@@ -651,6 +663,98 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:ins_contract.delivered_service,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.management_protocol,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.management_protocol,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.management_protocol,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.management_protocol,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.management_protocol,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.management_protocol,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_contract.management_protocol,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:ins_contract.management_protocol,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_contract.management_protocol,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.management_protocol,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.management_protocol,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.management_role,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:ins_contract.management_role,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.management_role,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.management_role,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.management_role,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.management_role,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.management_role,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_contract.management_role,protocol:"
+msgid "Protocol"
+msgstr "Protocole de gestion"
+
+msgctxt "field:ins_contract.management_role,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ins_contract.management_role,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.management_role,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.management_role,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -1107,6 +1211,14 @@ msgctxt "model:ins_contract.delivered_service,name:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 
+msgctxt "model:ins_contract.management_protocol,name:"
+msgid "Management Protocol"
+msgstr "Protocole de gestion"
+
+msgctxt "model:ins_contract.management_role,name:"
+msgid "Management Role"
+msgstr "Gestionnaire"
+
 msgctxt "model:ins_contract.option,name:"
 msgid "Subscribed Coverage"
 msgstr "Garantie"
@@ -1326,6 +1438,18 @@ msgstr "Refusé"
 msgctxt "selection:ins_contract.covered_data,status:"
 msgid "Terminated"
 msgstr "Terminé"
+
+msgctxt "selection:ins_contract.management_protocol,kind:"
+msgid "Business Provider"
+msgstr "Apporteur"
+
+msgctxt "selection:ins_contract.management_protocol,kind:"
+msgid "Claim Manager"
+msgstr "Gestionnaire de sinistres"
+
+msgctxt "selection:ins_contract.management_protocol,kind:"
+msgid "Contract Manager"
+msgstr "Gestionnaire de contrat"
 
 msgctxt "selection:ins_contract.option,status:"
 msgid "Active"

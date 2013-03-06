@@ -682,6 +682,10 @@ msgctxt "field:ins_collective.contract,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
+msgctxt "field:ins_collective.contract,management:"
+msgid "Management Roles"
+msgstr "Gestionnaires"
+
 msgctxt "field:ins_collective.contract,master:"
 msgid "Master"
 msgstr "Maître"
@@ -1358,6 +1362,10 @@ msgstr "ID"
 msgctxt "field:ins_collective.enrollment,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
+
+msgctxt "field:ins_collective.enrollment,management:"
+msgid "Management Roles"
+msgstr "Gestionnaires"
 
 msgctxt "field:ins_collective.enrollment,master:"
 msgid "Master"
@@ -2085,6 +2093,14 @@ msgstr "Comportement du Modèle"
 msgctxt "field:ins_collective.product,term_renewal_rules:"
 msgid "Term - Renewal"
 msgstr "Terme - Renouvellement"
+
+msgctxt "field:ins_collective.product,tmp_claim_manager:"
+msgid "Claim Manager"
+msgstr "Gestionnaire de sinistres"
+
+msgctxt "field:ins_collective.product,tmp_contract_manager:"
+msgid "Contract Manager"
+msgstr "Gestionnaire de contrat"
 
 msgctxt "field:ins_collective.product,write_date:"
 msgid "Write Date"
