@@ -1058,7 +1058,8 @@ class Expense(model.CoopSQL, model.CoopView):
         ondelete='CASCADE')
     kind = fields.Many2One('ins_product.expense_kind', 'Kind')
     amount = fields.Numeric('Amount', required=True,
-        digits=(16, Eval('currency_digits', DEF_CUR_DIG)))
+        digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
+        depends=['currency_digits'])
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
     currency_digits = fields.Function(
         fields.Integer('Currency Digits', states={'invisible': True}),
