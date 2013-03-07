@@ -20,7 +20,6 @@ def get_or_create_objects(cfg_dict, cur_line, header):
             continue
         data[key] = cur_line[n].decode('latin-1')
         n += 1
-    print data
     proteus_tools.get_or_create_this(
         data, {}, cfg_dict, 'ExpenseKind', 'code')
 
