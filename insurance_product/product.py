@@ -502,3 +502,4 @@ class ExpenseKind(model.CoopSQL, model.CoopView):
         ], 'Kind')
     code = fields.Char('Code', required=True)
     name = fields.Char('Name')
+    short_name = fields.Char('Short Name')

@@ -3,4 +3,5 @@
     <field name="kind"/>
     <field name="code"/>
     <field name="name"/>
+    <field name="short_name"/>
 </tree>

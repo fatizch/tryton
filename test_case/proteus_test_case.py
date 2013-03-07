@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
+import sys
 from proteus import Model, Wizard
 
 import proteus_tools
@@ -70,9 +71,9 @@ def load_test_case_translations(cfg_dict, path):
     return cfg_dict
 
 
-def update_modules(cfg_dict):
+def update_modules(cfg_dict, modules):
     cfg_dict = set_currency(cfg_dict)
-    modules = proteus_tools.get_modules_to_update(cfg_dict['modules'])
+    modules = proteus_tools.get_modules_to_update(modules)
     for cur_module in modules:
         print '=' * 80 + '\n'
         cur_path = os.path.abspath(
@@ -101,20 +102,25 @@ def update_modules(cfg_dict):
         #    warnings.warn('KO : Exception raised', stacklevel=2)
 
 
-def launch_proteus_test_case(test_config_file):
+def launch_proteus_test_case(test_config_file=None, module=None):
+    if not test_config_file:
+        test_config_file = os.path.join(DIR, 'test_case.cfg')
     cfg_dict = proteus_tools.get_test_cfg(test_config_file)
 
     delete_db_if_necessary(cfg_dict)
-
-    modules = install_modules(proteus_tools.get_config(
-        cfg_dict), cfg_dict['modules'])
-    for module in cfg_dict['modules']:
+    if not module:
+        modules = cfg_dict['modules']
+    else:
+        modules = [module]
+    installed_modules = install_modules(proteus_tools.get_config(
+            cfg_dict), modules)
+    for module in installed_modules:
         if module in modules:
             print 'Module %s installed' % module
         else:
             print 'Module %s already installed' % module
 
-    update_modules(cfg_dict)
+    update_modules(cfg_dict, modules)
 
 
 def set_currency(cfg_dict):
@@ -129,4 +135,4 @@ def set_currency(cfg_dict):
 
 
 if __name__ == '__main__':
-    launch_proteus_test_case(os.path.join(DIR, 'test_case.cfg'))
+    launch_proteus_test_case()

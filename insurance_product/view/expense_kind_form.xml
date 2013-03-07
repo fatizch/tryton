@@ -1,6 +1,13 @@
 <?xml version="1.0"?>
 <form string="Expense Kind">
+    <label name="kind"/>
     <field name="kind"/>
+    <newline/>
+    <label name="code"/>
     <field name="code"/>
+    <label name="name"/>
     <field name="name"/>
+    <newline/>
+    <label name="short_name"/>
+    <field name="short_name"/>
 </form>

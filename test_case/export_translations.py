@@ -69,5 +69,5 @@ def update_views(test_config_file):
 
 
 if __name__ == '__main__':
-    #update_views('test_case.cfg')
+    #update_views(os.path.join(DIR, 'test_case.cfg'))
     launch_proteus_test_case(os.path.join(DIR, 'test_case.cfg'))
