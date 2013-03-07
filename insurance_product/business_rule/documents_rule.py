@@ -686,7 +686,7 @@ class LetterGeneration(Wizard):
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Generate', 'generate', 'tryton-ok'),
             Button('Attach', 'attach', 'tryton-go-next'),
-            Button('Complete', 'post-generation', 'tryton-ok')])
+            Button('Complete', 'post_generation', 'tryton-ok')])
 
     attach = StateView(
         'ins_product.attach_letter',
