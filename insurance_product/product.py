@@ -409,8 +409,8 @@ class Product(model.CoopSQL, Offered):
                 return [], ()
         return [], ()
 
-    def get_currency(self, name):
-        return self.currency.id
+    def get_currency(self):
+        return self.currency
 
 
 class ProductOptionsCoverage(model.CoopSQL):

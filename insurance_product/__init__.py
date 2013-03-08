@@ -51,6 +51,7 @@ def register():
         BenefitLossDescRelation,
         BenefitComplementaryDataRelation,
         BenefitRule,
+        SubBenefitRule,
         ReserveRule,
         CoverageAmountRule,
         DeductibleRule,

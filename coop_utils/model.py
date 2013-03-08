@@ -289,7 +289,7 @@ class CoopSQL(ExportImportMixin, ModelSQL):
         return super(CoopSQL, cls).search(domain=domain, offset=offset,
             limit=limit, order=order, count=count, query_string=query_string)
 
-    def get_currency(self, name):
+    def get_currency(self):
         print self.__name__
         raise NotImplementedError
 

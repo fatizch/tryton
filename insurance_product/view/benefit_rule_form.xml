@@ -4,8 +4,11 @@
         <form string="benefit rule"/>
     </xpath>
     <xpath expr="/form/label[@name='config_kind']" position="before">
+        <label name="amount_evolves_over_time"/>
+        <field name="amount_evolves_over_time"/>
         <label name="indemnification_calc_unit"/>
         <field name="indemnification_calc_unit"/>
+        <field name="sub_benefit_rules" colspan="4"/>
         <newline/>
     </xpath>
     <xpath expr="/form/label[@name='rule']" position="before">

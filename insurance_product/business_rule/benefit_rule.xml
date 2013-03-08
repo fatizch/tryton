@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
-        <!--  ******************************************* 
-              ********    Benefit Rule    ***************
-              *******************************************-->
+        <!-- *******************************************
+            ******** Benefit Rule ***************
+            ******************************************* -->
         <record model="ir.ui.view" id="benefit_rule_view_tree">
             <field name="model">ins_product.benefit_rule</field>
             <field name="type">tree</field>
@@ -15,6 +15,16 @@
             <field name="type">form</field>
             <field name="inherit" ref="businessruleroot_view_form"/>
             <field name="name">benefit_rule_form</field>
+        </record>
+        <record model="ir.ui.view" id="sub_benefit_rule_view_tree">
+            <field name="model">ins_product.sub_benefit_rule</field>
+            <field name="type">tree</field>
+            <field name="name">sub_benefit_rule_tree</field>
+        </record>
+        <record model="ir.ui.view" id="sub_benefit_rule_view_form">
+            <field name="model">ins_product.sub_benefit_rule</field>
+            <field name="type">form</field>
+            <field name="name">sub_benefit_rule_form</field>
         </record>
     </data>
 </tryton>

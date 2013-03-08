@@ -340,17 +340,19 @@ class Indemnification(model.CoopSQL, model.CoopView):
             self.details = []
         else:
             self.details = list(self.details)
+            #TODO: Delete previous details
             self.details[:] = []
         for key, fancy_name in INDEMNIFICATION_DETAIL_KIND:
             if not key in details_dict:
                 continue
-            detail = utils.instanciate_relation(self.__class__,
-                'details')
-            detail.init_from_indemnification(self)
-            self.details.append(detail)
-            detail.kind = key
-            for field_name, value in details_dict[key].iteritems():
-                setattr(detail, field_name, value)
+            for detail_dict in details_dict[key]:
+                detail = utils.instanciate_relation(self.__class__,
+                    'details')
+                detail.init_from_indemnification(self)
+                self.details.append(detail)
+                detail.kind = key
+                for field_name, value in detail_dict.iteritems():
+                    setattr(detail, field_name, value)
         self.calculate_amount_from_details()
 
     def calculate_amount_from_details(self):

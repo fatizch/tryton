@@ -59,7 +59,7 @@ class Subscribed(model.CoopView):
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency'),
-        'get_currency')
+        'get_currency_id')
     currency_digits = fields.Function(
         fields.Integer('Currency Digits'),
         'get_currency_digits')
@@ -452,9 +452,14 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def get_contact(self):
         return self.subscriber
 
-    def get_currency(self, name):
+    def get_currency(self):
         if hasattr(self, 'offered') and self.offered:
-            return self.offered.get_currency(name)
+            return self.offered.get_currency()
+
+    def get_currency_id(self, name):
+        currency = self.get_currency()
+        if currency:
+            return currency.id
 
     def get_sender(self):
         return self.get_management_role('contract_manager').protocol.party

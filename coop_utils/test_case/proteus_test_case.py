@@ -61,6 +61,7 @@ import proteus_tools
 
 def update_models(cfg_dict):
     cfg_dict['Model'] = Model.get('ir.model')
+    cfg_dict['Lang'] = Model.get('ir.lang')
 
 
 def set_global_search_options(cfg_dict):
@@ -73,6 +74,20 @@ def set_global_search_options(cfg_dict):
             model.save()
 
 
+def set_language_translatable(cfg_dict, code):
+    domain = [
+        ('translatable', '=', False),
+        ('code', '=', code),
+    ]
+    lang = proteus_tools.get_objects_from_db(cfg_dict, 'Lang', domain=domain)
+    if not lang:
+        return
+    lang.translatable = True
+    lang.save()
+
+
 def launch_test_case(cfg_dict):
     update_models(cfg_dict)
     set_global_search_options(cfg_dict)
+    set_language_translatable(cfg_dict, 'fr_FR')
+    set_language_translatable(cfg_dict, 'en_US')

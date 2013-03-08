@@ -103,6 +103,8 @@ class BankAccountNumber(CoopSQL, CoopView):
                 })
 
     def check_number(self):
+        if not hasattr(self, 'kind'):
+            return True
         if self.kind == 'IBAN':
             return self.check_iban()
         elif self.kind == 'RIB':

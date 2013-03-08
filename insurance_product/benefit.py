@@ -135,11 +135,16 @@ class Benefit(model.CoopSQL, Offered):
         res = {}
         errs = []
         for key, fancy_name in INDEMNIFICATION_DETAIL_KIND:
-            indemn_dict, indemn_errs = self.get_result(key, args, key)
+            #For indemnification we could have a list of result because the
+            #indemnification could change over time for example 3 month at 100%
+            #then 50% for the rest of the period
+            indemn_dicts, indemn_errs = self.get_result(key, args, key)
             errs += indemn_errs
-            if not indemn_dict:
+            if not indemn_dicts:
                 continue
-            res[key] = indemn_dict
+            res[key] = indemn_dicts
+            #to retrieve the end date, we use the last calculated indemnificat
+            indemn_dict = indemn_dicts[-1]
             if (self.indemnification_kind == 'period'
                 and 'end_date' in indemn_dict):
                 args['start_date'] = date.add_day(indemn_dict['end_date'], 1)

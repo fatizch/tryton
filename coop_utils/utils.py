@@ -13,7 +13,7 @@ from trytond.model import fields
 from trytond.protocols.jsonrpc import JSONEncoder, object_hook
 
 # Needed for Pyson evaluation
-from trytond.pyson import PYSONDecoder, PYSONEncoder, CONTEXT, Eval
+from trytond.pyson import PYSONDecoder, PYSONEncoder, CONTEXT, Eval, Or
 from trytond.tools import safe_eval
 from trytond.model.modelstorage import EvalEnvironment
 
@@ -849,3 +849,19 @@ def get_versioning_domain(start_date, end_date=None, do_eval=True):
                 ('end_date', '!=', None),
                 ('start_date', '<=', start_date),
                 ('end_date', '>=', end_date)]]
+
+
+def update_states(cls, var_name, new_states):
+    '''
+    This methods allows to update field states when overriding a field and you
+    don't know what where the states defined at the higher level
+    '''
+    field_name = copy.copy(getattr(cls, var_name))
+    if not field_name.states:
+        field_name.states = {}
+    for key, value in new_states.iteritems():
+        if not key in field_name.states:
+            field_name.states[key] = value
+        elif field_name.states[key] != value:
+            field_name.states[key] = Or(field_name.states[key], value)
+    setattr(cls, var_name, field_name)
