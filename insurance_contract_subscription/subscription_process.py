@@ -8,6 +8,7 @@ from trytond.transaction import Transaction
 from trytond.modules.coop_utils import utils, model
 
 from trytond.modules.process import ClassAttr
+from trytond.modules.coop_process import CoopProcessFramework
 from trytond.modules.coop_process import ProcessFinder, ProcessParameters
 from trytond.modules.coop_party.party import ACTOR_KIND
 
@@ -28,7 +29,7 @@ __all__ = [
 ]
 
 
-class ContractSubscription():
+class ContractSubscription(CoopProcessFramework):
     'Contract'
 
     __name__ = 'ins_contract.contract'

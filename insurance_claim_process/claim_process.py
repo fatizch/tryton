@@ -5,6 +5,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.modules.coop_utils import utils
 
 from trytond.modules.process import ClassAttr
+from trytond.modules.coop_process import CoopProcessFramework
 from trytond.modules.coop_process import ProcessFinder, ProcessParameters
 
 
@@ -17,11 +18,11 @@ __all__ = [
 ]
 
 
-class ClaimProcess():
+class ClaimProcess(CoopProcessFramework):
     'Claim'
 
-    __name__ = 'ins_claim.claim'
     __metaclass__ = ClassAttr
+    __name__ = 'ins_claim.claim'
 
     contracts = fields.Function(
         fields.One2Many(

@@ -7,6 +7,7 @@ from trytond.model import ModelSQL, ModelView, fields
 
 __all__ = [
     'User',
+    'Session',
     'Priority',
     'Team',
     'TeamGroupRelation',
@@ -19,13 +20,27 @@ class User():
     'User'
 
     __metaclass__ = PoolMeta
-
     __name__ = 'res.user'
 
-    team = fields.Many2One(
-        'task_manager.team',
-        'Team',
-    )
+    team = fields.Many2One('task_manager.team', 'Team')
+
+
+class Session():
+    'Session'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'ir.session'
+
+    @classmethod
+    def delete(cls, sessions):
+        Log = Pool().get('coop_process.process_log')
+        for session in sessions:
+            locks = Log.search([
+                ('user', '=', session.create_uid),
+                ('locked', '=', True)])
+            if locks:
+                Log.write(locks, {'locked': False})
+        super(Session, cls).delete(sessions)
 
 
 class Priority(ModelSQL, ModelView):
@@ -34,35 +49,38 @@ class Priority(ModelSQL, ModelView):
     __name__ = 'task_manager.priority'
 
     process_step = fields.Many2One(
-        'process.process_step_relation',
-        'Process Step',
-        required=True,
-    )
-
-    team = fields.Many2One(
-        'task_manager.team',
-        'Team',
-        ondelete='CASCADE',
-    )
-
+        'process.process_step_relation', 'Process Step', required=True)
+    team = fields.Many2One('task_manager.team', 'Team', ondelete='CASCADE')
     priority = fields.Integer('Priority')
+    kind = fields.Selection(
+        [
+            ('user', 'User Issues'),
+            ('non_user', 'Another User issues'),
+            ('both', 'Both')],
+        'Kind')
 
     def get_task(self, user):
         if not self.process_step:
             return None
-
         process = self.process_step.process
         good_act = process.menu_item.action
-
-        TargetModel = Pool().get(process.on_model.model)
-
-        try:
-            res, = TargetModel.search([
-                    ('current_state', '=', self.process_step),
-                ], limit=1)
-            return good_act, res.id, res.__name__
-        except ValueError:
+        Log = Pool().get('coop_process.process_log')
+        domain = [
+            ('latest', '=', True),
+            ('to_state', '=', self.process_step),
+            ('locked', '=', False)]
+        if self.kind != 'both':
+            domain.append(('user', '=' if self.kind == 'user' else '!=', user))
+        res = Log.search(domain, limit=1)
+        if not res:
             return None
+        else:
+            task = res[0].task
+            return good_act, task.id, task.__name__
+
+    @classmethod
+    def default_kind(cls):
+        return 'both'
 
 
 class TeamGroupRelation(ModelSQL):
@@ -70,17 +88,8 @@ class TeamGroupRelation(ModelSQL):
 
     __name__ = 'task_manager.team_group_relation'
 
-    team = fields.Many2One(
-        'task_manager.team',
-        'Team',
-        ondelete='CASCADE',
-    )
-
-    group = fields.Many2One(
-        'res.group',
-        'Group',
-        ondelete='CASCADE',
-    )
+    team = fields.Many2One('task_manager.team', 'Team', ondelete='CASCADE')
+    group = fields.Many2One('res.group', 'Group', ondelete='CASCADE')
 
 
 class Team(ModelSQL, ModelView):
@@ -88,36 +97,14 @@ class Team(ModelSQL, ModelView):
 
     __name__ = 'task_manager.team'
 
-    name = fields.Char(
-        'Name',
-        required=True,
-    )
-
-    code = fields.Char(
-        'Code',
-        required=True,
-    )
-
+    name = fields.Char('Name', required=True)
+    code = fields.Char('Code', required=True)
     members = fields.One2Many(
-        'res.user',
-        'team',
-        'Members',
-        states={
-            'readonly': True
-        },
-    )
-
+        'res.user', 'team', 'Members', states={'readonly': True})
     authorizations = fields.Many2Many(
-        'task_manager.team_group_relation',
-        'team',
-        'group',
-        'Authorizations',
-    )
-
+        'task_manager.team_group_relation', 'team', 'group', 'Authorizations')
     priorities = fields.One2Many(
-        'task_manager.priority',
-        'team',
-        'Priorities',
+        'task_manager.priority', 'team', 'Priorities',
         order=[('priority', 'ASC')],
     )
 
@@ -138,7 +125,6 @@ class Team(ModelSQL, ModelView):
             res = priority.get_task(user)
             if res:
                 break
-
         return res
 
 
@@ -147,27 +133,19 @@ class SelectUser(ModelView):
 
     __name__ = 'task_manager.select_user'
 
-    user = fields.Many2One(
-        'res.user',
-        'User',
-    )
-
+    user = fields.Many2One('res.user', 'User')
     user_ok = fields.Function(
         fields.Char(
-            'User Ok',
-            on_change_with=['user',],
-        ),
+            'User Ok', on_change_with=['user']),
         'on_change_with_user_ok',
     )
 
     def on_change_with_user_ok(self):
         if not (hasattr(self, 'user') and self.user):
             return ''
-
         if self.user.team:
             return 'User is already a member of team %s' % (
                 self.user.team.get_rec_name(None))
-
         return 'User does not have a team'
 
 
@@ -177,7 +155,6 @@ class AddTeamUser(Wizard):
     __name__ = 'task_manager.add_user'
 
     start_state = 'select_user'
-
     select_user = StateView(
         'task_manager.select_user',
         'task_manager.select_user_form',
@@ -185,15 +162,11 @@ class AddTeamUser(Wizard):
             Button('Add User', 'add_user', 'tryton-go-next'),
             Button('Cancel', 'end', 'tryton-cancel'),
         ])
-
     add_user = StateTransition()
 
     def transition_add_user(self):
         the_team = Transaction().context.get('active_id')
-
         the_user = self.select_user.user
-
         the_user.team = the_team
         the_user.save()
-
         return 'end'

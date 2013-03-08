@@ -40,5 +40,15 @@
       <field name="type">form</field>
       <field name="name">process_parameters_form</field>
     </record>
+    <record model="ir.ui.view" id="process_log_form">
+      <field name="model">coop_process.process_log</field>
+      <field name="type">form</field>
+      <field name="name">process_log_form</field>
+    </record>
+    <record model="ir.ui.view" id="process_log_tree">
+      <field name="model">coop_process.process_log</field>
+      <field name="type">tree</field>
+      <field name="name">process_log_tree</field>
+    </record>
   </data>
 </tryton>

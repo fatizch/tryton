@@ -3,13 +3,11 @@ import copy
 
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, Bool, If
-from trytond.transaction import Transaction
+from trytond.pyson import Eval, Bool
 
 from trytond.modules.coop_utils import model
 from trytond.modules.coop_utils import utils, date, business
 from trytond.modules.coop_utils import coop_string
-from trytond.modules.coop_process import CoopProcessFramework
 from trytond.modules.insurance_product import Printable
 from trytond.modules.insurance_product.product import DEF_CUR_DIG
 
@@ -43,7 +41,7 @@ __all__ = [
 ]
 
 
-class Subscribed(CoopProcessFramework):
+class Subscribed(model.CoopView):
     'Subscribed'
 
     offered = fields.Many2One(
@@ -302,9 +300,16 @@ class Contract(model.CoopSQL, Subscribed, Printable):
 
     def get_rec_name(self, val):
         if self.offered and self.subscriber:
-            return '%s (%s) - %s' % (
-                self.contract_number, self.get_product().get_rec_name(val),
-                self.subscriber.get_rec_name(val))
+            if self.contract_number:
+                return '%s (%s) - %s' % (
+                    self.contract_number, self.get_product().get_rec_name(val),
+                    self.subscriber.get_rec_name(val))
+            else:
+                return 'Contract %s - %s' % (
+                    self.get_product().get_rec_name(val),
+                    self.subscriber.get_rec_name(val))
+        else:
+            return super(Contract, self).get_rec_name(val)
 
     @classmethod
     def search_rec_name(cls, name, clause):

@@ -809,7 +809,6 @@ def get_domain_instances(record, field_name):
     field = record._fields[field_name]
     if not isinstance(field, fields.Many2One):
         return []
-
     pyson_domain = PYSONEncoder().encode(field.domain)
     env = EvalEnvironment(record, record.__class__)
     env.update(Transaction().context)

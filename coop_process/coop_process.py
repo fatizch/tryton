@@ -1,5 +1,6 @@
 import copy
 import pydot
+import datetime
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Not, And
@@ -14,6 +15,7 @@ from trytond.modules.process import ProcessFramework
 __all__ = [
     'StepTransition',
     'GenerateGraph',
+    'ProcessLog',
     'CoopProcessFramework',
     'ProcessStepRelation',
     'ProcessDesc',
@@ -128,8 +130,121 @@ class StepTransition(model.CoopSQL):
         return result
 
 
+class ProcessLog(model.CoopSQL, model.CoopView):
+    'Process Log'
+
+    __name__ = 'coop_process.process_log'
+
+    user = fields.Many2One('res.user', 'User')
+    from_state = fields.Many2One(
+        'process.process_step_relation', 'From State', ondelete='RESTRICT')
+    to_state = fields.Many2One(
+        'process.process_step_relation', 'To State', ondelete='RESTRICT')
+    start_time = fields.DateTime('Start Time')
+    end_time = fields.DateTime('End Time')
+    description = fields.Text('Description')
+    task = fields.Reference(
+        'Task', 'get_task_models', select=True, required=True)
+    locked = fields.Boolean('Lock', select=True)
+    latest = fields.Boolean('Latest')
+    session = fields.Char('Session')
+
+    @classmethod
+    def default_latest(cls):
+        return True
+
+    @classmethod
+    def create(cls, values):
+        for value in values:
+            previous_latest = cls.search([
+                ('task', '=', value['task']),
+                ('latest', '=', True)])
+            if previous_latest:
+                previous_latest = previous_latest[0]
+                previous_latest.latest = False
+                previous_latest.save()
+        return super(ProcessLog, cls).create(values)
+
+    @classmethod
+    def get_task_models(cls):
+        Model = Pool().get('ir.model')
+        good_models = Model.search([('is_workflow', '=', True)])
+        return [(model.model, model.name) for model in good_models]
+
+
 class CoopProcessFramework(ProcessFramework):
     'Coop Process Framework'
+
+    logs = fields.One2Many('coop_process.process_log', 'task', 'Task')
+    current_log = fields.Function(
+        fields.Many2One('coop_process.process_log', 'Current Log'),
+        'get_current_log')
+
+    @classmethod
+    def __setup__(cls):
+        super(CoopProcessFramework, cls).__setup__()
+        cls._error_messages.update({
+            'lock_fault': 'Object %s is currently locked by user %s',
+        })
+
+    def get_current_log(self, name):
+        if not (hasattr(self, 'id') and self.id):
+            return None
+        Log = Pool().get('coop_process.process_log')
+        current_log = Log.search([
+            ('task', '=', utils.convert_to_reference(self)),
+            ('latest', '=', True)])
+        return current_log[0].id if current_log else None
+
+    @classmethod
+    def write(cls, instances, values):
+        for instance in instances:
+            if instance.current_log and instance.current_log.locked:
+                if instance.current_log.user.id != Transaction().user:
+                    cls.raise_user_error(
+                        'lock_fault', (
+                            instance.get_rec_name(None),
+                            instance.current_log.user.get_rec_name(None)))
+        super(CoopProcessFramework, cls).write(instances, values)
+        Session = Pool().get('ir.session')
+        Log = Pool().get('coop_process.process_log')
+        good_session, = Session.search(
+            [('create_uid', '=', Transaction().user)])
+        for instance in instances:
+            good_log = instance.current_log
+            if good_log.session != good_session.key:
+                good_log.latest = False
+                good_log.save()
+                old_log = good_log
+                good_log = Log()
+                good_log.session = good_session.key
+                good_log.user = Transaction().user
+                good_log.start_time = datetime.datetime.now()
+                good_log.from_state = old_log.end_state
+                good_log.latest = True
+            good_log.to_state = instance.current_state
+            good_log.end_time = datetime.datetime.now()
+            if instance.current_state is None:
+                good_log.locked = False
+            good_log.save()
+
+    @classmethod
+    def create(cls, values):
+        instances = super(CoopProcessFramework, cls).create(values)
+        Log = Pool().get('coop_process.process_log')
+        Session = Pool().get('ir.session')
+        good_session, = Session.search(
+            [('create_uid', '=', Transaction().user)])
+        for instance in instances:
+            log = Log()
+            log.user = Transaction().user
+            log.task = utils.convert_to_reference(instance)
+            log.start_time = datetime.datetime.now()
+            log.end_time = datetime.datetime.now()
+            log.end_state = instance.current_state
+            log.session = good_session.key
+            log.save()
+        return instances
 
     def get_next_execution(self):
         if not self.current_state:
@@ -684,9 +799,8 @@ class ProcessFinder(Wizard):
             'ir.action.act_window', [good_action.id])
         good_values[0]['views'] = [
             view for view in good_values[0]['views'] if view[1] == 'form']
-        with Transaction().set_user(0):
-            good_obj = self.instanciate_main_object()
-            good_obj.save()
+        good_obj = self.instanciate_main_object()
+        good_obj.save()
         return good_values[0], {
             'res_id': good_obj.id}
 

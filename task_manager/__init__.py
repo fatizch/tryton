@@ -9,6 +9,7 @@ def register():
         TeamGroupRelation,
         Priority,
         User,
+        Session,
         SelectUser,
         module='task_manager', type_='model')
 

@@ -120,7 +120,7 @@ class Model():
     )
 
 
-class ProcessFramework(ModelView):
+class ProcessFramework(Model):
     'Process Framework'
 
     __metaclass__ = ClassAttr
@@ -256,10 +256,10 @@ class ProcessFramework(ModelView):
         # We append the current_state to the record name
         res = super(ProcessFramework, self).get_rec_name(name)
 
-        if res:
+        if res and self.current_state:
             return res + ' - ' + self.current_state.get_rec_name(name)
 
-        return self.current_state.get_rec_name(name)
+        return res
 
     @classmethod
     def raise_user_error(cls, errors, error_args=None,
@@ -282,7 +282,7 @@ class ProcessFramework(ModelView):
             # compatibility
             if isinstance(the_error, (str, unicode)):
                 error = the_error
-                error_args = ()
+                error_args = error_args
             else:
                 error, error_args = the_error
 

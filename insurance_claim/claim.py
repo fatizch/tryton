@@ -5,7 +5,6 @@ from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coop_utils import model, utils, date
-from trytond.modules.coop_process import CoopProcessFramework
 from trytond.modules.insurance_product.benefit import INDEMNIFICATION_KIND, \
     INDEMNIFICATION_DETAIL_KIND
 from trytond.modules.insurance_product import Printable
@@ -44,7 +43,7 @@ INDEMNIFICATION_STATUS = [
 ]
 
 
-class Claim(model.CoopSQL, CoopProcessFramework, Printable):
+class Claim(model.CoopSQL, model.CoopView, Printable):
     'Claim'
 
     __name__ = 'ins_claim.claim'
