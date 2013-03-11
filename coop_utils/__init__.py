@@ -7,6 +7,7 @@ from .model import *
 from .many2one_form import *
 from .business import *
 from .session import *
+from .test_framework import *
 
 
 def register():

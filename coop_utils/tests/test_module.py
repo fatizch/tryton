@@ -1,13 +1,14 @@
 import sys
 import os
+import unittest
 DIR = os.path.abspath(os.path.normpath(os.path.join(
     __file__, '..', '..', '..', '..', '..', 'trytond')))
 if os.path.isdir(DIR):
     sys.path.insert(0, os.path.dirname(DIR))
 
-import unittest
 import trytond.tests.test_tryton
-from trytond.tests.test_tryton import test_view, test_depends
+
+from trytond.modules.coop_utils import test_framework
 from trytond.modules.coop_utils import utils
 
 MODULE_NAME = os.path.basename(
@@ -15,25 +16,14 @@ MODULE_NAME = os.path.basename(
         os.path.join(os.path.normpath(__file__), '..', '..')))
 
 
-class ModuleTestCase(unittest.TestCase):
+class ModuleTestCase(test_framework.CoopTestCase):
     '''
     Test Coop module.
     '''
 
-    def setUp(self):
-        trytond.tests.test_tryton.install_module(MODULE_NAME)
-
-    def test0005views(self):
-        '''
-        Test views.
-        '''
-        test_view(MODULE_NAME)
-
-    def test0006depends(self):
-        '''
-        Test depends.
-        '''
-        test_depends()
+    @classmethod
+    def get_module_name(cls):
+        return MODULE_NAME
 
     def test0020get_module_path(self):
         self.assert_(utils.get_module_path(MODULE_NAME))

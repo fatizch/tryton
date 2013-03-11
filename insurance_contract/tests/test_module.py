@@ -10,68 +10,57 @@ if os.path.isdir(DIR):
 
 import unittest
 import trytond.tests.test_tryton
-from trytond.tests.test_tryton import test_view, test_depends
 
-
+from trytond.modules.coop_utils import test_framework
 from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT
 from trytond.transaction import Transaction
 
 
 MODULE_NAME = os.path.basename(
-    os.path.abspath(os.path.join(os.path.normpath(__file__), '..', '..')))
+    os.path.abspath(
+        os.path.join(os.path.normpath(__file__), '..', '..')))
 
 
-class ModuleTestCase(unittest.TestCase):
+class ModuleTestCase(test_framework.CoopTestCase):
     '''
     Test Coop module.
     '''
 
-    def setUp(self):
-        trytond.tests.test_tryton.install_module('life_contract')
+    @classmethod
+    def get_module_name(cls):
+        return MODULE_NAME
 
-        self.Contract = POOL.get('ins_contract.contract')
-        self.SubsProcess = POOL.get('ins_contract.subs_process', type='wizard')
-        self.ProcessDesc = POOL.get('ins_process.process_desc')
-        self.Party = POOL.get('party.party')
-        self.Product = POOL.get('ins_product.product')
-        self.Coverage = POOL.get('ins_product.coverage')
-        self.Pricing = POOL.get('ins_product.pricing_rule')
-        self.PricingComponent = POOL.get('ins_product.pricing_component')
-        self.Eligibility = POOL.get('ins_product.eligibility_rule')
-        self.Currency = POOL.get('currency.currency')
-        self.TreeElement = POOL.get('rule_engine.tree_element')
-        self.Context = POOL.get('rule_engine.context')
-        self.RuleEngine = POOL.get('rule_engine')
-        self.TestCase = POOL.get('rule_engine.test_case')
-        self.TestCaseValue = POOL.get('rule_engine.test_case.value')
-        self.RunTests = POOL.get('rule_engine.run_tests', type='wizard')
-        self.Tax = POOL.get('coop_account.tax_desc')
-        self.TaxVersion = POOL.get('coop_account.tax_version')
-        self.Fee = POOL.get('coop_account.fee_desc')
-        self.FeeVersion = POOL.get('coop_account.fee_version')
-        self.AddressKind = POOL.get('party.address_kind')
-        self.Sequence = POOL.get('ir.sequence')
-        self.BillingProcess = POOL.get('ins_contract.billing_process',
-            type='wizard')
+    @classmethod
+    def depending_modules(cls):
+        return ['life_contract']
 
-        with Transaction().start(DB_NAME,
-                                 USER,
-                                 context=CONTEXT) as transaction:
-            subs_process_desc, = self.ProcessDesc.search([
-                ('process_model', '=', 'ins_contract.subs_process')])
-            self.assert_(subs_process_desc.id)
-
-    def test0005views(self):
-        '''
-        Test views.
-        '''
-        test_view(MODULE_NAME)
-
-    def test0006depends(self):
-        '''
-        Test depends.
-        '''
-        test_depends()
+    @classmethod
+    def get_models(cls):
+        return {
+            'Contract': 'ins_contract.contract',
+            'SubsProcess': 'ins_contract.subs_process',
+            'ProcessDesc': 'ins_process.process_desc',
+            'Party': 'party.party',
+            'Product': 'ins_product.product',
+            'Coverage': 'ins_product.coverage',
+            'Pricing': 'ins_product.pricing_rule',
+            'PricingComponent': 'ins_product.pricing_component',
+            'Eligibility': 'ins_product.eligibility_rule',
+            'Currency': 'currency.currency',
+            'TreeElement': 'rule_engine.tree_element',
+            'Context': 'rule_engine.context',
+            'RuleEngine': 'rule_engine',
+            'TestCase': 'rule_engine.test_case',
+            'TestCaseValue': 'rule_engine.test_case.value',
+            'RunTests': 'rule_engine.run_tests',
+            'Tax': 'coop_account.tax_desc',
+            'TaxVersion': 'coop_account.tax_version',
+            'Fee': 'coop_account.fee_desc',
+            'FeeVersion': 'coop_account.fee_version',
+            'AddressKind': 'party.address_kind',
+            'Sequence': 'ir.sequence',
+            'BillingProcess': 'ins_contract.billing_process',
+        }
 
     def create_number_generator(self, code):
         ng = self.Sequence()
