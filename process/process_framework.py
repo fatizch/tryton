@@ -138,6 +138,7 @@ class ProcessFramework(ModelSQL, ModelView):
 
     @classmethod
     def __setup__(cls):
+        cls._table = None
         super(ProcessFramework, cls).__setup__()
 
         # We prepare the class to respond to generated buttons

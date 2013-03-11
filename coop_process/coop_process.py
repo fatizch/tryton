@@ -220,8 +220,12 @@ class CoopProcessFramework(ProcessFramework):
                 good_log.session = good_session.key
                 good_log.user = Transaction().user
                 good_log.start_time = datetime.datetime.now()
-                good_log.from_state = old_log.end_state
+                if not (hasattr(old_log, 'end_state') and old_log.end_state):
+                    good_log.from_state = instance.current_state
+                else:
+                    good_log.from_state = old_log.end_state
                 good_log.latest = True
+                good_log.task = instance
             good_log.to_state = instance.current_state
             good_log.end_time = datetime.datetime.now()
             if instance.current_state is None:
