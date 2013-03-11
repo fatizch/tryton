@@ -1,12 +1,10 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.model.model import ModelMeta
-from trytond.tools import safe_eval
-from trytond.pyson import PYSONEncoder, CONTEXT
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
 from trytond.model import fields
-from trytond.model import ModelView
+from trytond.model import ModelView, ModelSQL
 
 from trytond.modules.coop_utils import utils
 
@@ -120,7 +118,7 @@ class Model():
     )
 
 
-class ProcessFramework(Model):
+class ProcessFramework(ModelSQL, ModelView):
     'Process Framework'
 
     __metaclass__ = ClassAttr
