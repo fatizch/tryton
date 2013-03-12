@@ -2,6 +2,8 @@ import os
 import imp
 import unittest
 
+from trytond.transaction import Transaction
+
 
 def get_module_test_case(module_name):
     filename = os.path.abspath(
@@ -9,6 +11,36 @@ def get_module_test_case(module_name):
             os.path.normpath(__file__),
             '..', '..', module_name, 'tests', 'test_module.py'))
     return imp.load_source(module_name, filename)
+
+
+def launch_function(module_name, method_name):
+    module_file = get_module_test_case(module_name)
+    test_class = module_file.ModuleTestCase
+    test_class._models = Transaction().context.get(
+        'master')._models
+    getattr(test_class(method_name), method_name)()
+
+
+def prepare_test(*_args):
+    from trytond.tests.test_tryton import DB_NAME, USER, CONTEXT
+
+    def decorator(f):
+        def wrap(self):
+            if not (Transaction() and Transaction().context and
+                    'master' in Transaction().context):
+                with Transaction().start(DB_NAME, USER, context=CONTEXT):
+                    with Transaction().set_context(master=self):
+                        for arg in _args:
+                            module_name, method_name = arg.split('.')
+                            launch_function(module_name, method_name)
+                    return f(self)
+            else:
+                for arg in _args:
+                    module_name, method_name = arg.split('.')
+                    launch_function(module_name, method_name)
+                return f(self)
+        return wrap
+    return decorator
 
 
 class CoopTestCase(unittest.TestCase):
@@ -51,13 +83,14 @@ class CoopTestCase(unittest.TestCase):
         for modules in modules.itervalues():
             models.update(modules.ModuleTestCase.get_models())
 
+        self._models = {}
         for k, v in models.iteritems():
             try:
                 good_model = trytond.tests.test_tryton.POOL.get(v)
             except KeyError:
                 good_model = trytond.tests.test_tryton.POOL.get(
                     v, type='wizard')
-            setattr(self, k, good_model)
+            self._models.update({k: good_model})
 
     def test0005views(self):
         '''
@@ -72,3 +105,10 @@ class CoopTestCase(unittest.TestCase):
         '''
         import trytond.tests.test_tryton
         trytond.tests.test_tryton.test_depends()
+
+    def __getattr__(self, name):
+        if name == '_models':
+            return super(CoopTestCase, self).__getattr__(name)
+        if self._models and name in self._models:
+            return self._models[name]
+        raise AttributeError
