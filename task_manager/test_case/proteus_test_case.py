@@ -105,7 +105,6 @@ def launch_test_case(cfg_dict):
             cfg_dict['Menu'](meths['ModelData']({
                 'module': 'insurance_product',
                 'fs_id': 'menu_coverage_form'}).db_id),
-            subs_process.menu_item,
         ],
         'users': [admin_user],
     })
@@ -191,7 +190,6 @@ def launch_test_case(cfg_dict):
             cfg_dict['Menu'](meths['ModelData']({
                 'module': 'process',
                 'fs_id': 'menu_step_desc'}).db_id),
-            subs_process.menu_item,
         ],
         'users': [admin_user],
     })
@@ -236,7 +234,7 @@ def launch_test_case(cfg_dict):
         'model': meths['Model']({
             'model': 'process.process_desc',
         }),
-        'name': 'menu_item',
+        'name': 'menu_items',
     })
 
     meths['FieldAccess']({

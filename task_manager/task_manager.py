@@ -63,7 +63,7 @@ class Priority(ModelSQL, ModelView):
         if not self.process_step:
             return None
         process = self.process_step.process
-        good_act = process.menu_item.action
+        good_act = process.get_act_window()
         Log = Pool().get('coop_process.process_log')
         domain = [
             ('latest', '=', True),

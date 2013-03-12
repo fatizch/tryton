@@ -122,6 +122,9 @@
         </record>
         <menuitem parent="process_menu_id" sequence="11" action="act_step_desc"
             id="menu_step_desc"/>
+        <!-- Folder for processes launchers -->
+        <menuitem parent="process_menu_id" sequence="100" id="menu_process_lang"
+            name='Processes'/>
         <!-- Visualization of process description -->
         <record model="ir.action.report" id="report_generate_graph">
             <field name="name">Graph</field>

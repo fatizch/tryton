@@ -186,13 +186,6 @@ expand_toolbar="0" />''',
 expand_toolbar="0" />''',
     })
 
-    top_menu_tmp = Model.get('ir.model.data').find(
-        [
-            ('module', '=', 'insurance_claim'),
-            ('fs_id', '=', 'menu_claim'),
-        ])[0]
-    top_menu = Model.get('ir.ui.menu')(top_menu_tmp.db_id)
-
     prev_product = Model.get('ins_product.product').find(
         [('code', '=', 'PREV')])[0]
 
@@ -209,7 +202,6 @@ expand_toolbar="0" />''',
 <field name="claimant"/>
 <field name="status"/>
 ''',
-        'menu_top': top_menu,
         'step_button_group_position': 'right',
     })
 

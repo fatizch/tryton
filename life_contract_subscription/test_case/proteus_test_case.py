@@ -153,14 +153,6 @@ yexpand="1" mode="form"/>
 ''',
     })
 
-    top_menu_tmp = Model.get('ir.model.data').find(
-        [
-            ('module', '=', 'insurance_contract'),
-            ('fs_id', '=', 'menu_individual'),
-        ])[0]
-
-    top_menu = Model.get('ir.ui.menu')(top_menu_tmp.db_id)
-
     prev_product = Model.get('ins_product.product').find(
         [('code', '=', 'PREV')])[0]
 
@@ -181,7 +173,6 @@ yexpand="1" mode="form"/>
 <field name="start_date"/>
 <field name="offered"/>
 ''',
-        'menu_top': top_menu,
         'step_button_group_position': 'right',
     })
 

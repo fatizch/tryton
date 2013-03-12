@@ -13,6 +13,7 @@ from trytond.modules.coop_utils import coop_string
 __all__ = [
     'Status',
     'ProcessStepRelation',
+    'ProcessMenuRelation',
     'ProcessDesc',
     'TransitionAuthorization',
     'StepTransition',
@@ -67,22 +68,23 @@ class ProcessStepRelation(ModelSQL, ModelView):
             self.status.get_rec_name(name)
 
 
+class ProcessMenuRelation(ModelSQL):
+    'Process Menu Relation'
+
+    __name__ = 'process.process_menu_relation'
+
+    process = fields.Many2One(
+        'process.process_desc', 'Process', ondelete='CASCADE')
+    menu = fields.Many2One('ir.ui.menu', 'Menu', ondelete='RESTRICT')
+
+
 class ProcessDesc(ModelSQL, ModelView):
     'Process Descriptor'
 
     __name__ = 'process.process_desc'
 
-    # This name must be unique in the database, in order to avoid mismatching
-    # as it is the key which will be passed in the context
-    technical_name = fields.Char(
-        'Technical Name',
-    )
-
-    # We also need a name which we can display to the final user
-    fancy_name = fields.Char(
-        'Name', translate=True
-    )
-
+    technical_name = fields.Char('Technical Name')
+    fancy_name = fields.Char('Name', translate=True)
     # A given process can only be used on a given model
     on_model = fields.Many2One(
         'ir.model',
@@ -94,61 +96,26 @@ class ProcessDesc(ModelSQL, ModelView):
         ],
         required=True,
     )
-
-    # We also need all the steps that will be used in the process
     all_steps = fields.One2Many(
         'process.process_step_relation',
         'process',
         'All Steps',
         order=[('order', 'ASC')],
     )
-
     transitions = fields.One2Many(
-        'process.step_transition',
-        'on_process',
-        'Transitions',
-    )
-
-    # We might want to cusomize our process screen
-    xml_header = fields.Text(
-        'Header XML',
-    )
-
-    xml_footer = fields.Text(
-        'Footer XML',
-    )
-
-    # We also need a way to present the processes in tree views
-    xml_tree = fields.Text(
-        'Tree View XML',
-    )
-
+        'process.step_transition', 'on_process', 'Transitions')
+    xml_header = fields.Text('Header XML')
+    xml_footer = fields.Text('Footer XML')
+    xml_tree = fields.Text('Tree View XML')
     step_button_group_position = fields.Selection(
         [('', 'None'), ('right', 'Right'), ('bottom', 'Bottom')],
         'Process Overview Positioning',
     )
-
-    # We need to be able to specify where the entry point to launch the process
-    # will be displayed.
-    menu_top = fields.Many2One(
-        'ir.ui.menu',
-        'Top Menu',
-    )
-
-    menu_item = fields.Many2One(
-        'ir.ui.menu',
-        'Menu Element',
-    )
-
-    menu_icon = fields.Selection(
-        'list_icons',
-        'Menu Icon',
-    )
-
+    menu_items = fields.Many2Many(
+        'process.process_menu_relation', 'process', 'menu', 'Menus')
+    menu_icon = fields.Selection('list_icons', 'Menu Icon')
     menu_name = fields.Char(
-        'Menu name',
-        on_change_with=['fancy_name', 'menu_name'],
-    )
+        'Menu name', on_change_with=['fancy_name', 'menu_name'])
 
     @classmethod
     def __setup__(cls):
@@ -190,9 +157,9 @@ class ProcessDesc(ModelSQL, ModelView):
             for process in processes:
                 if isinstance(process, int):
                     process = cls(process)
-                good_menu = process.create_update_menu_entry()
-                if good_menu:
-                    process.menu_item = good_menu
+                good_menus = process.create_update_menu_entry()
+                if good_menus:
+                    process.menu_items = good_menus
                     process.save()
 
     def get_all_steps(self):
@@ -220,14 +187,35 @@ class ProcessDesc(ModelSQL, ModelView):
 
         return result
 
-    def create_or_update_menu(self, good_action):
+    def get_or_create_root_menu_for_lang(self, lang):
+        ModelData = Pool().get('ir.model.data')
+        good_model, = ModelData.search([
+            ('module', '=', 'process'),
+            ('fs_id', '=', 'menu_process_lang')])
+        Menu = Pool().get('ir.ui.menu')
+        lang_menu = Menu.search([
+            ('name', '=', lang.name),
+            ('parent', '=', good_model.db_id)])
+        if not lang_menu:
+            lang_menu = Menu()
+            lang_menu.name = lang.name
+            lang_menu.parent = good_model.db_id
+            lang_menu.save()
+            return lang_menu
+        else:
+            return lang_menu[0]
+
+    def create_or_update_menu(self, good_action, lang):
         MenuItem = Pool().get('ir.ui.menu')
-        good_menu = self.menu_item
+        good_menu = MenuItem.search([
+            ('name', '=', '%s_%s' % (self.technical_name, lang.code))])
         if not good_menu:
             good_menu = MenuItem()
+        else:
+            good_menu = good_menu[0]
 
-        good_menu.parent = self.menu_top
-        good_menu.name = self.menu_name
+        good_menu.parent = self.get_or_create_root_menu_for_lang(lang)
+        good_menu.name = '%s_%s' % (self.technical_name, lang.code)
         good_menu.sequence = 10
         good_menu.action = good_action
         good_menu.icon = self.menu_icon
@@ -236,12 +224,16 @@ class ProcessDesc(ModelSQL, ModelView):
 
         return good_menu
 
-    def create_or_update_action(self):
+    def create_or_update_action(self, lang):
         ActWin = Pool().get('ir.action.act_window')
 
-        if ((hasattr(self, 'menu_item') and self.menu_item) and
-                hasattr(self.menu_item, 'action') and self.menu_item.action):
-            good_action = self.menu_item.action
+        if (hasattr(self, 'menu_items') and self.menu_items):
+            for menu in self.menu_items:
+                if not menu.name == '%s_%s' % (self.technical_name, lang.code):
+                    continue
+                if hasattr(menu, 'action') and menu.action:
+                    good_action = menu.action
+                    break
         else:
             good_action = ActWin()
 
@@ -471,13 +463,18 @@ completed the current process, please go ahead"/>'
         # the database and provide access to them through a dedicated entry
         # point which is calculated, then can be modified / cloned.
 
-        good_action = self.create_or_update_action()
-        good_menu = self.create_or_update_menu(good_action)
-        self.create_or_update_view(good_action, 'tree')
-        self.create_or_update_view(good_action, 'form')
+        Lang = Pool().get('ir.lang')
+        good_langs = Lang.search([('translatable', '=', True)])
+        good_menus = []
+        for lang in good_langs:
+            good_action = self.create_or_update_action(lang)
+            good_menus.append(self.create_or_update_menu(good_action, lang))
+            with Transaction().set_context(language=lang.code):
+                self.create_or_update_view(good_action, 'tree')
+                self.create_or_update_view(good_action, 'form')
 
-        # We return the good_menu so that it can be set in the menu_item field
-        return good_menu
+        # We return the good_menu so that it can be set in the menu_items field
+        return good_menus
 
     def get_step_relation(self, step):
         for elem in self.all_steps:
@@ -495,17 +492,37 @@ completed the current process, please go ahead"/>'
     def get_rec_name(self, name):
         return self.fancy_name
 
+    def set_menu_item_list(self, previous_ids, new_ids):
+        Menu = Pool().get('ir.ui.menu')
+        Process = Pool().get('process.process_desc')
+        MenuItem = Pool().get('ir.ui.menu')
+        ActWin = Pool().get('ir.action.act_window')
+        View = Pool().get('ir.ui.view')
+
+        to_delete = set(previous_ids) - set(new_ids)
+        Process.write([self], {'menu_items': [('set', new_ids)]})
+        menus = []
+        act_wins = []
+        views = []
+        for menu in Menu.browse(to_delete):
+            menus.append(menu)
+            act_wins.append(menu.action)
+            for view in menu.action.act_window_views:
+                views.append(view.view)
+        MenuItem.delete(menus)
+        ActWin.delete(act_wins)
+        View.delete(views)
+
     @classmethod
     def create(cls, values):
         # When creating the process, we create the associated view
         processes = super(ProcessDesc, cls).create(values)
 
         for process in processes:
-            menu = process.create_update_menu_entry()
-
-            # Then save the menu in the menu_item field
-            if not process.menu_item:
-                cls.write([process], {'menu_item': menu})
+            existing_menus = [x.id for x in process.menu_items]
+            menus = process.create_update_menu_entry()
+            menus_ids = [x.id for x in menus]
+            process.set_menu_item_list(existing_menus, menus_ids)
 
         return processes
 
@@ -514,42 +531,28 @@ completed the current process, please go ahead"/>'
         # Each time we write the process, we update the view
         super(ProcessDesc, cls).write(instances, values)
 
-        if 'menu_item' in values:
+        if 'menu_items' in values:
             return
 
         for process in instances:
-            menu = process.create_update_menu_entry()
-
-            if not process.menu_item:
-                cls.write([process], {'menu_item': menu})
+            existing_menus = [x.id for x in process.menu_items]
+            menus = process.create_update_menu_entry()
+            menus_ids = [x.id for x in menus]
+            process.set_menu_item_list(existing_menus, menus_ids)
 
     @classmethod
     def delete(cls, processes):
-        MenuItem = Pool().get('ir.ui.menu')
-        ActWin = Pool().get('ir.action.act_window')
-        View = Pool().get('ir.ui.view')
-
-        menus = []
-        act_wins = []
-        views = []
-
         for process in processes:
-            if process.menu_item:
-                menus.append(process.menu_item)
-                act_wins.append(process.menu_item.action)
-                for view in process.menu_item.action.act_window_views:
-                    views.append(view.view)
-
-        MenuItem.delete(menus)
-        ActWin.delete(act_wins)
-        View.delete(views)
-
+            process.set_menu_item_list([x.id for x in process.menu_items], [])
         super(ProcessDesc, cls).delete(processes)
 
     def get_act_window(self):
-        if not self.menu_item:
+        if not self.menu_items:
             return None
-        return self.menu_item.action
+        lang = Transaction().context.get('language')
+        for menu in self.menu_items:
+            if menu.name == '%s_%s' % (self.technical_name, lang):
+                return menu.action
 
 
 class TransitionAuthorization(ModelSQL):

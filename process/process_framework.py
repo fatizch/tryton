@@ -118,7 +118,7 @@ class Model():
     )
 
 
-class ProcessFramework(ModelSQL, ModelView):
+class ProcessFramework(Model):
     'Process Framework'
 
     __metaclass__ = ClassAttr
@@ -138,7 +138,6 @@ class ProcessFramework(ModelSQL, ModelView):
 
     @classmethod
     def __setup__(cls):
-        cls._table = None
         super(ProcessFramework, cls).__setup__()
 
         # We prepare the class to respond to generated buttons
