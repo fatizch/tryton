@@ -22,4 +22,26 @@
         <field name="coef_coverage_amount"/>
         <newline/>
     </xpath>
+    <xpath expr="/form" position="inside">
+        <label name="max_duration_per_indemnification"/>
+        <group id="max_duration_per_indemnification">
+            <field name="max_duration_per_indemnification"/>
+            <field name="max_duration_per_indemnification_unit"/>
+        </group>
+        <label name="validation_delay"/>
+        <group id="validation_delay">
+            <field name="validation_delay"/>
+            <field name="validation_delay_unit"/>
+        </group>
+        <newline/>
+        <label name="with_revaluation"/>
+        <field name="with_revaluation"/>
+        <newline/>
+        <label name="revaluation_index"/>
+        <field name="revaluation_index"/>
+        <label name="index_initial_value"/>
+        <field name="index_initial_value"/>
+        <label name="revaluation_date"/>
+        <field name="revaluation_date"/>
+    </xpath>
 </data>

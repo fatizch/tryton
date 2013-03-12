@@ -1,7 +1,7 @@
-import copy
-
+import datetime
 from trytond.model import fields
 from trytond.pyson import Eval, Or, Bool
+from trytond.pool import Pool
 
 from trytond.modules.coop_utils import model, coop_string, date, utils
 from trytond.modules.insurance_product.business_rule.business_rule import \
@@ -12,12 +12,14 @@ from trytond.modules.insurance_product.product import DEF_CUR_DIG
 __all__ = [
     'BenefitRule',
     'SubBenefitRule',
-    ]
-
+]
 AMOUNT_KIND = [
     ('amount', 'Amount'),
     ('cov_amount', 'Coverage Amount'),
 ]
+STATES_PARENT_NOT_PERIODIC = Eval('_parent_offered', {}).get(
+    'indemnification_kind') != 'period'
+STATES_AMOUNT_EVOLVES = Bool(Eval('amount_evolves_over_time'))
 
 
 class BenefitRule(BusinessRuleRoot, model.CoopSQL):
@@ -26,49 +28,65 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
     __name__ = 'ins_product.benefit_rule'
 
     amount_evolves_over_time = fields.Boolean('Evolves Over Time',
-        states={
-            'invisible': Eval('_parent_offered', {}).get(
-                'indemnification_kind') != 'period',
-        })
+        states={'invisible': STATES_PARENT_NOT_PERIODIC})
     amount_kind = fields.Selection(AMOUNT_KIND, 'Amount Kind',
-        states={
-            'invisible': Or(
-                STATE_SIMPLE,
-                Bool(Eval('amount_evolves_over_time')),
-            )
-        })
+        states={'invisible': Or(STATE_SIMPLE, STATES_AMOUNT_EVOLVES)})
     amount = fields.Numeric('Amount',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
         states={
-            'invisible':
-                Or(
-                    STATE_SIMPLE,
-                    Eval('amount_kind') != 'amount',
-                    Bool(Eval('amount_evolves_over_time')),
-                )
+            'invisible': Or(
+                STATE_SIMPLE,
+                Eval('amount_kind') != 'amount',
+                STATES_AMOUNT_EVOLVES,
+            )
         })
+    #TODO: use new tryton digits factor
     coef_coverage_amount = fields.Numeric('Multiplier',
         states={
-            'invisible':
-                Or(
-                    STATE_SIMPLE,
-                    Eval('amount_kind') != 'cov_amount',
-                    Bool(Eval('amount_evolves_over_time')),
-                )
+            'invisible': Or(
+                STATE_SIMPLE,
+                Eval('amount_kind') != 'cov_amount',
+                STATES_AMOUNT_EVOLVES,
+            )
         }, help='Add a multiplier to apply to the coverage amount', )
     indemnification_calc_unit = fields.Selection(date.DAILY_DURATION,
         'Indemnification Calculation Unit',
         states={
-            'invisible':
-                Or(
-                    Eval('_parent_offered', {}).get(
-                        'indemnification_kind') != 'period',
-                    Bool(Eval('amount_evolves_over_time')),
-                )
+            'invisible': Or(STATES_PARENT_NOT_PERIODIC, STATES_AMOUNT_EVOLVES)
         }, sort=False)
     sub_benefit_rules = fields.One2Many('ins_product.sub_benefit_rule',
         'benefit_rule', 'Sub Benefit Rules',
-        states={'invisible': ~Bool(Eval('amount_evolves_over_time'))})
+        states={'invisible': ~STATES_AMOUNT_EVOLVES})
+    max_duration_per_indemnification = fields.Integer(
+        'Max duration per Indemnification')
+    max_duration_per_indemnification_unit = fields.Selection(
+        date.DAILY_DURATION, 'Unit', sort=False)
+    with_revaluation = fields.Boolean('With Revaluation',
+        states={
+            'invisible': Or(STATES_PARENT_NOT_PERIODIC, STATES_AMOUNT_EVOLVES)
+        })
+    revaluation_date = fields.Date('Revaluation Date',
+        states={
+            'invisible': Bool(~Eval('with_revaluation')),
+            'required': Bool(Eval('with_revaluation')),
+        })
+    revaluation_index = fields.Many2One('table.table_def', 'Revaluation Index',
+        domain=[
+            ('dimension_kind1', '=', 'range-date'),
+            ('dimension_kind2', '=', None),
+        ], states={
+            'invisible': Bool(~Eval('with_revaluation')),
+            'required': Bool(Eval('with_revaluation')),
+        }, ondelete='RESTRICT')
+    index_initial_value = fields.Many2One('table.table_cell',
+        'Initial Value', states={
+            'invisible': Bool(~Eval('with_revaluation')),
+            'required': Bool(Eval('with_revaluation')),
+        }, domain=[('definition', '=', Eval('revaluation_index'))])
+    validation_delay = fields.Integer('Validation Delay',
+        states={'invisible': Bool(~Eval('with_revaluation'))})
+    validation_delay_unit = fields.Selection(date.DAILY_DURATION,
+        'Delay', states={'invisible': Bool(~Eval('with_revaluation'))})
 
     @classmethod
     def __setup__(cls):
@@ -107,34 +125,93 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
     def default_indemnification_calc_unit():
         return 'day'
 
+    def get_index_at_date(self, at_date):
+        if not self.revaluation_index:
+            return
+        Cell = Pool().get('table.table_cell')
+        return Cell.get(self.revaluation_index, (at_date))
+
+    def get_revaluated_amount(self, amount, at_date):
+        if not self.with_revaluation:
+            return amount
+        if not amount:
+            return 0
+        index = self.get_index_at_date(at_date)
+        if self.index_initial_value:
+            initial_value = self.index_initial_value.get_value_with_type()
+        else:
+            initial_value = 1
+        if initial_value != 0:
+            return index * amount / initial_value
+        return 0
+
     def get_coverage_amount(self, args):
         if 'option' in args:
             return args['option'].get_coverage_amount()
 
+    def get_rule_result(self, args,):
+        res, errs = super(BenefitRule, self).get_rule_result(args)
+        if not errs:
+            res = self.get_revaluated_amount(res, args['start_date'])
+        return res, errs
+
     def get_simple_result(self, args):
         if self.amount_kind == 'amount':
-            return self.amount, []
+            amount = self.amount
         elif self.amount_kind == 'cov_amount':
-            return self.get_coverage_amount(args), []
+            amount = self.get_coverage_amount(args)
+        return self.get_revaluated_amount(amount, args['start_date']), []
 
     def get_indemnification_for_period(self, args):
+        if not 'start_date' in args:
+            return [{}], 'missing_start_date'
         if not self.amount_evolves_over_time:
-            return self.get_fixed_indemnification_for_period(args)
+            if not self.with_revaluation:
+                return self.get_fixed_indemnification_for_period(args)
+            else:
+                return self.get_revaluated_indemnifications_for_period(args)
         else:
-            if not 'start_date' in args:
-                return [{}], 'missing_date'
             return self.get_evolving_indemnifications_for_period(args)
+
+    def get_revaluated_indemnifications_for_period(self, args):
+        errs = []
+        res = []
+        start_date = args['start_date']
+        end_date = self.get_end_date(start_date,
+            args['end_date'] if 'end_date' in args else None)
+        while True and not errs:
+            period_end_date = datetime.date(start_date.year,
+            self.revaluation_date.month, self.revaluation_date.day)
+            period_end_date = date.add_duration(period_end_date, -1, 'day')
+            if period_end_date < start_date:
+                period_end_date = date.add_duration(period_end_date, 1,
+                    'year')
+            period_args = args.copy()
+            period_args['start_date'] = start_date
+            period_args['end_date'] = min(period_end_date, end_date)
+            indemns, err = self.get_fixed_indemnification_for_period(
+                period_args)
+            if not indemns:
+                return res, errs
+            indemn = indemns[0]
+            res.append(indemn)
+            errs += err
+            if indemn['end_date'] == end_date:
+                break
+            start_date = date.add_day(indemn['end_date'], 1)
+        return res, errs
 
     def get_fixed_indemnification_for_period(self, args):
         errs = []
         res = {}
         res['start_date'] = args['start_date']
-        if not 'end_date' in args:
-            nb = 1
-        else:
-            nb = date.duration_between(args['start_date'], args['end_date'],
+        end_date = args['end_date'] if 'end_date' in args else None
+        res['end_date'] = self.get_end_date(res['start_date'], end_date)
+        if not res['end_date']:
+            errs += 'missing_end_date'
+            return [res], errs
+        nb = date.duration_between(res['start_date'], res['end_date'],
             self.indemnification_calc_unit)
-            res['end_date'] = args['end_date']
         res['nb_of_unit'] = nb
         res['unit'] = self.indemnification_calc_unit
         res['amount_per_unit'], re_errs = self.give_me_result(args)
@@ -145,8 +222,9 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
         res = []
         start_date = args['start_date']
         for sub_rule in self.sub_benefit_rules:
-            indemn, err = sub_rule.get_indemnification_for_period(args,
-                start_date)
+            sub_args = args.copy()
+            sub_args['start_date'] = start_date
+            indemn, err = sub_rule.get_indemnification_for_period(sub_args)
             res.append(indemn)
             errs += err
             if indemn['end_date'] == args['end_date']:
@@ -165,6 +243,15 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
             return self.get_indemnification_for_period(args)
         else:
             return self.get_indemnification_for_capital(args)
+
+    def get_end_date(self, from_date, to_date):
+        if (not self.max_duration_per_indemnification
+                or not self.max_duration_per_indemnification_unit):
+            return to_date
+        max_end_date = date.get_end_of_period(from_date,
+            self.max_duration_per_indemnification,
+            self.max_duration_per_indemnification_unit)
+        return min(to_date, max_end_date) if to_date else max_end_date
 
 
 class SubBenefitRule(model.CoopSQL, model.CoopView):
@@ -196,7 +283,7 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
 
     def get_simple_rec_name(self):
         if not (hasattr(self, 'amount')
-            and hasattr(self, 'indemnification_calc_unit')):
+                and hasattr(self, 'indemnification_calc_unit')):
             return ''
         return '%s / %s' % (self.amount,
             coop_string.translate_value(self, 'indemnification_calc_unit'))
@@ -214,7 +301,7 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
             return to_date
         max_end_date = date.get_end_of_period(from_date, self.duration,
             self.duration_unit)
-        return min(to_date, max_end_date)
+        return min(to_date, max_end_date) if to_date else max_end_date
 
     def get_rule_result(self, args):
         if self.rule:
@@ -234,7 +321,8 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
         errs = []
         res = {}
         res['start_date'] = from_date
-        end_date = self.get_end_date(from_date, args['end_date'])
+        end_date = args['end_date'] if 'end_date' in args else None
+        end_date = self.get_end_date(from_date, end_date)
         nb = date.duration_between(from_date, end_date,
             self.indemnification_calc_unit)
         res['end_date'] = end_date

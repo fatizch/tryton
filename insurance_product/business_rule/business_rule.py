@@ -14,8 +14,8 @@ STATE_SIMPLE = Eval('config_kind') != 'simple'
 STATE_SUB_SIMPLE = Eval('sub_elem_config_kind') != 'simple'
 
 __all__ = [
-   'BusinessRuleRoot',
-    ]
+    'BusinessRuleRoot',
+]
 
 
 #class BusinessRuleManager(model.CoopSQL, model.CoopView,

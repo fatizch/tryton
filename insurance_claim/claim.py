@@ -184,7 +184,7 @@ class Loss(model.CoopSQL, model.CoopView):
 
     def init_delivered_services(self, option, benefits):
         if (not hasattr(self, 'delivered_services')
-            or not self.delivered_services):
+                or not self.delivered_services):
             self.delivered_services = []
         else:
             self.delivered_services = list(self.delivered_services)
@@ -192,7 +192,7 @@ class Loss(model.CoopSQL, model.CoopView):
             del_service = None
             for other_del_service in self.delivered_services:
                 if (other_del_service.benefit == benefit
-                    and other_del_service.subscribed_service == option):
+                        and other_del_service.subscribed_service == option):
                     del_service = other_del_service
             if del_service:
                 continue
@@ -245,6 +245,8 @@ class ClaimDeliveredService():
         return self.subscribed_service.get_contract()
 
     def init_dict_for_rule_engine(self, cur_dict):
+        #this date is the one used for finding the good rule,
+        #so the rules that was effective when the loss occured
         cur_dict['date'] = self.loss.start_date
         cur_dict['start_date'] = self.loss.start_date
         cur_dict['end_date'] = self.loss.end_date
@@ -374,11 +376,11 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date', states={
             'invisible':
                 Eval('_parent_indemnification', {}).get('kind') != 'period'
-        })
+    })
     end_date = fields.Date('End Date', states={
             'invisible':
                 Eval('_parent_indemnification', {}).get('kind') != 'period'
-        })
+    })
     kind = fields.Selection(INDEMNIFICATION_DETAIL_KIND, 'Kind', sort=False)
     amount_per_unit = fields.Numeric('Amount per Unit')
     nb_of_unit = fields.Numeric('Nb of Unit')

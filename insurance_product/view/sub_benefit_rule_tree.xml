@@ -2,6 +2,5 @@
 <tree string="Sub Benefit Rule">
     <field name="config_kind"/>
     <field name="indemnification_calc_unit"/>
-    <field name="rule"/>
-    <field name="amount"/>
+    <field name="rec_name"/>
 </tree>
