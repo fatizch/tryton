@@ -194,11 +194,11 @@ class ProcessDesc(ModelSQL, ModelView):
             ('fs_id', '=', 'menu_process_lang')])
         Menu = Pool().get('ir.ui.menu')
         lang_menu = Menu.search([
-            ('name', '=', lang.name),
+            ('name', '=', lang.code),
             ('parent', '=', good_model.db_id)])
         if not lang_menu:
             lang_menu = Menu()
-            lang_menu.name = lang.name
+            lang_menu.name = lang.code
             lang_menu.parent = good_model.db_id
             lang_menu.save()
             return lang_menu
