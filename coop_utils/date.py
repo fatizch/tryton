@@ -79,15 +79,24 @@ def number_of_years_between(date1, date2):
 
 
 def number_of_months_between(date1, date2):
-    return relativedelta(date1, date2).months
+    return (relativedelta(date1, date2).months
+        + relativedelta(date1, date2).years * 12)
 
 
 def duration_between(date1, date2, duration_unit):
+    '''
+    This function returns for
+    date1=01/01/2013 date2=31/01/2013 -> 31 days, 1 Month
+    date1=01/01/2013 date2=31/03/2013 -> 90 days, 3 months, 1 quarter
+    date1=01/01/2013 date2=31/12/21013 -> 365 days, 12 months, 1 year
+    '''
     if duration_unit == 'day':
         return number_of_days_between(date1, date2)
     elif duration_unit == 'week':
         return number_of_days_between(date1, date2) / 7
-    elif duration_unit == 'month':
+
+    date2 = add_day(date2, 1)
+    if duration_unit == 'month':
         return number_of_months_between(date2, date1)
     elif duration_unit == 'quarter':
         return number_of_months_between(date2, date1) / 3

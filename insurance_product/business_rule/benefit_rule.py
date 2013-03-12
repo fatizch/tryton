@@ -142,7 +142,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
         else:
             initial_value = 1
         if initial_value != 0:
-            return index * amount / initial_value
+            return index * amount / initial_value if index else 0
         return 0
 
     def get_coverage_amount(self, args):

@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 from trytond.model import fields
 
-from trytond.modules.coop_utils import model, utils, date
+from trytond.modules.coop_utils import model, date
 from trytond.modules.insurance_product import Offered
 
 __all__ = [
@@ -134,11 +134,12 @@ class Benefit(model.CoopSQL, Offered):
     def give_me_indemnification(self, args):
         res = {}
         errs = []
+        sub_args = args.copy()
         for key, fancy_name in INDEMNIFICATION_DETAIL_KIND:
             #For indemnification we could have a list of result because the
             #indemnification could change over time for example 3 month at 100%
             #then 50% for the rest of the period
-            indemn_dicts, indemn_errs = self.get_result(key, args, key)
+            indemn_dicts, indemn_errs = self.get_result(key, sub_args, key)
             errs += indemn_errs
             if not indemn_dicts:
                 continue
@@ -146,8 +147,9 @@ class Benefit(model.CoopSQL, Offered):
             #to retrieve the end date, we use the last calculated indemnificat
             indemn_dict = indemn_dicts[-1]
             if (self.indemnification_kind == 'period'
-                and 'end_date' in indemn_dict):
-                args['start_date'] = date.add_day(indemn_dict['end_date'], 1)
+                    and 'end_date' in indemn_dict):
+                sub_args['start_date'] = date.add_day(
+                    indemn_dict['end_date'], 1)
         return res, errs
 
 

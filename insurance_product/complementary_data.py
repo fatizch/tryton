@@ -16,7 +16,7 @@ from trytond.modules.coop_utils import model, utils, coop_string
 
 __all__ = [
     'ComplementaryDataDefinition',
-    ]
+]
 
 
 class ComplementaryDataDefinition(DictSchemaMixin, model.CoopSQL,
@@ -71,11 +71,12 @@ class ComplementaryDataDefinition(DictSchemaMixin, model.CoopSQL,
         utils.remove_tuple_from_list(cls.type_.selection, 'time')
         utils.remove_tuple_from_list(cls.type_.selection, 'binary')
 
-        cls.string = copy.copy(cls.string)
+        cls.name = copy.copy(cls.name)
         if not cls.name.on_change_with:
             cls.name.on_change_with = []
         cls.name.on_change_with.append('string')
         cls.name.on_change_with.append('name')
+        cls.name.string = 'Code'
 
     @staticmethod
     def default_start_date():
