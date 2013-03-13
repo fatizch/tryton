@@ -58,9 +58,13 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
         'benefit_rule', 'Sub Benefit Rules',
         states={'invisible': ~STATES_AMOUNT_EVOLVES})
     max_duration_per_indemnification = fields.Integer(
-        'Max duration per Indemnification')
+        'Max duration per Indemnification', states={
+            'invisible': Or(STATES_PARENT_NOT_PERIODIC, STATES_AMOUNT_EVOLVES)
+        })
     max_duration_per_indemnification_unit = fields.Selection(
-        date.DAILY_DURATION, 'Unit', sort=False)
+        date.DAILY_DURATION, 'Unit', sort=False, states={
+            'invisible': Or(STATES_PARENT_NOT_PERIODIC, STATES_AMOUNT_EVOLVES)
+        })
     with_revaluation = fields.Boolean('With Revaluation',
         states={
             'invisible': Or(STATES_PARENT_NOT_PERIODIC, STATES_AMOUNT_EVOLVES)
@@ -269,7 +273,7 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
         states={'invisible': STATE_SIMPLE})
     indemnification_calc_unit = fields.Selection(date.DAILY_DURATION,
-        '/', sort=False)
+        'Calculation Unit', sort=False)
     limited_duration = fields.Boolean('Limited Duration')
     duration = fields.Integer('Duration',
         states={'invisible': Bool(~Eval('limited_duration'))})
@@ -330,10 +334,6 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
         res['unit'] = self.indemnification_calc_unit
         res['amount_per_unit'], re_errs = self.give_me_result(args)
         return res, errs + re_errs
-
-    @staticmethod
-    def default_duration():
-        return 'day'
 
     @staticmethod
     def default_indemnification_calc_unit():

@@ -6,8 +6,6 @@
     <xpath expr="/form/label[@name='config_kind']" position="before">
         <label name="amount_evolves_over_time"/>
         <field name="amount_evolves_over_time"/>
-        <label name="indemnification_calc_unit"/>
-        <field name="indemnification_calc_unit"/>
         <field name="sub_benefit_rules" colspan="4"/>
         <newline/>
     </xpath>
@@ -23,6 +21,8 @@
         <newline/>
     </xpath>
     <xpath expr="/form" position="inside">
+        <label name="indemnification_calc_unit"/>
+        <field name="indemnification_calc_unit"/>
         <label name="max_duration_per_indemnification"/>
         <group id="max_duration_per_indemnification">
             <field name="max_duration_per_indemnification"/>
