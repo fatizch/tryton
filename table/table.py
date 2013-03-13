@@ -456,8 +456,8 @@ class TableCell(ModelSQL, ModelView):
 
     def get_rec_name(self, name=None):
         if self.definition:
-            return '%s' % self.get_value_with_type()
-        return super(self, TableCell).get_rec_name(name)
+            return str(self.get_value_with_type())
+        return super(TableCell, self).get_rec_name(name)
 
     @classmethod
     def create(cls, values):

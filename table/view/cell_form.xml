@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form string="Table" col="6">
+<form string="Table" col="8">
     <label name="definition"/>
-    <field name="definition" colspan="5"/>
+    <field name="definition" colspan="7"/>
     <newline/>
     <label name="dimension1"/>
     <field name="dimension1"/>
@@ -12,5 +12,5 @@
     <label name="dimension4"/>
     <field name="dimension4"/>
     <label name="value"/>
-    <field name="value" colspan="5"/>
+    <field name="value" colspan="7"/>
 </form>
