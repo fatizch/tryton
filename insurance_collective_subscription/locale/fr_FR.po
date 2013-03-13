@@ -27,6 +27,14 @@ msgid "At least one option must be selected for %s"
 msgstr "Saisir au moins une garantie pour %s"
 
 msgctxt "error:ins_collective.contract:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
+msgctxt "error:ins_collective.contract:"
+msgid "Object %s is currently locked by user %s"
+msgstr ""
+
+msgctxt "error:ins_collective.contract:"
 msgid "Option %s is not eligible"
 msgstr "La garantie %s n'est pas éligible"
 
@@ -38,6 +46,14 @@ msgctxt "error:ins_collective.contract:"
 msgid "There must be at least one covered element"
 msgstr "Saisir un élement couvert"
 
+msgctxt "field:ins_collective.contract,current_log:"
+msgid "Current Log"
+msgstr ""
+
+msgctxt "field:ins_collective.contract,current_state:"
+msgid ""
+msgstr " "
+
 msgctxt "field:ins_collective.contract,doc_received:"
 msgid "All Document Received"
 msgstr "Documents Reçus"
@@ -45,6 +61,14 @@ msgstr "Documents Reçus"
 msgctxt "field:ins_collective.contract,is_custom:"
 msgid "Custom"
 msgstr "Sur Mesure"
+
+msgctxt "field:ins_collective.contract,is_workflow:"
+msgid "Is Workflow"
+msgstr ""
+
+msgctxt "field:ins_collective.contract,logs:"
+msgid "Task"
+msgstr "Tâche"
 
 msgctxt "field:ins_collective.contract,product_desc:"
 msgid "Description"

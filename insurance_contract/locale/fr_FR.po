@@ -38,6 +38,10 @@ msgctxt "error:ins_contract.delivered_service:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_contract.expense:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:ins_contract.management_protocol:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -674,6 +678,14 @@ msgctxt "field:ins_contract.expense,amount:"
 msgid "Amount"
 msgstr "Montant"
 
+msgctxt "field:ins_contract.expense,create_date:"
+msgid ""
+msgstr " "
+
+msgctxt "field:ins_contract.expense,create_uid:"
+msgid ""
+msgstr " "
+
 msgctxt "field:ins_contract.expense,currency:"
 msgid "Currency"
 msgstr "Devises"
@@ -686,13 +698,33 @@ msgctxt "field:ins_contract.expense,delivered_service:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 
+msgctxt "field:ins_contract.expense,id:"
+msgid ""
+msgstr " "
+
+msgctxt "field:ins_contract.expense,is_used:"
+msgid ""
+msgstr " "
+
 msgctxt "field:ins_contract.expense,kind:"
 msgid "Kind"
 msgstr "Type"
 
+msgctxt "field:ins_contract.expense,rec_name:"
+msgid ""
+msgstr " "
+
 msgctxt "field:ins_contract.expense,subscribed_service:"
 msgid "Subscribed Service"
 msgstr ""
+
+msgctxt "field:ins_contract.expense,write_date:"
+msgid ""
+msgstr " "
+
+msgctxt "field:ins_contract.expense,write_uid:"
+msgid ""
+msgstr " "
 
 msgctxt "field:ins_contract.management_protocol,create_date:"
 msgid "Create Date"
@@ -1238,6 +1270,10 @@ msgstr "Elément Couvert"
 msgctxt "model:ins_contract.delivered_service,name:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
+
+msgctxt "model:ins_contract.expense,name:"
+msgid ""
+msgstr " "
 
 msgctxt "model:ins_contract.management_protocol,name:"
 msgid "Management Protocol"

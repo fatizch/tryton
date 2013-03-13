@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:coop_process.process_log:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:coop_process.xml_view_desc:"
 msgid "The functional id must be unique !"
 msgstr "L'identifiant fonctionnel doit être unique"
@@ -33,6 +37,74 @@ msgstr "Expression Pyson et la description sont obligatoires"
 msgctxt "error:process.step_transition:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:coop_process.process_log,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:coop_process.process_log,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:coop_process.process_log,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:coop_process.process_log,end_time:"
+msgid "End Time"
+msgstr ""
+
+msgctxt "field:coop_process.process_log,from_state:"
+msgid "From State"
+msgstr ""
+
+msgctxt "field:coop_process.process_log,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:coop_process.process_log,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:coop_process.process_log,latest:"
+msgid "Latest"
+msgstr ""
+
+msgctxt "field:coop_process.process_log,locked:"
+msgid "Lock"
+msgstr ""
+
+msgctxt "field:coop_process.process_log,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:coop_process.process_log,session:"
+msgid "Session"
+msgstr "Session"
+
+msgctxt "field:coop_process.process_log,start_time:"
+msgid "Start Time"
+msgstr ""
+
+msgctxt "field:coop_process.process_log,task:"
+msgid "Task"
+msgstr "Tâche"
+
+msgctxt "field:coop_process.process_log,to_state:"
+msgid "To State"
+msgstr ""
+
+msgctxt "field:coop_process.process_log,user:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:coop_process.process_log,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:coop_process.process_log,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
 
 msgctxt "field:coop_process.process_parameters,date:"
 msgid "Date"
@@ -193,6 +265,10 @@ msgstr " "
 msgctxt "field:process.step_transition,transition_kind:"
 msgid ""
 msgstr " "
+
+msgctxt "model:coop_process.process_log,name:"
+msgid "Process Log"
+msgstr ""
 
 msgctxt "model:coop_process.process_parameters,name:"
 msgid "Process Parameters"

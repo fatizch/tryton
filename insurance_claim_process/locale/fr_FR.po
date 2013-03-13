@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:ins_claim.claim:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
+msgctxt "error:ins_claim.claim:"
+msgid "Object %s is currently locked by user %s"
+msgstr ""
+
 msgctxt "field:ins_claim.claim,contact_history:"
 msgid "History"
 msgstr "Historique"
@@ -9,6 +17,10 @@ msgstr "Historique"
 msgctxt "field:ins_claim.claim,contracts:"
 msgid "Contracts"
 msgstr "Contrats"
+
+msgctxt "field:ins_claim.claim,current_log:"
+msgid "Current Log"
+msgstr ""
 
 msgctxt "field:ins_claim.claim,current_state:"
 msgid "Current State"
@@ -25,6 +37,14 @@ msgstr "Indemnisations"
 msgctxt "field:ins_claim.claim,indemnifications_consult:"
 msgid "Indemnifications"
 msgstr "Indemnisations"
+
+msgctxt "field:ins_claim.claim,is_workflow:"
+msgid "Is Workflow"
+msgstr ""
+
+msgctxt "field:ins_claim.claim,logs:"
+msgid "Task"
+msgstr "Tâche"
 
 msgctxt "field:ins_claim.declaration_process_parameters,date:"
 msgid "Date"
@@ -49,6 +69,10 @@ msgstr "Prestations"
 msgctxt "model:ins_claim.declaration_process_parameters,name:"
 msgid "Declaration Process Parameters"
 msgstr "Paramètres du Processus de Déclaration Sinistre"
+
+msgctxt "model:ir.action,name:act_claim_logs"
+msgid "Logs"
+msgstr ""
 
 msgctxt "model:ir.action,name:declaration_process_launcher"
 msgid "Start Declaration"

@@ -27,6 +27,14 @@ msgid "At least one option must be selected for %s"
 msgstr "Saisir au moins une garantie pour %s"
 
 msgctxt "error:ins_contract.contract:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
+msgctxt "error:ins_contract.contract:"
+msgid "Object %s is currently locked by user %s"
+msgstr ""
+
+msgctxt "error:ins_contract.contract:"
 msgid "Option %s is not eligible"
 msgstr "La garantie %s n'est pas éligible"
 
@@ -42,9 +50,25 @@ msgctxt "error:ins_contract.subscription_mgr:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "field:ins_contract.contract,current_log:"
+msgid "Current Log"
+msgstr ""
+
+msgctxt "field:ins_contract.contract,current_state:"
+msgid ""
+msgstr " "
+
 msgctxt "field:ins_contract.contract,doc_received:"
 msgid "All Document Received"
 msgstr "Documents Reçus"
+
+msgctxt "field:ins_contract.contract,is_workflow:"
+msgid "Is Workflow"
+msgstr ""
+
+msgctxt "field:ins_contract.contract,logs:"
+msgid "Task"
+msgstr "Tâche"
 
 msgctxt "field:ins_contract.contract,product_desc:"
 msgid "Description"
@@ -141,6 +165,10 @@ msgstr ""
 msgctxt "model:ins_contract.subscription_process_parameters,name:"
 msgid "Subscription Process Parameters"
 msgstr "Paramètres du Processus de Souscription"
+
+msgctxt "model:ir.action,name:act_contract_logs"
+msgid "Logs"
+msgstr ""
 
 msgctxt "model:ir.action,name:subscription_process_launcher"
 msgid "Start Subscription"

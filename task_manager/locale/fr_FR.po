@@ -22,6 +22,10 @@ msgctxt "field:task_manager.priority,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:task_manager.priority,kind:"
+msgid "Kind"
+msgstr "Type"
+
 msgctxt "field:task_manager.priority,priority:"
 msgid "Priority"
 msgstr "Priorité"
@@ -173,6 +177,18 @@ msgstr "Equipe"
 msgctxt "model:task_manager.team_group_relation,name:"
 msgid "Team - Group Relation"
 msgstr "Relation Equipe - Groupe"
+
+msgctxt "selection:task_manager.priority,kind:"
+msgid "Another User issues"
+msgstr ""
+
+msgctxt "selection:task_manager.priority,kind:"
+msgid "Both"
+msgstr ""
+
+msgctxt "selection:task_manager.priority,kind:"
+msgid "User Issues"
+msgstr ""
 
 msgctxt "view:res.user:"
 msgid "Team management"

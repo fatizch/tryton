@@ -54,6 +54,10 @@ msgctxt "field:process.process_desc,menu_item:"
 msgid "Menu Element"
 msgstr "Menu"
 
+msgctxt "field:process.process_desc,menu_items:"
+msgid "Menus"
+msgstr ""
+
 msgctxt "field:process.process_desc,menu_name:"
 msgid "Menu name"
 msgstr "Nom du Menu"
@@ -96,11 +100,11 @@ msgstr "Pied de Page XML"
 
 msgctxt "field:process.process_desc,xml_header:"
 msgid "Header XML"
-msgstr "Description de la Vue"
+msgstr "Entête XML"
 
 msgctxt "field:process.process_desc,xml_tree:"
 msgid "Tree View XML"
-msgstr "Description de la Vue"
+msgstr "Description de la Vue Arbre"
 
 msgctxt "field:process.process_framework,current_state:"
 msgid "Current State"
@@ -109,6 +113,38 @@ msgstr "Etat Courant"
 msgctxt "field:process.process_framework,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:process.process_menu_relation,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:process.process_menu_relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:process.process_menu_relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:process.process_menu_relation,menu:"
+msgid "Menu"
+msgstr "Menu"
+
+msgctxt "field:process.process_menu_relation,process:"
+msgid "Process"
+msgstr "Processus"
+
+msgctxt "field:process.process_menu_relation,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:process.process_menu_relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:process.process_menu_relation,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
 
 msgctxt "field:process.process_step_relation,create_date:"
 msgid "Create Date"
@@ -414,6 +450,10 @@ msgctxt "model:ir.ui.menu,name:menu_process_desc"
 msgid "Process Descriptors"
 msgstr "Paramétrage des Processus"
 
+msgctxt "model:ir.ui.menu,name:menu_process_lang"
+msgid "Processes"
+msgstr ""
+
 msgctxt "model:ir.ui.menu,name:menu_process_status"
 msgid "Process Status"
 msgstr "Statuts des Etapes"
@@ -432,6 +472,10 @@ msgstr "Descripteur de Processus"
 
 msgctxt "model:process.process_framework,name:"
 msgid "Process Framework"
+msgstr ""
+
+msgctxt "model:process.process_menu_relation,name:"
+msgid "Process Menu Relation"
 msgstr ""
 
 msgctxt "model:process.process_step_relation,name:"
@@ -528,7 +572,7 @@ msgstr ""
 
 msgctxt "view:ins_claim.claim:"
 msgid "Déclarant"
-msgstr ""
+msgstr "Déclarant"
 
 msgctxt "view:ins_claim.claim:"
 msgid "Déclaration Sinistre"

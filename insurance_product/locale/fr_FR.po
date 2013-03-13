@@ -215,6 +215,10 @@ msgctxt "error:ins_product.reserve_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "Deux règles se chevauchent!"
 
+msgctxt "error:ins_product.sub_benefit_rule:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:ins_product.term_renewal_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -333,7 +337,7 @@ msgstr "Description"
 
 msgctxt "field:ins_product.benefit,document_rules:"
 msgid "Document Rules"
-msgstr ""
+msgstr "Documents"
 
 msgctxt "field:ins_product.benefit,eligibility_rules:"
 msgid "Eligibility Rules"
@@ -361,7 +365,7 @@ msgstr "Type"
 
 msgctxt "field:ins_product.benefit,loss_descs:"
 msgid "Loss Descriptions"
-msgstr ""
+msgstr "Types de Préjudice Couverts"
 
 msgctxt "field:ins_product.benefit,name:"
 msgid "Name"
@@ -466,7 +470,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.benefit-loss_desc,loss_desc:"
 msgid "Loss Desc"
-msgstr "Descripteur de Préjudice"
+msgstr "Type de Préjudice"
 
 msgctxt "field:ins_product.benefit-loss_desc,rec_name:"
 msgid "Name"
@@ -483,6 +487,10 @@ msgstr "Mis à jour par"
 msgctxt "field:ins_product.benefit_rule,amount:"
 msgid "Amount"
 msgstr "Montant"
+
+msgctxt "field:ins_product.benefit_rule,amount_evolves_over_time:"
+msgid "Evolves Over Time"
+msgstr "Evolue au cours du temps"
 
 msgctxt "field:ins_product.benefit_rule,amount_kind:"
 msgid "Amount Kind"
@@ -516,6 +524,10 @@ msgctxt "field:ins_product.benefit_rule,indemnification_calc_unit:"
 msgid "Indemnification Calculation Unit"
 msgstr "Unité de calcul de l'indemnisation"
 
+msgctxt "field:ins_product.benefit_rule,index_initial_value:"
+msgid "Initial Value"
+msgstr "Valeur Initiale"
+
 msgctxt "field:ins_product.benefit_rule,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
@@ -523,6 +535,15 @@ msgstr "Est Utilisé"
 msgctxt "field:ins_product.benefit_rule,kind:"
 msgid "Kind"
 msgstr "Type"
+
+msgctxt "field:ins_product.benefit_rule,max_duration_per_indemnification:"
+msgid "Max duration per Indemnification"
+msgstr "Durée max par Indemnisation"
+
+msgctxt ""
+"field:ins_product.benefit_rule,max_duration_per_indemnification_unit:"
+msgid "Unit"
+msgstr "Unité"
 
 msgctxt "field:ins_product.benefit_rule,offered:"
 msgid "Offered"
@@ -532,6 +553,14 @@ msgctxt "field:ins_product.benefit_rule,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:ins_product.benefit_rule,revaluation_date:"
+msgid "Revaluation Date"
+msgstr "Date de Revalorisation"
+
+msgctxt "field:ins_product.benefit_rule,revaluation_index:"
+msgid "Revaluation Index"
+msgstr "Indice de Revalorisation"
+
 msgctxt "field:ins_product.benefit_rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
@@ -539,6 +568,10 @@ msgstr "Moteur de Règle"
 msgctxt "field:ins_product.benefit_rule,start_date:"
 msgid "From Date"
 msgstr "Date de Début"
+
+msgctxt "field:ins_product.benefit_rule,sub_benefit_rules:"
+msgid "Sub Benefit Rules"
+msgstr "Sous Règles de Prestation"
 
 msgctxt "field:ins_product.benefit_rule,template:"
 msgid "Template"
@@ -548,9 +581,21 @@ msgctxt "field:ins_product.benefit_rule,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
 
+msgctxt "field:ins_product.benefit_rule,validation_delay:"
+msgid "Validation Delay"
+msgstr "Délai de Validation"
+
+msgctxt "field:ins_product.benefit_rule,validation_delay_unit:"
+msgid "Delay"
+msgstr "Délai"
+
 msgctxt "field:ins_product.benefit_rule,view_rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:ins_product.benefit_rule,with_revaluation:"
+msgid "With Revaluation"
+msgstr "Avec Revalorisation"
 
 msgctxt "field:ins_product.benefit_rule,write_date:"
 msgid "Write Date"
@@ -849,8 +894,8 @@ msgid "Linked Item"
 msgstr "Objet Lié"
 
 msgctxt "field:ins_product.complementary_data_def,name:"
-msgid "Name"
-msgstr "Nom"
+msgid "Code"
+msgstr "Code"
 
 msgctxt "field:ins_product.complementary_data_def,rec_name:"
 msgid "Name"
@@ -1752,6 +1797,10 @@ msgstr "Nom"
 msgctxt "field:ins_product.expense_kind,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:ins_product.expense_kind,short_name:"
+msgid "Short Name"
+msgstr "Nom Court"
 
 msgctxt "field:ins_product.expense_kind,write_date:"
 msgid "Write Date"
@@ -2732,6 +2781,66 @@ msgctxt "field:ins_product.rule_sets.subscriber,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_product.sub_benefit_rule,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:ins_product.sub_benefit_rule,benefit_rule:"
+msgid "Benefit Rule"
+msgstr "Règle de Prestation"
+
+msgctxt "field:ins_product.sub_benefit_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:ins_product.sub_benefit_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.sub_benefit_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.sub_benefit_rule,duration:"
+msgid "Duration"
+msgstr "Durée"
+
+msgctxt "field:ins_product.sub_benefit_rule,duration_unit:"
+msgid "Duration Unit"
+msgstr "Unité de la Durée"
+
+msgctxt "field:ins_product.sub_benefit_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.sub_benefit_rule,indemnification_calc_unit:"
+msgid "/"
+msgstr ""
+
+msgctxt "field:ins_product.sub_benefit_rule,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.sub_benefit_rule,limited_duration:"
+msgid "Limited Duration"
+msgstr "Durée Limitée"
+
+msgctxt "field:ins_product.sub_benefit_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.sub_benefit_rule,rule:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:ins_product.sub_benefit_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.sub_benefit_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_product.term_renewal_rule,can_be_renewed:"
 msgid "Can be renewed"
 msgstr "Peut Etre Renouvelé"
@@ -3053,6 +3162,10 @@ msgctxt "model:ins_product.rule_sets.subscriber,name:"
 msgid "Context functions for Contracts."
 msgstr ""
 
+msgctxt "model:ins_product.sub_benefit_rule,name:"
+msgid "Sub Benefit Rule"
+msgstr "Sous Règles de Prestation"
+
 msgctxt "model:ins_product.term_renewal_rule,name:"
 msgid "Term and Renewal Rule"
 msgstr "Règle de Terme - Renouvellement"
@@ -3281,6 +3394,41 @@ msgctxt "selection:ins_product.benefit_rule,kind:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"
 
+msgctxt ""
+"selection:ins_product.benefit_rule,max_duration_per_indemnification_unit:"
+msgid ""
+msgstr " "
+
+msgctxt ""
+"selection:ins_product.benefit_rule,max_duration_per_indemnification_unit:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt ""
+"selection:ins_product.benefit_rule,max_duration_per_indemnification_unit:"
+msgid "Half-year"
+msgstr "Semestre"
+
+msgctxt ""
+"selection:ins_product.benefit_rule,max_duration_per_indemnification_unit:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt ""
+"selection:ins_product.benefit_rule,max_duration_per_indemnification_unit:"
+msgid "Quarter"
+msgstr "Trimestre"
+
+msgctxt ""
+"selection:ins_product.benefit_rule,max_duration_per_indemnification_unit:"
+msgid "Week"
+msgstr "Semaine"
+
+msgctxt ""
+"selection:ins_product.benefit_rule,max_duration_per_indemnification_unit:"
+msgid "Year"
+msgstr "Année"
+
 msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
 msgid ""
 msgstr " "
@@ -3292,6 +3440,34 @@ msgstr "Compléter"
 msgctxt "selection:ins_product.benefit_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
+
+msgctxt "selection:ins_product.benefit_rule,validation_delay_unit:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:ins_product.benefit_rule,validation_delay_unit:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "selection:ins_product.benefit_rule,validation_delay_unit:"
+msgid "Half-year"
+msgstr "Semestre"
+
+msgctxt "selection:ins_product.benefit_rule,validation_delay_unit:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "selection:ins_product.benefit_rule,validation_delay_unit:"
+msgid "Quarter"
+msgstr "Trimestre"
+
+msgctxt "selection:ins_product.benefit_rule,validation_delay_unit:"
+msgid "Week"
+msgstr "Semaine"
+
+msgctxt "selection:ins_product.benefit_rule,validation_delay_unit:"
+msgid "Year"
+msgstr "Année"
 
 msgctxt "selection:ins_product.business_rule_root,config_kind:"
 msgid "Advanced"
@@ -3741,6 +3917,70 @@ msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
+msgctxt "selection:ins_product.sub_benefit_rule,config_kind:"
+msgid "Advanced"
+msgstr "Avancé"
+
+msgctxt "selection:ins_product.sub_benefit_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_product.sub_benefit_rule,duration_unit:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:ins_product.sub_benefit_rule,duration_unit:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "selection:ins_product.sub_benefit_rule,duration_unit:"
+msgid "Half-year"
+msgstr "Semestre"
+
+msgctxt "selection:ins_product.sub_benefit_rule,duration_unit:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "selection:ins_product.sub_benefit_rule,duration_unit:"
+msgid "Quarter"
+msgstr "Trimestre"
+
+msgctxt "selection:ins_product.sub_benefit_rule,duration_unit:"
+msgid "Week"
+msgstr "Semaine"
+
+msgctxt "selection:ins_product.sub_benefit_rule,duration_unit:"
+msgid "Year"
+msgstr "Année"
+
+msgctxt "selection:ins_product.sub_benefit_rule,indemnification_calc_unit:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:ins_product.sub_benefit_rule,indemnification_calc_unit:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "selection:ins_product.sub_benefit_rule,indemnification_calc_unit:"
+msgid "Half-year"
+msgstr "Semestre"
+
+msgctxt "selection:ins_product.sub_benefit_rule,indemnification_calc_unit:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "selection:ins_product.sub_benefit_rule,indemnification_calc_unit:"
+msgid "Quarter"
+msgstr "Trimestre"
+
+msgctxt "selection:ins_product.sub_benefit_rule,indemnification_calc_unit:"
+msgid "Week"
+msgstr "Semaine"
+
+msgctxt "selection:ins_product.sub_benefit_rule,indemnification_calc_unit:"
+msgid "Year"
+msgstr "Année"
+
 msgctxt "selection:ins_product.term_renewal_rule,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
@@ -4051,6 +4291,11 @@ msgstr "Générer"
 msgctxt ""
 "wizard_button:ins_product.letter_creation_wizard,select_model,post-"
 "generation:"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt ""
+"wizard_button:ins_product.letter_creation_wizard,select_model,post_generation:"
 msgid "Complete"
 msgstr "Terminer"
 
