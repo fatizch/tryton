@@ -139,14 +139,15 @@ class ProcessLog(model.CoopSQL, model.CoopView):
     from_state = fields.Many2One(
         'process.process_step_relation', 'From State', ondelete='RESTRICT')
     to_state = fields.Many2One(
-        'process.process_step_relation', 'To State', ondelete='RESTRICT')
+        'process.process_step_relation', 'To State', ondelete='RESTRICT',
+        select=True)
     start_time = fields.DateTime('Start Time')
     end_time = fields.DateTime('End Time')
     description = fields.Text('Description')
     task = fields.Reference(
         'Task', 'get_task_models', select=True, required=True)
     locked = fields.Boolean('Lock', select=True)
-    latest = fields.Boolean('Latest')
+    latest = fields.Boolean('Latest', select=True)
     session = fields.Char('Session')
 
     @classmethod
@@ -220,10 +221,10 @@ class CoopProcessFramework(ProcessFramework):
                 good_log.session = good_session.key
                 good_log.user = Transaction().user
                 good_log.start_time = datetime.datetime.now()
-                if not (hasattr(old_log, 'end_state') and old_log.end_state):
+                if not (hasattr(old_log, 'to_state') and old_log.to_state):
                     good_log.from_state = instance.current_state
                 else:
-                    good_log.from_state = old_log.end_state
+                    good_log.from_state = old_log.to_state
                 good_log.latest = True
                 good_log.task = instance
             good_log.to_state = instance.current_state
@@ -245,10 +246,18 @@ class CoopProcessFramework(ProcessFramework):
             log.task = utils.convert_to_reference(instance)
             log.start_time = datetime.datetime.now()
             log.end_time = datetime.datetime.now()
-            log.end_state = instance.current_state
+            log.to_state = instance.current_state
             log.session = good_session.key
             log.save()
         return instances
+
+    @classmethod
+    def delete(cls, records):
+        # Delete logs
+        Log = Pool().get('coop_process.process_log')
+        Log.delete(Log.search([('task', 'in', [
+            utils.convert_to_reference(x) for x in records])]))
+        super(CoopProcessFramework, cls).delete(records)
 
     def get_next_execution(self):
         if not self.current_state:
@@ -795,10 +804,8 @@ class ProcessFinder(Wizard):
         cls.process_parameters.view = cls.get_parameters_view()
 
     def do_action(self, action):
-        ActWindow = Pool().get('ir.action.act_window')
         Action = Pool().get('ir.action')
-        good_view = self.process_parameters.good_process.get_act_window()
-        good_action = ActWindow(good_view)
+        good_action = self.process_parameters.good_process.get_act_window()
         good_values = Action.get_action_values(
             'ir.action.act_window', [good_action.id])
         good_values[0]['views'] = [
