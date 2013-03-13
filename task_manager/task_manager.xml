@@ -65,17 +65,22 @@
       <field name="wiz_name">task_manager.task_dispatcher</field>
     </record>
     <menuitem parent="menu_task" sequence="100" action="act_task_dispatcher" id="menu_task_dispatcher"/>
+    <!-- TaskSelector -->
+    <record model="ir.ui.view" id="task_selector_form">
+      <field name="model">task_manager.task_selector</field>
+      <field name="type">form</field>
+      <field name="name">task_selector_form</field>
+    </record>
     <!-- Task Displayer -->
     <record model="ir.ui.view" id="task_displayer_tree">
       <field name="model">task_manager.task_displayer</field>
       <field name="type">tree</field>
       <field name="name">task_displayer_tree</field>
     </record>
-    <!-- TaskSelector -->
-    <record model="ir.ui.view" id="task_selector_form">
-      <field name="model">task_manager.task_selector</field>
-      <field name="type">form</field>
-      <field name="name">task_selector_form</field>
+    <record model="ir.ui.view" id="task_displayer_graph">
+        <field name="model">task_manager.task_displayer</field>
+        <field name="type">graph</field>
+        <field name="name">task_displayer_graph</field>
     </record>
   </data>
 </tryton>

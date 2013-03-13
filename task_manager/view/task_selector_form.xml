@@ -5,14 +5,14 @@
     <field name="team" widget="selection"/>
     <label name="nb_users_team" xalign="0"/>
     <field name="nb_users_team"/>
-    <field name="tasks_team" yexpand="1" yfill="1" mode="tree" colspan="2"/>
+    <field name="tasks_team" yexpand="1" yfill="1" colspan="2" mode="graph,tree"/>
     <label name="nb_tasks_team" xalign="0"/>
     <field name="nb_tasks_team"/>
   </group>
   <group id="process" col="2" yexpand="1" yfill="1">
     <label name="process" xalign="0"/>
     <field name="process" widget="selection"/>
-    <field name="tasks_process" yexpand="1" yfill="1" mode="tree" colspan="2"/>
+    <field name="tasks_process" yexpand="1" yfill="1" colspan="2" mode="graph,tree"/>
     <label name="nb_tasks_process" xalign="0"/>
     <field name="nb_tasks_process"/>
   </group>

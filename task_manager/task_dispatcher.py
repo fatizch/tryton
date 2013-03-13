@@ -27,6 +27,16 @@ class TaskDisplayer(model.CoopView):
         [('team', 'Team'), ('process', 'Process')],
         'Kind', states={'invisible': True},
     )
+    task_name = fields.Function(
+        fields.Char('Task Name', on_change_with=['task'], depends=['task']),
+        'on_change_with_task_name',
+    )
+
+    def on_change_with_task_name(self, name=None):
+        if not (hasattr(self, 'task') and self.task):
+            return ''
+        return '%s - %s' % (
+            self.task.process.fancy_name, self.task.step.fancy_name)
 
     def on_change_with_nb_tasks(self):
         if not (hasattr(self, 'task') and self.task):
@@ -43,31 +53,85 @@ class TaskSelector(model.CoopView):
 
     __name__ = 'task_manager.task_selector'
 
-    team = fields.Many2One('task_manager.team', 'Team')
-    process = fields.Many2One('process.process_desc', 'Process')
+    team = fields.Many2One(
+        'task_manager.team', 'Team',
+        on_change=['team', 'nb_tasks_team', 'nb_users_team', 'tasks_team'])
+    process = fields.Many2One(
+        'process.process_desc', 'Process',
+        on_change=['process', 'nb_tasks_process', 'tasks_process'])
     nb_tasks_team = fields.Integer(
-        'Team Tasks', on_change_with=['team'], depends=['team'],
+        'Team Tasks',
         states={'readonly': True})
     nb_users_team = fields.Integer(
-        'Team Users', on_change_with=['team'], depends=['team'],
+        'Team Users',
         states={'readonly': True})
     nb_tasks_process = fields.Integer(
-        'Process Tasks', on_change_with=['process'], depends=['process'],
+        'Process Tasks',
         states={'readonly': True})
     tasks_team = model.One2ManyDomain(
-        'task_manager.task_displayer', None, 'Team Tasks',
+        'task_manager.task_displayer', '', 'Team Tasks',
         domain=[('kind', '=', 'team')],
-        on_change_with=['team'],
         states={'readonly': True},
     )
     tasks_process = model.One2ManyDomain(
-        'task_manager.task_displayer', None, 'Process Tasks',
+        'task_manager.task_displayer', '', 'Process Tasks',
         domain=[('kind', '=', 'process')],
-        on_change_with=['process'],
         states={'readonly': True},
     )
 
-    def on_change_with_tasks_team(self):
+    def on_change_team(self):
+        if not (hasattr(self, 'team') and self.team):
+            return {
+                'nb_users_team': 0,
+                'nb_tasks_team': 0,
+                'tasks_team': []}
+        result = {}
+        User = Pool().get('res.user')
+        result['nb_users_team'] = User.search_count([('team', '=', self.team)])
+        tmp_result = {}
+        final_result = []
+        nb_tasks = 0
+        TaskDisplayer = Pool().get('task_manager.task_displayer')
+        for priority in self.team.priorities:
+            if (priority.process_step.id, priority.priority) in tmp_result:
+                continue
+            task = TaskDisplayer()
+            task.kind = 'team'
+            task.task = priority.process_step
+            task.task_name = '%s - %s' % (
+                task.task.process.fancy_name, task.task.step.fancy_name)
+            task.nb_tasks = task.on_change_with_nb_tasks()
+            nb_tasks += task.nb_tasks
+            tmp_result[(priority.process_step.id, priority.priority)] = task
+            final_result.append(task)
+        result['tasks_team'] = utils.WithAbstract.serialize_field(final_result)
+        result['nb_tasks_team'] = nb_tasks
+        return result
+
+    def on_change_process(self):
+        if not (hasattr(self, 'process') and self.process):
+            return {
+                'nb_tasks_process': 0,
+                'tasks_process': []}
+        result = {}
+        tmp_result = []
+        nb_tasks = 0
+        TaskDisplayer = Pool().get('task_manager.task_displayer')
+        for step in self.process.all_steps:
+            task = TaskDisplayer()
+            task.kind = 'process'
+            task.task = step.id
+            task.task_name = '%s - %s' % (
+                task.task.process.fancy_name, task.task.step.fancy_name)
+            task.nb_tasks = task.on_change_with_nb_tasks()
+            nb_tasks += task.nb_tasks
+            tmp_result.append(task)
+        result['tasks_process'] = utils.WithAbstract.serialize_field(
+            tmp_result)
+        result['nb_tasks_process'] = nb_tasks
+        return result
+
+    def _on_change_with_tasks_team(self):
         if not (hasattr(self, 'team') and self.team):
             return []
         result = {}
@@ -79,31 +143,33 @@ class TaskSelector(model.CoopView):
             task = TaskDisplayer()
             task.kind = 'team'
             task.task = priority.process_step
+            task.task_name = '%s - %s' % (
+                task.task.process.fancy_name, task.task.step.fancy_name)
             task.nb_tasks = task.on_change_with_nb_tasks()
             result[(priority.process_step.id, priority.priority)] = task
             final_result.append(task)
         return utils.WithAbstract.serialize_field(final_result)
 
-    def on_change_with_tasks_process(self):
+    def _on_change_with_tasks_process(self):
         if not (hasattr(self, 'process') and self.process):
             return []
         result = []
         TaskDisplayer = Pool().get('task_manager.task_displayer')
         for step in self.process.all_steps:
             task = TaskDisplayer()
-            task.kind = 'team'
+            task.kind = 'process'
             task.task = step.id
             task.nb_tasks = task.on_change_with_nb_tasks()
             result.append(task)
         return utils.WithAbstract.serialize_field(result)
 
-    def on_change_with_nb_users_team(self):
+    def _on_change_with_nb_users_team(self):
         if not (hasattr(self, 'team') and self.team):
             return None
         User = Pool().get('res.user')
         return User.search_count([('team', '=', self.team)])
 
-    def on_change_with_nb_tasks_team(self):
+    def _on_change_with_nb_tasks_team(self):
         if not (hasattr(self, 'tasks_team') and self.tasks_team):
             return None
         res = 0
@@ -111,7 +177,7 @@ class TaskSelector(model.CoopView):
             res += task['nb_tasks']
         return res
 
-    def on_change_with_nb_tasks_process(self):
+    def _on_change_with_nb_tasks_process(self):
         if not (hasattr(self, 'tasks_process') and self.tasks_process):
             return None
         res = 0
@@ -184,18 +250,17 @@ class TaskDispatcher(Wizard):
         User = Pool().get('res.user')
         user = User(Transaction().user)
         if not (hasattr(user, 'team') and user.team):
-            return None
+            return {}
         selector = Selector()
         selector.team = user.team
         if not user.team.priorities:
-            return None
+            return {}
         good_priority = user.team.priorities[0]
         selector.process = good_priority.process_step.process
-        selector.nb_users_team = selector.on_change_with_nb_users_team()
-        selector.tasks_team = selector.on_change_with_tasks_team()
-        selector.tasks_process = selector.on_change_with_tasks_process()
-        selector.nb_tasks_team = selector.on_change_with_nb_tasks_team()
-        selector.nb_tasks_process = selector.on_change_with_nb_tasks_process()
+        changes = selector.on_change_team()
+        changes.update(selector.on_change_process())
+        for k, v in changes:
+            setattr(selector, k, v)
         return utils.WithAbstract.serialize_field(selector)
 
     def transition_remove_locks(self):
