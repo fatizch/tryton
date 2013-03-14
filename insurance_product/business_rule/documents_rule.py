@@ -887,18 +887,29 @@ class AttachmentSetter(model.CoopView):
     __name__ = 'ins_product.attachment_setter'
 
     attachments = fields.One2Many(
-        'ir.attachment',
-        '',
-        'Attachments',
+        'ir.attachment', '', 'Attachments',
         context={'resource': Eval('resource')},
+        on_change=['attachments', 'resource'],
     )
+    resource = fields.Char('Resource', states={'invisible': True})
 
-    resource = fields.Char(
-        'Resource',
-        states={
-            'invisible': True
-        },
-    )
+    @classmethod
+    def __setup__(cls):
+        super(AttachmentSetter, cls).__setup__()
+        cls._error_messages.update({
+            'ident_name': 'Duplicate name on attachments : %s'})
+
+    def on_change_attachments(self):
+        if not (hasattr(self, 'attachments') and self.attachments):
+            return {}
+        codes = {}
+        for att in self.attachments:
+            if not att.resource in codes:
+                codes[att.resource] = set()
+            if att.name in codes[att.resource]:
+                self.raise_user_error('ident_name', att.name)
+            codes[att.resource].add(att.name)
+        return {}
 
 
 class DocumentRequestDisplayer(model.CoopView):
