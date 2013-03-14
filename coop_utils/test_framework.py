@@ -23,6 +23,9 @@ def launch_function(module_name, method_name):
 
 def prepare_test(*_args):
     from trytond.tests.test_tryton import DB_NAME, USER, CONTEXT
+    for arg in _args:
+        if not isinstance(arg, str) or isinstance(arg, unicode):
+            raise Exception('Parameters must be strings, not %s' % type(arg))
 
     def decorator(f):
         def wrap(self):
@@ -39,6 +42,7 @@ def prepare_test(*_args):
                     module_name, method_name = arg.split('.')
                     launch_function(module_name, method_name)
                 return f(self)
+        wrap._is_ready = True
         return wrap
     return decorator
 
@@ -58,6 +62,9 @@ class CoopTestCase(unittest.TestCase):
     def install_module(cls):
         import trytond.tests.test_tryton
         trytond.tests.test_tryton.install_module(cls.get_module_name())
+
+    def run(self, result=None):
+        super(CoopTestCase, self).run(result)
 
     @classmethod
     def get_models(cls):

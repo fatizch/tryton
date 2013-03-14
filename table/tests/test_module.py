@@ -12,8 +12,6 @@ from decimal import Decimal
 
 import trytond.tests.test_tryton
 from trytond.modules.coop_utils import test_framework, prepare_test
-from trytond.tests.test_tryton import DB_NAME, USER, CONTEXT
-from trytond.transaction import Transaction
 
 MODULE_NAME = os.path.basename(
                   os.path.abspath(
