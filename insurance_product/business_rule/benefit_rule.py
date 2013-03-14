@@ -86,7 +86,8 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
         'Initial Value', states={
             'invisible': Bool(~Eval('with_revaluation')),
             'required': Bool(Eval('with_revaluation')),
-        }, domain=[('definition', '=', Eval('revaluation_index'))])
+        }, domain=[('definition', '=', Eval('revaluation_index'))],
+        depends=['revaluation_index'])
     validation_delay = fields.Integer('Validation Delay',
         states={'invisible': Bool(~Eval('with_revaluation'))})
     validation_delay_unit = fields.Selection(date.DAILY_DURATION,
