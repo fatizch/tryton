@@ -1,107 +1,77 @@
+# -*- coding: utf-8 -*-
 import sys
 import os
-DIR = os.path.abspath(os.path.normpath(os.path.join(__file__,
-    '..', '..', '..', '..', '..', 'trytond')))
+DIR = os.path.abspath(os.path.normpath(os.path.join(
+    __file__, '..', '..', '..', '..', '..', 'trytond')))
 if os.path.isdir(DIR):
     sys.path.insert(0, os.path.dirname(DIR))
 
 import unittest
 import trytond.tests.test_tryton
+
 from trytond.model import ModelView
-from trytond.tests.test_tryton import test_view, test_depends
-from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT
+from trytond.pool import Pool
 from trytond.transaction import Transaction
 
+from trytond.modules.coop_utils import test_framework, prepare_test
 
 MODULE_NAME = os.path.basename(
-                  os.path.abspath(
-                      os.path.join(os.path.normpath(__file__), '..', '..')))
+    os.path.abspath(
+        os.path.join(os.path.normpath(__file__), '..', '..')))
 
 
-class ModuleTestCase(unittest.TestCase):
+class ModuleTestCase(test_framework.CoopTestCase):
     '''
     Test Coop module.
     '''
 
-    def setUp(self):
-        trytond.tests.test_tryton.install_module(MODULE_NAME)
-        self.TreeElement = POOL.get('rule_engine.tree_element')
-        self.Context = POOL.get('rule_engine.context')
-        self.RuleEngine = POOL.get('rule_engine')
-        self.TestCase = POOL.get('rule_engine.test_case')
-        self.TestCaseValue = POOL.get('rule_engine.test_case.value')
-        self.RunTests = POOL.get('rule_engine.run_tests', type='wizard')
-        self.definition = POOL.get('table.table_def')
-        self.dimension = POOL.get('table.table_dimension')
-        self.cell = POOL.get('table.table_cell')
+    @classmethod
+    def get_module_name(cls):
+        return MODULE_NAME
 
-    def test0005views(self):
-        '''
-        Test views.
-        '''
-        test_view(MODULE_NAME)
+    @classmethod
+    def get_models(cls):
+        return {
+            'TreeElement': 'rule_engine.tree_element',
+            'Context': 'rule_engine.context',
+            'RuleEngine': 'rule_engine',
+            'TestCase': 'rule_engine.test_case',
+            'TestCaseValue': 'rule_engine.test_case.value',
+            'RunTests': 'rule_engine.run_tests',
+        }
 
-    def test0006depends(self):
-        '''
-        Test depends.
-        '''
-        test_depends()
+    @classmethod
+    def depending_modules(cls):
+        return ['table']
 
-    def create_test_table(self):
-        definition, = self.definition.create([{
-            'name': 'test',
-            'code': 'test_table_awesome',
-            'dimension_kind1': 'value',
-            'dimension_name1': 'Value',
-            'dimension_kind2': 'range',
-            'dimension_name2': 'Range',
-            }])
+    @prepare_test('table.test0060table_2dim')
+    def test0010_testTableTreeElementCreation(self):
+        test_table = self.Definition.search([
+            ('code', '=', 'test_code')])[0]
+        table_tree = self.TreeElement.search([
+            ('the_table', '=', test_table)])
+        self.assertEqual(len(table_tree), 1)
+        table_tree = table_tree[0]
+        self.assertEqual(table_tree.fct_args, 'Value, Range')
 
-        tree_elem, = self.TreeElement.search([
-                ('the_table', '=', definition),
-            ], limit=1)
+    def test0011_testCleanValues(self):
+        te = self.TreeElement()
+        te.type = 'function'
+        te.name = 'test_values'
+        te.translated_technical_name = 'values_testé'
+        te.fct_args = 'Test, Qsd'
+        te.description = 'Test Values'
+        te.namespace = 'rule_engine_tests'
+        te.language = 1
 
-        self.assertEqual(tree_elem.fct_args, 'Value, Range')
+        self.assertRaises(trytond.error.UserError, te.save)
+        te.translated_technical_name = 'values_test'
+        te.save()
+        te.fct_args = 'Test, Qsdé'
+        self.assertRaises(trytond.error.UserError, te.save)
 
-        dim1_foo, = self.dimension.create([{
-                'definition': definition.id,
-                'type': 'dimension1',
-                'value': 'foo',
-                }])
-        dim1_bar, = self.dimension.create([{
-                'definition': definition.id,
-                'type': 'dimension1',
-                'value': 'bar',
-                }])
-        dim2_foo, = self.dimension.create([{
-                'definition': definition.id,
-                'type': 'dimension2',
-                'start': 1,
-                'end': 10,
-                }])
-        dim2_bar, = self.dimension.create([{
-                'definition': definition.id,
-                'type': 'dimension2',
-                'start': 20,
-                'end': 42,
-                }])
-        for values in (
-                {'dimension1': dim1_foo.id, 'dimension2': dim2_foo.id,
-                    'value': 'ham'},
-                {'dimension1': dim1_bar.id, 'dimension2': dim2_foo.id,
-                    'value': 'spam'},
-                {'dimension1': dim1_foo.id, 'dimension2': dim2_bar.id,
-                    'value': 'egg'},
-                {'dimension1': dim1_bar.id, 'dimension2': dim2_bar.id,
-                    'value': 'chicken'}):
-            values.update({
-                    'definition': definition.id,
-                    })
-            self.cell.create([values])
-
-        return definition
-
-    def test0010_testRuleEngine(self):
+    @prepare_test('table.test0060table_2dim')
+    def test0020_testRuleEngine(self):
         class TestRuleEngine(ModelView):
             __name__ = 'rule_engine_tests'
 
@@ -115,81 +85,78 @@ class ModuleTestCase(unittest.TestCase):
             def test_values_inexisting(cls, args):
                 return 200
 
-        Language = POOL.get('ir.lang')
+        Language = Pool().get('ir.lang')
 
-        with Transaction().start(DB_NAME,
-                                 USER,
-                                 context=CONTEXT) as transaction:
-            POOL.register(TestRuleEngine, type_='model', module=MODULE_NAME)
-            POOL.add(TestRuleEngine)
+        Pool().register(TestRuleEngine, type_='model', module=MODULE_NAME)
+        Pool().add(TestRuleEngine)
 
-            te = self.TreeElement()
-            te.type = 'function'
-            te.name = 'test_values'
-            te.translated_technical_name = 'values_test'
-            te.description = 'Test Values'
-            te.namespace = 'rule_engine_tests'
-            te.language, = Language.search([('code', '=', 'en_US')])
+        te = self.TreeElement()
+        te.type = 'function'
+        te.name = 'test_values'
+        te.translated_technical_name = 'values_test'
+        te.description = 'Test Values'
+        te.namespace = 'rule_engine_tests'
+        te.language, = Language.search([('code', '=', 'en_US')])
 
-            te.save()
+        te.save()
 
-            te1 = self.TreeElement()
-            te1.type = 'function'
-            te1.name = 'test_values_inexisting'
-            te1.translated_technical_name = 'inexisting_test_values'
-            te1.description = 'Test Values'
-            te1.namespace = 'rule_engine_tests'
-            te1.language, = Language.search([('code', '=', 'en_US')])
+        te1 = self.TreeElement()
+        te1.type = 'function'
+        te1.name = 'test_values_inexisting'
+        te1.translated_technical_name = 'inexisting_test_values'
+        te1.description = 'Test Values'
+        te1.namespace = 'rule_engine_tests'
+        te1.language, = Language.search([('code', '=', 'en_US')])
 
-            te1.save()
+        te1.save()
 
-            te2 = self.TreeElement()
-            te2.type = 'table'
-            te2.translated_technical_name = 'table_test_table_awesome'
-            te2.description = 'Table Test'
-            te2.the_table = self.create_test_table()
-            te2.language, = Language.search([('code', '=', 'en_US')])
+        te2 = self.TreeElement()
+        te2.type = 'table'
+        te2.translated_technical_name = 'table_test_code'
+        te2.description = 'Table Test'
+        te2.the_table = self.Definition.search([('code', '=', 'test_code')])[0]
+        te2.language, = Language.search([('code', '=', 'en_US')])
 
-            te2.save()
+        te2.save()
 
-            ct = self.Context()
-            ct.name = 'test_context'
-            ct.allowed_elements = []
-            ct.allowed_elements.append(te)
-            ct.allowed_elements.append(te1)
-            ct.allowed_elements.append(te2)
+        ct = self.Context()
+        ct.name = 'test_context'
+        ct.allowed_elements = []
+        ct.allowed_elements.append(te)
+        ct.allowed_elements.append(te1)
+        ct.allowed_elements.append(te2)
 
-            ct.save()
+        ct.save()
 
-            rule = self.RuleEngine()
-            rule.name = 'test_rule'
-            rule.context = ct
-            rule.code = '''
-if table_test_table_awesome('bar', 5) != 'spam':
+        rule = self.RuleEngine()
+        rule.name = 'test_rule'
+        rule.context = ct
+        rule.code = '''
+if table_test_code('bar', 5) != 'spam':
     return 0
 
 return values_test(inexisting_test_values()) * 1.0
 '''
 
-            tcv = self.TestCaseValue()
-            tcv.name = 'inexisting_test_values'
-            tcv.value = '4'
+        tcv = self.TestCaseValue()
+        tcv.name = 'inexisting_test_values'
+        tcv.value = '4'
 
-            tc = self.TestCase()
-            tc.description = 'Test'
-            tc.values = [tcv]
-            tc.expected_result = "(8, ['Toto'], ['Titi'])"
+        tc = self.TestCase()
+        tc.description = 'Test'
+        tc.values = [tcv]
+        tc.expected_result = "(8, ['Toto'], ['Titi'])"
 
-            rule.test_cases = [tc]
+        rule.test_cases = [tc]
 
-            rule.save()
+        rule.save()
 
-            with transaction.set_context({'active_id': rule.id}):
-                wizard_id, _, _ = self.RunTests.create()
-                wizard = self.RunTests(wizard_id)
-                wizard._execute('report')
-                res = wizard.default_report(None)
-                self.assertEqual(res, {'report': 'Test ... SUCCESS'})
+        with Transaction().set_context({'active_id': rule.id}):
+            wizard_id, _, _ = self.RunTests.create()
+            wizard = self.RunTests(wizard_id)
+            wizard._execute('report')
+            res = wizard.default_report(None)
+            self.assertEqual(res, {'report': 'Test ... SUCCESS'})
 
 
 def suite():
