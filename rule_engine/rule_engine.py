@@ -511,9 +511,13 @@ class TreeElement(ModelView, ModelSQL):
         })
 
     def check_arguments_accents(self):
+        if not self.fct_args:
+            return True
         return coop_string.is_ascii(self.fct_args)
 
     def check_name_accents(self):
+        if not self.name:
+            return True
         return coop_string.is_ascii(self.translated_technical_name)
 
     @staticmethod
@@ -803,11 +807,14 @@ class TableDefinition():
                 try:
                     dim_name = getattr(table, 'dimension_name%s' % idx)
                 except AttributeError:
+                    dim_name = None
+                if not dim_name:
                     dim_name = 'Col #%s' % idx
 
                 dimension_names.append(dim_name)
 
-            new_tree.fct_args = ', '.join(dimension_names)
+            if dimension_names:
+                new_tree.fct_args = ', '.join(dimension_names)
             new_tree.save()
 
         return tables
