@@ -271,6 +271,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 'code': 'test_code',
                 'dimension_kind1': 'value',
                 'dimension_kind2': 'range',
+                'dimension_name1': 'Value',
+                'dimension_name2': 'Range',
                 }])
         dim1_foo, = self.Dimension.create([{
                 'definition': definition.id,
