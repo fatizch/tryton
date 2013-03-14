@@ -1,3 +1,4 @@
+import functools
 import os
 import imp
 import unittest
@@ -23,25 +24,32 @@ def launch_function(module_name, method_name):
 
 def prepare_test(*_args):
     from trytond.tests.test_tryton import DB_NAME, USER, CONTEXT
+
     for arg in _args:
         if not isinstance(arg, str) or isinstance(arg, unicode):
             raise Exception('Parameters must be strings, not %s' % type(arg))
 
-    def decorator(f):
-        def wrap(self):
+    def decorator(f, forced=False):
+        def wrap(*args, **kwargs):
             if not (Transaction() and Transaction().context and
                     'master' in Transaction().context):
                 with Transaction().start(DB_NAME, USER, context=CONTEXT):
-                    with Transaction().set_context(master=self):
+                    with Transaction().set_context(master=args[0]):
                         for arg in _args:
                             module_name, method_name = arg.split('.')
                             launch_function(module_name, method_name)
-                    return f(self)
+                    if not forced:
+                        return f(args[0])
+                    else:
+                        return f()
             else:
                 for arg in _args:
                     module_name, method_name = arg.split('.')
                     launch_function(module_name, method_name)
-                return f(self)
+                if not forced:
+                    return f(args[0])
+                else:
+                    return f()
         wrap._is_ready = True
         return wrap
     return decorator
@@ -64,6 +72,13 @@ class CoopTestCase(unittest.TestCase):
         trytond.tests.test_tryton.install_module(cls.get_module_name())
 
     def run(self, result=None):
+        test_function = getattr(self, self._testMethodName)
+        if not (hasattr(test_function, '_is_ready') and
+                test_function._is_ready) and not (self._testMethodName in (
+                    'test0005views', 'test0006depends')):
+            good_function = functools.partial(
+                prepare_test()(test_function, True), self)
+            setattr(self, self._testMethodName, good_function)
         super(CoopTestCase, self).run(result)
 
     @classmethod

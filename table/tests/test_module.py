@@ -35,7 +35,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Cell': 'table.table_cell',
         }
 
-    @prepare_test()
     def test0010definition_get(self):
         '''
         Test Definition.get.
@@ -47,7 +46,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(self.Definition.get('Test'), definition)
         self.assertRaises(IndexError, self.Definition.get, 'foo')
 
-    @prepare_test()
     def test0020table_1dim_value_get(self):
         '''
         Test TableCell.get with 1 dimension of value.
@@ -81,7 +79,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             self.assertEqual(self.Cell.get(definition, *query),
                 result, (query, result))
 
-    @prepare_test()
     def test0030table_1dim_date_get(self):
         '''
         Test TableCell.get with 1 dimension of date.
@@ -115,7 +112,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             self.assertEqual(self.Cell.get(definition, *query),
                 result, (query, result))
 
-    @prepare_test()
     def test0040table_1dim_range_get(self):
         '''
         Test TableCell.get with 1 dimension of range.
@@ -154,7 +150,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             self.assertEqual(self.Cell.get(definition, *query),
                 result, (query, result))
 
-    @prepare_test()
     def test0041table_1dim_range_get(self):
         '''
         Test TableCell.get with 1 dimension of range.
@@ -192,7 +187,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             self.assertEqual(self.Cell.get(definition, *query),
                 result, (query, result))
 
-    @prepare_test()
     def test0050table_1dim_range_date_get(self):
         '''
         Test TableCell.get with 1 dimension of range-date.
@@ -231,7 +225,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             self.assertEqual(self.Cell.get(definition, *query),
                 result, (query, result))
 
-    @prepare_test()
     def test0051table_1dim_range_date_get(self):
         '''
         Test TableCell.get with 1 dimension of range-date.
@@ -269,7 +262,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             self.assertEqual(self.Cell.get(definition, *query),
                 result, (query, result))
 
-    @prepare_test()
     def test0060table_2dim(self):
         '''
         Test TableCell.get with 2 dimensions of value.
@@ -326,7 +318,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             self.assertEqual(self.Cell.get(definition, *query),
                 result, (query, result))
 
-    @prepare_test()
     def test0070load_dump_value(self):
         '''
         Test load/dump value.
