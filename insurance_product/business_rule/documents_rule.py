@@ -17,6 +17,7 @@ from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_SIMPLE
 
 __all__ = [
+    'NoTargetCheckAttachment',
     'DocumentDesc',
     'DocumentRule',
     'DocumentRuleRelation',
@@ -801,13 +802,11 @@ class RequestFinder(model.CoopView):
         idx = 0
         for k, v in cls.allowed_values().iteritems():
             cls.kind.selection.append((k, v[0]))
-            # good_domain = [(v[1], '=', Eval('value'))]
             tmp = fields.Many2One(
                 k, v[0],
                 states={'invisible': Eval('kind') != k},
-                # domain=good_domain,
                 depends=['kind', 'value'],
-                on_change=['request', 'tmp_%s' % idx])
+                on_change=['request', 'tmp_%s' % idx, 'kind'])
             setattr(cls, 'tmp_%s' % idx, tmp)
 
             def on_change_tmp(self, name=''):
@@ -816,7 +815,8 @@ class RequestFinder(model.CoopView):
 
                 relation = getattr(self, name)
                 if not (hasattr(relation, 'documents') and relation.documents):
-                    return {}
+                    return {'value': utils.convert_to_reference(
+                        getattr(self, name))}
 
                 return {'request': relation.documents[0].id}
 
@@ -868,6 +868,19 @@ class RequestFinder(model.CoopView):
         return result
 
 
+class NoTargetCheckAttachment():
+    'Attachment'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'ir.attachment'
+
+    @classmethod
+    def check_access(cls, ids, mode='read'):
+        if '_force_access' in Transaction().context:
+            return
+        super(NoTargetCheckAttachment, cls).check_access(ids, mode)
+
+
 class AttachmentSetter(model.CoopView):
     'Attachment Setter'
 
@@ -907,35 +920,30 @@ class ReceiveDocuments(Wizard):
     __name__ = 'ins_product.receive_document_wizard'
 
     start_state = 'start'
-
+    start = StateTransition()
     select_instance = StateView(
         'ins_product.request_finder',
         'insurance_product.request_finder_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Continue', 'attachment_setter', 'tryton-ok')])
-
+    attachment_setter = StateView(
+        'ins_product.attachment_setter',
+        'insurance_product.attachment_setter_form',
+        [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Next', 'only_store', 'tryton-go-next')])
+    only_store = StateTransition()
+    store_attachments = StateTransition()
+    store_and_reconcile = StateTransition()
     input_document = StateView(
         'ins_product.document_request_displayer',
         'insurance_product.document_request_displayer_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Complete', 'notify_request', 'tryton-ok')])
-
-    attachment_setter = StateView(
-        'ins_product.attachment_setter',
-        'insurance_product.attachment_setter_form',
-        [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Next', 'store_attachments', 'tryton-go-next')])
-
-    store_attachments = StateTransition()
-
     notify_request = StateTransition()
-
     try_to_go_forward = StateTransition()
-
-    start = StateTransition()
 
     @classmethod
     def __setup__(cls):
@@ -993,6 +1001,9 @@ this object'})
 
     def default_attachment_setter(self, name):
         Attachment = Pool().get('ir.attachment')
+        if not (hasattr(self.select_instance, 'request') and
+                self.select_instance.request):
+            return {'resource': self.select_instance.value}
         good_obj = self.select_instance.request.needed_by
         good_obj = utils.convert_to_reference(good_obj)
         return {
@@ -1005,21 +1016,37 @@ this object'})
     def default_input_document(self, name):
         return {'documents': [self.select_instance.request.id]}
 
-    def transition_store_attachments(self):
-        Attachment = Pool().get('ir.attachment')
-        good_obj = self.select_instance.request.needed_by
-        good_obj = utils.convert_to_reference(good_obj)
-        previous = Attachment.search([('resource', '=', good_obj)])
-        current = [k.id for k in self.attachment_setter.attachments]
-        for prev_att in previous:
-            if prev_att.id not in current:
-                prev_att.delete([prev_att])
-        for att in self.attachment_setter.attachments:
-            if isinstance(att.data, int):
-                continue
-            att.resource = good_obj
-            att.save()
+    def transition_only_store(self):
+        if (hasattr(self.select_instance, 'request') and
+                self.select_instance.request):
+            return 'store_and_reconcile'
+        else:
+            return 'store_attachments'
 
+    def update_attachments(self, resource):
+        Attachment = Pool().get('ir.attachment')
+        previous = Attachment.search([('resource', '=', resource)])
+        current = [k.id for k in self.attachment_setter.attachments]
+        with Transaction().set_context(_force_access=True):
+            for prev_att in previous:
+                if prev_att.id not in current:
+                    prev_att.delete([prev_att])
+            for att in self.attachment_setter.attachments:
+                if isinstance(att.data, int):
+                    continue
+                att.resource = resource
+                att.save()
+
+    def transition_store_attachments(self):
+        resource = self.select_instance.value
+        if resource:
+            self.update_attachments(resource)
+        return 'end'
+
+    def transition_store_and_reconcile(self):
+        resource = self.select_instance.request.needed_by
+        resource = utils.convert_to_reference(resource)
+        self.update_attachments(resource)
         return 'input_document'
 
     def transition_notify_request(self):

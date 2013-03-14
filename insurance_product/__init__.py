@@ -34,6 +34,7 @@ def register():
         Document,
         LetterModelDisplayer,
         LetterModelSelection,
+        NoTargetCheckAttachment,
         AttachmentCreation,
         RequestFinder,
         AttachmentSetter,
