@@ -24,13 +24,14 @@ from trytond.modules.coop_utils import CoopView, utils, coop_string
 from trytond.modules.coop_utils import date
 from trytond.modules.table import TableCell
 
-__all__ = ['Rule', 'Context', 'TreeElement', 'ContextTreeElement', 'TestCase',
+__all__ = [
+    'Rule', 'Context', 'TreeElement', 'ContextTreeElement', 'TestCase',
     'TestCaseValue', 'TestRule', 'TestRuleStart', 'TestRuleTest',
     'CreateTestValues', 'RunTests', 'RunTestsReport', 'RuleTools',
     'RuleEngineContext', 'InternalRuleEngineError', 'check_args',
     'CreateTestCase', 'CreateTestCaseStart', 'CreateTestCaseAskDescription',
     'TableDefinition'
-    ]
+]
 
 CODE_TEMPLATE = """
 def fct_%s():
@@ -54,15 +55,9 @@ def check_code(code):
 
 WARNINGS = []
 for name in (
-        'UnusedImport',
-        'RedefinedWhileUnused',
-        'ImportShadowedByLoopVar',
-        'ImportStarUsed',
-        'UndefinedExport',
-        'RedefinedFunction',
-        'LateFutureImport',
-        'UnusedVariable',
-        ):
+        'UnusedImport', 'RedefinedWhileUnused', 'ImportShadowedByLoopVar',
+        'ImportStarUsed', 'UndefinedExport', 'RedefinedFunction',
+        'LateFutureImport', 'UnusedVariable'):
     message = getattr(pyflakes.messages, name, None)
     if message is not None:
         WARNINGS.append(message)
@@ -124,17 +119,18 @@ def safe_eval(source, data=None):
         raise ValueError('__subclasses__ not allowed')
 
     comp = _compile_source(source)
-    return eval(comp, {'__builtins__': {
-        'True': True,
-        'False': False,
-        'str': str,
-        'globals': locals,
-        'locals': locals,
-        'bool': bool,
-        'dict': dict,
-        'round': round,
-        'Decimal': Decimal,
-        'datetime': datetime
+    return eval(comp, {
+        '__builtins__': {
+            'True': True,
+            'False': False,
+            'str': str,
+            'globals': locals,
+            'locals': locals,
+            'bool': bool,
+            'dict': dict,
+            'round': round,
+            'Decimal': Decimal,
+            'datetime': datetime
         }}, data)
 
 
@@ -216,25 +212,26 @@ class Rule(ModelView, ModelSQL):
     __name__ = 'rule_engine'
 
     name = fields.Char('Name', required=True)
-    context = fields.Many2One('rule_engine.context', 'Context',
-        on_change=['context'], required=True)
+    context = fields.Many2One(
+        'rule_engine.context', 'Context', on_change=['context'], required=True)
     code = fields.Text('Code')
     data_tree = fields.Function(fields.Text('Data Tree'), 'get_data_tree')
     test_cases = fields.One2Many('rule_engine.test_case', 'rule', 'Test Cases')
-    status = fields.Selection([
+    status = fields.Selection(
+        [
             ('draft', 'Draft'),
             ('validated', 'Validated'),
-            ], 'Status')
+        ], 'Status')
 
     @classmethod
     def __setup__(cls):
         super(Rule, cls).__setup__()
         cls._constraints += [
             ('check_code', 'invalid_code'),
-            ]
+        ]
         cls._error_messages.update({
-                'invalid_code': 'Your code has errors!',
-                })
+            'invalid_code': 'Your code has errors!',
+        })
 
     def filter_errors(self, error):
         if isinstance(error, WARNINGS):
@@ -247,8 +244,8 @@ class Rule(ModelView, ModelSQL):
 
     def check_code(self):
         return not bool(filter(
-                lambda m: self.filter_errors(m),
-                check_code(self.as_function)))
+            lambda m: self.filter_errors(m),
+            check_code(self.as_function)))
 
     @staticmethod
     def default_status():
@@ -262,8 +259,8 @@ class Rule(ModelView, ModelSQL):
             localcontext = {}
             try:
                 exec self.as_function in context, localcontext
-                result = localcontext[('result_%s' %
-                        hash(self.name)).replace('-', '_')]
+                result = localcontext[
+                    ('result_%s' % hash(self.name)).replace('-', '_')]
             except InternalRuleEngineError:
                 result = None
             except:
@@ -282,7 +279,7 @@ class Rule(ModelView, ModelSQL):
     def on_change_context(self):
         return {
             'data_tree': self.get_data_tree(None) if self.context else '[]',
-            }
+        }
 
     @property
     def as_function(self):
@@ -296,29 +293,11 @@ class Rule(ModelView, ModelSQL):
 
     @property
     def allowed_functions(self):
-        return sum([e.as_functions_list()
-                for e in self.context.allowed_elements], [])
+        return sum([
+            e.as_functions_list() for e in self.context.allowed_elements], [])
 
     def get_rec_name(self, name=None):
         return self.name
-
-#    @classmethod
-#    def get_summary(cls, rules, name=None, with_label=True,
-#                    at_date=None, lang=None):
-#        res = {}
-#        for rule in rules:
-#            kw = 'return'
-#            pos1 = rule.code.rfind(kw)
-#            pos2 = rule.code.rfind('\n')
-#            if pos1 == -1:
-#                pos1 = 0
-#            else:
-#                pos1 += len(kw) + 1
-#            if pos2 > 0:
-#                res[rule.id] = rule.code[pos1:pos2]
-#            else:
-#                res[rule.id] = rule.name
-#        return res
 
 
 class TestCase(ModelView, ModelSQL):
@@ -327,10 +306,11 @@ class TestCase(ModelView, ModelSQL):
     _rec_name = 'description'
 
     description = fields.Char('Description', required=True)
-    rule = fields.Many2One('rule_engine', 'Rule', required=True,
+    rule = fields.Many2One(
+        'rule_engine', 'Rule', required=True,
         ondelete='CASCADE', context={'rule_id': Eval('rule')})
-    values = fields.One2Many('rule_engine.test_case.value', 'test_case',
-        'Values')
+    values = fields.One2Many(
+        'rule_engine.test_case.value', 'test_case', 'Values')
     expected_result = fields.Char('Expected Result')
 
     def do_test(self):
@@ -338,8 +318,8 @@ class TestCase(ModelView, ModelSQL):
         for value in self.values:
             test_context.setdefault(value.name, []).append(
                 safe_eval(value.value))
-        test_context = {key: noargs_func(value)
-            for key, value in test_context.items()}
+        test_context = {
+            key: noargs_func(value) for key, value in test_context.items()}
         try:
             test_value = self.rule.compute(test_context)
             for key, noargs in test_context.iteritems():
@@ -367,11 +347,12 @@ class TestCaseValue(ModelView, ModelSQL):
     "Test Case Value"
     __name__ = 'rule_engine.test_case.value'
 
-    name = fields.Selection('get_selection', 'Name',
+    name = fields.Selection(
+        'get_selection', 'Name',
         selection_change_with=['rule'], depends=['rule'])
     value = fields.Char('Value')
-    test_case = fields.Many2One('rule_engine.test_case', 'Test Case',
-        ondelete='CASCADE')
+    test_case = fields.Many2One(
+        'rule_engine.test_case', 'Test Case', ondelete='CASCADE')
     rule = fields.Function(
         fields.Many2One(
             'rule_engine',
@@ -432,10 +413,10 @@ class Context(ModelView, ModelSQL):
         super(Context, cls).__setup__()
         cls._constraints += [
             ('check_duplicate_name', 'duplicate_name'),
-            ]
+        ]
         cls._error_messages.update({
-                'duplicate_name': 'You define twice the same name!',
-                })
+            'duplicate_name': 'You define twice the same name!',
+        })
 
     def check_duplicate_name(self):
         names = set()
@@ -464,41 +445,47 @@ class TreeElement(ModelView, ModelSQL):
     __name__ = 'rule_engine.tree_element'
     _rec_name = 'description'
 
-    description = fields.Char('Description',
-        on_change=['description', 'translated_technical_name'])
-    rule = fields.Many2One('rule_engine', 'Rule', states={
+    description = fields.Char(
+        'Description', on_change=['description', 'translated_technical_name'])
+    rule = fields.Many2One(
+        'rule_engine', 'Rule', states={
             'invisible': Eval('type') != 'rule',
             'required': Eval('type') == 'rule',
-            }, depends=['rule'])
-    name = fields.Char('Name', states={
+        }, depends=['rule'])
+    name = fields.Char(
+        'Name', states={
             'invisible': ~Eval('type').in_(['function']),
             'required': Eval('type').in_(['function']),
-            }, depends=['type'])
-    namespace = fields.Char('Namespace', states={
+        }, depends=['type'])
+    namespace = fields.Char(
+        'Namespace', states={
             'invisible': Eval('type') != 'function',
             'required': Eval('type') == 'function',
-            }, depends=['type'])
-    type = fields.Selection([
+        }, depends=['type'])
+    type = fields.Selection(
+        [
             ('folder', 'Folder'),
             ('function', 'Function'),
             ('rule', 'Rule'),
             ('table', 'Table'),
-            ], 'Type', required=True)
+        ], 'Type', required=True)
     parent = fields.Many2One('rule_engine.tree_element', 'Parent')
-    children = fields.One2Many('rule_engine.tree_element', 'parent',
-        'Children')
-    translated_technical_name = fields.Char('Translated technical name',
+    children = fields.One2Many(
+        'rule_engine.tree_element', 'parent', 'Children')
+    translated_technical_name = fields.Char(
+        'Translated technical name',
         states={
             'invisible': ~Eval('type').in_(['function', 'rule', 'table']),
             'required': Eval('type').in_(['function', 'rule', 'table']),
-            }, depends=['type'],
+        }, depends=['type'],
         on_change_with=['rule'])
-    fct_args = fields.Char('Function Arguments', states={
+    fct_args = fields.Char(
+        'Function Arguments', states={
             'invisible': And(
                 Eval('type') != 'function',
                 Eval('type') != 'table'
-                ),
-            })
+            ),
+        })
     language = fields.Many2One('ir.lang', 'Language', required=True)
     the_table = fields.Many2One(
         'table.table_def',
@@ -512,6 +499,23 @@ class TreeElement(ModelView, ModelSQL):
         'Long Description',
     )
 
+    @classmethod
+    def __setup__(cls):
+        super(TreeElement, cls).__setup__()
+        cls._constraints.extend([
+            ('check_arguments_accents', 'argument_accent_error'),
+            ('check_name_accents', 'name_accent_error')])
+        cls._error_messages.update({
+            'argument_accent_error': 'Function arguments must only use ascii',
+            'name_accent_error': 'Technical name must only use ascii',
+        })
+
+    def check_arguments_accents(self):
+        return coop_string.is_ascii(self.fct_args)
+
+    def check_name_accents(self):
+        return coop_string.is_ascii(self.translated_technical_name)
+
     @staticmethod
     def default_type():
         return 'function'
@@ -521,7 +525,7 @@ class TreeElement(ModelView, ModelSQL):
             return {}
         return {
             'translated_technical_name': self.description.replace(' ', '_'),
-            }
+        }
 
     def on_change_the_table(self):
         if not(hasattr(self, 'the_table') and self.the_table):
@@ -545,8 +549,8 @@ class TreeElement(ModelView, ModelSQL):
         if self.type in ('function', 'rule', 'table'):
             return [self.translated_technical_name]
         else:
-            return sum([child.as_functions_list()
-                    for child in self.children], [])
+            return sum([
+                child.as_functions_list() for child in self.children], [])
 
     def as_context(self, context):
         pool = Pool()
@@ -577,9 +581,10 @@ class ContextTreeElement(ModelSQL):
     "Context Tree Element"
     __name__ = 'rule_engine.context-rule_engine.tree_element'
 
-    context = fields.Many2One('rule_engine.context', 'Context', required=True,
-        ondelete='CASCADE')
-    tree_element = fields.Many2One('rule_engine.tree_element', 'Tree Element',
+    context = fields.Many2One(
+        'rule_engine.context', 'Context', required=True, ondelete='CASCADE')
+    tree_element = fields.Many2One(
+        'rule_engine.tree_element', 'Tree Element',
         required=True, ondelete='CASCADE')
 
 
@@ -601,15 +606,17 @@ class TestRule(Wizard):
     "Test Rule Wizard"
     __name__ = 'rule_engine.test_rule'
 
-    start = StateView('rule_engine.test_rule.start',
+    start = StateView(
+        'rule_engine.test_rule.start',
         'rule_engine.test_rule_start_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Test', 'test', 'tryton-go-next', True)
-            ])
-    test = StateView('rule_engine.test_rule.test',
+        ])
+    test = StateView(
+        'rule_engine.test_rule.test',
         'rule_engine.test_rule_test_form', [
             Button('OK', 'end', 'tryton-ok', True),
-            ])
+        ])
 
     def default_start(self, fields):
         return {}
@@ -621,7 +628,7 @@ class TestRule(Wizard):
         rule = Rule(Transaction().context['active_id'])
         return {
             'result': str(rule.compute(context)),
-            }
+        }
 
 
 class RunTestsReport(ModelView):
@@ -636,10 +643,11 @@ class RunTests(Wizard):
     __name__ = 'rule_engine.run_tests'
     start_state = 'report'
 
-    report = StateView('rule_engine.run_tests.report',
+    report = StateView(
+        'rule_engine.run_tests.report',
         'rule_engine.run_tests_report', [
             Button('OK', 'end', 'tryton-ok', True),
-            ])
+        ])
 
     def format_result(self, test_case):
         success, info = test_case.do_test()
@@ -658,7 +666,7 @@ class RunTests(Wizard):
 
         return {
             'report': '\n\n'.join(results),
-            }
+        }
 
 
 class CreateTestValues(Wizard):
@@ -673,8 +681,8 @@ class CreateTestValues(Wizard):
 
         test_case = TestCase(Transaction().context['active_id'])
         func_values = set(v.name for v in test_case.values)
-        func_finder = FunctionFinder([test_case.rule.name]
-            + test_case.rule.allowed_functions)
+        func_finder = FunctionFinder(
+            [test_case.rule.name] + test_case.rule.allowed_functions)
         ast_node = ast.parse(test_case.rule.as_function)
         func_finder.visit(ast_node)
         for func_name in func_finder.functions:
@@ -811,7 +819,8 @@ class CreateTestCaseStart(ModelView):
 
     rule = fields.Many2One('rule_engine', 'Rule', readonly=True)
     unknown_values = fields.Integer('Unknown Values')
-    test_values = fields.One2Many('rule_engine.test_case.value', None,
+    test_values = fields.One2Many(
+        'rule_engine.test_case.value', None,
         'Values', size=Eval('unknown_values', 0),
         on_change=['test_values', 'rule'], depends=['unknown_values', 'rule'],
         context={'rule_id': Eval('rule')})
@@ -825,8 +834,8 @@ class CreateTestCaseStart(ModelView):
         for value in self.test_values:
             val = safe_eval(value.value if value.value != '' else "''")
             test_context.setdefault(value.name, []).append(val)
-        test_context = {key: noargs_func(value)
-            for key, value in test_context.items()}
+        test_context = {
+            key: noargs_func(value) for key, value in test_context.items()}
         try:
             test_value = self.rule.compute(test_context, debug_mode=True)
             result_value = str(test_value[0])
@@ -858,22 +867,24 @@ class CreateTestCase(Wizard):
     'Create a test case'
     __name__ = 'rule_engine.create_test_case'
 
-    start = StateView('rule_engine.create_test_case.start',
+    start = StateView(
+        'rule_engine.create_test_case.start',
         'rule_engine.create_test_case_start_view', [
             Button('Create Test Case', 'ask_description', default=True),
             Button('Cancel', 'end'),
-            ])
-    ask_description = StateView('rule_engine.create_test_case.ask_description',
+        ])
+    ask_description = StateView(
+        'rule_engine.create_test_case.ask_description',
         'rule_engine.create_test_case_ask_description', [
             Button('Create', 'create_test_case', default=True),
             Button('Cancel', 'end'),
-            ])
+        ])
     create_test_case = StateTransition()
 
     def default_start(self, fields):
         return {
             'rule': Transaction().context['active_id'],
-            }
+        }
 
     def compute_value(self):
         Rule = Pool().get('rule_engine')
@@ -882,8 +893,8 @@ class CreateTestCase(Wizard):
         for value in self.start.test_values:
             val = safe_eval(value.value)
             test_context.setdefault(value.name, []).append(val)
-        test_context = {key: noargs_func(value)
-            for key, value in test_context.items()}
+        test_context = {
+            key: noargs_func(value) for key, value in test_context.items()}
         return rule.compute(test_context)
 
     def transition_create_test_case(self):
@@ -891,8 +902,9 @@ class CreateTestCase(Wizard):
         testcase.create([{
             'description': self.ask_description.description,
             'rule': Transaction().context['active_id'],
-            'values': [('create', [{'name': tv.name, 'value': tv.value}])
+            'values': [
+                ('create', [{'name': tv.name, 'value': tv.value}])
                 for tv in self.start.test_values],
             'expected_result': str(self.compute_value()),
-            }])
+        }])
         return 'end'

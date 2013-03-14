@@ -170,3 +170,11 @@ def concat_strings(this, that):
     elif that:
         res = that
     return res
+
+
+def is_ascii(s):
+    try:
+        s.encode('ascii')
+        return True
+    except UnicodeEncodeError:
+        return False
