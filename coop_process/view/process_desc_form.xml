@@ -15,7 +15,7 @@
   <xpath expr="/form/group[@id='global_part']/field[@name='on_model']" position="replace_attributes">
     <field name="on_model" colspan="1"/>
   </xpath>
-  <xpath expr="/form/notebook/page[@id='xml']/group[@id='form_customization']/field[@name='step_button_group_position']" position="after">
+  <xpath expr="/form/notebook/page[@id='xml']/group[@id='form_customization']/group[@id='customization_data']/field[@name='step_button_group_position']" position="after">
     <label name="with_prev_next" xalign="0"/>
     <field name="with_prev_next"/>
   </xpath>

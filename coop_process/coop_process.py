@@ -709,6 +709,7 @@ class StepDesc(model.CoopSQL):
             ('is_workflow', '=', True),
             ('model', '!=', 'process.process_framework')
         ],
+        required=True,
     )
 
     def get_pyson_for_button(self):

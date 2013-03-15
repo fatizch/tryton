@@ -17,13 +17,14 @@
     </page>
     <page string="XML" id="xml">
       <group id="form_customization" col="2" yexpand="1" yfill="1">
-        <label name="menu_icon" xalign="0"/>
-        <field name="menu_icon"/>
-        <label name="menu_name" xalign="0"/>
-        <field name="menu_name"/>
-        <label name="step_button_group_position" xalign="0"/>
-        <field name="step_button_group_position"/>
-        <label name="menu_items" xalign="0"/>
+        <group id="customization_data" col="2" yexpand="1" yfill="1">
+          <label name="menu_icon" xalign="0"/>
+          <field name="menu_icon"/>
+          <label name="menu_name" xalign="0"/>
+          <field name="menu_name"/>
+          <label name="step_button_group_position" xalign="0"/>
+          <field name="step_button_group_position"/>
+        </group>
         <field name="menu_items" readonly="1" yexpand="1" yfill="1"/>
       </group>
       <newline/>
