@@ -347,6 +347,7 @@ class CoopProcessFramework(ProcessFramework):
     def build_instruction_complete_method(cls, process, data):
         def button_complete_generic(works):
             for work in works:
+                work.current_state.execute_after(work)
                 work.current_state = None
                 work.save()
 
