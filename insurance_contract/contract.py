@@ -1104,16 +1104,13 @@ class Expense(model.CoopSQL, model.CoopView):
 class DocumentRequest():
     'Document Request'
 
-    __metaclass__ = PoolMeta
-
     __name__ = 'ins_product.document_request'
+    __metaclass__ = PoolMeta
 
     @classmethod
     def __setup__(cls):
         super(DocumentRequest, cls).__setup__()
-
         cls.needed_by = copy.copy(cls.needed_by)
-
         cls.needed_by.selection.append(
             ('ins_contract.contract', 'Contract'))
 
@@ -1121,16 +1118,13 @@ class DocumentRequest():
 class Document():
     'Document'
 
-    __metaclass__ = PoolMeta
-
     __name__ = 'ins_product.document'
+    __metaclass__ = PoolMeta
 
     @classmethod
     def __setup__(cls):
         super(Document, cls).__setup__()
-
         cls.for_object = copy.copy(cls.for_object)
-
         cls.for_object.selection.append(
             ('ins_contract.contract', 'Contract'))
         cls.for_object.selection.append(
@@ -1142,9 +1136,8 @@ class Document():
 class RequestFinder():
     'Request Finder'
 
-    __metaclass__ = PoolMeta
-
     __name__ = 'ins_product.request_finder'
+    __metaclass__ = PoolMeta
 
     @classmethod
     def allowed_values(cls):
