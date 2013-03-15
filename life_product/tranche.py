@@ -2,7 +2,7 @@
 from trytond.model import fields
 from trytond.pool import Pool
 
-from trytond.modules.coop_utils.model import CoopSQL, CoopView, utils
+from trytond.modules.coop_utils.model import CoopSQL, utils
 from trytond.modules.coop_utils.model import VersionedObject, VersionObject
 
 __all__ = [

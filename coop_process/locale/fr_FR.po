@@ -184,7 +184,7 @@ msgstr "Nom de le Vue"
 
 msgctxt "field:coop_process.xml_view_desc,view_string:"
 msgid "View String"
-msgstr "Libellé de la Vye"
+msgstr "Libellé de la Vue"
 
 msgctxt "field:coop_process.xml_view_desc,write_date:"
 msgid "Write Date"

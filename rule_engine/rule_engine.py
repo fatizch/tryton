@@ -190,6 +190,10 @@ class RuleTools(RuleEngineContext):
         if Transaction().context.get('debug'):
             args['debug'].append(str(the_message))
 
+    @classmethod
+    def _re_calculation_date(cls, args):
+        return args['date'] if 'date' in args else cls._re_today(args)
+
 
 class FunctionFinder(ast.NodeVisitor):
 
@@ -298,6 +302,24 @@ class Rule(ModelView, ModelSQL):
 
     def get_rec_name(self, name=None):
         return self.name
+
+#    @classmethod
+#    def get_summary(cls, rules, name=None, with_label=True,
+#                    at_date=None, lang=None):
+#        res = {}
+#        for rule in rules:
+#            kw = 'return'
+#            pos1 = rule.code.rfind(kw)
+#            pos2 = rule.code.rfind('\n')
+#            if pos1 == -1:
+#                pos1 = 0
+#            else:
+#                pos1 += len(kw) + 1
+#            if pos2 > 0:
+#                res[rule.id] = rule.code[pos1:pos2]
+#            else:
+#                res[rule.id] = rule.name
+#        return res
 
 
 class TestCase(ModelView, ModelSQL):

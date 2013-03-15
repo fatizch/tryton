@@ -145,6 +145,15 @@ class Subscribed(model.CoopView):
         if hasattr(self, 'currency') and self.currency:
             return self.currency.digits
 
+    @classmethod
+    def get_summary(cls, instances, name):
+        return dict((x.id, '') for x in instances)
+
+    def get_currency_id(self, name):
+        currency = self.get_currency()
+        if currency:
+            return currency.id
+
 
 class Contract(model.CoopSQL, Subscribed, Printable):
     'Contract'
@@ -336,9 +345,6 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def get_possible_status(cls, name=None):
         return CONTRACTSTATUSES
 
-    def get_manager_model(self):
-        return 'ins_contract.billing_manager'
-
     def check_at_least_one_covered(self):
         errors = []
         for covered in self.covered_elements:
@@ -350,9 +356,9 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         return True, ()
 
     def init_covered_elements(self):
-        CoveredData = Pool().get('ins_contract.covered_data')
         options = dict([(o.offered.code, o) for o in self.options])
         for elem in self.covered_elements:
+            CoveredData = utils.get_relation_model(elem, 'covered_data')
             if (hasattr(elem, 'covered_data') and elem.covered_data):
                 existing_datas = dict([
                     (data.get_coverage().code, data)
@@ -375,6 +381,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
                     good_datas.append(good_data)
             CoveredData.delete(to_delete)
             elem.covered_data = good_datas
+            elem.save()
         return True, ()
 
     def get_policy_owner(self, at_date=None):
@@ -382,7 +389,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         the owner of a contract could change over time, you should never use
         the direct link subscriber
         '''
-        # TODO to enhance
+        # TODO: to enhance
         return self.subscriber
 
     def init_options_from_covered_elements(self):
@@ -452,15 +459,6 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def get_contact(self):
         return self.subscriber
 
-    def get_currency(self):
-        if hasattr(self, 'offered') and self.offered:
-            return self.offered.get_currency()
-
-    def get_currency_id(self, name):
-        currency = self.get_currency()
-        if currency:
-            return currency.id
-
     def get_sender(self):
         return self.get_management_role('contract_manager').protocol.party
 
@@ -475,6 +473,10 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         if not good_roles:
             return None
         return good_roles[0]
+
+    def get_currency(self):
+        if hasattr(self, 'offered') and self.offered:
+            return self.offered.get_currency()
 
 
 class Option(model.CoopSQL, Subscribed):
@@ -533,6 +535,10 @@ class Option(model.CoopSQL, Subscribed):
 
     def get_coverage_amount(self):
         raise NotImplementedError
+
+    def get_currency(self):
+        if hasattr(self, 'offered') and self.offered:
+            return self.offered.get_currency()
 
 
 class StatusHistory(model.CoopSQL, model.CoopView):
@@ -849,7 +855,11 @@ class CoveredElement(model.CoopSQL, model.CoopView):
 
     contract = fields.Many2One(
         'ins_contract.contract', 'Contract', ondelete='CASCADE')
-    item_desc = fields.Many2One('ins_product.item_desc', 'Item Desc')
+    #We need to put complementary data in depends, because the complementary
+    #data are set through on_change_with and the item desc can be set on an
+    #editable tree, or we can not display for the moment dictionnary in tree
+    item_desc = fields.Many2One('ins_product.item_desc', 'Item Desc',
+        depends=['complementary_data'])
     covered_data = fields.One2Many(
         'ins_contract.covered_data', 'covered_element', 'Covered Element Data')
     name = fields.Char('Name')
@@ -859,12 +869,15 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Complementary Data',
         on_change_with=['item_desc', 'complementary_data'])
+    complementary_data_summary = fields.Function(
+        fields.Char('Complementary Data', on_change_with=['item_desc']),
+        'on_change_with_complementary_data_summary')
 
     def get_name_for_billing(self):
-        pass
+        return self.name
 
     def get_name_for_info(self):
-        pass
+        return self.name
 
     def get_rec_name(self, value):
         res = super(CoveredElement, self).get_rec_name(value)
@@ -909,6 +922,10 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         elif self.item_desc:
             return utils.init_complementary_data(
                 self.item_desc.complementary_data_def)
+
+    def on_change_with_complementary_data_summary(self, name=None):
+        return ' '.join(['%s: %s' % (x[0], x[1])
+            for x in self.complementary_data.iteritems()])
 
 
 class CoveredData(model.CoopSQL, model.CoopView):

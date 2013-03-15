@@ -3,7 +3,7 @@ import copy
 
 from trytond.model import fields
 from trytond.pool import Pool
-from trytond.pyson import Eval, Bool, Or
+from trytond.pyson import Eval, Bool
 
 from trytond.modules.coop_utils import model, business, utils
 from trytond.modules.insurance_product import Offered
@@ -31,9 +31,7 @@ class Coverage(model.CoopSQL, Offered):
     _export_name = 'code'
 
     insurer = fields.Many2One('party.insurer', 'Insurer',
-        states={
-            'invisible': Bool(Eval('is_package')),
-        },
+        states={'invisible': Bool(Eval('is_package'))},
         depends=['is_package'])
     family = fields.Selection([('default', 'default')], 'Family',
         states={
@@ -54,8 +52,7 @@ class Coverage(model.CoopSQL, Offered):
         },
         depends=['currency_digits'])
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
-    coverage_amount_rules = fields.One2Many(
-        'ins_product.coverage_amount_rule',
+    coverage_amount_rules = fields.One2Many('ins_product.coverage_amount_rule',
         'offered', 'Coverage Amount Rules',
         states={'invisible': Bool(~Eval('is_coverage_amount_needed'))},)
     is_coverage_amount_needed = fields.Function(
@@ -73,7 +70,8 @@ class Coverage(model.CoopSQL, Offered):
         domain=[('is_package', '=', False)])
     complementary_data_def = fields.Many2Many(
         'ins_product.coverage-complementary_data_def',
-        'coverage', 'complementary_data_def', 'Complementary Data')
+        'coverage', 'complementary_data_def', 'Complementary Data',
+        domain=[('kind', 'in', ['contract', 'sub_elem'])])
 
     @classmethod
     def __setup__(cls):
@@ -110,7 +108,7 @@ class Coverage(model.CoopSQL, Offered):
         for clone, original in zip(res, products):
             i = 1
             while cls.search(
-                [('code', '=', '%s_(%s)' % (original.code, i))]):
+                    [('code', '=', '%s_(%s)' % (original.code, i))]):
                 i += 1
             clone.code = '%s_(%s)' % (original.code, i)
             clone.save()

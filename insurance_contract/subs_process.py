@@ -596,7 +596,7 @@ class SubscriptionProcess(CoopProcess):
 
     config_data = {
         'process_state_model': 'ins_contract.subs_process.process_state'
-        }
+    }
 
     # Here we just have to declare our steps
     project = CoopStateView(
@@ -618,8 +618,7 @@ class SubscriptionProcess(CoopProcess):
         contract.finalize_contract()
         if not (hasattr(contract, 'billing_manager') and
                 contract.billing_manager):
-            BillingManager = Pool().get(contract.get_manager_model())
-            bm = BillingManager()
+            bm = utils.instanciate_relation(contract, 'billing_manager')
             contract.billing_manager = [bm]
         for covered_element in contract.covered_elements:
             for covered_data in covered_element.covered_data:

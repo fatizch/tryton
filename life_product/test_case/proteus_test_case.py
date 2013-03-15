@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-import ConfigParser
 import os
 
 from decimal import Decimal
@@ -251,7 +250,7 @@ def create_AAA_Product(cfg_dict, code, name):
                 'code': 'PP',
                 'config_kind': 'simple',
                 'fixed_amount': Decimal(30),
-             },
+            },
         ],
         end_date=cfg_dict['Date'].today({}) + datetime.timedelta(days=10))
 
@@ -599,7 +598,7 @@ return PP + FG + RA + Tax
 '''
     combination_rule = get_or_create_rule(cfg_dict, u'Règle de combinaison',
         code, 'Rule Combination')
-    pricing_rule = create_pricing_rule(cfg_dict, cov, config_kind='advanced',
+    create_pricing_rule(cfg_dict, cov, config_kind='advanced',
         rated_object_kind='global', combi_rule=combination_rule,
         components=[
             {
@@ -607,28 +606,28 @@ return PP + FG + RA + Tax
                 'code': 'PP',
                 'config_kind': 'simple',
                 'fixed_amount': Decimal(5),
-             },
+            },
             {
                 'kind': 'base',
                 'code': 'RA',
                 'config_kind': 'simple',
                 'fixed_amount': Decimal(2),
-             },
+            },
             {
                 'kind': 'tax',
                 'tax': tax,
                 'config_kind': 'simple',
-             },
+            },
             {
                 'kind': 'fee',
                 'fee': fee,
                 'config_kind': 'simple',
-             },
+            },
         ])
 
     benefit = get_or_create_benefit(cfg_dict, 'IJ',
         'Indémnité Journalière', 'day')
-    benefit_rule = add_rule(cfg_dict, benefit, 'benefit')
+    add_rule(cfg_dict, benefit, 'benefit')
     cov.benefits.append(benefit)
 
     cov.description = '''<b>En cas d’arrêt de travail temporaire ou prolongé, \
@@ -672,12 +671,12 @@ else:
                     'code': 'PP',
                     'config_kind': 'advanced',
                     'rule': rule_engine,
-                 },
+                },
                 {
                     'kind': 'tax',
                     'tax': get_or_create_tax(cfg_dict, 'TSCA'),
                     'config_kind': 'simple',
-                 },
+                },
             ])
 
     benefit = get_or_create_benefit(cfg_dict, 'RENT_INVAL',
@@ -729,12 +728,12 @@ return result
                     'code': 'PP',
                     'config_kind': 'advanced',
                     'rule': rule_engine,
-                 },
+                },
                 {
                     'kind': 'tax',
                     'tax': get_or_create_tax(cfg_dict, 'TSCA'),
                     'config_kind': 'simple',
-                 },
+                },
             ])
 
     capital_benefit = get_or_create_benefit(cfg_dict, 'CAP_DC',
@@ -814,10 +813,8 @@ def get_tree_element(cfg_dict, name=None, table_code=None):
 
 
 def write_ceiling_code(pss_multiplicator, pss_element):
-    res = ('PMSS = %s(aujourd_hui(), \'mensuel\')\n'
-            % pss_element.translated_technical_name)
-    res += '#TODO replace current date by calculation data\n'
-    res += 'PMSS = Decimal(\'.\'.join(PMSS.split(\',\')))\n'
+    res = ('PMSS = %s(date_de_calcul())\n'
+        % pss_element.translated_technical_name)
     res += 'return %s * PMSS\n' % pss_multiplicator
     return res
 
@@ -875,4 +872,4 @@ def launch_test_case(cfg_dict):
     create_AAA_Product(cfg_dict, 'AAA', 'Awesome Alternative Allowance')
     #create_BBB_product(cfg_dict, 'BBB', 'Big Bad Bully')
     create_prev_product(cfg_dict)
-    create_tranches(cfg_dict, 'PSS')
+    create_tranches(cfg_dict, 'PMSS')

@@ -1,18 +1,19 @@
 from trytond.model import fields
-from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
-from trytond.modules.coop_utils import model, utils
+from trytond.modules.coop_utils import utils
 from trytond.modules.insurance_collective import GroupRoot
 from trytond.modules.insurance_contract_subscription import \
-    ContractSubscription, SubscriptionManager
+    subscription_process
 
 __all__ = [
     'GroupContractSubscription',
     'GroupSubscriptionManager',
+    'GroupOptionSubscription',
 ]
 
 
-class GroupContractSubscription(GroupRoot, ContractSubscription):
+class GroupContractSubscription(GroupRoot,
+        subscription_process.ContractSubscription):
     'Contract'
 
     __name__ = 'ins_collective.contract'
@@ -38,7 +39,8 @@ class GroupContractSubscription(GroupRoot, ContractSubscription):
                 Model.create(
                     [
                         {
-                            'contract': 'ins_collective.contract,%s' % contract.id,
+                            'contract': 'ins_collective.contract,%s' %
+                                contract.id,
                             'is_custom': vals,
                         }
                     ])
@@ -58,7 +60,8 @@ class GroupContractSubscription(GroupRoot, ContractSubscription):
         return True, ()
 
 
-class GroupSubscriptionManager(GroupRoot, SubscriptionManager):
+class GroupSubscriptionManager(GroupRoot,
+        subscription_process.SubscriptionManager):
     'Subscription Manager'
 
     __name__ = 'ins_collective.subscription_mgr'
@@ -77,3 +80,9 @@ class GroupSubscriptionManager(GroupRoot, SubscriptionManager):
         res['ins_contract.subscription_mgr'] = (
             'ins_collective.subscription_mgr')
         return res
+
+
+class GroupOptionSubscription(GroupRoot, subscription_process.Option):
+    'Collective Option for Subscription'
+
+    __name__ = 'ins_collective.option'

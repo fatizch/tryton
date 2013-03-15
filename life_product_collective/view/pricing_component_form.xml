@@ -5,7 +5,5 @@
         <field name="contribution_base"/>
         <label name="rate"/>
         <field name="rate"/>
-        <label name="tranche"/>
-        <field name="tranche"/>
     </xpath>
 </data>

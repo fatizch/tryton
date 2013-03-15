@@ -233,7 +233,8 @@ class Product(model.CoopSQL, Offered):
         'product', 'item_desc', 'Item Descriptors')
     complementary_data_def = fields.Many2Many(
         'ins_product.product-complementary_data_def',
-        'product', 'complementary_data_def', 'Complementary Data')
+        'product', 'complementary_data_def', 'Complementary Data',
+        domain=[('kind', '=', 'contract')])
     # Temporary
     tmp_claim_manager = fields.Many2One(
         'party.party', 'Claim Manager', domain=[('is_company', '=', True)])

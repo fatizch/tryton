@@ -6,14 +6,15 @@ from trytond.pyson import Eval
 
 from trytond.modules.insurance_contract import contract
 from .collective import GroupRoot
-from trytond.modules.coop_utils import utils
 
 __all__ = [
-        'GroupContract',
-        'GroupOption',
-        'GroupCoveredElement',
-        'GroupCoveredData',
-        ]
+    'GroupContract',
+    'GroupOption',
+    'GroupCoveredElement',
+    'GroupCoveredData',
+    'GroupBillingManager',
+    'GroupPriceLine',
+]
 
 
 class GroupContract(GroupRoot, contract.Contract):
@@ -61,3 +62,21 @@ class GroupCoveredData(GroupRoot, contract.CoveredData):
     'Covered Data'
 
     __name__ = 'ins_collective.covered_data'
+
+
+class GroupBillingManager(GroupRoot, contract.BillingManager):
+    'Billing Manager'
+
+    __name__ = 'ins_collective.billing_manager'
+
+
+class GroupPriceLine(GroupRoot, contract.PriceLine):
+    'Price Line'
+
+    __name__ = 'ins_collective.price_line'
+
+    @classmethod
+    def get_line_target_models(cls):
+        res = super(GroupPriceLine, cls).get_line_target_models()
+        res.append(('ins_collective.covered_data', 'Collective Covered Data'))
+        return res

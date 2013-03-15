@@ -1,14 +1,12 @@
 #-*- coding:utf-8 -*-
 import copy
 
-from trytond.model import fields
 from trytond.pool import Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
 from trytond.modules.insurance_product import product, benefit
 from trytond.modules.insurance_product import coverage, clause
-from trytond.modules.insurance_product.benefit import *
 from trytond.modules.insurance_product.business_rule import eligibility_rule
 from trytond.modules.insurance_product.business_rule import benefit_rule
 from trytond.modules.insurance_product.business_rule import reserve_rule
@@ -30,7 +28,7 @@ IND_TO_COLL = {
     'ins_product.coverage': 'ins_collective.coverage',
     'ins_product.coverage_amount_rule': 'ins_collective.coverage_amount_rule',
     'ins_product.deductible_rule': 'ins_collective.deductible_rule',
-    'ins_product.eligibility_relation_kind':\
+    'ins_product.eligibility_relation_kind':
         'ins_collective.eligibility_relation_kind',
     'ins_product.eligibility_rule': 'ins_collective.eligibility_rule',
     'ins_product.pricing_component': 'ins_collective.pricing_component',
@@ -46,10 +44,12 @@ IND_TO_COLL = {
     'ins_product.product-item_desc': 'ins_collective.product-item_desc',
     'ins_contract.covered_element': 'ins_collective.covered_element',
     'ins_contract.covered_data': 'ins_collective.covered_data',
-    'ins_product.product-complementary_data_def':\
+    'ins_product.product-complementary_data_def':
         'ins_collective.product-complementary_data_def',
-    'ins_product.coverage-complementary_data_def':\
+    'ins_product.coverage-complementary_data_def':
         'ins_collective.coverage-complementary_data_def',
+    'ins_contract.billing_manager': 'ins_collective.billing_manager',
+    'ins_contract.price_line': 'ins_collective.price_line',
 }
 
 
@@ -245,7 +245,7 @@ class GroupPricingRule(GroupRoot, pricing_rule.PricingRule):
     @classmethod
     def __setup__(cls):
         super(GroupPricingRule, cls).__setup__()
-        #In pricing config kind means simple ou multiple prices, in collective
+        #In pricing config kind means simple or multiple prices, in collective
         #you always have at least a price per covered item
         cls.config_kind = copy.copy(cls.config_kind)
         if not cls.config_kind.states:

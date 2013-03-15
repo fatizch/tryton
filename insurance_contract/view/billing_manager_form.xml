@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<form string="billing_manager">
+	<group id="Administrative data">
+		<label name="next_billing_date"/>
+		<field name="next_billing_date" xexpand="1"/>
+	</group>
+	<newline/>
+	<group id="Pricing Data" yfill="1" yexpand="1">
+		<field name="prices" colspan="4"/>
+	</group>
+</form>

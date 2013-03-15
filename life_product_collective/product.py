@@ -1,6 +1,3 @@
-#-*- coding:utf-8 -*
-import copy
-
 from trytond.pool import PoolMeta
 from trytond.model import fields
 from trytond.pyson import Eval
@@ -53,25 +50,12 @@ class GroupPricingComponent():
         help='Value between 0 and 100',
         states={
             'invisible': Eval('config_kind') != 'simple',
-        },
-        depends=['config_kind'],
-        )
+        }, depends=['config_kind'])
     contribution_base = fields.Numeric('Contribution Base',
         help='Value between 0 and 100',
         states={
             'invisible': Eval('config_kind') != 'simple',
-        },
-        depends=['config_kind'],
-        )
-    tranche = fields.Many2One('tranche.tranche', 'Tranche',
-        states={
-            'required': Eval('config_kind') == 'simple',
-            'invisible': Eval('config_kind') != 'simple',
-        },
-        depends=['config_kind'],
-        domain=[('colleges', '=',
-                Eval('_parent_calculator', {}).get('college'))]
-        )
+        }, depends=['config_kind'])
 
     @staticmethod
     def default_contribution_base():

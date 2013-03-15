@@ -1,14 +1,10 @@
 <?xml version="1.0"?>
 <data>
-    <xpath expr="/tree" position="replace_attributes">
-        <tree editable="bottom"/>
-    </xpath>
     <xpath expr="/tree/field[@name='kind']" position="before">
         <field name="rate"/>
     </xpath>
     <xpath expr="/tree/field[@name='summary']" position="before">
         <field name="contribution_base"/>
-        <field name="tranche"/>
     </xpath>
     <xpath expr="/tree/field[@name='config_kind']" position="replace"/>
 </data>

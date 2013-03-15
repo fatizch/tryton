@@ -226,9 +226,6 @@ class WithAbstract(object):
                 # We go through each value of the dictionnary an set it.
                 if not key in for_object._fields:
                     # After checking that it matches, of course...
-                    print '*' * 80
-                    print key, for_object._fields
-                    print '*' * 80
                     raise BadDataKeyError
                 setattr(for_object,
                         key,
@@ -650,7 +647,8 @@ def get_user_language():
     return get_this_object('ir.lang', [('code', '=', Transaction().language)])
 
 
-def get_relation_model_name(from_class, field_name):
+def get_relation_model_name(from_class_or_instance, field_name):
+    from_class = get_class_from_instance(from_class_or_instance)
     field = getattr(from_class, field_name)
     if not hasattr(field, 'model_name') and hasattr(field, 'relation_name'):
         # M2M
@@ -662,14 +660,18 @@ def get_relation_model_name(from_class, field_name):
     return res
 
 
-def get_relation_model(from_class, field_name):
-    model_name = get_relation_model_name(from_class, field_name)
+def get_class_from_instance(instance):
+    return Pool().get(instance.__name__)
+
+
+def get_relation_model(from_class_or_instance, field_name):
+    model_name = get_relation_model_name(from_class_or_instance, field_name)
     if model_name:
         return Pool().get(model_name)
 
 
-def instanciate_relation(from_class, field_name):
-    Model = get_relation_model(from_class, field_name)
+def instanciate_relation(from_class_or_instance, field_name):
+    Model = get_relation_model(from_class_or_instance, field_name)
     if Model:
         return Model()
 

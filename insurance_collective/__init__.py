@@ -13,6 +13,8 @@ def register():
         GroupProductCoverageRelation,
         GroupPackageCoverage,
         GroupContract,
+        GroupBillingManager,
+        GroupPriceLine,
         GroupOption,
         GroupCoveredElement,
         GroupCoveredData,

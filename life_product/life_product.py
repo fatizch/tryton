@@ -15,6 +15,7 @@ from trytond.modules.insurance_product.business_rule.business_rule import \
 
 STATE_LIFE = (Eval('_parent_offered', {}).get('family') !=
     'life_product.definition')
+FAMILY_LIFE = 'life_product.definition'
 
 __all__ = [
     'LifeItemDescriptor',
@@ -52,9 +53,13 @@ class LifeCoverage():
         if not cls.family.selection:
             cls.family.selection = []
         utils.append_inexisting(cls.family.selection,
-            ('life_product.definition', 'Life'))
+            (FAMILY_LIFE, 'Life'))
         if ('default', 'default') in cls.family.selection:
             cls.family.selection.remove(('default', 'default'))
+
+    def get_is_coverage_amount_needed(self, name=None):
+        res = super(LifeCoverage, self).get_is_coverage_amount_needed(name)
+        return res and self.family == FAMILY_LIFE
 
 
 class LifeProductDefinition(ProductDefinition):
@@ -70,7 +75,7 @@ class LifeProductDefinition(ProductDefinition):
     def get_step_model(step_name):
         steps = {
             'extension': 'life_contract.extension_life_state',
-            }
+        }
         return steps[step_name]
 
 

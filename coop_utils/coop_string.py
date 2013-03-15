@@ -1,8 +1,10 @@
-import utils
+# -*- coding: utf-8 -*-
+import re
 
 from trytond.pool import Pool
-
 from trytond.transaction import Transaction
+
+import utils
 
 
 def zfill(the_instance, val_name):
@@ -143,9 +145,11 @@ def date_as_string(date, lang=None):
 
 def remove_invalid_char(from_string):
     import unicodedata
-    return ''.join((
+    res = ''.join((
         c for c in unicodedata.normalize('NFD', unicode(from_string))
         if unicodedata.category(c) != 'Mn'))
+    res = re.sub('[^0-9a-zA-Z]+', '_', res)
+    return res
 
 
 def remove_all_but_alphanumeric_and_space(from_string):

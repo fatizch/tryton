@@ -25,7 +25,7 @@ __all__ = [
     'SubscriptionManager',
     'ProcessDesc',
     'SubscriptionProcessParameters',
-    'SubscriptionProcessFinder'
+    'SubscriptionProcessFinder',
 ]
 
 
@@ -208,7 +208,7 @@ class ContractSubscription(CoopProcessFramework):
                     'subscriber': self.subscriber,
                 })
 
-            if not eligibility.eligible:
+            if eligibility and not eligibility.eligible:
                 errs.append(('option_not_eligible', (option.offered.code)))
                 errs += (
                     ('%s' % elem, ())
@@ -247,8 +247,7 @@ class ContractSubscription(CoopProcessFramework):
     def init_billing_manager(self):
         if not (hasattr(self, 'billing_manager') and
                 self.billing_manager):
-            BillingManager = Pool().get(self.get_manager_model())
-            bm = BillingManager()
+            bm = utils.instanciate_relation(self, 'billing_manager')
             self.billing_manager = [bm]
 
         return True, ()

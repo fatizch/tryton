@@ -212,7 +212,7 @@ def create_parties(cfg_dict):
     nb_male = 0
     nb_female = 0
     for person in proteus_tools.get_objects_from_db(cfg_dict, 'Party',
-        limit=None, domain=[('is_person', '=', True)]):
+            limit=None, domain=[('is_person', '=', True)]):
         if person.gender == 'male':
             nb_male += 1
         if person.gender == 'female':
@@ -245,7 +245,7 @@ def create_company(cfg_dict, name, short_name=None, parent=None,
 
 def create_hierarchy(cfg_dict):
     if proteus_tools.get_objects_from_db(cfg_dict, 'Party', key='name',
-        value='Mother House'):
+            value='Mother House'):
         return
     create_company(cfg_dict, 'Mother House', 'MH', None, 1, 4)
 
@@ -270,8 +270,7 @@ def migrate_parties(cfg_dict):
         party.is_company = True
         party.save()
     for company in proteus_tools.get_objects_from_db(cfg_dict, 'Party',
-        limit=None, domain=[('is_society', '=', True)]):
-        print company.name
+            limit=None, domain=[('is_society', '=', True)]):
         company.is_company = True
         company.is_society = False
         company.save()

@@ -4,55 +4,21 @@
         <!--################################################################ -->
         <!-- Price Lines -->
         <!--################################################################ -->
-        <record model="ir.ui.view" id="price_lines_expandable_tree">
+        <record model="ir.ui.view" id="price_line_expandable_view_tree">
             <field name="model">ins_contract.price_line</field>
             <field name="type">tree</field>
             <field name="field_childs">child_lines</field>
-            <field name="arch" type="xml"><![CDATA[
-                        <tree string="Pricing Lines">
-                            <field name="name"/>
-                            <field name="amount_for_display"/>
-                            <field name="taxes"/>
-                        </tree>
-                    ]]></field>
+            <field name="name">price_line_expandable_tree</field>
         </record>
-        <record model="ir.ui.view" id="price_lines_tree">
+        <record model="ir.ui.view" id="price_line_view_tree">
             <field name="model">ins_contract.price_line</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml"><![CDATA[
-                        <tree string="Pricing Lines">
-                            <field name="name"/>
-                            <field name="start_date_calculated"/>
-                            <field name="end_date_calculated"/>
-                            <field name="amount_for_display"/>
-                            <field name="taxes"/>
-                        </tree>
-                    ]]></field>
+            <field name="name">price_line_tree</field>
         </record>
         <record model="ir.ui.view" id="price_line_view_form">
             <field name="model">ins_contract.price_line</field>
             <field name="type">form</field>
-            <field name="arch" type="xml"><![CDATA[
-                     <form string="price_line">
-                         <group id="General">
-                             <label name="start_date_calculated"/>
-                             <field name="start_date_calculated" xexpand="1"/>
-                             <label name="end_date_calculated"/>
-                             <field name="end_date_calculated" xexpand="1"/>
-                             <newline/>
-                             <label name="amount_for_display"/>
-                             <field name="amount_for_display" xexpand="1"/>
-                             <label name="taxes"/>
-                             <field name="taxes" xexpand="1"/>
-                         </group>
-                         <newline/>
-                         <field name="child_lines" mode="tree" yfill="1"
-                             yexpand="1" xfill="1" 
-                             view_ids="insurance_contract.price_lines_tree"/>
-                         <field name="details" mode="tree" yfill="1"
-                             yexpand="1" xfill="1"
-                             view_ids="insurance_contract.price_lines_tree"/>
-                     </form>               ]]></field>
+            <field name="name">price_line_form</field>
         </record>
         <!--################################################################ -->
         <!-- Billing Manager -->
@@ -60,19 +26,7 @@
         <record model="ir.ui.view" id="billing_manager_view_form">
             <field name="model">ins_contract.billing_manager</field>
             <field name="type">form</field>
-            <field name="arch" type="xml"><![CDATA[
-                     <form string="billing_manager">
-                         <group id="Administrative data">
-                             <label name="next_billing_date"/>
-                             <field name="next_billing_date" xexpand="1"/>
-                         </group>
-                         <newline/>
-                         <group id="Pricing Data" yfill="1" yexpand="1">
-                             <field name="prices" mode="tree" yfill="1"
-                                 yexpand="1" xfill="1"
-                                 view_ids="insurance_contract.price_lines_expandable_tree"/>
-                         </group>
-                     </form>               ]]></field>
+            <field name="name">billing_manager_form</field>
         </record>
         <!--################################################################ -->
         <!-- Contract Screens -->

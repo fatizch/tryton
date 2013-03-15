@@ -11,6 +11,7 @@ def register():
         GroupLifeCoverage,
         College,
         GroupPricingRule,
+        GroupPricingComponent,
 #        TrancheCalculatorLine,
         Tranche,
         CollegeTranche,
