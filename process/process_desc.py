@@ -630,9 +630,6 @@ class StepTransition(ModelSQL, ModelView):
     # The purpose of a transition is to execute some code, let's do this !
     methods = fields.Text(
         'Methods',
-        states={
-            'invisible': Eval('kind') != 'standard',
-        },
     )
 
     method_kind = fields.Selection(
@@ -640,9 +637,6 @@ class StepTransition(ModelSQL, ModelView):
             ('replace', 'Replace Step Methods'),
             ('add', 'Executed between steps')],
         'Method Behaviour',
-        states={
-            'invisible': Eval('kind') != 'standard',
-        },
     )
 
     # And authorizations are needed to filter users
