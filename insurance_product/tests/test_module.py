@@ -3,64 +3,56 @@ import sys
 import os
 from decimal import Decimal
 import datetime
-DIR = os.path.abspath(os.path.normpath(os.path.join(__file__,
-    '..', '..', '..', '..', '..', 'trytond')))
+DIR = os.path.abspath(os.path.normpath(os.path.join(
+    __file__, '..', '..', '..', '..', '..', 'trytond')))
 if os.path.isdir(DIR):
     sys.path.insert(0, os.path.dirname(DIR))
 
 import unittest
 import trytond.tests.test_tryton
-from trytond.tests.test_tryton import test_view, test_depends
-from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT
+
 from trytond.transaction import Transaction
 from trytond.modules.insurance_product import PricingResultLine
+from trytond.modules.coop_utils import test_framework
 
 
 MODULE_NAME = os.path.basename(
-                  os.path.abspath(
-                      os.path.join(os.path.normpath(__file__), '..', '..')))
+    os.path.abspath(
+        os.path.join(os.path.normpath(__file__), '..', '..')))
 
 
-class ModuleTestCase(unittest.TestCase):
+class ModuleTestCase(test_framework.CoopTestCase):
     '''
     Test Coop module.
     '''
 
-    def setUp(self):
-        trytond.tests.test_tryton.install_module('life_product')
-        self.Product = POOL.get('ins_product.product')
-        self.Coverage = POOL.get('ins_product.coverage')
-        self.Pricing = POOL.get('ins_product.pricing_rule')
-        self.Currency = POOL.get('currency.currency')
-        self.Eligibility = POOL.get('ins_product.eligibility_rule')
-        self.TreeElement = POOL.get('rule_engine.tree_element')
-        self.Context = POOL.get('rule_engine.context')
-        self.RuleEngine = POOL.get('rule_engine')
-        self.TestCase = POOL.get('rule_engine.test_case')
-        self.TestCaseValue = POOL.get('rule_engine.test_case.value')
-        self.RunTests = POOL.get('rule_engine.run_tests', type='wizard')
-        self.PricingComponent = POOL.get('ins_product.pricing_component')
-        self.Tax = POOL.get('coop_account.tax_desc')
-        self.TaxVersion = POOL.get('coop_account.tax_version')
-        self.Fee = POOL.get('coop_account.fee_desc')
-        self.FeeVersion = POOL.get('coop_account.fee_version')
-        self.Sequence = POOL.get('ir.sequence')
+    @classmethod
+    def get_module_name(cls):
+        return MODULE_NAME
 
-    def test0005views(self):
-        '''
-        Test views.
-        '''
-        test_view(MODULE_NAME)
+    @classmethod
+    def depending_modules(cls):
+        return ['rule_engine']
 
-    def test0006depends(self):
-        '''
-        Test depends.
-        '''
-        test_depends()
+    @classmethod
+    def get_models(cls):
+        return {
+            'Product': 'ins_product.product',
+            'Coverage': 'ins_product.coverage',
+            'Pricing': 'ins_product.pricing_rule',
+            'Currency': 'currency.currency',
+            'Eligibility': 'ins_product.eligibility_rule',
+            'PricingComponent': 'ins_product.pricing_component',
+            'Tax': 'coop_account.tax_desc',
+            'TaxVersion': 'coop_account.tax_version',
+            'Fee': 'coop_account.fee_desc',
+            'FeeVersion': 'coop_account.fee_version',
+            'Sequence': 'ir.sequence',
+            'Lang': 'ir.lang',
+        }
 
-    def createTestRule(self):
-        Lang = POOL.get('ir.lang')
-        fr = Lang.search([('name', '=', 'French')], limit=1)[0]
+    def test0001_testFunctionalRuleCreation(self):
+        fr = self.Lang.search([('name', '=', 'French')], limit=1)[0]
 
         te2 = self.TreeElement()
         te2.language = fr
@@ -159,239 +151,234 @@ return True'''
         rule.test_cases = [tc, tc1]
 
         rule.save()
+        with Transaction().set_context({'active_id': rule.id}):
+            wizard_id, _, _ = self.RunTests.create()
+            wizard = self.RunTests(wizard_id)
+            wizard._execute('report')
+            res = wizard.default_report(None)
+            self.assertEqual(
+                res,
+                {'report': 'Test ... SUCCESS\n\nTest1 ... SUCCESS'})
 
-        return rule
+    def test0002_testTaxCreation(self):
+        def create_tax(code, amount):
+            tax_v = self.TaxVersion()
+            tax_v.kind = 'rate'
+            tax_v.value = Decimal(amount)
+            tax_v.start_date = datetime.date.today()
+            tax = self.Tax()
+            tax.name = 'Test Tax %s' % code
+            tax.code = code
+            tax.versions = [tax_v]
+            tax.save()
 
-    def create_tax(self, code, amount):
-        tax_v1 = self.TaxVersion()
-        tax_v1.kind = 'rate'
-        tax_v1.value = Decimal(amount)
-        tax_v1.start_date = datetime.date.today()
+        create_tax('TT', 14)
+        create_tax('TTA', 27)
 
-        tax = self.Tax()
-        tax.name = 'Test Tax %s' % code
-        tax.code = code
-        tax.versions = [tax_v1]
+    def test0003_testFeeCreation(self):
+        def create_fee(code, amount):
+            fee_v = self.FeeVersion()
+            fee_v.kind = 'flat'
+            fee_v.value = Decimal(amount)
+            fee_v.start_date = datetime.date.today()
+            fee = self.Fee()
+            fee.name = 'Test Fee %s' % code
+            fee.code = code
+            fee.versions = [fee_v]
+            fee.save()
 
-        tax.save()
+        create_fee('FEE', 20)
 
-        return tax
-
-    def create_fee(self, code, amount):
-        fee_v1 = self.FeeVersion()
-        fee_v1.kind = 'flat'
-        fee_v1.value = Decimal(amount)
-        fee_v1.start_date = datetime.date.today()
-
-        fee = self.Fee()
-        fee.name = 'Test Fee %s' % code
-        fee.code = code
-        fee.versions = [fee_v1]
-
-        fee.save()
-
-        return fee
-
-    def create_number_generator(self, code):
+    def test0004_testNumberGeneratorCreation(self):
         ng = self.Sequence()
         ng.name = 'Contract Sequence'
-        ng.code = code
+        ng.code = 'ins_product.product'
         ng.prefix = 'Ctr'
         ng.suffix = 'Y${year}'
         ng.save()
-        return ng
 
+    def test0005_testCurrencyCreation(self):
+        euro = self.Currency()
+        euro.name = 'Euro'
+        euro.symbol = u'€'
+        euro.code = 'EUR'
+        euro.save()
+
+    @test_framework.prepare_test(
+        'insurance_product.test0001_testFunctionalRuleCreation',
+        'insurance_product.test0002_testTaxCreation',
+        'insurance_product.test0003_testFeeCreation',
+        'insurance_product.test0004_testNumberGeneratorCreation',
+        'insurance_product.test0005_testCurrencyCreation',
+    )
     def test0010Coverage_creation(self):
         '''
             Tests process desc creation
         '''
-        with Transaction().start(DB_NAME,
-                                 USER,
-                                 context=CONTEXT) as transaction:
+        rule = self.RuleEngine.search([('name', '=', 'test_rule')])[0]
+        ng = self.Sequence.search([('code', '=', 'ins_product.product')])[0]
 
-            rule = self.createTestRule()
-            with transaction.set_context({'active_id': rule.id}):
-                wizard_id, _, _ = self.RunTests.create()
-                wizard = self.RunTests(wizard_id)
-                wizard._execute('report')
-                res = wizard.default_report(None)
-                self.assertEqual(
-                    res,
-                    {'report': 'Test ... SUCCESS\n\nTest1 ... SUCCESS'})
+        # Coverage A
 
-            ng = self.create_number_generator('ins_product.product')
+        tax = self.Tax.search([('code', '=', 'TT')])[0]
+        fee = self.Fee.search([('code', '=', 'FEE')])[0]
 
-            #We need to create the currency manually because it's needed
-            #on the default currency for product and coverage
-            euro = self.Currency()
-            euro.name = 'Euro'
-            euro.symbol = u'€'
-            euro.code = 'EUR'
-            euro.save()
+        pricing_comp1 = self.PricingComponent()
+        pricing_comp1.config_kind = 'simple'
+        pricing_comp1.fixed_amount = 12
+        pricing_comp1.kind = 'base'
+        pricing_comp1.code = 'PP'
+        pricing_comp1.rated_object_kind = 'global'
 
-            # Coverage A
+        pricing_comp11 = self.PricingComponent()
+        pricing_comp11.kind = 'tax'
+        pricing_comp11.tax = tax
+        pricing_comp11.code = tax.code
+        pricing_comp11.rated_object_kind = 'global'
 
-            tax = self.create_tax('TT', 13)
-            fee = self.create_fee('FEE', 20)
+        pricing_comp12 = self.PricingComponent()
+        pricing_comp12.kind = 'fee'
+        pricing_comp12.fee = fee
+        pricing_comp12.code = fee.code
+        pricing_comp12.rated_object_kind = 'global'
 
-            pricing_comp1 = self.PricingComponent()
-            pricing_comp1.config_kind = 'simple'
-            pricing_comp1.fixed_amount = 12
-            pricing_comp1.kind = 'base'
-            pricing_comp1.code = 'PP'
-            pricing_comp1.rated_object_kind = 'global'
+        pricing_comp2 = self.PricingComponent()
+        pricing_comp2.config_kind = 'simple'
+        pricing_comp2.fixed_amount = 1
+        pricing_comp2.kind = 'base'
+        pricing_comp2.code = 'PP'
+        pricing_comp2.rated_object_kind = 'sub_item'
 
-            pricing_comp11 = self.PricingComponent()
-            pricing_comp11.kind = 'tax'
-            pricing_comp11.tax = tax
-            pricing_comp11.code = tax.code
-            pricing_comp11.rated_object_kind = 'global'
+        pricing_rulea = self.Pricing()
 
-            pricing_comp12 = self.PricingComponent()
-            pricing_comp12.kind = 'fee'
-            pricing_comp12.fee = fee
-            pricing_comp12.code = fee.code
-            pricing_comp12.rated_object_kind = 'global'
+        pricing_rulea.components = [
+            pricing_comp1, pricing_comp11, pricing_comp12]
+        pricing_rulea.sub_item_components = [pricing_comp2]
 
-            pricing_comp2 = self.PricingComponent()
-            pricing_comp2.config_kind = 'simple'
-            pricing_comp2.fixed_amount = 1
-            pricing_comp2.kind = 'base'
-            pricing_comp2.code = 'PP'
-            pricing_comp2.rated_object_kind = 'sub_item'
+        pricing_rulea.start_date = datetime.date.today()
+        pricing_rulea.end_date = datetime.date.today() + \
+            datetime.timedelta(days=10)
 
-            pricing_rulea = self.Pricing()
+        pricing_comp3 = self.PricingComponent()
+        pricing_comp3.config_kind = 'simple'
+        pricing_comp3.fixed_amount = 15
+        pricing_comp3.kind = 'base'
+        pricing_comp3.code = 'PP'
+        pricing_comp3.rated_object_kind = 'global'
 
-            pricing_rulea.components = [pricing_comp1, pricing_comp11,
-                pricing_comp12]
-            pricing_rulea.sub_item_components = [pricing_comp2]
+        pricing_ruleb = self.Pricing()
+        pricing_ruleb.components = [pricing_comp3]
 
-            pricing_rulea.start_date = datetime.date.today()
-            pricing_rulea.end_date = datetime.date.today() + \
-                                            datetime.timedelta(days=10)
+        pricing_ruleb.start_date = datetime.date.today() + \
+            datetime.timedelta(days=11)
+        pricing_ruleb.end_date = datetime.date.today() + \
+            datetime.timedelta(days=20)
 
-            pricing_comp3 = self.PricingComponent()
-            pricing_comp3.config_kind = 'simple'
-            pricing_comp3.fixed_amount = 15
-            pricing_comp3.kind = 'base'
-            pricing_comp3.code = 'PP'
-            pricing_comp3.rated_object_kind = 'global'
+        coverage_a = self.Coverage()
+        coverage_a.family = coverage_a._fields['family'].selection[0][0]
+        coverage_a.code = 'ALP'
+        coverage_a.name = 'Alpha Coverage'
+        coverage_a.start_date = datetime.date.today()
 
-            pricing_ruleb = self.Pricing()
-            pricing_ruleb.components = [pricing_comp3]
+        coverage_a.pricing_rules = [pricing_rulea]
 
-            pricing_ruleb.start_date = datetime.date.today() + \
-                                            datetime.timedelta(days=11)
-            pricing_ruleb.end_date = datetime.date.today() + \
-                                            datetime.timedelta(days=20)
+        coverage_a.save()
 
-            coverage_a = self.Coverage()
-            coverage_a.family = coverage_a._fields['family'].selection[0][0]
-            coverage_a.code = 'ALP'
-            coverage_a.name = 'Alpha Coverage'
-            coverage_a.start_date = datetime.date.today()
+        # Coverage B
 
-            coverage_a.pricing_rules = [pricing_rulea]
+        tax_1 = self.Tax.search([('code', '=', 'TTA')])[0]
 
-            coverage_a.save()
+        pricing_comp4 = self.PricingComponent()
+        pricing_comp4.config_kind = 'simple'
+        pricing_comp4.fixed_amount = 30
+        pricing_comp4.kind = 'base'
+        pricing_comp4.code = 'PP'
+        pricing_comp4.rated_object_kind = 'global'
 
-            # Coverage B
+        pricing_comp41 = self.PricingComponent()
+        pricing_comp41.kind = 'tax'
+        pricing_comp41.tax = tax_1
+        pricing_comp41.code = tax_1.code
+        pricing_comp41.rated_object_kind = 'global'
 
-            tax_1 = self.create_tax('TTA', 27)
+        pricing_rulec = self.Pricing()
+        pricing_rulec.config_kind = 'simple'
+        pricing_rulec.components = [pricing_comp4, pricing_comp41]
 
-            pricing_comp4 = self.PricingComponent()
-            pricing_comp4.config_kind = 'simple'
-            pricing_comp4.fixed_amount = 30
-            pricing_comp4.kind = 'base'
-            pricing_comp4.code = 'PP'
-            pricing_comp4.rated_object_kind = 'global'
+        pricing_rulec.start_date = datetime.date.today()
+        pricing_rulec.end_date = datetime.date.today() + \
+            datetime.timedelta(days=10)
 
-            pricing_comp41 = self.PricingComponent()
-            pricing_comp41.kind = 'tax'
-            pricing_comp41.tax = tax_1
-            pricing_comp41.code = tax_1.code
-            pricing_comp41.rated_object_kind = 'global'
+        coverage_b = self.Coverage()
+        coverage_b.code = 'BET'
+        coverage_b.name = 'Beta Coverage'
+        coverage_b.family = coverage_a._fields['family'].selection[0][0]
+        coverage_b.start_date = datetime.date.today() + \
+            datetime.timedelta(days=5)
 
-            pricing_rulec = self.Pricing()
-            pricing_rulec.config_kind = 'simple'
-            pricing_rulec.components = [pricing_comp4, pricing_comp41]
+        coverage_b.pricing_rules = [pricing_ruleb]
 
-            pricing_rulec.start_date = datetime.date.today()
-            pricing_rulec.end_date = datetime.date.today() + \
-                                            datetime.timedelta(days=10)
+        coverage_b.save()
 
-            coverage_b = self.Coverage()
-            coverage_b.code = 'BET'
-            coverage_b.name = 'Beta Coverage'
-            coverage_b.family = coverage_a._fields['family'].selection[0][0]
-            coverage_b.start_date = datetime.date.today() + \
-                                            datetime.timedelta(days=5)
+        # Coverage C
 
-            coverage_b.pricing_rules = [pricing_ruleb]
+        eligibility_rule_a = self.Eligibility()
+        eligibility_rule_a.config_kind = 'advanced'
+        eligibility_rule_a.min_age = 100
+        eligibility_rule_a.rule = rule
 
-            coverage_b.save()
+        eligibility_rule_a.start_date = datetime.date.today()
 
-            # Coverage C
+        coverage_c = self.Coverage()
+        coverage_c.code = 'GAM'
+        coverage_c.name = 'Gamma Coverage'
+        coverage_c.family = coverage_a._fields['family'].selection[0][0]
+        coverage_c.start_date = datetime.date.today()
 
-            eligibility_rule_a = self.Eligibility()
-            eligibility_rule_a.config_kind = 'advanced'
-            eligibility_rule_a.is_eligible = False
-            eligibility_rule_a.rule = rule
+        coverage_c.eligibility_rules = [eligibility_rule_a]
 
-            eligibility_rule_a.start_date = datetime.date.today()
+        coverage_c.save()
 
-            coverage_c = self.Coverage()
-            coverage_c.code = 'GAM'
-            coverage_c.name = 'Gamma Coverage'
-            coverage_c.family = coverage_a._fields['family'].selection[0][0]
-            coverage_c.start_date = datetime.date.today()
+        # Coverage D
 
-            coverage_c.eligibility_rules = [eligibility_rule_a]
+        eligibility_rule_d = self.Eligibility()
+        eligibility_rule_d.config_kind = 'simple'
+        eligibility_rule_d.is_eligible = True
+        eligibility_rule_d.is_sub_elem_eligible = False
 
-            coverage_c.save()
+        eligibility_rule_d.start_date = datetime.date.today()
 
-            # Coverage D
+        coverage_d = self.Coverage()
+        coverage_d.code = 'DEL'
+        coverage_d.name = 'Delta Coverage'
+        coverage_d.family = coverage_a._fields['family'].selection[0][0]
+        coverage_d.start_date = datetime.date.today()
 
-            eligibility_rule_d = self.Eligibility()
-            eligibility_rule_d.config_kind = 'simple'
-            eligibility_rule_d.is_eligible = True
-            eligibility_rule_d.is_sub_elem_eligible = False
+        coverage_d.eligibility_rules = [eligibility_rule_d]
 
-            eligibility_rule_d.start_date = datetime.date.today()
+        coverage_d.save()
 
-            coverage_d = self.Coverage()
-            coverage_d.code = 'DEL'
-            coverage_d.name = 'Delta Coverage'
-            coverage_d.family = coverage_a._fields['family'].selection[0][0]
-            coverage_d.start_date = datetime.date.today()
+        # Product Eligibility Manager
 
-            coverage_d.eligibility_rules = [eligibility_rule_d]
+        eligibility_rule_b = self.Eligibility()
+        eligibility_rule_b.config_kind = 'simple'
+        eligibility_rule_b.is_eligible = True
 
-            coverage_d.save()
+        eligibility_rule_b.start_date = datetime.date.today()
 
-            # Product Eligibility Manager
+        # Product
 
-            eligibility_rule_b = self.Eligibility()
-            eligibility_rule_b.config_kind = 'simple'
-            eligibility_rule_b.is_eligible = True
+        product_a = self.Product()
+        product_a.code = 'AAA'
+        product_a.name = 'Awesome Alternative Allowance'
+        product_a.start_date = datetime.date.today()
+        product_a.options = [
+            coverage_a, coverage_b, coverage_c, coverage_d]
+        product_a.eligibility_rules = [eligibility_rule_b]
+        product_a.contract_generator = ng
+        product_a.save()
 
-            eligibility_rule_b.start_date = datetime.date.today()
-
-            # Product
-
-            product_a = self.Product()
-            product_a.code = 'AAA'
-            product_a.name = 'Awesome Alternative Allowance'
-            product_a.start_date = datetime.date.today()
-            product_a.options = [
-                coverage_a, coverage_b, coverage_c, coverage_d]
-            product_a.eligibility_rules = [eligibility_rule_b]
-            product_a.contract_generator = ng
-            product_a.save()
-
-            self.assert_(product_a.id)
-
-            transaction.cursor.commit()
+        self.assert_(product_a.id)
 
     def test0020Pricing_Line_Results(self):
         '''

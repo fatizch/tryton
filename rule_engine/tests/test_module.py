@@ -13,7 +13,7 @@ from trytond.model import ModelView
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import test_framework, prepare_test
+from trytond.modules.coop_utils import test_framework
 
 MODULE_NAME = os.path.basename(
     os.path.abspath(
@@ -44,7 +44,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def depending_modules(cls):
         return ['table']
 
-    @prepare_test('table.test0060table_2dim')
+    @test_framework.prepare_test('table.test0060table_2dim')
     def test0010_testTableTreeElementCreation(self):
         test_table = self.Definition.search([
             ('code', '=', 'test_code')])[0]
@@ -70,7 +70,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         te.fct_args = 'Test, Qsdé'
         self.assertRaises(trytond.error.UserError, te.save)
 
-    @prepare_test('table.test0060table_2dim')
+    @test_framework.prepare_test('table.test0060table_2dim')
     def test0020_testRuleEngine(self):
         class TestRuleEngine(ModelView):
             __name__ = 'rule_engine_tests'
