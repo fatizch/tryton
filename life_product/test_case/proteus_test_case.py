@@ -287,7 +287,9 @@ def get_or_create_tree_element(cfg_dict, cur_type, description,
     te.description = description
     te.long_description = long_desc
     if fct_args:
-        te.fct_args = ', '.join(fct_args.split(','))
+        te.fct_args = ', '.join(map(
+            proteus_tools.remove_all_but_alphanumeric_and_space,
+            fct_args.split(',')))
     te.translated_technical_name = translated_technical
     te.namespace = namespace
     te.language = lang

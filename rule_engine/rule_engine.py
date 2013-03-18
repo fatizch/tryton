@@ -303,24 +303,6 @@ class Rule(ModelView, ModelSQL):
     def get_rec_name(self, name=None):
         return self.name
 
-#    @classmethod
-#    def get_summary(cls, rules, name=None, with_label=True,
-#                    at_date=None, lang=None):
-#        res = {}
-#        for rule in rules:
-#            kw = 'return'
-#            pos1 = rule.code.rfind(kw)
-#            pos2 = rule.code.rfind('\n')
-#            if pos1 == -1:
-#                pos1 = 0
-#            else:
-#                pos1 += len(kw) + 1
-#            if pos2 > 0:
-#                res[rule.id] = rule.code[pos1:pos2]
-#            else:
-#                res[rule.id] = rule.name
-#        return res
-
 
 class TestCase(ModelView, ModelSQL):
     "Test Case"
@@ -781,7 +763,8 @@ class TableDefinition():
 
                 dimension_names.append(dim_name)
 
-            good_te.fct_args = ', '.join(dimension_names)
+            good_te.fct_args = ', '.join(
+                map(coop_string.remove_invalid_char, dimension_names))
             good_te.save()
 
     @classmethod
@@ -836,7 +819,8 @@ class TableDefinition():
                 dimension_names.append(dim_name)
 
             if dimension_names:
-                new_tree.fct_args = ', '.join(dimension_names)
+                new_tree.fct_args = ', '.join(
+                    map(coop_string.remove_invalid_char, dimension_names))
             new_tree.save()
 
         return tables

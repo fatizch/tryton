@@ -325,3 +325,9 @@ def get_modules_to_update(from_modules):
         modules_set |= set(get_module_depends(cur_module))
     graph = create_graph(list(modules_set))[0]
     return [x.name for x in graph if is_coop_module(x.name)]
+
+
+def remove_all_but_alphanumeric_and_space(from_string):
+    import re
+    pattern = re.compile(r'([^\s\w]|_)+')
+    return pattern.sub('', from_string)
