@@ -665,7 +665,6 @@ class StepTransition(ModelSQL, ModelView):
                     # All methods should return a result, and errors
                     result = getattr(target, method.strip())()
                 except:
-                    print 'Error for method ', method
                     raise
 
                 if not isinstance(result, (list, tuple)) and result is True:
