@@ -253,7 +253,7 @@ class Product(model.CoopSQL, Offered):
         if default is None:
             default = {}
         default = default.copy()
-        #Code must be unique and action "copy" store in db during the process
+        #Code must be unique and action "copy" stores in db during the process
         default['code'] = 'temp_for_copy'
         res = super(Product, cls).copy(products, default=default)
         for clone, original in zip(res, products):

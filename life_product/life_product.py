@@ -3,7 +3,7 @@ import copy
 
 from trytond.pool import PoolMeta
 from trytond.model import fields
-from trytond.pyson import Eval, Or
+from trytond.pyson import Eval, Or, Bool
 
 from trytond.modules.coop_utils import utils
 from trytond.modules.coop_utils import date
@@ -46,6 +46,15 @@ class LifeCoverage():
     __name__ = 'ins_product.coverage'
     __metaclass__ = PoolMeta
 
+    coverage_amount_rules = fields.One2Many('ins_product.coverage_amount_rule',
+        'offered', 'Coverage Amount Rules',
+        states={
+            'invisible': Or(
+                Bool(Eval('is_package')),
+                Eval('family') != FAMILY_LIFE,
+            )
+        })
+
     @classmethod
     def __setup__(cls):
         super(LifeCoverage, cls).__setup__()
@@ -56,10 +65,6 @@ class LifeCoverage():
             (FAMILY_LIFE, 'Life'))
         if ('default', 'default') in cls.family.selection:
             cls.family.selection.remove(('default', 'default'))
-
-    def get_is_coverage_amount_needed(self, name=None):
-        res = super(LifeCoverage, self).get_is_coverage_amount_needed(name)
-        return res and self.family == FAMILY_LIFE
 
 
 class LifeProductDefinition(ProductDefinition):

@@ -23,14 +23,6 @@
         </page>
     </xpath>
     <xpath
-        expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']"
-        position="before">
-        <page string="Coverage Amount" id="coverage_amount"
-            states="{'invisible': Bool(~Eval('is_coverage_amount_needed'))}">
-            <field name="coverage_amount_rules"/>
-        </page>
-    </xpath>
-    <xpath
         expr="/form/notebook/page[@id='managers']/notebook/page[@id='documents']/field[@name='document_rules']"
         position="after">
         <field name="sub_document_rules"/>
@@ -54,9 +46,5 @@
         <label name="family"/>
         <field name="family" xexpand="1"/>
         <newline/>
-    </xpath>
-    <xpath expr="/form" position="inside">
-        <newline/>
-        <field name="is_coverage_amount_needed"/>
     </xpath>
 </data>
