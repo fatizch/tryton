@@ -867,3 +867,10 @@ def update_states(cls, var_name, new_states):
         elif field_name.states[key] != value:
             field_name.states[key] = Or(field_name.states[key], value)
     setattr(cls, var_name, field_name)
+
+
+def get_team(good_user=None):
+    if not good_user:
+        User = Pool().get('res.user')
+        good_user = User(Transaction().user)
+    return good_user.team
