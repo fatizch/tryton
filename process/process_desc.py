@@ -251,7 +251,8 @@ class ProcessDesc(ModelSQL, ModelView):
 
     def get_xml_header(self, colspan="4"):
         xml = '<group name="process_header" colspan="%s">' % colspan
-        xml += self.xml_header
+        if (hasattr(self, 'xml_header') and self.xml_header):
+            xml += self.xml_header
         xml += '</group>'
         xml += '<newline/>'
 
@@ -371,7 +372,8 @@ completed the current process, please go ahead"/>'
 
     def get_xml_footer(self, colspan=4):
         xml = '<group name="process_footer" colspan="%s">' % colspan
-        xml += self.xml_footer
+        if (hasattr(self, 'xml_footer') and self.xml_footer):
+            xml += self.xml_footer
         xml += '</group>'
 
         return xml
