@@ -15,8 +15,8 @@
       <field name="step_xml" xexpand="1" xfill="1" yexpand="1" yfill="1" colspan="4"/>
     </page>
     <page string="Code" id="code">
-      <field name="code_before"/>
-      <field name="code_after"/>
+      <field name="code_before" pre_validate="1"/>
+      <field name="code_after" pre_validate="1"/>
     </page>
     <page string="Authorizations" id="authorizations">
       <field name="authorizations" xexpand="1" xfill="1" yexpand="1" yfill="1"/>

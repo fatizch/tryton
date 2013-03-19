@@ -19,16 +19,7 @@ class ModuleTestCase(unittest.TestCase):
     '''
     Test Coop module.
     '''
-
-    @classmethod
-    def depending_modules(cls):
-        return [
-            'insurance_contract',
-            'insurance_contract_subscription',
-            MODULE_NAME]
-
     def setUp(self):
-
         trytond.tests.test_tryton.install_module(MODULE_NAME)
 
     def test0005views(self):

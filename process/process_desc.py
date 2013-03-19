@@ -593,6 +593,22 @@ class Code(ModelSQL, ModelView):
         'process.step_transition', 'Parent Transition', ondelete='CASCADE')
     sequence = fields.Integer('Sequence', states={'invisible': True})
 
+    @classmethod
+    def __setup__(cls):
+        super(Code, cls).__setup__()
+        cls._error_messages.update({
+            'non_matching_method': 'Method %s does not exist on model %s'})
+
+    def pre_validate(self):
+        if not (hasattr(self.on_model, 'attribute') and
+                self.on_model.attribute):
+            return
+        TargetModel = Pool().get(self.on_model.model)
+        if not (self.method_name in dir(TargetModel) and callable(
+                getattr(TargetModel, self.method_name))):
+            self.raise_user_error('non_matching_method', (
+                self.on_model.get_rec_name(None), self.method_name))
+
     def execute(self, target):
         if not target.__name__ == self.on_model.model:
             raise Exception('Bad models ! Expected %s got %s' % (

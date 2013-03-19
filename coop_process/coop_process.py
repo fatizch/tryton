@@ -57,9 +57,8 @@ class StepTransition(model.CoopSQL):
     @classmethod
     def __setup__(cls):
         super(StepTransition, cls).__setup__()
-        kind = copy.copy(cls.kind)
-        kind.selection.append(('calculated', 'Calculated'))
-        setattr(cls, 'kind', kind)
+        cls.kind = copy.copy(cls.kind)
+        cls.kind.selection.append(('calculated', 'Calculated'))
         cls.from_step = copy.copy(cls.from_step)
         cls.from_step.domain.extend([
             ('main_model', '=', Eval('_parent_on_process', {}).get(
@@ -67,6 +66,10 @@ class StepTransition(model.CoopSQL):
         cls.to_step = copy.copy(cls.to_step)
         cls.to_step.domain.extend([
             ('main_model', '=', Eval('_parent_on_process', {}).get(
+                'on_model'))])
+        cls.methods = copy.copy(cls.methods)
+        cls.methods.domain.extend([
+            ('on_model', '=', Eval('_parent_on_process', {}).get(
                 'on_model'))])
 
         cls._error_messages.update({
@@ -666,7 +669,7 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
         View.delete(to_delete)
 
 
-class StepDesc(model.CoopSQL):
+class StepDesc():
     'Step Desc'
 
     __metaclass__ = PoolMeta
@@ -674,22 +677,28 @@ class StepDesc(model.CoopSQL):
 
     pyson = fields.Char('Pyson Constraint')
     custom_views = fields.One2Many(
-        'coop_process.xml_view_desc',
-        'for_step',
-        'Custom Views',
+        'coop_process.xml_view_desc', 'for_step', 'Custom Views',
         context={'for_step_name': Eval('technical_name', '')},
-        states={'readonly': ~Eval('technical_name')},
-    )
+        states={'readonly': ~Eval('technical_name')})
     main_model = fields.Many2One(
-        'ir.model',
-        'Main Model',
-        states={'readonly': ~~Eval('main_model')},
+        'ir.model', 'Main Model', states={'readonly': ~~Eval('main_model')},
         domain=[
             ('is_workflow', '=', True),
             ('model', '!=', 'process.process_framework')
         ],
-        required=True,
-    )
+        required=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(StepDesc, cls).__setup__()
+        cls.code_before = copy.copy(cls.code_before)
+        cls.code_before.domain.extend([
+            ('on_model', '=', Eval('main_model'))])
+        cls.code_before.depends.append('main_model')
+        cls.code_after = copy.copy(cls.code_after)
+        cls.code_after.domain.extend([
+            ('on_model', '=', Eval('main_model'))])
+        cls.code_after.depends.append('main_model')
 
     def get_pyson_for_button(self):
         return self.pyson or ''
