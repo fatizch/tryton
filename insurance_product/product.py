@@ -76,7 +76,7 @@ class Offered(model.CoopView, utils.GetResult, Templated):
     description = fields.Text('Description', translate=True)
 
     pricing_rules = fields.One2Many(
-        'ins_product.pricing_rule', 'offered', 'Pricing Rules')
+        None, 'offered', 'Pricing Rules')
     eligibility_rules = fields.One2Many(
         'ins_product.eligibility_rule', 'offered', 'Eligibility Rules')
     clause_rules = fields.One2Many(
@@ -129,6 +129,9 @@ class Offered(model.CoopView, utils.GetResult, Templated):
 
         cls.template = copy.copy(cls.template)
         cls.template.model_name = cls.__name__
+
+        cls.pricing_rules = copy.copy(cls.pricing_rules)
+        cls.pricing_rules.model_name = cls.get_pricing_rule_model()
 
     @staticmethod
     def default_start_date():
@@ -211,6 +214,10 @@ class Offered(model.CoopView, utils.GetResult, Templated):
             return self.get_result('documents', args, kind='document')
         except utils.NonExistingRuleKindException:
             return [], ()
+
+    @classmethod
+    def get_pricing_rule_model(cls):
+        return 'ins_product.pricing_rule'
 
 
 class Product(model.CoopSQL, Offered):

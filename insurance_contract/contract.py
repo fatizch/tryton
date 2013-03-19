@@ -3,7 +3,7 @@ import copy
 
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import model
 from trytond.modules.coop_utils import utils, date, business
@@ -222,14 +222,28 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             elem.get_coverage()
             for elem in self.get_active_options_at_date(at_date)]
 
+    def init_complementary_data(self):
+        if not (hasattr(self, 'complementary_data') and
+                self.complementary_data):
+            self.complementary_data = {}
+        self.complementary_data = utils.init_complementary_data(
+            self.get_complementary_data_def())
+        return True, ()
+
+    def get_complementary_data_def(self):
+        compl_data_defs = []
+        if self.offered:
+            compl_data_defs.extend(self.offered.get_complementary_data_def(
+                ['contract'], at_date=self.start_date))
+        for option in self.options:
+            compl_data_defs.extend(
+                option.offered.get_complementary_data_def(
+                    ['contract'], at_date=option.start_date))
+        return set(compl_data_defs)
+
     def get_complementary_data_value(self, at_date, value):
-        if (not(hasattr(self, 'complementary_data')
-                and self.complementary_data)):
-            return None
-        try:
-            return self.complementary_data[value]
-        except KeyError:
-            return None
+        return utils.get_complementary_data_value(self, 'complementary_data',
+            self.get_complementary_data_def(), at_date, value)
 
     def get_dates(self, dates=None, start=None, end=None):
         if dates:
@@ -410,20 +424,6 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         self.update_status('active', self.start_date)
         return True, ()
 
-    def init_complementary_data(self):
-        if not (hasattr(self, 'complementary_data') and
-                self.complementary_data):
-            self.complementary_data = {}
-        compl_data_defs = self.offered.get_complementary_data_def(
-            ['contract'], at_date=self.start_date)
-        for option in self.options:
-            compl_data_defs.extend(
-                option.offered.get_complementary_data_def(
-                    ['contract'], at_date=option.start_date))
-        self.complementary_data = utils.init_complementary_data(
-            set(compl_data_defs))
-        return True, ()
-
     def init_options(self):
         existing = {}
         if (hasattr(self, 'options') and self.options):
@@ -477,6 +477,12 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def get_currency(self):
         if hasattr(self, 'offered') and self.offered:
             return self.offered.get_currency()
+
+    def init_billing_manager(self):
+        if not (hasattr(self, 'billing_manager') and
+                self.billing_manager):
+            bm = utils.instanciate_relation(self, 'billing_manager')
+            self.billing_manager = [bm]
 
 
 class Option(model.CoopSQL, Subscribed):
@@ -733,6 +739,9 @@ class BillingManager(model.CoopSQL, model.CoopView):
         'billing_manager',
         'Prices')
 
+    def get_contract(self):
+        return self.contract
+
     def store_prices(self, prices):
         if not prices:
             return
@@ -771,14 +780,15 @@ class BillingManager(model.CoopSQL, model.CoopView):
         return cls._fields['prices'].model_name
 
     def get_product_frequency(self, at_date):
-        res, errs = self.contract.offered.get_result(
+        res, errs = self.get_contract().offered.get_result(
             'frequency',
             {'date': at_date})
         if not errs:
             return res
 
     def next_billing_dates(self):
-        date = max(Pool().get('ir.date').today(), self.contract.start_date)
+        date = max(Pool().get('ir.date').today(),
+            self.get_contract().start_date)
         return (
             date,
             utils.add_frequency(self.get_product_frequency(date), date))
@@ -830,7 +840,7 @@ class BillingManager(model.CoopSQL, model.CoopView):
     def bill(self, start_date, end_date):
         Bill = Pool().get(self.get_bill_model())
         the_bill = Bill()
-        the_bill.flat_init(start_date, end_date, self.contract)
+        the_bill.flat_init(start_date, end_date, self.get_contract())
 
         price_list = self.create_price_list(start_date, end_date)
 
@@ -943,10 +953,6 @@ class CoveredData(model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     status = fields.Selection(OPTIONSTATUS, 'Status')
-    coverage_amount = fields.Numeric('Coverage Amount', states={
-        'invisible': Bool(~Eval('_parent_coverage', {}).get(
-            'is_coverage_amount_needed'))
-    })
 
     @classmethod
     def default_status(cls):
@@ -956,13 +962,12 @@ class CoveredData(model.CoopSQL, model.CoopView):
         return self.covered_element.get_name_for_billing()
 
     def get_complementary_data_value(self, at_date, value):
-        if not(hasattr(self, 'complementary_data')
-                and self.complementary_data):
-            return None
-        try:
-            return self.complementary_data[value]
-        except KeyError:
-            return None
+        return utils.get_complementary_data_value(self, 'complementary_data',
+            self.get_complementary_data_def(), at_date, value)
+
+    def get_complementary_data_def(self):
+        return self.option.offered.get_complementary_data_def(
+            ['sub_elem'], at_date=self.start_date)
 
     def init_from_option(self, option):
         self.option = option
@@ -970,8 +975,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
         self.start_date = option.start_date
         self.end_date = option.end_date
         self.complementary_data = utils.init_complementary_data(
-            option.offered.get_complementary_data_def(
-                ['sub_elem'], at_date=self.start_date))
+            self.get_complementary_data_def())
 
     def init_from_covered_element(self, covered_element):
         #self.covered_element = covered_element

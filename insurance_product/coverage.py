@@ -12,6 +12,7 @@ from trytond.modules.insurance_product import EligibilityResultLine
 
 
 __all__ = [
+    'SimpleCoverage',
     'Coverage',
     'PackageCoverage',
     'CoverageComplementaryDataRelation',
@@ -24,11 +25,10 @@ SUBSCRIPTION_BEHAVIOUR = [
 ]
 
 
-class Coverage(model.CoopSQL, Offered):
-    'Coverage'
+class SimpleCoverage(Offered):
+    'Simple Coverage'
 
-    __name__ = 'ins_product.coverage'
-    _export_name = 'code'
+    __name__ = 'ins_product.simple_coverage'
 
     insurer = fields.Many2One('party.insurer', 'Insurer',
         states={'invisible': Bool(Eval('is_package'))},
@@ -40,17 +40,6 @@ class Coverage(model.CoopSQL, Offered):
         },
         depends=['is_package'])
     item_desc = fields.Many2One('ins_product.item_desc', 'Item Descriptor')
-    benefits = fields.Many2Many('ins_product.coverage-benefit', 'coverage',
-        'benefit', 'Benefits',
-        context={
-            'start_date': Eval('start_date'),
-            'currency_digits': Eval('currency_digits'),
-        },
-        states={
-            'readonly': ~Bool(Eval('start_date')),
-            'invisible': Bool(Eval('is_package')),
-        },
-        depends=['currency_digits'])
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
     subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
         'Subscription Behaviour', sort=False)
@@ -69,10 +58,7 @@ class Coverage(model.CoopSQL, Offered):
 
     @classmethod
     def __setup__(cls):
-        super(Coverage, cls).__setup__()
-        cls._sql_constraints += [
-            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
-        ]
+        super(SimpleCoverage, cls).__setup__()
         for field_name in (mgr for mgr in dir(cls) if mgr.endswith('_mgr')):
             cur_attr = copy.copy(getattr(cls, field_name))
             if not hasattr(cur_attr, 'context') or not isinstance(
@@ -93,13 +79,13 @@ class Coverage(model.CoopSQL, Offered):
         cls.template.depends.append('is_package')
 
     @classmethod
-    def copy(cls, products, default=None):
+    def copy(cls, coverages, default=None):
         if default is None:
             default = {}
         default = default.copy()
         default['code'] = 'temp_copy'
-        res = super(Coverage, cls).copy(products, default=default)
-        for clone, original in zip(res, products):
+        res = super(SimpleCoverage, cls).copy(coverages, default=default)
+        for clone, original in zip(res, coverages):
             i = 1
             while cls.search(
                     [('code', '=', '%s_(%s)' % (original.code, i))]):
@@ -300,6 +286,31 @@ class Coverage(model.CoopSQL, Offered):
 
     def get_currency(self):
         return self.currency
+
+
+class Coverage(model.CoopSQL, SimpleCoverage):
+    'Coverage'
+
+    __name__ = 'ins_product.coverage'
+
+    benefits = fields.Many2Many('ins_product.coverage-benefit', 'coverage',
+        'benefit', 'Benefits',
+        context={
+            'start_date': Eval('start_date'),
+            'currency_digits': Eval('currency_digits'),
+        },
+        states={
+            'readonly': ~Bool(Eval('start_date')),
+            'invisible': Bool(Eval('is_package')),
+        },
+        depends=['currency_digits'])
+
+    @classmethod
+    def __setup__(cls):
+        super(Coverage, cls).__setup__()
+        cls._sql_constraints += [
+            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+        ]
 
 
 class PackageCoverage(model.CoopSQL):

@@ -8,6 +8,7 @@ def register():
         Contract,
         LifeOption,
         CoveredPerson,
+        LifeCoveredData,
         LifeCoveredDesc,
         ExtensionLifeState,
         PriceLine,

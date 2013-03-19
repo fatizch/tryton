@@ -15,6 +15,7 @@ def register():
         # from product
         Offered,
         ItemDescriptor,
+        SimpleCoverage,
         Coverage,
         PackageCoverage,
         Product,
@@ -39,6 +40,7 @@ def register():
         RequestFinder,
         AttachmentSetter,
         DocumentRequestDisplayer,
+        SimplePricingRule,
         PricingRule,
         PricingComponent,
         EligibilityRule,

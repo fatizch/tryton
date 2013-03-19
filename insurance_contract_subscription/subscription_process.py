@@ -245,11 +245,7 @@ class ContractSubscription(CoopProcessFramework):
         return result, errs
 
     def init_billing_manager(self):
-        if not (hasattr(self, 'billing_manager') and
-                self.billing_manager):
-            bm = utils.instanciate_relation(self, 'billing_manager')
-            self.billing_manager = [bm]
-
+        super(ContractSubscription, self).init_billing_manager()
         return True, ()
 
     def calculate_prices(self):

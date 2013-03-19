@@ -2,20 +2,36 @@
 <tryton>
     <data>
         <!--  ******************************************* 
+              **************    Simple Coverage    **************
+              *******************************************-->
+        <!-- form view -->
+        <record model="ir.ui.view" id="simple_coverage_view_form">
+            <field name="model">ins_product.simple_coverage</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered_view_form"/>
+            <field name="name">simple_coverage_form</field>
+        </record>
+        <record model="ir.ui.view" id="simple_coverage_view_tree">
+            <field name="model">ins_product.simple_coverage</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="offered_view_tree"/>
+            <field name="name">simple_coverage_tree</field>
+        </record>
+        <!--  ******************************************* 
               **************    Coverage    **************
               *******************************************-->
         <!-- form view -->
         <record model="ir.ui.view" id="coverage_view_form">
             <field name="model">ins_product.coverage</field>
             <field name="type">form</field>
-            <field name="inherit" ref="offered_view_form"/>
+            <field name="inherit" ref="simple_coverage_view_form"/>
             <field name="name">coverage_form</field>
         </record>
         <record model="ir.ui.view" id="coverage_view_tree">
             <field name="model">ins_product.coverage</field>
             <field name="type">tree</field>
-            <field name="inherit" ref="offered_view_tree"/>
-            <field name="name">coverage_tree</field>
+            <field name="inherit" ref="simple_coverage_view_tree"/>
+            <field name="arch" type="xml"/>
         </record>
         <!-- View for the main menu and the event -->
         <record model="ir.action.act_window" id="act_coverage_form">

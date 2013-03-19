@@ -707,22 +707,6 @@ def extend_inexisting(into_list, elements):
     return into_list
 
 
-def init_complementary_data(compl_data_defs):
-    res = {}
-    for compl_data_def in compl_data_defs:
-        res[compl_data_def.name] = compl_data_def.get_default_value(None)
-    return res
-
-
-def init_complementary_data_from_ids(ids):
-    the_model = Pool().get('ins_product.complementary_data_def')
-    res = {}
-    for id in ids:
-        elem = the_model(id)
-        res[elem.name] = elem.get_default_value(None)
-    return res
-
-
 def set_default_dict(input_dict, data):
     for k in data.iterkeys():
         input_dict.setdefault(k, data[k])
@@ -869,8 +853,54 @@ def update_states(cls, var_name, new_states):
     setattr(cls, var_name, field_name)
 
 
+def update_domain(cls, var_name, new_domain):
+    '''
+    This methods allows to update field domain when overriding a field and you
+    don't know what where the domain defined at the higher level
+    '''
+    field_name = copy.copy(getattr(cls, var_name))
+    if not field_name.domain:
+        field_name.domain = []
+    field_name.domain.extend(new_domain)
+    field_name.domain = list(set(field_name.domain))
+    setattr(cls, var_name, field_name)
+
+
 def get_team(good_user=None):
     if not good_user:
         User = Pool().get('res.user')
         good_user = User(Transaction().user)
     return good_user.team
+
+
+def init_complementary_data(compl_data_defs):
+    res = {}
+    if compl_data_defs:
+        for compl_data_def in compl_data_defs:
+            res[compl_data_def.name] = compl_data_def.get_default_value(None)
+    return res
+
+
+def init_complementary_data_from_ids(ids):
+    the_model = Pool().get('ins_product.complementary_data_def')
+    res = {}
+    for id in ids:
+        elem = the_model(id)
+        res[elem.name] = elem.get_default_value(None)
+    return res
+
+
+def get_complementary_data_value(instance, var_name, data_defs, at_date,
+        value):
+    res = None
+    if hasattr(instance, var_name):
+        cur_dict = getattr(instance, var_name)
+        if cur_dict and value in cur_dict:
+            res = cur_dict[value]
+    if res:
+        return res
+    for data_def in data_defs:
+        if data_def.name != value:
+            continue
+        if data_def.type_ in ['integer', 'float', 'numeric']:
+            return 0

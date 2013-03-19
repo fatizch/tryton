@@ -279,20 +279,15 @@ class ClaimDeliveredService():
         return super(ClaimDeliveredService, self).get_rec_name(name)
 
     def on_change_with_complementary_data(self):
-        res = {}
+        return utils.init_complementary_data(self.get_complementary_data_def)
+
+    def get_complementary_data_def(self):
         if self.benefit:
-            res = utils.init_complementary_data(
-                self.benefit.complementary_data_def)
-        return res
+            return self.benefit.complementary_data_def
 
     def get_complementary_data_value(self, at_date, value):
-        if (not(hasattr(self, 'complementary_data')
-                and self.complementary_data)):
-            return None
-        try:
-            return self.complementary_data[value]
-        except KeyError:
-            return None
+        return utils.get_complementary_data_value(self, 'complementary_data',
+            self.get_complementary_data_def(), at_date, value)
 
     def get_indemnification_being_calculated(self):
         if not hasattr(self, 'indemnifications'):

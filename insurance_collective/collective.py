@@ -1,56 +1,28 @@
 #-*- coding:utf-8 -*-
 import copy
 
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.insurance_product import product, benefit
-from trytond.modules.insurance_product import coverage, clause
-from trytond.modules.insurance_product.business_rule import eligibility_rule
-from trytond.modules.insurance_product.business_rule import benefit_rule
-from trytond.modules.insurance_product.business_rule import reserve_rule
-from trytond.modules.insurance_product.business_rule import \
-    coverage_amount_rule
-from trytond.modules.insurance_product.business_rule import clause_rule
-from trytond.modules.insurance_product.business_rule import deductible_rule
-from trytond.modules.insurance_product.business_rule import term_renewal_rule
-from trytond.modules.coop_utils import utils
+from trytond.modules.insurance_product import product
+from trytond.modules.insurance_product import coverage
+from trytond.modules.coop_utils import utils, model
 from trytond.modules.insurance_product.business_rule import pricing_rule
+from trytond.modules.insurance_product import PricingResultLine
 
-IND_TO_COLL = {
-    'ins_product.benefit': 'ins_collective.benefit',
-    'ins_product.benefit_rule': 'ins_collective.benefit_rule',
-    'ins_product.clause': 'ins_collective.clause',
-    'ins_product.clause_relation': 'ins_collective.clause_relation',
-    'ins_product.clause_rule': 'ins_collective.clause_rule',
-    'ins_product.clause_version': 'ins_collective.clause_version',
-    'ins_product.coverage': 'ins_collective.coverage',
-    'ins_product.coverage_amount_rule': 'ins_collective.coverage_amount_rule',
-    'ins_product.deductible_rule': 'ins_collective.deductible_rule',
-    'ins_product.eligibility_relation_kind':
-        'ins_collective.eligibility_relation_kind',
-    'ins_product.eligibility_rule': 'ins_collective.eligibility_rule',
-    'ins_product.pricing_component': 'ins_collective.pricing_component',
-    'ins_product.pricing_rule': 'ins_collective.pricing_rule',
-    'ins_product.product': 'ins_collective.product',
-    'ins_product.product-options-coverage': 'ins_collective.product-coverage',
-    'ins_product.reserve_rule': 'ins_collective.reserve_rule',
-    'ins_product.term_renewal_rule': 'ins_collective.term_renewal_rule',
-
-    'ins_contract.contract': 'ins_collective.contract',
-    'ins_contract.option': 'ins_collective.option',
-    'ins_product.package-coverage': 'ins_collective.package-coverage',
-    'ins_product.product-item_desc': 'ins_collective.product-item_desc',
-    'ins_contract.covered_element': 'ins_collective.covered_element',
-    'ins_contract.covered_data': 'ins_collective.covered_data',
-    'ins_product.product-complementary_data_def':
-        'ins_collective.product-complementary_data_def',
-    'ins_product.coverage-complementary_data_def':
-        'ins_collective.coverage-complementary_data_def',
-    'ins_contract.billing_manager': 'ins_collective.billing_manager',
-    'ins_contract.price_line': 'ins_collective.price_line',
-}
+__all__ = [
+    'GroupRoot',
+    'GroupProduct',
+    'GroupProductItemDescriptorRelation',
+    'GroupCoverage',
+    'GroupProductCoverageRelation',
+    'GroupPackageCoverage',
+    'GroupPricingRule',
+    'GroupProductComplementaryDataRelation',
+    'GroupCoverageComplementaryDataRelation',
+    'StatusHistory',
+]
 
 
 class GroupRoot(object):
@@ -58,16 +30,11 @@ class GroupRoot(object):
     @classmethod
     def __setup__(cls):
         cls._table = None
-        utils.change_relation_links(cls, convert_dict=cls.get_convert_dict())
         super(GroupRoot, cls).__setup__()
 
     @classmethod
     def get_offered_module_prefix(cls):
         return 'ins_collective'
-
-    @classmethod
-    def get_convert_dict(cls):
-        return IND_TO_COLL
 
 
 class GroupProduct(GroupRoot, product.Product):
@@ -77,8 +44,6 @@ class GroupProduct(GroupRoot, product.Product):
 
     @classmethod
     def __setup__(cls):
-        super(GroupProduct, cls).__setup__()
-
         cls.contract_generator = copy.copy(cls.contract_generator)
         cls.contract_generator.required = False
         cls.contract_generator.states['required'] = ~Eval('template')
@@ -87,7 +52,17 @@ class GroupProduct(GroupRoot, product.Product):
         cls.template = copy.copy(cls.template)
         cls.template.on_change = ['template', 'options', 'start_date']
 
-        cls.code = copy.copy(cls.code)
+        cls.options = copy.copy(cls.options)
+        cls.options.relation_name = 'ins_collective.product-coverage'
+
+        cls.item_descriptors = copy.copy(cls.item_descriptors)
+        cls.item_descriptors.relation_name = 'ins_collective.product-item_desc'
+
+        cls.complementary_data_def = copy.copy(cls.complementary_data_def)
+        cls.complementary_data_def.relation_name = \
+            'ins_collective.product-complementary_data_def'
+
+        super(GroupProduct, cls).__setup__()
 
     def get_subscriber(self):
         subscriber_id = Transaction().context.get('subscriber')
@@ -131,6 +106,10 @@ class GroupProduct(GroupRoot, product.Product):
             res['options'] = {'add': options}
         return res
 
+    @classmethod
+    def get_pricing_rule_model(cls):
+        return 'ins_collective.pricing_rule'
+
 
 class GroupProductItemDescriptorRelation(GroupRoot,
         product.ProductItemDescriptorRelation):
@@ -138,11 +117,31 @@ class GroupProductItemDescriptorRelation(GroupRoot,
 
     __name__ = 'ins_collective.product-item_desc'
 
+    @classmethod
+    def __setup__(cls):
+        cls.product = copy.copy(cls.product)
+        cls.product.model_name = 'ins_collective.product'
+        super(GroupProductItemDescriptorRelation, cls).__setup__()
 
-class GroupCoverage(GroupRoot, coverage.Coverage):
+
+class GroupCoverage(GroupRoot, model.CoopSQL, coverage.SimpleCoverage):
     'Group Insurance Coverage'
 
     __name__ = 'ins_collective.coverage'
+
+    @classmethod
+    def get_pricing_rule_model(cls):
+        return 'ins_collective.pricing_rule'
+
+    @classmethod
+    def __setup__(cls):
+        cls.coverages_in_package = copy.copy(cls.coverages_in_package)
+        cls.coverages_in_package.relation_name = \
+            'ins_collective.package-coverage'
+        cls.complementary_data_def = copy.copy(cls.complementary_data_def)
+        cls.complementary_data_def.relation_name = \
+            'ins_collective.coverage-complementary_data_def'
+        super(GroupCoverage, cls).__setup__()
 
 
 class GroupProductCoverageRelation(GroupRoot, product.ProductOptionsCoverage):
@@ -150,111 +149,42 @@ class GroupProductCoverageRelation(GroupRoot, product.ProductOptionsCoverage):
 
     __name__ = 'ins_collective.product-coverage'
 
+    @classmethod
+    def __setup__(cls):
+        cls.product = copy.copy(cls.product)
+        cls.product.model_name = 'ins_collective.product'
+        cls.coverage = copy.copy(cls.coverage)
+        cls.coverage.model_name = 'ins_collective.coverage'
+        super(GroupProductCoverageRelation, cls).__setup__()
+
 
 class GroupPackageCoverage(GroupRoot, coverage.PackageCoverage):
     'Link Package Coverage'
 
     __name__ = 'ins_collective.package-coverage'
 
-
-class GroupEligibilityRule(GroupRoot, eligibility_rule.EligibilityRule):
-    'Eligibility Rule'
-
-    __name__ = 'ins_collective.eligibility_rule'
-
-
-class GroupEligibilityRelationKind(GroupRoot,
-        eligibility_rule.EligibilityRelationKind):
-    'Define relation between eligibility rule and relation kind authorized'
-
-    __name__ = 'ins_collective.eligibility_relation_kind'
+    @classmethod
+    def __setup__(cls):
+        cls.package = copy.copy(cls.package)
+        cls.package.model_name = 'ins_collective.coverage'
+        cls.coverage = copy.copy(cls.coverage)
+        cls.coverage.model_name = 'ins_collective.coverage'
+        super(GroupPackageCoverage, cls).__setup__()
 
 
-class GroupBenefit(GroupRoot, benefit.Benefit):
-    'Benefit'
-
-    __name__ = 'ins_collective.benefit'
-
-
-class GroupBenefitRule(GroupRoot, benefit_rule.BenefitRule):
-    'Benefit Rule'
-
-    __name__ = 'ins_collective.benefit_rule'
-
-
-class GroupReserveRule(GroupRoot, reserve_rule.ReserveRule):
-    'Reserve Rule'
-
-    __name__ = 'ins_collective.reserve_rule'
-
-
-class GroupCoverageAmountRule(GroupRoot,
-        coverage_amount_rule.CoverageAmountRule):
-    'Coverage Amount Rule'
-
-    __name__ = 'ins_collective.coverage_amount_rule'
-
-
-class GroupClause(GroupRoot, clause.Clause):
-    'Clause'
-
-    __name__ = 'ins_collective.clause'
-
-
-class GroupClauseVersion(GroupRoot, clause.ClauseVersion):
-    'Clause Version'
-
-    __name__ = 'ins_collective.clause_version'
-
-
-class GroupClauseRule(GroupRoot, clause_rule.ClauseRule):
-    'Clause Rule'
-
-    __name__ = 'ins_collective.clause_rule'
-
-
-class GroupDeductibleRule(GroupRoot, deductible_rule.DeductibleRule):
-    'Deductible Rule'
-
-    __name__ = 'ins_collective.deductible_rule'
-
-
-class GroupClauseRelation(GroupRoot, clause_rule.ClauseRelation):
-    'Relation between clause and offered'
-
-    __name__ = 'ins_collective.clause_relation'
-
-
-class GroupTermRenewalRule(GroupRoot, term_renewal_rule.TermRenewalRule):
-    'Clause Rule'
-
-    __name__ = 'ins_collective.term_renewal_rule'
-
-
-class GroupPricingComponent(GroupRoot, pricing_rule.PricingComponent):
-    'Pricing Data'
-
-    __name__ = 'ins_collective.pricing_component'
-
-
-class GroupPricingRule(GroupRoot, pricing_rule.PricingRule):
+class GroupPricingRule(GroupRoot, pricing_rule.SimplePricingRule,
+        model.CoopSQL):
     'Pricing Rule'
 
     __name__ = 'ins_collective.pricing_rule'
 
-    @classmethod
-    def __setup__(cls):
-        super(GroupPricingRule, cls).__setup__()
-        #In pricing config kind means simple or multiple prices, in collective
-        #you always have at least a price per covered item
-        cls.config_kind = copy.copy(cls.config_kind)
-        if not cls.config_kind.states:
-            cls.config_kind.states = {}
-        cls.config_kind.states['invisible'] = True
+    def give_me_price(self, args):
+        return PricingResultLine(value=0), []
 
-    @staticmethod
-    def default_config_kind():
-        return 'advanced'
+    def give_me_sub_elem_price(self, args):
+        value, errs = self.give_me_result(args)
+        result = PricingResultLine(value=value)
+        return result, errs
 
 
 class GroupProductComplementaryDataRelation(GroupRoot,
@@ -263,9 +193,35 @@ class GroupProductComplementaryDataRelation(GroupRoot,
 
     __name__ = 'ins_collective.product-complementary_data_def'
 
+    @classmethod
+    def __setup__(cls):
+        cls.product = copy.copy(cls.product)
+        cls.product.model_name = 'ins_collective.product'
+        super(GroupProductComplementaryDataRelation, cls).__setup__()
+
 
 class GroupCoverageComplementaryDataRelation(GroupRoot,
         coverage.CoverageComplementaryDataRelation):
     'Relation between Coverage and Complementary Data'
 
     __name__ = 'ins_collective.coverage-complementary_data_def'
+
+    @classmethod
+    def __setup__(cls):
+        cls.coverage = copy.copy(cls.coverage)
+        cls.coverage.model_name = 'ins_collective.coverage'
+        super(GroupCoverageComplementaryDataRelation, cls).__setup__()
+
+
+class StatusHistory(model.CoopSQL, model.CoopView):
+    'Status History'
+
+    __name__ = 'ins_contract.status_history'
+    __metaclass__ = PoolMeta
+
+    @classmethod
+    def get_possible_reference(cls):
+        res = super(StatusHistory, cls).get_possible_reference()
+        res.append(('ins_collective.contract', 'Collective Contract')),
+        res.append(('ins_collective.option', 'Collective Option')),
+        return res

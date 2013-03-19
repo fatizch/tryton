@@ -4,7 +4,7 @@ from decimal import Decimal
 from trytond.model import fields
 
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
@@ -19,11 +19,12 @@ __all__ = [
     'Contract',
     'LifeOption',
     'CoveredPerson',
+    'LifeCoveredData',
     'LifeCoveredDesc',
     'ExtensionLifeState',
     'SubscriptionProcess',
     'PriceLine',
-    ]
+]
 
 
 class Contract():
@@ -135,6 +136,18 @@ class CoveredPerson():
         self.person = person
 
 
+class LifeCoveredData():
+    'Covered Data'
+
+    __name__ = 'ins_contract.covered_data'
+    __metaclass__ = PoolMeta
+
+    coverage_amount = fields.Numeric('Coverage Amount', states={
+        'invisible': Bool(~Eval('_parent_coverage', {}).get(
+            'is_coverage_amount_needed'))
+    })
+
+
 class LifeCoveredDesc(CoveredDesc):
     'Covered Desc'
 
@@ -165,7 +178,7 @@ class LifeCoveredDesc(CoveredDesc):
             'life_contract.covered_desc'
         cls.__rpc__.update({
                 'get_allowed_amounts': RPC(instantiate=0),
-                })
+        })
 
     def on_change_elem_person(self):
         if hasattr(self, 'elem_person') and self.elem_person:
@@ -195,7 +208,7 @@ class ExtensionLifeState(DependantState):
     '''
     __name__ = 'life_contract.extension_life_state'
     covered_elements = fields.One2Many(
-#        'life_contract.covered_person_desc',
+        #'life_contract.covered_person_desc',
         'life_contract.covered_desc',
         'life_state',
         'Covered Elements',
@@ -264,17 +277,17 @@ class ExtensionLifeState(DependantState):
         options = ';'.join([opt.offered.code
             for opt in wizard.option_selection.options
             if opt.status == 'active'])
-        wizard.extension_life.complementary_data = utils.init_complementary_data_from_ids(
-            product.get_result(
-                'complementary_data_getter',
-                {
-                    'date': wizard.project.start_date,
-                    'dd_args': {
-                        'options': options,
-                        'kind': 'main',
-                        'path': 'extension_life',
-                    }
-                 })[0])
+        wizard.extension_life.complementary_data = \
+            utils.init_complementary_data_from_ids(
+                product.get_result(
+                    'complementary_data_getter', {
+                        'date': wizard.project.start_date,
+                        'dd_args': {
+                            'options': options,
+                            'kind': 'main',
+                            'path': 'extension_life',
+                        }
+                    })[0])
         if wizard.extension_life.complementary_data:
             wizard.extension_life.for_product = product
             wizard.extension_life.at_date = wizard.project.start_date
@@ -290,7 +303,7 @@ class ExtensionLifeState(DependantState):
             found = False
             for covered_data in covered_element.elem_covered_data:
                 if hasattr(covered_data, 'data_status') and \
-                        covered_data.data_status == True:
+                        covered_data.data_status:
                     found = True
                     break
             if not found:
@@ -312,7 +325,7 @@ class ExtensionLifeState(DependantState):
             cur_element = CoveredPerson()
             cur_element.covered_data = []
             for covered_data in covered_element.elem_covered_data:
-                if covered_data.data_status != True:
+                if not covered_data.data_status:
                     continue
                 cur_data = CoveredData()
                 cur_data.start_date = covered_data.data_start_date
@@ -330,15 +343,12 @@ class ExtensionLifeState(DependantState):
                     cur_data.coverage_amount = Decimal(0)
                 if hasattr(covered_data, 'data_complementary_data') and \
                         covered_data.data_complementary_data:
-                    cur_data.complementary_data = covered_data.data_complementary_data
+                    cur_data.complementary_data = \
+                        covered_data.data_complementary_data
                 cur_element.covered_data.append(cur_data)
             cur_element.person = covered_element.elem_person
             contract.covered_elements.append(cur_element)
 
-#        if not(hasattr(ext, 'complementary_data') and ext.complementary_data):
-#            ext.complementary_data = {}
-#        ext.complementary_data.update(wizard.extension_life.complementary_data)
-#        contract.extension_life = [ext]
         res = contract.check_sub_elem_eligibility(wizard.project.start_date)
         if res[0]:
             res1 = contract.check_covered_amounts(wizard.project.start_date)

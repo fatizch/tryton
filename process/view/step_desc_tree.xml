@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <tree string="Step Descriptors">
-  <field name="fancy_name"/>
-  <field name="technical_name"/>
+	<field name="main_model"/>
+	<field name="fancy_name"/>
+	<field name="technical_name"/>
 </tree>

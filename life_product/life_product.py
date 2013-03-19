@@ -66,6 +66,9 @@ class LifeCoverage():
         if ('default', 'default') in cls.family.selection:
             cls.family.selection.remove(('default', 'default'))
 
+    def get_is_coverage_amount_needed(self, name=None):
+        return not self.is_package and self.family == FAMILY_LIFE
+
 
 class LifeProductDefinition(ProductDefinition):
     'Life Product Definition'
