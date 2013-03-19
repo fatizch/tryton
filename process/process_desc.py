@@ -600,14 +600,13 @@ class Code(ModelSQL, ModelView):
             'non_matching_method': 'Method %s does not exist on model %s'})
 
     def pre_validate(self):
-        if not (hasattr(self.on_model, 'attribute') and
-                self.on_model.attribute):
+        if not (hasattr(self, 'on_model') and self.on_model):
             return
         TargetModel = Pool().get(self.on_model.model)
         if not (self.method_name in dir(TargetModel) and callable(
                 getattr(TargetModel, self.method_name))):
             self.raise_user_error('non_matching_method', (
-                self.on_model.get_rec_name(None), self.method_name))
+                self.method_name, self.on_model.get_rec_name(None)))
 
     def execute(self, target):
         if not target.__name__ == self.on_model.model:
