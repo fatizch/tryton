@@ -79,7 +79,7 @@ def npop(the_list, n):
 
 
 def multiprocess_this(fun, the_args, cfg_dict, connexion_date):
-#    num_processes = multiprocessing.cpu_count()
+    # num_processes = multiprocessing.cpu_count()
     num_processes = 1
 
     grouping = int((len(the_args) - 1) / num_processes) + 1
@@ -200,6 +200,12 @@ def get_translation(string, cfg_dict):
 
 def translate_this(cfg_dict):
     return functools.partial(get_translation, cfg_dict=cfg_dict)
+
+
+def write_data_file(filename, data):
+    the_file = open(filename, 'w')
+    the_file.write('\n'.join(data))
+    the_file.close
 
 
 def read_data_file(filename, sep='|'):
@@ -331,3 +337,9 @@ def remove_all_but_alphanumeric_and_space(from_string):
     import re
     pattern = re.compile(r'([^\s\w]|_)+')
     return pattern.sub('', from_string)
+
+
+def convert_to_reference(value):
+    if isinstance(value, Model):
+        value = '%s,%s' % (value.__class__.__name__, value.id)
+    return value or None
