@@ -41,6 +41,11 @@ class Contract():
     def get_contract_kind(cls):
         return 'ind'
 
+    def new_billing_manager(self):
+        res = super(Contract, self).new_billing_manager()
+        res.kind = self.__class__.get_contract_kind()
+        return res
+
 
 class GroupContract(GroupRoot, contract.Contract):
     'Group Contract'
@@ -82,6 +87,11 @@ class GroupContract(GroupRoot, contract.Contract):
     @classmethod
     def get_contract_kind(cls):
         return 'group'
+
+    def new_billing_manager(self):
+        res = super(GroupContract, self).new_billing_manager()
+        res.kind = self.__class__.get_contract_kind()
+        return res
 
 
 class GroupOption(GroupRoot, contract.Option):

@@ -478,11 +478,14 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         if hasattr(self, 'offered') and self.offered:
             return self.offered.get_currency()
 
+    def new_billing_manager(self):
+        return utils.instanciate_relation(self, 'billing_manager')
+
     def init_billing_manager(self):
         if not (hasattr(self, 'billing_manager') and
                 self.billing_manager):
-            bm = utils.instanciate_relation(self, 'billing_manager')
-            self.billing_manager = [bm]
+            bm = self.new_billing_manager()
+        self.billing_manager = [bm]
 
 
 class Option(model.CoopSQL, Subscribed):
