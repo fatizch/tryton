@@ -44,8 +44,7 @@ class StepTransition(model.CoopSQL):
         domain=[
             ('kind', '=', 'calculated'),
             ('main_model', '=', Eval('_parent_on_process', {}).get(
-                'on_model'))],
-    )
+                'on_model'))])
     choice_if_false = fields.Many2One(
         'process.step_transition',
         'Transition if False',
@@ -53,8 +52,7 @@ class StepTransition(model.CoopSQL):
         domain=[
             ('kind', '=', 'calculated'),
             ('main_model', '=', Eval('_parent_on_process', {}).get(
-                'on_model'))],
-    )
+                'on_model'))])
 
     @classmethod
     def __setup__(cls):
@@ -504,48 +502,35 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
     __name__ = 'coop_process.xml_view_desc'
 
     the_view = fields.Many2One(
-        'ir.ui.view',
-        'View',
-        states={'readonly': True},
-    )
+        'ir.ui.view', 'View',
+        states={'readonly': True})
     view_name = fields.Char(
-        'View Name',
-        required=True,
+        'View Name', required=True,
         states={'readonly': Eval('id', 0) > 0},
         on_change_with=['view_name', 'view_model'],
-        depends=['view_name', 'view_model'],
-    )
+        depends=['view_name', 'view_model'])
     view_final_name = fields.Function(
         fields.Char(
-            'View Name',
-            states={'readonly': True},
+            'View Name', states={'readonly': True},
             on_change_with=['view_name', 'view_kind'],
             depends=['view_name', 'view_kind', 'view_model'],
         ),
-        'on_change_with_view_final_name',
-    )
+        'on_change_with_view_final_name')
     view_kind = fields.Selection(
-        [('form', 'Form'), ('tree', 'Tree')],
-        'View Kind',
-    )
+        [('form', 'Form'), ('tree', 'Tree')], 'View Kind')
     input_mode = fields.Selection(
-        [('classic', 'Classic'), ('expert', 'Expert')],
-        'Input Mode',
-    )
+        [('classic', 'Classic'), ('expert', 'Expert')], 'Input Mode')
     header_line = fields.Char(
         'Header Line',
         states={'invisible': Eval('input_mode', '') != 'expert'},
         on_change_with=[
             'view_string', 'nb_col', 'input_mode', 'header_line', 'view_kind'],
         depends=[
-            'view_string', 'nb_col', 'input_mode', 'header_line', 'view_kind'],
-    )
+            'view_string', 'nb_col', 'input_mode', 'header_line', 'view_kind'])
     view_string = fields.Char(
         'View String',
         states={'invisible': Eval('input_mode', '') != 'classic'},
-        on_change_with=['view_model'],
-        depends=['input_mode', 'view_model'],
-    )
+        on_change_with=['view_model'], depends=['input_mode', 'view_model'])
     nb_col = fields.Integer(
         'Number of columns',
         states={
@@ -553,20 +538,13 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
                 Eval('input_mode', '') == 'classic',
                 Eval('view_kind', '') == 'form')),
         },
-        depends=['view_kind', 'input_mode'],
-    )
+        depends=['view_kind', 'input_mode'])
     view_content = fields.Text('View Content')
     view_model = fields.Many2One(
-        'ir.model',
-        'View Model',
-        required=True,
-        states={'readonly': Eval('id', 0) > 0},
-    )
+        'ir.model', 'View Model', required=True,
+        states={'readonly': Eval('id', 0) > 0})
     for_step = fields.Many2One(
-        'process.step_desc',
-        'For Step',
-        ondelete='CASCADE',
-    )
+        'process.step_desc', 'For Step', ondelete='CASCADE')
 
     @classmethod
     def __setup__(cls):

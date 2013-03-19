@@ -141,5 +141,16 @@
             <field name="model">process.process_desc,-1</field>
             <field name="action" ref="generate_graph_wizard"/>
         </record>
+        <!-- Code -->
+        <record model="ir.ui.view" id="code_form">
+          <field name="model">process.code</field>
+          <field name="type">form</field>
+          <field name="name">code_form</field>
+        </record>
+        <record model="ir.ui.view" id="code_tree">
+          <field name="model">process.code</field>
+          <field name="type">tree</field>
+          <field name="name">code_tree</field>
+        </record>
     </data>
 </tryton>

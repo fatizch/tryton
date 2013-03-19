@@ -17,6 +17,7 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['StepDesc'] = Model.get('process.step_desc')
     cfg_dict['StepDescAuthorization'] = Model.get(
         'process.step_desc_authorization')
+    cfg_dict['Code'] = Model.get('process.code')
 
 
 def create_methods(cfg_dict):
@@ -32,6 +33,10 @@ def create_methods(cfg_dict):
         cfg_dict, 'ProcessDesc', 'technical_name')
     res['ProcessStepRelation'] = proteus_tools.generate_creation_method(
         cfg_dict, 'ProcessStepRelation', domain=['process', 'step'])
+    res['Code'] = proteus_tools.generate_creation_method(
+        cfg_dict, 'Code', domain=[
+            'parent_step', 'parent_transition', 'method_name',
+            'technical_kind'])
 
     return res
 
@@ -230,40 +235,132 @@ yexpand="1" mode="form"/>
         },
         {'process_model': contract_model.id})
 
-    meths['StepTransition'](
+    trans1 = meths['StepTransition'](
         {
             'from_step': subscriber_sel_step,
             'to_step': option_sel_step,
             'on_process': subs_process_desc,
-            'methods': '''
-check_product_not_null
-check_subscriber_not_null
-check_start_date_valid
-check_product_eligibility
-init_options
-init_complementary_data
-''',
         },
         {'process_model': contract_model.id})
-    meths['StepTransition'](
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'check_product_not_null',
+        'parent_transition': trans1,
+        'sequence': 1,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'check_subscriber_not_null',
+        'parent_transition': trans1,
+        'sequence': 2,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'check_start_date_valid',
+        'parent_transition': trans1,
+        'sequence': 3,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'check_product_eligibility',
+        'parent_transition': trans1,
+        'sequence': 4,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'init_options',
+        'parent_transition': trans1,
+        'sequence': 5,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'init_complementary_data',
+        'parent_transition': trans1,
+        'sequence': 6,
+    })
+    trans2 = meths['StepTransition'](
         {
             'from_step': subscriber_sel_step,
             'to_step': covered_pers_sel_step,
             'on_process': subs_process_desc,
-            'methods': '''
-check_product_not_null
-check_subscriber_not_null
-check_start_date_valid
-check_product_eligibility
-init_options
-init_complementary_data
-check_options_eligibility
-check_option_selected
-check_option_dates
-init_covered_elements
-''',
         },
         {'process_model': contract_model.id})
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'check_product_not_null',
+        'parent_transition': trans2,
+        'sequence': 1,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'check_subscriber_not_null',
+        'parent_transition': trans2,
+        'sequence': 2,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'check_start_date_valid',
+        'parent_transition': trans2,
+        'sequence': 3,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'check_product_eligibility',
+        'parent_transition': trans2,
+        'sequence': 4,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'init_options',
+        'parent_transition': trans2,
+        'sequence': 5,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'init_complementary_data',
+        'parent_transition': trans2,
+        'sequence': 6,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'check_options_eligibility',
+        'parent_transition': trans2,
+        'sequence': 7,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'check_option_selected',
+        'parent_transition': trans2,
+        'sequence': 8,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'check_option_dates',
+        'parent_transition': trans2,
+        'sequence': 9,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'init_covered_elements',
+        'parent_transition': trans2,
+        'sequence': 10,
+    })
     meths['StepTransition'](
         {
             'from_step': option_sel_step,
@@ -271,19 +368,41 @@ init_covered_elements
             'on_process': subs_process_desc,
         },
         {'process_model': contract_model.id})
-    meths['StepTransition'](
+    trans3 = meths['StepTransition'](
         {
             'from_step': option_sel_step,
             'to_step': covered_pers_sel_step,
             'on_process': subs_process_desc,
-            'methods': '''
-check_options_eligibility
-check_option_selected
-check_option_dates
-init_covered_elements
-''',
         },
         {'process_model': contract_model.id})
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'check_options_eligibility',
+        'parent_transition': trans3,
+        'sequence': 1,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'check_option_selected',
+        'parent_transition': trans3,
+        'sequence': 2,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'check_option_dates',
+        'parent_transition': trans3,
+        'sequence': 3,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'init_covered_elements',
+        'parent_transition': trans3,
+        'sequence': 4,
+    })
     meths['StepTransition'](
         {
             'from_step': covered_pers_sel_step,
@@ -298,19 +417,41 @@ init_covered_elements
             'on_process': subs_process_desc,
         },
         {'process_model': contract_model.id})
-    meths['StepTransition'](
+    trans4 = meths['StepTransition'](
         {
             'from_step': covered_pers_sel_step,
             'to_step': document_step,
             'on_process': subs_process_desc,
-            'methods': '''
-check_at_least_one_covered
-check_sub_elem_eligibility
-check_covered_amounts
-init_subscription_document_request
-''',
         },
         {'process_model': contract_model.id})
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'check_at_least_one_covered',
+        'parent_transition': trans4,
+        'sequence': 1,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'check_sub_elem_eligibility',
+        'parent_transition': trans4,
+        'sequence': 2,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'check_covered_amounts',
+        'parent_transition': trans4,
+        'sequence': 3,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'init_subscription_document_request',
+        'parent_transition': trans4,
+        'sequence': 4,
+    })
     meths['StepTransition'](
         {
             'from_step': document_step,
@@ -318,17 +459,27 @@ init_subscription_document_request
             'on_process': subs_process_desc,
         },
         {'process_model': contract_model.id})
-    meths['StepTransition'](
+    trans5 = meths['StepTransition'](
         {
             'from_step': document_step,
             'to_step': pricing_step,
             'on_process': subs_process_desc,
-            'methods': '''
-init_billing_manager
-calculate_prices
-''',
         },
         {'process_model': contract_model.id})
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'init_billing_manager',
+        'parent_transition': trans5,
+        'sequence': 1,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'calculate_prices',
+        'parent_transition': trans5,
+        'sequence': 2,
+    })
     meths['StepTransition'](
         {
             'from_step': pricing_step,
@@ -343,16 +494,26 @@ calculate_prices
             'on_process': subs_process_desc,
         },
         {'process_model': contract_model.id})
-    meths['StepTransition'](
+    trans6 = meths['StepTransition'](
         {
             'from_step': validation_step,
             'on_process': subs_process_desc,
             'kind': 'complete',
-            'methods': '''
-activate_contract
-finalize_contract
-''',
         },
         {'process_model': contract_model.id})
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'activate_contract',
+        'parent_transition': trans6,
+        'sequence': 1,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'finalize_contract',
+        'parent_transition': trans6,
+        'sequence': 2,
+    })
 
     cfg_dict['ProcessDesc'].update_view([subs_process_desc.id], {})

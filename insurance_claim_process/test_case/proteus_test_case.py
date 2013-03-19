@@ -17,6 +17,7 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['StepDesc'] = Model.get('process.step_desc')
     cfg_dict['StepDescAuthorization'] = Model.get(
         'process.step_desc_authorization')
+    cfg_dict['Code'] = Model.get('process.code')
 
 
 def create_methods(cfg_dict):
@@ -32,6 +33,10 @@ def create_methods(cfg_dict):
         cfg_dict, 'ProcessDesc', 'technical_name')
     res['ProcessStepRelation'] = proteus_tools.generate_creation_method(
         cfg_dict, 'ProcessStepRelation', domain=['process', 'step'])
+    res['Code'] = proteus_tools.generate_creation_method(
+        cfg_dict, 'Code', domain=[
+            'parent_step', 'parent_transition', 'method_name',
+            'technical_kind'])
 
     return res
 
@@ -78,7 +83,13 @@ def launch_test_case(cfg_dict):
 <newline/>
 <field name="contracts" colspan="2"/>
 <field name="contact_history" colspan="2"/>''',
-        'code_after': 'set_claim_number',
+    })
+    meths['Code']({
+        'technical_kind': 'step_after',
+        'on_model': claim_model,
+        'method_name': 'set_claim_number',
+        'parent_step': step_claimant,
+        'sequence': 1,
     })
     step_loss = meths['StepDesc']({
         'technical_name': 'loss',
@@ -96,7 +107,13 @@ def launch_test_case(cfg_dict):
 <field name="losses" colspan="4" mode="form,tree" \
 view_ids="insurance_claim_process.loss_view_form,\
 insurance_claim.loss_view_tree"/>''',
-        'code_before': 'init_loss',
+    })
+    meths['Code']({
+        'technical_kind': 'step_before',
+        'on_model': claim_model,
+        'method_name': 'init_loss',
+        'parent_step': step_loss,
+        'sequence': 1,
     })
     step_documents = meths['StepDesc']({
         'technical_name': 'required_documents',
@@ -112,7 +129,13 @@ insurance_claim.loss_view_tree"/>''',
 <label name="declaration_date"/>
 <field name="declaration_date"/>
 <field name="documents" colspan="4" mode="form"/>''',
-        'code_before': 'init_declaration_document_request',
+    })
+    meths['Code']({
+        'technical_kind': 'step_before',
+        'on_model': claim_model,
+        'method_name': 'init_declaration_document_request',
+        'parent_step': step_documents,
+        'sequence': 1,
     })
     step_delivered_service = meths['StepDesc']({
         'technical_name': 'delivered_services',
@@ -131,7 +154,13 @@ insurance_claim.loss_view_tree"/>''',
 view_ids="insurance_claim_process.loss_delivered_services_view_form,\
 insurance_claim.loss_view_tree"/>
 <field name="doc_received" invisible="1"/>''',
-        'code_before': 'init_delivered_services',
+    })
+    meths['Code']({
+        'technical_kind': 'step_before',
+        'on_model': claim_model,
+        'method_name': 'init_delivered_services',
+        'parent_step': step_delivered_service,
+        'sequence': 1,
     })
     step_indemnification = meths['StepDesc']({
         'technical_name': 'indemnification_calculation',
@@ -149,8 +178,20 @@ insurance_claim.loss_view_tree"/>
 <field name="indemnifications" colspan="4" mode="form,tree" \
 expand_toolbar="0" />
 ''',
-        'code_before': 'calculate_indemnification',
-        'code_after': 'validate_indemnifications',
+    })
+    meths['Code']({
+        'technical_kind': 'step_before',
+        'on_model': claim_model,
+        'method_name': 'calculate_indemnification',
+        'parent_step': step_indemnification,
+        'sequence': 1,
+    })
+    meths['Code']({
+        'technical_kind': 'step_after',
+        'on_model': claim_model,
+        'method_name': 'validate_indemnifications',
+        'parent_step': step_indemnification,
+        'sequence': 1,
     })
     step_disbursment = meths['StepDesc']({
         'technical_name': 'disbursment',
@@ -167,7 +208,13 @@ expand_toolbar="0" />
 <field name="declaration_date"/>
 <field name="indemnifications" colspan="4" mode="form,tree" \
 expand_toolbar="0" />''',
-        'code_after': 'validate_indemnifications',
+    })
+    meths['Code']({
+        'technical_kind': 'step_after',
+        'on_model': claim_model,
+        'method_name': 'validate_indemnifications',
+        'parent_step': step_disbursment,
+        'sequence': 1,
     })
     step_closing = meths['StepDesc']({
         'technical_name': 'closing',

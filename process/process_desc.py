@@ -1,6 +1,5 @@
 import pydot
 
-from trytond.model import fields
 from trytond.model import ModelView, ModelSQL
 from trytond.wizard import Wizard, StateAction
 from trytond.report import Report
@@ -9,6 +8,7 @@ from trytond.pyson import Eval
 from trytond.pool import Pool
 
 from trytond.modules.coop_utils import coop_string
+from trytond.modules.coop_utils import fields
 
 __all__ = [
     'Status',
@@ -16,6 +16,7 @@ __all__ = [
     'ProcessMenuRelation',
     'ProcessDesc',
     'TransitionAuthorization',
+    'Code',
     'StepTransition',
     'StepDesc',
     'StepDescAuthorization',
@@ -85,7 +86,6 @@ class ProcessDesc(ModelSQL, ModelView):
 
     technical_name = fields.Char('Technical Name')
     fancy_name = fields.Char('Name', translate=True)
-    # A given process can only be used on a given model
     on_model = fields.Many2One(
         'ir.model',
         'On Model',
@@ -94,14 +94,12 @@ class ProcessDesc(ModelSQL, ModelView):
             ('is_workflow', '=', True),
             ('model', '!=', 'process.process_framework')
         ],
-        required=True,
-    )
+        required=True)
     all_steps = fields.One2Many(
         'process.process_step_relation',
         'process',
         'All Steps',
-        order=[('order', 'ASC')],
-    )
+        order=[('order', 'ASC')])
     transitions = fields.One2Many(
         'process.step_transition', 'on_process', 'Transitions')
     xml_header = fields.Text('Header XML')
@@ -109,8 +107,7 @@ class ProcessDesc(ModelSQL, ModelView):
     xml_tree = fields.Text('Tree View XML')
     step_button_group_position = fields.Selection(
         [('', 'None'), ('right', 'Right'), ('bottom', 'Bottom')],
-        'Process Overview Positioning',
-    )
+        'Process Overview Positioning')
     menu_items = fields.Many2Many(
         'process.process_menu_relation', 'process', 'menu', 'Menus')
     menu_icon = fields.Selection('list_icons', 'Menu Icon')
@@ -577,111 +574,86 @@ class TransitionAuthorization(ModelSQL):
     )
 
 
+class Code(ModelSQL, ModelView):
+    'Code'
+
+    __name__ = 'process.code'
+
+    technical_kind = fields.Selection(
+        [
+            ('step_before', 'Before'),
+            ('step_after', 'After'),
+            ('transition', 'Transition')],
+        'Kind', states={'invisible': True})
+    on_model = fields.Many2One('ir.model', 'On Model')
+    method_name = fields.Char('Method Name')
+    parent_step = fields.Many2One(
+        'process.step_desc', 'Parent Step', ondelete='CASCADE')
+    parent_transition = fields.Many2One(
+        'process.step_transition', 'Parent Transition', ondelete='CASCADE')
+    sequence = fields.Integer('Sequence', states={'invisible': True})
+
+    def execute(self, target):
+        if not target.__name__ == self.on_model.model:
+            raise Exception('Bad models ! Expected %s got %s' % (
+                self.on_model.model, target.__name__))
+
+        result = getattr(target, self.method_name)()
+        if not isinstance(result, (list, tuple)) and result is True:
+            return
+        res, errs = result
+        if not res or errs:
+            target.raise_user_error(errs)
+
+
 class StepTransition(ModelSQL, ModelView):
     'Step Transition'
 
     __name__ = 'process.step_transition'
 
     on_process = fields.Many2One(
-        'process.process_desc',
-        'On Process',
-        required=True,
-        ondelete='CASCADE',
-    )
-
-    # Transitions go FROM one step...
+        'process.process_desc', 'On Process', required=True,
+        ondelete='CASCADE')
     from_step = fields.Many2One(
-        'process.step_desc',
-        'From Step',
-        ondelete='CASCADE',
-        required=True,
-    )
-
-    # TO another
+        'process.step_desc', 'From Step', ondelete='CASCADE', required=True)
     to_step = fields.Many2One(
-        'process.step_desc',
-        'To Step',
-        ondelete='CASCADE',
-        # (they cannot be the same)
+        'process.step_desc', 'To Step', ondelete='CASCADE',
         domain=[('id', '!=', Eval('from_step'))],
         depends=['from_step'],
-        states={
-            'invisible': Eval('kind') != 'standard',
-        },
-    )
-
-    # Theoratically, there might be a difference between going from B to A
-    # depending on whether we alredy went through A or not
+        states={'invisible': Eval('kind') != 'standard'})
     kind = fields.Selection(
         [
             ('standard', 'Standard Transition'),
             ('complete', 'Complete Process'),
         ],
-        'Transition Kind',
-        required=True,
-    )
-
-    # We might want to have a little more control on whether we display a
-    # transition or not.
+        'Transition Kind', required=True)
     # Could be useful if we need to find the dependencies of the pyson expr :
     #  re.compile('Eval\(\'([a-zA-Z0-9._]*)\'', re.I|re.U) + finditer
-    pyson = fields.Char(
-        'Pyson Constraint',
-    )
-
-    # The purpose of a transition is to execute some code, let's do this !
-    methods = fields.Text(
-        'Methods',
-    )
-
+    pyson = fields.Char('Pyson Constraint')
+    methods = fields.One2ManyDomain(
+        'process.code', 'parent_transition', 'Methods',
+        domain=[('technical_kind', '=', 'transition')],
+        order=[('sequence', 'ASC')])
     method_kind = fields.Selection(
         [
             ('replace', 'Replace Step Methods'),
             ('add', 'Executed between steps')],
-        'Method Behaviour',
-    )
-
-    # And authorizations are needed to filter users
+        'Method Behaviour')
     authorizations = fields.Many2Many(
-        'process.transition_authorization',
-        'transition',
-        'group',
-        'Authorizations',
-    )
-
-    # We need to be able to order the transitions
-    priority = fields.Integer(
-        'Priority',
-    )
+        'process.transition_authorization', 'transition', 'group',
+        'Authorizations')
+    priority = fields.Integer('Priority')
 
     def execute(self, target):
         if (self.kind == 'standard' and self.is_forward() or
                 self.kind == 'complete') and self.method_kind == 'add':
             self.from_step.execute_after(target)
-        # Executing a transition is easy : just apply all methods
         if self.methods:
-            for method in self.methods.split('\n'):
-                if not method:
-                    continue
-                try:
-                    # All methods should return a result, and errors
-                    result = getattr(target, method.strip())()
-                except:
-                    raise
-
-                if not isinstance(result, (list, tuple)) and result is True:
-                    continue
-
-                # In case of errors, display them !
-                res, errs = result
-                if not res or errs:
-                    target.raise_user_error(errs)
-
+            for method in self.methods:
+                method.execute(target)
         if self.kind == 'standard' and self.is_forward and \
                 self.method_kind == 'add':
             self.to_step.execute_before(target)
-
-        # Everything went right, update the state of the instance
         if not self.kind == 'complete':
             target.set_state(self.to_step)
         else:
@@ -750,16 +722,8 @@ class StepDescAuthorization(ModelSQL):
     __name__ = 'process.step_desc_authorization'
 
     step_desc = fields.Many2One(
-        'process.step_desc',
-        'Step Desc',
-        ondelete='CASCADE',
-    )
-
-    group = fields.Many2One(
-        'res.group',
-        'Group',
-        ondelete='CASCADE',
-    )
+        'process.step_desc', 'Step Desc', ondelete='CASCADE')
+    group = fields.Many2One('res.group', 'Group', ondelete='CASCADE')
 
 
 class StepDesc(ModelSQL, ModelView):
@@ -768,43 +732,24 @@ class StepDesc(ModelSQL, ModelView):
     __name__ = 'process.step_desc'
     _rec_name = 'fancy_name'
 
-    # The technical_name is a functional name to identify the step desc in a
-    # friendlier way than just the id.
     technical_name = fields.Char(
         'Technical Name', on_change_with=['technical_name', 'fancy_name'])
-    # We also need a really fancy way to present the current state
     fancy_name = fields.Char('Name', translate=True)
-
-    # Finally, the xml which will be displayed on the current state.
-    step_xml = fields.Text(
-        'XML',
-    )
-
+    step_xml = fields.Text('XML')
     authorizations = fields.Many2Many(
-        'process.step_desc_authorization',
-        'step_desc',
-        'group',
-        'Authorizations',
-    )
-
-    code_before = fields.Text(
-        'Exectuted Before Step',
-    )
-
-    code_after = fields.Text(
-        'Executed After Step',
-    )
-
-    colspan = fields.Integer(
-        'View columns',
-        required=True,
-    )
-
+        'process.step_desc_authorization', 'step_desc', 'group',
+        'Authorizations')
+    code_before = fields.One2ManyDomain(
+        'process.code', 'parent_step', 'Executed Before Step',
+        domain=[('technical_kind', '=', 'step_before')],
+        order=[('sequence', 'ASC')])
+    code_after = fields.One2ManyDomain(
+        'process.code', 'parent_step', 'Executed After Step',
+        domain=[('technical_kind', '=', 'step_after')],
+        order=[('sequence', 'ASC')])
+    colspan = fields.Integer('View columns', required=True)
     processes = fields.One2Many(
-        'process.process_step_relation',
-        'step',
-        'Transitions',
-    )
+        'process.process_step_relation', 'step', 'Transitions')
 
     @classmethod
     def __setup__(cls):
@@ -834,36 +779,13 @@ class StepDesc(ModelSQL, ModelView):
         for process in processes:
             Process(process).create_update_menu_entry()
 
-    def execute_code(self, target, code):
-        for method in code.split('\n'):
-            if not method:
-                continue
-            try:
-                # All methods should return a result, and errors
-                result = getattr(target, method.strip())()
-            except:
-                print 'Error for method ', method
-                raise
-
-            if not isinstance(result, (list, tuple)) and result is True:
-                continue
-
-            # In case of errors, display them !
-            res, errs = result
-            if not res or errs:
-                target.raise_user_error(errs)
-
     def execute_before(self, target):
-        if not self.code_before:
-            return
-
-        self.execute_code(target, self.code_before)
+        for code in self.code_before:
+            code.execute(target)
 
     def execute_after(self, target):
-        if not self.code_after:
-            return
-
-        self.execute_code(target, self.code_after)
+        for code in self.code_after:
+            code.execute(target)
 
     def build_step_main_view(self, process):
         xml = ''.join(self.step_xml.split('\n'))

@@ -10,6 +10,7 @@ def register():
         StepDesc,
         ProcessDesc,
         StepTransition,
+        Code,
         TransitionAuthorization,
         ProcessMenuRelation,
         ProcessStepRelation,

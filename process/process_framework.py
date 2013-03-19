@@ -110,12 +110,9 @@ class Model():
     '''
 
     __metaclass__ = PoolMeta
-
     __name__ = 'ir.model'
 
-    is_workflow = fields.Boolean(
-        'Is Workflow',
-    )
+    is_workflow = fields.Boolean('Is Workflow')
 
 
 class ProcessFramework(Model):
@@ -133,8 +130,7 @@ class ProcessFramework(Model):
     current_state = fields.Many2One(
         'process.process_step_relation',
         'Current State',
-        ondelete='RESTRICT',
-    )
+        ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):
