@@ -3,6 +3,14 @@ from trytond.pool import Pool
 from .utils import get_coop_config
 
 
+__all__ = [
+    'ArgsDoNotMatchException',
+    'get_default_currency',
+    'get_default_country',
+    'update_args_with_subscriber',
+]
+
+
 class ArgsDoNotMatchException(Exception):
     pass
 

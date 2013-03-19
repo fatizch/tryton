@@ -68,12 +68,12 @@ class TaskSelector(model.CoopView):
     nb_tasks_process = fields.Integer(
         'Process Tasks',
         states={'readonly': True})
-    tasks_team = model.One2ManyDomain(
+    tasks_team = fields.One2ManyDomain(
         'task_manager.task_displayer', '', 'Team Tasks',
         domain=[('kind', '=', 'team')],
         states={'readonly': True},
     )
-    tasks_process = model.One2ManyDomain(
+    tasks_process = fields.One2ManyDomain(
         'task_manager.task_displayer', '', 'Process Tasks',
         domain=[('kind', '=', 'process')],
         states={'readonly': True},

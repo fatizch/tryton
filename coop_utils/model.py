@@ -1,6 +1,5 @@
 import copy
 
-from itertools import chain
 try:
     import simplejson as json
 except ImportError:
@@ -16,6 +15,19 @@ from trytond.protocols.jsonrpc import JSONEncoder, object_hook
 
 import utils
 import coop_string
+
+
+__all__ = [
+    'NotExportImport',
+    'ExportImportMixin',
+    'CoopSQL',
+    'CoopView',
+    'CoopWizard',
+    'TableOfTable',
+    'DynamicSelection',
+    'VersionedObject',
+    'VersionObject',
+]
 
 
 class NotExportImport(Exception):
@@ -361,40 +373,6 @@ class DynamicSelection(TableOfTable):
 
     __name__ = 'coop.dyn_selection'
     _table = 'coop_table_of_table'
-
-
-class One2ManyDomain(fields.One2Many):
-
-    def get(self, ids, model, name, values=None):
-        '''
-        Return target records ordered.
-        '''
-        pool = Pool()
-        Relation = pool.get(self.model_name)
-        if self.field in Relation._fields:
-            field = Relation._fields[self.field]
-        else:
-            field = Relation._inherit_fields[self.field][2]
-        res = {}
-        for i in ids:
-            res[i] = []
-
-        targets = []
-        for i in range(0, len(ids), Transaction().cursor.IN_MAX):
-            sub_ids = ids[i:i + Transaction().cursor.IN_MAX]
-            if field._type == 'reference':
-                references = ['%s,%s' % (model.__name__, x) for x in sub_ids]
-                clause = [(self.field, 'in', references)]
-            else:
-                clause = [(self.field, 'in', sub_ids)]
-            clause.append(self.domain)
-            targets.append(Relation.search(clause, order=self.order))
-        targets = list(chain(*targets))
-
-        for target in targets:
-            origin_id = getattr(target, self.field).id
-            res[origin_id].append(target.id)
-        return dict((key, tuple(value)) for key, value in res.iteritems())
 
 
 class VersionedObject(CoopView):

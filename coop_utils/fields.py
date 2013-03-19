@@ -1,72 +1,111 @@
-from trytond.model import fields
+from itertools import chain
 
-class Boolean(fields.Boolean):
+from trytond.model import fields as tryton_fields
+from trytond.pool import Pool
+from trytond.transaction import Transaction
+
+
+class Boolean(tryton_fields.Boolean):
     pass
 
 
-class Integer(fields.Integer):
+class Integer(tryton_fields.Integer):
     pass
 
 
-class Char(fields.Char):
+class Char(tryton_fields.Char):
     pass
 
 
-class Sha(fields.Sha):
+class Sha(tryton_fields.Sha):
     pass
 
 
-class Text(fields.Text):
+class Text(tryton_fields.Text):
     pass
 
 
-class Float(fields.Float):
+class Float(tryton_fields.Float):
     pass
 
 
-class Numeric(fields.Numeric):
+class Numeric(tryton_fields.Numeric):
     pass
 
 
-class Date(fields.Date):
+class Date(tryton_fields.Date):
     pass
 
 
-class Binary(fields.Binary):
+class Binary(tryton_fields.Binary):
     pass
 
 
-class Selection(fields.Selection):
+class Selection(tryton_fields.Selection):
     pass
 
 
-class Reference(fields.Reference):
+class Reference(tryton_fields.Reference):
     pass
 
 
-class Many2One(fields.Many2One):
+class Many2One(tryton_fields.Many2One):
     pass
 
 
-class One2Many(fields.One2Many):
+class One2Many(tryton_fields.One2Many):
     pass
 
 
-class Many2Many(fields.Many2Many):
+class One2ManyDomain(One2Many):
+
+    def get(self, ids, model, name, values=None):
+        '''
+        Return target records ordered.
+        '''
+        pool = Pool()
+        Relation = pool.get(self.model_name)
+        if self.field in Relation._fields:
+            field = Relation._fields[self.field]
+        else:
+            field = Relation._inherit_fields[self.field][2]
+        res = {}
+        for i in ids:
+            res[i] = []
+
+        targets = []
+        for i in range(0, len(ids), Transaction().cursor.IN_MAX):
+            sub_ids = ids[i:i + Transaction().cursor.IN_MAX]
+            if field._type == 'reference':
+                references = ['%s,%s' % (model.__name__, x) for x in sub_ids]
+                clause = [(self.field, 'in', references)]
+            else:
+                clause = [(self.field, 'in', sub_ids)]
+            clause.append(self.domain)
+            targets.append(Relation.search(clause, order=self.order))
+        targets = list(chain(*targets))
+
+        for target in targets:
+            origin_id = getattr(target, self.field).id
+            res[origin_id].append(target.id)
+        return dict((key, tuple(value)) for key, value in res.iteritems())
+
+
+class Many2Many(tryton_fields.Many2Many):
     pass
 
 
-class Function(fields.Function):
+class Function(tryton_fields.Function):
     pass
 
 
-class Property(fields.Property):
+class Property(tryton_fields.Property):
     pass
 
 
-class One2One(fields.One2One):
+class One2One(tryton_fields.One2One):
     pass
 
 
-class Dict(fields.Dict):
+class Dict(tryton_fields.Dict):
     pass

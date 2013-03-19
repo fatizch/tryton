@@ -42,6 +42,11 @@ class Session():
                 Log.write(locks, {'locked': False})
         super(Session, cls).delete(sessions)
 
+    @classmethod
+    def create(cls, values):
+        cls.delete(cls.search([('create_uid', '=', Transaction().user)]))
+        return super(Session, cls).create(values)
+
 
 class Priority(ModelSQL, ModelView):
     'Priority'

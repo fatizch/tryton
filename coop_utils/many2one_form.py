@@ -4,6 +4,11 @@ from trytond.model import fields
 from trytond.pool import Pool
 
 
+__all__ = [
+    'Many2OneForm',
+]
+
+
 class Many2OneForm(fields.Function):
     '''
     Define One2Many based on a Many2One.

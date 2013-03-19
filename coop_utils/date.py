@@ -1,6 +1,23 @@
 import datetime
 from dateutil.relativedelta import relativedelta
 
+
+__all__ = [
+    'HOURLY_DURATION',
+    'DAILY_DURATION',
+    'add_day',
+    'add_month',
+    'add_year',
+    'add_duration',
+    'get_end_of_period',
+    'convert_to_periods',
+    'number_of_days_between',
+    'number_of_years_between',
+    'number_of_months_between',
+    'duration_between',
+]
+
+
 HOURLY_DURATION = [
     ('second', 'Second'),
     ('minute', 'Minute'),
@@ -79,8 +96,8 @@ def number_of_years_between(date1, date2):
 
 
 def number_of_months_between(date1, date2):
-    return (relativedelta(date1, date2).months
-        + relativedelta(date1, date2).years * 12)
+    return relativedelta(date1, date2).months + \
+        relativedelta(date1, date2).years * 12
 
 
 def duration_between(date1, date2, duration_unit):

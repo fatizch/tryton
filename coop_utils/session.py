@@ -4,6 +4,11 @@ from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 
 
+__all__ = [
+    'DateClass',
+]
+
+
 class DateClass():
     '''Overriden ir.date class for more accurate date management'''
 

@@ -1,12 +1,11 @@
 #-*- coding:utf-8 -*-
 import copy
 
-from trytond.model import fields
 from trytond.pool import Pool
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model, business, utils
+from trytond.modules.coop_utils import model, business, utils, fields
 from trytond.modules.insurance_product import PricingResultLine
 from trytond.modules.insurance_product import EligibilityResultLine
 
@@ -42,7 +41,8 @@ class Templated(object):
 
     __name__ = 'ins_product.templated'
 
-    template = fields.Many2One(None, 'Template',
+    template = fields.Many2One(
+        None, 'Template',
         domain=[('id', '!=', Eval('id'))],
         depends=['id'],
         on_change=['template'])
@@ -83,11 +83,11 @@ class Offered(model.CoopView, utils.GetResult, Templated):
         'ins_product.clause_rule', 'offered', 'Clause Rules')
     deductible_rules = fields.One2Many(
         'ins_product.deductible_rule', 'offered', 'Deductible Rules')
-    document_rules = model.One2ManyDomain(
+    document_rules = fields.One2ManyDomain(
         'ins_product.document_rule', 'offered', 'Document Rules',
         context={'doc_rule_kind': 'main'},
         domain=[('kind', '=', 'main')])
-    sub_document_rules = model.One2ManyDomain(
+    sub_document_rules = fields.One2ManyDomain(
         'ins_product.document_rule', 'offered', 'Sub Document Rules',
         context={'doc_rule_kind': 'sub'},
         domain=[('kind', '=', 'sub')])
@@ -119,8 +119,8 @@ class Offered(model.CoopView, utils.GetResult, Templated):
             cur_attr.context['currency_digits'] = Eval('currency_digits')
             if cur_attr.depends is None:
                 cur_attr.depends = []
-            utils.extend_inexisting(cur_attr.depends,
-                ['start_date', 'currency_digits'])
+            utils.extend_inexisting(
+                cur_attr.depends, ['start_date', 'currency_digits'])
             if cur_attr.states is None:
                 cur_attr.states = {}
             cur_attr.states['readonly'] = ~Bool(Eval('start_date'))
@@ -181,8 +181,8 @@ class Offered(model.CoopView, utils.GetResult, Templated):
             # the good rule.
             # (This is a given way to get a rule from a list, using the
             # applicable date, it could be anything)
-            return utils.get_good_version_at_date(self, '%s_rules' % kind,
-                the_date)
+            return utils.get_good_version_at_date(
+                self, '%s_rules' % kind, the_date)
         except ValueError:
             return None
 
@@ -198,7 +198,8 @@ class Offered(model.CoopView, utils.GetResult, Templated):
                 field.field)
 
     def get_complementary_data_def(self, kinds=None, at_date=None):
-        return [x for x in self.complementary_data_def
+        return [
+            x for x in self.complementary_data_def
             if x.valid_at_date(at_date) and (not kinds or x.kind in kinds)]
 
     def give_me_sub_elem_eligibility(self, args):
@@ -225,18 +226,20 @@ class Product(model.CoopSQL, Offered):
 
     __name__ = 'ins_product.product'
 
-    options = fields.Many2Many('ins_product.product-options-coverage',
+    options = fields.Many2Many(
+        'ins_product.product-options-coverage',
         'product', 'coverage', 'Options',
         domain=[('currency', '=', Eval('currency'))],
         depends=['currency'])
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
-    contract_generator = fields.Many2One('ir.sequence',
-        'Contract Number Generator',
+    contract_generator = fields.Many2One(
+        'ir.sequence', 'Contract Number Generator',
         context={'code': 'ins_product.product'}, required=True,
         ondelete='RESTRICT')
-    term_renewal_rules = fields.One2Many('ins_product.term_renewal_rule',
-        'offered', 'Term - Renewal')
-    item_descriptors = fields.Many2Many('ins_product.product-item_desc',
+    term_renewal_rules = fields.One2Many(
+        'ins_product.term_renewal_rule', 'offered', 'Term - Renewal')
+    item_descriptors = fields.Many2Many(
+        'ins_product.product-item_desc',
         'product', 'item_desc', 'Item Descriptors')
     complementary_data_def = fields.Many2Many(
         'ins_product.product-complementary_data_def',
@@ -426,10 +429,12 @@ class ProductOptionsCoverage(model.CoopSQL):
 
     __name__ = 'ins_product.product-options-coverage'
 
-    product = fields.Many2One('ins_product.product',
-        'Product', select=1, required=True, ondelete='CASCADE')
-    coverage = fields.Many2One('ins_product.coverage',
-        'Coverage', select=1, required=True, ondelete='RESTRICT')
+    product = fields.Many2One(
+        'ins_product.product', 'Product',
+        select=1, required=True, ondelete='CASCADE')
+    coverage = fields.Many2One(
+        'ins_product.coverage', 'Coverage',
+        select=1, required=True, ondelete='RESTRICT')
 
 
 class ProductDefinition(model.CoopView):
@@ -466,8 +471,8 @@ class ItemDescriptorComplementaryDataRelation(model.CoopSQL):
 
     __name__ = 'ins_product.item_desc-complementary_data_def'
 
-    item_desc = fields.Many2One('ins_product.item_desc', 'Item Desc',
-        ondelete='CASCADE', )
+    item_desc = fields.Many2One(
+        'ins_product.item_desc', 'Item Desc', ondelete='CASCADE', )
     complementary_data_def = fields.Many2One(
         'ins_product.complementary_data_def',
         'Complementary Data', ondelete='RESTRICT', )
@@ -478,10 +483,10 @@ class ProductItemDescriptorRelation(model.CoopSQL):
 
     __name__ = 'ins_product.product-item_desc'
 
-    product = fields.Many2One('ins_product.product', 'Product',
-        ondelete='CASCADE')
-    item_desc = fields.Many2One('ins_product.item_desc', 'Item Descriptor',
-        ondelete='RESTRICT')
+    product = fields.Many2One(
+        'ins_product.product', 'Product', ondelete='CASCADE')
+    item_desc = fields.Many2One(
+        'ins_product.item_desc', 'Item Descriptor', ondelete='RESTRICT')
 
 
 class ProductComplementaryDataRelation(model.CoopSQL):
@@ -489,8 +494,8 @@ class ProductComplementaryDataRelation(model.CoopSQL):
 
     __name__ = 'ins_product.product-complementary_data_def'
 
-    product = fields.Many2One('ins_product.product', 'Product',
-        ondelete='CASCADE')
+    product = fields.Many2One(
+        'ins_product.product', 'Product', ondelete='CASCADE')
     complementary_data_def = fields.Many2One(
         'ins_product.complementary_data_def',
         'Complementary Data', ondelete='RESTRICT')

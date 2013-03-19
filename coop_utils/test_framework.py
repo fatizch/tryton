@@ -6,6 +6,14 @@ import unittest
 from trytond.transaction import Transaction
 
 
+__all__ = [
+    'get_module_test_case',
+    'launch_function',
+    'prepare_test',
+    'CoopTestCase',
+]
+
+
 def get_module_test_case(module_name):
     filename = os.path.abspath(
         os.path.join(

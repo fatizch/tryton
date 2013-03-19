@@ -1,5 +1,4 @@
 from trytond.pool import Pool
-from .fields import *
 from .utils import *
 from .date import *
 from .coop_string import *

@@ -1,11 +1,10 @@
 import datetime
 import copy
 
-from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.coop_utils import model
+from trytond.modules.coop_utils import model, fields
 from trytond.modules.coop_utils import utils, date, business
 from trytond.modules.coop_utils import coop_string
 from trytond.modules.insurance_product import Printable
@@ -54,8 +53,8 @@ class Subscribed(model.CoopView):
     # contract. Default value is start_date
     start_management_date = fields.Date('Management Date')
     status = fields.Selection('get_possible_status', 'Status', readonly=True)
-    status_history = fields.One2Many('ins_contract.status_history',
-        'reference', 'Status History')
+    status_history = fields.One2Many(
+        'ins_contract.status_history', 'reference', 'Status History')
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency'),
@@ -135,7 +134,7 @@ class Subscribed(model.CoopView):
         if not hasattr(self, 'status_history') or not self.status_history:
             self.status_history = []
         status_history = utils.instanciate_relation(
-                self.__class__, 'status_history')
+            self.__class__, 'status_history')
         status_history.init_from_reference(self, to_status, at_date)
         self.status_history.append(status_history)
         self.status = to_status
@@ -609,10 +608,10 @@ class PriceLine(model.CoopSQL, model.CoopView):
         'Start Date'), 'get_start_date')
     end_date_calculated = fields.Function(fields.Date(
         'End Date'), 'get_end_date')
-    details = model.One2ManyDomain(
+    details = fields.One2ManyDomain(
         'ins_contract.price_line', 'master', 'Details', domain=[
             ('kind', '!=', 'main')], readonly=True)
-    child_lines = model.One2ManyDomain(
+    child_lines = fields.One2ManyDomain(
         'ins_contract.price_line', 'master', 'Sub-Lines', domain=[
             ('kind', '=', 'main')], readonly=True)
 
@@ -871,8 +870,8 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     #We need to put complementary data in depends, because the complementary
     #data are set through on_change_with and the item desc can be set on an
     #editable tree, or we can not display for the moment dictionnary in tree
-    item_desc = fields.Many2One('ins_product.item_desc', 'Item Desc',
-        depends=['complementary_data'])
+    item_desc = fields.Many2One(
+        'ins_product.item_desc', 'Item Desc', depends=['complementary_data'])
     covered_data = fields.One2Many(
         'ins_contract.covered_data', 'covered_element', 'Covered Element Data')
     name = fields.Char('Name')
@@ -937,7 +936,8 @@ class CoveredElement(model.CoopSQL, model.CoopView):
                 self.item_desc.complementary_data_def)
 
     def on_change_with_complementary_data_summary(self, name=None):
-        return ' '.join(['%s: %s' % (x[0], x[1])
+        return ' '.join([
+            '%s: %s' % (x[0], x[1])
             for x in self.complementary_data.iteritems()])
 
 
@@ -1059,8 +1059,8 @@ class DeliveredService(model.CoopSQL, model.CoopView):
 
     subscribed_service = fields.Many2One(
         'ins_contract.option', 'Coverage', ondelete='RESTRICT')
-    expenses = fields.One2Many('ins_contract.expense',
-        'delivered_service', 'Expenses')
+    expenses = fields.One2Many(
+        'ins_contract.expense', 'delivered_service', 'Expenses')
 
     def get_rec_name(self, name=None):
         if self.subscribed_service:
@@ -1091,7 +1091,8 @@ class Expense(model.CoopSQL, model.CoopView):
         'ins_contract.delivered_service', 'Delivered Service',
         ondelete='CASCADE')
     kind = fields.Many2One('ins_product.expense_kind', 'Kind')
-    amount = fields.Numeric('Amount', required=True,
+    amount = fields.Numeric(
+        'Amount', required=True,
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
         depends=['currency_digits'])
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
