@@ -3,10 +3,11 @@
     <label name="claim"/>
     <field name="claim"/>
     <newline/>
-    <!-- ToDO: Temporary hack -->
+    <!-- ToDO: Temporary hack
     <label name="covered_person"/>
     <field name="covered_person" widget="selection"/>
     <newline/>
+    -->
     <label name="loss_desc"/>
     <field name="loss_desc" widget="selection"/>
     <label name="event_desc"/>
@@ -16,6 +17,6 @@
     <label name="end_date"/>
     <field name="end_date"/>
     <newline/>
-    <field name="complementary_data" colspan="2"/>
+    <field name="complementary_data" colspan="2" no_command="1"/>
     <field name="benefits" colspan="4"/>
 </form>

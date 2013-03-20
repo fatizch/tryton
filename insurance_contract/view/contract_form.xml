@@ -22,7 +22,7 @@
       <field name="billing_manager" mode="form"/>
     </page>
     <page string="Complementary Data" id="complementary_data">
-      <field name="complementary_data"/>
+      <field name="complementary_data" no_command="1"/>
     </page>
     <page string="Documents" id="documents">
       <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" mode="form"/>

@@ -5,7 +5,7 @@
     <label name="item_desc"/>
     <field name="item_desc"/>
     <newline/>
-    <field name="complementary_data" colspan="2"/>
+    <field name="complementary_data" colspan="2" no_command="1"/>
     <newline/>
     <field name="covered_data" colspan="4"/>
     <field name="sub_covered_elements" colspan="4"/>

@@ -9,7 +9,7 @@
             <field name="model">ins_contract.subs_process.project</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                    <![CDATA[ 
+                    <![CDATA[
                         <form string="Subscription Process - Project Step">
                             <label name="start_date"/>
                             <field name="start_date" xfill="1"/>
@@ -69,7 +69,7 @@
                             <field name="for_product"/>
                             <field name="at_date"/>
                             <newline/>
-                            <field name="complementary_data"/>
+                            <field name="complementary_data" no_command="1"/>
                         </form>
                     ]]>
             </field>
@@ -174,20 +174,8 @@
                     ]]>
             </field>
         </record>
-        
-    <!--################################################################-->
-    <!--                          Menu Entries                          -->
-    <!--################################################################-->
 
-        <record model="ir.action.wizard" id="project_view_action">
-            <field name="name">New Subscription Process</field>
-            <field name="wiz_name">ins_contract.subs_process</field>
-            <field name="model">ir.ui.menu</field>
-        </record>
 
-        <menuitem parent="menu_individual" action="project_view_action"
-            id="menu_start_subs" />
-        
     <!--################################################################-->
     <!--                          Actions Entries                       -->
     <!--################################################################-->
@@ -198,11 +186,11 @@
             <field name="model">ins_process.suspended_process</field>
         </record>
     </data>
-    
+
     <!--################################################################-->
     <!--                          Init Data                             -->
     <!--################################################################-->
-    
+
     <data>
         <record model="ins_process.process_desc" id="subs_process_desc">
             <field name="name">Subscription Process Descriptor</field>
@@ -266,4 +254,4 @@
         </record>
     </data>
 </tryton>
-        
+
