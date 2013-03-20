@@ -2,14 +2,14 @@
 <tree>
   <field name="kind"/>
   <field name="fixed_rate">
-    <!-- <suffix string="%"/> -->
+    <suffix string="%"/>
   </field>
   <field name="monthly_payment_number"/>
   <field name="monthly_payment_amount"/>
   <field name="amount">
-    <!--  <suffix name="currency_symbol"/> -->
-  </field>
-  <field name="funds_release_date"/>
-  <field name="first_payment_date"/>
-  <field name="lender"/>
+   <suffix name="currency_symbol"/>
+ </field>
+ <field name="funds_release_date"/>
+ <field name="first_payment_date"/>
+ <field name="lender"/>
 </tree>

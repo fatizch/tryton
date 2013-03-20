@@ -1,11 +1,10 @@
 #-*- coding:utf-8 -*-
-import copy
 import math
 
 from decimal import Decimal
 from trytond.model import fields
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Or
+from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import utils, date
@@ -104,7 +103,7 @@ class Loan(model.CoopSQL, model.CoopView):
         domain=[('bank_role', '>', 0)])
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency'),
-        'get_currency')
+        'get_currency_id')
     currency_digits = fields.Function(
         fields.Integer('Currency Digits'),
         'get_currency_digits')
@@ -150,9 +149,14 @@ class Loan(model.CoopSQL, model.CoopView):
     def default_currency():
         return Transaction().context.get('currency')
 
-    def get_currency(self, name):
+    def get_currency_id(self, name):
+        currency = self.get_currency()
+        if currency:
+            return currency.id
+
+    def get_currency(self):
         if hasattr(self, 'contract') and self.contract:
-            return self.contract.get_currency(name)
+            return self.contract.get_currency()
 
     @staticmethod
     def default_currency_symbol():
