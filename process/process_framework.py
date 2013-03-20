@@ -130,7 +130,7 @@ class ProcessFramework(Model):
     current_state = fields.Many2One(
         'process.process_step_relation',
         'Current State',
-        ondelete='RESTRICT')
+        ondelete='RESTRICT', states={'readonly': True})
 
     @classmethod
     def __setup__(cls):
