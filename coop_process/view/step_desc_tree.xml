@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<data>
+  <xpath expr="/tree/field[@name='fancy_name']" position="before">
+    <field name="main_model"/>
+  </xpath>
+</data>
