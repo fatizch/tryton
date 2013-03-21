@@ -562,16 +562,9 @@ class TransitionAuthorization(ModelSQL):
     __name__ = 'process.transition_authorization'
 
     transition = fields.Many2One(
-        'process.step_transition',
-        'Transition',
-        ondelete='CASCADE',
-    )
-
+        'process.step_transition', 'Transition', ondelete='CASCADE')
     group = fields.Many2One(
-        'res.group',
-        'Group',
-        ondelete='CASCADE',
-    )
+        'res.group', 'Group', ondelete='CASCADE')
 
 
 class Code(ModelSQL, ModelView):

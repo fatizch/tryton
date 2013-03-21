@@ -173,6 +173,9 @@ class ProcessLog(model.CoopSQL, model.CoopView):
         good_models = Model.search([('is_workflow', '=', True)])
         return [(model.model, model.name) for model in good_models]
 
+    def get_rec_name(self, name):
+        return self.task.get_rec_name(None)
+
 
 class CoopProcessFramework(ProcessFramework):
     'Coop Process Framework'

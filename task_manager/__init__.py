@@ -12,6 +12,7 @@ def register():
         User,
         Session,
         SelectUser,
+        ProcessLog,
         TaskDisplayer,
         TaskSelector,
         module='task_manager', type_='model')

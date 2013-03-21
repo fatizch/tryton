@@ -4,7 +4,6 @@ from trytond.model.model import ModelMeta
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
 from trytond.model import fields
-from trytond.model import ModelView, ModelSQL
 
 from trytond.modules.coop_utils import utils
 

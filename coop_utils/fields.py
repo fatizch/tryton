@@ -38,6 +38,10 @@ class Date(tryton_fields.Date):
     pass
 
 
+class DateTime(tryton_fields.DateTime):
+    pass
+
+
 class Binary(tryton_fields.Binary):
     pass
 

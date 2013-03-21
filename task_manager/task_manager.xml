@@ -82,5 +82,11 @@
         <field name="type">graph</field>
         <field name="name">task_displayer_graph</field>
     </record>
+    <!-- Process Log -->
+    <record model="ir.ui.view" id="process_log_priority_tree">
+      <field name="model">coop_process.process_log</field>
+      <field name="type">tree</field>
+      <field name="name">process_log_priority_tree</field>
+    </record>
   </data>
 </tryton>

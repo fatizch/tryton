@@ -3,16 +3,96 @@ import datetime
 from trytond.wizard import Wizard, StateAction
 from trytond.wizard import StateView, Button, StateTransition
 from trytond.transaction import Transaction
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 
 from trytond.modules.coop_utils import utils, model, fields
 
 
 __all__ = [
+    'ProcessLog',
     'TaskDispatcher',
     'TaskDisplayer',
     'TaskSelector',
 ]
+
+
+class ProcessLog():
+    'Process Log'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'coop_process.process_log'
+
+    priority = fields.Function(
+        fields.Integer('Priority', order_field='id'), 'get_priority')
+    task_start = fields.Function(
+        fields.DateTime('Task Start', on_change_with=['task']),
+        'on_change_with_task_start')
+    task_selected = fields.Function(
+        fields.Boolean('Selected'),
+        'get_task_selected',
+        setter='setter_void')
+
+    @classmethod
+    def setter_void(cls, *args):
+        pass
+
+    def get_priority(self, name):
+        team = utils.get_team()
+        if not team:
+            return None
+        for priority in team.priorities:
+            if priority.process_step.id == self.to_state.id:
+                return priority.priority
+        return None
+
+    def get_task_selected(self, name):
+        return False
+
+    def on_change_with_task_start(self, name=None):
+        if not (hasattr(self, 'task') and self.task):
+            return None
+        start_log, = self.search([
+            ('from_state', '=', None),
+            ('task', '=', utils.convert_to_reference(self.task))], limit=1)
+        return start_log.start_time
+
+    @classmethod
+    def search(
+            cls, domain, offset=0, limit=None, order=None, count=False,
+            query_string=False):
+        result = super(ProcessLog, cls).search(
+            domain, offset, limit, order, count, query_string)
+        if not (order and len(order) == 1):
+            return result
+        if not order[0][0] in ('priority', 'task_start'):
+            return result
+        elif order[0][0] == 'priority':
+            team = utils.get_team()
+            ordering_table = {}
+            count = 0
+            for priority in team.priorities:
+                if priority.process_step.id in ordering_table:
+                    continue
+                ordering_table[priority.process_step.id] = count
+                count += 1
+
+            def order_priority(x):
+                try:
+                    return ordering_table[x.to_state.id]
+                except KeyError:
+                    return len(ordering_table) + 1
+
+            order_func = order_priority
+        elif order[0][0] == 'task_start':
+            def order_start_task(x):
+                return x.task_start if hasattr(x, 'task_start') else None
+
+            order_func = order_start_task
+
+        if order[0][1] == 'ASC':
+            return sorted(result, key=order_func)
+        else:
+            return sorted(result, key=order_func, reverse=True)
 
 
 class TaskDisplayer(model.CoopView):
@@ -25,12 +105,10 @@ class TaskDisplayer(model.CoopView):
         'Number', on_change_with=['task'], depends=['task', 'kind'])
     kind = fields.Selection(
         [('team', 'Team'), ('process', 'Process')],
-        'Kind', states={'invisible': True},
-    )
+        'Kind', states={'invisible': True})
     task_name = fields.Function(
         fields.Char('Task Name', on_change_with=['task'], depends=['task']),
-        'on_change_with_task_name',
-    )
+        'on_change_with_task_name')
 
     def on_change_with_task_name(self, name=None):
         if not (hasattr(self, 'task') and self.task):
@@ -55,7 +133,8 @@ class TaskSelector(model.CoopView):
 
     team = fields.Many2One(
         'task_manager.team', 'Team',
-        on_change=['team', 'nb_tasks_team', 'nb_users_team', 'tasks_team'])
+        on_change=[
+            'team', 'nb_tasks_team', 'nb_users_team', 'tasks_team', 'tasks'])
     process = fields.Many2One(
         'process.process_desc', 'Process',
         on_change=['process', 'nb_tasks_process', 'tasks_process'])
@@ -71,13 +150,18 @@ class TaskSelector(model.CoopView):
     tasks_team = fields.One2ManyDomain(
         'task_manager.task_displayer', '', 'Team Tasks',
         domain=[('kind', '=', 'team')],
-        states={'readonly': True},
-    )
+        states={'readonly': True})
     tasks_process = fields.One2ManyDomain(
         'task_manager.task_displayer', '', 'Process Tasks',
         domain=[('kind', '=', 'process')],
-        states={'readonly': True},
-    )
+        states={'readonly': True})
+    tasks = fields.One2Many(
+        'coop_process.process_log', '', 'Tasks',
+        domain=[('latest', '=', True), ('locked', '=', False)],
+        order=[('priority', 'ASC')],
+        on_change=['selected_task', 'tasks'])
+    selected_task = fields.Many2One(
+        'coop_process.process_log', 'Selected Task', states={'readonly': True})
 
     def on_change_team(self):
         if not (hasattr(self, 'team') and self.team):
@@ -85,13 +169,15 @@ class TaskSelector(model.CoopView):
                 'nb_users_team': 0,
                 'nb_tasks_team': 0,
                 'tasks_team': []}
-        result = {}
         User = Pool().get('res.user')
+        Log = Pool().get('coop_process.process_log')
+        result = {}
         result['nb_users_team'] = User.search_count([('team', '=', self.team)])
         tmp_result = {}
         final_result = []
         nb_tasks = 0
         TaskDisplayer = Pool().get('task_manager.task_displayer')
+        valid_states = []
         for priority in self.team.priorities:
             if (priority.process_step.id, priority.priority) in tmp_result:
                 continue
@@ -104,8 +190,17 @@ class TaskSelector(model.CoopView):
             nb_tasks += task.nb_tasks
             tmp_result[(priority.process_step.id, priority.priority)] = task
             final_result.append(task)
+            valid_states.append(priority.process_step.id)
         result['tasks_team'] = utils.WithAbstract.serialize_field(final_result)
         result['nb_tasks_team'] = nb_tasks
+        result['tasks'] = utils.WithAbstract.serialize_field(
+            Log.search([
+                ('latest', '=', True), ('locked', '=', False),
+                ('to_state', 'in', valid_states)],
+                order=[('priority', 'ASC')]))
+        if not (hasattr(self, 'selected_task') and self.selected_task):
+            result['selected_task'] = \
+                result['tasks'][0] if result['tasks'] else None
         return result
 
     def on_change_process(self):
@@ -131,59 +226,27 @@ class TaskSelector(model.CoopView):
         result['nb_tasks_process'] = nb_tasks
         return result
 
-    def _on_change_with_tasks_team(self):
-        if not (hasattr(self, 'team') and self.team):
-            return []
+    def on_change_tasks(self):
+        if not (hasattr(self, 'tasks') and self.tasks):
+            return None
+        found = None
+        for task in self.tasks:
+            if task.task_selected:
+                if not(hasattr(self, 'selected_task') and self.selected_task) \
+                        or task.id != self.selected_task.id:
+                    found = task
+        if not found:
+            if hasattr(self, 'selected_task') and self.selected_task:
+                found = self.selected_task
+            else:
+                return None
         result = {}
-        final_result = []
-        TaskDisplayer = Pool().get('task_manager.task_displayer')
-        for priority in self.team.priorities:
-            if (priority.process_step.id, priority.priority) in result:
-                continue
-            task = TaskDisplayer()
-            task.kind = 'team'
-            task.task = priority.process_step
-            task.task_name = '%s - %s' % (
-                task.task.process.fancy_name, task.task.step.fancy_name)
-            task.nb_tasks = task.on_change_with_nb_tasks()
-            result[(priority.process_step.id, priority.priority)] = task
-            final_result.append(task)
-        return utils.WithAbstract.serialize_field(final_result)
-
-    def _on_change_with_tasks_process(self):
-        if not (hasattr(self, 'process') and self.process):
-            return []
-        result = []
-        TaskDisplayer = Pool().get('task_manager.task_displayer')
-        for step in self.process.all_steps:
-            task = TaskDisplayer()
-            task.kind = 'process'
-            task.task = step.id
-            task.nb_tasks = task.on_change_with_nb_tasks()
-            result.append(task)
-        return utils.WithAbstract.serialize_field(result)
-
-    def _on_change_with_nb_users_team(self):
-        if not (hasattr(self, 'team') and self.team):
-            return None
-        User = Pool().get('res.user')
-        return User.search_count([('team', '=', self.team)])
-
-    def _on_change_with_nb_tasks_team(self):
-        if not (hasattr(self, 'tasks_team') and self.tasks_team):
-            return None
-        res = 0
-        for task in self.tasks_team:
-            res += task['nb_tasks']
-        return res
-
-    def _on_change_with_nb_tasks_process(self):
-        if not (hasattr(self, 'tasks_process') and self.tasks_process):
-            return None
-        res = 0
-        for task in self.tasks_process:
-            res += task['nb_tasks']
-        return res
+        result['selected_task'] = found.id
+        result['tasks'] = {
+            'update': [
+                {'id': x.id, 'task_selected': x.id == found.id}
+                for x in self.tasks]}
+        return result
 
 
 class TaskDispatcher(Wizard):
@@ -192,34 +255,6 @@ class TaskDispatcher(Wizard):
     __name__ = 'task_manager.task_dispatcher'
 
     start_state = 'remove_locks'
-
-    class LaunchStateAction(StateAction):
-        '''
-            We need a special StateAction in which we will override the
-            get_action method to find what the user is supposed to do and
-            dispatch it
-        '''
-
-        def __init__(self):
-            StateAction.__init__(self, None)
-
-        def get_action(self):
-            User = Pool().get('res.user')
-            the_user = User(Transaction().user)
-
-            if not (hasattr(the_user, 'team') and the_user.team):
-                return None
-
-            act = the_user.team.get_next_action(the_user)
-
-            if not act:
-                return None
-
-            Action = Pool().get('ir.action')
-
-            return Action.get_action_values(
-                act[0].__name__,
-                [act[0].id])[0], act[1], act[2]
 
     class VoidStateAction(StateAction):
         def __init__(self):
@@ -242,7 +277,7 @@ class TaskDispatcher(Wizard):
     def __setup__(cls):
         super(TaskDispatcher, cls).__setup__()
         cls._error_messages.update({
-            'no_task_available': 'There is no task available right now.',
+            'no_task_selected': 'No task has been selected.',
         })
 
     def default_select_context(self, name):
@@ -259,7 +294,7 @@ class TaskDispatcher(Wizard):
         selector.process = good_priority.process_step.process
         changes = selector.on_change_team()
         changes.update(selector.on_change_process())
-        for k, v in changes:
+        for k, v in changes.iteritems():
             setattr(selector, k, v)
         return utils.WithAbstract.serialize_field(selector)
 
@@ -274,14 +309,15 @@ class TaskDispatcher(Wizard):
 
     def do_calculate_action(self, action):
         Log = Pool().get('coop_process.process_log')
-        User = Pool().get('res.user')
-        action = self.select_context.team.get_next_action(
-            User(Transaction().user))
-        if not action:
-            self.raise_user_error('no_task_available')
+        if self.select_context.selected_task:
+            good_task = self.select_context.selected_task
+            good_id = good_task.task.id
+            good_model = good_task.task.__name__
+            act = good_task.to_state.process.get_act_window()
+        else:
+            self.raise_user_error('no_task_selected')
 
         Action = Pool().get('ir.action')
-        act, good_id, good_model = action
         act = Action.get_action_values(act.__name__, [act.id])[0]
 
         Session = Pool().get('ir.session')
