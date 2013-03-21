@@ -1,12 +1,14 @@
 <?xml version="1.0"?>
 <tryton>
   <data>
+      <!-- Transition Override -->
     <record model="ir.ui.view" id="step_transition_form">
       <field name="model">process.step_transition</field>
       <field name="type">form</field>
       <field name="inherit" ref="process.step_transition_form"/>
       <field name="name">step_transition_form</field>
     </record>
+    <!-- Process Override -->
     <record model="ir.ui.view" id="process_desc_form">
       <field name="model">process.process_desc</field>
       <field name="type">form</field>
@@ -19,12 +21,20 @@
       <field name="inherit" ref="process.process_desc_tree"/>
       <field name="name">process_desc_tree</field>
     </record>
+    <!-- Step Override -->
     <record model="ir.ui.view" id="step_desc_form">
       <field name="model">process.step_desc</field>
       <field name="type">form</field>
       <field name="inherit" ref="process.step_desc_form"/>
       <field name="name">step_desc_form</field>
     </record>
+    <record model="ir.ui.view" id="step_desc_tree">
+      <field name="model">process.step_desc</field>
+      <field name="type">tree</field>
+      <field name="inherit" ref="process.step_desc_tree"/>
+      <field name="name">step_desc_tree</field>
+    </record>
+    <!-- XML View Desc -->
     <record model="ir.ui.view" id="xml_view_desc_form">
       <field name="model">coop_process.xml_view_desc</field>
       <field name="type">form</field>
@@ -35,11 +45,13 @@
       <field name="type">tree</field>
       <field name="name">xml_view_desc_tree</field>
     </record>
+    <!-- Process Parameters -->
     <record model="ir.ui.view" id="process_parameters_form">
       <field name="model">coop_process.process_parameters</field>
       <field name="type">form</field>
       <field name="name">process_parameters_form</field>
     </record>
+    <!-- Process Log -->
     <record model="ir.ui.view" id="process_log_form">
       <field name="model">coop_process.process_log</field>
       <field name="type">form</field>
