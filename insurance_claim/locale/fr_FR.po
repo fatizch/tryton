@@ -3,10 +3,6 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:ins_claim.claim:"
-msgid "Everything is good !"
-msgstr "Tout est bon!"
-
-msgctxt "error:ins_claim.claim:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -73,10 +69,6 @@ msgstr "Préjudices"
 msgctxt "field:ins_claim.claim,name:"
 msgid "Number"
 msgstr "Numéro"
-
-msgctxt "field:ins_claim.claim,printable:"
-msgid "Printable"
-msgstr "Imprimable"
 
 msgctxt "field:ins_claim.claim,rec_name:"
 msgid "Name"
@@ -166,10 +158,6 @@ msgctxt "field:ins_claim.indemnification_detail,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:ins_claim.indemnification_detail,amount_per_period:"
-msgid "Amount per Period"
-msgstr "Montant par période"
-
 msgctxt "field:ins_claim.indemnification_detail,amount_per_unit:"
 msgid "Amount per Unit"
 msgstr "Montant par Unité"
@@ -254,10 +242,6 @@ msgctxt "field:ins_claim.loss,event_desc:"
 msgid "Event"
 msgstr "Fait Générateur"
 
-msgctxt "field:ins_claim.loss,expenses:"
-msgid "Expenses"
-msgstr "Frais"
-
 msgctxt "field:ins_claim.loss,id:"
 msgid "ID"
 msgstr "ID"
@@ -329,10 +313,6 @@ msgstr "ID"
 msgctxt "field:ins_contract.expense,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
-
-msgctxt "field:ins_contract.expense,loss:"
-msgid "Loss"
-msgstr "Préjudice"
 
 msgctxt "field:ins_contract.expense,rec_name:"
 msgid "Name"
@@ -463,10 +443,6 @@ msgid "Deductible"
 msgstr "Franchise"
 
 msgctxt "selection:ins_claim.indemnification_detail,kind:"
-msgid "Included"
-msgstr "Inclus"
-
-msgctxt "selection:ins_claim.indemnification_detail,kind:"
 msgid "Indemnified"
 msgstr "Indemnisé"
 
@@ -529,6 +505,18 @@ msgstr "Sinistre"
 msgctxt "selection:party.contact_history,for_object_ref:"
 msgid "Claim"
 msgstr "Sinistre"
+
+msgctxt "view:ins_claim.claim:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "view:ins_claim.claim:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "view:ins_claim.claim:"
+msgid "Losses"
+msgstr "Préjudices"
 
 msgctxt "view:ins_claim.indemnification:"
 msgid "Indemnification"

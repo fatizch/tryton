@@ -14,14 +14,6 @@ msgctxt "error:ins_contract.billing_manager:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_contract.broker_manager:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.contract:"
-msgid "Everything is good !"
-msgstr "Tout est bon!"
-
 msgctxt "error:ins_contract.contract:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -49,10 +41,6 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "error:ins_contract.management_role:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.option:"
-msgid "Everything is good !"
-msgstr "Tout est bon!"
 
 msgctxt "error:ins_contract.option:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -358,45 +346,9 @@ msgctxt "field:ins_contract.billing_process.process_state,the_bill_str:"
 msgid "Jsonthe_bill"
 msgstr ""
 
-msgctxt "field:ins_contract.broker_manager,broker:"
-msgid "Broker"
-msgstr "Courtier"
-
-msgctxt "field:ins_contract.broker_manager,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_contract.broker_manager,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_contract.broker_manager,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_contract.broker_manager,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_contract.broker_manager,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_contract.broker_manager,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_contract.broker_manager,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:ins_contract.contract,billing_manager:"
 msgid "Billing Manager"
 msgstr "Cotisation"
-
-msgctxt "field:ins_contract.contract,broker_manager:"
-msgid "Broker Manager"
-msgstr "Courtier"
 
 msgctxt "field:ins_contract.contract,complementary_data:"
 msgid "Complementary Data"
@@ -465,10 +417,6 @@ msgstr "Produit"
 msgctxt "field:ins_contract.contract,options:"
 msgid "Options"
 msgstr "Garanties"
-
-msgctxt "field:ins_contract.contract,printable:"
-msgid "Printable"
-msgstr "Imprimable"
 
 msgctxt "field:ins_contract.contract,rec_name:"
 msgid "Name"
@@ -583,6 +531,10 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:ins_contract.covered_element,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_contract.covered_element,complementary_data_summary:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -714,10 +666,6 @@ msgctxt "field:ins_contract.expense,rec_name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.expense,subscribed_service:"
-msgid "Subscribed Service"
-msgstr ""
-
 msgctxt "field:ins_contract.expense,write_date:"
 msgid ""
 msgstr " "
@@ -841,10 +789,6 @@ msgstr "Devises"
 msgctxt "field:ins_contract.option,currency_digits:"
 msgid "Currency Digits"
 msgstr "Nbre de chiffres après la virgule"
-
-msgctxt "field:ins_contract.option,current_state:"
-msgid "Current State"
-msgstr "Etat Courant"
 
 msgctxt "field:ins_contract.option,end_date:"
 msgid "End Date"
@@ -1247,10 +1191,6 @@ msgctxt "model:ins_contract.billing_process.process_state,name:"
 msgid "Billing Process State"
 msgstr ""
 
-msgctxt "model:ins_contract.broker_manager,name:"
-msgid "Broker Manager"
-msgstr "Courtier"
-
 msgctxt "model:ins_contract.contract,name:"
 msgid "Contract"
 msgstr "Contrat"
@@ -1351,10 +1291,6 @@ msgctxt "model:ir.action,name:launch_billing_process"
 msgid "Billing"
 msgstr "Cotisation"
 
-msgctxt "model:ir.action,name:project_view_action"
-msgid "New Subscription Process"
-msgstr "Souscription Individuelle"
-
 msgctxt "model:ir.action,name:resume_subs_process"
 msgid "Resume Process"
 msgstr "Reprendre le Workflow"
@@ -1374,10 +1310,6 @@ msgstr "Contrat"
 msgctxt "model:ir.ui.menu,name:menu_individual"
 msgid "Individual Policy"
 msgstr "Individuel"
-
-msgctxt "model:ir.ui.menu,name:menu_start_subs"
-msgid "New Subscription Process"
-msgstr "Souscription Individuelle"
 
 msgctxt "selection:ins_contract.billing.generic_line,kind:"
 msgid "Base Amount"
@@ -1591,10 +1523,6 @@ msgctxt "selection:ins_contract.subs_process.project,subscriber_kind:"
 msgid "Person"
 msgstr "Personne Physique"
 
-msgctxt "selection:ins_contract.subs_process.project,subscriber_kind:"
-msgid "Society"
-msgstr "Société"
-
 msgctxt "selection:ins_product.document,for_object:"
 msgid "Contract"
 msgstr "Contrat"
@@ -1664,8 +1592,12 @@ msgid "Covered Elements/Options"
 msgstr "Eléments Couverts/Garanties"
 
 msgctxt "view:ins_contract.contract:"
-msgid "Options"
-msgstr "Garanties"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Managing Entities"
+msgstr ""
 
 msgctxt "view:ins_contract.contract:"
 msgid "contract"
@@ -1695,6 +1627,30 @@ msgctxt "view:ins_contract.delivered_service:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 
+msgctxt "view:ins_contract.expense:"
+msgid "Expense"
+msgstr "Frais"
+
+msgctxt "view:ins_contract.expense:"
+msgid "Expenses"
+msgstr "Frais"
+
+msgctxt "view:ins_contract.management_protocol:"
+msgid "Protocol"
+msgstr "Protocole de gestion"
+
+msgctxt "view:ins_contract.management_protocol:"
+msgid "Protocols"
+msgstr ""
+
+msgctxt "view:ins_contract.management_role:"
+msgid "Management"
+msgstr ""
+
+msgctxt "view:ins_contract.management_role:"
+msgid "Manager"
+msgstr ""
+
 msgctxt "view:ins_contract.option:"
 msgid "option"
 msgstr "Garantie"
@@ -1706,6 +1662,10 @@ msgstr "Lignes de Cotisation"
 msgctxt "view:ins_contract.price_line:"
 msgid "price_line"
 msgstr "ligne de cotisation"
+
+msgctxt "view:ins_contract.status_history:"
+msgid "Status History"
+msgstr "Historique des Statuts"
 
 msgctxt "view:ins_contract.subs_process.covered_desc:"
 msgid "Covered Data"

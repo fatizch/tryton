@@ -22,10 +22,6 @@ msgctxt "error:process.process_step_relation:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:process.step_desc:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:process.step_transition:"
 msgid "Both choices must be filled !"
 msgstr "Saisir les deux choix"
@@ -230,10 +226,6 @@ msgctxt "field:process.step_desc,custom_views:"
 msgid "Custom Views"
 msgstr "Vues Personnalisées"
 
-msgctxt "field:process.step_desc,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:process.step_desc,main_model:"
 msgid "Main Model"
 msgstr "Modèle Principal"
@@ -259,10 +251,6 @@ msgid ""
 msgstr " "
 
 msgctxt "field:process.step_transition,pyson_description:"
-msgid ""
-msgstr " "
-
-msgctxt "field:process.step_transition,transition_kind:"
 msgid ""
 msgstr " "
 
@@ -302,13 +290,29 @@ msgctxt "selection:process.step_transition,kind:"
 msgid "Calculated"
 msgstr "Calculé"
 
-msgctxt "selection:process.step_transition,transition_kind:"
-msgid "Choice"
-msgstr "Choix"
+msgctxt "view:coop_process.process_log:"
+msgid "Log"
+msgstr ""
 
-msgctxt "selection:process.step_transition,transition_kind:"
-msgid "Standard"
-msgstr "Standard"
+msgctxt "view:coop_process.process_log:"
+msgid "Logs"
+msgstr ""
+
+msgctxt "view:coop_process.process_parameters:"
+msgid "Process Parameters"
+msgstr "Paramètres du Processus"
+
+msgctxt "view:coop_process.xml_view_desc:"
+msgid "View Descriptor"
+msgstr ""
+
+msgctxt "view:coop_process.xml_view_desc:"
+msgid "View Descriptors"
+msgstr ""
+
+msgctxt "view:process.step_desc:"
+msgid "Custom Views"
+msgstr "Vues Personnalisées"
 
 msgctxt "wizard_button:ProcessFinder,process_parameters,action:"
 msgid "Start Process"

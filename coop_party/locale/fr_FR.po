@@ -6,10 +6,6 @@ msgctxt "error:party.address_kind:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:party.company:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:party.contact_history:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -159,54 +155,6 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:party.address_kind,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:party.company,childs:"
-msgid "Children"
-msgstr "Enfants"
-
-msgctxt "field:party.company,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:party.company,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:party.company,employees:"
-msgid "Employees"
-msgstr "Employés"
-
-msgctxt "field:party.company,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:party.company,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:party.company,parent:"
-msgid "Parent"
-msgstr "Parent"
-
-msgctxt "field:party.company,party:"
-msgid "Party"
-msgstr "Tiers"
-
-msgctxt "field:party.company,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:party.company,reference:"
-msgid "Reference"
-msgstr "Référence"
-
-msgctxt "field:party.company,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:party.company,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -422,10 +370,6 @@ msgctxt "field:party.party,children:"
 msgid "Children"
 msgstr "Enfants"
 
-msgctxt "field:party.party,company:"
-msgid "Company"
-msgstr "Société"
-
 msgctxt "field:party.party,employee_role:"
 msgid "Employee"
 msgstr "Employé"
@@ -481,10 +425,6 @@ msgstr "Adresse"
 msgctxt "field:party.party,parent:"
 msgid "Parent"
 msgstr "Parent"
-
-msgctxt "field:party.party,person:"
-msgid "Person"
-msgstr "Personne"
 
 msgctxt "field:party.party,relations:"
 msgid "Relations"
@@ -770,10 +710,6 @@ msgctxt "model:party.address_kind,name:second"
 msgid "Secondary"
 msgstr "Secondaire"
 
-msgctxt "model:party.company,name:"
-msgid "Company"
-msgstr "Société"
-
 msgctxt "model:party.contact_history,name:"
 msgid "Contact History"
 msgstr "Historique des Contacts"
@@ -894,10 +830,6 @@ msgctxt "view:party.actor:"
 msgid "Roles"
 msgstr "Rôles"
 
-msgctxt "view:party.company:"
-msgid "Company"
-msgstr "Société"
-
 msgctxt "view:party.contact_history:"
 msgid "Communication Log"
 msgstr "Historique des Contacts"
@@ -911,16 +843,8 @@ msgid "Employees"
 msgstr "Employés"
 
 msgctxt "view:party.party:"
-msgid "Contact"
-msgstr "Contact"
-
-msgctxt "view:party.party:"
-msgid "Employee"
-msgstr "Employé"
-
-msgctxt "view:party.party:"
-msgid "Party"
-msgstr "Tiers"
+msgid "Company"
+msgstr "Société"
 
 msgctxt "view:party.party:"
 msgid "Relations"

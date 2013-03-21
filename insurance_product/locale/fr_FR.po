@@ -2,9 +2,9 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:ins_contract.process_product_relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+msgctxt "error:ins_product.attachment_setter:"
+msgid "Duplicate name on attachments : %s"
+msgstr ""
 
 msgctxt "error:ins_product.benefit-complementary_data_def:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -22,14 +22,6 @@ msgctxt "error:ins_product.benefit_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_product.benefit_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "Deux règles se chevauchent!"
-
-msgctxt "error:ins_product.business_rule_root:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "Deux règles se chevauchent!"
-
 msgctxt "error:ins_product.clause:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -41,10 +33,6 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "error:ins_product.clause_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.clause_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "Deux règles se chevauchent!"
 
 msgctxt "error:ins_product.clause_version:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -78,17 +66,9 @@ msgctxt "error:ins_product.coverage_amount_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_product.coverage_amount_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "Deux règles se chevauchent!"
-
 msgctxt "error:ins_product.deductible_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.deductible_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "Deux règles se chevauchent!"
 
 msgctxt "error:ins_product.document-rule-relation:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -110,10 +90,6 @@ msgctxt "error:ins_product.document_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_product.document_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "Deux règles se chevauchent!"
-
 msgctxt "error:ins_product.eligibility_relation_kind:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -121,10 +97,6 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "error:ins_product.eligibility_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.eligibility_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "Deux règles se chevauchent!"
 
 msgctxt "error:ins_product.event_desc-loss_desc:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -179,9 +151,9 @@ msgctxt "error:ins_product.pricing_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_product.pricing_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "Deux règles se chevauchent!"
+msgctxt "error:ins_product.process_product_relation:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_product.product-complementary_data_def:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -211,10 +183,6 @@ msgctxt "error:ins_product.reserve_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_product.reserve_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "Deux règles se chevauchent!"
-
 msgctxt "error:ins_product.sub_benefit_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -223,49 +191,9 @@ msgctxt "error:ins_product.term_renewal_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_product.term_renewal_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "Deux règles se chevauchent!"
-
 msgctxt "field:ProductDefinition,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_contract.process_product_relation,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_contract.process_product_relation,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_contract.process_product_relation,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_contract.process_product_relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_contract.process_product_relation,process:"
-msgid "Process"
-msgstr "Processus"
-
-msgctxt "field:ins_contract.process_product_relation,product:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "field:ins_contract.process_product_relation,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_contract.process_product_relation,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_contract.process_product_relation,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
 
 msgctxt "field:ins_product.attach_letter,attachment:"
 msgid "Data File"
@@ -358,10 +286,6 @@ msgstr "Type d'Indemnisation"
 msgctxt "field:ins_product.benefit,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
-
-msgctxt "field:ins_product.benefit,kind:"
-msgid "Kind"
-msgstr "Type"
 
 msgctxt "field:ins_product.benefit,loss_descs:"
 msgid "Loss Descriptions"
@@ -531,10 +455,6 @@ msgstr "Valeur Initiale"
 msgctxt "field:ins_product.benefit_rule,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
-
-msgctxt "field:ins_product.benefit_rule,kind:"
-msgid "Kind"
-msgstr "Type"
 
 msgctxt "field:ins_product.benefit_rule,max_duration_per_indemnification:"
 msgid "Max duration per Indemnification"
@@ -889,10 +809,6 @@ msgctxt "field:ins_product.complementary_data_def,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:ins_product.complementary_data_def,linked_item:"
-msgid "Linked Item"
-msgstr "Objet Lié"
-
 msgctxt "field:ins_product.complementary_data_def,name:"
 msgid "Code"
 msgstr "Code"
@@ -946,10 +862,6 @@ msgid "Code"
 msgstr "Code"
 
 msgctxt "field:ins_product.coverage,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "field:ins_product.coverage,complementary_data:"
 msgid "Offered Kind"
 msgstr "Données Complémentaires"
 
@@ -991,7 +903,7 @@ msgstr "Description"
 
 msgctxt "field:ins_product.coverage,document_rules:"
 msgid "Document Rules"
-msgstr ""
+msgstr "Documents"
 
 msgctxt "field:ins_product.coverage,eligibility_rules:"
 msgid "Eligibility Rules"
@@ -1013,10 +925,6 @@ msgctxt "field:ins_product.coverage,insurer:"
 msgid "Insurer"
 msgstr "Assureur"
 
-msgctxt "field:ins_product.coverage,is_coverage_amount_needed:"
-msgid "Coverage Amount Needed"
-msgstr ""
-
 msgctxt "field:ins_product.coverage,is_package:"
 msgid "Package"
 msgstr "Formule"
@@ -1036,6 +944,10 @@ msgstr "Nom"
 msgctxt "field:ins_product.coverage,pricing_rules:"
 msgid "Pricing Rules"
 msgstr "Règles de Cotisation"
+
+msgctxt "field:ins_product.coverage,products:"
+msgid "Products"
+msgstr "Produits"
 
 msgctxt "field:ins_product.coverage,rec_name:"
 msgid "Name"
@@ -1290,10 +1202,6 @@ msgctxt "field:ins_product.deductible_rule,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
 
-msgctxt "field:ins_product.deductible_rule,value:"
-msgid "Value"
-msgstr "Valeur"
-
 msgctxt "field:ins_product.deductible_rule,view_rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -1446,10 +1354,6 @@ msgctxt "field:ins_product.document_desc,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.document_request,contact_party:"
-msgid "Contact Party"
-msgstr "Acteur"
-
 msgctxt "field:ins_product.document_request,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -1481,10 +1385,6 @@ msgstr "Nécessaire Pour"
 msgctxt "field:ins_product.document_request,needed_by_str:"
 msgid "Master as String"
 msgstr ""
-
-msgctxt "field:ins_product.document_request,printable:"
-msgid "Printable"
-msgstr "Imprimable"
 
 msgctxt "field:ins_product.document_request,rec_name:"
 msgid "Name"
@@ -1712,7 +1612,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.event_desc,loss_descs:"
 msgid "Loss Descriptions"
-msgstr ""
+msgstr "Types de Préjudice Couverts"
 
 msgctxt "field:ins_product.event_desc,name:"
 msgid "Name"
@@ -2206,7 +2106,7 @@ msgstr "Description"
 
 msgctxt "field:ins_product.offered,document_rules:"
 msgid "Document Rules"
-msgstr ""
+msgstr "Documents"
 
 msgctxt "field:ins_product.offered,eligibility_rules:"
 msgid "Eligibility Rules"
@@ -2440,6 +2340,42 @@ msgctxt "field:ins_product.pricing_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_product.process_product_relation,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.process_product_relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.process_product_relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.process_product_relation,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.process_product_relation,process:"
+msgid "Process"
+msgstr "Processus"
+
+msgctxt "field:ins_product.process_product_relation,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:ins_product.process_product_relation,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.process_product_relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.process_product_relation,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_product.product,clause_rules:"
 msgid "Clause Rules"
 msgstr "Clauses"
@@ -2447,10 +2383,6 @@ msgstr "Clauses"
 msgctxt "field:ins_product.product,code:"
 msgid "Code"
 msgstr "Code"
-
-msgctxt "field:ins_product.product,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
 
 msgctxt "field:ins_product.product,complementary_data:"
 msgid "Offered Kind"
@@ -2490,7 +2422,7 @@ msgstr "Description"
 
 msgctxt "field:ins_product.product,document_rules:"
 msgid "Document Rules"
-msgstr ""
+msgstr "Documents"
 
 msgctxt "field:ins_product.product,eligibility_rules:"
 msgid "Eligibility Rules"
@@ -2781,6 +2713,146 @@ msgctxt "field:ins_product.rule_sets.subscriber,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_product.simple_coverage,clause_rules:"
+msgid "Clause Rules"
+msgstr "Clauses"
+
+msgctxt "field:ins_product.simple_coverage,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:ins_product.simple_coverage,complementary_data:"
+msgid "Offered Kind"
+msgstr "Typage"
+
+msgctxt "field:ins_product.simple_coverage,complementary_data_def:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_product.simple_coverage,coverages_in_package:"
+msgid "Coverages In Package"
+msgstr "Garanties de la Formule"
+
+msgctxt "field:ins_product.simple_coverage,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_product.simple_coverage,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:ins_product.simple_coverage,deductible_rules:"
+msgid "Deductible Rules"
+msgstr "Franchises"
+
+msgctxt "field:ins_product.simple_coverage,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:ins_product.simple_coverage,document_rules:"
+msgid "Document Rules"
+msgstr "Documents"
+
+msgctxt "field:ins_product.simple_coverage,eligibility_rules:"
+msgid "Eligibility Rules"
+msgstr "Règles d'Eligibilité"
+
+msgctxt "field:ins_product.simple_coverage,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_product.simple_coverage,family:"
+msgid "Family"
+msgstr "Famille"
+
+msgctxt "field:ins_product.simple_coverage,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.simple_coverage,insurer:"
+msgid "Insurer"
+msgstr "Assureur"
+
+msgctxt "field:ins_product.simple_coverage,is_package:"
+msgid "Package"
+msgstr "Formule"
+
+msgctxt "field:ins_product.simple_coverage,item_desc:"
+msgid "Item Descriptor"
+msgstr "Description du Risque"
+
+msgctxt "field:ins_product.simple_coverage,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.simple_coverage,pricing_rules:"
+msgid "Pricing Rules"
+msgstr "Règles de Cotisation"
+
+msgctxt "field:ins_product.simple_coverage,products:"
+msgid "Products"
+msgstr "Produits"
+
+msgctxt "field:ins_product.simple_coverage,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_product.simple_coverage,sub_document_rules:"
+msgid "Sub Document Rules"
+msgstr ""
+
+msgctxt "field:ins_product.simple_coverage,subscription_behaviour:"
+msgid "Subscription Behaviour"
+msgstr "Comportement à la Souscription"
+
+msgctxt "field:ins_product.simple_coverage,summary:"
+msgid "Summary"
+msgstr "Synthèse"
+
+msgctxt "field:ins_product.simple_coverage,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_product.simple_coverage,template_behaviour:"
+msgid "Template Behaviour"
+msgstr "Comportement du Modèle"
+
+msgctxt "field:ins_product.simple_pricing_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:ins_product.simple_pricing_rule,end_date:"
+msgid "To Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_product.simple_pricing_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.simple_pricing_rule,offered:"
+msgid "Offered"
+msgstr "Offre"
+
+msgctxt "field:ins_product.simple_pricing_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:ins_product.simple_pricing_rule,start_date:"
+msgid "From Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_product.simple_pricing_rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:ins_product.simple_pricing_rule,template_behaviour:"
+msgid "Template Behaviour"
+msgstr "Comportement du Modèle"
+
+msgctxt "field:ins_product.simple_pricing_rule,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
+
 msgctxt "field:ins_product.sub_benefit_rule,amount:"
 msgid "Amount"
 msgstr "Montant"
@@ -2814,7 +2886,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:ins_product.sub_benefit_rule,indemnification_calc_unit:"
-msgid "/"
+msgid "Calculation Unit"
 msgstr ""
 
 msgctxt "field:ins_product.sub_benefit_rule,is_used:"
@@ -2944,10 +3016,6 @@ msgstr "Spécifier les montants séparés par des ;"
 msgctxt "model:ProductDefinition,name:"
 msgid "Product Definition"
 msgstr "Définition Produit"
-
-msgctxt "model:ins_contract.process_product_relation,name:"
-msgid "Process Product Relation"
-msgstr "Relation Processus Produit"
 
 msgctxt "model:ins_product.attach_letter,name:"
 msgid "Attachment Creation"
@@ -3114,6 +3182,10 @@ msgctxt "model:ins_product.pricing_rule,name:"
 msgid "Pricing Rule"
 msgstr "Règle de Cotisation"
 
+msgctxt "model:ins_product.process_product_relation,name:"
+msgid "Process Product Relation"
+msgstr "Relation Processus Produit"
+
 msgctxt "model:ins_product.product,name:"
 msgid "Product"
 msgstr "Produit"
@@ -3160,6 +3232,14 @@ msgstr ""
 
 msgctxt "model:ins_product.rule_sets.subscriber,name:"
 msgid "Context functions for Contracts."
+msgstr ""
+
+msgctxt "model:ins_product.simple_coverage,name:"
+msgid "Simple Coverage"
+msgstr ""
+
+msgctxt "model:ins_product.simple_pricing_rule,name:"
+msgid "Simple Pricing Rule"
 msgstr ""
 
 msgctxt "model:ins_product.sub_benefit_rule,name:"
@@ -3318,18 +3398,6 @@ msgctxt "selection:ins_product.benefit,indemnification_kind:"
 msgid "Period"
 msgstr "Période"
 
-msgctxt "selection:ins_product.benefit,kind:"
-msgid "Annuity"
-msgstr "Rente"
-
-msgctxt "selection:ins_product.benefit,kind:"
-msgid "Capital"
-msgstr "Capital"
-
-msgctxt "selection:ins_product.benefit,kind:"
-msgid "Per Diem"
-msgstr "Indemnité Journalière"
-
 msgctxt "selection:ins_product.benefit,template_behaviour:"
 msgid ""
 msgstr " "
@@ -3385,14 +3453,6 @@ msgstr "Semaine"
 msgctxt "selection:ins_product.benefit_rule,indemnification_calc_unit:"
 msgid "Year"
 msgstr "Année"
-
-msgctxt "selection:ins_product.benefit_rule,kind:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "selection:ins_product.benefit_rule,kind:"
-msgid "Coverage Amount"
-msgstr "Montant de Couverture"
 
 msgctxt ""
 "selection:ins_product.benefit_rule,max_duration_per_indemnification_unit:"
@@ -3522,22 +3582,6 @@ msgid "Loss"
 msgstr "Préjudice"
 
 msgctxt "selection:ins_product.complementary_data_def,kind:"
-msgid "On Contract"
-msgstr "Contrat"
-
-msgctxt "selection:ins_product.complementary_data_def,kind:"
-msgid "On Loss"
-msgstr "Préjudice"
-
-msgctxt "selection:ins_product.complementary_data_def,kind:"
-msgid "On Product"
-msgstr "Produit"
-
-msgctxt "selection:ins_product.complementary_data_def,kind:"
-msgid "On Sub Element"
-msgstr "Elèment Couvert"
-
-msgctxt "selection:ins_product.complementary_data_def,kind:"
 msgid "Product"
 msgstr "Produit"
 
@@ -3572,10 +3616,6 @@ msgstr "Sélection"
 msgctxt "selection:ins_product.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
-
-msgctxt "selection:ins_product.coverage,family:"
-msgid "default"
-msgstr "Par défaut"
 
 msgctxt "selection:ins_product.coverage,subscription_behaviour:"
 msgid "Mandatory"
@@ -3917,6 +3957,54 @@ msgctxt "selection:ins_product.reserve_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
+msgctxt "selection:ins_product.simple_coverage,family:"
+msgid "default"
+msgstr "Par défaut"
+
+msgctxt "selection:ins_product.simple_coverage,subscription_behaviour:"
+msgid "Mandatory"
+msgstr "Obligatoire"
+
+msgctxt "selection:ins_product.simple_coverage,subscription_behaviour:"
+msgid "Optional"
+msgstr "En Option"
+
+msgctxt "selection:ins_product.simple_coverage,subscription_behaviour:"
+msgid "Proposed"
+msgstr "Proposé par Défaut"
+
+msgctxt "selection:ins_product.simple_coverage,template_behaviour:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:ins_product.simple_coverage,template_behaviour:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:ins_product.simple_coverage,template_behaviour:"
+msgid "Remove"
+msgstr "Remplacer"
+
+msgctxt "selection:ins_product.simple_pricing_rule,config_kind:"
+msgid "Advanced"
+msgstr "Avancé"
+
+msgctxt "selection:ins_product.simple_pricing_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:ins_product.simple_pricing_rule,template_behaviour:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:ins_product.simple_pricing_rule,template_behaviour:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:ins_product.simple_pricing_rule,template_behaviour:"
+msgid "Remove"
+msgstr "Remplacer"
+
 msgctxt "selection:ins_product.sub_benefit_rule,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
@@ -4029,6 +4117,10 @@ msgctxt "selection:ins_product.term_renewal_rule,term_date_choice:"
 msgid "At this Date"
 msgstr "À Cette Date"
 
+msgctxt "view:ins_product.attach_letter:"
+msgid "Attachment"
+msgstr "Pièce jointe"
+
 msgctxt "view:ins_product.attachment_setter:"
 msgid "Attachments"
 msgstr "Pièces jointes"
@@ -4036,6 +4128,10 @@ msgstr "Pièces jointes"
 msgctxt "view:ins_product.benefit:"
 msgid "Benefit"
 msgstr "Prestation"
+
+msgctxt "view:ins_product.benefit:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
 
 msgctxt "view:ins_product.benefit:"
 msgid "Reserve"
@@ -4048,10 +4144,6 @@ msgstr "Règle de Prestation"
 msgctxt "view:ins_product.business_rule_root:"
 msgid "Business Rule Root"
 msgstr "Règle Métier Racine"
-
-msgctxt "view:ins_product.business_rule_root:"
-msgid "Global"
-msgstr "Global"
 
 msgctxt "view:ins_product.clause:"
 msgid "Clause"
@@ -4082,24 +4174,16 @@ msgid "Benefits"
 msgstr "Prestations"
 
 msgctxt "view:ins_product.coverage:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
+msgid "Clause"
+msgstr "Clause"
 
 msgctxt "view:ins_product.coverage:"
-msgid "Coverage"
-msgstr "Garantie"
+msgid "Deductible"
+msgstr "Franchise"
 
 msgctxt "view:ins_product.coverage:"
-msgid "Coverage Amount"
-msgstr "Montant de Couverture"
-
-msgctxt "view:ins_product.coverage:"
-msgid "Coverages"
-msgstr "Garanties"
-
-msgctxt "view:ins_product.coverage:"
-msgid "Covered Element"
-msgstr "Elément Couvert"
+msgid "Documents"
+msgstr "Documents"
 
 msgctxt "view:ins_product.coverage_amount_rule:"
 msgid "Coverage Amount rule"
@@ -4157,6 +4241,10 @@ msgctxt "view:ins_product.event_desc:"
 msgid "Event Descriptor"
 msgstr ""
 
+msgctxt "view:ins_product.expense_kind:"
+msgid "Expense Kind"
+msgstr "Type de Frais"
+
 msgctxt "view:ins_product.letter_model:"
 msgid "Letter Model"
 msgstr "Modèle de Lettre"
@@ -4182,6 +4270,18 @@ msgid "Letter Versions"
 msgstr "Versions de Lettre"
 
 msgctxt "view:ins_product.loss_desc:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "view:ins_product.loss_desc:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "view:ins_product.loss_desc:"
+msgid "Events"
+msgstr ""
+
+msgctxt "view:ins_product.loss_desc:"
 msgid "Loss Descriptor"
 msgstr "Description du Préjudice"
 
@@ -4190,28 +4290,8 @@ msgid "Administration"
 msgstr "Administration"
 
 msgctxt "view:ins_product.offered:"
-msgid "Clause"
-msgstr "Clause"
-
-msgctxt "view:ins_product.offered:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "view:ins_product.offered:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "view:ins_product.offered:"
-msgid "Deductible"
-msgstr "Franchise"
-
-msgctxt "view:ins_product.offered:"
 msgid "Eligibility"
 msgstr "Eligibilité"
-
-msgctxt "view:ins_product.offered:"
-msgid "Managers"
-msgstr "Règles"
 
 msgctxt "view:ins_product.offered:"
 msgid "Offered"
@@ -4220,6 +4300,10 @@ msgstr "Offre"
 msgctxt "view:ins_product.offered:"
 msgid "Pricing"
 msgstr "Cotisation"
+
+msgctxt "view:ins_product.offered:"
+msgid "Rules"
+msgstr "Règles"
 
 msgctxt "view:ins_product.offered:"
 msgid "Summary"
@@ -4242,8 +4326,20 @@ msgid "Pricing rule"
 msgstr "Règle de Cotisation"
 
 msgctxt "view:ins_product.product:"
+msgid "Clause"
+msgstr "Clause"
+
+msgctxt "view:ins_product.product:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
+
+msgctxt "view:ins_product.product:"
+msgid "Deductible"
+msgstr "Franchise"
+
+msgctxt "view:ins_product.product:"
+msgid "Documents"
+msgstr "Documents"
 
 msgctxt "view:ins_product.product:"
 msgid "Items/Options"
@@ -4261,9 +4357,29 @@ msgctxt "view:ins_product.reserve_rule:"
 msgid "Reserve rule"
 msgstr "Provisionnement"
 
+msgctxt "view:ins_product.simple_coverage:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "view:ins_product.simple_coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "view:ins_product.simple_coverage:"
+msgid "Coverages"
+msgstr "Garanties"
+
+msgctxt "view:ins_product.sub_benefit_rule:"
+msgid "Sub Benefit Rule"
+msgstr "Sous Règles de Prestation"
+
 msgctxt "view:ins_product.term_renewal_rule:"
 msgid "Term - Renewal rule"
 msgstr "Règle de Terme - Renouvellement"
+
+msgctxt "view:process.process_desc:"
+msgid "Products"
+msgstr "Produits"
 
 msgctxt "wizard_button:ins_product.letter_creation_wizard,attach,end:"
 msgid "Cancel"
@@ -4289,12 +4405,6 @@ msgid "Generate"
 msgstr "Générer"
 
 msgctxt ""
-"wizard_button:ins_product.letter_creation_wizard,select_model,post-"
-"generation:"
-msgid "Complete"
-msgstr "Terminer"
-
-msgctxt ""
 "wizard_button:ins_product.letter_creation_wizard,select_model,post_generation:"
 msgid "Complete"
 msgstr "Terminer"
@@ -4305,7 +4415,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 msgctxt ""
-"wizard_button:ins_product.receive_document_wizard,attachment_setter,store_attachments:"
+"wizard_button:ins_product.receive_document_wizard,attachment_setter,only_store:"
 msgid "Next"
 msgstr "Suivant"
 

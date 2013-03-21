@@ -3,10 +3,6 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:ins_claim.claim:"
-msgid "Everything is good !"
-msgstr "Tout est bon!"
-
-msgctxt "error:ins_claim.claim:"
 msgid "Object %s is currently locked by user %s"
 msgstr ""
 

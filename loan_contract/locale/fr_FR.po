@@ -259,6 +259,10 @@ msgid "Loans"
 msgstr "Prêts"
 
 msgctxt "view:ins_contract.loan:"
+msgid "%"
+msgstr ""
+
+msgctxt "view:ins_contract.loan:"
 msgid "Loan"
 msgstr "Emprunteur"
 

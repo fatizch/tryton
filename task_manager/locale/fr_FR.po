@@ -3,8 +3,20 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:task_manager.task_dispatcher:"
-msgid "There is no task available right now."
-msgstr "Pas de tâches disponibles pour le moment"
+msgid "No task has been selected."
+msgstr ""
+
+msgctxt "field:coop_process.process_log,priority:"
+msgid "Priority"
+msgstr "Priorité"
+
+msgctxt "field:coop_process.process_log,task_selected:"
+msgid "Selected"
+msgstr "Coché"
+
+msgctxt "field:coop_process.process_log,task_start:"
+msgid "Task Start"
+msgstr ""
 
 msgctxt "field:res.user,team:"
 msgid "Team"
@@ -61,6 +73,66 @@ msgstr "Utilisateur"
 msgctxt "field:task_manager.select_user,user_ok:"
 msgid "User Ok"
 msgstr "Utilisateur Ok"
+
+msgctxt "field:task_manager.task_displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:task_manager.task_displayer,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:task_manager.task_displayer,nb_tasks:"
+msgid "Number"
+msgstr "Numéro"
+
+msgctxt "field:task_manager.task_displayer,task:"
+msgid "Task"
+msgstr "Tâche"
+
+msgctxt "field:task_manager.task_displayer,task_name:"
+msgid "Task Name"
+msgstr ""
+
+msgctxt "field:task_manager.task_selector,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:task_manager.task_selector,nb_tasks_process:"
+msgid "Process Tasks"
+msgstr ""
+
+msgctxt "field:task_manager.task_selector,nb_tasks_team:"
+msgid "Team Tasks"
+msgstr ""
+
+msgctxt "field:task_manager.task_selector,nb_users_team:"
+msgid "Team Users"
+msgstr ""
+
+msgctxt "field:task_manager.task_selector,process:"
+msgid "Process"
+msgstr "Processus"
+
+msgctxt "field:task_manager.task_selector,selected_task:"
+msgid "Selected Task"
+msgstr ""
+
+msgctxt "field:task_manager.task_selector,tasks:"
+msgid "Tasks"
+msgstr ""
+
+msgctxt "field:task_manager.task_selector,tasks_process:"
+msgid "Process Tasks"
+msgstr ""
+
+msgctxt "field:task_manager.task_selector,tasks_team:"
+msgid "Team Tasks"
+msgstr ""
+
+msgctxt "field:task_manager.task_selector,team:"
+msgid "Team"
+msgstr "Equipe"
 
 msgctxt "field:task_manager.team,authorizations:"
 msgid "Authorizations"
@@ -170,6 +242,14 @@ msgctxt "model:task_manager.select_user,name:"
 msgid "Select User"
 msgstr "Saisir un utilisateur"
 
+msgctxt "model:task_manager.task_displayer,name:"
+msgid "Task Displayer"
+msgstr ""
+
+msgctxt "model:task_manager.task_selector,name:"
+msgid "Task Selector"
+msgstr ""
+
 msgctxt "model:task_manager.team,name:"
 msgid "Team"
 msgstr "Equipe"
@@ -190,6 +270,18 @@ msgctxt "selection:task_manager.priority,kind:"
 msgid "User Issues"
 msgstr ""
 
+msgctxt "selection:task_manager.task_displayer,kind:"
+msgid "Process"
+msgstr "Processus"
+
+msgctxt "selection:task_manager.task_displayer,kind:"
+msgid "Team"
+msgstr "Equipe"
+
+msgctxt "view:coop_process.process_log:"
+msgid "Tasks"
+msgstr ""
+
 msgctxt "view:res.user:"
 msgid "Team management"
 msgstr "Gestion de l'Equipe"
@@ -205,6 +297,18 @@ msgstr "Priorité"
 msgctxt "view:task_manager.select_user:"
 msgid "Add User"
 msgstr "Ajouter l'Utilisateur"
+
+msgctxt "view:task_manager.task_displayer:"
+msgid "Tasks"
+msgstr ""
+
+msgctxt "view:task_manager.task_displayer:"
+msgid "Tasks Repartition"
+msgstr ""
+
+msgctxt "view:task_manager.task_selector:"
+msgid "Task Selector"
+msgstr ""
 
 msgctxt "view:task_manager.team:"
 msgid "Add User"
@@ -223,5 +327,14 @@ msgid "Add User"
 msgstr "Ajouter l'Utilisateur"
 
 msgctxt "wizard_button:task_manager.add_user,select_user,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:task_manager.task_dispatcher,select_context,calculate_action:"
+msgid "Compute Task"
+msgstr ""
+
+msgctxt "wizard_button:task_manager.task_dispatcher,select_context,end:"
 msgid "Cancel"
 msgstr "Annuler"

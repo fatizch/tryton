@@ -2,13 +2,13 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:process.code:"
+msgid "Method %s does not exist on model %s"
+msgstr ""
+
 msgctxt "error:process.process_desc:"
 msgid "The technical name must be unique"
 msgstr "Le nom technique doit être unique"
-
-msgctxt "error:process.process_framework:"
-msgid "Everything is good !"
-msgstr "Tout est bon!"
 
 msgctxt "error:process.step_desc:"
 msgid "The technical name must be unique"
@@ -25,6 +25,54 @@ msgstr "Expression Pyson et la description sont obligatoires"
 msgctxt "field:ir.model,is_workflow:"
 msgid "Is Workflow"
 msgstr ""
+
+msgctxt "field:process.code,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:process.code,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:process.code,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:process.code,method_name:"
+msgid "Method Name"
+msgstr ""
+
+msgctxt "field:process.code,on_model:"
+msgid "On Model"
+msgstr "Modèle"
+
+msgctxt "field:process.code,parent_step:"
+msgid "Parent Step"
+msgstr ""
+
+msgctxt "field:process.code,parent_transition:"
+msgid "Parent Transition"
+msgstr ""
+
+msgctxt "field:process.code,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:process.code,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:process.code,technical_kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:process.code,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:process.code,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
 
 msgctxt "field:process.process_desc,all_steps:"
 msgid "All Steps"
@@ -50,10 +98,6 @@ msgctxt "field:process.process_desc,menu_icon:"
 msgid "Menu Icon"
 msgstr "Icône du Menu"
 
-msgctxt "field:process.process_desc,menu_item:"
-msgid "Menu Element"
-msgstr "Menu"
-
 msgctxt "field:process.process_desc,menu_items:"
 msgid "Menus"
 msgstr ""
@@ -61,10 +105,6 @@ msgstr ""
 msgctxt "field:process.process_desc,menu_name:"
 msgid "Menu name"
 msgstr "Nom du Menu"
-
-msgctxt "field:process.process_desc,menu_top:"
-msgid "Top Menu"
-msgstr "Menu Parent"
 
 msgctxt "field:process.process_desc,on_model:"
 msgid "On Model"
@@ -105,14 +145,6 @@ msgstr "Entête XML"
 msgctxt "field:process.process_desc,xml_tree:"
 msgid "Tree View XML"
 msgstr "Description de la Vue Arbre"
-
-msgctxt "field:process.process_framework,current_state:"
-msgid "Current State"
-msgstr "Etat Courant"
-
-msgctxt "field:process.process_framework,id:"
-msgid "ID"
-msgstr "ID"
 
 msgctxt "field:process.process_menu_relation,create_date:"
 msgid "Create Date"
@@ -231,7 +263,7 @@ msgid "Executed After Step"
 msgstr ""
 
 msgctxt "field:process.step_desc,code_before:"
-msgid "Exectuted Before Step"
+msgid "Executed Before Step"
 msgstr ""
 
 msgctxt "field:process.step_desc,colspan:"
@@ -338,10 +370,6 @@ msgctxt "field:process.step_transition,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:process.step_transition,is_readonly:"
-msgid "Readonly"
-msgstr "En Lecture Seule"
-
 msgctxt "field:process.step_transition,kind:"
 msgid "Transition Kind"
 msgstr "Type"
@@ -381,10 +409,6 @@ msgstr "Nom"
 msgctxt "field:process.step_transition,to_step:"
 msgid "To Step"
 msgstr "Vers l'Etape"
-
-msgctxt "field:process.step_transition,transition_kind:"
-msgid "Transition Kind"
-msgstr "Type de Transition"
 
 msgctxt "field:process.step_transition,write_date:"
 msgid "Write Date"
@@ -466,13 +490,13 @@ msgctxt "model:ir.ui.menu,name:process_menu_id"
 msgid "Process Main Menu"
 msgstr "Moteur de Processus"
 
+msgctxt "model:process.code,name:"
+msgid "Code"
+msgstr "Code"
+
 msgctxt "model:process.process_desc,name:"
 msgid "Process Descriptor"
 msgstr "Descripteur de Processus"
-
-msgctxt "model:process.process_framework,name:"
-msgid "Process Framework"
-msgstr ""
 
 msgctxt "model:process.process_menu_relation,name:"
 msgid "Process Menu Relation"
@@ -502,6 +526,18 @@ msgctxt "model:process.transition_authorization,name:"
 msgid "Transition Authorization"
 msgstr "Autorisations pour les Transitions"
 
+msgctxt "selection:process.code,technical_kind:"
+msgid "After"
+msgstr ""
+
+msgctxt "selection:process.code,technical_kind:"
+msgid "Before"
+msgstr ""
+
+msgctxt "selection:process.code,technical_kind:"
+msgid "Transition"
+msgstr "Transition"
+
 msgctxt "selection:process.process_desc,step_button_group_position:"
 msgid "Bottom"
 msgstr "Bas"
@@ -523,14 +559,6 @@ msgid "Complete Process"
 msgstr "Terminer le processus"
 
 msgctxt "selection:process.step_transition,kind:"
-msgid "Next Transition"
-msgstr "Prochaine Transition"
-
-msgctxt "selection:process.step_transition,kind:"
-msgid "Previous Transition"
-msgstr "Transition Précédente"
-
-msgctxt "selection:process.step_transition,kind:"
 msgid "Standard Transition"
 msgstr "Transition Standard"
 
@@ -542,21 +570,33 @@ msgctxt "selection:process.step_transition,method_kind:"
 msgid "Replace Step Methods"
 msgstr ""
 
-msgctxt "selection:process.step_transition,transition_kind:"
-msgid "Choice"
-msgstr "Choix"
-
-msgctxt "selection:process.step_transition,transition_kind:"
-msgid "Standard"
-msgstr "Standard"
-
 msgctxt "view:ins_claim.claim:"
-msgid "Calcul de l'Indemnisation"
+msgid "==> Clôture"
 msgstr ""
 
 msgctxt "view:ins_claim.claim:"
-msgid "Claim Declaration"
-msgstr "Claim Declaration"
+msgid "==> Documents"
+msgstr ""
+
+msgctxt "view:ins_claim.claim:"
+msgid "==> Décl. du Préjudice"
+msgstr ""
+
+msgctxt "view:ins_claim.claim:"
+msgid "==> Déclarant"
+msgstr ""
+
+msgctxt "view:ins_claim.claim:"
+msgid "==> Prestations"
+msgstr ""
+
+msgctxt "view:ins_claim.claim:"
+msgid "==> Remboursement"
+msgstr ""
+
+msgctxt "view:ins_claim.claim:"
+msgid "==> Validation de l'indemnisation"
+msgstr ""
 
 msgctxt "view:ins_claim.claim:"
 msgid "Clôture"
@@ -567,16 +607,20 @@ msgid "Complete"
 msgstr "Terminer"
 
 msgctxt "view:ins_claim.claim:"
-msgid "Documents requis"
-msgstr ""
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "view:ins_claim.claim:"
+msgid "Décl. du Préjudice"
+msgstr "Décl. du Préjudice"
 
 msgctxt "view:ins_claim.claim:"
 msgid "Déclarant"
 msgstr "Déclarant"
 
 msgctxt "view:ins_claim.claim:"
-msgid "Déclaration Sinistre"
-msgstr "Déclaration Sinistre"
+msgid "Déclaration de Sinistre"
+msgstr "Déclaration de Sinistre"
 
 msgctxt "view:ins_claim.claim:"
 msgid "Next"
@@ -591,10 +635,6 @@ msgid "Previous"
 msgstr "Précédent"
 
 msgctxt "view:ins_claim.claim:"
-msgid "Préjudice"
-msgstr "Préjudice"
-
-msgctxt "view:ins_claim.claim:"
 msgid "Remboursement"
 msgstr "Remboursement"
 
@@ -602,56 +642,57 @@ msgctxt "view:ins_claim.claim:"
 msgid "The current record completed the current process, please go ahead"
 msgstr "Processus Terminé. Commencez une nouvelle tâche"
 
-msgctxt "view:ins_collective.contract:"
-msgid "Activation"
+msgctxt "view:ins_claim.claim:"
+msgid "Validation de l'indemnisation"
+msgstr "Validation de l'indemnisation"
+
+msgctxt "view:ins_contract.contract:"
+msgid "==> Adhérent"
 msgstr ""
 
-msgctxt "view:ins_collective.contract:"
+msgctxt "view:ins_contract.contract:"
+msgid "==> Choix des personnes couvertes"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "==> Choix du souscripteur"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "==> Cotisation"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "==> Document Request"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "==> Options"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "==> Options Selection"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "==> Populations"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "==> Tarif"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "==> Validation"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "==> Validation du contract"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
 msgid "Adhérent"
-msgstr ""
-
-msgctxt "view:ins_collective.contract:"
-msgid "Choix du Produit"
-msgstr ""
-
-msgctxt "view:ins_collective.contract:"
-msgid "Complete Process"
-msgstr "Terminer le processus"
-
-msgctxt "view:ins_collective.contract:"
-msgid "Eléments Couverts"
-msgstr ""
-
-msgctxt "view:ins_collective.contract:"
-msgid "Garanties"
-msgstr "Garanties"
-
-msgctxt "view:ins_collective.contract:"
-msgid "Modification du Produit"
-msgstr "Modification du Produit"
-
-msgctxt "view:ins_collective.contract:"
-msgid "Produit Sur Mesure"
-msgstr ""
-
-msgctxt "view:ins_collective.contract:"
-msgid "Souscription Contrat Groupe (Moteur WF)"
-msgstr "Souscription Contrat Groupe (Moteur WF)"
-
-msgctxt "view:ins_collective.contract:"
-msgid "Synthèse"
-msgstr ""
-
-msgctxt "view:ins_collective.contract:"
-msgid "The current record completed the current process, please go ahead"
-msgstr "Processus Terminé. Commencez une nouvelle tâche"
-
-msgctxt "view:ins_collective.contract:"
-msgid ""
-"The current record is in a state (Activation) that you are not allowed to "
-"view."
-msgstr ""
-"Vous n'avez pas les habilitations nécessaires pour terminer ce processus"
+msgstr "Adhérent"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Billing"
@@ -674,12 +715,12 @@ msgid "Complete"
 msgstr "Terminer"
 
 msgctxt "view:ins_contract.contract:"
-msgid "Document Request"
-msgstr "Document Request"
+msgid "Cotisation"
+msgstr "Cotisation"
 
 msgctxt "view:ins_contract.contract:"
-msgid "Loans"
-msgstr "Prêts"
+msgid "Document Request"
+msgstr "Document Request"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Next"
@@ -694,6 +735,10 @@ msgid "Options Selection"
 msgstr "Options Selection"
 
 msgctxt "view:ins_contract.contract:"
+msgid "Populations"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
 msgid "Previous"
 msgstr "Précédent"
 
@@ -702,12 +747,8 @@ msgid "Processus de souscription individuel"
 msgstr "Processus de souscription individuel"
 
 msgctxt "view:ins_contract.contract:"
-msgid "Prêt"
-msgstr ""
-
-msgctxt "view:ins_contract.contract:"
-msgid "Souscription Emprunteur"
-msgstr "Souscription Emprunteur"
+msgid "Souscription Contrat Collectif"
+msgstr "Souscription Contrat Collectif"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Tarif"
@@ -719,17 +760,21 @@ msgstr "Processus Terminé. Commencez une nouvelle tâche"
 
 msgctxt "view:ins_contract.contract:"
 msgid ""
-"The current record is in a state (Validation du contract) that you are not "
+"The current record isin a state (Validation du contract) that you are not "
 "allowed to view."
 msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "Validation"
+msgstr "Validation"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Validation du contract"
 msgstr "Validation du contract"
 
-msgctxt "view:process.process_desc:"
-msgid "Description"
-msgstr "Description"
+msgctxt "view:process.code:"
+msgid "Code"
+msgstr "Code"
 
 msgctxt "view:process.process_desc:"
 msgid "Description"
@@ -740,8 +785,8 @@ msgid "Description"
 msgstr "Description"
 
 msgctxt "view:process.process_desc:"
-msgid "Descrption"
-msgstr ""
+msgid "Description"
+msgstr "Description"
 
 msgctxt "view:process.process_desc:"
 msgid "Process Descriptor"
@@ -750,10 +795,6 @@ msgstr "Descripteur de Processus"
 msgctxt "view:process.process_desc:"
 msgid "Process Descriptors"
 msgstr "Paramétrage des Processus"
-
-msgctxt "view:process.process_desc:"
-msgid "Steps"
-msgstr "Etapes"
 
 msgctxt "view:process.process_desc:"
 msgid "Update Menu"
@@ -784,16 +825,16 @@ msgid "Code"
 msgstr "Code"
 
 msgctxt "view:process.step_desc:"
-msgid "Relations"
-msgstr "Relations"
-
-msgctxt "view:process.step_desc:"
 msgid "Step Descriptor"
 msgstr "Descripteur d'Etape"
 
 msgctxt "view:process.step_desc:"
 msgid "Step Descriptors"
 msgstr "Paramétrage des Etapes"
+
+msgctxt "view:process.step_desc:"
+msgid "Usage"
+msgstr "Utilisation"
 
 msgctxt "view:process.step_desc:"
 msgid "XML"

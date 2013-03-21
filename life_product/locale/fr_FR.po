@@ -166,6 +166,10 @@ msgctxt "selection:ins_product.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
 
+msgctxt "view:ins_product.coverage:"
+msgid "Coverage Amount"
+msgstr "Montant de Couverture"
+
 msgctxt "view:tranche.tranche:"
 msgid "Tranche"
 msgstr "Tranche"
