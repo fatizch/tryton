@@ -530,9 +530,9 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
         'Header Line',
         states={'invisible': Eval('input_mode', '') != 'expert'},
         on_change_with=[
-            'view_string', 'nb_col', 'input_mode', 'header_line', 'view_kind'],
+            'view_string', 'nb_col', 'input_mode', 'header_line'],
         depends=[
-            'view_string', 'nb_col', 'input_mode', 'header_line', 'view_kind'])
+            'view_string', 'nb_col', 'input_mode', 'header_line'])
     view_string = fields.Char(
         'View String',
         states={'invisible': Eval('input_mode', '') != 'classic'},
@@ -578,14 +578,9 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
     def on_change_with_header_line(self):
         if self.input_mode == 'expert':
             return self.header_line
-        if self.view_kind == 'tree':
-            xml = '<tree '
-        elif self.view_kind == 'form':
-            xml = '<form '
-        xml += 'string="%s" ' % self.view_string
+        xml = 'string="%s" ' % self.view_string
         if self.view_kind == 'form':
             xml += 'col="%s" ' % self.nb_col
-        xml += '>'
         return xml
 
     def on_change_with_view_string(self):
@@ -604,7 +599,8 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
             the_step = self.for_step.technical_name
         else:
             the_step = Transaction().context.get('for_step_name', '')
-        return 'step_%s_%s_%s' % (the_step, self.view_name, self.view_kind)
+        return '_extra_views.step_%s_%s_%s' % (
+            the_step, self.view_name, self.view_kind)
 
     def create_update_view(self):
         if (hasattr(self, 'the_view') and self.the_view):
@@ -612,13 +608,14 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
         else:
             View = Pool().get('ir.ui.view')
             the_view = View()
-            the_view.module = 'process'
-            the_view.name = self.on_change_with_view_final_name()
+            the_view.module = '_extra_views'
+            the_view.name = self.on_change_with_view_final_name()[13:]
         the_view.model = self.view_model.model
         the_view.priority = 1000
         the_view.type = self.view_kind
         the_view.data = '<?xml version="1.0"?>'
-        the_view.data += self.on_change_with_header_line()
+        the_view.data += '<%s %s>' % (
+            self.view_kind, self.on_change_with_header_line())
         the_view.data += self.view_content
         if self.view_kind == 'form':
             the_view.data += '</form>'
@@ -627,12 +624,12 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
         the_view.save()
         ModelData = Pool().get('ir.model.data')
         good_data = ModelData.search([
-            ('module', '=', 'process'),
+            ('module', '=', '_extra_views'),
             ('fs_id', '=', the_view.name),
             ('model', '=', 'ir.ui.view')])
         if not good_data:
             data = ModelData()
-            data.module = 'process'
+            data.module = '_extra_views'
             data.model = 'ir.ui.view'
             data.fs_id = the_view.name
             data.db_id = the_view.id
@@ -664,7 +661,7 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
         super(XMLViewDesc, cls).delete(records)
         ModelData = Pool().get('ir.model.data')
         good_data = ModelData.search([
-            ('module', '=', 'process'),
+            ('module', '=', '_extra_views'),
             ('model', '=', 'ir.ui.view'),
             ('db_id', 'in', [x.id for x in to_delete])])
         ModelData.delete(good_data)

@@ -595,6 +595,8 @@ class Code(ModelSQL, ModelView):
     def pre_validate(self):
         if not (hasattr(self, 'on_model') and self.on_model):
             return
+        if not (hasattr(self, 'method_name') and self.method_name):
+            return
         TargetModel = Pool().get(self.on_model.model)
         if not (self.method_name in dir(TargetModel) and callable(
                 getattr(TargetModel, self.method_name))):
