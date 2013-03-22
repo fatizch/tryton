@@ -183,15 +183,15 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     billing_manager = fields.One2Many(
         'ins_contract.billing_manager', 'contract', 'Billing Manager')
     complementary_data = fields.Dict(
-        'ins_product.complementary_data_def', 'Complementary Data')
+        'ins_product.complementary_data_def', 'Complementary Data',
+        on_change=[
+            'complementary_data', 'start_date', 'options', 'offered'],
+        depends=[
+            'complementary_data', 'start_date', 'options', 'offered'])
     # TODO replace single contact by date versionned list
     contact = fields.Many2One('party.party', 'Contact')
     documents = fields.One2Many(
-        'ins_product.document_request',
-        'needed_by',
-        'Documents',
-        size=1,
-    )
+        'ins_product.document_request', 'needed_by', 'Documents', size=1)
 
     @staticmethod
     def get_master(master):
@@ -225,24 +225,14 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         if not (hasattr(self, 'complementary_data') and
                 self.complementary_data):
             self.complementary_data = {}
-        self.complementary_data = utils.init_complementary_data(
-            self.get_complementary_data_def())
+        self.complementary_data = self.on_change_complementary_data()[
+            'complementary_data']
         return True, ()
 
-    def get_complementary_data_def(self):
-        compl_data_defs = []
-        if self.offered:
-            compl_data_defs.extend(self.offered.get_complementary_data_def(
-                ['contract'], at_date=self.start_date))
-        for option in self.options:
-            compl_data_defs.extend(
-                option.offered.get_complementary_data_def(
-                    ['contract'], at_date=option.start_date))
-        return set(compl_data_defs)
-
     def get_complementary_data_value(self, at_date, value):
-        return utils.get_complementary_data_value(self, 'complementary_data',
-            self.get_complementary_data_def(), at_date, value)
+        return utils.get_complementary_data_value(
+            self, 'complementary_data', self.get_complementary_data_def(),
+            at_date, value)
 
     def get_dates(self, dates=None, start=None, end=None):
         if dates:
@@ -383,6 +373,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             good_datas = []
             for code, option in options.iteritems():
                 if code in existing_datas:
+                    existing_datas[code].init_complementary_data()
                     good_datas.append(existing_datas[code])
                     to_delete.remove(existing_datas[code])
                     continue
@@ -485,6 +476,11 @@ class Contract(model.CoopSQL, Subscribed, Printable):
                 self.billing_manager):
             bm = self.new_billing_manager()
         self.billing_manager = [bm]
+
+    def on_change_complementary_data(self):
+        return {'complementary_data': self.offered.get_result(
+            'calculated_complementary_datas',
+            {'date': self.start_date, 'contract': self})[0]}
 
 
 class Option(model.CoopSQL, Subscribed):
@@ -789,8 +785,8 @@ class BillingManager(model.CoopSQL, model.CoopView):
             return res
 
     def next_billing_dates(self):
-        date = max(Pool().get('ir.date').today(),
-            self.get_contract().start_date)
+        date = max(
+            Pool().get('ir.date').today(), self.get_contract().start_date)
         return (
             date,
             utils.add_frequency(self.get_product_frequency(date), date))
@@ -952,7 +948,9 @@ class CoveredData(model.CoopSQL, model.CoopView):
     covered_element = fields.Many2One(
         'ins_contract.covered_element', 'Covered Element', ondelete='CASCADE')
     complementary_data = fields.Dict(
-        'ins_product.complementary_data_def', 'Complementary Data')
+        'ins_product.complementary_data_def', 'Complementary Data', on_change=[
+            'complementary_data', 'option', 'start_date'],
+        depends=['complementary_data', 'option', 'start_date'])
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     status = fields.Selection(OPTIONSTATUS, 'Status')
@@ -964,21 +962,26 @@ class CoveredData(model.CoopSQL, model.CoopView):
     def get_name_for_billing(self):
         return self.covered_element.get_name_for_billing()
 
-    def get_complementary_data_value(self, at_date, value):
-        return utils.get_complementary_data_value(self, 'complementary_data',
-            self.get_complementary_data_def(), at_date, value)
-
-    def get_complementary_data_def(self):
-        return self.option.offered.get_complementary_data_def(
-            ['sub_elem'], at_date=self.start_date)
+    def init_complementary_data(self):
+        if not (hasattr(self, 'complementary_data') and
+                self.complementary_data):
+            self.complementary_data = {}
+        self.complementary_data = self.on_change_complementary_data()[
+            'complementary_data']
 
     def init_from_option(self, option):
         self.option = option
         self.coverage = option.offered
         self.start_date = option.start_date
         self.end_date = option.end_date
-        self.complementary_data = utils.init_complementary_data(
-            self.get_complementary_data_def())
+        self.init_complementary_data()
+
+    def on_change_complementary_data(self):
+        return {'complementary_data': self.option.contract.offered.get_result(
+            'calculated_complementary_datas', {
+                'date': self.start_date,
+                'contract': self.option.contract,
+                'sub_elem': self})[0]}
 
     def init_from_covered_element(self, covered_element):
         #self.covered_element = covered_element
@@ -995,9 +998,9 @@ class CoveredData(model.CoopSQL, model.CoopView):
         return utils.limit_dates(res, start, end)
 
     def get_coverage(self):
-        if self.coverage:
+        if (hasattr(self, 'coverage') and self.coverage):
             return self.coverage
-        if self.option:
+        if (hasattr(self, 'option') and self.option):
             return self.option.offered
 
 

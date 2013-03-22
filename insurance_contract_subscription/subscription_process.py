@@ -261,9 +261,9 @@ class ContractSubscription(CoopProcessFramework):
     def finalize_contract(self):
         res = super(ContractSubscription, self).finalize_contract()
         return res
-#        Model = utils.get_relation_model(self.__class__, 'subscription_mgr')
-#        Model.delete([self.subscription_mgr])
-#        return res
+        # Model = utils.get_relation_model(self.__class__, 'subscription_mgr')
+        # Model.delete([self.subscription_mgr])
+        # return res
 
     def init_subscription_document_request(self):
         DocRequest = Pool().get('ins_product.document_request')
@@ -434,9 +434,9 @@ class CoveredElement():
         for option in contract.options:
             good_data = CoveredData()
             good_data.init_from_option(option)
-#            good_data.start_date = max(
-#                good_data.start_date, contract.start_date)
-            good_data.init_complementary_data(option.offered, contract)
+            # good_data.start_date = max(
+                # good_data.start_date, contract.start_date)
+            # good_data.init_complementary_data(option.offered, contract)
             good_data.status_selection = True
             covered_datas.append(good_data)
         return utils.WithAbstract.serialize_field(covered_datas)

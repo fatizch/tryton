@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<form string="Complementary Data Desciptor">
+<form string="Complementary Data Descriptor">
     <label name="string"/>
     <field name="string"/>
     <label name="name"/>
@@ -24,4 +24,5 @@
         <field name="default_value_char"/>
         <field name="default_value_selection"/>
     </group>
+    <field name="sub_datas" yexpand="1" yfill="1" colspan="4"/>
 </form>

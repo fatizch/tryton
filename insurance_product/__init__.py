@@ -20,7 +20,9 @@ def register():
         PackageCoverage,
         Product,
         ProductOptionsCoverage,
+        # from complementary_data
         ComplementaryDataDefinition,
+        ComplementaryDataRecursiveRelation,
         ItemDescriptorComplementaryDataRelation,
         ProductItemDescriptorRelation,
         # from business_rule

@@ -101,7 +101,8 @@ class Offered(model.CoopView, utils.GetResult, Templated):
     complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Offered Kind',
         context={'complementary_data_kind': 'product'},
-        domain=[('kind', '=', 'product')])
+        domain=[('kind', '=', 'product')],
+        on_change_with=['complementary_data'])
 
     @classmethod
     def __setup__(cls):
@@ -156,9 +157,6 @@ class Offered(model.CoopView, utils.GetResult, Templated):
         else:
             return Transaction().context.get('currency_digits')
 
-    def give_me_complementary_data_ids(self, args):
-        return self.get_complementary_data_def(['main'], args['date'])
-
     @staticmethod
     def default_complementary_data():
         good_se = Pool().get('ins_product.complementary_data_def').search([
@@ -202,6 +200,15 @@ class Offered(model.CoopView, utils.GetResult, Templated):
             x for x in self.complementary_data_def
             if x.valid_at_date(at_date) and (not kinds or x.kind in kinds)]
 
+    def get_complementary_data_for_execution(self, args):
+        looking_for = 'contract' if not 'sub_elem' in args else 'sub_elem'
+        all_schemas = set(self.get_complementary_data_def(
+            ('contract', looking_for), args['date']))
+        possible_schemas = set(self.get_complementary_data_def(
+            (looking_for), args['date']))
+        return all_schemas, possible_schemas
+
+
     def give_me_sub_elem_eligibility(self, args):
         try:
             res = self.get_result(
@@ -219,6 +226,19 @@ class Offered(model.CoopView, utils.GetResult, Templated):
     @classmethod
     def get_pricing_rule_model(cls):
         return 'ins_product.pricing_rule'
+
+    def on_change_with_complementary_data(self):
+        if not hasattr(self, 'complementary_data_def'):
+            return {}
+        ComplementaryData = Pool().get('ins_product.complementary_data_def')
+        schemas = ComplementaryData.search([
+            'name', 'in', [k for k in self.complementary_data_def.iterkeys()]])
+        if not schemas:
+            return {}
+        result = copy.copy(self.complementary_data_def)
+        for schema in schemas:
+            schema.update_field_value(result)
+        return result
 
 
 class Product(model.CoopSQL, Offered):
@@ -422,6 +442,40 @@ class Product(model.CoopSQL, Offered):
 
     def get_currency(self):
         return self.currency
+
+    def give_me_calculated_complementary_datas(self, args):
+        # We prepare the call to the 'calculate_value_set' API.
+        # It needs the following parameters:
+        #  - The list of the schemas it must look for
+        #  - The list of all the schemas in the tree. This list should
+        #    contain all the schemas from the first list
+        #  - All the values available for all relevent schemas
+        if not 'contract' in args or not 'date' in args:
+            raise Exception('Expected contract and date in args, got %s' % (
+                str([k for k in args.iterkeys()])))
+        all_schemas, possible_schemas = \
+            self.get_complementary_data_for_execution(args)
+        if not 'sub_elem' in args:
+            for coverage in args['contract'].get_active_coverages_at_date(
+                    args['date']):
+                coverage_all, coverage_possible = \
+                    coverage.get_complementary_data_for_execution(args)
+                all_schemas |= coverage_all
+                possible_schemas |= coverage_possible
+        else:
+            coverage = args['sub_elem'].get_coverage()
+            coverage_all, coverage_possible = \
+                coverage.get_complementary_data_for_execution(args)
+            all_schemas |= coverage_all
+            possible_schemas |= coverage_possible
+        existing_data = {}
+        existing_data.update(args['contract'].complementary_data)
+        if 'sub_elem' in args:
+            existing_data.update(args['sub_elem'].complementary_data)
+        ComplementaryData = Pool().get('ins_product.complementary_data_def')
+        result = ComplementaryData.calculate_value_set(
+            possible_schemas, all_schemas, existing_data)
+        return result, ()
 
 
 class ProductOptionsCoverage(model.CoopSQL):
