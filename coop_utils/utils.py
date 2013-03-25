@@ -13,7 +13,7 @@ from trytond.model import fields
 from trytond.protocols.jsonrpc import JSONEncoder, object_hook
 
 # Needed for Pyson evaluation
-from trytond.pyson import PYSONDecoder, PYSONEncoder, CONTEXT, Eval, Or
+from trytond.pyson import PYSONDecoder, PYSONEncoder, CONTEXT, Eval, Or, And
 from trytond.tools import safe_eval
 from trytond.model.modelstorage import EvalEnvironment
 
@@ -629,7 +629,22 @@ def today():
     return Pool().get('ir.date').today()
 
 
-def get_good_versions_at_date(instance, var_name, at_date=None):
+def is_effective_at_date(instance, at_date=None, start_var_name='start_date',
+        end_var_name='end_date'):
+    if not at_date:
+        at_date = today()
+    start_date = None
+    if hasattr(instance, start_var_name):
+        start_date = getattr(instance, start_var_name)
+    end_date = None
+    if hasattr(instance, end_var_name):
+        end_date = getattr(instance, end_var_name)
+    return ((not start_date or at_date >= start_date)
+        and (not end_date or at_date <= end_date))
+
+
+def get_good_versions_at_date(instance, var_name, at_date=None,
+        start_var_name='start_date', end_var_name='end_date'):
     '''This method looks for the elements in the list which are effective at
     the date. By default, it will check that the at_date is between the start
     date and the end_date, otherwise it will check if there is already a
@@ -641,22 +656,10 @@ def get_good_versions_at_date(instance, var_name, at_date=None):
         return getattr(instance, 'get_good_versions_at_date')(
             var_name, at_date)
     res = []
-    element_added = False
-    for element in reversed(getattr(instance, var_name)):
-        if (not hasattr(element, 'end_date')
-                and hasattr(element, 'start_date)')):
-            if not element.start_date:
-                res.insert(0, element)
-            elif at_date >= element.start_date and not element_added:
-                res.insert(0, element)
-                element_added = True
-        elif hasattr(element, 'start_date') and hasattr(element, 'end_date'):
-            if (not element.start_date or at_date >= element.start_date) and (
-                    not element.end_date or at_date <= element.end_date):
-                res.insert(0, element)
-        else:
-            res.insert(0, element)
-    return res
+    for elem in reversed(getattr(instance, var_name)):
+        if is_effective_at_date(elem, at_date, start_var_name, end_var_name):
+            res.insert(0, elem)
+    return list(set(res))
 
 
 def get_good_version_at_date(instance, var_name, at_date=None):
@@ -857,6 +860,7 @@ def get_domain_instances(record, field_name):
     domain = PYSONDecoder(env).decode(pyson_domain)
 
     GoodModel = Pool().get(field.model_name)
+    print domain
     return GoodModel.search(domain)
 
 
@@ -889,7 +893,7 @@ def get_versioning_domain(start_date, end_date=None, do_eval=True):
                 ('end_date', '>=', end_date)]]
 
 
-def update_states(cls, var_name, new_states):
+def update_states(cls, var_name, new_states, pyson_cond='Or'):
     '''
     This methods allows to update field states when overriding a field and you
     don't know what where the states defined at the higher level
@@ -901,7 +905,10 @@ def update_states(cls, var_name, new_states):
         if not key in field_name.states:
             field_name.states[key] = value
         elif field_name.states[key] != value:
-            field_name.states[key] = Or(field_name.states[key], value)
+            if pyson_cond == 'Or':
+                field_name.states[key] = Or(field_name.states[key], value)
+            elif pyson_cond == 'And':
+                field_name.states[key] = And(field_name.states[key], value)
     setattr(cls, var_name, field_name)
 
 

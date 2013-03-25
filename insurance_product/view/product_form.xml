@@ -4,7 +4,7 @@
         <form string="Product"/>
     </xpath>
     <xpath
-        expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']"
+        expr="/form/notebook/page/notebook/page[@id='eligibility']"
         position="before">
         <page string="Complementary Data" id="complementary_data">
             <field name="complementary_data_def" colspan="4"/>
@@ -16,8 +16,16 @@
             <field name="options"/>
         </page>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='managers']/notebook/page[@id='pricing']"
-        position="after">
+    <xpath expr="/form/notebook/page/notebook" position="inside">
+        <page string="Deductible" id="deductible">
+            <field name="deductible_rules" colspan="4"/>
+        </page>
+        <page string="Clause" id="clause">
+            <field name="clause_rules" colspan="4"/>
+        </page>
+        <page string="Documents" id="documents">
+            <field name="document_rules"/>
+        </page>
         <page string="Term - Renewal" id="term_renewal">
             <field name="term_renewal_rules" colspan="4"/>
         </page>
@@ -30,10 +38,10 @@
         <label name="currency"/>
         <field name="currency"/>
         <newline/>
-        <label name="tmp_claim_manager" xalign="0"/>
+        <label name="tmp_claim_manager"/>
         <field name="tmp_claim_manager"/>
         <newline/>
-        <label name="tmp_contract_manager" xalign="0"/>
+        <label name="tmp_contract_manager"/>
         <field name="tmp_contract_manager"/>
     </xpath>
 </data>

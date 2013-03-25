@@ -18,5 +18,6 @@ def register():
         RequestFinder,
         ContactHistory,
         ClaimContract,
+        ClaimOption,
         ClaimContext,
         module='insurance_claim', type_='model')

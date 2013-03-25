@@ -4,5 +4,5 @@
     <field name="name"/>
     <label name="item_desc"/>
     <field name="item_desc"/>
-    <field name="complementary_data" colspan="2"/>
+    <field name="complementary_data" colspan="2" no_command="1"/>
 </form>

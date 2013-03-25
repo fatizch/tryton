@@ -136,6 +136,14 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             return None
         return good_role.protocol.party
 
+    @classmethod
+    def get_possible_contracts_from_party(cls, party, at_date):
+        if not party:
+            return []
+        Contract = Pool().get('ins_contract.contract')
+        #TODO: filter with the at_date
+        return Contract.search([('subscriber', '=', party.id)])
+
 
 class Loss(model.CoopSQL, model.CoopView):
     'Loss'
@@ -279,7 +287,7 @@ class ClaimDeliveredService():
         return super(ClaimDeliveredService, self).get_rec_name(name)
 
     def on_change_with_complementary_data(self):
-        return utils.init_complementary_data(self.get_complementary_data_def)
+        return utils.init_complementary_data(self.get_complementary_data_def())
 
     def get_complementary_data_def(self):
         if self.benefit:

@@ -1,8 +1,8 @@
 #-*- coding:utf-8 -*-
 from trytond.model import fields
-from trytond.pyson import Eval, Bool, Not
+from trytond.pyson import Eval, Bool
 
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import CoopView, CoopSQL
 from trytond.modules.coop_utils import TableOfTable, utils
@@ -63,15 +63,18 @@ class Party:
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
         })
-    first_name = fields.Char('First Name', states={
+    first_name = fields.Char('First Name',
+        states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
         })
-    maiden_name = fields.Char('Maiden Name', states={
+    maiden_name = fields.Char('Maiden Name',
+        states={
             'readonly': Eval('gender') != 'female',
             'invisible': ~STATES_PERSON
         })
-    birth_date = fields.Date('Birth Date', states={
+    birth_date = fields.Date('Birth Date',
+        states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
         })
@@ -300,7 +303,7 @@ class GenericActor(CoopSQL, Actor):
         res = {}
         for party in parties:
             res[party.id] = coop_string.get_field_as_summary(
-            party, 'kind', True, at_date, lang=lang)
+                party, 'kind', True, at_date, lang=lang)
         return res
 
 

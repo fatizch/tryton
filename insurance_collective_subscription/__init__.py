@@ -1,10 +1,11 @@
 from trytond.pool import Pool
-from .subscription_process import *
+from .collective_subscription_process import *
 
 
 def register():
     Pool.register(
-        #GroupSubscriptionManager,
-        GroupContractSubscription,
-        GroupOptionSubscription,
+        GroupSubscriptionProcessParameters,
         module='insurance_collective_subscription', type_='model')
+    Pool.register(
+        SubscriptionProcessFinder,
+        module='insurance_collective_subscription', type_='wizard')

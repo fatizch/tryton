@@ -84,7 +84,7 @@ class ProcessDesc(ModelSQL, ModelView):
 
     __name__ = 'process.process_desc'
 
-    technical_name = fields.Char('Technical Name')
+    technical_name = fields.Char('Technical Name', required=True)
     fancy_name = fields.Char('Name', translate=True)
     on_model = fields.Many2One(
         'ir.model',
@@ -224,6 +224,7 @@ class ProcessDesc(ModelSQL, ModelView):
     def create_or_update_action(self, lang):
         ActWin = Pool().get('ir.action.act_window')
 
+        good_action = None
         if (hasattr(self, 'menu_items') and self.menu_items):
             for menu in self.menu_items:
                 if not menu.name == '%s_%s' % (self.technical_name, lang.code):
@@ -231,7 +232,7 @@ class ProcessDesc(ModelSQL, ModelView):
                 if hasattr(menu, 'action') and menu.action:
                     good_action = menu.action
                     break
-        else:
+        if not good_action:
             good_action = ActWin()
 
         good_action.name = self.fancy_name

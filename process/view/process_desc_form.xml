@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <form string="Process Descriptor" col="4">
   <group id="global_part">
-    <label name="fancy_name" xalign="0"/>
+    <label name="fancy_name"/>
     <field name="fancy_name"/>
-    <label name="technical_name" xalign="0"/>
+    <label name="technical_name"/>
     <field name="technical_name"/>
     <newline/>
-    <label name="on_model" xalign="0"/>
+    <label name="on_model"/>
     <field name="on_model" colspan="3"/>
   </group>
   <newline/>
@@ -18,11 +18,11 @@
     <page string="XML" id="xml">
       <group id="form_customization" col="2" yexpand="1" yfill="1">
         <group id="customization_data" col="2" yexpand="1" yfill="1">
-          <label name="menu_icon" xalign="0"/>
+          <label name="menu_icon"/>
           <field name="menu_icon"/>
-          <label name="menu_name" xalign="0"/>
+          <label name="menu_name"/>
           <field name="menu_name"/>
-          <label name="step_button_group_position" xalign="0"/>
+          <label name="step_button_group_position"/>
           <field name="step_button_group_position"/>
         </group>
         <field name="menu_items" readonly="1" yexpand="1" yfill="1"/>

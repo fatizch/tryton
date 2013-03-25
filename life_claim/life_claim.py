@@ -1,12 +1,32 @@
 #-*- coding:utf-8 -*-
 import copy
 from trytond.model import fields
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 __all__ = [
+    'LifeClaim',
     'LifeLoss',
     'LifeClaimDeliveredService',
 ]
+
+
+class LifeClaim():
+    'Claim'
+
+    __name__ = 'ins_claim.claim'
+    __metaclass__ = PoolMeta
+
+    @classmethod
+    def get_possible_contracts_from_party(cls, party, at_date):
+        res = super(LifeClaim, cls).get_possible_contracts_from_party(party,
+            at_date)
+        if not party:
+            return res
+        CoveredElement = Pool().get('ins_contract.covered_element')
+        cov_elems = CoveredElement.search([('person', '=', party.id)])
+        for cov_elem in cov_elems:
+            res.append(cov_elem.get_contract())
+        return res
 
 
 class LifeLoss():

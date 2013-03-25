@@ -398,6 +398,7 @@ class Option():
             return {'status': 'refused'}
 
     def get_status_selection(self, name):
+        print self.status
         if self.status == 'active':
             return 'active'
         return 'refused'
@@ -515,6 +516,16 @@ class SubscriptionProcessParameters(ProcessParameters):
     product = fields.Many2One(
         'ins_product.product',
         'Product',
+        domain=['AND',
+            ['OR',
+                [('end_date', '>=', Eval('date'))],
+                [('end_date', '=', None)],
+            ],
+            ['OR',
+                [('start_date', '<=', Eval('date'))],
+                [('start_date', '=', None)],
+            ],
+        ], depends=['date']
     )
 
     @classmethod
@@ -553,9 +564,11 @@ class SubscriptionProcessFinder(ProcessFinder):
             'insurance_contract_subscription',
             'subscription_process_parameters_form')
 
-    def instanciate_main_object(self):
-        contract = super(
-            SubscriptionProcessFinder, self).instanciate_main_object()
-        contract.start_date = self.process_parameters.date
-        contract.offered = self.process_parameters.product
-        return contract
+    def init_main_object_from_process(self, obj, process_param):
+        res, errs = super(SubscriptionProcessFinder,
+            self).init_main_object_from_process(obj, process_param)
+        if res:
+            res, err = obj.init_from_offered(process_param.product,
+                process_param.date)
+            errs += err
+        return res, errs

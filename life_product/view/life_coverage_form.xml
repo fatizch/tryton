@@ -2,10 +2,13 @@
 <data>
     <xpath
         expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']"
-        position="before"> 
+        position="before">
         <page string="Coverage Amount" id="coverage_amount"
             states="{'invisible': Or(Bool(Eval('is_package')), Eval('family') != 'life_product.definition')}">
             <field name="coverage_amount_rules"/>
         </page>
+    </xpath>
+    <xpath expr="/form" position="inside">
+        <field name="is_coverage_amount_needed"/>
     </xpath>
 </data>

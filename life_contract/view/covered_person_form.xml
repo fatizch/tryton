@@ -1,12 +1,9 @@
 <?xml version="1.0"?>
 <data>
-    <xpath expr="/form" position="replace_attributes">
-        <form string="Covered Person"/>
-    </xpath>
-    <xpath expr="/form/label[@name='name']" position="replace"/>
-    <xpath expr="/form/field[@name='name']" position="replace"/>
     <xpath expr="/form/label[@name='item_desc']" position="before">
+        <newline/>
         <label name="person"/>
         <field name="person"/>
+        <newline/>
     </xpath>
 </data>

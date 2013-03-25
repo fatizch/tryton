@@ -2,6 +2,7 @@
 <form string="Covered Element">
     <label name="name"/>
     <field name="name"/>
+    <newline/>
     <label name="item_desc"/>
     <field name="item_desc"/>
     <newline/>

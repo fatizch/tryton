@@ -215,7 +215,7 @@ class LoanCoveredData():
         'get_person')
 
     def get_person(self, name=None):
-        if self.covered_element:
+        if self.covered_element and self.covered_element.person:
             return self.covered_element.person.id
 
     def init_from_option(self, option):

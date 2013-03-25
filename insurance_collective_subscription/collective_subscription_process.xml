@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+    <tryton>
+      <data>
+        <record model="ir.ui.view" id="subscription_process_parameters_form">
+          <field name="model">ins_contract.subscription_process_parameters</field>
+          <field name="type">form</field>
+          <field name="inherit" ref="insurance_contract_subscription.subscription_process_parameters_form"/>
+          <field name="name">collective_subscription_process_parameters_form</field>
+      </record>
+  </data>
+</tryton>

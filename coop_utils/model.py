@@ -75,7 +75,7 @@ class ExportImportMixin(object):
         values = {
             '__name__': self.__name__,
             '_export_name': getattr(self, self._export_name),
-            }
+        }
         for field_name, field in self._fields.iteritems():
             if (field_name in skip_fields
                     or (isinstance(field, fields.Function)
@@ -229,11 +229,11 @@ class CoopSQL(ExportImportMixin, ModelSQL):
         for cur_class, var_name in cls.get_class_where_used():
             Class = Pool().get(cur_class)
             for found_instance in Class.search(
-                [
-                    (var_name, 'in',
-                        [getattr(instance, key_name) for instance in instances]
-                    )
-                ]):
+                    [
+                        (var_name, 'in',
+                            [getattr(cur_inst, key_name)
+                                for cur_inst in instances])
+                    ]):
                 cur_id = key_dict[getattr(found_instance, var_name)]
                 res[cur_id].append(found_instance)
         return res
@@ -264,7 +264,7 @@ class CoopSQL(ExportImportMixin, ModelSQL):
                         coop_string.translate_model_name(
                             using_instance.__class__),
                         using_instance.id,
-                        ))
+                    ))
                 continue
         return res
 
@@ -281,23 +281,16 @@ class CoopSQL(ExportImportMixin, ModelSQL):
     @classmethod
     def search_rec_name(cls, name, clause):
         if (hasattr(cls, 'code')
-            and cls.search([('code',) + clause[1:]], limit=1)):
+                and cls.search([('code',) + clause[1:]], limit=1)):
             return [('code',) + clause[1:]]
         return [(cls._rec_name,) + clause[1:]]
-
-    def get_rec_name(self, name):
-        res = ''
-        if hasattr(self, 'code'):
-            res = '%s' % getattr(self, 'code')
-        return coop_string.concat_strings(
-            res, super(CoopSQL, self).get_rec_name(name))
 
     @classmethod
     def search(cls, domain, offset=0, limit=None, order=None, count=False,
             query_string=False):
         #Set your class here to see the domain on the search
-#        if cls.__name__ == 'ins_contract.option':
-#            print domain
+        if cls.__name__ == 'party.party':
+            print domain
         return super(CoopSQL, cls).search(domain=domain, offset=offset,
             limit=limit, order=order, count=count, query_string=query_string)
 

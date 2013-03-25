@@ -6,4 +6,16 @@
             <field name="benefits"/>
         </page>
     </xpath>
+    <xpath expr="/form/notebook/page/notebook" position="inside">
+        <page string="Deductible" id="deductible">
+            <field name="deductible_rules" colspan="4"/>
+        </page>
+        <page string="Clause" id="clause">
+            <field name="clause_rules" colspan="4"/>
+        </page>
+        <page string="Documents" id="documents">
+            <field name="document_rules"/>
+            <field name="sub_document_rules"/>
+        </page>
+    </xpath>
 </data>

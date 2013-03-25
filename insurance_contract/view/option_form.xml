@@ -5,6 +5,8 @@
     <newline/>
     <label name="offered"/>
     <field name="offered"/>
+    <label name="status"/>
+    <field name="status" readonly="1"/>
     <newline/>
     <label name="start_date"/>
     <field name="start_date"/>

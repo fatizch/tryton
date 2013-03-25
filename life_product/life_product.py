@@ -54,6 +54,9 @@ class LifeCoverage():
                 Eval('family') != FAMILY_LIFE,
             )
         })
+    is_coverage_amount_needed = fields.Function(
+        fields.Boolean('Coverage Amount Needed', states={'invisible': True}),
+        'get_is_coverage_amount_needed')
 
     @classmethod
     def __setup__(cls):

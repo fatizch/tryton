@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
-        <record model="ir.action.act_window" id="act_college_form">
+<!--         <record model="ir.action.act_window" id="act_college_form">
             <field name="name">College</field>
             <field name="res_model">party.college</field>
         </record>
@@ -26,6 +26,6 @@
             <field name="act_window" ref="act_college_form"/>
         </record>
         <menuitem parent="party.menu_configuration" sequence="50"
-            id="menu_college_form" icon="tryton-list" action="act_college_form"/>
+            id="menu_college_form" icon="tryton-list" action="act_college_form"/> -->
     </data>
 </tryton>

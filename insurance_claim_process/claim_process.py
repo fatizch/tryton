@@ -27,7 +27,7 @@ class ClaimProcess(CoopProcessFramework):
     contracts = fields.Function(
         fields.One2Many(
             'ins_contract.contract', None, 'Contracts',
-            on_change_with=['claimant']),
+            on_change_with=['claimant', 'declaration_date']),
         'on_change_with_contracts')
     doc_received = fields.Function(
         fields.Boolean(
@@ -37,7 +37,7 @@ class ClaimProcess(CoopProcessFramework):
         'on_change_with_doc_received')
     indemnifications = fields.Function(
         fields.One2Many('ins_claim.indemnification', None, 'Indemnifications'),
-        'get_indemnifications', 'set_toto')
+        'get_indemnifications', 'set_indemnifications')
     indemnifications_consult = fields.Function(
         fields.One2Many('ins_claim.indemnification', None, 'Indemnifications'),
         'get_indemnifications')
@@ -47,11 +47,11 @@ class ClaimProcess(CoopProcessFramework):
             on_change_with=['claimant'], depends=['claimant']),
         'on_change_with_contact_history')
 
-    def get_possible_contracts(self):
-        if not self.claimant:
-            return []
-        Contract = Pool().get('ins_contract.contract')
-        return Contract.search([('subscriber', '=', self.claimant.id)])
+    def get_possible_contracts(self, at_date=None):
+        if not at_date:
+            at_date = self.declaration_date
+        return self.get_possible_contracts_from_party(self.claimant,
+            at_date)
 
     def on_change_with_contracts(self, name=None):
         return [x.id for x in self.get_possible_contracts()]
@@ -166,7 +166,7 @@ class ClaimProcess(CoopProcessFramework):
         return True
 
     @classmethod
-    def set_toto(cls, instances, name, vals):
+    def set_indemnifications(cls, instances, name, vals):
         Indemnification = Pool().get('ins_claim.indemnification')
         for val in vals:
             if not val[0] == 'write':
@@ -191,17 +191,18 @@ class LossProcess():
     benefits = fields.Function(
         fields.One2Many(
             'ins_product.benefit', None, 'Benefits',
-            on_change_with=['loss_desc', 'event_desc', 'start_date', 'claim']),
+            on_change_with=['loss_desc', 'event_desc', 'start_date', 'claim',
+            'covered_person']),  #  TODO:Covered person should not be here
         'on_change_with_benefits')
 
     def get_possible_benefits(self):
         if not self.claim or not self.loss_desc:
             return {}
         res = {}
-        for contract in self.claim.get_possible_contracts():
+        for contract in self.claim.get_possible_contracts(
+                at_date=self.start_date):
             for option in contract.options:
-                benefits = option.offered.get_possible_benefits(
-                    self.loss_desc, self.event_desc, self.start_date)
+                benefits = option.get_possible_benefits(self)
                 if benefits:
                     res[option.id] = benefits
         return res
@@ -260,8 +261,9 @@ class DeclarationProcessFinder(ProcessFinder):
             'insurance_claim_process',
             'declaration_process_parameters_form')
 
-    def instanciate_main_object(self):
-        claim = super(
-            DeclarationProcessFinder, self).instanciate_main_object()
-        claim.declaration_date = self.process_parameters.date
-        return claim
+    def init_main_object_from_process(self, obj, process_param):
+        res, errs = super(DeclarationProcessFinder,
+            self).init_main_object_from_process(obj, process_param)
+        if res:
+            obj.declaration_date = process_param.date
+        return res, errs

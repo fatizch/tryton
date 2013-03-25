@@ -11,5 +11,5 @@
     <label name="covered_element"/>
     <field name="covered_element"/>
     <newline/>
-    <field name="complementary_data" colspan="2"/>
+    <field name="complementary_data" colspan="2" no_command="1"/>
 </form>

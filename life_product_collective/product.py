@@ -3,24 +3,17 @@ from trytond.model import fields
 from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import utils
-from trytond.modules.life_product import LifeCoverage
+
 __all__ = [
-    'GroupLifeCoverage',
     'GroupPricingRule',
     'GroupPricingComponent',
 ]
 
 
-class GroupLifeCoverage(LifeCoverage):
-    'Coverage'
-
-    __name__ = 'ins_collective.coverage'
-
-
 class GroupPricingRule():
     'Pricing Rule'
 
-    __name__ = 'ins_collective.pricing_rule'
+    __name__ = 'ins_product.pricing_rule'
     __metaclass__ = PoolMeta
 
     college = fields.Many2One('party.college', 'College',

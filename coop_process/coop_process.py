@@ -809,7 +809,16 @@ class ProcessFinder(Wizard):
         good_obj = GoodModel()
         good_obj.current_state = \
             self.process_parameters.good_process.all_steps[0]
-        return good_obj
+        is_ok, errs = self.init_main_object_from_process(good_obj,
+            self.process_parameters)
+        if is_ok:
+            return good_obj
+        else:
+            print errs
+            #TODO What if?
+
+    def init_main_object_from_process(self, obj, process_param):
+        return True, []
 
     @classmethod
     def get_parameters_model(cls):

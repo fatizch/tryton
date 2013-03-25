@@ -30,6 +30,11 @@ class SimpleCoverage(Offered):
 
     __name__ = 'ins_product.simple_coverage'
 
+    products = fields.Many2Many(
+        'ins_product.product-options-coverage',
+        'coverage', 'product', 'Products',
+        domain=[('currency', '=', Eval('currency'))],
+        depends=['currency'])
     insurer = fields.Many2One('party.insurer', 'Insurer',
         states={'invisible': Bool(Eval('is_package'))},
         depends=['is_package'])
@@ -311,6 +316,9 @@ class Coverage(model.CoopSQL, SimpleCoverage):
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
         ]
+
+    def get_currency(self):
+        return self.currency
 
 
 class PackageCoverage(model.CoopSQL):

@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 <form string="Step Transition Descriptor">
-  <label name="from_step" xalign="0"/>
+  <label name="from_step"/>
   <field name="from_step" colspan="3"/>
   <newline/>
-  <label name="to_step" xalign="0"/>
+  <label name="to_step"/>
   <field name="to_step" colspan="3"/>
   <newline/>
-  <label name="kind" xalign="0"/>
+  <label name="kind"/>
   <field name="kind" colspan="3"/>
-  <label name="pyson" xalign="0"/>
+  <label name="pyson"/>
   <field name="pyson"/>
   <newline/>
   <group id="methods" xexpand="1" xfill="1" yexpand="1" yfill="1" states="{'invisible': Eval('kind') != 'standard'}">
-    <label name="method_kind" xalign="0"/>
+    <label name="method_kind"/>
     <field name="method_kind" colspan="3" xexpand="1" xfill="1"/>
     <newline/>
     <field name="methods" colspan="4" xexpand="1" xfill="1" yexpand="1" yfill="1" pre_validate="1"/>

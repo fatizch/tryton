@@ -6,7 +6,7 @@
     <field name="end_date"/>
     <newline/>
     <label name="option"/>
-    <field name="option" xfill="1"/>
+    <field name="option" xfill="1" widget="selection"/>
     <newline/>
     <label name="covered_element"/>
     <field name="covered_element"/>

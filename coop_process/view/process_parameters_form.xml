@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <form string="Process Parameters" col="4">
-  <label name="model" xalign="0"/>
+  <label name="model"/>
   <field name="model" colspan="3"/>
-  <label name="date" xalign="0"/>
+  <label name="date"/>
   <field name="date" colspan="3"/>
-  <label name="good_process" xalign="0"/>
+  <label name="good_process"/>
   <field name="good_process" colspan="3" widget="selection"/>
 </form>

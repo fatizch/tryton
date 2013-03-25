@@ -4,16 +4,15 @@ from decimal import Decimal
 from trytond.model import fields
 
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Or, Bool
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
 from trytond.modules.coop_utils import utils
-
 from trytond.modules.insurance_contract import CoveredDesc
 from trytond.modules.insurance_process import DependantState
 from trytond.modules.insurance_process import CoopStateView
-
+from trytond.modules.life_product.life_product import FAMILY_LIFE
 
 __all__ = [
     'Contract',
@@ -120,13 +119,15 @@ class CoveredPerson():
         domain=[('is_person', '=', True)], ondelete='RESTRICT')
 
     def get_name_for_billing(self):
-        return self.person.rec_name
+        return self.get_rec_name('billing')
 
     def get_name_for_info(self):
-        return self.person.rec_name
+        return self.get_rec_name('info')
 
     def get_rec_name(self, value):
-        return self.person.rec_name
+        if self.person:
+            return self.person.rec_name
+        return super(CoveredPerson, self).get_rec_name(value)
 
     @classmethod
     def get_covered_data_model(cls):
@@ -134,6 +135,18 @@ class CoveredPerson():
 
     def init_from_person(self, person):
         self.person = person
+
+    def is_person_covered(self, party, at_date, option):
+        if self.person == party:
+            for covered_data in self.covered_data:
+                if (utils.is_effective_at_date(covered_data, at_date)
+                        and covered_data.option == option):
+                    return True
+        if hasattr(self, 'sub_covered_elements'):
+            for sub_elem in self.sub_covered_elements:
+                if sub_elem.is_person_covered(party, at_date, option):
+                    return True
+        return False
 
 
 class LifeCoveredData():
@@ -143,9 +156,14 @@ class LifeCoveredData():
     __metaclass__ = PoolMeta
 
     coverage_amount = fields.Numeric('Coverage Amount', states={
-        'invisible': Bool(~Eval('_parent_coverage', {}).get(
-            'is_coverage_amount_needed'))
-    })
+        'invisible': Or(
+            Bool(Eval('_parent_coverage', {}).get('is_package')),
+            Eval('_parent_coverage', {}).get('family') != FAMILY_LIFE,
+        )})
+
+    def is_person_covered(self, party, at_date):
+        return self.covered_element.is_person_covered(party, at_date,
+            self.option)
 
 
 class LifeCoveredDesc(CoveredDesc):

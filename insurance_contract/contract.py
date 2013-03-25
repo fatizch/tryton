@@ -45,14 +45,24 @@ class Subscribed(model.CoopView):
 
     offered = fields.Many2One(
         None, 'Offered', ondelete='RESTRICT',
-        states={'required': Eval('status') == 'active'})
+        states={'required': Eval('status') == 'active'},
+        domain=['AND',
+            ['OR',
+                [('end_date', '>=', Eval('start_date'))],
+                [('end_date', '=', None)],
+            ],
+            ['OR',
+                [('start_date', '<=', Eval('start_date'))],
+                [('start_date', '=', None)],
+            ],
+        ], depends=['start_date'])
     start_date = fields.Date('Effective Date', required=True)
     end_date = fields.Date(
         'End Date', domain=[('start_date', '<=', 'end_date')])
     # Management date is the date at which the company started to manage the
     # contract. Default value is start_date
     start_management_date = fields.Date('Management Date')
-    status = fields.Selection('get_possible_status', 'Status', readonly=True)
+    status = fields.Selection('get_possible_status', 'Status')
     status_history = fields.One2Many(
         'ins_contract.status_history', 'reference', 'Status History')
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
@@ -67,13 +77,8 @@ class Subscribed(model.CoopView):
     def __setup__(cls):
         cls.offered = copy.copy(cls.offered)
         suffix, cls.offered.string = cls.get_offered_name()
-        cls.offered.model_name = (
-            '%s.%s' % (cls.get_offered_module_prefix(), suffix))
+        cls.offered.model_name = 'ins_product.%s' % suffix
         super(Subscribed, cls).__setup__()
-
-    @classmethod
-    def get_offered_module_prefix(cls):
-        return 'ins_product'
 
     @staticmethod
     def default_start_date():
@@ -101,21 +106,18 @@ class Subscribed(model.CoopView):
         return utils.limit_dates(res, start, end)
 
     def init_from_offered(self, offered, start_date=None, end_date=None):
-        self.offered = offered
-        if start_date:
-            self.start_date = max(offered.start_date, start_date)
-        else:
-            self.start_date = offered.start_date
-        if end_date:
-            self.end_date = min(offered.end_date, end_date)
-        else:
-            self.end_date = offered.end_date
-        self.update_status('active', self.start_date)
+        if utils.is_effective_at_date(offered, start_date):
+            self.offered = offered
+            self.start_date = (max(offered.start_date, start_date)
+                if start_date else offered.start_date)
+            self.end_date = (min(offered.end_date, end_date)
+                if end_date else offered.end_date)
+            self.update_status('quote', self.start_date)
+            return True, []
+        return False, ['offered_not_effective_at_date']
 
     def get_offered(self):
-        if not (hasattr(self, 'offered') and self.offered):
-            return None
-        return self.offered
+        return self.offered if hasattr(self, 'offered') else None
 
     @staticmethod
     def get_status_transition_authorized(from_status):
@@ -133,6 +135,8 @@ class Subscribed(model.CoopView):
                 ('transition_unauthorized', (self.status, to_status))]
         if not hasattr(self, 'status_history') or not self.status_history:
             self.status_history = []
+        else:
+            self.status_history = list(self.status_history)
         status_history = utils.instanciate_relation(
             self.__class__, 'status_history')
         status_history.init_from_reference(self, to_status, at_date)
@@ -161,8 +165,9 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     _rec_name = 'contract_number'
 
     options = fields.One2Many('ins_contract.option', 'contract', 'Options')
-    covered_elements = fields.One2Many(
-        'ins_contract.covered_element', 'contract', 'Covered Elements')
+    covered_elements = fields.One2ManyDomain(
+        'ins_contract.covered_element', 'contract', 'Covered Elements',
+        domain=[('parent', '=', None)])
     contract_number = fields.Char(
         'Contract Number', select=1, states={
             'required': Eval('status') == 'active'},
@@ -348,10 +353,6 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         return ''
 
     @classmethod
-    def get_offered_module_prefix(cls):
-        return 'ins_product'
-
-    @classmethod
     def get_offered_name(cls):
         return 'product', 'Product'
 
@@ -501,8 +502,9 @@ class Option(model.CoopSQL, Subscribed):
 
     contract = fields.Many2One(
         'ins_contract.contract', 'Contract', ondelete='CASCADE')
-    covered_data = fields.One2Many(
-        'ins_contract.covered_data', 'option', 'Covered Data')
+    covered_data = fields.One2ManyDomain(
+        'ins_contract.covered_data', 'option', 'Covered Data',
+        domain=[('covered_element.parent', '=', None)])
 
     def get_coverage(self):
         return self.offered
@@ -527,10 +529,8 @@ class Option(model.CoopSQL, Subscribed):
         return OPTIONSTATUS
 
     def get_rec_name(self, name):
-        if self.contract:
-            res = self.contract.get_rec_name(name)
         if self.offered:
-            return '%s (%s)' % (res, self.offered.get_rec_name(name))
+            return self.offered.get_rec_name(name)
         return super(Option, self).get_rec_name(name)
 
     def append_covered_data(self, covered_element=None):
@@ -884,7 +884,9 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     name = fields.Char('Name')
     parent = fields.Many2One('ins_contract.covered_element', 'Parent')
     sub_covered_elements = fields.One2Many(
-        'ins_contract.covered_element', 'parent', 'Sub Covered Elements')
+        'ins_contract.covered_element', 'parent', 'Sub Covered Elements',
+        domain=[('covered_data.option.contract', '=', Eval('contract'))],
+        depends=['contract'])
     complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Complementary Data',
         on_change_with=['item_desc', 'complementary_data'])
@@ -946,6 +948,12 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         return ' '.join([
             '%s: %s' % (x[0], x[1])
             for x in self.complementary_data.iteritems()])
+
+    def get_contract(self):
+        if self.contract:
+            return self.contract
+        elif self.parent:
+            return self.parent.get_contract()
 
 
 class CoveredData(model.CoopSQL, model.CoopView):

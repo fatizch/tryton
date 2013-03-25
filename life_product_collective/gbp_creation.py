@@ -17,9 +17,7 @@ __all__ = [
 
 class GBPStateView(StateView):
     def get_defaults(self, wizard, state_name, fields):
-        res = StateView.get_defaults(self, wizard,
-                                                      state_name,
-                                                      fields)
+        res = StateView.get_defaults(self, wizard, state_name, fields)
         # First we get the existing data for our step in the current session
         default_data = getattr(wizard, state_name)
         if default_data:
@@ -49,7 +47,7 @@ class CollegeDisplayer(model.CoopView):
         'displayer', 'Colleges')
     college = fields.Many2One('party.college', 'College',
         states={'readonly': True})
-    coverage = fields.Many2One('ins_collective.coverage', 'Coverage')
+    coverage = fields.Many2One('ins_contract.contract', 'Coverage')
     is_selected = fields.Boolean('Selected',
         states={'readonly': ~Eval('college')})
 
@@ -67,7 +65,7 @@ class TrancheDisplayer(model.CoopView):
     'Tranche Displayer'
 
     __name__ = 'ins_collective.tranche_displayer'
-    coverage = fields.Many2One('ins_collective.coverage', 'Coverage',
+    coverage = fields.Many2One('ins_contract.contract', 'Coverage',
         states={'readonly': True})
     college = fields.Many2One('party.college', 'College',
         states={'readonly': True})
@@ -105,7 +103,7 @@ class GBPWizard(Wizard):
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Complete', 'validate_tranches', 'tryton-go-next',
                 default=True),
-            ])
+        ])
 
     def transition_start(self):
         GBP = Pool().get('ins_collective.contract')
