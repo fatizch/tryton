@@ -234,6 +234,17 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             self, 'complementary_data', self.get_complementary_data_def(),
             at_date, value)
 
+    def get_complementary_data_def(self):
+        compl_data_defs = []
+        if self.offered:
+            compl_data_defs.extend(self.offered.get_complementary_data_def(
+                ['contract'], at_date=self.start_date))
+        for option in self.options:
+            compl_data_defs.extend(
+                option.offered.get_complementary_data_def(
+                    ['contract'], at_date=option.start_date))
+        return set(compl_data_defs)
+
     def get_dates(self, dates=None, start=None, end=None):
         if dates:
             res = set(dates)
@@ -966,6 +977,10 @@ class CoveredData(model.CoopSQL, model.CoopView):
         return utils.get_complementary_data_value(
             self, 'complementary_data', self.get_complementary_data_def(),
             at_date, value)
+
+    def get_complementary_data_def(self):
+        return self.option.offered.get_complementary_data_def(
+            ['sub_elem'], at_date=self.start_date)
 
     def init_complementary_data(self):
         if not (hasattr(self, 'complementary_data') and
