@@ -962,6 +962,11 @@ class CoveredData(model.CoopSQL, model.CoopView):
     def get_name_for_billing(self):
         return self.covered_element.get_name_for_billing()
 
+    def get_complementary_data_value(self, at_date, value):
+        return utils.get_complementary_data_value(
+            self, 'complementary_data', self.get_complementary_data_def(),
+            at_date, value)
+
     def init_complementary_data(self):
         if not (hasattr(self, 'complementary_data') and
                 self.complementary_data):
