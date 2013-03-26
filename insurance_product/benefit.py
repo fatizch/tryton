@@ -1,8 +1,9 @@
 #-*- coding:utf-8 -*-
 from trytond.model import fields
 
-from trytond.modules.coop_utils import model, date
+from trytond.modules.coop_utils import model, date, utils
 from trytond.modules.insurance_product import Offered
+from trytond.modules.insurance_product import EligibilityResultLine
 
 __all__ = [
     'EventDesc',
@@ -152,6 +153,13 @@ class Benefit(model.CoopSQL, Offered):
                 sub_args['start_date'] = date.add_day(
                     indemn_dict['end_date'], 1)
         return res, errs
+
+    def give_me_eligibility(self, args):
+        try:
+            res = self.get_result('eligibility', args, kind='eligibility')
+        except utils.NonExistingRuleKindException:
+            return (EligibilityResultLine(True), [])
+        return res
 
 
 class BenefitLossDescRelation(model.CoopSQL):
