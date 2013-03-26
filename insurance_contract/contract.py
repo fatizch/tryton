@@ -487,7 +487,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         if not (hasattr(self, 'billing_manager') and
                 self.billing_manager):
             bm = self.new_billing_manager()
-        self.billing_manager = [bm]
+            self.billing_manager = [bm]
 
     def on_change_complementary_data(self):
         return {'complementary_data': self.offered.get_result(
