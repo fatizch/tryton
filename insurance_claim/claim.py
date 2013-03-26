@@ -152,8 +152,10 @@ class Loss(model.CoopSQL, model.CoopView):
     claim = fields.Many2One('ins_claim.claim', 'Claim', ondelete='CASCADE')
     start_date = fields.Date('Loss Date')
     end_date = fields.Date('End Date',
-        states={'invisible': Bool(~Eval('with_end_date'))},
-        depends=['with_end_date'])
+        states={
+            'invisible': Bool(~Eval('with_end_date')),
+            'required': Bool(Eval('with_end_date')),
+        }, depends=['with_end_date'])
     loss_desc = fields.Many2One('ins_product.loss_desc', 'Loss Descriptor',
         ondelete='RESTRICT')
     event_desc = fields.Many2One('ins_product.event_desc', 'Event',
@@ -270,7 +272,9 @@ class ClaimDeliveredService():
     def calculate(self):
         cur_dict = {}
         self.init_dict_for_rule_engine(cur_dict)
+        #We first check the eligibility of the benefit
         res, errs = self.benefit.get_result('eligibility', cur_dict)
+        print res.details
         if res and not res.eligible:
             self.status = 'not_eligible'
             return None, errs

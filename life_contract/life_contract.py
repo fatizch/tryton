@@ -6,7 +6,7 @@ from trytond.pyson import Eval, Or, Bool
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
-from trytond.modules.coop_utils import utils, fields, model 
+from trytond.modules.coop_utils import utils, fields, model
 from trytond.modules.insurance_contract import CoveredDesc
 from trytond.modules.insurance_process import DependantState
 from trytond.modules.insurance_process import CoopStateView
@@ -160,7 +160,7 @@ class CoveredPerson():
         self.person = person
 
     def is_person_covered(self, party, at_date, option):
-        if self.person == party:
+        if party in self.get_covered_persons(at_date):
             for covered_data in self.covered_data:
                 if (utils.is_effective_at_date(covered_data, at_date)
                         and covered_data.option == option):
@@ -175,6 +175,23 @@ class CoveredPerson():
         if self.item_desc:
             return self.item_desc.kind == 'person'
         return False
+
+    def get_covered_persons(self, at_date):
+        '''
+        Returns all covered persons sharing the same covered data
+        for example an employe, his spouse and his children
+        '''
+        res = []
+        if self.person:
+            res.append(self.person)
+        for relation in self.covered_relations:
+            if not utils.is_effective_at_date(relation, at_date):
+                continue
+            if relation.from_party != self.person:
+                res.append(relation.from_party)
+            if relation.to_party != self.person:
+                res.append(relation.to_party)
+        return res
 
 
 class CoveredElementPartyRelation(model.CoopSQL):

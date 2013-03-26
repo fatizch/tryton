@@ -1,5 +1,5 @@
 #-*- coding:utf-8 -*-
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Or
 from trytond.modules.coop_utils import model, business, fields, utils
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot
@@ -24,21 +24,54 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
     __name__ = 'ins_product.eligibility_rule'
 
     sub_elem_config_kind = fields.Selection(
-        CONFIG_KIND, 'Sub Elem Conf. kind', required=True)
+        CONFIG_KIND, 'Sub Elem Conf. kind', states={
+            'invisible': Eval('offered_kind') != 'ins_product.coverage',
+            'required': Eval('offered_kind') == 'ins_product.coverage',
+        })
     sub_elem_rule = fields.Many2One(
-        'rule_engine', 'Sub Elem Rule Engine', depends=['config_kind'])
+        'rule_engine', 'Sub Elem Rule Engine', depends=['config_kind'],
+        states={
+            'invisible': Eval('offered_kind') != 'ins_product.coverage',
+        })
     sub_elem_rule_complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Rule Complementary Data',
-        on_change_with=['sub_elem_rule', 'sub_elem_rule_complementary_data'])
-    subscriber_classes = fields.Selection(
-        SUBSCRIBER_CLASSES,
-        'Can be subscribed',
-        required=True)
+        on_change_with=['sub_elem_rule', 'sub_elem_rule_complementary_data'],
+        states={
+            'invisible': Eval('offered_kind') != 'ins_product.coverage',
+        })
+    subscriber_classes = fields.Selection(SUBSCRIBER_CLASSES,
+        'Can be subscribed', states={
+            'invisible': Eval('offered_kind') == 'ins_product.benefit',
+            'required': Eval('offered_kind') != 'ins_product.benefit',
+        })
     relation_kinds = fields.Many2Many(
         'ins_product.eligibility_relation_kind',
         'eligibility_rule', 'relation_kind', 'Relations Authorized',
-        states={'invisible': Eval('sub_elem_config_kind') != 'simple'},
-        depends=['sub_elem_config_kind'])
+        states={
+            'invisible': Or(
+                Eval('sub_elem_config_kind') != 'simple',
+                Eval('offered_kind') != 'ins_product.coverage',
+            )
+        }, depends=['sub_elem_config_kind'])
+    offered_kind = fields.Function(
+        fields.Char('Offered Kind', states={'invisible': True},
+            on_change_with=['offered']),
+        'on_change_with_offered_kind')
+
+    def check_subscriber_classes(self, args):
+        if self.offered_kind != 'ins_product.benefit':
+            # We define a match_table which will tell what data to look for
+            # depending on the subscriber_eligibility attribute value.
+            match_table = {
+                'all': 'subscriber',
+                'person': 'subscriber_person',
+                'company': 'subscriber_company'}
+
+            # if it does not match, refusal
+            if not match_table[self.subscriber_classes] in args:
+                return (False, ['Subscriber must be a %s'
+                        % dict(SUBSCRIBER_CLASSES)[self.subscriber_classes]])
+        return True, []
 
     def give_me_eligibility(self, args):
         # First of all, we look for a subscriber data in the args and update
@@ -50,20 +83,9 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
             return (EligibilityResultLine(
                 False, ['Subscriber not defined in args']), [])
 
-        # We define a match_table which will tell what data to look for
-        # depending on the subscriber_eligibility attribute value.
-        match_table = {
-            'all': 'subscriber',
-            'person': 'subscriber_person',
-            'company': 'subscriber_company'}
-
-        # if it does not match, refusal
-        if not match_table[self.subscriber_classes] in args:
-            return (EligibilityResultLine(
-                False,
-                ['Subscriber must be a %s'
-                    % dict(SUBSCRIBER_CLASSES)[self.subscriber_classes]]),
-                [])
+        res, errs = self.check_subscriber_classes(args)
+        if not res:
+            return EligibilityResultLine(False, [], errs)
 
         # Now we can call the rule if it exists :
         if hasattr(self, 'rule') and self.rule:
@@ -71,9 +93,7 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
             return (EligibilityResultLine(eligible=res, details=mess), errs)
 
         # Default eligibility is "True" :
-        return (
-            EligibilityResultLine(eligible=True),
-            [])
+        return EligibilityResultLine(eligible=True), []
 
     def give_me_sub_elem_eligibility(self, args):
         if hasattr(self, 'sub_elem_rule') and self.sub_elem_rule:
@@ -119,6 +139,12 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
     @staticmethod
     def default_subscriber_classes():
         return 'person'
+
+    def on_change_with_offered_kind(self, name):
+        res = ''
+        if self.offered:
+            res = self.offered.__name__
+        return res
 
 
 class EligibilityRelationKind(model.CoopSQL):

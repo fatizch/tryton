@@ -104,9 +104,7 @@ def launch_test_case(cfg_dict):
 <field name="claimant"/>
 <label name="declaration_date"/>
 <field name="declaration_date"/>
-<field name="losses" colspan="4" mode="form,tree" \
-view_ids="insurance_claim_process.loss_view_form,\
-insurance_claim.loss_view_tree"/>''',
+<field name="losses" colspan="4" mode="form,tree"/>''',
     })
     meths['Code']({
         'technical_kind': 'step_before',

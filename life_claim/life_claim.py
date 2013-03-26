@@ -24,11 +24,15 @@ class LifeClaim():
             at_date)
         if not party:
             return res
-        CoveredElement = Pool().get('ins_contract.covered_element')
-        cov_elems = CoveredElement.search([('person', '=', party.id)])
-        for cov_elem in cov_elems:
+        for cov_elem in cls.get_possible_covered_elements(party, at_date):
             res.append(cov_elem.get_contract())
         return res
+
+    @classmethod
+    def get_possible_covered_elements(cls, party, at_date):
+        CoveredElement = Pool().get('ins_contract.covered_element')
+        #TODO : To enhance with date control
+        return CoveredElement.search([('person', '=', party.id)])
 
 
 class LifeLoss():
@@ -37,9 +41,24 @@ class LifeLoss():
     __name__ = 'ins_claim.loss'
     __metaclass__ = PoolMeta
 
+    possible_covered_persons = fields.Function(
+        fields.One2Many('party,party', None, 'Covered Persons',
+            states={'invisible': True}),
+        'get_possible_covered_persons_id')
     covered_person = fields.Many2One('party.party', 'Covered Person',
         #TODO: Claimant could be a different person than covered person
-        domain=[('id', '=', Eval('_parent_claim', {}).get('claimant'))])
+        domain=[('id', 'in', Eval('possible_covered_persons'))],
+        depends=['possible_covered_persons'])
+
+    def get_possible_covered_persons(self):
+        res = []
+        for covered_element in self.claim.get_possible_covered_elements(
+                self.claim.claimant, self.start_date):
+            res.extend(covered_element.get_covered_persons(self.start_date))
+        return res
+
+    def get_possible_covered_persons_id(self, name):
+        return [x.id for x in self.get_possible_covered_persons()]
 
 
 class LifeClaimDeliveredService():
@@ -68,5 +87,8 @@ class LifeClaimDeliveredService():
 
     def get_covered_data(self):
         for covered_data in self.subscribed_service.covered_data:
-            if covered_data.covered_element.person == self.get_covered_person():
+            #TODO to enhance the covered person could be the spouse or the
+            #children of the insured person
+            if (covered_data.covered_element.person ==
+                    self.get_covered_person()):
                 return covered_data

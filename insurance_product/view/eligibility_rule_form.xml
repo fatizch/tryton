@@ -9,8 +9,8 @@
         <newline/>
     </xpath>
     <xpath expr="/form/field[@name='rule']" position="after">
-        <group id="sub_elem" string="Covered Element" yfill="1" yexpand="1"
-            colspan="4">
+        <group id="sub_elem" string="Covered Element" colspan="4"
+            states="{'invisible': Eval('offered_kind') != 'ins_product.coverage'}">
             <group id="sub_elem_config_kind" colspan="2">
                 <label name="sub_elem_config_kind" xfill="1"/>
                 <field name="sub_elem_config_kind" xfill="1" xexpand="0"/>
@@ -28,5 +28,8 @@
             </group>
             <field name="relation_kinds" colspan="4" xexpand="1" yfill="1"/>
         </group>
+    </xpath>
+    <xpath expr="/form" position="inside">
+        <field name="offered_kind"/>
     </xpath>
 </data>

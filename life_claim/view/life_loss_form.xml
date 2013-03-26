@@ -3,7 +3,7 @@
     <xpath expr="/form/field[@name='claim']" position="after">
         <newline/>
         <label name="covered_person"/>
-        <field name="covered_person"/>
+        <field name="covered_person" widget="selection"/>
         <newline/>
     </xpath>
 </data>
