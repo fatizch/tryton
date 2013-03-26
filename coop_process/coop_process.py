@@ -2,13 +2,15 @@ import copy
 import pydot
 import datetime
 
+from trytond.model import fields as tryton_fields
+
 from trytond.pool import PoolMeta, Pool
+from trytond.rpc import RPC
 from trytond.pyson import Eval, Not, And
-from trytond.model import fields
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateView, Button
 
-from trytond.modules.coop_utils import utils, model, date
+from trytond.modules.coop_utils import utils, model, date, fields
 from trytond.modules.process import ProcessFramework
 
 
@@ -518,7 +520,7 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
     view_final_name = fields.Function(
         fields.Char(
             'View Name', states={'readonly': True},
-            on_change_with=['view_name', 'view_kind'],
+            on_change_with=['view_name', 'view_kind', 'view_model'],
             depends=['view_name', 'view_kind', 'view_model'],
         ),
         'on_change_with_view_final_name')
@@ -530,9 +532,9 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
         'Header Line',
         states={'invisible': Eval('input_mode', '') != 'expert'},
         on_change_with=[
-            'view_string', 'nb_col', 'input_mode', 'header_line'],
+            'view_string', 'nb_col', 'input_mode', 'header_line', 'view_kind'],
         depends=[
-            'view_string', 'nb_col', 'input_mode', 'header_line'])
+            'view_string', 'nb_col', 'input_mode', 'header_line', 'view_kind'])
     view_string = fields.Char(
         'View String',
         states={'invisible': Eval('input_mode', '') != 'classic'},
@@ -551,6 +553,11 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
         states={'readonly': Eval('id', 0) > 0})
     for_step = fields.Many2One(
         'process.step_desc', 'For Step', ondelete='CASCADE')
+    field_childs = fields.Selection(
+        'get_field_childs', 'Children field',
+        selection_change_with=['view_model'], depends=['view_model'],
+        states={'invisible': Eval('view_kind') != 'tree'},
+        on_change_with=['view_model'])
 
     @classmethod
     def __setup__(cls):
@@ -558,6 +565,7 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
         cls._sql_constraints += [
             ('unique_fs_id', 'UNIQUE(view_name, for_step, view_kind)',
                 'The functional id must be unique !')]
+        cls.__rpc__.update({'get_field_childs': RPC(instantiate=0)})
 
     @classmethod
     def default_nb_col(cls):
@@ -571,6 +579,19 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
     def default_input_mode(cls):
         return 'classic'
 
+    def on_change_with_field_childs(self):
+        if not (hasattr(self, 'view_model') and self.view_model):
+            return ''
+
+    def get_field_childs(self):
+        if not (hasattr(self, 'view_model') and self.view_model):
+            return [('', '')]
+        ViewModel = Pool().get(self.view_model.model)
+        return [
+            (field_name, field.string)
+            for field_name, field in ViewModel._fields.iteritems()
+            if isinstance(field, tryton_fields.One2Many)]
+
     @classmethod
     def default_view_final_name(cls):
         return 'step_%s__form' % Transaction().context.get('for_step_name', '')
@@ -579,7 +600,7 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
         if self.input_mode == 'expert':
             return self.header_line
         xml = 'string="%s" ' % self.view_string
-        if self.view_kind == 'form':
+        if hasattr(self, 'view_kind') and self.view_kind == 'form':
             xml += 'col="%s" ' % self.nb_col
         return xml
 
@@ -600,7 +621,7 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
         else:
             the_step = Transaction().context.get('for_step_name', '')
         return '_extra_views.step_%s_%s_%s' % (
-            the_step, self.view_name, self.view_kind)
+            the_step, self.on_change_with_view_name(), self.view_kind)
 
     def create_update_view(self):
         if (hasattr(self, 'the_view') and self.the_view):
@@ -612,6 +633,8 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
             the_view.name = self.on_change_with_view_final_name()[13:]
         the_view.model = self.view_model.model
         the_view.priority = 1000
+        the_view.field_childs = self.field_childs if hasattr(
+            self, 'field_childs') else ''
         the_view.type = self.view_kind
         the_view.data = '<?xml version="1.0"?>'
         the_view.data += '<%s %s>' % (
@@ -809,8 +832,8 @@ class ProcessFinder(Wizard):
         good_obj = GoodModel()
         good_obj.current_state = \
             self.process_parameters.good_process.all_steps[0]
-        is_ok, errs = self.init_main_object_from_process(good_obj,
-            self.process_parameters)
+        is_ok, errs = self.init_main_object_from_process(
+            good_obj, self.process_parameters)
         if is_ok:
             return good_obj
         else:
