@@ -1,15 +1,14 @@
 #-*- coding:utf-8 -*-
-from trytond.model import fields
 from trytond.pyson import Eval, Or
 
-from trytond.modules.coop_utils import model
+from trytond.modules.coop_utils import model, fields, utils
 from trytond.modules.insurance_product.product import DEF_CUR_DIG
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_SIMPLE
 
 __all__ = [
     'CoverageAmountRule',
-    ]
+]
 
 
 class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
@@ -23,44 +22,48 @@ class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
             ('cal_list', 'Calculated List')
         ],
         'Kind', states={'invisible': STATE_SIMPLE}, )
-    amounts = fields.Char('Amounts', help='Specify amounts separated by ;',
+    amounts = fields.Char(
+        'Amounts', help='Specify amounts separated by ;',
         states={
             'invisible': Or(
                 (Eval('kind') != 'amount'),
                 (Eval('config_kind') != 'simple'),
-                ),
+            ),
         }, depends=['config_kind', 'kind'])
-    amount_start = fields.Numeric('From',
+    amount_start = fields.Numeric(
+        'From',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
         states={
             'invisible': Or(
                 (Eval('kind') != 'cal_list'),
                 (Eval('config_kind') != 'simple'),
-                ),
+            ),
         }, depends=['config_kind', 'kind'])
-    amount_end = fields.Numeric('To',
+    amount_end = fields.Numeric(
+        'To',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
         states={
             'invisible': Or(
                 (Eval('kind') != 'cal_list'),
                 (Eval('config_kind') != 'simple'),
-                ),
+            ),
         }, depends=['config_kind', 'kind'])
-    amount_step = fields.Numeric('Step',
+    amount_step = fields.Numeric(
+        'Step',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
         states={
             'invisible': Or(
                 (Eval('kind') != 'cal_list'),
                 (Eval('config_kind') != 'simple'),
-                ),
+            ),
         })
 
     @classmethod
     def __setup__(cls):
         super(CoverageAmountRule, cls).__setup__()
         cls._error_messages.update({
-                'amounts_float': 'Amounts need to be floats !',
-                })
+            'amounts_float': 'Amounts need to be floats !',
+        })
 
     def validate_those_amounts(self, amounts):
         try:
@@ -81,13 +84,13 @@ class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
         elif self.config_kind == 'advanced' and self.rule:
             mess = []
             try:
-                res, mess, errs = self.rule.compute(args)
+                res, mess, errs = utils.execute_rule(self, self.rule, args)
                 if res:
                     res = self.validate_those_amounts(res)
             except Exception:
                 res = []
                 errs = ['Invalid rule !']
-            if res == False:
+            if res is False:
                 res = []
                 errs = ['Invalid amounts']
             return res, mess + errs
@@ -109,7 +112,7 @@ class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
         if not hasattr(self, 'amounts'):
             return
         if self.config_kind == 'simple' and self.kind == 'amount':
-            if self.validate_those_amounts(self.amounts) == False:
+            if self.validate_those_amounts(self.amounts) is False:
                 self.raise_user_error('amounts_float')
 
     @staticmethod

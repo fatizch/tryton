@@ -223,7 +223,7 @@ class DocumentRule(BusinessRuleRoot, model.CoopSQL):
         if not self.rule:
             return [], []
         try:
-            res, mess, errs = self.rule.compute(args)
+            res, mess, errs = utils.execute_rule(self, self.rule, args)
         except Exception:
             return [], ['Invalid rule']
         try:

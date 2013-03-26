@@ -197,7 +197,8 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
             for key in result.details.iterkeys():
                 final_details[key] = 0
             new_args['final_details'] = final_details
-            res, mess, errs = combination_rule.compute(new_args)
+            res, mess, errs = utils.execute_rule(
+                self, combination_rule, new_args)
             errors += mess + errs
             result = PricingResultLine(value=res)
             result.details = {}
@@ -260,6 +261,13 @@ class PricingComponent(model.CoopSQL, model.CoopView):
             'invisible': Or(
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'advanced')))})
+    rule_complementary_data = fields.Dict(
+        'ins_product.complementary_data_def', 'Rule Complementary Data',
+        on_change_with=['rule', 'rule_complementary_data'],
+        states={
+            'invisible': Or(
+                Bool((Eval('kind') != 'base')),
+                Bool((Eval('config_kind') != 'advanced')))})
     kind = fields.Selection(
         PRICING_LINE_KINDS, 'Line kind', required=True)
     code = fields.Char(
@@ -302,9 +310,26 @@ class PricingComponent(model.CoopSQL, model.CoopView):
         elif self.config_kind == 'simple':
             amount = self.fixed_amount
         elif self.config_kind == 'advanced' and self.rule:
-            res, mess, errs = self.rule.compute(args)
+            res, mess, errs = utils.execute_rule(self, self.rule, args)
             amount, errors = res, mess + errs
         return amount, errors
+
+    def on_change_with_rule_complementary_data(self):
+        if not (hasattr(self, 'rule') and self.rule):
+            return {}
+        if not (hasattr(self.rule, 'complementary_parameters') and
+                self.rule.complementary_parameters):
+            return {}
+        return dict([
+            (elem.name, self.rule_complementary_data.get(
+                elem.name, elem.get_default_value(None)))
+            for elem in self.rule.complementary_parameters])
+
+    def get_rule_complementary_data(self, schema_name):
+        if not (hasattr(self, 'rule_complementary_data') and
+                self.rule_complementary_data):
+            return None
+        return self.rule_complementary_data.get(schema_name, None)
 
     def calculate_value(self, args):
         kind = self.kind

@@ -63,7 +63,8 @@ class ComplementaryDataDefinition(
             ('product', 'Product'),
             ('sub_elem', 'Sub Element'),
             ('loss', 'Loss'),
-            ('benefit', 'Benefit')
+            ('benefit', 'Benefit'),
+            ('rule_engine', 'Rule Engine'),
         ],
         'Kind')
     sub_datas = fields.One2Many(

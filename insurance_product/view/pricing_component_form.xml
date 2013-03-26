@@ -19,4 +19,7 @@
     <field name="fixed_amount"/>
     <label name="rule"/>
     <field name="rule"/>
+    <newline/>
+    <label name="rule_complementary_data"/>
+    <field name="rule_complementary_data" no_command="1"/>
 </form>

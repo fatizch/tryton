@@ -15,4 +15,6 @@
     <newline/>
     <label name="rule"/>
     <field name="rule" colspan="3"/>
+    <label name="rule_complementary_data"/>
+    <field name="rule_complementary_data" colspan="3" no_command="1"/>
 </form>

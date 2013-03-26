@@ -35,8 +35,9 @@ class EventDesc(model.CoopSQL, model.CoopView):
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', translate=True)
-    loss_descs = fields.Many2Many('ins_product.event_desc-loss_desc',
-        'event_desc', 'loss_desc', 'Loss Descriptions')
+    loss_descs = fields.Many2Many(
+        'ins_product.event_desc-loss_desc', 'event_desc', 'loss_desc',
+        'Loss Descriptions')
 
 
 class LossDescDocumentsRelation(model.CoopSQL):
@@ -46,8 +47,8 @@ class LossDescDocumentsRelation(model.CoopSQL):
 
     document = fields.Many2One('ins_product.document_desc', 'Document',
         ondelete='RESTRICT')
-    loss = fields.Many2One('ins_product.loss_desc', 'Loss',
-        ondelete='CASCADE')
+    loss = fields.Many2One(
+        'ins_product.loss_desc', 'Loss', ondelete='CASCADE')
 
 
 class LossDesc(model.CoopSQL, model.CoopView):

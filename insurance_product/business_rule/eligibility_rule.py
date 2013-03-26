@@ -1,7 +1,6 @@
 #-*- coding:utf-8 -*-
-from trytond.model import fields
 from trytond.pyson import Eval
-from trytond.modules.coop_utils import model, business
+from trytond.modules.coop_utils import model, business, fields, utils
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot
 from trytond.modules.insurance_product.product import CONFIG_KIND
@@ -10,13 +9,13 @@ from trytond.modules.insurance_product import EligibilityResultLine
 __all__ = [
     'EligibilityRule',
     'EligibilityRelationKind'
-    ]
+]
 
 SUBSCRIBER_CLASSES = [
     ('person', 'Person'),
     ('company', 'Society'),
     ('all', 'All'),
-    ]
+]
 
 
 class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
@@ -24,15 +23,19 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
 
     __name__ = 'ins_product.eligibility_rule'
 
-    sub_elem_config_kind = fields.Selection(CONFIG_KIND,
-        'Sub Elem Conf. kind', required=True)
-    sub_elem_rule = fields.Many2One('rule_engine', 'Sub Elem Rule Engine',
-        depends=['config_kind'])
+    sub_elem_config_kind = fields.Selection(
+        CONFIG_KIND, 'Sub Elem Conf. kind', required=True)
+    sub_elem_rule = fields.Many2One(
+        'rule_engine', 'Sub Elem Rule Engine', depends=['config_kind'])
+    sub_elem_rule_complementary_data = fields.Dict(
+        'ins_product.complementary_data_def', 'Rule Complementary Data',
+        on_change_with=['sub_elem_rule', 'sub_elem_rule_complementary_data'])
     subscriber_classes = fields.Selection(
         SUBSCRIBER_CLASSES,
         'Can be subscribed',
         required=True)
-    relation_kinds = fields.Many2Many('ins_product.eligibility_relation_kind',
+    relation_kinds = fields.Many2Many(
+        'ins_product.eligibility_relation_kind',
         'eligibility_rule', 'relation_kind', 'Relations Authorized',
         states={'invisible': Eval('sub_elem_config_kind') != 'simple'},
         depends=['sub_elem_config_kind'])
@@ -64,7 +67,7 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
 
         # Now we can call the rule if it exists :
         if hasattr(self, 'rule') and self.rule:
-            res, mess, errs = self.rule.compute(args)
+            res, mess, errs = utils.execute_rule(self, self.rule, args)
             return (EligibilityResultLine(eligible=res, details=mess), errs)
 
         # Default eligibility is "True" :
@@ -74,9 +77,26 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
 
     def give_me_sub_elem_eligibility(self, args):
         if hasattr(self, 'sub_elem_rule') and self.sub_elem_rule:
-            res, mess, errs = self.sub_elem_rule.compute(args)
+            res, mess, errs = utils.execute(self, self.sub_elem_rule, args)
             return (EligibilityResultLine(eligible=res, details=mess), errs)
         return (EligibilityResultLine(True), [])
+
+    def on_change_with_sub_elem_rule_complementary_data(self):
+        if not (hasattr(self, 'sub_elem_rule') and self.sub_elem_rule):
+            return {}
+        if not (hasattr(self.sub_elem_rule, 'complementary_parameters') and
+                self.sub_elem_rule.complementary_parameters):
+            return {}
+        return dict([
+            (elem.name, self.sub_elem_rule_complementary_data.get(
+                elem.name, elem.get_default_value(None)))
+            for elem in self.sub_elem_rule.complementary_parameters])
+
+    def get_rule_complementary_data(self, schema_name):
+        if not (hasattr(self, 'sub_elem_rule_complementary_data') and
+                self.sub_elem_rule_complementary_data):
+            return None
+        return self.sub_elem_rule_complementary_data.get(schema_name, None)
 
     @staticmethod
     def default_is_eligible():
@@ -100,7 +120,7 @@ class EligibilityRelationKind(model.CoopSQL):
 
     __name__ = 'ins_product.eligibility_relation_kind'
 
-    eligibility_rule = fields.Many2One('ins_product.eligibility_rule',
-        'Eligibility Rule', ondelete='CASCADE')
-    relation_kind = fields.Many2One('party.party_relation_kind',
-        'Relation Kind', ondelete='CASCADE')
+    eligibility_rule = fields.Many2One(
+        'ins_product.eligibility_rule', 'Eligibility Rule', ondelete='CASCADE')
+    relation_kind = fields.Many2One(
+        'party.party_relation_kind', 'Relation Kind', ondelete='CASCADE')

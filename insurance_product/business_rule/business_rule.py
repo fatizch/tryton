@@ -1,11 +1,15 @@
 #-*- coding:utf-8 -*-
 import copy
+import json
+import functools
 
-from trytond.model import fields
+import pyflakes.messages
+
+from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model, utils, date
+from trytond.modules.coop_utils import model, utils, fields
 from trytond.modules.insurance_product.product import CONFIG_KIND
 from trytond.modules.insurance_product.product import Templated
 
@@ -14,181 +18,102 @@ STATE_SIMPLE = Eval('config_kind') != 'simple'
 STATE_SUB_SIMPLE = Eval('sub_elem_config_kind') != 'simple'
 
 __all__ = [
+    'RuleEngineComplementaryDataRelation',
+    'RuleEngine',
     'BusinessRuleRoot',
 ]
 
 
-#class BusinessRuleManager(model.CoopSQL, model.CoopView,
-#        utils.GetResult, Templated):
-#    'Business Rule Manager'
-#
-#    __name__ = 'ins_product.business_rule_manager'
-#
-#    offered = fields.Reference('Offered', selection='get_offered_models')
-#    business_rules = fields.One2Many('ins_product.generic_business_rule',
-#        'manager', 'Business Rules', on_change=['business_rules'])
-#
-#    @classmethod
-#    def __setup__(cls):
-#        super(BusinessRuleManager, cls).__setup__()
-#        cls.template = copy.copy(cls.template)
-#        cls.template.model_name = cls.__name__
-#        cls.__rpc__.update({'get_offered_models': RPC()})
-#
-#    @classmethod
-#    def get_offered_models(cls):
-#        module_name = utils.get_module_name(cls)
-#        return [x for x in utils.get_descendents('ins_product.offered')
-#            if module_name in x[0]]
-#
-#    def on_change_business_rules(self):
-#        res = {'business_rules': {}}
-#        res['business_rules'].setdefault('update', [])
-#        for business_rule1 in self.business_rules:
-#            #the idea is to always set the end_date
-#            #to the according next start_date
-#            for business_rule2 in self.business_rules:
-#                if (business_rule1 != business_rule2
-#                    and business_rule2.start_date
-#                    and business_rule1.start_date
-#                    and business_rule2.start_date > business_rule1.start_date
-#                    and (not business_rule1.end_date
-#                    or business_rule1.end_date >= business_rule2.start_date
-#                        )
-#                    ):
-#                    end_date = (business_rule2.start_date
-#                        - datetime.timedelta(days=1))
-#                    res['business_rules']['update'].append({
-#                        'id': business_rule1.id,
-#                        'end_date': end_date})
-#
-#            #if we change the start_date to a date after the end_date,
-#            #we reinitialize the end_date
-#            if (business_rule1.end_date
-#                and business_rule1.start_date
-#                and business_rule1.end_date < business_rule1.start_date):
-#                res['business_rules']['update'].append(
-#                    {
-#                        'id': business_rule1.id,
-#                        'end_date': None
-#                    })
-#        return res
-#
-#    def get_offered(self):
-#        return self.offered
-#
-##    @classmethod
-##    def create(cls, vals):
-#        #We need a functional key for import/export, we'll create one when we
-#        #create a brm and therefore a business rule because br is required for
-#        #brm.
-#        #the functional key is the concatenation of the func ey of the offered
-#        #and the func key of the business rule (kind)
-##        offered = utils.convert_ref_to_obj(vals['offered'])
-##        offered_key = getattr(offered, offered._export_name)
-##        kind = vals['business_rules'][0][1]['kind']
-##        vals['code'] = '%s,%s,%s' % (
-##            offered.__class__.__name__, offered_key, kind)
-##        return super(BusinessRuleManager, cls).create(vals)
-#
-##    @classmethod
-##    def default_business_rules(cls):
-##        return utils.create_inst_with_default_val(cls, 'business_rules')
-#
-#    @classmethod
-#    def recreate_rather_than_update(cls):
-#        return True
-#
-#
-#class GenericBusinessRule(model.CoopSQL, model.CoopView):
-#    'Generic Business Rule'
-#
-#    __name__ = 'ins_product.generic_business_rule'
-#
-#    kind = fields.Selection('get_kind', 'Kind',
-#        required=True, on_change=['kind'],
-#        states={'readonly': Eval('id', -1) >= 0})
-#    manager = fields.Many2One('ins_product.business_rule_manager', 'Manager',
-#        ondelete='CASCADE')
-#    start_date = fields.Date('From Date', required=True,
-#        depends=['is_current'])
-#    end_date = fields.Date('To Date')
-#    is_current = fields.Function(fields.Boolean('Is current'),
-#        'get_is_current')
-#    pricing_rule = fields.One2Many('ins_product.pricing_rule',
-#        'generic_rule', 'Pricing Rule', size=1)
-#    eligibility_rule = fields.One2Many('ins_product.eligibility_rule',
-#        'generic_rule', 'Eligibility Rule', size=1)
-#    benefit_rule = fields.One2Many('ins_product.benefit_rule',
-#        'generic_rule', 'Benefit Rule', size=1)
-#    reserve_rule = fields.One2Many('ins_product.reserve_rule',
-#        'generic_rule', 'Reserve Rule', size=1)
-#    coverage_amount_rule = fields.One2Many('ins_product.coverage_amount_rule',
-#        'generic_rule', 'Coverage Amount Rule', size=1)
-#    clause_rule = fields.One2Many('ins_product.clause_rule',
-#        'generic_rule', 'Clause Rule', size=1)
-#    term_renewal_rule = fields.One2Many('ins_product.term_renewal_rule',
-#        'generic_rule', 'Term - Renewal Rule', size=1)
-#    deductible_rule = fields.One2Many('ins_product.deductible_rule',
-#        'generic_rule', 'Deductible Rule', size=1)
-#
-#    def get_rec_name(self, name):
-#        return self.kind
-#
-#    @classmethod
-#    def __setup__(cls):
-#        super(GenericBusinessRule, cls).__setup__()
-#        cls.kind = copy.copy(cls.kind)
-#        for field_name in (rule for rule in dir(cls) if rule.endswith('rule')
-#            attr = copy.copy(getattr(cls, field_name))
-#            if not hasattr(attr, 'model_name'):
-#                continue
-#            if cls.kind.on_change is None:
-#                cls.kind.on_change = []
-#            if field_name not in cls.kind.on_change:
-#                cls.kind.on_change += [field_name]
-#
-#            attr.states = {
-#                'invisible': (Eval('kind') != attr.model_name)
-#            }
-#            setattr(cls, field_name, attr)
-#
-#    def on_change_kind(self):
-#        res = {}
-#        for field_name, field in self._fields.iteritems():
-#            if not (hasattr(field, 'model_name')
-#                and getattr(field, 'model_name').endswith('_rule')
-#                and (not getattr(self, field_name)
-#                    or len(getattr(self, field_name)) == 0)):
-#                continue
-#            if field.model_name != self.kind:
-#                continue
-#            res[field_name] = utils.create_inst_with_default_val(
-#                self.__class__, field_name, action='add')
-#        return res
-#
-##    @classmethod
-##    def get_kind(cls, vals=None):
-##        return coop_string.get_descendents_name(BusinessRuleRoot)
-#
-#    def get_is_current(self, name):
-#        #first we need the model for the manager (depends on the module used
-#        if not hasattr(self.__class__, 'manager'):
-#            return False
-#        manager_attr = getattr(self.__class__, 'manager')
-#        if not hasattr(manager_attr, 'model_name'):
-#            return False
-#        BRM = Pool().get(manager_attr.model_name)
-#        date = utils.today()
-#        return self == BRM.get_good_rule_at_date(self.manager,
-#                {'date': date})
-#
-#    def get_offered(self):
-#        return self.manager.get_offered()
-#
-#    @classmethod
-#    def default_kind(cls):
-#        return cls.get_kind()
+class RuleEngineComplementaryDataRelation(model.CoopSQL):
+    'Rule engine to complementary data relation'
+
+    __name__ = 'ins_product.rule_engine_complementary_data_relation'
+
+    rule = fields.Many2One('rule_engine', 'Rule', ondelete='CASCADE')
+    complementary_data = fields.Many2One(
+        'ins_product.complementary_data_def', 'Complementary Data',
+        ondelete='RESTRICT')
+
+
+class RuleEngine():
+    'Rule Engine'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'rule_engine'
+
+    complementary_parameters = fields.Many2Many(
+        'ins_product.rule_engine_complementary_data_relation',
+        'rule', 'complementary_data', 'Complementary Parameters',
+        domain=[('kind', '=', 'rule_engine')],
+        on_change=['context', 'complementary_parameters'])
+
+    @classmethod
+    def __setup__(cls):
+        super(RuleEngine, cls).__setup__()
+        cls.context = copy.copy(cls.context)
+        cls.context.on_change.append('complementary_parameters')
+
+    def on_change_complementary_parameters(self):
+        return {
+            'data_tree': self.get_data_tree(None) if self.context else '[]'}
+
+    def get_data_tree(self, name):
+        if not (hasattr(self, 'complementary_parameters') and
+                self.complementary_parameters):
+            return super(RuleEngine, self).get_data_tree(name)
+        tmp_result = [e.as_tree() for e in self.context.allowed_elements]
+        tmp_node = {}
+        tmp_node['name'] = 'x-y-z'
+        tmp_node['translated'] = 'x-y-z'
+        tmp_node['fct_args'] = ''
+        tmp_node['description'] = 'X-Y-Z'
+        tmp_node['type'] = 'folder'
+        tmp_node['long_description'] = ''
+        tmp_node['children'] = []
+        for elem in self.complementary_parameters:
+            param_node = {}
+            param_node['name'] = elem.string
+            param_node['translated'] = 'rule_engine_parameter_%s' % elem.name
+            param_node['fct_args'] = ''
+            param_node['description'] = elem.string
+            param_node['type'] = 'function'
+            param_node['long_description'] = ''
+            param_node['children'] = []
+            tmp_node['children'].append(param_node)
+        tmp_result.append(tmp_node)
+        return json.dumps(tmp_result)
+
+    @classmethod
+    def get_complementary_parameter_value(cls, args, schema_name):
+        return args['_caller'].get_rule_complementary_data(schema_name)
+
+    def get_context_for_execution(self):
+        result = super(RuleEngine, self).get_context_for_execution()
+        if not (hasattr(self, 'complementary_parameters') and
+                self.complementary_parameters):
+            return result
+        for schema in self.complementary_parameters:
+            result['rule_engine_parameter_%s' % schema.name] = \
+                functools.partial(
+                    self.get_complementary_parameter_value,
+                    result, schema.name)
+        return result
+
+    def filter_errors(self, error):
+        result = super(RuleEngine, self).filter_errors(error)
+        if not result and isinstance(error, pyflakes.messages.UndefinedName):
+            if error.message_args[0][:24] == '_rule_complementary_data':
+                if error.message_args[0][25:] in self._rule_complementary_data:
+                    return True
+        return False
+
+    @property
+    def _allowed_functions(self):
+        result = super(RuleEngine, self).allowed_functions
+        result += [
+            '_rule_complementary_data%s' % elem.name
+            for elem in self._rule_complementary_data]
+        return result
 
 
 class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
@@ -199,14 +124,18 @@ class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
     offered = fields.Reference('Offered', selection='get_offered_models')
     start_date = fields.Date('From Date', required=True)
     end_date = fields.Date('To Date')
-    config_kind = fields.Selection(CONFIG_KIND,
-        'Conf. kind', required=True)
-    rule = fields.Many2One('rule_engine', 'Rule Engine',
-        states={'invisible': STATE_ADVANCED},
+    config_kind = fields.Selection(
+        CONFIG_KIND, 'Conf. kind', required=True)
+    rule = fields.Many2One(
+        'rule_engine', 'Rule Engine', states={'invisible': STATE_ADVANCED},
         depends=['config_kind'])
     view_rec_name = fields.Function(
         fields.Char('Name'),
         'get_rec_name')
+    rule_complementary_data = fields.Dict(
+        'ins_product.complementary_data_def', 'Rule Complementary Data',
+        on_change_with=['rule', 'rule_complementary_data'],
+        states={'invisible': STATE_ADVANCED})
 
     @classmethod
     def __setup__(cls):
@@ -218,13 +147,26 @@ class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
         if hasattr(cls, '_constraints'):
             cls._constraints += [('check_dates', 'businessrule_overlaps')]
         if hasattr(cls, '_error_messages'):
-            cls._error_messages.update({'businessrule_overlaps':
+            cls._error_messages.update({
+                'businessrule_overlaps':
                 'You can not have 2 business rules that overlaps!'})
 
-    def get_rule_result(self, args):
-        if self.rule:
-            res, mess, errs = self.rule.compute(args)
-            return res, mess + errs
+    def on_change_with_rule_complementary_data(self):
+        if not (hasattr(self, 'rule') and self.rule):
+            return {}
+        if not (hasattr(self.rule, 'complementary_parameters') and
+                self.rule.complementary_parameters):
+            return {}
+        return dict([
+            (elem.name, self.rule_complementary_data.get(
+                elem.name, elem.get_default_value(None)))
+            for elem in self.rule.complementary_parameters])
+
+    def get_rule_complementary_data(self, schema_name):
+        if not (hasattr(self, 'rule_complementary_data') and
+                self.rule_complementary_data):
+            return None
+        return self.rule_complementary_data.get(schema_name, None)
 
     def get_simple_result(self, args):
         return None, None
@@ -245,7 +187,8 @@ class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
     @classmethod
     def get_offered_models(cls):
         module_name = utils.get_module_name(cls)
-        return [x for x in utils.get_descendents('ins_product.offered')
+        return [
+            x for x in utils.get_descendents('ins_product.offered')
             if module_name in x[0]]
 
     @classmethod
@@ -270,18 +213,19 @@ class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
 
     def check_dates(self):
         cursor = Transaction().cursor
-        cursor.execute('SELECT id ' \
-            'FROM ' + self._table + ' ' \
-            'WHERE ((start_date <= %s AND end_date >= %s) ' \
-                    'OR (start_date <= %s AND end_date >= %s) ' \
-                    'OR (start_date >= %s AND end_date <= %s)) ' \
-                'AND offered = %s' \
-                'AND id != %s',
-            (self.start_date, self.start_date,
-             self.end_date, self.end_date,
-             self.start_date, self.end_date,
-             '%s,%s' % (self.offered.__class__.__name__, self.offered.id),
-              self.id))
+        cursor.execute(
+            'SELECT id '
+            'FROM ' + self._table + ' '
+            'WHERE ((start_date <= %s AND end_date >= %s) '
+            '        OR (start_date <= %s AND end_date >= %s) '
+            '        OR (start_date >= %s AND end_date <= %s)) '
+            '    AND offered = %s'
+            '    AND id != %s', (
+            self.start_date, self.start_date,
+            self.end_date, self.end_date,
+            self.start_date, self.end_date,
+            '%s,%s' % (self.offered.__class__.__name__, self.offered.id),
+            self.id))
         if cursor.fetchone():
             return False
         return True

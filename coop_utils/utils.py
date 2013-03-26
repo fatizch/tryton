@@ -949,8 +949,8 @@ def init_complementary_data_from_ids(ids):
     return res
 
 
-def get_complementary_data_value(instance, var_name, data_defs, at_date,
-        value):
+def get_complementary_data_value(
+        instance, var_name, data_defs, at_date, value):
     res = None
     if hasattr(instance, var_name):
         cur_dict = getattr(instance, var_name)
@@ -963,3 +963,8 @@ def get_complementary_data_value(instance, var_name, data_defs, at_date,
             continue
         if data_def.type_ in ['integer', 'float', 'numeric']:
             return 0
+
+
+def execute_rule(caller, rule, args):
+    args['_caller'] = caller
+    return rule.compute(args)

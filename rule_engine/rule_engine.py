@@ -255,9 +255,12 @@ class Rule(ModelView, ModelSQL):
     def default_status():
         return 'draft'
 
+    def get_context_for_execution(self):
+        return self.context.get_context()
+
     def compute(self, evaluation_context, debug_mode=False):
         with Transaction().set_context(debug=debug_mode):
-            context = self.context.get_context()
+            context = self.get_context_for_execution()
             context.update(evaluation_context)
             context['context'] = context
             localcontext = {}

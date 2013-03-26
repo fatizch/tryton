@@ -268,7 +268,11 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
         ondelete='CASCADE')
     config_kind = fields.Selection(CONFIG_KIND,
         'Conf. kind', required=True)
-    rule = fields.Many2One('rule_engine', 'Amount',
+    rule = fields.Many2One(
+        'rule_engine', 'Amount', states={'invisible': STATE_ADVANCED})
+    rule_complementary_data = fields.Dict(
+        'ins_product.complementary_data_def', 'Rule Complementary Data',
+        on_change_with=['rule', 'rule_complementary_data'],
         states={'invisible': STATE_ADVANCED})
     amount = fields.Numeric('Amount',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
@@ -280,6 +284,23 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
         states={'invisible': Bool(~Eval('limited_duration'))})
     duration_unit = fields.Selection(date.DAILY_DURATION, 'Duration Unit',
         sort=False, states={'invisible': Bool(~Eval('limited_duration'))})
+
+    def on_change_with_rule_complementary_data(self):
+        if not (hasattr(self, 'rule') and self.rule):
+            return {}
+        if not (hasattr(self.rule, 'complementary_parameters') and
+                self.rule.complementary_parameters):
+            return {}
+        return dict([
+            (elem.name, self.rule_complementary_data.get(
+                elem.name, elem.get_default_value(None)))
+            for elem in self.rule.complementary_parameters])
+
+    def get_rule_complementary_data(self, schema_name):
+        if not (hasattr(self, 'rule_complementary_data') and
+                self.rule_complementary_data):
+            return None
+        return self.rule_complementary_data.get(schema_name, None)
 
     def get_rec_name(self, name=None):
         if self.config_kind == 'advanced' and self.rule:
@@ -310,7 +331,7 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
 
     def get_rule_result(self, args):
         if self.rule:
-            res, mess, errs = self.rule.compute(args)
+            res, mess, errs = utils.execute_rule(self, self.rule, args)
             return res, mess + errs
 
     def give_me_result(self, args):
