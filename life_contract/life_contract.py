@@ -6,7 +6,7 @@ from trytond.pyson import Eval, Or, Bool
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
-from trytond.modules.coop_utils import utils, fields
+from trytond.modules.coop_utils import utils, fields, model 
 from trytond.modules.insurance_contract import CoveredDesc
 from trytond.modules.insurance_process import DependantState
 from trytond.modules.insurance_process import CoopStateView
@@ -16,6 +16,7 @@ __all__ = [
     'Contract',
     'LifeOption',
     'CoveredPerson',
+    'CoveredElementPartyRelation',
     'LifeCoveredData',
     'LifeCoveredDesc',
     'ExtensionLifeState',
@@ -114,7 +115,31 @@ class CoveredPerson():
     __metaclass__ = PoolMeta
 
     person = fields.Many2One('party.party', 'Person',
-        domain=[('is_person', '=', True)], ondelete='RESTRICT')
+        domain=[('is_person', '=', True)], ondelete='RESTRICT',
+        states={
+            'invisible': Bool(~Eval('is_person')),
+            'required': Bool(Eval('is_person')),
+        })
+    covered_relations = fields.Many2Many(
+        'ins_contract.covered_element-party_relation', 'covered_element',
+        'party_relation', 'Covered Relations', domain=[
+            'OR',
+            [('from_party', '=', Eval('person'))],
+            [('to_party', '=', Eval('person'))],
+        ], depends=['person'],
+        states={'invisible': Bool(~Eval('person'))})
+    is_person = fields.Function(
+        fields.Boolean('Person', on_change_with=['item_desc'],
+            states={'invisible': True}),
+        'on_change_with_is_person')
+
+    @classmethod
+    def __setup__(cls):
+        super(CoveredPerson, cls).__setup__()
+        utils.update_states(cls, 'sub_covered_elements',
+            {'invisible': Bool(Eval('is_person'))})
+        utils.update_states(cls, 'name',
+            {'invisible': Bool(Eval('is_person'))})
 
     def get_name_for_billing(self):
         return self.get_rec_name('billing')
@@ -145,6 +170,22 @@ class CoveredPerson():
                 if sub_elem.is_person_covered(party, at_date, option):
                     return True
         return False
+
+    def on_change_with_is_person(self, name=None):
+        if self.item_desc:
+            return self.item_desc.kind == 'person'
+        return False
+
+
+class CoveredElementPartyRelation(model.CoopSQL):
+    'Relation between Covered Element and Covered Relations'
+
+    __name__ = 'ins_contract.covered_element-party_relation'
+
+    covered_element = fields.Many2One('ins_contract.covered_element',
+        'Covered Element', ondelete='CASCADE')
+    party_relation = fields.Many2One('party.party-relation', 'Party Relation',
+        ondelete='RESTRICT')
 
 
 class LifeCoveredData():

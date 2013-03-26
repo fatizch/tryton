@@ -215,9 +215,9 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def get_active_options_at_date(self, at_date):
         res = []
         for elem in self.options:
-            if elem.start_date <= at_date and (not hasattr(
-                    elem, 'end_date') or (
-                    elem.end_date is None or elem.end_date > at_date)):
+            if (elem.start_date and elem.start_date <= at_date
+                and (not hasattr(elem, 'end_date') or (
+                    elem.end_date is None or elem.end_date > at_date))):
                 res += [elem]
         return list(set(res))
 
@@ -412,7 +412,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         the direct link subscriber
         '''
         # TODO: to enhance
-        return self.get_policy_owner()
+        return self.subscriber
 
     def init_options_from_covered_elements(self):
         if self.options:
@@ -500,11 +500,6 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             'calculated_complementary_datas',
             {'date': self.start_date, 'contract': self})[0]}
 
-    def get_policy_owner(self, at_date=None):
-        #TODO : To Enhance
-        if not at_date:
-            at_date = self.start_date
-        return self.subscriber
 
 class Option(model.CoopSQL, Subscribed):
     'Subscribed Coverage'

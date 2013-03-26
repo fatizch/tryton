@@ -8,4 +8,5 @@
     <label name="kind"/>
     <field name="kind"/>
     <field name="complementary_data_def" colspan="4"/>
+    <field name="sub_item_descs" colspan="4"/>
 </form>

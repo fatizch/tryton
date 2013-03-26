@@ -40,6 +40,7 @@ class PartyRelation(CoopSQL, CoopView):
     'Party Relation'
 
     __name__ = 'party.party-relation'
+    _rec_name = 'to_party'
 
     from_party = fields.Many2One('party.party', 'From Party',
         ondelete='CASCADE',

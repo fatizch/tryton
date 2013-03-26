@@ -205,7 +205,6 @@ class Offered(model.CoopView, utils.GetResult, Templated):
             (looking_for), args['date']))
         return all_schemas, possible_schemas
 
-
     def give_me_sub_elem_eligibility(self, args):
         try:
             res = self.get_result(
@@ -507,6 +506,9 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
         'item_desc', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'sub_elem')], )
     kind = fields.Selection('get_possible_item_kind', 'Kind')
+    parent = fields.Many2One('ins_product.item_desc', 'Parent')
+    sub_item_descs = fields.One2Many('ins_product.item_desc', 'parent',
+        'Sub Item Descriptors')
 
     @classmethod
     def get_possible_item_kind(cls):

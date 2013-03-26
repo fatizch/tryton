@@ -381,30 +381,26 @@ class Option():
     __name__ = 'ins_contract.option'
 
     status_selection = fields.Function(
-        fields.Selection(
-            OPTION_SELECTION_STATUS,
-            'Status',
-            on_change=['status_selection', 'status'],
-        ),
+        fields.Boolean('Status',
+            on_change=['status_selection', 'status']),
         'get_status_selection',
         'setter_void',
     )
 
     def on_change_status_selection(self):
-        if self.status_selection == 'active':
+        if self.status_selection:
             return {'status': 'active'}
         else:
             return {'status': 'refused'}
 
     def get_status_selection(self, name):
-        print self.status
         if self.status == 'active':
-            return 'active'
-        return 'refused'
+            return True
+        return False
 
     @classmethod
     def default_status_selection(cls):
-        return 'active'
+        return True
 
     @classmethod
     def setter_void(cls, contracts, name, values):

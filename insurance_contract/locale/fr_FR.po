@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -544,7 +544,7 @@ msgstr "Contrat"
 
 msgctxt "field:ins_contract.covered_element,covered_data:"
 msgid "Covered Element Data"
-msgstr "Coverage Data"
+msgstr "Données de Couverture"
 
 msgctxt "field:ins_contract.covered_element,create_date:"
 msgid "Create Date"

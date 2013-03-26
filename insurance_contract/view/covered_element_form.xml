@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
 <form string="Covered Element">
+    <label name="item_desc"/>
+    <field name="item_desc" widget="selection"/>
     <label name="name"/>
     <field name="name"/>
-    <newline/>
-    <label name="item_desc"/>
-    <field name="item_desc"/>
     <newline/>
     <field name="complementary_data" colspan="2" no_command="1"/>
     <newline/>
