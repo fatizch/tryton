@@ -8,7 +8,7 @@
         <record model="ir.action.act_window" id="act_product_form">
             <field name="name">Group Products</field>
             <field name="res_model">ins_product.product</field>
-            <field name="domain">[('is_group', '=', True]</field>
+            <field name="domain">[('is_group', '=', True)]</field>
         </record>
         <record model="ir.ui.view" id="product_view_form">
             <field name="model">ins_product.product</field>
@@ -46,7 +46,7 @@
         <record model="ir.action.act_window" id="act_coverage_form">
             <field name="name">Group Coverages</field>
             <field name="res_model">ins_product.coverage</field>
-            <field name="domain">[('is_group', '=', True]</field>
+            <field name="domain">[('is_group', '=', True)]</field>
         </record>
         <record model="ir.ui.view" id="coverage_view_form">
             <field name="model">ins_product.coverage</field>
