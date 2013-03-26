@@ -347,6 +347,9 @@ class CoopProcessFramework(ProcessFramework):
 
     @classmethod
     def button_complete_states(cls, process, step_relation):
+        if process.custom_transitions and \
+                not process.steps_implicitly_available:
+            return {'readonly': True}
         return {}
 
     @classmethod
@@ -406,16 +409,15 @@ class ProcessDesc(model.CoopSQL):
                     if for_task.button_is_active('_button_complete_%s_%s' % (
                             self.id, self.all_steps[-1].id)):
                         return 'complete'
-                continue
             if not cur_step_found:
                 continue
-            # First we look for a matching transition
             if self.custom_transitions:
                 for trans in self.transitions:
                     if not trans.from_step == from_step:
                         continue
                     if not trans.to_step == step_relation.step:
-                        continue
+                        if trans.kind != 'complete':
+                            continue
                     if not for_task.is_button_available(self, trans):
                         continue
                     return trans
@@ -427,7 +429,6 @@ class ProcessDesc(model.CoopSQL):
         for step_relation in reversed(self.all_steps):
             if step_relation.step == from_step:
                 cur_step_found = True
-                continue
             if not cur_step_found:
                 continue
             # First we look for a matching transition
