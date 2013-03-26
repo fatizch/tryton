@@ -178,6 +178,10 @@ class ProcessLog(model.CoopSQL, model.CoopView):
     def get_rec_name(self, name):
         return self.task.get_rec_name(None)
 
+    @classmethod
+    def default_start_time(cls):
+        return datetime.datetime.now()
+
 
 class CoopProcessFramework(ProcessFramework):
     'Coop Process Framework'
@@ -194,7 +198,7 @@ class CoopProcessFramework(ProcessFramework):
             'lock_fault': 'Object %s is currently locked by user %s',
         })
 
-    def get_current_log(self, name):
+    def get_current_log(self, name=None):
         if not (hasattr(self, 'id') and self.id):
             return None
         Log = Pool().get('coop_process.process_log')
@@ -361,6 +365,23 @@ class CoopProcessFramework(ProcessFramework):
                 work.save()
 
         return button_complete_generic
+
+    def set_state(self, value, process_name=None):
+        super(CoopProcessFramework, self).set_state(value, process_name)
+        if self.current_state:
+            authorizations = self.current_state.step.authorizations
+            visible = len(authorizations) == 0
+            for elem in authorizations:
+                visible = visible and \
+                    elem.id in Transaction().context.get('groups')
+        else:
+            visible = False
+        if visible:
+            return
+        self.current_log.locked = False
+        self.current_log.end_time = datetime.datetime.now()
+        self.current_log.to_state = self.current_state
+        self.current_log.save()
 
 
 class ProcessDesc(model.CoopSQL):
