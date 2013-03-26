@@ -29,12 +29,6 @@ class FrenchParty():
             cls.ssn.on_change_with = []
         cls.ssn.on_change_with += ['ssn_no_key', 'ssn_key']
 
-        cls._constraints += [
-            ('check_ssn', 'invalid_ssn'),
-            ('check_ssn_key', 'invalid_ssn_key'),
-            ('check_ssn_birth_date', 'invalid_ssn_birth_date'),
-            ('check_ssn_gender', 'invalid_ssn_gender'),
-            ]
         cls._error_messages.update(
             {
                 'invalid_ssn': 'Invalid format for SSN',
@@ -46,6 +40,15 @@ class FrenchParty():
         cls.siren = copy.copy(cls.siren)
         cls.siren.states = {'invisible': Bool(~Eval('is_company'))}
 
+    @classmethod
+    def validate(cls, parties):
+        super(FrenchParty, cls).validate(parties)
+        for party in parties:
+            party.check_ssn()
+            party.check_ssn_key()
+            party.check_ssn_birth_date()
+            party.check_ssn_gender()
+
     @staticmethod
     def calculate_ssn_key(ssn_no_key):
         ssn_as_num = str(ssn_no_key).replace('2A', '19').replace('2B', '18')
@@ -54,20 +57,26 @@ class FrenchParty():
 
     def check_ssn(self):
         if not self.ssn:
-            return True
-        pattern = """^[1-3]
-            [0-9]{2}
-            [0-1][0-9]
-            (2[AB]|[0-9]{2})
-            [0-9]{3}
-            [0-9]{3}
-            [0-9]{2}$"""
-        return re.search(pattern, self.ssn, re.X)
+            res = True
+        else:
+            pattern = """^[1-3]
+                [0-9]{2}
+                [0-1][0-9]
+                (2[AB]|[0-9]{2})
+                [0-9]{3}
+                [0-9]{3}
+                [0-9]{2}$"""
+            res = re.search(pattern, self.ssn, re.X)
+        if not res:
+            self.raise_user_error('invalid_ssn_key')
 
     def check_ssn_key(self):
         if not self.ssn:
-            return True
-        return self.calculate_ssn_key(self.ssn_no_key) == int(self.ssn_key)
+            res = True
+        else:
+            res = self.calculate_ssn_key(self.ssn_no_key) == int(self.ssn_key)
+        if not res:
+            self.raise_user_error('invalid_ssn')
 
     def get_ssn(self, name):
         if not self.ssn:
@@ -95,10 +104,16 @@ class FrenchParty():
 
     def check_ssn_birth_date(self):
         if not self.ssn:
-            return True
-        return self.birth_date.strftime('%y%m') == self.ssn[1:5]
+            res = True
+        else:
+            res = self.birth_date.strftime('%y%m') == self.ssn[1:5]
+        if not res:
+            self.raise_user_error('invalid_ssn_birth_date')
 
     def check_ssn_gender(self):
         if not self.ssn or (self.ssn[0] != '1' and self.ssn[0] != '2'):
-            return True
-        return self.ssn[0] == str(self.get_gender_as_int())
+            res = True
+        else:
+            res = self.ssn[0] == str(self.get_gender_as_int())
+        if not res:
+            self.raise_user_error('invalid_ssn_gender')

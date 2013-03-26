@@ -15,8 +15,7 @@ from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT, test_view,\
 from trytond.transaction import Transaction
 
 MODULE_NAME = os.path.basename(
-                  os.path.abspath(
-                      os.path.join(os.path.normpath(__file__), '..', '..')))
+    os.path.abspath(os.path.join(os.path.normpath(__file__), '..', '..')))
 
 
 class ModuleTestCase(unittest.TestCase):
@@ -53,7 +52,7 @@ class ModuleTestCase(unittest.TestCase):
                     'birth_date': birth_date,
                     'gender': gender,
                     'addresses': []
-                    }])
+                }])
                 res = person.id > 0
             except:
                 res = False
@@ -73,7 +72,7 @@ class ModuleTestCase(unittest.TestCase):
                 ('145065C12312307', False),
                 ('14511661231233', False),
                 ('279086507612053', True)
-            )
+        )
         for i, (value, test) in enumerate(values):
             birth_date = date(int('19' + value[1:3]), int(value[3:5]), 1)
             gender = 'male'
