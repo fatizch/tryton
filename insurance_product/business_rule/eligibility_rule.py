@@ -95,8 +95,14 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
     def get_rule_complementary_data(self, schema_name):
         if not (hasattr(self, 'sub_elem_rule_complementary_data') and
                 self.sub_elem_rule_complementary_data):
-            return None
-        return self.sub_elem_rule_complementary_data.get(schema_name, None)
+            result = None
+        else:
+            result = self.sub_elem_rule_complementary_data.get(
+                schema_name, None)
+        if not result:
+            return super(EligibilityRule, self).get_rule_complementary_data(
+                schema_name)
+        return result
 
     @staticmethod
     def default_is_eligible():

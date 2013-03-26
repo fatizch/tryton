@@ -23,6 +23,8 @@
                 states="{'invisible': Eval('sub_elem_config_kind') != 'advanced'}">
                 <label name="sub_elem_rule"/>
                 <field name="sub_elem_rule"/>
+                <label name="sub_elem_rule_complementary_data"/>
+                <field name="sub_elem_rule_complementary_data"/>
             </group>
             <field name="relation_kinds" colspan="4" xexpand="1" yfill="1"/>
         </group>

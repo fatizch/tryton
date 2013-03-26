@@ -25,6 +25,8 @@
         colspan="2" xexpand="0">
         <label name="rule"/>
         <field name="rule"/>
+        <label name="rule_complementary_data"/>
+        <field name="rule_complementary_data"/>
         <label name="indemnification_calc_unit" xexpand="0"/>
         <field name="indemnification_calc_unit" xalign="0"/>
     </group>
