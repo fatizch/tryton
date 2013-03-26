@@ -1,4 +1,6 @@
 #-*- coding:utf-8 -*-
+import copy
+
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
@@ -21,8 +23,10 @@ class GroupProduct():
 
     @classmethod
     def __setup__(cls):
-        utils.update_domain(cls, 'options',
-            [('is_group', '=', Eval('is_group'))])
+        utils.update_domain(
+            cls, 'options', [('is_group', '=', Eval('is_group'))])
+        cls.options = copy.copy(cls.options)
+        cls.options.depends.append('is_group')
         super(GroupProduct, cls).__setup__()
 
 
