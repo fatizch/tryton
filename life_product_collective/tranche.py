@@ -1,12 +1,7 @@
 #-*- coding:utf-8 -*-
-import copy
-
-from trytond.model import fields
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval
-from trytond.transaction import Transaction
-from trytond.modules.coop_utils import utils
 
+from trytond.modules.coop_utils import fields
 
 PAYER_KIND = [
     ('employer', 'Employer'),

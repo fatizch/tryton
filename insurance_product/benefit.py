@@ -1,7 +1,5 @@
 #-*- coding:utf-8 -*-
-from trytond.model import fields
-
-from trytond.modules.coop_utils import model, date
+from trytond.modules.coop_utils import model, date, fields
 from trytond.modules.insurance_product import Offered
 
 __all__ = [

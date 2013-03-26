@@ -1,12 +1,11 @@
 import copy
 import datetime
 from trytond.pool import PoolMeta, Pool
-from trytond.model import fields
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
 from trytond.modules.party.contact_mechanism import _TYPES
-from trytond.modules.coop_utils import model, utils
+from trytond.modules.coop_utils import model, utils, fields
 
 MEDIA = _TYPES + [
     ('mail', 'Mail')

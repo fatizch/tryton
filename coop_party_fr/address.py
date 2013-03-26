@@ -1,9 +1,11 @@
 import copy
 
-from trytond.model import fields
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
 from trytond.modules.party.address import STATES, DEPENDS
+
+from trytond.modules.coop_utils import fields
+
 __all__ = ['Address']
 
 

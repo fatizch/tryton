@@ -6,7 +6,7 @@ except ImportError:
     import json
 
 from trytond.pyson import Eval, Bool
-from trytond.model import ModelView, ModelSQL, fields as fields
+from trytond.model import ModelView, ModelSQL, fields as tryton_fields
 from trytond.wizard import Wizard
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
@@ -15,6 +15,7 @@ from trytond.protocols.jsonrpc import JSONEncoder, object_hook
 
 import utils
 import coop_string
+import fields
 
 
 __all__ = [
@@ -59,7 +60,7 @@ class ExportImportMixin(object):
         if skip_fields is None:
             skip_fields = set()
         field = self._fields[field_name]
-        if isinstance(field, fields.One2Many):
+        if isinstance(field, tryton_fields.One2Many):
             skip_fields.add(field.field)
         if not hasattr(field.get_target(), 'export_json'):
             raise NotExportImport()
@@ -78,16 +79,17 @@ class ExportImportMixin(object):
         }
         for field_name, field in self._fields.iteritems():
             if (field_name in skip_fields
-                    or (isinstance(field, fields.Function)
-                        and not isinstance(field, fields.Property))):
+                    or (isinstance(field, tryton_fields.Function)
+                        and not isinstance(field, tryton_fields.Property))):
                 continue
-            elif isinstance(field, (fields.Many2One, fields.One2One,
-                        fields.Reference)):
+            elif isinstance(field, (tryton_fields.Many2One,
+                    tryton_fields.One2One, tryton_fields.Reference)):
                 try:
                     values[field_name] = self._export_json_xxx2one(field_name)
                 except NotExportImport:
                     pass
-            elif isinstance(field, (fields.One2Many, fields.Many2Many)):
+            elif isinstance(field, (
+                    tryton_fields.One2Many, tryton_fields.Many2Many)):
                 try:
                     values[field_name] = self._export_json_xxx2many(field_name)
                 except NotExportImport:
@@ -107,10 +109,10 @@ class ExportImportMixin(object):
             if field_name in ('__name__', '_export_name'):
                 continue
             field = cls._fields[field_name]
-            if isinstance(field, (fields.Many2One, fields.One2One,
-                        fields.Reference)):
+            if isinstance(field, (tryton_fields.Many2One,
+                    tryton_fields.One2One, tryton_fields.Reference)):
                 if value:
-                    if isinstance(field, fields.Reference):
+                    if isinstance(field,  tryton_fields.Reference):
                         Target = pool.get(value['__name__'])
                     else:
                         Target = field.get_target()
@@ -118,7 +120,8 @@ class ExportImportMixin(object):
                     new_values[field_name] = target.id
                 else:
                     new_values[field_name] = None
-            elif isinstance(field, (fields.One2Many, fields.Many2Many)):
+            elif isinstance(field, (
+                    tryton_fields.One2Many, tryton_fields.Many2Many)):
                 lines[field_name] = value
             else:
                 new_values[field_name] = value
@@ -159,7 +162,7 @@ class ExportImportMixin(object):
                             Target._import_json(line)))
                     del existing_lines[export_name]
                 else:
-                    if isinstance(field, fields.Many2Many):
+                    if isinstance(field, tryton_fields.Many2Many):
                         if Target.search([
                                     (Target._export_name, '=',
                                         line['_export_name'])]):
@@ -202,7 +205,8 @@ class ExportImportMixin(object):
 class CoopSQL(ExportImportMixin, ModelSQL):
     'Root class for all stored classes'
 
-    is_used = fields.Function(fields.Boolean('Is Used'), 'get_is_used')
+    is_used = fields.Function(
+        fields.Boolean('Is Used'), 'get_is_used')
 
     @classmethod
     def __setup__(cls):
@@ -377,7 +381,8 @@ class VersionedObject(CoopView):
         None,
         'main_elem',
         'Versions')
-    current_rec_name = fields.Function(fields.Char('Current Value'),
+    current_rec_name = fields.Function(
+        fields.Char('Current Value'),
         'get_current_rec_name')
 
     @classmethod
@@ -426,10 +431,7 @@ class VersionObject(CoopView):
 
     __name__ = 'utils.version_object'
 
-    main_elem = fields.Many2One(
-        None,
-        'Descriptor',
-        ondelete='CASCADE')
+    main_elem = fields.Many2One(None, 'Descriptor', ondelete='CASCADE')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
 

@@ -1,8 +1,7 @@
 #-*- coding:utf-8 -*-
-
-from trytond.model import fields
-from trytond.modules.coop_utils import CoopSQL, CoopView
 from trytond.pool import PoolMeta
+
+from trytond.modules.coop_utils import model, fields
 
 __all__ = [
     'College',
@@ -11,7 +10,7 @@ __all__ = [
 ]
 
 
-class College(CoopSQL, CoopView):
+class College(model.CoopSQL, model.CoopView):
     'College'
 
     __name__ = 'party.college'
@@ -32,7 +31,7 @@ class Tranche():
         'Colleges')
 
 
-class CollegeTranche(CoopSQL):
+class CollegeTranche(model.CoopSQL):
     ' '
 
     __name__ = 'party.college_tranche'

@@ -1,13 +1,10 @@
-from trytond.model import fields
-from trytond.pool import Pool
-
-from trytond.modules.coop_utils import model, utils
+from trytond.modules.coop_utils import model, utils, fields
 
 
 __all__ = [
     'TaxDesc',
     'TaxVersion',
-    ]
+]
 
 
 class TaxDesc(model.CoopSQL, model.VersionedObject):

@@ -1,10 +1,9 @@
 #-*- coding:utf-8 -*-
 import copy
 
-from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.coop_utils import DynamicSelection, utils
-from trytond.modules.coop_utils import coop_string, business
+from trytond.modules.coop_utils import coop_string, business, fields
 
 __all__ = ['Address', 'AddresseKind']
 

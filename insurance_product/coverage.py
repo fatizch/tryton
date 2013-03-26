@@ -1,11 +1,10 @@
 #-*- coding:utf-8 -*-
 import copy
 
-from trytond.model import fields
 from trytond.pool import Pool
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.coop_utils import model, business, utils
+from trytond.modules.coop_utils import model, business, utils, fields
 from trytond.modules.insurance_product import Offered
 from trytond.modules.insurance_product import PricingResultLine
 from trytond.modules.insurance_product import EligibilityResultLine

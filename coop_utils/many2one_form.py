@@ -1,7 +1,8 @@
 import copy
 
-from trytond.model import fields
 from trytond.pool import Pool
+
+import fields
 
 
 __all__ = [

@@ -1,8 +1,9 @@
 from decimal import Decimal
 
-from trytond.model import fields
 from trytond.pool import PoolMeta
 from trytond.rpc import RPC
+
+from trytond.modules.coop_utils import fields
 
 
 __all__ = [

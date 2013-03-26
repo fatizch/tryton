@@ -1,10 +1,9 @@
 #-*- coding:utf-8 -*-
-from trytond.model import fields
 from trytond.pyson import Eval
 from trytond.pool import PoolMeta
 from trytond.pyson import If, Equal
 
-from trytond.modules.coop_utils import utils
+from trytond.modules.coop_utils import utils, fields
 
 CONTRACT_KIND = [
     ('individual', 'Individual'),

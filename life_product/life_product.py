@@ -2,10 +2,9 @@
 import copy
 
 from trytond.pool import PoolMeta
-from trytond.model import fields
 from trytond.pyson import Eval, Or, Bool
 
-from trytond.modules.coop_utils import utils
+from trytond.modules.coop_utils import utils, fields
 from trytond.modules.coop_utils import date
 
 from trytond.modules.insurance_product import ProductDefinition
@@ -13,8 +12,8 @@ from trytond.modules.insurance_product import EligibilityResultLine
 from trytond.modules.insurance_product.business_rule.business_rule import \
     STATE_SIMPLE, STATE_SUB_SIMPLE
 
-STATE_LIFE = (Eval('_parent_offered', {}).get('family') !=
-    'life_product.definition')
+STATE_LIFE = (
+    Eval('_parent_offered', {}).get('family') != 'life_product.definition')
 FAMILY_LIFE = 'life_product.definition'
 
 __all__ = [

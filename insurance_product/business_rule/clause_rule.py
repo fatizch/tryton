@@ -1,7 +1,5 @@
 #-*- coding:utf-8 -*-
-from trytond.model import fields
-
-from trytond.modules.coop_utils import model
+from trytond.modules.coop_utils import model, fields
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot
 
@@ -9,7 +7,7 @@ from trytond.modules.insurance_product.business_rule.business_rule import \
 __all__ = [
     'ClauseRule',
     'ClauseRelation'
-    ]
+]
 
 
 class ClauseRule(BusinessRuleRoot, model.CoopSQL):

@@ -1,9 +1,8 @@
-from trytond.model import fields
 from trytond.modules.insurance_contract import Contract
 
 from trytond.modules.coop_utils import utils
 from trytond.modules.coop_utils import date
-from trytond.modules.coop_utils import model
+from trytond.modules.coop_utils import model, fields
 
 # Needed for getting models
 from trytond.pool import Pool
@@ -11,7 +10,7 @@ from trytond.pool import Pool
 __all__ = [
     'GenericBillLine',
     'Bill'
-    ]
+]
 
 
 class GenericBillLine(model.CoopSQL, model.CoopView):

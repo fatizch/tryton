@@ -2,11 +2,10 @@ import re
 from stdnum import luhn
 from ibanlib import iban
 
-from trytond.model import fields
 from trytond.pyson import Eval
 from trytond.pool import Pool
 
-from trytond.modules.coop_utils import CoopView, CoopSQL, utils
+from trytond.modules.coop_utils import CoopView, CoopSQL, utils, fields
 from trytond.modules.coop_utils import coop_string
 
 BANK_ACCOUNT_KIND = [('IBAN', 'IBAN'),

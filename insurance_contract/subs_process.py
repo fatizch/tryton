@@ -1,5 +1,3 @@
-from trytond.model import fields
-
 # Needed for getting models
 from trytond.pool import Pool
 
@@ -13,7 +11,7 @@ from trytond.modules.insurance_process import CoopStep
 from trytond.modules.insurance_process import CoopStateView
 from trytond.modules.insurance_process import CoopStepView
 
-from trytond.modules.coop_utils import utils
+from trytond.modules.coop_utils import utils, fields
 from trytond.modules.coop_party.party import ACTOR_KIND
 
 from contract import OPTIONSTATUS
@@ -29,16 +27,16 @@ from trytond.modules.insurance_product import Coverage
 ###############################################################################
 
 __all__ = [
-        'ProjectState',
-        'CoverageDisplayer',
-        'OptionSelectionState',
-        'CoveredDesc',
-        'SummaryState',
-        'SubscriptionProcessState',
-        'SubscriptionProcess',
-        'SummaryState',
-        'PricingLine'
-           ]
+    'ProjectState',
+    'CoverageDisplayer',
+    'OptionSelectionState',
+    'CoveredDesc',
+    'SummaryState',
+    'SubscriptionProcessState',
+    'SubscriptionProcess',
+    'SummaryState',
+    'PricingLine'
+]
 
 
 class ProjectState(CoopStep):

@@ -3,7 +3,7 @@ import copy
 import StringIO
 import functools
 
-from trytond.model import fields, Model
+from trytond.model import Model
 from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard, StateAction, StateView, Button
 from trytond.wizard import StateTransition
@@ -12,7 +12,7 @@ from trytond.ir import Attachment
 
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
-from trytond.modules.coop_utils import model, utils, coop_string
+from trytond.modules.coop_utils import fields, model, utils, coop_string
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_SIMPLE
 

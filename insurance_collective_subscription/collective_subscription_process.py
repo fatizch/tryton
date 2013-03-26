@@ -1,5 +1,6 @@
-from trytond.model import fields
 from trytond.pool import PoolMeta
+
+from trytond.modules.coop_utils import fields
 
 from trytond.modules.insurance_collective.collective_contract import \
     CONTRACT_KIND

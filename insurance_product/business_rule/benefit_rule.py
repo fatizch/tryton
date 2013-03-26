@@ -1,9 +1,8 @@
 import datetime
-from trytond.model import fields
 from trytond.pyson import Eval, Or, Bool
 from trytond.pool import Pool
 
-from trytond.modules.coop_utils import model, coop_string, date, utils
+from trytond.modules.coop_utils import model, coop_string, date, utils, fields
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_SIMPLE, CONFIG_KIND, STATE_ADVANCED
 from trytond.modules.insurance_product.product import DEF_CUR_DIG

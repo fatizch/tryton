@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Needed for displaying and storing objects
-from trytond.model import fields
-
-from trytond.modules.coop_utils import model
+from trytond.modules.coop_utils import model, fields
 
 # Needed for easy access to models
 from trytond.pool import Pool

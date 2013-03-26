@@ -2,10 +2,9 @@
 import copy
 import re
 
-from trytond.model import fields
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
-from trytond.modules.coop_utils import utils
+from trytond.modules.coop_utils import utils, fields
 
 SSN_LENGTH = 15
 

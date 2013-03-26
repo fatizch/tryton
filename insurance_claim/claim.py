@@ -1,10 +1,9 @@
 #-*- coding:utf-8 -*-
 import copy
-from trytond.model import fields
 from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.coop_utils import model, utils, date
+from trytond.modules.coop_utils import model, utils, date, fields
 from trytond.modules.insurance_product.benefit import INDEMNIFICATION_KIND, \
     INDEMNIFICATION_DETAIL_KIND
 from trytond.modules.insurance_product import Printable

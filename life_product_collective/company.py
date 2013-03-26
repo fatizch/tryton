@@ -1,9 +1,10 @@
 #-*- coding:utf-8 -*-
-from trytond.model import fields
 from trytond.pool import PoolMeta
 
+from trytond.modules.coop_utils import fields
+
 __all__ = [
-'Employee',
+    'Employee',
 ]
 
 

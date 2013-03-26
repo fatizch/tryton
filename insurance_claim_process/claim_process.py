@@ -1,8 +1,7 @@
 import copy
 
-from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
-from trytond.modules.coop_utils import utils
+from trytond.modules.coop_utils import utils, fields
 
 from trytond.modules.process import ClassAttr
 from trytond.modules.coop_process import CoopProcessFramework

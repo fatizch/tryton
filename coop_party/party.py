@@ -1,11 +1,10 @@
 #-*- coding:utf-8 -*-
-from trytond.model import fields
 from trytond.pyson import Eval, Bool
 
 from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import CoopView, CoopSQL
-from trytond.modules.coop_utils import TableOfTable, utils
+from trytond.modules.coop_utils import TableOfTable, utils, fields
 from trytond.modules.coop_utils import coop_string
 
 

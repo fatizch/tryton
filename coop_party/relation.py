@@ -1,8 +1,7 @@
 #-*- coding:utf-8 -*-
-from trytond.model import fields
 from trytond.pool import Pool
 from trytond.modules.coop_utils import CoopView, CoopSQL, TableOfTable
-from trytond.modules.coop_utils import utils, coop_string
+from trytond.modules.coop_utils import utils, coop_string, fields
 
 __all__ = ['PartyRelationKind', 'PartyRelation']
 

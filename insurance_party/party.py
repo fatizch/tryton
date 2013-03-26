@@ -1,9 +1,8 @@
 #-*- coding:utf-8 -*-
-from trytond.model import fields
 from trytond.pool import PoolMeta
 from trytond.pyson import Not
 
-from trytond.modules.coop_utils import CoopSQL, coop_string
+from trytond.modules.coop_utils import model, fields, coop_string
 from trytond.modules.coop_party import Actor
 from trytond.modules.coop_party.party import  STATES_COMPANY
 
@@ -44,7 +43,7 @@ class Party:
         return res
 
 
-class Insurer(CoopSQL, Actor):
+class Insurer(model.CoopSQL, Actor):
     'Insurer'
 
     __name__ = 'party.insurer'
@@ -54,7 +53,7 @@ class Insurer(CoopSQL, Actor):
         return dict([(insurer.id, 'X') for insurer in insurers])
 
 
-class Broker(CoopSQL, Actor):
+class Broker(model.CoopSQL, Actor):
     'Broker'
 
     __name__ = 'party.broker'
@@ -64,7 +63,7 @@ class Broker(CoopSQL, Actor):
         return dict([(broker.id, 'X') for broker in brokers])
 
 
-class Customer(CoopSQL, Actor):
+class Customer(model.CoopSQL, Actor):
     'Customer'
 
     __name__ = 'party.customer'

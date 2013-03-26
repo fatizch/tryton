@@ -1,14 +1,13 @@
 #-*- coding:utf-8 -*-
-from trytond.model import fields
 from trytond.pyson import Eval, And, Not, Or
 
-from trytond.modules.coop_utils import model, utils
+from trytond.modules.coop_utils import model, utils, fields
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot
 
 __all__ = [
     'TermRenewalRule',
-    ]
+]
 
 
 class TermRenewalRule(BusinessRuleRoot, model.CoopSQL):

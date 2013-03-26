@@ -1,8 +1,7 @@
 from trytond.pool import PoolMeta
-from trytond.model import fields
 from trytond.pyson import Eval
 
-from trytond.modules.coop_utils import utils
+from trytond.modules.coop_utils import utils, fields
 
 __all__ = [
     'GroupPricingRule',

@@ -1,11 +1,10 @@
 #-*- coding:utf-8 -*-
 from ibanlib import iban
 
-from trytond.model import fields
 from trytond.pool import PoolMeta
 from trytond.pyson import Not
 
-from trytond.modules.coop_utils import CoopSQL, coop_string
+from trytond.modules.coop_utils import CoopSQL, coop_string, fields
 from trytond.modules.coop_party import Actor
 from trytond.modules.coop_party.party import STATES_COMPANY
 

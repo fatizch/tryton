@@ -1,15 +1,14 @@
 #-*- coding:utf-8 -*-
-from trytond.model import fields
 from trytond.pyson import Eval, Or
 
-from trytond.modules.coop_utils import model, date
+from trytond.modules.coop_utils import model, date, fields
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_SIMPLE
 
 
 __all__ = [
     'DeductibleRule',
-    ]
+]
 
 
 DEDUCTIBLE_KIND = [

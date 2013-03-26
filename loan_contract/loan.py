@@ -2,14 +2,12 @@
 import math
 
 from decimal import Decimal
-from trytond.model import fields
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import utils, date
+from trytond.modules.coop_utils import utils, date, fields, model
 
-from trytond.modules.coop_utils import model
 __all__ = [
     'LoanContract',
     'LoanOption',

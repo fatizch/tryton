@@ -1,11 +1,10 @@
 #-*- coding:utf-8 -*-
-from trytond.model import ModelView, ModelSQL, fields as fields
-from trytond.modules.coop_utils import coop_string
+from trytond.modules.coop_utils import coop_string, fields, model
 
 __all__ = ['ZipCode']
 
 
-class ZipCode(ModelSQL, ModelView):
+class ZipCode(model.CoopSQL, model.CoopView):
     'ZipCode'
 
     __name__ = 'country.zipcode'
@@ -39,14 +38,16 @@ class ZipCode(ModelSQL, ModelView):
 
     @classmethod
     def search_rec_name(cls, name, clause):
-        domain = [('city', clause[1],
-                cls.replace_city_name_with_support_for_french_sna(clause[2]))]
+        domain = [(
+            'city', clause[1],
+            cls.replace_city_name_with_support_for_french_sna(clause[2]))]
         if cls.search(domain, limit=1):
             return domain
         return [(cls._rec_name,) + clause[1:]]
 
     @classmethod
-    def search(cls, domain, offset=0, limit=None, order=None, count=False,
+    def search(
+            cls, domain, offset=0, limit=None, order=None, count=False,
             query_string=False):
         for cur_domain in domain:
             if cur_domain and cur_domain[0] == 'city':
@@ -57,5 +58,5 @@ class ZipCode(ModelSQL, ModelView):
                     city = '%' + city + '%'
                 domain.append([u'city', cur_domain[1], city])
                 break
-        return super(ZipCode, cls).search(domain, offset, limit, order, count,
-            query_string)
+        return super(ZipCode, cls).search(
+            domain, offset, limit, order, count, query_string)

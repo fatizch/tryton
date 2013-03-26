@@ -1,8 +1,10 @@
 #-*- coding:utf-8 -*-
 import copy
-from trytond.model import fields
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
+
+from trytond.modules.coop_utils import fields
+
 __all__ = [
     'LifeClaim',
     'LifeLoss',

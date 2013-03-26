@@ -1,8 +1,7 @@
 from trytond.wizard import Wizard, StateView, StateTransition, Button
-from trytond.model import fields
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.modules.coop_utils import utils, model
+from trytond.modules.coop_utils import utils, model, fields
 
 from trytond.pyson import Eval
 

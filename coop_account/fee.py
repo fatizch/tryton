@@ -1,12 +1,10 @@
-from trytond.model import fields
-
-from trytond.modules.coop_utils import model, utils
+from trytond.modules.coop_utils import model, utils, fields
 
 
 __all__ = [
     'FeeDesc',
     'FeeVersion',
-    ]
+]
 
 
 class FeeDesc(model.CoopSQL, model.VersionedObject):

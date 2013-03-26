@@ -1,14 +1,11 @@
 #-*- coding:utf-8 -*-
-from trytond.model import fields
-from trytond.pool import Pool
-
-from trytond.modules.coop_utils import model, utils
+from trytond.modules.coop_utils import model, utils, fields
 
 
 __all__ = [
     'Clause',
     'ClauseVersion'
-    ]
+]
 
 
 class Clause(model.CoopSQL, model.VersionedObject):

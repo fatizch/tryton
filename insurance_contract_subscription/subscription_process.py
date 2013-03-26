@@ -1,11 +1,10 @@
 import copy
 
 from trytond.pool import Pool, PoolMeta
-from trytond.model import fields
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import utils, model
+from trytond.modules.coop_utils import utils, model, fields
 
 from trytond.modules.process import ClassAttr
 from trytond.modules.coop_process import CoopProcessFramework

@@ -1,10 +1,9 @@
 #from trytond.modules.coop_utils import WithAbstract
 from trytond.modules.coop_utils import WithAbstract, get_descendents
-from trytond.modules.coop_utils import convert_ref_to_obj
+from trytond.modules.coop_utils import convert_ref_to_obj, fields
 
 from trytond.modules.insurance_process import CoopProcess
 from trytond.modules.insurance_process import ProcessState, CoopStepView
-from trytond.model import fields
 from trytond.modules.insurance_contract import Contract
 from trytond.modules.insurance_process import CoopStep, CoopStateView
 from trytond.transaction import Transaction
