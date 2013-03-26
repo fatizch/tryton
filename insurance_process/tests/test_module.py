@@ -11,15 +11,13 @@ from trytond.tests.test_tryton import test_view, test_depends
 from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT
 from trytond.transaction import Transaction
 
-from trytond.model import fields
-
 from trytond.exceptions import UserError
 
 from trytond.modules.insurance_process import CoopProcess, ProcessState
 from trytond.modules.insurance_process import CoopStep, CoopStateView
 
 from trytond.modules.coop_utils import model
-from trytond.modules.coop_utils import utils
+from trytond.modules.coop_utils import utils, fields
 
 MODULE_NAME = os.path.basename(
                   os.path.abspath(

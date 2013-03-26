@@ -27,7 +27,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     def test0020get_module_path(self):
         self.assert_(utils.get_module_path(MODULE_NAME))
-        self.assert_(utils.get_module_path('coop_party'))
         self.assert_(utils.get_module_path('dfsfsfsdf') is None)
 
 

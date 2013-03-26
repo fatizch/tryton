@@ -132,7 +132,12 @@ class CoopTestCase(unittest.TestCase):
         Test views.
         '''
         import trytond.tests.test_tryton
-        trytond.tests.test_tryton.test_view(self.get_module_name())
+        try:
+            trytond.tests.test_tryton.test_view(self.get_module_name())
+        except AssertionError, e:
+            if not e.args[0].startswith('No views for '):
+                raise
+            pass
 
     def test0006depends(self):
         '''

@@ -65,7 +65,6 @@
         <record model="ir.ui.view" id="party_relation_view_tree_hierarchical">
             <field name="model">party.party-relation</field>
             <field name="type">tree</field>
-            <field name="field_childs">children</field>
             <field name="name">relation_tree_hierarchical</field>
         </record>
         <!-- *******************************************
