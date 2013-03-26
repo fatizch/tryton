@@ -333,15 +333,15 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         return True, ()
 
     def get_rec_name(self, val):
-        if self.offered and self.subscriber:
+        if self.offered and self.get_policy_owner():
             if self.contract_number:
                 return '%s (%s) - %s' % (
                     self.contract_number, self.get_product().get_rec_name(val),
-                    self.subscriber.get_rec_name(val))
+                    self.get_policy_owner().get_rec_name(val))
             else:
                 return 'Contract %s - %s' % (
                     self.get_product().get_rec_name(val),
-                    self.subscriber.get_rec_name(val))
+                    self.get_policy_owner().get_rec_name(val))
         else:
             return super(Contract, self).get_rec_name(val)
 
@@ -412,7 +412,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         the direct link subscriber
         '''
         # TODO: to enhance
-        return self.subscriber
+        return self.get_policy_owner()
 
     def init_options_from_covered_elements(self):
         if self.options:
@@ -462,10 +462,10 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         return True, ()
 
     def get_main_contact(self):
-        return self.subscriber
+        return self.get_policy_owner()
 
     def get_contact(self):
-        return self.subscriber
+        return self.get_policy_owner()
 
     def get_sender(self):
         return self.get_management_role('contract_manager').protocol.party
@@ -500,6 +500,11 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             'calculated_complementary_datas',
             {'date': self.start_date, 'contract': self})[0]}
 
+    def get_policy_owner(self, at_date=None):
+        #TODO : To Enhance
+        if not at_date:
+            at_date = self.start_date
+        return self.subscriber
 
 class Option(model.CoopSQL, Subscribed):
     'Subscribed Coverage'

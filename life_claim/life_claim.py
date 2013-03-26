@@ -68,5 +68,5 @@ class LifeClaimDeliveredService():
 
     def get_covered_data(self):
         for covered_data in self.subscribed_service.covered_data:
-            if covered_data.covered_element.person == self.get_covered_person:
+            if covered_data.covered_element.person == self.get_covered_person():
                 return covered_data

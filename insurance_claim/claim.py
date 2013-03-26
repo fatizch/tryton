@@ -265,6 +265,7 @@ class ClaimDeliveredService():
         cur_dict['option'] = self.subscribed_service
         cur_dict['delivered_service'] = self
         cur_dict['data'] = self.get_covered_data()
+        cur_dict['subscriber'] = self.get_contract().get_policy_owner()
 
     def calculate(self):
         cur_dict = {}

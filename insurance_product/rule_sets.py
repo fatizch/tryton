@@ -166,7 +166,7 @@ class CoveredDataContext(RuleEngineContext):
         raise InternalRuleEngineError
 
     @classmethod
-    @check_args('contract')
+    @check_args('data')
     def _re_covered_data_complementary_data(cls, args, data_name):
         data = cls.get_covered_data(args)
         return data.get_complementary_data_value(args['date'], data_name)
