@@ -4,5 +4,5 @@ from .life_contract_collective import *
 
 def register():
     Pool.register(
-        'GroupCoveredElement',
+        GroupCoveredElement,
         module='life_contract_collective', type_='model')
