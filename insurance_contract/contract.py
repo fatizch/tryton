@@ -22,6 +22,12 @@ OPTIONSTATUS = CONTRACTSTATUSES + [
     ('refused', 'Refused'),
 ]
 
+DELIVERED_SERVICES_STATUSES = [
+    ('calculating', 'Calculating'),
+    ('not_eligible', 'Not Eligible'),
+    ('delivered', 'Delivered'),
+]
+
 __all__ = [
     'Contract',
     'Option',
@@ -1088,6 +1094,7 @@ class DeliveredService(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.delivered_service'
 
+    status = fields.Selection(DELIVERED_SERVICES_STATUSES, 'Status')
     subscribed_service = fields.Many2One(
         'ins_contract.option', 'Coverage', ondelete='RESTRICT')
     expenses = fields.One2Many(
@@ -1111,6 +1118,10 @@ class DeliveredService(model.CoopSQL, model.CoopView):
             if res[1] == expense.currency:
                 res[0] += expense.amount
         return res
+
+    @staticmethod
+    def default_status():
+        return 'calculating'
 
 
 class Expense(model.CoopSQL, model.CoopView):

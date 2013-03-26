@@ -264,6 +264,10 @@ class ClaimDeliveredService():
     def calculate(self):
         cur_dict = {}
         self.init_dict_for_rule_engine(cur_dict)
+        res, errs = self.benefit.get_result('eligibility', cur_dict)
+        if res and not res.eligible:
+            self.status = 'not_eligible'
+            return None, errs
         details_dict, errors = self.benefit.get_result('indemnification',
             cur_dict)
         if errors:
