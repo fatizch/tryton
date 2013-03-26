@@ -65,3 +65,8 @@ class LifeClaimDeliveredService():
         super(LifeClaimDeliveredService, self).init_dict_for_rule_engine(
             cur_dict)
         cur_dict['covered_person'] = self.get_covered_person()
+
+    def get_covered_data(self):
+        for covered_data in self.subscribed_service.covered_data:
+            if covered_data.covered_element.person == self.get_covered_person:
+                return covered_data

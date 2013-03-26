@@ -251,6 +251,10 @@ class ClaimDeliveredService():
     def get_contract(self):
         return self.subscribed_service.get_contract()
 
+    def get_covered_data(self):
+        for covered_data in self.subscribed_service.covered_data:
+            return covered_data
+
     def init_dict_for_rule_engine(self, cur_dict):
         #this date is the one used for finding the good rule,
         #so the rules that was effective when the loss occured
@@ -260,6 +264,7 @@ class ClaimDeliveredService():
         cur_dict['loss'] = self.loss
         cur_dict['option'] = self.subscribed_service
         cur_dict['delivered_service'] = self
+        cur_dict['data'] = self.get_covered_data()
 
     def calculate(self):
         cur_dict = {}
