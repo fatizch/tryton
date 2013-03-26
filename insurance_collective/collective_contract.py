@@ -28,9 +28,6 @@ class GroupContract():
     group_contract = fields.Many2One('ins_contract.contract',
         'Group Contract', domain=[('kind', '=', 'group')],
         states={'invisible': Eval('kind') != 'enrollment'})
-    enrollments = fields.One2Many('ins_contract.contract', 'group_contract',
-        'Enrollments', states={'invisible': Eval('kind') != 'group'},
-        domain=[('kind', '=', 'enrollment')])
 
     @classmethod
     def _setup__(cls):
