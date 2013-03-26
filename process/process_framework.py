@@ -317,6 +317,9 @@ class ProcessFramework(Model):
 
     def is_button_available(self, process, executable):
         if executable.__name__ == 'process.step_desc':
+            if self.current_state and \
+                    self.current_state.step.id == executable.id:
+                return False
             button_name = '_button_step_%s_%s' % (process.id, executable.id)
         elif executable.__name__ == 'process.step_transition':
             button_name = '_button_transition_%s_%s' % (
