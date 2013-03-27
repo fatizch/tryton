@@ -76,9 +76,9 @@ class LetterVersion(Attachment):
 
     __name__ = 'ins_product.letter_version'
 
-    start_date = fields.Date('Start date')
+    start_date = fields.Date('Start date', required=True)
     end_date = fields.Date('End date')
-    language = fields.Many2One('ir.lang', 'Language')
+    language = fields.Many2One('ir.lang', 'Language', required=True)
 
     @classmethod
     def __setup__(cls):
