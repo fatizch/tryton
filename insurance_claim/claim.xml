@@ -45,6 +45,12 @@
       <field name="priority" eval="10"/>
       <field name="name">loss_form</field>
     </record>
+    <record model="ir.ui.view" id="loss_simple_tree">
+      <field name="model">ins_claim.loss</field>
+      <field name="type">tree</field>
+      <field name="field_childs">multi_level_view</field>
+      <field name="name">loss_simple_tree</field>
+    </record>
 
     <!--################################################################ -->
     <!-- Delivered Service -->

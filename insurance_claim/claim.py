@@ -163,10 +163,12 @@ class Loss(model.CoopSQL, model.CoopView):
             ('loss_descs', '=', Eval('loss_desc'))
         ],
         depends=['loss_desc'], ondelete='RESTRICT')
-    delivered_services = fields.One2Many('ins_contract.delivered_service',
-        'loss', 'Delivered Services')
-    main_loss = fields.Many2One('ins_claim.loss', 'Main Loss',
-        ondelete='CASCADE')
+    delivered_services = fields.One2Many(
+        'ins_contract.delivered_service', 'loss', 'Delivered Services')
+    multi_level_view = fields.One2Many(
+        'ins_contract.delivered_service', 'loss', 'Delivered Services')
+    main_loss = fields.Many2One(
+        'ins_claim.loss', 'Main Loss', ondelete='CASCADE')
     sub_losses = fields.One2Many('ins_claim.loss', 'main_loss', 'Sub Losses')
     with_end_date = fields.Function(
         fields.Boolean('With End Date', on_change_with=['loss_desc']),
@@ -224,14 +226,15 @@ class ClaimDeliveredService():
     __metaclass__ = PoolMeta
 
     loss = fields.Many2One('ins_claim.loss', 'Loss', ondelete='CASCADE')
-    benefit = fields.Many2One('ins_product.benefit', 'Benefit',
-        ondelete='RESTRICT',
+    benefit = fields.Many2One(
+        'ins_product.benefit', 'Benefit', ondelete='RESTRICT',
         domain=[
-            ('loss_descs', '=', Eval('_parent_loss', {}).get('loss_desc'))
-        ], )
-    indemnifications = fields.One2Many('ins_claim.indemnification',
-        'delivered_service', 'Indemnifications',
+            ('loss_descs', '=', Eval('_parent_loss', {}).get('loss_desc'))])
+    indemnifications = fields.One2Many(
+        'ins_claim.indemnification', 'delivered_service', 'Indemnifications',
         states={'invisible': ~Eval('indemnifications')})
+    multi_level_view = fields.One2Many(
+        'ins_claim.indemnification', 'delivered_service', 'Indemnifications')
     complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Complementary Data',
         on_change_with=['benefit', 'complementary_data'])
@@ -379,6 +382,13 @@ class Indemnification(model.CoopSQL, model.CoopView):
         for detail in self.details:
             detail.calculate_amount()
             self.amount += detail.amount
+
+    def get_rec_name(self, name):
+        return '%s %s%s%s' % (
+            str(self.amount) if self.amount else 0,
+            ('(' + str(self.status) + ') ') if self.status else '',
+            self.start_date,
+            (' - %s' % self.end_date) if self.end_date else '')
 
 
 class IndemnificationDetail(model.CoopSQL, model.CoopView):
