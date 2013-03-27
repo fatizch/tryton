@@ -615,7 +615,7 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
         return [
             (field_name, field.string)
             for field_name, field in ViewModel._fields.iteritems()
-            if isinstance(field, tryton_fields.One2Many)]
+            if isinstance(field, tryton_fields.One2Many)] + [('', '')]
 
     @classmethod
     def default_view_final_name(cls):
