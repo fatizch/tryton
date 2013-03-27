@@ -176,6 +176,9 @@ class ProcessLog(model.CoopSQL, model.CoopView):
         return [(model.model, model.name) for model in good_models]
 
     def get_rec_name(self, name):
+        # TODO: There should not be logs without tasks
+        if not (hasattr(self, 'task') and self.task):
+            return ''
         return self.task.get_rec_name(None)
 
     @classmethod
