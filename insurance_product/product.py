@@ -270,23 +270,6 @@ class Product(model.CoopSQL, Offered):
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
         ]
 
-    @classmethod
-    def copy(cls, products, default=None):
-        if default is None:
-            default = {}
-        default = default.copy()
-        #Code must be unique and action "copy" stores in db during the process
-        default['code'] = 'temp_for_copy'
-        res = super(Product, cls).copy(products, default=default)
-        for clone, original in zip(res, products):
-            i = 1
-            while cls.search(
-                    [('code', '=', '%s_(%s)' % (original.code, i))]):
-                i += 1
-            clone.code = '%s_(%s)' % (original.code, i)
-            clone.save()
-        return res
-
     def get_valid_options(self):
         for option in self.options:
             if option.is_valid():

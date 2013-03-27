@@ -82,22 +82,6 @@ class SimpleCoverage(Offered):
             cls.template = []
         cls.template.depends.append('is_package')
 
-    @classmethod
-    def copy(cls, coverages, default=None):
-        if default is None:
-            default = {}
-        default = default.copy()
-        default['code'] = 'temp_copy'
-        res = super(SimpleCoverage, cls).copy(coverages, default=default)
-        for clone, original in zip(res, coverages):
-            i = 1
-            while cls.search(
-                    [('code', '=', '%s_(%s)' % (original.code, i))]):
-                i += 1
-            clone.code = '%s_(%s)' % (original.code, i)
-            clone.save()
-        return res
-
     def give_me_price(self, args):
         # This method is one of the core of the pricing system. It asks for the
         # price for the self depending on the contrat that is given as an

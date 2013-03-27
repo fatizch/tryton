@@ -302,6 +302,32 @@ class CoopSQL(ExportImportMixin, ModelSQL):
         print self.__name__
         raise NotImplementedError
 
+    @classmethod
+    def copy(cls, objects, default=None):
+        constraints = []
+        for constraint in cls._sql_constraints:
+            if 'UNIQUE' in constraint[1]:
+                constraints.append(constraint[1][7:-1])
+        if len(constraints) == 1:
+            if default is None:
+                default = {}
+            default = default.copy()
+            #Code must be unique and action "copy" stores in db during process
+            default[constraints[0]] = 'temp_for_copy'
+            res = super(CoopSQL, cls).copy(objects, default=default)
+            for clone, original in zip(res, objects):
+                i = 1
+                while cls.search([
+                        (constraints[0], '=', '%s_%s' % (
+                            getattr(original, constraints[0]), i))]):
+                    i += 1
+                setattr(clone, constraints[0],
+                    '%s_%s' % (getattr(original, constraints[0]), i))
+                clone.save()
+            return res
+        else:
+            res = super(CoopSQL, cls).copy(objects, default=default)
+
 
 class CoopView(ModelView):
     pass
