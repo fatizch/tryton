@@ -8,8 +8,7 @@
     </xpath>
     <xpath expr="/form/field[@name='complementary_data']" position="after">
         <newline/>
-        <label name="covered_relations"/>
-        <field name="covered_relations"/>
+        <field name="covered_relations" colspan="4"/>
     </xpath>
     <xpath expr="/form" position="inside">
         <newline/>
