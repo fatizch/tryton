@@ -104,6 +104,10 @@ class ComplementaryDataDefinition(
         cls.name.on_change_with.append('name')
         cls.name.string = 'Code'
 
+        cls._sql_constraints += [
+            ('code_uniq', 'UNIQUE(name)', 'The code must be unique!'),
+        ]
+
     @staticmethod
     def default_start_date():
         return utils.today()
