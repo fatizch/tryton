@@ -3,7 +3,7 @@ import copy
 from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.coop_utils import model, utils, date, fields
+from trytond.modules.coop_utils import model, utils, date, fields, coop_string
 from trytond.modules.insurance_product.benefit import INDEMNIFICATION_KIND, \
     INDEMNIFICATION_DETAIL_KIND
 from trytond.modules.insurance_product import Printable
@@ -319,8 +319,12 @@ class ClaimDeliveredService():
             if indemnification.status == 'calculated':
                 return indemnification
 
+    def get_currency(self):
+        if self.subscribed_service:
+            return self.subscribed_service.get_currency()
 
-class Indemnification(model.CoopSQL, model.CoopView):
+
+class Indemnification(model.CoopView, model.CoopSQL):
     'Indemnification'
 
     __name__ = 'ins_claim.indemnification'
@@ -383,12 +387,16 @@ class Indemnification(model.CoopSQL, model.CoopView):
             detail.calculate_amount()
             self.amount += detail.amount
 
+    def get_currency(self):
+        if self.delivered_service:
+            return self.delivered_service.get_currency()
+
     def get_rec_name(self, name):
-        return '%s %s%s%s' % (
-            str(self.amount) if self.amount else 0,
-            ('(' + str(self.status) + ') ') if self.status else '',
-            self.start_date,
-            (' - %s' % self.end_date) if self.end_date else '')
+        return '%s %.2f [%s]' % (
+            coop_string.translate_value(self, 'start_date'),
+            self.amount,
+            coop_string.translate_value(self, 'status') if self.status else '',
+        )
 
 
 class IndemnificationDetail(model.CoopSQL, model.CoopView):
