@@ -793,7 +793,21 @@ def format_data(data, prefix='', prefix_inc='    ', is_init=True):
             tmp += tmp_res
         tmp += [prefix + '}']
     elif isinstance(data, (str, unicode)):
-        tmp = [prefix + '"' + str(data) + '"']
+        tmp = [prefix + '"' + data + '"']
+    elif isinstance(data, Model) and is_init:
+        tmp = [prefix + str(data) + ' : {']
+        for k in data._fields:
+            if not getattr(data, k):
+                continue
+            new_data = format_data(
+                getattr(data, k), prefix + prefix_inc, is_init=False)
+            tmp_res = [
+                prefix + prefix_inc + str(k) + ':' +
+                new_data[0][len(prefix + prefix_inc) - 1:]]
+            if len(new_data) > 1:
+                tmp_res += new_data[1:]
+            tmp += tmp_res
+        tmp += [prefix + '}']
     elif data is None:
         tmp = [prefix + 'None']
     else:
