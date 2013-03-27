@@ -123,6 +123,12 @@
             <field name="type">form</field>
             <field name="name">covered_element_form</field>
         </record>
+        <record model="ir.ui.view" id="covered_elements_clean_tree">
+          <field name="model">ins_contract.covered_element</field>
+          <field name="type">tree</field>
+          <field name="field_childs">covered_data</field>
+          <field name="name">covered_elements_clean_tree</field>
+        </record>
         <!--################################################################ -->
         <!-- Menus -->
         <!--################################################################ -->

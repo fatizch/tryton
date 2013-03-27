@@ -52,12 +52,15 @@ class Subscribed(model.CoopView):
     offered = fields.Many2One(
         None, 'Offered', ondelete='RESTRICT',
         states={'required': Eval('status') == 'active'},
-        domain=['AND',
-            ['OR',
+        domain=[
+            'AND',
+            [
+                'OR',
                 [('end_date', '>=', Eval('start_date'))],
                 [('end_date', '=', None)],
             ],
-            ['OR',
+            [
+                'OR',
                 [('start_date', '<=', Eval('start_date'))],
                 [('start_date', '=', None)],
             ],
@@ -114,9 +117,11 @@ class Subscribed(model.CoopView):
     def init_from_offered(self, offered, start_date=None, end_date=None):
         if utils.is_effective_at_date(offered, start_date):
             self.offered = offered
-            self.start_date = (max(offered.start_date, start_date)
+            self.start_date = (
+                max(offered.start_date, start_date)
                 if start_date else offered.start_date)
-            self.end_date = (min(offered.end_date, end_date)
+            self.end_date = (
+                min(offered.end_date, end_date)
                 if end_date else offered.end_date)
             self.update_status('quote', self.start_date)
             return True, []
@@ -951,6 +956,9 @@ class CoveredElement(model.CoopSQL, model.CoopView):
                 self.get_complementary_data_def())
 
     def on_change_with_complementary_data_summary(self, name=None):
+        if not (hasattr(self, 'complementary_data') and
+                self.complementary_data):
+            return ''
         return ' '.join([
             '%s: %s' % (x[0], x[1])
             for x in self.complementary_data.iteritems()])
@@ -994,6 +1002,9 @@ class CoveredData(model.CoopSQL, model.CoopView):
 
     def get_name_for_billing(self):
         return self.covered_element.get_name_for_billing()
+
+    def get_rec_name(self, name):
+        return self.get_coverage().name
 
     def get_complementary_data_value(self, at_date, value):
         res = utils.get_complementary_data_value(
