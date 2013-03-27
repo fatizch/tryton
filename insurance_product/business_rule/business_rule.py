@@ -151,6 +151,11 @@ class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
                 'businessrule_overlaps':
                 'You can not have 2 business rules that overlaps!'})
 
+    def get_rule_result(self, args):
+        if self.rule:
+            res, mess, errs = self.rule.compute(args)
+            return res, mess + errs
+
     def on_change_with_rule_complementary_data(self):
         if not (hasattr(self, 'rule') and self.rule):
             return {}
