@@ -1149,7 +1149,7 @@ class ManagementRole(model.CoopSQL, model.CoopView):
         return coop_string.translate_value(self.protocol, 'kind')
 
 
-class DeliveredService(model.CoopSQL, model.CoopView):
+class DeliveredService(model.CoopView, model.CoopSQL):
     'Delivered Service'
 
     __name__ = 'ins_contract.delivered_service'
