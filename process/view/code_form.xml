@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <form string="Code" col="2">
-  <label name="on_model" xalign="0"/>
+  <label name="on_model"/>
   <field name="on_model"/>
-  <label name="method_name" xalign="0"/>
+  <label name="method_name"/>
   <field name="method_name"/>
+  <label name="technical_kind"/>
+  <field name="technical_kind"/>
 </form>

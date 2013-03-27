@@ -4,7 +4,12 @@
     <xpath expr="/form/field[@name='coverage_amount']" position="replace"/>
     <xpath expr="/form/field[@name='covered_element']" position="after">
         <newline/>
-        <label name="coverage_amount_selection"/>
-        <field name="coverage_amount_selection"/>
+
+
+
+
+<!--    #TODO temporaty remove
+     <label name="coverage_amount_selection"/>
+        <field name="coverage_amount_selection"/> -->
     </xpath>
 </data>

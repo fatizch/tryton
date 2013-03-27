@@ -10,7 +10,6 @@
         <field name="complementary_data" colspan="2" no_command="1"/>
     </xpath>
     <xpath expr="/form" position="inside">
-        <field name="indemnifications" colspan="4" mode="form,tree"
-            expand_toolbar="0"/>
+        <field name="indemnifications" colspan="4"/>
     </xpath>
 </data>
