@@ -293,8 +293,8 @@ class CoopSQL(ExportImportMixin, ModelSQL):
     def search(cls, domain, offset=0, limit=None, order=None, count=False,
             query_string=False):
         #Set your class here to see the domain on the search
-        if cls.__name__ == 'ins_product.item_desc':
-            print domain
+        # if cls.__name__ == 'party.party':
+        #     print domain
         return super(CoopSQL, cls).search(domain=domain, offset=offset,
             limit=limit, order=order, count=count, query_string=query_string)
 

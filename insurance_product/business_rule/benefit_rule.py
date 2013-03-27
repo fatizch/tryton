@@ -153,7 +153,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
         if 'option' in args:
             return args['option'].get_coverage_amount()
 
-    def get_rule_result(self, args,):
+    def get_rule_result(self, args):
         res, errs = super(BenefitRule, self).get_rule_result(args)
         if not errs:
             res = self.get_revaluated_amount(res, args['start_date'])

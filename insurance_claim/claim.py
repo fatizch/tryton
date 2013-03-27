@@ -274,7 +274,6 @@ class ClaimDeliveredService():
         self.init_dict_for_rule_engine(cur_dict)
         #We first check the eligibility of the benefit
         res, errs = self.benefit.get_result('eligibility', cur_dict)
-        print res.details
         if res and not res.eligible:
             self.status = 'not_eligible'
             return None, errs

@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 import copy
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If, Bool
 
 from trytond.modules.coop_utils import fields
 
@@ -43,11 +43,17 @@ class LifeLoss():
 
     possible_covered_persons = fields.Function(
         fields.One2Many('party,party', None, 'Covered Persons',
-            states={'invisible': True}),
-        'get_possible_covered_persons_id')
+            states={'invisible': True},
+        ), 'get_possible_covered_persons_ids')
     covered_person = fields.Many2One('party.party', 'Covered Person',
-        #TODO: Claimant could be a different person than covered person
-        domain=[('id', 'in', Eval('possible_covered_persons'))],
+        #TODO: Temporary hack, the function field is not calculated when storing the object
+        domain=[
+            If(
+                Bool(Eval('possible_covered_persons')),
+                ('id', 'in', Eval('possible_covered_persons')),
+                ()
+            )
+        ],
         depends=['possible_covered_persons'])
 
     def get_possible_covered_persons(self):
@@ -57,7 +63,7 @@ class LifeLoss():
             res.extend(covered_element.get_covered_persons(self.start_date))
         return res
 
-    def get_possible_covered_persons_id(self, name):
+    def get_possible_covered_persons_ids(self, name):
         return [x.id for x in self.get_possible_covered_persons()]
 
 

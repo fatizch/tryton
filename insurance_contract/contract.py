@@ -948,7 +948,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             return self.complementary_data
         elif self.item_desc:
             return utils.init_complementary_data(
-                self.item_desc.complementary_data_def)
+                self.get_complementary_data_def())
 
     def on_change_with_complementary_data_summary(self, name=None):
         return ' '.join([
@@ -960,6 +960,14 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             return self.contract
         elif self.parent:
             return self.parent.get_contract()
+
+    def get_complementary_data_def(self):
+        return self.item_desc.complementary_data_def
+
+    def get_complementary_data_value(self, at_date, value):
+        return utils.get_complementary_data_value(
+            self, 'complementary_data', self.get_complementary_data_def(),
+            at_date, value)
 
 
 class CoveredData(model.CoopSQL, model.CoopView):
@@ -988,9 +996,11 @@ class CoveredData(model.CoopSQL, model.CoopView):
         return self.covered_element.get_name_for_billing()
 
     def get_complementary_data_value(self, at_date, value):
-        return utils.get_complementary_data_value(
+        res = utils.get_complementary_data_value(
             self, 'complementary_data', self.get_complementary_data_def(),
             at_date, value)
+        if not res:
+            return self.covered_element.get_complementary_data_value(at_date, value)
 
     def get_complementary_data_def(self):
         return self.option.offered.get_complementary_data_def(
