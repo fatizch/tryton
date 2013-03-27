@@ -705,7 +705,7 @@ class LetterGeneration(Wizard):
         ActiveModel = Pool().get(Transaction().context.get('active_model'))
         good_model = ActiveModel(Transaction().context.get('active_id'))
         sender = good_model.get_sender()
-        sender_address = good_model.get_sender_address().id
+        sender_address = good_model.get_sender_address()
         # logo = good_model.format_logo()
 
         return action, {
@@ -716,7 +716,7 @@ class LetterGeneration(Wizard):
             'party': self.select_model.party.id,
             'address': self.select_model.good_address.id,
             'sender': sender.id if sender else None,
-            'sender_address': sender_address,
+            'sender_address': sender_address.id if sender_address else None,
             # 'logo': logo,
         }
 
