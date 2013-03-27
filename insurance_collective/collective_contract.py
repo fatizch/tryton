@@ -23,7 +23,7 @@ class GroupContract():
     __name__ = 'ins_contract.contract'
     __metaclass__ = PoolMeta
 
-    kind = fields.Selection(CONTRACT_KIND, 'Kind', required=True)
+    kind = fields.Selection(CONTRACT_KIND, 'Kind')
     group_contract = fields.Many2One('ins_contract.contract',
         'Group Contract', domain=[('kind', '=', 'group')],
         states={'invisible': Eval('kind') != 'enrollment'})
