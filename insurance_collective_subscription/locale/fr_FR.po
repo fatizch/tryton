@@ -2,106 +2,28 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:ins_collective.contract:"
-msgid "%s is not a valid start date for product %s"
-msgstr "%s n'est pas une date d'effet compatible avec le produit %s"
-
-msgctxt "error:ins_collective.contract:"
-msgid "A product must be provided"
-msgstr "Saisir un produit"
-
-msgctxt "error:ins_collective.contract:"
-msgid "A start date must be provided"
-msgstr "Saisir la date d'effet"
-
-msgctxt "error:ins_collective.contract:"
-msgid "A subscriber must be provided"
-msgstr "Saisir le Souscripteur"
-
-msgctxt "error:ins_collective.contract:"
-msgid "At least an option must be selected"
-msgstr "Saisir une garantie"
-
-msgctxt "error:ins_collective.contract:"
-msgid "At least one option must be selected for %s"
-msgstr "Saisir au moins une garantie pour %s"
-
-msgctxt "error:ins_collective.contract:"
-msgid "Everything is good !"
-msgstr "Tout est bon!"
-
-msgctxt "error:ins_collective.contract:"
-msgid "Object %s is currently locked by user %s"
-msgstr ""
-
-msgctxt "error:ins_collective.contract:"
-msgid "Option %s is not eligible"
-msgstr "La garantie %s n'est pas éligible"
-
-msgctxt "error:ins_collective.contract:"
-msgid "Option %s must be subscribed after %s"
-msgstr "La Garantie %s doit être souscrite après le %s"
-
-msgctxt "error:ins_collective.contract:"
-msgid "There must be at least one covered element"
-msgstr "Saisir un élement couvert"
-
-msgctxt "field:ins_collective.contract,current_log:"
-msgid "Current Log"
-msgstr ""
-
-msgctxt "field:ins_collective.contract,current_state:"
-msgid ""
-msgstr " "
-
-msgctxt "field:ins_collective.contract,doc_received:"
-msgid "All Document Received"
-msgstr "Documents Reçus"
-
-msgctxt "field:ins_collective.contract,is_custom:"
-msgid "Custom"
-msgstr "Sur Mesure"
-
-msgctxt "field:ins_collective.contract,is_workflow:"
-msgid "Is Workflow"
-msgstr ""
-
-msgctxt "field:ins_collective.contract,logs:"
-msgid "Task"
-msgstr "Tâche"
-
-msgctxt "field:ins_collective.contract,product_desc:"
-msgid "Description"
-msgstr "Description"
-
-msgctxt "field:ins_collective.contract,subscriber_as_company:"
-msgid "Subscriber"
-msgstr "Souscripteur"
-
-msgctxt "field:ins_collective.contract,subscriber_as_person:"
-msgid "Subscriber"
-msgstr "Souscripteur"
-
-msgctxt "field:ins_collective.contract,subscriber_desc:"
-msgid "Summary"
-msgstr "Synthèse"
-
-msgctxt "field:ins_collective.contract,subscriber_kind:"
+msgctxt "field:ins_contract.subscription_process_parameters,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:ins_collective.contract,subscription_mgr:"
-msgid "Subscription Manager"
-msgstr ""
+msgctxt "selection:ins_contract.subscription_process_parameters,kind:"
+msgid "Enrollment"
+msgstr "Affiliation"
 
-msgctxt "selection:ins_collective.contract,subscriber_kind:"
-msgid "Company"
-msgstr "Société"
+msgctxt "selection:ins_contract.subscription_process_parameters,kind:"
+msgid "Group"
+msgstr "Groupe"
 
-msgctxt "selection:ins_collective.contract,subscriber_kind:"
-msgid "Person"
-msgstr "Personne Physique"
+msgctxt "selection:ins_contract.subscription_process_parameters,kind:"
+msgid "Individual"
+msgstr "Individuel"
 
-msgctxt "selection:ins_collective.contract,subscriber_kind:"
-msgid "Society"
-msgstr "Société"
+msgctxt ""
+"wizard_button:ins_contract.subscription_process_finder,process_parameters,action:"
+msgid "Start Process"
+msgstr "Démarrer le processus"
+
+msgctxt ""
+"wizard_button:ins_contract.subscription_process_finder,process_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"

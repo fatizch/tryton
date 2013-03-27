@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:ins_contract.contract,enrollments:"
-msgid "Enrollments"
-msgstr "Affiliations"
-
 msgctxt "field:ins_contract.contract,group_contract:"
 msgid "Group Contract"
 msgstr "Contrat Collectif"
@@ -14,29 +10,13 @@ msgctxt "field:ins_contract.contract,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:ins_product.coverage,individual_coverage:"
-msgid "Individual Coverage"
-msgstr ""
+msgctxt "field:ins_product.coverage,is_group:"
+msgid "Group Coverage"
+msgstr "Garantie Collective"
 
-msgctxt "field:ins_product.coverage,is_floating:"
-msgid "Floating"
-msgstr ""
-
-msgctxt "field:ins_product.coverage,subscribed_kind:"
-msgid "Coverage Kind"
-msgstr ""
-
-msgctxt "field:ins_product.product,individual_product:"
-msgid "Individual Product"
-msgstr ""
-
-msgctxt "field:ins_product.product,subscribed_kind:"
-msgid "Contract Kind"
-msgstr ""
-
-msgctxt "help:ins_product.coverage,is_floating:"
-msgid "If True, there is no need to subscribe the coverage"
-msgstr ""
+msgctxt "field:ins_product.product,is_group:"
+msgid "Group Product"
+msgstr "Produit Collectif"
 
 msgctxt "model:ir.action,name:act_contract_form"
 msgid "Group Contract"
@@ -88,31 +68,7 @@ msgstr "Groupe"
 
 msgctxt "selection:ins_contract.contract,kind:"
 msgid "Individual"
-msgstr ""
-
-msgctxt "selection:ins_product.coverage,subscribed_kind:"
-msgid "Enrollment"
-msgstr "Affiliation"
-
-msgctxt "selection:ins_product.coverage,subscribed_kind:"
-msgid "Group"
-msgstr "Groupe"
-
-msgctxt "selection:ins_product.coverage,subscribed_kind:"
-msgid "Individual"
-msgstr ""
-
-msgctxt "selection:ins_product.product,subscribed_kind:"
-msgid "Enrollment"
-msgstr "Affiliation"
-
-msgctxt "selection:ins_product.product,subscribed_kind:"
-msgid "Group"
-msgstr "Groupe"
-
-msgctxt "selection:ins_product.product,subscribed_kind:"
-msgid "Individual"
-msgstr ""
+msgstr "Individuel"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Enrollments"

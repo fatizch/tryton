@@ -2,13 +2,61 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:ins_contract.covered_element-party_relation:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "field:ins_contract.covered_data,coverage_amount:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"
 
+msgctxt "field:ins_contract.covered_element,covered_relations:"
+msgid "Covered Relations"
+msgstr "Relations Couvertes"
+
+msgctxt "field:ins_contract.covered_element,is_person:"
+msgid "Person"
+msgstr "Personne Physique"
+
 msgctxt "field:ins_contract.covered_element,person:"
 msgid "Person"
 msgstr "Personne Physique"
+
+msgctxt "field:ins_contract.covered_element-party_relation,covered_element:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "field:ins_contract.covered_element-party_relation,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.covered_element-party_relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.covered_element-party_relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.covered_element-party_relation,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.covered_element-party_relation,party_relation:"
+msgid "Party Relation"
+msgstr "Relations entre Tiers"
+
+msgctxt "field:ins_contract.covered_element-party_relation,rec_name:"
+msgid "Name"
+msgstr "Name"
+
+msgctxt "field:ins_contract.covered_element-party_relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.covered_element-party_relation,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
 
 msgctxt "field:life_contract.covered_desc,data_complementary_data:"
 msgid "Complementary Data"
@@ -93,6 +141,10 @@ msgstr "ID"
 msgctxt "field:life_contract.extension_life_state,session_id:"
 msgid "Session Id"
 msgstr "Session Id"
+
+msgctxt "model:ins_contract.covered_element-party_relation,name:"
+msgid "Relation between Covered Element and Covered Relations"
+msgstr ""
 
 msgctxt "model:life_contract.covered_desc,name:"
 msgid "Covered Desc"

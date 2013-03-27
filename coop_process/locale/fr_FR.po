@@ -126,6 +126,10 @@ msgctxt "field:coop_process.xml_view_desc,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:coop_process.xml_view_desc,field_childs:"
+msgid "Children field"
+msgstr ""
+
 msgctxt "field:coop_process.xml_view_desc,for_step:"
 msgid "For Step"
 msgstr "Pour l'Etape"

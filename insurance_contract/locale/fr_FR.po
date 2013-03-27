@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -613,6 +613,10 @@ msgstr "Est Utilisé"
 msgctxt "field:ins_contract.delivered_service,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:ins_contract.delivered_service,status:"
+msgid "Status"
+msgstr "Statut"
 
 msgctxt "field:ins_contract.delivered_service,subscribed_service:"
 msgid "Coverage"
@@ -1435,6 +1439,18 @@ msgctxt "selection:ins_contract.covered_data,status:"
 msgid "Terminated"
 msgstr "Terminé"
 
+msgctxt "selection:ins_contract.delivered_service,status:"
+msgid "Calculating"
+msgstr "Calcul en Cours"
+
+msgctxt "selection:ins_contract.delivered_service,status:"
+msgid "Delivered"
+msgstr "Delivré"
+
+msgctxt "selection:ins_contract.delivered_service,status:"
+msgid "Not Eligible"
+msgstr "Non Eligible"
+
 msgctxt "selection:ins_contract.management_protocol,kind:"
 msgid "Business Provider"
 msgstr "Apporteur"
@@ -1597,7 +1613,7 @@ msgstr "Documents"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Managing Entities"
-msgstr ""
+msgstr "Délégataires"
 
 msgctxt "view:ins_contract.contract:"
 msgid "contract"

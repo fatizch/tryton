@@ -5,3 +5,7 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 msgctxt "field:ins_claim.loss,covered_person:"
 msgid "Covered Person"
 msgstr "Personne Couverte"
+
+msgctxt "field:ins_claim.loss,possible_covered_persons:"
+msgid "Covered Persons"
+msgstr "Personnes Couvertes"

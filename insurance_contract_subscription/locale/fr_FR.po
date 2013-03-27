@@ -27,6 +27,10 @@ msgid "At least one option must be selected for %s"
 msgstr "Saisir au moins une garantie pour %s"
 
 msgctxt "error:ins_contract.contract:"
+msgid "Everything is good !"
+msgstr ""
+
+msgctxt "error:ins_contract.contract:"
 msgid "Object %s is currently locked by user %s"
 msgstr ""
 
@@ -181,14 +185,6 @@ msgstr "Société"
 msgctxt "selection:ins_contract.contract,subscriber_kind:"
 msgid "Person"
 msgstr "Personne Physique"
-
-msgctxt "selection:ins_contract.option,status_selection:"
-msgid "Active"
-msgstr "Actif"
-
-msgctxt "selection:ins_contract.option,status_selection:"
-msgid "Refused"
-msgstr "Refusé"
 
 msgctxt "selection:ins_contract.subscription_mgr,contract:"
 msgid "Contract"

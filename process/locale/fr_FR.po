@@ -595,7 +595,7 @@ msgid "==> Remboursement"
 msgstr ""
 
 msgctxt "view:ins_claim.claim:"
-msgid "==> Validation de l'indemnisation"
+msgid "==> Validation"
 msgstr ""
 
 msgctxt "view:ins_claim.claim:"
@@ -623,6 +623,10 @@ msgid "Déclaration de Sinistre"
 msgstr "Déclaration de Sinistre"
 
 msgctxt "view:ins_claim.claim:"
+msgid "Losses"
+msgstr "Préjudices"
+
+msgctxt "view:ins_claim.claim:"
 msgid "Next"
 msgstr "Suivant"
 
@@ -643,11 +647,19 @@ msgid "The current record completed the current process, please go ahead"
 msgstr "Processus Terminé. Commencez une nouvelle tâche"
 
 msgctxt "view:ins_claim.claim:"
-msgid "Validation de l'indemnisation"
-msgstr "Validation de l'indemnisation"
+msgid "Validation"
+msgstr "Validation"
 
 msgctxt "view:ins_contract.contract:"
 msgid "==> Adhérent"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "==> Affiliations"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "==> Affilié"
 msgstr ""
 
 msgctxt "view:ins_contract.contract:"
@@ -659,7 +671,7 @@ msgid "==> Choix du souscripteur"
 msgstr ""
 
 msgctxt "view:ins_contract.contract:"
-msgid "==> Cotisation"
+msgid "==> Couverture"
 msgstr ""
 
 msgctxt "view:ins_contract.contract:"
@@ -667,11 +679,7 @@ msgid "==> Document Request"
 msgstr ""
 
 msgctxt "view:ins_contract.contract:"
-msgid "==> Options"
-msgstr ""
-
-msgctxt "view:ins_contract.contract:"
-msgid "==> Options Selection"
+msgid "==> Garanties"
 msgstr ""
 
 msgctxt "view:ins_contract.contract:"
@@ -683,16 +691,24 @@ msgid "==> Tarif"
 msgstr ""
 
 msgctxt "view:ins_contract.contract:"
-msgid "==> Validation"
-msgstr ""
-
-msgctxt "view:ins_contract.contract:"
 msgid "==> Validation du contract"
 msgstr ""
 
 msgctxt "view:ins_contract.contract:"
 msgid "Adhérent"
 msgstr "Adhérent"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Affiliation"
+msgstr "Affiliation"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Affiliations"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "Affilié"
+msgstr "Affilié"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Billing"
@@ -715,12 +731,28 @@ msgid "Complete"
 msgstr "Terminer"
 
 msgctxt "view:ins_contract.contract:"
-msgid "Cotisation"
-msgstr "Cotisation"
+msgid "Couverture"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "Couverture"
+msgstr "Couverture"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Covered Elements/Options"
+msgstr "Eléments Couverts/Garanties"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Document Request"
 msgstr "Document Request"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Managing Entities"
+msgstr "Délégataires"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Next"
@@ -729,10 +761,6 @@ msgstr "Suivant"
 msgctxt "view:ins_contract.contract:"
 msgid "Options"
 msgstr "Garanties"
-
-msgctxt "view:ins_contract.contract:"
-msgid "Options Selection"
-msgstr "Options Selection"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Populations"
@@ -763,10 +791,6 @@ msgid ""
 "The current record isin a state (Validation du contract) that you are not "
 "allowed to view."
 msgstr ""
-
-msgctxt "view:ins_contract.contract:"
-msgid "Validation"
-msgstr "Validation"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Validation du contract"

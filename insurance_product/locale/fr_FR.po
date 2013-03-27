@@ -22,6 +22,14 @@ msgctxt "error:ins_product.benefit_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_product.benefit_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
+
+msgctxt "error:ins_product.business_rule_root:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
+
 msgctxt "error:ins_product.clause:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -34,11 +42,23 @@ msgctxt "error:ins_product.clause_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_product.clause_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
+
 msgctxt "error:ins_product.clause_version:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_product.complementary_data_def:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
+
+msgctxt "error:ins_product.complementary_data_def:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.complementary_data_recursive_relation:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -66,9 +86,17 @@ msgctxt "error:ins_product.coverage_amount_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_product.coverage_amount_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
+
 msgctxt "error:ins_product.deductible_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.deductible_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
 
 msgctxt "error:ins_product.document-rule-relation:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -90,6 +118,10 @@ msgctxt "error:ins_product.document_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_product.document_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
+
 msgctxt "error:ins_product.eligibility_relation_kind:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -97,6 +129,10 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "error:ins_product.eligibility_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.eligibility_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
 
 msgctxt "error:ins_product.event_desc-loss_desc:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -151,6 +187,10 @@ msgctxt "error:ins_product.pricing_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_product.pricing_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
+
 msgctxt "error:ins_product.process_product_relation:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -183,6 +223,18 @@ msgctxt "error:ins_product.reserve_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_product.reserve_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
+
+msgctxt "error:ins_product.rule_engine_complementary_data_relation:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.simple_pricing_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
+
 msgctxt "error:ins_product.sub_benefit_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -190,6 +242,10 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "error:ins_product.term_renewal_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.term_renewal_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
 
 msgctxt "field:ProductDefinition,id:"
 msgid "ID"
@@ -485,6 +541,10 @@ msgctxt "field:ins_product.benefit_rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
+msgctxt "field:ins_product.benefit_rule,rule_complementary_data:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
+
 msgctxt "field:ins_product.benefit_rule,start_date:"
 msgid "From Date"
 msgstr "Date de Début"
@@ -544,6 +604,10 @@ msgstr "Offre"
 msgctxt "field:ins_product.business_rule_root,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
+
+msgctxt "field:ins_product.business_rule_root,rule_complementary_data:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
 
 msgctxt "field:ins_product.business_rule_root,start_date:"
 msgid "From Date"
@@ -684,6 +748,10 @@ msgstr "Nom"
 msgctxt "field:ins_product.clause_rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
+
+msgctxt "field:ins_product.clause_rule,rule_complementary_data:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
 
 msgctxt "field:ins_product.clause_rule,shared_clauses:"
 msgid "Shared Clauses"
@@ -833,6 +901,10 @@ msgctxt "field:ins_product.complementary_data_def,string:"
 msgid "String"
 msgstr "Nom"
 
+msgctxt "field:ins_product.complementary_data_def,sub_datas:"
+msgid "Sub Data"
+msgstr "Sous Donnée"
+
 msgctxt "field:ins_product.complementary_data_def,type_:"
 msgid "Type"
 msgstr "Type"
@@ -846,6 +918,47 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:ins_product.complementary_data_def,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.complementary_data_recursive_relation,child:"
+msgid "Child"
+msgstr "Donnée Liée"
+
+msgctxt "field:ins_product.complementary_data_recursive_relation,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.complementary_data_recursive_relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.complementary_data_recursive_relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.complementary_data_recursive_relation,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.complementary_data_recursive_relation,master:"
+msgid "Master"
+msgstr "Maître"
+
+msgctxt "field:ins_product.complementary_data_recursive_relation,rec_name:"
+msgid "Name"
+msgstr "Name"
+
+msgctxt ""
+"field:ins_product.complementary_data_recursive_relation,select_value:"
+msgid "Select value"
+msgstr ""
+
+msgctxt "field:ins_product.complementary_data_recursive_relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.complementary_data_recursive_relation,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -1114,6 +1227,10 @@ msgctxt "field:ins_product.coverage_amount_rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
+msgctxt "field:ins_product.coverage_amount_rule,rule_complementary_data:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
+
 msgctxt "field:ins_product.coverage_amount_rule,start_date:"
 msgid "From Date"
 msgstr "Date de Début"
@@ -1189,6 +1306,10 @@ msgstr "Nom"
 msgctxt "field:ins_product.deductible_rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
+
+msgctxt "field:ins_product.deductible_rule,rule_complementary_data:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
 
 msgctxt "field:ins_product.deductible_rule,start_date:"
 msgid "From Date"
@@ -1454,6 +1575,10 @@ msgctxt "field:ins_product.document_rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
+msgctxt "field:ins_product.document_rule,rule_complementary_data:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
+
 msgctxt "field:ins_product.document_rule,start_date:"
 msgid "From Date"
 msgstr "Date de Début"
@@ -1542,6 +1667,10 @@ msgctxt "field:ins_product.eligibility_rule,offered:"
 msgid "Offered"
 msgstr "Offre"
 
+msgctxt "field:ins_product.eligibility_rule,offered_kind:"
+msgid "Offered Kind"
+msgstr "Typage"
+
 msgctxt "field:ins_product.eligibility_rule,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -1554,6 +1683,10 @@ msgctxt "field:ins_product.eligibility_rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
+msgctxt "field:ins_product.eligibility_rule,rule_complementary_data:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
+
 msgctxt "field:ins_product.eligibility_rule,start_date:"
 msgid "From Date"
 msgstr "Date de Début"
@@ -1565,6 +1698,10 @@ msgstr "Type de Conf."
 msgctxt "field:ins_product.eligibility_rule,sub_elem_rule:"
 msgid "Sub Elem Rule Engine"
 msgstr "Moteur de Règle"
+
+msgctxt "field:ins_product.eligibility_rule,sub_elem_rule_complementary_data:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
 
 msgctxt "field:ins_product.eligibility_rule,subscriber_classes:"
 msgid "Can be subscribed"
@@ -1742,9 +1879,17 @@ msgctxt "field:ins_product.item_desc,name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:ins_product.item_desc,parent:"
+msgid "Parent"
+msgstr "Parent"
+
 msgctxt "field:ins_product.item_desc,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:ins_product.item_desc,sub_item_descs:"
+msgid "Sub Item Descriptors"
+msgstr "Descriptions des Sous Eléments"
 
 msgctxt "field:ins_product.item_desc,write_date:"
 msgid "Write Date"
@@ -2236,6 +2381,10 @@ msgctxt "field:ins_product.pricing_component,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
+msgctxt "field:ins_product.pricing_component,rule_complementary_data:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
+
 msgctxt "field:ins_product.pricing_component,summary:"
 msgid "Value"
 msgstr "Valeur"
@@ -2303,6 +2452,10 @@ msgstr "Nom"
 msgctxt "field:ins_product.pricing_rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
+
+msgctxt "field:ins_product.pricing_rule,rule_complementary_data:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
 
 msgctxt "field:ins_product.pricing_rule,specific_combination_rule:"
 msgid "Combination Rule"
@@ -2665,6 +2818,10 @@ msgctxt "field:ins_product.reserve_rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
+msgctxt "field:ins_product.reserve_rule,rule_complementary_data:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
+
 msgctxt "field:ins_product.reserve_rule,start_date:"
 msgid "From Date"
 msgstr "Date de Début"
@@ -2686,6 +2843,46 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:ins_product.reserve_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt ""
+"field:ins_product.rule_engine_complementary_data_relation,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt ""
+"field:ins_product.rule_engine_complementary_data_relation,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt ""
+"field:ins_product.rule_engine_complementary_data_relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.rule_engine_complementary_data_relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.rule_engine_complementary_data_relation,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.rule_engine_complementary_data_relation,rec_name:"
+msgid "Name"
+msgstr "Name"
+
+msgctxt "field:ins_product.rule_engine_complementary_data_relation,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt ""
+"field:ins_product.rule_engine_complementary_data_relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.rule_engine_complementary_data_relation,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -2837,6 +3034,10 @@ msgctxt "field:ins_product.simple_pricing_rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
+msgctxt "field:ins_product.simple_pricing_rule,rule_complementary_data:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
+
 msgctxt "field:ins_product.simple_pricing_rule,start_date:"
 msgid "From Date"
 msgstr "Date de Début"
@@ -2905,6 +3106,10 @@ msgctxt "field:ins_product.sub_benefit_rule,rule:"
 msgid "Amount"
 msgstr "Montant"
 
+msgctxt "field:ins_product.sub_benefit_rule,rule_complementary_data:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
+
 msgctxt "field:ins_product.sub_benefit_rule,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -2961,6 +3166,10 @@ msgctxt "field:ins_product.term_renewal_rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
+msgctxt "field:ins_product.term_renewal_rule,rule_complementary_data:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
+
 msgctxt "field:ins_product.term_renewal_rule,start_date:"
 msgid "From Date"
 msgstr "Date de Début"
@@ -3000,6 +3209,10 @@ msgstr "Imprimable"
 msgctxt "field:process.process_desc,for_products:"
 msgid "Products"
 msgstr "Produits"
+
+msgctxt "field:rule_engine,complementary_parameters:"
+msgid "Complementary Parameters"
+msgstr "Paramètres Complémentaires"
 
 msgctxt "help:ins_product.benefit_rule,coef_coverage_amount:"
 msgid "Add a multiplier to apply to the coverage amount"
@@ -3064,6 +3277,10 @@ msgstr "Version de Clause"
 msgctxt "model:ins_product.complementary_data_def,name:"
 msgid "Complementary Data Definition"
 msgstr "Définition de Données Complémentaires"
+
+msgctxt "model:ins_product.complementary_data_recursive_relation,name:"
+msgid "Complementary Data recursive relation"
+msgstr "Données Complémentaires Récursives"
 
 msgctxt "model:ins_product.coverage,name:"
 msgid "Coverage"
@@ -3209,6 +3426,10 @@ msgstr ""
 msgctxt "model:ins_product.reserve_rule,name:"
 msgid "Reserve Rule"
 msgstr "Provisionnement"
+
+msgctxt "model:ins_product.rule_engine_complementary_data_relation,name:"
+msgid "Rule engine to complementary data relation"
+msgstr ""
 
 msgctxt "model:ins_product.rule_sets.contract,name:"
 msgid "Context functions for contract related data"
@@ -3584,6 +3805,10 @@ msgstr "Préjudice"
 msgctxt "selection:ins_product.complementary_data_def,kind:"
 msgid "Product"
 msgstr "Produit"
+
+msgctxt "selection:ins_product.complementary_data_def,kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
 
 msgctxt "selection:ins_product.complementary_data_def,kind:"
 msgid "Sub Element"
@@ -4162,12 +4387,20 @@ msgid "Clause rule"
 msgstr "Clause"
 
 msgctxt "view:ins_product.complementary_data_def:"
-msgid "Complementary Data Desciptor"
-msgstr "Descripteur de Données Complémentaires"
+msgid "Complementary Data Descriptor"
+msgstr ""
 
 msgctxt "view:ins_product.complementary_data_def:"
 msgid "Complementary Data Descriptors"
 msgstr "Descripteur de Données Complémentaires"
+
+msgctxt "view:ins_product.complementary_data_recursive_relation:"
+msgid "Relation"
+msgstr ""
+
+msgctxt "view:ins_product.complementary_data_recursive_relation:"
+msgid "Relations"
+msgstr "Relations"
 
 msgctxt "view:ins_product.coverage:"
 msgid "Benefits"
