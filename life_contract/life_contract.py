@@ -193,6 +193,11 @@ class CoveredPerson():
                 res.append(relation.to_party)
         return res
 
+    def on_change_item_desc(self):
+        result = super(CoveredPerson, self).on_change_item_desc()
+        result['is_person'] = self.on_change_with_is_person()
+        return result
+
 
 class CoveredElementPartyRelation(model.CoopSQL):
     'Relation between Covered Element and Covered Relations'
@@ -220,6 +225,10 @@ class LifeCoveredData():
     def is_person_covered(self, party, at_date):
         return self.covered_element.is_person_covered(party, at_date,
             self.option)
+
+    @classmethod
+    def default_coverage_amount(cls):
+        return None
 
 
 class LifeCoveredDesc(CoveredDesc):

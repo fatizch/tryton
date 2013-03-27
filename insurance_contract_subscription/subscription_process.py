@@ -416,6 +416,8 @@ class CoveredElement():
 
     @classmethod
     def default_covered_data(cls):
+        if '_master_covered' in Transaction().context:
+            return super(CoveredElement, cls).default_covered_data()
         contract = Transaction().context.get('current_contract')
 
         if not contract:

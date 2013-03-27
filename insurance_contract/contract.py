@@ -3,6 +3,7 @@ import copy
 
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
+from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, fields
 from trytond.modules.coop_utils import utils, date, business
@@ -889,7 +890,8 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     #data are set through on_change_with and the item desc can be set on an
     #editable tree, or we can not display for the moment dictionnary in tree
     item_desc = fields.Many2One(
-        'ins_product.item_desc', 'Item Desc', depends=['complementary_data'])
+        'ins_product.item_desc', 'Item Desc', depends=['complementary_data'],
+        on_change=['item_desc', 'complementary_data'])
     covered_data = fields.One2Many(
         'ins_contract.covered_data', 'covered_element', 'Covered Element Data')
     name = fields.Char('Name')
@@ -897,13 +899,44 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     sub_covered_elements = fields.One2Many(
         'ins_contract.covered_element', 'parent', 'Sub Covered Elements',
         domain=[('covered_data.option.contract', '=', Eval('contract'))],
-        depends=['contract'])
+        depends=['contract'], context={'_master_covered': Eval('id')})
     complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Complementary Data',
         on_change_with=['item_desc', 'complementary_data'])
     complementary_data_summary = fields.Function(
         fields.Char('Complementary Data', on_change_with=['item_desc']),
         'on_change_with_complementary_data_summary')
+
+    @classmethod
+    def get_parent_in_transaction(cls):
+        if not '_master_covered' in Transaction().context:
+            return None
+        GoodModel = Pool().get(cls.__name__)
+        return GoodModel(Transaction().context.get('_master_covered'))
+
+    @classmethod
+    def default_item_desc(cls):
+        master = cls.get_parent_in_transaction()
+        if not master:
+            return None
+        if master.item_desc and master.item_desc.sub_item_descs:
+            return master.item_desc.sub_item_descs[0].id
+
+    @classmethod
+    def default_covered_data(cls):
+        master = cls.get_parent_in_transaction()
+        if not master:
+            return None
+        CoveredData = Pool().get('ins_contract.covered_data')
+        result = []
+        for covered_data in master.covered_data:
+            tmp_covered = CoveredData()
+            tmp_covered.option = covered_data.option
+            tmp_covered.start_date = covered_data.start_date
+            tmp_covered.end_date = covered_data.end_date
+            tmp_covered.coverage = covered_data.coverage
+            result.append(tmp_covered)
+        return utils.WithAbstract.serialize_field(result)
 
     def get_name_for_billing(self):
         return self.name
@@ -947,6 +980,11 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         if errors:
             return False, errors
         return True, ()
+
+    def on_change_item_desc(self):
+        if not (hasattr(self, 'item_desc') and self.item_desc):
+            return {'complementary_data': {}, 'is_person': False}
+        return {'complementary_data': self.on_change_with_complementary_data()}
 
     def on_change_with_complementary_data(self):
         if self.complementary_data:
@@ -1011,7 +1049,8 @@ class CoveredData(model.CoopSQL, model.CoopView):
             self, 'complementary_data', self.get_complementary_data_def(),
             at_date, value)
         if not res:
-            return self.covered_element.get_complementary_data_value(at_date, value)
+            return self.covered_element.get_complementary_data_value(
+                at_date, value)
 
     def get_complementary_data_def(self):
         return self.option.offered.get_complementary_data_def(
