@@ -102,10 +102,15 @@ def launch_test_case(cfg_dict):
         'fancy_name': translater('Covered Person Selection'),
         'main_model': contract_model,
         'step_xml': '''
-<field name="covered_elements"
- mode="form,tree"
- view_ids="life_contract_subscription.subscription_covered_person_form,
-life_contract.covered_person_view_tree"/>
+<field name="covered_elements" group="covered_elements" mode="tree"
+view_ids="insurance_contract.covered_elements_clean_tree"
+xexpand="0" xfill="0"/>
+<field name="covered_elements" group="covered_elements" mode="form"
+relation="ins_contract.covered_element" relation_field="contract"
+view_ids="insurance_contract.covered_element_view_form"/>
+<field name="covered_elements" group="covered_elements" mode="form"
+relation="ins_contract.covered_data" relation_field="covered_element"
+view_ids="insurance_contract.covered_data_view_form"/>
   ''',
     })
     document_step = meths['StepDesc']({
