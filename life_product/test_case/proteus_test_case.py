@@ -415,24 +415,15 @@ def parse_tree_names(cfg_dict):
 def create_rule_engine_data(cfg_dict):
     #descs = get_file_as_dict(os.path.join(cfg_dict['dir_loc'], 'tree_names'))
     descs = parse_tree_names(cfg_dict)
-    tools = create_folder_from_set(cfg_dict,
-        'rule_engine.tools_functions', descs)
-
-    person = create_folder_from_set(cfg_dict,
-        'ins_product.rule_sets.person', descs)
-
-    subscriber = create_folder_from_set(cfg_dict,
-        'ins_product.rule_sets.subscriber', descs)
-
-    contract = create_folder_from_set(cfg_dict,
-        'ins_product.rule_sets.contract', descs)
-
-    option = create_folder_from_set(cfg_dict,
-        'ins_product.rule_sets.option', descs)
-
-    data_coverage = create_folder_from_set(cfg_dict,
-        'ins_product.rule_sets.covered_data', descs)
-
+    create_folder_from_set(cfg_dict, 'rule_engine.tools_functions', descs)
+    create_folder_from_set(cfg_dict, 'ins_product.rule_sets.person', descs)
+    create_folder_from_set(cfg_dict, 'ins_product.rule_sets.subscriber', descs)
+    create_folder_from_set(cfg_dict, 'ins_product.rule_sets.contract', descs)
+    create_folder_from_set(cfg_dict, 'ins_product.rule_sets.option', descs)
+    create_folder_from_set(cfg_dict, 'ins_product.rule_sets.covered_data',
+        descs)
+    #TODO : To move to claim test case
+    create_folder_from_set(cfg_dict, 'ins_product.rule_sets.claim', descs)
     rule_combination = create_folder_from_set(cfg_dict,
         'ins_product.rule_sets.rule_combination', descs)
 
@@ -658,7 +649,7 @@ def create_invalidity_coverage(cfg_dict):
     elig_rule.min_age = 18
     elig_rule.max_age = 65
 
-    algo = '''salaire = donnee_dynamique_element_couvert('salaire') or '0'
+    algo = '''salaire = donnee_compl_element_couvert('salaire') or '0'
 if donnee_dynamique_element_couvert('CSP') == 'CSP1':
     return Decimal(salaire) * 0.0002
 else:
@@ -716,7 +707,7 @@ def create_death_coverage(cfg_dict):
 date_de_naissance(),aujourd_hui()), 'Les deux sexes')
 
 result = montant_de_couverture() * (100 - esperance) / 100 * 0.008
-if donnee_dynamique_option('est_vip'):
+if donnee_compl_option('est_vip'):
     result = 0.9 * result
 return result
 '''

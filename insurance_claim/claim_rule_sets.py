@@ -19,12 +19,10 @@ class ClaimContext(RuleEngineContext):
     @check_args('delivered_service')
     def _re_delivered_service_expense(cls, args, expense_code):
         del_service = args['delivered_service']
-        at_date = args['date']
         return del_service.get_expense(expense_code)
 
     @classmethod
     @check_args('delivered_service')
     def _re_delivered_service_total_expenses(cls, args):
         del_service = args['delivered_service']
-        at_date = args['date']
         return del_service.get_total_expense()
