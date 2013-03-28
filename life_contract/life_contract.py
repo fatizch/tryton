@@ -132,6 +132,9 @@ class CoveredPerson():
         fields.Boolean('Person', on_change_with=['item_desc'],
             states={'invisible': True}),
         'on_change_with_is_person')
+    covered_name = fields.Function(
+        fields.Char('Name', on_change_with=['person']),
+        'on_change_with_covered_name')
 
     @classmethod
     def __setup__(cls):
@@ -197,6 +200,11 @@ class CoveredPerson():
         result = super(CoveredPerson, self).on_change_item_desc()
         result['is_person'] = self.on_change_with_is_person()
         return result
+
+    def on_change_with_covered_name(self, name=None):
+        if self.person:
+            return self.person.get_rec_name(name)
+        return ''
 
 
 class CoveredElementPartyRelation(model.CoopSQL):
