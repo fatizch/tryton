@@ -158,12 +158,6 @@ class ClaimProcess(CoopProcessFramework):
                         indemnification.save()
         return True
 
-    def close_claim(self):
-        self.status = 'closed'
-        self.sub_status = 'paid'
-        self.end_date = utils.today()
-        return True
-
     @classmethod
     def set_indemnifications(cls, instances, name, vals):
         Indemnification = Pool().get('ins_claim.indemnification')

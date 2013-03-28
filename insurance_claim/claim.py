@@ -143,6 +143,12 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         #TODO: filter with the at_date
         return Contract.search([('subscriber', '=', party.id)])
 
+    def close_claim(self):
+        self.status = 'closed'
+        self.sub_status = 'paid'
+        self.end_date = utils.today()
+        return True
+
 
 class Loss(model.CoopSQL, model.CoopView):
     'Loss'
