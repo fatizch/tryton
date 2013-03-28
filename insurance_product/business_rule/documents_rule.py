@@ -177,7 +177,7 @@ class Printable(Model):
     def format_logo(self):
         good_logo = self.get_appliable_logo()
         if not good_logo:
-            return None
+            return ''
         return StringIO.StringIO(str(good_logo))
 
     def get_sender(self):
@@ -632,9 +632,13 @@ class LetterReport(Report):
             localcontext['Lang'] = 'en_US'
         if data['sender']:
             localcontext['Sender'] = Pool().get('party.party')(data['sender'])
+        else:
+            localcontext['Sender'] = None
         if data['sender_address']:
             localcontext['SenderAddress'] = Pool().get(
                 'party.address')(data['sender_address'])
+        else:
+            localcontext['SenderAddress'] = None
         # localcontext['Logo'] = data['logo']
         localcontext['Today'] = utils.today()
         GoodModel = Pool().get(data['model'])
