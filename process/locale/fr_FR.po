@@ -732,7 +732,7 @@ msgstr "Terminer"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Couverture"
-msgstr ""
+msgstr "Couverture"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Couverture"
@@ -749,6 +749,10 @@ msgstr "Document Request"
 msgctxt "view:ins_contract.contract:"
 msgid "Documents"
 msgstr "Documents"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Garanties"
+msgstr "Couverture"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Managing Entities"

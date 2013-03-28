@@ -48,11 +48,11 @@ msgstr "Description"
 
 msgctxt "field:coop_process.process_log,end_time:"
 msgid "End Time"
-msgstr ""
+msgstr "Fin"
 
 msgctxt "field:coop_process.process_log,from_state:"
 msgid "From State"
-msgstr ""
+msgstr "Etat de Départ"
 
 msgctxt "field:coop_process.process_log,id:"
 msgid "ID"
@@ -64,11 +64,11 @@ msgstr "Est Utilisé"
 
 msgctxt "field:coop_process.process_log,latest:"
 msgid "Latest"
-msgstr ""
+msgstr "Dernier"
 
 msgctxt "field:coop_process.process_log,locked:"
 msgid "Lock"
-msgstr ""
+msgstr "Verrrouillé"
 
 msgctxt "field:coop_process.process_log,rec_name:"
 msgid "Name"
@@ -80,7 +80,7 @@ msgstr "Session"
 
 msgctxt "field:coop_process.process_log,start_time:"
 msgid "Start Time"
-msgstr ""
+msgstr "Début"
 
 msgctxt "field:coop_process.process_log,task:"
 msgid "Task"
@@ -88,7 +88,7 @@ msgstr "Tâche"
 
 msgctxt "field:coop_process.process_log,to_state:"
 msgid "To State"
-msgstr ""
+msgstr "Etat Final"
 
 msgctxt "field:coop_process.process_log,user:"
 msgid "User"
@@ -216,11 +216,11 @@ msgstr "Date de Début"
 
 msgctxt "field:process.process_desc,steps_implicitly_available:"
 msgid "Steps Implicitly Available"
-msgstr ""
+msgstr "Etapes Implicites"
 
 msgctxt "field:process.process_desc,with_prev_next:"
 msgid "With Previous / Next button"
-msgstr ""
+msgstr "Avec Préc/Suiv."
 
 msgctxt "field:process.process_step_relation,is_used:"
 msgid "Is Used"
@@ -308,11 +308,11 @@ msgstr "Paramètres du Processus"
 
 msgctxt "view:coop_process.xml_view_desc:"
 msgid "View Descriptor"
-msgstr ""
+msgstr "Descripteur de Vue"
 
 msgctxt "view:coop_process.xml_view_desc:"
 msgid "View Descriptors"
-msgstr ""
+msgstr "Descripteurs de Vue"
 
 msgctxt "view:process.step_desc:"
 msgid "Custom Views"
