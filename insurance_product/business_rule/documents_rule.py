@@ -75,6 +75,7 @@ class LetterVersion(Attachment):
     'Letter Version'
 
     __name__ = 'ins_product.letter_version'
+    _table = None
 
     start_date = fields.Date('Start date', required=True)
     end_date = fields.Date('End date')
