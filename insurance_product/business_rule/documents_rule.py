@@ -763,7 +763,7 @@ class LetterGeneration(Wizard):
         contact.title = self.select_model.get_active_model(False).name
         contact.for_object_ref = good_obj.get_object_for_contact()
         if (hasattr(self, 'attach') and self.attach):
-            if self.attach.attachment:
+            if (hasattr(self.attach, 'attachment') and self.attach.attachment):
                 Attachment = Pool().get('ir.attachment')
                 attachment = Attachment()
                 attachment.resource = contact.for_object_ref
