@@ -68,6 +68,8 @@ class ProcessLog():
             return result
         elif order[0][0] == 'priority':
             team = utils.get_team()
+            if not team:
+                return result
             ordering_table = {}
             count = 0
             for priority in team.priorities:
