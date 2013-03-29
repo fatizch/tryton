@@ -25,7 +25,9 @@ class LifeClaim():
         if not party:
             return res
         for cov_elem in cls.get_possible_covered_elements(party, at_date):
-            res.append(cov_elem.get_contract())
+            contract = cov_elem.get_contract()
+            if contract:
+                res.append(contract)
         return res
 
     @classmethod
@@ -46,7 +48,8 @@ class LifeLoss():
             states={'invisible': True},
         ), 'get_possible_covered_persons_ids')
     covered_person = fields.Many2One('party.party', 'Covered Person',
-        #TODO: Temporary hack, the function field is not calculated when storing the object
+        #TODO: Temporary hack, the function field is not calculated
+        #when storing the object
         domain=[
             If(
                 Bool(Eval('possible_covered_persons')),

@@ -67,7 +67,8 @@ def get_or_create_generator(cfg_dict, code):
     return seq
 
 
-def get_or_create_benefit(cfg_dict, code, name, kind=None, date=None):
+def get_or_create_benefit(cfg_dict, code, name, kind, date=None,
+        calc_unit=None):
     benefit = proteus_tools.get_objects_from_db(cfg_dict, 'Benefit', 'code',
         code)
     if benefit:
@@ -76,12 +77,8 @@ def get_or_create_benefit(cfg_dict, code, name, kind=None, date=None):
     benefit.code = code
     benefit.name = name
     benefit.start_date = date if date else cfg_dict['Date'].today({})
-    if kind:
-        if kind == 'capital':
-            benefit.indemnification_kind = kind
-        else:
-            benefit.indemnification_kind = 'period'
-            benefit.indemnification_calc_unit = kind
+    benefit.indemnification_kind = kind
+    benefit.indemnification_calc_unit = calc_unit
     return benefit
 
 
@@ -195,56 +192,56 @@ def create_AAA_Product(cfg_dict, code, name):
         [{'value': 4}])
 
     pricing_rulea1 = create_pricing_rule(cfg_dict, coverage_a,
-         config_kind='advanced', rated_object_kind='global', components=[
+        config_kind='advanced', rated_object_kind='global', components=[
             {
                 'kind': 'base',
                 'code': 'PP',
                 'config_kind': 'simple',
                 'fixed_amount': Decimal(12),
-             },
+            },
             {
                 'kind': 'tax',
                 'tax': tax,
                 'config_kind': 'simple',
-             },
+            },
             {
                 'kind': 'fee',
                 'fee': fee,
                 'config_kind': 'simple',
-             },
+            },
         ],
         end_date=cfg_dict['Date'].today({}) + datetime.timedelta(days=10))
 
     create_components(cfg_dict, pricing_rulea1, rated_object_kind='sub_item',
         components=[
             {
-             'kind': 'base',
-             'code': 'PP',
-             'config_kind': 'simple',
-             'fixed_amount': Decimal(1)
-             }])
+                'kind': 'base',
+                'code': 'PP',
+                'config_kind': 'simple',
+                'fixed_amount': Decimal(1)
+            }])
 
-    pricing_rulea2 = create_pricing_rule(cfg_dict, coverage_a,
-         config_kind='advanced', rated_object_kind='global', components=[
+    create_pricing_rule(cfg_dict, coverage_a,
+        config_kind='advanced', rated_object_kind='global', components=[
             {
                 'kind': 'base',
                 'code': 'PP',
                 'config_kind': 'simple',
                 'fixed_amount': Decimal(15),
-             },
+            },
             {
                 'kind': 'tax',
                 'tax': tax,
                 'config_kind': 'simple',
-             },
+            },
         ],
         start_date=cfg_dict['Date'].today({}) + datetime.timedelta(days=11),
         end_date=cfg_dict['Date'].today({}) + datetime.timedelta(days=20))
 
     coverage_b = get_or_create_coverage(cfg_dict, 'BET', 'Beta Coverage',
         cfg_dict['Date'].today({}) + datetime.timedelta(days=5))
-    pricing_ruleb1 = create_pricing_rule(cfg_dict, coverage_b,
-         config_kind='advanced', rated_object_kind='global', components=[
+    create_pricing_rule(cfg_dict, coverage_b,
+        config_kind='advanced', rated_object_kind='global', components=[
             {
                 'kind': 'base',
                 'code': 'PP',
@@ -619,7 +616,7 @@ return PP + FG + RA + Tax
         ])
 
     benefit = get_or_create_benefit(cfg_dict, 'IJ',
-        'Indémnité Journalière', 'day')
+        'Indémnité Journalière', kind='period', calc_unit='day')
     add_rule(cfg_dict, benefit, 'benefit')
     cov.benefits.append(benefit)
 
@@ -657,7 +654,7 @@ else:
 '''
     rule_engine = get_or_create_rule(cfg_dict, u'Tarif CSP', algo,
         'Default Context')
-    pricing_rule = create_pricing_rule(cfg_dict, cov, config_kind='advanced',
+    create_pricing_rule(cfg_dict, cov, config_kind='advanced',
             rated_object_kind='sub_item', components=[
                 {
                     'kind': 'base',
@@ -673,8 +670,8 @@ else:
             ])
 
     benefit = get_or_create_benefit(cfg_dict, 'RENT_INVAL',
-        'Rente d\'invalidité', 'quarter')
-    benefit_rule = add_rule(cfg_dict, benefit, 'benefit')
+        'Rente d\'invalidité', kind='annuity', calc_unit='quarter')
+    add_rule(cfg_dict, benefit, 'benefit')
     cov.benefits.append(benefit)
 
     cov.description = '''<b>En cas d’invalidité, votre pouvoir d’achat est \
@@ -714,7 +711,7 @@ return result
     rule_engine = get_or_create_rule(cfg_dict,
         u'2% du Montant de couverture et 10% de reduc pour VIP', algo,
         'Default Context')
-    pricing_rule = create_pricing_rule(cfg_dict, cov, config_kind='advanced',
+    create_pricing_rule(cfg_dict, cov, config_kind='advanced',
             rated_object_kind='sub_item', components=[
                 {
                     'kind': 'base',
@@ -730,18 +727,18 @@ return result
             ])
 
     capital_benefit = get_or_create_benefit(cfg_dict, 'CAP_DC',
-        'Capital Décès', 'capital')
+        'Capital Décès', kind='capital')
     benefit_rule = add_rule(cfg_dict, capital_benefit, 'benefit')
     cov.benefits.append(capital_benefit)
 
     annuity_benefit = get_or_create_benefit(cfg_dict, 'RENT_CJ',
-        'Rente de conjoint', 'annuity')
+        'Rente de conjoint', kind='annuity', calc_unit='quarter')
     benefit_rule = add_rule(cfg_dict, annuity_benefit, 'benefit')
     benefit_rule.coef_coverage_amount = Decimal(1 / (10 * 12))
     cov.benefits.append(annuity_benefit)
 
     annuity__edu_benefit = get_or_create_benefit(cfg_dict, 'RENT_EDU',
-        'Rente éducation', 'annuity')
+        'Rente éducation', kind='annuity', cal_unit='quarter')
     benefit_rule = add_rule(cfg_dict, annuity__edu_benefit, 'benefit')
     benefit_rule.coef_coverage_amount = Decimal(1 / (10 * 12 * 4))
     cov.benefits.append(annuity__edu_benefit)

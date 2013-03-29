@@ -18,6 +18,7 @@ __all__ = [
 INDEMNIFICATION_KIND = [
     ('capital', 'Capital'),
     ('period', 'Period'),
+    ('annuity', 'Annuity'),
 ]
 INDEMNIFICATION_DETAIL_KIND = [
     ('waiting_period', 'Waiting Period'),
@@ -128,7 +129,7 @@ class Benefit(model.CoopSQL, Offered):
         super(Benefit, cls).delete(entities)
 
     @staticmethod
-    def default_kind():
+    def default_indemnification_kind():
         return 'capital'
 
     def give_me_indemnification(self, args):

@@ -16,8 +16,12 @@ AMOUNT_KIND = [
     ('amount', 'Amount'),
     ('cov_amount', 'Coverage Amount'),
 ]
-STATES_PARENT_NOT_PERIODIC = Eval('_parent_offered', {}).get(
-    'indemnification_kind') != 'period'
+STATES_CAPITAL = Eval('_parent_offered', {}).get(
+    'indemnification_kind') == 'capital'
+STATES_PERIOD = Eval('_parent_offered', {}).get(
+    'indemnification_kind') == 'period'
+STATES_ANNUITY = Eval('_parent_offered', {}).get(
+    'indemnification_kind') == 'annuity'
 STATES_AMOUNT_EVOLVES = Bool(Eval('amount_evolves_over_time'))
 
 
@@ -27,7 +31,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
     __name__ = 'ins_product.benefit_rule'
 
     amount_evolves_over_time = fields.Boolean('Evolves Over Time',
-        states={'invisible': STATES_PARENT_NOT_PERIODIC})
+        states={'invisible': ~STATES_PERIOD})
     amount_kind = fields.Selection(AMOUNT_KIND, 'Amount Kind',
         states={'invisible': Or(STATE_SIMPLE, STATES_AMOUNT_EVOLVES)})
     amount = fields.Numeric('Amount',
@@ -51,22 +55,25 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
     indemnification_calc_unit = fields.Selection(date.DAILY_DURATION,
         'Indemnification Calculation Unit',
         states={
-            'invisible': Or(STATES_PARENT_NOT_PERIODIC, STATES_AMOUNT_EVOLVES)
+            'invisible': Or(STATES_CAPITAL, STATES_AMOUNT_EVOLVES),
+            'required': ~STATES_CAPITAL,
         }, sort=False)
     sub_benefit_rules = fields.One2Many('ins_product.sub_benefit_rule',
         'benefit_rule', 'Sub Benefit Rules',
         states={'invisible': ~STATES_AMOUNT_EVOLVES})
     max_duration_per_indemnification = fields.Integer(
         'Max duration per Indemnification', states={
-            'invisible': Or(STATES_PARENT_NOT_PERIODIC, STATES_AMOUNT_EVOLVES)
+            'invisible': Or(~STATES_ANNUITY, STATES_AMOUNT_EVOLVES),
+            'required': STATES_ANNUITY,
         })
     max_duration_per_indemnification_unit = fields.Selection(
         date.DAILY_DURATION, 'Unit', sort=False, states={
-            'invisible': Or(STATES_PARENT_NOT_PERIODIC, STATES_AMOUNT_EVOLVES)
+            'invisible': Or(~STATES_ANNUITY, STATES_AMOUNT_EVOLVES),
+            'required': STATES_ANNUITY,
         })
     with_revaluation = fields.Boolean('With Revaluation',
         states={
-            'invisible': Or(STATES_PARENT_NOT_PERIODIC, STATES_AMOUNT_EVOLVES)
+            'invisible': Or(~STATES_ANNUITY, STATES_AMOUNT_EVOLVES)
         })
     revaluation_date = fields.Date('Revaluation Date',
         states={
@@ -151,7 +158,9 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
 
     def get_coverage_amount(self, args):
         if 'option' in args:
-            return args['option'].get_coverage_amount()
+            cov_amount = args['option'].get_coverage_amount()
+            return cov_amount * self.coef_coverage_amount
+        return 0
 
     def get_rule_result(self, args):
         res, errs = super(BenefitRule, self).get_rule_result(args)
@@ -209,7 +218,9 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
         errs = []
         res = {}
         res['start_date'] = args['start_date']
-        end_date = args['end_date'] if 'end_date' in args else None
+        end_date = None
+        if self.offered.indemnification_kind == 'period':
+            end_date = args['end_date'] if 'end_date' in args else None
         res['end_date'] = self.get_end_date(res['start_date'], end_date)
         if not res['end_date']:
             errs += 'missing_end_date'
@@ -243,7 +254,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
         return [res], errs
 
     def give_me_benefit(self, args):
-        if self.offered.indemnification_kind == 'period':
+        if self.offered.indemnification_kind != 'capital':
             return self.get_indemnification_for_period(args)
         else:
             return self.get_indemnification_for_capital(args)
