@@ -333,43 +333,45 @@ class ContractSubscription(CoopProcessFramework):
         product = self.offered
         self.management = []
         # Set Contract Management Role
-        good_protocol = ManagementProtocol.search([
-            ('kind', '=', 'contract_manager'),
-            ('party', '=', product.tmp_contract_manager.id),
-            ('start_date', '<=', self.start_date)])
-        if not good_protocol:
-            good_protocol = ManagementProtocol()
-            good_protocol.start_date = self.start_date
-            good_protocol.kind = 'contract_manager'
-            good_protocol.party = product.tmp_contract_manager
-            good_protocol.save()
-        else:
-            good_protocol = good_protocol[0]
-        good_role = ManagementRole()
-        good_role.protocol = good_protocol
-        good_role.start_date = self.start_date
-        good_role.contract = self
-        good_role.save()
-        self.management.append(good_role)
+        if product.tmp_contract_manager:
+            good_protocol = ManagementProtocol.search([
+                ('kind', '=', 'contract_manager'),
+                ('party', '=', product.tmp_contract_manager.id),
+                ('start_date', '<=', self.start_date)])
+            if not good_protocol:
+                good_protocol = ManagementProtocol()
+                good_protocol.start_date = self.start_date
+                good_protocol.kind = 'contract_manager'
+                good_protocol.party = product.tmp_contract_manager
+                good_protocol.save()
+            else:
+                good_protocol = good_protocol[0]
+            good_role = ManagementRole()
+            good_role.protocol = good_protocol
+            good_role.start_date = self.start_date
+            good_role.contract = self
+            good_role.save()
+            self.management.append(good_role)
         # Set Claim Management Role
-        good_protocol = ManagementProtocol.search([
-            ('kind', '=', 'claim_manager'),
-            ('party', '=', product.tmp_claim_manager.id),
-            ('start_date', '<=', self.start_date)])
-        if not good_protocol:
-            good_protocol = ManagementProtocol()
-            good_protocol.start_date = self.start_date
-            good_protocol.kind = 'claim_manager'
-            good_protocol.party = product.tmp_claim_manager
-            good_protocol.save()
-        else:
-            good_protocol = good_protocol[0]
-        good_role = ManagementRole()
-        good_role.protocol = good_protocol
-        good_role.start_date = self.start_date
-        good_role.contract = self
-        good_role.save()
-        self.management.append(good_role)
+        if product.tmp_claim_manager:
+            good_protocol = ManagementProtocol.search([
+                ('kind', '=', 'claim_manager'),
+                ('party', '=', product.tmp_claim_manager.id),
+                ('start_date', '<=', self.start_date)])
+            if not good_protocol:
+                good_protocol = ManagementProtocol()
+                good_protocol.start_date = self.start_date
+                good_protocol.kind = 'claim_manager'
+                good_protocol.party = product.tmp_claim_manager
+                good_protocol.save()
+            else:
+                good_protocol = good_protocol[0]
+            good_role = ManagementRole()
+            good_role.protocol = good_protocol
+            good_role.start_date = self.start_date
+            good_role.contract = self
+            good_role.save()
+            self.management.append(good_role)
         return True
 
 

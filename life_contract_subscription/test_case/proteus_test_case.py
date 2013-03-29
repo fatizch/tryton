@@ -103,14 +103,14 @@ def launch_test_case(cfg_dict):
         'main_model': contract_model,
         'step_xml': '''
 <field name="covered_elements" group="covered_elements" mode="tree"
-view_ids="insurance_contract.covered_elements_clean_tree"
-xexpand="0" xfill="0"/>
+ view_ids="insurance_contract.covered_elements_clean_tree"
+ xexpand="0" xfill="0"/>
 <field name="covered_elements" group="covered_elements" mode="form"
-relation="ins_contract.covered_element" relation_field="contract"
-view_ids="insurance_contract.covered_element_view_form"/>
+ relation="ins_contract.covered_element" relation_field="contract"
+ view_ids="insurance_contract.covered_element_view_form"/>
 <field name="covered_elements" group="covered_elements" mode="form"
-relation="ins_contract.covered_data" relation_field="covered_element"
-view_ids="insurance_contract.covered_data_view_form"/>
+ relation="ins_contract.covered_data" relation_field="covered_element"
+ view_ids="insurance_contract.covered_data_view_form"/>
   ''',
     })
     document_step = meths['StepDesc']({
@@ -289,6 +289,13 @@ yexpand="1" mode="form"/>
         'parent_transition': trans1,
         'sequence': 6,
     })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'init_management_roles',
+        'parent_transition': trans1,
+        'sequence': 7,
+    })
     trans2 = meths['StepTransition'](
         {
             'from_step': subscriber_sel_step,
@@ -341,30 +348,37 @@ yexpand="1" mode="form"/>
     meths['Code']({
         'technical_kind': 'transition',
         'on_model': contract_model,
-        'method_name': 'check_options_eligibility',
+        'method_name': 'init_management_roles',
         'parent_transition': trans2,
         'sequence': 7,
     })
     meths['Code']({
         'technical_kind': 'transition',
         'on_model': contract_model,
-        'method_name': 'check_option_selected',
+        'method_name': 'check_options_eligibility',
         'parent_transition': trans2,
         'sequence': 8,
     })
     meths['Code']({
         'technical_kind': 'transition',
         'on_model': contract_model,
-        'method_name': 'check_option_dates',
+        'method_name': 'check_option_selected',
         'parent_transition': trans2,
         'sequence': 9,
     })
     meths['Code']({
         'technical_kind': 'transition',
         'on_model': contract_model,
-        'method_name': 'init_covered_elements',
+        'method_name': 'check_option_dates',
         'parent_transition': trans2,
         'sequence': 10,
+    })
+    meths['Code']({
+        'technical_kind': 'transition',
+        'on_model': contract_model,
+        'method_name': 'init_covered_elements',
+        'parent_transition': trans2,
+        'sequence': 11,
     })
     meths['StepTransition'](
         {
