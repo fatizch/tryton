@@ -113,28 +113,6 @@ def launch_test_case(cfg_dict):
         'parent_step': step_loss,
         'sequence': 1,
     })
-    step_documents = meths['StepDesc']({
-        'technical_name': 'required_documents',
-        'fancy_name': translater('Documents'),
-        'main_model': claim_model,
-        'step_xml': '''
-<label name="name"/>
-<field name="name"/>
-<label name="status"/>
-<field name="status"/>
-<label name="claimant"/>
-<field name="claimant"/>
-<label name="declaration_date"/>
-<field name="declaration_date"/>
-<field name="documents" colspan="4" mode="form"/>''',
-    })
-    meths['Code']({
-        'technical_kind': 'step_before',
-        'on_model': claim_model,
-        'method_name': 'init_declaration_document_request',
-        'parent_step': step_documents,
-        'sequence': 1,
-    })
     step_delivered_service = meths['StepDesc']({
         'technical_name': 'delivered_services',
         'fancy_name': translater('Delivered Services'),
@@ -158,6 +136,28 @@ insurance_claim.loss_view_tree"/>
         'on_model': claim_model,
         'method_name': 'init_delivered_services',
         'parent_step': step_delivered_service,
+        'sequence': 1,
+    })
+    step_documents = meths['StepDesc']({
+        'technical_name': 'required_documents',
+        'fancy_name': translater('Documents'),
+        'main_model': claim_model,
+        'step_xml': '''
+<label name="name"/>
+<field name="name"/>
+<label name="status"/>
+<field name="status"/>
+<label name="claimant"/>
+<field name="claimant"/>
+<label name="declaration_date"/>
+<field name="declaration_date"/>
+<field name="documents" colspan="4" mode="form"/>''',
+    })
+    meths['Code']({
+        'technical_kind': 'step_before',
+        'on_model': claim_model,
+        'method_name': 'init_declaration_document_request',
+        'parent_step': step_documents,
         'sequence': 1,
     })
     step_indemnification = meths['StepDesc']({
@@ -269,16 +269,16 @@ expand_toolbar="0" />''',
     meths['ProcessStepRelation'](
         {
             'process': process_claim,
-            'step': step_documents,
-            'status': status_documents,
+            'step': step_delivered_service,
+            'status': status_calculation,
             'order': 3,
         },
         {'process_model': claim_model.id})
     meths['ProcessStepRelation'](
         {
             'process': process_claim,
-            'step': step_delivered_service,
-            'status': status_calculation,
+            'step': step_documents,
+            'status': status_documents,
             'order': 4,
         },
         {'process_model': claim_model.id})
