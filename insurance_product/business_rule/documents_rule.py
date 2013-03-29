@@ -45,15 +45,13 @@ class LetterModel(model.CoopSQL, model.CoopView):
     __name__ = 'ins_product.letter_model'
 
     name = fields.Char('Name', required=True, translate=True)
-    on_model = fields.Many2One('ir.model', 'Model',
-        domain=[('printable', '=', True)], required=True)
+    on_model = fields.Many2One(
+        'ir.model', 'Model', domain=[('printable', '=', True)], required=True)
     code = fields.Char('Code', required=True)
-    versions = fields.One2Many('ins_product.letter_version',
-        'resource', 'Versions')
-    kind = fields.Selection([
-            ('', ''),
-            ('doc_request', 'Document Request'),
-        ], 'name')
+    versions = fields.One2Many(
+        'ins_product.letter_version', 'resource', 'Versions')
+    kind = fields.Selection(
+        [('', ''), ('doc_request', 'Document Request')], 'name')
 
     def get_good_version(self, date, language):
         for version in self.versions:
@@ -214,8 +212,8 @@ class DocumentRule(BusinessRuleRoot, model.CoopSQL):
             ('loss', 'Loss'),
             ('', ''),
         ], 'Kind')
-    documents = fields.Many2Many('ins_product.document-rule-relation',
-        'rule', 'document', 'Documents',
+    documents = fields.Many2Many(
+        'ins_product.document-rule-relation', 'rule', 'document', 'Documents',
         states={'invisible': STATE_SIMPLE})
 
     def give_me_documents(self, args):
@@ -245,10 +243,10 @@ class DocumentRuleRelation(model.CoopSQL):
 
     __name__ = 'ins_product.document-rule-relation'
 
-    rule = fields.Many2One('ins_product.document_rule',
-        'Rule', ondelete='CASCADE')
-    document = fields.Many2One('ins_product.document_desc',
-        'Document', ondelete='RESTRICT')
+    rule = fields.Many2One(
+        'ins_product.document_rule', 'Rule', ondelete='CASCADE')
+    document = fields.Many2One(
+        'ins_product.document_desc', 'Document', ondelete='RESTRICT')
 
 
 class Document(model.CoopSQL, model.CoopView):
@@ -256,11 +254,10 @@ class Document(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_product.document'
 
-    document_desc = fields.Many2One('ins_product.document_desc',
-        'Document Definition', required=True)
-    for_object = fields.Reference('Needed For',
-        [('', '')],
-        states={'readonly': ~~Eval('for_object')})
+    document_desc = fields.Many2One(
+        'ins_product.document_desc', 'Document Definition', required=True)
+    for_object = fields.Reference(
+        'Needed For', [('', '')], states={'readonly': ~~Eval('for_object')})
 
     send_date = fields.Date(
         'Send Date',
