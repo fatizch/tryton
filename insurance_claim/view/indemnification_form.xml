@@ -18,6 +18,14 @@
     <field name="beneficiary"/>
     <newline/>
     <label name="amount"/>
-    <field name="amount"/>
+    <group id="amount">
+        <field name="amount"/>
+        <field name="currency"/>
+    </group>
+    <label name="local_currency_amount"/>
+    <group id="local_amount">
+        <field name="local_currency_amount"/>
+        <field name="local_currency"/>
+    </group>
     <field name="details" colspan="4"/>
 </form>

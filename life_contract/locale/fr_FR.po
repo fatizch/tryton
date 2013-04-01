@@ -10,6 +10,10 @@ msgctxt "field:ins_contract.covered_data,coverage_amount:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"
 
+msgctxt "field:ins_contract.covered_element,covered_name:"
+msgid "Name"
+msgstr "Nom"
+
 msgctxt "field:ins_contract.covered_element,covered_relations:"
 msgid "Covered Relations"
 msgstr "Relations Couvertes"

@@ -107,6 +107,10 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
         utils.update_states(cls, 'rule',
             {'invisible': Bool(Eval('amount_evolves_over_time'))})
 
+    def get_currency(self):
+        if self.offered:
+            return self.offered.get_currency()
+
     @staticmethod
     def default_coef_coverage_amount():
         return 1

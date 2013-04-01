@@ -7,6 +7,7 @@ from trytond.modules.coop_utils import model, utils, date, fields, coop_string
 from trytond.modules.insurance_product.benefit import INDEMNIFICATION_KIND, \
     INDEMNIFICATION_DETAIL_KIND
 from trytond.modules.insurance_product import Printable
+from trytond.modules.insurance_product.product import DEF_CUR_DIG
 
 __all__ = [
     'Claim',
@@ -278,19 +279,19 @@ class ClaimDeliveredService():
         cur_dict['data'] = self.get_covered_data()
         cur_dict['subscriber'] = self.get_contract().get_policy_owner()
 
-    def calculate(self):
-        cur_dict = {}
-        self.init_dict_for_rule_engine(cur_dict)
-        #We first check the eligibility of the benefit
-        res, errs = self.benefit.get_result('eligibility', cur_dict)
-        if res and not res.eligible:
-            self.status = 'not_eligible'
-            return None, errs
+    def get_local_currencies_used(self):
+        res = []
+        res.append(self.get_currency())
+        res += [x.currency for x in self.expenses]
+        return tuple(res)
+
+    def create_indemnification(self, cur_dict):
         details_dict, errors = self.benefit.get_result('indemnification',
             cur_dict)
         if errors:
             return None, errors
-        indemnification = self.get_indemnification_being_calculated()
+        #TODO : To enhance
+        indemnification = self.get_indemnification_being_calculated(cur_dict)
         if not hasattr(self, 'indemnifications') or not self.indemnifications:
             self.indemnifications = []
         else:
@@ -300,7 +301,25 @@ class ClaimDeliveredService():
                 self.__class__, 'indemnifications')
             self.indemnifications.append(indemnification)
         indemnification.init_from_delivered_service(self)
-        indemnification.create_details_from_dict(details_dict)
+        indemnification.create_details_from_dict(details_dict, self,
+            cur_dict['currency'])
+        return True, errors
+
+    def calculate(self):
+        cur_dict = {}
+        self.init_dict_for_rule_engine(cur_dict)
+        #We first check the eligibility of the benefit
+        res, errs = self.benefit.get_result('eligibility', cur_dict)
+        if res and not res.eligible:
+            self.status = 'not_eligible'
+            return None, errs
+        currencies = self.get_local_currencies_used()
+        for currency in currencies:
+            cur_dict['currency'] = currency
+            cur_res, cur_errs = self.create_indemnification(cur_dict)
+            res = res and cur_res
+            errs += cur_errs
+        return res, errs
 
     def get_rec_name(self, name=None):
         if self.benefit:
@@ -318,12 +337,14 @@ class ClaimDeliveredService():
         return utils.get_complementary_data_value(self, 'complementary_data',
             self.get_complementary_data_def(), at_date, value)
 
-    def get_indemnification_being_calculated(self):
+    def get_indemnification_being_calculated(self, cur_dict):
         if not hasattr(self, 'indemnifications'):
             return None
-        for indemnification in self.indemnifications:
-            if indemnification.status == 'calculated':
-                return indemnification
+        for indemn in self.indemnifications:
+            if (indemn.status == 'calculated'
+                    and (not hasattr(indemn, 'local_currency')
+                        or indemn.local_currency == cur_dict['currency'])):
+                return indemn
 
     def get_currency(self):
         if self.subscribed_service:
@@ -348,7 +369,25 @@ class Indemnification(model.CoopView, model.CoopSQL):
     end_date = fields.Date('End Date',
         states={'invisible': Eval('kind') != 'period'})
     status = fields.Selection(INDEMNIFICATION_STATUS, 'Status', sort=False)
-    amount = fields.Numeric('Amount')
+    amount = fields.Numeric('Amount',
+        digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
+        depends=['currency_digits'])
+    currency = fields.Function(
+        fields.Many2One('currency.currency', 'Currency'),
+        'get_currency_id')
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'get_currency_digits')
+    local_currency_amount = fields.Numeric('Local Currency Amount',
+        digits=(16, Eval('local_currency_digits', DEF_CUR_DIG)),
+        states={'invisible': ~Eval('local_currency')},
+        depends=['local_currency_digits'])
+    local_currency = fields.Many2One('currency.currency', 'Local Currency',
+        states={'invisible': ~Eval('local_currency')})
+    local_currency_digits = fields.Function(
+        fields.Integer('Local Currency Digits',
+            on_change_with=['local_currency']),
+        'on_change_with_local_currency_digits')
     details = fields.One2Many('ins_claim.indemnification_detail',
         'indemnification', 'Details')
 
@@ -365,7 +404,7 @@ class Indemnification(model.CoopView, model.CoopSQL):
             return res
         return self.delivered_service.benefit.indemnification_kind
 
-    def create_details_from_dict(self, details_dict):
+    def create_details_from_dict(self, details_dict, del_service, currency):
         if not hasattr(self, 'details'):
             self.details = []
         else:
@@ -383,19 +422,43 @@ class Indemnification(model.CoopView, model.CoopSQL):
                 detail.kind = key
                 for field_name, value in detail_dict.iteritems():
                     setattr(detail, field_name, value)
-        self.calculate_amount_from_details()
+        self.calculate_amount_from_details(del_service, currency)
 
-    def calculate_amount_from_details(self):
+    def calculate_amount_from_details(self, del_service, currency):
         self.amount = 0
+        self.local_currency_amount = 0
         if not hasattr(self, 'details'):
             return
+        main_currency = del_service.get_currency()
         for detail in self.details:
             detail.calculate_amount()
-            self.amount += detail.amount
+            if currency == main_currency:
+                self.amount += detail.amount
+            else:
+                self.local_currency_amount += detail.amount
+                self.local_currency = currency
+        if self.local_currency_amount > 0:
+            Currency = Pool().get('currency.currency')
+            self.amount = Currency.compute(self.local_currency,
+                self.local_currency_amount, main_currency)
 
     def get_currency(self):
         if self.delivered_service:
             return self.delivered_service.get_currency()
+
+    def get_currency_id(self, name):
+        currency = self.get_currency()
+        if currency:
+            return currency.id
+
+    def get_currency_digits(self):
+        currency = self.get_currency()
+        if currency:
+            return currency.digits
+
+    def on_change_with_local_currency_digits(self):
+        if self.local_currency:
+            return self.local_currency.digits
 
     def get_rec_name(self, name):
         return '%s %.2f [%s]' % (
@@ -425,12 +488,24 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView):
     nb_of_unit = fields.Numeric('Nb of Unit')
     unit = fields.Selection(date.DAILY_DURATION, 'Unit')
     amount = fields.Numeric('Amount')
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'get_currency_digits')
 
     def init_from_indemnification(self, indemnification):
         pass
 
     def calculate_amount(self):
         self.amount = self.amount_per_unit * self.nb_of_unit
+
+    def get_currency(self):
+        if self.indemnification:
+            return self.indemnification.get_currency()
+
+    def get_currency_digits(self):
+        currency = self.get_currency
+        if currency:
+            return currency.digits
 
 
 class DocumentRequest():

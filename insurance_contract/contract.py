@@ -1165,18 +1165,17 @@ class DeliveredService(model.CoopView, model.CoopSQL):
             return self.subscribed_service.get_rec_name(name)
         return super(DeliveredService, self).get_rec_name(name)
 
-    def get_expense(self, code):
+    def get_expense(self, code, currency):
         for expense in self.expenses:
-            if expense.kind and expense.kind.code == code:
-                return expense.amount, expense.currency
+            if (expense.kind and expense.kind.code == code
+                    and expense.currency == currency):
+                return expense.amount
 
-    def get_total_expense(self):
-        res = [0, None]
+    def get_total_expense(self, currency):
+        res = 0
         for expense in self.expenses:
-            if not res[1]:
-                res[1] = expense.currency
-            if res[1] == expense.currency:
-                res[0] += expense.amount
+            if expense.currency == currency:
+                res += expense.amount
         return res
 
     @staticmethod

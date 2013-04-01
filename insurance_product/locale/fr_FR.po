@@ -383,6 +383,10 @@ msgctxt "field:ins_product.benefit,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement de Modèle"
 
+msgctxt "field:ins_product.benefit,use_local_currency:"
+msgid "Use Local Currency"
+msgstr "Utiliser la Devise Locale"
+
 msgctxt "field:ins_product.benefit,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -3612,6 +3616,10 @@ msgid "Document Received"
 msgstr "Document reçu"
 
 msgctxt "selection:ins_product.benefit,indemnification_kind:"
+msgid "Annuity"
+msgstr "Rente"
+
+msgctxt "selection:ins_product.benefit,indemnification_kind:"
 msgid "Capital"
 msgstr "Capital"
 
@@ -4585,6 +4593,10 @@ msgstr "Produit"
 msgctxt "view:ins_product.product:"
 msgid "Term - Renewal"
 msgstr "Terme - Renouvellement"
+
+msgctxt "view:ins_product.request_finder:"
+msgid "Request Finder"
+msgstr ""
 
 msgctxt "view:ins_product.reserve_rule:"
 msgid "Reserve rule"

@@ -106,6 +106,10 @@ msgctxt "field:ins_claim.indemnification,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_claim.indemnification,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
 msgctxt "field:ins_claim.indemnification,customer:"
 msgid "Customer"
 msgstr "Client"
@@ -133,6 +137,18 @@ msgstr "Est Utilisé"
 msgctxt "field:ins_claim.indemnification,kind:"
 msgid "Kind"
 msgstr "Type"
+
+msgctxt "field:ins_claim.indemnification,local_currency:"
+msgid "Local Currency"
+msgstr "Devise Locale"
+
+msgctxt "field:ins_claim.indemnification,local_currency_amount:"
+msgid "Local Currency Amount"
+msgstr "Montant en Devise Locale"
+
+msgctxt "field:ins_claim.indemnification,local_currency_digits:"
+msgid "Local Currency Digits"
+msgstr "Précision de la Devise Locale"
 
 msgctxt "field:ins_claim.indemnification,rec_name:"
 msgid "Name"
@@ -169,6 +185,10 @@ msgstr "Date de création"
 msgctxt "field:ins_claim.indemnification_detail,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:ins_claim.indemnification_detail,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
 
 msgctxt "field:ins_claim.indemnification_detail,end_date:"
 msgid "End Date"
@@ -425,6 +445,10 @@ msgstr "En Attente Client"
 msgctxt "selection:ins_claim.claim,status:"
 msgid "litigation"
 msgstr "En Litige"
+
+msgctxt "selection:ins_claim.indemnification,kind:"
+msgid "Annuity"
+msgstr "Rente"
 
 msgctxt "selection:ins_claim.indemnification,kind:"
 msgid "Capital"

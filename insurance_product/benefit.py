@@ -26,6 +26,11 @@ INDEMNIFICATION_DETAIL_KIND = [
     ('benefit', 'Indemnified'),
     ('limit', 'Limit'),
 ]
+CURRENCY_SETTING = [
+    ('specific', 'Specific'),
+    ('coverage', 'Coverage'),
+    ('')
+]
 
 
 class EventDesc(model.CoopSQL, model.CoopView):
@@ -122,6 +127,7 @@ class Benefit(model.CoopSQL, Offered):
         'ins_product.benefit-complementary_data_def',
         'benefit', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'benefit')])
+    use_local_currency = fields.Boolean('Use Local Currency')
 
     @classmethod
     def delete(cls, entities):
