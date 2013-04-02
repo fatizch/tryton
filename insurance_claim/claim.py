@@ -451,12 +451,12 @@ class Indemnification(model.CoopView, model.CoopSQL):
         if currency:
             return currency.id
 
-    def get_currency_digits(self):
+    def get_currency_digits(self, name):
         currency = self.get_currency()
         if currency:
             return currency.digits
 
-    def on_change_with_local_currency_digits(self):
+    def on_change_with_local_currency_digits(self, name=None):
         if self.local_currency:
             return self.local_currency.digits
 
