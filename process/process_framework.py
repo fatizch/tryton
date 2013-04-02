@@ -1,16 +1,10 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
-from trytond.model.model import ModelMeta
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
 from trytond.model import fields
 
 from trytond.modules.coop_utils import utils
-
-try:
-    import simplejson as json
-except ImportError:
-    import json
 
 
 __all__ = [
@@ -80,7 +74,7 @@ class DynamicButtonDict(dict):
         return super(AllowRPCDict, self).__contains__(name)
 
 
-class ClassAttr(ModelMeta):
+class ClassAttr(PoolMeta):
     '''
         The purpose of this class is to allow us to override the __getattr__
         of the class it instanciate in order to be able to direct all the calls
