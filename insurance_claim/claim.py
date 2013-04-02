@@ -370,8 +370,9 @@ class Indemnification(model.CoopView, model.CoopSQL):
         states={'invisible': Eval('kind') != 'period'})
     status = fields.Selection(INDEMNIFICATION_STATUS, 'Status', sort=False)
     amount = fields.Numeric('Amount',
-        digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
-        depends=['currency_digits'])
+        #digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
+        #depends=['currency_digits']
+        )
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency'),
         'get_currency_id')
