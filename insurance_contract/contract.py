@@ -1051,6 +1051,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
         if not res:
             return self.covered_element.get_complementary_data_value(
                 at_date, value)
+        return res
 
     def get_complementary_data_def(self):
         return self.option.offered.get_complementary_data_def(
