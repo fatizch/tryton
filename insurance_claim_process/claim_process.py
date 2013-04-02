@@ -1,9 +1,10 @@
 import copy
 
 from trytond.pool import Pool, PoolMeta
-from trytond.modules.coop_utils import utils, fields
+from trytond.pyson import Eval, And, Or
 
 from trytond.modules.process import ClassAttr
+from trytond.modules.coop_utils import utils, fields
 from trytond.modules.coop_process import CoopProcessFramework
 from trytond.modules.coop_process import ProcessFinder, ProcessParameters
 
@@ -14,6 +15,7 @@ __all__ = [
     'ProcessDesc',
     'DeclarationProcessParameters',
     'DeclarationProcessFinder',
+    'DeliveredServiceProcess',
 ]
 
 
@@ -71,10 +73,15 @@ class ClaimProcess(CoopProcessFramework):
         return True
 
     def calculate_indemnification(self):
+        to_delete = []
         for loss in self.losses:
             for delivered_service in loss.delivered_services:
-                delivered_service.calculate()
-                delivered_service.save()
+                if delivered_service.status == 'calculating':
+                    delivered_service.calculate()
+                    delivered_service.save()
+                elif delivered_service.status == 'applicable':
+                    to_delete.append(delivered_service)
+        Pool().get('ins_contract.delivered_service').delete(to_delete)
         return True
 
     def init_declaration_document_request(self):
@@ -205,6 +212,48 @@ class LossProcess():
         for x in self.get_possible_benefits().values():
             res += [benefit.id for benefit in x]
         return list(set(res))
+
+
+class DeliveredServiceProcess():
+    'Claim Delivered Service'
+
+    __name__ = 'ins_contract.delivered_service'
+    __metaclass__ = PoolMeta
+
+    needs_to_be_calculated = fields.Function(
+        fields.Boolean('To Be Calculated',
+            on_change=['needs_to_be_calculated', 'status'],
+            states={'invisible': And(
+                        Eval('status') != 'applicable',
+                        Eval('status') != 'calculating'
+            )}),
+        'get_needs_to_be_calculated', 'set_void')
+
+    @classmethod
+    def __setup__(cls):
+        super(DeliveredServiceProcess, cls).__setup__()
+        utils.update_states(cls, 'status', {'invisible': Or(
+                Eval('status') == 'applicable',
+                Eval('status') == 'calculating'
+        )})
+
+    def get_needs_to_be_calculated(self, name):
+        if self.status == 'applicable':
+            return False
+        elif self.status == 'calculating':
+            return True
+
+    def on_change_needs_to_be_calculated(self):
+        res = {}
+        if self.needs_to_be_calculated and self.status == 'applicable':
+            res['status'] = 'calculating'
+        elif not self.needs_to_be_calculated and self.status == 'calculating':
+            res['status'] = 'applicable'
+        return res
+
+    @classmethod
+    def set_void(cls, instances, names, vals):
+        pass
 
 
 class ProcessDesc():

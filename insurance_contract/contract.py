@@ -24,8 +24,10 @@ OPTIONSTATUS = CONTRACTSTATUSES + [
 ]
 
 DELIVERED_SERVICES_STATUSES = [
+    ('applicable', 'Applicable'),
     ('calculating', 'Calculating'),
     ('not_eligible', 'Not Eligible'),
+    ('calculated', 'Calculated'),
     ('delivered', 'Delivered'),
 ]
 
@@ -1159,7 +1161,12 @@ class DeliveredService(model.CoopView, model.CoopSQL):
     subscribed_service = fields.Many2One(
         'ins_contract.option', 'Coverage', ondelete='RESTRICT')
     expenses = fields.One2Many(
-        'ins_contract.expense', 'delivered_service', 'Expenses')
+        'ins_contract.expense', 'delivered_service', 'Expenses',
+        states={'invisible': Eval('status') == 'applicable'})
+    contract = fields.Function(
+        fields.Many2One('ins_contract.contract', 'Contract',
+            on_change_with=['subscribed_service']),
+        'on_change_with_contract')
 
     def get_rec_name(self, name=None):
         if self.subscribed_service:
@@ -1181,7 +1188,16 @@ class DeliveredService(model.CoopView, model.CoopSQL):
 
     @staticmethod
     def default_status():
-        return 'calculating'
+        return 'applicable'
+
+    def get_contract(self):
+        if self.subscribed_service:
+            return self.subscribed_service.get_contract()
+
+    def on_change_with_contract(self, name=None):
+        contract = self.get_contract()
+        if contract:
+            return contract.id
 
 
 class Expense(model.CoopSQL, model.CoopView):

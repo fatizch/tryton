@@ -638,7 +638,7 @@ def create_invalidity_coverage(cfg_dict):
 
     CSP = get_or_create_complementary_data(cfg_dict, name='CSP')
     salary = get_or_create_complementary_data(cfg_dict, name='salary',
-        string='Annual Salary', type_='char', kind='sub_elem')
+        string='Annual Salary', type_='numeric', kind='sub_elem')
     cov.complementary_data_def.append(CSP)
     cov.complementary_data_def.append(salary)
 
@@ -646,11 +646,11 @@ def create_invalidity_coverage(cfg_dict):
     elig_rule.min_age = 18
     elig_rule.max_age = 65
 
-    algo = '''salaire = donnee_compl_element_couvert('salaire') or '0'
+    algo = '''salaire = donnee_compl_element_couvert('salaire')
 if donnee_dynamique_element_couvert('CSP') == 'CSP1':
-    return Decimal(salaire) * 0.0002
+    return salaire * 0.0002
 else:
-    return Decimal(salaire) * 0.0001
+    return salaire * 0.0001
 '''
     rule_engine = get_or_create_rule(cfg_dict, u'Tarif CSP', algo,
         'Default Context')

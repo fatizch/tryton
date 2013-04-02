@@ -7,6 +7,7 @@ def register():
         ClaimProcess,
         LossProcess,
         ProcessDesc,
+        DeliveredServiceProcess,
         DeclarationProcessParameters,
         module='insurance_claim_process', type_='model')
 

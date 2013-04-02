@@ -244,7 +244,8 @@ class ClaimDeliveredService():
         'ins_claim.indemnification', 'delivered_service', 'Indemnifications')
     complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Complementary Data',
-        on_change_with=['benefit', 'complementary_data'])
+        on_change_with=['benefit', 'complementary_data'],
+        states={'invisible': Eval('status') == 'applicable'})
 
     @classmethod
     def __setup__(cls):
@@ -319,6 +320,7 @@ class ClaimDeliveredService():
             cur_res, cur_errs = self.create_indemnification(cur_dict)
             res = res and cur_res
             errs += cur_errs
+        self.status = 'calculated'
         return res, errs
 
     def get_rec_name(self, name=None):
