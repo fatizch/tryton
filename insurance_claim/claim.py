@@ -455,10 +455,12 @@ class Indemnification(model.CoopView, model.CoopSQL):
         currency = self.get_currency()
         if currency:
             return currency.digits
+        return DEF_CUR_DIG
 
     def on_change_with_local_currency_digits(self, name=None):
         if self.local_currency:
             return self.local_currency.digits
+        return DEF_CUR_DIG
 
     def get_rec_name(self, name):
         return '%s %.2f [%s]' % (
