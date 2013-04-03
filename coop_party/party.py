@@ -265,8 +265,8 @@ class Actor(CoopView):
 
     def get_rec_name(self, name):
         if self.party:
-            return self.party.get_rec_name(name)
-        super(Actor, self).get_rec_name(name)
+            return self.party.rec_name
+        return super(Actor, self).get_rec_name(name)
 
 
 class GenericActorKind(TableOfTable):
