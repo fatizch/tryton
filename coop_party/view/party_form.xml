@@ -56,7 +56,6 @@
             <field name="children" colspan="4"
                 view_ids="coop_party.company_view_tree_hierarchical,coop_party.company_view_form"
                     mode="tree,form"/>
-            <field name="employees" colspan="4"/>
             <label name="logo" xalign="0"/>
             <field name="logo" colspan="3"/>
         </page>
@@ -68,15 +67,7 @@
         </page>
         <page string="Roles" id="role">
             <group id="role_group" colspan="4">
-                <label name="is_employee"/>
-                <field name="is_employee" xexpand="0" width="25"/>
             </group>
-            <group id="employee" colspan="4" yexpand="1" yfill="1"
-                states="{'invisible': Bool(~Eval('is_employee'))}">
-                <field name="employee_role" mode="form"
-                    view_ids="coop_party.employee_view_form2"/>
-            </group>
-            <field name="generic_roles" colspan="4"/>
         </page>
     </xpath>
     <xpath expr="/form/notebook/page/field[@name='categories']" position="replace"/>

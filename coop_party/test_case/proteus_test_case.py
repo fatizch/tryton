@@ -10,8 +10,6 @@ import proteus_tools
 
 
 def update_models(cfg_dict):
-    cfg_dict['Person'] = Model.get('party.person')
-    cfg_dict['Company'] = Model.get('party.society')
     cfg_dict['Party'] = Model.get('party.party')
     cfg_dict['RelationKind'] = Model.get('party.party_relation_kind')
     cfg_dict['Relation'] = Model.get('party.party-relation')
@@ -250,34 +248,7 @@ def create_hierarchy(cfg_dict):
     create_company(cfg_dict, 'Mother House', 'MH', None, 1, 4)
 
 
-def migrate_parties(cfg_dict):
-    persons = proteus_tools.get_objects_from_db(cfg_dict, 'Person', limit=None)
-    for person in persons:
-        party = person.party
-        party.is_person = True
-        if person.gender == 'M' or person.gender == 'male':
-            party.gender = 'male'
-        elif person.gender == 'F' or person.gender == 'female':
-            party.gender = 'female'
-        party.first_name = person.first_name
-        party.maiden_name = person.maiden_name
-        party.ssn = person.ssn
-        party.birth_date = person.birth_date
-        party.save()
-    for company in proteus_tools.get_objects_from_db(
-            cfg_dict, 'Company', limit=None):
-        party = company.party
-        party.is_company = True
-        party.save()
-    for company in proteus_tools.get_objects_from_db(cfg_dict, 'Party',
-            limit=None, domain=[('is_society', '=', True)]):
-        company.is_company = True
-        company.is_society = False
-        company.save()
-
-
 def launch_test_case(cfg_dict):
     update_models(cfg_dict)
-    migrate_parties(cfg_dict)
     create_parties(cfg_dict)
     create_hierarchy(cfg_dict)

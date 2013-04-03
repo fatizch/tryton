@@ -246,9 +246,9 @@ class LifeCoveredDesc(CoveredDesc):
 
     data_coverage_amount = fields.Selection(
         'get_allowed_amounts', 'Coverage Amount',
-        selection_change_with=['data_for_coverage', 'start_date'],
+        selection_change_with=['data_for_coverage', 'data_start_date'],
         # context={'data_for_coverage': Eval('data_for_coverage')},
-        depends=['data_for_coverage', 'start_date'], sort=False,
+        depends=['data_for_coverage', 'data_start_date'], sort=False,
         states={
             'readonly': Eval('the_kind') != 'data'})
     elem_person = fields.Many2One(
@@ -283,7 +283,7 @@ class LifeCoveredDesc(CoveredDesc):
         vals = the_coverage.get_result(
             'allowed_amounts',
             {
-                'date': self.start_date,
+                'date': self.data_start_date,
                 #'contract': utils.WithAbstract.get_abstract_objects(
                 #    wizard, 'for_contract')
             },)[0]

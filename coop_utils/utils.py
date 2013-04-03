@@ -735,8 +735,7 @@ def create_inst_with_default_val(from_class, field_name, action=None):
     res = {}
     model_name = get_relation_model_name(from_class, field_name)
     CurModel = Pool().get(model_name)
-    fields_names = list(x for x in set(
-        CurModel._fields.keys() + CurModel._inherit_fields.keys())
+    fields_names = list(x for x in set(CurModel._fields.keys())
         if x not in [
             'id', 'create_uid', 'create_date', 'write_uid', 'write_date'])
     field = getattr(from_class, field_name)

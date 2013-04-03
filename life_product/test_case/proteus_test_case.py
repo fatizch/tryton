@@ -738,7 +738,7 @@ return result
     cov.benefits.append(annuity_benefit)
 
     annuity__edu_benefit = get_or_create_benefit(cfg_dict, 'RENT_EDU',
-        'Rente éducation', kind='annuity', cal_unit='quarter')
+        'Rente éducation', kind='annuity', calc_unit='quarter')
     benefit_rule = add_rule(cfg_dict, annuity__edu_benefit, 'benefit')
     benefit_rule.coef_coverage_amount = Decimal(1 / (10 * 12 * 4))
     cov.benefits.append(annuity__edu_benefit)

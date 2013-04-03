@@ -91,28 +91,6 @@
             <field name="name">company_tree_hierarchical</field>
         </record>
         <!-- *******************************************
-            ************** Employee *************
-            ******************************************* -->
-        <record model="ir.ui.view" id="employee_view_form">
-            <field name="model">party.employee</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="party.party_view_form"/>
-            <field name="priority">10</field>
-            <field name="name">employee_form</field>
-        </record>
-        <record model="ir.ui.view" id="employee_view_form2">
-            <field name="model">party.employee</field>
-            <field name="type">form</field>
-            <field name="priority">20</field>
-            <field name="name">employee_form_2</field>
-        </record>
-        <record model="ir.ui.view" id="employee_view_tree">
-            <field name="model">party.employee</field>
-            <field name="type">tree</field>
-            <field name="name">employee_tree</field>
-        </record>
-
-        <!-- *******************************************
             ******** Generic Actor Kind **********
             ******************************************* -->
         <!-- generic_actor_kind -->

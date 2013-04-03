@@ -4,7 +4,6 @@
         <page string="Company" col="2" id="company">
             <label name="parent"/>
             <field name="parent"/>
-            <field name="employees" colspan="2"/>
         </page>
     </xpath>
 </data>

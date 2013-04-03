@@ -10,23 +10,27 @@ from proteus import Model
 def get_models():
     res = {}
     res['Insurer'] = Model.get('party.insurer')
-    res['Society'] = Model.get('party.party')
+    res['Company'] = Model.get('party.party')
     return res
 
 
 def get_or_create_insurer(models, cfg_dict, code, name):
-    insurers = models['Insurer'].find([('name', '=', name)])
+    insurers = models['Company'].find(
+        [
+            ('name', '=', name),
+            ('insurer_role', '>', 0),
+        ])
     if insurers:
         return insurers[0]
     insurer = models['Insurer']()
-    company = models['Society']()
+    company = models['Company']()
     company.is_company = True
     company.insurer_role.append(insurer)
-    insurer.name = name
-    insurer.code = code
-    insurer.addresses[:] = []
+    company.name = name
+    company.code = code
+    company.addresses[:] = []
     company.currency = cfg_dict['currency']
-    insurer.save()
+    company.save()
     return insurer
 
 

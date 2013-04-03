@@ -8,11 +8,12 @@ from trytond.pool import Pool
 from trytond.modules.coop_utils import CoopView, CoopSQL, utils, fields
 from trytond.modules.coop_utils import coop_string
 
-BANK_ACCOUNT_KIND = [('IBAN', 'IBAN'),
-                     ('RIB', 'RIB'),
-                     ('OT', 'Other'),
-                     ('CC', 'Credit Card'),
-                    ]
+BANK_ACCOUNT_KIND = [
+    ('IBAN', 'IBAN'),
+    ('RIB', 'RIB'),
+    ('OT', 'Other'),
+    ('CC', 'Credit Card'),
+]
 
 RIB_LENGTH = 23
 
@@ -94,12 +95,8 @@ class BankAccountNumber(CoopSQL, CoopView):
     @classmethod
     def __setup__(cls):
         super(BankAccountNumber, cls).__setup__()
-        cls._constraints += [
-            ('check_number', 'invalid_number'),
-            ]
-        cls._error_messages.update({
-                'invalid_number': 'Invalid number!',
-                })
+        cls._constraints += [('check_number', 'invalid_number'), ]
+        cls._error_messages.update({'invalid_number': 'Invalid number!'})
 
     def check_number(self):
         if not hasattr(self, 'kind'):

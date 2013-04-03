@@ -15,8 +15,7 @@ from trytond.transaction import Transaction
 
 
 MODULE_NAME = os.path.basename(
-                  os.path.abspath(
-                      os.path.join(os.path.normpath(__file__), '..', '..')))
+    os.path.abspath(os.path.join(os.path.normpath(__file__), '..', '..')))
 
 
 class ModuleTestCase(unittest.TestCase):
@@ -50,9 +49,10 @@ class ModuleTestCase(unittest.TestCase):
         '''
         with Transaction().start(DB_NAME, USER,
                 context=CONTEXT) as transaction:
-            bank1, = self.Bank.create([{
+            party1, = self.Party.create([{
                     'name': 'Bank 1', 'addresses': []
-                }])
+            }])
+            bank1, = self.Bank.create([{'party': party1.id}])
             self.assert_(bank1.id)
             transaction.cursor.commit()
 
@@ -76,7 +76,7 @@ class ModuleTestCase(unittest.TestCase):
                     'name': 'Euro',
                     'code': 'EUR',
                     'symbol': u'€',
-                    }])
+            }])
 
             bank_account = self.BankAccount()
             bank_account.party = party1.id
@@ -104,7 +104,7 @@ class ModuleTestCase(unittest.TestCase):
                 ('FR47104230099100031044T8477', True),
                 ('104230099100031044T8477', False),
                 ('099100031044T8477', False),
-            )
+        )
         for value, test in values:
             self.assert_(ibanlib.iban.valid(value) == test)
 
@@ -128,7 +128,7 @@ class ModuleTestCase(unittest.TestCase):
                 ('4012888888881881', True),
                 ('4012868888881881', False),
                 ('4222222222222', True),
-            )
+        )
         for value, test in values:
             self.assert_(
                 self.BankAccountNumber.check_credit_card(value) == test)
@@ -147,7 +147,7 @@ class ModuleTestCase(unittest.TestCase):
                 ('1179003250008688281087', False),
                 ('104230099100031044T8477', True),
                 ('104230099100031044T8478', False),
-            )
+        )
         for value, test in values:
             res = self.BankAccountNumber.check_rib(value)
             self.assert_(res == test, 'Error for %s, expected : %s, found : %s'

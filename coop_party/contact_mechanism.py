@@ -69,7 +69,7 @@ class ContactHistory(model.CoopSQL, model.CoopView):
         domain=[
             ('party', '=', Eval('party')),
             ('type', '=', Eval('media')),
-        ], depends=['party', 'type', 'media'],
+        ], depends=['party', 'media'],
         states={'invisible': Eval('media') == 'mail'},
         ondelete='RESTRICT')
     address = fields.Many2One('party.address', 'Address',

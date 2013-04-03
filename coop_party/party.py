@@ -10,10 +10,7 @@ from trytond.modules.coop_utils import coop_string
 
 __all__ = [
     'Party',
-    'Company',
-    'Employee',
     'Actor',
-    'Person',
     'GenericActorKind',
     'GenericActor',
 ]
@@ -41,9 +38,6 @@ class Party:
 
     is_person = fields.Boolean('Person')
     is_company = fields.Boolean('Company')
-    #ToBeDeleted
-    is_society = fields.Boolean('Company')
-    #/ToBeDeleted
 
     generic_roles = fields.One2Many('party.generic_actor', 'party',
         'Generic Actor')
@@ -78,8 +72,6 @@ class Party:
             'required': STATES_PERSON,
         })
     ssn = fields.Char('SSN', states={'invisible': ~STATES_PERSON})
-    employee_role = fields.One2Many('party.employee', 'party', 'Employee',
-        size=1, states={'invisible': ~STATES_PERSON})
     ####################################
     #Company information
     short_name = fields.Char(
@@ -90,9 +82,6 @@ class Party:
         states={'invisible': ~STATES_COMPANY})
     children = fields.One2Many('party.party', 'parent', 'Children',
         states={'invisible': ~STATES_COMPANY})
-    employees = fields.One2Many('party.employee', 'company', 'Employees',
-        states={'invisible': ~STATES_COMPANY},
-        domain=[('is_person', '=', True)])
     logo = fields.Binary('Logo', states={'invisible': ~STATES_COMPANY})
     ####################################
 
@@ -179,6 +168,8 @@ class Party:
         if self.is_person:
             res = "%s %s %s" % (coop_string.translate_value(
                 self, 'gender'), self.name.upper(), self.first_name)
+            if self.ssn:
+                res += ' (%s)' % self.ssn
         if self.is_company:
             res = super(Party, self).get_rec_name(name)
         if res:
@@ -266,7 +257,6 @@ class Party:
 
 class Actor(CoopView):
     'Actor'
-    _inherits = {'party.party': 'party'}
     __name__ = 'party.actor'
 
     reference = fields.Char('Reference')
@@ -304,35 +294,3 @@ class GenericActor(CoopSQL, Actor):
             res[party.id] = coop_string.get_field_as_summary(
                 party, 'kind', True, at_date, lang=lang)
         return res
-
-
-class Company(CoopSQL, Actor):
-    'Company'
-
-    __name__ = 'party.society'
-
-    parent = fields.Many2One('party.society', 'Parent')
-    childs = fields.One2Many('party.society', 'parent', 'Children')
-
-
-class Employee(CoopSQL, Actor):
-    'Employee'
-
-    __name__ = 'party.employee'
-
-    company = fields.Many2One('party.party', 'Company', required=True)
-
-
-class Person(CoopSQL, Actor):
-    'Person'
-
-    __name__ = 'party.person'
-
-    gender = fields.Selection(
-        GENDER, 'Gender', required=True, on_change=['gender'])
-    first_name = fields.Char('First Name', required=True)
-    maiden_name = fields.Char(
-        'Maiden Name', states={'readonly': Eval('gender') != 'female'},
-        depends=['gender'])
-    birth_date = fields.Date('Birth Date', required=True)
-    ssn = fields.Char('SSN')
