@@ -120,6 +120,8 @@ def launch_proteus_test_case(test_config_file=None, module=None):
         else:
             print 'Module %s already installed' % module
 
+    if cfg_dict['only_install'] is True:
+        return
     update_modules(cfg_dict, modules)
 
 
