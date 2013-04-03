@@ -6,7 +6,7 @@ from trytond.pyson import Eval, Or, Bool
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
-from trytond.modules.coop_utils import utils, fields, model
+from trytond.modules.coop_utils import utils, fields, model, abstract
 from trytond.modules.insurance_contract import CoveredDesc
 from trytond.modules.insurance_process import DependantState
 from trytond.modules.insurance_process import CoopStateView
@@ -284,7 +284,7 @@ class LifeCoveredDesc(CoveredDesc):
             'allowed_amounts',
             {
                 'date': self.data_start_date,
-                #'contract': utils.WithAbstract.get_abstract_objects(
+                #'contract': abstract.WithAbstract.get_abstract_objects(
                 #    wizard, 'for_contract')
             },)[0]
         if vals:
@@ -338,7 +338,7 @@ class ExtensionLifeState(DependantState):
 
     @staticmethod
     def before_step_subscriber_as_covered(wizard):
-        contract = utils.WithAbstract.get_abstract_objects(
+        contract = abstract.WithAbstract.get_abstract_objects(
             wizard, 'for_contract')
         if hasattr(wizard.extension_life, 'covered_elements') and \
                 wizard.extension_life.covered_elements:
@@ -407,7 +407,7 @@ class ExtensionLifeState(DependantState):
     @staticmethod
     @utils.priority(0)
     def post_step_update_contract(wizard):
-        contract = utils.WithAbstract.get_abstract_objects(
+        contract = abstract.WithAbstract.get_abstract_objects(
             wizard, 'for_contract')
         CoveredPerson = Pool().get('ins_contract.covered_element')
         CoveredData = Pool().get('ins_contract.covered_data')
@@ -446,7 +446,7 @@ class ExtensionLifeState(DependantState):
         else:
             return res
         if res[0] and res1[0]:
-            utils.WithAbstract.save_abstract_objects(
+            abstract.WithAbstract.save_abstract_objects(
                 wizard, ('for_contract', contract))
             return res[0] * res1[0], res[1] + res1[1]
         else:

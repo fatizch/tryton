@@ -17,7 +17,7 @@ from trytond.modules.insurance_process import CoopProcess, ProcessState
 from trytond.modules.insurance_process import CoopStep, CoopStateView
 
 from trytond.modules.coop_utils import model
-from trytond.modules.coop_utils import utils, fields
+from trytond.modules.coop_utils import utils, fields, abstract
 
 MODULE_NAME = os.path.basename(
                   os.path.abspath(
@@ -72,14 +72,14 @@ class DummyStep(CoopStep):
 
     @staticmethod
     def check_step_abstract_obj(wizard):
-        if 'for_contract' in utils.WithAbstract.abstract_objs(wizard):
-            contract = utils.WithAbstract.get_abstract_objects(wizard,
+        if 'for_contract' in abstract.WithAbstract.abstract_objs(wizard):
+            contract = abstract.WithAbstract.get_abstract_objects(wizard,
                                                         'for_contract')
             if hasattr(contract, 'contract_number'):
                 contract.contract_number = 'Toto'
             else:
                 contract.contract_number = 'Test'
-            utils.WithAbstract.save_abstract_objects(wizard,
+            abstract.WithAbstract.save_abstract_objects(wizard,
                                               ('for_contract', contract))
             return (True, [])
         else:
@@ -106,12 +106,12 @@ class DummyStep1(CoopStep):
 
     @staticmethod
     def check_step_abstract(wizard):
-        for_contract, for_contract1 = utils.WithAbstract.get_abstract_objects(
+        for_contract, for_contract1 = abstract.WithAbstract.get_abstract_objects(
                                                         wizard,
                                                         ['for_contract',
                                                          'for_contract1'])
         for_contract1.contract_number = for_contract.contract_number
-        utils.WithAbstract.save_abstract_objects(wizard, ('for_contract1',
+        abstract.WithAbstract.save_abstract_objects(wizard, ('for_contract1',
                                                   for_contract1))
         return (False, [wizard.process_state.for_contract_str,
                         wizard.process_state.for_contract1_str])
@@ -121,7 +121,7 @@ class DummyStep1(CoopStep):
         return 'Dummy Step 1'
 
 
-class DummyProcessState(ProcessState, utils.WithAbstract):
+class DummyProcessState(ProcessState, abstract.WithAbstract):
     '''
         A DummyProcessState with abstract objects, for tests...
     '''

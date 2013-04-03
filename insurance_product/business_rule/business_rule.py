@@ -11,7 +11,7 @@ from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, utils, fields
 from trytond.modules.insurance_product.product import CONFIG_KIND
-from trytond.modules.insurance_product.product import Templated
+from trytond.modules.insurance_product.product import Templated, GetResult
 
 STATE_ADVANCED = Eval('config_kind') != 'advanced'
 STATE_SIMPLE = Eval('config_kind') != 'simple'
@@ -116,7 +116,7 @@ class RuleEngine():
         return result
 
 
-class BusinessRuleRoot(model.CoopView, utils.GetResult, Templated):
+class BusinessRuleRoot(model.CoopView, GetResult, Templated):
     'Business Rule Root'
 
     __name__ = 'ins_product.business_rule_root'

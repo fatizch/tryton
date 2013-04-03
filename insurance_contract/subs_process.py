@@ -11,7 +11,7 @@ from trytond.modules.insurance_process import CoopStep
 from trytond.modules.insurance_process import CoopStateView
 from trytond.modules.insurance_process import CoopStepView
 
-from trytond.modules.coop_utils import utils, fields
+from trytond.modules.coop_utils import utils, fields, abstract
 from trytond.modules.coop_party.party import ACTOR_KIND
 
 from contract import OPTIONSTATUS
@@ -133,7 +133,7 @@ class ProjectState(CoopStep):
     @staticmethod
     def post_step_update_abstract(wizard):
         BrokerManager = Pool().get('ins_contract.management_role')
-        contract = utils.WithAbstract.get_abstract_objects(
+        contract = abstract.WithAbstract.get_abstract_objects(
             wizard, 'for_contract')
         contract.offered = wizard.project.product
         contract.start_date = wizard.project.start_date
@@ -142,7 +142,7 @@ class ProjectState(CoopStep):
             broker_manager = BrokerManager()
             broker_manager.party = wizard.project.broker
             contract.management = [broker_manager]
-        utils.WithAbstract.save_abstract_objects(
+        abstract.WithAbstract.save_abstract_objects(
             wizard, ('for_contract', contract))
         return (True, [])
 
@@ -333,7 +333,7 @@ class OptionSelectionState(CoopStep):
 
     @staticmethod
     def post_step_create_options(wizard):
-        contract = utils.WithAbstract.get_abstract_objects(
+        contract = abstract.WithAbstract.get_abstract_objects(
             wizard, 'for_contract')
         list_options = []
         Option = Pool().get(contract.give_option_model())
@@ -349,7 +349,7 @@ class OptionSelectionState(CoopStep):
         if hasattr(wizard.option_selection, 'complementary_data') and \
                 wizard.option_selection.complementary_data:
             contract.complementary_data.update(wizard.option_selection.complementary_data)
-        utils.WithAbstract.save_abstract_objects(
+        abstract.WithAbstract.save_abstract_objects(
             wizard, ('for_contract', contract))
         return (True, [])
 
@@ -445,7 +445,7 @@ class CoveredDesc(CoopStepView):
             return []
         if not from_wizard:
             from_wizard = CoveredDesc.get_context()
-        contract = utils.WithAbstract.get_abstract_objects(
+        contract = abstract.WithAbstract.get_abstract_objects(
             from_wizard, 'for_contract')
         covered_datas = []
         for option in contract.options:
@@ -463,7 +463,7 @@ class CoveredDesc(CoopStepView):
                             'path': 'all'}})[0])
             covered_data.data_status = True
             covered_datas.append(covered_data)
-        return utils.WithAbstract.serialize_field(covered_datas)
+        return abstract.WithAbstract.serialize_field(covered_datas)
 
     @staticmethod
     def get_coverages_model():
@@ -551,7 +551,7 @@ class SummaryState(CoopStep):
     @staticmethod
     def before_step_calculate_lines(wizard):
         PricingLine = Pool().get('ins_contract.subs_process.lines')
-        contract = utils.WithAbstract.get_abstract_objects(
+        contract = abstract.WithAbstract.get_abstract_objects(
             wizard, 'for_contract')
         prices, errs = contract.calculate_prices_at_all_dates()
         if errs:
@@ -576,7 +576,7 @@ class SummaryState(CoopStep):
         return 'Summary'
 
 
-class SubscriptionProcessState(ProcessState, utils.WithAbstract):
+class SubscriptionProcessState(ProcessState, abstract.WithAbstract):
     '''
         The process state for the subscription process must have an abstract
         contract.
@@ -610,7 +610,7 @@ class SubscriptionProcess(CoopProcess):
 
     # And do something when validation occurs
     def do_complete(self):
-        contract = utils.WithAbstract.get_abstract_objects(
+        contract = abstract.WithAbstract.get_abstract_objects(
             self, 'for_contract')
         Contract = Pool().get(contract.__name__)
         contract.finalize_contract()

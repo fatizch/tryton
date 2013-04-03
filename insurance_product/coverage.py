@@ -5,7 +5,7 @@ from trytond.pool import Pool
 from trytond.pyson import Eval, Bool
 
 from trytond.modules.coop_utils import model, business, utils, fields
-from trytond.modules.insurance_product import Offered
+from trytond.modules.insurance_product import Offered, product
 from trytond.modules.insurance_product import PricingResultLine
 from trytond.modules.insurance_product import EligibilityResultLine
 
@@ -22,6 +22,8 @@ SUBSCRIPTION_BEHAVIOUR = [
     ('proposed', 'Proposed'),
     ('optional', 'Optional'),
 ]
+
+COULD_NOT_FIND_A_MATCHING_RULE = 'Could not find a matching rule'
 
 
 class SimpleCoverage(Offered):
@@ -103,7 +105,7 @@ class SimpleCoverage(Offered):
             # the request.
             try:
                 _res, _errs = self.get_result('price', args, kind='pricing')
-            except utils.NonExistingRuleKindException:
+            except product.NonExistingRuleKindException:
                 _res = None
                 _errs = []
             if _res and _res.value:
@@ -144,7 +146,7 @@ class SimpleCoverage(Offered):
                         'sub_elem_price',
                         tmp_args,
                         kind='pricing')
-                except utils.NonExistingRuleKindException:
+                except product.NonExistingRuleKindException:
                     _res = None
                     _errs = []
                 if _res and _res.value:
@@ -161,8 +163,8 @@ class SimpleCoverage(Offered):
                     res += _res
                     errs += _errs
             errs = list(set(errs))
-            if utils.COULD_NOT_FIND_A_MATCHING_RULE in errs:
-                errs.remove(utils.COULD_NOT_FIND_A_MATCHING_RULE)
+            if COULD_NOT_FIND_A_MATCHING_RULE in errs:
+                errs.remove(COULD_NOT_FIND_A_MATCHING_RULE)
             return (res, list(set(errs)))
         return (None, [])
 
@@ -182,7 +184,7 @@ class SimpleCoverage(Offered):
     def give_me_eligibility(self, args):
         try:
             res = self.get_result('eligibility', args, kind='eligibility')
-        except utils.NonExistingRuleKindException:
+        except product.NonExistingRuleKindException:
             return (EligibilityResultLine(True), [])
         return res
 
@@ -227,7 +229,7 @@ class SimpleCoverage(Offered):
                 'allowed_amounts',
                 args,
                 kind='coverage_amount')
-        except utils.NonExistingRuleKindException:
+        except product.NonExistingRuleKindException:
             return [], []
 
     def give_me_documents(self, args):
@@ -237,7 +239,7 @@ class SimpleCoverage(Offered):
                     'documents', args, kind='sub_document')
             else:
                 res, errs = self.get_result('documents', args, kind='document')
-        except utils.NonExistingRuleKindException:
+        except product.NonExistingRuleKindException:
             return [], []
 
         return res, errs
@@ -255,7 +257,7 @@ class SimpleCoverage(Offered):
                 'coverage_amount_validity',
                 args,
                 kind='coverage_amount')
-        except utils.NonExistingRuleKindException:
+        except product.NonExistingRuleKindException:
             return (True, []), []
 
     def give_me_complementary_data_ids_aggregate(self, args):

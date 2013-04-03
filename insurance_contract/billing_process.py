@@ -1,6 +1,6 @@
 #from trytond.modules.coop_utils import WithAbstract
-from trytond.modules.coop_utils import WithAbstract, get_descendents
-from trytond.modules.coop_utils import convert_ref_to_obj, fields
+from trytond.modules.coop_utils import utils, abstract
+from trytond.modules.coop_utils import fields
 
 from trytond.modules.insurance_process import CoopProcess
 from trytond.modules.insurance_process import ProcessState, CoopStepView
@@ -16,7 +16,7 @@ __all__ = [
     'BillParameters',
     'BillLineForDisplay',
     'BillDisplay',
-    ]
+]
 
 
 class BillParameters(CoopStep):
@@ -35,7 +35,7 @@ class BillParameters(CoopStep):
     @staticmethod
     def before_step_init(wizard):
         if Transaction().context['active_model'] \
-                                in get_descendents(Contract, True):
+                in utils.get_descendents(Contract, True):
             wizard.process_state.for_contract = '%s,%s' % (
                 Transaction().context['active_model'],
                 Transaction().context['active_id'])
@@ -64,7 +64,8 @@ class BillParameters(CoopStep):
         start_date = wizard.bill_parameters.start_date
         end_date = wizard.bill_parameters.end_date
         the_bill = billing_manager.bill(start_date, end_date)
-        WithAbstract.save_abstract_objects(wizard, ('the_bill', the_bill))
+        abstract.WithAbstract.save_abstract_objects(wizard, ('the_bill',
+            the_bill))
         return (True, [])
 
     @staticmethod
@@ -130,13 +131,13 @@ class BillDisplay(CoopStep):
         None,
         'Bill Lines',
         readonly=True
-        )
+    )
 
     @staticmethod
     def before_step_init(wizard):
         BillLineViewer = Pool().get(
             'ins_contract.billing_process.bill_line_view')
-        bill = WithAbstract.get_abstract_objects(wizard, 'the_bill')
+        bill = abstract.WithAbstract.get_abstract_objects(wizard, 'the_bill')
         wizard.bill_display.bill_amount_ht = bill.amount_ht
         wizard.bill_display.bill_amount_ttc = bill.amount_ttc
         wizard.bill_display.bill_start_date = bill.start_date
@@ -153,7 +154,7 @@ class BillDisplay(CoopStep):
         return 'Bill Display'
 
 
-class BillingProcessState(ProcessState, WithAbstract):
+class BillingProcessState(ProcessState, abstract.WithAbstract):
     'Billing Process State'
 
     __abstracts__ = [('the_bill', 'ins_contract.billing.bill')]
@@ -165,11 +166,11 @@ class BillingProcessState(ProcessState, WithAbstract):
 
     @staticmethod
     def get_contract_models():
-        return get_descendents(Contract)
+        return utils.get_descendents(Contract)
 
     def get_contract(self):
         if self.for_contract:
-            return convert_ref_to_obj(self.for_contract)
+            return utils.convert_ref_to_obj(self.for_contract)
         return None
 
 
@@ -180,7 +181,7 @@ class BillingProcess(CoopProcess):
 
     config_data = {
         'process_state_model': 'ins_contract.billing_process.process_state'
-        }
+    }
 
     bill_parameters = CoopStateView(
         'ins_contract.billing_process.bill_parameters',
@@ -191,7 +192,7 @@ class BillingProcess(CoopProcess):
         'insurance_contract.bill_view')
 
     def do_complete(self):
-        the_bill = WithAbstract.get_abstract_objects(self, 'the_bill')
+        the_bill = abstract.WithAbstract.get_abstract_objects(self, 'the_bill')
         the_bill.for_contract = self.process_state.get_contract()
         the_bill.save()
         return (True, [])

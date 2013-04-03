@@ -1,8 +1,8 @@
-from trytond.modules.insurance_contract import Contract
-
-from trytond.modules.coop_utils import utils
+from trytond.modules.coop_utils import utils, abstract
 from trytond.modules.coop_utils import date
 from trytond.modules.coop_utils import model, fields
+from trytond.modules.insurance_product import product
+from trytond.modules.insurance_contract import Contract
 
 # Needed for getting models
 from trytond.pool import Pool
@@ -35,7 +35,7 @@ class GenericBillLine(model.CoopSQL, model.CoopView):
     on_object = fields.Reference(
         'Target',
         'get_on_object_model'
-        )
+    )
     master = fields.Reference(
         'Master',
         [('ins_contract.billing.bill', 'Bill'),
@@ -45,7 +45,7 @@ class GenericBillLine(model.CoopSQL, model.CoopView):
         ('base', 'Base Amount'),
         ('tax', 'Tax'),
         ('fee', 'Fee'),
-        ], 'Kind')
+    ], 'Kind')
     childs = fields.One2Many(
         'ins_contract.billing.generic_line',
         'master',
@@ -80,14 +80,14 @@ class GenericBillLine(model.CoopSQL, model.CoopView):
         for elem in self.childs:
             if elem.kind != 'main':
                 res.append(elem)
-        return utils.WithAbstract.serialize_field(res)
+        return abstract.WithAbstract.serialize_field(res)
 
     def get_node_childs(self, name):
         res = []
         for elem in self.childs:
             if elem.kind == 'main':
                 res.append(elem)
-        return utils.WithAbstract.serialize_field(res)
+        return abstract.WithAbstract.serialize_field(res)
 
     def flat_init(self, start_date, end_date):
         self.start_date = start_date
@@ -197,7 +197,7 @@ class Bill(model.CoopSQL, model.CoopView):
                     'frequency_days',
                     {'date': start_date},
                     kind='pricing')
-            except utils.NonExistingRuleKindException:
+            except product.NonExistingRuleKindException:
                 frequency_days = 365
             bill_line = GenericBillLine()
             bill_line.flat_init(start_date, end_date)

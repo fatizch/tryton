@@ -5,7 +5,7 @@ from trytond.wizard import StateView, Button, StateTransition
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
 
-from trytond.modules.coop_utils import utils, model, fields
+from trytond.modules.coop_utils import utils, model, fields, abstract
 
 
 __all__ = [
@@ -193,9 +193,9 @@ class TaskSelector(model.CoopView):
             tmp_result[(priority.process_step.id, priority.priority)] = task
             final_result.append(task)
             valid_states.append(priority.process_step.id)
-        result['tasks_team'] = utils.WithAbstract.serialize_field(final_result)
+        result['tasks_team'] = abstract.WithAbstract.serialize_field(final_result)
         result['nb_tasks_team'] = nb_tasks
-        result['tasks'] = utils.WithAbstract.serialize_field(
+        result['tasks'] = abstract.WithAbstract.serialize_field(
             Log.search([
                 ('latest', '=', True), ('locked', '=', False),
                 ('to_state', 'in', valid_states)],
@@ -223,7 +223,7 @@ class TaskSelector(model.CoopView):
             task.nb_tasks = task.on_change_with_nb_tasks()
             nb_tasks += task.nb_tasks
             tmp_result.append(task)
-        result['tasks_process'] = utils.WithAbstract.serialize_field(
+        result['tasks_process'] = abstract.WithAbstract.serialize_field(
             tmp_result)
         result['nb_tasks_process'] = nb_tasks
         return result
@@ -298,7 +298,7 @@ class TaskDispatcher(Wizard):
         changes.update(selector.on_change_process())
         for k, v in changes.iteritems():
             setattr(selector, k, v)
-        return utils.WithAbstract.serialize_field(selector)
+        return abstract.WithAbstract.serialize_field(selector)
 
     def transition_remove_locks(self):
         Log = Pool().get('coop_process.process_log')

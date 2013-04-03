@@ -1,7 +1,7 @@
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.modules.coop_utils import utils, model, fields
+from trytond.modules.coop_utils import abstract, model, fields
 
 from trytond.pyson import Eval
 
@@ -27,7 +27,7 @@ class GBPStateView(StateView):
                     field_value = getattr(default_data, field)
                     # We need to make the field json-compatible, so we use the
                     # serialize_field function which does exactly that.
-                    res[field] = utils.WithAbstract.serialize_field(
+                    res[field] = abstract.WithAbstract.serialize_field(
                         field_value)
 
         return res

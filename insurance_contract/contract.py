@@ -5,7 +5,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model, fields
+from trytond.modules.coop_utils import model, fields, abstract
 from trytond.modules.coop_utils import utils, date, business
 from trytond.modules.coop_utils import coop_string
 from trytond.modules.insurance_product import Printable
@@ -938,7 +938,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             tmp_covered.end_date = covered_data.end_date
             tmp_covered.coverage = covered_data.coverage
             result.append(tmp_covered)
-        return utils.WithAbstract.serialize_field(result)
+        return abstract.WithAbstract.serialize_field(result)
 
     def get_name_for_billing(self):
         return self.name

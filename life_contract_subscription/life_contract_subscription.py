@@ -57,7 +57,7 @@ class CoveredDataSubs():
             'allowed_amounts',
             {
                 'date': self.start_date,
-                #'contract': utils.WithAbstract.get_abstract_objects(
+                #'contract': abstract.WithAbstract.get_abstract_objects(
                 #    wizard, 'for_contract')
             },)[0]
         if vals:

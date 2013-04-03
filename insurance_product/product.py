@@ -11,6 +11,7 @@ from trytond.modules.insurance_product import EligibilityResultLine
 
 
 __all__ = [
+    'GetResult',
     'Offered',
     'Product',
     'ProductOptionsCoverage',
@@ -63,7 +64,83 @@ class Templated(object):
             return {'template_behaviour': None}
 
 
-class Offered(model.CoopView, utils.GetResult, Templated):
+class NonExistingRuleKindException(Exception):
+    pass
+
+
+class GetResult(object):
+    def get_result(self, target='result', args=None, kind='', path=''):
+        # This method is a generic entry point for getting parameters.
+        #
+        # Arguments are :
+        #  - The target value to compute. It is a key which will be used to
+        #    decide which data is asked for
+        #  - The dict of arguments which will be used by the rule to compute.
+        #    Another way to do this would be a link to a method on the caller
+        #    which would provide said args on demand.
+        #  - The kind will usually be filled, it is a key to finding where
+        #    the required data is stored. So if the target is "price", the
+        #    kind should be set to "pricing".
+        #  - We can use the 'path' arg to specify the way to our data.
+        #    Basically, we try to match the first part of path (which looks
+        #    like a '.' delimited string ('alpha1.beta3.gamma2')) to one of the
+        #    sub-elements of self, then iterate.
+
+        if path:
+            # If a path is set, the data we look for is not set on self. So we
+            # need to iterate on self's sub-elems.
+            #
+            # First of all, we need the sub-elems descriptor. This is the
+            # result of the get_sub_elem_data method, which returns a tuple
+            # with the field name to iterate on as the first element, and
+            # this field's field on which to try to match the value.
+            sub_elem_data = self.get_sub_elem_data()
+
+            if not sub_elem_data:
+                # If it does not exist, someone failed...
+                return (None, ['Object %s does not have any sub_data.' % (
+                    self.name)])
+
+            path_elems = path.split('.')
+
+            for elem in getattr(self, sub_elem_data[0]):
+                # Now we iterate on the specified field
+                if path_elems[0] in (
+                        getattr(elem, attr) for attr in sub_elem_data[1]):
+                    if isinstance(elem, GetResult):
+                        return elem.get_result(
+                            target, args, kind, '.'.join(path_elems[1:]))
+                    return (
+                        None, ['Sub element %s of %s cannot get_result !' % (
+                            elem.name, self.name)])
+            return (None, ['Could not find %s sub element in %s' % (
+                path_elems[0], self.name)])
+
+        if kind:
+            try:
+                good_rule = self.get_good_rule_at_date(args, kind)
+            except Exception:
+                good_rule = None
+            if not good_rule:
+                return (None, [])
+            return good_rule.get_result(target, args)
+            # We did not found any rule matching the specified name
+            raise NonExistingRuleKindException
+
+        # Now we look for our target, as it is at our level
+        target_func = getattr(self, 'give_me_' + target)
+
+        result = target_func(args)
+        if not isinstance(result, tuple) and not result is None:
+            return (result, [])
+        return result
+
+    def get_sub_elem_data(self):
+        # Should be overridden
+        return None
+
+
+class Offered(model.CoopView, GetResult, Templated):
     'Offered'
 
     __name__ = 'ins_product.offered'

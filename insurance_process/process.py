@@ -3,8 +3,8 @@ import functools
 
 # Needed for displaying objects
 
-from trytond.modules.coop_utils import utils, CoopView, CoopSQL
-from trytond.modules.coop_utils import WithAbstract, fields
+from trytond.modules.coop_utils import utils, CoopView, CoopSQL, abstract
+from trytond.modules.coop_utils import fields
 
 # Needed for proper encoding / decoding of objects as strings
 from trytond.protocols.jsonrpc import object_hook
@@ -28,9 +28,16 @@ except ImportError:
     import json
 
 
-__all__ = ['WithAbstract', 'ProcessState', 'CoopProcess', 'CoopStateView',
-           'CoopStep', 'CoopStepView', 'DependantState', 'SuspendedProcess',
-           'ResumeWizard']
+__all__ = [
+    'ProcessState',
+    'CoopProcess',
+    'CoopStateView',
+    'CoopStep',
+    'CoopStepView',
+    'DependantState',
+    'SuspendedProcess',
+    'ResumeWizard'
+]
 
 
 ACTIONS = ('go_previous', 'go_next', 'cancel', 'complete', 'check', 'suspend')
@@ -672,7 +679,7 @@ class CoopStateView(StateView, CoopState):
                     field_value = getattr(default_data, field)
                     # We need to make the field json-compatible, so we use the
                     # serialize_field function which does exactly that.
-                    res[field] = WithAbstract.serialize_field(field_value)
+                    res[field] = abstract.WithAbstract.serialize_field(field_value)
 
         return res
 

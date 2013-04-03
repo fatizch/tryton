@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
-from trytond.modules.coop_utils import model, date, fields, utils
-from trytond.modules.insurance_product import Offered
+from trytond.modules.coop_utils import model, date, fields
+from trytond.modules.insurance_product import product
 from trytond.modules.insurance_product import EligibilityResultLine
 
 __all__ = [
@@ -108,7 +108,7 @@ class EventDescLossDescRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class Benefit(model.CoopSQL, Offered):
+class Benefit(model.CoopSQL, product.Offered):
     'Benefit'
 
     __name__ = 'ins_product.benefit'
@@ -162,7 +162,7 @@ class Benefit(model.CoopSQL, Offered):
     def give_me_eligibility(self, args):
         try:
             res = self.get_result('eligibility', args, kind='eligibility')
-        except utils.NonExistingRuleKindException:
+        except product.NonExistingRuleKindException:
             return (EligibilityResultLine(True), [])
         return res
 
