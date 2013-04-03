@@ -4,7 +4,7 @@ from trytond.pyson import Not
 
 from trytond.modules.coop_utils import model, fields, coop_string
 from trytond.modules.coop_party import Actor
-from trytond.modules.coop_party.party import  STATES_COMPANY
+from trytond.modules.coop_party.party import STATES_COMPANY
 
 __all__ = [
     'Party',
@@ -43,7 +43,7 @@ class Party:
         return res
 
 
-class Insurer(model.CoopSQL, Actor):
+class Insurer(Actor, model.CoopSQL):
     'Insurer'
 
     __name__ = 'party.insurer'
@@ -53,7 +53,7 @@ class Insurer(model.CoopSQL, Actor):
         return dict([(insurer.id, 'X') for insurer in insurers])
 
 
-class Broker(model.CoopSQL, Actor):
+class Broker(Actor, model.CoopSQL):
     'Broker'
 
     __name__ = 'party.broker'
@@ -63,7 +63,7 @@ class Broker(model.CoopSQL, Actor):
         return dict([(broker.id, 'X') for broker in brokers])
 
 
-class Customer(model.CoopSQL, Actor):
+class Customer(Actor, model.CoopSQL):
     'Customer'
 
     __name__ = 'party.customer'
