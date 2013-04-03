@@ -63,7 +63,10 @@ else
 	echo "export TRYTON_PATH" >> scripts.conf
 	echo "[options]" > trytond.conf
 	echo "jsonrpc = localhost:8000" >> trytond.conf
-	echo "db_type = sqlite" >> trytond.conf
+	echo "# db_type = sqlite" >> trytond.conf
+	echo "db_type = postgresql" >> trytond.conf
+	echo "# db_user = tryton" >> trytond.conf
+	echo "# db_password = tryton" >> trytond.conf
 	echo "data_path = $TOPPATH/tryton-workspace/data" >> trytond.conf
 	echo "logfile = $TOPPATH/tryton-workspace/logs/server_logs.log" >> trytond.conf
 	cd ..

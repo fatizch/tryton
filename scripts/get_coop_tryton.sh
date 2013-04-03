@@ -35,6 +35,10 @@ else
 	echo $SEP
 	hg clone https://$2@bitbucket.org/coopengo/tryton
 	echo $SEP
+	echo Getting Proteus
+	echo $SEP
+	hg clone http://hg.tryton.org/proteus
+	echo $SEP
 	echo Done
 	echo $SEP
 fi
