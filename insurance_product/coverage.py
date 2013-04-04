@@ -302,6 +302,11 @@ class Coverage(model.CoopSQL, SimpleCoverage):
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
         ]
 
+    @classmethod
+    def delete(cls, entities):
+        cls.delete_rules(entities)
+        super(Coverage, cls).delete(entities)
+
     def get_currency(self):
         return self.currency
 

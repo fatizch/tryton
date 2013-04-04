@@ -265,9 +265,7 @@ class Offered(model.CoopView, GetResult, Templated):
             if not hasattr(field, 'model_name'):
                 continue
             utils.delete_reference_backref(
-                entities,
-                field.model_name,
-                field.field)
+                entities, field.model_name, field.field)
 
     def get_complementary_data_def(self, kinds=None, at_date=None):
         return [
@@ -346,6 +344,11 @@ class Product(model.CoopSQL, Offered):
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
         ]
+
+    @classmethod
+    def delete(cls, entities):
+        cls.delete_rules(entities)
+        super(Product, cls).delete(entities)
 
     def get_valid_options(self):
         for option in self.options:
