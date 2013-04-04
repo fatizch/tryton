@@ -12,8 +12,14 @@
   <newline/>
   <notebook>
     <page string="Description" id="steps" col="4">
-      <field name="all_steps" yexpand="1" yfill="1" xexpand="1" xfill="1" colspan="2"/>
-      <field name="transitions" yexpand="1" yfill="1" xexpand="1" xfill="1" colspan="2"/>
+      <label name="display_steps_without_status"/>
+      <field name="display_steps_without_status"/>
+      <newline/>
+      <group id="steps" colspan="2" yfill="1" yexpand="1">
+        <field name="all_steps" />
+        <field name="steps_to_display"/>
+      </group>
+      <field name="transitions" yfill="1" colspan="2"/>
     </page>
     <page string="XML" id="xml">
       <group id="form_customization" col="2" yexpand="1" yfill="1">

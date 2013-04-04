@@ -4,7 +4,7 @@ from trytond.model import ModelView, ModelSQL
 from trytond.wizard import Wizard, StateAction
 from trytond.report import Report
 from trytond.transaction import Transaction
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 from trytond.pool import Pool
 
 from trytond.modules.coop_utils import coop_string
@@ -42,31 +42,23 @@ class ProcessStepRelation(ModelSQL, ModelView):
 
     __name__ = 'process.process_step_relation'
 
-    process = fields.Many2One(
-        'process.process_desc',
-        'Process',
-        ondelete='CASCADE',
-    )
-
-    step = fields.Many2One(
-        'process.step_desc',
-        'Step',
-        ondelete='RESTRICT',
-    )
-
-    status = fields.Many2One(
-        'process.status',
-        'Status',
-        ondelete='RESTRICT',
-    )
-
-    order = fields.Integer(
-        'Order',
-    )
+    process = fields.Many2One('process.process_desc', 'Process',
+        ondelete='CASCADE')
+    step = fields.Many2One('process.step_desc', 'Step',
+        ondelete='RESTRICT')
+    status = fields.Many2One('process.status', 'Status',
+        ondelete='RESTRICT')
+    order = fields.Integer('Order')
 
     def get_rec_name(self, name):
-        return self.process.get_rec_name(name) + ' - ' + \
-            self.status.get_rec_name(name)
+        res = ''
+        if self.step:
+            res += self.step.rec_name
+        if self.status:
+            res += ' (%s)' % self.status.rec_name
+        if not res:
+            res = super(ProcessStepRelation, self).get_rec_name(name)
+        return res
 
 
 class ProcessMenuRelation(ModelSQL):
@@ -84,22 +76,25 @@ class ProcessDesc(ModelSQL, ModelView):
 
     __name__ = 'process.process_desc'
 
-    technical_name = fields.Char('Technical Name', required=True)
+    technical_name = fields.Char('Technical Name', required=True,
+        on_change_with=['fancy_name', 'technical_name'])
     fancy_name = fields.Char('Name', translate=True)
-    on_model = fields.Many2One(
-        'ir.model',
-        'On Model',
+    on_model = fields.Many2One('ir.model', 'On Model',
         # This model must be workflow compatible
         domain=[
             ('is_workflow', '=', True),
             ('model', '!=', 'process.process_framework')
         ],
         required=True)
-    all_steps = fields.One2Many(
-        'process.process_step_relation',
-        'process',
-        'All Steps',
-        order=[('order', 'ASC')])
+    all_steps = fields.One2Many('process.process_step_relation',
+        'process', 'All Steps', order=[('order', 'ASC')],
+        states={'invisible': Bool(Eval('display_steps_without_status'))})
+    display_steps_without_status = fields.Function(
+        fields.Boolean('Display Steps Without Status'),
+        'get_display_steps_without_status', 'set_void')
+    steps_to_display = fields.Many2Many('process.process_step_relation',
+        'process', 'step', 'Steps',
+        states={'invisible': Bool(~Eval('display_steps_without_status'))})
     transitions = fields.One2Many(
         'process.step_transition', 'on_process', 'Transitions')
     xml_header = fields.Text('Header XML')
@@ -555,6 +550,18 @@ completed the current process, please go ahead"/>'
         for menu in self.menu_items:
             if menu.name == '%s_%s' % (self.technical_name, lang):
                 return menu.action
+
+    def on_change_with_technical_name(self):
+        if self.technical_name:
+            return self.technical_name
+        return coop_string.remove_blank_and_invalid_char(self.fancy_name)
+
+    def get_display_steps_without_status(self, name):
+        return False
+
+    @classmethod
+    def set_void(cls, instances, name, vals):
+        pass
 
 
 class TransitionAuthorization(ModelSQL):
