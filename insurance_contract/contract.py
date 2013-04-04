@@ -92,6 +92,11 @@ class Subscribed(model.CoopView):
         cls.offered.model_name = 'ins_product.%s' % suffix
         super(Subscribed, cls).__setup__()
 
+    @classmethod
+    def delete_status_history(cls, entities):
+        utils.delete_reference_backref(entities, 'ins_contract.status_history',
+            cls.status_history.field)
+
     @staticmethod
     def default_start_date():
         return utils.today()
@@ -211,6 +216,11 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     contact = fields.Many2One('party.party', 'Contact')
     documents = fields.One2Many(
         'ins_product.document_request', 'needed_by', 'Documents', size=1)
+
+    @classmethod
+    def delete(cls, entities):
+        cls.delete_status_history(entities)
+        super(Contract, cls).delete(entities)
 
     @staticmethod
     def get_master(master):
@@ -519,6 +529,11 @@ class Option(model.CoopSQL, Subscribed):
     covered_data = fields.One2ManyDomain(
         'ins_contract.covered_data', 'option', 'Covered Data',
         domain=[('covered_element.parent', '=', None)])
+
+    @classmethod
+    def delete(cls, entities):
+        cls.delete_status_history(entities)
+        super(Option, cls).delete(entities)
 
     def get_coverage(self):
         return self.offered
