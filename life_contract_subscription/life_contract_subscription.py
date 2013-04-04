@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from trytond.pool import PoolMeta
 from trytond.rpc import RPC
+from trytond.pyson import Bool, Eval
 
 from trytond.modules.coop_utils import fields
 
@@ -25,6 +26,9 @@ class CoveredDataSubs():
     __name__ = 'ins_contract.covered_data'
     __metaclass__ = PoolMeta
 
+    with_coverage_amount = fields.Function(
+        fields.Boolean('With Coverage Amount', states={'invisible': True}),
+        'get_with_coverage_amount')
     coverage_amount_selection = fields.Function(
         fields.Selection(
             'get_allowed_amounts',
@@ -33,6 +37,7 @@ class CoveredDataSubs():
             depends=['coverage', 'start_date', 'coverage_amount'],
             sort=False,
             on_change=['coverage_amount', 'coverage_amount_selection'],
+            states={'invisible': Bool(~Eval('with_coverage_amount'))}
         ),
         'get_coverage_amount_selection',
         'setter_void',
@@ -80,3 +85,6 @@ class CoveredDataSubs():
     @classmethod
     def setter_void(cls, covered_datas, name, values):
         pass
+
+    def get_with_coverage_amount(self, name):
+        return len(self.get_allowed_amounts()) > 1
