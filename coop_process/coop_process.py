@@ -841,14 +841,12 @@ class ProcessParameters(model.CoopView):
         'ir.model',
         'Model',
         domain=[('is_workflow', '=', 'True')],
-        states={'readonly': True},
-    )
+        states={'readonly': True})
     good_process = fields.Many2One(
         'process.process_desc',
         'Good Process',
         on_change_with=['date, model'],
-        depends=['date', 'model'],
-    )
+        depends=['date', 'model'])
 
     @classmethod
     def __setup__(cls):
@@ -911,9 +909,14 @@ class ProcessFinder(Wizard):
         cls.process_parameters = copy.copy(cls.process_parameters)
         cls.process_parameters.model_name = cls.get_parameters_model()
         cls.process_parameters.view = cls.get_parameters_view()
+        cls._error_messages.update({
+            'no_process_selected': 'Please pick a process from the selection'})
 
     def do_action(self, action):
         Action = Pool().get('ir.action')
+        if not (hasattr(self.process_parameters, 'good_process') and
+                self.process_parameters.good_process):
+            self.raise_user_error('no_process_selected')
         good_action = self.process_parameters.good_process.get_act_window()
         good_values = Action.get_action_values(
             'ir.action.act_window', [good_action.id])
