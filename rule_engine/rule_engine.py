@@ -14,7 +14,9 @@ import pyflakes.messages
 
 from trytond.rpc import RPC
 
-from trytond.model import ModelView, ModelSQL, fields
+from trytond.modules.coop_utils import fields
+from trytond.modules.coop_utils.model import CoopSQL as ModelSQL
+from trytond.modules.coop_utils.model import CoopView as ModelView
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
@@ -237,6 +239,10 @@ class Rule(ModelView, ModelSQL):
             'invalid_code': 'Your code has errors!',
         })
 
+    @classmethod
+    def _export_keys(cls):
+        return set(['name'])
+
     def filter_errors(self, error):
         if isinstance(error, WARNINGS):
             return False
@@ -268,11 +274,10 @@ class Rule(ModelView, ModelSQL):
                 exec self.as_function in context, localcontext
                 result = localcontext[
                     ('result_%s' % hash(self.name)).replace('-', '_')]
-            except InternalRuleEngineError:
-                result = None
             except:
-                raise
-                context['errors'].append('Critical Internal Rule Engine Error')
+                # raise
+                context['errors'].append(
+                    'Critical Internal Rule Engine Error in rule %s' % self.name)
                 result = None
 
         messages = context['messages']
@@ -502,9 +507,7 @@ class TreeElement(ModelView, ModelSQL):
             'required': Eval('type') == 'table'},
         on_change=['translated_technical_name', 'description', 'the_table'],
         ondelete='CASCADE')
-    long_description = fields.Text(
-        'Long Description',
-    )
+    long_description = fields.Text('Long Description')
 
     @classmethod
     def __setup__(cls):
@@ -516,6 +519,16 @@ class TreeElement(ModelView, ModelSQL):
             'argument_accent_error': 'Function arguments must only use ascii',
             'name_accent_error': 'Technical name must only use ascii',
         })
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['type', 'translated_technical_name', 'language.code'])
+
+    @classmethod
+    def _export_force_recreate(cls):
+        result = super(TreeElement, cls)._export_force_recreate()
+        result.remove('children')
+        return result
 
     def check_arguments_accents(self):
         if not self.fct_args:
@@ -748,6 +761,9 @@ class TableDefinition():
                 'dimension_name3' in values or 'dimension_name4' in values):
             return
 
+        if '__importing__' in Transaction().context:
+            return
+
         dimension_names = []
         for table in tables:
             good_te = table.get_good_tree_element()
@@ -773,6 +789,8 @@ class TableDefinition():
     @classmethod
     def create(cls, values):
         tables = super(TableDefinition, cls).create(values)
+        if '__importing__' in Transaction().context:
+            return tables
         TreeElement = Pool().get('rule_engine.tree_element')
         folder = utils.get_those_objects(
             'rule_engine.tree_element',

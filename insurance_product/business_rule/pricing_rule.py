@@ -285,6 +285,10 @@ class PricingComponent(model.CoopSQL, model.CoopView):
                 'kind', 'tax', 'fee', 'code']),
         'get_summary')
 
+    @classmethod
+    def _export_keys(cls):
+        return set([])
+
     @staticmethod
     def default_kind():
         return 'base'

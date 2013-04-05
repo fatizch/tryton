@@ -7,6 +7,7 @@ from .relation import *
 
 def register():
     Pool.register(
+        PartyCategory,
         Party,
         Address,
         Actor,

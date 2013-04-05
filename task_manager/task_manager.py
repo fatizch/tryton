@@ -2,7 +2,8 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, Button, StateTransition
-from trytond.model import ModelSQL, ModelView, fields
+
+from trytond.modules.coop_utils import model, fields
 
 
 __all__ = [
@@ -48,7 +49,7 @@ class Session():
         return super(Session, cls).create(values)
 
 
-class Priority(ModelSQL, ModelView):
+class Priority(model.CoopSQL, model.CoopView):
     'Priority'
 
     __name__ = 'task_manager.priority'
@@ -88,7 +89,7 @@ class Priority(ModelSQL, ModelView):
         return 'both'
 
 
-class TeamGroupRelation(ModelSQL):
+class TeamGroupRelation(model.CoopSQL):
     'Team - Group Relation'
 
     __name__ = 'task_manager.team_group_relation'
@@ -97,7 +98,7 @@ class TeamGroupRelation(ModelSQL):
     group = fields.Many2One('res.group', 'Group', ondelete='CASCADE')
 
 
-class Team(ModelSQL, ModelView):
+class Team(model.CoopSQL, model.CoopView):
     'Team'
 
     __name__ = 'task_manager.team'
@@ -120,7 +121,13 @@ class Team(ModelSQL, ModelView):
             'add_user_button': {}})
 
     @classmethod
-    @ModelView.button_action('task_manager.wizard_add_user')
+    def _export_skips(cls):
+        result = super(Team, cls)._export_skips()
+        result.add('members')
+        return result
+
+    @classmethod
+    @model.CoopView.button_action('task_manager.wizard_add_user')
     def add_user_button(cls, teams):
         pass
 
@@ -133,7 +140,7 @@ class Team(ModelSQL, ModelView):
         return res
 
 
-class SelectUser(ModelView):
+class SelectUser(model.CoopView):
     'Select User'
 
     __name__ = 'task_manager.select_user'

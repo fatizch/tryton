@@ -373,7 +373,7 @@ def format_data(data, prefix='', prefix_inc='    ', is_init=True):
         for k, v in data.iteritems():
             new_data = format_data(v, prefix + prefix_inc, is_init=False)
             tmp_res = [
-                prefix + prefix_inc + str(k) + ':' +
+                prefix + prefix_inc + k.__repr__() + ':' +
                 new_data[0][len(prefix + prefix_inc) - 1:]]
             if len(new_data) > 1:
                 tmp_res += new_data[1:]
@@ -384,7 +384,7 @@ def format_data(data, prefix='', prefix_inc='    ', is_init=True):
     elif isinstance(data, Model) and is_init:
         tmp = [prefix + str(data) + ' : {']
         for k in data._fields:
-            if not getattr(data, k):
+            if not getattr(data, k, None):
                 continue
             new_data = format_data(
                 getattr(data, k), prefix + prefix_inc, is_init=False)
@@ -398,7 +398,7 @@ def format_data(data, prefix='', prefix_inc='    ', is_init=True):
     elif data is None:
         tmp = [prefix + 'None']
     else:
-        tmp = [prefix + str(data)]
+        tmp = [prefix + data.__repr__()]
 
     if not tmp:
         return prefix
@@ -569,3 +569,14 @@ def get_complementary_data_value(
 def execute_rule(caller, rule, args):
     args['_caller'] = caller
     return rule.compute(args)
+
+
+def recursive_list_tuple_convert(the_list):
+    if isinstance(the_list, (list, tuple)):
+        return tuple((recursive_list_tuple_convert(x) for x in the_list))
+    elif isinstance(the_list, dict):
+        return dict((
+            (key, recursive_list_tuple_convert(value))
+            for key, value in the_list.iteritems()))
+    else:
+        return the_list

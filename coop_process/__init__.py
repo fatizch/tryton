@@ -4,6 +4,8 @@ from .coop_process import *
 
 def register():
     Pool.register(
+        Status,
+        Code,
         ProcessLog,
         StepTransition,
         ProcessStepRelation,

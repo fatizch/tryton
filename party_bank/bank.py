@@ -4,6 +4,7 @@ from ibanlib import iban
 
 from trytond.pyson import Eval
 from trytond.pool import Pool
+from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import CoopView, CoopSQL, utils, fields
 from trytond.modules.coop_utils import coop_string
@@ -29,7 +30,7 @@ class BankAccount(CoopSQL, CoopView):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     account_numbers = fields.One2Many('party.bank_account_number',
-        'bank_account', 'Account Number', required=True)
+        'bank_account', 'Account Number', required=False)
     agency = fields.Many2One('party.bank', 'Agency')
     address = fields.Many2One('party.address', 'Address',
         domain=[('party', '=', Eval('agency'))],
@@ -44,7 +45,10 @@ class BankAccount(CoopSQL, CoopView):
 
     @staticmethod
     def default_account_numbers():
-        return [{}]
+        if not Transaction().context.get('__importing__'):
+            return [{}]
+        else:
+            return []
 
     @staticmethod
     def default_start_date():

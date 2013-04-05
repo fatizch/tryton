@@ -3,12 +3,12 @@ import copy
 
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.coop_utils import DynamicSelection, utils
-from trytond.modules.coop_utils import coop_string, business, fields
+from trytond.modules.coop_utils import coop_string, business, fields, model
 
 __all__ = ['Address', 'AddresseKind']
 
 
-class Address():
+class Address(model.ExportImportMixin):
     "Address"
 
     __metaclass__ = PoolMeta

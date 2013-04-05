@@ -1,7 +1,26 @@
 #-*- coding:utf-8 -*-
+from trytond.pool import PoolMeta
 from trytond.modules.coop_utils import coop_string, fields, model
 
-__all__ = ['ZipCode']
+__all__ = [
+    'ZipCode',
+    'Country',
+    'Subdivision',
+]
+
+
+class Country(model.ExportImportMixin):
+    'Country'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'country.country'
+
+
+class Subdivision(model.ExportImportMixin):
+    'Subdivision'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'country.subdivision'
 
 
 class ZipCode(model.CoopSQL, model.CoopView):

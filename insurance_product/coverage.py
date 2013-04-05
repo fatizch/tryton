@@ -161,7 +161,7 @@ class SimpleCoverage(Offered):
                             covered_data.__name__,
                             covered_data.id)
                     res += _res
-                    errs += _errs
+                errs += _errs
             errs = list(set(errs))
             if COULD_NOT_FIND_A_MATCHING_RULE in errs:
                 errs.remove(COULD_NOT_FIND_A_MATCHING_RULE)
@@ -309,6 +309,12 @@ class Coverage(model.CoopSQL, SimpleCoverage):
 
     def get_currency(self):
         return self.currency
+
+    def __export_json(self, skip_fields=None):
+        if skip_fields is None:
+            skip_fields = set()
+        skip_fields.add('products')
+        return super(Coverage, self).export_json(skip_fields)
 
 
 class PackageCoverage(model.CoopSQL):

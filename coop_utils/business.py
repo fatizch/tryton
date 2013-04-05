@@ -1,14 +1,39 @@
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 
 from .utils import get_coop_config
+from .model import ExportImportMixin
 
 
 __all__ = [
+    'Lang',
+    'Currency',
+    'CurrencyRate',
     'ArgsDoNotMatchException',
     'get_default_currency',
     'get_default_country',
     'update_args_with_subscriber',
 ]
+
+
+class Lang(ExportImportMixin):
+    'Lang'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'ir.lang'
+
+
+class Currency(ExportImportMixin):
+    'Currency'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'currency.currency'
+
+
+class CurrencyRate(ExportImportMixin):
+    'Currency'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'currency.currency.rate'
 
 
 class ArgsDoNotMatchException(Exception):

@@ -4,12 +4,13 @@ from decimal import Decimal
 
 from trytond.config import CONFIG
 from trytond.backend import TableHandler
-from trytond.model import ModelSQL, ModelView
 from trytond.pool import Pool
 from trytond.pyson import Eval, If, Bool, PYSONEncoder
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
     Button
+from trytond.modules.coop_utils.model import CoopSQL as ModelSQL
+from trytond.modules.coop_utils.model import CoopView as ModelView
 from trytond.modules.coop_utils import fields
 from trytond.modules.coop_utils import coop_string
 
@@ -120,27 +121,24 @@ class TableDefinition(ModelSQL, ModelView):
         'Name',
         states={
             'invisible': ~Eval('dimension_kind1'),
-        },
-    )
+        })
     dimension_name2 = fields.Char(
         'Name',
         states={
             'invisible': ~Eval('dimension_kind2'),
-        },
-    )
+        })
     dimension_name3 = fields.Char(
         'Name',
         states={
             'invisible': ~Eval('dimension_kind3'),
-        },
-    )
+        })
     dimension_name4 = fields.Char(
         'Name',
         states={
             'invisible': ~Eval('dimension_kind4'),
-        },
-    )
+        })
     kind = fields.Function(fields.Char('Kind'), 'get_kind')
+    cells = fields.One2Many('table.table_cell', 'definition', 'Cells')
 
     @classmethod
     def __setup__(cls):
@@ -160,6 +158,15 @@ class TableDefinition(ModelSQL, ModelView):
 
         cursor = Transaction().cursor
         cursor.execute('CREATE EXTENSION IF NOT EXISTS tablefunc', ())
+
+    @classmethod
+    def _export_force_recreate(cls):
+        result = super(TableDefinition, cls)._export_force_recreate()
+        # result.remove('dimension1')
+        # result.remove('dimension2')
+        # result.remove('dimension3')
+        # result.remove('dimension4')
+        return result
 
     @staticmethod
     def default_dimension_order1():
@@ -309,6 +316,12 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         table.index_action(['definition', 'type'], 'add')
 
     @classmethod
+    def _export_keys(cls):
+        return set([
+            'definition.code', 'type', 'date', 'start',
+            'end', 'start_date', 'end_date', 'value'])
+
+    @classmethod
     def clean_sequence(cls, records):
         to_clean = []
         for record in records:
@@ -429,6 +442,12 @@ class TableCell(ModelSQL, ModelView):
             [
                 'definition', 'dimension1', 'dimension2',
                 'dimension3', 'dimension4'], 'add')
+
+    @classmethod
+    def _export_light(cls):
+        return set([
+            'definition', 'dimension1', 'dimension2', 'dimension3',
+            'dimension4'])
 
     @classmethod
     def fields_get(cls, fields_names=None):

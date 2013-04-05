@@ -15,6 +15,8 @@ from trytond.modules.process import ProcessFramework
 
 
 __all__ = [
+    'Status',
+    'Code',
     'StepTransition',
     'GenerateGraph',
     'ProcessLog',
@@ -26,6 +28,30 @@ __all__ = [
     'ProcessParameters',
     'ProcessFinder',
 ]
+
+
+class Status(model.CoopSQL):
+    'Status'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'process.status'
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(Status, cls)._export_skips()
+        result.add('relations')
+        return result
+
+
+class Code(model.CoopSQL):
+    'Code'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'process.code'
+
+    @classmethod
+    def _export_light(cls):
+        return set(['on_model'])
 
 
 class StepTransition(model.CoopSQL):
@@ -83,6 +109,11 @@ class StepTransition(model.CoopSQL):
             ('check_pyson', 'missing_pyson'),
             ('check_choices', 'missing_choice'),
         ]
+
+    @classmethod
+    def _export_light(cls):
+        return set(
+            ['choice_if_true', 'choice_if_false', 'from_step', 'to_step'])
 
     def execute(self, target):
         if self.kind != 'choice':
@@ -397,8 +428,7 @@ class ProcessDesc(model.CoopSQL):
     custom_transitions = fields.Boolean('Custom Transitions')
     steps_implicitly_available = fields.Boolean(
         'Steps Implicitly Available',
-        states={'invisible': ~Eval('custom_transitions')},
-    )
+        states={'invisible': ~Eval('custom_transitions')})
     kind = fields.Selection([('', '')], 'Kind')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
@@ -409,6 +439,28 @@ class ProcessDesc(model.CoopSQL):
         cls.transitions = copy.copy(cls.transitions)
         cls.transitions.states['invisible'] = ~Eval('custom_transitions')
         cls.transitions.depends.append('custom_transitions')
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(ProcessDesc, cls)._export_skips()
+        result.add('menu_items')
+        return result
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['technical_name'])
+
+    @classmethod
+    def _export_light(cls):
+        result = super(ProcessDesc, cls)._export_light()
+        result.add('on_model')
+        return result
+
+    @classmethod
+    def _export_force_recreate(cls):
+        result = super(ProcessDesc, cls)._export_force_recreate()
+        result.remove('all_steps')
+        return result
 
     @classmethod
     def default_with_prev_next(cls):
@@ -527,6 +579,10 @@ class ProcessStepRelation(model.CoopSQL):
         cls.step.domain.extend([(
             'main_model', '=', Eval('_parent_process', {}).get(
                 'on_model', 0))])
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['process.technical_name', 'step.technical_name'])
 
 
 class XMLViewDesc(model.CoopSQL, model.CoopView):
@@ -717,7 +773,7 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
         View.delete(to_delete)
 
 
-class StepDesc():
+class StepDesc(model.CoopSQL):
     'Step Desc'
 
     __metaclass__ = PoolMeta
@@ -747,6 +803,22 @@ class StepDesc():
         cls.code_after.domain.extend([
             ('on_model', '=', Eval('main_model'))])
         cls.code_after.depends.append('main_model')
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['technical_name'])
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(StepDesc, cls)._export_skips()
+        result.add('processes')
+        return result
+
+    @classmethod
+    def _export_light(cls):
+        result = super(StepDesc, cls)._export_light()
+        result.add('main_model')
+        return result
 
     def get_pyson_for_button(self):
         return self.pyson or ''

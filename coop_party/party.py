@@ -4,11 +4,12 @@ from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import CoopView, CoopSQL
-from trytond.modules.coop_utils import TableOfTable, utils, fields
+from trytond.modules.coop_utils import TableOfTable, utils, fields, model
 from trytond.modules.coop_utils import coop_string
 
 
 __all__ = [
+    'PartyCategory',
     'Party',
     'Actor',
     'GenericActorKind',
@@ -30,7 +31,14 @@ STATES_PERSON = Bool(Eval('is_person'))
 STATES_COMPANY = Bool(Eval('is_company'))
 
 
-class Party:
+class PartyCategory(model.ExportImportMixin):
+    'Party Category'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'party.category'
+
+
+class Party(model.ExportImportMixin):
     'Party'
 
     __name__ = 'party.party'

@@ -11,11 +11,16 @@ from .test_framework import *
 
 def register():
     Pool.register(
+        # from business
+        Lang,
+        Currency,
+        CurrencyRate,
         # from model
         TableOfTable,
         DynamicSelection,
         VersionedObject,
         VersionObject,
+        Group,
         # from session
         DateClass,
         module='coop_utils', type_='model')

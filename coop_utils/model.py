@@ -6,12 +6,13 @@ except ImportError:
     import json
 
 from trytond.pyson import Eval, Bool
-from trytond.model import ModelView, ModelSQL, fields as tryton_fields
+from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
 from trytond.wizard import Wizard
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 from trytond.protocols.jsonrpc import JSONEncoder, object_hook
+from trytond.exceptions import UserError
 
 import utils
 import coop_string
@@ -28,6 +29,7 @@ __all__ = [
     'DynamicSelection',
     'VersionedObject',
     'VersionObject',
+    'Group',
 ]
 
 
@@ -35,11 +37,9 @@ class NotExportImport(Exception):
     pass
 
 
-class ExportImportMixin(object):
+class ExportImportMixin(Model):
     'Mixin to support export/import in json'
     __metaclass__ = PoolMeta
-
-    _export_name = 'rec_name'
 
     @classmethod
     def __setup__(cls):
@@ -49,157 +49,410 @@ class ExportImportMixin(object):
         cls.__rpc__['import_json'] = RPC(readonly=False,
             result=lambda r: None)
 
-    def _export_json_xxx2one(self, field_name, skip_fields=None):
-        target = getattr(self, field_name)
-        if not hasattr(target, 'export_json'):
-            raise NotExportImport()
-        if target:
-            return target.export_json(skip_fields=skip_fields)
+    def _prepare_for_import(self):
+        pass
 
-    def _export_json_xxx2many(self, field_name, skip_fields=None):
-        if skip_fields is None:
-            skip_fields = set()
-        field = self._fields[field_name]
-        if isinstance(field, tryton_fields.One2Many):
-            skip_fields.add(field.field)
-        if not hasattr(field.get_target(), 'export_json'):
-            raise NotExportImport()
-        targets = getattr(self, field_name) or []
-        return [t.export_json(skip_fields=skip_fields) for t in targets]
+    def _post_import(self):
+        pass
 
-    def export_json(self, skip_fields=None):
-        if skip_fields is None:
-            skip_fields = set()
-        skip_fields |= set(('id',
-                'create_uid', 'write_uid',
-                'create_date', 'write_date'))
+    @classmethod
+    def _export_keys(cls):
+        # TODO : Look for a field with 'UNIQUE' and 'required' attributes set
+        if 'code' in cls._fields:
+            return set(['code'])
+        elif 'name' in cls._fields:
+            return set(['name'])
+        else:
+            return set()
+
+    @classmethod
+    def _export_skips(cls):
+        return set((
+            'id', 'create_uid', 'write_uid', 'create_date', 'write_date'))
+
+    @classmethod
+    def _export_light(cls):
+        return set()
+
+    @classmethod
+    def _export_force_recreate(cls):
+        force = set()
+        for field_name, field in cls._fields.iteritems():
+            if isinstance(field, tryton_fields.One2Many):
+                force.add(field_name)
+        return force
+
+    def _export_get_key(self):
+        class_keys = self._export_keys()
+        if not class_keys:
+            raise NotExportImport('No keys defined for %s' % self.__name__)
+        result = []
+        for k in class_keys:
+            keys = k.split('.')
+            value = self
+            for idx in range(0, len(keys)):
+                value = getattr(value, keys[idx])
+            result.append((k, value))
+        return tuple(result)
+
+    @classmethod
+    def _export_find_instance(cls, instance_key):
+        if not instance_key:
+            return None
+        try:
+            domain = [(key, '=', value) for key, value in instance_key]
+        except ValueError:
+            return None
+        result = cls.search(domain)
+        if not result:
+            return None
+        if len(result) > 1:
+            raise NotExportImport(
+                'Multiple result found for key %s in class %s' % (
+                    instance_key, cls.__name__))
+        return result[0]
+
+    def export_json(self, exported=None, from_field=None, force_key=None):
+        if exported is None:
+            exported = {}
+        if self.__name__ not in exported:
+            exported[self.__name__] = set()
+        if force_key is None:
+            my_key = self._export_get_key()
+        else:
+            if len(force_key) == 3 and isinstance(force_key[2], int):
+                my_key = force_key
+            else:
+                my_key = force_key[1]
+        exported[self.__name__].add(my_key)
         values = {
             '__name__': self.__name__,
-            '_export_name': getattr(self, self._export_name),
-        }
+            '_export_key': my_key}
+        field_order = []
         for field_name, field in self._fields.iteritems():
-            if (field_name in skip_fields
-                    or (isinstance(field, tryton_fields.Function)
-                        and not isinstance(field, tryton_fields.Property))):
+            if field_name in self._export_skips():
                 continue
-            elif isinstance(field, (tryton_fields.Many2One,
-                    tryton_fields.One2One, tryton_fields.Reference)):
-                try:
-                    values[field_name] = self._export_json_xxx2one(field_name)
-                except NotExportImport:
-                    pass
-            elif isinstance(field, (
-                    tryton_fields.One2Many, tryton_fields.Many2Many)):
-                try:
-                    values[field_name] = self._export_json_xxx2many(field_name)
-                except NotExportImport:
-                    pass
+            if isinstance(field, tryton_fields.Function) and not isinstance(
+                    field, tryton_fields.Property):
+                continue
+            field_value = getattr(self, field_name)
+            if field_value is None:
+                continue
+            field_order.append(field_name)
+            if hasattr(self, '_export_override_%s' % field_name):
+                values[field_name] = getattr(
+                    self, '_export_override_%s' % field_name)(exported, my_key)
+                continue
+            if isinstance(field, (
+                    tryton_fields.Many2One, tryton_fields.One2One)):
+                if not hasattr(field_value, 'export_json'):
+                    raise NotExportImport(
+                        '%s - %s' % (self.__name__, field_value.__name__))
+                if field_name == from_field and force_key:
+                    values[field_name] = force_key[0]
+                    continue
+                field_key = field_value._export_get_key()
+                if field_key in exported.get(field_value.__name__, {}) or \
+                        field_name in self._export_light():
+                    values[field_name] = field_key
+                else:
+                    values[field_name] = field_value.export_json(exported)
+            elif isinstance(field, tryton_fields.Reference):
+                if not hasattr(field_value, 'export_json'):
+                    raise NotExportImport(
+                        '%s - %s' % (self.__name__, field_value.__name__))
+                if field_name == from_field and force_key:
+                    values[field_name] = (field_value.__name__, force_key[0])
+                    continue
+                field_key = field_value._export_get_key()
+                if field_key in exported.get(field_value.__name__, {}) or \
+                        field_name in self._export_light():
+                    values[field_name] = (field_value.__name__, field_key)
+                else:
+                    values[field_name] = field_value.export_json(exported)
+            elif isinstance(field, tryton_fields.One2Many) and field.size != 1:
+                if not hasattr(Pool().get(field.model_name), 'export_json'):
+                    raise NotExportImport(
+                        '%s - %s' % (self.__name__, field.model_name))
+                field_export_value = []
+                idx = 1
+                for elem in field_value:
+                    if field_name in self._export_force_recreate():
+                        try:
+                            elem_key = (my_key, elem._export_get_key())
+                        except NotExportImport:
+                            elem_key = (my_key, field_name, idx)
+                        field_export_value.append(elem.export_json(
+                            exported, field.field, elem_key))
+                    else:
+                        field_export_value.append(elem.export_json(
+                            exported))
+                    idx += 1
+                values[field_name] = field_export_value
+            elif isinstance(field, tryton_fields.One2Many) and field.size == 1:
+                if len(field_value) != 1:
+                    continue
+                field_value = field_value[0]
+                if not hasattr(field_value, 'export_json'):
+                    raise NotExportImport(
+                        '%s - %s' % (self.__name__, field_value.__name__))
+                field_key = field_value._export_get_key()
+                if field_key in exported.get(field_value.__name__, {}) or \
+                        field_name in self._export_light():
+                    values[field_name] = field_key
+                else:
+                    values[field_name] = field_value.export_json(exported)
+            elif isinstance(field, tryton_fields.Many2Many):
+                target_field = Pool().get(
+                    field.relation_name)._fields[field.target]
+                if not hasattr(
+                        Pool().get(target_field.model_name), 'export_json'):
+                    raise NotExportImport(
+                        '%s - %s' % (self.__name__, target_field.model_name))
+                field_export_value = []
+                for elem in field_value:
+                    elem_key = elem._export_get_key()
+                    if elem_key in exported.get(elem.__name__, {}) or \
+                            field_name in self._export_light():
+                        field_export_value.append(elem_key)
+                    else:
+                        field_export_value.append(elem.export_json(exported))
+                values[field_name] = field_export_value
             else:
                 values[field_name] = getattr(self, field_name)
+        values['_export_order'] = field_order
         return values
 
     @classmethod
-    def _import_json(cls, values):
-        pool = Pool()
-        assert values['__name__'] == cls.__name__, (values['__name__'],
-            cls.__name__)
-        new_values = {}
-        lines = {}
-        for field_name, value in values.iteritems():
-            if field_name in ('__name__', '_export_name'):
-                continue
-            field = cls._fields[field_name]
-            if isinstance(field, (tryton_fields.Many2One,
-                    tryton_fields.One2One, tryton_fields.Reference)):
-                if value:
-                    if isinstance(field,  tryton_fields.Reference):
-                        Target = pool.get(value['__name__'])
-                    else:
-                        Target = field.get_target()
-                    target = Target.import_json(value)
-                    new_values[field_name] = target.id
-                else:
-                    new_values[field_name] = None
-            elif isinstance(field, (
-                    tryton_fields.One2Many, tryton_fields.Many2Many)):
-                lines[field_name] = value
-            else:
-                new_values[field_name] = value
-
-        if cls.recreate_rather_than_update():
-            record = None
+    def _import_json(
+            cls, values, force_recreate=False, created=None, relink=None,
+            root=True, cur_path=None):
+        # Useful for debugging
+        # print cur_path
+        assert values['__name__'] == cls.__name__
+        save = True
+        if created is None:
+            created = {}
+        if relink is None:
+            relink = []
+        if cur_path is None:
+            cur_path = [cls.__name__]
+        to_relink = []
+        my_key = values['_export_key']
+        good_instance = cls._export_find_instance(my_key)
+        if good_instance is None:
+            good_instance = cls()
         else:
-            records = cls.search(
-                [(cls._export_name, '=', values['_export_name'])])
-            if records:
-                if len(records) > 1:
-                    pass
-                    print 'Too many values found for class %s (%s)' % (
-                        cls._export_name, values['_export_name'])
-                record, = records
-            else:
-                record = None
-
-        for field_name, value in lines.iteritems():
+            good_instance._prepare_for_import()
+        for field_name in values['_export_order']:
+            if not field_name in values:
+                continue
+            cur_path.append(field_name)
             field = cls._fields[field_name]
-            Target = field.get_target()
-            if record:
-                existing_lines = dict((getattr(l, l._export_name), l)
-                    for l in getattr(record, field_name))
-            else:
-                existing_lines = {}
-
-            writes = []
-            creates = []
-            adds = []
-            deletes = []
-            for line in value:
-                export_name = line['_export_name']
-                if export_name in existing_lines:
-                    existing_line = existing_lines[export_name]
-                    writes.append(
-                        ('write', [existing_line.id],
-                            Target._import_json(line)))
-                    del existing_lines[export_name]
+            field_value = values[field_name]
+            if isinstance(field, (
+                    tryton_fields.Many2One, tryton_fields.One2One)):
+                TargetModel = Pool().get(field.model_name)
+                if isinstance(field_value, tuple):
+                    if (TargetModel.__name__ in created and
+                            field_value in created[TargetModel.__name__]):
+                        target_value = created[
+                            TargetModel.__name__][field_value]
+                        if hasattr(target_value, 'id') and target_value.id:
+                            setattr(good_instance, field_name, created[
+                                TargetModel.__name__][field_value])
+                        else:
+                            to_relink.append(
+                                (field_name, (field.model_name, field_value)))
+                            save = False
+                    else:
+                        good_value = TargetModel._export_find_instance(
+                            field_value)
+                        if good_value:
+                            setattr(good_instance, field_name, good_value.id)
+                        else:
+                            to_relink.append(
+                                (field_name, (field.model_name, field_value)))
+                            save = False
                 else:
-                    if isinstance(field, tryton_fields.Many2Many):
-                        if Target.search([
-                                    (Target._export_name, '=',
-                                        line['_export_name'])]):
-                            target = Target.import_json(line)
-                            adds.append(target.id)
+                    setattr(
+                        good_instance, field_name, TargetModel._import_json(
+                            field_value, created=created, relink=relink,
+                            root=False, cur_path=cur_path))
+            elif isinstance(field, tryton_fields.Reference):
+                if isinstance(field_value, tuple):
+                    field_model, field_value = field_value
+                    TargetModel = Pool().get(field_model)
+                    if (TargetModel.__name__ in created and
+                            field_value in created[TargetModel.__name__]):
+                        target_value = created[
+                            TargetModel.__name__][field_value]
+                        if hasattr(target_value, 'id') and target_value.id:
+                            setattr(good_instance, field_name, created[
+                                TargetModel.__name__][field_value])
+                        else:
+                            to_relink.append(
+                                (field_name, (field.model_name, field_value)))
+                            save = False
+                    else:
+                        good_value = TargetModel._export_find_instance(
+                            field_value)
+                        if good_value:
+                            setattr(good_instance, field_name, good_value)
+                        else:
+                            to_relink.append(
+                                (field_name, (field_model, field_value)))
+                            save = False
+                else:
+                    TargetModel = Pool().get(field_value.__name__)
+                    setattr(
+                        good_instance, field_name, TargetModel._import_json(
+                            field_value, created=created, relink=relink,
+                            root=False, cur_path=cur_path))
+            elif isinstance(field, tryton_fields.One2Many) and field.size != 1:
+                existing_values = getattr(good_instance, field_name) \
+                    if hasattr(good_instance, field_name) else None
+                TargetModel = Pool().get(field.model_name)
+                if field_name in cls._export_force_recreate() and \
+                        existing_values:
+                    TargetModel.delete([elem for elem in existing_values])
+                good_value = []
+                for elem in field_value:
+                    good_value.append(TargetModel._import_json(
+                        elem, created=created, relink=relink,
+                        root=False, cur_path=cur_path))
+            elif isinstance(field, tryton_fields.One2Many) and field.size == 1:
+                TargetModel = Pool().get(field.model_name)
+                if isinstance(field_value, tuple):
+                    if (TargetModel.__name__ in created and
+                            field_value in created[TargetModel.__name__]):
+                        setattr(good_instance, field_name, [created[
+                            TargetModel.__name__][field_value]])
+                    else:
+                        good_value = TargetModel._export_find_instance(
+                            field_value)
+                        if good_value:
+                            setattr(
+                                good_instance, field_name, [good_value.id])
+                        else:
+                            to_relink.append((
+                                field_name, (field.model_name, [field_value])))
+                else:
+                    setattr(
+                        good_instance, field_name, [
+                            TargetModel._import_json(
+                                field_value, created=created, relink=relink,
+                                root=False, cur_path=cur_path)])
+            elif isinstance(field, tryton_fields.Many2Many):
+                if (hasattr(good_instance, 'id') and good_instance.id):
+                    # For now, just recreate the links
+                    RelationModel = Pool().get(field.relation_name)
+                    RelationModel.delete(RelationModel.search([
+                        (field.origin, '=', good_instance.id)]))
+                TargetModel = Pool().get(Pool().get(
+                    field.relation_name)._fields[field.target].model_name)
+                relinks = []
+                good_values = []
+                for elem in field_value:
+                    if isinstance(elem, tuple):
+                        if (TargetModel.__name__ in created and
+                                elem in created[TargetModel.__name__]):
+                            good_values.append(
+                                created[TargetModel.__name__][elem])
+                        else:
+                            good_value = TargetModel._export_find_instance(
+                                elem)
+                            if good_value:
+                                good_values.append(good_value)
+                            else:
+                                relinks.append(elem)
+                    else:
+                        good_values.append(TargetModel._import_json(
+                            elem, created=created, relink=relink,
+                            root=False, cur_path=cur_path))
+                setattr(good_instance, field_name, good_values)
+                if relinks:
+                    to_relink.append(
+                        (field_name, (TargetModel.__name__, relinks)))
+            else:
+                setattr(good_instance, field_name, field_value)
+            cur_path.pop(-1)
+        if save:
+            try:
+                good_instance.save()
+            except:
+                # Useful for debugging
+                # print '\n'.join([str(x) for x in relink])
+                # print utils.format_data(created)
+                # print utils.format_data(good_instance)
+                raise
+            good_instance._post_import()
+        if not cls.__name__ in created:
+            created[cls.__name__] = {}
+        if my_key in created[cls.__name__]:
+            raise NotExportImport('Already existing key (%s) for class %s' % (
+                my_key, cls.__name__))
+        created[cls.__name__].update({my_key: good_instance})
+        if to_relink:
+            relink.append(((cls.__name__, my_key), dict([
+                (name, value) for name, value in to_relink])))
+        if not root:
+            return good_instance
+        # Useful for debugging
+        # print utils.format_data(created)
+        # print '\n'.join([str(x) for x in relink])
+        while len(relink) > 0:
+            cur_errs = []
+            to_del = []
+            idx = 0
+            for key, value in relink:
+                # print utils.format_data({key: value})
+                working_instance = created[key[0]][key[1]]
+                for field_name, field_value in value.iteritems():
+                    if isinstance(field_value[1], list):
+                        existing = list(getattr(
+                            working_instance, field_name))
+                        for elem in field_value[1]:
+                            existing.append(created[field_value[0]][elem])
+                        setattr(working_instance, field_name, existing)
+                    else:
+                        value = created[field_value[0]][field_value[1]]
+                        if not (hasattr(value, 'id') and value.id):
                             continue
-                    creates.append(
-                        ('create', [Target._import_json(line)]))
-            if existing_lines:
-                deletes.append(
-                    ('delete', [l.id for l in existing_lines.itervalues()]))
-
-            new_values[field_name] = []
-            for action in (writes, creates, deletes):
-                if action:
-                    new_values[field_name].extend(action)
-            if adds:
-                new_values[field_name].append(('add', adds))
-
-        return new_values
+                        setattr(working_instance, field_name, value)
+                try:
+                    working_instance.save()
+                except UserError, e:
+                    cur_errs.append(e.args)
+                    continue
+                    # raise
+                working_instance._post_import()
+                to_del.append(idx)
+                idx += 1
+            for k in sorted(to_del, reverse=True):
+                relink.pop(k)
+            if len(to_del) == 0:
+                print '#' * 80
+                print 'CREATED DATA'
+                print utils.format_data(created)
+                print '#' * 80
+                print 'RELINKS'
+                print '\n'.join([str(x) for x in relink])
+                print '#' * 80
+                print 'User Errors'
+                print '\n'.join((utils.format_data(err) for err in cur_errs))
+                raise NotExportImport('Infinite loop detected in import')
+        return good_instance
 
     @classmethod
     def import_json(cls, values):
-        if isinstance(values, basestring):
-            values = json.loads(values, object_hook=object_hook)
-        new_values = cls._import_json(values)
-        records = cls.search([(cls._export_name, '=', values['_export_name'])])
-        if records:
-            record, = records
-            cls.write(records, new_values)
-        else:
-            record, = cls.create([new_values])
+        with Transaction().set_user(0):
+            with Transaction().set_context(__importing__=True):
+                if isinstance(values, basestring):
+                    values = json.loads(values, object_hook=object_hook)
+                    values = utils.recursive_list_tuple_convert(values)
+                record = cls._import_json(values)
         return record
-
-    @classmethod
-    def recreate_rather_than_update(cls):
-        return False
 
 
 class CoopSQL(ExportImportMixin, ModelSQL):
@@ -475,3 +728,53 @@ class VersionObject(CoopView):
     @staticmethod
     def default_start_date():
         return Transaction().context.get('start_date', utils.today())
+
+
+class Group(ExportImportMixin):
+    __metaclass__ = PoolMeta
+    __name__ = 'res.group'
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(Group, cls)._export_skips()
+        result.add('users')
+        return result
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['name'])
+
+
+def add_export_to_model(models):
+    def class_generator(model_name, keys):
+        class GenericClass(ExportImportMixin):
+            __metaclass__ = PoolMeta
+            __name__ = model_name
+
+            @classmethod
+            def _export_keys(cls):
+                return set(keys)
+
+        return GenericClass
+
+    classes = []
+    for model, keys in models:
+        classes.append(class_generator(model, keys))
+    Pool.register(*classes, module='coop_utils', type_='model')
+
+
+add_export_to_model([
+    ('ir.model', ('model',)),
+    ('ir.model.field', ('name', 'model.model')),
+    ('res.group', ('name',)),
+    ('ir.ui.menu', ('name',)),
+    ('ir.model.field.access', ('field',)),
+    ('ir.rule.group', ('name',)),
+    ('ir.sequence', ('code', 'name')),
+    ('res.user', ('login',)),
+    ('ir.action', ('type', 'name')),
+    ('ir.action.keyword', ('keyword',)),
+    ('res.user.warning', ('name', 'user')),
+    ('ir.rule', ('domain',)),
+    ('ir.model.access', ('group.name', 'model.model')),
+])
