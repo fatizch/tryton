@@ -923,6 +923,8 @@ class ProcessFinder(Wizard):
         good_values[0]['views'] = [
             view for view in good_values[0]['views'] if view[1] == 'form']
         good_obj = self.instanciate_main_object()
+        if (hasattr(good_obj, 'current_state') and good_obj.current_state):
+            good_obj.current_state.step.execute_before(good_obj)
         good_obj.save()
         return good_values[0], {
             'res_id': good_obj.id}
