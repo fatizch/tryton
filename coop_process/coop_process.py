@@ -585,7 +585,7 @@ class ProcessStepRelation(model.CoopSQL):
 
     @classmethod
     def _export_keys(cls):
-        return set(['process.technical_name', 'step.technical_name'])
+        return set(['process.technical_name', 'step.technical_name', 'order'])
 
 
 class XMLViewDesc(model.CoopSQL, model.CoopView):
