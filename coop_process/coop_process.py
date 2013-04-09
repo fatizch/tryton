@@ -446,6 +446,7 @@ class ProcessDesc(model.CoopSQL):
     def _export_skips(cls):
         result = super(ProcessDesc, cls)._export_skips()
         result.add('menu_items')
+        result.add('steps_to_display')
         return result
 
     @classmethod
