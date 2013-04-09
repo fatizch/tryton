@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:ins_claim.claim.history:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:ins_claim.claim:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -21,6 +25,10 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "error:ins_contract.expense:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:ins_claim.claim,claim_history:"
+msgid "History"
+msgstr "Historique"
 
 msgctxt "field:ins_claim.claim,claimant:"
 msgid "Claimant"
@@ -90,6 +98,66 @@ msgctxt "field:ins_claim.claim,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_claim.claim.history,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_claim.claim.history,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_claim.claim.history,date:"
+msgid "Change Date"
+msgstr "Date du Changement"
+
+msgctxt "field:ins_claim.claim.history,declaration_date:"
+msgid "Declaration Date"
+msgstr "Date de Déclaration"
+
+msgctxt "field:ins_claim.claim.history,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_claim.claim.history,from_object:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "field:ins_claim.claim.history,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_claim.claim.history,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_claim.claim.history,name:"
+msgid "Number"
+msgstr "Numéro"
+
+msgctxt "field:ins_claim.claim.history,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_claim.claim.history,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:ins_claim.claim.history,sub_status:"
+msgid "Sub Status"
+msgstr "Sous Statut"
+
+msgctxt "field:ins_claim.claim.history,user:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:ins_claim.claim.history,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_claim.claim.history,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_claim.indemnification,amount:"
 msgid "Amount"
 msgstr "Montant"
@@ -105,6 +173,10 @@ msgstr "Date de création"
 msgctxt "field:ins_claim.indemnification,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:ins_claim.indemnification,currency:"
+msgid "Currency"
+msgstr "Devises"
 
 msgctxt "field:ins_claim.indemnification,currency_digits:"
 msgid "Currency Digits"
@@ -344,7 +416,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.expense,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ins_contract.expense,write_date:"
 msgid "Write Date"
@@ -356,7 +428,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_product.coverage,is_coverage_amount_needed:"
 msgid "Coverage Amount Needed"
-msgstr ""
+msgstr "Montant de Couverture Nécessaire"
 
 msgctxt "field:ins_product.request_finder,tmp_1:"
 msgid "Claim"
@@ -369,6 +441,10 @@ msgstr "ID"
 msgctxt "model:ins_claim.claim,name:"
 msgid "Claim"
 msgstr "Sinistre"
+
+msgctxt "model:ins_claim.claim.history,name:"
+msgid "Claim History"
+msgstr "Historique du Sinistre"
 
 msgctxt "model:ins_claim.indemnification,name:"
 msgid "Indemnification"
@@ -400,11 +476,11 @@ msgstr "Sinistres"
 
 msgctxt "model:ir.action,name:act_indemnification_relate_form"
 msgid "Indemnifications"
-msgstr "indemnisations"
+msgstr "Indemnisations"
 
 msgctxt "model:ir.sequence,name:claim_sequence"
 msgid "Claim Sequence"
-msgstr ""
+msgstr "Numéroteur de Sinistre"
 
 msgctxt "model:ir.sequence.type,name:sequence_type_claim_number"
 msgid "Claim Number"
@@ -435,16 +511,48 @@ msgid "Closed"
 msgstr "Fermé"
 
 msgctxt "selection:ins_claim.claim,status:"
-msgid "In Progress"
-msgstr "En Cours"
+msgid "Open"
+msgstr "Ouvert"
 
 msgctxt "selection:ins_claim.claim,status:"
-msgid "Waiting from Client"
-msgstr "En Attente Client"
+msgid "Reopened"
+msgstr ""
 
-msgctxt "selection:ins_claim.claim,status:"
-msgid "litigation"
-msgstr "En Litige"
+msgctxt "selection:ins_claim.claim.history,status:"
+msgid "Closed"
+msgstr "Fermé"
+
+msgctxt "selection:ins_claim.claim.history,status:"
+msgid "Open"
+msgstr "Ouvert"
+
+msgctxt "selection:ins_claim.claim.history,status:"
+msgid "Reopened"
+msgstr "Réouvert"
+
+msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgid "Paid"
+msgstr "Payé"
+
+msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgid "Reclamation"
+msgstr "Réclamation"
+
+msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgid "Refusal"
+msgstr "Refus"
+
+msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgid "Regularization"
+msgstr "Régularisation"
+
+msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgid "Relapse"
+msgstr "Rechute"
 
 msgctxt "selection:ins_claim.indemnification,kind:"
 msgid "Annuity"
@@ -542,6 +650,10 @@ msgctxt "selection:party.contact_history,for_object_ref:"
 msgid "Claim"
 msgstr "Sinistre"
 
+msgctxt "view:ins_claim.claim.history:"
+msgid "History"
+msgstr "Historique"
+
 msgctxt "view:ins_claim.claim:"
 msgid "Claim"
 msgstr "Sinistre"
@@ -549,6 +661,10 @@ msgstr "Sinistre"
 msgctxt "view:ins_claim.claim:"
 msgid "Documents"
 msgstr "Documents"
+
+msgctxt "view:ins_claim.claim:"
+msgid "History"
+msgstr "Historique"
 
 msgctxt "view:ins_claim.claim:"
 msgid "Losses"

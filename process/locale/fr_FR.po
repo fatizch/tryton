@@ -40,7 +40,7 @@ msgstr "ID"
 
 msgctxt "field:process.code,method_name:"
 msgid "Method Name"
-msgstr ""
+msgstr "Nom de la Méthode"
 
 msgctxt "field:process.code,on_model:"
 msgid "On Model"
@@ -48,11 +48,11 @@ msgstr "Modèle"
 
 msgctxt "field:process.code,parent_step:"
 msgid "Parent Step"
-msgstr ""
+msgstr "Etape Parente"
 
 msgctxt "field:process.code,parent_transition:"
 msgid "Parent Transition"
-msgstr ""
+msgstr "Transition Parente"
 
 msgctxt "field:process.code,rec_name:"
 msgid "Name"
@@ -192,7 +192,7 @@ msgstr "ID"
 
 msgctxt "field:process.process_step_relation,order:"
 msgid "Order"
-msgstr ""
+msgstr "Ordre"
 
 msgctxt "field:process.process_step_relation,process:"
 msgid "Process"
@@ -260,11 +260,11 @@ msgstr "Autorisations"
 
 msgctxt "field:process.step_desc,code_after:"
 msgid "Executed After Step"
-msgstr ""
+msgstr "Executé après l'Etape"
 
 msgctxt "field:process.step_desc,code_before:"
 msgid "Executed Before Step"
-msgstr ""
+msgstr "Executer avant l'Etape"
 
 msgctxt "field:process.step_desc,colspan:"
 msgid "View columns"
@@ -376,7 +376,7 @@ msgstr "Type"
 
 msgctxt "field:process.step_transition,method_kind:"
 msgid "Method Behaviour"
-msgstr ""
+msgstr "Comportement de la Méthode"
 
 msgctxt "field:process.step_transition,methods:"
 msgid "Methods"
@@ -384,7 +384,7 @@ msgstr "Méthodes"
 
 msgctxt "field:process.step_transition,on_process:"
 msgid "On Process"
-msgstr ""
+msgstr "Sur le Processus"
 
 msgctxt "field:process.step_transition,priority:"
 msgid "Priority"
@@ -476,7 +476,7 @@ msgstr "Paramétrage des Processus"
 
 msgctxt "model:ir.ui.menu,name:menu_process_lang"
 msgid "Processes"
-msgstr ""
+msgstr "Processus"
 
 msgctxt "model:ir.ui.menu,name:menu_process_status"
 msgid "Process Status"
@@ -528,11 +528,11 @@ msgstr "Autorisations pour les Transitions"
 
 msgctxt "selection:process.code,technical_kind:"
 msgid "After"
-msgstr ""
+msgstr "Après"
 
 msgctxt "selection:process.code,technical_kind:"
 msgid "Before"
-msgstr ""
+msgstr "Avant"
 
 msgctxt "selection:process.code,technical_kind:"
 msgid "Transition"
@@ -564,11 +564,11 @@ msgstr "Transition Standard"
 
 msgctxt "selection:process.step_transition,method_kind:"
 msgid "Executed between steps"
-msgstr ""
+msgstr "Exécuter entre les Etapes"
 
 msgctxt "selection:process.step_transition,method_kind:"
 msgid "Replace Step Methods"
-msgstr ""
+msgstr "Remplacer les Méthodes de l'Etape"
 
 msgctxt "view:ins_claim.claim:"
 msgid "==> Clôture"
@@ -592,6 +592,10 @@ msgstr ""
 
 msgctxt "view:ins_claim.claim:"
 msgid "==> Remboursement"
+msgstr ""
+
+msgctxt "view:ins_claim.claim:"
+msgid "==> Réouverture"
 msgstr ""
 
 msgctxt "view:ins_claim.claim:"
@@ -641,6 +645,18 @@ msgstr "Précédent"
 msgctxt "view:ins_claim.claim:"
 msgid "Remboursement"
 msgstr "Remboursement"
+
+msgctxt "view:ins_claim.claim:"
+msgid "Reopened Reason"
+msgstr "Raison de la réouverture"
+
+msgctxt "view:ins_claim.claim:"
+msgid "Réouverture"
+msgstr ""
+
+msgctxt "view:ins_claim.claim:"
+msgid "Réouverture De Sinistre"
+msgstr "Réouverture De Sinistre"
 
 msgctxt "view:ins_claim.claim:"
 msgid "The current record completed the current process, please go ahead"
@@ -752,7 +768,7 @@ msgstr "Documents"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Garanties"
-msgstr "Couverture"
+msgstr "Garanties"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Managing Entities"

@@ -6,9 +6,25 @@ msgctxt "error:table.2d:"
 msgid "The table is not 2D"
 msgstr "La table n'est pas 2D"
 
+msgctxt "error:table.2d:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:table.table_cell:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:table.table_def:"
 msgid "The name of \"Table Definition\" must be unique"
 msgstr "Le nom de la table doit être unique"
+
+msgctxt "error:table.table_def:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:table.table_dimension:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:table.2d,create_date:"
 msgid "Create Date"
@@ -21,6 +37,10 @@ msgstr "Créé par"
 msgctxt "field:table.2d,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:table.2d,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:table.2d,rec_name:"
 msgid "Name"
@@ -94,9 +114,13 @@ msgctxt "field:table.table_cell,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:table.table_cell,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:table.table_cell,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:table.table_cell,value:"
 msgid "Value"
@@ -109,6 +133,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:table.table_cell,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:table.table_def,cells:"
+msgid "Cells"
+msgstr "Cellules"
 
 msgctxt "field:table.table_def,code:"
 msgid "Code"
@@ -156,39 +184,43 @@ msgstr "Type Dim 4"
 
 msgctxt "field:table.table_def,dimension_name1:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:table.table_def,dimension_name2:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:table.table_def,dimension_name3:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:table.table_def,dimension_name4:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:table.table_def,dimension_order1:"
 msgid "Dimension Order 1"
-msgstr ""
+msgstr "Ordre Dimension 1"
 
 msgctxt "field:table.table_def,dimension_order2:"
 msgid "Dimension Order 2"
-msgstr ""
+msgstr "Ordre Dimension 2"
 
 msgctxt "field:table.table_def,dimension_order3:"
 msgid "Dimension Order 3"
-msgstr ""
+msgstr "Ordre Dimension 3"
 
 msgctxt "field:table.table_def,dimension_order4:"
 msgid "Dimension Order 4"
-msgstr ""
+msgstr "Ordre Dimension 4"
 
 msgctxt "field:table.table_def,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:table.table_def,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:table.table_def,kind:"
 msgid "Kind"
@@ -241,6 +273,10 @@ msgstr "Date de Fin"
 msgctxt "field:table.table_dimension,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:table.table_dimension,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:table.table_dimension,rec_name:"
 msgid "Name"
@@ -408,7 +444,7 @@ msgstr "Séquence"
 
 msgctxt "selection:table.table_def,dimension_order2:"
 msgid "Alphabetical"
-msgstr ""
+msgstr "Alphabétique"
 
 msgctxt "selection:table.table_def,dimension_order2:"
 msgid "Sequence"
@@ -424,7 +460,7 @@ msgstr "Séquence"
 
 msgctxt "selection:table.table_def,dimension_order4:"
 msgid "Alphabetical"
-msgstr ""
+msgstr "Alphabétique"
 
 msgctxt "selection:table.table_def,dimension_order4:"
 msgid "Sequence"

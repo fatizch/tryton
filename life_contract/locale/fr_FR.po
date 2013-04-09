@@ -52,7 +52,7 @@ msgstr "Relations entre Tiers"
 
 msgctxt "field:ins_contract.covered_element-party_relation,rec_name:"
 msgid "Name"
-msgstr "Name"
+msgstr "Nom"
 
 msgctxt "field:ins_contract.covered_element-party_relation,write_date:"
 msgid "Write Date"
@@ -152,7 +152,7 @@ msgstr ""
 
 msgctxt "model:life_contract.covered_desc,name:"
 msgid "Covered Desc"
-msgstr ""
+msgstr "Descripteur d'Element Couvert"
 
 msgctxt "model:life_contract.extension_life_state,name:"
 msgid "Life Extension"

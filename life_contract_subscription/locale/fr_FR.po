@@ -9,3 +9,7 @@ msgstr "Saisir le Montant de Couverture"
 msgctxt "field:ins_contract.covered_data,coverage_amount_selection:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"
+
+msgctxt "field:ins_contract.covered_data,with_coverage_amount:"
+msgid "With Coverage Amount"
+msgstr ""

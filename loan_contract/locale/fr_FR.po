@@ -24,7 +24,7 @@ msgstr "Documents"
 
 msgctxt "field:ins_contract.contract,is_loan_contract:"
 msgid "Is Loan Contract"
-msgstr ""
+msgstr "Contrat Emprunteur?"
 
 msgctxt "field:ins_contract.contract,loans:"
 msgid "Loans"
@@ -216,7 +216,7 @@ msgstr "Emprunteur"
 
 msgctxt "model:ins_contract.loan_covered_data-loan_share,name:"
 msgid "Loan Covered Data Loan Share Relation"
-msgstr ""
+msgstr "Relation Données de Couverture et Quotités"
 
 msgctxt "model:ins_contract.loan_share,name:"
 msgid "Loan Share"

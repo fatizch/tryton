@@ -92,27 +92,27 @@ msgstr "Description du Processus"
 
 msgctxt "field:ins_process.step_desc,button_cancel:"
 msgid "'Cancel' button"
-msgstr ""
+msgstr "Bouton Annuler"
 
 msgctxt "field:ins_process.step_desc,button_check:"
 msgid "'Check' button"
-msgstr ""
+msgstr "Bouton Vérifier"
 
 msgctxt "field:ins_process.step_desc,button_complete:"
 msgid "'Complete' button"
-msgstr ""
+msgstr "Bouton Compléter"
 
 msgctxt "field:ins_process.step_desc,button_default:"
 msgid "Default Button"
-msgstr ""
+msgstr "Bouton Par Défaut"
 
 msgctxt "field:ins_process.step_desc,button_next:"
 msgid "'Next' button"
-msgstr ""
+msgstr "Bouton Suivant"
 
 msgctxt "field:ins_process.step_desc,button_previous:"
 msgid "'Previous' button"
-msgstr ""
+msgstr "Bouton Précédent"
 
 msgctxt "field:ins_process.step_desc,button_suspend:"
 msgid "'Suspend' button"
@@ -308,7 +308,7 @@ msgstr ""
 
 msgctxt "model:ir.action,name:resume_dummy_process"
 msgid "Resume Process"
-msgstr "Reprendre le Workflow"
+msgstr ""
 
 msgctxt "model:ir.action,name:suspended_process_form"
 msgid "Suspended Processes"
@@ -316,7 +316,7 @@ msgstr "Processus Suspendus"
 
 msgctxt "model:ir.action,name:suspended_process_resume"
 msgid "Resume Process"
-msgstr "Reprendre le Workflow"
+msgstr ""
 
 msgctxt "selection:ins_process.process_state,cur_action:"
 msgid "cancel"
@@ -344,19 +344,19 @@ msgstr "Suspendre"
 
 msgctxt "selection:ins_process.step_desc,button_default:"
 msgid "'Cancel' Button"
-msgstr ""
+msgstr "Bouton Annuler"
 
 msgctxt "selection:ins_process.step_desc,button_default:"
 msgid "'Check' Button"
-msgstr ""
+msgstr "Bouton Vérifier"
 
 msgctxt "selection:ins_process.step_desc,button_default:"
 msgid "'Complete' Button"
-msgstr ""
+msgstr "Bouton Compléter"
 
 msgctxt "selection:ins_process.step_desc,button_default:"
 msgid "'Next' Button"
-msgstr ""
+msgstr "Bouton Suivant"
 
 msgctxt "selection:ins_process.step_desc,button_default:"
 msgid "'Previous' Button"
@@ -364,7 +364,7 @@ msgstr ""
 
 msgctxt "selection:ins_process.step_desc,button_default:"
 msgid "'Suspend' Button"
-msgstr ""
+msgstr "Bouton Suspendre"
 
 msgctxt "selection:ins_process.step_method_desc,rule_kind:"
 msgid "Must Step Over"
@@ -372,7 +372,7 @@ msgstr ""
 
 msgctxt "selection:ins_process.step_method_desc,rule_kind:"
 msgid "Step Validation"
-msgstr ""
+msgstr "Validation de l'Etape"
 
 msgctxt "view:ins_process.process_desc:"
 msgid "Process Descriptor"

@@ -50,6 +50,10 @@ msgctxt "error:ins_contract.subscription_mgr:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_contract.subscription_process_finder:"
+msgid "Please pick a process from the selection"
+msgstr ""
+
 msgctxt "field:ins_contract.contract,current_log:"
 msgid "Current Log"
 msgstr ""
@@ -157,6 +161,14 @@ msgstr "Modèle"
 msgctxt "field:ins_contract.subscription_process_parameters,product:"
 msgid "Product"
 msgstr "Produit"
+
+msgctxt "field:process.process_desc,display_steps_without_status:"
+msgid "Display Steps Without Status"
+msgstr "Afficher les Etapes sans Statuts"
+
+msgctxt "field:process.process_desc,steps_to_display:"
+msgid "Steps"
+msgstr "Etapes"
 
 msgctxt "model:ins_contract.subscription_mgr,name:"
 msgid "Subscription Manager"

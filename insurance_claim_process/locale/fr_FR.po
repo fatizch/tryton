@@ -4,10 +4,14 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:ins_claim.claim:"
 msgid "Everything is good !"
-msgstr ""
+msgstr "Tout est bon!"
 
 msgctxt "error:ins_claim.claim:"
 msgid "Object %s is currently locked by user %s"
+msgstr "L'objet %s est verrouillé par l'utilisateur %s"
+
+msgctxt "error:ins_claim.declaration_process_finder:"
+msgid "Please pick a process from the selection"
 msgstr ""
 
 msgctxt "field:ins_claim.claim,contact_history:"
@@ -46,6 +50,14 @@ msgctxt "field:ins_claim.claim,logs:"
 msgid "Task"
 msgstr "Tâche"
 
+msgctxt "field:ins_claim.declaration_process_parameters,claim:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "field:ins_claim.declaration_process_parameters,claims:"
+msgid "Claims"
+msgstr "Sinistres"
+
 msgctxt "field:ins_claim.declaration_process_parameters,date:"
 msgid "Date"
 msgstr "Date"
@@ -62,9 +74,17 @@ msgctxt "field:ins_claim.declaration_process_parameters,model:"
 msgid "Model"
 msgstr "Modèle"
 
+msgctxt "field:ins_claim.declaration_process_parameters,party:"
+msgid "Party"
+msgstr "Tiers"
+
 msgctxt "field:ins_claim.loss,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
+
+msgctxt "field:ins_contract.delivered_service,needs_to_be_calculated:"
+msgid "To Be Calculated"
+msgstr "A Calculer"
 
 msgctxt "model:ins_claim.declaration_process_parameters,name:"
 msgid "Declaration Process Parameters"
@@ -85,6 +105,10 @@ msgstr "Commencer la Déclaration"
 msgctxt "selection:process.process_desc,kind:"
 msgid "Claim Declaration"
 msgstr "Claim Declaration"
+
+msgctxt "selection:process.process_desc,kind:"
+msgid "Claim Reopening"
+msgstr "Réouverture de Sinistre"
 
 msgctxt "view:ins_claim.loss:"
 msgid "Loss"

@@ -36,7 +36,7 @@ msgstr "ID"
 
 msgctxt "field:tranche.tranche,ceiling:"
 msgid "Current Ceiling"
-msgstr ""
+msgstr "Plafond Courant"
 
 msgctxt "field:tranche.tranche,code:"
 msgid "Code"
@@ -56,7 +56,7 @@ msgstr "Valeur Courante"
 
 msgctxt "field:tranche.tranche,floor:"
 msgid "Current Floor"
-msgstr ""
+msgstr "Plancher Courant"
 
 msgctxt "field:tranche.tranche,id:"
 msgid "ID"
@@ -88,7 +88,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:tranche.tranche_version,ceiling:"
 msgid "Ceiling"
-msgstr ""
+msgstr "Plafond"
 
 msgctxt "field:tranche.tranche_version,create_date:"
 msgid "Create Date"
@@ -140,7 +140,7 @@ msgstr "Inclus"
 
 msgctxt "help:tranche.tranche_version,floor:"
 msgid "Not Included"
-msgstr ""
+msgstr "Non Inclus"
 
 msgctxt "model:ir.action,name:act_model_tranche"
 msgid "Tranches"

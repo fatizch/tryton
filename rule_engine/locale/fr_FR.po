@@ -2,17 +2,41 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:rule_engine.context-rule_engine.tree_element:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:rule_engine.context:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:rule_engine.context:"
 msgid "You define twice the same name!"
 msgstr "Vous avez défini le même nom plusieurs fois"
 
+msgctxt "error:rule_engine.test_case.value:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:rule_engine.test_case:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:rule_engine.tree_element:"
 msgid "Function arguments must only use ascii"
-msgstr ""
+msgstr "Paramètres de la Fonction ne doit pas utiliser de caracères spéciaux"
 
 msgctxt "error:rule_engine.tree_element:"
 msgid "Technical name must only use ascii"
 msgstr ""
+
+msgctxt "error:rule_engine.tree_element:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:rule_engine:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:rule_engine:"
 msgid "Your code has errors!"
@@ -42,6 +66,10 @@ msgctxt "field:rule_engine,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:rule_engine,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:rule_engine,name:"
 msgid "Name"
 msgstr "Nom"
@@ -56,7 +84,7 @@ msgstr "Statut"
 
 msgctxt "field:rule_engine,test_cases:"
 msgid "Test Cases"
-msgstr ""
+msgstr "Jeux de Test"
 
 msgctxt "field:rule_engine,write_date:"
 msgid "Write Date"
@@ -81,6 +109,10 @@ msgstr "Créé par"
 msgctxt "field:rule_engine.context,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:rule_engine.context,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:rule_engine.context,name:"
 msgid "Name"
@@ -113,6 +145,10 @@ msgstr "Créé par"
 msgctxt "field:rule_engine.context-rule_engine.tree_element,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:rule_engine.context-rule_engine.tree_element,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:rule_engine.context-rule_engine.tree_element,rec_name:"
 msgid "Name"
@@ -168,7 +204,7 @@ msgstr "Valeurs"
 
 msgctxt "field:rule_engine.create_test_case.start,unknown_values:"
 msgid "Unknown Values"
-msgstr ""
+msgstr "Valeurs Inconnues"
 
 msgctxt "field:rule_engine.run_tests.report,id:"
 msgid "ID"
@@ -197,6 +233,10 @@ msgstr "Résultat attendu"
 msgctxt "field:rule_engine.test_case,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:rule_engine.test_case,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:rule_engine.test_case,rec_name:"
 msgid "Name"
@@ -230,6 +270,10 @@ msgctxt "field:rule_engine.test_case.value,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:rule_engine.test_case.value,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:rule_engine.test_case.value,name:"
 msgid "Name"
 msgstr "Nom"
@@ -244,7 +288,7 @@ msgstr "Règle"
 
 msgctxt "field:rule_engine.test_case.value,test_case:"
 msgid "Test Case"
-msgstr ""
+msgstr "Jeu de Test"
 
 msgctxt "field:rule_engine.test_case.value,value:"
 msgid "Value"
@@ -296,11 +340,15 @@ msgstr "Description"
 
 msgctxt "field:rule_engine.tree_element,fct_args:"
 msgid "Function Arguments"
-msgstr ""
+msgstr "Paramètres de la Fonction"
 
 msgctxt "field:rule_engine.tree_element,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:rule_engine.tree_element,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:rule_engine.tree_element,language:"
 msgid "Language"
@@ -308,7 +356,7 @@ msgstr "Langues"
 
 msgctxt "field:rule_engine.tree_element,long_description:"
 msgid "Long Description"
-msgstr ""
+msgstr "Description"
 
 msgctxt "field:rule_engine.tree_element,name:"
 msgid "Name"
@@ -316,7 +364,7 @@ msgstr "Nom"
 
 msgctxt "field:rule_engine.tree_element,namespace:"
 msgid "Namespace"
-msgstr ""
+msgstr "Espace de Nom"
 
 msgctxt "field:rule_engine.tree_element,parent:"
 msgid "Parent"
@@ -360,7 +408,7 @@ msgstr "Créer le jeu de test"
 
 msgctxt "model:ir.action,name:create_test_values_wizard"
 msgid "Create Test Values"
-msgstr "Créer les valeurs de test"
+msgstr "Créer les Valeurs du Jeu d'Essai"
 
 msgctxt "model:ir.action,name:rule_window"
 msgid "Rules"
@@ -428,7 +476,7 @@ msgstr ""
 
 msgctxt "model:rule_engine.test_case.value,name:"
 msgid "Test Case Value"
-msgstr ""
+msgstr "Valeur du Test"
 
 msgctxt "model:rule_engine.test_rule.start,name:"
 msgid "Test Rule Input Form"

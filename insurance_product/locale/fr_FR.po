@@ -4,7 +4,7 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:ins_product.attachment_setter:"
 msgid "Duplicate name on attachments : %s"
-msgstr ""
+msgstr "Doublon de Nom sur les pièces jointes : %s"
 
 msgctxt "error:ins_product.benefit-complementary_data_def:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -217,7 +217,7 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_product.receive_document_wizard:"
 msgid "No document request found for this object"
-msgstr ""
+msgstr "Aucune demande de document trouvé pour cet objet"
 
 msgctxt "error:ins_product.reserve_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -951,7 +951,7 @@ msgstr "Maître"
 
 msgctxt "field:ins_product.complementary_data_recursive_relation,rec_name:"
 msgid "Name"
-msgstr "Name"
+msgstr "Nom"
 
 msgctxt ""
 "field:ins_product.complementary_data_recursive_relation,select_value:"
@@ -1353,11 +1353,11 @@ msgstr "Créé par"
 
 msgctxt "field:ins_product.document,document_desc:"
 msgid "Document Definition"
-msgstr ""
+msgstr "Définition du Document"
 
 msgctxt "field:ins_product.document,for_object:"
 msgid "Needed For"
-msgstr ""
+msgstr "Nécessaire Pour"
 
 msgctxt "field:ins_product.document,id:"
 msgid "ID"
@@ -1517,7 +1517,7 @@ msgstr "Nom"
 
 msgctxt "field:ins_product.document_request,request_description:"
 msgid "Request Description"
-msgstr ""
+msgstr "Description de la Demande"
 
 msgctxt "field:ins_product.document_request,write_date:"
 msgid "Write Date"
@@ -1781,7 +1781,7 @@ msgstr "Créé par"
 
 msgctxt "field:ins_product.event_desc-loss_desc,event_desc:"
 msgid "Event Desc"
-msgstr ""
+msgstr "Descripteur d'Evénement"
 
 msgctxt "field:ins_product.event_desc-loss_desc,id:"
 msgid "ID"
@@ -1962,7 +1962,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.letter_model,kind:"
 msgid "name"
-msgstr ""
+msgstr "Nom"
 
 msgctxt "field:ins_product.letter_model,name:"
 msgid "Name"
@@ -2158,7 +2158,7 @@ msgstr "Documents"
 
 msgctxt "field:ins_product.loss_desc,event_descs:"
 msgid "Events Descriptions"
-msgstr ""
+msgstr "Descripteurs d'Evénement"
 
 msgctxt "field:ins_product.loss_desc,id:"
 msgid "ID"
@@ -2875,7 +2875,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.rule_engine_complementary_data_relation,rec_name:"
 msgid "Name"
-msgstr "Name"
+msgstr "Nom"
 
 msgctxt "field:ins_product.rule_engine_complementary_data_relation,rule:"
 msgid "Rule"
@@ -3092,7 +3092,7 @@ msgstr "ID"
 
 msgctxt "field:ins_product.sub_benefit_rule,indemnification_calc_unit:"
 msgid "Calculation Unit"
-msgstr ""
+msgstr "Unité de Calcul"
 
 msgctxt "field:ins_product.sub_benefit_rule,is_used:"
 msgid "Is Used"
@@ -3224,7 +3224,7 @@ msgstr "Ajouter un coefficient multiplicateur au montant de couverture"
 
 msgctxt "help:ins_product.complementary_data_def,selection:"
 msgid "A couple of key and label separated by \":\" per line"
-msgstr ""
+msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
 
 msgctxt "help:ins_product.coverage_amount_rule,amounts:"
 msgid "Specify amounts separated by ;"
@@ -3240,7 +3240,7 @@ msgstr "Création de l'attachment"
 
 msgctxt "model:ins_product.attachment_setter,name:"
 msgid "Attachment Setter"
-msgstr ""
+msgstr "Gestionnaire de Pièces Jointes"
 
 msgctxt "model:ins_product.benefit,name:"
 msgid "Benefit"
@@ -3252,7 +3252,7 @@ msgstr "Relation entre Prestation et Données Complémentaires"
 
 msgctxt "model:ins_product.benefit-loss_desc,name:"
 msgid "Benefit Loss Desc Relation"
-msgstr ""
+msgstr "Relation Prestation Descripteur de Préjudice"
 
 msgctxt "model:ins_product.benefit_rule,name:"
 msgid "Benefit Rule"
@@ -3292,7 +3292,7 @@ msgstr "Garantie"
 
 msgctxt "model:ins_product.coverage-benefit,name:"
 msgid "Coverage Benefit Relation"
-msgstr ""
+msgstr "Relation Garantie Prestation"
 
 msgctxt "model:ins_product.coverage-complementary_data_def,name:"
 msgid "Relation between Coverage and Complementary Data"
@@ -3312,11 +3312,11 @@ msgstr "Document"
 
 msgctxt "model:ins_product.document-rule-relation,name:"
 msgid "Relation between rule and document"
-msgstr ""
+msgstr "Relation Règle Document"
 
 msgctxt "model:ins_product.document_desc,name:"
 msgid "Document Descriptor"
-msgstr ""
+msgstr "Descripteur de Document"
 
 msgctxt "model:ins_product.document_request,name:"
 msgid "Document Request"
@@ -3345,7 +3345,7 @@ msgstr ""
 
 msgctxt "model:ins_product.event_desc-loss_desc,name:"
 msgid "Event Desc - Loss Desc Relation"
-msgstr ""
+msgstr "Relation Descripteur d'Evénement Descripteur de Préjudice"
 
 msgctxt "model:ins_product.expense_kind,name:"
 msgid "Expense Kind"
@@ -3365,7 +3365,7 @@ msgstr "Modèle de Lettre"
 
 msgctxt "model:ins_product.letter_model_displayer,name:"
 msgid "Letter Model Displayer"
-msgstr ""
+msgstr "Présenteur de Modèle de Lettre"
 
 msgctxt "model:ins_product.letter_model_selection,name:"
 msgid "Letter Model Selection"
@@ -3377,7 +3377,7 @@ msgstr "Version de Lettre"
 
 msgctxt "model:ins_product.loss-document-relation,name:"
 msgid "Loss Desc to Document relation"
-msgstr ""
+msgstr "Relation Descripteur de Préjudice Document"
 
 msgctxt "model:ins_product.loss_desc,name:"
 msgid "Loss Desc"
@@ -3461,7 +3461,7 @@ msgstr ""
 
 msgctxt "model:ins_product.simple_coverage,name:"
 msgid "Simple Coverage"
-msgstr ""
+msgstr "Garantie Simple"
 
 msgctxt "model:ins_product.simple_pricing_rule,name:"
 msgid "Simple Pricing Rule"
@@ -3497,7 +3497,7 @@ msgstr "Eligibilité"
 
 msgctxt "model:ir.action,name:act_event_desc_form"
 msgid "Events"
-msgstr ""
+msgstr "Evénements"
 
 msgctxt "model:ir.action,name:act_item_desc_form"
 msgid "Item Descriptors"
@@ -3541,7 +3541,7 @@ msgstr ""
 
 msgctxt "model:ir.action,name:letter_generation_wizard"
 msgid "Letter Generation"
-msgstr ""
+msgstr "Impression du Courrier"
 
 msgctxt "model:ir.action,name:receive_documents_wizard"
 msgid "Document Reception"
@@ -3561,7 +3561,7 @@ msgstr "Garanties"
 
 msgctxt "model:ir.ui.menu,name:menu_document_desc"
 msgid "Document Descriptors"
-msgstr ""
+msgstr "Descripteurs de Document"
 
 msgctxt "model:ir.ui.menu,name:menu_edm"
 msgid "EDM"
@@ -4396,11 +4396,11 @@ msgstr "Clause"
 
 msgctxt "view:ins_product.complementary_data_def:"
 msgid "Complementary Data Descriptor"
-msgstr ""
+msgstr "Descripteur de Données Complémentaires"
 
 msgctxt "view:ins_product.complementary_data_def:"
 msgid "Complementary Data Descriptors"
-msgstr "Descripteur de Données Complémentaires"
+msgstr "Descripteurs de Données Complémentaires"
 
 msgctxt "view:ins_product.complementary_data_recursive_relation:"
 msgid "Relation"
@@ -4468,7 +4468,7 @@ msgstr "Document Request"
 
 msgctxt "view:ins_product.document_rule:"
 msgid "Document Rule"
-msgstr ""
+msgstr "Document"
 
 msgctxt "view:ins_product.eligibility_rule:"
 msgid "Covered Element"
@@ -4480,7 +4480,7 @@ msgstr "Eligibilite"
 
 msgctxt "view:ins_product.event_desc:"
 msgid "Event Descriptor"
-msgstr ""
+msgstr "Descripteur d'Evénement"
 
 msgctxt "view:ins_product.expense_kind:"
 msgid "Expense Kind"
@@ -4677,7 +4677,7 @@ msgstr "Terminer"
 msgctxt ""
 "wizard_button:ins_product.receive_document_wizard,select_instance,attachment_setter:"
 msgid "Continue"
-msgstr ""
+msgstr "Continuer"
 
 msgctxt ""
 "wizard_button:ins_product.receive_document_wizard,select_instance,end:"

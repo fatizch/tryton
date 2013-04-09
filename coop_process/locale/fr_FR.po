@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:ProcessFinder:"
+msgid "Please pick a process from the selection"
+msgstr ""
+
 msgctxt "error:coop_process.process_log:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -14,11 +18,23 @@ msgctxt "error:coop_process.xml_view_desc:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:process.code:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:process.process_desc:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:process.process_step_relation:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:process.status:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:process.step_desc:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -194,6 +210,10 @@ msgctxt "field:coop_process.xml_view_desc,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:process.code,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:process.process_desc,custom_transitions:"
 msgid "Custom Transitions"
 msgstr "Transitions Personnalisés"
@@ -226,9 +246,17 @@ msgctxt "field:process.process_step_relation,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
+msgctxt "field:process.status,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:process.step_desc,custom_views:"
 msgid "Custom Views"
 msgstr "Vues Personnalisées"
+
+msgctxt "field:process.step_desc,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:process.step_desc,main_model:"
 msgid "Main Model"

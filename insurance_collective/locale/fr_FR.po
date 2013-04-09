@@ -24,7 +24,7 @@ msgstr "Contrat Collectif"
 
 msgctxt "model:ir.action,name:act_coverage_form"
 msgid "Garanties Collectives"
-msgstr "Garanties Collectives"
+msgstr ""
 
 msgctxt "model:ir.action,name:act_enrollment_form"
 msgid "Enrollment"
@@ -36,7 +36,7 @@ msgstr "Affiliations"
 
 msgctxt "model:ir.action,name:act_product_form"
 msgid "Produits Collectifs"
-msgstr "Produits Collectifs"
+msgstr ""
 
 msgctxt "model:ir.ui.menu,name:menu_contract_form"
 msgid "Group Contract"
