@@ -25,6 +25,7 @@ INDEMNIFICATION_DETAIL_KIND = [
     ('deductible', 'Deductible'),
     ('benefit', 'Indemnified'),
     ('limit', 'Limit'),
+    ('regularization', 'Regularization'),
 ]
 CURRENCY_SETTING = [
     ('specific', 'Specific'),

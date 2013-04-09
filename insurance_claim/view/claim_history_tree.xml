@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tree string="History">
+    <field name="date"/>
+    <field name="user"/>
+    <field name="name"/>
+    <field name="status"/>
+    <field name="sub_status"/>
+    <field name="declaration_date"/>
+    <field name="end_date"/>
+</tree>

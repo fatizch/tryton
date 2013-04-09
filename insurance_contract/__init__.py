@@ -11,6 +11,7 @@ def register():
         # contract.py classes
         Party,
         Contract,
+        ContractHistory,
         ManagementProtocol,
         ManagementRole,
         Option,

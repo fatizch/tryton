@@ -2,6 +2,8 @@
 import copy
 from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta, Pool
+from trytond.rpc import RPC
+from decimal import Decimal
 
 from trytond.modules.coop_utils import model, utils, date, fields, coop_string
 from trytond.modules.insurance_product.benefit import INDEMNIFICATION_KIND, \
@@ -19,19 +21,26 @@ __all__ = [
     'Document',
     'RequestFinder',
     'ContactHistory',
+    'ClaimHistory',
 ]
 
 CLAIM_STATUS = [
-    ('in_progress', 'In Progress'),
-    ('waiting_client', 'Waiting from Client'),
+    ('open', 'Open'),
     ('closed', 'Closed'),
-    ('litigation', 'litigation'),
+    ('reopened', 'Reopened'),
 ]
 
 CLAIM_CLOSED_REASON = [
     ('', ''),
     ('refusal', 'Refusal'),
     ('paid', 'Paid'),
+]
+
+CLAIM_REOPENED_REASON = [
+    ('', ''),
+    ('relapse', 'Relapse'),
+    ('reclamation', 'Reclamation'),
+    ('regularization', 'Regularization')
 ]
 
 
@@ -47,15 +56,12 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     'Claim'
 
     __name__ = 'ins_claim.claim'
+    _history = True
 
     name = fields.Char('Number', select=True,
-        states={
-            'readonly': True
-        },)
+        states={'readonly': True})
     status = fields.Selection(CLAIM_STATUS, 'Status', sort=False,
-        states={
-            'readonly': True
-        },)
+        states={'readonly': True})
     sub_status = fields.Selection('get_possible_sub_status', 'Sub Status',
         selection_change_with=['status'])
     declaration_date = fields.Date('Declaration Date')
@@ -66,16 +72,23 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             states={'invisible': Eval('status') != 'closed'}),
         'get_closed_reason')
     claimant = fields.Many2One('party.party', 'Claimant')
-    losses = fields.One2Many('ins_claim.loss', 'claim', 'Losses')
-    documents = fields.One2Many(
-        'ins_product.document_request',
-        'needed_by',
-        'Documents',
-    )
+    losses = fields.One2Many('ins_claim.loss', 'claim', 'Losses',
+        states={'readonly': Eval('status') == 'closed'})
+    documents = fields.One2Many('ins_product.document_request',
+        'needed_by', 'Documents')
+    claim_history = fields.One2Many('ins_claim.claim.history',
+        'from_object', 'History')
+
+    @classmethod
+    def __setup__(cls):
+        super(Claim, cls).__setup__()
+        cls.__rpc__.update({'get_possible_sub_status': RPC(instantiate=0), })
 
     def get_possible_sub_status(self):
         if self.status == 'closed':
             return CLAIM_CLOSED_REASON
+        elif self.status == 'reopened':
+            return CLAIM_REOPENED_REASON
         return [('', '')]
 
     def get_closed_reason(self, name):
@@ -86,10 +99,6 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     @staticmethod
     def default_declaration_date():
         return utils.today()
-
-    @staticmethod
-    def default_status():
-        return 'in_progress'
 
     def init_loss(self):
         if hasattr(self, 'losses') and self.losses:
@@ -141,14 +150,55 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         if not party:
             return []
         Contract = Pool().get('ins_contract.contract')
-        #TODO: filter with the at_date
-        return Contract.search([('subscriber', '=', party.id)])
+        domain = [
+            ('subscriber', '=', party.id),
+            ('status_history.status', '=', 'active'),
+            ('status_history.start_date', '<=', at_date),
+            ['OR',
+                [('status_history.end_date', '=', None)],
+                [('status_history.end_date', '>=', at_date)]]
+        ]
+        return Contract.search(domain)
 
-    def close_claim(self):
+    @staticmethod
+    def default_status():
+        return 'open'
+
+    def close_claim(self, sub_status=None):
+        #TODO : To Enhance. Get real closed reason
         self.status = 'closed'
         self.sub_status = 'paid'
         self.end_date = utils.today()
-        return True
+        return True, []
+
+    def reopen_claim(self):
+        if self.status == 'closed':
+            self.status = 'reopened'
+            self.sub_status = ''
+            self.end_date = None
+        return True, []
+
+
+class ClaimHistory(model.ObjectHistory):
+    'Claim History'
+
+    __name__ = 'ins_claim.claim.history'
+
+    name = fields.Char('Number')
+    status = fields.Selection(CLAIM_STATUS, 'Status')
+    sub_status = fields.Selection(CLAIM_CLOSED_REASON + CLAIM_REOPENED_REASON,
+        'Sub Status')
+    declaration_date = fields.Date('Declaration Date')
+    end_date = fields.Date('End Date',
+        states={'invisible': Eval('status') != 'closed'})
+
+    @classmethod
+    def get_object_model(cls):
+        return 'ins_claim.claim'
+
+    @classmethod
+    def get_object_name(cls):
+        return 'Claim'
 
 
 class Loss(model.CoopSQL, model.CoopView):
@@ -302,9 +352,24 @@ class ClaimDeliveredService():
                 self.__class__, 'indemnifications')
             self.indemnifications.append(indemnification)
         indemnification.init_from_delivered_service(self)
+        self.regularize_indemnification(indemnification, details_dict,
+            cur_dict['currency'])
         indemnification.create_details_from_dict(details_dict, self,
             cur_dict['currency'])
         return True, errors
+
+    def regularize_indemnification(self, indemn, details_dict, currency):
+        amount = Decimal(0)
+        for other_indemn in self.indemnifications:
+            if (other_indemn.status == 'paid'
+                    and other_indemn.currency == currency):
+                amount += other_indemn.amount
+        if amount:
+            details_dict['regularization'] = [
+                {
+                    'amount_per_unit': amount,
+                    'nb_of_unit': -1,
+                }]
 
     def calculate(self):
         cur_dict = {}
@@ -325,7 +390,10 @@ class ClaimDeliveredService():
 
     def get_rec_name(self, name=None):
         if self.benefit:
-            return self.benefit.get_rec_name(name)
+            res = self.benefit.get_rec_name(name)
+            if self.status:
+                res += ' [%s]' % coop_string.translate_value(self, 'status')
+            return res
         return super(ClaimDeliveredService, self).get_rec_name(name)
 
     def on_change_with_complementary_data(self):
@@ -344,7 +412,7 @@ class ClaimDeliveredService():
             return None
         for indemn in self.indemnifications:
             if (indemn.status == 'calculated'
-                    and (not hasattr(indemn, 'local_currency')
+                    and (utils.is_none(indemn, 'local_currency')
                         or indemn.local_currency == cur_dict['currency'])):
                 return indemn
 
@@ -372,14 +440,13 @@ class Indemnification(model.CoopView, model.CoopSQL):
         states={'invisible': Eval('kind') != 'period'})
     status = fields.Selection(INDEMNIFICATION_STATUS, 'Status', sort=False)
     amount = fields.Numeric('Amount',
-        #digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
-        #depends=['currency_digits']
-        )
+        digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
+        depends=['currency_digits'])
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency'),
         'get_currency_id')
     currency_digits = fields.Function(
-        fields.Integer('Currency Digits'),
+        fields.Integer('Currency Digits', states={'invisible': True}),
         'get_currency_digits')
     local_currency_amount = fields.Numeric('Local Currency Amount',
         digits=(16, Eval('local_currency_digits', DEF_CUR_DIG)),
@@ -389,6 +456,7 @@ class Indemnification(model.CoopView, model.CoopSQL):
         states={'invisible': ~Eval('local_currency')})
     local_currency_digits = fields.Function(
         fields.Integer('Local Currency Digits',
+            states={'invisible': True},
             on_change_with=['local_currency']),
         'on_change_with_local_currency_digits')
     details = fields.One2Many('ins_claim.indemnification_detail',
@@ -412,7 +480,7 @@ class Indemnification(model.CoopView, model.CoopSQL):
             self.details = []
         else:
             self.details = list(self.details)
-            #TODO: Delete previous details
+            Pool().get('ins_claim.indemnification_detail').delete(self.details)
             self.details[:] = []
         for key, fancy_name in INDEMNIFICATION_DETAIL_KIND:
             if not key in details_dict:
@@ -444,6 +512,7 @@ class Indemnification(model.CoopView, model.CoopSQL):
             Currency = Pool().get('currency.currency')
             self.amount = Currency.compute(self.local_currency,
                 self.local_currency_amount, main_currency)
+        self.amount = main_currency.round(self.amount)
 
     def get_currency(self):
         if self.delivered_service:
@@ -471,6 +540,15 @@ class Indemnification(model.CoopView, model.CoopSQL):
             self.amount,
             coop_string.translate_value(self, 'status') if self.status else '',
         )
+
+    def validate_indemnification(self):
+        if self.status == 'validated' and self.amount:
+            self.status = 'paid'
+            self.save()
+        return True, []
+
+    def is_pending(self):
+        return self.amount > 0 and self.status != 'paid'
 
 
 class IndemnificationDetail(model.CoopSQL, model.CoopView):

@@ -257,6 +257,8 @@ class CoopProcessFramework(ProcessFramework):
             [('create_uid', '=', Transaction().user)])
         for instance in instances:
             good_log = instance.current_log
+            if not good_log:
+                continue
             if good_log.session != good_session.key:
                 good_log.latest = False
                 good_log.save()
@@ -922,18 +924,32 @@ class ProcessFinder(Wizard):
             'ir.action.act_window', [good_action.id])
         good_values[0]['views'] = [
             view for view in good_values[0]['views'] if view[1] == 'form']
-        good_obj = self.instanciate_main_object()
+        good_obj = self.get_or_create_object()
         if (hasattr(good_obj, 'current_state') and good_obj.current_state):
             good_obj.current_state.step.execute_before(good_obj)
         good_obj.save()
         return good_values[0], {
             'res_id': good_obj.id}
 
+    def search_main_object(self):
+        return None
+
+    def get_or_create_object(self):
+        res = self.search_main_object()
+        if not res:
+            return self.instanciate_main_object()
+        self.init_state(res)
+        return res
+
+    def init_state(self, obj):
+        if utils.is_none(obj, 'current_state'):
+            obj.current_state = \
+                self.process_parameters.good_process.all_steps[0]
+
     def instanciate_main_object(self):
         GoodModel = Pool().get(self.process_parameters.model.model)
         good_obj = GoodModel()
-        good_obj.current_state = \
-            self.process_parameters.good_process.all_steps[0]
+        self.init_state(good_obj)
         is_ok, errs = self.init_main_object_from_process(
             good_obj, self.process_parameters)
         if is_ok:

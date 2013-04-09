@@ -164,6 +164,24 @@
             <field name="name">status_history_tree</field>
         </record>
         <!--################################################################ -->
+        <!-- Contract History -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="contract_history_view_form">
+            <field name="model">ins_contract.contract.history</field>
+            <field name="type">form</field>
+            <field name="name">contract_history_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_history_view_tree">
+            <field name="model">ins_contract.contract.history</field>
+            <field name="type">tree</field>
+            <field name="name">contract_history_tree</field>
+        </record>
+         <record model="ir.model.access" id="access_contract_history">
+           <field name="model" search="[('model', '=', 'ins_contract.contract.history')]"/>
+           <field name="perm_write" eval="False"/>
+           <field name="perm_read" eval="True"/>
+       </record>
+        <!--################################################################ -->
         <!-- Relate -->
         <!--################################################################ -->
         <record model="ir.action.act_window" id="act_contract_relate_form">

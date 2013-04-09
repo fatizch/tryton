@@ -70,6 +70,25 @@ class Contract():
         self.covered_elements = [covered_element]
         return super(Contract, self).init_covered_elements()
 
+    @classmethod
+    def get_possible_contracts_from_party(cls, party, at_date):
+        res = super(Contract, cls).get_possible_contracts_from_party(party,
+            at_date)
+        if not party:
+            return res
+        for cov_elem in cls.get_possible_covered_elements(party, at_date):
+            contract = cov_elem.get_contract()
+            #TODO : Temporary Hack Date validation should be done with domain
+            #and in get_possible_covered_elements
+            if contract and contract.is_active_at_date(at_date):
+                res.append(contract)
+        return res
+
+    @classmethod
+    def get_possible_covered_elements(cls, party, at_date):
+        CoveredElement = Pool().get('ins_contract.covered_element')
+        return CoveredElement.get_possible_covered_elements(party, at_date)
+
 
 class LifeOption():
     'Subscribed Life Coverage'
@@ -205,6 +224,18 @@ class CoveredPerson():
         if self.person:
             return self.person.get_rec_name(name)
         return ''
+
+    @classmethod
+    def get_possible_covered_elements(cls, party, at_date):
+        #TODO : To enhance with status control on contract and option linked
+        domain = [
+            ('person', '=', party.id),
+            ('covered_data.start_date', '>=', at_date),
+            ['OR',
+                ['covered_data.end_date', '=', None],
+                ['covered_data.end_date', '>=', at_date]]
+            ]
+        return cls.search([domain])
 
 
 class CoveredElementPartyRelation(model.CoopSQL):

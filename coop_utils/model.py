@@ -1,5 +1,6 @@
 import copy
-
+import time
+import datetime
 try:
     import simplejson as json
 except ImportError:
@@ -29,6 +30,7 @@ __all__ = [
     'DynamicSelection',
     'VersionedObject',
     'VersionObject',
+    'ObjectHistory',
     'Group',
 ]
 
@@ -546,7 +548,7 @@ class CoopSQL(ExportImportMixin, ModelSQL):
     def search(cls, domain, offset=0, limit=None, order=None, count=False,
             query_string=False):
         #Set your class here to see the domain on the search
-        # if cls.__name__ == 'party.party':
+        # if cls.__name__ == 'ins_contract.option':
         #     print domain
         return super(CoopSQL, cls).search(domain=domain, offset=offset,
             limit=limit, order=order, count=count, query_string=query_string)
@@ -730,6 +732,85 @@ class VersionObject(CoopView):
         return Transaction().context.get('start_date', utils.today())
 
 
+class ObjectHistory(CoopSQL, CoopView):
+    'Object History'
+
+    __name__ = 'coop.object.history'
+
+    date = fields.DateTime('Change Date')
+    from_object = fields.Many2One(None, 'From Object')
+    user = fields.Many2One('res.user', 'User')
+
+    @classmethod
+    def __setup__(cls):
+        cls.from_object = copy.copy(cls.from_object)
+        cls.from_object.model_name = cls.get_object_model()
+        object_name = cls.get_object_name()
+        if object_name:
+            cls.from_object.string = object_name
+        super(ObjectHistory, cls).__setup__()
+        cls._order.insert(0, ('date', 'DESC'))
+
+    @classmethod
+    def get_object_model(cls):
+        raise NotImplementedError
+
+    @classmethod
+    def get_object_name(cls):
+        return 'From Object'
+
+    @classmethod
+    def _table_query_fields(cls):
+        Object = Pool().get(cls.get_object_model())
+        table = '%s__history' % Object._table
+        return [
+            'MIN("%s".__id) AS id' % table,
+            '"%s".id AS from_object' % table,
+            ('MIN(COALESCE("%s".write_date, "%s".create_date)) AS date'
+                % (table, table)),
+            ('COALESCE("%s".write_uid, "%s".create_uid) AS user'
+                % (table, table)),
+        ] + ['"%s"."%s"' % (table, name)
+            for name, field in cls._fields.iteritems()
+            if name not in ('id', 'from_object', 'date', 'user')
+            and not hasattr(field, 'set')]
+
+    @classmethod
+    def _table_query_group(cls):
+        Object = Pool().get(cls.get_object_model())
+        table = '%s__history' % Object._table
+        return [
+            '"%s".id' % table,
+            'COALESCE("%s".write_uid, "%s".create_uid)' % (table, table),
+        ] + ['"%s"."%s"' % (table, name)
+            for name, field in cls._fields.iteritems()
+            if (name not in ('id', 'from_object', 'date', 'user')
+                and not hasattr(field, 'set'))]
+
+    @classmethod
+    def table_query(cls):
+        Object = Pool().get(cls.get_object_model())
+        return (('SELECT ' + (', '.join(cls._table_query_fields()))
+                + ' FROM "%s__history" GROUP BY '
+                + (', '.join(cls._table_query_group())))
+            % Object._table, [])
+
+    @classmethod
+    def read(cls, ids, fields_names=None):
+        res = super(ObjectHistory, cls).read(ids,
+            fields_names=fields_names)
+
+        # Remove microsecond from timestamp
+        for values in res:
+            if 'date' in values:
+                if isinstance(values['date'], basestring):
+                    values['date'] = datetime.datetime(
+                        *time.strptime(values['date'],
+                            '%Y-%m-%d %H:%M:%S.%f')[:6])
+                values['date'] = values['date'].replace(microsecond=0)
+        return res
+
+
 class Group(ExportImportMixin):
     __metaclass__ = PoolMeta
     __name__ = 'res.group'
@@ -778,3 +859,4 @@ add_export_to_model([
     ('ir.rule', ('domain',)),
     ('ir.model.access', ('group.name', 'model.model')),
 ])
+

@@ -22,6 +22,7 @@
     <record model="ir.ui.view" id="declaration_process_parameters_form">
       <field name="model">ins_claim.declaration_process_parameters</field>
       <field name="type">form</field>
+      <field name="name">claim_process_parameters_form</field>
       <field name="inherit" ref="coop_process.process_parameters_form"/>
     </record>
     <record model="ir.action.wizard" id="declaration_process_launcher">

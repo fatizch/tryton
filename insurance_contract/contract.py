@@ -31,8 +31,10 @@ DELIVERED_SERVICES_STATUSES = [
     ('delivered', 'Delivered'),
 ]
 
+
 __all__ = [
     'Contract',
+    'ContractHistory',
     'Option',
     'StatusHistory',
     'PriceLine',
@@ -147,20 +149,23 @@ class Subscribed(model.CoopView):
             res = ['terminated']
         return res
 
-    def update_status(self, to_status, at_date):
+    def update_status(self, to_status, at_date, sub_status=None):
         if (hasattr(self, 'status') and not to_status in
                 self.get_status_transition_authorized(self.status)):
             return False, [
                 ('transition_unauthorized', (self.status, to_status))]
-        if not hasattr(self, 'status_history') or not self.status_history:
+        if not hasattr(self, 'status_history'):
             self.status_history = []
         else:
             self.status_history = list(self.status_history)
         status_history = utils.instanciate_relation(
             self.__class__, 'status_history')
-        status_history.init_from_reference(self, to_status, at_date)
+        status_history.init_from_reference(self, to_status, at_date,
+            sub_status)
         self.status_history.append(status_history)
         self.status = to_status
+        if hasattr(self, 'sub_status'):
+            self.sub_status = sub_status
         return True, []
 
     def get_currency_digits(self, name):
@@ -176,21 +181,27 @@ class Subscribed(model.CoopView):
         if currency:
             return currency.id
 
+    def is_active_at_date(self, at_date):
+        for status_hist in self.status_history:
+            if (status_hist.status == 'active'
+                    and utils.is_effective_at_date(status_hist)):
+                return True
+        return False
+
 
 class Contract(model.CoopSQL, Subscribed, Printable):
     'Contract'
 
     __name__ = 'ins_contract.contract'
     _rec_name = 'contract_number'
+    _history = True
 
     options = fields.One2Many('ins_contract.option', 'contract', 'Options')
     covered_elements = fields.One2ManyDomain(
         'ins_contract.covered_element', 'contract', 'Covered Elements',
         domain=[('parent', '=', None)])
-    contract_number = fields.Char(
-        'Contract Number', select=1, states={
-            'required': Eval('status') == 'active'},
-        depends=['status'])
+    contract_number = fields.Char('Contract Number', select=1,
+        states={'required': Eval('status') == 'active'})
     subscriber = fields.Many2One('party.party', 'Subscriber')
     # The master field is the object on which rules will be called.
     # Basically, we need an abstract way to call rules, because in some case
@@ -216,10 +227,12 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     contact = fields.Many2One('party.party', 'Contact')
     documents = fields.One2Many(
         'ins_product.document_request', 'needed_by', 'Documents', size=1)
+    contract_history = fields.One2Many('ins_contract.contract.history',
+        'from_object', 'Contract History')
 
     @classmethod
     def delete(cls, entities):
-        cls.delete_status_history(entities)
+        #cls.delete_status_history(entities)
         super(Contract, cls).delete(entities)
 
     @staticmethod
@@ -518,6 +531,20 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             'calculated_complementary_datas',
             {'date': self.start_date, 'contract': self})[0]}
 
+    @classmethod
+    def get_possible_contracts_from_party(cls, party, at_date):
+        if not party:
+            return []
+        domain = [
+            ('subscriber', '=', party.id),
+            ('status_history.status', '=', 'active'),
+            ('status_history.start_date', '<=', at_date),
+            ['OR',
+                [('status_history.end_date', '=', None)],
+                [('status_history.end_date', '>=', at_date)]]
+        ]
+        return cls.search(domain)
+
 
 class Option(model.CoopSQL, Subscribed):
     'Subscribed Coverage'
@@ -591,7 +618,9 @@ class StatusHistory(model.CoopSQL, model.CoopView):
     __name__ = 'ins_contract.status_history'
 
     reference = fields.Reference('Reference', 'get_possible_reference')
-    status = fields.Char('Status')
+    status = fields.Selection(OPTIONSTATUS, 'Status',
+        selection_change_with=['reference'])
+    sub_status = fields.Char('Sub Status')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
 
@@ -602,17 +631,40 @@ class StatusHistory(model.CoopSQL, model.CoopView):
         res.append(('ins_contract.option', 'Option'))
         return res
 
-    def init_from_reference(self, reference, to_status, at_date):
+    def init_from_reference(self, reference, to_status, at_date,
+            sub_status=None):
         self.status = to_status
         self.start_date = at_date
+        self.sub_status = sub_status
         if not reference.status_history:
             return
         previous_status = reference.status_history[-1]
         if not previous_status:
             return
-        previous_status.end_date = date.add_day(at_date, -1)
+        previous_status.end_date = max(date.add_day(at_date, -1),
+            previous_status.start_date)
         if previous_status == 'active':
             reference.end_date = previous_status.end_date
+
+
+class ContractHistory(model.ObjectHistory):
+    'Contract History'
+
+    __name__ = 'ins_contract.contract.history'
+
+    status = fields.Selection('get_possible_status', 'Status')
+
+    @classmethod
+    def get_object_model(cls):
+        return 'ins_contract.contract'
+
+    @classmethod
+    def get_object_name(cls):
+        return 'Contract'
+
+    @classmethod
+    def get_possible_status(cls):
+        return Pool().get('ins_contract.contract').get_possible_status()
 
 
 class PriceLine(model.CoopSQL, model.CoopView):
@@ -1185,8 +1237,12 @@ class DeliveredService(model.CoopView, model.CoopSQL):
 
     def get_rec_name(self, name=None):
         if self.subscribed_service:
-            return self.subscribed_service.get_rec_name(name)
-        return super(DeliveredService, self).get_rec_name(name)
+            res = self.subscribed_service.get_rec_name(name)
+        else:
+            res = super(DeliveredService, self).get_rec_name(name)
+        if self.status:
+            res += ' [%s]' % coop_string.translate_value(self, 'status')
+        return res
 
     def get_expense(self, code, currency):
         for expense in self.expenses:

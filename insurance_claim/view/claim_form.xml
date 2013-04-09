@@ -27,5 +27,8 @@
     <page string="Documents" id="documents">
       <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" mode="form" />
     </page>
+    <page string="History" id="History">
+      <field name="claim_history" colspan="4"/>
+    </page>
   </notebook>
 </form>

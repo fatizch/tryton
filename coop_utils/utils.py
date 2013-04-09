@@ -91,24 +91,23 @@ def to_list(data):
         return [data]
 
 
-# Who needs this?
-# def add_results(results):
-#     # This function can be used to concatenate simple return types, of the
-#     # form (result, [errors]).
-#     # It supposes that the result's type supports the += operator
-#     res = [None, []]
-#     for cur_res in results:
-#         if cur_res == (None, []):
-#             continue
-#         elif cur_res[0] is None:
-#             res[1] += cur_res[1]
-#         elif res[0] is None:
-#             res[0] = cur_res[0]
-#             res[1] += cur_res[1]
-#         else:
-#             res[0] += cur_res[0]
-#             res[1] += cur_res[1]
-#     return tuple(res)
+def add_results(results):
+    # This function can be used to concatenate simple return types, of the
+    # form (result, [errors]).
+    # It supposes that the result's type supports the += operator
+    res = [None, []]
+    for cur_res in results:
+        if cur_res == (None, []):
+            continue
+        elif cur_res[0] is None:
+            res[1] += cur_res[1]
+        elif res[0] is None:
+            res[0] = cur_res[0]
+            res[1] += cur_res[1]
+        else:
+            res[0] += cur_res[0]
+            res[1] += cur_res[1]
+    return tuple(res)
 
 
 def get_data_from_dict(data, dict):
@@ -461,7 +460,6 @@ def get_domain_instances(record, field_name):
     domain = PYSONDecoder(env).decode(pyson_domain)
 
     GoodModel = Pool().get(field.model_name)
-    print domain
     return GoodModel.search(domain)
 
 
@@ -580,3 +578,15 @@ def recursive_list_tuple_convert(the_list):
             for key, value in the_list.iteritems()))
     else:
         return the_list
+
+
+def is_none(instance, field_name):
+    return (not hasattr(instance, field_name)
+        or not getattr(instance, field_name))
+
+
+def concat_res(res1, res2):
+    res = list(res1)
+    res[0] = res[0] and res2[0]
+    res[1] += res2[1]
+    return tuple(res)

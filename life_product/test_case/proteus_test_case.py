@@ -635,7 +635,6 @@ def create_invalidity_coverage(cfg_dict):
     at_date = datetime.date(2011, 1, 1)
     cov = get_or_create_coverage(cfg_dict, 'INVAL', u'Invalidité',
         date=at_date)
-
     CSP = get_or_create_complementary_data(cfg_dict, name='CSP')
     salary = get_or_create_complementary_data(cfg_dict, name='salary',
         string='Annual Salary', type_='numeric', kind='sub_elem')
@@ -647,7 +646,7 @@ def create_invalidity_coverage(cfg_dict):
     elig_rule.max_age = 65
 
     algo = '''salaire = donnee_compl_element_couvert('salaire')
-if donnee_dynamique_element_couvert('CSP') == 'CSP1':
+if donnee_compl_element_couvert('CSP') == 'CSP1':
     return salaire * 0.0002
 else:
     return salaire * 0.0001
@@ -844,7 +843,7 @@ def create_shared_complementary_data(cfg_dict):
     get_or_create_complementary_data(cfg_dict, name='is_vip', string='Is VIP',
         type_='boolean', kind='contract')
     get_or_create_complementary_data(cfg_dict, name='salary',
-        string='Annual Salary', type_='char', kind='sub_elem')
+        string='Annual Salary', type_='numeric', kind='sub_elem')
     get_or_create_complementary_data(cfg_dict, name='CSP',
         string='CSP', type_='selection', kind='sub_elem',
         selection='''CSP1: CSP1

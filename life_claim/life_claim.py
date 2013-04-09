@@ -18,24 +18,6 @@ class LifeClaim():
     __name__ = 'ins_claim.claim'
     __metaclass__ = PoolMeta
 
-    @classmethod
-    def get_possible_contracts_from_party(cls, party, at_date):
-        res = super(LifeClaim, cls).get_possible_contracts_from_party(party,
-            at_date)
-        if not party:
-            return res
-        for cov_elem in cls.get_possible_covered_elements(party, at_date):
-            contract = cov_elem.get_contract()
-            if contract:
-                res.append(contract)
-        return res
-
-    @classmethod
-    def get_possible_covered_elements(cls, party, at_date):
-        CoveredElement = Pool().get('ins_contract.covered_element')
-        #TODO : To enhance with date control
-        return CoveredElement.search([('person', '=', party.id)])
-
 
 class LifeLoss():
     'Life Loss'
@@ -61,7 +43,8 @@ class LifeLoss():
 
     def get_possible_covered_persons(self):
         res = []
-        for covered_element in self.claim.get_possible_covered_elements(
+        CoveredElement = Pool().get('ins_contract.covered_element')
+        for covered_element in CoveredElement.get_possible_covered_elements(
                 self.claim.claimant, self.start_date):
             res.extend(covered_element.get_covered_persons(self.start_date))
         return res
@@ -76,15 +59,15 @@ class LifeClaimDeliveredService():
     __name__ = 'ins_contract.delivered_service'
     __metaclass__ = PoolMeta
 
-    @classmethod
-    def __setup__(cls):
-        super(LifeClaimDeliveredService, cls).__setup__()
-        cls.subscribed_service = copy.copy(cls.subscribed_service)
-        if not cls.subscribed_service.domain:
-            cls.subscribed_service.domain = []
-        domain = ('covered_data.covered_element.person', '=',
-            Eval('_parent_loss', {}).get('covered_person'))
-        cls.subscribed_service.domain.append(domain)
+    # @classmethod
+    # def __setup__(cls):
+    #     super(LifeClaimDeliveredService, cls).__setup__()
+    #     cls.subscribed_service = copy.copy(cls.subscribed_service)
+    #     if not cls.subscribed_service.domain:
+    #         cls.subscribed_service.domain = []
+    #     domain = ('covered_data.covered_element.person', '=',
+    #         Eval('_parent_loss', {}).get('covered_person'))
+    #     cls.subscribed_service.domain.append(domain)
 
     def get_covered_person(self):
         return self.loss.covered_person

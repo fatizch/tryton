@@ -17,6 +17,7 @@ def register():
         DocumentRequest,
         RequestFinder,
         ContactHistory,
+        ClaimHistory,
         ClaimContract,
         ClaimOption,
         ClaimContext,

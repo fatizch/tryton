@@ -94,6 +94,24 @@
       <field name="name">indemnification_detail_tree</field>
     </record>
     <!--################################################################ -->
+    <!-- Contract History -->
+    <!--################################################################ -->
+    <record model="ir.ui.view" id="claim_history_view_form">
+        <field name="model">ins_claim.claim.history</field>
+        <field name="type">form</field>
+        <field name="name">claim_history_form</field>
+    </record>
+    <record model="ir.ui.view" id="claim_history_view_tree">
+        <field name="model">ins_claim.claim.history</field>
+        <field name="type">tree</field>
+        <field name="name">claim_history_tree</field>
+    </record>
+     <record model="ir.model.access" id="access_claim_history">
+       <field name="model" search="[('model', '=', 'ins_claim.claim.history')]"/>
+       <field name="perm_write" eval="False"/>
+       <field name="perm_read" eval="True"/>
+   </record>
+    <!--################################################################ -->
     <!-- Relate -->
     <!--################################################################ -->
     <record model="ir.action.act_window" id="act_claim_relate_form">
