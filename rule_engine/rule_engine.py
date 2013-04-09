@@ -366,12 +366,8 @@ class TestCaseValue(ModelView, ModelSQL):
     test_case = fields.Many2One(
         'rule_engine.test_case', 'Test Case', ondelete='CASCADE')
     rule = fields.Function(
-        fields.Many2One(
-            'rule_engine',
-            'Rule',
-        ),
-        'get_rule',
-    )
+        fields.Many2One('rule_engine', 'Rule'),
+        'get_rule')
 
     @classmethod
     def __setup__(cls):
@@ -379,6 +375,10 @@ class TestCaseValue(ModelView, ModelSQL):
         cls.__rpc__.update({
             'get_selection': RPC(instantiate=0),
         })
+
+    @classmethod
+    def _export_keys(cls):
+        return set([])
 
     def get_rule(self, name):
         if (hasattr(self, 'test_case') and self.test_case) and (
