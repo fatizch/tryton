@@ -3,7 +3,7 @@ from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import model, fields
 from trytond.modules.insurance_product.business_rule.business_rule import \
-    BusinessRuleRoot, STATE_SIMPLE
+    BusinessRuleRoot, STATE_ADVANCED
 from trytond.modules.insurance_product.product import DEF_CUR_DIG
 
 
@@ -19,5 +19,5 @@ class ReserveRule(BusinessRuleRoot, model.CoopSQL):
 
     amount = fields.Numeric('Amount',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
-        states={'invisible': STATE_SIMPLE}
+        states={'invisible': STATE_ADVANCED}
         )

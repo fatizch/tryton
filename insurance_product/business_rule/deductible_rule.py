@@ -1,9 +1,9 @@
 #-*- coding:utf-8 -*-
-from trytond.pyson import Eval, Or
+from trytond.pyson import Eval, Or, And
 
 from trytond.modules.coop_utils import model, date, fields
 from trytond.modules.insurance_product.business_rule.business_rule import \
-    BusinessRuleRoot, STATE_SIMPLE
+    BusinessRuleRoot, STATE_ADVANCED
 
 
 __all__ = [
@@ -22,13 +22,22 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
 
     __name__ = 'ins_product.deductible_rule'
 
-    kind = fields.Selection(DEDUCTIBLE_KIND, 'Kind', sort=False)
+    kind = fields.Selection(DEDUCTIBLE_KIND, 'Kind', sort=False, required=True)
     amount = fields.Numeric('Amount',
-        states={'invisible': Or(STATE_SIMPLE, Eval('kind') != 'amount')})
+        states={
+            'invisible': Or(STATE_ADVANCED, Eval('kind') != 'amount'),
+            'required': And(~STATE_ADVANCED, Eval('kind') == 'amount'),
+        })
     duration = fields.Integer('Duration',
-        states={'invisible': Or(STATE_SIMPLE, Eval('kind') != 'duration')})
+        states={
+            'invisible': Or(STATE_ADVANCED, Eval('kind') != 'duration'),
+            'required': And(~STATE_ADVANCED, Eval('kind') == 'duration'),
+        })
     duration_unit = fields.Selection(date.DAILY_DURATION, 'Duration Unit',
-        states={'invisible': Or(STATE_SIMPLE, Eval('kind') != 'duration')})
+        states={
+            'invisible': Or(STATE_ADVANCED, Eval('kind') != 'duration'),
+            'required': And(~STATE_ADVANCED, Eval('kind') == 'duration'),
+        })
 
     def get_simple_rec_name(self):
         res = self.get_simple_result()[0]

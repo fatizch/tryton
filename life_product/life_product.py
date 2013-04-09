@@ -10,7 +10,7 @@ from trytond.modules.coop_utils import date
 from trytond.modules.insurance_product import ProductDefinition
 from trytond.modules.insurance_product import EligibilityResultLine
 from trytond.modules.insurance_product.business_rule.business_rule import \
-    STATE_SIMPLE, STATE_SUB_SIMPLE
+    STATE_ADVANCED, STATE_SUB_SIMPLE
 
 STATE_LIFE = (
     Eval('_parent_offered', {}).get('family') != 'life_product.definition')
@@ -97,9 +97,9 @@ class LifeEligibilityRule():
     __name__ = 'ins_product.eligibility_rule'
 
     min_age = fields.Integer('Minimum Age',
-        states={'invisible': Or(STATE_LIFE, STATE_SIMPLE)})
+        states={'invisible': Or(STATE_LIFE, STATE_ADVANCED)})
     max_age = fields.Integer('Maximum Age',
-        states={'invisible': Or(STATE_LIFE, STATE_SIMPLE)})
+        states={'invisible': Or(STATE_LIFE, STATE_ADVANCED)})
     sub_min_age = fields.Integer('Minimum Age',
         states={'invisible': Or(STATE_LIFE, STATE_SUB_SIMPLE)})
     sub_max_age = fields.Integer('Maximum Age',

@@ -14,7 +14,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval
 from trytond.modules.coop_utils import fields, model, utils, coop_string
 from trytond.modules.insurance_product.business_rule.business_rule import \
-    BusinessRuleRoot, STATE_SIMPLE
+    BusinessRuleRoot, STATE_ADVANCED
 
 __all__ = [
     'NoTargetCheckAttachment',
@@ -214,7 +214,7 @@ class DocumentRule(BusinessRuleRoot, model.CoopSQL):
         ], 'Kind')
     documents = fields.Many2Many(
         'ins_product.document-rule-relation', 'rule', 'document', 'Documents',
-        states={'invisible': STATE_SIMPLE})
+        states={'invisible': STATE_ADVANCED})
 
     def give_me_documents(self, args):
         if self.config_kind == 'simple':

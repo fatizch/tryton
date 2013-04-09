@@ -13,8 +13,8 @@ from trytond.modules.coop_utils import model, utils, fields
 from trytond.modules.insurance_product.product import CONFIG_KIND
 from trytond.modules.insurance_product.product import Templated, GetResult
 
-STATE_ADVANCED = Eval('config_kind') != 'advanced'
-STATE_SIMPLE = Eval('config_kind') != 'simple'
+STATE_SIMPLE = Eval('config_kind') != 'advanced'
+STATE_ADVANCED = Eval('config_kind') != 'simple'
 STATE_SUB_SIMPLE = Eval('sub_elem_config_kind') != 'simple'
 
 __all__ = [
@@ -127,7 +127,7 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
     config_kind = fields.Selection(
         CONFIG_KIND, 'Conf. kind', required=True)
     rule = fields.Many2One(
-        'rule_engine', 'Rule Engine', states={'invisible': STATE_ADVANCED},
+        'rule_engine', 'Rule Engine', states={'invisible': STATE_SIMPLE},
         depends=['config_kind'])
     view_rec_name = fields.Function(
         fields.Char('Name'),
@@ -135,7 +135,7 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
     rule_complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Rule Complementary Data',
         on_change_with=['rule', 'rule_complementary_data'],
-        states={'invisible': STATE_ADVANCED})
+        states={'invisible': STATE_SIMPLE})
 
     @classmethod
     def __setup__(cls):

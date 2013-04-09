@@ -8,7 +8,7 @@ from trytond.modules.coop_utils import utils, date, model, fields
 from trytond.modules.insurance_product.product import DEF_CUR_DIG, CONFIG_KIND
 from trytond.modules.insurance_product import PricingResultLine
 from trytond.modules.insurance_product.business_rule.business_rule import \
-    BusinessRuleRoot, STATE_SIMPLE, STATE_ADVANCED
+    BusinessRuleRoot, STATE_ADVANCED, STATE_SIMPLE
 
 __all__ = [
     'SimplePricingRule',
@@ -53,7 +53,7 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
     components = fields.One2ManyDomain(
         'ins_product.pricing_component', 'pricing_rule', 'Components',
         domain=[('rated_object_kind', '=', 'global')],
-        states={'invisible': STATE_ADVANCED})
+        states={'invisible': STATE_SIMPLE})
     sub_item_components = fields.One2ManyDomain(
         'ins_product.pricing_component',
         'pricing_rule', 'Covered Item Components',
@@ -62,12 +62,12 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
         PRICING_FREQUENCY, 'Rate Frequency', required=True)
     specific_combination_rule = fields.Many2One(
         'rule_engine', 'Combination Rule',
-        states={'invisible': STATE_ADVANCED})
+        states={'invisible': STATE_SIMPLE})
     sub_item_specific_combination_rule = fields.Many2One(
         'rule_engine', 'Sub Item Combination Rule')
     basic_price = fields.Function(
         fields.Numeric(
-            'Amount', states={'invisible': STATE_SIMPLE},
+            'Amount', states={'invisible': STATE_ADVANCED},
             digits=(
                 16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG))),
         'get_basic_price',
@@ -75,7 +75,7 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
     basic_tax = fields.Function(
         fields.Many2One(
             'coop_account.tax_desc', 'Tax',
-            states={'invisible': STATE_SIMPLE}),
+            states={'invisible': STATE_ADVANCED}),
         'get_basic_tax',
         'set_basic_tax')
 

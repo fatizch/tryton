@@ -4,7 +4,7 @@ from trytond.pool import Pool
 
 from trytond.modules.coop_utils import model, coop_string, date, utils, fields
 from trytond.modules.insurance_product.business_rule.business_rule import \
-    BusinessRuleRoot, STATE_SIMPLE, CONFIG_KIND, STATE_ADVANCED
+    BusinessRuleRoot, STATE_ADVANCED, CONFIG_KIND, STATE_SIMPLE
 from trytond.modules.insurance_product.product import DEF_CUR_DIG
 
 
@@ -33,12 +33,12 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
     amount_evolves_over_time = fields.Boolean('Evolves Over Time',
         states={'invisible': ~STATES_PERIOD})
     amount_kind = fields.Selection(AMOUNT_KIND, 'Amount Kind',
-        states={'invisible': Or(STATE_SIMPLE, STATES_AMOUNT_EVOLVES)})
+        states={'invisible': Or(STATE_ADVANCED, STATES_AMOUNT_EVOLVES)})
     amount = fields.Numeric('Amount',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
         states={
             'invisible': Or(
-                STATE_SIMPLE,
+                STATE_ADVANCED,
                 Eval('amount_kind') != 'amount',
                 STATES_AMOUNT_EVOLVES,
             )
@@ -47,7 +47,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
     coef_coverage_amount = fields.Numeric('Multiplier',
         states={
             'invisible': Or(
-                STATE_SIMPLE,
+                STATE_ADVANCED,
                 Eval('amount_kind') != 'cov_amount',
                 STATES_AMOUNT_EVOLVES,
             )
@@ -284,14 +284,14 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
     config_kind = fields.Selection(CONFIG_KIND,
         'Conf. kind', required=True)
     rule = fields.Many2One(
-        'rule_engine', 'Amount', states={'invisible': STATE_ADVANCED})
+        'rule_engine', 'Amount', states={'invisible': STATE_SIMPLE})
     rule_complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Rule Complementary Data',
         on_change_with=['rule', 'rule_complementary_data'],
-        states={'invisible': STATE_ADVANCED})
+        states={'invisible': STATE_SIMPLE})
     amount = fields.Numeric('Amount',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
-        states={'invisible': STATE_SIMPLE})
+        states={'invisible': STATE_ADVANCED})
     indemnification_calc_unit = fields.Selection(date.DAILY_DURATION,
         'Calculation Unit', sort=False)
     limited_duration = fields.Boolean('Limited Duration')

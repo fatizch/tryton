@@ -4,7 +4,7 @@ from trytond.pyson import Eval, Or
 from trytond.modules.coop_utils import model, fields, utils
 from trytond.modules.insurance_product.product import DEF_CUR_DIG
 from trytond.modules.insurance_product.business_rule.business_rule import \
-    BusinessRuleRoot, STATE_SIMPLE
+    BusinessRuleRoot, STATE_ADVANCED
 
 __all__ = [
     'CoverageAmountRule',
@@ -21,7 +21,7 @@ class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
             ('amount', 'Amount'),
             ('cal_list', 'Calculated List')
         ],
-        'Kind', states={'invisible': STATE_SIMPLE}, )
+        'Kind', states={'invisible': STATE_ADVANCED}, )
     amounts = fields.Char(
         'Amounts', help='Specify amounts separated by ;',
         states={
