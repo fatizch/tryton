@@ -341,6 +341,8 @@ class DeclarationProcessFinder(ProcessFinder):
             self).init_main_object_from_process(obj, process_param)
         if res:
             obj.declaration_date = process_param.date
+            if process_param.party:
+                obj.claimant = process_param.party
         return res, errs
 
     def search_main_object(self):

@@ -1,5 +1,4 @@
 #-*- coding:utf-8 -*-
-import copy
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool
 
@@ -26,9 +25,10 @@ class LifeLoss():
     __metaclass__ = PoolMeta
 
     possible_covered_persons = fields.Function(
-        fields.One2Many('party,party', None, 'Covered Persons',
+        fields.One2Many('party.party', None, 'Covered Persons',
             states={'invisible': True},
-        ), 'get_possible_covered_persons_ids')
+            on_change_with=['claim', 'start_date']
+        ), 'on_change_with_possible_covered_persons')
     covered_person = fields.Many2One('party.party', 'Covered Person',
         #TODO: Temporary hack, the function field is not calculated
         #when storing the object
@@ -49,7 +49,7 @@ class LifeLoss():
             res.extend(covered_element.get_covered_persons(self.start_date))
         return res
 
-    def get_possible_covered_persons_ids(self, name):
+    def on_change_with_possible_covered_persons(self, name=None):
         return [x.id for x in self.get_possible_covered_persons()]
 
 

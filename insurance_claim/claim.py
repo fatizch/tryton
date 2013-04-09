@@ -84,6 +84,12 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         super(Claim, cls).__setup__()
         cls.__rpc__.update({'get_possible_sub_status': RPC(instantiate=0), })
 
+    def get_rec_name(self, name):
+        res = super(Claim, self).get_rec_name(name)
+        if self.claimant:
+            res += ' %s' % self.claimant.get_rec_name(name)
+        return res
+
     def get_possible_sub_status(self):
         if self.status == 'closed':
             return CLAIM_CLOSED_REASON

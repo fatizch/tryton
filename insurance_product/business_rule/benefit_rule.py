@@ -264,8 +264,9 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
             return self.get_indemnification_for_capital(args)
 
     def get_end_date(self, from_date, to_date):
-        if (not self.max_duration_per_indemnification
-                or not self.max_duration_per_indemnification_unit):
+        if (self.offered.indemnification_kind != 'annuity'
+            or (not self.max_duration_per_indemnification
+                or not self.max_duration_per_indemnification_unit)):
             return to_date
         max_end_date = date.get_end_of_period(from_date,
             self.max_duration_per_indemnification,

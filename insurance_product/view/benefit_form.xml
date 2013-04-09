@@ -19,6 +19,9 @@
         <page string="Reserve" id="reserve">
             <field name="reserve_rules" colspan="4"/>
         </page>
+        <page string="Deductible" id="deductible">
+            <field name="deductible_rules" colspan="4"/>
+        </page>
     </xpath>
     <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"
         position="inside">

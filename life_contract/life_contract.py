@@ -230,11 +230,11 @@ class CoveredPerson():
         #TODO : To enhance with status control on contract and option linked
         domain = [
             ('person', '=', party.id),
-            ('covered_data.start_date', '>=', at_date),
+            ('covered_data.start_date', '<=', at_date),
             ['OR',
                 ['covered_data.end_date', '=', None],
                 ['covered_data.end_date', '>=', at_date]]
-            ]
+        ]
         return cls.search([domain])
 
 
