@@ -29,6 +29,7 @@ def register():
         RuleEngineComplementaryDataRelation,
         RuleEngine,
         BusinessRuleRoot,
+        # from documents_rule
         OverridenModel,
         LetterModel,
         LetterVersion,
@@ -44,6 +45,8 @@ def register():
         RequestFinder,
         AttachmentSetter,
         DocumentRequestDisplayer,
+        DocumentRequestBatch,
+        # from pricing_rule
         SimplePricingRule,
         PricingRule,
         PricingComponent,
