@@ -76,6 +76,13 @@ def get_end_of_period(date, duration, duration_unit):
     return add_day(res, -1)
 
 
+def get_end_of_month(date):
+    res = datetime.date(date.year, date.month, 1)
+    res = add_month(res, 1)
+    res = add_day(res, -1)
+    return res
+
+
 def convert_to_periods(dates):
     tmp_dates = dates
     tmp_dates.sort()

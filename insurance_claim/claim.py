@@ -335,7 +335,8 @@ class ClaimDeliveredService():
         #so the rules that was effective when the loss occured
         cur_dict['date'] = self.loss.start_date
         cur_dict['start_date'] = self.loss.start_date
-        cur_dict['end_date'] = self.loss.end_date
+        if self.loss.end_date:
+            cur_dict['end_date'] = self.loss.end_date
         cur_dict['loss'] = self.loss
         cur_dict['option'] = self.subscribed_service
         cur_dict['delivered_service'] = self
@@ -353,22 +354,36 @@ class ClaimDeliveredService():
             cur_dict)
         if errors:
             return None, errors
-        #TODO : To enhance
-        indemnification = self.get_indemnification_being_calculated(cur_dict)
-        if not hasattr(self, 'indemnifications') or not self.indemnifications:
-            self.indemnifications = []
-        else:
-            self.indemnifications = list(self.indemnifications)
-        if not indemnification:
-            indemnification = utils.instanciate_relation(
-                self.__class__, 'indemnifications')
-            self.indemnifications.append(indemnification)
+        indemnification = utils.instanciate_relation(self, 'indemnifications')
+        self.indemnifications.append(indemnification)
         indemnification.init_from_delivered_service(self)
         self.regularize_indemnification(indemnification, details_dict,
             cur_dict['currency'])
         indemnification.create_details_from_dict(details_dict, self,
             cur_dict['currency'])
-        return True, errors
+        return indemnification, errors
+
+    def create_indemnifications(self, cur_dict):
+        if not hasattr(self, 'indemnifications') or not self.indemnifications:
+            self.indemnifications = []
+        else:
+            self.indemnifications = list(self.indemnifications)
+        to_del = [x for x in self.indemnifications if x.status == 'calculated']
+        indemn, errs = self.create_indemnification(cur_dict)
+        res = indemn is not None
+        if ('end_date' in cur_dict and res
+                and indemn.end_date < cur_dict['end_date']):
+            while res and indemn.end_date < cur_dict['end_date']:
+                cur_dict = cur_dict.copy()
+                cur_dict['start_date'] = date.add_day(indemn.end_date, 1)
+                indemn, cur_err = self.create_indemnification(cur_dict)
+                res = indemn is not None
+                errs += cur_err
+        for element in to_del:
+            self.indemnifications.remove(element)
+        Indemnification = Pool().get('ins_claim.indemnification')
+        Indemnification.delete(to_del)
+        return res, errs
 
     def regularize_indemnification(self, indemn, details_dict, currency):
         amount = Decimal(0)
@@ -394,7 +409,7 @@ class ClaimDeliveredService():
         currencies = self.get_local_currencies_used()
         for currency in currencies:
             cur_dict['currency'] = currency
-            cur_res, cur_errs = self.create_indemnification(cur_dict)
+            cur_res, cur_errs = self.create_indemnifications(cur_dict)
             res = res and cur_res
             errs += cur_errs
         self.status = 'calculated'
@@ -476,8 +491,6 @@ class Indemnification(model.CoopView, model.CoopSQL):
 
     def init_from_delivered_service(self, delivered_service):
         self.status = 'calculated'
-        self.start_date = delivered_service.loss.start_date
-        self.end_date = delivered_service.loss.end_date
         self.customer = delivered_service.loss.claim.claimant
         self.beneficiary = delivered_service.loss.claim.claimant
 
@@ -488,7 +501,7 @@ class Indemnification(model.CoopView, model.CoopSQL):
         return self.delivered_service.benefit.indemnification_kind
 
     def create_details_from_dict(self, details_dict, del_service, currency):
-        if not hasattr(self, 'details'):
+        if utils.is_none(self, 'details'):
             self.details = []
         else:
             self.details = list(self.details)
@@ -498,16 +511,20 @@ class Indemnification(model.CoopView, model.CoopSQL):
             if not key in details_dict:
                 continue
             for detail_dict in details_dict[key]:
-                detail = utils.instanciate_relation(self.__class__,
-                    'details')
+                detail = utils.instanciate_relation(self, 'details')
                 detail.init_from_indemnification(self)
                 self.details.append(detail)
                 detail.kind = key
                 for field_name, value in detail_dict.iteritems():
                     setattr(detail, field_name, value)
-        self.calculate_amount_from_details(del_service, currency)
+                if ('start_date' in detail_dict
+                        and (utils.is_none(self, 'start_date')
+                            or detail.start_date < self.start_date)):
+                    self.start_date = detail.start_date
+        self.calculate_amount_and_end_date_from_details(del_service, currency)
 
-    def calculate_amount_from_details(self, del_service, currency):
+    def calculate_amount_and_end_date_from_details(self, del_service,
+            currency):
         self.amount = 0
         self.local_currency_amount = 0
         if not hasattr(self, 'details'):
@@ -520,6 +537,8 @@ class Indemnification(model.CoopView, model.CoopSQL):
             else:
                 self.local_currency_amount += detail.amount
                 self.local_currency = currency
+            if hasattr(detail, 'end_date'):
+                self.end_date = detail.end_date
         if self.local_currency_amount > 0:
             Currency = Pool().get('currency.currency')
             self.amount = Currency.compute(self.local_currency,
@@ -548,7 +567,8 @@ class Indemnification(model.CoopView, model.CoopSQL):
 
     def get_rec_name(self, name):
         return '%s %.2f [%s]' % (
-            coop_string.translate_value(self, 'start_date'),
+            coop_string.translate_value(self, 'start_date')
+            if self.start_date else '',
             self.amount,
             coop_string.translate_value(self, 'status') if self.status else '',
         )

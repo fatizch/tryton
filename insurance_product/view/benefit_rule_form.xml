@@ -23,6 +23,9 @@
     <xpath expr="/form" position="inside">
         <label name="indemnification_calc_unit"/>
         <field name="indemnification_calc_unit"/>
+        <label name="use_monthly_period"/>
+        <field name="use_monthly_period"/>
+        <newline/>
         <label name="max_duration_per_indemnification"/>
         <group id="max_duration_per_indemnification">
             <field name="max_duration_per_indemnification"/>
