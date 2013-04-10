@@ -583,9 +583,24 @@ class CoopSQL(ExportImportMixin, ModelSQL):
         else:
             res = super(CoopSQL, cls).copy(objects, default=default)
 
+    @classmethod
+    def setter_void(cls, objects, name, values):
+        pass
+
+    def getter_void(self, name):
+        pass
+
+    def get_rec_name(self, name=None):
+        return super(CoopSQL, self).get_rec_name(name)
+
 
 class CoopView(ModelView):
-    pass
+    @classmethod
+    def setter_void(cls, objects, name, values):
+        pass
+
+    def getter_void(self, name):
+        pass
 
 
 class CoopWizard(Wizard):

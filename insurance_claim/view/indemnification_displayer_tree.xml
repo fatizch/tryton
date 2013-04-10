@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tree string="Indemnifications" editable="bottom">
+  <field name="selected_validation"/>
+  <field name="selected_control"/>
+  <field name="start_date"/>
+  <field name="end_date"/>
+  <field name="amount"/>
+  <field name="covered_element"/>
+</tree>
