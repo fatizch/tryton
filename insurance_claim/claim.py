@@ -521,7 +521,10 @@ class Indemnification(model.CoopView, model.CoopSQL):
         states={'invisible': Eval('kind') != 'period'})
     end_date = fields.Date('End Date',
         states={'invisible': Eval('kind') != 'period'})
-    status = fields.Selection(INDEMNIFICATION_STATUS, 'Status', sort=False)
+    status = fields.Selection(INDEMNIFICATION_STATUS, 'Status', sort=False,
+        states={
+            'invisible': Eval('status') == 'calculated',
+            'readonly': True})
     amount = fields.Numeric('Amount',
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
         depends=['currency_digits'])
@@ -544,6 +547,20 @@ class Indemnification(model.CoopView, model.CoopSQL):
         'on_change_with_local_currency_digits')
     details = fields.One2Many('ins_claim.indemnification_detail',
         'indemnification', 'Details')
+
+    @classmethod
+    def __setup__(cls):
+        super(Indemnification, cls).__setup__()
+        cls.__rpc__.update({'validate_indemnification': RPC(instantiate=0,
+            readonly=False)})
+        cls.__rpc__.update({'reject_indemnification': RPC(instantiate=0)})
+        cls._buttons.update(
+            {
+                'validate_indemnification': {
+                    'invisible': Eval('status') != 'calculated'},
+                'reject_indemnification': {
+                    'invisible': Eval('status') != 'calculated'},
+            })
 
     def init_from_delivered_service(self, delivered_service):
         self.status = 'calculated'
@@ -636,7 +653,7 @@ class Indemnification(model.CoopView, model.CoopSQL):
         return True, []
 
     def is_pending(self):
-        return self.amount > 0 and self.status != 'paid'
+        return self.amount > 0 and self.status not in ['paid', 'rejected']
 
     def get_claim_sub_status(self):
         if self.status == 'calculated':
@@ -647,6 +664,14 @@ class Indemnification(model.CoopView, model.CoopSQL):
             return 'paid'
         else:
             return 'instruction'
+
+    @classmethod
+    def validate_indemnification(cls, indemnifications):
+        cls.write(indemnifications, {'status': 'validated'})
+
+    @classmethod
+    def reject_indemnification(cls, indemnifications):
+        cls.write(indemnifications, {'status': 'rejected'})
 
 
 class IndemnificationDetail(model.CoopSQL, model.CoopView):
