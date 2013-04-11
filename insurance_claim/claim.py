@@ -76,8 +76,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         states={'readonly': True})
     status = fields.Selection(CLAIM_STATUS, 'Status', sort=False,
         states={'readonly': True})
-    sub_status = fields.Selection(
-        CLAIM_CLOSED_REASON + CLAIM_REOPENED_REASON + CLAIM_OPEN_SUB_STATUS,
+    sub_status = fields.Selection('get_possible_sub_status',
         'Sub Status', selection_change_with=['status'],
         states={'readonly': True})
     declaration_date = fields.Date('Declaration Date')
@@ -549,9 +548,10 @@ class Indemnification(model.CoopView, model.CoopSQL):
             'invisible': Eval('kind') != 'period',
             'readonly': ~Eval('manual'), })
     status = fields.Selection(INDEMNIFICATION_STATUS, 'Status', sort=False,
-        states={
-            'invisible': Eval('status') == 'calculated',
-            'readonly': True})
+        # states={
+        #     'invisible': Eval('status') == 'calculated',
+        #     'readonly': True}
+    )
     amount = fields.Numeric('Amount',
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
         depends=['currency_digits'],
@@ -582,9 +582,10 @@ class Indemnification(model.CoopView, model.CoopSQL):
     @classmethod
     def __setup__(cls):
         super(Indemnification, cls).__setup__()
-        cls.__rpc__.update({'validate_indemnification': RPC(instantiate=0,
-            readonly=False)})
-        cls.__rpc__.update({'reject_indemnification': RPC(instantiate=0)})
+        cls.__rpc__.update({'validate_indemnification':
+                    RPC(instantiate=0, readonly=False)})
+        cls.__rpc__.update({'reject_indemnification':
+                    RPC(instantiate=0, readonly=False)})
         cls._buttons.update(
             {
                 'validate_indemnification': {

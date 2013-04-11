@@ -180,7 +180,6 @@ class ClaimProcess(CoopProcessFramework):
             for del_ser in loss.delivered_services:
                 for indemn in del_ser.indemnifications:
                     if indemn.status == 'calculated':
-                        print True
                         return True
         return False
 
