@@ -8,6 +8,11 @@
         <field name="benefit"/>
         <newline/>
         <field name="complementary_data" colspan="2" no_command="1"/>
+        <label name="compensated_duration"/>
+        <group id="compensated_duration" xexpand="0">
+            <field name="compensated_duration" xexpand="0"/>
+            <field name="compensated_duration_unit" xexpand="0" xalign="0"/>
+        </group>
     </xpath>
     <xpath expr="/form" position="inside">
         <field name="indemnifications" colspan="4"/>

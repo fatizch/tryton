@@ -55,7 +55,8 @@ CLAIM_OPEN_SUB_STATUS = [
     ('instruction', 'Instruction'),
     ('waiting_validation', 'Waiting Validation'),
     ('validated', 'Validated'),
-    ('paid', 'Paid')
+    ('paid', 'Paid'),
+    ('rejected', 'Rejected')
 ]
 
 INDEMNIFICATION_STATUS = [
@@ -76,7 +77,8 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         states={'readonly': True})
     status = fields.Selection(CLAIM_STATUS, 'Status', sort=False,
         states={'readonly': True})
-    sub_status = fields.Selection('get_possible_sub_status',
+    sub_status = fields.Selection(
+        CLAIM_CLOSED_REASON + CLAIM_REOPENED_REASON + CLAIM_OPEN_SUB_STATUS,
         'Sub Status', selection_change_with=['status'],
         states={'readonly': True})
     declaration_date = fields.Date('Declaration Date')
@@ -258,7 +260,8 @@ class ClaimHistory(model.ObjectHistory):
 
     name = fields.Char('Number')
     status = fields.Selection(CLAIM_STATUS, 'Status')
-    sub_status = fields.Selection(CLAIM_CLOSED_REASON + CLAIM_REOPENED_REASON,
+    sub_status = fields.Selection(
+        CLAIM_CLOSED_REASON + CLAIM_REOPENED_REASON + CLAIM_OPEN_SUB_STATUS,
         'Sub Status')
     declaration_date = fields.Date('Declaration Date')
     end_date = fields.Date('End Date',
@@ -377,6 +380,14 @@ class ClaimDeliveredService():
         'ins_product.complementary_data_def', 'Complementary Data',
         on_change_with=['benefit', 'complementary_data'],
         states={'invisible': Eval('status') == 'applicable'})
+    compensated_duration = fields.Function(
+        fields.Integer('Compensated Duration',
+            states={'invisible': ~Eval('compensated_duration_unit')}),
+        'get_compensated_duration')
+    compensated_duration_unit = fields.Function(
+        fields.Selection(date.DAILY_DURATION, 'Unit',
+            states={'invisible': ~Eval('compensated_duration_unit')}),
+        'get_compensated_duration_unit')
 
     @classmethod
     def __setup__(cls):
@@ -523,6 +534,19 @@ class ClaimDeliveredService():
             return ['rejected']
         else:
             return ['instruction']
+
+    def get_indemnification_duration(self, duration_unit=None):
+        res = [0, duration_unit]
+        for indemnification in self.indemnifications:
+            qty, res[1] = indemnification.get_indemnification_duration(res[1])
+            res[0] += qty
+        return res
+
+    def get_compensated_duration(self, name):
+        return self.get_indemnification_duration()[0]
+
+    def get_compensated_duration_unit(self, name):
+        return self.get_indemnification_duration()[1]
 
 
 class Indemnification(model.CoopView, model.CoopSQL):
@@ -690,10 +714,8 @@ class Indemnification(model.CoopView, model.CoopSQL):
     def get_claim_sub_status(self):
         if self.status == 'calculated':
             return 'waiting_validation'
-        elif self.status == 'validated':
-            return 'validated'
-        elif self.status == 'paid':
-            return 'paid'
+        elif self.status in ['validated', 'paid', 'rejected']:
+            return self.status
         else:
             return 'instruction'
 
@@ -705,6 +727,15 @@ class Indemnification(model.CoopView, model.CoopSQL):
     def reject_indemnification(cls, indemnifications):
         cls.write(indemnifications, {'status': 'rejected'})
 
+    def get_indemnification_duration(self, duration_unit=None):
+        res = [0, duration_unit]
+        if self.status != 'paid':
+            return res
+        for detail in self.details:
+            qty, res[1] = detail.get_indemnification_duration(res[1])
+            res[0] += qty
+        return res
+
 
 class IndemnificationDetail(model.CoopSQL, model.CoopView):
     'Indemnification Detail'
@@ -713,14 +744,16 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView):
 
     indemnification = fields.Many2One('ins_claim.indemnification',
         'Indemnification', ondelete='CASCADE')
-    start_date = fields.Date('Start Date', states={
+    start_date = fields.Date('Start Date',
+        states={
             'invisible':
                 Eval('_parent_indemnification', {}).get('kind') != 'period'
-    })
-    end_date = fields.Date('End Date', states={
+        })
+    end_date = fields.Date('End Date',
+        states={
             'invisible':
                 Eval('_parent_indemnification', {}).get('kind') != 'period'
-    })
+        })
     kind = fields.Selection(INDEMNIFICATION_DETAIL_KIND, 'Kind', sort=False)
     amount_per_unit = fields.Numeric('Amount per Unit')
     nb_of_unit = fields.Numeric('Nb of Unit')
@@ -744,6 +777,15 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView):
         currency = self.get_currency
         if currency:
             return currency.digits
+
+    def get_indemnification_duration(self, duration_unit=None):
+        if (self.kind not in ['benefit', 'regularization']
+                or utils.is_none(self, 'unit')):
+            return 0, duration_unit
+        if not duration_unit:
+            duration_unit = self.unit
+        return date.duration_between(self.start_date, self.end_date,
+            duration_unit), duration_unit
 
 
 class DocumentRequest():
