@@ -772,6 +772,7 @@ class IndemnificationDisplayer(model.CoopView):
     start_date = fields.Date('Start Date', states={'readonly': True})
     end_date = fields.Date('End Date', states={'readonly': True})
     covered_element = fields.Char('Covered Element', states={'readonly': True})
+    claim_number = fields.Char('Claim Number', states={'readonly': True})
 
 
 class IndemnificationSelection(model.CoopView):
@@ -866,6 +867,8 @@ class IndemnificationSelection(model.CoopView):
                 'start_date': indemnification.start_date,
                 'end_date': indemnification.end_date,
                 'indemnification_displayer': [indemnification.id],
+                'claim_number': '%s' % (
+                    indemnification.delivered_service.loss.claim.name),
                 'covered_element': '%s' % (
                     indemnification.customer.get_rec_name(None))})
         return {'indemnifications': result, 'modified': False}
@@ -921,5 +924,8 @@ class IndemnificationValidation(Wizard):
                 elem.indemnification.save()
         Selector = Pool().get('ins_claim.indemnification_selection')
         self.select_indemnifications.indemnifications = \
-            Selector.find_indemnifications()['indemnifications']
+            Selector.find_indemnifications(
+                Selector.build_domain(
+                    self.select_indemnifications.domain_string))[
+                        'indemnifications']
         return 'select_indemnifications'

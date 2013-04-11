@@ -1,23 +1,19 @@
 <?xml version="1.0"?>
 <form string="Indemnification Validation" col="3">
-  <group id="criterion" colspan="3" col="6">
-    <label name="domain_string"/>
+  <group id="display_domain" colspan="3">
+    <label name="display_domain"/>
+    <field name="display_domain" xexpand="0" xfill="1"/>
     <field name="domain_string"/>
   </group>
   <group id="indemn" colspan="3" yexpand="1" yfill="1">
     <field name="indemnifications" mode="tree" group="indemnifications"/>
-    <field name="indemnifications" mode="form" group="indemnifications"/>
+    <newline/>
+    <field name="indemnifications" mode="form" group="indemnifications" expand_toolbar="0"/>
   </group>
-  <group id="toggles" colspan="1" xexpand="0" xfill="1">
+  <group id="toggles" colspan="3" xexpand="0" xfill="1">
     <label name="apply"/>
     <field name="global_value" xexpand="0" xfill="1"/>
     <field name="apply" xexpand="0" xfill="1"/>
-  </group>
-  <group id="filler">
-    </group>
-  <group id="display_domain" xexpand="0" xfill="1">
-    <label name="display_domain"/>
-    <field name="display_domain" xexpand="0" xfill="1"/>
   </group>
   <field name="modified"/>
 </form>

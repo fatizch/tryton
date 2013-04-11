@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
 <form string="Indemnification">
-  <field name="indemnification_displayer" mode="form"/>
+  <field name="indemnification_displayer" mode="form" expand_toolbar="0"/>
 </form>
