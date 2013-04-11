@@ -75,12 +75,12 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     name = fields.Char('Number', select=True,
         states={'readonly': True})
     status = fields.Selection(CLAIM_STATUS, 'Status', sort=False,
-        states={'readonly': True},)
+        states={'readonly': True})
     sub_status = fields.Selection('get_possible_sub_status', 'Sub Status',
-        selection_change_with=['status'])
+        selection_change_with=['status'], states={'readonly': True})
     declaration_date = fields.Date('Declaration Date')
     end_date = fields.Date('End Date',
-        states={'invisible': Eval('status') != 'closed'})
+        states={'invisible': Eval('status') != 'closed', 'readonly': True})
     claimant = fields.Many2One('party.party', 'Claimant')
     losses = fields.One2Many('ins_claim.loss', 'claim', 'Losses',
         states={'readonly': Eval('status') == 'closed'})
@@ -515,19 +515,25 @@ class Indemnification(model.CoopView, model.CoopSQL):
     delivered_service = fields.Many2One('ins_contract.delivered_service',
         'Delivered Service', ondelete='CASCADE')
     kind = fields.Function(
-        fields.Selection(INDEMNIFICATION_KIND, 'Kind', sort=False),
+        fields.Selection(INDEMNIFICATION_KIND, 'Kind', sort=False,
+            states={'invisible': True}),
         'get_kind')
     start_date = fields.Date('Start Date',
-        states={'invisible': Eval('kind') != 'period'})
+        states={
+            'invisible': Eval('kind') != 'period',
+            'readonly': ~Eval('manual'), })
     end_date = fields.Date('End Date',
-        states={'invisible': Eval('kind') != 'period'})
+        states={
+            'invisible': Eval('kind') != 'period',
+            'readonly': ~Eval('manual'), })
     status = fields.Selection(INDEMNIFICATION_STATUS, 'Status', sort=False,
         states={
             'invisible': Eval('status') == 'calculated',
             'readonly': True})
     amount = fields.Numeric('Amount',
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
-        depends=['currency_digits'])
+        depends=['currency_digits'],
+        states={'readonly': ~Eval('manual')})
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency'),
         'get_currency_id')
@@ -536,7 +542,9 @@ class Indemnification(model.CoopView, model.CoopSQL):
         'get_currency_digits')
     local_currency_amount = fields.Numeric('Local Currency Amount',
         digits=(16, Eval('local_currency_digits', DEF_CUR_DIG)),
-        states={'invisible': ~Eval('local_currency')},
+        states={
+            'invisible': ~Eval('local_currency'),
+            'readonly': ~Eval('manual')},
         depends=['local_currency_digits'])
     local_currency = fields.Many2One('currency.currency', 'Local Currency',
         states={'invisible': ~Eval('local_currency')})
@@ -546,7 +554,8 @@ class Indemnification(model.CoopView, model.CoopSQL):
             on_change_with=['local_currency']),
         'on_change_with_local_currency_digits')
     details = fields.One2Many('ins_claim.indemnification_detail',
-        'indemnification', 'Details')
+        'indemnification', 'Details', states={'readonly': ~Eval('manual')})
+    manual = fields.Boolean('Manual Calculation')
 
     @classmethod
     def __setup__(cls):

@@ -25,10 +25,14 @@
         <field name="amount"/>
         <field name="currency"/>
     </group>
+    <label name="manual"/>
+    <field name="manual"/>
     <label name="local_currency_amount"/>
     <group id="local_amount">
         <field name="local_currency_amount"/>
         <field name="local_currency"/>
     </group>
+
     <field name="details" colspan="4"/>
+    <field name="kind"/>
 </form>
