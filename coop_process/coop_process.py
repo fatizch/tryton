@@ -171,10 +171,9 @@ class ProcessLog(model.CoopSQL, model.CoopView):
 
     user = fields.Many2One('res.user', 'User')
     from_state = fields.Many2One(
-        'process.process_step_relation', 'From State', ondelete='RESTRICT')
+        'process.process_step_relation', 'From State')
     to_state = fields.Many2One(
-        'process.process_step_relation', 'To State', ondelete='RESTRICT',
-        select=True)
+        'process.process_step_relation', 'To State', select=True)
     start_time = fields.DateTime('Start Time')
     end_time = fields.DateTime('End Time')
     description = fields.Text('Description')
