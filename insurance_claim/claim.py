@@ -1,5 +1,6 @@
 #-*- coding:utf-8 -*-
 import copy
+import datetime
 from decimal import Decimal
 
 from trytond.pyson import Eval, Bool
@@ -686,12 +687,9 @@ class IndemnificationDisplayer(model.CoopView):
 
     __name__ = 'ins_claim.indemnification_displayer'
 
-    selected_validation = fields.Boolean(
-        'V', on_change=[
-            'selected_validation', 'selected_control'])
-    selected_control = fields.Boolean(
-        'R', on_change=[
-            'selected_validation', 'selected_control'])
+    selection = fields.Selection([
+        ('nothing', 'Nothing'), ('validate', 'Validate'),
+        ('refuse', 'Refuse')], 'Selection')
     indemnification_displayer = fields.One2Many(
         'ins_claim.indemnification', '', 'Indemnification',
         states={'readonly': True})
@@ -710,18 +708,6 @@ class IndemnificationDisplayer(model.CoopView):
     end_date = fields.Date('End Date', states={'readonly': True})
     covered_element = fields.Char('Covered Element', states={'readonly': True})
 
-    def on_change_selected_validation(self):
-        if (hasattr(self, 'selected_validation') and self.selected_validation):
-            return {'selected_control': False}
-        else:
-            return {'selected_control': True}
-
-    def on_change_selected_control(self):
-        if (hasattr(self, 'selected_control') and self.selected_control):
-            return {'selected_validation': False}
-        else:
-            return {'selected_validation': True}
-
 
 class IndemnificationSelection(model.CoopView):
     'Indemnification Selection'
@@ -730,32 +716,19 @@ class IndemnificationSelection(model.CoopView):
 
     indemnifications = fields.One2Many(
         'ins_claim.indemnification_displayer', '', 'Indemnifications')
-    start_date = fields.Date(
-        'Start Date', on_change=[
-            'start_date', 'end_date', 'amount', 'indemnifications',
-            'modified'],
-        states={'readonly': Eval('modified', False)})
-    end_date = fields.Date(
-        'End date', on_change=[
-            'start_date', 'end_date', 'amount', 'indemnifications',
-            'modified'],
-        states={'readonly': Eval('modified', False)})
-    amount = fields.Numeric(
-        'Amount', on_change=[
-            'start_date', 'end_date', 'amount', 'indemnifications',
-            'modified'],
-        states={'readonly': Eval('modifid', False)})
+    domain_string = fields.Char(
+        'Domain', on_change=['domain_string', 'indemnifications'],
+        states={'invisible': ~Eval('display_domain')})
     modified = fields.Boolean(
         'Modified', states={'invisible': True},
         on_change_with=['indemnifications'])
-    toggle_control_all = fields.Boolean(
-        'Refuse All', on_change=[
-            'indemnifications', 'modified', 'toggle_control_all',
-            'toggle_validate_all'])
-    toggle_validate_all = fields.Boolean(
-        'Validate All', on_change=[
-            'indemnifications', 'modified', 'toggle_control_all',
-            'toggle_validate_all'])
+    apply = fields.Boolean(
+        'Apply on all', on_change=[
+            'indemnifications', 'modified', 'apply', 'global_value'])
+    global_value = fields.Selection([
+        ('nothing', 'Nothing'), ('validate', 'Validate'),
+        ('refuse', 'Refuse')], 'Global Value')
+    display_domain = fields.Boolean('Display Search')
 
     @classmethod
     def __setup__(cls):
@@ -765,73 +738,64 @@ class IndemnificationSelection(model.CoopView):
             'Please unselect all indemnifications first',
         })
 
-    def on_change_with_modified(self):
-        if not (hasattr(self, 'indemnifications') and self.indemnifications):
-            return
-        for indemnification in self.indemnifications:
-            if (hasattr(indemnification, 'selected') and
-                    indemnification.selected):
-                return True
-        return False
-
-    def on_change_toggle_control_all(self):
-        if (hasattr(self, 'toggle_control_all') and self.toggle_control_all):
-            selected = True
-        else:
-            selected = False
-        result = []
-        for elem in self.indemnifications:
-            elem.selected_control = selected
-            if selected:
-                elem.selected_validation = False
-            if (hasattr(elem, 'id') and elem.id):
-                elem.id = None
-            elem_as_dict = abstract.WithAbstract.serialize_field(elem)
-            if 'id' in elem_as_dict:
-                del elem_as_dict['id']
-            result.append(elem_as_dict)
-        return {'indemnifications': result, 'toggle_validate_all': False}
-
-    def on_change_toggle_validate_all(self):
-        if (hasattr(self, 'toggle_validate_all') and self.toggle_validate_all):
-            selected = True
-        else:
-            selected = False
-        result = []
-        for elem in self.indemnifications:
-            elem.selected_validation = selected
-            if selected:
-                elem.selected_control = False
-            if (hasattr(elem, 'id') and elem.id):
-                elem.id = None
-            elem_as_dict = abstract.WithAbstract.serialize_field(elem)
-            if 'id' in elem_as_dict:
-                del elem_as_dict['id']
-            result.append(elem_as_dict)
-        return {'indemnifications': result, 'toggle_control_all': False}
-
     @classmethod
-    def find_indemnifications(
-            cls, amount=None, start_date=None, end_date=None):
+    def build_domain(cls, string):
+        if not string:
+            return []
+        Indemnification = Pool().get('ins_claim.indemnification')
+        clean_values = []
+        cur_value = ''
+        quote_found = False
+        for elem in string:
+            if elem == '"':
+                if quote_found:
+                    clean_values.append(cur_value)
+                    cur_value = ''
+                    quote_found = False
+                else:
+                    quote_found = True
+            elif elem == ' ' or elem == ':' or elem == ',':
+                if cur_value and not quote_found:
+                    clean_values.append(cur_value)
+                    cur_value = ''
+            else:
+                cur_value += elem
+        if cur_value:
+            clean_values.append(cur_value)
         domain = []
-        if amount:
-            domain.append(('amount', '>=', amount))
-        if start_date:
-            domain.append(('start_date', '>=', start_date))
-        if end_date:
+        for i in range(len(clean_values) / 3):
+            field_name = clean_values[3*i]
+            operator = clean_values[3*i+1]
+            operand = clean_values[3*i+2]
+            if isinstance(Indemnification._fields[field_name], fields.Date):
+                operand = datetime.date(*map(int, operand.split('-')))
             domain.append([
                 'OR',
-                [('end_date', '=', None)],
-                [('end_date', '<=', end_date)]])
-        domain.append(('status', '=', 'calculated'))
+                [(field_name, '=', None)],
+                [(field_name, operator, operand)]])
+        return domain
+
+    def on_change_apply(self):
+        result = []
+        for elem in self.indemnifications:
+            elem.selection = self.global_value
+            if (hasattr(elem, 'id') and elem.id):
+                elem.id = None
+            elem_as_dict = abstract.WithAbstract.serialize_field(elem)
+            if 'id' in elem_as_dict:
+                del elem_as_dict['id']
+            result.append(elem_as_dict)
+        return {'indemnifications': result, 'apply': False}
+
+    @classmethod
+    def find_indemnifications(cls, domain):
         Indemnification = Pool().get('ins_claim.indemnification')
         indemnifications = Indemnification.search(
             domain, order=[('start_date', 'ASC')], limit=20)
         result = []
         for indemnification in indemnifications:
             result.append({
-                'selected_control': False,
-                'selected_validate': False,
+                'selection': 'nothing',
                 'indemnification': indemnification.id,
                 'amount': indemnification.amount,
                 'start_date': indemnification.start_date,
@@ -841,26 +805,18 @@ class IndemnificationSelection(model.CoopView):
                     indemnification.customer.get_rec_name(None))})
         return {'indemnifications': result, 'modified': False}
 
-    def calculate_indemnifications(self):
-        amount = start_date = end_date = None
-        if (hasattr(self, 'modified') and self.modified):
-            self.raise_user_error('indemnifications_selected')
-        if (hasattr(self, 'amount') and self.amount):
-            amount = self.amount
-        if (hasattr(self, 'start_date') and self.start_date):
-            start_date = self.start_date
-        if (hasattr(self, 'end_date') and self.end_date):
-            end_date = self.end_date
-        return self.find_indemnifications(amount, start_date, end_date)
+    def on_change_domain_string(self):
+        return self.find_indemnifications(
+            self.build_domain(self.domain_string))
 
-    def on_change_amount(self):
-        return self.calculate_indemnifications()
-
-    def on_change_start_date(self):
-        return self.calculate_indemnifications()
-
-    def on_change_end_date(self):
-        return self.calculate_indemnifications()
+    def on_change_with_modified(self):
+        if not (hasattr(self, 'indemnifications') and self.indemnifications):
+            return
+        for indemnification in self.indemnifications:
+            if (hasattr(indemnification, 'selection') and
+                    indemnification.selection != 'nothing'):
+                return True
+        return False
 
 
 class IndemnificationValidation(Wizard):
@@ -879,16 +835,23 @@ class IndemnificationValidation(Wizard):
     reload_selection = StateTransition()
 
     def default_select_indemnifications(self, fields):
+        today = utils.today()
+        default_max_date = datetime.date(today.year, today.month, 1)
+        domain_string = 'status: = calculated, start_date: <= %s' % (
+            date.get_end_of_period(default_max_date, 1, 'month'))
         Selector = Pool().get('ins_claim.indemnification_selection')
-        return Selector.find_indemnifications()
+        return {
+            'domain_string': domain_string,
+            'global_value': 'nothing',
+            'indemnifications': Selector.find_indemnifications(
+                Selector.build_domain(domain_string))['indemnifications']}
 
     def transition_reload_selection(self):
         for elem in self.select_indemnifications.indemnifications:
-            print utils.format_data(elem)
-            if elem.selected_validation:
+            if elem.selection == 'validated':
                 elem.indemnification.status = 'validated'
                 elem.indemnification.validate_indemnification()
-            elif elem.selected_control:
+            elif elem.selection == 'refused':
                 elem.indemnification.status = 'refused'
                 elem.indemnification.save()
         Selector = Pool().get('ins_claim.indemnification_selection')

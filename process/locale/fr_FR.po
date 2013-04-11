@@ -86,6 +86,10 @@ msgctxt "field:process.process_desc,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:process.process_desc,display_steps_without_status:"
+msgid ""
+msgstr ""
+
 msgctxt "field:process.process_desc,fancy_name:"
 msgid "Name"
 msgstr "Nom"
@@ -117,6 +121,10 @@ msgstr "Nom"
 msgctxt "field:process.process_desc,step_button_group_position:"
 msgid "Process Overview Positioning"
 msgstr "Position des Boutons"
+
+msgctxt "field:process.process_desc,steps_to_display:"
+msgid ""
+msgstr ""
 
 msgctxt "field:process.process_desc,technical_name:"
 msgid "Technical Name"

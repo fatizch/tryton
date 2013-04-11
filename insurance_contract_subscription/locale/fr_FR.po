@@ -28,11 +28,11 @@ msgstr "Saisir au moins une garantie pour %s"
 
 msgctxt "error:ins_contract.contract:"
 msgid "Everything is good !"
-msgstr ""
+msgstr "Tout est bon!"
 
 msgctxt "error:ins_contract.contract:"
 msgid "Object %s is currently locked by user %s"
-msgstr ""
+msgstr "L'objet %s est verrouillé par l'utilisateur %s"
 
 msgctxt "error:ins_contract.contract:"
 msgid "Option %s is not eligible"

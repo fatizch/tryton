@@ -1,22 +1,23 @@
 <?xml version="1.0"?>
-<form string="Indemnification Validation" col="2">
-  <group id="criterion" colspan="2" col="6">
-    <label name="amount"/>
-    <field name="amount"/>
-    <label name="start_date"/>
-    <field name="start_date"/>
-    <label name="end_date"/>
-    <field name="end_date"/>
+<form string="Indemnification Validation" col="3">
+  <group id="criterion" colspan="3" col="6">
+    <label name="domain_string"/>
+    <field name="domain_string"/>
   </group>
-  <group id="indemn" colspan="2" yexpand="1" yfill="1">
-    <field name="indemnifications" xexpand="0" xfill="0" mode="tree" group="indemnifications"/>
+  <group id="indemn" colspan="3" yexpand="1" yfill="1">
+    <field name="indemnifications" mode="tree" group="indemnifications"/>
     <field name="indemnifications" mode="form" group="indemnifications"/>
   </group>
-  <group id="toggles" colspan="2">
-    <label name="toggle_validate_all"/>
-    <field name="toggle_validate_all"/>
-    <label name="toggle_control_all"/>
-    <field name="toggle_control_all"/>
+  <group id="toggles" colspan="1" xexpand="0" xfill="1">
+    <label name="apply"/>
+    <field name="global_value" xexpand="0" xfill="1"/>
+    <field name="apply" xexpand="0" xfill="1"/>
+  </group>
+  <group id="filler">
+    </group>
+  <group id="display_domain" xexpand="0" xfill="1">
+    <label name="display_domain"/>
+    <field name="display_domain" xexpand="0" xfill="1"/>
   </group>
   <field name="modified"/>
 </form>

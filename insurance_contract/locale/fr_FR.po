@@ -364,7 +364,7 @@ msgstr "Contact"
 
 msgctxt "field:ins_contract.contract,contract_history:"
 msgid "Contract History"
-msgstr ""
+msgstr "Historique de Contrat"
 
 msgctxt "field:ins_contract.contract,contract_number:"
 msgid "Contract Number"
@@ -472,7 +472,7 @@ msgstr "Créé par"
 
 msgctxt "field:ins_contract.contract.history,date:"
 msgid "Change Date"
-msgstr ""
+msgstr "Date du Changement"
 
 msgctxt "field:ins_contract.contract.history,from_object:"
 msgid "Contract"
@@ -1305,7 +1305,7 @@ msgstr "Historique des Statuts"
 
 msgctxt "model:ins_contract.subs_process.covered_desc,name:"
 msgid "Covered Desc"
-msgstr ""
+msgstr "Descripteur d'Element Couvert"
 
 msgctxt "model:ins_contract.subs_process.lines,name:"
 msgid "Pricing Line"
@@ -1689,7 +1689,7 @@ msgstr "Paramètres de Cotisation"
 
 msgctxt "view:ins_contract.contract.history:"
 msgid "Contract History"
-msgstr ""
+msgstr "Historique de Contrat"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Billing"
@@ -1706,6 +1706,10 @@ msgstr "Contrat"
 msgctxt "view:ins_contract.contract:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Covered Elements/Options"
+msgstr "Eléments Couverts/Garanties"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Documents"

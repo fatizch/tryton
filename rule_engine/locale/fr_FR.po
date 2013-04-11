@@ -420,7 +420,7 @@ msgstr "Jouer les Tests"
 
 msgctxt "model:ir.action,name:test_case_window_relate"
 msgid "Test Cases"
-msgstr ""
+msgstr "Jeux de Test"
 
 msgctxt "model:ir.action,name:test_rule_wizard"
 msgid "Test Rule"
@@ -472,7 +472,7 @@ msgstr ""
 
 msgctxt "model:rule_engine.test_case,name:"
 msgid "Test Case"
-msgstr ""
+msgstr "Jeu de Test"
 
 msgctxt "model:rule_engine.test_case.value,name:"
 msgid "Test Case Value"
@@ -540,11 +540,11 @@ msgstr ""
 
 msgctxt "view:rule_engine.test_case.value:"
 msgid "Test Case Value"
-msgstr ""
+msgstr "Valeur du Test"
 
 msgctxt "view:rule_engine.test_case:"
 msgid "Test Case"
-msgstr ""
+msgstr "Jeu de Test"
 
 msgctxt "view:rule_engine.test_rule.start:"
 msgid "Test Rule"

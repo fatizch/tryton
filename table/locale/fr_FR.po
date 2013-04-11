@@ -436,7 +436,7 @@ msgstr "Valeur"
 
 msgctxt "selection:table.table_def,dimension_order1:"
 msgid "Alphabetical"
-msgstr ""
+msgstr "Alphabétique"
 
 msgctxt "selection:table.table_def,dimension_order1:"
 msgid "Sequence"
@@ -452,7 +452,7 @@ msgstr "Séquence"
 
 msgctxt "selection:table.table_def,dimension_order3:"
 msgid "Alphabetical"
-msgstr ""
+msgstr "Alphabétique"
 
 msgctxt "selection:table.table_def,dimension_order3:"
 msgid "Sequence"
