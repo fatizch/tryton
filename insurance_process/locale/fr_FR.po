@@ -308,7 +308,7 @@ msgstr ""
 
 msgctxt "model:ir.action,name:resume_dummy_process"
 msgid "Resume Process"
-msgstr ""
+msgstr "Reprendre le Processus"
 
 msgctxt "model:ir.action,name:suspended_process_form"
 msgid "Suspended Processes"
@@ -316,7 +316,7 @@ msgstr "Processus Suspendus"
 
 msgctxt "model:ir.action,name:suspended_process_resume"
 msgid "Resume Process"
-msgstr ""
+msgstr "Reprendre le Processus"
 
 msgctxt "selection:ins_process.process_state,cur_action:"
 msgid "cancel"

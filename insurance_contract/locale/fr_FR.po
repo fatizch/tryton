@@ -364,7 +364,7 @@ msgstr "Contact"
 
 msgctxt "field:ins_contract.contract,contract_history:"
 msgid "Contract History"
-msgstr ""
+msgstr "Historique de Contrat"
 
 msgctxt "field:ins_contract.contract,contract_number:"
 msgid "Contract Number"
@@ -472,7 +472,7 @@ msgstr "Créé par"
 
 msgctxt "field:ins_contract.contract.history,date:"
 msgid "Change Date"
-msgstr ""
+msgstr "Date du Changement"
 
 msgctxt "field:ins_contract.contract.history,from_object:"
 msgid "Contract"
@@ -618,6 +618,10 @@ msgctxt "field:ins_contract.covered_element,item_desc:"
 msgid "Item Desc"
 msgstr "Desc Risque"
 
+msgctxt "field:ins_contract.covered_element,item_kind:"
+msgid "Item Kind"
+msgstr ""
+
 msgctxt "field:ins_contract.covered_element,name:"
 msgid "Name"
 msgstr "Nom"
@@ -625,6 +629,10 @@ msgstr "Nom"
 msgctxt "field:ins_contract.covered_element,parent:"
 msgid "Parent"
 msgstr "Parent"
+
+msgctxt "field:ins_contract.covered_element,party:"
+msgid "Actor"
+msgstr "Acteur"
 
 msgctxt "field:ins_contract.covered_element,rec_name:"
 msgid "Name"
@@ -1227,6 +1235,10 @@ msgctxt "field:ins_product.request_finder,tmp_0:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "field:party.party,covered_elements:"
+msgid "Covered Elements"
+msgstr "Eléments Couverts"
+
 msgctxt "model:ins_contract.billing.bill,name:"
 msgid "Bill"
 msgstr "Cotisation"
@@ -1305,7 +1317,7 @@ msgstr "Historique des Statuts"
 
 msgctxt "model:ins_contract.subs_process.covered_desc,name:"
 msgid "Covered Desc"
-msgstr ""
+msgstr "Descripteur d'Element Couvert"
 
 msgctxt "model:ins_contract.subs_process.lines,name:"
 msgid "Pricing Line"
@@ -1689,7 +1701,7 @@ msgstr "Paramètres de Cotisation"
 
 msgctxt "view:ins_contract.contract.history:"
 msgid "Contract History"
-msgstr ""
+msgstr "Historique de Contrat"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Billing"
@@ -1706,6 +1718,10 @@ msgstr "Contrat"
 msgctxt "view:ins_contract.contract:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Covered Elements/Options"
+msgstr "Eléments Couverts/Garanties"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Documents"

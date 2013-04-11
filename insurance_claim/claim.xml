@@ -51,7 +51,6 @@
       <field name="field_childs">multi_level_view</field>
       <field name="name">loss_simple_tree</field>
     </record>
-
     <!--################################################################ -->
     <!-- Delivered Service -->
     <!--################################################################ -->
@@ -97,20 +96,20 @@
     <!-- Contract History -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="claim_history_view_form">
-        <field name="model">ins_claim.claim.history</field>
-        <field name="type">form</field>
-        <field name="name">claim_history_form</field>
+      <field name="model">ins_claim.claim.history</field>
+      <field name="type">form</field>
+      <field name="name">claim_history_form</field>
     </record>
     <record model="ir.ui.view" id="claim_history_view_tree">
-        <field name="model">ins_claim.claim.history</field>
-        <field name="type">tree</field>
-        <field name="name">claim_history_tree</field>
+      <field name="model">ins_claim.claim.history</field>
+      <field name="type">tree</field>
+      <field name="name">claim_history_tree</field>
     </record>
-     <record model="ir.model.access" id="access_claim_history">
-       <field name="model" search="[('model', '=', 'ins_claim.claim.history')]"/>
-       <field name="perm_write" eval="False"/>
-       <field name="perm_read" eval="True"/>
-   </record>
+    <record model="ir.model.access" id="access_claim_history">
+      <field name="model" search="[('model', '=', 'ins_claim.claim.history')]"/>
+      <field name="perm_write" eval="False"/>
+      <field name="perm_read" eval="True"/>
+    </record>
     <!--################################################################ -->
     <!-- Relate -->
     <!--################################################################ -->
@@ -161,5 +160,29 @@
       <field name="prefix">SIN${year}</field>
       <field name="padding">10</field>
     </record>
+    <!-- Indemnification Displayer -->
+    <record model="ir.ui.view" id="indemnification_displayer_form">
+      <field name="model">ins_claim.indemnification_displayer</field>
+      <field name="type">form</field>
+      <field name="name">indemnification_displayer_form</field>
+    </record>
+    <record model="ir.ui.view" id="indemnification_displayer_tree">
+      <field name="model">ins_claim.indemnification_displayer</field>
+      <field name="type">tree</field>
+      <field name="name">indemnification_displayer_tree</field>
+    </record>
+    <!-- Indemnification Selection -->
+    <record model="ir.ui.view" id="indemnification_selection_form">
+      <field name="model">ins_claim.indemnification_selection</field>
+      <field name="type">form</field>
+      <field name="name">indemnification_selection_form</field>
+    </record>
+    <!-- Indemnification Validation -->
+    <record model="ir.action.wizard" id="indemnification_validation_wizard">
+        <field name="name">Indemnification Validation</field>
+        <field name="wiz_name">ins_claim.indemnification_validation</field>
+    </record>
+    <menuitem name="Validate Indemnifications" id="menu_validate_indemnification" sequence="15"
+        parent="menu_claim" action="indemnification_validation_wizard"/>
   </data>
 </tryton>

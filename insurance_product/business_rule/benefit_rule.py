@@ -61,20 +61,30 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
     sub_benefit_rules = fields.One2Many('ins_product.sub_benefit_rule',
         'benefit_rule', 'Sub Benefit Rules',
         states={'invisible': ~STATES_AMOUNT_EVOLVES})
+    use_monthly_period = fields.Boolean('Monthly Period',
+        help='Split periods at the end of the month',
+        states={'invisible':
+                Or(STATES_CAPITAL, STATES_AMOUNT_EVOLVES,
+                    Bool(Eval('max_duration_per_indemnification')))})
     max_duration_per_indemnification = fields.Integer(
-        'Max duration per Indemnification', states={
-            'invisible': Or(~STATES_ANNUITY, STATES_AMOUNT_EVOLVES),
-            'required': STATES_ANNUITY,
+        'Max duration per Indemnification',
+        states={
+            'invisible':
+                Or(STATES_CAPITAL, STATES_AMOUNT_EVOLVES,
+                    Bool(Eval('use_monthly_period'))),
+            'required': Or(STATES_ANNUITY,
+                Bool(Eval('max_duration_per_indemnification_unit')))
         })
     max_duration_per_indemnification_unit = fields.Selection(
-        date.DAILY_DURATION, 'Unit', sort=False, states={
-            'invisible': Or(~STATES_ANNUITY, STATES_AMOUNT_EVOLVES),
-            'required': STATES_ANNUITY,
+        date.DAILY_DURATION, 'Unit', sort=False,
+        states={
+            'invisible': Or(STATES_CAPITAL, STATES_AMOUNT_EVOLVES,
+                Bool(Eval('use_monthly_period'))),
+            'required': Or(STATES_ANNUITY,
+                Bool(Eval('max_duration_per_indemnification')))
         })
     with_revaluation = fields.Boolean('With Revaluation',
-        states={
-            'invisible': Or(~STATES_ANNUITY, STATES_AMOUNT_EVOLVES)
-        })
+        states={'invisible': Or(~STATES_ANNUITY, STATES_AMOUNT_EVOLVES)})
     revaluation_date = fields.Date('Revaluation Date',
         states={
             'invisible': Bool(~Eval('with_revaluation')),
@@ -179,34 +189,49 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
             amount = self.get_coverage_amount(args)
         return self.get_revaluated_amount(amount, args['start_date']), []
 
-    def get_indemnification_for_period(self, args):
+    def get_indemnification_for_non_capital(self, args):
         if not 'start_date' in args:
             return [{}], 'missing_start_date'
         if not self.amount_evolves_over_time:
-            if not self.with_revaluation:
-                return self.get_fixed_indemnification_for_period(args)
-            else:
-                return self.get_revaluated_indemnifications_for_period(args)
+            return self.get_indemnifications_for_periods(args)
         else:
             return self.get_evolving_indemnifications_for_period(args)
 
-    def get_revaluated_indemnifications_for_period(self, args):
+    def get_indemnification_end_date(self, from_date, to_date):
+        if (self.max_duration_per_indemnification
+                and self.max_duration_per_indemnification_unit):
+            max_end_date = date.get_end_of_period(from_date,
+                self.max_duration_per_indemnification,
+                self.max_duration_per_indemnification_unit)
+        elif self.use_monthly_period:
+            max_end_date = date.get_end_of_month(from_date)
+        else:
+            return to_date
+        return min(to_date, max_end_date) if to_date else max_end_date
+
+    def get_period_end_date(self, from_date, to_date):
+        if (self.offered.indemnification_kind == 'annuity'
+                and self.with_revaluation):
+            res = datetime.date(from_date.year,
+                self.revaluation_date.month, self.revaluation_date.day)
+            res = date.add_duration(res, -1, 'day')
+            if res < from_date:
+                    res = date.add_duration(res, 1, 'year')
+        else:
+            return to_date
+
+    def get_indemnifications_for_periods(self, args):
         errs = []
         res = []
         start_date = args['start_date']
-        end_date = self.get_end_date(start_date,
+        end_date = self.get_indemnification_end_date(start_date,
             args['end_date'] if 'end_date' in args else None)
         while True and not errs:
-            period_end_date = datetime.date(start_date.year,
-            self.revaluation_date.month, self.revaluation_date.day)
-            period_end_date = date.add_duration(period_end_date, -1, 'day')
-            if period_end_date < start_date:
-                period_end_date = date.add_duration(period_end_date, 1,
-                    'year')
+            period_end_date = self.get_period_end_date(start_date, end_date)
             period_args = args.copy()
             period_args['start_date'] = start_date
             period_args['end_date'] = min(period_end_date, end_date)
-            indemns, err = self.get_fixed_indemnification_for_period(
+            indemns, err = self.get_indemnification_for_period(
                 period_args)
             if not indemns:
                 return res, errs
@@ -218,14 +243,15 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
             start_date = date.add_day(indemn['end_date'], 1)
         return res, errs
 
-    def get_fixed_indemnification_for_period(self, args):
+    def get_indemnification_for_period(self, args):
         errs = []
         res = {}
         res['start_date'] = args['start_date']
         end_date = None
         if self.offered.indemnification_kind == 'period':
             end_date = args['end_date'] if 'end_date' in args else None
-        res['end_date'] = self.get_end_date(res['start_date'], end_date)
+        res['end_date'] = self.get_indemnification_end_date(res['start_date'],
+            end_date)
         if not res['end_date']:
             errs += 'missing_end_date'
             return [res], errs
@@ -259,19 +285,9 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
 
     def give_me_benefit(self, args):
         if self.offered.indemnification_kind != 'capital':
-            return self.get_indemnification_for_period(args)
+            return self.get_indemnification_for_non_capital(args)
         else:
             return self.get_indemnification_for_capital(args)
-
-    def get_end_date(self, from_date, to_date):
-        if (self.offered.indemnification_kind != 'annuity'
-            or (not self.max_duration_per_indemnification
-                or not self.max_duration_per_indemnification_unit)):
-            return to_date
-        max_end_date = date.get_end_of_period(from_date,
-            self.max_duration_per_indemnification,
-            self.max_duration_per_indemnification_unit)
-        return min(to_date, max_end_date) if to_date else max_end_date
 
 
 class SubBenefitRule(model.CoopSQL, model.CoopView):

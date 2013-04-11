@@ -565,6 +565,10 @@ msgctxt "field:ins_product.benefit_rule,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
 
+msgctxt "field:ins_product.benefit_rule,use_monthly_period:"
+msgid "Monthly Period"
+msgstr ""
+
 msgctxt "field:ins_product.benefit_rule,validation_delay:"
 msgid "Validation Delay"
 msgstr "Délai de Validation"
@@ -3222,6 +3226,10 @@ msgctxt "help:ins_product.benefit_rule,coef_coverage_amount:"
 msgid "Add a multiplier to apply to the coverage amount"
 msgstr "Ajouter un coefficient multiplicateur au montant de couverture"
 
+msgctxt "help:ins_product.benefit_rule,use_monthly_period:"
+msgid "Split periods at the end of the month"
+msgstr ""
+
 msgctxt "help:ins_product.complementary_data_def,selection:"
 msgid "A couple of key and label separated by \":\" per line"
 msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
@@ -3341,7 +3349,7 @@ msgstr "Eligibilite"
 
 msgctxt "model:ins_product.event_desc,name:"
 msgid "Event Desc"
-msgstr ""
+msgstr "Descripteur d'Evénement"
 
 msgctxt "model:ins_product.event_desc-loss_desc,name:"
 msgid "Event Desc - Loss Desc Relation"
@@ -3489,7 +3497,7 @@ msgstr "Garanties"
 
 msgctxt "model:ir.action,name:act_document_desc"
 msgid "Document Descriptors"
-msgstr ""
+msgstr "Descripteurs de Document"
 
 msgctxt "model:ir.action,name:act_eligibility_rule_relate_form"
 msgid "Eligibility"
@@ -3569,7 +3577,7 @@ msgstr "GED"
 
 msgctxt "model:ir.ui.menu,name:menu_event_desc_form"
 msgid "Events"
-msgstr ""
+msgstr "Evénements"
 
 msgctxt "model:ir.ui.menu,name:menu_item_desc_form"
 msgid "Item Descriptors"
@@ -3807,6 +3815,10 @@ msgid "Contract"
 msgstr "Contrat"
 
 msgctxt "selection:ins_product.complementary_data_def,kind:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "selection:ins_product.complementary_data_def,kind:"
 msgid "Loss"
 msgstr "Préjudice"
 
@@ -3820,7 +3832,7 @@ msgstr "Moteur de Règle"
 
 msgctxt "selection:ins_product.complementary_data_def,kind:"
 msgid "Sub Element"
-msgstr "Sous Eléments"
+msgstr ""
 
 msgctxt "selection:ins_product.complementary_data_def,type_:"
 msgid "Boolean"
@@ -3849,6 +3861,10 @@ msgstr "Sélection"
 msgctxt "selection:ins_product.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
+
+msgctxt "selection:ins_product.coverage,family:"
+msgid "default"
+msgstr "Par défaut"
 
 msgctxt "selection:ins_product.coverage,subscription_behaviour:"
 msgid "Mandatory"
@@ -4367,6 +4383,10 @@ msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
 msgctxt "view:ins_product.benefit:"
+msgid "Deductible"
+msgstr "Franchise"
+
+msgctxt "view:ins_product.benefit:"
 msgid "Reserve"
 msgstr "Provision"
 
@@ -4520,7 +4540,7 @@ msgstr "Documents"
 
 msgctxt "view:ins_product.loss_desc:"
 msgid "Events"
-msgstr ""
+msgstr "Evénements"
 
 msgctxt "view:ins_product.loss_desc:"
 msgid "Loss Descriptor"

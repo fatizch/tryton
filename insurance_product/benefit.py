@@ -131,7 +131,7 @@ class Benefit(model.CoopSQL, product.Offered):
         INDEMNIFICATION_KIND, 'Indemnification Kind', sort=False)
     loss_descs = fields.Many2Many(
         'ins_product.benefit-loss_desc', 'benefit', 'loss_desc',
-        'Loss Descriptions')
+        'Loss Descriptions', required=True)
     complementary_data_def = fields.Many2Many(
         'ins_product.benefit-complementary_data_def',
         'benefit', 'complementary_data_def', 'Complementary Data',

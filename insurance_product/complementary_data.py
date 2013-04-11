@@ -61,7 +61,7 @@ class ComplementaryDataDefinition(
         [
             ('contract', 'Contract'),
             ('product', 'Product'),
-            ('sub_elem', 'Sub Element'),
+            ('sub_elem', 'Covered Element'),
             ('loss', 'Loss'),
             ('benefit', 'Benefit'),
             ('rule_engine', 'Rule Engine'),

@@ -42,6 +42,10 @@ msgctxt "field:ins_claim.claim,indemnifications_consult:"
 msgid "Indemnifications"
 msgstr "Indemnisations"
 
+msgctxt "field:ins_claim.claim,is_pending_indemnification:"
+msgid "Pending Indemnification"
+msgstr "Indemnisation en attente"
+
 msgctxt "field:ins_claim.claim,is_workflow:"
 msgid "Is Workflow"
 msgstr ""

@@ -21,4 +21,10 @@ def register():
         ClaimContract,
         ClaimOption,
         ClaimContext,
+        IndemnificationDisplayer,
+        IndemnificationSelection,
         module='insurance_claim', type_='model')
+
+    Pool.register(
+        IndemnificationValidation,
+        module='insurance_claim', type_='wizard')

@@ -47,6 +47,9 @@ class ClaimProcess(CoopProcessFramework):
             'party.contact_history', '', 'History',
             on_change_with=['claimant'], depends=['claimant']),
         'on_change_with_contact_history')
+    is_pending_indemnification = fields.Function(
+        fields.Boolean('Pending Indemnification', states={'invisible': True}),
+        'get_is_pending_indemnification')
 
     def get_possible_contracts(self, at_date=None):
         if not at_date:
@@ -157,25 +160,6 @@ class ClaimProcess(CoopProcessFramework):
                     res.append(indemnification.id)
         return res
 
-    def validate_indemnifications(self):
-        res = True, []
-        for loss in self.losses:
-            for delivered_service in loss.delivered_services:
-                for indemnification in delivered_service.indemnifications:
-                    utils.concat_res(res,
-                        indemnification.validate_indemnification())
-                pending_indemnification = False
-                indemnification_paid = False
-                for indemnification in delivered_service.indemnifications:
-                    if indemnification.is_pending():
-                        pending_indemnification = True
-                    else:
-                        indemnification_paid = True
-                if indemnification_paid and not pending_indemnification:
-                    delivered_service.status = 'delivered'
-                    delivered_service.save()
-        return res
-
     @classmethod
     def set_indemnifications(cls, instances, name, vals):
         Indemnification = Pool().get('ins_claim.indemnification')
@@ -188,9 +172,16 @@ class ClaimProcess(CoopProcessFramework):
 
     def reject_and_close_claim(self):
         self.status = 'closed'
-        self.sub_status = 'refusal'
         self.end_date = utils.today()
         return True
+
+    def get_is_pending_indemnification(self, name):
+        for loss in self.losses:
+            for del_ser in loss.delivered_services:
+                for indemn in del_ser.indemnifications:
+                    if indemn.status == 'calculated':
+                        return True
+        return False
 
 
 class LossProcess():

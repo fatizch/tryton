@@ -3,10 +3,12 @@
     <label name="delivered_service"/>
     <field name="delivered_service"/>
     <newline/>
-    <label name="kind"/>
-    <field name="kind"/>
+<!--     <button name="validate_indemnification" string="Validate"/>
+    <button name="reject_indemnification" string="Reject"/>
+    <newline/> -->
     <label name="status"/>
     <field name="status"/>
+    <newline/>
     <label name="start_date"/>
     <field name="start_date"/>
     <label name="end_date"/>
@@ -14,6 +16,7 @@
     <newline/>
     <label name="customer"/>
     <field name="customer"/>
+    <newline/>
     <label name="beneficiary"/>
     <field name="beneficiary"/>
     <newline/>
@@ -22,10 +25,14 @@
         <field name="amount"/>
         <field name="currency"/>
     </group>
+    <label name="manual"/>
+    <field name="manual"/>
     <label name="local_currency_amount"/>
     <group id="local_amount">
         <field name="local_currency_amount"/>
         <field name="local_currency"/>
     </group>
+
     <field name="details" colspan="4"/>
+    <field name="kind"/>
 </form>

@@ -54,8 +54,8 @@ class Priority(model.CoopSQL, model.CoopView):
 
     __name__ = 'task_manager.priority'
 
-    process_step = fields.Many2One(
-        'process.process_step_relation', 'Process Step', required=True)
+    process_step = fields.Many2One('process.process_step_relation',
+        'Process Step', required=True, ondelete='CASCADE')
     team = fields.Many2One('task_manager.team', 'Team', ondelete='CASCADE')
     priority = fields.Integer('Priority')
     kind = fields.Selection(
