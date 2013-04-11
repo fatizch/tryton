@@ -995,6 +995,7 @@ class IndemnificationValidation(Wizard):
             Indemnification.browse(to_reject))
         for claim in Claim.browse(claims):
             claim.complete_indemnifications()
+            Claim.write([claim], {})
         Selector = Pool().get('ins_claim.indemnification_selection')
         self.select_indemnifications.indemnifications = \
             Selector.find_indemnifications(
