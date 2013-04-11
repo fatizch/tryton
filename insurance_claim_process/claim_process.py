@@ -157,13 +157,13 @@ class ClaimProcess(CoopProcessFramework):
                     res.append(indemnification.id)
         return res
 
-    def validate_indemnifications(self):
+    def complete_indemnifications(self):
         res = True, []
         for loss in self.losses:
             for delivered_service in loss.delivered_services:
                 for indemnification in delivered_service.indemnifications:
                     utils.concat_res(res,
-                        indemnification.validate_indemnification())
+                        indemnification.complete_indemnification())
                 pending_indemnification = False
                 indemnification_paid = False
                 for indemnification in delivered_service.indemnifications:
@@ -188,7 +188,6 @@ class ClaimProcess(CoopProcessFramework):
 
     def reject_and_close_claim(self):
         self.status = 'closed'
-        self.sub_status = 'refusal'
         self.end_date = utils.today()
         return True
 

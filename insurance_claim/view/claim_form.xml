@@ -5,8 +5,8 @@
   <label name="status"/>
   <group id="status">
     <field name="status"/>
-    <label name="closed_reason"/>
-    <field name="closed_reason"/>
+    <label name="sub_status"/>
+    <field name="sub_status"/>
   </group>
   <newline/>
   <label name="declaration_date"/>

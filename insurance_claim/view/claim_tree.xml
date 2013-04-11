@@ -3,4 +3,5 @@
     <field name="name"/>
     <field name="claimant"/>
     <field name="status"/>
+    <field name="sub_status"/>
 </tree>

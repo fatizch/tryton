@@ -39,7 +39,7 @@ CLAIM_STATUS = [
 
 CLAIM_CLOSED_REASON = [
     ('', ''),
-    ('refusal', 'Refusal'),
+    ('rejected', 'Rejected'),
     ('paid', 'Paid'),
 ]
 
@@ -50,6 +50,13 @@ CLAIM_REOPENED_REASON = [
     ('regularization', 'Regularization')
 ]
 
+CLAIM_OPEN_SUB_STATUS = [
+    ('waiting_doc', 'Waiting For Documents'),
+    ('instruction', 'Instruction'),
+    ('waiting_validation', 'Waiting Validation'),
+    ('validated', 'Validated'),
+    ('paid', 'Paid')
+]
 
 INDEMNIFICATION_STATUS = [
     ('calculated', 'Calculated'),
@@ -68,16 +75,12 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     name = fields.Char('Number', select=True,
         states={'readonly': True})
     status = fields.Selection(CLAIM_STATUS, 'Status', sort=False,
-        states={'readonly': True})
+        states={'readonly': True},)
     sub_status = fields.Selection('get_possible_sub_status', 'Sub Status',
         selection_change_with=['status'])
     declaration_date = fields.Date('Declaration Date')
     end_date = fields.Date('End Date',
         states={'invisible': Eval('status') != 'closed'})
-    closed_reason = fields.Function(
-        fields.Selection(CLAIM_CLOSED_REASON, 'Closed Reason',
-            states={'invisible': Eval('status') != 'closed'}),
-        'get_closed_reason')
     claimant = fields.Many2One('party.party', 'Claimant')
     losses = fields.One2Many('ins_claim.loss', 'claim', 'Losses',
         states={'readonly': Eval('status') == 'closed'})
@@ -89,7 +92,15 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     @classmethod
     def __setup__(cls):
         super(Claim, cls).__setup__()
-        cls.__rpc__.update({'get_possible_sub_status': RPC(instantiate=0), })
+        cls.__rpc__.update({'get_possible_sub_status': RPC(instantiate=0)})
+
+    @classmethod
+    def write(cls, claims, values):
+        for claim in claims:
+            claim.update_sub_status()
+            values['sub_status'] = claim.sub_status
+            super(Claim, cls).write([claim], values)
+        super(Claim, cls).write(claims, values)
 
     def get_rec_name(self, name):
         res = super(Claim, self).get_rec_name(name)
@@ -102,12 +113,36 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             return CLAIM_CLOSED_REASON
         elif self.status == 'reopened':
             return CLAIM_REOPENED_REASON
+        elif self.status == 'open':
+            return CLAIM_OPEN_SUB_STATUS
         return [('', '')]
 
-    def get_closed_reason(self, name):
-        if self.status == 'closed':
-            return self.sub_status
-        return ''
+    def is_waiting_for_documents(self):
+        if not utils.is_none(self, 'documents'):
+            for doc in self.documents:
+                if not doc.is_complete:
+                    return True
+        return False
+
+    def get_sub_status(self):
+        if self.is_waiting_for_documents():
+            return 'waiting_doc'
+        sub_statuses = []
+        for loss in self.losses:
+            sub_statuses.extend(loss.get_claim_sub_status())
+        if not sub_statuses:
+            return 'instruction'
+        if 'waiting_validation' in sub_statuses:
+            return 'waiting_validation'
+        if 'validated' in sub_statuses:
+            return 'validated'
+        if 'paid' in sub_statuses:
+            return 'paid'
+        print sub_statuses
+        return 'instruction'
+
+    def update_sub_status(self):
+        self.sub_status = self.get_sub_status()
 
     @staticmethod
     def default_declaration_date():
@@ -177,10 +212,13 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def default_status():
         return 'open'
 
+    @staticmethod
+    def default_sub_status():
+        return 'instruction'
+
     def close_claim(self, sub_status=None):
         #TODO : To Enhance. Get real closed reason
         self.status = 'closed'
-        self.sub_status = 'paid'
         self.end_date = utils.today()
         return True, []
 
@@ -287,6 +325,15 @@ class Loss(model.CoopSQL, model.CoopView):
         if self.loss_desc:
             return self.loss_desc.get_rec_name(name)
         return super(Loss, self).get_rec_name(name)
+
+    def get_claim_sub_status(self):
+        res = []
+        if self.delivered_services:
+            for del_serv in self.delivered_services:
+                res.extend(del_serv.get_claim_sub_status())
+            return res
+        else:
+            return ['instruction']
 
 
 class ClaimDeliveredService():
@@ -448,6 +495,14 @@ class ClaimDeliveredService():
         if self.subscribed_service:
             return self.subscribed_service.get_currency()
 
+    def get_claim_sub_status(self):
+        if self.indemnifications:
+            return [x.get_claim_sub_status() for x in self.indemnifications]
+        elif self.status == 'not_eligible':
+            return ['rejected']
+        else:
+            return ['instruction']
+
 
 class Indemnification(model.CoopView, model.CoopSQL):
     'Indemnification'
@@ -574,7 +629,7 @@ class Indemnification(model.CoopView, model.CoopSQL):
             coop_string.translate_value(self, 'status') if self.status else '',
         )
 
-    def validate_indemnification(self):
+    def complete_indemnification(self):
         if self.status == 'validated' and self.amount:
             self.status = 'paid'
             self.save()
@@ -582,6 +637,16 @@ class Indemnification(model.CoopView, model.CoopSQL):
 
     def is_pending(self):
         return self.amount > 0 and self.status != 'paid'
+
+    def get_claim_sub_status(self):
+        if self.status == 'calculated':
+            return 'waiting_validation'
+        elif self.status == 'validated':
+            return 'validated'
+        elif self.status == 'paid':
+            return 'paid'
+        else:
+            return 'instruction'
 
 
 class IndemnificationDetail(model.CoopSQL, model.CoopView):
