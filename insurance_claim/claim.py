@@ -61,7 +61,7 @@ CLAIM_OPEN_SUB_STATUS = [
 INDEMNIFICATION_STATUS = [
     ('calculated', 'Calculated'),
     ('validated', 'Validated'),
-    ('refused', 'Refused'),
+    ('rejected', 'Rejected'),
     ('paid', 'Paid'),
 ]
 
@@ -228,6 +228,25 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             self.sub_status = ''
             self.end_date = None
         return True, []
+
+    def complete_indemnifications(self):
+        res = True, []
+        for loss in self.losses:
+            for delivered_service in loss.delivered_services:
+                for indemnification in delivered_service.indemnifications:
+                    utils.concat_res(res,
+                        indemnification.complete_indemnification())
+                pending_indemnification = False
+                indemnification_paid = False
+                for indemnification in delivered_service.indemnifications:
+                    if indemnification.is_pending():
+                        pending_indemnification = True
+                    else:
+                        indemnification_paid = True
+                if indemnification_paid and not pending_indemnification:
+                    delivered_service.status = 'delivered'
+                    delivered_service.save()
+        return res
 
 
 class ClaimHistory(model.ObjectHistory):

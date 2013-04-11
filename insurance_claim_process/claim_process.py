@@ -157,25 +157,6 @@ class ClaimProcess(CoopProcessFramework):
                     res.append(indemnification.id)
         return res
 
-    def complete_indemnifications(self):
-        res = True, []
-        for loss in self.losses:
-            for delivered_service in loss.delivered_services:
-                for indemnification in delivered_service.indemnifications:
-                    utils.concat_res(res,
-                        indemnification.complete_indemnification())
-                pending_indemnification = False
-                indemnification_paid = False
-                for indemnification in delivered_service.indemnifications:
-                    if indemnification.is_pending():
-                        pending_indemnification = True
-                    else:
-                        indemnification_paid = True
-                if indemnification_paid and not pending_indemnification:
-                    delivered_service.status = 'delivered'
-                    delivered_service.save()
-        return res
-
     @classmethod
     def set_indemnifications(cls, instances, name, vals):
         Indemnification = Pool().get('ins_claim.indemnification')
