@@ -956,16 +956,22 @@ class IndemnificationValidation(Wizard):
 
     def transition_reload_selection(self):
         claims = set([])
+        to_validate = set([])
+        to_reject = set([])
         for elem in self.select_indemnifications.indemnifications:
             if elem.selection == 'validated':
-                elem.indemnification.validate_indemnification()
-                claims.add(elem.claim_displayer[0].id)
+                to_validate.add(elem.indemnification.id)
+                claims.add(elem.claim.id)
             elif elem.selection == 'refused':
-                elem.indemnification.reject_indemnification()
-                claims.add(elem.claim_displayer[0].id)
+                to_reject.add(elem.indemnification.id)
+                claims.add(elem.claim.id)
         Claim = Pool().get('ins_claim.claim')
-        for claim in Claim.browse(claims):
-            claim.complete_indemnification()
+        Indemnification = Pool().get('ins_claim.indemnification')
+        Indemnification.validate_indemnification(
+            Indemnification.browse(to_validate))
+        Indemnification.reject_indemnification(
+            Indemnification.browse(to_reject))
+        Claim.complete_indemnification(Claim.browse(claims))
         Selector = Pool().get('ins_claim.indemnification_selection')
         self.select_indemnifications.indemnifications = \
             Selector.find_indemnifications(
