@@ -959,10 +959,11 @@ class IndemnificationValidation(Wizard):
         to_validate = set([])
         to_reject = set([])
         for elem in self.select_indemnifications.indemnifications:
-            if elem.selection == 'validated':
+            print utils.format_data(elem)
+            if elem.selection == 'validate':
                 to_validate.add(elem.indemnification.id)
                 claims.add(elem.claim.id)
-            elif elem.selection == 'refused':
+            elif elem.selection == 'refuse':
                 to_reject.add(elem.indemnification.id)
                 claims.add(elem.claim.id)
         Claim = Pool().get('ins_claim.claim')
@@ -971,7 +972,8 @@ class IndemnificationValidation(Wizard):
             Indemnification.browse(to_validate))
         Indemnification.reject_indemnification(
             Indemnification.browse(to_reject))
-        Claim.complete_indemnification(Claim.browse(claims))
+        for claim in Claim.browse(claims):
+            claim.complete_indemnifications()
         Selector = Pool().get('ins_claim.indemnification_selection')
         self.select_indemnifications.indemnifications = \
             Selector.find_indemnifications(
