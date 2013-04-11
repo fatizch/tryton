@@ -88,7 +88,7 @@ msgstr "Créé par"
 
 msgctxt "field:process.process_desc,display_steps_without_status:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:process.process_desc,fancy_name:"
 msgid "Name"
@@ -124,7 +124,7 @@ msgstr "Position des Boutons"
 
 msgctxt "field:process.process_desc,steps_to_display:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:process.process_desc,technical_name:"
 msgid "Technical Name"
@@ -599,10 +599,6 @@ msgid "==> Prestations"
 msgstr ""
 
 msgctxt "view:ins_claim.claim:"
-msgid "==> Remboursement"
-msgstr ""
-
-msgctxt "view:ins_claim.claim:"
 msgid "==> Réouverture"
 msgstr ""
 
@@ -649,10 +645,6 @@ msgstr "Prestations"
 msgctxt "view:ins_claim.claim:"
 msgid "Previous"
 msgstr "Précédent"
-
-msgctxt "view:ins_claim.claim:"
-msgid "Remboursement"
-msgstr "Remboursement"
 
 msgctxt "view:ins_claim.claim:"
 msgid "Reopened Reason"

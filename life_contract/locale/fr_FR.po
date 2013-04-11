@@ -18,14 +18,6 @@ msgctxt "field:ins_contract.covered_element,covered_relations:"
 msgid "Covered Relations"
 msgstr "Relations Couvertes"
 
-msgctxt "field:ins_contract.covered_element,is_person:"
-msgid "Person"
-msgstr "Personne Physique"
-
-msgctxt "field:ins_contract.covered_element,person:"
-msgid "Person"
-msgstr "Personne Physique"
-
 msgctxt "field:ins_contract.covered_element-party_relation,covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"

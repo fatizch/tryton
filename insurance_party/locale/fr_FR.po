@@ -126,6 +126,10 @@ msgctxt "field:party.party,broker_role:"
 msgid "Broker"
 msgstr "Courtier"
 
+msgctxt "field:party.party,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
 msgctxt "field:party.party,customer_role:"
 msgid "Customer"
 msgstr "Client"

@@ -618,6 +618,10 @@ msgctxt "field:ins_contract.covered_element,item_desc:"
 msgid "Item Desc"
 msgstr "Desc Risque"
 
+msgctxt "field:ins_contract.covered_element,item_kind:"
+msgid "Item Kind"
+msgstr ""
+
 msgctxt "field:ins_contract.covered_element,name:"
 msgid "Name"
 msgstr "Nom"
@@ -625,6 +629,10 @@ msgstr "Nom"
 msgctxt "field:ins_contract.covered_element,parent:"
 msgid "Parent"
 msgstr "Parent"
+
+msgctxt "field:ins_contract.covered_element,party:"
+msgid "Actor"
+msgstr "Acteur"
 
 msgctxt "field:ins_contract.covered_element,rec_name:"
 msgid "Name"
@@ -1227,6 +1235,10 @@ msgctxt "field:ins_product.request_finder,tmp_0:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "field:party.party,covered_elements:"
+msgid "Covered Elements"
+msgstr "Eléments Couverts"
+
 msgctxt "model:ins_contract.billing.bill,name:"
 msgid "Bill"
 msgstr "Cotisation"
@@ -1706,10 +1718,6 @@ msgstr "Contrat"
 msgctxt "view:ins_contract.contract:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
-
-msgctxt "view:ins_contract.contract:"
-msgid "Covered Elements/Options"
-msgstr "Eléments Couverts/Garanties"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Documents"
