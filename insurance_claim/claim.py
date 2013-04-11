@@ -843,18 +843,20 @@ class IndemnificationSelection(model.CoopView):
     indemnifications = fields.One2Many(
         'ins_claim.indemnification_displayer', '', 'Indemnifications')
     domain_string = fields.Char(
-        'Domain', on_change=['domain_string', 'indemnifications'],
-        states={'invisible': ~Eval('display_domain')})
+        'Domain', states={'invisible': ~Eval('display_domain')},
+        on_change=['domain_string', 'indemnifications', 'search_size'])
     modified = fields.Boolean(
         'Modified', states={'invisible': True},
         on_change_with=['indemnifications'])
-    apply = fields.Boolean(
-        'Apply on all', on_change=[
+    global_value = fields.Selection(
+        [
+            ('nothing', 'Nothing'), ('validate', 'Validate'),
+            ('refuse', 'Refuse')],
+        'Force Value', on_change=[
             'indemnifications', 'modified', 'apply', 'global_value'])
-    global_value = fields.Selection([
-        ('nothing', 'Nothing'), ('validate', 'Validate'),
-        ('refuse', 'Refuse')], 'Global Value')
     display_domain = fields.Boolean('Display Search')
+    search_size = fields.Integer(
+        'Search Size', states={'invisible': ~Eval('display_domain')})
 
     @classmethod
     def __setup__(cls):
@@ -901,7 +903,7 @@ class IndemnificationSelection(model.CoopView):
                 [(field_name, operator, operand)]])
         return domain
 
-    def on_change_apply(self):
+    def on_change_global_value(self):
         result = []
         for elem in self.indemnifications:
             elem.selection = self.global_value
@@ -911,13 +913,13 @@ class IndemnificationSelection(model.CoopView):
             if 'id' in elem_as_dict:
                 del elem_as_dict['id']
             result.append(elem_as_dict)
-        return {'indemnifications': result, 'apply': False}
+        return {'indemnifications': result}
 
     @classmethod
-    def find_indemnifications(cls, domain):
+    def find_indemnifications(cls, domain, search_size):
         Indemnification = Pool().get('ins_claim.indemnification')
         indemnifications = Indemnification.search(
-            domain, order=[('start_date', 'ASC')], limit=20)
+            domain, order=[('start_date', 'ASC')], limit=search_size)
         result = []
         for indemnification in indemnifications:
             claim = indemnification.delivered_service.loss.claim
@@ -938,7 +940,7 @@ class IndemnificationSelection(model.CoopView):
 
     def on_change_domain_string(self):
         return self.find_indemnifications(
-            self.build_domain(self.domain_string))
+            self.build_domain(self.domain_string, self.search_size))
 
     def on_change_with_modified(self):
         if not (hasattr(self, 'indemnifications') and self.indemnifications):
@@ -974,8 +976,10 @@ class IndemnificationValidation(Wizard):
         return {
             'domain_string': domain_string,
             'global_value': 'nothing',
+            'search_size': 20,
             'indemnifications': Selector.find_indemnifications(
-                Selector.build_domain(domain_string))['indemnifications']}
+                Selector.build_domain(domain_string),
+                20)['indemnifications']}
 
     def transition_reload_selection(self):
         claims = set([])
@@ -1001,6 +1005,6 @@ class IndemnificationValidation(Wizard):
         self.select_indemnifications.indemnifications = \
             Selector.find_indemnifications(
                 Selector.build_domain(
-                    self.select_indemnifications.domain_string))[
-                        'indemnifications']
+                    self.select_indemnifications.domain_string),
+                self.select_indemnifications.search_size)['indemnifications']
         return 'select_indemnifications'

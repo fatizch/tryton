@@ -1720,6 +1720,10 @@ msgid "Covered Elements"
 msgstr "Eléments Couverts"
 
 msgctxt "view:ins_contract.contract:"
+msgid "Covered Elements/Options"
+msgstr "Eléments Couverts/Garanties"
+
+msgctxt "view:ins_contract.contract:"
 msgid "Documents"
 msgstr "Documents"
 

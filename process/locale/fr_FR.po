@@ -599,6 +599,10 @@ msgid "==> Prestations"
 msgstr ""
 
 msgctxt "view:ins_claim.claim:"
+msgid "==> Remboursement"
+msgstr ""
+
+msgctxt "view:ins_claim.claim:"
 msgid "==> Réouverture"
 msgstr ""
 
@@ -645,6 +649,10 @@ msgstr "Prestations"
 msgctxt "view:ins_claim.claim:"
 msgid "Previous"
 msgstr "Précédent"
+
+msgctxt "view:ins_claim.claim:"
+msgid "Remboursement"
+msgstr "Remboursement"
 
 msgctxt "view:ins_claim.claim:"
 msgid "Reopened Reason"

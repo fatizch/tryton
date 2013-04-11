@@ -38,6 +38,10 @@ msgctxt "field:ins_claim.claim,claimant:"
 msgid "Claimant"
 msgstr "Déclarant"
 
+msgctxt "field:ins_claim.claim,closed_reason:"
+msgid "Closed Reason"
+msgstr "Motif de clôture"
+
 msgctxt "field:ins_claim.claim,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -350,6 +354,10 @@ msgctxt "field:ins_claim.indemnification_displayer,indemnification_displayer:"
 msgid "Indemnification"
 msgstr "Indemnisation"
 
+msgctxt "field:ins_claim.indemnification_displayer,selected:"
+msgid "Selected"
+msgstr "Coché"
+
 msgctxt "field:ins_claim.indemnification_displayer,selection:"
 msgid "Selection"
 msgstr "Sélection"
@@ -357,6 +365,10 @@ msgstr "Sélection"
 msgctxt "field:ins_claim.indemnification_displayer,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
+
+msgctxt "field:ins_claim.indemnification_selection,amount:"
+msgid "Amount"
+msgstr "Montant"
 
 msgctxt "field:ins_claim.indemnification_selection,apply:"
 msgid "Apply on all"
@@ -370,8 +382,12 @@ msgctxt "field:ins_claim.indemnification_selection,domain_string:"
 msgid "Domain"
 msgstr "Domaine"
 
+msgctxt "field:ins_claim.indemnification_selection,end_date:"
+msgid "End date"
+msgstr "Date de Fin"
+
 msgctxt "field:ins_claim.indemnification_selection,global_value:"
-msgid "Global Value"
+msgid "Force Value"
 msgstr "Valeur globale"
 
 msgctxt "field:ins_claim.indemnification_selection,id:"
@@ -385,6 +401,18 @@ msgstr "Indemnisations"
 msgctxt "field:ins_claim.indemnification_selection,modified:"
 msgid "Modified"
 msgstr "Modifié"
+
+msgctxt "field:ins_claim.indemnification_selection,search_size:"
+msgid "Search Size"
+msgstr "Taille de recherche"
+
+msgctxt "field:ins_claim.indemnification_selection,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_claim.indemnification_selection,toggle_select_all:"
+msgid "Toggle Select All"
+msgstr "Appliquer à tous"
 
 msgctxt "field:ins_claim.loss,claim:"
 msgid "Claim"
@@ -590,9 +618,25 @@ msgctxt "model:ir.ui.menu,name:menu_validate_indemnification"
 msgid "Validate Indemnifications"
 msgstr "Validation des Indemnisations"
 
+msgctxt "selection:ins_claim.claim,closed_reason:"
+msgid ""
+msgstr "Unité"
+
+msgctxt "selection:ins_claim.claim,closed_reason:"
+msgid "Paid"
+msgstr "Payé"
+
+msgctxt "selection:ins_claim.claim,closed_reason:"
+msgid "Refusal"
+msgstr "Refus"
+
 msgctxt "selection:ins_claim.claim,status:"
 msgid "Closed"
 msgstr "Fermé"
+
+msgctxt "selection:ins_claim.claim,status:"
+msgid "In Progress"
+msgstr "En cours"
 
 msgctxt "selection:ins_claim.claim,status:"
 msgid "Open"
@@ -601,6 +645,14 @@ msgstr "Ouvert"
 msgctxt "selection:ins_claim.claim,status:"
 msgid "Reopened"
 msgstr "Réouvert"
+
+msgctxt "selection:ins_claim.claim,status:"
+msgid "Waiting from Client"
+msgstr "En attente de retour client"
+
+msgctxt "selection:ins_claim.claim,status:"
+msgid "litigation"
+msgstr "En conflit"
 
 msgctxt "selection:ins_claim.claim.history,status:"
 msgid "Closed"
@@ -625,6 +677,10 @@ msgstr "Payé"
 msgctxt "selection:ins_claim.claim.history,sub_status:"
 msgid "Reclamation"
 msgstr "Réclamation"
+
+msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgid "Refusal"
+msgstr "Refus"
 
 msgctxt "selection:ins_claim.claim.history,sub_status:"
 msgid "Regularization"
@@ -660,6 +716,10 @@ msgstr "Payé"
 
 msgctxt "selection:ins_claim.indemnification,status:"
 msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "selection:ins_claim.indemnification,status:"
+msgid "Rejected"
 msgstr "Refusé"
 
 msgctxt "selection:ins_claim.indemnification,status:"

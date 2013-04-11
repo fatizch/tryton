@@ -3830,6 +3830,10 @@ msgctxt "selection:ins_product.complementary_data_def,kind:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
+msgctxt "selection:ins_product.complementary_data_def,kind:"
+msgid "Sub Element"
+msgstr ""
+
 msgctxt "selection:ins_product.complementary_data_def,type_:"
 msgid "Boolean"
 msgstr "Booléen"
@@ -3857,6 +3861,10 @@ msgstr "Sélection"
 msgctxt "selection:ins_product.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
+
+msgctxt "selection:ins_product.coverage,family:"
+msgid "default"
+msgstr "Par défaut"
 
 msgctxt "selection:ins_product.coverage,subscription_behaviour:"
 msgid "Mandatory"
