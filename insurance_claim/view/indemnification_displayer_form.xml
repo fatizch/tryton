@@ -1,4 +1,6 @@
 <?xml version="1.0"?>
 <form string="Indemnification">
-  <field name="indemnification_displayer" mode="form" expand_toolbar="0"/>
+  <field name="claim"/>
+  <newline/>
+  <field name="indemnification_displayer" colspan="2" mode="form" expand_toolbar="0"/>
 </form>

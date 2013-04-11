@@ -314,6 +314,18 @@ msgctxt "field:ins_claim.indemnification_displayer,amount:"
 msgid "Amount"
 msgstr "Montant"
 
+msgctxt "field:ins_claim.indemnification_displayer,claim:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "field:ins_claim.indemnification_displayer,claim_declaration_date:"
+msgid "Claim Declaration Date"
+msgstr "Date de déclaration"
+
+msgctxt "field:ins_claim.indemnification_displayer,claim_number:"
+msgid "Claim Number"
+msgstr "Numéro de Sinistre"
+
 msgctxt "field:ins_claim.indemnification_displayer,covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
@@ -665,6 +677,10 @@ msgstr "Refus"
 msgctxt "selection:ins_claim.claim.history,sub_status:"
 msgid "Regularization"
 msgstr "Régularisation"
+
+msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgid "Rejected"
+msgstr "Refusé"
 
 msgctxt "selection:ins_claim.claim.history,sub_status:"
 msgid "Relapse"

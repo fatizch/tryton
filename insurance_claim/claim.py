@@ -773,6 +773,9 @@ class IndemnificationDisplayer(model.CoopView):
     end_date = fields.Date('End Date', states={'readonly': True})
     covered_element = fields.Char('Covered Element', states={'readonly': True})
     claim_number = fields.Char('Claim Number', states={'readonly': True})
+    claim = fields.Many2One(
+        'ins_claim.claim', 'Claim', states={'readonly': True})
+    claim_declaration_date = fields.Date('Claim Declaration Date')
 
 
 class IndemnificationSelection(model.CoopView):
@@ -860,6 +863,7 @@ class IndemnificationSelection(model.CoopView):
             domain, order=[('start_date', 'ASC')], limit=20)
         result = []
         for indemnification in indemnifications:
+            claim = indemnification.delivered_service.loss.claim
             result.append({
                 'selection': 'nothing',
                 'indemnification': indemnification.id,
@@ -867,8 +871,10 @@ class IndemnificationSelection(model.CoopView):
                 'start_date': indemnification.start_date,
                 'end_date': indemnification.end_date,
                 'indemnification_displayer': [indemnification.id],
-                'claim_number': '%s' % (
-                    indemnification.delivered_service.loss.claim.name),
+                'which_display': 'indemnification',
+                'claim': claim.id,
+                'claim_declaration_date': claim.declaration_date,
+                'claim_number': '%s' % claim.name,
                 'covered_element': '%s' % (
                     indemnification.customer.get_rec_name(None))})
         return {'indemnifications': result, 'modified': False}
@@ -915,13 +921,17 @@ class IndemnificationValidation(Wizard):
                 Selector.build_domain(domain_string))['indemnifications']}
 
     def transition_reload_selection(self):
+        claims = set([])
         for elem in self.select_indemnifications.indemnifications:
             if elem.selection == 'validated':
-                elem.indemnification.status = 'validated'
                 elem.indemnification.validate_indemnification()
+                claims.add(elem.claim_displayer[0].id)
             elif elem.selection == 'refused':
-                elem.indemnification.status = 'refused'
-                elem.indemnification.save()
+                elem.indemnification.reject_indemnification()
+                claims.add(elem.claim_displayer[0].id)
+        Claim = Pool().get('ins_claim.claim')
+        for claim in Claim.browse(claims):
+            claim.complete_indemnification()
         Selector = Pool().get('ins_claim.indemnification_selection')
         self.select_indemnifications.indemnifications = \
             Selector.find_indemnifications(

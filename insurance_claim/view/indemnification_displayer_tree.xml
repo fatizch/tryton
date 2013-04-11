@@ -5,5 +5,6 @@
   <field name="end_date"/>
   <field name="amount"/>
   <field name="claim_number"/>
+  <field name="claim_declaration_date"/>
   <field name="covered_element"/>
 </tree>
