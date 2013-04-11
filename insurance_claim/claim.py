@@ -76,8 +76,10 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         states={'readonly': True})
     status = fields.Selection(CLAIM_STATUS, 'Status', sort=False,
         states={'readonly': True})
-    sub_status = fields.Selection('get_possible_sub_status', 'Sub Status',
-        selection_change_with=['status'], states={'readonly': True})
+    sub_status = fields.Selection(
+        CLAIM_CLOSED_REASON + CLAIM_REOPENED_REASON + CLAIM_OPEN_SUB_STATUS,
+        'Sub Status', selection_change_with=['status'],
+        states={'readonly': True})
     declaration_date = fields.Date('Declaration Date')
     end_date = fields.Date('End Date',
         states={'invisible': Eval('status') != 'closed', 'readonly': True})
@@ -138,7 +140,8 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             return 'validated'
         if 'paid' in sub_statuses:
             return 'paid'
-        print sub_statuses
+        if 'rejected' in sub_statuses:
+            return 'rejected'
         return 'instruction'
 
     def update_sub_status(self):
@@ -978,7 +981,6 @@ class IndemnificationValidation(Wizard):
         to_validate = set([])
         to_reject = set([])
         for elem in self.select_indemnifications.indemnifications:
-            print utils.format_data(elem)
             if elem.selection == 'validate':
                 to_validate.add(elem.indemnification.id)
                 claims.add(elem.claim.id)

@@ -47,6 +47,9 @@ class ClaimProcess(CoopProcessFramework):
             'party.contact_history', '', 'History',
             on_change_with=['claimant'], depends=['claimant']),
         'on_change_with_contact_history')
+    is_pending_indemnification = fields.Function(
+        fields.Boolean('Pending Indemnification', states={'invisible': True}),
+        'get_is_pending_indemnification')
 
     def get_possible_contracts(self, at_date=None):
         if not at_date:
@@ -171,6 +174,15 @@ class ClaimProcess(CoopProcessFramework):
         self.status = 'closed'
         self.end_date = utils.today()
         return True
+
+    def get_is_pending_indemnification(self, name):
+        for loss in self.losses:
+            for del_ser in loss.delivered_services:
+                for indemn in del_ser.indemnifications:
+                    if indemn.status == 'calculated':
+                        print True
+                        return True
+        return False
 
 
 class LossProcess():
