@@ -50,17 +50,6 @@ def un_fuzzy_translation(src=None, module=None):
         cur_translation.save()
 
 
-def set_currency(cfg_dict):
-    Currency = Model.get('currency.currency')
-    cur_domain = []
-    if cfg_dict['currency']:
-        cur_domain.append(('code', '=', cfg_dict['currency']))
-    currencies = Currency.find(cur_domain, limit=1)
-    if len(currencies) > 0:
-        cfg_dict['currency'] = currencies[0]
-    return cfg_dict
-
-
 def update_views(test_config_file):
     cfg = proteus_tools.get_config(
         proteus_tools.get_test_cfg(test_config_file))

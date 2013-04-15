@@ -45,7 +45,7 @@
             <field name="model">ins_contract.option</field>
             <field name="type">form</field>
             <field name="inherit" ref="insurance_contract.option_view_form"/>
-            <field name="name">collective_option_=form</field>
+            <field name="name">collective_option_form</field>
         </record>
     </data>
 </tryton>

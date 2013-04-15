@@ -221,7 +221,6 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         return 'instruction'
 
     def close_claim(self, sub_status=None):
-        #TODO : To Enhance. Get real closed reason
         self.status = 'closed'
         self.end_date = utils.today()
         return True, []
