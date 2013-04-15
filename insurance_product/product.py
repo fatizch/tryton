@@ -575,7 +575,12 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
 
     @classmethod
     def get_possible_item_kind(cls):
-        return [('', '')]
+        return [
+            ('', ''),
+            ('party', 'Party'),
+            ('person', 'Person'),
+            ('company', 'Company'),
+        ]
 
 
 class ItemDescriptorComplementaryDataRelation(model.CoopSQL):

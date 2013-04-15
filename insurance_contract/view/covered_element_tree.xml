@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
 <tree string="Covered Elements">
-    <field name="rec_name" expand="1"/>
+    <field name="covered_name" expand="1"/>
+    <field name="item_kind" tree_invisible="1"/>
 </tree>

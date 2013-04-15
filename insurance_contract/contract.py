@@ -2,7 +2,7 @@ import datetime
 import copy
 
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If, And, Or
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, fields, abstract
@@ -40,6 +40,7 @@ __all__ = [
     'PriceLine',
     'BillingManager',
     'CoveredElement',
+    'CoveredElementPartyRelation',
     'CoveredData',
     'ManagementProtocol',
     'ManagementRole',
@@ -960,21 +961,88 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     #editable tree, or we can not display for the moment dictionnary in tree
     item_desc = fields.Many2One(
         'ins_product.item_desc', 'Item Desc', depends=['complementary_data'],
-        on_change=['item_desc', 'complementary_data'])
+        on_change=['item_desc', 'complementary_data', 'party'])
     covered_data = fields.One2Many(
         'ins_contract.covered_data', 'covered_element', 'Covered Element Data')
-    name = fields.Char('Name')
+    name = fields.Char('Name',
+        states={'invisible':
+                Or(
+                    Eval('item_kind') == 'person',
+                    Eval('item_kind') == 'company',
+                    Eval('item_kind') == 'party',
+                )})
     parent = fields.Many2One('ins_contract.covered_element', 'Parent')
     sub_covered_elements = fields.One2Many(
         'ins_contract.covered_element', 'parent', 'Sub Covered Elements',
+        states={'invisible': Eval('item_kind') == 'person'},
         domain=[('covered_data.option.contract', '=', Eval('contract'))],
         depends=['contract'], context={'_master_covered': Eval('id')})
-    complementary_data = fields.Dict(
-        'ins_product.complementary_data_def', 'Complementary Data',
-        on_change_with=['item_desc', 'complementary_data'])
+    complementary_data = fields.Dict('ins_product.complementary_data_def',
+        'Complementary Data',
+        on_change_with=['item_desc', 'complementary_data'],
+        # states={'invisible':
+        #         Or(
+        #             Eval('item_kind') == 'person',
+        #             Eval('item_kind') == 'company',
+        #             Eval('item_kind') == 'party',
+        #         )}
+    )
+    party_compl_data = fields.Function(
+        fields.Dict('ins_product.complementary_data_def', 'Complementary Data',
+            on_change_with=['item_desc', 'complementary_data', 'party'],
+            states={'invisible':
+                    And(
+                        Eval('item_kind') != 'person',
+                        Eval('item_kind') != 'company',
+                        Eval('item_kind') != 'party',
+                    )}),
+        'on_change_with_party_compl_data', 'set_party_compl_data')
     complementary_data_summary = fields.Function(
         fields.Char('Complementary Data', on_change_with=['item_desc']),
         'on_change_with_complementary_data_summary')
+    party = fields.Many2One('party.party', 'Actor',
+        domain=[
+            If(
+                Eval('item_kind') == 'person',
+                ('is_person', '=', True),
+                (),
+            ), If(
+                Eval('item_kind') == 'company',
+                ('is_company', '=', True),
+                (),
+            )], ondelete='RESTRICT',
+        states={
+            'invisible': And(
+                Eval('item_kind') != 'person',
+                Eval('item_kind') != 'company',
+                Eval('item_kind') != 'party',
+            ),
+            'required': Or(
+                Eval('item_kind') == 'person',
+                Eval('item_kind') == 'company',
+                Eval('item_kind') == 'party',
+            )
+        }, depends=['item_kind'])
+    covered_relations = fields.Many2Many(
+        'ins_contract.covered_element-party_relation', 'covered_element',
+        'party_relation', 'Covered Relations', domain=[
+            'OR',
+            [('from_party', '=', Eval('party'))],
+            [('to_party', '=', Eval('party'))],
+        ], depends=['party'],
+        states={
+            'invisible': And(
+                Eval('item_kind') != 'person',
+                Eval('item_kind') != 'company',
+                Eval('item_kind') != 'party',
+            )})
+    item_kind = fields.Function(
+        fields.Char('Item Kind', on_change_with=['item_desc'],
+            states={'invisible': True}),
+        'on_change_with_item_kind')
+    covered_name = fields.Function(
+        fields.Char('Name', on_change_with=['party']),
+        'on_change_with_covered_name')
 
     @classmethod
     def get_parent_in_transaction(cls):
@@ -1008,12 +1076,14 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         return abstract.WithAbstract.serialize_field(result)
 
     def get_name_for_billing(self):
-        return self.name
+        return self.get_rec_name('billing')
 
     def get_name_for_info(self):
-        return self.name
+        return self.get_rec_name('info')
 
     def get_rec_name(self, value):
+        if self.party:
+            return self.party.rec_name
         res = super(CoveredElement, self).get_rec_name(value)
         if self.item_desc:
             res = coop_string.concat_strings(
@@ -1051,9 +1121,15 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         return True, ()
 
     def on_change_item_desc(self):
+        res = {}
         if not (hasattr(self, 'item_desc') and self.item_desc):
-            return {'complementary_data': {}, 'is_person': False}
-        return {'complementary_data': self.on_change_with_complementary_data()}
+            res['complementary_data'] = {}
+        else:
+            res['complementary_data'] = \
+                self.on_change_with_complementary_data()
+        res['item_kind'] = self.on_change_with_item_kind()
+        # res['party_compl_data'] = self.on_change_with_party_compl_data()
+        return res
 
     def on_change_with_complementary_data(self):
         if self.complementary_data:
@@ -1076,13 +1152,93 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         elif self.parent:
             return self.parent.get_contract()
 
+    def on_change_with_party_compl_data(self, name=None):
+        res = {}
+        if self.party and self.party.complementary_data:
+            res = self.party.complementary_data
+        if not (self.item_desc
+                and self.item_desc.kind in ['party', 'person', 'company']):
+            return res
+        for compl_data_def in self.item_desc.complementary_data_def:
+            if compl_data_def.name in res:
+                continue
+            res[compl_data_def.name] = compl_data_def.get_default_value(None)
+        return res
+
     def get_complementary_data_def(self):
-        return self.item_desc.complementary_data_def
+        if (self.item_desc
+                and not self.item_desc.kind in ['party', 'person', 'company']):
+            return self.item_desc.complementary_data_def
 
     def get_complementary_data_value(self, at_date, value):
         return utils.get_complementary_data_value(
             self, 'complementary_data', self.get_complementary_data_def(),
             at_date, value)
+
+    def init_from_party(self, party):
+        self.party = party
+
+    def is_party_covered(self, party, at_date, option):
+        if party in self.get_covered_parties(at_date):
+            for covered_data in self.covered_data:
+                if (utils.is_effective_at_date(covered_data, at_date)
+                        and covered_data.option == option):
+                    return True
+        if hasattr(self, 'sub_covered_elements'):
+            for sub_elem in self.sub_covered_elements:
+                if sub_elem.is_party_covered(party, at_date, option):
+                    return True
+        return False
+
+    def on_change_with_item_kind(self, name=None):
+        if self.item_desc:
+            return self.item_desc.kind
+        return ''
+
+    def get_covered_parties(self, at_date):
+        '''
+        Returns all covered persons sharing the same covered data
+        for example an employe, his spouse and his children
+        '''
+        res = []
+        if self.party:
+            res.append(self.party)
+        for relation in self.covered_relations:
+            if not utils.is_effective_at_date(relation, at_date):
+                continue
+            if relation.from_party != self.party:
+                res.append(relation.from_party)
+            if relation.to_party != self.party:
+                res.append(relation.to_party)
+        return res
+
+    def on_change_with_covered_name(self, name=None):
+        if self.party:
+            return self.party.rec_name
+        return ''
+
+    @classmethod
+    def get_possible_covered_elements(cls, party, at_date):
+        #TODO : To enhance with status control on contract and option linked
+        domain = [
+            ('party', '=', party.id),
+            ('covered_data.start_date', '<=', at_date),
+            ['OR',
+                ['covered_data.end_date', '=', None],
+                ['covered_data.end_date', '>=', at_date]]
+        ]
+        return cls.search([domain])
+
+
+class CoveredElementPartyRelation(model.CoopSQL):
+    'Relation between Covered Element and Covered Relations'
+
+    __name__ = 'ins_contract.covered_element-party_relation'
+
+    covered_element = fields.Many2One('ins_contract.covered_element',
+        'Covered Element', ondelete='CASCADE')
+    party_relation = fields.Many2One('party.party-relation', 'Party Relation',
+        ondelete='RESTRICT')
 
 
 class CoveredData(model.CoopSQL, model.CoopView):
