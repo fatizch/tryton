@@ -316,6 +316,11 @@ class Coverage(model.CoopSQL, SimpleCoverage):
         skip_fields.add('products')
         return super(Coverage, self).export_json(skip_fields)
 
+    @classmethod
+    def clean_object_before_copy(cls, default):
+        super(Coverage, cls).clean_object_before_copy(default)
+        default['products'] = None
+
 
 class PackageCoverage(model.CoopSQL):
     'Link Package Coverage'

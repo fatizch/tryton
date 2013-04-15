@@ -558,6 +558,10 @@ class CoopSQL(ExportImportMixin, ModelSQL):
         raise NotImplementedError
 
     @classmethod
+    def clean_object_before_copy(cls, default):
+        pass
+
+    @classmethod
     def copy(cls, objects, default=None):
         constraints = []
         for constraint in cls._sql_constraints:
@@ -567,6 +571,7 @@ class CoopSQL(ExportImportMixin, ModelSQL):
             if default is None:
                 default = {}
             default = default.copy()
+            cls.clean_object_before_copy(default)
             #Code must be unique and action "copy" stores in db during process
             default[constraints[0]] = 'temp_for_copy'
             res = super(CoopSQL, cls).copy(objects, default=default)
@@ -874,4 +879,3 @@ add_export_to_model([
     ('ir.rule', ('domain',)),
     ('ir.model.access', ('group.name', 'model.model')),
 ])
-
