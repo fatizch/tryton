@@ -10,7 +10,7 @@
     <newline/>
     <field name="complementary_data" colspan="2" no_command="1"/>
     <newline/>
-     <field name="party_compl_data" colspan="2" no_command="1"/>
+     <field name="party_compl_data" colspan="2"/> <!-- no_command="1" -->
     <newline/>
     <field name="covered_relations" colspan="4"/>
     <newline/>

@@ -79,17 +79,21 @@ def translate_value(instance, var_name, lang=None):
 
     ttype = None
     if _type == 'selection':
-        value = selection_as_string(instance, var_name)
+        res = selection_as_string(instance, var_name)
         ttype = field.__class__._type
     elif _type == 'date':
-        value = date_as_string(getattr(instance, var_name), lang)
+        res = date_as_string(getattr(instance, var_name), lang)
+    elif _type == 'dict':
+        CDataDef = Pool().get('ins_product.complementary_data_def')
+        res = CDataDef.get_complementary_data_summary([instance],
+            var_name)[instance.id]
     else:
-        value = str(getattr(instance, var_name))
+        res = u'%s' % getattr(instance, var_name)
     if (hasattr(field, 'translate') and field.translate
         or (hasattr(field, 'translate_selection')
             and field.translate_selection)):
-        return translate_field(instance, var_name, value, ttype, lang=lang)
-    return str(value)
+        return translate_field(instance, var_name, res, ttype, lang=lang)
+    return res
 
 
 def translate_field(instance, var_name, src, ttype='field', lang=None):
@@ -107,6 +111,16 @@ def translate(model, var_name, src, ttype, lang=None):
     if not res:
         return src
     return res
+
+
+def translate_bool(value, lang=None):
+    if lang:
+        language = lang.code
+    else:
+        language = Transaction().language
+    if language == 'fr_FR':
+        return 'Vrai' if value else 'Faux'
+    return str(value)
 
 
 def translate_model_name(model, lang=None):

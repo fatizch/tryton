@@ -1128,15 +1128,17 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             res['complementary_data'] = \
                 self.on_change_with_complementary_data()
         res['item_kind'] = self.on_change_with_item_kind()
-        # res['party_compl_data'] = self.on_change_with_party_compl_data()
+        res['party_compl_data'] = self.on_change_with_party_compl_data()
         return res
 
     def on_change_with_complementary_data(self):
-        if self.complementary_data:
-            return self.complementary_data
-        elif self.item_desc:
+        res = {}
+        if (self.item_desc and not self.item_desc.kind in
+                ['party', 'person', 'company']):
             return utils.init_complementary_data(
                 self.get_complementary_data_def())
+        else:
+            return res
 
     def on_change_with_complementary_data_summary(self, name=None):
         if not (hasattr(self, 'complementary_data') and
@@ -1154,16 +1156,31 @@ class CoveredElement(model.CoopSQL, model.CoopView):
 
     def on_change_with_party_compl_data(self, name=None):
         res = {}
-        if self.party and self.party.complementary_data:
-            res = self.party.complementary_data
-        if not (self.item_desc
+        if not self.party or not (self.item_desc
                 and self.item_desc.kind in ['party', 'person', 'company']):
             return res
         for compl_data_def in self.item_desc.complementary_data_def:
-            if compl_data_def.name in res:
-                continue
-            res[compl_data_def.name] = compl_data_def.get_default_value(None)
+            if (self.party
+                    and not utils.is_none(self.party, 'complementary_data')
+                    and compl_data_def.name in self.party.complementary_data):
+                res[compl_data_def.name] = self.party.complementary_data[
+                    compl_data_def.name]
+            else:
+                res[compl_data_def.name] = compl_data_def.get_default_value(
+                    None)
         return res
+
+    @classmethod
+    def set_party_compl_data(cls, instances, name, vals):
+        #We'll update the party complementary data with existing key or add new
+        #keys, but if others keys already exist we won't modify them
+        Party = Pool().get('party.party')
+        for covered in instances:
+            if utils.is_none(covered.party, 'complementary_data'):
+                Party.write([covered.party], {'complementary_data': vals})
+            else:
+                covered.party.complementary_data.update(vals)
+                covered.party.save()
 
     def get_complementary_data_def(self):
         if (self.item_desc
