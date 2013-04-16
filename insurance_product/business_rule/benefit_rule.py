@@ -98,12 +98,17 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
             'invisible': Bool(~Eval('with_revaluation')),
             'required': Bool(Eval('with_revaluation')),
         }, ondelete='RESTRICT')
-    index_initial_value = fields.Many2One('table.table_cell',
-        'Initial Value', states={
+    index_initial_date = fields.Date('Index Initial Date', states={
             'invisible': Bool(~Eval('with_revaluation')),
-            'required': Bool(Eval('with_revaluation')),
-        }, domain=[('definition', '=', Eval('revaluation_index'))],
-        depends=['revaluation_index'])
+            'required': Bool(Eval('with_revaluation'))})
+    index_initial_value = fields.Function(
+        fields.Char('Initial Value', states={
+                'invisible': Bool(~Eval('with_revaluation')),
+                'required': Bool(Eval('with_revaluation'))},
+            domain=[('definition', '=', Eval('revaluation_index'))],
+            depends=['revaluation_index'],
+            on_change_with=['revaluation_index', 'index_initial_date']),
+        'on_change_with_index_initial_value')
     validation_delay = fields.Integer('Validation Delay',
         states={'invisible': Bool(~Eval('with_revaluation'))})
     validation_delay_unit = fields.Selection(date.DAILY_DURATION,
@@ -154,7 +159,13 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
         if not self.revaluation_index:
             return
         Cell = Pool().get('table.table_cell')
-        return Cell.get(self.revaluation_index, (at_date))
+        return Cell.get_cell(self.revaluation_index, (at_date))
+
+    def on_change_with_index_initial_value(self, name=None):
+        cell = self.get_index_at_date(self.index_initial_date)
+        if cell:
+            return str(cell.get_value_with_type())
+        return ''
 
     def get_revaluated_amount(self, amount, at_date):
         if not self.with_revaluation:
@@ -162,10 +173,11 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
         if not amount:
             return 0
         index = self.get_index_at_date(at_date)
-        if self.index_initial_value:
-            initial_value = self.index_initial_value.get_value_with_type()
-        else:
-            initial_value = 1
+        initial_value = 1
+        if self.index_initial_date:
+            initial_index = self.get_index_at_date(self.index_initial_date)
+            if initial_index:
+                initial_value = initial_index.get_value_with_type()
         if initial_value != 0:
             return index * amount / initial_value if index else 0
         return 0

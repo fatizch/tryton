@@ -32,6 +32,7 @@ __all__ = [
     'VersionObject',
     'ObjectHistory',
     'Group',
+    'UIMenu',
 ]
 
 
@@ -574,6 +575,7 @@ class CoopSQL(ExportImportMixin, ModelSQL):
             cls.clean_object_before_copy(default)
             #Code must be unique and action "copy" stores in db during process
             default[constraints[0]] = 'temp_for_copy'
+
             res = super(CoopSQL, cls).copy(objects, default=default)
             for clone, original in zip(res, objects):
                 i = 1
@@ -586,7 +588,7 @@ class CoopSQL(ExportImportMixin, ModelSQL):
                 clone.save()
             return res
         else:
-            res = super(CoopSQL, cls).copy(objects, default=default)
+            return super(CoopSQL, cls).copy(objects, default=default)
 
     @classmethod
     def setter_void(cls, objects, name, values):
@@ -878,4 +880,14 @@ add_export_to_model([
     ('res.user.warning', ('name', 'user')),
     ('ir.rule', ('domain',)),
     ('ir.model.access', ('group.name', 'model.model')),
+    ('ir.ui.view', ('module', 'type', 'name')),
 ])
+
+
+class UIMenu():
+    "UI menu"
+    __name__ = 'ir.ui.menu'
+    __metaclass__ = PoolMeta
+
+    def get_rec_name(self, name):
+        return self.name

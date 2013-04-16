@@ -187,7 +187,7 @@ expand_toolbar="0" />
     meths['Code']({
         'technical_kind': 'step_after',
         'on_model': claim_model,
-        'method_name': 'validate_indemnifications',
+        'method_name': 'complete_indemnifications',
         'parent_step': step_indemnification,
         'sequence': 1,
     })
@@ -210,7 +210,7 @@ expand_toolbar="0" />''',
     meths['Code']({
         'technical_kind': 'step_after',
         'on_model': claim_model,
-        'method_name': 'validate_indemnifications',
+        'method_name': 'complete_indemnifications',
         'parent_step': step_disbursment,
         'sequence': 1,
     })

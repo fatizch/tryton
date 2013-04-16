@@ -69,6 +69,9 @@
             <group id="role_group" colspan="4">
             </group>
         </page>
+        <page string="Complementary Data" id="compl_data">
+            <field name="complementary_data" no_command="1"/>
+        </page>
     </xpath>
     <xpath expr="/form/notebook/page/field[@name='categories']" position="replace"/>
     <xpath expr="/form/notebook/page/field[@name='addresses']" position="replace_attributes">

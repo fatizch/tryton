@@ -25,6 +25,8 @@ class Party:
     broker_role = fields.One2Many('party.broker', 'party', 'Broker', size=1)
     customer_role = fields.One2Many('party.customer', 'party', 'Customer',
         size=1)
+    complementary_data = fields.Dict('ins_product.complementary_data_def',
+        'Complementary Data')
 
     @classmethod
     def get_summary(cls, parties, name=None, at_date=None, lang=None):

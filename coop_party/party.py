@@ -214,6 +214,8 @@ class Party(model.ExportImportMixin):
             if party.is_company:
                 pass
             res[party.id] += coop_string.get_field_as_summary(
+                party, 'complementary_data', True, at_date, lang=lang)
+            res[party.id] += coop_string.get_field_as_summary(
                 party, 'addresses', True, at_date, lang=lang)
             res[party.id] += coop_string.get_field_as_summary(
                 party, 'relations', True, at_date, lang=lang)

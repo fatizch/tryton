@@ -18,6 +18,7 @@ def register():
         StatusHistory,
         BillingManager,
         CoveredElement,
+        CoveredElementPartyRelation,
         CoveredData,
         PriceLine,
         Document,

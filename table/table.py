@@ -527,10 +527,7 @@ class TableCell(ModelSQL, ModelView):
         return result
 
     @classmethod
-    def get(cls, definition, *values):
-        """
-        Return the value for the tuple dimensions values.
-        """
+    def get_cell(cls, definition, *values):
         pool = Pool()
         Definition = pool.get('table.table_def')
         Dimension = pool.get('table.table_dimension')
@@ -582,7 +579,16 @@ class TableCell(ModelSQL, ModelView):
             cell, = cls.search(domain)
         except ValueError:
             return None
-        return cls._load_value(cell.value, definition.type_)
+        return cell
+
+    @classmethod
+    def get(cls, definition, *values):
+        """
+        Return the value for the tuple dimensions values.
+        """
+        cell = cls.get_cell(definition, *values)
+        if cell:
+            return cls._load_value(cell.value, definition.type_)
 
 
 class TableOpen2DAskDimensions(ModelView):

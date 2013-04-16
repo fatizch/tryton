@@ -20,7 +20,7 @@ class LifeOption():
         for covered_data in self.covered_data:
             if not utils.is_effective_at_date(covered_data, loss.start_date):
                 continue
-            if covered_data.is_person_covered(loss.covered_person,
+            if covered_data.is_party_covered(loss.covered_person,
                     loss.start_date):
                 return True
         return False
