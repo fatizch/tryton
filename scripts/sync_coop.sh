@@ -8,5 +8,5 @@ hg pull -u
 cd $ENV_FOLDER/tryton-workspace/proteus
 hg pull -u
 cd $ENV_FOLDER/tryton-workspace/trytond/trytond/modules
-ln -s ../../../coopbusiness/* . 2> /dev/null
-rm defaults scripts test_case
+cd $ENV_FOLDER
+./tryton-workspace/coopbusiness/scripts/configure_directory.sh $ENV_FOLDER
