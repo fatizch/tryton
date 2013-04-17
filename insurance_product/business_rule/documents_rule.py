@@ -15,6 +15,7 @@ from trytond.pyson import Eval
 from trytond.modules.coop_utils import fields, model, utils, coop_string
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED
+from trytond.modules.coop_utils import BatchRoot
 
 __all__ = [
     'NoTargetCheckAttachment',
@@ -36,6 +37,7 @@ __all__ = [
     'DocumentRequestDisplayer',
     'ReceiveDocuments',
     'AttachmentCreation',
+    'DocumentRequestBatch',
 ]
 
 
@@ -372,51 +374,28 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_product.document_request'
 
-    needed_by = fields.Reference(
-        'Requested for',
-        [('', '')],
-    )
-
+    needed_by = fields.Reference('Requested for', [('', '')])
     documents = fields.One2Many(
-        'ins_product.document',
-        'request',
-        'Documents',
-        depends=['needed_by_str'],
-        on_change=['documents', 'is_complete'],
-        context={'request_owner': Eval('needed_by_str')},
-    )
-
+        'ins_product.document', 'request', 'Documents',
+        depends=['needed_by_str'], on_change=['documents', 'is_complete'],
+        context={'request_owner': Eval('needed_by_str')})
     is_complete = fields.Function(
         fields.Boolean(
-            'Is Complete',
-            depends=['documents'],
-            on_change_with=['documents'],
+            'Is Complete', depends=['documents'], on_change_with=['documents'],
             on_change=['documents', 'is_complete'],
-            states={
-                'readonly': ~~Eval('is_complete')
-            },
-        ),
+            states={'readonly': ~~Eval('is_complete')}),
         'on_change_with_is_complete',
-        'setter_void',
-    )
-
+        'setter_void')
     needed_by_str = fields.Function(
         fields.Char(
-            'Master as String',
-            on_change_with=['needed_by'],
-            depends=['needed_by'],
-        ),
-        'on_change_with_needed_by_str',
-    )
-
+            'Master as String', on_change_with=['needed_by'],
+            depends=['needed_by']),
+        'on_change_with_needed_by_str')
     request_description = fields.Function(
         fields.Char(
-            'Request Description',
-            depends=['needed_by'],
-            on_change_with=['needed_by'],
-        ),
-        'on_change_with_request_description',
-    )
+            'Request Description', depends=['needed_by'],
+            on_change_with=['needed_by']),
+        'on_change_with_request_description')
 
     @classmethod
     def __setup__(cls):
@@ -1079,3 +1058,36 @@ this object'})
             # pass
 
         return 'end'
+
+
+class DocumentRequestBatch(BatchRoot):
+    'Document Request Batch Definition'
+
+    __name__ = 'ins_product.document_request_batch'
+
+    @classmethod
+    def get_batch_main_model_name(cls):
+        return 'ins_product.document_request'
+
+    @classmethod
+    def get_batch_search_model(cls):
+        return 'ins_product.document'
+
+    @classmethod
+    def get_batch_field(cls):
+        return 'request'
+
+    @classmethod
+    def get_batch_ordering(cls):
+        return [('request', 'ASC')]
+
+    @classmethod
+    def get_batch_domain(cls):
+        return [('reception_date', '=', None)]
+
+    @classmethod
+    def execute(cls, objects, ids, logger):
+        logger.info('#' * 80)
+        logger.debug('%s' % objects)
+        for cur_object in objects:
+            print 'Treating object %s' % cur_object.id
