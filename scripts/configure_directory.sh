@@ -96,8 +96,7 @@ else
         echo "TRYTON_DATABASE = 'new_feature'" >> celeryconfig.py
         echo "" >> celeryconfig.py
         echo "# Trytond config filepath" >> celeryconfig.py
-        echo "TRYTON_CONFIG = '/home/giovanni/WorkDir/' + \\" >> celeryconfig.py
-        echo "    'envs/new_feature/tryton-workspace/conf/trytond.conf'" >> celeryconfig.py
+        echo "TRYTON_CONFIG = '$TOPPATH/tryton-workspace/conf/trytond.conf'" >> celeryconfig.py
     fi
     if [ ! -e "tryton.conf" ]
     then

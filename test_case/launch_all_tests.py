@@ -44,7 +44,7 @@ if __name__ == '__main__':
             os.remove(os.path.join(target_dir, file))
 
     root = os.path.abspath(os.path.join(os.path.normpath(__file__),
-        '..', '..'))
+        '..', '..', 'modules'))
     modules = os.listdir(root)
     modules.sort(reverse=True)
     num_processes = multiprocessing.cpu_count()
