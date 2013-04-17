@@ -1,5 +1,0 @@
-<?xml version="1.0" ?>
-<form>
-    <field name="delivered_services" colspan="4" mode="form,tree"
-        expand_toolbar="0"/>
-</form>

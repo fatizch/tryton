@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<form string="Letter Models">
-    <field name="models" xexpand="1" xfill="1" yexpand="1" yfill="1" colspan="4"/>
-    <newline/>
-    <label name="good_address" xalign="0"/>
-    <field name="good_address" colspan="3"/>
-    <field name="party"/>
-</form>

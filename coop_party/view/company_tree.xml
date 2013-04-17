@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<tree>
-    <field name="code"/>
-    <field name="short_name"/>
-    <field name="name"/>
-    <field name="parent"/>
-    <field name="main_address"/>
-</tree>

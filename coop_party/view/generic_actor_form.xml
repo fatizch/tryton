@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<form>
-    <label name="kind"/>
-    <field name="kind" widget="selection"/>
-    <label name="reference"/>
-    <field name="reference"/>
-</form>

@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<tree string="Relations">
-    <field name="child"/>
-    <field name="select_value"/>
-</tree>

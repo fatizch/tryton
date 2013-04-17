@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<form string="Attachments">
-  <field name="attachments" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
-  <field name="resource"/>
-</form>

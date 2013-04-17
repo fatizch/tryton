@@ -1,3 +1,0 @@
-The ibanlib need the file iban_countries.cfg to validate IBAN code.
-If the file is missing, copy the one from this directory to 
-python2.7/site-packages/ibanlib

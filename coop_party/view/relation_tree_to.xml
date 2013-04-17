@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<tree>
-    <field name="start_date"/>
-    <field name="end_date"/>
-    <field name="reverse_kind"/>
-    <field name="from_party"/>
-</tree>
