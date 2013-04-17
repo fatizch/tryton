@@ -11,14 +11,19 @@ echo $SEP
 $TRYTOND_PATH/trytond -c $TRYTOND_CONF &
 echo "Starting tryton client"
 echo $SEP
-#developpement mode
-env UBUNTU_MENUPROXY= $TRYTON_PATH/tryton -c $TRYTON_CONF -d &
-
-# Non developpement mode for demo or production
-# env UBUNTU_MENUPROXY= $TRYTON_PATH/tryton -c $TRYTON_CONF &
-
-# Debug Mode
-#env UBUNTU_MENUPROXY= $TRYTON_PATH/tryton -c $TRYTON_CONF -l DEBUG -d -v &
+if test "${TRYTON_LAUNCH_MODE+set}" != set
+then
+    env UBUNTU_MENUPROXY= $TRYTON_PATH/tryton -c $TRYTON_CONF &
+elif [ $TRYTON_LAUNCH_MODE = "demo" ]
+then
+    env UBUNTU_MENUPROXY= $TRYTON_PATH/tryton -c $TRYTON_CONF &
+elif [ $TRYTON_LAUNCH_MODE = "dev" ]
+then
+    env UBUNTU_MENUPROXY= $TRYTON_PATH/tryton -c $TRYTON_CONF -d &
+elif [ $TRYTON_LAUNCH_MODE = "debug" ]
+then
+    env UBUNTU_MENUPROXY= $TRYTON_PATH/tryton -c $TRYTON_CONF -l DEBUG -d -v &
+fi
 sleep 2
 echo $SEP
 echo "Client ready"

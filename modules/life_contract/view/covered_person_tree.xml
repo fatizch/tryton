@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<data>
-    <xpath expr="/tree" position="inside">
-        <field name="covered_name"/>
-        <field name="is_person" tree_invisible="1"/>
-    </xpath>
-    <xpath expr="/tree/field[@name='rec_name']" position="replace"/>
-</data>
