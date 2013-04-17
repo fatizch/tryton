@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<tree string="Priorities" sequence="priority">
-  <field name="priority" tree_invisible="1"/>
-  <field name="process_step"/>
-</tree>

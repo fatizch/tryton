@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<tree string="Generic Business Rule"
-    colors="If(Bool(Eval('is_current')), 'blue', 'black')">
-    <field name="start_date"/>
-    <field name="end_date"/>
-</tree>

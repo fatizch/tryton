@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<tree string="Code" sequence="sequence">
-    <field name="on_model"/>
-    <field name="method_name"/>
-</tree>

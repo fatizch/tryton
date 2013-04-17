@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<form string="Manager" col="4">
-  <label name="start_date" xalign="0"/>
-  <field name="start_date"/>
-  <label name="end_date" xalign="0"/>
-  <field name="end_date"/>
-  <label name="protocol" xalign="0"/>
-  <field name="protocol" colspan="3"/>
-</form>

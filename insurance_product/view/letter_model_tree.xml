@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<tree string="Letter Models">
-  <field name="name"/>
-  <field name="code"/>
-  <field name="on_model"/>
-  <field name="kind"/>
-</tree>
