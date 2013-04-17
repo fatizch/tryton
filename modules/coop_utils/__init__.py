@@ -22,6 +22,7 @@ def register():
         VersionedObject,
         VersionObject,
         Group,
+        UIMenu,
         # from session
         DateClass,
         module='coop_utils', type_='model')

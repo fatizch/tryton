@@ -216,3 +216,33 @@ class ComplementaryDataDefinition(
                 continue
             sub_data.update_if_needed(
                 new_vals, cur_value, init_dict, valid_schemas)
+
+    def get_value_as_string(self, value, lang=None):
+        if self.type_ == 'selection':
+            cur_dict = dict(self.__class__.get_keys([self])[0]['selection'])
+            return cur_dict[value]
+        elif self.type_ in ['integer', 'float', 'numeric'] and not value:
+            return '0'
+        elif self.type_ == 'boolean':
+            return coop_string.translate_bool(value, lang)
+        return str(value)
+
+    @classmethod
+    def get_complementary_data_summary(cls, instances, var_name, lang=None):
+        res = {}
+        domain = []
+        keys = []
+        for instance in instances:
+            keys += [key for key in getattr(instance, var_name).iterkeys()]
+        domain = [[('name', '=', key)] for key in set(keys)]
+        domain.insert(0, 'OR')
+        compl_dict = dict([x.name, x] for x in cls.search(domain))
+        for instance in instances:
+            res[instance.id] = ''
+            for key, value in getattr(instance, var_name).iteritems():
+                res[instance.id] += u'\n%s : %s' % (
+                    coop_string.translate_value(compl_dict[key], 'string',
+                        lang),
+                    compl_dict[key].get_value_as_string(value, lang))
+            res[instance.id] = coop_string.re_indent_text(res[instance.id], 1)
+        return res

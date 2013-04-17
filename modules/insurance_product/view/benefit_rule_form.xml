@@ -42,6 +42,8 @@
         <newline/>
         <label name="revaluation_index"/>
         <field name="revaluation_index"/>
+        <label name="index_initial_date"/>
+        <field name="index_initial_date"/>
         <label name="index_initial_value"/>
         <field name="index_initial_value"/>
         <label name="revaluation_date"/>

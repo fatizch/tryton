@@ -139,6 +139,13 @@ class Benefit(model.CoopSQL, product.Offered):
     use_local_currency = fields.Boolean('Use Local Currency')
 
     @classmethod
+    def __setup__(cls):
+        super(Benefit, cls).__setup__()
+        cls._sql_constraints += [
+            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+        ]
+
+    @classmethod
     def delete(cls, entities):
         cls.delete_rules(entities)
         super(Benefit, cls).delete(entities)

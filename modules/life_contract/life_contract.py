@@ -6,7 +6,7 @@ from trytond.pyson import Eval, Or, Bool
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
-from trytond.modules.coop_utils import utils, fields, model, abstract
+from trytond.modules.coop_utils import utils, fields, abstract
 from trytond.modules.insurance_contract import CoveredDesc
 from trytond.modules.insurance_process import DependantState
 from trytond.modules.insurance_process import CoopStateView
@@ -16,7 +16,6 @@ __all__ = [
     'Contract',
     'LifeOption',
     'CoveredPerson',
-    'CoveredElementPartyRelation',
     'LifeCoveredData',
     'LifeCoveredDesc',
     'ExtensionLifeState',
@@ -66,7 +65,7 @@ class Contract():
         if not subscriber.is_person:
             return super(Contract, self).init_covered_elements()
         covered_element = Pool().get('ins_contract.covered_element')()
-        covered_element.person = subscriber.id
+        covered_element.party = subscriber.id
         self.covered_elements = [covered_element]
         return super(Contract, self).init_covered_elements()
 
@@ -100,7 +99,7 @@ class LifeOption():
         for covered_data in self.covered_data:
             if not hasattr(covered_data.covered_element, 'person'):
                 continue
-            if covered_data.covered_element.person == covered_person:
+            if covered_data.covered_element.party == covered_person:
                 return covered_data
 
     def get_coverage_amount(self, covered_person):
@@ -133,121 +132,6 @@ class CoveredPerson():
     __name__ = 'ins_contract.covered_element'
     __metaclass__ = PoolMeta
 
-    person = fields.Many2One('party.party', 'Person',
-        domain=[('is_person', '=', True)], ondelete='RESTRICT',
-        states={
-            'invisible': Bool(~Eval('is_person')),
-            'required': Bool(Eval('is_person')),
-        })
-    covered_relations = fields.Many2Many(
-        'ins_contract.covered_element-party_relation', 'covered_element',
-        'party_relation', 'Covered Relations', domain=[
-            'OR',
-            [('from_party', '=', Eval('person'))],
-            [('to_party', '=', Eval('person'))],
-        ], depends=['person'],
-        states={'invisible': Bool(~Eval('person'))})
-    is_person = fields.Function(
-        fields.Boolean('Person', on_change_with=['item_desc'],
-            states={'invisible': True}),
-        'on_change_with_is_person')
-    covered_name = fields.Function(
-        fields.Char('Name', on_change_with=['person']),
-        'on_change_with_covered_name')
-
-    @classmethod
-    def __setup__(cls):
-        super(CoveredPerson, cls).__setup__()
-        utils.update_states(cls, 'sub_covered_elements',
-            {'invisible': Bool(Eval('is_person'))})
-        utils.update_states(cls, 'name',
-            {'invisible': Bool(Eval('is_person'))})
-
-    def get_name_for_billing(self):
-        return self.get_rec_name('billing')
-
-    def get_name_for_info(self):
-        return self.get_rec_name('info')
-
-    def get_rec_name(self, value):
-        if self.person:
-            return self.person.rec_name
-        return super(CoveredPerson, self).get_rec_name(value)
-
-    @classmethod
-    def get_covered_data_model(cls):
-        return 'life_contract.covered_data'
-
-    def init_from_person(self, person):
-        self.person = person
-
-    def is_person_covered(self, party, at_date, option):
-        if party in self.get_covered_persons(at_date):
-            for covered_data in self.covered_data:
-                if (utils.is_effective_at_date(covered_data, at_date)
-                        and covered_data.option == option):
-                    return True
-        if hasattr(self, 'sub_covered_elements'):
-            for sub_elem in self.sub_covered_elements:
-                if sub_elem.is_person_covered(party, at_date, option):
-                    return True
-        return False
-
-    def on_change_with_is_person(self, name=None):
-        if self.item_desc:
-            return self.item_desc.kind == 'person'
-        return False
-
-    def get_covered_persons(self, at_date):
-        '''
-        Returns all covered persons sharing the same covered data
-        for example an employe, his spouse and his children
-        '''
-        res = []
-        if self.person:
-            res.append(self.person)
-        for relation in self.covered_relations:
-            if not utils.is_effective_at_date(relation, at_date):
-                continue
-            if relation.from_party != self.person:
-                res.append(relation.from_party)
-            if relation.to_party != self.person:
-                res.append(relation.to_party)
-        return res
-
-    def on_change_item_desc(self):
-        result = super(CoveredPerson, self).on_change_item_desc()
-        result['is_person'] = self.on_change_with_is_person()
-        return result
-
-    def on_change_with_covered_name(self, name=None):
-        if self.person:
-            return self.person.get_rec_name(name)
-        return ''
-
-    @classmethod
-    def get_possible_covered_elements(cls, party, at_date):
-        #TODO : To enhance with status control on contract and option linked
-        domain = [
-            ('person', '=', party.id),
-            ('covered_data.start_date', '<=', at_date),
-            ['OR',
-                ['covered_data.end_date', '=', None],
-                ['covered_data.end_date', '>=', at_date]]
-        ]
-        return cls.search([domain])
-
-
-class CoveredElementPartyRelation(model.CoopSQL):
-    'Relation between Covered Element and Covered Relations'
-
-    __name__ = 'ins_contract.covered_element-party_relation'
-
-    covered_element = fields.Many2One('ins_contract.covered_element',
-        'Covered Element', ondelete='CASCADE')
-    party_relation = fields.Many2One('party.party-relation', 'Party Relation',
-        ondelete='RESTRICT')
-
 
 class LifeCoveredData():
     'Covered Data'
@@ -261,8 +145,8 @@ class LifeCoveredData():
             Eval('_parent_coverage', {}).get('family') != FAMILY_LIFE,
         )})
 
-    def is_person_covered(self, party, at_date):
-        return self.covered_element.is_person_covered(party, at_date,
+    def is_party_covered(self, party, at_date):
+        return self.covered_element.is_party_covered(party, at_date,
             self.option)
 
     @classmethod
@@ -468,7 +352,7 @@ class ExtensionLifeState(DependantState):
                     cur_data.complementary_data = \
                         covered_data.data_complementary_data
                 cur_element.covered_data.append(cur_data)
-            cur_element.person = covered_element.elem_person
+            cur_element.party = covered_element.elem_person
             contract.covered_elements.append(cur_element)
 
         res = contract.check_sub_elem_eligibility(wizard.project.start_date)

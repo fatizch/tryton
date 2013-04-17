@@ -46,7 +46,7 @@ class LifeLoss():
         CoveredElement = Pool().get('ins_contract.covered_element')
         for covered_element in CoveredElement.get_possible_covered_elements(
                 self.claim.claimant, self.start_date):
-            res.extend(covered_element.get_covered_persons(self.start_date))
+            res.extend(covered_element.get_covered_parties(self.start_date))
         return res
 
     def on_change_with_possible_covered_persons(self, name=None):
@@ -65,7 +65,7 @@ class LifeClaimDeliveredService():
     #     cls.subscribed_service = copy.copy(cls.subscribed_service)
     #     if not cls.subscribed_service.domain:
     #         cls.subscribed_service.domain = []
-    #     domain = ('covered_data.covered_element.person', '=',
+    #     domain = ('covered_data.covered_element.party', '=',
     #         Eval('_parent_loss', {}).get('covered_person'))
     #     cls.subscribed_service.domain.append(domain)
 
@@ -81,6 +81,6 @@ class LifeClaimDeliveredService():
         for covered_data in self.subscribed_service.covered_data:
             #TODO to enhance the covered person could be the spouse or the
             #children of the insured person
-            if (covered_data.covered_element.person ==
+            if (covered_data.covered_element.party ==
                     self.get_covered_person()):
                 return covered_data
