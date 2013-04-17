@@ -11,45 +11,50 @@ cd tryton-workspace/conf
 . ./scripts.conf
 cd ../coopbusiness/scripts
 SCRIPT_NAME=$1
-while getopts ":rckldsuhte" opt; do
+while getopts ":bdeklrstu" opt; do
    case $opt in
-      r)
-         SCRIPT_NAME=resetdb ;;
-      k)
-         SCRIPT_NAME=killtryton ;;
-      l)
-         SCRIPT_NAME=launch ;;
-      d)
-         SCRIPT_NAME=updatedatabase ;;
-      s)
-         SCRIPT_NAME=sync_coop ;;
-      t)
-         SCRIPT_NAME=test_case ;;
-      u)
-         SCRIPT_NAME=unittest ;;
-      e)
-         SCRIPT_NAME=export_translations ;;
-      h)
-         echo "
--r reset 
--c cleanandrelaunch 
+        b)
+            SCRIPT_NAME=launch_batch ;;
+        r)
+            SCRIPT_NAME=resetdb ;;
+        k)
+            SCRIPT_NAME=killtryton  ;;
+        l)
+            SCRIPT_NAME=launch  ;;
+        d)
+            SCRIPT_NAME=updatedatabase  ;;
+        s)
+            SCRIPT_NAME=sync_coop  ;;
+        t)
+            SCRIPT_NAME=test_case  ;;
+        u)
+            SCRIPT_NAME=unittest  ;;
+        e)
+            SCRIPT_NAME=export_translations  ;;
+        h)
+            echo "
+-b launch_batch
+-d updatedatabase
+-e export_translations
 -k killtryton 
 -l launch 
--d updatedatabase
+-r reset 
 -s sync_coop
 -t test_case
--e export_translations" ;;
-      \?)
-         echo "Invalid Option" ;;
+-u unittest" ;;
+        \?)
+            echo "Invalid Option" ;;
    esac
 done
 if [ ! -e "$SCRIPT_NAME" ]; then
    if [ ! -e "$SCRIPT_NAME.sh" ]; then
       echo "Le script '$SCRIPT_NAME' n'existe pas"
    else
-      ./$SCRIPT_NAME.sh $2
+        shift
+        ./$SCRIPT_NAME.sh "$@"
    fi
 else
-   ./$SCRIPT_NAME
+    shift
+    ./$SCRIPT_NAME "$@"
 fi
 cd $PREV_WD
