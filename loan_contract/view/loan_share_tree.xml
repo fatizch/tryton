@@ -1,8 +1,0 @@
-<?xml version="1.0" ?>
-<tree>
-    <field name="loan"/>
-    <field name="share"/>
-    <field name="person"/>
-    <field name="start_date"/>
-    <field name="end_date"/>
-</tree>

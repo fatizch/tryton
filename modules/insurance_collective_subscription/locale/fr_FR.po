@@ -1,0 +1,29 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:ins_contract.subscription_process_parameters,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "selection:ins_contract.subscription_process_parameters,kind:"
+msgid "Enrollment"
+msgstr "Affiliation"
+
+msgctxt "selection:ins_contract.subscription_process_parameters,kind:"
+msgid "Group"
+msgstr "Groupe"
+
+msgctxt "selection:ins_contract.subscription_process_parameters,kind:"
+msgid "Individual"
+msgstr "Individuel"
+
+msgctxt ""
+"wizard_button:ins_contract.subscription_process_finder,process_parameters,action:"
+msgid "Start Process"
+msgstr "Démarrer le processus"
+
+msgctxt ""
+"wizard_button:ins_contract.subscription_process_finder,process_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"

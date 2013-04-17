@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tree string="Logs">
+  <field name="user"/>
+  <field name="start_time"/>
+  <field name="from_state"/>
+  <field name="to_state"/>
+  <field name="locked"/>
+</tree>

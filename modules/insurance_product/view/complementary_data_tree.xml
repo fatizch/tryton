@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tree string="Complementary Data Descriptors">
+    <field name="kind"/>
+    <field name="is_shared"/>
+    <field name="string"/>
+    <field name="type_"/>
+    <field name="name"/>
+    <field name="start_date"/>
+    <field name="end_date"/>
+</tree>

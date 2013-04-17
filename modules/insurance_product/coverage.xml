@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!--  ******************************************* 
+              **************    Simple Coverage    **************
+              *******************************************-->
+        <!-- form view -->
+        <record model="ir.ui.view" id="simple_coverage_view_form">
+            <field name="model">ins_product.simple_coverage</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered_view_form"/>
+            <field name="name">simple_coverage_form</field>
+        </record>
+        <record model="ir.ui.view" id="simple_coverage_view_tree">
+            <field name="model">ins_product.simple_coverage</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="offered_view_tree"/>
+            <field name="name">simple_coverage_tree</field>
+        </record>
+        <!--  ******************************************* 
+              **************    Coverage    **************
+              *******************************************-->
+        <!-- form view -->
+        <record model="ir.ui.view" id="coverage_view_form">
+            <field name="model">ins_product.coverage</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="simple_coverage_view_form"/>
+            <field name="name">coverage_form</field>
+        </record>
+        <record model="ir.ui.view" id="coverage_view_tree">
+            <field name="model">ins_product.coverage</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="simple_coverage_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+        <!-- View for the main menu and the event -->
+        <record model="ir.action.act_window" id="act_coverage_form">
+            <field name="name">Coverages</field>
+            <field name="res_model">ins_product.coverage</field>
+            <field name="domain">[("is_package", "=", False)]</field>
+        </record>
+
+        <!-- View that connect the form in the tree with the specification -->
+        <record model="ir.action.act_window.view" id="act_coverage_tree_view">
+            <field name="sequence" eval="10" />
+            <field name="view" ref="coverage_view_tree" />
+            <field name="act_window" ref="act_coverage_form" />
+        </record>
+
+        <!-- View for the edition or the Form of coverage -->
+        <record model="ir.action.act_window.view" id="act_coverage_form_view2">
+            <field name="sequence" eval="20" />
+            <field name="view" ref="coverage_view_form" />
+            <field name="act_window" ref="act_coverage_form" />
+        </record>
+
+        <menuitem parent="menu_product" sequence="2" id="menu_coverage_form"
+            icon="tryton-list" action="act_coverage_form" />
+        <!--/Coverage -->
+
+         <!--  ******************************************* 
+              **************    package    **************
+              *******************************************-->
+        <!-- form view -->
+        <record model="ir.ui.view" id="package_view_form">
+            <field name="model">ins_product.coverage</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="coverage_view_form"/>
+            <field name="name">package_form</field>
+        </record>
+        <record model="ir.ui.view" id="package_view_tree">
+            <field name="model">ins_product.coverage</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="coverage_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+        <!-- View for the main menu and the event -->
+        <record model="ir.action.act_window" id="act_package_form">
+            <field name="name">Packages</field>
+            <field name="res_model">ins_product.coverage</field>
+            <field name="domain">[("is_package", "=", True)]</field>
+        </record>
+
+        <!-- View that connect the form in the tree with the specification -->
+        <record model="ir.action.act_window.view" id="act_package_tree_view">
+            <field name="sequence" eval="10" />
+            <field name="view" ref="package_view_tree" />
+            <field name="act_window" ref="act_package_form" />
+        </record>
+
+        <!-- View for the edition or the Form of package -->
+        <record model="ir.action.act_window.view" id="act_package_form_view2">
+            <field name="sequence" eval="20" />
+            <field name="view" ref="package_view_form" />
+            <field name="act_window" ref="act_package_form" />
+        </record>
+
+        <menuitem parent="menu_product" sequence="4" id="menu_package_form"
+            icon="tryton-list" action="act_package_form" />
+        <!--/package -->
+    </data>
+</tryton>

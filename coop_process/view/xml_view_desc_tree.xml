@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<tree string="View Descriptors">
-    <field name="view_name"/>
-    <field name="view_kind"/>
-    <field name="view_model"/>
-    <field name="view_final_name"/>
-</tree>

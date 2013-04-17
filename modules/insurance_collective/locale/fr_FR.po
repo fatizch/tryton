@@ -1,0 +1,79 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:ins_contract.contract,group_contract:"
+msgid "Group Contract"
+msgstr "Contrat Collectif"
+
+msgctxt "field:ins_contract.contract,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_product.coverage,is_group:"
+msgid "Group Coverage"
+msgstr "Garantie Collective"
+
+msgctxt "field:ins_product.product,is_group:"
+msgid "Group Product"
+msgstr "Produit Collectif"
+
+msgctxt "model:ir.action,name:act_contract_form"
+msgid "Group Contract"
+msgstr "Contrat Collectif"
+
+msgctxt "model:ir.action,name:act_coverage_form"
+msgid "Garanties Collectives"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_enrollment_form"
+msgid "Enrollment"
+msgstr "Affiliation"
+
+msgctxt "model:ir.action,name:act_enrollment_relate_form"
+msgid "Enrollments"
+msgstr "Affiliations"
+
+msgctxt "model:ir.action,name:act_product_form"
+msgid "Produits Collectifs"
+msgstr ""
+
+msgctxt "model:ir.ui.menu,name:menu_contract_form"
+msgid "Group Contract"
+msgstr "Contrat Collectif"
+
+msgctxt "model:ir.ui.menu,name:menu_coverage_form"
+msgid "Plan Coverages"
+msgstr "Garanties Collectives"
+
+msgctxt "model:ir.ui.menu,name:menu_enrollment_form"
+msgid "Enrollment"
+msgstr "Affiliation"
+
+msgctxt "model:ir.ui.menu,name:menu_group"
+msgid "Group"
+msgstr "Collectif"
+
+msgctxt "model:ir.ui.menu,name:menu_product_form"
+msgid "Insurance Plan"
+msgstr "Produits Collectifs"
+
+msgctxt "selection:ins_contract.contract,kind:"
+msgid "Enrollment"
+msgstr "Affiliation"
+
+msgctxt "selection:ins_contract.contract,kind:"
+msgid "Group"
+msgstr "Groupe"
+
+msgctxt "selection:ins_contract.contract,kind:"
+msgid "Individual"
+msgstr "Individuel"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Enrollments"
+msgstr "Affiliations"
+
+msgctxt "view:ins_contract.covered_element:"
+msgid "Covered Element"
+msgstr "Elément Couvert"

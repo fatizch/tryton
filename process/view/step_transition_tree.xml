@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<tree string="Transitions" sequence="priority">
-  <field name="priority" tree_invisible="1"/>
-  <field name="from_step"/>
-  <field name="to_step"/>
-  <field name="kind"/>
-</tree>

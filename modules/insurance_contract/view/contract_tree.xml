@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tree string="Contract">
+    <field name="contract_number"/>
+    <field name="subscriber"/>
+    <field name="status"/>
+    <field name="start_date"/>
+    <field name="offered"/>
+</tree>
+ 

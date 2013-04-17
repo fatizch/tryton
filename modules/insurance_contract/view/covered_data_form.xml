@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<form string="Covered Data">
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <newline/>
+    <label name="option"/>
+    <field name="option" xfill="1" widget="selection"/>
+    <newline/>
+    <label name="covered_element"/>
+    <field name="covered_element"/>
+    <newline/>
+    <label name="coverage_amount"/>
+    <field name="coverage_amount"/>
+    <newline/>
+    <field name="complementary_data" colspan="2" no_command="1"/>
+</form>

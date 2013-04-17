@@ -1,0 +1,283 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:ins_contract.covered_element-party_relation:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:ins_contract.covered_data,coverage_amount:"
+msgid "Coverage Amount"
+msgstr "Montant de Couverture"
+
+msgctxt "field:ins_contract.covered_element,covered_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.covered_element,covered_relations:"
+msgid "Covered Relations"
+msgstr "Relations Couvertes"
+
+msgctxt "field:ins_contract.covered_element,is_person:"
+msgid "Person"
+msgstr "Personne Physique"
+
+msgctxt "field:ins_contract.covered_element,person:"
+msgid "Person"
+msgstr "Personne Physique"
+
+msgctxt "field:ins_contract.covered_element-party_relation,covered_element:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "field:ins_contract.covered_element-party_relation,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.covered_element-party_relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.covered_element-party_relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.covered_element-party_relation,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.covered_element-party_relation,party_relation:"
+msgid "Party Relation"
+msgstr "Relations entre Tiers"
+
+msgctxt "field:ins_contract.covered_element-party_relation,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.covered_element-party_relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.covered_element-party_relation,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:life_contract.covered_desc,data_complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:life_contract.covered_desc,data_coverage_amount:"
+msgid "Coverage Amount"
+msgstr "Montant de Couverture"
+
+msgctxt "field:life_contract.covered_desc,data_coverage_name:"
+msgid "offered"
+msgstr "Garantie"
+
+msgctxt "field:life_contract.covered_desc,data_covered_element:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "field:life_contract.covered_desc,data_end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:life_contract.covered_desc,data_for_coverage:"
+msgid "For offered"
+msgstr "Garantie"
+
+msgctxt "field:life_contract.covered_desc,data_for_option_char:"
+msgid "For Option"
+msgstr "Garantie"
+
+msgctxt "field:life_contract.covered_desc,data_start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:life_contract.covered_desc,data_status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:life_contract.covered_desc,elem_covered_data:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
+msgctxt "field:life_contract.covered_desc,elem_life_state:"
+msgid "Life State"
+msgstr "Prévoyance"
+
+msgctxt "field:life_contract.covered_desc,elem_person:"
+msgid "Covered Person"
+msgstr "Personne Couverte"
+
+msgctxt "field:life_contract.covered_desc,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:life_contract.covered_desc,the_kind:"
+msgid "The kind"
+msgstr "Type"
+
+msgctxt "field:life_contract.extension_life_state,at_date:"
+msgid "At Date"
+msgstr "A la Date"
+
+msgctxt "field:life_contract.extension_life_state,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:life_contract.extension_life_state,covered_elements:"
+msgid "Covered Elements"
+msgstr "Eléments Couverts"
+
+msgctxt "field:life_contract.extension_life_state,for_options:"
+msgid "For Options"
+msgstr "Garanties"
+
+msgctxt "field:life_contract.extension_life_state,for_product:"
+msgid "For Product"
+msgstr "Produit"
+
+msgctxt "field:life_contract.extension_life_state,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:life_contract.extension_life_state,session_id:"
+msgid "Session Id"
+msgstr "Session Id"
+
+msgctxt "model:ins_contract.covered_element-party_relation,name:"
+msgid "Relation between Covered Element and Covered Relations"
+msgstr ""
+
+msgctxt "model:life_contract.covered_desc,name:"
+msgid "Covered Desc"
+msgstr "Descripteur d'Element Couvert"
+
+msgctxt "model:life_contract.extension_life_state,name:"
+msgid "Life Extension"
+msgstr "Prévoyance"
+
+msgctxt "selection:life_contract.covered_desc,the_kind:"
+msgid "data"
+msgstr ""
+
+msgctxt "selection:life_contract.covered_desc,the_kind:"
+msgid "elem"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "Extension Life"
+msgstr "Prévoyance"
+
+msgctxt "view:ins_contract.covered_element:"
+msgid "Covered Person"
+msgstr "Personne Couverte"
+
+msgctxt "view:life_contract.extension_life_state:"
+msgid "Subscription Process - Life Extension"
+msgstr "Sélection des Eléments Couverts"
+
+msgctxt "wizard_button:ins_contract.subs_process,extension_life,steps_cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:ins_contract.subs_process,extension_life,steps_check:"
+msgid "Check"
+msgstr "Vérifier"
+
+msgctxt ""
+"wizard_button:ins_contract.subs_process,extension_life,steps_complete:"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt "wizard_button:ins_contract.subs_process,extension_life,steps_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:ins_contract.subs_process,extension_life,steps_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:ins_contract.subs_process,extension_life,steps_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt ""
+"wizard_button:ins_contract.subs_process,option_selection,steps_cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:ins_contract.subs_process,option_selection,steps_check:"
+msgid "Check"
+msgstr "Vérifier"
+
+msgctxt ""
+"wizard_button:ins_contract.subs_process,option_selection,steps_complete:"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt "wizard_button:ins_contract.subs_process,option_selection,steps_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:ins_contract.subs_process,option_selection,steps_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:ins_contract.subs_process,option_selection,steps_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:ins_contract.subs_process,project,steps_cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:ins_contract.subs_process,project,steps_check:"
+msgid "Check"
+msgstr "Vérifier"
+
+msgctxt "wizard_button:ins_contract.subs_process,project,steps_complete:"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt "wizard_button:ins_contract.subs_process,project,steps_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "wizard_button:ins_contract.subs_process,project,steps_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:ins_contract.subs_process,project,steps_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:ins_contract.subs_process,summary,steps_cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:ins_contract.subs_process,summary,steps_check:"
+msgid "Check"
+msgstr "Vérifier"
+
+msgctxt "wizard_button:ins_contract.subs_process,summary,steps_complete:"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt "wizard_button:ins_contract.subs_process,summary,steps_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "wizard_button:ins_contract.subs_process,summary,steps_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:ins_contract.subs_process,summary,steps_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"

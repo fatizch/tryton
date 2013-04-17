@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tree string="Documents" editable="bottom">
+    <field name="received"/>
+    <field name="request_date"/>
+    <field name="send_date"/>
+    <field name="reception_date"/>
+    <field name="document_desc"/>
+    <field name="for_object"/>
+    <field name="attachment"/>
+</tree>

@@ -1,0 +1,271 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:ins_contract.loan:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.loan_covered_data-loan_share:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.loan_share:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:ins_contract.contract,doc_received:"
+msgid "All Document Received"
+msgstr "Documents Reçus"
+
+msgctxt "field:ins_contract.contract,documents:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "field:ins_contract.contract,is_loan_contract:"
+msgid "Is Loan Contract"
+msgstr "Contrat Emprunteur?"
+
+msgctxt "field:ins_contract.contract,loans:"
+msgid "Loans"
+msgstr "Prêts"
+
+msgctxt "field:ins_contract.covered_data,loan_shares:"
+msgid "Loan Shares"
+msgstr "Quotités"
+
+msgctxt "field:ins_contract.covered_data,person:"
+msgid "Person"
+msgstr "Personne Physique"
+
+msgctxt "field:ins_contract.loan,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:ins_contract.loan,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:ins_contract.loan,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.loan,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.loan,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_contract.loan,currency_digits:"
+msgid "Currency Digits"
+msgstr "Nbre de chiffres après la virgule"
+
+msgctxt "field:ins_contract.loan,currency_symbol:"
+msgid "Symbol"
+msgstr "Symbole"
+
+msgctxt "field:ins_contract.loan,first_payment_date:"
+msgid "First Payment Date"
+msgstr "Date de 1er Paiement"
+
+msgctxt "field:ins_contract.loan,fixed_rate:"
+msgid "Fixed Rate"
+msgstr "Taux Fixe"
+
+msgctxt "field:ins_contract.loan,funds_release_date:"
+msgid "Funds Release Date"
+msgstr "Date de Déblocage des Fonds"
+
+msgctxt "field:ins_contract.loan,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.loan,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.loan,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_contract.loan,lender:"
+msgid "Lender"
+msgstr "Organisme Prêteur"
+
+msgctxt "field:ins_contract.loan,loan_shares:"
+msgid "Loan Shares"
+msgstr "Quotités"
+
+msgctxt "field:ins_contract.loan,monthly_payment_amount:"
+msgid "Monthly Payment Amount"
+msgstr "Mensualité"
+
+msgctxt "field:ins_contract.loan,monthly_payment_number:"
+msgid "Monthly Payment Number"
+msgstr "Nombre de Mensualités"
+
+msgctxt "field:ins_contract.loan,outstanding_capital:"
+msgid "Outstanding Capital"
+msgstr "Capital Restant Du"
+
+msgctxt "field:ins_contract.loan,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.loan,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.loan,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.loan_covered_data-loan_share,covered_data:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
+msgctxt "field:ins_contract.loan_covered_data-loan_share,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.loan_covered_data-loan_share,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.loan_covered_data-loan_share,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.loan_covered_data-loan_share,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.loan_covered_data-loan_share,loan_share:"
+msgid "Loan Share"
+msgstr "Quotité"
+
+msgctxt "field:ins_contract.loan_covered_data-loan_share,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.loan_covered_data-loan_share,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.loan_covered_data-loan_share,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.loan_share,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.loan_share,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.loan_share,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.loan_share,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.loan_share,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.loan_share,loan:"
+msgid "Loan"
+msgstr "Emprunteur"
+
+msgctxt "field:ins_contract.loan_share,person:"
+msgid "Person"
+msgstr "Personne Physique"
+
+msgctxt "field:ins_contract.loan_share,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.loan_share,share:"
+msgid "Loan Share"
+msgstr "Quotité"
+
+msgctxt "field:ins_contract.loan_share,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.loan_share,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.loan_share,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.option,is_loan_option:"
+msgid "Is Loan Option"
+msgstr ""
+
+msgctxt "model:ins_contract.loan,name:"
+msgid "Loan"
+msgstr "Emprunteur"
+
+msgctxt "model:ins_contract.loan_covered_data-loan_share,name:"
+msgid "Loan Covered Data Loan Share Relation"
+msgstr "Relation Données de Couverture et Quotités"
+
+msgctxt "model:ins_contract.loan_share,name:"
+msgid "Loan Share"
+msgstr "Quotité"
+
+msgctxt "selection:ins_contract.loan,kind:"
+msgid "Adjustable Rate"
+msgstr "Taux Variable"
+
+msgctxt "selection:ins_contract.loan,kind:"
+msgid "Balloon"
+msgstr "In Fine"
+
+msgctxt "selection:ins_contract.loan,kind:"
+msgid "Fixed Rate"
+msgstr "Taux Fixe"
+
+msgctxt "selection:ins_contract.loan,kind:"
+msgid "Graduated"
+msgstr "Palier"
+
+msgctxt "selection:ins_contract.loan,kind:"
+msgid "Intermediate"
+msgstr "Prêt Relais"
+
+msgctxt "selection:ins_contract.loan,kind:"
+msgid "Leasing"
+msgstr "Crédit Bail"
+
+msgctxt "selection:ins_contract.loan,kind:"
+msgid "Revolving"
+msgstr "Crédit Permanent"
+
+msgctxt "selection:ins_contract.loan,kind:"
+msgid "Zero Interest Loan"
+msgstr "Taux Zéro"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Loans"
+msgstr "Prêts"
+
+msgctxt "view:ins_contract.loan:"
+msgid "%"
+msgstr ""
+
+msgctxt "view:ins_contract.loan:"
+msgid "Loan"
+msgstr "Emprunteur"
+
+msgctxt "view:ins_contract.loan_share:"
+msgid "Loan Share"
+msgstr "Quotité"

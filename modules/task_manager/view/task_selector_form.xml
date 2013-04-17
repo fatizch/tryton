@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<form string="Task Selector" col="2">
+  <group id="tasks" col="1" yexpand="1" yfill="1">
+    <field name="tasks" yexpand="1" yfill="1" view_ids="task_manager.process_log_priority_tree"/>
+    <field name="selected_task"/>
+  </group>
+  <group id="graphs" col="2" yexpand="1" yfill="1" xexpand="0" xfill="0">
+    <label name="team" xalign="0"/>
+    <field name="team" widget="selection"/>
+    <label name="nb_users_team" xalign="0"/>
+    <field name="nb_users_team"/>
+    <field name="tasks_team" yexpand="1" yfill="1" colspan="2" mode="graph,tree"/>
+    <label name="nb_tasks_team" xalign="0"/>
+    <field name="nb_tasks_team"/>
+    <label name="process" xalign="0"/>
+    <field name="process" widget="selection"/>
+    <field name="tasks_process" yexpand="1" yfill="1" colspan="2" mode="graph,tree"/>
+    <label name="nb_tasks_process" xalign="0"/>
+    <field name="nb_tasks_process"/>
+  </group>
+</form>

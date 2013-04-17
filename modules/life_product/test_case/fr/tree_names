@@ -1,0 +1,51 @@
+[rule_engine.tools_functions]
+rule_engine.tools_functions|Outils|dossier_outils|
+_re_message|Ajouter Message|ajouter_message|Message|Ajoute un message qui sera affiché à l'utilisateur
+_re_today|Aujourd'hui|aujourd_hui||Retourne la date du jour
+_re_years_between|Nombre d'années entre...|annees_entre|Debut,Fin|Calcule le nombre d'années entre deux dates
+_re_debug|Message de debug|message_debug|Message|Ajoute un message de debug qui sera affichée lors de la création des cas de test
+_re_calculation_date|Date de Calcul|date_de_calcul||Retrouve la date du calcul
+
+[ins_product.rule_sets.person]
+ins_product.rule_sets.person|Personne Couverte|dossier_personne_couverte|
+_re_get_person_birthdate|Date de naissance|date_de_naissance||
+_re_get_person_living_country|Pays de résidence|pays_de_residence||
+_re_is_person_of_age|Est majeur ?|est_majeur||Renvoie True si la personne est majeure
+_re_link_with_subscriber|Relation avec le souscripteur|relation_avec_souscripteur||Précise la nature de la relation avec le souscripteur
+_re_person_subscribed|A souscrit le produit...|a_souscrit_le_produit|Code Produit|Indique si le souscripteur a souscrit le produit
+
+[ins_product.rule_sets.subscriber]
+ins_product.rule_sets.subscriber|Souscripteur|dossier_souscripteur|
+_re_get_subscriber_birthdate|Date de naissance|date_de_naissance_souscripteur||
+_re_get_subscriber_living_country|Pays de résidence|pays_de_residence_souscripteur||
+_re_subscriber_subscribed|A souscrit le produit|souscripteur_a_souscrit_produit||
+
+[ins_product.rule_sets.covered_data]
+ins_product.rule_sets.covered_data|Données de couverture|dossier_donnees_couverture|
+_re_get_initial_subscription_date|Date d'effet du contrat|date_debut_souscription||
+_re_get_subscription_end_date|Date de fin du contrat|date_fin_souscription||
+_re_get_coverage_amount|Montant de couverture|montant_de_couverture||
+_re_covered_data_complementary_data|Récupérer la donnée complémentaire|donnee_compl_element_couvert|Code donnee complementaire|
+
+[ins_product.rule_sets.rule_combination]
+ins_product.rule_sets.rule_combination|Combinaison de règles|dossier_rule_combination|
+_re_append_detail|Ajouter un détail|ajouter_detail|Code detail,Montant|
+_re_apply_fee|Appliquer le frais|appliquer_frais|Code Frais,Assiette|
+_re_apply_tax|Appliquer la taxe|appliquer_taxe|Code Taxe,Assiette|
+_re_get_sub_component|Valeur de la composante|valeur_de_composante|Code composante|
+
+[ins_product.rule_sets.contract]
+ins_product.rule_sets.contract|Contrat|dossier_contrat|
+_re_contract_complementary_data|Récupérer la donnée complémentaire|donnee_compl_contrat|Code donnee complementaire|
+
+[ins_product.rule_sets.option]
+ins_product.rule_sets.option|Option|dossier_option|
+_re_option_complementary_data|Récupérer la donnée complémentaire|donnee_compl_option|Code donnee complementaire|
+
+[ins_product.rule_sets.claim]
+ins_product.rule_sets.claim|Sinistre|dossier_sinistre|
+_re_delivered_service_complementary_data|Récupérer la donnée complémentaire|donnee_compl_prestation|Code donnee complementaire|
+ins_product.rule_sets.claim|Sinistre|dossier_sinistre|
+_re_delivered_service_expense|Récupérer la Dépense|depense|Code de la depense|
+ins_product.rule_sets.claim|Sinistre|dossier_sinistre|
+_re_delivered_service_total_expenses|Récupérer le total des dépenses|total_depenses||

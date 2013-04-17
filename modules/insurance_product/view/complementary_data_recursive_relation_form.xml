@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<form string="Relation">
+  <label name="select_value" xalign="0"/>
+  <field name="select_value"/>
+  <label name="child" xalign="0"/>
+  <field name="child"/>
+</form>

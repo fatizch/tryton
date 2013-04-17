@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<form string="Pricing Component">
+    <label name="kind"/>
+    <field name="kind"/>
+    <label name="rated_object_kind"/>
+    <field name="rated_object_kind"/>
+    <label name="code"/>
+    <field name="code"/>
+    <newline/>
+    <label name="tax"/>
+    <field name="tax"/>
+    <newline/>
+    <label name="fee"/>
+    <field name="fee"/>
+    <newline/>
+    <label name="config_kind"/>
+    <field name="config_kind"/>
+    <label name="fixed_amount"/>
+    <field name="fixed_amount"/>
+    <label name="rule"/>
+    <field name="rule"/>
+    <newline/>
+    <label name="rule_complementary_data"/>
+    <field name="rule_complementary_data" no_command="1"/>
+</form>

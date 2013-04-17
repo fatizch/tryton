@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<form>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <newline/>
+    <label name="kind"/>
+    <field name="kind"/>
+    <label name="reverse_kind"/>
+    <field name="reverse_kind"/>
+    <label name="from_party"/>
+    <field name="from_party"/>
+    <label name="to_party"/>
+    <field name="to_party"/>
+    <!--
+        <label name="parent"/>
+        <field name="parent"/>
+        <field name="children" colspan="4"
+        view_ids="coop_party.party_relation_view_tree_hierarchical,coop_party.party_relation_view_form"
+        mode="tree,form"/>
+    -->
+</form>

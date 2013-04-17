@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tree>
+    <field name="from_party"/>
+    <field name="to_party"/>
+    <field name="kind"/>
+    <!--
+        <field name="parent" tree_invisible="1"/>
+        <field name="children" tree_invisible="1"/>
+    -->
+</tree>

@@ -1,0 +1,531 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:table.2d:"
+msgid "The table is not 2D"
+msgstr "La table n'est pas 2D"
+
+msgctxt "error:table.2d:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:table.table_cell:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:table.table_def:"
+msgid "The name of \"Table Definition\" must be unique"
+msgstr "Le nom de la table doit être unique"
+
+msgctxt "error:table.table_def:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:table.table_dimension:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:table.2d,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:table.2d,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:table.2d,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:table.2d,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:table.2d,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:table.2d,row:"
+msgid "Row"
+msgstr "Ligne"
+
+msgctxt "field:table.2d,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:table.2d,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:table.2d.open.ask_dimensions,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:table.2d.open.ask_dimensions,dimension3:"
+msgid "Dimension 3"
+msgstr "Dimension 3"
+
+msgctxt "field:table.2d.open.ask_dimensions,dimension3_required:"
+msgid "Dimension 3 Required"
+msgstr "Dimension 3 requise"
+
+msgctxt "field:table.2d.open.ask_dimensions,dimension4:"
+msgid "Dimension 4"
+msgstr "Dimension 4"
+
+msgctxt "field:table.2d.open.ask_dimensions,dimension4_required:"
+msgid "Dimension 4 Required"
+msgstr "Dimension 4 requise"
+
+msgctxt "field:table.2d.open.ask_dimensions,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:table.table_cell,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:table.table_cell,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:table.table_cell,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:table.table_cell,dimension1:"
+msgid "Dimension 1"
+msgstr "Dimension 1"
+
+msgctxt "field:table.table_cell,dimension2:"
+msgid "Dimension 2"
+msgstr "Dimension 2"
+
+msgctxt "field:table.table_cell,dimension3:"
+msgid "Dimension 3"
+msgstr "Dimension 3"
+
+msgctxt "field:table.table_cell,dimension4:"
+msgid "Dimension 4"
+msgstr "Dimension 4"
+
+msgctxt "field:table.table_cell,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:table.table_cell,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:table.table_cell,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:table.table_cell,value:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "field:table.table_cell,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:table.table_cell,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:table.table_def,cells:"
+msgid "Cells"
+msgstr "Cellules"
+
+msgctxt "field:table.table_def,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:table.table_def,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:table.table_def,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:table.table_def,dimension1:"
+msgid "Dimension 1"
+msgstr "Dimension 1"
+
+msgctxt "field:table.table_def,dimension2:"
+msgid "Dimension 2"
+msgstr "Dimension 2"
+
+msgctxt "field:table.table_def,dimension3:"
+msgid "Dimension 3"
+msgstr "Dimension 3"
+
+msgctxt "field:table.table_def,dimension4:"
+msgid "Dimension 4"
+msgstr "Dimension 4"
+
+msgctxt "field:table.table_def,dimension_kind1:"
+msgid "Dimension Kind 1"
+msgstr "Type Dim 1"
+
+msgctxt "field:table.table_def,dimension_kind2:"
+msgid "Dimension Kind 2"
+msgstr "Type Dim 2"
+
+msgctxt "field:table.table_def,dimension_kind3:"
+msgid "Dimension Kind 3"
+msgstr "Type Dim 3"
+
+msgctxt "field:table.table_def,dimension_kind4:"
+msgid "Dimension Kind 4"
+msgstr "Type Dim 4"
+
+msgctxt "field:table.table_def,dimension_name1:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:table.table_def,dimension_name2:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:table.table_def,dimension_name3:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:table.table_def,dimension_name4:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:table.table_def,dimension_order1:"
+msgid "Dimension Order 1"
+msgstr "Ordre Dimension 1"
+
+msgctxt "field:table.table_def,dimension_order2:"
+msgid "Dimension Order 2"
+msgstr "Ordre Dimension 2"
+
+msgctxt "field:table.table_def,dimension_order3:"
+msgid "Dimension Order 3"
+msgstr "Ordre Dimension 3"
+
+msgctxt "field:table.table_def,dimension_order4:"
+msgid "Dimension Order 4"
+msgstr "Ordre Dimension 4"
+
+msgctxt "field:table.table_def,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:table.table_def,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:table.table_def,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:table.table_def,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:table.table_def,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:table.table_def,type_:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "field:table.table_def,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:table.table_def,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:table.table_dimension,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:table.table_dimension,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:table.table_dimension,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:table.table_dimension,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:table.table_dimension,end:"
+msgid "End"
+msgstr "Borne Supérieure"
+
+msgctxt "field:table.table_dimension,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:table.table_dimension,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:table.table_dimension,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:table.table_dimension,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:table.table_dimension,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:table.table_dimension,start:"
+msgid "Start"
+msgstr "Borne Inférieure"
+
+msgctxt "field:table.table_dimension,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:table.table_dimension,type:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "field:table.table_dimension,value:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "field:table.table_dimension,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:table.table_dimension,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "model:ir.action,name:act_cell_form"
+msgid "Cells"
+msgstr "Cellules"
+
+msgctxt "model:ir.action,name:act_cell_relate_form"
+msgid "Cells"
+msgstr "Cellules"
+
+msgctxt "model:ir.action,name:act_table_2d_open"
+msgid "Table 2D"
+msgstr "Table 2D"
+
+msgctxt "model:ir.action,name:act_table_2d_relate_form"
+msgid "Table 2D"
+msgstr "Table 2D"
+
+msgctxt "model:ir.action,name:act_table_definition_form"
+msgid "Tables"
+msgstr "Tables"
+
+msgctxt "model:ir.ui.menu,name:menu_table_defintion_form"
+msgid "Tables"
+msgstr "Tables"
+
+msgctxt "model:table.2d,name:"
+msgid "Table 2D"
+msgstr "Table 2D"
+
+msgctxt "model:table.2d.open.ask_dimensions,name:"
+msgid "Table Open 2D Ask Dimensions"
+msgstr "Table Open 2D Ask Dimensions"
+
+msgctxt "model:table.table_cell,name:"
+msgid "Cell"
+msgstr "Cellule"
+
+msgctxt "model:table.table_def,name:"
+msgid "Table Definition"
+msgstr "Table"
+
+msgctxt "model:table.table_dimension,name:"
+msgid "Table Definition Dimension"
+msgstr "Dimension"
+
+msgctxt "selection:table.table_def,dimension_kind1:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:table.table_def,dimension_kind1:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "selection:table.table_def,dimension_kind1:"
+msgid "Range"
+msgstr "Intervalle"
+
+msgctxt "selection:table.table_def,dimension_kind1:"
+msgid "Range-Date"
+msgstr "Intervalle de Date"
+
+msgctxt "selection:table.table_def,dimension_kind1:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "selection:table.table_def,dimension_kind2:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:table.table_def,dimension_kind2:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "selection:table.table_def,dimension_kind2:"
+msgid "Range"
+msgstr "Intervalle"
+
+msgctxt "selection:table.table_def,dimension_kind2:"
+msgid "Range-Date"
+msgstr "Intervalle de Date"
+
+msgctxt "selection:table.table_def,dimension_kind2:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "selection:table.table_def,dimension_kind3:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:table.table_def,dimension_kind3:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "selection:table.table_def,dimension_kind3:"
+msgid "Range"
+msgstr "Intervalle"
+
+msgctxt "selection:table.table_def,dimension_kind3:"
+msgid "Range-Date"
+msgstr "Intervalle de Date"
+
+msgctxt "selection:table.table_def,dimension_kind3:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "selection:table.table_def,dimension_kind4:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:table.table_def,dimension_kind4:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "selection:table.table_def,dimension_kind4:"
+msgid "Range"
+msgstr "Intervalle"
+
+msgctxt "selection:table.table_def,dimension_kind4:"
+msgid "Range-Date"
+msgstr "Plage de Date"
+
+msgctxt "selection:table.table_def,dimension_kind4:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "selection:table.table_def,dimension_order1:"
+msgid "Alphabetical"
+msgstr "Alphabétique"
+
+msgctxt "selection:table.table_def,dimension_order1:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "selection:table.table_def,dimension_order2:"
+msgid "Alphabetical"
+msgstr "Alphabétique"
+
+msgctxt "selection:table.table_def,dimension_order2:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "selection:table.table_def,dimension_order3:"
+msgid "Alphabetical"
+msgstr "Alphabétique"
+
+msgctxt "selection:table.table_def,dimension_order3:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "selection:table.table_def,dimension_order4:"
+msgid "Alphabetical"
+msgstr "Alphabétique"
+
+msgctxt "selection:table.table_def,dimension_order4:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "selection:table.table_def,type_:"
+msgid "Boolean"
+msgstr "Booléen"
+
+msgctxt "selection:table.table_def,type_:"
+msgid "Char"
+msgstr "Alphanumérique"
+
+msgctxt "selection:table.table_def,type_:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "selection:table.table_def,type_:"
+msgid "Integer"
+msgstr "Entier"
+
+msgctxt "selection:table.table_def,type_:"
+msgid "Numeric"
+msgstr "Numérique"
+
+msgctxt "selection:table.table_dimension,type:"
+msgid "Dimension 1"
+msgstr "Dimension 1"
+
+msgctxt "selection:table.table_dimension,type:"
+msgid "Dimension 2"
+msgstr "Dimension 2"
+
+msgctxt "selection:table.table_dimension,type:"
+msgid "Dimension 3"
+msgstr "Dimension 3"
+
+msgctxt "selection:table.table_dimension,type:"
+msgid "Dimension 4"
+msgstr "Dimension 4"
+
+msgctxt "view:table.2d.open.ask_dimensions:"
+msgid "Dimensions"
+msgstr "Dimensions"
+
+msgctxt "view:table.table_cell:"
+msgid "Table"
+msgstr "Table"
+
+msgctxt "view:table.table_def:"
+msgid "Table Definition"
+msgstr "Table"
+
+msgctxt "view:table.table_dimension:"
+msgid "Table Definition Dimension"
+msgstr "Dimension"
+
+msgctxt "view:table.table_dimension:"
+msgid "Table Definition Dimensions"
+msgstr "Dimensions"
+
+msgctxt "wizard_button:table.2d.open,ask_dimensions,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:table.2d.open,ask_dimensions,open_:"
+msgid "Open"
+msgstr "Ouvert"

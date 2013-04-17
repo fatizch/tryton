@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tree string="Table" editable="bottom">
+    <field name="definition"/>
+    <field name="dimension1"/>
+    <field name="dimension2"/>
+    <field name="dimension3"/>
+    <field name="dimension4"/>
+    <field name="value"/>
+</tree>

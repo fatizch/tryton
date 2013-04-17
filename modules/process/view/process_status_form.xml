@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<form string="Status">
+  <label name="name"/>
+  <field name="name"/>
+  <label name="code"/>
+  <field name="code"/>
+  <newline/>
+  <field name="relations" colspan="4"/>
+</form>

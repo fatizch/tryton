@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<tryton>
+  <data>
+    <!-- Complementary Datas -->
+    <record model="ir.ui.view" id="complementary_data_view_tree">
+      <field name="model">ins_product.complementary_data_def</field>
+      <field name="type">tree</field>
+      <field name="name">complementary_data_tree</field>
+    </record>
+    <record model="ir.ui.view" id="complementary_data_view_form">
+      <field name="model">ins_product.complementary_data_def</field>
+      <field name="type">form</field>
+      <field name="name">complementary_data_form</field>
+    </record>
+    <record model="ir.action.act_window" id="act_model_coop_schema">
+      <field name="name">Complementary Data Complementary Datas</field>
+      <field name="res_model">ins_product.complementary_data_def</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_model_coop_schema_tree">
+      <field name="sequence" eval="10"/>
+      <field name="view" ref="complementary_data_view_tree"/>
+      <field name="act_window" ref="act_model_coop_schema"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_model_coop_schema_form">
+      <field name="sequence" eval="20"/>
+      <field name="view" ref="complementary_data_view_form"/>
+      <field name="act_window" ref="act_model_coop_schema"/>
+    </record>
+    <menuitem parent="menu_product_configuration" action="act_model_coop_schema" id="menu_model_coop_schema"/>
+    <!-- Complementary data recursive relation -->
+    <record model="ir.ui.view" id="complementary_data_recursive_relation_form">
+      <field name="model">ins_product.complementary_data_recursive_relation</field>
+      <field name="type">form</field>
+      <field name="name">complementary_data_recursive_relation_form</field>
+    </record>
+    <record model="ir.ui.view" id="complementary_data_recursive_relation_tree">
+      <field name="model">ins_product.complementary_data_recursive_relation</field>
+      <field name="type">tree</field>
+      <field name="name">complementary_data_recursive_relation_tree</field>
+    </record>
+  </data>
+</tryton>

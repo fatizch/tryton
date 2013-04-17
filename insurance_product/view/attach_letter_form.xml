@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<form string="Attachment">
-  <field name="name"/>
-  <field name="attachment"/>
-</form>

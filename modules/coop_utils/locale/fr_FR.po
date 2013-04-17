@@ -1,0 +1,163 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:coop.dyn_selection:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:coop.table_of_table:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:coop.dyn_selection,childs:"
+msgid "Sub values"
+msgstr "Sous valeurs"
+
+msgctxt "field:coop.dyn_selection,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:coop.dyn_selection,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:coop.dyn_selection,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:coop.dyn_selection,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:coop.dyn_selection,key:"
+msgid "Key"
+msgstr "Clé"
+
+msgctxt "field:coop.dyn_selection,my_model_name:"
+msgid "Model Name"
+msgstr "Nom de l'objet"
+
+msgctxt "field:coop.dyn_selection,name:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "field:coop.dyn_selection,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:coop.dyn_selection,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:coop.dyn_selection,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:coop.dyn_selection,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:coop.table_of_table,childs:"
+msgid "Sub values"
+msgstr "Sous valeurs"
+
+msgctxt "field:coop.table_of_table,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:coop.table_of_table,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:coop.table_of_table,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:coop.table_of_table,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:coop.table_of_table,key:"
+msgid "Key"
+msgstr "Clé"
+
+msgctxt "field:coop.table_of_table,my_model_name:"
+msgid "Model Name"
+msgstr "Nom de l'objet"
+
+msgctxt "field:coop.table_of_table,name:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "field:coop.table_of_table,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:coop.table_of_table,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:coop.table_of_table,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:coop.table_of_table,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:utils.version_object,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:utils.version_object,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:utils.version_object,main_elem:"
+msgid "Descriptor"
+msgstr "Descripteur"
+
+msgctxt "field:utils.version_object,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:utils.versionned_object,current_rec_name:"
+msgid "Current Value"
+msgstr "Valeur Courante"
+
+msgctxt "field:utils.versionned_object,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:utils.versionned_object,versions:"
+msgid "Versions"
+msgstr "Versions"
+
+msgctxt "model:coop.dyn_selection,name:"
+msgid "Dynamic Selection"
+msgstr "Sélection Dynamique"
+
+msgctxt "model:coop.table_of_table,name:"
+msgid "Table of table"
+msgstr "Table des Tables"
+
+msgctxt "model:utils.version_object,name:"
+msgid "Version Object"
+msgstr "Version d'Objet"
+
+msgctxt "model:utils.versionned_object,name:"
+msgid "Versionned Object"
+msgstr "Objet Versionné"
+
+msgctxt "view:coop.dyn_selection:"
+msgid "Dynamic Selection"
+msgstr "Sélection Dynamique"
+
+msgctxt "view:utils.version_object:"
+msgid "Version Object"
+msgstr "Version d'Objet"
+
+msgctxt "view:utils.versionned_object:"
+msgid "Versionned Object"
+msgstr "Objet Versionné"

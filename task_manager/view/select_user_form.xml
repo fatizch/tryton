@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<form string="Add User">
-  <group id="user_selection" yexpand="1" yfill="1" xexpand="1" xfill="1">
-    <label name="user" xalign="0"/>
-    <field name="user"/>
-  </group>
-  <newline/>
-  <field name="user_ok"/>
-</form>

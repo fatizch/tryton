@@ -1,0 +1,1998 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:ins_contract.billing.bill:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.billing.generic_line:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.billing_manager:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.contract.history:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.contract:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.covered_data:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.covered_element:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.delivered_service:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.expense:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.management_protocol:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.management_role:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.option:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.price_line:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_contract.status_history:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:ins_contract.billing.bill,amount_ht:"
+msgid "Amount HT"
+msgstr "Montant HT"
+
+msgctxt "field:ins_contract.billing.bill,amount_ttc:"
+msgid "Amount TTC"
+msgstr "Montant TTC"
+
+msgctxt "field:ins_contract.billing.bill,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.billing.bill,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.billing.bill,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.billing.bill,for_contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:ins_contract.billing.bill,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.billing.bill,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.billing.bill,lines:"
+msgid "Bill Lines"
+msgstr "Lignes de Cotisation"
+
+msgctxt "field:ins_contract.billing.bill,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.billing.bill,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.billing.bill,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.billing.bill,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.billing.generic_line,amount_ht:"
+msgid "Amount HT"
+msgstr "Montant HT"
+
+msgctxt "field:ins_contract.billing.generic_line,amount_ttc:"
+msgid "Amount TTC"
+msgstr "Montant TTC"
+
+msgctxt "field:ins_contract.billing.generic_line,base_price:"
+msgid "Base Price"
+msgstr "Prix de Base"
+
+msgctxt "field:ins_contract.billing.generic_line,childs:"
+msgid "Child Lines"
+msgstr "Lignes Filles"
+
+msgctxt "field:ins_contract.billing.generic_line,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.billing.generic_line,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.billing.generic_line,detail_childs:"
+msgid "Details"
+msgstr "Détails"
+
+msgctxt "field:ins_contract.billing.generic_line,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.billing.generic_line,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.billing.generic_line,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.billing.generic_line,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_contract.billing.generic_line,master:"
+msgid "Master"
+msgstr "Maître"
+
+msgctxt "field:ins_contract.billing.generic_line,name:"
+msgid "Short Description"
+msgstr "Description"
+
+msgctxt "field:ins_contract.billing.generic_line,node_childs:"
+msgid "Nodes"
+msgstr "Noeuds"
+
+msgctxt "field:ins_contract.billing.generic_line,on_object:"
+msgid "Target"
+msgstr "Cible"
+
+msgctxt "field:ins_contract.billing.generic_line,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.billing.generic_line,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.billing.generic_line,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.billing.generic_line,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.billing_manager,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:ins_contract.billing_manager,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.billing_manager,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.billing_manager,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.billing_manager,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.billing_manager,next_billing_date:"
+msgid "Next Billing Date"
+msgstr "Prochain Calcul de Cotisation"
+
+msgctxt "field:ins_contract.billing_manager,prices:"
+msgid "Prices"
+msgstr "Cotisations"
+
+msgctxt "field:ins_contract.billing_manager,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.billing_manager,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.billing_manager,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.billing_process.bill_display,bill_amount_ht:"
+msgid "Amount HT"
+msgstr "Montant HT"
+
+msgctxt "field:ins_contract.billing_process.bill_display,bill_amount_ttc:"
+msgid "Amount TTC"
+msgstr "Montant TTC"
+
+msgctxt "field:ins_contract.billing_process.bill_display,bill_end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.billing_process.bill_display,bill_lines:"
+msgid "Bill Lines"
+msgstr "Lignes de Cotisation"
+
+msgctxt "field:ins_contract.billing_process.bill_display,bill_start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.billing_process.bill_display,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.billing_process.bill_display,session_id:"
+msgid "Session Id"
+msgstr "Session Id"
+
+msgctxt "field:ins_contract.billing_process.bill_line_view,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.billing_process.bill_line_view,line_amount_ht:"
+msgid "Amount HT"
+msgstr "Montant HT"
+
+msgctxt "field:ins_contract.billing_process.bill_line_view,line_amount_ttc:"
+msgid "Amount TTC"
+msgstr "Montant TTC"
+
+msgctxt "field:ins_contract.billing_process.bill_line_view,line_base_price:"
+msgid "Base Price"
+msgstr "Prix de Base"
+
+msgctxt "field:ins_contract.billing_process.bill_line_view,line_end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.billing_process.bill_line_view,line_kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_contract.billing_process.bill_line_view,line_name:"
+msgid "Short Description"
+msgstr "Description"
+
+msgctxt "field:ins_contract.billing_process.bill_line_view,line_start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.billing_process.bill_line_view,line_sub_lines:"
+msgid "Sub Lines"
+msgstr ""
+
+msgctxt "field:ins_contract.billing_process.bill_parameters,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.billing_process.bill_parameters,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.billing_process.bill_parameters,session_id:"
+msgid "Session Id"
+msgstr "Session Id"
+
+msgctxt "field:ins_contract.billing_process.bill_parameters,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.billing_process.process_state,cur_action:"
+msgid "Current Action"
+msgstr "Action Courante"
+
+msgctxt "field:ins_contract.billing_process.process_state,cur_step:"
+msgid "Current step"
+msgstr "Etape Courante"
+
+msgctxt "field:ins_contract.billing_process.process_state,cur_step_desc:"
+msgid "Step Descriptor"
+msgstr "Descripteur d'Etape"
+
+msgctxt "field:ins_contract.billing_process.process_state,errors:"
+msgid "Errors"
+msgstr "Erreurs"
+
+msgctxt "field:ins_contract.billing_process.process_state,for_contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:ins_contract.billing_process.process_state,from_susp_process:"
+msgid "From Process"
+msgstr "Processus Source"
+
+msgctxt "field:ins_contract.billing_process.process_state,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.billing_process.process_state,on_product:"
+msgid "On Product Process"
+msgstr "Produit"
+
+msgctxt "field:ins_contract.billing_process.process_state,process_desc:"
+msgid "Process Description"
+msgstr "Description du Processus"
+
+msgctxt "field:ins_contract.billing_process.process_state,the_bill_db:"
+msgid "the_bill"
+msgstr ""
+
+msgctxt "field:ins_contract.billing_process.process_state,the_bill_str:"
+msgid "Jsonthe_bill"
+msgstr ""
+
+msgctxt "field:ins_contract.contract,billing_manager:"
+msgid "Billing Manager"
+msgstr "Cotisation"
+
+msgctxt "field:ins_contract.contract,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_contract.contract,contact:"
+msgid "Contact"
+msgstr "Contact"
+
+msgctxt "field:ins_contract.contract,contract_history:"
+msgid "Contract History"
+msgstr "Historique de Contrat"
+
+msgctxt "field:ins_contract.contract,contract_number:"
+msgid "Contract Number"
+msgstr "Numéro de Contrat"
+
+msgctxt "field:ins_contract.contract,covered_elements:"
+msgid "Covered Elements"
+msgstr "Eléments Couverts"
+
+msgctxt "field:ins_contract.contract,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.contract,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.contract,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_contract.contract,currency_digits:"
+msgid "Currency Digits"
+msgstr "Nbre de chiffres après la virgule"
+
+msgctxt "field:ins_contract.contract,current_state:"
+msgid "Current State"
+msgstr "Etat Courant"
+
+msgctxt "field:ins_contract.contract,documents:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "field:ins_contract.contract,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.contract,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.contract,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.contract,management:"
+msgid "Management Roles"
+msgstr "Gestionnaires"
+
+msgctxt "field:ins_contract.contract,master:"
+msgid "Master"
+msgstr "Maître"
+
+msgctxt "field:ins_contract.contract,offered:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:ins_contract.contract,options:"
+msgid "Options"
+msgstr "Garanties"
+
+msgctxt "field:ins_contract.contract,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.contract,start_date:"
+msgid "Effective Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:ins_contract.contract,start_management_date:"
+msgid "Management Date"
+msgstr "Date de Début de Gestion"
+
+msgctxt "field:ins_contract.contract,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:ins_contract.contract,status_history:"
+msgid "Status History"
+msgstr "Historique des Statuts"
+
+msgctxt "field:ins_contract.contract,subscriber:"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
+msgctxt "field:ins_contract.contract,summary:"
+msgid "Summary"
+msgstr "Synthèse"
+
+msgctxt "field:ins_contract.contract,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.contract,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.contract.history,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.contract.history,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.contract.history,date:"
+msgid "Change Date"
+msgstr "Date du Changement"
+
+msgctxt "field:ins_contract.contract.history,from_object:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:ins_contract.contract.history,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.contract.history,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.contract.history,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.contract.history,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:ins_contract.contract.history,user:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:ins_contract.contract.history,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.contract.history,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.coverage_displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.coverage_displayer,offered:"
+msgid "offered"
+msgstr "Garantie"
+
+msgctxt "field:ins_contract.coverage_displayer,start_date:"
+msgid "From Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.coverage_displayer,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:ins_contract.covered_data,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_contract.covered_data,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:ins_contract.covered_data,coverage_amount:"
+msgid ""
+msgstr " "
+
+msgctxt "field:ins_contract.covered_data,covered_element:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "field:ins_contract.covered_data,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.covered_data,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.covered_data,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.covered_data,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.covered_data,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.covered_data,option:"
+msgid "Subscribed Coverage"
+msgstr "Garantie Souscrite"
+
+msgctxt "field:ins_contract.covered_data,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.covered_data,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.covered_data,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:ins_contract.covered_data,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.covered_data,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.covered_element,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_contract.covered_element,complementary_data_summary:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_contract.covered_element,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:ins_contract.covered_element,covered_data:"
+msgid "Covered Element Data"
+msgstr "Données de Couverture"
+
+msgctxt "field:ins_contract.covered_element,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.covered_element,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.covered_element,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.covered_element,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.covered_element,item_desc:"
+msgid "Item Desc"
+msgstr "Desc Risque"
+
+msgctxt "field:ins_contract.covered_element,item_kind:"
+msgid "Item Kind"
+msgstr ""
+
+msgctxt "field:ins_contract.covered_element,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.covered_element,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:ins_contract.covered_element,party:"
+msgid "Actor"
+msgstr "Acteur"
+
+msgctxt "field:ins_contract.covered_element,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.covered_element,sub_covered_elements:"
+msgid "Sub Covered Elements"
+msgstr "Sous Eléments Couverts"
+
+msgctxt "field:ins_contract.covered_element,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.covered_element,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.delivered_service,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:ins_contract.delivered_service,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.delivered_service,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.delivered_service,expenses:"
+msgid "Expenses"
+msgstr "Frais"
+
+msgctxt "field:ins_contract.delivered_service,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.delivered_service,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.delivered_service,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.delivered_service,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:ins_contract.delivered_service,subscribed_service:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:ins_contract.delivered_service,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.delivered_service,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.expense,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:ins_contract.expense,create_date:"
+msgid ""
+msgstr " "
+
+msgctxt "field:ins_contract.expense,create_uid:"
+msgid ""
+msgstr " "
+
+msgctxt "field:ins_contract.expense,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_contract.expense,currency_digits:"
+msgid "Currency Digits"
+msgstr "Nbre de chiffres après la virgule"
+
+msgctxt "field:ins_contract.expense,delivered_service:"
+msgid "Delivered Service"
+msgstr "Prestation Fournie"
+
+msgctxt "field:ins_contract.expense,id:"
+msgid ""
+msgstr " "
+
+msgctxt "field:ins_contract.expense,is_used:"
+msgid ""
+msgstr " "
+
+msgctxt "field:ins_contract.expense,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_contract.expense,rec_name:"
+msgid ""
+msgstr " "
+
+msgctxt "field:ins_contract.expense,write_date:"
+msgid ""
+msgstr " "
+
+msgctxt "field:ins_contract.expense,write_uid:"
+msgid ""
+msgstr " "
+
+msgctxt "field:ins_contract.management_protocol,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.management_protocol,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.management_protocol,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.management_protocol,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.management_protocol,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.management_protocol,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_contract.management_protocol,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:ins_contract.management_protocol,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.management_protocol,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.management_protocol,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.management_protocol,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.management_role,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:ins_contract.management_role,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.management_role,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.management_role,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.management_role,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.management_role,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.management_role,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_contract.management_role,protocol:"
+msgid "Protocol"
+msgstr "Protocole de gestion"
+
+msgctxt "field:ins_contract.management_role,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.management_role,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.management_role,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.management_role,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.option,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:ins_contract.option,covered_data:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
+msgctxt "field:ins_contract.option,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.option,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.option,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_contract.option,currency_digits:"
+msgid "Currency Digits"
+msgstr "Nbre de chiffres après la virgule"
+
+msgctxt "field:ins_contract.option,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.option,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.option,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.option,offered:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:ins_contract.option,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.option,start_date:"
+msgid "Effective Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:ins_contract.option,start_management_date:"
+msgid "Management Date"
+msgstr "Date de Début de Gestion"
+
+msgctxt "field:ins_contract.option,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:ins_contract.option,status_history:"
+msgid "Status History"
+msgstr "Historique des Statuts"
+
+msgctxt "field:ins_contract.option,summary:"
+msgid "Summary"
+msgstr "Synthèse"
+
+msgctxt "field:ins_contract.option,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.option,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.price_line,all_lines:"
+msgid "Lines"
+msgstr "Lignes"
+
+msgctxt "field:ins_contract.price_line,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:ins_contract.price_line,amount_for_display:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:ins_contract.price_line,billing_manager:"
+msgid "Billing Manager"
+msgstr "Cotisation"
+
+msgctxt "field:ins_contract.price_line,child_lines:"
+msgid "Sub-Lines"
+msgstr ""
+
+msgctxt "field:ins_contract.price_line,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.price_line,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.price_line,details:"
+msgid "Details"
+msgstr "Détails"
+
+msgctxt "field:ins_contract.price_line,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.price_line,end_date_calculated:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.price_line,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.price_line,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.price_line,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_contract.price_line,master:"
+msgid "Master Line"
+msgstr ""
+
+msgctxt "field:ins_contract.price_line,name:"
+msgid "Short Description"
+msgstr "Description"
+
+msgctxt "field:ins_contract.price_line,on_object:"
+msgid "Priced object"
+msgstr "Elément Tarifé"
+
+msgctxt "field:ins_contract.price_line,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.price_line,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.price_line,start_date_calculated:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.price_line,taxes:"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "field:ins_contract.price_line,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.price_line,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.status_history,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.status_history,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.status_history,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.status_history,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.status_history,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.status_history,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.status_history,reference:"
+msgid "Reference"
+msgstr "Référence"
+
+msgctxt "field:ins_contract.status_history,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.status_history,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:ins_contract.status_history,sub_status:"
+msgid "Sub Status"
+msgstr "Sous Statut"
+
+msgctxt "field:ins_contract.status_history,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.status_history,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt ""
+"field:ins_contract.subs_process.covered_desc,data_complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,data_coverage_name:"
+msgid "offered"
+msgstr "Garantie"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,data_covered_element:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,data_end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,data_for_coverage:"
+msgid "For offered"
+msgstr "Garantie"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,data_for_option_char:"
+msgid "For Option"
+msgstr "Garantie"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,data_start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,data_status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,elem_covered_data:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.subs_process.covered_desc,the_kind:"
+msgid "The kind"
+msgstr "Type"
+
+msgctxt "field:ins_contract.subs_process.lines,childs:"
+msgid "Details"
+msgstr "Détails"
+
+msgctxt "field:ins_contract.subs_process.lines,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.subs_process.lines,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.subs_process.lines,summary_state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:ins_contract.subs_process.lines,taxes:"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "field:ins_contract.subs_process.lines,value:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "field:ins_contract.subs_process.option_selection,at_date:"
+msgid "At Date"
+msgstr "A la Date"
+
+msgctxt "field:ins_contract.subs_process.option_selection,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:ins_contract.subs_process.option_selection,for_product:"
+msgid "For Product"
+msgstr "Produit"
+
+msgctxt "field:ins_contract.subs_process.option_selection,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.subs_process.option_selection,options:"
+msgid "Options Choices"
+msgstr "Choix des Garanties"
+
+msgctxt "field:ins_contract.subs_process.option_selection,session_id:"
+msgid "Session Id"
+msgstr "Session Id"
+
+msgctxt "field:ins_contract.subs_process.process_state,cur_action:"
+msgid "Current Action"
+msgstr "Action Courante"
+
+msgctxt "field:ins_contract.subs_process.process_state,cur_step:"
+msgid "Current step"
+msgstr "Etape Courante"
+
+msgctxt "field:ins_contract.subs_process.process_state,cur_step_desc:"
+msgid "Step Descriptor"
+msgstr "Descripteur d'Etape"
+
+msgctxt "field:ins_contract.subs_process.process_state,errors:"
+msgid "Errors"
+msgstr "Erreurs"
+
+msgctxt "field:ins_contract.subs_process.process_state,for_contract_db:"
+msgid "for_contract"
+msgstr "for_contract"
+
+msgctxt "field:ins_contract.subs_process.process_state,for_contract_str:"
+msgid "Jsonfor_contract"
+msgstr ""
+
+msgctxt "field:ins_contract.subs_process.process_state,from_susp_process:"
+msgid "From Process"
+msgstr "Processus Source"
+
+msgctxt "field:ins_contract.subs_process.process_state,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.subs_process.process_state,on_product:"
+msgid "On Product Process"
+msgstr "Produit"
+
+msgctxt "field:ins_contract.subs_process.process_state,process_desc:"
+msgid "Process Description"
+msgstr "Description du Processus"
+
+msgctxt "field:ins_contract.subs_process.project,broker:"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "field:ins_contract.subs_process.project,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.subs_process.project,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:ins_contract.subs_process.project,product_desc:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:ins_contract.subs_process.project,session_id:"
+msgid "Session Id"
+msgstr "Session Id"
+
+msgctxt "field:ins_contract.subs_process.project,start_date:"
+msgid "Effective Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:ins_contract.subs_process.project,subscriber:"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
+msgctxt "field:ins_contract.subs_process.project,subscriber_as_company:"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
+msgctxt "field:ins_contract.subs_process.project,subscriber_as_person:"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
+msgctxt "field:ins_contract.subs_process.project,subscriber_desc:"
+msgid "Summary"
+msgstr "Synthèse"
+
+msgctxt "field:ins_contract.subs_process.project,subscriber_kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_contract.subs_process.summary,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.subs_process.summary,lines:"
+msgid "Lines"
+msgstr "Lignes de Cotisation"
+
+msgctxt "field:ins_contract.subs_process.summary,session_id:"
+msgid "Session Id"
+msgstr "Session Id"
+
+msgctxt "field:ins_product.request_finder,tmp_0:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:party.party,covered_elements:"
+msgid "Covered Elements"
+msgstr "Eléments Couverts"
+
+msgctxt "model:ins_contract.billing.bill,name:"
+msgid "Bill"
+msgstr "Cotisation"
+
+msgctxt "model:ins_contract.billing.generic_line,name:"
+msgid "Bill Line"
+msgstr "Ligne de Cotisation"
+
+msgctxt "model:ins_contract.billing_manager,name:"
+msgid "Billing Manager"
+msgstr "Cotisation"
+
+msgctxt "model:ins_contract.billing_process.bill_display,name:"
+msgid "Bill Displayer"
+msgstr ""
+
+msgctxt "model:ins_contract.billing_process.bill_line_view,name:"
+msgid "Bill Line"
+msgstr "Ligne de Cotisation"
+
+msgctxt "model:ins_contract.billing_process.bill_parameters,name:"
+msgid "Bill Parameters"
+msgstr "Paramètre de Cotisation"
+
+msgctxt "model:ins_contract.billing_process.process_state,name:"
+msgid "Billing Process State"
+msgstr ""
+
+msgctxt "model:ins_contract.contract,name:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "model:ins_contract.contract.history,name:"
+msgid "Contract History"
+msgstr "Historique de Contrat"
+
+msgctxt "model:ins_contract.coverage_displayer,name:"
+msgid "Coverage Description"
+msgstr "Description de la Garantie"
+
+msgctxt "model:ins_contract.covered_data,name:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
+msgctxt "model:ins_contract.covered_element,name:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "model:ins_contract.delivered_service,name:"
+msgid "Delivered Service"
+msgstr "Prestation Fournie"
+
+msgctxt "model:ins_contract.expense,name:"
+msgid ""
+msgstr " "
+
+msgctxt "model:ins_contract.management_protocol,name:"
+msgid "Management Protocol"
+msgstr "Protocole de gestion"
+
+msgctxt "model:ins_contract.management_role,name:"
+msgid "Management Role"
+msgstr "Gestionnaire"
+
+msgctxt "model:ins_contract.option,name:"
+msgid "Subscribed Coverage"
+msgstr "Garantie"
+
+msgctxt "model:ins_contract.price_line,name:"
+msgid "Price Line"
+msgstr "Ligne de Cotisation"
+
+msgctxt "model:ins_contract.status_history,name:"
+msgid "Status History"
+msgstr "Historique des Statuts"
+
+msgctxt "model:ins_contract.subs_process.covered_desc,name:"
+msgid "Covered Desc"
+msgstr "Descripteur d'Element Couvert"
+
+msgctxt "model:ins_contract.subs_process.lines,name:"
+msgid "Pricing Line"
+msgstr "Ligne de Cotisation"
+
+msgctxt "model:ins_contract.subs_process.option_selection,name:"
+msgid "This step uses the provided product to compute a list of available"
+msgstr ""
+
+msgctxt "model:ins_contract.subs_process.process_state,name:"
+msgid "The process state for the subscription process must have an abstract"
+msgstr ""
+
+msgctxt "model:ins_contract.subs_process.project,name:"
+msgid "This step should be the first one, as it asks the user which product"
+msgstr ""
+
+msgctxt "model:ins_contract.subs_process.summary,name:"
+msgid "Summary"
+msgstr "Synthèse"
+
+msgctxt "model:ir.action,name:act_bill_form"
+msgid "Bill"
+msgstr "Cotisation"
+
+msgctxt "model:ir.action,name:act_billing_by_contract"
+msgid "Bills by Contract"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_contract_form"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "model:ir.action,name:act_contract_relate_form"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "model:ir.action,name:act_contract_status_history_relate_form"
+msgid "Status History"
+msgstr "Historique des Statuts"
+
+msgctxt "model:ir.action,name:act_generic_line_form"
+msgid "Bill Line"
+msgstr "Ligne de Cotisation"
+
+msgctxt "model:ir.action,name:act_option_form"
+msgid "option"
+msgstr "Garantie"
+
+msgctxt "model:ir.action,name:launch_billing_process"
+msgid "Billing"
+msgstr "Cotisation"
+
+msgctxt "model:ir.action,name:resume_subs_process"
+msgid "Resume Process"
+msgstr "Reprendre le Processus"
+
+msgctxt "model:ir.ui.menu,name:menu_bill_view"
+msgid "Bill"
+msgstr "Cotisation"
+
+msgctxt "model:ir.ui.menu,name:menu_contract"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "model:ir.ui.menu,name:menu_contract_form"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "model:ir.ui.menu,name:menu_individual"
+msgid "Individual Policy"
+msgstr "Individuel"
+
+msgctxt "selection:ins_contract.billing.generic_line,kind:"
+msgid "Base Amount"
+msgstr "Montant de Base"
+
+msgctxt "selection:ins_contract.billing.generic_line,kind:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "selection:ins_contract.billing.generic_line,kind:"
+msgid "Node"
+msgstr "Noeud"
+
+msgctxt "selection:ins_contract.billing.generic_line,kind:"
+msgid "Tax"
+msgstr "Taxe"
+
+msgctxt "selection:ins_contract.billing.generic_line,master:"
+msgid "Bill"
+msgstr "Cotisation"
+
+msgctxt "selection:ins_contract.billing.generic_line,master:"
+msgid "Line"
+msgstr "Ligne"
+
+msgctxt "selection:ins_contract.billing_process.process_state,cur_action:"
+msgid "cancel"
+msgstr "Annuler"
+
+msgctxt "selection:ins_contract.billing_process.process_state,cur_action:"
+msgid "check"
+msgstr "Vérifier"
+
+msgctxt "selection:ins_contract.billing_process.process_state,cur_action:"
+msgid "complete"
+msgstr "Terminer"
+
+msgctxt "selection:ins_contract.billing_process.process_state,cur_action:"
+msgid "go_next"
+msgstr "Suivant"
+
+msgctxt "selection:ins_contract.billing_process.process_state,cur_action:"
+msgid "go_previous"
+msgstr "Précédent"
+
+msgctxt "selection:ins_contract.billing_process.process_state,cur_action:"
+msgid "suspend"
+msgstr "Suspendre"
+
+msgctxt "selection:ins_contract.contract,master:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:ins_contract.contract,master:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:ins_contract.contract,master:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "selection:ins_contract.contract,status:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "selection:ins_contract.contract,status:"
+msgid "Hold"
+msgstr "Suspendre"
+
+msgctxt "selection:ins_contract.contract,status:"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt "selection:ins_contract.contract,status:"
+msgid "Terminated"
+msgstr "Terminé"
+
+msgctxt "selection:ins_contract.coverage_displayer,status:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:ins_contract.coverage_displayer,status:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "selection:ins_contract.coverage_displayer,status:"
+msgid "Hold"
+msgstr "Suspendre"
+
+msgctxt "selection:ins_contract.coverage_displayer,status:"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt "selection:ins_contract.coverage_displayer,status:"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "selection:ins_contract.coverage_displayer,status:"
+msgid "Terminated"
+msgstr "Terminé"
+
+msgctxt "selection:ins_contract.covered_data,status:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:ins_contract.covered_data,status:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "selection:ins_contract.covered_data,status:"
+msgid "Hold"
+msgstr "Suspendre"
+
+msgctxt "selection:ins_contract.covered_data,status:"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt "selection:ins_contract.covered_data,status:"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "selection:ins_contract.covered_data,status:"
+msgid "Terminated"
+msgstr "Terminé"
+
+msgctxt "selection:ins_contract.delivered_service,status:"
+msgid "Applicable"
+msgstr "Appliquable"
+
+msgctxt "selection:ins_contract.delivered_service,status:"
+msgid "Calculated"
+msgstr "Calculé"
+
+msgctxt "selection:ins_contract.delivered_service,status:"
+msgid "Calculating"
+msgstr "Calcul en Cours"
+
+msgctxt "selection:ins_contract.delivered_service,status:"
+msgid "Delivered"
+msgstr "Delivré"
+
+msgctxt "selection:ins_contract.delivered_service,status:"
+msgid "Not Eligible"
+msgstr "Non Eligible"
+
+msgctxt "selection:ins_contract.management_protocol,kind:"
+msgid "Business Provider"
+msgstr "Apporteur"
+
+msgctxt "selection:ins_contract.management_protocol,kind:"
+msgid "Claim Manager"
+msgstr "Gestionnaire de sinistres"
+
+msgctxt "selection:ins_contract.management_protocol,kind:"
+msgid "Contract Manager"
+msgstr "Gestionnaire de contrat"
+
+msgctxt "selection:ins_contract.option,status:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "selection:ins_contract.option,status:"
+msgid "Hold"
+msgstr "Suspendre"
+
+msgctxt "selection:ins_contract.option,status:"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt "selection:ins_contract.option,status:"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "selection:ins_contract.option,status:"
+msgid "Terminated"
+msgstr "Terminé"
+
+msgctxt "selection:ins_contract.price_line,kind:"
+msgid "Base"
+msgstr "Base"
+
+msgctxt "selection:ins_contract.price_line,kind:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "selection:ins_contract.price_line,kind:"
+msgid "Line"
+msgstr "Ligne"
+
+msgctxt "selection:ins_contract.price_line,kind:"
+msgid "Tax"
+msgstr "Taxe"
+
+msgctxt "selection:ins_contract.status_history,status:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:ins_contract.status_history,status:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "selection:ins_contract.status_history,status:"
+msgid "Hold"
+msgstr "Suspendre"
+
+msgctxt "selection:ins_contract.status_history,status:"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt "selection:ins_contract.status_history,status:"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "selection:ins_contract.status_history,status:"
+msgid "Terminated"
+msgstr "Terminé"
+
+msgctxt "selection:ins_contract.subs_process.covered_desc,the_kind:"
+msgid "data"
+msgstr ""
+
+msgctxt "selection:ins_contract.subs_process.covered_desc,the_kind:"
+msgid "elem"
+msgstr ""
+
+msgctxt "selection:ins_contract.subs_process.process_state,cur_action:"
+msgid "cancel"
+msgstr "Annuler"
+
+msgctxt "selection:ins_contract.subs_process.process_state,cur_action:"
+msgid "check"
+msgstr "Vérifier"
+
+msgctxt "selection:ins_contract.subs_process.process_state,cur_action:"
+msgid "complete"
+msgstr "Terminer"
+
+msgctxt "selection:ins_contract.subs_process.process_state,cur_action:"
+msgid "go_next"
+msgstr "Suivant"
+
+msgctxt "selection:ins_contract.subs_process.process_state,cur_action:"
+msgid "go_previous"
+msgstr "Précédent"
+
+msgctxt "selection:ins_contract.subs_process.process_state,cur_action:"
+msgid "suspend"
+msgstr "Suspendre"
+
+msgctxt "selection:ins_contract.subs_process.project,subscriber_kind:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "selection:ins_contract.subs_process.project,subscriber_kind:"
+msgid "Person"
+msgstr "Personne Physique"
+
+msgctxt "selection:ins_product.document,for_object:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:ins_product.document,for_object:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "selection:ins_product.document,for_object:"
+msgid "Option"
+msgstr "Garantie"
+
+msgctxt "selection:ins_product.document_request,needed_by:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:ins_product.request_finder,kind:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "view:ins_contract.billing.bill:"
+msgid "Bill Summary"
+msgstr "Synthèse de la Cotisation"
+
+msgctxt "view:ins_contract.billing.bill:"
+msgid "Bills"
+msgstr "Cotisations"
+
+msgctxt "view:ins_contract.billing.generic_line:"
+msgid "Bill Lines"
+msgstr "Lignes de Cotisation"
+
+msgctxt "view:ins_contract.billing.generic_line:"
+msgid "Bill Summary"
+msgstr "Synthèse de la Cotisation"
+
+msgctxt "view:ins_contract.billing_manager:"
+msgid "billing_manager"
+msgstr "Cotisation"
+
+msgctxt "view:ins_contract.billing_process.bill_display:"
+msgid "Billing Process - Bill Result"
+msgstr "Cotisation"
+
+msgctxt "view:ins_contract.billing_process.bill_line_view:"
+msgid "Bill Lines"
+msgstr "Lignes de Cotisation"
+
+msgctxt "view:ins_contract.billing_process.bill_parameters:"
+msgid "Billing Process - Bill Parameters"
+msgstr "Paramètres de Cotisation"
+
+msgctxt "view:ins_contract.contract.history:"
+msgid "Contract History"
+msgstr "Historique de Contrat"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Billing"
+msgstr "Cotisation"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Covered Elements"
+msgstr "Eléments Couverts"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Covered Elements/Options"
+msgstr "Eléments Couverts/Garanties"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "view:ins_contract.contract:"
+msgid "History"
+msgstr "Historique"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Managing Entities"
+msgstr "Délégataires"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Options"
+msgstr "Garanties"
+
+msgctxt "view:ins_contract.contract:"
+msgid "contract"
+msgstr "contrat"
+
+msgctxt "view:ins_contract.coverage_displayer:"
+msgid "Coverage Choices Tree"
+msgstr "Choix des Garanties"
+
+msgctxt "view:ins_contract.covered_data:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
+msgctxt "view:ins_contract.covered_data:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "view:ins_contract.covered_element:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "view:ins_contract.covered_element:"
+msgid "Covered Elements"
+msgstr "Eléments Couverts"
+
+msgctxt "view:ins_contract.delivered_service:"
+msgid "Delivered Service"
+msgstr "Prestation Fournie"
+
+msgctxt "view:ins_contract.expense:"
+msgid "Expense"
+msgstr "Frais"
+
+msgctxt "view:ins_contract.expense:"
+msgid "Expenses"
+msgstr "Frais"
+
+msgctxt "view:ins_contract.management_protocol:"
+msgid "Protocol"
+msgstr "Protocole de gestion"
+
+msgctxt "view:ins_contract.management_protocol:"
+msgid "Protocols"
+msgstr "Protocoles"
+
+msgctxt "view:ins_contract.management_role:"
+msgid "Management"
+msgstr "Gestionnaire"
+
+msgctxt "view:ins_contract.management_role:"
+msgid "Manager"
+msgstr ""
+
+msgctxt "view:ins_contract.option:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
+msgctxt "view:ins_contract.option:"
+msgid "Status History"
+msgstr "Historique des Statuts"
+
+msgctxt "view:ins_contract.option:"
+msgid "option"
+msgstr "Garantie"
+
+msgctxt "view:ins_contract.price_line:"
+msgid "Pricing Lines"
+msgstr "Lignes de Cotisation"
+
+msgctxt "view:ins_contract.price_line:"
+msgid "price_line"
+msgstr "ligne de cotisation"
+
+msgctxt "view:ins_contract.status_history:"
+msgid "Status History"
+msgstr "Historique des Statuts"
+
+msgctxt "view:ins_contract.subs_process.covered_desc:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
+msgctxt "view:ins_contract.subs_process.lines:"
+msgid "Pricing Lines"
+msgstr "Lignes de Cotisation"
+
+msgctxt "view:ins_contract.subs_process.option_selection:"
+msgid "Subscription Process - Option Selection Step"
+msgstr "Sélection des Garanties"
+
+msgctxt "view:ins_contract.subs_process.project:"
+msgid "Subscription Process - Project Step"
+msgstr "Sélection du Produit"
+
+msgctxt "view:ins_contract.subs_process.summary:"
+msgid "Subscription Process - Summary"
+msgstr "Synthèse"
+
+msgctxt ""
+"wizard_button:ins_contract.billing_process,bill_display,steps_cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:ins_contract.billing_process,bill_display,steps_check:"
+msgid "Check"
+msgstr "Vérifier"
+
+msgctxt ""
+"wizard_button:ins_contract.billing_process,bill_display,steps_complete:"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt "wizard_button:ins_contract.billing_process,bill_display,steps_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:ins_contract.billing_process,bill_display,steps_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:ins_contract.billing_process,bill_display,steps_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt ""
+"wizard_button:ins_contract.billing_process,bill_parameters,steps_cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:ins_contract.billing_process,bill_parameters,steps_check:"
+msgid "Check"
+msgstr "Vérifier"
+
+msgctxt ""
+"wizard_button:ins_contract.billing_process,bill_parameters,steps_complete:"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt ""
+"wizard_button:ins_contract.billing_process,bill_parameters,steps_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:ins_contract.billing_process,bill_parameters,steps_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:ins_contract.billing_process,bill_parameters,steps_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:ins_contract.subs_process,extension_life,steps_cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:ins_contract.subs_process,extension_life,steps_check:"
+msgid "Check"
+msgstr "Vérifier"
+
+msgctxt ""
+"wizard_button:ins_contract.subs_process,extension_life,steps_complete:"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt "wizard_button:ins_contract.subs_process,extension_life,steps_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:ins_contract.subs_process,extension_life,steps_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:ins_contract.subs_process,extension_life,steps_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt ""
+"wizard_button:ins_contract.subs_process,option_selection,steps_cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:ins_contract.subs_process,option_selection,steps_check:"
+msgid "Check"
+msgstr "Vérifier"
+
+msgctxt ""
+"wizard_button:ins_contract.subs_process,option_selection,steps_complete:"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt "wizard_button:ins_contract.subs_process,option_selection,steps_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:ins_contract.subs_process,option_selection,steps_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:ins_contract.subs_process,option_selection,steps_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:ins_contract.subs_process,project,steps_cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:ins_contract.subs_process,project,steps_check:"
+msgid "Check"
+msgstr "Vérifier"
+
+msgctxt "wizard_button:ins_contract.subs_process,project,steps_complete:"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt "wizard_button:ins_contract.subs_process,project,steps_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "wizard_button:ins_contract.subs_process,project,steps_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:ins_contract.subs_process,project,steps_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:ins_contract.subs_process,summary,steps_cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:ins_contract.subs_process,summary,steps_check:"
+msgid "Check"
+msgstr "Vérifier"
+
+msgctxt "wizard_button:ins_contract.subs_process,summary,steps_complete:"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt "wizard_button:ins_contract.subs_process,summary,steps_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "wizard_button:ins_contract.subs_process,summary,steps_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:ins_contract.subs_process,summary,steps_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"

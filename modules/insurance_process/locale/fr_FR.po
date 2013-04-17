@@ -1,0 +1,403 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:ins_process.process_desc:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_process.step_desc:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_process.step_method_desc:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_process.suspended_process:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:ins_process.process_desc,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_process.process_desc,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_process.process_desc,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_process.process_desc,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_process.process_desc,name:"
+msgid "Process Name"
+msgstr "Nom du Processus"
+
+msgctxt "field:ins_process.process_desc,process_model:"
+msgid "Process Model"
+msgstr ""
+
+msgctxt "field:ins_process.process_desc,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_process.process_desc,steps:"
+msgid "Steps"
+msgstr "Etapes"
+
+msgctxt "field:ins_process.process_desc,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_process.process_desc,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_process.process_state,cur_action:"
+msgid "Current Action"
+msgstr "Action Courante"
+
+msgctxt "field:ins_process.process_state,cur_step:"
+msgid "Current step"
+msgstr "Etape Courante"
+
+msgctxt "field:ins_process.process_state,cur_step_desc:"
+msgid "Step Descriptor"
+msgstr "Descripteur d'Etape"
+
+msgctxt "field:ins_process.process_state,errors:"
+msgid "Errors"
+msgstr "Erreurs"
+
+msgctxt "field:ins_process.process_state,from_susp_process:"
+msgid "From Process"
+msgstr "Processus Source"
+
+msgctxt "field:ins_process.process_state,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_process.process_state,on_product:"
+msgid "On Product Process"
+msgstr "Produit"
+
+msgctxt "field:ins_process.process_state,process_desc:"
+msgid "Process Description"
+msgstr "Description du Processus"
+
+msgctxt "field:ins_process.step_desc,button_cancel:"
+msgid "'Cancel' button"
+msgstr "Bouton Annuler"
+
+msgctxt "field:ins_process.step_desc,button_check:"
+msgid "'Check' button"
+msgstr "Bouton Vérifier"
+
+msgctxt "field:ins_process.step_desc,button_complete:"
+msgid "'Complete' button"
+msgstr "Bouton Compléter"
+
+msgctxt "field:ins_process.step_desc,button_default:"
+msgid "Default Button"
+msgstr "Bouton Par Défaut"
+
+msgctxt "field:ins_process.step_desc,button_next:"
+msgid "'Next' button"
+msgstr "Bouton Suivant"
+
+msgctxt "field:ins_process.step_desc,button_previous:"
+msgid "'Previous' button"
+msgstr "Bouton Précédent"
+
+msgctxt "field:ins_process.step_desc,button_suspend:"
+msgid "'Suspend' button"
+msgstr ""
+
+msgctxt "field:ins_process.step_desc,buttons_storage:"
+msgid "Buttons"
+msgstr "Boutons"
+
+msgctxt "field:ins_process.step_desc,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_process.step_desc,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_process.step_desc,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_process.step_desc,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_process.step_desc,methods:"
+msgid "Methods"
+msgstr "Méthodes"
+
+msgctxt "field:ins_process.step_desc,on_product_step:"
+msgid "On Product Step"
+msgstr "Sélection du Produit"
+
+msgctxt "field:ins_process.step_desc,process:"
+msgid "Process"
+msgstr "Processus"
+
+msgctxt "field:ins_process.step_desc,process_name:"
+msgid "Process Name"
+msgstr "Nom du Processus"
+
+msgctxt "field:ins_process.step_desc,product_step_name:"
+msgid "Product Step Name"
+msgstr ""
+
+msgctxt "field:ins_process.step_desc,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_process.step_desc,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:ins_process.step_desc,step_model:"
+msgid "Step"
+msgstr "Etape"
+
+msgctxt "field:ins_process.step_desc,step_name:"
+msgid "Step Name"
+msgstr "Nom de l'Etape"
+
+msgctxt "field:ins_process.step_desc,virtual_step:"
+msgid "Virtual Step"
+msgstr ""
+
+msgctxt "field:ins_process.step_desc,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_process.step_desc,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_process.step_method_desc,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_process.step_method_desc,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_process.step_method_desc,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_process.step_method_desc,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_process.step_method_desc,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_process.step_method_desc,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_process.step_method_desc,rule_kind:"
+msgid "Rule Kind"
+msgstr "Type de Règle"
+
+msgctxt "field:ins_process.step_method_desc,step:"
+msgid "Step"
+msgstr "Etape"
+
+msgctxt "field:ins_process.step_method_desc,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_process.step_method_desc,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ins_process.suspended_process,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_process.suspended_process,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_process.suspended_process,desc:"
+msgid "Process Description"
+msgstr "Description du Processus"
+
+msgctxt "field:ins_process.suspended_process,for_user:"
+msgid "Suspended by"
+msgstr "Suspendu Par"
+
+msgctxt "field:ins_process.suspended_process,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_process.suspended_process,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_process.suspended_process,process_model_name:"
+msgid "Process Model"
+msgstr ""
+
+msgctxt "field:ins_process.suspended_process,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_process.suspended_process,session_data:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "field:ins_process.suspended_process,suspension_date:"
+msgid "Suspension Date"
+msgstr "Date de Mise en Suspend"
+
+msgctxt "field:ins_process.suspended_process,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_process.suspended_process,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "model:ins_process.process_desc,name:"
+msgid "Master Class for all processes, has a list of steps and"
+msgstr ""
+
+msgctxt "model:ins_process.process_state,name:"
+msgid "This class is a fake step. Its only purpose is to provide us with a"
+msgstr ""
+
+msgctxt "model:ins_process.step_desc,name:"
+msgid "Master Class for process steps."
+msgstr ""
+
+msgctxt "model:ins_process.step_method_desc,name:"
+msgid "This is a prototype of method (rule) which might be called anytime"
+msgstr ""
+
+msgctxt "model:ins_process.suspended_process,name:"
+msgid "This class represents a suspended process, which can be resumed later."
+msgstr ""
+
+msgctxt "model:ir.action,name:act_process_form"
+msgid "Process"
+msgstr "Processus"
+
+msgctxt "model:ir.action,name:act_step_form"
+msgid "step"
+msgstr "étape"
+
+msgctxt "model:ir.action,name:act_step_method_form"
+msgid "Step Method"
+msgstr ""
+
+msgctxt "model:ir.action,name:resume_dummy_process"
+msgid "Resume Process"
+msgstr "Reprendre le Processus"
+
+msgctxt "model:ir.action,name:suspended_process_form"
+msgid "Suspended Processes"
+msgstr "Processus Suspendus"
+
+msgctxt "model:ir.action,name:suspended_process_resume"
+msgid "Resume Process"
+msgstr "Reprendre le Processus"
+
+msgctxt "selection:ins_process.process_state,cur_action:"
+msgid "cancel"
+msgstr "Annuler"
+
+msgctxt "selection:ins_process.process_state,cur_action:"
+msgid "check"
+msgstr "Vérifier"
+
+msgctxt "selection:ins_process.process_state,cur_action:"
+msgid "complete"
+msgstr "Terminer"
+
+msgctxt "selection:ins_process.process_state,cur_action:"
+msgid "go_next"
+msgstr "Suivant"
+
+msgctxt "selection:ins_process.process_state,cur_action:"
+msgid "go_previous"
+msgstr "Précédent"
+
+msgctxt "selection:ins_process.process_state,cur_action:"
+msgid "suspend"
+msgstr "Suspendre"
+
+msgctxt "selection:ins_process.step_desc,button_default:"
+msgid "'Cancel' Button"
+msgstr "Bouton Annuler"
+
+msgctxt "selection:ins_process.step_desc,button_default:"
+msgid "'Check' Button"
+msgstr "Bouton Vérifier"
+
+msgctxt "selection:ins_process.step_desc,button_default:"
+msgid "'Complete' Button"
+msgstr "Bouton Compléter"
+
+msgctxt "selection:ins_process.step_desc,button_default:"
+msgid "'Next' Button"
+msgstr "Bouton Suivant"
+
+msgctxt "selection:ins_process.step_desc,button_default:"
+msgid "'Previous' Button"
+msgstr ""
+
+msgctxt "selection:ins_process.step_desc,button_default:"
+msgid "'Suspend' Button"
+msgstr "Bouton Suspendre"
+
+msgctxt "selection:ins_process.step_method_desc,rule_kind:"
+msgid "Must Step Over"
+msgstr ""
+
+msgctxt "selection:ins_process.step_method_desc,rule_kind:"
+msgid "Step Validation"
+msgstr "Validation de l'Etape"
+
+msgctxt "view:ins_process.process_desc:"
+msgid "Process Descriptor"
+msgstr "Descripteur de Processus"
+
+msgctxt "view:ins_process.process_desc:"
+msgid "process"
+msgstr "processus"
+
+msgctxt "view:ins_process.step_desc:"
+msgid "Buttons"
+msgstr "Boutons"
+
+msgctxt "view:ins_process.step_desc:"
+msgid "step"
+msgstr "étape"
+
+msgctxt "view:ins_process.step_method_desc:"
+msgid "method step"
+msgstr ""
+
+msgctxt "view:ins_process.step_method_desc:"
+msgid "step"
+msgstr "étape"
+
+msgctxt "view:ins_process.suspended_process:"
+msgid "Suspended Processes"
+msgstr "Processus Suspendus"

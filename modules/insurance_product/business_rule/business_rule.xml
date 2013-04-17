@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- Rule Engine -->
+        <record model="ir.ui.view" id="rule_engine_form">
+          <field name="model">rule_engine</field>
+          <field name="type">form</field>
+          <field name="inherit" ref="rule_engine.rule_form"/>
+          <field name="name">rule_engine_form</field>
+        </record>
+        <!--  ******************************************* 
+              ********    BusinessRuleRoot    ********
+              *******************************************-->
+        <record model="ir.ui.view" id="businessruleroot_view_form">
+            <field name="model">ins_product.business_rule_root</field>
+            <field name="type">form</field>
+            <field name="name">br_root_form</field>
+        </record>
+        <record model="ir.ui.view" id="businessruleroot_view_tree">
+            <field name="model">ins_product.business_rule_root</field>
+            <field name="type">tree</field>
+            <field name="name">br_root_tree</field>
+        </record>
+    </data>
+</tryton>

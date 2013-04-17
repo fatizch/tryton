@@ -1,0 +1,129 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:ins_claim.claim:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
+msgctxt "error:ins_claim.claim:"
+msgid "Object %s is currently locked by user %s"
+msgstr "L'objet %s est verrouillé par l'utilisateur %s"
+
+msgctxt "error:ins_claim.declaration_process_finder:"
+msgid "Please pick a process from the selection"
+msgstr ""
+
+msgctxt "field:ins_claim.claim,contact_history:"
+msgid "History"
+msgstr "Historique"
+
+msgctxt "field:ins_claim.claim,contracts:"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "field:ins_claim.claim,current_log:"
+msgid "Current Log"
+msgstr ""
+
+msgctxt "field:ins_claim.claim,current_state:"
+msgid "Current State"
+msgstr "Etat Courant"
+
+msgctxt "field:ins_claim.claim,doc_received:"
+msgid "All Document Received"
+msgstr "Documents Reçus"
+
+msgctxt "field:ins_claim.claim,indemnifications:"
+msgid "Indemnifications"
+msgstr "Indemnisations"
+
+msgctxt "field:ins_claim.claim,indemnifications_consult:"
+msgid "Indemnifications"
+msgstr "Indemnisations"
+
+msgctxt "field:ins_claim.claim,is_pending_indemnification:"
+msgid "Pending Indemnification"
+msgstr "Indemnisation en attente"
+
+msgctxt "field:ins_claim.claim,is_workflow:"
+msgid "Is Workflow"
+msgstr ""
+
+msgctxt "field:ins_claim.claim,logs:"
+msgid "Task"
+msgstr "Tâche"
+
+msgctxt "field:ins_claim.declaration_process_parameters,claim:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "field:ins_claim.declaration_process_parameters,claims:"
+msgid "Claims"
+msgstr "Sinistres"
+
+msgctxt "field:ins_claim.declaration_process_parameters,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:ins_claim.declaration_process_parameters,good_process:"
+msgid "Good Process"
+msgstr "Processus"
+
+msgctxt "field:ins_claim.declaration_process_parameters,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_claim.declaration_process_parameters,model:"
+msgid "Model"
+msgstr "Modèle"
+
+msgctxt "field:ins_claim.declaration_process_parameters,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:ins_claim.loss,benefits:"
+msgid "Benefits"
+msgstr "Prestations"
+
+msgctxt "field:ins_contract.delivered_service,needs_to_be_calculated:"
+msgid "To Be Calculated"
+msgstr "A Calculer"
+
+msgctxt "model:ins_claim.declaration_process_parameters,name:"
+msgid "Declaration Process Parameters"
+msgstr "Paramètres du Processus de Déclaration Sinistre"
+
+msgctxt "model:ir.action,name:act_claim_logs"
+msgid "Logs"
+msgstr ""
+
+msgctxt "model:ir.action,name:declaration_process_launcher"
+msgid "Start Declaration"
+msgstr "Commencer la Déclaration"
+
+msgctxt "model:ir.ui.menu,name:menu_start_declaration"
+msgid "Start Declaration"
+msgstr "Commencer la Déclaration"
+
+msgctxt "selection:process.process_desc,kind:"
+msgid "Claim Declaration"
+msgstr "Claim Declaration"
+
+msgctxt "selection:process.process_desc,kind:"
+msgid "Claim Reopening"
+msgstr "Réouverture de Sinistre"
+
+msgctxt "view:ins_claim.loss:"
+msgid "Loss"
+msgstr "Préjudice"
+
+msgctxt ""
+"wizard_button:ins_claim.declaration_process_finder,process_parameters,action:"
+msgid "Start Process"
+msgstr "Démarrer le processus"
+
+msgctxt ""
+"wizard_button:ins_claim.declaration_process_finder,process_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"
