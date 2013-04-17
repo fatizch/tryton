@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Letter Models" editable="bottom">
+  <field name="selected"/>
+  <field name="letter_model"/>
+</tree>
+

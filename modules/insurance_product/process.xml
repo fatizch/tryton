@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+  <data>
+    <record model="ir.ui.view" id="process_desc_form">
+      <field name="model">process.process_desc</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="process.process_desc_form"/>
+      <field name="name">process_desc_form</field>
+    </record>
+  </data>
+</tryton>

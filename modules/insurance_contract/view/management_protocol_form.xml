@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<form string="Protocol" col="4">
+  <label name="start_date" xalign="0"/>
+  <field name="start_date"/>
+  <label name="end_date" xalign="0"/>
+  <field name="end_date"/>
+  <label name="kind" xalign="0"/>
+  <field name="kind" colspan="3"/>
+  <label name="party" xalign="0"/>
+  <field name="party" colspan="3"/>
+</form>

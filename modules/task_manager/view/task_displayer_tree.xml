@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Tasks">
+    <field name="task_name"/>
+    <field name="nb_tasks"/>
+    <field name="kind" tree_invisible="1"/>
+</tree>

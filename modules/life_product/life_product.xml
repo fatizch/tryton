@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tryton>
+    <data>
+
+        <!--############################################################## -->
+        <!-- Eligibility Rule -->
+        <!--############################################################## -->
+        <record model="ir.ui.view" id="life_eligibility_view_tree">
+            <field name="model">ins_product.eligibility_rule</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_product.eligibilityrule_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+        <record model="ir.ui.view" id="life_eligibility_view_form">
+            <field name="model">ins_product.eligibility_rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_product.eligibilityrule_view_form"/>
+            <field name="name">eligibility_rule_form</field>
+        </record>
+        <!--############################################################## -->
+        <!-- Life Coverage -->
+        <!--############################################################## -->
+        <record model="ir.ui.view" id="coverage_view_form">
+            <field name="model">ins_product.coverage</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_product.coverage_view_form"/>
+            <field name="name">life_coverage_form</field>
+        </record>
+    </data>
+</tryton>

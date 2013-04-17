@@ -1,0 +1,28 @@
+msgid "On going"
+msgstr "En cours de saisie"
+
+msgid "Validation"
+msgstr "En cours de validation"
+
+msgid "Administrative Data"
+msgstr "Données Administratives"
+
+msgid "Subscriber Selection"
+msgstr "Choix du souscripteur"
+
+msgid "Option Selection"
+msgstr "Choix des options"
+
+msgid "Covered Person Selection"
+msgstr "Choix des personnes couvertes"
+
+msgid "Pricing"
+msgstr "Tarif"
+
+msgid "Contract Validation"
+msgstr "Validation du contract"
+
+msgid "Individual Subscription Process"
+msgstr "Processus de souscription individuel"
+
+

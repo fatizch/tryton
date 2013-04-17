@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form" position="replace_attributes">
+        <form string="Eligibility rule"/>
+    </xpath>
+    <xpath expr="/form/label[@name='config_kind']" position="before">
+        <label name="subscriber_classes"/>
+        <field name="subscriber_classes" xexpand="0"/>
+        <newline/>
+    </xpath>
+    <xpath expr="/form/field[@name='rule']" position="after">
+        <group id="sub_elem" string="Covered Element" colspan="4"
+            states="{'invisible': Eval('offered_kind') != 'ins_product.coverage'}">
+            <group id="sub_elem_config_kind" colspan="2">
+                <label name="sub_elem_config_kind" xfill="1"/>
+                <field name="sub_elem_config_kind" xfill="1" xexpand="0"/>
+            </group>
+            <newline/>
+            <group id="sub_simple" colspan="4"
+                states="{'invisible': Eval('sub_elem_config_kind') != 'simple'}">
+            </group>
+            <group id="sub_rule" colspan="4"
+                states="{'invisible': Eval('sub_elem_config_kind') != 'advanced'}">
+                <label name="sub_elem_rule"/>
+                <field name="sub_elem_rule"/>
+                <label name="sub_elem_rule_complementary_data"/>
+                <field name="sub_elem_rule_complementary_data"/>
+            </group>
+            <field name="relation_kinds" colspan="4" xexpand="1" yfill="1"/>
+        </group>
+    </xpath>
+    <xpath expr="/form" position="inside">
+        <field name="offered_kind"/>
+    </xpath>
+</data>

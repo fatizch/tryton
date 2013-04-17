@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<data>
+  <xpath expr="/tree/field[@name='module']" position="after">
+    <field name="is_workflow"/>
+  </xpath>
+</data>

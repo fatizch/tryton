@@ -1,0 +1,59 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:country.zipcode:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:country.zipcode,city:"
+msgid ""
+msgstr " "
+
+msgctxt "field:country.zipcode,country:"
+msgid ""
+msgstr " "
+
+msgctxt "field:country.zipcode,create_date:"
+msgid ""
+msgstr " "
+
+msgctxt "field:country.zipcode,create_uid:"
+msgid ""
+msgstr " "
+
+msgctxt "field:country.zipcode,id:"
+msgid ""
+msgstr " "
+
+msgctxt "field:country.zipcode,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:country.zipcode,rec_name:"
+msgid ""
+msgstr " "
+
+msgctxt "field:country.zipcode,write_date:"
+msgid ""
+msgstr " "
+
+msgctxt "field:country.zipcode,write_uid:"
+msgid ""
+msgstr " "
+
+msgctxt "field:country.zipcode,zip:"
+msgid ""
+msgstr " "
+
+msgctxt "model:country.zipcode,name:"
+msgid ""
+msgstr " "
+
+msgctxt "model:ir.action,name:act_zipcode_form"
+msgid "ZipCode"
+msgstr "Code Postal"
+
+msgctxt "model:ir.ui.menu,name:menu_zipcode_form"
+msgid "ZipCode"
+msgstr "Code Postal"

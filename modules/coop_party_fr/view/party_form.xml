@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/group/field[@name='ssn']" position="before">
+        <group id="ssn" colspan="1">
+            <field name="ssn_no_key" xexpand="0"/>
+            <field name="ssn_key" xexpand="0"/>
+        </group>
+    </xpath>
+    <xpath expr="/form/group/field[@name='ssn']" position="replace"/>
+    <xpath expr="/form/group[@id='company']" position="inside">
+        <label name="siren"/>
+        <field name="siren"/>
+    </xpath>
+    <xpath expr="/form/label[@name='siren']" position="replace"/>
+    <xpath expr="/form/field[@name='siren']" position="replace"/>
+</data>

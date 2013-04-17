@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.menu" id="party.menu_address_form">
+            <field name="active" eval="False"/>
+        </record>
+        <record model="ir.ui.view" id="address_view_form">
+            <field name="model">party.address</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="party.address_view_form"></field>
+            <field name="name">address_form</field>
+        </record>
+        <record model="ir.ui.view" id="address_view_tree">
+            <field name="model">party.address</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="party.address_view_tree_sequence"></field>
+            <field name="name">address_tree</field>
+        </record>
+        <!-- Address kind tree view -->
+        <record model="ir.ui.view" id="address_kind_view_tree">
+            <field name="model">party.address_kind</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="coop_utils.dyn_selection_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+
+        <!-- Address Kind form view -->
+        <record model="ir.ui.view" id="address_kind_view_form">
+            <field name="model">party.address_kind</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml"/>
+            <field name="inherit" ref="coop_utils.dyn_selection_view_form"/>
+        </record>
+        <!-- View for the main menu and the event -->
+        <record model="ir.action.act_window" id="act_address_kind_form">
+            <field name="name">Address Kind</field>
+            <field name="res_model">party.address_kind</field>
+        </record>
+
+        <!-- View that connects the form in the tree with the specification -->
+        <record model="ir.action.act_window.view" id="act_address_kind_tree_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="address_kind_view_tree"/>
+            <field name="act_window" ref="act_address_kind_form"/>
+        </record>
+
+        <!-- View for the edition or the Party Relation -->
+        <record model="ir.action.act_window.view" id="act_address_kind_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="address_kind_view_form"/>
+            <field name="act_window" ref="act_address_kind_form"/>
+        </record>
+
+        <!-- Sub menu configuration Party Relation -->
+        <menuitem parent="party.menu_configuration" sequence="10"
+            id="menu_address_kind_form" icon="tryton-list" action="act_address_kind_form"/>
+        <!-- *******************************************
+            *** Address Kind Test Case*******
+            ******************************************* -->
+        <record model="party.address_kind" id="main">
+            <field name="name">Main</field>
+            <field name="key">main</field>
+        </record>
+        <record model="party.address_kind" id="second">
+            <field name="name">Secondary</field>
+            <field name="key">2nd</field>
+        </record>
+        <record model="party.address_kind" id="job">
+            <field name="name">Job</field>
+            <field name="key">job</field>
+        </record>
+    </data>
+</tryton>

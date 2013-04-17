@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+<tryton>
+  <data>
+    <!-- *******************************************
+            ************** Claim **************
+            ******************************************* -->
+    <record model="ir.ui.view" id="claim_view_form">
+      <field name="model">ins_claim.claim</field>
+      <field name="type">form</field>
+      <field name="name">claim_form</field>
+    </record>
+    <record model="ir.ui.view" id="claim_view_tree">
+      <field name="model">ins_claim.claim</field>
+      <field name="type">tree</field>
+      <field name="name">claim_tree</field>
+    </record>
+    <record model="ir.action.act_window" id="act_claim_form">
+      <field name="name">Claims</field>
+      <field name="res_model">ins_claim.claim</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_claim_view_tree">
+      <field name="sequence" eval="10"/>
+      <field name="view" ref="claim_view_tree"/>
+      <field name="act_window" ref="act_claim_form"/>
+    </record>
+    <!-- View for the edition or the Form of claim -->
+    <record model="ir.action.act_window.view" id="act_claim_view_form">
+      <field name="sequence" eval="20"/>
+      <field name="view" ref="claim_view_form"/>
+      <field name="act_window" ref="act_claim_form"/>
+    </record>
+    <menuitem name="Claim" id="menu_claim" sequence="15"/>
+    <menuitem parent="menu_claim" sequence="4" id="menu_claim_form" icon="tryton-list" action="act_claim_form"/>
+    <!-- *******************************************
+            ************** Loss **************
+            ******************************************* -->
+    <record model="ir.ui.view" id="loss_view_tree">
+      <field name="model">ins_claim.loss</field>
+      <field name="type">tree</field>
+      <field name="name">loss_tree</field>
+    </record>
+    <record model="ir.ui.view" id="loss_view_form">
+      <field name="model">ins_claim.loss</field>
+      <field name="type">form</field>
+      <field name="priority" eval="10"/>
+      <field name="name">loss_form</field>
+    </record>
+    <record model="ir.ui.view" id="loss_simple_tree">
+      <field name="model">ins_claim.loss</field>
+      <field name="type">tree</field>
+      <field name="field_childs">multi_level_view</field>
+      <field name="name">loss_simple_tree</field>
+    </record>
+    <!--################################################################ -->
+    <!-- Delivered Service -->
+    <!--################################################################ -->
+    <record model="ir.ui.view" id="delivered_service_view_form">
+      <field name="model">ins_contract.delivered_service</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="insurance_contract.delivered_service_view_form"/>
+      <field name="name">delivered_service_form</field>
+    </record>
+    <record model="ir.ui.view" id="delivered_service_view_tree">
+      <field name="model">ins_contract.delivered_service</field>
+      <field name="type">tree</field>
+      <field name="inherit" ref="insurance_contract.delivered_service_view_tree"/>
+      <field name="name">delivered_service_tree</field>
+    </record>
+    <!--################################################################ -->
+    <!-- Indemnification -->
+    <!--################################################################ -->
+    <record model="ir.ui.view" id="indemnification_view_form">
+      <field name="model">ins_claim.indemnification</field>
+      <field name="type">form</field>
+      <field name="name">indemnification_form</field>
+    </record>
+    <record model="ir.ui.view" id="indemnification_view_tree">
+      <field name="model">ins_claim.indemnification</field>
+      <field name="type">tree</field>
+      <field name="name">indemnification_tree</field>
+    </record>
+    <!--################################################################ -->
+    <!-- Indemnification Detail -->
+    <!--################################################################ -->
+    <record model="ir.ui.view" id="indemnification_detail_view_form">
+      <field name="model">ins_claim.indemnification_detail</field>
+      <field name="type">form</field>
+      <field name="name">indemnification_detail_form</field>
+    </record>
+    <record model="ir.ui.view" id="indemnification_detail_view_tree">
+      <field name="model">ins_claim.indemnification_detail</field>
+      <field name="type">tree</field>
+      <field name="name">indemnification_detail_tree</field>
+    </record>
+    <!--################################################################ -->
+    <!-- Contract History -->
+    <!--################################################################ -->
+    <record model="ir.ui.view" id="claim_history_view_form">
+      <field name="model">ins_claim.claim.history</field>
+      <field name="type">form</field>
+      <field name="name">claim_history_form</field>
+    </record>
+    <record model="ir.ui.view" id="claim_history_view_tree">
+      <field name="model">ins_claim.claim.history</field>
+      <field name="type">tree</field>
+      <field name="name">claim_history_tree</field>
+    </record>
+    <record model="ir.model.access" id="access_claim_history">
+      <field name="model" search="[('model', '=', 'ins_claim.claim.history')]"/>
+      <field name="perm_write" eval="False"/>
+      <field name="perm_read" eval="True"/>
+    </record>
+    <!--################################################################ -->
+    <!-- Relate -->
+    <!--################################################################ -->
+    <record model="ir.action.act_window" id="act_claim_relate_form">
+      <field name="name">Claims</field>
+      <field name="res_model">ins_claim.claim</field>
+      <field name="domain">[('claimant', '=', Eval('active_id'))]</field>
+    </record>
+    <record model="ir.action.keyword" id="act_claim_relate_keyword">
+      <field name="keyword">form_relate</field>
+      <field name="model">party.party,-1</field>
+      <field name="action" ref="act_claim_relate_form"/>
+    </record>
+    <record model="ir.action.act_window" id="act_indemnification_relate_form">
+      <field name="name">Indemnifications</field>
+      <field name="res_model">ins_claim.indemnification</field>
+      <field name="domain">[('customer', '=', Eval('active_id'))]</field>
+    </record>
+    <record model="ir.action.keyword" id="act_indemnification_relate_keyword">
+      <field name="keyword">form_relate</field>
+      <field name="model">party.party,-1</field>
+      <field name="action" ref="act_indemnification_relate_form"/>
+    </record>
+    <!-- Receive Documents -->
+    <record model="ir.action.keyword" id="receive_documents_wizard_keyword">
+      <field name="keyword">form_action</field>
+      <field name="model">ins_claim.claim,-1</field>
+      <field name="action" ref="insurance_product.receive_documents_wizard"/>
+    </record>
+    <!-- Send Document -->
+    <record model="ir.action.keyword" id="letter_generation_claim_keyword">
+      <field name="keyword">form_action</field>
+      <field name="model">ins_claim.claim,-1</field>
+      <field name="action" ref="insurance_product.letter_generation_wizard"/>
+    </record>
+    <!-- Claim Number Generator -->
+    <record model="ir.sequence.type" id="sequence_type_claim_number">
+      <field name="name">Claim Number</field>
+      <field name="code">ins_claim.claim</field>
+    </record>
+    <record model="ir.sequence.type-res.group" id="sequence_type_claim_number_group_admin">
+      <field name="sequence_type" ref="sequence_type_claim_number"/>
+      <field name="group" ref="res.group_admin"/>
+    </record>
+    <record model="ir.sequence" id="claim_sequence">
+      <field name="name">Claim Sequence</field>
+      <field name="code">ins_claim.claim</field>
+      <field name="prefix">SIN${year}</field>
+      <field name="padding">10</field>
+    </record>
+    <!-- Indemnification Displayer -->
+    <record model="ir.ui.view" id="indemnification_displayer_form">
+      <field name="model">ins_claim.indemnification_displayer</field>
+      <field name="type">form</field>
+      <field name="name">indemnification_displayer_form</field>
+    </record>
+    <record model="ir.ui.view" id="indemnification_displayer_tree">
+      <field name="model">ins_claim.indemnification_displayer</field>
+      <field name="type">tree</field>
+      <field name="name">indemnification_displayer_tree</field>
+    </record>
+    <!-- Indemnification Selection -->
+    <record model="ir.ui.view" id="indemnification_selection_form">
+      <field name="model">ins_claim.indemnification_selection</field>
+      <field name="type">form</field>
+      <field name="name">indemnification_selection_form</field>
+    </record>
+    <!-- Indemnification Validation -->
+    <record model="ir.action.wizard" id="indemnification_validation_wizard">
+        <field name="name">Indemnification Validation</field>
+        <field name="wiz_name">ins_claim.indemnification_validation</field>
+    </record>
+    <menuitem name="Validate Indemnifications" id="menu_validate_indemnification" sequence="15"
+        parent="menu_claim" action="indemnification_validation_wizard"/>
+  </data>
+</tryton>

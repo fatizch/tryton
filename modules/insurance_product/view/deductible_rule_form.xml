@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form" position="replace_attributes">
+        <form string="Deductible rule"/>
+    </xpath>
+    <xpath expr="/form/label[@name='config_kind']" position="before">
+        <label name="kind"/>
+        <field name="kind" xexpand="0"/>
+        <newline/>
+    </xpath>
+    <xpath expr="/form/label[@name='rule']" position="before">
+        <label name="amount"/>
+        <field name="amount"/>
+        <newline/>
+        <label name="duration"/>
+        <group id="duration" xexpand="0">
+            <field name="duration" xexpand="0"/>
+            <field name="duration_unit" xalign="0" xexpand="0"/>
+        </group>
+        <newline/>
+    </xpath>
+</data>

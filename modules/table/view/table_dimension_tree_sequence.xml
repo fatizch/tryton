@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tree string="Table Definition Dimensions" sequence="sequence">
+    <field name="definition"/>
+    <field name="rec_name" expand="1"/>
+    <field name="type" tree_invisible="1"/>
+    <field name="sequence" tree_invisible="1"/>
+</tree>

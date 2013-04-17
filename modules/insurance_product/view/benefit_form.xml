@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form" position="replace_attributes">
+        <form string="Benefit"/>
+    </xpath>
+    <xpath
+        expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']"
+        position="before">
+        <page string="Complementary Data" id="complementary_data">
+            <field name="complementary_data_def" colspan="4"/>
+        </page>
+    </xpath>
+    <xpath
+        expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']"
+        position="before">
+        <page string="Benefit" id="benefit">
+            <field name="benefit_rules" colspan="4"/>
+        </page>
+        <page string="Reserve" id="reserve">
+            <field name="reserve_rules" colspan="4"/>
+        </page>
+        <page string="Deductible" id="deductible">
+            <field name="deductible_rules" colspan="4"/>
+        </page>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"
+        position="inside">
+        <label name="indemnification_kind"/>
+        <field name="indemnification_kind"/>
+        <newline/>
+        <field name="loss_descs" colspan="4"/>
+    </xpath>
+</data>

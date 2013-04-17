@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tree string="Table Definition">
+    <field name="name"/>
+    <field name="code"/>
+    <field name="kind"/>
+</tree>

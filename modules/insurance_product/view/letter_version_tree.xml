@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tree string="Letter Versions" editable="bottom">
+    <field name="resource"/>
+    <field name="name"/>
+    <field name="start_date"/>
+    <field name="end_date"/>
+    <field name="language"/>
+    <field name="data"/>
+</tree>
+

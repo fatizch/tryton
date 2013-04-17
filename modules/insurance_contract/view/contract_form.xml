@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form string="contract">
+  <group id="Administrative data">
+    <label name="contract_number"/>
+    <field name="contract_number"/>
+    <label name="status"/>
+    <field name="status"/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <newline/>
+    <label name="subscriber"/>
+    <field name="subscriber"/>
+    <label name="offered"/>
+    <field name="offered"/>
+  </group>
+  <notebook colspan="4">
+    <page string="Covered Elements" id="cov_elements">
+      <field name="covered_elements" mode="tree" view_ids="insurance_contract.covered_elements_clean_tree" group="covered_elements" xexpand="0" xfill="0"/>
+      <field name="covered_elements" mode="form" view_ids="insurance_contract.covered_element_view_form" relation="ins_contract.covered_element" relation_field="contract" group="covered_elements"/>
+      <field name="covered_elements" mode="form" view_ids="insurance_contract.covered_data_view_form" relation="ins_contract.covered_data" relation_field="covered_element" group="covered_elements"/>
+    </page>
+    <page string="Options" id="options2">
+      <field name="options" colspan="4"/>
+    </page>
+    <page string="Billing" id="billing">
+      <field name="billing_manager" mode="form"/>
+    </page>
+    <page string="Complementary Data" id="complementary_data">
+      <field name="complementary_data" no_command="1"/>
+    </page>
+    <page string="Documents" id="documents">
+      <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" mode="form"/>
+    </page>
+    <page string="Managing Entities" id="managing_entities">
+        <field name="management" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
+    </page>
+    <page string="History" id="history">
+      <field name="contract_history" colspan="4"/>
+    </page>
+  </notebook>
+</form>

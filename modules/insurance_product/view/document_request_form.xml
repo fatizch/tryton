@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<form string="Document Request" col="6">
+  <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" colspan="6"/>
+  <label name="is_complete" xalign="0"/>
+  <field name="is_complete"/>
+  <button string="Send Request" name="generic_send_letter"/>
+</form>

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<graph string="Tasks Repartition" type="pie">
+    <x>
+        <field name="task_name"/>
+    </x>
+    <y>
+       <field name="nb_tasks"/>
+    </y>
+</graph>
