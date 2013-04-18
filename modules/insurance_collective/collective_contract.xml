@@ -23,6 +23,9 @@
             <field name="res_model">ins_contract.contract</field>
             <field name="domain">[('kind', '=', 'group')]</field>
         </record>
+        <record model="ir.action.act_window" id="insurance_contract.act_contract_form">
+            <field name="domain">[('kind', '=', 'individual')]</field>
+        </record>
 
         <!-- View that connect the form in the tree with the specification -->
         <record model="ir.action.act_window.view" id="act_contract_form_view1">
@@ -45,7 +48,7 @@
             <field name="model">ins_contract.option</field>
             <field name="type">form</field>
             <field name="inherit" ref="insurance_contract.option_view_form"/>
-            <field name="name">collective_option_=form</field>
+            <field name="name">collective_option_form</field>
         </record>
     </data>
 </tryton>
