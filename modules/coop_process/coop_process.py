@@ -576,7 +576,7 @@ class ProcessDesc(model.CoopSQL):
                 step1_rank = elem.order
             if step2.id == elem.step.id:
                 step2_rank = elem.order
-        return step1_rank > step2_rank
+        return step1_rank < step2_rank
 
 
 class ProcessStepRelation(model.CoopSQL):
