@@ -22,7 +22,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.tools.misc import _compile_source
 from trytond.pyson import Eval, And
-from trytond.modules.coop_utils import CoopView, utils, coop_string
+from trytond.modules.coop_utils import model, CoopView, utils, coop_string
 from trytond.modules.coop_utils import date
 from trytond.modules.table import TableCell
 
