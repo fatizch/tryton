@@ -310,11 +310,11 @@ class Coverage(model.CoopSQL, SimpleCoverage):
     def get_currency(self):
         return self.currency
 
-    def __export_json(self, skip_fields=None):
-        if skip_fields is None:
-            skip_fields = set()
-        skip_fields.add('products')
-        return super(Coverage, self).export_json(skip_fields)
+    @classmethod
+    def _export_skips(cls):
+        skips = super(Coverage, cls)._export_skips()
+        skips.add('products')
+        return skips
 
 
 class PackageCoverage(model.CoopSQL):
