@@ -798,11 +798,13 @@ class StepDesc(model.CoopSQL):
         context={'for_step_name': Eval('technical_name', '')},
         states={'readonly': ~Eval('technical_name')})
     main_model = fields.Many2One(
-        'ir.model', 'Main Model', states={'readonly': ~~Eval('main_model')},
+        'ir.model', 'Main Model',
+        states={'readonly': Eval('processes', []) != []},
         domain=[
             ('is_workflow', '=', True),
             ('model', '!=', 'process.process_framework')
         ],
+        depends=['processes'],
         required=True)
 
     @classmethod
