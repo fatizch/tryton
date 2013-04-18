@@ -942,3 +942,15 @@ class CreateTestCase(Wizard):
             'expected_result': str(self.compute_value()),
         }])
         return 'end'
+
+
+class RuleError(model.CoopSQL, model.CoopView):
+    'Rule Error'
+
+    __name__ = 'rule_engine.error'
+
+    code = fields.Char('Code', required=True)
+    name = fields.Char('Name', required=True, translate=True)
+    kind = fields.Selection(
+        [('info', 'Info'), ('warning', 'Warning'), ('error', 'Error')], 'Kind',
+        required=True)
