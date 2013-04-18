@@ -3,7 +3,7 @@ import copy
 import datetime
 from decimal import Decimal
 
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, Or
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.wizard import Wizard, StateView, StateTransition, Button
@@ -79,6 +79,11 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     sub_status = fields.Selection('get_possible_sub_status',
         'Sub Status', selection_change_with=['status'],
         states={'readonly': True})
+    reopened_reason = fields.Selection(CLAIM_REOPENED_REASON,
+        'Reopened Reason', sort=False,
+        states={
+            'invisible': Eval('status') != 'reopened',
+            'required': Eval('status') == 'reopened'})
     declaration_date = fields.Date('Declaration Date')
     end_date = fields.Date('End Date',
         states={'invisible': Eval('status') != 'closed', 'readonly': True})
@@ -109,12 +114,13 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             res += ' %s' % self.claimant.get_rec_name(name)
         return res
 
+    def is_open(self):
+        return self.status in ['open', 'reopened']
+
     def get_possible_sub_status(self):
         if self.status == 'closed':
             return CLAIM_CLOSED_REASON
-        elif self.status == 'reopened':
-            return CLAIM_REOPENED_REASON
-        elif self.status == 'open':
+        elif self.is_open():
             return CLAIM_OPEN_SUB_STATUS
         return [('', '')]
 
@@ -144,7 +150,11 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         return 'instruction'
 
     def update_sub_status(self):
-        self.sub_status = self.get_sub_status()
+        sub_status = self.get_sub_status()
+        if sub_status in [x[0] for x in self.get_possible_sub_status()]:
+            self.sub_status = sub_status
+        else:
+            self.sub_status = ''
 
     @staticmethod
     def default_declaration_date():
@@ -156,6 +166,22 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         loss = utils.instanciate_relation(self.__class__, 'losses')
         loss.init_from_claim(self)
         self.losses = [loss]
+        return True
+
+    def get_pending_relapse_loss(self):
+        for loss in self.losses:
+            if not loss.main_loss:
+                continue
+            if 'instruction' in loss.get_claim_sub_status():
+                return loss
+
+    def init_relapse_loss(self):
+        if self.get_pending_relapse_loss():
+            return True
+        loss = utils.instanciate_relation(self.__class__, 'losses')
+        loss.init_from_claim(self)
+        self.losses = list(self.losses)
+        self.losses.append(loss)
         return True
 
     def get_main_contact(self):
@@ -219,7 +245,6 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         return 'instruction'
 
     def close_claim(self, sub_status=None):
-        #TODO : To Enhance. Get real closed reason
         self.status = 'closed'
         self.end_date = utils.today()
         return True, []
@@ -258,7 +283,7 @@ class ClaimHistory(model.ObjectHistory):
 
     name = fields.Char('Number')
     status = fields.Selection(CLAIM_STATUS, 'Status')
-    sub_status = fields.Selection(CLAIM_CLOSED_REASON + CLAIM_REOPENED_REASON,
+    sub_status = fields.Selection(CLAIM_CLOSED_REASON + CLAIM_OPEN_SUB_STATUS,
         'Sub Status')
     declaration_date = fields.Date('Declaration Date')
     end_date = fields.Date('End Date',
@@ -286,25 +311,30 @@ class Loss(model.CoopSQL, model.CoopView):
             'required': Bool(Eval('with_end_date')),
         }, depends=['with_end_date'])
     loss_desc = fields.Many2One('ins_product.loss_desc', 'Loss Descriptor',
-        ondelete='RESTRICT')
+        ondelete='RESTRICT',
+        on_change=['loss_desc', 'complementary_data'])
     event_desc = fields.Many2One('ins_product.event_desc', 'Event',
         domain=[
             ('loss_descs', '=', Eval('loss_desc'))
-        ],
+        ], states={'invisible': Bool(Eval('main_loss'))},
         depends=['loss_desc'], ondelete='RESTRICT')
     delivered_services = fields.One2Many(
         'ins_contract.delivered_service', 'loss', 'Delivered Services')
     multi_level_view = fields.One2Many(
         'ins_contract.delivered_service', 'loss', 'Delivered Services')
     main_loss = fields.Many2One(
-        'ins_claim.loss', 'Main Loss', ondelete='CASCADE')
+        'ins_claim.loss', 'Main Loss', ondelete='CASCADE',
+        domain=[('claim', '=', Eval('claim')), ('id', '!=', Eval('id'))],
+        depends=['claim', 'id'],
+        on_change=['main_loss', 'loss_desc'])
     sub_losses = fields.One2Many('ins_claim.loss', 'main_loss', 'Sub Losses')
     with_end_date = fields.Function(
         fields.Boolean('With End Date', on_change_with=['loss_desc']),
         'on_change_with_with_end_date')
     complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Complementary Data',
-        on_change_with=['loss_desc', 'complementary_data'])
+        on_change_with=['loss_desc', 'complementary_data'],
+        states={'invisible': ~Eval('complementary_data')})
 
     def on_change_with_with_end_date(self, name=None):
         res = False
@@ -343,9 +373,17 @@ class Loss(model.CoopSQL, model.CoopView):
             self.delivered_services.append(del_service)
 
     def get_rec_name(self, name=None):
+        res = ''
         if self.loss_desc:
-            return self.loss_desc.get_rec_name(name)
-        return super(Loss, self).get_rec_name(name)
+            res = self.loss_desc.rec_name
+        if self.start_date and not self.end_date:
+            res += ' [%s]' % self.start_date
+        elif self.start_date and self.end_date:
+            res += ' [%s - %s]' % (self.start_date, self.end_date)
+        if res:
+            return res
+        else:
+            return super(Loss, self).get_rec_name(name)
 
     def get_claim_sub_status(self):
         res = []
@@ -355,6 +393,18 @@ class Loss(model.CoopSQL, model.CoopView):
             return res
         else:
             return ['instruction']
+
+    def on_change_main_loss(self):
+        res = {}
+        #TODO : Add possibility to have compatible loss example a disability
+        #after a temporary incapacity
+        if self.main_loss and self.main_loss.loss_desc:
+            res['loss_desc'] = self.main_loss.loss_desc.id
+            res['with_end_date'] = self.main_loss.loss_desc.with_end_date
+        else:
+            res['loss_desc'] = None
+            res['with_end_date'] = False
+        return res
 
 
 class ClaimDeliveredService():
@@ -376,7 +426,9 @@ class ClaimDeliveredService():
     complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Complementary Data',
         on_change_with=['benefit', 'complementary_data'],
-        states={'invisible': Eval('status') == 'applicable'})
+        states={'invisible': Or(
+                    Eval('status') == 'applicable',
+                    ~Eval('complementary_data'))},)
 
     @classmethod
     def __setup__(cls):

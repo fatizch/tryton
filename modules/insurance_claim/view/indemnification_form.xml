@@ -7,12 +7,14 @@
     <button name="reject_indemnification" string="Reject"/>
     <newline/> -->
     <label name="status"/>
-    <field name="status"/>
+    <field name="status" xexpand="0"/>
     <newline/>
     <label name="start_date"/>
-    <field name="start_date"/>
-    <label name="end_date"/>
-    <field name="end_date"/>
+    <group id="date">
+        <field name="start_date"/>
+        <label name="end_date"/>
+        <field name="end_date"/>
+    </group>
     <newline/>
     <label name="customer"/>
     <field name="customer"/>

@@ -223,7 +223,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         on_change=[
             'complementary_data', 'start_date', 'options', 'offered'],
         depends=[
-            'complementary_data', 'start_date', 'options', 'offered'])
+            'complementary_data', 'start_date', 'options', 'offered'],
+        states={'invisible': ~Eval('complementary_data')})
     # TODO replace single contact by date versionned list
     contact = fields.Many2One('party.party', 'Contact')
     documents = fields.One2Many(
@@ -980,12 +981,13 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     complementary_data = fields.Dict('ins_product.complementary_data_def',
         'Complementary Data',
         on_change_with=['item_desc', 'complementary_data'],
-        # states={'invisible':
-        #         Or(
-        #             Eval('item_kind') == 'person',
-        #             Eval('item_kind') == 'company',
-        #             Eval('item_kind') == 'party',
-        #         )}
+        states={'invisible':
+                Or(
+                    Eval('item_kind') == 'person',
+                    Eval('item_kind') == 'company',
+                    Eval('item_kind') == 'party',
+                    ~Eval('complementary_data'),
+                )}
     )
     party_compl_data = fields.Function(
         fields.Dict('ins_product.complementary_data_def', 'Complementary Data',
@@ -1176,6 +1178,8 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         #keys, but if others keys already exist we won't modify them
         Party = Pool().get('party.party')
         for covered in instances:
+            if not covered.party:
+                continue
             if utils.is_none(covered.party, 'complementary_data'):
                 Party.write([covered.party], {'complementary_data': vals})
             else:

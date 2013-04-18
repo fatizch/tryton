@@ -50,6 +50,9 @@ class ClaimProcess(CoopProcessFramework):
     is_pending_indemnification = fields.Function(
         fields.Boolean('Pending Indemnification', states={'invisible': True}),
         'get_is_pending_indemnification')
+    working_loss = fields.Function(
+        fields.One2Many('ins_claim.loss', None, 'Loss'),
+        'get_working_loss', 'set_working_loss')
 
     def get_possible_contracts(self, at_date=None):
         if not at_date:
@@ -90,34 +93,26 @@ class ClaimProcess(CoopProcessFramework):
 
     def init_declaration_document_request(self):
         DocRequest = Pool().get('ins_product.document_request')
-
         if not (hasattr(self, 'documents') and self.documents):
             good_req = DocRequest()
             good_req.needed_by = self
             good_req.save()
         else:
             good_req = self.documents[0]
-
         documents = []
-
         for loss in self.losses:
             if not loss.loss_desc:
                 continue
-
             loss_docs = loss.loss_desc.get_documents()
-
             if loss_docs:
                 documents.extend([(doc_desc, self) for doc_desc in loss_docs])
-
             for delivered in loss.delivered_services:
                 if not (hasattr(delivered, 'benefit') and delivered.benefit):
                     continue
-
                 contract = delivered.get_contract()
                 product = contract.get_offered()
                 if not product:
                     continue
-
                 benefit_docs, errs = delivered.benefit.get_result(
                     'documents', {
                         'product': product,
@@ -126,30 +121,22 @@ class ClaimProcess(CoopProcessFramework):
                         'claim': self,
                         'date': loss.start_date,
                     })
-
                 if errs:
                     return False, errs
-
                 if not benefit_docs:
                     continue
-
                 documents.extend([
                     (doc_desc, delivered) for doc_desc in benefit_docs])
-
         good_req.add_documents(utils.today(), documents)
-
         # good_req.clean_extras(documents)
-
         return True, ()
 
     def on_change_with_doc_received(self, name=None):
         if not (hasattr(self, 'documents') and self.documents):
             return False
-
         for doc in self.documents:
             if not doc.is_complete:
                 return False
-
         return True
 
     def get_indemnifications(self, name=None):
@@ -166,9 +153,18 @@ class ClaimProcess(CoopProcessFramework):
         for val in vals:
             if not val[0] == 'write':
                 continue
-            Indemnification.write(
-                Indemnification.browse(val[1]),
-                val[2])
+            Indemnification.write(Indemnification.browse(val[1]), val[2])
+
+    @classmethod
+    def set_working_loss(cls, instances, name, vals):
+        Loss = Pool().get('ins_claim.loss')
+        for val in vals:
+            if not val[0] == 'write':
+                continue
+            Loss.write(Loss.browse(val[1]), val[2])
+
+    def get_working_loss(self, name):
+        return [self.losses[-1].id]
 
     def reject_and_close_claim(self):
         self.status = 'closed'

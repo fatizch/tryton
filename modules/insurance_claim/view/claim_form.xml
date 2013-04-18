@@ -3,8 +3,10 @@
   <label name="name"/>
   <field name="name"/>
   <label name="status"/>
-  <group id="status">
+  <group id="status" col="5">
     <field name="status"/>
+    <label name="reopened_reason"/>
+    <field name="reopened_reason"/>
     <label name="sub_status"/>
     <field name="sub_status"/>
   </group>

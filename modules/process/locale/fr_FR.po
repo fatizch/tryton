@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -272,7 +272,7 @@ msgstr "Executé après l'Etape"
 
 msgctxt "field:process.step_desc,code_before:"
 msgid "Executed Before Step"
-msgstr "Executer avant l'Etape"
+msgstr "Executé avant l'Etape"
 
 msgctxt "field:process.step_desc,colspan:"
 msgid "View columns"
