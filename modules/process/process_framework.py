@@ -252,8 +252,6 @@ class ProcessFramework(Model):
     def raise_user_error(cls, errors, error_args=None,
                          error_description='', error_description_args=None,
                          raise_exception=True):
-        import traceback
-        traceback.print_stack()
         if error_args or error_description or error_description_args:
             super(ProcessFramework, cls).raise_user_error(
                 errors, error_args, error_description, error_description_args,
