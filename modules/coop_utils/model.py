@@ -227,12 +227,13 @@ class ExportImportMixin(Model):
         return values
 
     def _export_filename(self):
+        if (hasattr(self, 'code') and self.code):
+            return self.code
         return self.get_rec_name(None)
 
     def export_json(self):
-        filename = '[%s]%s.json' % (
-            coop_string.date_as_string(
-                datetime.date.today()).replace('/', '-'),
+        filename = '[%s][%s]%s.json' % (
+            datetime.date.today().isoformat(), self.__name__,
             self._export_filename())
         return filename, self._export_json()
 
