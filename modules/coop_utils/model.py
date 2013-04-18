@@ -48,7 +48,7 @@ class ExportImportMixin(Model):
     def __setup__(cls):
         super(ExportImportMixin, cls).__setup__()
         cls.__rpc__['export_json'] = RPC(instantiate=0,
-            result=lambda r: json.dumps(r, cls=JSONEncoder))
+            result=lambda r: (r[0], json.dumps(r[1], cls=JSONEncoder)))
         cls.__rpc__['import_json'] = RPC(readonly=False,
             result=lambda r: None)
 
@@ -115,7 +115,7 @@ class ExportImportMixin(Model):
                     instance_key, cls.__name__))
         return result[0]
 
-    def export_json(self, exported=None, from_field=None, force_key=None):
+    def _export_json(self, exported=None, from_field=None, force_key=None):
         if exported is None:
             exported = {}
         if self.__name__ not in exported:
@@ -148,7 +148,7 @@ class ExportImportMixin(Model):
                 continue
             if isinstance(field, (
                     tryton_fields.Many2One, tryton_fields.One2One)):
-                if not hasattr(field_value, 'export_json'):
+                if not hasattr(field_value, '_export_json'):
                     raise NotExportImport(
                         '%s - %s' % (self.__name__, field_value.__name__))
                 if field_name == from_field and force_key:
@@ -159,9 +159,9 @@ class ExportImportMixin(Model):
                         field_name in self._export_light():
                     values[field_name] = field_key
                 else:
-                    values[field_name] = field_value.export_json(exported)
+                    values[field_name] = field_value._export_json(exported)
             elif isinstance(field, tryton_fields.Reference):
-                if not hasattr(field_value, 'export_json'):
+                if not hasattr(field_value, '_export_json'):
                     raise NotExportImport(
                         '%s - %s' % (self.__name__, field_value.__name__))
                 if field_name == from_field and force_key:
@@ -172,9 +172,9 @@ class ExportImportMixin(Model):
                         field_name in self._export_light():
                     values[field_name] = (field_value.__name__, field_key)
                 else:
-                    values[field_name] = field_value.export_json(exported)
+                    values[field_name] = field_value._export_json(exported)
             elif isinstance(field, tryton_fields.One2Many) and field.size != 1:
-                if not hasattr(Pool().get(field.model_name), 'export_json'):
+                if not hasattr(Pool().get(field.model_name), '_export_json'):
                     raise NotExportImport(
                         '%s - %s' % (self.__name__, field.model_name))
                 field_export_value = []
@@ -185,10 +185,10 @@ class ExportImportMixin(Model):
                             elem_key = (my_key, elem._export_get_key())
                         except NotExportImport:
                             elem_key = (my_key, field_name, idx)
-                        field_export_value.append(elem.export_json(
+                        field_export_value.append(elem._export_json(
                             exported, field.field, elem_key))
                     else:
-                        field_export_value.append(elem.export_json(
+                        field_export_value.append(elem._export_json(
                             exported))
                     idx += 1
                 values[field_name] = field_export_value
@@ -196,7 +196,7 @@ class ExportImportMixin(Model):
                 if len(field_value) != 1:
                     continue
                 field_value = field_value[0]
-                if not hasattr(field_value, 'export_json'):
+                if not hasattr(field_value, '_export_json'):
                     raise NotExportImport(
                         '%s - %s' % (self.__name__, field_value.__name__))
                 field_key = field_value._export_get_key()
@@ -204,12 +204,12 @@ class ExportImportMixin(Model):
                         field_name in self._export_light():
                     values[field_name] = field_key
                 else:
-                    values[field_name] = field_value.export_json(exported)
+                    values[field_name] = field_value._export_json(exported)
             elif isinstance(field, tryton_fields.Many2Many):
                 target_field = Pool().get(
                     field.relation_name)._fields[field.target]
                 if not hasattr(
-                        Pool().get(target_field.model_name), 'export_json'):
+                        Pool().get(target_field.model_name), '_export_json'):
                     raise NotExportImport(
                         '%s - %s' % (self.__name__, target_field.model_name))
                 field_export_value = []
@@ -219,12 +219,22 @@ class ExportImportMixin(Model):
                             field_name in self._export_light():
                         field_export_value.append(elem_key)
                     else:
-                        field_export_value.append(elem.export_json(exported))
+                        field_export_value.append(elem._export_json(exported))
                 values[field_name] = field_export_value
             else:
                 values[field_name] = getattr(self, field_name)
         values['_export_order'] = field_order
         return values
+
+    def _export_filename(self):
+        return self.get_rec_name(None)
+
+    def export_json(self):
+        filename = '[%s]%s.json' % (
+            coop_string.date_as_string(
+                datetime.date.today()).replace('/', '-'),
+            self._export_filename())
+        return filename, self._export_json()
 
     @classmethod
     def _import_json(
