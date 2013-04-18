@@ -567,6 +567,17 @@ class ProcessDesc(model.CoopSQL):
                     'end_date': date.add_day(process['start_date'], -1)})
         return super(ProcessDesc, cls).create(values)
 
+    def step1_before_step2(self, step1, step2):
+        # Returns True if step1 appears before step2 in self.all_steps
+        step1_rank = -1
+        step2_rank = -1
+        for elem in self.all_steps:
+            if step1.id == elem.step.id:
+                step1_rank = elem.order
+            if step2.id == elem.step.id:
+                step2_rank = elem.order
+        return step1_rank > step2_rank
+
 
 class ProcessStepRelation(model.CoopSQL):
     'Process to Step relation'
@@ -825,9 +836,10 @@ class StepDesc(model.CoopSQL):
     def get_pyson_for_button(self):
         return self.pyson or ''
 
-    def execute(self, target, execute_after=True):
+    def execute(self, target):
         origin = target.current_state.step
-        if execute_after:
+        if target.current_state.process.step1_before_step2(
+                origin, self):
             origin.execute_after(target)
         self.execute_before(target)
         target.set_state(self)
