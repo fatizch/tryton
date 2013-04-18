@@ -55,6 +55,8 @@ else
         echo "REPOS_ROOT=\$ENV_FOLDER/tryton-workspace/" >> scripts.conf
         echo "TRYTOND_PATH=\$ENV_FOLDER/tryton-workspace/trytond/bin" >> scripts.conf
         echo "TRYTON_PATH=\$ENV_FOLDER/tryton-workspace/tryton/bin" >> scripts.conf
+        echo "# demo / dev / debug" >> scripts.conf
+        echo "TRYTON_LAUNCH_MODE=demo" >> scripts.conf
         echo "export ENV_FOLDER" >> scripts.conf
         echo "export DATABASE_FOLDER" >> scripts.conf
         echo "export DATABASE_BACKUP_FOLDER" >> scripts.conf
@@ -65,6 +67,7 @@ else
         echo "export REPOS_ROOT" >> scripts.conf
         echo "export TRYTOND_PATH" >> scripts.conf
         echo "export TRYTON_PATH" >> scripts.conf
+        echo "export TRYTON_LAUNCH_MODE" >> scripts.conf
     fi
     if [ ! -e "trytond.conf" ]
     then
