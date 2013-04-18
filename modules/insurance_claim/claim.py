@@ -81,9 +81,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         states={'readonly': True})
     reopened_reason = fields.Selection(CLAIM_REOPENED_REASON,
         'Reopened Reason', sort=False,
-        states={
-            'invisible': Eval('status') != 'reopened',
-            'required': Eval('status') == 'reopened'})
+        states={'invisible': Eval('status') != 'reopened'})
     declaration_date = fields.Date('Declaration Date')
     end_date = fields.Date('End Date',
         states={'invisible': Eval('status') != 'closed', 'readonly': True})
