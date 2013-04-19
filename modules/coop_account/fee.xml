@@ -2,7 +2,7 @@
 <tryton>
     <data>
 
-        <!--  ******************************************* 
+        <!--  *******************************************
               ************    Fee Version    ************
               *******************************************-->
 
@@ -42,7 +42,7 @@
             </field>
         </record>
 
-        <!--  ******************************************* 
+        <!--  *******************************************
               **************    Fee Desc   **************
               *******************************************-->
         <record model="ir.ui.view" id="fee_desc_view_tree">
@@ -51,8 +51,8 @@
             <field name="arch" type="xml">
                 <![CDATA[
                 <tree string="Fee Descriptor">
-                        <field name="code"/>
                         <field name="name"/>
+                        <field name="code"/>
                         <field name="current_rec_name"/>
                 </tree>
                 ]]>
@@ -66,10 +66,10 @@
                 <![CDATA[
                 <form string="Fee Descriptor">
                     <group id="basic data" col="12">
-                        <label name="code"/>
-                        <field name="code"/>
                         <label name="name"/>
                         <field name="name" colspan="9"/>
+                        <label name="code"/>
+                        <field name="code"/>
                         <label name="description"/>
                         <field name="description" colspan="11"/>
                     </group>
@@ -103,7 +103,7 @@
         </record>
 
 
-        <!--  ******************************************* 
+        <!--  *******************************************
               ****************    Menu    ***************
               *******************************************-->
 

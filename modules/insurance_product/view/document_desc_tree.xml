@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <tree string="Documents">
-  <field name="code"/>
   <field name="name"/>
+  <field name="code"/>
   <field name="start_date"/>
   <field name="end_date"/>
 </tree>

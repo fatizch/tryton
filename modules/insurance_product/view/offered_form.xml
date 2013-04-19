@@ -6,10 +6,10 @@
         <field name="template_behaviour"/>
     </group>
     <newline/>
-    <label name="code"/>
-    <field name="code"/>
     <label name="name"/>
     <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
     <label name="start_date"/>
     <field name="start_date" xexpand="0"/>
     <label name="end_date"/>

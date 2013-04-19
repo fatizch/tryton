@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <form string="Loss Descriptor">
-  <label name="code"/>
-  <field name="code"/>
   <label name="name"/>
   <field name="name"/>
+  <label name="code"/>
+  <field name="code"/>
   <label name="item_kind"/>
   <field name="item_kind"/>
   <label name="with_end_date"/>

@@ -3,10 +3,10 @@
     <label name="kind"/>
     <field name="kind"/>
     <newline/>
-    <label name="code"/>
-    <field name="code"/>
     <label name="name"/>
     <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
     <newline/>
     <label name="short_name"/>
     <field name="short_name"/>
