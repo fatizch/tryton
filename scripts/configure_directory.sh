@@ -42,13 +42,14 @@ else
         mkdir conf
     fi
 	cd conf
+    VIRTUALNAME=`basename $TOPPATH`
     if [ ! -e "scripts.conf" ]
     then
         echo "#!/bin/sh" > scripts.conf
         echo "ENV_FOLDER=$TOPPATH" >> scripts.conf
         echo "DATABASE_FOLDER=\$ENV_FOLDER/tryton-workspace/data" >> scripts.conf
         echo "DATABASE_BACKUP_FOLDER=\$DATABASE_FOLDER/BackUp" >> scripts.conf
-        echo "DATABASE_NAME=Test" >> scripts.conf
+        echo "DATABASE_NAME=$VIRTUALNAME" >> scripts.conf
         echo "DATABASE_EXTENSION=sqlite" >> scripts.conf
         echo "TRYTOND_CONF=\$ENV_FOLDER/tryton-workspace/conf/trytond.conf" >> scripts.conf
         echo "TRYTON_CONF=\$ENV_FOLDER/tryton-workspace/conf/tryton.conf" >> scripts.conf
@@ -96,7 +97,7 @@ else
         echo "    '[%(task_name)s] %(message)s'" >> celeryconfig.py
         echo "" >> celeryconfig.py
         echo "# Tryton db name" >> celeryconfig.py
-        echo "TRYTON_DATABASE = 'new_feature'" >> celeryconfig.py
+        echo "TRYTON_DATABASE = '$VIRTUALNAME'" >> celeryconfig.py
         echo "" >> celeryconfig.py
         echo "# Trytond config filepath" >> celeryconfig.py
         echo "TRYTON_CONFIG = '$TOPPATH/tryton-workspace/conf/trytond.conf'" >> celeryconfig.py
