@@ -27,12 +27,27 @@ from trytond.modules.coop_utils import date
 from trytond.modules.table import TableCell
 
 __all__ = [
-    'Rule', 'Context', 'TreeElement', 'ContextTreeElement', 'TestCase',
-    'TestCaseValue', 'TestRule', 'TestRuleStart', 'TestRuleTest',
-    'CreateTestValues', 'RunTests', 'RunTestsReport', 'RuleTools',
-    'RuleEngineContext', 'InternalRuleEngineError', 'check_args',
-    'CreateTestCase', 'CreateTestCaseStart', 'CreateTestCaseAskDescription',
-    'TableDefinition'
+    'Rule',
+    'Context',
+    'TreeElement',
+    'ContextTreeElement',
+    'TestCase',
+    'TestCaseValue',
+    'TestRule',
+    'TestRuleStart',
+    'TestRuleTest',
+    'CreateTestValues',
+    'RunTests',
+    'RunTestsReport',
+    'RuleTools',
+    'RuleEngineContext',
+    'InternalRuleEngineError',
+    'check_args',
+    'CreateTestCase',
+    'CreateTestCaseStart',
+    'CreateTestCaseAskDescription',
+    'TableDefinition',
+    'RuleError',
 ]
 
 CODE_TEMPLATE = """
@@ -279,7 +294,6 @@ class Rule(ModelView, ModelSQL):
                 context['errors'].append(
                     'Critical Internal Rule Engine Error in rule %s' % self.name)
                 result = None
-
         messages = context['messages']
         errors = context['errors']
         if debug_mode:
@@ -949,8 +963,36 @@ class RuleError(model.CoopSQL, model.CoopView):
 
     __name__ = 'rule_engine.error'
 
-    code = fields.Char('Code', required=True)
+    code = fields.Char('Code', required=True, on_change_with=['code', 'name'])
     name = fields.Char('Name', required=True, translate=True)
     kind = fields.Selection(
         [('info', 'Info'), ('warning', 'Warning'), ('error', 'Error')], 'Kind',
         required=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(RuleError, cls).__setup__()
+        cls._sql_constraints += [
+            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+        ]
+
+    def on_change_with_code(self):
+        print self.code, self.name
+        if self.code:
+            return self.code
+        elif self.name:
+            return coop_string.remove_blank_and_invalid_char(self.name)
+
+    @classmethod
+    def get_functional_errors_from_errors(cls, errors):
+        domain = [[('code', '=', code)] for code in set(errors)]
+        domain.insert(0, 'OR')
+        err_dict = dict([x.code, x] for x in cls.search(domain))
+        func_err = []
+        other = []
+        for error in errors:
+            if error in err_dict:
+                func_err.append(err_dict[error])
+            else:
+                other.append(error)
+        return func_err, other

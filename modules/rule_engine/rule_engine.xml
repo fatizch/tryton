@@ -59,7 +59,7 @@
             </field>
         </record>
         <record model="ir.action.act_window" id="test_case_window_relate">
-            <field name="name">Test Cases</field> 
+            <field name="name">Test Cases</field>
             <field name="res_model">rule_engine.test_case</field>
             <field name="domain">[('rule', '=', Eval('active_id'))]</field>
         </record>
@@ -288,8 +288,35 @@
         </record>
 
         <!-- Move table menu to rule engine -->
-        <menuitem action="table.act_table_definition_form" 
+        <menuitem action="table.act_table_definition_form"
             sequence="50"
             id="table.menu_table_defintion_form" parent ="menu_rule_engine"/>
+
+        <!-- Rule Error -->
+        <record model="ir.ui.view" id="error_form">
+            <field name="model">rule_engine.error</field>
+            <field name="type">form</field>
+            <field name="name">error_form</field>
+        </record>
+        <record model="ir.ui.view" id="error_tree">
+            <field name="model">rule_engine.error</field>
+            <field name="type">tree</field>
+            <field name="name">error_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="error_window">
+            <field name="name">Rule Errors</field>
+            <field name="res_model">rule_engine.error</field>
+        </record>
+        <record model="ir.action.act_window.view" id="error_tree_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="error_tree"/>
+            <field name="act_window" ref="error_window"/>
+        </record>
+        <record model="ir.action.act_window.view" id="error_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="error_form"/>
+            <field name="act_window" ref="error_window"/>
+        </record>
+        <menuitem parent="menu_rule_engine" action="error_window" id="menu_error"/>
     </data>
 </tryton>

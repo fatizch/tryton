@@ -3,6 +3,8 @@
     <label name="status"/>
     <field name="status" readonly="1"/>
     <newline/>
+    <label name="func_error"/>
+    <field name="func_error"/>
     <label name="contract"/>
     <field name="contract"/>
     <label name="subscribed_service"/>

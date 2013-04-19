@@ -17,6 +17,7 @@ def register():
         CreateTestCaseStart,
         CreateTestCaseAskDescription,
         TableDefinition,
+        RuleError,
         module='rule_engine', type_='model')
     Pool.register(
         TestRule,

@@ -2,7 +2,10 @@ class RuleEngineResultLine(object):
     '''
         This class is the root of all rule engine result classes
     '''
-    pass
+
+    def __init__(self, rule_errors=None):
+        super(RuleEngineResultLine, self).__init__()
+        self.rule_errors = rule_errors or []
 
 
 class EligibilityResultLine(RuleEngineResultLine):

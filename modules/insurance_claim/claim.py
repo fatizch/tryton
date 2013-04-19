@@ -53,6 +53,7 @@ CLAIM_REOPENED_REASON = [
 CLAIM_OPEN_SUB_STATUS = [
     ('waiting_doc', 'Waiting For Documents'),
     ('instruction', 'Instruction'),
+    ('rejected', 'Rejected'),
     ('waiting_validation', 'Waiting Validation'),
     ('validated', 'Validated'),
     ('paid', 'Paid')
@@ -161,7 +162,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def init_loss(self):
         if hasattr(self, 'losses') and self.losses:
             return True
-        loss = utils.instanciate_relation(self.__class__, 'losses')
+        loss = utils.instanciate_relation(self, 'losses')
         loss.init_from_claim(self)
         self.losses = [loss]
         return True
@@ -176,7 +177,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def init_relapse_loss(self):
         if self.get_pending_relapse_loss():
             return True
-        loss = utils.instanciate_relation(self.__class__, 'losses')
+        loss = utils.instanciate_relation(self, 'losses')
         loss.init_from_claim(self)
         self.losses = list(self.losses)
         self.losses.append(loss)
@@ -309,8 +310,7 @@ class Loss(model.CoopSQL, model.CoopView):
             'required': Bool(Eval('with_end_date')),
         }, depends=['with_end_date'])
     loss_desc = fields.Many2One('ins_product.loss_desc', 'Loss Descriptor',
-        ondelete='RESTRICT',
-        on_change=['loss_desc', 'complementary_data'])
+        ondelete='RESTRICT')
     event_desc = fields.Many2One('ins_product.event_desc', 'Event',
         domain=[
             ('loss_descs', '=', Eval('loss_desc'))
@@ -324,7 +324,9 @@ class Loss(model.CoopSQL, model.CoopView):
         'ins_claim.loss', 'Main Loss', ondelete='CASCADE',
         domain=[('claim', '=', Eval('claim')), ('id', '!=', Eval('id'))],
         depends=['claim', 'id'],
-        on_change=['main_loss', 'loss_desc'])
+        on_change=['main_loss', 'loss_desc'],
+        states={'invisible': Eval('_parent_claim', {}).get('reopened_reason')
+            != 'relapse'})
     sub_losses = fields.One2Many('ins_claim.loss', 'main_loss', 'Sub Losses')
     with_end_date = fields.Function(
         fields.Boolean('With End Date', on_change_with=['loss_desc']),
@@ -522,9 +524,15 @@ class ClaimDeliveredService():
         self.init_dict_for_rule_engine(cur_dict)
         #We first check the eligibility of the benefit
         res, errs = self.benefit.get_result('eligibility', cur_dict)
+        print errs
         if res and not res.eligible:
             self.status = 'not_eligible'
-            return None, errs
+            Error = Pool().get('rule_engine.error')
+            func_err, other_errs = Error.get_functional_errors_from_errors(
+                res.details)
+            if func_err:
+                self.func_error = func_err[0]
+            return None, errs + other_errs
         currencies = self.get_local_currencies_used()
         for currency in currencies:
             cur_dict['currency'] = currency

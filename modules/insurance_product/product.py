@@ -6,6 +6,7 @@ from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, business, utils, fields
+from trytond.modules.coop_utils import coop_string
 from trytond.modules.insurance_product import PricingResultLine
 from trytond.modules.insurance_product import EligibilityResultLine
 
@@ -562,7 +563,7 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_product.item_desc'
 
-    code = fields.Char('Code', required=True)
+    code = fields.Char('Code', required=True, on_change_with=['name', 'code'])
     name = fields.Char('Name')
     complementary_data_def = fields.Many2Many(
         'ins_product.item_desc-complementary_data_def',
@@ -571,7 +572,13 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
     kind = fields.Selection('get_possible_item_kind', 'Kind')
     parent = fields.Many2One('ins_product.item_desc', 'Parent')
     sub_item_descs = fields.One2Many('ins_product.item_desc', 'parent',
-        'Sub Item Descriptors')
+        'Sub Item Descriptors', states={'invisible': Eval('kind') == 'person'})
+
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        elif self.name:
+            return coop_string.remove_blank_and_invalid_char(self.name)
 
     @classmethod
     def get_possible_item_kind(cls):

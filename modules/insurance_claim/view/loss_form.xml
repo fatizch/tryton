@@ -3,6 +3,9 @@
     <label name="claim"/>
     <field name="claim"/>
     <newline/>
+    <label name="main_loss"/>
+    <field name="main_loss"/>
+    <newline/>
     <label name="loss_desc"/>
     <field name="loss_desc" widget="selection"/>
     <label name="event_desc"/>

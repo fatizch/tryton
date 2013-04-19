@@ -1411,6 +1411,10 @@ class DeliveredService(model.CoopView, model.CoopSQL):
         fields.Many2One('ins_contract.contract', 'Contract',
             on_change_with=['subscribed_service']),
         'on_change_with_contract')
+    func_error = fields.Many2One('rule_engine.error', 'Error',
+        ondelete='RESTRICT', states={
+            'invisible': ~Eval('func_error'),
+            'readonly': True})
 
     def get_rec_name(self, name=None):
         if self.subscribed_service:
