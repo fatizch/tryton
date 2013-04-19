@@ -39,7 +39,7 @@ else
     fi
     if [ ! -e "conf" ]
     then
-        mkdir logs
+        mkdir conf
     fi
 	cd conf
     if [ ! -e "scripts.conf" ]
@@ -103,7 +103,7 @@ else
     fi
     if [ ! -e "tryton.conf" ]
     then
-        cp coopbusiness/defaults/tryton.conf .
+        cp ../coopbusiness/defaults/tryton.conf .
     fi
 	cd ../../lib/python2.7/site-packages
     if [ ! -e '_trytond_path.pth' ]
