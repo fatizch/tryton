@@ -58,10 +58,9 @@ class PersonContext(RuleEngineContext):
         if 'person' in args:
             return args['person']
         elif 'sub_elem' in args:
-            return args['sub_elem'].person
-        else:
-            args['errors'].append('Cannot find a person to get')
-            raise InternalRuleEngineError
+            return args['sub_elem'].party
+        args['errors'].append('Cannot find a person to get')
+        raise InternalRuleEngineError
 
     @classmethod
     def _re_get_person_birthdate(cls, args):
