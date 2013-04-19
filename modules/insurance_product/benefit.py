@@ -127,8 +127,8 @@ class Benefit(model.CoopSQL, product.Offered):
         'ins_product.benefit_rule', 'offered', 'Benefit Rules')
     reserve_rules = fields.One2Many(
         'ins_product.reserve_rule', 'offered', 'Reserve Rules')
-    indemnification_kind = fields.Selection(
-        INDEMNIFICATION_KIND, 'Indemnification Kind', sort=False)
+    indemnification_kind = fields.Selection(INDEMNIFICATION_KIND,
+        'Indemnification Kind', sort=False, required=True)
     loss_descs = fields.Many2Many(
         'ins_product.benefit-loss_desc', 'benefit', 'loss_desc',
         'Loss Descriptions', required=True)
@@ -137,6 +137,8 @@ class Benefit(model.CoopSQL, product.Offered):
         'benefit', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'benefit')])
     use_local_currency = fields.Boolean('Use Local Currency')
+    beneficiary_kind = fields.Selection('get_beneficiary_kind',
+        'Beneficiary Kind', required=True, sort=False)
 
     @classmethod
     def __setup__(cls):
@@ -181,6 +183,17 @@ class Benefit(model.CoopSQL, product.Offered):
         except product.NonExistingRuleKindException:
             return (EligibilityResultLine(True), [])
         return res
+
+    @classmethod
+    def get_beneficiary_kind(cls):
+        return [
+            ('subscriber', 'Subscriber'),
+            ('other', 'Other'),
+        ]
+
+    @staticmethod
+    def default_beneficiary_kind():
+        return 'subscriber'
 
 
 class BenefitLossDescRelation(model.CoopSQL):

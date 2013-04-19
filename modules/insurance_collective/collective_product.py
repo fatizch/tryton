@@ -10,6 +10,7 @@ from trytond.modules.coop_utils import utils, fields
 __all__ = [
     'GroupProduct',
     'GroupCoverage',
+    'GroupBenefit',
 ]
 
 
@@ -37,3 +38,16 @@ class GroupCoverage():
     __metaclass__ = PoolMeta
 
     is_group = fields.Boolean('Group Coverage')
+
+
+class GroupBenefit():
+    'Benefit'
+
+    __name__ = 'ins_product.benefit'
+    __metaclass__ = PoolMeta
+
+    @classmethod
+    def get_beneficiary_kind(cls):
+        res = super(GroupBenefit, cls).get_beneficiary_kind()
+        res.append(['affiliated', 'Affiliated'])
+        return res

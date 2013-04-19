@@ -10,6 +10,7 @@ __all__ = [
     'LifeClaim',
     'LifeLoss',
     'LifeClaimDeliveredService',
+    'LifeIndemnification',
 ]
 
 
@@ -100,3 +101,17 @@ class LifeClaimDeliveredService():
             if (covered_data.covered_element.party ==
                     self.get_covered_person()):
                 return covered_data
+
+
+class LifeIndemnification():
+    'Indemnification'
+
+    __name__ = 'ins_claim.indemnification'
+    __metaclass__ = PoolMeta
+
+    def get_beneficiary(self, beneficiary_kind, del_service):
+        res = super(LifeIndemnification, self).get_beneficiary(
+            beneficiary_kind, del_service)
+        if beneficiary_kind == 'covered_person':
+            res = del_service.loss.covered_person
+        return res

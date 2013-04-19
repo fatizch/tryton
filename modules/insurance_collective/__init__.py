@@ -7,6 +7,7 @@ def register():
     Pool.register(
         GroupProduct,
         GroupCoverage,
+        GroupBenefit,
         GroupContract,
         GroupCoveredData,
         module='insurance_collective', type_='model')

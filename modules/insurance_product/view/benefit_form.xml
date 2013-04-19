@@ -27,6 +27,8 @@
         position="inside">
         <label name="indemnification_kind"/>
         <field name="indemnification_kind"/>
+        <label name="beneficiary_kind"/>
+        <field name="beneficiary_kind"/>
         <newline/>
         <field name="loss_descs" colspan="4"/>
     </xpath>

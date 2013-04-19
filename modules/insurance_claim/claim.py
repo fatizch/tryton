@@ -524,7 +524,8 @@ class ClaimDeliveredService():
         self.init_dict_for_rule_engine(cur_dict)
         #We first check the eligibility of the benefit
         res, errs = self.benefit.get_result('eligibility', cur_dict)
-        print errs
+        if errs:
+            print errs
         if res and not res.eligible:
             self.status = 'not_eligible'
             Error = Pool().get('rule_engine.error')
@@ -654,14 +655,21 @@ class Indemnification(model.CoopView, model.CoopSQL):
 
     def init_from_delivered_service(self, delivered_service):
         self.status = 'calculated'
+        #TODO : To enhance
         self.customer = delivered_service.loss.claim.claimant
-        self.beneficiary = delivered_service.loss.claim.claimant
 
     def get_kind(self, name=None):
         res = ''
         if not self.delivered_service:
             return res
         return self.delivered_service.benefit.indemnification_kind
+
+    def get_beneficiary(self, beneficiary_kind, del_service):
+        res = ''
+        if beneficiary_kind == 'subscriber':
+            res = del_service.contract.get_policy_owner(
+                del_service.loss.start_date)
+        return res
 
     def create_details_from_dict(self, details_dict, del_service, currency):
         if utils.is_none(self, 'details'):
@@ -679,7 +687,12 @@ class Indemnification(model.CoopView, model.CoopSQL):
                 self.details.append(detail)
                 detail.kind = key
                 for field_name, value in detail_dict.iteritems():
-                    setattr(detail, field_name, value)
+                    #TODO: Temporary Hack
+                    if field_name == 'beneficiary_kind':
+                        self.beneficiary = self.get_beneficiary(value,
+                            del_service) or None
+                    else:
+                        setattr(detail, field_name, value)
                 if ('start_date' in detail_dict
                         and (utils.is_none(self, 'start_date')
                             or detail.start_date < self.start_date)):

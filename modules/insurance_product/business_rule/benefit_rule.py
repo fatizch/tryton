@@ -272,6 +272,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
         res['nb_of_unit'] = nb
         res['unit'] = self.indemnification_calc_unit
         res['amount_per_unit'], re_errs = self.give_me_result(args)
+        res['beneficiary_kind'] = self.offered.beneficiary_kind
         return [res], errs + re_errs
 
     def get_evolving_indemnifications_for_period(self, args):
@@ -293,6 +294,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
         res = {}
         res['nb_of_unit'] = 1
         res['amount_per_unit'], errs = self.give_me_result(args)
+        res['beneficiary_kind'] = self.offered.beneficiary_kind
         return [res], errs
 
     def give_me_benefit(self, args):

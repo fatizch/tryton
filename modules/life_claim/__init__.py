@@ -9,4 +9,5 @@ def register():
         LifeClaim,
         LifeLoss,
         LifeClaimDeliveredService,
+        LifeIndemnification,
         module='life_claim', type_='model')

@@ -6,7 +6,7 @@ import functools
 import pyflakes.messages
 
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Or
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, utils, fields
@@ -135,7 +135,8 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
     rule_complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Rule Complementary Data',
         on_change_with=['rule', 'rule_complementary_data'],
-        states={'invisible': STATE_SIMPLE})
+        states={'invisible':
+            Or(STATE_SIMPLE, ~Eval('rule_complementary_data'))})
 
     @classmethod
     def __setup__(cls):

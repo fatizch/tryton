@@ -22,6 +22,7 @@ __all__ = [
     'LifeProductDefinition',
     'LifeEligibilityRule',
     'LifeLossDesc',
+    'LifeBenefit',
     'LifeBenefitRule',
 ]
 
@@ -170,6 +171,19 @@ class LifeLossDesc():
     def get_possible_item_kind(cls):
         res = super(LifeLossDesc, cls).get_possible_item_kind()
         res.append(('person', 'Person'))
+        return res
+
+
+class LifeBenefit():
+    'Benefit'
+
+    __name__ = 'ins_product.benefit'
+    __metaclass__ = PoolMeta
+
+    @classmethod
+    def get_beneficiary_kind(cls):
+        res = super(LifeBenefit, cls).get_beneficiary_kind()
+        res.append(['covered_person', 'Covered Person'])
         return res
 
 
