@@ -33,4 +33,7 @@
       <field name="claim_history" colspan="4"/>
     </page>
   </notebook>
+  <group id="contracts" states="{'invisible': True}">
+    <field name="possible_contracts"/>
+  </group>
 </form>

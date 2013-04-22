@@ -3,7 +3,7 @@ import copy
 import datetime
 from decimal import Decimal
 
-from trytond.pyson import Eval, Bool, Or
+from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.wizard import Wizard, StateView, StateTransition, Button
@@ -458,7 +458,7 @@ class ClaimDeliveredService():
     complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Complementary Data',
         on_change_with=['benefit', 'complementary_data'],
-        states={'invisible':~Eval('complementary_data')},)
+        states={'invisible': ~Eval('complementary_data')},)
 
     @classmethod
     def __setup__(cls):
@@ -648,11 +648,7 @@ class Indemnification(model.CoopView, model.CoopSQL):
         states={
             'invisible': Eval('kind') != 'period',
             'readonly': ~Eval('manual'), })
-    status = fields.Selection(INDEMNIFICATION_STATUS, 'Status', sort=False,
-        # states={
-        #     'invisible': Eval('status') == 'calculated',
-        #     'readonly': True}
-    )
+    status = fields.Selection(INDEMNIFICATION_STATUS, 'Status', sort=False)
     amount = fields.Numeric('Amount',
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
         depends=['currency_digits'],
@@ -663,6 +659,9 @@ class Indemnification(model.CoopView, model.CoopSQL):
     currency_digits = fields.Function(
         fields.Integer('Currency Digits', states={'invisible': True}),
         'get_currency_digits')
+    currency_symbol = fields.Function(
+        fields.Char('Currency Symbol'),
+        'get_currency_symbol')
     local_currency_amount = fields.Numeric('Local Currency Amount',
         digits=(16, Eval('local_currency_digits', DEF_CUR_DIG)),
         states={
@@ -773,10 +772,10 @@ class Indemnification(model.CoopView, model.CoopSQL):
             return currency.id
 
     def get_currency_digits(self, name):
-        currency = self.get_currency()
-        if currency:
-            return currency.digits
-        return DEF_CUR_DIG
+        return self.currency.digits if self.currency else DEF_CUR_DIG
+
+    def get_currency_symbol(self, name):
+        return self.currency.symbol if self.currency else ''
 
     def on_change_with_local_currency_digits(self, name=None):
         if self.local_currency:
@@ -784,10 +783,11 @@ class Indemnification(model.CoopView, model.CoopSQL):
         return DEF_CUR_DIG
 
     def get_rec_name(self, name):
-        return '%s %.2f [%s]' % (
+        return u'%s %.2f %s [%s]' % (
             coop_string.translate_value(self, 'start_date')
             if self.start_date else '',
             self.amount,
+            self.currency_symbol,
             coop_string.translate_value(self, 'status') if self.status else '',
         )
 
@@ -839,9 +839,15 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView):
     nb_of_unit = fields.Numeric('Nb of Unit')
     unit = fields.Selection(date.DAILY_DURATION, 'Unit')
     amount = fields.Numeric('Amount')
+    currency = fields.Function(
+        fields.Many2One('currency.currency', 'Currency'),
+        'get_currency_id')
     currency_digits = fields.Function(
         fields.Integer('Currency Digits'),
         'get_currency_digits')
+    currency_symbol = fields.Function(
+        fields.Char('Currency Symbol'),
+        'get_currency_symbol')
 
     def init_from_indemnification(self, indemnification):
         pass
@@ -850,13 +856,24 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView):
         self.amount = self.amount_per_unit * self.nb_of_unit
 
     def get_currency(self):
+        #If a local currency is used details are stored with the local currency
+        #to make only one conversion at the indemnification level
         if self.indemnification:
-            return self.indemnification.get_currency()
+            if self.indemnification.local_currency:
+                return self.indemnification.local_currency
+            else:
+                return self.indemnification.currency
 
-    def get_currency_digits(self):
-        currency = self.get_currency
+    def get_currency_digits(self, name):
+        return self.currency.digits if self.currency else DEF_CUR_DIG
+
+    def get_currency_id(self, name):
+        currency = self.get_currency()
         if currency:
-            return currency.digits
+            return currency.id
+
+    def get_currency_symbol(self, name):
+        return self.currency.symbol if self.currency else ''
 
 
 class DocumentRequest():

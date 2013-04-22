@@ -4,5 +4,7 @@
     <field name="status"/>
     <field name="start_date"/>
     <field name="end_date"/>
-    <field name="amount"/>
+    <field name="amount">
+        <suffix name="currency_symbol"/>
+    </field>
 </tree>

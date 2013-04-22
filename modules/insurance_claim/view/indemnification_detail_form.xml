@@ -16,8 +16,14 @@
     <label name="unit"/>
     <field name="unit"/>
     <label name="amount_per_unit"/>
-    <field name="amount_per_unit"/>
+    <group id="amount_per_unit">
+        <field name="amount_per_unit" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
     <newline/>
     <label name="amount"/>
-    <field name="amount"/>
+    <group id="amount">
+        <field name="amount" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
 </form>

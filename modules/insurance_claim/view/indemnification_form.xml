@@ -24,8 +24,8 @@
     <newline/>
     <label name="amount"/>
     <group id="amount">
-        <field name="amount"/>
-        <field name="currency"/>
+        <field name="amount" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
     </group>
     <label name="manual"/>
     <field name="manual"/>

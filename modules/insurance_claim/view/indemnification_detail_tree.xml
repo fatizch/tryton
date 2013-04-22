@@ -5,6 +5,10 @@
     <field name="end_date"/>
     <field name="nb_of_unit"/>
     <field name="unit"/>
-    <field name="amount_per_unit"/>
-    <field name="amount"/>
+    <field name="amount_per_unit">
+        <suffix name="currency_symbol"/>
+    </field>
+    <field name="amount">
+        <suffix name="currency_symbol"/>
+    </field>
 </tree>
