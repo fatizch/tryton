@@ -112,19 +112,20 @@ class LifeEligibilityRule():
         if not self.config_kind == 'simple' or not(
                 hasattr(self, 'min_age') or hasattr(self, 'max_age')):
             return res, errs
-        subscriber = args['subscriber_person']
-        age = date.number_of_years_between(
-            subscriber.birth_date, args['date'])
-        res = True
         details = []
-        if hasattr(self, 'min_age') and self.min_age and age < self.min_age:
-            res = False
-            details.append(
-                'Subscriber must be older than %s' % self.min_age)
-        if hasattr(self, 'max_age') and self.max_age and age > self.max_age:
-            res = False
-            details.append(
-                'Subscriber must be younger than %s' % self.max_age)
+        if 'subscriber_person' in args:
+            subscriber = args['subscriber_person']
+            age = date.number_of_years_between(subscriber.birth_date,
+                args['date'])
+            res = True
+            if not utils.is_none(self, 'min_age') and age < self.min_age:
+                res = False
+                details.append(
+                    'Subscriber must be older than %s' % self.min_age)
+            if not utils.is_none(self, 'max_age') and age > self.max_age:
+                res = False
+                details.append(
+                    'Subscriber must be younger than %s' % self.max_age)
         return (EligibilityResultLine(eligible=res, details=details), errs)
 
     def give_me_sub_elem_eligibility(self, args):
