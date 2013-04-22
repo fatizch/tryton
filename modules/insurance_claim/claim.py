@@ -93,6 +93,11 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         'needed_by', 'Documents')
     claim_history = fields.One2Many('ins_claim.claim.history',
         'from_object', 'History')
+    possible_contracts = fields.Function(
+        fields.One2Many(
+            'ins_contract.contract', None, 'Contracts',
+            on_change_with=['claimant', 'declaration_date']),
+        'on_change_with_possible_contracts')
 
     @classmethod
     def __setup__(cls):
@@ -103,8 +108,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def write(cls, claims, values):
         for claim in claims:
             claim.update_sub_status()
-            values['sub_status'] = claim.sub_status
-            super(Claim, cls).write([claim], values)
+            super(Claim, cls).write([claim], {'sub_status': claim.sub_status})
         super(Claim, cls).write(claims, values)
 
     def get_rec_name(self, name):
@@ -220,21 +224,6 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             return None
         return good_role.protocol.party
 
-    @classmethod
-    def get_possible_contracts_from_party(cls, party, at_date):
-        if not party:
-            return []
-        Contract = Pool().get('ins_contract.contract')
-        domain = [
-            ('subscriber', '=', party.id),
-            ('status_history.status', '=', 'active'),
-            ('status_history.start_date', '<=', at_date),
-            ['OR',
-                [('status_history.end_date', '=', None)],
-                [('status_history.end_date', '>=', at_date)]]
-        ]
-        return Contract.search(domain)
-
     @staticmethod
     def default_status():
         return 'open'
@@ -251,7 +240,6 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def reopen_claim(self):
         if self.status == 'closed':
             self.status = 'reopened'
-            self.sub_status = ''
             self.end_date = None
         return True, []
 
@@ -273,6 +261,16 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
                     delivered_service.status = 'delivered'
                     delivered_service.save()
         return res
+
+    def get_possible_contracts(self, at_date=None):
+        if not at_date:
+            at_date = self.declaration_date
+        Contract = Pool().get('ins_contract.contract')
+        return Contract.get_possible_contracts_from_party(self.claimant,
+            at_date)
+
+    def on_change_with_possible_contracts(self, name=None):
+        return [x.id for x in self.get_possible_contracts()]
 
 
 class ClaimHistory(model.ObjectHistory):
@@ -308,16 +306,21 @@ class Loss(model.CoopSQL, model.CoopView):
         states={
             'invisible': Bool(~Eval('with_end_date')),
             'required': Bool(Eval('with_end_date')),
-        }, depends=['with_end_date'])
+        }, depends=['with_end_date'],)
     loss_desc = fields.Many2One('ins_product.loss_desc', 'Loss Descriptor',
-        ondelete='RESTRICT')
+        ondelete='RESTRICT',
+        on_change=['event_desc', 'loss_desc', 'with_end_date', 'end_date'])
     event_desc = fields.Many2One('ins_product.event_desc', 'Event',
         domain=[
             ('loss_descs', '=', Eval('loss_desc'))
         ], states={'invisible': Bool(Eval('main_loss'))},
         depends=['loss_desc'], ondelete='RESTRICT')
     delivered_services = fields.One2Many(
-        'ins_contract.delivered_service', 'loss', 'Delivered Services')
+        'ins_contract.delivered_service', 'loss', 'Delivered Services',
+        domain=[
+            ('contract', 'in',
+                Eval('_parent_claim', {}).get('possible_contracts'))
+        ],)
     multi_level_view = fields.One2Many(
         'ins_contract.delivered_service', 'loss', 'Delivered Services')
     main_loss = fields.Many2One(
@@ -329,14 +332,23 @@ class Loss(model.CoopSQL, model.CoopView):
             != 'relapse'})
     sub_losses = fields.One2Many('ins_claim.loss', 'main_loss', 'Sub Losses')
     with_end_date = fields.Function(
-        fields.Boolean('With End Date', on_change_with=['loss_desc']),
-        'on_change_with_with_end_date')
+        fields.Boolean('With End Date'),
+        'get_with_end_date')
     complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Complementary Data',
         on_change_with=['loss_desc', 'complementary_data'],
         states={'invisible': ~Eval('complementary_data')})
 
-    def on_change_with_with_end_date(self, name=None):
+    @classmethod
+    def __setup__(cls):
+        super(Loss, cls).__setup__()
+        cls._error_messages.update(
+            {
+                'end_date_smaller_than_start_date':
+                    'End Date is smaller than start date',
+            })
+
+    def get_with_end_date(self, name):
         res = False
         if self.loss_desc:
             res = self.loss_desc.with_end_date
@@ -406,6 +418,26 @@ class Loss(model.CoopSQL, model.CoopView):
             res['with_end_date'] = False
         return res
 
+    def on_change_loss_desc(self):
+        res = {}
+        res['with_end_date'] = self.get_with_end_date('')
+        if (self.loss_desc and self.event_desc
+                and not self.event_desc in self.loss_desc.event_descs):
+            res['event_desc'] = None
+        res['end_date'] = self.end_date if res['with_end_date'] else None
+        return res
+
+    @classmethod
+    def validate(cls, instances):
+        super(Loss, cls).validate(instances)
+        for instance in instances:
+            instance.check_end_date()
+
+    def check_end_date(self):
+        if (self.start_date and self.end_date
+                and self.end_date < self.start_date):
+            self.raise_user_error('end_date_smaller_than_start_date')
+
 
 class ClaimDeliveredService():
     'Claim Delivered Service'
@@ -426,9 +458,7 @@ class ClaimDeliveredService():
     complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Complementary Data',
         on_change_with=['benefit', 'complementary_data'],
-        states={'invisible': Or(
-                    Eval('status') == 'applicable',
-                    ~Eval('complementary_data'))},)
+        states={'invisible':~Eval('complementary_data')},)
 
     @classmethod
     def __setup__(cls):
@@ -439,6 +469,12 @@ class ClaimDeliveredService():
         domain = ('offered.benefits.loss_descs', '=',
             Eval('_parent_loss', {}).get('loss_desc'))
         cls.subscribed_service.domain.append(domain)
+
+        cls.__rpc__.update({'calculate_delivered_services':
+                RPC(instantiate=0, readonly=False)})
+        cls._buttons.update(
+            {'calculate_delivered_services': {
+                'invisible': Eval('status') == 'delivered'}})
 
     def init_from_loss(self, loss, benefit):
         self.benefit = benefit
@@ -519,6 +555,11 @@ class ClaimDeliveredService():
                     'nb_of_unit': -1,
                 }]
 
+    @classmethod
+    def calculate_delivered_services(cls, instances):
+        for instance in instances:
+            instance.calculate()
+
     def calculate(self):
         cur_dict = {}
         self.init_dict_for_rule_engine(cur_dict)
@@ -526,6 +567,7 @@ class ClaimDeliveredService():
         res, errs = self.benefit.get_result('eligibility', cur_dict)
         if errs:
             print errs
+        self.func_error = None
         if res and not res.eligible:
             self.status = 'not_eligible'
             Error = Pool().get('rule_engine.error')

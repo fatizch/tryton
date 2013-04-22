@@ -1,7 +1,7 @@
 import copy
 
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, Or, If, Bool
+from trytond.pyson import Eval, If, Bool
 
 from trytond.modules.process import ClassAttr
 from trytond.modules.coop_utils import utils, fields
@@ -25,11 +25,6 @@ class ClaimProcess(CoopProcessFramework):
     __metaclass__ = ClassAttr
     __name__ = 'ins_claim.claim'
 
-    contracts = fields.Function(
-        fields.One2Many(
-            'ins_contract.contract', None, 'Contracts',
-            on_change_with=['claimant', 'declaration_date']),
-        'on_change_with_contracts')
     doc_received = fields.Function(
         fields.Boolean(
             'All Document Received',
@@ -50,19 +45,6 @@ class ClaimProcess(CoopProcessFramework):
     is_pending_indemnification = fields.Function(
         fields.Boolean('Pending Indemnification', states={'invisible': True}),
         'get_is_pending_indemnification')
-    working_loss = fields.Function(
-        fields.One2Many('ins_claim.loss', None, 'Loss'),
-        'get_working_loss', 'set_working_loss')
-
-    def get_possible_contracts(self, at_date=None):
-        if not at_date:
-            at_date = self.declaration_date
-        Contract = Pool().get('ins_contract.contract')
-        return Contract.get_possible_contracts_from_party(self.claimant,
-            at_date)
-
-    def on_change_with_contracts(self, name=None):
-        return [x.id for x in self.get_possible_contracts()]
 
     def on_change_with_contact_history(self, name=None):
         if not (hasattr(self, 'claimant') and self.claimant):
@@ -71,24 +53,12 @@ class ClaimProcess(CoopProcessFramework):
         return [x.id for x in ContactHistory.search(
             [('party', '=', self.claimant)])]
 
-    def init_delivered_services(self):
-        Option = Pool().get('ins_contract.option')
-        for loss in self.losses:
-            for option_id, benefits in loss.get_possible_benefits().items():
-                loss.init_delivered_services(Option(option_id), benefits)
-            loss.save()
-        return True
-
     def calculate_indemnification(self):
-        to_delete = []
         for loss in self.losses:
             for delivered_service in loss.delivered_services:
                 if delivered_service.status == 'calculating':
                     delivered_service.calculate()
                     delivered_service.save()
-                elif delivered_service.status == 'applicable':
-                    to_delete.append(delivered_service)
-        Pool().get('ins_contract.delivered_service').delete(to_delete)
         return True
 
     def init_declaration_document_request(self):
@@ -155,17 +125,6 @@ class ClaimProcess(CoopProcessFramework):
                 continue
             Indemnification.write(Indemnification.browse(val[1]), val[2])
 
-    @classmethod
-    def set_working_loss(cls, instances, name, vals):
-        Loss = Pool().get('ins_claim.loss')
-        for val in vals:
-            if not val[0] == 'write':
-                continue
-            Loss.write(Loss.browse(val[1]), val[2])
-
-    def get_working_loss(self, name):
-        return [self.losses[-1].id]
-
     def reject_and_close_claim(self):
         self.status = 'closed'
         self.end_date = utils.today()
@@ -217,37 +176,6 @@ class DeliveredServiceProcess():
 
     __name__ = 'ins_contract.delivered_service'
     __metaclass__ = PoolMeta
-
-    needs_to_be_calculated = fields.Function(
-        fields.Boolean('To Be Calculated',
-            on_change=['needs_to_be_calculated', 'status']),
-        'get_needs_to_be_calculated', 'set_void')
-
-    @classmethod
-    def __setup__(cls):
-        super(DeliveredServiceProcess, cls).__setup__()
-        utils.update_states(cls, 'status', {'invisible': Or(
-                Eval('status') == 'applicable',
-                Eval('status') == 'calculating'
-        )})
-
-    def get_needs_to_be_calculated(self, name):
-        if self.status == 'applicable':
-            return False
-        elif self.status == 'calculating':
-            return True
-
-    def on_change_needs_to_be_calculated(self):
-        res = {}
-        if self.needs_to_be_calculated:
-            res['status'] = 'calculating'
-        elif not self.needs_to_be_calculated:
-            res['status'] = 'applicable'
-        return res
-
-    @classmethod
-    def set_void(cls, instances, names, vals):
-        pass
 
 
 class ProcessDesc():

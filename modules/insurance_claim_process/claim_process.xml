@@ -41,14 +41,5 @@
       <field name="model">ins_claim.claim,-1</field>
       <field name="action" ref="act_claim_logs"/>
     </record>
-    <!--################################################################ -->
-    <!-- Delivered Service -->
-    <!--################################################################ -->
-    <record model="ir.ui.view" id="delivered_service_view_form">
-      <field name="model">ins_contract.delivered_service</field>
-      <field name="type">form</field>
-      <field name="inherit" ref="insurance_contract.delivered_service_view_form"/>
-      <field name="name">delivered_service_form</field>
-    </record>
   </data>
 </tryton>

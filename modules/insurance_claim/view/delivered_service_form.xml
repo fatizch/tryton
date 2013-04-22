@@ -5,8 +5,9 @@
         <field name="loss"/>
         <newline/>
         <label name="benefit"/>
-        <field name="benefit"/>
+        <field name="benefit" widget="selection"/>
         <newline/>
+        <!-- <button name="calculate_delivered_services" string="Calculate"/> -->
         <field name="complementary_data" colspan="2" no_command="1"/>
     </xpath>
     <xpath expr="/form" position="inside">

@@ -24,7 +24,6 @@ OPTIONSTATUS = CONTRACTSTATUSES + [
 ]
 
 DELIVERED_SERVICES_STATUSES = [
-    ('applicable', 'Applicable'),
     ('calculating', 'Calculating'),
     ('not_eligible', 'Not Eligible'),
     ('calculated', 'Calculated'),
@@ -962,7 +961,8 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     #editable tree, or we can not display for the moment dictionnary in tree
     item_desc = fields.Many2One(
         'ins_product.item_desc', 'Item Desc', depends=['complementary_data'],
-        on_change=['item_desc', 'complementary_data', 'party'])
+        on_change=['item_desc', 'complementary_data', 'party'],
+        ondelete='RESTRICT')
     covered_data = fields.One2Many(
         'ins_contract.covered_data', 'covered_element', 'Covered Element Data')
     name = fields.Char('Name',
@@ -1402,15 +1402,14 @@ class DeliveredService(model.CoopView, model.CoopSQL):
     __name__ = 'ins_contract.delivered_service'
 
     status = fields.Selection(DELIVERED_SERVICES_STATUSES, 'Status')
+    expenses = fields.One2Many('ins_contract.expense',
+        'delivered_service', 'Expenses')
+    contract = fields.Many2One('ins_contract.contract', 'Contract')
     subscribed_service = fields.Many2One(
-        'ins_contract.option', 'Coverage', ondelete='RESTRICT')
-    expenses = fields.One2Many(
-        'ins_contract.expense', 'delivered_service', 'Expenses',
-        states={'invisible': Eval('status') == 'applicable'})
-    contract = fields.Function(
-        fields.Many2One('ins_contract.contract', 'Contract',
-            on_change_with=['subscribed_service']),
-        'on_change_with_contract')
+        'ins_contract.option', 'Coverage', ondelete='RESTRICT',
+        domain=[
+            If(~~Eval('contract'), ('contract', '=', Eval('contract', {})), ())
+        ], depends=['contract'])
     func_error = fields.Many2One('rule_engine.error', 'Error',
         ondelete='RESTRICT', states={
             'invisible': ~Eval('func_error'),
@@ -1440,16 +1439,10 @@ class DeliveredService(model.CoopView, model.CoopSQL):
 
     @staticmethod
     def default_status():
-        return 'applicable'
+        return 'calculating'
 
     def get_contract(self):
-        if self.subscribed_service:
-            return self.subscribed_service.get_contract()
-
-    def on_change_with_contract(self, name=None):
-        contract = self.get_contract()
-        if contract:
-            return contract.id
+        return self.contract
 
 
 class Expense(model.CoopSQL, model.CoopView):
