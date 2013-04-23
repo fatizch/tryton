@@ -134,7 +134,6 @@ insurance_claim.loss_view_tree"/>
     meths['Code']({
         'technical_kind': 'step_before',
         'on_model': claim_model,
-        'method_name': 'init_delivered_services',
         'parent_step': step_delivered_service,
         'sequence': 1,
     })
