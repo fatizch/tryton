@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-import sys
 from proteus import Model, Wizard
 
 import proteus_tools
@@ -77,7 +76,7 @@ def update_modules(cfg_dict, modules):
     for cur_module in modules:
         print '=' * 80 + '\n'
         cur_path = os.path.abspath(
-            os.path.join(DIR, '..', cur_module))
+            os.path.join(DIR, '..', 'modules', cur_module))
         module_dir = os.path.join(cur_path, 'test_case')
         if not os.path.isfile(os.path.join(module_dir,
                     'proteus_test_case.py')):
