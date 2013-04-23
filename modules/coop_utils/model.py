@@ -465,11 +465,10 @@ class ExportImportMixin(Model):
     def import_json(cls, values):
         with Transaction().set_user(0):
             with Transaction().set_context(__importing__=True):
-                if isinstance(values, (basestring, buffer)):
+                if isinstance(values, basestring):
                     values = json.loads(values, object_hook=object_hook)
                     values = utils.recursive_list_tuple_convert(values)
-                GoodModel = Pool().get(values['__name__'])
-                record = GoodModel._import_json(values)
+                record = cls._import_json(values)
         return record
 
 
@@ -562,31 +561,39 @@ class CoopSQL(ExportImportMixin, ModelSQL):
     @classmethod
     def can_be_deleted(cls, instances):
         using_inst = cls.get_instances_using_me(instances)
-        res = {}
         for instance in instances:
-            if len(using_inst[instance.id]) == 0:
-                res[instance.id] = (True, '', [])
             for using_instance in using_inst[instance.id]:
-                res[instance.id] = (
-                    False, 'item_used', (
+                cls.raise_user_error(
+                    'item_used',
+                    (
                         instance.rec_name,
                         using_instance.rec_name,
                         coop_string.translate_model_name(
                             using_instance.__class__),
                         using_instance.id,
                     ))
-                continue
-        return res
 
     @classmethod
     def delete(cls, instances):
-        can_be_del_dict = cls.can_be_deleted(instances)
-        for instance in instances:
-            (can_be_deleted, error, error_args) = can_be_del_dict[instance.id]
-            if not can_be_deleted:
-                cls.raise_user_error(error, error_args)
+        cls.can_be_deleted(instances)
 
+        # Handle O2M with fields.Reference backref
+        to_delete = []
+        for field_name, field in cls._fields.iteritems():
+            if not isinstance(field, tryton_fields.One2Many):
+                continue
+            Target = Pool().get(field.model_name)
+            backref_field = Target._fields[field.field]
+            if not isinstance(backref_field, tryton_fields.Reference):
+                continue
+            to_delete.append((field.model_name, field.field))
+
+        instance_list = ['%s,%s' % (i.__name__, i.id) for i in instances]
         super(CoopSQL, cls).delete(instances)
+        for model_name, field_name in to_delete:
+            TargetModel = Pool().get(model_name)
+            TargetModel.delete(TargetModel.search(
+                [(field_name, 'in', instance_list)]))
 
     @classmethod
     def search_rec_name(cls, name, clause):
