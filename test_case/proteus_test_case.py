@@ -17,7 +17,8 @@ execute_test(cfg_dict)
 
 def delete_db_if_necessary(cfg_dict):
     if cfg_dict['create_db']:
-        db = os.path.join(cfg_dict['data_path'],
+        db = os.path.join(
+            cfg_dict['data_path'],
             proteus_tools.get_database_name(
                 cfg_dict) + '.' + cfg_dict['db_type'])
         if os.path.isfile(db):
@@ -52,9 +53,9 @@ def get_module_cfg(path, cfg_dict):
     if 'depends' in module_cfg.keys():
         for dependency in module_cfg['depends']:
             module_cfg = dict(get_module_cfg(
-                    os.path.abspath(os.path.join(path, '..', dependency)),
-                    cfg_dict).items()
-                + module_cfg.items())
+                os.path.abspath(
+                    os.path.join(path, '..', 'modules', dependency)),
+                cfg_dict).items() + module_cfg.items())
         module_cfg.pop('depends')
     return dict(cfg_dict.items() + module_cfg.items())
 
@@ -77,9 +78,10 @@ def update_modules(cfg_dict, modules):
         print '=' * 80 + '\n'
         cur_path = os.path.abspath(
             os.path.join(DIR, '..', 'modules', cur_module))
+        module_dict = get_module_cfg(cur_path, cfg_dict)
         module_dir = os.path.join(cur_path, 'test_case')
-        if not os.path.isfile(os.path.join(module_dir,
-                    'proteus_test_case.py')):
+        if not os.path.isfile(os.path.join(
+                module_dir, 'proteus_test_case.py')):
             print 'Missing test case file for module %s' % cur_module
             continue
         print 'Running test case for module % s' % cur_module
@@ -88,12 +90,12 @@ def update_modules(cfg_dict, modules):
         #try:
         module_dict = get_module_cfg(cur_path, cfg_dict)
         module_dict['dir'] = module_dir
-        dir_loc = os.path.join(module_dir,
-            module_dict.get('language', 'fr')[0:2].lower())
+        dir_loc = os.path.join(
+            module_dir, module_dict.get('language', 'fr')[0:2].lower())
         if os.path.exists(dir_loc):
             module_dict['dir_loc'] = dir_loc
-            module_dict = load_test_case_translations(module_dict,
-                module_dict['dir_loc'])
+            module_dict = load_test_case_translations(
+                module_dict, module_dict['dir_loc'])
         context = {'cfg_dict': module_dict}
         localcontext = {}
         exec code in context, localcontext
@@ -111,8 +113,8 @@ def launch_proteus_test_case(test_config_file=None, module=None):
         modules = cfg_dict['modules']
     else:
         modules = [module]
-    installed_modules = install_modules(proteus_tools.get_config(
-            cfg_dict), modules)
+    installed_modules = install_modules(
+        proteus_tools.get_config(cfg_dict), modules)
     for module in installed_modules:
         if module in modules:
             print 'Module %s installed' % module
@@ -122,6 +124,26 @@ def launch_proteus_test_case(test_config_file=None, module=None):
     if cfg_dict['only_install'] is True:
         return
     update_modules(cfg_dict, modules)
+    json_dir = os.path.join(
+        DIR, 'json_files', cfg_dict.get('language', 'fr_FR'))
+    if os.path.isdir(json_dir):
+        files = [
+            os.path.join(json_dir, f) for f in os.listdir(json_dir)
+            if os.path.isfile(os.path.join(
+                json_dir, f)) and f.endswith('.json')]
+        if files:
+            print ''
+            print 'Loading json files'
+        for cur_file in files:
+            try:
+                f = open(cur_file, 'rb')
+                wizard = Wizard('coop_utils.import_wizard')
+                wizard.form.selected_file = f.read()
+                wizard.execute('file_import')
+                f.close()
+            except:
+                continue
+            print 'Successfully imported file %s' % cur_file
 
 
 def set_currency(cfg_dict):

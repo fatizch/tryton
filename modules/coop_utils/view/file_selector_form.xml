@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<form string="File Selection">
+    <label name="selected_file"/>
+    <field name="name"/>
+    <field name="selected_file"/>
+</form>
