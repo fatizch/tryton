@@ -17,6 +17,7 @@ def register():
         Currency,
         CurrencyRate,
         # from model
+        FileSelector,
         TableOfTable,
         DynamicSelection,
         VersionedObject,
@@ -26,3 +27,7 @@ def register():
         # from session
         DateClass,
         module='coop_utils', type_='model')
+    Pool.register(
+        # from model
+        ImportWizard,
+        module='coop_utils', type_='wizard')

@@ -1,7 +1,18 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
-
+        <!-- Import Wizard -->
+        <record model="ir.ui.view" id="file_selector_form">
+          <field name="model">coop_utils.file_selector</field>
+          <field name="type">form</field>
+          <field name="name">file_selector_form</field>
+        </record>
+        <record model="ir.action.wizard" id="import_wizard">
+            <field name="name">Import File</field>
+            <field name="wiz_name">coop_utils.import_wizard</field>
+        </record>
+        <menuitem name="Import Wizard" id="menu_import_wizard" sequence="50"
+            parent="ir.menu_administration" action="import_wizard"/>
         <!--  ******************************************* 
               *********   Table of table   ***********
               *******************************************-->

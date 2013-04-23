@@ -8,7 +8,7 @@ except ImportError:
 
 from trytond.pyson import Eval, Bool
 from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
-from trytond.wizard import Wizard
+from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
@@ -23,6 +23,8 @@ import fields
 __all__ = [
     'NotExportImport',
     'ExportImportMixin',
+    'FileSelector',
+    'ImportWizard',
     'CoopSQL',
     'CoopView',
     'CoopWizard',
@@ -47,10 +49,11 @@ class ExportImportMixin(Model):
     @classmethod
     def __setup__(cls):
         super(ExportImportMixin, cls).__setup__()
-        cls.__rpc__['export_json'] = RPC(instantiate=0,
+        cls.__rpc__['export_json'] = RPC(
+            instantiate=0,
             result=lambda r: (r[0], json.dumps(r[1], cls=JSONEncoder)))
-        cls.__rpc__['import_json'] = RPC(readonly=False,
-            result=lambda r: None)
+        cls.__rpc__['import_json'] = RPC(
+            readonly=False, result=lambda r: None)
 
     def _prepare_for_import(self):
         pass
@@ -462,11 +465,45 @@ class ExportImportMixin(Model):
     def import_json(cls, values):
         with Transaction().set_user(0):
             with Transaction().set_context(__importing__=True):
-                if isinstance(values, basestring):
+                if isinstance(values, (basestring, buffer)):
                     values = json.loads(values, object_hook=object_hook)
                     values = utils.recursive_list_tuple_convert(values)
-                record = cls._import_json(values)
+                GoodModel = Pool().get(values['__name__'])
+                record = GoodModel._import_json(values)
         return record
+
+
+class FileSelector(ModelView):
+    'File Selector'
+
+    __name__ = 'coop_utils.file_selector'
+
+    selected_file = fields.Binary('Import File', filename='name')
+    name = fields.Char('Filename')
+
+
+class ImportWizard(Wizard):
+    'Import Wizard'
+
+    __name__ = 'coop_utils.import_wizard'
+
+    start_state = 'file_selector'
+    file_selector = StateView(
+        'coop_utils.file_selector',
+        'coop_utils.file_selector_form',
+        [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Import', 'file_import', 'tryton-ok')])
+    file_import = StateTransition()
+
+    def transition_file_import(self):
+        if not (hasattr(self.file_selector, 'selected_file') and
+                self.file_selector.selected_file):
+            self.raise_user_error('no_file_selected')
+        file_buffer = self.file_selector.selected_file
+        values = str(file_buffer)
+        ExportImportMixin.import_json(values)
+        return 'end'
 
 
 class CoopSQL(ExportImportMixin, ModelSQL):
@@ -495,7 +532,8 @@ class CoopSQL(ExportImportMixin, ModelSQL):
         key_name = cls.get_func_pk_name()
         if not key_name:
             return res
-        key_dict = dict((getattr(instance, key_name), instance.id)
+        key_dict = dict(
+            (getattr(instance, key_name), instance.id)
             for instance in instances)
         for cur_class, var_name in cls.get_class_where_used():
             Class = Pool().get(cur_class)
@@ -516,8 +554,9 @@ class CoopSQL(ExportImportMixin, ModelSQL):
     @classmethod
     def get_is_used(cls, instances, name):
         using_inst = cls.get_instances_using_me(instances)
-        res = dict((instance.id,
-                len(using_inst[instance.id]) > 0) for instance in instances)
+        res = dict(
+            (instance.id, len(using_inst[instance.id]) > 0)
+            for instance in instances)
         return res
 
     @classmethod
@@ -528,8 +567,8 @@ class CoopSQL(ExportImportMixin, ModelSQL):
             if len(using_inst[instance.id]) == 0:
                 res[instance.id] = (True, '', [])
             for using_instance in using_inst[instance.id]:
-                res[instance.id] = (False, 'item_used',
-                    (
+                res[instance.id] = (
+                    False, 'item_used', (
                         instance.rec_name,
                         using_instance.rec_name,
                         coop_string.translate_model_name(
@@ -557,12 +596,14 @@ class CoopSQL(ExportImportMixin, ModelSQL):
         return [(cls._rec_name,) + clause[1:]]
 
     @classmethod
-    def search(cls, domain, offset=0, limit=None, order=None, count=False,
+    def search(
+            cls, domain, offset=0, limit=None, order=None, count=False,
             query_string=False):
         #Set your class here to see the domain on the search
         # if cls.__name__ == 'ins_contract.option':
         #     print domain
-        return super(CoopSQL, cls).search(domain=domain, offset=offset,
+        return super(CoopSQL, cls).search(
+            domain=domain, offset=offset,
             limit=limit, order=order, count=count, query_string=query_string)
 
     def get_currency(self):
@@ -589,8 +630,8 @@ class CoopSQL(ExportImportMixin, ModelSQL):
                         (constraints[0], '=', '%s_%s' % (
                             getattr(original, constraints[0]), i))]):
                     i += 1
-                setattr(clone, constraints[0],
-                    '%s_%s' % (getattr(original, constraints[0]), i))
+                setattr(clone, constraints[0], '%s_%s' % (
+                    getattr(original, constraints[0]), i))
                 clone.save()
             return res
         else:
@@ -628,12 +669,13 @@ class TableOfTable(CoopSQL, CoopView):
     _table = 'coop_table_of_table'
 
     my_model_name = fields.Char('Model Name')
-    key = fields.Char('Key', states={'readonly': Bool(Eval('is_used'))},
-        depends=['is_used'])
+    key = fields.Char(
+        'Key', states={'readonly': Bool(Eval('is_used'))}, depends=['is_used'])
     name = fields.Char('Value', required=True, translate=True)
-    parent = fields.Many2One(None, 'Parent',
-        ondelete='CASCADE')
-    childs = fields.One2Many('coop.table_of_table', 'parent', 'Sub values',
+    parent = fields.Many2One(
+        None, 'Parent', ondelete='CASCADE')
+    childs = fields.One2Many(
+        'coop.table_of_table', 'parent', 'Sub values',
         domain=[('my_model_name', '=', Eval('my_model_name'))],
         depends=['my_model_name', 'parent'],
         states={'invisible': Bool(Eval('parent'))},)
@@ -651,10 +693,12 @@ class TableOfTable(CoopSQL, CoopView):
         return cls.__name__
 
     @classmethod
-    def search(cls, domain, offset=0, limit=None, order=None, count=False,
+    def search(
+            cls, domain, offset=0, limit=None, order=None, count=False,
             query_string=False):
         domain.append(('my_model_name', '=', cls.__name__))
-        return super(TableOfTable, cls).search(domain, offset=offset,
+        return super(TableOfTable, cls).search(
+            domain, offset=offset,
             limit=limit, order=order, count=count, query_string=query_string)
 
     @staticmethod
@@ -798,7 +842,8 @@ class ObjectHistory(CoopSQL, CoopView):
                 % (table, table)),
             ('COALESCE("%s".write_uid, "%s".create_uid) AS user'
                 % (table, table)),
-        ] + ['"%s"."%s"' % (table, name)
+        ] + [
+            '"%s"."%s"' % (table, name)
             for name, field in cls._fields.iteritems()
             if name not in ('id', 'from_object', 'date', 'user')
             and not hasattr(field, 'set')]
@@ -810,7 +855,8 @@ class ObjectHistory(CoopSQL, CoopView):
         return [
             '"%s".id' % table,
             'COALESCE("%s".write_uid, "%s".create_uid)' % (table, table),
-        ] + ['"%s"."%s"' % (table, name)
+        ] + [
+            '"%s"."%s"' % (table, name)
             for name, field in cls._fields.iteritems()
             if (name not in ('id', 'from_object', 'date', 'user')
                 and not hasattr(field, 'set'))]
@@ -818,23 +864,22 @@ class ObjectHistory(CoopSQL, CoopView):
     @classmethod
     def table_query(cls):
         Object = Pool().get(cls.get_object_model())
-        return (('SELECT ' + (', '.join(cls._table_query_fields()))
-                + ' FROM "%s__history" GROUP BY '
-                + (', '.join(cls._table_query_group())))
-            % Object._table, [])
+        return ((
+            'SELECT ' + (', '.join(cls._table_query_fields()))
+            + ' FROM "%s__history" GROUP BY '
+            + (', '.join(cls._table_query_group()))) % Object._table, [])
 
     @classmethod
     def read(cls, ids, fields_names=None):
-        res = super(ObjectHistory, cls).read(ids,
-            fields_names=fields_names)
+        res = super(ObjectHistory, cls).read(ids, fields_names=fields_names)
 
         # Remove microsecond from timestamp
         for values in res:
             if 'date' in values:
                 if isinstance(values['date'], basestring):
                     values['date'] = datetime.datetime(
-                        *time.strptime(values['date'],
-                            '%Y-%m-%d %H:%M:%S.%f')[:6])
+                        *time.strptime(
+                            values['date'], '%Y-%m-%d %H:%M:%S.%f')[:6])
                 values['date'] = values['date'].replace(microsecond=0)
         return res
 
@@ -897,4 +942,3 @@ class UIMenu():
 
     def get_rec_name(self, name):
         return self.name
-
