@@ -1,30 +1,29 @@
 #!/bin/bash
 SEP=------------------------------------------------
-EXPECTED_ARGS=2
+EXPECTED_ARGS=1
 
 if [ $# -ne $EXPECTED_ARGS ]
 then
 	echo $SEP
-     	echo "Usage: `basename $0` {path} {directory}"
+     	echo "Usage: `basename $0` {directory}"
 	echo $SEP
-elif [ ! -e "$1" ]
+elif [ ! -e `dirname $1` ]
 then
 	echo $SEP
-	echo $1 must be an existing directory
+	echo `dirname $1` must be an existing directory
 	echo $SEP
-elif [ -e "$1/$2" ]
+elif [ -e "$1" ]
 then
 	echo $SEP
-	echo $2 already exists in $1 !
+	echo `basename $1` already exists in `dirname $1` !
 	echo $SEP
 else
+	mkdir $1
+	echo $SEP
+	echo Creating Virtual Env in $1
+	echo $SEP
+	virtualenv $1
 	cd $1
-	mkdir $2
-	echo $SEP
-	echo Creating Virtual Env in $2
-	echo $SEP
-	virtualenv $2
-	cd $2
 	echo $SEP
 	echo Entering Virtual Env
 	echo $SEP
