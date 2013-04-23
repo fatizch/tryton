@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<tree editable="bottom">
-    <field name="coverage"/>
-    <field name="college"/>
-    <field name="tranche"/>
-    <field name="rate"/>
-</tree>
