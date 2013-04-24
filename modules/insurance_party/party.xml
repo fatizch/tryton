@@ -1,109 +1,51 @@
 <?xml version="1.0"?>
 <tryton>
-    <data>
-        <!--  ******************************************* 
-              **************   Society     ***************
-              *******************************************-->
-        <record model="ir.ui.view" id="party_view_form">
-            <field name="model">party.party</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="party.party_view_form"/>
-            <field name="name">party_form</field>
-        </record>
-        <record model="ir.ui.view" id="party_view_tree">
-            <field name="model">party.party</field>
-            <field name="type">tree</field>
-            <field name="inherit" ref="party.party_view_tree"/>
-            <field name="name">party_tree</field>
-        </record>
-
-        <!--  ******************************************* 
-              **************   Insurer     ***************
-              *******************************************-->
-        <!-- Insurer form view -->
-        <record model="ir.ui.view" id="insurer_view_form_hosted">
-            <field name="model">party.insurer</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form>
-                    <label name="reference"/>
-                    <field name="reference"/>
-                </form>
-                ]]>
-            </field>
-        </record>
-
-        <!-- Insurer tree view -->
-        <record model="ir.ui.view" id="insurer_view_tree">
-            <field name="model">party.insurer</field>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                    <tree>
-                        <field name="reference"/>
-                    </tree>
-                ]]>
-            </field>
-        </record>
-        <!--  ******************************************* 
-              **************   Broker     ***************
-              *******************************************-->
-        <!-- Broker form view -->
-        <record model="ir.ui.view" id="broker_view_form">
-            <field name="model">party.broker</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form>
-                    <label name="reference"/>
-                    <field name="reference"/>
-                </form>
-                ]]>
-            </field>
-        </record>
-
-        <!-- Broker tree view -->
-        <record model="ir.ui.view" id="broker_view_tree">
-            <field name="model">party.broker</field>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                    <tree>
-                        <field name="reference"/>
-                    </tree>
-                ]]>
-            </field>
-        </record>
-        <!--  ******************************************* 
-              **************   Customer     ***************
-              *******************************************-->
-        <!-- Customer form view -->
-        <record model="ir.ui.view" id="customer_view_form">
-            <field name="model">party.customer</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form>
-                    <label name="reference"/>
-                    <field name="reference"/>
-                </form>
-                ]]>
-            </field>
-        </record>
-
-        <!-- Customer tree view -->
-        <record model="ir.ui.view" id="customer_view_tree">
-            <field name="model">party.customer</field>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                    <tree>
-                        <field name="reference"/>
-                    </tree>
-                ]]>
-            </field>
-        </record>
-
-    </data>
+  <data>
+    <!-- Society -->
+    <record model="ir.ui.view" id="party_view_form">
+      <field name="model">party.party</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="party.party_view_form"/>
+      <field name="name">party_form</field>
+    </record>
+    <record model="ir.ui.view" id="party_view_tree">
+      <field name="model">party.party</field>
+      <field name="type">tree</field>
+      <field name="inherit" ref="party.party_view_tree"/>
+      <field name="name">party_tree</field>
+    </record>
+    <!-- Insurer -->
+    <record model="ir.ui.view" id="insurer_view_form_hosted">
+      <field name="model">party.insurer</field>
+      <field name="type">form</field>
+      <field name="name">insurer_view_form</field>
+    </record>
+    <record model="ir.ui.view" id="insurer_view_tree">
+      <field name="model">party.insurer</field>
+      <field name="type">tree</field>
+      <field name="name">insurer_view_tree</field>
+    </record>
+    <!-- Broker -->
+    <record model="ir.ui.view" id="broker_view_form">
+      <field name="model">party.broker</field>
+      <field name="type">form</field>
+      <field name="name">broker_view_form</field>
+    </record>
+    <record model="ir.ui.view" id="broker_view_tree">
+      <field name="model">party.broker</field>
+      <field name="type">tree</field>
+      <field name="name">broker_view_tree</field>
+    </record>
+    <!-- Customer -->
+    <record model="ir.ui.view" id="customer_view_form">
+      <field name="model">party.customer</field>
+      <field name="type">form</field>
+      <field name="name">customer_view_form</field>
+    </record>
+    <record model="ir.ui.view" id="customer_view_tree">
+      <field name="model">party.customer</field>
+      <field name="type">tree</field>
+      <field name="name">customer_view_tree</field>
+    </record>
+  </data>
 </tryton>
