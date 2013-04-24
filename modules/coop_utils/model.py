@@ -468,7 +468,8 @@ class ExportImportMixin(Model):
                 if isinstance(values, basestring):
                     values = json.loads(values, object_hook=object_hook)
                     values = utils.recursive_list_tuple_convert(values)
-                record = cls._import_json(values)
+                TargetModel = Pool().get(values['__name__'])
+                record = TargetModel._import_json(values)
         return record
 
 
