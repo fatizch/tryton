@@ -32,7 +32,7 @@ def launch_proteus_test_case(test_config_file):
     for cur_module in modules:
         print '=' * 80 + '\n'
         cur_path = os.path.abspath(
-            os.path.join(DIR, '..', cur_module))
+            os.path.join(DIR, '..', 'modules', cur_module))
         if cfg_dict['un_fuzzy_translation']:
             un_fuzzy_translation(module=cur_module)
         generate_module_translation(cfg_dict, cur_path, cur_module)
