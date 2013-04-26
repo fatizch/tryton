@@ -752,7 +752,7 @@ class StepDesc(ModelSQL, ModelView):
 
     technical_name = fields.Char(
         'Technical Name', on_change_with=['technical_name', 'fancy_name'])
-    fancy_name = fields.Char('Name', translate=True)
+    fancy_name = fields.Char('Name', required=True, translate=True)
     step_xml = fields.Text('XML')
     authorizations = fields.Many2Many(
         'process.step_desc_authorization', 'step_desc', 'group',
