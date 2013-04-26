@@ -841,11 +841,10 @@ class Indemnification(model.CoopView, model.CoopSQL):
         return DEF_CUR_DIG
 
     def get_rec_name(self, name):
-        return u'%s %.2f %s [%s]' % (
+        return u'%s %s [%s]' % (
             coop_string.translate_value(self, 'start_date')
             if self.start_date else '',
-            self.amount,
-            self.currency_symbol,
+            coop_string.amount_as_string(self.amount, self.currency),
             coop_string.translate_value(self, 'status') if self.status else '',
         )
 

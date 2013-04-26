@@ -578,7 +578,8 @@ class TreeElement(ModelView, ModelSQL):
         if self.translated_technical_name:
             return {}
         return {
-            'translated_technical_name': self.description.replace(' ', '_'),
+            'translated_technical_name':
+            coop_string.remove_blank_and_invalid_char(self.description)
         }
 
     def on_change_the_table(self):

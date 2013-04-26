@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -180,7 +180,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.loan_share,loan:"
 msgid "Loan"
-msgstr "Emprunteur"
+msgstr "Prêt"
 
 msgctxt "field:ins_contract.loan_share,person:"
 msgid "Person"
@@ -212,7 +212,7 @@ msgstr ""
 
 msgctxt "model:ins_contract.loan,name:"
 msgid "Loan"
-msgstr "Emprunteur"
+msgstr "Prêt"
 
 msgctxt "model:ins_contract.loan_covered_data-loan_share,name:"
 msgid "Loan Covered Data Loan Share Relation"
@@ -264,7 +264,7 @@ msgstr ""
 
 msgctxt "view:ins_contract.loan:"
 msgid "Loan"
-msgstr "Emprunteur"
+msgstr "Prêt"
 
 msgctxt "view:ins_contract.loan_share:"
 msgid "Loan Share"

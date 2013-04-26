@@ -460,7 +460,7 @@ msgstr "Mis à jour par"
 
 msgctxt "model:ir.action,name:act_process_desc"
 msgid "Process Descriptors"
-msgstr "Paramétrage des Processus"
+msgstr "Processus"
 
 msgctxt "model:ir.action,name:act_process_status"
 msgid "Process Status"
@@ -468,7 +468,7 @@ msgstr "Statuts des Etapes"
 
 msgctxt "model:ir.action,name:act_step_desc"
 msgid "Step Descriptors"
-msgstr "Paramétrage des Etapes"
+msgstr "Etapes"
 
 msgctxt "model:ir.action,name:generate_graph_wizard"
 msgid "Graph"
@@ -480,7 +480,7 @@ msgstr "Graphique"
 
 msgctxt "model:ir.ui.menu,name:menu_process_desc"
 msgid "Process Descriptors"
-msgstr "Paramétrage des Processus"
+msgstr "Processus"
 
 msgctxt "model:ir.ui.menu,name:menu_process_lang"
 msgid "Processes"
@@ -492,7 +492,7 @@ msgstr "Statuts des Etapes"
 
 msgctxt "model:ir.ui.menu,name:menu_step_desc"
 msgid "Step Descriptors"
-msgstr "Paramétrage des Etapes"
+msgstr "Etapes"
 
 msgctxt "model:ir.ui.menu,name:process_menu_id"
 msgid "Process Main Menu"

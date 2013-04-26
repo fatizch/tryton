@@ -19,7 +19,7 @@ class LoanClaimDeliveredService():
                 return share.loan
 
     def is_loan(self):
-        return self.subscribed_service.is_loan_option
+        return self.subscribed_service.is_loan
 
     def init_dict_for_rule_engine(self, cur_dict):
         super(LoanClaimDeliveredService, self).init_dict_for_rule_engine(

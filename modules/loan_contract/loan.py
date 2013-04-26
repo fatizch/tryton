@@ -6,7 +6,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import utils, date, fields, model
+from trytond.modules.coop_utils import utils, date, fields, model, coop_string
 
 __all__ = [
     'LoanContract',
@@ -37,30 +37,38 @@ class LoanContract():
     __name__ = 'ins_contract.contract'
     __metaclass__ = PoolMeta
 
-    is_loan_contract = fields.Function(
-        fields.Boolean('Is Loan Contract', states={'invisible': True}),
-        'get_is_loan_contract')
+    is_loan = fields.Function(
+        fields.Boolean('Is Loan', states={'invisible': True}),
+        'get_is_loan')
     loans = fields.One2Many('ins_contract.loan', 'contract', 'Loans',
-        states={'invisible': ~Eval('is_loan_contract')},
-        depends=['is_loan_contract', 'currency'],
+        states={'invisible': ~Eval('is_loan')},
+        depends=['is_loan', 'currency'],
         context={'currency': Eval('currency')})
 
-    def get_is_loan_contract(self, name=None):
+    def get_is_loan(self, name):
         if not self.options and self.offered:
             return self.offered.get_is_loan_product()
         for option in self.options:
-            if option.get_is_loan_option():
+            if option.is_loan:
                 return True
         return False
 
     def init_from_subscriber(self):
-        loan = utils.instanciate_relation(self.__class__, 'loans')
+        if not utils.is_none(self, 'loans'):
+            return True
+        loan = utils.instanciate_relation(self, 'loans')
         loan.init_from_contract(self)
         loan.init_from_borrowers([self.subscriber])
         if not hasattr(self, 'loan'):
             self.loans = []
         self.loans.append(loan)
         return True
+
+    def init_dict_for_rule_engine(self, cur_dict):
+        super(LoanContract, self).init_dict_for_rule_engine(cur_dict)
+        #TODO : To enhance
+        if not utils.is_none(self, 'loans'):
+            cur_dict['loan'] = self.loans[-1]
 
 
 class LoanOption():
@@ -69,11 +77,11 @@ class LoanOption():
     __name__ = 'ins_contract.option'
     __metaclass__ = PoolMeta
 
-    is_loan_option = fields.Function(
-        fields.Boolean('Is Loan Option', states={'invisible': True}),
-        'get_is_loan_option')
+    is_loan = fields.Function(
+        fields.Boolean('Is Loan', states={'invisible': True}),
+        'get_is_loan')
 
-    def get_is_loan_option(self, name=None):
+    def get_is_loan(self, name=None):
         return self.offered and self.offered.family == 'loan'
 
 
@@ -124,7 +132,10 @@ class Loan(model.CoopSQL, model.CoopView):
         return self.monthly_payment_amount
 
     def get_rec_name(self, name):
-        return self.amount
+        res = ''
+        if self.amount:
+            res = coop_string.amount_as_string(self.amount, self.currency)
+        return res
 
     def init_from_borrowers(self, parties):
         if hasattr(self, 'loan_shares') and self.loan_shares:
@@ -204,13 +215,17 @@ class LoanCoveredData():
     loan_shares = fields.Many2Many(
         'ins_contract.loan_covered_data-loan_share',
         'covered_data', 'loan_share', 'Loan Shares',
-        states={
-            'invisible': ~Eval('_parent_option', {}).get('is_loan_option')},
-        domain=[('person', '=', Eval('person'))],
-        depends=['person'])
+        states={'invisible': ~Eval('is_loan')},
+        domain=[
+            ('person', '=', Eval('person')),
+            ('loan.contract', '=', Eval('contract'))],
+        depends=['person', 'contract'])
     person = fields.Function(
         fields.Many2One('party.party', 'Person'),
         'get_person')
+    is_loan = fields.Function(
+        fields.Boolean('Is Loan', states={'invisible': True}),
+        'get_is_loan')
 
     def get_person(self, name=None):
         if self.covered_element and self.covered_element.party:
@@ -227,6 +242,9 @@ class LoanCoveredData():
             for share in loan.loan_shares:
                 if share.person.id == covered_element.party.id:
                     self.loan_shares.append(share)
+
+    def get_is_loan(self, name):
+        return self.option and self.option.is_loan
 
 
 class LoanCoveredDataLoanShareRelation(model.CoopSQL):

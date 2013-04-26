@@ -2,7 +2,7 @@ import datetime
 import copy
 
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, If, And, Or
+from trytond.pyson import Eval, If, Or
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, fields, abstract
@@ -299,13 +299,13 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             res.update(option.get_dates(start, end))
         return super(Contract, self).get_dates(res, start, end)
 
+    def init_dict_for_rule_engine(self, cur_dict):
+        cur_dict['contract'] = self
+
     def calculate_price_at_date(self, date):
-        prices, errs = self.offered.get_result(
-            'total_price',
-            {
-                'date': date,
-                'contract': self
-            })
+        cur_dict = {'date': date}
+        self.init_dict_for_rule_engine(cur_dict)
+        prices, errs = self.offered.get_result('total_price', cur_dict)
         return (prices, errs)
 
     def calculate_prices_at_all_dates(self):
@@ -966,12 +966,8 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     covered_data = fields.One2Many(
         'ins_contract.covered_data', 'covered_element', 'Covered Element Data')
     name = fields.Char('Name',
-        states={'invisible':
-                Or(
-                    Eval('item_kind') == 'person',
-                    Eval('item_kind') == 'company',
-                    Eval('item_kind') == 'party',
-                )})
+        states={
+            'invisible': Eval('item_kind') in ['person', 'company', 'party']})
     parent = fields.Many2One('ins_contract.covered_element', 'Parent')
     sub_covered_elements = fields.One2Many(
         'ins_contract.covered_element', 'parent', 'Sub Covered Elements',
@@ -983,21 +979,18 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         on_change_with=['item_desc', 'complementary_data'],
         states={'invisible':
                 Or(
-                    Eval('item_kind') == 'person',
-                    Eval('item_kind') == 'company',
-                    Eval('item_kind') == 'party',
+                    Eval('item_kind') in ['person', 'company', 'party'],
                     ~Eval('complementary_data'),
-                )}
-    )
+                )
+            })
     party_compl_data = fields.Function(
         fields.Dict('ins_product.complementary_data_def', 'Complementary Data',
             on_change_with=['item_desc', 'complementary_data', 'party'],
-            states={'invisible':
-                    And(
-                        Eval('item_kind') != 'person',
-                        Eval('item_kind') != 'company',
-                        Eval('item_kind') != 'party',
-                    )}),
+            states={'invisible': Or(
+                    Eval('item_kind') not in ['person', 'company', 'party'],
+                    ~Eval('party_compl_data')
+                    ),
+                }),
         'on_change_with_party_compl_data', 'set_party_compl_data')
     complementary_data_summary = fields.Function(
         fields.Char('Complementary Data', on_change_with=['item_desc']),
@@ -1014,30 +1007,20 @@ class CoveredElement(model.CoopSQL, model.CoopView):
                 (),
             )], ondelete='RESTRICT',
         states={
-            'invisible': And(
-                Eval('item_kind') != 'person',
-                Eval('item_kind') != 'company',
-                Eval('item_kind') != 'party',
-            ),
-            'required': Or(
-                Eval('item_kind') == 'person',
-                Eval('item_kind') == 'company',
-                Eval('item_kind') == 'party',
-            )
-        }, depends=['item_kind'])
+            'invisible': Eval('item_kind') not in
+                ['person', 'company', 'party'],
+            'required': Eval('item_kind') in ['person', 'company', 'party'],
+            }, depends=['item_kind'])
     covered_relations = fields.Many2Many(
         'ins_contract.covered_element-party_relation', 'covered_element',
         'party_relation', 'Covered Relations', domain=[
             'OR',
             [('from_party', '=', Eval('party'))],
             [('to_party', '=', Eval('party'))],
-        ], depends=['party'],
-        states={
-            'invisible': And(
-                Eval('item_kind') != 'person',
-                Eval('item_kind') != 'company',
-                Eval('item_kind') != 'party',
-            )})
+            ], depends=['party'],
+        states={'invisible': Eval('item_kind') not in
+                ['person', 'company', 'party']
+            })
     item_kind = fields.Function(
         fields.Char('Item Kind', on_change_with=['item_desc'],
             states={'invisible': True}),
@@ -1250,6 +1233,9 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         ]
         return cls.search([domain])
 
+    def get_currency(self):
+        return self.contract.currency if self.contract else None
+
 
 class CoveredElementPartyRelation(model.CoopSQL):
     'Relation between Covered Element and Covered Relations'
@@ -1275,10 +1261,14 @@ class CoveredData(model.CoopSQL, model.CoopView):
     complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Complementary Data', on_change=[
             'complementary_data', 'option', 'start_date'],
-        depends=['complementary_data', 'option', 'start_date'])
+        depends=['complementary_data', 'option', 'start_date'],
+        states={'invisible': ~Eval('complementary_data')})
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     status = fields.Selection(OPTIONSTATUS, 'Status')
+    contract = fields.Function(
+        fields.Many2One('ins_contract.contract', 'Contract'),
+        'get_contract_id')
 
     @classmethod
     def default_status(cls):
@@ -1343,6 +1333,14 @@ class CoveredData(model.CoopSQL, model.CoopView):
             return self.coverage
         if (hasattr(self, 'option') and self.option):
             return self.option.offered
+
+    def get_contract_id(self, name):
+        contract = self.option.get_contract() if self.option else None
+        return contract.id if contract else None
+
+    def get_currency(self):
+        return (self.covered_element.get_currency()
+            if self.covered_element else None)
 
 
 class ManagementProtocol(model.CoopSQL, model.CoopView):

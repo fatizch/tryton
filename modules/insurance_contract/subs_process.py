@@ -490,6 +490,10 @@ class CoveredDesc(CoopStepView):
             return ''
         return utils.convert_ref_to_obj(self.data_for_coverage).code
 
+    def get_currency(self):
+        if self.data_covered_element():
+            return self.data_covered_element.get_currency()
+
 
 class PricingLine(CoopStepView):
     'Pricing Line'

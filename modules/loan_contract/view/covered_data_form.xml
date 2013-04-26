@@ -3,5 +3,7 @@
     <xpath expr="/form" position="inside">
         <newline/>
         <field name="loan_shares" colspan="4"/>
+        <newline/>
+        <field name="is_loan"/>
     </xpath>
 </data>

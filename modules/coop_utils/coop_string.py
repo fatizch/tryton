@@ -160,6 +160,13 @@ def date_as_string(date, lang=None):
     return Lang.strftime(date, lang.code, lang.date)
 
 
+def amount_as_string(amount, currency, symbol=True, lang=None):
+    Lang = Pool().get('ir.lang')
+    if not lang:
+        lang = utils.get_user_language()
+    return Lang.currency(lang, amount, currency, symbol=symbol)
+
+
 def remove_invalid_char(from_string):
     import unicodedata
     res = ''.join((

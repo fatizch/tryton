@@ -2,6 +2,6 @@
 <data>
     <xpath expr="/form" position="inside">
         <newline/>
-        <field name="is_loan_option"/>
+        <field name="is_loan"/>
     </xpath>
 </data>
