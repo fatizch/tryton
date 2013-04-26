@@ -7,7 +7,7 @@ if os.path.isdir(DIR):
 
 import unittest
 import trytond.tests.test_tryton
-from trytond.tests.test_tryton import test_depends
+from trytond.tests.test_tryton import test_depends, test_view
 
 
 MODULE_NAME = os.path.basename(
@@ -26,7 +26,7 @@ class ModuleTestCase(unittest.TestCase):
         '''
         Test views.
         '''
-        # test_view(MODULE_NAME)
+        test_view(MODULE_NAME)
 
     def test0006depends(self):
         '''
