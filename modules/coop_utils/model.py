@@ -608,7 +608,7 @@ class CoopSQL(ExportImportMixin, ModelSQL):
             cls, domain, offset=0, limit=None, order=None, count=False,
             query_string=False):
         #Set your class here to see the domain on the search
-        # if cls.__name__ == 'ins_contract.option':
+        # if cls.__name__ in ['ins_product.benefit', 'ins_contract.option']:
         #     print domain
         return super(CoopSQL, cls).search(
             domain=domain, offset=offset,

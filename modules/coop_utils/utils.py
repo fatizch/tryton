@@ -524,6 +524,14 @@ def update_domain(cls, var_name, new_domain):
     setattr(cls, var_name, field_name)
 
 
+def update_depends(cls, var_name, new_depends):
+    field_name = copy.copy(getattr(cls, var_name))
+    if not field_name.depends:
+        field_name.depends = []
+    field_name.depends.extend(new_depends)
+    setattr(cls, var_name, field_name)
+
+
 def get_team(good_user=None):
     if not good_user:
         User = Pool().get('res.user')

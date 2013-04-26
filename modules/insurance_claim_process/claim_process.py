@@ -145,12 +145,25 @@ class LossProcess():
     __name__ = 'ins_claim.loss'
     __metaclass__ = PoolMeta
 
+    #The Benefit to deliver is just a shortcut to ease delivered service
+    #creation. it should not be used once a delivered_service has been created
+    benefit_to_deliver = fields.Function(
+        fields.Many2One('ins_product.benefit', 'Benefit',
+            domain=[('id', 'in', Eval('benefits'))],
+            depends=['benefits', 'can_modify_benefit'],
+            states={'invisible': ~Eval('can_modify_benefit')},
+            on_change=['benefit_to_deliver', 'delivered_services', 'claim',
+                'start_date', 'loss_desc', 'event_desc']),
+        'get_benefit_to_deliver', 'set_void')
     benefits = fields.Function(
         fields.One2Many(
             'ins_product.benefit', None, 'Benefits',
-            on_change_with=['loss_desc', 'event_desc', 'start_date', 'claim',
-            'covered_person']),  #  TODO:Covered person should not be here
+            on_change_with=['loss_desc', 'event_desc', 'start_date', 'claim']),
         'on_change_with_benefits')
+    can_modify_benefit = fields.Function(
+        fields.Boolean('Can Modify Benefit?',
+            on_change_with=['delivered_services']),
+        'on_change_with_can_modify_benefit')
 
     def get_possible_benefits(self):
         if not self.claim or not self.loss_desc:
@@ -169,6 +182,59 @@ class LossProcess():
         for x in self.get_possible_benefits().values():
             res += [benefit.id for benefit in x]
         return list(set(res))
+
+    def get_benefit_to_deliver(self, name):
+        if (len(self.delivered_services) == 1
+                and self.delivered_services[0].status == 'calculating'):
+            return self.delivered_services[0].benefit.id
+
+    @classmethod
+    def set_void(cls, instances, name, vals):
+        pass
+
+    def on_change_benefit_to_deliver(self):
+        res = {}
+        if not self.delivered_services:
+            res['delivered_services'] = utils.create_inst_with_default_val(
+                self, 'delivered_services', 'add')
+            del_serv_dict = res['delivered_services']['add'][0]
+        elif (len(self.delivered_services) == 1
+                and self.delivered_services[0].status == 'calculating'):
+            res['delivered_services'] = {'update':
+                [{'id': self.delivered_services[0].id}]
+            }
+            del_serv_dict = res['delivered_services']['update'][0]
+        else:
+            return res
+        del_serv_dict['benefit'] = (self.benefit_to_deliver.id
+            if self.benefit_to_deliver else None)
+        del_serv_dict['complementary_data'] = (utils.init_complementary_data(
+                self.benefit_to_deliver.complementary_data_def)
+            if self.benefit_to_deliver else {})
+        contract = None
+        if self.claim.main_contract:
+            contract = self.claim.main_contract
+        else:
+            contracts = self.claim.get_possible_contracts(self.start_date)
+            if len(contracts) == 1:
+                contract = contracts[0]
+        if not contract:
+            return res
+        del_serv_dict['contract'] = contract.id
+        if not self.benefit_to_deliver:
+            return res
+        options = []
+        for option in contract.options:
+            if self.benefit_to_deliver in option.get_possible_benefits(self):
+                options.append(option)
+        if len(set(options)) == 1:
+            del_serv_dict['subscribed_service'] = options[0].id
+        return res
+
+    def on_change_with_can_modify_benefit(self, name=None):
+        return (not self.delivered_services
+            or (len(self.delivered_services) == 1
+                and self.delivered_services[0].status == 'calculating'))
 
 
 class DeliveredServiceProcess():

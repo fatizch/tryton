@@ -42,18 +42,9 @@ class LifeLoss():
                 ()
             )
         ],
-        depends=['possible_covered_persons'])
-
-    def get_possible_covered_persons(self):
-        res = []
-        CoveredElement = Pool().get('ins_contract.covered_element')
-        for covered_element in CoveredElement.get_possible_covered_elements(
-                self.claim.claimant, self.start_date):
-            res.extend(covered_element.get_covered_parties(self.start_date))
-        return res
-
-    def on_change_with_possible_covered_persons(self, name=None):
-        return [x.id for x in self.get_possible_covered_persons()]
+        depends=['possible_covered_persons'],
+        on_change=['covered_person', 'possible_loss_descs', 'claim',
+            'start_date', 'loss_desc', 'event_desc'])
 
     @classmethod
     def super(cls):
@@ -69,6 +60,21 @@ class LifeLoss():
             res['covered_person'] = None
         return res
 
+    def get_possible_covered_persons(self):
+        res = []
+        CoveredElement = Pool().get('ins_contract.covered_element')
+        for covered_element in CoveredElement.get_possible_covered_elements(
+                self.claim.claimant, self.start_date):
+            res.extend(covered_element.get_covered_parties(self.start_date))
+        return res
+
+    def on_change_with_possible_covered_persons(self, name=None):
+        return [x.id for x in self.get_possible_covered_persons()]
+
+    def on_change_covered_person(self):
+        res = {}
+        res['possible_loss_descs'] = self.on_change_with_possible_loss_descs()
+        return res
 
 class LifeClaimDeliveredService():
     'Claim Delivered Service'

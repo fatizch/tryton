@@ -3,7 +3,7 @@ import copy
 import datetime
 from decimal import Decimal
 
-from trytond.pyson import Eval, Bool, Or
+from trytond.pyson import Eval, Bool, Or, If
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.wizard import Wizard, StateView, StateTransition, Button
@@ -93,6 +93,13 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         'needed_by', 'Documents')
     claim_history = fields.One2Many('ins_claim.claim.history',
         'from_object', 'History')
+    #The Main contract is only used to ease the declaration process for 80%
+    #of the claims where there is only one contract involved. This link should
+    #not be used for other reason than initiating sub elements on claim.
+    #Otherwise use claim.get_contract()
+    main_contract = fields.Many2One('ins_contract.contract', 'Main Contract',
+        domain=[('id', 'in', Eval('possible_contracts'))],
+        depends=['possible_contracts'])
     possible_contracts = fields.Function(
         fields.One2Many(
             'ins_contract.contract', None, 'Contracts',
@@ -272,6 +279,21 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def on_change_with_possible_contracts(self, name=None):
         return [x.id for x in self.get_possible_contracts()]
 
+    def get_contracts(self):
+        res = []
+        for loss in self.losses:
+            res.extend(loss.get_contracts())
+        if not res and self.main_contract:
+            res.append(self.main_contract)
+        return list(set(res))
+
+    def get_contract(self):
+        contracts = self.get_contracts()
+        if len(contracts) == 1:
+            return contracts[0]
+        elif len(contracts) > 1 and self.main_contract in contracts:
+            return self.main_contract
+
 
 class ClaimHistory(model.ObjectHistory):
     'Claim History'
@@ -302,34 +324,40 @@ class Loss(model.CoopSQL, model.CoopView):
 
     claim = fields.Many2One('ins_claim.claim', 'Claim', ondelete='CASCADE')
     start_date = fields.Date('Loss Date')
-    end_date = fields.Date('End Date',
-        states={
+    end_date = fields.Date('End Date', states={
             'invisible': Bool(~Eval('with_end_date')),
             'required': Bool(Eval('with_end_date')),
-        }, depends=['with_end_date'],)
+            }, depends=['with_end_date'],)
     loss_desc = fields.Many2One('ins_product.loss_desc', 'Loss Descriptor',
         ondelete='RESTRICT',
-        on_change=['event_desc', 'loss_desc', 'with_end_date', 'end_date'])
-    event_desc = fields.Many2One('ins_product.event_desc', 'Event',
+        on_change=['event_desc', 'loss_desc', 'with_end_date', 'end_date'],
         domain=[
-            ('loss_descs', '=', Eval('loss_desc'))
-        ], states={'invisible': Bool(Eval('main_loss'))},
+            If(~~Eval('_parent_claim', {}).get('main_contract'),
+                ('id', 'in', Eval('possible_loss_descs')), ())
+            ],
+        depends=['possible_loss_descs'])
+    possible_loss_descs = fields.Function(
+        fields.One2Many('ins_product.loss_desc', None, 'Possible Loss Descs',
+            on_change_with=['claim']),
+        'on_change_with_possible_loss_descs')
+    event_desc = fields.Many2One('ins_product.event_desc', 'Event',
+        domain=[('loss_descs', '=', Eval('loss_desc'))],
+        states={'invisible': Bool(Eval('main_loss'))},
         depends=['loss_desc'], ondelete='RESTRICT')
     delivered_services = fields.One2Many(
         'ins_contract.delivered_service', 'loss', 'Delivered Services',
         domain=[
             ('contract', 'in',
                 Eval('_parent_claim', {}).get('possible_contracts'))
-        ],)
-    multi_level_view = fields.One2Many(
-        'ins_contract.delivered_service', 'loss', 'Delivered Services')
-    main_loss = fields.Many2One(
-        'ins_claim.loss', 'Main Loss', ondelete='CASCADE',
+            ],)
+    multi_level_view = fields.One2Many('ins_contract.delivered_service',
+        'loss', 'Delivered Services')
+    main_loss = fields.Many2One('ins_claim.loss', 'Main Loss',
         domain=[('claim', '=', Eval('claim')), ('id', '!=', Eval('id'))],
-        depends=['claim', 'id'],
-        on_change=['main_loss', 'loss_desc'],
-        states={'invisible': Eval('_parent_claim', {}).get('reopened_reason')
-            != 'relapse'})
+        depends=['claim', 'id'], ondelete='CASCADE',
+        on_change=['main_loss', 'loss_desc'], states={
+            'invisible': Eval('_parent_claim', {}).get('reopened_reason')
+                != 'relapse'})
     sub_losses = fields.One2Many('ins_claim.loss', 'main_loss', 'Sub Losses')
     with_end_date = fields.Function(
         fields.Boolean('With End Date'),
@@ -342,8 +370,7 @@ class Loss(model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(Loss, cls).__setup__()
-        cls._error_messages.update(
-            {
+        cls._error_messages.update({
                 'end_date_smaller_than_start_date':
                     'End Date is smaller than start date',
             })
@@ -438,6 +465,22 @@ class Loss(model.CoopSQL, model.CoopView):
                 and self.end_date < self.start_date):
             self.raise_user_error('end_date_smaller_than_start_date')
 
+    def get_contracts(self):
+        res = []
+        for del_serv in self.delivered_services:
+            contract = del_serv.get_contract()
+            if contract:
+                res.append(contract)
+        return list(set(res))
+
+    def on_change_with_possible_loss_descs(self, name=None):
+        res = []
+        if not self.claim or not self.claim.main_contract:
+            return res
+        for benefit in self.claim.main_contract.get_possible_benefits(self):
+            res.extend(benefit.loss_descs)
+        return [x.id for x in set(res)]
+
 
 class ClaimDeliveredService():
     'Claim Delivered Service'
@@ -449,7 +492,10 @@ class ClaimDeliveredService():
     benefit = fields.Many2One(
         'ins_product.benefit', 'Benefit', ondelete='RESTRICT',
         domain=[
-            ('loss_descs', '=', Eval('_parent_loss', {}).get('loss_desc'))])
+            If(~~Eval('_parent_loss', {}).get('loss_desc'),
+                ('loss_descs', '=', Eval('_parent_loss', {}).get('loss_desc')),
+                ())
+            ], depends=['loss'])
     indemnifications = fields.One2Many(
         'ins_claim.indemnification', 'delivered_service', 'Indemnifications',
         states={'invisible': ~Eval('indemnifications')})
@@ -463,18 +509,20 @@ class ClaimDeliveredService():
     @classmethod
     def __setup__(cls):
         super(ClaimDeliveredService, cls).__setup__()
-        cls.subscribed_service = copy.copy(cls.subscribed_service)
-        if not cls.subscribed_service.domain:
-            cls.subscribed_service.domain = []
-        domain = ('offered.benefits.loss_descs', '=',
-            Eval('_parent_loss', {}).get('loss_desc'))
-        cls.subscribed_service.domain.append(domain)
-
-        cls.__rpc__.update({'calculate_delivered_services':
-                RPC(instantiate=0, readonly=False)})
-        cls._buttons.update(
-            {'calculate_delivered_services': {
-                'invisible': Eval('status') == 'delivered'}})
+        utils.update_domain(cls, 'subscribed_service',
+            [If(~~Eval('_parent_loss', {}).get('loss_desc'),
+                ('offered.benefits.loss_descs', '=',
+                    Eval('_parent_loss', {}).get('loss_desc')),
+                ())
+            ])
+        utils.update_domain(cls, 'contract',
+            [If(
+                ~~Eval('_parent_loss', {}).get('_parent_claim', {}).get(
+                    'main_contract'),
+                ('id', '=', Eval('_parent_loss', {}).get(
+                    '_parent_claim', {}).get('main_contract')),
+                (),)
+            ])
 
     def init_from_loss(self, loss, benefit):
         self.benefit = benefit
@@ -558,7 +606,7 @@ class ClaimDeliveredService():
     @classmethod
     def calculate_delivered_services(cls, instances):
         for instance in instances:
-            instance.calculate()
+            res, errs = instance.calculate()
 
     def calculate(self):
         cur_dict = {}
@@ -583,6 +631,8 @@ class ClaimDeliveredService():
             res = res and cur_res
             errs += cur_errs
         self.status = 'calculated'
+        if errs:
+            print errs
         return res, errs
 
     def get_rec_name(self, name=None):
@@ -643,14 +693,14 @@ class Indemnification(model.CoopView, model.CoopSQL):
         fields.Selection(INDEMNIFICATION_KIND, 'Kind', sort=False,
             states={'invisible': True}),
         'get_kind')
-    start_date = fields.Date('Start Date',
-        states={
+    start_date = fields.Date('Start Date', states={
             'invisible': Eval('kind') != 'period',
-            'readonly': Or(~Eval('manual'), Eval('status') == 'paid'), })
-    end_date = fields.Date('End Date',
-        states={
+            'readonly': Or(~Eval('manual'), Eval('status') == 'paid'),
+            })
+    end_date = fields.Date('End Date', states={
             'invisible': Eval('kind') != 'period',
-            'readonly': Or(~Eval('manual'), Eval('status') == 'paid'), })
+            'readonly': Or(~Eval('manual'), Eval('status') == 'paid'),
+            })
     status = fields.Selection(INDEMNIFICATION_STATUS, 'Status', sort=False,
         states={'readonly': Eval('status') == 'paid'})
     amount = fields.Numeric('Amount',
