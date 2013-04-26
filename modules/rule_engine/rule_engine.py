@@ -151,11 +151,22 @@ def safe_eval(source, data=None):
         }}, data)
 
 
-def noargs_func(values):
+class TooManyFunctionCall(StopIteration):
+    pass
+
+
+class TooFewFunctionCall(Exception):
+    pass
+
+
+def noargs_func(name, values):
     v_iterator = iter(values)
 
     def newfunc(*args, **keywords):
-        return v_iterator.next()
+        try:
+            return v_iterator.next()
+        except StopIteration:
+            raise TooManyFunctionCall('Too many calls to {}'.format(name))
 
     return newfunc
 
@@ -289,10 +300,14 @@ class Rule(ModelView, ModelSQL):
                 exec self.as_function in context, localcontext
                 result = localcontext[
                     ('result_%s' % hash(self.name)).replace('-', '_')]
+            except (TooFewFunctionCall, TooManyFunctionCall):
+                if debug_mode:
+                    raise
             except:
                 # raise
                 context['errors'].append(
-                    'Critical Internal Rule Engine Error in rule %s' % self.name)
+                    'Critical Internal Rule Engine Error in rule %s' % (
+                        self.name))
                 result = None
         messages = context['messages']
         errors = context['errors']
@@ -345,16 +360,17 @@ class TestCase(ModelView, ModelSQL):
             test_context.setdefault(value.name, []).append(
                 safe_eval(value.value))
         test_context = {
-            key: noargs_func(value) for key, value in test_context.items()}
+            key: noargs_func(key, value)
+            for key, value in test_context.items()}
         try:
             test_value = self.rule.compute(test_context)
             for key, noargs in test_context.iteritems():
                 try:
                     noargs()
-                except StopIteration:
+                except TooManyFunctionCall:
                     pass
                 else:
-                    raise TypeError('Too few calls to {}'.format(key))
+                    raise TooFewFunctionCall('Too few calls to {}'.format(key))
         except InternalRuleEngineError:
             pass
         except:
@@ -876,14 +892,18 @@ class CreateTestCaseStart(ModelView):
     result_messages = fields.Text('Result Messages', readonly=True)
     result_errors = fields.Text('Result Errors', readonly=True)
     debug = fields.Text('Debug Info', readonly=True)
+    rule_text = fields.Text('Rule Text', states={'readonly': True})
 
     def on_change_test_values(self):
         test_context = {}
         for value in self.test_values:
+            if not value.value:
+                return {}
             val = safe_eval(value.value if value.value != '' else "''")
             test_context.setdefault(value.name, []).append(val)
         test_context = {
-            key: noargs_func(value) for key, value in test_context.items()}
+            key: noargs_func(key, value)
+            for key, value in test_context.items()}
         try:
             test_value = self.rule.compute(test_context, debug_mode=True)
             result_value = str(test_value[0])
@@ -930,8 +950,11 @@ class CreateTestCase(Wizard):
     create_test_case = StateTransition()
 
     def default_start(self, fields):
+        Rule = Pool().get('rule_engine')
+        the_rule = Rule(Transaction().context.get('active_id'))
         return {
-            'rule': Transaction().context['active_id'],
+            'rule_text': the_rule.code,
+            'rule': the_rule.id,
         }
 
     def compute_value(self):
@@ -942,7 +965,8 @@ class CreateTestCase(Wizard):
             val = safe_eval(value.value)
             test_context.setdefault(value.name, []).append(val)
         test_context = {
-            key: noargs_func(value) for key, value in test_context.items()}
+            key: noargs_func(key, value)
+            for key, value in test_context.items()}
         return rule.compute(test_context)
 
     def transition_create_test_case(self):
