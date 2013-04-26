@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<form string="Tests Report">
+  <field name="report" colspan="4"/>
+</form>

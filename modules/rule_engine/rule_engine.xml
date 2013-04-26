@@ -32,31 +32,12 @@
         <record model="ir.ui.view" id="test_case_form">
             <field name="model">rule_engine.test_case</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Test Case">
-                    <label name="rule"/>
-                    <field name="rule"/>
-                    <label name="description"/>
-                    <field name="description"/>
-                    <field name="values" colspan="4"/>
-                    <label name="expected_result"/>
-                    <field name="expected_result" colspan="3"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">test_case_form</field>
         </record>
         <record model="ir.ui.view" id="test_case_tree">
             <field name="model">rule_engine.test_case</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Test Case">
-                    <field name="description"/>
-                    <field name="expected_result"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">test_case_tree</field>
         </record>
         <record model="ir.action.act_window" id="test_case_window_relate">
             <field name="name">Test Cases</field>
@@ -82,55 +63,23 @@
         <record model="ir.ui.view" id="test_case_value_form">
             <field name="model">rule_engine.test_case.value</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Test Case Value">
-                    <label name="test_case"/>
-                    <field name="test_case" colspan="3"/>
-                    <label name="name"/>
-                    <field name="name"/>
-                    <label name="value"/>
-                    <field name="value"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">test_case_value_form</field>
         </record>
         <record model="ir.ui.view" id="test_case_value_tree">
             <field name="model">rule_engine.test_case.value</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Test Case Value" editable="bottom">
-                    <field name="name"/>
-                    <field name="value"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">test_case_value_tree</field>
         </record>
 
         <record model="ir.ui.view" id="context_form">
             <field name="model">rule_engine.context</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Context">
-                    <label name="name"/>
-                    <field name="name"/>
-                    <field name="allowed_elements" colspan="4"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">context_form</field>
         </record>
         <record model="ir.ui.view" id="context_tree">
             <field name="model">rule_engine.context</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Contexts">
-                    <field name="name"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">context_tree</field>
         </record>
         <record model="ir.action.act_window" id="context_window">
             <field name="name">Contexts</field>
@@ -178,26 +127,12 @@
         <record model="ir.ui.view" id="test_rule_start_form">
             <field name="model">rule_engine.test_rule.start</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Test Rule">
-                    <separator name="context"/>
-                    <field name="context" colspan="4"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">test_rule_start_form</field>
         </record>
         <record model="ir.ui.view" id="test_rule_test_form">
             <field name="model">rule_engine.test_rule.test</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Test Rule">
-                    <separator name="result"/>
-                    <field name="result" colspan="4"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">test_rule_test_form</field>
         </record>
         <record model="ir.action.wizard" id="test_rule_wizard">
             <field name="name">Test Rule</field>
@@ -224,13 +159,7 @@
         <record model="ir.ui.view" id="run_tests_report">
             <field name="model">rule_engine.run_tests.report</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Tests Report">
-                    <field name="report" colspan="4"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">run_tests_report</field>
         </record>
         <record model="ir.action.wizard" id="run_tests_wizard">
             <field name="name">Run Tests</field>
@@ -246,38 +175,12 @@
         <record model="ir.ui.view" id="create_test_case_start_view">
             <field name="model">rule_engine.create_test_case.start</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Create Test Case" col="2">
-                    <group id="input" yexpand="1" yfill="1" col="1">
-                        <field name="test_values"/>
-                        <field name="rule_text"/>
-                    </group>
-                    <group id="result_value" yexpand="1" yfill="1" col="2">
-                        <label name="result_value"/>
-                        <field name="result_value"/>
-                        <separator name="result_messages" colspan="2"/>
-                        <field name="result_messages" colspan="2"/>
-                        <separator name="result_errors" colspan="2"/>
-                        <field name="result_errors" colspan="2"/>
-                        <separator name="debug" colspan="2"/>
-                        <field name="debug" colspan="2"/>
-                    </group>
-                </form>
-                ]]>
-            </field>
+            <field name="name">create_test_case_start_view</field>
         </record>
         <record model="ir.ui.view" id="create_test_case_ask_description">
             <field name="model">rule_engine.create_test_case.ask_description</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Enter Description">
-                    <label name="description"/>
-                    <field name="description"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">create_test_case_ask_description</field>
         </record>
         <record model="ir.action.wizard" id="create_test_case_wizard">
             <field name="name">Create Test Case</field>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<form string="Test Case">
+  <label name="rule"/>
+  <field name="rule"/>
+  <label name="description"/>
+  <field name="description"/>
+  <field name="values" colspan="4"/>
+  <label name="expected_result"/>
+  <field name="expected_result" colspan="3"/>
+</form>

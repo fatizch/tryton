@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<form string="Test Case Value">
+  <label name="test_case"/>
+  <field name="test_case" colspan="3"/>
+  <label name="name"/>
+  <field name="name"/>
+  <label name="value"/>
+  <field name="value"/>
+</form>
