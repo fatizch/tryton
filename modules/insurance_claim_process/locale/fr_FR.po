@@ -18,10 +18,6 @@ msgctxt "field:ins_claim.claim,contact_history:"
 msgid "History"
 msgstr "Historique"
 
-msgctxt "field:ins_claim.claim,contracts:"
-msgid "Contracts"
-msgstr "Contrats"
-
 msgctxt "field:ins_claim.claim,current_log:"
 msgid "Current Log"
 msgstr ""
@@ -48,7 +44,7 @@ msgstr "Indemnisation en attente"
 
 msgctxt "field:ins_claim.claim,is_workflow:"
 msgid "Is Workflow"
-msgstr ""
+msgstr "Processus"
 
 msgctxt "field:ins_claim.claim,logs:"
 msgid "Task"
@@ -85,10 +81,6 @@ msgstr "Tiers"
 msgctxt "field:ins_claim.loss,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
-
-msgctxt "field:ins_contract.delivered_service,needs_to_be_calculated:"
-msgid "To Be Calculated"
-msgstr "A Calculer"
 
 msgctxt "model:ins_claim.declaration_process_parameters,name:"
 msgid "Declaration Process Parameters"

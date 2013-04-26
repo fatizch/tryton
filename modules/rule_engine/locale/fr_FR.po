@@ -14,6 +14,14 @@ msgctxt "error:rule_engine.context:"
 msgid "You define twice the same name!"
 msgstr "Vous avez défini le même nom plusieurs fois"
 
+msgctxt "error:rule_engine.error:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
+
+msgctxt "error:rule_engine.error:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:rule_engine.test_case.value:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -205,6 +213,46 @@ msgstr "Valeurs"
 msgctxt "field:rule_engine.create_test_case.start,unknown_values:"
 msgid "Unknown Values"
 msgstr "Valeurs Inconnues"
+
+msgctxt "field:rule_engine.error,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:rule_engine.error,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:rule_engine.error,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:rule_engine.error,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.error,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:rule_engine.error,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:rule_engine.error,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.error,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.error,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:rule_engine.error,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
 
 msgctxt "field:rule_engine.run_tests.report,id:"
 msgid "ID"
@@ -410,6 +458,10 @@ msgctxt "model:ir.action,name:create_test_values_wizard"
 msgid "Create Test Values"
 msgstr "Créer les Valeurs du Jeu d'Essai"
 
+msgctxt "model:ir.action,name:error_window"
+msgid "Rule Errors"
+msgstr "Erreurs Fonctionnelles"
+
 msgctxt "model:ir.action,name:rule_window"
 msgid "Rules"
 msgstr "Règles"
@@ -433,6 +485,10 @@ msgstr "Eléments de l'arbre"
 msgctxt "model:ir.ui.menu,name:menu_context"
 msgid "Contexts"
 msgstr "Contextes"
+
+msgctxt "model:ir.ui.menu,name:menu_error"
+msgid "Rule Errors"
+msgstr "Erreurs Fonctionnelles"
 
 msgctxt "model:ir.ui.menu,name:menu_rule"
 msgid "Rules"
@@ -466,9 +522,13 @@ msgctxt "model:rule_engine.create_test_case.start,name:"
 msgid "Display test cases variables"
 msgstr "Afficher les Variables"
 
+msgctxt "model:rule_engine.error,name:"
+msgid "Rule Error"
+msgstr "Erreur"
+
 msgctxt "model:rule_engine.run_tests.report,name:"
 msgid "Test Run Report"
-msgstr ""
+msgstr "Tester le rapport d'exécution"
 
 msgctxt "model:rule_engine.test_case,name:"
 msgid "Test Case"
@@ -480,15 +540,15 @@ msgstr "Valeur du Test"
 
 msgctxt "model:rule_engine.test_rule.start,name:"
 msgid "Test Rule Input Form"
-msgstr ""
+msgstr "Tester la Règle"
 
 msgctxt "model:rule_engine.test_rule.test,name:"
 msgid "Test Rule Result Form"
-msgstr ""
+msgstr "Résultat de la Règle"
 
 msgctxt "model:rule_engine.tools_functions,name:"
 msgid "Tools functions"
-msgstr ""
+msgstr "Outils"
 
 msgctxt "model:rule_engine.tree_element,name:"
 msgid "Rule Engine Tree Element"
@@ -501,6 +561,18 @@ msgstr "Brouillon"
 msgctxt "selection:rule_engine,status:"
 msgid "Validated"
 msgstr "Validé"
+
+msgctxt "selection:rule_engine.error,kind:"
+msgid "Error"
+msgstr "Erreur"
+
+msgctxt "selection:rule_engine.error,kind:"
+msgid "Info"
+msgstr "Info"
+
+msgctxt "selection:rule_engine.error,kind:"
+msgid "Warning"
+msgstr "Avertissement"
 
 msgctxt "selection:rule_engine.tree_element,type:"
 msgid "Folder"
@@ -533,6 +605,14 @@ msgstr "Entrer la Description"
 msgctxt "view:rule_engine.create_test_case.start:"
 msgid "Create Test Case"
 msgstr "Créer le jeu de test"
+
+msgctxt "view:rule_engine.error:"
+msgid "Rule Error"
+msgstr "Erreur"
+
+msgctxt "view:rule_engine.error:"
+msgid "name"
+msgstr "Nom"
 
 msgctxt "view:rule_engine.run_tests.report:"
 msgid "Tests Report"

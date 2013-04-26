@@ -26,6 +26,10 @@ msgctxt "error:ins_contract.covered_data:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_contract.covered_element-party_relation:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:ins_contract.covered_element:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -598,6 +602,14 @@ msgctxt "field:ins_contract.covered_element,covered_data:"
 msgid "Covered Element Data"
 msgstr "Données de Couverture"
 
+msgctxt "field:ins_contract.covered_element,covered_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.covered_element,covered_relations:"
+msgid "Covered Relations"
+msgstr "Relations Couvertes"
+
 msgctxt "field:ins_contract.covered_element,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -634,6 +646,10 @@ msgctxt "field:ins_contract.covered_element,party:"
 msgid "Actor"
 msgstr "Acteur"
 
+msgctxt "field:ins_contract.covered_element,party_compl_data:"
+msgid ""
+msgstr ""
+
 msgctxt "field:ins_contract.covered_element,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -650,6 +666,42 @@ msgctxt "field:ins_contract.covered_element,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_contract.covered_element-party_relation,covered_element:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_contract.covered_element-party_relation,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_contract.covered_element-party_relation,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_contract.covered_element-party_relation,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_contract.covered_element-party_relation,is_used:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_contract.covered_element-party_relation,party_relation:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_contract.covered_element-party_relation,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_contract.covered_element-party_relation,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_contract.covered_element-party_relation,write_uid:"
+msgid ""
+msgstr ""
+
 msgctxt "field:ins_contract.delivered_service,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -665,6 +717,10 @@ msgstr "Créé par"
 msgctxt "field:ins_contract.delivered_service,expenses:"
 msgid "Expenses"
 msgstr "Frais"
+
+msgctxt "field:ins_contract.delivered_service,func_error:"
+msgid "Error"
+msgstr "Erreur"
 
 msgctxt "field:ins_contract.delivered_service,id:"
 msgid "ID"
@@ -1287,6 +1343,10 @@ msgctxt "model:ins_contract.covered_element,name:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
+msgctxt "model:ins_contract.covered_element-party_relation,name:"
+msgid ""
+msgstr ""
+
 msgctxt "model:ins_contract.delivered_service,name:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
@@ -1516,10 +1576,6 @@ msgid "Terminated"
 msgstr "Terminé"
 
 msgctxt "selection:ins_contract.delivered_service,status:"
-msgid "Applicable"
-msgstr "Appliquable"
-
-msgctxt "selection:ins_contract.delivered_service,status:"
 msgid "Calculated"
 msgstr "Calculé"
 
@@ -1718,10 +1774,6 @@ msgstr "Contrat"
 msgctxt "view:ins_contract.contract:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
-
-msgctxt "view:ins_contract.contract:"
-msgid "Covered Elements/Options"
-msgstr "Eléments Couverts/Garanties"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Documents"

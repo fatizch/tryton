@@ -68,7 +68,7 @@ msgstr "Documents Reçus"
 
 msgctxt "field:ins_contract.contract,is_workflow:"
 msgid "Is Workflow"
-msgstr ""
+msgstr "Processus"
 
 msgctxt "field:ins_contract.contract,logs:"
 msgid "Task"

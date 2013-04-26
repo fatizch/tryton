@@ -1,10 +1,10 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:process.code:"
 msgid "Method %s does not exist on model %s"
-msgstr ""
+msgstr "La méthode %s n'existe pas sur le modèle %s"
 
 msgctxt "error:process.process_desc:"
 msgid "The technical name must be unique"
@@ -24,7 +24,7 @@ msgstr "Expression Pyson et la description sont obligatoires"
 
 msgctxt "field:ir.model,is_workflow:"
 msgid "Is Workflow"
-msgstr ""
+msgstr "Processus"
 
 msgctxt "field:process.code,create_date:"
 msgid "Create Date"
@@ -104,7 +104,7 @@ msgstr "Icône du Menu"
 
 msgctxt "field:process.process_desc,menu_items:"
 msgid "Menus"
-msgstr ""
+msgstr "Menus"
 
 msgctxt "field:process.process_desc,menu_name:"
 msgid "Menu name"
@@ -508,7 +508,7 @@ msgstr "Descripteur de Processus"
 
 msgctxt "model:process.process_menu_relation,name:"
 msgid "Process Menu Relation"
-msgstr ""
+msgstr "Relation Processus Menu"
 
 msgctxt "model:process.process_step_relation,name:"
 msgid "Process to Step relation"
@@ -599,6 +599,10 @@ msgid "==> Prestations"
 msgstr ""
 
 msgctxt "view:ins_claim.claim:"
+msgid "==> Rechute"
+msgstr ""
+
+msgctxt "view:ins_claim.claim:"
 msgid "==> Remboursement"
 msgstr ""
 
@@ -651,16 +655,16 @@ msgid "Previous"
 msgstr "Précédent"
 
 msgctxt "view:ins_claim.claim:"
+msgid "Rechute"
+msgstr ""
+
+msgctxt "view:ins_claim.claim:"
 msgid "Remboursement"
 msgstr "Remboursement"
 
 msgctxt "view:ins_claim.claim:"
-msgid "Reopened Reason"
-msgstr "Raison de la réouverture"
-
-msgctxt "view:ins_claim.claim:"
 msgid "Réouverture"
-msgstr ""
+msgstr "Réouverture"
 
 msgctxt "view:ins_claim.claim:"
 msgid "Réouverture De Sinistre"
@@ -680,10 +684,6 @@ msgstr ""
 
 msgctxt "view:ins_contract.contract:"
 msgid "==> Affiliations"
-msgstr ""
-
-msgctxt "view:ins_contract.contract:"
-msgid "==> Affilié"
 msgstr ""
 
 msgctxt "view:ins_contract.contract:"
@@ -723,16 +723,8 @@ msgid "Adhérent"
 msgstr "Adhérent"
 
 msgctxt "view:ins_contract.contract:"
-msgid "Affiliation"
-msgstr "Affiliation"
-
-msgctxt "view:ins_contract.contract:"
 msgid "Affiliations"
-msgstr ""
-
-msgctxt "view:ins_contract.contract:"
-msgid "Affilié"
-msgstr "Affilié"
+msgstr "Affiliations"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Billing"
@@ -792,7 +784,7 @@ msgstr "Garanties"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Populations"
-msgstr ""
+msgstr "Populations"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Previous"

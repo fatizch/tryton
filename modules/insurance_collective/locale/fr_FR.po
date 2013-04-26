@@ -23,39 +23,27 @@ msgid "Group Contract"
 msgstr "Contrat Collectif"
 
 msgctxt "model:ir.action,name:act_coverage_form"
-msgid "Garanties Collectives"
-msgstr ""
-
-msgctxt "model:ir.action,name:act_enrollment_form"
-msgid "Enrollment"
-msgstr "Affiliation"
-
-msgctxt "model:ir.action,name:act_enrollment_relate_form"
-msgid "Enrollments"
-msgstr "Affiliations"
+msgid "Group Coverages"
+msgstr "Garanties Collectives"
 
 msgctxt "model:ir.action,name:act_product_form"
-msgid "Produits Collectifs"
-msgstr ""
+msgid "Group Products"
+msgstr "Produits Collectifs"
 
 msgctxt "model:ir.ui.menu,name:menu_contract_form"
 msgid "Group Contract"
 msgstr "Contrat Collectif"
 
 msgctxt "model:ir.ui.menu,name:menu_coverage_form"
-msgid "Plan Coverages"
+msgid "Group Coverages"
 msgstr "Garanties Collectives"
-
-msgctxt "model:ir.ui.menu,name:menu_enrollment_form"
-msgid "Enrollment"
-msgstr "Affiliation"
 
 msgctxt "model:ir.ui.menu,name:menu_group"
 msgid "Group"
 msgstr "Collectif"
 
 msgctxt "model:ir.ui.menu,name:menu_product_form"
-msgid "Insurance Plan"
+msgid "Group Products"
 msgstr "Produits Collectifs"
 
 msgctxt "selection:ins_contract.contract,kind:"

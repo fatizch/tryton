@@ -12,4 +12,4 @@ msgstr "Montant de Couverture"
 
 msgctxt "field:ins_contract.covered_data,with_coverage_amount:"
 msgid "With Coverage Amount"
-msgstr ""
+msgstr "Avec Montant de Couverture"

@@ -10,6 +10,14 @@ msgctxt "error:tranche.tranche_version:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "field:ins_product.coverage,coverage_amount_rules:"
+msgid ""
+msgstr ""
+
+msgctxt "field:ins_product.coverage,is_coverage_amount_needed:"
+msgid ""
+msgstr ""
+
 msgctxt "field:ins_product.eligibility_rule,max_age:"
 msgid "Maximum Age"
 msgstr "Age Maximum"

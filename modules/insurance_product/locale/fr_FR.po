@@ -15,6 +15,10 @@ msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_product.benefit:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
+
+msgctxt "error:ins_product.benefit:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -113,6 +117,10 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "error:ins_product.document_request:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.document_request_batch:"
+msgid "No Batch Path Specified"
+msgstr ""
 
 msgctxt "error:ins_product.document_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -275,6 +283,10 @@ msgctxt "field:ins_product.attachment_setter,resource:"
 msgid "Resource"
 msgstr "Ressource"
 
+msgctxt "field:ins_product.benefit,beneficiary_kind:"
+msgid "Beneficiary Kind"
+msgstr "Type de Bénéficiaire"
+
 msgctxt "field:ins_product.benefit,benefit_rules:"
 msgid "Benefit Rules"
 msgstr "Règles de Prestation"
@@ -369,7 +381,7 @@ msgstr "Date de Début"
 
 msgctxt "field:ins_product.benefit,sub_document_rules:"
 msgid "Sub Document Rules"
-msgstr ""
+msgstr "Documents Eléments Couverts"
 
 msgctxt "field:ins_product.benefit,summary:"
 msgid "Summary"
@@ -508,6 +520,10 @@ msgctxt "field:ins_product.benefit_rule,indemnification_calc_unit:"
 msgid "Indemnification Calculation Unit"
 msgstr "Unité de calcul de l'indemnisation"
 
+msgctxt "field:ins_product.benefit_rule,index_initial_date:"
+msgid "Index Initial Date"
+msgstr "Date de l'Indice de Référence"
+
 msgctxt "field:ins_product.benefit_rule,index_initial_value:"
 msgid "Initial Value"
 msgstr "Valeur Initiale"
@@ -567,7 +583,7 @@ msgstr "Comportement du Modèle"
 
 msgctxt "field:ins_product.benefit_rule,use_monthly_period:"
 msgid "Monthly Period"
-msgstr ""
+msgstr "Période Mensuelle"
 
 msgctxt "field:ins_product.benefit_rule,validation_delay:"
 msgid "Validation Delay"
@@ -1080,7 +1096,7 @@ msgstr "Date de Début"
 
 msgctxt "field:ins_product.coverage,sub_document_rules:"
 msgid "Sub Document Rules"
-msgstr ""
+msgstr "Documents Eléments Couverts"
 
 msgctxt "field:ins_product.coverage,subscription_behaviour:"
 msgid "Subscription Behaviour"
@@ -1530,6 +1546,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:ins_product.document_request,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.document_request_batch,id:"
+msgid "ID"
+msgstr "ID"
 
 msgctxt "field:ins_product.document_request_displayer,documents:"
 msgid "Documents"
@@ -2287,7 +2307,7 @@ msgstr "Date de Début"
 
 msgctxt "field:ins_product.offered,sub_document_rules:"
 msgid "Sub Document Rules"
-msgstr ""
+msgstr "Documents Eléments Couverts"
 
 msgctxt "field:ins_product.offered,summary:"
 msgid "Summary"
@@ -2627,7 +2647,7 @@ msgstr "Date de Début"
 
 msgctxt "field:ins_product.product,sub_document_rules:"
 msgid "Sub Document Rules"
-msgstr ""
+msgstr "Documents Eléments Couverts"
 
 msgctxt "field:ins_product.product,summary:"
 msgid "Summary"
@@ -3004,7 +3024,7 @@ msgstr "Date de Début"
 
 msgctxt "field:ins_product.simple_coverage,sub_document_rules:"
 msgid "Sub Document Rules"
-msgstr ""
+msgstr "Documents Eléments Couverts"
 
 msgctxt "field:ins_product.simple_coverage,subscription_behaviour:"
 msgid "Subscription Behaviour"
@@ -3228,7 +3248,7 @@ msgstr "Ajouter un coefficient multiplicateur au montant de couverture"
 
 msgctxt "help:ins_product.benefit_rule,use_monthly_period:"
 msgid "Split periods at the end of the month"
-msgstr ""
+msgstr "Découper les périodes à la fin du mois"
 
 msgctxt "help:ins_product.complementary_data_def,selection:"
 msgid "A couple of key and label separated by \":\" per line"
@@ -3330,6 +3350,10 @@ msgctxt "model:ins_product.document_request,name:"
 msgid "Document Request"
 msgstr "Demande de Documents"
 
+msgctxt "model:ins_product.document_request_batch,name:"
+msgid "Document Request Batch Definition"
+msgstr ""
+
 msgctxt "model:ins_product.document_request_displayer,name:"
 msgid "Document Request Displayer"
 msgstr "Document en attente"
@@ -3393,7 +3417,7 @@ msgstr "Descripteur de Préjudice"
 
 msgctxt "model:ins_product.loss_desc-complementary_data_def,name:"
 msgid "Relation between Loss Desc and Complementary Data"
-msgstr ""
+msgstr "Relation Type de Préjudice et Données Complémentaires"
 
 msgctxt "model:ins_product.offered,name:"
 msgid "Offered"
@@ -3441,7 +3465,7 @@ msgstr "Provisionnement"
 
 msgctxt "model:ins_product.rule_engine_complementary_data_relation,name:"
 msgid "Rule engine to complementary data relation"
-msgstr ""
+msgstr "Relation Moteur de Règle Données Complémentaires"
 
 msgctxt "model:ins_product.rule_sets.contract,name:"
 msgid "Context functions for contract related data"
@@ -3473,7 +3497,7 @@ msgstr "Garantie Simple"
 
 msgctxt "model:ins_product.simple_pricing_rule,name:"
 msgid "Simple Pricing Rule"
-msgstr ""
+msgstr "Règle de Cotisation Simple"
 
 msgctxt "model:ins_product.sub_benefit_rule,name:"
 msgid "Sub Benefit Rule"
@@ -3830,10 +3854,6 @@ msgctxt "selection:ins_product.complementary_data_def,kind:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "selection:ins_product.complementary_data_def,kind:"
-msgid "Sub Element"
-msgstr ""
-
 msgctxt "selection:ins_product.complementary_data_def,type_:"
 msgid "Boolean"
 msgstr "Booléen"
@@ -3861,10 +3881,6 @@ msgstr "Sélection"
 msgctxt "selection:ins_product.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
-
-msgctxt "selection:ins_product.coverage,family:"
-msgid "default"
-msgstr "Par défaut"
 
 msgctxt "selection:ins_product.coverage,subscription_behaviour:"
 msgid "Mandatory"

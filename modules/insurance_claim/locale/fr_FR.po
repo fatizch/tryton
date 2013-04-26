@@ -23,6 +23,10 @@ msgid "Please unselect all indemnifications first"
 msgstr "Veuillez traiter les indemnisations refusées ou validées"
 
 msgctxt "error:ins_claim.loss:"
+msgid "End Date is smaller than start date"
+msgstr "La date de fin est antérieure à la date de début"
+
+msgctxt "error:ins_claim.loss:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -37,10 +41,6 @@ msgstr "Historique"
 msgctxt "field:ins_claim.claim,claimant:"
 msgid "Claimant"
 msgstr "Déclarant"
-
-msgctxt "field:ins_claim.claim,closed_reason:"
-msgid "Closed Reason"
-msgstr "Motif de clôture"
 
 msgctxt "field:ins_claim.claim,create_date:"
 msgid "Create Date"
@@ -78,13 +78,25 @@ msgctxt "field:ins_claim.claim,losses:"
 msgid "Losses"
 msgstr "Préjudices"
 
+msgctxt "field:ins_claim.claim,main_contract:"
+msgid "Main Contract"
+msgstr "Contrat Principal"
+
 msgctxt "field:ins_claim.claim,name:"
 msgid "Number"
 msgstr "Numéro"
 
+msgctxt "field:ins_claim.claim,possible_contracts:"
+msgid "Contracts"
+msgstr "Contrats"
+
 msgctxt "field:ins_claim.claim,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:ins_claim.claim,reopened_reason:"
+msgid "Reopened Reason"
+msgstr "Motif de Réouverture"
 
 msgctxt "field:ins_claim.claim,status:"
 msgid "Status"
@@ -186,6 +198,10 @@ msgctxt "field:ins_claim.indemnification,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
+msgctxt "field:ins_claim.indemnification,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
 msgctxt "field:ins_claim.indemnification,customer:"
 msgid "Customer"
 msgstr "Client"
@@ -266,9 +282,17 @@ msgctxt "field:ins_claim.indemnification_detail,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_claim.indemnification_detail,currency:"
+msgid "Currency"
+msgstr "Devises"
+
 msgctxt "field:ins_claim.indemnification_detail,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
+
+msgctxt "field:ins_claim.indemnification_detail,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
 
 msgctxt "field:ins_claim.indemnification_detail,end_date:"
 msgid "End Date"
@@ -354,10 +378,6 @@ msgctxt "field:ins_claim.indemnification_displayer,indemnification_displayer:"
 msgid "Indemnification"
 msgstr "Indemnisation"
 
-msgctxt "field:ins_claim.indemnification_displayer,selected:"
-msgid "Selected"
-msgstr "Coché"
-
 msgctxt "field:ins_claim.indemnification_displayer,selection:"
 msgid "Selection"
 msgstr "Sélection"
@@ -366,14 +386,6 @@ msgctxt "field:ins_claim.indemnification_displayer,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:ins_claim.indemnification_selection,amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:ins_claim.indemnification_selection,apply:"
-msgid "Apply on all"
-msgstr "Appliquer à tous"
-
 msgctxt "field:ins_claim.indemnification_selection,display_domain:"
 msgid "Display Search"
 msgstr "Afficher les critères de recherche"
@@ -381,10 +393,6 @@ msgstr "Afficher les critères de recherche"
 msgctxt "field:ins_claim.indemnification_selection,domain_string:"
 msgid "Domain"
 msgstr "Domaine"
-
-msgctxt "field:ins_claim.indemnification_selection,end_date:"
-msgid "End date"
-msgstr "Date de Fin"
 
 msgctxt "field:ins_claim.indemnification_selection,global_value:"
 msgid "Force Value"
@@ -405,14 +413,6 @@ msgstr "Modifié"
 msgctxt "field:ins_claim.indemnification_selection,search_size:"
 msgid "Search Size"
 msgstr "Taille de recherche"
-
-msgctxt "field:ins_claim.indemnification_selection,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:ins_claim.indemnification_selection,toggle_select_all:"
-msgid "Toggle Select All"
-msgstr "Appliquer à tous"
 
 msgctxt "field:ins_claim.loss,claim:"
 msgid "Claim"
@@ -461,6 +461,10 @@ msgstr "Préjudice Initial"
 msgctxt "field:ins_claim.loss,multi_level_view:"
 msgid "Delivered Services"
 msgstr "Prestations Fournies"
+
+msgctxt "field:ins_claim.loss,possible_loss_descs:"
+msgid ""
+msgstr ""
 
 msgctxt "field:ins_claim.loss,rec_name:"
 msgid "Name"
@@ -618,25 +622,25 @@ msgctxt "model:ir.ui.menu,name:menu_validate_indemnification"
 msgid "Validate Indemnifications"
 msgstr "Validation des Indemnisations"
 
-msgctxt "selection:ins_claim.claim,closed_reason:"
+msgctxt "selection:ins_claim.claim,reopened_reason:"
 msgid ""
-msgstr "Unité"
+msgstr ""
 
-msgctxt "selection:ins_claim.claim,closed_reason:"
-msgid "Paid"
-msgstr "Payé"
+msgctxt "selection:ins_claim.claim,reopened_reason:"
+msgid "Reclamation"
+msgstr "Réclamation"
 
-msgctxt "selection:ins_claim.claim,closed_reason:"
-msgid "Refusal"
-msgstr "Refus"
+msgctxt "selection:ins_claim.claim,reopened_reason:"
+msgid "Regularization"
+msgstr "Régularisation"
+
+msgctxt "selection:ins_claim.claim,reopened_reason:"
+msgid "Relapse"
+msgstr "Rechute"
 
 msgctxt "selection:ins_claim.claim,status:"
 msgid "Closed"
 msgstr "Fermé"
-
-msgctxt "selection:ins_claim.claim,status:"
-msgid "In Progress"
-msgstr "En cours"
 
 msgctxt "selection:ins_claim.claim,status:"
 msgid "Open"
@@ -646,13 +650,45 @@ msgctxt "selection:ins_claim.claim,status:"
 msgid "Reopened"
 msgstr "Réouvert"
 
-msgctxt "selection:ins_claim.claim,status:"
-msgid "Waiting from Client"
-msgstr "En attente de retour client"
+msgctxt "selection:ins_claim.claim,sub_status:"
+msgid ""
+msgstr ""
 
-msgctxt "selection:ins_claim.claim,status:"
-msgid "litigation"
-msgstr "En conflit"
+msgctxt "selection:ins_claim.claim,sub_status:"
+msgid "Instruction"
+msgstr "Instruction"
+
+msgctxt "selection:ins_claim.claim,sub_status:"
+msgid "Paid"
+msgstr "Payé"
+
+msgctxt "selection:ins_claim.claim,sub_status:"
+msgid "Reclamation"
+msgstr "Réclamation"
+
+msgctxt "selection:ins_claim.claim,sub_status:"
+msgid "Regularization"
+msgstr "Régularisation"
+
+msgctxt "selection:ins_claim.claim,sub_status:"
+msgid "Rejected"
+msgstr "Refusé"
+
+msgctxt "selection:ins_claim.claim,sub_status:"
+msgid "Relapse"
+msgstr "Rechute"
+
+msgctxt "selection:ins_claim.claim,sub_status:"
+msgid "Validated"
+msgstr "Validé"
+
+msgctxt "selection:ins_claim.claim,sub_status:"
+msgid "Waiting For Documents"
+msgstr "En Attente de Documents"
+
+msgctxt "selection:ins_claim.claim,sub_status:"
+msgid "Waiting Validation"
+msgstr "En Attente de Validation"
 
 msgctxt "selection:ins_claim.claim.history,status:"
 msgid "Closed"
@@ -671,28 +707,28 @@ msgid ""
 msgstr " Sous Statut"
 
 msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgid "Instruction"
+msgstr "Instruction"
+
+msgctxt "selection:ins_claim.claim.history,sub_status:"
 msgid "Paid"
 msgstr "Payé"
-
-msgctxt "selection:ins_claim.claim.history,sub_status:"
-msgid "Reclamation"
-msgstr "Réclamation"
-
-msgctxt "selection:ins_claim.claim.history,sub_status:"
-msgid "Refusal"
-msgstr "Refus"
-
-msgctxt "selection:ins_claim.claim.history,sub_status:"
-msgid "Regularization"
-msgstr "Régularisation"
 
 msgctxt "selection:ins_claim.claim.history,sub_status:"
 msgid "Rejected"
 msgstr "Refusé"
 
 msgctxt "selection:ins_claim.claim.history,sub_status:"
-msgid "Relapse"
-msgstr "Rechute"
+msgid "Validated"
+msgstr "Validé"
+
+msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgid "Waiting For Documents"
+msgstr "En Attente de Documents"
+
+msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgid "Waiting Validation"
+msgstr "En Attente de Validation"
 
 msgctxt "selection:ins_claim.indemnification,kind:"
 msgid "Annuity"
@@ -713,10 +749,6 @@ msgstr "Calculé"
 msgctxt "selection:ins_claim.indemnification,status:"
 msgid "Paid"
 msgstr "Payé"
-
-msgctxt "selection:ins_claim.indemnification,status:"
-msgid "Refused"
-msgstr "Refusé"
 
 msgctxt "selection:ins_claim.indemnification,status:"
 msgid "Rejected"
@@ -747,10 +779,6 @@ msgid "Waiting Period"
 msgstr "Carence"
 
 msgctxt "selection:ins_claim.indemnification_detail,unit:"
-msgid ""
-msgstr "Unité"
-
-msgctxt "selection:ins_claim.indemnification_detail,unit:"
 msgid "Day"
 msgstr "Jour"
 
@@ -765,6 +793,10 @@ msgstr "Mois"
 msgctxt "selection:ins_claim.indemnification_detail,unit:"
 msgid "Quarter"
 msgstr "Trimestre"
+
+msgctxt "selection:ins_claim.indemnification_detail,unit:"
+msgid "Unit"
+msgstr "Unité"
 
 msgctxt "selection:ins_claim.indemnification_detail,unit:"
 msgid "Week"
@@ -845,14 +877,6 @@ msgstr "Préjudices"
 msgctxt "view:ins_claim.indemnification:"
 msgid "Indemnification"
 msgstr "Indemnisation"
-
-msgctxt "view:ins_claim.indemnification:"
-msgid "Reject"
-msgstr "Rejeté"
-
-msgctxt "view:ins_claim.indemnification:"
-msgid "Validate"
-msgstr "Valider"
 
 msgctxt "view:ins_claim.indemnification_detail:"
 msgid "Indemnification Detail"
