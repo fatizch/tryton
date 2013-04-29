@@ -30,6 +30,8 @@ DELIVERED_SERVICES_STATUSES = [
     ('delivered', 'Delivered'),
 ]
 
+IS_PARTY = Or((Eval('item_kind') == 'person'),
+        (Eval('item_kind') == 'company'), (Eval('item_kind') == 'party'))
 
 __all__ = [
     'Contract',
@@ -966,8 +968,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     covered_data = fields.One2Many(
         'ins_contract.covered_data', 'covered_element', 'Covered Element Data')
     name = fields.Char('Name',
-        states={
-            'invisible': Eval('item_kind') in ['person', 'company', 'party']})
+        states={'invisible': IS_PARTY})
     parent = fields.Many2One('ins_contract.covered_element', 'Parent')
     sub_covered_elements = fields.One2Many(
         'ins_contract.covered_element', 'parent', 'Sub Covered Elements',
@@ -977,20 +978,11 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     complementary_data = fields.Dict('ins_product.complementary_data_def',
         'Complementary Data',
         on_change_with=['item_desc', 'complementary_data'],
-        states={'invisible':
-                Or(
-                    Eval('item_kind') in ['person', 'company', 'party'],
-                    ~Eval('complementary_data'),
-                )
-            })
+        states={'invisible': Or(IS_PARTY, ~Eval('complementary_data'))})
     party_compl_data = fields.Function(
         fields.Dict('ins_product.complementary_data_def', 'Complementary Data',
             on_change_with=['item_desc', 'complementary_data', 'party'],
-            states={'invisible': Or(
-                    Eval('item_kind') not in ['person', 'company', 'party'],
-                    ~Eval('party_compl_data')
-                    ),
-                }),
+            states={'invisible': Or(~IS_PARTY, ~Eval('party_compl_data'))}),
         'on_change_with_party_compl_data', 'set_party_compl_data')
     complementary_data_summary = fields.Function(
         fields.Char('Complementary Data', on_change_with=['item_desc']),
@@ -999,7 +991,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         domain=[
             If(
                 Eval('item_kind') == 'person',
-                ('is_person', '=', True),
+                ('IS_PARTY', '=', True),
                 (),
             ), If(
                 Eval('item_kind') == 'company',
@@ -1007,9 +999,8 @@ class CoveredElement(model.CoopSQL, model.CoopView):
                 (),
             )], ondelete='RESTRICT',
         states={
-            'invisible': Eval('item_kind') not in
-                ['person', 'company', 'party'],
-            'required': Eval('item_kind') in ['person', 'company', 'party'],
+            'invisible': ~IS_PARTY,
+            'required': IS_PARTY,
             }, depends=['item_kind'])
     covered_relations = fields.Many2Many(
         'ins_contract.covered_element-party_relation', 'covered_element',
@@ -1018,9 +1009,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             [('from_party', '=', Eval('party'))],
             [('to_party', '=', Eval('party'))],
             ], depends=['party'],
-        states={'invisible': Eval('item_kind') not in
-                ['person', 'company', 'party']
-            })
+        states={'invisible': ~IS_PARTY})
     item_kind = fields.Function(
         fields.Char('Item Kind', on_change_with=['item_desc'],
             states={'invisible': True}),
