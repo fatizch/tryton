@@ -991,7 +991,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         domain=[
             If(
                 Eval('item_kind') == 'person',
-                ('IS_PARTY', '=', True),
+                ('is_person', '=', True),
                 (),
             ), If(
                 Eval('item_kind') == 'company',
