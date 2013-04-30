@@ -78,7 +78,7 @@ class Address(model.ExportImportMixin):
 
     @staticmethod
     def default_kind():
-        'RSE TODO : what if this address kind was removed or modified?'
+        #RSE TODO : what if this address kind was removed or modified?
         return 'main'
 
     @staticmethod

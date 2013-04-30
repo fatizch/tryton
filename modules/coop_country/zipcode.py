@@ -65,9 +65,12 @@ class ZipCode(model.CoopSQL, model.CoopView):
         return [(cls._rec_name,) + clause[1:]]
 
     @classmethod
-    def search(
-            cls, domain, offset=0, limit=None, order=None, count=False,
+    def search(cls, domain, offset=0, limit=None, order=None, count=False,
             query_string=False):
+        res = super(ZipCode, cls).search(
+            domain, offset, limit, order, count, query_string)
+        if res:
+            return res
         for cur_domain in domain:
             if cur_domain and cur_domain[0] == 'city':
                 city = cls.replace_city_name_with_support_for_french_sna(
