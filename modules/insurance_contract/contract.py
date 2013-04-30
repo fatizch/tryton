@@ -1,7 +1,7 @@
 import datetime
 import copy
 
-from trytond.pool import Pool, PoolMeta
+from trytond.pool import Pool
 from trytond.pyson import Eval, If, Or
 from trytond.transaction import Transaction
 
@@ -45,11 +45,9 @@ __all__ = [
     'CoveredData',
     'ManagementProtocol',
     'ManagementRole',
-    'Document',
-    'DocumentRequest',
     'DeliveredService',
-    'RequestFinder',
     'Expense',
+    'ContractAddress',
 ]
 
 
@@ -205,6 +203,9 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     contract_number = fields.Char('Contract Number', select=1,
         states={'required': Eval('status') == 'active'})
     subscriber = fields.Many2One('party.party', 'Subscriber')
+    current_policy_owner = fields.Function(
+        fields.Many2One('party.party', 'Current Policy Owner'),
+        'get_current_policy_owner')
     # The master field is the object on which rules will be called.
     # Basically, we need an abstract way to call rules, because in some case
     # (typically in GBP rules might be managed on the group contract) the rules
@@ -232,11 +233,11 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         'ins_product.document_request', 'needed_by', 'Documents', size=1)
     contract_history = fields.One2Many('ins_contract.contract.history',
         'from_object', 'Contract History')
-
-    @classmethod
-    def delete(cls, entities):
-        #cls.delete_status_history(entities)
-        super(Contract, cls).delete(entities)
+    addresses = fields.One2Many('ins_contract.address', 'contract',
+        'Addresses', context={
+            'policy_owner': Eval('current_policy_owner'),
+            'start_date': Eval('start_date'),
+            }, depends=['current_policy_owner'])
 
     @staticmethod
     def get_master(master):
@@ -547,6 +548,15 @@ class Contract(model.CoopSQL, Subscribed, Printable):
                 [('status_history.end_date', '>=', at_date)]]
         ]
         return cls.search(domain)
+
+    def get_current_policy_owner(self, name):
+        policy_owner = self.get_policy_owner(utils.today())
+        return policy_owner.id if policy_owner else None
+
+    def get_contract_address(self, at_date=None):
+        res = utils.get_good_versions_at_date(self, 'addresses', at_date)
+        if res:
+            return res[0].address
 
 
 class Option(model.CoopSQL, Subscribed):
@@ -1163,10 +1173,19 @@ class CoveredElement(model.CoopSQL, model.CoopView):
                 and not self.item_desc.kind in ['party', 'person', 'company']):
             return self.item_desc.complementary_data_def
 
+    def get_party_compl_data_def(self):
+        if (self.item_desc
+                and self.item_desc.kind in ['party', 'person', 'company']):
+            return self.item_desc.complementary_data_def
+
     def get_complementary_data_value(self, at_date, value):
-        return utils.get_complementary_data_value(
-            self, 'complementary_data', self.get_complementary_data_def(),
-            at_date, value)
+        res = utils.get_complementary_data_value(self, 'complementary_data',
+            self.get_complementary_data_def(), at_date, value)
+        if not res and self.party:
+            res = utils.get_complementary_data_value(self.party,
+                'complementary_data', self.get_party_compl_data_def(), at_date,
+                value)
+        return res
 
     def init_from_party(self, party):
         self.party = party
@@ -1243,6 +1262,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
     __name__ = 'ins_contract.covered_data'
 
     option = fields.Many2One('ins_contract.option', 'Subscribed Coverage')
+    #IMO we should not have the link to the coverage
     coverage = fields.Many2One(
         'ins_product.coverage', 'Coverage', ondelete='RESTRICT')
     covered_element = fields.Many2One(
@@ -1274,7 +1294,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
             self, 'complementary_data', self.get_complementary_data_def(),
             at_date, value)
         if not res:
-            return self.covered_element.get_complementary_data_value(
+            res = self.covered_element.get_complementary_data_value(
                 at_date, value)
         return res
 
@@ -1459,48 +1479,34 @@ class Expense(model.CoopSQL, model.CoopView):
             return self.currency.digits
 
 
-class DocumentRequest():
-    'Document Request'
+class ContractAddress(model.CoopSQL, model.CoopView):
+    'Contract Address'
 
-    __name__ = 'ins_product.document_request'
-    __metaclass__ = PoolMeta
+    __name__ = 'ins_contract.address'
 
-    @classmethod
-    def __setup__(cls):
-        super(DocumentRequest, cls).__setup__()
-        cls.needed_by = copy.copy(cls.needed_by)
-        cls.needed_by.selection.append(
-            ('ins_contract.contract', 'Contract'))
+    contract = fields.Many2One('ins_contract.contract', 'Contract')
+    start_date = fields.Date('Start Date', required=True)
+    end_date = fields.Date('End Date')
+    address = fields.Many2One('party.address', 'Address',
+        domain=[('party', '=', Eval('policy_owner'))],
+        depends=['policy_owner'])
+    policy_owner = fields.Function(
+        fields.Many2One('party.party', 'Policy Owner',
+            states={'invisible': True}),
+        'get_policy_owner')
 
+    @staticmethod
+    def default_policy_owner():
+        return Transaction().context.get('policy_owner')
 
-class Document():
-    'Document'
+    def get_policy_owner(self, name):
+        if self.contract and self.start_date:
+            res = self.contract.get_policy_owner(self.start_date)
+        else:
+            res = self.default_policy_owner()
+        if res:
+            return res.id
 
-    __name__ = 'ins_product.document'
-    __metaclass__ = PoolMeta
-
-    @classmethod
-    def __setup__(cls):
-        super(Document, cls).__setup__()
-        cls.for_object = copy.copy(cls.for_object)
-        cls.for_object.selection.append(
-            ('ins_contract.contract', 'Contract'))
-        cls.for_object.selection.append(
-            ('ins_contract.option', 'Option'))
-        cls.for_object.selection.append(
-            ('ins_contract.covered_element', 'Covered Element'))
-
-
-class RequestFinder():
-    'Request Finder'
-
-    __name__ = 'ins_product.request_finder'
-    __metaclass__ = PoolMeta
-
-    @classmethod
-    def allowed_values(cls):
-        result = super(RequestFinder, cls).allowed_values()
-        result.update({
-            'ins_contract.contract': (
-                'Contract', 'contract_number')})
-        return result
+    @staticmethod
+    def default_start_date():
+        return Transaction().context.get('start_date')

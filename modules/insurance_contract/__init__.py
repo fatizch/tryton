@@ -4,6 +4,7 @@ from subs_process import *
 from billing import *
 from billing_process import *
 from .party import *
+from .document import *
 
 
 def register():
@@ -42,6 +43,7 @@ def register():
         DeliveredService,
         RequestFinder,
         Expense,
+        ContractAddress,
         module='insurance_contract', type_='model')
     Pool.register(
         # subs_process.py classes
