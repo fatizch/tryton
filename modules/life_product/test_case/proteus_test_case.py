@@ -703,7 +703,7 @@ def create_death_coverage(cfg_dict):
 date_de_naissance(),aujourd_hui()), 'Les deux sexes')
 
 result = montant_de_couverture() * (100 - esperance) / 100 * 0.008
-if donnee_compl_option('est_vip'):
+if donnee_compl_contrat('est_vip'):
     result = 0.9 * result
 return result
 '''

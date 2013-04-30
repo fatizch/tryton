@@ -113,6 +113,22 @@ class ContractContext(RuleEngineContext):
         contract = args['contract']
         return contract.get_complementary_data_value(args['date'], data_name)
 
+    @classmethod
+    @check_args('contract')
+    def _re_contract_address_country(cls, args):
+        contract = args['contract']
+        address = contract.get_contract_address(args['date'])
+        if address:
+            return address.country
+
+    @classmethod
+    @check_args('contract')
+    def _re_contract_address_zip(cls, args):
+        contract = args['contract']
+        address = contract.get_contract_address(args['date'])
+        if address:
+            return address.zip
+
 
 class OptionContext(RuleEngineContext):
     '''
@@ -120,12 +136,6 @@ class OptionContext(RuleEngineContext):
     '''
 
     __name__ = 'ins_product.rule_sets.option'
-
-    @classmethod
-    @check_args('contract')
-    def _re_option_complementary_data(cls, args, data_name):
-        contract = args['contract']
-        return contract.get_complementary_data_value(args['date'], data_name)
 
 
 class CoveredDataContext(RuleEngineContext):
