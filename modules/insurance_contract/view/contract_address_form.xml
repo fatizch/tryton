@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form string="Contract Address">
+    <label name="contract"/>
+    <field name="contract"/>
+    <newline/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <newline/>
+    <label name="address"/>
+    <field name="address" colspan="3"/>
+    <field name="policy_owner"/>
+</form>
