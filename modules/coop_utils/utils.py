@@ -565,7 +565,7 @@ def get_complementary_data_value(
             res = cur_dict[value]
     if res:
         return res
-    for data_def in data_defs:
+    for data_def in data_defs if data_defs else []:
         if data_def.name != value:
             continue
         if data_def.type_ in ['integer', 'float', 'numeric']:
