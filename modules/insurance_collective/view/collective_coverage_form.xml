@@ -1,9 +1,5 @@
 <?xml version="1.0"?>
 <data>
-	<xpath expr="/form/notebook" position="before">
-		<label name="product"/>
-		<field name="product"/>
-	</xpath>
 	<xpath expr="//page[@id='admin']/group[@id='left']" position="inside">
 			<label name="is_group"/>
 			<field name="is_group"/>

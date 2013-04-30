@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <tree string="Covered Elements">
-    <field name="name"/>
-    <field name="item_desc"/>
+<!--     <field name="name"/>
+    <field name="item_desc"/> -->
 </tree>
