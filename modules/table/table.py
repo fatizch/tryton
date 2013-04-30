@@ -576,10 +576,15 @@ class TableCell(ModelSQL, ModelView):
             domain.append(('dimension%d' % (i + 1), '=',
                     dimension.id if dimension else None))
         try:
-            cell, = cls.search(domain)
+            cells = cls.search(domain)
         except ValueError:
             return None
-        return cell
+        if not cells:
+            return None
+        if len(cells) == 1:
+            return cells[0]
+        else:
+            raise Exception('Several cells with same dimensions (%s)' % domain)
 
     @classmethod
     def get(cls, definition, *values):
