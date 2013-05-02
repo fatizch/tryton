@@ -199,7 +199,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     options = fields.One2Many('ins_contract.option', 'contract', 'Options')
     covered_elements = fields.One2ManyDomain(
         'ins_contract.covered_element', 'contract', 'Covered Elements',
-        domain=[('parent', '=', None)])
+        domain=[('parent', '=', None)],
+        context={'contract': Eval('id')})
     contract_number = fields.Char('Contract Number', select=1,
         states={'required': Eval('status') == 'active'})
     subscriber = fields.Many2One('party.party', 'Subscriber')
@@ -972,9 +973,17 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     #data are set through on_change_with and the item desc can be set on an
     #editable tree, or we can not display for the moment dictionnary in tree
     item_desc = fields.Many2One(
-        'ins_product.item_desc', 'Item Desc', depends=['complementary_data'],
+        'ins_product.item_desc', 'Item Desc',
         on_change=['item_desc', 'complementary_data', 'party'],
-        ondelete='RESTRICT')
+        domain=[If(
+                ~~Eval('possible_item_desc'),
+                ('id', 'in', Eval('possible_item_desc')),
+                ())
+            ], depends=['possible_item_desc', 'complementary_data'])
+    possible_item_desc = fields.Function(
+        fields.Many2Many('ins_product.item_desc', None, None,
+            'Possible Item Desc', states={'invisible': True}),
+        'get_possible_item_desc_ids')
     covered_data = fields.One2Many(
         'ins_contract.covered_data', 'covered_element', 'Covered Element Data')
     name = fields.Char('Name',
@@ -1034,14 +1043,6 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             return None
         GoodModel = Pool().get(cls.__name__)
         return GoodModel(Transaction().context.get('_master_covered'))
-
-    @classmethod
-    def default_item_desc(cls):
-        master = cls.get_parent_in_transaction()
-        if not master:
-            return None
-        if master.item_desc and master.item_desc.sub_item_descs:
-            return master.item_desc.sub_item_descs[0].id
 
     @classmethod
     def default_covered_data(cls):
@@ -1243,6 +1244,33 @@ class CoveredElement(model.CoopSQL, model.CoopView):
 
     def get_currency(self):
         return self.contract.currency if self.contract else None
+
+    @classmethod
+    def get_possible_item_desc(cls, contract=None, parent=None):
+        if not parent:
+            parent = cls.get_parent_in_transaction()
+        if parent and parent.item_desc:
+            return parent.item_desc.sub_item_descs
+        if not contract:
+            Contract = Pool().get('ins_contract.contract')
+            contract = Contract(Transaction().context.get('contract'))
+        if contract and not utils.is_none(contract, 'offered'):
+            return contract.offered.item_descriptors
+        return []
+
+    def get_possible_item_desc_ids(self, name):
+        return [x.id for x in
+            self.get_possible_item_desc(self.contract, self.parent)]
+
+    @classmethod
+    def default_item_desc(cls):
+        item_descs = cls.get_possible_item_desc()
+        if len(item_descs) == 1:
+            return item_descs[0].id
+
+    @classmethod
+    def default_possible_item_desc(cls):
+        return [x.id for x in cls.get_possible_item_desc()]
 
 
 class CoveredElementPartyRelation(model.CoopSQL):

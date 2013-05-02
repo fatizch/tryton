@@ -17,4 +17,5 @@
     <field name="covered_data" colspan="4"/>
     <field name="sub_covered_elements" colspan="4"/>
     <field name="item_kind"/>
+    <field name="possible_item_desc"/>
 </form>

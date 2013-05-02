@@ -328,7 +328,13 @@ class Product(model.CoopSQL, Offered):
         'ins_product.term_renewal_rule', 'offered', 'Term - Renewal')
     item_descriptors = fields.Many2Many(
         'ins_product.product-item_desc',
-        'product', 'item_desc', 'Item Descriptors')
+        'product', 'item_desc', 'Item Descriptors',
+        domain=[('id', 'in', Eval('possible_item_descs'))],
+        depends=['possible_item_descs'], required=True)
+    possible_item_descs = fields.Function(
+        fields.Many2Many('ins_product.item_desc', None, None,
+            'Possible Item Descriptors'),
+        'get_possible_item_descs_id')
     complementary_data_def = fields.Many2Many(
         'ins_product.product-complementary_data_def',
         'product', 'complementary_data_def', 'Complementary Data',
@@ -532,6 +538,13 @@ class Product(model.CoopSQL, Offered):
         result = ComplementaryData.calculate_value_set(
             possible_schemas, all_schemas, existing_data)
         return result, ()
+
+    def get_possible_item_descs_id(self, name):
+        res = []
+        for option in self.options:
+            if not utils.is_none(option, 'item_desc'):
+                res.append(option.item_desc.id)
+        return res
 
 
 class ProductOptionsCoverage(model.CoopSQL):

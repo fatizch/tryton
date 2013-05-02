@@ -45,7 +45,8 @@ class SimpleCoverage(Offered):
             'required': Bool(~Eval('is_package')),
         },
         depends=['is_package'])
-    item_desc = fields.Many2One('ins_product.item_desc', 'Item Descriptor')
+    item_desc = fields.Many2One('ins_product.item_desc', 'Item Descriptor',
+        required=True)
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
     subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
         'Subscription Behaviour', sort=False)
