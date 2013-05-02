@@ -2,6 +2,8 @@
 <form string="name">
     <label name="name"/>
     <field name="name"/>
+    <label name="arguments"/>
+    <field name="arguments"/>
     <label name="code"/>
     <field name="code"/>
     <label name="kind"/>

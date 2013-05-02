@@ -82,18 +82,13 @@ class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
                 res = range(start, self.amount_end + 1, step)
                 return res, []
         elif self.config_kind == 'advanced' and self.rule:
-            mess = []
-            try:
-                res, mess, errs = utils.execute_rule(self, self.rule, args)
-                if res:
-                    res = self.validate_those_amounts(res)
-            except Exception:
-                res = []
-                errs = ['Invalid rule !']
-            if res is False:
+            rule_result = self.get_rule_result(args)
+            if rule_result.result_set:
+                res = self.validate_those_amounts(rule_result.result)
+            if not res and not rule_result.has_errors:
                 res = []
                 errs = ['Invalid amounts']
-            return res, mess + errs
+            return res, rule_result.print_errors() + errs
 
     def give_me_coverage_amount_validity(self, args):
         if not('data' in args and hasattr(args['data'], 'coverage_amount')

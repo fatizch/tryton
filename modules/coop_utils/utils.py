@@ -220,7 +220,8 @@ def today():
     return Pool().get('ir.date').today()
 
 
-def is_effective_at_date(instance, at_date=None, start_var_name='start_date',
+def is_effective_at_date(
+        instance, at_date=None, start_var_name='start_date',
         end_var_name='end_date'):
     if not at_date:
         at_date = today()
@@ -230,11 +231,13 @@ def is_effective_at_date(instance, at_date=None, start_var_name='start_date',
     end_date = None
     if hasattr(instance, end_var_name):
         end_date = getattr(instance, end_var_name)
-    return ((not start_date or at_date >= start_date)
+    return (
+        (not start_date or at_date >= start_date)
         and (not end_date or at_date <= end_date))
 
 
-def get_good_versions_at_date(instance, var_name, at_date=None,
+def get_good_versions_at_date(
+        instance, var_name, at_date=None,
         start_var_name='start_date', end_var_name='end_date'):
     '''This method looks for the elements in the list which are effective at
     the date. By default, it will check that the at_date is between the start
@@ -322,7 +325,8 @@ def create_inst_with_default_val(from_class, field_name, action=None):
     res = {}
     model_name = get_relation_model_name(from_class, field_name)
     CurModel = Pool().get(model_name)
-    fields_names = list(x for x in set(CurModel._fields.keys())
+    fields_names = list(
+        x for x in set(CurModel._fields.keys())
         if x not in [
             'id', 'create_uid', 'create_date', 'write_uid', 'write_date'])
     field = getattr(from_class, field_name)
@@ -574,7 +578,17 @@ def get_complementary_data_value(
 
 def execute_rule(caller, rule, args):
     args['_caller'] = caller
-    return rule.compute(args)
+    result = rule.compute(args)
+    if not (hasattr(rule, 'debug_mode') and rule.debug_mode):
+        return result
+    RuleExecution = Pool().get('rule_engine.execution_log')
+    rule_execution = RuleExecution()
+    rule_execution.rule = rule
+    rule_execution.create_date = datetime.datetime.now()
+    rule_execution.user = Transaction().user
+    rule_execution.init_from_rule_result(result)
+    rule_execution.save()
+    return result
 
 
 def recursive_list_tuple_convert(the_list):
@@ -589,7 +603,8 @@ def recursive_list_tuple_convert(the_list):
 
 
 def is_none(instance, field_name):
-    return (not hasattr(instance, field_name)
+    return (
+        not hasattr(instance, field_name)
         or not getattr(instance, field_name))
 
 

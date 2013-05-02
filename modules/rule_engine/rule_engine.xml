@@ -6,6 +6,19 @@
     <!-- ############################################################ -->
     <menuitem name="Rule Engine" id="menu_rule_engine"/>
     <!-- ############################################################ -->
+    <!-- Rule Execution Log -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="execution_log_form">
+      <field name="model">rule_engine.execution_log</field>
+      <field name="type">form</field>
+      <field name="name">execution_log_form</field>
+    </record>
+    <record model="ir.ui.view" id="execution_log_tree">
+      <field name="model">rule_engine.execution_log</field>
+      <field name="type">tree</field>
+      <field name="name">execution_log_tree</field>
+    </record>
+    <!-- ############################################################ -->
     <!-- Rule -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="rule_form">
@@ -39,6 +52,19 @@
       <field name="name">test_case_form</field>
     </record>
     <!-- ############################################################ -->
+    <!-- Test Case Values -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="test_case_value_form">
+      <field name="model">rule_engine.test_case.value</field>
+      <field name="type">form</field>
+      <field name="name">test_case_value_form</field>
+    </record>
+    <record model="ir.ui.view" id="test_case_value_tree">
+      <field name="model">rule_engine.test_case.value</field>
+      <field name="type">tree</field>
+      <field name="name">test_case_value_tree</field>
+    </record>
+    <!-- ############################################################ -->
     <!-- Test Cases -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="test_case_tree">
@@ -65,19 +91,6 @@
       <field name="keyword">form_relate</field>
       <field name="model">rule_engine,-1</field>
       <field name="action" ref="test_case_window_relate"/>
-    </record>
-    <!-- ############################################################ -->
-    <!-- Test Case Values -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="test_case_value_form">
-      <field name="model">rule_engine.test_case.value</field>
-      <field name="type">form</field>
-      <field name="name">test_case_value_form</field>
-    </record>
-    <record model="ir.ui.view" id="test_case_value_tree">
-      <field name="model">rule_engine.test_case.value</field>
-      <field name="type">tree</field>
-      <field name="name">test_case_value_tree</field>
     </record>
     <!-- ############################################################ -->
     <!-- Context -->
@@ -136,42 +149,6 @@
       <field name="act_window" ref="tree_element_window"/>
     </record>
     <menuitem parent="menu_rule_engine" action="tree_element_window" id="menu_tree_element"/>
-    <record model="ir.ui.view" id="test_rule_start_form">
-      <field name="model">rule_engine.test_rule.start</field>
-      <field name="type">form</field>
-      <field name="name">test_rule_start_form</field>
-    </record>
-    <!-- ############################################################ -->
-    <!-- Test Rule wizard -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="test_rule_test_form">
-      <field name="model">rule_engine.test_rule.test</field>
-      <field name="type">form</field>
-      <field name="name">test_rule_test_form</field>
-    </record>
-    <record model="ir.action.wizard" id="test_rule_wizard">
-      <field name="name">Test Rule</field>
-      <field name="wiz_name">rule_engine.test_rule</field>
-      <field name="model">rule_engine</field>
-    </record>
-    <record model="ir.action.keyword" id="test_rule_keyword">
-      <field name="keyword">form_action</field>
-      <field name="model">rule_engine,-1</field>
-      <field name="action" ref="test_rule_wizard"/>
-    </record>
-    <!-- ############################################################ -->
-    <!-- Test Values Wizard -->
-    <!-- ############################################################ -->
-    <record model="ir.action.wizard" id="create_test_values_wizard">
-      <field name="name">Create Test Values</field>
-      <field name="wiz_name">rule_engine.create_test_values</field>
-      <field name="model">rule_engine.test_case</field>
-    </record>
-    <record model="ir.action.keyword" id="create_test_values_keyword">
-      <field name="keyword">form_action</field>
-      <field name="model">rule_engine.test_case,-1</field>
-      <field name="action" ref="create_test_values_wizard"/>
-    </record>
     <!-- ############################################################ -->
     <!-- Run Tests Wizard -->
     <!-- ############################################################ -->
@@ -189,32 +166,6 @@
       <field name="keyword">form_action</field>
       <field name="model">rule_engine,-1</field>
       <field name="action" ref="run_tests_wizard"/>
-    </record>
-    <!-- ############################################################ -->
-    <!-- Create Test Case - Select Values -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="create_test_case_start_view">
-      <field name="model">rule_engine.create_test_case.start</field>
-      <field name="type">form</field>
-      <field name="name">create_test_case_start_view</field>
-    </record>
-    <record model="ir.ui.view" id="create_test_case_ask_description">
-      <field name="model">rule_engine.create_test_case.ask_description</field>
-      <field name="type">form</field>
-      <field name="name">create_test_case_ask_description</field>
-    </record>
-    <!-- ############################################################ -->
-    <!-- Create Test Case Wizard -->
-    <!-- ############################################################ -->
-    <record model="ir.action.wizard" id="create_test_case_wizard">
-      <field name="name">Create Test Case</field>
-      <field name="wiz_name">rule_engine.create_test_case</field>
-      <field name="model">rule_engine</field>
-    </record>
-    <record model="ir.action.keyword" id="create_test_case_keyword">
-      <field name="keyword">form_action</field>
-      <field name="model">rule_engine,-1</field>
-      <field name="action" ref="create_test_case_wizard"/>
     </record>
     <!-- ############################################################ -->
     <!-- Table Menu -->

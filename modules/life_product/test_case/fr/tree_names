@@ -1,6 +1,9 @@
 [rule_engine.tools_functions]
 rule_engine.tools_functions|Outils|dossier_outils|
-_re_message|Ajouter Message|ajouter_message|Message|Ajoute un message qui sera affiché à l'utilisateur
+_re_add_error|Ajouter Erreur|ajouter_erreur|'Message'|Ajouter un message d'erreur
+_re_add_warning|Ajouter Avertissement|ajouter_avertissement|'Message'|Ajouter un message d'avertissement
+_re_add_info|Ajouter Info|ajouter_info|'Message'|Ajouter un message informatif
+_re_add_error_code|Ajouter message prédéfini|ajouter_code_erreur|'Code Erreur'|Ajouter un message prédéfini
 _re_today|Aujourd'hui|aujourd_hui||Retourne la date du jour
 _re_years_between|Nombre d'années entre...|annees_entre|Debut,Fin|Calcule le nombre d'années entre deux dates
 _re_debug|Message de debug|message_debug|Message|Ajoute un message de debug qui sera affichée lors de la création des cas de test
@@ -37,6 +40,8 @@ _re_get_sub_component|Valeur de la composante|valeur_de_composante|Code composan
 [ins_product.rule_sets.contract]
 ins_product.rule_sets.contract|Contrat|dossier_contrat|
 _re_contract_complementary_data|Donnée Complémentaire Contrat|donnee_compl_contrat|Code donnee complementaire|
+_re_contract_address_country|Pays du contrat|pays_du_contrat||Pays de l'adresse associée au contrat
+_re_contract_address_zip|Code postal du contrat|code_postal_du_contrat||Code postal de l'adresse associée au contrat
 
 [ins_product.rule_sets.option]
 ins_product.rule_sets.option|Option|dossier_option|

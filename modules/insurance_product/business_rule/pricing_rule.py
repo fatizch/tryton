@@ -197,9 +197,11 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
             for key in result.details.iterkeys():
                 final_details[key] = 0
             new_args['final_details'] = final_details
-            res, mess, errs = utils.execute_rule(
+            rule_result = utils.execute_rule(
                 self, combination_rule, new_args)
-            errors += mess + errs
+            res = rule_result.result
+            errors.extend(rule_result.print_errors())
+            errors.extend(rule_result.print_warnings())
             result = PricingResultLine(value=res)
             result.details = {}
             result.update_details(new_args['final_details'])
@@ -314,8 +316,8 @@ class PricingComponent(model.CoopSQL, model.CoopView):
         elif self.config_kind == 'simple':
             amount = self.fixed_amount
         elif self.config_kind == 'advanced' and self.rule:
-            res, mess, errs = utils.execute_rule(self, self.rule, args)
-            amount, errors = res, mess + errs
+            rule_result = utils.execute_rule(self, self.rule, args)
+            amount, errors = rule_result.result, rule_result.print_errors()
         return amount, errors
 
     def on_change_with_rule_complementary_data(self):

@@ -77,8 +77,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
             @classmethod
             def test_values(cls, args, alpha):
-                args['messages'].append('Toto')
-                args['errors'].append('Titi')
+                args['__result__'].warnings.append('Toto')
+                args['__result__'].errors.append('Titi')
                 return alpha * 2
 
             @classmethod
@@ -144,8 +144,8 @@ return values_test(inexisting_test_values()) * 1.0
 
         tc = self.TestCase()
         tc.description = 'Test'
-        tc.values = [tcv]
-        tc.expected_result = "(8, ['Toto'], ['Titi'])"
+        tc.test_values = [tcv]
+        tc.expected_result = "[8.0, ['Titi'], ['Toto'], []]"
 
         rule.test_cases = [tc]
 

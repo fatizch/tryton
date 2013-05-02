@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<form string="Execution Log" col="4">
+  <label name="user"/>
+  <field name="user"/>
+  <label name="result"/>
+  <field name="result"/>
+  <group id="results" col="1" colspan="2" yexpand="1" yfill="1">
+      <separator name="debug"/>
+      <field name="debug"/>
+      <separator name="info"/>
+      <field name="info"/>
+      <separator name="warnings"/>
+      <field name="warnings"/>
+      <separator name="errors"/>
+      <field name="errors"/>
+  </group>
+  <group id="debug" colspan="2" yexpand="1" yfill="1">
+    <field name="low_level_debug"/>
+  </group>
+</form>

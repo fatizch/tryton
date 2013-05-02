@@ -7,21 +7,15 @@ def register():
         RuleTools,
         Context,
         Rule,
+        RuleExecutionLog,
         TestCase,
         TestCaseValue,
         TreeElement,
         ContextTreeElement,
-        TestRuleStart,
-        TestRuleTest,
         RunTestsReport,
-        CreateTestCaseStart,
-        CreateTestCaseAskDescription,
         TableDefinition,
         RuleError,
         module='rule_engine', type_='model')
     Pool.register(
-        TestRule,
-        CreateTestValues,
         RunTests,
-        CreateTestCase,
         module='rule_engine', type_='wizard')

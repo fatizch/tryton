@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<form string="Enter Description">
-  <label name="description"/>
-  <field name="description"/>
-</form>

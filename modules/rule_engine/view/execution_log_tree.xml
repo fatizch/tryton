@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Rule Executions">
+    <field name="create_date"/>
+    <field name="user"/>
+    <field name="result"/>
+</tree>

@@ -154,8 +154,7 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
 
     def get_rule_result(self, args):
         if self.rule:
-            res, mess, errs = utils.execute_rule(self, self.rule, args)
-            return res, mess + errs
+            return utils.execute_rule(self, self.rule, args)
 
     def on_change_with_rule_complementary_data(self):
         if not (hasattr(self, 'rule') and self.rule):

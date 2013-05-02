@@ -224,13 +224,13 @@ class DocumentRule(BusinessRuleRoot, model.CoopSQL):
         if not self.rule:
             return [], []
         try:
-            res, mess, errs = utils.execute_rule(self, self.rule, args)
+            rule_result = self.get_rule_result(args)
         except Exception:
             return [], ['Invalid rule']
         try:
             result = utils.get_those_objects(
                 'ins_product.document', [
-                    ('code', 'in', res)])
+                    ('code', 'in', rule_result.result)])
             return result, []
         except:
             return [], ['Invalid documents']

@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<form string="Test Rule">
-  <separator name="result"/>
-  <field name="result" colspan="4"/>
-</form>

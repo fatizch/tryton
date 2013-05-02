@@ -189,10 +189,11 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
         return 0
 
     def get_rule_result(self, args):
-        res, errs = super(BenefitRule, self).get_rule_result(args)
-        if not errs:
+        rule_result = super(BenefitRule, self).get_rule_result(args)
+        res = rule_result.result
+        if not rule_result.has_errors:
             res = self.get_revaluated_amount(res, args['start_date'])
-        return res, errs
+        return res, rule_result.print_errors()
 
     def get_simple_result(self, args):
         if self.amount_kind == 'amount':
@@ -376,8 +377,8 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
 
     def get_rule_result(self, args):
         if self.rule:
-            res, mess, errs = utils.execute_rule(self, self.rule, args)
-            return res, mess + errs
+            rule_result = utils.execute_rule(self, self.rule, args)
+            return rule_result.result, rule_result.errors
 
     def give_me_result(self, args):
         if self.config_kind == 'advanced':

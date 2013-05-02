@@ -1,10 +1,33 @@
 <?xml version="1.0"?>
-<form string="Test Case">
-  <label name="rule"/>
-  <field name="rule"/>
+<form string="Test Case" col="4">
+  <field name="rule" colspan="4"/>
+  <newline/>
   <label name="description"/>
-  <field name="description"/>
-  <field name="values" colspan="4"/>
+  <field name="description" colspan="3"/>
+  <group id="input" yexpand="1" yfill="1" colspan="2" col="1">
+    <field name="test_values"/>
+    <field name="rule_text"/>
+  </group>
+  <group id="right_group" yexpand="1" yfill="1" colspan="2">
+    <notebook>
+      <page string="Result" id="result" col="2">
+        <label name="result_value"/>
+        <field name="result_value"/>
+        <separator name="result_info" colspan="2"/>
+        <field name="result_info" colspan="2"/>
+        <separator name="result_warnings" colspan="2"/>
+        <field name="result_warnings" colspan="2"/>
+        <separator name="result_errors" colspan="2"/>
+        <field name="result_errors" colspan="2"/>
+      </page>
+      <page string="Debug Info" id="debug" col="1">
+        <separator name="low_debug"/>
+        <field name="low_debug"/>
+        <separator name="debug"/>
+        <field name="debug"/>
+      </page>
+    </notebook>
+  </group>
   <label name="expected_result"/>
   <field name="expected_result" colspan="3"/>
 </form>

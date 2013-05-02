@@ -17,7 +17,7 @@ from trytond.rpc import RPC
 from trytond.modules.coop_utils import fields
 from trytond.modules.coop_utils.model import CoopSQL as ModelSQL
 from trytond.modules.coop_utils.model import CoopView as ModelView
-from trytond.wizard import Wizard, StateView, StateTransition, Button
+from trytond.wizard import Wizard, StateView, Button
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.tools.misc import _compile_source
@@ -28,24 +28,19 @@ from trytond.modules.table import TableCell
 
 __all__ = [
     'Rule',
+    'RuleExecutionLog',
     'Context',
     'TreeElement',
     'ContextTreeElement',
     'TestCase',
     'TestCaseValue',
-    'TestRule',
-    'TestRuleStart',
-    'TestRuleTest',
-    'CreateTestValues',
     'RunTests',
     'RunTestsReport',
     'RuleTools',
     'RuleEngineContext',
     'InternalRuleEngineError',
+    'CatchedRuleEngineError',
     'check_args',
-    'CreateTestCase',
-    'CreateTestCaseStart',
-    'CreateTestCaseAskDescription',
     'TableDefinition',
     'RuleError',
 ]
@@ -83,18 +78,7 @@ WARNINGS = tuple(WARNINGS)
 
 # code snippet taken from http://docs.python.org/library/tokenize.html
 def decistmt(s):
-    """Substitute Decimals for floats in a string of statements.
-
-    >>> from decimal import Decimal
-    >>> s = 'print +21.3e-5*-.1234/81.7'
-    >>> decistmt(s)
-    "print +Decimal ('21.3e-5')*-Decimal ('.1234')/Decimal ('81.7')"
-
-    >>> exec(s)
-    -3.21716034272e-007
-    >>> exec(decistmt(s))
-    -3.217160342717258261933904529E-7
-    """
+    'Substitute Decimals for floats in a string of statements.'
     result = []
     # tokenize the string
     g = tokenize.generate_tokens(StringIO(s).readline)
@@ -112,18 +96,14 @@ def decistmt(s):
     return tokenize.untokenize(result)
 
 
-class InternalRuleEngineError(Exception):
-    pass
-
-
 def check_args(*_args):
     def decorator(f):
         def wrap(*args, **kwargs):
             f.needed_args = []
             for arg in _args:
                 if not arg in args[1]:
-                    args[1]['errors'].append('%s undefined !' % arg)
-                    raise InternalRuleEngineError
+                    args[1]['__result__'].errors.append('%s undefined !' % arg)
+                    raise CatchedRuleEngineError
                 f.needed_args.append(arg)
             return f(*args, **kwargs)
         wrap.__name__ = f.__name__
@@ -151,14 +131,6 @@ def safe_eval(source, data=None):
         }}, data)
 
 
-class TooManyFunctionCall(StopIteration):
-    pass
-
-
-class TooFewFunctionCall(Exception):
-    pass
-
-
 def noargs_func(name, values):
     v_iterator = iter(values)
 
@@ -169,6 +141,82 @@ def noargs_func(name, values):
             raise TooManyFunctionCall('Too many calls to {}'.format(name))
 
     return newfunc
+
+
+class InternalRuleEngineError(Exception):
+    pass
+
+
+class CatchedRuleEngineError(Exception):
+    pass
+
+
+class TooManyFunctionCall(StopIteration):
+    pass
+
+
+class TooFewFunctionCall(Exception):
+    pass
+
+
+class RuleEngineResult(object):
+    'Rule engine result'
+
+    def __init__(self):
+        super(RuleEngineResult, self).__init__()
+        self.errors = []
+        self.warnings = []
+        self.info = []
+        self.debug = []
+        self.low_level_debug = []
+        self.result = None
+        self.result_set = False
+
+    @property
+    def has_errors(self):
+        return bool(self.errors)
+
+    def __str__(self):
+        return '[' + ', '.join(map(str, [
+            self.result, self.errors, self.warnings, self.info])) + ']'
+
+    def print_errors(self):
+        return map(str, self.errors)
+
+    def print_warnings(self):
+        return map(str, self.warnings)
+
+    def print_info(self):
+        return map(str, self.info)
+
+    def print_debug(self):
+        return map(str, self.debug)
+
+    def print_result(self):
+        return str(self.result)
+
+
+class RuleExecutionLog(ModelSQL, ModelView):
+    'Rule Execution Log'
+
+    __name__ = 'rule_engine.execution_log'
+
+    user = fields.Many2One('res.user', 'User')
+    rule = fields.Many2One('rule_engine', 'Rule', ondelete='CASCADE')
+    errors = fields.Text('Errors', states={'readonly': True})
+    warnings = fields.Text('Warnings', states={'readonly': True})
+    info = fields.Text('Info', states={'readonly': True})
+    debug = fields.Text('Debug', states={'readonly': True})
+    low_level_debug = fields.Text('Execution Trace', states={'readonly': True})
+    result = fields.Char('Result', states={'readonly': True})
+
+    def init_from_rule_result(self, result):
+        self.errors = '\n'.join(result.print_errors())
+        self.warnings = '\n'.join(result.print_warnings())
+        self.info = '\n'.join(result.print_info())
+        self.debug = '\n'.join(result.print_debug())
+        self.low_level_debug = '\n'.join(result.low_level_debug)
+        self.result = result.print_result()
 
 
 class RuleEngineContext(CoopView):
@@ -190,6 +238,16 @@ class RuleEngineContext(CoopView):
         super(RuleEngineContext, cls).__setup__()
         cls.__rpc__.update({'get_rules': RPC()})
 
+    @classmethod
+    def get_result(cls, args):
+        if '__result__' in args:
+            return args['__result__']
+        raise InternalRuleEngineError('Result not found')
+
+    @classmethod
+    def append_error(cls, args, error_msg):
+        cls.get_result(args).errors.append(error_msg)
+
 
 class RuleTools(RuleEngineContext):
     '''
@@ -202,7 +260,7 @@ class RuleTools(RuleEngineContext):
         if (not isinstance(date1, datetime.date)
                 or not isinstance(date2, datetime.date)):
             args['errors'].append('years_between needs datetime types')
-            raise InternalRuleEngineError
+            raise CatchedRuleEngineError
         return date.number_of_years_between(date1, date2)
 
     @classmethod
@@ -210,13 +268,48 @@ class RuleTools(RuleEngineContext):
         return utils.today()
 
     @classmethod
-    def _re_message(cls, args, the_message):
-        args['messages'].append(str(the_message))
+    def add_error(cls, args, error_code, custom=False, lvl=None):
+        RuleError = Pool().get('rule_engine.error')
+        if custom:
+            error = error_code
+        else:
+            error = RuleError.search([('code', '=', error_code)])
+            if len(error) < 1:
+                cls.get_result(args).errors.append(
+                    'No error definition found for error_code %s' % error_code)
+                raise CatchedRuleEngineError
+            elif len(error) > 1:
+                cls.get_result(args).errors.append(
+                    'Multiple definitions for error code : %s' % error_code)
+                raise CatchedRuleEngineError
+            error = error[0]
+            lvl = error.kind
+        if lvl == 'info':
+            cls.get_result(args).info.append(error)
+        elif lvl == 'warning':
+            cls.get_result(args).warnings.append(error)
+        elif lvl == 'error':
+            cls.get_result(args).errors.append(error)
+
+    @classmethod
+    def _re_add_error(cls, args, error_message):
+        cls.add_error(args, error_message, custom=True, lvl='error')
+
+    @classmethod
+    def _re_add_warning(cls, args, error_message):
+        cls.add_error(args, error_message, custom=True, lvl='warning')
+
+    @classmethod
+    def _re_add_info(cls, args, error_message):
+        cls.add_error(args, error_message, custom=True, lvl='info')
+
+    @classmethod
+    def _re_add_error_code(cls, args, error_code):
+        cls.add_error(args, error_code)
 
     @classmethod
     def _re_debug(cls, args, the_message):
-        if Transaction().context.get('debug'):
-            args['debug'].append(str(the_message))
+        cls.get_result(args).debug.append(str(the_message))
 
     @classmethod
     def _re_calculation_date(cls, args):
@@ -248,12 +341,20 @@ class Rule(ModelView, ModelSQL):
         'rule_engine.context', 'Context', on_change=['context'], required=True)
     code = fields.Text('Code')
     data_tree = fields.Function(fields.Text('Data Tree'), 'get_data_tree')
-    test_cases = fields.One2Many('rule_engine.test_case', 'rule', 'Test Cases')
+    test_cases = fields.One2Many(
+        'rule_engine.test_case', 'rule', 'Test Cases',
+        states={'invisible': Eval('id', 0) <= 0},
+        context={'rule_id': Eval('id')})
     status = fields.Selection(
         [
             ('draft', 'Draft'),
             ('validated', 'Validated'),
         ], 'Status')
+    debug_mode = fields.Boolean('Debug Mode')
+    exec_logs = fields.One2Many(
+        'rule_engine.execution_log', 'rule', 'Execution Logs',
+        states={'readonly': True, 'invisible': ~Eval('debug_mode')},
+        depends=['debug_mode'])
 
     @classmethod
     def __setup__(cls):
@@ -264,6 +365,14 @@ class Rule(ModelView, ModelSQL):
         cls._error_messages.update({
             'invalid_code': 'Your code has errors!',
         })
+
+    @classmethod
+    def write(cls, rules, values):
+        if 'debug_mode' in values and not values['debug_mode']:
+            RuleExecutionLog = Pool().get('rule_engine.execution_log')
+            RuleExecutionLog.delete(RuleExecutionLog.search([
+                ('rule', 'in', [x.id for x in rules])]))
+        super(Rule, cls).write(rules, values)
 
     @classmethod
     def _export_keys(cls):
@@ -291,31 +400,29 @@ class Rule(ModelView, ModelSQL):
         return self.context.get_context()
 
     def compute(self, evaluation_context, debug_mode=False):
+        # with Transaction().set_context(debug=debug_mode), \
+                # Transaction().new_cursor():
         with Transaction().set_context(debug=debug_mode):
             context = self.get_context_for_execution()
             context.update(evaluation_context)
             context['context'] = context
+            the_result = RuleEngineResult()
+            context['__result__'] = the_result
             localcontext = {}
             try:
                 exec self.as_function in context, localcontext
-                result = localcontext[
+                the_result.result = localcontext[
                     ('result_%s' % hash(self.name)).replace('-', '_')]
+                the_result.result_set = True
             except (TooFewFunctionCall, TooManyFunctionCall):
                 if debug_mode:
                     raise
-            except:
-                # raise
-                context['errors'].append(
-                    'Critical Internal Rule Engine Error in rule %s' % (
-                        self.name))
-                result = None
-        messages = context['messages']
-        errors = context['errors']
-        if debug_mode:
-            debug = context['debug']
-            return (result, messages, errors, debug)
-        else:
-            return (result, messages, errors)
+            except CatchedRuleEngineError:
+                pass
+                the_result.result = None
+            except Exception, exc:
+                raise InternalRuleEngineError(str(exc))
+        return the_result
 
     def on_change_context(self):
         return {
@@ -339,106 +446,6 @@ class Rule(ModelView, ModelSQL):
 
     def get_rec_name(self, name=None):
         return self.name
-
-
-class TestCase(ModelView, ModelSQL):
-    "Test Case"
-    __name__ = 'rule_engine.test_case'
-    _rec_name = 'description'
-
-    description = fields.Char('Description', required=True)
-    rule = fields.Many2One(
-        'rule_engine', 'Rule', required=True,
-        ondelete='CASCADE', context={'rule_id': Eval('rule')})
-    values = fields.One2Many(
-        'rule_engine.test_case.value', 'test_case', 'Values')
-    expected_result = fields.Char('Expected Result')
-
-    def do_test(self):
-        test_context = {}
-        for value in self.values:
-            test_context.setdefault(value.name, []).append(
-                safe_eval(value.value))
-        test_context = {
-            key: noargs_func(key, value)
-            for key, value in test_context.items()}
-        try:
-            test_value = self.rule.compute(test_context)
-            for key, noargs in test_context.iteritems():
-                try:
-                    noargs()
-                except TooManyFunctionCall:
-                    pass
-                else:
-                    raise TooFewFunctionCall('Too few calls to {}'.format(key))
-        except InternalRuleEngineError:
-            pass
-        except:
-            return False, sys.exc_info()
-
-        try:
-            assert test_value == safe_eval(self.expected_result)
-            return True, None
-        except AssertionError:
-            return False, str(test_value) + ' vs. ' + str(self.expected_result)
-        except:
-            return False, str(sys.exc_info())
-
-
-class TestCaseValue(ModelView, ModelSQL):
-    "Test Case Value"
-    __name__ = 'rule_engine.test_case.value'
-
-    name = fields.Selection(
-        'get_selection', 'Name',
-        selection_change_with=['rule'], depends=['rule'])
-    value = fields.Char('Value')
-    test_case = fields.Many2One(
-        'rule_engine.test_case', 'Test Case', ondelete='CASCADE')
-    rule = fields.Function(
-        fields.Many2One('rule_engine', 'Rule'),
-        'get_rule')
-
-    @classmethod
-    def __setup__(cls):
-        super(TestCaseValue, cls).__setup__()
-        cls.__rpc__.update({
-            'get_selection': RPC(instantiate=0),
-        })
-
-    @classmethod
-    def _export_keys(cls):
-        return set([])
-
-    def get_rule(self, name):
-        if (hasattr(self, 'test_case') and self.test_case) and (
-                hasattr(self.test_case, 'rule') and self.test_case.rule):
-            return self.test_case.rule.id
-        elif 'rule_id' in Transaction().context:
-            return Transaction().context.get('rule_id')
-        else:
-            return None
-
-    @classmethod
-    def default_rule(cls):
-        if 'rule_id' in Transaction().context:
-            return Transaction().context.get('rule_id')
-        else:
-            return None
-
-    def get_selection(self):
-        if not (hasattr(self, 'rule') and self.rule):
-            return [('', '')]
-        rule = self.rule
-        rule_name = ('fct_%s' % hash(rule.name)).replace('-', '_')
-        func_finder = FunctionFinder(
-            ['Decimal', rule_name] + rule.allowed_functions)
-        ast_node = ast.parse(rule.as_function)
-        func_finder.visit(ast_node)
-        test_values = list(set([
-            (n, n) for n in func_finder.functions
-            if n not in (rule_name, 'Decimal')]))
-        return test_values + [('', '')]
 
 
 class Context(ModelView, ModelSQL):
@@ -474,9 +481,6 @@ class Context(ModelView, ModelSQL):
 
     def get_context(self):
         context = {}
-        context['messages'] = []
-        context['errors'] = []
-        context['debug'] = []
         for element in self.allowed_elements:
             element.as_context(context)
         return context
@@ -608,17 +612,35 @@ class TreeElement(ModelView, ModelSQL):
                 child.as_functions_list() for child in self.children], [])
 
     def as_context(self, context):
+        def debug_wrapper(func):
+            def wrapper_func(*args, **kwargs):
+                context['__result__'].low_level_debug.append(
+                    'Entering %s (args = %s)' % (
+                        self.translated_technical_name, str(args)))
+                try:
+                    result = func(*args, **kwargs)
+                except Exception, exc:
+                    context['__result__'].errors.append(
+                        'Error in %s : %s' % (
+                            self.translated_technical_name, str(exc)))
+                    raise
+                context['__result__'].low_level_debug.append(
+                    'Exiting %s (result = %s)' % (
+                        self.translated_technical_name, str(result)))
+                return result
+            return wrapper_func
+
         pool = Pool()
         if self.type == 'function':
             namespace_obj = pool.get(self.namespace)
-            context[self.translated_technical_name] = functools.partial(
-                getattr(namespace_obj, self.name), context)
+            context[self.translated_technical_name] = debug_wrapper(
+                functools.partial(getattr(namespace_obj, self.name), context))
         elif self.type == 'rule':
-            context[self.translated_technical_name] = functools.partial(
-                self.rule.compute, context)
+            context[self.translated_technical_name] = debug_wrapper(
+                functools.partial(self.rule.compute, context))
         elif self.type == 'table':
-            context[self.translated_technical_name] = functools.partial(
-                TableCell.get, self.the_table)
+            context[self.translated_technical_name] = debug_wrapper(
+                functools.partial(TableCell.get, self.the_table))
         for element in self.children:
             element.as_context(context)
         return context
@@ -643,47 +665,147 @@ class ContextTreeElement(ModelSQL):
         required=True, ondelete='CASCADE')
 
 
-class TestRuleStart(ModelView):
-    "Test Rule Input Form"
-    __name__ = 'rule_engine.test_rule.start'
+class TestCaseValue(ModelView, ModelSQL):
+    "Test Case Value"
+    __name__ = 'rule_engine.test_case.value'
 
-    context = fields.Text('Context')
+    name = fields.Selection(
+        'get_selection', 'Name',
+        selection_change_with=['rule'], depends=['rule'])
+    value = fields.Char('Value')
+    test_case = fields.Many2One(
+        'rule_engine.test_case', 'Test Case', ondelete='CASCADE')
+    rule = fields.Function(
+        fields.Many2One('rule_engine', 'Rule'),
+        'get_rule')
+
+    @classmethod
+    def __setup__(cls):
+        super(TestCaseValue, cls).__setup__()
+        cls.__rpc__.update({
+            'get_selection': RPC(instantiate=0),
+        })
+
+    @classmethod
+    def _export_keys(cls):
+        return set([])
+
+    def get_rule(self, name):
+        if (hasattr(self, 'test_case') and self.test_case) and (
+                hasattr(self.test_case, 'rule') and self.test_case.rule):
+            return self.test_case.rule.id
+        elif 'rule_id' in Transaction().context:
+            return Transaction().context.get('rule_id')
+        else:
+            return None
+
+    @classmethod
+    def default_rule(cls):
+        if 'rule_id' in Transaction().context:
+            return Transaction().context.get('rule_id')
+        else:
+            return None
+
+    def get_selection(self):
+        if not (hasattr(self, 'rule') and self.rule):
+            return [('', '')]
+        rule = self.rule
+        rule_name = ('fct_%s' % hash(rule.name)).replace('-', '_')
+        func_finder = FunctionFinder(
+            ['Decimal', rule_name] + rule.allowed_functions)
+        ast_node = ast.parse(rule.as_function)
+        func_finder.visit(ast_node)
+        test_values = list(set([
+            (n, n) for n in func_finder.functions
+            if n not in (rule_name, 'Decimal')]))
+        return test_values + [('', '')]
 
 
-class TestRuleTest(ModelView):
-    "Test Rule Result Form"
-    __name__ = 'rule_engine.test_rule.test'
+class TestCase(ModelView, ModelSQL):
+    "Test Case"
+    __name__ = 'rule_engine.test_case'
+    _rec_name = 'description'
 
-    result = fields.Text('Result')
+    description = fields.Char('Description', required=True)
+    rule = fields.Many2One(
+        'rule_engine', 'Rule', required=True, ondelete='CASCADE')
+    expected_result = fields.Char('Expected Result')
+    test_values = fields.One2Many(
+        'rule_engine.test_case.value', 'test_case', 'Values',
+        on_change=['test_values', 'rule'], depends=['rule'],
+        context={'rule_id': Eval('rule')})
+    result_value = fields.Char('Result Value')
+    result_warnings = fields.Text('Result Warnings')
+    result_errors = fields.Text('Result Errors')
+    result_info = fields.Text('Result Info')
+    debug = fields.Text('Debug Info')
+    low_debug = fields.Text('Low Level Debug Info')
+    rule_text = fields.Function(
+        fields.Text('Rule Text', states={'readonly': True}),
+        'get_rule_text')
 
+    def get_rule_text(self, name):
+        return self.rule.code
 
-class TestRule(Wizard):
-    "Test Rule Wizard"
-    __name__ = 'rule_engine.test_rule'
+    def execute_test(self):
+        test_context = {}
+        for value in self.test_values:
+            if not value.value:
+                return {}
+            val = safe_eval(value.value if value.value != '' else "''")
+            test_context.setdefault(value.name, []).append(val)
+        test_context = {
+            key: noargs_func(key, value)
+            for key, value in test_context.items()}
+        return self.rule.compute(test_context, debug_mode=True)
 
-    start = StateView(
-        'rule_engine.test_rule.start',
-        'rule_engine.test_rule_start_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Test', 'test', 'tryton-go-next', True)
-        ])
-    test = StateView(
-        'rule_engine.test_rule.test',
-        'rule_engine.test_rule_test_form', [
-            Button('OK', 'end', 'tryton-ok', True),
-        ])
-
-    def default_start(self, fields):
-        return {}
-
-    def default_test(self, fields):
-        Rule = Pool().get('rule_engine')
-
-        context = eval(self.start.context)
-        rule = Rule(Transaction().context['active_id'])
+    def on_change_test_values(self):
+        try:
+            test_result = self.execute_test()
+        except Exception as exc:
+            result_value = 'ERROR: {}'.format(exc)
+            return {
+                'result_value': result_value,
+                'result_info': '',
+                'result_warnings': '',
+                'result_errors': '',
+                'debug': '',
+                'low_debug': '',
+                'expected_result': result_value,
+            }
+        # if test_result.has_errors:
+            # test_result.result = 'ERROR'
         return {
-            'result': str(rule.compute(context)),
+            'result_value': test_result.print_result(),
+            'result_info': '\n'.join(test_result.print_info()),
+            'result_warning': '\n'.join(test_result.print_warnings()),
+            'result_errors': '\n'.join(test_result.print_errors()),
+            'debug': '\n'.join(test_result.print_debug()),
+            'low_debug': '\n'.join(test_result.low_level_debug),
+            'expected_result': str(test_result),
         }
+
+    def do_test(self):
+        try:
+            test_result = self.execute_test()
+        except:
+            raise
+            return False, sys.exc_info()
+        try:
+            assert str(test_result) == self.expected_result
+            return True, None
+        except AssertionError:
+            return False, str(test_result) + ' vs. ' + str(
+                self.expected_result)
+        except:
+            return False, str(sys.exc_info())
+
+    @classmethod
+    def default_rule(cls):
+        rule_id = Transaction().context.get('rule_id', None)
+        if not rule_id:
+            cls.raise_user_error('undefined_rule')
+        return rule_id
 
 
 class RunTestsReport(ModelView):
@@ -722,30 +844,6 @@ class RunTests(Wizard):
         return {
             'report': '\n\n'.join(results),
         }
-
-
-class CreateTestValues(Wizard):
-    "Create Test Values Wizard"
-    __name__ = 'rule_engine.create_test_values'
-
-    start = StateTransition()
-
-    def transition_start(self):
-        TestCase = Pool().get('rule_engine.test_case')
-        TestCaseValue = Pool().get('rule_engine.test_case.value')
-
-        test_case = TestCase(Transaction().context['active_id'])
-        func_values = set(v.name for v in test_case.values)
-        func_finder = FunctionFinder(
-            [test_case.rule.name] + test_case.rule.allowed_functions)
-        ast_node = ast.parse(test_case.rule.as_function)
-        func_finder.visit(ast_node)
-        for func_name in func_finder.functions:
-            if func_name == test_case.rule.name or func_name in func_values:
-                continue
-            test_value = TestCaseValue(name=func_name, test_case=test_case)
-            test_value.save()
-        return 'end'
 
 
 class TableDefinition():
@@ -878,111 +976,6 @@ class TableDefinition():
         return tables
 
 
-class CreateTestCaseStart(ModelView):
-    'Display test cases variables'
-    __name__ = 'rule_engine.create_test_case.start'
-
-    rule = fields.Many2One('rule_engine', 'Rule', readonly=True)
-    unknown_values = fields.Integer('Unknown Values')
-    test_values = fields.One2Many(
-        'rule_engine.test_case.value', None,
-        'Values', size=Eval('unknown_values', 0),
-        on_change=['test_values', 'rule'], depends=['unknown_values', 'rule'],
-        context={'rule_id': Eval('rule')})
-    result_value = fields.Char('Result Value', readonly=True)
-    result_messages = fields.Text('Result Messages', readonly=True)
-    result_errors = fields.Text('Result Errors', readonly=True)
-    debug = fields.Text('Debug Info', readonly=True)
-    rule_text = fields.Text('Rule Text', states={'readonly': True})
-
-    def on_change_test_values(self):
-        test_context = {}
-        for value in self.test_values:
-            if not value.value:
-                return {}
-            val = safe_eval(value.value if value.value != '' else "''")
-            test_context.setdefault(value.name, []).append(val)
-        test_context = {
-            key: noargs_func(key, value)
-            for key, value in test_context.items()}
-        try:
-            test_value = self.rule.compute(test_context, debug_mode=True)
-            result_value = str(test_value[0])
-            result_messages, result_errors, debug = test_value[1:]
-        except Exception as exc:
-            result_value = 'ERROR: {}'.format(exc)
-            return {
-                'result_value': result_value,
-                'result_messages': '',
-                'result_errors': '',
-                'debug': '',
-            }
-        return {
-            'result_value': result_value,
-            'result_messages': '\n'.join(result_messages),
-            'result_errors': '\n'.join(result_errors),
-            'debug': '\n'.join(debug),
-        }
-
-
-class CreateTestCaseAskDescription(ModelView):
-    'Ask for test case description'
-    __name__ = 'rule_engine.create_test_case.ask_description'
-
-    description = fields.Char('Description', required=True)
-
-
-class CreateTestCase(Wizard):
-    'Create a test case'
-    __name__ = 'rule_engine.create_test_case'
-
-    start = StateView(
-        'rule_engine.create_test_case.start',
-        'rule_engine.create_test_case_start_view', [
-            Button('Create Test Case', 'ask_description', default=True),
-            Button('Cancel', 'end'),
-        ])
-    ask_description = StateView(
-        'rule_engine.create_test_case.ask_description',
-        'rule_engine.create_test_case_ask_description', [
-            Button('Create', 'create_test_case', default=True),
-            Button('Cancel', 'end'),
-        ])
-    create_test_case = StateTransition()
-
-    def default_start(self, fields):
-        Rule = Pool().get('rule_engine')
-        the_rule = Rule(Transaction().context.get('active_id'))
-        return {
-            'rule_text': the_rule.code,
-            'rule': the_rule.id,
-        }
-
-    def compute_value(self):
-        Rule = Pool().get('rule_engine')
-        rule, = Rule.browse([Transaction().context['active_id']])
-        test_context = {}
-        for value in self.start.test_values:
-            val = safe_eval(value.value)
-            test_context.setdefault(value.name, []).append(val)
-        test_context = {
-            key: noargs_func(key, value)
-            for key, value in test_context.items()}
-        return rule.compute(test_context)
-
-    def transition_create_test_case(self):
-        testcase = Pool().get('rule_engine.test_case')
-        testcase.create([{
-            'description': self.ask_description.description,
-            'rule': Transaction().context['active_id'],
-            'values': [
-                ('create', [{'name': tv.name, 'value': tv.value}])
-                for tv in self.start.test_values],
-            'expected_result': str(self.compute_value()),
-        }])
-        return 'end'
-
-
 class RuleError(model.CoopSQL, model.CoopView):
     'Rule Error'
 
@@ -993,6 +986,10 @@ class RuleError(model.CoopSQL, model.CoopView):
     kind = fields.Selection(
         [('info', 'Info'), ('warning', 'Warning'), ('error', 'Error')], 'Kind',
         required=True)
+    arguments = fields.Char('Arguments')
+
+    def __str__(self):
+        return '[%s] %s' % (self.kind, self.name)
 
     @classmethod
     def __setup__(cls):
@@ -1000,9 +997,27 @@ class RuleError(model.CoopSQL, model.CoopView):
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
         ]
+        cls._error_messages.update({
+            'arg_number_error':
+            'Number of arguments does not match string content',
+        })
+
+    def check_arguments(self):
+        try:
+            if self.arguments:
+                self.name % tuple(self.arguments.split(','))
+            else:
+                self.name % ()
+        except TypeError:
+            self.raise_user_error('arg_number_error')
+
+    @classmethod
+    def validate(cls, errors):
+        super(RuleError, cls).validate(errors)
+        for error in errors:
+            error.check_arguments()
 
     def on_change_with_code(self):
-        print self.code, self.name
         if self.code:
             return self.code
         elif self.name:

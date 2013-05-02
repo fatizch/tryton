@@ -1,5 +1,4 @@
 from trytond.modules.rule_engine import RuleEngineContext
-from trytond.modules.rule_engine import InternalRuleEngineError
 from trytond.modules.rule_engine import check_args
 from trytond.modules.rule_engine import RuleTools
 
@@ -29,8 +28,7 @@ class SubscriberContext(RuleEngineContext):
         subscriber = args['subscriber_person']
         if hasattr(subscriber, 'birth_date'):
             return subscriber.birth_date
-        args['errors'].append('Subscriber does not have a birth date')
-        raise InternalRuleEngineError
+        cls.append_error(args, 'Subscriber does not have a birth date')
 
     @classmethod
     @check_args('contract')
@@ -42,8 +40,8 @@ class SubscriberContext(RuleEngineContext):
     @check_args('contract')
     def _re_subscriber_subscribed(cls, args, product_name):
         contracts = args['contract'].subscriber.get_subscribed_contracts()
-        matches = [1 for x in contracts
-            if x.get_product().code == product_name]
+        matches = [
+            1 for x in contracts if x.get_product().code == product_name]
         return len(matches) > 0
 
 
@@ -53,22 +51,20 @@ class PersonContext(RuleEngineContext):
     '''
     __name__ = 'ins_product.rule_sets.person'
 
-    @staticmethod
-    def get_person(args):
+    @classmethod
+    def get_person(cls, args):
         if 'person' in args:
             return args['person']
         elif 'sub_elem' in args:
             return args['sub_elem'].party
-        args['errors'].append('Cannot find a person to get')
-        raise InternalRuleEngineError
+        cls.append_error(args, 'Cannot find a person to get')
 
     @classmethod
     def _re_get_person_birthdate(cls, args):
         person = cls.get_person(args)
         if hasattr(person, 'birth_date'):
             return person.birth_date
-        args['errors'].append('%s does not have a birth date' % person.name)
-        raise InternalRuleEngineError
+        cls.append_error(args, '%s does not have a birth date' % person.name)
 
     @classmethod
     def _re_get_person_living_country(cls, args):
@@ -78,8 +74,8 @@ class PersonContext(RuleEngineContext):
     @classmethod
     def _re_person_subscribed(cls, args, product_name):
         contracts = cls.get_person(args).get_subscribed_contracts()
-        matches = [1 for x in contracts
-            if x.get_product().code == product_name]
+        matches = [
+            1 for x in contracts if x.get_product().code == product_name]
         return len(matches) > 0
 
     @classmethod
@@ -145,13 +141,12 @@ class CoveredDataContext(RuleEngineContext):
     '''
     __name__ = 'ins_product.rule_sets.covered_data'
 
-    @staticmethod
-    def get_covered_data(args):
+    @classmethod
+    def get_covered_data(cls, args):
         if 'data' in args:
             return args['data']
         else:
-            args['errors'].append('Cannot find a covered data to get')
-            raise InternalRuleEngineError
+            cls.append_error(args, 'Cannot find a covered data to get')
 
     @classmethod
     def _re_get_initial_subscription_date(cls, args):
@@ -163,16 +158,14 @@ class CoveredDataContext(RuleEngineContext):
         if hasattr(data, 'end_date') and data.end_date:
             return data.end_date
         else:
-            args['errors'].append('No end date defined on provided data')
-            raise InternalRuleEngineError
+            cls.append_error(args, 'No end date defined on provided data')
 
     @classmethod
     def _re_get_coverage_amount(cls, args):
         data = cls.get_covered_data(args)
         if data.coverage_amount:
             return data.coverage_amount
-        args['errors'].append('Coverage amount undefined')
-        raise InternalRuleEngineError
+        cls.append_error(args, 'Coverage amount undefined')
 
     @classmethod
     @check_args('data')
@@ -196,8 +189,7 @@ class RuleCombinationContext(RuleEngineContext):
         for code, value in det.iteritems():
             if code[1] == the_code:
                 return value
-        args['errors'].append('Inexisting code : %s' % the_code)
-        raise InternalRuleEngineError
+        cls.append_error(args, 'Inexisting code : %s' % the_code)
 
     @classmethod
     @check_args('price_details', 'final_details')

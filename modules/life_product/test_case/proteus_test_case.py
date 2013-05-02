@@ -279,15 +279,15 @@ def get_or_create_tree_element(cfg_dict, cur_type, description,
         return tree_element
     lang = cfg_dict['Lang'].find([('code', '=', cfg_dict['language'])])[0]
     te = cfg_dict['TreeElement']()
-    te.type = cur_type
-    te.name = name
-    te.description = description
-    te.long_description = long_desc
     if fct_args:
         te.fct_args = ', '.join(map(
             proteus_tools.remove_all_but_alphanumeric_and_space,
             fct_args.split(',')))
     te.translated_technical_name = translated_technical
+    te.description = description
+    te.long_description = long_desc
+    te.type = cur_type
+    te.name = name
     te.namespace = namespace
     te.language = lang
     try_to_save_object(cfg_dict, te)

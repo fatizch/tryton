@@ -96,9 +96,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         te6 = self.TreeElement()
         te6.language = fr
         te6.type = 'function'
-        te6.name = '_re_message'
-        te6.translated_technical_name = 'ajouter_message'
-        te6.description = 'Ajouter message'
+        te6.name = '_re_add_warning'
+        te6.translated_technical_name = 'ajouter_warning'
+        te6.description = 'Ajouter warning'
         te6.namespace = 'rule_engine.tools_functions'
 
         te6.save()
@@ -126,7 +126,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         rule.code = '''
 birthdate = date_de_naissance_souscripteur()
 if annees_entre(birthdate, aujourd_hui()) > 40.0:
-    ajouter_message('Subscriber too old (max: 40)')
+    ajouter_warning('Subscriber too old (max: 40)')
     return False
 return True'''
 
@@ -136,8 +136,8 @@ return True'''
 
         tc = self.TestCase()
         tc.description = 'Test'
-        tc.values = [tcv]
-        tc.expected_result = '(True, [], [])'
+        tc.test_values = [tcv]
+        tc.expected_result = '[True, [], [], []]'
 
         tcv1 = self.TestCaseValue()
         tcv1.name = 'date_de_naissance_souscripteur'
@@ -145,8 +145,9 @@ return True'''
 
         tc1 = self.TestCase()
         tc1.description = 'Test1'
-        tc1.values = [tcv1]
-        tc1.expected_result = '(False, ["Subscriber too old (max: 40)"], [])'
+        tc1.test_values = [tcv1]
+        tc1.expected_result = \
+            "[False, [], ['Subscriber too old (max: 40)'], []]"
 
         rule.test_cases = [tc, tc1]
 

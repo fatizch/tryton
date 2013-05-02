@@ -89,8 +89,12 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
 
         # Now we can call the rule if it exists :
         if hasattr(self, 'rule') and self.rule:
-            res, mess, errs = utils.execute_rule(self, self.rule, args)
-            return (EligibilityResultLine(eligible=res, details=mess), errs)
+            rule_result = self.get_rule_result(args)
+            return (
+                EligibilityResultLine(
+                    eligible=rule_result.result,
+                    details=rule_result.print_warnings()),
+                rule_result.print_errors())
 
         # Default eligibility is "True" :
         return EligibilityResultLine(eligible=True), []

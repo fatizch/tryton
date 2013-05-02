@@ -142,6 +142,7 @@ def launch_proteus_test_case(test_config_file=None, module=None):
                 wizard.execute('file_import')
                 f.close()
             except:
+                print 'Could not import %s' % cur_file
                 continue
             print 'Successfully imported file %s' % cur_file
 
