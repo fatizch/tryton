@@ -1512,7 +1512,8 @@ class ContractAddress(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.address'
 
-    contract = fields.Many2One('ins_contract.contract', 'Contract')
+    contract = fields.Many2One('ins_contract.contract', 'Contract',
+        ondelete='CASCADE')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     address = fields.Many2One('party.address', 'Address',
