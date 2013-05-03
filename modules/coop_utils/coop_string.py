@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
+import locale
+from decimal import Decimal
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -206,3 +208,9 @@ def is_ascii(s):
         return True
     except UnicodeEncodeError:
         return False
+
+
+def get_amount_from_currency(amount, currency):
+    amount = amount.strip(currency.symbol)
+    amount = amount.replace(currency.mon_decimal_point, '.')
+    return Decimal(locale.atof(amount))

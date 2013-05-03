@@ -465,6 +465,10 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def activate_contract(self):
         if not self.status == 'quote':
             return True, ()
+        for option in self.options:
+            if option.status == 'quote':
+                option.update_status('active', self.start_date)
+                option.save()
         self.update_status('active', self.start_date)
         return True, ()
 
@@ -1306,6 +1310,13 @@ class CoveredData(model.CoopSQL, model.CoopView):
     contract = fields.Function(
         fields.Many2One('ins_contract.contract', 'Contract'),
         'get_contract_id')
+    currency = fields.Function(
+        fields.Many2One('currency.currency', 'Currency',
+            states={'invisible': True}),
+        'get_currency_id')
+    currency_symbol = fields.Function(
+        fields.Char('Currency Symbol'),
+        'get_currency_symbol')
 
     @classmethod
     def default_status(cls):
@@ -1378,6 +1389,13 @@ class CoveredData(model.CoopSQL, model.CoopView):
     def get_currency(self):
         return (self.covered_element.get_currency()
             if self.covered_element else None)
+
+    def get_currency_id(self, name):
+        currency = self.get_currency()
+        return currency.id if currency else None
+
+    def get_currency_symbol(self, name):
+        return self.currency.symbol if self.currency else None
 
 
 class ManagementProtocol(model.CoopSQL, model.CoopView):

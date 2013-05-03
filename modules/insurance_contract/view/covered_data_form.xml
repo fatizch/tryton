@@ -14,5 +14,8 @@
     <label name="coverage_amount"/>
     <field name="coverage_amount"/>
     <newline/>
+    <label name="currency"/>
+    <field name="currency"/>
+    <newline/>
     <field name="complementary_data" colspan="2" no_command="1"/>
 </form>

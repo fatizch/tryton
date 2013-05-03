@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -647,8 +647,8 @@ msgid "Actor"
 msgstr "Acteur"
 
 msgctxt "field:ins_contract.covered_element,party_compl_data:"
-msgid ""
-msgstr ""
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
 
 msgctxt "field:ins_contract.covered_element,rec_name:"
 msgid "Name"

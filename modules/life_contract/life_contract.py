@@ -6,7 +6,7 @@ from trytond.pyson import Eval, Or, Bool
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
-from trytond.modules.coop_utils import utils, fields, abstract
+from trytond.modules.coop_utils import utils, fields, abstract, coop_string
 from trytond.modules.insurance_contract import CoveredDesc
 from trytond.modules.insurance_process import DependantState
 from trytond.modules.insurance_process import CoopStateView
@@ -57,17 +57,6 @@ class Contract():
                     errs += validity[1]
                 errs += errors
         return (res, errs)
-
-    def init_covered_elements(self):
-        if self.covered_elements:
-            return super(Contract, self).init_covered_elements()
-        subscriber = self.get_policy_owner(self.start_date)
-        if not subscriber.is_person:
-            return super(Contract, self).init_covered_elements()
-        covered_element = Pool().get('ins_contract.covered_element')()
-        covered_element.party = subscriber.id
-        self.covered_elements = [covered_element]
-        return super(Contract, self).init_covered_elements()
 
     @classmethod
     def get_possible_contracts_from_party(cls, party, at_date):
@@ -139,11 +128,40 @@ class LifeCoveredData():
     __name__ = 'ins_contract.covered_data'
     __metaclass__ = PoolMeta
 
-    coverage_amount = fields.Numeric('Coverage Amount', states={
-        'invisible': Or(
-            Bool(Eval('_parent_coverage', {}).get('is_package')),
-            Eval('_parent_coverage', {}).get('family') != FAMILY_LIFE,
-        )})
+    coverage_amount = fields.Numeric('Coverage Amount',
+        states={
+                'invisible': ~Eval('with_coverage_amount'),
+                'required': ~~Eval('with_coverage_amount'),
+            }, depends=['with_coverage_amount'])
+    with_coverage_amount = fields.Function(
+        fields.Boolean('With Coverage Amount', states={'invisible': True}),
+        'get_with_coverage_amount')
+
+    @classmethod
+    def __setup__(cls):
+        super(LifeCoveredData, cls).__setup__()
+        cls.__rpc__.update({'get_possible_amounts': RPC(instantiate=0)})
+
+    def get_possible_amounts(self):
+        if not (hasattr(self, 'coverage') and self.coverage):
+            return [('', '')]
+        the_coverage = self.coverage
+        vals = the_coverage.get_result(
+            'allowed_amounts',
+            {
+                'date': self.start_date,
+                #'contract': abstract.WithAbstract.get_abstract_objects(
+                #    wizard, 'for_contract')
+            },)[0]
+        if vals:
+            res = map(lambda x: (x, x),
+                map(lambda x: coop_string.amount_as_string(x, self.currency),
+                    vals))
+            return [('', '')] + res
+        return [('', '')]
+
+    def get_with_coverage_amount(self, name):
+        return len(self.get_possible_amounts()) > 1
 
     def is_party_covered(self, party, at_date):
         return self.covered_element.is_party_covered(party, at_date,
@@ -160,7 +178,7 @@ class LifeCoveredDesc(CoveredDesc):
     __name__ = 'life_contract.covered_desc'
 
     data_coverage_amount = fields.Selection(
-        'get_allowed_amounts', 'Coverage Amount',
+        'get_possible_amounts', 'Coverage Amount',
         selection_change_with=['data_for_coverage', 'data_start_date'],
         # context={'data_for_coverage': Eval('data_for_coverage')},
         depends=['data_for_coverage', 'data_start_date'], sort=False,
@@ -183,7 +201,7 @@ class LifeCoveredDesc(CoveredDesc):
         cls.elem_covered_data.model_name = \
             'life_contract.covered_desc'
         cls.__rpc__.update({
-                'get_allowed_amounts': RPC(instantiate=0),
+                'get_possible_amounts': RPC(instantiate=0),
         })
 
     def on_change_elem_person(self):
@@ -191,7 +209,7 @@ class LifeCoveredDesc(CoveredDesc):
             return {'data_coverage_name': self.elem_person.get_rec_name('')}
         return {}
 
-    def get_allowed_amounts(self):
+    def get_possible_amounts(self):
         if not (hasattr(self, 'data_for_coverage') and self.data_for_coverage):
             return []
         the_coverage = utils.convert_ref_to_obj(self.data_for_coverage)
@@ -203,7 +221,9 @@ class LifeCoveredDesc(CoveredDesc):
                 #    wizard, 'for_contract')
             },)[0]
         if vals:
-            return map(lambda x: (x, x), map(lambda x: '%.2f' % x, vals))
+            # return map(lambda x: (x, x), map(lambda x: '%.2f' % x, vals))
+            return map(lambda x: (x, x),
+                map(lambda x: coop_string.amount_as_string(x, self.get_currency()), vals))
         return ''
 
 
