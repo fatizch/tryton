@@ -531,8 +531,9 @@ class Product(model.CoopSQL, Offered):
             all_schemas |= coverage_all
             possible_schemas |= coverage_possible
         existing_data = {}
-        existing_data.update(args['contract'].complementary_data)
-        if 'sub_elem' in args:
+        if args['contract'].complementary_data:
+            existing_data.update(args['contract'].complementary_data)
+        if 'sub_elem' in args and args['sub_elem'].complementary_data:
             existing_data.update(args['sub_elem'].complementary_data)
         ComplementaryData = Pool().get('ins_product.complementary_data_def')
         result = ComplementaryData.calculate_value_set(
