@@ -332,8 +332,8 @@ class Product(model.CoopSQL, Offered):
         depends=['possible_item_descs'], required=True)
     possible_item_descs = fields.Function(
         fields.Many2Many('ins_product.item_desc', None, None,
-            'Possible Item Descriptors'),
-        'get_possible_item_descs_id')
+            'Possible Item Descriptors', on_change_with=['options']),
+        'on_change_with_possible_item_descs')
     complementary_data_def = fields.Many2Many(
         'ins_product.product-complementary_data_def',
         'product', 'complementary_data_def', 'Complementary Data',
@@ -539,7 +539,7 @@ class Product(model.CoopSQL, Offered):
             possible_schemas, all_schemas, existing_data)
         return result, ()
 
-    def get_possible_item_descs_id(self, name):
+    def on_change_with_possible_item_descs(self, name=None):
         res = []
         for option in self.options:
             if not utils.is_none(option, 'item_desc'):
