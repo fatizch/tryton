@@ -131,7 +131,7 @@ class LifeCoveredData():
     coverage_amount = fields.Numeric('Coverage Amount',
         states={
                 'invisible': ~Eval('with_coverage_amount'),
-                'required': ~~Eval('with_coverage_amount'),
+                # 'required': ~~Eval('with_coverage_amount'),
             }, depends=['with_coverage_amount'])
     with_coverage_amount = fields.Function(
         fields.Boolean('With Coverage Amount', states={'invisible': True}),
