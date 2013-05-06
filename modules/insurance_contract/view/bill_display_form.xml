@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<form string="Bill Result">
+  <field name="bills" mode="form"/>
+</form>

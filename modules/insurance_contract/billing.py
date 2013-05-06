@@ -2,7 +2,6 @@ from trytond.modules.coop_utils import utils, abstract
 from trytond.modules.coop_utils import date
 from trytond.modules.coop_utils import model, fields
 from trytond.modules.insurance_product import product
-from trytond.modules.insurance_contract import Contract
 
 # Needed for getting models
 from trytond.pool import Pool
@@ -19,23 +18,12 @@ class GenericBillLine(model.CoopSQL, model.CoopView):
     __name__ = 'ins_contract.billing.generic_line'
 
     name = fields.Char('Short Description')
-    start_date = fields.Date(
-        'Start Date',
-        required=True)
-    end_date = fields.Date(
-        'End Date',
-        required=True)
-    amount_ht = fields.Numeric(
-        'Amount HT',
-        required=True)
+    start_date = fields.Date('Start Date')
+    end_date = fields.Date('End Date')
+    amount_ht = fields.Numeric('Amount HT')
     amount_ttc = fields.Numeric('Amount TTC')
-    base_price = fields.Numeric(
-        'Base Price',
-        required=True)
-    on_object = fields.Reference(
-        'Target',
-        'get_on_object_model'
-    )
+    base_price = fields.Numeric('Base Price')
+    on_object = fields.Reference('Target', 'get_on_object_model')
     master = fields.Reference(
         'Master',
         [('ins_contract.billing.bill', 'Bill'),
@@ -44,23 +32,16 @@ class GenericBillLine(model.CoopSQL, model.CoopView):
         ('main', 'Node'),
         ('base', 'Base Amount'),
         ('tax', 'Tax'),
-        ('fee', 'Fee'),
-    ], 'Kind')
+        ('fee', 'Fee')], 'Kind')
     childs = fields.One2Many(
-        'ins_contract.billing.generic_line',
-        'master',
-        'Child Lines')
-
-    node_childs = fields.Function(fields.One2Many(
-        'ins_contract.billing.generic_line',
-        None,
-        'Nodes'),
+        'ins_contract.billing.generic_line', 'master', 'Child Lines')
+    node_childs = fields.Function(
+        fields.One2Many(
+            'ins_contract.billing.generic_line', None, 'Nodes'),
         'get_node_childs')
-
-    detail_childs = fields.Function(fields.One2Many(
-        'ins_contract.billing.generic_line',
-        None,
-        'Details',),
+    detail_childs = fields.Function(
+        fields.One2Many(
+            'ins_contract.billing.generic_line', None, 'Details'),
         'get_detail_childs')
 
     @staticmethod
@@ -147,41 +128,53 @@ class Bill(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.billing.bill'
 
-    start_date = fields.Date(
-        'Start Date',
-        required=True)
-    end_date = fields.Date(
-        'End Date',
-        required=True)
-    amount_ht = fields.Numeric(
-        'Amount HT',
-        required=True)
+    start_date = fields.Date('Start Date', required=True)
+    end_date = fields.Date('End Date', required=True)
+    amount_ht = fields.Numeric('Amount HT', required=True)
     amount_ttc = fields.Numeric('Amount TTC')
     lines = fields.One2Many(
-        'ins_contract.billing.generic_line',
-        'master',
-        'Bill Lines')
-    for_contract = fields.Reference(
-        'Contract',
-        'get_contract_models')
+        'ins_contract.billing.generic_line', 'master', 'Bill Lines',
+        order=[('start_date', 'ASC'), ('name', 'ASC')])
+    contract = fields.Many2One('ins_contract.contract', 'Contract')
+    bill_details = fields.Function(
+        fields.One2Many(
+            'ins_contract.billing.generic_line', None, 'Bill Details'),
+        'get_bill_details')
 
-    def flat_init(self, start_date, end_date, contract=''):
+    def get_bill_details(self, name):
+        DetailLine = Pool().get('ins_contract.billing.generic_line')
+        existing = {}
+        res = {}
+        for line in self.lines:
+            for elem in line.childs:
+                if elem.kind != 'main':
+                    if (elem.kind, elem.name) in existing:
+                        good_line = existing[(elem.kind, elem.name)]
+                        good_line.amount_ht += elem.amount_ht
+                        good_line.amount_ttc += elem.amount_ttc
+                    else:
+                        new_line = DetailLine()
+                        new_line.kind = elem.kind
+                        new_line.name = elem.name
+                        new_line.amount_ht = elem.amount_ht
+                        new_line.amount_ttc = elem.amount_ttc
+                        if elem.kind in res:
+                            res[elem.kind].append(new_line)
+                        else:
+                            res[elem.kind] = [new_line]
+                        existing[(elem.kind, elem.name)] = new_line
+        details = []
+        for k, v in res.iteritems():
+            details.extend(v)
+        return abstract.WithAbstract.serialize_field(details)
+
+    def flat_init(self, start_date, end_date, contract):
         self.start_date = start_date
         self.end_date = end_date
         self.lines = []
         self.amount_ht = 0
         self.amount_ttc = 0
-        if isinstance(contract, str):
-            self.for_contract = contract
-        elif isinstance(contract, Contract):
-            self.for_contract = '%s,%s' % (contract.__name__, contract.id)
-
-    @staticmethod
-    def get_contract_models():
-        return utils.get_descendents(Contract)
-
-    def get_bill_line_model(self):
-        return 'ins_contract.billing.generic_line'
+        self.contract = contract
 
     def append_bill_line(self, line):
         self.amount_ht += line.amount_ht
@@ -189,7 +182,7 @@ class Bill(model.CoopSQL, model.CoopView):
         self.lines.append(line)
 
     def init_from_lines(self, lines):
-        GenericBillLine = Pool().get(self.get_bill_line_model())
+        GenericBillLine = Pool().get('ins_contract.billing.generic_line')
         for start_date, end_date, cur_line in lines:
             number_of_days = date.number_of_days_between(start_date, end_date)
             try:

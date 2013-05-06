@@ -100,6 +100,7 @@ class SimpleCoverage(Offered):
         # contract.
         coverages = contract.get_active_coverages_at_date(date)
         res = PricingResultLine(name=self.name)
+        res.on_object = utils.convert_to_reference(self)
         if self in coverages:
             # The first part of the pricing is the price at the coverage level.
             # It is computed by the pricing manager, so we just need to forward

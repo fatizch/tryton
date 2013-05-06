@@ -123,10 +123,9 @@ class GetResult(object):
             except Exception:
                 good_rule = None
             if not good_rule:
-                return (None, [])
+                # We did not found any rule matching the specified name
+                raise NonExistingRuleKindException
             return good_rule.get_result(target, args)
-            # We did not found any rule matching the specified name
-            raise NonExistingRuleKindException
 
         # Now we look for our target, as it is at our level
         target_func = getattr(self, 'give_me_' + target)
@@ -285,14 +284,14 @@ class Offered(model.CoopView, GetResult, Templated):
         try:
             res = self.get_result(
                 'sub_elem_eligibility', args, kind='eligibility')
-        except utils.NonExistingRuleKindException:
+        except NonExistingRuleKindException:
             return (EligibilityResultLine(True), [])
         return res
 
     def give_me_documents(self, args):
         try:
             return self.get_result('documents', args, kind='document')
-        except utils.NonExistingRuleKindException:
+        except NonExistingRuleKindException:
             return [], ()
 
     def on_change_with_complementary_data(self):
@@ -395,7 +394,7 @@ class Product(model.CoopSQL, Offered):
         # request.
         try:
             res = self.get_result('price', args, kind='pricing')
-        except utils.NonExistingRuleKindException:
+        except NonExistingRuleKindException:
             res = (False, [])
         if not res[0]:
             res = (PricingResultLine(), res[1])
@@ -426,7 +425,7 @@ class Product(model.CoopSQL, Offered):
     def give_me_eligibility(self, args):
         try:
             res = self.get_result('eligibility', args, kind='eligibility')
-        except utils.NonExistingRuleKindException:
+        except NonExistingRuleKindException:
             return (EligibilityResultLine(True), [])
         return res
 
@@ -445,13 +444,13 @@ class Product(model.CoopSQL, Offered):
             raise Exception('A date must be provided')
         try:
             return self.get_result('frequency', args, kind='pricing')
-        except utils.NonExistingRuleKindException:
+        except NonExistingRuleKindException:
             pass
         for coverage in self.get_valid_options():
             try:
                 return coverage.get_result(
                     'frequency', args, kind='pricing')
-            except utils.NonExistingRuleKindException:
+            except NonExistingRuleKindException:
                 pass
         return 'yearly', []
 
@@ -498,7 +497,7 @@ class Product(model.CoopSQL, Offered):
             try:
                 return self.get_result(
                     'documents', args, kind='document')
-            except utils.NonExistingRuleKindException:
+            except NonExistingRuleKindException:
                 return [], ()
         return [], ()
 

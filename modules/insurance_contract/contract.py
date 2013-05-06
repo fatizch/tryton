@@ -533,6 +533,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         if not (hasattr(self, 'billing_manager') and
                 self.billing_manager):
             bm = self.new_billing_manager()
+            bm.contract = self
             self.billing_manager = [bm]
 
     def on_change_complementary_data(self):
@@ -562,6 +563,9 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         res = utils.get_good_versions_at_date(self, 'addresses', at_date)
         if res:
             return res[0].address
+
+    def get_next_renewal_date(self):
+        return utils.add_frequency('yearly', self.start_date)
 
 
 class Option(model.CoopSQL, Subscribed):
@@ -836,19 +840,9 @@ class BillingManager(model.CoopSQL, model.CoopView):
     __name__ = 'ins_contract.billing_manager'
 
     contract = fields.Many2One('ins_contract.contract', 'Contract')
-    #It MUST be updated every time a billing is
-    # done, so that the next batch will have up-to-date information on whether
-    # or not it needs to work on this contract.
     next_billing_date = fields.Date('Next Billing Date')
-
-    # We need a way to present our prices.
     prices = fields.One2Many(
-        'ins_contract.price_line',
-        'billing_manager',
-        'Prices')
-
-    def get_contract(self):
-        return self.contract
+        'ins_contract.price_line', 'billing_manager', 'Prices')
 
     def store_prices(self, prices):
         if not prices:
@@ -860,6 +854,9 @@ class BillingManager(model.CoopSQL, model.CoopView):
                 to_delete.append(price)
         result_prices = []
         dates = [utils.to_date(key) for key in prices.iterkeys()]
+        end_date = self.contract.get_next_renewal_date()
+        if not end_date in dates:
+            dates.append(end_date)
         dates.sort()
         for date, price in prices.iteritems():
             pl = PriceLine()
@@ -888,7 +885,7 @@ class BillingManager(model.CoopSQL, model.CoopView):
         return cls._fields['prices'].model_name
 
     def get_product_frequency(self, at_date):
-        res, errs = self.get_contract().offered.get_result(
+        res, errs = self.contract.offered.get_result(
             'frequency',
             {'date': at_date})
         if not errs:
@@ -896,7 +893,7 @@ class BillingManager(model.CoopSQL, model.CoopView):
 
     def next_billing_dates(self):
         date = max(
-            Pool().get('ir.date').today(), self.get_contract().start_date)
+            Pool().get('ir.date').today(), self.contract.start_date)
         return (
             date,
             utils.add_frequency(self.get_product_frequency(date), date))
@@ -912,10 +909,12 @@ class BillingManager(model.CoopSQL, model.CoopView):
         dated_prices = [
             (elem.start_date, elem.end_date or end_date, elem)
             for elem in self.prices
-            if (elem.start_date >= start_date and elem.start_date <= end_date)
-            or (elem.end_date and elem.end_date >= start_date
-                and elem.end_date <= end_date)]
-
+            if (
+                (elem.start_date >= start_date and elem.start_date <= end_date)
+                or (
+                    elem.end_date and elem.end_date >= start_date
+                    and elem.end_date <= end_date))]
+        print str([x.name for x in dated_prices[1][2].all_lines])
         return dated_prices
 
     def flatten(self, prices):
@@ -948,14 +947,10 @@ class BillingManager(model.CoopSQL, model.CoopView):
     def bill(self, start_date, end_date):
         Bill = Pool().get(self.get_bill_model())
         the_bill = Bill()
-        the_bill.flat_init(start_date, end_date, self.get_contract())
-
+        the_bill.flat_init(start_date, end_date, self.contract)
         price_list = self.create_price_list(start_date, end_date)
-
         price_lines = self.flatten(price_list)
-
         the_bill.init_from_lines(price_lines)
-
         return the_bill
 
 

@@ -37,9 +37,7 @@ def register():
         GenericBillLine,
         # billing_process.py classes
         BillParameters,
-        BillLineForDisplay,
         BillDisplay,
-        BillingProcessState,
         DeliveredService,
         RequestFinder,
         Expense,

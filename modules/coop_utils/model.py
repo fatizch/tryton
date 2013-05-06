@@ -576,6 +576,11 @@ class CoopSQL(ExportImportMixin, ModelSQL):
 
     @classmethod
     def delete(cls, instances):
+        # Do not remove, needed to avoid infinite recursion in case a model
+        # has a O2Ref which can lead to itself.
+        if not instances:
+            return
+
         cls.can_be_deleted(instances)
 
         # Handle O2M with fields.Reference backref

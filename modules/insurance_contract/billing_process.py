@@ -1,202 +1,88 @@
 #from trytond.modules.coop_utils import WithAbstract
-from trytond.modules.coop_utils import utils, abstract
-from trytond.modules.coop_utils import fields
+from trytond.modules.coop_utils import fields, model
+from trytond.wizard import Wizard, StateView, StateTransition, Button
 
-from trytond.modules.insurance_process import CoopProcess
-from trytond.modules.insurance_process import ProcessState, CoopStepView
-from trytond.modules.insurance_contract import Contract
-from trytond.modules.insurance_process import CoopStep, CoopStateView
 from trytond.transaction import Transaction
 
 from trytond.pool import Pool
 
 __all__ = [
-    'BillingProcessState',
     'BillingProcess',
     'BillParameters',
-    'BillLineForDisplay',
     'BillDisplay',
 ]
 
 
-class BillParameters(CoopStep):
+class BillParameters(model.CoopView):
     'Bill Parameters'
 
     __name__ = 'ins_contract.billing_process.bill_parameters'
 
-    start_date = fields.Date(
-        'Start Date',
-        required=True)
-
-    end_date = fields.Date(
-        'End Date',
-        required=True)
-
-    @staticmethod
-    def before_step_init(wizard):
-        if Transaction().context['active_model'] \
-                in utils.get_descendents(Contract, True):
-            wizard.process_state.for_contract = '%s,%s' % (
-                Transaction().context['active_model'],
-                Transaction().context['active_id'])
-        else:
-            return (False, ['Could not find a contract to bill'])
-        contract = wizard.process_state.get_contract()
-        bill_dates = contract.billing_manager[0].next_billing_dates()
-        wizard.bill_parameters.start_date = bill_dates[0]
-        wizard.bill_parameters.end_date = bill_dates[1]
-        return (True, [])
-
-    @staticmethod
-    def check_step_valid_interval(wizard):
-        if wizard.bill_parameters.start_date > wizard.bill_parameters.end_date:
-            return (False, ['Start date must be smaller than End date'])
-        if (wizard.bill_parameters.start_date <
-                wizard.process_state.get_contract().start_date):
-            return (False,
-                ["Start date must be greater than contract's start date"])
-        return (True, [])
-
-    @staticmethod
-    def post_step_calculate_bill(wizard):
-        contract = wizard.process_state.get_contract()
-        billing_manager = contract.billing_manager[0]
-        start_date = wizard.bill_parameters.start_date
-        end_date = wizard.bill_parameters.end_date
-        the_bill = billing_manager.bill(start_date, end_date)
-        abstract.WithAbstract.save_abstract_objects(wizard, ('the_bill',
-            the_bill))
-        return (True, [])
-
-    @staticmethod
-    def coop_step_name():
-        return 'Bill Parameters'
+    start_date = fields.Date('Start Date', required=True)
+    end_date = fields.Date('End Date', required=True)
+    contract = fields.Many2One(
+        'ins_contract.contract', 'Contract', states={'invisible': True})
 
 
-class BillLineForDisplay(CoopStepView):
-    'Bill Line'
-
-    __name__ = 'ins_contract.billing_process.bill_line_view'
-
-    line_amount_ht = fields.Numeric('Amount HT')
-
-    line_amount_ttc = fields.Numeric('Amount TTC')
-
-    line_start_date = fields.Date('Start Date')
-
-    line_end_date = fields.Date('End Date')
-
-    line_name = fields.Char('Short Description')
-
-    line_base_price = fields.Numeric('Base Price')
-
-    line_kind = fields.Char('Kind')
-
-    line_sub_lines = fields.One2Many(
-        'ins_contract.billing_process.bill_line_view',
-        None,
-        'Sub Lines')
-
-    def init_from_bill_line(self, line):
-        self.line_amount_ht = line.amount_ht
-        self.line_amount_ttc = line.amount_ttc
-        self.line_start_date = line.start_date
-        self.line_end_date = line.end_date
-        self.line_name = line.get_rec_name('')
-        self.line_base_price = line.base_price
-        self.line_kind = line.kind
-        LineModel = Pool().get(self.__name__)
-        self.line_sub_lines = []
-        for sub_line in line.childs:
-            new_line = LineModel()
-            new_line.init_from_bill_line(sub_line)
-            self.line_sub_lines.append(new_line)
-
-
-class BillDisplay(CoopStep):
+class BillDisplay(model.CoopView):
     'Bill Displayer'
 
     __name__ = 'ins_contract.billing_process.bill_display'
 
-    bill_amount_ht = fields.Numeric('Amount HT', readonly=True)
-
-    bill_amount_ttc = fields.Numeric('Amount TTC', readonly=True)
-
-    bill_start_date = fields.Date('Start Date', readonly=True)
-
-    bill_end_date = fields.Date('End Date', readonly=True)
-
-    bill_lines = fields.One2Many(
-        'ins_contract.billing_process.bill_line_view',
-        None,
-        'Bill Lines',
-        readonly=True
-    )
-
-    @staticmethod
-    def before_step_init(wizard):
-        BillLineViewer = Pool().get(
-            'ins_contract.billing_process.bill_line_view')
-        bill = abstract.WithAbstract.get_abstract_objects(wizard, 'the_bill')
-        wizard.bill_display.bill_amount_ht = bill.amount_ht
-        wizard.bill_display.bill_amount_ttc = bill.amount_ttc
-        wizard.bill_display.bill_start_date = bill.start_date
-        wizard.bill_display.bill_end_date = bill.end_date
-        wizard.bill_display.bill_lines = []
-        for line in bill.lines:
-            bill_line = BillLineViewer()
-            bill_line.init_from_bill_line(line)
-            wizard.bill_display.bill_lines.append(bill_line)
-        return (True, [])
-
-    @staticmethod
-    def coop_step_name():
-        return 'Bill Display'
+    bills = fields.One2Many(
+        'ins_contract.billing.bill', None, 'Bill', states={'readonly': True})
 
 
-class BillingProcessState(ProcessState, abstract.WithAbstract):
-    'Billing Process State'
-
-    __abstracts__ = [('the_bill', 'ins_contract.billing.bill')]
-    __name__ = 'ins_contract.billing_process.process_state'
-
-    for_contract = fields.Reference(
-        'Contract',
-        'get_contract_models')
-
-    @staticmethod
-    def get_contract_models():
-        return utils.get_descendents(Contract)
-
-    def get_contract(self):
-        if self.for_contract:
-            return utils.convert_ref_to_obj(self.for_contract)
-        return None
-
-
-class BillingProcess(CoopProcess):
+class BillingProcess(Wizard):
     'Billing Process'
 
     __name__ = 'ins_contract.billing_process'
 
-    config_data = {
-        'process_state_model': 'ins_contract.billing_process.process_state'
-    }
-
-    bill_parameters = CoopStateView(
+    start_state = 'bill_parameters'
+    bill_parameters = StateView(
         'ins_contract.billing_process.bill_parameters',
-        'insurance_contract.parameters_view')
-
-    bill_display = CoopStateView(
+        'insurance_contract.bill_parameters_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Preview', 'bill_display', 'tryton-go-next')])
+    bill_display = StateView(
         'ins_contract.billing_process.bill_display',
-        'insurance_contract.bill_view')
+        'insurance_contract.bill_display_form', [
+            Button('Cancel', 'cancel_bill', 'tryton-cancel'),
+            Button('Accept', 'accept_bill', 'tryton-go-next')])
+    cancel_bill = StateTransition()
+    accept_bill = StateTransition()
 
-    def do_complete(self):
-        the_bill = abstract.WithAbstract.get_abstract_objects(self, 'the_bill')
-        the_bill.for_contract = self.process_state.get_contract()
+    def default_bill_parameters(self, values):
+        ContractModel = Pool().get(Transaction().context.get('active_model'))
+        contract = ContractModel(Transaction().context.get('active_id'))
+        bill_dates = contract.billing_manager[0].next_billing_dates()
+        return {
+            'contract': contract.id,
+            'start_date': bill_dates[0],
+            'end_date': bill_dates[1]}
+
+    def default_bill_display(self, values):
+        if self.bill_parameters.end_date < self.bill_parameters.start_date:
+            self.raise_user_error('bad_dates')
+        contract = self.bill_parameters.contract
+        if self.bill_parameters.start_date < contract.start_date:
+            self.raise_user_error('start_date_too_old')
+        billing_manager = contract.billing_manager[0]
+        start_date = self.bill_parameters.start_date
+        end_date = self.bill_parameters.end_date
+        the_bill = billing_manager.bill(start_date, end_date)
+        the_bill.contract = None
         the_bill.save()
-        return (True, [])
+        return {'bills': [the_bill.id]}
 
-    @staticmethod
-    def coop_process_name():
-        return 'Billing Process'
+    def transition_cancel_bill(self):
+        Bill = Pool().get('ins_contract.billing.bill')
+        the_bill = self.bill_display.bills[0]
+        Bill.delete([the_bill])
+        return 'end'
+
+    def transition_accept_bill(self):
+        the_bill = self.bill_display.bills[0]
+        the_bill.contract = self.bill_parameters.contract
+        the_bill.save()
+        return 'end'

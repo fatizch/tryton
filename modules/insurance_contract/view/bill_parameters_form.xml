@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<form string="Bill Parameters">
+  <label name="start_date"/>
+  <field name="start_date"/>
+  <newline/>
+  <label name="end_date"/>
+  <field name="end_date"/>
+  <newline/>
+  <field name="contract"/>
+</form>
