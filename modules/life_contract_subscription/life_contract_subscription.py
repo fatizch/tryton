@@ -64,7 +64,7 @@ class CoveredDataSubs():
                 'currency'],
             states={
                 'invisible': ~Eval('with_coverage_amount'),
-                'required': ~~Eval('with_coverage_amount'),
+                # 'required': ~~Eval('with_coverage_amount'),
                 }
         ),
         'get_coverage_amount_selection',
