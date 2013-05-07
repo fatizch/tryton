@@ -544,6 +544,7 @@ class ClaimDeliveredService():
             cur_dict['end_date'] = self.loss.end_date
         cur_dict['loss'] = self.loss
         cur_dict['option'] = self.subscribed_service
+        cur_dict['contract'] = self.get_contract()
         cur_dict['delivered_service'] = self
         cur_dict['data'] = self.get_covered_data()
         cur_dict['subscriber'] = self.get_contract().get_policy_owner()
