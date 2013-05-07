@@ -164,7 +164,10 @@ class Benefit(model.CoopSQL, product.Offered):
             #For indemnification we could have a list of result because the
             #indemnification could change over time for example 3 month at 100%
             #then 50% for the rest of the period
-            indemn_dicts, indemn_errs = self.get_result(key, sub_args, key)
+            try:
+	        indemn_dicts, indemn_errs = self.get_result(key, sub_args, key)
+            except product.NonExistingRuleKindException:
+                continue
             errs += indemn_errs
             if not indemn_dicts:
                 continue
