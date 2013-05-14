@@ -65,6 +65,7 @@ def register():
         ReserveRule,
         CoverageAmountRule,
         DeductibleRule,
+        DeductibleDuration,
         ProductDefinition,
         TermRenewalRule,
         # from rule_sets

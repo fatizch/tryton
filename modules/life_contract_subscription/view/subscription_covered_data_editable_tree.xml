@@ -2,6 +2,7 @@
 <data>
   <xpath expr="/tree/field[@name='end_date']" position="after">
     <field name="coverage_amount_selection"/>
-    <field name="with_coverage_amount"/>
+    <field name="with_coverage_amount" tree_invisible="1"/>
+    <field name="currency" tree_invisible="1"/>
   </xpath>
 </data>

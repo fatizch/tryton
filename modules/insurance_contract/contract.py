@@ -10,6 +10,7 @@ from trytond.modules.coop_utils import utils, date, business
 from trytond.modules.coop_utils import coop_string
 from trytond.modules.insurance_product import Printable
 from trytond.modules.insurance_product.product import DEF_CUR_DIG
+from trytond.modules.insurance_product import product
 
 CONTRACTSTATUSES = [
     ('', ''),
@@ -577,6 +578,17 @@ class Option(model.CoopSQL, Subscribed):
     covered_data = fields.One2ManyDomain(
         'ins_contract.covered_data', 'option', 'Covered Data',
         domain=[('covered_element.parent', '=', None)])
+    deductible_duration = fields.Many2One('ins_product.deductible_duration',
+        'Deductible Duration', states={
+            'invisible': ~Eval('possible_deductible_duration'),
+            # 'required': ~~Eval('possible_deductible_duration'),
+            }, domain=[('id', 'in', Eval('possible_deductible_duration'))],
+        depends=['possible_deductible_duration'])
+    possible_deductible_duration = fields.Function(
+        fields.Many2Many(
+            'ins_product.deductible_duration', None, None,
+            'Possible Deductible Duration', states={'invisible': True}),
+        'get_possible_deductible_duration')
 
     @classmethod
     def delete(cls, entities):
@@ -631,6 +643,16 @@ class Option(model.CoopSQL, Subscribed):
     def get_currency(self):
         if hasattr(self, 'offered') and self.offered:
             return self.offered.get_currency()
+
+    def get_possible_deductible_duration(self, name):
+        try:
+            durations = self.offered.get_result(
+                'possible_deductible_duration',
+                {'date': self.start_date, 'scope': 'coverage'},
+                kind='deductible')[0]
+            return [x.id for x in durations] if durations else []
+        except product.NonExistingRuleKindException:
+            return []
 
 
 class StatusHistory(model.CoopSQL, model.CoopView):
@@ -1287,10 +1309,17 @@ class CoveredData(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.covered_data'
 
-    option = fields.Many2One('ins_contract.option', 'Subscribed Coverage')
+    option = fields.Many2One('ins_contract.option', 'Subscribed Coverage',
+        domain=[('id', 'in', Eval('possible_options'))],
+        depends=['possible_options'])
+    possible_options = fields.Function(
+        fields.Many2Many('ins_contract.option', None, None,
+            'Possible Options', states={'invisible': True}),
+        'get_possible_options')
     #IMO we should not have the link to the coverage
     coverage = fields.Many2One(
         'ins_product.coverage', 'Coverage', ondelete='RESTRICT')
+
     covered_element = fields.Many2One(
         'ins_contract.covered_element', 'Covered Element', ondelete='CASCADE')
     complementary_data = fields.Dict(
@@ -1311,6 +1340,17 @@ class CoveredData(model.CoopSQL, model.CoopView):
     currency_symbol = fields.Function(
         fields.Char('Currency Symbol'),
         'get_currency_symbol')
+    deductible_duration = fields.Many2One('ins_product.deductible_duration',
+        'Deductible Duration', states={
+            'invisible': ~Eval('possible_deductible_duration'),
+            # 'required': ~~Eval('possible_deductible_duration')
+            }, domain=[('id', 'in', Eval('possible_deductible_duration'))],
+        depends=['possible_deductible_duration'])
+    possible_deductible_duration = fields.Function(
+        fields.Many2Many(
+            'ins_product.deductible_duration', None, None,
+            'Possible Deductible Duration', states={'invisible': True}),
+        'get_possible_deductible_duration')
 
     @classmethod
     def default_status(cls):
@@ -1390,6 +1430,25 @@ class CoveredData(model.CoopSQL, model.CoopView):
 
     def get_currency_symbol(self, name):
         return self.currency.symbol if self.currency else None
+
+    def get_possible_deductible_duration(self, name):
+        try:
+            durations = self.option.offered.get_result(
+                'possible_deductible_duration',
+                {'date': self.start_date, 'scope': 'covered'},
+                kind='deductible')[0]
+            return [x.id for x in durations] if durations else []
+        except product.NonExistingRuleKindException:
+            return []
+
+    def get_deductible_duration(self):
+        if self.deductible_duration:
+            return self.deductible_duration
+        elif self.option.deductible_duration:
+            return self.option.deductible_duration
+
+    def get_possible_options(self, name):
+        return [x.id for x in self.contract.options] if self.contract else []
 
 
 class ManagementProtocol(model.CoopSQL, model.CoopView):

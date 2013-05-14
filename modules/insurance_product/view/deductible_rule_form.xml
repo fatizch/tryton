@@ -8,6 +8,14 @@
         <field name="kind" xexpand="0"/>
         <newline/>
     </xpath>
+    <xpath expr="/form/field[@name='config_kind']" position="after">
+        <newline/>
+        <label name="simple_config_choice"/>
+        <field name="simple_config_choice" xexpand="0"/>
+        <label name="scope"/>
+        <field name="scope"/>
+        <newline/>
+    </xpath>
     <xpath expr="/form/label[@name='rule']" position="before">
         <label name="amount"/>
         <field name="amount"/>
@@ -15,8 +23,10 @@
         <label name="duration"/>
         <group id="duration" xexpand="0">
             <field name="duration" xexpand="0"/>
-            <field name="duration_unit" xalign="0" xexpand="0"/>
+            <field name="duration_unit" xexpand="0"/>
         </group>
+        <newline/>
+        <field name="durations" colspan="4"/>
         <newline/>
     </xpath>
 </data>

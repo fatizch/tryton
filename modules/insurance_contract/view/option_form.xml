@@ -12,6 +12,9 @@
     <field name="start_date"/>
     <label name="end_date"/>
     <field name="end_date"/>
+    <label name="deductible_duration"/>
+    <field name="deductible_duration" widget="selection"/>
+    <newline/>
     <notebook colspan="4">
         <page string="Covered Data" id="covered_data">
             <field name="covered_data" colspan="4"/>

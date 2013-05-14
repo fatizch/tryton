@@ -1,13 +1,14 @@
 #-*- coding:utf-8 -*-
 from trytond.pyson import Eval, Or, And
 
-from trytond.modules.coop_utils import model, date, fields
+from trytond.modules.coop_utils import model, date, fields, coop_string
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED
 
 
 __all__ = [
     'DeductibleRule',
+    'DeductibleDuration',
 ]
 
 
@@ -23,30 +24,58 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
     __name__ = 'ins_product.deductible_rule'
 
     kind = fields.Selection(DEDUCTIBLE_KIND, 'Kind', sort=False, required=True)
-    amount = fields.Numeric('Amount',
-        states={
+    simple_config_choice = fields.Selection(
+        [('value', 'Value'), ('list', 'List')], 'Simple Config. Choice',
+        sort=False, states={
+            'invisible': Or(STATE_ADVANCED, Eval('kind') != 'duration'),
+            'required': And(~STATE_ADVANCED, Eval('kind') == 'duration'),
+            }
+        )
+    amount = fields.Numeric('Amount', states={
             'invisible': Or(STATE_ADVANCED, Eval('kind') != 'amount'),
             'required': And(~STATE_ADVANCED, Eval('kind') == 'amount'),
-        })
-    duration = fields.Integer('Duration',
-        states={
-            'invisible': Or(STATE_ADVANCED, Eval('kind') != 'duration'),
-            'required': And(~STATE_ADVANCED, Eval('kind') == 'duration'),
-        })
+            })
+    duration = fields.Integer('Duration', states={
+            'invisible': Or(STATE_ADVANCED, Eval('kind') != 'duration',
+                Eval('simple_config_choice') != 'value'),
+            'required': And(~STATE_ADVANCED, Eval('kind') == 'duration',
+                Eval('simple_config_choice') == 'value'),
+            })
     duration_unit = fields.Selection(date.DAILY_DURATION, 'Duration Unit',
         states={
-            'invisible': Or(STATE_ADVANCED, Eval('kind') != 'duration'),
-            'required': And(~STATE_ADVANCED, Eval('kind') == 'duration'),
-        })
+            'invisible': Or(STATE_ADVANCED, Eval('kind') != 'duration',
+                Eval('simple_config_choice') != 'value'),
+            'required': And(~STATE_ADVANCED, Eval('kind') == 'duration',
+                Eval('simple_config_choice') == 'value'),
+            })
+    durations = fields.One2Many('ins_product.deductible_duration',
+        'deductible_rule', 'Durations', states={
+            'invisible': Or(STATE_ADVANCED, Eval('kind') != 'duration',
+                Eval('simple_config_choice') != 'list'),
+            'required': And(~STATE_ADVANCED, Eval('kind') == 'duration',
+                Eval('simple_config_choice') == 'list'),
+            })
+    scope = fields.Selection(
+        [('coverage', 'Coverage'), ('covered', 'Covered Element')], 'Scope',
+        states={
+            'invisible': Or(STATE_ADVANCED, Eval('kind') != 'duration',
+                Eval('simple_config_choice') != 'list'),
+            'required': And(~STATE_ADVANCED, Eval('kind') == 'duration',
+                Eval('simple_config_choice') == 'list'),
+            })
 
     def get_simple_rec_name(self):
-        res = self.get_simple_result()[0]
-        if not res:
-            return ''
-        if self.kind == 'duration' and len(res) > 1:
-            return '%s %s' % (res[0], res[1])
+        if self.simple_config_choice == 'value':
+            res = self.get_simple_result()[0]
+            if not res:
+                return ''
+            if self.kind == 'duration' and len(res) > 1:
+                return '%s %s' % (res[0], res[1])
+            else:
+                return str(res)
         else:
-            return str(res)
+            if self.kind == 'duration' and self.durations:
+                return ', '.join([x.get_rec_name('') for x in self.durations])
 
     def get_simple_result(self, args=None):
         if self.kind == 'amount':
@@ -55,6 +84,13 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
             return (self.duration, self.duration_unit), []
         else:
             return None, []
+
+    def give_me_result(self, args):
+        #The deductible could be set at a higher level, the coverage,
+        #or a choice could be stored on the covered data or the option
+        if args['deductible_duration']:
+            return args['deductible_duration'].get_value(), []
+        return super(DeductibleRule, self).give_me_result(args)
 
     def get_deductible_duration(self, args):
         errs = []
@@ -91,3 +127,38 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
             return self.get_deductible_duration(args)
         else:
             return self.get_deductible_amount(args)
+
+    @staticmethod
+    def default_simple_config_choice():
+        return 'value'
+
+    @staticmethod
+    def default_scope():
+        return 'covered'
+
+    def give_me_possible_deductible_duration(self, args):
+        if not (self.kind == 'duration' and self.config_kind == 'simple'
+                and self.simple_config_choice == 'list'
+                and args['scope'] == self.scope):
+            return []
+        else:
+            return list(self.durations)
+
+
+class DeductibleDuration(model.CoopSQL, model.CoopView):
+    'Deductible Duration'
+
+    __name__ = 'ins_product.deductible_duration'
+
+    deductible_rule = fields.Many2One('ins_product.deductible_rule',
+        'Deductible Rule')
+    duration = fields.Integer('Duration', required=True)
+    duration_unit = fields.Selection(date.DAILY_DURATION, 'Duration Unit',
+        required=True)
+
+    def get_rec_name(self, name):
+        return '%s %s' % (self.duration,
+            coop_string.translate_value(self, 'duration_unit'))
+
+    def get_value(self):
+        return self.duration, self.duration_unit

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
-        <!--  ******************************************* 
+        <!--  *******************************************
               ********    Deductible Rule    ***************
               *******************************************-->
         <record model="ir.ui.view" id="deductible_rule_view_tree">
@@ -15,6 +15,16 @@
             <field name="type">form</field>
             <field name="inherit" ref="businessruleroot_view_form"/>
             <field name="name">deductible_rule_form</field>
+        </record>
+        <record model="ir.ui.view" id="deductible_duration_view_tree">
+            <field name="model">ins_product.deductible_duration</field>
+            <field name="type">tree</field>
+            <field name="name">deductible_duration_tree</field>
+        </record>
+        <record model="ir.ui.view" id="deductible_duration_view_form">
+            <field name="model">ins_product.deductible_duration</field>
+            <field name="type">form</field>
+            <field name="name">deductible_duration_form</field>
         </record>
     </data>
 </tryton>

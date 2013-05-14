@@ -542,12 +542,15 @@ class ClaimDeliveredService():
         cur_dict['start_date'] = self.loss.start_date
         if self.loss.end_date:
             cur_dict['end_date'] = self.loss.end_date
+        cur_dict['coverage'] = self.subscribed_service.offered
         cur_dict['loss'] = self.loss
         cur_dict['option'] = self.subscribed_service
         cur_dict['contract'] = self.get_contract()
         cur_dict['delivered_service'] = self
         cur_dict['data'] = self.get_covered_data()
         cur_dict['subscriber'] = self.get_contract().get_policy_owner()
+        cur_dict['deductible_duration'] = \
+            cur_dict['data'].get_deductible_duration()
 
     def get_local_currencies_used(self):
         res = []

@@ -121,8 +121,6 @@ class Benefit(model.CoopSQL, product.Offered):
 
     __name__ = 'ins_product.benefit'
 
-    coverage = fields.Many2One(
-        'ins_product.coverage', 'Coverage', ondelete='CASCADE')
     benefit_rules = fields.One2Many(
         'ins_product.benefit_rule', 'offered', 'Benefit Rules')
     reserve_rules = fields.One2Many(
@@ -164,10 +162,17 @@ class Benefit(model.CoopSQL, product.Offered):
             #For indemnification we could have a list of result because the
             #indemnification could change over time for example 3 month at 100%
             #then 50% for the rest of the period
+            coverage = args['coverage']
             try:
-	        indemn_dicts, indemn_errs = self.get_result(key, sub_args, key)
+                #we first check that no rule are defined at a higher level
+                indemn_dicts, indemn_errs = coverage.get_result(key, sub_args,
+                    key)
             except product.NonExistingRuleKindException:
-                continue
+                try:
+                    indemn_dicts, indemn_errs = self.get_result(key,
+                        sub_args, key)
+                except product.NonExistingRuleKindException:
+                    continue
             errs += indemn_errs
             if not indemn_dicts:
                 continue
@@ -190,9 +195,9 @@ class Benefit(model.CoopSQL, product.Offered):
     @classmethod
     def get_beneficiary_kind(cls):
         return [
-            ('subscriber', 'Subscriber'),
-            ('other', 'Other'),
-        ]
+                ('subscriber', 'Subscriber'),
+                ('other', 'Other'),
+            ]
 
     @staticmethod
     def default_beneficiary_kind():

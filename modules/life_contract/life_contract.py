@@ -2,7 +2,7 @@ import copy
 from decimal import Decimal
 
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, Or, Bool
+from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
@@ -10,7 +10,6 @@ from trytond.modules.coop_utils import utils, fields, abstract, coop_string
 from trytond.modules.insurance_contract import CoveredDesc
 from trytond.modules.insurance_process import DependantState
 from trytond.modules.insurance_process import CoopStateView
-from trytond.modules.life_product.life_product import FAMILY_LIFE
 
 __all__ = [
     'Contract',
@@ -128,11 +127,10 @@ class LifeCoveredData():
     __name__ = 'ins_contract.covered_data'
     __metaclass__ = PoolMeta
 
-    coverage_amount = fields.Numeric('Coverage Amount',
-        states={
-                'invisible': ~Eval('with_coverage_amount'),
-                # 'required': ~~Eval('with_coverage_amount'),
-            }, depends=['with_coverage_amount'])
+    coverage_amount = fields.Numeric('Coverage Amount', states={
+            'invisible': ~Eval('with_coverage_amount'),
+            # 'required': ~~Eval('with_coverage_amount'),
+            }, depends=['with_coverage_amount', 'currency'])
     with_coverage_amount = fields.Function(
         fields.Boolean('With Coverage Amount', states={'invisible': True}),
         'get_with_coverage_amount')
@@ -221,9 +219,9 @@ class LifeCoveredDesc(CoveredDesc):
                 #    wizard, 'for_contract')
             },)[0]
         if vals:
-            # return map(lambda x: (x, x), map(lambda x: '%.2f' % x, vals))
             return map(lambda x: (x, x),
-                map(lambda x: coop_string.amount_as_string(x, self.get_currency()), vals))
+                map(lambda x: coop_string.amount_as_string(x,
+                    self.get_currency()), vals))
         return ''
 
 
