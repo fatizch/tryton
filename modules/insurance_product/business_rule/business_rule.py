@@ -218,19 +218,20 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
 
     def check_dates(self):
         cursor = Transaction().cursor
-        cursor.execute(
-            'SELECT id '
-            'FROM ' + self._table + ' '
-            'WHERE ((start_date <= %s AND end_date >= %s) '
-            '        OR (start_date <= %s AND end_date >= %s) '
-            '        OR (start_date >= %s AND end_date <= %s)) '
-            '    AND offered = %s'
-            '    AND id != %s', (
+        request = 'SELECT id ' + \
+            'FROM ' + self._table + ' ' + \
+            'WHERE ((start_date <= %s AND end_date >= %s) ' + \
+            '        OR (start_date <= %s AND end_date >= %s) ' + \
+            '        OR (start_date >= %s AND end_date <= %s)) ' + \
+            '    AND offered = %s' + \
+            '    AND id != %s'
+        args = (
             self.start_date, self.start_date,
             self.end_date, self.end_date,
             self.start_date, self.end_date,
             '%s,%s' % (self.offered.__class__.__name__, self.offered.id),
-            self.id))
+            self.id)
+        cursor.execute(request, args)
         if cursor.fetchone():
             return False
         return True

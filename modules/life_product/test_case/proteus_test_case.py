@@ -32,14 +32,16 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['Context'] = Model.get('rule_engine.context')
     cfg_dict['TreeElement'] = Model.get('rule_engine.tree_element')
     cfg_dict['Tranche'] = Model.get('tranche.tranche')
+    cfg_dict['LossDesc'] = Model.get('ins_product.loss_desc')
     cfg_dict['ComplementaryData'] = Model.get(
         'ins_product.complementary_data_def')
+    cfg_dict['ItemDesc'] = Model.get('ins_product.item_desc')
     return cfg_dict
 
 
 def get_or_create_product(cfg_dict, code, name, options=None, date=None):
-    product = proteus_tools.get_objects_from_db(cfg_dict,
-        'Product', 'code', code)
+    product = proteus_tools.get_objects_from_db(
+        cfg_dict, 'Product', 'code', code)
     if product:
         return product
     product = cfg_dict['Product']()
@@ -67,10 +69,10 @@ def get_or_create_generator(cfg_dict, code):
     return seq
 
 
-def get_or_create_benefit(cfg_dict, code, name, kind, date=None,
-        calc_unit=None):
-    benefit = proteus_tools.get_objects_from_db(cfg_dict, 'Benefit', 'code',
-        code)
+def get_or_create_benefit(
+        cfg_dict, code, name, kind, date=None, calc_unit=None):
+    benefit = proteus_tools.get_objects_from_db(
+        cfg_dict, 'Benefit', 'code', code)
     if benefit:
         return benefit
     benefit = cfg_dict['Benefit']()
@@ -80,6 +82,21 @@ def get_or_create_benefit(cfg_dict, code, name, kind, date=None,
     benefit.indemnification_kind = kind
     benefit.indemnification_calc_unit = calc_unit
     return benefit
+
+
+def get_or_create_loss_desc(
+        cfg_dict, code, name, item_kind, with_end_date=True):
+    loss_desc = proteus_tools.get_objects_from_db(
+        cfg_dict, 'LossDesc', 'code', code)
+    if loss_desc:
+        return loss_desc
+    loss_desc = cfg_dict['LossDesc']()
+    loss_desc.code = code
+    loss_desc.name = name
+    loss_desc.with_end_date = with_end_date
+    loss_desc.item_kind = item_kind
+    loss_desc.save()
+    return loss_desc
 
 
 def try_to_save_object(cfg_dict, cur_object):
@@ -93,10 +110,23 @@ def try_to_save_object(cfg_dict, cur_object):
         print 'Exception raised when trying to save', cur_object
 
 
-def get_or_create_coverage(cfg_dict, code, name, date=None,
-        family='life_product.definition'):
-    coverage = proteus_tools.get_objects_from_db(cfg_dict, 'Coverage', 'code',
-        code)
+def get_or_create_item_desc(cfg_dict, code, name, kind):
+    item_desc = proteus_tools.get_objects_from_db(
+        cfg_dict, 'ItemDesc', 'code', code)
+    if item_desc:
+        return item_desc
+    item_desc = cfg_dict['ItemDesc']()
+    item_desc.code = code
+    item_desc.name = name
+    item_desc.kind = kind
+    item_desc.save()
+    return item_desc
+
+
+def get_or_create_coverage(
+        cfg_dict, code, name, date=None, family='life_product.definition'):
+    coverage = proteus_tools.get_objects_from_db(
+        cfg_dict, 'Coverage', 'code', code)
     if coverage:
         return coverage
     coverage = cfg_dict['Coverage']()
@@ -107,8 +137,8 @@ def get_or_create_coverage(cfg_dict, code, name, date=None,
         coverage.start_date = date
     else:
         coverage.start_date = cfg_dict['Date'].today({})
-    coverage.insurer = proteus_tools.get_objects_from_db(cfg_dict, 'Insurer',
-        force_search=True)
+    coverage.insurer = proteus_tools.get_objects_from_db(
+        cfg_dict, 'Insurer', force_search=True)
     return coverage
 
 
@@ -122,8 +152,8 @@ def get_or_create_tax(cfg_dict, code, name=None, vals=None):
     if vals:
         for val in vals:
             tax_ver = cfg_dict['TaxVersion']()
-            tax_ver.start_date = val.get('start_date',
-                cfg_dict['Date'].today({}))
+            tax_ver.start_date = val.get(
+                'start_date', cfg_dict['Date'].today({}))
             tax_ver.end_date = val.get('end_date', None)
             tax_ver.kind = val.get('kind', 'rate')
             tax_ver.value = Decimal(val.get('value', 0))
@@ -142,8 +172,8 @@ def get_or_create_fee(cfg_dict, code, name, vals=None):
     if vals:
         for val in vals:
             fee_ver = cfg_dict['FeeVersion']()
-            fee_ver.start_date = val.get('start_date',
-                cfg_dict['Date'].today({}))
+            fee_ver.start_date = val.get(
+                'start_date', cfg_dict['Date'].today({}))
             fee_ver.end_date = val.get('end_date', None)
             fee_ver.kind = val.get('kind', 'rate')
             fee_ver.value = Decimal(val.get('value', 0))
@@ -152,13 +182,13 @@ def get_or_create_fee(cfg_dict, code, name, vals=None):
     return fee
 
 
-def get_or_create_complementary_data(cfg_dict, name, string=None, type_=None,
-        kind=None, selection=None):
+def get_or_create_complementary_data(
+        cfg_dict, name, string=None, type_=None, kind=None, selection=None):
     name = cfg_dict['translate'].get(name, name)
     if string:
         string = cfg_dict['translate'].get(string, string)
-    schema_el = proteus_tools.get_objects_from_db(cfg_dict,
-        'ComplementaryData', 'name', name)
+    schema_el = proteus_tools.get_objects_from_db(
+        cfg_dict, 'ComplementaryData', 'name', name)
     if schema_el:
         return schema_el
     schema_el = cfg_dict['ComplementaryData']()
@@ -183,15 +213,15 @@ def create_AAA_Product(cfg_dict, code, name):
         return product_a
 
     coverage_a = get_or_create_coverage(cfg_dict, 'ALP', 'Alpha Coverage')
-    tax = get_or_create_tax(cfg_dict,
-        cfg_dict['translate']['IT'],
-        cfg_dict['translate']['Insurance Tax'],
-        [{'value': 15}])
+    tax = get_or_create_tax(
+        cfg_dict, cfg_dict['translate']['IT'],
+        cfg_dict['translate']['Insurance Tax'], [{'value': 15}])
+    item_desc = get_or_create_item_desc(cfg_dict, 'person', 'Person', 'person')
+    fee = get_or_create_fee(
+        cfg_dict, 'FG', u'Frais de gestion', [{'value': 4}])
 
-    fee = get_or_create_fee(cfg_dict, 'FG', u'Frais de gestion',
-        [{'value': 4}])
-
-    pricing_rulea1 = create_pricing_rule(cfg_dict, coverage_a,
+    pricing_rulea1 = create_pricing_rule(
+        cfg_dict, coverage_a,
         config_kind='advanced', rated_object_kind='global', components=[
             {
                 'kind': 'base',
@@ -212,8 +242,8 @@ def create_AAA_Product(cfg_dict, code, name):
         ],
         end_date=cfg_dict['Date'].today({}) + datetime.timedelta(days=10))
 
-    create_components(cfg_dict, pricing_rulea1, rated_object_kind='sub_item',
-        components=[
+    create_components(
+        cfg_dict, pricing_rulea1, rated_object_kind='sub_item', components=[
             {
                 'kind': 'base',
                 'code': 'PP',
@@ -221,7 +251,8 @@ def create_AAA_Product(cfg_dict, code, name):
                 'fixed_amount': Decimal(1)
             }])
 
-    create_pricing_rule(cfg_dict, coverage_a,
+    create_pricing_rule(
+        cfg_dict, coverage_a,
         config_kind='advanced', rated_object_kind='global', components=[
             {
                 'kind': 'base',
@@ -238,9 +269,11 @@ def create_AAA_Product(cfg_dict, code, name):
         start_date=cfg_dict['Date'].today({}) + datetime.timedelta(days=11),
         end_date=cfg_dict['Date'].today({}) + datetime.timedelta(days=20))
 
-    coverage_b = get_or_create_coverage(cfg_dict, 'BET', 'Beta Coverage',
+    coverage_b = get_or_create_coverage(
+        cfg_dict, 'BET', 'Beta Coverage',
         cfg_dict['Date'].today({}) + datetime.timedelta(days=5))
-    create_pricing_rule(cfg_dict, coverage_b,
+    create_pricing_rule(
+        cfg_dict, coverage_b,
         config_kind='advanced', rated_object_kind='global', components=[
             {
                 'kind': 'base',
@@ -251,20 +284,23 @@ def create_AAA_Product(cfg_dict, code, name):
         ],
         end_date=cfg_dict['Date'].today({}) + datetime.timedelta(days=10))
 
+    coverage_a.item_desc = item_desc
+    coverage_b.item_desc = item_desc
     try_to_save_object(cfg_dict, coverage_a)
     try_to_save_object(cfg_dict, coverage_b)
 
     product_a.options.append(coverage_a)
     product_a.options.append(coverage_b)
+    product_a.item_descriptors.append(item_desc)
 
     product_a.contract_generator = get_or_create_generator(
         cfg_dict, 'ins_product.product')
     try_to_save_object(cfg_dict, product_a)
 
 
-def get_or_create_tree_element(cfg_dict, cur_type, description,
-        translated_technical, fct_args='', name=None, namespace=None,
-        long_desc=''):
+def get_or_create_tree_element(
+        cfg_dict, cur_type, description, translated_technical,
+        fct_args='', name=None, namespace=None, long_desc=''):
     cur_domain = []
     if cur_type == 'function':
         cur_domain.append(('namespace', '=', namespace))
@@ -273,8 +309,8 @@ def get_or_create_tree_element(cfg_dict, cur_type, description,
         cur_domain.append(('description', '=', description))
     cur_domain.append(('language.code', '=', cfg_dict['language']))
     cur_domain.append(('translated_technical_name', '=', translated_technical))
-    tree_element = proteus_tools.get_objects_from_db(cfg_dict, 'TreeElement',
-        domain=cur_domain)
+    tree_element = proteus_tools.get_objects_from_db(
+        cfg_dict, 'TreeElement', domain=cur_domain)
     if tree_element:
         return tree_element
     lang = cfg_dict['Lang'].find([('code', '=', cfg_dict['language'])])[0]
@@ -328,8 +364,8 @@ def get_or_create_context(cfg_dict, name=None):
 
 
 def get_or_create_rule_for_birthdate_eligibility(cfg_dict, ct, name):
-    rule = proteus_tools.get_objects_from_db(cfg_dict, 'RuleEngine', 'name',
-        name)
+    rule = proteus_tools.get_objects_from_db(
+        cfg_dict, 'RuleEngine', 'name', name)
     if rule:
         return rule
     rule = cfg_dict['RuleEngine']()
@@ -417,20 +453,21 @@ def create_rule_engine_data(cfg_dict):
     create_folder_from_set(cfg_dict, 'ins_product.rule_sets.subscriber', descs)
     create_folder_from_set(cfg_dict, 'ins_product.rule_sets.contract', descs)
     create_folder_from_set(cfg_dict, 'ins_product.rule_sets.option', descs)
-    create_folder_from_set(cfg_dict, 'ins_product.rule_sets.covered_data',
-        descs)
+    create_folder_from_set(
+        cfg_dict, 'ins_product.rule_sets.covered_data', descs)
     #TODO : To move to claim test case
     create_folder_from_set(cfg_dict, 'ins_product.rule_sets.claim', descs)
-    rule_combination = create_folder_from_set(cfg_dict,
-        'ins_product.rule_sets.rule_combination', descs)
+    rule_combination = create_folder_from_set(
+        cfg_dict, 'ins_product.rule_sets.rule_combination', descs)
 
     rule_combi_context = get_or_create_context(cfg_dict, 'Rule Combination')
-    append_inexisting_elements(rule_combi_context, 'allowed_elements',
-        [rule_combination])
+    append_inexisting_elements(
+        rule_combi_context, 'allowed_elements', [rule_combination])
     rule_combi_context.save()
 
     ct = get_or_create_context(cfg_dict, 'Default Context')
-    folders = cfg_dict['TreeElement'].find([('type', '=', 'folder')])
+    folders = cfg_dict['TreeElement'].find([
+        ('type', '=', 'folder'), ('parent', '=', None)])
     append_inexisting_elements(ct, 'allowed_elements', folders)
 
     ct.save()
@@ -442,8 +479,8 @@ def create_BBB_product(cfg_dict, code, name):
         return product_b
     coverage = Model.get('ins_product.coverage')
 
-    rule = get_or_create_rule_for_birthdate_eligibility(cfg_dict,
-        get_or_create_context(cfg_dict, 'Default Context'),
+    rule = get_or_create_rule_for_birthdate_eligibility(
+        cfg_dict, get_or_create_context(cfg_dict, 'Default Context'),
         'test_rule')
 
     coverage_a, = coverage.find([('code', '=', 'ALP')], limit=1)
@@ -489,8 +526,8 @@ def create_BBB_product(cfg_dict, code, name):
 
 
 def get_or_create_currency(cfg_dict):
-    currency = proteus_tools.get_objects_from_db(cfg_dict, 'Currency', 'code',
-        'EUR', force_search=True)
+    currency = proteus_tools.get_objects_from_db(
+        cfg_dict, 'Currency', 'code', 'EUR', force_search=True)
     if currency:
         return currency
     currency = cfg_dict['Currency']()
@@ -516,7 +553,14 @@ def add_rule(cfg_dict, offered, kind, at_date=None, end_date=None):
     return res
 
 
-def create_components(cfg_dict, pricing_rule, rated_object_kind='global',
+def clean_rules(cfg_dict, offered, kind):
+    RuleModel = Model.get('ins_product.%s_rule' % kind)
+    for elem in getattr(offered, '%s_rules' % kind):
+        RuleModel.delete(elem)
+
+
+def create_components(
+        cfg_dict, pricing_rule, rated_object_kind='global',
         combi_rule=None, components=None):
 
     prefix = '%s_' % rated_object_kind if rated_object_kind != 'global' else ''
@@ -531,31 +575,38 @@ def create_components(cfg_dict, pricing_rule, rated_object_kind='global',
     return pricing_rule
 
 
-def create_pricing_rule(cfg_dict, cov, config_kind='simple',
+def create_pricing_rule(
+        cfg_dict, cov, config_kind='simple',
         rated_object_kind='global', combi_rule=None, basic_price=None,
         basic_tax=None, components=None, start_date=None, end_date=None):
 
-    res = add_rule(cfg_dict, cov, 'pricing', at_date=start_date,
-        end_date=end_date)
+    res = add_rule(
+        cfg_dict, cov, 'pricing', at_date=start_date, end_date=end_date)
     res.config_kind = config_kind
     res.basic_price = basic_price
     res.basic_tax = basic_tax
-    create_components(cfg_dict, res, rated_object_kind, combi_rule,
-        components)
+    create_components(
+        cfg_dict, res, rated_object_kind, combi_rule, components)
     return res
 
 
 def create_disability_coverage(cfg_dict):
     at_date = datetime.date(2011, 1, 1)
-    cov = get_or_create_coverage(cfg_dict, 'INCAP', u'Incapacité',
-        date=at_date)
-
-    ca_rule = add_rule(cfg_dict, cov, 'coverage_amount', at_date,
+    cov = get_or_create_coverage(
+        cfg_dict, 'INCAP', u'Incapacité', date=at_date)
+    if cov.id > 0:
+        clean_rules(cfg_dict, cov, 'coverage_amount')
+        cov.reload()
+    item_desc = get_or_create_item_desc(cfg_dict, 'person', 'Person', 'person')
+    cov.item_desc = item_desc
+    ca_rule = add_rule(
+        cfg_dict, cov, 'coverage_amount', at_date,
         end_date=datetime.date(2011, 12, 31))
     ca_rule.amounts = '40;90;140;190'
 
     at_date = datetime.date(2012, 1, 1)
-    ca_rule = add_rule(cfg_dict, cov, 'coverage_amount', at_date,
+    ca_rule = add_rule(
+        cfg_dict, cov, 'coverage_amount', at_date,
         end_date=datetime.date(2012, 12, 31))
     ca_rule.amounts = '50;100;150;200'
 
@@ -567,8 +618,8 @@ def create_disability_coverage(cfg_dict):
     elig_rule.min_age = 18
     elig_rule.max_age = 65
 
-    fee = get_or_create_fee(cfg_dict, 'FG', u'Frais de gestion',
-        [{'value': 4}])
+    fee = get_or_create_fee(
+        cfg_dict, 'FG', u'Frais de gestion', [{'value': 4}])
     tax = get_or_create_tax(cfg_dict, 'TSCA')
 
     code = '''
@@ -586,9 +637,10 @@ ajouter_detail('FG', FG)
 
 return PP + FG + RA + Tax
 '''
-    combination_rule = get_or_create_rule(cfg_dict, u'Règle de combinaison',
-        code, 'Rule Combination')
-    create_pricing_rule(cfg_dict, cov, config_kind='advanced',
+    combination_rule = get_or_create_rule(
+        cfg_dict, u'Règle de combinaison', code, 'Rule Combination')
+    create_pricing_rule(
+        cfg_dict, cov, config_kind='advanced',
         rated_object_kind='global', combi_rule=combination_rule,
         components=[
             {
@@ -615,8 +667,12 @@ return PP + FG + RA + Tax
             },
         ])
 
-    benefit = get_or_create_benefit(cfg_dict, 'IJ',
-        'Indémnité Journalière', kind='period', calc_unit='day')
+    benefit = get_or_create_benefit(
+        cfg_dict, 'IJ', 'Indémnité Journalière', kind='period',
+        calc_unit='day')
+    loss_desc = get_or_create_loss_desc(
+        cfg_dict, 'WI', 'Arrêt de travail', 'person')
+    benefit.loss_descs.append(loss_desc)
     add_rule(cfg_dict, benefit, 'benefit')
     cov.benefits.append(benefit)
 
@@ -633,11 +689,14 @@ considéré comme invalide).'''
 
 def create_invalidity_coverage(cfg_dict):
     at_date = datetime.date(2011, 1, 1)
-    cov = get_or_create_coverage(cfg_dict, 'INVAL', u'Invalidité',
-        date=at_date)
+    cov = get_or_create_coverage(
+        cfg_dict, 'INVAL', u'Invalidité', date=at_date)
+    item_desc = get_or_create_item_desc(cfg_dict, 'person', 'Person', 'person')
+    cov.item_desc = item_desc
     CSP = get_or_create_complementary_data(cfg_dict, name='CSP')
-    salary = get_or_create_complementary_data(cfg_dict, name='salary',
-        string='Annual Salary', type_='numeric', kind='sub_elem')
+    salary = get_or_create_complementary_data(
+        cfg_dict, name='salary', string='Annual Salary', type_='numeric',
+        kind='sub_elem')
     cov.complementary_data_def.append(CSP)
     cov.complementary_data_def.append(salary)
 
@@ -651,25 +710,30 @@ if donnee_compl_element_couvert('CSP') == 'CSP1':
 else:
     return salaire * 0.0001
 '''
-    rule_engine = get_or_create_rule(cfg_dict, u'Tarif CSP', algo,
-        'Default Context')
-    create_pricing_rule(cfg_dict, cov, config_kind='advanced',
-            rated_object_kind='sub_item', components=[
-                {
-                    'kind': 'base',
-                    'code': 'PP',
-                    'config_kind': 'advanced',
-                    'rule': rule_engine,
-                },
-                {
-                    'kind': 'tax',
-                    'tax': get_or_create_tax(cfg_dict, 'TSCA'),
-                    'config_kind': 'simple',
-                },
-            ])
+    rule_engine = get_or_create_rule(
+        cfg_dict, u'Tarif CSP', algo, 'Default Context')
+    create_pricing_rule(
+        cfg_dict, cov, config_kind='advanced', rated_object_kind='sub_item',
+        components=[
+            {
+                'kind': 'base',
+                'code': 'PP',
+                'config_kind': 'advanced',
+                'rule': rule_engine,
+            },
+            {
+                'kind': 'tax',
+                'tax': get_or_create_tax(cfg_dict, 'TSCA'),
+                'config_kind': 'simple',
+            },
+        ])
 
-    benefit = get_or_create_benefit(cfg_dict, 'RENT_INVAL',
-        'Rente d\'invalidité', kind='annuity', calc_unit='quarter')
+    benefit = get_or_create_benefit(
+        cfg_dict, 'RENT_INVAL', 'Rente d\'invalidité', kind='annuity',
+        calc_unit='quarter')
+    loss_desc = get_or_create_loss_desc(
+        cfg_dict, 'DY', 'Invalidité', 'person')
+    benefit.loss_descs.append(loss_desc)
     add_rule(cfg_dict, benefit, 'benefit')
     cov.benefits.append(benefit)
 
@@ -685,6 +749,8 @@ retraite (au plus tard jusqu’à votre 60ème anniversaire).'''
 def create_death_coverage(cfg_dict):
     at_date = datetime.date(2011, 1, 1)
     cov = get_or_create_coverage(cfg_dict, 'DC', u'Décès', date=at_date)
+    item_desc = get_or_create_item_desc(cfg_dict, 'person', 'Person', 'person')
+    cov.item_desc = item_desc
 
     cov.complementary_data_def.append(
         get_or_create_complementary_data(cfg_dict, name='is_vip'))
@@ -707,39 +773,51 @@ if donnee_compl_contrat('est_vip'):
     result = 0.9 * result
 return result
 '''
-    rule_engine = get_or_create_rule(cfg_dict,
-        u'2% du Montant de couverture et 10% de reduc pour VIP', algo,
-        'Default Context')
-    create_pricing_rule(cfg_dict, cov, config_kind='advanced',
-            rated_object_kind='sub_item', components=[
-                {
-                    'kind': 'base',
-                    'code': 'PP',
-                    'config_kind': 'advanced',
-                    'rule': rule_engine,
-                },
-                {
-                    'kind': 'tax',
-                    'tax': get_or_create_tax(cfg_dict, 'TSCA'),
-                    'config_kind': 'simple',
-                },
-            ])
+    rule_engine = get_or_create_rule(
+        cfg_dict, u'2% du Montant de couverture et 10% de reduc pour VIP',
+        algo, 'Default Context')
+    create_pricing_rule(
+        cfg_dict, cov, config_kind='advanced', rated_object_kind='sub_item',
+        components=[
+            {
+                'kind': 'base',
+                'code': 'PP',
+                'config_kind': 'advanced',
+                'rule': rule_engine,
+            },
+            {
+                'kind': 'tax',
+                'tax': get_or_create_tax(cfg_dict, 'TSCA'),
+                'config_kind': 'simple',
+            },
+        ])
 
-    capital_benefit = get_or_create_benefit(cfg_dict, 'CAP_DC',
-        'Capital Décès', kind='capital')
+    capital_benefit = get_or_create_benefit(
+        cfg_dict, 'CAP_DC', 'Capital Décès', kind='capital')
     benefit_rule = add_rule(cfg_dict, capital_benefit, 'benefit')
+    loss_desc = get_or_create_loss_desc(
+        cfg_dict, 'DH', 'Décès', 'person')
+    capital_benefit.loss_descs.append(loss_desc)
     cov.benefits.append(capital_benefit)
 
-    annuity_benefit = get_or_create_benefit(cfg_dict, 'RENT_CJ',
-        'Rente de conjoint', kind='annuity', calc_unit='quarter')
+    annuity_benefit = get_or_create_benefit(
+        cfg_dict, 'RENT_CJ', 'Rente de conjoint', kind='annuity',
+        calc_unit='quarter')
     benefit_rule = add_rule(cfg_dict, annuity_benefit, 'benefit')
     benefit_rule.coef_coverage_amount = Decimal(1 / (10 * 12))
+    loss_desc = get_or_create_loss_desc(
+        cfg_dict, 'DH', 'Décès', 'person')
+    annuity_benefit.loss_descs.append(loss_desc)
     cov.benefits.append(annuity_benefit)
 
-    annuity__edu_benefit = get_or_create_benefit(cfg_dict, 'RENT_EDU',
-        'Rente éducation', kind='annuity', calc_unit='quarter')
+    annuity__edu_benefit = get_or_create_benefit(
+        cfg_dict, 'RENT_EDU', 'Rente éducation', kind='annuity',
+        calc_unit='quarter')
     benefit_rule = add_rule(cfg_dict, annuity__edu_benefit, 'benefit')
     benefit_rule.coef_coverage_amount = Decimal(1 / (10 * 12 * 4))
+    loss_desc = get_or_create_loss_desc(
+        cfg_dict, 'DH', 'Décès', 'person')
+    annuity__edu_benefit.loss_descs.append(loss_desc)
     cov.benefits.append(annuity__edu_benefit)
 
     cov.description = '''<b>En cas de décès ou de Perte Totale et Irréversible\
@@ -770,16 +848,19 @@ def create_prev_product(cfg_dict):
     disability = create_disability_coverage(cfg_dict)
     death = create_death_coverage(cfg_dict)
     inval = create_invalidity_coverage(cfg_dict)
-    prod = get_or_create_product(cfg_dict, 'PREV', u'Prévoyance Indviduelle',
+    prod = get_or_create_product(
+        cfg_dict, 'PREV', u'Prévoyance Indviduelle',
         options=[death, inval, disability], date=at_date)
     add_description(cfg_dict, prod)
+    item_desc = get_or_create_item_desc(cfg_dict, 'person', 'Person', 'person')
+    prod.item_descriptors.append(item_desc)
     prod.save()
     return prod
 
 
 def get_or_create_rule(cfg_dict, name, algo, context_name=None):
-    rule = proteus_tools.get_objects_from_db(cfg_dict, 'RuleEngine', 'name',
-        name)
+    rule = proteus_tools.get_objects_from_db(
+        cfg_dict, 'RuleEngine', 'name', name)
     if rule:
         return rule
     rule = cfg_dict['RuleEngine']()
@@ -802,8 +883,8 @@ def get_tree_element(cfg_dict, name=None, table_code=None):
 
 
 def write_ceiling_code(pss_multiplicator, pss_element):
-    res = ('PMSS = %s(date_de_calcul())\n'
-        % pss_element.translated_technical_name)
+    res = 'PMSS = %s(date_de_calcul())\n' % (
+        pss_element.translated_technical_name)
     res += 'return %s * PMSS\n' % pss_multiplicator
     return res
 
@@ -840,13 +921,15 @@ def create_tranches(cfg_dict, pss_code):
 
 
 def create_shared_complementary_data(cfg_dict):
-    get_or_create_complementary_data(cfg_dict, name='is_vip', string='Is VIP',
-        type_='boolean', kind='contract')
-    get_or_create_complementary_data(cfg_dict, name='salary',
-        string='Annual Salary', type_='numeric', kind='sub_elem')
-    get_or_create_complementary_data(cfg_dict, name='CSP',
-        string='CSP', type_='selection', kind='sub_elem',
-        selection='''CSP1: CSP1
+    get_or_create_complementary_data(
+        cfg_dict, name='is_vip', string='Is VIP', type_='boolean',
+        kind='contract')
+    get_or_create_complementary_data(
+        cfg_dict, name='salary', string='Annual Salary', type_='numeric',
+        kind='sub_elem')
+    get_or_create_complementary_data(
+        cfg_dict, name='CSP', string='CSP', type_='selection',
+        kind='sub_elem', selection='''CSP1: CSP1
 CSP2: CSP2
 CSP3: CSP3
 CSP4: CSP4
