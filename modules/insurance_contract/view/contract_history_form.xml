@@ -6,4 +6,7 @@
     <field name="user"/>
     <label name="status"/>
     <field name="status"/>
+    <label name="subscriber"/>
+    <field name="subscriber"/>
+    <field name="options"/>
 </form>

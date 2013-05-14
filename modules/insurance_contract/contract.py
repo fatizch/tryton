@@ -572,6 +572,7 @@ class Option(model.CoopSQL, Subscribed):
     'Subscribed Coverage'
 
     __name__ = 'ins_contract.option'
+    _history = True
 
     contract = fields.Many2One(
         'ins_contract.contract', 'Contract', ondelete='CASCADE')
@@ -695,7 +696,25 @@ class ContractHistory(model.ObjectHistory):
 
     __name__ = 'ins_contract.contract.history'
 
+    offered = fields.Many2One('ins_product.product', 'Product',
+        datetime_field='date')
+    start_date = fields.Date('Effective Date')
+    end_date = fields.Date('End Date')
+    start_management_date = fields.Date('Management Date')
     status = fields.Selection('get_possible_status', 'Status')
+    summary = fields.Function(fields.Text('Summary'), 'get_summary')
+    currency = fields.Function(
+        fields.Many2One('currency.currency', 'Currency'),
+        'get_currency_id')
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'get_currency_digits')
+    options = fields.Function(
+        fields.One2Many('ins_contract.option', None, 'Options',
+            datetime_field='date'),
+        'get_options')
+    subscriber = fields.Many2One('party.party', 'Subscriber',
+        datetime_field='date')
 
     @classmethod
     def get_object_model(cls):
@@ -708,6 +727,13 @@ class ContractHistory(model.ObjectHistory):
     @classmethod
     def get_possible_status(cls):
         return Pool().get('ins_contract.contract').get_possible_status()
+
+    def get_options(self, name):
+        Option = Pool().get('ins_contract.option')
+        options = Option.search([
+                ('contract', '=', self.from_object.id),
+                ])
+        return [o.id for o in options]
 
 
 class PriceLine(model.CoopSQL, model.CoopView):
