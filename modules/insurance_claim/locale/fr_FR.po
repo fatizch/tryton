@@ -463,8 +463,8 @@ msgid "Delivered Services"
 msgstr "Prestations Fournies"
 
 msgctxt "field:ins_claim.loss,possible_loss_descs:"
-msgid ""
-msgstr ""
+msgid "Possible Loss Descs"
+msgstr "Possible Loss Descs"
 
 msgctxt "field:ins_claim.loss,rec_name:"
 msgid "Name"
@@ -777,6 +777,10 @@ msgstr "Régularisation"
 msgctxt "selection:ins_claim.indemnification_detail,kind:"
 msgid "Waiting Period"
 msgstr "Carence"
+
+msgctxt "selection:ins_claim.indemnification_detail,unit:"
+msgid ""
+msgstr ""
 
 msgctxt "selection:ins_claim.indemnification_detail,unit:"
 msgid "Day"

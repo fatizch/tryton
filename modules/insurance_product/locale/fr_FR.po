@@ -94,6 +94,10 @@ msgctxt "error:ins_product.coverage_amount_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
+msgctxt "error:ins_product.deductible_duration:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:ins_product.deductible_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -1279,6 +1283,46 @@ msgctxt "field:ins_product.coverage_amount_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_product.deductible_duration,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.deductible_duration,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.deductible_duration,deductible_rule:"
+msgid "Deductible Rule"
+msgstr "Franchise"
+
+msgctxt "field:ins_product.deductible_duration,duration:"
+msgid "Duration"
+msgstr "Durée"
+
+msgctxt "field:ins_product.deductible_duration,duration_unit:"
+msgid "Duration Unit"
+msgstr "Unité de la Durée"
+
+msgctxt "field:ins_product.deductible_duration,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.deductible_duration,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.deductible_duration,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.deductible_duration,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.deductible_duration,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_product.deductible_rule,amount:"
 msgid "Amount"
 msgstr "Montant"
@@ -1302,6 +1346,10 @@ msgstr "Durée"
 msgctxt "field:ins_product.deductible_rule,duration_unit:"
 msgid "Duration Unit"
 msgstr "Unité de la Durée"
+
+msgctxt "field:ins_product.deductible_rule,durations:"
+msgid "Durations"
+msgstr ""
 
 msgctxt "field:ins_product.deductible_rule,end_date:"
 msgid "To Date"
@@ -1334,6 +1382,14 @@ msgstr "Moteur de Règle"
 msgctxt "field:ins_product.deductible_rule,rule_complementary_data:"
 msgid "Rule Complementary Data"
 msgstr "Paramètres de Rêgle"
+
+msgctxt "field:ins_product.deductible_rule,scope:"
+msgid "Scope"
+msgstr ""
+
+msgctxt "field:ins_product.deductible_rule,simple_config_choice:"
+msgid "Simple Config. Choice"
+msgstr ""
 
 msgctxt "field:ins_product.deductible_rule,start_date:"
 msgid "From Date"
@@ -2633,6 +2689,10 @@ msgctxt "field:ins_product.product,options:"
 msgid "Options"
 msgstr "Garanties"
 
+msgctxt "field:ins_product.product,possible_item_descs:"
+msgid "Possible Item Descriptors"
+msgstr ""
+
 msgctxt "field:ins_product.product,pricing_rules:"
 msgid "Pricing Rules"
 msgstr "Règles de Cotisation"
@@ -3330,6 +3390,10 @@ msgctxt "model:ins_product.coverage_amount_rule,name:"
 msgid "Coverage Amount Rule"
 msgstr "Montant de Couverture"
 
+msgctxt "model:ins_product.deductible_duration,name:"
+msgid "Deductible Duration"
+msgstr ""
+
 msgctxt "model:ins_product.deductible_rule,name:"
 msgid "Deductible Rule"
 msgstr "Franchise"
@@ -3882,6 +3946,10 @@ msgctxt "selection:ins_product.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
 
+msgctxt "selection:ins_product.coverage,family:"
+msgid "default"
+msgstr "Par défaut"
+
 msgctxt "selection:ins_product.coverage,subscription_behaviour:"
 msgid "Mandatory"
 msgstr "Obligatoire"
@@ -3934,6 +4002,34 @@ msgctxt "selection:ins_product.coverage_amount_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
+msgctxt "selection:ins_product.deductible_duration,duration_unit:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:ins_product.deductible_duration,duration_unit:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "selection:ins_product.deductible_duration,duration_unit:"
+msgid "Half-year"
+msgstr "Semestre"
+
+msgctxt "selection:ins_product.deductible_duration,duration_unit:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "selection:ins_product.deductible_duration,duration_unit:"
+msgid "Quarter"
+msgstr "Trimestre"
+
+msgctxt "selection:ins_product.deductible_duration,duration_unit:"
+msgid "Week"
+msgstr "Semaine"
+
+msgctxt "selection:ins_product.deductible_duration,duration_unit:"
+msgid "Year"
+msgstr "Année"
+
 msgctxt "selection:ins_product.deductible_rule,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
@@ -3977,6 +4073,22 @@ msgstr "Montant"
 msgctxt "selection:ins_product.deductible_rule,kind:"
 msgid "Duration"
 msgstr "Durée"
+
+msgctxt "selection:ins_product.deductible_rule,scope:"
+msgid "Coverage"
+msgstr "Offre"
+
+msgctxt "selection:ins_product.deductible_rule,scope:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "selection:ins_product.deductible_rule,simple_config_choice:"
+msgid "List"
+msgstr ""
+
+msgctxt "selection:ins_product.deductible_rule,simple_config_choice:"
+msgid "Value"
+msgstr "Valeur"
 
 msgctxt "selection:ins_product.deductible_rule,template_behaviour:"
 msgid ""
@@ -4465,6 +4577,10 @@ msgstr "Documents"
 msgctxt "view:ins_product.coverage_amount_rule:"
 msgid "Coverage Amount rule"
 msgstr "Montant de Couverture"
+
+msgctxt "view:ins_product.deductible_duration:"
+msgid "Deductible Duration"
+msgstr ""
 
 msgctxt "view:ins_product.deductible_rule:"
 msgid "Deductible rule"

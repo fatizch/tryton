@@ -656,7 +656,7 @@ msgstr "Précédent"
 
 msgctxt "view:ins_claim.claim:"
 msgid "Rechute"
-msgstr ""
+msgstr "Rechute"
 
 msgctxt "view:ins_claim.claim:"
 msgid "Remboursement"
@@ -687,19 +687,11 @@ msgid "==> Affiliations"
 msgstr ""
 
 msgctxt "view:ins_contract.contract:"
-msgid "==> Choix des personnes couvertes"
-msgstr ""
-
-msgctxt "view:ins_contract.contract:"
-msgid "==> Choix du souscripteur"
-msgstr ""
-
-msgctxt "view:ins_contract.contract:"
 msgid "==> Couverture"
 msgstr ""
 
 msgctxt "view:ins_contract.contract:"
-msgid "==> Document Request"
+msgid "==> Documents"
 msgstr ""
 
 msgctxt "view:ins_contract.contract:"
@@ -707,7 +699,19 @@ msgid "==> Garanties"
 msgstr ""
 
 msgctxt "view:ins_contract.contract:"
+msgid "==> Personnes Couvertes"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
 msgid "==> Populations"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "==> Produit"
+msgstr ""
+
+msgctxt "view:ins_contract.contract:"
+msgid "==> Prêt"
 msgstr ""
 
 msgctxt "view:ins_contract.contract:"
@@ -731,14 +735,6 @@ msgid "Billing"
 msgstr "Cotisation"
 
 msgctxt "view:ins_contract.contract:"
-msgid "Choix des personnes couvertes"
-msgstr "Choix des personnes couvertes"
-
-msgctxt "view:ins_contract.contract:"
-msgid "Choix du souscripteur"
-msgstr "Choix du souscripteur"
-
-msgctxt "view:ins_contract.contract:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -757,10 +753,6 @@ msgstr "Couverture"
 msgctxt "view:ins_contract.contract:"
 msgid "Covered Elements/Options"
 msgstr "Eléments Couverts/Garanties"
-
-msgctxt "view:ins_contract.contract:"
-msgid "Document Request"
-msgstr "Document Request"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Documents"
@@ -783,6 +775,10 @@ msgid "Options"
 msgstr "Garanties"
 
 msgctxt "view:ins_contract.contract:"
+msgid "Personnes Couvertes"
+msgstr "Personnes Couvertes"
+
+msgctxt "view:ins_contract.contract:"
 msgid "Populations"
 msgstr "Populations"
 
@@ -795,8 +791,20 @@ msgid "Processus de souscription individuel"
 msgstr "Processus de souscription individuel"
 
 msgctxt "view:ins_contract.contract:"
+msgid "Produit"
+msgstr "Produit"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Prêt"
+msgstr "Prêt"
+
+msgctxt "view:ins_contract.contract:"
 msgid "Souscription Contrat Collectif"
 msgstr "Souscription Contrat Collectif"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Souscription Emprunteur"
+msgstr "Souscription Emprunteur"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Tarif"
@@ -805,12 +813,6 @@ msgstr "Tarif"
 msgctxt "view:ins_contract.contract:"
 msgid "The current record completed the current process, please go ahead"
 msgstr "Processus Terminé. Commencez une nouvelle tâche"
-
-msgctxt "view:ins_contract.contract:"
-msgid ""
-"The current record isin a state (Validation du contract) that you are not "
-"allowed to view."
-msgstr ""
 
 msgctxt "view:ins_contract.contract:"
 msgid "Validation du contract"

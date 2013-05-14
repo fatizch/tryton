@@ -15,10 +15,18 @@ msgid "You define twice the same name!"
 msgstr "Vous avez défini le même nom plusieurs fois"
 
 msgctxt "error:rule_engine.error:"
+msgid "Number of arguments does not match string content"
+msgstr ""
+
+msgctxt "error:rule_engine.error:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
 msgctxt "error:rule_engine.error:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:rule_engine.execution_log:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -69,6 +77,14 @@ msgstr "Créé par"
 msgctxt "field:rule_engine,data_tree:"
 msgid "Data Tree"
 msgstr "Arbre de Données"
+
+msgctxt "field:rule_engine,debug_mode:"
+msgid "Debug Mode"
+msgstr ""
+
+msgctxt "field:rule_engine,exec_logs:"
+msgid "Execution Logs"
+msgstr ""
 
 msgctxt "field:rule_engine,id:"
 msgid "ID"
@@ -206,6 +222,10 @@ msgctxt "field:rule_engine.create_test_case.start,rule:"
 msgid "Rule"
 msgstr "Règle"
 
+msgctxt "field:rule_engine.create_test_case.start,rule_text:"
+msgid "Rule Text"
+msgstr ""
+
 msgctxt "field:rule_engine.create_test_case.start,test_values:"
 msgid "Values"
 msgstr "Valeurs"
@@ -213,6 +233,10 @@ msgstr "Valeurs"
 msgctxt "field:rule_engine.create_test_case.start,unknown_values:"
 msgid "Unknown Values"
 msgstr "Valeurs Inconnues"
+
+msgctxt "field:rule_engine.error,arguments:"
+msgid "Arguments"
+msgstr "Arguments"
 
 msgctxt "field:rule_engine.error,code:"
 msgid "Code"
@@ -254,6 +278,66 @@ msgctxt "field:rule_engine.error,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:rule_engine.execution_log,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:rule_engine.execution_log,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:rule_engine.execution_log,debug:"
+msgid "Debug"
+msgstr ""
+
+msgctxt "field:rule_engine.execution_log,errors:"
+msgid "Errors"
+msgstr "Erreurs"
+
+msgctxt "field:rule_engine.execution_log,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.execution_log,info:"
+msgid "Info"
+msgstr "Info"
+
+msgctxt "field:rule_engine.execution_log,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:rule_engine.execution_log,low_level_debug:"
+msgid "Execution Trace"
+msgstr ""
+
+msgctxt "field:rule_engine.execution_log,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.execution_log,result:"
+msgid "Result"
+msgstr "Résultat"
+
+msgctxt "field:rule_engine.execution_log,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:rule_engine.execution_log,user:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:rule_engine.execution_log,warnings:"
+msgid "Warnings"
+msgstr "Avertissements"
+
+msgctxt "field:rule_engine.execution_log,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:rule_engine.execution_log,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:rule_engine.run_tests.report,id:"
 msgid "ID"
 msgstr "ID"
@@ -269,6 +353,10 @@ msgstr "Date de création"
 msgctxt "field:rule_engine.test_case,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:rule_engine.test_case,debug:"
+msgid "Debug Info"
+msgstr "Information de débogage"
 
 msgctxt "field:rule_engine.test_case,description:"
 msgid "Description"
@@ -286,13 +374,41 @@ msgctxt "field:rule_engine.test_case,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
+msgctxt "field:rule_engine.test_case,low_debug:"
+msgid "Low Level Debug Info"
+msgstr ""
+
 msgctxt "field:rule_engine.test_case,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:rule_engine.test_case,result_errors:"
+msgid "Result Errors"
+msgstr "Erreurs du Résultat"
+
+msgctxt "field:rule_engine.test_case,result_info:"
+msgid "Result Info"
+msgstr ""
+
+msgctxt "field:rule_engine.test_case,result_value:"
+msgid "Result Value"
+msgstr "Valeur du Résultat"
+
+msgctxt "field:rule_engine.test_case,result_warnings:"
+msgid "Result Warnings"
+msgstr ""
+
 msgctxt "field:rule_engine.test_case,rule:"
 msgid "Rule"
 msgstr "Règle"
+
+msgctxt "field:rule_engine.test_case,rule_text:"
+msgid "Rule Text"
+msgstr ""
+
+msgctxt "field:rule_engine.test_case,test_values:"
+msgid "Values"
+msgstr "Valeurs"
 
 msgctxt "field:rule_engine.test_case,values:"
 msgid "Values"
@@ -450,14 +566,6 @@ msgctxt "model:ir.action,name:context_window"
 msgid "Contexts"
 msgstr "Contextes"
 
-msgctxt "model:ir.action,name:create_test_case_wizard"
-msgid "Create Test Case"
-msgstr "Créer le jeu de test"
-
-msgctxt "model:ir.action,name:create_test_values_wizard"
-msgid "Create Test Values"
-msgstr "Créer les Valeurs du Jeu d'Essai"
-
 msgctxt "model:ir.action,name:error_window"
 msgid "Rule Errors"
 msgstr "Erreurs Fonctionnelles"
@@ -473,10 +581,6 @@ msgstr "Jouer les Tests"
 msgctxt "model:ir.action,name:test_case_window_relate"
 msgid "Test Cases"
 msgstr "Jeux de Test"
-
-msgctxt "model:ir.action,name:test_rule_wizard"
-msgid "Test Rule"
-msgstr "Tester la Règle"
 
 msgctxt "model:ir.action,name:tree_element_window"
 msgid "Tree Elements"
@@ -525,6 +629,10 @@ msgstr "Afficher les Variables"
 msgctxt "model:rule_engine.error,name:"
 msgid "Rule Error"
 msgstr "Erreur"
+
+msgctxt "model:rule_engine.execution_log,name:"
+msgid "Rule Execution Log"
+msgstr ""
 
 msgctxt "model:rule_engine.run_tests.report,name:"
 msgid "Test Run Report"
@@ -614,6 +722,14 @@ msgctxt "view:rule_engine.error:"
 msgid "name"
 msgstr "Nom"
 
+msgctxt "view:rule_engine.execution_log:"
+msgid "Execution Log"
+msgstr ""
+
+msgctxt "view:rule_engine.execution_log:"
+msgid "Rule Executions"
+msgstr ""
+
 msgctxt "view:rule_engine.run_tests.report:"
 msgid "Tests Report"
 msgstr ""
@@ -621,6 +737,14 @@ msgstr ""
 msgctxt "view:rule_engine.test_case.value:"
 msgid "Test Case Value"
 msgstr "Valeur du Test"
+
+msgctxt "view:rule_engine.test_case:"
+msgid "Debug Info"
+msgstr "Information de débogage"
+
+msgctxt "view:rule_engine.test_case:"
+msgid "Result"
+msgstr "Résultat"
 
 msgctxt "view:rule_engine.test_case:"
 msgid "Test Case"
@@ -637,6 +761,10 @@ msgstr "Tester la Règle"
 msgctxt "view:rule_engine.tree_element:"
 msgid "Tree Element"
 msgstr "Elément de l'Arbre"
+
+msgctxt "view:rule_engine:"
+msgid "Debug"
+msgstr ""
 
 msgctxt "view:rule_engine:"
 msgid "Rule"

@@ -1,6 +1,10 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:ins_contract.address:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_contract.billing.bill:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -62,6 +66,58 @@ msgctxt "error:ins_contract.status_history:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "field:ins_contract.address,address:"
+msgid "Address"
+msgstr "Adresse"
+
+msgctxt "field:ins_contract.address,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:ins_contract.address,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_contract.address,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_contract.address,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ins_contract.address,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.address,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_contract.address,policy_owner:"
+msgid "Policy Owner"
+msgstr ""
+
+msgctxt "field:ins_contract.address,possible_address:"
+msgid "Possible Address"
+msgstr ""
+
+msgctxt "field:ins_contract.address,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_contract.address,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:ins_contract.address,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_contract.address,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_contract.billing.bill,amount_ht:"
 msgid "Amount HT"
 msgstr "Montant HT"
@@ -69,6 +125,14 @@ msgstr "Montant HT"
 msgctxt "field:ins_contract.billing.bill,amount_ttc:"
 msgid "Amount TTC"
 msgstr "Montant TTC"
+
+msgctxt "field:ins_contract.billing.bill,bill_details:"
+msgid "Bill Details"
+msgstr ""
+
+msgctxt "field:ins_contract.billing.bill,contract:"
+msgid "Contract"
+msgstr "Contrat"
 
 msgctxt "field:ins_contract.billing.bill,create_date:"
 msgid "Create Date"
@@ -250,6 +314,10 @@ msgctxt "field:ins_contract.billing_process.bill_display,bill_start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
+msgctxt "field:ins_contract.billing_process.bill_display,bills:"
+msgid "Bill"
+msgstr "Cotisation"
+
 msgctxt "field:ins_contract.billing_process.bill_display,id:"
 msgid "ID"
 msgstr "ID"
@@ -293,6 +361,10 @@ msgstr "Date de Début"
 msgctxt "field:ins_contract.billing_process.bill_line_view,line_sub_lines:"
 msgid "Sub Lines"
 msgstr ""
+
+msgctxt "field:ins_contract.billing_process.bill_parameters,contract:"
+msgid "Contract"
+msgstr "Contrat"
 
 msgctxt "field:ins_contract.billing_process.bill_parameters,end_date:"
 msgid "End Date"
@@ -354,6 +426,10 @@ msgctxt "field:ins_contract.billing_process.process_state,the_bill_str:"
 msgid "Jsonthe_bill"
 msgstr ""
 
+msgctxt "field:ins_contract.contract,addresses:"
+msgid "Addresses"
+msgstr "Adresses"
+
 msgctxt "field:ins_contract.contract,billing_manager:"
 msgid "Billing Manager"
 msgstr "Cotisation"
@@ -393,6 +469,10 @@ msgstr "Devises"
 msgctxt "field:ins_contract.contract,currency_digits:"
 msgid "Currency Digits"
 msgstr "Nbre de chiffres après la virgule"
+
+msgctxt "field:ins_contract.contract,current_policy_owner:"
+msgid "Current Policy Owner"
+msgstr ""
 
 msgctxt "field:ins_contract.contract,current_state:"
 msgid "Current State"
@@ -550,6 +630,14 @@ msgctxt "field:ins_contract.covered_data,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:ins_contract.covered_data,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:ins_contract.covered_data,deductible_duration:"
+msgid "Deductible Duration"
+msgstr ""
+
 msgctxt "field:ins_contract.covered_data,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -565,6 +653,10 @@ msgstr "Est Utilisé"
 msgctxt "field:ins_contract.covered_data,option:"
 msgid "Subscribed Coverage"
 msgstr "Garantie Souscrite"
+
+msgctxt "field:ins_contract.covered_data,possible_deductible_duration:"
+msgid "Possible Deductible Duration"
+msgstr ""
 
 msgctxt "field:ins_contract.covered_data,rec_name:"
 msgid "Name"
@@ -649,6 +741,10 @@ msgstr "Acteur"
 msgctxt "field:ins_contract.covered_element,party_compl_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
+
+msgctxt "field:ins_contract.covered_element,possible_item_desc:"
+msgid "Possible Item Desc"
+msgstr ""
 
 msgctxt "field:ins_contract.covered_element,rec_name:"
 msgid "Name"
@@ -1295,6 +1391,10 @@ msgctxt "field:party.party,covered_elements:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
 
+msgctxt "model:ins_contract.address,name:"
+msgid "Contract Address"
+msgstr ""
+
 msgctxt "model:ins_contract.billing.bill,name:"
 msgid "Bill"
 msgstr "Cotisation"
@@ -1723,6 +1823,10 @@ msgctxt "selection:ins_product.request_finder,kind:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "view:ins_contract.address:"
+msgid "Contract Address"
+msgstr ""
+
 msgctxt "view:ins_contract.billing.bill:"
 msgid "Bill Summary"
 msgstr "Synthèse de la Cotisation"
@@ -1744,20 +1848,24 @@ msgid "billing_manager"
 msgstr "Cotisation"
 
 msgctxt "view:ins_contract.billing_process.bill_display:"
-msgid "Billing Process - Bill Result"
-msgstr "Cotisation"
+msgid "Bill Result"
+msgstr ""
 
 msgctxt "view:ins_contract.billing_process.bill_line_view:"
 msgid "Bill Lines"
 msgstr "Lignes de Cotisation"
 
 msgctxt "view:ins_contract.billing_process.bill_parameters:"
-msgid "Billing Process - Bill Parameters"
-msgstr "Paramètres de Cotisation"
+msgid "Bill Parameters"
+msgstr "Paramètre de Cotisation"
 
 msgctxt "view:ins_contract.contract.history:"
 msgid "Contract History"
 msgstr "Historique de Contrat"
+
+msgctxt "view:ins_contract.contract:"
+msgid "Addresses"
+msgstr "Adresses"
 
 msgctxt "view:ins_contract.contract:"
 msgid "Billing"
@@ -1887,6 +1995,14 @@ msgctxt "view:ins_contract.subs_process.summary:"
 msgid "Subscription Process - Summary"
 msgstr "Synthèse"
 
+msgctxt "wizard_button:ins_contract.billing_process,bill_display,accept_bill:"
+msgid "Accept"
+msgstr ""
+
+msgctxt "wizard_button:ins_contract.billing_process,bill_display,cancel_bill:"
+msgid "Cancel"
+msgstr "Annuler"
+
 msgctxt ""
 "wizard_button:ins_contract.billing_process,bill_display,steps_cancel:"
 msgid "Cancel"
@@ -1914,6 +2030,15 @@ msgctxt ""
 "wizard_button:ins_contract.billing_process,bill_display,steps_suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
+
+msgctxt ""
+"wizard_button:ins_contract.billing_process,bill_parameters,bill_display:"
+msgid "Preview"
+msgstr ""
+
+msgctxt "wizard_button:ins_contract.billing_process,bill_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt ""
 "wizard_button:ins_contract.billing_process,bill_parameters,steps_cancel:"

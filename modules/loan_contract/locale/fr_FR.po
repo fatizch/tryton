@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -22,6 +22,10 @@ msgctxt "field:ins_contract.contract,documents:"
 msgid "Documents"
 msgstr "Documents"
 
+msgctxt "field:ins_contract.contract,is_loan:"
+msgid "Is Loan"
+msgstr ""
+
 msgctxt "field:ins_contract.contract,is_loan_contract:"
 msgid "Is Loan Contract"
 msgstr "Contrat Emprunteur?"
@@ -29,6 +33,14 @@ msgstr "Contrat Emprunteur?"
 msgctxt "field:ins_contract.contract,loans:"
 msgid "Loans"
 msgstr "Prêts"
+
+msgctxt "field:ins_contract.covered_data,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:ins_contract.covered_data,is_loan:"
+msgid "Is Loan"
+msgstr ""
 
 msgctxt "field:ins_contract.covered_data,loan_shares:"
 msgid "Loan Shares"
@@ -206,6 +218,10 @@ msgctxt "field:ins_contract.loan_share,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_contract.option,is_loan:"
+msgid "Is Loan"
+msgstr ""
+
 msgctxt "field:ins_contract.option,is_loan_option:"
 msgid "Is Loan Option"
 msgstr ""
@@ -265,6 +281,10 @@ msgstr ""
 msgctxt "view:ins_contract.loan:"
 msgid "Loan"
 msgstr "Prêt"
+
+msgctxt "view:ins_contract.loan_share:"
+msgid "%"
+msgstr ""
 
 msgctxt "view:ins_contract.loan_share:"
 msgid "Loan Share"
