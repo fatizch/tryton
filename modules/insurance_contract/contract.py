@@ -30,8 +30,7 @@ DELIVERED_SERVICES_STATUSES = [
     ('delivered', 'Delivered'),
 ]
 
-IS_PARTY = Or((Eval('item_kind') == 'person'),
-        (Eval('item_kind') == 'company'), (Eval('item_kind') == 'party'))
+IS_PARTY = Eval('item_kind').in_(['person', 'company', 'party'])
 
 __all__ = [
     'Contract',
