@@ -3,4 +3,6 @@
     <label name="selected_file"/>
     <field name="name"/>
     <field name="selected_file"/>
+    <newline/>
+    <field name="file_content" colspan="3" widget="richtext" readonly="1"/>
 </form>

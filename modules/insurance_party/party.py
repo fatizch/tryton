@@ -29,6 +29,14 @@ class Party:
         'Complementary Data')
 
     @classmethod
+    def _export_force_recreate(cls):
+        result = super(Party, cls)._export_force_recreate()
+        result.remove('insurer_role')
+        result.remove('broker_role')
+        result.remove('customer_role')
+        return result
+
+    @classmethod
     def get_summary(cls, parties, name=None, at_date=None, lang=None):
         res = super(Party, cls).get_summary(
             parties, name=name, at_date=at_date, lang=lang)
