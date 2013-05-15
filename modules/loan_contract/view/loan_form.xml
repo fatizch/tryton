@@ -5,7 +5,7 @@
   <label name="fixed_rate"/>
   <group id="fixed_rate">
     <field name="fixed_rate" xexpand="0"/>
-    <!-- <label string="%" xexpand="0" xalign="0"/> -->
+    <label id="percent" string="%" xexpand="0" xalign="0"/>
   </group>
   <newline/>
   <label name="contract"/>
@@ -20,7 +20,10 @@
   <label name="monthly_payment_number"/>
   <field name="monthly_payment_number"/>
   <label name="monthly_payment_amount"/>
-  <field name="monthly_payment_amount"/>
+  <group id="monthly_payment_amount">
+    <field name="monthly_payment_amount" xexpand="0"/>
+    <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+  </group>
   <newline/>
   <label name="funds_release_date"/>
   <field name="funds_release_date"/>
