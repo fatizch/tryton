@@ -159,15 +159,6 @@ class TableDefinition(ModelSQL, ModelView):
         cursor = Transaction().cursor
         cursor.execute('CREATE EXTENSION IF NOT EXISTS tablefunc', ())
 
-    @classmethod
-    def _export_force_recreate(cls):
-        result = super(TableDefinition, cls)._export_force_recreate()
-        # result.remove('dimension1')
-        # result.remove('dimension2')
-        # result.remove('dimension3')
-        # result.remove('dimension4')
-        return result
-
     @staticmethod
     def default_dimension_order1():
         return 'alpha'
