@@ -378,6 +378,13 @@ class Rule(ModelView, ModelSQL):
     def _export_keys(cls):
         return set(['name'])
 
+    @classmethod
+    def _export_skips(cls):
+        result = super(Rule, cls)._export_skips()
+        result.add('debug_mode')
+        result.add('exec_logs')
+        return result
+
     def filter_errors(self, error):
         if isinstance(error, WARNINGS):
             return False
