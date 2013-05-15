@@ -129,10 +129,6 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
         return result
 
     @staticmethod
-    def default_is_eligible():
-        return True
-
-    @staticmethod
     def default_is_sub_elem_eligible():
         return True
 
