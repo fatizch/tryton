@@ -1,6 +1,7 @@
 import copy
 import time
 import datetime
+import logging
 try:
     import simplejson as json
 except ImportError:
@@ -63,6 +64,9 @@ class ExportImportMixin(Model):
 
     @classmethod
     def _export_keys(cls):
+        # Returns a set of fields which will be used to compute a unique
+        # functional key for self.
+        # field_name may use "." to chain if it is not ambiguous
         # TODO : Look for a field with 'UNIQUE' and 'required' attributes set
         if 'code' in cls._fields:
             return set(['code'])
@@ -73,15 +77,20 @@ class ExportImportMixin(Model):
 
     @classmethod
     def _export_skips(cls):
+        # A list of fields which will not be exported
         return set((
             'id', 'create_uid', 'write_uid', 'create_date', 'write_date'))
 
     @classmethod
     def _export_light(cls):
+        # A list of fields which will not be recursively exported.
         return set()
 
     @classmethod
     def _export_force_recreate(cls):
+        # A list of X2M fields which will be deleted then recreated rather than
+        # updated. By default, all O2M fields are forced, as they usually
+        # do not have a functional key.
         force = set()
         for field_name, field in cls._fields.iteritems():
             if isinstance(field, tryton_fields.One2Many):
@@ -89,6 +98,9 @@ class ExportImportMixin(Model):
         return force
 
     def _export_get_key(self):
+        # Returns a unique functional key for self, built from a set of
+        # fields defined in the _export_keys method.
+        # This key is a tuple of (field_name, field_value) tuples.
         class_keys = self._export_keys()
         if not class_keys:
             raise NotExportImport('No keys defined for %s' % self.__name__)
@@ -101,8 +113,26 @@ class ExportImportMixin(Model):
             result.append((k, value))
         return tuple(result)
 
+    def _export_prepare(self, exported, force_key):
+        # exported is a dict which hold a log of what has already been exported
+        # It uses the class __name__ as a first key to get to a set of the
+        # functional keys of already exported records.
+        if self.__name__ not in exported:
+            exported[self.__name__] = set()
+        if force_key is None:
+            my_key = self._export_get_key()
+        else:
+            if len(force_key) == 3 and isinstance(force_key[2], int):
+                # We are in the case of a O2M forced key.
+                my_key = force_key
+            else:
+                my_key = force_key[1]
+        exported[self.__name__].add(my_key)
+        return my_key
+
     @classmethod
     def _export_find_instance(cls, instance_key):
+        # Tries to find an instance from its key
         if not instance_key:
             return None
         try:
@@ -118,115 +148,132 @@ class ExportImportMixin(Model):
                     instance_key, cls.__name__))
         return result[0]
 
+    @classmethod
+    def _export_must_export_field(cls, field_name, field):
+        if field_name in cls._export_skips():
+            return False
+        if isinstance(field, tryton_fields.Function) and not isinstance(
+                field, tryton_fields.Property):
+            return False
+        return True
+
+    @classmethod
+    def _export_check_value_exportable(cls, field_name, field, field_value):
+        result = True
+        if isinstance(field, (tryton_fields.Many2One, tryton_fields.One2Many)):
+            if hasattr(Pool().get(field.model_name), 'export_json'):
+                result = True
+            else:
+                if field_name in cls._export_force_recreate():
+                    result = True
+                else:
+                    result = False
+        elif isinstance(field, (
+                tryton_fields.One2One, tryton_fields.Many2Many)):
+            RelationModel = Pool().get(field.relation_name)
+            if not hasattr(RelationModel, 'export_json'):
+                result = False
+            else:
+                target_field = RelationModel._fields[field.target]
+                if not hasattr(
+                        Pool().get(target_field.model_name), 'export_json'):
+                    result = False
+                else:
+                    result = True
+        elif isinstance(field, tryton_fields.Reference):
+            if isinstance(field_value, basestring):
+                good_model = Pool().get(field_value.split(',')[0])
+            else:
+                good_model = field_value
+            if hasattr(good_model, 'export_json'):
+                result = True
+            else:
+                result = False
+        if not result:
+            raise NotExportImport('%s.%s' % (cls.__name__, field_name))
+
+    @classmethod
+    def _export_single_link(
+            cls, exported, field_name, field, field_value, from_field,
+            force_key, values):
+        if isinstance(field, tryton_fields.Reference):
+            f = lambda x: (field_value.__name__, x)
+        else:
+            f = lambda x: x
+        if field_name == from_field and force_key:
+            values[field_name] = f(force_key[0])
+            return
+        field_key = field_value._export_get_key()
+        if field_key in exported.get(field_value.__name__, set()) or \
+                field_name in cls._export_light():
+            values[field_name] = f(field_key)
+        else:
+            values[field_name] = field_value._export_json(exported)
+
+    @classmethod
+    def _export_multiple_link(
+            cls, exported, field_name, field, field_value, my_key, values):
+        field_export_value = []
+        idx = 1
+        for elem in field_value:
+            if field_name in cls._export_force_recreate():
+                try:
+                    elem_key = (my_key, elem._export_get_key())
+                except NotExportImport:
+                    elem_key = (my_key, field_name, idx)
+                field_export_value.append(elem._export_json(
+                    exported, field.field, elem_key))
+            else:
+                elem_key = elem._export_get_key()
+                if elem_key in exported.get(elem.__name__, {}) or \
+                        field_name in cls._export_light():
+                    field_export_value.append(elem_key)
+                else:
+                    field_export_value.append(elem._export_json(exported))
+            idx += 1
+        values[field_name] = field_export_value
+
     def _export_json(self, exported=None, from_field=None, force_key=None):
         if exported is None:
             exported = {}
-        if self.__name__ not in exported:
-            exported[self.__name__] = set()
-        if force_key is None:
-            my_key = self._export_get_key()
-        else:
-            if len(force_key) == 3 and isinstance(force_key[2], int):
-                my_key = force_key
-            else:
-                my_key = force_key[1]
-        exported[self.__name__].add(my_key)
+        my_key = self._export_prepare(exported, force_key)
         values = {
             '__name__': self.__name__,
             '_export_key': my_key}
-        field_order = []
-        for field_name, field in self._fields.iteritems():
-            if field_name in self._export_skips():
-                continue
-            if isinstance(field, tryton_fields.Function) and not isinstance(
-                    field, tryton_fields.Property):
+        # Use "sorted" on fields keys to be sure of the order
+        for field_name in sorted(self._fields.iterkeys()):
+            field = self._fields[field_name]
+            if not self._export_must_export_field(field_name, field):
                 continue
             field_value = getattr(self, field_name)
             if field_value is None:
                 continue
-            field_order.append(field_name)
             if hasattr(self, '_export_override_%s' % field_name):
                 values[field_name] = getattr(
                     self, '_export_override_%s' % field_name)(exported, my_key)
                 continue
+            self._export_check_value_exportable(field_name, field, field_value)
             if isinstance(field, (
-                    tryton_fields.Many2One, tryton_fields.One2One)):
-                if not hasattr(field_value, '_export_json'):
-                    raise NotExportImport(
-                        '%s - %s' % (self.__name__, field_value.__name__))
-                if field_name == from_field and force_key:
-                    values[field_name] = force_key[0]
-                    continue
-                field_key = field_value._export_get_key()
-                if field_key in exported.get(field_value.__name__, {}) or \
-                        field_name in self._export_light():
-                    values[field_name] = field_key
-                else:
-                    values[field_name] = field_value._export_json(exported)
-            elif isinstance(field, tryton_fields.Reference):
-                if not hasattr(field_value, '_export_json'):
-                    raise NotExportImport(
-                        '%s - %s' % (self.__name__, field_value.__name__))
-                if field_name == from_field and force_key:
-                    values[field_name] = (field_value.__name__, force_key[0])
-                    continue
-                field_key = field_value._export_get_key()
-                if field_key in exported.get(field_value.__name__, {}) or \
-                        field_name in self._export_light():
-                    values[field_name] = (field_value.__name__, field_key)
-                else:
-                    values[field_name] = field_value._export_json(exported)
-            elif isinstance(field, tryton_fields.One2Many) and field.size != 1:
-                if not hasattr(Pool().get(field.model_name), '_export_json'):
-                    raise NotExportImport(
-                        '%s - %s' % (self.__name__, field.model_name))
-                field_export_value = []
-                idx = 1
-                for elem in field_value:
-                    if field_name in self._export_force_recreate():
-                        try:
-                            elem_key = (my_key, elem._export_get_key())
-                        except NotExportImport:
-                            elem_key = (my_key, field_name, idx)
-                        field_export_value.append(elem._export_json(
-                            exported, field.field, elem_key))
-                    else:
-                        field_export_value.append(elem._export_json(
-                            exported))
-                    idx += 1
-                values[field_name] = field_export_value
+                    tryton_fields.Many2One, tryton_fields.One2One,
+                    tryton_fields.Reference)):
+                self._export_single_link(
+                    exported, field_name, field, field_value, from_field,
+                    force_key, values)
             elif isinstance(field, tryton_fields.One2Many) and field.size == 1:
                 if len(field_value) != 1:
                     continue
-                field_value = field_value[0]
-                if not hasattr(field_value, '_export_json'):
-                    raise NotExportImport(
-                        '%s - %s' % (self.__name__, field_value.__name__))
-                field_key = field_value._export_get_key()
-                if field_key in exported.get(field_value.__name__, {}) or \
-                        field_name in self._export_light():
-                    values[field_name] = field_key
-                else:
-                    values[field_name] = field_value._export_json(exported)
-            elif isinstance(field, tryton_fields.Many2Many):
-                target_field = Pool().get(
-                    field.relation_name)._fields[field.target]
-                if not hasattr(
-                        Pool().get(target_field.model_name), '_export_json'):
-                    raise NotExportImport(
-                        '%s - %s' % (self.__name__, target_field.model_name))
-                field_export_value = []
-                for elem in field_value:
-                    elem_key = elem._export_get_key()
-                    if elem_key in exported.get(elem.__name__, {}) or \
-                            field_name in self._export_light():
-                        field_export_value.append(elem_key)
-                    else:
-                        field_export_value.append(elem._export_json(exported))
-                values[field_name] = field_export_value
+                self._export_single_link(
+                    exported, field_name, field, field_value[0], from_field,
+                    force_key, values)
+            elif (isinstance(field, tryton_fields.Many2Many) or
+                    isinstance(field, tryton_fields.One2Many) and
+                    field.size != 1):
+                self._export_multiple_link(
+                    exported, field_name, field, field_value, my_key, values)
             else:
                 values[field_name] = getattr(self, field_name)
-        values['_export_order'] = field_order
+        logging.getLogger('export_import').info(
+            'Successfully exported %s' % self.get_rec_name(None))
         return values
 
     def _export_filename(self):
@@ -234,10 +281,12 @@ class ExportImportMixin(Model):
             return self.code
         return self.get_rec_name(None)
 
+    def _export_filename_prefix(self):
+        return '[%s][%s]' % (datetime.date.today().isoformat(), self.__name__)
+
     def export_json(self):
-        filename = '[%s][%s]%s.json' % (
-            datetime.date.today().isoformat(), self.__name__,
-            self._export_filename())
+        filename = '%s%s.json' % (
+            self._export_filename_prefix(), self._export_filename())
         return filename, self._export_json()
 
     @classmethod
@@ -261,7 +310,8 @@ class ExportImportMixin(Model):
             good_instance = cls()
         else:
             good_instance._prepare_for_import()
-        for field_name in values['_export_order']:
+        for field_name in sorted(cls._fields.iterkeys()):
+        # for field_name in values['_export_order']:
             if not field_name in values:
                 continue
             cur_path.append(field_name)
@@ -609,7 +659,8 @@ class CoopSQL(ExportImportMixin, ModelSQL):
         return [(cls._rec_name,) + clause[1:]]
 
     @classmethod
-    def search(cls, domain, offset=0, limit=None, order=None, count=False,
+    def search(
+            cls, domain, offset=0, limit=None, order=None, count=False,
             query_string=False):
         #Set your class here to see the domain on the search
         # if cls.__name__ == 'ins_contract.loan_share':
