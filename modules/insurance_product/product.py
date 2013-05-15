@@ -313,9 +313,9 @@ class Product(model.CoopSQL, Offered):
 
     __name__ = 'ins_product.product'
 
-    options = fields.Many2Many(
+    coverages = fields.Many2Many(
         'ins_product.product-options-coverage',
-        'product', 'coverage', 'Options',
+        'product', 'coverage', 'Coverages',
         domain=[('currency', '=', Eval('currency'))],
         depends=['currency'])
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
@@ -332,7 +332,7 @@ class Product(model.CoopSQL, Offered):
         depends=['possible_item_descs'], required=True)
     possible_item_descs = fields.Function(
         fields.Many2Many('ins_product.item_desc', None, None,
-            'Possible Item Descriptors', on_change_with=['options']),
+            'Possible Item Descriptors', on_change_with=['coverages']),
         'on_change_with_possible_item_descs')
     complementary_data_def = fields.Many2Many(
         'ins_product.product-complementary_data_def',
@@ -356,34 +356,33 @@ class Product(model.CoopSQL, Offered):
         cls.delete_rules(entities)
         super(Product, cls).delete(entities)
 
-    def get_valid_options(self):
-        for option in self.options:
-            if option.is_valid():
-                yield option
+    def get_valid_coverages(self):
+        for coverage in self.coverages:
+            if coverage.is_valid():
+                yield coverage
 
     def get_sub_elem_data(self):
         # This method is used by the get_result method to know where to look
         # for sub-elements to parse and what fields can be used for key
         # matching
         #
-        # Here it states that Product objects have a list of 'options' which
+        # Here it states that Product objects have a list of 'coverages' which
         # implements the GetResult class, and on which we might use 'code' or
         # 'name' as keys.
-        return ('options', ['code', 'name'])
+        return ('coverages', ['code', 'name'])
 
     def update_args(self, args):
-        # We might need the product while computing the options
+        # We might need the product while computing the coverages
         if not 'product' in args:
             args['product'] = self
 
-    def give_me_options_price(self, args):
-        # Getting the options price is easy : just loop and append the results
+    def give_me_coverages_price(self, args):
         errs = []
         res = []
 
         self.update_args(args)
-        for option in self.get_valid_options():
-            _res, _errs = option.get_result('price', args)
+        for coverage in self.get_valid_coverages():
+            _res, _errs = coverage.get_result('price', args)
             if _res:
                 res.append(_res)
             errs += _errs
@@ -409,9 +408,9 @@ class Product(model.CoopSQL, Offered):
         return [res[0]], res[1]
 
     def give_me_total_price(self, args):
-        # Total price is the sum of Options price and Product price
+        # Total price is the sum of coverages price and Product price
         (p_price, errs_product) = self.give_me_product_price(args)
-        (o_price, errs_options) = self.give_me_options_price(args)
+        (o_price, errs_coverages) = self.give_me_coverages_price(args)
 
         lines = []
 
@@ -420,7 +419,7 @@ class Product(model.CoopSQL, Offered):
                 continue
             lines.append(line)
 
-        return (lines, errs_product + errs_options)
+        return (lines, errs_product + errs_coverages)
 
     def give_me_eligibility(self, args):
         try:
@@ -433,8 +432,8 @@ class Product(model.CoopSQL, Offered):
         self.update_args(args)
         result = []
         errors = []
-        for option in self.get_valid_options():
-            res, errs = option.get_result('family', args)
+        for coverage in self.get_valid_coverages():
+            res, errs = coverage.get_result('family', args)
             result.append(res)
             errors += errs
         return (result, errors)
@@ -446,7 +445,7 @@ class Product(model.CoopSQL, Offered):
             return self.get_result('frequency', args, kind='pricing')
         except NonExistingRuleKindException:
             pass
-        for coverage in self.get_valid_options():
+        for coverage in self.get_valid_coverages():
             try:
                 return coverage.get_result(
                     'frequency', args, kind='pricing')
@@ -470,7 +469,7 @@ class Product(model.CoopSQL, Offered):
             return [], []
         res = set()
         errs = []
-        for opt in self.options:
+        for opt in self.coverages:
             result, errors = opt.get_result(
                 'complementary_data_ids_aggregate',
                 args)
@@ -490,9 +489,9 @@ class Product(model.CoopSQL, Offered):
 
     def give_me_documents(self, args):
         if 'option' in args:
-            for opt in self.options:
-                if opt.code == args['option']:
-                    return opt.give_me_documents(args)
+            for coverage in self.coverages:
+                if coverage.code == args['option']:
+                    return coverage.give_me_documents(args)
         else:
             try:
                 return self.get_result(
@@ -541,9 +540,9 @@ class Product(model.CoopSQL, Offered):
 
     def on_change_with_possible_item_descs(self, name=None):
         res = []
-        for option in self.options:
-            if not utils.is_none(option, 'item_desc'):
-                res.append(option.item_desc.id)
+        for coverage in self.coverages:
+            if not utils.is_none(coverage, 'item_desc'):
+                res.append(coverage.item_desc.id)
         return res
 
 

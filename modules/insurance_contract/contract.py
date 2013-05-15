@@ -454,8 +454,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         if self.options:
             return True, ()
         self.options = []
-        for coverage in self.offered.options:
-            option = utils.instanciate_relation(self.__class__, 'options')
+        for coverage in self.offered.coverages:
+            option = utils.instanciate_relation(self, 'options')
             option.init_from_offered(coverage, self.start_date)
             for covered_element in self.covered_elements:
                 option.append_covered_data(covered_element)
@@ -482,7 +482,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         to_delete = [elem for elem in existing.itervalues()]
 
         OptionModel = Pool().get(self.give_option_model())
-        for coverage in self.offered.options:
+        for coverage in self.offered.coverages:
             if coverage.code in existing:
                 good_opt = existing[coverage.code]
                 to_delete.remove(good_opt)
