@@ -10,6 +10,8 @@ if os.path.isdir(DIR):
 import unittest
 import trytond.tests.test_tryton
 
+from dateutil.relativedelta import relativedelta
+
 from trytond.modules.coop_utils import test_framework
 from trytond.transaction import Transaction
 
@@ -54,7 +56,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         party.is_person = True
         party.name = 'Toto'
         party.first_name = 'titi'
-        party.birth_date = datetime.date(1950, 12, 04)
+        party.birth_date = datetime.date.today() + relativedelta(years=-39)
         party.gender = 'male'
         party.save()
 
@@ -62,35 +64,15 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assert_(party.id)
 
     @test_framework.prepare_test(
-        'insurance_product.test0004_testNumberGeneratorCreation',
-        'insurance_product.test0005_testCurrencyCreation',
-    )
-    def test0002_testFakeProductCreation(self):
-        # Fake Eligibility Manager
-        erm_c = self.Eligibility()
-        erm_c.config_kind = 'simple'
-        erm_c.min_age = 100
-        erm_c.start_date = datetime.date.today()
-        product_b = self.Product()
-        product_b.code = 'BBB'
-        product_b.name = 'Big Bad Bully'
-        product_b.start_date = datetime.date.today()
-        product_b.eligibility_rules = [erm_c]
-        product_b.contract_generator = self.Sequence.search([
-            ('code', '=', 'ins_product.product')])[0]
-        product_b.save()
-
-    @test_framework.prepare_test(
         'life_product.test0010_LifeProductCreation',
         'insurance_contract.test0001_testPersonCreation',
-        'insurance_contract.test0002_testFakeProductCreation',
-    )
-    def _test0004_testContractCreation(self):
+        )
+    def test0004_testContractCreation(self):
         '''
             Tests subscription process
         '''
         on_party, = self.Party.search([('name', '=', 'Toto')])
-        on_product, = self.Product.search([('code', '=', 'BBB')])
+        on_product, = self.Product.search([('code', '=', 'AAA')])
         wizard_id, _, _ = self.SubsProcess.create()
         wizard = self.SubsProcess(wizard_id)
         wizard.transition_steps_start()
@@ -110,164 +92,164 @@ class ModuleTestCase(test_framework.CoopTestCase):
             wizard,
             wizard.process_state.cur_step_desc)
         self.assertEqual(tmp[0], False)
-        self.assertEqual(tmp[1][0], 'Subscriber must be older than 100')
+        self.assertEqual(tmp[1][0], 'Subscriber must be older than 40')
 
-        on_product, = self.Product.search([('code', '=', 'AAA')])
-        wizard.project.product = on_product
-        tmp = wizard.project.check_step(
-            wizard,
-            wizard.process_state.cur_step_desc)
-        self.assertEqual(tmp[0], True)
-        wizard.transition_steps_next()
-        wizard.transition_master_step()
-        tmp = set([
-            elem.offered.code for elem in wizard.option_selection.options])
-        self.assertEqual(len(tmp), len(on_product.options))
-        self.assertEqual(tmp,
-                         set([elem.code for elem in on_product.options]))
-        self.assertEqual(wizard.option_selection.options[0].start_date,
-                         wizard.project.start_date)
-        self.assertEqual(wizard.option_selection.options[1].start_date,
-                         wizard.project.start_date +
-                         datetime.timedelta(days=3))
-        wizard.option_selection.options[0].start_date += \
-            datetime.timedelta(days=-4)
-        tmp = wizard.option_selection.check_step(
-            wizard,
-            wizard.process_state.cur_step_desc)
-        self.assertEqual(tmp[0], False)
-        wizard.option_selection.options[0].start_date += \
-            datetime.timedelta(days=5)
-        wizard.option_selection.options[1].start_date += \
-            datetime.timedelta(days=-1)
-        tmp = wizard.option_selection.check_step(
-            wizard,
-            wizard.process_state.cur_step_desc)
-        self.assertEqual(tmp[0], False)
-        wizard.option_selection.options[1].start_date += \
-            datetime.timedelta(days=1)
-        tmp = wizard.option_selection.check_step(
-            wizard,
-            wizard.process_state.cur_step_desc)
-        self.assertEqual(tmp[0], False)
-        self.assertEqual(tmp[1][0], 'GAM option not eligible :')
-        self.assertEqual(tmp[1][1], '\tSubscriber too old (max: 40)')
+        # on_product, = self.Product.search([('code', '=', 'AAA')])
+        # wizard.project.product = on_product
+        # tmp = wizard.project.check_step(
+        #     wizard,
+        #     wizard.process_state.cur_step_desc)
+        # self.assertEqual(tmp[0], True)
+        # wizard.transition_steps_next()
+        # wizard.transition_master_step()
+        # tmp = set([
+        #     elem.offered.code for elem in wizard.option_selection.options])
+        # self.assertEqual(len(tmp), len(on_product.coverages))
+        # self.assertEqual(tmp,
+        #                  set([elem.code for elem in on_product.coverages]))
+        # self.assertEqual(wizard.option_selection.options[0].start_date,
+        #                  wizard.project.start_date)
+        # self.assertEqual(wizard.option_selection.options[1].start_date,
+        #                  wizard.project.start_date +
+        #                  datetime.timedelta(days=3))
+        # wizard.option_selection.options[0].start_date += \
+        #     datetime.timedelta(days=-4)
+        # tmp = wizard.option_selection.check_step(
+        #     wizard,
+        #     wizard.process_state.cur_step_desc)
+        # self.assertEqual(tmp[0], False)
+        # wizard.option_selection.options[0].start_date += \
+        #     datetime.timedelta(days=5)
+        # wizard.option_selection.options[1].start_date += \
+        #     datetime.timedelta(days=-1)
+        # tmp = wizard.option_selection.check_step(
+        #     wizard,
+        #     wizard.process_state.cur_step_desc)
+        # self.assertEqual(tmp[0], False)
+        # wizard.option_selection.options[1].start_date += \
+        #     datetime.timedelta(days=1)
+        # tmp = wizard.option_selection.check_step(
+        #     wizard,
+        #     wizard.process_state.cur_step_desc)
+        # self.assertEqual(tmp[0], False)
+        # self.assertEqual(tmp[1][0], 'GAM option not eligible :')
+        # self.assertEqual(tmp[1][1], '\tSubscriber too old (max: 40)')
 
-        wizard.option_selection.options[3].status = 'Refused'
-        wizard.option_selection.options[1].status = 'Refused'
-        tmp = wizard.option_selection.check_step(
-            wizard,
-            wizard.process_state.cur_step_desc)
-        self.assertEqual(tmp[0], True)
-        wizard.option_selection.options[1].status = 'active'
-        wizard.transition_steps_next()
-        wizard.transition_master_step()
-        wizard.transition_steps_previous()
-        wizard.transition_master_step()
-        wizard.transition_steps_next()
-        wizard.transition_master_step()
-        tmp = hasattr(wizard, 'extension_life')
-        self.assert_(tmp)
-        self.assertEqual(len(wizard.extension_life.covered_elements), 1)
-        covered = wizard.extension_life.covered_elements[0]
-        self.assertEqual(covered.elem_person, on_party)
-        self.assertEqual(len(covered.elem_covered_data), 3)
-        self.assertEqual(
-            covered.elem_covered_data[0].data_start_date,
-            wizard.project.start_date + datetime.timedelta(days=1))
-        tmp = wizard.extension_life.check_step(
-            wizard,
-            wizard.process_state.cur_step_desc)
-        self.assertEqual(tmp[0], True)
-        tmp = wizard.extension_life.post_step(
-            wizard,
-            wizard.process_state.cur_step_desc)
-        self.assertEqual(tmp[0], False)
-        self.assertEqual(
-            tmp[1][0],
-            'Toto must be older than 100')
-        wizard.transition_steps_previous()
-        wizard.transition_master_step()
-        wizard.option_selection.options[2].status = 'Refused'
-        wizard.transition_steps_next()
-        wizard.transition_master_step()
-        tmp = wizard.extension_life.check_step(
-            wizard,
-            wizard.process_state.cur_step_desc)
-        self.assertEqual(tmp[0], True)
-        wizard.transition_steps_next()
-        wizard.transition_master_step()
+        # wizard.option_selection.options[3].status = 'Refused'
+        # wizard.option_selection.options[1].status = 'Refused'
+        # tmp = wizard.option_selection.check_step(
+        #     wizard,
+        #     wizard.process_state.cur_step_desc)
+        # self.assertEqual(tmp[0], True)
+        # wizard.option_selection.options[1].status = 'active'
+        # wizard.transition_steps_next()
+        # wizard.transition_master_step()
+        # wizard.transition_steps_previous()
+        # wizard.transition_master_step()
+        # wizard.transition_steps_next()
+        # wizard.transition_master_step()
+        # tmp = hasattr(wizard, 'extension_life')
+        # self.assert_(tmp)
+        # self.assertEqual(len(wizard.extension_life.covered_elements), 1)
+        # covered = wizard.extension_life.covered_elements[0]
+        # self.assertEqual(covered.elem_person, on_party)
+        # self.assertEqual(len(covered.elem_covered_data), 3)
+        # self.assertEqual(
+        #     covered.elem_covered_data[0].data_start_date,
+        #     wizard.project.start_date + datetime.timedelta(days=1))
+        # tmp = wizard.extension_life.check_step(
+        #     wizard,
+        #     wizard.process_state.cur_step_desc)
+        # self.assertEqual(tmp[0], True)
+        # tmp = wizard.extension_life.post_step(
+        #     wizard,
+        #     wizard.process_state.cur_step_desc)
+        # self.assertEqual(tmp[0], False)
+        # self.assertEqual(
+        #     tmp[1][0],
+        #     'Toto must be older than 100')
+        # wizard.transition_steps_previous()
+        # wizard.transition_master_step()
+        # wizard.option_selection.options[2].status = 'Refused'
+        # wizard.transition_steps_next()
+        # wizard.transition_master_step()
+        # tmp = wizard.extension_life.check_step(
+        #     wizard,
+        #     wizard.process_state.cur_step_desc)
+        # self.assertEqual(tmp[0], True)
+        # wizard.transition_steps_next()
+        # wizard.transition_master_step()
 
-        def print_line(line):
-            if not hasattr(line, 'name'):
-                return ''
-            res = line.name
-            if hasattr(line, 'value'):
-                res += ' => %.2f' % line.value
-            if hasattr(line, 'taxes') and line.taxes:
-                res += ' (Tx : %.2f)' % line.taxes
-            return res
+        # def print_line(line):
+        #     if not hasattr(line, 'name'):
+        #         return ''
+        #     res = line.name
+        #     if hasattr(line, 'value'):
+        #         res += ' => %.2f' % line.value
+        #     if hasattr(line, 'taxes') and line.taxes:
+        #         res += ' (Tx : %.2f)' % line.taxes
+        #     return res
 
-        lines = []
+        # lines = []
 
-        def parse_line(line, prefix=''):
-            res = []
-            res.append(prefix + print_line(line))
-            if hasattr(line, 'childs') and line.childs:
-                for sub_elem in line.childs:
-                    res += map(
-                        lambda x: prefix + x, parse_line(sub_elem, '\t'))
-            return res
+        # def parse_line(line, prefix=''):
+        #     res = []
+        #     res.append(prefix + print_line(line))
+        #     if hasattr(line, 'childs') and line.childs:
+        #         for sub_elem in line.childs:
+        #             res += map(
+        #                 lambda x: prefix + x, parse_line(sub_elem, '\t'))
+        #     return res
 
-        for elem in wizard.summary.lines:
-            lines += parse_line(elem)
-            lines += ['']
+        # for elem in wizard.summary.lines:
+        #     lines += parse_line(elem)
+        #     lines += ['']
 
-        def date_from_today(nb):
-            from trytond.modules.coop_utils import date
-            return date.add_day(datetime.date.today(), nb)
+        # def date_from_today(nb):
+        #     from trytond.modules.coop_utils import date
+        #     return date.add_day(datetime.date.today(), nb)
 
-        good_lines = [
-            date_from_today(5).isoformat() + ' => 63.00 (Tx : 12.26)',
-            '\tAlpha Coverage => 33.00 (Tx : 4.16)',
-            '\t\tGlobal Price => 32.00 (Tx : 4.16)',
-            '\t\t\tbase - PP => 12.00',
-            '\t\t\ttax - TT => 4.16',
-            '\t\t\tfee - FEE => 20.00',
-            '\t\tMr. TOTO titi => 1.00',
-            '\t\t\tbase - PP => 1.00',
-            '\tBeta Coverage => 30.00 (Tx : 8.10)',
-            '\t\tGlobal Price => 30.00 (Tx : 8.10)',
-            '\t\t\tbase - PP => 30.00',
-            '\t\t\ttax - TTA => 8.10',
-            '',
-            date_from_today(3).isoformat() + ' => 33.00 (Tx : 4.16)',
-            '\tAlpha Coverage => 33.00 (Tx : 4.16)',
-            '\t\tGlobal Price => 32.00 (Tx : 4.16)',
-            '\t\t\tbase - PP => 12.00',
-            '\t\t\ttax - TT => 4.16',
-            '\t\t\tfee - FEE => 20.00',
-            '\t\tMr. TOTO titi => 1.00',
-            '\t\t\tbase - PP => 1.00',
-            '',
-            date_from_today(11).isoformat() + ' => 15.00',
-            '\tAlpha Coverage => 15.00',
-            '\t\tGlobal Price => 15.00',
-            '\t\t\tbase - PP => 15.00',
-            '']
+        # good_lines = [
+        #     date_from_today(5).isoformat() + ' => 63.00 (Tx : 12.26)',
+        #     '\tAlpha Coverage => 33.00 (Tx : 4.16)',
+        #     '\t\tGlobal Price => 32.00 (Tx : 4.16)',
+        #     '\t\t\tbase - PP => 12.00',
+        #     '\t\t\ttax - TT => 4.16',
+        #     '\t\t\tfee - FEE => 20.00',
+        #     '\t\tMr. TOTO titi => 1.00',
+        #     '\t\t\tbase - PP => 1.00',
+        #     '\tBeta Coverage => 30.00 (Tx : 8.10)',
+        #     '\t\tGlobal Price => 30.00 (Tx : 8.10)',
+        #     '\t\t\tbase - PP => 30.00',
+        #     '\t\t\ttax - TTA => 8.10',
+        #     '',
+        #     date_from_today(3).isoformat() + ' => 33.00 (Tx : 4.16)',
+        #     '\tAlpha Coverage => 33.00 (Tx : 4.16)',
+        #     '\t\tGlobal Price => 32.00 (Tx : 4.16)',
+        #     '\t\t\tbase - PP => 12.00',
+        #     '\t\t\ttax - TT => 4.16',
+        #     '\t\t\tfee - FEE => 20.00',
+        #     '\t\tMr. TOTO titi => 1.00',
+        #     '\t\t\tbase - PP => 1.00',
+        #     '',
+        #     date_from_today(11).isoformat() + ' => 15.00',
+        #     '\tAlpha Coverage => 15.00',
+        #     '\t\tGlobal Price => 15.00',
+        #     '\t\t\tbase - PP => 15.00',
+        #     '']
 
-        lines.sort()
-        good_lines.sort()
+        # lines.sort()
+        # good_lines.sort()
 
-        self.maxDiff = None
-        #print lines, good_lines
-        self.assertListEqual(lines, good_lines)
+        # self.maxDiff = None
+        # #print lines, good_lines
+        # self.assertListEqual(lines, good_lines)
 
-        wizard.transition_steps_complete()
-        wizard.transition_master_step()
+        # wizard.transition_steps_complete()
+        # wizard.transition_master_step()
 
-        contract, = self.Contract.search([('id', '=', '1')])
-        self.assert_(contract.id)
+        # contract, = self.Contract.search([('id', '=', '1')])
+        # self.assert_(contract.id)
 
     @test_framework.prepare_test(
         'insurance_contract.test0004_testContractCreation',
