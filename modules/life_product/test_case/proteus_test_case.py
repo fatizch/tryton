@@ -39,17 +39,17 @@ def update_cfg_dict_with_models(cfg_dict):
     return cfg_dict
 
 
-def get_or_create_product(cfg_dict, code, name, options=None, date=None):
-    product = proteus_tools.get_objects_from_db(
-        cfg_dict, 'Product', 'code', code)
+def get_or_create_product(cfg_dict, code, name, coverages=None, date=None):
+    product = proteus_tools.get_objects_from_db(cfg_dict,
+        'Product', 'code', code)
     if product:
         return product
     product = cfg_dict['Product']()
     product.code = code
     product.name = name
     product.start_date = date if date else cfg_dict['Date'].today({})
-    if options:
-        product.options[:] = options
+    if coverages:
+        product.coverages[:] = coverages
     product.contract_generator = get_or_create_generator(
         cfg_dict, 'ins_product.product')
     return product
@@ -152,8 +152,8 @@ def get_or_create_tax(cfg_dict, code, name=None, vals=None):
     if vals:
         for val in vals:
             tax_ver = cfg_dict['TaxVersion']()
-            tax_ver.start_date = val.get(
-                'start_date', cfg_dict['Date'].today({}))
+            tax_ver.start_date = val.get('start_date',
+                cfg_dict['Date'].today({}))
             tax_ver.end_date = val.get('end_date', None)
             tax_ver.kind = val.get('kind', 'rate')
             tax_ver.value = Decimal(val.get('value', 0))
@@ -172,8 +172,8 @@ def get_or_create_fee(cfg_dict, code, name, vals=None):
     if vals:
         for val in vals:
             fee_ver = cfg_dict['FeeVersion']()
-            fee_ver.start_date = val.get(
-                'start_date', cfg_dict['Date'].today({}))
+            fee_ver.start_date = val.get('start_date',
+                cfg_dict['Date'].today({}))
             fee_ver.end_date = val.get('end_date', None)
             fee_ver.kind = val.get('kind', 'rate')
             fee_ver.value = Decimal(val.get('value', 0))
@@ -182,13 +182,13 @@ def get_or_create_fee(cfg_dict, code, name, vals=None):
     return fee
 
 
-def get_or_create_complementary_data(
-        cfg_dict, name, string=None, type_=None, kind=None, selection=None):
+def get_or_create_complementary_data(cfg_dict, name, string=None, type_=None,
+        kind=None, selection=None):
     name = cfg_dict['translate'].get(name, name)
     if string:
         string = cfg_dict['translate'].get(string, string)
-    schema_el = proteus_tools.get_objects_from_db(
-        cfg_dict, 'ComplementaryData', 'name', name)
+    schema_el = proteus_tools.get_objects_from_db(cfg_dict,
+        'ComplementaryData', 'name', name)
     if schema_el:
         return schema_el
     schema_el = cfg_dict['ComplementaryData']()
@@ -289,9 +289,8 @@ def create_AAA_Product(cfg_dict, code, name):
     try_to_save_object(cfg_dict, coverage_a)
     try_to_save_object(cfg_dict, coverage_b)
 
-    product_a.options.append(coverage_a)
-    product_a.options.append(coverage_b)
-    product_a.item_descriptors.append(item_desc)
+    product_a.coverages.append(coverage_a)
+    product_a.coverages.append(coverage_b)
 
     product_a.contract_generator = get_or_create_generator(
         cfg_dict, 'ins_product.product')
@@ -515,10 +514,10 @@ def create_BBB_product(cfg_dict, code, name):
 
     # Product
 
-    product_b.options.append(coverage_a)
-    product_b.options.append(coverage_b)
-    product_b.options.append(coverage_c)
-    product_b.options.append(coverage_d)
+    product_b.coverages.append(coverage_a)
+    product_b.coverages.append(coverage_b)
+    product_b.coverages.append(coverage_c)
+    product_b.coverages.append(coverage_d)
     product_b.eligibility_rules.append(erm_b)
     product_b.contract_generator = get_or_create_generator(
         cfg_dict, 'ins_product.product')
@@ -848,9 +847,8 @@ def create_prev_product(cfg_dict):
     disability = create_disability_coverage(cfg_dict)
     death = create_death_coverage(cfg_dict)
     inval = create_invalidity_coverage(cfg_dict)
-    prod = get_or_create_product(
-        cfg_dict, 'PREV', u'Prévoyance Indviduelle',
-        options=[death, inval, disability], date=at_date)
+    prod = get_or_create_product(cfg_dict, 'PREV', u'Prévoyance Indviduelle',
+        coverages=[death, inval, disability], date=at_date)
     add_description(cfg_dict, prod)
     item_desc = get_or_create_item_desc(cfg_dict, 'person', 'Person', 'person')
     prod.item_descriptors.append(item_desc)

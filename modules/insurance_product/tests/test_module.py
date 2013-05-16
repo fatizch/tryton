@@ -49,6 +49,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'FeeVersion': 'coop_account.fee_version',
             'Sequence': 'ir.sequence',
             'Lang': 'ir.lang',
+            'ItemDesc': 'ins_product.item_desc',
         }
 
     def test0001_testFunctionalRuleCreation(self):
@@ -172,9 +173,12 @@ return True'''
             tax.code = code
             tax.versions = [tax_v]
             tax.save()
+            return tax
 
-        create_tax('TT', 14)
-        create_tax('TTA', 27)
+        tax = create_tax('TT', 14)
+        self.assert_(tax.id)
+        tax = create_tax('TTA', 27)
+        self.assert_(tax.id)
 
     def test0003_testFeeCreation(self):
         def create_fee(code, amount):
@@ -187,8 +191,10 @@ return True'''
             fee.code = code
             fee.versions = [fee_v]
             fee.save()
+            return fee
 
-        create_fee('FEE', 20)
+        fee = create_fee('FEE', 20)
+        self.assert_(fee.id)
 
     def test0004_testNumberGeneratorCreation(self):
         ng = self.Sequence()
@@ -197,6 +203,7 @@ return True'''
         ng.prefix = 'Ctr'
         ng.suffix = 'Y${year}'
         ng.save()
+        self.assert_(ng.id)
 
     def test0005_testCurrencyCreation(self):
         euro = self.Currency()
@@ -204,6 +211,15 @@ return True'''
         euro.symbol = u'€'
         euro.code = 'EUR'
         euro.save()
+        self.assert_(euro.id)
+
+    def test0006_testItemDescCreation(self):
+        item_desc = self.ItemDesc()
+        item_desc.kind = 'person'
+        item_desc.code = 'person'
+        item_desc.name = 'Person'
+        item_desc.save()
+        self.assert_(item_desc.id)
 
     @test_framework.prepare_test(
         'insurance_product.test0001_testFunctionalRuleCreation',
@@ -211,6 +227,7 @@ return True'''
         'insurance_product.test0003_testFeeCreation',
         'insurance_product.test0004_testNumberGeneratorCreation',
         'insurance_product.test0005_testCurrencyCreation',
+        'insurance_product.test0006_testItemDescCreation',
     )
     def test0010Coverage_creation(self):
         '''
@@ -223,6 +240,7 @@ return True'''
 
         tax = self.Tax.search([('code', '=', 'TT')])[0]
         fee = self.Fee.search([('code', '=', 'FEE')])[0]
+        item_desc = self.ItemDesc.search([('code', '=', 'person')])[0]
 
         pricing_comp1 = self.PricingComponent()
         pricing_comp1.config_kind = 'simple'
@@ -283,6 +301,8 @@ return True'''
 
         coverage_a.pricing_rules = [pricing_rulea]
 
+        coverage_a.item_desc = item_desc
+
         coverage_a.save()
 
         # Coverage B
@@ -319,6 +339,7 @@ return True'''
 
         coverage_b.pricing_rules = [pricing_ruleb]
 
+        coverage_b.item_desc = item_desc
         coverage_b.save()
 
         # Coverage C
@@ -337,6 +358,8 @@ return True'''
         coverage_c.start_date = datetime.date.today()
 
         coverage_c.eligibility_rules = [eligibility_rule_a]
+
+        coverage_c.item_desc = item_desc
 
         coverage_c.save()
 
@@ -357,14 +380,16 @@ return True'''
 
         coverage_d.eligibility_rules = [eligibility_rule_d]
 
+        coverage_d.item_desc = item_desc
+
         coverage_d.save()
 
         # Product Eligibility Manager
 
         eligibility_rule_b = self.Eligibility()
         eligibility_rule_b.config_kind = 'simple'
-        eligibility_rule_b.is_eligible = True
-
+        eligibility_rule_b.min_age = 40
+        eligibility_rule_b.max_age = 45
         eligibility_rule_b.start_date = datetime.date.today()
 
         # Product
@@ -373,10 +398,11 @@ return True'''
         product_a.code = 'AAA'
         product_a.name = 'Awesome Alternative Allowance'
         product_a.start_date = datetime.date.today()
-        product_a.options = [
+        product_a.coverages = [
             coverage_a, coverage_b, coverage_c, coverage_d]
         product_a.eligibility_rules = [eligibility_rule_b]
         product_a.contract_generator = ng
+        product_a.item_descriptors = [item_desc]
         product_a.save()
 
         self.assert_(product_a.id)

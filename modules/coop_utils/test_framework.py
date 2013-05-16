@@ -135,6 +135,7 @@ class CoopTestCase(unittest.TestCase):
         try:
             trytond.tests.test_tryton.test_view(self.get_module_name())
         except AssertionError, e:
+            # TODO : Cleaner detection
             if not e.args[0].startswith('No views for '):
                 raise
             pass

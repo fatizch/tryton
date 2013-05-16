@@ -25,9 +25,9 @@ class GroupProduct():
     @classmethod
     def __setup__(cls):
         utils.update_domain(
-            cls, 'options', [('is_group', '=', Eval('is_group'))])
-        cls.options = copy.copy(cls.options)
-        cls.options.depends.append('is_group')
+            cls, 'coverages', [('is_group', '=', Eval('is_group'))])
+        cls.coverages = copy.copy(cls.coverages)
+        cls.coverages.depends.append('is_group')
         super(GroupProduct, cls).__setup__()
 
 

@@ -11,9 +11,9 @@
         </page>
     </xpath>
     <xpath expr="/form/notebook/page[@id='managers']" position="before">
-        <page string="Items/Options" id="option">
+        <page string="Items/Coverages" id="option">
             <field name="item_descriptors"/>
-            <field name="options"/>
+            <field name="coverages"/>
         </page>
     </xpath>
     <xpath expr="/form/notebook/page/notebook" position="inside">

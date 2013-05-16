@@ -19,7 +19,7 @@ class LoanProduct():
     __metaclass__ = PoolMeta
 
     def get_is_loan_product(self):
-        for coverage in self.options:
+        for coverage in self.coverages:
             if coverage.get_is_loan_coverage():
                 return True
         return False
