@@ -25,13 +25,13 @@ def register():
         Document,
         DocumentRequest,
         # subs_process.py classes
-        ProjectState,
-        CoverageDisplayer,
-        OptionSelectionState,
-        CoveredDesc,
-        SubscriptionProcessState,
-        SummaryState,
-        PricingLine,
+        # ProjectState,
+        # CoverageDisplayer,
+        # OptionSelectionState,
+        # CoveredDesc,
+        # SubscriptionProcessState,
+        # SummaryState,
+        # PricingLine,
         # billing.py classes
         Bill,
         GenericBillLine,
@@ -45,7 +45,7 @@ def register():
         module='insurance_contract', type_='model')
     Pool.register(
         # subs_process.py classes
-        SubscriptionProcess,
+        # SubscriptionProcess,
         # billing_process.py classes
         BillingProcess,
         module='insurance_contract', type_='wizard')

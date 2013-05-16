@@ -38,8 +38,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def get_models(cls):
         return {
             'Contract': 'ins_contract.contract',
-            'SubsProcess': 'ins_contract.subs_process',
-            'ProcessDesc': 'ins_process.process_desc',
             'Party': 'party.party',
             'AddressKind': 'party.address_kind',
             'Sequence': 'ir.sequence',
@@ -67,7 +65,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         'life_product.test0010_LifeProductCreation',
         'insurance_contract.test0001_testPersonCreation',
         )
-    def test0004_testContractCreation(self):
+    def _test0004_testContractCreation(self):
         '''
             Tests subscription process
         '''

@@ -5,7 +5,7 @@
     <!--                          Project View                          -->
     <!--################################################################-->
 
-        <record model="ir.ui.view" id="project_view">
+<!--         <record model="ir.ui.view" id="project_view">
             <field name="model">ins_contract.subs_process.project</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
@@ -34,13 +34,12 @@
                         </form>
                     ]]>
             </field>
-        </record>
+        </record> -->
 
     <!--################################################################-->
     <!--                       Coverage Displayer                       -->
     <!--################################################################-->
-
-        <!-- View for the coverage displayer used in the subscription process -->
+<!--
         <record model="ir.ui.view" id="coverage_displayer_tree">
             <field name="model">ins_contract.coverage_displayer</field>
             <field name="type">tree</field>
@@ -53,13 +52,13 @@
                         </tree>
                     ]]>
             </field>
-        </record>
+        </record> -->
 
     <!--################################################################-->
     <!--                     Option Selection View                      -->
     <!--################################################################-->
 
-        <record model="ir.ui.view" id="option_selection_view">
+<!--         <record model="ir.ui.view" id="option_selection_view">
             <field name="model">ins_contract.subs_process.option_selection</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
@@ -74,12 +73,12 @@
                     ]]>
             </field>
         </record>
-
+ -->
     <!--################################################################-->
     <!--                        Covered Desc                            -->
     <!--################################################################-->
 
-        <record model="ir.ui.view" id="covered_desc_view_form">
+<!--         <record model="ir.ui.view" id="covered_desc_view_form">
             <field name="model">ins_contract.subs_process.covered_desc</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
@@ -138,13 +137,13 @@
                     </tree>
                 ]]>
             </field>
-        </record>
+        </record> -->
 
     <!--################################################################-->
     <!--                        Pricing Lines                           -->
     <!--################################################################-->
 
-        <record model="ir.ui.view" id="lines_view">
+<!--         <record model="ir.ui.view" id="lines_view">
             <field name="model">ins_contract.subs_process.lines</field>
             <field name="type">tree</field>
             <field name="field_childs">childs</field>
@@ -158,12 +157,12 @@
                     ]]>
             </field>
         </record>
-
+ -->
     <!--################################################################-->
     <!--                       Summary View                             -->
     <!--################################################################-->
 
-        <record model="ir.ui.view" id="summary_view">
+<!--         <record model="ir.ui.view" id="summary_view">
             <field name="model">ins_contract.subs_process.summary</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
@@ -174,24 +173,24 @@
                     ]]>
             </field>
         </record>
-
+ -->
 
     <!--################################################################-->
     <!--                          Actions Entries                       -->
     <!--################################################################-->
-
+<!--
         <record model="ir.action.wizard" id="resume_subs_process">
             <field name="name">Resume Process</field>
             <field name="wiz_name">ins_contract.subs_process</field>
             <field name="model">ins_process.suspended_process</field>
-        </record>
+        </record> -->
     </data>
 
     <!--################################################################-->
     <!--                          Init Data                             -->
     <!--################################################################-->
 
-    <data>
+<!--     <data>
         <record model="ins_process.process_desc" id="subs_process_desc">
             <field name="name">Subscription Process Descriptor</field>
             <field name="process_model">ins_contract.subs_process</field>
@@ -252,6 +251,6 @@
             <field name="sequence">4</field>
             <field name="step_model">ins_contract.subs_process.summary</field>
         </record>
-    </data>
+    </data> -->
 </tryton>
 

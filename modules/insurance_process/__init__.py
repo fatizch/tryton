@@ -5,14 +5,14 @@ from process_labo import *
 
 def register():
     Pool.register(
-        ProcessState,
-        SuspendedProcess,
-        ProcessDesc,
-        StepDesc,
-        StepMethodDesc,
+        # ProcessState,
+        # SuspendedProcess,
+        # ProcessDesc,
+        # StepDesc,
+        # StepMethodDesc,
         module='insurance_process', type_='model')
 
     Pool.register(
-        CoopProcess,
-        ResumeWizard,
+        # CoopProcess,
+        # ResumeWizard,
         module='insurance_process', type_='wizard')

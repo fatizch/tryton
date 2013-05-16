@@ -9,11 +9,9 @@ def register():
         LifeOption,
         CoveredPerson,
         LifeCoveredData,
-        LifeCoveredDesc,
-        ExtensionLifeState,
         PriceLine,
         module='life_contract', type_='model')
 
-    Pool.register(
-        SubscriptionProcess,
-        module='life_contract', type_='wizard')
+    # Pool.register(
+    #     SubscriptionProcess,
+    #     module='life_contract', type_='wizard')
