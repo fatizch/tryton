@@ -143,6 +143,8 @@ def launch_proteus_test_case(test_config_file=None, module=None):
                 f.close()
             except:
                 print 'Could not import %s' % cur_file
+                import traceback
+                traceback.print_exc()
                 continue
             print 'Successfully imported file %s' % cur_file
 
