@@ -412,9 +412,8 @@ class Option():
 class CoveredElement():
     'Covered Element'
 
-    __metaclass__ = PoolMeta
-
     __name__ = 'ins_contract.covered_element'
+    __metaclass__ = PoolMeta
 
     @classmethod
     def default_covered_data(cls):

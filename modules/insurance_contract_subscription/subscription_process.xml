@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <tryton>
   <data>
-    <record model="ir.ui.view" id="subscription_editable_option_tree">
+<!--     <record model="ir.ui.view" id="subscription_editable_option_tree">
       <field name="model">ins_contract.option</field>
       <field name="type">tree</field>
       <field name="name">subscription_editable_option_tree</field>
@@ -10,7 +10,7 @@
       <field name="model">ins_contract.covered_data</field>
       <field name="type">tree</field>
       <field name="name">subscription_editable_covered_data_tree</field>
-    </record>
+    </record> -->
     <record model="ir.ui.view" id="subscription_process_parameters_form">
       <field name="model">ins_contract.subscription_process_parameters</field>
       <field name="type">form</field>
