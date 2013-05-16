@@ -291,7 +291,6 @@ def create_AAA_Product(cfg_dict, code, name):
 
     product_a.coverages.append(coverage_a)
     product_a.coverages.append(coverage_b)
-    product_a.item_descriptors.append(item_desc)
 
     product_a.contract_generator = get_or_create_generator(
         cfg_dict, 'ins_product.product')
