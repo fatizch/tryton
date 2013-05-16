@@ -55,9 +55,9 @@ class CoveredDataSubs():
         fields.Selection(
             'get_possible_amounts',
             'Coverage Amount',
-            selection_change_with=['coverage', 'start_date',
+            selection_change_with=['option', 'start_date',
                 'covered_element', 'currency'],
-            depends=['coverage', 'start_date', 'coverage_amount',
+            depends=['option', 'start_date', 'coverage_amount',
                 'with_coverage_amount'],
             sort=False,
             on_change=['coverage_amount', 'coverage_amount_selection',

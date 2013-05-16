@@ -206,7 +206,7 @@ class SimpleCoverage(Offered):
             # covered by self.
             for covered_data in covered.covered_data:
                 coverage = utils.convert_ref_to_obj(
-                    covered_data.coverage)
+                    covered_data.option.offered)
                 if not coverage.code == self.code:
                     continue
 

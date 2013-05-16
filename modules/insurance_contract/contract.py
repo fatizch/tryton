@@ -48,7 +48,7 @@ __all__ = [
     'DeliveredService',
     'Expense',
     'ContractAddress',
-]
+    ]
 
 
 class Subscribed(model.CoopView):
@@ -76,7 +76,7 @@ class Subscribed(model.CoopView):
     # Management date is the date at which the company started to manage the
     # contract. Default value is start_date
     start_management_date = fields.Date('Management Date')
-    status = fields.Selection('get_possible_status', 'Status')
+
     status_history = fields.One2Many(
         'ins_contract.status_history', 'reference', 'Status History')
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
@@ -110,8 +110,8 @@ class Subscribed(model.CoopView):
         '''
         raise NotImplementedError
 
-    @classmethod
-    def get_possible_status(cls, name=None):
+    @staticmethod
+    def get_possible_status(name=None):
         raise NotImplementedError
 
     def get_dates(self, dates=None, start=None, end=None):
@@ -196,6 +196,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     _rec_name = 'contract_number'
     _history = True
 
+    status = fields.Selection(CONTRACTSTATUSES, 'Status')
     options = fields.One2Many('ins_contract.option', 'contract', 'Options')
     covered_elements = fields.One2ManyDomain(
         'ins_contract.covered_element', 'contract', 'Covered Elements',
@@ -227,7 +228,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             'complementary_data', 'start_date', 'options', 'offered'],
         depends=[
             'complementary_data', 'start_date', 'options', 'offered'],
-        states={'invisible': ~Eval('complementary_data')})
+        # states={'invisible': ~Eval('complementary_data')
+        )
     # TODO replace single contact by date versionned list
     contact = fields.Many2One('party.party', 'Contact')
     documents = fields.One2Many(
@@ -398,8 +400,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def get_offered_name(cls):
         return 'product', 'Product'
 
-    @classmethod
-    def get_possible_status(cls, name=None):
+    @staticmethod
+    def get_possible_status(name=None):
         return CONTRACTSTATUSES
 
     def check_at_least_one_covered(self):
@@ -574,6 +576,7 @@ class Option(model.CoopSQL, Subscribed):
     __name__ = 'ins_contract.option'
     _history = True
 
+    status = fields.Selection(OPTIONSTATUS, 'Status')
     contract = fields.Many2One(
         'ins_contract.contract', 'Contract', ondelete='CASCADE')
     covered_data = fields.One2ManyDomain(
@@ -614,8 +617,8 @@ class Option(model.CoopSQL, Subscribed):
     def get_offered_name(cls):
         return 'coverage', 'Coverage'
 
-    @classmethod
-    def get_possible_status(cls, name=None):
+    @staticmethod
+    def get_possible_status(name=None):
         return OPTIONSTATUS
 
     def get_rec_name(self, name):
@@ -724,8 +727,8 @@ class ContractHistory(model.ObjectHistory):
     def get_object_name(cls):
         return 'Contract'
 
-    @classmethod
-    def get_possible_status(cls):
+    @staticmethod
+    def get_possible_status():
         return Pool().get('ins_contract.contract').get_possible_status()
 
     def get_options(self, name):
@@ -1102,7 +1105,6 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             tmp_covered.option = covered_data.option
             tmp_covered.start_date = covered_data.start_date
             tmp_covered.end_date = covered_data.end_date
-            tmp_covered.coverage = covered_data.coverage
             result.append(tmp_covered)
         return abstract.WithAbstract.serialize_field(result)
 
@@ -1342,10 +1344,6 @@ class CoveredData(model.CoopSQL, model.CoopView):
         fields.Many2Many('ins_contract.option', None, None,
             'Possible Options', states={'invisible': True}),
         'get_possible_options')
-    #IMO we should not have the link to the coverage
-    coverage = fields.Many2One(
-        'ins_product.coverage', 'Coverage', ondelete='RESTRICT')
-
     covered_element = fields.Many2One(
         'ins_contract.covered_element', 'Covered Element', ondelete='CASCADE')
     complementary_data = fields.Dict(
@@ -1410,7 +1408,6 @@ class CoveredData(model.CoopSQL, model.CoopView):
 
     def init_from_option(self, option):
         self.option = option
-        self.coverage = option.offered
         self.start_date = option.start_date
         self.end_date = option.end_date
         self.init_complementary_data()
@@ -1437,8 +1434,6 @@ class CoveredData(model.CoopSQL, model.CoopView):
         return utils.limit_dates(res, start, end)
 
     def get_coverage(self):
-        if (hasattr(self, 'coverage') and self.coverage):
-            return self.coverage
         if (hasattr(self, 'option') and self.option):
             return self.option.offered
 
