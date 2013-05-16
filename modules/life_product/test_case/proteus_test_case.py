@@ -213,6 +213,8 @@ def create_AAA_Product(cfg_dict, code, name):
         return product_a
 
     coverage_a = get_or_create_coverage(cfg_dict, 'ALP', 'Alpha Coverage')
+    if coverage_a.id > 0:
+        clean_rules(cfg_dict, coverage_a, 'pricing')
     tax = get_or_create_tax(
         cfg_dict, cfg_dict['translate']['IT'],
         cfg_dict['translate']['Insurance Tax'], [{'value': 15}])
@@ -272,6 +274,8 @@ def create_AAA_Product(cfg_dict, code, name):
     coverage_b = get_or_create_coverage(
         cfg_dict, 'BET', 'Beta Coverage',
         cfg_dict['Date'].today({}) + datetime.timedelta(days=5))
+    if coverage_b.id > 0:
+        clean_rules(cfg_dict, coverage_b, 'pricing')
     create_pricing_rule(
         cfg_dict, coverage_b,
         config_kind='advanced', rated_object_kind='global', components=[
@@ -291,6 +295,7 @@ def create_AAA_Product(cfg_dict, code, name):
 
     product_a.coverages.append(coverage_a)
     product_a.coverages.append(coverage_b)
+    product_a.item_descriptors.append(item_desc)
 
     product_a.contract_generator = get_or_create_generator(
         cfg_dict, 'ins_product.product')
