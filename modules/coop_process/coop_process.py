@@ -465,6 +465,10 @@ class ProcessDesc(model.CoopSQL):
         return result
 
     @classmethod
+    def _post_import(cls, processes):
+        cls.update_view(processes)
+
+    @classmethod
     def default_with_prev_next(cls):
         return True
 
@@ -595,7 +599,7 @@ class ProcessStepRelation(model.CoopSQL):
 
     @classmethod
     def _export_keys(cls):
-        return set(['process.technical_name', 'step.technical_name', 'order'])
+        return set(['process.technical_name', 'step.technical_name'])
 
 
 class XMLViewDesc(model.CoopSQL, model.CoopView):

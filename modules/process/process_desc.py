@@ -118,6 +118,20 @@ class ProcessDesc(ModelSQL, ModelView):
         cls._sql_constraints += [(
             'unique_tech_name', 'UNIQUE(technical_name)',
             'The technical name must be unique')]
+        cls._error_messages.update({
+            'use_steps_only_once': '%s: Step %s cannot be used more than once',
+        })
+
+    @classmethod
+    def validate(cls, processes):
+        for process in processes:
+            used_steps = set()
+            for relation in process.all_steps:
+                if relation.step.id in used_steps:
+                    cls.raise_user_error('use_steps_only_once', (
+                        process.fancy_name, relation.step.technical_name))
+                used_steps.add(relation.step.id)
+        return True
 
     @classmethod
     def default_step_button_group_position(cls):

@@ -59,7 +59,8 @@ class ExportImportMixin(Model):
     def _prepare_for_import(self):
         pass
 
-    def _post_import(self):
+    @classmethod
+    def _post_import(cls, records):
         pass
 
     @classmethod
@@ -236,6 +237,13 @@ class ExportImportMixin(Model):
 
     def _export_json(
             self, exported, export_result, from_field=None, force_key=None):
+        try:
+            log_name = self.get_rec_name(None)
+        except TypeError:
+            log_name = self.get_rec_name([self], None)[self.id]
+        if force_key is None and from_field is None:
+            logging.getLogger('export_import').info(
+                'Trying to export %s' % log_name)
         my_key = self._export_prepare(exported, force_key)
         values = {
             '__name__': self.__name__,
@@ -270,13 +278,8 @@ class ExportImportMixin(Model):
                 values[field_name] = getattr(self, field_name)
         if force_key is None and from_field is None:
             export_result.append(values)
-            try:
-                logging.getLogger('export_import').info(
-                    'Successfully exported %s' % self.get_rec_name(None))
-            except TypeError:
-                logging.getLogger('export_import').info(
-                    'Successfully exported %s' % self.get_rec_name(
-                        [self], None))
+            logging.getLogger('export_import').info(
+                'Successfully exported %s' % log_name)
         return values
 
     def _export_filename(self):
@@ -427,18 +430,18 @@ class ExportImportMixin(Model):
             if isinstance(field, (
                     tryton_fields.Many2One, tryton_fields.One2One)):
                 TargetModel = Pool().get(field.model_name)
-                save = save and cls._import_single_link(
+                save = cls._import_single_link(
                     good_instance, field_name, field, field_value, created,
-                    relink, TargetModel, to_relink)
+                    relink, TargetModel, to_relink) and save
             elif isinstance(field, tryton_fields.Reference):
                 if isinstance(field_value, tuple):
                     field_model, field_value = field_value
                     TargetModel = Pool().get(field_model)
                 else:
                     TargetModel = Pool().get(field_value['__name__'])
-                save = save and cls._import_single_link(
+                save = cls._import_single_link(
                     good_instance, field_name, field, field_value, created,
-                    relink, TargetModel, to_relink)
+                    relink, TargetModel, to_relink) and save
             elif isinstance(field, tryton_fields.One2Many):
                 cls._import_one2many(
                     good_instance, field_name, field, field_value, created,
@@ -454,7 +457,7 @@ class ExportImportMixin(Model):
         return good_instance
 
     @classmethod
-    def _import_finish(cls, created, relink):
+    def _import_relink(cls, created, relink):
         # Useful for debugging
         # print utils.format_data(created)
         # print '\n'.join([str(x) for x in relink])
@@ -480,9 +483,12 @@ class ExportImportMixin(Model):
                     working_instance.save()
                 except UserError, e:
                     cur_errs.append(e.args)
-                    # raise
                     continue
-                working_instance._post_import()
+                except Exception:
+                    logging.getLogger('export_import').debug(
+                        'Error trying to save \n%s' % utils.format_data(
+                            working_instance))
+                    raise
                 to_del.append(idx)
                 idx += 1
             for k in sorted(to_del, reverse=True):
@@ -501,6 +507,12 @@ class ExportImportMixin(Model):
                 raise NotExportImport('Infinite loop detected in import')
 
     @classmethod
+    def _import_complete(cls, created):
+        for k, v in created.iteritems():
+            CurModel = Pool().get(k)
+            CurModel._post_import([elem for elem in v.itervalues()])
+
+    @classmethod
     def import_json(cls, values):
         with Transaction().set_user(0):
             with Transaction().set_context(__importing__=True):
@@ -517,15 +529,15 @@ class ExportImportMixin(Model):
                     TargetModel = Pool().get(value['__name__'])
                     main_instances.append(
                         TargetModel._import_json(value, created, relink))
-                cls._import_finish(created, relink)
+                cls._import_relink(created, relink)
+                cls._import_complete(created)
         for instance in main_instances:
             try:
-                logging.getLogger('export_import').info(
-                    'Successfully imported %s' % instance.get_rec_name(None))
+                log_name = instance.get_rec_name(None)
             except TypeError:
-                logging.getLogger('export_import').info(
-                    'Successfully imported %s' % instance.get_rec_name(
-                        [instance], None))
+                log_name = instance.get_rec_name([instance], None)[instance.id]
+            logging.getLogger('export_import').info(
+                'Successfully imported %s' % log_name)
 
 
 class FileSelector(ModelView):
