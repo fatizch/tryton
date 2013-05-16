@@ -23,6 +23,7 @@ from proteus_tools import multiprocess_this
 
 
 def launch_test_case(cfg_dict):
+    pass
     # # TODO : rewrite contract test_case
     # return
     # Contract = Model.get('ins_contract.contract')
