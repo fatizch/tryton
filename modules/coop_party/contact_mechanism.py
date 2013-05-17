@@ -18,7 +18,7 @@ __all__ = [
 ]
 
 
-class ContactMechanism(model.ExportImportMixin):
+class ContactMechanism(model.CoopSQL):
     "Contact Mechanism"
 
     __metaclass__ = PoolMeta

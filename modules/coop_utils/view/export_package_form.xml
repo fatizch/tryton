@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<form string="Export Package" col="4">
+    <label name="package_name"/>
+    <field name="package_name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <field name="instances_to_export" colspan="4" yexpand="1" yfill="1"/>
+</form>

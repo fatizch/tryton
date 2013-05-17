@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<tree string="Export instances">
+  <field name="to_export"/>
+</tree>

@@ -8,7 +8,7 @@ from trytond.modules.coop_utils import coop_string, business, fields, model
 __all__ = ['Address', 'AddresseKind']
 
 
-class Address(model.ExportImportMixin):
+class Address(model.CoopSQL):
     "Address"
 
     __metaclass__ = PoolMeta

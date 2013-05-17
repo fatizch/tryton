@@ -2,6 +2,7 @@ from trytond.pool import Pool
 from .utils import *
 from .date import *
 from .coop_string import *
+from .export import *
 from .model import *
 from .many2one_form import *
 from .business import *
@@ -12,22 +13,21 @@ from .batchs import *
 
 def register():
     Pool.register(
-        # from business
-        Lang,
-        Currency,
-        CurrencyRate,
+        # from export
+        ExportPackage,
+        ExportInstance,
+        Group,
+        UIMenu,
         # from model
         FileSelector,
         TableOfTable,
         DynamicSelection,
         VersionedObject,
         VersionObject,
-        Group,
-        UIMenu,
         # from session
         DateClass,
         module='coop_utils', type_='model')
     Pool.register(
-        # from model
+        # from export
         ImportWizard,
         module='coop_utils', type_='wizard')

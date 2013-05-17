@@ -106,6 +106,78 @@ msgctxt "field:coop.table_of_table,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:coop_utils.export_instance,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:coop_utils.export_instance,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:coop_utils.export_instance,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:coop_utils.export_instance,package:"
+msgid "Package"
+msgstr "Formule"
+
+msgctxt "field:coop_utils.export_instance,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:coop_utils.export_instance,to_export:"
+msgid "To export"
+msgstr "Elément à exporter"
+
+msgctxt "field:coop_utils.export_instance,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:coop_utils.export_instance,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:coop_utils.export_package,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:coop_utils.export_package,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:coop_utils.export_package,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:coop_utils.export_package,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:coop_utils.export_package,instances_to_export:"
+msgid "Instances to export"
+msgstr "Eléments à exporter"
+
+msgctxt "field:coop_utils.export_package,package_name:"
+msgid "Package Name"
+msgstr "Nom du Groupe"
+
+msgctxt "field:coop_utils.export_package,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:coop_utils.export_package,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:coop_utils.export_package,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:coop_utils.file_selector,file_content:"
+msgid "File Content"
+msgstr "Contenu du fichier"
+
 msgctxt "field:coop_utils.file_selector,id:"
 msgid "ID"
 msgstr "ID"
@@ -117,6 +189,10 @@ msgstr "Nom du Fichier"
 msgctxt "field:coop_utils.file_selector,selected_file:"
 msgid "Import File"
 msgstr "Importer le Fichier"
+
+msgctxt "field:party.category,id:"
+msgid ""
+msgstr ""
 
 msgctxt "field:utils.version_object,end_date:"
 msgid "End Date"
@@ -154,17 +230,41 @@ msgctxt "model:coop.table_of_table,name:"
 msgid "Table of table"
 msgstr "Table des Tables"
 
+msgctxt "model:coop_utils.export_instance,name:"
+msgid "Export Instance"
+msgstr "Elément à exporter"
+
+msgctxt "model:coop_utils.export_package,name:"
+msgid "Export Package"
+msgstr ""
+
 msgctxt "model:coop_utils.file_selector,name:"
 msgid "File Selector"
-msgstr ""
+msgstr "Selecteur de fichier"
+
+msgctxt "model:ir.action,name:act_export_package"
+msgid "Export Package"
+msgstr "Exports groupés"
 
 msgctxt "model:ir.action,name:import_wizard"
 msgid "Import File"
 msgstr "Importer le Fichier"
 
+msgctxt "model:ir.ui.menu,name:menu_export_import"
+msgid "Export Import"
+msgstr "Export Import"
+
+msgctxt "model:ir.ui.menu,name:menu_export_package"
+msgid "Export Package"
+msgstr "Exports groupés"
+
 msgctxt "model:ir.ui.menu,name:menu_import_wizard"
 msgid "Import Wizard"
-msgstr ""
+msgstr "Importer un fichier"
+
+msgctxt "model:party.category,name:"
+msgid "party.category"
+msgstr "Catégorie"
 
 msgctxt "model:utils.version_object,name:"
 msgid "Version Object"

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<tryton>
+  <data>
+    <!-- Menu -->
+    <menuitem name="Export Import" id="menu_export_import" sequence="50" parent="ir.menu_administration"/>
+    <!-- Import Wizard -->
+    <record model="ir.ui.view" id="file_selector_form">
+      <field name="model">coop_utils.file_selector</field>
+      <field name="type">form</field>
+      <field name="name">file_selector_form</field>
+    </record>
+    <record model="ir.action.wizard" id="import_wizard">
+      <field name="name">Import File</field>
+      <field name="wiz_name">coop_utils.import_wizard</field>
+    </record>
+    <menuitem name="Import Wizard" id="menu_import_wizard" sequence="50" parent="menu_export_import" action="import_wizard"/>
+    <!-- Export Instance -->
+    <record model="ir.ui.view" id="export_instance_form">
+      <field name="model">coop_utils.export_instance</field>
+      <field name="type">form</field>
+      <field name="name">export_instance_form</field>
+    </record>
+    <record model="ir.ui.view" id="export_instance_tree">
+      <field name="model">coop_utils.export_instance</field>
+      <field name="type">tree</field>
+      <field name="name">export_instance_tree</field>
+    </record>
+    <!-- Export Package -->
+    <record model="ir.ui.view" id="export_package_form">
+      <field name="model">coop_utils.export_package</field>
+      <field name="type">form</field>
+      <field name="name">export_package_form</field>
+    </record>
+    <record model="ir.ui.view" id="export_package_tree">
+      <field name="model">coop_utils.export_package</field>
+      <field name="type">tree</field>
+      <field name="name">export_package_tree</field>
+    </record>
+    <record model="ir.action.act_window" id="act_export_package">
+      <field name="name">Export Package</field>
+      <field name="res_model">coop_utils.export_package</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_export_package_view1">
+      <field name="sequence" eval="16"/>
+      <field name="view" ref="export_package_tree"/>
+      <field name="act_window" ref="act_export_package"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_export_package_view2">
+      <field name="sequence" eval="16"/>
+      <field name="view" ref="export_package_form"/>
+      <field name="act_window" ref="act_export_package"/>
+    </record>
+    <menuitem parent="menu_export_import" sequence="1" action="act_export_package" id="menu_export_package"/>
+  </data>
+</tryton>

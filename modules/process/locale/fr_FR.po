@@ -7,6 +7,10 @@ msgid "Method %s does not exist on model %s"
 msgstr "La méthode %s n'existe pas sur le modèle %s"
 
 msgctxt "error:process.process_desc:"
+msgid "%s: Step %s cannot be used more than once"
+msgstr "%s: L'étape %s ne peut être utilisée qu'une seule fois"
+
+msgctxt "error:process.process_desc:"
 msgid "The technical name must be unique"
 msgstr "Le nom technique doit être unique"
 
