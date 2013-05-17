@@ -424,7 +424,7 @@ class ExportImportMixin(Model):
             field_value = values[field_name]
             if hasattr(cls, '_import_override_%s' % field_name):
                 values[field_name] = getattr(
-                    cls, '_import_override_%s' % field_name)(
+                    cls, '_import_override_%s' % field_name)(my_key,
                         good_instance, field_value, values, created, relink)
                 continue
             if isinstance(field, (
@@ -467,20 +467,34 @@ class ExportImportMixin(Model):
             idx = 0
             for key, value in relink:
                 working_instance = created[key[0]][key[1]]
+                # print utils.format_data(working_instance)
+                all_done = True
                 for field_name, field_value in value.iteritems():
                     if isinstance(field_value[1], list):
-                        existing = list(getattr(
-                            working_instance, field_name))
+                        to_append = []
                         for elem in field_value[1]:
-                            existing.append(created[field_value[0]][elem])
-                        setattr(working_instance, field_name, existing)
+                            elem_instance = created[field_value[0]][elem]
+                            if (hasattr(elem_instance, 'id') and
+                                    elem_instance.id):
+                                to_append.append(elem_instance)
+                            else:
+                                all_done = False
+                                break
+                        if len(to_append) == len(field_value[1]):
+                            existing = list(getattr(
+                                working_instance, field_name))
+                            existing += to_append
+                            setattr(working_instance, field_name, existing)
                     else:
                         value = created[field_value[0]][field_value[1]]
                         if not (hasattr(value, 'id') and value.id):
+                            all_done = False
                             continue
                         setattr(working_instance, field_name, value)
                 try:
                     working_instance.save()
+                    if all_done:
+                        to_del.append(idx)
                 except UserError, e:
                     cur_errs.append(e.args)
                     continue
@@ -489,7 +503,6 @@ class ExportImportMixin(Model):
                         'Error trying to save \n%s' % utils.format_data(
                             working_instance))
                     raise
-                to_del.append(idx)
                 idx += 1
             for k in sorted(to_del, reverse=True):
                 relink.pop(k)

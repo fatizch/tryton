@@ -9,5 +9,4 @@ def register():
         GroupCoverage,
         GroupBenefit,
         GroupContract,
-        GroupCoveredData,
         module='insurance_collective', type_='model')

@@ -666,6 +666,18 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
         cls.__rpc__.update({'get_field_childs': RPC(instantiate=0)})
 
     @classmethod
+    def _export_skips(cls):
+        result = super(XMLViewDesc, cls)._export_skips()
+        result.add('the_view')
+        return result
+
+    @classmethod
+    def _post_import(cls, views):
+        for view in views:
+            view.the_view = view.create_update_view()
+            view.save()
+
+    @classmethod
     def default_nb_col(cls):
         return 4
 

@@ -159,6 +159,75 @@ class TableDefinition(ModelSQL, ModelView):
         cursor = Transaction().cursor
         cursor.execute('CREATE EXTENSION IF NOT EXISTS tablefunc', ())
 
+    def _export_override_cells(self, exported, my_key):
+        def lock_dim_and_export(locked, results, dimensions):
+            my_dim = len(locked) + 1
+            try:
+                dims = getattr(self, 'dimension%s' % my_dim)
+            except AttributeError:
+                dims = None
+            if not dims:
+                matches = TableCell.search([('definition', '=', self.id)] + [
+                    ('dimension%s' % (i + 1), '=', locked[i])
+                    for i in xrange(my_dim - 1)])
+                if not matches:
+                    results.append(None)
+                else:
+                    results.append(matches[0].value)
+                return
+            else:
+                if len(dimensions) == len(locked):
+                    dimensions.append(len(dims))
+                for elem in dims:
+                    locked.append(elem.id)
+                    lock_dim_and_export(locked, results, dimensions)
+                    locked.pop()
+        result = []
+        dimensions = []
+        lock_dim_and_export([], result, dimensions)
+        return [dimensions, result]
+
+    @classmethod
+    def _import_override_cells(cls, instance_key, good_instance,
+            field_value, values, created, relink):
+        Cell = Pool().get('table.table_cell')
+        if (hasattr(good_instance, 'id') and good_instance.id):
+            table_id = good_instance.id
+            Cell.delete(Cell.search([('definition', '=', table_id)]))
+        else:
+            table_id = None
+        dimensions, cell_values = field_value
+        cells_number = len(cell_values)
+        cell_values = list(cell_values)
+
+        def lock_dim_and_import(locked, relink_template):
+            my_dim = len(locked) + 1
+            if my_dim > len(dimensions):
+                to_relink = list(relink_template)
+                cell = Cell()
+                cell.value = cell_values.pop(0)
+                cell.definition = table_id
+                cell._import_finalize((instance_key,
+                        cells_number - len(cell_values)),
+                    cell, False, created, relink, to_relink)
+            else:
+                for elem in xrange(dimensions[my_dim - 1]):
+                    relink_template.append(('dimension%s' % my_dim, (
+                                'table.table_dimension', (
+                                    instance_key, 'dimension%s' % my_dim,
+                                    elem + 1))))
+                    locked.append(elem + 1)
+                    lock_dim_and_import(locked, relink_template)
+                    locked.pop()
+                    relink_template.pop()
+        locks = []
+        if table_id:
+            template = []
+        else:
+            template = [('definition', ('table.table_def',
+                   instance_key))]
+        lock_dim_and_import(locks, template)
+
     @staticmethod
     def default_dimension_order1():
         return 'alpha'
@@ -306,11 +375,11 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         table = TableHandler(cursor, cls, module_name)
         table.index_action(['definition', 'type'], 'add')
 
-    @classmethod
-    def _export_keys(cls):
-        return set([
-            'definition.code', 'type', 'date', 'start',
-            'end', 'start_date', 'end_date', 'value'])
+    # @classmethod
+    # def _export_keys(cls):
+        # return set([
+            # 'definition.code', 'type', 'date', 'start',
+            # 'end', 'start_date', 'end_date', 'value'])
 
     @classmethod
     def clean_sequence(cls, records):
@@ -434,11 +503,11 @@ class TableCell(ModelSQL, ModelView):
                 'definition', 'dimension1', 'dimension2',
                 'dimension3', 'dimension4'], 'add')
 
-    @classmethod
-    def _export_light(cls):
-        return set([
-            'definition', 'dimension1', 'dimension2', 'dimension3',
-            'dimension4'])
+    # @classmethod
+    # def _export_light(cls):
+        # return set([
+            # 'definition', 'dimension1', 'dimension2', 'dimension3',
+            # 'dimension4'])
 
     @classmethod
     def fields_get(cls, fields_names=None):

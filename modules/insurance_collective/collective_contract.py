@@ -13,7 +13,6 @@ CONTRACT_KIND = [
 
 __all__ = [
     'GroupContract',
-    'GroupCoveredData',
 ]
 
 
@@ -54,14 +53,3 @@ class GroupContract():
             else:
                 self.kind = 'individual'
         return res, errs
-
-
-class GroupCoveredData():
-    'Covered Data'
-
-    __name__ = 'ins_contract.covered_data'
-    __metaclass__ = PoolMeta
-
-    @classmethod
-    def __setup__(cls):
-        super(GroupCoveredData, cls).__setup__()
