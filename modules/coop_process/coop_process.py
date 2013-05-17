@@ -465,6 +465,10 @@ class ProcessDesc(model.CoopSQL):
         return result
 
     @classmethod
+    def _post_import(cls, processes):
+        cls.update_view(processes)
+
+    @classmethod
     def default_with_prev_next(cls):
         return True
 
@@ -595,7 +599,7 @@ class ProcessStepRelation(model.CoopSQL):
 
     @classmethod
     def _export_keys(cls):
-        return set(['process.technical_name', 'step.technical_name', 'order'])
+        return set(['process.technical_name', 'step.technical_name'])
 
 
 class XMLViewDesc(model.CoopSQL, model.CoopView):
@@ -660,6 +664,18 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
             ('unique_fs_id', 'UNIQUE(view_name, for_step, view_kind)',
                 'The functional id must be unique !')]
         cls.__rpc__.update({'get_field_childs': RPC(instantiate=0)})
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(XMLViewDesc, cls)._export_skips()
+        result.add('the_view')
+        return result
+
+    @classmethod
+    def _post_import(cls, views):
+        for view in views:
+            view.the_view = view.create_update_view()
+            view.save()
 
     @classmethod
     def default_nb_col(cls):

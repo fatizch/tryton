@@ -141,10 +141,9 @@ def launch_proteus_test_case(test_config_file=None, module=None):
                 wizard.form.selected_file = f.read()
                 wizard.execute('file_import')
                 f.close()
-            except:
+            except Exception as e:
                 print 'Could not import %s' % cur_file
-                import traceback
-                traceback.print_exc()
+                print e
                 continue
             print 'Successfully imported file %s' % cur_file
 
