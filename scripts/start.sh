@@ -11,24 +11,12 @@ cd tryton-workspace/conf
 . ./scripts.conf
 cd ../coopbusiness/scripts
 SCRIPT_NAME=$1
-while getopts ":bdeklrstu" opt; do
+while getopts ":bdehklprstu" opt; do
    case $opt in
         b)
             SCRIPT_NAME=launch_batch ;;
-        r)
-            SCRIPT_NAME=resetdb ;;
-        k)
-            SCRIPT_NAME=killtryton  ;;
-        l)
-            SCRIPT_NAME=launch  ;;
         d)
             SCRIPT_NAME=updatedatabase  ;;
-        s)
-            SCRIPT_NAME=sync_coop  ;;
-        t)
-            SCRIPT_NAME=test_case  ;;
-        u)
-            SCRIPT_NAME=unittest  ;;
         e)
             SCRIPT_NAME=export_translations  ;;
         h)
@@ -42,6 +30,20 @@ while getopts ":bdeklrstu" opt; do
 -s sync_coop
 -t test_case
 -u unittest" ;;
+        k)
+            SCRIPT_NAME=killtryton  ;;
+        l)
+            SCRIPT_NAME=launch  ;;
+        p)
+            SCRIPT_NAME=print_status ;;
+        r)
+            SCRIPT_NAME=resetdb ;;
+        s)
+            SCRIPT_NAME=sync_coop  ;;
+        t)
+            SCRIPT_NAME=test_case  ;;
+        u)
+            SCRIPT_NAME=unittest  ;;
         \?)
             echo "Invalid Option" ;;
    esac
