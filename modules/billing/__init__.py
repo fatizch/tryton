@@ -4,12 +4,15 @@ from .billing import *
 def register():
     Pool.register(
         # From file billing :
+        PaymentMethod,
         PriceLine,
         BillingManager,
         GenericBillLine,
         Bill,
         BillParameters,
         BillDisplay,
+        ProductPaymentMethodRelation,
+        Product,
         Contract,
         Option,
         CoveredElement,

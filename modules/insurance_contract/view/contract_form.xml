@@ -22,9 +22,6 @@
     <page string="Options" id="options2">
       <field name="options" colspan="4"/>
     </page>
-    <page string="Billing" id="billing">
-      <field name="billing_manager" mode="form"/>
-    </page>
     <page string="Complementary Data" id="complementary_data">
       <field name="complementary_data" no_command="1"/>
     </page>

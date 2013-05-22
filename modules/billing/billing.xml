@@ -1,6 +1,33 @@
 <?xml version="1.0"?>
 <tryton>
   <data>
+    <!--################################################################ -->
+    <!-- Price Lines -->
+    <!--################################################################ -->
+    <record model="ir.ui.view" id="price_line_expandable_view_tree">
+      <field name="model">billing.price_line</field>
+      <field name="type">tree</field>
+      <field name="field_childs">child_lines</field>
+      <field name="name">price_line_expandable_tree</field>
+    </record>
+    <record model="ir.ui.view" id="price_line_view_tree">
+      <field name="model">billing.price_line</field>
+      <field name="type">tree</field>
+      <field name="name">price_line_tree</field>
+    </record>
+    <record model="ir.ui.view" id="price_line_view_form">
+      <field name="model">billing.price_line</field>
+      <field name="type">form</field>
+      <field name="name">price_line_form</field>
+    </record>
+    <!--################################################################ -->
+    <!-- Billing Manager -->
+    <!--################################################################ -->
+    <record model="ir.ui.view" id="billing_manager_view_form">
+      <field name="model">billing.billing_manager</field>
+      <field name="type">form</field>
+      <field name="name">billing_manager_form</field>
+    </record>
     <!--################################################################-->
     <!--                        Bill Line Tree                          -->
     <!--################################################################-->
@@ -74,9 +101,17 @@
       <field name="act_window" ref="act_bill_form"/>
     </record>
     <!--################################################################-->
+    <!-- Contract -->
+    <!--################################################################-->
+    <record model="ir.ui.view" id="contract_form">
+      <field name="model">ins_contract.contract</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="insurance_contract.contract_view_form"/>
+      <field name="name">contract_form</field>
+    </record>
+    <!--################################################################-->
     <!--                           Menus                                -->
     <!--################################################################-->
-    <!-- Application Entry point -->
-    <menuitem parent="menu_contract" sequence="50" id="menu_bill_view" icon="tryton-list" action="act_bill_form"/>
+    <menuitem parent="insurance_contract.menu_contract" sequence="50" id="menu_bill_view" icon="tryton-list" action="act_bill_form"/>
   </data>
 </tryton>

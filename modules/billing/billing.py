@@ -1,6 +1,6 @@
 import datetime
 
-from trytond.Pool import Pool, PoolMeta
+from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateTransition, StateView, Button
 
@@ -8,6 +8,7 @@ from trytond.modules.coop_utils import model, fields, utils, date, abstract
 from trytond.modules.insurance_product import product
 
 __all__ = [
+    'PaymentMethod',
     'PriceLine',
     'BillingManager',
     'GenericBillLine',
@@ -15,11 +16,40 @@ __all__ = [
     'BillingProcess',
     'BillParameters',
     'BillDisplay',
+    'ProductPaymentMethodRelation',
+    'Product',
     'Contract',
     'Option',
     'CoveredElement',
     'CoveredData',
 ]
+
+PAYMENT_FREQUENCIES = [
+    ('monthly', 'Monthly'),
+    ('quarterly', 'Quarterly'),
+    ('biannually', 'Twice a year'),
+    ('yearly', 'Yearly'),
+]
+
+PAYMENT_MODES = [
+    ('cash', 'Cash'),
+    ('check', 'Check'),
+    ('wire_transfer', 'Wire Transfer'),
+    ('direct_debit', 'Direct Debit'),
+]
+
+
+class PaymentMethod(model.CoopSQL, model.CoopView):
+    'Payment Method'
+
+    __name__ = 'billing.payment_method'
+
+    name = fields.Char('Name')
+    code = fields.Char('Code', required=True)
+    frequency = fields.Selection(PAYMENT_FREQUENCIES, 'Frequency',
+        required=True)
+    payment_mode = fields.Selection(PAYMENT_MODES, 'Payment Mode',
+        required=True)
 
 
 class PriceLine(model.CoopSQL, model.CoopView):
@@ -550,10 +580,32 @@ class BillingProcess(Wizard):
         return 'end'
 
 
+class ProductPaymentMethodRelation(model.CoopSQL):
+    'Product to Payment Method Relation definition'
+
+    __name__ = 'billing.product-payment_method-relation'
+
+    product = fields.Many2One('ins_product.product', 'Product',
+        ondelete='CASCADE')
+    payment_method = fields.Many2One('billing.payment_method',
+        'payment_method', ondelete='RESTRICT')
+
+
+class Product():
+    'Product'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'ins_product.product'
+
+    payment_methods = fields.Many2Many(
+        'billing.product-payment_method-relation', 'product', 'payment_method',
+        'Payment Methods')
+
+
 class Contract():
     'Contract'
 
-    __metaclas__ = PoolMeta
+    __metaclass__ = PoolMeta
     __name__ = 'ins_contract.contract'
 
     billing_manager = fields.One2Many(
@@ -576,7 +628,7 @@ class Contract():
 class Option():
     'Option'
 
-    __metaclas__ = PoolMeta
+    __metaclass__ = PoolMeta
     __name__ = 'ins_contract.option'
 
     def get_name_for_billing(self):
@@ -586,7 +638,7 @@ class Option():
 class CoveredElement():
     'Covered Element'
 
-    __metaclas__ = PoolMeta
+    __metaclass__ = PoolMeta
     __name__ = 'ins_contract.covered_element'
 
     def get_name_for_billing(self):
@@ -596,7 +648,7 @@ class CoveredElement():
 class CoveredData():
     'Covered Data'
 
-    __metaclas__ = PoolMeta
+    __metaclass__ = PoolMeta
     __name__ = 'ins_contract.covered_data'
 
     def get_name_for_billing(self):
