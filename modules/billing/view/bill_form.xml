@@ -12,10 +12,10 @@
   <field name="contract"/>
   <notebook>
     <page name="lines">
-      <field name="lines" mode="tree,form" yexpand="1" yfill="1" view_ids="insurance_contract.generic_line_tree_node_expandable"/>
+      <field name="lines" mode="tree,form" yexpand="1" yfill="1" view_ids="billing.generic_line_tree_node_expandable"/>
     </page>
     <page name="bill_details">
-      <field name="bill_details" mode="tree,form" yexpand="1" yfill="1" view_ids="insurance_contract.generic_line_tree_flat"/>
+      <field name="bill_details" mode="tree,form" yexpand="1" yfill="1" view_ids="billing.generic_line_tree_flat"/>
     </page>
   </notebook>
 </form>

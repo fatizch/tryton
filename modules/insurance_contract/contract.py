@@ -1,4 +1,3 @@
-import datetime
 import copy
 
 from trytond.pool import Pool
@@ -38,8 +37,6 @@ __all__ = [
     'ContractHistory',
     'Option',
     'StatusHistory',
-    'PriceLine',
-    'BillingManager',
     'CoveredElement',
     'CoveredElementPartyRelation',
     'CoveredData',
@@ -220,8 +217,6 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         ])
     management = fields.One2Many(
         'ins_contract.management_role', 'contract', 'Management Roles')
-    billing_manager = fields.One2Many(
-        'ins_contract.billing_manager', 'contract', 'Billing Manager')
     complementary_data = fields.Dict(
         'ins_product.complementary_data_def', 'Complementary Data',
         on_change=[
@@ -324,9 +319,6 @@ class Contract(model.CoopSQL, Subscribed, Printable):
                 prices[cur_date.isoformat()] = price
             errs += err
         return prices, errs
-
-    def get_name_for_billing(self):
-        return self.offered.name + ' - Base Price'
 
     def get_product(self):
         return self.offered
@@ -528,16 +520,6 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         if hasattr(self, 'offered') and self.offered:
             return self.offered.get_currency()
 
-    def new_billing_manager(self):
-        return utils.instanciate_relation(self, 'billing_manager')
-
-    def init_billing_manager(self):
-        if not (hasattr(self, 'billing_manager') and
-                self.billing_manager):
-            bm = self.new_billing_manager()
-            bm.contract = self
-            self.billing_manager = [bm]
-
     def on_change_complementary_data(self):
         return {'complementary_data': self.offered.get_result(
             'calculated_complementary_datas',
@@ -609,9 +591,6 @@ class Option(model.CoopSQL, Subscribed):
             res = set()
         res.update(self.offered.get_dates(dates, start, end))
         return super(Option, self).get_dates(res, start, end)
-
-    def get_name_for_billing(self):
-        return self.get_coverage().name + ' - Base Price'
 
     @classmethod
     def get_offered_name(cls):
@@ -739,271 +718,6 @@ class ContractHistory(model.ObjectHistory):
         return [o.id for o in options]
 
 
-class PriceLine(model.CoopSQL, model.CoopView):
-    'Price Line'
-
-    __name__ = 'ins_contract.price_line'
-
-    amount = fields.Numeric('Amount')
-    name = fields.Char('Short Description')
-    master = fields.Many2One('ins_contract.price_line', 'Master Line')
-    kind = fields.Selection(
-        [
-            ('main', 'Line'),
-            ('base', 'Base'),
-            ('tax', 'Tax'),
-            ('fee', 'Fee')
-        ], 'Kind', readonly='True')
-    on_object = fields.Reference('Priced object', 'get_line_target_models')
-    billing_manager = fields.Many2One(
-        'ins_contract.billing_manager', 'Billing Manager')
-    start_date = fields.Date('Start Date')
-    end_date = fields.Date('End Date')
-    all_lines = fields.One2Many(
-        'ins_contract.price_line', 'master', 'Lines', readonly=True)
-    taxes = fields.Function(fields.Numeric('Taxes'), 'get_total_taxes')
-    amount_for_display = fields.Function(
-        fields.Numeric('Amount'), 'get_amount_for_display')
-    start_date_calculated = fields.Function(fields.Date(
-        'Start Date'), 'get_start_date')
-    end_date_calculated = fields.Function(fields.Date(
-        'End Date'), 'get_end_date')
-    details = fields.One2ManyDomain(
-        'ins_contract.price_line', 'master', 'Details', domain=[
-            ('kind', '!=', 'main')], readonly=True)
-    child_lines = fields.One2ManyDomain(
-        'ins_contract.price_line', 'master', 'Sub-Lines', domain=[
-            ('kind', '=', 'main')], readonly=True)
-
-    def get_id(self):
-        if hasattr(self, 'on_object') and self.on_object:
-            return self.on_object.get_name_for_billing()
-        if hasattr(self, 'name') and self.name:
-            return self.name
-        return self.kind
-
-    def init_values(self):
-        if not hasattr(self, 'name') or not self.name:
-            self.name = ''
-        self.amount = 0
-        self.all_lines = []
-
-    def init_from_result_line(self, line):
-        if not line:
-            return
-        PLModel = Pool().get(self.__name__)
-        self.init_values()
-        self.amount = line.value
-        for (kind, code), value in line.details.iteritems():
-            detail_line = PLModel()
-            detail_line.name = code
-            detail_line.amount = value
-            detail_line.kind = kind
-            self.all_lines.append(detail_line)
-        if line.desc:
-            for elem in line.desc:
-                child_line = PLModel()
-                child_line.init_from_result_line(elem)
-                self.all_lines.append(child_line)
-        if not self.name:
-            if line.on_object:
-                self.name = utils.convert_ref_to_obj(
-                    line.on_object).get_name_for_billing()
-            else:
-                self.name = line.name
-        if line.on_object:
-            self.on_object = line.on_object
-
-    @staticmethod
-    def default_kind():
-        return 'main'
-
-    def get_total_taxes(self, field_name):
-        res = self.get_total_detail('tax')
-        if res:
-            return res
-
-    def get_total_detail(self, name):
-        res = 0
-        for line in self.details:
-            if line.kind == name:
-                res += line.amount
-        return res
-
-    def get_amount_for_display(self, field_name):
-        res = self.amount
-        if not res:
-            return None
-        return res
-
-    def get_start_date(self, field_name):
-        if hasattr(self, 'start_date') and self.start_date:
-            return self.start_date
-        if self.master:
-            return self.master.start_date_calculated
-
-    def get_end_date(self, field_name):
-        if hasattr(self, 'end_date') and self.end_date:
-            return self.end_date
-        if self.master:
-            return self.master.end_date_calculated
-
-    @classmethod
-    def get_line_target_models(cls):
-        f = lambda x: (x, x)
-        res = [
-            f(''),
-            f('ins_product.product'),
-            f('ins_product.coverage'),
-            f('ins_contract.contract'),
-            f('ins_contract.option'),
-            f('ins_contract.covered_data')]
-        return res
-
-    def is_main_line(self):
-        return hasattr(self, 'on_object') and self.on_object and \
-            self.on_object.__name__ in (
-                'ins_product.product',
-                'ins_product.coverage')
-
-    def print_line(self):
-        res = [self.get_id()]
-        res.append(self.name)
-        res.append('%.2f' % self.amount)
-        res.append(self.kind)
-        res.append('%s' % self.start_date)
-        res.append('%s' % self.end_date)
-        if self.on_object:
-            res.append(self.on_object.__name__)
-        else:
-            res.append('')
-        return ' - '.join(res)
-
-
-class BillingManager(model.CoopSQL, model.CoopView):
-    'Billing Manager'
-    '''
-        This object will manage all billing-related content on the contract.
-        It will be the target of all sql requests for automated bill
-        calculation, lapsing, etc...
-    '''
-    __name__ = 'ins_contract.billing_manager'
-
-    contract = fields.Many2One('ins_contract.contract', 'Contract')
-    next_billing_date = fields.Date('Next Billing Date')
-    prices = fields.One2Many(
-        'ins_contract.price_line', 'billing_manager', 'Prices')
-
-    def store_prices(self, prices):
-        if not prices:
-            return
-        PriceLine = Pool().get(self.get_price_line_model())
-        to_delete = []
-        if hasattr(self, 'prices') and self.prices:
-            for price in self.prices:
-                to_delete.append(price)
-        result_prices = []
-        dates = [utils.to_date(key) for key in prices.iterkeys()]
-        end_date = self.contract.get_next_renewal_date()
-        if not end_date in dates:
-            dates.append(end_date)
-        dates.sort()
-        for date, price in prices.iteritems():
-            pl = PriceLine()
-            pl.name = date
-            details = []
-            for cur_price in price:
-                detail = PriceLine()
-                detail.init_from_result_line(cur_price)
-                details.append(detail)
-            pl.all_lines = details
-            pl.start_date = utils.to_date(date)
-            try:
-                pl.end_date = dates[dates.index(pl.start_date) + 1] + \
-                    datetime.timedelta(days=-1)
-            except IndexError:
-                pass
-            result_prices.append(pl)
-        self.prices = result_prices
-
-        self.save()
-
-        PriceLine.delete(to_delete)
-
-    @classmethod
-    def get_price_line_model(cls):
-        return cls._fields['prices'].model_name
-
-    def get_product_frequency(self, at_date):
-        res, errs = self.contract.offered.get_result(
-            'frequency',
-            {'date': at_date})
-        if not errs:
-            return res
-
-    def next_billing_dates(self):
-        date = max(
-            Pool().get('ir.date').today(), self.contract.start_date)
-        return (
-            date,
-            utils.add_frequency(self.get_product_frequency(date), date))
-
-    def get_bill_model(self):
-        return 'ins_contract.billing.bill'
-
-    def get_prices_dates(self):
-        return [elem.start_date for elem in self.prices].append(
-            self.prices[-1].end_date)
-
-    def create_price_list(self, start_date, end_date):
-        dated_prices = [
-            (elem.start_date, elem.end_date or end_date, elem)
-            for elem in self.prices
-            if (
-                (elem.start_date >= start_date and elem.start_date <= end_date)
-                or (
-                    elem.end_date and elem.end_date >= start_date
-                    and elem.end_date <= end_date))]
-        print str([x.name for x in dated_prices[1][2].all_lines])
-        return dated_prices
-
-    def flatten(self, prices):
-        # prices is a list of tuples (start, end, price_line).
-        # aggregate returns one price_line which aggregates all of the
-        # provided price_lines, in which all lines have set start and end dates
-        lines_desc = []
-        for elem in prices:
-            if elem[2].is_main_line():
-                if elem[2].amount:
-                    lines_desc.append(elem)
-            else:
-                lines_desc += self.flatten(
-                    [(elem[0], elem[1], line) for line in elem[2].child_lines])
-        return lines_desc
-
-    def lines_as_dict(self, lines):
-        # lines are a list of tuples (start, end, price_line).
-        # This function organizes the lines in a dict which uses the price_line
-        # id (get_id) as keys
-        the_dict = {}
-        for elem in lines:
-            id = elem[2].get_id()
-            if id in the_dict:
-                the_dict[id].append(elem)
-            else:
-                the_dict[id] = [elem]
-        return the_dict
-
-    def bill(self, start_date, end_date):
-        Bill = Pool().get(self.get_bill_model())
-        the_bill = Bill()
-        the_bill.flat_init(start_date, end_date, self.contract)
-        price_list = self.create_price_list(start_date, end_date)
-        price_lines = self.flatten(price_list)
-        the_bill.init_from_lines(price_lines)
-        return the_bill
-
-
 class CoveredElement(model.CoopSQL, model.CoopView):
     'Covered Element'
     '''
@@ -1107,9 +821,6 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             tmp_covered.end_date = covered_data.end_date
             result.append(tmp_covered)
         return abstract.WithAbstract.serialize_field(result)
-
-    def get_name_for_billing(self):
-        return self.get_rec_name('billing')
 
     def get_name_for_info(self):
         return self.get_rec_name('info')
@@ -1379,9 +1090,6 @@ class CoveredData(model.CoopSQL, model.CoopView):
     @classmethod
     def default_status(cls):
         return 'active'
-
-    def get_name_for_billing(self):
-        return self.covered_element.get_name_for_billing()
 
     def get_rec_name(self, name):
         return self.get_coverage().name

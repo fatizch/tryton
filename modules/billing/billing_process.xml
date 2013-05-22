@@ -5,7 +5,7 @@
     <!--                     Bill Parameters View                       -->
     <!--################################################################-->
     <record model="ir.ui.view" id="bill_parameters_form">
-      <field name="model">ins_contract.billing_process.bill_parameters</field>
+      <field name="model">billing.billing_process.bill_parameters</field>
       <field name="type">form</field>
       <field name="name">bill_parameters_form</field>
     </record>
@@ -13,7 +13,7 @@
     <!--                            Bill Display                        -->
     <!--################################################################-->
     <record model="ir.ui.view" id="bill_display_form">
-      <field name="model">ins_contract.billing_process.bill_display</field>
+      <field name="model">billing.billing_process.bill_display</field>
       <field name="type">form</field>
       <field name="name">bill_display_form</field>
     </record>
@@ -22,7 +22,7 @@
     <!--################################################################-->
     <record model="ir.action.wizard" id="launch_billing_process">
       <field name="name">Billing</field>
-      <field name="wiz_name">ins_contract.billing_process</field>
+      <field name="wiz_name">billing.billing_process</field>
       <field name="model">ins_contract.contract</field>
     </record>
     <record model="ir.action.keyword" id="launch_billing_keyword">
@@ -35,7 +35,7 @@
     <!--################################################################-->
     <record model="ir.action.act_window" id="act_billing_by_contract">
       <field name="name">Bills by Contract</field>
-      <field name="res_model">ins_contract.billing.bill</field>
+      <field name="res_model">billing.billing.bill</field>
       <field name="domain">[('contract', '=', Eval('active_id'))]</field>
     </record>
     <record model="ir.action.keyword" id="act_billing_by_contract_keyword1">
