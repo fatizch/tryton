@@ -608,8 +608,8 @@ class Contract():
     __metaclass__ = PoolMeta
     __name__ = 'ins_contract.contract'
 
-    billing_manager = fields.One2Many(
-        'billing.billing_manager', 'contract', 'Billing Manager')
+    billing_manager = fields.One2Many('billing.billing_manager', 'contract',
+        'Billing Manager')
 
     def get_name_for_billing(self):
         return self.offered.name + ' - Base Price'

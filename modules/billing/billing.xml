@@ -2,6 +2,34 @@
 <tryton>
   <data>
     <!--################################################################ -->
+    <!-- Payment Methods -->
+    <!--################################################################ -->
+    <record model="ir.ui.view" id="payment_method_form">
+      <field name="model">billing.payment_method</field>
+      <field name="type">form</field>
+      <field name="name">payment_method_form</field>
+    </record>
+    <record model="ir.ui.view" id="payment_method_tree">
+      <field name="model">billing.payment_method</field>
+      <field name="type">tree</field>
+      <field name="name">payment_method_tree</field>
+    </record>
+    <record model="ir.action.act_window" id="act_payment_method">
+      <field name="name">Payment Methods</field>
+      <field name="res_model">billing.payment_method</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_payment_method_view1">
+      <field name="sequence" eval="16"/>
+      <field name="view" ref="payment_method_tree"/>
+      <field name="act_window" ref="act_payment_method"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_payment_method_view2">
+      <field name="sequence" eval="16"/>
+      <field name="view" ref="payment_method_form"/>
+      <field name="act_window" ref="act_payment_method"/>
+    </record>
+    <menuitem parent="insurance_product.menu_product_configuration" sequence="10" action="act_payment_method" id="menu_payment_method"/>
+    <!--################################################################ -->
     <!-- Price Lines -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="price_line_expandable_view_tree">
@@ -108,6 +136,15 @@
       <field name="type">form</field>
       <field name="inherit" ref="insurance_contract.contract_view_form"/>
       <field name="name">contract_form</field>
+    </record>
+    <!--################################################################-->
+    <!-- Product -->
+    <!--################################################################-->
+    <record model="ir.ui.view" id="product_form">
+      <field name="model">ins_product.product</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="insurance_product.product_view_form"/>
+      <field name="name">product_form</field>
     </record>
     <!--################################################################-->
     <!--                           Menus                                -->

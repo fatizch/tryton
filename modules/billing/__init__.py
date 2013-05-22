@@ -5,8 +5,8 @@ def register():
     Pool.register(
         # From file billing :
         PaymentMethod,
-        PriceLine,
         BillingManager,
+        PriceLine,
         GenericBillLine,
         Bill,
         BillParameters,
