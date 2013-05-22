@@ -97,9 +97,15 @@ if __name__ == '__main__':
             for line in lines:
                 print line[:-1]
 
-        sum['number'] = int(lines[-3].split(' ', 2)[1])
+        try:
+            sum['number'] = int(lines[-3].split(' ', 2)[1])
+        except:
+            sum['number'] = 0
 
-        sum['time'] = float(lines[-3][:-1].rsplit(' ', 1)[1][:-1])
+        try:
+            sum['time'] = float(lines[-3][:-1].rsplit(' ', 1)[1][:-1])
+        except:
+            sum['time'] = 0
 
         summary[cur_module] = sum
 
