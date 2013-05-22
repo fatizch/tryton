@@ -100,7 +100,7 @@ if __name__ == '__main__':
         try:
             sum['number'] = int(lines[-3].split(' ', 2)[1])
         except:
-            sum['number'] = 0
+            sum['number'] = 1
 
         try:
             sum['time'] = float(lines[-3][:-1].rsplit(' ', 1)[1][:-1])

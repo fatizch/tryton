@@ -76,21 +76,12 @@ class LifeLoss():
         res['possible_loss_descs'] = self.on_change_with_possible_loss_descs()
         return res
 
+
 class LifeClaimDeliveredService():
     'Claim Delivered Service'
 
     __name__ = 'ins_contract.delivered_service'
     __metaclass__ = PoolMeta
-
-    # @classmethod
-    # def __setup__(cls):
-    #     super(LifeClaimDeliveredService, cls).__setup__()
-    #     cls.subscribed_service = copy.copy(cls.subscribed_service)
-    #     if not cls.subscribed_service.domain:
-    #         cls.subscribed_service.domain = []
-    #     domain = ('covered_data.covered_element.party', '=',
-    #         Eval('_parent_loss', {}).get('covered_person'))
-    #     cls.subscribed_service.domain.append(domain)
 
     def get_covered_person(self):
         return self.loss.covered_person
@@ -101,12 +92,11 @@ class LifeClaimDeliveredService():
         cur_dict['covered_person'] = self.get_covered_person()
 
     def get_covered_data(self):
+        party = self.get_covered_person()
         for covered_data in self.subscribed_service.covered_data:
-            #TODO to enhance the covered person could be the spouse or the
-            #children of the insured person
-            if (covered_data.covered_element.party ==
-                    self.get_covered_person()):
-                return covered_data
+            sub_covered_data = covered_data.get_covered_data(party=party)
+            if sub_covered_data:
+                return sub_covered_data
 
 
 class LifeIndemnification():

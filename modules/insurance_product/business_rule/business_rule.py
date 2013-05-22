@@ -225,11 +225,18 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
             '        OR (start_date >= %s AND end_date <= %s)) ' + \
             '    AND offered = %s' + \
             '    AND id != %s'
+
+        #offered depends if the link is a reference link or a M2O
+        if hasattr(self.__class__.offered, 'selection'):
+            offered = '%s,%s' % (self.offered.__class__.__name__,
+                self.offered.id)
+        else:
+            offered = self.offered.id
         args = (
             self.start_date, self.start_date,
             self.end_date, self.end_date,
             self.start_date, self.end_date,
-            '%s,%s' % (self.offered.__class__.__name__, self.offered.id),
+            offered,
             self.id)
         cursor.execute(request, args)
         if cursor.fetchone():

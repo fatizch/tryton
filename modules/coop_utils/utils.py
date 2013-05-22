@@ -140,28 +140,6 @@ def convert_ref_to_obj(ref):
     return model_obj(id)
 
 
-def priority(priority_lvl):
-    # This function is meant to be used as a decorator that will allow the
-    # definition of priorities on other functions.
-    # This is especially important in the case of before / post step methods
-    # in the CoopProcess framework.
-    #
-    # USAGE :
-    #    @priority(4)
-    #    def my_func...
-    def wrap(f):
-        f.priority = priority_lvl
-        return f
-    return wrap
-
-
-def keywords(keys):
-    def wrap(f):
-        f.keywords = keys
-        return f
-    return wrap
-
-
 def limit_dates(dates, start=None, end=None):
     res = list(dates)
     res.sort()
@@ -220,8 +198,7 @@ def today():
     return Pool().get('ir.date').today()
 
 
-def is_effective_at_date(
-        instance, at_date=None, start_var_name='start_date',
+def is_effective_at_date(instance, at_date=None, start_var_name='start_date',
         end_var_name='end_date'):
     if not at_date:
         at_date = today()
@@ -236,8 +213,7 @@ def is_effective_at_date(
         and (not end_date or at_date <= end_date))
 
 
-def get_good_versions_at_date(
-        instance, var_name, at_date=None,
+def get_good_versions_at_date(instance, var_name, at_date=None,
         start_var_name='start_date', end_var_name='end_date'):
     '''This method looks for the elements in the list which are effective at
     the date. By default, it will check that the at_date is between the start

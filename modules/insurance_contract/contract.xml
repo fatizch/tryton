@@ -8,12 +8,15 @@
         <record model="ir.ui.view" id="contract_view_tree">
             <field name="model">ins_contract.contract</field>
             <field name="type">tree</field>
-            <field name="name">contract_tree</field>
+            <field name="inherit" ref="contract.contract_view_tree"/>
+            <!-- <field name="name">contract_tree</field> -->
+            <field name="arch" type="xml"/>
         </record>
         <!-- form view -->
         <record model="ir.ui.view" id="contract_view_form">
             <field name="model">ins_contract.contract</field>
             <field name="type">form</field>
+            <field name="inherit" ref="contract.contract_view_form"/>
             <field name="name">contract_form</field>
         </record>
         <!-- View for the main menu and the event -->
@@ -155,6 +158,19 @@
             <field name="perm_read" eval="True"/>
         </record>
         <!--################################################################ -->
+        <!-- Contract Address -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="contract_address_view_tree">
+            <field name="model">ins_contract.address</field>
+            <field name="type">tree</field>
+            <field name="name">contract_address_tree</field>
+        </record>
+        <record model="ir.ui.view" id="contract_address_view_form">
+            <field name="model">ins_contract.address</field>
+            <field name="type">form</field>
+            <field name="name">contract_address_form</field>
+        </record>
+        <!--################################################################ -->
         <!-- Relate -->
         <!--################################################################ -->
         <record model="ir.action.act_window" id="act_contract_relate_form">
@@ -199,18 +215,5 @@
         <field name="type">tree</field>
         <field name="name">management_protocol_tree</field>
       </record>
-        <!--################################################################ -->
-        <!-- Contract Address -->
-        <!--################################################################ -->
-        <record model="ir.ui.view" id="contract_address_view_tree">
-            <field name="model">ins_contract.address</field>
-            <field name="type">tree</field>
-            <field name="name">contract_address_tree</field>
-        </record>
-        <record model="ir.ui.view" id="contract_address_view_form">
-            <field name="model">ins_contract.address</field>
-            <field name="type">form</field>
-            <field name="name">contract_address_form</field>
-        </record>
     </data>
 </tryton>

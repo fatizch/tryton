@@ -9,11 +9,11 @@ def register():
     Pool.register(
         # contract.py classes
         Party,
-        Contract,
+        InsurancePolicy,
         ContractHistory,
         ManagementProtocol,
         ManagementRole,
-        Option,
+        InsuranceSubscribedCoverage,
         StatusHistory,
         CoveredElement,
         CoveredElementPartyRelation,

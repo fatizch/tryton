@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pool import Pool
 from trytond.pyson import Eval, If, Or
 from trytond.transaction import Transaction
@@ -7,21 +5,10 @@ from trytond.transaction import Transaction
 from trytond.modules.coop_utils import model, fields, abstract
 from trytond.modules.coop_utils import utils, date, business
 from trytond.modules.coop_utils import coop_string
-from trytond.modules.insurance_product import Printable
+from trytond.modules.contract import contract
 from trytond.modules.insurance_product.product import DEF_CUR_DIG
 from trytond.modules.insurance_product import product
 
-CONTRACTSTATUSES = [
-    ('', ''),
-    ('quote', 'Quote'),
-    ('active', 'Active'),
-    ('hold', 'Hold'),
-    ('terminated', 'Terminated'),
-]
-
-OPTIONSTATUS = CONTRACTSTATUSES + [
-    ('refused', 'Refused'),
-]
 
 DELIVERED_SERVICES_STATUSES = [
     ('calculating', 'Calculating'),
@@ -33,9 +20,9 @@ DELIVERED_SERVICES_STATUSES = [
 IS_PARTY = Eval('item_kind').in_(['person', 'company', 'party'])
 
 __all__ = [
-    'Contract',
+    'InsurancePolicy',
     'ContractHistory',
-    'Option',
+    'InsuranceSubscribedCoverage',
     'StatusHistory',
     'CoveredElement',
     'CoveredElementPartyRelation',
@@ -48,187 +35,18 @@ __all__ = [
     ]
 
 
-class Subscribed(model.CoopView):
-    'Subscribed'
-
-    offered = fields.Many2One(
-        None, 'Offered', ondelete='RESTRICT',
-        states={'required': Eval('status') == 'active'},
-        domain=[
-            'AND',
-            [
-                'OR',
-                [('end_date', '>=', Eval('start_date'))],
-                [('end_date', '=', None)],
-            ],
-            [
-                'OR',
-                [('start_date', '<=', Eval('start_date'))],
-                [('start_date', '=', None)],
-            ],
-        ], depends=['start_date'])
-    start_date = fields.Date('Effective Date', required=True)
-    end_date = fields.Date(
-        'End Date', domain=[('start_date', '<=', 'end_date')])
-    # Management date is the date at which the company started to manage the
-    # contract. Default value is start_date
-    start_management_date = fields.Date('Management Date')
-
-    status_history = fields.One2Many(
-        'ins_contract.status_history', 'reference', 'Status History')
-    summary = fields.Function(fields.Text('Summary'), 'get_summary')
-    currency = fields.Function(
-        fields.Many2One('currency.currency', 'Currency'),
-        'get_currency_id')
-    currency_digits = fields.Function(
-        fields.Integer('Currency Digits'),
-        'get_currency_digits')
-
-    @classmethod
-    def __setup__(cls):
-        cls.offered = copy.copy(cls.offered)
-        suffix, cls.offered.string = cls.get_offered_name()
-        cls.offered.model_name = 'ins_product.%s' % suffix
-        super(Subscribed, cls).__setup__()
-
-    @classmethod
-    def delete_status_history(cls, entities):
-        utils.delete_reference_backref(entities, 'ins_contract.status_history',
-            cls.status_history.field)
-
-    @staticmethod
-    def default_start_date():
-        return utils.today()
-
-    @classmethod
-    def get_offered_name(cls):
-        '''
-        returns a tuple of key (without module), string for offered class name
-        '''
-        raise NotImplementedError
-
-    @staticmethod
-    def get_possible_status(name=None):
-        raise NotImplementedError
-
-    def get_dates(self, dates=None, start=None, end=None):
-        if dates:
-            res = set(dates)
-        else:
-            res = set()
-        res.add(self.start_date)
-        if hasattr(self, 'end_date') and self.end_date:
-            res.add(self.end_date)
-        return utils.limit_dates(res, start, end)
-
-    def init_from_offered(self, offered, start_date=None, end_date=None):
-        if utils.is_effective_at_date(offered, start_date):
-            self.offered = offered
-            self.start_date = (
-                max(offered.start_date, start_date)
-                if start_date else offered.start_date)
-            self.end_date = (
-                min(offered.end_date, end_date)
-                if end_date else offered.end_date)
-            self.update_status('quote', self.start_date)
-            return True, []
-        return False, ['offered_not_effective_at_date']
-
-    def get_offered(self):
-        return self.offered if hasattr(self, 'offered') else None
-
-    @staticmethod
-    def get_status_transition_authorized(from_status):
-        res = []
-        if from_status == 'quote':
-            res = ['active', 'refused']
-        elif from_status == 'active':
-            res = ['terminated']
-        return res
-
-    def update_status(self, to_status, at_date, sub_status=None):
-        if (hasattr(self, 'status') and not to_status in
-                self.get_status_transition_authorized(self.status)):
-            return False, [
-                ('transition_unauthorized', (self.status, to_status))]
-        if not hasattr(self, 'status_history'):
-            self.status_history = []
-        else:
-            self.status_history = list(self.status_history)
-        status_history = utils.instanciate_relation(
-            self.__class__, 'status_history')
-        status_history.init_from_reference(self, to_status, at_date,
-            sub_status)
-        self.status_history.append(status_history)
-        self.status = to_status
-        if hasattr(self, 'sub_status'):
-            self.sub_status = sub_status
-        return True, []
-
-    def get_currency_digits(self, name):
-        if hasattr(self, 'currency') and self.currency:
-            return self.currency.digits
-
-    @classmethod
-    def get_summary(cls, instances, name):
-        return dict((x.id, '') for x in instances)
-
-    def get_currency_id(self, name):
-        currency = self.get_currency()
-        if currency:
-            return currency.id
-
-    def is_active_at_date(self, at_date):
-        for status_hist in self.status_history:
-            if (status_hist.status == 'active'
-                    and utils.is_effective_at_date(status_hist)):
-                return True
-        return False
-
-
-class Contract(model.CoopSQL, Subscribed, Printable):
-    'Contract'
+class InsurancePolicy(contract.Contract):
+    'Insurance Policy'
 
     __name__ = 'ins_contract.contract'
-    _rec_name = 'contract_number'
-    _history = True
+    _table = None
 
-    status = fields.Selection(CONTRACTSTATUSES, 'Status')
-    options = fields.One2Many('ins_contract.option', 'contract', 'Options')
     covered_elements = fields.One2ManyDomain(
         'ins_contract.covered_element', 'contract', 'Covered Elements',
         domain=[('parent', '=', None)],
         context={'contract': Eval('id')})
-    contract_number = fields.Char('Contract Number', select=1,
-        states={'required': Eval('status') == 'active'})
-    subscriber = fields.Many2One('party.party', 'Subscriber')
-    current_policy_owner = fields.Function(
-        fields.Many2One('party.party', 'Current Policy Owner'),
-        'get_current_policy_owner')
-    # The master field is the object on which rules will be called.
-    # Basically, we need an abstract way to call rules, because in some case
-    # (typically in GBP rules might be managed on the group contract) the rules
-    # will not be those of the product.
-    master = fields.Reference(
-        'Master', [
-            ('', ''),
-            ('ins_contract.contract', 'Contract'),
-            ('ins_product.product', 'Product'),
-        ])
     management = fields.One2Many(
         'ins_contract.management_role', 'contract', 'Management Roles')
-    complementary_data = fields.Dict(
-        'ins_product.complementary_data_def', 'Complementary Data',
-        on_change=[
-            'complementary_data', 'start_date', 'options', 'offered'],
-        depends=[
-            'complementary_data', 'start_date', 'options', 'offered'],
-        # states={'invisible': ~Eval('complementary_data')
-        )
-    # TODO replace single contact by date versionned list
-    contact = fields.Many2One('party.party', 'Contact')
-    documents = fields.One2Many(
-        'ins_product.document_request', 'needed_by', 'Documents', size=1)
     contract_history = fields.One2Many('ins_contract.contract.history',
         'from_object', 'Contract History')
     addresses = fields.One2Many('ins_contract.address', 'contract',
@@ -237,71 +55,9 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             'start_date': Eval('start_date'),
             }, depends=['current_policy_owner'])
 
-    @staticmethod
-    def get_master(master):
-        res = master.split(',')
-        return res[0], int(res[1])
-
-    def give_option_model(self):
-        return self._fields['options'].model_name
-
-    def get_active_options_at_date(self, at_date):
-        res = []
-        for elem in self.options:
-            if (elem.start_date and elem.start_date <= at_date
-                and (not hasattr(elem, 'end_date') or (
-                    elem.end_date is None or elem.end_date > at_date))):
-                res += [elem]
-        return list(set(res))
-
-    def get_option_for_coverage_at_date(self, coverage, date):
-        for elem in self.get_active_options_at_date(date):
-            if elem.get_coverage() == coverage:
-                return elem
-        return None
-
-    def get_active_coverages_at_date(self, at_date):
-        return [
-            elem.get_coverage()
-            for elem in self.get_active_options_at_date(at_date)]
-
-    def init_complementary_data(self):
-        if not (hasattr(self, 'complementary_data') and
-                self.complementary_data):
-            self.complementary_data = {}
-        self.complementary_data = self.on_change_complementary_data()[
-            'complementary_data']
-        return True, ()
-
-    def get_complementary_data_value(self, at_date, value):
-        return utils.get_complementary_data_value(
-            self, 'complementary_data', self.get_complementary_data_def(),
-            at_date, value)
-
-    def get_complementary_data_def(self):
-        compl_data_defs = []
-        if self.offered:
-            compl_data_defs.extend(self.offered.get_complementary_data_def(
-                ['contract'], at_date=self.start_date))
-        for option in self.options:
-            compl_data_defs.extend(
-                option.offered.get_complementary_data_def(
-                    ['contract'], at_date=option.start_date))
-        return set(compl_data_defs)
-
-    def get_dates(self, dates=None, start=None, end=None):
-        if dates:
-            res = set(dates)
-        else:
-            res = set()
-        for covered in self.covered_elements:
-            res.update(covered.get_dates(start, end))
-        for option in self.options:
-            res.update(option.get_dates(start, end))
-        return super(Contract, self).get_dates(res, start, end)
-
-    def init_dict_for_rule_engine(self, cur_dict):
-        cur_dict['contract'] = self
+    @classmethod
+    def get_options_model_name(cls):
+        return 'ins_contract.option'
 
     def calculate_price_at_date(self, date):
         cur_dict = {'date': date}
@@ -319,9 +75,6 @@ class Contract(model.CoopSQL, Subscribed, Printable):
                 prices[cur_date.isoformat()] = price
             errs += err
         return prices, errs
-
-    def get_product(self):
-        return self.offered
 
     def check_sub_elem_eligibility(self, at_date=None, ext=None):
         errors = []
@@ -351,50 +104,9 @@ class Contract(model.CoopSQL, Subscribed, Printable):
                 errs += errors
         return (res, errs)
 
-    @staticmethod
-    def default_status():
-        return 'quote'
-
-    def get_new_contract_number(self):
-        return self.get_product().get_result('new_contract_number', {})[0]
-
-    def finalize_contract(self):
-        self.contract_number = self.get_new_contract_number()
-        return True, ()
-
-    def get_rec_name(self, val):
-        if self.offered and self.get_policy_owner():
-            if self.contract_number:
-                return '%s (%s) - %s' % (
-                    self.contract_number, self.get_product().get_rec_name(val),
-                    self.get_policy_owner().get_rec_name(val))
-            else:
-                return 'Contract %s - %s' % (
-                    self.get_product().get_rec_name(val),
-                    self.get_policy_owner().get_rec_name(val))
-        else:
-            return super(Contract, self).get_rec_name(val)
-
-    @classmethod
-    def search_rec_name(cls, name, clause):
-        contracts = cls.search([
-            'OR',
-            ('contract_number',) + clause[1:],
-            ('subscriber.name',) + clause[1:],
-        ])
-        return [('id', 'in', [c.id for c in contracts])]
-
-    @classmethod
-    def get_summary(cls, insurers, name=None, at_date=None, lang=None):
-        return ''
-
     @classmethod
     def get_offered_name(cls):
-        return 'product', 'Product'
-
-    @staticmethod
-    def get_possible_status(name=None):
-        return CONTRACTSTATUSES
+        return 'ins_product.product', 'Product'
 
     def check_at_least_one_covered(self):
         errors = []
@@ -436,14 +148,6 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             elem.save()
         return True, ()
 
-    def get_policy_owner(self, at_date=None):
-        '''
-        the owner of a contract could change over time, you should never use
-        the direct link subscriber
-        '''
-        # TODO: to enhance
-        return self.subscriber
-
     def init_options_from_covered_elements(self):
         if self.options:
             return True, ()
@@ -455,51 +159,6 @@ class Contract(model.CoopSQL, Subscribed, Printable):
                 option.append_covered_data(covered_element)
             self.options.append(option)
         return True, ()
-
-    def activate_contract(self):
-        if not self.status == 'quote':
-            return True, ()
-        for option in self.options:
-            if option.status == 'quote':
-                option.update_status('active', self.start_date)
-                option.save()
-        self.update_status('active', self.start_date)
-        return True, ()
-
-    def init_options(self):
-        existing = {}
-        if (hasattr(self, 'options') and self.options):
-            for opt in self.options:
-                existing[opt.offered.code] = opt
-
-        good_options = []
-        to_delete = [elem for elem in existing.itervalues()]
-
-        OptionModel = Pool().get(self.give_option_model())
-        for coverage in self.offered.coverages:
-            if coverage.code in existing:
-                good_opt = existing[coverage.code]
-                to_delete.remove(good_opt)
-            else:
-                good_opt = OptionModel()
-                good_opt.init_from_offered(coverage, self.start_date)
-                good_opt.contract = self
-
-            good_opt.save()
-            good_options.append(good_opt)
-
-        if to_delete:
-            OptionModel.delete(to_delete)
-
-        self.options = good_options
-
-        return True, ()
-
-    def get_main_contact(self):
-        return self.get_policy_owner()
-
-    def get_contact(self):
-        return self.get_policy_owner()
 
     def get_sender(self):
         return self.get_management_role('contract_manager').protocol.party
@@ -516,51 +175,21 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             return None
         return good_roles[0]
 
-    def get_currency(self):
-        if hasattr(self, 'offered') and self.offered:
-            return self.offered.get_currency()
-
     def on_change_complementary_data(self):
         return {'complementary_data': self.offered.get_result(
             'calculated_complementary_datas',
             {'date': self.start_date, 'contract': self})[0]}
 
-    @classmethod
-    def get_possible_contracts_from_party(cls, party, at_date):
-        if not party:
-            return []
-        domain = [
-            ('subscriber', '=', party.id),
-            ('status_history.status', '=', 'active'),
-            ('status_history.start_date', '<=', at_date),
-            ['OR',
-                [('status_history.end_date', '=', None)],
-                [('status_history.end_date', '>=', at_date)]]
-        ]
-        return cls.search(domain)
-
-    def get_current_policy_owner(self, name):
-        policy_owner = self.get_policy_owner(utils.today())
-        return policy_owner.id if policy_owner else None
-
-    def get_contract_address(self, at_date=None):
-        res = utils.get_good_versions_at_date(self, 'addresses', at_date)
-        if res:
-            return res[0].address
-
     def get_next_renewal_date(self):
         return utils.add_frequency('yearly', self.start_date)
 
 
-class Option(model.CoopSQL, Subscribed):
+class InsuranceSubscribedCoverage(contract.SubscribedCoverage):
     'Subscribed Coverage'
 
     __name__ = 'ins_contract.option'
-    _history = True
+    _table = None
 
-    status = fields.Selection(OPTIONSTATUS, 'Status')
-    contract = fields.Many2One(
-        'ins_contract.contract', 'Contract', ondelete='CASCADE')
     covered_data = fields.One2ManyDomain(
         'ins_contract.covered_data', 'option', 'Covered Data',
         domain=[('covered_element.parent', '=', None)])
@@ -577,33 +206,12 @@ class Option(model.CoopSQL, Subscribed):
         'get_possible_deductible_duration')
 
     @classmethod
-    def delete(cls, entities):
-        cls.delete_status_history(entities)
-        super(Option, cls).delete(entities)
-
-    def get_coverage(self):
-        return self.offered
-
-    def get_dates(self, dates=None, start=None, end=None):
-        if dates:
-            res = set(dates)
-        else:
-            res = set()
-        res.update(self.offered.get_dates(dates, start, end))
-        return super(Option, self).get_dates(res, start, end)
+    def get_contract_model_name(cls):
+        return 'ins_contract.contract'
 
     @classmethod
     def get_offered_name(cls):
-        return 'coverage', 'Coverage'
-
-    @staticmethod
-    def get_possible_status(name=None):
-        return OPTIONSTATUS
-
-    def get_rec_name(self, name):
-        if self.offered:
-            return self.offered.get_rec_name(name)
-        return super(Option, self).get_rec_name(name)
+        return 'ins_product.coverage', 'Coverage'
 
     def append_covered_data(self, covered_element=None):
         res = utils.instanciate_relation(self.__class__, 'covered_data')
@@ -614,18 +222,11 @@ class Option(model.CoopSQL, Subscribed):
         res.init_from_covered_element(covered_element)
         return res
 
-    def get_contract(self):
-        return self.contract
-
     def get_covered_data(self):
         raise NotImplementedError
 
     def get_coverage_amount(self):
         raise NotImplementedError
-
-    def get_currency(self):
-        if hasattr(self, 'offered') and self.offered:
-            return self.offered.get_currency()
 
     def get_possible_deductible_duration(self, name):
         try:
@@ -644,7 +245,7 @@ class StatusHistory(model.CoopSQL, model.CoopView):
     __name__ = 'ins_contract.status_history'
 
     reference = fields.Reference('Reference', 'get_possible_reference')
-    status = fields.Selection(OPTIONSTATUS, 'Status',
+    status = fields.Selection(contract.OPTIONSTATUS, 'Status',
         selection_change_with=['reference'])
     sub_status = fields.Char('Sub Status')
     start_date = fields.Date('Start Date')
@@ -1031,6 +632,22 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     def default_possible_item_desc(cls):
         return [x.id for x in cls.get_possible_item_desc()]
 
+    def match_key(self, from_name=None, party=None):
+        if (from_name and self.name == from_name
+                or party and self.party == party):
+            return True
+        if party:
+            for relation in self.covered_relations:
+                if relation.from_party == party or relation.to_party == party:
+                    return self
+
+    def get_covered_element(self, from_name=None, party=None):
+        if self.match_key(from_name, party):
+            return self
+        for sub_element in self.sub_covered_elements:
+            if sub_element.match_key(from_name, party):
+                return sub_element
+
 
 class CoveredElementPartyRelation(model.CoopSQL):
     'Relation between Covered Element and Covered Relations'
@@ -1064,7 +681,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
         states={'invisible': ~Eval('complementary_data')})
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    status = fields.Selection(OPTIONSTATUS, 'Status')
+    status = fields.Selection(contract.OPTIONSTATUS, 'Status')
     contract = fields.Function(
         fields.Many2One('ins_contract.contract', 'Contract'),
         'get_contract_id')
@@ -1178,6 +795,18 @@ class CoveredData(model.CoopSQL, model.CoopView):
 
     def get_possible_options(self, name):
         return [x.id for x in self.contract.options] if self.contract else []
+
+    def get_covered_element(self, from_name=None, party=None):
+        if self.covered_element:
+            return self.covered_element.get_covered_element(from_name, party)
+
+    def get_covered_data(self, from_name=None, party=None):
+        covered_element = self.get_covered_element(from_name, party)
+        if not covered_element:
+            return
+        for covered_data in covered_element.covered_data:
+            if covered_data.option == self.option:
+                return covered_data
 
 
 class ManagementProtocol(model.CoopSQL, model.CoopView):

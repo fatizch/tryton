@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form string="contract">
+  <group id="Administrative data">
+    <label name="contract_number"/>
+    <field name="contract_number"/>
+    <label name="status"/>
+    <field name="status"/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <newline/>
+    <label name="subscriber"/>
+    <field name="subscriber"/>
+    <label name="offered"/>
+    <field name="offered"/>
+  </group>
+  <notebook colspan="4">
+    <page string="Options" id="options">
+      <field name="options" colspan="4"/>
+    </page>
+    <page string="Complementary Data" id="complementary_data">
+      <field name="complementary_data" no_command="1"/>
+    </page>
+    <page string="Documents" id="documents">
+      <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" mode="form"/>
+    </page>
+  </notebook>
+</form>
