@@ -1,17 +1,17 @@
 # Needed for getting models
-from trytond.pool import Pool
+# from trytond.pool import Pool
 
-# Needed for Evaluation
-from trytond.pyson import Eval
-from trytond.transaction import Transaction
+# # Needed for Evaluation
+# from trytond.pyson import Eval
+# from trytond.transaction import Transaction
 
 
-from trytond.modules.coop_utils import utils, fields, abstract, model
-from trytond.modules.coop_party.party import ACTOR_KIND
+# from trytond.modules.coop_utils import utils, fields, abstract, model
+# from trytond.modules.coop_party.party import ACTOR_KIND
 
-from contract import OPTIONSTATUS
+# from contract import OPTIONSTATUS
 
-from trytond.modules.insurance_product import Coverage
+# from trytond.modules.insurance_product import Coverage
 
 ###############################################################################
 # This is the Subscription Process. It is a process (which uses the           #
