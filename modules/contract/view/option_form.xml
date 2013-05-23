@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<form string="option">
+    <label name="contract"/>
+    <field name="contract"/>
+    <newline/>
+    <label name="offered"/>
+    <field name="offered"/>
+    <label name="status"/>
+    <field name="status" readonly="1"/>
+    <newline/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <notebook colspan="4">
+        <page string="Status History" id="status_history">
+            <field name="status_history" colspan="4"/>
+        </page>
+    </notebook>
+</form>
