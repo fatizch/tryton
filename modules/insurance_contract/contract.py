@@ -1098,6 +1098,9 @@ class CoveredData(model.CoopSQL, model.CoopView):
             if covered_data.option == self.option:
                 return covered_data
 
+    def _expand_tree(self, name):
+        return True
+
 
 class ManagementProtocol(model.CoopSQL, model.CoopView):
     'Management Protocol'

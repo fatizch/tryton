@@ -1,10 +1,11 @@
 import copy
 import time
 import datetime
+import json
 
 from trytond.pyson import Eval, Bool
 from trytond.model import ModelView, ModelSQL, fields as tryton_fields
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard
 
@@ -23,6 +24,7 @@ __all__ = [
     'VersionedObject',
     'VersionObject',
     'ObjectHistory',
+    'expand_tree',
 ]
 
 
@@ -182,12 +184,52 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
 
 
 class CoopView(ModelView):
+    must_expand_tree = fields.Function(fields.Boolean('Must Expand Tree'),
+        '_expand_tree')
+
     @classmethod
     def setter_void(cls, objects, name, values):
         pass
 
     def getter_void(self, name):
         pass
+
+    def _expand_tree(self, name):
+        return False
+
+
+def expand_tree(name, test_field='must_expand_tree'):
+
+    class ViewTreeState:
+        __metaclass__ = PoolMeta
+        __name__ = 'ir.ui.view_tree_state'
+
+        @classmethod
+        def get(cls, model, domain, child_name):
+            result = super(ViewTreeState, cls).get(model, domain, child_name)
+            if model == name and child_name:
+                Model = Pool().get(name)
+                domain = json.loads(domain)
+                roots = Model.search(domain)
+                nodes = []
+                selected = []
+
+                def parse(records, path):
+                    expanded = False
+                    for record in records:
+                        if getattr(record, test_field):
+                            if path and not expanded:
+                                nodes.append(path)
+                                expanded = True
+                            if not selected:
+                                selected.append(path + (record.id,))
+                        parse(getattr(record, child_name, []),
+                            path + (record.id,))
+                parse(roots, ())
+                result = (json.dumps(nodes), json.dumps(selected))
+            return result
+
+    return ViewTreeState
 
 
 class CoopWizard(Wizard):

@@ -6,6 +6,10 @@ from billing_process import *
 from .party import *
 from .document import *
 
+from trytond.modules.coop_utils import expand_tree
+CoveredElementTreeExpansion = expand_tree('ins_contract.covered_element')
+CoveredDataTreeExpansion = expand_tree('ins_contract.covered_data')
+
 
 def register():
     Pool.register(
@@ -19,8 +23,10 @@ def register():
         StatusHistory,
         BillingManager,
         CoveredElement,
+        CoveredElementTreeExpansion,
         CoveredElementPartyRelation,
         CoveredData,
+        CoveredDataTreeExpansion,
         PriceLine,
         Document,
         DocumentRequest,
