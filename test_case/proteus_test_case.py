@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
+import sys
+
 from proteus import Model, Wizard
 
 import proteus_tools
@@ -103,27 +105,7 @@ def update_modules(cfg_dict, modules):
         #    warnings.warn('KO : Exception raised', stacklevel=2)
 
 
-def launch_proteus_test_case(test_config_file=None, module=None):
-    if not test_config_file:
-        test_config_file = os.path.join(DIR, 'test_case.cfg')
-    cfg_dict = proteus_tools.get_test_cfg(test_config_file)
-
-    delete_db_if_necessary(cfg_dict)
-    if not module:
-        modules = cfg_dict['modules']
-    else:
-        modules = [module]
-    installed_modules = install_modules(
-        proteus_tools.get_config(cfg_dict), modules)
-    for module in installed_modules:
-        if module in modules:
-            print 'Module %s installed' % module
-        else:
-            print 'Module %s already installed' % module
-
-    if cfg_dict['only_install'] is True:
-        return
-    update_modules(cfg_dict, modules)
+def import_json_files(cfg_dict):
     json_dir = os.path.join(
         DIR, 'json_files', cfg_dict.get('language', 'fr_FR'))
     if os.path.isdir(json_dir):
@@ -148,6 +130,29 @@ def launch_proteus_test_case(test_config_file=None, module=None):
             print 'Successfully imported file %s' % cur_file
 
 
+def launch_proteus_test_case(test_config_file=None, module=None):
+    if not test_config_file:
+        test_config_file = os.path.join(DIR, 'test_case.cfg')
+    cfg_dict = proteus_tools.get_test_cfg(test_config_file)
+
+    delete_db_if_necessary(cfg_dict)
+    if not module:
+        modules = cfg_dict['modules']
+    else:
+        modules = [module]
+    installed_modules = install_modules(
+        proteus_tools.get_config(cfg_dict), modules)
+    for cur_module in installed_modules:
+        if cur_module in modules:
+            print 'Module %s installed' % cur_module
+        else:
+            print 'Module %s already installed' % cur_module
+
+    if cfg_dict['only_install'] is True:
+        return
+    update_modules(cfg_dict, modules)
+
+
 def set_currency(cfg_dict):
     Currency = Model.get('currency.currency')
     cur_domain = []
@@ -160,4 +165,9 @@ def set_currency(cfg_dict):
 
 
 if __name__ == '__main__':
-    launch_proteus_test_case()
+    module = None
+    if len(sys.argv) == 2:
+        module = sys.argv[1]
+    launch_proteus_test_case(module=module)
+    if not module:
+        import_json_files()
