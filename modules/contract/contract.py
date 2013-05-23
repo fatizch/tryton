@@ -189,7 +189,6 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     documents = fields.One2Many(
         'ins_product.document_request', 'needed_by', 'Documents', size=1)
 
-
     @classmethod
     def __setup__(cls):
         cls.options = copy.copy(cls.options)
@@ -403,20 +402,14 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
 
     status = fields.Selection(OPTIONSTATUS, 'Status')
     contract = fields.Many2One(None, 'Contract', ondelete='CASCADE')
-    covered_data = fields.One2ManyDomain(
-        'ins_contract.covered_data', 'option', 'Covered Data',
-        domain=[('covered_element.parent', '=', None)])
-    deductible_duration = fields.Many2One('ins_product.deductible_duration',
-        'Deductible Duration', states={
-            'invisible': ~Eval('possible_deductible_duration'),
-            # 'required': ~~Eval('possible_deductible_duration'),
-            }, domain=[('id', 'in', Eval('possible_deductible_duration'))],
-        depends=['possible_deductible_duration'])
-    possible_deductible_duration = fields.Function(
-        fields.Many2Many(
-            'ins_product.deductible_duration', None, None,
-            'Possible Deductible Duration', states={'invisible': True}),
-        'get_possible_deductible_duration')
+    contract_number = fields.Function(
+        fields.Char('Contract Number'), 'get_contract_number')
+    current_policy_owner = fields.Function(
+        fields.Many2One('party.party', 'Current Policy Owner'),
+        'get_current_policy_owner_id')
+    product = fields.Function(
+        fields.Many2One('ins_product.product', 'Product'),
+        'get_product_id')
 
     @classmethod
     def __setup__(cls):
@@ -464,3 +457,13 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
     def get_currency(self):
         if hasattr(self, 'offered') and self.offered:
             return self.offered.get_currency()
+
+    def get_contract_number(self, name):
+        return self.contract.contract_number if self.contract else ''
+
+    def get_current_policy_owner_id(self, name):
+        if self.contract:
+            return self.contract.get_current_policy_owner(name)
+
+    def get_product_id(self, name):
+        return self.contract.offered.id if self.contract else None

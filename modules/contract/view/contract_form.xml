@@ -7,6 +7,8 @@
     <field name="status"/>
     <label name="start_date"/>
     <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
     <newline/>
     <label name="subscriber"/>
     <field name="subscriber"/>
