@@ -33,5 +33,18 @@
             <field name="view" ref="contract_view_form"/>
             <field name="act_window" ref="act_contract_form"/>
         </record>
+        <!--################################################################ -->
+        <!-- Options Screens -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="option_view_tree">
+            <field name="model">contract.subscribed_coverage</field>
+            <field name="type">tree</field>
+            <field name="name">option_tree</field>
+        </record>
+        <record model="ir.ui.view" id="option_view_form">
+            <field name="model">contract.subscribed_coverage</field>
+            <field name="type">form</field>
+            <field name="name">option_form</field>
+        </record>
     </data>
 </tryton>
