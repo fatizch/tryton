@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<form string="Compensated Option">
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <label name="com_option"/>
+    <field name="com_option"/>
+    <newline/>
+    <label name="subs_option"/>
+    <field name="subs_option"/>
+    <newline/>
+    <label name="use_specific_rate"/>
+    <field name="use_specific_rate"/>
+    <label name="rate"/>
+    <group id="rate">
+      <field name="rate" xexpand="0"/>
+      <label string="%" id="rate" xexpand="0" xalign="0"
+        states="{'invisible': ~Eval('use_specific_rate')}"/>
+    </group>
+</form>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='managers']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='summary']" position="after">
+        <page string="Commissioning" id="com">
+            <field name="commission_rules" colspan="4"/>
+            <field name="coverages" colspan="4"/>
+        </page>
+    </xpath>
+</data>

@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <menuitem name="Commissioning" id="menu_commission" sequence="18"/>
+        <menuitem name="Configuration" parent="menu_commission"
+            id="menu_commission_configuration" sequence="100" icon="tryton-preferences"/>
+
+        <record model="ir.ui.view" id="plan_view_form">
+            <field name="model">commission.commission_plan</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_product.offered_view_form"/>
+            <field name="name">plan_form</field>
+        </record>
+        <record model="ir.ui.view" id="plan_view_tree">
+            <field name="model">commission.commission_plan</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_product.offered_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+
+        <record model="ir.action.act_window" id="act_plan_form">
+            <field name="name">Commission Plans</field>
+            <field name="res_model">commission.commission_plan</field>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_plan_form_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="plan_view_tree"/>
+            <field name="act_window" ref="act_plan_form"/>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_plan_form_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="plan_view_form"/>
+            <field name="act_window" ref="act_plan_form"/>
+        </record>
+
+        <menuitem parent="menu_commission_configuration" sequence="2" id="menu_plan_form"
+            icon="tryton-list" action="act_plan_form"/>
+
+        <record model="ir.ui.view" id="component_view_form">
+            <field name="model">commission.commission_component</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_product.offered_view_form"/>
+            <field name="name">component_form</field>
+        </record>
+        <record model="ir.ui.view" id="component_view_tree">
+            <field name="model">commission.commission_component</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_product.offered_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+
+        <record model="ir.action.act_window" id="act_component_form">
+            <field name="name">Commission Components</field>
+            <field name="res_model">commission.commission_component</field>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_component_form_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="component_view_tree"/>
+            <field name="act_window" ref="act_component_form"/>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_component_form_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="component_view_form"/>
+            <field name="act_window" ref="act_component_form"/>
+        </record>
+
+        <menuitem parent="menu_commission_configuration" sequence="1" id="menu_component_form"
+            icon="tryton-list" action="act_component_form"/>
+
+        <!--  *******************************************
+          ********    Commission Rule    ********
+          *******************************************-->
+          <record model="ir.ui.view" id="commission_rule_view_tree">
+            <field name="model">commission.commission_rule</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_product.businessruleroot_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+        <record model="ir.ui.view" id="commission_rule_view_form">
+            <field name="model">commission.commission_rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_product.businessruleroot_view_form"/>
+            <field name="name">commission_rule_form</field>
+        </record>
+    </data>
+</tryton>

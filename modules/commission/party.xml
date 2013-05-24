@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<tryton>
+  <data>
+    <!-- Society -->
+    <record model="ir.ui.view" id="party_view_form">
+      <field name="model">party.party</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="party.party_view_form"/>
+      <field name="name">party_form</field>
+    </record>
+
+    <!-- Broker -->
+    <record model="ir.ui.view" id="broker_view_form">
+      <field name="model">party.broker</field>
+      <field name="type">form</field>
+      <field name="name">broker_view_form</field>
+    </record>
+    <record model="ir.ui.view" id="broker_view_tree">
+      <field name="model">party.broker</field>
+      <field name="type">tree</field>
+      <field name="name">broker_view_tree</field>
+    </record>
+  </data>
+  <record model="ir.action.act_window" id="act_broker_form">
+    <field name="name">Brokers</field>
+    <field name="res_model">party.party</field>
+    <field name="domain">[('is_broker', '=', True)]</field>
+  </record>
+  <record model="ir.action.act_window.view" id="act_broker_tree_view">
+    <field name="sequence" eval="10"/>
+    <field name="view" ref="coop_party.party_view_tree"/>
+    <field name="act_window" ref="act_broker_form"/>
+  </record>
+  <record model="ir.action.act_window.view" id="act_broker_form_view">
+    <field name="sequence" eval="20"/>
+    <field name="view" ref="coop_party.party_view_form"/>
+    <field name="act_window" ref="act_broker_form"/>
+  </record>
+  <menuitem parent="menu_commission" sequence="1" id="menu_broker_form"
+    icon="tryton-list" action="act_broker_form"/>
+  </tryton>

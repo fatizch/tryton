@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tryton>
+    <data>
+        <!-- CommissionAgreement -->
+        <record model="ir.ui.view" id="agreement_view_tree">
+            <field name="model">commission.agreement</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="contract.contract_view_tree"/>
+            <!-- <field name="name">contract_tree</field> -->
+            <field name="arch" type="xml"/>
+        </record>
+        <!-- form view -->
+        <record model="ir.ui.view" id="agreement_view_form">
+            <field name="model">commission.agreement</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="contract.contract_view_form"/>
+            <field name="arch" type="xml"/>
+            <!-- <field name="name">contract_form</field> -->
+        </record>
+        <record model="ir.action.act_window" id="act_agreement_form">
+            <field name="name">Commission Agreements</field>
+            <field name="res_model">commission.agreement</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_agreement_tree_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="agreement_view_tree"/>
+            <field name="act_window" ref="act_agreement_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_agreement_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="agreement_view_form"/>
+            <field name="act_window" ref="act_agreement_form"/>
+        </record>
+
+        <menuitem parent="menu_commission" sequence="20"
+            id="menu_agreement_form" icon="tryton-list" action="act_agreement_form"/>
+
+        <!-- CommissionOption -->
+        <record model="ir.ui.view" id="option_view_tree">
+            <field name="model">commission.option</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="contract.option_view_tree"/>
+            <!-- <field name="name">option_tree</field> -->
+            <field name="arch" type="xml"/>
+        </record>
+        <record model="ir.ui.view" id="option_view_form">
+            <field name="model">commission.option</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="contract.option_view_form"/>
+            <field name="name">option_form</field>
+        </record>
+
+        <!-- CompensatedOption -->
+        <record model="ir.ui.view" id="compensated_option_view_tree">
+            <field name="model">commission.compensated_option</field>
+            <field name="type">tree</field>
+            <field name="name">compensated_option_tree</field>
+        </record>
+        <record model="ir.ui.view" id="compensated_option_view_form">
+            <field name="model">commission.compensated_option</field>
+            <field name="type">form</field>
+            <field name="name">compensated_option_form</field>
+        </record>
+    </data>
+</tryton>
