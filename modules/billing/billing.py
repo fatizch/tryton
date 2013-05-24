@@ -498,7 +498,7 @@ class BillingProcess(Wizard):
         return 'end'
 
 
-class ProductPaymentMethodRelation(model.CoopSQL):
+class ProductPaymentMethodRelation(model.CoopSQL, model.CoopView):
     'Product to Payment Method Relation definition'
 
     __name__ = 'billing.product-payment_method-relation'
@@ -506,7 +506,7 @@ class ProductPaymentMethodRelation(model.CoopSQL):
     product = fields.Many2One('ins_product.product', 'Product',
         ondelete='CASCADE')
     payment_method = fields.Many2One('billing.payment_method',
-        'payment_method', ondelete='RESTRICT')
+        'Payment Method', ondelete='RESTRICT')
     is_default = fields.Boolean('Default')
 
 

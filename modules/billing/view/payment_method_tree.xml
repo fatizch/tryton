@@ -2,6 +2,6 @@
 <tree string="Payment Methods">
   <field name="code"/>
   <field name="name"/>
-  <field name="frequency"/>
   <field name="payment_mode"/>
+  <field name="payment_term"/>
 </tree>
