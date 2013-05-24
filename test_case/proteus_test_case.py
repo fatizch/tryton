@@ -149,8 +149,9 @@ def launch_proteus_test_case(test_config_file=None, module=None):
             print 'Module %s already installed' % cur_module
 
     if cfg_dict['only_install'] is True:
-        return
+        return cfg_dict
     update_modules(cfg_dict, modules)
+    return cfg_dict
 
 
 def set_currency(cfg_dict):
@@ -168,6 +169,6 @@ if __name__ == '__main__':
     module = None
     if len(sys.argv) == 2:
         module = sys.argv[1]
-    launch_proteus_test_case(module=module)
-    if not module:
-        import_json_files()
+    cfg_dict = launch_proteus_test_case(module=module)
+    if not module and not cfg_dict['only_install']:
+        import_json_files(cfg_dict)
