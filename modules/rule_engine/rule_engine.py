@@ -428,7 +428,8 @@ class Rule(ModelView, ModelSQL):
                 pass
                 the_result.result = None
             except Exception, exc:
-                raise InternalRuleEngineError(str(exc))
+                raise InternalRuleEngineError(coop_string.remove_invalid_char(
+                    self.name) + ' - ' + str(exc))
         return the_result
 
     def on_change_context(self):
