@@ -5,6 +5,7 @@ from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateTransition, StateView, Button
 
 from trytond.modules.coop_utils import model, fields, utils, date, abstract
+from trytond.modules.coop_utils import export
 from trytond.modules.insurance_product import product
 
 __all__ = [
@@ -30,6 +31,12 @@ PAYMENT_MODES = [
     ('wire_transfer', 'Wire Transfer'),
     ('direct_debit', 'Direct Debit'),
 ]
+
+
+export.add_export_to_model([
+    ('account.invoice.payment_term', ('name', )),
+    ('account.invoice.payment_term.line', ()),
+])
 
 
 class PaymentMethod(model.CoopSQL, model.CoopView):
