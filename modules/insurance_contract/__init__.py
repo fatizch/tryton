@@ -4,6 +4,10 @@ from subs_process import *
 from .party import *
 from .document import *
 
+from trytond.modules.coop_utils import expand_tree
+CoveredElementTreeExpansion = expand_tree('ins_contract.covered_element')
+CoveredDataTreeExpansion = expand_tree('ins_contract.covered_data')
+
 
 def register():
     Pool.register(
@@ -16,8 +20,10 @@ def register():
         InsuranceSubscribedCoverage,
         StatusHistory,
         CoveredElement,
+        CoveredElementTreeExpansion,
         CoveredElementPartyRelation,
         CoveredData,
+        CoveredDataTreeExpansion,
         Document,
         DocumentRequest,
         # subs_process.py classes
