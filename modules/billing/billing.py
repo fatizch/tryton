@@ -61,8 +61,7 @@ class PriceLine(model.CoopSQL, model.CoopView):
             ('fee', 'Fee')
         ], 'Kind', readonly='True')
     on_object = fields.Reference('Priced object', 'get_line_target_models')
-    billing_manager = fields.Many2One(
-        'billing.billing_manager', 'Billing Manager')
+    contract = fields.Many2One('ins_contract.contract', 'Contract')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     all_lines = fields.One2Many(
@@ -521,13 +520,13 @@ class Product():
         'Payment Methods')
 
     def get_default_payment_method(self):
-        for elem in self.payment_method:
+        for elem in self.payment_methods:
             if elem.is_default:
                 return elem.payment_method
 
     def get_allowed_payment_methods(self):
         result = []
-        for elem in self.payment_method:
+        for elem in self.payment_methods:
             result.append(elem.payment_method)
         return result
 
@@ -542,7 +541,7 @@ class Contract():
         'Billing Managers')
     next_billing_date = fields.Date('Next Billing Date')
     prices = fields.One2Many(
-        'billing.price_line', 'billing_manager', 'Prices')
+        'billing.price_line', 'contract', 'Prices')
 
     def get_name_for_billing(self):
         return self.offered.name + ' - Base Price'
