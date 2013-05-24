@@ -24,13 +24,6 @@ __all__ = [
     'CoveredData',
 ]
 
-PAYMENT_FREQUENCIES = [
-    ('monthly', 'Monthly'),
-    ('quarterly', 'Quarterly'),
-    ('biannually', 'Twice a year'),
-    ('yearly', 'Yearly'),
-]
-
 PAYMENT_MODES = [
     ('cash', 'Cash'),
     ('check', 'Check'),
@@ -46,8 +39,8 @@ class PaymentMethod(model.CoopSQL, model.CoopView):
 
     name = fields.Char('Name')
     code = fields.Char('Code', required=True)
-    frequency = fields.Selection(PAYMENT_FREQUENCIES, 'Frequency',
-        required=True)
+    payment_term = fields.Many2One('account.invoice.payment_term',
+        'Payment Term', ondelete='RESTRICT')
     payment_mode = fields.Selection(PAYMENT_MODES, 'Payment Mode',
         required=True)
 
@@ -203,82 +196,20 @@ class BillingManager(model.CoopSQL, model.CoopView):
     __name__ = 'billing.billing_manager'
 
     contract = fields.Many2One('ins_contract.contract', 'Contract')
-    next_billing_date = fields.Date('Next Billing Date')
-    prices = fields.One2Many(
-        'billing.price_line', 'billing_manager', 'Prices')
-
-    def store_prices(self, prices):
-        if not prices:
-            return
-        PriceLine = Pool().get(self.get_price_line_model())
-        to_delete = []
-        if hasattr(self, 'prices') and self.prices:
-            for price in self.prices:
-                to_delete.append(price)
-        result_prices = []
-        dates = [utils.to_date(key) for key in prices.iterkeys()]
-        end_date = self.contract.get_next_renewal_date()
-        if not end_date in dates:
-            dates.append(end_date)
-        dates.sort()
-        for price_date, price in prices.iteritems():
-            pl = PriceLine()
-            pl.name = price_date
-            details = []
-            for cur_price in price:
-                detail = PriceLine()
-                detail.init_from_result_line(cur_price)
-                details.append(detail)
-            pl.all_lines = details
-            pl.start_date = utils.to_date(price_date)
-            try:
-                pl.end_date = dates[dates.index(pl.start_date) + 1] + \
-                    datetime.timedelta(days=-1)
-            except IndexError:
-                pass
-            result_prices.append(pl)
-        self.prices = result_prices
-
-        self.save()
-
-        PriceLine.delete(to_delete)
-
-    @classmethod
-    def get_price_line_model(cls):
-        return cls._fields['prices'].model_name
-
-    def get_product_frequency(self, at_date):
-        res, errs = self.contract.offered.get_result(
-            'frequency',
-            {'date': at_date})
-        if not errs:
-            return res
-
-    def next_billing_dates(self):
-        start_date = max(
-            Pool().get('ir.date').today(), self.contract.start_date)
-        return (
-            start_date,
-            utils.add_frequency(
-                self.get_product_frequency(start_date), start_date))
-
-    def get_bill_model(self):
-        return 'billing.billing.bill'
-
-    def get_prices_dates(self):
-        return [elem.start_date for elem in self.prices].append(
-            self.prices[-1].end_date)
+    start_date = fields.Date('Start Date', required=True)
+    end_date = fields.Date('End Date')
+    payment_method = fields.Many2One('billing.payment_method',
+        'Payment Method', required=True)
 
     def create_price_list(self, start_date, end_date):
         dated_prices = [
             (elem.start_date, elem.end_date or end_date, elem)
-            for elem in self.prices
+            for elem in self.contract.prices
             if (
                 (elem.start_date >= start_date and elem.start_date <= end_date)
                 or (
                     elem.end_date and elem.end_date >= start_date
                     and elem.end_date <= end_date))]
-        print str([x.name for x in dated_prices[1][2].all_lines])
         return dated_prices
 
     def flatten(self, prices):
@@ -294,19 +225,6 @@ class BillingManager(model.CoopSQL, model.CoopView):
                 lines_desc += self.flatten(
                     [(elem[0], elem[1], line) for line in elem[2].child_lines])
         return lines_desc
-
-    def lines_as_dict(self, lines):
-        # lines are a list of tuples (start, end, price_line).
-        # This function organizes the lines in a dict which uses the price_line
-        # id (get_id) as keys
-        the_dict = {}
-        for elem in lines:
-            id = elem[2].get_id()
-            if id in the_dict:
-                the_dict[id].append(elem)
-            else:
-                the_dict[id] = [elem]
-        return the_dict
 
     def bill(self, start_date, end_date):
         Bill = Pool().get(self.get_bill_model())
@@ -547,7 +465,7 @@ class BillingProcess(Wizard):
     def default_bill_parameters(self, values):
         ContractModel = Pool().get(Transaction().context.get('active_model'))
         contract = ContractModel(Transaction().context.get('active_id'))
-        bill_dates = contract.billing_manager[0].next_billing_dates()
+        bill_dates = contract.billing_managers[0].next_billing_dates()
         return {
             'contract': contract.id,
             'start_date': bill_dates[0],
@@ -559,7 +477,7 @@ class BillingProcess(Wizard):
         contract = self.bill_parameters.contract
         if self.bill_parameters.start_date < contract.start_date:
             self.raise_user_error('start_date_too_old')
-        billing_manager = contract.billing_manager[0]
+        billing_manager = contract.billing_managers[0]
         start_date = self.bill_parameters.start_date
         end_date = self.bill_parameters.end_date
         the_bill = billing_manager.bill(start_date, end_date)
@@ -589,6 +507,7 @@ class ProductPaymentMethodRelation(model.CoopSQL):
         ondelete='CASCADE')
     payment_method = fields.Many2One('billing.payment_method',
         'payment_method', ondelete='RESTRICT')
+    is_default = fields.Boolean('Default')
 
 
 class Product():
@@ -597,9 +516,20 @@ class Product():
     __metaclass__ = PoolMeta
     __name__ = 'ins_product.product'
 
-    payment_methods = fields.Many2Many(
-        'billing.product-payment_method-relation', 'product', 'payment_method',
+    payment_methods = fields.One2Many(
+        'billing.product-payment_method-relation', 'product',
         'Payment Methods')
+
+    def get_default_payment_method(self):
+        for elem in self.payment_method:
+            if elem.is_default:
+                return elem.payment_method
+
+    def get_allowed_payment_methods(self):
+        result = []
+        for elem in self.payment_method:
+            result.append(elem.payment_method)
+        return result
 
 
 class Contract():
@@ -608,21 +538,84 @@ class Contract():
     __metaclass__ = PoolMeta
     __name__ = 'ins_contract.contract'
 
-    billing_manager = fields.One2Many('billing.billing_manager', 'contract',
-        'Billing Manager')
+    billing_managers = fields.One2Many('billing.billing_manager', 'contract',
+        'Billing Managers')
+    next_billing_date = fields.Date('Next Billing Date')
+    prices = fields.One2Many(
+        'billing.price_line', 'billing_manager', 'Prices')
 
     def get_name_for_billing(self):
         return self.offered.name + ' - Base Price'
 
     def new_billing_manager(self):
-        return utils.instanciate_relation(self, 'billing_manager')
+        return utils.instanciate_relation(self, 'billing_managers')
 
     def init_billing_manager(self):
-        if not (hasattr(self, 'billing_manager') and
-                self.billing_manager):
+        if not (hasattr(self, 'billing_managers') and
+                self.billing_managers):
             bm = self.new_billing_manager()
             bm.contract = self
-            self.billing_manager = [bm]
+            bm.start_date = self.start_date
+            bm.payment_method = self.offered.get_default_payment_method()
+            self.billing_managers = [bm]
+            bm.save()
+
+    def next_billing_dates(self):
+        start_date = self.next_billing_date
+        return (
+            start_date,
+            utils.add_frequency(
+                self.get_product_frequency(start_date), start_date))
+
+    @classmethod
+    def get_price_line_model(cls):
+        return cls._fields['prices'].model_name
+
+    def get_product_frequency(self, at_date):
+        res, errs = self.offered.get_result(
+            'frequency',
+            {'date': at_date})
+        if not errs:
+            return res
+
+    def get_bill_model(self):
+        return 'billing.billing.bill'
+
+    def store_prices(self, prices):
+        if not prices:
+            return
+        PriceLine = Pool().get(self.get_price_line_model())
+        to_delete = []
+        if hasattr(self, 'prices') and self.prices:
+            for price in self.prices:
+                to_delete.append(price)
+        result_prices = []
+        dates = [utils.to_date(key) for key in prices.iterkeys()]
+        end_date = self.get_next_renewal_date()
+        if not end_date in dates:
+            dates.append(end_date)
+        dates.sort()
+        for price_date, price in prices.iteritems():
+            pl = PriceLine()
+            pl.name = price_date
+            details = []
+            for cur_price in price:
+                detail = PriceLine()
+                detail.init_from_result_line(cur_price)
+                details.append(detail)
+            pl.all_lines = details
+            pl.start_date = utils.to_date(price_date)
+            try:
+                pl.end_date = dates[dates.index(pl.start_date) + 1] + \
+                    datetime.timedelta(days=-1)
+            except IndexError:
+                pass
+            result_prices.append(pl)
+        self.prices = result_prices
+
+        self.save()
+
+        PriceLine.delete(to_delete)
 
 
 class Option():

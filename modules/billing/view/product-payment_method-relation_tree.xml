@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<tree string="Payment Methods" editable="bottom">
+  <field name="is_default"/>
+  <field name="payment_method" widget="selection"/>
+</tree>

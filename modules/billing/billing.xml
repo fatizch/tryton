@@ -56,6 +56,11 @@
       <field name="type">form</field>
       <field name="name">billing_manager_form</field>
     </record>
+    <record model="ir.ui.view" id="billing_manager_tree">
+      <field name="model">billing.billing_manager</field>
+      <field name="type">tree</field>
+      <field name="name">billing_manager_tree</field>
+    </record>
     <!--################################################################-->
     <!--                        Bill Line Tree                          -->
     <!--################################################################-->
@@ -136,6 +141,14 @@
       <field name="type">form</field>
       <field name="inherit" ref="insurance_contract.contract_view_form"/>
       <field name="name">contract_form</field>
+    </record>
+    <!--################################################################-->
+    <!-- Product Payment Method Relation -->
+    <!--################################################################-->
+    <record model="ir.ui.view" id="product-payment_method-relation_tree">
+      <field name="model">billing.product-payment_method-relation</field>
+      <field name="type">tree</field>
+      <field name="name">product-payment_method-relation_tree</field>
     </record>
     <!--################################################################-->
     <!-- Product -->
