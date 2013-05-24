@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <menuitem name="Distribution" id="menu_distribution" sequence="15"/>
+        <menuitem name="Configuration" parent="menu_distribution"
+            id="menu_distribution_configuration" sequence="100" icon="tryton-preferences"/>
+
+        <record model="ir.ui.view" id="dist_network_view_form">
+            <field name="model">distribution.dist_network</field>
+            <field name="type">form</field>
+            <field name="name">dist_network_form</field>
+        </record>
+        <record model="ir.ui.view" id="dist_network_view_tree">
+            <field name="model">distribution.dist_network</field>
+            <field name="type">tree</field>
+            <field name="field_childs">sub_levels</field>
+            <field name="name">dist_network_tree</field>
+        </record>
+
+        <record model="ir.action.act_window" id="act_dist_network_form">
+            <field name="name">Distribution Networks</field>
+            <field name="res_model">distribution.dist_network</field>
+            <field name="domain">[('top_level', '=', False)]</field>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_dist_network_tree_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="dist_network_view_tree"/>
+            <field name="act_window" ref="act_dist_network_form"/>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_dist_network_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="dist_network_view_form"/>
+            <field name="act_window" ref="act_dist_network_form"/>
+        </record>
+
+        <menuitem parent="menu_distribution" sequence="2"
+            id="menu_dist_network_form" icon="tryton-list"
+            action="act_dist_network_form"/>
+
+    </data>
+</tryton>

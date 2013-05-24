@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- Distribution Network -->
+        <record model="ir.ui.view" id="dist_network_view_form">
+            <field name="model">distribution.dist_network</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="distribution.dist_network_view_form"/>
+            <field name="name">dist_network_form</field>
+        </record>
+
+        <!-- Commercial Product -->
+        <record model="ir.ui.view" id="commercial_product_view_form">
+            <field name="model">distribution.commercial_product</field>
+            <field name="type">form</field>
+            <field name="name">commercial_product_form</field>
+        </record>
+        <record model="ir.ui.view" id="commercial_product_view_tree">
+            <field name="model">distribution.commercial_product</field>
+            <field name="type">tree</field>
+            <field name="name">commercial_product_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_commercial_product_form">
+            <field name="name">Commercial Products</field>
+            <field name="res_model">distribution.commercial_product</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_commercial_product_tree_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="commercial_product_view_tree"/>
+            <field name="act_window" ref="act_commercial_product_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_commercial_product_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="commercial_product_view_form"/>
+            <field name="act_window" ref="act_commercial_product_form"/>
+        </record>
+        <menuitem parent="distribution.menu_distribution" sequence="3"
+            id="menu_commercial_product_form" icon="tryton-list"
+            action="act_commercial_product_form"/>
+
+    </data>
+</tryton>

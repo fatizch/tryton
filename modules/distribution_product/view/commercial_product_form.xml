@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<form string="Commercial Product">
+    <label name="product"/>
+    <field name="product"/>
+    <newline/>
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+</form>
