@@ -9,7 +9,6 @@ from trytond.modules.coop_party.party import STATES_COMPANY
 __all__ = [
     'Party',
     'Insurer',
-    'Broker',
     'Customer',
 ]
 
@@ -22,7 +21,6 @@ class Party:
 
     insurer_role = fields.One2Many('party.insurer', 'party', 'Insurer', size=1,
         states={'invisible': Not(STATES_COMPANY)})
-    broker_role = fields.One2Many('party.broker', 'party', 'Broker', size=1)
     customer_role = fields.One2Many('party.customer', 'party', 'Customer',
         size=1)
     complementary_data = fields.Dict('ins_product.complementary_data_def',
@@ -32,7 +30,6 @@ class Party:
     def _export_force_recreate(cls):
         result = super(Party, cls)._export_force_recreate()
         result.remove('insurer_role')
-        result.remove('broker_role')
         result.remove('customer_role')
         return result
 
@@ -44,9 +41,6 @@ class Party:
             if party.insurer_role:
                 res[party.id] += coop_string.get_field_as_summary(party,
                     'insurer_role', True, at_date, lang=lang)
-            if party.broker_role:
-                res[party.id] += coop_string.get_field_as_summary(party,
-                    'broker_role', True, at_date, lang=lang)
             if party.customer_role:
                 res[party.id] += coop_string.get_field_as_summary(party,
                     'broker_role', True, at_date, lang=lang)
@@ -65,16 +59,6 @@ class Insurer(Actor, model.CoopSQL):
     @classmethod
     def get_summary(cls, insurers, name=None, at_date=None, lang=None):
         return dict([(insurer.id, 'X') for insurer in insurers])
-
-
-class Broker(Actor, model.CoopSQL):
-    'Broker'
-
-    __name__ = 'party.broker'
-
-    @classmethod
-    def get_summary(cls, brokers, name=None, at_date=None, lang=None):
-        return dict([(broker.id, 'X') for broker in brokers])
 
 
 class Customer(Actor, model.CoopSQL):

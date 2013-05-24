@@ -68,6 +68,7 @@
         <page string="Roles" id="role">
             <group id="role_group" colspan="4">
             </group>
+            <notebook/>
         </page>
     </xpath>
     <xpath expr="/form/notebook/page/field[@name='categories']" position="replace"/>

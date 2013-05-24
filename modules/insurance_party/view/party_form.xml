@@ -6,24 +6,18 @@
         <field name="is_customer" xexpand="0" width="25"/>
         <label name="is_insurer"/>
         <field name="is_insurer" xexpand="0" width="25"/>
-        <label name="is_broker"/>
-        <field name="is_broker" xexpand="0" width="25"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='role']/group[@id='role_group']"
-        position="after">
-        <group id="customer" colspan="4" yexpand="1" yfill="1"
+    <xpath expr="/form/notebook/page[@id='role']/notebook"
+        position="inside">
+        <page id="customer" string="Customer"
             states="{'invisible': Bool(~Eval('is_customer'))}">
             <field name="customer_role" mode="form"/>
-        </group>
-        <group id="insurer" colspan="4" yexpand="1" yfill="1"
+        </page>
+        <page id="insurer" string="Insurer"
             states="{'invisible': Bool(~Eval('is_insurer'))}">
             <field name="insurer_role" mode="form"
                 view_ids="insurance_party.insurer_view_form_hosted"/>
-            </group>
-            <group id="broker" colspan="4" yexpand="1" yfill="1"
-                states="{'invisible': Bool(~Eval('is_broker'))}">
-                <field name="broker_role" mode="form"/>
-            </group>
+            </page>
         </xpath>
         <xpath expr="/form/notebook" position="inside">
             <page string="Complementary Data" id="compl_data">

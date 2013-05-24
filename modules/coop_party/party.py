@@ -103,14 +103,12 @@ class Party(model.CoopSQL):
             if not hasattr(field, 'model_name'):
                 continue
             is_actor_var_name = Party.get_is_actor_var_name(field_name)
-            searcher = None
-            if not field_name.endswith('_role'):
-                searcher = 'search_is_actor'
             field = fields.Function(
                 fields.Boolean(
                     field.string, on_change=[field_name, is_actor_var_name],
                     states=field.states),
-                'get_is_actor', setter='set_is_actor', searcher=searcher)
+                'get_is_actor', setter='set_is_actor',
+                searcher='search_is_actor')
             setattr(cls, is_actor_var_name, field)
 
             def get_on_change(name):
