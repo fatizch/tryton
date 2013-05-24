@@ -631,7 +631,8 @@ class Code(ModelSQL, ModelView):
                 self.on_model.model, target.__name__))
 
         result = getattr(target, self.method_name)()
-        if not isinstance(result, (list, tuple)) and result is True:
+        if (not result or
+                not isinstance(result, (list, tuple)) and result is True):
             return
         res, errs = result
         if not res or errs:

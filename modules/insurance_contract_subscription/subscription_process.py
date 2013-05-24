@@ -243,10 +243,6 @@ class ContractSubscription(CoopProcessFramework):
 
         return result, errs
 
-    def init_billing_manager(self):
-        super(ContractSubscription, self).init_billing_manager()
-        return True, ()
-
     def calculate_prices(self):
         prices, errs = self.calculate_prices_at_all_dates()
 
