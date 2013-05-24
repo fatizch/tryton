@@ -1,6 +1,7 @@
 import copy
 
 from trytond.pool import Pool, PoolMeta
+from trytond.rpc import RPC
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
@@ -92,6 +93,7 @@ class ContractSubscription(CoopProcessFramework):
             'need_option': 'At least one option must be selected for %s',
             'need_covered': 'There must be at least one covered element',
         })
+        cls.__rpc__.update({'get_allowed_payment_methods': RPC(instantiate=0)})
 
     def on_change_with_subscriber_desc(self, name=None):
         res = ''
@@ -178,9 +180,9 @@ class ContractSubscription(CoopProcessFramework):
 
     def get_payment_method(self, name):
         if (hasattr(self, 'billing_managers') and self.billing_managers):
-            return self.billing_managers[0].payment_method.id
+            return str(self.billing_managers[0].payment_method.id)
         if (hasattr(self, 'offered') and self.offered):
-            return self.offered.get_default_payment_method().id
+            return str(self.offered.get_default_payment_method().id)
 
     @classmethod
     def default_subscriber_kind(cls):
