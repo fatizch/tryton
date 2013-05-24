@@ -71,7 +71,7 @@ class DynamicButtonDict(dict):
         # Names starting sith the allowed prefix are in, no matter what !
         if name.startswith(self.allowed_prefix):
             return True
-        return super(AllowRPCDict, self).__contains__(name)
+        return super(DynamicButtonDict, self).__contains__(name)
 
 
 class ClassAttr(PoolMeta):
