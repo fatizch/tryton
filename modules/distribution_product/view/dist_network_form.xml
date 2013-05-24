@@ -3,7 +3,7 @@
     <xpath expr="/form/notebook" position="inside">
         <page id="product" string="Products">
             <field name="commercial_products" colspan="4"/>
-            <field name="top_level_com_products" colspan="4"/>
+            <field name="parent_com_products" colspan="4"/>
         </page>
     </xpath>
 </data>

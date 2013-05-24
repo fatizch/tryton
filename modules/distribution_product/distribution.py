@@ -18,24 +18,20 @@ class DistributionNetwork():
     commercial_products = fields.Many2Many(
         'distribution.dist_network-com_product', 'dist_network', 'com_product',
         'Commercial Products')
-    top_level_com_products = fields.Function(
+    parent_com_products = fields.Function(
         fields.Many2Many('distribution.commercial_product', None, None,
             'Top Level Commercial Products'),
-        'get_top_level_com_products_id')
+        'get_parent_com_products_id')
 
-    def get_top_level_com_products(self):
+    def get_parent_com_products_id(self, name):
+        parents = self.__class__.search([
+                ('left', '<', self.left), ('right', '>', self.right),
+                ('commercial_products', '>', 0),
+                ])
         res = []
-        if self.commercial_products:
-            res.extend(self.commercial_products)
-        if self.top_level:
-            res.extend(self.top_level.get_top_level_com_products())
-        return res
-
-    def get_top_level_com_products_id(self, name):
-        if self.top_level:
-            return [x.id for x in self.top_level.get_top_level_com_products()]
-        else:
-            return []
+        for x in parents:
+            res.extend(x.commercial_products)
+        return [x.id for x in res]
 
 
 class CommercialProduct(model.CoopSQL, model.CoopView):

@@ -4,9 +4,9 @@
     <field name="name"/>
     <notebook>
         <page id="hierarchy" string="Hierarchy">
-            <label name="top_level"/>
-            <field name="top_level"/>
-            <field name="sub_levels" colspan="4"/>
+            <label name="parent"/>
+            <field name="parent"/>
+            <field name="childs" colspan="4"/>
         </page>
     </notebook>
 </form>

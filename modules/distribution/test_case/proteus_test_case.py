@@ -13,7 +13,7 @@ def create_dist_network(cfg_dict, name, parent=None,
     res = cfg_dict['DistributionNetwork']()
     res.name = name
     if parent:
-        res.top_level = parent
+        res.parent = parent
     res.save()
     if not children_name or not children_nb:
         return res
@@ -30,14 +30,14 @@ def create_dist_networks(cfg_dict):
     root = create_dist_network(cfg_dict, 'Root')
     internal_network = create_dist_network(cfg_dict,
         'Internal Network', root, 'Region', random.randint(1, 3))
-    for region in internal_network.sub_levels:
+    for region in internal_network.childs:
         for i in range(1, random.randint(1, 5)):
             name = '%s : Dept %s' % (region.name, i)
             create_dist_network(cfg_dict, name, region,
                 '%s Agency' % name, random.randint(1, 10))
     partner = create_dist_network(cfg_dict, 'Commercials Partners',
         root, 'Partner', random.randint(1, 5))
-    for sub_partner in partner.sub_levels:
+    for sub_partner in partner.childs:
         for i in range(1, random.randint(1, 5)):
             name = '%s : Dept %s' % (sub_partner.name, i)
             create_dist_network(cfg_dict, name, sub_partner,

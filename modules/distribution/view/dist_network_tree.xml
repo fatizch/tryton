@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tree string="Distribution Network">
     <field name="name"/>
-    <field name="top_level" tree_invisible="1"/>
-    <field name="sub_levels" tree_invisible="1"/>
+    <field name="parent" tree_invisible="1"/>
+    <field name="childs" tree_invisible="1"/>
 </tree>

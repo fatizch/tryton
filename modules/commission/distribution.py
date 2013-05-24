@@ -16,27 +16,23 @@ class DistributionNetwork():
 
     commission_plans = fields.Many2Many('distribution.dist_network-plan',
         'dist_network', 'com_plan', 'Commission Plans')
-    top_level_com_plans = fields.Function(
+    parent_com_plans = fields.Function(
         fields.Many2Many('commission.commission_plan', None, None,
             'Top Level Commission Plans'),
-        'get_top_level_com_plans_id')
+        'get_parent_com_plans_id')
     brokers = fields.Many2Many('distribution.dist_network-broker',
         'dist_network', 'broker', 'Brokers',
         domain=[('is_broker', '=', True)])
 
-    def get_top_level_com_plans(self):
+    def get_parent_com_plans_id(self, name):
+        parents = self.__class__.search([
+                ('left', '<', self.left), ('right', '>', self.right),
+                ('commission_plans', '>', 0),
+                ])
         res = []
-        if self.commission_plans:
-            res.extend(self.commission_plans)
-        if self.top_level:
-            res.extend(self.top_level.get_top_level_com_plans())
-        return res
-
-    def get_top_level_com_plans_id(self, name):
-        if self.top_level:
-            return [x.id for x in self.top_level.get_top_level_com_plans()]
-        else:
-            return []
+        for x in parents:
+            res.extend(x.commission_plans)
+        return [x.id for x in res]
 
 class DistributionNetworkComPlanRelation(model.CoopSQL):
     'Relation Distribution Network - Commission Plan'

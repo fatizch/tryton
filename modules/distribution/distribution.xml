@@ -13,14 +13,14 @@
         <record model="ir.ui.view" id="dist_network_view_tree">
             <field name="model">distribution.dist_network</field>
             <field name="type">tree</field>
-            <field name="field_childs">sub_levels</field>
+            <field name="field_childs">childs</field>
             <field name="name">dist_network_tree</field>
         </record>
 
         <record model="ir.action.act_window" id="act_dist_network_form">
             <field name="name">Distribution Networks</field>
             <field name="res_model">distribution.dist_network</field>
-            <field name="domain">[('top_level', '=', False)]</field>
+            <field name="domain">[('parent', '=', False)]</field>
         </record>
 
         <record model="ir.action.act_window.view" id="act_dist_network_tree_view">
