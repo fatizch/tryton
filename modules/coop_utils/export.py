@@ -459,6 +459,7 @@ class ExportImportMixin(Model):
                 working_instance = created[key[0]][key[1]]
                 # print utils.format_data(working_instance)
                 all_done = True
+                clean_keys = []
                 for field_name, field_value in value.iteritems():
                     if isinstance(field_value[1], list):
                         to_append = []
@@ -476,24 +477,28 @@ class ExportImportMixin(Model):
                             existing += to_append
                             setattr(working_instance, field_name, existing)
                     else:
-                        value = created[field_value[0]][field_value[1]]
-                        if not (hasattr(value, 'id') and value.id):
+                        the_value = created[field_value[0]][field_value[1]]
+                        if not (hasattr(the_value, 'id') and the_value.id):
                             all_done = False
                             continue
-                        setattr(working_instance, field_name, value)
+                        setattr(working_instance, field_name, the_value)
+                        clean_keys.append(field_name)
+                for elem in clean_keys:
+                    value.pop(elem, '')
                 try:
                     working_instance.save()
                     if all_done:
                         to_del.append(idx)
+                    idx += 1
                 except UserError, e:
                     cur_errs.append(e.args)
+                    idx += 1
                     continue
                 except Exception:
                     logging.getLogger('export_import').debug(
                         'Error trying to save \n%s' % utils.format_data(
                             working_instance))
                     raise
-                idx += 1
             for k in sorted(to_del, reverse=True):
                 relink.pop(k)
             if len(to_del) == 0:
