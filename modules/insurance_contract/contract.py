@@ -1,9 +1,9 @@
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If, Or
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, fields, abstract
-from trytond.modules.coop_utils import utils, date, business
+from trytond.modules.coop_utils import utils, business
 from trytond.modules.coop_utils import coop_string
 from trytond.modules.contract import contract
 from trytond.modules.insurance_product.product import DEF_CUR_DIG
@@ -239,39 +239,18 @@ class InsuranceSubscribedCoverage(contract.SubscribedCoverage):
             return []
 
 
-class StatusHistory(model.CoopSQL, model.CoopView):
+class StatusHistory():
     'Status History'
 
-    __name__ = 'ins_contract.status_history'
-
-    reference = fields.Reference('Reference', 'get_possible_reference')
-    status = fields.Selection(contract.OPTIONSTATUS, 'Status',
-        selection_change_with=['reference'])
-    sub_status = fields.Char('Sub Status')
-    start_date = fields.Date('Start Date')
-    end_date = fields.Date('End Date')
+    __metaclass__ = PoolMeta
+    __name__ = 'contract.status_history'
 
     @classmethod
     def get_possible_reference(cls):
-        res = []
+        res = super(StatusHistory, cls).get_possible_reference()
         res.append(('ins_contract.contract', 'Contract'))
         res.append(('ins_contract.option', 'Option'))
         return res
-
-    def init_from_reference(self, reference, to_status, at_date,
-            sub_status=None):
-        self.status = to_status
-        self.start_date = at_date
-        self.sub_status = sub_status
-        if not reference.status_history:
-            return
-        previous_status = reference.status_history[-1]
-        if not previous_status:
-            return
-        previous_status.end_date = max(date.add_day(at_date, -1),
-            previous_status.start_date)
-        if previous_status == 'active':
-            reference.end_date = previous_status.end_date
 
 
 class ContractHistory(model.ObjectHistory):

@@ -2,6 +2,19 @@
 <tryton>
     <data>
         <!--################################################################ -->
+        <!-- Status History -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="status_history_view_form">
+            <field name="model">contract.status_history</field>
+            <field name="type">form</field>
+            <field name="name">status_history_form</field>
+        </record>
+        <record model="ir.ui.view" id="status_history_view_tree">
+            <field name="model">contract.status_history</field>
+            <field name="type">tree</field>
+            <field name="name">status_history_tree</field>
+        </record>
+        <!--################################################################ -->
         <!-- Contract Screens -->
         <!--################################################################ -->
         <!-- Tree view for contract -->

@@ -1,6 +1,6 @@
 import copy
 
-from trytond.modules.coop_utils import model, fields
+from trytond.modules.coop_utils import model, fields, date
 from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import utils
@@ -19,9 +19,42 @@ OPTIONSTATUS = CONTRACTSTATUSES + [
 ]
 
 __all__ = [
+    'StatusHistory',
     'Contract',
     'SubscribedCoverage',
     ]
+
+
+class StatusHistory(model.CoopSQL, model.CoopView):
+    'Status History'
+
+    __name__ = 'contract.status_history'
+
+    reference = fields.Reference('Reference', 'get_possible_reference')
+    status = fields.Selection(OPTIONSTATUS, 'Status',
+        selection_change_with=['reference'])
+    sub_status = fields.Char('Sub Status')
+    start_date = fields.Date('Start Date')
+    end_date = fields.Date('End Date')
+
+    @classmethod
+    def get_possible_reference(cls):
+        return []
+
+    def init_from_reference(self, reference, to_status, at_date,
+            sub_status=None):
+        self.status = to_status
+        self.start_date = at_date
+        self.sub_status = sub_status
+        if not reference.status_history:
+            return
+        previous_status = reference.status_history[-1]
+        if not previous_status:
+            return
+        previous_status.end_date = max(date.add_day(at_date, -1),
+            previous_status.start_date)
+        if previous_status == 'active':
+            reference.end_date = previous_status.end_date
 
 
 class Subscribed(model.CoopView):
@@ -49,8 +82,6 @@ class Subscribed(model.CoopView):
     # Management date is the date at which the company started to manage the
     # contract. Default value is start_date
     start_management_date = fields.Date('Management Date')
-    status_history = fields.One2Many(
-        'ins_contract.status_history', 'reference', 'Status History')
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency'),
@@ -58,6 +89,8 @@ class Subscribed(model.CoopView):
     currency_digits = fields.Function(
         fields.Integer('Currency Digits'),
         'get_currency_digits')
+    status_history = fields.One2Many(
+        'contract.status_history', 'reference', 'Status History')
 
     @classmethod
     def __setup__(cls):
@@ -65,11 +98,6 @@ class Subscribed(model.CoopView):
         model_name, cls.offered.string = cls.get_offered_name()
         cls.offered.model_name = model_name
         super(Subscribed, cls).__setup__()
-
-    @classmethod
-    def delete_status_history(cls, entities):
-        utils.delete_reference_backref(entities, 'ins_contract.status_history',
-            cls.status_history.field)
 
     @staticmethod
     def default_start_date():
@@ -425,11 +453,6 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
     def get_offered_name(cls):
         #TODO : to replace with generic product
         return 'ins_product.coverage', 'Coverage'
-
-    @classmethod
-    def delete(cls, entities):
-        cls.delete_status_history(entities)
-        super(SubscribedCoverage, cls).delete(entities)
 
     def get_coverage(self):
         return self.offered
