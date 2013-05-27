@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tree string="Payment Methods">
+  <field name="code"/>
+  <field name="name"/>
+  <field name="payment_mode"/>
+  <field name="payment_term"/>
+</tree>

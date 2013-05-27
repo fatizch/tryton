@@ -1,0 +1,167 @@
+<?xml version="1.0"?>
+<tryton>
+  <data>
+    <!--################################################################ -->
+    <!-- Payment Methods -->
+    <!--################################################################ -->
+    <record model="ir.ui.view" id="payment_method_form">
+      <field name="model">billing.payment_method</field>
+      <field name="type">form</field>
+      <field name="name">payment_method_form</field>
+    </record>
+    <record model="ir.ui.view" id="payment_method_tree">
+      <field name="model">billing.payment_method</field>
+      <field name="type">tree</field>
+      <field name="name">payment_method_tree</field>
+    </record>
+    <record model="ir.action.act_window" id="act_payment_method">
+      <field name="name">Payment Methods</field>
+      <field name="res_model">billing.payment_method</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_payment_method_view1">
+      <field name="sequence" eval="16"/>
+      <field name="view" ref="payment_method_tree"/>
+      <field name="act_window" ref="act_payment_method"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_payment_method_view2">
+      <field name="sequence" eval="16"/>
+      <field name="view" ref="payment_method_form"/>
+      <field name="act_window" ref="act_payment_method"/>
+    </record>
+    <menuitem parent="insurance_product.menu_product_configuration" sequence="10" action="act_payment_method" id="menu_payment_method"/>
+    <!--################################################################ -->
+    <!-- Price Lines -->
+    <!--################################################################ -->
+    <record model="ir.ui.view" id="price_line_expandable_view_tree">
+      <field name="model">billing.price_line</field>
+      <field name="type">tree</field>
+      <field name="field_childs">child_lines</field>
+      <field name="name">price_line_expandable_tree</field>
+    </record>
+    <record model="ir.ui.view" id="price_line_view_tree">
+      <field name="model">billing.price_line</field>
+      <field name="type">tree</field>
+      <field name="name">price_line_tree</field>
+    </record>
+    <record model="ir.ui.view" id="price_line_view_form">
+      <field name="model">billing.price_line</field>
+      <field name="type">form</field>
+      <field name="name">price_line_form</field>
+    </record>
+    <!--################################################################ -->
+    <!-- Billing Manager -->
+    <!--################################################################ -->
+    <record model="ir.ui.view" id="billing_manager_view_form">
+      <field name="model">billing.billing_manager</field>
+      <field name="type">form</field>
+      <field name="name">billing_manager_form</field>
+    </record>
+    <record model="ir.ui.view" id="billing_manager_tree">
+      <field name="model">billing.billing_manager</field>
+      <field name="type">tree</field>
+      <field name="name">billing_manager_tree</field>
+    </record>
+    <!--################################################################-->
+    <!--                        Bill Line Tree                          -->
+    <!--################################################################-->
+    <record model="ir.ui.view" id="generic_line_tree_node_expandable">
+      <field name="model">billing.billing.generic_line</field>
+      <field name="type">tree</field>
+      <field name="name">generic_line_tree_node_expandable</field>
+      <field name="field_childs">node_childs</field>
+    </record>
+    <record model="ir.ui.view" id="generic_line_tree_flat">
+      <field name="model">billing.billing.generic_line</field>
+      <field name="type">tree</field>
+      <field name="name">generic_line_tree_flat</field>
+    </record>
+    <!--################################################################-->
+    <!--                           Bill Line Form                       -->
+    <!--################################################################-->
+    <record model="ir.ui.view" id="generic_line_form">
+      <field name="model">billing.billing.generic_line</field>
+      <field name="type">form</field>
+      <field name="name">generic_line_form</field>
+    </record>
+    <!-- View for the main menu and the event -->
+    <record model="ir.action.act_window" id="act_generic_line_form">
+      <field name="name">Bill Line</field>
+      <field name="res_model">billing.billing.generic_line</field>
+    </record>
+    <!-- View that connect the form in the tree with the specification -->
+    <record model="ir.action.act_window.view" id="act_generic_line_form_view1">
+      <field name="sequence" eval="10"/>
+      <field name="view" ref="generic_line_tree_flat"/>
+      <field name="act_window" ref="act_generic_line_form"/>
+    </record>
+    <!-- View for the edition or the Form of product -->
+    <record model="ir.action.act_window.view" id="act_generic_line_form_view2">
+      <field name="sequence" eval="20"/>
+      <field name="view" ref="generic_line_form"/>
+      <field name="act_window" ref="act_generic_line_form"/>
+    </record>
+    <!--################################################################-->
+    <!--                            Bill Tree                           -->
+    <!--################################################################-->
+    <record model="ir.ui.view" id="bill_tree">
+      <field name="model">billing.billing.bill</field>
+      <field name="type">tree</field>
+      <field name="name">bill_tree</field>
+    </record>
+    <!--################################################################-->
+    <!--                             Bill Form                          -->
+    <!--################################################################-->
+    <record model="ir.ui.view" id="bill_form">
+      <field name="model">billing.billing.bill</field>
+      <field name="type">form</field>
+      <field name="name">bill_form</field>
+    </record>
+    <!-- View for the main menu and the event -->
+    <record model="ir.action.act_window" id="act_bill_form">
+      <field name="name">Bill</field>
+      <field name="res_model">billing.billing.bill</field>
+    </record>
+    <!-- View that connect the form in the tree with the specification -->
+    <record model="ir.action.act_window.view" id="act_bill_form_view1">
+      <field name="sequence" eval="10"/>
+      <field name="view" ref="bill_tree"/>
+      <field name="act_window" ref="act_bill_form"/>
+    </record>
+    <!-- View for the edition or the Form of product -->
+    <record model="ir.action.act_window.view" id="act_bill_form_view2">
+      <field name="sequence" eval="20"/>
+      <field name="view" ref="bill_form"/>
+      <field name="act_window" ref="act_bill_form"/>
+    </record>
+    <!--################################################################-->
+    <!-- Contract -->
+    <!--################################################################-->
+    <record model="ir.ui.view" id="contract_form">
+      <field name="model">ins_contract.contract</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="insurance_contract.contract_view_form"/>
+      <field name="name">contract_form</field>
+    </record>
+    <!--################################################################-->
+    <!-- Product Payment Method Relation -->
+    <!--################################################################-->
+    <record model="ir.ui.view" id="product-payment_method-relation_tree">
+      <field name="model">billing.product-payment_method-relation</field>
+      <field name="type">tree</field>
+      <field name="name">product-payment_method-relation_tree</field>
+    </record>
+    <!--################################################################-->
+    <!-- Product -->
+    <!--################################################################-->
+    <record model="ir.ui.view" id="product_form">
+      <field name="model">ins_product.product</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="insurance_product.product_view_form"/>
+      <field name="name">product_form</field>
+    </record>
+    <!--################################################################-->
+    <!--                           Menus                                -->
+    <!--################################################################-->
+    <menuitem parent="insurance_contract.menu_contract" sequence="50" id="menu_bill_view" icon="tryton-list" action="act_bill_form"/>
+  </data>
+</tryton>

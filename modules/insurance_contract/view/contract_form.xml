@@ -8,9 +8,6 @@
     </page>
   </xpath>
   <xpath expr="/form/notebook/page[@id='options']" position="after">
-    <page string="Billing" id="billing">
-      <field name="billing_manager" mode="form"/>
-    </page>
     <page string="Managing Entities" id="managing_entities">
       <field name="management" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
     </page>

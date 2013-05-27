@@ -32,7 +32,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     @classmethod
     def depending_modules(cls):
-        return ['life_contract', 'insurance_product']
+        return ['life_contract', 'insurance_product', 'billing']
 
     @classmethod
     def get_models(cls):
@@ -41,7 +41,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Party': 'party.party',
             'AddressKind': 'party.address_kind',
             'Sequence': 'ir.sequence',
-            'BillingProcess': 'ins_contract.billing_process',
+            # 'BillingProcess': 'billing.billing_process',
         }
 
     def test0001_testPersonCreation(self):

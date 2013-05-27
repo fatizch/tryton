@@ -21,6 +21,6 @@
   </group>
   <newline/>
   <group id="lines" yfill="1" yexpand="1">
-    <field name="detail_childs" yfill="1" yexpand="1" mode="tree" view_ids="insurance_contract.generic_line_tree_flat"/>
+    <field name="detail_childs" yfill="1" yexpand="1" mode="tree" view_ids="billing.generic_line_tree_flat"/>
   </group>
 </form>

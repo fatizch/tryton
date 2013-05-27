@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<form string="billing_manager" col="4">
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <label name="payment_method"/>
+    <field name="payment_method" colspan="3"/>
+</form>

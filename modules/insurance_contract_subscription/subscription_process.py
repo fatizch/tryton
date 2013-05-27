@@ -1,6 +1,7 @@
 import copy
 
 from trytond.pool import Pool, PoolMeta
+from trytond.rpc import RPC
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
@@ -72,6 +73,11 @@ class ContractSubscription(CoopProcessFramework):
             depends=['documents'],
             on_change_with=['documents']),
         'on_change_with_doc_received')
+    payment_method = fields.Function(
+        fields.Selection('get_allowed_payment_methods', 'Payment Method',
+            selection_change_with=['offered', 'start_date'],
+            on_change=['billing_manager', 'offered', 'start_date']),
+        'get_payment_method', 'setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -87,6 +93,7 @@ class ContractSubscription(CoopProcessFramework):
             'need_option': 'At least one option must be selected for %s',
             'need_covered': 'There must be at least one covered element',
         })
+        cls.__rpc__.update({'get_allowed_payment_methods': RPC(instantiate=0)})
 
     def on_change_with_subscriber_desc(self, name=None):
         res = ''
@@ -149,6 +156,33 @@ class ContractSubscription(CoopProcessFramework):
                 return False
 
         return True
+
+    def get_allowed_payment_methods(self):
+        if not (hasattr(self, 'offered') and self.offered):
+            return [('', '')]
+        result = []
+        for elem in self.offered.get_allowed_payment_methods():
+            result.append((str(elem.id), elem.name))
+        return result
+
+    def on_change_payment_method(self):
+        if not (hasattr(self, 'payment_method') and self.payment_method):
+            return {}
+        if not (hasattr(self, 'billing_managers') and self.billing_managers):
+            the_billing_manager = Pool().get('billing.billing_manager')()
+            the_billing_manager.start_date = self.start_date
+        else:
+            the_billing_manager = self.billing_managers[0]
+        the_billing_manager.payment_method = int(self.payment_method)
+        return {
+            'billing_managers': [abstract.WithAbstract.serialize_field(
+                the_billing_manager)]}
+
+    def get_payment_method(self, name):
+        if (hasattr(self, 'billing_managers') and self.billing_managers):
+            return str(self.billing_managers[0].payment_method.id)
+        if (hasattr(self, 'offered') and self.offered):
+            return str(self.offered.get_default_payment_method().id)
 
     @classmethod
     def default_subscriber_kind(cls):
@@ -243,17 +277,12 @@ class ContractSubscription(CoopProcessFramework):
 
         return result, errs
 
-    def init_billing_manager(self):
-        super(ContractSubscription, self).init_billing_manager()
-        return True, ()
-
     def calculate_prices(self):
         prices, errs = self.calculate_prices_at_all_dates()
 
         if errs:
             return False, errs
-        self.billing_manager[0].store_prices(prices)
-        self.billing_manager[0].save()
+        self.store_prices(prices)
 
         return True, ()
 

@@ -13,8 +13,8 @@
 	</group>
 	<newline/>
 	<field name="child_lines" mode="tree" yfill="1" yexpand="1" xfill="1" 
-		view_ids="insurance_contract.price_line_view_tree"/>
+		view_ids="billing.price_line_view_tree"/>
 	<field name="details" mode="tree" yfill="1"
 		yexpand="1" xfill="1"
-		view_ids="insurance_contract.price_line_view_tree"/>
+		view_ids="billing.price_line_view_tree"/>
 </form>
