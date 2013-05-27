@@ -1,4 +1,5 @@
 import pydot
+import inspect
 
 from trytond.model import ModelView, ModelSQL
 from trytond.wizard import Wizard, StateAction
@@ -600,6 +601,9 @@ class Code(ModelSQL, ModelView):
             ('step_after', 'After'),
             ('transition', 'Transition')],
         'Kind', states={'invisible': True})
+    source_code = fields.Function(
+        fields.Text('Source Code', on_change_with=['method_name', 'on_model']),
+        'on_change_with_source_code')
     on_model = fields.Many2One('ir.model', 'On Model')
     method_name = fields.Char('Method Name')
     parent_step = fields.Many2One(
@@ -637,6 +641,18 @@ class Code(ModelSQL, ModelView):
         res, errs = result
         if not res or errs:
             target.raise_user_error(errs)
+
+    def on_change_with_source_code(self, name=None):
+        if not (hasattr(self, 'method_name') and self.method_name):
+            return ''
+        if not (hasattr(self, 'on_model') and self.on_model):
+            return ''
+        try:
+            GoodModel = Pool().get(self.on_model.model)
+            func = getattr(GoodModel, self.method_name)
+            return ''.join(inspect.getsourcelines(func)[0])
+        except:
+            return 'Source Code unavailable'
 
 
 class StepTransition(ModelSQL, ModelView):
