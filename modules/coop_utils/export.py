@@ -268,7 +268,7 @@ class ExportImportMixin(Model):
                 values[field_name] = getattr(self, field_name)
         if force_key is None and from_field is None:
             export_result.append(values)
-            logging.getLogger('export_import').info(
+            logging.getLogger('export_import').debug(
                 'Successfully exported %s' % log_name)
         return values
 
@@ -544,7 +544,7 @@ class ExportImportMixin(Model):
                 log_name = instance.get_rec_name(None)
             except TypeError:
                 log_name = instance.get_rec_name([instance], None)[instance.id]
-            logging.getLogger('export_import').info(
+            logging.getLogger('export_import').debug(
                 'Successfully imported %s' % log_name)
 
 
