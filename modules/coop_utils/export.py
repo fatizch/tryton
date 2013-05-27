@@ -232,7 +232,7 @@ class ExportImportMixin(Model):
         except TypeError:
             log_name = self.get_rec_name([self], None)[self.id]
         if force_key is None and from_field is None:
-            logging.getLogger('export_import').info(
+            logging.getLogger('export_import').debug(
                 'Trying to export %s' % log_name)
         my_key = self._export_prepare(exported, force_key)
         values = {
