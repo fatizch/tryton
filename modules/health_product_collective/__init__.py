@@ -1,8 +1,8 @@
 from trytond.pool import Pool
-from .product import *
+# from .product import *
 
 
 def register():
     Pool.register(
-        GroupHealthCoverage,
+        # GroupHealthCoverage,
         module='health_product_collective', type_='model')
