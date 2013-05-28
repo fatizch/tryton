@@ -150,6 +150,11 @@
       <field name="type">tree</field>
       <field name="name">product-payment_method-relation_tree</field>
     </record>
+    <record model="ir.ui.view" id="product-payment_method-relation_form">
+      <field name="model">billing.product-payment_method-relation</field>
+      <field name="type">form</field>
+      <field name="name">product-payment_method-relation_form</field>
+    </record>
     <!--################################################################-->
     <!-- Product -->
     <!--################################################################-->

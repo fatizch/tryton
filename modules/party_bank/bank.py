@@ -62,6 +62,13 @@ class BankAccount(CoopSQL, CoopView):
                 'account_numbers', False, at_date, lang=lang)
         return res
 
+    @classmethod
+    def default_party(cls):
+        for_party = Transaction().context.get('for_party', None)
+        if not for_party:
+            return
+        return for_party
+
 
 class BankAccountNumber(CoopSQL, CoopView):
     'Bank account Number'

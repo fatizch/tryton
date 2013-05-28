@@ -73,10 +73,22 @@ class ContractSubscription(CoopProcessFramework):
             depends=['documents'],
             on_change_with=['documents']),
         'on_change_with_doc_received')
+    payment_bank_account = fields.Function(
+        fields.Many2One('party.bank_account', 'Payment Bank Account',
+            context={'for_party': Eval('subscriber', 0)},
+            depends=['payment_mode', 'billing_managers'],
+            domain=[('party', '=', Eval('subscriber'))],
+            states={'invisible': Eval('payment_mode') != 'direct_debit'},
+            on_change=['billing_managers', 'payment_bank_account']),
+        'get_payment_bank_account', 'setter_void')
+    payment_mode = fields.Function(
+        fields.Char('Payment Mode', states={'invisible': True}),
+        'get_payment_mode', 'setter_void')
     payment_method = fields.Function(
         fields.Selection('get_allowed_payment_methods', 'Payment Method',
             selection_change_with=['offered', 'start_date'],
-            on_change=['billing_manager', 'offered', 'start_date']),
+            depends=['billing_managers'], on_change=['billing_managers',
+                'offered', 'start_date', 'payment_mode', 'payment_method']),
         'get_payment_method', 'setter_void')
 
     @classmethod
@@ -168,21 +180,42 @@ class ContractSubscription(CoopProcessFramework):
     def on_change_payment_method(self):
         if not (hasattr(self, 'payment_method') and self.payment_method):
             return {}
-        if not (hasattr(self, 'billing_managers') and self.billing_managers):
-            the_billing_manager = Pool().get('billing.billing_manager')()
-            the_billing_manager.start_date = self.start_date
-        else:
-            the_billing_manager = self.billing_managers[0]
-        the_billing_manager.payment_method = int(self.payment_method)
+        PaymentMethod = Pool().get('billing.payment_method')
+        payment_method = PaymentMethod(int(self.payment_method))
         return {
-            'billing_managers': [abstract.WithAbstract.serialize_field(
-                the_billing_manager)]}
+            'payment_mode': payment_method.payment_mode,
+            'billing_managers': {
+                'update': [
+                    {'id': self.billing_managers[0].id,
+                    'payment_method': int(self.payment_method)}]}}
 
     def get_payment_method(self, name):
         if (hasattr(self, 'billing_managers') and self.billing_managers):
             return str(self.billing_managers[0].payment_method.id)
         if (hasattr(self, 'offered') and self.offered):
             return str(self.offered.get_default_payment_method().id)
+
+    def get_payment_mode(self, name):
+        if not (hasattr(self, 'payment_method') and self.payment_method):
+            return ''
+        PaymentMethod = Pool().get('billing.payment_method')
+        payment_method = PaymentMethod(int(self.payment_method))
+        return payment_method.payment_mode
+
+    def on_change_payment_bank_account(self):
+        if not (hasattr(self, 'payment_bank_account') and
+                self.payment_bank_account):
+            return {}
+        return {
+            'billing_managers': {'update': [{'id': self.billing_managers[0].id,
+                'payment_bank_account': self.payment_bank_account.id}]}}
+
+    def get_payment_bank_account(self, name):
+        if (hasattr(self, 'billing_managers') and self.billing_managers):
+            the_billing_manager = self.billing_managers[0]
+            if (hasattr(the_billing_manager, 'payment_bank_account')
+                    and the_billing_manager.payment_bank_account):
+                return the_billing_manager.payment_bank_account.id
 
     @classmethod
     def default_subscriber_kind(cls):

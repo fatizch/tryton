@@ -3,6 +3,7 @@ import datetime
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateTransition, StateView, Button
+from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import model, fields, utils, date, abstract
 from trytond.modules.coop_utils import export
@@ -206,6 +207,18 @@ class BillingManager(model.CoopSQL, model.CoopView):
     end_date = fields.Date('End Date')
     payment_method = fields.Many2One('billing.payment_method',
         'Payment Method', required=True)
+    payment_mode = fields.Function(
+        fields.Char('Payment Mode', states={'invisible': True},
+            on_change_with=['payment_method']),
+        'on_change_with_payment_mode')
+    payment_bank_account = fields.Many2One('party.bank_account',
+        'Payment Bank Account', depends=['payment_mode'],
+        states={'invisible': Eval('payment_mode') != 'direct_debit'})
+
+    def on_change_with_payment_mode(self, name=None):
+        if not (hasattr(self, 'payment_method') and self.payment_method):
+            return ''
+        return self.payment_method.payment_mode
 
     def create_price_list(self, start_date, end_date):
         dated_prices = [

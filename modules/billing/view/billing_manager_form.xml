@@ -6,4 +6,7 @@
     <field name="end_date"/>
     <label name="payment_method"/>
     <field name="payment_method" colspan="3"/>
+    <label name="payment_bank_account"/>
+    <field name="payment_bank_account" colspan="3"/>
+    <field name="payment_mode"/>
 </form>
