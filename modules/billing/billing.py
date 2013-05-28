@@ -3,11 +3,12 @@ import datetime
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateTransition, StateView, Button
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If
 
 from trytond.modules.coop_utils import model, fields, utils, date, abstract
 from trytond.modules.coop_utils import export
 from trytond.modules.insurance_product import product
+from trytond.modules.insurance_contract.contract import IS_PARTY
 
 __all__ = [
     'PaymentMethod',
@@ -652,6 +653,13 @@ class CoveredElement():
 
     __metaclass__ = PoolMeta
     __name__ = 'ins_contract.covered_element'
+
+    indemnification_bank_account = fields.Many2One('party.bank_account',
+        'Indemnification Bank Account', depends=['contract'],
+        domain=[
+            ['OR',
+                ('party', '=', Eval('_parent_contract', {}).get('subscriber')),
+                If(IS_PARTY, ('party', '=', Eval('party', 0)), ())]])
 
     def get_name_for_billing(self):
         return self.get_rec_name('billing')
