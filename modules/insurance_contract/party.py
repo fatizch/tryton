@@ -19,5 +19,5 @@ class Party:
         'party', 'Covered Elements')
 
     def get_subscribed_contracts(self):
-        Contract = Pool().get('ins_contract.contract')
+        Contract = Pool().get('contract.contract')
         return Contract.search(['subscriber', '=', self.id])

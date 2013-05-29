@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -18,11 +18,11 @@ msgctxt "error:ins_contract.billing_manager:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_contract.contract.history:"
+msgctxt "error:contract.contract.history:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_contract.contract:"
+msgctxt "error:contract.contract:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -54,7 +54,7 @@ msgctxt "error:ins_contract.management_role:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:ins_contract.option:"
+msgctxt "error:contract.subscribed_option:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -426,167 +426,167 @@ msgctxt "field:ins_contract.billing_process.process_state,the_bill_str:"
 msgid "Jsonthe_bill"
 msgstr ""
 
-msgctxt "field:ins_contract.contract,addresses:"
+msgctxt "field:contract.contract,addresses:"
 msgid "Addresses"
 msgstr "Adresses"
 
-msgctxt "field:ins_contract.contract,billing_manager:"
+msgctxt "field:contract.contract,billing_manager:"
 msgid "Billing Manager"
 msgstr "Cotisation"
 
-msgctxt "field:ins_contract.contract,complementary_data:"
+msgctxt "field:contract.contract,complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:ins_contract.contract,contact:"
+msgctxt "field:contract.contract,contact:"
 msgid "Contact"
 msgstr "Contact"
 
-msgctxt "field:ins_contract.contract,contract_history:"
+msgctxt "field:contract.contract,contract_history:"
 msgid "Contract History"
 msgstr "Historique de Contrat"
 
-msgctxt "field:ins_contract.contract,contract_number:"
+msgctxt "field:contract.contract,contract_number:"
 msgid "Contract Number"
 msgstr "Numéro de Contrat"
 
-msgctxt "field:ins_contract.contract,covered_elements:"
+msgctxt "field:contract.contract,covered_elements:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
 
-msgctxt "field:ins_contract.contract,create_date:"
+msgctxt "field:contract.contract,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_contract.contract,create_uid:"
+msgctxt "field:contract.contract,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_contract.contract,currency:"
+msgctxt "field:contract.contract,currency:"
 msgid "Currency"
 msgstr "Devises"
 
-msgctxt "field:ins_contract.contract,currency_digits:"
+msgctxt "field:contract.contract,currency_digits:"
 msgid "Currency Digits"
 msgstr "Nbre de chiffres après la virgule"
 
-msgctxt "field:ins_contract.contract,current_policy_owner:"
+msgctxt "field:contract.contract,current_policy_owner:"
 msgid "Current Policy Owner"
 msgstr ""
 
-msgctxt "field:ins_contract.contract,current_state:"
+msgctxt "field:contract.contract,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
 
-msgctxt "field:ins_contract.contract,documents:"
+msgctxt "field:contract.contract,documents:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "field:ins_contract.contract,end_date:"
+msgctxt "field:contract.contract,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_contract.contract,id:"
+msgctxt "field:contract.contract,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_contract.contract,is_used:"
+msgctxt "field:contract.contract,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-msgctxt "field:ins_contract.contract,management:"
+msgctxt "field:contract.contract,management:"
 msgid "Management Roles"
 msgstr "Gestionnaires"
 
-msgctxt "field:ins_contract.contract,master:"
+msgctxt "field:contract.contract,master:"
 msgid "Master"
 msgstr "Maître"
 
-msgctxt "field:ins_contract.contract,offered:"
+msgctxt "field:contract.contract,offered:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "field:ins_contract.contract,options:"
+msgctxt "field:contract.contract,options:"
 msgid "Options"
 msgstr "Garanties"
 
-msgctxt "field:ins_contract.contract,rec_name:"
+msgctxt "field:contract.contract,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_contract.contract,start_date:"
+msgctxt "field:contract.contract,start_date:"
 msgid "Effective Date"
 msgstr "Date d'Effet"
 
-msgctxt "field:ins_contract.contract,start_management_date:"
+msgctxt "field:contract.contract,start_management_date:"
 msgid "Management Date"
 msgstr "Date de Début de Gestion"
 
-msgctxt "field:ins_contract.contract,status:"
+msgctxt "field:contract.contract,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:ins_contract.contract,status_history:"
+msgctxt "field:contract.contract,status_history:"
 msgid "Status History"
 msgstr "Historique des Statuts"
 
-msgctxt "field:ins_contract.contract,subscriber:"
+msgctxt "field:contract.contract,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-msgctxt "field:ins_contract.contract,summary:"
+msgctxt "field:contract.contract,summary:"
 msgid "Summary"
 msgstr "Synthèse"
 
-msgctxt "field:ins_contract.contract,write_date:"
+msgctxt "field:contract.contract,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_contract.contract,write_uid:"
+msgctxt "field:contract.contract,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_contract.contract.history,create_date:"
+msgctxt "field:contract.contract.history,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_contract.contract.history,create_uid:"
+msgctxt "field:contract.contract.history,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_contract.contract.history,date:"
+msgctxt "field:contract.contract.history,date:"
 msgid "Change Date"
 msgstr "Date du Changement"
 
-msgctxt "field:ins_contract.contract.history,from_object:"
+msgctxt "field:contract.contract.history,from_object:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:ins_contract.contract.history,id:"
+msgctxt "field:contract.contract.history,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_contract.contract.history,is_used:"
+msgctxt "field:contract.contract.history,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-msgctxt "field:ins_contract.contract.history,rec_name:"
+msgctxt "field:contract.contract.history,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_contract.contract.history,status:"
+msgctxt "field:contract.contract.history,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:ins_contract.contract.history,user:"
+msgctxt "field:contract.contract.history,user:"
 msgid "User"
 msgstr "Utilisateur"
 
-msgctxt "field:ins_contract.contract.history,write_date:"
+msgctxt "field:contract.contract.history,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_contract.contract.history,write_uid:"
+msgctxt "field:contract.contract.history,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -986,75 +986,75 @@ msgctxt "field:ins_contract.management_role,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_contract.option,contract:"
+msgctxt "field:contract.subscribed_option,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:ins_contract.option,covered_data:"
+msgctxt "field:contract.subscribed_option,covered_data:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
 
-msgctxt "field:ins_contract.option,create_date:"
+msgctxt "field:contract.subscribed_option,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_contract.option,create_uid:"
+msgctxt "field:contract.subscribed_option,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_contract.option,currency:"
+msgctxt "field:contract.subscribed_option,currency:"
 msgid "Currency"
 msgstr "Devises"
 
-msgctxt "field:ins_contract.option,currency_digits:"
+msgctxt "field:contract.subscribed_option,currency_digits:"
 msgid "Currency Digits"
 msgstr "Nbre de chiffres après la virgule"
 
-msgctxt "field:ins_contract.option,end_date:"
+msgctxt "field:contract.subscribed_option,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_contract.option,id:"
+msgctxt "field:contract.subscribed_option,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_contract.option,is_used:"
+msgctxt "field:contract.subscribed_option,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-msgctxt "field:ins_contract.option,offered:"
+msgctxt "field:contract.subscribed_option,offered:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "field:ins_contract.option,rec_name:"
+msgctxt "field:contract.subscribed_option,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_contract.option,start_date:"
+msgctxt "field:contract.subscribed_option,start_date:"
 msgid "Effective Date"
 msgstr "Date d'Effet"
 
-msgctxt "field:ins_contract.option,start_management_date:"
+msgctxt "field:contract.subscribed_option,start_management_date:"
 msgid "Management Date"
 msgstr "Date de Début de Gestion"
 
-msgctxt "field:ins_contract.option,status:"
+msgctxt "field:contract.subscribed_option,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:ins_contract.option,status_history:"
+msgctxt "field:contract.subscribed_option,status_history:"
 msgid "Status History"
 msgstr "Historique des Statuts"
 
-msgctxt "field:ins_contract.option,summary:"
+msgctxt "field:contract.subscribed_option,summary:"
 msgid "Summary"
 msgstr "Synthèse"
 
-msgctxt "field:ins_contract.option,write_date:"
+msgctxt "field:contract.subscribed_option,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_contract.option,write_uid:"
+msgctxt "field:contract.subscribed_option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -1423,11 +1423,11 @@ msgctxt "model:ins_contract.billing_process.process_state,name:"
 msgid "Billing Process State"
 msgstr ""
 
-msgctxt "model:ins_contract.contract,name:"
+msgctxt "model:contract.contract,name:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "model:ins_contract.contract.history,name:"
+msgctxt "model:contract.contract.history,name:"
 msgid "Contract History"
 msgstr "Historique de Contrat"
 
@@ -1463,7 +1463,7 @@ msgctxt "model:ins_contract.management_role,name:"
 msgid "Management Role"
 msgstr "Gestionnaire"
 
-msgctxt "model:ins_contract.option,name:"
+msgctxt "model:contract.subscribed_option,name:"
 msgid "Subscribed Coverage"
 msgstr "Garantie"
 
@@ -1599,31 +1599,31 @@ msgctxt "selection:ins_contract.billing_process.process_state,cur_action:"
 msgid "suspend"
 msgstr "Suspendre"
 
-msgctxt "selection:ins_contract.contract,master:"
+msgctxt "selection:contract.contract,master:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:ins_contract.contract,master:"
+msgctxt "selection:contract.contract,master:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "selection:ins_contract.contract,master:"
+msgctxt "selection:contract.contract,master:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "selection:ins_contract.contract,status:"
+msgctxt "selection:contract.contract,status:"
 msgid "Active"
 msgstr "Actif"
 
-msgctxt "selection:ins_contract.contract,status:"
+msgctxt "selection:contract.contract,status:"
 msgid "Hold"
 msgstr "Suspendre"
 
-msgctxt "selection:ins_contract.contract,status:"
+msgctxt "selection:contract.contract,status:"
 msgid "Quote"
 msgstr "Devis"
 
-msgctxt "selection:ins_contract.contract,status:"
+msgctxt "selection:contract.contract,status:"
 msgid "Terminated"
 msgstr "Terminé"
 
@@ -1703,23 +1703,23 @@ msgctxt "selection:ins_contract.management_protocol,kind:"
 msgid "Contract Manager"
 msgstr "Gestionnaire de contrat"
 
-msgctxt "selection:ins_contract.option,status:"
+msgctxt "selection:contract.subscribed_option,status:"
 msgid "Active"
 msgstr "Actif"
 
-msgctxt "selection:ins_contract.option,status:"
+msgctxt "selection:contract.subscribed_option,status:"
 msgid "Hold"
 msgstr "Suspendre"
 
-msgctxt "selection:ins_contract.option,status:"
+msgctxt "selection:contract.subscribed_option,status:"
 msgid "Quote"
 msgstr "Devis"
 
-msgctxt "selection:ins_contract.option,status:"
+msgctxt "selection:contract.subscribed_option,status:"
 msgid "Refused"
 msgstr "Refusé"
 
-msgctxt "selection:ins_contract.option,status:"
+msgctxt "selection:contract.subscribed_option,status:"
 msgid "Terminated"
 msgstr "Terminé"
 
@@ -1859,47 +1859,47 @@ msgctxt "view:ins_contract.billing_process.bill_parameters:"
 msgid "Bill Parameters"
 msgstr "Paramètre de Cotisation"
 
-msgctxt "view:ins_contract.contract.history:"
+msgctxt "view:contract.contract.history:"
 msgid "Contract History"
 msgstr "Historique de Contrat"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Addresses"
 msgstr "Adresses"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Billing"
 msgstr "Cotisation"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "History"
 msgstr "Historique"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Managing Entities"
 msgstr "Délégataires"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Options"
 msgstr "Garanties"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "contract"
 msgstr "contrat"
 
@@ -1951,15 +1951,15 @@ msgctxt "view:ins_contract.management_role:"
 msgid "Manager"
 msgstr ""
 
-msgctxt "view:ins_contract.option:"
+msgctxt "view:contract.subscribed_option:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
 
-msgctxt "view:ins_contract.option:"
+msgctxt "view:contract.subscribed_option:"
 msgid "Status History"
 msgstr "Historique des Statuts"
 
-msgctxt "view:ins_contract.option:"
+msgctxt "view:contract.subscribed_option:"
 msgid "option"
 msgstr "Garantie"
 

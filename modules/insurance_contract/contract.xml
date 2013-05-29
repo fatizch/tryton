@@ -6,7 +6,7 @@
         <!--################################################################ -->
         <!-- Tree view for contract -->
         <record model="ir.ui.view" id="contract_view_tree">
-            <field name="model">ins_contract.contract</field>
+            <field name="model">contract.contract</field>
             <field name="type">tree</field>
             <field name="inherit" ref="contract.contract_view_tree"/>
             <!-- <field name="name">contract_tree</field> -->
@@ -14,7 +14,7 @@
         </record>
         <!-- form view -->
         <record model="ir.ui.view" id="contract_view_form">
-            <field name="model">ins_contract.contract</field>
+            <field name="model">contract.contract</field>
             <field name="type">form</field>
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="name">contract_form</field>
@@ -22,7 +22,7 @@
         <!-- View for the main menu and the event -->
         <record model="ir.action.act_window" id="act_contract_form">
             <field name="name">Contract</field>
-            <field name="res_model">ins_contract.contract</field>
+            <field name="res_model">contract.contract</field>
         </record>
         <!-- View that connect the form in the tree with the specification -->
         <record model="ir.action.act_window.view" id="act_contract_form_view1">
@@ -38,7 +38,7 @@
         </record>
         <record model="ir.action.keyword" id="report_document_request_keyword">
             <field name="keyword">form_action</field>
-            <field name="model">ins_contract.contract,-1</field>
+            <field name="model">contract.contract,-1</field>
             <field name="action" ref="insurance_product.letter_generation_wizard"/>
         </record>
         <!--################################################################ -->
@@ -46,7 +46,7 @@
         <!--################################################################ -->
         <!-- Tree view -->
         <record model="ir.ui.view" id="option_view_tree">
-            <field name="model">ins_contract.option</field>
+            <field name="model">contract.subscribed_option</field>
             <field name="type">tree</field>
             <field name="inherit" ref="contract.option_view_tree"/>
             <field name="arch" type="xml"/>
@@ -54,7 +54,7 @@
         </record>
         <!-- form view -->
         <record model="ir.ui.view" id="option_view_form">
-            <field name="model">ins_contract.option</field>
+            <field name="model">contract.subscribed_option</field>
             <field name="type">form</field>
             <field name="inherit" ref="contract.option_view_form"/>
             <field name="name">option_form</field>
@@ -116,17 +116,17 @@
         <!-- Contract History -->
         <!--################################################################ -->
         <record model="ir.ui.view" id="contract_history_view_form">
-            <field name="model">ins_contract.contract.history</field>
+            <field name="model">contract.contract.history</field>
             <field name="type">form</field>
             <field name="name">contract_history_form</field>
         </record>
         <record model="ir.ui.view" id="contract_history_view_tree">
-            <field name="model">ins_contract.contract.history</field>
+            <field name="model">contract.contract.history</field>
             <field name="type">tree</field>
             <field name="name">contract_history_tree</field>
         </record>
         <record model="ir.model.access" id="access_contract_history">
-            <field name="model" search="[('model', '=', 'ins_contract.contract.history')]"/>
+            <field name="model" search="[('model', '=', 'contract.contract.history')]"/>
             <field name="perm_write" eval="False"/>
             <field name="perm_read" eval="True"/>
         </record>
@@ -148,7 +148,7 @@
         <!--################################################################ -->
         <record model="ir.action.act_window" id="act_contract_relate_form">
             <field name="name">Contracts</field>
-            <field name="res_model">ins_contract.contract</field>
+            <field name="res_model">contract.contract</field>
             <field name="domain">[('subscriber', '=', Eval('active_id'))]</field>
         </record>
         <record model="ir.action.keyword" id="act_contract_relate_keyword">
@@ -159,11 +159,11 @@
         <record model="ir.action.act_window" id="act_contract_status_history_relate_form">
             <field name="name">Status History</field>
             <field name="res_model">contract.status_history</field>
-            <field name="domain">[('reference', '=', ('ins_contract.contract', Eval('active_id')))]</field>
+            <field name="domain">[('reference', '=', ('contract.contract', Eval('active_id')))]</field>
         </record>
         <record model="ir.action.keyword" id="act_contract_status_history_relate_keyword">
             <field name="keyword">form_relate</field>
-            <field name="model">ins_contract.contract,-1</field>
+            <field name="model">contract.contract,-1</field>
             <field name="action" ref="act_contract_status_history_relate_form"/>
         </record>
         <!-- Management Role -->
@@ -176,17 +176,6 @@
           <field name="model">ins_contract.management_role</field>
           <field name="type">tree</field>
           <field name="name">management_role_tree</field>
-      </record>
-      <!-- Management Protocol -->
-      <record model="ir.ui.view" id="management_protocol_form">
-        <field name="model">ins_contract.management_protocol</field>
-        <field name="type">form</field>
-        <field name="name">management_protocol_form</field>
-      </record>
-      <record model="ir.ui.view" id="management_protocol_tree">
-        <field name="model">ins_contract.management_protocol</field>
-        <field name="type">tree</field>
-        <field name="name">management_protocol_tree</field>
       </record>
     </data>
 </tryton>

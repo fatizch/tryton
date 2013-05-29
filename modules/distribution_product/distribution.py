@@ -1,4 +1,4 @@
-from trytond.pool import PoolMeta
+from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.modules.coop_utils import model, fields, utils, coop_string
 
@@ -24,14 +24,21 @@ class DistributionNetwork():
         'get_parent_com_products_id')
 
     def get_parent_com_products_id(self, name):
-        parents = self.__class__.search([
-                ('left', '<', self.left), ('right', '>', self.right),
-                ('commercial_products', '>', 0),
-                ])
-        res = []
-        for x in parents:
-            res.extend(x.commercial_products)
-        return [x.id for x in res]
+        ComProduct = Pool().get('distribution.commercial_product')
+        return [x.id for x in ComProduct.search([
+                    ('dist_networks.left', '<', self.left),
+                    ('dist_networks.right', '>', self.right),
+                    ])
+            ]
+
+    def get_commercial_products(self):
+        return list(set(self.commercial_products + self.parent_com_products))
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(DistributionNetwork, cls)._export_skips()
+        result.add('commercial_products')
+        return result
 
 
 class CommercialProduct(model.CoopSQL, model.CoopView):
@@ -42,6 +49,9 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
     product = fields.Many2One('ins_product.product', 'Technical Product',
         domain=[('start_date', '<=', Eval('start_date'))],
         depends=['start_date'])
+    dist_networks = fields.Many2Many('distribution.dist_network-com_product',
+        'com_product', 'dist_network',
+        'Distribution Networks')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     name = fields.Char('Name', required=True)

@@ -60,7 +60,7 @@ def launch_test_case(cfg_dict):
     })
 
     contract_model = Model.get('ir.model').find(
-        [('model', '=', 'ins_contract.contract')])[0]
+        [('model', '=', 'contract.contract')])[0]
 
     subscriber_sel_step = meths['StepDesc']({
         'technical_name': 'subscriber_selection',

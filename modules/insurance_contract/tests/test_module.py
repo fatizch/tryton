@@ -37,7 +37,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def get_models(cls):
         return {
-            'Contract': 'ins_contract.contract',
+            'Contract': 'contract.contract',
             'Party': 'party.party',
             'AddressKind': 'party.address_kind',
             'Sequence': 'ir.sequence',

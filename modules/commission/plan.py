@@ -21,6 +21,14 @@ class CommissionPlan(model.CoopSQL, product.Offered):
 
     components = fields.Many2Many('commission.plan-component',
         'plan', 'component', 'Components')
+    dist_networks = fields.Many2Many('distribution.dist_network-plan',
+        'com_plan', 'dist_network', 'Distribution Networks')
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(CommissionPlan, cls)._export_skips()
+        result.add('dist_networks')
+        return result
 
 
 class CommissionComponent(model.CoopSQL, product.Offered):

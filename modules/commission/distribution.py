@@ -1,4 +1,4 @@
-from trytond.pool import PoolMeta
+from trytond.pool import Pool, PoolMeta
 from trytond.modules.coop_utils import model, fields
 
 __all__ = [
@@ -23,16 +23,35 @@ class DistributionNetwork():
     brokers = fields.Many2Many('distribution.dist_network-broker',
         'dist_network', 'broker', 'Brokers',
         domain=[('is_broker', '=', True)])
+    childs_brokers = fields.Function(
+        fields.Many2Many('party.party', None, None, 'Sub Level Brokers',),
+        'get_childs_brokers_id')
 
     def get_parent_com_plans_id(self, name):
-        parents = self.__class__.search([
-                ('left', '<', self.left), ('right', '>', self.right),
-                ('commission_plans', '>', 0),
+        Plan = Pool().get('commission.commission_plan')
+        return [x.id for x in Plan.search([
+                    ('dist_networks.left', '<', self.left),
+                    ('dist_networks.right', '>', self.right),
                 ])
-        res = []
-        for x in parents:
-            res.extend(x.commission_plans)
-        return [x.id for x in res]
+            ]
+
+    def get_childs_brokers_id(self, name):
+        Broker = Pool().get('party.party')
+        return [x.id for x in Broker.search([
+                    ('dist_networks.parent', 'child_of', self.id),
+                    ('dist_networks.id', '!=', self.id),
+                    ])
+            ]
+
+    def get_brokers(self):
+        return self.brokers + self.childs_brokers
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(DistributionNetwork, cls)._export_skips()
+        result.add('brokers')
+        return result
+
 
 class DistributionNetworkComPlanRelation(model.CoopSQL):
     'Relation Distribution Network - Commission Plan'

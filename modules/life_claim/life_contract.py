@@ -10,7 +10,7 @@ __all__ = [
 class LifeOption():
     'Option'
 
-    __name__ = 'ins_contract.option'
+    __name__ = 'contract.subscribed_option'
     __metaclass__ = PoolMeta
 
     def is_item_covered(self, loss):

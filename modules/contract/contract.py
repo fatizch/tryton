@@ -196,6 +196,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     _rec_name = 'contract_number'
     _history = True
 
+    kind = fields.Selection('get_possible_contract_kind', 'kind')
     status = fields.Selection(CONTRACTSTATUSES, 'Status')
     options = fields.One2Many(None, 'contract', 'Options')
     contract_number = fields.Char('Contract Number', select=1,
@@ -225,7 +226,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
 
     @classmethod
     def get_options_model_name(cls):
-        return 'contract.subscribed_coverage'
+        return 'contract.subscribed_option'
 
     @classmethod
     def get_offered_name(cls):
@@ -421,11 +422,15 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def get_next_renewal_date(self):
         return utils.add_frequency('yearly', self.start_date)
 
+    @staticmethod
+    def get_possible_contract_kind():
+        return []
+
 
 class SubscribedCoverage(model.CoopSQL, Subscribed):
     'Subscribed Coverage'
 
-    __name__ = 'contract.subscribed_coverage'
+    __name__ = 'contract.subscribed_option'
     _history = True
 
     status = fields.Selection(OPTIONSTATUS, 'Status')

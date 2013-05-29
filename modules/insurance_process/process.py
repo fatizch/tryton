@@ -1220,7 +1220,7 @@
 #     # must be called afterwards, but we also have a chance to work a little
 #     # before.
 #     def transition_validate(self, session):
-#         contract_obj = Pool().get('ins_contract.contract')
+#         contract_obj = Pool().get('contract.contract')
 #         options = []
 #         for option in session.option_selection.options:
 

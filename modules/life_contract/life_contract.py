@@ -20,7 +20,7 @@ __all__ = [
 class Contract():
     'Contract'
 
-    __name__ = 'ins_contract.contract'
+    __name__ = 'contract.contract'
     __metaclass__ = PoolMeta
 
     def check_covered_amounts(self, at_date=None):
@@ -75,7 +75,7 @@ class Contract():
 class LifeOption():
     'Subscribed Life Coverage'
 
-    __name__ = 'ins_contract.option'
+    __name__ = 'contract.subscribed_option'
     __metaclass__ = PoolMeta
 
     def get_covered_data(self, covered_person):

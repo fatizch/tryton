@@ -32,7 +32,7 @@ __all__ = [
 class ContractSubscription(CoopProcessFramework):
     'Contract'
 
-    __name__ = 'ins_contract.contract'
+    __name__ = 'contract.contract'
     __metaclass__ = ClassAttr
 
     subscriber_kind = fields.Function(
@@ -76,7 +76,7 @@ class ContractSubscription(CoopProcessFramework):
     payment_bank_account = fields.Function(
         fields.Many2One('party.bank_account', 'Payment Bank Account',
             context={'for_party': Eval('subscriber', 0)},
-            depends=['payment_mode', 'billing_managers'],
+            depends=['payment_mode', 'billing_managers', 'subscriber'],
             domain=[('party', '=', Eval('subscriber'))],
             states={'invisible': Eval('payment_mode') != 'direct_debit'},
             on_change=['billing_managers', 'payment_bank_account']),
@@ -390,50 +390,51 @@ class ContractSubscription(CoopProcessFramework):
         return True, ()
 
     def init_management_roles(self):
-        ManagementRole = Pool().get('ins_contract.management_role')
-        ManagementProtocol = Pool().get('ins_contract.management_protocol')
-        product = self.offered
-        self.management = []
-        # Set Contract Management Role
-        if product.tmp_contract_manager:
-            good_protocol = ManagementProtocol.search([
-                ('kind', '=', 'contract_manager'),
-                ('party', '=', product.tmp_contract_manager.id),
-                ('start_date', '<=', self.start_date)])
-            if not good_protocol:
-                good_protocol = ManagementProtocol()
-                good_protocol.start_date = self.start_date
-                good_protocol.kind = 'contract_manager'
-                good_protocol.party = product.tmp_contract_manager
-                good_protocol.save()
-            else:
-                good_protocol = good_protocol[0]
-            good_role = ManagementRole()
-            good_role.protocol = good_protocol
-            good_role.start_date = self.start_date
-            good_role.contract = self
-            good_role.save()
-            self.management.append(good_role)
-        # Set Claim Management Role
-        if product.tmp_claim_manager:
-            good_protocol = ManagementProtocol.search([
-                ('kind', '=', 'claim_manager'),
-                ('party', '=', product.tmp_claim_manager.id),
-                ('start_date', '<=', self.start_date)])
-            if not good_protocol:
-                good_protocol = ManagementProtocol()
-                good_protocol.start_date = self.start_date
-                good_protocol.kind = 'claim_manager'
-                good_protocol.party = product.tmp_claim_manager
-                good_protocol.save()
-            else:
-                good_protocol = good_protocol[0]
-            good_role = ManagementRole()
-            good_role.protocol = good_protocol
-            good_role.start_date = self.start_date
-            good_role.contract = self
-            good_role.save()
-            self.management.append(good_role)
+        #TODO:Migrate to new architecture
+        # ManagementRole = Pool().get('ins_contract.management_role')
+        # ManagementProtocol = Pool().get('ins_contract.management_protocol')
+        # product = self.offered
+        # self.management = []
+        # # Set Contract Management Role
+        # if product.tmp_contract_manager:
+        #     good_protocol = ManagementProtocol.search([
+        #         ('kind', '=', 'contract_manager'),
+        #         ('party', '=', product.tmp_contract_manager.id),
+        #         ('start_date', '<=', self.start_date)])
+        #     if not good_protocol:
+        #         good_protocol = ManagementProtocol()
+        #         good_protocol.start_date = self.start_date
+        #         good_protocol.kind = 'contract_manager'
+        #         good_protocol.party = product.tmp_contract_manager
+        #         good_protocol.save()
+        #     else:
+        #         good_protocol = good_protocol[0]
+        #     good_role = ManagementRole()
+        #     good_role.protocol = good_protocol
+        #     good_role.start_date = self.start_date
+        #     good_role.contract = self
+        #     good_role.save()
+        #     self.management.append(good_role)
+        # # Set Claim Management Role
+        # if product.tmp_claim_manager:
+        #     good_protocol = ManagementProtocol.search([
+        #         ('kind', '=', 'claim_manager'),
+        #         ('party', '=', product.tmp_claim_manager.id),
+        #         ('start_date', '<=', self.start_date)])
+        #     if not good_protocol:
+        #         good_protocol = ManagementProtocol()
+        #         good_protocol.start_date = self.start_date
+        #         good_protocol.kind = 'claim_manager'
+        #         good_protocol.party = product.tmp_claim_manager
+        #         good_protocol.save()
+        #     else:
+        #         good_protocol = good_protocol[0]
+        #     good_role = ManagementRole()
+        #     good_role.protocol = good_protocol
+        #     good_role.start_date = self.start_date
+        #     good_role.contract = self
+        #     good_role.save()
+        #     self.management.append(good_role)
         return True
 
 
@@ -442,7 +443,7 @@ class Option():
 
     __metaclass__ = PoolMeta
 
-    __name__ = 'ins_contract.option'
+    __name__ = 'contract.subscribed_option'
 
     status_selection = fields.Function(
         fields.Boolean('Status',
@@ -486,7 +487,7 @@ class CoveredElement():
         if not contract:
             return []
 
-        Contract = Pool().get('ins_contract.contract')
+        Contract = Pool().get('contract.contract')
         contract = Contract(contract)
 
         CoveredData = Pool().get('ins_contract.covered_data')
@@ -548,7 +549,7 @@ class SubscriptionManager(model.CoopSQL):
     contract = fields.Reference(
         'Contract',
         [
-            ('ins_contract.contract', 'Contract'),
+            ('contract.contract', 'Contract'),
             ('ins_collective.contract', 'Contract')],
     )
     is_custom = fields.Boolean('Custom')
@@ -573,20 +574,42 @@ class SubscriptionProcessParameters(ProcessParameters):
 
     __name__ = 'ins_contract.subscription_process_parameters'
 
-    product = fields.Many2One(
-        'ins_product.product',
-        'Product',
-        domain=['AND',
-            ['OR',
-                [('end_date', '>=', Eval('date'))],
-                [('end_date', '=', None)],
+    dist_network = fields.Many2One('distribution.dist_network',
+        'Distribution Network', on_change=['dist_network', 'possible_brokers',
+        'broker'])
+    possible_brokers = fields.Function(
+        fields.Many2Many('party.party', None, None, 'Possible Brokers',
+            on_change_with=['dist_network', 'possible_brokers'],
+            states={'invisible': True},
+            ), 'on_change_with_possible_brokers')
+    broker = fields.Many2One('party.party', 'Broker',
+        domain=[
+            ('id', 'in', Eval('possible_brokers')),
+            ('is_broker', '=', True),
+            ], depends=['possible_brokers'])
+    possible_com_product = fields.Function(
+        fields.Many2Many('distribution.commercial_product', None,
+            None, 'Commercial Products Available',
+            on_change_with=['dist_network'],
+            states={'invisible': True}),
+        'on_change_with_possible_com_product')
+    com_product = fields.Many2One('distribution.commercial_product',
+        'Product Commercial',
+        domain=[
+                ('id', 'in', Eval('possible_com_product')),
+                ['OR',
+                    [('end_date', '>=', Eval('date'))],
+                    [('end_date', '=', None)],
+                ],
+                ['OR',
+                    [('start_date', '<=', Eval('date'))],
+                    [('start_date', '=', None)],
+                ],
             ],
-            ['OR',
-                [('start_date', '<=', Eval('date'))],
-                [('start_date', '=', None)],
-            ],
-        ], depends=['date']
-    )
+        depends=['possible_com_product', 'date'],
+        on_change=['com_product', 'product'])
+    product = fields.Many2One('ins_product.product', 'Product',
+        states={'invisible': True})
 
     @classmethod
     def build_process_domain(cls):
@@ -606,7 +629,42 @@ class SubscriptionProcessParameters(ProcessParameters):
     @classmethod
     def default_model(cls):
         Model = Pool().get('ir.model')
-        return Model.search([('model', '=', 'ins_contract.contract')])[0].id
+        return Model.search([('model', '=', 'contract.contract')])[0].id
+
+    @classmethod
+    def default_dist_network(cls):
+        User = Pool().get('res.user')
+        user = User(Transaction().user)
+        return user.dist_network.id if user.dist_network else None
+
+    def on_change_with_possible_com_product(self, name=None):
+        if self.dist_network:
+            return [x.id for x in self.dist_network.get_commercial_products()]
+        return []
+
+    def on_change_com_product(self):
+        res = {}
+        if (not self.com_product
+                or self.product and self.com_product.product != self.product):
+            res = {'product': None}
+        else:
+            res = {'product': self.com_product.product.id}
+        return res
+
+    def on_change_with_possible_brokers(self, name=None):
+        if self.dist_network:
+            return [x.id for x in self.dist_network.get_brokers()]
+        else:
+            return []
+
+    def on_change_dist_network(self):
+        res = {}
+        res['possible_brokers'] = self.on_change_with_possible_brokers()
+        if self.broker and self.broker.id not in res['possible_brokers']:
+            res['broker'] = None
+        elif len(res['possible_brokers']) == 1:
+            res['broker'] = res['possible_brokers'][0]
+        return res
 
 
 class SubscriptionProcessFinder(ProcessFinder):

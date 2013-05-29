@@ -604,7 +604,9 @@ class Code(ModelSQL, ModelView):
     source_code = fields.Function(
         fields.Text('Source Code', on_change_with=['method_name', 'on_model']),
         'on_change_with_source_code')
-    on_model = fields.Many2One('ir.model', 'On Model')
+    on_model = fields.Function(
+        fields.Many2One('ir.model', 'On Model'),
+        'get_on_model')
     method_name = fields.Char('Method Name')
     parent_step = fields.Many2One(
         'process.step_desc', 'Parent Step', ondelete='CASCADE')
@@ -653,6 +655,14 @@ class Code(ModelSQL, ModelView):
             return ''.join(inspect.getsourcelines(func)[0])
         except:
             return 'Source Code unavailable'
+
+    def get_on_model(self, name):
+        if self.parent_step and self.parent_step.main_model:
+            #TODO : to change from process module to coop_process
+            return self.parent_step.main_model.id
+        elif (self.parent_transition and self.parent_transition.on_process
+                and self.parent_transition.on_process.on_model):
+            return self.parent_transition.on_process.on_model.id
 
 
 class StepTransition(ModelSQL, ModelView):

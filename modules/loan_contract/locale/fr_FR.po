@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -14,23 +14,23 @@ msgctxt "error:ins_contract.loan_share:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "field:ins_contract.contract,doc_received:"
+msgctxt "field:contract.contract,doc_received:"
 msgid "All Document Received"
 msgstr "Documents Reçus"
 
-msgctxt "field:ins_contract.contract,documents:"
+msgctxt "field:contract.contract,documents:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "field:ins_contract.contract,is_loan:"
+msgctxt "field:contract.contract,is_loan:"
 msgid "Is Loan"
 msgstr ""
 
-msgctxt "field:ins_contract.contract,is_loan_contract:"
+msgctxt "field:contract.contract,is_loan_contract:"
 msgid "Is Loan Contract"
 msgstr "Contrat Emprunteur?"
 
-msgctxt "field:ins_contract.contract,loans:"
+msgctxt "field:contract.contract,loans:"
 msgid "Loans"
 msgstr "Prêts"
 
@@ -218,11 +218,11 @@ msgctxt "field:ins_contract.loan_share,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_contract.option,is_loan:"
+msgctxt "field:contract.subscribed_option,is_loan:"
 msgid "Is Loan"
 msgstr ""
 
-msgctxt "field:ins_contract.option,is_loan_option:"
+msgctxt "field:contract.subscribed_option,is_loan_option:"
 msgid "Is Loan Option"
 msgstr ""
 
@@ -270,7 +270,7 @@ msgctxt "selection:ins_contract.loan,kind:"
 msgid "Zero Interest Loan"
 msgstr "Taux Zéro"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Loans"
 msgstr "Prêts"
 

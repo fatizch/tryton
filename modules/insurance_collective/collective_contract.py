@@ -3,53 +3,41 @@ from trytond.pyson import Eval
 from trytond.pool import PoolMeta
 from trytond.pyson import If, Equal
 
-from trytond.modules.coop_utils import utils, fields
-
-CONTRACT_KIND = [
-    ('individual', 'Individual'),
-    ('group', 'Group'),
-    ('enrollment', 'Enrollment'),
-]
+from trytond.modules.coop_utils import utils
 
 __all__ = [
     'GroupContract',
-]
+    ]
 
 
 class GroupContract():
     'Group Contract'
 
-    __name__ = 'ins_contract.contract'
+    __name__ = 'contract.contract'
     __metaclass__ = PoolMeta
 
-    kind = fields.Selection(CONTRACT_KIND, 'Kind')
-    group_contract = fields.Many2One('ins_contract.contract',
-        'Group Contract', domain=[('kind', '=', 'group')],
-        states={'invisible': Eval('kind') != 'enrollment'})
-
     @classmethod
-    def _setup__(cls):
+    def __setup__(cls):
+        utils.update_domain(cls, 'subscriber', [If(
+                    Equal(Eval('kind'), 'group'),
+                    ('is_company', '=', True),
+                    (),
+                    )])
+        utils.update_depends(cls, 'subscriber', ['kind'])
         super(GroupContract, cls).__setup__()
-        utils.update_domain(cls, 'subscriber',
-            [
-                (
-                    'is_company',
-                    'in',
-                    If(Equal(Eval('kind'), 'group'), [True], [True, False])
-                ),
-            ])
 
-        if not cls.subscriber.depends:
-            cls.subscriber.depends = []
-        cls.subscriber.depends.append('kind')
-
-    def init_from_offered(self, offered, start_date=None, end_date=None,
-            kind=None):
+    def init_from_offered(self, offered, start_date=None, end_date=None):
         res, errs = super(GroupContract, self).init_from_offered(offered,
             start_date, end_date)
         if res:
-            if offered.is_group:
-                self.kind = kind if kind else 'group'
-            else:
-                self.kind = 'individual'
+            self.kind = 'group' if offered.is_group else 'individual'
         return res, errs
+
+    @classmethod
+    def get_possible_contract_kind(cls):
+        res = super(GroupContract, cls).get_possible_contract_kind()
+        res.extend([
+                ('individual', 'Individual'),
+                ('group', 'Group'),
+                ])
+        return list(set(res))

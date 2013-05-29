@@ -12,19 +12,19 @@
             <field name="name">loan_tree</field>
         </record>
         <record model="ir.ui.view" id="contract_view_form">
-            <field name="model">ins_contract.contract</field>
+            <field name="model">contract.contract</field>
             <field name="type">form</field>
             <field name="inherit" ref="insurance_contract.contract_view_form"/>
             <field name="name">contract_form</field>
         </record>
         <record model="ir.ui.view" id="contract_view_tree">
-            <field name="model">ins_contract.contract</field>
+            <field name="model">contract.contract</field>
             <field name="inherit" ref="insurance_contract.contract_view_tree"/>
             <field name="type">tree</field>
             <field name="arch" type="xml"/>
         </record>
         <record model="ir.ui.view" id="option_view_form">
-            <field name="model">ins_contract.option</field>
+            <field name="model">contract.subscribed_option</field>
             <field name="type">form</field>
             <field name="inherit" ref="insurance_contract.option_view_form"/>
             <field name="name">option_form</field>

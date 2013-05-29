@@ -17,6 +17,7 @@
         <field name="amount"/>
         <newline/>
         <label name="coef_coverage_amount"/>
+        <!-- ToDo add tryton digits factor factor="100"-->
         <field name="coef_coverage_amount"/>
         <newline/>
     </xpath>

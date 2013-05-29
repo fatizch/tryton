@@ -23,11 +23,11 @@
     <record model="ir.action.wizard" id="launch_billing_process">
       <field name="name">Billing</field>
       <field name="wiz_name">billing.billing_process</field>
-      <field name="model">ins_contract.contract</field>
+      <field name="model">contract.contract</field>
     </record>
     <record model="ir.action.keyword" id="launch_billing_keyword">
       <field name="keyword">form_action</field>
-      <field name="model">ins_contract.contract,-1</field>
+      <field name="model">contract.contract,-1</field>
       <field name="action" ref="launch_billing_process"/>
     </record>
     <!--################################################################-->
@@ -40,7 +40,7 @@
     </record>
     <record model="ir.action.keyword" id="act_billing_by_contract_keyword1">
       <field name="keyword">form_relate</field>
-      <field name="model">ins_contract.contract,-1</field>
+      <field name="model">contract.contract,-1</field>
       <field name="action" ref="act_billing_by_contract"/>
     </record>
   </data>

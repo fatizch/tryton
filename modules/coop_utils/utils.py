@@ -500,7 +500,10 @@ def update_domain(cls, var_name, new_domain):
     if not field_name.domain:
         field_name.domain = []
     field_name.domain.extend(new_domain)
-    field_name.domain = list(set(field_name.domain))
+    try:
+        field_name.domain = list(set(field_name.domain))
+    except:
+        pass
     setattr(cls, var_name, field_name)
 
 

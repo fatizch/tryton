@@ -70,7 +70,7 @@ class PriceLine(model.CoopSQL, model.CoopView):
             ('fee', 'Fee')
         ], 'Kind', readonly='True')
     on_object = fields.Reference('Priced object', 'get_line_target_models')
-    contract = fields.Many2One('ins_contract.contract', 'Contract')
+    contract = fields.Many2One('contract.contract', 'Contract')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     all_lines = fields.One2Many(
@@ -169,8 +169,8 @@ class PriceLine(model.CoopSQL, model.CoopView):
             f(''),
             f('ins_product.product'),
             f('ins_product.coverage'),
-            f('ins_contract.contract'),
-            f('ins_contract.option'),
+            f('contract.contract'),
+            f('contract.subscribed_option'),
             f('ins_contract.covered_data')]
         return res
 
@@ -203,7 +203,7 @@ class BillingManager(model.CoopSQL, model.CoopView):
     '''
     __name__ = 'billing.billing_manager'
 
-    contract = fields.Many2One('ins_contract.contract', 'Contract')
+    contract = fields.Many2One('contract.contract', 'Contract')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     payment_method = fields.Many2One('billing.payment_method',
@@ -295,8 +295,8 @@ class GenericBillLine(model.CoopSQL, model.CoopView):
             f(''),
             f('ins_product.product'),
             f('ins_product.coverage'),
-            f('ins_contract.contract'),
-            f('ins_contract.option')]
+            f('contract.contract'),
+            f('contract.subscribed_option')]
         res += utils.get_descendents('ins_contract.covered_data')
         return res
 
@@ -379,7 +379,7 @@ class Bill(model.CoopSQL, model.CoopView):
     lines = fields.One2Many(
         'billing.billing.generic_line', 'master', 'Bill Lines',
         order=[('start_date', 'ASC'), ('name', 'ASC')])
-    contract = fields.Many2One('ins_contract.contract', 'Contract')
+    contract = fields.Many2One('contract.contract', 'Contract')
     bill_details = fields.Function(
         fields.One2Many(
             'billing.billing.generic_line', None, 'Bill Details'),
@@ -451,7 +451,7 @@ class BillParameters(model.CoopView):
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date', required=True)
     contract = fields.Many2One(
-        'ins_contract.contract', 'Contract', states={'invisible': True})
+        'contract.contract', 'Contract', states={'invisible': True})
 
 
 class BillDisplay(model.CoopView):
@@ -556,7 +556,7 @@ class Contract():
     'Contract'
 
     __metaclass__ = PoolMeta
-    __name__ = 'ins_contract.contract'
+    __name__ = 'contract.contract'
 
     billing_managers = fields.One2Many('billing.billing_manager', 'contract',
         'Billing Managers')
@@ -642,7 +642,7 @@ class Option():
     'Option'
 
     __metaclass__ = PoolMeta
-    __name__ = 'ins_contract.option'
+    __name__ = 'contract.subscribed_option'
 
     def get_name_for_billing(self):
         return self.get_coverage().name + ' - Base Price'

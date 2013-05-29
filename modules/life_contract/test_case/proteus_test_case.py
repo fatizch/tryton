@@ -26,7 +26,7 @@ def launch_test_case(cfg_dict):
     pass
     # # TODO : rewrite contract test_case
     # return
-    # Contract = Model.get('ins_contract.contract')
+    # Contract = Model.get('contract.contract')
     # if len(Contract.find()) >= int(cfg_dict['total_nb']):
     #     return
     # Party = Model.get('party.party')

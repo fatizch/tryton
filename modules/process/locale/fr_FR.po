@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -682,143 +682,143 @@ msgctxt "view:ins_claim.claim:"
 msgid "Validation"
 msgstr "Validation"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "==> Adhérent"
 msgstr ""
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "==> Affiliations"
 msgstr ""
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "==> Couverture"
 msgstr ""
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "==> Documents"
 msgstr ""
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "==> Garanties"
 msgstr ""
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "==> Personnes Couvertes"
 msgstr ""
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "==> Populations"
 msgstr ""
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "==> Produit"
 msgstr ""
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "==> Prêt"
 msgstr ""
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "==> Tarif"
 msgstr ""
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "==> Validation du contract"
 msgstr ""
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Adhérent"
 msgstr "Adhérent"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Affiliations"
 msgstr "Affiliations"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Billing"
 msgstr "Cotisation"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Complete"
 msgstr "Terminer"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Couverture"
 msgstr "Couverture"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Couverture"
 msgstr "Couverture"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Covered Elements/Options"
 msgstr "Eléments Couverts/Garanties"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Garanties"
 msgstr "Garanties"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Managing Entities"
 msgstr "Délégataires"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Next"
 msgstr "Suivant"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Options"
 msgstr "Garanties"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Personnes Couvertes"
 msgstr "Personnes Couvertes"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Populations"
 msgstr "Populations"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Previous"
 msgstr "Précédent"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Processus de souscription individuel"
 msgstr "Processus de souscription individuel"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Produit"
 msgstr "Produit"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Prêt"
 msgstr "Prêt"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Souscription Contrat Collectif"
 msgstr "Souscription Contrat Collectif"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Souscription Emprunteur"
 msgstr "Souscription Emprunteur"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Tarif"
 msgstr "Tarif"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "The current record completed the current process, please go ahead"
 msgstr "Processus Terminé. Commencez une nouvelle tâche"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Validation du contract"
 msgstr "Validation du contract"
 

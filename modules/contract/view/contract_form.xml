@@ -14,6 +14,8 @@
     <field name="subscriber"/>
     <label name="offered"/>
     <field name="offered"/>
+    <label name="kind"/>
+    <field name="kind"/>
   </group>
   <notebook colspan="4">
     <page string="Options" id="options">

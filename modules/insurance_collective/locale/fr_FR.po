@@ -1,12 +1,12 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:ins_contract.contract,group_contract:"
+msgctxt "field:contract.contract,group_contract:"
 msgid "Group Contract"
 msgstr "Contrat Collectif"
 
-msgctxt "field:ins_contract.contract,kind:"
+msgctxt "field:contract.contract,kind:"
 msgid "Kind"
 msgstr "Type"
 
@@ -46,19 +46,19 @@ msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Group Products"
 msgstr "Produits Collectifs"
 
-msgctxt "selection:ins_contract.contract,kind:"
+msgctxt "selection:contract.contract,kind:"
 msgid "Enrollment"
 msgstr "Affiliation"
 
-msgctxt "selection:ins_contract.contract,kind:"
+msgctxt "selection:contract.contract,kind:"
 msgid "Group"
 msgstr "Groupe"
 
-msgctxt "selection:ins_contract.contract,kind:"
+msgctxt "selection:contract.contract,kind:"
 msgid "Individual"
 msgstr "Individuel"
 
-msgctxt "view:ins_contract.contract:"
+msgctxt "view:contract.contract:"
 msgid "Enrollments"
 msgstr "Affiliations"
 

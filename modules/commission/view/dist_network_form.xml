@@ -4,7 +4,8 @@
         <page id="com" string="Commissioning">
             <field name="commission_plans" colspan="2"/>
             <field name="parent_com_plans" colspan="2"/>
-            <field name="brokers" colspan="4"/>
+            <field name="brokers" colspan="2"/>
+            <field name="childs_brokers" colspan="2"/>
         </page>
     </xpath>
 </data>

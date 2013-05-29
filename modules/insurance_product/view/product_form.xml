@@ -38,10 +38,5 @@
         <label name="currency"/>
         <field name="currency"/>
         <newline/>
-        <label name="tmp_claim_manager"/>
-        <field name="tmp_claim_manager"/>
-        <newline/>
-        <label name="tmp_contract_manager"/>
-        <field name="tmp_contract_manager"/>
     </xpath>
 </data>

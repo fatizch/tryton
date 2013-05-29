@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <data>
-    <xpath expr="/form/field[@name='date']" position="after">
-        <label name="kind"/>
-        <field name="kind"/>
-        <newline/>
+    <xpath expr="/form/label[@name='com_product']" position="before">
+        <label name="is_group"/>
+        <field name="is_group"/>
     </xpath>
 </data>

@@ -23,11 +23,11 @@ __all__ = [
     'InsurancePolicy',
     'ContractHistory',
     'InsuranceSubscribedCoverage',
+    'SubscribedCoverageComplement',
     'StatusHistory',
     'CoveredElement',
     'CoveredElementPartyRelation',
     'CoveredData',
-    'ManagementProtocol',
     'ManagementRole',
     'DeliveredService',
     'Expense',
@@ -35,11 +35,11 @@ __all__ = [
     ]
 
 
-class InsurancePolicy(contract.Contract):
+class InsurancePolicy():
     'Insurance Policy'
 
-    __name__ = 'ins_contract.contract'
-    _table = None
+    __name__ = 'contract.contract'
+    __metaclass__ = PoolMeta
 
     covered_elements = fields.One2ManyDomain(
         'ins_contract.covered_element', 'contract', 'Covered Elements',
@@ -47,7 +47,7 @@ class InsurancePolicy(contract.Contract):
         context={'contract': Eval('id')})
     management = fields.One2Many(
         'ins_contract.management_role', 'contract', 'Management Roles')
-    contract_history = fields.One2Many('ins_contract.contract.history',
+    contract_history = fields.One2Many('contract.contract.history',
         'from_object', 'Contract History')
     addresses = fields.One2Many('ins_contract.address', 'contract',
         'Addresses', context={
@@ -57,7 +57,7 @@ class InsurancePolicy(contract.Contract):
 
     @classmethod
     def get_options_model_name(cls):
-        return 'ins_contract.option'
+        return 'contract.subscribed_option'
 
     def calculate_price_at_date(self, date):
         cur_dict = {'date': date}
@@ -183,31 +183,36 @@ class InsurancePolicy(contract.Contract):
     def get_next_renewal_date(self):
         return utils.add_frequency('yearly', self.start_date)
 
+    @classmethod
+    def get_possible_contract_kind(cls):
+        res = super(InsurancePolicy, cls).get_possible_contract_kind()
+        res.extend([
+                ('claim_manager', 'Claim Manager'),
+                ('contract_manager', 'Contract Manager'),
+                ])
+        return list(set(res))
+
 
 class InsuranceSubscribedCoverage(contract.SubscribedCoverage):
     'Subscribed Coverage'
 
-    __name__ = 'ins_contract.option'
+    __name__ = 'contract.subscribed_option'
     _table = None
 
     covered_data = fields.One2ManyDomain(
         'ins_contract.covered_data', 'option', 'Covered Data',
         domain=[('covered_element.parent', '=', None)])
-    deductible_duration = fields.Many2One('ins_product.deductible_duration',
-        'Deductible Duration', states={
-            'invisible': ~Eval('possible_deductible_duration'),
-            # 'required': ~~Eval('possible_deductible_duration'),
-            }, domain=[('id', 'in', Eval('possible_deductible_duration'))],
-        depends=['possible_deductible_duration'])
-    possible_deductible_duration = fields.Function(
-        fields.Many2Many(
-            'ins_product.deductible_duration', None, None,
-            'Possible Deductible Duration', states={'invisible': True}),
-        'get_possible_deductible_duration')
+    ins_complement = fields.One2Many(
+        'ins_contract.subscribed_coverage_complement', 'subscribed_coverage',
+        'Complement')
+    complement = fields.Function(
+        fields.Many2One('ins_contract.subscribed_coverage_complement',
+            'Complement'),
+        'get_ins_complement_id')
 
     @classmethod
     def get_contract_model_name(cls):
-        return 'ins_contract.contract'
+        return 'contract.contract'
 
     @classmethod
     def get_offered_name(cls):
@@ -224,6 +229,32 @@ class InsuranceSubscribedCoverage(contract.SubscribedCoverage):
 
     def get_covered_data(self):
         raise NotImplementedError
+
+    def get_coverage_amount(self):
+        raise NotImplementedError
+
+    def get_ins_complement_id(self, name):
+        return self.ins_complement[0].id if self.ins_complement else None
+
+
+class SubscribedCoverageComplement(model.CoopSQL, model.CoopView):
+    'Subscribed Coverage'
+
+    __name__ = 'ins_contract.subscribed_coverage_complement'
+
+    subscribed_coverage = fields.Many2One('contract.subscribed_option',
+        'Subscribed Coverage', ondelete='CASCADE')
+    deductible_duration = fields.Many2One('ins_product.deductible_duration',
+        'Deductible Duration', states={
+            'invisible': ~Eval('possible_deductible_duration'),
+            # 'required': ~~Eval('possible_deductible_duration'),
+            }, domain=[('id', 'in', Eval('possible_deductible_duration'))],
+        depends=['possible_deductible_duration'])
+    possible_deductible_duration = fields.Function(
+        fields.Many2Many(
+            'ins_product.deductible_duration', None, None,
+            'Possible Deductible Duration', states={'invisible': True}),
+        'get_possible_deductible_duration')
 
     def get_coverage_amount(self):
         raise NotImplementedError
@@ -248,15 +279,15 @@ class StatusHistory():
     @classmethod
     def get_possible_reference(cls):
         res = super(StatusHistory, cls).get_possible_reference()
-        res.append(('ins_contract.contract', 'Contract'))
-        res.append(('ins_contract.option', 'Option'))
+        res.append(('contract.contract', 'Contract'))
+        res.append(('contract.subscribed_option', 'Option'))
         return res
 
 
 class ContractHistory(model.ObjectHistory):
     'Contract History'
 
-    __name__ = 'ins_contract.contract.history'
+    __name__ = 'contract.contract.history'
 
     offered = fields.Many2One('ins_product.product', 'Product',
         datetime_field='date')
@@ -272,7 +303,7 @@ class ContractHistory(model.ObjectHistory):
         fields.Integer('Currency Digits'),
         'get_currency_digits')
     options = fields.Function(
-        fields.One2Many('ins_contract.option', None, 'Options',
+        fields.One2Many('contract.subscribed_option', None, 'Options',
             datetime_field='date'),
         'get_options')
     subscriber = fields.Many2One('party.party', 'Subscriber',
@@ -280,7 +311,7 @@ class ContractHistory(model.ObjectHistory):
 
     @classmethod
     def get_object_model(cls):
-        return 'ins_contract.contract'
+        return 'contract.contract'
 
     @classmethod
     def get_object_name(cls):
@@ -288,10 +319,10 @@ class ContractHistory(model.ObjectHistory):
 
     @staticmethod
     def get_possible_status():
-        return Pool().get('ins_contract.contract').get_possible_status()
+        return Pool().get('contract.contract').get_possible_status()
 
     def get_options(self, name):
-        Option = Pool().get('ins_contract.option')
+        Option = Pool().get('contract.subscribed_option')
         options = Option.search([
                 ('contract', '=', self.from_object.id),
                 ])
@@ -310,8 +341,8 @@ class CoveredElement(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.covered_element'
 
-    contract = fields.Many2One(
-        'ins_contract.contract', 'Contract', ondelete='CASCADE')
+    contract = fields.Many2One('contract.contract', 'Contract',
+        ondelete='CASCADE')
     #We need to put complementary data in depends, because the complementary
     #data are set through on_change_with and the item desc can be set on an
     #editable tree, or we can not display for the moment dictionnary in tree
@@ -591,7 +622,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         if parent and parent.item_desc:
             return parent.item_desc.sub_item_descs
         if not contract:
-            Contract = Pool().get('ins_contract.contract')
+            Contract = Pool().get('contract.contract')
             contract = Contract(Transaction().context.get('contract'))
         if contract and not utils.is_none(contract, 'offered'):
             return contract.offered.item_descriptors
@@ -644,11 +675,11 @@ class CoveredData(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.covered_data'
 
-    option = fields.Many2One('ins_contract.option', 'Subscribed Coverage',
+    option = fields.Many2One('contract.subscribed_option', 'Subscribed Coverage',
         domain=[('id', 'in', Eval('possible_options'))],
         depends=['possible_options'])
     possible_options = fields.Function(
-        fields.Many2Many('ins_contract.option', None, None,
+        fields.Many2Many('contract.subscribed_option', None, None,
             'Possible Options', states={'invisible': True}),
         'get_possible_options')
     covered_element = fields.Many2One(
@@ -662,7 +693,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
     end_date = fields.Date('End Date')
     status = fields.Selection(contract.OPTIONSTATUS, 'Status')
     contract = fields.Function(
-        fields.Many2One('ins_contract.contract', 'Contract'),
+        fields.Many2One('contract.contract', 'Contract'),
         'get_contract_id')
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency',
@@ -769,7 +800,8 @@ class CoveredData(model.CoopSQL, model.CoopView):
     def get_deductible_duration(self):
         if self.deductible_duration:
             return self.deductible_duration
-        elif self.option.deductible_duration:
+        elif (self.option and self.option.complement
+                and self.option.complement.deductible_duration):
             return self.option.deductible_duration
 
     def get_possible_options(self, name):
@@ -791,28 +823,6 @@ class CoveredData(model.CoopSQL, model.CoopView):
         return True
 
 
-class ManagementProtocol(model.CoopSQL, model.CoopView):
-    'Management Protocol'
-
-    __name__ = 'ins_contract.management_protocol'
-
-    kind = fields.Selection(
-        [
-            ('provider', 'Business Provider'),
-            ('claim_manager', 'Claim Manager'),
-            ('contract_manager', 'Contract Manager'),
-        ],
-        'Kind',
-        required=True,
-    )
-    start_date = fields.Date('Start Date')
-    end_date = fields.Date('End Date')
-    party = fields.Many2One('party.party', 'Party')
-
-    def get_rec_name(self, name):
-        return self.party.get_rec_name(name)
-
-
 class ManagementRole(model.CoopSQL, model.CoopView):
     'Management Role'
 
@@ -820,21 +830,17 @@ class ManagementRole(model.CoopSQL, model.CoopView):
 
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
-    protocol = fields.Many2One(
-        'ins_contract.management_protocol', 'Protocol', required=True,
+    protocol = fields.Many2One('contract.contract', 'Protocol',
+        required=True,
         domain=[utils.get_versioning_domain('start_date', 'end_date')],
         depends=['start_date', 'end_date'],
         ondelete='RESTRICT',)
     contract = fields.Many2One(
-        'ins_contract.contract', 'Contract', ondelete='CASCADE')
+        'contract.contract', 'Contract', ondelete='CASCADE')
     kind = fields.Function(
-        fields.Char(
-            'Kind',
-            on_change_with=['protocol'],
-            depends=['protocol'],
-        ),
+        fields.Char('Kind', on_change_with=['protocol'], depends=['protocol']),
         'on_change_with_kind',
-    )
+        )
 
     def on_change_with_kind(self, name=None):
         if not (hasattr(self, 'protocol') and self.protocol):
@@ -850,9 +856,9 @@ class DeliveredService(model.CoopView, model.CoopSQL):
     status = fields.Selection(DELIVERED_SERVICES_STATUSES, 'Status')
     expenses = fields.One2Many('ins_contract.expense',
         'delivered_service', 'Expenses')
-    contract = fields.Many2One('ins_contract.contract', 'Contract')
+    contract = fields.Many2One('contract.contract', 'Contract')
     subscribed_service = fields.Many2One(
-        'ins_contract.option', 'Coverage', ondelete='RESTRICT',
+        'contract.subscribed_option', 'Coverage', ondelete='RESTRICT',
         domain=[
             If(~~Eval('contract'), ('contract', '=', Eval('contract', {})), ())
         ], depends=['contract'])
@@ -923,7 +929,7 @@ class ContractAddress(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.address'
 
-    contract = fields.Many2One('ins_contract.contract', 'Contract',
+    contract = fields.Many2One('contract.contract', 'Contract',
         ondelete='CASCADE')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')

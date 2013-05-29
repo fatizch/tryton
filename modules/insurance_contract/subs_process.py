@@ -571,7 +571,7 @@ __all__ = [
 #         The process state for the subscription process must have an abstract
 #         contract.
 #     '''
-#     __abstracts__ = [('for_contract', 'ins_contract.contract')]
+#     __abstracts__ = [('for_contract', 'contract.contract')]
 #     __name__ = 'ins_contract.subs_process.process_state'
 
 

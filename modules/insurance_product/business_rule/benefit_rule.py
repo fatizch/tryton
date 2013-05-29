@@ -141,6 +141,8 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
             res = coop_string.translate_value(self, 'amount_kind')
             if self.coef_coverage_amount != 1:
                 res = '%s * %s' % (self.coef_coverage_amount, res)
+                #TODO : waiting tryton digits factor
+                #res = '%s%% * %s' % (self.coef_coverage_amount * 100, res)
             return res
 
     def get_rec_name(self, name):

@@ -95,10 +95,10 @@ class StepTransition(model.CoopSQL):
         cls.to_step.domain.extend([
             ('main_model', '=', Eval('_parent_on_process', {}).get(
                 'on_model'))])
-        cls.methods = copy.copy(cls.methods)
-        cls.methods.domain.extend([
-            ('on_model', '=', Eval('_parent_on_process', {}).get(
-                'on_model'))])
+        # cls.methods = copy.copy(cls.methods)
+        # cls.methods.domain.extend([
+        #     ('on_model', '=', Eval('_parent_on_process', {}).get(
+        #         'on_model'))])
 
         cls._error_messages.update({
             'missing_pyson': 'Pyson expression and description is mandatory',
@@ -823,17 +823,17 @@ class StepDesc(model.CoopSQL):
         depends=['processes'],
         required=True)
 
-    @classmethod
-    def __setup__(cls):
-        super(StepDesc, cls).__setup__()
-        cls.code_before = copy.copy(cls.code_before)
-        cls.code_before.domain.extend([
-            ('on_model', '=', Eval('main_model'))])
-        cls.code_before.depends.append('main_model')
-        cls.code_after = copy.copy(cls.code_after)
-        cls.code_after.domain.extend([
-            ('on_model', '=', Eval('main_model'))])
-        cls.code_after.depends.append('main_model')
+    # @classmethod
+    # def __setup__(cls):
+    #     super(StepDesc, cls).__setup__()
+    #     cls.code_before = copy.copy(cls.code_before)
+    #     cls.code_before.domain.extend([
+    #         ('on_model', '=', Eval('main_model'))])
+    #     cls.code_before.depends.append('main_model')
+    #     cls.code_after = copy.copy(cls.code_after)
+    #     cls.code_after.domain.extend([
+    #         ('on_model', '=', Eval('main_model'))])
+    #     cls.code_after.depends.append('main_model')
 
     @classmethod
     def _export_keys(cls):
@@ -869,11 +869,9 @@ class ProcessParameters(model.CoopView):
     __name__ = 'coop_process.process_parameters'
 
     date = fields.Date('Date')
-    model = fields.Many2One(
-        'ir.model',
-        'Model',
+    model = fields.Many2One('ir.model', 'Model',
         domain=[('is_workflow', '=', 'True')],
-        states={'readonly': True})
+        states={'readonly': True, 'invisible': True})
     good_process = fields.Many2One(
         'process.process_desc',
         'Good Process',

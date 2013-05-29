@@ -50,12 +50,12 @@
         <!-- Options Screens -->
         <!--################################################################ -->
         <record model="ir.ui.view" id="option_view_tree">
-            <field name="model">contract.subscribed_coverage</field>
+            <field name="model">contract.subscribed_option</field>
             <field name="type">tree</field>
             <field name="name">option_tree</field>
         </record>
         <record model="ir.ui.view" id="option_view_form">
-            <field name="model">contract.subscribed_coverage</field>
+            <field name="model">contract.subscribed_option</field>
             <field name="type">form</field>
             <field name="name">option_form</field>
         </record>

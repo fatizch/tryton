@@ -137,7 +137,7 @@
     <!-- Contract -->
     <!--################################################################-->
     <record model="ir.ui.view" id="contract_form">
-      <field name="model">ins_contract.contract</field>
+      <field name="model">contract.contract</field>
       <field name="type">form</field>
       <field name="inherit" ref="insurance_contract.contract_view_form"/>
       <field name="name">contract_form</field>

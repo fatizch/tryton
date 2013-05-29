@@ -1,9 +1,9 @@
+import copy
+
 from trytond.pool import PoolMeta
+from trytond.pyson import Eval
 
-from trytond.modules.coop_utils import fields
-
-from trytond.modules.insurance_collective.collective_contract import \
-    CONTRACT_KIND
+from trytond.modules.coop_utils import fields, utils
 
 __all__ = [
     'GroupSubscriptionProcessParameters',
@@ -17,11 +17,27 @@ class GroupSubscriptionProcessParameters():
     __name__ = 'ins_contract.subscription_process_parameters'
     __metaclass__ = PoolMeta
 
-    kind = fields.Selection(CONTRACT_KIND, 'Kind')
+    is_group = fields.Boolean('Group', on_change=['product', 'is_group'])
 
-    @staticmethod
-    def default_kind():
-        return 'individual'
+    @classmethod
+    def __setup__(cls):
+        utils.update_domain(cls, 'product',
+            [('is_group', '=', Eval('is_group'))])
+        utils.update_depends(cls, 'product', ['is_group'])
+        cls.possible_com_product = copy.copy(cls.possible_com_product)
+        cls.possible_com_product.on_change_with.append('is_group')
+        super(GroupSubscriptionProcessParameters, cls).__setup__()
+
+    def on_change_is_group(self):
+        if self.product and self.product.is_group != self.is_group:
+            return {'product': None}
+        return {}
+
+    def get_possible_com_product(self):
+        res = super(GroupSubscriptionProcessParameters,
+            self).get_possible_com_product()
+        return [x for x in res
+            if res.technical_product.is_group == self.is_group]
 
 
 class SubscriptionProcessFinder():
@@ -35,7 +51,7 @@ class SubscriptionProcessFinder():
             self).init_main_object_from_process(obj, process_param)
         if res:
             res, err = obj.init_from_offered(process_param.product,
-                process_param.date, kind=process_param.kind)
+                process_param.date)
             errs += err
         return res, errs
 

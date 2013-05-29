@@ -34,7 +34,7 @@ LOAN_KIND = [
 class LoanContract():
     'Loan Contract'
 
-    __name__ = 'ins_contract.contract'
+    __name__ = 'contract.contract'
     __metaclass__ = PoolMeta
 
     is_loan = fields.Function(
@@ -74,7 +74,7 @@ class LoanContract():
 class LoanOption():
     'Loan Option'
 
-    __name__ = 'ins_contract.option'
+    __name__ = 'contract.subscribed_option'
     __metaclass__ = PoolMeta
 
     is_loan = fields.Function(
@@ -91,7 +91,7 @@ class Loan(model.CoopSQL, model.CoopView):
     __name__ = 'ins_contract.loan'
 
     kind = fields.Selection(LOAN_KIND, 'Kind', sort=False)
-    contract = fields.Many2One('ins_contract.contract', 'Contract',
+    contract = fields.Many2One('contract.contract', 'Contract',
         ondelete='CASCADE')
     monthly_payment_number = fields.Integer('Monthly Payment Number')
     monthly_payment_amount = fields.Numeric('Monthly Payment Amount',

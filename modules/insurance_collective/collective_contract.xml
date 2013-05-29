@@ -3,7 +3,7 @@
     <data>
         <!-- Tree view for contract -->
         <record model="ir.ui.view" id="contract_view_tree">
-            <field name="model">ins_contract.contract</field>
+            <field name="model">contract.contract</field>
             <field name="type">tree</field>
             <field name="inherit" ref="insurance_contract.contract_view_tree"/>
             <field name="arch" type="xml"/>
@@ -11,16 +11,16 @@
 
         <!-- form view -->
         <record model="ir.ui.view" id="contract_view_form">
-            <field name="model">ins_contract.contract</field>
+            <field name="model">contract.contract</field>
             <field name="type">form</field>
             <field name="inherit" ref="insurance_contract.contract_view_form"/>
-            <field name="name">contract_form</field>
+            <field name="arch" type="xml"/>
         </record>
 
         <!-- View for the main menu and the event -->
         <record model="ir.action.act_window" id="act_contract_form">
             <field name="name">Group Contract</field>
-            <field name="res_model">ins_contract.contract</field>
+            <field name="res_model">contract.contract</field>
             <field name="domain">[('kind', '=', 'group')]</field>
         </record>
         <record model="ir.action.act_window" id="insurance_contract.act_contract_form">
