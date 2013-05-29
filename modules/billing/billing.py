@@ -655,7 +655,8 @@ class CoveredElement():
     __name__ = 'ins_contract.covered_element'
 
     indemnification_bank_account = fields.Many2One('party.bank_account',
-        'Indemnification Bank Account', depends=['contract'],
+        'Indemnification Bank Account',
+        depends=['contract', 'item_kind', 'party'],
         domain=[
             ['OR',
                 ('party', '=', Eval('_parent_contract', {}).get('subscriber')),
