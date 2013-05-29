@@ -16,8 +16,8 @@ def register():
         CommissionRule,
         #Agreement
         CommissionAgreement,
-        CommissionOption,
         CompensatedOption,
+        CommissionOption,
         #Party
         Party,
         Broker,
