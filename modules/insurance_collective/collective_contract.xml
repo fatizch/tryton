@@ -5,7 +5,7 @@
         <record model="ir.ui.view" id="contract_view_tree">
             <field name="model">contract.contract</field>
             <field name="type">tree</field>
-            <field name="inherit" ref="contract.contract_view"_tree"/>
+            <field name="inherit" ref="contract.contract_view_tree"/>
             <field name="arch" type="xml"/>
         </record>
 
@@ -13,7 +13,7 @@
         <record model="ir.ui.view" id="contract_view_form">
             <field name="model">contract.contract</field>
             <field name="type">form</field>
-            <field name="inherit" ref="contract.contract_view"_form"/>
+            <field name="inherit" ref="contract.contract_view_form"/>
             <field name="arch" type="xml"/>
         </record>
 
