@@ -1,11 +1,6 @@
 <?xml version="1.0"?>
 <data>
-    <xpath expr="/form" position="replace_attributes">
-        <form string="Coverage"/>
-    </xpath>
-    <xpath
-        expr="/form/notebook/page/notebook/page"
-        position="before">
+<xpath expr="/form/notebook/page[@id='summary']" position="after">
         <page string="Complementary Data" id="complementary_data">
             <field name="complementary_data_def" colspan="4"/>
         </page>
@@ -18,22 +13,13 @@
     </xpath>
     <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"
         position="inside">
-        <label name="item_desc"/>
-        <field name="item_desc"/>
-        <newline/>
+        <label name="kind"/>
+        <field name="kind"/>
         <label name="currency"/>
         <field name="currency"/>
         <newline/>
-        <label name="insurer"/>
-        <field name="insurer" widget="selection"/>
-        <newline/>
         <label name="subscription_behaviour"/>
         <field name="subscription_behaviour"/>
-        <newline/>
-    </xpath>
-    <xpath expr="/form/label[@name='template']" position="before">
-        <label name="family"/>
-        <field name="family" xexpand="1"/>
         <newline/>
     </xpath>
 </data>

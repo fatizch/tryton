@@ -8,7 +8,7 @@ from trytond.modules.coop_utils import fields, utils
 __all__ = [
     'GroupSubscriptionProcessParameters',
     'SubscriptionProcessFinder',
-]
+    ]
 
 
 class GroupSubscriptionProcessParameters():
@@ -17,7 +17,8 @@ class GroupSubscriptionProcessParameters():
     __name__ = 'ins_contract.subscription_process_parameters'
     __metaclass__ = PoolMeta
 
-    is_group = fields.Boolean('Group', on_change=['product', 'is_group'])
+    is_group = fields.Boolean('Group', on_change=['product', 'is_group',
+        'possible_com_product', 'dist_network', 'com_product'])
 
     @classmethod
     def __setup__(cls):
@@ -29,15 +30,21 @@ class GroupSubscriptionProcessParameters():
         super(GroupSubscriptionProcessParameters, cls).__setup__()
 
     def on_change_is_group(self):
-        if self.product and self.product.is_group != self.is_group:
-            return {'product': None}
-        return {}
+        res = {}
+        com_products = self.get_possible_com_product()
+        res['possible_com_product'] = [x.id for x in com_products]
+        if self.com_product and not self.com_product in com_products:
+            res['com_product'] = None
+        if (self.product and self.product not in
+                [x.product for x in com_products]):
+            res['product'] = None
+        return res
 
     def get_possible_com_product(self):
         res = super(GroupSubscriptionProcessParameters,
             self).get_possible_com_product()
         return [x for x in res
-            if res.technical_product.is_group == self.is_group]
+            if x.product.is_group == self.is_group]
 
 
 class SubscriptionProcessFinder():

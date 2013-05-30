@@ -16,6 +16,8 @@
     <field name="offered"/>
     <label name="kind"/>
     <field name="kind"/>
+    <label name="product_kind"/>
+    <field name="product_kind"/>
   </group>
   <notebook colspan="4">
     <page string="Options" id="options">

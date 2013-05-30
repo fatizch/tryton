@@ -69,11 +69,11 @@ def launch_test_case(cfg_dict):
     })
 
     product_mod = meths['Model']({
-        'model': 'ins_product.product',
+        'model': 'offered.product',
     })
 
     coverage_mod = meths['Model']({
-        'model': 'ins_product.coverage',
+        'model': 'offered.coverage',
     })
 
     company_mod = meths['Model']({
@@ -97,13 +97,13 @@ def launch_test_case(cfg_dict):
                 'module': 'insurance_contract',
                 'fs_id': 'menu_contract_form'}).db_id),
             cfg_dict['Menu'](meths['ModelData']({
-                'module': 'insurance_product',
+                'module': 'offered',
                 'fs_id': 'menu_product'}).db_id),
             cfg_dict['Menu'](meths['ModelData']({
-                'module': 'insurance_product',
+                'module': 'offered',
                 'fs_id': 'menu_product_form'}).db_id),
             cfg_dict['Menu'](meths['ModelData']({
-                'module': 'insurance_product',
+                'module': 'offered',
                 'fs_id': 'menu_coverage_form'}).db_id),
         ],
         'users': [admin_user],
@@ -131,7 +131,7 @@ def launch_test_case(cfg_dict):
     })
 
     coverage_mod = meths['Model']({
-        'model': 'ins_product.coverage',
+        'model': 'offered.coverage',
     })
 
     menu_mod = meths['Model']({
@@ -146,16 +146,16 @@ def launch_test_case(cfg_dict):
         'name': translater('Functional Admin'),
         'menu_access': [
             cfg_dict['Menu'](meths['ModelData']({
-                'module': 'insurance_product',
+                'module': 'offered',
                 'fs_id': 'menu_product'}).db_id),
             cfg_dict['Menu'](meths['ModelData']({
-                'module': 'insurance_product',
+                'module': 'offered',
                 'fs_id': 'menu_product_form'}).db_id),
             cfg_dict['Menu'](meths['ModelData']({
-                'module': 'insurance_product',
+                'module': 'offered',
                 'fs_id': 'menu_product_configuration'}).db_id),
             cfg_dict['Menu'](meths['ModelData']({
-                'module': 'insurance_product',
+                'module': 'offered',
                 'fs_id': 'menu_product_configuration'}).db_id),
             cfg_dict['Menu'](meths['ModelData']({
                 'module': 'rule_engine',
@@ -164,10 +164,10 @@ def launch_test_case(cfg_dict):
                 'module': 'insurance_product',
                 'fs_id': 'menu_model_clause'}).db_id),
             cfg_dict['Menu'](meths['ModelData']({
-                'module': 'insurance_product',
+                'module': 'offered',
                 'fs_id': 'menu_model_coop_schema'}).db_id),
             cfg_dict['Menu'](meths['ModelData']({
-                'module': 'insurance_product',
+                'module': 'offered',
                 'fs_id': 'menu_coverage_form'}).db_id),
             cfg_dict['Menu'](meths['ModelData']({
                 'module': 'party',

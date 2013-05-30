@@ -1,71 +1,54 @@
 #-*- coding:utf-8 -*-
 import copy
 
-from trytond.pool import Pool
-from trytond.pyson import Eval, Bool
+from trytond.pool import Pool, PoolMeta
+from trytond.pyson import Eval, Or, And
 
-from trytond.modules.coop_utils import model, business, utils, fields
-from trytond.modules.insurance_product import Offered, product
+from trytond.modules.coop_utils import utils, fields
+from trytond.modules.insurance_product import product
 from trytond.modules.insurance_product import PricingResultLine
 from trytond.modules.insurance_product import EligibilityResultLine
+from .product import IS_INSURANCE
 
 
 __all__ = [
-    'SimpleCoverage',
     'Coverage',
-    'PackageCoverage',
-    'CoverageComplementaryDataRelation',
-]
-
-SUBSCRIPTION_BEHAVIOUR = [
-    ('mandatory', 'Mandatory'),
-    ('proposed', 'Proposed'),
-    ('optional', 'Optional'),
+    'OfferedCoverage',
 ]
 
 COULD_NOT_FIND_A_MATCHING_RULE = 'Could not find a matching rule'
 
 
-class SimpleCoverage(Offered):
-    'Simple Coverage'
+class Coverage():
+    'Coverage'
 
-    __name__ = 'ins_product.simple_coverage'
+    __name__ = 'offered.coverage'
+    __metaclass__ = PoolMeta
 
-    products = fields.Many2Many(
-        'ins_product.product-options-coverage',
-        'coverage', 'product', 'Products',
-        domain=[('currency', '=', Eval('currency'))],
-        depends=['currency'])
-    insurer = fields.Many2One('party.insurer', 'Insurer',
-        states={'invisible': Bool(Eval('is_package'))},
-        depends=['is_package'])
-    family = fields.Selection([('default', 'default')], 'Family',
+    benefits = fields.Many2Many('offered.coverage-benefit', 'coverage',
+        'benefit', 'Benefits', context={
+            'start_date': Eval('start_date'),
+            'currency_digits': Eval('currency_digits')},
         states={
-            'invisible': Bool(Eval('is_package')),
-            'required': Bool(~Eval('is_package')),
-        },
-        depends=['is_package'])
+            'readonly': ~Eval('start_date'),
+            'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE),
+            }, depends=['currency_digits'])
+    insurer = fields.Many2One('party.insurer', 'Insurer', states={
+            'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE)
+            }, depends=['is_package'])
+    family = fields.Selection([('', '')], 'Family', states={
+            'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE),
+            'required': And(~Eval('is_package'), IS_INSURANCE),
+            }, depends=['is_package'])
     item_desc = fields.Many2One('ins_product.item_desc', 'Item Descriptor',
-        required=True)
-    currency = fields.Many2One('currency.currency', 'Currency', required=True)
-    subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
-        'Subscription Behaviour', sort=False)
-    is_package = fields.Boolean('Package')
-    coverages_in_package = fields.Many2Many('ins_product.package-coverage',
-        'package', 'coverage', 'Coverages In Package',
         states={
-            'invisible': Bool(~Eval('is_package')),
-        },
-        depends=['is_package'],
-        domain=[('is_package', '=', False)])
-    complementary_data_def = fields.Many2Many(
-        'ins_product.coverage-complementary_data_def',
-        'coverage', 'complementary_data_def', 'Complementary Data',
-        domain=[('kind', 'in', ['contract', 'sub_elem'])])
+            'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE),
+            'required': And(~Eval('is_package'), IS_INSURANCE),
+            }, depends=['is_package'])
 
     @classmethod
     def __setup__(cls):
-        super(SimpleCoverage, cls).__setup__()
+        super(Coverage, cls).__setup__()
         for field_name in (mgr for mgr in dir(cls) if mgr.endswith('_mgr')):
             cur_attr = copy.copy(getattr(cls, field_name))
             if not hasattr(cur_attr, 'context') or not isinstance(
@@ -77,13 +60,16 @@ class SimpleCoverage(Offered):
             cur_attr = copy.copy(cur_attr)
             setattr(cls, field_name, cur_attr)
 
-        cls.template = copy.copy(cls.template)
-        if not cls.template.domain:
-            cls.template.domain = []
-        cls.template.domain.append(('is_package', '=', Eval('is_package')))
-        if not cls.template.depends:
-            cls.template = []
-        cls.template.depends.append('is_package')
+        cls.kind = copy.copy(cls.kind)
+        cls.kind.selection.append(('insurance', 'Insurance'))
+        if ('default', 'Default') in cls.kind.selection:
+            cls.kind.selection.remove(('default', 'Default'))
+        cls.kind.selection = list(set(cls.kind.selection))
+
+    @classmethod
+    def delete(cls, entities):
+        cls.delete_rules(entities)
+        super(Coverage, cls).delete(entities)
 
     def give_me_price(self, args):
         # This method is one of the core of the pricing system. It asks for the
@@ -190,10 +176,6 @@ class SimpleCoverage(Offered):
             return (EligibilityResultLine(True), [])
         return res
 
-    @staticmethod
-    def default_currency():
-        return business.get_default_currency()
-
     def give_me_family(self, args):
         return (Pool().get(self.family), [])
 
@@ -219,11 +201,6 @@ class SimpleCoverage(Offered):
                     continue
                 res.append((covered, covered_data))
         return res, []
-
-    def is_valid(self):
-        if self.template_behaviour == 'remove':
-            return False
-        return True
 
     def give_me_allowed_amounts(self, args):
         try:
@@ -262,79 +239,13 @@ class SimpleCoverage(Offered):
         except product.NonExistingRuleKindException:
             return (True, []), []
 
-    def give_me_complementary_data_ids_aggregate(self, args):
-        if not 'dd_args' in args:
-            return [], []
-        dd_args = args['dd_args']
-        if not('options' in dd_args and dd_args['options'] != '' and
-                self.code in dd_args['options'].split(';')):
-            return [], []
-        return self.get_complementary_data_def(
-            [dd_args['kind']], args['date']), []
-
-    @staticmethod
-    def default_subscription_behaviour():
-        return 'mandatory'
-
     def get_currency(self):
         return self.currency
 
 
-class Coverage(model.CoopSQL, SimpleCoverage):
-    'Coverage'
+class OfferedCoverage(product.Offered):
+    'Offered Coverage'
 
-    __name__ = 'ins_product.coverage'
-
-    benefits = fields.Many2Many('ins_product.coverage-benefit', 'coverage',
-        'benefit', 'Benefits',
-        context={
-            'start_date': Eval('start_date'),
-            'currency_digits': Eval('currency_digits'),
-        },
-        states={
-            'readonly': ~Bool(Eval('start_date')),
-            'invisible': Bool(Eval('is_package')),
-        },
-        depends=['currency_digits'])
-
-    @classmethod
-    def __setup__(cls):
-        super(Coverage, cls).__setup__()
-        cls._sql_constraints += [
-            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
-        ]
-
-    @classmethod
-    def delete(cls, entities):
-        cls.delete_rules(entities)
-        super(Coverage, cls).delete(entities)
-
-    def get_currency(self):
-        return self.currency
-
-    @classmethod
-    def _export_skips(cls):
-        skips = super(Coverage, cls)._export_skips()
-        skips.add('products')
-        return skips
-
-
-class PackageCoverage(model.CoopSQL):
-    'Link Package Coverage'
-
-    __name__ = 'ins_product.package-coverage'
-
-    package = fields.Many2One('ins_product.coverage', 'Package')
-    coverage = fields.Many2One('ins_product.coverage', 'Coverage')
-
-
-class CoverageComplementaryDataRelation(model.CoopSQL):
-    'Relation between Coverage and Complementary Data'
-
-    __name__ = 'ins_product.coverage-complementary_data_def'
-
-    coverage = fields.Many2One('ins_product.coverage', 'Coverage',
-        ondelete='CASCADE')
-    complementary_data_def = fields.Many2One(
-        'ins_product.complementary_data_def',
-        'Complementary Data', ondelete='RESTRICT')
+    __name__ = 'offered.coverage'
+    #This empty override is necessary to have in the coverage the fields added
+    #in the override of offered

@@ -1,19 +1,39 @@
 <?xml version="1.0"?>
 <data>
+    <xpath expr="/form" position="replace_attributes">
+        <form string="Coverage"/>
+    </xpath>
     <xpath expr="/form/notebook/page[@id='managers']" position="after">
         <page string="Benefits" id="benefits"
-            states="{'invisible': Bool(Eval('is_package'))}">
+            states="{'invisible': Or(Bool(Eval('is_package')), Eval('kind') != 'insurance')}">
             <field name="benefits"/>
         </page>
     </xpath>
+    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"
+        position="inside">
+        <label name="item_desc"/>
+        <field name="item_desc"/>
+        <newline/>
+        <label name="insurer"/>
+        <field name="insurer" widget="selection"/>
+        <newline/>
+    </xpath>
+    <xpath expr="/form/label[@name='template']" position="before">
+        <label name="family"/>
+        <field name="family" xexpand="1"/>
+        <newline/>
+    </xpath>
     <xpath expr="/form/notebook/page/notebook" position="inside">
-        <page string="Deductible" id="deductible">
+        <page string="Deductible" id="deductible"
+            states="{'invisible': Eval('kind') != 'insurance'}">
             <field name="deductible_rules" colspan="4"/>
         </page>
-        <page string="Clause" id="clause">
+        <page string="Clause" id="clause"
+            states="{'invisible': Eval('kind') != 'insurance'}">
             <field name="clause_rules" colspan="4"/>
         </page>
-        <page string="Documents" id="documents">
+        <page string="Documents" id="documents"
+            states="{'invisible': Eval('kind') != 'insurance'}">
             <field name="document_rules"/>
             <field name="sub_document_rules"/>
         </page>

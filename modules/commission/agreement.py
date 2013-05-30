@@ -19,7 +19,8 @@ class CommissionAgreement():
     __name__ = 'contract.contract'
     __metaclass__ = PoolMeta
 
-    plan = fields.Many2One('commission.commission_plan', 'Plan')
+    plan = fields.Many2One('offered.product', 'Plan',
+        domain=[('kind', '=', 'commission')])
 
     @classmethod
     def __setup__(cls):
@@ -63,9 +64,11 @@ class CompensatedOption(model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     com_option = fields.Many2One('contract.subscribed_option',
-        'Commission Option', ondelete='RESTRICT')
+        'Commission Option', domain=[('kind', '=', 'commission')],
+        ondelete='RESTRICT')
     subs_option = fields.Many2One('contract.subscribed_option',
-        'Subscribed Coverage', ondelete='CASCADE')
+        'Subscribed Coverage', domain=[('kind', '=', 'insurance')],
+        ondelete='CASCADE')
     use_specific_rate = fields.Boolean('Specific Rate')
     rate = fields.Numeric('Rate', states={
             'invisible': ~Eval('use_specific_rate'),

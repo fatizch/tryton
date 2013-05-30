@@ -5,7 +5,7 @@ from trytond.pool import Pool
 from trytond.modules.coop_utils import model, coop_string, date, utils, fields
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED, CONFIG_KIND, STATE_SIMPLE
-from trytond.modules.insurance_product.product import DEF_CUR_DIG
+from trytond.modules.offered.offered import DEF_CUR_DIG
 
 
 __all__ = [
@@ -319,7 +319,7 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
     rule = fields.Many2One(
         'rule_engine', 'Amount', states={'invisible': STATE_SIMPLE})
     rule_complementary_data = fields.Dict(
-        'ins_product.complementary_data_def', 'Rule Complementary Data',
+        'offered.complementary_data_def', 'Rule Complementary Data',
         on_change_with=['rule', 'rule_complementary_data'],
         states={'invisible': STATE_SIMPLE})
     amount = fields.Numeric('Amount',

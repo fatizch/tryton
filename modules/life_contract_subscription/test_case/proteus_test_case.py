@@ -163,7 +163,7 @@ yexpand="1" mode="form"/>
 ''',
     })
 
-    prev_product = Model.get('ins_product.product').find(
+    prev_product = Model.get('offered.product').find(
         [('code', '=', 'PREV')])[0]
 
     subs_process_desc = meths['ProcessDesc']({

@@ -58,7 +58,7 @@ __all__ = [
 
 #     # This is a core field, it will be used all along the process to ask for
 #     # directions, client side rules, etc...
-#     product = fields.Many2One('ins_product.product',
+#     product = fields.Many2One('offered.product',
 #                               'Product',
 #                               # domain : a list of conditions
 #                               # (param1, op, param2).
@@ -183,7 +183,7 @@ __all__ = [
 #     # to be stored, and is not supposed to be.
 
 #     __name__ = 'ins_contract.coverage_displayer'
-#     offered = fields.Many2One('ins_product.coverage', 'offered',
+#     offered = fields.Many2One('offered.coverage', 'offered',
 #         readonly=True)
 #     start_date = fields.Date('From Date',
 #         domain=[('offered.start_date', '<=', 'start_date')],
@@ -211,7 +211,7 @@ __all__ = [
 #                                None,
 #                                'Options Choices')
 #     complementary_data = fields.Dict(
-#         'ins_product.complementary_data_def', 'Complementary Data',
+#         'offered.complementary_data_def', 'Complementary Data',
 #         context={
 #             'for_product': Eval('for_product'),
 #             'at_date': Eval('at_date'),
@@ -220,7 +220,7 @@ __all__ = [
 #         depends=['for_product', 'at_date'],
 #         states={'invisible': ~Eval('for_product')})
 #     for_product = fields.Many2One(
-#         'ins_product.product',
+#         'offered.product',
 #         'For Product',
 #         states={'invisible': True})
 #     at_date = fields.Date(
@@ -403,7 +403,7 @@ __all__ = [
 #         readonly=True)
 
 #     data_complementary_data = fields.Dict(
-#         'ins_product.complementary_data_def', 'Complementary Data',
+#         'offered.complementary_data_def', 'Complementary Data',
 #         context={
 #             'at_date': Eval('data_start_date'),
 #             'dd_args': {

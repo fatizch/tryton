@@ -11,4 +11,5 @@
     <field name="start_date"/>
     <label name="end_date"/>
     <field name="end_date"/>
+    <field name="dist_networks" colspan="4"/>
 </form>

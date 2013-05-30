@@ -1,7 +1,8 @@
 #-*- coding:utf-8 -*-
 from trytond.modules.coop_utils import model, date, fields
-from trytond.modules.insurance_product import product
+from trytond.modules.offered import offered
 from trytond.modules.insurance_product import EligibilityResultLine
+from .product import Offered
 
 __all__ = [
     'EventDesc',
@@ -9,6 +10,7 @@ __all__ = [
     'LossDesc',
     'EventDescLossDescRelation',
     'Benefit',
+    'InsuranceBenefit',
     'BenefitLossDescRelation',
     'CoverageBenefitRelation',
     'LossDescComplementaryDataRelation',
@@ -101,7 +103,7 @@ class LossDescComplementaryDataRelation(model.CoopSQL):
     loss_desc = fields.Many2One(
         'ins_product.loss_desc', 'Loss Desc', ondelete='CASCADE')
     complementary_data_def = fields.Many2One(
-        'ins_product.complementary_data_def',
+        'offered.complementary_data_def',
         'Complementary Data', ondelete='RESTRICT')
 
 
@@ -116,7 +118,7 @@ class EventDescLossDescRelation(model.CoopSQL):
         'ins_product.loss_desc', 'Loss Desc', ondelete='RESTRICT')
 
 
-class Benefit(model.CoopSQL, product.Offered):
+class Benefit(model.CoopSQL, offered.Offered):
     'Benefit'
 
     __name__ = 'ins_product.benefit'
@@ -167,11 +169,11 @@ class Benefit(model.CoopSQL, product.Offered):
                 #we first check that no rule are defined at a higher level
                 indemn_dicts, indemn_errs = coverage.get_result(key, sub_args,
                     key)
-            except product.NonExistingRuleKindException:
+            except offered.NonExistingRuleKindException:
                 try:
                     indemn_dicts, indemn_errs = self.get_result(key,
                         sub_args, key)
-                except product.NonExistingRuleKindException:
+                except offered.NonExistingRuleKindException:
                     continue
             errs += indemn_errs
             if not indemn_dicts:
@@ -188,7 +190,7 @@ class Benefit(model.CoopSQL, product.Offered):
     def give_me_eligibility(self, args):
         try:
             res = self.get_result('eligibility', args, kind='eligibility')
-        except product.NonExistingRuleKindException:
+        except offered.NonExistingRuleKindException:
             return (EligibilityResultLine(True), [])
         return res
 
@@ -202,6 +204,14 @@ class Benefit(model.CoopSQL, product.Offered):
     @staticmethod
     def default_beneficiary_kind():
         return 'subscriber'
+
+
+class InsuranceBenefit(Offered):
+    'Insurance Benefit'
+
+    __name__ = 'ins_product.benefit'
+    #This empty override is necessary to have in the benefit the fields added
+    #in the override of offered
 
 
 class BenefitLossDescRelation(model.CoopSQL):
@@ -218,10 +228,10 @@ class BenefitLossDescRelation(model.CoopSQL):
 class CoverageBenefitRelation(model.CoopSQL):
     'Coverage Benefit Relation'
 
-    __name__ = 'ins_product.coverage-benefit'
+    __name__ = 'offered.coverage-benefit'
 
     coverage = fields.Many2One(
-        'ins_product.coverage', 'Coverage', ondelete='CASCADE')
+        'offered.coverage', 'Coverage', ondelete='CASCADE')
     benefit = fields.Many2One(
         'ins_product.benefit', 'Benefit', ondelete='RESTRICT')
 
@@ -234,5 +244,5 @@ class BenefitComplementaryDataRelation(model.CoopSQL):
     benefit = fields.Many2One(
         'ins_product.benefit', 'Benefit', ondelete='CASCADE')
     complementary_data_def = fields.Many2One(
-        'ins_product.complementary_data_def',
+        'offered.complementary_data_def',
         'Complementary Data', ondelete='RESTRICT')

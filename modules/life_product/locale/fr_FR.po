@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -10,11 +10,11 @@ msgctxt "error:tranche.tranche_version:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "field:ins_product.coverage,coverage_amount_rules:"
+msgctxt "field:offered.coverage,coverage_amount_rules:"
 msgid ""
 msgstr ""
 
-msgctxt "field:ins_product.coverage,is_coverage_amount_needed:"
+msgctxt "field:offered.coverage,is_coverage_amount_needed:"
 msgid ""
 msgstr ""
 
@@ -170,11 +170,11 @@ msgctxt "model:tranche.tranche_version,name:"
 msgid "Tranche Version"
 msgstr ""
 
-msgctxt "selection:ins_product.coverage,family:"
+msgctxt "selection:offered.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
 
-msgctxt "view:ins_product.coverage:"
+msgctxt "view:offered.coverage:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"
 

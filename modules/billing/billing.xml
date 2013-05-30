@@ -28,7 +28,7 @@
       <field name="view" ref="payment_method_form"/>
       <field name="act_window" ref="act_payment_method"/>
     </record>
-    <menuitem parent="insurance_product.menu_product_configuration" sequence="10" action="act_payment_method" id="menu_payment_method"/>
+    <menuitem parent="offered.menu_product_configuration" sequence="10" action="act_payment_method" id="menu_payment_method"/>
     <!--################################################################ -->
     <!-- Price Lines -->
     <!--################################################################ -->
@@ -168,7 +168,7 @@
     <!-- Product -->
     <!--################################################################-->
     <record model="ir.ui.view" id="product_form">
-      <field name="model">ins_product.product</field>
+      <field name="model">offered.product</field>
       <field name="type">form</field>
       <field name="inherit" ref="insurance_product.product_view_form"/>
       <field name="name">product_form</field>

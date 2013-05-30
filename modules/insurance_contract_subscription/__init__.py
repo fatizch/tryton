@@ -1,5 +1,7 @@
 from trytond.pool import Pool
-from subscription_process import *
+
+from .subscription_process import *
+from .contract import *
 
 
 def register():

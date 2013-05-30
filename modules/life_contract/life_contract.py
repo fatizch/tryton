@@ -237,7 +237,7 @@ class LifeCoveredData():
 #             'kind': 'elem'},
 #         depends=['covered_elements'])
 #     complementary_data = fields.Dict(
-#         'ins_product.complementary_data_def', 'Complementary Data',
+#         'offered.complementary_data_def', 'Complementary Data',
 #         context={
 #             'for_product': Eval('for_product'),
 #             'at_date': Eval('at_date'),
@@ -248,7 +248,7 @@ class LifeCoveredData():
 #         depends=['for_product', 'at_date', 'for_options'],
 #         states={'invisible': ~Eval('for_product')})
 #     for_product = fields.Many2One(
-#         'ins_product.product',
+#         'offered.product',
 #         'For Product',
 #         states={'invisible': True})
 #     at_date = fields.Date(

@@ -13,7 +13,7 @@ from trytond.modules.coop_utils import abstract
 from trytond.modules.insurance_product.benefit import INDEMNIFICATION_KIND, \
     INDEMNIFICATION_DETAIL_KIND
 from trytond.modules.insurance_product import Printable
-from trytond.modules.insurance_product.product import DEF_CUR_DIG
+from trytond.modules.offered.offered import DEF_CUR_DIG
 
 __all__ = [
     'Claim',
@@ -363,7 +363,7 @@ class Loss(model.CoopSQL, model.CoopView):
         fields.Boolean('With End Date'),
         'get_with_end_date')
     complementary_data = fields.Dict(
-        'ins_product.complementary_data_def', 'Complementary Data',
+        'offered.complementary_data_def', 'Complementary Data',
         on_change_with=['loss_desc', 'complementary_data'],
         states={'invisible': ~Eval('complementary_data')})
 
@@ -502,7 +502,7 @@ class ClaimDeliveredService():
     multi_level_view = fields.One2Many(
         'ins_claim.indemnification', 'delivered_service', 'Indemnifications')
     complementary_data = fields.Dict(
-        'ins_product.complementary_data_def', 'Complementary Data',
+        'offered.complementary_data_def', 'Complementary Data',
         on_change_with=['benefit', 'complementary_data'],
         states={'invisible': ~Eval('complementary_data')},)
 

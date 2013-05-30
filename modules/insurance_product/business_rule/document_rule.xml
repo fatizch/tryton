@@ -26,7 +26,7 @@
       <field name="view" ref="document_desc_form"/>
       <field name="act_window" ref="act_document_desc"/>
     </record>
-    <menuitem parent="menu_product_configuration" sequence="30" action="act_document_desc" id="menu_document_desc"/>
+    <menuitem parent="offered.menu_product_configuration" sequence="30" action="act_document_desc" id="menu_document_desc"/>
     <!-- Document Rule -->
     <record model="ir.ui.view" id="document_rule_form">
       <field name="model">ins_product.document_rule</field>
@@ -101,7 +101,7 @@
       <field name="view" ref="letter_model_form"/>
       <field name="act_window" ref="act_letter_model"/>
     </record>
-    <menuitem parent="menu_product_configuration" sequence="30"
+    <menuitem parent="offered.menu_product_configuration" sequence="30"
       action="act_letter_model" id="menu_letter_model"/>
     <!-- Letter Version -->
     <record model="ir.ui.view" id="letter_version_form">

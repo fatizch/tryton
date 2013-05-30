@@ -17,7 +17,7 @@ __all__ = [
 class GroupProduct():
     'Group Product'
 
-    __name__ = 'ins_product.product'
+    __name__ = 'offered.product'
     __metaclass__ = PoolMeta
 
     is_group = fields.Boolean('Group Product')
@@ -34,7 +34,7 @@ class GroupProduct():
 class GroupCoverage():
     'Group Coverage'
 
-    __name__ = 'ins_product.coverage'
+    __name__ = 'offered.coverage'
     __metaclass__ = PoolMeta
 
     is_group = fields.Boolean('Group Coverage')

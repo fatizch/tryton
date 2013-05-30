@@ -15,14 +15,10 @@ def register():
         # from product
         Offered,
         ItemDescriptor,
-        SimpleCoverage,
         Coverage,
-        PackageCoverage,
+        OfferedCoverage,
         Product,
-        ProductOptionsCoverage,
-        # from complementary_data
-        ComplementaryDataDefinition,
-        ComplementaryDataRecursiveRelation,
+        OfferedProduct,
         ItemDescriptorComplementaryDataRelation,
         ProductItemDescriptorRelation,
         # from business_rule
@@ -57,6 +53,7 @@ def register():
         LossDescDocumentsRelation,
         EventDescLossDescRelation,
         Benefit,
+        InsuranceBenefit,
         CoverageBenefitRelation,
         BenefitLossDescRelation,
         BenefitComplementaryDataRelation,
@@ -66,7 +63,6 @@ def register():
         CoverageAmountRule,
         DeductibleRule,
         DeductibleDuration,
-        ProductDefinition,
         TermRenewalRule,
         # from rule_sets
         SubscriberContext,
@@ -79,8 +75,6 @@ def register():
         Clause,
         ClauseRelation,
         ClauseVersion,
-        ProductComplementaryDataRelation,
-        CoverageComplementaryDataRelation,
         LossDescComplementaryDataRelation,
         # from process
         ProcessProductRelation,
