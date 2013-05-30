@@ -19,23 +19,6 @@
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="name">contract_form</field>
         </record>
-        <!-- View for the main menu and the event -->
-        <record model="ir.action.act_window" id="act_contract_form">
-            <field name="name">Contract</field>
-            <field name="res_model">contract.contract</field>
-        </record>
-        <!-- View that connect the form in the tree with the specification -->
-        <record model="ir.action.act_window.view" id="act_contract_form_view1">
-            <field name="sequence" eval="10"/>
-            <field name="view" ref="contract_view_tree"/>
-            <field name="act_window" ref="act_contract_form"/>
-        </record>
-        <!-- View for the edition or the Form of product -->
-        <record model="ir.action.act_window.view" id="act_contract_form_view2">
-            <field name="sequence" eval="20"/>
-            <field name="view" ref="contract_view_form"/>
-            <field name="act_window" ref="act_contract_form"/>
-        </record>
         <record model="ir.action.keyword" id="report_document_request_keyword">
             <field name="keyword">form_action</field>
             <field name="model">contract.contract,-1</field>
@@ -98,7 +81,7 @@
         <menuitem parent="menu_contract" name="Individual Policy" id="menu_individual"
             sequence="10"/>
         <menuitem parent="menu_individual" sequence="1"
-            id="menu_contract_form" icon="tryton-list" action="act_contract_form"/>
+            id="menu_contract_form" icon="tryton-list" action="contract.act_contract_form"/>
         <!--################################################################ -->
         <!-- Delivered Service -->
         <!--################################################################ -->
