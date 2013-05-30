@@ -110,14 +110,14 @@ def add_results(results):
     return tuple(res)
 
 
-def get_data_from_dict(data, dict):
+def get_data_from_dict(data, the_dict):
     # This is used to parse a given dict for a set of data, and returns a dict
     # and a list of errors in the case it could not find one or more of the
     # specified data keys in the dict.
     res = ({}, [])
     for elem in data:
-        if elem in dict:
-            res[0][elem] = dict[elem]
+        if elem in the_dict:
+            res[0][elem] = the_dict[elem]
         else:
             res[1] += '%s data not found' % elem
     return res
