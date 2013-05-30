@@ -14,12 +14,12 @@
         <record model="ir.ui.view" id="contract_view_form">
             <field name="model">contract.contract</field>
             <field name="type">form</field>
-            <field name="inherit" ref="insurance_contract.contract_view_form"/>
+            <field name="inherit" ref="contract.contract_view"_form"/>
             <field name="name">contract_form</field>
         </record>
         <record model="ir.ui.view" id="contract_view_tree">
             <field name="model">contract.contract</field>
-            <field name="inherit" ref="insurance_contract.contract_view_tree"/>
+            <field name="inherit" ref="contract.contract_view"_tree"/>
             <field name="type">tree</field>
             <field name="arch" type="xml"/>
         </record>
