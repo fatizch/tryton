@@ -193,7 +193,11 @@ class ContractSubscription(CoopProcessFramework):
         if (hasattr(self, 'billing_managers') and self.billing_managers):
             return str(self.billing_managers[0].payment_method.id)
         if (hasattr(self, 'offered') and self.offered):
-            return str(self.offered.get_default_payment_method().id)
+            good_payment_method = self.offered.get_default_payment_method()
+            if good_payment_method:
+                return str(good_payment_method.id)
+            else:
+                return ''
 
     def get_payment_mode(self, name):
         if not (hasattr(self, 'payment_method') and self.payment_method):
