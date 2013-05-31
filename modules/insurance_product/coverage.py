@@ -86,89 +86,48 @@ class SimpleCoverage(Offered):
         cls.template.depends.append('is_package')
 
     def give_me_price(self, args):
-        # This method is one of the core of the pricing system. It asks for the
-        # price for the self depending on the contrat that is given as an
-        # argument.
         data_dict, errs = utils.get_data_from_dict(['contract', 'date'], args)
         if errs:
-            # No contract means no price.
-            return (None, errs)
+            return ([], errs)
         contract = data_dict['contract']
         date = data_dict['date']
 
-        # We need to check that self is part of the subscribed coverages of the
-        # contract.
-        coverages = contract.get_active_coverages_at_date(date)
-        res = PricingResultLine(name=self.name)
-        res.on_object = utils.convert_to_reference(self)
-        if self in coverages:
-            # The first part of the pricing is the price at the coverage level.
-            # It is computed by the pricing manager, so we just need to forward
-            # the request.
+        active_coverages = contract.get_active_coverages_at_date(date)
+        if not self in active_coverages:
+            return (None, [])
+
+        result_line = PricingResultLine(on_object=self)
+        result_line.init_from_args(args)
+        try:
+            coverage_line, coverage_errs = self.get_result(
+                'price', args, kind='pricing')
+        except product.NonExistingRuleKindException:
+            coverage_line = None
+            coverage_errs = []
+        if coverage_line and coverage_line.amount:
+            for_option = contract.get_option_for_coverage_at_date(
+                self, date)
+            if for_option:
+                coverage_line.on_object = for_option
+            result_line.add_detail_from_line(coverage_line)
+        errs += coverage_errs
+
+        for covered, covered_data in self.give_me_covered_elements_at_date(
+                args)[0]:
+            tmp_args = args
+            tmp_args['sub_elem'] = covered
+            tmp_args['data'] = covered_data
             try:
-                _res, _errs = self.get_result('price', args, kind='pricing')
+                sub_elem_line, sub_elem_errs = self.get_result(
+                    'sub_elem_price', tmp_args, kind='pricing')
             except product.NonExistingRuleKindException:
-                _res = None
-                _errs = []
-            if _res and _res.value:
-                # If a result exists, we give it a name and add it to the main
-                # result
-                for_option = contract.get_option_for_coverage_at_date(
-                    self, date)
-                if for_option:
-                    if for_option.id:
-                        _res.on_object = '%s,%s' % (
-                            for_option.__name__, for_option.id)
-                    else:
-                        _res.name = 'Global Price'
-                res += _res
-                res.on_object = '%s,%s' % (
-                    self.__name__, self.id)
-            # We always append the errors (if any).
-            errs += _errs
-
-            # Now it is time to price the covered elements of the contract.
-            # Note that they might have a role in the Base Price computation,
-            # depending on the algorithm that is used.
-            #
-            # What we compute now is the part of the price that is associated
-            # to each of the covered elements at the given date
-            for covered, covered_data in self.give_me_covered_elements_at_date(
-                    args)[0]:
-                # Now we need to set a new argument before forwarding
-                # the request to the manager, which is the covered
-                # element it must work on.
-                tmp_args = args
-                tmp_args['sub_elem'] = covered
-                tmp_args['data'] = covered_data
-
-                # And we finally call the manager for the price
-                try:
-                    _res, _errs = self.get_result(
-                        'sub_elem_price',
-                        tmp_args,
-                        kind='pricing')
-                except product.NonExistingRuleKindException:
-                    _res = None
-                    _errs = []
-                if _res and _res.value:
-                    # Basically we set name = covered.product_specific
-                    # .person.name, but 'product_specific' is a
-                    # Reference field and is not automatically turned
-                    # into a browse object.
-                    # Should be done later by tryton.
-                    _res.name = covered.get_name_for_info()
-                    if covered_data.id:
-                        _res.on_object = '%s,%s' % (
-                            covered_data.__name__,
-                            covered_data.id)
-                    res += _res
-                errs += _errs
-            errs = list(set(errs))
-            if COULD_NOT_FIND_A_MATCHING_RULE in errs:
-                errs.remove(COULD_NOT_FIND_A_MATCHING_RULE)
-            return (res, list(set(errs)))
-        return (None, [])
+                sub_elem_line = None
+                sub_elem_errs = []
+            if sub_elem_line and sub_elem_line.amount:
+                sub_elem_line.on_object = covered_data
+                result_line.add_detail_from_line(sub_elem_line)
+            errs += sub_elem_errs
+        return ([result_line], errs)
 
     def get_dates(self, dates=None, start=None, end=None):
         # This is a temporary functionality that is provided to ease the

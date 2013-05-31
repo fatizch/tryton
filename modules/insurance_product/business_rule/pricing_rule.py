@@ -7,6 +7,7 @@ from trytond.pyson import Eval, Or, Bool
 from trytond.modules.coop_utils import utils, date, model, fields
 from trytond.modules.insurance_product.product import DEF_CUR_DIG, CONFIG_KIND
 from trytond.modules.insurance_product import PricingResultLine
+from trytond.modules.insurance_product import PricingResultDetail
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED, STATE_SIMPLE
 
@@ -181,59 +182,61 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
         elif rated_object_kind == 'sub_item':
             return self.sub_item_specific_combination_rule
 
+    def build_details(self, final_details):
+        result = []
+        for amount, detail_definition in final_details.itervalues():
+            detail_definition.amount = amount
+            result.append(detail_definition)
+        return result
+
     def calculate_price(self, args, rated_object_kind='global'):
-        result = PricingResultLine(value=0)
+        result = PricingResultLine()
         errors = []
         errs = []
         for component in self.get_components(rated_object_kind):
             res, errs = component.calculate_value(args)
-            result += res
+            result.add_detail(res)
             errors += errs
         combination_rule = self.get_combination_rule(rated_object_kind)
         if not errors and combination_rule:
             new_args = copy.copy(args)
             new_args['price_details'] = result.details
-            final_details = {}
-            for key in result.details.iterkeys():
-                final_details[key] = 0
-            new_args['final_details'] = final_details
+            new_args['final_details'] = {}
             rule_result = utils.execute_rule(
                 self, combination_rule, new_args)
             res = rule_result.result
             errors.extend(rule_result.print_errors())
             errors.extend(rule_result.print_warnings())
-            result = PricingResultLine(value=res)
-            result.details = {}
-            result.update_details(new_args['final_details'])
+            details = self.build_details(new_args['final_details'])
+            result.amount = res
+            result.details = details
         elif not errs and not combination_rule:
-            result.value = 0
-            sorted = dict([(key, []) for key, _ in PRICING_LINE_KINDS])
-            result.desc = []
-            for key, value in result.details.iteritems():
-                sorted[key[0]].append((key[1], value))
-            for the_code, value in sorted['base']:
-                result.value += value
-            total_fee = 0
-            for the_code, value in sorted['fee']:
-                fee, = utils.get_those_objects(
-                    'coop_account.fee_desc',
-                    [('code', '=', the_code)], 1)
+            result.amount = 0
+            group_details = dict([(key, []) for key, _ in PRICING_LINE_KINDS])
+            for detail in result.details:
+                group_details[detail.on_object.kind].append(detail)
+            result.details = []
+            for detail in group_details['base']:
+                result.add_detail(detail)
+            fee_details = []
+            for detail in group_details['fee']:
+                fee = detail.on_object.fee
                 fee_vers = fee.get_version_at_date(args['date'])
-                amount = fee_vers.apply_fee(result.value)
-                total_fee += amount
-                result.details[('fee', the_code)] = amount
-            result.value += total_fee
-            total_tax = 0
-            for the_code, value in sorted['tax']:
-                tax, = utils.get_those_objects(
-                    'coop_account.tax_desc',
-                    [('code', '=', the_code)], 1)
+                amount = fee_vers.apply_fee(result.amount)
+                detail.amount = amount
+                fee_details.append(detail)
+            for detail in fee_details:
+                result.add_detail(detail)
+            tax_details = []
+            for detail in group_details['tax']:
+                tax = detail.on_object.tax
                 tax_vers = tax.get_version_at_date(args['date'])
-                amount = tax_vers.apply_tax(result.value)
-                total_tax += amount
-                result.details[('tax', the_code)] = amount
-            # result.value += total_tax
-        result.create_descs_from_details()
+                amount = tax_vers.apply_tax(result.amount)
+                detail.amount = amount
+                tax_details.append(detail)
+            for detail in tax_details:
+                result.add_detail(detail)
+        result.frequency = self.frequency
         return result, errors
 
 
@@ -338,13 +341,9 @@ class PricingComponent(model.CoopSQL, model.CoopView):
         return self.rule_complementary_data.get(schema_name, None)
 
     def calculate_value(self, args):
-        kind = self.kind
         amount, errors = self.get_amount(args)
-        code = self.code
-        name = kind + ' - ' + code
-        final_res = PricingResultLine(amount, name)
-        final_res.update_details({(kind, code): amount})
-        return final_res, errors
+        detail_line = PricingResultDetail(amount, self)
+        return detail_line, errors
 
     @classmethod
     def get_summary(cls, pricings, name=None, with_label=False, at_date=None,
@@ -370,9 +369,9 @@ class PricingComponent(model.CoopSQL, model.CoopView):
         return self.get_summary([self])[self.id]
 
     def on_change_with_code(self, name=None):
-        if self.code:
-            return self.code
         if self.tax:
             return self.tax.code
         if self.fee:
             return self.fee.code
+        if self.code:
+            return self.code

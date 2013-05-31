@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <form string="price_line">
 	<group id="General">
-		<label name="start_date_calculated"/>
-		<field name="start_date_calculated" xexpand="1"/>
-		<label name="end_date_calculated"/>
-		<field name="end_date_calculated" xexpand="1"/>
+		<label name="start_date"/>
+		<field name="start_date" xexpand="1"/>
+		<label name="end_date"/>
+		<field name="end_date" xexpand="1"/>
 		<newline/>
 		<label name="amount_for_display"/>
 		<field name="amount_for_display" xexpand="1"/>

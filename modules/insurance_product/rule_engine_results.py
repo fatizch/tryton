@@ -31,7 +31,7 @@ class EligibilityResultLine(RuleEngineResultLine):
         return tmp
 
 
-class PricingResultLine(RuleEngineResultLine):
+class OldPricingResultLine(RuleEngineResultLine):
     'Pricing Line Result'
 
     def __init__(self, value=0, name='', desc=None):
@@ -148,3 +148,52 @@ class PricingResultLine(RuleEngineResultLine):
             tmp_desc = PricingResultLine()
             tmp_desc.decode_from_dict(elem)
             self.desc.append(tmp_desc)
+
+
+class PricingResultDetail(object):
+    def __init__(self, amount=0, on_object=None, details=None):
+        self.amount = amount
+        self.on_object = on_object
+        self.details = details or []
+
+
+class PricingResultLine(RuleEngineResultLine):
+    def __init__(self, amount=0, contract=None, start_date=None, end_date=None,
+            on_object=None, frequency=None, details=None):
+        self.amount = amount
+        self.contract = contract
+        self.start_date = start_date
+        self.end_date = end_date
+        self.on_object = on_object
+        self.frequency = frequency
+        self.details = details or []
+
+    def __repr__(self):
+        return str(self)
+
+    def __str__(self):
+        return '%s EUR %s %s %s' % (self.amount, self.contract,
+            self.start_date, self.on_object)
+
+    def init_from_args(self, args):
+        if 'contract' in args:
+            self.contract = args['contract']
+        if 'date' in args:
+            self.start_date = args['date']
+
+    def add_detail(self, detail):
+        self.amount += detail.amount
+        self.details.append(detail)
+
+    def add_detail_from_line(self, other_line):
+        if not self.frequency and other_line.frequency:
+            self.frequency = other_line.frequency
+        elif (other_line.frequency and
+                not self.frequency == other_line.frequency):
+            # TODO : remove this once the frequency consistency checking is
+            # performed on the managers
+            raise Exception('Frequencies do not match')
+        self.amount += other_line.amount
+        new_detail = PricingResultDetail(other_line.amount,
+            other_line.on_object, details=other_line.details)
+        self.details.append(new_detail)

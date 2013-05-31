@@ -2,8 +2,6 @@ from trytond.modules.rule_engine import RuleEngineContext
 from trytond.modules.rule_engine import check_args
 from trytond.modules.rule_engine import RuleTools
 
-from trytond.modules.coop_utils import utils
-
 ###############################################################################
 # We write here sets of functions that will be available in the rule engine.  #
 # They will be automatically created as tree_elements in sub_folders          #
@@ -185,37 +183,54 @@ class RuleCombinationContext(RuleEngineContext):
     @classmethod
     @check_args('price_details')
     def _re_get_sub_component(cls, args, the_code):
-        det = args['price_details']
-        for code, value in det.iteritems():
-            if code[1] == the_code:
-                return value
+        for detail in args['price_details']:
+            if detail.on_object.code == the_code:
+                return detail.amount
         cls.append_error(args, 'Inexisting code : %s' % the_code)
 
     @classmethod
     @check_args('price_details', 'final_details')
     def _re_append_detail(cls, args, the_code, amount):
-        for key, code in args['price_details'].iterkeys():
-            if not code == the_code:
+        found = False
+        for detail in args['price_details']:
+            if not detail.on_object.code == the_code:
                 continue
-            args['final_details'][(key, code)] += amount
+            args['final_details'][the_code] = (amount +
+                args['final_details'].get(the_code, (0,))[0], detail)
+            found = True
             break
+        if not found:
+            cls.append_error(args, 'Undefined Code %s' % the_code)
+            return
 
     @classmethod
     @check_args('price_details')
     def _re_apply_tax(cls, args, code, base):
-        if ('tax', code) in args['price_details']:
-            tax, = utils.get_those_objects(
-                'coop_account.tax_desc',
-                [('code', '=', code)], 1)
-            tax_vers = tax.get_version_at_date(args['date'])
-            return tax_vers.apply_tax(base)
+        tax = None
+        for detail in args['price_details']:
+            if detail.on_object.kind == 'tax':
+                if detail.on_object.code == code:
+                    tax = detail.on_object.tax
+                    break
+        if tax is None:
+            cls.append_error(args, 'Undefined Tax %s' % code)
+            return
+
+        tax_vers = tax.get_version_at_date(args['date'])
+        return tax_vers.apply_tax(base)
 
     @classmethod
     @check_args('price_details')
     def _re_apply_fee(cls, args, code, base):
-        if ('fee', code) in args['price_details']:
-            fee, = utils.get_those_objects(
-                'coop_account.fee_desc',
-                [('code', '=', code)], 1)
-            fee_vers = fee.get_version_at_date(args['date'])
-            return fee_vers.apply_fee(base)
+        fee = None
+        for detail in args['price_details']:
+            if detail.on_object.kind == 'fee':
+                if detail.on_object.code == code:
+                    fee = detail.on_object.fee
+                    break
+        if fee is None:
+            cls.append_error(args, 'Undefined Fee %s' % code)
+            return
+
+        fee_vers = fee.get_version_at_date(args['date'])
+        return fee_vers.apply_fee(base)

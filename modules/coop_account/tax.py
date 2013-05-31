@@ -1,4 +1,4 @@
-from trytond.modules.coop_utils import model, utils, fields
+from trytond.modules.coop_utils import model, fields
 
 
 __all__ = [
@@ -38,6 +38,9 @@ class TaxDesc(model.CoopSQL, model.VersionedObject):
             res += ' (%s)' % val
         return res
 
+    def get_name_for_billing(self):
+        return self.name
+
 
 class TaxVersion(model.CoopSQL, model.VersionObject):
     '''Tax Version'''
@@ -45,7 +48,7 @@ class TaxVersion(model.CoopSQL, model.VersionObject):
     __name__ = 'coop_account.tax_version'
 
     kind = fields.Selection(
-        [('flat', 'Flat'), ('rate', 'Rate')],
+        [('flat', 'Flat'), ('rate', 'Rate'), ('rule', 'Rule')],
         'Rating mode',
         required=True)
     value = fields.Numeric('Value')

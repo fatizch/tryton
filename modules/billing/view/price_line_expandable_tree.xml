@@ -2,5 +2,4 @@
 <tree string="Pricing Lines">
 	<field name="name"/>
 	<field name="amount_for_display"/>
-	<field name="taxes"/>
 </tree>

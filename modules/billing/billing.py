@@ -60,7 +60,7 @@ class PriceLine(model.CoopSQL, model.CoopView):
     __name__ = 'billing.price_line'
 
     amount = fields.Numeric('Amount')
-    name = fields.Char('Short Description')
+    name = fields.Function(fields.Char('Short Description'), 'get_short_name')
     master = fields.Many2One('billing.price_line', 'Master Line')
     kind = fields.Selection(
         [
@@ -73,28 +73,15 @@ class PriceLine(model.CoopSQL, model.CoopView):
     contract = fields.Many2One('contract.contract', 'Contract')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    all_lines = fields.One2Many(
-        'billing.price_line', 'master', 'Lines', readonly=True)
-    taxes = fields.Function(fields.Numeric('Taxes'), 'get_total_taxes')
+    all_lines = fields.One2Many('billing.price_line', 'master', 'Lines',
+        readonly=True, loading='lazy')
     amount_for_display = fields.Function(
         fields.Numeric('Amount'), 'get_amount_for_display')
-    start_date_calculated = fields.Function(fields.Date(
-        'Start Date'), 'get_start_date')
-    end_date_calculated = fields.Function(fields.Date(
-        'End Date'), 'get_end_date')
-    details = fields.One2ManyDomain(
-        'billing.price_line', 'master', 'Details', domain=[
-            ('kind', '!=', 'main')], readonly=True)
-    child_lines = fields.One2ManyDomain(
-        'billing.price_line', 'master', 'Sub-Lines', domain=[
-            ('kind', '=', 'main')], readonly=True)
 
-    def get_id(self):
-        if hasattr(self, 'on_object') and self.on_object:
+    def get_short_name(self, name):
+        if self.on_object:
             return self.on_object.get_name_for_billing()
-        if hasattr(self, 'name') and self.name:
-            return self.name
-        return self.kind
+        return 'Main Line'
 
     def init_values(self):
         if not hasattr(self, 'name') or not self.name:
@@ -102,65 +89,47 @@ class PriceLine(model.CoopSQL, model.CoopView):
         self.amount = 0
         self.all_lines = []
 
+    def get_good_on_object(self, line):
+        if not line.on_object:
+            return None
+        target = line.on_object
+        if target.__name__ == 'ins_product.pricing_component':
+            if target.kind == 'tax':
+                return target.tax
+            if target.kind == 'fee':
+                return target.fee
+            return None
+        return target
+
+    def calculate_my_kind(self, line):
+        test_value = line.on_object.__name__
+        if test_value == 'ins_product.pricing_component':
+            return line.on_object.kind
+        else:
+            return 'main'
+
     def init_from_result_line(self, line):
         if not line:
             return
-        PLModel = Pool().get(self.__name__)
+        PriceLineModel = Pool().get(self.__name__)
         self.init_values()
-        self.amount = line.value
-        for (kind, code), value in line.details.iteritems():
-            detail_line = PLModel()
-            detail_line.name = code
-            detail_line.amount = value
-            detail_line.kind = kind
+        self.amount = line.amount
+        self.on_object = self.get_good_on_object(line)
+        self.start_date = line.start_date if hasattr(
+            line, 'start_date') else None
+        self.frequency = line.frequency if hasattr(line, 'frequency') else ''
+        self.contract = line.contract if hasattr(line, 'contract') else None
+        self.kind = self.calculate_my_kind(line)
+        for detail in line.details:
+            detail_line = PriceLineModel()
+            detail_line.init_from_result_line(detail)
             self.all_lines.append(detail_line)
-        if line.desc:
-            for elem in line.desc:
-                child_line = PLModel()
-                child_line.init_from_result_line(elem)
-                self.all_lines.append(child_line)
-        if not self.name:
-            if line.on_object:
-                self.name = utils.convert_ref_to_obj(
-                    line.on_object).get_name_for_billing()
-            else:
-                self.name = line.name
-        if line.on_object:
-            self.on_object = line.on_object
-
-    @staticmethod
-    def default_kind():
-        return 'main'
-
-    def get_total_taxes(self, field_name):
-        res = self.get_total_detail('tax')
-        if res:
-            return res
-
-    def get_total_detail(self, name):
-        res = 0
-        for line in self.details:
-            if line.kind == name:
-                res += line.amount
-        return res
 
     def get_amount_for_display(self, field_name):
         res = self.amount
         if not res:
             return None
         return res
-
-    def get_start_date(self, field_name):
-        if hasattr(self, 'start_date') and self.start_date:
-            return self.start_date
-        if self.master:
-            return self.master.start_date_calculated
-
-    def get_end_date(self, field_name):
-        if hasattr(self, 'end_date') and self.end_date:
-            return self.end_date
-        if self.master:
-            return self.master.end_date_calculated
 
     @classmethod
     def get_line_target_models(cls):
@@ -171,27 +140,13 @@ class PriceLine(model.CoopSQL, model.CoopView):
             f('ins_product.coverage'),
             f('contract.contract'),
             f('contract.subscribed_option'),
-            f('ins_contract.covered_data')]
+            f('ins_contract.covered_data'),
+            f('coop_account.tax_desc'),
+            f('coop_account.fee_desc')]
         return res
 
     def is_main_line(self):
-        return hasattr(self, 'on_object') and self.on_object and \
-            self.on_object.__name__ in (
-                'ins_product.product',
-                'ins_product.coverage')
-
-    def print_line(self):
-        res = [self.get_id()]
-        res.append(self.name)
-        res.append('%.2f' % self.amount)
-        res.append(self.kind)
-        res.append('%s' % self.start_date)
-        res.append('%s' % self.end_date)
-        if self.on_object:
-            res.append(self.on_object.__name__)
-        else:
-            res.append('')
-        return ' - '.join(res)
+        return self.contract is not None
 
 
 class BillingManager(model.CoopSQL, model.CoopView):
@@ -604,35 +559,25 @@ class Contract():
     def store_prices(self, prices):
         if not prices:
             return
+        print utils.format_data(prices)
         PriceLine = Pool().get(self.get_price_line_model())
         to_delete = []
         if hasattr(self, 'prices') and self.prices:
             for price in self.prices:
                 to_delete.append(price)
         result_prices = []
-        dates = [utils.to_date(key) for key in prices.iterkeys()]
-        end_date = self.get_next_renewal_date()
-        if not end_date in dates:
-            dates.append(end_date)
+        dates = list(set([elem.start_date for elem in prices]))
         dates.sort()
-        for price_date, price in prices.iteritems():
-            pl = PriceLine()
-            pl.name = price_date
-            details = []
-            for cur_price in price:
-                detail = PriceLine()
-                detail.init_from_result_line(cur_price)
-                details.append(detail)
-            pl.all_lines = details
-            pl.start_date = utils.to_date(price_date)
+        for price in prices:
+            price_line = PriceLine()
+            price_line.init_from_result_line(price)
             try:
-                pl.end_date = dates[dates.index(pl.start_date) + 1] + \
-                    datetime.timedelta(days=-1)
+                price_line.end_date = dates[dates.index(price_line.start_date)
+                    + 1] + datetime.timedelta(days=-1)
             except IndexError:
                 pass
-            result_prices.append(pl)
+            result_prices.append(price_line)
         self.prices = result_prices
-
         self.save()
 
         PriceLine.delete(to_delete)

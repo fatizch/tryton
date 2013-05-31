@@ -36,6 +36,9 @@ class FeeDesc(model.CoopSQL, model.VersionedObject):
         res += ' (%s)' % self.get_current_rec_name(name)
         return res
 
+    def get_name_for_billing(self):
+        return self.name
+
 
 class FeeVersion(model.CoopSQL, model.VersionObject):
     '''Fee Version'''
