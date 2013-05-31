@@ -25,6 +25,8 @@ __all__ = [
     'Option',
     'CoveredElement',
     'CoveredData',
+    'TaxVersion',
+    'FeeVersion',
 ]
 
 PAYMENT_MODES = [
@@ -619,3 +621,21 @@ class CoveredData():
 
     def get_name_for_billing(self):
         return self.covered_element.get_name_for_billing()
+
+
+class TaxVersion():
+    'Tax Version'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'coop_account.tax_version'
+
+    apply_at_pricing_time = fields.Boolean('Apply when Pricing')
+
+
+class FeeVersion():
+    'Fee Version'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'coop_account.fee_version'
+
+    apply_at_pricing_time = fields.Boolean('Apply when Pricing')
