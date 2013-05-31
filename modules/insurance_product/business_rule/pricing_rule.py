@@ -218,6 +218,7 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
             result.details = []
             for detail in group_details['base']:
                 result.add_detail(detail)
+            # By default, taxes and fees are appliend on the total base amount
             fee_details = []
             for detail in group_details['fee']:
                 fee = detail.on_object.fee
@@ -225,8 +226,6 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
                 amount = fee_vers.apply_fee(result.amount)
                 detail.amount = amount
                 fee_details.append(detail)
-            for detail in fee_details:
-                result.add_detail(detail)
             tax_details = []
             for detail in group_details['tax']:
                 tax = detail.on_object.tax
@@ -234,6 +233,8 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
                 amount = tax_vers.apply_tax(result.amount)
                 detail.amount = amount
                 tax_details.append(detail)
+            for detail in fee_details:
+                result.add_detail(detail)
             for detail in tax_details:
                 result.add_detail(detail)
         result.frequency = self.frequency
