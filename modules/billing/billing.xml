@@ -177,23 +177,5 @@
     <!--                           Menus                                -->
     <!--################################################################-->
     <menuitem parent="insurance_contract.menu_contract" sequence="50" id="menu_bill_view" icon="tryton-list" action="act_bill_form"/>
-    <!--################################################################-->
-    <!-- Tax Version -->
-    <!--################################################################-->
-    <record model="ir.ui.view" id="tax_version_form">
-      <field name="model">cop_account.tax_version</field>
-      <field name="type">form</field>
-      <field name="inherit" ref="coop_account.tax_version_view_form"/>
-      <field name="name">tax_version_form</field>
-    </record>
-    <!--################################################################-->
-    <!-- Fee Version -->
-    <!--################################################################-->
-    <record model="ir.ui.view" id="fee_version_form">
-      <field name="model">coop_account.fee_version</field>
-      <field name="type">form</field>
-      <field name="inherit" ref="coop_account.fee_version_view_form"/>
-      <field name="name">fee_version_form</field>
-    </record>
   </data>
 </tryton>

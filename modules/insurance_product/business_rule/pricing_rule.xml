@@ -1,34 +1,51 @@
 <?xml version="1.0"?>
 <tryton>
-    <data>
-        <!--  ******************************************* 
-              ********        PricingData        ********
-              *******************************************-->
-        <record model="ir.ui.view" id="pricing_component_view_tree">
-            <field name="model">ins_product.pricing_component</field>
-            <field name="type">tree</field>
-            <field name="name">pricing_component_tree</field>
-        </record>
-        <record model="ir.ui.view" id="pricing_component_view_form">
-            <field name="model">ins_product.pricing_component</field>
-            <field name="type">form</field>
-            <field name="name">pricing_component_form</field>
-        </record>
-
-        <!--  ******************************************* 
-              ********    PricingRule    ********
-              *******************************************-->
-        <record model="ir.ui.view" id="pricingrule_view_tree">
-            <field name="model">ins_product.pricing_rule</field>
-            <field name="type">tree</field>
-            <field name="inherit" ref="businessruleroot_view_tree"/>
-            <field name="arch" type="xml"/>
-        </record>
-        <record model="ir.ui.view" id="pricingrule_view_form">
-            <field name="model">ins_product.pricing_rule</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="businessruleroot_view_form"/>
-            <field name="name">pricing_rule_form</field>
-        </record>
-    </data>
+  <data>
+    <!--################################################################-->
+    <!-- Pricing Data -->
+    <!--################################################################-->
+    <record model="ir.ui.view" id="pricing_component_view_tree">
+      <field name="model">ins_product.pricing_component</field>
+      <field name="type">tree</field>
+      <field name="name">pricing_component_tree</field>
+    </record>
+    <record model="ir.ui.view" id="pricing_component_view_form">
+      <field name="model">ins_product.pricing_component</field>
+      <field name="type">form</field>
+      <field name="name">pricing_component_form</field>
+    </record>
+    <!--################################################################-->
+    <!-- Pricing Rule -->
+    <!--################################################################-->
+    <record model="ir.ui.view" id="pricingrule_view_tree">
+      <field name="model">ins_product.pricing_rule</field>
+      <field name="type">tree</field>
+      <field name="inherit" ref="businessruleroot_view_tree"/>
+      <field name="arch" type="xml"/>
+    </record>
+    <record model="ir.ui.view" id="pricingrule_view_form">
+      <field name="model">ins_product.pricing_rule</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="businessruleroot_view_form"/>
+      <field name="name">pricing_rule_form</field>
+    </record>
+    <!--################################################################-->
+    <!-- Tax Version -->
+    <!--################################################################-->
+    <record model="ir.ui.view" id="tax_version_form">
+      <field name="model">cop_account.tax_version</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="coop_account.tax_version_view_form"/>
+      <field name="name">tax_version_form</field>
+    </record>
+    <!--################################################################-->
+    <!-- Fee Version -->
+    <!--################################################################-->
+    <record model="ir.ui.view" id="fee_version_form">
+      <field name="model">coop_account.fee_version</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="coop_account.fee_version_view_form"/>
+      <field name="name">fee_version_form</field>
+    </record>
+  </data>
 </tryton>

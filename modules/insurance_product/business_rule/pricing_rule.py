@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 import copy
 
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Or, Bool
 
 from trytond.modules.coop_utils import utils, date, model, fields
@@ -15,6 +15,8 @@ __all__ = [
     'SimplePricingRule',
     'PricingRule',
     'PricingComponent',
+    'TaxVersion',
+    'FeeVersion',
 ]
 
 PRICING_LINE_KINDS = [
@@ -189,6 +191,18 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
             result.append(detail_definition)
         return result
 
+    def calculate_tax_detail(self, from_detail, args, base):
+        tax = from_detail.on_object.tax
+        tax_vers = tax.get_version_at_date(args['date'])
+        amount = tax_vers.apply_tax(base)
+        from_detail.amount = amount
+
+    def calculate_fee_detail(self, from_detail, args, base):
+        fee = from_detail.on_object.fee
+        fee_vers = fee.get_version_at_date(args['date'])
+        amount = fee_vers.apply_fee(base)
+        from_detail.amount = amount
+
     def calculate_price(self, args, rated_object_kind='global'):
         result = PricingResultLine()
         errors = []
@@ -221,17 +235,11 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
             # By default, taxes and fees are appliend on the total base amount
             fee_details = []
             for detail in group_details['fee']:
-                fee = detail.on_object.fee
-                fee_vers = fee.get_version_at_date(args['date'])
-                amount = fee_vers.apply_fee(result.amount)
-                detail.amount = amount
+                self.calculate_fee_detail(detail, args, result.amount)
                 fee_details.append(detail)
             tax_details = []
             for detail in group_details['tax']:
-                tax = detail.on_object.tax
-                tax_vers = tax.get_version_at_date(args['date'])
-                amount = tax_vers.apply_tax(result.amount)
-                detail.amount = amount
+                self.calculate_tax_detail(detail, args, result.amount)
                 tax_details.append(detail)
             for detail in fee_details:
                 result.add_detail(detail)
@@ -376,3 +384,21 @@ class PricingComponent(model.CoopSQL, model.CoopView):
             return self.fee.code
         if self.code:
             return self.code
+
+
+class TaxVersion():
+    'Tax Version'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'coop_account.tax_version'
+
+    apply_at_pricing_time = fields.Boolean('Apply when Pricing')
+
+
+class FeeVersion():
+    'Fee Version'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'coop_account.fee_version'
+
+    apply_at_pricing_time = fields.Boolean('Apply when Pricing')

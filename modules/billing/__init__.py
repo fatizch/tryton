@@ -18,8 +18,6 @@ def register():
         Option,
         CoveredElement,
         CoveredData,
-        TaxVersion,
-        FeeVersion,
         module='billing', type_='model')
 
     Pool.register(
