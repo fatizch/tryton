@@ -310,7 +310,7 @@ class ExportImportMixin(Model):
                         target_model.__name__][field_value])
                 else:
                     to_relink.append(
-                        (field_name, (field.model_name, field_value)))
+                        (field_name, (target_model, field_value)))
                     return False
             else:
                 good_value = target_model._export_find_instance(
