@@ -60,7 +60,7 @@ class DynamicButtonDict(dict):
     def __getitem__(self, name):
         # If the name does not match the specified prefix, business as usual !
         if not name.startswith(self.allowed_prefix):
-            return super(AllowRPCDict, self).__getitem__(name)
+            return super(DynamicButtonDict, self).__getitem__(name)
 
         # Remove the prefix before going forward
         button_data = name[len(self.allowed_prefix):].split('_')

@@ -1,6 +1,7 @@
 import copy
 
 from trytond.modules.coop_utils import model, fields, date
+from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import utils
@@ -217,12 +218,18 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     contact = fields.Many2One('party.party', 'Contact')
     documents = fields.One2Many(
         'ins_product.document_request', 'needed_by', 'Documents', size=1)
+    company = fields.Many2One('company.company', 'Company', required=True,
+        select=True)
 
     @classmethod
     def __setup__(cls):
         cls.options = copy.copy(cls.options)
         cls.options.model_name = cls.get_options_model_name()
         super(Contract, cls).__setup__()
+
+    @staticmethod
+    def default_company():
+        return Transaction().context.get('company')
 
     @classmethod
     def get_options_model_name(cls):

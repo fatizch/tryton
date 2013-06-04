@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<form string="Billing Period">
+    <label name="contract"/>
+    <field name="contract" colspan="3"/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <field name="moves" colspan="4"/>
+</form>

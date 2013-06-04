@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Billing Periods">
+    <field name="contract"/>
+    <field name="start_date"/>
+    <field name="end_date"/>
+</tree>

@@ -45,9 +45,6 @@
     <xpath expr="/form/label[@name='name']" position="replace"/>
     <xpath expr="/form/field[@name='code']" position="replace"/>
     <xpath expr="/form/label[@name='code']" position="replace"/>
-    <xpath expr="/form/notebook/page[@id='accounting']" position="replace_attributes">
-        <page id="accounting" states="{'invisible':Bool(~Eval('is_company'))}"/>
-    </xpath>
     <xpath expr="/form/notebook" position="inside">
         <page string="Company" id="tree" states="{'invisible': ~Eval('is_company')}">
             <label name="parent"/>

@@ -96,7 +96,7 @@ class PartyRelation(CoopSQL, CoopView):
                 party = relation.from_party
             res[relation.id] = '%s %s' % (coop_string.translate_value(relation,
                     link, lang=lang),
-                party.rec_name)
+                party.rec_name if party else '')
         return res
 
     def get_rec_name(self, name):

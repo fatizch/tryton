@@ -61,6 +61,19 @@
       <field name="type">tree</field>
       <field name="name">billing_manager_tree</field>
     </record>
+    <!--################################################################ -->
+    <!-- Billing Period -->
+    <!--################################################################ -->
+    <record model="ir.ui.view" id="billing_period_view_form">
+      <field name="model">billing.period</field>
+      <field name="type">form</field>
+      <field name="name">billing_period_form</field>
+    </record>
+    <record model="ir.ui.view" id="billing_period_tree">
+      <field name="model">billing.period</field>
+      <field name="type">tree</field>
+      <field name="name">billing_period_tree</field>
+    </record>
     <!--################################################################-->
     <!--                        Bill Line Tree                          -->
     <!--################################################################-->
@@ -177,5 +190,29 @@
     <!--                           Menus                                -->
     <!--################################################################-->
     <menuitem parent="insurance_contract.menu_contract" sequence="50" id="menu_bill_view" icon="tryton-list" action="act_bill_form"/>
+
+
+    <record model="ir.action.act_window" id="act_open_move_form">
+        <field name="name">Moves</field>
+        <field name="res_model">account.move</field>
+        <field name="domain">[('origin', '=', ('contract.contract', Eval('id')))]</field>
+    </record>
+    <record model="ir.action.keyword" id="act_open_move_keyword1">
+        <field name="keyword">form_relate</field>
+        <field name="model">contract.contract,-1</field>
+        <field name="action" ref="act_open_move_form"/>
+    </record>
+
+    <record model="ir.action.act_window" id="act_open_billing_period_form">
+        <field name="name">Billing Periods</field>
+        <field name="res_model">billing.period</field>
+        <field name="domain">[('contract', '=', Eval('id'))]</field>
+    </record>
+    <record model="ir.action.keyword" id="act_open_billing_period_keyword1">
+        <field name="keyword">form_relate</field>
+        <field name="model">contract.contract,-1</field>
+        <field name="action" ref="act_open_billing_period_form"/>
+    </record>
+
   </data>
 </tryton>

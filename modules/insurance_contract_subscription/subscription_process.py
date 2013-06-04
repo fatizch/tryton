@@ -314,15 +314,6 @@ class ContractSubscription(CoopProcessFramework):
 
         return result, errs
 
-    def calculate_prices(self):
-        prices, errs = self.calculate_prices_at_all_dates()
-
-        if errs:
-            return False, errs
-        self.store_prices(prices)
-
-        return True, ()
-
     def finalize_contract(self):
         res = super(ContractSubscription, self).finalize_contract()
         return res

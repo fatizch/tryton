@@ -14,6 +14,7 @@ __all__ = [
     'PaymentMethod',
     'PriceLine',
     'BillingManager',
+    'BillingPeriod',
     'GenericBillLine',
     'Bill',
     'BillingProcess',
@@ -194,6 +195,15 @@ class PriceLine(model.CoopSQL, model.CoopView):
             res.append('')
         return ' - '.join(res)
 
+    def get_account_for_billing(self):
+        # TODO
+        Account = Pool().get('account.account')
+        accounts = Account.search([
+                ('kind', '=', 'revenue'),
+                ], limit=1)
+        if accounts:
+            return accounts[0]
+
 
 class BillingManager(model.CoopSQL, model.CoopView):
     'Billing Manager'
@@ -217,44 +227,65 @@ class BillingManager(model.CoopSQL, model.CoopView):
         'Payment Bank Account', depends=['payment_mode'],
         states={'invisible': Eval('payment_mode') != 'direct_debit'})
 
+    @classmethod
+    def __setup__(cls):
+        super(BillingManager, cls).__setup__()
+        cls._order.insert(0, ('start_date', 'ASC'))
+
     def on_change_with_payment_mode(self, name=None):
         if not (hasattr(self, 'payment_method') and self.payment_method):
             return ''
         return self.payment_method.payment_mode
 
-    def create_price_list(self, start_date, end_date):
-        dated_prices = [
-            (elem.start_date, elem.end_date or end_date, elem)
-            for elem in self.contract.prices
-            if (
-                (elem.start_date >= start_date and elem.start_date <= end_date)
-                or (
-                    elem.end_date and elem.end_date >= start_date
-                    and elem.end_date <= end_date))]
-        return dated_prices
 
-    def flatten(self, prices):
-        # prices is a list of tuples (start, end, price_line).
-        # aggregate returns one price_line which aggregates all of the
-        # provided price_lines, in which all lines have set start and end dates
-        lines_desc = []
-        for elem in prices:
-            if elem[2].is_main_line():
-                if elem[2].amount:
-                    lines_desc.append(elem)
-            else:
-                lines_desc += self.flatten(
-                    [(elem[0], elem[1], line) for line in elem[2].child_lines])
-        return lines_desc
+class BillingPeriod(model.CoopSQL, model.CoopView):
+    'Billing Period'
+    __name__ = 'billing.period'
+    contract = fields.Many2One('contract.contract', 'Contract', required=True)
+    start_date = fields.Date('Start Date', required=True)
+    end_date = fields.Date('End Date', required=True)
+    moves = fields.One2Many('account.move', 'billing_period', 'Moves',
+        readonly=True)
 
-    def bill(self, start_date, end_date):
-        Bill = Pool().get(self.get_bill_model())
-        the_bill = Bill()
-        the_bill.flat_init(start_date, end_date, self.contract)
-        price_list = self.create_price_list(start_date, end_date)
-        price_lines = self.flatten(price_list)
-        the_bill.init_from_lines(price_lines)
-        return the_bill
+    @classmethod
+    def __setup__(cls):
+        super(BillingPeriod, cls).__setup__()
+        cls._error_messages.update({
+                'period_overlaps': ('Billing Period "%(first)s" and '
+                    '"%(second)s" overlap.'),
+                })
+
+    def get_rec_name(self, name):
+        return self.contract.rec_name
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return [('contract',), tuple(clause[1:])]
+
+    @classmethod
+    def validate(cls, periods):
+        for period in periods:
+            period.check_dates()
+
+    def check_dates(self):
+        cursor = Transaction().cursor
+        cursor.execute('SELECT id '
+            'FROM "' + self._table + '" '
+            'WHERE ((start_date <= %s AND end_date >= %s) '
+                'OR (start_date <= %s AND end_date >= %s) '
+                'OR (start_date >= %s AND end_date <= %s)) '
+            'AND id != %s',
+            (self.start_date, self.start_date,
+                self.end_date, self.end_date,
+                self.start_date, self.end_date,
+                self.id))
+        second_id = cursor.fetchone()
+        if second_id:
+            second = self.__class__(second_id[0])
+            self.raise_user_error('period_overlaps', {
+                    'first': self.rec_name,
+                    'second': second.rec_name,
+                    })
 
 
 class GenericBillLine(model.CoopSQL, model.CoopView):
@@ -460,8 +491,7 @@ class BillDisplay(model.CoopView):
 
     __name__ = 'billing.billing_process.bill_display'
 
-    bills = fields.One2Many(
-        'billing.billing.bill', None, 'Bill', states={'readonly': True})
+    moves = fields.One2Many('account.move', None, 'Bill', readonly=True)
 
 
 class BillingProcess(Wizard):
@@ -486,7 +516,7 @@ class BillingProcess(Wizard):
     def default_bill_parameters(self, values):
         ContractModel = Pool().get(Transaction().context.get('active_model'))
         contract = ContractModel(Transaction().context.get('active_id'))
-        bill_dates = contract.billing_managers[0].next_billing_dates()
+        bill_dates = contract.next_billing_dates()
         return {
             'contract': contract.id,
             'start_date': bill_dates[0],
@@ -498,24 +528,15 @@ class BillingProcess(Wizard):
         contract = self.bill_parameters.contract
         if self.bill_parameters.start_date < contract.start_date:
             self.raise_user_error('start_date_too_old')
-        billing_manager = contract.billing_managers[0]
-        start_date = self.bill_parameters.start_date
-        end_date = self.bill_parameters.end_date
-        the_bill = billing_manager.bill(start_date, end_date)
-        the_bill.contract = None
-        the_bill.save()
-        return {'bills': [the_bill.id]}
+        move = contract.bill()
+        return {'moves': [move.id]}
 
     def transition_cancel_bill(self):
-        Bill = Pool().get('billing.billing.bill')
-        the_bill = self.bill_display.bills[0]
-        Bill.delete([the_bill])
+        Move = Pool().get('account.move')
+        Move.delete(self.bill_display.moves)
         return 'end'
 
     def transition_accept_bill(self):
-        the_bill = self.bill_display.bills[0]
-        the_bill.contract = self.bill_parameters.contract
-        the_bill.save()
         return 'end'
 
 
@@ -564,6 +585,15 @@ class Contract():
     next_billing_date = fields.Date('Next Billing Date')
     prices = fields.One2Many(
         'billing.price_line', 'contract', 'Prices')
+    billing_periods = fields.One2Many('billing.period', 'contract',
+        'Billing Periods')
+
+    @classmethod
+    def __setup__(cls):
+        super(Contract, cls).__setup__()
+        cls._buttons.update({
+                'button_calculate_prices': {},
+                })
 
     def get_name_for_billing(self):
         return self.offered.name + ' - Base Price'
@@ -572,8 +602,7 @@ class Contract():
         return utils.instanciate_relation(self, 'billing_managers')
 
     def init_billing_manager(self):
-        if not (hasattr(self, 'billing_managers') and
-                self.billing_managers):
+        if not self.billing_managers:
             bm = self.new_billing_manager()
             bm.contract = self
             bm.start_date = self.start_date
@@ -582,7 +611,7 @@ class Contract():
             bm.save()
 
     def next_billing_dates(self):
-        start_date = self.next_billing_date
+        start_date = self.next_billing_date or self.start_date  # FIXME
         return (
             start_date,
             utils.add_frequency(
@@ -637,6 +666,143 @@ class Contract():
         self.save()
 
         PriceLine.delete(to_delete)
+
+    @classmethod
+    @model.CoopView.button
+    def button_calculate_prices(cls, contracts):
+        for contract in contracts:
+            contract.calculate_prices()
+
+    def calculate_prices(self):
+        prices, errs = self.calculate_prices_at_all_dates()
+
+        if errs:
+            return False, errs
+        self.store_prices(prices)
+
+        return True, ()
+
+    def create_price_list(self, start_date, end_date):
+        for price_line in self.prices:
+            if start_date > price_line.start_date:
+                start = start_date
+            else:
+                start = price_line.start_date
+            if not price_line.end_date:
+                end = end_date
+            elif end_date < price_line.end_date:
+                end = end_date
+            else:
+                end = price_line.end_date
+            if start <= end:
+                yield (start, end), price_line
+
+    def flatten(self, prices):
+        # prices is a list of tuples (start, end, price_line).
+        # aggregate returns one price_line which aggregates all of the
+        # provided price_lines, in which all lines have set start and end dates
+        for period, price_line in prices:
+            if price_line.is_main_line():
+                if price_line.amount:
+                    yield (period, price_line)
+            else:
+                for child in self.flatten((period, c)
+                        for c in price_line.child_lines):
+                    yield child
+
+    @staticmethod
+    def get_journal():
+        Journal = Pool().get('account.journal')
+        journal, = Journal.search([
+                ('type', '=', 'revenue'),
+                ], limit=1)
+        return journal
+
+    def bill(self):
+        pool = Pool()
+        Date = pool.get('ir.date')
+        Move = pool.get('account.move')
+        Line = pool.get('account.move.line')
+        Period = pool.get('account.period')
+        BillingPeriod = pool.get('billing.period')
+
+        period = self.next_billing_dates()
+        billing_date = period[0]
+        for billing_period in self.billing_periods:
+            if (billing_period.start_date, billing_period.end_date) == period:
+                break
+        else:
+            billing_period = BillingPeriod(contract=self)
+            billing_period.start_date, billing_period.end_date = period
+            billing_period.save()
+
+        price_list = self.create_price_list(*period)
+        price_lines = self.flatten(price_list)
+
+        self.init_billing_manager()
+        billing_manager = None
+        for manager in self.billing_managers:
+            if (manager.start_date >= billing_date
+                    and (not manager.end_date
+                        or manager.end_date <= billing_date)):
+                billing_manager = manager
+                break
+
+        assert billing_manager, 'Missing Billing Manager'
+
+        payment_term = billing_manager.payment_method.payment_term
+        currency = self.get_currency()
+
+        period_id = Period.find(self.company.id, date=billing_date)
+
+        move = Move(
+            journal=self.get_journal(),
+            period=period_id,
+            date=billing_date,
+            origin=str(self),
+            billing_period=billing_period,
+            )
+
+        lines = []
+        for period, price_line in price_lines:
+            try:
+                frequency_days, _ = price_line.on_object.get_result(
+                    'frequency_days',
+                    {'date': billing_date},
+                    kind='pricing')
+            except product.NonExistingRuleKindException:
+                frequency_days = 365
+            number_of_days = date.number_of_days_between(*period)
+            amount = price_line.amount * number_of_days / frequency_days
+            amount = currency.round(amount)
+
+            line = Line()
+            line.credit = amount
+            line.debit = 0
+            line.account = price_line.get_account_for_billing()
+            print line.account
+            line.party = self.subscriber
+
+            lines.append(line)
+
+            if payment_term:
+                term_lines = payment_term.compute(amount, currency,
+                    billing_date)
+            else:
+                term_lines = [(Date.today(), amount)]
+            for term_date, amount in term_lines:
+                counterpart = Line()
+                counterpart.credit = 0
+                counterpart.debit = amount
+                counterpart.account = self.subscriber.account_receivable
+                print counterpart.account
+                counterpart.party = self.subscriber
+                counterpart.maturity_date = term_date
+                lines.append(counterpart)
+
+        move.lines = lines
+        move.save()
+        return move
 
 
 class Option():
