@@ -25,6 +25,7 @@ __all__ = [
     'Option',
     'CoveredElement',
     'CoveredData',
+    'PaymentTerm',
 ]
 
 PAYMENT_MODES = [
@@ -674,3 +675,15 @@ class CoveredData():
 
     def get_name_for_billing(self):
         return self.covered_element.get_name_for_billing()
+
+
+class PaymentTerm():
+    'Payment Term'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'account.invoice.payment_term'
+
+    def check_remainder(self):
+        if Transaction().context.get('__importing__'):
+            return True
+        return super(PaymentTerm, self).check_remainder()

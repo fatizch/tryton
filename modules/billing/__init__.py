@@ -17,6 +17,7 @@ def register():
         Option,
         CoveredElement,
         CoveredData,
+        PaymentTerm,
         module='billing', type_='model')
 
     Pool.register(
