@@ -218,6 +218,8 @@ class ComplementaryDataDefinition(
                 new_vals, cur_value, init_dict, valid_schemas)
 
     def get_value_as_string(self, value, lang=None):
+        if not value:
+            return ''
         if self.type_ == 'selection':
             cur_dict = dict(self.__class__.get_keys([self])[0]['selection'])
             return cur_dict[value]
