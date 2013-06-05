@@ -128,3 +128,14 @@ def duration_between(date1, date2, duration_unit):
         return number_of_months_between(date2, date1) / 6
     elif duration_unit == 'year':
         return number_of_years_between(date2, date1)
+
+
+def add_frequency(frequency, to_date):
+    if frequency == 'yearly':
+        return to_date + relativedelta(years=+1)
+    elif frequency == 'half-yearly':
+        return to_date + relativedelta(months=+6)
+    elif frequency == 'quarterly':
+        return to_date + relativedelta(months=+3)
+    elif frequency == 'monthly':
+        return to_date + relativedelta(months=+1)

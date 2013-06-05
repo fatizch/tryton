@@ -206,7 +206,7 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
         the_date = args['date']
         return date.number_of_days_between(
             the_date,
-            utils.add_frequency(self.frequency, the_date))
+            date.add_frequency(self.frequency, the_date))
 
     @staticmethod
     def default_frequency():

@@ -427,7 +427,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             return res[0].address
 
     def get_next_renewal_date(self):
-        return utils.add_frequency('yearly', self.start_date)
+        return date.add_frequency('yearly', self.start_date)
 
     @staticmethod
     def get_possible_contract_kind():

@@ -3,7 +3,7 @@ from trytond.pyson import Eval, If, Or
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, fields, abstract
-from trytond.modules.coop_utils import utils, business
+from trytond.modules.coop_utils import utils, business, date
 from trytond.modules.coop_utils import coop_string
 from trytond.modules.contract import contract
 from trytond.modules.insurance_product.product import DEF_CUR_DIG
@@ -181,7 +181,7 @@ class InsurancePolicy():
             {'date': self.start_date, 'contract': self})[0]}
 
     def get_next_renewal_date(self):
-        return utils.add_frequency('yearly', self.start_date)
+        return date.add_frequency('yearly', self.start_date)
 
     @classmethod
     def get_possible_contract_kind(cls):
