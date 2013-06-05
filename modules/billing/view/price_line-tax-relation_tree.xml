@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Tax Lines">
+  <field name="tax_desc"/>
+  <field name="amount"/>
+  <field name="to_recalculate"/>
+</tree>

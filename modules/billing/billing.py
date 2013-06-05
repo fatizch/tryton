@@ -8,11 +8,15 @@ from trytond.pyson import Eval, If
 from trytond.modules.coop_utils import model, fields, utils, date, abstract
 from trytond.modules.coop_utils import export
 from trytond.modules.insurance_product import product
+from trytond.modules.insurance_product.business_rule.pricing_rule import \
+    PRICING_FREQUENCY
 from trytond.modules.insurance_contract.contract import IS_PARTY
 
 __all__ = [
     'PaymentMethod',
     'PriceLine',
+    'PriceLineTaxRelation',
+    'PriceLineFeeRelation',
     'BillingManager',
     'GenericBillLine',
     'Bill',
@@ -34,7 +38,6 @@ PAYMENT_MODES = [
     ('direct_debit', 'Direct Debit'),
 ]
 
-
 export.add_export_to_model([
     ('account.invoice.payment_term', ('name', )),
     ('account.invoice.payment_term.line', ()),
@@ -54,6 +57,32 @@ class PaymentMethod(model.CoopSQL, model.CoopView):
         required=True)
 
 
+class PriceLineTaxRelation(model.CoopSQL, model.CoopView):
+    'Price Line Tax Relation'
+
+    __name__ = 'billing.price_line-tax-relation'
+
+    price_line = fields.Many2One('billing.price_line', 'Price Line',
+        ondelete='CASCADE')
+    tax_desc = fields.Many2One('coop_account.tax_desc', 'Tax',
+        ondelete='RESTRICT')
+    to_recalculate = fields.Boolean('Recalculate at billing')
+    amount = fields.Numeric('Amount')
+
+
+class PriceLineFeeRelation(model.CoopSQL, model.CoopView):
+    'Price Line Fee Relation'
+
+    __name__ = 'billing.price_line-fee-relation'
+
+    price_line = fields.Many2One('billing.price_line', 'Price Line',
+        ondelete='CASCADE')
+    fee_desc = fields.Many2One('coop_account.fee_desc', 'Fee',
+        ondelete='RESTRICT')
+    to_recalculate = fields.Boolean('Recalculate at billing')
+    amount = fields.Numeric('Amount')
+
+
 class PriceLine(model.CoopSQL, model.CoopView):
     'Price Line'
 
@@ -62,21 +91,21 @@ class PriceLine(model.CoopSQL, model.CoopView):
     amount = fields.Numeric('Amount')
     name = fields.Function(fields.Char('Short Description'), 'get_short_name')
     master = fields.Many2One('billing.price_line', 'Master Line')
-    kind = fields.Selection(
-        [
-            ('main', 'Line'),
-            ('base', 'Base'),
-            ('tax', 'Tax'),
-            ('fee', 'Fee')
-        ], 'Kind', readonly='True')
     on_object = fields.Reference('Priced object', 'get_line_target_models')
+    frequency = fields.Selection(PRICING_FREQUENCY + [('', '')], 'Frequency')
     contract = fields.Many2One('contract.contract', 'Contract')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     all_lines = fields.One2Many('billing.price_line', 'master', 'Lines',
         readonly=True, loading='lazy')
-    amount_for_display = fields.Function(
-        fields.Numeric('Amount'), 'get_amount_for_display')
+    estimated_taxes = fields.Function(
+        fields.Numeric('Estimated Taxes'), 'get_estimated_taxes')
+    estimated_fees = fields.Function(
+        fields.Numeric('Estimated Fees'), 'get_estimated_fees')
+    tax_lines = fields.One2Many('billing.price_line-tax-relation',
+        'price_line', 'Tax Lines')
+    fee_lines = fields.One2Many('billing.price_line-fee-relation',
+        'price_line', 'Fee Lines')
 
     def get_short_name(self, name):
         if self.on_object:
@@ -98,37 +127,99 @@ class PriceLine(model.CoopSQL, model.CoopView):
                 return target.tax
             if target.kind == 'fee':
                 return target.fee
+            # TODO : set a valid on_object for base amount lines
             return None
         return target
-
-    def calculate_my_kind(self, line):
-        test_value = line.on_object.__name__
-        if test_value == 'ins_product.pricing_component':
-            return line.on_object.kind
-        else:
-            return 'main'
 
     def init_from_result_line(self, line):
         if not line:
             return
         PriceLineModel = Pool().get(self.__name__)
         self.init_values()
-        self.amount = line.amount
         self.on_object = self.get_good_on_object(line)
         self.start_date = line.start_date if hasattr(
             line, 'start_date') else None
         self.frequency = line.frequency if hasattr(line, 'frequency') else ''
         self.contract = line.contract if hasattr(line, 'contract') else None
-        self.kind = self.calculate_my_kind(line)
         for detail in line.details:
+            if (detail.on_object and detail.on_object.__name__ ==
+                    'ins_product.pricing_component' and
+                    detail.on_object.kind in ('tax', 'fee')):
+                continue
             detail_line = PriceLineModel()
             detail_line.init_from_result_line(detail)
             self.all_lines.append(detail_line)
+        if not line.details:
+            self.amount = line.amount
+        else:
+            self.amount = sum(map(lambda x: x.amount, self.all_lines))
 
-    def get_amount_for_display(self, field_name):
-        res = self.amount
-        if not res:
-            return None
+    def build_tax_lines(self, line):
+        def get_tax_details(line, taxes):
+            for elem in line.details:
+                print elem.on_object
+                if (elem.on_object and elem.on_object.__name__ ==
+                        'ins_product.pricing_component' and
+                        elem.on_object.kind == 'tax'):
+                    if elem.on_object.tax.id in taxes:
+                        taxes[elem.on_object.tax.id].append(elem)
+                    else:
+                        taxes[elem.on_object.tax.id] = [elem]
+                else:
+                    get_tax_details(elem, taxes)
+
+        tax_details = {}
+        if not (hasattr(self, 'tax_lines') and self.tax_lines):
+            self.tax_lines = []
+        get_tax_details(line, tax_details)
+        TaxDesc = Pool().get('coop_account.tax_desc')
+        TaxRelation = Pool().get('billing.price_line-tax-relation')
+        for tax_id, tax_lines in tax_details.iteritems():
+            the_tax = TaxDesc(tax_id)
+            tax_relation = TaxRelation()
+            tax_relation.tax_desc = the_tax
+            tax_relation.to_recalculate = tax_lines[0].to_recalculate
+            tax_relation.amount = sum(map(lambda x: x.amount, tax_lines))
+            self.tax_lines.append(tax_relation)
+
+    def build_fee_lines(self, line):
+        def get_fee_details(line, fees):
+            for elem in line.details:
+                if (elem.on_object and elem.on_object.__name__ ==
+                        'ins_product.pricing_component' and
+                        elem.on_object.kind == 'fee'):
+                    if elem.on_object.fee.id in fees:
+                        fees[elem.on_object.fee.id].append(elem)
+                    else:
+                        fees[elem.on_object.fee.id] = [elem]
+                else:
+                    for detail in elem.details:
+                        get_fee_details(detail, fees)
+
+        fee_details = {}
+        if not (hasattr(self, 'fee_lines') and self.fee_lines):
+            self.fee_lines = []
+        get_fee_details(line, fee_details)
+        FeeDesc = Pool().get('coop_account.fee_desc')
+        FeeRelation = Pool().get('billing.price_line-fee-relation')
+        for fee_id, fee_lines in fee_details.iteritems():
+            the_fee = FeeDesc(fee_id)
+            fee_relation = FeeRelation()
+            fee_relation.fee_desc = the_fee
+            fee_relation.to_recalculate = fee_lines[0].to_recalculate
+            fee_relation.amount = sum(map(lambda x: x.amount, fee_lines))
+            self.fee_lines.append(fee_relation)
+
+    def get_estimated_taxes(self, field_name):
+        res = 0
+        for elem in self.tax_lines:
+            res += elem.amount
+        return res
+
+    def get_estimated_fees(self, field_name):
+        res = 0
+        for elem in self.fee_lines:
+            res += elem.amount
         return res
 
     @classmethod
@@ -144,9 +235,6 @@ class PriceLine(model.CoopSQL, model.CoopView):
             f('coop_account.tax_desc'),
             f('coop_account.fee_desc')]
         return res
-
-    def is_main_line(self):
-        return self.contract is not None
 
 
 class BillingManager(model.CoopSQL, model.CoopView):
@@ -571,6 +659,8 @@ class Contract():
         for price in prices:
             price_line = PriceLine()
             price_line.init_from_result_line(price)
+            price_line.build_tax_lines(price)
+            price_line.build_fee_lines(price)
             try:
                 price_line.end_date = dates[dates.index(price_line.start_date)
                     + 1] + datetime.timedelta(days=-1)

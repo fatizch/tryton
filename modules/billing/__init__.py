@@ -8,6 +8,8 @@ def register():
         PaymentMethod,
         BillingManager,
         PriceLine,
+        PriceLineTaxRelation,
+        PriceLineFeeRelation,
         GenericBillLine,
         Bill,
         BillParameters,

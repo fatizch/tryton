@@ -83,6 +83,16 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
         'set_basic_tax')
 
     @classmethod
+    def __setup__(cls):
+        super(PricingRule, cls).__setup__()
+        cls._error_messages.update({
+            'bad_tax_version':
+            '%s : Rule combination unavailable with tax (%s) version (%s)',
+            'bad_fee_version':
+            '%s : Rule combination unavailable with fee (%s) version (%s)',
+        })
+
+    @classmethod
     def set_basic_price(cls, pricing_rules, name, value):
         if not value:
             return
@@ -125,6 +135,36 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
                         'kind': 'tax',
                         'code': tax.code,
                         'rated_object_kind': 'global'}])]})
+
+    @classmethod
+    def validate(cls, rules):
+        super(PricingRule, cls).validate(rules)
+        for rule in rules:
+            rule.check_rule_combination_compatibility()
+
+    def check_rule_combination_compatibility(self):
+        def check_component(component):
+            for version in getattr(component, component.kind).versions:
+                if (version.start_date >= self.start_date and
+                        (not self.end_date or
+                            self.end_date >= elem.end_date) or
+                        version.start_date < self.start_date and
+                        (not version.end_date and
+                            version.end_date < self.start_date)):
+                    if version.apply_at_pricing_time:
+                        self.raise_user_error(
+                            'bad_%s_version' % component.kind, (
+                                self.start_date, elem.main_elem.code,
+                                elem.start_date))
+
+        if self.specific_combination_rule:
+            for elem in self.components:
+                if elem.kind in ('fee', 'tax'):
+                    check_component(elem)
+        if self.sub_item_specific_combination_rule:
+            for elem in self.sub_item_components:
+                if elem.kind in ('fee', 'tax'):
+                    check_component(elem)
 
     def get_component_of_kind(self, kind='base', rated_object_kind='global'):
         components = self.get_components(rated_object_kind)
@@ -195,12 +235,14 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
         tax = from_detail.on_object.tax
         tax_vers = tax.get_version_at_date(args['date'])
         amount = tax_vers.apply_tax(base)
+        from_detail.to_recalculate = tax_vers.apply_at_pricing_time
         from_detail.amount = amount
 
     def calculate_fee_detail(self, from_detail, args, base):
         fee = from_detail.on_object.fee
         fee_vers = fee.get_version_at_date(args['date'])
         amount = fee_vers.apply_fee(base)
+        from_detail.to_recalculate = fee_vers.apply_at_pricing_time
         from_detail.amount = amount
 
     def calculate_price(self, args, rated_object_kind='global'):

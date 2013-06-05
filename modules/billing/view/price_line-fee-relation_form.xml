@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<form string="Fee Line" col="2">
+  <label name="fee_desc"/>
+  <field name="fee_desc"/>
+  <label name="amount"/>
+  <field name="amount"/>
+  <label name="to_recalculate"/>
+  <field name="to_recalculate"/>
+</form>

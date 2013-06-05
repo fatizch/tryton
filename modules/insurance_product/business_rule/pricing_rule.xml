@@ -33,7 +33,7 @@
     <!-- Tax Version -->
     <!--################################################################-->
     <record model="ir.ui.view" id="tax_version_form">
-      <field name="model">cop_account.tax_version</field>
+      <field name="model">coop_account.tax_version</field>
       <field name="type">form</field>
       <field name="inherit" ref="coop_account.tax_version_view_form"/>
       <field name="name">tax_version_form</field>

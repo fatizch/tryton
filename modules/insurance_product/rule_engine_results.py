@@ -32,10 +32,12 @@ class EligibilityResultLine(RuleEngineResultLine):
 
 
 class PricingResultDetail(object):
-    def __init__(self, amount=0, on_object=None, details=None):
+    def __init__(self, amount=0, on_object=None, details=None,
+            to_recalculate=False):
         self.amount = amount
         self.on_object = on_object
         self.details = details or []
+        self.to_recalculate = to_recalculate
 
 
 class PricingResultLine(RuleEngineResultLine):

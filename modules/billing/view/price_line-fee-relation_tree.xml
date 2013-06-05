@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tree string="Fee Lines">
+  <field name="fee_desc"/>
+  <field name="amount"/>
+  <field name="to_recalculate"/>
+</tree>
+
