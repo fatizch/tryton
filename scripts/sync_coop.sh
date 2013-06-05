@@ -6,7 +6,7 @@ read -p "Are you sure you want to sync (y/n) ? " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     cd $ENV_FOLDER/tryton-workspace/coopbusiness
-    hg pull -u -b default
+    hg pull -u
     cd $ENV_FOLDER/tryton-workspace/tryton
     hg pull -u
     cd $ENV_FOLDER/tryton-workspace/trytond
