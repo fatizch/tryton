@@ -384,7 +384,7 @@ class Product(model.CoopSQL, Offered):
         for coverage in self.get_valid_coverages():
             _res, _errs = coverage.get_result('price', args)
             if _res:
-                res.append(_res)
+                res.extend(_res)
             errs += _errs
         return (res, errs)
 
@@ -394,17 +394,12 @@ class Product(model.CoopSQL, Offered):
         try:
             res = self.get_result('price', args, kind='pricing')
         except NonExistingRuleKindException:
-            res = (False, [])
+            return ([], [])
         if not res[0]:
-            res = (PricingResultLine(), res[1])
-        data_dict, errs = utils.get_data_from_dict(['contract'], args)
-        if errs:
-            # No contract means no price.
-            return (None, errs)
-        contract = data_dict['contract']
-        res[0].name = 'Product Global Price'
-        if contract.id:
-            res[0].on_object = '%s,%s' % (self.__name__, self.id)
+            result_line = PricingResultLine()
+            result_line.init_from_args(args)
+            result_line.on_object = self
+            return ([result_line], res[1])
         return [res[0]], res[1]
 
     def give_me_total_price(self, args):
@@ -412,12 +407,12 @@ class Product(model.CoopSQL, Offered):
         (p_price, errs_product) = self.give_me_product_price(args)
         (o_price, errs_coverages) = self.give_me_coverages_price(args)
 
-        lines = []
-
-        for line in p_price + o_price:
-            if line.value == 0:
-                continue
-            lines.append(line)
+        lines = p_price + o_price
+        # lines = []
+        # for line in p_price + o_price:
+            # if line.value == 0:
+                # continue
+            # lines.append(line)
 
         return (lines, errs_product + errs_coverages)
 

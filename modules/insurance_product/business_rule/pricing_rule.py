@@ -1,12 +1,13 @@
 #-*- coding:utf-8 -*-
 import copy
 
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Or, Bool
 
 from trytond.modules.coop_utils import utils, date, model, fields
 from trytond.modules.insurance_product.product import DEF_CUR_DIG, CONFIG_KIND
 from trytond.modules.insurance_product import PricingResultLine
+from trytond.modules.insurance_product import PricingResultDetail
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED, STATE_SIMPLE
 
@@ -14,6 +15,8 @@ __all__ = [
     'SimplePricingRule',
     'PricingRule',
     'PricingComponent',
+    'TaxVersion',
+    'FeeVersion',
 ]
 
 PRICING_LINE_KINDS = [
@@ -80,6 +83,16 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
         'set_basic_tax')
 
     @classmethod
+    def __setup__(cls):
+        super(PricingRule, cls).__setup__()
+        cls._error_messages.update({
+            'bad_tax_version':
+            '%s : Rule combination unavailable with tax (%s) version (%s)',
+            'bad_fee_version':
+            '%s : Rule combination unavailable with fee (%s) version (%s)',
+        })
+
+    @classmethod
     def set_basic_price(cls, pricing_rules, name, value):
         if not value:
             return
@@ -122,6 +135,36 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
                         'kind': 'tax',
                         'code': tax.code,
                         'rated_object_kind': 'global'}])]})
+
+    @classmethod
+    def validate(cls, rules):
+        super(PricingRule, cls).validate(rules)
+        for rule in rules:
+            rule.check_rule_combination_compatibility()
+
+    def check_rule_combination_compatibility(self):
+        def check_component(component):
+            for version in getattr(component, component.kind).versions:
+                if (version.start_date >= self.start_date and
+                        (not self.end_date or
+                            self.end_date >= elem.end_date) or
+                        version.start_date < self.start_date and
+                        (not version.end_date or
+                            version.end_date < self.start_date)):
+                    if version.apply_at_pricing_time:
+                        self.raise_user_error(
+                            'bad_%s_version' % component.kind, (
+                                self.start_date, elem.main_elem.code,
+                                elem.start_date))
+
+        if self.specific_combination_rule:
+            for elem in self.components:
+                if elem.kind in ('fee', 'tax'):
+                    check_component(elem)
+        if self.sub_item_specific_combination_rule:
+            for elem in self.sub_item_components:
+                if elem.kind in ('fee', 'tax'):
+                    check_component(elem)
 
     def get_component_of_kind(self, kind='base', rated_object_kind='global'):
         components = self.get_components(rated_object_kind)
@@ -181,59 +224,70 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
         elif rated_object_kind == 'sub_item':
             return self.sub_item_specific_combination_rule
 
+    def build_details(self, final_details):
+        result = []
+        for amount, detail_definition in final_details.itervalues():
+            detail_definition.amount = amount
+            result.append(detail_definition)
+        return result
+
+    def calculate_tax_detail(self, from_detail, args, base):
+        tax = from_detail.on_object.tax
+        tax_vers = tax.get_version_at_date(args['date'])
+        amount = tax_vers.apply_tax(base)
+        from_detail.to_recalculate = tax_vers.apply_at_pricing_time
+        from_detail.amount = amount
+
+    def calculate_fee_detail(self, from_detail, args, base):
+        fee = from_detail.on_object.fee
+        fee_vers = fee.get_version_at_date(args['date'])
+        amount = fee_vers.apply_fee(base)
+        from_detail.to_recalculate = fee_vers.apply_at_pricing_time
+        from_detail.amount = amount
+
     def calculate_price(self, args, rated_object_kind='global'):
-        result = PricingResultLine(value=0)
+        result = PricingResultLine()
         errors = []
         errs = []
         for component in self.get_components(rated_object_kind):
             res, errs = component.calculate_value(args)
-            result += res
+            result.add_detail(res)
             errors += errs
         combination_rule = self.get_combination_rule(rated_object_kind)
         if not errors and combination_rule:
             new_args = copy.copy(args)
             new_args['price_details'] = result.details
-            final_details = {}
-            for key in result.details.iterkeys():
-                final_details[key] = 0
-            new_args['final_details'] = final_details
+            new_args['final_details'] = {}
             rule_result = utils.execute_rule(
                 self, combination_rule, new_args)
             res = rule_result.result
             errors.extend(rule_result.print_errors())
             errors.extend(rule_result.print_warnings())
-            result = PricingResultLine(value=res)
-            result.details = {}
-            result.update_details(new_args['final_details'])
+            details = self.build_details(new_args['final_details'])
+            result.amount = res
+            result.details = details
         elif not errs and not combination_rule:
-            result.value = 0
-            sorted = dict([(key, []) for key, _ in PRICING_LINE_KINDS])
-            result.desc = []
-            for key, value in result.details.iteritems():
-                sorted[key[0]].append((key[1], value))
-            for the_code, value in sorted['base']:
-                result.value += value
-            total_fee = 0
-            for the_code, value in sorted['fee']:
-                fee, = utils.get_those_objects(
-                    'coop_account.fee_desc',
-                    [('code', '=', the_code)], 1)
-                fee_vers = fee.get_version_at_date(args['date'])
-                amount = fee_vers.apply_fee(result.value)
-                total_fee += amount
-                result.details[('fee', the_code)] = amount
-            result.value += total_fee
-            total_tax = 0
-            for the_code, value in sorted['tax']:
-                tax, = utils.get_those_objects(
-                    'coop_account.tax_desc',
-                    [('code', '=', the_code)], 1)
-                tax_vers = tax.get_version_at_date(args['date'])
-                amount = tax_vers.apply_tax(result.value)
-                total_tax += amount
-                result.details[('tax', the_code)] = amount
-            # result.value += total_tax
-        result.create_descs_from_details()
+            result.amount = 0
+            group_details = dict([(key, []) for key, _ in PRICING_LINE_KINDS])
+            for detail in result.details:
+                group_details[detail.on_object.kind].append(detail)
+            result.details = []
+            for detail in group_details['base']:
+                result.add_detail(detail)
+            # By default, taxes and fees are appliend on the total base amount
+            fee_details = []
+            for detail in group_details['fee']:
+                self.calculate_fee_detail(detail, args, result.amount)
+                fee_details.append(detail)
+            tax_details = []
+            for detail in group_details['tax']:
+                self.calculate_tax_detail(detail, args, result.amount)
+                tax_details.append(detail)
+            for detail in fee_details:
+                result.add_detail(detail)
+            for detail in tax_details:
+                result.add_detail(detail)
+        result.frequency = self.frequency
         return result, errors
 
 
@@ -338,13 +392,9 @@ class PricingComponent(model.CoopSQL, model.CoopView):
         return self.rule_complementary_data.get(schema_name, None)
 
     def calculate_value(self, args):
-        kind = self.kind
         amount, errors = self.get_amount(args)
-        code = self.code
-        name = kind + ' - ' + code
-        final_res = PricingResultLine(amount, name)
-        final_res.update_details({(kind, code): amount})
-        return final_res, errors
+        detail_line = PricingResultDetail(amount, self)
+        return detail_line, errors
 
     @classmethod
     def get_summary(cls, pricings, name=None, with_label=False, at_date=None,
@@ -370,9 +420,27 @@ class PricingComponent(model.CoopSQL, model.CoopView):
         return self.get_summary([self])[self.id]
 
     def on_change_with_code(self, name=None):
-        if self.code:
-            return self.code
         if self.tax:
             return self.tax.code
         if self.fee:
             return self.fee.code
+        if self.code:
+            return self.code
+
+
+class TaxVersion():
+    'Tax Version'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'coop_account.tax_version'
+
+    apply_at_pricing_time = fields.Boolean('Apply when Pricing')
+
+
+class FeeVersion():
+    'Fee Version'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'coop_account.fee_version'
+
+    apply_at_pricing_time = fields.Boolean('Apply when Pricing')

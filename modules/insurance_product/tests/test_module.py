@@ -12,7 +12,6 @@ import unittest
 import trytond.tests.test_tryton
 
 from trytond.transaction import Transaction
-from trytond.modules.insurance_product import PricingResultLine
 from trytond.modules.coop_utils import test_framework
 
 
@@ -406,36 +405,6 @@ return True'''
         product_a.save()
 
         self.assert_(product_a.id)
-
-    def test0020Pricing_Line_Results(self):
-        '''
-            Tests pricing lines
-        '''
-        p1 = PricingResultLine(value=10, name='Alpha', desc=[])
-        p2 = PricingResultLine(value=30, name='Beta', desc=[])
-
-        p_add = p1 + p2
-
-        self.assertEqual(p_add.value, 40)
-        self.assertEqual(p_add.name, '')
-        self.assertEqual(len(p_add.desc), 2)
-        self.assertEqual(p_add.desc, [p1, p2])
-
-        p1 += p2
-
-        self.assertEqual(p1.value, 40)
-        self.assertEqual(p1.name, 'Alpha')
-        self.assertEqual(len(p1.desc), 1)
-
-        sub_p = p1.desc[0]
-
-        self.assertEqual(sub_p.value, p2.value)
-        self.assertEqual(sub_p.name, p2.name)
-        self.assertEqual(sub_p.desc, p2.desc)
-
-        self.assertEqual(sub_p, p2)
-
-        p1 += p2
 
 
 def suite():

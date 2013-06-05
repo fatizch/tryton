@@ -66,13 +66,13 @@ class InsurancePolicy():
         return (prices, errs)
 
     def calculate_prices_at_all_dates(self):
-        prices = {}
+        prices = []
         errs = []
         dates = self.get_dates()
         for cur_date in dates:
             price, err = self.calculate_price_at_date(cur_date)
             if price:
-                prices[cur_date.isoformat()] = price
+                prices.extend(price)
             errs += err
         return prices, errs
 
@@ -675,8 +675,8 @@ class CoveredData(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.covered_data'
 
-    option = fields.Many2One('contract.subscribed_option', 'Subscribed Coverage',
-        domain=[('id', 'in', Eval('possible_options'))],
+    option = fields.Many2One('contract.subscribed_option',
+        'Subscribed Coverage', domain=[('id', 'in', Eval('possible_options'))],
         depends=['possible_options'])
     possible_options = fields.Function(
         fields.Many2Many('contract.subscribed_option', None, None,

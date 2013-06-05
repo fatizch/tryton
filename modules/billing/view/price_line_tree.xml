@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
 <tree string="Pricing Lines">
-	<field name="name"/>
-	<field name="start_date_calculated"/>
-	<field name="end_date_calculated"/>
-	<field name="amount_for_display"/>
-	<field name="taxes"/>
+  <field name="name"/>
+  <field name="start_date"/>
+  <field name="end_date"/>
+  <field name="amount"/>
+  <field name="estimated_fees"/>
+  <field name="estimated_taxes"/>
+  <field name="frequency"/>
 </tree>

@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <tree string="Pricing Lines">
 	<field name="name"/>
-	<field name="amount_for_display"/>
-	<field name="taxes"/>
+	<field name="amount"/>
 </tree>

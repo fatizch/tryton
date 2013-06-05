@@ -2,6 +2,7 @@ from trytond.pool import Pool
 from .billing import *
 from .account import *
 
+
 def register():
     Pool.register(
         # From file billing :
@@ -9,6 +10,8 @@ def register():
         BillingManager,
         BillingPeriod,
         PriceLine,
+        PriceLineTaxRelation,
+        PriceLineFeeRelation,
         GenericBillLine,
         Bill,
         BillParameters,

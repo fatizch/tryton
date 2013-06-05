@@ -50,6 +50,9 @@ def register():
         SimplePricingRule,
         PricingRule,
         PricingComponent,
+        TaxVersion,
+        FeeVersion,
+        # from eligibility_rule
         EligibilityRule,
         EligibilityRelationKind,
         EventDesc,

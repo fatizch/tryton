@@ -1,4 +1,5 @@
 import sys
+import logging
 import ast
 import _ast
 import tokenize
@@ -428,6 +429,8 @@ class Rule(ModelView, ModelSQL):
                 pass
                 the_result.result = None
             except Exception, exc:
+                for elem in the_result.print_debug():
+                    logging.getLogger('rule_engine').debug(elem)
                 raise InternalRuleEngineError(coop_string.remove_invalid_char(
                     self.name) + ' - ' + str(exc))
         return the_result
