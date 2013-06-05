@@ -717,6 +717,7 @@ class Contract():
         return True, ()
 
     def create_price_list(self, start_date, end_date):
+        res = []
         for price_line in self.prices:
             if start_date > price_line.start_date:
                 start = start_date
@@ -728,21 +729,9 @@ class Contract():
                 end = end_date
             else:
                 end = price_line.end_date
-            if start <= end:
-                yield (start, end), price_line
-
-    def flatten(self, prices):
-        # prices is a list of tuples (start, end, price_line).
-        # aggregate returns one price_line which aggregates all of the
-        # provided price_lines, in which all lines have set start and end dates
-        for period, price_line in prices:
-            if price_line.is_main_line():
-                if price_line.amount:
-                    yield (period, price_line)
-            else:
-                for child in self.flatten((period, c)
-                        for c in price_line.child_lines):
-                    yield child
+            if start <= end and price_line.amount:
+                res.append(((start, end), price_line))
+        return res
 
     @staticmethod
     def get_journal():
@@ -770,8 +759,7 @@ class Contract():
             billing_period.start_date, billing_period.end_date = period
             billing_period.save()
 
-        price_list = self.create_price_list(*period)
-        price_lines = self.flatten(price_list)
+        price_lines = self.create_price_list(*period)
 
         self.init_billing_manager()
         billing_manager = None
@@ -829,7 +817,6 @@ class Contract():
                 counterpart.credit = 0
                 counterpart.debit = amount
                 counterpart.account = self.subscriber.account_receivable
-                print counterpart.account
                 counterpart.party = self.subscriber
                 counterpart.maturity_date = term_date
                 lines.append(counterpart)
