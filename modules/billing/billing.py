@@ -31,6 +31,8 @@ __all__ = [
     'CoveredElement',
     'CoveredData',
     'PaymentTerm',
+    'TaxDesc',
+    'FeeDesc',
 ]
 
 PAYMENT_MODES = [
@@ -246,6 +248,10 @@ class PriceLine(model.CoopSQL, model.CoopView):
                 ], limit=1)
         if accounts:
             return accounts[0]
+
+    def get_number_of_days_at_date(self, at_date):
+        final_date = date.add_frequency(self.frequency, at_date)
+        return date.number_of_days_between(at_date, final_date)
 
 
 class BillingManager(model.CoopSQL, model.CoopView):
@@ -657,7 +663,7 @@ class Contract():
         start_date = self.next_billing_date or self.start_date  # FIXME
         return (
             start_date,
-            utils.add_frequency(
+            date.add_frequency(
                 self.get_product_frequency(start_date), start_date))
 
     @classmethod
@@ -786,40 +792,92 @@ class Contract():
             )
 
         lines = []
+        total_amount = 0
+        taxes = {}
+        fees = {}
         for period, price_line in price_lines:
-            try:
-                frequency_days, _ = price_line.on_object.get_result(
-                    'frequency_days',
-                    {'date': billing_date},
-                    kind='pricing')
-            except product.NonExistingRuleKindException:
-                frequency_days = 365
             number_of_days = date.number_of_days_between(*period)
-            amount = price_line.amount * number_of_days / frequency_days
+            price_line_days = price_line.get_number_of_days_at_date(period[0])
+            convert_factor = number_of_days / price_line_days
+            amount = price_line.amount * convert_factor
             amount = currency.round(amount)
 
             line = Line()
             line.credit = amount
             line.debit = 0
             line.account = price_line.get_account_for_billing()
-            print line.account
             line.party = self.subscriber
 
             lines.append(line)
+            total_amount += amount
 
-            if payment_term:
-                term_lines = payment_term.compute(amount, currency,
-                    billing_date)
+            for tax_line in price_line.tax_lines:
+                if not tax_line.tax_desc.id in taxes:
+                    taxes[tax_line.tax_desc.id] = {
+                        'amount': tax_line.amount * convert_factor,
+                        'base': amount,
+                        'object': tax_line.tax_desc,
+                        'to_recalculate': tax_line.to_recalculate}
+                else:
+                    cur_values = taxes[tax_line.tax_desc.id]
+                    cur_values['amount'] += tax_line.amount * convert_factor
+                    cur_values['base'] += amount
+
+            for fee_line in price_line.fee_lines:
+                if not fee_line.fee_desc.id in fees:
+                    fees[fee_line.fee_desc.id] = {
+                        'amount': fee_line.amount * convert_factor,
+                        'base': amount,
+                        'object': fee_line.fee_desc,
+                        'to_recalculate': fee_line.to_recalculate}
+                else:
+                    cur_values = fees[fee_line.fee_desc.id]
+                    cur_values['amount'] += fee_line.amount * convert_factor
+                    cur_values['base'] += amount
+
+        for _, tax_data in taxes.iteritems():
+            line_tax = Line()
+            line_tax.debit = 0
+            line_tax.party = self.subscriber
+            line_tax.account = tax_data['object'].get_account_for_billing()
+            if tax_data['to_recalculate']:
+                good_version = tax_data['object'].get_version_at_date(
+                    period[0])
+                amount = good_version.apply_tax(tax_data['base'])
             else:
-                term_lines = [(Date.today(), amount)]
-            for term_date, amount in term_lines:
-                counterpart = Line()
-                counterpart.credit = 0
-                counterpart.debit = amount
-                counterpart.account = self.subscriber.account_receivable
-                counterpart.party = self.subscriber
-                counterpart.maturity_date = term_date
-                lines.append(counterpart)
+                amount = tax_data['amount']
+            line_tax.credit = currency.round(amount)
+            lines.append(line_tax)
+            total_amount += amount
+
+        for _, fee_data in fees.iteritems():
+            line_fee = Line()
+            line_fee.debit = 0
+            line_fee.party = self.subscriber
+            line_fee.account = fee_data['object'].get_account_for_billing()
+            if fee_data['to_recalculate']:
+                good_version = fee_data['object'].get_version_at_date(
+                    period[0])
+                amount = good_version.apply_fee(fee_data['base'])
+            else:
+                amount = fee_data['amount']
+            line_fee.credit = currency.round(amount)
+            lines.append(line_fee)
+            total_amount += amount
+
+        if payment_term:
+            term_lines = payment_term.compute(total_amount, currency,
+                billing_date)
+        else:
+            term_lines = [(Date.today(), amount)]
+        for term_date, amount in term_lines:
+            counterpart = Line()
+            counterpart.credit = 0
+            counterpart.debit = amount
+            counterpart.account = self.subscriber.account_receivable
+            counterpart.party = self.subscriber
+            counterpart.maturity_date = term_date
+            lines.append(counterpart)
 
         move.lines = lines
         move.save()
@@ -874,3 +932,29 @@ class PaymentTerm():
         if Transaction().context.get('__importing__'):
             return True
         return super(PaymentTerm, self).check_remainder()
+
+
+class TaxDesc():
+    'Tax Desc'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'coop_account.tax_desc'
+
+    account_for_billing = fields.Many2One('account.account',
+        'Account for billing', required=True)
+
+    def get_account_for_billing(self):
+        return self.account_for_billing
+
+
+class FeeDesc():
+    'Fee Desc'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'coop_account.fee_desc'
+
+    account_for_billing = fields.Many2One('account.account',
+        'Account for billing', required=True)
+
+    def get_account_for_billing(self):
+        return self.account_for_billing

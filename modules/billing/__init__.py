@@ -23,6 +23,9 @@ def register():
         CoveredElement,
         CoveredData,
         PaymentTerm,
+        TaxDesc,
+        FeeDesc,
+        # from account
         Move,
         module='billing', type_='model')
 
