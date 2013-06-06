@@ -45,8 +45,12 @@ class InsurancePolicy():
         'ins_contract.covered_element', 'contract', 'Covered Elements',
         domain=[('parent', '=', None)],
         context={'contract': Eval('id')})
-    management = fields.One2Many(
-        'ins_contract.management_role', 'contract', 'Management Roles')
+    management_roles = fields.One2Many('ins_contract.management_role',
+        'contract', 'Management Roles',
+        states={'invisible': Eval('product_kind') != 'insurance'})
+    managing_roles = fields.One2Many('ins_contract.management_role',
+        'protocol', 'Managing Roles',
+        states={'invisible': Eval('product_kind') == 'insurance'})
     contract_history = fields.One2Many('contract.contract.history',
         'from_object', 'Contract History')
     addresses = fields.One2Many('ins_contract.address', 'contract',
@@ -161,19 +165,83 @@ class InsurancePolicy():
         return True, ()
 
     def get_sender(self):
-        return self.get_management_role('contract_manager').protocol.party
+        role = self.get_management_role('contract_manager')
+        return role.party if role else None
 
-    def get_management_role(self, role, good_date=None):
-        if not good_date:
-            good_date = utils.today()
-        Role = Pool().get('ins_contract.management_role')
-        domain = [
-            utils.get_versioning_domain(good_date, do_eval=False),
-            ('protocol.kind', '=', role)]
-        good_roles = Role.search(domain)
-        if not good_roles:
-            return None
-        return good_roles[0]
+    def get_management_role(self, kind, party=None, only_active_at_date=False,
+            at_date=None):
+        if only_active_at_date:
+            roles = utils.get_good_versions_at_date(self, 'management_roles',
+                at_date)
+        elif not utils.is_none(self, 'management_roles'):
+            roles = self.management_roles
+        else:
+            roles = []
+        good_roles = [x for x in roles if (not x.kind or x.kind == kind)
+            and (not party or x.party == party)]
+        return good_roles[0] if len(good_roles) == 1 else None
+
+    def get_or_create_management_role(self, kind, party):
+        role = self.get_management_role(kind, party)
+        if not role:
+            role = utils.instanciate_relation(self, 'management_roles')
+            role.party = party
+            role.kind = kind
+            if utils.is_none(self, 'management_roles'):
+                self.management_roles = []
+            else:
+                self.management_roles = list(self.management_roles)
+            self.management_roles.append(role)
+        return role
+
+    def get_protocol_offered(self, kind):
+        #what if several protocols exist?
+        return None
+
+    @classmethod
+    def search_contract(cls, offered, party, at_date):
+        #TODO : add check on contract status and date
+        return cls.search([
+                ('offered', '=', offered),
+                ('subscriber', '=', party),
+                ('start_date', '<=', at_date),
+                ['OR',
+                    [('end_date', '=', None)],
+                    [('end_date', '>=', at_date)]
+                ], ('status', '=', 'active'),
+                ])
+
+    def update_protocol(self, contract):
+        pass
+
+    def update_management_roles(self):
+        #This method will update the management role and find the good protocol
+        #based on real coverage subscribed
+        if utils.is_none(self, 'management_roles'):
+            return
+        for role in [x for x in self.management_roles]:
+            #we browse all roles that need to be updated on contract
+            if not role.protocol:
+                protocol_offered = self.get_protocol_offered(role.kind)
+                if not protocol_offered:
+                    #TODO : We can't find anything
+                    return
+                contracts = self.search_contract(protocol_offered, role.party,
+                    self.start_date)
+                protocol = None
+                if len(contracts) == 1:
+                    protocol = contracts[0]
+                elif len(contracts) > 1:
+                    #TODO
+                    raise
+                else:
+                    protocol = self.subscribe_contract(protocol_offered,
+                        role.party, protocol_offered.start_date)
+                    protocol.save()
+                role.protocol = protocol.id
+            role.protocol.update_protocol(self)
+            role.start_date = self.start_date
+            role.save()
 
     def on_change_complementary_data(self):
         return {'complementary_data': self.offered.get_result(
@@ -183,14 +251,9 @@ class InsurancePolicy():
     def get_next_renewal_date(self):
         return utils.add_frequency('yearly', self.start_date)
 
-    @classmethod
-    def get_possible_contract_kind(cls):
-        res = super(InsurancePolicy, cls).get_possible_contract_kind()
-        res.extend([
-                ('claim_manager', 'Claim Manager'),
-                ('contract_manager', 'Contract Manager'),
-                ])
-        return list(set(res))
+    def finalize_contract(self):
+        super(InsurancePolicy, self).finalize_contract()
+        self.update_management_roles()
 
 
 class InsuranceSubscribedCoverage():
@@ -824,24 +887,21 @@ class ManagementRole(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.management_role'
 
-    start_date = fields.Date('Start Date', required=True)
+    start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
+    party = fields.Many2One('party.party', 'Party', ondelete='RESTRICT')
     protocol = fields.Many2One('contract.contract', 'Protocol',
-        required=True,
-        domain=[utils.get_versioning_domain('start_date', 'end_date')],
-        depends=['start_date', 'end_date'],
+        domain=[
+            utils.get_versioning_domain('start_date', 'end_date'),
+            ('product_kind', '!=', 'insurance'),
+            ('subscriber', '=', Eval('party')),
+            ], depends=['start_date', 'end_date', 'party'],
+        #we only need to have a protocole when the management is effective
+        states={'required': ~~Eval('start_date')},
         ondelete='RESTRICT',)
-    contract = fields.Many2One(
-        'contract.contract', 'Contract', ondelete='CASCADE')
-    kind = fields.Function(
-        fields.Char('Kind', on_change_with=['protocol'], depends=['protocol']),
-        'on_change_with_kind',
-        )
-
-    def on_change_with_kind(self, name=None):
-        if not (hasattr(self, 'protocol') and self.protocol):
-            return ''
-        return coop_string.translate_value(self.protocol, 'kind')
+    contract = fields.Many2One('contract.contract', 'Contract',
+        depends=['party'], ondelete='CASCADE')
+    kind = fields.Char('Kind')
 
 
 class DeliveredService(model.CoopView, model.CoopSQL):

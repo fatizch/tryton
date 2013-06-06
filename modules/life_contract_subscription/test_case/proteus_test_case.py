@@ -289,13 +289,6 @@ yexpand="1" mode="form"/>
         'parent_transition': trans1,
         'sequence': 6,
     })
-    meths['Code']({
-        'technical_kind': 'transition',
-        'on_model': contract_model,
-        'method_name': 'init_management_roles',
-        'parent_transition': trans1,
-        'sequence': 7,
-    })
     trans2 = meths['StepTransition'](
         {
             'from_step': subscriber_sel_step,
@@ -344,13 +337,6 @@ yexpand="1" mode="form"/>
         'method_name': 'init_complementary_data',
         'parent_transition': trans2,
         'sequence': 6,
-    })
-    meths['Code']({
-        'technical_kind': 'transition',
-        'on_model': contract_model,
-        'method_name': 'init_management_roles',
-        'parent_transition': trans2,
-        'sequence': 7,
     })
     meths['Code']({
         'technical_kind': 'transition',

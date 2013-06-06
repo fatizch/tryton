@@ -20,7 +20,8 @@ class GroupProduct():
     __name__ = 'offered.product'
     __metaclass__ = PoolMeta
 
-    is_group = fields.Boolean('Group Product')
+    is_group = fields.Boolean('Group Product',
+        states={'invisible': Eval('kind') != 'insurance'})
 
     @classmethod
     def __setup__(cls):

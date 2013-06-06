@@ -2,7 +2,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.rpc import RPC
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
-from trytond.modules.coop_utils import abstract, fields
+from trytond.modules.coop_utils import abstract, fields, utils
 
 from trytond.modules.process import ClassAttr
 from trytond.modules.coop_process import CoopProcessFramework
@@ -50,7 +50,7 @@ class ContractSubscription(CoopProcessFramework):
         ), 'on_change_with_subscriber_desc', 'setter_void', )
     product_desc = fields.Function(
         fields.Text(
-            'Description', on_change_with=['offered', ],
+            'Description', on_change_with=['offered', 'com_product'],
         ),
         'on_change_with_product_desc', 'setter_void', )
     subscription_mgr = fields.One2Many(
@@ -103,8 +103,8 @@ class ContractSubscription(CoopProcessFramework):
 
     def on_change_with_product_desc(self, name=None):
         res = ''
-        if self.get_product():
-            res = self.get_product().description
+        if self.com_product:
+            res = self.com_product.description
         return res
 
     def on_change_subscriber_kind(self):
@@ -158,12 +158,11 @@ class ContractSubscription(CoopProcessFramework):
         return True
 
     def get_allowed_payment_methods(self):
-        if not (hasattr(self, 'offered') and self.offered):
-            return [('', '')]
         result = []
-        for elem in self.offered.get_allowed_payment_methods():
-            result.append((str(elem.id), elem.name))
-        return result
+        if not utils.is_none(self, 'offered'):
+            for elem in self.offered.get_allowed_payment_methods():
+                result.append((str(elem.id), elem.name))
+        return result if result else [('', '')]
 
     def on_change_payment_method(self):
         if not (hasattr(self, 'payment_method') and self.payment_method):
@@ -181,7 +180,8 @@ class ContractSubscription(CoopProcessFramework):
         if (hasattr(self, 'billing_managers') and self.billing_managers):
             return str(self.billing_managers[0].payment_method.id)
         if (hasattr(self, 'offered') and self.offered):
-            return str(self.offered.get_default_payment_method().id)
+            payment_method = self.offered.get_default_payment_method()
+            return str(payment_method.id) if payment_method else ''
 
     def get_payment_mode(self, name):
         if not (hasattr(self, 'payment_method') and self.payment_method):
@@ -376,68 +376,6 @@ class ContractSubscription(CoopProcessFramework):
         good_req.clean_extras(documents)
 
         return True, ()
-
-    def init_management_role(party, dist_network, kind):
-        pool = Pool()
-        ManagementRole = Pool().get('ins_contract.management_role')
-        Contract = Pool().get('contract.contract')
-        # protocol = Contract.search([
-        #         ('kind', '=', kind),
-        #         ('start_date', '<=', self.start_date),
-        #         ('status', '=', 'active'),
-        #         ['OR',
-        #             [('end_date', '=', None)],
-        #             ['end_date', '>=', self.end_date]],
-        #         ], ('subscriber', '=', 'party'),
-
-
-    def init_management_roles(self):
-        #TODO:Migrate to new architecture
-        # ManagementRole = Pool().get('ins_contract.management_role')
-        # ManagementProtocol = Pool().get('ins_contract.management_protocol')
-        # product = self.offered
-        # self.management = []
-        # # Set Contract Management Role
-        # if product.tmp_contract_manager:
-        #     good_protocol = ManagementProtocol.search([
-        #         ('kind', '=', 'contract_manager'),
-        #         ('party', '=', product.tmp_contract_manager.id),
-        #         ('start_date', '<=', self.start_date)])
-        #     if not good_protocol:
-        #         good_protocol = ManagementProtocol()
-        #         good_protocol.start_date = self.start_date
-        #         good_protocol.kind = 'contract_manager'
-        #         good_protocol.party = product.tmp_contract_manager
-        #         good_protocol.save()
-        #     else:
-        #         good_protocol = good_protocol[0]
-        #     good_role = ManagementRole()
-        #     good_role.protocol = good_protocol
-        #     good_role.start_date = self.start_date
-        #     good_role.contract = self
-        #     good_role.save()
-        #     self.management.append(good_role)
-        # # Set Claim Management Role
-        # if product.tmp_claim_manager:
-        #     good_protocol = ManagementProtocol.search([
-        #         ('kind', '=', 'claim_manager'),
-        #         ('party', '=', product.tmp_claim_manager.id),
-        #         ('start_date', '<=', self.start_date)])
-        #     if not good_protocol:
-        #         good_protocol = ManagementProtocol()
-        #         good_protocol.start_date = self.start_date
-        #         good_protocol.kind = 'claim_manager'
-        #         good_protocol.party = product.tmp_claim_manager
-        #         good_protocol.save()
-        #     else:
-        #         good_protocol = good_protocol[0]
-        #     good_role = ManagementRole()
-        #     good_role.protocol = good_protocol
-        #     good_role.start_date = self.start_date
-        #     good_role.contract = self
-        #     good_role.save()
-        #     self.management.append(good_role)
-        return True
 
 
 class Option():

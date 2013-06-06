@@ -2,7 +2,6 @@
 import copy
 
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import model, fields
 from trytond.modules.insurance_product.business_rule import business_rule
@@ -10,7 +9,6 @@ from trytond.modules.insurance_product.business_rule import business_rule
 __all__ = [
     'CommissionPlan',
     'CommissionComponent',
-    'CommissionPlanComponentRelation',
     'CommissionComponentCoverageRelation',
     'CommissionRule',
     ]
@@ -22,10 +20,6 @@ class CommissionPlan():
     __name__ = 'offered.product'
     __metaclass__ = PoolMeta
 
-    components = fields.Many2Many('commission.plan-component',
-        'plan', 'component', 'Components',
-        domain=[('kind', '=', Eval('kind'))],
-        depends=['kind'])
     dist_networks = fields.Many2Many('distribution.dist_network-plan',
         'com_plan', 'dist_network', 'Distribution Networks')
 
@@ -64,17 +58,6 @@ class CommissionComponent():
         if ('default', 'Default') in cls.kind.selection:
             cls.kind.selection.remove(('default', 'Default'))
         cls.kind.selection = list(set(cls.kind.selection))
-
-
-class CommissionPlanComponentRelation(model.CoopSQL):
-    'Relation Commission Plan and Component'
-
-    __name__ = 'commission.plan-component'
-
-    plan = fields.Many2One('offered.product', 'Commission Plan',
-        ondelete='CASCADE')
-    component = fields.Many2One('offered.coverage',
-        'Commission Component', ondelete='RESTRICT')
 
 
 class CommissionComponentCoverageRelation(model.CoopSQL):

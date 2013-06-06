@@ -50,7 +50,7 @@ class DistributionNetwork():
             ]
 
     def get_all_com_plans_id(self, name):
-        return self.commission_plans + self.parent_com_plans
+        return [x.id for x in self.commission_plans + self.parent_com_plans]
 
     def get_brokers(self):
         return self.brokers + self.childs_brokers

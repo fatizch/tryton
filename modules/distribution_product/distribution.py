@@ -49,7 +49,8 @@ class Product():
     __metaclass__ = PoolMeta
 
     com_products = fields.One2Many('distribution.commercial_product',
-        'product', 'Commercial Products')
+        'product', 'Commercial Products',
+        states={'invisible': Eval('product_kind') != 'insurance'})
 
 
 class CommercialProduct(model.CoopSQL, model.CoopView):
@@ -67,6 +68,7 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
     end_date = fields.Date('End Date')
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True, on_change_with=['name', 'code'])
+    description = fields.Text('Description')
 
     @staticmethod
     def default_start_date():

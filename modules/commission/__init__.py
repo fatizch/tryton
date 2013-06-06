@@ -4,6 +4,7 @@ from .plan import *
 from .agreement import *
 from .party import *
 from .distribution import *
+from .contract import *
 
 
 def register():
@@ -11,7 +12,6 @@ def register():
         #Plan
         CommissionPlan,
         CommissionComponent,
-        CommissionPlanComponentRelation,
         CommissionComponentCoverageRelation,
         CommissionRule,
         #Agreement
@@ -25,4 +25,6 @@ def register():
         DistributionNetwork,
         DistributionNetworkComPlanRelation,
         DistributionNetworkBrokerRelation,
+        #Contract
+        Contract,
         module='commission', type_='model')

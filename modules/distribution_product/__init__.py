@@ -1,6 +1,7 @@
 from trytond.pool import Pool
 
 from .distribution import *
+from .contract import *
 
 
 def register():
@@ -9,4 +10,5 @@ def register():
         Product,
         CommercialProduct,
         DistributionNetworkComProductRelation,
+        Contract,
         module='distribution_product', type_='model')

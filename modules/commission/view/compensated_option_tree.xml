@@ -2,7 +2,6 @@
 <tree string="Compensated Option">
     <field name="start_date"/>
     <field name="end_date"/>
-    <field name="com_option"/>
     <field name="subs_option"/>
     <field name="rec_name"/>
 </tree>

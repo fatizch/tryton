@@ -2,6 +2,7 @@ import copy
 
 from trytond.modules.coop_utils import model, fields, date
 from trytond.pyson import Eval
+from trytond.pool import Pool
 
 from trytond.modules.coop_utils import utils
 from trytond.modules.insurance_product import Printable
@@ -120,6 +121,9 @@ class Subscribed(model.CoopView):
         return utils.limit_dates(res, start, end)
 
     def init_from_offered(self, offered, start_date=None, end_date=None):
+        #TODO : check eligibility
+        if not start_date:
+            start_date = utils.today()
         if utils.is_effective_at_date(offered, start_date):
             self.offered = offered
             self.start_date = (
@@ -194,7 +198,6 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     product_kind = fields.Function(
         fields.Char('Product Kind', on_change_with=['offered']),
         'on_change_with_product_kind', searcher='search_product_kind')
-    kind = fields.Selection('get_possible_contract_kind', 'kind')
     status = fields.Selection(CONTRACTSTATUSES, 'Status')
     options = fields.One2Many(None, 'contract', 'Options')
     contract_number = fields.Char('Contract Number', select=1,
@@ -221,6 +224,27 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         cls.options = copy.copy(cls.options)
         cls.options.model_name = cls.get_options_model_name()
         super(Contract, cls).__setup__()
+
+    @classmethod
+    def subscribe_contract(cls, offered, party, at_date=None,
+            options_code=None):
+        'WIP : This method should be the basic API to have a contract.'
+        pool = Pool()
+        Contract = pool.get('contract.contract')
+        SubscribedOpt = pool.get('contract.subscribed_option')
+        contract = Contract()
+        contract.init_from_offered(offered)
+        contract.subscriber = party
+        contract.options = []
+        for option in offered.coverages:
+            if options_code and option.code not in options_code:
+                continue
+            sub_option = SubscribedOpt()
+            sub_option.init_from_offered(option, at_date)
+            contract.options.append(sub_option)
+        contract.activate_contract()
+        contract.finalize_contract()
+        return contract
 
     @classmethod
     def get_options_model_name(cls):
@@ -419,12 +443,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def get_next_renewal_date(self):
         return utils.add_frequency('yearly', self.start_date)
 
-    @staticmethod
-    def get_possible_contract_kind():
-        return []
-
     def on_change_with_product_kind(self, name=None):
-        print self.offered
         return self.offered.kind if self.offered else ''
 
     @classmethod
@@ -455,7 +474,6 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
 
     @classmethod
     def get_offered_name(cls):
-        #TODO : to replace with generic product
         return 'offered.coverage', 'Coverage'
 
     def get_coverage(self):
