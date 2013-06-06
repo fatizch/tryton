@@ -3,8 +3,12 @@
   <xpath expr="/form/notebook/page[@id='options']" position="after">
     <page string="Billing" id="billing" col="2">
       <field name="billing_managers" mode="form,tree" colspan="1"/>
-      <field name="prices" colspan="1"/>
-      <button name="button_calculate_prices" string="Calculate Prices"/>
+      <group id="prices" col="2" colspan="1" yexpand="1" yfill="1">
+        <label name="next_billing_date"/>
+        <field name="next_billing_date"/>
+        <field name="prices" colspan="2"/>
+        <button name="button_calculate_prices" string="Calculate Prices" colspan="2"/>
+      </group>
     </page>
   </xpath>
 </data>

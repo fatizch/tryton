@@ -1,5 +1,7 @@
 import datetime
 
+from decimal import Decimal
+
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateTransition, StateView, Button
@@ -252,7 +254,7 @@ class PriceLine(model.CoopSQL, model.CoopView):
 
     def get_number_of_days_at_date(self, at_date):
         final_date = date.add_frequency(self.frequency, at_date)
-        return date.number_of_days_between(at_date, final_date)
+        return date.number_of_days_between(at_date, final_date) - 1
 
 
 class BillingManager(model.CoopSQL, model.CoopView):
@@ -324,11 +326,11 @@ class BillingPeriod(model.CoopSQL, model.CoopView):
             'WHERE ((start_date <= %s AND end_date >= %s) '
                 'OR (start_date <= %s AND end_date >= %s) '
                 'OR (start_date >= %s AND end_date <= %s)) '
-            'AND id != %s',
+            'AND id != %s AND contract = %s',
             (self.start_date, self.start_date,
                 self.end_date, self.end_date,
                 self.start_date, self.end_date,
-                self.id))
+                self.id, self.contract.id))
         second_id = cursor.fetchone()
         if second_id:
             second = self.__class__(second_id[0])
@@ -379,7 +381,7 @@ class BillingProcess(Wizard):
     def default_bill_parameters(self, values):
         ContractModel = Pool().get(Transaction().context.get('active_model'))
         contract = ContractModel(Transaction().context.get('active_id'))
-        bill_dates = contract.next_billing_dates()
+        bill_dates = contract.next_billing_period()
         return {
             'contract': contract.id,
             'start_date': bill_dates[0],
@@ -400,6 +402,11 @@ class BillingProcess(Wizard):
         return 'end'
 
     def transition_accept_bill(self):
+        move_date = self.bill_display.moves[-1].billing_period.end_date
+        ContractModel = Pool().get(Transaction().context.get('active_model'))
+        contract = ContractModel(Transaction().context.get('active_id'))
+        contract.next_billing_date = date.add_day(move_date, 1)
+        contract.save()
         return 'end'
 
 
@@ -472,13 +479,16 @@ class Contract():
             bm.payment_method = self.offered.get_default_payment_method()
             self.billing_managers = [bm]
             bm.save()
+        if not self.next_billing_date:
+            self.next_billing_date = self.start_date
 
-    def next_billing_dates(self):
-        start_date = self.next_billing_date or self.start_date  # FIXME
+    def next_billing_period(self):
+        start_date = self.next_billing_date
+        next_period_start = date.add_frequency(
+            self.get_product_frequency(start_date), start_date)
         return (
             start_date,
-            date.add_frequency(
-                self.get_product_frequency(start_date), start_date))
+            date.add_day(next_period_start, -1))
 
     @classmethod
     def get_price_line_model(cls):
@@ -566,7 +576,7 @@ class Contract():
         Period = pool.get('account.period')
         BillingPeriod = pool.get('billing.period')
 
-        period = self.next_billing_dates()
+        period = self.next_billing_period()
         billing_date = period[0]
         for billing_period in self.billing_periods:
             if (billing_period.start_date, billing_period.end_date) == period:
@@ -581,9 +591,9 @@ class Contract():
         self.init_billing_manager()
         billing_manager = None
         for manager in self.billing_managers:
-            if (manager.start_date >= billing_date
-                    and (not manager.end_date
-                        or manager.end_date <= billing_date)):
+            if (manager.start_date <= billing_date
+                    and (manager.end_date is None
+                        or manager.end_date >= billing_date)):
                 billing_manager = manager
                 break
 
@@ -609,7 +619,7 @@ class Contract():
         for period, price_line in price_lines:
             number_of_days = date.number_of_days_between(*period)
             price_line_days = price_line.get_number_of_days_at_date(period[0])
-            convert_factor = number_of_days / price_line_days
+            convert_factor = number_of_days / Decimal(price_line_days)
             amount = price_line.amount * convert_factor
             amount = currency.round(amount)
 
@@ -645,6 +655,8 @@ class Contract():
                     cur_values = fees[fee_line.fee_desc.id]
                     cur_values['amount'] += fee_line.amount * convert_factor
                     cur_values['base'] += amount
+
+        print utils.format_data(lines)
 
         for _, tax_data in taxes.iteritems():
             line_tax = Line()
