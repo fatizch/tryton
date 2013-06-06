@@ -140,7 +140,7 @@ class SimpleCoverage(Offered):
             res = set()
         for rule in self.pricing_rules:
             res.add(rule.start_date)
-        return res
+        return utils.limit_dates(res, start, end)
 
     def give_me_eligibility(self, args):
         try:
@@ -171,12 +171,10 @@ class SimpleCoverage(Offered):
 
                 # And that this coverage is effective at the requested
                 # computation date.
-                if not (date >= covered_data.start_date and
-                        (not hasattr(covered_data, 'end_date') or
-                            covered_data.end_date is None or
-                            covered_data.end_date < date)):
-                    continue
-                res.append((covered, covered_data))
+                if (date >= covered_data.start_date and
+                        (not covered_data.end_date
+                            or covered_data.end_date >= date)):
+                    res.append((covered, covered_data))
         return res, []
 
     def is_valid(self):

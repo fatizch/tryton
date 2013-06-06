@@ -164,7 +164,6 @@ class PriceLine(model.CoopSQL, model.CoopView):
     def build_tax_lines(self, line):
         def get_tax_details(line, taxes):
             for elem in line.details:
-                print elem.on_object
                 if (elem.on_object and elem.on_object.__name__ ==
                         'ins_product.pricing_component' and
                         elem.on_object.kind == 'tax'):
@@ -655,8 +654,6 @@ class Contract():
                     cur_values = fees[fee_line.fee_desc.id]
                     cur_values['amount'] += fee_line.amount * convert_factor
                     cur_values['base'] += amount
-
-        print utils.format_data(lines)
 
         for _, tax_data in taxes.iteritems():
             line_tax = Line()

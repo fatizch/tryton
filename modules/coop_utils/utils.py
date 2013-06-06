@@ -150,6 +150,7 @@ def limit_dates(dates, start=None, end=None):
         final_res.insert(0, start)
     if end and final_res[-1] != end:
         final_res.append(end)
+    print final_res
     return final_res
 
 

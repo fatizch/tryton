@@ -68,7 +68,7 @@ class InsurancePolicy():
     def calculate_prices_at_all_dates(self):
         prices = []
         errs = []
-        dates = self.get_dates()
+        dates = self.get_dates(start=self.start_date)
         for cur_date in dates:
             price, err = self.calculate_price_at_date(cur_date)
             if price:
@@ -765,7 +765,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
             res = set()
         res.add(self.start_date)
         if hasattr(self, 'end_date') and self.end_date:
-            res.add(self.end_date)
+            res.add(date.add_day(self.end_date, 1))
         return utils.limit_dates(res, start, end)
 
     def get_coverage(self):

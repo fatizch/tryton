@@ -122,7 +122,7 @@ class Subscribed(model.CoopView):
             res = set()
         res.add(self.start_date)
         if hasattr(self, 'end_date') and self.end_date:
-            res.add(self.end_date)
+            res.add(date.add_day(self.end_date, 1))
         return utils.limit_dates(res, start, end)
 
     def init_from_offered(self, offered, start_date=None, end_date=None):
@@ -291,9 +291,9 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         else:
             res = set()
         for covered in self.covered_elements:
-            res.update(covered.get_dates(start, end))
+            res.update(covered.get_dates(res, start, end))
         for option in self.options:
-            res.update(option.get_dates(start, end))
+            res.update(option.get_dates(res, start, end))
         return super(Contract, self).get_dates(res, start, end)
 
     def init_dict_for_rule_engine(self, cur_dict):
