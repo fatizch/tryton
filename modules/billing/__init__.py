@@ -12,8 +12,6 @@ def register():
         PriceLine,
         PriceLineTaxRelation,
         PriceLineFeeRelation,
-        GenericBillLine,
-        Bill,
         BillParameters,
         BillDisplay,
         ProductPaymentMethodRelation,

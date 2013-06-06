@@ -30,18 +30,5 @@
       <field name="model">contract.contract,-1</field>
       <field name="action" ref="launch_billing_process"/>
     </record>
-    <!--################################################################-->
-    <!--                           Relate Entries                       -->
-    <!--################################################################-->
-    <record model="ir.action.act_window" id="act_billing_by_contract">
-      <field name="name">Bills by Contract</field>
-      <field name="res_model">billing.billing.bill</field>
-      <field name="domain">[('contract', '=', Eval('active_id'))]</field>
-    </record>
-    <record model="ir.action.keyword" id="act_billing_by_contract_keyword1">
-      <field name="keyword">form_relate</field>
-      <field name="model">contract.contract,-1</field>
-      <field name="action" ref="act_billing_by_contract"/>
-    </record>
   </data>
 </tryton>

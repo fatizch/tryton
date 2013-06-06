@@ -42,7 +42,7 @@ class ExportImportMixin(Model):
         super(ExportImportMixin, cls).__setup__()
         cls.__rpc__['export_json'] = RPC(
             instantiate=0,
-            result=lambda r: (r[0], json.dumps(r[1], cls=JSONEncoder)))
+            result=lambda r: (r[0], json.dumps(r[1], cls=JSONEncoder), r[2]))
         cls.__rpc__['import_json'] = RPC(
             readonly=False, result=lambda r: None)
 
@@ -286,7 +286,17 @@ class ExportImportMixin(Model):
         exported = {}
         result = []
         self._export_json(exported, result)
-        return filename, result
+        instances = {}
+        for value in result:
+            if not value['__name__'] in instances:
+                instances[value['__name__']] = []
+            instances[value['__name__']].append(value['_export_key'])
+        export_log = ''
+        for k, v in instances.iteritems():
+            export_log += '<b>%s</b>\n' % k
+            for elem in v:
+                export_log += '    %s\n' % str(elem)
+        return filename, result, export_log
 
     @classmethod
     def _import_get_working_instance(cls, key):
