@@ -1,4 +1,6 @@
 import datetime
+from collections import defaultdict
+from itertools import repeat, izip, chain
 
 from decimal import Decimal
 
@@ -482,12 +484,18 @@ class Contract():
             self.next_billing_date = self.start_date
 
     def next_billing_period(self):
-        start_date = self.next_billing_date
-        next_period_start = date.add_frequency(
-            self.get_product_frequency(start_date), start_date)
-        return (
-            start_date,
-            date.add_day(next_period_start, -1))
+        last_date = self.start_date
+        for period in self.billing_periods:
+            if (self.start_date <= period.start_date and (
+                    not period.end_date
+                    or period.end_date >= self.start_date)):
+                return (period.start_date, period.end_date)
+            if period.end_date > last_date:
+                last_date = period.end_date
+        new_period_start = date.add_day(last_date, 1)
+        new_period_end = date.add_frequency(
+            self.get_product_frequency(last_date), last_date)
+        return (new_period_start, new_period_end)
 
     @classmethod
     def get_price_line_model(cls):
@@ -567,7 +575,7 @@ class Contract():
                 ], limit=1)
         return journal
 
-    def bill(self):
+    def bill(self, *period):
         pool = Pool()
         Date = pool.get('ir.date')
         Move = pool.get('account.move')
@@ -575,7 +583,8 @@ class Contract():
         Period = pool.get('account.period')
         BillingPeriod = pool.get('billing.period')
 
-        period = self.next_billing_period()
+        if not period:
+            period = self.next_billing_period()
         billing_date = period[0]
         for billing_period in self.billing_periods:
             if (billing_period.start_date, billing_period.end_date) == period:
@@ -611,95 +620,94 @@ class Contract():
             billing_period=billing_period,
             )
 
-        lines = []
+        lines = defaultdict(lambda: Line(credit=0, debit=0))
         total_amount = 0
-        taxes = {}
-        fees = {}
+        taxes = defaultdict(
+            lambda: {'amount': 0, 'base': 0, 'to_recalculate': False})
+        fees = defaultdict(
+            lambda: {'amount': 0, 'base': 0, 'to_recalculate': False})
         for period, price_line in price_lines:
             number_of_days = date.number_of_days_between(*period)
             price_line_days = price_line.get_number_of_days_at_date(period[0])
             convert_factor = number_of_days / Decimal(price_line_days)
             amount = price_line.amount * convert_factor
             amount = currency.round(amount)
+            account = price_line.get_account_for_billing()
 
-            line = Line()
-            line.credit = amount
-            line.debit = 0
-            line.account = price_line.get_account_for_billing()
+            line = lines[(price_line.on_object, account)]
+            line.second_origin = price_line.on_object
+            line.credit += amount
+            line.account = account
             line.party = self.subscriber
 
-            lines.append(line)
             total_amount += amount
 
-            for tax_line in price_line.tax_lines:
-                if not tax_line.tax_desc.id in taxes:
-                    taxes[tax_line.tax_desc.id] = {
-                        'amount': tax_line.amount * convert_factor,
-                        'base': amount,
-                        'object': tax_line.tax_desc,
-                        'to_recalculate': tax_line.to_recalculate}
-                else:
-                    cur_values = taxes[tax_line.tax_desc.id]
-                    cur_values['amount'] += tax_line.amount * convert_factor
-                    cur_values['base'] += amount
+            for type_, sub_lines, sub_line in chain(
+                    izip(repeat('tax'), repeat(taxes), price_line.tax_lines),
+                    izip(repeat('fee'), repeat(fees), price_line.fee_lines)):
+                desc = getattr(sub_line, '%s_desc' % type_)
+                values = sub_lines[desc.id]
+                values['object'] = desc
+                values['to_recalculate'] |= sub_line.to_recalculate
+                values['amount'] += sub_line.amount * convert_factor
+                values['base'] += amount
 
-            for fee_line in price_line.fee_lines:
-                if not fee_line.fee_desc.id in fees:
-                    fees[fee_line.fee_desc.id] = {
-                        'amount': fee_line.amount * convert_factor,
-                        'base': amount,
-                        'object': fee_line.fee_desc,
-                        'to_recalculate': fee_line.to_recalculate}
-                else:
-                    cur_values = fees[fee_line.fee_desc.id]
-                    cur_values['amount'] += fee_line.amount * convert_factor
-                    cur_values['base'] += amount
-
-        for _, tax_data in taxes.iteritems():
-            line_tax = Line()
-            line_tax.debit = 0
-            line_tax.party = self.subscriber
-            line_tax.account = tax_data['object'].get_account_for_billing()
-            if tax_data['to_recalculate']:
-                good_version = tax_data['object'].get_version_at_date(
+        for type_, data in chain(
+                izip(repeat('tax'), taxes.itervalues()),
+                izip(repeat('fee'), fees.itervalues())):
+            account = data['object'].get_account_for_billing()
+            line = lines[(None, account)]
+            line.party = self.subscriber
+            line.account = account
+            if data['to_recalculate']:
+                good_version = data['object'].get_version_at_date(
                     period[0])
-                amount = good_version.apply_tax(tax_data['base'])
+                amount = getattr(good_version,
+                    'apply_%s' % type_)(data['base'])
             else:
-                amount = tax_data['amount']
-            line_tax.credit = currency.round(amount)
-            lines.append(line_tax)
+                amount = data['amount']
+            line.credit = currency.round(amount)
             total_amount += amount
 
-        for _, fee_data in fees.iteritems():
-            line_fee = Line()
-            line_fee.debit = 0
-            line_fee.party = self.subscriber
-            line_fee.account = fee_data['object'].get_account_for_billing()
-            if fee_data['to_recalculate']:
-                good_version = fee_data['object'].get_version_at_date(
-                    period[0])
-                amount = good_version.apply_fee(fee_data['base'])
-            else:
-                amount = fee_data['amount']
-            line_fee.credit = currency.round(amount)
-            lines.append(line_fee)
-            total_amount += amount
+        if billing_period.moves:
+            for old_move in billing_period.moves:
+                for old_line in old_move.lines:
+                    if old_line.account == self.subscriber.account_receivable:
+                        continue
+                    line = lines[(old_line.second_origin, old_line.account)]
+                    line.second_origin = old_line.second_origin
+                    line.account = old_line.account
+                    if old_line.credit:
+                        line.credit -= old_line.credit
+                        total_amount -= old_line.credit
+                    else:
+                        line.credit += old_line.debit
+                        total_amount += old_line.debit
 
-        if payment_term:
+        for line in lines.itervalues():
+            if line.credit < 0:
+                line.credit, line.debit = 0, -line.credit
+
+        if total_amount >= 0 and payment_term:
             term_lines = payment_term.compute(total_amount, currency,
                 billing_date)
         else:
-            term_lines = [(Date.today(), amount)]
+            term_lines = [(Date.today(), currency.round(total_amount))]
+        counterparts = []
         for term_date, amount in term_lines:
             counterpart = Line()
-            counterpart.credit = 0
-            counterpart.debit = amount
+            if amount >= 0:
+                counterpart.credit = 0
+                counterpart.debit = amount
+            else:
+                counterpart.credit = - amount
+                counterpart.debit = 0
             counterpart.account = self.subscriber.account_receivable
             counterpart.party = self.subscriber
             counterpart.maturity_date = term_date
-            lines.append(counterpart)
+            counterparts.append(counterpart)
 
-        move.lines = lines
+        move.lines = lines.values() + counterparts
         move.save()
         return move
 

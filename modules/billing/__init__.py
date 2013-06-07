@@ -25,6 +25,7 @@ def register():
         FeeDesc,
         # from account
         Move,
+        MoveLine,
         module='billing', type_='model')
 
     Pool.register(
