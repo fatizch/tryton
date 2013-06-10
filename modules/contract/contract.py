@@ -216,6 +216,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         )
     # TODO replace single contact by date versionned list
     contact = fields.Many2One('party.party', 'Contact')
+    appliable_conditions_date = fields.Date('Appliable Conditions Date',
+        on_change_with=['start_date'])
     documents = fields.One2Many(
         'ins_product.document_request', 'needed_by', 'Documents', size=1)
     company = fields.Many2One('company.company', 'Company', required=True,
@@ -226,6 +228,14 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         cls.options = copy.copy(cls.options)
         cls.options.model_name = cls.get_options_model_name()
         super(Contract, cls).__setup__()
+        cls.start_date = copy.copy(cls.start_date)
+        if not cls.start_date.on_change:
+            cls.start_date.on_change = []
+        if not cls.start_date.depends:
+            cls.start_date.depends = []
+        cls.start_date.depends.append('appliable_conditions_date')
+        cls.start_date.on_change.append('start_date')
+        cls.start_date.on_change.append('appliable_conditions_date')
 
     @staticmethod
     def default_company():
@@ -302,12 +312,25 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def get_product(self):
         return self.offered
 
+    def on_change_start_date(self):
+        try:
+            res = super(Contract, self).on_change_start_date()
+        except AttributeError:
+            res = {}
+        if not (hasattr(self, 'start_date') and self.start_date):
+            return res
+        return res.update({'appliable_conditions_date': self.start_date})
+
     @staticmethod
     def default_status():
         return 'quote'
 
     def get_new_contract_number(self):
-        return self.get_product().get_result('new_contract_number', {})[0]
+        return self.get_product().get_result(
+            'new_contract_number', {
+                'appliable_conditions_date': self.appliable_conditions_date,
+                'date': self.start_date,
+                })[0]
 
     def finalize_contract(self):
         self.contract_number = self.get_new_contract_number()
@@ -400,8 +423,10 @@ class Contract(model.CoopSQL, Subscribed, Printable):
 
     def on_change_complementary_data(self):
         return {'complementary_data': self.offered.get_result(
-            'calculated_complementary_datas',
-            {'date': self.start_date, 'contract': self})[0]}
+            'calculated_complementary_datas', {
+                'date': self.start_date,
+                'appliable_conditions_date': self.appliable_conditions_date,
+                'contract': self})[0]}
 
     @classmethod
     def get_possible_contracts_from_party(cls, party, at_date):

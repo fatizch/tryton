@@ -244,7 +244,7 @@ class Offered(model.CoopView, GetResult, Templated):
         # First we got to check that the fields that we will need to calculate
         # which rule is appliable are available in the data dictionnary
         try:
-            the_date = data['date']
+            the_date = data['appliable_conditions_date']
         except KeyError:
             return None
 

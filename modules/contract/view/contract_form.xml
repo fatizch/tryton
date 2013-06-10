@@ -27,5 +27,9 @@
     <page string="Documents" id="documents">
       <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" mode="form"/>
     </page>
+    <page string="Advanced" id="advanced">
+      <label name="appliable_conditions_date"/>
+      <field name="appliable_conditions_date"/>
+    </page>
   </notebook>
 </form>

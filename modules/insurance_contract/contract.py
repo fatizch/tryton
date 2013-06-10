@@ -60,7 +60,9 @@ class InsurancePolicy():
         return 'contract.subscribed_option'
 
     def calculate_price_at_date(self, date):
-        cur_dict = {'date': date}
+        cur_dict = {
+            'date': date,
+            'appliable_conditions_date': self.appliable_conditions_date}
         self.init_dict_for_rule_engine(cur_dict)
         prices, errs = self.offered.get_result('total_price', cur_dict)
         return (prices, errs)
@@ -94,6 +96,8 @@ class InsurancePolicy():
                     'sub_elem_eligibility',
                     {
                         'date': at_date,
+                        'appliable_conditions_date':
+                        self.appliable_conditions_date,
                         'sub_elem': covered_element,
                         'data': covered_data,
                         'option': options[covered_data.get_coverage().code]
@@ -177,8 +181,11 @@ class InsurancePolicy():
 
     def on_change_complementary_data(self):
         return {'complementary_data': self.offered.get_result(
-            'calculated_complementary_datas',
-            {'date': self.start_date, 'contract': self})[0]}
+            'calculated_complementary_datas', {
+                'date': self.start_date,
+                'contract': self,
+                'appliable_conditions_date': self.appliable_conditions_date}
+            )[0]}
 
     def get_next_renewal_date(self):
         return date.add_frequency('yearly', self.start_date)
@@ -262,8 +269,11 @@ class SubscribedCoverageComplement(model.CoopSQL, model.CoopView):
     def get_possible_deductible_duration(self, name):
         try:
             durations = self.offered.get_result(
-                'possible_deductible_duration',
-                {'date': self.start_date, 'scope': 'coverage'},
+                'possible_deductible_duration', {
+                    'date': self.start_date,
+                    'appliable_conditions_date':
+                self.subscribed_coverage.contract.appliable_conditions_date,
+                    'scope': 'coverage'},
                 kind='deductible')[0]
             return [x.id for x in durations] if durations else []
         except product.NonExistingRuleKindException:
@@ -752,6 +762,8 @@ class CoveredData(model.CoopSQL, model.CoopView):
             'calculated_complementary_datas', {
                 'date': self.start_date,
                 'contract': self.option.contract,
+                'appliable_conditions_date':
+                self.option.contract.appliable_conditions_date,
                 'sub_elem': self})[0]}
 
     def init_from_covered_element(self, covered_element):
@@ -790,8 +802,11 @@ class CoveredData(model.CoopSQL, model.CoopView):
     def get_possible_deductible_duration(self, name):
         try:
             durations = self.option.offered.get_result(
-                'possible_deductible_duration',
-                {'date': self.start_date, 'scope': 'covered'},
+                'possible_deductible_duration', {
+                    'date': self.start_date,
+                    'appliable_conditions_date':
+                    self.option.contract.appliable_conditions_date,
+                    'scope': 'covered'},
                 kind='deductible')[0]
             return [x.id for x in durations] if durations else []
         except product.NonExistingRuleKindException:

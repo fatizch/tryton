@@ -45,6 +45,8 @@ class Contract():
                         'data': covered_data,
                         'option': options[coverage.code],
                         'contract': self,
+                        'appliable_conditions_date':
+                        self.appliable_conditions_date,
                     })
                 res = res and (not validity or validity[0])
                 if validity:
@@ -143,6 +145,8 @@ class LifeCoveredData():
             'allowed_amounts',
             {
                 'date': self.start_date,
+                'appliable_conditions_date':
+                self.option.contract.appliable_conditions_date,
                 #'contract': abstract.WithAbstract.get_abstract_objects(
                 #    wizard, 'for_contract')
             },)[0]

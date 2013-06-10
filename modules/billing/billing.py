@@ -495,6 +495,8 @@ class Contract():
         new_period_start = date.add_day(last_date, 1)
         new_period_end = date.add_frequency(
             self.get_product_frequency(last_date), last_date)
+        if self.end_date and new_period_end > self.end_date:
+            return (new_period_start, self.end_date)
         return (new_period_start, new_period_end)
 
     @classmethod
@@ -503,8 +505,9 @@ class Contract():
 
     def get_product_frequency(self, at_date):
         res, errs = self.offered.get_result(
-            'frequency',
-            {'date': at_date})
+            'frequency', {
+                'date': at_date,
+                'appliable_conditions_date': self.appliable_conditions_date})
         if not errs:
             return res
 
@@ -616,7 +619,7 @@ class Contract():
             journal=self.get_journal(),
             period=period_id,
             date=billing_date,
-            origin=str(self),
+            origin=utils.convert_to_reference(self),
             billing_period=billing_period,
             )
 
