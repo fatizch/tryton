@@ -239,7 +239,8 @@ class ContractSubscription(CoopProcessFramework):
             'eligibility',
             {
                 'subscriber': self.subscriber,
-                'date': self.start_date
+                'date': self.start_date,
+                'appliable_conditions_date': self.appliable_conditions_date,
             })
         if eligibility:
             return eligibility.eligible, eligibility.details + errors
@@ -260,6 +261,8 @@ class ContractSubscription(CoopProcessFramework):
                 {
                     'date': self.start_date,
                     'subscriber': self.subscriber,
+                    'appliable_conditions_date':
+                    self.appliable_conditions_date,
                 })
 
             if eligibility and not eligibility.eligible:
@@ -298,15 +301,6 @@ class ContractSubscription(CoopProcessFramework):
 
         return result, errs
 
-    def calculate_prices(self):
-        prices, errs = self.calculate_prices_at_all_dates()
-
-        if errs:
-            return False, errs
-        self.store_prices(prices)
-
-        return True, ()
-
     def finalize_contract(self):
         res = super(ContractSubscription, self).finalize_contract()
         return res
@@ -328,7 +322,8 @@ class ContractSubscription(CoopProcessFramework):
         product_docs, errs = self.get_product().get_result(
             'documents', {
                 'contract': self,
-                'date': self.start_date})
+                'date': self.start_date,
+                'appliable_conditions_date': self.appliable_conditions_date})
 
         if errs:
             return False, errs
@@ -343,6 +338,8 @@ class ContractSubscription(CoopProcessFramework):
                 'documents', {
                     'contract': self,
                     'option': option.get_coverage().code,
+                    'appliable_conditions_date':
+                    self.appliable_conditions_date,
                     'date': self.start_date})
 
             if errs:
@@ -362,6 +359,8 @@ class ContractSubscription(CoopProcessFramework):
                         'contract': self,
                         'option': data.option.get_coverage().code,
                         'date': self.start_date,
+                        'appliable_conditions_date':
+                        self.appliable_conditions_date,
                         'kind': 'sub',
                         'sub_elem': elem})
                 if errs:
