@@ -16,5 +16,9 @@
         <page string="Status History" id="status_history">
             <field name="status_history" colspan="4"/>
         </page>
+        <page string="Administration" id="admin">
+            <label name="coverage_kind"/>
+            <field name="coverage_kind"/>
+        </page>
     </notebook>
 </form>

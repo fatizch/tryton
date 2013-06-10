@@ -85,7 +85,7 @@
 #     errors = fields.Text('Errors')
 
 #     # Stores the product for product-based state definition :
-#     on_product = fields.Many2One('ins_product.product',
+#     on_product = fields.Many2One('offered.product',
 #                                   'On Product Process')
 
 #     @classmethod
@@ -1256,7 +1256,7 @@
 #     start_date = fields.Date('Effective Date',
 #                                  required=True)
 #     product = fields.Many2One(
-#         'ins_product.product',
+#         'offered.product',
 #         'Product',
 #         domain=[('start_date', '<=', Eval('start_date'))],
 #         depends=['start_date', ],

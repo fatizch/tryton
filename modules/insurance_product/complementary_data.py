@@ -21,9 +21,9 @@ class ComplementaryDataRecursiveRelation(model.CoopSQL, model.CoopView):
     __name__ = 'ins_product.complementary_data_recursive_relation'
 
     master = fields.Many2One(
-        'ins_product.complementary_data_def', 'Master', ondelete='CASCADE')
+        'offered.complementary_data_def', 'Master', ondelete='CASCADE')
     child = fields.Many2One(
-        'ins_product.complementary_data_def', 'Child', ondelete='RESTRICT')
+        'offered.complementary_data_def', 'Child', ondelete='RESTRICT')
     select_value = fields.Char('Select value')
 
     def does_match(self, value):
@@ -41,7 +41,7 @@ class ComplementaryDataDefinition(
         DictSchemaMixin, model.CoopSQL, model.CoopView):
     'Complementary Data Definition'
 
-    __name__ = 'ins_product.complementary_data_def'
+    __name__ = 'offered.complementary_data_def'
 
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
@@ -154,7 +154,7 @@ class ComplementaryDataDefinition(
             at_date = Transaction().context['at_date']
             dd_args = Transaction().context['dd_args']
             if for_product and at_date:
-                the_product, = Pool().get('ins_product.product').search(
+                the_product, = Pool().get('offered.product').search(
                     [('id', '=', Transaction().context['for_product'])])
                 with Transaction().set_context({'relation_selection': True}):
                     good_schemas = the_product.get_result(

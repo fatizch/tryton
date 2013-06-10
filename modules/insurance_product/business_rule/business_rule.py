@@ -10,8 +10,7 @@ from trytond.pyson import Eval, Or
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, utils, fields
-from trytond.modules.insurance_product.product import CONFIG_KIND
-from trytond.modules.insurance_product.product import Templated, GetResult
+from trytond.modules.offered.offered import CONFIG_KIND, Templated, GetResult
 
 STATE_SIMPLE = Eval('config_kind') != 'advanced'
 STATE_ADVANCED = Eval('config_kind') != 'simple'
@@ -31,7 +30,7 @@ class RuleEngineComplementaryDataRelation(model.CoopSQL):
 
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='CASCADE')
     complementary_data = fields.Many2One(
-        'ins_product.complementary_data_def', 'Complementary Data',
+        'offered.complementary_data_def', 'Complementary Data',
         ondelete='RESTRICT')
 
 
@@ -121,7 +120,12 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
 
     __name__ = 'ins_product.business_rule_root'
 
-    offered = fields.Reference('Offered', selection='get_offered_models')
+    offered = fields.Reference('Offered',
+        selection=[
+            ('offered.product', 'Product'),
+            ('offered.coverage', 'Coverage'),
+            ('ins_product.benefit', 'Benefit')
+            ])
     start_date = fields.Date('From Date', required=True)
     end_date = fields.Date('To Date')
     config_kind = fields.Selection(
@@ -133,7 +137,7 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
         fields.Char('Name'),
         'get_rec_name')
     rule_complementary_data = fields.Dict(
-        'ins_product.complementary_data_def', 'Rule Complementary Data',
+        'offered.complementary_data_def', 'Rule Complementary Data',
         on_change_with=['rule', 'rule_complementary_data'],
         states={'invisible':
             Or(STATE_SIMPLE, ~Eval('rule_complementary_data'))})
@@ -188,13 +192,6 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
 
     def get_offered(self):
         return self.generic_rule.get_offered()
-
-    @classmethod
-    def get_offered_models(cls):
-        module_name = utils.get_module_name(cls)
-        return [
-            x for x in utils.get_descendents('ins_product.offered')
-            if module_name in x[0]]
 
     @classmethod
     def recreate_rather_than_update(cls):

@@ -1,42 +1,27 @@
 <?xml version="1.0"?>
 <data>
-    <xpath expr="/form" position="replace_attributes">
-        <form string="Product"/>
-    </xpath>
-    <xpath
-        expr="/form/notebook/page/notebook/page[@id='eligibility']"
-        position="before">
-        <page string="Complementary Data" id="complementary_data">
-            <field name="complementary_data_def" colspan="4"/>
-        </page>
-    </xpath>
-    <xpath expr="/form/notebook/page[@id='managers']" position="before">
-        <page string="Items/Coverages" id="option">
+    <xpath expr="/form/notebook/page[@id='option']" position="before">
+        <page string="Items" id="option"
+            states="{'invisible': Eval('kind') != 'insurance'}">
             <field name="item_descriptors"/>
-            <field name="coverages"/>
         </page>
     </xpath>
     <xpath expr="/form/notebook/page/notebook" position="inside">
-        <page string="Deductible" id="deductible">
+        <page string="Deductible" id="deductible"
+            states="{'invisible': Eval('kind') != 'insurance'}">
             <field name="deductible_rules" colspan="4"/>
         </page>
-        <page string="Clause" id="clause">
+        <page string="Clause" id="clause"
+            states="{'invisible': Eval('kind') != 'insurance'}">
             <field name="clause_rules" colspan="4"/>
         </page>
-        <page string="Documents" id="documents">
+        <page string="Documents" id="documents"
+            states="{'invisible': Eval('kind') != 'insurance'}">
             <field name="document_rules"/>
         </page>
-        <page string="Term - Renewal" id="term_renewal">
+        <page string="Term - Renewal" id="term_renewal"
+            states="{'invisible': Eval('kind') != 'insurance'}">
             <field name="term_renewal_rules" colspan="4"/>
         </page>
-    </xpath>
-    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"
-        position="inside">
-        <label name="contract_generator"/>
-        <field name="contract_generator"/>
-        <newline/>
-        <label name="currency"/>
-        <field name="currency"/>
-        <newline/>
     </xpath>
 </data>

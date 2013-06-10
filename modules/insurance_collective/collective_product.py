@@ -17,10 +17,11 @@ __all__ = [
 class GroupProduct():
     'Group Product'
 
-    __name__ = 'ins_product.product'
+    __name__ = 'offered.product'
     __metaclass__ = PoolMeta
 
-    is_group = fields.Boolean('Group Product')
+    is_group = fields.Boolean('Group Product',
+        states={'invisible': Eval('kind') != 'insurance'})
 
     @classmethod
     def __setup__(cls):
@@ -34,7 +35,7 @@ class GroupProduct():
 class GroupCoverage():
     'Group Coverage'
 
-    __name__ = 'ins_product.coverage'
+    __name__ = 'offered.coverage'
     __metaclass__ = PoolMeta
 
     is_group = fields.Boolean('Group Coverage')

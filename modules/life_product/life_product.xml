@@ -21,9 +21,9 @@
         <!-- Life Coverage -->
         <!--############################################################## -->
         <record model="ir.ui.view" id="coverage_view_form">
-            <field name="model">ins_product.coverage</field>
+            <field name="model">offered.coverage</field>
             <field name="type">form</field>
-            <field name="inherit" ref="insurance_product.simple_coverage_view_form"/>
+            <field name="inherit" ref="offered.coverage_view_form"/>
             <field name="name">life_coverage_form</field>
         </record>
     </data>

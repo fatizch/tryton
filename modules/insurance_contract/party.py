@@ -13,7 +13,7 @@ class Party:
     __name__ = 'party.party'
     __metaclass__ = PoolMeta
 
-    complementary_data = fields.Dict('ins_product.complementary_data_def',
+    complementary_data = fields.Dict('offered.complementary_data_def',
         'Complementary Data')
     covered_elements = fields.One2Many('ins_contract.covered_element',
         'party', 'Covered Elements')

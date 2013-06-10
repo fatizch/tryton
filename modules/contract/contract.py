@@ -3,6 +3,7 @@ import copy
 from trytond.modules.coop_utils import model, fields, date
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
+from trytond.pool import Pool
 
 from trytond.modules.coop_utils import utils
 from trytond.modules.insurance_product import Printable
@@ -64,19 +65,14 @@ class Subscribed(model.CoopView):
     offered = fields.Many2One(
         None, 'Offered', ondelete='RESTRICT',
         states={'required': Eval('status') == 'active'},
-        domain=[
-            'AND',
-            [
-                'OR',
+        domain=[['OR',
                 [('end_date', '>=', Eval('start_date'))],
                 [('end_date', '=', None)],
-            ],
-            [
-                'OR',
+                ], ['OR',
                 [('start_date', '<=', Eval('start_date'))],
                 [('start_date', '=', None)],
-            ],
-        ], depends=['start_date'])
+                ],
+            ], depends=['start_date'])
     start_date = fields.Date('Effective Date', required=True)
     end_date = fields.Date(
         'End Date', domain=[('start_date', '<=', 'end_date')])
@@ -126,6 +122,9 @@ class Subscribed(model.CoopView):
         return utils.limit_dates(res, start, end)
 
     def init_from_offered(self, offered, start_date=None, end_date=None):
+        #TODO : check eligibility
+        if not start_date:
+            start_date = utils.today()
         if utils.is_effective_at_date(offered, start_date):
             self.offered = offered
             self.start_date = (
@@ -197,7 +196,9 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     _rec_name = 'contract_number'
     _history = True
 
-    kind = fields.Selection('get_possible_contract_kind', 'kind')
+    product_kind = fields.Function(
+        fields.Char('Product Kind', on_change_with=['offered']),
+        'on_change_with_product_kind', searcher='search_product_kind')
     status = fields.Selection(CONTRACTSTATUSES, 'Status')
     options = fields.One2Many(None, 'contract', 'Options')
     contract_number = fields.Char('Contract Number', select=1,
@@ -207,7 +208,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         fields.Many2One('party.party', 'Current Policy Owner'),
         'get_current_policy_owner')
     complementary_data = fields.Dict(
-        'ins_product.complementary_data_def', 'Complementary Data',
+        'offered.complementary_data_def', 'Complementary Data',
         on_change=[
             'complementary_data', 'start_date', 'options', 'offered'],
         depends=[
@@ -242,13 +243,33 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         return Transaction().context.get('company')
 
     @classmethod
+    def subscribe_contract(cls, offered, party, at_date=None,
+            options_code=None):
+        'WIP : This method should be the basic API to have a contract.'
+        pool = Pool()
+        Contract = pool.get('contract.contract')
+        SubscribedOpt = pool.get('contract.subscribed_option')
+        contract = Contract()
+        contract.init_from_offered(offered)
+        contract.subscriber = party
+        contract.options = []
+        for option in offered.coverages:
+            if options_code and option.code not in options_code:
+                continue
+            sub_option = SubscribedOpt()
+            sub_option.init_from_offered(option, at_date)
+            contract.options.append(sub_option)
+        contract.activate_contract()
+        contract.finalize_contract()
+        return contract
+
+    @classmethod
     def get_options_model_name(cls):
         return 'contract.subscribed_option'
 
     @classmethod
     def get_offered_name(cls):
-        #TODO : to replace with generic product
-        return 'ins_product.product', 'Product'
+        return 'offered.product', 'Product'
 
     def get_active_options_at_date(self, at_date):
         res = []
@@ -439,7 +460,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             ['OR',
                 [('status_history.end_date', '=', None)],
                 [('status_history.end_date', '>=', at_date)]]
-        ]
+            ]
         return cls.search(domain)
 
     def get_current_policy_owner(self, name):
@@ -454,9 +475,12 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def get_next_renewal_date(self):
         return date.add_frequency('yearly', self.start_date)
 
-    @staticmethod
-    def get_possible_contract_kind():
-        return []
+    def on_change_with_product_kind(self, name=None):
+        return self.offered.kind if self.offered else ''
+
+    @classmethod
+    def search_product_kind(cls, name, clause):
+        return [('offered.kind', ) + tuple(clause[1:])]
 
 
 class SubscribedCoverage(model.CoopSQL, Subscribed):
@@ -466,30 +490,23 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
     _history = True
 
     status = fields.Selection(OPTIONSTATUS, 'Status')
-    contract = fields.Many2One(None, 'Contract', ondelete='CASCADE')
+    contract = fields.Many2One('contract.contract', 'Contract',
+        ondelete='CASCADE')
+    coverage_kind = fields.Function(
+        fields.Char('Coverage Kind', on_change_with=['offered']),
+        'on_change_with_coverage_kind', searcher='search_coverage_kind')
     contract_number = fields.Function(
         fields.Char('Contract Number'), 'get_contract_number')
     current_policy_owner = fields.Function(
         fields.Many2One('party.party', 'Current Policy Owner'),
         'get_current_policy_owner_id')
     product = fields.Function(
-        fields.Many2One('ins_product.product', 'Product'),
+        fields.Many2One('offered.product', 'Product'),
         'get_product_id')
 
     @classmethod
-    def __setup__(cls):
-        cls.contract = copy.copy(cls.contract)
-        cls.contract.model_name = cls.get_contract_model_name()
-        super(SubscribedCoverage, cls).__setup__()
-
-    @classmethod
-    def get_contract_model_name(cls):
-        return 'contract.contract'
-
-    @classmethod
     def get_offered_name(cls):
-        #TODO : to replace with generic product
-        return 'ins_product.coverage', 'Coverage'
+        return 'offered.coverage', 'Coverage'
 
     def get_coverage(self):
         return self.offered
@@ -527,3 +544,10 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
 
     def get_product_id(self, name):
         return self.contract.offered.id if self.contract else None
+
+    def on_change_with_coverage_kind(self, name=None):
+        return self.offered.kind if self.offered else ''
+
+    @classmethod
+    def search_coverage_kind(cls, name, clause):
+        return [('offered.kind', ) + tuple(clause[1:])]

@@ -10,11 +10,11 @@ msgctxt "field:contract.contract,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:ins_product.coverage,is_group:"
+msgctxt "field:offered.coverage,is_group:"
 msgid "Group Coverage"
 msgstr "Garantie Collective"
 
-msgctxt "field:ins_product.product,is_group:"
+msgctxt "field:offered.product,is_group:"
 msgid "Group Product"
 msgstr "Produit Collectif"
 

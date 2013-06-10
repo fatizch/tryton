@@ -1,7 +1,7 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "selection:ins_product.coverage,family:"
+msgctxt "selection:offered.coverage,family:"
 msgid "Property & Casualty"
 msgstr "IARD"

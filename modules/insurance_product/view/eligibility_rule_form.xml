@@ -10,7 +10,7 @@
     </xpath>
     <xpath expr="/form/field[@name='rule']" position="after">
         <group id="sub_elem" string="Covered Element" colspan="4"
-            states="{'invisible': Eval('offered_kind') != 'ins_product.coverage'}">
+            states="{'invisible': Eval('offered_kind') != 'offered.coverage'}">
             <group id="sub_elem_config_kind" colspan="2">
                 <label name="sub_elem_config_kind" xfill="1"/>
                 <field name="sub_elem_config_kind" xfill="1" xexpand="0"/>

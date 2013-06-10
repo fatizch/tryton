@@ -235,8 +235,8 @@ class PriceLine(model.CoopSQL, model.CoopView):
         f = lambda x: (x, x)
         res = [
             f(''),
-            f('ins_product.product'),
-            f('ins_product.coverage'),
+            f('offered.product'),
+            f('offered.coverage'),
             f('contract.contract'),
             f('contract.subscribed_option'),
             f('ins_contract.covered_data'),
@@ -416,7 +416,7 @@ class ProductPaymentMethodRelation(model.CoopSQL, model.CoopView):
 
     __name__ = 'billing.product-payment_method-relation'
 
-    product = fields.Many2One('ins_product.product', 'Product',
+    product = fields.Many2One('offered.product', 'Product',
         ondelete='CASCADE')
     payment_method = fields.Many2One('billing.payment_method',
         'Payment Method', ondelete='RESTRICT')
@@ -427,7 +427,7 @@ class Product():
     'Product'
 
     __metaclass__ = PoolMeta
-    __name__ = 'ins_product.product'
+    __name__ = 'offered.product'
 
     payment_methods = fields.One2Many(
         'billing.product-payment_method-relation', 'product',

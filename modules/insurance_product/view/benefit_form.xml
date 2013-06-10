@@ -3,16 +3,14 @@
     <xpath expr="/form" position="replace_attributes">
         <form string="Benefit"/>
     </xpath>
-    <xpath
-        expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']"
-        position="before">
+    <xpath expr="/form/notebook/page[@id='summary']" position="after">
         <page string="Complementary Data" id="complementary_data">
             <field name="complementary_data_def" colspan="4"/>
         </page>
     </xpath>
     <xpath
-        expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']"
-        position="before">
+        expr="/form/notebook/page[@id='managers']/notebook"
+        position="inside">
         <page string="Benefit" id="benefit">
             <field name="benefit_rules" colspan="4"/>
         </page>

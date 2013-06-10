@@ -23,7 +23,7 @@ class Party:
         states={'invisible': Not(STATES_COMPANY)})
     customer_role = fields.One2Many('party.customer', 'party', 'Customer',
         size=1)
-    complementary_data = fields.Dict('ins_product.complementary_data_def',
+    complementary_data = fields.Dict('offered.complementary_data_def',
         'Complementary Data')
 
     @classmethod

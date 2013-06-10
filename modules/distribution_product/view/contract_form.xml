@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/notebook" position="before">
+        <label name="com_product"/>
+        <field name="com_product"/>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='admin']" position="inside">
+        <label name="dist_network"/>
+        <field name="dist_network"/>
+    </xpath>
+</data>

@@ -13,7 +13,7 @@
         <record model="ir.ui.view" id="benefit_view_tree">
             <field name="model">ins_product.benefit</field>
             <field name="type">tree</field>
-            <field name="inherit" ref="offered_view_tree"/>
+            <field name="inherit" ref="offered.offered_view_tree"/>
             <field name="name">benefit_tree</field>
         </record>
         <record model="ir.action.act_window" id="act_benefit_form">
@@ -30,7 +30,7 @@
             <field name="view" ref="benefit_view_form"/>
             <field name="act_window" ref="act_benefit_form"/>
         </record>
-        <menuitem parent="menu_product" sequence="1"
+        <menuitem parent="offered.menu_product" sequence="1"
             id="menu_benefit_form" icon="tryton-list" action="act_benefit_form"/>
 
         <!-- *******************************************
@@ -60,7 +60,7 @@
             <field name="view" ref="event_desc_view_form"/>
             <field name="act_window" ref="act_event_desc_form"/>
         </record>
-        <menuitem parent="menu_product_configuration" sequence="11"
+        <menuitem parent="offered.menu_product_configuration" sequence="11"
             id="menu_event_desc_form" icon="tryton-list" action="act_event_desc_form"/>
 
         <!-- *******************************************
@@ -90,7 +90,7 @@
             <field name="view" ref="loss_desc_view_form"/>
             <field name="act_window" ref="act_loss_desc_form"/>
         </record>
-        <menuitem parent="menu_product_configuration" sequence="11"
+        <menuitem parent="offered.menu_product_configuration" sequence="11"
             id="menu_loss_desc_form" icon="tryton-list" action="act_loss_desc_form"/>
     </data>
 </tryton>

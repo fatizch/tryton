@@ -14,7 +14,7 @@ class ProcessProductRelation(model.CoopSQL):
 
     __name__ = 'ins_product.process_product_relation'
 
-    product = fields.Many2One('ins_product.product', 'Product',
+    product = fields.Many2One('offered.product', 'Product',
         ondelete='CASCADE')
     process = fields.Many2One('process.process_desc', 'Process',
         ondelete='CASCADE')

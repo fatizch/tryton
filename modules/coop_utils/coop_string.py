@@ -86,7 +86,7 @@ def translate_value(instance, var_name, lang=None):
     elif _type == 'date':
         res = date_as_string(getattr(instance, var_name), lang)
     elif _type == 'dict':
-        CDataDef = Pool().get('ins_product.complementary_data_def')
+        CDataDef = Pool().get('offered.complementary_data_def')
         res = CDataDef.get_complementary_data_summary([instance],
             var_name)[instance.id]
     else:
