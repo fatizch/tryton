@@ -63,7 +63,7 @@ msgid "Contract History"
 msgstr "Historique de Contrat"
 
 msgctxt "field:contract.contract,contract_number:"
-msgid "Reference"
+msgid "Contract Number"
 msgstr "Numéro de Contrat"
 
 msgctxt "field:contract.contract,covered_elements:"
@@ -88,7 +88,7 @@ msgstr "Nbre de chiffres après la virgule"
 
 msgctxt "field:contract.contract,current_policy_owner:"
 msgid "Current Policy Owner"
-msgstr ""
+msgstr "Responsable Courant de la Police"
 
 msgctxt "field:contract.contract,current_state:"
 msgid "Current State"
@@ -147,8 +147,8 @@ msgid "Status History"
 msgstr "Historique des Statuts"
 
 msgctxt "field:contract.contract,subscriber:"
-msgid "Broker"
-msgstr "Courtier"
+msgid "Subscriber"
+msgstr "Souscripteur"
 
 msgctxt "field:contract.contract,summary:"
 msgid "Summary"
@@ -412,7 +412,7 @@ msgstr "Symbole de la Devise"
 
 msgctxt "field:ins_contract.covered_data,deductible_duration:"
 msgid "Deductible Duration"
-msgstr ""
+msgstr "Franchise"
 
 msgctxt "field:ins_contract.covered_data,end_date:"
 msgid "End Date"
@@ -436,7 +436,7 @@ msgstr "Garantie Souscrite"
 
 msgctxt "field:ins_contract.covered_data,possible_deductible_duration:"
 msgid "Possible Deductible Duration"
-msgstr ""
+msgstr "Franchises Possibles"
 
 msgctxt "field:ins_contract.covered_data,possible_options:"
 msgid "Possible Options"

@@ -3406,7 +3406,7 @@ msgstr "Montant de Couverture"
 
 msgctxt "model:ins_product.deductible_duration,name:"
 msgid "Deductible Duration"
-msgstr ""
+msgstr "Franchise"
 
 msgctxt "model:ins_product.deductible_rule,name:"
 msgid "Deductible Rule"
@@ -4654,7 +4654,7 @@ msgstr "Montant de Couverture"
 
 msgctxt "view:ins_product.deductible_duration:"
 msgid "Deductible Duration"
-msgstr ""
+msgstr "Franchise"
 
 msgctxt "view:ins_product.deductible_rule:"
 msgid "Deductible rule"

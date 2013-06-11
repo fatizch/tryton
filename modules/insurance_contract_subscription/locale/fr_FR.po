@@ -110,6 +110,10 @@ msgctxt "field:contract.contract,subscription_mgr:"
 msgid "Subscription Manager"
 msgstr ""
 
+msgctxt "field:contract.subscribed_option,is_health:"
+msgid "Is Health"
+msgstr "Santé"
+
 msgctxt "field:contract.subscribed_option,status_selection:"
 msgid "Status"
 msgstr "Statut"
@@ -117,6 +121,14 @@ msgstr "Statut"
 msgctxt "field:ins_contract.covered_data,status_selection:"
 msgid "Status"
 msgstr "Statut"
+
+msgctxt "field:ins_contract.covered_element,is_law_madelin:"
+msgid "Law Madelin"
+msgstr "Loi Madelin"
+
+msgctxt "field:ins_contract.covered_element,is_rsi:"
+msgid "Is RSI"
+msgstr "RSI"
 
 msgctxt "field:ins_contract.subscription_mgr,contract:"
 msgid "Contract"

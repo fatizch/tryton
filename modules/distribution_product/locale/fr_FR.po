@@ -18,6 +18,10 @@ msgctxt "field:contract.contract,dist_network:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
 
+msgctxt "field:contract.contract,is_health:"
+msgid "Is Health"
+msgstr "Santé"
+
 msgctxt "field:distribution.commercial_product,code:"
 msgid "Code"
 msgstr "Code"
@@ -125,6 +129,10 @@ msgstr "Mis à jour par"
 msgctxt "field:offered.product,com_products:"
 msgid "Commercial Products"
 msgstr "Produits Commerciaux"
+
+msgctxt "field:offered.product,is_health:"
+msgid "Is Health"
+msgstr "Santé"
 
 msgctxt "model:distribution.commercial_product,name:"
 msgid "Commercial Product"

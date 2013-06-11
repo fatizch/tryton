@@ -31,8 +31,8 @@ msgid ""
 msgstr ""
 
 msgctxt "field:contract.contract,contract_number:"
-msgid "Reference"
-msgstr "Référence"
+msgid "Contract Number"
+msgstr "Numéro de Contrat"
 
 msgctxt "field:contract.contract,create_date:"
 msgid ""
@@ -107,8 +107,8 @@ msgid ""
 msgstr ""
 
 msgctxt "field:contract.contract,subscriber:"
-msgid "Broker"
-msgstr "Courtier"
+msgid "Subscriber"
+msgstr "Souscripteur"
 
 msgctxt "field:contract.contract,summary:"
 msgid ""

@@ -306,9 +306,17 @@ msgctxt "field:offered.coverage,coverages:"
 msgid "Coverages"
 msgstr "Garanties"
 
+msgctxt "field:offered.coverage,is_loan:"
+msgid "Is Loan"
+msgstr "Emprunteur"
+
 msgctxt "field:offered.product,dist_networks:"
 msgid "Distribution Networks"
 msgstr "Réseaux de Distribution"
+
+msgctxt "field:offered.product,is_loan:"
+msgid "Is Loan"
+msgstr "Emprunteur"
 
 msgctxt "field:party.broker,create_date:"
 msgid ""
