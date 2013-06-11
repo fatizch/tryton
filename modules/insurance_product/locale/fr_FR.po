@@ -3612,7 +3612,7 @@ msgid "Clauses"
 msgstr "Clauses"
 
 msgctxt "model:ir.action,name:act_model_coop_schema"
-msgid "Complementary Data Complementary Datas"
+msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
 msgctxt "model:ir.action,name:act_model_expense_kind"
@@ -3684,7 +3684,7 @@ msgid "Clauses"
 msgstr "Clauses"
 
 msgctxt "model:ir.ui.menu,name:menu_model_coop_schema"
-msgid "Complementary Data Complementary Datas"
+msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
 msgctxt "model:ir.ui.menu,name:menu_model_expense_kind"
