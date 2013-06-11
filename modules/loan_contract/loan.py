@@ -47,7 +47,7 @@ class LoanContract():
 
     def get_is_loan(self, name):
         if not self.options and self.offered:
-            return self.offered.get_is_loan_product()
+            return self.offered.is_loan
         for option in self.options:
             if option.is_loan:
                 return True
