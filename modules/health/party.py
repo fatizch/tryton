@@ -25,6 +25,11 @@ class Party():
     def get_is_health(self, name):
         return Transaction().context.get('is_health')
 
+    @staticmethod
+    def default_health_complement():
+        if Transaction().context.get('is_health'):
+            return [{}]
+
 
 class PartyHealthComplement(model.CoopSQL, model.CoopView):
     'Party Health Complement'
