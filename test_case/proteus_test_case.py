@@ -28,22 +28,27 @@ def delete_db_if_necessary(cfg_dict):
             os.remove(db)
 
 
-def install_modules(config, modules_to_install):
-    Module = Model.get('ir.module.module')
-    modules = Module.find([
-        ('name', 'in', modules_to_install),
-        ('state', '!=', 'installed'),
-    ])
-    Module.install([x.id for x in modules], config.context)
-    modules = [x.name for x in Module.find([('state', '=', 'to install')])]
-    Wizard('ir.module.module.install_upgrade').execute('upgrade')
-
+def install_modules(config, modules_to_install, cfg_dict):
+    cfg_dict['_config'] = config
+    will_be_installed = proteus_tools.get_modules_to_update(modules_to_install)
     ConfigWizardItem = Model.get('ir.module.module.config_wizard.item')
-    for item in ConfigWizardItem.find([('state', '!=', 'done')]):
-        item.state = 'done'
-        item.save()
-
-    return modules
+    Module = Model.get('ir.module.module')
+    installed_modules = set()
+    for cur_module in will_be_installed:
+        module = Module.find([('name', '=', cur_module)])
+        if module:
+            module = module[0]
+            Module.install([module.id], config.context)
+            to_install = Module.find([('state', '=', 'to install')])
+            installed_modules |= set([x.name for x in to_install])
+            Wizard('ir.module.module.install_upgrade').execute('upgrade')
+            Model.reset()
+            for item in ConfigWizardItem.find([('state', '!=', 'done')]):
+                item.state = 'done'
+                item.save()
+        if not cfg_dict['only_install']:
+            update_modules(cfg_dict, [cur_module], True)
+    return installed_modules
 
 
 def get_module_cfg(path, cfg_dict):
@@ -73,9 +78,10 @@ def load_test_case_translations(cfg_dict, path):
     return cfg_dict
 
 
-def update_modules(cfg_dict, modules):
+def update_modules(cfg_dict, modules, only_this_module=False):
     cfg_dict = set_currency(cfg_dict)
-    modules = proteus_tools.get_modules_to_update(modules)
+    if not only_this_module:
+        modules = proteus_tools.get_modules_to_update(modules)
     for cur_module in modules:
         print '=' * 80 + '\n'
         cur_path = os.path.abspath(
@@ -89,7 +95,6 @@ def update_modules(cfg_dict, modules):
         print 'Running test case for module % s' % cur_module
 
         code = CODE_TEMPLATE % ('trytond.modules.' + cur_module + '.test_case')
-        #try:
         module_dict = get_module_cfg(cur_path, cfg_dict)
         module_dict['dir'] = module_dir
         dir_loc = os.path.join(
@@ -101,8 +106,6 @@ def update_modules(cfg_dict, modules):
         context = {'cfg_dict': module_dict}
         localcontext = {}
         exec code in context, localcontext
-        #except:
-        #    warnings.warn('KO : Exception raised', stacklevel=2)
 
 
 def import_json_files(cfg_dict):
@@ -140,17 +143,14 @@ def launch_proteus_test_case(test_config_file=None, module=None):
         modules = cfg_dict['modules']
     else:
         modules = [module]
-    installed_modules = install_modules(
-        proteus_tools.get_config(cfg_dict), modules)
+    installed_modules = install_modules(proteus_tools.get_config(cfg_dict),
+        modules, cfg_dict)
     for cur_module in installed_modules:
         if cur_module in modules:
             print 'Module %s installed' % cur_module
         else:
             print 'Module %s already installed' % cur_module
 
-    if cfg_dict['only_install'] is True:
-        return cfg_dict
-    update_modules(cfg_dict, modules)
     return cfg_dict
 
 
@@ -158,6 +158,8 @@ def set_currency(cfg_dict):
     Currency = Model.get('currency.currency')
     cur_domain = []
     if cfg_dict['currency']:
+        if isinstance(cfg_dict['currency'], Model):
+            return cfg_dict
         cur_domain.append(('code', '=', cfg_dict['currency']))
     currencies = Currency.find(cur_domain, limit=1)
     if len(currencies) > 0:
