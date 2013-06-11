@@ -1,0 +1,91 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:distribution.dist_network:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:distribution.dist_network,childs:"
+msgid "Sub Levels"
+msgstr "Niveaux Inférieurs"
+
+msgctxt "field:distribution.dist_network,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:distribution.dist_network,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:distribution.dist_network,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:distribution.dist_network,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:distribution.dist_network,left:"
+msgid "Left"
+msgstr "Gauche"
+
+msgctxt "field:distribution.dist_network,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:distribution.dist_network,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:distribution.dist_network,parent:"
+msgid "Top Level"
+msgstr "Niveau Supérieur"
+
+msgctxt "field:distribution.dist_network,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:distribution.dist_network,right:"
+msgid "Right"
+msgstr "Droite"
+
+msgctxt "field:distribution.dist_network,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:distribution.dist_network,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:res.user,dist_network:"
+msgid "Distribution Network"
+msgstr "Réseau de Distribution"
+
+msgctxt "model:distribution.dist_network,name:"
+msgid "Distribution Network"
+msgstr "Réseau de Distribution"
+
+msgctxt "model:ir.action,name:act_dist_network_form"
+msgid "Distribution Networks"
+msgstr "Réseaux de Distribution"
+
+msgctxt "model:ir.ui.menu,name:menu_dist_network_form"
+msgid "Distribution Networks"
+msgstr "Réseaux de Distribution"
+
+msgctxt "model:ir.ui.menu,name:menu_distribution"
+msgid "Distribution"
+msgstr "Distribution"
+
+msgctxt "model:ir.ui.menu,name:menu_distribution_configuration"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt "view:distribution.dist_network:"
+msgid "Distribution Network"
+msgstr "Réseau de Distribution"
+
+msgctxt "view:distribution.dist_network:"
+msgid "Hierarchy"
+msgstr "Hierarchie"

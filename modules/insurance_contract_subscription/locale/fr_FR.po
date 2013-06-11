@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -74,6 +74,18 @@ msgctxt "field:contract.contract,logs:"
 msgid "Task"
 msgstr "Tâche"
 
+msgctxt "field:contract.contract,payment_bank_account:"
+msgid "Payment Bank Account"
+msgstr "Compte de Paiement"
+
+msgctxt "field:contract.contract,payment_method:"
+msgid "Payment Method"
+msgstr "Méthode de Paiement"
+
+msgctxt "field:contract.contract,payment_mode:"
+msgid "Payment Mode"
+msgstr "Mode de Paiement"
+
 msgctxt "field:contract.contract,product_desc:"
 msgid "Description"
 msgstr "Description"
@@ -98,11 +110,11 @@ msgctxt "field:contract.contract,subscription_mgr:"
 msgid "Subscription Manager"
 msgstr ""
 
-msgctxt "field:ins_contract.covered_data,status_selection:"
+msgctxt "field:contract.subscribed_option,status_selection:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:contract.subscribed_option,status_selection:"
+msgctxt "field:ins_contract.covered_data,status_selection:"
 msgid "Status"
 msgstr "Statut"
 
@@ -142,9 +154,21 @@ msgctxt "field:ins_contract.subscription_mgr,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_contract.subscription_process_parameters,broker:"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "field:ins_contract.subscription_process_parameters,com_product:"
+msgid "Product Commercial"
+msgstr "Produit Commercial"
+
 msgctxt "field:ins_contract.subscription_process_parameters,date:"
 msgid "Date"
 msgstr "Date"
+
+msgctxt "field:ins_contract.subscription_process_parameters,dist_network:"
+msgid "Distribution Network"
+msgstr "Réseau de Distribution"
 
 msgctxt "field:ins_contract.subscription_process_parameters,good_process:"
 msgid "Good Process"
@@ -157,6 +181,19 @@ msgstr "ID"
 msgctxt "field:ins_contract.subscription_process_parameters,model:"
 msgid "Model"
 msgstr "Modèle"
+
+msgctxt "field:ins_contract.subscription_process_parameters,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:ins_contract.subscription_process_parameters,possible_brokers:"
+msgid "Possible Brokers"
+msgstr "Courtiers Possibles"
+
+msgctxt ""
+"field:ins_contract.subscription_process_parameters,possible_com_product:"
+msgid "Commercial Products Available"
+msgstr "Produits Commerciaux Disponibles"
 
 msgctxt "field:ins_contract.subscription_process_parameters,product:"
 msgid "Product"
@@ -206,13 +243,13 @@ msgctxt "selection:process.process_desc,kind:"
 msgid "Contract Subscription"
 msgstr "Souscription Contrat"
 
-msgctxt "view:ins_contract.covered_data:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
-
 msgctxt "view:contract.subscribed_option:"
 msgid "Options"
 msgstr "Garanties"
+
+msgctxt "view:ins_contract.covered_data:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
 
 msgctxt ""
 "wizard_button:ins_contract.subscription_process_finder,process_parameters,action:"

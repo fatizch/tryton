@@ -86,6 +86,10 @@ msgctxt "field:coop_process.process_log,locked:"
 msgid "Lock"
 msgstr "Verrrouillé"
 
+msgctxt "field:coop_process.process_log,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:coop_process.process_log,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -134,6 +138,10 @@ msgctxt "field:coop_process.process_parameters,model:"
 msgid "Model"
 msgstr "Modèle"
 
+msgctxt "field:coop_process.process_parameters,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:coop_process.xml_view_desc,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -165,6 +173,10 @@ msgstr "Mode de Saisie"
 msgctxt "field:coop_process.xml_view_desc,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
+
+msgctxt "field:coop_process.xml_view_desc,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
 
 msgctxt "field:coop_process.xml_view_desc,nb_col:"
 msgid "Number of columns"

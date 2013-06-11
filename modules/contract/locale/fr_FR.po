@@ -1,0 +1,387 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.contract:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:contract.status_history:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:contract.subscribed_option:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:contract.contract,appliable_conditions_date:"
+msgid "Appliable Conditions Date"
+msgstr ""
+
+msgctxt "field:contract.contract,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "field:contract.contract,complementary_data:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,contact:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,contract_number:"
+msgid "Reference"
+msgstr "Référence"
+
+msgctxt "field:contract.contract,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,currency:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,currency_digits:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,current_policy_owner:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,documents:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,end_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,is_used:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:contract.contract,offered:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,options:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,product_kind:"
+msgid "Product Kind"
+msgstr "Type de Produit"
+
+msgctxt "field:contract.contract,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,start_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,start_management_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,status:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,status_history:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,subscriber:"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "field:contract.contract,summary:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.contract,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.status_history,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:contract.status_history,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.status_history,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:contract.status_history,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.status_history,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:contract.status_history,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:contract.status_history,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.status_history,reference:"
+msgid "Reference"
+msgstr "Référence"
+
+msgctxt "field:contract.status_history,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:contract.status_history,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:contract.status_history,sub_status:"
+msgid "Sub Status"
+msgstr "Sous Statut"
+
+msgctxt "field:contract.status_history,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.status_history,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.subscribed_option,contract:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.subscribed_option,contract_number:"
+msgid "Contract Number"
+msgstr "Numéro de Contrat"
+
+msgctxt "field:contract.subscribed_option,coverage_kind:"
+msgid "Coverage Kind"
+msgstr "Type de Garantie"
+
+msgctxt "field:contract.subscribed_option,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.subscribed_option,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.subscribed_option,currency:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.subscribed_option,currency_digits:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.subscribed_option,current_policy_owner:"
+msgid "Current Policy Owner"
+msgstr "Responsable Courant de la Police"
+
+msgctxt "field:contract.subscribed_option,end_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.subscribed_option,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.subscribed_option,is_used:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.subscribed_option,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:contract.subscribed_option,offered:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.subscribed_option,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:contract.subscribed_option,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.subscribed_option,start_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.subscribed_option,start_management_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.subscribed_option,status:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.subscribed_option,status_history:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.subscribed_option,summary:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.subscribed_option,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.subscribed_option,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "model:contract.contract,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:contract.status_history,name:"
+msgid "Status History"
+msgstr "Historique des Statuts"
+
+msgctxt "model:contract.subscribed_option,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ir.action,name:act_contract_form"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:contract.contract,status:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:contract.contract,status:"
+msgid "Active"
+msgstr "Active"
+
+msgctxt "selection:contract.contract,status:"
+msgid "Hold"
+msgstr "Suspendre"
+
+msgctxt "selection:contract.contract,status:"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt "selection:contract.contract,status:"
+msgid "Terminated"
+msgstr "Terminé"
+
+msgctxt "selection:contract.status_history,status:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:contract.status_history,status:"
+msgid "Active"
+msgstr "Active"
+
+msgctxt "selection:contract.status_history,status:"
+msgid "Hold"
+msgstr "Suspendre"
+
+msgctxt "selection:contract.status_history,status:"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt "selection:contract.status_history,status:"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "selection:contract.status_history,status:"
+msgid "Terminated"
+msgstr "Terminé"
+
+msgctxt "selection:contract.subscribed_option,status:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:contract.subscribed_option,status:"
+msgid "Active"
+msgstr "Active"
+
+msgctxt "selection:contract.subscribed_option,status:"
+msgid "Hold"
+msgstr "Suspendre"
+
+msgctxt "selection:contract.subscribed_option,status:"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt "selection:contract.subscribed_option,status:"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "selection:contract.subscribed_option,status:"
+msgid "Terminated"
+msgstr "Terminé"
+
+msgctxt "view:contract.contract:"
+msgid "Administration"
+msgstr "Administration"
+
+msgctxt "view:contract.contract:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "view:contract.contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "view:contract.contract:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "view:contract.contract:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt "view:contract.contract:"
+msgid "contract"
+msgstr "contrat"
+
+msgctxt "view:contract.status_history:"
+msgid "Status History"
+msgstr "Historique des Statuts"
+
+msgctxt "view:contract.subscribed_option:"
+msgid "Administration"
+msgstr "Administration"
+
+msgctxt "view:contract.subscribed_option:"
+msgid "Status History"
+msgstr "Historique des Statuts"
+
+msgctxt "view:contract.subscribed_option:"
+msgid "option"
+msgstr "option"

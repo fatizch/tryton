@@ -74,13 +74,25 @@ msgctxt "field:ins_claim.declaration_process_parameters,model:"
 msgid "Model"
 msgstr "Modèle"
 
+msgctxt "field:ins_claim.declaration_process_parameters,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:ins_claim.declaration_process_parameters,party:"
 msgid "Party"
 msgstr "Tiers"
 
+msgctxt "field:ins_claim.loss,benefit_to_deliver:"
+msgid "Benefit"
+msgstr "Prestation"
+
 msgctxt "field:ins_claim.loss,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
+
+msgctxt "field:ins_claim.loss,can_modify_benefit:"
+msgid "Can Modify Benefit?"
+msgstr "Prestation Modifiable?"
 
 msgctxt "model:ins_claim.declaration_process_parameters,name:"
 msgid "Declaration Process Parameters"

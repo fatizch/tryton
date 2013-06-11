@@ -1,0 +1,511 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:commission.commission_rule:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:commission.commission_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
+
+msgctxt "error:commission.compensated_option:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:commission.component-coverage:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:distribution.dist_network-broker:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:distribution.dist_network-plan:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:party.broker:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:commission.commission_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:commission.commission_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:commission.commission_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:commission.commission_rule,end_date:"
+msgid "To Date"
+msgstr "Date de Fin"
+
+msgctxt "field:commission.commission_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.commission_rule,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:commission.commission_rule,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:commission.commission_rule,offered:"
+msgid "Offered"
+msgstr "Offre"
+
+msgctxt "field:commission.commission_rule,rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:commission.commission_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:commission.commission_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:commission.commission_rule,rule_complementary_data:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:commission.commission_rule,start_date:"
+msgid "From Date"
+msgstr "Date de Début"
+
+msgctxt "field:commission.commission_rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:commission.commission_rule,template_behaviour:"
+msgid "Template Behaviour"
+msgstr "Comportement du Modèle"
+
+msgctxt "field:commission.commission_rule,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:commission.commission_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:commission.commission_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:commission.compensated_option,com_option:"
+msgid "Commission Option"
+msgstr "Option de Commissionnement"
+
+msgctxt "field:commission.compensated_option,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:commission.compensated_option,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:commission.compensated_option,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:commission.compensated_option,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.compensated_option,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:commission.compensated_option,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:commission.compensated_option,rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:commission.compensated_option,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:commission.compensated_option,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:commission.compensated_option,subs_option:"
+msgid "Subscribed Coverage"
+msgstr "Garantie Souscrite"
+
+msgctxt "field:commission.compensated_option,use_specific_rate:"
+msgid "Specific Rate"
+msgstr "Taux Spécifique"
+
+msgctxt "field:commission.compensated_option,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:commission.compensated_option,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:commission.component-coverage,component:"
+msgid "Component"
+msgstr "Composante"
+
+msgctxt "field:commission.component-coverage,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:commission.component-coverage,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:commission.component-coverage,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:commission.component-coverage,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.component-coverage,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:commission.component-coverage,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:commission.component-coverage,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:commission.component-coverage,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.subscribed_option,commissions:"
+msgid "Commissions"
+msgstr "Commissions"
+
+msgctxt "field:contract.subscribed_option,compensated_options:"
+msgid "Compensated Options"
+msgstr "Options Commissionées"
+
+msgctxt "field:distribution.dist_network,all_com_plans:"
+msgid "Top Level Commission Plans"
+msgstr "Plans de Commissionnement Hérités"
+
+msgctxt "field:distribution.dist_network,brokers:"
+msgid "Brokers"
+msgstr "Courtiers"
+
+msgctxt "field:distribution.dist_network,childs_brokers:"
+msgid "Sub Level Brokers"
+msgstr "Courtiers du Réseau"
+
+msgctxt "field:distribution.dist_network,commission_plans:"
+msgid "Commission Plans"
+msgstr "Plans de Commissionnement"
+
+msgctxt "field:distribution.dist_network,parent_com_plans:"
+msgid "Top Level Commission Plans"
+msgstr "Plans de Commissionnement Hérités"
+
+msgctxt "field:distribution.dist_network-broker,broker:"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "field:distribution.dist_network-broker,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:distribution.dist_network-broker,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:distribution.dist_network-broker,dist_network:"
+msgid "Distribution Network"
+msgstr "Réseau de Distribution"
+
+msgctxt "field:distribution.dist_network-broker,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:distribution.dist_network-broker,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:distribution.dist_network-broker,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:distribution.dist_network-broker,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:distribution.dist_network-broker,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:distribution.dist_network-broker,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:distribution.dist_network-plan,com_plan:"
+msgid "Commission Plan"
+msgstr "Plan de Commissionnement"
+
+msgctxt "field:distribution.dist_network-plan,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:distribution.dist_network-plan,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:distribution.dist_network-plan,dist_network:"
+msgid "Distribution Network"
+msgstr "Réseau de Distribution"
+
+msgctxt "field:distribution.dist_network-plan,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:distribution.dist_network-plan,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:distribution.dist_network-plan,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:distribution.dist_network-plan,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:distribution.dist_network-plan,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.coverage,commission_rules:"
+msgid "Commission Rules"
+msgstr "Règles de Commissionnement"
+
+msgctxt "field:offered.coverage,coverages:"
+msgid "Coverages"
+msgstr "Garanties"
+
+msgctxt "field:offered.product,dist_networks:"
+msgid "Distribution Networks"
+msgstr "Réseaux de Distribution"
+
+msgctxt "field:party.broker,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.broker,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.broker,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.broker,is_used:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.broker,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:party.broker,party:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.broker,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.broker,reference:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.broker,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.broker,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.party,broker_role:"
+msgid ""
+msgstr ""
+
+msgctxt "field:party.party,dist_networks:"
+msgid "Distribution Networks"
+msgstr "Réseaux de Distribution"
+
+msgctxt "field:party.party,is_broker:"
+msgid ""
+msgstr ""
+
+msgctxt "model:commission.commission_rule,name:"
+msgid "Commission Rule"
+msgstr "Règle de Commissionnement"
+
+msgctxt "model:commission.compensated_option,name:"
+msgid "Compensated Option"
+msgstr "Option Commissionée"
+
+msgctxt "model:commission.component-coverage,name:"
+msgid "Relation Commission Component and Coverage"
+msgstr "Relation Composante de Com - Garantie"
+
+msgctxt "model:distribution.dist_network-broker,name:"
+msgid "Relation Distribution Network - Broker"
+msgstr "Relation Réseau de Distrib - Courtier"
+
+msgctxt "model:distribution.dist_network-plan,name:"
+msgid "Relation Distribution Network - Commission Plan"
+msgstr "Relation Réseau de Distrib - Plan de Com"
+
+msgctxt "model:ir.action,name:act_agreement_form"
+msgid "Commission Agreements"
+msgstr "Agréments de Commissionnement"
+
+msgctxt "model:ir.action,name:act_broker_form"
+msgid "Brokers"
+msgstr "Courtiers"
+
+msgctxt "model:ir.action,name:act_component_form"
+msgid "Commission Components"
+msgstr "Composantes de Commissionnement"
+
+msgctxt "model:ir.action,name:act_plan_form"
+msgid "Commission Plans"
+msgstr "Plans de Commissionnement"
+
+msgctxt "model:ir.ui.menu,name:menu_agreement_form"
+msgid "Commission Agreements"
+msgstr "Agréments de Commissionnement"
+
+msgctxt "model:ir.ui.menu,name:menu_broker_form"
+msgid "Brokers"
+msgstr "Courtiers"
+
+msgctxt "model:ir.ui.menu,name:menu_commission"
+msgid "Commissioning"
+msgstr "Commissionnement"
+
+msgctxt "model:ir.ui.menu,name:menu_commission_configuration"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt "model:ir.ui.menu,name:menu_component_form"
+msgid "Commission Components"
+msgstr "Composantes de Commissionnement"
+
+msgctxt "model:ir.ui.menu,name:menu_plan_form"
+msgid "Commission Plans"
+msgstr "Plans de Commissionnement"
+
+msgctxt "model:party.broker,name:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:commission.commission_rule,config_kind:"
+msgid "Advanced"
+msgstr "Avancé"
+
+msgctxt "selection:commission.commission_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:commission.commission_rule,offered:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "selection:commission.commission_rule,offered:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "selection:commission.commission_rule,offered:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "selection:commission.commission_rule,template_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:commission.commission_rule,template_behaviour:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:commission.commission_rule,template_behaviour:"
+msgid "Remove"
+msgstr "Remplacer"
+
+msgctxt "selection:offered.coverage,kind:"
+msgid "Commission"
+msgstr "Commission"
+
+msgctxt "selection:offered.product,kind:"
+msgid "Commission"
+msgstr "Commission"
+
+msgctxt "view:commission.commission_rule:"
+msgid "%"
+msgstr ""
+
+msgctxt "view:commission.commission_rule:"
+msgid "Commission rule"
+msgstr "Règle de Commissionnement"
+
+msgctxt "view:commission.compensated_option:"
+msgid "%"
+msgstr ""
+
+msgctxt "view:commission.compensated_option:"
+msgid "Compensated Option"
+msgstr "Option Commissionée"
+
+msgctxt "view:contract.subscribed_option:"
+msgid "Commissions"
+msgstr "Commissions"
+
+msgctxt "view:contract.subscribed_option:"
+msgid "Compensated Options"
+msgstr "Options Commissionées"
+
+msgctxt "view:contract.subscribed_option:"
+msgid "Coverages"
+msgstr "Garanties"
+
+msgctxt "view:distribution.dist_network:"
+msgid "Commissioning"
+msgstr "Commissionnement"
+
+msgctxt "view:offered.coverage:"
+msgid "Commissioning"
+msgstr "Commissionnement"
+
+msgctxt "view:offered.product:"
+msgid "Commission Plans"
+msgstr "Plans de Commissionnement"
+
+msgctxt "view:party.party:"
+msgid "Broker"
+msgstr "Courtier"

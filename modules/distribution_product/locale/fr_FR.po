@@ -1,0 +1,155 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:distribution.commercial_product:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:distribution.dist_network-com_product:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:contract.contract,com_product:"
+msgid "Commercial Product"
+msgstr "Produit Commercial"
+
+msgctxt "field:contract.contract,dist_network:"
+msgid "Distribution Network"
+msgstr "Réseau de Distribution"
+
+msgctxt "field:distribution.commercial_product,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:distribution.commercial_product,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:distribution.commercial_product,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:distribution.commercial_product,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:distribution.commercial_product,dist_networks:"
+msgid "Distribution Networks"
+msgstr "Réseaux de Distribution"
+
+msgctxt "field:distribution.commercial_product,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:distribution.commercial_product,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:distribution.commercial_product,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:distribution.commercial_product,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:distribution.commercial_product,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:distribution.commercial_product,product:"
+msgid "Technical Product"
+msgstr "Produit Technique"
+
+msgctxt "field:distribution.commercial_product,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:distribution.commercial_product,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:distribution.commercial_product,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:distribution.commercial_product,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:distribution.dist_network,commercial_products:"
+msgid "Commercial Products"
+msgstr "Produits Commerciaux"
+
+msgctxt "field:distribution.dist_network,parent_com_products:"
+msgid "Top Level Commercial Products"
+msgstr "Produits Commerciaux Hérités"
+
+msgctxt "field:distribution.dist_network-com_product,com_product:"
+msgid "Commercial Product"
+msgstr "Produit Commercial"
+
+msgctxt "field:distribution.dist_network-com_product,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:distribution.dist_network-com_product,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:distribution.dist_network-com_product,dist_network:"
+msgid "Distribution Network"
+msgstr "Réseau de Distribution"
+
+msgctxt "field:distribution.dist_network-com_product,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:distribution.dist_network-com_product,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:distribution.dist_network-com_product,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:distribution.dist_network-com_product,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:distribution.dist_network-com_product,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.product,com_products:"
+msgid "Commercial Products"
+msgstr "Produits Commerciaux"
+
+msgctxt "model:distribution.commercial_product,name:"
+msgid "Commercial Product"
+msgstr "Produit Commercial"
+
+msgctxt "model:distribution.dist_network-com_product,name:"
+msgid "Relation Distribution Network - Commercial Product"
+msgstr "Relation Réseau de Distrib - Produit Commercial"
+
+msgctxt "model:ir.action,name:act_commercial_product_form"
+msgid "Commercial Products"
+msgstr "Produits Commerciaux"
+
+msgctxt "model:ir.ui.menu,name:menu_commercial_product_form"
+msgid "Commercial Products"
+msgstr "Produits Commerciaux"
+
+msgctxt "view:distribution.commercial_product:"
+msgid "Commercial Product"
+msgstr "Produit Commercial"
+
+msgctxt "view:distribution.dist_network:"
+msgid "Products"
+msgstr "Produits"
+
+msgctxt "view:offered.product:"
+msgid "Commercial Products"
+msgstr "Produits Commerciaux"

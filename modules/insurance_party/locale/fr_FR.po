@@ -66,6 +66,10 @@ msgctxt "field:party.customer,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
+msgctxt "field:party.customer,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:party.customer,party:"
 msgid "Party"
 msgstr "Tiers"
@@ -101,6 +105,10 @@ msgstr "ID"
 msgctxt "field:party.insurer,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
+
+msgctxt "field:party.insurer,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
 
 msgctxt "field:party.insurer,party:"
 msgid "Party"
@@ -163,8 +171,8 @@ msgid "Insurer"
 msgstr "Assureur"
 
 msgctxt "view:party.party:"
-msgid "Broker"
-msgstr "Courtier"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
 
 msgctxt "view:party.party:"
 msgid "Customer"

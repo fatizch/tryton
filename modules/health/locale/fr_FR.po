@@ -1,7 +1,19 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "model:ir.ui.menu,name:menu_health"
+msgid "Health"
+msgstr "Santé"
+
+msgctxt "model:ir.ui.menu,name:menu_health_configuration"
+msgid "Configuration"
+msgstr "Configuration"
 
 msgctxt "selection:offered.coverage,family:"
 msgid "Health"
 msgstr "Santé"
+
+msgctxt "view:health.party_complement:"
+msgid "Party Health Complement"
+msgstr "Complément Santé"

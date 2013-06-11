@@ -1,7 +1,35 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "model:ir.action,name:act_insurance_fund_form"
+msgid "Insurance Funds"
+msgstr "Caisses d'Affiliation"
+
+msgctxt "model:ir.action,name:act_regime_form"
+msgid "Regimes"
+msgstr "Régimes"
+
+msgctxt "model:ir.ui.menu,name:menu_insurance_fund_form"
+msgid "Insurance Funds"
+msgstr "Caisses d'Affiliation"
+
+msgctxt "model:ir.ui.menu,name:menu_regime_form"
+msgid "Regimes"
+msgstr "Régimes"
 
 msgctxt "selection:offered.coverage,family:"
 msgid "Health"
 msgstr "Santé"
+
+msgctxt "view:health.insurance_fund:"
+msgid "Insurance Fund"
+msgstr "Caisse d'Affiliation"
+
+msgctxt "view:health.regime:"
+msgid "Regime"
+msgstr "Régime"
+
+msgctxt "view:health.regime:"
+msgid "name"
+msgstr "Nom"
