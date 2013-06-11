@@ -10,7 +10,7 @@ def update_cfg_dict_with_models(cfg_dict):
 
 def create_loss_desc(cfg_dict, data, event_codes=None, document_codes=None):
     res = proteus_tools.get_or_create_this(
-        data, {}, cfg_dict, 'LossDesc', sel_val='code')
+        data, cfg_dict, 'LossDesc', sel_val='code')
     proteus_tools.append_from_key(cfg_dict, res, 'event_descs', 'EventDesc',
         'code', event_codes)
     proteus_tools.append_from_key(cfg_dict, res, 'documents', 'Document',
@@ -47,7 +47,7 @@ def create_event_desc(cfg_dict):
             'name': proteus_tools.get_translation('Accident', cfg_dict),
         })
     for event in events:
-        proteus_tools.get_or_create_this(event, {}, cfg_dict, 'EventDesc',
+        proteus_tools.get_or_create_this(event, cfg_dict, 'EventDesc',
             'code')
 
 
@@ -73,7 +73,7 @@ def create_document_descs(cfg_dict):
                 'Disability Justification', cfg_dict),
         })
     for doc in documents:
-        proteus_tools.get_or_create_this(doc, {}, cfg_dict, 'Document', 'code')
+        proteus_tools.get_or_create_this(doc, cfg_dict, 'Document', 'code')
 
 
 def launch_test_case(cfg_dict):
