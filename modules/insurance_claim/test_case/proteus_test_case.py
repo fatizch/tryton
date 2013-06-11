@@ -78,6 +78,7 @@ def create_document_descs(cfg_dict):
 
 def launch_test_case(cfg_dict):
     update_cfg_dict_with_models(cfg_dict)
+    proteus_tools.set_global_search('ins_claim.claim')
     create_document_descs(cfg_dict)
     create_event_desc(cfg_dict)
     create_loss_descs(cfg_dict)

@@ -3,6 +3,7 @@
 
 
 from proteus import Model
+import proteus_tools
 
 
 def update_models(cfg_dict):
@@ -30,4 +31,5 @@ def migrate_eligibility_rules(cfg_dict):
 
 def launch_test_case(cfg_dict):
     update_models(cfg_dict)
+    proteus_tools.set_global_search('ins_product.product')
     migrate_eligibility_rules(cfg_dict)

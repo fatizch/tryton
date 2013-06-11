@@ -250,5 +250,6 @@ def create_hierarchy(cfg_dict):
 
 def launch_test_case(cfg_dict):
     update_models(cfg_dict)
+    proteus_tools.set_global_search('party.party')
     create_parties(cfg_dict)
     create_hierarchy(cfg_dict)

@@ -343,3 +343,12 @@ def convert_to_reference(value):
     if isinstance(value, Model):
         value = '%s,%s' % (value.__class__.__name__, value.id)
     return value or None
+
+
+def set_global_search(model_name):
+    model = get_objects_from_db(
+        {'Model': Model.get('ir.model')},
+        'Model', 'model', model_name, force_search=True)
+    if not model.global_search_p:
+        model.global_search_p = True
+        model.save()
