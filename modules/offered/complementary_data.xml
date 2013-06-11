@@ -13,7 +13,7 @@
       <field name="name">complementary_data_form</field>
     </record>
     <record model="ir.action.act_window" id="act_model_coop_schema">
-      <field name="name">Complementary Data Complementary Datas</field>
+      <field name="name">Complementary Data</field>
       <field name="res_model">offered.complementary_data_def</field>
     </record>
     <record model="ir.action.act_window.view" id="act_model_coop_schema_tree">
