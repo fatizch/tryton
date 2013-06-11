@@ -159,13 +159,6 @@ class CoveredDataContext(RuleEngineContext):
             cls.append_error(args, 'No end date defined on provided data')
 
     @classmethod
-    def _re_get_coverage_amount(cls, args):
-        data = cls.get_covered_data(args)
-        if data.coverage_amount:
-            return data.coverage_amount
-        cls.append_error(args, 'Coverage amount undefined')
-
-    @classmethod
     @check_args('data')
     def _re_covered_data_complementary_data(cls, args, data_name):
         data = cls.get_covered_data(args)

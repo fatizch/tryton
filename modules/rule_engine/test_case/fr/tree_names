@@ -1,0 +1,10 @@
+[rule_engine.tools_functions]
+rule_engine.tools_functions|Outils|dossier_outils|
+_re_add_error|Ajouter Erreur|ajouter_erreur|'Message'|Ajouter un message d'erreur
+_re_add_warning|Ajouter Avertissement|ajouter_avertissement|'Message'|Ajouter un message d'avertissement
+_re_add_info|Ajouter Info|ajouter_info|'Message'|Ajouter un message informatif
+_re_add_error_code|Ajouter message prédéfini|ajouter_code_erreur|'Code Erreur'|Ajouter un message prédéfini
+_re_today|Aujourd'hui|aujourd_hui||Retourne la date du jour
+_re_years_between|Nombre d'années entre...|annees_entre|Debut,Fin|Calcule le nombre d'années entre deux dates
+_re_debug|Message de debug|message_debug|Message|Ajoute un message de debug qui sera affichée lors de la création des cas de test
+_re_calculation_date|Date de Calcul|date_de_calcul||Retrouve la date du calcul

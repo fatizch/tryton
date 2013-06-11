@@ -352,3 +352,36 @@ def set_global_search(model_name):
     if not model.global_search_p:
         model.global_search_p = True
         model.save()
+
+
+def append_inexisting_elements(cur_object, list_name, the_list):
+    to_set = False
+    if hasattr(cur_object, list_name):
+        cur_list = getattr(cur_object, list_name)
+        if cur_list is None:
+            cur_list = []
+            to_set = True
+
+    if not isinstance(the_list, (list, tuple)):
+        the_list = [the_list]
+
+    for child in the_list:
+        if not child in cur_list:
+            cur_list.append(child)
+
+    if to_set:
+        setattr(cur_object, list_name, cur_list)
+
+    cur_object.save()
+    return cur_object
+
+
+def try_to_save_object(cfg_dict, cur_object):
+    if not cfg_dict['re_create_if_already_exists']:
+        cur_object.save()
+    #if we try to save one object which already exists, we could have error
+    #with constraints
+    try:
+        cur_object.save()
+    except:
+        print 'Exception raised when trying to save', cur_object

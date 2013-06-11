@@ -864,27 +864,6 @@ class TableDefinition():
 
     __name__ = 'table.table_def'
 
-    @classmethod
-    def get_or_create_table_folder(cls):
-        TreeElement = Pool().get('rule_engine.tree_element')
-        good_language, = utils.get_this_object(
-            'ir.lang', ('code', '=', Transaction().language))
-        folder, = utils.get_those_objects(
-            'rule_engine.tree_element',
-            [('type', '=', 'folder'), ('description', '=', 'Tables'),
-                ('language', '=', good_language)])
-        if not folder:
-            folder = TreeElement()
-            folder.type = 'folder'
-            folder.description = 'Tables'
-            folder.translated_technical_name = 'table_folder'
-            folder.language = good_language
-            folder.save()
-        else:
-            folder = folder[0]
-
-        return folder
-
     def get_good_tree_element(self):
         TreeElement = Pool().get('rule_engine.tree_element')
         good_language = utils.get_this_object(

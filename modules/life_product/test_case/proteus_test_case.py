@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-import os
 
 from decimal import Decimal
 from proteus import Model
 import proteus_tools
+from trytond.modules.insurance_product.test_case import get_or_create_context
+from trytond.modules.insurance_product.test_case import create_or_update_folder
 
 
 def update_cfg_dict_with_models(cfg_dict):
@@ -97,17 +98,6 @@ def get_or_create_loss_desc(
     loss_desc.item_kind = item_kind
     loss_desc.save()
     return loss_desc
-
-
-def try_to_save_object(cfg_dict, cur_object):
-    if not cfg_dict['re_create_if_already_exists']:
-        cur_object.save()
-    #if we try to save one object which already exists, we could have error
-    #with constraints
-    try:
-        cur_object.save()
-    except:
-        print 'Exception raised when trying to save', cur_object
 
 
 def get_or_create_item_desc(cfg_dict, code, name, kind):
@@ -290,8 +280,8 @@ def create_AAA_Product(cfg_dict, code, name):
 
     coverage_a.item_desc = item_desc
     coverage_b.item_desc = item_desc
-    try_to_save_object(cfg_dict, coverage_a)
-    try_to_save_object(cfg_dict, coverage_b)
+    proteus_tools.try_to_save_object(cfg_dict, coverage_a)
+    proteus_tools.try_to_save_object(cfg_dict, coverage_b)
 
     product_a.coverages.append(coverage_a)
     product_a.coverages.append(coverage_b)
@@ -299,72 +289,7 @@ def create_AAA_Product(cfg_dict, code, name):
 
     product_a.contract_generator = get_or_create_generator(
         cfg_dict, 'ins_product.product')
-    try_to_save_object(cfg_dict, product_a)
-
-
-def get_or_create_tree_element(
-        cfg_dict, cur_type, description, translated_technical,
-        fct_args='', name=None, namespace=None, long_desc=''):
-    cur_domain = []
-    if cur_type == 'function':
-        cur_domain.append(('namespace', '=', namespace))
-        cur_domain.append(('name', '=', name))
-    if cur_type == 'folder':
-        cur_domain.append(('description', '=', description))
-    cur_domain.append(('language.code', '=', cfg_dict['language']))
-    cur_domain.append(('translated_technical_name', '=', translated_technical))
-    tree_element = proteus_tools.get_objects_from_db(
-        cfg_dict, 'TreeElement', domain=cur_domain)
-    if tree_element:
-        return tree_element
-    lang = cfg_dict['Lang'].find([('code', '=', cfg_dict['language'])])[0]
-    te = cfg_dict['TreeElement']()
-    if fct_args:
-        te.fct_args = ', '.join(map(
-            proteus_tools.remove_all_but_alphanumeric_and_space,
-            fct_args.split(',')))
-    te.translated_technical_name = translated_technical
-    te.description = description
-    te.long_description = long_desc
-    te.type = cur_type
-    te.name = name
-    te.namespace = namespace
-    te.language = lang
-    try_to_save_object(cfg_dict, te)
-    return te
-
-
-def append_inexisting_elements(cur_object, list_name, the_list):
-    to_set = False
-    if hasattr(cur_object, list_name):
-        cur_list = getattr(cur_object, list_name)
-        if cur_list is None:
-            cur_list = []
-            to_set = True
-
-    if not isinstance(the_list, (list, tuple)):
-        the_list = [the_list]
-
-    for child in the_list:
-        if not child in cur_list:
-            cur_list.append(child)
-
-    if to_set:
-        setattr(cur_object, list_name, cur_list)
-
-    cur_object.save()
-    return cur_object
-
-
-def get_or_create_context(cfg_dict, name=None):
-    ct = proteus_tools.get_objects_from_db(cfg_dict, 'Context', 'name', name)
-    if ct:
-        return ct
-    if name:
-        ct = cfg_dict['Context']()
-        ct.name = name
-        try_to_save_object(cfg_dict, ct)
-        return ct
+    proteus_tools.try_to_save_object(cfg_dict, product_a)
 
 
 def get_or_create_rule_for_birthdate_eligibility(cfg_dict, ct, name):
@@ -403,78 +328,13 @@ return True'''
     rule.test_cases.append(tc)
     rule.test_cases.append(tc1)
 
-    try_to_save_object(cfg_dict, rule)
+    proteus_tools.try_to_save_object(cfg_dict, rule)
 
     return rule
 
 
-def create_folder_from_set(cfg_dict, set_name, descs):
-    the_set = Model.get(set_name)
-    if not the_set:
-        return
-    functions = the_set.get_rules({})
-    tes = []
-    for fun in functions:
-        cur_te = get_or_create_tree_element(
-            cfg_dict,
-            'function',
-            descs[set_name][fun['name']][0],
-            descs[set_name][fun['name']][1],
-            descs[set_name][fun['name']][2],
-            fun['name'],
-            set_name,
-            descs[set_name][fun['name']][3])
-        tes.append(cur_te)
-    te_top = get_or_create_tree_element(
-        cfg_dict, 'folder',
-        descs[set_name][set_name][0],
-        descs[set_name][set_name][1])
-    append_inexisting_elements(te_top, 'children', tes)
-    te_top.save()
-    return te_top
-
-
-def parse_tree_names(cfg_dict):
-    base_data = proteus_tools.read_data_file(
-        os.path.join(cfg_dict['dir_loc'], 'tree_names'))
-
-    final_data = {}
-    for k, v in base_data.iteritems():
-        if not k in final_data:
-            final_data[k] = {}
-
-        for elem in v:
-            final_data[k][elem[0]] = elem[1:]
-
-    return final_data
-
-
 def create_rule_engine_data(cfg_dict):
-    #descs = get_file_as_dict(os.path.join(cfg_dict['dir_loc'], 'tree_names'))
-    descs = parse_tree_names(cfg_dict)
-    create_folder_from_set(cfg_dict, 'rule_engine.tools_functions', descs)
-    create_folder_from_set(cfg_dict, 'ins_product.rule_sets.person', descs)
-    create_folder_from_set(cfg_dict, 'ins_product.rule_sets.subscriber', descs)
-    create_folder_from_set(cfg_dict, 'ins_product.rule_sets.contract', descs)
-    create_folder_from_set(cfg_dict, 'ins_product.rule_sets.option', descs)
-    create_folder_from_set(
-        cfg_dict, 'ins_product.rule_sets.covered_data', descs)
-    #TODO : To move to claim test case
-    create_folder_from_set(cfg_dict, 'ins_product.rule_sets.claim', descs)
-    rule_combination = create_folder_from_set(
-        cfg_dict, 'ins_product.rule_sets.rule_combination', descs)
-
-    rule_combi_context = get_or_create_context(cfg_dict, 'Rule Combination')
-    append_inexisting_elements(
-        rule_combi_context, 'allowed_elements', [rule_combination])
-    rule_combi_context.save()
-
-    ct = get_or_create_context(cfg_dict, 'Default Context')
-    folders = cfg_dict['TreeElement'].find([
-        ('type', '=', 'folder'), ('parent', '=', None)])
-    append_inexisting_elements(ct, 'allowed_elements', folders)
-
-    ct.save()
+    create_or_update_folder(cfg_dict, 'ins_product.rule_sets.covered_data')
 
 
 def create_BBB_product(cfg_dict, code, name):
@@ -499,7 +359,7 @@ def create_BBB_product(cfg_dict, code, name):
     coverage_c = get_or_create_coverage(cfg_dict, 'GAM', 'Gamma Coverage')
     if not coverage_c.id > 0:
         coverage_c.eligibility_rules.append(erm_a)
-        try_to_save_object(cfg_dict, coverage_c)
+        proteus_tools.try_to_save_object(cfg_dict, coverage_c)
 
     # Coverage D
     erm_d = Model.get('ins_product.eligibility_rule')()
@@ -510,7 +370,7 @@ def create_BBB_product(cfg_dict, code, name):
     coverage_d = get_or_create_coverage(cfg_dict, 'DEL', 'Delta Coverage')
     if not coverage_d.id > 0:
         coverage_d.eligibility_rules.append(erm_d)
-        try_to_save_object(cfg_dict, coverage_d)
+        proteus_tools.try_to_save_object(cfg_dict, coverage_d)
 
     # Product Eligibility Manager
     erm_b = Model.get('ins_product.eligibility_rule')()
@@ -526,7 +386,7 @@ def create_BBB_product(cfg_dict, code, name):
     product_b.eligibility_rules.append(erm_b)
     product_b.contract_generator = get_or_create_generator(
         cfg_dict, 'ins_product.product')
-    try_to_save_object(cfg_dict, product_b)
+    proteus_tools.try_to_save_object(cfg_dict, product_b)
 
 
 def get_or_create_currency(cfg_dict):
@@ -538,7 +398,7 @@ def get_or_create_currency(cfg_dict):
     currency.name = 'Euro'
     currency.symbol = u'€'
     currency.code = 'EUR'
-    try_to_save_object(cfg_dict, currency)
+    proteus_tools.try_to_save_object(cfg_dict, currency)
     return currency
 
 

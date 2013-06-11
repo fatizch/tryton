@@ -14,4 +14,5 @@ def register():
         LifeLossDesc,
         LifeBenefit,
         LifeBenefitRule,
+        CoveredDataContext,
         module='life_product', type_='model')

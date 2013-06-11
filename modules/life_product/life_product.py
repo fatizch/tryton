@@ -7,6 +7,7 @@ from trytond.pyson import Eval, Or, Bool
 from trytond.modules.coop_utils import utils, fields
 from trytond.modules.coop_utils import date
 
+from trytond.modules.rule_engine import RuleEngineContext
 from trytond.modules.insurance_product import ProductDefinition
 from trytond.modules.insurance_product import EligibilityResultLine
 from trytond.modules.insurance_product.business_rule.business_rule import \
@@ -24,6 +25,7 @@ __all__ = [
     'LifeLossDesc',
     'LifeBenefit',
     'LifeBenefitRule',
+    'CoveredDataContext',
 ]
 
 
@@ -197,3 +199,16 @@ class LifeBenefitRule():
     def get_coverage_amount(self, args):
         if 'option' in args and 'covered_person' in args:
             return args['option'].get_coverage_amount(args['covered_person'])
+
+
+class CoveredDataContext(RuleEngineContext):
+    'Covered data context'
+
+    __name__ = 'ins_product.rule_sets.covered_data'
+
+    @classmethod
+    def _re_get_coverage_amount(cls, args):
+        data = cls.get_covered_data(args)
+        if data.coverage_amount:
+            return data.coverage_amount
+        cls.append_error(args, 'Coverage amount undefined')

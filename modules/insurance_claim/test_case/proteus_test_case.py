@@ -1,6 +1,10 @@
 from proteus import Model
 import proteus_tools
 
+from trytond.modules.rule_engine.test_case import create_or_update_folder
+from trytond.modules.rule_engine.test_case import append_folder_to_context
+from trytond.modules.rule_engine.test_case import get_or_create_context
+
 
 def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['LossDesc'] = Model.get('ins_product.loss_desc')
@@ -82,3 +86,7 @@ def launch_test_case(cfg_dict):
     create_document_descs(cfg_dict)
     create_event_desc(cfg_dict)
     create_loss_descs(cfg_dict)
+    default_context = get_or_create_context(cfg_dict, 'Default Context')
+    claim_folder = create_or_update_folder(cfg_dict,
+        'ins_product.rule_sets.claim')
+    append_folder_to_context(default_context, claim_folder)
