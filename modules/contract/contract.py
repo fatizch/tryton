@@ -263,6 +263,12 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         contract.finalize_contract()
         return contract
 
+    def init_from_offered(self, offered, start_date=None, end_date=None):
+        res = super(Contract, self).init_from_offered(offered, start_date,
+            end_date)
+        self.appliable_conditions_date = self.start_date
+        return res
+
     @classmethod
     def get_options_model_name(cls):
         return 'contract.subscribed_option'
