@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pyson import Eval, Equal, If
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
@@ -29,10 +27,6 @@ class CommissionAgreement():
                     (),
                     )])
         utils.update_depends(cls, 'subscriber', ['product_kind'])
-        cls.subscriber = copy.copy(cls.subscriber)
-        cls.subscriber.string = 'Broker'
-        cls.contract_number = copy.copy(cls.contract_number)
-        cls.contract_number.string = 'Reference'
 
     def update_management_roles(self):
         super(CommissionAgreement, self).update_management_roles()
@@ -98,7 +92,6 @@ class CompensatedOption(model.CoopSQL, model.CoopView):
             'invisible': ~Eval('use_specific_rate'),
             'required': ~~Eval('use_specific_rate'),
             })
-
 
     def get_rec_name(self, name):
         option = None
