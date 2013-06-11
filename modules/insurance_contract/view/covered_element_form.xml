@@ -8,14 +8,25 @@
     <label name="party"/>
     <field name="party"/>
     <newline/>
-    <field name="complementary_data" colspan="2" no_command="1"/>
-    <newline/>
-     <field name="party_compl_data" colspan="2" no_command="1"/>
-    <newline/>
-    <field name="covered_relations" colspan="4"/>
-    <newline/>
-    <field name="covered_data" colspan="4"/>
-    <field name="sub_covered_elements" colspan="4"/>
+    <notebook>
+        <page id="data" string="Complementary Data">
+            <field name="complementary_data" colspan="2" no_command="1"/>
+            <newline/>
+            <field name="party_compl_data" colspan="2" no_command="1"/>
+            <newline/>
+        </page>
+        <page id="covered_data" string="Covered Data">
+            <field name="covered_data" colspan="4"/>
+        </page>
+        <page id="covered_relations" string="Covered Relations"
+            states="{'invisible': ~Eval('item_kind').in_(['person', 'company', 'party'])}">
+            <field name="covered_relations" colspan="4"/>
+        </page>
+        <page id="sub_elements" string="Sub Covered Elements"
+            states="{'invisible': Eval('item_kind') == 'person'}">
+            <field name="sub_covered_elements" colspan="4"/>
+        </page>
+    </notebook>
     <field name="item_kind"/>
     <field name="possible_item_desc"/>
 </form>
