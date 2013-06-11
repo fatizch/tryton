@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="covered_element_view_form">
+            <field name="model">ins_contract.covered_element</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_contract.covered_element_view_form"/>
+            <field name="name">covered_element_form</field>
+        </record>
+    </data>
+</tryton>

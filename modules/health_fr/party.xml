@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="party_complement_view_form">
+            <field name="model">health.party_complement</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="health.party_complement_view_form"/>
+            <field name="name">party_complement_form</field>
+        </record>
+        <record model="ir.ui.view" id="party_complement_view_tree">
+            <field name="model">health.party_complement</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="health.party_complement_view_tree"/>
+            <field name="name">party_complement_tree</field>
+        </record>
+    </data>
+</tryton>

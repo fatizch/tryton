@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="contract_view_form">
+            <field name="model">contract.contract</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="contract.contract_view_form"/>
+            <field name="name">contract_form</field>
+        </record>
+        <record model="ir.ui.view" id="option_view_form">
+            <field name="model">contract.subscribed_option</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="contract.option_view_form"/>
+            <field name="name">option_form</field>
+        </record>
+    </data>
+</tryton>
