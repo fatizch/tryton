@@ -92,16 +92,20 @@ def launch_test_case(cfg_dict):
                 },
                 {'company': company.id},
             )
-            fisc_year = meths['FiscalYear']({
-                'name': 'Fiscal Year %s' % str(2010 + i),
-                'start_date': datetime.date(2010 + i, 1, 1),
-                'end_date': datetime.date(2010 + i, 12, 31),
-                'code': 'FY%i' % i,
-                'post_move_sequence': post_move_seq,
-                'in_invoice_sequence': invoice_seq,
-                'out_invoice_sequence': invoice_seq,
-                'in_credit_note_sequence': invoice_seq,
-                'out_credit_note_sequence': invoice_seq})
+            fisc_year = meths['FiscalYear'](
+                {
+                    'name': 'Fiscal Year %s' % str(2010 + i),
+                    'start_date': datetime.date(2010 + i, 1, 1),
+                    'end_date': datetime.date(2010 + i, 12, 31),
+                    'code': 'FY%i' % i,
+                    'post_move_sequence': post_move_seq,
+                    'in_invoice_sequence': invoice_seq,
+                    'out_invoice_sequence': invoice_seq,
+                    'in_credit_note_sequence': invoice_seq,
+                    'out_credit_note_sequence': invoice_seq,
+                },
+                {'company': company.id},
+            )
             if len(fisc_year.periods) < 1:
                 cfg_dict['FiscalYear'].create_period([fisc_year.id],
                     {'company': company.id})
