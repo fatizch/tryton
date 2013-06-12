@@ -80,7 +80,7 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:ins_claim.declaration_process_parameters,party:"
 msgid "Party"
-msgstr "Tiers"
+msgstr "Acteur"
 
 msgctxt "field:ins_claim.loss,benefit_to_deliver:"
 msgid "Benefit"

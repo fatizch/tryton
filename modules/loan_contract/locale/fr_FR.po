@@ -24,7 +24,7 @@ msgstr "Documents"
 
 msgctxt "field:contract.contract,is_loan:"
 msgid "Is Loan"
-msgstr ""
+msgstr "Emprunteur"
 
 msgctxt "field:contract.contract,loans:"
 msgid "Loans"
@@ -32,7 +32,7 @@ msgstr "Prêts"
 
 msgctxt "field:contract.subscribed_option,is_loan:"
 msgid "Is Loan"
-msgstr ""
+msgstr "Emprunteur"
 
 msgctxt "field:ins_contract.covered_data,contract:"
 msgid "Contract"
@@ -40,7 +40,7 @@ msgstr "Contrat"
 
 msgctxt "field:ins_contract.covered_data,is_loan:"
 msgid "Is Loan"
-msgstr ""
+msgstr "Emprunteur"
 
 msgctxt "field:ins_contract.covered_data,loan_shares:"
 msgid "Loan Shares"

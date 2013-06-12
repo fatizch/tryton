@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.address:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:contract.contract.history:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -11,10 +15,6 @@ msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:contract.subscribed_option:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.address:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -45,6 +45,58 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "error:ins_contract.subscribed_coverage_complement:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:contract.address,address:"
+msgid "Address"
+msgstr "Adresse"
+
+msgctxt "field:contract.address,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.address,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:contract.address,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.address,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:contract.address,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.address,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:contract.address,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:contract.address,policy_owner:"
+msgid "Policy Owner"
+msgstr "Responsable de la Police"
+
+msgctxt "field:contract.address,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.address,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:contract.address,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.address,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
 
 msgctxt "field:contract.contract,addresses:"
 msgid "Addresses"
@@ -326,58 +378,6 @@ msgctxt "field:contract.subscribed_option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_contract.address,address:"
-msgid "Address"
-msgstr "Adresse"
-
-msgctxt "field:ins_contract.address,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:ins_contract.address,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_contract.address,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_contract.address,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:ins_contract.address,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_contract.address,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_contract.address,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:ins_contract.address,policy_owner:"
-msgid "Policy Owner"
-msgstr ""
-
-msgctxt "field:ins_contract.address,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_contract.address,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:ins_contract.address,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_contract.address,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:ins_contract.covered_data,complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
@@ -508,7 +508,7 @@ msgstr "Desc Risque"
 
 msgctxt "field:ins_contract.covered_element,item_kind:"
 msgid "Item Kind"
-msgstr ""
+msgstr "Type de Bien"
 
 msgctxt "field:ins_contract.covered_element,must_expand_tree:"
 msgid ""
@@ -801,6 +801,10 @@ msgctxt "field:party.party,covered_elements:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
 
+msgctxt "model:contract.address,name:"
+msgid "Contract Address"
+msgstr ""
+
 msgctxt "model:contract.contract,name:"
 msgid "Contract"
 msgstr "Contrat"
@@ -812,10 +816,6 @@ msgstr "Historique de Contrat"
 msgctxt "model:contract.subscribed_option,name:"
 msgid "Subscribed Coverage"
 msgstr "Garantie"
-
-msgctxt "model:ins_contract.address,name:"
-msgid "Contract Address"
-msgstr ""
 
 msgctxt "model:ins_contract.covered_data,name:"
 msgid "Covered Data"
@@ -961,6 +961,10 @@ msgctxt "selection:ins_product.request_finder,kind:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "view:contract.address:"
+msgid "Contract Address"
+msgstr ""
+
 msgctxt "view:contract.contract.history:"
 msgid "Contract History"
 msgstr "Historique de Contrat"
@@ -984,10 +988,6 @@ msgstr "Délégataires"
 msgctxt "view:contract.subscribed_option:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
-
-msgctxt "view:ins_contract.address:"
-msgid "Contract Address"
-msgstr ""
 
 msgctxt "view:ins_contract.covered_data:"
 msgid "Covered Data"
@@ -1039,4 +1039,4 @@ msgstr "Gestionnaire"
 
 msgctxt "view:ins_contract.management_role:"
 msgid "Manager"
-msgstr ""
+msgstr "Géré par"

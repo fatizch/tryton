@@ -74,18 +74,6 @@ msgctxt "field:contract.contract,logs:"
 msgid "Task"
 msgstr "Tâche"
 
-msgctxt "field:contract.contract,payment_bank_account:"
-msgid "Payment Bank Account"
-msgstr "Compte de Paiement"
-
-msgctxt "field:contract.contract,payment_method:"
-msgid "Payment Method"
-msgstr "Méthode de Paiement"
-
-msgctxt "field:contract.contract,payment_mode:"
-msgid "Payment Mode"
-msgstr "Mode de Paiement"
-
 msgctxt "field:contract.contract,product_desc:"
 msgid "Description"
 msgstr "Description"

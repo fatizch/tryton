@@ -36,7 +36,7 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:account.move,billing_period:"
 msgid "Billing Period"
-msgstr ""
+msgstr "Période de Facturation"
 
 msgctxt "field:account.move.line,second_origin:"
 msgid "Second Origin"
@@ -53,6 +53,10 @@ msgstr "Date de création"
 msgctxt "field:billing.billing_manager,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:billing.billing_manager,disbursment_bank_account:"
+msgid "Disbursement Bank Account"
+msgstr "Compte de Virement"
 
 msgctxt "field:billing.billing_manager,end_date:"
 msgid "End Date"
@@ -81,6 +85,10 @@ msgstr "Méthode de Paiement"
 msgctxt "field:billing.billing_manager,payment_mode:"
 msgid "Payment Mode"
 msgstr "Mode de Paiement"
+
+msgctxt "field:billing.billing_manager,policy_owner:"
+msgid "Party"
+msgstr "Acteur"
 
 msgctxt "field:billing.billing_manager,rec_name:"
 msgid "Name"
@@ -204,7 +212,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:billing.period,moves:"
 msgid "Moves"
-msgstr ""
+msgstr "Mouvements"
 
 msgctxt "field:billing.period,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -252,15 +260,15 @@ msgstr "Date de Fin"
 
 msgctxt "field:billing.price_line,estimated_fees:"
 msgid "Estimated Fees"
-msgstr ""
+msgstr "Estimation des Frais"
 
 msgctxt "field:billing.price_line,estimated_taxes:"
 msgid "Estimated Taxes"
-msgstr ""
+msgstr "Estimation des Taxes"
 
 msgctxt "field:billing.price_line,fee_lines:"
 msgid "Fee Lines"
-msgstr ""
+msgstr "Lignes de Frais"
 
 msgctxt "field:billing.price_line,frequency:"
 msgid "Frequency"
@@ -284,11 +292,11 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:billing.price_line,name:"
 msgid "Short Description"
-msgstr ""
+msgstr "Description Courte"
 
 msgctxt "field:billing.price_line,on_object:"
 msgid "Priced object"
-msgstr ""
+msgstr "Objet Tarifé"
 
 msgctxt "field:billing.price_line,rec_name:"
 msgid "Name"
@@ -340,7 +348,7 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:billing.price_line-fee-relation,price_line:"
 msgid "Price Line"
-msgstr ""
+msgstr "Ligne de Prime"
 
 msgctxt "field:billing.price_line-fee-relation,rec_name:"
 msgid "Name"
@@ -384,7 +392,7 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:billing.price_line-tax-relation,price_line:"
 msgid "Price Line"
-msgstr ""
+msgstr "Ligne de Prime"
 
 msgctxt "field:billing.price_line-tax-relation,rec_name:"
 msgid "Name"
@@ -452,27 +460,27 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.contract,billing_managers:"
 msgid "Billing Managers"
-msgstr ""
+msgstr "Gestionnaires d'Appel de Cotisation"
 
 msgctxt "field:contract.contract,billing_periods:"
 msgid "Billing Periods"
-msgstr ""
+msgstr "Période de Facturation"
 
 msgctxt "field:contract.contract,next_billing_date:"
 msgid "Next Billing Date"
-msgstr ""
+msgstr "Date du Prochain Calcul"
 
 msgctxt "field:contract.contract,prices:"
 msgid "Prices"
-msgstr ""
+msgstr "Primes"
 
 msgctxt "field:coop_account.fee_desc,account_for_billing:"
 msgid "Account for billing"
-msgstr ""
+msgstr "Compte de Facturation"
 
 msgctxt "field:coop_account.tax_desc,account_for_billing:"
 msgid "Account for billing"
-msgstr ""
+msgstr "Compte de Facturation"
 
 msgctxt "field:ins_contract.covered_element,indemnification_bank_account:"
 msgid ""
@@ -484,7 +492,7 @@ msgstr "Méthodes de Paiement"
 
 msgctxt "model:billing.billing_manager,name:"
 msgid "Billing Manager"
-msgstr ""
+msgstr "Gestionnaire d'Appel de Cotisation"
 
 msgctxt "model:billing.billing_process.bill_display,name:"
 msgid "Bill Displayer"
@@ -492,7 +500,7 @@ msgstr ""
 
 msgctxt "model:billing.billing_process.bill_parameters,name:"
 msgid "Bill Parameters"
-msgstr ""
+msgstr "Paramètres de Facturation"
 
 msgctxt "model:billing.payment_method,name:"
 msgid "Payment Method"
@@ -500,11 +508,11 @@ msgstr "Méthode de Paiement"
 
 msgctxt "model:billing.period,name:"
 msgid "Billing Period"
-msgstr ""
+msgstr "Période de Facturation"
 
 msgctxt "model:billing.price_line,name:"
 msgid "Price Line"
-msgstr ""
+msgstr "Ligne de Prime"
 
 msgctxt "model:billing.price_line-fee-relation,name:"
 msgid "Price Line Fee Relation"
@@ -520,11 +528,11 @@ msgstr ""
 
 msgctxt "model:ir.action,name:act_open_billing_period_form"
 msgid "Billing Periods"
-msgstr ""
+msgstr "Périodes de Facturation"
 
 msgctxt "model:ir.action,name:act_open_move_form"
 msgid "Moves"
-msgstr ""
+msgstr "Mouvements"
 
 msgctxt "model:ir.action,name:act_payment_method"
 msgid "Payment Methods"
@@ -548,11 +556,11 @@ msgstr ""
 
 msgctxt "selection:billing.payment_method,payment_mode:"
 msgid "Direct Debit"
-msgstr ""
+msgstr "Prélèvement Automatique"
 
 msgctxt "selection:billing.payment_method,payment_mode:"
 msgid "Wire Transfer"
-msgstr ""
+msgstr "Virement Bancaire"
 
 msgctxt "selection:billing.price_line,frequency:"
 msgid ""
@@ -576,7 +584,7 @@ msgstr "Annuel"
 
 msgctxt "view:billing.billing_manager:"
 msgid "Billing Managers"
-msgstr ""
+msgstr "Gestionnaires d'Appel de Cotisation"
 
 msgctxt "view:billing.billing_manager:"
 msgid "billing_manager"
@@ -588,7 +596,7 @@ msgstr ""
 
 msgctxt "view:billing.billing_process.bill_parameters:"
 msgid "Bill Parameters"
-msgstr ""
+msgstr "Paramètres de Facturation"
 
 msgctxt "view:billing.payment_method:"
 msgid "Payment Method"
@@ -600,19 +608,19 @@ msgstr "Méthode de Paiement"
 
 msgctxt "view:billing.period:"
 msgid "Billing Period"
-msgstr ""
+msgstr "Période de Facturation"
 
 msgctxt "view:billing.period:"
 msgid "Billing Periods"
-msgstr ""
+msgstr "Période de Facturation"
 
 msgctxt "view:billing.price_line-fee-relation:"
 msgid "Fee Line"
-msgstr ""
+msgstr "Ligne de Frais"
 
 msgctxt "view:billing.price_line-fee-relation:"
 msgid "Fee Lines"
-msgstr ""
+msgstr "Lignes de Frais"
 
 msgctxt "view:billing.price_line-tax-relation:"
 msgid "Tax Line"
@@ -624,11 +632,11 @@ msgstr "Lignes de taxe"
 
 msgctxt "view:billing.price_line:"
 msgid "Price Line"
-msgstr ""
+msgstr "Ligne de Prime"
 
 msgctxt "view:billing.price_line:"
 msgid "Pricing Lines"
-msgstr ""
+msgstr "Lignes de Prime"
 
 msgctxt "view:billing.product-payment_method-relation:"
 msgid "Payment Method"
@@ -644,7 +652,7 @@ msgstr "Cotisation"
 
 msgctxt "view:contract.contract:"
 msgid "Calculate Prices"
-msgstr ""
+msgstr "Calculer les Primes"
 
 msgctxt "view:offered.product:"
 msgid "Payment Methods"
@@ -660,7 +668,7 @@ msgstr "Annuler"
 
 msgctxt "wizard_button:billing.billing_process,bill_parameters,bill_display:"
 msgid "Preview"
-msgstr ""
+msgstr "Prévisualiser"
 
 msgctxt "wizard_button:billing.billing_process,bill_parameters,end:"
 msgid "Cancel"

@@ -627,10 +627,6 @@ msgid "==> Tarif"
 msgstr ""
 
 msgctxt "view:contract.contract:"
-msgid "==> Validation du contract"
-msgstr ""
-
-msgctxt "view:contract.contract:"
 msgid "==> Validation du contrat"
 msgstr ""
 
@@ -721,10 +717,6 @@ msgstr "Tarif"
 msgctxt "view:contract.contract:"
 msgid "The current record completed the current process, please go ahead"
 msgstr "Processus Terminé. Commencez une nouvelle tâche"
-
-msgctxt "view:contract.contract:"
-msgid "Validation du contract"
-msgstr "Validation du contract"
 
 msgctxt "view:contract.contract:"
 msgid "Validation du contrat"

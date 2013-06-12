@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.address:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:contract.contract:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -14,9 +18,61 @@ msgctxt "error:contract.subscribed_option:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "field:contract.address,address:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.address,contract:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.address,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.address,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.address,end_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.address,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.address,is_used:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.address,must_expand_tree:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.address,policy_owner:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.address,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.address,start_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.address,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.address,write_uid:"
+msgid ""
+msgstr ""
+
 msgctxt "field:contract.contract,appliable_conditions_date:"
 msgid "Appliable Conditions Date"
-msgstr ""
+msgstr "Date de Conditions"
 
 msgctxt "field:contract.contract,company:"
 msgid "Company"
@@ -262,6 +318,10 @@ msgctxt "field:contract.subscribed_option,write_uid:"
 msgid ""
 msgstr ""
 
+msgctxt "model:contract.address,name:"
+msgid ""
+msgstr ""
+
 msgctxt "model:contract.contract,name:"
 msgid ""
 msgstr ""
@@ -345,6 +405,10 @@ msgstr "Refusé"
 msgctxt "selection:contract.subscribed_option,status:"
 msgid "Terminated"
 msgstr "Terminé"
+
+msgctxt "view:contract.address:"
+msgid "Contract Address"
+msgstr "Adresse"
 
 msgctxt "view:contract.contract:"
 msgid "Administration"

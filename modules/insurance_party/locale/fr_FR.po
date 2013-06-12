@@ -32,7 +32,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:party.broker,party:"
 msgid "Party"
-msgstr "Tiers"
+msgstr "Acteur"
 
 msgctxt "field:party.broker,rec_name:"
 msgid "Name"
@@ -72,7 +72,7 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:party.customer,party:"
 msgid "Party"
-msgstr "Tiers"
+msgstr "Acteur"
 
 msgctxt "field:party.customer,rec_name:"
 msgid "Name"
@@ -112,7 +112,7 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:party.insurer,party:"
 msgid "Party"
-msgstr "Tiers"
+msgstr "Acteur"
 
 msgctxt "field:party.insurer,rec_name:"
 msgid "Name"

@@ -56,7 +56,7 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:party.bank,party:"
 msgid "Party"
-msgstr "Tiers"
+msgstr "Acteur"
 
 msgctxt "field:party.bank,rec_name:"
 msgid "Name"
@@ -116,7 +116,7 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:party.bank_account,party:"
 msgid "Party"
-msgstr "Tiers"
+msgstr "Acteur"
 
 msgctxt "field:party.bank_account,rec_name:"
 msgid "Name"

@@ -44,7 +44,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.covered_element-party_relation,party_relation:"
 msgid "Party Relation"
-msgstr "Relations entre Tiers"
+msgstr "Relations entre Acteurs"
 
 msgctxt "field:ins_contract.covered_element-party_relation,rec_name:"
 msgid "Name"

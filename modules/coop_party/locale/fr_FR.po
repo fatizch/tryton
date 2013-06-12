@@ -92,7 +92,7 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:party.actor,party:"
 msgid "Party"
-msgstr "Tiers"
+msgstr "Acteur"
 
 msgctxt "field:party.actor,reference:"
 msgid "Reference"
@@ -280,7 +280,7 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:party.generic_actor,party:"
 msgid "Party"
-msgstr "Tiers"
+msgstr "Acteur"
 
 msgctxt "field:party.generic_actor,rec_name:"
 msgid "Name"
@@ -432,7 +432,7 @@ msgstr "Date de Fin"
 
 msgctxt "field:party.party-relation,from_party:"
 msgid "From Party"
-msgstr "Depuis le tiers"
+msgstr "Depuis l'acteur"
 
 msgctxt "field:party.party-relation,id:"
 msgid "ID"
@@ -464,7 +464,7 @@ msgstr "Date de Début"
 
 msgctxt "field:party.party-relation,to_party:"
 msgid "To Party"
-msgstr "Vers le tiers"
+msgstr "Vers l'acteur"
 
 msgctxt "field:party.party-relation,write_date:"
 msgid "Write Date"
@@ -548,7 +548,7 @@ msgstr "Acteur Générique"
 
 msgctxt "model:ir.action,name:act_party_relation_kind_form"
 msgid "Party Relation Kind"
-msgstr "Type de Relation entre Tiers"
+msgstr "Type de Relation entre Acteurs"
 
 msgctxt "model:ir.action,name:act_person_form"
 msgid "Persons"
@@ -568,7 +568,7 @@ msgstr "Acteur Générique"
 
 msgctxt "model:ir.ui.menu,name:menu_party_relation_kind_form"
 msgid "Party Relation Kind"
-msgstr "Type de Relation entre Tiers"
+msgstr "Type de Relation entre Acteurs"
 
 msgctxt "model:ir.ui.menu,name:menu_person_form"
 msgid "Persons"
@@ -608,11 +608,11 @@ msgstr "Type d'Acteur Générique"
 
 msgctxt "model:party.party-relation,name:"
 msgid "Party Relation"
-msgstr "Relations entre Tiers"
+msgstr "Relations entre Acteurs"
 
 msgctxt "model:party.party_relation_kind,name:"
 msgid "Party Relation Kind"
-msgstr "Type de Relation entre Tiers"
+msgstr "Type de Relation entre Acteurs"
 
 msgctxt "model:party.party_relation_kind,name:child"
 msgid "Children Of"
@@ -628,7 +628,7 @@ msgstr "Conjoint de"
 
 msgctxt "selection:party.contact_history,for_object_ref:"
 msgid "Party"
-msgstr "Tiers"
+msgstr "Acteur"
 
 msgctxt "selection:party.contact_history,media:"
 msgid "E-Mail"
@@ -712,4 +712,4 @@ msgstr "Synthèse"
 
 msgctxt "view:party.party_relation_kind:"
 msgid "Party Relation Kind"
-msgstr "Type de Relation entre Tiers"
+msgstr "Type de Relation entre Acteurs"

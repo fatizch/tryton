@@ -2,6 +2,126 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:health.insurance_fund:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:health.regime:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:health.insurance_fund,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:health.insurance_fund,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:health.insurance_fund,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:health.insurance_fund,department:"
+msgid "Department"
+msgstr "Département"
+
+msgctxt "field:health.insurance_fund,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:health.insurance_fund,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:health.insurance_fund,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:health.insurance_fund,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:health.insurance_fund,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:health.insurance_fund,regime:"
+msgid "Regime"
+msgstr "Régime"
+
+msgctxt "field:health.insurance_fund,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:health.insurance_fund,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:health.party_complement,department:"
+msgid "Department"
+msgstr "Département"
+
+msgctxt "field:health.party_complement,insurance_fund:"
+msgid "Insurance Fund"
+msgstr "Caisse d'Affiliation"
+
+msgctxt "field:health.party_complement,regime:"
+msgid "Regime"
+msgstr "Régime"
+
+msgctxt "field:health.regime,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:health.regime,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:health.regime,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:health.regime,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:health.regime,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:health.regime,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:health.regime,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:health.regime,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:health.regime,short_name:"
+msgid "Short Name"
+msgstr "Nom Court"
+
+msgctxt "field:health.regime,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:health.regime,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "model:health.insurance_fund,name:"
+msgid "Insurance Fund"
+msgstr "Caisse d'Affiliation"
+
+msgctxt "model:health.regime,name:"
+msgid "Regime"
+msgstr "Régime"
+
 msgctxt "model:ir.action,name:act_insurance_fund_form"
 msgid "Insurance Funds"
 msgstr "Caisses d'Affiliation"

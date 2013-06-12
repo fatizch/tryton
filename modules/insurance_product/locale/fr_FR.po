@@ -1055,7 +1055,7 @@ msgstr "Unité de la Durée"
 
 msgctxt "field:ins_product.deductible_rule,durations:"
 msgid "Durations"
-msgstr ""
+msgstr "Durées"
 
 msgctxt "field:ins_product.deductible_rule,end_date:"
 msgid "To Date"
@@ -1099,7 +1099,7 @@ msgstr ""
 
 msgctxt "field:ins_product.deductible_rule,simple_config_choice:"
 msgid "Simple Config. Choice"
-msgstr ""
+msgstr "Choix de Config. Simple"
 
 msgctxt "field:ins_product.deductible_rule,start_date:"
 msgid "From Date"
@@ -1852,7 +1852,7 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:ins_product.letter_model_selection,party:"
 msgid "Party"
-msgstr "Tiers"
+msgstr "Acteur"
 
 msgctxt "field:ins_product.letter_version,collision:"
 msgid "Collision"
@@ -3511,7 +3511,7 @@ msgstr "Relation Processus Produit"
 
 msgctxt "model:ins_product.request_finder,name:"
 msgid "Request Finder"
-msgstr ""
+msgstr "Rechercher une Demande"
 
 msgctxt "model:ins_product.reserve_rule,name:"
 msgid "Reserve Rule"
@@ -4086,7 +4086,7 @@ msgstr "Principale"
 
 msgctxt "selection:ins_product.document_rule,kind:"
 msgid "Sub Elem"
-msgstr ""
+msgstr "Elément Couvert"
 
 msgctxt "selection:ins_product.document_rule,offered:"
 msgid "Benefit"
@@ -4770,7 +4770,7 @@ msgstr "Règle de Cotisation"
 
 msgctxt "view:ins_product.request_finder:"
 msgid "Request Finder"
-msgstr ""
+msgstr "Rechercher une Demande"
 
 msgctxt "view:ins_product.reserve_rule:"
 msgid "Reserve rule"

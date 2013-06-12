@@ -2,6 +2,62 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:health.party_complement:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:health.party_complement,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:health.party_complement,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:health.party_complement,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:health.party_complement,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:health.party_complement,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:health.party_complement,party:"
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:health.party_complement,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:health.party_complement,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:health.party_complement,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.coverage,is_health:"
+msgid "Is Health"
+msgstr "Santé"
+
+msgctxt "field:party.party,health_complement:"
+msgid "Health Complement"
+msgstr "Complément Santé"
+
+msgctxt "field:party.party,is_health:"
+msgid "Is Health"
+msgstr "Santé"
+
+msgctxt "model:health.party_complement,name:"
+msgid "Party Health Complement"
+msgstr "Complément Santé"
+
 msgctxt "model:ir.ui.menu,name:menu_health"
 msgid "Health"
 msgstr "Santé"
