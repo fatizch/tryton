@@ -4,7 +4,7 @@ from ibanlib import iban
 from trytond.pool import PoolMeta
 from trytond.pyson import Not
 
-from trytond.modules.coop_utils import CoopSQL, coop_string, fields
+from trytond.modules.coop_utils import CoopSQL, coop_string, fields, utils
 from trytond.modules.coop_party import Actor
 from trytond.modules.coop_party.party import STATES_COMPANY
 
@@ -38,6 +38,9 @@ class Party:
             res[party.id] += coop_string.get_field_as_summary(
                 party, 'bank_accounts', True, at_date, lang=lang)
         return res
+
+    def get_bank_accounts(self, at_date=None):
+        return utils.get_good_versions_at_date(self, 'bank_accounts', at_date)
 
 
 class Bank(CoopSQL, Actor):

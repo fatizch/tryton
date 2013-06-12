@@ -70,6 +70,16 @@ class BankAccount(CoopSQL, CoopView):
             return
         return for_party
 
+    def get_rec_name(self, name=None):
+        res = ''
+        if self.agency:
+            res += self.agency.rec_name
+        if self.account_numbers:
+            if res:
+                res += ' '
+            res += '[%s]' % self.account_numbers[0].rec_name
+        return res
+
 
 class BankAccountNumber(CoopSQL, CoopView):
     'Bank account Number'

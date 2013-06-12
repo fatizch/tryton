@@ -145,6 +145,17 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
         print self.__name__
         raise NotImplementedError
 
+    def get_currency_id(self, name):
+        return self.get_currency().id
+
+    def get_currency_digits(self, name):
+        return (self.currency.digits
+            if not utils.is_none(self, 'currency') else 2)
+
+    def get_currency_symbol(self, name):
+        return (self.currency.symbol
+            if not utils.is_none(self, 'currency') else '')
+
     @classmethod
     def copy(cls, objects, default=None):
         constraints = []

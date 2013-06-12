@@ -13,13 +13,13 @@
         <record model="ir.ui.view" id="product_view_form">
             <field name="model">offered.product</field>
             <field name="type">form</field>
-            <field name="inherit" ref="insurance_product.product_view_form"/>
+            <field name="inherit" ref="offered.product_view_form"/>
             <field name="name">collective_product_form</field>
         </record>
         <record model="ir.ui.view" id="product_view_tree">
             <field name="model">offered.product</field>
             <field name="type">tree</field>
-            <field name="inherit" ref="insurance_product.product_view_tree"/>
+            <field name="inherit" ref="offered.product_view_tree"/>
             <field name="arch" type="xml"/>
         </record>
         <!-- View for the edition or the Form of product -->

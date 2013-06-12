@@ -471,24 +471,32 @@ class Context(ModelView, ModelSQL):
     @classmethod
     def __setup__(cls):
         super(Context, cls).__setup__()
-        cls._constraints += [
-            ('check_duplicate_name', 'duplicate_name'),
-        ]
         cls._error_messages.update({
-            'duplicate_name': 'You define twice the same name!',
+                'duplicate_name': ('You have defined twice the same name %s '
+                    'in %s and %s'),
         })
 
-    def check_duplicate_name(self):
-        names = set()
-        elements = list(self.allowed_elements)
-        while elements:
-            element = elements.pop()
-            if element.translated_technical_name in names:
-                return False
-            else:
-                names.add(element.translated_technical_name)
-            elements.extend(element.children)
-        return True
+    @classmethod
+    def validate(cls, contexts):
+        super(Context, cls).validate(contexts)
+        cls.check_duplicate_name(contexts)
+
+    @classmethod
+    def check_duplicate_name(cls, contexts):
+        for context in contexts:
+            names = {}
+            elements = list(context.allowed_elements)
+            while elements:
+                element = elements.pop()
+                if element.translated_technical_name in names:
+                    cls.raise_user_error('duplicate_name', (
+                            element.translated_technical_name,
+                            element.full_path,
+                            names[element.translated_technical_name].full_path,
+                            ))
+                else:
+                    names[element.translated_technical_name] = element
+                elements.extend(element.children)
 
     def get_context(self):
         context = {}
@@ -553,6 +561,8 @@ class TreeElement(ModelView, ModelSQL):
         on_change=['translated_technical_name', 'description', 'the_table'],
         ondelete='CASCADE')
     long_description = fields.Text('Long Description')
+    full_path = fields.Function(
+        fields.Char('Full Path'), 'get_full_path')
 
     @classmethod
     def __setup__(cls):
@@ -663,6 +673,13 @@ class TreeElement(ModelView, ModelSQL):
     @staticmethod
     def default_long_description():
         return ''
+
+    def get_full_path(self, name):
+        res = ''
+        if self.parent:
+            res = '%s.' % self.parent.full_path
+        res += self.translated_technical_name
+        return res
 
 
 class ContextTreeElement(ModelSQL):
