@@ -20,6 +20,7 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['SequenceStrict'] = Model.get('ir.sequence.strict')
     cfg_dict['AccountConfiguration'] = Model.get('account.configuration')
     cfg_dict['Contract'] = Model.get('contract.contract')
+    cfg_dict['Company'] = Model.get('company.company')
 
 
 def create_methods(cfg_dict):
@@ -40,7 +41,11 @@ def create_methods(cfg_dict):
 def launch_test_case(cfg_dict):
     update_cfg_dict_with_models(cfg_dict)
     meths = create_methods(cfg_dict)
-    company = proteus_tools.get_or_create_company(cfg_dict, 'Mother House')
+    company_candidates = cfg_dict['Company'].find([])
+    if company_candidates:
+        company = company_candidates[0]
+    else:
+        company = proteus_tools.get_or_create_company(cfg_dict, 'Mother House')
 
     bad_contracts = cfg_dict['Contract'].find([('company', '=', None)])
     cfg_dict['Contract'].write([x.id for x in bad_contracts],
