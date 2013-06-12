@@ -9,11 +9,12 @@ from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateTransition, StateView, Button
 from trytond.pyson import Eval, If
 
-from trytond.modules.coop_utils import model, fields, utils, date
+from trytond.modules.coop_utils import model, fields, utils, date, coop_string
 from trytond.modules.coop_utils import export
 from trytond.modules.insurance_product.business_rule.pricing_rule import \
     PRICING_FREQUENCY
 from trytond.modules.insurance_contract.contract import IS_PARTY
+from trytond.modules.offered.offered import DEF_CUR_DIG
 
 __all__ = [
     'PaymentMethod',
@@ -59,11 +60,16 @@ class PaymentMethod(model.CoopSQL, model.CoopView):
     __name__ = 'billing.payment_method'
 
     name = fields.Char('Name')
-    code = fields.Char('Code', required=True)
+    code = fields.Char('Code', required=True, on_change_with=['code', 'name'])
     payment_term = fields.Many2One('account.invoice.payment_term',
         'Payment Term', ondelete='RESTRICT')
     payment_mode = fields.Selection(PAYMENT_MODES, 'Payment Mode',
         required=True)
+
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
 
 
 class PriceLineTaxRelation(model.CoopSQL, model.CoopView):
@@ -97,7 +103,8 @@ class PriceLine(model.CoopSQL, model.CoopView):
 
     __name__ = 'billing.price_line'
 
-    amount = fields.Numeric('Amount')
+    amount = fields.Numeric('Amount',
+        digits=(16, Eval('currency_digits', DEF_CUR_DIG)))
     name = fields.Function(fields.Char('Short Description'), 'get_short_name')
     master = fields.Many2One('billing.price_line', 'Master Line')
     on_object = fields.Reference('Priced object', 'get_line_target_models')
@@ -108,13 +115,24 @@ class PriceLine(model.CoopSQL, model.CoopView):
     all_lines = fields.One2Many('billing.price_line', 'master', 'Lines',
         readonly=True, loading='lazy')
     estimated_taxes = fields.Function(
-        fields.Numeric('Estimated Taxes'), 'get_estimated_taxes')
+        fields.Numeric('Estimated Taxes',
+            digits=(16, Eval('currency_digits', DEF_CUR_DIG))), 'get_estimated_taxes')
     estimated_fees = fields.Function(
-        fields.Numeric('Estimated Fees'), 'get_estimated_fees')
+        fields.Numeric('Estimated Fees',
+            digits=(16, Eval('currency_digits', DEF_CUR_DIG))), 'get_estimated_fees')
     tax_lines = fields.One2Many('billing.price_line-tax-relation',
         'price_line', 'Tax Lines')
     fee_lines = fields.One2Many('billing.price_line-fee-relation',
         'price_line', 'Fee Lines')
+    currency = fields.Function(
+        fields.Many2One('currency.currency', 'Currency'),
+        'get_currency_id')
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'get_currency_digits')
+    currency_symbol = fields.Function(
+        fields.Char('Currency Symbol'),
+        'get_currency_symbol')
 
     def get_short_name(self, name):
         if self.on_object:
@@ -257,6 +275,12 @@ class PriceLine(model.CoopSQL, model.CoopView):
         final_date = date.add_frequency(self.frequency, at_date)
         return date.number_of_days_between(at_date, final_date) - 1
 
+    def get_currency(self):
+        if self.contract:
+            return self.contract.currency
+        elif self.master:
+            return self.master.currency
+
 
 class BillingManager(model.CoopSQL, model.CoopView):
     'Billing Manager'
@@ -268,6 +292,9 @@ class BillingManager(model.CoopSQL, model.CoopView):
     __name__ = 'billing.billing_manager'
 
     contract = fields.Many2One('contract.contract', 'Contract')
+    policy_owner = fields.Function(
+        fields.Many2One('party.party', 'Party', states={'invisible': True}),
+        'get_policy_owner_id')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     payment_method = fields.Many2One('billing.payment_method',
@@ -277,18 +304,33 @@ class BillingManager(model.CoopSQL, model.CoopView):
             on_change_with=['payment_method']),
         'on_change_with_payment_mode')
     payment_bank_account = fields.Many2One('party.bank_account',
-        'Payment Bank Account', depends=['payment_mode'],
-        states={'invisible': Eval('payment_mode') != 'direct_debit'})
+        'Payment Bank Account',
+        states={'invisible': Eval('payment_mode') != 'direct_debit'},
+        domain=[('party', '=', Eval('policy_owner'))],
+        depends=['policy_owner'])
+    disbursment_bank_account = fields.Many2One('party.bank_account',
+        'Disbursement Bank Account',
+        states={'invisible': Eval('payment_mode') != 'direct_debit'},
+        domain=[('party', '=', Eval('policy_owner'))],
+        depends=['policy_owner'])
 
     @classmethod
     def __setup__(cls):
         super(BillingManager, cls).__setup__()
         cls._order.insert(0, ('start_date', 'ASC'))
 
+    def init_from_contract(self, contract, start_date):
+        self.start_date = start_date
+        self.payment_method = contract.offered.get_default_payment_method()
+
     def on_change_with_payment_mode(self, name=None):
         if not (hasattr(self, 'payment_method') and self.payment_method):
             return ''
         return self.payment_method.payment_mode
+
+    def get_policy_owner_id(self, name):
+        return (self.contract.get_policy_owner(self.start_date).id
+            if self.contract else None)
 
 
 class BillingPeriod(model.CoopSQL, model.CoopView):
@@ -475,9 +517,7 @@ class Contract():
     def init_billing_manager(self):
         if not self.billing_managers:
             bm = self.new_billing_manager()
-            bm.contract = self
-            bm.start_date = self.start_date
-            bm.payment_method = self.offered.get_default_payment_method()
+            bm.init_from_contract(self, self.start_date)
             self.billing_managers = [bm]
             bm.save()
         if not self.next_billing_date:

@@ -3,8 +3,14 @@
   <field name="name"/>
   <field name="start_date"/>
   <field name="end_date"/>
-  <field name="amount"/>
-  <field name="estimated_fees"/>
-  <field name="estimated_taxes"/>
+  <field name="amount">
+    <suffix name="currency_symbol"/>
+  </field>
+  <field name="estimated_fees">
+    <suffix name="currency_symbol"/>
+  </field>
+  <field name="estimated_taxes">
+    <suffix name="currency_symbol"/>
+  </field>
   <field name="frequency"/>
 </tree>

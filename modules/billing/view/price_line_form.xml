@@ -7,14 +7,23 @@
     <field name="end_date" xexpand="1"/>
     <newline/>
     <label name="amount"/>
-    <field name="amount" xexpand="1"/>
+    <group id="amount">
+      <field name="amount" xexpand="0"/>
+      <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
     <label name="frequency"/>
     <field name="frequency"/>
     <newline/>
     <label name="estimated_fees"/>
-    <field name="estimated_fees"/>
+    <group id="estimated_fees">
+      <field name="estimated_fees"  xexpand="0"/>
+      <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
     <label name="estimated_taxes"/>
-    <field name="estimated_taxes" xexpand="1"/>
+    <group id="estimated_taxes">
+      <field name="estimated_taxes" xexpand="0"/>
+      <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
   </group>
   <field name="all_lines" colspan="1" mode="tree" yfill="1" yexpand="1" view_ids="billing.price_line_expandable_view_tree"/>
   <group id="special_lines" yexpand="1" yfill="1" colspan="1" col="1">

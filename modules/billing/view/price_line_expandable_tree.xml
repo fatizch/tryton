@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <tree string="Pricing Lines">
 	<field name="name"/>
-	<field name="amount"/>
+	<field name="amount">
+        <suffix name="currency_symbol"/>
+    </field>
 </tree>
