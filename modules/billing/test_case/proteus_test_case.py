@@ -60,8 +60,10 @@ def launch_test_case(cfg_dict):
     kinds = {'tax': tax_account_kind, 'fee': fee_account_kind}
 
     for type_, data in chain(
-            izip(repeat('tax'), cfg_dict['Tax'].find([])),
-            izip(repeat('fee'), cfg_dict['Fee'].find([]))):
+            izip(repeat('tax'), cfg_dict['Tax'].find(
+                [('account_for_billing', '=', None)])),
+            izip(repeat('fee'), cfg_dict['Fee'].find(
+                [('account_for_billing', '=', None)]))):
         tmp_account = meths['Account'](
             {
                 'name': 'Account for %s' % data.code,
