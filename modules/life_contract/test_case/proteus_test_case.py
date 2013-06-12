@@ -30,7 +30,7 @@ def launch_test_case(cfg_dict):
     # if len(Contract.find()) >= int(cfg_dict['total_nb']):
     #     return
     # Party = Model.get('party.party')
-    # Product = Model.get('ins_product.product')
+    # Product = Model.get('offered.product')
     # return
     # for on_product in Product.find([('code', '=', 'AAA')]):
     #     on_parties = Party.find()

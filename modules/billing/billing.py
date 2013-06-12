@@ -235,8 +235,8 @@ class PriceLine(model.CoopSQL, model.CoopView):
         f = lambda x: (x, x)
         res = [
             f(''),
-            f('ins_product.product'),
-            f('ins_product.coverage'),
+            f('offered.product'),
+            f('offered.coverage'),
             f('contract.contract'),
             f('contract.subscribed_option'),
             f('ins_contract.covered_data'),
@@ -416,7 +416,7 @@ class ProductPaymentMethodRelation(model.CoopSQL, model.CoopView):
 
     __name__ = 'billing.product-payment_method-relation'
 
-    product = fields.Many2One('ins_product.product', 'Product',
+    product = fields.Many2One('offered.product', 'Product',
         ondelete='CASCADE')
     payment_method = fields.Many2One('billing.payment_method',
         'Payment Method', ondelete='RESTRICT')
@@ -427,7 +427,7 @@ class Product():
     'Product'
 
     __metaclass__ = PoolMeta
-    __name__ = 'ins_product.product'
+    __name__ = 'offered.product'
 
     payment_methods = fields.One2Many(
         'billing.product-payment_method-relation', 'product',
@@ -495,6 +495,8 @@ class Contract():
         new_period_start = date.add_day(last_date, 1)
         new_period_end = date.add_frequency(
             self.get_product_frequency(last_date), last_date)
+        if self.end_date and new_period_end > self.end_date:
+            return (new_period_start, self.end_date)
         return (new_period_start, new_period_end)
 
     @classmethod
@@ -503,8 +505,9 @@ class Contract():
 
     def get_product_frequency(self, at_date):
         res, errs = self.offered.get_result(
-            'frequency',
-            {'date': at_date})
+            'frequency', {
+                'date': at_date,
+                'appliable_conditions_date': self.appliable_conditions_date})
         if not errs:
             return res
 
@@ -616,7 +619,7 @@ class Contract():
             journal=self.get_journal(),
             period=period_id,
             date=billing_date,
-            origin=str(self),
+            origin=utils.convert_to_reference(self),
             billing_period=billing_period,
             )
 

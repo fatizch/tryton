@@ -6,10 +6,14 @@ msgctxt "field:ins_product.rule_sets.loan,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_product.rule_sets.loan,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "model:ins_product.rule_sets.loan,name:"
 msgid "Context functions for Loans."
 msgstr ""
 
-msgctxt "selection:ins_product.coverage,family:"
+msgctxt "selection:offered.coverage,family:"
 msgid "Loan"
 msgstr "Emprunteur"

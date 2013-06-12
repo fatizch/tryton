@@ -8,7 +8,13 @@
             <field name="inherit" ref="distribution.dist_network_view_form"/>
             <field name="name">dist_network_form</field>
         </record>
-
+        <!-- Product -->
+        <record model="ir.ui.view" id="product_view_form">
+            <field name="model">offered.product</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered.product_view_form"/>
+            <field name="name">product_form</field>
+        </record>
         <!-- Commercial Product -->
         <record model="ir.ui.view" id="commercial_product_view_form">
             <field name="model">distribution.commercial_product</field>

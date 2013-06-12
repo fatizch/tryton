@@ -8,7 +8,6 @@ from trytond.modules.coop_utils import utils, fields
 from trytond.modules.coop_utils import date
 
 from trytond.modules.rule_engine import RuleEngineContext
-from trytond.modules.insurance_product import ProductDefinition
 from trytond.modules.insurance_product import EligibilityResultLine
 from trytond.modules.insurance_product.business_rule.business_rule import \
     STATE_ADVANCED, STATE_SUB_SIMPLE
@@ -20,7 +19,6 @@ FAMILY_LIFE = 'life_product.definition'
 __all__ = [
     'LifeItemDescriptor',
     'LifeCoverage',
-    'LifeProductDefinition',
     'LifeEligibilityRule',
     'LifeLossDesc',
     'LifeBenefit',
@@ -39,7 +37,7 @@ class LifeItemDescriptor():
 class LifeCoverage():
     'Coverage'
 
-    __name__ = 'ins_product.coverage'
+    __name__ = 'offered.coverage'
     __metaclass__ = PoolMeta
 
     coverage_amount_rules = fields.One2Many('ins_product.coverage_amount_rule',
@@ -62,28 +60,9 @@ class LifeCoverage():
             cls.family.selection = []
         utils.append_inexisting(cls.family.selection,
             (FAMILY_LIFE, 'Life'))
-        if ('default', 'default') in cls.family.selection:
-            cls.family.selection.remove(('default', 'default'))
 
     def get_is_coverage_amount_needed(self, name=None):
         return not self.is_package and self.family == FAMILY_LIFE
-
-
-class LifeProductDefinition(ProductDefinition):
-    'Life Product Definition'
-
-    __name__ = 'life_product.definition'
-
-    @staticmethod
-    def get_extension_model():
-        return 'extension_life'
-
-    @staticmethod
-    def get_step_model(step_name):
-        steps = {
-            'extension': 'life_contract.extension_life_state',
-        }
-        return steps[step_name]
 
 
 class LifeEligibilityRule():

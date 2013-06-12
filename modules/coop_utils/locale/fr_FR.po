@@ -10,6 +10,14 @@ msgctxt "error:coop.table_of_table:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "field:account.invoice.payment_term,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:account.invoice.payment_term.line,id:"
+msgid ""
+msgstr ""
+
 msgctxt "field:coop.dyn_selection,childs:"
 msgid "Sub values"
 msgstr "Sous valeurs"
@@ -33,6 +41,10 @@ msgstr "Est Utilisé"
 msgctxt "field:coop.dyn_selection,key:"
 msgid "Key"
 msgstr "Clé"
+
+msgctxt "field:coop.dyn_selection,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
 
 msgctxt "field:coop.dyn_selection,my_model_name:"
 msgid "Model Name"
@@ -81,6 +93,10 @@ msgstr "Est Utilisé"
 msgctxt "field:coop.table_of_table,key:"
 msgid "Key"
 msgstr "Clé"
+
+msgctxt "field:coop.table_of_table,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
 
 msgctxt "field:coop.table_of_table,my_model_name:"
 msgid "Model Name"
@@ -206,6 +222,10 @@ msgctxt "field:utils.version_object,main_elem:"
 msgid "Descriptor"
 msgstr "Descripteur"
 
+msgctxt "field:utils.version_object,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:utils.version_object,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
@@ -218,9 +238,21 @@ msgctxt "field:utils.versionned_object,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:utils.versionned_object,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:utils.versionned_object,versions:"
 msgid "Versions"
 msgstr "Versions"
+
+msgctxt "model:account.invoice.payment_term,name:"
+msgid "account.invoice.payment_term"
+msgstr "Conditions de paiement"
+
+msgctxt "model:account.invoice.payment_term.line,name:"
+msgid "account.invoice.payment_term.line"
+msgstr "Ligne de condition de paiement"
 
 msgctxt "model:coop.dyn_selection,name:"
 msgid "Dynamic Selection"
@@ -236,7 +268,7 @@ msgstr "Elément à exporter"
 
 msgctxt "model:coop_utils.export_package,name:"
 msgid "Export Package"
-msgstr ""
+msgstr "Exports groupés"
 
 msgctxt "model:coop_utils.file_selector,name:"
 msgid "File Selector"
@@ -277,6 +309,22 @@ msgstr "Objet Versionné"
 msgctxt "view:coop.dyn_selection:"
 msgid "Dynamic Selection"
 msgstr "Sélection Dynamique"
+
+msgctxt "view:coop_utils.export_instance:"
+msgid "Export Instance"
+msgstr "Elément à exporter"
+
+msgctxt "view:coop_utils.export_instance:"
+msgid "Export instances"
+msgstr ""
+
+msgctxt "view:coop_utils.export_package:"
+msgid "Export Package"
+msgstr "Exports groupés"
+
+msgctxt "view:coop_utils.export_package:"
+msgid "Export Packages"
+msgstr ""
 
 msgctxt "view:coop_utils.file_selector:"
 msgid "File Selection"

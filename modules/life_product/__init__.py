@@ -7,7 +7,6 @@ def register():
     Pool.register(
         LifeItemDescriptor,
         LifeCoverage,
-        LifeProductDefinition,
         LifeEligibilityRule,
         Tranche,
         TrancheVersion,

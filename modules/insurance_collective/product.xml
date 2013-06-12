@@ -2,12 +2,12 @@
 <tryton>
     <data>
         <record model="ir.action.act_window"
-            id="insurance_product.act_product_form">
-            <field name="domain">[('is_group', '=', False)]</field>
+            id="offered.act_product_form">
+            <field name="domain">[('is_group', '=', False), ('kind', '=', 'insurance')]</field>
         </record>
         <record model="ir.action.act_window"
-            id="insurance_product.act_coverage_form">
-            <field name="domain">[('is_group', '=', False), ("is_package", "=", False)]</field>
+            id="offered.act_coverage_form">
+            <field name="domain">[('is_group', '=', False), ("is_package", "=", False), ('kind', '=', 'insurance')]</field>
         </record>
     </data>
 </tryton>

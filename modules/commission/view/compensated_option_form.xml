@@ -4,6 +4,7 @@
     <field name="start_date"/>
     <label name="end_date"/>
     <field name="end_date"/>
+    <newline/>
     <label name="com_option"/>
     <field name="com_option"/>
     <newline/>

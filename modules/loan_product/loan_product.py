@@ -3,24 +3,27 @@ import copy
 
 from trytond.pool import PoolMeta
 
-from trytond.modules.coop_utils import utils
+from trytond.modules.coop_utils import utils, fields
 
 __all__ = [
     'LoanProduct',
     'LoanCoverage',
-
-]
+    ]
 
 
 class LoanProduct():
     'Loan Product'
 
-    __name__ = 'ins_product.product'
+    __name__ = 'offered.product'
     __metaclass__ = PoolMeta
 
-    def get_is_loan_product(self):
+    is_loan = fields.Function(
+        fields.Boolean('Is Loan', states={'invisible': True}),
+        'get_is_loan_product')
+
+    def get_is_loan_product(self, name):
         for coverage in self.coverages:
-            if coverage.get_is_loan_coverage():
+            if coverage.is_loan:
                 return True
         return False
 
@@ -28,8 +31,12 @@ class LoanProduct():
 class LoanCoverage():
     'Loan Coverage'
 
-    __name__ = 'ins_product.coverage'
+    __name__ = 'offered.coverage'
     __metaclass__ = PoolMeta
+
+    is_loan = fields.Function(
+        fields.Boolean('Is Loan', states={'invisible': True}),
+        'get_is_loan_coverage')
 
     @classmethod
     def __setup__(cls):
@@ -39,10 +46,8 @@ class LoanCoverage():
             cls.family.selection = []
         utils.append_inexisting(cls.family.selection,
             ('loan', 'Loan'))
-        if ('default', 'default') in cls.family.selection:
-            cls.family.selection.remove(('default', 'default'))
 
-    def get_is_loan_coverage(self):
+    def get_is_loan_coverage(self, name):
         return self.family == 'loan'
 
     def get_is_coverage_amount_needed(self, name=None):

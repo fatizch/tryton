@@ -1,0 +1,667 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:billing.billing_manager:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:billing.payment_method:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:billing.period:"
+msgid "Billing Period \"%(first)s\" and \"%(second)s\" overlap."
+msgstr ""
+
+msgctxt "error:billing.period:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:billing.price_line-fee-relation:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:billing.price_line-tax-relation:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:billing.price_line:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:billing.product-payment_method-relation:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:account.move,billing_period:"
+msgid "Billing Period"
+msgstr ""
+
+msgctxt "field:account.move.line,second_origin:"
+msgid "Second Origin"
+msgstr ""
+
+msgctxt "field:billing.billing_manager,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:billing.billing_manager,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:billing.billing_manager,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:billing.billing_manager,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:billing.billing_manager,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.billing_manager,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:billing.billing_manager,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:billing.billing_manager,payment_bank_account:"
+msgid "Payment Bank Account"
+msgstr "Compte de Paiement"
+
+msgctxt "field:billing.billing_manager,payment_method:"
+msgid "Payment Method"
+msgstr "Méthode de Paiement"
+
+msgctxt "field:billing.billing_manager,payment_mode:"
+msgid "Payment Mode"
+msgstr "Mode de Paiement"
+
+msgctxt "field:billing.billing_manager,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:billing.billing_manager,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:billing.billing_manager,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:billing.billing_manager,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:billing.billing_process.bill_display,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.billing_process.bill_display,moves:"
+msgid "Bill"
+msgstr ""
+
+msgctxt "field:billing.billing_process.bill_display,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:billing.billing_process.bill_parameters,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:billing.billing_process.bill_parameters,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:billing.billing_process.bill_parameters,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.billing_process.bill_parameters,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:billing.billing_process.bill_parameters,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:billing.payment_method,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:billing.payment_method,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:billing.payment_method,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:billing.payment_method,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.payment_method,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:billing.payment_method,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:billing.payment_method,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:billing.payment_method,payment_mode:"
+msgid "Payment Mode"
+msgstr "Mode de Paiement"
+
+msgctxt "field:billing.payment_method,payment_term:"
+msgid "Payment Term"
+msgstr "Conditions de paiement"
+
+msgctxt "field:billing.payment_method,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:billing.payment_method,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:billing.payment_method,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:billing.period,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:billing.period,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:billing.period,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:billing.period,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:billing.period,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.period,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:billing.period,moves:"
+msgid "Moves"
+msgstr ""
+
+msgctxt "field:billing.period,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:billing.period,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:billing.period,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:billing.period,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:billing.period,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:billing.price_line,all_lines:"
+msgid "Lines"
+msgstr "Lignes"
+
+msgctxt "field:billing.price_line,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:billing.price_line,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:billing.price_line,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:billing.price_line,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:billing.price_line,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:billing.price_line,estimated_fees:"
+msgid "Estimated Fees"
+msgstr ""
+
+msgctxt "field:billing.price_line,estimated_taxes:"
+msgid "Estimated Taxes"
+msgstr ""
+
+msgctxt "field:billing.price_line,fee_lines:"
+msgid "Fee Lines"
+msgstr ""
+
+msgctxt "field:billing.price_line,frequency:"
+msgid "Frequency"
+msgstr "Fréquence"
+
+msgctxt "field:billing.price_line,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.price_line,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:billing.price_line,master:"
+msgid "Master Line"
+msgstr ""
+
+msgctxt "field:billing.price_line,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:billing.price_line,name:"
+msgid "Short Description"
+msgstr ""
+
+msgctxt "field:billing.price_line,on_object:"
+msgid "Priced object"
+msgstr ""
+
+msgctxt "field:billing.price_line,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:billing.price_line,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:billing.price_line,tax_lines:"
+msgid "Tax Lines"
+msgstr "Lignes de taxe"
+
+msgctxt "field:billing.price_line,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:billing.price_line,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:billing.price_line-fee-relation,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:billing.price_line-fee-relation,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:billing.price_line-fee-relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:billing.price_line-fee-relation,fee_desc:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "field:billing.price_line-fee-relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.price_line-fee-relation,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:billing.price_line-fee-relation,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:billing.price_line-fee-relation,price_line:"
+msgid "Price Line"
+msgstr ""
+
+msgctxt "field:billing.price_line-fee-relation,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:billing.price_line-fee-relation,to_recalculate:"
+msgid "Recalculate at billing"
+msgstr ""
+
+msgctxt "field:billing.price_line-fee-relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:billing.price_line-fee-relation,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:billing.price_line-tax-relation,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:billing.price_line-tax-relation,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:billing.price_line-tax-relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:billing.price_line-tax-relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.price_line-tax-relation,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:billing.price_line-tax-relation,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:billing.price_line-tax-relation,price_line:"
+msgid "Price Line"
+msgstr ""
+
+msgctxt "field:billing.price_line-tax-relation,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:billing.price_line-tax-relation,tax_desc:"
+msgid "Tax"
+msgstr "Taxe"
+
+msgctxt "field:billing.price_line-tax-relation,to_recalculate:"
+msgid "Recalculate at billing"
+msgstr ""
+
+msgctxt "field:billing.price_line-tax-relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:billing.price_line-tax-relation,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:billing.product-payment_method-relation,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:billing.product-payment_method-relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:billing.product-payment_method-relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.product-payment_method-relation,is_default:"
+msgid "Default"
+msgstr "Défaut"
+
+msgctxt "field:billing.product-payment_method-relation,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:billing.product-payment_method-relation,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:billing.product-payment_method-relation,payment_method:"
+msgid "Payment Method"
+msgstr "Méthode de Paiement"
+
+msgctxt "field:billing.product-payment_method-relation,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:billing.product-payment_method-relation,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:billing.product-payment_method-relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:billing.product-payment_method-relation,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.contract,billing_managers:"
+msgid "Billing Managers"
+msgstr ""
+
+msgctxt "field:contract.contract,billing_periods:"
+msgid "Billing Periods"
+msgstr ""
+
+msgctxt "field:contract.contract,next_billing_date:"
+msgid "Next Billing Date"
+msgstr ""
+
+msgctxt "field:contract.contract,prices:"
+msgid "Prices"
+msgstr ""
+
+msgctxt "field:coop_account.fee_desc,account_for_billing:"
+msgid "Account for billing"
+msgstr ""
+
+msgctxt "field:coop_account.tax_desc,account_for_billing:"
+msgid "Account for billing"
+msgstr ""
+
+msgctxt "field:ins_contract.covered_element,indemnification_bank_account:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,payment_methods:"
+msgid "Payment Methods"
+msgstr "Méthodes de Paiement"
+
+msgctxt "model:billing.billing_manager,name:"
+msgid "Billing Manager"
+msgstr ""
+
+msgctxt "model:billing.billing_process.bill_display,name:"
+msgid "Bill Displayer"
+msgstr ""
+
+msgctxt "model:billing.billing_process.bill_parameters,name:"
+msgid "Bill Parameters"
+msgstr ""
+
+msgctxt "model:billing.payment_method,name:"
+msgid "Payment Method"
+msgstr "Méthode de Paiement"
+
+msgctxt "model:billing.period,name:"
+msgid "Billing Period"
+msgstr ""
+
+msgctxt "model:billing.price_line,name:"
+msgid "Price Line"
+msgstr ""
+
+msgctxt "model:billing.price_line-fee-relation,name:"
+msgid "Price Line Fee Relation"
+msgstr ""
+
+msgctxt "model:billing.price_line-tax-relation,name:"
+msgid "Price Line Tax Relation"
+msgstr ""
+
+msgctxt "model:billing.product-payment_method-relation,name:"
+msgid "Product to Payment Method Relation definition"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_open_billing_period_form"
+msgid "Billing Periods"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_open_move_form"
+msgid "Moves"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_payment_method"
+msgid "Payment Methods"
+msgstr "Méthodes de Paiement"
+
+msgctxt "model:ir.action,name:launch_billing_process"
+msgid "Billing"
+msgstr "Cotisation"
+
+msgctxt "model:ir.ui.menu,name:menu_payment_method"
+msgid "Payment Methods"
+msgstr "Méthodes de Paiement"
+
+msgctxt "selection:billing.payment_method,payment_mode:"
+msgid "Cash"
+msgstr "Cash"
+
+msgctxt "selection:billing.payment_method,payment_mode:"
+msgid "Check"
+msgstr ""
+
+msgctxt "selection:billing.payment_method,payment_mode:"
+msgid "Direct Debit"
+msgstr ""
+
+msgctxt "selection:billing.payment_method,payment_mode:"
+msgid "Wire Transfer"
+msgstr ""
+
+msgctxt "selection:billing.price_line,frequency:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:billing.price_line,frequency:"
+msgid "Half Yearly"
+msgstr "Semestriel"
+
+msgctxt "selection:billing.price_line,frequency:"
+msgid "Monthly"
+msgstr "Mensuel"
+
+msgctxt "selection:billing.price_line,frequency:"
+msgid "Quarterly"
+msgstr "Trimestriel"
+
+msgctxt "selection:billing.price_line,frequency:"
+msgid "Yearly"
+msgstr "Annuel"
+
+msgctxt "view:billing.billing_manager:"
+msgid "Billing Managers"
+msgstr ""
+
+msgctxt "view:billing.billing_manager:"
+msgid "billing_manager"
+msgstr ""
+
+msgctxt "view:billing.billing_process.bill_display:"
+msgid "Bill Result"
+msgstr ""
+
+msgctxt "view:billing.billing_process.bill_parameters:"
+msgid "Bill Parameters"
+msgstr ""
+
+msgctxt "view:billing.payment_method:"
+msgid "Payment Method"
+msgstr "Méthode de Paiement"
+
+msgctxt "view:billing.payment_method:"
+msgid "Payment Methods"
+msgstr "Méthode de Paiement"
+
+msgctxt "view:billing.period:"
+msgid "Billing Period"
+msgstr ""
+
+msgctxt "view:billing.period:"
+msgid "Billing Periods"
+msgstr ""
+
+msgctxt "view:billing.price_line-fee-relation:"
+msgid "Fee Line"
+msgstr ""
+
+msgctxt "view:billing.price_line-fee-relation:"
+msgid "Fee Lines"
+msgstr ""
+
+msgctxt "view:billing.price_line-tax-relation:"
+msgid "Tax Line"
+msgstr "Ligne de taxe"
+
+msgctxt "view:billing.price_line-tax-relation:"
+msgid "Tax Lines"
+msgstr "Lignes de taxe"
+
+msgctxt "view:billing.price_line:"
+msgid "Price Line"
+msgstr ""
+
+msgctxt "view:billing.price_line:"
+msgid "Pricing Lines"
+msgstr ""
+
+msgctxt "view:billing.product-payment_method-relation:"
+msgid "Payment Method"
+msgstr "Méthode de Paiement"
+
+msgctxt "view:billing.product-payment_method-relation:"
+msgid "Payment Methods"
+msgstr "Méthodes de Paiement"
+
+msgctxt "view:contract.contract:"
+msgid "Billing"
+msgstr "Cotisation"
+
+msgctxt "view:contract.contract:"
+msgid "Calculate Prices"
+msgstr ""
+
+msgctxt "view:offered.product:"
+msgid "Payment Methods"
+msgstr "Méthodes de Paiement"
+
+msgctxt "wizard_button:billing.billing_process,bill_display,accept_bill:"
+msgid "Accept"
+msgstr ""
+
+msgctxt "wizard_button:billing.billing_process,bill_display,cancel_bill:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:billing.billing_process,bill_parameters,bill_display:"
+msgid "Preview"
+msgstr ""
+
+msgctxt "wizard_button:billing.billing_process,bill_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"

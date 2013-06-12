@@ -2,7 +2,7 @@
 from trytond.pyson import Eval, Or
 
 from trytond.modules.coop_utils import model, fields
-from trytond.modules.insurance_product.product import DEF_CUR_DIG
+from trytond.modules.offered.offered import DEF_CUR_DIG
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED
 

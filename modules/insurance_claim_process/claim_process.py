@@ -90,6 +90,8 @@ class ClaimProcess(CoopProcessFramework):
                         'loss': loss,
                         'claim': self,
                         'date': loss.start_date,
+                        'appliable_conditions_date':
+                        contract.appliable_conditions_date,
                     })
                 if errs:
                     return False, errs

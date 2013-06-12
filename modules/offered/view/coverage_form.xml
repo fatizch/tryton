@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<data>
+<xpath expr="/form/notebook/page[@id='summary']" position="after">
+        <page string="Complementary Data" id="complementary_data">
+            <field name="complementary_data_def" colspan="4"/>
+        </page>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='managers']" position="before">
+        <page string="Coverages" id="package"
+            states="{'invisible': Bool(~Eval('is_package'))}">
+            <field name="coverages_in_package"/>
+        </page>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"
+        position="inside">
+        <label name="kind"/>
+        <field name="kind"/>
+        <label name="currency"/>
+        <field name="currency"/>
+        <newline/>
+        <label name="subscription_behaviour"/>
+        <field name="subscription_behaviour"/>
+        <newline/>
+    </xpath>
+</data>

@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- Regime -->
+        <record model="ir.ui.view" id="regime_view_form">
+            <field name="model">health.regime</field>
+            <field name="type">form</field>
+            <field name="name">regime_form</field>
+        </record>
+        <record model="ir.ui.view" id="regime_view_tree">
+            <field name="model">health.regime</field>
+            <field name="type">tree</field>
+            <field name="name">regime_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_regime_form">
+            <field name="name">Regimes</field>
+            <field name="res_model">health.regime</field>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_regime_form_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="regime_view_tree"/>
+            <field name="act_window" ref="act_regime_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_regime_form_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="regime_view_form"/>
+            <field name="act_window" ref="act_regime_form"/>
+        </record>
+        <menuitem parent="health.menu_health_configuration" sequence="1" id="menu_regime_form"
+            icon="tryton-list" action="act_regime_form"/>
+
+        <!-- Insurance Fund -->
+        <record model="ir.ui.view" id="insurance_fund_view_form">
+            <field name="model">health.insurance_fund</field>
+            <field name="type">form</field>
+            <field name="name">insurance_fund_form</field>
+        </record>
+        <record model="ir.ui.view" id="insurance_fund_view_tree">
+            <field name="model">health.insurance_fund</field>
+            <field name="type">tree</field>
+            <field name="name">insurance_fund_tree</field>
+        </record>
+
+        <record model="ir.action.act_window" id="act_insurance_fund_form">
+            <field name="name">Insurance Funds</field>
+            <field name="res_model">health.insurance_fund</field>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_insurance_fund_form_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="insurance_fund_view_tree"/>
+            <field name="act_window" ref="act_insurance_fund_form"/>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_insurance_fund_form_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="insurance_fund_view_form"/>
+            <field name="act_window" ref="act_insurance_fund_form"/>
+        </record>
+
+        <menuitem parent="health.menu_health_configuration" sequence="2" id="menu_insurance_fund_form"
+            icon="tryton-list" action="act_insurance_fund_form"/>
+
+        </data>
+        <data skiptest="1">
+
+            <record model="health.regime" id="rsi">
+                <field name="name">REGIME SOCIAL DES INDEPENDANTS</field>
+                <field name="code">03</field>
+                <field name="short_name">RSI</field>
+            </record>
+        </data>
+</tryton>

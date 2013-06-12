@@ -6,8 +6,9 @@
         <field name="deductible_duration" widget="selection"/>
 
     </xpath> -->
-    <xpath expr="/form/notebook" position="inside">
-        <page string="Covered Data" id="covered_data">
+    <xpath expr="/form/notebook/page[@id='status_history']" position="before">
+        <page string="Covered Data" id="covered_data"
+            states="{'invisible': Eval('coverage_kind') != 'insurance'}">
             <field name="covered_data" colspan="4"/>
         </page>
     </xpath>

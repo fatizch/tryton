@@ -36,8 +36,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def get_models(cls):
         return {
-            'Product': 'ins_product.product',
-            'Coverage': 'ins_product.coverage',
+            'Product': 'offered.product',
+            'Coverage': 'offered.coverage',
             'Pricing': 'ins_product.pricing_rule',
             'Currency': 'currency.currency',
             'Eligibility': 'ins_product.eligibility_rule',
@@ -198,7 +198,7 @@ return True'''
     def test0004_testNumberGeneratorCreation(self):
         ng = self.Sequence()
         ng.name = 'Contract Sequence'
-        ng.code = 'ins_product.product'
+        ng.code = 'offered.product'
         ng.prefix = 'Ctr'
         ng.suffix = 'Y${year}'
         ng.save()
@@ -233,7 +233,7 @@ return True'''
             Tests process desc creation
         '''
         rule = self.RuleEngine.search([('name', '=', 'test_rule')])[0]
-        ng = self.Sequence.search([('code', '=', 'ins_product.product')])[0]
+        ng = self.Sequence.search([('code', '=', 'offered.product')])[0]
 
         # Coverage A
 

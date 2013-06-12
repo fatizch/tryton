@@ -3,7 +3,7 @@ from trytond.pyson import Eval, Or
 from trytond.modules.coop_utils import model, business, fields, utils
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot
-from trytond.modules.insurance_product.product import CONFIG_KIND
+from trytond.modules.offered.offered import CONFIG_KIND
 from trytond.modules.insurance_product import EligibilityResultLine
 
 __all__ = [
@@ -25,19 +25,19 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
 
     sub_elem_config_kind = fields.Selection(
         CONFIG_KIND, 'Sub Elem Conf. kind', states={
-            'invisible': Eval('offered_kind') != 'ins_product.coverage',
-            'required': Eval('offered_kind') == 'ins_product.coverage',
+            'invisible': Eval('offered_kind') != 'offered.coverage',
+            'required': Eval('offered_kind') == 'offered.coverage',
         })
     sub_elem_rule = fields.Many2One(
         'rule_engine', 'Sub Elem Rule Engine', depends=['config_kind'],
         states={
-            'invisible': Eval('offered_kind') != 'ins_product.coverage',
+            'invisible': Eval('offered_kind') != 'offered.coverage',
         })
     sub_elem_rule_complementary_data = fields.Dict(
-        'ins_product.complementary_data_def', 'Rule Complementary Data',
+        'offered.complementary_data_def', 'Rule Complementary Data',
         on_change_with=['sub_elem_rule', 'sub_elem_rule_complementary_data'],
         states={
-            'invisible': Eval('offered_kind') != 'ins_product.coverage',
+            'invisible': Eval('offered_kind') != 'offered.coverage',
         })
     subscriber_classes = fields.Selection(SUBSCRIBER_CLASSES,
         'Can be subscribed', states={
@@ -50,7 +50,7 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
         states={
             'invisible': Or(
                 Eval('sub_elem_config_kind') != 'simple',
-                Eval('offered_kind') != 'ins_product.coverage',
+                Eval('offered_kind') != 'offered.coverage',
             )
         }, depends=['sub_elem_config_kind'])
     offered_kind = fields.Function(

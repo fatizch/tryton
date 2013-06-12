@@ -24,8 +24,8 @@ class MoveLine:
     @classmethod
     def _get_origin(cls):
         return [
-            'ins_product.product',
-            'ins_product.coverage',
+            'offered.product',
+            'offered.coverage',
             ]
 
     @classmethod

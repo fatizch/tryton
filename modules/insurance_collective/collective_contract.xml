@@ -13,16 +13,16 @@
       <field name="model">contract.contract</field>
       <field name="type">form</field>
       <field name="inherit" ref="contract.contract_view_form"/>
-      <field name="arch" type="xml"/>
+      <field name="name">contract_form</field>
     </record>
     <!-- View for the main menu and the event -->
     <record model="ir.action.act_window" id="act_contract_form">
       <field name="name">Group Contract</field>
       <field name="res_model">contract.contract</field>
-      <field name="domain">[('kind', '=', 'group')]</field>
+      <field name="domain">[('is_group', '=', True)]</field>
     </record>
     <record model="ir.action.act_window" id="contract.act_contract_form">
-      <field name="domain">[('kind', '=', 'individual')]</field>
+      <field name="domain">[('is_group', '=', False), ('product_kind', '=', 'insurance')]</field>
     </record>
     <!-- View that connect the form in the tree with the specification -->
     <record model="ir.action.act_window.view" id="act_contract_form_view1">

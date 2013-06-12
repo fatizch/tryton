@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form string="contract">
-  <group id="Administrative data">
     <label name="contract_number"/>
     <field name="contract_number"/>
     <label name="status"/>
@@ -9,14 +8,8 @@
     <field name="start_date"/>
     <label name="end_date"/>
     <field name="end_date"/>
-    <newline/>
     <label name="subscriber"/>
     <field name="subscriber"/>
-    <label name="offered"/>
-    <field name="offered"/>
-    <label name="kind"/>
-    <field name="kind"/>
-  </group>
   <notebook colspan="4">
     <page string="Options" id="options">
       <field name="options" colspan="4"/>
@@ -26,6 +19,14 @@
     </page>
     <page string="Documents" id="documents">
       <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" mode="form"/>
+    </page>
+    <page string="Administration" id="admin">
+      <label name="product_kind"/>
+      <field name="product_kind"/>
+      <label name="offered"/>
+      <field name="offered"/>
+      <label name="appliable_conditions_date"/>
+      <field name="appliable_conditions_date"/>
     </page>
   </notebook>
 </form>

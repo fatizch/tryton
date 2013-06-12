@@ -50,6 +50,10 @@ msgctxt "field:party.bank,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
+msgctxt "field:party.bank,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:party.bank,party:"
 msgid "Party"
 msgstr "Tiers"
@@ -105,6 +109,10 @@ msgstr "ID"
 msgctxt "field:party.bank_account,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
+
+msgctxt "field:party.bank_account,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
 
 msgctxt "field:party.bank_account,party:"
 msgid "Party"
@@ -166,6 +174,10 @@ msgctxt "field:party.bank_account_number,kind:"
 msgid "Kind"
 msgstr "Type"
 
+msgctxt "field:party.bank_account_number,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:party.bank_account_number,number:"
 msgid "Number"
 msgstr "Numéro"
@@ -225,6 +237,10 @@ msgstr "RIB"
 msgctxt "view:party.bank_account_number:"
 msgid "Account Number"
 msgstr "Numéro de Compte"
+
+msgctxt "view:party.party:"
+msgid "Bank"
+msgstr "Banque"
 
 msgctxt "view:party.party:"
 msgid "Bank accounts"

@@ -12,8 +12,8 @@ from trytond.modules.insurance_product.test_case import create_or_update_folder
 
 def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['Currency'] = Model.get('currency.currency')
-    cfg_dict['Coverage'] = Model.get('ins_product.coverage')
-    cfg_dict['Product'] = Model.get('ins_product.product')
+    cfg_dict['Coverage'] = Model.get('offered.coverage')
+    cfg_dict['Product'] = Model.get('offered.product')
     cfg_dict['TreeElement'] = Model.get('rule_engine.tree_element')
     cfg_dict['Context'] = Model.get('rule_engine.context')
     cfg_dict['RuleEngine'] = Model.get('rule_engine')
@@ -35,7 +35,7 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['Tranche'] = Model.get('tranche.tranche')
     cfg_dict['LossDesc'] = Model.get('ins_product.loss_desc')
     cfg_dict['ComplementaryData'] = Model.get(
-        'ins_product.complementary_data_def')
+        'offered.complementary_data_def')
     cfg_dict['ItemDesc'] = Model.get('ins_product.item_desc')
     return cfg_dict
 
@@ -52,7 +52,7 @@ def get_or_create_product(cfg_dict, code, name, coverages=None, date=None):
     if coverages:
         product.coverages[:] = coverages
     product.contract_generator = get_or_create_generator(
-        cfg_dict, 'ins_product.product')
+        cfg_dict, 'offered.product')
     return product
 
 
@@ -288,7 +288,7 @@ def create_AAA_Product(cfg_dict, code, name):
     product_a.item_descriptors.append(item_desc)
 
     product_a.contract_generator = get_or_create_generator(
-        cfg_dict, 'ins_product.product')
+        cfg_dict, 'offered.product')
     proteus_tools.try_to_save_object(cfg_dict, product_a)
 
 
@@ -341,7 +341,7 @@ def create_BBB_product(cfg_dict, code, name):
     product_b = get_or_create_product(cfg_dict, code, name)
     if product_b.id > 0:
         return product_b
-    coverage = Model.get('ins_product.coverage')
+    coverage = Model.get('offered.coverage')
 
     rule = get_or_create_rule_for_birthdate_eligibility(
         cfg_dict, get_or_create_context(cfg_dict, 'Default Context'),
@@ -385,7 +385,7 @@ def create_BBB_product(cfg_dict, code, name):
     product_b.coverages.append(coverage_d)
     product_b.eligibility_rules.append(erm_b)
     product_b.contract_generator = get_or_create_generator(
-        cfg_dict, 'ins_product.product')
+        cfg_dict, 'offered.product')
     proteus_tools.try_to_save_object(cfg_dict, product_b)
 
 

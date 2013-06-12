@@ -30,6 +30,10 @@ msgctxt "field:country.zipcode,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
+msgctxt "field:country.zipcode,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:country.zipcode,rec_name:"
 msgid ""
 msgstr " "

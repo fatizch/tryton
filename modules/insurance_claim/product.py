@@ -10,7 +10,7 @@ __al__ = [
 class ClaimCoverage():
     'Coverage'
 
-    __name__ = 'ins_product.coverage'
+    __name__ = 'offered.coverage'
     __metaclass__ = PoolMeta
 
     def get_possible_benefits(self, loss_desc=None, event_desc=None,

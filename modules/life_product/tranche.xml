@@ -30,7 +30,7 @@
             <field name="view" ref="tranche_view_form"/>
             <field name="act_window" ref="act_model_tranche"/>
         </record>
-        <menuitem parent="insurance_product.menu_product_configuration"
+        <menuitem parent="offered.menu_product_configuration"
             action="act_model_tranche" id="menu_model_tranche"/>
 
         <!-- *******************************************

@@ -27,5 +27,5 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
         return 0
 
     def get_parents(self):
-        return self.__class__.search([
+        return self.search([
                 ('left', '<', self.left), ('right', '>', self.right)])

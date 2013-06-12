@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <menuitem name="Health" id="menu_health" sequence="15"/>
+        <menuitem name="Configuration" parent="menu_health"
+            id="menu_health_configuration" sequence="100" icon="tryton-preferences"/>
+    </data>
+</tryton>

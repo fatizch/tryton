@@ -1,20 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from proteus import Model
-import proteus_tools
-
 from trytond.modules.rule_engine.test_case import create_or_update_folder
 from trytond.modules.rule_engine.test_case import append_folder_to_context
 from trytond.modules.rule_engine.test_case import get_or_create_context
 
 
-def update_models(cfg_dict):
-    pass
-
-
 def launch_test_case(cfg_dict):
-    update_models(cfg_dict)
-    proteus_tools.set_global_search('ins_product.product')
     default_context = get_or_create_context(cfg_dict, 'Default Context')
     person_folder = create_or_update_folder(cfg_dict,
         'ins_product.rule_sets.person')

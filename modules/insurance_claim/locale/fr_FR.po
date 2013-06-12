@@ -82,6 +82,10 @@ msgctxt "field:ins_claim.claim,main_contract:"
 msgid "Main Contract"
 msgstr "Contrat Principal"
 
+msgctxt "field:ins_claim.claim,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:ins_claim.claim,name:"
 msgid "Number"
 msgstr "Numéro"
@@ -145,6 +149,10 @@ msgstr "ID"
 msgctxt "field:ins_claim.claim.history,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
+
+msgctxt "field:ins_claim.claim.history,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
 
 msgctxt "field:ins_claim.claim.history,name:"
 msgid "Number"
@@ -246,6 +254,10 @@ msgctxt "field:ins_claim.indemnification,manual:"
 msgid "Manual Calculation"
 msgstr "Calcul Manuel"
 
+msgctxt "field:ins_claim.indemnification,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:ins_claim.indemnification,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -314,6 +326,10 @@ msgctxt "field:ins_claim.indemnification_detail,kind:"
 msgid "Kind"
 msgstr "Type"
 
+msgctxt "field:ins_claim.indemnification_detail,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:ins_claim.indemnification_detail,nb_of_unit:"
 msgid "Nb of Unit"
 msgstr "Nombre d'Unité"
@@ -378,6 +394,10 @@ msgctxt "field:ins_claim.indemnification_displayer,indemnification_displayer:"
 msgid "Indemnification"
 msgstr "Indemnisation"
 
+msgctxt "field:ins_claim.indemnification_displayer,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:ins_claim.indemnification_displayer,selection:"
 msgid "Selection"
 msgstr "Sélection"
@@ -409,6 +429,10 @@ msgstr "Indemnisations"
 msgctxt "field:ins_claim.indemnification_selection,modified:"
 msgid "Modified"
 msgstr "Modifié"
+
+msgctxt "field:ins_claim.indemnification_selection,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
 
 msgctxt "field:ins_claim.indemnification_selection,search_size:"
 msgid "Search Size"
@@ -461,6 +485,10 @@ msgstr "Préjudice Initial"
 msgctxt "field:ins_claim.loss,multi_level_view:"
 msgid "Delivered Services"
 msgstr "Prestations Fournies"
+
+msgctxt "field:ins_claim.loss,must_expand_tree:"
+msgid ""
+msgstr ""
 
 msgctxt "field:ins_claim.loss,possible_loss_descs:"
 msgid "Possible Loss Descs"
@@ -538,10 +566,6 @@ msgctxt "field:ins_contract.expense,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.coverage,is_coverage_amount_needed:"
-msgid "Coverage Amount Needed"
-msgstr "Montant de Couverture Nécessaire"
-
 msgctxt "field:ins_product.request_finder,tmp_1:"
 msgid "Claim"
 msgstr "Sinistre"
@@ -549,6 +573,14 @@ msgstr "Sinistre"
 msgctxt "field:ins_product.rule_sets.claim,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ins_product.rule_sets.claim,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:offered.coverage,is_coverage_amount_needed:"
+msgid "Coverage Amount Needed"
+msgstr "Montant de Couverture Nécessaire"
 
 msgctxt "model:ins_claim.claim,name:"
 msgid "Claim"
@@ -704,7 +736,7 @@ msgstr "Réouvert"
 
 msgctxt "selection:ins_claim.claim.history,sub_status:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:ins_claim.claim.history,sub_status:"
 msgid "Instruction"
@@ -799,10 +831,6 @@ msgid "Quarter"
 msgstr "Trimestre"
 
 msgctxt "selection:ins_claim.indemnification_detail,unit:"
-msgid "Unit"
-msgstr "Unité"
-
-msgctxt "selection:ins_claim.indemnification_detail,unit:"
 msgid "Week"
 msgstr "Semaine"
 
@@ -853,6 +881,10 @@ msgstr "Prestation Fournie"
 msgctxt "selection:ins_product.request_finder,kind:"
 msgid "Claim"
 msgstr "Sinistre"
+
+msgctxt "selection:offered.coverage,family:"
+msgid ""
+msgstr ""
 
 msgctxt "selection:party.contact_history,for_object_ref:"
 msgid "Claim"

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form" position="inside">
+        <newline/>
+        <label name="regime"/>
+        <field name="regime"/>
+        <label name="department"/>
+        <field name="department" xexpand="0"/>
+        <label name="insurance_fund"/>
+        <field name="insurance_fund"/>
+    </xpath>
+</data>

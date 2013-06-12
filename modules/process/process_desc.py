@@ -595,8 +595,7 @@ class Code(ModelSQL, ModelView):
 
     __name__ = 'process.code'
 
-    technical_kind = fields.Selection(
-        [
+    technical_kind = fields.Selection([
             ('step_before', 'Before'),
             ('step_after', 'After'),
             ('transition', 'Transition')],
@@ -607,7 +606,7 @@ class Code(ModelSQL, ModelView):
     on_model = fields.Function(
         fields.Many2One('ir.model', 'On Model'),
         'get_on_model')
-    method_name = fields.Char('Method Name')
+    method_name = fields.Char('Method Name', required=True)
     parent_step = fields.Many2One(
         'process.step_desc', 'Parent Step', ondelete='CASCADE')
     parent_transition = fields.Many2One(

@@ -10,14 +10,6 @@ msgctxt "error:tranche.tranche_version:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "field:ins_product.coverage,coverage_amount_rules:"
-msgid ""
-msgstr ""
-
-msgctxt "field:ins_product.coverage,is_coverage_amount_needed:"
-msgid ""
-msgstr ""
-
 msgctxt "field:ins_product.eligibility_rule,max_age:"
 msgid "Maximum Age"
 msgstr "Age Maximum"
@@ -38,9 +30,13 @@ msgctxt "field:ins_product.item_desc,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:life_product.definition,id:"
-msgid "ID"
-msgstr "ID"
+msgctxt "field:offered.coverage,coverage_amount_rules:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,is_coverage_amount_needed:"
+msgid ""
+msgstr ""
 
 msgctxt "field:tranche.tranche,ceiling:"
 msgid "Current Ceiling"
@@ -73,6 +69,10 @@ msgstr "ID"
 msgctxt "field:tranche.tranche,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
+
+msgctxt "field:tranche.tranche,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
 
 msgctxt "field:tranche.tranche,name:"
 msgid "Name"
@@ -126,6 +126,10 @@ msgctxt "field:tranche.tranche_version,main_elem:"
 msgid "Descriptor"
 msgstr "Descripteur"
 
+msgctxt "field:tranche.tranche_version,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:tranche.tranche_version,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -158,10 +162,6 @@ msgctxt "model:ir.ui.menu,name:menu_model_tranche"
 msgid "Tranches"
 msgstr "Tranches"
 
-msgctxt "model:life_product.definition,name:"
-msgid "Life Product Definition"
-msgstr "Définition du Produit"
-
 msgctxt "model:tranche.tranche,name:"
 msgid "Tranche"
 msgstr "Tranche"
@@ -170,11 +170,11 @@ msgctxt "model:tranche.tranche_version,name:"
 msgid "Tranche Version"
 msgstr ""
 
-msgctxt "selection:ins_product.coverage,family:"
+msgctxt "selection:offered.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
 
-msgctxt "view:ins_product.coverage:"
+msgctxt "view:offered.coverage:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"
 

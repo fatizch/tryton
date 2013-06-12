@@ -100,3 +100,11 @@ class Address():
         if self.country and self.country.code != 'FR':
             res += self.country.name
         return res
+
+    def get_department(self):
+        if not self.zip:
+            return ''
+        if self.zip[0:2] in ['97', '98']:
+            return self.zip[0:3]
+        else:
+            return self.zip[0:2]

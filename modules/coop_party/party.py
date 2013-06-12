@@ -93,7 +93,7 @@ class Party(model.CoopSQL):
     @classmethod
     def __setup__(cls):
         super(Party, cls).__setup__()
-        cls._order.insert(0, ('name', 'ASC'))
+        # cls._order.insert(0, ('name', 'ASC'))
 
         #this loop will add for each One2Many role, a function field is_role
         for field_name in dir(cls):

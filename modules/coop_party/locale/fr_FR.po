@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:party.address:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:party.address_kind:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -14,6 +18,10 @@ msgctxt "error:party.contact_mechanism:"
 msgid "Invalid Email !"
 msgstr "e-Mail Invalide"
 
+msgctxt "error:party.contact_mechanism:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:party.generic_actor:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -23,6 +31,10 @@ msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:party.party-relation:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:party.party:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -74,6 +86,10 @@ msgctxt "field:party.actor,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:party.actor,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:party.actor,party:"
 msgid "Party"
 msgstr "Tiers"
@@ -85,6 +101,10 @@ msgstr "Référence"
 msgctxt "field:party.address,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
+
+msgctxt "field:party.address,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:party.address,kind:"
 msgid "Kind"
@@ -121,6 +141,10 @@ msgstr "Est Utilisé"
 msgctxt "field:party.address_kind,key:"
 msgid "Key"
 msgstr "Clé"
+
+msgctxt "field:party.address_kind,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
 
 msgctxt "field:party.address_kind,my_model_name:"
 msgid "Model Name"
@@ -194,6 +218,10 @@ msgctxt "field:party.contact_history,media:"
 msgid "Media"
 msgstr ""
 
+msgctxt "field:party.contact_history,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:party.contact_history,party:"
 msgid "Actor"
 msgstr "Acteur"
@@ -222,6 +250,10 @@ msgctxt "field:party.contact_history,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:party.contact_mechanism,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
 msgctxt "field:party.generic_actor,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -241,6 +273,10 @@ msgstr "Est Utilisé"
 msgctxt "field:party.generic_actor,kind:"
 msgid "Kind"
 msgstr "Type"
+
+msgctxt "field:party.generic_actor,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
 
 msgctxt "field:party.generic_actor,party:"
 msgid "Party"
@@ -285,6 +321,10 @@ msgstr "Est Utilisé"
 msgctxt "field:party.generic_actor_kind,key:"
 msgid "Key"
 msgstr "Clé"
+
+msgctxt "field:party.generic_actor_kind,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
 
 msgctxt "field:party.generic_actor_kind,my_model_name:"
 msgid "Model Name"
@@ -341,6 +381,10 @@ msgstr "Société"
 msgctxt "field:party.party,is_person:"
 msgid "Person"
 msgstr "Personne"
+
+msgctxt "field:party.party,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
 
 msgctxt "field:party.party,logo:"
 msgid "Logo"
@@ -402,6 +446,10 @@ msgctxt "field:party.party-relation,kind:"
 msgid "Kind"
 msgstr "Type"
 
+msgctxt "field:party.party-relation,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:party.party-relation,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -449,6 +497,10 @@ msgstr "Est Utilisé"
 msgctxt "field:party.party_relation_kind,key:"
 msgid "Key"
 msgstr "Clé"
+
+msgctxt "field:party.party_relation_kind,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
 
 msgctxt "field:party.party_relation_kind,my_model_name:"
 msgid "Model Name"
@@ -645,10 +697,6 @@ msgstr "Historique des Contacts"
 msgctxt "view:party.party:"
 msgid "Company"
 msgstr "Société"
-
-msgctxt "view:party.party:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
 
 msgctxt "view:party.party:"
 msgid "Relations"

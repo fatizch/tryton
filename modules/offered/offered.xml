@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- *******************************************
+            ************** Menus **************
+            ******************************************* -->
+        <!-- Application Entry point -->
+        <menuitem name="Laboratory" id="menu_product" sequence="20"/>
+        <menuitem name="Configuration" parent="menu_product"
+            id="menu_product_configuration" sequence="100" icon="tryton-preferences"/>
+        <!-- Moving existing Entry Points -->
+        <menuitem parent="menu_product_configuration" name="Rule Engine"
+            id="rule_engine.menu_rule_engine" sequence="100"/>
+        <!-- *******************************************
+            ************** Offered **************
+            ******************************************* -->
+        <record model="ir.ui.view" id="offered_view_tree">
+            <field name="model">offered.offered</field>
+            <field name="type">tree</field>
+            <field name="name">offered_tree</field>
+        </record>
+        <record model="ir.ui.view" id="offered_view_form">
+            <field name="model">offered.offered</field>
+            <field name="type">form</field>
+            <field name="name">offered_form</field>
+        </record>
+        <!-- *******************************************
+            ************** Product **************
+            ******************************************* -->
+        <record model="ir.ui.view" id="product_view_form">
+            <field name="model">offered.product</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered_view_form"/>
+            <field name="name">product_form</field>
+        </record>
+        <record model="ir.ui.view" id="product_view_tree">
+            <field name="model">offered.product</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="offered_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+
+        <!-- View for the main menu and the event -->
+        <record model="ir.action.act_window" id="act_product_form">
+            <field name="name">Products</field>
+            <field name="res_model">offered.product</field>
+        </record>
+
+        <!-- View that connects the form in the tree with the specification -->
+        <record model="ir.action.act_window.view" id="act_product_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="product_view_tree"/>
+            <field name="act_window" ref="act_product_form"/>
+        </record>
+
+        <!-- View for the edition or the Form of product -->
+        <record model="ir.action.act_window.view" id="act_product_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="product_view_form"/>
+            <field name="act_window" ref="act_product_form"/>
+        </record>
+
+        <menuitem parent="menu_product" sequence="3" id="menu_product_form"
+            icon="tryton-list" action="act_product_form"/>
+
+        <!--################################################################ -->
+        <!-- Contract Number Generator -->
+        <!--################################################################ -->
+        <record model="ir.sequence.type" id="sequence_type_contract_number">
+            <field name="name">Contract Number</field>
+            <field name="code">offered.product</field>
+        </record>
+        <record model="ir.sequence.type-res.group" id="sequence_type_contract_number_group_admin">
+            <field name="sequence_type" ref="sequence_type_contract_number"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
+    </data>
+</tryton>

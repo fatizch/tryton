@@ -5,7 +5,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Or, Bool
 
 from trytond.modules.coop_utils import utils, date, model, fields
-from trytond.modules.insurance_product.product import DEF_CUR_DIG, CONFIG_KIND
+from trytond.modules.offered.offered import DEF_CUR_DIG, CONFIG_KIND
 from trytond.modules.insurance_product import PricingResultLine
 from trytond.modules.insurance_product import PricingResultDetail
 from trytond.modules.insurance_product.business_rule.business_rule import \
@@ -318,7 +318,7 @@ class PricingComponent(model.CoopSQL, model.CoopView):
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'advanced')))})
     rule_complementary_data = fields.Dict(
-        'ins_product.complementary_data_def', 'Rule Complementary Data',
+        'offered.complementary_data_def', 'Rule Complementary Data',
         on_change_with=['rule', 'rule_complementary_data'],
         states={
             'invisible': Or(

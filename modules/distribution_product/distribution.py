@@ -5,6 +5,7 @@ from trytond.modules.coop_utils import model, fields, utils, coop_string
 __all__ = [
     'DistributionNetwork',
     'CommercialProduct',
+    'Product',
     'DistributionNetworkComProductRelation',
     ]
 
@@ -41,12 +42,23 @@ class DistributionNetwork():
         return result
 
 
+class Product():
+    'Product'
+
+    __name__ = 'offered.product'
+    __metaclass__ = PoolMeta
+
+    com_products = fields.One2Many('distribution.commercial_product',
+        'product', 'Commercial Products',
+        states={'invisible': Eval('product_kind') != 'insurance'})
+
+
 class CommercialProduct(model.CoopSQL, model.CoopView):
     'Commercial Product'
 
     __name__ = 'distribution.commercial_product'
 
-    product = fields.Many2One('ins_product.product', 'Technical Product',
+    product = fields.Many2One('offered.product', 'Technical Product',
         domain=[('start_date', '<=', Eval('start_date'))],
         depends=['start_date'])
     dist_networks = fields.Many2Many('distribution.dist_network-com_product',
@@ -56,6 +68,7 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
     end_date = fields.Date('End Date')
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True, on_change_with=['name', 'code'])
+    description = fields.Text('Description')
 
     @staticmethod
     def default_start_date():

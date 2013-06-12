@@ -5,5 +5,5 @@
   <label name="date"/>
   <field name="date" colspan="3"/>
   <label name="good_process"/>
-  <field name="good_process" colspan="3" widget="selection"/>
+  <field name="good_process" widget="selection"/>
 </form>

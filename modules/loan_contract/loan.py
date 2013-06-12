@@ -47,7 +47,7 @@ class LoanContract():
 
     def get_is_loan(self, name):
         if not self.options and self.offered:
-            return self.offered.get_is_loan_product()
+            return self.offered.is_loan
         for option in self.options:
             if option.is_loan:
                 return True
@@ -252,5 +252,7 @@ class LoanCoveredDataLoanShareRelation(model.CoopSQL):
 
     __name__ = 'ins_contract.loan_covered_data-loan_share'
 
-    covered_data = fields.Many2One('ins_contract.covered_data', 'Covered Data')
-    loan_share = fields.Many2One('ins_contract.loan_share', 'Loan Share')
+    covered_data = fields.Many2One('ins_contract.covered_data', 'Covered Data',
+        ondelete='CASCADE')
+    loan_share = fields.Many2One('ins_contract.loan_share', 'Loan Share',
+        ondelete='RESTRICT')

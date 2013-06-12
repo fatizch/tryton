@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -26,13 +26,13 @@ msgctxt "field:contract.contract,is_loan:"
 msgid "Is Loan"
 msgstr ""
 
-msgctxt "field:contract.contract,is_loan_contract:"
-msgid "Is Loan Contract"
-msgstr "Contrat Emprunteur?"
-
 msgctxt "field:contract.contract,loans:"
 msgid "Loans"
 msgstr "Prêts"
+
+msgctxt "field:contract.subscribed_option,is_loan:"
+msgid "Is Loan"
+msgstr ""
 
 msgctxt "field:ins_contract.covered_data,contract:"
 msgid "Contract"
@@ -118,6 +118,10 @@ msgctxt "field:ins_contract.loan,monthly_payment_number:"
 msgid "Monthly Payment Number"
 msgstr "Nombre de Mensualités"
 
+msgctxt "field:ins_contract.loan,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:ins_contract.loan,outstanding_capital:"
 msgid "Outstanding Capital"
 msgstr "Capital Restant Du"
@@ -194,6 +198,10 @@ msgctxt "field:ins_contract.loan_share,loan:"
 msgid "Loan"
 msgstr "Prêt"
 
+msgctxt "field:ins_contract.loan_share,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:ins_contract.loan_share,person:"
 msgid "Person"
 msgstr "Personne Physique"
@@ -217,14 +225,6 @@ msgstr "Date de mise à jour"
 msgctxt "field:ins_contract.loan_share,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
-
-msgctxt "field:contract.subscribed_option,is_loan:"
-msgid "Is Loan"
-msgstr ""
-
-msgctxt "field:contract.subscribed_option,is_loan_option:"
-msgid "Is Loan Option"
-msgstr ""
 
 msgctxt "model:ins_contract.loan,name:"
 msgid "Loan"

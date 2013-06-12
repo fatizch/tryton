@@ -20,7 +20,7 @@
         <record model="ir.action.act_window" id="act_agreement_form">
             <field name="name">Commission Agreements</field>
             <field name="res_model">contract.contract</field>
-            <field name="domain">[('kind', '=', 'commission')]</field>
+            <field name="domain">[('product_kind', '=', 'commission')]</field>
         </record>
         <record model="ir.action.act_window.view" id="act_agreement_tree_view">
             <field name="sequence" eval="10"/>
@@ -49,6 +49,12 @@
             <field name="type">form</field>
             <field name="inherit" ref="contract.option_view_form"/>
             <field name="name">option_form</field>
+        </record>
+        <record model="ir.ui.view" id="option_com_tree">
+          <field name="model">contract.subscribed_option</field>
+          <field name="type">tree</field>
+          <field name="field_childs">commissions</field>
+          <field name="name">option_com_tree</field>
         </record>
 
         <!-- CompensatedOption -->

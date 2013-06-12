@@ -288,6 +288,22 @@ def create_objects(cfg_dict):
     create_table_cotisation(cfg_dict)
 
 
+# def createdim():
+#     Dimension = Model.get('table.table_dimension')
+#     Table = Model.get('table.table_def')
+#     seq = 0
+#     for i in range(17, 81):
+#         dimension = Dimension()
+#         dimension.definition = Table(15)
+#         seq += 1
+#         dimension.sequence = seq
+#         dimension.type = 'dimension1'
+#         dimension.value = ''
+#         dimension.start = i
+#         dimension.end = i + 1
+#         dimension.save()
+
 def launch_test_case(cfg_dict):
+    # createdim()
     cfg_dict = update_cfg_dict_with_models(cfg_dict)
     create_objects(cfg_dict)

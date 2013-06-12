@@ -15,11 +15,16 @@ class DistributionNetwork():
     __metaclass__ = PoolMeta
 
     commission_plans = fields.Many2Many('distribution.dist_network-plan',
-        'dist_network', 'com_plan', 'Commission Plans')
+        'dist_network', 'com_plan', 'Commission Plans',
+        domain=[('kind', '=', 'commission')])
     parent_com_plans = fields.Function(
-        fields.Many2Many('commission.commission_plan', None, None,
+        fields.Many2Many('offered.product', None, None,
             'Top Level Commission Plans'),
         'get_parent_com_plans_id')
+    all_com_plans = fields.Function(
+        fields.Many2Many('offered.product', None, None,
+            'Top Level Commission Plans'),
+        'get_all_com_plans_id')
     brokers = fields.Many2Many('distribution.dist_network-broker',
         'dist_network', 'broker', 'Brokers',
         domain=[('is_broker', '=', True)])
@@ -28,8 +33,9 @@ class DistributionNetwork():
         'get_childs_brokers_id')
 
     def get_parent_com_plans_id(self, name):
-        Plan = Pool().get('commission.commission_plan')
+        Plan = Pool().get('offered.product')
         return [x.id for x in Plan.search([
+                    ('kind', '=', 'commission'),
                     ('dist_networks.left', '<', self.left),
                     ('dist_networks.right', '>', self.right),
                 ])
@@ -42,6 +48,9 @@ class DistributionNetwork():
                     ('dist_networks.id', '!=', self.id),
                     ])
             ]
+
+    def get_all_com_plans_id(self, name):
+        return [x.id for x in self.commission_plans + self.parent_com_plans]
 
     def get_brokers(self):
         return self.brokers + self.childs_brokers
@@ -60,7 +69,7 @@ class DistributionNetworkComPlanRelation(model.CoopSQL):
 
     dist_network = fields.Many2One('distribution.dist_network',
         'Distribution Network', ondelete='CASCADE')
-    com_plan = fields.Many2One('commission.commission_plan', 'Commission Plan',
+    com_plan = fields.Many2One('offered.product', 'Commission Plan',
         ondelete='RESTRICT')
 
 

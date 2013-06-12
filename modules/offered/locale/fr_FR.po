@@ -1,0 +1,813 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:offered.complementary_data_def:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
+
+msgctxt "error:offered.complementary_data_def:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:offered.complementary_data_recursive_relation:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:offered.coverage-complementary_data_def:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:offered.coverage:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
+
+msgctxt "error:offered.coverage:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:offered.package-coverage:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:offered.product-complementary_data_def:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:offered.product-options-coverage:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:offered.product:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
+
+msgctxt "error:offered.product:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:offered.complementary_data_def,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,default_value:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,default_value_boolean:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,default_value_char:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,default_value_selection:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,digits:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,end_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,is_shared:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,is_used:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,kind:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:offered.complementary_data_def,name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,selection:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,selection_json:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,start_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,string:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,sub_datas:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,type_:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,with_default_value:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_def,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_recursive_relation,child:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_recursive_relation,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_recursive_relation,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_recursive_relation,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_recursive_relation,is_used:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_recursive_relation,master:"
+msgid ""
+msgstr ""
+
+msgctxt ""
+"field:offered.complementary_data_recursive_relation,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:offered.complementary_data_recursive_relation,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_recursive_relation,select_value:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_recursive_relation,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.complementary_data_recursive_relation,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,code:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,complementary_data:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,complementary_data_def:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,coverages_in_package:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,currency:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,currency_digits:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,description:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,end_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,is_package:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,is_used:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,kind:"
+msgid "Coverage Kind"
+msgstr "Type de Garantie"
+
+msgctxt "field:offered.coverage,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:offered.coverage,name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,products:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,start_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,subscription_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,summary:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,template:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,template_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt ""
+"field:offered.coverage-complementary_data_def,complementary_data_def:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage-complementary_data_def,coverage:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage-complementary_data_def,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage-complementary_data_def,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage-complementary_data_def,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage-complementary_data_def,is_used:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage-complementary_data_def,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage-complementary_data_def,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.coverage-complementary_data_def,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.offered,code:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.offered,complementary_data:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.offered,currency_digits:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.offered,description:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.offered,end_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.offered,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.offered,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:offered.offered,name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.offered,start_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.offered,summary:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.offered,template:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.offered,template_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.package-coverage,coverage:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.package-coverage,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.package-coverage,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.package-coverage,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.package-coverage,is_used:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.package-coverage,package:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.package-coverage,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.package-coverage,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.package-coverage,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,code:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,complementary_data:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,complementary_data_def:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,contract_generator:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,coverages:"
+msgid "Coverages"
+msgstr "Garanties"
+
+msgctxt "field:offered.product,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,currency:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,currency_digits:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,description:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,end_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,is_used:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,kind:"
+msgid "Product Kind"
+msgstr "Type de Produit"
+
+msgctxt "field:offered.product,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:offered.product,name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,start_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,summary:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,template:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,template_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-complementary_data_def,complementary_data_def:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-complementary_data_def,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-complementary_data_def,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-complementary_data_def,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-complementary_data_def,is_used:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-complementary_data_def,product:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-complementary_data_def,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-complementary_data_def,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-complementary_data_def,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-options-coverage,coverage:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-options-coverage,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-options-coverage,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-options-coverage,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-options-coverage,is_used:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-options-coverage,product:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-options-coverage,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-options-coverage,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product-options-coverage,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "help:offered.complementary_data_def,selection:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ir.action,name:act_coverage_form"
+msgid "Coverages"
+msgstr "Garanties"
+
+msgctxt "model:ir.action,name:act_model_coop_schema"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "model:ir.action,name:act_package_form"
+msgid "Packages"
+msgstr "Formules"
+
+msgctxt "model:ir.action,name:act_product_form"
+msgid "Products"
+msgstr "Produits"
+
+msgctxt "model:ir.sequence.type,name:sequence_type_contract_number"
+msgid "Contract Number"
+msgstr "Numéro de Contrat"
+
+msgctxt "model:ir.ui.menu,name:menu_coverage_form"
+msgid "Coverages"
+msgstr "Garanties"
+
+msgctxt "model:ir.ui.menu,name:menu_model_coop_schema"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "model:ir.ui.menu,name:menu_package_form"
+msgid "Packages"
+msgstr "Formules"
+
+msgctxt "model:ir.ui.menu,name:menu_product"
+msgid "Laboratory"
+msgstr "Laboratoire"
+
+msgctxt "model:ir.ui.menu,name:menu_product_configuration"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt "model:ir.ui.menu,name:menu_product_form"
+msgid "Products"
+msgstr "Produits"
+
+msgctxt "model:offered.complementary_data_def,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:offered.complementary_data_recursive_relation,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:offered.coverage,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:offered.coverage-complementary_data_def,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:offered.offered,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:offered.package-coverage,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:offered.product,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:offered.product-complementary_data_def,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:offered.product-options-coverage,name:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:offered.complementary_data_def,kind:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "selection:offered.complementary_data_def,kind:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:offered.complementary_data_def,kind:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "selection:offered.complementary_data_def,kind:"
+msgid "Loss"
+msgstr "Préjudice"
+
+msgctxt "selection:offered.complementary_data_def,kind:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "selection:offered.complementary_data_def,kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:offered.complementary_data_def,type_:"
+msgid "Boolean"
+msgstr "Booléen"
+
+msgctxt "selection:offered.complementary_data_def,type_:"
+msgid "Char"
+msgstr "Alphanumérique"
+
+msgctxt "selection:offered.complementary_data_def,type_:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "selection:offered.complementary_data_def,type_:"
+msgid "Integer"
+msgstr "Entier"
+
+msgctxt "selection:offered.complementary_data_def,type_:"
+msgid "Numeric"
+msgstr "Numérique"
+
+msgctxt "selection:offered.complementary_data_def,type_:"
+msgid "Selection"
+msgstr "Sélection"
+
+msgctxt "selection:offered.coverage,kind:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:offered.coverage,subscription_behaviour:"
+msgid "Mandatory"
+msgstr "Obligatoire"
+
+msgctxt "selection:offered.coverage,subscription_behaviour:"
+msgid "Optional"
+msgstr "En Option"
+
+msgctxt "selection:offered.coverage,subscription_behaviour:"
+msgid "Proposed"
+msgstr "Proposé par Défaut"
+
+msgctxt "selection:offered.coverage,template_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:offered.coverage,template_behaviour:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:offered.coverage,template_behaviour:"
+msgid "Remove"
+msgstr "Remplacer"
+
+msgctxt "selection:offered.offered,template_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:offered.offered,template_behaviour:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:offered.offered,template_behaviour:"
+msgid "Remove"
+msgstr "Remplacer"
+
+msgctxt "selection:offered.product,kind:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:offered.product,template_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:offered.product,template_behaviour:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:offered.product,template_behaviour:"
+msgid "Remove"
+msgstr "Remplacer"
+
+msgctxt "view:offered.complementary_data_def:"
+msgid "Complementary Data Descriptor"
+msgstr "Descripteur de Données Complémentaires"
+
+msgctxt "view:offered.complementary_data_def:"
+msgid "Complementary Data Descriptors"
+msgstr "Descripteurs de Données Complémentaires"
+
+msgctxt "view:offered.complementary_data_recursive_relation:"
+msgid "Relation"
+msgstr ""
+
+msgctxt "view:offered.complementary_data_recursive_relation:"
+msgid "Relations"
+msgstr "Relations"
+
+msgctxt "view:offered.coverage:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "view:offered.coverage:"
+msgid "Coverages"
+msgstr "Garanties"
+
+msgctxt "view:offered.offered:"
+msgid "Administration"
+msgstr "Administration"
+
+msgctxt "view:offered.offered:"
+msgid "Offered"
+msgstr "Offre"
+
+msgctxt "view:offered.offered:"
+msgid "Rules"
+msgstr "Règles"
+
+msgctxt "view:offered.offered:"
+msgid "Summary"
+msgstr "Synthèse"
+
+msgctxt "view:offered.product:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "view:offered.product:"
+msgid "Coverages"
+msgstr "Garanties"
+
+msgctxt "view:offered.product:"
+msgid "Product"
+msgstr "Produit"

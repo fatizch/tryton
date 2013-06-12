@@ -5,6 +5,7 @@ import ConfigParser
 import logging.handlers
 import time
 import sys
+import csv
 
 from proteus import Model
 from proteus import config as pconfig
@@ -113,18 +114,17 @@ def get_objects_from_db(
     if not cfg_dict[model]:
         return None
     instances = cfg_dict[model].find(domain, limit=limit)
-    if instances and limit == 1:
-        return instances[0]
+    if limit == 1:
+        return instances[0] if instances else None
     else:
         return instances
 
 
-def get_or_create_this(
-        data, ctx={}, cfg_dict={}, class_key='', sel_val='', domain=None,
-        to_store=True, only_get=False):
+def get_or_create_this(data, cfg_dict, class_key='', sel_val='', ctx=None,
+        domain=None, to_store=True, only_get=False):
     if sel_val:
-        the_object = get_objects_from_db(
-            cfg_dict, class_key, sel_val, data[sel_val])
+        the_object = get_objects_from_db(cfg_dict, class_key, sel_val,
+            data[sel_val])
     elif domain:
         def prepare_search(data):
             if isinstance(data, Model):
@@ -141,10 +141,10 @@ def get_or_create_this(
         return the_object
     elif only_get:
         return None
-
+    if not ctx:
+        ctx = {}
     with cfg_dict[class_key]._config.set_context(ctx):
         the_object = cfg_dict[class_key]()
-
         for key, value in data.iteritems():
             try:
                 if isinstance(value, list):
@@ -181,16 +181,10 @@ def append_from_key(cfg_dict, from_obj, list_name, object_class_key, key,
     from_obj.save()
 
 
-def generate_creation_method(
-        cfg_dict, class_key, sel_val='', domain=None,
+def generate_creation_method(cfg_dict, class_key, sel_val='', domain=None,
         to_store=True, only_get=False):
-    return functools.partial(
-        get_or_create_this,
-        cfg_dict=cfg_dict,
-        class_key=class_key,
-        sel_val=sel_val,
-        domain=domain,
-        to_store=to_store,
+    return functools.partial(get_or_create_this, cfg_dict=cfg_dict,
+        class_key=class_key, sel_val=sel_val, domain=domain, to_store=to_store,
         only_get=only_get)
 
 
@@ -345,6 +339,15 @@ def convert_to_reference(value):
     return value or None
 
 
+def import_file(cfg_dict, file_name, class_key, sel_val, delimiter=';'):
+    path = os.path.join(cfg_dict['dir_loc'], file_name)
+    reader = csv.DictReader(open(path, 'rb'), delimiter=delimiter)
+    objects = []
+    for n, data in enumerate(reader, 1):
+        objects.append(
+            (data, get_or_create_this(data, cfg_dict, class_key, sel_val)))
+    print 'Successfully created %s %s' % (n, class_key)
+    return objects
 def set_global_search(model_name):
     model = get_objects_from_db(
         {'Model': Model.get('ir.model')},

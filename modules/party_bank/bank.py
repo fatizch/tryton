@@ -31,7 +31,8 @@ class BankAccount(CoopSQL, CoopView):
     end_date = fields.Date('End Date')
     account_numbers = fields.One2Many('party.bank_account_number',
         'bank_account', 'Account Number', required=False)
-    agency = fields.Many2One('party.bank', 'Agency')
+    agency = fields.Many2One('party.party', 'Agency',
+        domain=[('is_bank', '=', True)])
     address = fields.Many2One('party.address', 'Address',
         domain=[('party', '=', Eval('agency'))],
         depends=['agency'])

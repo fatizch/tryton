@@ -45,6 +45,8 @@ class Contract():
                         'data': covered_data,
                         'option': options[coverage.code],
                         'contract': self,
+                        'appliable_conditions_date':
+                        self.appliable_conditions_date,
                     })
                 res = res and (not validity or validity[0])
                 if validity:
@@ -143,6 +145,8 @@ class LifeCoveredData():
             'allowed_amounts',
             {
                 'date': self.start_date,
+                'appliable_conditions_date':
+                self.option.contract.appliable_conditions_date,
                 #'contract': abstract.WithAbstract.get_abstract_objects(
                 #    wizard, 'for_contract')
             },)[0]
@@ -237,7 +241,7 @@ class LifeCoveredData():
 #             'kind': 'elem'},
 #         depends=['covered_elements'])
 #     complementary_data = fields.Dict(
-#         'ins_product.complementary_data_def', 'Complementary Data',
+#         'offered.complementary_data_def', 'Complementary Data',
 #         context={
 #             'for_product': Eval('for_product'),
 #             'at_date': Eval('at_date'),
@@ -248,7 +252,7 @@ class LifeCoveredData():
 #         depends=['for_product', 'at_date', 'for_options'],
 #         states={'invisible': ~Eval('for_product')})
 #     for_product = fields.Many2One(
-#         'ins_product.product',
+#         'offered.product',
 #         'For Product',
 #         states={'invisible': True})
 #     at_date = fields.Date(
