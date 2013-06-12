@@ -26,6 +26,19 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
     def default_right():
         return 0
 
+    @classmethod
+    def _export_force_recreate(cls):
+        result = super(DistributionNetwork, cls)._export_force_recreate()
+        result.remove('childs')
+        return result
+
+    @classmethod
+    def _export_skips(cls):
+        res = super(DistributionNetwork, cls)._export_skips()
+        res.add('left')
+        res.add('right')
+        return res
+
     def get_parents(self):
         return self.search([
                 ('left', '<', self.left), ('right', '>', self.right)])
