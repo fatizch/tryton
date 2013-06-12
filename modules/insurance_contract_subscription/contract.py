@@ -61,23 +61,23 @@ class ContractSubscription(CoopProcessFramework):
             depends=['documents'],
             on_change_with=['documents']),
         'on_change_with_doc_received')
-    payment_bank_account = fields.Function(
-        fields.Many2One('party.bank_account', 'Payment Bank Account',
-            context={'for_party': Eval('subscriber', 0)},
-            depends=['payment_mode', 'billing_managers', 'subscriber'],
-            domain=[('party', '=', Eval('subscriber'))],
-            states={'invisible': Eval('payment_mode') != 'direct_debit'},
-            on_change=['billing_managers', 'payment_bank_account']),
-        'get_payment_bank_account', 'setter_void')
-    payment_mode = fields.Function(
-        fields.Char('Payment Mode', states={'invisible': True}),
-        'get_payment_mode', 'setter_void')
-    payment_method = fields.Function(
-        fields.Selection('get_allowed_payment_methods', 'Payment Method',
-            selection_change_with=['offered', 'start_date'],
-            depends=['billing_managers'], on_change=['billing_managers',
-                'offered', 'start_date', 'payment_mode', 'payment_method']),
-        'get_payment_method', 'setter_void')
+    # payment_bank_account = fields.Function(
+    #     fields.Many2One('party.bank_account', 'Payment Bank Account',
+    #         context={'for_party': Eval('subscriber', 0)},
+    #         depends=['payment_mode', 'billing_managers', 'subscriber'],
+    #         domain=[('party', '=', Eval('subscriber'))],
+    #         states={'invisible': Eval('payment_mode') != 'direct_debit'},
+    #         on_change=['billing_managers', 'payment_bank_account']),
+    #     'get_payment_bank_account', 'setter_void')
+    # payment_mode = fields.Function(
+    #     fields.Char('Payment Mode', states={'invisible': True}),
+    #     'get_payment_mode', 'setter_void')
+    # payment_method = fields.Function(
+    #     fields.Selection('get_allowed_payment_methods', 'Payment Method',
+    #         selection_change_with=['offered', 'start_date'],
+    #         depends=['billing_managers'], on_change=['billing_managers',
+    #             'offered', 'start_date', 'payment_mode', 'payment_method']),
+    #     'get_payment_method', 'setter_void')
 
     @classmethod
     def __setup__(cls):
