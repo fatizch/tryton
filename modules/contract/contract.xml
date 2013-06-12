@@ -59,5 +59,18 @@
             <field name="type">form</field>
             <field name="name">option_form</field>
         </record>
+        <!--################################################################ -->
+        <!-- Contract Address -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="contract_address_view_tree">
+            <field name="model">contract.address</field>
+            <field name="type">tree</field>
+            <field name="name">contract_address_tree</field>
+        </record>
+        <record model="ir.ui.view" id="contract_address_view_form">
+            <field name="model">contract.address</field>
+            <field name="type">form</field>
+            <field name="name">contract_address_form</field>
+        </record>
     </data>
 </tryton>

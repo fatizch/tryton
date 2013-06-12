@@ -8,4 +8,5 @@ def register():
         StatusHistory,
         Contract,
         SubscribedCoverage,
+        ContractAddress,
         module='contract', type_='model')

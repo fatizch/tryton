@@ -36,5 +36,4 @@ def register():
         DeliveredService,
         RequestFinder,
         Expense,
-        ContractAddress,
         module='insurance_contract', type_='model')

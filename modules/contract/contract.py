@@ -24,6 +24,7 @@ __all__ = [
     'StatusHistory',
     'Contract',
     'SubscribedCoverage',
+    'ContractAddress',
     ]
 
 
@@ -223,6 +224,11 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         'ins_product.document_request', 'needed_by', 'Documents', size=1)
     company = fields.Many2One('company.company', 'Company', required=True,
         select=True)
+    addresses = fields.One2Many('contract.address', 'contract',
+        'Addresses', context={
+            'policy_owner': Eval('current_policy_owner'),
+            'start_date': Eval('start_date'),
+            }, depends=['current_policy_owner'])
 
     @classmethod
     def __setup__(cls):
@@ -252,6 +258,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         contract = Contract()
         contract.init_from_offered(offered)
         contract.subscriber = party
+        contract.init_default_address()
         contract.options = []
         for option in offered.coverages:
             if options_code and option.code not in options_code:
@@ -488,6 +495,18 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def search_product_kind(cls, name, clause):
         return [('offered.kind', ) + tuple(clause[1:])]
 
+    def init_default_address(self):
+        if self.addresses:
+            return True
+        addresses = self.current_policy_owner.address_get(
+            at_date=self.start_date)
+        if addresses:
+            cur_address = utils.instanciate_relation(self, 'addresses')
+            cur_address.address = addresses
+            cur_address.start_date = self.start_date
+            self.addresses = [cur_address]
+        return True
+
 
 class SubscribedCoverage(model.CoopSQL, Subscribed):
     'Subscribed Coverage'
@@ -557,3 +576,37 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
     @classmethod
     def search_coverage_kind(cls, name, clause):
         return [('offered.kind', ) + tuple(clause[1:])]
+
+
+class ContractAddress(model.CoopSQL, model.CoopView):
+    'Contract Address'
+
+    __name__ = 'contract.address'
+
+    contract = fields.Many2One('contract.contract', 'Contract',
+        ondelete='CASCADE')
+    start_date = fields.Date('Start Date', required=True)
+    end_date = fields.Date('End Date')
+    address = fields.Many2One('party.address', 'Address',
+        domain=[('party', '=', Eval('policy_owner'))],
+        depends=['policy_owner'])
+    policy_owner = fields.Function(
+        fields.Many2One('party.party', 'Policy Owner',
+            states={'invisible': True}),
+        'get_policy_owner')
+
+    @staticmethod
+    def default_policy_owner():
+        return Transaction().context.get('policy_owner')
+
+    def get_policy_owner(self, name):
+        if self.contract and self.start_date:
+            res = self.contract.get_policy_owner(self.start_date)
+        else:
+            res = self.default_policy_owner()
+        if res:
+            return res.id
+
+    @staticmethod
+    def default_start_date():
+        return Transaction().context.get('start_date')

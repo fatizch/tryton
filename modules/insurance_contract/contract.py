@@ -31,7 +31,6 @@ __all__ = [
     'ManagementRole',
     'DeliveredService',
     'Expense',
-    'ContractAddress',
     ]
 
 
@@ -53,11 +52,6 @@ class InsurancePolicy():
         states={'invisible': Eval('product_kind') == 'insurance'})
     contract_history = fields.One2Many('contract.contract.history',
         'from_object', 'Contract History')
-    addresses = fields.One2Many('ins_contract.address', 'contract',
-        'Addresses', context={
-            'policy_owner': Eval('current_policy_owner'),
-            'start_date': Eval('start_date'),
-            }, depends=['current_policy_owner'])
 
     @classmethod
     def get_options_model_name(cls):
@@ -993,37 +987,3 @@ class Expense(model.CoopSQL, model.CoopView):
     def get_currency_digits(self, name):
         if hasattr(self, 'currency') and self.currency:
             return self.currency.digits
-
-
-class ContractAddress(model.CoopSQL, model.CoopView):
-    'Contract Address'
-
-    __name__ = 'ins_contract.address'
-
-    contract = fields.Many2One('contract.contract', 'Contract',
-        ondelete='CASCADE')
-    start_date = fields.Date('Start Date', required=True)
-    end_date = fields.Date('End Date')
-    address = fields.Many2One('party.address', 'Address',
-        domain=[('party', '=', Eval('policy_owner'))],
-        depends=['policy_owner'])
-    policy_owner = fields.Function(
-        fields.Many2One('party.party', 'Policy Owner',
-            states={'invisible': True}),
-        'get_policy_owner')
-
-    @staticmethod
-    def default_policy_owner():
-        return Transaction().context.get('policy_owner')
-
-    def get_policy_owner(self, name):
-        if self.contract and self.start_date:
-            res = self.contract.get_policy_owner(self.start_date)
-        else:
-            res = self.default_policy_owner()
-        if res:
-            return res.id
-
-    @staticmethod
-    def default_start_date():
-        return Transaction().context.get('start_date')
