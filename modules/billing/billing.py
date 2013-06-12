@@ -1,3 +1,4 @@
+import copy
 import datetime
 from collections import defaultdict
 from itertools import repeat, izip, chain
@@ -35,6 +36,7 @@ __all__ = [
     'PaymentTerm',
     'TaxDesc',
     'FeeDesc',
+    'Party',
 ]
 
 PAYMENT_MODES = [
@@ -116,10 +118,12 @@ class PriceLine(model.CoopSQL, model.CoopView):
         readonly=True, loading='lazy')
     estimated_taxes = fields.Function(
         fields.Numeric('Estimated Taxes',
-            digits=(16, Eval('currency_digits', DEF_CUR_DIG))), 'get_estimated_taxes')
+            digits=(16, Eval('currency_digits', DEF_CUR_DIG))),
+        'get_estimated_taxes')
     estimated_fees = fields.Function(
         fields.Numeric('Estimated Fees',
-            digits=(16, Eval('currency_digits', DEF_CUR_DIG))), 'get_estimated_fees')
+            digits=(16, Eval('currency_digits', DEF_CUR_DIG))),
+        'get_estimated_fees')
     tax_lines = fields.One2Many('billing.price_line-tax-relation',
         'price_line', 'Tax Lines')
     fee_lines = fields.One2Many('billing.price_line-fee-relation',
@@ -829,3 +833,29 @@ class FeeDesc():
 
     def get_account_for_billing(self):
         return self.account_for_billing
+
+
+class Party():
+    'Party'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'party.party'
+
+    @classmethod
+    def __setup__(cls):
+        super(Party, cls).__setup__()
+
+        # Hack to remove constraints when importing
+        # TODO : Be cleaner
+        def remove_company(domain):
+            to_remove = []
+            for i, elem in enumerate(domain):
+                if elem[0] == 'company' and elem[1] == '=':
+                    to_remove.insert(0, i)
+            for i in to_remove:
+                domain.pop(i)
+
+        cls.account_payable = copy.copy(cls.account_payable)
+        remove_company(cls.account_payable.domain)
+        cls.account_receivable = copy.copy(cls.account_receivable)
+        remove_company(cls.account_receivable.domain)

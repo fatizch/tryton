@@ -23,9 +23,11 @@ def register():
         PaymentTerm,
         TaxDesc,
         FeeDesc,
+        Party,
         # from account
         Move,
         MoveLine,
+        Account,
         module='billing', type_='model')
 
     Pool.register(

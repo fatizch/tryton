@@ -1,7 +1,7 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.model import fields
 
-__all__ = ['Move', 'MoveLine']
+__all__ = ['Move', 'MoveLine', 'Account']
 __metaclass__ = PoolMeta
 
 
@@ -36,3 +36,14 @@ class MoveLine:
                 ('model', 'in', models),
                 ])
         return [('', '')] + [(m.model, m.name) for m in models]
+
+
+class Account:
+    __name__ = 'account.account'
+
+    @classmethod
+    def _export_skips(cls):
+        res = super(Account, cls)._export_skips()
+        res.add('left')
+        res.add('right')
+        return res
