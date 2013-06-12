@@ -112,7 +112,5 @@ def launch_test_case(cfg_dict):
         table_elem.parent = table_folder
         table_elem.the_table = table
         table_elem.save()
-    print '#' * 80
-    print 'WRITE §§§§§§§§'
     cfg_dict['Table'].write([t.id for t in cfg_dict['Table'].find([])], {}, {})
     append_folder_to_context(default_context, table_folder)

@@ -385,3 +385,32 @@ def try_to_save_object(cfg_dict, cur_object):
         cur_object.save()
     except:
         print 'Exception raised when trying to save', cur_object
+
+
+def get_or_create_company(cfg_dict, party_name):
+    # We suppose that calling this method means that the company module is
+    # installed.
+    Company = Model.get('company.company')
+    candidates = Company.find([('party.name', '=', party_name)])
+    if candidates:
+        if len(candidates) > 1:
+            raise Exception('Multiple company found for name %s' % party_name)
+        return candidates[0]
+    Party = Model.get('party.party')
+    candidates = Party.find([('name', '=', party_name)])
+    if candidates:
+        if len(candidates) > 1:
+            raise Exception('Multiple parties found for name %s' % party_name)
+        the_party = candidates[0]
+    else:
+        raise Exception('No party found with name %s' % party_name)
+    the_company = Company()
+    the_company.party = the_party
+    the_company.currency = cfg_dict['currency']
+    the_company.save()
+
+    User = Model.get('res.user')
+    admin = User.find([('login', '=', 'admin')])[0]
+    admin.company = the_company
+    admin.save()
+    return the_company

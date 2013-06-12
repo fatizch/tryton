@@ -28,9 +28,13 @@ def delete_db_if_necessary(cfg_dict):
             os.remove(db)
 
 
-def install_modules(config, modules_to_install, cfg_dict):
+def install_modules(config, modules_to_install, cfg_dict, only_this_module):
     cfg_dict['_config'] = config
-    will_be_installed = proteus_tools.get_modules_to_update(modules_to_install)
+    if not only_this_module:
+        will_be_installed = proteus_tools.get_modules_to_update(
+            modules_to_install)
+    else:
+        will_be_installed = modules_to_install
     ConfigWizardItem = Model.get('ir.module.module.config_wizard.item')
     Module = Model.get('ir.module.module')
     installed_modules = set()
@@ -144,7 +148,7 @@ def launch_proteus_test_case(test_config_file=None, module=None):
     else:
         modules = [module]
     installed_modules = install_modules(proteus_tools.get_config(cfg_dict),
-        modules, cfg_dict)
+        modules, cfg_dict, module is not None)
     for cur_module in installed_modules:
         if cur_module in modules:
             print 'Module %s installed' % cur_module
