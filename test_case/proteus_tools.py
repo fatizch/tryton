@@ -20,7 +20,7 @@ def get_config(cfg_dict):
         format = '[%(asctime)s] %(levelname)s:%(name)s:%(message)s'
         datefmt = '%a %b %d %H:%M:%S %Y'
         logging.basicConfig(
-            level=logging.INFO, format=format, datefmt=datefmt)
+            level=logging.WARNING, format=format, datefmt=datefmt)
 
         # test if the directories exist, else create them
         try:
@@ -41,7 +41,7 @@ def get_config(cfg_dict):
 
             # add the handler to the root logger
             logging.getLogger().addHandler(handler)
-            logging.getLogger().setLevel(logging.INFO)
+            logging.getLogger().setLevel(logging.WARNING)
 
     return pconfig.set_trytond(
         database_name=get_database_name(cfg_dict),
