@@ -349,8 +349,12 @@ def import_file(cfg_dict, file_name, class_key, sel_val, delimiter=';'):
     reader = csv.DictReader(open(path, 'rb'), delimiter=delimiter)
     objects = []
     for n, data in enumerate(reader, 1):
-        objects.append(
-            (data, get_or_create_this(data, cfg_dict, class_key, sel_val)))
+        try:
+            objects.append(
+                (data, get_or_create_this(data, cfg_dict, class_key, sel_val)))
+        except:
+            print 'Error importing %s' % str(data).encode('utf8')
+            raise
     print 'Successfully created %s %s' % (n, class_key)
     return objects
 

@@ -106,6 +106,10 @@ def launch_test_case(cfg_dict):
         'table_folder')
     lang = Model.get('ir.lang').find([('code', '=', cfg_dict['language'])])[0]
     for table in cfg_dict['Table'].find([]):
+        possible_table_elem = cfg_dict['TreeElement'].find([
+            ('the_table', '=', table.id)])
+        if possible_table_elem:
+            continue
         table_elem = cfg_dict['TreeElement']()
         table_elem.language = lang
         table_elem.type = 'table'
