@@ -18,6 +18,7 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['FiscalYear'] = Model.get('account.fiscalyear')
     cfg_dict['Sequence'] = Model.get('ir.sequence')
     cfg_dict['SequenceStrict'] = Model.get('ir.sequence.strict')
+    cfg_dict['AccountConfiguration'] = Model.get('account.configuration')
 
 
 def create_methods(cfg_dict):
@@ -87,5 +88,33 @@ def launch_test_case(cfg_dict):
             'out_invoice_sequence': invoice_seq,
             'in_credit_note_sequence': invoice_seq,
             'out_credit_note_sequence': invoice_seq})
-        cfg_dict['FiscalYear'].create_period([fisc_year.id],
+        if len(fisc_year.periods) < 1:
+            cfg_dict['FiscalYear'].create_period([fisc_year.id],
+                {'company': company.id})
+
+    account_config = cfg_dict['AccountConfiguration'].find([])[0]
+    if not account_config.default_account_receivable:
+        default_receivable_kind = meths['AccountType'](
+            {'name': 'Client Receivable', 'company': company},
+        )
+        default_account = meths['Account'](
+            {
+                'name': 'Default Receivable Account',
+                'kind': 'receivable',
+                'type': default_receivable_kind,
+            },
             {'company': company.id})
+        account_config.default_account_receivable = default_account
+    if not account_config.default_account_payable:
+        default_payable_kind = meths['AccountType'](
+            {'name': 'Client Payable', 'company': company},
+        )
+        default_account = meths['Account'](
+            {
+                'name': 'Default Payable Account',
+                'kind': 'payable',
+                'type': default_payable_kind,
+            },
+            {'company': company.id})
+        account_config.default_account_payable = default_account
+    account_config.save()
