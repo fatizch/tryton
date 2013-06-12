@@ -183,9 +183,14 @@ def append_from_key(cfg_dict, from_obj, list_name, object_class_key, key,
 
 def generate_creation_method(cfg_dict, class_key, sel_val='', domain=None,
         to_store=True, only_get=False):
-    return functools.partial(get_or_create_this, cfg_dict=cfg_dict,
+    partial_func = functools.partial(get_or_create_this, cfg_dict=cfg_dict,
         class_key=class_key, sel_val=sel_val, domain=domain, to_store=to_store,
         only_get=only_get)
+
+    def callable_method(data, ctx=None):
+        return partial_func(data, ctx=ctx)
+
+    return callable_method
 
 
 def get_translation(string, cfg_dict):
@@ -348,6 +353,7 @@ def import_file(cfg_dict, file_name, class_key, sel_val, delimiter=';'):
             (data, get_or_create_this(data, cfg_dict, class_key, sel_val)))
     print 'Successfully created %s %s' % (n, class_key)
     return objects
+
 def set_global_search(model_name):
     model = get_objects_from_db(
         {'Model': Model.get('ir.model')},
