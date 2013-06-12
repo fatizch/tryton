@@ -103,8 +103,7 @@ class PriceLine(model.CoopSQL, model.CoopView):
 
     __name__ = 'billing.price_line'
 
-    amount = fields.Numeric('Amount',
-        digits=(16, Eval('currency_digits', DEF_CUR_DIG)))
+    amount = fields.Numeric('Amount')
     name = fields.Function(fields.Char('Short Description'), 'get_short_name')
     master = fields.Many2One('billing.price_line', 'Master Line')
     on_object = fields.Reference('Priced object', 'get_line_target_models')
@@ -115,11 +114,9 @@ class PriceLine(model.CoopSQL, model.CoopView):
     all_lines = fields.One2Many('billing.price_line', 'master', 'Lines',
         readonly=True, loading='lazy')
     estimated_taxes = fields.Function(
-        fields.Numeric('Estimated Taxes',
-            digits=(16, Eval('currency_digits', DEF_CUR_DIG))), 'get_estimated_taxes')
+        fields.Numeric('Estimated Taxes'), 'get_estimated_taxes')
     estimated_fees = fields.Function(
-        fields.Numeric('Estimated Fees',
-            digits=(16, Eval('currency_digits', DEF_CUR_DIG))), 'get_estimated_fees')
+        fields.Numeric('Estimated Fees'), 'get_estimated_fees')
     tax_lines = fields.One2Many('billing.price_line-tax-relation',
         'price_line', 'Tax Lines')
     fee_lines = fields.One2Many('billing.price_line-fee-relation',
