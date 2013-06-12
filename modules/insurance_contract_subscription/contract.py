@@ -28,39 +28,33 @@ class ContractSubscription(CoopProcessFramework):
             'subscriber_as_person', 'subscriber_as_company', ],
         ), 'get_subscriber_kind', 'setter_void', )
     subscriber_as_person = fields.Function(
-        fields.Many2One(
-            'party.party', 'Subscriber',
-            states={
+        fields.Many2One('party.party', 'Subscriber', states={
                 'invisible': Eval('subscriber_kind') != 'person',
-            },
-            on_change=['subscriber', 'subscriber_as_person', ],
+                }, on_change=['subscriber', 'subscriber_as_person', ],
             domain=[('is_person', '=', True)],
         ), 'get_subscriber_as_person', 'setter_void', )
     subscriber_as_company = fields.Function(
-        fields.Many2One(
-            'party.party', 'Subscriber',
-            states={
+        fields.Many2One('party.party', 'Subscriber', states={
                 'invisible': Eval('subscriber_kind') != 'company',
-            }, domain=[('is_company', '=', True)],
+                }, domain=[('is_company', '=', True)],
             on_change=['subscriber', 'subscriber_as_company'],
         ), 'get_subscriber_as_company', 'setter_void', )
     subscriber_desc = fields.Function(
         fields.Text('Summary', on_change_with=[
             'subscriber_as_person', 'subscriber_as_company', 'subscriber', ],
-        ), 'on_change_with_subscriber_desc', 'setter_void', )
+            readonly=True,
+            ), 'on_change_with_subscriber_desc', 'setter_void', )
     product_desc = fields.Function(
         fields.Text(
             'Description', on_change_with=['offered', 'com_product'],
-        ),
-        'on_change_with_product_desc', 'setter_void', )
+            readonly=True,
+            ), 'on_change_with_product_desc', 'setter_void', )
     subscription_mgr = fields.One2Many(
         'ins_contract.subscription_mgr', 'contract', 'Subscription Manager')
     doc_received = fields.Function(
-        fields.Boolean(
-            'All Document Received',
-            depends=['documents'],
-            on_change_with=['documents']),
-        'on_change_with_doc_received')
+        fields.Boolean('All Document Received',
+            depends=['documents'], on_change_with=['documents'],
+            ), 'on_change_with_doc_received')
     # payment_bank_account = fields.Function(
     #     fields.Many2One('party.bank_account', 'Payment Bank Account',
     #         context={'for_party': Eval('subscriber', 0)},

@@ -256,8 +256,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         Contract = pool.get('contract.contract')
         SubscribedOpt = pool.get('contract.subscribed_option')
         contract = Contract()
-        contract.init_from_offered(offered)
         contract.subscriber = party
+        contract.init_from_offered(offered)
         contract.init_default_address()
         contract.options = []
         for option in offered.coverages:
@@ -496,9 +496,9 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         return [('offered.kind', ) + tuple(clause[1:])]
 
     def init_default_address(self):
-        if self.addresses:
+        if not utils.is_none(self, 'addresses'):
             return True
-        addresses = self.current_policy_owner.address_get(
+        addresses = self.subscriber.address_get(
             at_date=self.start_date)
         if addresses:
             cur_address = utils.instanciate_relation(self, 'addresses')
