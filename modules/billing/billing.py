@@ -297,7 +297,7 @@ class BillingManager(model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     payment_method = fields.Many2One('billing.payment_method',
-        'Payment Method', required=True)
+        'Payment Method')
     payment_mode = fields.Function(
         fields.Char('Payment Mode', states={'invisible': True},
             on_change_with=['payment_method']),
@@ -328,8 +328,9 @@ class BillingManager(model.CoopSQL, model.CoopView):
         return self.payment_method.payment_mode
 
     def get_policy_owner_id(self, name):
-        return (self.contract.get_policy_owner(self.start_date).id
+        policy_owner = (self.contract.get_policy_owner(self.start_date)
             if self.contract else None)
+        return policy_owner.id if policy_owner else None
 
 
 class BillingPeriod(model.CoopSQL, model.CoopView):
@@ -513,13 +514,19 @@ class Contract():
     def new_billing_manager(self):
         return utils.instanciate_relation(self, 'billing_managers')
 
+    def init_from_offered(self, offered, start_date=None, end_date=None):
+        res = super(Contract, self).init_from_offered(offered, start_date,
+            end_date)
+        self.init_billing_manager()
+        return res
+
     def init_billing_manager(self):
-        if not self.billing_managers:
+        if utils.is_none(self, 'billing_managers'):
             bm = self.new_billing_manager()
             bm.init_from_contract(self, self.start_date)
             self.billing_managers = [bm]
             bm.save()
-        if not self.next_billing_date:
+        if utils.is_none(self, 'next_billing_date'):
             self.next_billing_date = self.start_date
 
     def next_billing_period(self):
