@@ -253,6 +253,8 @@ class ExportImportMixin(Model):
             self._export_check_value_exportable(field_name, field, field_value)
             logging.getLogger('export_import').debug(
                 'Exporting field %s.%s' % (self.__name__, field_name))
+            if isinstance(field, tryton_fields.Property):
+                field = field._field
             if isinstance(field, (
                     tryton_fields.Many2One, tryton_fields.One2One,
                     tryton_fields.Reference)):
@@ -286,6 +288,8 @@ class ExportImportMixin(Model):
         exported = {}
         result = []
         self._export_json(exported, result)
+        with open('/home/giovanni/tmp.json', 'w') as f:
+            f.write(utils.format_data(result).encode('utf8'))
         instances = {}
         for value in result:
             if not value['__name__'] in instances:
@@ -427,6 +431,8 @@ class ExportImportMixin(Model):
                     cls, '_import_override_%s' % field_name)(my_key,
                         good_instance, field_value, values, created, relink)
                 continue
+            if isinstance(field, tryton_fields.Property):
+                field = field._field
             if isinstance(field, (
                     tryton_fields.Many2One, tryton_fields.One2One)):
                 TargetModel = Pool().get(field.model_name)
