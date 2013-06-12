@@ -75,34 +75,36 @@ def launch_test_case(cfg_dict):
         data.account_for_billing = tmp_account
         data.save()
 
-    for i in range(10):
-        post_move_seq = meths['Sequence'](
-            {
-                'name': 'Post Move (%i)' % (2010 + i),
-                'code': 'account.move',
-            },
-            {'company': company.id},
-        )
-        invoice_seq = meths['SequenceStrict'](
-            {
-                'name': 'Invoice (%i)' % (2010 + i),
-                'code': 'account.invoice',
-            },
-            {'company': company.id},
-        )
-        fisc_year = meths['FiscalYear']({
-            'name': 'Fiscal Year %s' % str(2010 + i),
-            'start_date': datetime.date(2010 + i, 1, 1),
-            'end_date': datetime.date(2010 + i, 12, 31),
-            'code': 'FY%i' % i,
-            'post_move_sequence': post_move_seq,
-            'in_invoice_sequence': invoice_seq,
-            'out_invoice_sequence': invoice_seq,
-            'in_credit_note_sequence': invoice_seq,
-            'out_credit_note_sequence': invoice_seq})
-        if len(fisc_year.periods) < 1:
-            cfg_dict['FiscalYear'].create_period([fisc_year.id],
-                {'company': company.id})
+    existing_fiscal_years = cfg_dict['FiscalYear'].find([])
+    if len(existing_fiscal_years) == 0:
+        for i in range(10):
+            post_move_seq = meths['Sequence'](
+                {
+                    'name': 'Post Move (%i)' % (2010 + i),
+                    'code': 'account.move',
+                },
+                {'company': company.id},
+            )
+            invoice_seq = meths['SequenceStrict'](
+                {
+                    'name': 'Invoice (%i)' % (2010 + i),
+                    'code': 'account.invoice',
+                },
+                {'company': company.id},
+            )
+            fisc_year = meths['FiscalYear']({
+                'name': 'Fiscal Year %s' % str(2010 + i),
+                'start_date': datetime.date(2010 + i, 1, 1),
+                'end_date': datetime.date(2010 + i, 12, 31),
+                'code': 'FY%i' % i,
+                'post_move_sequence': post_move_seq,
+                'in_invoice_sequence': invoice_seq,
+                'out_invoice_sequence': invoice_seq,
+                'in_credit_note_sequence': invoice_seq,
+                'out_credit_note_sequence': invoice_seq})
+            if len(fisc_year.periods) < 1:
+                cfg_dict['FiscalYear'].create_period([fisc_year.id],
+                    {'company': company.id})
 
     account_config = cfg_dict['AccountConfiguration'].find([])[0]
     if not account_config.default_account_receivable:
