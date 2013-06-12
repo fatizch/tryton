@@ -354,6 +354,7 @@ def import_file(cfg_dict, file_name, class_key, sel_val, delimiter=';'):
     print 'Successfully created %s %s' % (n, class_key)
     return objects
 
+
 def set_global_search(model_name):
     model = get_objects_from_db(
         {'Model': Model.get('ir.model')},
@@ -376,7 +377,7 @@ def append_inexisting_elements(cur_object, list_name, the_list):
 
     for child in the_list:
         if not child in cur_list:
-            cur_list.append(child)
+            proteus_append_extend(cur_object, list_name, child)
 
     if to_set:
         setattr(cur_object, list_name, cur_list)
