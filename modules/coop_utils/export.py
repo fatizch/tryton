@@ -288,8 +288,6 @@ class ExportImportMixin(Model):
         exported = {}
         result = []
         self._export_json(exported, result)
-        with open('/home/giovanni/tmp.json', 'w') as f:
-            f.write(utils.format_data(result).encode('utf8'))
         instances = {}
         for value in result:
             if not value['__name__'] in instances:
@@ -526,8 +524,8 @@ class ExportImportMixin(Model):
                 # print 'RELINKS'
                 # print '\n'.join([str(x) for x in relink])
                 # print '#' * 80
-                # print 'User Errors'
-                # print '\n'.join((utils.format_data(err) for err in cur_errs))
+                print 'User Errors'
+                print '\n'.join((utils.format_data(err) for err in cur_errs))
                 raise NotExportImport('Infinite loop detected in import')
 
     @classmethod
@@ -538,23 +536,23 @@ class ExportImportMixin(Model):
 
     @classmethod
     def import_json(cls, values):
-        with Transaction().set_user(0):
-            with Transaction().set_context(__importing__=True):
-                if isinstance(values, basestring):
-                    values = json.loads(values, object_hook=object_hook)
-                    values = map(utils.recursive_list_tuple_convert, values)
-                created = {}
-                relink = []
-                main_instances = []
-                for value in values:
-                    logging.getLogger('export_import').debug(
-                        'First pass for %s %s' % (
-                            value['__name__'], value['_export_key']))
-                    TargetModel = Pool().get(value['__name__'])
-                    main_instances.append(
-                        TargetModel._import_json(value, created, relink))
-                cls._import_relink(created, relink)
-                cls._import_complete(created)
+        with Transaction().set_user(0), Transaction().set_context(
+                company=None), Transaction().set_context(__importing__=True):
+            if isinstance(values, basestring):
+                values = json.loads(values, object_hook=object_hook)
+                values = map(utils.recursive_list_tuple_convert, values)
+            created = {}
+            relink = []
+            main_instances = []
+            for value in values:
+                logging.getLogger('export_import').debug(
+                    'First pass for %s %s' % (
+                        value['__name__'], value['_export_key']))
+                TargetModel = Pool().get(value['__name__'])
+                main_instances.append(
+                    TargetModel._import_json(value, created, relink))
+            cls._import_relink(created, relink)
+            cls._import_complete(created)
         for instance in main_instances:
             try:
                 log_name = instance.get_rec_name(None)
