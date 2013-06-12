@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, And
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, fields
@@ -20,7 +20,8 @@ class Party():
         fields.Boolean('Is Health', states={'invisible': True}),
         'get_is_health')
     health_complement = fields.One2Many('health.party_complement', 'party',
-        'Health Complement', size=1, states={'invisible': ~Eval('is_health')})
+        'Health Complement', size=1, states={
+            'invisible': And(~Eval('health_complement'), ~Eval('is_health'))})
 
     def get_is_health(self, name):
         return Transaction().context.get('is_health')
