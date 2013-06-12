@@ -131,12 +131,6 @@ view_ids="insurance_claim_process.loss_delivered_services_view_form,\
 insurance_claim.loss_view_tree"/>
 <field name="doc_received" invisible="1"/>''',
     })
-    meths['Code']({
-        'technical_kind': 'step_before',
-        'on_model': claim_model,
-        'parent_step': step_delivered_service,
-        'sequence': 1,
-    })
     step_documents = meths['StepDesc']({
         'technical_name': 'required_documents',
         'fancy_name': translater('Documents'),
