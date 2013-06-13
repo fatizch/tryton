@@ -211,7 +211,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     complementary_data = fields.Dict(
         'offered.complementary_data_def', 'Complementary Data',
         on_change=[
-            'complementary_data', 'start_date', 'options', 'offered'],
+            'complementary_data', 'start_date', 'options', 'offered',
+            'appliable_conditions_date'],
         depends=[
             'complementary_data', 'start_date', 'options', 'offered'],
         # states={'invisible': ~Eval('complementary_data')
