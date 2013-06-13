@@ -481,8 +481,11 @@ class ProcessDesc(model.CoopSQL):
         return True
 
     def get_next_execution(self, from_step, for_task):
+        # We need to call execute_after because it could make some conditions
+        # True. It will be rollbacked at the end of the method call
         from_step.execute_after(for_task)
         cur_step_found = False
+        result = None
         for step_relation in self.all_steps:
             if step_relation.step == from_step:
                 cur_step_found = True
@@ -490,7 +493,8 @@ class ProcessDesc(model.CoopSQL):
                     # Check there is no "complete" button
                     if for_task.button_is_active('_button_complete_%s_%s' % (
                             self.id, self.all_steps[-1].id)):
-                        return 'complete'
+                        result = 'complete'
+                        break
             if not cur_step_found:
                 continue
             if self.custom_transitions:
@@ -502,9 +506,15 @@ class ProcessDesc(model.CoopSQL):
                             continue
                     if not for_task.is_button_available(self, trans):
                         continue
-                    return trans
+                    result = trans
+                    break
             if for_task.is_button_available(self, step_relation.step):
-                return step_relation.step
+                result = step_relation.step
+                break
+        # We must ensure that none of the modifications from execute_after
+        # is saved
+        Transaction().cursor.rollback()
+        return result
 
     def get_previous_execution(self, from_step, for_task):
         cur_step_found = False
@@ -822,18 +832,6 @@ class StepDesc(model.CoopSQL):
         ],
         depends=['processes'],
         required=True)
-
-    # @classmethod
-    # def __setup__(cls):
-    #     super(StepDesc, cls).__setup__()
-    #     cls.code_before = copy.copy(cls.code_before)
-    #     cls.code_before.domain.extend([
-    #         ('on_model', '=', Eval('main_model'))])
-    #     cls.code_before.depends.append('main_model')
-    #     cls.code_after = copy.copy(cls.code_after)
-    #     cls.code_after.domain.extend([
-    #         ('on_model', '=', Eval('main_model'))])
-    #     cls.code_after.depends.append('main_model')
 
     @classmethod
     def _export_keys(cls):
