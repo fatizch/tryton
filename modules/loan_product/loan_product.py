@@ -49,7 +49,3 @@ class LoanCoverage():
 
     def get_is_loan_coverage(self, name):
         return self.family == 'loan'
-
-    def get_is_coverage_amount_needed(self, name=None):
-        res = super(LoanCoverage, self).get_is_coverage_amount_needed(name)
-        return res and not self.get_is_loan_coverage()
