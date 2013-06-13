@@ -436,6 +436,10 @@ class TaxVersion():
 
     apply_at_pricing_time = fields.Boolean('Apply when Pricing')
 
+    @classmethod
+    def default_apply_at_pricing_time(cls):
+        return False
+
 
 class FeeVersion():
     'Fee Version'
@@ -444,3 +448,7 @@ class FeeVersion():
     __name__ = 'coop_account.fee_version'
 
     apply_at_pricing_time = fields.Boolean('Apply when Pricing')
+
+    @classmethod
+    def default_apply_at_pricing_time(cls):
+        return False
