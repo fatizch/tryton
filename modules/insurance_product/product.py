@@ -286,6 +286,12 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
             return coop_string.remove_blank_and_invalid_char(self.name)
 
     @classmethod
+    def _export_force_recreate(cls):
+        result = super(ItemDescriptor, cls)._export_force_recreate()
+        result.remove('sub_item_descs')
+        return result
+
+    @classmethod
     def get_possible_item_kind(cls):
         return [
             ('', ''),
