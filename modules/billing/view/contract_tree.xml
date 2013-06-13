@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<data>
+  <xpath expr="/tree/field[@name='status']" position="after">
+    <field name="receivable_today"/>
+  </xpath>
+</data>

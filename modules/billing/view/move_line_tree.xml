@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tree string="Move Lines">
+    <field name="origin_name"/>
+    <field name="debit" sum="debit"/>
+    <field name="credit" sum="credit"/>
+    <field name="date"/>
+    <field name="maturity_date"/>
+    <field name="move_state"/>
+    <field name="reconciliation"/>
+</tree>

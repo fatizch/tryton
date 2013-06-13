@@ -1,4 +1,3 @@
-import copy
 import datetime
 from collections import defaultdict
 from itertools import repeat, izip, chain
@@ -36,7 +35,6 @@ __all__ = [
     'PaymentTerm',
     'TaxDesc',
     'FeeDesc',
-    'Party',
 ]
 
 PAYMENT_MODES = [
@@ -522,6 +520,11 @@ class Contract():
         'billing.price_line', 'contract', 'Prices')
     billing_periods = fields.One2Many('billing.period', 'contract',
         'Billing Periods')
+    receivable_lines = fields.One2ManyDomain('account.move.line', 'origin',
+        'Receivable Lines', domain=[('account.kind', '=', 'receivable'),
+            ('reconciliation', '=', None)], loading='lazy')
+    receivable_today = fields.Function(fields.Numeric('Receivable Today'),
+            'get_receivable_payable', searcher='search_receivable_payable')
 
     @classmethod
     def __setup__(cls):
@@ -783,6 +786,133 @@ class Contract():
         move.save()
         return move
 
+    # From account => party
+    @classmethod
+    def get_receivable_payable(cls, contracts, names):
+        '''
+        Function to compute receivable, payable (today or not) for party ids.
+        '''
+        res = {}
+        pool = Pool()
+        MoveLine = pool.get('account.move.line')
+        User = pool.get('res.user')
+        Date = pool.get('ir.date')
+        cursor = Transaction().cursor
+
+        for name in names:
+            if name not in ('receivable', 'payable',
+                    'receivable_today', 'payable_today'):
+                raise Exception('Bad argument')
+            res[name] = dict((p.id, Decimal('0.0')) for p in contracts)
+
+        user_id = Transaction().user
+        if user_id == 0 and 'user' in Transaction().context:
+            user_id = Transaction().context['user']
+        user = User(user_id)
+        if not user.company:
+            return res
+        company_id = user.company.id
+
+        line_query, _ = MoveLine.query_get()
+
+        for name in names:
+            code = name
+            today_query = ''
+            today_value = []
+            if name in ('receivable_today', 'payable_today'):
+                code = name[:-6]
+                today_query = 'AND (l.maturity_date <= %s ' \
+                    'OR l.maturity_date IS NULL) '
+                today_value = [Date.today()]
+
+            cursor.execute('SELECT m.origin, '
+                    'SUM((COALESCE(l.debit, 0) - COALESCE(l.credit, 0))) '
+                'FROM account_move_line AS l, account_account AS a '
+                ', account_move as m '
+                'WHERE a.id = l.account '
+                    'AND a.active '
+                    'AND a.kind = %s '
+                    'AND l.move = m.id '
+                    'AND m.id IN '
+                        '(SELECT m.id FROM account_move as m '
+                        'WHERE m.origin IN '
+                        '(' + ','.join(('%s',) * len(contracts)) + ')) '
+                    'AND l.reconciliation IS NULL '
+                    'AND ' + line_query + ' '
+                    + today_query +
+                    'AND a.company = %s '
+                'GROUP BY m.origin',
+                [code] + [utils.convert_to_reference(p) for p in contracts] +
+                today_value + [company_id])
+            for contract_id, sum in cursor.fetchall():
+                # SQLite uses float for SUM
+                if not isinstance(sum, Decimal):
+                    sum = Decimal(str(sum))
+                res[name][int(contract_id.split(',')[1])] = sum
+        return res
+
+    @classmethod
+    def search_receivable_payable(cls, name, clause):
+        pool = Pool()
+        MoveLine = pool.get('account.move.line')
+        Company = pool.get('company.company')
+        User = pool.get('res.user')
+        Date = pool.get('ir.date')
+        cursor = Transaction().cursor
+
+        if name not in ('receivable', 'payable',
+                'receivable_today', 'payable_today'):
+            raise Exception('Bad argument')
+
+        company_id = None
+        user_id = Transaction().user
+        if user_id == 0 and 'user' in Transaction().context:
+            user_id = Transaction().context['user']
+        user = User(user_id)
+        if Transaction().context.get('company'):
+            child_companies = Company.search([
+                    ('parent', 'child_of', [user.main_company.id]),
+                    ])
+            if Transaction().context['company'] in child_companies:
+                company_id = Transaction().context['company']
+
+        if not company_id:
+            if user.company:
+                company_id = user.company.id
+            elif user.main_company:
+                company_id = user.main_company.id
+
+        if not company_id:
+            return []
+
+        code = name
+        today_query = ''
+        today_value = []
+        if name in ('receivable_today', 'payable_today'):
+            code = name[:-6]
+            today_query = 'AND (l.maturity_date <= %s ' \
+                'OR l.maturity_date IS NULL) '
+            today_value = [Date.today()]
+
+        line_query, _ = MoveLine.query_get()
+
+        cursor.execute('SELECT m.contract '
+            'FROM account_move_line AS l, account_account AS a '
+            ', account_move as m '
+            'WHERE a.id = l.account '
+                'AND a.active '
+                'AND a.kind = %s '
+                'AND l.move = m.id '
+                'AND l.reconciliation IS NULL '
+                'AND ' + line_query + ' '
+                + today_query +
+                'AND a.company = %s '
+            'GROUP BY l.party '
+            'HAVING (SUM((COALESCE(l.debit, 0) - COALESCE(l.credit, 0))) '
+                + clause[1] + ' %s)',
+            [code] + today_value + [company_id] + [Decimal(clause[2] or 0)])
+        return [('id', 'in', [x[0] for x in cursor.fetchall()])]
+
 
 class Option():
     'Option'
@@ -858,29 +988,3 @@ class FeeDesc():
 
     def get_account_for_billing(self):
         return self.account_for_billing
-
-
-class Party():
-    'Party'
-
-    __metaclass__ = PoolMeta
-    __name__ = 'party.party'
-
-    @classmethod
-    def __setup__(cls):
-        super(Party, cls).__setup__()
-
-        # Hack to remove constraints when importing
-        # TODO : Be cleaner
-        def remove_company(domain):
-            to_remove = []
-            for i, elem in enumerate(domain):
-                if elem[0] == 'company' and elem[1] == '=':
-                    to_remove.insert(0, i)
-            for i in to_remove:
-                domain.pop(i)
-
-        cls.account_payable = copy.copy(cls.account_payable)
-        remove_company(cls.account_payable.domain)
-        cls.account_receivable = copy.copy(cls.account_receivable)
-        remove_company(cls.account_receivable.domain)

@@ -21,6 +21,13 @@ class MoveLine:
 
     second_origin = fields.Reference('Second Origin',
         selection='get_second_origin')
+    origin_name = fields.Function(fields.Char('Origin Name'),
+        'get_origin_name')
+
+    def get_origin_name(self, name):
+        if not (hasattr(self, 'origin') and self.origin):
+            return ''
+        return self.origin.rec_name
 
     @classmethod
     def _get_second_origin(cls):

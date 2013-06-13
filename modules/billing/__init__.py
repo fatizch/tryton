@@ -1,6 +1,7 @@
 from trytond.pool import Pool
 from .billing import *
 from .account import *
+from .party import *
 
 
 def register():
@@ -24,6 +25,7 @@ def register():
         PaymentTerm,
         TaxDesc,
         FeeDesc,
+        # from party
         Party,
         # from account
         Move,

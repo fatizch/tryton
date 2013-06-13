@@ -110,6 +110,12 @@
       <field name="inherit" ref="contract.contract_view_form"/>
       <field name="name">contract_form</field>
     </record>
+    <record model="ir.ui.view" id="contract_tree">
+      <field name="model">contract.contract</field>
+      <field name="type">tree</field>
+      <field name="inherit" ref="contract.contract_view_tree"/>
+      <field name="name">contract_tree</field>
+    </record>
     <!--################################################################-->
     <!-- Covered Element -->
     <!--################################################################-->

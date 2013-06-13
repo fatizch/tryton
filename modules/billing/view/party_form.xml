@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<data>
+  <xpath expr="/form/notebook/page[@id='accounting']" position="replace">
+    <page string="Accounting" id="Accounting" col="4">
+      <label name="receivable_today"/>
+      <field name="receivable_today"/>
+      <label name="payable_today"/>
+      <field name="payable_today"/>
+      <field name="receivable_lines" colspan="2" view_ids="billing.move_line_tree,account.move_line_view_form"/>
+      <field name="payable_lines" colspan="2" view_ids="billing.move_line_tree,account.move_line_view_form"/>
+    </page>
+  </xpath>
+</data>
