@@ -12,7 +12,6 @@ class Address(model.CoopSQL):
     "Address"
 
     __metaclass__ = PoolMeta
-
     __name__ = 'party.address'
 
     start_date = fields.Date('Start Date')
@@ -95,6 +94,10 @@ class Address(model.CoopSQL):
         domain.append(('country', '=', country))
         return utils.get_those_objects('country.zipcode', domain)
 
+    @classmethod
+    def _export_keys(cls):
+        return set(('party.code', 'name'))
+
     def on_change_with_city(self):
         if self.zip and self.country:
             cities = self.get_cities_from_zip(self.zip, self.country)
@@ -110,26 +113,6 @@ class Address(model.CoopSQL):
                 return zips[0].zip
             else:
                 return self.zip
-
-#    @classmethod
-#    def create(cls, vals):
-#        address = super(Address, cls).create(vals)
-#        if not all([elem in vals for elem in ['zip', 'country', 'city']]):
-#            return address
-#        ZipCode = Pool().get('country.zipcode')
-#        if len(ZipCode.search(
-#                [
-#                    ('zip', '=', vals['zip']),
-#                    ('country', '=', vals['country']),
-#                ])) > 0:
-#            return address
-#        ZipCode.create(
-#            {
-#                'zip': vals['zip'],
-#                'city': vals['city'],
-#                'country': vals['country']
-#            })
-#        return address
 
     @staticmethod
     def default_country():
