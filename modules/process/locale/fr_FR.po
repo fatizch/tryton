@@ -599,6 +599,10 @@ msgid "==> Commission"
 msgstr ""
 
 msgctxt "view:contract.contract:"
+msgid "==> Contract Validation"
+msgstr ""
+
+msgctxt "view:contract.contract:"
 msgid "==> Documents"
 msgstr ""
 
@@ -643,6 +647,10 @@ msgid "Billing"
 msgstr "Cotisation"
 
 msgctxt "view:contract.contract:"
+msgid "Calculate Prices"
+msgstr "Calculer les Primes"
+
+msgctxt "view:contract.contract:"
 msgid "Commission"
 msgstr "Commission"
 
@@ -653,6 +661,10 @@ msgstr "Données Complémentaires"
 msgctxt "view:contract.contract:"
 msgid "Complete"
 msgstr "Terminer"
+
+msgctxt "view:contract.contract:"
+msgid "Contract Validation"
+msgstr ""
 
 msgctxt "view:contract.contract:"
 msgid "Covered Elements/Options"

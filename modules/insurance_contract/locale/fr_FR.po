@@ -803,7 +803,7 @@ msgstr "Eléments Couverts"
 
 msgctxt "model:contract.address,name:"
 msgid "Contract Address"
-msgstr ""
+msgstr "Adresse"
 
 msgctxt "model:contract.contract,name:"
 msgid "Contract"
@@ -963,7 +963,7 @@ msgstr "Contrat"
 
 msgctxt "view:contract.address:"
 msgid "Contract Address"
-msgstr ""
+msgstr "Adresse"
 
 msgctxt "view:contract.contract.history:"
 msgid "Contract History"

@@ -11,8 +11,8 @@ msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:rule_engine.context:"
-msgid "You define twice the same name!"
-msgstr "Vous avez défini le même nom plusieurs fois"
+msgid "You have defined twice the same name %s in %s and %s"
+msgstr ""
 
 msgctxt "error:rule_engine.error:"
 msgid "Number of arguments does not match string content"
@@ -473,6 +473,10 @@ msgstr "Description"
 msgctxt "field:rule_engine.tree_element,fct_args:"
 msgid "Function Arguments"
 msgstr "Paramètres de la Fonction"
+
+msgctxt "field:rule_engine.tree_element,full_path:"
+msgid "Full Path"
+msgstr ""
 
 msgctxt "field:rule_engine.tree_element,id:"
 msgid "ID"

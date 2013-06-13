@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.invoice.payment_term:"
+msgid "Last line of payment term \"%s\" must be of type remainder."
+msgstr ""
+
 msgctxt "error:billing.billing_manager:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -254,6 +258,18 @@ msgctxt "field:billing.price_line,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:billing.price_line,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:billing.price_line,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:billing.price_line,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
 msgctxt "field:billing.price_line,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -485,6 +501,18 @@ msgstr "Compte de Facturation"
 msgctxt "field:ins_contract.covered_element,indemnification_bank_account:"
 msgid ""
 msgstr ""
+
+msgctxt "field:ins_contract.covered_element,indemnification_bank_account:"
+msgid "Indemnification Bank Account"
+msgstr "Compte de Remboursement"
+
+msgctxt "field:offered.coverage,account_for_billing:"
+msgid "Account for billing"
+msgstr "Compte de Facturation"
+
+msgctxt "field:offered.product,account_for_billing:"
+msgid "Account for billing"
+msgstr "Compte de Facturation"
 
 msgctxt "field:offered.product,payment_methods:"
 msgid "Payment Methods"
