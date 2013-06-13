@@ -52,6 +52,12 @@ class Product():
         'product', 'Commercial Products',
         states={'invisible': Eval('product_kind') != 'insurance'})
 
+    @classmethod
+    def _export_skips(cls):
+        res = super(Product, cls)._export_skips()
+        res.add('com_products')
+        return res
+
 
 class CommercialProduct(model.CoopSQL, model.CoopView):
     'Commercial Product'
