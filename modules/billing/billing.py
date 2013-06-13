@@ -450,6 +450,9 @@ class BillingProcess(Wizard):
         contract = ContractModel(Transaction().context.get('active_id'))
         contract.next_billing_date = date.add_day(move_date, 1)
         contract.save()
+        move = self.bill_display.moves[-1]
+        move.post([move])
+        move.save()
         return 'end'
 
 
@@ -525,6 +528,9 @@ class Contract():
             ('reconciliation', '=', None)], loading='lazy')
     receivable_today = fields.Function(fields.Numeric('Receivable Today'),
             'get_receivable_payable', searcher='search_receivable_payable')
+    last_bill = fields.Function(
+        fields.One2Many('account.move', None, 'Last Bill'),
+        'get_last_bill')
 
     @classmethod
     def __setup__(cls):
@@ -785,6 +791,31 @@ class Contract():
         move.lines = lines.values() + counterparts
         move.save()
         return move
+
+    def generate_first_bill(self):
+        Move = Pool().get('account.move')
+        Move.delete(Move.search(
+            [('origin', '=', utils.convert_to_reference(self))]))
+        self.bill()
+
+    def get_last_bill(self, name):
+        Move = Pool().get('account.move')
+        try:
+            return [Move.search(
+                [('origin', '=', utils.convert_to_reference(self))])[-1].id]
+        except:
+            return []
+
+    def finalize_contract(self):
+        super(Contract, self).finalize_contract()
+        last_bill = self.last_bill[0]
+        self.generate_first_bill()
+        last_bill = self.last_bill[0]
+        Move = Pool().get('account.move')
+        Move.post([last_bill])
+        self.next_billing_date = date.add_day(
+            last_bill.billing_period.end_date, 1)
+        self.save()
 
     # From account => party
     @classmethod
