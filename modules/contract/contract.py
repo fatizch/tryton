@@ -458,10 +458,12 @@ class Contract(model.CoopSQL, Subscribed, Printable):
 
     def on_change_complementary_data(self):
         return {'complementary_data': self.offered.get_result(
-            'calculated_complementary_datas', {
-                'date': self.start_date,
-                'appliable_conditions_date': self.appliable_conditions_date,
-                'contract': self})[0]}
+                'calculated_complementary_datas', {
+                    'date': self.start_date,
+                    'appliable_conditions_date': self.appliable_conditions_date,
+                    'contract': self,
+                    'level': 'contract',
+                    })[0]}
 
     @classmethod
     def get_possible_contracts_from_party(cls, party, at_date):

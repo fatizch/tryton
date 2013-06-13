@@ -1,5 +1,4 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.rpc import RPC
 from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import fields, utils, coop_string
@@ -9,7 +8,7 @@ __all__ = [
     'LifeContractSubscription',
     'CoveredPersonSubs',
     'CoveredDataSubs',
-]
+    ]
 
 
 class LifeContractSubscription():
@@ -26,10 +25,15 @@ class LifeContractSubscription():
                 if covered_element.party == subscriber:
                     return True
         covered_element = CoveredElement()
+        covered_element.start_date = self.start_date
         covered_element.party = subscriber
+        covered_element.contract = self
         item_descs = CoveredElement.get_possible_item_desc(self)
         if len(item_descs) == 1:
             covered_element.item_desc = item_descs[0]
+            cov_as_dict = covered_element.on_change_item_desc()
+            for key, val in cov_as_dict.iteritems():
+                setattr(covered_element, key, val)
         if not hasattr(self, 'covered_elements'):
             self.covered_elements = [covered_element]
         else:

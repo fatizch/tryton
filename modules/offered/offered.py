@@ -184,7 +184,7 @@ class Offered(model.CoopView, GetResult, Templated):
     @staticmethod
     def default_complementary_data():
         good_se = Pool().get('offered.complementary_data_def').search([
-            ('kind', '=', 'product')])
+                ('kind', '=', 'product')])
         res = {}
         for se in good_se:
             res[se.name] = se.get_default_value(None)
@@ -195,12 +195,18 @@ class Offered(model.CoopView, GetResult, Templated):
             x for x in self.complementary_data_def
             if x.valid_at_date(at_date) and (not kinds or x.kind in kinds)]
 
+    def get_cmpl_data_looking_for_what(self, args):
+        return 'contract' if not 'sub_elem' in args else 'sub_elem'
+
     def get_complementary_data_for_execution(self, args):
-        looking_for = 'contract' if not 'sub_elem' in args else 'sub_elem'
+        looking_for = self.get_cmpl_data_looking_for_what(args)
         all_schemas = set(self.get_complementary_data_def(
             ('contract', looking_for), args['date']))
-        possible_schemas = set(self.get_complementary_data_def(
-            (looking_for), args['date']))
+        if looking_for:
+            possible_schemas = set(self.get_complementary_data_def(
+                (looking_for), args['date']))
+        else:
+            possible_schemas = set([])
         return all_schemas, possible_schemas
 
     def on_change_with_complementary_data(self):
@@ -237,7 +243,7 @@ class Product(model.CoopSQL, Offered):
     complementary_data_def = fields.Many2Many(
         'offered.product-complementary_data_def',
         'product', 'complementary_data_def', 'Complementary Data',
-        domain=[('kind', '=', 'contract')])
+        domain=[('kind', 'in', ['contract', 'sub_elem'])])
 
     @classmethod
     def __setup__(cls):

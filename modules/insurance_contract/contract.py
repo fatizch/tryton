@@ -243,11 +243,13 @@ class InsurancePolicy():
 
     def on_change_complementary_data(self):
         return {'complementary_data': self.offered.get_result(
-            'calculated_complementary_datas', {
-                'date': self.start_date,
-                'contract': self,
-                'appliable_conditions_date': self.appliable_conditions_date}
-            )[0]}
+                'calculated_complementary_datas', {
+                    'date': self.start_date,
+                    'contract': self,
+                    'appliable_conditions_date': self.appliable_conditions_date,
+                    'level': 'contract',
+                    }
+                )[0]}
 
     def get_next_renewal_date(self):
         return date.add_frequency('yearly', self.start_date)
@@ -409,10 +411,9 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     #We need to put complementary data in depends, because the complementary
     #data are set through on_change_with and the item desc can be set on an
     #editable tree, or we can not display for the moment dictionnary in tree
-    item_desc = fields.Many2One(
-        'ins_product.item_desc', 'Item Desc',
-        on_change=['item_desc', 'complementary_data', 'party'],
-        domain=[If(
+    item_desc = fields.Many2One('ins_product.item_desc', 'Item Desc',
+        on_change=['item_desc', 'complementary_data', 'party', 'contrat',
+            'start_date'], domain=[If(
                 ~~Eval('possible_item_desc'),
                 ('id', 'in', Eval('possible_item_desc')),
                 ())
@@ -421,22 +422,24 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         fields.Many2Many('ins_product.item_desc', None, None,
             'Possible Item Desc', states={'invisible': True}),
         'get_possible_item_desc_ids')
-    covered_data = fields.One2Many(
-        'ins_contract.covered_data', 'covered_element', 'Covered Element Data')
-    name = fields.Char('Name',
-        states={'invisible': IS_PARTY})
+    covered_data = fields.One2Many('ins_contract.covered_data',
+        'covered_element', 'Covered Element Data')
+    name = fields.Char('Name', states={'invisible': IS_PARTY})
     parent = fields.Many2One('ins_contract.covered_element', 'Parent')
-    sub_covered_elements = fields.One2Many(
-        'ins_contract.covered_element', 'parent', 'Sub Covered Elements',
+    sub_covered_elements = fields.One2Many('ins_contract.covered_element',
+        'parent', 'Sub Covered Elements',
         states={'invisible': Eval('item_kind') == 'person'},
         domain=[('covered_data.option.contract', '=', Eval('contract'))],
         depends=['contract'], context={'_master_covered': Eval('id')})
     complementary_data = fields.Dict('offered.complementary_data_def',
-        'Complementary Data',
-        on_change_with=['item_desc', 'complementary_data'],
-        states={'invisible': Or(IS_PARTY, ~Eval('complementary_data'))})
+        'Contract Complementary Data',
+        on_change_with=['item_desc', 'complementary_data', 'contract',
+            'start_date'],
+        states={'invisible': ~Eval('complementary_data')}
+        )
     party_compl_data = fields.Function(
-        fields.Dict('offered.complementary_data_def', 'Complementary Data',
+        fields.Dict('offered.complementary_data_def',
+            'Party Complementary Data',
             on_change_with=['item_desc', 'complementary_data', 'party'],
             states={'invisible': Or(~IS_PARTY, ~Eval('party_compl_data'))}),
         'on_change_with_party_compl_data', 'set_party_compl_data')
@@ -550,13 +553,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         return res
 
     def on_change_with_complementary_data(self):
-        res = {}
-        if (self.item_desc and not self.item_desc.kind in
-                ['party', 'person', 'company']):
-            return utils.init_complementary_data(
-                self.get_complementary_data_def())
-        else:
-            return res
+        return utils.init_complementary_data(self.get_complementary_data_def())
 
     def on_change_with_complementary_data_summary(self, name=None):
         if not (hasattr(self, 'complementary_data') and
@@ -567,10 +564,13 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             for x in self.complementary_data.iteritems()])
 
     def get_contract(self):
-        if self.contract:
+        if not utils.is_none(self, 'contract'):
             return self.contract
-        elif self.parent:
+        elif not utils.is_none(self, 'parent'):
             return self.parent.get_contract()
+        elif 'contract' in Transaction().context:
+            Contract = Pool().get('contract.contract')
+            return Contract(Transaction().context.get('contract'))
 
     def on_change_with_party_compl_data(self, name=None):
         res = {}
@@ -602,10 +602,14 @@ class CoveredElement(model.CoopSQL, model.CoopView):
                 covered.party.complementary_data.update(vals)
                 covered.party.save()
 
-    def get_complementary_data_def(self):
+    def get_complementary_data_def(self, at_date=None):
+        res = []
         if (self.item_desc
                 and not self.item_desc.kind in ['party', 'person', 'company']):
-            return self.item_desc.complementary_data_def
+            res.extend(self.item_desc.complementary_data_def)
+        res.extend(self.get_contract().offered.get_complementary_data_def(
+            ['sub_elem'], at_date=at_date))
+        return res
 
     def get_party_compl_data_def(self):
         if (self.item_desc
@@ -614,7 +618,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
 
     def get_complementary_data_value(self, at_date, value):
         res = utils.get_complementary_data_value(self, 'complementary_data',
-            self.get_complementary_data_def(), at_date, value)
+            self.get_complementary_data_def(at_date=at_date), at_date, value)
         if not res and self.party:
             res = utils.get_complementary_data_value(self.party,
                 'complementary_data', self.get_party_compl_data_def(), at_date,
@@ -812,12 +816,14 @@ class CoveredData(model.CoopSQL, model.CoopView):
 
     def on_change_complementary_data(self):
         return {'complementary_data': self.option.contract.offered.get_result(
-            'calculated_complementary_datas', {
-                'date': self.start_date,
-                'contract': self.option.contract,
-                'appliable_conditions_date':
-                self.option.contract.appliable_conditions_date,
-                'sub_elem': self})[0]}
+                'calculated_complementary_datas', {
+                    'date': self.start_date,
+                    'contract': self.option.contract,
+                    'appliable_conditions_date':
+                    self.option.contract.appliable_conditions_date,
+                    'sub_elem': self,
+                    'level': 'covered_data',
+                    })[0]}
 
     def init_from_covered_element(self, covered_element):
         #self.covered_element = covered_element

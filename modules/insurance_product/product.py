@@ -254,6 +254,11 @@ class Product():
                 res.append(coverage.item_desc.id)
         return res
 
+    def get_cmpl_data_looking_for_what(self, args):
+        if 'sub_elem' in args and args['level'] == 'covered_data':
+            return ''
+        return super(Product, self).get_cmpl_data_looking_for_what(args)
+
 
 class OfferedProduct(Offered):
     'Offered Product'
