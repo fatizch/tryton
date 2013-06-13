@@ -26,7 +26,7 @@ else
 	echo Creating links between working directory and tryton modules
 	echo $SEP
 	cd tryton-workspace/trytond/trytond/modules
-    find . -maxdepth 1 -type l | xargs rm
+    find . -maxdepth 1 -lname '*' -exec rm {} \
     ln -s ../../../coopbusiness/modules/* . 2> /dev/null
 	cd ../../../..
 	ln -s tryton-workspace/coopbusiness/scripts/start.sh . 2> /dev/null
