@@ -21,14 +21,16 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['AccountConfiguration'] = Model.get('account.configuration')
     cfg_dict['Contract'] = Model.get('contract.contract')
     cfg_dict['Company'] = Model.get('company.company')
+    cfg_dict['Product'] = Model.get('offered.product')
+    cfg_dict['Coverage'] = Model.get('offered.coverage')
 
 
 def create_methods(cfg_dict):
     res = {}
     res['Account'] = proteus_tools.generate_creation_method(
-        cfg_dict, 'Account', 'name')
+        cfg_dict, 'Account', domain=['name', 'company'])
     res['AccountType'] = proteus_tools.generate_creation_method(
-        cfg_dict, 'AccountType', 'name')
+        cfg_dict, 'AccountType', domain=['name', 'company'])
     res['FiscalYear'] = proteus_tools.generate_creation_method(
         cfg_dict, 'FiscalYear', 'name')
     res['Sequence'] = proteus_tools.generate_creation_method(
@@ -58,7 +60,6 @@ def launch_test_case(cfg_dict):
         {'name': 'Fee Account', 'company': company},
     )
     kinds = {'tax': tax_account_kind, 'fee': fee_account_kind}
-
     for type_, data in chain(
             izip(repeat('tax'), cfg_dict['Tax'].find(
                 [('account_for_billing', '=', None)])),
@@ -75,6 +76,29 @@ def launch_test_case(cfg_dict):
         data.account_for_billing = tmp_account
         data.save()
 
+    product_account_kind = meths['AccountType']({
+        'name': 'Product Account', 'company': company},
+    )
+    coverage_account_kind = meths['AccountType'](
+        {'name': 'Coverage Account', 'company': company},
+    )
+    kinds = {
+        'product': product_account_kind, 'coverage': coverage_account_kind}
+    for type_, data in chain(
+            izip(repeat('product'), cfg_dict['Product'].find(
+                [('account_for_billing', '=', None)])),
+            izip(repeat('coverage'), cfg_dict['Coverage'].find(
+                [('account_for_billing', '=', None)]))):
+        tmp_account = meths['Account'](
+            {
+                'name': 'Account for %s %s' % (type_, data.name),
+                'kind': 'revenue',
+                'type': kinds[type_],
+            },
+            {'company': company.id},
+        )
+        data.account_for_billing = tmp_account
+        data.save()
     existing_fiscal_years = cfg_dict['FiscalYear'].find([])
     if len(existing_fiscal_years) == 0:
         for i in range(10):

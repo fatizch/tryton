@@ -142,6 +142,15 @@
       <field name="name">product_form</field>
     </record>
     <!--################################################################-->
+    <!-- Coverage -->
+    <!--################################################################-->
+    <record model="ir.ui.view" id="coverage_form">
+      <field name="model">offered.coverage</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="offered.coverage_view_form"/>
+      <field name="name">coverage_form</field>
+    </record>
+    <!--################################################################-->
     <!-- Tax Version -->
     <!--################################################################-->
     <record model="ir.ui.view" id="tax_desc_form">

@@ -15,7 +15,6 @@ from trytond.modules.coop_utils import export
 from trytond.modules.insurance_product.business_rule.pricing_rule import \
     PRICING_FREQUENCY
 from trytond.modules.insurance_contract.contract import IS_PARTY
-from trytond.modules.offered.offered import DEF_CUR_DIG
 
 __all__ = [
     'PaymentMethod',
@@ -29,6 +28,7 @@ __all__ = [
     'BillDisplay',
     'ProductPaymentMethodRelation',
     'Product',
+    'Coverage',
     'Contract',
     'Option',
     'CoveredElement',
@@ -86,6 +86,10 @@ class PriceLineTaxRelation(model.CoopSQL, model.CoopView):
     to_recalculate = fields.Boolean('Recalculate at billing')
     amount = fields.Numeric('Amount')
 
+    @classmethod
+    def default_to_recalculate(cls):
+        return False
+
 
 class PriceLineFeeRelation(model.CoopSQL, model.CoopView):
     'Price Line Fee Relation'
@@ -98,6 +102,10 @@ class PriceLineFeeRelation(model.CoopSQL, model.CoopView):
         ondelete='RESTRICT')
     to_recalculate = fields.Boolean('Recalculate at billing')
     amount = fields.Numeric('Amount')
+
+    @classmethod
+    def default_to_recalculate(cls):
+        return False
 
 
 class PriceLine(model.CoopSQL, model.CoopView):
@@ -262,13 +270,7 @@ class PriceLine(model.CoopSQL, model.CoopView):
         return res
 
     def get_account_for_billing(self):
-        # TODO
-        Account = Pool().get('account.account')
-        accounts = Account.search([
-                ('kind', '=', 'revenue'),
-                ], limit=1)
-        if accounts:
-            return accounts[0]
+        return self.on_object.get_account_for_billing()
 
     def get_number_of_days_at_date(self, at_date):
         final_date = date.add_frequency(self.frequency, at_date)
@@ -474,6 +476,9 @@ class Product():
     payment_methods = fields.One2Many(
         'billing.product-payment_method-relation', 'product',
         'Payment Methods')
+    account_for_billing = fields.Many2One('account.account',
+        'Account for billing', required=True,
+        domain=[('kind', '=', 'revenue')])
 
     def get_default_payment_method(self):
         for elem in self.payment_methods:
@@ -485,6 +490,23 @@ class Product():
         for elem in self.payment_methods:
             result.append(elem.payment_method)
         return result
+
+    def get_account_for_billing(self):
+        return self.account_for_billing
+
+
+class Coverage():
+    'Coverage'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'offered.coverage'
+
+    account_for_billing = fields.Many2One('account.account',
+        'Account for billing', required=True,
+        domain=[('kind', '=', 'revenue')])
+
+    def get_account_for_billing(self):
+        return self.account_for_billing
 
 
 class Contract():
@@ -530,11 +552,12 @@ class Contract():
             self.next_billing_date = self.start_date
 
     def next_billing_period(self):
-        last_date = self.start_date
+        start_date = self.next_billing_date
+        last_date = date.add_day(self.start_date, -1)
         for period in self.billing_periods:
-            if (self.start_date <= period.start_date and (
+            if (start_date >= period.start_date and (
                     not period.end_date
-                    or period.end_date >= self.start_date)):
+                    or period.end_date >= start_date)):
                 return (period.start_date, period.end_date)
             if period.end_date > last_date:
                 last_date = period.end_date

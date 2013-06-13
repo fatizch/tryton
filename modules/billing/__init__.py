@@ -16,6 +16,7 @@ def register():
         BillDisplay,
         ProductPaymentMethodRelation,
         Product,
+        Coverage,
         Contract,
         Option,
         CoveredElement,
