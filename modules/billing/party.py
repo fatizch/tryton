@@ -39,3 +39,13 @@ class Party():
         remove_company(cls.account_payable.domain)
         cls.account_receivable = copy.copy(cls.account_receivable)
         remove_company(cls.account_receivable.domain)
+
+    @classmethod
+    def _import_single_link(
+            cls, instance, field_name, field, field_value, created, relink,
+            target_model, to_relink):
+        res = super(Party, cls)._import_single_link(instance, field_name,
+            field, field_value, created, relink, target_model, to_relink)
+        if field_name in ('account_receivable', 'account_payable'):
+            return True
+        return res
