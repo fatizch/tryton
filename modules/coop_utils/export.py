@@ -260,7 +260,7 @@ class ExportImportMixin(Model):
                     tryton_fields.Reference)):
                 self._export_single_link(
                     exported, export_result, field_name, field, field_value,
-                    None, force_key, values)
+                    from_field, force_key, values)
             elif (isinstance(field, tryton_fields.Many2Many) or
                     isinstance(field, tryton_fields.One2Many)):
                 self._export_multiple_link(
@@ -322,7 +322,7 @@ class ExportImportMixin(Model):
                         target_model.__name__][field_value])
                 else:
                     to_relink.append(
-                        (field_name, (target_model, field_value)))
+                        (field_name, (target_model.__name__, field_value)))
                     return False
             else:
                 good_value = target_model._export_find_instance(
@@ -402,11 +402,7 @@ class ExportImportMixin(Model):
             # print '\n'.join([str(x) for x in relink])
             # print utils.format_data(created)
             # print utils.format_data(instance)
-            try:
-                instance.save()
-            except:
-                print utils.format_data(created)
-                raise
+            instance.save()
         if to_relink:
             relink.append(((cls.__name__, key), dict([
                 (name, value) for name, value in to_relink])))
