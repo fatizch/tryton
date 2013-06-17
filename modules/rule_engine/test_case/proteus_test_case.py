@@ -36,13 +36,15 @@ def get_or_create_tree_element(
         cur_domain.append(('name', '=', name))
     if cur_type == 'folder':
         cur_domain.append(('description', '=', description))
+    else:
+        cur_domain.append(
+            ('translated_technical_name', '=', translated_technical))
     cur_domain.append(('language.code', '=', cfg_dict['language']))
-    cur_domain.append(('translated_technical_name', '=', translated_technical))
     tree_element = proteus_tools.get_objects_from_db(
         cfg_dict, 'TreeElement', domain=cur_domain)
     if tree_element:
         return tree_element
-    lang = cfg_dict['Lang'].find([('code', '=', cfg_dict['language'])])[0]
+    lang = Model.get('ir.lang').find([('code', '=', cfg_dict['language'])])[0]
     te = cfg_dict['TreeElement']()
     if fct_args:
         te.fct_args = ', '.join(map(
