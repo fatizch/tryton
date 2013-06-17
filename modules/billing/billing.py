@@ -944,6 +944,23 @@ class Contract():
             [code] + today_value + [company_id] + [Decimal(clause[2] or 0)])
         return [('id', 'in', [x[0] for x in cursor.fetchall()])]
 
+    def calculate_price_at_date(self, date):
+        cur_dict = {'date': date}
+        self.init_dict_for_rule_engine(cur_dict)
+        prices, errs = self.offered.get_result('total_price', cur_dict)
+        return (prices, errs)
+
+    def calculate_prices_at_all_dates(self):
+        prices = []
+        errs = []
+        dates = self.get_dates(start=self.start_date)
+        for cur_date in dates:
+            price, err = self.calculate_price_at_date(cur_date)
+            if price:
+                prices.extend(price)
+            errs += err
+        return prices, errs
+
 
 class Option():
     'Option'
