@@ -5,7 +5,7 @@
     </xpath>
     <xpath expr="/form/label[@name='rule']" position="before">
         <label name="rate"/>
-        <group id="rate">
+        <group id="rate" states="{'invisible': Eval('config_kind') != 'simple'}">
             <field name="rate" xexpand="0"/>
             <label string="%" id="rate" xexpand="0" xalign="0"/>
         </group>
