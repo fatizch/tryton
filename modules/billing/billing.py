@@ -563,19 +563,20 @@ class Contract():
     def next_billing_period(self):
         start_date = self.next_billing_date
         last_date = date.add_day(self.start_date, -1)
-        for period in self.billing_periods:
-            if (start_date >= period.start_date and (
-                    not period.end_date
-                    or period.end_date >= start_date)):
-                return (period.start_date, period.end_date)
-            if period.end_date > last_date:
-                last_date = period.end_date
-        new_period_start = date.add_day(last_date, 1)
-        new_period_end = date.add_frequency(
-            self.get_product_frequency(last_date), last_date)
-        if self.end_date and new_period_end > self.end_date:
-            return (new_period_start, self.end_date)
-        return (new_period_start, new_period_end)
+        if not utils.is_none(self, 'billing_periods'):
+            for period in self.billing_periods:
+                if (start_date >= period.start_date and (
+                        not period.end_date
+                        or period.end_date >= start_date)):
+                    return (period.start_date, period.end_date)
+                if period.end_date > last_date:
+                    last_date = period.end_date
+            new_period_start = date.add_day(last_date, 1)
+            new_period_end = date.add_frequency(
+                self.get_product_frequency(last_date), last_date)
+            if self.end_date and new_period_end > self.end_date:
+                return (new_period_start, self.end_date)
+            return (new_period_start, new_period_end)
 
     @classmethod
     def get_price_line_model(cls):
@@ -666,6 +667,8 @@ class Contract():
 
         if not period:
             period = self.next_billing_period()
+        if not period:
+            return
         billing_date = period[0]
         for billing_period in self.billing_periods:
             if (billing_period.start_date, billing_period.end_date) == period:
@@ -808,13 +811,13 @@ class Contract():
 
     def finalize_contract(self):
         super(Contract, self).finalize_contract()
-        last_bill = self.last_bill[0]
         self.generate_first_bill()
-        last_bill = self.last_bill[0]
-        Move = Pool().get('account.move')
-        Move.post([last_bill])
-        self.next_billing_date = date.add_day(
-            last_bill.billing_period.end_date, 1)
+        if not utils.is_none(self, 'last_bill'):
+            last_bill = self.last_bill[0]
+            Move = Pool().get('account.move')
+            Move.post([last_bill])
+            self.next_billing_date = date.add_day(
+                last_bill.billing_period.end_date, 1)
         self.save()
 
     # From account => party
