@@ -100,9 +100,8 @@ class Coverage():
 
         for covered, covered_data in self.give_me_covered_elements_at_date(
                 args)[0]:
-            tmp_args = args
-            tmp_args['sub_elem'] = covered
-            tmp_args['data'] = covered_data
+            tmp_args = args.copy()
+            covered_data.init_dict_for_rule_engine(tmp_args)
             try:
                 sub_elem_line, sub_elem_errs = self.get_result(
                     'sub_elem_price', tmp_args, kind='pricing')
