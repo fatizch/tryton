@@ -318,6 +318,14 @@ msgctxt "field:contract.subscribed_option,write_uid:"
 msgid ""
 msgstr ""
 
+msgctxt "field:offered.rule_sets,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.rule_sets,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
 msgctxt "model:contract.address,name:"
 msgid ""
 msgstr ""
@@ -338,9 +346,13 @@ msgctxt "model:ir.action,name:act_contract_form"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "model:offered.rule_sets,name:"
+msgid "Offered Context"
+msgstr ""
+
 msgctxt "selection:contract.contract,status:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "selection:contract.contract,status:"
 msgid "Active"
@@ -360,7 +372,7 @@ msgstr "Terminé"
 
 msgctxt "selection:contract.status_history,status:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "selection:contract.status_history,status:"
 msgid "Active"
@@ -384,7 +396,7 @@ msgstr "Terminé"
 
 msgctxt "selection:contract.subscribed_option,status:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "selection:contract.subscribed_option,status:"
 msgid "Active"

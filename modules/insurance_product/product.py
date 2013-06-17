@@ -122,11 +122,10 @@ class Product():
     __name__ = 'offered.product'
     __metaclass__ = PoolMeta
 
-    term_renewal_rules = fields.One2Many(
-        'ins_product.term_renewal_rule', 'offered', 'Term - Renewal')
-    item_descriptors = fields.Many2Many(
-        'offered.product-item_desc',
-        'product', 'item_desc', 'Item Descriptors',
+    term_renewal_rules = fields.One2Many('ins_product.term_renewal_rule',
+        'offered', 'Term - Renewal')
+    item_descriptors = fields.Many2Many('offered.product-item_desc', 'product',
+        'item_desc', 'Item Descriptors',
         domain=[('id', 'in', Eval('possible_item_descs'))],
         depends=['possible_item_descs'],
         states={
@@ -146,6 +145,9 @@ class Product():
         if ('default', 'Default') in cls.kind.selection:
             cls.kind.selection.remove(('default', 'Default'))
         cls.kind.selection = list(set(cls.kind.selection))
+        cls._error_messages.update({
+            'no_renewal_rule_configured': 'No renewal rule configured',
+        })
 
     @classmethod
     def delete(cls, entities):
@@ -257,6 +259,13 @@ class Product():
         if 'sub_elem' in args and args['level'] == 'covered_data':
             return ''
         return super(Product, self).get_cmpl_data_looking_for_what(args)
+
+    def give_me_next_renewal_date(self, args):
+        try:
+            return self.get_result('next_renewal_date', args,
+                kind='term_renewal')
+        except NonExistingRuleKindException:
+            return None, [('no_renewal_rule_configured', ())]
 
 
 class OfferedProduct(Offered):

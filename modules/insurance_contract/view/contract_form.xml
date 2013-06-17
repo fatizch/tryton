@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
+  <xpath expr="/form/field[@name='end_date']" position="after">
+    <label name="last_renewed"/>
+    <field name="last_renewed"/>
+    <label name="next_renewal_date"/>
+    <field name="next_renewal_date"/>
+  </xpath>
   <xpath expr="/form/notebook/page[@id='options']" position="before">
-    <page string="Covered Elements" id="cov_elements"
-      states="{'invisible': Eval('product_kind') != 'insurance'}">
+    <page string="Covered Elements" id="cov_elements" states="{'invisible': Eval('product_kind') != 'insurance'}">
       <field name="covered_elements" mode="tree" view_ids="insurance_contract.covered_elements_clean_tree" group="covered_elements" xexpand="0" xfill="0"/>
       <field name="covered_elements" mode="form" view_ids="insurance_contract.covered_element_view_form" relation="ins_contract.covered_element" relation_field="contract" group="covered_elements"/>
       <field name="covered_elements" mode="form" view_ids="insurance_contract.covered_data_view_form" relation="ins_contract.covered_data" relation_field="covered_element" group="covered_elements"/>

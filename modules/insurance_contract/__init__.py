@@ -3,6 +3,7 @@ from contract import *
 from subs_process import *
 from .party import *
 from .document import *
+from .renewal import *
 from .rule_engine import *
 
 from trytond.modules.coop_utils import expand_tree
@@ -30,6 +31,13 @@ def register():
         DeliveredService,
         RequestFinder,
         Expense,
+        # from renewal
+        RenewalStart,
+        RenewalResult,
         #From Rule Engine,
         OfferedContext,
         module='insurance_contract', type_='model')
+
+    Pool.register(
+        RenewalWizard,
+        module='insurance_contract', type_='wizard')

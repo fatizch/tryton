@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -581,7 +581,7 @@ msgid "Coverages"
 msgstr "Garanties"
 
 msgctxt "model:ir.action,name:act_model_coop_schema"
-msgid "Complementary Data"
+msgid "Complementary Data Complementary Datas"
 msgstr "Données Complémentaires"
 
 msgctxt "model:ir.action,name:act_package_form"
@@ -706,7 +706,11 @@ msgstr "Sélection"
 
 msgctxt "selection:offered.coverage,kind:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
+
+msgctxt "selection:offered.coverage,kind:"
+msgid "Default"
+msgstr "Défaut"
 
 msgctxt "selection:offered.coverage,subscription_behaviour:"
 msgid "Mandatory"
@@ -722,7 +726,7 @@ msgstr "Proposé par Défaut"
 
 msgctxt "selection:offered.coverage,template_behaviour:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "selection:offered.coverage,template_behaviour:"
 msgid "Add"
@@ -734,7 +738,7 @@ msgstr "Remplacer"
 
 msgctxt "selection:offered.offered,template_behaviour:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "selection:offered.offered,template_behaviour:"
 msgid "Add"
@@ -746,11 +750,15 @@ msgstr "Remplacer"
 
 msgctxt "selection:offered.product,kind:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
+
+msgctxt "selection:offered.product,kind:"
+msgid "Default"
+msgstr "Défaut"
 
 msgctxt "selection:offered.product,template_behaviour:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "selection:offered.product,template_behaviour:"
 msgid "Add"

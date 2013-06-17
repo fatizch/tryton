@@ -456,7 +456,7 @@ msgstr "Produit"
 
 msgctxt "selection:commission.commission_rule,template_behaviour:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "selection:commission.commission_rule,template_behaviour:"
 msgid "Add"

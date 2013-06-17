@@ -42,6 +42,10 @@ msgctxt "field:account.move,billing_period:"
 msgid "Billing Period"
 msgstr "Période de Facturation"
 
+msgctxt "field:account.move.line,origin_name:"
+msgid "Origin Name"
+msgstr "Source"
+
 msgctxt "field:account.move.line,second_origin:"
 msgid "Second Origin"
 msgstr ""
@@ -482,6 +486,10 @@ msgctxt "field:contract.contract,billing_periods:"
 msgid "Billing Periods"
 msgstr "Période de Facturation"
 
+msgctxt "field:contract.contract,last_bill:"
+msgid "Last Bill"
+msgstr "Dernier Décompte"
+
 msgctxt "field:contract.contract,next_billing_date:"
 msgid "Next Billing Date"
 msgstr "Date du Prochain Calcul"
@@ -489,6 +497,14 @@ msgstr "Date du Prochain Calcul"
 msgctxt "field:contract.contract,prices:"
 msgid "Prices"
 msgstr "Primes"
+
+msgctxt "field:contract.contract,receivable_lines:"
+msgid "Receivable Lines"
+msgstr "Lignes à recevoir"
+
+msgctxt "field:contract.contract,receivable_today:"
+msgid "Receivable Today"
+msgstr "À recevoir aujourd'hui"
 
 msgctxt "field:coop_account.fee_desc,account_for_billing:"
 msgid "Account for billing"
@@ -500,7 +516,7 @@ msgstr "Compte de Facturation"
 
 msgctxt "field:ins_contract.covered_element,indemnification_bank_account:"
 msgid ""
-msgstr ""
+msgstr "Compte de Remboursement"
 
 msgctxt "field:ins_contract.covered_element,indemnification_bank_account:"
 msgid "Indemnification Bank Account"
@@ -517,6 +533,14 @@ msgstr "Compte de Facturation"
 msgctxt "field:offered.product,payment_methods:"
 msgid "Payment Methods"
 msgstr "Méthodes de Paiement"
+
+msgctxt "field:party.party,payable_lines:"
+msgid "Payable Lines"
+msgstr "Lignes à payer"
+
+msgctxt "field:party.party,receivable_lines:"
+msgid "Receivable Lines"
+msgstr "Lignes à recevoir"
 
 msgctxt "model:billing.billing_manager,name:"
 msgid "Billing Manager"
@@ -592,7 +616,7 @@ msgstr "Virement Bancaire"
 
 msgctxt "selection:billing.price_line,frequency:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "selection:billing.price_line,frequency:"
 msgid "Half Yearly"

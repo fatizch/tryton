@@ -142,15 +142,16 @@ def convert_ref_to_obj(ref):
 def limit_dates(dates, start=None, end=None):
     res = list(dates)
     res.sort()
-    final_res = []
-    for elem in res:
-        if (not start or elem > start) and (not end or elem <= end):
-            final_res.append(elem)
-    if start and (not final_res or final_res[0] and final_res[0] != start):
-        final_res.insert(0, start)
-    if end and final_res[-1] != end:
-        final_res.append(end)
-    return final_res
+    filter_func = lambda x: (x >= start if start else True) and (
+        x < end if end else True)
+    res = filter(filter_func, res)
+    res = set(res)
+    if end:
+        res.add(end)
+    # The list was sorted before filtering so the resulting set should be
+    # properly sorted as well. 'end' should be the greatest elem of the set
+    # so adding it later should not change the iteration order
+    return res
 
 
 def to_date(string, format='ymd'):

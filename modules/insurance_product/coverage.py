@@ -114,18 +114,10 @@ class Coverage():
             errs += sub_elem_errs
         return ([result_line], errs)
 
-    def get_dates(self, dates=None, start=None, end=None):
-        # This is a temporary functionality that is provided to ease the
-        # checking of the pricing calculations.
-        # In 'real life', it is not systematic to update the pricing when a new
-        # version of the rule is defined
-        if dates:
-            res = set(dates)
-        else:
-            res = set()
-        for rule in self.pricing_rules:
-            res.add(rule.start_date)
-        return utils.limit_dates(res, start, end)
+    def get_dates(self, dates=None):
+        if not dates:
+            dates = set()
+        return dates
 
     def give_me_eligibility(self, args):
         try:

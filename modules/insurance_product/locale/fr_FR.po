@@ -260,6 +260,10 @@ msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:offered.product:"
+msgid "No renewal rule configured"
+msgstr "Aucune règle de renouvellement configurée sur le produit"
+
+msgctxt "error:offered.product:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
@@ -3946,7 +3950,7 @@ msgstr "Remplacer"
 
 msgctxt "selection:ins_product.deductible_duration,duration_unit:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "selection:ins_product.deductible_duration,duration_unit:"
 msgid "Day"

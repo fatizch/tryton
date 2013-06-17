@@ -566,17 +566,18 @@ class Contract():
         if not utils.is_none(self, 'billing_periods'):
             for period in self.billing_periods:
                 if (start_date >= period.start_date and (
-                        not period.end_date
-                        or period.end_date >= start_date)):
+                        not period.end_date or period.end_date >= start_date)):
                     return (period.start_date, period.end_date)
-                if period.end_date > last_date:
-                    last_date = period.end_date
-            new_period_start = date.add_day(last_date, 1)
-            new_period_end = date.add_frequency(
-                self.get_product_frequency(last_date), last_date)
-            if self.end_date and new_period_end > self.end_date:
-                return (new_period_start, self.end_date)
-            return (new_period_start, new_period_end)
+            if period.end_date > last_date:
+                last_date = period.end_date
+        new_period_start = date.add_day(last_date, 1)
+        new_period_end = date.add_frequency(
+            self.get_product_frequency(last_date), last_date)
+        new_period_end = min(new_period_end, date.add_day(
+            self.next_renewal_date, -1))
+        if self.end_date and new_period_end > self.end_date:
+            return (new_period_start, self.end_date)
+        return (new_period_start, new_period_end)
 
     @classmethod
     def get_price_line_model(cls):
@@ -594,13 +595,24 @@ class Contract():
         if not prices:
             return
         PriceLine = Pool().get(self.get_price_line_model())
-        to_delete = []
-        if hasattr(self, 'prices') and self.prices:
-            for price in self.prices:
-                to_delete.append(price)
-        result_prices = []
         dates = list(set([elem.start_date for elem in prices]))
         dates.sort()
+        result_prices = []
+        to_delete = []
+        oldest = []
+        if hasattr(self, 'prices') and self.prices:
+            result_prices = list(filter(lambda x: x.start_date < dates[0],
+                self.prices))
+            to_delete = list(filter(lambda x: x.start_date >= dates[0],
+                self.prices))
+            by_dates = {}
+            max_date = None
+            for elem in result_prices:
+                by_dates.setdefault(elem.start_date, []).append(elem)
+                max_date = max_date if (
+                    max_date and max_date > elem.start_date) \
+                    else elem.start_date
+            oldest = by_dates[max_date]
         for price in prices:
             price_line = PriceLine()
             price_line.init_from_result_line(price)
@@ -612,10 +624,13 @@ class Contract():
             except IndexError:
                 pass
             result_prices.append(price_line)
+        for elem in oldest:
+            elem.end_date = date.add_day(dates[0], -1)
+            elem.save()
+        if to_delete:
+            PriceLine.delete(to_delete)
         self.prices = result_prices
         self.save()
-
-        PriceLine.delete(to_delete)
 
     @classmethod
     @model.CoopView.button
@@ -624,7 +639,7 @@ class Contract():
             contract.calculate_prices()
 
     def calculate_prices(self):
-        prices, errs = self.calculate_prices_at_all_dates()
+        prices, errs = self.calculate_prices_between_dates()
 
         if errs:
             return False, errs
@@ -801,6 +816,28 @@ class Contract():
             [('origin', '=', utils.convert_to_reference(self))]))
         self.bill()
 
+    def calculate_price_at_date(self, date):
+        cur_dict = {
+            'date': date,
+            'appliable_conditions_date': self.appliable_conditions_date}
+        self.init_dict_for_rule_engine(cur_dict)
+        prices, errs = self.offered.get_result('total_price', cur_dict)
+        return (prices, errs)
+
+    def calculate_prices_between_dates(self, start=None, end=None):
+        if not start:
+            start = self.start_date
+        prices = []
+        errs = []
+        dates = self.get_dates()
+        dates = utils.limit_dates(dates, self.start_date)
+        for cur_date in dates:
+            price, err = self.calculate_price_at_date(cur_date)
+            if price:
+                prices.extend(price)
+            errs += err
+        return prices, errs
+
     def get_last_bill(self, name):
         Move = Pool().get('account.move')
         try:
@@ -819,6 +856,19 @@ class Contract():
             self.next_billing_date = date.add_day(
                 last_bill.billing_period.end_date, 1)
         self.save()
+
+    def renew(self):
+        res = super(Contract, self).renew()
+        if not res:
+            return res
+        self.bill()
+        last_bill = self.last_bill[0]
+        Move = Pool().get('account.move')
+        Move.post([last_bill])
+        self.next_billing_date = date.add_day(
+            last_bill.billing_period.end_date, 1)
+        self.save()
+        return True
 
     # From account => party
     @classmethod
@@ -946,23 +996,6 @@ class Contract():
                 + clause[1] + ' %s)',
             [code] + today_value + [company_id] + [Decimal(clause[2] or 0)])
         return [('id', 'in', [x[0] for x in cursor.fetchall()])]
-
-    def calculate_price_at_date(self, date):
-        cur_dict = {'date': date}
-        self.init_dict_for_rule_engine(cur_dict)
-        prices, errs = self.offered.get_result('total_price', cur_dict)
-        return (prices, errs)
-
-    def calculate_prices_at_all_dates(self):
-        prices = []
-        errs = []
-        dates = self.get_dates(start=self.start_date)
-        for cur_date in dates:
-            price, err = self.calculate_price_at_date(cur_date)
-            if price:
-                prices.extend(price)
-            errs += err
-        return prices, errs
 
 
 class Option():

@@ -112,7 +112,7 @@ class Subscribed(model.CoopView):
     def get_possible_status(name=None):
         raise NotImplementedError
 
-    def get_dates(self, dates=None, start=None, end=None):
+    def get_dates(self, dates=None):
         if dates:
             res = set(dates)
         else:
@@ -120,7 +120,7 @@ class Subscribed(model.CoopView):
         res.add(self.start_date)
         if hasattr(self, 'end_date') and self.end_date:
             res.add(date.add_day(self.end_date, 1))
-        return utils.limit_dates(res, start, end)
+        return res
 
     def init_from_offered(self, offered, start_date=None, end_date=None):
         #TODO : check eligibility
@@ -325,16 +325,13 @@ class Contract(model.CoopSQL, Subscribed, Printable):
                     ['contract'], at_date=option.start_date))
         return set(compl_data_defs)
 
-    def get_dates(self, dates=None, start=None, end=None):
-        if dates:
-            res = set(dates)
-        else:
-            res = set()
+    def get_dates(self, dates=None):
+        res = super(Contract, self).get_dates(dates)
         for covered in self.covered_elements:
-            res.update(covered.get_dates(res, start, end))
+            res.update(covered.get_dates(res))
         for option in self.options:
-            res.update(option.get_dates(res, start, end))
-        return super(Contract, self).get_dates(res, start, end)
+            res.update(option.get_dates(res))
+        return res
 
     def init_dict_for_rule_engine(self, cur_dict):
         cur_dict['contract'] = self
@@ -535,13 +532,10 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
     def get_coverage(self):
         return self.offered
 
-    def get_dates(self, dates=None, start=None, end=None):
-        if dates:
-            res = set(dates)
-        else:
-            res = set()
-        res.update(self.offered.get_dates(dates, start, end))
-        return super(SubscribedCoverage, self).get_dates(res, start, end)
+    def get_dates(self, dates=None):
+        res = super(SubscribedCoverage, self).get_dates(dates)
+        res.update(self.offered.get_dates(res))
+        return res
 
     @staticmethod
     def get_possible_status(name=None):

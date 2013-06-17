@@ -656,7 +656,7 @@ msgstr "Validation des Indemnisations"
 
 msgctxt "selection:ins_claim.claim,reopened_reason:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "selection:ins_claim.claim,reopened_reason:"
 msgid "Reclamation"
@@ -684,7 +684,7 @@ msgstr "Réouvert"
 
 msgctxt "selection:ins_claim.claim,sub_status:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "selection:ins_claim.claim,sub_status:"
 msgid "Instruction"
@@ -736,7 +736,7 @@ msgstr "Réouvert"
 
 msgctxt "selection:ins_claim.claim.history,sub_status:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "selection:ins_claim.claim.history,sub_status:"
 msgid "Instruction"
@@ -812,7 +812,7 @@ msgstr "Carence"
 
 msgctxt "selection:ins_claim.indemnification_detail,unit:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "selection:ins_claim.indemnification_detail,unit:"
 msgid "Day"
@@ -884,7 +884,7 @@ msgstr "Sinistre"
 
 msgctxt "selection:offered.coverage,family:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "selection:party.contact_history,for_object_ref:"
 msgid "Claim"

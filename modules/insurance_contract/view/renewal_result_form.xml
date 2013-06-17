@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<form string="Renewal Result" col="1">
+    <separator name="renewal_log_success"/>
+    <field name="renewal_log_success"/>
+    <separator name="renewal_log_failure"/>
+    <field name="renewal_log_failure"/>
+</form>

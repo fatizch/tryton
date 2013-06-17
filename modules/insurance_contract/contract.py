@@ -52,6 +52,8 @@ class InsurancePolicy():
         states={'invisible': Eval('product_kind') == 'insurance'})
     contract_history = fields.One2Many('contract.contract.history',
         'from_object', 'Contract History')
+    next_renewal_date = fields.Date('Next Renewal Date')
+    last_renewed = fields.Date('Last Renewed')
 
     @classmethod
     def get_options_model_name(cls):
@@ -86,6 +88,27 @@ class InsurancePolicy():
                     errs += eligibility.details
                 errs += errors
         return (res, errs)
+
+    def get_dates(self, dates=None):
+        res = super(InsurancePolicy, self).get_dates(dates)
+        res.add(self.last_renewed)
+        return res
+
+    def init_from_offered(self, offered, start_date=None, end_date=None):
+        res = super(InsurancePolicy, self).init_from_offered(offered,
+            start_date, end_date)
+        self.last_renewed = self.start_date
+        self.next_renewal_date = None
+        self.next_renewal_date, errors = self.offered.get_result(
+            'next_renewal_date', {
+                'date': self.start_date,
+                'appliable_conditions_date': self.appliable_conditions_date,
+                'contract': self})
+        if len(errors) == 1 and errors[0][0] == 'no_renewal_rule_configured':
+            return res[0], []
+        else:
+            res = (res[0] and not errors, res[1] + errors)
+            return res
 
     @classmethod
     def get_offered_name(cls):
@@ -227,7 +250,8 @@ class InsurancePolicy():
                 'calculated_complementary_datas', {
                     'date': self.start_date,
                     'contract': self,
-                    'appliable_conditions_date': self.appliable_conditions_date,
+                    'appliable_conditions_date':
+                    self.appliable_conditions_date,
                     'level': 'contract',
                     }
                 )[0]}
@@ -238,6 +262,22 @@ class InsurancePolicy():
     def finalize_contract(self):
         super(InsurancePolicy, self).finalize_contract()
         self.update_management_roles()
+
+    def renew(self):
+        renewal_date = self.next_renewal_date
+        self.next_renewal_date, errors = self.offered.get_result(
+            'next_renewal_date', {
+                'date': self.start_date,
+                'appliable_conditions_date': self.appliable_conditions_date,
+                'contract': self})
+        self.last_renewed = renewal_date
+        if errors:
+            return False
+        prices_update, errs = self.calculate_prices_between_dates(renewal_date)
+        if errors:
+            return False
+        self.store_prices(prices_update)
+        return True
 
 
 class InsuranceSubscribedCoverage():
@@ -496,16 +536,16 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             res = coop_string.concat_strings(res, self.name)
         return res
 
-    def get_dates(self, dates=None, start=None, end=None):
+    def get_dates(self, dates=None):
         if dates:
             res = set(dates)
         else:
             res = set()
         for data in self.covered_data:
-            res.update(data.get_dates(dates, start, end))
+            res.update(data.get_dates(dates))
         if hasattr(self, 'sub_covered_elements'):
             for sub_elem in self.sub_covered_elements:
-                res.update(sub_elem.get_dates(dates, start, end))
+                res.update(sub_elem.get_dates(dates))
         return res
 
     def check_at_least_one_covered(self, errors=None):
@@ -800,7 +840,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
         #self.covered_element = covered_element
         pass
 
-    def get_dates(self, dates=None, start=None, end=None):
+    def get_dates(self, dates=None):
         if dates:
             res = set(dates)
         else:
@@ -808,7 +848,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
         res.add(self.start_date)
         if hasattr(self, 'end_date') and self.end_date:
             res.add(date.add_day(self.end_date, 1))
-        return utils.limit_dates(res, start, end)
+        return res
 
     def get_coverage(self):
         if (hasattr(self, 'option') and self.option):

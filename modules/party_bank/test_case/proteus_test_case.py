@@ -44,6 +44,7 @@ def create_bank(cfg_dict):
             # bank.save()
             n += 1
         except:
+            raise
             warnings.warn('Impossible to create bank %s' % line[11:51].strip(),
                 stacklevel=2)
     f.close()

@@ -162,6 +162,10 @@ msgctxt "field:contract.contract,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
+msgctxt "field:contract.contract,last_renewed:"
+msgid "Last Renewed"
+msgstr "Dernier renouvellement"
+
 msgctxt "field:contract.contract,management_roles:"
 msgid "Management Roles"
 msgstr "Géré par"
@@ -169,6 +173,10 @@ msgstr "Géré par"
 msgctxt "field:contract.contract,managing_roles:"
 msgid "Managing Roles"
 msgstr "Gérant les Contrats"
+
+msgctxt "field:contract.contract,next_renewal_date:"
+msgid "Next Renewal Date"
+msgstr "Prochain renouvellement"
 
 msgctxt "field:contract.contract,offered:"
 msgid "Product"
@@ -463,7 +471,7 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:ins_contract.covered_element,complementary_data:"
-msgid "Complementary Data"
+msgid "Contract Complementary Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:ins_contract.covered_element,complementary_data_summary:"
@@ -527,7 +535,7 @@ msgid "Actor"
 msgstr "Acteur"
 
 msgctxt "field:ins_contract.covered_element,party_compl_data:"
-msgid "Complementary Data"
+msgid "Party Complementary Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:ins_contract.covered_element,possible_item_desc:"
@@ -552,39 +560,39 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_contract.covered_element-party_relation,covered_element:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_element-party_relation,create_date:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_element-party_relation,create_uid:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_element-party_relation,id:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_element-party_relation,is_used:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_element-party_relation,party_relation:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_element-party_relation,rec_name:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_element-party_relation,write_date:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_element-party_relation,write_uid:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.delivered_service,contract:"
 msgid "Contract"
@@ -746,6 +754,46 @@ msgctxt "field:ins_contract.management_role,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_contract.renewal_result,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.renewal_result,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:ins_contract.renewal_result,renewal_log_failure:"
+msgid "Failed"
+msgstr "Ont échoués"
+
+msgctxt "field:ins_contract.renewal_result,renewal_log_success:"
+msgid "Succeeded"
+msgstr "Ont réussit"
+
+msgctxt "field:ins_contract.renewal_start,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_contract.renewal_start,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:ins_contract.renewal_start,renew_what:"
+msgid "All contracts"
+msgstr "Tous les contrats"
+
+msgctxt "field:ins_contract.renewal_start,renewal_date:"
+msgid "Renewal Date"
+msgstr "Date de renouvellement"
+
+msgctxt "field:ins_contract.renewal_start,this_contract:"
+msgid "Renew this contract"
+msgstr "Seulement ce contrat"
+
+msgctxt "field:ins_contract.renewal_start,will_be_renewed:"
+msgid "Will be renewed"
+msgstr "A renouveller"
+
 msgctxt "field:ins_contract.subscribed_coverage_complement,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -827,7 +875,7 @@ msgstr "Elément Couvert"
 
 msgctxt "model:ins_contract.covered_element-party_relation,name:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "model:ins_contract.delivered_service,name:"
 msgid "Delivered Service"
@@ -841,6 +889,14 @@ msgctxt "model:ins_contract.management_role,name:"
 msgid "Management Role"
 msgstr "Gestionnaire"
 
+msgctxt "model:ins_contract.renewal_result,name:"
+msgid "Renewal Result"
+msgstr "Résultat du Renouvellement"
+
+msgctxt "model:ins_contract.renewal_start,name:"
+msgid "Renewal Start"
+msgstr "Paramètres du Renouvellement"
+
 msgctxt "model:ins_contract.subscribed_coverage_complement,name:"
 msgid "Subscribed Coverage"
 msgstr "Garantie Souscrite"
@@ -853,6 +909,10 @@ msgctxt "model:ir.action,name:act_contract_status_history_relate_form"
 msgid "Status History"
 msgstr "Historique des Statuts"
 
+msgctxt "model:ir.action,name:act_renewal_wizard"
+msgid "Renew Contracts"
+msgstr "Renouvellement"
+
 msgctxt "model:ir.ui.menu,name:menu_contract"
 msgid "Contract"
 msgstr "Contrat"
@@ -864,6 +924,10 @@ msgstr "Contrat"
 msgctxt "model:ir.ui.menu,name:menu_individual"
 msgid "Individual Policy"
 msgstr "Individuel"
+
+msgctxt "model:ir.ui.menu,name:menu_renew_contract"
+msgid "Renew Contracts"
+msgstr "Renouvellement"
 
 msgctxt "selection:contract.contract,status:"
 msgid "Active"
@@ -1040,3 +1104,20 @@ msgstr "Gestionnaire"
 msgctxt "view:ins_contract.management_role:"
 msgid "Manager"
 msgstr "Géré par"
+
+msgctxt "wizard_button:ins_contract.renewal_wizard,renewal_result,end:"
+msgid "End"
+msgstr "Terminer"
+
+msgctxt "wizard_button:ins_contract.renewal_wizard,renewal_start,do_renewal:"
+msgid "Start"
+msgstr "Borne Inférieure"
+
+msgctxt "wizard_button:ins_contract.renewal_wizard,renewal_start,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:ins_contract.renewal_wizard,renewal_start,renewal_result:"
+msgid "Start"
+msgstr "Borne Inférieure"

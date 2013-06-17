@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<form string="Renewal Start" col="4">
+  <label name="renewal_date"/>
+  <field name="renewal_date"/>
+  <label name="renew_what"/>
+  <field name="renew_what"/>
+  <label name="this_contract"/>
+  <field name="this_contract" colspan="3"/>
+  <field name="will_be_renewed" colspan="4"/>
+</form>

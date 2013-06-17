@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<tryton>
+  <data>
+    <!-- ############################################################ -->
+    <!-- Renewal Start -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="renewal_start_form">
+      <field name="model">ins_contract.renewal_start</field>
+      <field name="type">form</field>
+      <field name="name">renewal_start_form</field>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Renewal Result -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="renewal_result_form">
+      <field name="model">ins_contract.renewal_result</field>
+      <field name="type">form</field>
+      <field name="name">renewal_result_form</field>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Renewal Wizard -->
+    <!-- ############################################################ -->
+    <record model="ir.action.wizard" id="act_renewal_wizard">
+      <field name="name">Renew Contracts</field>
+      <field name="wiz_name">ins_contract.renewal_wizard</field>
+    </record>
+    <menuitem id="menu_renew_contract" sequence="15" action="act_renewal_wizard"
+        parent="insurance_contract.menu_contract"/>
+  </data>
+</tryton>
