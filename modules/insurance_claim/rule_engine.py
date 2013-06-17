@@ -1,5 +1,25 @@
+from trytond.pool import PoolMeta
+
 from trytond.modules.rule_engine import RuleEngineContext
 from trytond.modules.rule_engine import check_args
+
+__all__ = [
+    'OfferedContext',
+    'ClaimContext',
+    ]
+
+
+class OfferedContext():
+    'Offered Context'
+
+    __name__ = 'offered.rule_sets'
+    __metaclass__ = PoolMeta
+
+    @classmethod
+    def get_lowest_level_object(cls, args):
+        if 'delivered_service' in args:
+            return args['delivered_service']
+        return super(OfferedContext, cls).get_lowest_level_object(args)
 
 
 class ClaimContext(RuleEngineContext):
@@ -11,9 +31,7 @@ class ClaimContext(RuleEngineContext):
     @classmethod
     @check_args('delivered_service')
     def _re_delivered_service_complementary_data(cls, args, data_name):
-        del_service = args['delivered_service']
-        at_date = args['date']
-        return del_service.get_complementary_data_value(at_date, data_name)
+        cls.append_error(args, 'deprecated_method')
 
     @classmethod
     @check_args('delivered_service')
