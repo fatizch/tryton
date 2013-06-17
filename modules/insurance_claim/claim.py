@@ -481,6 +481,12 @@ class Loss(model.CoopSQL, model.CoopView):
             res.extend(benefit.loss_descs)
         return [x.id for x in set(res)]
 
+    def get_all_complementary_data(self, at_date):
+        res = {}
+        if not utils.is_none(self, 'complementary_data'):
+            res = self.complementary_data
+        return res
+
 
 class ClaimDeliveredService():
     'Claim Delivered Service'
@@ -656,10 +662,6 @@ class ClaimDeliveredService():
         if self.benefit:
             return self.benefit.complementary_data_def
 
-    def get_complementary_data_value(self, at_date, value):
-        return utils.get_complementary_data_value(self, 'complementary_data',
-            self.get_complementary_data_def(), at_date, value)
-
     def get_indemnification_being_calculated(self, cur_dict):
         if not hasattr(self, 'indemnifications'):
             return None
@@ -680,6 +682,14 @@ class ClaimDeliveredService():
             return ['rejected']
         else:
             return ['instruction']
+
+    def get_all_complementary_data(self, at_date):
+        res = {}
+        if not utils.is_none(self, 'complementary_data'):
+            res = self.complementary_data
+        res.update(self.subscribed_service.get_all_complementary_data(at_date))
+        res.update(self.loss.get_all_complementary_data(at_date))
+        return res
 
 
 class Indemnification(model.CoopView, model.CoopSQL):

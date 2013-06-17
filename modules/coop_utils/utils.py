@@ -503,6 +503,14 @@ def update_depends(cls, var_name, new_depends):
     setattr(cls, var_name, field_name)
 
 
+def update_on_change(cls, var_name, new_on_change):
+    field_name = copy.copy(getattr(cls, var_name))
+    if not field_name.on_change:
+        field_name.on_change = []
+    field_name.on_change.extend(new_on_change)
+    setattr(cls, var_name, field_name)
+
+
 def get_team(good_user=None):
     if not good_user:
         User = Pool().get('res.user')
@@ -525,22 +533,6 @@ def init_complementary_data_from_ids(ids):
         elem = the_model(id)
         res[elem.name] = elem.get_default_value(None)
     return res
-
-
-def get_complementary_data_value(
-        instance, var_name, data_defs, at_date, value):
-    res = None
-    if hasattr(instance, var_name):
-        cur_dict = getattr(instance, var_name)
-        if cur_dict and value in cur_dict:
-            res = cur_dict[value]
-    if res:
-        return res
-    for data_def in data_defs if data_defs else []:
-        if data_def.name != value:
-            continue
-        if data_def.type_ in ['integer', 'float', 'numeric']:
-            return 0
 
 
 def execute_rule(caller, rule, args):

@@ -257,8 +257,7 @@ class Product(model.CoopSQL, Offered):
             if coverage.is_valid():
                 yield coverage
 
-    def update_args(self, args):
-        # We might need the product while computing the coverages
+    def init_dict_for_rule_engine(self, args):
         if not 'product' in args:
             args['product'] = self
 

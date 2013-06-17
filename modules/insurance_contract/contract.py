@@ -57,25 +57,6 @@ class InsurancePolicy():
     def get_options_model_name(cls):
         return 'contract.subscribed_option'
 
-    def calculate_price_at_date(self, date):
-        cur_dict = {
-            'date': date,
-            'appliable_conditions_date': self.appliable_conditions_date}
-        self.init_dict_for_rule_engine(cur_dict)
-        prices, errs = self.offered.get_result('total_price', cur_dict)
-        return (prices, errs)
-
-    def calculate_prices_at_all_dates(self):
-        prices = []
-        errs = []
-        dates = self.get_dates(start=self.start_date)
-        for cur_date in dates:
-            price, err = self.calculate_price_at_date(cur_date)
-            if price:
-                prices.extend(price)
-            errs += err
-        return prices, errs
-
     def check_sub_elem_eligibility(self, at_date=None, ext=None):
         errors = []
         if not at_date:
@@ -616,15 +597,6 @@ class CoveredElement(model.CoopSQL, model.CoopView):
                 and self.item_desc.kind in ['party', 'person', 'company']):
             return self.item_desc.complementary_data_def
 
-    def get_complementary_data_value(self, at_date, value):
-        res = utils.get_complementary_data_value(self, 'complementary_data',
-            self.get_complementary_data_def(at_date=at_date), at_date, value)
-        if not res and self.party:
-            res = utils.get_complementary_data_value(self.party,
-                'complementary_data', self.get_party_compl_data_def(), at_date,
-                value)
-        return res
-
     def init_from_party(self, party):
         self.party = party
 
@@ -725,6 +697,14 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             if sub_element.match_key(from_name, party):
                 return sub_element
 
+    def get_all_complementary_data(self, at_date):
+        res = {}
+        if not utils.is_none(self, 'complementary_data'):
+            res = self.complementary_data
+        if not utils.is_none(self, 'party_compl_data'):
+            res.update(self.party_compl_data)
+        return res
+
 
 class CoveredElementPartyRelation(model.CoopSQL):
     'Relation between Covered Element and Covered Relations'
@@ -787,15 +767,6 @@ class CoveredData(model.CoopSQL, model.CoopView):
 
     def get_rec_name(self, name):
         return self.get_coverage().name
-
-    def get_complementary_data_value(self, at_date, value):
-        res = utils.get_complementary_data_value(
-            self, 'complementary_data', self.get_complementary_data_def(),
-            at_date, value)
-        if not res:
-            res = self.covered_element.get_complementary_data_value(
-                at_date, value)
-        return res
 
     def get_complementary_data_def(self):
         return self.option.offered.get_complementary_data_def(
@@ -895,6 +866,18 @@ class CoveredData(model.CoopSQL, model.CoopView):
 
     def _expand_tree(self, name):
         return True
+
+    def get_all_complementary_data(self, at_date):
+        res = {}
+        if not utils.is_none(self, 'complementary_data'):
+            res = self.complementary_data
+        res.update(self.covered_element.get_all_complementary_data(at_date))
+        res.update(self.option.get_all_complementary_data(at_date))
+        return res
+
+    def init_dict_for_rule_engine(self, args):
+        args['data'] = self
+        args['sub_elem'] = self.covered_element
 
 
 class ManagementRole(model.CoopSQL, model.CoopView):

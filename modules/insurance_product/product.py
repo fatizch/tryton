@@ -165,8 +165,7 @@ class Product():
     def give_me_coverages_price(self, args):
         errs = []
         res = []
-
-        self.update_args(args)
+        self.init_dict_for_rule_engine(args)
         for coverage in self.get_valid_coverages():
             _res, _errs = coverage.get_result('price', args)
             if _res:

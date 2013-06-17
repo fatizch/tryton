@@ -2,7 +2,7 @@ from trytond.pool import Pool
 from .claim import *
 from .product import *
 from .contract import *
-from .claim_rule_sets import *
+from .rule_engine import *
 
 
 def register():
@@ -20,9 +20,11 @@ def register():
         ClaimHistory,
         ClaimContract,
         ClaimOption,
-        ClaimContext,
         IndemnificationDisplayer,
         IndemnificationSelection,
+        #From Rule Engine
+        OfferedContext,
+        ClaimContext,
         module='insurance_claim', type_='model')
 
     Pool.register(

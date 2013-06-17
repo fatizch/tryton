@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<tryton>
+  <data skiptest="1">
+    <record model="rule_engine.tree_element" id="te_contract">
+        <field name="description">Contrat</field>
+        <field name="type">folder</field>
+        <field name="language" ref="ir.lang_fr"/>
+    </record>
+    <record model="rule_engine.context-rule_engine.tree_element" id="def_context-te_contract">
+        <field name="context" ref="rule_engine.default_context"/>
+        <field name="tree_element" ref="te_contract"/>
+    </record>
+    <record model="rule_engine.tree_element" id="te_contract_compl_data">
+        <field name="description">Donnée Complémentaire</field>
+        <field name="name">_re_complementary_data</field>
+        <field name="namespace">offered.rule_sets</field>
+        <field name="type">function</field>
+        <field name="parent" ref="te_contract"/>
+        <field name="translated_technical_name">donnee_compl</field>
+        <field name="language" ref="ir.lang_fr"/>
+    </record>
+</data>
+</tryton>

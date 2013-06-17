@@ -5,6 +5,7 @@ from .agreement import *
 from .party import *
 from .distribution import *
 from .contract import *
+from .rule_engine import *
 
 
 def register():
@@ -27,4 +28,6 @@ def register():
         DistributionNetworkBrokerRelation,
         #Contract
         Contract,
+        #Rule Engine
+        OfferedContext,
         module='commission', type_='model')

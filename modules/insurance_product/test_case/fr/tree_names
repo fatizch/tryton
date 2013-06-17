@@ -16,7 +16,6 @@ _re_subscriber_subscribed|A souscrit le produit|souscripteur_a_souscrit_produit|
 ins_product.rule_sets.covered_data|Données de couverture|dossier_donnees_couverture|
 _re_get_initial_subscription_date|Date d'effet du contrat|date_debut_souscription||
 _re_get_subscription_end_date|Date de fin du contrat|date_fin_souscription||
-_re_covered_data_complementary_data|Donnée complémentaire Elément Couvert|donnee_compl_element_couvert|Code donnee complementaire|
 
 [ins_product.rule_sets.rule_combination]
 ins_product.rule_sets.rule_combination|Combinaison de règles|dossier_rule_combination|
@@ -27,7 +26,6 @@ _re_get_sub_component|Valeur de la composante|valeur_de_composante|Code composan
 
 [ins_product.rule_sets.contract]
 ins_product.rule_sets.contract|Contrat|dossier_contrat|
-_re_contract_complementary_data|Donnée Complémentaire Contrat|donnee_compl_contrat|Code donnee complementaire|
 _re_contract_address_country|Pays du contrat|pays_du_contrat||Pays de l'adresse associée au contrat
 _re_contract_address_zip|Code postal du contrat|code_postal_du_contrat||Code postal de l'adresse associée au contrat
 

@@ -246,3 +246,16 @@ class ComplementaryDataDefinition(
                     compl_dict[key].get_value_as_string(value, lang))
             res[instance.id] = coop_string.re_indent_text(res[instance.id], 1)
         return res
+
+    @classmethod
+    def get_complementary_data_value(cls, instance, key, at_date=None):
+        compl_data = instance.get_all_complementary_data(at_date)
+        res = compl_data.get(key)
+        if res:
+            return res
+        #TODO : To Enhance and load data_def in cache
+        data_def, = cls.search([('name', '=', key)])
+        if data_def.type_ in ['integer', 'float', 'numeric']:
+            return 0
+        elif data_def.type_ in ['char', 'selection']:
+            return ''

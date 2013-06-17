@@ -104,8 +104,7 @@ class ContractContext(RuleEngineContext):
     @classmethod
     @check_args('contract')
     def _re_contract_complementary_data(cls, args, data_name):
-        contract = args['contract']
-        return contract.get_complementary_data_value(args['date'], data_name)
+        cls.append_error(args, 'deprecated_method')
 
     @classmethod
     @check_args('contract')
@@ -161,8 +160,7 @@ class CoveredDataContext(RuleEngineContext):
     @classmethod
     @check_args('data')
     def _re_covered_data_complementary_data(cls, args, data_name):
-        data = cls.get_covered_data(args)
-        return data.get_complementary_data_value(args['date'], data_name)
+        cls.append_error(args, 'deprecated_method')
 
 
 class RuleCombinationContext(RuleEngineContext):

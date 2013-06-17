@@ -107,3 +107,9 @@ class CompensatedOption(model.CoopSQL, model.CoopView):
             if option.contract.contract_number else '',
             option.rec_name,
             )
+
+    def get_all_complementary_data(self, at_date):
+        res = {}
+        res.update(self.com_option).get_all_complementary_data(at_date)
+        res.update(self.subs_option).get_all_complementary_data(at_date)
+        return res

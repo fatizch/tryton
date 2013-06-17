@@ -189,6 +189,11 @@ class Subscribed(model.CoopView):
                 return True
         return False
 
+    def get_all_complementary_data(self, at_date):
+        if not utils.is_none(self, 'complementary_data'):
+            return self.complementary_data
+        return {}
+
 
 class Contract(model.CoopSQL, Subscribed, Printable):
     'Contract'
@@ -236,14 +241,9 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         cls.options = copy.copy(cls.options)
         cls.options.model_name = cls.get_options_model_name()
         super(Contract, cls).__setup__()
-        cls.start_date = copy.copy(cls.start_date)
-        if not cls.start_date.on_change:
-            cls.start_date.on_change = []
-        if not cls.start_date.depends:
-            cls.start_date.depends = []
-        cls.start_date.depends.append('appliable_conditions_date')
-        cls.start_date.on_change.append('start_date')
-        cls.start_date.on_change.append('appliable_conditions_date')
+        utils.update_on_change(cls, 'start_date', [
+                'start_date', 'appliable_conditions_date'])
+        utils.update_depends(cls, 'start_date', ['appliable_conditions_date'])
 
     @staticmethod
     def default_company():
@@ -314,11 +314,6 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             'complementary_data']
         return True, ()
 
-    def get_complementary_data_value(self, at_date, value):
-        return utils.get_complementary_data_value(
-            self, 'complementary_data', self.get_complementary_data_def(),
-            at_date, value)
-
     def get_complementary_data_def(self):
         compl_data_defs = []
         if self.offered:
@@ -343,6 +338,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
 
     def init_dict_for_rule_engine(self, cur_dict):
         cur_dict['contract'] = self
+        cur_dict['appliable_conditions_date'] = self.appliable_conditions_date
 
     def get_product(self):
         return self.offered
@@ -579,6 +575,12 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
     @classmethod
     def search_coverage_kind(cls, name, clause):
         return [('offered.kind', ) + tuple(clause[1:])]
+
+    def get_all_complementary_data(self, at_date):
+        res = super(SubscribedCoverage, self).get_all_complementary_data(
+            at_date)
+        res.update(self.contract.get_all_complementary_data(at_date))
+        return res
 
 
 class ContractAddress(model.CoopSQL, model.CoopView):

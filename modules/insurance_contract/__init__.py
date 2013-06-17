@@ -3,6 +3,7 @@ from contract import *
 from subs_process import *
 from .party import *
 from .document import *
+from .rule_engine import *
 
 from trytond.modules.coop_utils import expand_tree
 CoveredElementTreeExpansion = expand_tree('ins_contract.covered_element')
@@ -26,14 +27,9 @@ def register():
         CoveredDataTreeExpansion,
         Document,
         DocumentRequest,
-        # subs_process.py classes
-        # ProjectState,
-        # CoverageDisplayer,
-        # OptionSelectionState,
-        # CoveredDesc,
-        # SubscriptionProcessState,
-        # SummaryState,
         DeliveredService,
         RequestFinder,
         Expense,
+        #From Rule Engine,
+        OfferedContext,
         module='insurance_contract', type_='model')

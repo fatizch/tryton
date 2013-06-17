@@ -1,6 +1,7 @@
 from trytond.pool import Pool
 
 from .contract import *
+from .rule_engine import *
 
 
 def register():
@@ -9,4 +10,6 @@ def register():
         Contract,
         SubscribedCoverage,
         ContractAddress,
+        #From Rule Engine
+        OfferedContext,
         module='contract', type_='model')
