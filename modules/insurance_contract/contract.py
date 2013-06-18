@@ -745,6 +745,9 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             res.update(self.party_compl_data)
         return res
 
+    def init_dict_for_rule_engine(self, args):
+        args['sub_elem'] = self
+
 
 class CoveredElementPartyRelation(model.CoopSQL):
     'Relation between Covered Element and Covered Relations'
@@ -917,7 +920,8 @@ class CoveredData(model.CoopSQL, model.CoopView):
 
     def init_dict_for_rule_engine(self, args):
         args['data'] = self
-        args['sub_elem'] = self.covered_element
+        self.covered_element.init_dict_for_rule_engine(args)
+        self.option.init_dict_for_rule_engine(args)
 
 
 class ManagementRole(model.CoopSQL, model.CoopView):

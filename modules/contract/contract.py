@@ -336,6 +336,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def init_dict_for_rule_engine(self, cur_dict):
         cur_dict['contract'] = self
         cur_dict['appliable_conditions_date'] = self.appliable_conditions_date
+        cur_dict['product'] = self.offered
 
     def get_product(self):
         return self.offered
@@ -575,6 +576,11 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
             at_date)
         res.update(self.contract.get_all_complementary_data(at_date))
         return res
+
+    def init_dict_for_rule_engine(self, args):
+        args['option'] = self
+        args['coverage'] = self.offered
+        self.contract.init_dict_for_rule_engine(args)
 
 
 class ContractAddress(model.CoopSQL, model.CoopView):
