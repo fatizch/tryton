@@ -429,6 +429,7 @@ class Rule(ModelView, ModelSQL):
                 pass
                 the_result.result = None
             except Exception, exc:
+                # raise
                 for elem in the_result.print_debug():
                     logging.getLogger('rule_engine').debug(elem)
                 raise InternalRuleEngineError(coop_string.remove_invalid_char(
@@ -678,7 +679,8 @@ class TreeElement(ModelView, ModelSQL):
         res = ''
         if self.parent:
             res = '%s.' % self.parent.full_path
-        res += self.translated_technical_name
+        res += (self.translated_technical_name
+            if self.translated_technical_name else '')
         return res
 
 
