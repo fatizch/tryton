@@ -12,6 +12,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.rpc import RPC
 from trytond.exceptions import UserError
 from trytond.transaction import Transaction
+from trytond.pyson import Eval, If, PYSONEncoder
 
 import utils
 import fields
@@ -699,6 +700,20 @@ add_export_to_model([
     ('ir.model.access', ('group.name', 'model.model')),
     ('ir.ui.view', ('module', 'type', 'name')),
 ])
+
+
+def clean_domain_for_import(domain):
+    final_domain = []
+    for elem in domain:
+        # TODO : Improve detection
+        tmp_domain = PYSONEncoder().encode([elem])
+        print tmp_domain
+        if 'company' in str(tmp_domain):
+            final_domain.append(
+                (If(~Eval('context', {}).get('__importing__', 0), elem, ())))
+        else:
+            final_domain.append(elem)
+    return final_domain
 
 
 class UIMenu():

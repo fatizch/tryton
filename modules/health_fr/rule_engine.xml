@@ -5,6 +5,7 @@
             <field name="description">Santé</field>
             <field name="type">folder</field>
             <field name="language" ref="ir.lang_fr"/>
+            <field name="translated_technical_name">sante</field>
         </record>
         <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_health">
             <field name="context" ref="rule_engine.default_context"/>

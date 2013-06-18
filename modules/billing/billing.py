@@ -1,3 +1,4 @@
+import copy
 import datetime
 from collections import defaultdict
 from itertools import repeat, izip, chain
@@ -35,6 +36,7 @@ __all__ = [
     'PaymentTerm',
     'TaxDesc',
     'FeeDesc',
+    'Sequence',
 ]
 
 PAYMENT_MODES = [
@@ -1072,3 +1074,17 @@ class FeeDesc():
 
     def get_account_for_billing(self):
         return self.account_for_billing
+
+
+class Sequence():
+    'Sequence'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'ir.sequence'
+
+    @classmethod
+    def __setup__(cls):
+        super(Sequence, cls).__setup__()
+        cls.company = copy.copy(cls.company)
+        cls.company.domain = export.clean_domain_for_import(cls.company.domain)
+        print cls.company.domain

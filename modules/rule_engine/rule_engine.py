@@ -496,7 +496,8 @@ class Context(ModelView, ModelSQL):
             while elements:
                 element = elements.pop()
                 if element.translated_technical_name in names:
-                    cls.raise_user_error('duplicate_name', (
+                    if element != names[element.translated_technical_name]:
+                        cls.raise_user_error('duplicate_name', (
                             element.translated_technical_name,
                             element.full_path,
                             names[element.translated_technical_name].full_path,

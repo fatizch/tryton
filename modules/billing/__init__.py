@@ -25,6 +25,7 @@ def register():
         PaymentTerm,
         TaxDesc,
         FeeDesc,
+        Sequence,
         # from party
         Party,
         # from account
