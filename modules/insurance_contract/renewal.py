@@ -25,7 +25,8 @@ class RenewalStart(model.CoopView):
             'invisible': ~Eval('renew_what')})
     this_contract = fields.Many2One(
         'contract.contract', 'Renew this contract', domain=[
-            ('next_renewal_date', '<=', Eval('renewal_date'))],
+            ('next_renewal_date', '<=', Eval('renewal_date')),
+            ('status', '!=', 'quote')],
         depends=['renew_what', 'renewal_date'],
         states={'invisible': ~~Eval('renew_what')})
 
@@ -34,7 +35,8 @@ class RenewalStart(model.CoopView):
             return {'will_be_renewed': []}
         Contract = Pool().get('contract.contract')
         to_renew = Contract.search([
-            ('next_renewal_date', '<=', self.renewal_date)])
+            ('next_renewal_date', '<=', self.renewal_date),
+            ('status', '!=', 'quote')])
         return {'will_be_renewed': [x.id for x in to_renew],
             'this_contract': None}
 
@@ -84,7 +86,6 @@ class RenewalWizard(Wizard):
         to_treat = self.renewal_start.get_contracts_to_renew()
         log = {'Success': [], 'Failed': []}
         for contract in to_treat:
-            print contract
             result = contract.renew()
             if result:
                 log['Success'].append(contract.rec_name)
