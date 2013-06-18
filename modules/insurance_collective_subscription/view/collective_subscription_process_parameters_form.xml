@@ -3,5 +3,6 @@
     <xpath expr="/form/label[@name='com_product']" position="before">
         <label name="is_group"/>
         <field name="is_group"/>
+        <newline/>
     </xpath>
 </data>

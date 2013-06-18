@@ -1,18 +1,21 @@
 <?xml version="1.0"?>
 <data>
-    <xpath expr="/form/label[@name='date']" position="before">
+    <xpath expr="/form/field[@name='date']" position="after">
+        <newline/>
         <label name="dist_network"/>
         <field name="dist_network"/>
+        <newline/>
         <label name="broker"/>
         <field name="broker"/>
-    </xpath>
-    <xpath expr="/form/field[@name='date']" position="after">
+        <newline/>
         <field name="possible_com_product" colspan="2"/>
         <newline/>
         <label name="com_product"/>
-        <field name="com_product"/>
+        <field name="com_product" widget="selection"/>
+        <newline/>
         <label name="product"/>
         <field name="product" colspan="3"/>
+        <newline/>
     </xpath>
     <xpath expr="/form" position="inside">
         <field name="possible_brokers"/>
