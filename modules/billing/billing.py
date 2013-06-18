@@ -614,7 +614,7 @@ class Contract():
                 max_date = max_date if (
                     max_date and max_date > elem.start_date) \
                     else elem.start_date
-            oldest = by_dates[max_date]
+            oldest = by_dates[max_date] if max_date else []
         for price in prices:
             price_line = PriceLine()
             price_line.init_from_result_line(price)
