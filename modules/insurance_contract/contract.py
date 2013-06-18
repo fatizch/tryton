@@ -91,7 +91,8 @@ class InsurancePolicy():
 
     def get_dates(self, dates=None):
         res = super(InsurancePolicy, self).get_dates(dates)
-        res.add(self.last_renewed)
+        if self.last_renewed:
+            res.add(self.last_renewed)
         return res
 
     def init_from_offered(self, offered, start_date=None, end_date=None):
