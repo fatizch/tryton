@@ -5,6 +5,7 @@
         <field name="description">Contrat</field>
         <field name="type">folder</field>
         <field name="language" ref="ir.lang_fr"/>
+        <field name="translated_technical_name">contrat</field>
     </record>
     <record model="rule_engine.context-rule_engine.tree_element" id="def_context-te_contract">
         <field name="context" ref="rule_engine.default_context"/>

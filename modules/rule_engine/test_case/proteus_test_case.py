@@ -36,9 +36,8 @@ def get_or_create_tree_element(
         cur_domain.append(('name', '=', name))
     if cur_type == 'folder':
         cur_domain.append(('description', '=', description))
-    else:
-        cur_domain.append(
-            ('translated_technical_name', '=', translated_technical))
+    cur_domain.append(
+        ('translated_technical_name', '=', translated_technical))
     cur_domain.append(('language.code', '=', cfg_dict['language']))
     tree_element = proteus_tools.get_objects_from_db(
         cfg_dict, 'TreeElement', domain=cur_domain)
