@@ -575,8 +575,9 @@ class Contract():
         new_period_start = date.add_day(last_date, 1)
         new_period_end = date.add_frequency(
             self.get_product_frequency(last_date), last_date)
-        new_period_end = min(new_period_end, date.add_day(
-            self.next_renewal_date, -1))
+        if self.next_renewal_date:
+            new_period_end = min(new_period_end, date.add_day(
+                self.next_renewal_date, -1))
         if self.end_date and new_period_end > self.end_date:
             return (new_period_start, self.end_date)
         return (new_period_start, new_period_end)
