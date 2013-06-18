@@ -599,10 +599,6 @@ msgid "==> Commission"
 msgstr ""
 
 msgctxt "view:contract.contract:"
-msgid "==> Contract Validation"
-msgstr ""
-
-msgctxt "view:contract.contract:"
 msgid "==> Documents"
 msgstr ""
 
@@ -661,10 +657,6 @@ msgstr "Données Complémentaires"
 msgctxt "view:contract.contract:"
 msgid "Complete"
 msgstr "Terminer"
-
-msgctxt "view:contract.contract:"
-msgid "Contract Validation"
-msgstr ""
 
 msgctxt "view:contract.contract:"
 msgid "Covered Elements/Options"
@@ -729,6 +721,12 @@ msgstr "Tarif"
 msgctxt "view:contract.contract:"
 msgid "The current record completed the current process, please go ahead"
 msgstr "Processus Terminé. Commencez une nouvelle tâche"
+
+msgctxt "view:contract.contract:"
+msgid ""
+"The current record isin a state (Validation du contrat) that you are not "
+"allowed to view."
+msgstr ""
 
 msgctxt "view:contract.contract:"
 msgid "Validation du contrat"

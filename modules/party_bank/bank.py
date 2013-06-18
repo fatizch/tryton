@@ -112,7 +112,8 @@ class BankAccountNumber(CoopSQL, CoopView):
     @classmethod
     def __setup__(cls):
         super(BankAccountNumber, cls).__setup__()
-        cls._error_messages.update({'invalid_number': ('Invalid number! %s')})
+        cls._error_messages.update({
+            'invalid_number': ('Invalid %s number : %s')})
         cls._buttons.update({
                 'button_migrate_rib_to_iban': {
                     'invisible': Eval('kind') != 'RIB',
@@ -122,21 +123,20 @@ class BankAccountNumber(CoopSQL, CoopView):
     @classmethod
     def validate(cls, numbers):
         super(BankAccountNumber, cls).validate(numbers)
-        cls.check_numbers(numbers)
-
-    @classmethod
-    def check_numbers(cls, numbers):
         for number in numbers:
-            res = True
-            if not hasattr(number, 'kind'):
-                continue
-            if number.kind == 'IBAN':
-                res = number.check_iban()
-            elif number.kind == 'RIB':
-                res = number.check_rib(number.number)
-            if not res:
-                cls.raise_user_error('invalid_number', (number.number))
+            cls.check_number(number)
+
+    def check_number(self):
+        res = True
+        if not hasattr(self, 'kind'):
             return res
+        if self.kind == 'IBAN':
+            res = self.check_iban()
+        elif self.kind == 'RIB':
+            res = self.check_rib(self.number)
+        if not res:
+            self.raise_user_error('invalid_number', (self.kind, self.number))
+        return res
 
     @staticmethod
     def get_clean_bank_account(number):
@@ -183,7 +183,6 @@ class BankAccountNumber(CoopSQL, CoopView):
     @staticmethod
     def check_rib(number):
         the_dict = BankAccountNumber.split_rib(number)
-        print the_dict
         if not the_dict:
             return False
         return (BankAccountNumber.calculate_key_rib(
@@ -268,7 +267,7 @@ class BankAccountNumber(CoopSQL, CoopView):
         return self.on_change_sub_rib('key')
 
     def pre_validate(self):
-        self.check_numbers([self])
+        self.check_number()
 
     def get_rec_name(self, name):
         if self.kind == 'RIB':

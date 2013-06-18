@@ -634,6 +634,18 @@ msgctxt "selection:billing.price_line,frequency:"
 msgid "Yearly"
 msgstr "Annuel"
 
+msgctxt "view:account.move.line:"
+msgid "Move Lines"
+msgstr ""
+
+msgctxt "view:account.move.line:"
+msgid "credit"
+msgstr ""
+
+msgctxt "view:account.move.line:"
+msgid "debit"
+msgstr ""
+
 msgctxt "view:billing.billing_manager:"
 msgid "Billing Managers"
 msgstr "Gestionnaires d'Appel de Cotisation"
@@ -699,6 +711,10 @@ msgid "Payment Methods"
 msgstr "Méthodes de Paiement"
 
 msgctxt "view:contract.contract:"
+msgid "Accounting"
+msgstr "Comptabilité"
+
+msgctxt "view:contract.contract:"
 msgid "Billing"
 msgstr "Cotisation"
 
@@ -709,6 +725,10 @@ msgstr "Calculer les Primes"
 msgctxt "view:offered.product:"
 msgid "Payment Methods"
 msgstr "Méthodes de Paiement"
+
+msgctxt "view:party.party:"
+msgid "Accounting"
+msgstr "Comptabilité"
 
 msgctxt "wizard_button:billing.billing_process,bill_display,accept_bill:"
 msgid "Accept"
