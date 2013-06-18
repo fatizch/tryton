@@ -53,9 +53,9 @@ class Product():
         states={'invisible': Eval('product_kind') != 'insurance'})
 
     @classmethod
-    def _export_skips(cls):
-        res = super(Product, cls)._export_skips()
-        res.add('com_products')
+    def _export_force_recreate(cls):
+        res = super(Product, cls)._export_force_recreate()
+        res.remove('com_products')
         return res
 
 
