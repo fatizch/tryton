@@ -19,6 +19,10 @@ msgid "Invalid number!"
 msgstr "Numéro non valide!"
 
 msgctxt "error:party.bank_account_number:"
+msgid "Invalid number! %s"
+msgstr ""
+
+msgctxt "error:party.bank_account_number:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -237,6 +241,10 @@ msgstr "RIB"
 msgctxt "view:party.bank_account_number:"
 msgid "Account Number"
 msgstr "Numéro de Compte"
+
+msgctxt "view:party.bank_account_number:"
+msgid "Migrate To IBAN"
+msgstr ""
 
 msgctxt "view:party.party:"
 msgid "Bank"

@@ -30,6 +30,30 @@ msgctxt "error:party.broker:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "field:commission.commission_amount_to_display,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:commission.commission_amount_to_display,comp_option:"
+msgid "Comp Option"
+msgstr ""
+
+msgctxt "field:commission.commission_amount_to_display,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.commission_amount_to_display,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:commission.commission_amount_to_display,rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:commission.commission_amount_to_display,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
 msgctxt "field:commission.commission_rule,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
@@ -102,6 +126,14 @@ msgctxt "field:commission.commission_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:commission.compensated_option,com_amount:"
+msgid "Com Amount"
+msgstr "Montant de la commission"
+
+msgctxt "field:commission.compensated_option,com_lines:"
+msgid "Commissions"
+msgstr "Commissions"
+
 msgctxt "field:commission.compensated_option,com_option:"
 msgid "Commission Option"
 msgstr "Option de Commissionnement"
@@ -113,6 +145,10 @@ msgstr "Date de création"
 msgctxt "field:commission.compensated_option,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:commission.compensated_option,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
 
 msgctxt "field:commission.compensated_option,end_date:"
 msgid "End Date"
@@ -368,6 +404,10 @@ msgstr "Réseaux de Distribution"
 
 msgctxt "field:party.party,is_broker:"
 msgid ""
+msgstr ""
+
+msgctxt "model:commission.commission_amount_to_display,name:"
+msgid "Commission Amount To Display"
 msgstr ""
 
 msgctxt "model:commission.commission_rule,name:"

@@ -1105,6 +1105,14 @@ msgctxt "view:ins_contract.management_role:"
 msgid "Manager"
 msgstr "Géré par"
 
+msgctxt "view:ins_contract.renewal_result:"
+msgid "Renewal Result"
+msgstr "Résultat du Renouvellement"
+
+msgctxt "view:ins_contract.renewal_start:"
+msgid "Renewal Start"
+msgstr "Paramètres du Renouvellement"
+
 msgctxt "wizard_button:ins_contract.renewal_wizard,renewal_result,end:"
 msgid "End"
 msgstr "Terminer"
