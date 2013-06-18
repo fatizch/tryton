@@ -35,6 +35,9 @@ class BankAccount(CoopSQL, CoopView):
     address = fields.Many2One('party.address', 'Address',
         domain=[('party', '=', Eval('agency'))],
         depends=['agency'])
+    numbers_as_char = fields.Function(
+        fields.Char('Numbers'),
+        'get_numbers_as_char')
 
     @staticmethod
     def default_currency():
@@ -76,8 +79,13 @@ class BankAccount(CoopSQL, CoopView):
         if self.account_numbers:
             if res:
                 res += ' '
-            res += '[%s]' % self.account_numbers[0].rec_name
+            res += '%s [%s]' % (
+                self.account_numbers[0].kind,
+                self.account_numbers[0].rec_name)
         return res
+
+    def get_numbers_as_char(self, name):
+        return ', '.join([x.rec_name for x in self.account_numbers])
 
 
 class BankAccountNumber(CoopSQL, CoopView):

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tree>
+    <field name="numbers_as_char"/>
+    <field name="start_date"/>
+    <field name="end_date"/>
+    <field name="currency"/>
+    <field name="agency"/>
+    <field name="address"/>
+    <field name="account_numbers" tree_invisible="1"/>
+
+</tree>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
-        <!--  ******************************************* 
+        <!--  *******************************************
               **************   Bank     ***************
               *******************************************-->
         <!-- Bank form view -->
@@ -17,7 +17,7 @@
             <field name="type">tree</field>
             <field name="name">bank_tree</field>
         </record>
-        <!--  ******************************************* 
+        <!--  *******************************************
               ************   Bank account    ************
               *******************************************-->
         <!-- Bank account form view -->
@@ -26,7 +26,12 @@
             <field name="type">form</field>
             <field name="name">bank_account_form</field>
         </record>
-        <!--  ******************************************* 
+        <record model="ir.ui.view" id="bank_account_view_tree">
+            <field name="model">party.bank_account</field>
+            <field name="type">tree</field>
+            <field name="name">bank_account_tree</field>
+        </record>
+        <!--  *******************************************
               ******   Bank account Number   ************
               *******************************************-->
         <!-- Bank account number form view -->
@@ -42,4 +47,4 @@
         </record>
     </data>
 </tryton>
-        
+
