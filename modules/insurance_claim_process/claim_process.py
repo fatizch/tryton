@@ -16,7 +16,7 @@ __all__ = [
     'DeclarationProcessParameters',
     'DeclarationProcessFinder',
     'DeliveredServiceProcess',
-]
+    ]
 
 
 class ClaimProcess(CoopProcessFramework):

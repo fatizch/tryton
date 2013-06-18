@@ -13,7 +13,7 @@ BANK_ACCOUNT_KIND = [
     ('IBAN', 'IBAN'),
     ('RIB', 'RIB'),
     ('OT', 'Other'),
-]
+    ]
 
 RIB_LENGTH = 23
 
