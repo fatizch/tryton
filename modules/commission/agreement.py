@@ -92,6 +92,12 @@ class CompensatedOption(model.CoopSQL, model.CoopView):
             'invisible': ~Eval('use_specific_rate'),
             'required': ~~Eval('use_specific_rate'),
             })
+    com_amount = fields.Function(
+        fields.Numeric('Com Amount'),
+        'get_com_amount')
+    currency_symbol = fields.Function(
+        fields.Char('Currency Symbol'),
+        'get_currency_symbol')
 
     def get_rec_name(self, name):
         option = None
@@ -110,6 +116,28 @@ class CompensatedOption(model.CoopSQL, model.CoopView):
 
     def get_all_complementary_data(self, at_date):
         res = {}
-        res.update(self.com_option).get_all_complementary_data(at_date)
-        res.update(self.subs_option).get_all_complementary_data(at_date)
+        res.update(self.com_option.get_all_complementary_data(at_date))
+        res.update(self.subs_option.get_all_complementary_data(at_date))
         return res
+
+    def init_dict_for_rule_engine(self, args):
+        args['comp_option'] = self
+        self.com_option.init_dict_for_rule_engine(args)
+
+    def get_com_amount(self, name):
+        cur_dict = {'date': self.start_date}
+        self.init_dict_for_rule_engine(cur_dict)
+        res = self.com_option.offered.get_result('commission', cur_dict)
+        for price_line in self.subs_option.contract.prices:
+            if price_line.on_object == self.subs_option.offered:
+                return res[0].result * price_line.amount
+
+    def get_currency(self):
+        return self.com_option.currency
+
+    def on_change_with_com_lines(self, name=None):
+        return [{}]
+
+    @classmethod
+    def set_void(cls, instances):
+        pass

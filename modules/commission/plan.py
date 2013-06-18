@@ -59,6 +59,9 @@ class CommissionComponent():
             cls.kind.selection.remove(('default', 'Default'))
         cls.kind.selection = list(set(cls.kind.selection))
 
+    def give_me_commission(self, args):
+        return self.get_result(args=args, kind='commission')
+
 
 class CommissionComponentCoverageRelation(model.CoopSQL):
     'Relation Commission Component and Coverage'

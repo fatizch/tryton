@@ -19,4 +19,9 @@
       <label string="%" id="rate" xexpand="0" xalign="0"
         states="{'invisible': ~Eval('use_specific_rate')}"/>
     </group>
+    <label name="com_amount"/>
+    <group id="com_amount">
+        <field name="com_amount" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
 </form>

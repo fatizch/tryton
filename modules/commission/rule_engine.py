@@ -8,7 +8,7 @@ __all__ = [
 class OfferedContext():
     'Offered Context'
 
-    __name__ = 'commission.rule_sets.commission'
+    __name__ = 'offered.rule_sets'
     __metaclass__ = PoolMeta
 
     @classmethod
