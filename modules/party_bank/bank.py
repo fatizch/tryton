@@ -1,5 +1,5 @@
 import re
-from stdnum import luhn
+# from stdnum import luhn
 from ibanlib import iban
 
 from trytond.pyson import Eval
@@ -13,7 +13,6 @@ BANK_ACCOUNT_KIND = [
     ('IBAN', 'IBAN'),
     ('RIB', 'RIB'),
     ('OT', 'Other'),
-    ('CC', 'Credit Card'),
 ]
 
 RIB_LENGTH = 23
@@ -88,48 +87,56 @@ class BankAccountNumber(CoopSQL, CoopView):
     bank_account = fields.Many2One('party.bank_account', 'Bank Account',
         ondelete='CASCADE')
     kind = fields.Selection(BANK_ACCOUNT_KIND, 'Kind', required=True)
-    number = fields.Char('Number', required=True,
-        states={'invisible': Eval('kind') == 'RIB'},
-        depends=['kind'],
-        on_change_with=['number', 'kind', 'bank_code', 'branch_code',
-            'account_number', 'key'])
+    number = fields.Char('Number', required=True)
     bank_code = fields.Function(fields.Char('Bank Code', size=5,
             states={'invisible': Eval('kind') != 'RIB'},
             depends=['kind'],
             on_change=['bank_code']),
-        'get_sub_rib', 'set_sub_rib')
+        'get_sub_rib')
     branch_code = fields.Function(fields.Char('Branch Code', size=5,
             states={'invisible': Eval('kind') != 'RIB'},
             depends=['kind'],
             on_change=['branch_code']),
-        'get_sub_rib', 'set_sub_rib')
+        'get_sub_rib')
     account_number = fields.Function(fields.Char('Account Number', size=11,
             states={'invisible': Eval('kind') != 'RIB'},
             depends=['kind'],
             on_change=['account_number']),
-        'get_sub_rib', 'set_sub_rib')
+        'get_sub_rib')
     key = fields.Function(fields.Char('Key', size=2,
             states={'invisible': Eval('kind') != 'RIB'},
             depends=['kind'],
             on_change=['key']),
-        'get_sub_rib', 'set_sub_rib')
+        'get_sub_rib')
 
     @classmethod
     def __setup__(cls):
         super(BankAccountNumber, cls).__setup__()
-        cls._constraints += [('check_number', 'invalid_number'), ]
-        cls._error_messages.update({'invalid_number': 'Invalid number!'})
+        cls._error_messages.update({'invalid_number': ('Invalid number! %s')})
+        cls._buttons.update({
+                'button_migrate_rib_to_iban': {
+                    'invisible': Eval('kind') != 'RIB',
+                    },
+                })
 
-    def check_number(self):
-        if not hasattr(self, 'kind'):
-            return True
-        if self.kind == 'IBAN':
-            return self.check_iban()
-        elif self.kind == 'RIB':
-            return self.check_rib(self.number)
-        elif self.kind == 'CC':
-            return self.check_credit_card(self.number)
-        return True
+    @classmethod
+    def validate(cls, numbers):
+        super(BankAccountNumber, cls).validate(numbers)
+        cls.check_numbers(numbers)
+
+    @classmethod
+    def check_numbers(cls, numbers):
+        for number in numbers:
+            res = True
+            if not hasattr(number, 'kind'):
+                continue
+            if number.kind == 'IBAN':
+                res = number.check_iban()
+            elif number.kind == 'RIB':
+                res = number.check_rib(number.number)
+            if not res:
+                cls.raise_user_error('invalid_number', (number.number))
+            return res
 
     @staticmethod
     def get_clean_bank_account(number):
@@ -176,6 +183,7 @@ class BankAccountNumber(CoopSQL, CoopView):
     @staticmethod
     def check_rib(number):
         the_dict = BankAccountNumber.split_rib(number)
+        print the_dict
         if not the_dict:
             return False
         return (BankAccountNumber.calculate_key_rib(
@@ -183,18 +191,8 @@ class BankAccountNumber(CoopSQL, CoopView):
             the_dict['account_number']) == the_dict['key'])
 
     @staticmethod
-    def check_credit_card(number):
-        expr = """^(?:4[0-9]{12}(?:[0-9]{3})?|
-            5[1-5][0-9]{14}|
-            6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|
-            3(?:0[0-5]|[68][0-9])[0-9]{11}|
-            (?:2131|1800|35\d{3})\d{11})$"""
-        return (re.search(expr, number, re.X)
-            and luhn.is_valid(number))
-
-    @staticmethod
     def default_kind():
-        return 'RIB'
+        return 'IBAN'
 
     @staticmethod
     def calculate_iban_from_rib(number):
@@ -221,31 +219,35 @@ class BankAccountNumber(CoopSQL, CoopView):
 
     @classmethod
     def set_sub_rib(cls, bank_account_nbs, name, value):
-        for nb in bank_account_nbs:
-            if nb.kind != 'RIB':
-                continue
-            if not nb.number or len(nb.number) < RIB_LENGTH:
-                nb.number = '0' * RIB_LENGTH
-            if name == 'bank_code':
-                nb.number = value + nb.number[5:RIB_LENGTH]
-            elif name == 'branch_code':
-                nb.number = nb.number[0:5] + value + nb.number[10:RIB_LENGTH]
-            elif name == 'account_number':
-                nb.number = nb.number[0:10] + value + nb.number[21:RIB_LENGTH]
-            elif name == 'key':
-                nb.number = nb.number[0:21] + value
-            cls.write([nb], {'number': nb.number})
+        pass
+        # for nb in bank_account_nbs:
+        #     print nb.kind, nb.number
+        #     if nb.kind != 'RIB':
+        #         continue
+        #     if not nb.number or len(nb.number) < RIB_LENGTH:
+        #         nb.number = '0' * RIB_LENGTH
+        #     if name == 'bank_code':
+        #         nb.number = value + nb.number[5:RIB_LENGTH]
+        #     elif name == 'branch_code':
+        #         nb.number = nb.number[0:5] + value + nb.number[10:RIB_LENGTH]
+        #     elif name == 'account_number':
+        #         nb.number = nb.number[0:10] + value + nb.number[21:RIB_LENGTH]
+        #     elif name == 'key':
+        #         nb.number = nb.number[0:21] + value
+        #     cls.write([nb], {'number': nb.number})
 
     def on_change_with_number(self, name=None):
-        if self.kind != 'RIB':
-            return self.number
-        res = coop_string.zfill(self, 'bank_code',)
-        res += coop_string.zfill(self, 'branch_code')
-        res += coop_string.zfill(self, 'account_number')
-        res += coop_string.zfill(self, 'key')
-        return res
+        pass
+        # if self.kind != 'RIB':
+        #     return self.number
+        # res = coop_string.zfill(self, 'bank_code',)
+        # res += coop_string.zfill(self, 'branch_code')
+        # res += coop_string.zfill(self, 'account_number')
+        # res += coop_string.zfill(self, 'key')
+        # return res
 
     def on_change_sub_rib(self, name):
+        return getattr(self, name)
         res = {}
         val = coop_string.zfill(self, name)
         if val:
@@ -266,8 +268,7 @@ class BankAccountNumber(CoopSQL, CoopView):
         return self.on_change_sub_rib('key')
 
     def pre_validate(self):
-        if not self.check_number():
-            self.raise_user_error('invalid_number')
+        self.check_numbers([self])
 
     def get_rec_name(self, name):
         if self.kind == 'RIB':
@@ -280,3 +281,14 @@ class BankAccountNumber(CoopSQL, CoopView):
     def get_summary(cls, numbers, name=None, at_date=None, lang=None):
         return dict([(nb.id, '%s : %s' % (nb.kind, nb.rec_name))
             for nb in numbers])
+
+    @classmethod
+    @CoopView.button
+    def button_migrate_rib_to_iban(cls, numbers):
+        for number in numbers:
+            if number.kind == 'RIB':
+                iban = BankAccountNumber.calculate_iban_from_rib(number.number)
+                if iban:
+                    number.kind = 'IBAN'
+                    number.number = iban
+                    number.save()

@@ -10,5 +10,5 @@
     <field name="agency"/>
     <label name="address"/>
     <field name="address"/>
-    <field name="account_numbers" mode="form,tree" pre_validate="1" colspan="4"/>
+    <field name="account_numbers" pre_validate="1" colspan="4"/>
 </form>
