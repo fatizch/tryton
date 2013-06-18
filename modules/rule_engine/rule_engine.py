@@ -360,9 +360,6 @@ class Rule(ModelView, ModelSQL):
     @classmethod
     def __setup__(cls):
         super(Rule, cls).__setup__()
-        cls._constraints += [
-            ('check_code', 'invalid_code'),
-        ]
         cls._error_messages.update({
             'invalid_code': 'Your code has errors!',
         })
@@ -396,9 +393,18 @@ class Rule(ModelView, ModelSQL):
             return True
 
     def check_code(self):
-        return not bool(filter(
+        result = not bool(filter(
             lambda m: self.filter_errors(m),
             check_code(self.as_function)))
+        if result:
+            return True
+        self.raise_user_error('invalid_code')
+
+    @classmethod
+    def validate(cls, rules):
+        for rule in rules:
+            rule.check_code()
+        return True
 
     @staticmethod
     def default_status():
@@ -568,9 +574,6 @@ class TreeElement(ModelView, ModelSQL):
     @classmethod
     def __setup__(cls):
         super(TreeElement, cls).__setup__()
-        cls._constraints.extend([
-            ('check_arguments_accents', 'argument_accent_error'),
-            ('check_name_accents', 'name_accent_error')])
         cls._error_messages.update({
             'argument_accent_error': 'Function arguments must only use ascii',
             'name_accent_error': 'Technical name must only use ascii',
@@ -589,12 +592,25 @@ class TreeElement(ModelView, ModelSQL):
     def check_arguments_accents(self):
         if not self.fct_args:
             return True
-        return coop_string.is_ascii(self.fct_args)
+        result = coop_string.is_ascii(self.fct_args)
+        if result:
+            return True
+        self.raise_user_error('argument_accent_error')
 
     def check_name_accents(self):
         if not self.name:
             return True
-        return coop_string.is_ascii(self.translated_technical_name)
+        result = coop_string.is_ascii(self.translated_technical_name)
+        if result:
+            return True
+        self.raise_user_error('name_accent_error')
+
+    @classmethod
+    def validate(cls, records):
+        for elem in records:
+            elem.check_arguments_accents()
+            elem.check_name_accents()
+        return True
 
     @staticmethod
     def default_type():
