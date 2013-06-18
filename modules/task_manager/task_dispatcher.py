@@ -80,7 +80,10 @@ class ProcessLog():
 
             def order_priority(x):
                 try:
-                    return ordering_table[x.to_state.id]
+                    result = ordering_table[x.to_state.id]
+                    if x.user.id == Transaction().user:
+                        return result - 0.5
+                    return result
                 except KeyError:
                     return len(ordering_table) + 1
 
