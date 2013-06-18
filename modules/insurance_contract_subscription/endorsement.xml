@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<tryton>
+  <data>
+    <record model="ir.ui.view" id="endorsement_process_parameters_form">
+      <field name="model">contract.endorsement_process_parameters</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="coop_process.process_parameters_form"/>
+      <field name="name">endorsement_process_parameters_form</field>
+    </record>
+    <record model="ir.action.wizard" id="endorsement_process_launcher">
+      <field name="name">Start Endorsement</field>
+      <field name="wiz_name">contract.endorsement_process_finder</field>
+    </record>
+    <menuitem parent="insurance_contract.menu_contract" sequence="2" action="endorsement_process_launcher" id="menu_start_endorsement"/>
+  </data>
+</tryton>

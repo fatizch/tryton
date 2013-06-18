@@ -44,6 +44,7 @@ class ProcessDesc():
         super(ProcessDesc, cls).__setup__()
         cls.kind = copy.copy(cls.kind)
         cls.kind.selection.append(('subscription', 'Contract Subscription'))
+        cls.kind.selection.append(('endorsement', 'Contract Endorsement'))
 
 
 class SubscriptionProcessParameters(ProcessParameters):
