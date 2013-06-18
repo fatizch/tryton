@@ -1,7 +1,7 @@
 import copy
 
 from trytond.pool import Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, business, utils, fields
@@ -161,6 +161,27 @@ class Offered(model.CoopView, GetResult, Templated):
         cls.template = copy.copy(cls.template)
         cls.template.model_name = cls.__name__
 
+        for field_name in (r for r in dir(cls) if r.endswith('_rules')):
+            field = getattr(cls, field_name)
+            if not hasattr(field, 'model_name'):
+                continue
+            cur_attr = copy.copy(field)
+            if not hasattr(cur_attr, 'context'):
+                continue
+            if cur_attr.context is None:
+                cur_attr.context = {}
+            cur_attr.context['start_date'] = Eval('start_date')
+            cur_attr.context['currency_digits'] = Eval('currency_digits')
+            if cur_attr.depends is None:
+                cur_attr.depends = []
+            utils.extend_inexisting(
+                cur_attr.depends, ['start_date', 'currency_digits'])
+            if cur_attr.states is None:
+                cur_attr.states = {}
+            cur_attr.states['readonly'] = ~Bool(Eval('start_date'))
+
+            setattr(cls, field_name, cur_attr)
+
     @staticmethod
     def default_start_date():
         res = Transaction().context.get('start_date')
@@ -221,6 +242,24 @@ class Offered(model.CoopView, GetResult, Templated):
         for schema in schemas:
             schema.update_field_value(result)
         return result
+
+    def get_good_rule_at_date(self, data, kind):
+        # First we got to check that the fields that we will need to calculate
+        # which rule is appliable are available in the data dictionnary
+        try:
+            the_date = data['appliable_conditions_date']
+        except KeyError:
+            return None
+
+        try:
+            # We use the date field from the data argument to search for
+            # the good rule.
+            # (This is a given way to get a rule from a list, using the
+            # applicable date, it could be anything)
+            return utils.get_good_version_at_date(
+                self, '%s_rules' % kind, the_date)
+        except ValueError:
+            return None
 
 
 class Product(model.CoopSQL, Offered):

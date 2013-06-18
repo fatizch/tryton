@@ -47,50 +47,8 @@ class Offered():
         context={'doc_rule_kind': 'sub'},
         domain=[('kind', '=', 'sub')])
 
-    @classmethod
-    def __setup__(cls):
-        super(Offered, cls).__setup__()
-        for field_name in (r for r in dir(cls) if r.endswith('_rules')):
-            field = getattr(cls, field_name)
-            if not hasattr(field, 'model_name'):
-                continue
-            cur_attr = copy.copy(field)
-            if not hasattr(cur_attr, 'context'):
-                continue
-            if cur_attr.context is None:
-                cur_attr.context = {}
-            cur_attr.context['start_date'] = Eval('start_date')
-            cur_attr.context['currency_digits'] = Eval('currency_digits')
-            if cur_attr.depends is None:
-                cur_attr.depends = []
-            utils.extend_inexisting(
-                cur_attr.depends, ['start_date', 'currency_digits'])
-            if cur_attr.states is None:
-                cur_attr.states = {}
-            cur_attr.states['readonly'] = ~Bool(Eval('start_date'))
-
-            setattr(cls, field_name, cur_attr)
-
     def get_name_for_billing(self):
         return self.name
-
-    def get_good_rule_at_date(self, data, kind):
-        # First we got to check that the fields that we will need to calculate
-        # which rule is appliable are available in the data dictionnary
-        try:
-            the_date = data['appliable_conditions_date']
-        except KeyError:
-            return None
-
-        try:
-            # We use the date field from the data argument to search for
-            # the good rule.
-            # (This is a given way to get a rule from a list, using the
-            # applicable date, it could be anything)
-            return utils.get_good_version_at_date(
-                self, '%s_rules' % kind, the_date)
-        except ValueError:
-            return None
 
     @classmethod
     def delete_rules(cls, entities):
