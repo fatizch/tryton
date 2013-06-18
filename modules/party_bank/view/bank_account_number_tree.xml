@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-    <tree editable="1">
-        <field name="kind"/>
-        <field name="number"/>
-        <button name="button_migrate_rib_to_iban" string="Migrate To IBAN"/>
-    </tree>
+<tree editable="bottom">
+  <field name="kind"/>
+  <field name="number"/>
+  <button name="button_migrate_rib_to_iban" string="Migrate To IBAN"/>
+</tree>
