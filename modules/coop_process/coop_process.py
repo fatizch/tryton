@@ -252,8 +252,13 @@ class CoopProcessFramework(ProcessFramework):
         super(CoopProcessFramework, cls).write(instances, values)
         Session = Pool().get('ir.session')
         Log = Pool().get('coop_process.process_log')
-        good_session, = Session.search(
-            [('create_uid', '=', Transaction().user)])
+        try:
+            good_session, = Session.search(
+                [('create_uid', '=', Transaction().user)])
+        except:
+            # TODO : find what to do if there is no current session (proteus)
+            return
+
         for instance in instances:
             good_log = instance.current_log
             if not good_log:
