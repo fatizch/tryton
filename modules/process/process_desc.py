@@ -53,6 +53,8 @@ class ProcessStepRelation(ModelSQL, ModelView):
 
     def get_rec_name(self, name):
         res = ''
+        if self.process:
+            res += '%s - ' % self.process.rec_name
         if self.step:
             res += self.step.rec_name
         if self.status:
