@@ -399,11 +399,14 @@ class ExportImportMixin(Model):
                 key, cls.__name__))
         created[cls.__name__][key] = instance
         if save:
-            # Useful for debugging
-            # print '\n'.join([str(x) for x in relink])
-            # print utils.format_data(created)
-            # print utils.format_data(instance)
-            instance.save()
+            try:
+                instance.save()
+            except:
+                # print '\n'.join([str(x) for x in relink])
+                # print utils.format_data(created)
+                # print utils.format_data(instance)
+                raise
+
         if to_relink:
             relink.append(((cls.__name__, key), dict([
                 (name, value) for name, value in to_relink])))
@@ -702,13 +705,14 @@ add_export_to_model([
 ])
 
 
-def clean_domain_for_import(domain):
+def clean_domain_for_import(domain, detect_key=None):
+    if not detect_key:
+        return [(If(~Eval('context', {}).get('__importing__', 0), domain, []))]
     final_domain = []
     for elem in domain:
         # TODO : Improve detection
         tmp_domain = PYSONEncoder().encode([elem])
-        print tmp_domain
-        if 'company' in str(tmp_domain):
+        if detect_key in str(tmp_domain):
             final_domain.append(
                 (If(~Eval('context', {}).get('__importing__', 0), elem, ())))
         else:

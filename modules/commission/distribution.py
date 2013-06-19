@@ -1,5 +1,7 @@
+import copy
+
 from trytond.pool import Pool, PoolMeta
-from trytond.modules.coop_utils import model, fields
+from trytond.modules.coop_utils import model, fields, export
 
 __all__ = [
     'DistributionNetwork',
@@ -31,6 +33,13 @@ class DistributionNetwork():
     childs_brokers = fields.Function(
         fields.Many2Many('party.party', None, None, 'Sub Level Brokers',),
         'get_childs_brokers_id')
+
+    @classmethod
+    def __setup__(cls):
+        super(DistributionNetwork, cls).__setup__()
+        cls.brokers = copy.copy(cls.brokers)
+        cls.brokers.domain = export.clean_domain_for_import(
+            cls.brokers.domain)
 
     def get_parent_com_plans_id(self, name):
         Plan = Pool().get('offered.product')

@@ -1,7 +1,7 @@
 import copy
 
 from trytond.pool import PoolMeta
-from trytond.modules.coop_utils import fields
+from trytond.modules.coop_utils import fields, export
 
 __all__ = [
     'Party',
@@ -24,21 +24,12 @@ class Party():
     @classmethod
     def __setup__(cls):
         super(Party, cls).__setup__()
-
-        # Hack to remove constraints when importing
-        # TODO : Be cleaner
-        def remove_company(domain):
-            to_remove = []
-            for i, elem in enumerate(domain):
-                if elem[0] == 'company' and elem[1] == '=':
-                    to_remove.insert(0, i)
-            for i in to_remove:
-                domain.pop(i)
-
         cls.account_payable = copy.copy(cls.account_payable)
-        remove_company(cls.account_payable.domain)
+        cls.account_payable.domain = export.clean_domain_for_import(
+            cls.account_payable.domain, 'company')
         cls.account_receivable = copy.copy(cls.account_receivable)
-        remove_company(cls.account_receivable.domain)
+        cls.account_receivable.domain = export.clean_domain_for_import(
+            cls.account_receivable.domain, 'company')
 
     @classmethod
     def _import_single_link(
