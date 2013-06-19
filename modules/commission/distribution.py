@@ -55,12 +55,6 @@ class DistributionNetwork():
     def get_brokers(self):
         return self.brokers + self.childs_brokers
 
-    @classmethod
-    def _export_skips(cls):
-        result = super(DistributionNetwork, cls)._export_skips()
-        result.add('brokers')
-        return result
-
 
 class DistributionNetworkComPlanRelation(model.CoopSQL):
     'Relation Distribution Network - Commission Plan'

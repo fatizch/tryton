@@ -24,6 +24,12 @@ class Party:
         result.remove('broker_role')
         return result
 
+    @classmethod
+    def _export_skips(cls):
+        result = super(Party, cls)._export_skips()
+        result.add('dist_networks')
+        return result
+
 
 class Broker(model.CoopSQL, model.CoopView):
     'Broker'
@@ -37,3 +43,7 @@ class Broker(model.CoopSQL, model.CoopView):
     @classmethod
     def get_summary(cls, brokers, name=None, at_date=None, lang=None):
         return dict([(broker.id, 'X') for broker in brokers])
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['party.code'])
