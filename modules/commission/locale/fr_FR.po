@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -236,7 +236,7 @@ msgstr "Commissions"
 
 msgctxt "field:contract.subscribed_option,compensated_options:"
 msgid "Compensated Options"
-msgstr "Options Commissionées"
+msgstr "Options Commissionnées"
 
 msgctxt "field:distribution.dist_network,all_com_plans:"
 msgid "Top Level Commission Plans"
@@ -416,7 +416,7 @@ msgstr "Règle de Commissionnement"
 
 msgctxt "model:commission.compensated_option,name:"
 msgid "Compensated Option"
-msgstr "Option Commissionée"
+msgstr "Option Commissionnée"
 
 msgctxt "model:commission.component-coverage,name:"
 msgid "Relation Commission Component and Coverage"
@@ -528,7 +528,7 @@ msgstr ""
 
 msgctxt "view:commission.compensated_option:"
 msgid "Compensated Option"
-msgstr "Option Commissionée"
+msgstr "Option Commissionnée"
 
 msgctxt "view:contract.subscribed_option:"
 msgid "Commissions"
@@ -536,7 +536,7 @@ msgstr "Commissions"
 
 msgctxt "view:contract.subscribed_option:"
 msgid "Compensated Options"
-msgstr "Options Commissionées"
+msgstr "Options Commissionnées"
 
 msgctxt "view:contract.subscribed_option:"
 msgid "Coverages"
