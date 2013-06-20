@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.001.04"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:py="http://genshi.edgewall.org/">
+    <py:def function="PartyIdentification(party)">
+        <Nm>${party.name[:140]}</Nm>
+        <py:with vars="address = party.address_get()">
+            <PstlAdr py:if="address">
+                ${PostalAddress(party.address_get())}
+            </PstlAdr>
+        </py:with>
+        <!-- Id -->
+        <!-- CtryOfRes -->
+        <!-- CtctDtls -->
+    </py:def>
+    <py:def function="PostalAddress(address)">
+        <!-- AdrTp -->
+        <!-- Dept -->
+        <!-- SubDept -->
+        <StrtNm py:if="address.street">${address.street[:70]}</StrtNm>
+        <!-- BldgNb -->
+        <PstCd py:if="address.zip">${address.zip}</PstCd>
+        <TwnNm py:if="address.city">${address.city}</TwnNm>
+        <CtrySubDvsn py:if="address.subdivision">${address.subdivision.rec_name}</CtrySubDvsn>
+        <Ctry py:if="address.country">${address.country.code}</Ctry>
+        <!-- AdrLine -->
+    </py:def>
+    <py:def function="Account(account_number)">
+        <Id>
+            <!-- Usage rule: only IBAN is allowed -->
+            <IBAN>${account_number.number}</IBAN>
+        </Id>
+        <!-- Tp -->
+        <Ccy py:if="account_number.bank_account.currency">${account_number.bank_account.currency.code}</Ccy>
+        <!-- Nm -->
+    </py:def>
+    <py:def function="FinancialInstitution(bank)">
+        <FinInstnId>
+            <BICFI py:if="bank.bic">bank.bic</BICFI>
+            <!-- ClrSysMmbId -->
+            <Nm>${bank.party.name[:140]}</Nm>
+            <py:with vars="address = bank.party.address_get()">
+                <PstlAdr py:if="address">
+                    ${PostalAddress(address)}
+                </PstlAdr>
+            </py:with>
+            <!-- Othr -->
+        </FinInstnId>
+        <!-- BrnchId -->
+    </py:def>
+    <CstmrDrctDbtInitn>
+        <GrpHdr>
+            <MsgId>${group.reference[:35]}</MsgId>
+            <CreDtTm>${datetime.datetime.now().isoformat()}</CreDtTm>
+            <!-- Authstn -->
+            <NbOfTxs>${len(group.payments)}</NbOfTxs>
+            <CtrlSum>${sum(p.amount for p in group.payments)}</CtrlSum>
+            <!-- PmtTpInf -->
+            <!-- ReqdColltnDt -->
+            <InitgPty>
+                ${PartyIdentification(group.company.party)}
+            </InitgPty>
+            <!-- FwdgAgt -->
+        </GrpHdr>
+        <PmtInf py:for="payment in group.payments">
+            <PmtInfId>${str(payment.id)[:35]}</PmtInfId>
+            <PmtMtd>DD</PmtMtd>
+            <BtchBookg>false</BtchBookg>
+            <NbOfTxs>1</NbOfTxs>
+            <CtrlSum>${payment.amount}</CtrlSum>
+            <!-- PmtTpInf -->
+            <ReqdColltnDt>${payment.date.isoformat()}</ReqdColltnDt>
+            <Cdtr>
+                ${PartyIdentification(group.company.party)}
+            </Cdtr>
+            <CdtrAcct>
+                ${Account(group.journal.sepa_bank_account_number)}
+            </CdtrAcct>
+            <CdtrAgt>
+                ${FinancialInstitution(group.journal.sepa_bank_account_number.bank_account.agency.bank_role[0])}
+            </CdtrAgt>
+            <!-- CdtrAgtAcct -->
+            <!-- UltmtCdtr -->
+            <!-- ChrgBr -->
+            <!-- ChrgsAcct -->
+            <!-- ChrgsAcctAgt -->
+            <!-- CdtrSchmeId -->
+            <DrctDbtTxInf> <!-- Only one per payment -->
+                <PmtId>
+                    <!-- InstrId -->
+                    <EndToEndId>${payment.sepa_end_to_end_id}</EndToEndId>
+                    <!-- PmtTpInf -->
+                    <InstdAmt py:attrs="{'Ccy': payment.currency.code}">${payment.amount}</InstdAmt>
+                    <!-- ChrgBr -->
+                    <DrctDbtTx>
+                        <MndtRltdInf py:with="mandate = payment.sepa_mandate">
+                            <MndtId>${mandate.reference}</MndtId>
+                            <DtOfSgntr>${mandate.signature_date.isoformat()}</DtOfSgntr>
+                            <!-- AmdmntInd -->
+                            <!-- AmdmntInfDtls -->
+                            <ElctrncSgntr py:if="mandate.electronic_signature">${mandate.electronic_signature}</ElctrncSgntr>
+                            <FrstColltnDt py:if="mandate.first_date">${mandate.first_date.isoformat()}</FrstColltnDt>
+                            <FnlColltnDt py:if="mandate.final_date">${mandate.final_date.isoformat()}</FnlColltnDt>
+                            <Frqcy py:if="mandate.frequency">${mandate.frequency}</Frqcy>
+                        </MndtRltdInf>
+                        <!-- CdtrSchmeId -->
+                        <!-- PreNtfctnId -->
+                        <!-- PreNtfctnDt -->
+                    </DrctDbtTx>
+                    <!-- UltmtCdtr -->
+                    <DbtrAgt>
+                        ${FinancialInstitution(payment.sepa_bank_account_number.bank_account.agency.bank_role[0])}
+                    </DbtrAgt>
+                    <!-- DbtrAgtAcct -->
+                    <Dbtr>
+                        ${PartyIdentification(payment.party)}
+                    </Dbtr>
+                    <DbtrAcct>
+                        ${Account(payment.sepa_bank_account_number)}
+                    </DbtrAcct>
+                    <!-- UltmtDbtr -->
+                    <!-- InstrForCdtrAgt -->
+                    <!-- Purp -->
+                    <!-- RgltryRptg -->
+                    <!-- Tax -->
+                    <!-- RltdRmtInf -->
+                    <!-- RmtInf -->
+                    <!-- SplmtryData -->
+                </PmtId>
+            </DrctDbtTxInf>
+        </PmtInf>
+        <!-- SplmtryData -->
+    </CstmrDrctDbtInitn>
+</Document>

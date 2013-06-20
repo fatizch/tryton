@@ -73,6 +73,6 @@ class TermRenewalRule(BusinessRuleRoot, model.CoopSQL):
         if self.term_date_choice == 'this_date':
             estimated_date = datetime.date(base_date.year,
                 self.date_for_sync.month, self.date_for_sync.day)
-            if estimated_date <= base_date:
+            while estimated_date <= base_date:
                 estimated_date = date.add_year(estimated_date, 1)
             return estimated_date, []

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<tryton>
+  <data>
+    <record model="ir.ui.view" id="journal_form">
+      <field name="model">account.payment.journal</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="account_payment.payment_journal_view_form"/>
+      <field name="name">journal_form</field>
+    </record>
+    <record model="ir.ui.view" id="group_form">
+      <field name="model">account.payment.group</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="account_payment.payment_group_view_form"/>
+      <field name="name">group_form</field>
+    </record>
+  </data>
+</tryton>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="create_receivable_start_view_form">
+            <field
+                name="model">coop_account_payment.create_receivable.start</field>
+            <field name="type">form</field>
+            <field name="name">create_receivable_start_form</field>
+        </record>
+
+        <record model="ir.action.wizard" id="wizard_create_receivable">
+            <field name="name">Create Receivable Payment</field>
+            <field
+                name="wiz_name">coop_account_payment.create_receivable</field>
+        </record>
+
+        <menuitem parent="account_payment.menu_payments" sequence="40"
+            action="wizard_create_receivable" id="menu_create_receivable"/>
+
+        <record model="ir.action.act_window" id="act_payment_receivable_form">
+            <field name="name">Receivable Payments</field>
+            <field name="res_model">account.payment</field>
+            <field name="domain">[('kind', '=', 'receivable')]</field>
+        </record>
+        <!-- TODO act_window.domain -->
+    </data>
+</tryton>

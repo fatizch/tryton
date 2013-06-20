@@ -8,7 +8,7 @@ from decimal import Decimal
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateTransition, StateView, Button
-from trytond.pyson import Eval, If
+from trytond.pyson import Eval, If, Date
 
 from trytond.modules.coop_utils import model, fields, utils, date, coop_string
 from trytond.modules.coop_utils import export
@@ -525,14 +525,28 @@ class Contract():
         'billing.price_line', 'contract', 'Prices')
     billing_periods = fields.One2Many('billing.period', 'contract',
         'Billing Periods')
-    receivable_lines = fields.One2ManyDomain('account.move.line', 'origin',
-        'Receivable Lines', domain=[('account.kind', '=', 'receivable'),
-            ('reconciliation', '=', None)], loading='lazy')
+    receivable_lines = fields.Function(
+        fields.One2Many('account.move.line', None,
+            'Receivable Lines', depends=['display_all_lines', 'id'],
+            domain=[('account.kind', '=', 'receivable'),
+                ('reconciliation', '=', None),
+                ('origin', '=', ('contract.contract', Eval('id', 0))),
+                If(~Eval('display_all_lines'),
+                    ('maturity_date', '<=',
+                        Eval('context', {}).get(
+                            'client_defined_date', Date())),
+                    ())],
+            on_change_with=['display_all_lines', 'id'], loading='lazy'),
+        'on_change_with_receivable_lines')
     receivable_today = fields.Function(fields.Numeric('Receivable Today'),
-            'get_receivable_payable', searcher='search_receivable_payable')
+            'get_receivable_payable')
+            # 'get_receivable_payable', searcher='search_receivable_payable')
     last_bill = fields.Function(
         fields.One2Many('account.move', None, 'Last Bill'),
         'get_last_bill')
+    display_all_lines = fields.Function(
+        fields.Boolean('Display all lines'),
+        'get_display_all_lines', 'setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -540,6 +554,13 @@ class Contract():
         cls._buttons.update({
                 'button_calculate_prices': {},
                 })
+
+    def on_change_with_receivable_lines(self, name=None):
+        return map(lambda x: x.id, utils.get_domain_instances(self,
+            'receivable_lines'))
+
+    def get_display_all_lines(self, name):
+        return False
 
     def get_name_for_billing(self):
         return self.offered.name + ' - Base Price'
@@ -561,6 +582,17 @@ class Contract():
             bm.save()
         if utils.is_none(self, 'next_billing_date'):
             self.next_billing_date = self.start_date
+
+    def get_billing_manager(self, date=None):
+        pool = Pool()
+        Date = pool.get('ir.date')
+        if date is None:
+            date = Date.today()
+        for manager in self.billing_managers:
+            if (manager.start_date <= date
+                    and (manager.end_date is None
+                        or manager.end_date >= date)):
+                return manager
 
     def next_billing_period(self):
         start_date = self.next_billing_date
@@ -688,7 +720,8 @@ class Contract():
         if not period:
             return
         billing_date = period[0]
-        for billing_period in self.billing_periods:
+        for billing_period in self.billing_periods \
+                if hasattr(self, 'billing_periods') else []:
             if (billing_period.start_date, billing_period.end_date) == period:
                 break
         else:
@@ -699,17 +732,14 @@ class Contract():
         price_lines = self.create_price_list(*period)
 
         self.init_billing_manager()
-        billing_manager = None
-        for manager in self.billing_managers:
-            if (manager.start_date <= billing_date
-                    and (manager.end_date is None
-                        or manager.end_date >= billing_date)):
-                billing_manager = manager
-                break
+        billing_manager = self.get_billing_manager(billing_date)
 
         assert billing_manager, 'Missing Billing Manager'
 
-        payment_term = billing_manager.payment_method.payment_term
+        try:
+            payment_term = billing_manager.payment_method.payment_term
+        except:
+            payment_term = None
         currency = self.get_currency()
 
         period_id = Period.find(self.company.id, date=billing_date)
@@ -873,9 +903,25 @@ class Contract():
         self.save()
         return True
 
+    def get_receivable_payable(self, name):
+        if not (hasattr(self, 'id') and self.id):
+            return 0.0
+        MoveLine = Pool().get('account.move.line')
+        Date = Pool().get('ir.date')
+        lines = MoveLine.search([
+            ('account.kind', '=', 'receivable'),
+            ('reconciliation', '=', None),
+            ('move.origin', '=', '%s,%s' % (self.__name__, self.id)),
+            ('maturity_date', '<=', Date.today())])
+        print '#' * 80
+        print 'QKJSDNKQJSDNKQJSND'
+        result = sum(map(lambda x: x.payment_amount, lines))
+        print result
+        return result
+
     # From account => party
     @classmethod
-    def get_receivable_payable(cls, contracts, names):
+    def _get_receivable_payable(cls, contracts, names):
         '''
         Function to compute receivable, payable (today or not) for party ids.
         '''
@@ -1087,5 +1133,5 @@ class Sequence():
     def __setup__(cls):
         super(Sequence, cls).__setup__()
         cls.company = copy.copy(cls.company)
-        cls.company.domain = export.clean_domain_for_import(cls.company.domain)
-        print cls.company.domain
+        cls.company.domain = export.clean_domain_for_import(
+            cls.company.domain, 'company')

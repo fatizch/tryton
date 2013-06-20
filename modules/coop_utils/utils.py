@@ -417,7 +417,9 @@ def pyson_encode(pyson_expr, do_eval=False):
 
 def get_domain_instances(record, field_name):
     field = record._fields[field_name]
-    if not isinstance(field, fields.Many2One):
+    if isinstance(field, fields.Function):
+        field = field._field
+    if not isinstance(field, (fields.Many2One, fields.One2Many)):
         return []
     pyson_domain = PYSONEncoder().encode(field.domain)
     env = EvalEnvironment(record, record.__class__)
@@ -485,7 +487,10 @@ def update_domain(cls, var_name, new_domain):
     This methods allows to update field domain when overriding a field and you
     don't know what where the domain defined at the higher level
     '''
-    field_name = copy.copy(getattr(cls, var_name))
+    origin_field = copy.copy(getattr(cls, var_name))
+    field_name = origin_field
+    if isinstance(field_name, fields.Function):
+        field_name = field_name._field
     if not field_name.domain:
         field_name.domain = []
     field_name.domain.extend(new_domain)
@@ -493,7 +498,7 @@ def update_domain(cls, var_name, new_domain):
         field_name.domain = list(set(field_name.domain))
     except:
         pass
-    setattr(cls, var_name, field_name)
+    setattr(cls, var_name, origin_field)
 
 
 def update_depends(cls, var_name, new_depends):
