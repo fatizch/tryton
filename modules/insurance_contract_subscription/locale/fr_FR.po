@@ -46,6 +46,10 @@ msgctxt "error:contract.contract:"
 msgid "There must be at least one covered element"
 msgstr "Saisir un élement couvert"
 
+msgctxt "error:contract.endorsement_process_finder:"
+msgid "Please pick a process from the selection"
+msgstr "Choisir un processus de la sélection"
+
 msgctxt "error:ins_contract.subscription_mgr:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -97,6 +101,34 @@ msgstr "Type"
 msgctxt "field:contract.contract,subscription_mgr:"
 msgid "Subscription Manager"
 msgstr ""
+
+msgctxt "field:contract.endorsement_process_parameters,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.endorsement_process_parameters,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:contract.endorsement_process_parameters,good_process:"
+msgid "Good Process"
+msgstr "Processus"
+
+msgctxt "field:contract.endorsement_process_parameters,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.endorsement_process_parameters,model:"
+msgid "Model"
+msgstr "Modèle"
+
+msgctxt "field:contract.endorsement_process_parameters,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.endorsement_process_parameters,product:"
+msgid "Product"
+msgstr "Produit"
 
 msgctxt "field:contract.subscribed_option,is_health:"
 msgid "Is Health"
@@ -207,6 +239,10 @@ msgctxt "field:process.process_desc,steps_to_display:"
 msgid "Steps"
 msgstr "Etapes"
 
+msgctxt "model:contract.endorsement_process_parameters,name:"
+msgid "Endorsement Process Parameters"
+msgstr ""
+
 msgctxt "model:ins_contract.subscription_mgr,name:"
 msgid "Subscription Manager"
 msgstr ""
@@ -219,9 +255,17 @@ msgctxt "model:ir.action,name:act_contract_logs"
 msgid "Logs"
 msgstr ""
 
+msgctxt "model:ir.action,name:endorsement_process_launcher"
+msgid "Start Endorsement"
+msgstr "Démarer l'Avenant"
+
 msgctxt "model:ir.action,name:subscription_process_launcher"
 msgid "Start Subscription"
 msgstr "Démarrer la Souscription"
+
+msgctxt "model:ir.ui.menu,name:menu_start_endorsement"
+msgid "Start Endorsement"
+msgstr "Démarer l'Avenant"
 
 msgctxt "model:ir.ui.menu,name:menu_start_subscription"
 msgid "Start Subscription"
@@ -240,6 +284,10 @@ msgid "Contract"
 msgstr "Contrat"
 
 msgctxt "selection:process.process_desc,kind:"
+msgid "Contract Endorsement"
+msgstr "Avenant"
+
+msgctxt "selection:process.process_desc,kind:"
 msgid "Contract Subscription"
 msgstr "Souscription Contrat"
 
@@ -250,6 +298,16 @@ msgstr "Garanties"
 msgctxt "view:ins_contract.covered_data:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
+
+msgctxt ""
+"wizard_button:contract.endorsement_process_finder,process_parameters,action:"
+msgid "Start Process"
+msgstr "Démarrer le processus"
+
+msgctxt ""
+"wizard_button:contract.endorsement_process_finder,process_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt ""
 "wizard_button:ins_contract.subscription_process_finder,process_parameters,action:"

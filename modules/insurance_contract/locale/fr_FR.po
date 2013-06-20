@@ -308,7 +308,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.subscribed_option,complement:"
 msgid "Complement"
-msgstr "Complement"
+msgstr "Complément"
 
 msgctxt "field:contract.subscribed_option,contract:"
 msgid "Contract"
@@ -344,7 +344,7 @@ msgstr "ID"
 
 msgctxt "field:contract.subscribed_option,ins_complement:"
 msgid "Complement"
-msgstr "Complement"
+msgstr "Complément"
 
 msgctxt "field:contract.subscribed_option,is_used:"
 msgid "Is Used"
@@ -560,39 +560,39 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_contract.covered_element-party_relation,covered_element:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:ins_contract.covered_element-party_relation,create_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:ins_contract.covered_element-party_relation,create_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:ins_contract.covered_element-party_relation,id:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:ins_contract.covered_element-party_relation,is_used:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:ins_contract.covered_element-party_relation,party_relation:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:ins_contract.covered_element-party_relation,rec_name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:ins_contract.covered_element-party_relation,write_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:ins_contract.covered_element-party_relation,write_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:ins_contract.delivered_service,contract:"
 msgid "Contract"
@@ -875,7 +875,7 @@ msgstr "Elément Couvert"
 
 msgctxt "model:ins_contract.covered_element-party_relation,name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "model:ins_contract.delivered_service,name:"
 msgid "Delivered Service"

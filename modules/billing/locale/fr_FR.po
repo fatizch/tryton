@@ -616,7 +616,7 @@ msgstr "Virement Bancaire"
 
 msgctxt "selection:billing.price_line,frequency:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:billing.price_line,frequency:"
 msgid "Half Yearly"
@@ -732,7 +732,7 @@ msgstr "Comptabilité"
 
 msgctxt "wizard_button:billing.billing_process,bill_display,accept_bill:"
 msgid "Accept"
-msgstr ""
+msgstr "Accepter"
 
 msgctxt "wizard_button:billing.billing_process,bill_display,cancel_bill:"
 msgid "Cancel"

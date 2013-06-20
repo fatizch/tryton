@@ -627,8 +627,16 @@ msgid "==> Tarif"
 msgstr ""
 
 msgctxt "view:contract.contract:"
+msgid "==> Validation de l'avenant"
+msgstr ""
+
+msgctxt "view:contract.contract:"
 msgid "==> Validation du contrat"
 msgstr ""
+
+msgctxt "view:contract.contract:"
+msgid "Accounting"
+msgstr "Comptabilité"
 
 msgctxt "view:contract.contract:"
 msgid "Adhérent"
@@ -637,6 +645,10 @@ msgstr "Adhérent"
 msgctxt "view:contract.contract:"
 msgid "Affiliations"
 msgstr "Affiliations"
+
+msgctxt "view:contract.contract:"
+msgid "Avenant"
+msgstr "Avenant"
 
 msgctxt "view:contract.contract:"
 msgid "Billing"
@@ -657,6 +669,10 @@ msgstr "Données Complémentaires"
 msgctxt "view:contract.contract:"
 msgid "Complete"
 msgstr "Terminer"
+
+msgctxt "view:contract.contract:"
+msgid "Covered Elements"
+msgstr "Eléments Couverts"
 
 msgctxt "view:contract.contract:"
 msgid "Covered Elements/Options"
@@ -724,13 +740,23 @@ msgstr "Processus Terminé. Commencez une nouvelle tâche"
 
 msgctxt "view:contract.contract:"
 msgid ""
+"The current record isin a state (Validation de l'avenant) that you are not "
+"allowed to view."
+msgstr ""
+
+msgctxt "view:contract.contract:"
+msgid ""
 "The current record isin a state (Validation du contrat) that you are not "
 "allowed to view."
 msgstr ""
 
 msgctxt "view:contract.contract:"
-msgid "Validation du contrat"
+msgid "Validation de l'avenant"
 msgstr ""
+
+msgctxt "view:contract.contract:"
+msgid "Validation du contrat"
+msgstr "Validation du contrat"
 
 msgctxt "view:ins_claim.claim:"
 msgid "==> Clôture"

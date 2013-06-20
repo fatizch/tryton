@@ -208,7 +208,7 @@ msgstr "Importer le Fichier"
 
 msgctxt "field:party.category,id:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:utils.version_object,end_date:"
 msgid "End Date"

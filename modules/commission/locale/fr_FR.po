@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -36,7 +36,7 @@ msgstr "Montant"
 
 msgctxt "field:commission.commission_amount_to_display,comp_option:"
 msgid "Comp Option"
-msgstr ""
+msgstr "Option Commissionnée"
 
 msgctxt "field:commission.commission_amount_to_display,id:"
 msgid "ID"
@@ -496,7 +496,7 @@ msgstr "Produit"
 
 msgctxt "selection:commission.commission_rule,template_behaviour:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:commission.commission_rule,template_behaviour:"
 msgid "Add"

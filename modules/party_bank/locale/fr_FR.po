@@ -15,6 +15,10 @@ msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:party.bank_account_number:"
+msgid "Invalid %s number : %s"
+msgstr "Le compte %s avec le numéro %s est invalide"
+
+msgctxt "error:party.bank_account_number:"
 msgid "Invalid number!"
 msgstr "Numéro non valide!"
 

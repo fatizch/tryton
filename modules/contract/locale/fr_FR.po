@@ -170,6 +170,10 @@ msgctxt "field:contract.contract,summary:"
 msgid ""
 msgstr ""
 
+msgctxt "field:contract.contract,temp_endorsment_date:"
+msgid "Endorsment Date"
+msgstr ""
+
 msgctxt "field:contract.contract,write_date:"
 msgid ""
 msgstr ""
@@ -177,6 +181,14 @@ msgstr ""
 msgctxt "field:contract.contract,write_uid:"
 msgid ""
 msgstr ""
+
+msgctxt "field:contract.rule_sets,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.rule_sets,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
 
 msgctxt "field:contract.status_history,create_date:"
 msgid "Create Date"
@@ -334,6 +346,10 @@ msgctxt "model:contract.contract,name:"
 msgid ""
 msgstr ""
 
+msgctxt "model:contract.rule_sets,name:"
+msgid "Context functions for contract related data"
+msgstr ""
+
 msgctxt "model:contract.status_history,name:"
 msgid "Status History"
 msgstr "Historique des Statuts"
@@ -352,7 +368,7 @@ msgstr ""
 
 msgctxt "selection:contract.contract,status:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:contract.contract,status:"
 msgid "Active"
@@ -372,7 +388,7 @@ msgstr "Terminé"
 
 msgctxt "selection:contract.status_history,status:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:contract.status_history,status:"
 msgid "Active"
@@ -396,7 +412,7 @@ msgstr "Terminé"
 
 msgctxt "selection:contract.subscribed_option,status:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:contract.subscribed_option,status:"
 msgid "Active"

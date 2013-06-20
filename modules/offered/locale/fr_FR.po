@@ -706,7 +706,7 @@ msgstr "Sélection"
 
 msgctxt "selection:offered.coverage,kind:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:offered.coverage,kind:"
 msgid "Default"
@@ -726,7 +726,7 @@ msgstr "Proposé par Défaut"
 
 msgctxt "selection:offered.coverage,template_behaviour:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:offered.coverage,template_behaviour:"
 msgid "Add"
@@ -738,7 +738,7 @@ msgstr "Remplacer"
 
 msgctxt "selection:offered.offered,template_behaviour:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:offered.offered,template_behaviour:"
 msgid "Add"
@@ -750,7 +750,7 @@ msgstr "Remplacer"
 
 msgctxt "selection:offered.product,kind:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:offered.product,kind:"
 msgid "Default"
@@ -758,7 +758,7 @@ msgstr "Défaut"
 
 msgctxt "selection:offered.product,template_behaviour:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:offered.product,template_behaviour:"
 msgid "Add"
