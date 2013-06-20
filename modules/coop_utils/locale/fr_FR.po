@@ -20,11 +20,11 @@ msgstr ""
 
 msgctxt "field:account.invoice.payment_term,id:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:account.invoice.payment_term.line,id:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:account.tax,id:"
 msgid ""
@@ -228,7 +228,7 @@ msgstr ""
 
 msgctxt "field:party.category,id:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:utils.version_object,end_date:"
 msgid "End Date"

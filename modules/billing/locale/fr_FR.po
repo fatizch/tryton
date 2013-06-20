@@ -519,7 +519,7 @@ msgid "Account for billing"
 msgstr "Compte de Facturation"
 
 msgctxt "field:ins_contract.covered_element,indemnification_bank_account:"
-msgid "Indemnification Bank Account"
+msgid ""
 msgstr "Compte de Remboursement"
 
 msgctxt "field:ins_contract.covered_element,indemnification_bank_account:"
@@ -620,7 +620,7 @@ msgstr "Virement Bancaire"
 
 msgctxt "selection:billing.price_line,frequency:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:billing.price_line,frequency:"
 msgid "Half Yearly"

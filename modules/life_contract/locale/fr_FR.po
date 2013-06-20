@@ -12,7 +12,7 @@ msgstr "Montant de Couverture"
 
 msgctxt "field:ins_contract.covered_data,with_coverage_amount:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:ins_contract.covered_element,covered_name:"
 msgid "Name"

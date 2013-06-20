@@ -32,11 +32,11 @@ msgstr "Type"
 
 msgctxt "field:offered.coverage,coverage_amount_rules:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,is_coverage_amount_needed:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:tranche.tranche,ceiling:"
 msgid "Current Ceiling"

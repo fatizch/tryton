@@ -3950,7 +3950,7 @@ msgstr "Remplacer"
 
 msgctxt "selection:ins_product.deductible_duration,duration_unit:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:ins_product.deductible_duration,duration_unit:"
 msgid "Day"
@@ -4522,7 +4522,7 @@ msgstr "Sélection"
 
 msgctxt "selection:offered.coverage,family:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:offered.coverage,family:"
 msgid "Life"

@@ -48,51 +48,51 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:offered.complementary_data_def,create_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,create_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,default_value:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,default_value_boolean:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,default_value_char:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,default_value_selection:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,digits:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,end_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,id:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,is_shared:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,is_used:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,kind:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -100,71 +100,71 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:offered.complementary_data_def,name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,rec_name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,selection:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,selection_json:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,start_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,string:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,sub_datas:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,type_:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,with_default_value:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,write_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_def,write_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_recursive_relation,child:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_recursive_relation,create_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_recursive_relation,create_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_recursive_relation,id:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_recursive_relation,is_used:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_recursive_relation,master:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt ""
 "field:offered.complementary_data_recursive_relation,must_expand_tree:"
@@ -173,71 +173,71 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:offered.complementary_data_recursive_relation,rec_name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_recursive_relation,select_value:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_recursive_relation,write_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.complementary_data_recursive_relation,write_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,code:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,complementary_data:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,complementary_data_def:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,coverages_in_package:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,create_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,create_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,currency:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,currency_digits:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,description:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,end_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,id:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,is_package:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,is_used:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,kind:"
 msgid "Coverage Kind"
@@ -249,104 +249,104 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:offered.coverage,name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,products:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,rec_name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,start_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,subscription_behaviour:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,summary:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,template:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,template_behaviour:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,write_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage,write_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt ""
 "field:offered.coverage-complementary_data_def,complementary_data_def:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage-complementary_data_def,coverage:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage-complementary_data_def,create_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage-complementary_data_def,create_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage-complementary_data_def,id:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage-complementary_data_def,is_used:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage-complementary_data_def,rec_name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage-complementary_data_def,write_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.coverage-complementary_data_def,write_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.offered,code:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.offered,complementary_data:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.offered,currency_digits:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.offered,description:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.offered,end_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.offered,id:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.offered,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -354,75 +354,75 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:offered.offered,name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.offered,start_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.offered,summary:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.offered,template:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.offered,template_behaviour:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.package-coverage,coverage:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.package-coverage,create_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.package-coverage,create_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.package-coverage,id:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.package-coverage,is_used:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.package-coverage,package:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.package-coverage,rec_name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.package-coverage,write_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.package-coverage,write_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,code:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,complementary_data:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,complementary_data_def:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,contract_generator:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,coverages:"
 msgid "Coverages"
@@ -430,35 +430,35 @@ msgstr "Garanties"
 
 msgctxt "field:offered.product,create_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,create_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,currency:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,currency_digits:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,description:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,end_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,id:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,is_used:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,kind:"
 msgid "Product Kind"
@@ -470,118 +470,118 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:offered.product,name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,rec_name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,start_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,summary:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,template:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,template_behaviour:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,write_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product,write_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-complementary_data_def,complementary_data_def:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-complementary_data_def,create_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-complementary_data_def,create_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-complementary_data_def,id:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-complementary_data_def,is_used:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-complementary_data_def,product:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-complementary_data_def,rec_name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-complementary_data_def,write_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-complementary_data_def,write_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-options-coverage,coverage:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-options-coverage,create_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-options-coverage,create_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-options-coverage,id:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-options-coverage,is_used:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-options-coverage,product:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-options-coverage,rec_name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-options-coverage,write_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.product-options-coverage,write_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "help:offered.complementary_data_def,selection:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "model:ir.action,name:act_coverage_form"
 msgid "Coverages"
 msgstr "Garanties"
 
 msgctxt "model:ir.action,name:act_model_coop_schema"
-msgid "Complementary Data"
+msgid "Complementary Data Complementary Datas"
 msgstr "Données Complémentaires"
 
 msgctxt "model:ir.action,name:act_package_form"
@@ -622,39 +622,39 @@ msgstr "Produits"
 
 msgctxt "model:offered.complementary_data_def,name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "model:offered.complementary_data_recursive_relation,name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "model:offered.coverage,name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "model:offered.coverage-complementary_data_def,name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "model:offered.offered,name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "model:offered.package-coverage,name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "model:offered.product,name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "model:offered.product-complementary_data_def,name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "model:offered.product-options-coverage,name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:offered.complementary_data_def,kind:"
 msgid "Benefit"
@@ -706,7 +706,7 @@ msgstr "Sélection"
 
 msgctxt "selection:offered.coverage,kind:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:offered.coverage,kind:"
 msgid "Default"
@@ -726,7 +726,7 @@ msgstr "Proposé par Défaut"
 
 msgctxt "selection:offered.coverage,template_behaviour:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:offered.coverage,template_behaviour:"
 msgid "Add"
@@ -738,7 +738,7 @@ msgstr "Remplacer"
 
 msgctxt "selection:offered.offered,template_behaviour:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:offered.offered,template_behaviour:"
 msgid "Add"
@@ -750,7 +750,7 @@ msgstr "Remplacer"
 
 msgctxt "selection:offered.product,kind:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:offered.product,kind:"
 msgid "Default"
@@ -758,7 +758,7 @@ msgstr "Défaut"
 
 msgctxt "selection:offered.product,template_behaviour:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:offered.product,template_behaviour:"
 msgid "Add"

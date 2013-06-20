@@ -20,55 +20,55 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:contract.address,address:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.address,contract:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.address,create_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.address,create_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.address,end_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.address,id:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.address,is_used:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.address,must_expand_tree:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.address,policy_owner:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.address,rec_name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.address,start_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.address,write_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.address,write_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,addresses:"
 msgid ""
@@ -84,11 +84,11 @@ msgstr "Société"
 
 msgctxt "field:contract.contract,complementary_data:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,contact:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,contract_number:"
 msgid "Contract Number"
@@ -96,39 +96,39 @@ msgstr "Numéro de Contrat"
 
 msgctxt "field:contract.contract,create_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,create_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,currency:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,currency_digits:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,current_policy_owner:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,documents:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,end_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,id:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,is_used:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -136,11 +136,11 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:contract.contract,offered:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,options:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,product_kind:"
 msgid "Product Kind"
@@ -148,23 +148,23 @@ msgstr "Type de Produit"
 
 msgctxt "field:contract.contract,rec_name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,start_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,start_management_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,status:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,status_history:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,subscriber:"
 msgid "Subscriber"
@@ -172,7 +172,7 @@ msgstr "Souscripteur"
 
 msgctxt "field:contract.contract,summary:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,temp_endorsment_date:"
 msgid "Endorsment Date"
@@ -180,11 +180,11 @@ msgstr ""
 
 msgctxt "field:contract.contract,write_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.contract,write_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.rule_sets,id:"
 msgid "ID"
@@ -248,7 +248,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.subscribed_option,contract:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.subscribed_option,contract_number:"
 msgid "Contract Number"
@@ -260,19 +260,19 @@ msgstr "Type de Garantie"
 
 msgctxt "field:contract.subscribed_option,create_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.subscribed_option,create_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.subscribed_option,currency:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.subscribed_option,currency_digits:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.subscribed_option,current_policy_owner:"
 msgid "Current Policy Owner"
@@ -280,15 +280,15 @@ msgstr "Responsable Courant de la Police"
 
 msgctxt "field:contract.subscribed_option,end_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.subscribed_option,id:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.subscribed_option,is_used:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.subscribed_option,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -296,7 +296,7 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:contract.subscribed_option,offered:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.subscribed_option,product:"
 msgid "Product"
@@ -304,35 +304,35 @@ msgstr "Produit"
 
 msgctxt "field:contract.subscribed_option,rec_name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.subscribed_option,start_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.subscribed_option,start_management_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.subscribed_option,status:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.subscribed_option,status_history:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.subscribed_option,summary:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.subscribed_option,write_date:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:contract.subscribed_option,write_uid:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "field:offered.rule_sets,id:"
 msgid "ID"
@@ -344,11 +344,11 @@ msgstr "Must Expand Tree"
 
 msgctxt "model:contract.address,name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "model:contract.contract,name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "model:contract.rule_sets,name:"
 msgid "Context functions for contract related data"
@@ -360,7 +360,7 @@ msgstr "Historique des Statuts"
 
 msgctxt "model:contract.subscribed_option,name:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "model:ir.action,name:act_contract_form"
 msgid "Contract"
@@ -372,7 +372,7 @@ msgstr ""
 
 msgctxt "selection:contract.contract,status:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:contract.contract,status:"
 msgid "Active"
@@ -392,7 +392,7 @@ msgstr "Terminé"
 
 msgctxt "selection:contract.status_history,status:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:contract.status_history,status:"
 msgid "Active"
@@ -416,7 +416,7 @@ msgstr "Terminé"
 
 msgctxt "selection:contract.subscribed_option,status:"
 msgid ""
-msgstr " Sous Statut"
+msgstr ""
 
 msgctxt "selection:contract.subscribed_option,status:"
 msgid "Active"
