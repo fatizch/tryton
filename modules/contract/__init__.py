@@ -12,4 +12,5 @@ def register():
         ContractAddress,
         #From Rule Engine
         OfferedContext,
+        ContractContext,
         module='contract', type_='model')

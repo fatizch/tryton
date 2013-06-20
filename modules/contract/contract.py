@@ -224,8 +224,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         )
     # TODO replace single contact by date versionned list
     contact = fields.Many2One('party.party', 'Contact')
-    appliable_conditions_date = fields.Date('Appliable Conditions Date',
-        on_change_with=['start_date'])
+    appliable_conditions_date = fields.Date('Appliable Conditions Date')
     documents = fields.One2Many(
         'ins_product.document_request', 'needed_by', 'Documents', size=1)
     company = fields.Many2One('company.company', 'Company', required=True,
@@ -342,13 +341,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         return self.offered
 
     def on_change_start_date(self):
-        try:
-            res = super(Contract, self).on_change_start_date()
-        except AttributeError:
-            res = {}
-        if not (hasattr(self, 'start_date') and self.start_date):
-            return res
-        return res.update({'appliable_conditions_date': self.start_date})
+        return {'appliable_conditions_date': self.start_date}
 
     @staticmethod
     def default_status():

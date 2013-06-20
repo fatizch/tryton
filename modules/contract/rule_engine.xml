@@ -20,5 +20,15 @@
         <field name="translated_technical_name">donnee_compl</field>
         <field name="language" ref="ir.lang_fr"/>
     </record>
+
+    <record model="rule_engine.tree_element" id="te_contract_conditions_date">
+        <field name="description">Date de Conditions</field>
+        <field name="name">_re_contract_conditions_date</field>
+        <field name="namespace">contract.rule_sets</field>
+        <field name="type">function</field>
+        <field name="parent" ref="te_contract"/>
+        <field name="translated_technical_name">date_de_conditions</field>
+        <field name="language" ref="ir.lang_fr"/>
+    </record>
 </data>
 </tryton>

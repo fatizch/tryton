@@ -4,6 +4,7 @@ from trytond.modules.rule_engine import RuleEngineContext
 
 __all__ = [
     'OfferedContext',
+    'ContractContext',
     ]
 
 
@@ -29,3 +30,15 @@ class OfferedContext(RuleEngineContext):
         ComplDataDef = Pool().get('offered.complementary_data_def')
         return ComplDataDef.get_complementary_data_value(from_object,
             data_name, args['date'])
+
+
+class ContractContext(RuleEngineContext):
+    '''
+        Context functions for contract related data
+    '''
+
+    __name__ = 'contract.rule_sets'
+
+    @classmethod
+    def _re_contract_conditions_date(cls, args):
+        return args['appliable_conditions_date']

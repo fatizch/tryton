@@ -36,7 +36,7 @@ class TermRenewalRule(BusinessRuleRoot, model.CoopSQL):
     frequency = fields.Selection([
             ('biyearly', 'Biyearly'),
             ('yearly', 'Yearly'),
-            ('half-yearly', 'Half Yearly'),
+            ('half_yearly', 'Half Yearly'),
             ('quarterly', 'Quarterly'),
             ('monthly', 'Monthly')
         ],
@@ -69,7 +69,7 @@ class TermRenewalRule(BusinessRuleRoot, model.CoopSQL):
         base_date = contract.next_renewal_date if contract.next_renewal_date \
             else contract.start_date
         if self.term_date_choice == 'subscription':
-            return date.add_frequency(base_date, self.frequency), []
+            return date.add_frequency(self.frequency, base_date), []
         if self.term_date_choice == 'this_date':
             estimated_date = datetime.date(base_date.year,
                 self.date_for_sync.month, self.date_for_sync.day)

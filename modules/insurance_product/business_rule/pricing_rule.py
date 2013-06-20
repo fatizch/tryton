@@ -27,7 +27,7 @@ PRICING_LINE_KINDS = [
 
 PRICING_FREQUENCY = [
     ('yearly', 'Yearly'),
-    ('half-yearly', 'Half Yearly'),
+    ('half_yearly', 'Half Yearly'),
     ('quarterly', 'Quarterly'),
     ('monthly', 'Monthly')
 ]
