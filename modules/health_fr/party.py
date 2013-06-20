@@ -30,7 +30,7 @@ class PartyHealthComplement():
 
     def get_department(self, name):
         address = self.party.address_get() if self.party else None
-        return address.get_department() if address else ''
+        return address.get_department() if address else None
 
     @classmethod
     def set_void(cls, instances, vals, name):

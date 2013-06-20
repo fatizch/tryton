@@ -13,5 +13,12 @@
             <field name="inherit" ref="contract.option_view_form"/>
             <field name="name">option_form</field>
         </record>
+        <record model="ir.ui.view" id="covered_element_view_form">
+            <field name="model">ins_contract.covered_element</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_contract.covered_element_view_form"/>
+            <field name="name">covered_element_form</field>
+        </record>
+
     </data>
 </tryton>
