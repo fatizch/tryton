@@ -886,10 +886,16 @@ class Contract():
     def get_last_bill(self, name):
         Move = Pool().get('account.move')
         try:
-            return [Move.search(
-                [('origin', '=', utils.convert_to_reference(self))])[-1].id]
+            result = [Move.search(
+                [('origin', '=', utils.convert_to_reference(self))])[0].id]
+            return result
         except:
             return []
+
+    def get_total_price_at_date(self, at_date):
+        return sum(map(lambda x: x.amount, filter(
+            lambda x: x.start_date <= at_date and (
+                not x.end_date or x.end_date >= at_date), self.prices)))
 
     def finalize_contract(self):
         super(Contract, self).finalize_contract()

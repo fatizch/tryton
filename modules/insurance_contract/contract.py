@@ -168,6 +168,7 @@ class InsurancePolicy():
         return True, ()
 
     def get_sender(self):
+        return self.company.party
         role = self.get_management_role('contract_manager')
         return role.party if role else None
 
@@ -279,6 +280,12 @@ class InsurancePolicy():
             return False
         self.store_prices(prices_update)
         return True
+
+    def get_appliable_logo(self, kind=''):
+        if self.company:
+            if self.company.party.logo:
+                return self.company.party.logo
+        return ''
 
 
 class InsuranceSubscribedCoverage():

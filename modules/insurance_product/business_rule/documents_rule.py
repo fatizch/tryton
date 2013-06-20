@@ -118,7 +118,6 @@ class Printable(Model):
         good_model, = GoodModel.search([
             ('model', '=', cls.__name__)], limit=1)
 
-        # Basically, that is just setting 'is_workflow' to True
         good_model.printable = True
 
         good_model.save()

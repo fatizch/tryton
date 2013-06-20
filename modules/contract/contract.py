@@ -3,7 +3,7 @@ import copy
 from trytond.modules.coop_utils import model, fields, date
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 
 from trytond.modules.coop_utils import utils
 from trytond.modules.insurance_product import Printable
@@ -25,6 +25,7 @@ __all__ = [
     'Contract',
     'SubscribedCoverage',
     'ContractAddress',
+    'LetterModel',
     ]
 
 
@@ -447,7 +448,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         return {'complementary_data': self.offered.get_result(
                 'calculated_complementary_datas', {
                     'date': self.start_date,
-                    'appliable_conditions_date': self.appliable_conditions_date,
+                    'appliable_conditions_date':
+                    self.appliable_conditions_date,
                     'contract': self,
                     'level': 'contract',
                     })[0]}
@@ -496,6 +498,9 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             cur_address.start_date = self.start_date
             self.addresses = [cur_address]
         return True
+
+    def get_letter_model_kind(self):
+        return 'contract'
 
 
 class SubscribedCoverage(model.CoopSQL, Subscribed):
@@ -608,3 +613,17 @@ class ContractAddress(model.CoopSQL, model.CoopView):
     @staticmethod
     def default_start_date():
         return Transaction().context.get('start_date')
+
+
+class LetterModel():
+    'Letter Model'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'ins_product.letter_model'
+
+    @classmethod
+    def __setup__(cls):
+        super(LetterModel, cls).__setup__()
+        cls.kind = copy.copy(cls.kind)
+        cls.kind.selection.append(('contract', 'Contract Documents'))
+        cls.kind.selection = list(set(cls.kind.selection))

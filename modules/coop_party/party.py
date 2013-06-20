@@ -166,6 +166,12 @@ class Party(model.CoopSQL):
     def set_is_actor(cls, parties, name, value):
         pass
 
+    def get_clean_name(self):
+        if self.is_person:
+            res = "%s %s %s" % (coop_string.translate_value(
+                self, 'gender'), self.name.upper(), self.first_name)
+        return res
+
     def get_rec_name(self, name):
         res = ''
         if self.is_person:
