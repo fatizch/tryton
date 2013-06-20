@@ -12,8 +12,10 @@
       <field name="due_today"/>
     </group>
   </xpath>
-  <xpath expr="/form/notebook/page[@id='accounting']/group[@id='lines']/field[@name='receivable_lines']" position="replace">
-    <field name="receivable_lines" colspan="2" view_ids="billing.move_line_tree,account.move_line_view_form"/>
-    <field name="payment_lines" colspan="2"/>
+  <xpath expr="/form/notebook/page[@id='accounting']/group[@id='lines']" position="replace_attributes">
+    <group id="lines" colspan="1" col="2" yexpand="1" yfill="1"/>
+  </xpath>
+  <xpath expr="/form/notebook/page[@id='accounting']/group[@id='lines']" position="after">
+    <field name="payment_lines"/>
   </xpath>
 </data>

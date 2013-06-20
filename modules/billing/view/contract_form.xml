@@ -13,11 +13,11 @@
     <page string="Accounting" id="accounting" col="2">
       <label name="receivable_today"/>
       <field name="receivable_today"/>
-        <group id="lines"  colspan="2" col="4" yexpand="1" yfill="1">
-          <label name="display_all_lines"/>
-          <field name="display_all_lines" colspan="3"/>
-          <field name="receivable_lines" colspan="4" view_ids="billing.move_line_tree,account.move_line_view_form"/>
-        </group>
+      <group id="lines" colspan="2" col="2" yexpand="1" yfill="1">
+        <field name="receivable_lines" colspan="2" view_ids="billing.move_line_tree,account.move_line_view_form"/>
+        <label name="display_all_lines"/>
+        <field name="display_all_lines"/>
+      </group>
     </page>
   </xpath>
 </data>

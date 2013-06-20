@@ -1,6 +1,6 @@
 from trytond.pool import PoolMeta, Pool
 
-from trytond.pyson import If, Eval
+from trytond.pyson import If, Eval, Date
 from trytond.modules.coop_utils import utils, fields
 
 
@@ -23,8 +23,13 @@ class Contract():
         fields.One2Many('account.payment', None, 'Payment Lines',
             domain=[
                 ('line.move.origin', '=', (__name__, Eval('id', 0))),
-                ('state', 'in', ('approved', 'processing', 'succeeded'))],
-            on_change_with=['id'], loading='lazy'),
+                ('state', 'in', ('approved', 'processing', 'succeeded')),
+                If(~Eval('display_all_lines'),
+                    ('line.maturity_date', '<=',
+                        Eval('context', {}).get(
+                            'client_defined_date', Date())),
+                    ())],
+            on_change_with=['display_all_lines', 'id'], loading='lazy'),
         'on_change_with_payment_lines')
 
     @classmethod
