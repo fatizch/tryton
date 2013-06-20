@@ -37,23 +37,23 @@ __all__ = [
     'TaxDesc',
     'FeeDesc',
     'Sequence',
-]
+    ]
 
 PAYMENT_MODES = [
     ('cash', 'Cash'),
     ('check', 'Check'),
     ('wire_transfer', 'Wire Transfer'),
     ('direct_debit', 'Direct Debit'),
-]
+    ]
 
 export.add_export_to_model([
-    ('account.invoice.payment_term', ('name', )),
-    ('account.invoice.payment_term.line', ()),
-    ('account.account', ('code', 'name')),
-    ('company.company', ('party.code', )),
-    ('account.tax', ('name', )),
-    ('account.account.type', ('name', )),
-])
+        ('account.invoice.payment_term', ('name', )),
+        ('account.invoice.payment_term.line', ()),
+        ('account.account', ('code', 'name')),
+        ('company.company', ('party.code', )),
+        ('account.tax', ('name', )),
+        ('account.account.type', ('name', )),
+        ])
 
 
 class PaymentMethod(model.CoopSQL, model.CoopView):
@@ -353,7 +353,9 @@ class BillingPeriod(model.CoopSQL, model.CoopView):
                 })
 
     def get_rec_name(self, name):
-        return self.contract.rec_name
+        ref = (self.contract.contract_number
+            if self.contract.contract_number else self.contract.rec_name)
+        return '%s (%s - %s)' % (ref, self.start_date, self.end_date)
 
     @classmethod
     def search_rec_name(cls, name, clause):
@@ -773,6 +775,8 @@ class Contract():
 
         if billing_period.moves:
             for old_move in billing_period.moves:
+                if old_move.state == 'draft':
+                    continue
                 for old_line in old_move.lines:
                     if old_line.account == self.subscriber.account_receivable:
                         continue
@@ -785,6 +789,8 @@ class Contract():
                     else:
                         line.credit += old_line.debit
                         total_amount += old_line.debit
+            Move.delete(
+                [x for x in billing_period.moves if x.state == 'draft'])
 
         for line in lines.itervalues():
             if line.credit < 0:
@@ -813,11 +819,19 @@ class Contract():
         move.save()
         return move
 
-    def generate_first_bill(self):
+    def bill_and_post(self, post=True):
         Move = Pool().get('account.move')
-        Move.delete(Move.search(
-            [('origin', '=', utils.convert_to_reference(self))]))
-        self.bill()
+        move = self.bill()
+        if move and post:
+            Move.post([move])
+            self.next_billing_date = date.add_day(
+                move.billing_period.end_date, 1)
+            self.save()
+
+    def generate_first_bill(self):
+        if self.next_billing_date:
+            self.next_billing_date = self.start_date
+        self.bill_and_post(post=False)
 
     def calculate_price_at_date(self, date):
         cur_dict = {
@@ -851,27 +865,25 @@ class Contract():
 
     def finalize_contract(self):
         super(Contract, self).finalize_contract()
-        self.generate_first_bill()
-        if not utils.is_none(self, 'last_bill'):
-            last_bill = self.last_bill[0]
-            Move = Pool().get('account.move')
-            Move.post([last_bill])
-            self.next_billing_date = date.add_day(
-                last_bill.billing_period.end_date, 1)
-        self.save()
+        self.bill_and_post()
 
     def renew(self):
         res = super(Contract, self).renew()
         if not res:
             return res
-        self.bill()
-        last_bill = self.last_bill[0]
-        Move = Pool().get('account.move')
-        Move.post([last_bill])
-        self.next_billing_date = date.add_day(
-            last_bill.billing_period.end_date, 1)
-        self.save()
+        self.bill_and_post()
         return True
+
+    def re_bill_from_date(self, at_date):
+        '''Recalculate a new bill for a period when a modifiction has occured
+        in the past and the previous bills already posted may be false'''
+        if self.next_billing_date:
+            self.next_billing_date = at_date
+        self.bill_and_post()
+
+    def temp_endorsment_re_bill(self):
+        #TODO :Temporay while we don't have the endorsement date
+        self.re_bill_from_date(self.start_date)
 
     # From account => party
     @classmethod
