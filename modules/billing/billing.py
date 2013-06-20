@@ -914,6 +914,7 @@ class Contract():
     def temp_endorsment_re_bill(self):
         #TODO :Temporay while we don't have the endorsement date
         self.re_bill_from_date(self.start_date)
+
     def get_receivable_payable(self, name):
         if not (hasattr(self, 'id') and self.id):
             return 0.0
@@ -924,10 +925,7 @@ class Contract():
             ('reconciliation', '=', None),
             ('move.origin', '=', '%s,%s' % (self.__name__, self.id)),
             ('maturity_date', '<=', Date.today())])
-        print '#' * 80
-        print 'QKJSDNKQJSDNKQJSND'
         result = sum(map(lambda x: x.payment_amount, lines))
-        print result
         return result
 
     # From account => party
