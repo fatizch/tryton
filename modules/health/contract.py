@@ -53,7 +53,7 @@ class CoveredElement():
     health_complement = fields.Function(
         fields.One2Many('health.party_complement', None, 'Health Complement',
             on_change_with=['party'], size=1),
-        'on_change_with_health_complement', 'set_health_complement')
+        'get_health_complement', 'set_health_complement')
 
     @classmethod
     def __setup__(cls):
@@ -63,6 +63,27 @@ class CoveredElement():
             cls.party.context = {}
         cls.party.context['is_health'] = Eval('_parent_contract',
             {}).get('is_health')
+
+    @classmethod
+    def create(cls, values):
+        pool = Pool()
+        Contract = pool.get('contract.contract')
+        Health_Complement = pool.get('health.party_complement')
+        Party = pool.get('party.party')
+        health_complements = []
+        for covered_element in values:
+            if not Contract(covered_element['contract']).is_health:
+                continue
+            party = Party(covered_element['party'])
+            if party.is_person and not party.health_complement:
+                health_complements.append({'party': covered_element['party']})
+        if health_complements:
+            Health_Complement.create(health_complements)
+        return super(CoveredElement, cls).create(values)
+
+    def get_health_complement(self, name):
+        return ([x.id for x in self.party.health_complement]
+            if self.party else [])
 
     def on_change_with_health_complement(self, name=None):
         if not self.party:
