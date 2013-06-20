@@ -541,8 +541,7 @@ class Contract():
             on_change_with=['display_all_lines', 'id'], loading='lazy'),
         'on_change_with_receivable_lines')
     receivable_today = fields.Function(fields.Numeric('Receivable Today'),
-            'get_receivable_payable')
-            # 'get_receivable_payable', searcher='search_receivable_payable')
+            'get_receivable_today', searcher='search_receivable_today')
     last_bill = fields.Function(
         fields.One2Many('account.move', None, 'Last Bill'),
         'get_last_bill')
@@ -915,22 +914,9 @@ class Contract():
         #TODO :Temporay while we don't have the endorsement date
         self.re_bill_from_date(self.start_date)
 
-    def get_receivable_payable(self, name):
-        if not (hasattr(self, 'id') and self.id):
-            return 0.0
-        MoveLine = Pool().get('account.move.line')
-        Date = Pool().get('ir.date')
-        lines = MoveLine.search([
-            ('account.kind', '=', 'receivable'),
-            ('reconciliation', '=', None),
-            ('move.origin', '=', '%s,%s' % (self.__name__, self.id)),
-            ('maturity_date', '<=', Date.today())])
-        result = sum(map(lambda x: x.payment_amount, lines))
-        return result
-
     # From account => party
     @classmethod
-    def _get_receivable_payable(cls, contracts, names):
+    def get_receivable_today(cls, contracts, names):
         '''
         Function to compute receivable, payable (today or not) for party ids.
         '''
@@ -994,7 +980,7 @@ class Contract():
         return res
 
     @classmethod
-    def search_receivable_payable(cls, name, clause):
+    def search_receivable_today(cls, name, clause):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         Company = pool.get('company.company')
