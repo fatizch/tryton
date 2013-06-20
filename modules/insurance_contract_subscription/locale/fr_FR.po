@@ -56,7 +56,7 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_contract.subscription_process_finder:"
 msgid "Please pick a process from the selection"
-msgstr ""
+msgstr "Choisir un processus de la sélection"
 
 msgctxt "field:contract.contract,current_log:"
 msgid "Current Log"

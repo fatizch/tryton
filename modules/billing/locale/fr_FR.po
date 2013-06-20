@@ -490,6 +490,10 @@ msgctxt "field:contract.contract,last_bill:"
 msgid "Last Bill"
 msgstr "Dernier Décompte"
 
+msgctxt "field:contract.contract,my_id:"
+msgid "My id"
+msgstr ""
+
 msgctxt "field:contract.contract,next_billing_date:"
 msgid "Next Billing Date"
 msgstr "Date du Prochain Calcul"
@@ -515,7 +519,7 @@ msgid "Account for billing"
 msgstr "Compte de Facturation"
 
 msgctxt "field:ins_contract.covered_element,indemnification_bank_account:"
-msgid ""
+msgid "Indemnification Bank Account"
 msgstr "Compte de Remboursement"
 
 msgctxt "field:ins_contract.covered_element,indemnification_bank_account:"
@@ -616,7 +620,7 @@ msgstr "Virement Bancaire"
 
 msgctxt "selection:billing.price_line,frequency:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "selection:billing.price_line,frequency:"
 msgid "Half Yearly"

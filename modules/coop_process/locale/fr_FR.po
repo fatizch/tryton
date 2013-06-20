@@ -4,7 +4,7 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:ProcessFinder:"
 msgid "Please pick a process from the selection"
-msgstr ""
+msgstr "Choisir un processus de la sélection"
 
 msgctxt "error:coop_process.process_log:"
 msgid "This item (%s) is used by %s (%s, %s)"

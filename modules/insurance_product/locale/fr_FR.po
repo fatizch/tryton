@@ -4521,6 +4521,10 @@ msgid "Selection"
 msgstr "Sélection"
 
 msgctxt "selection:offered.coverage,family:"
+msgid ""
+msgstr " Sous Statut"
+
+msgctxt "selection:offered.coverage,family:"
 msgid "Life"
 msgstr "Prévoyance"
 

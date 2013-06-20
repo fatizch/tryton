@@ -122,6 +122,10 @@ msgctxt "field:party.bank_account,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
+msgctxt "field:party.bank_account,numbers_as_char:"
+msgid "Numbers"
+msgstr "Numéros"
+
 msgctxt "field:party.bank_account,party:"
 msgid "Party"
 msgstr "Acteur"

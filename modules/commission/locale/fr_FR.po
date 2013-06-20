@@ -356,19 +356,19 @@ msgstr "Emprunteur"
 
 msgctxt "field:party.broker,create_date:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:party.broker,create_uid:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:party.broker,id:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:party.broker,is_used:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:party.broker,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -376,27 +376,27 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:party.broker,party:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:party.broker,rec_name:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:party.broker,reference:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:party.broker,write_date:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:party.broker,write_uid:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:party.party,broker_role:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:party.party,dist_networks:"
 msgid "Distribution Networks"
@@ -404,7 +404,7 @@ msgstr "Réseaux de Distribution"
 
 msgctxt "field:party.party,is_broker:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "model:commission.commission_amount_to_display,name:"
 msgid "Commission Amount To Display"
@@ -472,7 +472,7 @@ msgstr "Plans de Commissionnement"
 
 msgctxt "model:party.broker,name:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "selection:commission.commission_rule,config_kind:"
 msgid "Advanced"
@@ -496,7 +496,7 @@ msgstr "Produit"
 
 msgctxt "selection:commission.commission_rule,template_behaviour:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "selection:commission.commission_rule,template_behaviour:"
 msgid "Add"

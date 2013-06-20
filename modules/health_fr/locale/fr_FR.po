@@ -114,6 +114,14 @@ msgctxt "field:health.regime,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_contract.covered_element,is_law_madelin:"
+msgid "Law Madelin"
+msgstr "Loi Madelin"
+
+msgctxt "field:ins_contract.covered_element,is_rsi:"
+msgid "Is RSI"
+msgstr "RSI"
+
 msgctxt "model:health.insurance_fund,name:"
 msgid "Insurance Fund"
 msgstr "Caisse d'Affiliation"

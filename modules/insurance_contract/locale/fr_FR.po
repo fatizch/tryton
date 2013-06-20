@@ -392,7 +392,7 @@ msgstr "Données Complémentaires"
 
 msgctxt "field:ins_contract.covered_data,contract:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_data,coverage_amount:"
 msgid ""
@@ -412,7 +412,7 @@ msgstr "Créé par"
 
 msgctxt "field:ins_contract.covered_data,currency:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_data,currency_symbol:"
 msgid "Currency Symbol"
@@ -519,8 +519,8 @@ msgid "Item Kind"
 msgstr "Type de Bien"
 
 msgctxt "field:ins_contract.covered_element,must_expand_tree:"
-msgid ""
-msgstr ""
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
 
 msgctxt "field:ins_contract.covered_element,name:"
 msgid "Name"
@@ -560,39 +560,39 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_contract.covered_element-party_relation,covered_element:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_element-party_relation,create_date:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_element-party_relation,create_uid:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_element-party_relation,id:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_element-party_relation,is_used:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_element-party_relation,party_relation:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_element-party_relation,rec_name:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_element-party_relation,write_date:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.covered_element-party_relation,write_uid:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "field:ins_contract.delivered_service,contract:"
 msgid "Contract"
@@ -875,7 +875,7 @@ msgstr "Elément Couvert"
 
 msgctxt "model:ins_contract.covered_element-party_relation,name:"
 msgid ""
-msgstr ""
+msgstr " Sous Statut"
 
 msgctxt "model:ins_contract.delivered_service,name:"
 msgid "Delivered Service"

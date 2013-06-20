@@ -10,11 +10,27 @@ msgctxt "error:coop.table_of_table:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "field:account.invoice.payment_term,id:"
+msgctxt "field:account.account,id:"
 msgid ""
 msgstr ""
 
+msgctxt "field:account.account.type,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:account.invoice.payment_term,id:"
+msgid ""
+msgstr " Sous Statut"
+
 msgctxt "field:account.invoice.payment_term.line,id:"
+msgid ""
+msgstr " Sous Statut"
+
+msgctxt "field:account.tax,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:company.company,id:"
 msgid ""
 msgstr ""
 
@@ -206,9 +222,13 @@ msgctxt "field:coop_utils.file_selector,selected_file:"
 msgid "Import File"
 msgstr "Importer le Fichier"
 
-msgctxt "field:party.category,id:"
+msgctxt "field:country.subdivision,id:"
 msgid ""
 msgstr ""
+
+msgctxt "field:party.category,id:"
+msgid ""
+msgstr " Sous Statut"
 
 msgctxt "field:utils.version_object,end_date:"
 msgid "End Date"
@@ -246,6 +266,14 @@ msgctxt "field:utils.versionned_object,versions:"
 msgid "Versions"
 msgstr "Versions"
 
+msgctxt "model:account.account,name:"
+msgid "account.account"
+msgstr "Compte"
+
+msgctxt "model:account.account.type,name:"
+msgid "account.account.type"
+msgstr "Type de compte"
+
 msgctxt "model:account.invoice.payment_term,name:"
 msgid "account.invoice.payment_term"
 msgstr "Conditions de paiement"
@@ -253,6 +281,14 @@ msgstr "Conditions de paiement"
 msgctxt "model:account.invoice.payment_term.line,name:"
 msgid "account.invoice.payment_term.line"
 msgstr "Ligne de condition de paiement"
+
+msgctxt "model:account.tax,name:"
+msgid "account.tax"
+msgstr "Compte de taxe"
+
+msgctxt "model:company.company,name:"
+msgid "company.company"
+msgstr "Société"
 
 msgctxt "model:coop.dyn_selection,name:"
 msgid "Dynamic Selection"
@@ -273,6 +309,10 @@ msgstr "Exports groupés"
 msgctxt "model:coop_utils.file_selector,name:"
 msgid "File Selector"
 msgstr "Selecteur de fichier"
+
+msgctxt "model:country.subdivision,name:"
+msgid ""
+msgstr ""
 
 msgctxt "model:ir.action,name:act_export_package"
 msgid "Export Package"

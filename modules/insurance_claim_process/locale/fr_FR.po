@@ -12,7 +12,7 @@ msgstr "L'objet %s est verrouillé par l'utilisateur %s"
 
 msgctxt "error:ins_claim.declaration_process_finder:"
 msgid "Please pick a process from the selection"
-msgstr ""
+msgstr "Choisir un processus de la sélection"
 
 msgctxt "field:ins_claim.claim,contact_history:"
 msgid "History"
