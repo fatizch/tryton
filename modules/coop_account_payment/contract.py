@@ -1,5 +1,8 @@
+from decimal import Decimal
+
 from trytond.pool import PoolMeta, Pool
 
+from trytond.transaction import Transaction
 from trytond.pyson import If, Eval, Date
 from trytond.modules.coop_utils import utils, fields
 
@@ -38,21 +41,57 @@ class Contract():
         utils.update_domain(cls, 'receivable_lines', [
             If(~Eval('display_all_lines'), ('payment_amount', '!=', 0), ())])
 
-    def get_paid_today(self, name):
-        return self.receivable_today - self.due_today
-
     def get_due_today(self, name):
-        if not (hasattr(self, 'id') and self.id):
-            return 0.0
-        MoveLine = Pool().get('account.move.line')
-        Date = Pool().get('ir.date')
-        lines = MoveLine.search([
-            ('account.kind', '=', 'receivable'),
-            ('reconciliation', '=', None),
-            ('move.origin', '=', '%s,%s' % (self.__name__, self.id)),
-            ('maturity_date', '<=', Date.today())])
-        result = sum(map(lambda x: x.payment_amount, lines))
-        return result
+        res = self.receivable_today - self.paid_today
+        return res
+
+    @classmethod
+    def get_paid_today(cls, contracts, name):
+        res = {}
+        pool = Pool()
+        User = pool.get('res.user')
+        Date = pool.get('ir.date')
+        cursor = Transaction().cursor
+
+        res = dict((p.id, Decimal('0.0')) for p in contracts)
+
+        user_id = Transaction().user
+        if user_id == 0 and 'user' in Transaction().context:
+            user_id = Transaction().context['user']
+        user = User(user_id)
+        if not user.company:
+            return res
+        company_id = user.company.id
+
+        today_query = 'AND (l.maturity_date <= %s ' \
+            'OR l.maturity_date IS NULL) '
+        today_value = [Date.today()]
+
+        cursor.execute('SELECT m.origin, '
+                'SUM(COALESCE(p.amount, 0)) '
+            'FROM account_move_line AS l '
+            'LEFT JOIN account_payment p ON l.id = p.line '
+            'JOIN account_account AS a ON a.id = l.account '
+            'JOIN account_move AS m ON l.move = m.id  '
+            'WHERE '
+                'a.active '
+                'AND a.kind = \'receivable\' '
+                'AND m.id IN '
+                    '(SELECT m.id FROM account_move as m '
+                    'WHERE m.origin IN '
+                    '(' + ','.join(('%s',) * len(contracts)) + ')) '
+                'AND l.reconciliation IS NULL '
+                + today_query +
+                'AND a.company = %s '
+            'GROUP BY m.origin',
+            [utils.convert_to_reference(p) for p in contracts] +
+            today_value + [company_id])
+        for contract_id, sum in cursor.fetchall():
+            # SQLite uses float for SUM
+            if not isinstance(sum, Decimal):
+                sum = Decimal(str(sum))
+            res[int(contract_id.split(',')[1])] = sum
+        return res
 
     def on_change_with_payment_lines(self, name=None):
         return map(lambda x: x.id, sorted(utils.get_domain_instances(self,

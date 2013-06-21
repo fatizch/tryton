@@ -921,10 +921,7 @@ class Contract():
 
     # From account => party
     @classmethod
-    def get_receivable_today(cls, contracts, names):
-        '''
-        Function to compute receivable, payable (today or not) for party ids.
-        '''
+    def get_receivable_today(cls, contracts, name):
         res = {}
         pool = Pool()
         MoveLine = pool.get('account.move.line')
@@ -932,11 +929,7 @@ class Contract():
         Date = pool.get('ir.date')
         cursor = Transaction().cursor
 
-        for name in names:
-            if name not in ('receivable', 'payable',
-                    'receivable_today', 'payable_today'):
-                raise Exception('Bad argument')
-            res[name] = dict((p.id, Decimal('0.0')) for p in contracts)
+        res = dict((p.id, Decimal('0.0')) for p in contracts)
 
         user_id = Transaction().user
         if user_id == 0 and 'user' in Transaction().context:
@@ -948,40 +941,34 @@ class Contract():
 
         line_query, _ = MoveLine.query_get()
 
-        for name in names:
-            code = name
-            today_query = ''
-            today_value = []
-            if name in ('receivable_today', 'payable_today'):
-                code = name[:-6]
-                today_query = 'AND (l.maturity_date <= %s ' \
-                    'OR l.maturity_date IS NULL) '
-                today_value = [Date.today()]
+        today_query = 'AND (l.maturity_date <= %s ' \
+            'OR l.maturity_date IS NULL) '
+        today_value = [Date.today()]
 
-            cursor.execute('SELECT m.origin, '
-                    'SUM((COALESCE(l.debit, 0) - COALESCE(l.credit, 0))) '
-                'FROM account_move_line AS l, account_account AS a '
-                ', account_move as m '
-                'WHERE a.id = l.account '
-                    'AND a.active '
-                    'AND a.kind = %s '
-                    'AND l.move = m.id '
-                    'AND m.id IN '
-                        '(SELECT m.id FROM account_move as m '
-                        'WHERE m.origin IN '
-                        '(' + ','.join(('%s',) * len(contracts)) + ')) '
-                    'AND l.reconciliation IS NULL '
-                    'AND ' + line_query + ' '
-                    + today_query +
-                    'AND a.company = %s '
-                'GROUP BY m.origin',
-                [code] + [utils.convert_to_reference(p) for p in contracts] +
-                today_value + [company_id])
-            for contract_id, sum in cursor.fetchall():
-                # SQLite uses float for SUM
-                if not isinstance(sum, Decimal):
-                    sum = Decimal(str(sum))
-                res[name][int(contract_id.split(',')[1])] = sum
+        cursor.execute('SELECT m.origin, '
+                'SUM((COALESCE(l.debit, 0) - COALESCE(l.credit, 0))) '
+            'FROM account_move_line AS l, account_account AS a '
+            ', account_move as m '
+            'WHERE a.id = l.account '
+                'AND a.active '
+                'AND a.kind = \'receivable\' '
+                'AND l.move = m.id '
+                'AND m.id IN '
+                    '(SELECT m.id FROM account_move as m '
+                    'WHERE m.origin IN '
+                    '(' + ','.join(('%s',) * len(contracts)) + ')) '
+                'AND l.reconciliation IS NULL '
+                'AND ' + line_query + ' '
+                + today_query +
+                'AND a.company = %s '
+            'GROUP BY m.origin',
+            [utils.convert_to_reference(p) for p in contracts] +
+            today_value + [company_id])
+        for contract_id, sum in cursor.fetchall():
+            # SQLite uses float for SUM
+            if not isinstance(sum, Decimal):
+                sum = Decimal(str(sum))
+            res[int(contract_id.split(',')[1])] = sum
         return res
 
     @classmethod

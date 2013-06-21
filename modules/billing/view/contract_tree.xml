@@ -2,5 +2,7 @@
 <data>
   <xpath expr="/tree/field[@name='status']" position="after">
     <field name="receivable_today"/>
+    <field name="paid_today"/>
+    <field name="due_today"/>
   </xpath>
 </data>
