@@ -26,7 +26,6 @@ def register():
         Option,
         CoveredElement,
         CoveredData,
-        PaymentTerm,
         TaxDesc,
         FeeDesc,
         Sequence,
