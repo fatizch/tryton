@@ -1095,9 +1095,9 @@ class IndemnificationSelection(model.CoopView):
             clean_values.append(cur_value)
         domain = []
         for i in range(len(clean_values) / 3):
-            field_name = clean_values[3*i]
-            operator = clean_values[3*i+1]
-            operand = clean_values[3*i+2]
+            field_name = clean_values[3 * i]
+            operator = clean_values[3 * i + 1]
+            operand = clean_values[3 * i + 2]
             if isinstance(Indemnification._fields[field_name], fields.Date):
                 operand = datetime.date(*map(int, operand.split('-')))
             domain.append([
