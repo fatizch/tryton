@@ -3,7 +3,7 @@ import datetime
 from decimal import Decimal
 
 from trytond.pyson import Eval
-from tryond.modules.coop_utils import fields, model, date
+from trytond.modules.coop_utils import fields, model, date
 from trytond.modules.account_invoice import PaymentTermLine
 from trytond.modules.insurance_product.business_rule.pricing_rule import \
     PRICING_FREQUENCY
