@@ -508,7 +508,7 @@ msgstr "Lignes à recevoir"
 
 msgctxt "field:contract.contract,receivable_today:"
 msgid "Receivable Today"
-msgstr "À recevoir aujourd'hui"
+msgstr "Montant Dû"
 
 msgctxt "field:coop_account.fee_desc,account_for_billing:"
 msgid "Account for billing"

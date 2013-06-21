@@ -965,9 +965,14 @@ class ProcessFinder(Wizard):
     def search_main_object(self):
         return None
 
+    def update_main_object(self, main_obj):
+        pass
+
     def get_or_create_object(self):
         res = self.search_main_object()
-        if not res:
+        if res:
+            self.update_main_object(res)
+        else:
             return self.instanciate_main_object()
         self.init_state(res)
         return res

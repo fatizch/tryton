@@ -52,7 +52,7 @@ class CoveredElement():
 
     health_complement = fields.Function(
         fields.One2Many('health.party_complement', None, 'Health Complement',
-            on_change_with=['party'], size=1),
+            on_change_with=['party']),
         'get_health_complement', 'set_health_complement')
 
     @classmethod

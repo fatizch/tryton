@@ -265,7 +265,7 @@ msgstr "Démarrer la Souscription"
 
 msgctxt "model:ir.ui.menu,name:menu_start_endorsement"
 msgid "Start Endorsement"
-msgstr "Démarer l'Avenant"
+msgstr "Démarrer l'Avenant"
 
 msgctxt "model:ir.ui.menu,name:menu_start_subscription"
 msgid "Start Subscription"

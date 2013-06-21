@@ -1,0 +1,75 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.payment.group,sepa_msg:"
+msgid "Sepa Message"
+msgstr ""
+
+msgctxt "field:account.payment.journal,sepa_bank_account_number:"
+msgid "Bank Account"
+msgstr "Compte Bancaire"
+
+msgctxt "field:contract.contract,display_all_lines:"
+msgid "Display all lines"
+msgstr "Afficher Toutes les Lignes"
+
+msgctxt "field:contract.contract,due_today:"
+msgid "Due today"
+msgstr "Restant Dû"
+
+msgctxt "field:contract.contract,paid_today:"
+msgid "Paid today"
+msgstr "Payé"
+
+msgctxt "field:contract.contract,payment_lines:"
+msgid "Payment Lines"
+msgstr "Lignes de Paiement"
+
+msgctxt "field:coop_account_payment.create_receivable.start,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:coop_account_payment.create_receivable.start,until:"
+msgid "Until"
+msgstr "Jusqu'à"
+
+msgctxt "model:coop_account_payment.create_receivable.start,name:"
+msgid "Create Receivable Payment"
+msgstr "Créer Paiement"
+
+msgctxt "model:ir.action,name:act_payment_receivable_form"
+msgid "Receivable Payments"
+msgstr ""
+
+msgctxt "model:ir.action,name:wizard_create_receivable"
+msgid "Create Receivable Payment"
+msgstr "Créer Paiement"
+
+msgctxt "model:ir.ui.menu,name:menu_create_receivable"
+msgid "Create Receivable Payment"
+msgstr "Créer Paiement"
+
+msgctxt "selection:account.payment.journal,process_method:"
+msgid "Sepa"
+msgstr ""
+
+msgctxt "view:account.move.line:"
+msgid "Payments"
+msgstr "Paiements"
+
+msgctxt "view:coop_account_payment.create_receivable.start:"
+msgid "Create Receivable Payment"
+msgstr "Créer Paiement"
+
+msgctxt "view:coop_account_payment.create_receivable.start:"
+msgid "Create Receivable Payment?"
+msgstr "Créer Paiement?"
+
+msgctxt "wizard_button:coop_account_payment.create_receivable,start,create_:"
+msgid "Create"
+msgstr "Créer"
+
+msgctxt "wizard_button:coop_account_payment.create_receivable,start,end:"
+msgid "Cancel"
+msgstr "Annuler"
