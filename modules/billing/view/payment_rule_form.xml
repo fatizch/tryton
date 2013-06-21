@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<form string="payment_rule">
+  <label name="name"/>
+  <field name="name"/>
+  <label name="code"/>
+  <field name="code"/>
+  <label name="base_frequency"/>
+  <field name="base_frequency"/>
+  <label name="remaining_position"/>
+  <field name="remaining_position"/>
+  <label name="with_sync_date"/>
+  <field name="with_sync_date"/>
+  <label name="sync_date"/>
+  <field name="sync_date"/>
+  <field name="start_lines" colspan="4"/>
+</form>

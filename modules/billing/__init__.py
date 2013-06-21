@@ -2,10 +2,14 @@ from trytond.pool import Pool
 from .billing import *
 from .account import *
 from .party import *
+from .payment_rule import *
 
 
 def register():
     Pool.register(
+        # from payment_rule
+        PaymentRule,
+        PaymentRuleLine,
         # From file billing :
         PaymentMethod,
         BillingManager,

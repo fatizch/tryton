@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<form string="Payment Rule Line">
+  <label name="type"/>
+  <field name="type"/>
+  <newline/>
+  <label name="amount"/>
+  <field name="amount"/>
+  <label name="currency"/>
+  <field name="currency"/>
+  <newline/>
+  <label name="percentage"/>
+  <field name="percentage"/>
+  <label name="divisor"/>
+  <field name="divisor"/>
+  <label name="months"/>
+  <field name="months"/>
+  <label name="month"/>
+  <field name="month"/>
+  <label name="weeks"/>
+  <field name="weeks"/>
+  <label name="weekday"/>
+  <field name="weekday"/>
+  <label name="days"/>
+  <field name="days"/>
+  <label name="day"/>
+  <field name="day"/>
+</form>

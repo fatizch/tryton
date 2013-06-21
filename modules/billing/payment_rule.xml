@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<tryton>
+  <data>
+    <!-- ############################################################ -->
+    <!-- Payment Rule -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="payment_rule_form">
+      <field name="model">billing.payment_rule</field>
+      <field name="type">form</field>
+      <field name="name">payment_rule_form</field>
+    </record>
+    <record model="ir.ui.view" id="payment_rule_tree">
+      <field name="model">billing.payment_rule</field>
+      <field name="type">tree</field>
+      <field name="name">payment_rule_tree</field>
+    </record>
+    <record model="ir.action.act_window" id="act_payment_rule">
+      <field name="name">Payment Rule</field>
+      <field name="res_model">billing.payment_rule</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_payment_rule_view1">
+      <field name="sequence" eval="5"/>
+      <field name="view" ref="payment_rule_tree"/>
+      <field name="act_window" ref="act_payment_rule"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_payment_rule_view2">
+      <field name="sequence" eval="5"/>
+      <field name="view" ref="payment_rule_form"/>
+      <field name="act_window" ref="act_payment_rule"/>
+    </record>
+    <menuitem parent="offered.menu_product_configuration" sequence="6"
+      action="act_payment_rule" id="menu_payment_rule"/>
+    <!-- ############################################################ -->
+    <!-- Payment Rule Line -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="payment_rule_line_form">
+      <field name="model">billing.payment_rule_line</field>
+      <field name="type">form</field>
+      <field name="name">payment_rule_line_form</field>
+    </record>
+    <record model="ir.ui.view" id="payment_rule_line_tree">
+      <field name="model">billing.payment_rule_line</field>
+      <field name="type">tree</field>
+      <field name="name">payment_rule_line_tree</field>
+    </record>
+  </data>
+</tryton>
