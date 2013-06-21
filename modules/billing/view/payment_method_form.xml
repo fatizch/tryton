@@ -4,8 +4,8 @@
   <field name="name"/>
   <label name="code"/>
   <field name="code"/>
-  <label name="payment_term"/>
-  <field name="payment_term"/>
+  <label name="payment_rule"/>
+  <field name="payment_rule"/>
   <label name="payment_mode"/>
   <field name="payment_mode"/>
 </form>

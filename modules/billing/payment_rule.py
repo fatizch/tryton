@@ -32,6 +32,7 @@ class PaymentRuleLine(PaymentTermLine, model.CoopSQL, model.CoopView):
         super(PaymentRuleLine, cls).__setup__()
         cls.payment = copy.copy(cls.payment)
         cls.payment.model = 'billing.payment_rule'
+        setattr(cls, 'payment', cls.payment)
 
 
 class PaymentRule(model.CoopSQL, model.CoopView):
@@ -47,8 +48,8 @@ class PaymentRule(model.CoopSQL, model.CoopView):
         'Remaining position')
     with_sync_date = fields.Boolean('With Sync Date')
     sync_date = fields.Date('Sync Date', states={
-        'invisible': ~Eval('sync_date'),
-        'required': ~~Eval('sync_date')})
+        'invisible': ~Eval('with_sync_date'),
+        'required': ~~Eval('with_sync_date')})
     start_lines = fields.One2Many('billing.payment_rule_line', 'payment',
         'Start Lines')
 
@@ -58,6 +59,10 @@ class PaymentRule(model.CoopSQL, model.CoopView):
 
     @classmethod
     def default_with_sync_date(cls):
+        return False
+
+    @classmethod
+    def default_sync_date(cls):
         today = datetime.date.today()
         res = datetime.date(today.year, 1, 1)
         return res
@@ -87,16 +92,39 @@ class PaymentRule(model.CoopSQL, model.CoopView):
         if not remainder:
             return res
         last_date = res[-1][0] if len(res) else start_date
-        new_periods = []
+        if self.with_sync_date:
+            temp_date = date.add_frequency(self.base_frequency, last_date)
+            if self.base_frequency == 'yearly':
+                final_date = datetime.date(temp_date.year,
+                    self.sync_date.month, self.sync_date.day)
+            else:
+                final_date = datetime.date(temp_date.year, temp_date.month,
+                    self.sync_date.day)
+            if final_date <= end_date:
+                new_periods = [final_date]
+                last_date = final_date
+            else:
+                new_periods = []
+        else:
+            last_date = date.add_day(last_date, 1)
+            new_periods = []
+
         while last_date <= end_date:
-            new_line_start = date.add_day(last_date, 1)
-            last_date = date.add_frequency(new_line_start,
-                self.base_frequency)
-            new_periods.append(new_line_start)
+            last_date = date.add_frequency(self.base_frequency,
+                last_date)
+            if last_date <= end_date:
+                new_periods.append(last_date)
+
         base_amount = currency.round(remainder / len(new_periods))
         for elem in new_periods:
             res.append((elem, base_amount))
             remainder -= base_amount
         if remainder:
-            res[-1][1] += remainder
+            if self.remaining_position == 'last_calc':
+                last_date, last_value = res.pop(-1)
+                res.append((last_date, currency.round(last_value + remainder)))
+            elif self.remaining_position == 'first_calc':
+                first_date, first_value = res.pop(0)
+                res.insert(0, ((first_date, currency.round(
+                    first_value + remainder))))
         return res
