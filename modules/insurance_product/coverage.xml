@@ -25,7 +25,7 @@
             <field name="domain">[('is_package', '=', False), ('kind', '=', 'insurance')]</field>
         </record>
         <record model="ir.action.act_window" id="offered.act_package_form">
-            <field name="domain">[("is_package", "=", False), ('kind', '=', 'insurance')]</field>
+            <field name="domain">[("is_package", "=", True), ('kind', '=', 'insurance')]</field>
         </record>
     </data>
 </tryton>

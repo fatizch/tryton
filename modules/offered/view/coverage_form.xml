@@ -18,6 +18,8 @@
         <label name="currency"/>
         <field name="currency"/>
         <newline/>
+        <label name="is_package"/>
+        <field name="is_package"/>
         <label name="subscription_behaviour"/>
         <field name="subscription_behaviour"/>
         <newline/>

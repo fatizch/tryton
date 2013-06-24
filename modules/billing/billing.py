@@ -507,8 +507,10 @@ class Coverage():
     __name__ = 'offered.coverage'
 
     account_for_billing = fields.Many2One('account.account',
-        'Account for billing', required=True,
-        domain=[('kind', '=', 'revenue')])
+        'Account for billing', domain=[('kind', '=', 'revenue')], states={
+            'required': ~Eval('is_package'),
+            'invisible': ~~Eval('is_package'),
+            })
 
     def get_account_for_billing(self):
         return self.account_for_billing
@@ -849,6 +851,11 @@ class Contract():
 
     def bill_and_post(self, post=True):
         Move = Pool().get('account.move')
+        Move.delete(Move.search([
+                ('origin', '=', utils.convert_to_reference(self)),
+                ('state', '=', 'draft'),
+                ]))
+        Transaction().cursor.commit()
         move = self.bill()
         if move and post:
             Move.post([move])

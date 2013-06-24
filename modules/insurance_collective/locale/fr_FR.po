@@ -22,6 +22,10 @@ msgctxt "model:ir.action,name:act_coverage_form"
 msgid "Group Coverages"
 msgstr "Garanties Collectives"
 
+msgctxt "model:ir.action,name:act_package_form"
+msgid "Group Packages"
+msgstr "Formules Collectives"
+
 msgctxt "model:ir.action,name:act_product_form"
 msgid "Group Products"
 msgstr "Produits Collectifs"
@@ -37,6 +41,10 @@ msgstr "Garanties Collectives"
 msgctxt "model:ir.ui.menu,name:menu_group"
 msgid "Group"
 msgstr "Collectif"
+
+msgctxt "model:ir.ui.menu,name:menu_package_form"
+msgid "Group Packages"
+msgstr "Formules Collectives"
 
 msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Group Products"

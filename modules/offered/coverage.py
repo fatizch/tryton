@@ -39,7 +39,8 @@ class Coverage(model.CoopSQL, Offered):
     coverages_in_package = fields.Many2Many('offered.package-coverage',
         'package', 'coverage', 'Coverages In Package',
         states={'invisible': Bool(~Eval('is_package'))},
-        depends=['is_package'], domain=[('is_package', '=', False)])
+        depends=['is_package', 'kind'],
+        domain=[('is_package', '=', False), ('kind', '=', Eval('kind'))])
     complementary_data_def = fields.Many2Many(
         'offered.coverage-complementary_data_def',
         'coverage', 'complementary_data_def', 'Complementary Data',

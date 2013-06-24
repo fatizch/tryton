@@ -4,7 +4,8 @@
           <page string="Eligibility" id="eligibility">
             <field name="eligibility_rules" colspan="4"/>
         </page>
-        <page string="Pricing" id="pricing">
+        <page string="Pricing" id="pricing"
+            states="{'invisible': ~~Eval('is_package')}">
             <field name="pricing_rules" colspan="4"/>
         </page>
     </xpath>
