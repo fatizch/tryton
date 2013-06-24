@@ -453,7 +453,6 @@ class BillingProcess(Wizard):
         contract.save()
         move = self.bill_display.moves[-1]
         move.post([move])
-        move.save()
         return 'end'
 
 

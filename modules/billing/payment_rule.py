@@ -1,7 +1,7 @@
 import copy
 import datetime
-from decimal import Decimal
 
+from trytond.pool import Pool
 from trytond.pyson import Eval
 from trytond.modules.coop_utils import fields, model, date
 from trytond.modules.account_invoice import PaymentTermLine
@@ -22,6 +22,7 @@ REMAINING_POSITION = [
     ]
 
 
+# Temp : inherit from PaymentTermLine rather than copy-pasting it
 class PaymentRuleLine(PaymentTermLine, model.CoopSQL, model.CoopView):
     'Payment Rule Line'
 
@@ -33,6 +34,14 @@ class PaymentRuleLine(PaymentTermLine, model.CoopSQL, model.CoopView):
         cls.payment = copy.copy(cls.payment)
         cls.payment.model = 'billing.payment_rule'
         setattr(cls, 'payment', cls.payment)
+
+    def get_line_info(self, start_date):
+        return {
+            'date': self.get_date(start_date),
+            'remaining': self.kind == 'remaining',
+            'freq_amount': 0,
+            'line': self,
+        }
 
 
 class PaymentRule(model.CoopSQL, model.CoopView):
@@ -47,6 +56,8 @@ class PaymentRule(model.CoopSQL, model.CoopView):
     remaining_position = fields.Selection(REMAINING_POSITION,
         'Remaining position')
     with_sync_date = fields.Boolean('With Sync Date')
+    force_line_at_start = fields.Boolean('Force start date line',
+        states={'invisible': ~Eval('with_sync_date') or ~~Eval('start_lines')})
     sync_date = fields.Date('Sync Date', states={
         'invisible': ~Eval('with_sync_date'),
         'required': ~~Eval('with_sync_date')})
@@ -63,35 +74,24 @@ class PaymentRule(model.CoopSQL, model.CoopView):
 
     @classmethod
     def default_sync_date(cls):
-        today = datetime.date.today()
+        Date = Pool().get('ir.date')
+        today = Date.today()
         res = datetime.date(today.year, 1, 1)
         return res
 
-    def compute(self, start_date, end_date, amount, currency, sync_date=None):
-        if not sync_date and self.with_sync_date:
-            sync_date = self.sync_date
-        res = []
-        remainder = amount
-        sign = 1 if amount >= Decimal('0.0') else -1
-        for line in self.start_lines:
-            value = line.get_value(remainder, amount, currency)
-            value_date = line.get_date(start_date)
-            if not value or not value_date:
-                if (not remainder) and line.amount:
-                    self.raise_user_error('invalid_line', {
-                            'line': line.rec_name,
-                            'term': self.rec_name,
-                            })
-                else:
-                    continue
-            if ((remainder - value) * sign) < Decimal('0.0'):
-                res.append((value_date, remainder))
-                break
-            res.append((value_date, value))
-            remainder -= value
-        if not remainder:
-            return res
-        last_date = res[-1][0] if len(res) else start_date
+    @classmethod
+    def default_force_line_at_start(cls):
+        return True
+
+    def get_line_dates(self, start_date, end_date):
+        dates = [line.get_line_info(start_date) for line in self.start_lines]
+        if not dates and self.with_sync_date and self.force_line_at_start:
+            dates.append({
+                'date': start_date,
+                'remaining': self.remaining_position == 'first_calc',
+                'freq_amount': 1,
+                'line': None})
+        last_date = dates[-1]['date'] if len(dates) else start_date
         if self.with_sync_date:
             temp_date = date.add_frequency(self.base_frequency, last_date)
             if self.base_frequency == 'yearly':
@@ -101,30 +101,48 @@ class PaymentRule(model.CoopSQL, model.CoopView):
                 final_date = datetime.date(temp_date.year, temp_date.month,
                     self.sync_date.day)
             if final_date <= end_date:
-                new_periods = [final_date]
+                dates.append({
+                    'date': last_date,
+                    'remaining': False,
+                    'freq_amount': 1,
+                    'line': None})
                 last_date = final_date
-            else:
-                new_periods = []
         else:
             last_date = date.add_day(last_date, 1)
-            new_periods = []
 
         while last_date <= end_date:
             last_date = date.add_frequency(self.base_frequency,
                 last_date)
             if last_date <= end_date:
-                new_periods.append(last_date)
+                dates.append({
+                    'date': last_date,
+                    'remaining': False,
+                    'freq_amount': 1,
+                    'line': None})
 
-        base_amount = currency.round(remainder / len(new_periods))
-        for elem in new_periods:
-            res.append((elem, base_amount))
-            remainder -= base_amount
+        if self.remaining_position == 'last_calc':
+            dates[-1]['remaining'] = True
+        return dates
+
+    def compute(self, start_date, end_date, amount, currency, due_date=None):
+        lines_dates = self.get_line_dates(start_date, end_date)
+        res = dict(((l['date'], 0) for l in lines_dates))
+        freq_number = sum([k['freq_amount'] for k in lines_dates])
+        remainder = amount
+        flat_total = 0
+        for line in (l for l in lines_dates if l['line']):
+            line_amount = line['line'].get_value(0, 0, currency)
+            flat_total += line_amount
+            res[line['date']] += line_amount
+            remainder -= line_amount
+
+        base_amount = remainder / freq_number
+        for elem in (l for l in lines_dates if l['freq_amount']):
+            line_amount = currency.round(base_amount * elem['freq_amount'])
+            res[elem['date']] += line_amount
+            remainder -= line_amount
         if remainder:
-            if self.remaining_position == 'last_calc':
-                last_date, last_value = res.pop(-1)
-                res.append((last_date, currency.round(last_value + remainder)))
-            elif self.remaining_position == 'first_calc':
-                first_date, first_value = res.pop(0)
-                res.insert(0, ((first_date, currency.round(
-                    first_value + remainder))))
-        return res
+            remaining_line = next(l for l in lines_dates if l['remaining'])
+            res[remaining_line['date']] += currency.round(remainder)
+
+        return sorted(list(res.iteritems()), key=lambda x: x[0])
