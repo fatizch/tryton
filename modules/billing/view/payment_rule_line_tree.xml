@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <tree string="Payment Rule Lines">
-  <field name="payment"/>
   <field name="type"/>
   <field name="percentage"/>
   <field name="amount"/>
