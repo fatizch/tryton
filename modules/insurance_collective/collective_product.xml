@@ -77,6 +77,40 @@
         <menuitem parent="offered.menu_product" sequence="20"
             id="menu_coverage_form" icon="tryton-list" action="act_coverage_form"/>
         <!--/Coverage -->
+                <!--  *******************************************
+              **************    package    **************
+              *******************************************-->
+        <record model="ir.ui.view" id="package_view_form">
+            <field name="model">offered.coverage</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered.coverage_view_form"/>
+            <field name="arch" type="xml"/>
+        </record>
+        <record model="ir.ui.view" id="package_view_tree">
+            <field name="model">offered.coverage</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="offered.coverage_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+        <record model="ir.action.act_window" id="act_package_form">
+            <field name="name">Group Packages</field>
+            <field name="res_model">offered.coverage</field>
+            <field name="domain">[("is_package", "=", True), ('is_group', '=', True), ('kind', '=', 'insurance')]</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_package_tree_view">
+            <field name="sequence" eval="10" />
+            <field name="view" ref="package_view_tree" />
+            <field name="act_window" ref="act_package_form" />
+        </record>
+        <record model="ir.action.act_window.view" id="act_package_form_view2">
+            <field name="sequence" eval="20" />
+            <field name="view" ref="package_view_form" />
+            <field name="act_window" ref="act_package_form" />
+        </record>
+
+        <menuitem parent="offered.menu_product" sequence="5" id="menu_package_form"
+            icon="tryton-list" action="act_package_form" />
+
         <menuitem parent="insurance_contract.menu_contract" name="Group"
             id="menu_group" sequence="20"/>
     </data>

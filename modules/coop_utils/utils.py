@@ -352,10 +352,13 @@ def format_data(data, prefix='', prefix_inc='    ', is_init=True):
     elif isinstance(data, Model) and is_init:
         tmp = [prefix + str(data) + ' : {']
         for k in data._fields:
-            if not getattr(data, k, None):
+            try:
+                value = data.k
+            except:
+                value = None
+            if not value:
                 continue
-            new_data = format_data(
-                getattr(data, k), prefix + prefix_inc, is_init=False)
+            new_data = format_data(value, prefix + prefix_inc, is_init=False)
             tmp_res = [
                 prefix + prefix_inc + str(k) + ':' +
                 new_data[0][len(prefix + prefix_inc) - 1:]]

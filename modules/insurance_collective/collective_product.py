@@ -40,6 +40,13 @@ class GroupCoverage():
 
     is_group = fields.Boolean('Group Coverage')
 
+    @classmethod
+    def __setup__(cls):
+        super(GroupCoverage, cls).__setup__()
+        utils.update_domain(cls, 'coverages_in_package',
+            [('is_group', '=', Eval('is_group'))])
+        utils.update_depends(cls, 'coverages_in_package', ['is_group'])
+
 
 class GroupBenefit():
     'Benefit'
