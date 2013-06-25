@@ -844,6 +844,8 @@ class StepDesc(ModelSQL, ModelView):
             code.execute(target)
 
     def execute_after(self, target):
+        if 'after_executed' in Transaction().context:
+            return
         for code in self.code_after:
             code.execute(target)
 

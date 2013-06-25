@@ -329,13 +329,13 @@ class CoopProcessFramework(ProcessFramework):
             for work in works:
                 good_exec = work.get_next_execution()
                 if good_exec:
-                    if good_exec == 'complete':
-                        cls.build_instruction_complete_method(process, None)(
-                            [work])
-                    else:
-                        good_exec.execute(work)
-                        work.save()
-
+                    with Transaction().set_context(after_executed=True):
+                        if good_exec == 'complete':
+                            cls.build_instruction_complete_method(process,
+                                None)([work])
+                        else:
+                            good_exec.execute(work)
+                            work.save()
         return next
 
     @classmethod
@@ -486,8 +486,6 @@ class ProcessDesc(model.CoopSQL):
         return True
 
     def get_next_execution(self, from_step, for_task):
-        # We need to call execute_after because it could make some conditions
-        # True. It will be rollbacked at the end of the method call
         from_step.execute_after(for_task)
         cur_step_found = False
         result = None
@@ -516,9 +514,6 @@ class ProcessDesc(model.CoopSQL):
             if for_task.is_button_available(self, step_relation.step):
                 result = step_relation.step
                 break
-        # We must ensure that none of the modifications from execute_after
-        # is saved
-        Transaction().cursor.rollback()
         return result
 
     def get_previous_execution(self, from_step, for_task):
