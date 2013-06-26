@@ -527,6 +527,7 @@ class Contract():
         'Billing Periods')
     receivable_lines = fields.Function(
         fields.One2Many('account.move.line', None, 'Receivable Lines',
+            depends=['display_all_lines', 'id'],
             domain=[('account.kind', '=', 'receivable'),
                 ('reconciliation', '=', None),
                 ('origin', '=', ('contract.contract', Eval('id', 0))),

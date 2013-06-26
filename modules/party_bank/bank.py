@@ -238,7 +238,8 @@ class BankAccountNumber(CoopSQL, CoopView):
         #     elif name == 'branch_code':
         #         nb.number = nb.number[0:5] + value + nb.number[10:RIB_LENGTH]
         #     elif name == 'account_number':
-        #         nb.number = nb.number[0:10] + value + nb.number[21:RIB_LENGTH]
+        #         nb.number = nb.number[0:10] + value + \
+        #             nb.number[21:RIB_LENGTH]
         #     elif name == 'key':
         #         nb.number = nb.number[0:21] + value
         #     cls.write([nb], {'number': nb.number})
