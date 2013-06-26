@@ -2,7 +2,7 @@ import copy
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.coop_utils import fields
+from trytond.modules.coop_utils import fields, utils
 
 __all__ = [
     'Contract',
@@ -72,7 +72,8 @@ class CoveredElement():
         Party = pool.get('party.party')
         health_complements = []
         for covered_element in values:
-            if not Contract(covered_element['contract']).is_health:
+            if utils.is_none(Contract(covered_element['contract']),
+                    'is_health'):
                 continue
             party = Party(covered_element['party'])
             if party.is_person and not party.health_complement:
