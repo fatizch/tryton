@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<tree string="Payment Rule Lines">
+  <field name="type"/>
+  <field name="percentage"/>
+  <field name="amount"/>
+  <field name="currency"/>
+  <field name="months"/>
+  <field name="month"/>
+  <field name="weeks"/>
+  <field name="weekday"/>
+  <field name="days"/>
+  <field name="day"/>
+  <field name="sequence" tree_invisible="1"/>
+  <field name="currency_digits" tree_invisible="1"/>
+</tree>

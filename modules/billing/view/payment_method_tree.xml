@@ -3,5 +3,5 @@
   <field name="code"/>
   <field name="name"/>
   <field name="payment_mode"/>
-  <field name="payment_term"/>
+  <field name="payment_rule"/>
 </tree>

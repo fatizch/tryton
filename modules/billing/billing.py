@@ -33,7 +33,6 @@ __all__ = [
     'Option',
     'CoveredElement',
     'CoveredData',
-    'PaymentTerm',
     'TaxDesc',
     'FeeDesc',
     'Sequence',
@@ -47,8 +46,6 @@ PAYMENT_MODES = [
 ]
 
 export.add_export_to_model([
-    ('account.invoice.payment_term', ('name', )),
-    ('account.invoice.payment_term.line', ()),
     ('account.account', ('code', 'name')),
     ('company.company', ('party.code', )),
     ('account.tax', ('name', )),
@@ -63,8 +60,8 @@ class PaymentMethod(model.CoopSQL, model.CoopView):
 
     name = fields.Char('Name')
     code = fields.Char('Code', required=True, on_change_with=['code', 'name'])
-    payment_term = fields.Many2One('account.invoice.payment_term',
-        'Payment Term', ondelete='RESTRICT')
+    payment_rule = fields.Many2One('billing.payment_rule', 'Payment Rule',
+        ondelete='RESTRICT', required=True)
     payment_mode = fields.Selection(PAYMENT_MODES, 'Payment Mode',
         required=True)
 
@@ -456,7 +453,6 @@ class BillingProcess(Wizard):
         contract.save()
         move = self.bill_display.moves[-1]
         move.post([move])
-        move.save()
         return 'end'
 
 
@@ -531,6 +527,7 @@ class Contract():
         'Billing Periods')
     receivable_lines = fields.Function(
         fields.One2Many('account.move.line', None, 'Receivable Lines',
+            depends=['display_all_lines', 'id'],
             domain=[('account.kind', '=', 'receivable'),
                 ('reconciliation', '=', None),
                 ('origin', '=', ('contract.contract', Eval('id', 0))),
@@ -739,9 +736,9 @@ class Contract():
         assert billing_manager, 'Missing Billing Manager'
 
         try:
-            payment_term = billing_manager.payment_method.payment_term
+            payment_rule = billing_manager.payment_method.payment_rule
         except:
-            payment_term = None
+            payment_rule = None
         currency = self.get_currency()
 
         period_id = Period.find(self.company.id, date=billing_date)
@@ -826,9 +823,9 @@ class Contract():
             if line.credit < 0:
                 line.credit, line.debit = 0, -line.credit
 
-        if total_amount >= 0 and payment_term:
-            term_lines = payment_term.compute(total_amount, currency,
-                billing_date)
+        if total_amount >= 0 and payment_rule:
+            term_lines = payment_rule.compute(billing_date, period[1],
+                total_amount, currency)
         else:
             term_lines = [(Date.today(), currency.round(total_amount))]
         counterparts = []
@@ -1077,18 +1074,6 @@ class CoveredData():
 
     def get_name_for_billing(self):
         return self.covered_element.get_name_for_billing()
-
-
-class PaymentTerm():
-    'Payment Term'
-
-    __metaclass__ = PoolMeta
-    __name__ = 'account.invoice.payment_term'
-
-    def check_remainder(self):
-        if Transaction().context.get('__importing__'):
-            return True
-        return super(PaymentTerm, self).check_remainder()
 
 
 class TaxDesc():

@@ -109,13 +109,6 @@ def launch_test_case(cfg_dict):
                 },
                 {'company': company.id},
             )
-            invoice_seq = meths['SequenceStrict'](
-                {
-                    'name': 'Invoice (%i)' % (2010 + i),
-                    'code': 'account.invoice',
-                },
-                {'company': company.id},
-            )
             fisc_year = meths['FiscalYear'](
                 {
                     'name': 'Fiscal Year %s' % str(2010 + i),
@@ -123,10 +116,6 @@ def launch_test_case(cfg_dict):
                     'end_date': datetime.date(2010 + i, 12, 31),
                     'code': 'FY%i' % i,
                     'post_move_sequence': post_move_seq,
-                    'in_invoice_sequence': invoice_seq,
-                    'out_invoice_sequence': invoice_seq,
-                    'in_credit_note_sequence': invoice_seq,
-                    'out_credit_note_sequence': invoice_seq,
                 },
                 {'company': company.id},
             )

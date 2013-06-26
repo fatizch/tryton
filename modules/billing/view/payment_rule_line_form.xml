@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<form string="Payment Rule Line">
+  <label name="type"/>
+  <field name="type"/>
+  <label name="is_remainder"/>
+  <field name="is_remainder"/>
+  <newline/>
+  <label name="amount"/>
+  <field name="amount"/>
+  <label name="currency"/>
+  <field name="currency"/>
+  <newline/>
+  <label name="add_calculated_period"/>
+  <field name="add_calculated_period"/>
+  <label name="number_of_periods"/>
+  <field name="number_of_periods"/>
+  <newline/>
+  <label name="percentage"/>
+  <field name="percentage"/>
+  <label name="divisor"/>
+  <field name="divisor"/>
+  <label name="months"/>
+  <field name="months"/>
+  <label name="month"/>
+  <field name="month"/>
+  <label name="weeks"/>
+  <field name="weeks"/>
+  <label name="weekday"/>
+  <field name="weekday"/>
+  <label name="days"/>
+  <field name="days"/>
+  <label name="day"/>
+  <field name="day"/>
+</form>

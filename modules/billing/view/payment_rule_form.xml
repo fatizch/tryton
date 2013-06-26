@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<form string="payment_rule">
+  <group id="data" col="2" yexpand="1" yfill="1">
+    <label name="name"/>
+    <field name="name" colspan="3"/>
+    <label name="code"/>
+    <field name="code" colspan="3"/>
+    <label name="base_frequency"/>
+    <field name="base_frequency" colspan="3"/>
+    <label name="remaining_position"/>
+    <field name="remaining_position" colspan="3"/>
+    <label name="with_sync_date"/>
+    <field name="with_sync_date" colspan="3"/>
+    <label name="sync_date"/>
+    <field name="sync_date"/>
+    <label name="force_line_at_start"/>
+    <field name="force_line_at_start"/>
+  </group>
+  <group id="lines" yexpand="1" yfill="1">
+    <field name="start_lines" colspan="4"/>
+  </group>
+</form>
