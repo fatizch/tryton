@@ -2,8 +2,9 @@
 import copy
 
 from trytond.pool import Pool
+from trytond.rpc import RPC
 from trytond.model import DictSchemaMixin
-from trytond.pyson import Eval, Bool, Or, Not
+from trytond.pyson import Eval, Bool, Or
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import fields, model, utils, coop_string
@@ -49,11 +50,10 @@ class ComplementaryDataDefinition(
     default_value_boolean = fields.Function(
         fields.Boolean('Default Value'),
         'get_default_value', 'set_default_value')
-    default_value_char = fields.Function(
-        fields.Char('Default Value'),
-        'get_default_value', 'set_default_value')
     default_value_selection = fields.Function(
-        fields.Char('Default Value'),
+        fields.Selection('get_default_value_selection', 'Default Value',
+            selection_change_with=['type_', 'selection', 'with_default_value'],
+            depends=['type_', 'selection', 'with_default_value']),
         'get_default_value', 'set_default_value')
     default_value = fields.Char('Default Value')
     is_shared = fields.Function(fields.Boolean('Shared'), 'get_is_shared')
@@ -82,8 +82,6 @@ class ComplementaryDataDefinition(
             field.states['invisible'] = Or(
                 Eval('type_') != field_name[14:],
                 ~Bool(Eval('with_default_value')))
-            if field_name[14:] == 'selection':
-                field.states['required'] = Not(field.states['invisible'])
 
         map(lambda x: update_field(x[0], x[1]),
             [(elem, getattr(cls, elem)) for elem in dir(cls) if
@@ -104,9 +102,15 @@ class ComplementaryDataDefinition(
         cls.name.on_change_with.append('name')
         cls.name.string = 'Code'
 
+        cls.type_ = copy.copy(cls.type_)
+        if not cls.type_.on_change:
+            cls.type_.on_change = []
+        cls.type_.on_change.append('type_')
+
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(name)', 'The code must be unique!'),
         ]
+        cls.__rpc__.update({'get_default_value_selection': RPC(instantiate=0)})
 
     @staticmethod
     def default_start_date():
@@ -115,6 +119,22 @@ class ComplementaryDataDefinition(
     def get_is_shared(self, name):
         return False
 
+    def on_change_type_(self):
+        if not (hasattr(self, 'type_') and self.type_ == 'selection'):
+            return {'selection': ''}
+        return {}
+
+    def get_default_value_selection(self):
+        if not (hasattr(self, 'type_') and self.type_ == 'selection'):
+            return [('', '')]
+        if not (hasattr(self, 'selection') and self.selection):
+            return [('', '')]
+        res = [x.split(':') for x in self.selection.split('\n')]
+        if not (hasattr(self, 'with_default_value')
+                and self.with_default_value):
+            res.append(('', ''))
+        return res
+
     def get_default_value(self, name):
         if name is None:
             name_type = self.type_
@@ -122,20 +142,23 @@ class ComplementaryDataDefinition(
             name_type = name[14:]
         if name_type == 'boolean':
             return self.default_value == 'True'
-        if name_type == 'char' or name_type == 'selection':
-            return self.default_value
+        if name_type == 'selection':
+            return self.default_value if self.type_ == 'selection' else None
         return None
 
     @classmethod
     def set_default_value(cls, schemas, name, value):
         name_type = name[14:]
-        if name_type == 'boolean':
-            if value:
-                cls.write(schemas, {'default_value': 'True'})
-            else:
-                cls.write(schemas, {'default_value': 'False'})
-        elif name_type == 'char' or name_type == 'selection':
-            cls.write(schemas, {'default_value': value})
+        for schema in schemas:
+            if not name_type == schema.type_:
+                continue
+            if name_type == 'boolean':
+                if isinstance(value, bool) and value:
+                    cls.write(schemas, {'default_value': 'True'})
+                else:
+                    cls.write(schemas, {'default_value': 'False'})
+            elif name_type == 'selection':
+                cls.write(schemas, {'default_value': value})
 
     # Should be Deprecated, as the search part of the dict widget is removed
     # Also remove the give_me functions which use dd_args
