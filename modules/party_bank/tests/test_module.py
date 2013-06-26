@@ -108,31 +108,6 @@ class ModuleTestCase(unittest.TestCase):
         for value, test in values:
             self.assert_(ibanlib.iban.valid(value) == test)
 
-    def test0040creditcard(self):
-        '''
-        Test Credit Card
-        '''
-        values = (
-                ('378282246310005', True),
-                ('378282546310005', False),
-                ('371449635398431', True),
-                ('371449635399431', False),
-                ('378734493671000', True),
-                ('30569309025904', True),
-                ('38520000023237', True),
-                ('6011111111111117', True),
-                ('3530111333300000', True),
-                ('5555555555554444', True),
-                ('4111111111111111', True),
-                ('4111111111111112', False),
-                ('4012888888881881', True),
-                ('4012868888881881', False),
-                ('4222222222222', True),
-        )
-        for value, test in values:
-            self.assert_(
-                self.BankAccountNumber.check_credit_card(value) == test)
-
     def test0050rib(self):
         '''
         Test RIB
