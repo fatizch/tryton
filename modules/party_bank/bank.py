@@ -104,17 +104,17 @@ class BankAccountNumber(CoopSQL, CoopView):
     branch_code = fields.Function(fields.Char('Branch Code', size=5,
             states={'invisible': Eval('kind') != 'RIB'},
             depends=['kind'],
-            on_change=['branch_code']),
+            on_change=['branch_code', 'bank_code']),
         'get_sub_rib')
     account_number = fields.Function(fields.Char('Account Number', size=11,
             states={'invisible': Eval('kind') != 'RIB'},
             depends=['kind'],
-            on_change=['account_number']),
+            on_change=['account_number', 'branch_code', 'bank_code']),
         'get_sub_rib')
     key = fields.Function(fields.Char('Key', size=2,
             states={'invisible': Eval('kind') != 'RIB'},
             depends=['kind'],
-            on_change=['key']),
+            on_change=['key', 'bank_code', 'branch_code', 'account_number']),
         'get_sub_rib')
 
     @classmethod
@@ -254,26 +254,21 @@ class BankAccountNumber(CoopSQL, CoopView):
         # res += coop_string.zfill(self, 'key')
         # return res
 
-    def on_change_sub_rib(self, name):
-        return getattr(self, name)
-        res = {}
-        val = coop_string.zfill(self, name)
-        if val:
-            res[name] = val
-            return res
-        return res
-
     def on_change_bank_code(self):
-        return self.on_change_sub_rib('bank_code')
+        return {'number': self.bank_code, 'branch_code': '',
+            'account_number': '', 'key': ''}
 
     def on_change_branch_code(self):
-        return self.on_change_sub_rib('branch_code')
+        return {'number': self.bank_code + self.branch_code,
+            'account_number': '', 'key': ''}
 
     def on_change_account_number(self):
-        return self.on_change_sub_rib('account_number')
+        return {'number': self.bank_code + self.branch_code +
+            self.account_number, 'key': ''}
 
     def on_change_key(self):
-        return self.on_change_sub_rib('key')
+        return {'number': self.bank_code + self.branch_code +
+            self.account_number + self.key}
 
     def pre_validate(self):
         self.check_number()
