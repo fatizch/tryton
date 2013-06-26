@@ -21,7 +21,6 @@
     <group id="default value">
         <field name="with_default_value" xexpand="0"/>
         <field name="default_value_boolean" xexpand="0"/>
-        <field name="default_value_char"/>
         <field name="default_value_selection"/>
     </group>
     <field name="sub_datas" yexpand="1" yfill="1" colspan="4"/>
