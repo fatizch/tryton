@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tree string="Parameters">
+  <field name="name"/>
+  <field name="code"/>
+  <field name="kind"/>
+  <field name="the_rule"/>
+</tree>

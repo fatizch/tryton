@@ -544,18 +544,20 @@ def init_complementary_data_from_ids(ids):
     return res
 
 
-def execute_rule(caller, rule, args):
-    args['_caller'] = caller
-    result = rule.compute(args)
-    if not (hasattr(rule, 'debug_mode') and rule.debug_mode):
+def execute_rule(_caller, _rule, _args, **kwargs):
+    _args['_caller'] = _caller
+    result = _rule.compute(_args, **kwargs)
+    if not (hasattr(_rule, 'debug_mode') and _rule.debug_mode):
         return result
-    RuleExecution = Pool().get('rule_engine.execution_log')
-    rule_execution = RuleExecution()
-    rule_execution.rule = rule
-    rule_execution.create_date = datetime.datetime.now()
-    rule_execution.user = Transaction().user
-    rule_execution.init_from_rule_result(result)
-    rule_execution.save()
+    with Transaction().new_cursor() as transaction:
+        RuleExecution = Pool().get('rule_engine.execution_log')
+        rule_execution = RuleExecution()
+        rule_execution.rule = _rule
+        rule_execution.create_date = datetime.datetime.now()
+        rule_execution.user = Transaction().user
+        rule_execution.init_from_rule_result(result)
+        rule_execution.save()
+        transaction.cursor.commit()
     return result
 
 

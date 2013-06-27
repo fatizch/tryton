@@ -674,11 +674,9 @@ class Contract():
 
     def calculate_prices(self):
         prices, errs = self.calculate_prices_between_dates()
-
         if errs:
             return False, errs
         self.store_prices(prices)
-
         return True, ()
 
     def create_price_list(self, start_date, end_date):

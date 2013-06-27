@@ -1,11 +1,12 @@
 import sys
-import logging
+import traceback
 import ast
 import _ast
 import tokenize
 import functools
 import json
 import datetime
+
 from StringIO import StringIO
 
 from decimal import Decimal
@@ -15,6 +16,7 @@ import pyflakes.messages
 
 from trytond.rpc import RPC
 
+from trytond.exceptions import UserError
 from trytond.modules.coop_utils import fields
 from trytond.modules.coop_utils.model import CoopSQL as ModelSQL
 from trytond.modules.coop_utils.model import CoopView as ModelView
@@ -29,6 +31,7 @@ from trytond.modules.table import TableCell
 
 __all__ = [
     'Rule',
+    'RuleEngineParameter',
     'RuleExecutionLog',
     'Context',
     'TreeElement',
@@ -333,13 +336,104 @@ class FunctionFinder(ast.NodeVisitor):
         return super(FunctionFinder, self).visit(node)
 
 
+class RuleEngineParameter(ModelView, ModelSQL):
+    'Rule Engine Parameter'
+
+    __name__ = 'rule_engine.parameter'
+
+    name = fields.Char('Name')
+    code = fields.Char('Code', required=True)
+    kind = fields.Selection([('rule', 'Rule'), ('kwarg', 'Keyword Argument')],
+        'Kind', on_change=['kind'])
+    the_rule = fields.Many2One('rule_engine', 'Rule to use', states={
+            'invisible': Eval('kind', '') != 'rule',
+            'required': Eval('kind', '') == 'rule'},
+        ondelete='RESTRICT')
+    parent_rule = fields.Many2One('rule_engine', 'Parent Rule', required=True,
+        ondelete='CASCADE')
+
+    @classmethod
+    def __setup__(cls):
+        super(RuleEngineParameter, cls).__setup__()
+        cls._error_messages.update({
+            'kwarg_expected': 'Expected %s as a parameter for rule %s',
+        })
+
+    def on_change_kind(self):
+        if (hasattr(self, 'kind') and self.kind != 'rule'):
+            return {'the_rule': None}
+        return {}
+
+    def get_fct_args(self):
+        if self.kind == 'rule':
+            if not (hasattr(self, 'the_rule') and self.the_rule):
+                return ''
+            return ', '.join(('%s=' % elem.code for elem in
+                    self.the_rule.rule_parameters if elem.kind == 'kwarg'))
+        return ''
+
+    def get_description(self):
+        return (self.name if self.name else '') + ' (' + (
+            self.kind if self.kind else '') + ')'
+
+    def get_long_description(self):
+        return self.get_description()
+
+    def get_translated_technical_name(self):
+        return 'rule_engine_parameter_%s' % self.code
+
+    def execute_rule(self, evaluation_context, **kwargs):
+        result = utils.execute_rule(self, self.the_rule, evaluation_context,
+            **kwargs)
+        if result.has_errors:
+            raise InternalRuleEngineError(
+                'Impossible to evaluate parameter %s when computing rule %s' %
+                (self.code, self.parent_rule.name))
+        return result.result
+
+    def get_wrapper_func(self, context):
+        def debug_wrapper(func):
+            def wrapper_func(*args, **kwargs):
+                context['__result__'].low_level_debug.append(
+                    'Entering %s (args = %s)' % (
+                        self.get_translated_technical_name(), str(args)))
+                try:
+                    result = func(*args, **kwargs)
+                except Exception, exc:
+                    context['__result__'].errors.append(
+                        'Error in %s : %s' % (
+                            self.get_translated_technical_name(), str(exc)))
+                    raise
+                context['__result__'].low_level_debug.append(
+                    'Exiting %s (result = %s)' % (
+                        self.get_translated_technical_name(), str(result)))
+                return result
+            return wrapper_func
+        return debug_wrapper
+
+    def as_context(self, evaluation_context, context, forced_value):
+        debug_wrapper = self.get_wrapper_func(context)
+        if not forced_value:
+            if self.kind == 'kwarg':
+                self.raise_user_error('kwarg_expected', (self.code,
+                        self.parent_rule.name))
+        if forced_value:
+            context[self.get_translated_technical_name()] = debug_wrapper(
+                lambda: forced_value)
+        elif self.kind == 'rule':
+            context[self.get_translated_technical_name()] = debug_wrapper(
+                functools.partial(self.execute_rule, evaluation_context))
+        return context
+
+
 class Rule(ModelView, ModelSQL):
     "Rule"
     __name__ = 'rule_engine'
 
     name = fields.Char('Name', required=True)
     context = fields.Many2One(
-        'rule_engine.context', 'Context', on_change=['context'], required=True)
+        'rule_engine.context', 'Context', on_change=['context',
+            'rule_parameters'], required=True)
     code = fields.Text('Code')
     data_tree = fields.Function(fields.Text('Data Tree'), 'get_data_tree')
     test_cases = fields.One2Many(
@@ -356,12 +450,16 @@ class Rule(ModelView, ModelSQL):
         'rule_engine.execution_log', 'rule', 'Execution Logs',
         states={'readonly': True, 'invisible': ~Eval('debug_mode')},
         depends=['debug_mode'])
+    rule_parameters = fields.One2Many('rule_engine.parameter', 'parent_rule',
+        'Rule parameters', on_change=['rule_parameters', 'context'])
 
     @classmethod
     def __setup__(cls):
         super(Rule, cls).__setup__()
         cls._error_messages.update({
-            'invalid_code': 'Your code has errors!',
+                'invalid_code': 'Your code has errors!',
+                'bad_rule_computation': 'An error occured in rule %s.'
+                'For more information, activate debug mode and see the logs',
         })
 
     @classmethod
@@ -382,6 +480,10 @@ class Rule(ModelView, ModelSQL):
         result.add('debug_mode')
         result.add('exec_logs')
         return result
+
+    def on_change_rule_parameters(self):
+        return {'data_tree': self.get_data_tree(None)
+            if self.context else '[]'}
 
     def filter_errors(self, error):
         if isinstance(error, WARNINGS):
@@ -411,17 +513,31 @@ class Rule(ModelView, ModelSQL):
         return 'draft'
 
     def get_context_for_execution(self):
-        return self.context.get_context()
+        return self.context.get_context(self)
 
-    def compute(self, evaluation_context, debug_mode=False):
-        # with Transaction().set_context(debug=debug_mode), \
-                # Transaction().new_cursor():
+    def add_rule_parameters_to_context(self, evaluation_context, kwargs,
+            context):
+        if not kwargs:
+            kwargs = {}
+        for elem in self.rule_parameters:
+            elem.as_context(evaluation_context, context, kwargs[elem.code]
+                if elem.code in kwargs else None)
+
+    def prepare_context(self, evaluation_context, debug_mode, **kwargs):
+        context = self.get_context_for_execution()
+        the_result = RuleEngineResult()
+        context['__result__'] = the_result
+        self.add_rule_parameters_to_context(evaluation_context, kwargs,
+            context)
+        context.update(evaluation_context)
+        context['context'] = context
+        return context
+
+    def compute(self, evaluation_context, debug_mode=False, **kwargs):
         with Transaction().set_context(debug=debug_mode):
-            context = self.get_context_for_execution()
-            context.update(evaluation_context)
-            context['context'] = context
-            the_result = RuleEngineResult()
-            context['__result__'] = the_result
+            context = self.prepare_context(evaluation_context, debug_mode,
+                **kwargs)
+            the_result = context['__result__']
             localcontext = {}
             try:
                 exec self.as_function in context, localcontext
@@ -434,18 +550,49 @@ class Rule(ModelView, ModelSQL):
             except CatchedRuleEngineError:
                 pass
                 the_result.result = None
+            except UserError:
+                raise
             except Exception, exc:
-                # raise
-                for elem in the_result.print_debug():
-                    logging.getLogger('rule_engine').debug(elem)
-                raise InternalRuleEngineError(coop_string.remove_invalid_char(
-                    self.name) + ' - ' + str(exc))
+                if self.debug_mode:
+                    with Transaction().new_cursor() as transaction:
+                        RuleExecution = Pool().get('rule_engine.execution_log')
+                        rule_execution = RuleExecution()
+                        rule_execution.rule = self
+                        rule_execution.create_date = datetime.datetime.now()
+                        rule_execution.user = Transaction().user
+                        rule_execution.init_from_rule_result(the_result)
+                        exc_type, exc_value, exc_traceback = sys.exc_info()
+                        tmp = traceback.extract_tb(exc_traceback)
+                        last_frame = tmp[-1]
+                        if last_frame[2].startswith('fct__'):
+                            lineno = last_frame[1] - 3
+                            rule_execution.low_level_debug += '\n\n'
+                            rule_execution.low_level_debug += 'Error detected '
+                            'in rule definition line %d:\n' % lineno
+                            rule_execution.low_level_debug += '\n'
+                            for line_number, line in enumerate(
+                                    self.code.split('\n'), 1):
+                                if (line_number >= lineno - 2 and
+                                        line_number <= line_number + 2):
+                                    if line_number == lineno:
+                                        rule_execution.low_level_debug += \
+                                            '>>\t' + line + '\n'
+                                    else:
+                                        rule_execution.low_level_debug += \
+                                            '  \t' + line + '\n'
+                            rule_execution.low_level_debug += '\n'
+                            rule_execution.low_level_debug += str(exc)
+                        rule_execution.errors += '\n' + (
+                            coop_string.remove_invalid_char(self.name) +
+                            ' - ' + str(exc))
+                        rule_execution.save()
+                        transaction.cursor.commit()
+                self.raise_user_error('bad_rule_computation', (self.name))
         return the_result
 
     def on_change_context(self):
-        return {
-            'data_tree': self.get_data_tree(None) if self.context else '[]',
-        }
+        return {'data_tree': self.get_data_tree(None)
+            if self.context else '[]'}
 
     @property
     def as_function(self):
@@ -455,12 +602,37 @@ class Rule(ModelView, ModelSQL):
         return decistmt(code_template % code)
 
     def get_data_tree(self, name):
-        return json.dumps([e.as_tree() for e in self.context.allowed_elements])
+        tmp_result = [e.as_tree() for e in self.context.allowed_elements]
+        if not (hasattr(self, 'rule_parameters') and self.rule_parameters):
+            return json.dumps(tmp_result)
+        tmp_node = {}
+        tmp_node['name'] = 'x-y-z'
+        tmp_node['translated'] = 'x-y-z'
+        tmp_node['fct_args'] = ''
+        tmp_node['description'] = 'X-Y-Z'
+        tmp_node['type'] = 'folder'
+        tmp_node['long_description'] = ''
+        tmp_node['children'] = []
+        for elem in self.rule_parameters:
+            param_node = {}
+            param_node['name'] = elem.name
+            param_node['translated'] = elem.get_translated_technical_name()
+            param_node['fct_args'] = elem.get_fct_args()
+            param_node['description'] = elem.get_description()
+            param_node['type'] = 'function'
+            param_node['long_description'] = elem.get_long_description()
+            param_node['children'] = []
+            tmp_node['children'].append(param_node)
+        tmp_result.append(tmp_node)
+        return json.dumps(tmp_result)
 
     @property
     def allowed_functions(self):
-        return sum([
-            e.as_functions_list() for e in self.context.allowed_elements], [])
+        result = sum([e.as_functions_list()
+                for e in self.context.allowed_elements], [])
+        result += [elem.get_translated_technical_name()
+            for elem in self.rule_parameters]
+        return result
 
     def get_rec_name(self, name=None):
         return self.name
@@ -506,7 +678,7 @@ class Context(ModelView, ModelSQL):
                     names[element.translated_technical_name] = element
                 elements.extend(element.children)
 
-    def get_context(self):
+    def get_context(self, rule):
         context = {}
         for element in self.allowed_elements:
             element.as_context(context)

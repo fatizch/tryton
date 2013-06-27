@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<data>
+  <xpath expr="/form/field[@name='the_rule']" position="after">
+    <label name="the_complementary_data"/>
+    <field name="the_complementary_data"/>
+    <newline/>
+    <field name="rule_complementary_data" colspan="4" no_command="1"/>
+  </xpath>
+</data>

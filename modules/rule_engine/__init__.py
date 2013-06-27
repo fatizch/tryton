@@ -7,6 +7,7 @@ def register():
         RuleTools,
         Context,
         Rule,
+        RuleEngineParameter,
         RuleExecutionLog,
         TestCase,
         TestCaseValue,

@@ -108,13 +108,8 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
     def on_change_with_sub_elem_rule_complementary_data(self):
         if not (hasattr(self, 'sub_elem_rule') and self.sub_elem_rule):
             return {}
-        if not (hasattr(self.sub_elem_rule, 'complementary_parameters') and
-                self.sub_elem_rule.complementary_parameters):
-            return {}
-        return dict([
-            (elem.name, self.sub_elem_rule_complementary_data.get(
-                elem.name, elem.get_default_value(None)))
-            for elem in self.sub_elem_rule.complementary_parameters])
+        return self.sub_elem_rule.get_complementary_data_for_on_change(
+            self.sub_elem_rule_complementary_data)
 
     def get_rule_complementary_data(self, schema_name):
         if not (hasattr(self, 'sub_elem_rule_complementary_data') and

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<form string="Parameter">
+  <label name="name"/>
+  <field name="name"/>
+  <label name="code"/>
+  <field name="code"/>
+  <label name="kind"/>
+  <field name="kind"/>
+  <label name="the_rule"/>
+  <field name="the_rule"/>
+</form>

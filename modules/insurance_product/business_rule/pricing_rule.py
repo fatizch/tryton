@@ -377,13 +377,8 @@ class PricingComponent(model.CoopSQL, model.CoopView):
     def on_change_with_rule_complementary_data(self):
         if not (hasattr(self, 'rule') and self.rule):
             return {}
-        if not (hasattr(self.rule, 'complementary_parameters') and
-                self.rule.complementary_parameters):
-            return {}
-        return dict([
-            (elem.name, self.rule_complementary_data.get(
-                elem.name, elem.get_default_value(None)))
-            for elem in self.rule.complementary_parameters])
+        return self.rule.get_complementary_data_for_on_change(
+            self.rule_complementary_data)
 
     def get_rule_complementary_data(self, schema_name):
         if not (hasattr(self, 'rule_complementary_data') and

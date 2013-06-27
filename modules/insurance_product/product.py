@@ -136,16 +136,19 @@ class Product():
     def give_me_product_price(self, args):
         # There is a pricing manager on the products so we can just forward the
         # request.
+        self.init_dict_for_rule_engine(args)
+        result_line = PricingResultLine(on_object=self)
+        result_line.init_from_args(args)
         try:
-            res = self.get_result('price', args, kind='pricing')
+            product_line, product_errs = self.get_result('price', args,
+                kind='pricing')
         except NonExistingRuleKindException:
-            return ([], [])
-        if not res[0]:
-            result_line = PricingResultLine()
-            result_line.init_from_args(args)
-            result_line.on_object = self
-            return ([result_line], res[1])
-        return [res[0]], res[1]
+            product_line = None
+            product_errs = []
+        if product_line and product_line.amount:
+            product_line.on_object = args['contract']
+            result_line.add_detail_from_line(product_line)
+        return [result_line], product_errs
 
     def give_me_total_price(self, args):
         # Total price is the sum of coverages price and Product price

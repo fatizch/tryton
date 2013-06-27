@@ -21,7 +21,7 @@ def register():
         ItemDescriptorComplementaryDataRelation,
         ProductItemDescriptorRelation,
         # from business_rule
-        RuleEngineComplementaryDataRelation,
+        RuleEngineParameter,
         RuleEngine,
         BusinessRuleRoot,
         # from documents_rule

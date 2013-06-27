@@ -9,6 +9,9 @@
       <field name="code" widget="source" context_tree="data_tree" colspan="4"/>
       <field name="data_tree" invisible="1"/>
     </page>
+    <page string="Parameters" id="parameters">
+      <field name="rule_parameters"/>
+    </page>
     <page name="test_cases">
       <field name="test_cases" colspan="4"/>
     </page>
