@@ -357,12 +357,15 @@ class RuleEngineParameter(ModelView, ModelSQL):
 
     def get_fct_args(self):
         if self.kind == 'rule':
+            if not (hasattr(self, 'the_rule') and self.the_rule):
+                return ''
             return ', '.join(('%s=' % elem.code for elem in
                     self.the_rule.rule_parameters if elem.kind == 'kwarg'))
         return ''
 
     def get_description(self):
-        return self.name + ' (' + self.kind + ')'
+        return (self.name if self.name else '') + ' (' + (
+            self.kind if self.kind else '') + ')'
 
     def get_long_description(self):
         return self.get_description()
@@ -377,7 +380,7 @@ class RuleEngineParameter(ModelView, ModelSQL):
             raise InternalRuleEngineError(
                 'Impossible to evaluate parameter %s when computing rule %s' %
                 (self.code, self.parent_rule.name))
-        return result.the_result
+        return result.result
 
     def get_wrapper_func(self, context):
         def debug_wrapper(func):
@@ -538,7 +541,7 @@ class Rule(ModelView, ModelSQL):
                 pass
                 the_result.result = None
             except Exception, exc:
-                # raise
+                raise
                 for elem in the_result.print_debug():
                     logging.getLogger('rule_engine').debug(elem)
                 raise InternalRuleEngineError(coop_string.remove_invalid_char(
@@ -635,7 +638,7 @@ class Context(ModelView, ModelSQL):
 
     def get_context(self, rule):
         context = {}
-        for element in self.allowed_elements + rule.rule_parameters:
+        for element in self.allowed_elements:
             element.as_context(context)
         return context
 

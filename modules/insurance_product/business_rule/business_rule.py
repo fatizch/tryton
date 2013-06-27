@@ -27,8 +27,7 @@ class RuleEngineParameter():
 
     the_complementary_data = fields.Many2One('offered.complementary_data_def',
         'Complementary Parameters', domain=[('kind', '=', 'rule_engine')],
-        ondelete='RESTRICT', on_change=['the_complementary_data', 'name',
-            'code'],
+        ondelete='RESTRICT',
         states={'invisible': Eval('kind', '') != 'complementary_data',
             'required': Eval('kind', '') == 'complementary_data'})
     rule_complementary_data = fields.Dict(
@@ -43,10 +42,20 @@ class RuleEngineParameter():
         cls.kind = copy.copy(cls.kind)
         cls.kind.selection.append(('complementary_data', 'Complementary Data'))
         cls.kind.selection = list(set(cls.kind.selection))
+        cls.the_rule = copy.copy(cls.the_rule)
+        if not cls.the_rule.depends:
+            cls.the_rule.depends = []
+        cls.the_rule.depends.append('rule_complementary_data')
 
     @classmethod
     def get_complementary_parameter_value(cls, args, schema_name):
         return args['_caller'].get_rule_complementary_data(schema_name)
+
+    def get_rule_complementary_data(self, schema_name):
+        if not (hasattr(self, 'rule_complementary_data') and
+                self.rule_complementary_data):
+            return None
+        return self.rule_complementary_data.get(schema_name, None)
 
     def as_context(self, evaluation_context, context, forced_value):
         super(RuleEngineParameter, self).as_context(
@@ -61,7 +70,7 @@ class RuleEngineParameter():
 
     def on_change_with_rule_complementary_data(self):
         if not (hasattr(self, 'the_rule') and self.the_rule):
-            return {}
+            return None
         return self.the_rule.get_complementary_data_for_on_change(
             self.rule_complementary_data)
 
@@ -75,9 +84,9 @@ class RuleEngine():
     def get_complementary_data_for_on_change(self, existing_values):
         if not (hasattr(self, 'rule_parameters') and
                 self.rule_parameters):
-            return {}
+            return None
         return dict([
-                (elem.name, existing_values.get(
+                (elem.the_complementary_data.name, existing_values.get(
                         elem.the_complementary_data.name,
                         elem.the_complementary_data.get_default_value(None)))
                 for elem in self.rule_parameters

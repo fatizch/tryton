@@ -4,6 +4,6 @@
     <label name="the_complementary_data"/>
     <field name="the_complementary_data"/>
     <newline/>
-    <field name="rule_complementary_data" colspan="4"/>
+    <field name="rule_complementary_data" colspan="4" no_command="1"/>
   </xpath>
 </data>
