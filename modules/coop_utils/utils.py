@@ -544,9 +544,9 @@ def init_complementary_data_from_ids(ids):
     return res
 
 
-def execute_rule(caller, rule, args):
+def execute_rule(caller, rule, args, **kwargs):
     args['_caller'] = caller
-    result = rule.compute(args)
+    result = rule.compute(args, **kwargs)
     if not (hasattr(rule, 'debug_mode') and rule.debug_mode):
         return result
     RuleExecution = Pool().get('rule_engine.execution_log')

@@ -1,9 +1,5 @@
 #-*- coding:utf-8 -*-
 import copy
-import json
-import functools
-
-import pyflakes.messages
 
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Or
@@ -17,21 +13,57 @@ STATE_ADVANCED = Eval('config_kind') != 'simple'
 STATE_SUB_SIMPLE = Eval('sub_elem_config_kind') != 'simple'
 
 __all__ = [
-    'RuleEngineComplementaryDataRelation',
+    'RuleEngineParameter',
     'RuleEngine',
     'BusinessRuleRoot',
 ]
 
 
-class RuleEngineComplementaryDataRelation(model.CoopSQL):
-    'Rule engine to complementary data relation'
+class RuleEngineParameter():
+    'Rule Engine Parameter'
 
-    __name__ = 'ins_product.rule_engine_complementary_data_relation'
+    __metaclass__ = PoolMeta
+    __name__ = 'rule_engine.parameter'
 
-    rule = fields.Many2One('rule_engine', 'Rule', ondelete='CASCADE')
-    complementary_data = fields.Many2One(
-        'offered.complementary_data_def', 'Complementary Data',
-        ondelete='RESTRICT')
+    the_complementary_data = fields.Many2One('offered.complementary_data_def',
+        'Complementary Parameters', domain=[('kind', '=', 'rule_engine')],
+        ondelete='RESTRICT', on_change=['the_complementary_data', 'name',
+            'code'],
+        states={'invisible': Eval('kind', '') != 'complementary_data',
+            'required': Eval('kind', '') == 'complementary_data'})
+    rule_complementary_data = fields.Dict(
+        'offered.complementary_data_def', 'Rule Complementary Data',
+        on_change_with=['the_rule', 'rule_complementary_data'],
+        states={'invisible': Or(
+                Eval('kind', '') != 'rule', ~Eval('rule_complementary_data'))})
+
+    @classmethod
+    def __setup__(cls):
+        super(RuleEngineParameter, cls).__setup__()
+        cls.kind = copy.copy(cls.kind)
+        cls.kind.selection.append(('complementary_data', 'Complementary Data'))
+        cls.kind.selection = list(set(cls.kind.selection))
+
+    @classmethod
+    def get_complementary_parameter_value(cls, args, schema_name):
+        return args['_caller'].get_rule_complementary_data(schema_name)
+
+    def as_context(self, evaluation_context, context, forced_value):
+        super(RuleEngineParameter, self).as_context(
+            evaluation_context, context, forced_value)
+        if self.kind != 'complementary_data':
+            return context
+        debug_wrapper = self.get_wrapper_func(context)
+        context[self.get_translated_technical_name()] = debug_wrapper(
+            lambda: self.get_complementary_parameter_value(evaluation_context,
+                self.the_complementary_data.name))
+        return context
+
+    def on_change_with_rule_complementary_data(self):
+        if not (hasattr(self, 'the_rule') and self.the_rule):
+            return {}
+        return self.the_rule.get_complementary_data_for_on_change(
+            self.rule_complementary_data)
 
 
 class RuleEngine():
@@ -40,79 +72,16 @@ class RuleEngine():
     __metaclass__ = PoolMeta
     __name__ = 'rule_engine'
 
-    complementary_parameters = fields.Many2Many(
-        'ins_product.rule_engine_complementary_data_relation',
-        'rule', 'complementary_data', 'Complementary Parameters',
-        domain=[('kind', '=', 'rule_engine')],
-        on_change=['context', 'complementary_parameters'])
-
-    @classmethod
-    def __setup__(cls):
-        super(RuleEngine, cls).__setup__()
-        cls.context = copy.copy(cls.context)
-        cls.context.on_change.append('complementary_parameters')
-
-    def on_change_complementary_parameters(self):
-        return {
-            'data_tree': self.get_data_tree(None) if self.context else '[]'}
-
-    def get_data_tree(self, name):
-        if not (hasattr(self, 'complementary_parameters') and
-                self.complementary_parameters):
-            return super(RuleEngine, self).get_data_tree(name)
-        tmp_result = [e.as_tree() for e in self.context.allowed_elements]
-        tmp_node = {}
-        tmp_node['name'] = 'x-y-z'
-        tmp_node['translated'] = 'x-y-z'
-        tmp_node['fct_args'] = ''
-        tmp_node['description'] = 'X-Y-Z'
-        tmp_node['type'] = 'folder'
-        tmp_node['long_description'] = ''
-        tmp_node['children'] = []
-        for elem in self.complementary_parameters:
-            param_node = {}
-            param_node['name'] = elem.string
-            param_node['translated'] = 'rule_engine_parameter_%s' % elem.name
-            param_node['fct_args'] = ''
-            param_node['description'] = elem.string
-            param_node['type'] = 'function'
-            param_node['long_description'] = ''
-            param_node['children'] = []
-            tmp_node['children'].append(param_node)
-        tmp_result.append(tmp_node)
-        return json.dumps(tmp_result)
-
-    @classmethod
-    def get_complementary_parameter_value(cls, args, schema_name):
-        return args['_caller'].get_rule_complementary_data(schema_name)
-
-    def get_context_for_execution(self):
-        result = super(RuleEngine, self).get_context_for_execution()
-        if not (hasattr(self, 'complementary_parameters') and
-                self.complementary_parameters):
-            return result
-        for schema in self.complementary_parameters:
-            result['rule_engine_parameter_%s' % schema.name] = \
-                functools.partial(
-                    self.get_complementary_parameter_value,
-                    result, schema.name)
-        return result
-
-    def filter_errors(self, error):
-        result = super(RuleEngine, self).filter_errors(error)
-        if not result and isinstance(error, pyflakes.messages.UndefinedName):
-            if error.message_args[0][:24] == '_rule_complementary_data':
-                if error.message_args[0][25:] in self._rule_complementary_data:
-                    return True
-        return False
-
-    @property
-    def _allowed_functions(self):
-        result = super(RuleEngine, self).allowed_functions
-        result += [
-            '_rule_complementary_data%s' % elem.name
-            for elem in self._rule_complementary_data]
-        return result
+    def get_complementary_data_for_on_change(self, existing_values):
+        if not (hasattr(self, 'rule_parameters') and
+                self.rule_parameters):
+            return {}
+        return dict([
+                (elem.name, existing_values.get(
+                        elem.the_complementary_data.name,
+                        elem.the_complementary_data.get_default_value(None)))
+                for elem in self.rule_parameters
+                if elem.kind == 'complementary_data'])
 
 
 class BusinessRuleRoot(model.CoopView, GetResult, Templated):
@@ -163,13 +132,8 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
     def on_change_with_rule_complementary_data(self):
         if not (hasattr(self, 'rule') and self.rule):
             return {}
-        if not (hasattr(self.rule, 'complementary_parameters') and
-                self.rule.complementary_parameters):
-            return {}
-        return dict([
-            (elem.name, self.rule_complementary_data.get(
-                elem.name, elem.get_default_value(None)))
-            for elem in self.rule.complementary_parameters])
+        return self.rule.get_complementary_data_for_on_change(
+            self.rule_complementary_data)
 
     def get_rule_complementary_data(self, schema_name):
         if not (hasattr(self, 'rule_complementary_data') and

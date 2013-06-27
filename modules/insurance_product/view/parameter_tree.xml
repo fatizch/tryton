@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<data>
+  <xpath expr="/tree/field[@name='the_rule']" position="after">
+    <field name="the_complementary_data"/>
+  </xpath>
+</data>

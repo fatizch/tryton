@@ -52,6 +52,19 @@
       <field name="name">test_case_form</field>
     </record>
     <!-- ############################################################ -->
+    <!-- Rule Parameters -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="parameter_form">
+      <field name="model">rule_engine.parameter</field>
+      <field name="type">form</field>
+      <field name="name">parameter_form</field>
+    </record>
+    <record model="ir.ui.view" id="parameter_tree">
+      <field name="model">rule_engine.parameter</field>
+      <field name="type">tree</field>
+      <field name="name">parameter_tree</field>
+    </record>
+    <!-- ############################################################ -->
     <!-- Test Case Values -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="test_case_value_form">
