@@ -1,11 +1,12 @@
 import sys
-import logging
+import traceback
 import ast
 import _ast
 import tokenize
 import functools
 import json
 import datetime
+
 from StringIO import StringIO
 
 from decimal import Decimal
@@ -15,6 +16,7 @@ import pyflakes.messages
 
 from trytond.rpc import RPC
 
+from trytond.exceptions import UserError
 from trytond.modules.coop_utils import fields
 from trytond.modules.coop_utils.model import CoopSQL as ModelSQL
 from trytond.modules.coop_utils.model import CoopView as ModelView
@@ -350,6 +352,13 @@ class RuleEngineParameter(ModelView, ModelSQL):
     parent_rule = fields.Many2One('rule_engine', 'Parent Rule', required=True,
         ondelete='CASCADE')
 
+    @classmethod
+    def __setup__(cls):
+        super(RuleEngineParameter, cls).__setup__()
+        cls._error_messages.update({
+            'kwarg_expected': 'Expected %s as a parameter for rule %s',
+        })
+
     def on_change_kind(self):
         if (hasattr(self, 'kind') and self.kind != 'rule'):
             return {'the_rule': None}
@@ -406,9 +415,8 @@ class RuleEngineParameter(ModelView, ModelSQL):
         debug_wrapper = self.get_wrapper_func(context)
         if not forced_value:
             if self.kind == 'kwarg':
-                raise InternalRuleEngineError(
-                    'Expected %s as a parameter for rule %s' % (
-                        self.code, self.parent_rule.name))
+                self.raise_user_error('kwarg_expected', (self.code,
+                        self.parent_rule.name))
         if forced_value:
             context[self.get_translated_technical_name()] = debug_wrapper(
                 lambda: forced_value)
@@ -449,7 +457,9 @@ class Rule(ModelView, ModelSQL):
     def __setup__(cls):
         super(Rule, cls).__setup__()
         cls._error_messages.update({
-            'invalid_code': 'Your code has errors!',
+                'invalid_code': 'Your code has errors!',
+                'bad_rule_computation': 'An error occured in rule %s.'
+                'For more information, activate debug mode and see the logs',
         })
 
     @classmethod
@@ -540,12 +550,44 @@ class Rule(ModelView, ModelSQL):
             except CatchedRuleEngineError:
                 pass
                 the_result.result = None
-            except Exception, exc:
+            except UserError:
                 raise
-                for elem in the_result.print_debug():
-                    logging.getLogger('rule_engine').debug(elem)
-                raise InternalRuleEngineError(coop_string.remove_invalid_char(
-                    self.name) + ' - ' + str(exc))
+            except Exception, exc:
+                if self.debug_mode:
+                    with Transaction().new_cursor() as transaction:
+                        RuleExecution = Pool().get('rule_engine.execution_log')
+                        rule_execution = RuleExecution()
+                        rule_execution.rule = self
+                        rule_execution.create_date = datetime.datetime.now()
+                        rule_execution.user = Transaction().user
+                        rule_execution.init_from_rule_result(the_result)
+                        exc_type, exc_value, exc_traceback = sys.exc_info()
+                        tmp = traceback.extract_tb(exc_traceback)
+                        last_frame = tmp[-1]
+                        if last_frame[2].startswith('fct__'):
+                            lineno = last_frame[1] - 3
+                            rule_execution.low_level_debug += '\n\n'
+                            rule_execution.low_level_debug += 'Error detected '
+                            'in rule definition line %d:\n' % lineno
+                            rule_execution.low_level_debug += '\n'
+                            for line_number, line in enumerate(
+                                    self.code.split('\n'), 1):
+                                if (line_number >= lineno - 2 and
+                                        line_number <= line_number + 2):
+                                    if line_number == lineno:
+                                        rule_execution.low_level_debug += \
+                                            '>>\t' + line + '\n'
+                                    else:
+                                        rule_execution.low_level_debug += \
+                                            '  \t' + line + '\n'
+                            rule_execution.low_level_debug += '\n'
+                            rule_execution.low_level_debug += str(exc)
+                        rule_execution.errors += '\n' + (
+                            coop_string.remove_invalid_char(self.name) +
+                            ' - ' + str(exc))
+                        rule_execution.save()
+                        transaction.cursor.commit()
+                self.raise_user_error('bad_rule_computation', (self.name))
         return the_result
 
     def on_change_context(self):

@@ -549,13 +549,15 @@ def execute_rule(_caller, _rule, _args, **kwargs):
     result = _rule.compute(_args, **kwargs)
     if not (hasattr(_rule, 'debug_mode') and _rule.debug_mode):
         return result
-    RuleExecution = Pool().get('rule_engine.execution_log')
-    rule_execution = RuleExecution()
-    rule_execution.rule = _rule
-    rule_execution.create_date = datetime.datetime.now()
-    rule_execution.user = Transaction().user
-    rule_execution.init_from_rule_result(result)
-    rule_execution.save()
+    with Transaction().new_cursor() as transaction:
+        RuleExecution = Pool().get('rule_engine.execution_log')
+        rule_execution = RuleExecution()
+        rule_execution.rule = _rule
+        rule_execution.create_date = datetime.datetime.now()
+        rule_execution.user = Transaction().user
+        rule_execution.init_from_rule_result(result)
+        rule_execution.save()
+        transaction.cursor.commit()
     return result
 
 
