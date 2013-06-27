@@ -62,6 +62,9 @@ class RuleEngineParameter():
             evaluation_context, context, forced_value)
         if self.kind != 'complementary_data':
             return context
+        if self.get_translated_technical_name() in context:
+            # Looks like the value was forced
+            return context
         debug_wrapper = self.get_wrapper_func(context)
         context[self.get_translated_technical_name()] = debug_wrapper(
             lambda: self.get_complementary_parameter_value(evaluation_context,
