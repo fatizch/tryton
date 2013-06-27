@@ -30,7 +30,9 @@ else
 	source bin/activate
 	echo Installing pip packages
 	echo $SEP
-	pip install polib lxml relatorio genshi==0.6 python-dateutil pywebdav vobject python-ldap pytz psycopg2 hgnested hgreview sphinx ibanlib python-stdnum pydot==1.0.28 pyparsing==1.5.6 pyflakes celery flower
+    # Genshi 0.6 for relatorio compatibility
+    # pyflakes 0.5.0 for rule_engine validation, to upgrade
+	pip install polib lxml relatorio genshi==0.6 python-dateutil pywebdav vobject python-ldap pytz psycopg2 hgnested hgreview sphinx ibanlib python-stdnum pydot==1.0.28 pyparsing==1.5.6 pyflakes==0.5.0 celery flower
 	echo $SEP
 	echo $SEP
 	echo Creating symbol link for dependencies
