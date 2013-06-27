@@ -14,6 +14,14 @@ msgctxt "error:billing.payment_method:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:billing.payment_rule:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:billing.payment_rule_line:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:billing.period:"
 msgid "Billing Period \"%(first)s\" and \"%(second)s\" overlap."
 msgstr ""
@@ -178,6 +186,10 @@ msgctxt "field:billing.payment_method,payment_mode:"
 msgid "Payment Mode"
 msgstr "Mode de Paiement"
 
+msgctxt "field:billing.payment_method,payment_rule:"
+msgid "Payment Rule"
+msgstr "Règle de paiement"
+
 msgctxt "field:billing.payment_method,payment_term:"
 msgid "Payment Term"
 msgstr "Conditions de paiement"
@@ -191,6 +203,170 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:billing.payment_method,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:billing.payment_rule,base_frequency:"
+msgid "Base Frequency"
+msgstr "Fréquence de base"
+
+msgctxt "field:billing.payment_rule,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:billing.payment_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:billing.payment_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:billing.payment_rule,force_line_at_start:"
+msgid "Force start date line"
+msgstr "Ligne à la date de création"
+
+msgctxt "field:billing.payment_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.payment_rule,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:billing.payment_rule,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:billing.payment_rule,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:billing.payment_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:billing.payment_rule,remaining_position:"
+msgid "Remaining position"
+msgstr "Position du reste"
+
+msgctxt "field:billing.payment_rule,start_lines:"
+msgid "Start Lines"
+msgstr "Lignes du début"
+
+msgctxt "field:billing.payment_rule,sync_date:"
+msgid "Sync Date"
+msgstr "Date de Synchro"
+
+msgctxt "field:billing.payment_rule,with_sync_date:"
+msgid "With Sync Date"
+msgstr "Avec date de synchronisation"
+
+msgctxt "field:billing.payment_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:billing.payment_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:billing.payment_rule_line,add_calculated_period:"
+msgid "Add calculated period"
+msgstr "Ajouter une période calculée"
+
+msgctxt "field:billing.payment_rule_line,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:billing.payment_rule_line,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:billing.payment_rule_line,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:billing.payment_rule_line,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:billing.payment_rule_line,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:billing.payment_rule_line,day:"
+msgid "Day of Month"
+msgstr "Jour du mois"
+
+msgctxt "field:billing.payment_rule_line,days:"
+msgid "Number of Days"
+msgstr "Nombre de jours"
+
+msgctxt "field:billing.payment_rule_line,divisor:"
+msgid "Divisor"
+msgstr "Diviseur"
+
+msgctxt "field:billing.payment_rule_line,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.payment_rule_line,is_remainder:"
+msgid "Is remainder"
+msgstr "Contient le reste"
+
+msgctxt "field:billing.payment_rule_line,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:billing.payment_rule_line,month:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "field:billing.payment_rule_line,months:"
+msgid "Number of Months"
+msgstr "Nombre de mois"
+
+msgctxt "field:billing.payment_rule_line,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:billing.payment_rule_line,number_of_periods:"
+msgid "Number of periods"
+msgstr "Nombre de périodes"
+
+msgctxt "field:billing.payment_rule_line,payment_rule:"
+msgid "Payment Term"
+msgstr "Conditions de paiement"
+
+msgctxt "field:billing.payment_rule_line,percentage:"
+msgid "Percentage"
+msgstr "Pourcentage"
+
+msgctxt "field:billing.payment_rule_line,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:billing.payment_rule_line,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:billing.payment_rule_line,type:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "field:billing.payment_rule_line,weekday:"
+msgid "Day of Week"
+msgstr "Jour de la semaine"
+
+msgctxt "field:billing.payment_rule_line,weeks:"
+msgid "Number of Weeks"
+msgstr "Nombre de semaines"
+
+msgctxt "field:billing.payment_rule_line,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:billing.payment_rule_line,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -546,6 +722,10 @@ msgctxt "field:party.party,receivable_lines:"
 msgid "Receivable Lines"
 msgstr "Lignes à recevoir"
 
+msgctxt "help:billing.payment_rule_line,sequence:"
+msgid "Use to order lines in ascending order"
+msgstr "Utilisé pour trier les lignes en ordre croissant"
+
 msgctxt "model:billing.billing_manager,name:"
 msgid "Billing Manager"
 msgstr "Gestionnaire d'Appel de Cotisation"
@@ -561,6 +741,14 @@ msgstr "Paramètres de Facturation"
 msgctxt "model:billing.payment_method,name:"
 msgid "Payment Method"
 msgstr "Méthode de Paiement"
+
+msgctxt "model:billing.payment_rule,name:"
+msgid "Payment Rule"
+msgstr "Règle de paiement"
+
+msgctxt "model:billing.payment_rule_line,name:"
+msgid "Payment Rule Line"
+msgstr "Ligne de règle de paiement"
 
 msgctxt "model:billing.period,name:"
 msgid "Billing Period"
@@ -594,6 +782,10 @@ msgctxt "model:ir.action,name:act_payment_method"
 msgid "Payment Methods"
 msgstr "Méthodes de Paiement"
 
+msgctxt "model:ir.action,name:act_payment_rule"
+msgid "Payment Rule"
+msgstr "Règle de paiement"
+
 msgctxt "model:ir.action,name:launch_billing_process"
 msgid "Billing"
 msgstr "Cotisation"
@@ -601,6 +793,10 @@ msgstr "Cotisation"
 msgctxt "model:ir.ui.menu,name:menu_payment_method"
 msgid "Payment Methods"
 msgstr "Méthodes de Paiement"
+
+msgctxt "model:ir.ui.menu,name:menu_payment_rule"
+msgid "Payment Rule"
+msgstr "Règle de paiement"
 
 msgctxt "selection:billing.payment_method,payment_mode:"
 msgid "Cash"
@@ -617,6 +813,134 @@ msgstr "Prélèvement Automatique"
 msgctxt "selection:billing.payment_method,payment_mode:"
 msgid "Wire Transfer"
 msgstr "Virement Bancaire"
+
+msgctxt "selection:billing.payment_rule,base_frequency:"
+msgid "Half Yearly"
+msgstr "Semestriel"
+
+msgctxt "selection:billing.payment_rule,base_frequency:"
+msgid "Monthly"
+msgstr "Mensuel"
+
+msgctxt "selection:billing.payment_rule,base_frequency:"
+msgid "Quarterly"
+msgstr "Trimestriel"
+
+msgctxt "selection:billing.payment_rule,base_frequency:"
+msgid "Yearly"
+msgstr "Annuel"
+
+msgctxt "selection:billing.payment_rule,remaining_position:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:billing.payment_rule,remaining_position:"
+msgid "Custom Lines"
+msgstr "Parmi les lignes fixes"
+
+msgctxt "selection:billing.payment_rule,remaining_position:"
+msgid "First calculated"
+msgstr "Première ligne calculée"
+
+msgctxt "selection:billing.payment_rule,remaining_position:"
+msgid "Last calculated"
+msgstr "Dernière ligne calculée"
+
+msgctxt "selection:billing.payment_rule_line,month:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:billing.payment_rule_line,month:"
+msgid "April"
+msgstr "Avril"
+
+msgctxt "selection:billing.payment_rule_line,month:"
+msgid "August"
+msgstr "Août"
+
+msgctxt "selection:billing.payment_rule_line,month:"
+msgid "December"
+msgstr "Décembre"
+
+msgctxt "selection:billing.payment_rule_line,month:"
+msgid "February"
+msgstr "Février"
+
+msgctxt "selection:billing.payment_rule_line,month:"
+msgid "January"
+msgstr "Janvier"
+
+msgctxt "selection:billing.payment_rule_line,month:"
+msgid "July"
+msgstr "Juillet"
+
+msgctxt "selection:billing.payment_rule_line,month:"
+msgid "June"
+msgstr "Juin"
+
+msgctxt "selection:billing.payment_rule_line,month:"
+msgid "March"
+msgstr "Mars"
+
+msgctxt "selection:billing.payment_rule_line,month:"
+msgid "May"
+msgstr "Mai"
+
+msgctxt "selection:billing.payment_rule_line,month:"
+msgid "November"
+msgstr "Novembre"
+
+msgctxt "selection:billing.payment_rule_line,month:"
+msgid "October"
+msgstr "Octobre"
+
+msgctxt "selection:billing.payment_rule_line,month:"
+msgid "September"
+msgstr "Septembre"
+
+msgctxt "selection:billing.payment_rule_line,type:"
+msgid "Fixed"
+msgstr "Fixé"
+
+msgctxt "selection:billing.payment_rule_line,type:"
+msgid "Percentage on Total"
+msgstr "Pourcentage du total"
+
+msgctxt "selection:billing.payment_rule_line,type:"
+msgid "Prorata"
+msgstr "Au prorata"
+
+msgctxt "selection:billing.payment_rule_line,weekday:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:billing.payment_rule_line,weekday:"
+msgid "Friday"
+msgstr "Vendredi"
+
+msgctxt "selection:billing.payment_rule_line,weekday:"
+msgid "Monday"
+msgstr "Lundi"
+
+msgctxt "selection:billing.payment_rule_line,weekday:"
+msgid "Saturday"
+msgstr "Samedi"
+
+msgctxt "selection:billing.payment_rule_line,weekday:"
+msgid "Sunday"
+msgstr "Dimanche"
+
+msgctxt "selection:billing.payment_rule_line,weekday:"
+msgid "Thursday"
+msgstr "Jeudi"
+
+msgctxt "selection:billing.payment_rule_line,weekday:"
+msgid "Tuesday"
+msgstr "Mardi"
+
+msgctxt "selection:billing.payment_rule_line,weekday:"
+msgid "Wednesday"
+msgstr "Mercredi"
 
 msgctxt "selection:billing.price_line,frequency:"
 msgid ""

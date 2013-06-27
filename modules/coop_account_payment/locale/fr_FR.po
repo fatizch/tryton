@@ -58,6 +58,10 @@ msgctxt "view:account.move.line:"
 msgid "Payments"
 msgstr "Paiements"
 
+msgctxt "view:contract.contract:"
+msgid "As of today"
+msgstr ""
+
 msgctxt "view:coop_account_payment.create_receivable.start:"
 msgid "Create Receivable Payment"
 msgstr "Créer Paiement"

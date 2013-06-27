@@ -635,6 +635,10 @@ msgid "==> Validation du contrat"
 msgstr ""
 
 msgctxt "view:contract.contract:"
+msgid "A aujourd'hui"
+msgstr ""
+
+msgctxt "view:contract.contract:"
 msgid "Accounting"
 msgstr "Comptabilité"
 

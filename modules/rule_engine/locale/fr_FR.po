@@ -30,6 +30,14 @@ msgctxt "error:rule_engine.execution_log:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:rule_engine.parameter:"
+msgid "Expected %s as a parameter for rule %s"
+msgstr "L'argument %s est nécessaire pour la règle %s"
+
+msgctxt "error:rule_engine.parameter:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:rule_engine.test_case.value:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -49,6 +57,15 @@ msgstr ""
 msgctxt "error:rule_engine.tree_element:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:rule_engine:"
+msgid ""
+"An error occured in rule %s.For more information, activate debug mode and "
+"see the logs"
+msgstr ""
+"Une erreur est survenue lors de l'appel à la règle %s. Pour plus "
+"d'informations, veuillez activer le mode debug sur cette règle et consulter "
+"les logs."
 
 msgctxt "error:rule_engine:"
 msgid "This item (%s) is used by %s (%s, %s)"
@@ -105,6 +122,10 @@ msgstr "Nom"
 msgctxt "field:rule_engine,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:rule_engine,rule_parameters:"
+msgid "Rule parameters"
+msgstr "Paramètres de la règle"
 
 msgctxt "field:rule_engine,status:"
 msgid "Status"
@@ -307,6 +328,58 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:rule_engine.execution_log,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:rule_engine.parameter,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:rule_engine.parameter,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:rule_engine.parameter,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:rule_engine.parameter,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.parameter,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:rule_engine.parameter,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:rule_engine.parameter,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:rule_engine.parameter,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.parameter,parent_rule:"
+msgid "Parent Rule"
+msgstr "Règle parente"
+
+msgctxt "field:rule_engine.parameter,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.parameter,the_rule:"
+msgid "Rule to use"
+msgstr "Règle à appliquer"
+
+msgctxt "field:rule_engine.parameter,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:rule_engine.parameter,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -602,6 +675,10 @@ msgctxt "model:rule_engine.execution_log,name:"
 msgid "Rule Execution Log"
 msgstr ""
 
+msgctxt "model:rule_engine.parameter,name:"
+msgid "Rule Engine Parameter"
+msgstr "Paramètre du moteur de règle"
+
 msgctxt "model:rule_engine.run_tests.report,name:"
 msgid "Test Run Report"
 msgstr "Tester le rapport d'exécution"
@@ -641,6 +718,14 @@ msgstr "Info"
 msgctxt "selection:rule_engine.error,kind:"
 msgid "Warning"
 msgstr "Avertissement"
+
+msgctxt "selection:rule_engine.parameter,kind:"
+msgid "Keyword Argument"
+msgstr "Argument à l'appel"
+
+msgctxt "selection:rule_engine.parameter,kind:"
+msgid "Rule"
+msgstr "Règle"
 
 msgctxt "selection:rule_engine.tree_element,type:"
 msgid "Folder"

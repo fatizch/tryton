@@ -438,6 +438,14 @@ msgctxt "selection:contract.subscribed_option,status:"
 msgid "Terminated"
 msgstr "Terminé"
 
+msgctxt "selection:ins_product.letter_model,kind:"
+msgid "Contract Documents"
+msgstr "Documents du contrat"
+
+msgctxt "selection:party.contact_history,for_object_ref:"
+msgid "Contract"
+msgstr "Contrat"
+
 msgctxt "view:contract.address:"
 msgid "Contract Address"
 msgstr "Adresse"

@@ -275,11 +275,11 @@ msgid "account.account.type"
 msgstr "Type de compte"
 
 msgctxt "model:account.invoice.payment_term,name:"
-msgid "account.invoice.payment_term"
+msgid "Payment Term"
 msgstr "Conditions de paiement"
 
 msgctxt "model:account.invoice.payment_term.line,name:"
-msgid "account.invoice.payment_term.line"
+msgid "Payment Term Line"
 msgstr "Ligne de condition de paiement"
 
 msgctxt "model:account.tax,name:"

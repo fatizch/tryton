@@ -3344,6 +3344,14 @@ msgctxt "field:rule_engine,complementary_parameters:"
 msgid "Complementary Parameters"
 msgstr "Paramètres Complémentaires"
 
+msgctxt "field:rule_engine.parameter,rule_complementary_data:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:rule_engine.parameter,the_complementary_data:"
+msgid "Complementary Parameters"
+msgstr "Paramètres Complémentaires"
+
 msgctxt "help:ins_product.benefit_rule,coef_coverage_amount:"
 msgid "Add a multiplier to apply to the coverage amount"
 msgstr "Ajouter un coefficient multiplicateur au montant de couverture"
@@ -4607,6 +4615,10 @@ msgstr "Compléter"
 msgctxt "selection:offered.product,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
+
+msgctxt "selection:rule_engine.parameter,kind:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
 
 msgctxt "view:ins_product.attach_letter:"
 msgid "Attachment"

@@ -442,6 +442,10 @@ msgctxt "field:ins_contract.covered_data,option:"
 msgid "Subscribed Coverage"
 msgstr "Garantie Souscrite"
 
+msgctxt "field:ins_contract.covered_data,parent_covered_data:"
+msgid "Parent Covered Data"
+msgstr ""
+
 msgctxt "field:ins_contract.covered_data,possible_deductible_duration:"
 msgid "Possible Deductible Duration"
 msgstr "Franchises Possibles"
