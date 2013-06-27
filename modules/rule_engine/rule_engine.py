@@ -16,7 +16,6 @@ import pyflakes.messages
 
 from trytond.rpc import RPC
 
-from trytond.exceptions import UserError
 from trytond.modules.coop_utils import fields
 from trytond.modules.coop_utils.model import CoopSQL as ModelSQL
 from trytond.modules.coop_utils.model import CoopView as ModelView
@@ -459,7 +458,8 @@ class Rule(ModelView, ModelSQL):
         cls._error_messages.update({
                 'invalid_code': 'Your code has errors!',
                 'bad_rule_computation': 'An error occured in rule %s.'
-                'For more information, activate debug mode and see the logs',
+                'For more information, activate debug mode and see the logs'
+                '\n\nError info :\n%s',
         })
 
     @classmethod
@@ -550,9 +550,29 @@ class Rule(ModelView, ModelSQL):
             except CatchedRuleEngineError:
                 pass
                 the_result.result = None
-            except UserError:
-                raise
             except Exception, exc:
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                tmp = traceback.extract_tb(exc_traceback)
+                last_frame = tmp[-1]
+                if last_frame[2].startswith('fct_'):
+                    lineno = last_frame[1] - 3
+                    stack_info = '\n\n'
+                    stack_info += 'Error detected '
+                    'in rule definition line %d:\n' % lineno
+                    stack_info += '\n'
+                    for line_number, line in enumerate(
+                            self.code.split('\n'), 1):
+                        if (line_number >= lineno - 2 and
+                                line_number <= lineno + 2):
+                            if line_number == lineno:
+                                stack_info += \
+                                    '>>\t' + line + '\n'
+                            else:
+                                stack_info += \
+                                    '  \t' + line + '\n'
+                    stack_info += '\n'
+                    stack_info += str(exc)
+                    the_result.low_level_debug.append(stack_info)
                 if self.debug_mode:
                     with Transaction().new_cursor() as transaction:
                         RuleExecution = Pool().get('rule_engine.execution_log')
@@ -561,33 +581,16 @@ class Rule(ModelView, ModelSQL):
                         rule_execution.create_date = datetime.datetime.now()
                         rule_execution.user = Transaction().user
                         rule_execution.init_from_rule_result(the_result)
-                        exc_type, exc_value, exc_traceback = sys.exc_info()
-                        tmp = traceback.extract_tb(exc_traceback)
-                        last_frame = tmp[-1]
-                        if last_frame[2].startswith('fct__'):
-                            lineno = last_frame[1] - 3
-                            rule_execution.low_level_debug += '\n\n'
-                            rule_execution.low_level_debug += 'Error detected '
-                            'in rule definition line %d:\n' % lineno
-                            rule_execution.low_level_debug += '\n'
-                            for line_number, line in enumerate(
-                                    self.code.split('\n'), 1):
-                                if (line_number >= lineno - 2 and
-                                        line_number <= line_number + 2):
-                                    if line_number == lineno:
-                                        rule_execution.low_level_debug += \
-                                            '>>\t' + line + '\n'
-                                    else:
-                                        rule_execution.low_level_debug += \
-                                            '  \t' + line + '\n'
-                            rule_execution.low_level_debug += '\n'
-                            rule_execution.low_level_debug += str(exc)
                         rule_execution.errors += '\n' + (
                             coop_string.remove_invalid_char(self.name) +
                             ' - ' + str(exc))
                         rule_execution.save()
                         transaction.cursor.commit()
-                self.raise_user_error('bad_rule_computation', (self.name))
+                if debug_mode:
+                    the_result.result = str(exc)
+                    return the_result
+                self.raise_user_error('bad_rule_computation', (self.name,
+                        str(exc.args)))
         return the_result
 
     def on_change_context(self):
@@ -946,8 +949,8 @@ class TestCase(ModelView, ModelSQL):
     _rec_name = 'description'
 
     description = fields.Char('Description', required=True)
-    rule = fields.Many2One(
-        'rule_engine', 'Rule', required=True, ondelete='CASCADE')
+    rule = fields.Many2One('rule_engine', 'Rule', required=True,
+        ondelete='CASCADE')
     expected_result = fields.Char('Expected Result')
     test_values = fields.One2Many(
         'rule_engine.test_case.value', 'test_case', 'Values',
@@ -962,6 +965,13 @@ class TestCase(ModelView, ModelSQL):
     rule_text = fields.Function(
         fields.Text('Rule Text', states={'readonly': True}),
         'get_rule_text')
+
+    @classmethod
+    def default_rule_text(cls):
+        if 'rule_id' not in Transaction().context:
+            return ''
+        Rule = Pool().get('rule_engine')
+        return Rule(Transaction().context.get('rule_id')).code
 
     def get_rule_text(self, name):
         return self.rule.code
@@ -992,8 +1002,8 @@ class TestCase(ModelView, ModelSQL):
                 'low_debug': '',
                 'expected_result': result_value,
             }
-        # if test_result.has_errors:
-            # test_result.result = 'ERROR'
+        if test_result == {}:
+            return {}
         return {
             'result_value': test_result.print_result(),
             'result_info': '\n'.join(test_result.print_info()),
@@ -1018,13 +1028,6 @@ class TestCase(ModelView, ModelSQL):
                 self.expected_result)
         except:
             return False, str(sys.exc_info())
-
-    @classmethod
-    def default_rule(cls):
-        rule_id = Transaction().context.get('rule_id', None)
-        if not rule_id:
-            cls.raise_user_error('undefined_rule')
-        return rule_id
 
 
 class RunTestsReport(ModelView):
