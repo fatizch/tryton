@@ -811,6 +811,9 @@ class CoveredData(model.CoopSQL, model.CoopView):
             'ins_product.deductible_duration', None, None,
             'Possible Deductible Duration', states={'invisible': True}),
         'get_possible_deductible_duration')
+    parent_covered_data = fields.Function(
+        fields.Many2One('ins_contract.covered_data', 'Parent Covered Data'),
+        'get_parent_covered_data')
 
     @classmethod
     def default_status(cls):
@@ -832,7 +835,12 @@ class CoveredData(model.CoopSQL, model.CoopView):
 
     def init_from_option(self, option):
         self.option = option
-        self.start_date = option.start_date
+        #TODO : Ugly endorsment temporary hack to remove ASAP
+        endorsment_date = self.option.contract.temp_endorsment_date
+        if endorsment_date:
+            self.start_date = endorsment_date
+        else:
+            self.start_date = option.start_date
         self.end_date = option.end_date
         self.init_complementary_data()
 
@@ -924,12 +932,23 @@ class CoveredData(model.CoopSQL, model.CoopView):
             res = self.complementary_data
         res.update(self.covered_element.get_all_complementary_data(at_date))
         res.update(self.option.get_all_complementary_data(at_date))
+        if self.parent_covered_data:
+            res.update(self.parent_covered_data.get_all_complementary_data(
+                    at_date))
         return res
 
     def init_dict_for_rule_engine(self, args):
         args['data'] = self
+        args['deductible_duration'] = self.get_deductible_duration()
         self.covered_element.init_dict_for_rule_engine(args)
         self.option.init_dict_for_rule_engine(args)
+
+    def get_parent_covered_data(self, name):
+        if not self.covered_element.parent:
+            return None
+        for covered_data in self.covered_element.parent.covered_data:
+            if covered_data.option == self.option:
+                return covered_data.id
 
 
 class ManagementRole(model.CoopSQL, model.CoopView):

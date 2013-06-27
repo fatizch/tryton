@@ -235,6 +235,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             'policy_owner': Eval('current_policy_owner'),
             'start_date': Eval('start_date'),
             }, depends=['current_policy_owner'])
+    #temporary field to remove ASAP
+    temp_endorsment_date = fields.Date('Endorsment Date')
 
     @classmethod
     def __setup__(cls):
@@ -337,6 +339,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         cur_dict['contract'] = self
         cur_dict['appliable_conditions_date'] = self.appliable_conditions_date
         cur_dict['product'] = self.offered
+        cur_dict['subscriber'] = self.get_policy_owner()
 
     def get_product(self):
         return self.offered
@@ -449,7 +452,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
                 'calculated_complementary_datas', {
                     'date': self.start_date,
                     'appliable_conditions_date':
-                    self.appliable_conditions_date,
+                        self.appliable_conditions_date,
                     'contract': self,
                     'level': 'contract',
                     })[0]}
