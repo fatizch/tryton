@@ -394,8 +394,13 @@ class RuleEngineParameter(ModelView, ModelSQL):
         def debug_wrapper(func):
             def wrapper_func(*args, **kwargs):
                 context['__result__'].low_level_debug.append(
-                    'Entering %s (args = %s)' % (
-                        self.get_translated_technical_name(), str(args)))
+                    'Entering %s' % self.get_translated_technical_name())
+                if args:
+                    context['__result__'].low_level_debug.append(
+                        '\targs : %s' % str(args))
+                if kwargs:
+                    context['__result__'].low_level_debug.append(
+                        '\tkwargs : %s' % str(kwargs))
                 try:
                     result = func(*args, **kwargs)
                 except Exception, exc:
@@ -828,8 +833,13 @@ class TreeElement(ModelView, ModelSQL):
         def debug_wrapper(func):
             def wrapper_func(*args, **kwargs):
                 context['__result__'].low_level_debug.append(
-                    'Entering %s (args = %s)' % (
-                        self.translated_technical_name, str(args)))
+                    'Entering %s' % self.translated_technical_name)
+                if args:
+                    context['__result__'].low_level_debug.append(
+                        '\targs : %s' % str(args))
+                if kwargs:
+                    context['__result__'].low_level_debug.append(
+                        '\tkwargs : %s' % str(kwargs))
                 try:
                     result = func(*args, **kwargs)
                 except Exception, exc:
