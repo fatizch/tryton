@@ -400,12 +400,11 @@ class RuleEngineParameter(ModelView, ModelSQL):
                     result = func(*args, **kwargs)
                 except Exception, exc:
                     context['__result__'].errors.append(
-                        'Error in %s : %s' % (
+                        'ERROR in %s : %s' % (
                             self.get_translated_technical_name(), str(exc)))
                     raise
                 context['__result__'].low_level_debug.append(
-                    'Exiting %s (result = %s)' % (
-                        self.get_translated_technical_name(), str(result)))
+                    '\tresult = %s' % str(result))
                 return result
             return wrapper_func
         return debug_wrapper
@@ -835,12 +834,11 @@ class TreeElement(ModelView, ModelSQL):
                     result = func(*args, **kwargs)
                 except Exception, exc:
                     context['__result__'].errors.append(
-                        'Error in %s : %s' % (
+                        'ERROR in %s : %s' % (
                             self.translated_technical_name, str(exc)))
                     raise
                 context['__result__'].low_level_debug.append(
-                    'Exiting %s (result = %s)' % (
-                        self.translated_technical_name, str(result)))
+                    '\tresult = %s' % str(result))
                 return result
             return wrapper_func
 
