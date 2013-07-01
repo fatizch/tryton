@@ -9,6 +9,7 @@ def register():
     Pool.register(
         # from payment_rule
         PaymentRule,
+        PaymentRuleFeeRelation,
         PaymentRuleLine,
         # From file billing :
         PaymentMethod,

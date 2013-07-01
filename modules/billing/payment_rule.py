@@ -11,6 +11,7 @@ from trytond.modules.insurance_product.business_rule.pricing_rule import \
 
 __all__ = [
     'PaymentRuleLine',
+    'PaymentRuleFeeRelation',
     'PaymentRule',
     ]
 
@@ -231,6 +232,17 @@ class PaymentRuleLine(model.CoopSQL, model.CoopView):
             }
 
 
+class PaymentRuleFeeRelation(model.CoopSQL):
+    'Payment Rule - Fee relation'
+
+    __name__ = 'billing.payment_rule-fee-relation'
+
+    payment_rule = fields.Many2One('billing.payment_rule', 'Payment Rule',
+        required=True, ondelete='CASCADE')
+    fee = fields.Many2One('coop_account.fee_desc', 'Fee', required=True,
+        ondelete='RESTRICT')
+
+
 class PaymentRule(model.CoopSQL, model.CoopView):
     'Payment Rule'
 
@@ -250,6 +262,8 @@ class PaymentRule(model.CoopSQL, model.CoopView):
             'required': ~~Eval('with_sync_date')})
     start_lines = fields.One2Many('billing.payment_rule_line', 'payment_rule',
         'Start Lines')
+    appliable_fees = fields.Many2Many('billing.payment_rule-fee-relation',
+        'payment_rule', 'fee', 'Appliable fees')
 
     @classmethod
     def default_remaining_position(cls):

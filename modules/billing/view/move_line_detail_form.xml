@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<form string="Lines">
+  <label name="second_origin"/>
+  <field name="second_origin" colspan="3"/>
+  <label name="date"/>
+  <field name="date"/>
+  <label name="maturity_date"/>
+  <field name="maturity_date"/>
+  <label name="total_amount"/>
+  <field name="total_amount"/>
+  <label name="account"/>
+  <field name="account"/>
+  <label name="party"/>
+  <field name="party"/>
+</form>

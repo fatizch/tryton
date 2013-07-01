@@ -16,7 +16,8 @@
     <label name="force_line_at_start"/>
     <field name="force_line_at_start"/>
   </group>
-  <group id="lines" yexpand="1" yfill="1">
-    <field name="start_lines" colspan="4"/>
+  <group id="lines" yexpand="1" yfill="1" col="1">
+    <field name="start_lines"/>
+    <field name="appliable_fees"/>
   </group>
 </form>

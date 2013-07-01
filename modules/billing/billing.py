@@ -781,11 +781,19 @@ class Contract():
                 values['amount'] += sub_line.amount * convert_factor
                 values['base'] += amount
 
+        if payment_rule and payment_rule.appliable_fees:
+            for fee_desc in payment_rule.appliable_fees:
+                fee_line = fees[fee_desc.id]
+                fee_line['object'] = fee_desc
+                fee_line['to_recalculate'] = True
+                fee_line['amount'] = 0
+                fee_line['base'] = total_amount
+
         for type_, data in chain(
                 izip(repeat('tax'), taxes.itervalues()),
                 izip(repeat('fee'), fees.itervalues())):
             account = data['object'].get_account_for_billing()
-            line = lines[(None, account)]
+            line = lines[(data['object'], account)]
             line.party = self.subscriber
             line.account = account
             if data['to_recalculate']:
@@ -795,16 +803,21 @@ class Contract():
                     'apply_%s' % type_)(data['base'])
             else:
                 amount = data['amount']
+            line.second_origin = data['object']
             line.credit = currency.round(amount)
             total_amount += amount
 
         if billing_period.moves:
+            print utils.format_data(lines)
             for old_move in billing_period.moves:
                 if old_move.state == 'draft':
                     continue
                 for old_line in old_move.lines:
                     if old_line.account == self.subscriber.account_receivable:
                         continue
+                    print old_line.credit
+                    print old_line.debit
+                    print old_line.second_origin
                     line = lines[(old_line.second_origin, old_line.account)]
                     line.second_origin = old_line.second_origin
                     line.account = old_line.account
@@ -814,6 +827,7 @@ class Contract():
                     else:
                         line.credit += old_line.debit
                         total_amount += old_line.debit
+            print utils.format_data(lines)
             Move.delete(
                 [x for x in billing_period.moves if x.state == 'draft'])
 
@@ -853,10 +867,13 @@ class Contract():
         Transaction().cursor.commit()
         move = self.bill()
         if move and post:
-            Move.post([move])
             self.next_billing_date = date.add_day(
                 move.billing_period.end_date, 1)
             self.save()
+            if not move.lines:
+                Move.delete([move])
+            else:
+                Move.post([move])
 
     def generate_first_bill(self):
         if self.next_billing_date:

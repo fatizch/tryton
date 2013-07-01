@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<tree string="Scheduling">
+  <field name="maturity_date"/>
+  <field name="total_amount"/>
+</tree>
