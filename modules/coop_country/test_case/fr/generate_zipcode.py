@@ -2,10 +2,12 @@
 # -*- coding: utf-8 -*-
 import urllib
 import sys
+import csv
 from HTMLParser import HTMLParser
+import logging
 
 
-def get_cp(txtCommune=None, cdep=None, txtCP=None):
+def get_cp(txtCommune=None, cdep=None, txtCP=None, with_debug=False):
     #logging.info("looking for %s" % txtCommune)
     params = {'selCritere': 'CP'}
     if txtCommune:
@@ -32,6 +34,8 @@ def get_cp(txtCommune=None, cdep=None, txtCP=None):
     p = MyParser(cdep)
     p.feed(reponse)
     p.close()
+    # if with_debug:
+    #     print p.cp_found
     return p.cp_found
 
 
@@ -98,8 +102,101 @@ def write_cp_by_zipcode(to_file):
                         insee_cp.write("\n")
 
 
+def normalize_commune(art, ncc):
+    #logging.info("normalizing %s %s" % (art, ncc))
+    resu = None
+    if art:
+        resu = art.strip('(').strip(')').strip("'")
+    if resu:
+        resu = "%s %s" % (resu, ncc)
+    else:
+        resu = ncc
+    resu = resu.replace('-', ' ').replace("'", " ")
+    if resu.startswith('SAINT '):
+        resu = 'ST ' + resu[6:]
+    if resu.startswith('SAINTE '):
+        resu = 'STE ' + resu[7:]
+    return resu
+
+
+def write_cp(from_file, to_file):
+    logging.basicConfig(level=logging.INFO)
+    with open(to_file, 'w') as insee_cp:
+        with open(from_file) as insee:
+            first = True
+            for line in insee:
+                if first:
+                    first = False
+                    continue
+                splitted = line.split('\t')
+                dep = splitted[3]
+                com = splitted[4]
+                artmaj = splitted[8]
+                ncc = splitted[9]
+                txtCommune = normalize_commune(artmaj, ncc)
+                try:
+                    cp = get_cp(txtCommune, dep)
+                    #cp = get_cp('MARSEILLE', '13')
+                except:
+                    logging.info("Exception when searching CP for %s" %
+                        txtCommune)
+                    continue
+                cd_insee = dep + com
+#                if len(cp) > 1:
+#                    logging.warn("Plusieurs    CP")
+#                    logging.warn(cp)
+                if len(cp) == 0:
+                    logging.info("Impossible to find CP for %s in %s"
+                            % (txtCommune, dep))
+                for cur_list in cp:
+                    if cur_list[1] != txtCommune:
+                        logging.info("Searching: %s Found: %s CP: %s INSEE: %s"
+                            % (txtCommune, cur_list[1], cur_list[0], cd_insee))
+                    insee_cp.write("%s\t%s\t%s" % (cur_list[1], cur_list[0],
+                        cd_insee))
+                    insee_cp.write("\n")
+
+
 def test_CP():
-    print get_cp(txtCP='27630')
+    print get_cp(txtCommune='BOURG EN BRESSE', cdep='01', with_debug=True)
+
+
+def merge_zip_codes():
+    cur_dict = {}
+
+    reader2 = csv.reader(open('zipcode.csv', 'rb'), delimiter='\t')
+    for cur_line in reader2:
+        if not cur_line[1] in cur_dict:
+            cur_dict[cur_line[1]] = []
+        cur_dict[cur_line[1]].append(cur_line)
+
+    reader = csv.reader(open('communes.txt', 'rb'), delimiter='\t')
+    for cur_line in reader:
+        cur_line[1] = cur_line[1].strip(' ')
+        found = False
+        if not cur_line[1] in cur_dict:
+            cur_dict[cur_line[1]] = []
+        else:
+            for line in cur_dict[cur_line[1]]:
+                if line[0] == cur_line[0]:
+                    found = True
+                    break
+        if not found:
+            cur_dict[cur_line[1]].append(cur_line)
+
+    destination = open("zip_merged.csv", "w")
+    k = 0
+    for i in range(1000, 98900):
+        lines = cur_dict.get(str(i).zfill(5))
+        if i == 6000:
+            print i, lines
+        if lines:
+            for line in lines:
+                k += 1
+                destination.write('%s\t%s\t%s\n' % (line[0], line[1], 'CEDEX' in line[0]))
+                if i == 6000:
+                    print '%s\t%s\t%s\n' % (line[0], line[1], 'CEDEX' in line[0])
+    destination.close()
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
