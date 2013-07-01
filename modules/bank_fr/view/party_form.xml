@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/notebook" position="inside">
+        <page string="Bank accounts" id="bank_account">
+            <field name="bank_accounts" mode="form,tree"/>
+        </page>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='role']/group[@id='role_group']"
+        position="inside">
+        <label name="is_bank"/>
+        <field name="is_bank" xexpand="0" width="25"/>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='role']/notebook"
+        position="inside">
+        <page id="bank" string="Bank"
+            states="{'invisible': Bool(~Eval('is_bank'))}">
+            <field name="bank_role" mode="form"/>
+        </page>
+    </xpath>
+</data>

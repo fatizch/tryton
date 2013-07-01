@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+    <form>
+        <label name="bic"/>
+        <field name="bic"/>
+        <label name="bank_code"/>
+        <field name="bank_code"/>
+        <label name="branch_code"/>
+        <field name="branch_code"/>
+    </form>
