@@ -290,7 +290,7 @@ class PaymentRule(model.CoopSQL, model.CoopView):
             if final_date <= end_date:
                 dates.append({
                         'date': final_date,
-                        'remaining': False,
+                        'remaining': self.remaining_position == 'first_calc',
                         'freq_amount': 1,
                         'line': None})
                 last_date = final_date
