@@ -50,9 +50,13 @@ class CoveredElement():
     __name__ = 'ins_contract.covered_element'
     __metaclass__ = PoolMeta
 
+    is_health = fields.Function(
+        fields.Boolean('Is Health', states={'invisible': True}),
+        'get_is_health')
     health_complement = fields.Function(
         fields.One2Many('health.party_complement', None, 'Health Complement',
-            on_change_with=['party']),
+            on_change_with=['party'],
+            states={'invisible': ~Eval('is_health')}),
         'get_health_complement', 'set_health_complement')
 
     @classmethod
@@ -108,3 +112,6 @@ class CoveredElement():
                     action[2])
             elif action[0] == 'create':
                 Health_Complement.create(action[1])
+
+    def get_is_health(self, name):
+        return self.contract.is_health if self.contract else False
