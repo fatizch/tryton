@@ -68,3 +68,7 @@ class EndorsementProcessFinder(ProcessFinder):
 
     def search_main_object(self):
         return self.process_parameters.contract
+
+    def update_main_object(self, main_obj):
+        main_obj.temp_endorsment_date = self.process_parameters.date
+        super(EndorsementProcessFinder, self).update_main_object(main_obj)
