@@ -6,10 +6,8 @@
   <field name="date"/>
   <label name="maturity_date"/>
   <field name="maturity_date"/>
-  <label name="debit"/>
-  <field name="debit"/>
-  <label name="credit"/>
-  <field name="credit"/>
+  <label name="total_amount"/>
+  <field name="total_amount"/>
   <label name="account"/>
   <field name="account"/>
   <label name="party"/>

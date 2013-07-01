@@ -117,6 +117,9 @@ class MoveLine:
         'get_origin_name')
     second_origin_name = fields.Function(fields.Char('Second Origin Name'),
         'get_second_origin_name')
+    total_amount = fields.Function(
+        fields.Numeric('Total amount'),
+        'get_total_amount')
 
     def get_origin_name(self, name):
         if not (hasattr(self, 'origin') and self.origin):
@@ -127,6 +130,11 @@ class MoveLine:
         if not (hasattr(self, 'second_origin') and self.second_origin):
             return ''
         return self.second_origin.rec_name
+
+    def get_total_amount(self, name):
+        if self.account.kind == 'receivable':
+            return self.debit - self.credit
+        return self.credit - self.debit
 
     @classmethod
     def _get_second_origin(cls):
