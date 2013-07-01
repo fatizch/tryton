@@ -795,6 +795,7 @@ class Contract():
                     'apply_%s' % type_)(data['base'])
             else:
                 amount = data['amount']
+            line.second_origin = data['object']
             line.credit = currency.round(amount)
             total_amount += amount
 

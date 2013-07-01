@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<form string="Move" col="6">
+  <label name="state"/>
+  <field name="state"/>
+  <label name="contract"/>
+  <field name="contract"/>
+  <label name="post_date"/>
+  <field name="post_date"/>
+  <newline/>
+  <label name="total_amount"/>
+  <field name="total_amount"/>
+  <label name="tax_amount"/>
+  <field name="tax_amount"/>
+  <label name="fee_amount"/>
+  <field name="fee_amount"/>
+  <newline/>
+  <group id="schedule" colspan="6" yexpand="1" yfill="1">
+    <group id="details" colspan="2" col="1" yexpand="1" yfill="1">
+      <field name="coverage_details" mode="tree,form" view_ids="billing.move_line_detail_tree,billing.move_line_detail_form"/>
+      <field name="tax_details" mode="tree,form" view_ids="billing.move_line_detail_tree,billing.move_line_detail_form"/>
+      <field name="fee_details" mode="tree,form" view_ids="billing.move_line_detail_tree,billing.move_line_detail_form"/>
+    </group>
+    <field name="schedule" mode="tree" view_ids="billing.move_line_amount_date_tree"/>
+  </group>
+</form>
