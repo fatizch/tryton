@@ -487,6 +487,15 @@ class Loss(model.CoopSQL, model.CoopView):
             res = self.complementary_data
         return res
 
+    def init_dict_for_rule_engine(self, cur_dict):
+        cur_dict['loss'] = self
+        #this date is the one used for finding the good rule,
+        #so the rules that was effective when the loss occured
+        cur_dict['date'] = self.start_date
+        cur_dict['start_date'] = self.start_date
+        if self.end_date:
+            cur_dict['end_date'] = self.end_date
+
 
 class ClaimDeliveredService():
     'Claim Delivered Service'
@@ -538,27 +547,14 @@ class ClaimDeliveredService():
         return self.subscribed_service.get_contract()
 
     def get_covered_data(self):
+        #TODO : retrieve the good covered data
         for covered_data in self.subscribed_service.covered_data:
             return covered_data
 
     def init_dict_for_rule_engine(self, cur_dict):
-        #this date is the one used for finding the good rule,
-        #so the rules that was effective when the loss occured
-        cur_dict['date'] = self.loss.start_date
-        cur_dict['start_date'] = self.loss.start_date
-        if self.loss.end_date:
-            cur_dict['end_date'] = self.loss.end_date
-        cur_dict['coverage'] = self.subscribed_service.offered
-        cur_dict['loss'] = self.loss
-        cur_dict['option'] = self.subscribed_service
-        cur_dict['contract'] = self.get_contract()
-        cur_dict['appliable_conditions_date'] = \
-            cur_dict['contract'].appliable_conditions_date
         cur_dict['delivered_service'] = self
-        cur_dict['data'] = self.get_covered_data()
-        cur_dict['subscriber'] = self.get_contract().get_policy_owner()
-        cur_dict['deductible_duration'] = \
-            cur_dict['data'].get_deductible_duration()
+        self.loss.init_dict_for_rule_engine(cur_dict)
+        self.get_covered_data().init_dict_for_rule_engine(cur_dict)
 
     def get_local_currencies_used(self):
         res = []
@@ -687,7 +683,7 @@ class ClaimDeliveredService():
         res = {}
         if not utils.is_none(self, 'complementary_data'):
             res = self.complementary_data
-        res.update(self.subscribed_service.get_all_complementary_data(at_date))
+        res.update(self.get_covered_data().get_all_complementary_data(at_date))
         res.update(self.loss.get_all_complementary_data(at_date))
         return res
 
