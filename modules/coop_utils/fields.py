@@ -89,7 +89,7 @@ class One2ManyDomain(One2Many):
 
             def clean_domain(the_domain):
                 if the_domain[0] in ('OR', 'AND'):
-                    final_domain = the_domain[0]
+                    final_domain = [the_domain[0]]
                     for elem in the_domain[1:]:
                         good_domain = clean_domain(elem)
                         if not good_domain:
