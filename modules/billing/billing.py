@@ -867,13 +867,13 @@ class Contract():
         Transaction().cursor.commit()
         move = self.bill()
         if move and post:
+            self.next_billing_date = date.add_day(
+                move.billing_period.end_date, 1)
+            self.save()
             if not move.lines:
                 Move.delete([move])
             else:
                 Move.post([move])
-            self.next_billing_date = date.add_day(
-                move.billing_period.end_date, 1)
-            self.save()
 
     def generate_first_bill(self):
         if self.next_billing_date:
