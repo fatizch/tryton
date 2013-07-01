@@ -148,7 +148,7 @@ class Product():
         if product_line and product_line.amount:
             product_line.on_object = args['contract']
             result_line.add_detail_from_line(product_line)
-        return [result_line], product_errs
+        return [result_line] if result_line.amount else [], product_errs
 
     def give_me_total_price(self, args):
         # Total price is the sum of coverages price and Product price
