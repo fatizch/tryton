@@ -128,9 +128,11 @@ class CompensatedOption(model.CoopSQL, model.CoopView):
         cur_dict = {'date': self.start_date}
         self.init_dict_for_rule_engine(cur_dict)
         res = self.com_option.offered.get_result('commission', cur_dict)
+        if not res or not res[0] or not hasattr(res[0], 'result'):
+            return 0
         for price_line in self.subs_option.contract.prices:
             if price_line.on_object == self.subs_option.offered:
-                return res[0].result * price_line.amount
+                    return res[0].result * price_line.amount
 
     def get_currency(self):
         return self.com_option.currency
