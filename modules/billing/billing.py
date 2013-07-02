@@ -279,6 +279,31 @@ class PriceLine(model.CoopSQL, model.CoopView):
         elif self.master:
             return self.master.currency
 
+    def calculate_bill_contribution(self, work_set, period, currency):
+        number_of_days = date.number_of_days_between(*period)
+        price_line_days = self.get_number_of_days_at_date(period[0])
+        convert_factor = number_of_days / Decimal(price_line_days)
+        amount = self.amount * convert_factor
+        amount = currency.round(amount)
+        account = self.get_account_for_billing()
+        line = work_set['lines'][(self.on_object, account)]
+        line.second_origin = self.on_object
+        line.credit += amount
+        line.account = account
+        line.party = self.contract.subscriber
+        for type_, sub_lines, sub_line in chain(
+                izip(repeat('tax'), repeat(work_set['taxes']),
+                    self.tax_lines),
+                izip(repeat('fee'), repeat(work_set['fees']),
+                    self.fee_lines)):
+            desc = getattr(sub_line, '%s_desc' % type_)
+            values = sub_lines[desc.id]
+            values['object'] = desc
+            values['to_recalculate'] |= sub_line.to_recalculate
+            values['amount'] += sub_line.amount * convert_factor
+            values['base'] += amount
+        return line
+
 
 class BillingManager(model.CoopSQL, model.CoopView):
     'Billing Manager'
@@ -330,6 +355,13 @@ class BillingManager(model.CoopSQL, model.CoopView):
         policy_owner = (self.contract.get_policy_owner(self.start_date)
             if self.contract else None)
         return policy_owner.id if policy_owner else None
+
+    def get_payment_rule(self):
+        try:
+            payment_rule = self.payment_method.payment_rule
+        except:
+            payment_rule = None
+        return payment_rule
 
 
 class BillingPeriod(model.CoopSQL, model.CoopView):
@@ -704,19 +736,8 @@ class Contract():
                 ], limit=1)
         return journal
 
-    def bill(self, *period):
-        pool = Pool()
-        Date = pool.get('ir.date')
-        Move = pool.get('account.move')
-        Line = pool.get('account.move.line')
-        Period = pool.get('account.period')
-        BillingPeriod = pool.get('billing.period')
-
-        if not period:
-            period = self.next_billing_period()
-        if not period:
-            return
-        billing_date = period[0]
+    def get_or_create_billing_period(self, period):
+        BillingPeriod = Pool().get('billing.period')
         for billing_period in self.billing_periods \
                 if hasattr(self, 'billing_periods') else []:
             if (billing_period.start_date, billing_period.end_date) == period:
@@ -725,121 +746,106 @@ class Contract():
             billing_period = BillingPeriod(contract=self)
             billing_period.start_date, billing_period.end_date = period
             billing_period.save()
+        return billing_period
 
-        price_lines = self.create_price_list(*period)
+    def init_billing_info(self):
+        Line = Pool().get('account.move.line')
+        return {
+            'lines': defaultdict(lambda: Line(credit=0, debit=0)),
+            'total_amount': 0,
+            'taxes': defaultdict(
+                lambda: {'amount': 0, 'base': 0, 'to_recalculate': False}),
+            'fees': defaultdict(
+                lambda: {'amount': 0, 'base': 0, 'to_recalculate': False}),
+            }
 
-        self.init_billing_manager()
-        billing_manager = self.get_billing_manager(billing_date)
+    def create_billing_move(self, work_set):
+        Move = Pool().get('account.move')
+        Period = Pool().get('account.period')
 
-        assert billing_manager, 'Missing Billing Manager'
-
-        try:
-            payment_rule = billing_manager.payment_method.payment_rule
-        except:
-            payment_rule = None
-        currency = self.get_currency()
-
-        period_id = Period.find(self.company.id, date=billing_date)
-
+        period_id = Period.find(self.company.id, date=work_set['period'][0])
         move = Move(
             journal=self.get_journal(),
             period=period_id,
-            date=billing_date,
+            date=work_set['period'][0],
             origin=utils.convert_to_reference(self),
-            billing_period=billing_period,
+            billing_period=work_set['billing_period'],
             )
+        return move
 
-        lines = defaultdict(lambda: Line(credit=0, debit=0))
-        total_amount = 0
-        taxes = defaultdict(
-            lambda: {'amount': 0, 'base': 0, 'to_recalculate': False})
-        fees = defaultdict(
-            lambda: {'amount': 0, 'base': 0, 'to_recalculate': False})
-        for period, price_line in price_lines:
-            number_of_days = date.number_of_days_between(*period)
-            price_line_days = price_line.get_number_of_days_at_date(period[0])
-            convert_factor = number_of_days / Decimal(price_line_days)
-            amount = price_line.amount * convert_factor
-            amount = currency.round(amount)
-            account = price_line.get_account_for_billing()
+    def calculate_base_lines(self, work_set):
+        for period, price_line in work_set['price_lines']:
+            calculated_line = price_line.calculate_bill_contribution(
+                work_set, period, work_set['currency'])
+            work_set['total_amount'] += calculated_line.credit
 
-            line = lines[(price_line.on_object, account)]
-            line.second_origin = price_line.on_object
-            line.credit += amount
-            line.account = account
-            line.party = self.subscriber
-
-            total_amount += amount
-
-            for type_, sub_lines, sub_line in chain(
-                    izip(repeat('tax'), repeat(taxes), price_line.tax_lines),
-                    izip(repeat('fee'), repeat(fees), price_line.fee_lines)):
-                desc = getattr(sub_line, '%s_desc' % type_)
-                values = sub_lines[desc.id]
-                values['object'] = desc
-                values['to_recalculate'] |= sub_line.to_recalculate
-                values['amount'] += sub_line.amount * convert_factor
-                values['base'] += amount
-
-        if payment_rule and payment_rule.appliable_fees:
-            for fee_desc in payment_rule.appliable_fees:
-                fee_line = fees[fee_desc.id]
-                fee_line['object'] = fee_desc
-                fee_line['to_recalculate'] = True
-                fee_line['amount'] = 0
-                fee_line['base'] = total_amount
-
+    def calculate_final_taxes_and_fees(self, work_set):
         for type_, data in chain(
-                izip(repeat('tax'), taxes.itervalues()),
-                izip(repeat('fee'), fees.itervalues())):
+                izip(repeat('tax'), work_set['taxes'].itervalues()),
+                izip(repeat('fee'), work_set['fees'].itervalues())):
             account = data['object'].get_account_for_billing()
-            line = lines[(data['object'], account)]
+            line = work_set['lines'][(data['object'], account)]
             line.party = self.subscriber
             line.account = account
             if data['to_recalculate']:
                 good_version = data['object'].get_version_at_date(
-                    period[0])
+                    work_set['period'][0])
                 amount = getattr(good_version,
                     'apply_%s' % type_)(data['base'])
             else:
                 amount = data['amount']
             line.second_origin = data['object']
-            line.credit = currency.round(amount)
-            total_amount += amount
+            line.credit = work_set['currency'].round(amount)
+            work_set['total_amount'] += amount
 
-        if billing_period.moves:
-            print utils.format_data(lines)
-            for old_move in billing_period.moves:
-                if old_move.state == 'draft':
+    def calculate_billing_fees(self, work_set):
+        if not work_set['payment_rule']:
+            return
+        for fee_desc in work_set['payment_rule'].appliable_fees:
+            fee_line = work_set['fees'][fee_desc.id]
+            fee_line['object'] = fee_desc
+            fee_line['to_recalculate'] = True
+            fee_line['amount'] = 0
+            fee_line['base'] = work_set['total_amount']
+
+    def compensate_existing_moves_on_period(self, work_set):
+        if not work_set['billing_period'].moves:
+            return
+        Move = Pool().get('account.move')
+        for old_move in work_set['billing_period'].moves:
+            if old_move.state == 'draft':
+                continue
+            for old_line in old_move.lines:
+                if old_line.account == self.subscriber.account_receivable:
                     continue
-                for old_line in old_move.lines:
-                    if old_line.account == self.subscriber.account_receivable:
-                        continue
-                    print old_line.credit
-                    print old_line.debit
-                    print old_line.second_origin
-                    line = lines[(old_line.second_origin, old_line.account)]
-                    line.second_origin = old_line.second_origin
-                    line.account = old_line.account
-                    if old_line.credit:
-                        line.credit -= old_line.credit
-                        total_amount -= old_line.credit
-                    else:
-                        line.credit += old_line.debit
-                        total_amount += old_line.debit
-            print utils.format_data(lines)
-            Move.delete(
-                [x for x in billing_period.moves if x.state == 'draft'])
+                line = work_set['lines'][
+                    (old_line.second_origin, old_line.account)]
+                line.second_origin = old_line.second_origin
+                line.account = old_line.account
+                if old_line.credit:
+                    line.credit -= old_line.credit
+                    work_set['total_amount'] -= old_line.credit
+                else:
+                    line.credit += old_line.debit
+                    work_set['total_amount'] += old_line.debit
+        Move.delete([
+                x for x in work_set['billing_period'].moves
+                if x.state == 'draft'])
 
-        for line in lines.itervalues():
+    def apply_payment_rule(self, work_set):
+        Line = Pool().get('account.move.line')
+        Date = Pool().get('ir.date')
+        for line in work_set['lines'].itervalues():
             if line.credit < 0:
                 line.credit, line.debit = 0, -line.credit
 
-        if total_amount >= 0 and payment_rule:
-            term_lines = payment_rule.compute(billing_date, period[1],
-                total_amount, currency)
+        if work_set['total_amount'] >= 0 and work_set['payment_rule']:
+            term_lines = work_set['payment_rule'].compute(
+                work_set['period'][0], work_set['period'][1],
+                work_set['total_amount'], work_set['currency'])
         else:
-            term_lines = [(Date.today(), currency.round(total_amount))]
+            term_lines = [(Date.today(), work_set['currency'].round(
+                        work_set['total_amount']))]
         counterparts = []
         for term_date, amount in term_lines:
             counterpart = Line()
@@ -853,10 +859,62 @@ class Contract():
             counterpart.party = self.subscriber
             counterpart.maturity_date = term_date
             counterparts.append(counterpart)
+        work_set['counterparts'] = counterparts
 
-        move.lines = lines.values() + counterparts
-        move.save()
-        return move
+    def bill(self, *period):
+        # Performs billing operations on the contract. It is possible to force
+        # the period to work on
+
+        # Get the period if it is not provided
+        if not period:
+            period = self.next_billing_period()
+        if not period:
+            return
+
+        # Get the billing_manager and the billing period
+        self.init_billing_manager()
+        billing_manager = self.get_billing_manager(period[0])
+        assert billing_manager, 'Missing Billing Manager'
+        billing_period = self.get_or_create_billing_period(period)
+
+        # Get the appliable prices ont the period. This is a list of tuples
+        # of the form ((start_date, end_date), PriceLine)
+        price_lines = self.create_price_list(*period)
+
+        # Init the work_set which will be used
+        currency = self.get_currency()
+        work_set = self.init_billing_info()
+        work_set['price_lines'] = price_lines
+        work_set['payment_rule'] = billing_manager.get_payment_rule()
+        work_set['period'] = period
+        work_set['currency'] = currency
+        work_set['billing_period'] = billing_period
+        work_set['move'] = self.create_billing_move(work_set)
+
+        # Build the basic lines which represents the total amount due on the
+        # period. Those lines include product / coverage rates, taxes and fees
+        self.calculate_base_lines(work_set)
+
+        # Add billing fees if needed
+        self.calculate_billing_fees(work_set)
+
+        # Calculate final value of taxes and fees. The later the better to
+        # avoid rounding problems. Some may have been already calculated in the
+        # prices lines for complexity reasons
+        self.calculate_final_taxes_and_fees(work_set)
+
+        # Compensate for previous moves on the period. The current lines
+        # account for all must be paid on the period, we need to remove what
+        # has already been paid (or at least billed)
+        self.compensate_existing_moves_on_period(work_set)
+
+        # Schedule the payments depending on the chosen rule
+        self.apply_payment_rule(work_set)
+
+        work_set['move'].lines = work_set['lines'].values() + \
+            work_set['counterparts']
+        work_set['move'].save()
+        return work_set['move']
 
     def bill_and_post(self, post=True):
         Move = Pool().get('account.move')
