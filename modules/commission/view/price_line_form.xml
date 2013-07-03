@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<data>
+  <xpath expr="/form/group[@id='General']/group[@id='estimated_taxes']" position="after">
+    <group id="void" colspan="2">
+    </group>
+    <label name="estimated_wo_com"/>
+    <group id="estimated_wo_com">
+      <field name="estimated_wo_com"  xexpand="0"/>
+      <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
+    <label name="estimated_com"/>
+    <group id="estimated_com">
+      <field name="estimated_com"  xexpand="0"/>
+      <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
+  </xpath>
+  <xpath expr="/form/group[@id='special_lines']/field[@name='fee_lines']" position="after">
+    <field name="com_lines" yfill="1" yexpand="1"/>
+  </xpath>
+</data>

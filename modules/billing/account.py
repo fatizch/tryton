@@ -16,6 +16,9 @@ class Move:
     total_amount = fields.Function(
         fields.Numeric('Total due amount'),
         'get_basic_amount', searcher='search_basic_amount')
+    wo_tax_amount = fields.Function(
+        fields.Numeric('Total Amount w/o taxes'),
+        'get_wo_tax_amount')
     tax_amount = fields.Function(
         fields.Numeric('Tax amount'),
         'get_basic_amount', searcher='search_basic_amount')
@@ -29,7 +32,11 @@ class Move:
         domain=[('account.kind', '=', 'receivable')])
     coverage_details = fields.One2ManyDomain('account.move.line', 'move',
         'Details', domain=[('account.kind', '!=', 'receivable'), ['OR',
-                ('second_origin', 'like', 'offered.coverage,%'),
+                ['AND',
+                    ('second_origin', 'like', 'offered.coverage,%'),
+                    ('second_origin.kind', '=', 'insurance',
+                        'offered.coverage')
+                ],
                 ('second_origin', 'like', 'offered.product,%')]])
     tax_details = fields.One2ManyDomain('account.move.line', 'move', 'Taxes',
         domain=[('account.kind', '!=', 'receivable'),
@@ -106,6 +113,9 @@ class Move:
         if not self.origin.__name__ == 'contract.contract':
             return None
         return self.origin.id
+
+    def get_wo_tax_amount(self, name):
+        return self.total_amount - self.tax_amount
 
 
 class MoveLine:

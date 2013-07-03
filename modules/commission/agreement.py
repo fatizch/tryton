@@ -73,6 +73,22 @@ class CommissionOption():
             good_comp_option.start_date = self.start_date
             self.save()
 
+    def get_com_options_and_rates_at_date(self, at_date):
+        for commission in self.commissions:
+            if commission.start_date > at_date:
+                continue
+            if commission.end_date and commission.end_date < at_date:
+                continue
+            com_rate = commission.get_com_rate()
+            if not com_rate:
+                continue
+            yield((commission, com_rate[0]))
+
+    def get_account_for_billing(self):
+        if self.coverage_kind != 'commission':
+            return self.offered.get_account_for_billing()
+        return self.current_policy_owner.account_payable
+
 
 class CompensatedOption(model.CoopSQL, model.CoopView):
     'Compensated Option'
@@ -124,15 +140,20 @@ class CompensatedOption(model.CoopSQL, model.CoopView):
         args['comp_option'] = self
         self.com_option.init_dict_for_rule_engine(args)
 
-    def get_com_amount(self, name):
+    def get_com_rate(self):
         cur_dict = {'date': self.start_date}
         self.init_dict_for_rule_engine(cur_dict)
         res = self.com_option.offered.get_result('commission', cur_dict)
-        if not res or not res[0] or not hasattr(res[0], 'result'):
+        return res
+
+    def get_com_amount(self, name):
+        com_rate = self.get_com_rate()
+        if not com_rate or not com_rate[0] or not hasattr(
+                com_rate[0], 'result'):
             return 0
         for price_line in self.subs_option.contract.prices:
             if price_line.on_object == self.subs_option.offered:
-                    return res[0].result * price_line.amount
+                return com_rate[0].result * price_line.amount
 
     def get_currency(self):
         return self.com_option.currency

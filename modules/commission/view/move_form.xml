@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<data>
+  <xpath expr="/form/field[@name='tax_amount']" position="after">
+    <group id="void" colspan="2">
+    </group>
+    <label name="wo_com_amount"/>
+    <field name="wo_com_amount"/>
+    <label name="com_amount"/>
+    <field name="com_amount"/>
+  </xpath>
+  <xpath expr="/form/group[@id='lines']/group[@id='details']/field[@name='coverage_details']" position="after">
+    <field name="com_details" mode="tree,form" view_ids="billing.move_line_detail_tree,billing.move_line_detail_form"/>
+  </xpath>
+</data>

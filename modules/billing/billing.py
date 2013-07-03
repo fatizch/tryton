@@ -120,6 +120,9 @@ class PriceLine(model.CoopSQL, model.CoopView):
     end_date = fields.Date('End Date')
     all_lines = fields.One2Many('billing.price_line', 'master', 'Lines',
         readonly=True, loading='lazy')
+    estimated_total = fields.Function(
+        fields.Numeric('Estimated total'),
+        'get_estimated_total')
     estimated_taxes = fields.Function(
         fields.Numeric('Estimated Taxes'), 'get_estimated_taxes')
     estimated_fees = fields.Function(
@@ -138,6 +141,9 @@ class PriceLine(model.CoopSQL, model.CoopView):
         fields.Char('Currency Symbol'),
         'get_currency_symbol')
 
+    def get_estimated_total(self, name):
+        return self.amount + self.estimated_fees + self.estimated_taxes
+
     def get_short_name(self, name):
         if self.on_object:
             return self.on_object.get_name_for_billing()
@@ -148,6 +154,15 @@ class PriceLine(model.CoopSQL, model.CoopView):
             self.name = ''
         self.amount = 0
         self.all_lines = []
+
+    @classmethod
+    def must_create_detail(cls, detail):
+        if detail.on_object:
+            if detail.on_object.__name__ == 'ins_product.pricing_component':
+                if detail.on_object.kind in ('tax', 'fee'):
+                    return False
+                return True
+        return True
 
     def get_good_on_object(self, line):
         if not line.on_object:
@@ -162,7 +177,7 @@ class PriceLine(model.CoopSQL, model.CoopView):
             return None
         return target
 
-    def init_from_result_line(self, line):
+    def init_from_result_line(self, line, build_details=False):
         if not line:
             return
         PriceLineModel = Pool().get(self.__name__)
@@ -173,9 +188,7 @@ class PriceLine(model.CoopSQL, model.CoopView):
         self.frequency = line.frequency if hasattr(line, 'frequency') else ''
         self.contract = line.contract if hasattr(line, 'contract') else None
         for detail in line.details:
-            if (detail.on_object and detail.on_object.__name__ ==
-                    'ins_product.pricing_component' and
-                    detail.on_object.kind in ('tax', 'fee')):
+            if not self.must_create_detail(detail):
                 continue
             detail_line = PriceLineModel()
             detail_line.init_from_result_line(detail)
@@ -184,24 +197,27 @@ class PriceLine(model.CoopSQL, model.CoopView):
             self.amount = line.amount
         else:
             self.amount = sum(map(lambda x: x.amount, self.all_lines))
+        if build_details:
+            self.build_tax_lines(line)
+            self.build_fee_lines(line)
+
+    def get_tax_details(self, line, taxes):
+        for elem in line.details:
+            if (elem.on_object and elem.on_object.__name__ ==
+                    'ins_product.pricing_component' and
+                    elem.on_object.kind == 'tax'):
+                if elem.on_object.tax.id in taxes:
+                    taxes[elem.on_object.tax.id].append(elem)
+                else:
+                    taxes[elem.on_object.tax.id] = [elem]
+            else:
+                self.get_tax_details(elem, taxes)
 
     def build_tax_lines(self, line):
-        def get_tax_details(line, taxes):
-            for elem in line.details:
-                if (elem.on_object and elem.on_object.__name__ ==
-                        'ins_product.pricing_component' and
-                        elem.on_object.kind == 'tax'):
-                    if elem.on_object.tax.id in taxes:
-                        taxes[elem.on_object.tax.id].append(elem)
-                    else:
-                        taxes[elem.on_object.tax.id] = [elem]
-                else:
-                    get_tax_details(elem, taxes)
-
         tax_details = {}
         if not (hasattr(self, 'tax_lines') and self.tax_lines):
             self.tax_lines = []
-        get_tax_details(line, tax_details)
+        self.get_tax_details(line, tax_details)
         TaxDesc = Pool().get('coop_account.tax_desc')
         TaxRelation = Pool().get('billing.price_line-tax-relation')
         for tax_id, tax_lines in tax_details.iteritems():
@@ -212,24 +228,24 @@ class PriceLine(model.CoopSQL, model.CoopView):
             tax_relation.amount = sum(map(lambda x: x.amount, tax_lines))
             self.tax_lines.append(tax_relation)
 
-    def build_fee_lines(self, line):
-        def get_fee_details(line, fees):
-            for elem in line.details:
-                if (elem.on_object and elem.on_object.__name__ ==
-                        'ins_product.pricing_component' and
-                        elem.on_object.kind == 'fee'):
-                    if elem.on_object.fee.id in fees:
-                        fees[elem.on_object.fee.id].append(elem)
-                    else:
-                        fees[elem.on_object.fee.id] = [elem]
+    def get_fee_details(self, line, fees):
+        for elem in line.details:
+            if (elem.on_object and elem.on_object.__name__ ==
+                    'ins_product.pricing_component' and
+                    elem.on_object.kind == 'fee'):
+                if elem.on_object.fee.id in fees:
+                    fees[elem.on_object.fee.id].append(elem)
                 else:
-                    for detail in elem.details:
-                        get_fee_details(detail, fees)
+                    fees[elem.on_object.fee.id] = [elem]
+            else:
+                for detail in elem.details:
+                    self.get_fee_details(detail, fees)
 
+    def build_fee_lines(self, line):
         fee_details = {}
         if not (hasattr(self, 'fee_lines') and self.fee_lines):
             self.fee_lines = []
-        get_fee_details(line, fee_details)
+        self.get_fee_details(line, fee_details)
         FeeDesc = Pool().get('coop_account.fee_desc')
         FeeRelation = Pool().get('billing.price_line-fee-relation')
         for fee_id, fee_lines in fee_details.iteritems():
@@ -279,12 +295,15 @@ class PriceLine(model.CoopSQL, model.CoopView):
         elif self.master:
             return self.master.currency
 
-    def calculate_bill_contribution(self, work_set, period, currency):
+    def get_base_amount_for_billing(self):
+        return self.amount
+
+    def calculate_bill_contribution(self, work_set, period):
         number_of_days = date.number_of_days_between(*period)
         price_line_days = self.get_number_of_days_at_date(period[0])
         convert_factor = number_of_days / Decimal(price_line_days)
-        amount = self.amount * convert_factor
-        amount = currency.round(amount)
+        amount = self.get_base_amount_for_billing() * convert_factor
+        amount = work_set['currency'].round(amount)
         account = self.get_account_for_billing()
         line = work_set['lines'][(self.on_object, account)]
         line.second_origin = self.on_object
@@ -382,9 +401,7 @@ class BillingPeriod(model.CoopSQL, model.CoopView):
                 })
 
     def get_rec_name(self, name):
-        ref = (self.contract.contract_number
-            if self.contract.contract_number else self.contract.rec_name)
-        return '%s (%s - %s)' % (ref, self.start_date, self.end_date)
+        return '%s - %s' % (self.start_date, self.end_date)
 
     @classmethod
     def search_rec_name(cls, name, clause):
@@ -681,9 +698,7 @@ class Contract():
             oldest = by_dates[max_date] if max_date else []
         for price in prices:
             price_line = PriceLine()
-            price_line.init_from_result_line(price)
-            price_line.build_tax_lines(price)
-            price_line.build_fee_lines(price)
+            price_line.init_from_result_line(price, True)
             try:
                 price_line.end_date = dates[dates.index(price_line.start_date)
                     + 1] + datetime.timedelta(days=-1)
@@ -748,7 +763,7 @@ class Contract():
             billing_period.save()
         return billing_period
 
-    def init_billing_info(self):
+    def init_billing_work_set(self):
         Line = Pool().get('account.move.line')
         return {
             'lines': defaultdict(lambda: Line(credit=0, debit=0)),
@@ -776,7 +791,7 @@ class Contract():
     def calculate_base_lines(self, work_set):
         for period, price_line in work_set['price_lines']:
             calculated_line = price_line.calculate_bill_contribution(
-                work_set, period, work_set['currency'])
+                work_set, period)
             work_set['total_amount'] += calculated_line.credit
 
     def calculate_final_taxes_and_fees(self, work_set):
@@ -883,7 +898,7 @@ class Contract():
 
         # Init the work_set which will be used
         currency = self.get_currency()
-        work_set = self.init_billing_info()
+        work_set = self.init_billing_work_set()
         work_set['price_lines'] = price_lines
         work_set['payment_rule'] = billing_manager.get_payment_rule()
         work_set['period'] = period

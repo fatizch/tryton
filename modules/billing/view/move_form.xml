@@ -9,12 +9,16 @@
   <newline/>
   <label name="total_amount"/>
   <field name="total_amount"/>
+  <label name="wo_tax_amount"/>
+  <field name="wo_tax_amount"/>
   <label name="tax_amount"/>
   <field name="tax_amount"/>
+  <group id="void" colspan="2">
+  </group>
   <label name="fee_amount"/>
   <field name="fee_amount"/>
   <newline/>
-  <group id="schedule" colspan="6" yexpand="1" yfill="1">
+  <group id="lines" colspan="6" yexpand="1" yfill="1">
     <group id="details" colspan="2" col="1" yexpand="1" yfill="1">
       <field name="coverage_details" mode="tree,form" view_ids="billing.move_line_detail_tree,billing.move_line_detail_form"/>
       <field name="tax_details" mode="tree,form" view_ids="billing.move_line_detail_tree,billing.move_line_detail_form"/>

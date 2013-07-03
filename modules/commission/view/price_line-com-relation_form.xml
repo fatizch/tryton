@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<form string="Com Line">
+  <label name="com_subscribed"/>
+  <field name="com_subscribed"/>
+  <label name="amount"/>
+  <field name="amount"/>
+</form>

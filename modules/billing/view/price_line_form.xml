@@ -1,27 +1,31 @@
 <?xml version="1.0"?>
 <form string="Price Line" col="2">
-  <group id="General" xexpand="1" xfill="1" colspan="2">
+  <group id="General" xexpand="1" xfill="1" colspan="2" col="6">
     <label name="start_date"/>
     <field name="start_date" xexpand="1"/>
     <label name="end_date"/>
     <field name="end_date" xexpand="1"/>
-    <newline/>
-    <label name="amount"/>
-    <group id="amount">
-      <field name="amount" xexpand="0"/>
-      <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
-    </group>
     <label name="frequency"/>
     <field name="frequency"/>
     <newline/>
-    <label name="estimated_fees"/>
-    <group id="estimated_fees">
-      <field name="estimated_fees"  xexpand="0"/>
+    <label name="estimated_total"/>
+    <group id="estimated_total">
+      <field name="estimated_total" xexpand="0"/>
+      <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
+    <label name="amount" string="Amount w/o taxes"/>
+    <group id="amount">
+      <field name="amount" xexpand="0"/>
       <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
     </group>
     <label name="estimated_taxes"/>
     <group id="estimated_taxes">
       <field name="estimated_taxes" xexpand="0"/>
+      <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
+    <label name="estimated_fees"/>
+    <group id="estimated_fees">
+      <field name="estimated_fees"  xexpand="0"/>
       <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
     </group>
   </group>

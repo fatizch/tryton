@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<data>
+  <xpath expr="/tree/field[@name='fee_amount']" position="after">
+    <field name="com_amount"/>
+  </xpath>
+</data>

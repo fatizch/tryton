@@ -3,6 +3,7 @@
   <field name="billing_period"/>
   <field name="post_date"/>
   <field name="total_amount"/>
+  <field name="wo_tax_amount"/>
   <field name="tax_amount"/>
   <field name="fee_amount"/>
 </tree>
