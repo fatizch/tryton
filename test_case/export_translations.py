@@ -30,6 +30,9 @@ def launch_proteus_test_case(test_config_file):
     proteus_tools.get_config(cfg_dict)
     modules = proteus_tools.get_modules_to_update(cfg_dict['modules'])
     for cur_module in modules:
+        if cur_module == 'coop_translation':
+            #Manual translations to override tryton translations
+            continue
         print '=' * 80 + '\n'
         cur_path = os.path.abspath(
             os.path.join(DIR, '..', 'modules', cur_module))
@@ -51,8 +54,7 @@ def un_fuzzy_translation(src=None, module=None):
 
 
 def update_views(test_config_file):
-    cfg = proteus_tools.get_config(
-        proteus_tools.get_test_cfg(test_config_file))
+    proteus_tools.get_config(proteus_tools.get_test_cfg(test_config_file))
     View = Model.get('ir.ui.view')
     View.write([x.id for x in View.find([])], {}, {})
 

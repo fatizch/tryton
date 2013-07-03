@@ -1,0 +1,13 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "model:ir.action,name:party.act_party_form"
+msgid "Parties"
+msgstr "Acteurs"
+
+
+msgctxt "model:ir.ui.menu,name:party.menu_party_form"
+msgid "Parties"
+msgstr "Acteurs"
+
