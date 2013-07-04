@@ -1,23 +1,26 @@
 <?xml version="1.0"?>
 <form string="Move" col="6">
-  <label name="state"/>
-  <field name="state"/>
-  <label name="contract"/>
-  <field name="contract"/>
-  <label name="post_date"/>
-  <field name="post_date"/>
-  <newline/>
-  <label name="total_amount"/>
-  <field name="total_amount"/>
-  <label name="wo_tax_amount"/>
-  <field name="wo_tax_amount"/>
-  <label name="tax_amount"/>
-  <field name="tax_amount"/>
-  <group id="void" colspan="2">
+  <group id="amount" colspan="4">
+    <label name="wo_fee_amount"/>
+    <field name="wo_fee_amount"/>
+    <label name="fee_amount"/>
+    <field name="fee_amount"/>
+    <label name="wo_tax_amount"/>
+    <field name="wo_tax_amount"/>
+    <label name="tax_amount"/>
+    <field name="tax_amount"/>
+    <label name="total_amount"/>
+    <field name="total_amount"/>
+    <newline/>
   </group>
-  <label name="fee_amount"/>
-  <field name="fee_amount"/>
-  <newline/>
+  <group id="info" colspan="2" col="2" yexpand="0">
+    <label name="state"/>
+    <field name="state"/>
+    <label name="post_date"/>
+    <field name="post_date"/>
+    <label name="contract"/>
+    <field name="contract"/>
+  </group>
   <group id="lines" colspan="6" yexpand="1" yfill="1">
     <group id="details" colspan="2" col="1" yexpand="1" yfill="1">
       <field name="coverage_details" mode="tree,form" view_ids="billing.move_line_detail_tree,billing.move_line_detail_form"/>

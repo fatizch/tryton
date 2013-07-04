@@ -22,6 +22,9 @@ class Move:
     tax_amount = fields.Function(
         fields.Numeric('Tax amount'),
         'get_basic_amount', searcher='search_basic_amount')
+    wo_fee_amount = fields.Function(
+        fields.Numeric('Amount w/o fees'),
+        'get_wo_fee_amount')
     fee_amount = fields.Function(
         fields.Numeric('Fee amount'),
         'get_basic_amount', searcher='search_basic_amount')
@@ -116,6 +119,9 @@ class Move:
 
     def get_wo_tax_amount(self, name):
         return self.total_amount - self.tax_amount
+
+    def get_wo_fee_amount(self, name):
+        return self.wo_tax_amount - self.fee_amount
 
 
 class MoveLine:
