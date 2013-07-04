@@ -144,8 +144,8 @@ class Contract():
             line.party = data['object'].current_policy_owner
             line.account = account
             line.second_origin = data['object'].offered
-            amount = data['amount']
-            line.credit = work_set['currency'].round(amount)
+            amount = work_set['currency'].round(data['amount'])
+            line.credit += amount
             work_set['total_amount'] += amount
 
     def calculate_final_taxes_and_fees(self, work_set):

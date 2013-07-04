@@ -325,6 +325,7 @@ class PriceLine(model.CoopSQL, model.CoopView):
         line = work_set['lines'][(self.on_object, account)]
         line.second_origin = self.on_object
         line.credit += amount
+        work_set['total_amount'] += amount
         line.account = account
         line.party = self.contract.subscriber
         for type_, sub_lines, sub_line in chain(
@@ -845,9 +846,7 @@ class Contract():
 
     def calculate_base_lines(self, work_set):
         for period, price_line in work_set['price_lines']:
-            calculated_line = price_line.calculate_bill_contribution(
-                work_set, period)
-            work_set['total_amount'] += calculated_line.credit
+            price_line.calculate_bill_contribution(work_set, period)
 
     def calculate_final_taxes_and_fees(self, work_set):
         for type_, data in chain(
@@ -892,7 +891,6 @@ class Contract():
                     (old_line.second_origin, old_line.account)]
                 line.second_origin = old_line.second_origin
                 line.account = old_line.account
-                line.party = old_line.party
                 if old_line.credit:
                     line.credit -= old_line.credit
                     work_set['total_amount'] -= old_line.credit
