@@ -9,6 +9,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateTransition, StateView, Button
 from trytond.pyson import Eval, If, Date
+from trytond.rpc import RPC
 
 from trytond.modules.coop_utils import model, fields, utils, date, coop_string
 from trytond.modules.coop_utils import export
@@ -64,11 +65,27 @@ class PaymentMethod(model.CoopSQL, model.CoopView):
         ondelete='RESTRICT', required=True)
     payment_mode = fields.Selection(PAYMENT_MODES, 'Payment Mode',
         required=True)
+    allowed_payment_dates = fields.Char('Allowed Payment Dates',
+        states={'invisible': Eval('payment_mode', '') != 'direct_debit'},
+        help='A list of comma-separated numbers that resolves to the list of'
+        'allowed days of the month eligible for direct debit.\n\n'
+        'An empty list means that all dates are allowed')
 
     def on_change_with_code(self):
         if self.code:
             return self.code
         return coop_string.remove_blank_and_invalid_char(self.name)
+
+    def get_rule(self):
+        return self.payment_rule
+
+    def get_allowed_date_values(self):
+        if not self.payment_mode == 'direct_debit':
+            return [('', '')]
+        if not self.allowed_payment_dates:
+            return [(str(x), '%02d' % x) for x in xrange(1, 32)]
+        return [(str(x), '%02d' % int(x)) for x in
+            self.allowed_payment_dates.split(',')]
 
 
 class PriceLineTaxRelation(model.CoopSQL, model.CoopView):
@@ -340,7 +357,7 @@ class BillingManager(model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     payment_method = fields.Many2One('billing.payment_method',
-        'Payment Method')
+        'Payment Method', on_change=['payment_method', 'payment_date'])
     payment_mode = fields.Function(
         fields.Char('Payment Mode', states={'invisible': True},
             on_change_with=['payment_method']),
@@ -355,15 +372,37 @@ class BillingManager(model.CoopSQL, model.CoopView):
         states={'invisible': Eval('payment_mode') != 'direct_debit'},
         domain=[('party', '=', Eval('policy_owner'))],
         depends=['policy_owner'])
+    payment_date_selector = fields.Function(
+        fields.Selection('get_allowed_payment_dates',
+            'Payment Date', selection_change_with=['payment_method'],
+            states={'invisible': Eval('payment_mode', '') != 'direct_debit'},
+            on_change=['payment_date_selector']),
+        'get_payment_date_selector', 'setter_void')
+    payment_date = fields.Integer('Payment Date', states={'invisible': True})
 
     @classmethod
     def __setup__(cls):
         super(BillingManager, cls).__setup__()
         cls._order.insert(0, ('start_date', 'ASC'))
+        cls.__rpc__.update({'get_allowed_payment_dates': RPC(instantiate=0)})
+
+    def on_change_payment_date_selector(self):
+        if not (hasattr(self, 'payment_date_selector') and
+                self.payment_date_selector):
+            return {'payment_date': None}
+        return {'payment_date': int(self.payment_date_selector)}
+
+    def get_payment_date_selector(self, name):
+        if not (hasattr(self, 'payment_date') and self.payment_date):
+            return ''
+        return str(self.payment_date)
 
     def init_from_contract(self, contract, start_date):
         self.start_date = start_date
         self.payment_method = contract.offered.get_default_payment_method()
+        good_payment_date = self.payment_method.get_allowed_date_values()[0][0]
+        if good_payment_date:
+            self.payment_date = int(good_payment_date)
 
     def on_change_with_payment_mode(self, name=None):
         if not (hasattr(self, 'payment_method') and self.payment_method):
@@ -375,12 +414,24 @@ class BillingManager(model.CoopSQL, model.CoopView):
             if self.contract else None)
         return policy_owner.id if policy_owner else None
 
-    def get_payment_rule(self):
-        try:
-            payment_rule = self.payment_method.payment_rule
-        except:
-            payment_rule = None
-        return payment_rule
+    def get_allowed_payment_dates(self):
+        if not (hasattr(self, 'payment_method') and self.payment_method):
+            return [('', '')]
+        return self.payment_method.get_allowed_date_values()
+
+    def on_change_payment_method(self):
+        allowed_vals = map(lambda x: x[0], self.get_allowed_payment_dates())
+        if not (hasattr(self, 'payment_date') and self.payment_date):
+            return {'payment_date_selector': allowed_vals[0],
+                'payment_date': int(allowed_vals[0]) if allowed_vals[0] else
+                None}
+        if self.payment_date in allowed_vals:
+            return {}
+        return {'payment_date_selector': allowed_vals[0],
+            'payment_date': int(allowed_vals[0]) if allowed_vals[0] else None}
+
+    def get_payment_date(self):
+        return self.payment_date
 
 
 class BillingPeriod(model.CoopSQL, model.CoopView):
@@ -857,7 +908,8 @@ class Contract():
         if work_set['total_amount'] >= 0 and work_set['payment_rule']:
             term_lines = work_set['payment_rule'].compute(
                 work_set['period'][0], work_set['period'][1],
-                work_set['total_amount'], work_set['currency'])
+                work_set['total_amount'], work_set['currency'],
+                work_set['payment_date'])
         else:
             term_lines = [(Date.today(), work_set['currency'].round(
                         work_set['total_amount']))]
@@ -900,7 +952,9 @@ class Contract():
         currency = self.get_currency()
         work_set = self.init_billing_work_set()
         work_set['price_lines'] = price_lines
-        work_set['payment_rule'] = billing_manager.get_payment_rule()
+        work_set['payment_date'] = billing_manager.get_payment_date()
+        work_set['payment_method'] = billing_manager.payment_method
+        work_set['payment_rule'] = work_set['payment_method'].get_rule()
         work_set['period'] = period
         work_set['currency'] = currency
         work_set['billing_period'] = billing_period

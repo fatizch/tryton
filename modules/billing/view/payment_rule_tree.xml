@@ -2,6 +2,7 @@
 <tree string="Payment Rules">
   <field name="name"/>
   <field name="code"/>
+  <field name="payment_mode"/>
   <field name="base_frequency"/>
   <field name="sync_date"/>
 </tree>

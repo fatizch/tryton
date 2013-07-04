@@ -6,10 +6,14 @@
     <field name="end_date"/>
     <label name="payment_method"/>
     <field name="payment_method" widget="selection"/>
+    <label name="payment_date_selector"/>
+    <field name="payment_date_selector"/>
     <label name="payment_bank_account"/>
     <field name="payment_bank_account"/>
     <label name="disbursment_bank_account"/>
     <field name="disbursment_bank_account"/>
+    <!-- Dependencies -->
     <field name="payment_mode"/>
     <field name="policy_owner"/>
+    <field name="payment_date"/>
 </form>

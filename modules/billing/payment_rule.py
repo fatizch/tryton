@@ -8,19 +8,22 @@ from trytond.modules.coop_utils import fields, model, date
 from trytond.modules.insurance_product.business_rule.pricing_rule import \
     PRICING_FREQUENCY
 
-
 __all__ = [
     'PaymentRuleLine',
     'PaymentRuleFeeRelation',
     'PaymentRule',
     ]
 
-
 REMAINING_POSITION = [
     ('', ''),
     ('first_calc', 'First calculated'),
     ('last_calc', 'Last calculated'),
     ('custom', 'Custom Lines'),
+    ]
+
+PAYMENT_MODES = [
+    ('in_arrears', 'In Arrears'),
+    ('in_advance', 'In Advance'),
     ]
 
 
@@ -264,6 +267,11 @@ class PaymentRule(model.CoopSQL, model.CoopView):
         'Start Lines')
     appliable_fees = fields.Many2Many('billing.payment_rule-fee-relation',
         'payment_rule', 'fee', 'Appliable fees')
+    payment_mode = fields.Selection(PAYMENT_MODES, 'Payment Mode')
+
+    @classmethod
+    def default_payment_mode(cls):
+        return 'in_advance'
 
     @classmethod
     def default_remaining_position(cls):
@@ -325,7 +333,55 @@ class PaymentRule(model.CoopSQL, model.CoopView):
             dates[-1]['remaining'] = True
         return dates
 
-    def compute(self, start_date, end_date, amount, currency, due_date=None):
+    def apply_payment_date(self, payments, payment_date):
+        if not payment_date:
+            return payments
+        res = []
+        for cur_date, amount in payments:
+            if self.payment_mode == 'in_advance':
+                if not res:
+                    # First date:
+                    res.append((cur_date, amount))
+                    continue
+                if payment_date > cur_date.day:
+                    temp_date = date.add_month(cur_date, -1)
+                    if payment_date > 28:
+                        temp_date = date.get_end_of_month(temp_date)
+                        if temp_date.day > payment_date:
+                            res.append((datetime.date(temp_date.year,
+                                        temp_date.month, payment_date),
+                                    amount))
+                        else:
+                            res.append((temp_date, amount))
+                    else:
+                        res.append((datetime.date(temp_date.year,
+                                    temp_date.month, payment_date), amount))
+                else:
+                    res.append((datetime.date(cur_date.year, cur_date.month,
+                                payment_date), amount))
+            elif self.payment_mode == 'in_arrears':
+                if payment_date > cur_date.day:
+                    if payment_date > 28:
+                        temp_date = date.get_end_of_month(cur_date)
+                        if temp_date.day > payment_date:
+                            res.append((datetime.date(temp_date.year,
+                                        temp_date.month, payment_date),
+                                    amount))
+                        else:
+                            res.append((temp_date, amount))
+                    else:
+                        res.append((datetime.date(cur_date.year,
+                                    cur_date.month, payment_date), amount))
+                else:
+                    temp_date = date.add_month(cur_date, 1)
+                    if payment_date >= temp_date.day:
+                        res.append((temp_date, amount))
+                    else:
+                        res.append((datetime.date(temp_date.year,
+                                    temp_date.month, payment_date), amount))
+        return res
+
+    def compute(self, start_date, end_date, amount, currency, due_date):
         lines_dates = self.get_line_dates(start_date, end_date)
         res = dict(((l['date'], 0) for l in lines_dates))
         freq_number = sum([k['freq_amount'] for k in lines_dates])
@@ -347,5 +403,6 @@ class PaymentRule(model.CoopSQL, model.CoopView):
             remaining_line = next(l for l in lines_dates if l['remaining'])
             res[remaining_line['date']] += currency.round(remainder)
 
-        return sorted(list((x for x in res.iteritems() if x[1])),
+        result = sorted(list((x for x in res.iteritems() if x[1])),
             key=lambda x: x[0])
+        return self.apply_payment_date(result, due_date)

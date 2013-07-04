@@ -4,7 +4,9 @@
     <label name="name"/>
     <field name="name" colspan="3"/>
     <label name="code"/>
-    <field name="code" colspan="3"/>
+    <field name="code"/>
+    <label name="payment_mode"/>
+    <field name="payment_mode"/>
     <label name="base_frequency"/>
     <field name="base_frequency" colspan="3"/>
     <label name="remaining_position"/>

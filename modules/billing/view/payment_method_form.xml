@@ -8,4 +8,6 @@
   <field name="payment_rule"/>
   <label name="payment_mode"/>
   <field name="payment_mode"/>
+  <label name="allowed_payment_dates"/>
+  <field name="allowed_payment_dates"/>
 </form>
