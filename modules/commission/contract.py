@@ -67,7 +67,7 @@ class PriceLine():
             com_relation.com_subscribed = com_line.on_object.com_option
             # Com detail lines store the rate in the amount field. We need
             # to apply it now to avoid taxes and fees
-            com_relation.amount = self.amount * com_line.amount / 100
+            com_relation.amount = self.amount * com_line.amount
             self.com_lines.append(com_relation)
 
     def get_estimated_coms(self, field_name):
