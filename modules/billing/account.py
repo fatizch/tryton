@@ -32,7 +32,8 @@ class Move:
         fields.Many2One('contract.contract', 'Contract'),
         'get_contract')
     schedule = fields.One2ManyDomain('account.move.line', 'move', 'Schedule',
-        domain=[('account.kind', '=', 'receivable')])
+        domain=[('account.kind', '=', 'receivable')], order=[
+            ('maturity_date', 'ASC')])
     coverage_details = fields.One2ManyDomain('account.move.line', 'move',
         'Details', domain=[('account.kind', '!=', 'receivable'), ['OR',
                 ['AND',
@@ -81,7 +82,10 @@ class Move:
             # SQLite uses float for SUM
             if not isinstance(sum, Decimal):
                 sum = Decimal(str(sum))
-            res[move_id] = sum * sign
+            if sum == 0:
+                res[move_id] = sum
+            else:
+                res[move_id] = sum * sign
         return res
 
     @classmethod
