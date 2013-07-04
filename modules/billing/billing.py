@@ -707,8 +707,12 @@ class Contract():
         new_period_end = date.add_frequency(
             self.get_product_frequency(last_date), last_date)
         if self.next_renewal_date:
-            new_period_end = min(new_period_end, date.add_day(
-                self.next_renewal_date, -1))
+            #TODO : temporay hack to deal with first period longuer than a year
+            if start_date == self.start_date:
+                new_period_end = date.add_day(self.next_renewal_date, -1)
+            else:
+                new_period_end = min(new_period_end, date.add_day(
+                    self.next_renewal_date, -1))
         if self.end_date and new_period_end > self.end_date:
             return (new_period_start, self.end_date)
         return (new_period_start, new_period_end)
@@ -888,6 +892,7 @@ class Contract():
                     (old_line.second_origin, old_line.account)]
                 line.second_origin = old_line.second_origin
                 line.account = old_line.account
+                line.party = old_line.party
                 if old_line.credit:
                     line.credit -= old_line.credit
                     work_set['total_amount'] -= old_line.credit

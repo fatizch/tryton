@@ -140,7 +140,7 @@ class Contract():
     def calculate_final_coms(self, work_set):
         for data in work_set['coms'].itervalues():
             account = data['object'].get_account_for_billing()
-            line = work_set['lines'][(data['object'], account)]
+            line = work_set['lines'][(data['object'].offered, account)]
             line.party = data['object'].current_policy_owner
             line.account = account
             line.second_origin = data['object'].offered
