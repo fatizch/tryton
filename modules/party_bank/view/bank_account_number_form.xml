@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <form string="Account Number">
+    <label name="bank_account"/>
+    <field name="bank_account"/>
+    <newline/>
     <label name="kind"/>
     <field name="kind"/>
     <group id="number" colspan="2" col="4">
