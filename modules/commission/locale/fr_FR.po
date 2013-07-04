@@ -18,6 +18,10 @@ msgctxt "error:commission.component-coverage:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:commission.price_line-com-relation:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:distribution.dist_network-broker:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -29,6 +33,34 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 msgctxt "error:party.broker:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:account.move,com_amount:"
+msgid "Com amount"
+msgstr "Montant de Commissions"
+
+msgctxt "field:account.move,com_details:"
+msgid "Commissions"
+msgstr "Commissions"
+
+msgctxt "field:account.move,wo_com_amount:"
+msgid "Amount w/o com"
+msgstr "Montant hors Commissions"
+
+msgctxt "field:account.move,wo_tax_amount:"
+msgid "Total Amount w/o taxes"
+msgstr "Montant total hors Taxes"
+
+msgctxt "field:billing.price_line,com_lines:"
+msgid "Commission lines"
+msgstr "Lignes de Commissions"
+
+msgctxt "field:billing.price_line,estimated_com:"
+msgid "Estimated Commissions"
+msgstr "Commissions estimées"
+
+msgctxt "field:billing.price_line,estimated_wo_com:"
+msgid "Estimated w/o coms"
+msgstr "Montant estimé hors Commissions"
 
 msgctxt "field:commission.commission_amount_to_display,amount:"
 msgid "Amount"
@@ -230,6 +262,58 @@ msgctxt "field:commission.component-coverage,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:commission.price_line-com-relation,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:commission.price_line-com-relation,com_subscribed:"
+msgid "Commission Subscribed"
+msgstr "Garantie commissionée"
+
+msgctxt "field:commission.price_line-com-relation,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:commission.price_line-com-relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:commission.price_line-com-relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.price_line-com-relation,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:commission.price_line-com-relation,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:commission.price_line-com-relation,offered:"
+msgid "Commission Coverage"
+msgstr "Garantie de commissionement"
+
+msgctxt "field:commission.price_line-com-relation,price_line:"
+msgid "Price Line"
+msgstr "Ligne de Prime"
+
+msgctxt "field:commission.price_line-com-relation,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:commission.price_line-com-relation,to_recalculate:"
+msgid "Recalculate at billing"
+msgstr "Recalculer à la facturation"
+
+msgctxt "field:commission.price_line-com-relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:commission.price_line-com-relation,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:contract.subscribed_option,commissions:"
 msgid "Commissions"
 msgstr "Commissions"
@@ -421,6 +505,10 @@ msgstr "Option Commissionnée"
 msgctxt "model:commission.component-coverage,name:"
 msgid "Relation Commission Component and Coverage"
 msgstr "Relation Composante de Com - Garantie"
+
+msgctxt "model:commission.price_line-com-relation,name:"
+msgid "Price line to Commission relation"
+msgstr "Relation Ligne de Prime - Commission"
 
 msgctxt "model:distribution.dist_network-broker,name:"
 msgid "Relation Distribution Network - Broker"

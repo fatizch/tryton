@@ -68,6 +68,17 @@ msgstr ""
 "les logs."
 
 msgctxt "error:rule_engine:"
+msgid ""
+"An error occured in rule %s.For more information, activate debug mode and see the logs\n"
+"\n"
+"Error info :\n"
+"%s"
+msgstr ""
+"Une erreur s'est produite lors de l'exécution de la règle %s.\\nPour "
+"davantage d'informations, veuillez activer le mode debug de la règle et "
+"consulter les logs.\\n\\nInformations sur l'erreur :\\n%s"
+
+msgctxt "error:rule_engine:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 

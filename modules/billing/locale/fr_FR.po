@@ -14,6 +14,10 @@ msgctxt "error:billing.payment_method:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:billing.payment_rule-fee-relation:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:billing.payment_rule:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -50,6 +54,50 @@ msgctxt "field:account.move,billing_period:"
 msgid "Billing Period"
 msgstr "Période de Facturation"
 
+msgctxt "field:account.move,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:account.move,coverage_details:"
+msgid "Details"
+msgstr "Détails"
+
+msgctxt "field:account.move,details:"
+msgid "Details"
+msgstr "Détails"
+
+msgctxt "field:account.move,due_amount:"
+msgid "Due amount"
+msgstr "Montant du"
+
+msgctxt "field:account.move,fee_amount:"
+msgid "Fee amount"
+msgstr "Montant de Frais"
+
+msgctxt "field:account.move,fee_details:"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "field:account.move,schedule:"
+msgid "Schedule"
+msgstr "Echéancier"
+
+msgctxt "field:account.move,tax_amount:"
+msgid "Tax amount"
+msgstr "Montant de Taxes"
+
+msgctxt "field:account.move,tax_details:"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "field:account.move,total_amount:"
+msgid "Total due amount"
+msgstr "Montant total"
+
+msgctxt "field:account.move,wo_fee_amount:"
+msgid "Amount w/o fees"
+msgstr "Montant hors Frais"
+
 msgctxt "field:account.move.line,origin_name:"
 msgid "Origin Name"
 msgstr "Source"
@@ -57,6 +105,14 @@ msgstr "Source"
 msgctxt "field:account.move.line,second_origin:"
 msgid "Second Origin"
 msgstr ""
+
+msgctxt "field:account.move.line,second_origin_name:"
+msgid "Second Origin Name"
+msgstr "Motif"
+
+msgctxt "field:account.move.line,total_amount:"
+msgid "Total amount"
+msgstr "Montant total"
 
 msgctxt "field:billing.billing_manager,contract:"
 msgid "Contract"
@@ -94,6 +150,14 @@ msgctxt "field:billing.billing_manager,payment_bank_account:"
 msgid "Payment Bank Account"
 msgstr "Compte de Paiement"
 
+msgctxt "field:billing.billing_manager,payment_date:"
+msgid "Payment Date"
+msgstr "Jour de paiement"
+
+msgctxt "field:billing.billing_manager,payment_date_selector:"
+msgid "Payment Date"
+msgstr "Jour de paiement"
+
 msgctxt "field:billing.billing_manager,payment_method:"
 msgid "Payment Method"
 msgstr "Méthode de Paiement"
@@ -101,6 +165,10 @@ msgstr "Méthode de Paiement"
 msgctxt "field:billing.billing_manager,payment_mode:"
 msgid "Payment Mode"
 msgstr "Mode de Paiement"
+
+msgctxt "field:billing.billing_manager,payment_synced:"
+msgid "Payment Synced"
+msgstr "Paiement synchronisé"
 
 msgctxt "field:billing.billing_manager,policy_owner:"
 msgid "Party"
@@ -113,6 +181,14 @@ msgstr "Nom"
 msgctxt "field:billing.billing_manager,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
+
+msgctxt "field:billing.billing_manager,sync_date:"
+msgid "Sync Date"
+msgstr "Date de Synchro"
+
+msgctxt "field:billing.billing_manager,sync_day:"
+msgid "Payment Day"
+msgstr "Jour de prélèvement"
 
 msgctxt "field:billing.billing_manager,write_date:"
 msgid "Write Date"
@@ -153,6 +229,10 @@ msgstr "Etendre Arbre"
 msgctxt "field:billing.billing_process.bill_parameters,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
+
+msgctxt "field:billing.payment_method,allowed_payment_dates:"
+msgid "Allowed Payment Dates"
+msgstr "Jours de paiement possibles"
 
 msgctxt "field:billing.payment_method,code:"
 msgid "Code"
@@ -206,6 +286,10 @@ msgctxt "field:billing.payment_method,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:billing.payment_rule,appliable_fees:"
+msgid "Appliable fees"
+msgstr "Frais applicables"
+
 msgctxt "field:billing.payment_rule,base_frequency:"
 msgid "Base Frequency"
 msgstr "Fréquence de base"
@@ -242,6 +326,10 @@ msgctxt "field:billing.payment_rule,name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:billing.payment_rule,payment_mode:"
+msgid "Payment Mode"
+msgstr "Mode de Paiement"
+
 msgctxt "field:billing.payment_rule,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -258,8 +346,16 @@ msgctxt "field:billing.payment_rule,sync_date:"
 msgid "Sync Date"
 msgstr "Date de Synchro"
 
+msgctxt "field:billing.payment_rule,sync_days:"
+msgid "Sync Days"
+msgstr ""
+
 msgctxt "field:billing.payment_rule,with_sync_date:"
 msgid "With Sync Date"
+msgstr "Avec date de synchronisation"
+
+msgctxt "field:billing.payment_rule,with_sync_day:"
+msgid "With Sync Day"
 msgstr "Avec date de synchronisation"
 
 msgctxt "field:billing.payment_rule,write_date:"
@@ -267,6 +363,42 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:billing.payment_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:billing.payment_rule-fee-relation,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:billing.payment_rule-fee-relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:billing.payment_rule-fee-relation,fee:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "field:billing.payment_rule-fee-relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.payment_rule-fee-relation,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:billing.payment_rule-fee-relation,payment_rule:"
+msgid "Payment Rule"
+msgstr "Règle de paiement"
+
+msgctxt "field:billing.payment_rule-fee-relation,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:billing.payment_rule-fee-relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:billing.payment_rule-fee-relation,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -461,6 +593,10 @@ msgstr "Estimation des Frais"
 msgctxt "field:billing.price_line,estimated_taxes:"
 msgid "Estimated Taxes"
 msgstr "Estimation des Taxes"
+
+msgctxt "field:billing.price_line,estimated_total:"
+msgid "Estimated total"
+msgstr "Montant total estimé"
 
 msgctxt "field:billing.price_line,fee_lines:"
 msgid "Fee Lines"
@@ -722,6 +858,26 @@ msgctxt "field:party.party,receivable_lines:"
 msgid "Receivable Lines"
 msgstr "Lignes à recevoir"
 
+msgctxt "help:billing.payment_method,allowed_payment_dates:"
+msgid ""
+"A list of comma-separated numbers that resolves to the list ofallowed days of the month eligible for direct debit.\n"
+"\n"
+"An empty list means that all dates are allowed"
+msgstr ""
+"Une liste de nombres séparés par des virgules, correspondant aux jours du "
+"mois possibles pour le prélèvement automatique.\\n\\nUne liste vide laisse "
+"le choix au client."
+
+msgctxt "help:billing.payment_rule,sync_days:"
+msgid ""
+"Comma separated numbers which will be available to the subscriber.\n"
+"\n"
+"No entry means every day is a valid value"
+msgstr ""
+"Une liste de nombres séparés par des virgules, correspondant aux jours du "
+"mois possibles pour le prélèvement automatique.\\n\\nUne liste vide laisse "
+"le choix au client."
+
 msgctxt "help:billing.payment_rule_line,sequence:"
 msgid "Use to order lines in ascending order"
 msgstr "Utilisé pour trier les lignes en ordre croissant"
@@ -745,6 +901,10 @@ msgstr "Méthode de Paiement"
 msgctxt "model:billing.payment_rule,name:"
 msgid "Payment Rule"
 msgstr "Règle de paiement"
+
+msgctxt "model:billing.payment_rule-fee-relation,name:"
+msgid "Payment Rule - Fee relation"
+msgstr "Relation Règle de paiement - Frais"
 
 msgctxt "model:billing.payment_rule_line,name:"
 msgid "Payment Rule Line"
@@ -829,6 +989,14 @@ msgstr "Trimestriel"
 msgctxt "selection:billing.payment_rule,base_frequency:"
 msgid "Yearly"
 msgstr "Annuel"
+
+msgctxt "selection:billing.payment_rule,payment_mode:"
+msgid "In Advance"
+msgstr "Terme à échoir"
+
+msgctxt "selection:billing.payment_rule,payment_mode:"
+msgid "In Arrears"
+msgstr "Terme échu"
 
 msgctxt "selection:billing.payment_rule,remaining_position:"
 msgid ""
