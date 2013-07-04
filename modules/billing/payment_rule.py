@@ -99,7 +99,7 @@ class PaymentRuleLine(model.CoopSQL, model.CoopView):
             'invisible': ~Eval('add_calculated_period'),
             'required': ~~Eval('add_calculated_period')})
     is_remainder = fields.Boolean('Is remainder',
-        states={'invisible': Eval('_parent_payment_rule', {}).get('kind', '')
+        states={'invisible': Eval('_parent_payment_rule', {}).get('remaining_position', '')
             != 'custom'})
 
     @classmethod
