@@ -51,9 +51,9 @@ class CreateReceivablePayment(Wizard):
             contract = line.move.origin
             billing_manager = contract.get_billing_manager(
                 line.maturity_date or today)
-            if not billing_manager:
-                continue
-            if billing_manager.payment_method.payment_mode != 'direct_debit':
+            if (not billing_manager or not billing_manager.payment_method
+                    or billing_manager.payment_method.payment_mode !=
+                    'direct_debit'):
                 continue
             payment = Payment()
             currency = line.second_currency or line.account.company.currency
