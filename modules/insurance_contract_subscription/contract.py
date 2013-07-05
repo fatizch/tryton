@@ -2,7 +2,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.rpc import RPC
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
-from trytond.modules.coop_utils import abstract, fields, utils
+from trytond.modules.coop_utils import model, fields, utils
 
 from trytond.modules.process import ClassAttr
 from trytond.modules.coop_process import CoopProcessFramework
@@ -434,7 +434,7 @@ class CoveredElement():
             # good_data.init_complementary_data(option.offered, contract)
             good_data.status_selection = True
             covered_datas.append(good_data)
-        return abstract.WithAbstract.serialize_field(covered_datas)
+        return model.serialize_this(covered_datas)
 
 
 class CoveredData():

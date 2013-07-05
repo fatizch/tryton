@@ -2,7 +2,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If, Or
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model, fields, abstract
+from trytond.modules.coop_utils import model, fields
 from trytond.modules.coop_utils import utils, business, coop_date
 from trytond.modules.coop_utils import coop_string
 from trytond.modules.contract import contract
@@ -526,7 +526,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             tmp_covered.start_date = covered_data.start_date
             tmp_covered.end_date = covered_data.end_date
             result.append(tmp_covered)
-        return abstract.WithAbstract.serialize_field(result)
+        return model.serialize_this(result)
 
     def get_name_for_info(self):
         return self.get_rec_name('info')

@@ -4,7 +4,7 @@ import datetime
 import json
 
 from trytond.pyson import Eval, Bool
-from trytond.model import ModelView, ModelSQL, fields as tryton_fields
+from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard
@@ -26,6 +26,42 @@ __all__ = [
     'ObjectHistory',
     'expand_tree',
 ]
+
+
+def serialize_this(the_data, from_field=None):
+    res = None
+    if (isinstance(the_data, list) and
+            the_data != [] and
+            isinstance(the_data[0], Model)):
+        # It the provided field is a list, and the elements of this list is
+        # a Model, we need to serialize each element before use.
+        res = []
+        for elem in the_data:
+            res.append(serialize_this(elem))
+    elif isinstance(the_data, Model):
+        # If the field is a model
+        if isinstance(the_data, Model) and the_data.id > 0:
+            # that has been stored in the db, we just need its id to store
+            # it.
+            res = the_data.id
+            if isinstance(from_field, tryton_fields.Reference):
+                res = '%s,%s' % (
+                    the_data.__name__,
+                    the_data.id)
+        else:
+            # If not, we need to go through each field to serialize each of
+            # them separately.
+            res = {}
+            if not the_data._values is None:
+                for key, value in the_data._values.iteritems():
+                    res[key] = serialize_this(
+                        value,
+                        the_data._fields[key])
+    else:
+        # If the field is a basic type, no need for further work.
+        res = the_data
+
+    return res
 
 
 class CoopSQL(export.ExportImportMixin, ModelSQL):

@@ -9,7 +9,7 @@ from trytond.rpc import RPC
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 
 from trytond.modules.coop_utils import model, utils, coop_date, fields
-from trytond.modules.coop_utils import abstract, coop_string
+from trytond.modules.coop_utils import coop_string
 from trytond.modules.insurance_product.benefit import INDEMNIFICATION_KIND, \
     INDEMNIFICATION_DETAIL_KIND
 from trytond.modules.insurance_product import Printable
@@ -1108,7 +1108,7 @@ class IndemnificationSelection(model.CoopView):
             elem.selection = self.global_value
             if (hasattr(elem, 'id') and elem.id):
                 elem.id = None
-            elem_as_dict = abstract.WithAbstract.serialize_field(elem)
+            elem_as_dict = model.serialize_this(elem)
             if 'id' in elem_as_dict:
                 del elem_as_dict['id']
             result.append(elem_as_dict)

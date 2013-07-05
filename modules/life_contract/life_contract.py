@@ -1,12 +1,8 @@
-import copy
-from decimal import Decimal
-
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
-from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
-from trytond.modules.coop_utils import utils, fields, abstract, coop_string
+from trytond.modules.coop_utils import utils, fields, coop_string
 
 __all__ = [
     'Contract',
