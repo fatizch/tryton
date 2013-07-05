@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Or, Bool
 
 from trytond.modules.coop_utils import utils, fields
-from trytond.modules.coop_utils import date
+from trytond.modules.coop_utils import coop_date
 
 from trytond.modules.rule_engine import RuleEngineContext
 from trytond.modules.insurance_product import EligibilityResultLine
@@ -96,7 +96,7 @@ class LifeEligibilityRule():
         details = []
         if 'subscriber_person' in args:
             subscriber = args['subscriber_person']
-            age = date.number_of_years_between(subscriber.birth_date,
+            age = coop_date.number_of_years_between(subscriber.birth_date,
                 args['date'])
             res = True
             if not utils.is_none(self, 'min_age') and age < self.min_age:
@@ -124,7 +124,7 @@ class LifeEligibilityRule():
             return (EligibilityResultLine(
                 False, ['Sub Element not defined in args']), [])
         person = args['person'] = sub_elem.party.get_person()
-        age = date.number_of_years_between(
+        age = coop_date.number_of_years_between(
             person.birth_date, args['date'])
         res = True
         details = []

@@ -12,7 +12,8 @@ from trytond.ir import Attachment
 
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
-from trytond.modules.coop_utils import fields, model, utils, coop_string, date
+from trytond.modules.coop_utils import fields, model, utils, coop_string
+from trytond.modules.coop_utils import coop_date
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED
 from trytond.modules.coop_utils import BatchRoot
@@ -1086,7 +1087,7 @@ class DocumentRequestBatch(BatchRoot):
             [
                 'OR',
                 ('send_date', '=', None),
-                ('send_date', '<=', date.add_month(utils.today(), -3))]]
+                ('send_date', '<=', coop_date.add_month(utils.today(), -3))]]
 
     @classmethod
     def execute(cls, objects, ids, logger):

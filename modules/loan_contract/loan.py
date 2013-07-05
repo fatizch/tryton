@@ -6,7 +6,8 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import utils, date, fields, model, coop_string
+from trytond.modules.coop_utils import utils, coop_date, fields, model
+from trytond.modules.coop_utils import coop_string
 
 __all__ = [
     'LoanContract',
@@ -148,7 +149,8 @@ class Loan(model.CoopSQL, model.CoopView):
 
     def init_from_contract(self, contract):
         self.funds_release_date = contract.start_date
-        self.first_payment_date = date.add_month(self.funds_release_date, 1)
+        self.first_payment_date = coop_date.add_month(
+            self.funds_release_date, 1)
 
     def get_currency_digits(self, name):
         if hasattr(self, 'currency') and self.currency:

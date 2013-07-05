@@ -10,7 +10,7 @@ from trytond.pyson import Eval, Not, And
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateView, Button
 
-from trytond.modules.coop_utils import utils, model, date, fields
+from trytond.modules.coop_utils import utils, model, coop_date, fields
 from trytond.modules.process import ProcessFramework
 
 
@@ -578,7 +578,7 @@ class ProcessDesc(model.CoopSQL):
                 ('start_date', '<', process['start_date'])])
             if last_version:
                 cls.write(last_version, {
-                    'end_date': date.add_day(process['start_date'], -1)})
+                    'end_date': coop_date.add_day(process['start_date'], -1)})
         return super(ProcessDesc, cls).create(values)
 
     def step1_before_step2(self, step1, step2):

@@ -1,5 +1,5 @@
 #-*- coding:utf-8 -*-
-from trytond.modules.coop_utils import model, date, fields
+from trytond.modules.coop_utils import model, coop_date, fields
 from trytond.modules.offered import offered
 from trytond.modules.insurance_product import EligibilityResultLine
 from .product import Offered
@@ -183,7 +183,7 @@ class Benefit(model.CoopSQL, offered.Offered):
             indemn_dict = indemn_dicts[-1]
             if (self.indemnification_kind == 'period'
                     and 'end_date' in indemn_dict):
-                sub_args['start_date'] = date.add_day(
+                sub_args['start_date'] = coop_date.add_day(
                     indemn_dict['end_date'], 1)
         return res, errs
 

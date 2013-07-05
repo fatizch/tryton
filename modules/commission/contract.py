@@ -3,7 +3,7 @@ from collections import defaultdict
 
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.coop_utils import model, fields, date
+from trytond.modules.coop_utils import model, fields, coop_date
 from trytond.modules.insurance_product import PricingResultDetail
 
 __all__ = [
@@ -85,7 +85,7 @@ class PriceLine():
     def calculate_bill_contribution(self, work_set, period):
         result = super(PriceLine, self).calculate_bill_contribution(work_set,
             period)
-        number_of_days = date.number_of_days_between(*period)
+        number_of_days = coop_date.number_of_days_between(*period)
         price_line_days = self.get_number_of_days_at_date(period[0])
         convert_factor = number_of_days / Decimal(price_line_days)
         for com_line in self.com_lines:

@@ -8,8 +8,8 @@ from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 
-from trytond.modules.coop_utils import model, utils, date, fields, coop_string
-from trytond.modules.coop_utils import abstract
+from trytond.modules.coop_utils import model, utils, coop_date, fields
+from trytond.modules.coop_utils import abstract, coop_string
 from trytond.modules.insurance_product.benefit import INDEMNIFICATION_KIND, \
     INDEMNIFICATION_DETAIL_KIND
 from trytond.modules.insurance_product import Printable
@@ -588,7 +588,7 @@ class ClaimDeliveredService():
                 and indemn.end_date < cur_dict['end_date']):
             while res and indemn.end_date < cur_dict['end_date']:
                 cur_dict = cur_dict.copy()
-                cur_dict['start_date'] = date.add_day(indemn.end_date, 1)
+                cur_dict['start_date'] = coop_date.add_day(indemn.end_date, 1)
                 indemn, cur_err = self.create_indemnification(cur_dict)
                 res = indemn is not None
                 errs += cur_err
@@ -906,7 +906,7 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView):
     kind = fields.Selection(INDEMNIFICATION_DETAIL_KIND, 'Kind', sort=False)
     amount_per_unit = fields.Numeric('Amount per Unit')
     nb_of_unit = fields.Numeric('Nb of Unit')
-    unit = fields.Selection(date.DAILY_DURATION, 'Unit')
+    unit = fields.Selection(coop_date.DAILY_DURATION, 'Unit')
     amount = fields.Numeric('Amount')
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency'),
@@ -1170,7 +1170,7 @@ class IndemnificationValidation(Wizard):
         today = utils.today()
         default_max_date = datetime.date(today.year, today.month, 1)
         domain_string = 'status: = calculated, start_date: <= %s' % (
-            date.get_end_of_period(default_max_date, 1, 'month'))
+            coop_date.get_end_of_period(default_max_date, 1, 'month'))
         Selector = Pool().get('ins_claim.indemnification_selection')
         return {
             'domain_string': domain_string,

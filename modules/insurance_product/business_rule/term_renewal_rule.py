@@ -3,7 +3,7 @@ import datetime
 
 from trytond.pyson import Eval, And, Not, Or
 
-from trytond.modules.coop_utils import model, utils, fields, date
+from trytond.modules.coop_utils import model, utils, fields, coop_date
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot
 
@@ -69,10 +69,10 @@ class TermRenewalRule(BusinessRuleRoot, model.CoopSQL):
         base_date = contract.next_renewal_date if contract.next_renewal_date \
             else contract.start_date
         if self.term_date_choice == 'subscription':
-            return date.add_frequency(self.frequency, base_date), []
+            return coop_date.add_frequency(self.frequency, base_date), []
         if self.term_date_choice == 'this_date':
             estimated_date = datetime.date(base_date.year,
                 self.date_for_sync.month, self.date_for_sync.day)
             while estimated_date <= base_date:
-                estimated_date = date.add_year(estimated_date, 1)
+                estimated_date = coop_date.add_year(estimated_date, 1)
             return estimated_date, []

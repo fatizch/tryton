@@ -25,7 +25,7 @@ from trytond.transaction import Transaction
 from trytond.tools.misc import _compile_source
 from trytond.pyson import Eval, And
 from trytond.modules.coop_utils import model, CoopView, utils, coop_string
-from trytond.modules.coop_utils import date
+from trytond.modules.coop_utils import coop_date
 from trytond.modules.table import TableCell
 
 __all__ = [
@@ -264,7 +264,7 @@ class RuleTools(RuleEngineContext):
                 or not isinstance(date2, datetime.date)):
             args['errors'].append('years_between needs datetime types')
             raise CatchedRuleEngineError
-        return date.number_of_years_between(date1, date2)
+        return coop_date.number_of_years_between(date1, date2)
 
     @classmethod
     def _re_today(cls, args):

@@ -1,6 +1,6 @@
 from trytond.pool import Pool
 from .utils import *
-from .date import *
+from .coop_date import *
 from .coop_string import *
 from .export import *
 from .model import *

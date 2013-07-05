@@ -4,7 +4,7 @@ import copy
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Or, Bool
 
-from trytond.modules.coop_utils import utils, date, model, fields
+from trytond.modules.coop_utils import utils, coop_date, model, fields
 from trytond.modules.offered.offered import DEF_CUR_DIG, CONFIG_KIND
 from trytond.modules.insurance_product import PricingResultLine
 from trytond.modules.insurance_product import PricingResultDetail
@@ -204,9 +204,9 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
         if not 'date' in args:
             return (None, ['A base date must be provided !'])
         the_date = args['date']
-        return date.number_of_days_between(
+        return coop_date.number_of_days_between(
             the_date,
-            date.add_frequency(self.frequency, the_date))
+            coop_date.add_frequency(self.frequency, the_date))
 
     @staticmethod
     def default_frequency():

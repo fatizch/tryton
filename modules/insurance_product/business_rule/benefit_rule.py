@@ -2,7 +2,8 @@ import datetime
 from trytond.pyson import Eval, Or, Bool
 from trytond.pool import Pool
 
-from trytond.modules.coop_utils import model, coop_string, date, utils, fields
+from trytond.modules.coop_utils import model, coop_string, coop_date, utils
+from trytond.modules.coop_utils import fields
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED, CONFIG_KIND, STATE_SIMPLE
 from trytond.modules.offered.offered import DEF_CUR_DIG
@@ -52,7 +53,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
                 STATES_AMOUNT_EVOLVES,
             )
         }, help='Add a multiplier to apply to the coverage amount', )
-    indemnification_calc_unit = fields.Selection(date.DAILY_DURATION,
+    indemnification_calc_unit = fields.Selection(coop_date.DAILY_DURATION,
         'Indemnification Calculation Unit',
         states={
             'invisible': Or(STATES_CAPITAL, STATES_AMOUNT_EVOLVES),
@@ -76,7 +77,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
                 Bool(Eval('max_duration_per_indemnification_unit')))
         })
     max_duration_per_indemnification_unit = fields.Selection(
-        date.DAILY_DURATION, 'Unit', sort=False,
+        coop_date.DAILY_DURATION, 'Unit', sort=False,
         states={
             'invisible': Or(STATES_CAPITAL, STATES_AMOUNT_EVOLVES,
                 Bool(Eval('use_monthly_period'))),
@@ -111,7 +112,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
         'on_change_with_index_initial_value')
     validation_delay = fields.Integer('Validation Delay',
         states={'invisible': Bool(~Eval('with_revaluation'))})
-    validation_delay_unit = fields.Selection(date.DAILY_DURATION,
+    validation_delay_unit = fields.Selection(coop_date.DAILY_DURATION,
         'Delay', states={'invisible': Bool(~Eval('with_revaluation'))})
 
     @classmethod
@@ -215,11 +216,11 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
     def get_indemnification_end_date(self, from_date, to_date):
         if (self.max_duration_per_indemnification
                 and self.max_duration_per_indemnification_unit):
-            max_end_date = date.get_end_of_period(from_date,
+            max_end_date = coop_date.get_end_of_period(from_date,
                 self.max_duration_per_indemnification,
                 self.max_duration_per_indemnification_unit)
         elif self.use_monthly_period:
-            max_end_date = date.get_end_of_month(from_date)
+            max_end_date = coop_date.get_end_of_month(from_date)
         else:
             return to_date
         return min(to_date, max_end_date) if to_date else max_end_date
@@ -227,11 +228,11 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
     def get_period_end_date(self, from_date, to_date):
         if (self.offered.indemnification_kind == 'annuity'
                 and self.with_revaluation):
-            res = datetime.date(from_date.year,
+            res = datetime.coop_date(from_date.year,
                 self.revaluation_date.month, self.revaluation_date.day)
-            res = date.add_duration(res, -1, 'day')
+            res = coop_date.add_duration(res, -1, 'day')
             if res < from_date:
-                    res = date.add_duration(res, 1, 'year')
+                    res = coop_date.add_duration(res, 1, 'year')
         else:
             return to_date
 
@@ -255,7 +256,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
             errs += err
             if indemn['end_date'] == end_date:
                 break
-            start_date = date.add_day(indemn['end_date'], 1)
+            start_date = coop_date.add_day(indemn['end_date'], 1)
         return res, errs
 
     def get_indemnification_for_period(self, args):
@@ -270,7 +271,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
         if not res['end_date']:
             errs += 'missing_end_date'
             return [res], errs
-        nb = date.duration_between(res['start_date'], res['end_date'],
+        nb = coop_date.duration_between(res['start_date'], res['end_date'],
             self.indemnification_calc_unit)
         res['nb_of_unit'] = nb
         res['unit'] = self.indemnification_calc_unit
@@ -290,7 +291,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
             errs += err
             if indemn['end_date'] == args['end_date']:
                 break
-            start_date = date.add_day(indemn['end_date'], 1)
+            start_date = coop_date.add_day(indemn['end_date'], 1)
         return res, errs
 
     def get_indemnification_for_capital(self, args):
@@ -325,12 +326,12 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
     amount = fields.Numeric('Amount',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
         states={'invisible': STATE_ADVANCED})
-    indemnification_calc_unit = fields.Selection(date.DAILY_DURATION,
+    indemnification_calc_unit = fields.Selection(coop_date.DAILY_DURATION,
         'Calculation Unit', sort=False)
     limited_duration = fields.Boolean('Limited Duration')
     duration = fields.Integer('Duration',
         states={'invisible': Bool(~Eval('limited_duration'))})
-    duration_unit = fields.Selection(date.DAILY_DURATION, 'Duration Unit',
+    duration_unit = fields.Selection(coop_date.DAILY_DURATION, 'Duration Unit',
         sort=False, states={'invisible': Bool(~Eval('limited_duration'))})
 
     def on_change_with_rule_complementary_data(self):
@@ -368,7 +369,7 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
     def get_end_date(self, from_date, to_date):
         if not self.limited_duration:
             return to_date
-        max_end_date = date.get_end_of_period(from_date, self.duration,
+        max_end_date = coop_date.get_end_of_period(from_date, self.duration,
             self.duration_unit)
         return min(to_date, max_end_date) if to_date else max_end_date
 
@@ -392,7 +393,7 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
         res['start_date'] = from_date
         end_date = args['end_date'] if 'end_date' in args else None
         end_date = self.get_end_date(from_date, end_date)
-        nb = date.duration_between(from_date, end_date,
+        nb = coop_date.duration_between(from_date, end_date,
             self.indemnification_calc_unit)
         res['end_date'] = end_date
         res['nb_of_unit'] = nb

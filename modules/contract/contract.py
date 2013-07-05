@@ -1,6 +1,6 @@
 import copy
 
-from trytond.modules.coop_utils import model, fields, date
+from trytond.modules.coop_utils import model, fields, coop_date
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 from trytond.pool import Pool, PoolMeta
@@ -55,7 +55,7 @@ class StatusHistory(model.CoopSQL, model.CoopView):
         previous_status = reference.status_history[-1]
         if not previous_status:
             return
-        previous_status.end_date = max(date.add_day(at_date, -1),
+        previous_status.end_date = max(coop_date.add_day(at_date, -1),
             previous_status.start_date)
         if previous_status == 'active':
             reference.end_date = previous_status.end_date
@@ -120,7 +120,7 @@ class Subscribed(model.CoopView):
             res = set()
         res.add(self.start_date)
         if hasattr(self, 'end_date') and self.end_date:
-            res.add(date.add_day(self.end_date, 1))
+            res.add(coop_date.add_day(self.end_date, 1))
         return res
 
     def init_from_offered(self, offered, start_date=None, end_date=None):
@@ -481,7 +481,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             return res[0].address
 
     def get_next_renewal_date(self):
-        return date.add_frequency('yearly', self.start_date)
+        return coop_date.add_frequency('yearly', self.start_date)
 
     def on_change_with_product_kind(self, name=None):
         return self.offered.kind if self.offered else ''

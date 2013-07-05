@@ -3,7 +3,7 @@ from trytond.pyson import Eval, If, Or
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, fields, abstract
-from trytond.modules.coop_utils import utils, business, date
+from trytond.modules.coop_utils import utils, business, coop_date
 from trytond.modules.coop_utils import coop_string
 from trytond.modules.contract import contract
 from trytond.modules.offered.offered import DEF_CUR_DIG
@@ -259,7 +259,7 @@ class InsurancePolicy():
                 )[0]}
 
     def get_next_renewal_date(self):
-        return date.add_frequency('yearly', self.start_date)
+        return coop_date.add_frequency('yearly', self.start_date)
 
     def finalize_contract(self):
         super(InsurancePolicy, self).finalize_contract()
@@ -866,7 +866,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
             res = set()
         res.add(self.start_date)
         if hasattr(self, 'end_date') and self.end_date:
-            res.add(date.add_day(self.end_date, 1))
+            res.add(coop_date.add_day(self.end_date, 1))
         return res
 
     def get_coverage(self):

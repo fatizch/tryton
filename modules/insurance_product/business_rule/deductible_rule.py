@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 from trytond.pyson import Eval, Or, And
 
-from trytond.modules.coop_utils import model, date, fields, coop_string
+from trytond.modules.coop_utils import model, coop_date, fields, coop_string
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED
 
@@ -41,7 +41,7 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
             'required': And(~STATE_ADVANCED, Eval('kind') == 'duration',
                 Eval('simple_config_choice') == 'value'),
             })
-    duration_unit = fields.Selection(date.DAILY_DURATION, 'Duration Unit',
+    duration_unit = fields.Selection(coop_date.DAILY_DURATION, 'Duration Unit',
         states={
             'invisible': Or(STATE_ADVANCED, Eval('kind') != 'duration',
                 Eval('simple_config_choice') != 'value'),
@@ -106,11 +106,12 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
         if not duration or not unit:
             errs = 'missing_duration_or_duration_unit'
             return None, errs
-        end_date = date.get_end_of_period(args['start_date'], duration, unit)
+        end_date = coop_date.get_end_of_period(args['start_date'],
+            duration, unit)
         if 'end_date' in args and args['end_date']:
             end_date = min(end_date, args['end_date'])
         res['end_date'] = end_date
-        res['nb_of_unit'] = date.duration_between(res['start_date'],
+        res['nb_of_unit'] = coop_date.duration_between(res['start_date'],
             res['end_date'], 'day')
         res['unit'] = unit
         res['amount_per_unit'] = 0
@@ -153,7 +154,7 @@ class DeductibleDuration(model.CoopSQL, model.CoopView):
     deductible_rule = fields.Many2One('ins_product.deductible_rule',
         'Deductible Rule')
     duration = fields.Integer('Duration', required=True)
-    duration_unit = fields.Selection(date.DAILY_DURATION, 'Duration Unit',
+    duration_unit = fields.Selection(coop_date.DAILY_DURATION, 'Duration Unit',
         required=True)
 
     def get_rec_name(self, name):

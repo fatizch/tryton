@@ -11,8 +11,8 @@ from trytond.wizard import Wizard, StateTransition, StateView, Button
 from trytond.pyson import Eval, If, Date
 from trytond.rpc import RPC
 
-from trytond.modules.coop_utils import model, fields, utils, date, coop_string
-from trytond.modules.coop_utils import export
+from trytond.modules.coop_utils import model, fields, utils, coop_date
+from trytond.modules.coop_utils import export, coop_string
 from trytond.modules.insurance_product.business_rule.pricing_rule import \
     PRICING_FREQUENCY
 from trytond.modules.insurance_contract.contract import IS_PARTY
@@ -303,8 +303,8 @@ class PriceLine(model.CoopSQL, model.CoopView):
         return self.on_object.get_account_for_billing()
 
     def get_number_of_days_at_date(self, at_date):
-        final_date = date.add_frequency(self.frequency, at_date)
-        return date.number_of_days_between(at_date, final_date) - 1
+        final_date = coop_date.add_frequency(self.frequency, at_date)
+        return coop_date.number_of_days_between(at_date, final_date) - 1
 
     def get_currency(self):
         if self.contract:
@@ -316,7 +316,7 @@ class PriceLine(model.CoopSQL, model.CoopView):
         return self.amount
 
     def calculate_bill_contribution(self, work_set, period):
-        number_of_days = date.number_of_days_between(*period)
+        number_of_days = coop_date.number_of_days_between(*period)
         price_line_days = self.get_number_of_days_at_date(period[0])
         convert_factor = number_of_days / Decimal(price_line_days)
         amount = self.get_base_amount_for_billing() * convert_factor
@@ -550,7 +550,7 @@ class BillingProcess(Wizard):
         move_date = self.bill_display.moves[-1].billing_period.end_date
         ContractModel = Pool().get(Transaction().context.get('active_model'))
         contract = ContractModel(Transaction().context.get('active_id'))
-        contract.next_billing_date = date.add_day(move_date, 1)
+        contract.next_billing_date = coop_date.add_day(move_date, 1)
         contract.save()
         move = self.bill_display.moves[-1]
         move.post([move])
@@ -696,7 +696,7 @@ class Contract():
 
     def next_billing_period(self):
         start_date = self.next_billing_date
-        last_date = date.add_day(self.start_date, -1)
+        last_date = coop_date.add_day(self.start_date, -1)
         if not utils.is_none(self, 'billing_periods'):
             for period in self.billing_periods:
                 if (start_date >= period.start_date and (
@@ -704,15 +704,15 @@ class Contract():
                     return (period.start_date, period.end_date)
             if period.end_date > last_date:
                 last_date = period.end_date
-        new_period_start = date.add_day(last_date, 1)
-        new_period_end = date.add_frequency(
+        new_period_start = coop_date.add_day(last_date, 1)
+        new_period_end = coop_date.add_frequency(
             self.get_product_frequency(last_date), last_date)
         if self.next_renewal_date:
             #TODO : temporay hack to deal with first period longuer than a year
             if start_date == self.start_date:
-                new_period_end = date.add_day(self.next_renewal_date, -1)
+                new_period_end = coop_date.add_day(self.next_renewal_date, -1)
             else:
-                new_period_end = min(new_period_end, date.add_day(
+                new_period_end = min(new_period_end, coop_date.add_day(
                     self.next_renewal_date, -1))
         if self.end_date and new_period_end > self.end_date:
             return (new_period_start, self.end_date)
@@ -762,7 +762,7 @@ class Contract():
                 pass
             result_prices.append(price_line)
         for elem in oldest:
-            elem.end_date = date.add_day(dates[0], -1)
+            elem.end_date = coop_date.add_day(dates[0], -1)
             elem.save()
         if to_delete:
             PriceLine.delete(to_delete)
@@ -997,7 +997,7 @@ class Contract():
         Transaction().cursor.commit()
         move = self.bill()
         if move and post:
-            self.next_billing_date = date.add_day(
+            self.next_billing_date = coop_date.add_day(
                 move.billing_period.end_date, 1)
             self.save()
             if not move.lines:

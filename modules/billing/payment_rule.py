@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 
 from trytond.pool import Pool
 from trytond.pyson import Eval
-from trytond.modules.coop_utils import fields, model, date
+from trytond.modules.coop_utils import fields, model, coop_date
 from trytond.modules.insurance_product.business_rule.pricing_rule import \
     PRICING_FREQUENCY
 
@@ -198,7 +198,7 @@ class PaymentRuleLine(model.CoopSQL, model.CoopView):
             payment_rule = self.payment_rule
             my_start_date = self.get_date(start_date)
             if payment_rule.with_sync_date:
-                temp_date = date.add_frequency(payment_rule.base_frequency,
+                temp_date = coop_date.add_frequency(payment_rule.base_frequency,
                     my_start_date)
                 if payment_rule.base_frequency == 'yearly':
                     final_date = datetime.date(temp_date.year,
@@ -212,11 +212,11 @@ class PaymentRuleLine(model.CoopSQL, model.CoopView):
                 else:
                     my_end_date = end_date
             else:
-                my_end_date = date.add_frequency(payment_rule.base_frequency,
+                my_end_date = coop_date.add_frequency(payment_rule.base_frequency,
                     my_start_date)
-            my_end_date = date.add_day(my_end_date, -1)
-            period = date.number_of_days_between(my_start_date, my_end_date)
-            total_period = date.number_of_days_between(start_date, end_date)
+            my_end_date = coop_date.add_day(my_end_date, -1)
+            period = coop_date.number_of_days_between(my_start_date, my_end_date)
+            total_period = coop_date.number_of_days_between(start_date, end_date)
             return currency.round(amount * period / total_period)
         return 0
 
@@ -302,9 +302,9 @@ class PaymentRule(model.CoopSQL, model.CoopView):
                     'line': None})
         last_date = dates[-1]['date'] if len(dates) else start_date
         if self.with_sync_date:
-            temp_date = date.add_frequency(self.base_frequency, last_date)
+            temp_date = coop_date.add_frequency(self.base_frequency, last_date)
             if self.base_frequency == 'yearly':
-                final_date = datetime.date(temp_date.year,
+                final_date = datetime.coop_date(temp_date.year,
                     self.sync_date.month, self.sync_date.day)
             else:
                 final_date = datetime.date(temp_date.year, temp_date.month,
@@ -317,10 +317,10 @@ class PaymentRule(model.CoopSQL, model.CoopView):
                         'line': None})
                 last_date = final_date
         else:
-            last_date = date.add_day(last_date, 1)
+            last_date = coop_date.add_day(last_date, 1)
 
         while last_date <= end_date:
-            last_date = date.add_frequency(self.base_frequency,
+            last_date = coop_date.add_frequency(self.base_frequency,
                 last_date)
             if last_date <= end_date:
                 dates.append({
@@ -344,9 +344,9 @@ class PaymentRule(model.CoopSQL, model.CoopView):
                     res.append((cur_date, amount))
                     continue
                 if payment_date > cur_date.day:
-                    temp_date = date.add_month(cur_date, -1)
+                    temp_date = coop_date.add_month(cur_date, -1)
                     if payment_date > 28:
-                        temp_date = date.get_end_of_month(temp_date)
+                        temp_date = coop_date.get_end_of_month(temp_date)
                         if temp_date.day > payment_date:
                             res.append((datetime.date(temp_date.year,
                                         temp_date.month, payment_date),
@@ -362,7 +362,7 @@ class PaymentRule(model.CoopSQL, model.CoopView):
             elif self.payment_mode == 'in_arrears':
                 if payment_date > cur_date.day:
                     if payment_date > 28:
-                        temp_date = date.get_end_of_month(cur_date)
+                        temp_date = coop_date.get_end_of_month(cur_date)
                         if temp_date.day > payment_date:
                             res.append((datetime.date(temp_date.year,
                                         temp_date.month, payment_date),
@@ -373,7 +373,7 @@ class PaymentRule(model.CoopSQL, model.CoopView):
                         res.append((datetime.date(cur_date.year,
                                     cur_date.month, payment_date), amount))
                 else:
-                    temp_date = date.add_month(cur_date, 1)
+                    temp_date = coop_date.add_month(cur_date, 1)
                     if payment_date >= temp_date.day:
                         res.append((temp_date, amount))
                     else:
