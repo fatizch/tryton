@@ -228,11 +228,14 @@ class Party(model.CoopSQL):
 
     @classmethod
     def search_rec_name(cls, name, clause):
-        if cls.search([('first_name',) + clause[1:]], limit=1):
-            return [('first_name',) + clause[1:]]
-        if cls.search([('ssn',) + clause[1:]], limit=1):
-            return [('ssn',) + clause[1:]]
-        return [(cls._rec_name,) + clause[1:]]
+        parties = cls.search(['OR',
+                [('first_name',) + tuple(clause[1:])],
+                [('name',) + tuple(clause[1:])],
+                [('ssn',) + tuple(clause[1:])]
+                ], order=[])
+        if parties:
+            return [('id', 'in', [party.id for party in parties])]
+        return super(Party, cls).search_rec_name(name, clause)
 
     def get_person(self):
         if self.is_person:
