@@ -55,7 +55,7 @@ class CoveredElement():
         'get_is_health')
     health_complement = fields.Function(
         fields.One2Many('health.party_complement', None, 'Health Complement',
-            on_change_with=['party'],
+            on_change_with=['party', 'is_health'],
             states={'invisible': ~Eval('is_health')}),
         'get_health_complement', 'set_health_complement')
 
@@ -93,7 +93,7 @@ class CoveredElement():
     def on_change_with_health_complement(self, name=None):
         if not self.party:
             return []
-        elif self.party and not self.party.health_complement:
+        elif self.party and self.is_health and not self.party.health_complement:
             address = self.party.address_get() if self.party else None
             department = address.get_department() if address else ''
             return {'add': [{
