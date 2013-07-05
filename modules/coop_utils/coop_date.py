@@ -131,4 +131,6 @@ def duration_between(date1, date2, duration_unit):
 
 
 def add_frequency(frequency, to_date):
+    if frequency == 'biyearly':
+        return add_duration(to_date, 2, 'year')
     return add_duration(to_date, 1, frequency[:-2])
