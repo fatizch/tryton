@@ -708,12 +708,8 @@ class Contract():
         new_period_end = coop_date.add_frequency(
             self.get_product_frequency(last_date), last_date)
         if self.next_renewal_date:
-            #TODO : temporay hack to deal with first period longuer than a year
-            if start_date == self.start_date:
-                new_period_end = coop_date.add_day(self.next_renewal_date, -1)
-            else:
-                new_period_end = min(new_period_end, coop_date.add_day(
-                    self.next_renewal_date, -1))
+            new_period_end = min(new_period_end, date.add_day(
+                self.next_renewal_date, -1))
         if self.end_date and new_period_end > self.end_date:
             return (new_period_start, self.end_date)
         return (new_period_start, new_period_end)
