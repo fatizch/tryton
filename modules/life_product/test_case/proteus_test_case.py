@@ -795,8 +795,7 @@ def create_shared_complementary_data(cfg_dict):
         kind='sub_elem', selection='''CSP1: CSP1
 CSP2: CSP2
 CSP3: CSP3
-CSP4: CSP4
-''')
+CSP4: CSP4''')
 
 
 def launch_test_case(cfg_dict):
