@@ -44,7 +44,6 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
                 STATES_AMOUNT_EVOLVES,
             )
         })
-    #TODO: use new tryton digits factor
     coef_coverage_amount = fields.Numeric('Multiplier',
         states={
             'invisible': Or(

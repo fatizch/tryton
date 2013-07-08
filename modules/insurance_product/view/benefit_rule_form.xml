@@ -17,8 +17,15 @@
         <field name="amount"/>
         <newline/>
         <label name="coef_coverage_amount"/>
-        <!-- ToDo add tryton digits factor factor="100"-->
-        <field name="coef_coverage_amount"/>
+        <group id="coef_coverage_amount">
+            <field name="coef_coverage_amount" factor="100" xexpand="0"/>
+            <label string="%" id="percent" xexpand="0" xalign="0"
+                states="{
+                    'invisible': Or(
+                        Eval('config_kind') != 'simple',
+                        Eval('amount_kind') != 'cov_amount',
+                        Bool(Eval('amount_evolves_over_time')))}"/>
+        </group>
         <newline/>
     </xpath>
     <xpath expr="/form" position="inside">

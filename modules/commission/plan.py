@@ -91,4 +91,4 @@ class CommissionRule(business_rule.BusinessRuleRoot, model.CoopSQL):
         return self.rate, []
 
     def get_simple_rec_name(self):
-        return '%s %%' % self.rate
+        return '%s %%' % (self.rate * 100)
