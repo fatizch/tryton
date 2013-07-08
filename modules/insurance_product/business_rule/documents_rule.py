@@ -752,24 +752,10 @@ class RequestFinder(model.CoopView):
 
     __name__ = 'ins_product.request_finder'
 
-    kind = fields.Selection(
-        [
-            ('', '')
-        ],
-        'Kind',
-        on_change=['kind'],
-    )
-
-    value = fields.Char(
-        'Value',
-    )
-
-    request = fields.Many2One(
-        'ins_product.document_request',
-        'Request',
-        states={
-            'invisible': True
-        })
+    kind = fields.Selection([('', '')], 'Kind', on_change=['kind'])
+    value = fields.Char('Value')
+    request = fields.Many2One('ins_product.document_request', 'Request',
+        states={'invisible': True})
 
     @classmethod
     def __setup__(cls):
