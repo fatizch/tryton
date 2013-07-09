@@ -13,26 +13,26 @@ then
         echo $1 must be an existing directory
         echo $SEP
 else
-	cd $1
-	TOPPATH=$PWD
-	cd bin
-	ln -s ../tryton-workspace/coopbusiness/scripts/start.sh coop_start 2> /dev/null
-	cd ..
-	echo $SEP
-	echo Entering Virtual Env
-	echo $SEP
-	source bin/activate
-	echo $SEP
-	echo Creating links between working directory and tryton modules
-	echo $SEP
-	cd tryton-workspace/trytond/trytond/modules
-    find . -maxdepth 1 -lname '*' -exec rm {} \
+    cd $1
+    TOPPATH=$PWD
+    cd bin
+    ln -s ../tryton-workspace/coopbusiness/scripts/start.sh coop_start 2> /dev/null
+    cd ..
+    echo $SEP
+    echo Entering Virtual Env
+    echo $SEP
+    source bin/activate
+    echo $SEP
+    echo Creating links between working directory and tryton modules
+    echo $SEP
+    cd tryton-workspace/trytond/trytond/modules
+    find . -maxdepth 1 -lname '*' -exec rm '{}' \;
     ln -s ../../../coopbusiness/modules/* . 2> /dev/null
-	cd ../../../..
-	ln -s tryton-workspace/coopbusiness/scripts/start.sh . 2> /dev/null
-	cd tryton-workspace
-	echo $SEP
-	echo Configuring workspace and scripts, creating minimalist tryton server conf file
+    cd ../../../..
+    ln -s tryton-workspace/coopbusiness/scripts/start.sh . 2> /dev/null
+    cd tryton-workspace
+    echo $SEP
+    echo Configuring workspace and scripts, creating minimalist tryton server conf file
     if [ ! -e "logs" ]
     then
         mkdir logs
@@ -41,7 +41,7 @@ else
     then
         mkdir conf
     fi
-	cd conf
+    cd conf
     VIRTUALNAME=`basename $TOPPATH`
     if [ ! -e "scripts.conf" ]
     then
@@ -106,7 +106,7 @@ else
     then
         cp ../coopbusiness/defaults/tryton.conf .
     fi
-	cd ../../lib/python2.7/site-packages
+    cd ../../lib/python2.7/site-packages
     if [ ! -e '_trytond_path.pth' ]
     then
         echo "import sys; sys.__plen = len(sys.path)" > _trytond_path.pth
@@ -157,7 +157,7 @@ else
         echo "sys.path[p:p]=new" >> _trytond_celery_path.pth
         echo "sys.__egginsert = p+len(new)" >> _trytond_celery_path.pth
     fi
-	echo $SEP
-	echo Done
-	echo $SEP
+    echo $SEP
+    echo Done
+    echo $SEP
 fi
