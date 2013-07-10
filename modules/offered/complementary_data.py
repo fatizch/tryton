@@ -120,9 +120,17 @@ class ComplementaryDataDefinition(
         return False
 
     def on_change_type_(self):
-        if not (hasattr(self, 'type_') and self.type_ == 'selection'):
-            return {'selection': ''}
-        return {}
+        res = {}
+        if not hasattr(self, 'type_'):
+            return {}
+        if self.type_ == 'selection':
+            res['selection'] = ''
+            res['default_selection'] = ''
+        elif self.type_ == 'boolean':
+            res['default_boolean'] = False
+        else:
+            res['default'] = ''
+        return res
 
     def get_default_value_selection(self):
         if not (hasattr(self, 'type_') and self.type_ == 'selection'):
