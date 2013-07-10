@@ -585,7 +585,8 @@ class Product():
     payment_methods = fields.One2Many(
         'billing.product-payment_method-relation', 'product',
         'Payment Methods', order=[('order', 'ASC')],
-        domain=[('payment_rule.payment_mode', '=', Eval('payment_delay', ''))],
+        domain=[('payment_method.payment_rule.payment_mode', '=',
+                Eval('payment_delay', ''))],
         depends=['payment_delay'])
     account_for_billing = fields.Many2One('account.account',
         'Account for billing', required=True,
@@ -604,6 +605,10 @@ class Product():
 
     def get_account_for_billing(self):
         return self.account_for_billing
+
+    @classmethod
+    def default_payment_delay(cls):
+        return 'in_advance'
 
 
 class Coverage():
