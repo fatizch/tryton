@@ -37,6 +37,8 @@ __all__ = [
     'TaxDesc',
     'FeeDesc',
     'Sequence',
+    'FiscalYear',
+    'Company',
 ]
 
 PAYMENT_MODES = [
@@ -48,6 +50,8 @@ PAYMENT_MODES = [
 
 export.add_export_to_model([
     ('account.account', ('code', 'name')),
+    ('account.fiscalyear', ('code', )),
+    ('account.period', ('code', )),
     ('company.company', ('party.code', )),
     ('account.tax', ('name', )),
     ('account.account.type', ('name', )),
@@ -1255,3 +1259,60 @@ class Sequence():
         cls.company = copy.copy(cls.company)
         cls.company.domain = export.clean_domain_for_import(
             cls.company.domain, 'company')
+
+
+class Company():
+    'Company'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'company.company'
+
+    fiscal_years = fields.One2Many('account.fiscalyear', 'company',
+        'Fiscal Years')
+
+    def _post_import_set_default_accounts(self):
+        account_configuration = Pool().get('account.configuration')(0)
+        AccountType = Pool().get('account.account.type')
+        Account = Pool().get('account.account')
+        for name in ('receivable', 'payable'):
+            if getattr(account_configuration, 'default_account_%s' % name):
+                continue
+            account_type = AccountType()
+            account_type.name = 'Client %s' % name
+            account_type.company = self
+            account_type.save()
+            account = Account()
+            account.company = self
+            account.type = account_type
+            account.name = 'Default %s account' % name
+            account.kind = name
+            account.save()
+            setattr(account_configuration, 'default_account_%s' % name,
+                account)
+        account_configuration.save()
+
+    @classmethod
+    def _post_import(cls, companies):
+        for company in companies:
+            with Transaction().set_context(company=company.id):
+                company._post_import_set_default_accounts()
+
+
+class FiscalYear():
+    'Fiscal Year'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'account.fiscalyear'
+
+    @classmethod
+    def __setup__(cls):
+        super(FiscalYear, cls).__setup__()
+        cls.company = copy.copy(cls.company)
+        cls.company.domain = export.clean_domain_for_import(
+            cls.company.domain, 'company')
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(FiscalYear, cls)._export_skips()
+        result.add('close_lines')
+        return result

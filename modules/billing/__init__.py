@@ -30,6 +30,8 @@ def register():
         TaxDesc,
         FeeDesc,
         Sequence,
+        FiscalYear,
+        Company,
         # from party
         Party,
         # from account

@@ -32,6 +32,13 @@ class Party():
             cls.account_receivable.domain, 'company')
 
     @classmethod
+    def _export_skips(cls):
+        result = super(Party, cls)._export_skips()
+        result.add('receivable_lines')
+        result.add('payable_lines')
+        return result
+
+    @classmethod
     def _import_single_link(
             cls, instance, field_name, field, field_value, created, relink,
             target_model, to_relink):
