@@ -507,6 +507,10 @@ class Rule(ModelView, ModelSQL):
         self.raise_user_error('invalid_code')
 
     @classmethod
+    def default_code(cls):
+        return 'return'
+
+    @classmethod
     def validate(cls, rules):
         for rule in rules:
             rule.check_code()
