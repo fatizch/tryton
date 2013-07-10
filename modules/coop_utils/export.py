@@ -1,3 +1,4 @@
+import copy
 import datetime
 import logging
 try:
@@ -10,6 +11,7 @@ from trytond.model import Model, ModelSQL, ModelView, fields as tryton_fields
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pool import Pool, PoolMeta
 from trytond.rpc import RPC
+from trytond.backend import TableHandler
 from trytond.exceptions import UserError
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If, PYSONEncoder
@@ -46,6 +48,46 @@ class ExportImportMixin(Model):
             result=lambda r: (r[0], json.dumps(r[1], cls=JSONEncoder), r[2]))
         cls.__rpc__['import_json'] = RPC(
             readonly=False, result=lambda r: None)
+        if not hasattr(cls, '_fields'):
+            return
+        for field_name, field in cls._fields.iteritems():
+            if not field.required:
+                continue
+            tmp_field = copy.copy(field)
+            tmp_field.required = False
+            if not tmp_field.states:
+                tmp_field.states = {}
+            if 'required' in tmp_field.states and \
+                    tmp_field.states['required'] and tmp_field.required:
+                raise Exception('\'required\' attribute defined both in field '
+                    'definition and states for field %s in model %s' % (
+                        field_name, cls.__name__))
+            tmp_field.states['required'] = True
+            setattr(cls, field_name, tmp_field)
+
+    @classmethod
+    def __register__(cls, module_name):
+        super(ExportImportMixin, cls).__register__(module_name)
+        if not hasattr(cls, '_fields'):
+            return
+        cursor = Transaction().cursor
+        try:
+            table = TableHandler(cursor, cls, module_name)
+        except AttributeError:
+            # No _table defined for model
+            return
+        for field_name, field in cls._fields.iteritems():
+            if (not 'required' in field.states or field.states['required'] is
+                    not True):
+                continue
+            if not table.column_exist(field_name):
+                continue
+            if not table._columns[field_name]['notnull']:
+                continue
+            table.cursor.execute('ALTER TABLE "%s" '
+                'ALTER COLUMN "%s" DROP NOT NULL'
+                % (table.table_name, field_name))
+            table._update_definitions()
 
     def _prepare_for_import(self):
         pass
@@ -424,10 +466,10 @@ class ExportImportMixin(Model):
         for field_name in sorted(cls._fields.iterkeys()):
             if not field_name in values:
                 continue
-            logging.getLogger('export_import').debug(
-                'Importing field %s' % field_name)
             field = cls._fields[field_name]
             field_value = values[field_name]
+            logging.getLogger('export_import').debug(
+                'Importing field %s : %s' % (field_name, field_value))
             if hasattr(cls, '_import_override_%s' % field_name):
                 values[field_name] = getattr(
                     cls, '_import_override_%s' % field_name)(my_key,
@@ -488,7 +530,7 @@ class ExportImportMixin(Model):
                                 to_append.append(elem_instance)
                             else:
                                 all_done = False
-                                break
+                                continue
                         if len(to_append) == len(field_value[1]):
                             existing = list(getattr(
                                 working_instance, field_name))

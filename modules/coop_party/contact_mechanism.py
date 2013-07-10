@@ -29,11 +29,16 @@ class ContactMechanism(model.CoopSQL):
     @classmethod
     def __setup__(cls):
         super(ContactMechanism, cls).__setup__()
+        # TODO : Make it cleaner
         cls.type = copy.copy(cls.type)
-        cls.type.selection.remove(('skype', 'Skype'))
-        cls.type.selection.remove(('sip', 'SIP'))
-        cls.type.selection.remove(('irc', 'IRC'))
-        cls.type.selection.remove(('jabber', 'Jabber'))
+        if ('skype', 'Skype') in cls.type.selection:
+            cls.type.selection.remove(('skype', 'Skype'))
+        if ('sip', 'SIP') in cls.type.selection:
+            cls.type.selection.remove(('sip', 'SIP'))
+        if ('irc', 'IRC') in cls.type.selection:
+            cls.type.selection.remove(('irc', 'IRC'))
+        if ('jabber', 'Jabber') in cls.type.selection:
+            cls.type.selection.remove(('jabber', 'Jabber'))
         cls._constraints += [('check_email', 'invalid_email')]
         cls._error_messages.update({
             'invalid_email': 'Invalid Email !'})
