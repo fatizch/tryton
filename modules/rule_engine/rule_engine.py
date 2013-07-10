@@ -358,6 +358,10 @@ class RuleEngineParameter(ModelView, ModelSQL):
             'kwarg_expected': 'Expected %s as a parameter for rule %s',
         })
 
+    @classmethod
+    def _export_keys(cls):
+        return set(['code', 'parent_rule.name'])
+
     def on_change_kind(self):
         if (hasattr(self, 'kind') and self.kind != 'rule'):
             return {'the_rule': None}
@@ -499,12 +503,18 @@ class Rule(ModelView, ModelSQL):
             return True
 
     def check_code(self):
+        if '__importing__' in Transaction().context:
+            return True
         result = not bool(filter(
             lambda m: self.filter_errors(m),
             check_code(self.as_function)))
         if result:
             return True
         self.raise_user_error('invalid_code')
+
+    @classmethod
+    def _post_import(cls, rules):
+        cls.validate(rules)
 
     @classmethod
     def validate(cls, rules):
