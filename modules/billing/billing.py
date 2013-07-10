@@ -591,7 +591,7 @@ class Product():
     def get_default_payment_method(self):
         if not self.payment_methods:
             return None
-        return self.payment_methods[0]
+        return self.payment_methods[0].payment_method
 
     def get_allowed_payment_methods(self):
         result = []
