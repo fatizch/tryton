@@ -21,7 +21,7 @@ REMAINING_POSITION = [
     ('custom', 'Custom Lines'),
     ]
 
-PAYMENT_MODES = [
+PAYMENT_DELAYS = [
     ('in_arrears', 'In Arrears'),
     ('in_advance', 'In Advance'),
     ]
@@ -267,7 +267,7 @@ class PaymentRule(model.CoopSQL, model.CoopView):
         'Start Lines')
     appliable_fees = fields.Many2Many('billing.payment_rule-fee-relation',
         'payment_rule', 'fee', 'Appliable fees')
-    payment_mode = fields.Selection(PAYMENT_MODES, 'Payment Mode')
+    payment_mode = fields.Selection(PAYMENT_DELAYS, 'Payment Mode')
 
     @classmethod
     def default_payment_mode(cls):
