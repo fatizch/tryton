@@ -163,16 +163,12 @@ yexpand="1" mode="form"/>
 ''',
     })
 
-    prev_product = Model.get('offered.product').find(
-        [('code', '=', 'PREV')])[0]
-
     subs_process_desc = meths['ProcessDesc']({
         'technical_name': 'individual_subscription',
         'fancy_name': translater('Individual Subscription Process'),
         'on_model': contract_model,
         'start_date': cfg_dict['Date'].today({}),
         'kind': 'subscription',
-        'for_products': [prev_product],
         'custom_transitions': True,
         'steps_implicitly_available': False,
         'xml_tree': '''

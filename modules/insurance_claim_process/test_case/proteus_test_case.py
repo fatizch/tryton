@@ -224,16 +224,12 @@ expand_toolbar="0" />''',
 expand_toolbar="0" />''',
     })
 
-    prev_product = Model.get('offered.product').find(
-        [('code', '=', 'PREV')])[0]
-
     process_claim = meths['ProcessDesc']({
         'technical_name': 'claim_declaration',
         'fancy_name': translater('Claim Declaration'),
         'on_model': claim_model,
         'start_date': cfg_dict['Date'].today({}),
         'kind': 'claim_declaration',
-        'for_products': [prev_product],
         'xml_tree': '''
 <field name="current_state"/>
 <field name="name"/>
