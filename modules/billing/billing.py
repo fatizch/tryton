@@ -398,9 +398,10 @@ class BillingManager(model.CoopSQL, model.CoopView):
     def init_from_contract(self, contract, start_date):
         self.start_date = start_date
         self.payment_method = contract.offered.get_default_payment_method()
-        good_payment_date = self.payment_method.get_allowed_date_values()[0][0]
-        if good_payment_date:
-            self.payment_date = int(good_payment_date)
+        if self.payment_method:
+            good_payment_date = self.payment_method.get_allowed_date_values()[0][0]
+            if good_payment_date:
+                self.payment_date = int(good_payment_date)
 
     def on_change_with_payment_mode(self, name=None):
         if not (hasattr(self, 'payment_method') and self.payment_method):
@@ -586,7 +587,7 @@ class Product():
     def get_default_payment_method(self):
         if not self.payment_methods:
             return None
-        return self.payment_methods[0]
+        return self.payment_methods[0].payment_method
 
     def get_allowed_payment_methods(self):
         result = []
