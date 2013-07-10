@@ -734,7 +734,7 @@ def add_export_to_model(models, module_name):
     classes = []
     for model, keys in models:
         classes.append(class_generator(model, keys))
-    Pool.register(*classes, module='module_name', type_='model')
+    Pool.register(*classes, module=module_name, type_='model')
 
 
 def clean_domain_for_import(domain, detect_key=None):

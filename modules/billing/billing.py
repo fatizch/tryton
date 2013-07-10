@@ -1299,7 +1299,7 @@ class Company():
                 company._post_import_set_default_accounts()
 
 
-class FiscalYear():
+class FiscalYear(export.ExportImportMixin):
     'Fiscal Year'
 
     __metaclass__ = PoolMeta

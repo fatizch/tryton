@@ -47,7 +47,6 @@ def register():
 
     export.add_export_to_model([
             ('account.account', ('code', 'name')),
-            ('account.fiscalyear', ('code', )),
             ('account.period', ('code', )),
             ('company.company', ('party.code', )),
             ('account.tax', ('name', )),
