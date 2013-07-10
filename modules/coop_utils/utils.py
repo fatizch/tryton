@@ -353,7 +353,7 @@ def format_data(data, prefix='', prefix_inc='    ', is_init=True):
         tmp = [prefix + str(data) + ' : {']
         for k in data._fields:
             try:
-                value = data.k
+                value = getattr(data, k)
             except:
                 value = None
             if not value:
