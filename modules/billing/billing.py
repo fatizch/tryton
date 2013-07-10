@@ -17,6 +17,8 @@ from trytond.modules.insurance_product.business_rule.pricing_rule import \
     PRICING_FREQUENCY
 from trytond.modules.insurance_contract.contract import IS_PARTY
 
+from payment_rule import PAYMENT_DELAYS
+
 __all__ = [
     'PaymentMethod',
     'PriceLine',
@@ -570,7 +572,7 @@ class ProductPaymentMethodRelation(model.CoopSQL, model.CoopView):
         ondelete='CASCADE')
     payment_method = fields.Many2One('billing.payment_method',
         'Payment Method', ondelete='RESTRICT')
-    is_default = fields.Boolean('Default')
+    order = fields.Integer('Order', required=True)
 
 
 class Product():
@@ -579,17 +581,20 @@ class Product():
     __metaclass__ = PoolMeta
     __name__ = 'offered.product'
 
+    payment_delay = fields.Selection(PAYMENT_DELAYS, 'Payment delay')
     payment_methods = fields.One2Many(
         'billing.product-payment_method-relation', 'product',
-        'Payment Methods')
+        'Payment Methods', order=[('order', 'ASC')],
+        domain=[('payment_rule.payment_mode', '=', Eval('payment_delay', ''))],
+        depends=['payment_delay'])
     account_for_billing = fields.Many2One('account.account',
         'Account for billing', required=True,
         domain=[('kind', '=', 'revenue')])
 
     def get_default_payment_method(self):
-        for elem in self.payment_methods:
-            if elem.is_default:
-                return elem.payment_method
+        if not self.payment_methods:
+            return None
+        return self.payment_methods[0]
 
     def get_allowed_payment_methods(self):
         result = []

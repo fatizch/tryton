@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <form string="Payment Method" col="2">
-    <label name="is_default"/>
-    <field name="is_default"/>
+    <label name="order"/>
+    <field name="order"/>
     <label name="payment_method"/>
     <field name="payment_method"/>
 </form>
