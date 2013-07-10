@@ -1,4 +1,5 @@
 from trytond.pool import Pool
+from trytond.modules.coop_utils import export
 from .billing import *
 from .account import *
 from .party import *
@@ -43,3 +44,12 @@ def register():
     Pool.register(
         BillingProcess,
         module='billing', type_='wizard')
+
+    export.add_export_to_model([
+            ('account.account', ('code', 'name')),
+            ('account.fiscalyear', ('code', )),
+            ('account.period', ('code', )),
+            ('company.company', ('party.code', )),
+            ('account.tax', ('name', )),
+            ('account.account.type', ('name', )),
+            ], 'billing')

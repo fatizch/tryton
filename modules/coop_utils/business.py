@@ -1,7 +1,6 @@
 from trytond.pool import Pool
 
 from .utils import get_coop_config
-from .export import add_export_to_model
 
 
 __all__ = [
@@ -10,13 +9,6 @@ __all__ = [
     'get_default_country',
     'update_args_with_subscriber',
 ]
-
-
-add_export_to_model([
-    ('ir.lang', ('code',)),
-    ('currency.currency', ('code',)),
-    ('currency.currency.rate', ()),
-])
 
 
 class ArgsDoNotMatchException(Exception):

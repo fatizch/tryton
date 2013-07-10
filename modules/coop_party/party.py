@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import CoopView, CoopSQL
 from trytond.modules.coop_utils import TableOfTable, utils, fields, model
-from trytond.modules.coop_utils import coop_string, export
+from trytond.modules.coop_utils import coop_string
 
 
 __all__ = [
@@ -28,11 +28,6 @@ ACTOR_KIND = [
 
 STATES_PERSON = Bool(Eval('is_person'))
 STATES_COMPANY = Bool(Eval('is_company'))
-
-
-export.add_export_to_model([
-    ('party.category', ()),
-])
 
 
 class Party(model.CoopSQL):

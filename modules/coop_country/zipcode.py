@@ -8,11 +8,6 @@ __all__ = [
 ]
 
 
-export.add_export_to_model([
-    ('country.subdivision', ('code',)),
-])
-
-
 class Country(export.ExportImportMixin):
     'Country'
 

@@ -50,15 +50,6 @@ PAYMENT_MODES = [
     ('direct_debit', 'Direct Debit'),
 ]
 
-export.add_export_to_model([
-    ('account.account', ('code', 'name')),
-    ('account.fiscalyear', ('code', )),
-    ('account.period', ('code', )),
-    ('company.company', ('party.code', )),
-    ('account.tax', ('name', )),
-    ('account.account.type', ('name', )),
-])
-
 
 class PaymentMethod(model.CoopSQL, model.CoopView):
     'Payment Method'

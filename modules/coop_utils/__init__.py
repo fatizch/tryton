@@ -31,3 +31,23 @@ def register():
         # from export
         ImportWizard,
         module='coop_utils', type_='wizard')
+
+    add_export_to_model([
+            ('ir.model', ('model',)),
+            ('ir.model.field', ('name', 'model.model')),
+            ('res.group', ('name',)),
+            ('ir.ui.menu', ('name',)),
+            ('ir.model.field.access', ('field.name', 'field.model.model')),
+            ('ir.rule.group', ('name',)),
+            ('ir.sequence', ('code', 'name')),
+            ('res.user', ('login',)),
+            ('ir.action', ('type', 'name')),
+            ('ir.action.keyword', ('keyword',)),
+            ('res.user.warning', ('name', 'user')),
+            ('ir.rule', ('domain',)),
+            ('ir.model.access', ('group.name', 'model.model')),
+            ('ir.ui.view', ('module', 'type', 'name')),
+            ('ir.lang', ('code',)),
+            ('currency.currency', ('code',)),
+            ('currency.currency.rate', ()),
+            ], 'coop_utils')

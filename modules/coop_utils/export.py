@@ -710,7 +710,7 @@ class Group(ExportImportMixin):
         return set(['name'])
 
 
-def add_export_to_model(models):
+def add_export_to_model(models, module_name):
     def class_generator(model_name, keys):
         class GenericClass(ExportImportMixin):
             __metaclass__ = PoolMeta
@@ -720,31 +720,21 @@ def add_export_to_model(models):
             def _export_keys(cls):
                 return set(keys)
 
+            @classmethod
+            def __setup__(cls):
+                super(GenericClass, cls).__setup__()
+
+            @classmethod
+            def __register__(cls, module_name):
+                super(GenericClass, cls).__register__(module_name)
+
         GenericClass.__doc__ = model_name
         return GenericClass
 
     classes = []
     for model, keys in models:
         classes.append(class_generator(model, keys))
-    Pool.register(*classes, module='coop_utils', type_='model')
-
-
-add_export_to_model([
-    ('ir.model', ('model',)),
-    ('ir.model.field', ('name', 'model.model')),
-    ('res.group', ('name',)),
-    ('ir.ui.menu', ('name',)),
-    ('ir.model.field.access', ('field.name', 'field.model.model')),
-    ('ir.rule.group', ('name',)),
-    ('ir.sequence', ('code', 'name')),
-    ('res.user', ('login',)),
-    ('ir.action', ('type', 'name')),
-    ('ir.action.keyword', ('keyword',)),
-    ('res.user.warning', ('name', 'user')),
-    ('ir.rule', ('domain',)),
-    ('ir.model.access', ('group.name', 'model.model')),
-    ('ir.ui.view', ('module', 'type', 'name')),
-])
+    Pool.register(*classes, module='module_name', type_='model')
 
 
 def clean_domain_for_import(domain, detect_key=None):
