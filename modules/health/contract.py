@@ -77,7 +77,7 @@ class CoveredElement():
         health_complements = []
         for covered_element in values:
             if utils.is_none(Contract(covered_element['contract']),
-                    'is_health'):
+                    'is_health') or 'party' not in covered_element:
                 continue
             party = Party(covered_element['party'])
             if party.is_person and not party.health_complement:
