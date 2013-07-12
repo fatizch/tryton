@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<form string="Manage Dimensions" col="4">
+  <label name="name"/>
+  <field name="name" colspan="3"/>
+  <label name="order"/>
+  <field name="order" colspan="3"/>
+  <label name="kind"/>
+  <field name="kind"/>
+  <label name="date_format"/>
+  <field name="date_format"/>
+  <group id="values" yexpand="1" yfill="1" col="3" colspan="4">
+    <group id="input_text" col="1" yexpand="1" yfill="1">
+      <separator name="input_text"/>
+      <field name="input_text"/>
+    </group>
+    <group id="converted_text" col="1" yexpand="1" yfill="1">
+      <separator name="converted_text"/>
+      <field name="converted_text"/>
+    </group>
+    <field name="values" rowspan="2"/>
+  </group>
+  <!-- Invisible -->
+  <newline/>
+  <field name="table"/>
+  <field name="cur_dimension"/>
+</form>
