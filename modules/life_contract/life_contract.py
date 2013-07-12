@@ -57,7 +57,7 @@ class Contract():
         if not party:
             return res
         for cov_elem in cls.get_possible_covered_elements(party, at_date):
-            contract = cov_elem.get_contract()
+            contract = cov_elem.main_contract
             #TODO : Temporary Hack Date validation should be done with domain
             #and in get_possible_covered_elements
             if contract and contract.is_active_at_date(at_date):

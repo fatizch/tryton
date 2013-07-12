@@ -1,6 +1,6 @@
 import copy
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Or
 
 from trytond.modules.coop_utils import fields, utils
 
@@ -55,8 +55,8 @@ class CoveredElement():
         'get_is_health')
     health_complement = fields.Function(
         fields.One2Many('health.party_complement', None, 'Health Complement',
-            on_change_with=['party', 'is_health'],
-            states={'invisible': ~Eval('is_health')}),
+            on_change_with=['party', 'is_health', 'is_person'],
+            states={'invisible': Or(~Eval('is_health'), ~Eval('is_person'))}),
         'get_health_complement', 'set_health_complement')
 
     @classmethod
@@ -65,8 +65,7 @@ class CoveredElement():
         cls.party = copy.copy(cls.party)
         if not cls.party.context:
             cls.party.context = {}
-        cls.party.context['is_health'] = Eval('_parent_contract',
-            {}).get('is_health')
+        cls.party.context['is_health'] = Eval('is_health')
 
     @classmethod
     def create(cls, values):
@@ -74,14 +73,21 @@ class CoveredElement():
         Contract = pool.get('contract.contract')
         Health_Complement = pool.get('health.party_complement')
         Party = pool.get('party.party')
+        CovElement = pool.get('ins_contract.covered_element')
         health_complements = []
-        for covered_element in values:
-            if utils.is_none(Contract(covered_element['contract']),
-                    'is_health') or 'party' not in covered_element:
+        for cov_dict in values:
+            contract = None
+            if 'main_contract' in cov_dict and cov_dict['main_contract']:
+                contract = Contract(cov_dict['main_contract'])
+            elif 'parent' in cov_dict and cov_dict['parent']:
+                contract = CovElement(cov_dict['parent']).main_contract
+            elif 'contract' in cov_dict and cov_dict['contract']:
+                contract = Contract(cov_dict['contract'])
+            if not contract.is_health or 'party' not in cov_dict:
                 continue
-            party = Party(covered_element['party'])
+            party = Party(cov_dict['party'])
             if party.is_person and not party.health_complement:
-                health_complements.append({'party': covered_element['party']})
+                health_complements.append({'party': cov_dict['party']})
         if health_complements:
             Health_Complement.create(health_complements)
         return super(CoveredElement, cls).create(values)
@@ -91,9 +97,10 @@ class CoveredElement():
             if self.party else [])
 
     def on_change_with_health_complement(self, name=None):
-        if not self.party:
+        if not self.party or not self.is_person:
             return []
-        elif self.party and self.is_health and not self.party.health_complement:
+        elif (self.is_person and self.is_health
+                and not self.party.health_complement):
             address = self.party.address_get() if self.party else None
             department = address.get_department() if address else ''
             return {'add': [{
@@ -114,4 +121,4 @@ class CoveredElement():
                 Health_Complement.create(action[1])
 
     def get_is_health(self, name):
-        return self.contract.is_health if self.contract else False
+        return self.main_contract.is_health if self.main_contract else False

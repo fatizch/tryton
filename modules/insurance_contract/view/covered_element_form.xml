@@ -1,5 +1,11 @@
 <?xml version="1.0"?>
 <form string="Covered Element">
+    <label name="contract"/>
+    <field name="contract"/>
+    <newline/>
+    <label name="main_contract"/>
+    <field name="main_contract"/>
+    <newline/>
     <label name="item_desc"/>
     <field name="item_desc" widget="selection"/>
     <label name="name"/>
@@ -28,4 +34,7 @@
     </notebook>
     <field name="item_kind"/>
     <field name="possible_item_desc"/>
+    <newline/>
+    <field name="is_person"/>
+    <newline/>
 </form>

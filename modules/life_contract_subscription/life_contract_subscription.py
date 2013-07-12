@@ -31,6 +31,7 @@ class LifeContractSubscription():
         item_descs = CoveredElement.get_possible_item_desc(self)
         if len(item_descs) == 1:
             covered_element.item_desc = item_descs[0]
+            covered_element.main_contract = self
             cov_as_dict = covered_element.on_change_item_desc()
             for key, val in cov_as_dict.iteritems():
                 setattr(covered_element, key, val)
