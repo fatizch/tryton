@@ -17,7 +17,7 @@
       <separator name="converted_text"/>
       <field name="converted_text"/>
     </group>
-    <field name="values" rowspan="2"/>
+    <field name="values"/>
   </group>
   <!-- Invisible -->
   <newline/>
