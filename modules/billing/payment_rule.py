@@ -304,7 +304,7 @@ class PaymentRule(model.CoopSQL, model.CoopView):
         if self.with_sync_date:
             temp_date = coop_date.add_frequency(self.base_frequency, last_date)
             if self.base_frequency == 'yearly':
-                final_date = datetime.coop_date(temp_date.year,
+                final_date = datetime.date(temp_date.year,
                     self.sync_date.month, self.sync_date.day)
             else:
                 final_date = datetime.date(temp_date.year, temp_date.month,

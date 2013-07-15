@@ -227,7 +227,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
     def get_period_end_date(self, from_date, to_date):
         if (self.offered.indemnification_kind == 'annuity'
                 and self.with_revaluation):
-            res = datetime.coop_date(from_date.year,
+            res = datetime.date(from_date.year,
                 self.revaluation_date.month, self.revaluation_date.day)
             res = coop_date.add_duration(res, -1, 'day')
             if res < from_date:
