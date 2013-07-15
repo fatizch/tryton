@@ -79,7 +79,7 @@ class ClaimProcess(CoopProcessFramework):
             for delivered in loss.delivered_services:
                 if not (hasattr(delivered, 'benefit') and delivered.benefit):
                     continue
-                contract = delivered.get_contract()
+                contract = delivered.contract
                 product = contract.get_offered()
                 if not product:
                     continue

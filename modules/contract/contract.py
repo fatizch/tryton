@@ -548,9 +548,6 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
             return self.offered.get_rec_name(name)
         return super(SubscribedCoverage, self).get_rec_name(name)
 
-    def get_contract(self):
-        return self.contract
-
     def get_currency(self):
         if hasattr(self, 'offered') and self.offered:
             return self.offered.get_currency()

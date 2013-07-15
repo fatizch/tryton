@@ -1201,16 +1201,23 @@ class CoveredElement():
     __metaclass__ = PoolMeta
     __name__ = 'ins_contract.covered_element'
 
+    subscriber = fields.Function(
+        fields.Many2One('party.party', 'Subscriber'),
+        'get_subscriber_id')
     indemnification_bank_account = fields.Many2One('party.bank_account',
         'Indemnification Bank Account',
-        depends=['contract', 'item_kind', 'party'],
+        states={'invisible': ~Eval('is_person')},
+        depends=['item_kind', 'party', 'subscriber'],
         domain=[
             ['OR',
-                ('party', '=', Eval('_parent_contract', {}).get('subscriber')),
+                ('party', '=', Eval('subscriber')),
                 If(IS_PARTY, ('party', '=', Eval('party', 0)), ())]])
 
     def get_name_for_billing(self):
         return self.get_rec_name('billing')
+
+    def get_subscriber_id(self, name):
+        return self.main_contract.subscriber.id
 
 
 class CoveredData():

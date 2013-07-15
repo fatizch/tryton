@@ -2,6 +2,7 @@
 <data>
     <xpath expr="/form/notebook/page[@id='data']" position="inside">
         <field name="health_complement" colspan="4"/>
+        <newline/>
     </xpath>
     <xpath expr="/form" position="inside">
         <newline/>

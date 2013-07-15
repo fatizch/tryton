@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <form>
+    <label name="party"/>
+    <field name="party"/>
     <label name="start_date"/>
     <field name="start_date"/>
     <label name="end_date"/>

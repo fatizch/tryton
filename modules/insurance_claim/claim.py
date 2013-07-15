@@ -468,9 +468,8 @@ class Loss(model.CoopSQL, model.CoopView):
     def get_contracts(self):
         res = []
         for del_serv in self.delivered_services:
-            contract = del_serv.get_contract()
-            if contract:
-                res.append(contract)
+            if del_serv.contract:
+                res.append(del_serv.contract)
         return list(set(res))
 
     def on_change_with_possible_loss_descs(self, name=None):
@@ -542,9 +541,6 @@ class ClaimDeliveredService():
     def init_from_loss(self, loss, benefit):
         self.benefit = benefit
         self.complementary_data = self.on_change_with_complementary_data()
-
-    def get_contract(self):
-        return self.subscribed_service.get_contract()
 
     def get_covered_data(self):
         #TODO : retrieve the good covered data

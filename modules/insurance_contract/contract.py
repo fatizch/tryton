@@ -1,5 +1,5 @@
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, If, Or
+from trytond.pyson import Eval, If, Or, Bool
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, fields
@@ -436,12 +436,17 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     __name__ = 'ins_contract.covered_element'
 
     contract = fields.Many2One('contract.contract', 'Contract',
-        ondelete='CASCADE')
+        ondelete='CASCADE', states={'invisible': ~Eval('contract')})
+    # The link to use either for direct covered element or sub covered element
+    main_contract = fields.Function(
+        fields.Many2One('contract.contract', 'Contract',
+            states={'invisible': Bool(Eval('contract'))}),
+        'get_main_contract_id')
     #We need to put complementary data in depends, because the complementary
     #data are set through on_change_with and the item desc can be set on an
     #editable tree, or we can not display for the moment dictionnary in tree
     item_desc = fields.Many2One('ins_product.item_desc', 'Item Desc',
-        on_change=['item_desc', 'complementary_data', 'party', 'contrat',
+        on_change=['item_desc', 'complementary_data', 'party', 'main_contract',
             'start_date'], domain=[If(
                 ~~Eval('possible_item_desc'),
                 ('id', 'in', Eval('possible_item_desc')),
@@ -463,7 +468,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
     complementary_data = fields.Dict('offered.complementary_data_def',
         'Contract Complementary Data',
         on_change_with=['item_desc', 'complementary_data', 'contract',
-            'start_date'],
+            'start_date', 'main_contract'],
         states={'invisible': ~Eval('complementary_data')}
         )
     party_compl_data = fields.Function(
@@ -490,6 +495,10 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             'invisible': ~IS_PARTY,
             'required': IS_PARTY,
             }, depends=['item_kind'])
+    is_person = fields.Function(
+        fields.Boolean('Is Person', states={'invisible': True},
+            on_change_with=['party']),
+        'on_change_with_is_person')
     covered_relations = fields.Many2Many(
         'ins_contract.covered_element-party_relation', 'covered_element',
         'party_relation', 'Covered Relations', domain=[
@@ -592,14 +601,13 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             '%s: %s' % (x[0], x[1])
             for x in self.complementary_data.iteritems()])
 
-    def get_contract(self):
-        if not utils.is_none(self, 'contract'):
-            return self.contract
-        elif not utils.is_none(self, 'parent'):
-            return self.parent.get_contract()
+    def get_main_contract_id(self, name):
+        if not utils.is_none(self, 'parent'):
+            return self.parent.main_contract.id
+        elif not utils.is_none(self, 'contract'):
+            return self.contract.id
         elif 'contract' in Transaction().context:
-            Contract = Pool().get('contract.contract')
-            return Contract(Transaction().context.get('contract'))
+            return Transaction().context.get('contract')
 
     def on_change_with_party_compl_data(self, name=None):
         res = {}
@@ -636,7 +644,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         if (self.item_desc
                 and not self.item_desc.kind in ['party', 'person', 'company']):
             res.extend(self.item_desc.complementary_data_def)
-        res.extend(self.get_contract().offered.get_complementary_data_def(
+        res.extend(self.main_contract.offered.get_complementary_data_def(
             ['sub_elem'], at_date=at_date))
         return res
 
@@ -700,7 +708,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         return cls.search([domain])
 
     def get_currency(self):
-        return self.contract.currency if self.contract else None
+        return self.main_contract.currency if self.main_contract else None
 
     @classmethod
     def get_possible_item_desc(cls, contract=None, parent=None):
@@ -708,16 +716,14 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             parent = cls.get_parent_in_transaction()
         if parent and parent.item_desc:
             return parent.item_desc.sub_item_descs
-        if not contract:
-            Contract = Pool().get('contract.contract')
-            contract = Contract(Transaction().context.get('contract'))
         if contract and not utils.is_none(contract, 'offered'):
             return contract.offered.item_descriptors
         return []
 
     def get_possible_item_desc_ids(self, name):
+        print 'Main contract', self.main_contract
         return [x.id for x in
-            self.get_possible_item_desc(self.contract, self.parent)]
+            self.get_possible_item_desc(self.main_contract, self.parent)]
 
     @classmethod
     def default_item_desc(cls):
@@ -755,6 +761,13 @@ class CoveredElement(model.CoopSQL, model.CoopView):
 
     def init_dict_for_rule_engine(self, args):
         args['sub_elem'] = self
+
+    def on_change_with_is_person(self, name=None):
+        return self.party and self.party.is_person
+
+    @classmethod
+    def default_main_contract(cls):
+        return Transaction().context.get('contract')
 
 
 class CoveredElementPartyRelation(model.CoopSQL):
@@ -874,7 +887,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
             return self.option.offered
 
     def get_contract_id(self, name):
-        contract = self.option.get_contract() if self.option else None
+        contract = self.option.contract if self.option else None
         return contract.id if contract else None
 
     def get_currency(self):
