@@ -641,14 +641,14 @@ class CoveredElement(model.CoopSQL, model.CoopView):
 
     def get_complementary_data_def(self, at_date=None):
         contract = self.main_contract
-        if not contract:
+        if not contract.id:
             Contract = Pool().get('contract.contract')
             contract = Contract(Transaction().context.get('contract'))
         res = []
         if (self.item_desc
                 and not self.item_desc.kind in ['party', 'person', 'company']):
             res.extend(self.item_desc.complementary_data_def)
-        res.extend(self.main_contract.offered.get_complementary_data_def(
+        res.extend(contract.offered.get_complementary_data_def(
             ['sub_elem'], at_date=at_date))
         return res
 
