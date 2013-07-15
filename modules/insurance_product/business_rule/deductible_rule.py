@@ -90,7 +90,8 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
         #or a choice could be stored on the covered data or the option
         if args['deductible_duration']:
             return args['deductible_duration'].get_value(), []
-        return super(DeductibleRule, self).give_me_result(args)
+        result = super(DeductibleRule, self).give_me_result(args)
+        return result.result, result.errors + result.warnings
 
     def get_deductible_duration(self, args):
         errs = []
