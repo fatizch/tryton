@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.coop_utils import fields
+from trytond.modules.coop_utils import fields, export
 
 __all__ = ['Move', 'MoveLine', 'Account']
 __metaclass__ = PoolMeta
@@ -175,8 +175,13 @@ class MoveLine:
         return [('', '')] + [(m.model, m.name) for m in models]
 
 
-class Account:
+class Account(export.ExportImportMixin):
+    __metaclass__ = PoolMeta
     __name__ = 'account.account'
+
+    @classmethod
+    def _export_keys(cls):
+        return set(('code', 'name'))
 
     @classmethod
     def _export_skips(cls):

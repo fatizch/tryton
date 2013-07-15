@@ -46,7 +46,6 @@ def register():
         module='billing', type_='wizard')
 
     export.add_export_to_model([
-            ('account.account', ('code', 'name')),
             ('account.period', ('code', )),
             ('company.company', ('party.code', )),
             ('account.tax', ('name', )),
