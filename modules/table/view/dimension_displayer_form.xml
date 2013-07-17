@@ -2,6 +2,8 @@
 <form string="Manage Dimensions" col="4">
   <label name="name"/>
   <field name="name" colspan="3"/>
+  <label name="input_mode"/>
+  <field name="input_mode" colspan="3"/>
   <label name="order"/>
   <field name="order" colspan="3"/>
   <label name="kind"/>

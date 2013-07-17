@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<data>
+  <xpath expr="/form/field[@name='input_mode']" position="after">
+    <label name="complementary_data"/>
+    <field name="complementary_data" colspan="3"/>
+  </xpath>
+</data>

@@ -1,3 +1,4 @@
+import vimpdb
 #-*- coding:utf-8 -*-
 import copy
 
@@ -15,6 +16,7 @@ STATE_SUB_SIMPLE = Eval('sub_elem_config_kind') != 'simple'
 __all__ = [
     'RuleEngineParameter',
     'RuleEngine',
+    'DimensionDisplayer',
     'BusinessRuleRoot',
 ]
 
@@ -94,6 +96,48 @@ class RuleEngine():
                         elem.the_complementary_data.get_default_value(None)))
                 for elem in self.rule_parameters
                 if elem.kind == 'complementary_data'])
+
+
+class DimensionDisplayer():
+    'Dimension Displayer'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'table.dimension_displayer'
+
+    complementary_data = fields.Many2One('offered.complementary_data_def',
+        'Complementary Data', domain=[('type_', '=', 'selection')], states={
+            'invisible': Eval('input_mode', '') != 'compl_data'},
+        on_change=['input_mode', 'complementary_data'])
+
+    @classmethod
+    def __setup__(cls):
+        super(DimensionDisplayer, cls).__setup__()
+        cls.input_mode = copy.copy(cls.input_mode)
+        cls.input_mode.selection.append(('compl_data', 'Complementary data'))
+
+    def on_change_complementary_data(self):
+        vimpdb.set_trace()  # ####### Breakpoint # #######
+        if self.input_mode == 'compl_data' and self.complementary_data:
+            return {'converted_text': '\n'.join([x.split(':')[0] for x in
+                self.complementary_data.selection.split('\n')])}
+        else:
+            return {'complementary_data': None}
+
+    def on_change_input_mode(self):
+        result = super(DimensionDisplayer, self).on_change_input_mode()
+        if self.input_mode != 'compl_data':
+            result.update({'complementary_data': None})
+            return result
+        self.input_text = ''
+        result = self.on_change_input_text()
+        result.update({'input_text': ''})
+        return result
+
+    def convert_values(self):
+        if self.input_mode == 'compl_data':
+            return '\n'.join([x.split(':')[0] for x in
+                self.complementary_data.selection.split('\n')])
+        return super(DimensionDisplayer, self).convert_values()
 
 
 class BusinessRuleRoot(model.CoopView, GetResult, Templated):

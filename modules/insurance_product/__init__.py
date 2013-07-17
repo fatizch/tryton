@@ -23,6 +23,7 @@ def register():
         # from business_rule
         RuleEngineParameter,
         RuleEngine,
+        DimensionDisplayer,
         BusinessRuleRoot,
         # from documents_rule
         OverridenModel,

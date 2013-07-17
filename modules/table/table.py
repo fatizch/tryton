@@ -7,7 +7,7 @@ from trytond.config import CONFIG
 from trytond.backend import TableHandler
 from trytond.pool import Pool
 from trytond.rpc import RPC
-from trytond.pyson import Eval, If, Bool, PYSONEncoder
+from trytond.pyson import Eval, If, Bool, Or, PYSONEncoder
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
     Button
@@ -1002,24 +1002,36 @@ class DimensionDisplayer(ModelView):
     name = fields.Char('Name')
     order = fields.Selection(ORDER, 'Order')
     kind = fields.Selection(KIND, 'Kind')
+    input_mode = fields.Selection(
+        [('flat_file', 'Flat data'), ('boolean', 'Boolean')], 'Input Mode',
+        on_change=['values', 'order', 'input_mode', 'kind', 'date_format',
+            'input_mode'], states={'invisible': Eval('kind', '') != 'value'})
     values = fields.One2Many('table.table_dimension', None, 'Dimension Values',
-        on_change=['values', 'order', 'kind', 'date_format'])
-    input_text = fields.Text('Input Text', on_change=['input_text',
-            'date_format', 'kind', 'values'])
+        on_change=['values', 'order', 'kind', 'date_format', 'input_mode'])
     converted_text = fields.Text('Converted Text')
     table = fields.Many2One('table.table_def', 'Table', states={
             'invisible': True})
     cur_dimension = fields.Integer('Current Dimension', states={
             'invisible': True})
+    input_text = fields.Text('Input Text', on_change=['input_text',
+            'date_format', 'kind', 'values', 'input_mode'], states={
+            'invisible': Eval('input_mode', '') != 'flat_file'},)
     date_format = fields.Char('Date Format', states={
-            'invisible': Eval('kind', '') not in ('date', 'range-date')},
-        on_change=['date_format', 'values', 'input_text', 'kind'])
+            'invisible': Or(Eval('kind', '') == 'date',
+                Eval('kind', '') == 'range-date')
+            and Eval('input_mode', '') != 'flat_file'},
+        on_change=['date_format', 'values', 'input_text', 'kind',
+            'input_mode'])
 
     @classmethod
     def __setup__(cls):
         super(DimensionDisplayer, cls).__setup__()
         cls._error_messages.update({
             'invalid_format': 'Impossible to convert data %s with format %s'})
+
+    @classmethod
+    def default_input_mode(cls):
+        return 'flat_file'
 
     def on_change_input_text(self):
         if self.input_text:
@@ -1029,10 +1041,29 @@ class DimensionDisplayer(ModelView):
 
     def on_change_date_format(self):
         if self.kind not in ('date', 'range-date'):
-            return {}
+            return {'date_format': ''}
         if self.input_text:
             return self.on_change_input_text()
         return self.on_change_values()
+
+    def on_change_values(self):
+        if not self.values:
+            return {'converted_text': ''}
+        existing = self.get_existing_values(self.kind, self.values)
+        return {'converted_text': self.convert_existing_values(existing,
+                self.kind, self.date_format)}
+
+    def on_change_input_mode(self):
+        if self.input_mode == 'boolean':
+            return {
+                'input_text': '',
+                'converted_text': 'True\nFalse'}
+        elif self.input_mode == 'flat_file':
+            if (hasattr(self, 'input_text') and self.input_text):
+                return self.on_change_input_text()
+            else:
+                return {'converted_text': ''}
+        return {}
 
     def changing_ok(self):
         if not self.table.cells:
@@ -1047,16 +1078,17 @@ class DimensionDisplayer(ModelView):
             return False
 
     def convert_values(self):
-        if not self.input_text:
-            return ''
-        result = [x for x in re.split(r'[ ,|;\n\t]+', self.input_text)]
-        if self.kind in ('date', 'range-date'):
-            try:
-                datetime.strptime(result[0], self.date_format)
-            except:
-                self.raise_user_error('invalid_format', (result[0],
-                        self.date_format))
-        return '\n'.join(result)
+        if self.input_mode == 'boolean':
+            return 'True\nFalse'
+        elif self.input_mode == 'flat_file' and self.input_text:
+            result = [x for x in re.split(r'[ ,|;\n\t]+', self.input_text)]
+            if self.kind in ('date', 'range-date'):
+                try:
+                    datetime.strptime(result[0], self.date_format)
+                except:
+                    self.raise_user_error('invalid_format', (result[0],
+                            self.date_format))
+            return '\n'.join(result)
 
     @classmethod
     def get_existing_values(cls, kind, values):
@@ -1071,13 +1103,6 @@ class DimensionDisplayer(ModelView):
         for elem in values:
             res.append(the_func(elem))
         return res
-
-    def on_change_values(self):
-        if not self.values:
-            return {'converted_text': ''}
-        existing = self.get_existing_values(self.kind, self.values)
-        return {'converted_text': self.convert_existing_values(existing,
-                self.kind, self.date_format)}
 
     @classmethod
     def convert_existing_values(cls, values, kind, date_format=None):
