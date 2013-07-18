@@ -169,6 +169,8 @@ class TableDefinition(ModelSQL, ModelView):
         })
     kind = fields.Function(fields.Char('Kind'), 'get_kind')
     cells = fields.One2Many('table.table_cell', 'definition', 'Cells')
+    number_of_digits = fields.Integer('Number of Digits', states={
+            'invisible': Eval('type_', '') != 'numeric'})
 
     @classmethod
     def __setup__(cls):
@@ -310,6 +312,10 @@ class TableDefinition(ModelSQL, ModelView):
         if self.code:
             return self.code
         return coop_string.remove_blank_and_invalid_char(self.name)
+
+    @classmethod
+    def default_number_of_digits(cls):
+        return 2
 
     @classmethod
     @ModelView.button_action('table.act_manage_dimension_1')
@@ -556,6 +562,9 @@ class TableCell(ModelSQL, ModelView):
             table_definition = \
                 TableDefinition(Transaction().context['table.table_def'])
             result['value']['type'] = table_definition.type_
+            if table_definition.type_ == 'numeric':
+                result['value']['digits'] = (12,
+                    table_definition.number_of_digits)
         return result
 
     @staticmethod
