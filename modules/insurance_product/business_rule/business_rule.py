@@ -1,4 +1,3 @@
-import vimpdb
 #-*- coding:utf-8 -*-
 import copy
 
@@ -116,7 +115,6 @@ class DimensionDisplayer():
         cls.input_mode.selection.append(('compl_data', 'Complementary data'))
 
     def on_change_complementary_data(self):
-        vimpdb.set_trace()  # ####### Breakpoint # #######
         if self.input_mode == 'compl_data' and self.complementary_data:
             return {'converted_text': '\n'.join([x.split(':')[0] for x in
                 self.complementary_data.selection.split('\n')])}
