@@ -974,7 +974,8 @@ class Table2D(ModelSQL, ModelView):
                 TableCell.write(cells, {
                         'value': value,
                     })
-            for dim1_id in (set(dim1_ids) - set(i.id for i in cells)):
+            for dim1_id in (set(dim1_ids) -
+                    set(i.dimension1.id for i in cells)):
                 to_creates.append({
                         'definition': definition_id,
                         'dimension1': dim1_id,
