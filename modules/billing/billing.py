@@ -383,6 +383,23 @@ class BillingManager(model.CoopSQL, model.CoopView):
         super(BillingManager, cls).__setup__()
         cls._order.insert(0, ('start_date', 'ASC'))
         cls.__rpc__.update({'get_allowed_payment_dates': RPC(instantiate=0)})
+        cls._error_messages.update({
+            'payment_bank_account_required': 'A payment bank account must be '
+                'provided if the payment mode is Direct Debit',
+        })
+
+    def check_payment_bank_acount(self):
+        if self.status == 'quote':
+            return
+        if self.payment_mode == 'direct_debit':
+            if not self.payment_bank_account:
+                self.raise_user_error('payment_bank_account_required')
+
+    @classmethod
+    def validate(cls, managers):
+        for manager in managers:
+            manager.check_payment_bank_acount()
+        return True
 
     def on_change_payment_date_selector(self):
         if not (hasattr(self, 'payment_date_selector') and
@@ -959,7 +976,10 @@ class Contract():
         work_set['price_lines'] = price_lines
         work_set['payment_date'] = billing_manager.get_payment_date()
         work_set['payment_method'] = billing_manager.payment_method
-        work_set['payment_rule'] = work_set['payment_method'].get_rule()
+        if work_set['payment_method']:
+            work_set['payment_rule'] = work_set['payment_method'].get_rule()
+        else:
+            work_set['payment_rule'] = None
         work_set['period'] = period
         work_set['currency'] = currency
         work_set['billing_period'] = billing_period
