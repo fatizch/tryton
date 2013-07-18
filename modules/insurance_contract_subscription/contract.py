@@ -127,7 +127,7 @@ class ContractSubscription(CoopProcessFramework):
         if not self.subscriber:
             return
         if self.subscriber.is_company:
-            return self.subscriber
+            return self.subscriber.id
 
     def on_change_subscriber_as_person(self):
         if (hasattr(self, 'subscriber_as_person') and
