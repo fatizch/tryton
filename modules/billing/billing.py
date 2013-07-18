@@ -389,7 +389,7 @@ class BillingManager(model.CoopSQL, model.CoopView):
         })
 
     def check_payment_bank_acount(self):
-        if self.contract.status == 'quote':
+        if  not self.contract or self.contract.status == 'quote':
             return
         if self.payment_mode == 'direct_debit':
             if not self.payment_bank_account:
