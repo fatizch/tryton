@@ -417,9 +417,18 @@ class BillingManager(model.CoopSQL, model.CoopView):
         self.start_date = start_date
         self.payment_method = contract.offered.get_default_payment_method()
         if self.payment_method:
-            good_payment_date = self.payment_method.get_allowed_date_values()[0][0]
+            good_payment_date = \
+                self.payment_method.get_allowed_date_values()[0][0]
             if good_payment_date:
                 self.payment_date = int(good_payment_date)
+            if self.payment_method.payment_mode == 'direct_debit':
+                BankAccount = Pool().get('party.bank_account')
+                try:
+                    self.payment_bank_account = BankAccount.search([
+                            ('party', '=', contract.get_policy_owner(
+                                self.start_date))])[0]
+                except IndexError:
+                    pass
 
     def on_change_with_payment_mode(self, name=None):
         if not (hasattr(self, 'payment_method') and self.payment_method):
