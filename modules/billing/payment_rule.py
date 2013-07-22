@@ -329,6 +329,13 @@ class PaymentRule(model.CoopSQL, model.CoopView):
                         'freq_amount': 1,
                         'line': None})
 
+        if not dates:
+            dates.append({
+                    'date': start_date,
+                    'remaining': True,
+                    'freq_amount': 1,
+                    'line': None})
+
         if self.remaining_position == 'last_calc':
             dates[-1]['remaining'] = True
         return dates
