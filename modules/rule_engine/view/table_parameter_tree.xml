@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tree string="Tables" editable="bottom">
+  <field name="name"/>
+  <field name="code"/>
+  <field name="the_table" widget="selection"/>
+  <field name="kind" tree_invisible="1"/>
+</tree>

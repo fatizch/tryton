@@ -28,25 +28,40 @@ class RuleEngineParameter():
 
     the_complementary_data = fields.Many2One('offered.complementary_data_def',
         'Complementary Parameters', domain=[('kind', '=', 'rule_engine')],
-        ondelete='RESTRICT',
-        states={'invisible': Eval('kind', '') != 'complementary_data',
-            'required': Eval('kind', '') == 'complementary_data'})
+        ondelete='RESTRICT', on_change=['the_complementary_data'],
+        states={'invisible': Eval('kind', '') != 'rule_compl',
+            'required': Eval('kind', '') == 'rule_compl'})
     rule_complementary_data = fields.Dict(
         'offered.complementary_data_def', 'Rule Complementary Data',
         on_change_with=['the_rule', 'rule_complementary_data'],
         states={'invisible': Or(
                 Eval('kind', '') != 'rule', ~Eval('rule_complementary_data'))})
+    external_complementary_data = fields.Many2One(
+        'offered.complementary_data_def', 'External Complementary Data',
+        domain=[('kind', '!=', 'rime_engine')], ondelete='RESTRICT',
+        on_change=['external_complementary_data'],
+        states={'invisible': Eval('kind', '') != 'compl',
+            'required': Eval('kind', '') == 'compl'})
 
     @classmethod
     def __setup__(cls):
         super(RuleEngineParameter, cls).__setup__()
         cls.kind = copy.copy(cls.kind)
-        cls.kind.selection.append(('complementary_data', 'Complementary Data'))
+        cls.kind.selection.append(('rule_compl', 'Rule Complementary Data'))
+        cls.kind.selection.append(('compl', 'External Complementary Data'))
         cls.kind.selection = list(set(cls.kind.selection))
         cls.the_rule = copy.copy(cls.the_rule)
         if not cls.the_rule.depends:
             cls.the_rule.depends = []
         cls.the_rule.depends.append('rule_complementary_data')
+
+    def on_change_kind(self):
+        result = super(RuleEngineParameter, self).on_change_kind()
+        if hasattr(self, 'kind') and self.kind != 'rule_compl':
+            result['the_complementary_data'] = None
+        if hasattr(self, 'kind') and self.kind != 'compl':
+            result['external_complementary_data'] = None
+        return result
 
     @classmethod
     def get_complementary_parameter_value(cls, args, schema_name):
@@ -58,18 +73,37 @@ class RuleEngineParameter():
             return None
         return self.rule_complementary_data.get(schema_name, None)
 
+    def get_lowest_level_object(self, args):
+        '''This method to be overriden in different modules sets the lowest
+        object from where to search data. The object will level up itself if it
+        doesn't find the good information at its own level'''
+        if 'option' in args:
+            return args['option']
+        if 'contract' in args:
+            return args['contract']
+
+    def get_external_complementary_data(self, args):
+        from_object = self.get_lowest_level_object(args)
+        return self.external_complementary_data.get_complementary_data_value(
+            from_object, self.external_complementary_data.string.name,
+            args['date'])
+
     def as_context(self, evaluation_context, context, forced_value):
         super(RuleEngineParameter, self).as_context(
             evaluation_context, context, forced_value)
-        if self.kind != 'complementary_data':
-            return context
-        if self.get_translated_technical_name() in context:
+        technical_name = self.get_translated_technical_name()
+        if technical_name in context:
             # Looks like the value was forced
             return context
         debug_wrapper = self.get_wrapper_func(context)
-        context[self.get_translated_technical_name()] = debug_wrapper(
-            lambda: self.get_complementary_parameter_value(evaluation_context,
-                self.the_complementary_data.name))
+        if self.kind == 'rule_compl':
+            context[technical_name] = debug_wrapper(
+                lambda: self.get_complementary_parameter_value(
+                    evaluation_context, self.the_complementary_data.name))
+        elif self.kind == 'compl':
+            context[technical_name] = debug_wrapper(
+                lambda: self.get_external_complementary_data(
+                    evaluation_context))
         return context
 
     def on_change_with_rule_complementary_data(self):
@@ -78,12 +112,62 @@ class RuleEngineParameter():
         return self.the_rule.get_complementary_data_for_on_change(
             self.rule_complementary_data)
 
+    def on_change_the_complementary_data(self):
+        result = {}
+        if not (hasattr(self, 'the_complementary_data') and
+                self.the_complementary_data):
+            return result
+        result['code'] = self.the_complementary_data.name
+        result['name'] = self.the_complementary_data.string
+        return result
+
+    def on_change_external_complementary_data(self):
+        result = {}
+        if not (hasattr(self, 'external_complementary_data') and
+                self.external_complementary_data):
+            return result
+        result['code'] = self.external_complementary_data.name
+        result['name'] = self.external_complementary_data.string
+        return result
+
+    @classmethod
+    def build_root_node(cls, kind):
+        tmp_node = super(RuleEngineParameter, cls).build_root_node(kind)
+        if kind == 'rule_compl':
+            tmp_node['name'] = 'rule_compl'
+            tmp_node['translated'] = 'rule_compl'
+            tmp_node['fct_args'] = ''
+            tmp_node['description'] = 'Rule Complementary Data'
+            tmp_node['type'] = 'folder'
+            tmp_node['long_description'] = ''
+            tmp_node['children'] = []
+        elif kind == 'compl':
+            tmp_node['name'] = 'compl'
+            tmp_node['translated'] = 'compl'
+            tmp_node['fct_args'] = ''
+            tmp_node['description'] = 'External Complementary Data'
+            tmp_node['type'] = 'folder'
+            tmp_node['long_description'] = ''
+            tmp_node['children'] = []
+        return tmp_node
+
 
 class RuleEngine():
     'Rule Engine'
 
     __metaclass__ = PoolMeta
     __name__ = 'rule_engine'
+
+    rule_external_compl_datas = fields.One2ManyDomain('rule_engine.parameter',
+        'parent_rule', 'Rule External Complementary Data',
+        domain=[('kind', '=', 'compl')])
+    rule_compl_datas = fields.One2ManyDomain('rule_engine.parameter',
+        'parent_rule', 'Rule Complementary Datas',
+        domain=[('kind', '=', 'rule_compl')])
+
+    @classmethod
+    def __setup__(cls):
+        super(RuleEngine, cls).__setup__()
 
     def get_complementary_data_for_on_change(self, existing_values):
         if not (hasattr(self, 'rule_parameters') and
@@ -95,6 +179,12 @@ class RuleEngine():
                         elem.the_complementary_data.get_default_value(None)))
                 for elem in self.rule_parameters
                 if elem.kind == 'complementary_data'])
+
+    def on_change_rule_compl_datas(self):
+        return self.on_change_rule_parameters()
+
+    def on_change_rule_external_compl_datas(self):
+        return self.on_change_rule_parameters()
 
 
 class DimensionDisplayer():

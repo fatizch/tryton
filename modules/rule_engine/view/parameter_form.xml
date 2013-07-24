@@ -8,4 +8,6 @@
   <field name="kind"/>
   <label name="the_rule"/>
   <field name="the_rule"/>
+  <label name="the_table"/>
+  <field name="the_table"/>
 </form>

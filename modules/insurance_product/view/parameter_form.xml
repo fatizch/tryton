@@ -5,5 +5,7 @@
     <field name="the_complementary_data"/>
     <newline/>
     <field name="rule_complementary_data" colspan="4" no_command="1"/>
+    <label name="external_complementary_data"/>
+    <field name="external_complementary_data"/>
   </xpath>
 </data>

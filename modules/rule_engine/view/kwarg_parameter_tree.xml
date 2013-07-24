@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Kwargs" editable="bottom">
+  <field name="name"/>
+  <field name="code"/>
+  <field name="kind" tree_invisible="1"/>
+</tree>

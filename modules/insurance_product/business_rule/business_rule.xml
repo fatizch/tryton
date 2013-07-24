@@ -19,11 +19,24 @@
       <field name="inherit" ref="rule_engine.parameter_form"/>
       <field name="name">parameter_form</field>
     </record>
-    <record model="ir.ui.view" id="parameter_tree">
+    <record model="ir.ui.view" id="compl_parameter_tree">
       <field name="model">rule_engine.parameter</field>
       <field name="type">tree</field>
-      <field name="inherit" ref="rule_engine.parameter_tree"/>
-      <field name="name">parameter_tree</field>
+      <field name="name">compl_parameter_tree</field>
+    </record>
+    <record model="ir.ui.view" id="external_compl_parameter_tree">
+      <field name="model">rule_engine.parameter</field>
+      <field name="type">tree</field>
+      <field name="name">external_compl_parameter_tree</field>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Rule Engine -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="rule_engine_form">
+      <field name="model">rule_engine</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="rule_engine.rule_form"/>
+      <field name="name">rule_engine_form</field>
     </record>
     <!-- ############################################################ -->
     <!-- Business Rule Root -->
