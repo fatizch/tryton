@@ -21,10 +21,10 @@ from trytond.modules.coop_utils import fields
 from trytond.modules.coop_utils.model import CoopSQL as ModelSQL
 from trytond.modules.coop_utils.model import CoopView as ModelView
 from trytond.wizard import Wizard, StateView, Button
-from trytond.pool import Pool, PoolMeta
+from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.tools.misc import _compile_source
-from trytond.pyson import Eval, And
+from trytond.pyson import Eval
 from trytond.modules.coop_utils import model, CoopView, utils, coop_string
 from trytond.modules.coop_utils import coop_date
 from trytond.modules.table import TableCell
@@ -45,7 +45,6 @@ __all__ = [
     'InternalRuleEngineError',
     'CatchedRuleEngineError',
     'check_args',
-    'TableDefinition',
     'RuleError',
 ]
 
@@ -864,8 +863,6 @@ class TreeElement(ModelView, ModelSQL):
         [
             ('folder', 'Folder'),
             ('function', 'Function'),
-            ('rule', 'Rule'),
-            ('table', 'Table'),
         ], 'Type', required=True)
     parent = fields.Many2One('rule_engine.tree_element', 'Parent')
     children = fields.One2Many(
@@ -878,21 +875,8 @@ class TreeElement(ModelView, ModelSQL):
         }, depends=['type'],
         on_change_with=['rule'])
     fct_args = fields.Char(
-        'Function Arguments', states={
-            'invisible': And(
-                Eval('type') != 'function',
-                Eval('type') != 'table'
-            ),
-        })
+        'Function Arguments', states={'invisible': Eval('type') != 'function'})
     language = fields.Many2One('ir.lang', 'Language', required=True)
-    the_table = fields.Many2One(
-        'table.table_def',
-        'For Table',
-        states={
-            'invisible': Eval('type') != 'table',
-            'required': Eval('type') == 'table'},
-        on_change=['translated_technical_name', 'description', 'the_table'],
-        ondelete='CASCADE')
     long_description = fields.Text('Long Description')
     full_path = fields.Function(
         fields.Char('Full Path'), 'get_full_path')
@@ -950,13 +934,6 @@ class TreeElement(ModelView, ModelSQL):
             coop_string.remove_blank_and_invalid_char(self.description)
         }
 
-    def on_change_the_table(self):
-        if not(hasattr(self, 'the_table') and self.the_table):
-            return {}
-        return {
-            'translated_technical_name': 'table_%s' % self.the_table.code,
-            'description': 'Table %s' % self.the_table.name}
-
     def as_tree(self):
         tree = {}
         tree['name'] = self.name
@@ -969,7 +946,7 @@ class TreeElement(ModelView, ModelSQL):
         return tree
 
     def as_functions_list(self):
-        if self.type in ('function', 'rule', 'table'):
+        if self.type == 'function':
             return [self.translated_technical_name]
         else:
             return sum([
@@ -1003,12 +980,6 @@ class TreeElement(ModelView, ModelSQL):
             namespace_obj = pool.get(self.namespace)
             context[self.translated_technical_name] = debug_wrapper(
                 functools.partial(getattr(namespace_obj, self.name), context))
-        elif self.type == 'rule':
-            context[self.translated_technical_name] = debug_wrapper(
-                functools.partial(self.rule.compute, context))
-        elif self.type == 'table':
-            context[self.translated_technical_name] = debug_wrapper(
-                functools.partial(TableCell.get, self.the_table))
         for element in self.children:
             element.as_context(context)
         return context
@@ -1220,115 +1191,6 @@ class RunTests(Wizard):
         return {
             'report': '\n\n'.join(results),
         }
-
-
-class TableDefinition():
-    'Table Definition'
-
-    __metaclass__ = PoolMeta
-
-    __name__ = 'table.table_def'
-
-    def get_good_tree_element(self):
-        TreeElement = Pool().get('rule_engine.tree_element')
-        good_language = utils.get_this_object(
-            'ir.lang', ('code', '=', Transaction().language))
-        return utils.get_those_objects(
-            TreeElement.__name__,
-            [('the_table', '=', self), ('language', '=', good_language)])[0]
-
-    @classmethod
-    def write(cls, tables, values):
-        super(TableDefinition, cls).write(tables, values)
-
-        if not ('dimension_name1' in values or 'dimension_name2' in values or
-                'dimension_name3' in values or 'dimension_name4' in values):
-            return
-
-        if '__importing__' in Transaction().context:
-            return
-
-        dimension_names = []
-        for table in tables:
-            good_te = table.get_good_tree_element()
-            for idx in (1, 2, 3, 4):
-                try:
-                    dim = getattr(table, 'dimension_kind%s' % idx)
-                except AttributeError:
-                    break
-                if not dim:
-                    break
-
-                try:
-                    dim_name = getattr(table, 'dimension_name%s' % idx)
-                except AttributeError:
-                    dim_name = 'Col #%s' % idx
-
-                dimension_names.append(dim_name)
-
-            good_te.fct_args = ', '.join(
-                map(coop_string.remove_invalid_char, dimension_names))
-            good_te.save()
-
-    @classmethod
-    def create(cls, values):
-        tables = super(TableDefinition, cls).create(values)
-        if '__importing__' in Transaction().context:
-            return tables
-        TreeElement = Pool().get('rule_engine.tree_element')
-        folder = utils.get_those_objects(
-            'rule_engine.tree_element',
-            [('type', '=', 'folder'), ('description', '=', 'Tables')])
-        if not folder:
-            folder = TreeElement()
-            folder.type = 'folder'
-            folder.description = 'Tables'
-            folder.translated_technical_name = 'table_folder'
-            folder.language = utils.get_this_object(
-                'ir.lang', ('code', '=', Transaction().language))
-            folder.save()
-        else:
-            folder = folder[0]
-
-        for table in tables:
-            new_tree = TreeElement()
-            new_tree.type = 'table'
-            if not 'TABLE' in table.code.upper():
-                new_tree.translated_technical_name = 'table_%s' % table.code
-            else:
-                new_tree.translated_technical_name = table.code
-            if not 'TABLE' in table.name.upper():
-                new_tree.description = 'Table %s' % table.name
-            else:
-                new_tree.description = table.name
-            new_tree.language = utils.get_this_object(
-                'ir.lang', ('code', '=', Transaction().language))
-            new_tree.the_table = table.id
-            new_tree.parent = folder
-            dimension_names = []
-            for idx in (1, 2, 3, 4):
-                try:
-                    dim = getattr(table, 'dimension_kind%s' % idx)
-                except AttributeError:
-                    break
-                if not dim:
-                    break
-
-                try:
-                    dim_name = getattr(table, 'dimension_name%s' % idx)
-                except AttributeError:
-                    dim_name = None
-                if not dim_name:
-                    dim_name = 'Col #%s' % idx
-
-                dimension_names.append(dim_name)
-
-            if dimension_names:
-                new_tree.fct_args = ', '.join(
-                    map(coop_string.remove_invalid_char, dimension_names))
-            new_tree.save()
-
-        return tables
 
 
 class RuleError(model.CoopSQL, model.CoopView):

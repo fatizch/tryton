@@ -14,7 +14,6 @@ def register():
         TreeElement,
         ContextTreeElement,
         RunTestsReport,
-        TableDefinition,
         RuleError,
         module='rule_engine', type_='model')
     Pool.register(
