@@ -169,6 +169,13 @@ class RuleEngine():
     def __setup__(cls):
         super(RuleEngine, cls).__setup__()
 
+    @classmethod
+    def _export_skips(cls):
+        result = super(RuleEngine, cls)._export_skips()
+        result.add('rule_external_compl_datas')
+        result.add('rule_compl_datas')
+        return result
+
     def get_complementary_data_for_on_change(self, existing_values):
         if not (hasattr(self, 'rule_parameters') and
                 self.rule_parameters):

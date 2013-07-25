@@ -330,7 +330,8 @@ class FunctionFinder(ast.NodeVisitor):
         if (isinstance(node, ast.Call)
                 and isinstance(node.func, ast.Name)):
             if node.func.id not in self.allowed_names:
-                raise LookupError(node.func.id)
+                if node.func.id not in ('int', 'round', 'max', 'min'):
+                    raise LookupError(node.func.id)
             self.functions.append(node.func.id)
         return super(FunctionFinder, self).visit(node)
 
@@ -585,6 +586,9 @@ class Rule(ModelView, ModelSQL):
         result = super(Rule, cls)._export_skips()
         result.add('debug_mode')
         result.add('exec_logs')
+        result.add('rule_kwargs')
+        result.add('rule_rules')
+        result.add('rule_tables')
         return result
 
     def on_change_rule_parameters(self):
@@ -1055,9 +1059,13 @@ class TestCaseValue(ModelView, ModelSQL):
             return None
 
     def get_selection(self):
-        if not (hasattr(self, 'rule') and self.rule):
+        if (hasattr(self, 'rule') and self.rule):
+            rule = self.rule
+        elif 'rule_id' in Transaction().context:
+            rule = Pool().get('rule_engine')(
+                Transaction().context.get('rule_id'))
+        else:
             return [('', '')]
-        rule = self.rule
         rule_name = ('fct_%s' % hash(rule.name)).replace('-', '_')
         func_finder = FunctionFinder(
             ['Decimal', rule_name] + rule.allowed_functions)
@@ -1105,8 +1113,8 @@ class TestCase(ModelView, ModelSQL):
     def execute_test(self):
         test_context = {}
         for value in self.test_values:
-            if not value.value:
-                return {}
+            if value.value == 'None':
+                continue
             val = safe_eval(value.value if value.value != '' else "''")
             test_context.setdefault(value.name, []).append(val)
         test_context = {
@@ -1160,15 +1168,16 @@ class TestCase(ModelView, ModelSQL):
         if 'rule_id' not in Transaction().context:
             return []
         Rule = Pool().get('rule_engine')
-        the_rule = Rule(Transaction().context.get('rule_id')).code
+        the_rule = Rule(Transaction().context.get('rule_id'))
         errors = check_code(the_rule.as_function)
         result = []
         for error in errors:
             if (isinstance(error, pyflakes.messages.UndefinedName)
                     and error.message_args[0] in the_rule.allowed_functions):
-                result.append({'name': error.message_args[0], 'value': None})
+                result.append({'name': error.message_args[0], 'value': 'None'})
             elif not isinstance(error, WARNINGS):
                 raise Exception('Invalid rule')
+        print result
         return result
 
 
