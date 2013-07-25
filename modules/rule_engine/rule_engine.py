@@ -603,7 +603,8 @@ class Rule(ModelView, ModelSQL):
             if (elem.kind, elem.code) in keys:
                 continue
             rule_parameters.append(elem)
-        self.rule_parameters = rule_parameters
+        self.rule_parameters = filter(lambda x: x.kind is not None,
+            rule_parameters)
         return {'data_tree': self.get_data_tree(None)}
 
     def on_change_rule_kwargs(self):
@@ -1153,6 +1154,22 @@ class TestCase(ModelView, ModelSQL):
                 self.expected_result)
         except:
             return False, str(sys.exc_info())
+
+    @classmethod
+    def default_test_values(cls):
+        if 'rule_id' not in Transaction().context:
+            return []
+        Rule = Pool().get('rule_engine')
+        the_rule = Rule(Transaction().context.get('rule_id')).code
+        errors = check_code(the_rule.as_function)
+        result = []
+        for error in errors:
+            if (isinstance(error, pyflakes.messages.UndefinedName)
+                    and error.message_args[0] in the_rule.allowed_functions):
+                result.append({'name': error.message_args[0], 'value': None})
+            elif not isinstance(error, WARNINGS):
+                raise Exception('Invalid rule')
+        return result
 
 
 class RunTestsReport(ModelView):

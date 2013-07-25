@@ -37,6 +37,8 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['ComplementaryData'] = Model.get(
         'offered.complementary_data_def')
     cfg_dict['ItemDesc'] = Model.get('ins_product.item_desc')
+    cfg_dict['Table'] = Model.get('table.table_def')
+    cfg_dict['RuleParameter'] = Model.get('rule_engine.parameter')
     return cfg_dict
 
 
@@ -721,12 +723,26 @@ def create_prev_product(cfg_dict):
     return prod
 
 
-def get_or_create_rule(cfg_dict, name, algo, context_name=None):
+def get_or_create_rule(cfg_dict, name, algo, context_name=None, params=None):
     rule = proteus_tools.get_objects_from_db(
         cfg_dict, 'RuleEngine', 'name', name)
     if rule:
         return rule
+    if not params:
+        params = []
     rule = cfg_dict['RuleEngine']()
+    for kind, param_name in params:
+        parameter = None
+        if kind == 'table':
+            parameter = rule.rule_tables.new()
+            parameter.the_table = cfg_dict['Table'].find(
+                [('code', '=', param_name)])[0]
+        elif kind == 'rule':
+            parameter = rule.rule_rules.new()
+            parameter.the_rule = cfg_dict['RuleEngine'].find(
+                [('name', '=', param_name)])[0]
+        if parameter:
+            parameter.kind = kind
     rule.name = name
     rule.context = get_or_create_context(cfg_dict, context_name)
     rule.code = algo
@@ -734,20 +750,17 @@ def get_or_create_rule(cfg_dict, name, algo, context_name=None):
     return rule
 
 
-def get_tree_element(cfg_dict, name=None, table_code=None):
+def get_tree_element(cfg_dict, name=None):
     domain = []
     if name:
         domain.append(('name', '=', name))
-    if table_code:
-        domain.append(('the_table.code', '=', table_code))
     elements = cfg_dict['TreeElement'].find(domain, limit=1)
     if elements:
         return elements[0]
 
 
-def write_ceiling_code(pss_multiplicator, pss_element):
-    res = 'PMSS = %s(date_de_calcul())\n' % (
-        pss_element.translated_technical_name)
+def write_ceiling_code(pss_multiplicator):
+    res = 'PMSS = table_PMSS(date_de_calcul())\n'
     res += 'return %s * PMSS\n' % pss_multiplicator
     return res
 
@@ -766,14 +779,14 @@ def get_or_create_tranche(cfg_dict, code, floor=None, ceiling=None):
 
 
 def create_tranches(cfg_dict, pss_code):
-    pss = get_tree_element(cfg_dict, table_code=pss_code)
-    if not pss:
-        print 'Impossible to find tree element and/or table %s' % pss_code
-        return
-    TA = get_or_create_rule(cfg_dict, 'Plafond TA', write_ceiling_code(1, pss))
-    TB = get_or_create_rule(cfg_dict, 'Plafond TB', write_ceiling_code(4, pss))
-    TC = get_or_create_rule(cfg_dict, 'Plafond TC', write_ceiling_code(8, pss))
-    T2 = get_or_create_rule(cfg_dict, 'Plafond T2', write_ceiling_code(3, pss))
+    TA = get_or_create_rule(cfg_dict, 'Plafond TA', write_ceiling_code(1),
+        params=(('table', 'PMSS'),))
+    TB = get_or_create_rule(cfg_dict, 'Plafond TB', write_ceiling_code(4),
+        params=(('table', 'PMSS'),))
+    TC = get_or_create_rule(cfg_dict, 'Plafond TC', write_ceiling_code(8),
+        params=(('table', 'PMSS'),))
+    T2 = get_or_create_rule(cfg_dict, 'Plafond T2', write_ceiling_code(3),
+        params=(('table', 'PMSS'),))
 
     get_or_create_tranche(cfg_dict, 'TA', ceiling=TA)
     get_or_create_tranche(cfg_dict, 'TB', floor=TA, ceiling=TB)

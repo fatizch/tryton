@@ -103,19 +103,3 @@ def launch_test_case(cfg_dict):
     func_folder = create_or_update_folder(cfg_dict,
         'rule_engine.tools_functions')
     append_folder_to_context(default_context, func_folder)
-    table_folder = get_or_create_tree_element(cfg_dict, 'folder', 'Tables',
-        'table_folder')
-    lang = Model.get('ir.lang').find([('code', '=', cfg_dict['language'])])[0]
-    for table in cfg_dict['Table'].find([]):
-        possible_table_elem = cfg_dict['TreeElement'].find([
-            ('the_table', '=', table.id)])
-        if possible_table_elem:
-            continue
-        table_elem = cfg_dict['TreeElement']()
-        table_elem.language = lang
-        table_elem.type = 'table'
-        table_elem.parent = table_folder
-        table_elem.the_table = table
-        table_elem.save()
-    cfg_dict['Table'].write([t.id for t in cfg_dict['Table'].find([])], {}, {})
-    append_folder_to_context(default_context, table_folder)
