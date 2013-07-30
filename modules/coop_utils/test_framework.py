@@ -46,15 +46,18 @@ def prepare_test(*_args):
             if not (Transaction() and Transaction().context and
                     'master' in Transaction().context):
                 with Transaction().start(DB_NAME, USER, context=CONTEXT):
-                    with Transaction().set_context(master=args[0]):
-                        args[0]._executed = []
-                        for arg in _args:
-                            module_name, method_name = arg.split('.')
-                            launch_function(module_name, method_name)
-                    if not forced:
-                        return f(args[0])
-                    else:
-                        return f()
+                    with Transaction().new_cursor():
+                        with Transaction().set_context(master=args[0]):
+                            args[0]._executed = []
+                            for arg in _args:
+                                module_name, method_name = arg.split('.')
+                                launch_function(module_name, method_name)
+                        if not forced:
+                            result = f(args[0])
+                        else:
+                            result = f()
+                        Transaction().cursor.rollback()
+                        return result
             else:
                 for arg in _args:
                     module_name, method_name = arg.split('.')
