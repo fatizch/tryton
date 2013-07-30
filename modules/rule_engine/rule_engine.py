@@ -120,18 +120,21 @@ def safe_eval(source, data=None):
 
     comp = _compile_source(source)
     return eval(comp, {
-        '__builtins__': {
-            'True': True,
-            'False': False,
-            'str': str,
-            'globals': locals,
-            'locals': locals,
-            'bool': bool,
-            'dict': dict,
-            'round': round,
-            'Decimal': Decimal,
-            'datetime': datetime
-        }}, data)
+            '__builtins__': {
+                'True': True,
+                'False': False,
+                'str': str,
+                'globals': locals,
+                'locals': locals,
+                'bool': bool,
+                'dict': dict,
+                'round': round,
+                'Decimal': Decimal,
+                'datetime': datetime,
+                'int': int,
+                'max': max,
+                'min': min,
+                }}, data)
 
 
 def noargs_func(name, values):
@@ -592,6 +595,11 @@ class Rule(ModelView, ModelSQL):
         return result
 
     def on_change_rule_parameters(self):
+        # TODO : Currently uses the fact that the Transaction will be
+        # rollbacked to pseudo-update self.rule_parameters to include new
+        # parameters from One2ManyDomain fields.
+        # A better way would be to include the rule_parameters update in the
+        # on_change result
         rule_parameters = []
         for field_name, field in self._fields.iteritems():
             if not isinstance(field, fields.One2ManyDomain):
@@ -744,13 +752,13 @@ class Rule(ModelView, ModelSQL):
         code_template = CODE_TEMPLATE % (name, name, name)
         return decistmt(code_template % code)
 
-    def get_data_tree(self, name):
+    def data_tree_structure(self):
         if self.context:
             tmp_result = [e.as_tree() for e in self.context.allowed_elements]
         else:
             tmp_result = []
         if not (hasattr(self, 'rule_parameters') and self.rule_parameters):
-            return json.dumps(tmp_result)
+            return tmp_result
         tmp_node = {}
         tmp_node['name'] = 'extra args'
         tmp_node['translated'] = 'extra args'
@@ -774,7 +782,10 @@ class Rule(ModelView, ModelSQL):
             param_nodes[elem.kind]['children'].append(param_node)
         tmp_node['children'] = [x for x in param_nodes.itervalues()]
         tmp_result.append(tmp_node)
-        return json.dumps(tmp_result)
+        return tmp_result
+
+    def get_data_tree(self, name):
+        return json.dumps(self.data_tree_structure())
 
     @property
     def allowed_functions(self):
@@ -1024,7 +1035,8 @@ class TestCaseValue(ModelView, ModelSQL):
     name = fields.Selection(
         'get_selection', 'Name',
         selection_change_with=['rule'], depends=['rule'])
-    value = fields.Char('Value')
+    value = fields.Char('Value', states={'invisible': ~Eval('override_value')})
+    override_value = fields.Boolean('Override Value')
     test_case = fields.Many2One(
         'rule_engine.test_case', 'Test Case', ondelete='CASCADE')
     rule = fields.Function(
@@ -1076,6 +1088,10 @@ class TestCaseValue(ModelView, ModelSQL):
             if n not in (rule_name, 'Decimal')]))
         return test_values + [('', '')]
 
+    @classmethod
+    def default_override_value(cls):
+        return True
+
 
 class TestCase(ModelView, ModelSQL):
     "Test Case"
@@ -1113,7 +1129,7 @@ class TestCase(ModelView, ModelSQL):
     def execute_test(self):
         test_context = {}
         for value in self.test_values:
-            if value.value == 'None':
+            if not value.override_value:
                 continue
             val = safe_eval(value.value if value.value != '' else "''")
             test_context.setdefault(value.name, []).append(val)
@@ -1174,10 +1190,14 @@ class TestCase(ModelView, ModelSQL):
         for error in errors:
             if (isinstance(error, pyflakes.messages.UndefinedName)
                     and error.message_args[0] in the_rule.allowed_functions):
-                result.append({'name': error.message_args[0], 'value': 'None'})
+                element_name = error.message_args[0]
+                result.append({
+                        'name': element_name,
+                        'value': '',
+                        'override_value': not element_name.startswith(
+                            'table_')})
             elif not isinstance(error, WARNINGS):
                 raise Exception('Invalid rule')
-        print result
         return result
 
 

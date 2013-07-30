@@ -2,4 +2,5 @@
 <tree string="Test Case Value" editable="bottom">
   <field name="name"/>
   <field name="value"/>
+  <field name="override_value"/>
 </tree>
