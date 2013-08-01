@@ -20,6 +20,7 @@ def register():
         OfferedProduct,
         ItemDescriptorComplementaryDataRelation,
         ProductItemDescriptorRelation,
+        ProductValidationBatch,
         # from business_rule
         RuleEngineParameter,
         RuleEngine,
