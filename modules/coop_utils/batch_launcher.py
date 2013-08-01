@@ -15,11 +15,16 @@ from celery.utils.log import get_task_logger
 # Kill all celery processes :
 #   ps ax | grep celery | awk '{print $1}' | xargs kill
 #
+# Start a worker :
+#   celery worker -l info --config=celeryconfig
+#                         --app=trytond.modules.coop_utils.batch_launcher
+#                         --logfile=logs/coop_batch.log
+#
 # Start the workers as daemons (background) :
 #   celery multi start CoopBatch -l info
 #                         --app=trytond.modules.coop_utils.batch_launcher
-#                         --config=trytond.modules.coop_utils.celeryconfig
 #                         --logfile=logs/%n.log
+# (conf file for daemon should be put in /etc/default/celery)
 #
 # Run a given batch :
 #   celery call trytond.modules.coop_utils.batch_launcher.generate_all
@@ -40,14 +45,14 @@ celery = Celery('Coopengo Batch')
 
 def chunks_number(l, n):
     for i in xrange(0, len(l), n):
-        yield l[i:i+n]
+        yield l[i:i + n]
 
 
 def chunks_size(l, n):
     newn = int(1.0 * len(l) / n + 0.5)
-    for i in xrange(0, n-1):
-        yield l[i*newn:i*newn+newn]
-    yield l[n*newn-newn:]
+    for i in xrange(0, n - 1):
+        yield l[i * newn:i * newn + newn]
+    yield l[n * newn - newn:]
 
 
 @celery.task(base=TrytonTask)
