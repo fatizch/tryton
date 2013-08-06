@@ -133,9 +133,10 @@ def get_or_create_this(data, cfg_dict, class_key='', sel_val='', ctx=None,
 
         the_object = get_objects_from_db(
             cfg_dict, class_key, domain=[
-                ('%s' % k, '=', prepare_search(data[k]))
+                ('%s' % k[0], '=', prepare_search(data[k[0]]))
                 for k in domain
-                if k in data])
+                if k[0] in data
+                ])
 
     if the_object:
         return the_object
