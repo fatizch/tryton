@@ -171,8 +171,12 @@ class LossProcess():
         if not self.claim or not self.loss_desc:
             return {}
         res = {}
-        for contract in self.claim.get_possible_contracts(
-                at_date=self.start_date):
+        if self.claim.main_contract:
+            contracts = [self.claim.main_contract]
+        else:
+            contracts = self.claim.get_possible_contracts(
+                at_date=self.start_date)
+        for contract in contracts:
             for option in contract.options:
                 benefits = option.get_possible_benefits(self)
                 if benefits:
