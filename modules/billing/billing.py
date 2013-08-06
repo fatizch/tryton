@@ -348,7 +348,8 @@ class BillingManager(model.CoopSQL, model.CoopView):
     '''
     __name__ = 'billing.billing_manager'
 
-    contract = fields.Many2One('contract.contract', 'Contract')
+    contract = fields.Many2One('contract.contract', 'Contract',
+        ondelete='CASCADE')
     policy_owner = fields.Function(
         fields.Many2One('party.party', 'Party', states={'invisible': True}),
         'get_policy_owner_id')
@@ -464,7 +465,8 @@ class BillingManager(model.CoopSQL, model.CoopView):
 class BillingPeriod(model.CoopSQL, model.CoopView):
     'Billing Period'
     __name__ = 'billing.period'
-    contract = fields.Many2One('contract.contract', 'Contract', required=True)
+    contract = fields.Many2One('contract.contract', 'Contract', required=True,
+        ondelete='CASCADE')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date', required=True)
     moves = fields.One2Many('account.move', 'billing_period', 'Moves',
