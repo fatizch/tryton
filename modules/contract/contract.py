@@ -398,7 +398,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         the direct link subscriber
         '''
         # TODO: to enhance
-        return self.subscriber
+        if not utils.is_none(self, 'subscriber'):
+            return self.subscriber
 
     def activate_contract(self):
         if not self.status == 'quote':

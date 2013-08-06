@@ -348,7 +348,8 @@ class BillingManager(model.CoopSQL, model.CoopView):
     '''
     __name__ = 'billing.billing_manager'
 
-    contract = fields.Many2One('contract.contract', 'Contract')
+    contract = fields.Many2One('contract.contract', 'Contract',
+        ondelete='CASCADE')
     policy_owner = fields.Function(
         fields.Many2One('party.party', 'Party', states={'invisible': True}),
         'get_policy_owner_id')
@@ -416,19 +417,20 @@ class BillingManager(model.CoopSQL, model.CoopView):
     def init_from_contract(self, contract, start_date):
         self.start_date = start_date
         self.payment_method = contract.offered.get_default_payment_method()
-        if self.payment_method:
-            good_payment_date = \
-                self.payment_method.get_allowed_date_values()[0][0]
-            if good_payment_date:
-                self.payment_date = int(good_payment_date)
-            if self.payment_method.payment_mode == 'direct_debit':
-                BankAccount = Pool().get('party.bank_account')
-                try:
+        if not self.payment_method:
+            return
+        good_payment_date = self.payment_method.get_allowed_date_values()[0][0]
+        if good_payment_date:
+            self.payment_date = int(good_payment_date)
+        if self.payment_method.payment_mode == 'direct_debit':
+            BankAccount = Pool().get('party.bank_account')
+            try:
+                party = contract.get_policy_owner(self.start_date)
+                if party:
                     self.payment_bank_account = BankAccount.search([
-                            ('party', '=', contract.get_policy_owner(
-                                self.start_date))])[0]
-                except IndexError:
-                    pass
+                            ('party', '=', party.id)])[0]
+            except IndexError:
+                pass
 
     def on_change_with_payment_mode(self, name=None):
         if not (hasattr(self, 'payment_method') and self.payment_method):
@@ -463,7 +465,8 @@ class BillingManager(model.CoopSQL, model.CoopView):
 class BillingPeriod(model.CoopSQL, model.CoopView):
     'Billing Period'
     __name__ = 'billing.period'
-    contract = fields.Many2One('contract.contract', 'Contract', required=True)
+    contract = fields.Many2One('contract.contract', 'Contract', required=True,
+        ondelete='CASCADE')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date', required=True)
     moves = fields.One2Many('account.move', 'billing_period', 'Moves',
