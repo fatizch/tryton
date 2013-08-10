@@ -6,8 +6,8 @@ from trytond.pyson import Eval, Or, Bool
 
 from trytond.modules.coop_utils import utils, coop_date, model, fields
 from trytond.modules.offered.offered import DEF_CUR_DIG, CONFIG_KIND
-from trytond.modules.insurance_product import PricingResultLine
-from trytond.modules.insurance_product import PricingResultDetail
+from trytond.modules.offered import PricingResultLine
+from trytond.modules.offered import PricingResultDetail
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED, STATE_SIMPLE
 

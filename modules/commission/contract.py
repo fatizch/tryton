@@ -4,7 +4,7 @@ from collections import defaultdict
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coop_utils import model, fields, coop_date
-from trytond.modules.insurance_product import PricingResultDetail
+from trytond.modules.offered import PricingResultDetail
 
 __all__ = [
     'PriceLineComRelation',

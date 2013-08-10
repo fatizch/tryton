@@ -1,5 +1,6 @@
 from trytond.pool import Pool
 
+from .rule_engine_results import *
 from .offered import *
 from .complementary_data import *
 from .coverage import *

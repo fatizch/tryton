@@ -1,12 +1,10 @@
 from trytond.pool import Pool, PoolMeta
 from trytond.rpc import RPC
-from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.modules.coop_utils import model, fields, utils
 
 from trytond.modules.process import ClassAttr
 from trytond.modules.coop_process import CoopProcessFramework
-from trytond.modules.coop_party.party import ACTOR_KIND
 
 
 __all__ = [
@@ -23,30 +21,11 @@ class ContractSubscription(CoopProcessFramework):
     __name__ = 'contract.contract'
     __metaclass__ = ClassAttr
 
-    subscriber_kind = fields.Function(
-        fields.Selection(ACTOR_KIND, 'Kind', on_change=[
-            'subscriber_as_person', 'subscriber_as_company', ],
-        ), 'get_subscriber_kind', 'setter_void', )
-    subscriber_as_person = fields.Function(
-        fields.Many2One('party.party', 'Subscriber', states={
-                'invisible': Eval('subscriber_kind') != 'person',
-                }, on_change=['subscriber', 'subscriber_as_person', ],
-            domain=[('is_person', '=', True)],
-        ), 'get_subscriber_as_person', 'setter_void', )
-    subscriber_as_company = fields.Function(
-        fields.Many2One('party.party', 'Subscriber', states={
-                'invisible': Eval('subscriber_kind') != 'company',
-                }, domain=[('is_company', '=', True)],
-            on_change=['subscriber', 'subscriber_as_company'],
-        ), 'get_subscriber_as_company', 'setter_void', )
     subscriber_desc = fields.Function(
-        fields.Text('Summary', on_change_with=[
-            'subscriber_as_person', 'subscriber_as_company', 'subscriber', ],
-            readonly=True,
-            ), 'on_change_with_subscriber_desc', 'setter_void', )
+        fields.Text('Summary', on_change_with=['subscriber'], readonly=True),
+        'on_change_with_subscriber_desc', 'setter_void', )
     product_desc = fields.Function(
-        fields.Text(
-            'Description', on_change_with=['offered', 'com_product'],
+        fields.Text('Description', on_change_with=['offered', 'com_product'],
             readonly=True,
             ), 'on_change_with_product_desc', 'setter_void', )
     subscription_mgr = fields.One2Many(
@@ -55,23 +34,6 @@ class ContractSubscription(CoopProcessFramework):
         fields.Boolean('All Document Received',
             depends=['documents'], on_change_with=['documents'],
             ), 'on_change_with_doc_received')
-    # payment_bank_account = fields.Function(
-    #     fields.Many2One('party.bank_account', 'Payment Bank Account',
-    #         context={'for_party': Eval('subscriber', 0)},
-    #         depends=['payment_mode', 'billing_managers', 'subscriber'],
-    #         domain=[('party', '=', Eval('subscriber'))],
-    #         states={'invisible': Eval('payment_mode') != 'direct_debit'},
-    #         on_change=['billing_managers', 'payment_bank_account']),
-    #     'get_payment_bank_account', 'setter_void')
-    # payment_mode = fields.Function(
-    #     fields.Char('Payment Mode', states={'invisible': True}),
-    #     'get_payment_mode', 'setter_void')
-    # payment_method = fields.Function(
-    #     fields.Selection('get_allowed_payment_methods', 'Payment Method',
-    #         selection_change_with=['offered', 'start_date'],
-    #         depends=['billing_managers'], on_change=['billing_managers',
-    #             'offered', 'start_date', 'payment_mode', 'payment_method']),
-    #     'get_payment_method', 'setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -100,46 +62,6 @@ class ContractSubscription(CoopProcessFramework):
         if self.com_product:
             res = self.com_product.description
         return res
-
-    def on_change_subscriber_kind(self):
-        res = {}
-        if not (hasattr(self, 'subscriber_kind') and self.subscriber_kind):
-            return res
-        if self.subscriber_kind == 'person':
-            res['subscriber_as_company'] = None
-        elif self.subscriber_kind == 'company':
-            res['subscriber_as_person'] = None
-        return res
-
-    def get_subscriber_kind(self, name):
-        if (hasattr(self, 'subscriber_as_company') and
-                self.subscriber_as_company):
-            return 'company'
-        return 'person'
-
-    def get_subscriber_as_person(self, name):
-        if not self.subscriber:
-            return
-        if self.subscriber.is_person:
-            return self.subscriber.id
-
-    def get_subscriber_as_company(self, name):
-        if not self.subscriber:
-            return
-        if self.subscriber.is_company:
-            return self.subscriber.id
-
-    def on_change_subscriber_as_person(self):
-        if (hasattr(self, 'subscriber_as_person') and
-                self.subscriber_as_person):
-            return {'subscriber': self.subscriber_as_person.id}
-        return {}
-
-    def on_change_subscriber_as_company(self):
-        if (hasattr(self, 'subscriber_as_company') and
-                self.subscriber_as_company):
-            return {'subscriber': self.subscriber_as_company.id}
-        return {}
 
     def on_change_with_doc_received(self, name=None):
         if not (hasattr(self, 'documents') and self.documents):
@@ -198,10 +120,6 @@ class ContractSubscription(CoopProcessFramework):
             if (hasattr(the_billing_manager, 'payment_bank_account')
                     and the_billing_manager.payment_bank_account):
                 return the_billing_manager.payment_bank_account.id
-
-    @classmethod
-    def default_subscriber_kind(cls):
-        return 'person'
 
     @classmethod
     def setter_void(cls, contracts, name, values):

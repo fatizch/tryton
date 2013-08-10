@@ -5,6 +5,7 @@ from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, business, utils, fields
+from trytond.modules.offered import EligibilityResultLine
 
 __all__ = [
     'NonExistingRuleKindException',
@@ -18,13 +19,19 @@ __all__ = [
 CONFIG_KIND = [
     ('simple', 'Simple'),
     ('advanced', 'Advanced')
-]
+    ]
 
 TEMPLATE_BEHAVIOUR = [
     ('', ''),
     ('pass', 'Add'),
     ('override', 'Remove'),
-]
+    ]
+
+SUBSCRIBER_KIND = [
+    ('all', 'All'),
+    ('person', 'Person'),
+    ('company', 'Company'),
+    ]
 
 DEF_CUR_DIG = 2
 
@@ -283,6 +290,7 @@ class Product(model.CoopSQL, Offered):
         'offered.product-complementary_data_def',
         'product', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', 'in', ['contract', 'sub_elem'])])
+    subscriber_kind = fields.Selection(SUBSCRIBER_KIND, 'Subscriber Kind')
 
     @classmethod
     def __setup__(cls):
@@ -368,6 +376,43 @@ class Product(model.CoopSQL, Offered):
         result = ComplementaryData.calculate_value_set(
             possible_schemas, all_schemas, existing_data)
         return result, ()
+
+    def give_me_eligibility(self, args):
+        # First of all, we look for a subscriber data in the args and update
+        # the args dictionnary for sub values.
+        try:
+            business.update_args_with_subscriber(args)
+        except business.ArgsDoNotMatchException:
+            # If no Subscriber is found, automatic refusal
+            return (EligibilityResultLine(
+                False, ['Subscriber not defined in args']), [])
+
+        res, errs = self.check_subscriber_kind(args)
+        if not res:
+            return EligibilityResultLine(False, errs)
+        try:
+            res = self.get_result('eligibility', args, kind='eligibility')
+        except NonExistingRuleKindException:
+            return (EligibilityResultLine(True), [])
+        return res
+
+    def check_subscriber_kind(self, args):
+        # We define a match_table which will tell what data to look for
+        # depending on the subscriber_eligibility attribute value.
+        match_table = {
+            'all': 'subscriber',
+            'person': 'subscriber_person',
+            'company': 'subscriber_company'}
+
+        # if it does not match, refusal
+        if not match_table[self.subscriber_kind] in args:
+            return (False, ['Subscriber must be a %s'
+                    % dict(SUBSCRIBER_KIND)[self.subscriber_kind]])
+        return True, []
+
+    @staticmethod
+    def default_subscriber_kind():
+        return 'all'
 
 
 class ProductOptionsCoverage(model.CoopSQL):

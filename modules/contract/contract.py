@@ -2,7 +2,7 @@ import copy
 
 from trytond.modules.coop_utils import model, fields, coop_date
 from trytond.transaction import Transaction
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If
 from trytond.pool import Pool, PoolMeta
 
 from trytond.modules.coop_utils import utils
@@ -210,7 +210,21 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     options = fields.One2Many(None, 'contract', 'Options')
     contract_number = fields.Char('Contract Number', select=1,
         states={'required': Eval('status') == 'active'})
-    subscriber = fields.Many2One('party.party', 'Subscriber')
+    subscriber_kind = fields.Function(
+        fields.Char('Subscriber Kind', on_change_with=['offered'],
+            states={'invisible': True}),
+        'on_change_with_subscriber_kind')
+    subscriber = fields.Many2One('party.party', 'Subscriber',
+        domain=[[If(
+                    Eval('subscriber_kind') == 'person',
+                    ('is_person', '=', True),
+                    ())
+                ], [
+                If(
+                    Eval('subscriber_kind') == 'company',
+                    ('is_company', '=', True),
+                    ())
+                ]], depends=['subscriber_kind'])
     current_policy_owner = fields.Function(
         fields.Many2One('party.party', 'Current Policy Owner'),
         'get_current_policy_owner')
@@ -505,6 +519,9 @@ class Contract(model.CoopSQL, Subscribed, Printable):
 
     def get_letter_model_kind(self):
         return 'contract'
+
+    def on_change_with_subscriber_kind(self, name=None):
+        return self.offered.subscriber_kind if self.offered else 'all'
 
 
 class SubscribedCoverage(model.CoopSQL, Subscribed):

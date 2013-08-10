@@ -1,10 +1,10 @@
 #-*- coding:utf-8 -*-
 from trytond.pyson import Eval, Or
-from trytond.modules.coop_utils import model, business, fields, utils
+from trytond.modules.coop_utils import model, fields, utils
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot
 from trytond.modules.offered.offered import CONFIG_KIND
-from trytond.modules.insurance_product import EligibilityResultLine
+from trytond.modules.offered import EligibilityResultLine
 
 __all__ = [
     'EligibilityRule',
@@ -58,35 +58,7 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
             on_change_with=['offered']),
         'on_change_with_offered_kind')
 
-    def check_subscriber_classes(self, args):
-        if self.offered_kind != 'ins_product.benefit':
-            # We define a match_table which will tell what data to look for
-            # depending on the subscriber_eligibility attribute value.
-            match_table = {
-                'all': 'subscriber',
-                'person': 'subscriber_person',
-                'company': 'subscriber_company'}
-
-            # if it does not match, refusal
-            if not match_table[self.subscriber_classes] in args:
-                return (False, ['Subscriber must be a %s'
-                        % dict(SUBSCRIBER_CLASSES)[self.subscriber_classes]])
-        return True, []
-
     def give_me_eligibility(self, args):
-        # First of all, we look for a subscriber data in the args and update
-        # the args dictionnary for sub values.
-        try:
-            business.update_args_with_subscriber(args)
-        except business.ArgsDoNotMatchException:
-            # If no Subscriber is found, automatic refusal
-            return (EligibilityResultLine(
-                False, ['Subscriber not defined in args']), [])
-
-        res, errs = self.check_subscriber_classes(args)
-        if not res:
-            return EligibilityResultLine(False, [], errs)
-
         # Now we can call the rule if it exists :
         if hasattr(self, 'rule') and self.rule:
             rule_result = self.get_rule_result(args)

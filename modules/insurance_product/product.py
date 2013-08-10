@@ -10,8 +10,8 @@ from trytond.modules.coop_utils import model, utils, fields
 from trytond.modules.coop_utils import coop_string
 from trytond.modules.coop_utils import BatchRoot
 from trytond.modules.offered import NonExistingRuleKindException
-from trytond.modules.insurance_product import PricingResultLine
-from trytond.modules.insurance_product import EligibilityResultLine
+from trytond.modules.offered import PricingResultLine
+from trytond.modules.offered import EligibilityResultLine
 
 
 __all__ = [
@@ -167,13 +167,6 @@ class Product():
             # lines.append(line)
 
         return (lines, errs_product + errs_coverages)
-
-    def give_me_eligibility(self, args):
-        try:
-            res = self.get_result('eligibility', args, kind='eligibility')
-        except NonExistingRuleKindException:
-            return (EligibilityResultLine(True), [])
-        return res
 
     def give_me_families(self, args):
         self.update_args(args)

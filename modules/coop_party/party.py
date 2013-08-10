@@ -13,18 +13,13 @@ __all__ = [
     'Actor',
     'GenericActorKind',
     'GenericActor',
-]
+    ]
 
 GENDER = [
     ('male', 'Mr.'),
     ('female', 'Mrs.'),
     ('', ''),
-]
-
-ACTOR_KIND = [
-    ('person', 'Person'),
-    ('company', 'Company')
-]
+    ]
 
 STATES_PERSON = Bool(Eval('is_person'))
 STATES_COMPANY = Bool(Eval('is_company'))

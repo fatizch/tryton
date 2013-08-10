@@ -6,8 +6,8 @@ from trytond.pyson import Eval, Or, And
 
 from trytond.modules.coop_utils import utils, fields
 from trytond.modules.insurance_product import product
-from trytond.modules.insurance_product import PricingResultLine
-from trytond.modules.insurance_product import EligibilityResultLine
+from trytond.modules.offered import PricingResultLine
+from trytond.modules.offered import EligibilityResultLine
 from .product import IS_INSURANCE
 
 

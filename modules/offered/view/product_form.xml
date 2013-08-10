@@ -23,5 +23,8 @@
         <label name="currency"/>
         <field name="currency"/>
         <newline/>
+        <label name="subscriber_kind"/>
+        <field name="subscriber_kind"/>
+
     </xpath>
 </data>

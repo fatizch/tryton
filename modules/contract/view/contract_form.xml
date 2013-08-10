@@ -29,4 +29,6 @@
       <field name="appliable_conditions_date"/>
     </page>
   </notebook>
+  <newline/>
+  <field name="subscriber_kind"/>
 </form>
