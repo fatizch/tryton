@@ -17,6 +17,7 @@ def register():
         OfferedCoverage,
         Product,
         OfferedProduct,
+        ItemDescSubItemDescRelation,
         ItemDescriptorComplementaryDataRelation,
         ProductItemDescriptorRelation,
         ProductValidationBatch,

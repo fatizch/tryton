@@ -19,6 +19,7 @@ __all__ = [
     'Product',
     'OfferedProduct',
     'ItemDescriptor',
+    'ItemDescSubItemDescRelation',
     'ItemDescriptorComplementaryDataRelation',
     'ProductItemDescriptorRelation',
     'ExpenseKind',
@@ -246,9 +247,9 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
         'item_desc', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'sub_elem')], )
     kind = fields.Selection('get_possible_item_kind', 'Kind')
-    parent = fields.Many2One('ins_product.item_desc', 'Parent')
-    sub_item_descs = fields.One2Many('ins_product.item_desc', 'parent',
-        'Sub Item Descriptors', states={'invisible': Eval('kind') == 'person'})
+    sub_item_descs = fields.Many2Many('ins_product.item_desc-sub_item_desc',
+        'item_desc', 'sub_item_desc', 'Sub Item Descriptors',
+        states={'invisible': Eval('kind') == 'person'})
 
     def on_change_with_code(self):
         if self.code:
@@ -256,11 +257,11 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
         elif self.name:
             return coop_string.remove_blank_and_invalid_char(self.name)
 
-    @classmethod
-    def _export_force_recreate(cls):
-        result = super(ItemDescriptor, cls)._export_force_recreate()
-        result.remove('sub_item_descs')
-        return result
+    # @classmethod
+    # def _export_force_recreate(cls):
+    #     result = super(ItemDescriptor, cls)._export_force_recreate()
+    #     result.remove('sub_item_descs')
+    #     return result
 
     @classmethod
     def get_possible_item_kind(cls):
@@ -270,6 +271,17 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
             ('person', 'Person'),
             ('company', 'Company'),
         ]
+
+
+class ItemDescSubItemDescRelation(model.CoopSQL):
+    'Relation between Item Desc and Sub Item Desc'
+
+    __name__ = 'ins_product.item_desc-sub_item_desc'
+
+    item_desc = fields.Many2One('ins_product.item_desc', 'Item Desc',
+        ondelete='CASCADE')
+    sub_item_desc = fields.Many2One('ins_product.item_desc', 'Sub Item Desc',
+        ondelete='RESTRICT')
 
 
 class ItemDescriptorComplementaryDataRelation(model.CoopSQL):

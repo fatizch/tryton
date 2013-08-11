@@ -451,7 +451,8 @@ class CoveredElement(model.CoopSQL, model.CoopView):
                 ~~Eval('possible_item_desc'),
                 ('id', 'in', Eval('possible_item_desc')),
                 ())
-            ], depends=['possible_item_desc', 'complementary_data'])
+            ], depends=['possible_item_desc', 'complementary_data'],
+            ondelete='RESTRICT')
     possible_item_desc = fields.Function(
         fields.Many2Many('ins_product.item_desc', None, None,
             'Possible Item Desc', states={'invisible': True}),
