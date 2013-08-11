@@ -641,7 +641,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
 
     def get_complementary_data_def(self, at_date=None):
         contract = self.main_contract
-        if not contract.id:
+        if not contract:
             Contract = Pool().get('contract.contract')
             contract = Contract(Transaction().context.get('contract'))
         res = []
@@ -716,10 +716,13 @@ class CoveredElement(model.CoopSQL, model.CoopView):
 
     @classmethod
     def get_possible_item_desc(cls, contract=None, parent=None):
+        Contract = Pool().get('contract.contract')
         if not parent:
             parent = cls.get_parent_in_transaction()
         if parent and parent.item_desc:
             return parent.item_desc.sub_item_descs
+        if not contract:
+            contract = Contract(Transaction().context.get('contract'))
         if contract and not utils.is_none(contract, 'offered'):
             return contract.offered.item_descriptors
         return []
