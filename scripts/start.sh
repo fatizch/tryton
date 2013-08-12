@@ -11,7 +11,7 @@ cd tryton-workspace/conf
 . ./scripts.conf
 cd ../coopbusiness/scripts
 SCRIPT_NAME=$1
-while getopts ":bdehklprstu" opt; do
+while getopts ":bdehkloprstu" opt; do
    case $opt in
         b)
             SCRIPT_NAME=launch_batch ;;
@@ -24,9 +24,10 @@ while getopts ":bdehklprstu" opt; do
 -b launch_batch
 -d updatedatabase
 -e export_translations
--k killtryton 
--l launch 
--r reset 
+-k killtryton
+-l launch
+-o generate po file with replaced translations
+-r reset
 -s sync_coop
 -t test_case
 -u unittest" ;;
@@ -34,6 +35,8 @@ while getopts ":bdehklprstu" opt; do
             SCRIPT_NAME=killtryton  ;;
         l)
             SCRIPT_NAME=launch  ;;
+        o)
+            SCRIPT_NAME=replace_translations  ;;
         p)
             SCRIPT_NAME=print_status ;;
         r)
