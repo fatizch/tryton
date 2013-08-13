@@ -1211,11 +1211,14 @@ class ManageDimensionGeneric(Wizard):
             self.dimension_management.name)
         existing_values = self.dimension_management.get_existing_values(
             self.dimension_management.order, self.dimension_management.values)
-        new_values = self.dimension_management.format_text_values(
-            self.dimension_management.convert_values().split('\n'))
+        new_values = self.dimension_management.convert_values()
         the_table.save()
+        if not new_values:
+            return 'dimension_management'
+        new_values = self.dimension_management.format_text_values(
+            new_values.split('\n'))
         if existing_values == new_values:
-            return 'end'
+            return 'dimension_management'
         Dimension = Pool().get('table.table_dimension')
         Dimension.delete(Dimension.search([
                     ('type', '=', 'dimension%s' % idx),
