@@ -348,11 +348,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     type_), value)
 
 
-def suite():
-    suite = trytond.tests.test_tryton.suite()
-    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-        ModuleTestCase))
-    return suite
+suite = test_framework.suite_template(ModuleTestCase)
 
 if __name__ == '__main__':
     unittest.TextTestRunner(verbosity=2).run(suite())
