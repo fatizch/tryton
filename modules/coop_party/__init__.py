@@ -14,8 +14,6 @@ def register():
         PartyRelationKind,
         PartyRelation,
         ContactMechanism,
-        GenericActorKind,
-        GenericActor,
         AddresseKind,
         ContactHistory,
         module='coop_party', type_='model')

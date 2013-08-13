@@ -3,16 +3,14 @@ from trytond.pyson import Eval, Bool
 
 from trytond.pool import PoolMeta
 
-from trytond.modules.coop_utils import CoopView, CoopSQL
-from trytond.modules.coop_utils import TableOfTable, utils, fields, model
+from trytond.modules.coop_utils import CoopView
+from trytond.modules.coop_utils import utils, fields, model
 from trytond.modules.coop_utils import coop_string
 
 
 __all__ = [
     'Party',
     'Actor',
-    'GenericActorKind',
-    'GenericActor',
     ]
 
 GENDER = [
@@ -34,8 +32,6 @@ class Party(model.CoopSQL):
     is_person = fields.Boolean('Person')
     is_company = fields.Boolean('Company')
 
-    generic_roles = fields.One2Many('party.generic_actor', 'party',
-        'Generic Actor')
     relations = fields.One2Many('party.party-relation',
         'from_party', 'Relations', context={'direction': 'normal'})
     in_relation_with = fields.One2Many('party.party-relation',
@@ -271,35 +267,3 @@ class Actor(CoopView):
         if self.party:
             return self.party.rec_name
         return super(Actor, self).get_rec_name(name)
-
-
-class GenericActorKind(TableOfTable):
-    'Generic Actor Kind'
-
-    __name__ = 'party.generic_actor_kind'
-    _table = 'coop_table_of_table'
-
-    @staticmethod
-    def get_class_where_used():
-        return [('party.generic_actor', 'kind')]
-
-
-class GenericActor(CoopSQL, Actor):
-    'Generic Actor'
-
-    __name__ = 'party.generic_actor'
-
-    kind = fields.Selection('get_possible_actor_kind', 'Kind', required=True)
-
-    @classmethod
-    def get_possible_actor_kind(cls, vals=None):
-        return GenericActorKind.get_values_as_selection(
-            'party.generic_actor_kind')
-
-    @classmethod
-    def get_summary(cls, parties, name=None, at_date=None, lang=None):
-        res = {}
-        for party in parties:
-            res[party.id] = coop_string.get_field_as_summary(
-                party, 'kind', True, at_date, lang=lang)
-        return res
