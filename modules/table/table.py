@@ -7,7 +7,7 @@ from trytond.config import CONFIG
 from trytond.backend import TableHandler
 from trytond.pool import Pool
 from trytond.rpc import RPC
-from trytond.pyson import Eval, If, Bool, Or, PYSONEncoder
+from trytond.pyson import Not, Eval, If, Bool, Or, PYSONEncoder
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
     Button
@@ -1027,9 +1027,12 @@ class DimensionDisplayer(ModelView):
             'date_format', 'kind', 'values', 'input_mode'], states={
             'invisible': Eval('input_mode', '') != 'flat_file'},)
     date_format = fields.Char('Date Format', states={
-            'invisible': Or(Eval('kind', '') == 'date',
-                Eval('kind', '') == 'range-date')
-            and Eval('input_mode', '') != 'flat_file'},
+            'invisible': Not(Or(
+                    Eval('kind', '') == 'date',
+                    Eval('kind', '') == 'range-date'))},
+            # 'invisible': Or(Eval('kind', '') == 'date',
+                # Eval('kind', '') == 'range-date')
+            # and Eval('input_mode', '') != 'flat_file'},
         on_change=['date_format', 'values', 'input_text', 'kind',
             'input_mode'])
 
