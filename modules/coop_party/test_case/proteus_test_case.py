@@ -17,6 +17,7 @@ def update_models(cfg_dict):
     cfg_dict['Address'] = Model.get('party.address')
     cfg_dict['Country'] = Model.get('country.country')
     cfg_dict['Language'] = Model.get('ir.lang')
+    cfg_dict['Contact'] = Model.get('party.contact_mechanism')
     return cfg_dict
 
 
@@ -248,8 +249,43 @@ def create_hierarchy(cfg_dict):
     create_company(cfg_dict, 'Mother House', 'MH', None, 1, 4)
 
 
+def create_contact_mechanisms(cfg_dict):
+    Contact = cfg_dict['Contact']
+    for party in cfg_dict['Party'].find([('contact_mechanisms', '=', False)]):
+        contact_types = ['phone', 'email']
+        while len(contact_types) > 0:
+            contact = Contact()
+            contact.party = party
+            contact.type = random.choice(contact_types)
+            contact_types.remove(contact.type)
+            if contact.type == 'email':
+                if party.is_company:
+                    if party.short_name:
+                        suffix = party.short_name
+                    else:
+                        suffix = party.name
+                    suffix = proteus_tools.remove_invalid_char(suffix)
+                    contact.value = 'contact@%s.com' % suffix
+                elif party.is_person:
+                    prefix = ''
+                    if party.first_name:
+                        prefix = '%s.' % proteus_tools.remove_invalid_char(
+                            party.first_name)
+                    prefix += proteus_tools.remove_invalid_char(party.name)
+                    contact.value = '%s@%s' % (prefix, random.choice(
+                        ['gmail.com', 'yahoo.com', 'aol.com', 'hotmail.com']))
+                if contact.value:
+                    contact.value = contact.value.replace(' ', '').lower()
+            if contact.type == 'phone':
+                contact.value = (cfg_dict['phone_prefix']
+                    + str(random.randint(100000000, 999999999)))
+            if contact.value:
+                contact.save()
+
+
 def launch_test_case(cfg_dict):
     update_models(cfg_dict)
     proteus_tools.set_global_search('party.party')
     create_parties(cfg_dict)
     create_hierarchy(cfg_dict)
+    create_contact_mechanisms(cfg_dict)

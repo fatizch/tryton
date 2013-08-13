@@ -179,7 +179,6 @@ def remove_invalid_char(from_string):
 
 
 def remove_all_but_alphanumeric_and_space(from_string):
-    import re
     pattern = re.compile(r'([^\s\w]|_)+')
     return pattern.sub('', from_string)
 

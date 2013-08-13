@@ -6,6 +6,7 @@ import logging.handlers
 import time
 import sys
 import csv
+import re
 
 from proteus import Model
 from proteus import config as pconfig
@@ -334,7 +335,6 @@ def get_modules_to_update(from_modules):
 
 
 def remove_all_but_alphanumeric_and_space(from_string):
-    import re
     pattern = re.compile(r'([^\s\w]|_)+')
     return pattern.sub('', from_string)
 
@@ -429,3 +429,12 @@ def get_or_create_company(cfg_dict, party_name):
     admin.company = the_company
     admin.save()
     return the_company
+
+
+def remove_invalid_char(from_string):
+    import unicodedata
+    res = ''.join((
+        c for c in unicodedata.normalize('NFD', unicode(from_string))
+        if unicodedata.category(c) != 'Mn'))
+    res = re.sub('[^0-9a-zA-Z]+', '_', res)
+    return res
