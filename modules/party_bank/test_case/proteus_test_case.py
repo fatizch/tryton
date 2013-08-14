@@ -121,25 +121,18 @@ def add_bank_account(cfg_dict, party, banks):
         party.bank_accounts = []
     party.bank_accounts.append(bank_account)
     bank_account_nb = bank_account.account_numbers[0]
-    bank_account_nb.kind = 'RIB'
-    bank_account_nb.bank_code = get_random(banks)
-    bank_account_nb.branch_code = str(random.randint(0, 999)).zfill(5)
-    bank_account_nb.account_number = str(random.randint(0, 99999999)).zfill(11)
-    bank_account_nb.key = str(97 - (89 * int(bank_account_nb.bank_code)
-            + 15 * int(bank_account_nb.branch_code)
-            + 3 * int(bank_account_nb.account_number)) % 97).zfill(2)
-
-
-def migrate_banks(cfg_dict):
-    for bank in cfg_dict['Bank'].find([]):
-        if not bank.party.is_company:
-            bank.party.is_company = True
-            bank.party.save()
+    bank_account_nb.kind = 'IBAN'
+    bank_code = get_random(banks)
+    branch_code = str(random.randint(0, 999)).zfill(5)
+    account_number = str(random.randint(0, 99999999)).zfill(11)
+    key = str(97 - (89 * int(bank_code) + 15 * int(branch_code)
+            + 3 * int(account_number)) % 97).zfill(2)
+    bank_account_nb.number = 'FR76%s%s%s%s' % (bank_code, branch_code,
+        account_number, key)
 
 
 def load_bank_code(cfg_dict):
-    f = open(os.path.join(
-            DIR, cfg_dict['language'][0:2].lower(), 'bank.txt'),
+    f = open(os.path.join(DIR, cfg_dict['language'][0:2].lower(), 'bank.txt'),
         'r')
     res = {}
     n = 0
@@ -152,7 +145,6 @@ def load_bank_code(cfg_dict):
 
 def launch_test_case(cfg_dict):
     update_cfg_dict(cfg_dict)
-    migrate_banks(cfg_dict)
     if is_table_empty(cfg_dict['Bank']):
         create_bank(cfg_dict)
     create_bank_accounts(cfg_dict)
