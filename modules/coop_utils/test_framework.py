@@ -2,9 +2,7 @@ import functools
 import os
 import imp
 import unittest
-import doctest
 
-from trytond.backend.sqlite.database import Database as SQLiteDatabase
 from trytond.transaction import Transaction
 
 
@@ -71,34 +69,6 @@ def prepare_test(*_args):
         wrap._is_ready = True
         return wrap
     return decorator
-
-
-def suite_template(TestCaseClass, rst_files=None):
-    from trytond.tests.test_tryton import suite
-
-    def suite_function():
-        the_suite = suite()
-        the_suite.addTests(
-            unittest.TestLoader().loadTestsFromTestCase(TestCaseClass))
-        if not rst_files:
-            return the_suite
-
-        def doctest_dropdb(test):
-            database = SQLiteDatabase().connect()
-            cursor = database.cursor(autocommit=True)
-            try:
-                database.drop(cursor, ':memory:')
-                cursor.commit()
-            finally:
-                cursor.close()
-
-        for elem in rst_files:
-            the_suite.addTests(doctest.DocFileSuite(elem, setUp=doctest_dropdb,
-                    tearDown=doctest_dropdb, encoding='utf-8',
-                    optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
-        return the_suite
-
-    return suite_function
 
 
 class CoopTestCase(unittest.TestCase):
