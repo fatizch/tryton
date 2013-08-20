@@ -208,8 +208,6 @@ class Party(model.CoopSQL):
                 party, 'relations', True, at_date, lang=lang)
             res[party.id] += coop_string.get_field_as_summary(
                 party, 'in_relation_with', True, at_date, lang=lang)
-            res[party.id] += coop_string.get_field_as_summary(
-                party, 'generic_roles', True, at_date, lang=lang)
         return res
 
     @classmethod
