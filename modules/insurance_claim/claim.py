@@ -86,7 +86,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     declaration_date = fields.Date('Declaration Date')
     end_date = fields.Date('End Date',
         states={'invisible': Eval('status') != 'closed', 'readonly': True})
-    claimant = fields.Many2One('party.party', 'Claimant')
+    claimant = fields.Many2One('party.party', 'Claimant', ondelete='RESTRICT')
     losses = fields.One2Many('ins_claim.loss', 'claim', 'Losses',
         states={'readonly': Eval('status') == 'closed'})
     documents = fields.One2Many('ins_product.document_request',
