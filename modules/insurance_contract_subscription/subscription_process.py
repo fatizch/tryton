@@ -168,8 +168,9 @@ class SubscriptionProcessFinder(ProcessFinder):
         if res:
             res, err = obj.init_from_offered(process_param.product,
                 process_param.date)
-            obj.get_or_create_management_role('commission',
-                process_param.broker)
+            if process_param.broker:
+                obj.get_or_create_management_role('commission',
+                    process_param.broker)
             obj.dist_network = process_param.dist_network
             errs += err
         return res, errs
