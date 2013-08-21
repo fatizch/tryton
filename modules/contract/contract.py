@@ -224,7 +224,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
                     Eval('subscriber_kind') == 'company',
                     ('is_company', '=', True),
                     ())
-                ]], depends=['subscriber_kind'])
+                ]], depends=['subscriber_kind'], ondelete='RESTRICT')
     current_policy_owner = fields.Function(
         fields.Many2One('party.party', 'Current Policy Owner'),
         'get_current_policy_owner')
