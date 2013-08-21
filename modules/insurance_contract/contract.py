@@ -304,6 +304,9 @@ class InsuranceSubscribedCoverage():
         fields.Many2One('ins_contract.subscribed_coverage_complement',
             'Complement'),
         'get_ins_complement_id')
+    benefits = fields.Function(
+        fields.Many2Many('ins_product.benefit', None, None, 'Benefits'),
+        'get_benefits_ids')
 
     @classmethod
     def get_offered_name(cls):
@@ -326,6 +329,9 @@ class InsuranceSubscribedCoverage():
 
     def get_ins_complement_id(self, name):
         return self.ins_complement[0].id if self.ins_complement else None
+
+    def get_benefits_ids(self, name):
+        return [x.id for x in self.offered.benefits] if self.offered else []
 
 
 class SubscribedCoverageComplement(model.CoopSQL, model.CoopView):
@@ -356,7 +362,7 @@ class SubscribedCoverageComplement(model.CoopSQL, model.CoopView):
                 'possible_deductible_duration', {
                     'date': self.start_date,
                     'appliable_conditions_date':
-                self.subscribed_coverage.contract.appliable_conditions_date,
+                        self.subscribed_coverage.contract.appliable_conditions_date,
                     'scope': 'coverage'},
                 kind='deductible')[0]
             return [x.id for x in durations] if durations else []
@@ -1002,7 +1008,8 @@ class DeliveredService(model.CoopView, model.CoopSQL):
     status = fields.Selection(DELIVERED_SERVICES_STATUSES, 'Status')
     expenses = fields.One2Many('ins_contract.expense',
         'delivered_service', 'Expenses')
-    contract = fields.Many2One('contract.contract', 'Contract')
+    contract = fields.Many2One('contract.contract', 'Contract',
+        ondelete='RESTRICT')
     subscribed_service = fields.Many2One(
         'contract.subscribed_option', 'Coverage', ondelete='RESTRICT',
         domain=[
