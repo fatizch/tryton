@@ -26,6 +26,9 @@ class Party:
         })
     bank_accounts = fields.One2Many(
         'party.bank_account', 'party', 'Bank Accounts')
+    main_bank_account = fields.Function(
+        fields.Many2One('party.bank_account', 'Main Bank Account'),
+        'get_main_bank_account_id')
 
     @classmethod
     def get_summary(cls, parties, name=None, at_date=None, lang=None):
@@ -41,6 +44,10 @@ class Party:
 
     def get_bank_accounts(self, at_date=None):
         return utils.get_good_versions_at_date(self, 'bank_accounts', at_date)
+
+    def get_main_bank_account_id(self, name):
+        bank_accounts = self.get_bank_accounts(utils.today())
+        return bank_accounts[0].id if bank_accounts else None
 
 
 class Bank(CoopSQL, Actor):

@@ -187,6 +187,9 @@ class Address(model.CoopSQL):
             full_address = full_address.replace('\n', ' ')
         return full_address
 
+    def get_rec_name(self, name):
+        return self.get_address_as_char(name)
+
 
 class AddresseKind(DynamicSelection):
     'Addresse Kind'

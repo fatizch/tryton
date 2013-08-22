@@ -1,5 +1,5 @@
 #-*- coding:utf-8 -*-
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, Less
 
 from trytond.pool import PoolMeta
 
@@ -38,8 +38,21 @@ class Party(model.CoopSQL):
         'to_party', 'in relation with', context={'direction': 'reverse'})
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
     main_address = fields.Function(
-        fields.Char('Address'),
-        'get_main_address_as_char')
+        fields.Many2One('party.address', 'Main Address'),
+        'get_main_address_id')
+    number_of_addresses = fields.Function(
+        fields.Integer('Number Of Addresses', on_change_with=['addresses'],
+            states={'invisible': True}),
+        'on_change_with_number_of_addresses')
+    main_contact_mechanism = fields.Function(
+        fields.Many2One('party.contact_mechanism', 'Main Contact Mechanism',
+            states={'invisible': ~Eval('main_contact_mechanism')}),
+        'get_main_contact_mechanism_id')
+    number_of_contact_mechanisms = fields.Function(
+        fields.Integer('Number Of Contact Mechanisms',
+            on_change_with=['contact_mechanisms'],
+            states={'invisible': True}),
+        'on_change_with_number_of_contact_mechanisms')
     ####################################
     #Person information
     gender = fields.Selection(GENDER, 'Gender',
@@ -79,7 +92,15 @@ class Party(model.CoopSQL):
     @classmethod
     def __setup__(cls):
         super(Party, cls).__setup__()
-        # cls._order.insert(0, ('name', 'ASC'))
+        cls._buttons.update({
+                'open_addresses': {
+                    'invisible': Less(Eval('number_of_addresses', 0), 1, True),
+                    },
+                'open_contact_mechanisms': {
+                    'invisible': Less(Eval('number_of_contact_mechanisms', 0),
+                        1, True),
+                    },
+                })
 
         #this loop will add for each One2Many role, a function field is_role
         for field_name in dir(cls):
@@ -236,10 +257,9 @@ class Party(model.CoopSQL):
                     (not kind or address.kind == kind)):
                 return address
 
-    def get_main_address_as_char(self, name=None, at_date=None):
+    def get_main_address_id(self, name=None, at_date=None):
         address = self.address_get(at_date=at_date)
-        if address:
-            return address.get_address_as_char(name)
+        return address.id if address else None
 
     @classmethod
     def default_lang(cls):
@@ -251,6 +271,25 @@ class Party(model.CoopSQL):
             return res
         res['maiden_name'] = ''
         return res
+
+    def get_main_contact_mechanism_id(self, name):
+        return self.contact_mechanisms[0].id if self.contact_mechanisms else None
+
+    @classmethod
+    @model.CoopView.button_action('coop_party.act_addresses_button')
+    def open_addresses(cls, objs):
+        pass
+
+    @classmethod
+    @model.CoopView.button_action('coop_party.act_contact_mechanisms_button')
+    def open_contact_mechanisms(cls, objs):
+        pass
+
+    def on_change_with_number_of_addresses(self, name=None):
+        return len(self.addresses)
+
+    def on_change_with_number_of_contact_mechanisms(self, name=None):
+        return len(self.contact_mechanisms)
 
 
 class Actor(CoopView):
