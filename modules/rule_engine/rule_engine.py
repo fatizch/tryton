@@ -46,6 +46,7 @@ __all__ = [
     'CatchedRuleEngineError',
     'check_args',
     'RuleError',
+    'RuleEngineResult',
 ]
 
 CODE_TEMPLATE = """
@@ -168,14 +169,14 @@ class TooFewFunctionCall(Exception):
 class RuleEngineResult(object):
     'Rule engine result'
 
-    def __init__(self):
+    def __init__(self, result=None):
         super(RuleEngineResult, self).__init__()
         self.errors = []
         self.warnings = []
         self.info = []
         self.debug = []
         self.low_level_debug = []
-        self.result = None
+        self.result = result
         self.result_set = False
 
     @property
