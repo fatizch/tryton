@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="coverage_view_form">
+            <field name="model">offered.coverage</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered.coverage_view_form"/>
+            <field name="name">coverage_form</field>
+        </record>
+        <record model="ir.ui.view" id="rating_rule_view_tree">
+            <field name="model">collective.rating_rule</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="insurance_product.businessruleroot_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+        <record model="ir.ui.view" id="rating_rule_view_form">
+            <field name="model">collective.rating_rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_product.businessruleroot_view_form"/>
+            <field name="name">rating_rule_form</field>
+        </record>
+        <record model="ir.ui.view" id="rating_rule_by_tranche_view_tree">
+            <field name="model">collective.rating_rule_by_tranche</field>
+            <field name="type">tree</field>
+            <field name="name">rating_rule_by_tranche_tree</field>
+        </record>
+        <record model="ir.ui.view" id="rating_rule_by_tranche_view_form">
+            <field name="model">collective.rating_rule_by_tranche</field>
+            <field name="type">form</field>
+            <field name="name">rating_rule_by_tranche_form</field>
+        </record>
+    </data>
+</tryton>

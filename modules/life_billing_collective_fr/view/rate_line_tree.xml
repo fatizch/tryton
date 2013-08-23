@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tree string="Rate Line">
+    <field name="rec_name"/>
+    <field name="sum_rate" factor="100">
+        <suffix string="%"/>
+    </field>
+    <field name="childs" tree_invisible="1"/>
+    <field name="parent" tree_invisible="1"/>
+</tree>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<form string="Rate Line">
+    <label name="contract"/>
+    <field name="contract"/>
+    <newline/>
+    <label name="covered_element"/>
+    <field name="covered_element"/>
+    <label name="option"/>
+    <field name="option"/>
+    <newline/>
+    <label name="parent"/>
+    <field name="parent"/>
+    <newline/>
+    <field name="childs" colspan="4"/>
+    <newline/>
+    <label name="tranche"/>
+    <field name="tranche"/>
+    <label name="rate"/>
+    <field name="rate"/>
+</form>
