@@ -11,6 +11,5 @@
     <xpath expr="/form" position="inside">
         <newline/>
         <field name="use_rates"/>
-
     </xpath>
 </data>
