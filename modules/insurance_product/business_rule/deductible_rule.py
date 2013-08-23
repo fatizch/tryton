@@ -101,7 +101,9 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
             errs += 'missing_date'
             return None, errs
         res['start_date'] = args['start_date']
-        (duration, unit), cur_errs = self.give_me_result(args)
+        rule_engine_result = self.give_me_result(args)
+        duration, unit = rule_engine_result.result
+        cur_errs = rule_engine_result.errors
         errs += cur_errs
         if not duration or not unit:
             errs = 'missing_duration_or_duration_unit'
