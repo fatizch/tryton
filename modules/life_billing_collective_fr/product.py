@@ -38,8 +38,10 @@ class CollectiveRatingRule(business_rule.BusinessRuleRoot, model.CoopSQL):
             #TODO deal with date control, do not rate a future covered data
             covered_data_dict = {'covered_data': covered_data, 'rates': []}
             result.append(covered_data_dict)
+            covered_data_args = args.copy()
+            covered_data.init_dict_for_rule_engine(covered_data_args)
             for tranche_rate in self.rates_by_tranche:
-                rule_engine_res = tranche_rate.get_result(args)
+                rule_engine_res = tranche_rate.get_result(covered_data_args)
                 if rule_engine_res.errors:
                     errs += rule_engine_res.errors
                 else:
