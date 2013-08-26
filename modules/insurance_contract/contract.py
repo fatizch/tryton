@@ -735,7 +735,6 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         return []
 
     def get_possible_item_desc_ids(self, name):
-        print 'Main contract', self.main_contract
         return [x.id for x in
             self.get_possible_item_desc(self.main_contract, self.parent)]
 
