@@ -17,13 +17,17 @@ class Product():
 
     is_health = fields.Function(
         fields.Boolean('Is Health', states={'invisible': True}),
-        'get_is_health_product')
+        'get_is_health_product', searcher='search_is_health')
 
     def get_is_health_product(self, name):
         for coverage in self.coverages:
             if coverage.is_health:
                 return True
         return False
+
+    @classmethod
+    def search_is_health(cls, name, clause):
+        return [('coverages.is_health',) + tuple(clause[1:])]
 
 
 class Coverage():
@@ -34,7 +38,7 @@ class Coverage():
 
     is_health = fields.Function(
         fields.Boolean('Is Health', states={'invisible': True}),
-        'get_is_health_coverage')
+        'get_is_health_coverage', searcher='search_is_health')
 
     @classmethod
     def __setup__(cls):
@@ -47,3 +51,10 @@ class Coverage():
 
     def get_is_health_coverage(self, name):
         return self.family == 'health'
+
+    @classmethod
+    def search_is_health(cls, name, clause):
+        if clause[2] == True:
+            return [('family', '=', 'health')]
+        else:
+            return [('family', '!=', 'health')]
