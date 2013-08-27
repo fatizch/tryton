@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Or
 
 from trytond.modules.coop_utils import fields, model, utils
 from trytond.modules.rule_engine import RuleEngineResult
@@ -28,8 +28,31 @@ class CollectiveRatingRule(business_rule.BusinessRuleRoot, model.CoopSQL):
 
     __name__ = 'collective.rating_rule'
 
+    rating_kind = fields.Selection(
+        [('tranche', 'by Tranche'), ('index', 'by Index')], 'Rating Kind')
     rates_by_tranche = fields.One2Many('collective.rating_rule_by_tranche',
-        'main_rating_rule', 'Rate by Tranche')
+        'main_rating_rule', 'Rate by Tranche',
+        states={'invisible': Eval('rating_kind') != 'tranche'})
+    simple_rate = fields.Numeric('Rate',
+            states={'invisible': Or(
+                    ~business_rule.STATE_SIMPLE,
+                    Eval('rating_kind') != 'index'
+                    )}, digits=(16, 4))
+    index = fields.Many2One('table.table_def', 'Index',
+        domain=[
+            ('dimension_kind1', '=', 'range-date'),
+            ('dimension_kind2', '=', None),
+            ], states={'invisible': Eval('rating_kind') != 'index'},
+        ondelete='RESTRICT')
+
+    @classmethod
+    def __setup__(cls):
+        super(CollectiveRatingRule, cls).__setup__()
+        utils.update_states(cls, 'config_kind',
+            {'invisible': Eval('rating_kind') == 'tranche'})
+
+    def get_simple_result(self, args):
+        return self.simple_rate
 
     def give_me_rate(self, args):
         result = []
@@ -40,16 +63,33 @@ class CollectiveRatingRule(business_rule.BusinessRuleRoot, model.CoopSQL):
             result.append(covered_data_dict)
             covered_data_args = args.copy()
             covered_data.init_dict_for_rule_engine(covered_data_args)
-            for tranche_rate in self.rates_by_tranche:
-                rule_engine_res = tranche_rate.get_result(covered_data_args)
+            if self.rating_kind == 'index':
+                rule_engine_res = self.give_me_result(covered_data_args)
                 if rule_engine_res.errors:
                     errs += rule_engine_res.errors
                 else:
                     covered_data_dict['rates'].append({
-                            'tranche': tranche_rate.tranche,
+                            'key': self.index,
                             'rate': rule_engine_res.result,
+                            'kind': 'index',
                             })
+            elif self.rating_kind == 'tranche':
+                for tranche_rate in self.rates_by_tranche:
+                    rule_engine_res = tranche_rate.get_result(
+                        covered_data_args)
+                    if rule_engine_res.errors:
+                        errs += rule_engine_res.errors
+                    else:
+                        covered_data_dict['rates'].append({
+                                'key': tranche_rate.tranche,
+                                'rate': rule_engine_res.result,
+                                'kind': 'tranche',
+                                })
         return result, errs
+
+    @staticmethod
+    def default_rating_kind():
+        return 'index'
 
 
 class TrancheRatingRule(model.CoopView, model.CoopSQL):

@@ -13,8 +13,15 @@
     <newline/>
     <field name="childs" colspan="4"/>
     <newline/>
+    <label name="sum_rate"/>
+    <group col="2" id="rate">
+        <field name="sum_rate" factor="100" xexpand="0"/>
+        <label name="sum_rate" string="%" xalign="0.0" xexpand="1"/>
+    </group>
+    <newline/>
     <label name="tranche"/>
     <field name="tranche"/>
-    <label name="rate"/>
-    <field name="rate"/>
+    <newline/>
+    <label name="index"/>
+    <field name="index"/>
 </form>

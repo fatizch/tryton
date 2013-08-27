@@ -3,9 +3,20 @@
     <xpath expr="/form" position="replace_attributes">
         <form string="Collective Rating Rule"/>
     </xpath>
-    <xpath expr="/form/label[@name='config_kind']" position="replace"/>
-    <xpath expr="/form/field[@name='config_kind']" position="replace"/>
+    <xpath expr="/form/label[@name='config_kind']" position="before">
+        <label name="rating_kind"/>
+        <field name="rating_kind"/>
+        <newline/>
+    </xpath>
     <xpath expr="/form" position="inside">
+        <label name="simple_rate"/>
+        <group col="2" id="simple_rate">
+            <field name="simple_rate" factor="100" xexpand="0"/>
+            <label name="simple_rate" string="%" xalign="0.0" xexpand="1"/>
+        </group>
+        <newline/>
+        <label name="index"/>
+        <field name="index"/>
         <field name="rates_by_tranche" colspan="4"/>
     </xpath>
 </data>

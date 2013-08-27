@@ -90,12 +90,18 @@ class Contract():
             else:
                 rate_line, tranche_dict = pop_rates[population]
             for rate in rate_dict['rates']:
-                if not rate['tranche'] in tranche_dict:
-                    sub_rate_line = rate_line.add_tranche_rate_line(
-                        rate['tranche'])
-                    tranche_dict[rate['tranche']] = sub_rate_line
+                if rate['kind'] == 'tranche':
+                    tranche = rate['key']
+                    index = None
                 else:
-                    sub_rate_line = tranche_dict[rate['tranche']]
+                    tranche = None
+                    index = rate['key']
+                if not rate['key'] in tranche_dict:
+                    sub_rate_line = rate_line.add_indexed_rate_line(
+                        tranche=tranche, index=index)
+                    tranche_dict[rate['key']] = sub_rate_line
+                else:
+                    sub_rate_line = tranche_dict[rate['key']]
                 sub_rate_line.add_option_rate_line(
                     rate_dict['covered_data'].option, rate['rate'])
         for population in self.covered_elements:

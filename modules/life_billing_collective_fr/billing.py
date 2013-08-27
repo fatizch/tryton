@@ -19,7 +19,9 @@ class RateLine(model.CoopSQL, model.CoopView):
         'Covered Element', ondelete='RESTRICT')
     option = fields.Many2One('contract.subscribed_option', 'Option')
     tranche = fields.Many2One('tranche.tranche', 'Tranche',
-        ondelete='RESTRICT')
+        ondelete='RESTRICT', states={'invisible': ~Eval('tranche')})
+    index = fields.Many2One('table.table_def', 'Index',
+        states={'invisible': ~Eval('index')}, ondelete='RESTRICT')
     parent = fields.Many2One('billing.rate_line', 'Parent', ondelete='CASCADE')
     childs = fields.One2Many('billing.rate_line', 'parent', 'Childs',
         states={'invisible': ~~Eval('tranche')})
@@ -37,9 +39,10 @@ class RateLine(model.CoopSQL, model.CoopView):
         self.childs.append(child_line)
         return child_line
 
-    def add_tranche_rate_line(self, tranche):
+    def add_indexed_rate_line(self, tranche=None, index=None):
         child_line = self.add_child()
         child_line.tranche = tranche
+        child_line.index = index
         return child_line
 
     def add_option_rate_line(self, option, rate):
@@ -55,6 +58,8 @@ class RateLine(model.CoopSQL, model.CoopView):
             return self.option.rec_name
         elif self.tranche:
             return self.tranche.rec_name
+        elif self.index:
+            return self.index.rec_name
 
     def get_sum_rate(self, name):
         if self.contract:
