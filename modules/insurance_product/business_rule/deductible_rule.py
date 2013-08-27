@@ -66,7 +66,7 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
 
     def get_simple_rec_name(self):
         if self.simple_config_choice == 'value':
-            res = self.get_simple_result()[0]
+            res = self.get_simple_result({})
             if not res:
                 return ''
             if self.kind == 'duration' and len(res) > 1:
@@ -77,13 +77,13 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
             if self.kind == 'duration' and self.durations:
                 return ', '.join([x.get_rec_name('') for x in self.durations])
 
-    def get_simple_result(self, args=None):
+    def get_simple_result(self, args):
         if self.kind == 'amount':
-            return self.amount, []
+            return self.amount
         elif self.kind == 'duration':
-            return (self.duration, self.duration_unit), []
+            return (self.duration, self.duration_unit)
         else:
-            return None, []
+            return None
 
     def give_me_result(self, args):
         #The deductible could be set at a higher level, the coverage,

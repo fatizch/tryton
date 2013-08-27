@@ -202,7 +202,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
             amount = self.amount
         elif self.amount_kind == 'cov_amount':
             amount = self.get_coverage_amount(args)
-        return self.get_revaluated_amount(amount, args['start_date']), []
+        return self.get_revaluated_amount(amount, args['start_date'])
 
     def get_indemnification_for_non_capital(self, args):
         if not 'start_date' in args:
@@ -384,7 +384,7 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
             return self.get_simple_result(args)
 
     def get_simple_result(self, args):
-        return self.amount, []
+        return self.amount
 
     def get_indemnification_for_period(self, args, from_date):
         errs = []

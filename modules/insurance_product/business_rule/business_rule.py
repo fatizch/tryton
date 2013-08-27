@@ -6,6 +6,7 @@ from trytond.pyson import Eval, Or
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, utils, fields
+from trytond.modules.rule_engine import RuleEngineResult
 from trytond.modules.offered.offered import CONFIG_KIND, Templated, GetResult
 
 STATE_SIMPLE = Eval('config_kind') != 'advanced'
@@ -293,13 +294,13 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
         return self.rule_complementary_data.get(schema_name, None)
 
     def get_simple_result(self, args):
-        return None, None
+        return None
 
     def give_me_result(self, args):
         if self.config_kind == 'advanced':
             return self.get_rule_result(args)
         else:
-            return self.get_simple_result(args)
+            return RuleEngineResult(self.get_simple_result(args))
 
     @staticmethod
     def default_config_kind():
