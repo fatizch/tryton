@@ -13,14 +13,14 @@
             <field name="type">tree</field>
             <field name="priority" eval="50"/>
             <field name="inherit" ref="party.party_view_tree"/>
-            <field name="name">health_person_tree</field>
+            <field name="arch" type="xml"/>
         </record>
         <record model="ir.ui.view" id="health_person_view_form">
             <field name="model">party.party</field>
             <field name="type">form</field>
             <field name="priority" eval="60"/>
             <field name="inherit" ref="party.party_view_form"/>
-            <field name="name">health_person_form</field>
+            <field name="arch" type="xml"/>
         </record>
         <menuitem name="Persons" parent="menu_health_party"
                sequence="0" action="act_person_form"
