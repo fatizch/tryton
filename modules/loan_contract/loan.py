@@ -235,14 +235,11 @@ class LoanCoveredData():
 
     def init_from_option(self, option):
         super(LoanCoveredData, self).init_from_option(option)
-
-    def init_from_covered_element(self, covered_element):
-        super(LoanCoveredData, self).init_from_covered_element(covered_element)
         if not hasattr(self, 'loan_shares'):
             self.loan_shares = []
-        for loan in self.option.contract.loans:
+        for loan in option.contract.loans:
             for share in loan.loan_shares:
-                if share.person.id == covered_element.party.id:
+                if share.person.id == self.covered_element.party.id:
                     self.loan_shares.append(share)
 
     def get_is_loan(self, name):

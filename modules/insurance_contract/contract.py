@@ -146,8 +146,8 @@ class InsurancePolicy():
                     continue
                 else:
                     good_data = CoveredData()
-                    good_data.init_from_option(option)
                     good_data.init_from_covered_element(elem)
+                    good_data.init_from_option(option)
                     good_data.status_selection = True
                     good_datas.append(good_data)
             CoveredData.delete(to_delete)
@@ -867,7 +867,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
                 'calculated_complementary_datas', args)[0]}
 
     def init_from_covered_element(self, covered_element):
-        #self.covered_element = covered_element
+        self.covered_element = covered_element
         pass
 
     def get_dates(self, dates=None):
@@ -951,8 +951,8 @@ class CoveredData(model.CoopSQL, model.CoopView):
     def init_dict_for_rule_engine(self, args):
         args['data'] = self
         args['deductible_duration'] = self.get_deductible_duration()
-        if not utils.is_none(self, 'covered_element'):
-            self.covered_element.init_dict_for_rule_engine(args)
+        # if not utils.is_none(self, 'covered_element'):
+        self.covered_element.init_dict_for_rule_engine(args)
         self.option.init_dict_for_rule_engine(args)
 
     def get_parent_covered_data(self):
