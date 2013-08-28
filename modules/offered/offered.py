@@ -374,7 +374,7 @@ class Product(model.CoopSQL, Offered):
             existing_data.update(args['sub_elem'].complementary_data)
         ComplementaryData = Pool().get('offered.complementary_data_def')
         result = ComplementaryData.calculate_value_set(
-            possible_schemas, all_schemas, existing_data)
+            possible_schemas, all_schemas, existing_data, args)
         return result, ()
 
     def give_me_eligibility(self, args):

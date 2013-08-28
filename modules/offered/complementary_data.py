@@ -8,7 +8,7 @@ from trytond.pyson import Eval, Bool, Or
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import fields, model, utils, coop_string
-
+from trytond.modules.offered.offered import CONFIG_KIND
 
 __all__ = [
     'ComplementaryDataRecursiveRelation',
@@ -32,10 +32,12 @@ class ComplementaryDataRecursiveRelation(model.CoopSQL, model.CoopView):
             return True
         return str(value) in (self.select_value.replace(' ', '').split(','))
 
-    def update_if_needed(self, new_values, value, value_dict, valid_schemas):
+    def update_if_needed(self, new_values, value, value_dict, valid_schemas,
+            args):
         if not self.does_match(value):
             return
-        self.child.update_field_value(new_values, value_dict, valid_schemas)
+        self.child.update_field_value(new_values, value_dict, valid_schemas,
+            args)
 
 
 class ComplementaryDataDefinition(
@@ -70,7 +72,12 @@ class ComplementaryDataDefinition(
     sub_datas = fields.One2Many(
         'offered.complementary_data_recursive_relation',
         'master', 'Sub Data', context={
-            'kind': Eval('complementary_data_kind')})
+            'kind': Eval('complementary_data_kind')},
+        states={'invisible': Eval('sub_data_config_kind') != 'simple'})
+    sub_data_config_kind = fields.Selection(CONFIG_KIND,
+        'Sub Data Config Kind')
+    rule = fields.Many2One('rule_engine', 'Rule', ondelete='RESTRICT',
+        states={'invisible': Eval('sub_data_config_kind') != 'advanced'})
 
     @classmethod
     def __setup__(cls):
@@ -220,7 +227,7 @@ class ComplementaryDataDefinition(
         return self.name
 
     @classmethod
-    def calculate_value_set(cls, possible_schemas, all_schemas, values):
+    def calculate_value_set(cls, possible_schemas, all_schemas, values, args):
         working_value_set = copy.copy(values)
         childs = set([])
         for schema in all_schemas:
@@ -231,22 +238,29 @@ class ComplementaryDataDefinition(
         tree_top = [schema for schema in all_schemas if not schema in childs]
         new_vals = {}
         for schema in tree_top:
-            schema.update_field_value(new_vals, working_value_set, all_schemas)
+            schema.update_field_value(new_vals, working_value_set, all_schemas,
+                args)
         return dict([
             (k.name, new_vals[k.name])
             for k in possible_schemas if k.name in new_vals])
 
-    def update_field_value(self, new_vals, init_dict, valid_schemas):
+    def update_field_value(self, new_vals, init_dict, valid_schemas, args):
         try:
             cur_value = init_dict[self.name]
         except KeyError:
             cur_value = self.get_default_value(None)
         new_vals[self.name] = cur_value
-        for sub_data in self.sub_datas:
-            if not sub_data.child in valid_schemas:
-                continue
-            sub_data.update_if_needed(
-                new_vals, cur_value, init_dict, valid_schemas)
+        if self.sub_data_config_kind == 'advanced' and self.rule:
+            rule_engine_result = utils.execute_rule(self, self.rule, args)
+            if (not rule_engine_result.errors
+                    and type(rule_engine_result.result) is dict):
+                new_vals.update(rule_engine_result.result)
+        elif self.sub_data_config_kind == 'simple':
+            for sub_data in self.sub_datas:
+                if not sub_data.child in valid_schemas:
+                    continue
+                sub_data.update_if_needed(
+                    new_vals, cur_value, init_dict, valid_schemas, args)
 
     def get_value_as_string(self, value, lang=None):
         if self.type_ == 'selection':
@@ -290,3 +304,7 @@ class ComplementaryDataDefinition(
             return 0
         elif data_def.type_ in ['char', 'selection']:
             return ''
+
+    @staticmethod
+    def default_sub_data_config_kind():
+        return 'simple'

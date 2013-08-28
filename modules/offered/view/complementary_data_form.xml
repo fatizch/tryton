@@ -23,5 +23,11 @@
         <field name="default_value_boolean" xexpand="0"/>
         <field name="default_value_selection"/>
     </group>
+    <newline/>
+    <label name="sub_data_config_kind"/>
+    <field name="sub_data_config_kind"/>
+    <label name="rule"/>
+    <field name="rule"/>
+    <newline/>
     <field name="sub_datas" yexpand="1" yfill="1" colspan="4"/>
 </form>
