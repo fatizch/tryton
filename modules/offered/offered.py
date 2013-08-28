@@ -226,7 +226,7 @@ class Offered(model.CoopView, GetResult, Templated):
     def get_cmpl_data_looking_for_what(self, args):
         return 'contract' if not 'sub_elem' in args else 'sub_elem'
 
-    def get_complementary_data_for_execution(self, args):
+    def get_compl_data_for_exec(self, args):
         looking_for = self.get_cmpl_data_looking_for_what(args)
         all_schemas = set(self.get_complementary_data_def(
             ('contract', looking_for), args['date']))
@@ -352,19 +352,18 @@ class Product(model.CoopSQL, Offered):
         if not 'contract' in args or not 'date' in args:
             raise Exception('Expected contract and date in args, got %s' % (
                 str([k for k in args.iterkeys()])))
-        all_schemas, possible_schemas = \
-            self.get_complementary_data_for_execution(args)
+        all_schemas, possible_schemas = self.get_compl_data_for_exec(args)
         if not 'sub_elem' in args:
             for coverage in args['contract'].get_active_coverages_at_date(
                     args['date']):
                 coverage_all, coverage_possible = \
-                    coverage.get_complementary_data_for_execution(args)
+                    coverage.get_compl_data_for_exec(args)
                 all_schemas |= coverage_all
                 possible_schemas |= coverage_possible
         else:
-            coverage = args['sub_elem'].get_coverage()
+            coverage = args['coverage']
             coverage_all, coverage_possible = \
-                coverage.get_complementary_data_for_execution(args)
+                coverage.get_compl_data_for_exec(args)
             all_schemas |= coverage_all
             possible_schemas |= coverage_possible
         existing_data = {}

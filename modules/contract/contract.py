@@ -352,7 +352,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def init_dict_for_rule_engine(self, cur_dict):
         cur_dict['contract'] = self
         cur_dict['appliable_conditions_date'] = self.appliable_conditions_date
-        cur_dict['product'] = self.offered
+        self.offered.init_dict_for_rule_engine(cur_dict)
         cur_dict['subscriber'] = self.get_policy_owner()
 
     def get_product(self):
@@ -463,14 +463,10 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             return self.offered.get_currency()
 
     def on_change_complementary_data(self):
+        args = {'date': self.start_date, 'level': 'contract'}
+        self.init_dict_for_rule_engine(args)
         return {'complementary_data': self.offered.get_result(
-                'calculated_complementary_datas', {
-                    'date': self.start_date,
-                    'appliable_conditions_date':
-                        self.appliable_conditions_date,
-                    'contract': self,
-                    'level': 'contract',
-                    })[0]}
+                'calculated_complementary_datas', args)[0]}
 
     @classmethod
     def get_possible_contracts_from_party(cls, party, at_date):

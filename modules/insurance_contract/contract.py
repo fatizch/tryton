@@ -247,17 +247,6 @@ class InsurancePolicy():
             role.start_date = self.start_date
             role.save()
 
-    def on_change_complementary_data(self):
-        return {'complementary_data': self.offered.get_result(
-                'calculated_complementary_datas', {
-                    'date': self.start_date,
-                    'contract': self,
-                    'appliable_conditions_date':
-                    self.appliable_conditions_date,
-                    'level': 'contract',
-                    }
-                )[0]}
-
     def get_next_renewal_date(self):
         return coop_date.add_frequency('yearly', self.start_date)
 
@@ -810,7 +799,8 @@ class CoveredData(model.CoopSQL, model.CoopView):
         'ins_contract.covered_element', 'Covered Element', ondelete='CASCADE')
     complementary_data = fields.Dict(
         'offered.complementary_data_def', 'Complementary Data', on_change=[
-            'complementary_data', 'option', 'start_date'],
+            'complementary_data', 'option', 'start_date',
+            'deductible_duration', 'covered_element'],
         depends=['complementary_data', 'option', 'start_date'],
         states={'invisible': ~Eval('complementary_data')})
     start_date = fields.Date('Start Date')
@@ -839,7 +829,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
         'get_possible_deductible_duration')
     parent_covered_data = fields.Function(
         fields.Many2One('ins_contract.covered_data', 'Parent Covered Data'),
-        'get_parent_covered_data')
+        'get_parent_covered_data_id')
 
     @classmethod
     def default_status(cls):
@@ -871,15 +861,10 @@ class CoveredData(model.CoopSQL, model.CoopView):
         self.init_complementary_data()
 
     def on_change_complementary_data(self):
+        args = {'date': self.start_date, 'level': 'covered_data'}
+        self.init_dict_for_rule_engine(args)
         return {'complementary_data': self.option.contract.offered.get_result(
-                'calculated_complementary_datas', {
-                    'date': self.start_date,
-                    'contract': self.option.contract,
-                    'appliable_conditions_date':
-                    self.option.contract.appliable_conditions_date,
-                    'sub_elem': self,
-                    'level': 'covered_data',
-                    })[0]}
+                'calculated_complementary_datas', args)[0]}
 
     def init_from_covered_element(self, covered_element):
         #self.covered_element = covered_element
@@ -928,7 +913,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
             return []
 
     def get_deductible_duration(self):
-        if self.deductible_duration:
+        if not utils.is_none(self, 'deductible_duration'):
             return self.deductible_duration
         elif (self.option and self.option.complement
                 and self.option.complement.deductible_duration):
@@ -956,25 +941,31 @@ class CoveredData(model.CoopSQL, model.CoopView):
         res = {}
         if not utils.is_none(self, 'complementary_data'):
             res = self.complementary_data
-        res.update(self.covered_element.get_all_complementary_data(at_date))
+            res.update(self.covered_element.get_all_complementary_data(at_date))
         res.update(self.option.get_all_complementary_data(at_date))
-        if self.parent_covered_data:
-            res.update(self.parent_covered_data.get_all_complementary_data(
-                    at_date))
+        parent_covered_data = self.get_parent_covered_data()
+        if parent_covered_data:
+            res.update(parent_covered_data.get_all_complementary_data(at_date))
         return res
 
     def init_dict_for_rule_engine(self, args):
         args['data'] = self
         args['deductible_duration'] = self.get_deductible_duration()
-        self.covered_element.init_dict_for_rule_engine(args)
+        if not utils.is_none(self, 'covered_element'):
+            self.covered_element.init_dict_for_rule_engine(args)
         self.option.init_dict_for_rule_engine(args)
 
-    def get_parent_covered_data(self, name):
-        if not self.covered_element.parent:
+    def get_parent_covered_data(self):
+        if (utils.is_none(self, 'covered_element')
+                or not self.covered_element.parent):
             return None
         for covered_data in self.covered_element.parent.covered_data:
             if covered_data.option == self.option:
-                return covered_data.id
+                return covered_data
+
+    def get_parent_covered_data_id(self, name):
+        covered_data = self.get_parent_covered_data()
+        return covered_data.id if covered_data else None
 
 
 class ManagementRole(model.CoopSQL, model.CoopView):
