@@ -86,7 +86,7 @@ class RuleEngineParameter():
     def get_external_complementary_data(self, args):
         from_object = self.get_lowest_level_object(args)
         return self.external_complementary_data.get_complementary_data_value(
-            from_object, self.external_complementary_data.string.name,
+            from_object, self.external_complementary_data.name,
             args['date'])
 
     def as_context(self, evaluation_context, context, forced_value):
