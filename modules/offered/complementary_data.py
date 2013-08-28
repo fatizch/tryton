@@ -11,33 +11,9 @@ from trytond.modules.coop_utils import fields, model, utils, coop_string
 from trytond.modules.offered.offered import CONFIG_KIND
 
 __all__ = [
-    'ComplementaryDataRecursiveRelation',
     'ComplementaryDataDefinition',
-]
-
-
-class ComplementaryDataRecursiveRelation(model.CoopSQL, model.CoopView):
-    'Complementary Data recursive relation'
-
-    __name__ = 'offered.complementary_data_recursive_relation'
-
-    master = fields.Many2One(
-        'offered.complementary_data_def', 'Master', ondelete='CASCADE')
-    child = fields.Many2One(
-        'offered.complementary_data_def', 'Child', ondelete='RESTRICT')
-    select_value = fields.Char('Select value')
-
-    def does_match(self, value):
-        if not (hasattr(self, 'select_value') and self.select_value):
-            return True
-        return str(value) in (self.select_value.replace(' ', '').split(','))
-
-    def update_if_needed(self, new_values, value, value_dict, valid_schemas,
-            args):
-        if not self.does_match(value):
-            return
-        self.child.update_field_value(new_values, value_dict, valid_schemas,
-            args)
+    'ComplementaryDataRecursiveRelation',
+    ]
 
 
 class ComplementaryDataDefinition(
@@ -77,6 +53,10 @@ class ComplementaryDataDefinition(
     sub_data_config_kind = fields.Selection(CONFIG_KIND,
         'Sub Data Config Kind')
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='RESTRICT',
+        states={'invisible': Eval('sub_data_config_kind') != 'advanced'})
+    rule_sub_datas = fields.Many2Many(
+        'offered.complementary_data_recursive_relation', 'master', 'child',
+        'Sub Data',
         states={'invisible': Eval('sub_data_config_kind') != 'advanced'})
 
     @classmethod
@@ -308,3 +288,27 @@ class ComplementaryDataDefinition(
     @staticmethod
     def default_sub_data_config_kind():
         return 'simple'
+
+
+class ComplementaryDataRecursiveRelation(model.CoopSQL, model.CoopView):
+    'Complementary Data recursive relation'
+
+    __name__ = 'offered.complementary_data_recursive_relation'
+
+    master = fields.Many2One(
+        'offered.complementary_data_def', 'Master', ondelete='CASCADE')
+    child = fields.Many2One(
+        'offered.complementary_data_def', 'Child', ondelete='RESTRICT')
+    select_value = fields.Char('Select value')
+
+    def does_match(self, value):
+        if not (hasattr(self, 'select_value') and self.select_value):
+            return True
+        return str(value) in (self.select_value.replace(' ', '').split(','))
+
+    def update_if_needed(self, new_values, value, value_dict, valid_schemas,
+            args):
+        if not self.does_match(value):
+            return
+        self.child.update_field_value(new_values, value_dict, valid_schemas,
+            args)
