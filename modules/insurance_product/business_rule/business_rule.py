@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 import copy
 
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or
 from trytond.transaction import Transaction
 
@@ -74,17 +74,9 @@ class RuleEngineParameter():
             return None
         return self.rule_complementary_data.get(schema_name, None)
 
-    def get_lowest_level_object(self, args):
-        '''This method to be overriden in different modules sets the lowest
-        object from where to search data. The object will level up itself if it
-        doesn't find the good information at its own level'''
-        if 'option' in args:
-            return args['option']
-        if 'contract' in args:
-            return args['contract']
-
     def get_external_complementary_data(self, args):
-        from_object = self.get_lowest_level_object(args)
+        OfferedSet = Pool().get('offered.rule_sets')
+        from_object = OfferedSet.get_lowest_level_object(args)
         return self.external_complementary_data.get_complementary_data_value(
             from_object, self.external_complementary_data.name,
             args['date'])
