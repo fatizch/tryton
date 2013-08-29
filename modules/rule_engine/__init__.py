@@ -1,5 +1,6 @@
 from trytond.pool import Pool
 from .rule_engine import *
+from .tag import *
 
 
 def register():
@@ -15,6 +16,8 @@ def register():
         ContextTreeElement,
         RunTestsReport,
         RuleError,
+        #from tag
+        Tag,
         module='rule_engine', type_='model')
     Pool.register(
         RunTests,

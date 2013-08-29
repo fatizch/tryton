@@ -18,4 +18,5 @@ def register():
         ComplementaryDataRecursiveRelation,
         ProductComplementaryDataRelation,
         CoverageComplementaryDataRelation,
+        ComplementaryDataDefTagRelation,
         module='offered', type_='model')

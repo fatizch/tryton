@@ -13,6 +13,7 @@ from trytond.modules.offered.offered import CONFIG_KIND
 __all__ = [
     'ComplementaryDataDefinition',
     'ComplementaryDataRecursiveRelation',
+    'ComplementaryDataDefTagRelation',
     ]
 
 
@@ -34,7 +35,6 @@ class ComplementaryDataDefinition(
             depends=['type_', 'selection', 'with_default_value']),
         'get_default_value', 'set_default_value')
     default_value = fields.Char('Default Value')
-    is_shared = fields.Function(fields.Boolean('Shared'), 'get_is_shared')
     kind = fields.Selection(
         [
             ('contract', 'Contract'),
@@ -54,6 +54,11 @@ class ComplementaryDataDefinition(
         'Sub Data Config Kind')
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='RESTRICT',
         states={'invisible': Eval('sub_data_config_kind') != 'advanced'})
+    tags = fields.Many2Many('offered.compl_data_def-tag', 'compl_data_def',
+        'tag', 'Tags')
+    tags_name = fields.Function(
+        fields.Char('Tags', on_change_with=['tags']),
+        'on_change_with_tags_name', searcher='search_tags')
 
     @classmethod
     def __setup__(cls):
@@ -98,9 +103,6 @@ class ComplementaryDataDefinition(
     @staticmethod
     def default_start_date():
         return utils.today()
-
-    def get_is_shared(self, name):
-        return False
 
     def on_change_type_(self):
         res = {}
@@ -296,6 +298,13 @@ class ComplementaryDataDefinition(
     def default_sub_data_config_kind():
         return 'simple'
 
+    def on_change_with_tags_name(self, name=None):
+        return ', '.join([x.name for x in self.tags])
+
+    @classmethod
+    def search_tags(cls, name, clause):
+        return [('tags.name',) + tuple(clause[1:])]
+
 
 class ComplementaryDataRecursiveRelation(model.CoopSQL, model.CoopView):
     'Complementary Data recursive relation'
@@ -319,3 +328,13 @@ class ComplementaryDataRecursiveRelation(model.CoopSQL, model.CoopView):
             return
         self.child.update_field_value(new_values, value_dict, valid_schemas,
             args)
+
+
+class ComplementaryDataDefTagRelation(model.CoopSQL):
+    'Relation between complementary data def and tag'
+
+    __name__ = 'offered.compl_data_def-tag'
+
+    compl_data_def = fields.Many2One('offered.complementary_data_def',
+        'Complementary Data Def', ondelete='CASCADE')
+    tag = fields.Many2One('rule_engine.tag', 'Tag', ondelete='RESTRICT')
