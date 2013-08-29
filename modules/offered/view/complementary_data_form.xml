@@ -30,5 +30,4 @@
     <field name="rule"/>
     <newline/>
     <field name="sub_datas" yexpand="1" yfill="1" colspan="4"/>
-    <field name="rule_sub_datas" yexpand="1" yfill="1" colspan="4"/>
 </form>

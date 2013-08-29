@@ -54,10 +54,6 @@ class ComplementaryDataDefinition(
         'Sub Data Config Kind')
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='RESTRICT',
         states={'invisible': Eval('sub_data_config_kind') != 'advanced'})
-    rule_sub_datas = fields.Many2Many(
-        'offered.complementary_data_recursive_relation', 'master', 'child',
-        'Sub Data',
-        states={'invisible': Eval('sub_data_config_kind') != 'advanced'})
 
     @classmethod
     def __setup__(cls):
@@ -216,25 +212,36 @@ class ComplementaryDataDefinition(
                     continue
                 childs.add(sub_data.child)
         tree_top = [schema for schema in all_schemas if not schema in childs]
-        new_vals = {}
+        forced_values = {}
+        non_forced_values = {}
         for schema in tree_top:
+            new_vals = {}
             schema.update_field_value(new_vals, working_value_set, all_schemas,
                 args)
+            forced_values.update(
+                dict([(x, y[0]) for x, y in new_vals.items() if y[1]]))
+            non_forced_values.update(
+                dict([(x, y[0]) for x, y in new_vals.items() if not y[1]]))
+        res = {}
+        res.update(non_forced_values)
+        res.update(forced_values)
         return dict([
-            (k.name, new_vals[k.name])
-            for k in possible_schemas if k.name in new_vals])
+            (k.name, res[k.name])
+            for k in possible_schemas if k.name in res])
 
     def update_field_value(self, new_vals, init_dict, valid_schemas, args):
         try:
             cur_value = init_dict[self.name]
         except KeyError:
             cur_value = self.get_default_value(None)
-        new_vals[self.name] = cur_value
+        # We set a boolean to know if the value is forced through rule engine
+        new_vals[self.name] = (cur_value, False)
         if self.sub_data_config_kind == 'advanced' and self.rule:
             rule_engine_result = utils.execute_rule(self, self.rule, args)
             if (not rule_engine_result.errors
                     and type(rule_engine_result.result) is dict):
-                new_vals.update(rule_engine_result.result)
+                for key, value in rule_engine_result.result.items():
+                    new_vals[key] = (value, True)
         elif self.sub_data_config_kind == 'simple':
             for sub_data in self.sub_datas:
                 if not sub_data.child in valid_schemas:
