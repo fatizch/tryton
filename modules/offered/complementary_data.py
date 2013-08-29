@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 import copy
 
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.rpc import RPC
 from trytond.model import DictSchemaMixin
 from trytond.pyson import Eval, Bool, Or
@@ -10,9 +10,12 @@ from trytond.transaction import Transaction
 from trytond.modules.coop_utils import fields, model, utils, coop_string
 from trytond.modules.offered.offered import CONFIG_KIND
 
+__metaclass__ = PoolMeta
+
 __all__ = [
     'ComplementaryDataDefinition',
     'ComplementaryDataRecursiveRelation',
+    'Tag',
     'ComplementaryDataDefTagRelation',
     ]
 
@@ -328,6 +331,15 @@ class ComplementaryDataRecursiveRelation(model.CoopSQL, model.CoopView):
             return
         self.child.update_field_value(new_values, value_dict, valid_schemas,
             args)
+
+
+class Tag():
+    'Tag'
+
+    __name__ = 'rule_engine.tag'
+
+    compl_data_defs = fields.Many2Many('offered.compl_data_def-tag', 'tag',
+        'compl_data_def', 'Complementary Data')
 
 
 class ComplementaryDataDefTagRelation(model.CoopSQL):
