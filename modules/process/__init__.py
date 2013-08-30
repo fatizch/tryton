@@ -17,7 +17,7 @@ def register():
         StepDescAuthorization,
 
         # From process :
-        Model,
+        WorkflowModel,
         ProcessFramework,
         module='process', type_='model')
 

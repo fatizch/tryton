@@ -2,13 +2,13 @@ from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
-from trytond.model import fields
+from trytond.model import ModelView, fields
 
 from trytond.modules.coop_utils import utils
 
 
 __all__ = [
-    'Model',
+    'WorkflowModel',
     'ProcessFramework',
     'ClassAttr',
 ]
@@ -95,7 +95,7 @@ class ClassAttr(PoolMeta):
         return super(ClassAttr, self).__getattr__(name)
 
 
-class Model():
+class WorkflowModel():
     'Model'
     '''
         We need to override the Model Class in order to add the is_workflow
@@ -108,7 +108,7 @@ class Model():
     is_workflow = fields.Boolean('Is Workflow')
 
 
-class ProcessFramework(Model):
+class ProcessFramework(ModelView):
     'Process Framework'
 
     __metaclass__ = ClassAttr
