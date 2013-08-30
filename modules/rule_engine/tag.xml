@@ -10,6 +10,7 @@
             <field name="model">rule_engine.tag</field>
             <field name="type">tree</field>
             <field name="name">tag_tree</field>
+            <field name="field_childs">childs</field>
         </record>
         <record model="ir.action.act_window" id="act_tag_form">
             <field name="name">Tags</field>

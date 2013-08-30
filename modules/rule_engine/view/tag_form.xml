@@ -4,5 +4,11 @@
     <field name="name"/>
     <label name="code"/>
     <field name="code"/>
-    <notebook/>
+    <notebook>
+        <page id='tree' string='Tree'>
+            <label name="parent"/>
+            <field name="parent"/>
+            <field name="childs" colspan="4"/>
+        </page>
+    </notebook>
 </form>

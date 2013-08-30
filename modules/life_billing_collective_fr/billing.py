@@ -21,6 +21,8 @@ class RateLine(model.CoopSQL, model.CoopView):
         ondelete='CASCADE')
     tranche = fields.Many2One('tranche.tranche', 'Tranche',
         ondelete='RESTRICT', states={'invisible': ~Eval('tranche')})
+    fare_class = fields.Many2One('collective.fare_class', 'Fare Class',
+        states={'invisible': ~Eval('fare_class_group')})
     index = fields.Many2One('table.table_def', 'Index',
         states={'invisible': ~Eval('index')}, ondelete='RESTRICT')
     parent = fields.Many2One('billing.rate_line', 'Parent', ondelete='CASCADE')
@@ -32,6 +34,9 @@ class RateLine(model.CoopSQL, model.CoopView):
     sum_rate = fields.Function(
         fields.Numeric('Sum Rate', digits=(16, 4)),
         'get_sum_rate')
+    reference_value = fields.Function(
+        fields.Char('Reference Value'),
+        'get_reference_value')
 
     def add_child(self):
         if utils.is_none(self, 'childs'):
@@ -40,9 +45,10 @@ class RateLine(model.CoopSQL, model.CoopView):
         self.childs.append(child_line)
         return child_line
 
-    def add_indexed_rate_line(self, tranche=None, index=None):
+    def add_main_rate_line(self, tranche=None, fare_class=None, index=None):
         child_line = self.add_child()
         child_line.tranche = tranche
+        child_line.fare_class = fare_class
         child_line.index = index
         return child_line
 
@@ -59,6 +65,8 @@ class RateLine(model.CoopSQL, model.CoopView):
             return self.option.rec_name
         elif self.tranche:
             return self.tranche.rec_name
+        elif self.fare_class:
+            return self.fare_class.rec_name
         elif self.index:
             return self.index.rec_name
 

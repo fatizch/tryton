@@ -6,4 +6,7 @@
             <field name="rating_rules" colspan="4"/>
         </page>
     </xpath>
+    <xpath expr="/form" position="inside">
+        <field name="is_rating_by_fare_class"/>
+    </xpath>
 </data>

@@ -10,9 +10,13 @@ def register():
         # From Product
         Coverage,
         CollectiveRatingRule,
-        TrancheRatingRule,
+        SubRatingRule,
+        FareClass,
+        FareClassGroup,
+        FareClassGroupFareClassRelation,
         #From Contract
         Contract,
+        CoveredData,
         # From billing,
         RateLine,
         module='life_billing_collective_fr', type_='model')

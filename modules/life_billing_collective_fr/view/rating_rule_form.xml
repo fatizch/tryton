@@ -6,17 +6,18 @@
     <xpath expr="/form/label[@name='config_kind']" position="before">
         <label name="rating_kind"/>
         <field name="rating_kind"/>
+        <label name="index"/>
+        <field name="index"/>
         <newline/>
     </xpath>
     <xpath expr="/form" position="inside">
-        <label name="simple_rate"/>
-        <group col="2" id="simple_rate">
-            <field name="simple_rate" factor="100" xexpand="0"/>
-            <label name="simple_rate" string="%" xalign="0.0" xexpand="1"/>
+        <group id="sub_rating_rules" states="{'invisible': Eval('rating_kind') != 'tranche'}" colspan="4" yexpand="1" yfill="1">
+            <field name="sub_rating_rules" colspan="4" view_ids="life_billing_collective_fr.rating_rule_by_tranche_view_tree,life_billing_collective_fr.sub_rating_rule_view_form"/>
         </group>
-        <newline/>
-        <label name="index"/>
-        <field name="index"/>
-        <field name="rates_by_tranche" colspan="4"/>
+        <group id="rates_by_index" states="{'invisible': Eval('rating_kind') != 'fare_class'}" colspan="4" yexpand="1" yfill="1">
+            <field name="sub_rating_rules" colspan="4" view_ids="life_billing_collective_fr.rating_rule_by_fare_class_view_tree,life_billing_collective_fr.sub_rating_rule_view_form"/>
+        </group>
     </xpath>
+    <xpath expr="/form/label[@name='config_kind']" position="replace"/>
+    <xpath expr="/form/field[@name='config_kind']" position="replace"/>
 </data>

@@ -20,14 +20,78 @@
             <field name="name">rating_rule_form</field>
         </record>
         <record model="ir.ui.view" id="rating_rule_by_tranche_view_tree">
-            <field name="model">collective.rating_rule_by_tranche</field>
+            <field name="model">collective.sub_rating_rule</field>
             <field name="type">tree</field>
             <field name="name">rating_rule_by_tranche_tree</field>
         </record>
-        <record model="ir.ui.view" id="rating_rule_by_tranche_view_form">
-            <field name="model">collective.rating_rule_by_tranche</field>
-            <field name="type">form</field>
-            <field name="name">rating_rule_by_tranche_form</field>
+        <record model="ir.ui.view" id="rating_rule_by_fare_class_view_tree">
+            <field name="model">collective.sub_rating_rule</field>
+            <field name="type">tree</field>
+            <field name="name">rating_rule_by_fare_class_tree</field>
         </record>
+        <record model="ir.ui.view" id="sub_rating_rule_view_form">
+            <field name="model">collective.sub_rating_rule</field>
+            <field name="type">form</field>
+            <field name="name">sub_rating_rule_form</field>
+        </record>
+
+        <!-- Fare Class -->
+        <record model="ir.ui.view" id="fare_class_view_form">
+            <field name="model">collective.fare_class</field>
+            <field name="type">form</field>
+            <field name="name">fare_class_form</field>
+        </record>
+        <record model="ir.ui.view" id="fare_class_view_tree">
+            <field name="model">collective.fare_class</field>
+            <field name="type">tree</field>
+            <field name="name">fare_class_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_fare_class_form">
+            <field name="name">Fare Classes</field>
+            <field name="res_model">collective.fare_class</field>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_fare_class_form_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="fare_class_view_tree"/>
+            <field name="act_window" ref="act_fare_class_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_fare_class_form_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="fare_class_view_form"/>
+            <field name="act_window" ref="act_fare_class_form"/>
+        </record>
+        <menuitem parent="offered.menu_product_configuration" id="menu_fare_class_form"
+            icon="tryton-list" action="act_fare_class_form"/>
+
+        <!-- Fare Class Group -->
+        <record model="ir.ui.view" id="fare_class_group_view_form">
+            <field name="model">collective.fare_class_group</field>
+            <field name="type">form</field>
+            <field name="name">fare_class_group_form</field>
+        </record>
+        <record model="ir.ui.view" id="fare_class_group_view_tree">
+            <field name="model">collective.fare_class_group</field>
+            <field name="type">tree</field>
+            <field name="name">fare_class_group_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_fare_class_group_form">
+            <field name="name">Fare Class Group</field>
+            <field name="res_model">collective.fare_class_group</field>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_fare_class_group_form_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="fare_class_group_view_tree"/>
+            <field name="act_window" ref="act_fare_class_group_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_fare_class_group_form_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="fare_class_group_view_form"/>
+            <field name="act_window" ref="act_fare_class_group_form"/>
+        </record>
+        <menuitem parent="offered.menu_product_configuration" id="menu_fare_class_group_form"
+            icon="tryton-list" action="act_fare_class_group_form"/>
+
     </data>
 </tryton>

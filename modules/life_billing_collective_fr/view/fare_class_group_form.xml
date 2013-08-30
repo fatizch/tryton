@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<form string="Fare Class Group">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <field name="fare_classes" colspan="4"/>
+</form>

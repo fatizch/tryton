@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tree string="Fare Class Rating Rule">
+    <field name="fare_class_group"/>
+    <field name="fare_class"/>
+    <field name="config_kind"/>
+    <field name="simple_rate" factor="100">
+        <suffix string="%"/>
+    </field>
+</tree>

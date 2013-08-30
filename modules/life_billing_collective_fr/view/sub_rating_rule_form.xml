@@ -1,10 +1,16 @@
 <?xml version="1.0"?>
-<form string="Tranche Rating Rule">
+<form string="Sub Rating Rule">
     <label name="main_rating_rule"/>
     <field name="main_rating_rule"/>
     <newline/>
     <label name="tranche"/>
     <field name="tranche"/>
+    <newline/>
+    <label name="fare_class"/>
+    <field name="fare_class"/>
+    <label name="fare_class_group"/>
+    <field name="fare_class_group"/>
+
     <label name="config_kind"/>
     <field name="config_kind"/>
     <newline/>

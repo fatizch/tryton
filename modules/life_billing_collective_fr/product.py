@@ -1,14 +1,17 @@
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval, Or
+from trytond.pyson import Eval
 
-from trytond.modules.coop_utils import fields, model, utils
+from trytond.modules.coop_utils import fields, model, utils, coop_string
 from trytond.modules.rule_engine import RuleEngineResult
 from trytond.modules.insurance_product import business_rule
 
 __all__ = [
     'Coverage',
     'CollectiveRatingRule',
-    'TrancheRatingRule',
+    'SubRatingRule',
+    'FareClass',
+    'FareClassGroup',
+    'FareClassGroupFareClassRelation',
     ]
 
 __metaclass__ = PoolMeta
@@ -19,8 +22,60 @@ class Coverage():
 
     __name__ = 'offered.coverage'
 
+    is_rating_by_fare_class = fields.Function(
+        fields.Boolean('Rating by Fare Class', states={'invisible': True}),
+        'get_rating_by_fare_class')
     rating_rules = fields.One2Many('collective.rating_rule', 'offered',
         'Rating Rules', states={'invisible': ~Eval('is_group')})
+
+    def get_rating_by_fare_class(self, name):
+        if utils.is_none(self, 'rating_rules'):
+            return False
+        for rating_rule in self.rating_rules:
+            if rating_rule.rating_kind == 'fare_class':
+                return True
+        return False
+
+
+class FareClass(model.CoopSQL, model.CoopView):
+    'Fare Class'
+
+    __name__ = 'collective.fare_class'
+
+    code = fields.Char('Code', on_change_with=['code', 'name'], required=True)
+    name = fields.Char('Name')
+
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
+
+
+class FareClassGroup(model.CoopSQL, model.CoopView):
+    'Fare Class Group'
+
+    __name__ = 'collective.fare_class_group'
+
+    code = fields.Char('Code', on_change_with=['code', 'name'], required=True)
+    name = fields.Char('Name')
+    fare_classes = fields.Many2Many('collective.fare_class_group-fare_class',
+        'group', 'fare_class', 'Fare Classes')
+
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
+
+
+class FareClassGroupFareClassRelation(model.CoopSQL):
+    'Relation between fare class group and fare class'
+
+    __name__ = 'collective.fare_class_group-fare_class'
+
+    group = fields.Many2One('collective.fare_class_group', 'Group',
+        ondelete='CASCADE')
+    fare_class = fields.Many2One('collective.fare_class', 'Fare Class',
+        ondelete='RESTRICT')
 
 
 class CollectiveRatingRule(business_rule.BusinessRuleRoot, model.CoopSQL):
@@ -29,30 +84,16 @@ class CollectiveRatingRule(business_rule.BusinessRuleRoot, model.CoopSQL):
     __name__ = 'collective.rating_rule'
 
     rating_kind = fields.Selection(
-        [('tranche', 'by Tranche'), ('index', 'by Index')], 'Rating Kind')
-    rates_by_tranche = fields.One2Many('collective.rating_rule_by_tranche',
-        'main_rating_rule', 'Rate by Tranche',
-        states={'invisible': Eval('rating_kind') != 'tranche'})
-    simple_rate = fields.Numeric('Rate',
-            states={'invisible': Or(
-                    ~business_rule.STATE_SIMPLE,
-                    Eval('rating_kind') != 'index'
-                    )}, digits=(16, 4))
+        [('tranche', 'by Tranche'), ('fare_class', 'by Fare Class')],
+        'Rating Kind', states={'readonly': ~~Eval('sub_rating_rules')})
+    sub_rating_rules = fields.One2Many('collective.sub_rating_rule',
+        'main_rating_rule', 'Sub Rating Rules')
     index = fields.Many2One('table.table_def', 'Index',
         domain=[
             ('dimension_kind1', '=', 'range-date'),
             ('dimension_kind2', '=', None),
-            ], states={'invisible': Eval('rating_kind') != 'index'},
-        ondelete='RESTRICT')
-
-    @classmethod
-    def __setup__(cls):
-        super(CollectiveRatingRule, cls).__setup__()
-        utils.update_states(cls, 'config_kind',
-            {'invisible': Eval('rating_kind') == 'tranche'})
-
-    def get_simple_result(self, args):
-        return self.simple_rate
+            ], states={'invisible': Eval('rating_kind') != 'fare_class'},
+            ondelete='RESTRICT')
 
     def give_me_rate(self, args):
         result = []
@@ -63,43 +104,50 @@ class CollectiveRatingRule(business_rule.BusinessRuleRoot, model.CoopSQL):
             result.append(covered_data_dict)
             covered_data_args = args.copy()
             covered_data.init_dict_for_rule_engine(covered_data_args)
-            if self.rating_kind == 'index':
-                rule_engine_res = self.give_me_result(covered_data_args)
+            for sub_rule in self.sub_rating_rules:
+                if (self.rating_kind == 'fare_class'
+                        and sub_rule.fare_class_group !=
+                        covered_data.fare_class_group):
+                    continue
+                rule_engine_res = sub_rule.get_result(covered_data_args)
                 if rule_engine_res.errors:
                     errs += rule_engine_res.errors
-                else:
-                    covered_data_dict['rates'].append({
-                            'key': self.index,
-                            'rate': rule_engine_res.result,
-                            'kind': 'index',
-                            })
-            elif self.rating_kind == 'tranche':
-                for tranche_rate in self.rates_by_tranche:
-                    rule_engine_res = tranche_rate.get_result(
-                        covered_data_args)
-                    if rule_engine_res.errors:
-                        errs += rule_engine_res.errors
-                    else:
-                        covered_data_dict['rates'].append({
-                                'key': tranche_rate.tranche,
-                                'rate': rule_engine_res.result,
-                                'kind': 'tranche',
-                                })
+                    continue
+                cur_dict = {'rate': rule_engine_res.result}
+                if self.rating_kind == 'fare_class':
+                    cur_dict['key'] = sub_rule.fare_class
+                    cur_dict['index'] = self.index
+                    cur_dict['kind'] = 'fare_class'
+                elif self.rating_kind == 'tranche':
+                    cur_dict['key'] = sub_rule.tranche
+                    cur_dict['kind'] = 'tranche'
+                covered_data_dict['rates'].append(cur_dict)
         return result, errs
 
     @staticmethod
     def default_rating_kind():
-        return 'index'
+        return 'fare_class'
 
 
-class TrancheRatingRule(model.CoopView, model.CoopSQL):
-    'Tranche Rating Rule'
+class SubRatingRule(model.CoopView, model.CoopSQL):
+    'Sub Rating Rule'
 
-    __name__ = 'collective.rating_rule_by_tranche'
+    __name__ = 'collective.sub_rating_rule'
 
     main_rating_rule = fields.Many2One('collective.rating_rule',
         'Main Rating Rule', ondelete='CASCADE')
     tranche = fields.Many2One('tranche.tranche', 'Tranche',
+        states={'invisible': Eval('_parent_main_rating_rule', {}).get(
+                'rating_kind', '') != 'tranche'}, ondelete='RESTRICT')
+    fare_class_group = fields.Many2One('collective.fare_class_group',
+        'Fare Class Group',
+        states={'invisible': Eval('_parent_main_rating_rule', {}).get(
+                    'rating_kind', '') != 'fare_class'}, ondelete='RESTRICT',
+        domain=[('fare_classes', '=', Eval('fare_class'))],
+        depends=['fare_class'])
+    fare_class = fields.Many2One('collective.fare_class', 'Fare Class',
+        states={'invisible': Eval('_parent_main_rating_rule', {}).get(
+                    'rating_kind', '') != 'fare_class'},
         ondelete='RESTRICT')
     config_kind = fields.Selection(business_rule.CONFIG_KIND, 'Conf. kind',
         required=True)

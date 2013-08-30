@@ -8,6 +8,7 @@ __metaclass__ = PoolMeta
 
 __all__ = [
     'Contract',
+    'CoveredData',
     ]
 
 
@@ -93,12 +94,14 @@ class Contract():
                 if rate['kind'] == 'tranche':
                     tranche = rate['key']
                     index = None
+                    fare_class = None
                 else:
                     tranche = None
-                    index = rate['key']
+                    index = rate['index']
+                    fare_class = rate['key']
                 if not rate['key'] in tranche_dict:
-                    sub_rate_line = rate_line.add_indexed_rate_line(
-                        tranche=tranche, index=index)
+                    sub_rate_line = rate_line.add_main_rate_line(
+                        tranche=tranche, fare_class=fare_class, index=index)
                     tranche_dict[rate['key']] = sub_rate_line
                 else:
                     sub_rate_line = tranche_dict[rate['key']]
@@ -121,3 +124,20 @@ class Contract():
                 errs.extend(cur_errs)
         if errs:
             cls.raise_user_error(errs)
+
+
+class CoveredData():
+    'Covered Data'
+
+    __name__ = 'ins_contract.covered_data'
+
+    is_rating_by_fare_class = fields.Function(
+        fields.Boolean('Rating by Fare Class', states={'invisible': True}),
+        'get_rating_by_fare_class')
+    fare_class_group = fields.Many2One('collective.fare_class_group',
+        'Fare Class Group', ondelete='RESTRICT',
+        states={'invisible': ~Eval('is_rating_by_fare_class')})
+
+    def get_rating_by_fare_class(self, name):
+        return (self.option.offered.is_rating_by_fare_class
+            if self.option else False)
