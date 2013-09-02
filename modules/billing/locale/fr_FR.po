@@ -873,7 +873,7 @@ msgstr "Compte de Facturation"
 
 msgctxt "field:offered.product,payment_delay:"
 msgid "Payment delay"
-msgstr ""
+msgstr "Délai de Paiement"
 
 msgctxt "field:offered.product,payment_methods:"
 msgid "Payment Methods"

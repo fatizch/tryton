@@ -408,7 +408,7 @@ msgstr "Règle à appliquer"
 
 msgctxt "field:rule_engine.parameter,the_table:"
 msgid "Table to use"
-msgstr ""
+msgstr "Table à Utiliser"
 
 msgctxt "field:rule_engine.parameter,write_date:"
 msgid "Write Date"

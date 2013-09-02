@@ -96,7 +96,7 @@ msgstr "Nom"
 
 msgctxt "field:billing.rate_line,reference_value:"
 msgid "Reference Value"
-msgstr ""
+msgstr "Valeur de Référence"
 
 msgctxt "field:billing.rate_line,start_date:"
 msgid "Start Date"
@@ -104,7 +104,7 @@ msgstr "Date de Début"
 
 msgctxt "field:billing.rate_line,sum_rate:"
 msgid "Sum Rate"
-msgstr ""
+msgstr "Somme des Taux"
 
 msgctxt "field:billing.rate_line,tranche:"
 msgid "Tranche"
@@ -348,7 +348,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:collective.rating_rule_by_tranche,main_rating_rule:"
 msgid "Main Rating Rule"
-msgstr ""
+msgstr "Principale Règle de Tarif"
 
 msgctxt "field:collective.rating_rule_by_tranche,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -408,7 +408,7 @@ msgstr "Est Utilisé"
 
 msgctxt "field:collective.sub_rating_rule,main_rating_rule:"
 msgid "Main Rating Rule"
-msgstr ""
+msgstr "Principale Règle de Tarif"
 
 msgctxt "field:collective.sub_rating_rule,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -444,7 +444,7 @@ msgstr "Taux"
 
 msgctxt "field:contract.contract,use_rates:"
 msgid "Use Rates"
-msgstr ""
+msgstr "Utiliser le Tarif"
 
 msgctxt "field:ins_contract.covered_data,fare_class_group:"
 msgid "Fare Class Group"
