@@ -1,0 +1,615 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:billing.rate_line:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:collective.fare_class:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:collective.fare_class_group-fare_class:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:collective.fare_class_group:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:collective.rating_rule:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:collective.rating_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
+
+msgctxt "error:collective.rating_rule_by_tranche:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:collective.sub_rating_rule:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "field:billing.rate_line,childs:"
+msgid "Childs"
+msgstr "Enfants"
+
+msgctxt "field:billing.rate_line,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:billing.rate_line,covered_element:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "field:billing.rate_line,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:billing.rate_line,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:billing.rate_line,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:billing.rate_line,fare_class:"
+msgid "Fare Class"
+msgstr "Classe Tarif"
+
+msgctxt "field:billing.rate_line,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.rate_line,index:"
+msgid "Index"
+msgstr ""
+
+msgctxt "field:billing.rate_line,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:billing.rate_line,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:billing.rate_line,option:"
+msgid "Option"
+msgstr "Garantie"
+
+msgctxt "field:billing.rate_line,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:billing.rate_line,rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:billing.rate_line,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:billing.rate_line,reference_value:"
+msgid "Reference Value"
+msgstr ""
+
+msgctxt "field:billing.rate_line,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:billing.rate_line,sum_rate:"
+msgid "Sum Rate"
+msgstr ""
+
+msgctxt "field:billing.rate_line,tranche:"
+msgid "Tranche"
+msgstr "Tranche"
+
+msgctxt "field:billing.rate_line,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:billing.rate_line,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:collective.fare_class,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:collective.fare_class,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:collective.fare_class,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:collective.fare_class,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:collective.fare_class,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:collective.fare_class,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:collective.fare_class,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:collective.fare_class,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:collective.fare_class,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:collective.fare_class,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:collective.fare_class_group,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:collective.fare_class_group,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:collective.fare_class_group,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:collective.fare_class_group,fare_classes:"
+msgid "Fare Classes"
+msgstr "Classe Tarif"
+
+msgctxt "field:collective.fare_class_group,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:collective.fare_class_group,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:collective.fare_class_group,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:collective.fare_class_group,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:collective.fare_class_group,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:collective.fare_class_group,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:collective.fare_class_group,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:collective.fare_class_group-fare_class,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:collective.fare_class_group-fare_class,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:collective.fare_class_group-fare_class,fare_class:"
+msgid "Fare Class"
+msgstr "Classe Tarif"
+
+msgctxt "field:collective.fare_class_group-fare_class,group:"
+msgid "Group"
+msgstr "Groupe"
+
+msgctxt "field:collective.fare_class_group-fare_class,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:collective.fare_class_group-fare_class,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:collective.fare_class_group-fare_class,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:collective.fare_class_group-fare_class,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:collective.fare_class_group-fare_class,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:collective.rating_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:collective.rating_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:collective.rating_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:collective.rating_rule,end_date:"
+msgid "To Date"
+msgstr "Date de Fin"
+
+msgctxt "field:collective.rating_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:collective.rating_rule,index:"
+msgid "Index"
+msgstr ""
+
+msgctxt "field:collective.rating_rule,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:collective.rating_rule,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:collective.rating_rule,offered:"
+msgid "Offered"
+msgstr "Offre"
+
+msgctxt "field:collective.rating_rule,rates_by_tranche:"
+msgid "Rate by Tranche"
+msgstr ""
+
+msgctxt "field:collective.rating_rule,rating_kind:"
+msgid "Rating Kind"
+msgstr ""
+
+msgctxt "field:collective.rating_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:collective.rating_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:collective.rating_rule,rule_complementary_data:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:collective.rating_rule,simple_rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:collective.rating_rule,start_date:"
+msgid "From Date"
+msgstr "Date de Début"
+
+msgctxt "field:collective.rating_rule,sub_rating_rules:"
+msgid "Sub Rating Rules"
+msgstr ""
+
+msgctxt "field:collective.rating_rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:collective.rating_rule,template_behaviour:"
+msgid "Template Behaviour"
+msgstr "Comportement du Modèle"
+
+msgctxt "field:collective.rating_rule,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:collective.rating_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:collective.rating_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:collective.rating_rule_by_tranche,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:collective.rating_rule_by_tranche,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:collective.rating_rule_by_tranche,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:collective.rating_rule_by_tranche,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:collective.rating_rule_by_tranche,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:collective.rating_rule_by_tranche,main_rating_rule:"
+msgid "Main Rating Rule"
+msgstr ""
+
+msgctxt "field:collective.rating_rule_by_tranche,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:collective.rating_rule_by_tranche,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:collective.rating_rule_by_tranche,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:collective.rating_rule_by_tranche,simple_rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:collective.rating_rule_by_tranche,tranche:"
+msgid "Tranche"
+msgstr "Tranche"
+
+msgctxt "field:collective.rating_rule_by_tranche,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:collective.rating_rule_by_tranche,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:collective.sub_rating_rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:collective.sub_rating_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:collective.sub_rating_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:collective.sub_rating_rule,fare_class:"
+msgid "Fare Class"
+msgstr "Classe Tarif"
+
+msgctxt "field:collective.sub_rating_rule,fare_class_group:"
+msgid "Fare Class Group"
+msgstr "Groupe de Classe Tarif"
+
+msgctxt "field:collective.sub_rating_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:collective.sub_rating_rule,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:collective.sub_rating_rule,main_rating_rule:"
+msgid "Main Rating Rule"
+msgstr ""
+
+msgctxt "field:collective.sub_rating_rule,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:collective.sub_rating_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:collective.sub_rating_rule,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:collective.sub_rating_rule,simple_rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:collective.sub_rating_rule,tranche:"
+msgid "Tranche"
+msgstr "Tranche"
+
+msgctxt "field:collective.sub_rating_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:collective.sub_rating_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.contract,rates:"
+msgid "Rates"
+msgstr "Taux"
+
+msgctxt "field:contract.contract,use_rates:"
+msgid "Use Rates"
+msgstr ""
+
+msgctxt "field:ins_contract.covered_data,fare_class_group:"
+msgid "Fare Class Group"
+msgstr "Groupe de Classe Tarif"
+
+msgctxt "field:ins_contract.covered_data,is_rating_by_fare_class:"
+msgid "Rating by Fare Class"
+msgstr "Taux par Classe Tarif"
+
+msgctxt "field:offered.coverage,is_rating_by_fare_class:"
+msgid "Rating by Fare Class"
+msgstr "Taux par Classe Tarif"
+
+msgctxt "field:offered.coverage,rating_rules:"
+msgid "Rating Rules"
+msgstr ""
+
+msgctxt "model:billing.rate_line,name:"
+msgid "Rate Line"
+msgstr ""
+
+msgctxt "model:collective.fare_class,name:"
+msgid "Fare Class"
+msgstr "Classe Tarif"
+
+msgctxt "model:collective.fare_class_group,name:"
+msgid "Fare Class Group"
+msgstr "Groupe de Classe Tarif"
+
+msgctxt "model:collective.fare_class_group-fare_class,name:"
+msgid "Relation between fare class group and fare class"
+msgstr ""
+
+msgctxt "model:collective.rating_rule,name:"
+msgid "Collective Rating Rule"
+msgstr ""
+
+msgctxt "model:collective.rating_rule_by_tranche,name:"
+msgid "Tranche Rating Rule"
+msgstr ""
+
+msgctxt "model:collective.sub_rating_rule,name:"
+msgid "Sub Rating Rule"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_fare_class_form"
+msgid "Fare Classes"
+msgstr "Classe Tarif"
+
+msgctxt "model:ir.action,name:act_fare_class_group_form"
+msgid "Fare Class Group"
+msgstr "Groupe de Classe Tarif"
+
+msgctxt "model:ir.ui.menu,name:menu_fare_class_form"
+msgid "Fare Classes"
+msgstr "Classe Tarif"
+
+msgctxt "model:ir.ui.menu,name:menu_fare_class_group_form"
+msgid "Fare Class Group"
+msgstr "Groupe de Classe Tarif"
+
+msgctxt "selection:collective.rating_rule,config_kind:"
+msgid "Advanced"
+msgstr "Avancé"
+
+msgctxt "selection:collective.rating_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:collective.rating_rule,offered:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "selection:collective.rating_rule,offered:"
+msgid "Coverage"
+msgstr "Offre"
+
+msgctxt "selection:collective.rating_rule,offered:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "selection:collective.rating_rule,rating_kind:"
+msgid "by Fare Class"
+msgstr ""
+
+msgctxt "selection:collective.rating_rule,rating_kind:"
+msgid "by Index"
+msgstr "Par Indice"
+
+msgctxt "selection:collective.rating_rule,rating_kind:"
+msgid "by Tranche"
+msgstr "Par Tranche"
+
+msgctxt "selection:collective.rating_rule,template_behaviour:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:collective.rating_rule,template_behaviour:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:collective.rating_rule,template_behaviour:"
+msgid "Remove"
+msgstr "Remplacer"
+
+msgctxt "selection:collective.rating_rule_by_tranche,config_kind:"
+msgid "Advanced"
+msgstr "Avancé"
+
+msgctxt "selection:collective.rating_rule_by_tranche,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:collective.sub_rating_rule,config_kind:"
+msgid "Advanced"
+msgstr "Avancé"
+
+msgctxt "selection:collective.sub_rating_rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "view:billing.rate_line:"
+msgid "%"
+msgstr ""
+
+msgctxt "view:billing.rate_line:"
+msgid "Rate Line"
+msgstr ""
+
+msgctxt "view:collective.fare_class:"
+msgid "Fare Class"
+msgstr "Classe Tarif"
+
+msgctxt "view:collective.fare_class_group:"
+msgid "Fare Class Group"
+msgstr "Groupe de Classe Tarif"
+
+msgctxt "view:collective.rating_rule:"
+msgid "Collective Rating Rule"
+msgstr "Règle de Tarification Collective"
+
+msgctxt "view:collective.sub_rating_rule:"
+msgid "%"
+msgstr ""
+
+msgctxt "view:collective.sub_rating_rule:"
+msgid "Fare Class Rating Rule"
+msgstr ""
+
+msgctxt "view:collective.sub_rating_rule:"
+msgid "Sub Rating Rule"
+msgstr ""
+
+msgctxt "view:collective.sub_rating_rule:"
+msgid "Tranche Rating Rule"
+msgstr ""
+
+msgctxt "view:contract.contract:"
+msgid "Calculate Rates"
+msgstr "Calcul des Taux"
+
+msgctxt "view:contract.contract:"
+msgid "Rates"
+msgstr "Taux"
+
+msgctxt "view:offered.coverage:"
+msgid "Rating"
+msgstr ""

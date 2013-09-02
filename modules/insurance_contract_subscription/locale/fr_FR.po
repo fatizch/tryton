@@ -95,7 +95,7 @@ msgid "Summary"
 msgstr "Synthèse"
 
 msgctxt "field:contract.contract,subscriber_kind:"
-msgid "Kind"
+msgid "Subscriber Kind"
 msgstr "Type"
 
 msgctxt "field:contract.contract,subscription_mgr:"

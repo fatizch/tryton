@@ -134,6 +134,10 @@ msgctxt "error:ins_product.item_desc-complementary_data_def:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:ins_product.item_desc-sub_item_desc:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:ins_product.item_desc:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -182,6 +186,10 @@ msgstr "2 règles se chevauchent!"
 msgctxt "error:ins_product.process_product_relation:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:ins_product.product_validation_batch:"
+msgid "No Batch Path Specified"
+msgstr ""
 
 msgctxt "error:ins_product.receive_document_wizard:"
 msgid "No document request found for this object"
@@ -1770,6 +1778,42 @@ msgctxt "field:ins_product.item_desc-complementary_data_def,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_product.item_desc-sub_item_desc,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ins_product.item_desc-sub_item_desc,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ins_product.item_desc-sub_item_desc,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ins_product.item_desc-sub_item_desc,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:ins_product.item_desc-sub_item_desc,item_desc:"
+msgid "Item Desc"
+msgstr "Desc Risque"
+
+msgctxt "field:ins_product.item_desc-sub_item_desc,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ins_product.item_desc-sub_item_desc,sub_item_desc:"
+msgid "Sub Item Desc"
+msgstr ""
+
+msgctxt "field:ins_product.item_desc-sub_item_desc,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ins_product.item_desc-sub_item_desc,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:ins_product.letter_model,code:"
 msgid "Code"
 msgstr "Code"
@@ -2282,6 +2326,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:ins_product.process_product_relation,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:ins_product.product_validation_batch,id:"
+msgid "ID"
+msgstr "ID"
 
 msgctxt "field:ins_product.request_finder,id:"
 msgid "ID"
@@ -3344,6 +3392,18 @@ msgctxt "field:rule_engine,complementary_parameters:"
 msgid "Complementary Parameters"
 msgstr "Paramètres Complémentaires"
 
+msgctxt "field:rule_engine,rule_compl_datas:"
+msgid "Rule Complementary Datas"
+msgstr ""
+
+msgctxt "field:rule_engine,rule_external_compl_datas:"
+msgid "Rule External Complementary Data"
+msgstr ""
+
+msgctxt "field:rule_engine.parameter,external_complementary_data:"
+msgid "External Complementary Data"
+msgstr ""
+
 msgctxt "field:rule_engine.parameter,rule_complementary_data:"
 msgid "Rule Complementary Data"
 msgstr "Paramètres de Rêgle"
@@ -3351,6 +3411,10 @@ msgstr "Paramètres de Rêgle"
 msgctxt "field:rule_engine.parameter,the_complementary_data:"
 msgid "Complementary Parameters"
 msgstr "Paramètres Complémentaires"
+
+msgctxt "field:table.dimension_displayer,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
 
 msgctxt "help:ins_product.benefit_rule,coef_coverage_amount:"
 msgid "Add a multiplier to apply to the coverage amount"
@@ -3481,6 +3545,10 @@ msgctxt "model:ins_product.item_desc-complementary_data_def,name:"
 msgid "Relation between Item Descriptor and Complementary Data"
 msgstr "Relation Risque - Données Complémentaires"
 
+msgctxt "model:ins_product.item_desc-sub_item_desc,name:"
+msgid "Relation between Item Desc and Sub Item Desc"
+msgstr ""
+
 msgctxt "model:ins_product.letter_model,name:"
 msgid "Letter Model"
 msgstr "Modèle de Lettre"
@@ -3520,6 +3588,10 @@ msgstr "Règle de Cotisation"
 msgctxt "model:ins_product.process_product_relation,name:"
 msgid "Process Product Relation"
 msgstr "Relation Processus Produit"
+
+msgctxt "model:ins_product.product_validation_batch,name:"
+msgid "Product Validation Batch"
+msgstr ""
 
 msgctxt "model:ins_product.request_finder,name:"
 msgid "Request Finder"
@@ -3958,7 +4030,7 @@ msgstr "Remplacer"
 
 msgctxt "selection:ins_product.deductible_duration,duration_unit:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:ins_product.deductible_duration,duration_unit:"
 msgid "Day"
@@ -4530,7 +4602,7 @@ msgstr "Sélection"
 
 msgctxt "selection:offered.coverage,family:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:offered.coverage,family:"
 msgid "Life"
@@ -4620,6 +4692,18 @@ msgctxt "selection:rule_engine.parameter,kind:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
+msgctxt "selection:rule_engine.parameter,kind:"
+msgid "External Complementary Data"
+msgstr ""
+
+msgctxt "selection:rule_engine.parameter,kind:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "selection:table.dimension_displayer,input_mode:"
+msgid "Complementary data"
+msgstr ""
+
 msgctxt "view:ins_product.attach_letter:"
 msgid "Attachment"
 msgstr "Pièce jointe"
@@ -4643,6 +4727,10 @@ msgstr "Franchise"
 msgctxt "view:ins_product.benefit:"
 msgid "Reserve"
 msgstr "Provision"
+
+msgctxt "view:ins_product.benefit_rule:"
+msgid "%"
+msgstr ""
 
 msgctxt "view:ins_product.benefit_rule:"
 msgid "benefit rule"
@@ -4871,6 +4959,14 @@ msgstr "Terme - Renouvellement"
 msgctxt "view:process.process_desc:"
 msgid "Products"
 msgstr "Produits"
+
+msgctxt "view:rule_engine.parameter:"
+msgid "Rule Complementary Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "view:rule_engine.parameter:"
+msgid "Tables"
+msgstr "Tables"
 
 msgctxt "wizard_button:ins_product.letter_creation_wizard,attach,end:"
 msgid "Cancel"

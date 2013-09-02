@@ -38,6 +38,10 @@ msgctxt "error:rule_engine.parameter:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "error:rule_engine.tag:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
 msgctxt "error:rule_engine.test_case.value:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
@@ -114,6 +118,10 @@ msgctxt "field:rule_engine,exec_logs:"
 msgid "Execution Logs"
 msgstr ""
 
+msgctxt "field:rule_engine,extra_data:"
+msgid "Display Extra Data"
+msgstr ""
+
 msgctxt "field:rule_engine,id:"
 msgid "ID"
 msgstr "ID"
@@ -134,9 +142,21 @@ msgctxt "field:rule_engine,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:rule_engine,rule_kwargs:"
+msgid "Extra Kwargs"
+msgstr ""
+
 msgctxt "field:rule_engine,rule_parameters:"
 msgid "Rule parameters"
 msgstr "Paramètres de la règle"
+
+msgctxt "field:rule_engine,rule_rules:"
+msgid "Extra Rules"
+msgstr ""
+
+msgctxt "field:rule_engine,rule_tables:"
+msgid "Extra Tables"
+msgstr ""
 
 msgctxt "field:rule_engine,status:"
 msgid "Status"
@@ -386,6 +406,10 @@ msgctxt "field:rule_engine.parameter,the_rule:"
 msgid "Rule to use"
 msgstr "Règle à appliquer"
 
+msgctxt "field:rule_engine.parameter,the_table:"
+msgid "Table to use"
+msgstr ""
+
 msgctxt "field:rule_engine.parameter,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -405,6 +429,54 @@ msgstr "Etendre Arbre"
 msgctxt "field:rule_engine.run_tests.report,report:"
 msgid "Report"
 msgstr "Rapport"
+
+msgctxt "field:rule_engine.tag,childs:"
+msgid "Childs"
+msgstr "Enfants"
+
+msgctxt "field:rule_engine.tag,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:rule_engine.tag,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:rule_engine.tag,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:rule_engine.tag,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.tag,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:rule_engine.tag,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:rule_engine.tag,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.tag,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:rule_engine.tag,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.tag,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:rule_engine.tag,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
 
 msgctxt "field:rule_engine.test_case,create_date:"
 msgid "Create Date"
@@ -505,6 +577,10 @@ msgstr "Etendre Arbre"
 msgctxt "field:rule_engine.test_case.value,name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:rule_engine.test_case.value,override_value:"
+msgid "Override Value"
+msgstr ""
 
 msgctxt "field:rule_engine.test_case.value,rec_name:"
 msgid "Name"
@@ -622,6 +698,10 @@ msgctxt "field:rule_engine.tree_element,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "model:ir.action,name:act_tag_form"
+msgid "Tags"
+msgstr ""
+
 msgctxt "model:ir.action,name:context_window"
 msgid "Contexts"
 msgstr "Contextes"
@@ -662,6 +742,10 @@ msgctxt "model:ir.ui.menu,name:menu_rule_engine"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
+msgctxt "model:ir.ui.menu,name:menu_tag_form"
+msgid "Tags"
+msgstr ""
+
 msgctxt "model:ir.ui.menu,name:menu_tree_element"
 msgid "Tree Elements"
 msgstr "Eléments de l'arbre"
@@ -693,6 +777,10 @@ msgstr "Paramètre du moteur de règle"
 msgctxt "model:rule_engine.run_tests.report,name:"
 msgid "Test Run Report"
 msgstr "Tester le rapport d'exécution"
+
+msgctxt "model:rule_engine.tag,name:"
+msgid "Tag"
+msgstr ""
 
 msgctxt "model:rule_engine.test_case,name:"
 msgid "Test Case"
@@ -738,6 +826,10 @@ msgctxt "selection:rule_engine.parameter,kind:"
 msgid "Rule"
 msgstr "Règle"
 
+msgctxt "selection:rule_engine.parameter,kind:"
+msgid "Table"
+msgstr "Table"
+
 msgctxt "selection:rule_engine.tree_element,type:"
 msgid "Folder"
 msgstr "Dossier"
@@ -778,9 +870,37 @@ msgctxt "view:rule_engine.execution_log:"
 msgid "Rule Executions"
 msgstr ""
 
+msgctxt "view:rule_engine.parameter:"
+msgid "Kwargs"
+msgstr ""
+
+msgctxt "view:rule_engine.parameter:"
+msgid "Parameter"
+msgstr ""
+
+msgctxt "view:rule_engine.parameter:"
+msgid "Parameters"
+msgstr ""
+
+msgctxt "view:rule_engine.parameter:"
+msgid "Rules"
+msgstr "Règles"
+
+msgctxt "view:rule_engine.parameter:"
+msgid "Tables"
+msgstr "Tables"
+
 msgctxt "view:rule_engine.run_tests.report:"
 msgid "Tests Report"
 msgstr ""
+
+msgctxt "view:rule_engine.tag:"
+msgid "Tag"
+msgstr ""
+
+msgctxt "view:rule_engine.tag:"
+msgid "Tree"
+msgstr "Arbre"
 
 msgctxt "view:rule_engine.test_case.value:"
 msgid "Test Case Value"
@@ -804,6 +924,10 @@ msgstr "Elément de l'Arbre"
 
 msgctxt "view:rule_engine:"
 msgid "Debug"
+msgstr ""
+
+msgctxt "view:rule_engine:"
+msgid "Parameters"
 msgstr ""
 
 msgctxt "view:rule_engine:"

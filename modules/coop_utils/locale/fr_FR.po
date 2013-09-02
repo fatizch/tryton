@@ -12,27 +12,27 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:account.account,id:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:account.account.type,id:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:account.invoice.payment_term,id:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:account.invoice.payment_term.line,id:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:account.tax,id:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:company.company,id:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:coop.dyn_selection,childs:"
 msgid "Sub values"
@@ -224,11 +224,11 @@ msgstr "Importer le Fichier"
 
 msgctxt "field:country.subdivision,id:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:party.category,id:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:utils.version_object,end_date:"
 msgid "End Date"
@@ -312,7 +312,7 @@ msgstr "Selecteur de fichier"
 
 msgctxt "model:country.subdivision,name:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "model:ir.action,name:act_export_package"
 msgid "Export Package"

@@ -8,11 +8,11 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:contract.contract,is_health:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:contract.subscribed_option,is_health:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:health.party_complement,create_date:"
 msgid "Create Date"
@@ -64,7 +64,7 @@ msgstr "Santé"
 
 msgctxt "field:offered.product,is_health:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:party.party,health_complement:"
 msgid "Health Complement"

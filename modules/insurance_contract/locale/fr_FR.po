@@ -306,6 +306,10 @@ msgctxt "field:contract.contract.history,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:contract.subscribed_option,benefits:"
+msgid "Benefits"
+msgstr "Prestations"
+
 msgctxt "field:contract.subscribed_option,complement:"
 msgid "Complement"
 msgstr "Complément"
@@ -392,7 +396,7 @@ msgstr "Données Complémentaires"
 
 msgctxt "field:ins_contract.covered_data,contract:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:ins_contract.covered_data,coverage_amount:"
 msgid ""
@@ -412,7 +416,7 @@ msgstr "Créé par"
 
 msgctxt "field:ins_contract.covered_data,currency:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:ins_contract.covered_data,currency_symbol:"
 msgid "Currency Symbol"
@@ -510,6 +514,10 @@ msgctxt "field:ins_contract.covered_element,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_contract.covered_element,is_person:"
+msgid ""
+msgstr ""
+
 msgctxt "field:ins_contract.covered_element,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
@@ -522,8 +530,12 @@ msgctxt "field:ins_contract.covered_element,item_kind:"
 msgid "Item Kind"
 msgstr "Type de Bien"
 
-msgctxt "field:ins_contract.covered_element,must_expand_tree:"
+msgctxt "field:ins_contract.covered_element,main_contract:"
 msgid ""
+msgstr ""
+
+msgctxt "field:ins_contract.covered_element,must_expand_tree:"
+msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
 msgctxt "field:ins_contract.covered_element,name:"
@@ -564,39 +576,39 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ins_contract.covered_element-party_relation,covered_element:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:ins_contract.covered_element-party_relation,create_date:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:ins_contract.covered_element-party_relation,create_uid:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:ins_contract.covered_element-party_relation,id:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:ins_contract.covered_element-party_relation,is_used:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:ins_contract.covered_element-party_relation,party_relation:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:ins_contract.covered_element-party_relation,rec_name:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:ins_contract.covered_element-party_relation,write_date:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:ins_contract.covered_element-party_relation,write_uid:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:ins_contract.delivered_service,contract:"
 msgid "Contract"
@@ -879,7 +891,7 @@ msgstr "Elément Couvert"
 
 msgctxt "model:ins_contract.covered_element-party_relation,name:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "model:ins_contract.delivered_service,name:"
 msgid "Delivered Service"
