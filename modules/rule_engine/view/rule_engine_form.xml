@@ -18,6 +18,9 @@
       </group>
       <field name="data_tree" invisible="1"/>
     </page>
+    <page id="tags" string="Tags">
+      <field name="tags" colspan="4"/>
+    </page>
     <page string="Parameters" id="parameters">
       <field name="rule_parameters"/>
     </page>

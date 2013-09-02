@@ -5,6 +5,9 @@ from .tag import *
 
 def register():
     Pool.register(
+        #from tag
+        Tag,
+        # from Rule Engine
         RuleTools,
         Context,
         Rule,
@@ -16,8 +19,7 @@ def register():
         ContextTreeElement,
         RunTestsReport,
         RuleError,
-        #from tag
-        Tag,
+        RuleEngineTagRelation,
         module='rule_engine', type_='model')
     Pool.register(
         RunTests,

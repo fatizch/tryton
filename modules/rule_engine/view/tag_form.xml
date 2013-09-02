@@ -10,5 +10,8 @@
             <field name="parent"/>
             <field name="childs" colspan="4"/>
         </page>
+        <page id='rules' string="Rules">
+            <field name="rules" colspan="4"/>
+        </page>
     </notebook>
 </form>

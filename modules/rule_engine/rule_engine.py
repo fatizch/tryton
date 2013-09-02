@@ -47,6 +47,7 @@ __all__ = [
     'check_args',
     'RuleError',
     'RuleEngineResult',
+    'RuleEngineTagRelation',
 ]
 
 CODE_TEMPLATE = """
@@ -548,6 +549,11 @@ class Rule(ModelView, ModelSQL):
         'Extra Tables', domain=[('kind', '=', 'table')])
     extra_data = fields.Function(fields.Boolean('Display Extra Data'),
         'get_extra_data', 'setter_void')
+    tags = fields.Many2Many('rule_engine.rule_engine-tag', 'rule_engine',
+        'tag', 'Tags')
+    tags_name = fields.Function(
+        fields.Char('Tags', on_change_with=['tags']),
+        'on_change_with_tags_name', searcher='search_tags')
 
     @classmethod
     def __setup__(cls):
@@ -805,6 +811,13 @@ class Rule(ModelView, ModelSQL):
     @classmethod
     def default_code(cls):
         return 'return'
+
+    def on_change_with_tags_name(self, name=None):
+        return ', '.join([x.name for x in self.tags])
+
+    @classmethod
+    def search_tags(cls, name, clause):
+        return [('tags.name',) + tuple(clause[1:])]
 
 
 class Context(ModelView, ModelSQL):
@@ -1300,3 +1313,13 @@ class RuleError(model.CoopSQL, model.CoopView):
             else:
                 other.append(error)
         return func_err, other
+
+
+class RuleEngineTagRelation(model.CoopSQL):
+    'Relation between rule engine and tag'
+
+    __name__ = 'rule_engine.rule_engine-tag'
+
+    rule_engine = fields.Many2One('rule_engine',
+        'Rule Engine', ondelete='CASCADE')
+    tag = fields.Many2One('rule_engine.tag', 'Tag', ondelete='RESTRICT')
