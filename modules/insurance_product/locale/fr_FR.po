@@ -3402,7 +3402,7 @@ msgstr ""
 
 msgctxt "field:rule_engine.parameter,external_complementary_data:"
 msgid "External Complementary Data"
-msgstr ""
+msgstr "Donnée Complémentaire Externe"
 
 msgctxt "field:rule_engine.parameter,rule_complementary_data:"
 msgid "Rule Complementary Data"
@@ -4694,7 +4694,7 @@ msgstr "Données Complémentaires"
 
 msgctxt "selection:rule_engine.parameter,kind:"
 msgid "External Complementary Data"
-msgstr ""
+msgstr "Donnée Complémentaire Externe"
 
 msgctxt "selection:rule_engine.parameter,kind:"
 msgid "Rule Complementary Data"
@@ -4702,7 +4702,7 @@ msgstr "Paramètres de Rêgle"
 
 msgctxt "selection:table.dimension_displayer,input_mode:"
 msgid "Complementary data"
-msgstr ""
+msgstr "Données Complémentaires"
 
 msgctxt "view:ins_product.attach_letter:"
 msgid "Attachment"

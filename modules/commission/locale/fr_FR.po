@@ -620,11 +620,11 @@ msgstr "Option Commissionnée"
 
 msgctxt "view:commission.price_line-com-relation:"
 msgid "Com Line"
-msgstr ""
+msgstr "Ligne de Commission"
 
 msgctxt "view:commission.price_line-com-relation:"
 msgid "Com Lines"
-msgstr ""
+msgstr "Lignes de Commission"
 
 msgctxt "view:contract.subscribed_option:"
 msgid "Commissions"

@@ -120,7 +120,7 @@ msgstr ""
 
 msgctxt "field:rule_engine,extra_data:"
 msgid "Display Extra Data"
-msgstr ""
+msgstr "Affiche Donnée Plus"
 
 msgctxt "field:rule_engine,id:"
 msgid "ID"
@@ -152,11 +152,11 @@ msgstr "Paramètres de la règle"
 
 msgctxt "field:rule_engine,rule_rules:"
 msgid "Extra Rules"
-msgstr ""
+msgstr "Règles Complémentaires"
 
 msgctxt "field:rule_engine,rule_tables:"
 msgid "Extra Tables"
-msgstr ""
+msgstr "Tables Complémentaires "
 
 msgctxt "field:rule_engine,status:"
 msgid "Status"
@@ -700,7 +700,7 @@ msgstr "Mis à jour par"
 
 msgctxt "model:ir.action,name:act_tag_form"
 msgid "Tags"
-msgstr ""
+msgstr "Labels"
 
 msgctxt "model:ir.action,name:context_window"
 msgid "Contexts"
@@ -744,7 +744,7 @@ msgstr "Moteur de Règle"
 
 msgctxt "model:ir.ui.menu,name:menu_tag_form"
 msgid "Tags"
-msgstr ""
+msgstr "Labels"
 
 msgctxt "model:ir.ui.menu,name:menu_tree_element"
 msgid "Tree Elements"
@@ -780,7 +780,7 @@ msgstr "Tester le rapport d'exécution"
 
 msgctxt "model:rule_engine.tag,name:"
 msgid "Tag"
-msgstr ""
+msgstr "Label"
 
 msgctxt "model:rule_engine.test_case,name:"
 msgid "Test Case"
@@ -876,11 +876,11 @@ msgstr ""
 
 msgctxt "view:rule_engine.parameter:"
 msgid "Parameter"
-msgstr ""
+msgstr "Paramètre"
 
 msgctxt "view:rule_engine.parameter:"
 msgid "Parameters"
-msgstr ""
+msgstr "Paramètres"
 
 msgctxt "view:rule_engine.parameter:"
 msgid "Rules"
@@ -896,7 +896,7 @@ msgstr ""
 
 msgctxt "view:rule_engine.tag:"
 msgid "Tag"
-msgstr ""
+msgstr "Label"
 
 msgctxt "view:rule_engine.tag:"
 msgid "Tree"
@@ -928,7 +928,7 @@ msgstr ""
 
 msgctxt "view:rule_engine:"
 msgid "Parameters"
-msgstr ""
+msgstr "Paramètres"
 
 msgctxt "view:rule_engine:"
 msgid "Rule"

@@ -68,7 +68,7 @@ msgstr "ID"
 
 msgctxt "field:billing.rate_line,index:"
 msgid "Index"
-msgstr ""
+msgstr "indice"
 
 msgctxt "field:billing.rate_line,is_used:"
 msgid "Is Used"
@@ -260,7 +260,7 @@ msgstr "ID"
 
 msgctxt "field:collective.rating_rule,index:"
 msgid "Index"
-msgstr ""
+msgstr "indice"
 
 msgctxt "field:collective.rating_rule,is_used:"
 msgid "Is Used"
@@ -276,11 +276,11 @@ msgstr "Offre"
 
 msgctxt "field:collective.rating_rule,rates_by_tranche:"
 msgid "Rate by Tranche"
-msgstr ""
+msgstr "Taux par Tranche"
 
 msgctxt "field:collective.rating_rule,rating_kind:"
 msgid "Rating Kind"
-msgstr ""
+msgstr "Type de Tarif"
 
 msgctxt "field:collective.rating_rule,rec_name:"
 msgid "Name"
@@ -460,11 +460,11 @@ msgstr "Taux par Classe Tarif"
 
 msgctxt "field:offered.coverage,rating_rules:"
 msgid "Rating Rules"
-msgstr ""
+msgstr "Règles de Tarification"
 
 msgctxt "model:billing.rate_line,name:"
 msgid "Rate Line"
-msgstr ""
+msgstr "Ligne de Tarif"
 
 msgctxt "model:collective.fare_class,name:"
 msgid "Fare Class"
@@ -480,11 +480,11 @@ msgstr ""
 
 msgctxt "model:collective.rating_rule,name:"
 msgid "Collective Rating Rule"
-msgstr ""
+msgstr "Règle de Tarification Collective"
 
 msgctxt "model:collective.rating_rule_by_tranche,name:"
 msgid "Tranche Rating Rule"
-msgstr ""
+msgstr "Règle de Tarif par Tranche"
 
 msgctxt "model:collective.sub_rating_rule,name:"
 msgid "Sub Rating Rule"
@@ -528,7 +528,7 @@ msgstr "Produit"
 
 msgctxt "selection:collective.rating_rule,rating_kind:"
 msgid "by Fare Class"
-msgstr ""
+msgstr "par Classe Tarifaire"
 
 msgctxt "selection:collective.rating_rule,rating_kind:"
 msgid "by Index"
@@ -572,7 +572,7 @@ msgstr ""
 
 msgctxt "view:billing.rate_line:"
 msgid "Rate Line"
-msgstr ""
+msgstr "Ligne de Tarif"
 
 msgctxt "view:collective.fare_class:"
 msgid "Fare Class"
@@ -592,7 +592,7 @@ msgstr ""
 
 msgctxt "view:collective.sub_rating_rule:"
 msgid "Fare Class Rating Rule"
-msgstr ""
+msgstr "Règle de Classe Tarifaire"
 
 msgctxt "view:collective.sub_rating_rule:"
 msgid "Sub Rating Rule"
@@ -600,7 +600,7 @@ msgstr ""
 
 msgctxt "view:collective.sub_rating_rule:"
 msgid "Tranche Rating Rule"
-msgstr ""
+msgstr "Règle de Tarif par Tranche"
 
 msgctxt "view:contract.contract:"
 msgid "Calculate Rates"
@@ -612,4 +612,4 @@ msgstr "Taux"
 
 msgctxt "view:offered.coverage:"
 msgid "Rating"
-msgstr ""
+msgstr "Tarif"

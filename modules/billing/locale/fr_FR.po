@@ -1181,7 +1181,7 @@ msgstr ""
 
 msgctxt "view:account.move.line:"
 msgid "Total Amount"
-msgstr ""
+msgstr "Montant Total"
 
 msgctxt "view:account.move.line:"
 msgid "credit"
@@ -1265,7 +1265,7 @@ msgstr "Lignes de taxe"
 
 msgctxt "view:billing.price_line:"
 msgid "Amount w/o taxes"
-msgstr ""
+msgstr "Montant Hors Taxes"
 
 msgctxt "view:billing.price_line:"
 msgid "Price Line"

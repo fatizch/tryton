@@ -52,7 +52,7 @@ msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:offered.compl_data_def-tag,compl_data_def:"
 msgid "Complementary Data Def"
-msgstr ""
+msgstr "Définition de Données Complémentaires"
 
 msgctxt "field:offered.compl_data_def-tag,create_date:"
 msgid "Create Date"
@@ -76,7 +76,7 @@ msgstr "Nom"
 
 msgctxt "field:offered.compl_data_def-tag,tag:"
 msgid "Tag"
-msgstr ""
+msgstr "Label"
 
 msgctxt "field:offered.compl_data_def-tag,write_date:"
 msgid "Write Date"
@@ -180,11 +180,11 @@ msgstr " "
 
 msgctxt "field:offered.complementary_data_def,tags:"
 msgid "Tags"
-msgstr ""
+msgstr "Labels"
 
 msgctxt "field:offered.complementary_data_def,tags_name:"
 msgid "Tags"
-msgstr ""
+msgstr "Labels"
 
 msgctxt "field:offered.complementary_data_def,type_:"
 msgid ""
@@ -878,7 +878,7 @@ msgstr "Sous Donnée"
 
 msgctxt "view:offered.complementary_data_def:"
 msgid "Tags"
-msgstr ""
+msgstr "Labels"
 
 msgctxt "view:offered.complementary_data_recursive_relation:"
 msgid "Relation"
