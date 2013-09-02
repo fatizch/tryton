@@ -12,6 +12,7 @@ def register():
         User,
         Session,
         SelectUser,
+        # From file task_dispatcher
         ProcessLog,
         TaskDisplayer,
         TaskSelector,
@@ -20,5 +21,7 @@ def register():
     Pool.register(
         # From file task_manager :
         AddTeamUser,
+        # From file task_dispatcher
         TaskDispatcher,
+        LaunchTask,
         module='task_manager', type_='wizard')

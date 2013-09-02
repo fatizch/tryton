@@ -3,14 +3,18 @@
   <data>
     <!-- Menu entries -->
     <menuitem name="Task Manager" id="menu_task" sequence="-1"/>
-    <!-- User entries -->
+    <!-- ############################################################ -->
+    <!-- User -->
+    <!-- ############################################################ -->
     <record model="ir.ui.view" id="task_user_form">
       <field name="model">res.user</field>
       <field name="type">form</field>
       <field name="inherit" ref="res.user_view_form_preferences"/>
       <field name="name">task_user_form</field>
     </record>
-    <!-- Priority entries -->
+    <!-- ############################################################ -->
+    <!-- Priority -->
+    <!-- ############################################################ -->
     <record model="ir.ui.view" id="priority_form">
       <field name="model">task_manager.priority</field>
       <field name="type">form</field>
@@ -21,7 +25,9 @@
       <field name="type">tree</field>
       <field name="name">priority_tree</field>
     </record>
-    <!-- Team entries -->
+    <!-- ############################################################ -->
+    <!-- Team -->
+    <!-- ############################################################ -->
     <record model="ir.ui.view" id="team_form">
       <field name="model">task_manager.team</field>
       <field name="type">form</field>
@@ -53,25 +59,33 @@
       <field name="type">form</field>
       <field name="name">select_user_form</field>
     </record>
-    <!-- Plug Add User Wizard -->
+    <!-- ############################################################ -->
+    <!-- Add User Wizard -->
+    <!-- ############################################################ -->
     <record model="ir.action.wizard" id="wizard_add_user">
       <field name="name">Add Team User</field>
       <field name="wiz_name">task_manager.add_user</field>
       <field name="model">task_manager.team</field>
     </record>
+    <!-- ############################################################ -->
     <!-- Task Dispatcher -->
+    <!-- ############################################################ -->
     <record model="ir.action.wizard" id="act_task_dispatcher">
       <field name="name">New Task</field>
       <field name="wiz_name">task_manager.task_dispatcher</field>
     </record>
     <menuitem parent="menu_task" sequence="100" action="act_task_dispatcher" id="menu_task_dispatcher"/>
-    <!-- TaskSelector -->
+    <!-- ############################################################ -->
+    <!-- Task Selector -->
+    <!-- ############################################################ -->
     <record model="ir.ui.view" id="task_selector_form">
       <field name="model">task_manager.task_selector</field>
       <field name="type">form</field>
       <field name="name">task_selector_form</field>
     </record>
+    <!-- ############################################################ -->
     <!-- Task Displayer -->
+    <!-- ############################################################ -->
     <record model="ir.ui.view" id="task_displayer_tree">
       <field name="model">task_manager.task_displayer</field>
       <field name="type">tree</field>
@@ -82,11 +96,47 @@
         <field name="type">graph</field>
         <field name="name">task_displayer_graph</field>
     </record>
+    <!-- ############################################################ -->
     <!-- Process Log -->
+    <!-- ############################################################ -->
     <record model="ir.ui.view" id="process_log_priority_tree">
       <field name="model">coop_process.process_log</field>
       <field name="type">tree</field>
       <field name="name">process_log_priority_tree</field>
+    </record>
+    <record model="ir.ui.view" id="process_log_tree_launchable">
+      <field name="model">coop_process.process_log</field>
+      <field name="type">tree</field>
+      <field name="name">process_log_tree_launchable</field>
+    </record>
+    <record model="ir.action.act_window" id="act_process_log">
+      <field name="name">Waiting Tasks</field>
+      <field name="res_model">coop_process.process_log</field>
+      <field name="domain">[('latest', '=', True), ['OR', ('locked', '=', False), ('user', '=', Eval('context', {}).get('_user'))]]</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_process_log_view1">
+      <field name="sequence" eval="10"/>
+      <field name="view" ref="process_log_tree_launchable"/>
+      <field name="act_window" ref="act_process_log"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_process_log_view2">
+      <field name="sequence" eval="11"/>
+      <field name="view" ref="coop_process.process_log_form"/>
+      <field name="act_window" ref="act_process_log"/>
+    </record>
+    <menuitem parent="menu_task" sequence="30"
+      action="act_process_log" id="menu_launch_existing_tasks"/>
+    <!-- ############################################################ -->
+    <!-- Launch Task -->
+    <!-- ############################################################ -->
+    <record model="ir.action.wizard" id="act_launch_task_wizard">
+      <field name="name">Launch Task</field>
+      <field name="wiz_name">task_manager.launch_task_wizard</field>
+    </record>
+    <record model="ir.action.keyword" id="act_launch_task_wizard_keyword">
+      <field name="keyword">tree_open</field>
+      <field name="model">coop_process.process_log,-1</field>
+      <field name="action" ref="act_launch_task_wizard"/>
     </record>
   </data>
 </tryton>

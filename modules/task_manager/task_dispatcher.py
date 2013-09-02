@@ -13,6 +13,7 @@ __all__ = [
     'TaskDispatcher',
     'TaskDisplayer',
     'TaskSelector',
+    'LaunchTask',
 ]
 
 
@@ -31,6 +32,9 @@ class ProcessLog():
         fields.Boolean('Selected'),
         'get_task_selected',
         setter='setter_void')
+    is_current_user = fields.Function(
+        fields.Boolean('Is current user', depends=['user']),
+        'get_is_current_user')
 
     @classmethod
     def setter_void(cls, *args):
@@ -98,6 +102,11 @@ class ProcessLog():
             return sorted(result, key=order_func)
         else:
             return sorted(result, key=order_func, reverse=True)
+
+    def get_is_current_user(self, name):
+        if not Transaction().user:
+            return False
+        return Transaction().user == self.user.id
 
 
 class TaskDisplayer(model.CoopView):
@@ -319,6 +328,71 @@ class TaskDispatcher(Wizard):
             act = good_task.to_state.process.get_act_window()
         else:
             self.raise_user_error('no_task_selected')
+
+        Action = Pool().get('ir.action')
+        act = Action.get_action_values(act.__name__, [act.id])[0]
+
+        Session = Pool().get('ir.session')
+        good_session, = Session.search(
+            [('create_uid', '=', Transaction().user)])
+        GoodModel = Pool().get(good_model)
+        good_object = GoodModel(good_id)
+        new_log = Log()
+        new_log.user = Transaction().user
+        new_log.locked = True
+        new_log.task = utils.convert_ref_to_obj(good_object)
+        new_log.from_state = good_object.current_state.id
+        new_log.to_state = good_object.current_state.id
+        new_log.start_time = datetime.datetime.now()
+        new_log.session = good_session.key
+        new_log.save()
+
+        views = act['views']
+        if len(views) > 1:
+            for view in views:
+                if view[1] == 'form':
+                    act['views'] = [view]
+                    break
+        res = (
+            act,
+            {
+                'id': good_id,
+                'model': good_model,
+                'res_id': good_id,
+                'res_model': good_model,
+            })
+        return res
+
+
+class LaunchTask(Wizard):
+    'Launch Selected Task'
+
+    __name__ = 'task_manager.launch_task_wizard'
+
+    start_state = 'calculate_action'
+
+    class VoidStateAction(StateAction):
+        def __init__(self):
+            StateAction.__init__(self, None)
+
+        def get_action(self):
+            return None
+
+    calculate_action = VoidStateAction()
+
+    def do_calculate_action(self, action):
+        current_id = Transaction().context.get('active_id')
+        current_model = Transaction().context.get('active_model')
+        try:
+            assert current_id
+            assert current_model == 'coop_process.process_log'
+        except AssertionError:
+            self.raise_user_error('no_task_selected')
+        Log = Pool().get('coop_process.process_log')
+        good_task = Log(current_id)
+        good_id = good_task.task.id
+        good_model = good_task.task.__name__
+        act = good_task.to_state.process.get_act_window()
 
         Action = Pool().get('ir.action')
         act = Action.get_action_values(act.__name__, [act.id])[0]
