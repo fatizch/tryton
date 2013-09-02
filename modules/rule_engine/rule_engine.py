@@ -24,7 +24,7 @@ from trytond.wizard import Wizard, StateView, Button
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.tools.misc import _compile_source
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Or
 from trytond.modules.coop_utils import model, CoopView, utils, coop_string
 from trytond.modules.coop_utils import coop_date
 from trytond.modules.table import TableCell
@@ -542,13 +542,24 @@ class Rule(ModelView, ModelSQL):
     rule_parameters = fields.One2Many('rule_engine.parameter', 'parent_rule',
         'Rule parameters')
     rule_kwargs = fields.One2ManyDomain('rule_engine.parameter', 'parent_rule',
-        'Extra Kwargs', domain=[('kind', '=', 'kwarg')])
+        'Extra Kwargs', domain=[('kind', '=', 'kwarg')],
+        states={'invisible': Or(~Eval('extra_data'),
+                Eval('extra_data_kind') != 'kwarg')})
     rule_rules = fields.One2ManyDomain('rule_engine.parameter', 'parent_rule',
-        'Extra Rules', domain=[('kind', '=', 'rule')])
+        'Extra Rules', domain=[('kind', '=', 'rule')],
+        states={'invisible': Or(~Eval('extra_data'),
+                Eval('extra_data_kind') != 'rule')})
     rule_tables = fields.One2ManyDomain('rule_engine.parameter', 'parent_rule',
-        'Extra Tables', domain=[('kind', '=', 'table')])
+        'Extra Tables', domain=[('kind', '=', 'table')],
+        states={'invisible': Or(~Eval('extra_data'),
+                Eval('extra_data_kind') != 'table')})
     extra_data = fields.Function(fields.Boolean('Display Extra Data'),
         'get_extra_data', 'setter_void')
+    extra_data_kind = fields.Function(
+        fields.Selection(
+            [('kwarg', 'kwarg'), ('rule', 'Rule'), ('table', 'Table')],
+            'Kind', states={'invisible': ~Eval('extra_data')}),
+        'get_extra_data_kind', 'setter_void')
     tags = fields.Many2Many('rule_engine.rule_engine-tag', 'rule_engine',
         'tag', 'Tags')
     tags_name = fields.Function(
@@ -807,6 +818,9 @@ class Rule(ModelView, ModelSQL):
 
     def get_extra_data(self, name):
         return False
+
+    def get_extra_data_kind(self, name):
+        return ''
 
     @classmethod
     def default_code(cls):

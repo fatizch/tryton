@@ -2,6 +2,6 @@
 <tree string="Tables" editable="bottom">
   <field name="name"/>
   <field name="code"/>
-  <field name="the_table" widget="selection"/>
+  <field name="the_table"/>
   <field name="kind" tree_invisible="1"/>
 </tree>

@@ -2,7 +2,7 @@
 <tree string="Rules" editable="bottom">
   <field name="name"/>
   <field name="code"/>
-  <field name="the_rule" widget="selection"/>
+  <field name="the_rule"/>
   <field name="kind" tree_invisible="1"/>
 </tree>
 

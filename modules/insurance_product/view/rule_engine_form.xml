@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <data>
-  <xpath expr="/form/notebook/page[@name='code']/group[@id='extra_parameters']/field[@name='rule_tables']" position="after">
-    <field name="rule_external_compl_datas" view_ids="insurance_product.external_compl_parameter_tree"/>
-    <field name="rule_compl_datas" view_ids="insurance_product.compl_parameter_tree"/>
+  <xpath expr="/form/notebook/page[@name='code']/field[@name='rule_tables']" position="after">
+    <newline/>
+    <field name="rule_external_compl_datas" view_ids="insurance_product.external_compl_parameter_tree,rule_engine.parameter_form" colspan="4"/>
+    <newline/>
+    <field name="rule_compl_datas" view_ids="insurance_product.compl_parameter_tree,rule_engine.parameter_form" colspan="4"/>
   </xpath>
 </data>

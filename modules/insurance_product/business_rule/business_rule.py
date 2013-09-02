@@ -152,15 +152,23 @@ class RuleEngine():
     __name__ = 'rule_engine'
 
     rule_external_compl_datas = fields.One2ManyDomain('rule_engine.parameter',
-        'parent_rule', 'Rule External Complementary Data',
-        domain=[('kind', '=', 'compl')])
+        'parent_rule', 'Complementary Data',
+        domain=[('kind', '=', 'compl')],
+        states={'invisible': Or(~Eval('extra_data'),
+                Eval('extra_data_kind') != 'compl')})
     rule_compl_datas = fields.One2ManyDomain('rule_engine.parameter',
-        'parent_rule', 'Rule Complementary Datas',
-        domain=[('kind', '=', 'rule_compl')])
+        'parent_rule', 'Rule Parameter',
+        domain=[('kind', '=', 'rule_compl')],
+        states={'invisible': Or(~Eval('extra_data'),
+                Eval('extra_data_kind') != 'rule_compl')})
 
     @classmethod
     def __setup__(cls):
         super(RuleEngine, cls).__setup__()
+        cls.extra_data_kind = copy.copy(cls.extra_data_kind)
+        cls.extra_data_kind.selection.extend([('compl', 'Complementary Data'),
+                ('rule_compl', 'Rule Parameter')])
+        cls.extra_data_kind.selection = list(set(cls.extra_data_kind.selection))
 
     @classmethod
     def _export_skips(cls):

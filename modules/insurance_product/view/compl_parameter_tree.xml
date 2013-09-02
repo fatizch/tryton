@@ -2,6 +2,6 @@
 <tree string="Rule Complementary Data" editable="bottom">
   <field name="name"/>
   <field name="code"/>
-  <field name="the_complementary_data" widget="selection"/>
+  <field name="the_complementary_data"/>
   <field name="kind" tree_invisible="1"/>
 </tree>
