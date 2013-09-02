@@ -10,10 +10,10 @@ def register():
         # From Product
         Coverage,
         CollectiveRatingRule,
-        SubRatingRule,
         FareClass,
         FareClassGroup,
         FareClassGroupFareClassRelation,
+        SubRatingRule,
         #From Contract
         Contract,
         CoveredData,
