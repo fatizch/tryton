@@ -664,8 +664,7 @@ class LetterGeneration(Wizard):
         [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Generate', 'generate', 'tryton-ok'),
-            Button('Attach', 'attach', 'tryton-go-next'),
-            Button('Complete', 'post_generation', 'tryton-ok')])
+            Button('Attach', 'attach', 'tryton-go-next')])
     attach = StateView(
         'ins_product.attach_letter',
         'insurance_product.attach_letter_form',
