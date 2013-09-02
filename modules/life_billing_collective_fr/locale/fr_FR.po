@@ -396,7 +396,7 @@ msgstr "Classe Tarif"
 
 msgctxt "field:collective.sub_rating_rule,fare_class_group:"
 msgid "Fare Class Group"
-msgstr "Groupe de Classe Tarif"
+msgstr "Cotisation Groupe de Tarif"
 
 msgctxt "field:collective.sub_rating_rule,id:"
 msgid "ID"
@@ -448,7 +448,7 @@ msgstr "Utiliser le Tarif"
 
 msgctxt "field:ins_contract.covered_data,fare_class_group:"
 msgid "Fare Class Group"
-msgstr "Groupe de Classe Tarif"
+msgstr "Cotisation Groupe de Tarif"
 
 msgctxt "field:ins_contract.covered_data,is_rating_by_fare_class:"
 msgid "Rating by Fare Class"
@@ -472,7 +472,7 @@ msgstr "Classe Tarif"
 
 msgctxt "model:collective.fare_class_group,name:"
 msgid "Fare Class Group"
-msgstr "Groupe de Classe Tarif"
+msgstr "Cotisation Groupe de Tarif"
 
 msgctxt "model:collective.fare_class_group-fare_class,name:"
 msgid "Relation between fare class group and fare class"
@@ -496,7 +496,7 @@ msgstr "Classe Tarif"
 
 msgctxt "model:ir.action,name:act_fare_class_group_form"
 msgid "Fare Class Group"
-msgstr "Groupe de Classe Tarif"
+msgstr "Cotisation Groupe de Tarif"
 
 msgctxt "model:ir.ui.menu,name:menu_fare_class_form"
 msgid "Fare Classes"
@@ -504,7 +504,7 @@ msgstr "Classe Tarif"
 
 msgctxt "model:ir.ui.menu,name:menu_fare_class_group_form"
 msgid "Fare Class Group"
-msgstr "Groupe de Classe Tarif"
+msgstr "Cotisation Groupe de Tarif"
 
 msgctxt "selection:collective.rating_rule,config_kind:"
 msgid "Advanced"
@@ -580,7 +580,7 @@ msgstr "Classe Tarif"
 
 msgctxt "view:collective.fare_class_group:"
 msgid "Fare Class Group"
-msgstr "Groupe de Classe Tarif"
+msgstr "Cotisation Groupe de Tarif"
 
 msgctxt "view:collective.rating_rule:"
 msgid "Collective Rating Rule"
