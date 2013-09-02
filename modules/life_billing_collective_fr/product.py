@@ -98,18 +98,19 @@ class CollectiveRatingRule(business_rule.BusinessRuleRoot, model.CoopSQL):
     def give_me_rate(self, args):
         result = []
         errs = []
-        for covered_data in args['option'].covered_data:
+        for cov_data in args['option'].covered_data:
             #TODO deal with date control, do not rate a future covered data
-            covered_data_dict = {'covered_data': covered_data, 'rates': []}
-            result.append(covered_data_dict)
-            covered_data_args = args.copy()
-            covered_data.init_dict_for_rule_engine(covered_data_args)
+            cov_data_dict = {'covered_data': cov_data, 'rates': []}
+            result.append(cov_data_dict)
+            cov_data_args = args.copy()
+            cov_data.init_dict_for_rule_engine(cov_data_args)
             for sub_rule in self.sub_rating_rules:
-                if (self.rating_kind == 'fare_class'
-                        and sub_rule.fare_class_group !=
-                        covered_data.fare_class_group):
-                    continue
-                rule_engine_res = sub_rule.get_result(covered_data_args)
+                if self.rating_kind == 'fare_class':
+                    if sub_rule.fare_class_group != cov_data.fare_class_group:
+                        continue
+                    cov_data_args['fare_class'] = sub_rule.fare_class
+                    cov_data_args['fare_class_group'] = cov_data.fare_class_group
+                rule_engine_res = sub_rule.get_result(cov_data_args)
                 if rule_engine_res.errors:
                     errs += rule_engine_res.errors
                     continue
@@ -121,7 +122,7 @@ class CollectiveRatingRule(business_rule.BusinessRuleRoot, model.CoopSQL):
                 elif self.rating_kind == 'tranche':
                     cur_dict['key'] = sub_rule.tranche
                     cur_dict['kind'] = 'tranche'
-                covered_data_dict['rates'].append(cur_dict)
+                cov_data_dict['rates'].append(cur_dict)
         return result, errs
 
     @staticmethod

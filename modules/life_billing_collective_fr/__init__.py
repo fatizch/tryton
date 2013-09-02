@@ -3,6 +3,7 @@ from trytond.pool import Pool
 from .product import *
 from .contract import *
 from .billing import *
+from .rule_engine import *
 
 
 def register():
@@ -19,4 +20,6 @@ def register():
         CoveredData,
         # From billing,
         RateLine,
+        # from Rule Engine
+        OfferedContext,
         module='life_billing_collective_fr', type_='model')
