@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -120,7 +120,7 @@ msgstr ""
 
 msgctxt "field:rule_engine,extra_data:"
 msgid "Display Extra Data"
-msgstr "Affiche Donnée Plus"
+msgstr "Afficher Plus de Données"
 
 msgctxt "field:rule_engine,id:"
 msgid "ID"
