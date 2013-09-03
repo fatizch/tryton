@@ -18,6 +18,10 @@ msgctxt "error:task_manager.team_group_relation:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
+msgctxt "field:coop_process.process_log,is_current_user:"
+msgid "Is current user"
+msgstr ""
+
 msgctxt "field:coop_process.process_log,priority:"
 msgid "Priority"
 msgstr "Priorité"
@@ -254,6 +258,14 @@ msgctxt "field:task_manager.team_group_relation,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "model:ir.action,name:act_launch_task_wizard"
+msgid "Launch Task"
+msgstr "Lancer un Tâche"
+
+msgctxt "model:ir.action,name:act_process_log"
+msgid "Waiting Tasks"
+msgstr ""
+
 msgctxt "model:ir.action,name:act_task_dispatcher"
 msgid "New Task"
 msgstr "Nouvelle Tâche"
@@ -265,6 +277,10 @@ msgstr "Equipe"
 msgctxt "model:ir.action,name:wizard_add_user"
 msgid "Add Team User"
 msgstr "Ajouter un utilisateur à l'équipe"
+
+msgctxt "model:ir.ui.menu,name:menu_launch_existing_tasks"
+msgid "Waiting Tasks"
+msgstr "Tâches en attente"
 
 msgctxt "model:ir.ui.menu,name:menu_task"
 msgid "Task Manager"
@@ -321,6 +337,10 @@ msgstr "Processus"
 msgctxt "selection:task_manager.task_displayer,kind:"
 msgid "Team"
 msgstr "Equipe"
+
+msgctxt "view:coop_process.process_log:"
+msgid "Current Tasks"
+msgstr "Tâche courante"
 
 msgctxt "view:coop_process.process_log:"
 msgid "Tasks"

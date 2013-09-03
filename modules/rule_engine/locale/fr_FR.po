@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -35,6 +35,10 @@ msgid "Expected %s as a parameter for rule %s"
 msgstr "L'argument %s est nécessaire pour la règle %s"
 
 msgctxt "error:rule_engine.parameter:"
+msgid "This item (%s) is used by %s (%s, %s)"
+msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
+
+msgctxt "error:rule_engine.rule_engine-tag:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -122,6 +126,10 @@ msgctxt "field:rule_engine,extra_data:"
 msgid "Display Extra Data"
 msgstr "Afficher Plus de Données"
 
+msgctxt "field:rule_engine,extra_data_kind:"
+msgid "Kind"
+msgstr "Type"
+
 msgctxt "field:rule_engine,id:"
 msgid "ID"
 msgstr "ID"
@@ -161,6 +169,14 @@ msgstr "Tables Complémentaires "
 msgctxt "field:rule_engine,status:"
 msgid "Status"
 msgstr "Statut"
+
+msgctxt "field:rule_engine,tags:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:rule_engine,tags_name:"
+msgid "Tags"
+msgstr "Labels"
 
 msgctxt "field:rule_engine,test_cases:"
 msgid "Test Cases"
@@ -418,6 +434,42 @@ msgctxt "field:rule_engine.parameter,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:rule_engine.rule_engine-tag,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:rule_engine.rule_engine-tag,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:rule_engine.rule_engine-tag,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.rule_engine-tag,is_used:"
+msgid "Is Used"
+msgstr "Est Utilisé"
+
+msgctxt "field:rule_engine.rule_engine-tag,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.rule_engine-tag,rule_engine:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:rule_engine.rule_engine-tag,tag:"
+msgid "Tag"
+msgstr "Label"
+
+msgctxt "field:rule_engine.rule_engine-tag,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:rule_engine.rule_engine-tag,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:rule_engine.run_tests.report,id:"
 msgid "ID"
 msgstr "ID"
@@ -469,6 +521,10 @@ msgstr "Parent"
 msgctxt "field:rule_engine.tag,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:rule_engine.tag,rules:"
+msgid "Rules"
+msgstr "Règles"
 
 msgctxt "field:rule_engine.tag,write_date:"
 msgid "Write Date"
@@ -774,6 +830,10 @@ msgctxt "model:rule_engine.parameter,name:"
 msgid "Rule Engine Parameter"
 msgstr "Paramètre du moteur de règle"
 
+msgctxt "model:rule_engine.rule_engine-tag,name:"
+msgid "Relation between rule engine and tag"
+msgstr "Ralation entre Moteur de règle et Label"
+
 msgctxt "model:rule_engine.run_tests.report,name:"
 msgid "Test Run Report"
 msgstr "Tester le rapport d'exécution"
@@ -797,6 +857,18 @@ msgstr "Outils"
 msgctxt "model:rule_engine.tree_element,name:"
 msgid "Rule Engine Tree Element"
 msgstr "Elément de l'Arbre"
+
+msgctxt "selection:rule_engine,extra_data_kind:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "selection:rule_engine,extra_data_kind:"
+msgid "Table"
+msgstr "Table"
+
+msgctxt "selection:rule_engine,extra_data_kind:"
+msgid "kwarg"
+msgstr ""
 
 msgctxt "selection:rule_engine,status:"
 msgid "Draft"
@@ -895,6 +967,10 @@ msgid "Tests Report"
 msgstr ""
 
 msgctxt "view:rule_engine.tag:"
+msgid "Rules"
+msgstr "Règles"
+
+msgctxt "view:rule_engine.tag:"
 msgid "Tag"
 msgstr "Label"
 
@@ -937,6 +1013,10 @@ msgstr "Règle"
 msgctxt "view:rule_engine:"
 msgid "Rules"
 msgstr "Règles"
+
+msgctxt "view:rule_engine:"
+msgid "Tags"
+msgstr "Labels"
 
 msgctxt "wizard_button:rule_engine.run_tests,report,end:"
 msgid "OK"

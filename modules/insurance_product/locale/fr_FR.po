@@ -3393,12 +3393,12 @@ msgid "Complementary Parameters"
 msgstr "Paramètres Complémentaires"
 
 msgctxt "field:rule_engine,rule_compl_datas:"
-msgid "Rule Complementary Datas"
+msgid "Rule Parameter"
 msgstr ""
 
 msgctxt "field:rule_engine,rule_external_compl_datas:"
-msgid "Rule External Complementary Data"
-msgstr ""
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
 
 msgctxt "field:rule_engine.parameter,external_complementary_data:"
 msgid "External Complementary Data"
@@ -4687,6 +4687,14 @@ msgstr "Compléter"
 msgctxt "selection:offered.product,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
+
+msgctxt "selection:rule_engine,extra_data_kind:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "selection:rule_engine,extra_data_kind:"
+msgid "Rule Parameter"
+msgstr "Paramètre de Règle"
 
 msgctxt "selection:rule_engine.parameter,kind:"
 msgid "Complementary Data"
