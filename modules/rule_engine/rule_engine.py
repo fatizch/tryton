@@ -556,8 +556,9 @@ class Rule(ModelView, ModelSQL):
     extra_data = fields.Function(fields.Boolean('Display Extra Data'),
         'get_extra_data', 'setter_void')
     extra_data_kind = fields.Function(
-        fields.Selection(
-            [('kwarg', 'kwarg'), ('rule', 'Rule'), ('table', 'Table')],
+        fields.Selection([
+                ('', ''), ('kwarg', 'kwarg'),
+                ('rule', 'Rule'), ('table', 'Table')],
             'Kind', states={'invisible': ~Eval('extra_data')}),
         'get_extra_data_kind', 'setter_void')
     tags = fields.Many2Many('rule_engine.rule_engine-tag', 'rule_engine',
