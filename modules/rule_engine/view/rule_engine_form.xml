@@ -32,7 +32,7 @@
       <field name="debug_mode"/>
       <field name="exec_logs" colspan="2"/>
     </page>
-    <newline/>
-    <field name="data_tree" invisible="1"/>
   </notebook>
+  <newline/>
+  <field name="data_tree" invisible="1"/>
 </form>
