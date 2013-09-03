@@ -33,11 +33,7 @@ def load_zipcode(cfg_dict):
                     'city': city,
                     'zip': zip,
                     'country': country,
-                }, cfg_dict, 'ZipCode', domain=[
-                    ('country', '=', country.id),
-                    ('zip', '=', zip),
-                    ('city', '=', city),
-                    ])
+                }, cfg_dict, 'ZipCode', domain=['country', 'zip', 'city'])
             n += 1
     print 'Successfully created %s %s' % (n, 'ZipCode')
 

@@ -27,11 +27,9 @@ class Party():
         cls.account_payable = copy.copy(cls.account_payable)
         cls.account_payable.domain = export.clean_domain_for_import(
             cls.account_payable.domain, 'company')
-        cls.account_payable.domain = []
         cls.account_receivable = copy.copy(cls.account_receivable)
         cls.account_receivable.domain = export.clean_domain_for_import(
             cls.account_receivable.domain, 'company')
-        cls.account_receivable.domain = []
 
     @classmethod
     def _export_skips(cls):

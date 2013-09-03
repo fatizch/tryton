@@ -134,19 +134,19 @@ def get_or_create_this(data, cfg_dict, class_key='', sel_val='', ctx=None,
 
         the_object = get_objects_from_db(
             cfg_dict, class_key, domain=[
-                ('%s' % k[0], '=', prepare_search(data[k[0]]))
+                ('%s' % k, '=', prepare_search(data[k]))
                 for k in domain
-                if k[0] in data
-                ])
+                if k in data])
 
-    if the_object:
-        return the_object
-    elif only_get:
+    if only_get:
+        if the_object:
+            return the_object
         return None
     if not ctx:
         ctx = {}
     with cfg_dict[class_key]._config.set_context(ctx):
-        the_object = cfg_dict[class_key]()
+        if not the_object:
+            the_object = cfg_dict[class_key]()
         for key, value in data.iteritems():
             try:
                 if isinstance(value, list):

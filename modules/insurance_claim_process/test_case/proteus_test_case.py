@@ -18,6 +18,7 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['StepDescAuthorization'] = Model.get(
         'process.step_desc_authorization')
     cfg_dict['Code'] = Model.get('process.code')
+    cfg_dict['Date'] = Model.get('ir.date')
 
 
 def create_methods(cfg_dict):
