@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
+import time
 
 from proteus import Model, Wizard
 
@@ -87,6 +88,7 @@ def update_modules(cfg_dict, modules, only_this_module=False):
     if not only_this_module:
         modules = proteus_tools.get_modules_to_update(modules)
     for cur_module in modules:
+        start = time.clock()
         print '=' * 80 + '\n'
         cur_path = os.path.abspath(
             os.path.join(DIR, '..', 'modules', cur_module))
@@ -110,6 +112,8 @@ def update_modules(cfg_dict, modules, only_this_module=False):
         context = {'cfg_dict': module_dict}
         localcontext = {}
         exec code in context, localcontext
+        print '  -> Test Case executed for module %s in %s s' % (cur_module,
+            time.clock() - start)
 
 
 def import_json_files(cfg_dict):

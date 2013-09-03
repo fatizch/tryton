@@ -4,7 +4,6 @@
 import os
 import csv
 from proteus import Model
-import proteus_tools
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
@@ -21,7 +20,9 @@ def load_zipcode(cfg_dict):
         [('code', '=', country_code.upper())])[0]
     path = os.path.join(DIR, country_code.lower(), 'zipcode.csv')
     reader = csv.reader(open(path, 'rb'), dialect='excel-tab')
-    n = 0
+    zips = cfg_dict['ZipCode'].find([('country', '=', country.id)])
+    zip_dict = dict([('%s_%s' % (x.zip, x.city), x) for x in zips])
+    res = []
     for cur_line in reader:
         if len(cur_line) < 2:
             continue
@@ -29,13 +30,14 @@ def load_zipcode(cfg_dict):
                 or cur_line[1][0:2] in eval(cfg_dict['zip'])):
             zip = cur_line[1].rstrip().lstrip()
             city = cur_line[0].rstrip().lstrip()
-            proteus_tools.get_or_create_this({
-                    'city': city,
-                    'zip': zip,
-                    'country': country,
-                }, cfg_dict, 'ZipCode', domain=['country', 'zip', 'city'])
-            n += 1
-    print 'Successfully created %s %s' % (n, 'ZipCode')
+            if '%s_%s' % (zip, city) in zip_dict:
+                continue
+            res.append({'city': city, 'zip': zip, 'country': country.id})
+    if len(res):
+        cfg_dict['ZipCode'].create(res, {})
+        print 'Successfully created %s zipcodes' % len(res)
+    else:
+        print 'No zipcode to update'
 
 
 def launch_test_case(cfg_dict):
