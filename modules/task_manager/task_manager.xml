@@ -112,6 +112,7 @@
     <record model="ir.action.act_window" id="act_process_log">
       <field name="name">Waiting Tasks</field>
       <field name="res_model">coop_process.process_log</field>
+      <field name="auto_refresh">100</field>
       <field name="domain">[('latest', '=', True), ['OR', ('locked', '=', False), ('user', '=', Eval('context', {}).get('_user'))]]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_process_log_view1">
