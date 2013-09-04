@@ -418,7 +418,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(result.warnings, ['test warning'])
         self.assertEqual(result.info, ['test info'])
         self.assertEqual(result.low_level_debug, [u'Entering table_test_code',
-                "\targs : ('test', 30)",
+                "\targs : ('test', Decimal('30'))",
                 '\tresult = None',
                 u'Entering add_error',
                 "\targs : ('test error',)",
@@ -430,10 +430,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 "\targs : ('test info',)",
                 '\tresult = None',
                 u'Entering table_test_code',
-                "\targs : ('foo', 1)",
+                "\targs : ('foo', Decimal('1'))",
                 '\tresult = ham',
                 u'Entering rule_test_rule',
-                "\tkwargs : {'test_parameter': 20}",
+                "\tkwargs : {'test_parameter': Decimal('20')}",
                 '\tresult = 20'])
         self.assertEqual(rule.exec_logs, ())
 
@@ -442,7 +442,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         rule, = self.RuleEngine.search([('name', '=', 'Test Rule Advanced')])
         rule.code = 'return 8 / 100'
         result = utils.execute_rule(rule, rule, {})
-        self.assertEqual(result.result, Decimal(0.08))
+        self.assertEqual(result.result, Decimal(8) / Decimal(100))
 
     @test_framework.prepare_test('rule_engine.test0020_testAdvancedRule')
     def test0030_TestCaseCreation(self):
@@ -479,7 +479,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             self.maxDiff = None
             self.assertEqual(tc.on_change_test_values(), {
                     'low_debug': "Entering table_test_code\n"
-                    "\targs : ('test', 30)\n"
+                    "\targs : ('test', Decimal('30'))\n"
                     "\tresult = None\n"
                     "Entering add_error\n"
                     "\targs : ('test error',)\n"
@@ -491,10 +491,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     "\targs : ('test info',)\n"
                     "\tresult = None\n"
                     "Entering table_test_code\n"
-                    "\targs : ('foo', 1)\n"
+                    "\targs : ('foo', Decimal('1'))\n"
                     "\tresult = ham\n"
                     "Entering rule_test_rule\n"
-                    "\tkwargs : {'test_parameter': 20}\n"
+                    "\tkwargs : {'test_parameter': Decimal('20')}\n"
                     "\tresult = 20",
                     'result_warning': 'test warning',
                     'result_value': '20',
