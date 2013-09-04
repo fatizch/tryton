@@ -33,27 +33,27 @@ def create_methods(cfg_dict):
     res['Group'] = proteus_tools.generate_creation_method(
         cfg_dict, 'Group', 'name')
     res['ModelAccess'] = proteus_tools.generate_creation_method(
-        cfg_dict, 'ModelAccess', domain=['model', 'group'])
+        cfg_dict, 'ModelAccess', sel_keys=['model', 'group'])
     res['ModelData'] = proteus_tools.generate_creation_method(
-        cfg_dict, 'ModelData', domain=['module', 'fs_id'], only_get=True)
+        cfg_dict, 'ModelData', sel_keys=['module', 'fs_id'], only_get=True)
     res['MenuAccess'] = proteus_tools.generate_creation_method(
-        cfg_dict, 'MenuAccess', domain=['menu', 'group'], only_get=True)
+        cfg_dict, 'MenuAccess', sel_keys=['menu', 'group'], only_get=True)
     res['Field'] = proteus_tools.generate_creation_method(
-        cfg_dict, 'Field', domain=['name', 'model'], only_get=True)
+        cfg_dict, 'Field', sel_keys=['name', 'model'], only_get=True)
     res['ProcessDesc'] = proteus_tools.generate_creation_method(
         cfg_dict, 'ProcessDesc', 'technical_name', only_get=True)
     res['User'] = proteus_tools.generate_creation_method(
         cfg_dict, 'User', 'login')
     res['FieldAccess'] = proteus_tools.generate_creation_method(
-        cfg_dict, 'FieldAccess', domain=['field', 'group'])
+        cfg_dict, 'FieldAccess', sel_keys=['field', 'group'])
     res['StepDesc'] = proteus_tools.generate_creation_method(
         cfg_dict, 'StepDesc', 'technical_name', only_get=True)
     res['Team'] = proteus_tools.generate_creation_method(
         cfg_dict, 'Team', 'code')
     res['Priority'] = proteus_tools.generate_creation_method(
-        cfg_dict, 'Priority', domain=['process_step', 'team'])
+        cfg_dict, 'Priority', sel_keys=['process_step', 'team'])
     res['ProcessStepRelation'] = proteus_tools.generate_creation_method(
-        cfg_dict, 'ProcessStepRelation', domain=['process', 'step'],
+        cfg_dict, 'ProcessStepRelation', sel_keys=['process', 'step'],
         only_get=True)
 
     return res

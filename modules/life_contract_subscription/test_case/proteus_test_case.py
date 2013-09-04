@@ -28,13 +28,13 @@ def create_methods(cfg_dict):
     res['StepDesc'] = proteus_tools.generate_creation_method(
         cfg_dict, 'StepDesc', 'technical_name')
     res['StepTransition'] = proteus_tools.generate_creation_method(
-        cfg_dict, 'StepTransition', domain=['from_step', 'to_step', 'kind'])
+        cfg_dict, 'StepTransition', sel_keys=['from_step', 'to_step', 'kind'])
     res['ProcessDesc'] = proteus_tools.generate_creation_method(
         cfg_dict, 'ProcessDesc', 'technical_name')
     res['ProcessStepRelation'] = proteus_tools.generate_creation_method(
-        cfg_dict, 'ProcessStepRelation', domain=['process', 'step'])
+        cfg_dict, 'ProcessStepRelation', sel_keys=['process', 'step'])
     res['Code'] = proteus_tools.generate_creation_method(
-        cfg_dict, 'Code', domain=[
+        cfg_dict, 'Code', sel_keys=[
             'parent_step', 'parent_transition', 'method_name',
             'technical_kind'])
 

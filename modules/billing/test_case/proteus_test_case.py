@@ -28,9 +28,9 @@ def update_cfg_dict_with_models(cfg_dict):
 def create_methods(cfg_dict):
     res = {}
     res['Account'] = proteus_tools.generate_creation_method(
-        cfg_dict, 'Account', domain=['name', 'company'])
+        cfg_dict, 'Account', sel_keys=['name', 'company'])
     res['AccountType'] = proteus_tools.generate_creation_method(
-        cfg_dict, 'AccountType', domain=['name', 'company'])
+        cfg_dict, 'AccountType', sel_keys=['name', 'company'])
     res['FiscalYear'] = proteus_tools.generate_creation_method(
         cfg_dict, 'FiscalYear', 'name')
     res['Sequence'] = proteus_tools.generate_creation_method(

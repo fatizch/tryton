@@ -122,11 +122,11 @@ def get_objects_from_db(
 
 
 def get_or_create_this(data, cfg_dict, class_key='', sel_val='', ctx=None,
-        domain=None, to_store=True, only_get=False):
+        sel_keys=None, to_store=True, only_get=False):
     if sel_val:
         the_object = get_objects_from_db(cfg_dict, class_key, sel_val,
             data[sel_val])
-    elif domain:
+    elif sel_keys:
         def prepare_search(data):
             if isinstance(data, Model):
                 return data.id
@@ -135,7 +135,7 @@ def get_or_create_this(data, cfg_dict, class_key='', sel_val='', ctx=None,
         the_object = get_objects_from_db(
             cfg_dict, class_key, domain=[
                 ('%s' % k, '=', prepare_search(data[k]))
-                for k in domain
+                for k in sel_keys
                 if k in data])
 
     if only_get:
@@ -183,11 +183,11 @@ def append_from_key(cfg_dict, from_obj, list_name, object_class_key, key,
     from_obj.save()
 
 
-def generate_creation_method(cfg_dict, class_key, sel_val='', domain=None,
+def generate_creation_method(cfg_dict, class_key, sel_val='', sel_keys=None,
         to_store=True, only_get=False):
     partial_func = functools.partial(get_or_create_this, cfg_dict=cfg_dict,
-        class_key=class_key, sel_val=sel_val, domain=domain, to_store=to_store,
-        only_get=only_get)
+        class_key=class_key, sel_val=sel_val, sel_keys=sel_keys,
+        to_store=to_store, only_get=only_get)
 
     def callable_method(data, ctx=None):
         return partial_func(data, ctx=ctx)
