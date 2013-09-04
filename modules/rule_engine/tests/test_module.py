@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from decimal import Decimal
 import sys
 import os
 DIR = os.path.abspath(os.path.normpath(os.path.join(
@@ -435,6 +436,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 "\tkwargs : {'test_parameter': 20}",
                 '\tresult = 20'])
         self.assertEqual(rule.exec_logs, ())
+
+    @test_framework.prepare_test('rule_engine.test0020_testAdvancedRule')
+    def test0022_testIntToDecimalCasting(self):
+        rule, = self.RuleEngine.search([('name', '=', 'Test Rule Advanced')])
+        rule.code = 'return 8 / 100'
+        result = utils.execute_rule(rule, rule, {})
+        self.assertEqual(result.result, Decimal(0.08))
 
     @test_framework.prepare_test('rule_engine.test0020_testAdvancedRule')
     def test0030_TestCaseCreation(self):
