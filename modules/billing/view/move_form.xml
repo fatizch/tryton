@@ -14,6 +14,8 @@
     <newline/>
   </group>
   <group id="info" colspan="2" col="2" yexpand="0">
+    <label name="billing_period"/>
+    <field name="billing_period"/>
     <label name="state"/>
     <field name="state"/>
     <label name="post_date"/>
