@@ -67,80 +67,12 @@ def serialize_this(the_data, from_field=None):
 class CoopSQL(export.ExportImportMixin, ModelSQL):
     'Root class for all stored classes'
 
-    is_used = fields.Function(
-        fields.Boolean('Is Used'), 'get_is_used')
-
-    @classmethod
-    def __setup__(cls):
-        super(CoopSQL, cls).__setup__()
-        cls._error_messages.update({
-            'item_used': 'This item (%s) is used by %s (%s, %s)',
-        })
-
-    @staticmethod
-    def get_class_where_used():
-        '''Method to override in all sub class and return the list of tuple
-        class, var_name of object using this class. Needed when you can't
-        guess dependency with foreign keys'''
-        return []
-
-    @classmethod
-    def get_instances_using_me(cls, instances):
-        res = dict((instance.id, []) for instance in instances)
-        key_name = cls.get_func_pk_name()
-        if not key_name:
-            return res
-        key_dict = dict(
-            (getattr(instance, key_name), instance.id)
-            for instance in instances)
-        for cur_class, var_name in cls.get_class_where_used():
-            Class = Pool().get(cur_class)
-            for found_instance in Class.search(
-                    [
-                        (var_name, 'in',
-                            [getattr(cur_inst, key_name)
-                                for cur_inst in instances])
-                    ]):
-                cur_id = key_dict[getattr(found_instance, var_name)]
-                res[cur_id].append(found_instance)
-        return res
-
-    @staticmethod
-    def get_func_pk_name():
-        'return the functional key var name used when not using the id'
-
-    @classmethod
-    def get_is_used(cls, instances, name):
-        using_inst = cls.get_instances_using_me(instances)
-        res = dict(
-            (instance.id, len(using_inst[instance.id]) > 0)
-            for instance in instances)
-        return res
-
-    @classmethod
-    def can_be_deleted(cls, instances):
-        using_inst = cls.get_instances_using_me(instances)
-        for instance in instances:
-            for using_instance in using_inst[instance.id]:
-                cls.raise_user_error(
-                    'item_used',
-                    (
-                        instance.rec_name,
-                        using_instance.rec_name,
-                        coop_string.translate_model_name(
-                            using_instance.__class__),
-                        using_instance.id,
-                    ))
-
     @classmethod
     def delete(cls, instances):
         # Do not remove, needed to avoid infinite recursion in case a model
         # has a O2Ref which can lead to itself.
         if not instances:
             return
-
-        cls.can_be_deleted(instances)
-
         # Handle O2M with fields.Reference backref
         to_delete = []
         for field_name, field in cls._fields.iteritems():
@@ -294,21 +226,76 @@ class TableOfTable(CoopSQL, CoopView):
     key = fields.Char(
         'Key', states={'readonly': Bool(Eval('is_used'))}, depends=['is_used'])
     name = fields.Char('Value', required=True, translate=True)
-    parent = fields.Many2One(
-        None, 'Parent', ondelete='CASCADE')
-    childs = fields.One2Many(
-        'coop.table_of_table', 'parent', 'Sub values',
-        domain=[('my_model_name', '=', Eval('my_model_name'))],
-        depends=['my_model_name', 'parent'],
-        states={'invisible': Bool(Eval('parent'))},)
+    is_used = fields.Function(
+            fields.Boolean('Is Used'), 'get_is_used')
 
     @classmethod
     def __setup__(cls):
         super(TableOfTable, cls).__setup__()
-        cls.childs = copy.copy(cls.childs)
-        cls.childs.model_name = cls.__name__
-        cls.parent = copy.copy(cls.parent)
-        cls.parent.model_name = cls.childs.model_name
+        cls._error_messages.update({
+                'item_used': 'This item (%s) is used by %s (%s, %s)',
+                })
+
+    @staticmethod
+    def get_class_where_used():
+        '''Method to override in all sub class and return the list of tuple
+        class, var_name of object using this class. Needed when you can't
+        guess dependency with foreign keys'''
+        raise NotImplementedError
+
+    @classmethod
+    def get_instances_using_me(cls, instances):
+        res = dict((instance.id, []) for instance in instances)
+        key_name = cls.get_func_pk_name()
+        if not key_name:
+            return res
+        key_dict = dict(
+            (getattr(instance, key_name), instance.id)
+            for instance in instances)
+        for cur_class, var_name in cls.get_class_where_used():
+            Class = Pool().get(cur_class)
+            for found_instance in Class.search(
+                    [
+                        (var_name, 'in',
+                            [getattr(cur_inst, key_name)
+                                for cur_inst in instances])
+                    ]):
+                cur_id = key_dict[getattr(found_instance, var_name)]
+                res[cur_id].append(found_instance)
+        return res
+
+    @staticmethod
+    def get_func_pk_name():
+        'return the functional key var name used when not using the id'
+        return 'key'
+
+    @classmethod
+    def get_is_used(cls, instances, name):
+        using_inst = cls.get_instances_using_me(instances)
+        res = dict(
+            (instance.id, len(using_inst[instance.id]) > 0)
+            for instance in instances)
+        return res
+
+    @classmethod
+    def check_if_used(cls, instances):
+        using_inst = cls.get_instances_using_me(instances)
+        for instance in instances:
+            for using_instance in using_inst[instance.id]:
+                cls.raise_user_error(
+                    'item_used',
+                    (
+                        instance.rec_name,
+                        using_instance.rec_name,
+                        coop_string.translate_model_name(
+                            using_instance.__class__),
+                        using_instance.id,
+                    ))
+
+    @classmethod
+    def delete(cls, instances):
+        cls.check_if_used(instances)
+        super(TableOfTable, cls).delete(instances)
 
     @classmethod
     def default_my_model_name(cls):
@@ -330,14 +317,6 @@ class TableOfTable(CoopSQL, CoopView):
         for dyn_sel in DynamicSelection.search([]):
             res.append((dyn_sel.key, dyn_sel.name))
         return res
-
-    @staticmethod
-    def get_class_where_used():
-        raise NotImplementedError
-
-    @staticmethod
-    def get_func_pk_name():
-        return 'key'
 
 
 class DynamicSelection(TableOfTable):

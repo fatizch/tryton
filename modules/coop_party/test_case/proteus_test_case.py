@@ -90,14 +90,14 @@ def create_persons(cfg_dict, nb_male, nb_female, relations_kind,
                 'female')
             nb_female -= 1
             create_relation(cfg_dict, person1, person2,
-                relations_kind['spouse'].key)
+                relations_kind['spouse'])
             if launch_dice(cfg_dict, 'percent_of_couple_with_children'):
                 for _k in range(random.randint(1,
                         int(cfg_dict['max_nb_of_children_per_couple']))):
                     children = add_person(cfg_dict, person1.name,
                         dicts, children_date_interv)
                     create_relation(cfg_dict, person1, children,
-                        relations_kind['parent'].key, children.birth_date)
+                        relations_kind['parent'], children.birth_date)
 
     for _j in range(nb_female):
         name = random.choice(dicts['last_name'])
@@ -110,7 +110,7 @@ def create_relation(cfg_dict, from_actor, to_actor, kind, start_date=None):
     relation = cfg_dict['Relation']()
     relation.from_party = from_actor
     relation.to_party = to_actor
-    relation.kind = kind
+    relation.relation_kind = kind
     if start_date:
         relation.start_date = start_date
     relation.save()
@@ -174,20 +174,19 @@ def get_name_as_liste(file_name, size):
     return res
 
 
-def is_table_empty(model):
-    return len(model.find(limit=1)) == 0
-
-
-def get_relation_kind(cfg_dict, key):
-    res = cfg_dict['RelationKind'].find([('key', '=', key)])
-    if len(res) > 0:
-        return res[0]
-
-
 def get_relations_kind(cfg_dict):
     res = {}
-    res['spouse'] = get_relation_kind(cfg_dict, 'spouse')
-    res['parent'] = get_relation_kind(cfg_dict, 'parent')
+    res['spouse'] = proteus_tools.get_or_create_this({
+            'code': 'spouse',
+            'name': proteus_tools.get_translation('Spouse', cfg_dict),
+            'reversed_name': proteus_tools.get_translation('Spouse', cfg_dict),
+            }, cfg_dict, 'RelationKind', 'code')
+    res['parent'] = proteus_tools.get_or_create_this({
+            'code': 'parent',
+            'name': proteus_tools.get_translation('Parent', cfg_dict),
+            'reversed_name': proteus_tools.get_translation('Children',
+                cfg_dict),
+            }, cfg_dict, 'RelationKind', 'code')
     return res
 
 
@@ -283,9 +282,23 @@ def create_contact_mechanisms(cfg_dict):
                 contact.save()
 
 
+def migrate_relations(cfg_dict):
+    relations_kind = get_relations_kind(cfg_dict)
+    n = 0
+    for relation in cfg_dict['Relation'].find([
+            ('relation_kind', '=', None),
+            ('kind', '!=', ''),
+            ]):
+        n += 1
+        relation.relation_kind = relations_kind[relation.kind]
+        relation.save()
+    print 'Successfully migrated %s relations' % n
+
+
 def launch_test_case(cfg_dict):
     update_models(cfg_dict)
     proteus_tools.set_global_search('party.party')
     create_parties(cfg_dict)
     create_hierarchy(cfg_dict)
     create_contact_mechanisms(cfg_dict)
+    migrate_relations(cfg_dict)

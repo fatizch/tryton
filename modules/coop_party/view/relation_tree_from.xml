@@ -2,6 +2,6 @@
 <tree>
     <field name="start_date"/>
     <field name="end_date"/>
-    <field name="kind"/>
+    <field name="relation_name"/>
     <field name="to_party"/>
 </tree>

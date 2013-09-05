@@ -10,6 +10,7 @@ if os.path.isdir(DIR):
 import unittest
 import trytond.tests.test_tryton
 
+from trytond.transaction import Transaction
 from trytond.modules.coop_utils import test_framework
 
 MODULE_NAME = os.path.basename(os.path.abspath(os.path.join(
@@ -33,14 +34,17 @@ class ModuleTestCase(test_framework.CoopTestCase):
         }
 
     def test0001_createParties(self):
-        self.Party.create([
-            {
+        self.Party.create([{
                 'name': 'Parent',
                 'addresses': [],
-            },
-            {
+                }, {
                 'name': 'Children',
                 'addresses': [],
+                }])
+        self.RelationKind.create([{
+                'code': 'parent',
+                'name': 'Parent',
+                'reversed_name': 'Children'
             }])
 
     @test_framework.prepare_test('coop_party.test0001_createParties')
@@ -50,25 +54,20 @@ class ModuleTestCase(test_framework.CoopTestCase):
         '''
         party1 = self.Party.search([('name', '=', 'Parent')])[0]
         party2 = self.Party.search([('name', '=', 'Children')])[0]
+        rel_kind = self.RelationKind.search([])[0]
         relation = self.PartyRelation()
         relation.from_party = party1
         relation.to_party = party2
-        relation.kind = 'parent'
+        relation.relation_kind = rel_kind
         relation.start_date = datetime.date.today()
         relation.save()
 
-        relation2 = self.PartyRelation()
-        relation2.from_party = party2
-        relation2.to_party = party1
-        relation2.kind = 'child'
-        relation2.start_date = datetime.date.today()
-        relation2.save()
-
         self.assert_(relation.id > 0)
         self.assert_(party1.relations[0] == party2.in_relation_with[0])
-        self.assert_(party2.relations[0] == party1.in_relation_with[0])
-        self.assert_(relation.reverse_kind == relation2.kind)
-        self.assert_(relation2.reverse_kind == relation.kind)
+        self.assert_(party1.relations[0].relation_name == rel_kind.name)
+        with Transaction().set_context(direction='reverse'):
+            self.assert_(party2.in_relation_with[0].relation_name
+                == rel_kind.reversed_name)
 
 
 def suite():
