@@ -85,6 +85,8 @@ class CoveredElement():
                 contract = Contract(cov_dict['contract'])
             if not contract.is_health or 'party' not in cov_dict:
                 continue
+            if not cov_dict['party']:
+                continue
             party = Party(cov_dict['party'])
             if party.is_person and not party.health_complement:
                 health_complements.append({'party': cov_dict['party']})
