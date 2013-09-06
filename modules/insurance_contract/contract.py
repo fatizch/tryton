@@ -607,7 +607,7 @@ class CoveredElement(model.CoopSQL, model.CoopView):
 
     def on_change_with_party_compl_data(self, name=None):
         res = {}
-        if not self.party or not (self.item_desc
+        if utils.is_none(self, 'party') or not (self.item_desc
                 and self.item_desc.kind in ['party', 'person', 'company']):
             return res
         for compl_data_def in self.item_desc.complementary_data_def:

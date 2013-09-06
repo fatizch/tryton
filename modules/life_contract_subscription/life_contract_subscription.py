@@ -26,11 +26,16 @@ class LifeContractSubscription():
                     return True
         covered_element = CoveredElement()
         covered_element.start_date = self.start_date
-        covered_element.party = subscriber
+        item_descs = CoveredElement.get_possible_item_desc(self)
         covered_element.contract = self
         item_descs = CoveredElement.get_possible_item_desc(self)
         if len(item_descs) == 1:
-            covered_element.item_desc = item_descs[0]
+            item_desc = item_descs[0]
+            if (subscriber.is_person and item_desc.kind == 'person'
+                    or subscriber.is_company and item_desc.kind == 'company'
+                    or item_desc.kind == 'party'):
+                covered_element.party = subscriber
+            covered_element.item_desc = item_desc
             covered_element.main_contract = self
             cov_as_dict = covered_element.on_change_item_desc()
             for key, val in cov_as_dict.iteritems():
