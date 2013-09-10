@@ -301,6 +301,7 @@ class PaymentRule(model.CoopSQL, model.CoopView):
                     'freq_amount': 1,
                     'line': None})
         last_date = dates[-1]['date'] if len(dates) else start_date
+        first_calculated = False
         if self.with_sync_date:
             temp_date = coop_date.add_frequency(self.base_frequency, last_date)
             if self.base_frequency == 'yearly':
@@ -315,6 +316,7 @@ class PaymentRule(model.CoopSQL, model.CoopView):
                         'remaining': self.remaining_position == 'first_calc',
                         'freq_amount': 1,
                         'line': None})
+                first_calculated = True
                 last_date = final_date
         else:
             last_date = coop_date.add_day(last_date, 1)
@@ -325,9 +327,11 @@ class PaymentRule(model.CoopSQL, model.CoopView):
             if last_date <= end_date:
                 dates.append({
                         'date': last_date,
-                        'remaining': False,
+                        'remaining': (self.remaining_position == 'first_calc'
+                            and not first_calculated),
                         'freq_amount': 1,
                         'line': None})
+                first_calculated = True
 
         if not dates:
             dates.append({
