@@ -8,6 +8,8 @@
     <field name="currency"/>
     <label name="agency"/>
     <field name="agency"/>
+    <label name="bank"/>
+    <field name="bank"/>
     <label name="address"/>
     <field name="address"/>
     <field name="account_numbers" pre_validate="1" colspan="4"/>

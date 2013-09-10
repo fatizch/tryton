@@ -38,6 +38,10 @@ class BankAccount(CoopSQL, CoopView):
     numbers_as_char = fields.Function(
         fields.Char('Numbers'),
         'get_numbers_as_char')
+    bank = fields.Many2One('party.bank', 'Bank', required=True)
+    code = fields.Function(
+        fields.Char('Main Account Number'),
+        'get_main_bank_account_number')
 
     @staticmethod
     def default_currency():
@@ -86,6 +90,17 @@ class BankAccount(CoopSQL, CoopView):
 
     def get_numbers_as_char(self, name):
         return ', '.join([x.rec_name for x in self.account_numbers])
+
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        return ['account_numbers', ('bank', 'light'), ('currency', 'light')]
+
+    def get_main_bank_account_number(self, name):
+        ibans = [x.number for x in self.account_numbers if x.kind == 'iban']
+        if ibans:
+            return ibans[-1].number
+        elif self.account_numbers:
+            return self.account_numbers[-1].number
 
 
 class BankAccountNumber(CoopSQL, CoopView):
@@ -295,3 +310,11 @@ class BankAccountNumber(CoopSQL, CoopView):
                     number.kind = 'IBAN'
                     number.number = iban
                     number.save()
+
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        return ['kind', 'number', ]
+
+    @classmethod
+    def get_var_names_for_light_extract(cls):
+        return ['number']
