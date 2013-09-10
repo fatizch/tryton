@@ -8,7 +8,7 @@ __all__ = [
 ]
 
 
-class Country(export.ExportImportMixin):
+class Country(model.CoopSQL, export.ExportImportMixin):
     'Country'
 
     __metaclass__ = PoolMeta

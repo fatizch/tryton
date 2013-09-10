@@ -421,6 +421,14 @@ class Product(model.CoopSQL, Offered):
     def default_subscriber_kind():
         return 'all'
 
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        res = super(Product, cls).get_var_names_for_full_extract()
+        res.extend(['complementary_data_def',
+            'coverages', 'description', 'subscriber_kind',
+            ('currency', 'light')])
+        return res
+
 
 class ProductOptionsCoverage(model.CoopSQL):
     'Define Product - Coverage relations'

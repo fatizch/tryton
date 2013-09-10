@@ -8,6 +8,7 @@ from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard
+from trytond.rpc import RPC
 
 import utils
 import coop_string
@@ -66,6 +67,11 @@ def serialize_this(the_data, from_field=None):
 
 class CoopSQL(export.ExportImportMixin, ModelSQL):
     'Root class for all stored classes'
+
+    @classmethod
+    def __setup__(cls):
+        super(CoopSQL, cls).__setup__()
+        cls.__rpc__.update({'extract_object': RPC(instantiate=0)})
 
     @classmethod
     def delete(cls, instances):
@@ -160,6 +166,23 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
 
     def get_rec_name(self, name=None):
         return super(CoopSQL, self).get_rec_name(name)
+
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        'returns a list of varname or tuple varname extract_kind (full, light)'
+        return ['code', 'name']
+
+    @classmethod
+    def get_var_names_for_light_extract(cls):
+        'returns a list of varname or tuple varname extract_kind (full, light)'
+        return ['code']
+
+    def extract_object(self, extract_kind='full'):
+        if extract_kind == 'full':
+            var_names = self.get_var_names_for_full_extract()
+        elif extract_kind == 'light':
+            var_names = self.get_var_names_for_light_extract()
+        return utils.extract_object(self, var_names)
 
 
 class CoopView(ModelView):

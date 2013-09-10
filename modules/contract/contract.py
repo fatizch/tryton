@@ -287,6 +287,10 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         contract.finalize_contract()
         return contract
 
+    @classmethod
+    def ws_subscribe_contract(cls, contract_dict):
+        'This method is a standard API for webservice use'
+
     def init_from_offered(self, offered, start_date=None, end_date=None):
         res = super(Contract, self).init_from_offered(offered, start_date,
             end_date)
@@ -519,6 +523,11 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def on_change_with_subscriber_kind(self, name=None):
         return self.offered.subscriber_kind if self.offered else 'all'
 
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        return ['subscriber', ('offered', 'light'), 'complementary_data',
+        'options', 'covered_elements', 'start_date', 'end_date']
+
 
 class SubscribedCoverage(model.CoopSQL, Subscribed):
     'Subscribed Coverage'
@@ -593,6 +602,10 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
         args['option'] = self
         args['coverage'] = self.offered
         self.contract.init_dict_for_rule_engine(args)
+
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        return [('offered', 'light'), 'start_date', 'end_date']
 
 
 class ContractAddress(model.CoopSQL, model.CoopView):

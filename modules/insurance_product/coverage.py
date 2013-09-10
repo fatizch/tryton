@@ -190,6 +190,12 @@ class Coverage():
     def get_currency(self):
         return self.currency
 
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        res = super(Coverage, cls).get_var_names_for_full_extract()
+        res.extend([('item_desc', 'light')])
+        return res
+
 
 class OfferedCoverage(product.Offered):
     'Offered Coverage'

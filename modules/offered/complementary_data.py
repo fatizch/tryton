@@ -308,6 +308,10 @@ class ComplementaryDataDefinition(
     def search_tags(cls, name, clause):
         return [('tags.name',) + tuple(clause[1:])]
 
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        return ['name', 'string', 'type_', 'selection_json']
+
 
 class ComplementaryDataRecursiveRelation(model.CoopSQL, model.CoopView):
     'Complementary Data recursive relation'

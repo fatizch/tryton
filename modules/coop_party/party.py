@@ -252,6 +252,15 @@ class Party(model.CoopSQL):
         res['maiden_name'] = ''
         return res
 
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        res = super(Party, cls).get_var_names_for_full_extract()
+        res.extend(['is_person', 'is_company', 'relations',
+            'gender', 'first_name', 'maiden_name', 'birth_date', 'ssn',
+            'short_name', 'addresses', 'contact_mechanisms',
+            ('lang', 'light')])
+        return res
+
 
 class Actor(CoopView):
     'Actor'

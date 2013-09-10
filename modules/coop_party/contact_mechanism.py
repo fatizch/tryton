@@ -56,6 +56,10 @@ class ContactMechanism(model.CoopSQL):
         if not self.check_email():
             self.raise_user_error('invalid_email')
 
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        return ['type', 'value']
+
 
 class ContactHistory(model.CoopSQL, model.CoopView):
     'Contact History'

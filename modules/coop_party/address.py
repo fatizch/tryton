@@ -187,6 +187,10 @@ class Address(model.CoopSQL):
             full_address = full_address.replace('\n', ' ')
         return full_address
 
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        return['street', 'streetbis', 'zip', 'city', ('country', 'light')]
+
 
 class AddresseKind(DynamicSelection):
     'Addresse Kind'

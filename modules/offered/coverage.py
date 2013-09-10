@@ -94,6 +94,14 @@ class Coverage(model.CoopSQL, Offered):
         return skips
 
 
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        res = super(Coverage, cls).get_var_names_for_full_extract()
+        res.extend(['complementary_data_def', 'description',
+            'subscription_behaviour'])
+        return res
+
+
 class PackageCoverage(model.CoopSQL):
     'Link Package Coverage'
 

@@ -108,3 +108,9 @@ class Address():
             return self.zip[0:3]
         else:
             return self.zip[0:2]
+
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        res = super(Address, cls).get_var_names_for_full_extract()
+        res.extend(['line2', 'line3'])
+        return res

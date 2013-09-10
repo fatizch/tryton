@@ -583,3 +583,27 @@ def concat_res(res1, res2):
     res[0] = res[0] and res2[0]
     res[1] += res2[1]
     return tuple(res)
+
+
+def extract_object(instance, vars_name=None):
+    res = {}
+    for var_name in vars_name:
+        extract_kind = 'full'
+        if len(var_name) == 2:
+            var_name, extract_kind = var_name
+        if not getattr(instance, var_name):
+            continue
+        if isinstance(instance._fields[var_name],
+                (fields.Many2Many, fields.One2Many)):
+            res[var_name] = []
+            for sub_inst in getattr(instance, var_name):
+                res[var_name].append(sub_inst.extract_object(extract_kind))
+        elif isinstance(instance._fields[var_name], fields.Many2One):
+            try:
+                res[var_name] = getattr(instance, var_name).extract_object(
+                    extract_kind)
+            except AttributeError:
+                res[var_name] = getattr(getattr(instance, var_name), 'code')
+        else:
+            res[var_name] = getattr(instance, var_name)
+    return res

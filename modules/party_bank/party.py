@@ -42,6 +42,12 @@ class Party:
     def get_bank_accounts(self, at_date=None):
         return utils.get_good_versions_at_date(self, 'bank_accounts', at_date)
 
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        res = super(Party, cls).get_var_names_for_full_extract()
+        res.extend(['bank_accounts'])
+        return res
+
 
 class Bank(CoopSQL, Actor):
     'Bank'
@@ -75,3 +81,7 @@ class Bank(CoopSQL, Actor):
             res[party.id] += coop_string.get_field_as_summary(
                 party, 'bic', True, at_date, lang=lang)
         return res
+
+    @classmethod
+    def get_var_names_for_light_extract(cls):
+        return ['bic']

@@ -461,6 +461,11 @@ class BillingManager(model.CoopSQL, model.CoopView):
     def get_payment_date(self):
         return self.payment_date
 
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        return [('payment_method', 'light'), ('payment_bank_account', 'light'),
+            ('disbursment_bank_account', 'light'), 'payment_date']
+
 
 class BillingPeriod(model.CoopSQL, model.CoopView):
     'Billing Period'
@@ -596,6 +601,10 @@ class ProductPaymentMethodRelation(model.CoopSQL, model.CoopView):
         'Payment Method', ondelete='RESTRICT')
     order = fields.Integer('Order', required=True)
 
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        return ['order', 'payment_method']
+
 
 class Product():
     'Product'
@@ -631,6 +640,12 @@ class Product():
     @classmethod
     def default_payment_delay(cls):
         return 'in_advance'
+
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        res = super(Product, cls).get_var_names_for_full_extract()
+        res.extend(['payment_methods'])
+        return res
 
 
 class Coverage():
@@ -1216,6 +1231,12 @@ class Contract():
                 + clause[1] + ' %s)',
             [code] + today_value + [company_id] + [Decimal(clause[2] or 0)])
         return [('id', 'in', [x[0] for x in cursor.fetchall()])]
+
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        res = super(Contract, cls).get_var_names_for_full_extract()
+        res.extend(['billing_managers'])
+        return res
 
 
 class Option():

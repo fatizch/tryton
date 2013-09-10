@@ -512,6 +512,11 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         'on_change_with_covered_name')
 
     @classmethod
+    def get_var_names_for_full_extract(cls):
+        return ['name', 'sub_covered_elements',
+            'complementary_data', 'party', 'covered_relations']
+
+    @classmethod
     def get_parent_in_transaction(cls):
         if not '_master_covered' in Transaction().context:
             return None

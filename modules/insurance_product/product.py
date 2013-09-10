@@ -226,6 +226,12 @@ class Product():
         except NonExistingRuleKindException:
             return None, [('no_renewal_rule_configured', ())]
 
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        res = super(Product, cls).get_var_names_for_full_extract()
+        res.extend(['item_descriptors'])
+        return res
+
 
 class OfferedProduct(Offered):
     'Offered Product'
@@ -271,6 +277,12 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
             ('person', 'Person'),
             ('company', 'Company'),
         ]
+
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        res = super(ItemDescriptor, cls).get_var_names_for_full_extract()
+        res.extend(['complementary_data_def', 'kind', 'sub_item_descs'])
+        return res
 
 
 class ItemDescSubItemDescRelation(model.CoopSQL):
