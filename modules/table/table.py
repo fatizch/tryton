@@ -194,8 +194,15 @@ class TableDefinition(ModelSQL, ModelView):
         if not CONFIG['db_type'] == 'postgresql':
             return
 
-        cursor = Transaction().cursor
-        cursor.execute('CREATE EXTENSION IF NOT EXISTS tablefunc', ())
+        with Transaction().new_cursor() as cursor:
+            try:
+                cursor.execute('CREATE EXTENSION IF NOT EXISTS tablefunc', ())
+            except:
+                import logging
+                logger = logging.getLogger('database')
+                logger.warning('Unable to activate tablefunc extension, '
+                    '2D displaying of tables will not be available')
+                cursor.rollback()
 
     def _export_override_cells(self, exported, my_key):
         def lock_dim_and_export(locked, results, dimensions):
