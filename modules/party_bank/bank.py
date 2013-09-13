@@ -38,8 +38,8 @@ class BankAccount(CoopSQL, CoopView):
     numbers_as_char = fields.Function(
         fields.Char('Numbers'),
         'get_numbers_as_char')
-    bank = fields.Many2One('party.bank', 'Bank', required=True)
-    code = fields.Function(
+    bank = fields.Many2One('party.bank', 'Bank', ondelete='RESTRICT')
+    number = fields.Function(
         fields.Char('Main Account Number'),
         'get_main_bank_account_number')
 
@@ -90,6 +90,10 @@ class BankAccount(CoopSQL, CoopView):
 
     def get_numbers_as_char(self, name):
         return ', '.join([x.rec_name for x in self.account_numbers])
+
+    @classmethod
+    def get_var_names_for_light_extract(cls):
+        return ['number']
 
     @classmethod
     def get_var_names_for_full_extract(cls):
