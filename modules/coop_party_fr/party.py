@@ -24,7 +24,6 @@ class FrenchParty():
     def __setup__(cls):
         super(FrenchParty, cls).__setup__()
         cls.ssn = copy.copy(cls.ssn)
-        cls.ssn.size = 15
         if cls.ssn.on_change_with is None:
             cls.ssn.on_change_with = []
         cls.ssn.on_change_with += ['ssn_no_key', 'ssn_key']
