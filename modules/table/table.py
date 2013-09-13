@@ -194,7 +194,8 @@ class TableDefinition(ModelSQL, ModelView):
         if not CONFIG['db_type'] == 'postgresql':
             return
 
-        with Transaction().new_cursor() as cursor:
+        with Transaction().new_cursor() as transaction:
+            cursor = transaction.cursor
             try:
                 cursor.execute('CREATE EXTENSION IF NOT EXISTS tablefunc', ())
             except:
