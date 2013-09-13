@@ -38,7 +38,7 @@ class BankAccount(CoopSQL, CoopView):
     numbers_as_char = fields.Function(
         fields.Char('Numbers'),
         'get_numbers_as_char')
-    bank = fields.Many2One('party.bank', 'Bank', ondelete='RESTRICT')
+    bank = fields.Many2One('party.bank', 'Bank')
     number = fields.Function(
         fields.Char('Main Account Number'),
         'get_main_bank_account_number')
