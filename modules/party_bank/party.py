@@ -85,3 +85,7 @@ class Bank(CoopSQL, Actor):
     @classmethod
     def get_var_names_for_light_extract(cls):
         return ['bic']
+
+    def get_rec_name(self, name):
+        return (self.party.rec_name
+            if self.party else super(Bank, self).get_rec_name(name))
