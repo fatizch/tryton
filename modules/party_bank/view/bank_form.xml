@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
     <form>
+        <label name="party"/>
+        <field name="party"/>
         <label name="bic"/>
         <field name="bic"/>
         <label name="bank_code"/>

@@ -12,5 +12,10 @@
             <field name="type">form</field>
             <field name="name">rate_line_form</field>
         </record>
+    <record model="ir.ui.view" id="rate_note_process_parameters_view_form">
+      <field name="model">billing.rate_note_process_parameters</field>
+      <field name="type">form</field>
+      <field name="name">rate_note_process_parameters_form</field>
+    </record>
     </data>
 </tryton>

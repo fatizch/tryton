@@ -15,14 +15,14 @@ class Address():
     __name__ = 'party.address'
     __metaclass__ = PoolMeta
 
-    line2 = fields.Char('Add. complement', 38,
+    line2 = fields.Char('Add. complement', help=
         '''AFNOR - Line 2
         For individual : Delivery Point Access Data
         Door or Letterbox number, floor, staircase
         For companies : Individual Identification Form of Address -
         Given Name, Surname, function, Department''',
         states=STATES, depends=DEPENDS)
-    line3 = fields.Char('Building', 38,
+    line3 = fields.Char('Building', help=
         '''AFNOR - Line 3
         Delivery point location
         Wing or Building or Construction or Industrial zone''',
@@ -32,7 +32,6 @@ class Address():
     def __setup__(cls):
         super(Address, cls).__setup__()
         cls.name = copy.copy(cls.name)
-        cls.name.size = 38
         cls.name.string = 'Recipient'
         cls.name.help = '''AFNOR - Line 1
         For individual : Identity of the addressee -
@@ -41,7 +40,6 @@ class Address():
         Organization name, Legal Status'''
 
         cls.street = copy.copy(cls.street)
-        cls.street.size = 38
         if cls.street.on_change is None:
             cls.street.on_change = []
         cls.street.on_change.append('street')
@@ -50,7 +48,6 @@ class Address():
             Street or Avenue or Village...'''
 
         cls.streetbis = copy.copy(cls.streetbis)
-        cls.streetbis.size = 38
         cls.streetbis.string = 'Post Office'
         cls.streetbis.help = '''AFNOR - Line 5
             Delivery Service

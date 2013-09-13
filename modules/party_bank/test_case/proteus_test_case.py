@@ -19,37 +19,39 @@ def update_cfg_dict(cfg_dict):
     return cfg_dict
 
 
-def is_table_empty(model):
-    return len(model.find(limit=1)) == 0
-
-
-def create_bank(cfg_dict):
-    f = open(os.path.join(DIR, 'bank.cfg'), 'r')
-    countries = {}
-    n = 0
-    for line in f:
-        if n >= int(cfg_dict['nb_bank']):
-            break
-        try:
-            bank = cfg_dict['Bank']()
-            company = cfg_dict['Party']()
-            company.is_company = True
-            company.currency = cfg_dict['currency']
-            company.bank_role.append(bank)
-            company.name = line[11:51].strip()
-            company.short_name = line[51:61].strip()
-            add_address(cfg_dict, line, company, countries)
-            add_bank_info(line, bank)
-            company.save()
-            # bank.save()
-            n += 1
-        except:
-            raise
-            warnings.warn('Impossible to create bank %s' % line[11:51].strip(),
-                stacklevel=2)
-    f.close()
+def create_banks(cfg_dict):
+    banks = {}
+    with open(os.path.join(DIR, 'bank.cfg'), 'r') as f:
+        countries = {}
+        banks = dict((x.bank_code, x) for x in cfg_dict['Bank'].find([]))
+        n = 0
+        for line in f:
+            if n + len(banks) >= int(cfg_dict['nb_bank']):
+                break
+            try:
+                bank_code = line[0:5]
+                if bank_code in banks:
+                    continue
+                bank = cfg_dict['Bank']()
+                company = cfg_dict['Party']()
+                company.is_company = True
+                company.currency = cfg_dict['currency']
+                company.name = line[11:51].strip()
+                company.short_name = line[51:61].strip()
+                add_address(cfg_dict, line, company, countries)
+                add_bank_info(line, bank_code, bank)
+                banks[bank_code] = bank
+                company.save()
+                bank.party = company
+                bank.save()
+                n += 1
+            except:
+                raise
+                warnings.warn('Impossible to create bank %s' %
+                    line[11:51].strip(), stacklevel=2)
     if n > 0:
         print 'Successfully imported %s banks' % n
+    return banks
 
 
 def check_pattern(s, pattern):
@@ -86,15 +88,14 @@ def add_address(cfg_dict, line, bank, countries):
         address.country = get_country(cfg_dict, country_code, countries)
 
 
-def add_bank_info(line, bank):
+def add_bank_info(line, bank_code, bank):
     bic = check_pattern(line[236:247], r'^[0-9A-Z]{8,11}')
     if bic:
         bank.bic = bic
-    bank.bank_code = line[0:5]
+    bank.bank_code = bank_code
 
 
-def create_bank_accounts(cfg_dict):
-    banks = load_bank_code(cfg_dict)
+def create_bank_accounts(cfg_dict, banks):
     Party = cfg_dict['Party']
     n = 0
     parties = Party.find([('bank_accounts', '=', None)])
@@ -122,7 +123,8 @@ def add_bank_account(cfg_dict, party, banks):
     party.bank_accounts.append(bank_account)
     bank_account_nb = bank_account.account_numbers[0]
     bank_account_nb.kind = 'IBAN'
-    bank_code = get_random(banks)
+    bank_code = random.choice(banks.keys())
+    bank_account.bank = banks[bank_code]
     branch_code = str(random.randint(0, 999)).zfill(5)
     account_number = str(random.randint(0, 99999999)).zfill(11)
     key = str(97 - (89 * int(bank_code) + 15 * int(branch_code)
@@ -145,6 +147,5 @@ def load_bank_code(cfg_dict):
 
 def launch_test_case(cfg_dict):
     update_cfg_dict(cfg_dict)
-    if is_table_empty(cfg_dict['Bank']):
-        create_bank(cfg_dict)
-    create_bank_accounts(cfg_dict)
+    banks = create_banks(cfg_dict)
+    create_bank_accounts(cfg_dict, banks)
