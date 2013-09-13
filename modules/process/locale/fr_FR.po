@@ -611,14 +611,6 @@ msgid "==> Affiliations"
 msgstr ""
 
 msgctxt "view:contract.contract:"
-msgid "==> Choix des personnes couvertes"
-msgstr ""
-
-msgctxt "view:contract.contract:"
-msgid "==> Choix du souscripteur"
-msgstr ""
-
-msgctxt "view:contract.contract:"
 msgid "==> Commission"
 msgstr ""
 
@@ -627,19 +619,11 @@ msgid "==> Cotisations"
 msgstr ""
 
 msgctxt "view:contract.contract:"
-msgid "==> Document Request"
-msgstr ""
-
-msgctxt "view:contract.contract:"
 msgid "==> Documents"
 msgstr ""
 
 msgctxt "view:contract.contract:"
 msgid "==> Garanties"
-msgstr ""
-
-msgctxt "view:contract.contract:"
-msgid "==> Options Selection"
 msgstr ""
 
 msgctxt "view:contract.contract:"
@@ -668,10 +652,6 @@ msgstr ""
 
 msgctxt "view:contract.contract:"
 msgid "==> Validation de l'avenant"
-msgstr ""
-
-msgctxt "view:contract.contract:"
-msgid "==> Validation du contract"
 msgstr ""
 
 msgctxt "view:contract.contract:"
@@ -715,14 +695,6 @@ msgid "Calculer les Taux"
 msgstr ""
 
 msgctxt "view:contract.contract:"
-msgid "Choix des personnes couvertes"
-msgstr "Personnes Couvertes"
-
-msgctxt "view:contract.contract:"
-msgid "Choix du souscripteur"
-msgstr "Produit"
-
-msgctxt "view:contract.contract:"
 msgid "Commission"
 msgstr "Commission"
 
@@ -747,10 +719,6 @@ msgid "Covered Elements/Options"
 msgstr "Eléments Couverts/Garanties"
 
 msgctxt "view:contract.contract:"
-msgid "Document Request"
-msgstr "Documents"
-
-msgctxt "view:contract.contract:"
 msgid "Documents"
 msgstr "Documents"
 
@@ -764,10 +732,6 @@ msgstr "Suivant"
 
 msgctxt "view:contract.contract:"
 msgid "Options"
-msgstr "Garanties"
-
-msgctxt "view:contract.contract:"
-msgid "Options Selection"
 msgstr "Garanties"
 
 msgctxt "view:contract.contract:"
@@ -822,12 +786,6 @@ msgstr ""
 
 msgctxt "view:contract.contract:"
 msgid ""
-"The current record isin a state (Validation du contract) that you are not "
-"allowed to view."
-msgstr ""
-
-msgctxt "view:contract.contract:"
-msgid ""
 "The current record isin a state (Validation du contrat) that you are not "
 "allowed to view."
 msgstr ""
@@ -835,10 +793,6 @@ msgstr ""
 msgctxt "view:contract.contract:"
 msgid "Validation de l'avenant"
 msgstr "Validation de l'avenant"
-
-msgctxt "view:contract.contract:"
-msgid "Validation du contract"
-msgstr "Validation du contrat"
 
 msgctxt "view:contract.contract:"
 msgid "Validation du contrat"

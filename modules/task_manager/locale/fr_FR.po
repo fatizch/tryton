@@ -264,7 +264,7 @@ msgstr "Lancer un Tâche"
 
 msgctxt "model:ir.action,name:act_process_log"
 msgid "Waiting Tasks"
-msgstr ""
+msgstr "Tâches en attente"
 
 msgctxt "model:ir.action,name:act_task_dispatcher"
 msgid "New Task"

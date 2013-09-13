@@ -335,7 +335,7 @@ msgid "Is Used"
 msgstr "Est Utilisé"
 
 msgctxt "field:party.party-relation,kind:"
-msgid "Kind"
+msgid "Temporary kind for migration use, to be deleted"
 msgstr "Type"
 
 msgctxt "field:party.party-relation,must_expand_tree:"
@@ -345,6 +345,14 @@ msgstr "Etendre Arbre"
 msgctxt "field:party.party-relation,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:party.party-relation,relation_kind:"
+msgid "Relation Kind"
+msgstr "Type de Relation"
+
+msgctxt "field:party.party-relation,relation_name:"
+msgid "Relation Name"
+msgstr ""
 
 msgctxt "field:party.party-relation,reverse_kind:"
 msgid "Kind"
@@ -369,6 +377,10 @@ msgstr "Mis à jour par"
 msgctxt "field:party.party_relation_kind,childs:"
 msgid "Sub values"
 msgstr "Sous valeurs"
+
+msgctxt "field:party.party_relation_kind,code:"
+msgid "Code"
+msgstr "Code"
 
 msgctxt "field:party.party_relation_kind,create_date:"
 msgid "Create Date"
@@ -399,7 +411,7 @@ msgid "Model Name"
 msgstr "Nom de l'objet"
 
 msgctxt "field:party.party_relation_kind,name:"
-msgid "Value"
+msgid "Name"
 msgstr "Valeur"
 
 msgctxt "field:party.party_relation_kind,parent:"
@@ -409,6 +421,10 @@ msgstr "Parent"
 msgctxt "field:party.party_relation_kind,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:party.party_relation_kind,reversed_name:"
+msgid "Reversed Name"
+msgstr ""
 
 msgctxt "field:party.party_relation_kind,write_date:"
 msgid "Write Date"
@@ -489,18 +505,6 @@ msgstr "Relations entre Acteurs"
 msgctxt "model:party.party_relation_kind,name:"
 msgid "Party Relation Kind"
 msgstr "Type de Relation entre Acteurs"
-
-msgctxt "model:party.party_relation_kind,name:child"
-msgid "Children Of"
-msgstr "Enfant de"
-
-msgctxt "model:party.party_relation_kind,name:parent"
-msgid "Parent Of"
-msgstr "Parent de"
-
-msgctxt "model:party.party_relation_kind,name:spouse"
-msgid "Spouse Of"
-msgstr "Conjoint de"
 
 msgctxt "selection:party.contact_history,for_object_ref:"
 msgid "Party"

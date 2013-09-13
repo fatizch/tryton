@@ -94,6 +94,14 @@ msgctxt "field:party.bank_account,agency:"
 msgid "Agency"
 msgstr "Agence"
 
+msgctxt "field:party.bank_account,bank:"
+msgid "Bank"
+msgstr "Banque"
+
+msgctxt "field:party.bank_account,code:"
+msgid "Main Account Number"
+msgstr "Numéro de Compte Principal"
+
 msgctxt "field:party.bank_account,create_date:"
 msgid "Create Date"
 msgstr "Date de création"

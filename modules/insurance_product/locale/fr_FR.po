@@ -3394,7 +3394,7 @@ msgstr "Paramètres Complémentaires"
 
 msgctxt "field:rule_engine,rule_compl_datas:"
 msgid "Rule Parameter"
-msgstr ""
+msgstr "Paramètre de Règle"
 
 msgctxt "field:rule_engine,rule_external_compl_datas:"
 msgid "Complementary Data"
