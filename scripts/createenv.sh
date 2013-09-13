@@ -28,22 +28,50 @@ else
 	echo Entering Virtual Env
 	echo $SEP
 	source bin/activate
-	echo Installing pip packages
+	echo Installing shared pip packages
+	echo $SEP
+    pip install dateutils
+    # pytz does not install properly through pip
+    easy_install pytz
+    # pyflakes 0.5.0 for rule_engine validation, to upgrade
+    pip install pyparsing==1.5.7 pyflakes==0.5.0
+	echo $SEP
+	echo Installing server pip packages
 	echo $SEP
     # Genshi 0.6 for relatorio compatibility
-    # pyflakes 0.5.0 for rule_engine validation, to upgrade
-	pip install polib lxml relatorio genshi==0.6 python-dateutil pywebdav vobject python-ldap pytz psycopg2 hgnested hgreview sphinx ibanlib python-stdnum pydot==1.0.28 pyparsing==1.5.6 pyflakes==0.5.0 celery flower
+    pip install lxml polib genshi==0.6 relario python-ldap pywebdav vobject pydot ibanlib
 	echo $SEP
+	echo Installing client packages
 	echo $SEP
-	echo Creating symbol link for dependencies
+    # More relinking than installing
+    if [-e "/usr/lib/python2.7/dist-packages/gobject"]
+    then
+        # Looks like we found the shared libraries path
+        ln -s /usr/lib/python2.7/dist-packages/gtk* lib/python2.7/site-packages/
+        ln -s /usr/lib/python2.7/dist-packages/pygtk.p* lib/python2.7/site-packages/
+        ln -s /usr/lib/python2.7/dist-packages/gobject lib/python2.7/site-packages/
+        ln -s /usr/lib/python2.7/dist-packages/glib lib/python2.7/site-packages/
+        ln -s /usr/lib/python2.7/dist-packages/cairo lib/python2.7/site-packages/
+    elif [-e "/usr/lib64/python2.7/site-packages/gobject"]
+    then
+        # 64 bits ! The more the better
+        ln -s /usr/lib64/python2.7/site-packages/gtk* lib/python2.7/site-packages/
+        ln -s /usr/lib64/python2.7/site-packages/pygtk.p* lib/python2.7/site-packages/
+        ln -s /usr/lib64/python2.7/site-packages/gobject lib/python2.7/site-packages/
+        ln -s /usr/lib64/python2.7/site-packages/glib lib/python2.7/site-packages/
+        ln -s /usr/lib64/python2.7/site-packages/cairo lib/python2.7/site-packages/
+    else
+        # Libraries not found
+        echo No gtk libraries were found, the client will not be fonctional
+    fi
 	echo $SEP
-	ln -s /usr/lib/python2.7/dist-packages/gtk* lib/python2.7/site-packages/
-	ln -s /usr/lib/python2.7/dist-packages/pygtk.p* lib/python2.7/site-packages/
-	ln -s /usr/lib/python2.7/dist-packages/gobject lib/python2.7/site-packages/
-	ln -s /usr/lib/python2.7/dist-packages/glib lib/python2.7/site-packages/
-	ln -s /usr/lib/python2.7/dist-packages/cairo lib/python2.7/site-packages/
-	ln -s /usr/local/lib/python2.7/dist-packages/ibanlib lib/python2.7/site-packages/
-	ln -s /usr/local/lib/python2.7/dist-packages/stdnum/ lib/python2.7/site-packages/
+	echo Installing Optionnal packages
+    echo $SEP
+    # Postgres support
+    pip install psycopg2
+    # Batchs managing
+    pip install celery flower
+    echo $SEP
 	echo Installation complete, remember to add
 	echo 	'[extensions]'
 	echo	'hgnested='

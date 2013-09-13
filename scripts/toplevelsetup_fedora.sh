@@ -2,13 +2,25 @@
 SEP=------------------------------------------------
 
 echo $SEP
-echo Installing necessary packages
+echo Installing core packages
 echo $SEP
-sudo yum install python-pip postgresql python-devel gcc libxml2-devel libxslt-devel postgresql-devel openldap-devel cyrus-sasl-devel pygtk2-devel
+sudo yum install python python-pip python-dev mercurial
 echo $SEP
-echo Installing necessary dependencies
+echo Installing server packages
 echo $SEP
-sudo yum install build-dep python-ldap
+sudo yum install gcc libxml2-devel libxslt-devel openldap-devel cyrus-sasl-devel
+echo $SEP
+echo Installing client packages
+sudo yum install pygtk2-devel
+echo $SEP
+echo Installing optional dependencies
+echo $SEP
+# Postgres dependencies
+sudo yum install postgresql postgresql-server postgresql-devel
+# Batch dependencies
+sudo yum install rabbitmq-server
+# Rule engine code displayer (client)
+sudo yum install pygtksourceview-devel
 echo $SEP
 echo Installing virtualenv for multi env management
 echo $SEP

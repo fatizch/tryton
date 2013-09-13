@@ -15,17 +15,29 @@ then
     sudo apt-get update
 fi
 echo $SEP
-echo Installing necessary packages
+echo Installing core packages
 echo $SEP
-sudo apt-get install python-pip postgresql python-dev gcc libxml2-dev libxslt-dev libpq-dev python-gtksourceview2 libldap2-dev libsasl2-dev libssl-dev rabbitmq-server
+sudo apt-get install python python-pip python-devel mercurial
 echo $SEP
-echo Installing necessary dependencies
+echo Installing server packages
 echo $SEP
-sudo apt-get build-dep python-ldap
+sudo apt-get install gcc libxml2-dev libxslt-dev libldap2-dev libsasl2-dev
+echo $SEP
+echo Installing client packages
+sudo apt-get install python-gtk2
+echo $SEP
+echo Installing optional dependencies
+echo $SEP
+# Postgres dependencies
+sudo apt-get install postgresql postgresql-contrib libpq-dev
+# Batch dependencies
+sudo apt-get install rabbitmq-server
+# Rule engine code displayer (client)
+sudo apt-get install python-gtksourceview2
 echo $SEP
 echo Installing virtualenv for multi env management
 echo $SEP
-sudo pip install virtualenv
+sudo pip-python install virtualenv
 echo $SEP
 echo System ready
 echo $SEP
