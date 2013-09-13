@@ -6,7 +6,6 @@ from proteus import config, Model, Wizard
 NEEDED_MODULES = [
     'coop_translation',
     'party_bank',
-    'insurance_party_fr',
     'table',
     'health_fr',
     'property_product',
