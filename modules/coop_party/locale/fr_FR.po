@@ -2,15 +2,7 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:party.address:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:party.address_kind:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:party.contact_history:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -18,25 +10,9 @@ msgctxt "error:party.contact_mechanism:"
 msgid "Invalid Email !"
 msgstr "e-Mail Invalide"
 
-msgctxt "error:party.contact_mechanism:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:party.party-relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:party.party:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:party.party_relation_kind:"
 msgid "The key must be unique!"
 msgstr "La clé doit être unique"
-
-msgctxt "error:party.party_relation_kind:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:country.zipcode,city:"
 msgid "City"
@@ -94,10 +70,6 @@ msgctxt "field:party.address,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:party.address,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:party.address,kind:"
 msgid "Kind"
 msgstr "Type"
@@ -109,10 +81,6 @@ msgstr "Date de Début"
 msgctxt "field:party.address,zip_and_city:"
 msgid "Zip"
 msgstr "Code Postal"
-
-msgctxt "field:party.address_kind,childs:"
-msgid "Sub values"
-msgstr "Sous valeurs"
 
 msgctxt "field:party.address_kind,create_date:"
 msgid "Create Date"
@@ -145,10 +113,6 @@ msgstr "Nom de l'objet"
 msgctxt "field:party.address_kind,name:"
 msgid "Value"
 msgstr "Valeur"
-
-msgctxt "field:party.address_kind,parent:"
-msgid "Parent"
-msgstr "Parent"
 
 msgctxt "field:party.address_kind,rec_name:"
 msgid "Name"
@@ -202,10 +166,6 @@ msgctxt "field:party.contact_history,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.contact_history,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:party.contact_history,media:"
 msgid "Media"
 msgstr ""
@@ -242,10 +202,6 @@ msgctxt "field:party.contact_history,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:party.contact_mechanism,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:party.party,birth_date:"
 msgid "Birth Date"
 msgstr "Date de Naissance"
@@ -273,10 +229,6 @@ msgstr "Société"
 msgctxt "field:party.party,is_person:"
 msgid "Person"
 msgstr "Personne"
-
-msgctxt "field:party.party,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:party.party,logo:"
 msgid "Logo"
@@ -330,10 +282,6 @@ msgctxt "field:party.party-relation,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.party-relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:party.party-relation,kind:"
 msgid "Temporary kind for migration use, to be deleted"
 msgstr "Type"
@@ -354,10 +302,6 @@ msgctxt "field:party.party-relation,relation_name:"
 msgid "Relation Name"
 msgstr ""
 
-msgctxt "field:party.party-relation,reverse_kind:"
-msgid "Kind"
-msgstr "Type"
-
 msgctxt "field:party.party-relation,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
@@ -373,10 +317,6 @@ msgstr "Date de mise à jour"
 msgctxt "field:party.party-relation,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
-
-msgctxt "field:party.party_relation_kind,childs:"
-msgid "Sub values"
-msgstr "Sous valeurs"
 
 msgctxt "field:party.party_relation_kind,code:"
 msgid "Code"
@@ -394,29 +334,13 @@ msgctxt "field:party.party_relation_kind,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.party_relation_kind,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:party.party_relation_kind,key:"
-msgid "Key"
-msgstr "Clé"
-
 msgctxt "field:party.party_relation_kind,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:party.party_relation_kind,my_model_name:"
-msgid "Model Name"
-msgstr "Nom de l'objet"
-
 msgctxt "field:party.party_relation_kind,name:"
 msgid "Name"
 msgstr "Valeur"
-
-msgctxt "field:party.party_relation_kind,parent:"
-msgid "Parent"
-msgstr "Parent"
 
 msgctxt "field:party.party_relation_kind,rec_name:"
 msgid "Name"

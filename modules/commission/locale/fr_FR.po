@@ -3,36 +3,8 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:commission.commission_rule:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:commission.commission_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
-
-msgctxt "error:commission.compensated_option:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:commission.component-coverage:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:commission.price_line-com-relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:distribution.dist_network-broker:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:distribution.dist_network-plan:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:party.broker:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:account.move,com_amount:"
 msgid "Com amount"
@@ -62,30 +34,6 @@ msgctxt "field:billing.price_line,estimated_wo_com:"
 msgid "Estimated w/o coms"
 msgstr "Montant estimé hors Commissions"
 
-msgctxt "field:commission.commission_amount_to_display,amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:commission.commission_amount_to_display,comp_option:"
-msgid "Comp Option"
-msgstr "Option Commissionnée"
-
-msgctxt "field:commission.commission_amount_to_display,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:commission.commission_amount_to_display,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:commission.commission_amount_to_display,rate:"
-msgid "Rate"
-msgstr "Taux"
-
-msgctxt "field:commission.commission_amount_to_display,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
 msgctxt "field:commission.commission_rule,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
@@ -105,10 +53,6 @@ msgstr "Date de Fin"
 msgctxt "field:commission.commission_rule,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:commission.commission_rule,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:commission.commission_rule,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -162,10 +106,6 @@ msgctxt "field:commission.compensated_option,com_amount:"
 msgid "Com Amount"
 msgstr "Montant de la commission"
 
-msgctxt "field:commission.compensated_option,com_lines:"
-msgid "Commissions"
-msgstr "Commissions"
-
 msgctxt "field:commission.compensated_option,com_option:"
 msgid "Commission Option"
 msgstr "Option de Commissionnement"
@@ -189,10 +129,6 @@ msgstr "Date de Fin"
 msgctxt "field:commission.compensated_option,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:commission.compensated_option,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:commission.compensated_option,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -246,10 +182,6 @@ msgctxt "field:commission.component-coverage,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:commission.component-coverage,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:commission.component-coverage,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -282,17 +214,9 @@ msgctxt "field:commission.price_line-com-relation,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:commission.price_line-com-relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:commission.price_line-com-relation,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
-
-msgctxt "field:commission.price_line-com-relation,offered:"
-msgid "Commission Coverage"
-msgstr "Garantie de commissionement"
 
 msgctxt "field:commission.price_line-com-relation,price_line:"
 msgid "Price Line"
@@ -362,10 +286,6 @@ msgctxt "field:distribution.dist_network-broker,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:distribution.dist_network-broker,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:distribution.dist_network-broker,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -401,10 +321,6 @@ msgstr "Réseau de Distribution"
 msgctxt "field:distribution.dist_network-plan,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:distribution.dist_network-plan,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:distribution.dist_network-plan,rec_name:"
 msgid "Name"
@@ -450,10 +366,6 @@ msgctxt "field:party.broker,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:party.broker,is_used:"
-msgid ""
-msgstr " "
-
 msgctxt "field:party.broker,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -479,20 +391,16 @@ msgid ""
 msgstr " "
 
 msgctxt "field:party.party,broker_role:"
-msgid ""
-msgstr " "
+msgid "Broker"
+msgstr "Courtier"
 
 msgctxt "field:party.party,dist_networks:"
 msgid "Distribution Networks"
 msgstr "Réseaux de Distribution"
 
 msgctxt "field:party.party,is_broker:"
-msgid ""
-msgstr " "
-
-msgctxt "model:commission.commission_amount_to_display,name:"
-msgid "Commission Amount To Display"
-msgstr ""
+msgid "Broker"
+msgstr "Courtier"
 
 msgctxt "model:commission.commission_rule,name:"
 msgid "Commission Rule"

@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:rule_engine.context-rule_engine.tree_element:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:rule_engine.context:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:rule_engine.context:"
 msgid "You have defined twice the same name %s in %s and %s"
 msgstr ""
@@ -22,37 +14,9 @@ msgctxt "error:rule_engine.error:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
-msgctxt "error:rule_engine.error:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:rule_engine.execution_log:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:rule_engine.parameter:"
 msgid "Expected %s as a parameter for rule %s"
 msgstr "L'argument %s est nécessaire pour la règle %s"
-
-msgctxt "error:rule_engine.parameter:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:rule_engine.rule_engine-tag:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:rule_engine.tag:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:rule_engine.test_case.value:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:rule_engine.test_case:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:rule_engine.tree_element:"
 msgid "Function arguments must only use ascii"
@@ -61,19 +25,6 @@ msgstr "Paramètres de la Fonction ne doit pas utiliser de caracères spéciaux"
 msgctxt "error:rule_engine.tree_element:"
 msgid "Technical name must only use ascii"
 msgstr ""
-
-msgctxt "error:rule_engine.tree_element:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:rule_engine:"
-msgid ""
-"An error occured in rule %s.For more information, activate debug mode and "
-"see the logs"
-msgstr ""
-"Une erreur est survenue lors de l'appel à la règle %s. Pour plus "
-"d'informations, veuillez activer le mode debug sur cette règle et consulter "
-"les logs."
 
 msgctxt "error:rule_engine:"
 msgid ""
@@ -85,10 +36,6 @@ msgstr ""
 "Une erreur s'est produite lors de l'exécution de la règle %s.\\nPour "
 "davantage d'informations, veuillez activer le mode debug de la règle et "
 "consulter les logs.\\n\\nInformations sur l'erreur :\\n%s"
-
-msgctxt "error:rule_engine:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:rule_engine:"
 msgid "Your code has errors!"
@@ -133,10 +80,6 @@ msgstr "Type"
 msgctxt "field:rule_engine,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:rule_engine,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:rule_engine,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -206,10 +149,6 @@ msgctxt "field:rule_engine.context,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.context,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:rule_engine.context,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -246,10 +185,6 @@ msgctxt "field:rule_engine.context-rule_engine.tree_element,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.context-rule_engine.tree_element,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:rule_engine.context-rule_engine.tree_element,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -285,10 +220,6 @@ msgstr "Créé par"
 msgctxt "field:rule_engine.error,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:rule_engine.error,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:rule_engine.error,kind:"
 msgid "Kind"
@@ -337,10 +268,6 @@ msgstr "ID"
 msgctxt "field:rule_engine.execution_log,info:"
 msgid "Info"
 msgstr "Info"
-
-msgctxt "field:rule_engine.execution_log,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:rule_engine.execution_log,low_level_debug:"
 msgid "Execution Trace"
@@ -394,10 +321,6 @@ msgctxt "field:rule_engine.parameter,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.parameter,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:rule_engine.parameter,kind:"
 msgid "Kind"
 msgstr "Type"
@@ -445,10 +368,6 @@ msgstr "Créé par"
 msgctxt "field:rule_engine.rule_engine-tag,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:rule_engine.rule_engine-tag,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:rule_engine.rule_engine-tag,rec_name:"
 msgid "Name"
@@ -502,10 +421,6 @@ msgctxt "field:rule_engine.tag,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.tag,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:rule_engine.tag,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
@@ -557,10 +472,6 @@ msgstr "Résultat attendu"
 msgctxt "field:rule_engine.test_case,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:rule_engine.test_case,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:rule_engine.test_case,low_debug:"
 msgid "Low Level Debug Info"
@@ -621,10 +532,6 @@ msgstr "Créé par"
 msgctxt "field:rule_engine.test_case.value,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:rule_engine.test_case.value,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:rule_engine.test_case.value,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -698,10 +605,6 @@ msgctxt "field:rule_engine.tree_element,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.tree_element,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:rule_engine.tree_element,language:"
 msgid "Language"
 msgstr "Langues"
@@ -733,10 +636,6 @@ msgstr "Nom"
 msgctxt "field:rule_engine.tree_element,rule:"
 msgid "Rule"
 msgstr "Règle"
-
-msgctxt "field:rule_engine.tree_element,the_table:"
-msgid "For Table"
-msgstr "Table"
 
 msgctxt "field:rule_engine.tree_element,translated_technical_name:"
 msgid "Translated technical name"
@@ -859,10 +758,6 @@ msgid "Rule Engine Tree Element"
 msgstr "Elément de l'Arbre"
 
 msgctxt "selection:rule_engine,extra_data_kind:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:rule_engine,extra_data_kind:"
 msgid "Rule"
 msgstr "Règle"
 
@@ -913,14 +808,6 @@ msgstr "Dossier"
 msgctxt "selection:rule_engine.tree_element,type:"
 msgid "Function"
 msgstr "Fonction"
-
-msgctxt "selection:rule_engine.tree_element,type:"
-msgid "Rule"
-msgstr "Règle"
-
-msgctxt "selection:rule_engine.tree_element,type:"
-msgid "Table"
-msgstr "Table"
 
 msgctxt "view:rule_engine.context:"
 msgid "Context"

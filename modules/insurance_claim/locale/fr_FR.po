@@ -2,37 +2,9 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:ins_claim.claim.history:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_claim.claim:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_claim.indemnification:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_claim.indemnification_detail:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_claim.indemnification_selection:"
-msgid "Please unselect all indemnifications first"
-msgstr "Veuillez traiter les indemnisations refusées ou validées"
-
 msgctxt "error:ins_claim.loss:"
 msgid "End Date is smaller than start date"
 msgstr "La date de fin est antérieure à la date de début"
-
-msgctxt "error:ins_claim.loss:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.expense:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:ins_claim.claim,claim_history:"
 msgid "History"
@@ -69,10 +41,6 @@ msgstr "Date de Fin"
 msgctxt "field:ins_claim.claim,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_claim.claim,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_claim.claim,losses:"
 msgid "Losses"
@@ -145,10 +113,6 @@ msgstr "Sinistre"
 msgctxt "field:ins_claim.claim.history,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_claim.claim.history,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_claim.claim.history,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -229,10 +193,6 @@ msgstr "Date de Fin"
 msgctxt "field:ins_claim.indemnification,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_claim.indemnification,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_claim.indemnification,kind:"
 msgid "Kind"
@@ -317,10 +277,6 @@ msgstr "ID"
 msgctxt "field:ins_claim.indemnification_detail,indemnification:"
 msgid "Indemnification"
 msgstr "Indemnisation"
-
-msgctxt "field:ins_claim.indemnification_detail,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_claim.indemnification_detail,kind:"
 msgid "Kind"
@@ -470,10 +426,6 @@ msgctxt "field:ins_claim.loss,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_claim.loss,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_claim.loss,loss_desc:"
 msgid "Loss Descriptor"
 msgstr "Description du Préjudice"
@@ -549,10 +501,6 @@ msgstr "Créé par"
 msgctxt "field:ins_contract.expense,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_contract.expense,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.expense,rec_name:"
 msgid "Name"

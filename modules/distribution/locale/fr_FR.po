@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:distribution.dist_network:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "field:distribution.dist_network,childs:"
 msgid "Sub Levels"
 msgstr "Niveaux Inférieurs"
@@ -21,10 +17,6 @@ msgstr "Créé par"
 msgctxt "field:distribution.dist_network,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:distribution.dist_network,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:distribution.dist_network,left:"
 msgid "Left"

@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:country.zipcode:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "field:country.zipcode,city:"
 msgid ""
 msgstr " "
@@ -25,10 +21,6 @@ msgstr " "
 msgctxt "field:country.zipcode,id:"
 msgid ""
 msgstr " "
-
-msgctxt "field:country.zipcode,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:country.zipcode,must_expand_tree:"
 msgid "Must Expand Tree"

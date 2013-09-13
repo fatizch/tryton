@@ -6,14 +6,6 @@ msgctxt "error:table.2d:"
 msgid "The table is not 2D"
 msgstr "La table n'est pas 2D"
 
-msgctxt "error:table.2d:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:table.dimension_displayer:"
-msgid "Impossible to convert data %s with format %s"
-msgstr ""
-
 msgctxt "error:table.manage_dimension_1:"
 msgid "The requested change might delete data."
 msgstr ""
@@ -30,21 +22,9 @@ msgctxt "error:table.manage_dimension_4:"
 msgid "The requested change might delete data."
 msgstr ""
 
-msgctxt "error:table.table_cell:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:table.table_def:"
 msgid "The name of \"Table Definition\" must be unique"
 msgstr "Le nom de la table doit être unique"
-
-msgctxt "error:table.table_def:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:table.table_dimension:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:table.2d,create_date:"
 msgid "Create Date"
@@ -57,10 +37,6 @@ msgstr "Créé par"
 msgctxt "field:table.2d,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:table.2d,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:table.2d,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -190,10 +166,6 @@ msgctxt "field:table.table_cell,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:table.table_cell,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:table.table_cell,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -298,10 +270,6 @@ msgctxt "field:table.table_def,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:table.table_def,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:table.table_def,kind:"
 msgid "Kind"
 msgstr "Type"
@@ -361,10 +329,6 @@ msgstr "Date de Fin"
 msgctxt "field:table.table_dimension,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:table.table_dimension,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:table.table_dimension,must_expand_tree:"
 msgid "Must Expand Tree"

@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:health.insurance_fund:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:health.regime:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "field:health.insurance_fund,code:"
 msgid "Code"
 msgstr "Code"
@@ -29,10 +21,6 @@ msgstr "Département"
 msgctxt "field:health.insurance_fund,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:health.insurance_fund,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:health.insurance_fund,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -85,10 +73,6 @@ msgstr "Créé par"
 msgctxt "field:health.regime,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:health.regime,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:health.regime,must_expand_tree:"
 msgid "Must Expand Tree"

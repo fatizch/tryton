@@ -2,170 +2,42 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:ins_product.attachment_setter:"
-msgid "Duplicate name on attachments : %s"
-msgstr "Doublon de Nom sur les pièces jointes : %s"
-
-msgctxt "error:ins_product.benefit-complementary_data_def:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.benefit-loss_desc:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:ins_product.benefit:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
-msgctxt "error:ins_product.benefit:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.benefit_rule:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:ins_product.benefit_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
-msgctxt "error:ins_product.business_rule_root:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
-
-msgctxt "error:ins_product.clause:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.clause_relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.clause_rule:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:ins_product.clause_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
-
-msgctxt "error:ins_product.clause_version:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_product.coverage_amount_rule:"
 msgid "Amounts need to be floats !"
 msgstr "Les montants doivent être des numériques !"
 
 msgctxt "error:ins_product.coverage_amount_rule:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.coverage_amount_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
-
-msgctxt "error:ins_product.deductible_duration:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.deductible_rule:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_product.deductible_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
-msgctxt "error:ins_product.document-rule-relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.document:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.document_desc:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.document_request:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.document_request_batch:"
-msgid "No Batch Path Specified"
-msgstr ""
-
-msgctxt "error:ins_product.document_rule:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:ins_product.document_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
-msgctxt "error:ins_product.eligibility_relation_kind:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.eligibility_rule:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:ins_product.eligibility_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
-
-msgctxt "error:ins_product.event_desc-loss_desc:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.event_desc:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.expense_kind:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.item_desc-complementary_data_def:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.item_desc-sub_item_desc:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.item_desc:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.letter_model:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_product.letter_version:"
 msgid "The  names of attachments must be unique by resource!"
 msgstr ""
 "Le nom des pièces jointes doivent être unique pour une même ressource !"
-
-msgctxt "error:ins_product.loss-document-relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.loss_desc-complementary_data_def:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.loss_desc:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.pricing_component:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_product.pricing_rule:"
 msgid "%s : Rule combination unavailable with fee (%s) version (%s)"
@@ -176,48 +48,16 @@ msgid "%s : Rule combination unavailable with tax (%s) version (%s)"
 msgstr ""
 
 msgctxt "error:ins_product.pricing_rule:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.pricing_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
-
-msgctxt "error:ins_product.process_product_relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.product_validation_batch:"
-msgid "No Batch Path Specified"
-msgstr ""
 
 msgctxt "error:ins_product.receive_document_wizard:"
 msgid "No document request found for this object"
 msgstr "Aucune demande de document trouvé pour cet objet"
 
 msgctxt "error:ins_product.reserve_rule:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.reserve_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
-
-msgctxt "error:ins_product.rule_engine_complementary_data_relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.simple_pricing_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
-
-msgctxt "error:ins_product.sub_benefit_rule:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_product.term_renewal_rule:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ins_product.term_renewal_rule:"
 msgid "You can not have 2 business rules that overlaps!"
@@ -227,45 +67,9 @@ msgctxt "error:offered.complementary_data_def:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
-msgctxt "error:offered.complementary_data_def:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:offered.complementary_data_recursive_relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:offered.coverage-benefit:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:offered.coverage-complementary_data_def:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:offered.coverage:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
-
-msgctxt "error:offered.coverage:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:offered.package-coverage:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:offered.product-complementary_data_def:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:offered.product-item_desc:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:offered.product-options-coverage:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:offered.product:"
 msgid "No renewal rule configured"
@@ -274,10 +78,6 @@ msgstr "Aucune règle de renouvellement configurée sur le produit"
 msgctxt "error:offered.product:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
-
-msgctxt "error:offered.product:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:coop_account.fee_version,apply_at_pricing_time:"
 msgid "Apply when Pricing"
@@ -383,10 +183,6 @@ msgctxt "field:ins_product.benefit,indemnification_kind:"
 msgid "Indemnification Kind"
 msgstr "Type d'Indemnisation"
 
-msgctxt "field:ins_product.benefit,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.benefit,loss_descs:"
 msgid "Loss Descriptions"
 msgstr "Types de Préjudice Couverts"
@@ -464,10 +260,6 @@ msgctxt "field:ins_product.benefit-complementary_data_def,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.benefit-complementary_data_def,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.benefit-complementary_data_def,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -495,10 +287,6 @@ msgstr "Créé par"
 msgctxt "field:ins_product.benefit-loss_desc,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_product.benefit-loss_desc,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.benefit-loss_desc,loss_desc:"
 msgid "Loss Desc"
@@ -563,10 +351,6 @@ msgstr "Date de l'Indice de Référence"
 msgctxt "field:ins_product.benefit_rule,index_initial_value:"
 msgid "Initial Value"
 msgstr "Valeur Initiale"
-
-msgctxt "field:ins_product.benefit_rule,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.benefit_rule,max_duration_per_indemnification:"
 msgid "Max duration per Indemnification"
@@ -713,10 +497,6 @@ msgctxt "field:ins_product.clause,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.clause,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.clause,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -765,10 +545,6 @@ msgctxt "field:ins_product.clause_relation,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.clause_relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.clause_relation,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -804,10 +580,6 @@ msgstr "Date de Fin"
 msgctxt "field:ins_product.clause_rule,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_product.clause_rule,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.clause_rule,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -881,10 +653,6 @@ msgctxt "field:ins_product.clause_version,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.clause_version,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.clause_version,main_elem:"
 msgid "Descriptor"
 msgstr "Descripteur"
@@ -944,10 +712,6 @@ msgstr "Date de Fin"
 msgctxt "field:ins_product.coverage_amount_rule,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_product.coverage_amount_rule,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.coverage_amount_rule,kind:"
 msgid "Kind"
@@ -1021,10 +785,6 @@ msgctxt "field:ins_product.deductible_duration,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.deductible_duration,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.deductible_duration,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -1076,10 +836,6 @@ msgstr "Date de Fin"
 msgctxt "field:ins_product.deductible_rule,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_product.deductible_rule,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.deductible_rule,kind:"
 msgid "Kind"
@@ -1161,10 +917,6 @@ msgctxt "field:ins_product.document,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.document,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.document,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -1217,10 +969,6 @@ msgctxt "field:ins_product.document-rule-relation,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.document-rule-relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.document-rule-relation,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -1256,10 +1004,6 @@ msgstr "Date de Fin"
 msgctxt "field:ins_product.document_desc,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_product.document_desc,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.document_desc,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -1304,10 +1048,6 @@ msgstr "ID"
 msgctxt "field:ins_product.document_request,is_complete:"
 msgid "Is Complete"
 msgstr "Tout reçu"
-
-msgctxt "field:ins_product.document_request,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.document_request,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -1377,10 +1117,6 @@ msgctxt "field:ins_product.document_rule,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.document_rule,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.document_rule,kind:"
 msgid "Kind"
 msgstr "Type"
@@ -1445,10 +1181,6 @@ msgctxt "field:ins_product.eligibility_relation_kind,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.eligibility_relation_kind,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.eligibility_relation_kind,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -1484,10 +1216,6 @@ msgstr "Date de Fin"
 msgctxt "field:ins_product.eligibility_rule,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_product.eligibility_rule,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.eligibility_rule,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -1573,10 +1301,6 @@ msgctxt "field:ins_product.event_desc,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.event_desc,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.event_desc,loss_descs:"
 msgid "Loss Descriptions"
 msgstr "Types de Préjudice Couverts"
@@ -1617,10 +1341,6 @@ msgctxt "field:ins_product.event_desc-loss_desc,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.event_desc-loss_desc,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.event_desc-loss_desc,loss_desc:"
 msgid "Loss Desc"
 msgstr "Descripteur de Préjudice"
@@ -1652,10 +1372,6 @@ msgstr "Créé par"
 msgctxt "field:ins_product.expense_kind,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_product.expense_kind,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.expense_kind,kind:"
 msgid "Kind"
@@ -1705,10 +1421,6 @@ msgctxt "field:ins_product.item_desc,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.item_desc,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.item_desc,kind:"
 msgid ""
 msgstr " "
@@ -1720,10 +1432,6 @@ msgstr "Etendre Arbre"
 msgctxt "field:ins_product.item_desc,name:"
 msgid "Name"
 msgstr "Nom"
-
-msgctxt "field:ins_product.item_desc,parent:"
-msgid "Parent"
-msgstr "Parent"
 
 msgctxt "field:ins_product.item_desc,rec_name:"
 msgid "Name"
@@ -1758,10 +1466,6 @@ msgctxt "field:ins_product.item_desc-complementary_data_def,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.item_desc-complementary_data_def,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.item_desc-complementary_data_def,item_desc:"
 msgid "Item Desc"
 msgstr "Desc Risque"
@@ -1789,10 +1493,6 @@ msgstr "Créé par"
 msgctxt "field:ins_product.item_desc-sub_item_desc,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_product.item_desc-sub_item_desc,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.item_desc-sub_item_desc,item_desc:"
 msgid "Item Desc"
@@ -1829,10 +1529,6 @@ msgstr "Créé par"
 msgctxt "field:ins_product.letter_model,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_product.letter_model,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.letter_model,kind:"
 msgid "name"
@@ -2002,10 +1698,6 @@ msgctxt "field:ins_product.loss-document-relation,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.loss-document-relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.loss-document-relation,loss:"
 msgid "Loss"
 msgstr "Préjudice"
@@ -2049,10 +1741,6 @@ msgstr "Descripteurs d'Evénement"
 msgctxt "field:ins_product.loss_desc,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_product.loss_desc,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.loss_desc,item_kind:"
 msgid "Kind"
@@ -2099,10 +1787,6 @@ msgctxt "field:ins_product.loss_desc-complementary_data_def,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.loss_desc-complementary_data_def,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.loss_desc-complementary_data_def,loss_desc:"
 msgid "Loss Desc"
 msgstr "Descripteur de Préjudice"
@@ -2146,10 +1830,6 @@ msgstr "Montant"
 msgctxt "field:ins_product.pricing_component,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_product.pricing_component,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.pricing_component,kind:"
 msgid "Line kind"
@@ -2231,10 +1911,6 @@ msgctxt "field:ins_product.pricing_rule,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.pricing_rule,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.pricing_rule,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -2302,10 +1978,6 @@ msgstr "Créé par"
 msgctxt "field:ins_product.process_product_relation,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_product.process_product_relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.process_product_relation,process:"
 msgid "Process"
@@ -2375,10 +2047,6 @@ msgctxt "field:ins_product.reserve_rule,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.reserve_rule,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.reserve_rule,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -2420,46 +2088,6 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:ins_product.reserve_rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt ""
-"field:ins_product.rule_engine_complementary_data_relation,complementary_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt ""
-"field:ins_product.rule_engine_complementary_data_relation,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt ""
-"field:ins_product.rule_engine_complementary_data_relation,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_product.rule_engine_complementary_data_relation,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_product.rule_engine_complementary_data_relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:ins_product.rule_engine_complementary_data_relation,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_product.rule_engine_complementary_data_relation,rule:"
-msgid "Rule"
-msgstr "Règle"
-
-msgctxt ""
-"field:ins_product.rule_engine_complementary_data_relation,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_product.rule_engine_complementary_data_relation,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -2591,10 +2219,6 @@ msgctxt "field:ins_product.sub_benefit_rule,indemnification_calc_unit:"
 msgid "Calculation Unit"
 msgstr "Unité de Calcul"
 
-msgctxt "field:ins_product.sub_benefit_rule,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_product.sub_benefit_rule,limited_duration:"
 msgid "Limited Duration"
 msgstr "Durée Limitée"
@@ -2654,10 +2278,6 @@ msgstr "Fréquence"
 msgctxt "field:ins_product.term_renewal_rule,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_product.term_renewal_rule,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_product.term_renewal_rule,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -2731,10 +2351,6 @@ msgctxt "field:offered.complementary_data_def,default_value_boolean:"
 msgid "Default Value"
 msgstr "Valeur par Défaut"
 
-msgctxt "field:offered.complementary_data_def,default_value_char:"
-msgid "Default Value"
-msgstr "Valeur par Défaut"
-
 msgctxt "field:offered.complementary_data_def,default_value_selection:"
 msgid "Default Value"
 msgstr "Valeur par Défaut"
@@ -2750,14 +2366,6 @@ msgstr "Date de Fin"
 msgctxt "field:offered.complementary_data_def,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:offered.complementary_data_def,is_shared:"
-msgid "Shared"
-msgstr "Partagé"
-
-msgctxt "field:offered.complementary_data_def,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:offered.complementary_data_def,kind:"
 msgid "Kind"
@@ -2822,10 +2430,6 @@ msgstr "Créé par"
 msgctxt "field:offered.complementary_data_recursive_relation,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:offered.complementary_data_recursive_relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:offered.complementary_data_recursive_relation,master:"
 msgid "Master"
@@ -2927,10 +2531,6 @@ msgctxt "field:offered.coverage,is_package:"
 msgid "Package"
 msgstr "Formule"
 
-msgctxt "field:offered.coverage,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:offered.coverage,item_desc:"
 msgid "Item Descriptor"
 msgstr "Description du Risque"
@@ -3003,10 +2603,6 @@ msgctxt "field:offered.coverage-benefit,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.coverage-benefit,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:offered.coverage-benefit,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -3039,10 +2635,6 @@ msgstr "Créé par"
 msgctxt "field:offered.coverage-complementary_data_def,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:offered.coverage-complementary_data_def,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:offered.coverage-complementary_data_def,rec_name:"
 msgid "Name"
@@ -3140,10 +2732,6 @@ msgctxt "field:offered.package-coverage,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.package-coverage,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:offered.package-coverage,package:"
 msgid "Package"
 msgstr "Formule"
@@ -3220,10 +2808,6 @@ msgctxt "field:offered.product,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.product,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:offered.product,item_descriptors:"
 msgid "Item Descriptors"
 msgstr "Descriptions des Risques"
@@ -3292,10 +2876,6 @@ msgctxt "field:offered.product-complementary_data_def,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.product-complementary_data_def,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:offered.product-complementary_data_def,product:"
 msgid "Product"
 msgstr "Produit"
@@ -3323,10 +2903,6 @@ msgstr "Créé par"
 msgctxt "field:offered.product-item_desc,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:offered.product-item_desc,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:offered.product-item_desc,item_desc:"
 msgid "Item Descriptor"
@@ -3364,10 +2940,6 @@ msgctxt "field:offered.product-options-coverage,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.product-options-coverage,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:offered.product-options-coverage,product:"
 msgid "Product"
 msgstr "Produit"
@@ -3387,10 +2959,6 @@ msgstr "Mis à jour par"
 msgctxt "field:process.process_desc,for_products:"
 msgid "Products"
 msgstr "Produits"
-
-msgctxt "field:rule_engine,complementary_parameters:"
-msgid "Complementary Parameters"
-msgstr "Paramètres Complémentaires"
 
 msgctxt "field:rule_engine,rule_compl_datas:"
 msgid "Rule Parameter"
@@ -3600,10 +3168,6 @@ msgstr "Rechercher une Demande"
 msgctxt "model:ins_product.reserve_rule,name:"
 msgid "Reserve Rule"
 msgstr "Provisionnement"
-
-msgctxt "model:ins_product.rule_engine_complementary_data_relation,name:"
-msgid "Rule engine to complementary data relation"
-msgstr "Relation Moteur de Règle Données Complémentaires"
 
 msgctxt "model:ins_product.rule_sets.contract,name:"
 msgid "Context functions for contract related data"
@@ -4697,10 +4261,6 @@ msgid "Rule Parameter"
 msgstr "Paramètre de Règle"
 
 msgctxt "selection:rule_engine.parameter,kind:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "selection:rule_engine.parameter,kind:"
 msgid "External Complementary Data"
 msgstr "Donnée Complémentaire Externe"
 
@@ -4998,11 +4558,6 @@ msgctxt ""
 "wizard_button:ins_product.letter_creation_wizard,select_model,generate:"
 msgid "Generate"
 msgstr "Générer"
-
-msgctxt ""
-"wizard_button:ins_product.letter_creation_wizard,select_model,post_generation:"
-msgid "Complete"
-msgstr "Terminer"
 
 msgctxt ""
 "wizard_button:ins_product.receive_document_wizard,attachment_setter,end:"

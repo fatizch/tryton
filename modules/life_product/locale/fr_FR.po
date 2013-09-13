@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:tranche.tranche:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:tranche.tranche_version:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "field:ins_product.eligibility_rule,max_age:"
 msgid "Maximum Age"
 msgstr "Age Maximum"
@@ -66,10 +58,6 @@ msgctxt "field:tranche.tranche,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:tranche.tranche,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:tranche.tranche,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -117,10 +105,6 @@ msgstr "Seuil"
 msgctxt "field:tranche.tranche_version,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:tranche.tranche_version,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:tranche.tranche_version,main_elem:"
 msgid "Descriptor"

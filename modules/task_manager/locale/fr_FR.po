@@ -2,21 +2,9 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:task_manager.priority:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:task_manager.task_dispatcher:"
 msgid "No task has been selected."
 msgstr "Pas de Tâche Sélectionnée"
-
-msgctxt "error:task_manager.team:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:task_manager.team_group_relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:coop_process.process_log,is_current_user:"
 msgid "Is current user"
@@ -49,10 +37,6 @@ msgstr "Créé par"
 msgctxt "field:task_manager.priority,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:task_manager.priority,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:task_manager.priority,kind:"
 msgid "Kind"
@@ -190,10 +174,6 @@ msgctxt "field:task_manager.team,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:task_manager.team,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:task_manager.team,members:"
 msgid "Members"
 msgstr "Membres"
@@ -237,10 +217,6 @@ msgstr "Groupe"
 msgctxt "field:task_manager.team_group_relation,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:task_manager.team_group_relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:task_manager.team_group_relation,rec_name:"
 msgid "Name"

@@ -2,18 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:party.broker:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:party.customer:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:party.insurer:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "field:party.broker,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -25,10 +13,6 @@ msgstr "Créé par"
 msgctxt "field:party.broker,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:party.broker,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:party.broker,party:"
 msgid "Party"
@@ -61,10 +45,6 @@ msgstr "Créé par"
 msgctxt "field:party.customer,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:party.customer,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:party.customer,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -102,10 +82,6 @@ msgctxt "field:party.insurer,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.insurer,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:party.insurer,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -130,10 +106,6 @@ msgctxt "field:party.insurer,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:party.party,broker_role:"
-msgid "Broker"
-msgstr "Courtier"
-
 msgctxt "field:party.party,complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
@@ -145,10 +117,6 @@ msgstr "Client"
 msgctxt "field:party.party,insurer_role:"
 msgid "Insurer"
 msgstr "Assureur"
-
-msgctxt "field:party.party,is_broker:"
-msgid "Broker"
-msgstr "Courtier"
 
 msgctxt "field:party.party,is_customer:"
 msgid "Customer"

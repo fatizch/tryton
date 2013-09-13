@@ -2,22 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.address:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:contract.contract:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:contract.status_history:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:contract.subscribed_option:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "field:contract.address,address:"
 msgid ""
 msgstr " "
@@ -39,10 +23,6 @@ msgid ""
 msgstr " "
 
 msgctxt "field:contract.address,id:"
-msgid ""
-msgstr " "
-
-msgctxt "field:contract.address,is_used:"
 msgid ""
 msgstr " "
 
@@ -126,10 +106,6 @@ msgctxt "field:contract.contract,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.contract,is_used:"
-msgid ""
-msgstr " "
-
 msgctxt "field:contract.contract,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -170,10 +146,6 @@ msgctxt "field:contract.contract,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-msgctxt "field:contract.contract,subscriber_kind:"
-msgid ""
-msgstr ""
-
 msgctxt "field:contract.contract,summary:"
 msgid ""
 msgstr " "
@@ -213,10 +185,6 @@ msgstr "Date de Fin"
 msgctxt "field:contract.status_history,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:contract.status_history,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:contract.status_history,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -287,10 +255,6 @@ msgid ""
 msgstr " "
 
 msgctxt "field:contract.subscribed_option,id:"
-msgid ""
-msgstr " "
-
-msgctxt "field:contract.subscribed_option,is_used:"
 msgid ""
 msgstr " "
 

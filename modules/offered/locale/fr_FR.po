@@ -2,53 +2,17 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:offered.compl_data_def-tag:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:offered.complementary_data_def:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
-
-msgctxt "error:offered.complementary_data_def:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:offered.complementary_data_recursive_relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:offered.coverage-complementary_data_def:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:offered.coverage:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
-msgctxt "error:offered.coverage:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:offered.package-coverage:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:offered.product-complementary_data_def:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:offered.product-options-coverage:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:offered.product:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
-
-msgctxt "error:offered.product:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:offered.compl_data_def-tag,compl_data_def:"
 msgid "Complementary Data Def"
@@ -65,10 +29,6 @@ msgstr "Créé par"
 msgctxt "field:offered.compl_data_def-tag,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:offered.compl_data_def-tag,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:offered.compl_data_def-tag,rec_name:"
 msgid "Name"
@@ -102,10 +62,6 @@ msgctxt "field:offered.complementary_data_def,default_value_boolean:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,default_value_char:"
-msgid ""
-msgstr " "
-
 msgctxt "field:offered.complementary_data_def,default_value_selection:"
 msgid ""
 msgstr " "
@@ -119,14 +75,6 @@ msgid ""
 msgstr " "
 
 msgctxt "field:offered.complementary_data_def,id:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered.complementary_data_def,is_shared:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered.complementary_data_def,is_used:"
 msgid ""
 msgstr " "
 
@@ -149,10 +97,6 @@ msgstr " "
 msgctxt "field:offered.complementary_data_def,rule:"
 msgid "Rule"
 msgstr "Règle"
-
-msgctxt "field:offered.complementary_data_def,rule_sub_datas:"
-msgid "Sub Data"
-msgstr "Sous Donnée"
 
 msgctxt "field:offered.complementary_data_def,selection:"
 msgid ""
@@ -215,10 +159,6 @@ msgid ""
 msgstr " "
 
 msgctxt "field:offered.complementary_data_recursive_relation,id:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered.complementary_data_recursive_relation,is_used:"
 msgid ""
 msgstr " "
 
@@ -295,10 +235,6 @@ msgctxt "field:offered.coverage,is_package:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,is_used:"
-msgid ""
-msgstr " "
-
 msgctxt "field:offered.coverage,kind:"
 msgid "Coverage Kind"
 msgstr "Type de Garantie"
@@ -365,10 +301,6 @@ msgid ""
 msgstr " "
 
 msgctxt "field:offered.coverage-complementary_data_def,id:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered.coverage-complementary_data_def,is_used:"
 msgid ""
 msgstr " "
 
@@ -448,10 +380,6 @@ msgctxt "field:offered.package-coverage,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.package-coverage,is_used:"
-msgid ""
-msgstr " "
-
 msgctxt "field:offered.package-coverage,package:"
 msgid ""
 msgstr " "
@@ -516,10 +444,6 @@ msgctxt "field:offered.product,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product,is_used:"
-msgid ""
-msgstr " "
-
 msgctxt "field:offered.product,kind:"
 msgid "Product Kind"
 msgstr "Type de Produit"
@@ -580,10 +504,6 @@ msgctxt "field:offered.product-complementary_data_def,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-complementary_data_def,is_used:"
-msgid ""
-msgstr " "
-
 msgctxt "field:offered.product-complementary_data_def,product:"
 msgid ""
 msgstr " "
@@ -613,10 +533,6 @@ msgid ""
 msgstr " "
 
 msgctxt "field:offered.product-options-coverage,id:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered.product-options-coverage,is_used:"
 msgid ""
 msgstr " "
 
@@ -788,10 +704,6 @@ msgctxt "selection:offered.coverage,kind:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:offered.coverage,kind:"
-msgid "Default"
-msgstr "Défaut"
-
 msgctxt "selection:offered.coverage,subscription_behaviour:"
 msgid "Mandatory"
 msgstr "Obligatoire"
@@ -831,10 +743,6 @@ msgstr "Remplacer"
 msgctxt "selection:offered.product,kind:"
 msgid ""
 msgstr " "
-
-msgctxt "selection:offered.product,kind:"
-msgid "Default"
-msgstr "Défaut"
 
 msgctxt "selection:offered.product,subscriber_kind:"
 msgid "All"

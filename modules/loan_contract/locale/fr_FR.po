@@ -2,18 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:ins_contract.loan:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.loan_covered_data-loan_share:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.loan_share:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "field:contract.contract,doc_received:"
 msgid "All Document Received"
 msgstr "Documents Reçus"
@@ -94,10 +82,6 @@ msgctxt "field:ins_contract.loan,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_contract.loan,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_contract.loan,kind:"
 msgid "Kind"
 msgstr "Type"
@@ -154,10 +138,6 @@ msgctxt "field:ins_contract.loan_covered_data-loan_share,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_contract.loan_covered_data-loan_share,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_contract.loan_covered_data-loan_share,loan_share:"
 msgid "Loan Share"
 msgstr "Quotité"
@@ -189,10 +169,6 @@ msgstr "Date de Fin"
 msgctxt "field:ins_contract.loan_share,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_contract.loan_share,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.loan_share,loan:"
 msgid "Loan"

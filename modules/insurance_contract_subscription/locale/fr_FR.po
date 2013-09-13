@@ -50,10 +50,6 @@ msgctxt "error:contract.endorsement_process_finder:"
 msgid "Please pick a process from the selection"
 msgstr "Choisir un processus de la sélection"
 
-msgctxt "error:ins_contract.subscription_mgr:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:ins_contract.subscription_process_finder:"
 msgid "Please pick a process from the selection"
 msgstr "Choisir un processus de la sélection"
@@ -70,10 +66,6 @@ msgctxt "field:contract.contract,doc_received:"
 msgid "All Document Received"
 msgstr "Documents Reçus"
 
-msgctxt "field:contract.contract,is_workflow:"
-msgid "Is Workflow"
-msgstr "Processus"
-
 msgctxt "field:contract.contract,logs:"
 msgid "Task"
 msgstr "Tâche"
@@ -81,14 +73,6 @@ msgstr "Tâche"
 msgctxt "field:contract.contract,product_desc:"
 msgid "Description"
 msgstr "Description"
-
-msgctxt "field:contract.contract,subscriber_as_company:"
-msgid "Subscriber"
-msgstr "Souscripteur"
-
-msgctxt "field:contract.contract,subscriber_as_person:"
-msgid "Subscriber"
-msgstr "Souscripteur"
 
 msgctxt "field:contract.contract,subscriber_desc:"
 msgid "Summary"
@@ -142,14 +126,6 @@ msgctxt "field:ins_contract.covered_data,status_selection:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:ins_contract.covered_element,is_law_madelin:"
-msgid "Law Madelin"
-msgstr "Loi Madelin"
-
-msgctxt "field:ins_contract.covered_element,is_rsi:"
-msgid "Is RSI"
-msgstr "RSI"
-
 msgctxt "field:ins_contract.subscription_mgr,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -169,10 +145,6 @@ msgstr "ID"
 msgctxt "field:ins_contract.subscription_mgr,is_custom:"
 msgid "Custom"
 msgstr "Sur Mesure"
-
-msgctxt "field:ins_contract.subscription_mgr,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.subscription_mgr,rec_name:"
 msgid "Name"
@@ -270,14 +242,6 @@ msgstr "Démarrer l'Avenant"
 msgctxt "model:ir.ui.menu,name:menu_start_subscription"
 msgid "Start Subscription"
 msgstr "Démarrer la Souscription"
-
-msgctxt "selection:contract.contract,subscriber_kind:"
-msgid "Company"
-msgstr "Société"
-
-msgctxt "selection:contract.contract,subscriber_kind:"
-msgid "Person"
-msgstr "Personne Physique"
 
 msgctxt "selection:ins_contract.subscription_mgr,contract:"
 msgid "Contract"

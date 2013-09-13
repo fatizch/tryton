@@ -42,10 +42,6 @@ msgctxt "field:ins_claim.claim,is_pending_indemnification:"
 msgid "Pending Indemnification"
 msgstr "Indemnisation en attente"
 
-msgctxt "field:ins_claim.claim,is_workflow:"
-msgid "Is Workflow"
-msgstr "Processus"
-
 msgctxt "field:ins_claim.claim,logs:"
 msgid "Task"
 msgstr "Tâche"
@@ -89,10 +85,6 @@ msgstr "Prestation"
 msgctxt "field:ins_claim.loss,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
-
-msgctxt "field:ins_claim.loss,can_modify_benefit:"
-msgid "Can Modify Benefit?"
-msgstr "Prestation Modifiable?"
 
 msgctxt "model:ins_claim.declaration_process_parameters,name:"
 msgid "Declaration Process Parameters"

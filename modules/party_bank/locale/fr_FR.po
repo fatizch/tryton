@@ -6,29 +6,9 @@ msgctxt "error:party.bank:"
 msgid "Invalid BIC!"
 msgstr "BIC non valide!"
 
-msgctxt "error:party.bank:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:party.bank_account:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:party.bank_account_number:"
 msgid "Invalid %s number : %s"
 msgstr "Le compte %s avec le numéro %s est invalide"
-
-msgctxt "error:party.bank_account_number:"
-msgid "Invalid number!"
-msgstr "Numéro non valide!"
-
-msgctxt "error:party.bank_account_number:"
-msgid "Invalid number! %s"
-msgstr ""
-
-msgctxt "error:party.bank_account_number:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:party.bank,bank_code:"
 msgid "Bank Code"
@@ -53,10 +33,6 @@ msgstr "Créé par"
 msgctxt "field:party.bank,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:party.bank,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:party.bank,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -98,10 +74,6 @@ msgctxt "field:party.bank_account,bank:"
 msgid "Bank"
 msgstr "Banque"
 
-msgctxt "field:party.bank_account,code:"
-msgid "Main Account Number"
-msgstr "Numéro de Compte Principal"
-
 msgctxt "field:party.bank_account,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -121,10 +93,6 @@ msgstr "Date de Fin"
 msgctxt "field:party.bank_account,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:party.bank_account,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:party.bank_account,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -182,10 +150,6 @@ msgctxt "field:party.bank_account_number,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.bank_account_number,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:party.bank_account_number,key:"
 msgid "Key"
 msgstr "Clé"
@@ -237,10 +201,6 @@ msgstr "Compte Bancaire"
 msgctxt "model:party.bank_account_number,name:"
 msgid "Bank account Number"
 msgstr "Numéro de Compte"
-
-msgctxt "selection:party.bank_account_number,kind:"
-msgid "Credit Card"
-msgstr "Carte de Crédit"
 
 msgctxt "selection:party.bank_account_number,kind:"
 msgid "IBAN"

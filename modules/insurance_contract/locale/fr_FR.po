@@ -2,50 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.address:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:contract.contract.history:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:contract.contract:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:contract.subscribed_option:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.covered_data:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.covered_element-party_relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.covered_element:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.delivered_service:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.expense:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.management_role:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:ins_contract.subscribed_coverage_complement:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "field:contract.address,address:"
 msgid "Address"
 msgstr "Adresse"
@@ -69,10 +25,6 @@ msgstr "Date de Fin"
 msgctxt "field:contract.address,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:contract.address,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:contract.address,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -157,10 +109,6 @@ msgstr "Date de Fin"
 msgctxt "field:contract.contract,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:contract.contract,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:contract.contract,last_renewed:"
 msgid "Last Renewed"
@@ -254,10 +202,6 @@ msgctxt "field:contract.contract.history,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.contract.history,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:contract.contract.history,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -350,10 +294,6 @@ msgctxt "field:contract.subscribed_option,ins_complement:"
 msgid "Complement"
 msgstr "Complément"
 
-msgctxt "field:contract.subscribed_option,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:contract.subscribed_option,offered:"
 msgid "Coverage"
 msgstr "Garantie"
@@ -434,10 +374,6 @@ msgctxt "field:ins_contract.covered_data,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_contract.covered_data,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:ins_contract.covered_data,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -515,12 +451,8 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:ins_contract.covered_element,is_person:"
-msgid ""
+msgid "Is Person"
 msgstr ""
-
-msgctxt "field:ins_contract.covered_element,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.covered_element,item_desc:"
 msgid "Item Desc"
@@ -531,8 +463,8 @@ msgid "Item Kind"
 msgstr "Type de Bien"
 
 msgctxt "field:ins_contract.covered_element,main_contract:"
-msgid ""
-msgstr ""
+msgid "Contract"
+msgstr "Contrat"
 
 msgctxt "field:ins_contract.covered_element,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -590,10 +522,6 @@ msgctxt "field:ins_contract.covered_element-party_relation,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.covered_element-party_relation,is_used:"
-msgid ""
-msgstr " "
-
 msgctxt "field:ins_contract.covered_element-party_relation,party_relation:"
 msgid ""
 msgstr " "
@@ -633,10 +561,6 @@ msgstr "Erreur"
 msgctxt "field:ins_contract.delivered_service,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_contract.delivered_service,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.delivered_service,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -690,10 +614,6 @@ msgctxt "field:ins_contract.expense,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.expense,is_used:"
-msgid ""
-msgstr " "
-
 msgctxt "field:ins_contract.expense,kind:"
 msgid "Kind"
 msgstr "Type"
@@ -733,10 +653,6 @@ msgstr "Date de Fin"
 msgctxt "field:ins_contract.management_role,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_contract.management_role,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.management_role,kind:"
 msgid "Kind"
@@ -826,10 +742,6 @@ msgstr "Franchise"
 msgctxt "field:ins_contract.subscribed_coverage_complement,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_contract.subscribed_coverage_complement,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.subscribed_coverage_complement,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -1132,10 +1044,6 @@ msgstr "Paramètres du Renouvellement"
 msgctxt "wizard_button:ins_contract.renewal_wizard,renewal_result,end:"
 msgid "End"
 msgstr "Terminer"
-
-msgctxt "wizard_button:ins_contract.renewal_wizard,renewal_start,do_renewal:"
-msgid "Start"
-msgstr "Commencer"
 
 msgctxt "wizard_button:ins_contract.renewal_wizard,renewal_start,end:"
 msgid "Cancel"

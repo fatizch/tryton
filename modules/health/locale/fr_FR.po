@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:health.party_complement:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "field:contract.contract,is_health:"
 msgid ""
 msgstr " "
@@ -25,10 +21,6 @@ msgstr "Créé par"
 msgctxt "field:health.party_complement,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:health.party_complement,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:health.party_complement,must_expand_tree:"
 msgid "Must Expand Tree"

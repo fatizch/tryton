@@ -6,37 +6,9 @@ msgctxt "error:ProcessFinder:"
 msgid "Please pick a process from the selection"
 msgstr "Choisir un processus de la sélection"
 
-msgctxt "error:coop_process.process_log:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:coop_process.xml_view_desc:"
 msgid "The functional id must be unique !"
 msgstr "L'identifiant fonctionnel doit être unique"
-
-msgctxt "error:coop_process.xml_view_desc:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:process.code:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:process.process_desc:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:process.process_step_relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:process.status:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:process.step_desc:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:process.step_transition:"
 msgid "Both choices must be filled !"
@@ -45,10 +17,6 @@ msgstr "Saisir les deux choix"
 msgctxt "error:process.step_transition:"
 msgid "Pyson expression and description is mandatory"
 msgstr "Expression Pyson et la description sont obligatoires"
-
-msgctxt "error:process.step_transition:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:coop_process.process_log,create_date:"
 msgid "Create Date"
@@ -73,10 +41,6 @@ msgstr "Etat de Départ"
 msgctxt "field:coop_process.process_log,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:coop_process.process_log,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:coop_process.process_log,latest:"
 msgid "Latest"
@@ -170,10 +134,6 @@ msgctxt "field:coop_process.xml_view_desc,input_mode:"
 msgid "Input Mode"
 msgstr "Mode de Saisie"
 
-msgctxt "field:coop_process.xml_view_desc,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:coop_process.xml_view_desc,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -222,10 +182,6 @@ msgctxt "field:coop_process.xml_view_desc,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:process.code,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:process.process_desc,custom_transitions:"
 msgid "Custom Transitions"
 msgstr "Transitions Personnalisés"
@@ -233,10 +189,6 @@ msgstr "Transitions Personnalisés"
 msgctxt "field:process.process_desc,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
-
-msgctxt "field:process.process_desc,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:process.process_desc,kind:"
 msgid "Kind"
@@ -254,21 +206,9 @@ msgctxt "field:process.process_desc,with_prev_next:"
 msgid "With Previous / Next button"
 msgstr "Avec Préc/Suiv."
 
-msgctxt "field:process.process_step_relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:process.status,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:process.step_desc,custom_views:"
 msgid "Custom Views"
 msgstr "Vues Personnalisées"
-
-msgctxt "field:process.step_desc,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:process.step_desc,main_model:"
 msgid "Main Model"
@@ -285,10 +225,6 @@ msgstr " "
 msgctxt "field:process.step_transition,choice_if_true:"
 msgid ""
 msgstr " "
-
-msgctxt "field:process.step_transition,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:process.step_transition,pyson_choice:"
 msgid ""

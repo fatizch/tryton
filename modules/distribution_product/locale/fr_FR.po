@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:distribution.commercial_product:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:distribution.dist_network-com_product:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "field:contract.contract,com_product:"
 msgid "Commercial Product"
 msgstr "Produit Commercial"
@@ -49,10 +41,6 @@ msgstr "Date de Fin"
 msgctxt "field:distribution.commercial_product,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:distribution.commercial_product,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:distribution.commercial_product,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -109,10 +97,6 @@ msgstr "Réseau de Distribution"
 msgctxt "field:distribution.dist_network-com_product,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:distribution.dist_network-com_product,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:distribution.dist_network-com_product,rec_name:"
 msgid "Name"

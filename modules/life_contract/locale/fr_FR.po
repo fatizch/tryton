@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:ins_contract.covered_element-party_relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "field:ins_contract.covered_data,coverage_amount:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"
@@ -13,14 +9,6 @@ msgstr "Montant de Couverture"
 msgctxt "field:ins_contract.covered_data,with_coverage_amount:"
 msgid ""
 msgstr " "
-
-msgctxt "field:ins_contract.covered_element,covered_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_contract.covered_element,covered_relations:"
-msgid "Covered Relations"
-msgstr "Relations Couvertes"
 
 msgctxt "field:ins_contract.covered_element-party_relation,covered_element:"
 msgid "Covered Element"
@@ -37,10 +25,6 @@ msgstr "Créé par"
 msgctxt "field:ins_contract.covered_element-party_relation,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ins_contract.covered_element-party_relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:ins_contract.covered_element-party_relation,party_relation:"
 msgid "Party Relation"

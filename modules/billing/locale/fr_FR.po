@@ -2,58 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.invoice.payment_term:"
-msgid "Last line of payment term \"%s\" must be of type remainder."
-msgstr ""
-
 msgctxt "error:billing.billing_manager:"
 msgid ""
 "A payment bank account must be provided if the payment mode is Direct Debit"
 msgstr ""
 
-msgctxt "error:billing.billing_manager:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:billing.payment_method:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:billing.payment_rule-fee-relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:billing.payment_rule:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:billing.payment_rule_line:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
 msgctxt "error:billing.period:"
 msgid "Billing Period \"%(first)s\" and \"%(second)s\" overlap."
 msgstr ""
-
-msgctxt "error:billing.period:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:billing.price_line-fee-relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:billing.price_line-tax-relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:billing.price_line:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:billing.product-payment_method-relation:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "field:account.move,billing_period:"
 msgid "Billing Period"
@@ -66,14 +22,6 @@ msgstr "Contrat"
 msgctxt "field:account.move,coverage_details:"
 msgid "Details"
 msgstr "Détails"
-
-msgctxt "field:account.move,details:"
-msgid "Details"
-msgstr "Détails"
-
-msgctxt "field:account.move,due_amount:"
-msgid "Due amount"
-msgstr "Montant du"
 
 msgctxt "field:account.move,fee_amount:"
 msgid "Fee amount"
@@ -102,10 +50,6 @@ msgstr "Montant total"
 msgctxt "field:account.move,wo_fee_amount:"
 msgid "Amount w/o fees"
 msgstr "Montant hors Frais"
-
-msgctxt "field:account.move,wo_tax_amount:"
-msgid ""
-msgstr ""
 
 msgctxt "field:account.move.line,origin_name:"
 msgid "Origin Name"
@@ -147,10 +91,6 @@ msgctxt "field:billing.billing_manager,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.billing_manager,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:billing.billing_manager,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -175,10 +115,6 @@ msgctxt "field:billing.billing_manager,payment_mode:"
 msgid "Payment Mode"
 msgstr "Mode de Paiement"
 
-msgctxt "field:billing.billing_manager,payment_synced:"
-msgid "Payment Synced"
-msgstr "Paiement synchronisé"
-
 msgctxt "field:billing.billing_manager,policy_owner:"
 msgid "Party"
 msgstr "Acteur"
@@ -190,14 +126,6 @@ msgstr "Nom"
 msgctxt "field:billing.billing_manager,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
-
-msgctxt "field:billing.billing_manager,sync_date:"
-msgid "Sync Date"
-msgstr "Date de Synchro"
-
-msgctxt "field:billing.billing_manager,sync_day:"
-msgid "Payment Day"
-msgstr "Jour de prélèvement"
 
 msgctxt "field:billing.billing_manager,write_date:"
 msgid "Write Date"
@@ -259,10 +187,6 @@ msgctxt "field:billing.payment_method,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.payment_method,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:billing.payment_method,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -278,10 +202,6 @@ msgstr "Mode de Paiement"
 msgctxt "field:billing.payment_method,payment_rule:"
 msgid "Payment Rule"
 msgstr "Règle de paiement"
-
-msgctxt "field:billing.payment_method,payment_term:"
-msgid "Payment Term"
-msgstr "Conditions de paiement"
 
 msgctxt "field:billing.payment_method,rec_name:"
 msgid "Name"
@@ -323,10 +243,6 @@ msgctxt "field:billing.payment_rule,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.payment_rule,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:billing.payment_rule,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
@@ -355,16 +271,8 @@ msgctxt "field:billing.payment_rule,sync_date:"
 msgid "Sync Date"
 msgstr "Date de Synchro"
 
-msgctxt "field:billing.payment_rule,sync_days:"
-msgid "Sync Days"
-msgstr ""
-
 msgctxt "field:billing.payment_rule,with_sync_date:"
 msgid "With Sync Date"
-msgstr "Avec date de synchronisation"
-
-msgctxt "field:billing.payment_rule,with_sync_day:"
-msgid "With Sync Day"
 msgstr "Avec date de synchronisation"
 
 msgctxt "field:billing.payment_rule,write_date:"
@@ -390,10 +298,6 @@ msgstr "Frais"
 msgctxt "field:billing.payment_rule-fee-relation,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:billing.payment_rule-fee-relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:billing.payment_rule-fee-relation,payment_rule:"
 msgid "Payment Rule"
@@ -454,10 +358,6 @@ msgstr "ID"
 msgctxt "field:billing.payment_rule_line,is_remainder:"
 msgid "Is remainder"
 msgstr "Contient le reste"
-
-msgctxt "field:billing.payment_rule_line,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:billing.payment_rule_line,month:"
 msgid "Month"
@@ -530,10 +430,6 @@ msgstr "Date de Fin"
 msgctxt "field:billing.period,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:billing.period,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:billing.period,moves:"
 msgid "Moves"
@@ -619,10 +515,6 @@ msgctxt "field:billing.price_line,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.price_line,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:billing.price_line,master:"
 msgid "Master Line"
 msgstr ""
@@ -679,10 +571,6 @@ msgctxt "field:billing.price_line-fee-relation,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.price_line-fee-relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:billing.price_line-fee-relation,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -722,10 +610,6 @@ msgstr "Créé par"
 msgctxt "field:billing.price_line-tax-relation,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:billing.price_line-tax-relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
 
 msgctxt "field:billing.price_line-tax-relation,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -767,14 +651,6 @@ msgctxt "field:billing.product-payment_method-relation,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.product-payment_method-relation,is_default:"
-msgid "Default"
-msgstr "Défaut"
-
-msgctxt "field:billing.product-payment_method-relation,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
 msgctxt "field:billing.product-payment_method-relation,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -815,17 +691,9 @@ msgctxt "field:contract.contract,billing_periods:"
 msgid "Billing Periods"
 msgstr "Période de Facturation"
 
-msgctxt "field:contract.contract,display_all_lines:"
-msgid ""
-msgstr ""
-
 msgctxt "field:contract.contract,last_bill:"
 msgid "Last Bill"
 msgstr "Dernier Décompte"
-
-msgctxt "field:contract.contract,my_id:"
-msgid "My id"
-msgstr ""
 
 msgctxt "field:contract.contract,next_billing_date:"
 msgid "Next Billing Date"
@@ -855,13 +723,9 @@ msgctxt "field:ins_contract.covered_element,indemnification_bank_account:"
 msgid "Indemnification Bank Account"
 msgstr "Compte de Remboursement"
 
-msgctxt "field:ins_contract.covered_element,indemnification_bank_account:"
-msgid "Indemnification Bank Account"
-msgstr "Compte de Remboursement"
-
 msgctxt "field:ins_contract.covered_element,subscriber:"
-msgid ""
-msgstr ""
+msgid "Subscriber"
+msgstr "Souscripteur"
 
 msgctxt "field:offered.coverage,account_for_billing:"
 msgid "Account for billing"
@@ -892,16 +756,6 @@ msgid ""
 "A list of comma-separated numbers that resolves to the list ofallowed days of the month eligible for direct debit.\n"
 "\n"
 "An empty list means that all dates are allowed"
-msgstr ""
-"Une liste de nombres séparés par des virgules, correspondant aux jours du "
-"mois possibles pour le prélèvement automatique.\\n\\nUne liste vide laisse "
-"le choix au client."
-
-msgctxt "help:billing.payment_rule,sync_days:"
-msgid ""
-"Comma separated numbers which will be available to the subscriber.\n"
-"\n"
-"No entry means every day is a valid value"
 msgstr ""
 "Une liste de nombres séparés par des virgules, correspondant aux jours du "
 "mois possibles pour le prélèvement automatique.\\n\\nUne liste vide laisse "
