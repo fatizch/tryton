@@ -4,14 +4,14 @@ SEP=------------------------------------------------
 echo $SEP
 echo Installing core packages
 echo $SEP
-sudo yum install python python-pip python-dev mercurial
+sudo yum install -y python python-pip python-devel mercurial
 echo $SEP
 echo Installing server packages
 echo $SEP
-sudo yum install gcc libxml2-devel libxslt-devel openldap-devel cyrus-sasl-devel
+sudo yum install -y gcc libxml2-devel libxslt-devel openldap-devel cyrus-sasl-devel
 echo $SEP
 echo Installing client packages
-sudo yum install pygtk2-devel
+sudo yum install -y pygtk2-devel
 echo $SEP
 echo Installing optional dependencies
 echo $SEP
