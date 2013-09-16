@@ -4,7 +4,7 @@ EXPECTED_ARGS=1
 PWD=$( pwd )
 if echo $1 | grep '^/' > /dev/null
 then
-    FINALPWD=$PWD
+    FINALPWD=$1
 else
     FINALPWD=$PWD/$1
 fi
