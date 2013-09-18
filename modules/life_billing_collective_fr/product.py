@@ -6,6 +6,7 @@ from trytond.modules.rule_engine import RuleEngineResult
 from trytond.modules.insurance_product import business_rule
 
 __all__ = [
+    'Product',
     'Coverage',
     'CollectiveRatingRule',
     'SubRatingRule',
@@ -15,6 +16,15 @@ __all__ = [
     ]
 
 __metaclass__ = PoolMeta
+
+
+class Product():
+    'Product'
+
+    __name__ = 'offered.product'
+
+    def get_collective_rating_frequency(self):
+        return 'quarterly'
 
 
 class Coverage():
@@ -100,7 +110,8 @@ class CollectiveRatingRule(business_rule.BusinessRuleRoot, model.CoopSQL):
         errs = []
         for cov_data in args['option'].covered_data:
             #TODO deal with date control, do not rate a future covered data
-            cov_data_dict = {'covered_data': cov_data, 'rates': []}
+            cov_data_dict = {'covered_data': cov_data, 'rates': [],
+                'date': args['date']}
             result.append(cov_data_dict)
             cov_data_args = args.copy()
             cov_data.init_dict_for_rule_engine(cov_data_args)

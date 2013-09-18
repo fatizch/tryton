@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <form string="Rate Note Process Parameters">
-    <label name="start_date"/>
-    <field name="start_date"/>
-    <label name="end_date"/>
-    <field name="end_date"/>
-    <field name="clients" colspan="4"/>
+    <label name="until_date"/>
+    <field name="until_date"/>
+    <field name="products" colspan="4"/>
+    <field name="group_clients" colspan = "2"/>
+    <field name="clients" colspan="2"/>
+    <field name="contracts" colspan="4"/>
 </form>

@@ -6,6 +6,14 @@ msgctxt "error:collective.rating_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
+msgctxt "error:contract.contract:"
+msgid ""
+"A rate note for contract %s (%s, %s)\n"
+"already exists and can't be modified (%s)"
+msgstr ""
+"Un bordereau exist déjà pour le contrat %s (%s, %s) et ne peut pas être "
+"modifié (%s)"
+
 msgctxt "field:billing.rate_line,childs:"
 msgid "Childs"
 msgstr "Enfants"
@@ -85,6 +93,240 @@ msgstr "Date de mise à jour"
 msgctxt "field:billing.rate_line,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:billing.rate_note,client:"
+msgid "Client"
+msgstr "Client"
+
+msgctxt "field:billing.rate_note,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:billing.rate_note,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:billing.rate_note,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:billing.rate_note,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:billing.rate_note,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.rate_note,lines:"
+msgid "Lines"
+msgstr "Lignes"
+
+msgctxt "field:billing.rate_note,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:billing.rate_note,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:billing.rate_note,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:billing.rate_note,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:billing.rate_note,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:billing.rate_note,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:billing.rate_note_line,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:billing.rate_note_line,childs:"
+msgid "Childs"
+msgstr "Enfants"
+
+msgctxt "field:billing.rate_note_line,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:billing.rate_note_line,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:billing.rate_note_line,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:billing.rate_note_line,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:billing.rate_note_line,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:billing.rate_note_line,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:billing.rate_note_line,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.rate_note_line,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:billing.rate_note_line,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:billing.rate_note_line,quantity:"
+msgid "Quantity"
+msgstr "Quantité"
+
+msgctxt "field:billing.rate_note_line,rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:billing.rate_note_line,rate_line:"
+msgid "Rate Line"
+msgstr "Ligne de Taux"
+
+msgctxt "field:billing.rate_note_line,rate_note:"
+msgid "Rate Note"
+msgstr "Bordereau de Cotisation"
+
+msgctxt "field:billing.rate_note_line,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:billing.rate_note_line,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:billing.rate_note_line,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:billing.rate_note_line,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:billing.rate_note_process_parameter-client,client:"
+msgid "Client"
+msgstr "Client"
+
+msgctxt "field:billing.rate_note_process_parameter-client,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.rate_note_process_parameter-client,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:billing.rate_note_process_parameter-client,parameters_view:"
+msgid "Parameter View"
+msgstr "Paramètres"
+
+msgctxt "field:billing.rate_note_process_parameter-contract,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:billing.rate_note_process_parameter-contract,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.rate_note_process_parameter-contract,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:billing.rate_note_process_parameter-contract,parameters_view:"
+msgid "Parameter View"
+msgstr "Paramètres"
+
+msgctxt "field:billing.rate_note_process_parameter-group_client,group:"
+msgid "Group Party"
+msgstr "Regroupement de Sociétés"
+
+msgctxt "field:billing.rate_note_process_parameter-group_client,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt ""
+"field:billing.rate_note_process_parameter-group_client,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt ""
+"field:billing.rate_note_process_parameter-group_client,parameters_view:"
+msgid "Parameter View"
+msgstr "Paramètres"
+
+msgctxt "field:billing.rate_note_process_parameter-product,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.rate_note_process_parameter-product,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:billing.rate_note_process_parameter-product,parameters_view:"
+msgid "Parameter View"
+msgstr "Paramètres"
+
+msgctxt "field:billing.rate_note_process_parameter-product,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:billing.rate_note_process_parameters,clients:"
+msgid "Clients"
+msgstr "Clients"
+
+msgctxt "field:billing.rate_note_process_parameters,contracts:"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "field:billing.rate_note_process_parameters,group_clients:"
+msgid "Group Clients"
+msgstr "Regroupement de Sociétés"
+
+msgctxt "field:billing.rate_note_process_parameters,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.rate_note_process_parameters,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:billing.rate_note_process_parameters,products:"
+msgid "Products"
+msgstr "Produits"
+
+msgctxt "field:billing.rate_note_process_parameters,until_date:"
+msgid "Until Date"
+msgstr "Jusqu'à la Date"
+
+msgctxt "field:billing.rate_notes_displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.rate_notes_displayer,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:billing.rate_notes_displayer,rate_notes:"
+msgid "Rate Notes"
+msgstr "Bordereaux de Cotisations"
 
 msgctxt "field:collective.fare_class,code:"
 msgid "Code"
@@ -326,6 +568,10 @@ msgctxt "field:collective.sub_rating_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:contract.contract,next_assessment_date:"
+msgid "Next Assessment Date"
+msgstr "Prochain Appel de Cotisation"
+
 msgctxt "field:contract.contract,rates:"
 msgid "Rates"
 msgstr "Taux"
@@ -350,9 +596,85 @@ msgctxt "field:offered.coverage,rating_rules:"
 msgid "Rating Rules"
 msgstr "Règles de Tarification"
 
+msgctxt "field:party.group,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:party.group,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:party.group,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.group,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.group,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:party.group,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.group,parties:"
+msgid "Parties"
+msgstr "Acteurs"
+
+msgctxt "field:party.group,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.group,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.group,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:party.party,group:"
+msgid "Group"
+msgstr "Groupe"
+
 msgctxt "model:billing.rate_line,name:"
 msgid "Rate Line"
 msgstr "Ligne de Tarif"
+
+msgctxt "model:billing.rate_note,name:"
+msgid "Rate Note"
+msgstr "Bordereau de Cotisation"
+
+msgctxt "model:billing.rate_note_line,name:"
+msgid "Rate Note Line"
+msgstr "Ligne de Bordereau"
+
+msgctxt "model:billing.rate_note_process_parameter-client,name:"
+msgid "Rate Note Parameter Client Relation"
+msgstr "Relation Bordereau Client"
+
+msgctxt "model:billing.rate_note_process_parameter-contract,name:"
+msgid "Rate Note Parameter Contract Relation"
+msgstr "Relation Bordereau Contrat"
+
+msgctxt "model:billing.rate_note_process_parameter-group_client,name:"
+msgid "Rate Note Parameter Group Party Relation"
+msgstr "Relation Bordereau Acteur"
+
+msgctxt "model:billing.rate_note_process_parameter-product,name:"
+msgid "Rate Note Parameter Product Relation"
+msgstr "Relation Bordereau Produit"
+
+msgctxt "model:billing.rate_note_process_parameters,name:"
+msgid "Rate Note Parameters"
+msgstr "Paramètres de Recherche"
+
+msgctxt "model:billing.rate_notes_displayer,name:"
+msgid "Rate Notes"
+msgstr "Bordereaux de Cotisations"
 
 msgctxt "model:collective.fare_class,name:"
 msgid "Fare Class"
@@ -382,6 +704,22 @@ msgctxt "model:ir.action,name:act_fare_class_group_form"
 msgid "Fare Class Group"
 msgstr "Cotisation Groupe de Tarif"
 
+msgctxt "model:ir.action,name:act_group_party_form"
+msgid "Group Party"
+msgstr "Regroupement de Sociétés"
+
+msgctxt "model:ir.action,name:act_rate_note_form"
+msgid "Rate Notes"
+msgstr "Bordereaux de Cotisations"
+
+msgctxt "model:ir.action,name:act_rate_note_relate_form"
+msgid "Rate Notes"
+msgstr "Bordereaux de Cotisations"
+
+msgctxt "model:ir.action,name:launch_rate_notes_process"
+msgid "Rate Note Process"
+msgstr "Processus d'Appel de Cotisation"
+
 msgctxt "model:ir.ui.menu,name:menu_fare_class_form"
 msgid "Fare Classes"
 msgstr "Classe Tarif"
@@ -389,6 +727,42 @@ msgstr "Classe Tarif"
 msgctxt "model:ir.ui.menu,name:menu_fare_class_group_form"
 msgid "Fare Class Group"
 msgstr "Cotisation Groupe de Tarif"
+
+msgctxt "model:ir.ui.menu,name:menu_group_party_form"
+msgid "Group Party"
+msgstr "Regroupement de Sociétés"
+
+msgctxt "model:ir.ui.menu,name:menu_rate_note_form"
+msgid "Rate Notes"
+msgstr "Bordereaux de Cotisations"
+
+msgctxt "model:ir.ui.menu,name:menu_rate_note_process"
+msgid "Rate Note Process"
+msgstr "Processus d'Appel de Cotisation"
+
+msgctxt "model:party.group,name:"
+msgid "Group Party"
+msgstr "Regroupement de Sociétés"
+
+msgctxt "selection:billing.rate_note,status:"
+msgid "Completed by Client"
+msgstr "Complété par le Client"
+
+msgctxt "selection:billing.rate_note,status:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "selection:billing.rate_note,status:"
+msgid "Ready to be sent"
+msgstr "Prêt à Etre Envoyé"
+
+msgctxt "selection:billing.rate_note,status:"
+msgid "Sent"
+msgstr "Envoyé"
+
+msgctxt "selection:billing.rate_note,status:"
+msgid "Validated"
+msgstr "Validé"
 
 msgctxt "selection:collective.rating_rule,config_kind:"
 msgid "Advanced"
@@ -446,9 +820,25 @@ msgctxt "view:billing.rate_line:"
 msgid "Rate Line"
 msgstr "Ligne de Tarif"
 
+msgctxt "view:billing.rate_note:"
+msgid "Rate Note"
+msgstr "Bordereau de Cotisation"
+
+msgctxt "view:billing.rate_note_line:"
+msgid "%"
+msgstr ""
+
+msgctxt "view:billing.rate_note_line:"
+msgid "Rate Note Line"
+msgstr "Ligne de Bordereau"
+
 msgctxt "view:billing.rate_note_process_parameters:"
 msgid "Rate Note Process Parameters"
 msgstr ""
+
+msgctxt "view:billing.rate_notes_displayer:"
+msgid "Rate Notes"
+msgstr "Bordereaux de Cotisations"
 
 msgctxt "view:collective.fare_class:"
 msgid "Fare Class"
@@ -489,3 +879,24 @@ msgstr "Taux"
 msgctxt "view:offered.coverage:"
 msgid "Rating"
 msgstr "Tarif"
+
+msgctxt "view:party.group:"
+msgid "Group Party"
+msgstr "Regroupement de Sociétés"
+
+msgctxt "wizard_button:billing.rate_note_process,parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:billing.rate_note_process,parameters,rate_notes:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "wizard_button:billing.rate_note_process,rate_notes,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:billing.rate_note_process,rate_notes,validate_rate_notes:"
+msgid "Validate"
+msgstr "Valider"

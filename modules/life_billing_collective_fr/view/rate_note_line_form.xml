@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<form string="Rate Note Line">
+    <label name="parent"/>
+    <field name="parent"/>
+    <label name="rate_note"/>
+    <field name="rate_note"/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <label name="rec_name"/>
+    <field name="rec_name"/>
+    <label name="rate_line"/>
+    <field name="rate_line"/>
+    <label name="rate"/>
+    <group col="2" id="rate">
+        <field name="rate" factor="100" xexpand="0"/>
+        <label name="rate" string="%" xalign="0.0" xexpand="1"/>
+    </group>
+    <label name="amount"/>
+    <field name="amount"/>
+    <field name="childs" colspan="4"/>
+</form>
