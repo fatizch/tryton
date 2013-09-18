@@ -9,6 +9,6 @@ hg pull -u
 cd $ENV_FOLDER/tryton-workspace/trytond
 hg pull -u
 cd $ENV_FOLDER/tryton-workspace/proteus
-hg pull -u
+hg update -r 98
 cd $ENV_FOLDER
 ./tryton-workspace/coopbusiness/scripts/configure_directory.sh $ENV_FOLDER
