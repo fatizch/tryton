@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
 <tree string="Rate Note Line" editable="bottom">
     <field name="rec_name"/>
-    <field name="quantity"/>
+    <field name="base"/>
     <field name="rate" factor="100">
         <suffix string="%"/>
     </field>
-    <field name="amount"/>
+    <field name="sum_amount" sum="Total">
+         <suffix name="currency_symbol"/>
+    </field>
+    <field name="amount" tree_invisible="1"/>
 </tree>

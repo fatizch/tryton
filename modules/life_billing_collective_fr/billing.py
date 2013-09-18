@@ -2,6 +2,7 @@ from trytond.pyson import Eval
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.wizard import StateTransition, StateView, Button
+from trytond.backend import TableHandler
 
 from trytond.modules.coop_utils import model, fields, utils, coop_date, \
     coop_string
@@ -117,6 +118,9 @@ class RateNote(model.CoopSQL, model.CoopView):
     client = fields.Function(
         fields.Many2One('party.party', 'Client'),
         'get_client_id', searcher='search_client')
+    currency = fields.Function(
+        fields.Many2One('currency.currency', 'Currency'),
+        'get_currency_id')
 
     @staticmethod
     def default_status():
@@ -156,6 +160,9 @@ class RateNote(model.CoopSQL, model.CoopView):
             coop_string.date_as_string(self.start_date),
             coop_string.date_as_string(self.end_date))
 
+    def get_currency(self):
+        return self.contract.currency if self.contract else None
+
 
 class RateNoteLine(model.CoopSQL, model.CoopView):
     'Rate Note Line'
@@ -166,14 +173,16 @@ class RateNoteLine(model.CoopSQL, model.CoopView):
         ondelete='CASCADE')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    quantity = fields.Numeric('Quantity')
+    base = fields.Numeric('Base', on_change=['base', 'rate'],
+        states={'readonly': ~Eval('rate')})
     rate_line = fields.Many2One('billing.rate_line', 'Rate Line')
-    amount = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
-        on_change_with=['quantity', 'rate', 'amount'])
-    currency = fields.Function(fields.Many2One('currency.currency', 'Currency',
-            on_change_with=['journal']), 'on_change_with_currency')
-    currency_digits = fields.Function(fields.Integer('Currency Digits',
-            on_change_with=['journal']), 'on_change_with_currency_digits')
+    amount = fields.Numeric('Amount')
+    sum_amount = fields.Function(
+        fields.Numeric('Amount', on_change_with=['amount', 'childs', 'base']),
+        'on_change_with_sum_amount', 'setter_void')
+    currency = fields.Function(
+        fields.Many2One('currency.currency', 'Currency'),
+        'get_currency_id')
     currency_symbol = fields.Function(
         fields.Char('Currency Symbol'),
         'get_currency_symbol')
@@ -181,6 +190,16 @@ class RateNoteLine(model.CoopSQL, model.CoopView):
         ondelete='CASCADE')
     childs = fields.One2Many('billing.rate_note_line', 'parent', 'Childs')
     rate = fields.Function(fields.Numeric('Rate', digits=(16, 4)), 'get_rate')
+
+    @classmethod
+    def __register__(cls, module_name):
+        cursor = Transaction().cursor
+
+        # Migration from X.X: rename quantity to base
+        table = TableHandler(cursor, cls, module_name)
+        table.column_rename('quantity', 'base')
+
+        super(RateNoteLine, cls).__register__(module_name)
 
     def get_rec_name(self, name):
         return (self.rate_line.rec_name if self.rate_line
@@ -190,11 +209,21 @@ class RateNoteLine(model.CoopSQL, model.CoopView):
         return (self.rate_line.rate if self.rate_line and self.rate_line.rate
             else None)
 
-    def on_change_with_amount(self):
-        if self.amount:
-            return self.amount
-        elif hasattr(self, 'rate') and hasattr(self, 'quantity'):
-            return self.rate * self.quantity
+    def on_change_base(self):
+        if hasattr(self, 'rate') and hasattr(self, 'base'):
+            amount = self.rate * self.base if self.rate and self.base else None
+            return {'amount': amount, 'sum_amount': amount}
+        return {}
+
+    def get_currency(self):
+        if self.parent:
+            return self.parent.currency
+        elif self.rate_note:
+            return self.rate_note.currency
+
+    def on_change_with_sum_amount(self, name=None):
+        return (self.amount if self.amount else 0) + sum(
+            map(lambda x: x.sum_amount, self.childs))
 
 
 class RateNoteParameters(model.CoopView):
@@ -205,20 +234,29 @@ class RateNoteParameters(model.CoopView):
     until_date = fields.Date('Until Date', required=True)
     products = fields.Many2Many('billing.rate_note_process_parameter-product',
         'parameters_view', 'product', 'Products',
-        on_change=['products', 'contracts', 'group_clients', 'clients'],
+        on_change=['products', 'contracts', 'group_clients', 'clients',
+            'until_date'],
         domain=[('is_group', '=', True)])
     contracts = fields.Many2Many(
         'billing.rate_note_process_parameter-contract',
         'parameters_view', 'contract', 'Contracts',
-        on_change=['products', 'contracts', 'group_clients', 'clients'],
-        domain=[('is_group', '=', True), ('status', '=', 'active')])
+        on_change=['products', 'contracts', 'group_clients', 'clients',
+            'until_date'],
+        domain=[
+            ('is_group', '=', True),
+            ('status', '=', 'active'),
+            ['OR', [('next_assessment_date', '=', None)],
+                [('next_assessment_date', '<=', Eval('until_date'))]]
+            ], depends=['until_date'])
     group_clients = fields.Many2Many(
         'billing.rate_note_process_parameter-group_client',
         'parameters_view', 'group', 'Group Clients',
-        on_change=['products', 'contracts', 'group_clients', 'clients'])
+        on_change=['products', 'contracts', 'group_clients', 'clients',
+            'until_date'])
     clients = fields.Many2Many('billing.rate_note_process_parameter-client',
         'parameters_view', 'client', 'Clients',
-        on_change=['products', 'contracts', 'group_clients', 'clients'])
+        on_change=['products', 'contracts', 'group_clients', 'clients',
+            'until_date'])
 
     def _on_change(self):
         Contract = Pool().get('contract.contract')
@@ -228,7 +266,10 @@ class RateNoteParameters(model.CoopView):
         if self.products:
             contracts.extend(Contract.search([
                 ('offered', 'in', [x.id for x in self.products]),
-                ('status', '=', 'active')]))
+                ('status', '=', 'active'),
+                ['OR', [('next_assessment_date', '=', None)],
+                    [('next_assessment_date', '<=', self.until_date)]],
+                ]))
         for group in self.group_clients:
             clients.extend([x for x in group.parties])
         clients.extend([x.subscriber for x in contracts])
@@ -336,6 +377,7 @@ class RateNoteProcess(model.CoopWizard):
         for contract in self.parameters.contracts:
             rate_notes = contract.calculate_rate_notes(
                 self.parameters.until_date)
+            contract.save()
             res['rate_notes'].extend([x.id for x in rate_notes])
         return res
 

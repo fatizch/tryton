@@ -186,9 +186,9 @@ msgctxt "field:billing.rate_note_line,parent:"
 msgid "Parent"
 msgstr "Parent"
 
-msgctxt "field:billing.rate_note_line,quantity:"
-msgid "Quantity"
-msgstr "Quantité"
+msgctxt "field:billing.rate_note_line,base:"
+msgid "Base"
+msgstr "Base"
 
 msgctxt "field:billing.rate_note_line,rate:"
 msgid "Rate"

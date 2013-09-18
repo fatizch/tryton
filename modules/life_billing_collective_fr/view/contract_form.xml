@@ -2,10 +2,10 @@
 <data>
   <xpath expr="/form/notebook/page[@id='options']" position="after">
     <page string="Rates" id="rates" states="{'invisible': ~Eval('use_rates')}">
-      <group id="rates" colspan="4" yexpand="1" yfill="1">
-        <field name="rates" colspan="4"/>
-        <button name="button_calculate_rates" string="Calculate Rates" colspan="4"/>
-      </group>
+      <label name="next_assessment_date"/>
+      <field name="next_assessment_date"/>
+      <field name="rates" colspan="4"/>
+      <button name="button_calculate_rates" string="Calculate Rates" colspan="4"/>
     </page>
     </xpath>
     <xpath expr="/form" position="inside">

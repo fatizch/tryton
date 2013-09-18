@@ -84,6 +84,7 @@ already exists and can't be modified (%s)'''),
         pop_rates = {}
         for rate_dict in rates:
             population = rate_dict['covered_data'].covered_element
+            option = rate_dict['covered_data'].option
             at_date = rate_dict['date']
             if not (population, at_date) in pop_rates:
                 rate_line = RateLine()
@@ -97,12 +98,12 @@ already exists and can't be modified (%s)'''),
             for rate in rate_dict['rates']:
                 if not rate['rate']:
                     continue
-                if not rate_dict['covered_data'].option in option_dict:
+                if not option in option_dict:
                     sub_rate_line = rate_line.add_option_rate_line(
-                        rate_dict['covered_data'].option)
-                    option_dict[rate_dict['covered_data'].option] = sub_rate_line
+                        option)
+                    option_dict[option] = sub_rate_line
                 else:
-                    sub_rate_line = option_dict[rate_dict['covered_data'].option]
+                    sub_rate_line = option_dict[option]
                 if rate['kind'] == 'tranche':
                     tranche = rate['key']
                     index = None
