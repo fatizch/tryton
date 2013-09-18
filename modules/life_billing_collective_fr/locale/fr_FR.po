@@ -834,7 +834,7 @@ msgstr "Ligne de Bordereau"
 
 msgctxt "view:billing.rate_note_process_parameters:"
 msgid "Rate Note Process Parameters"
-msgstr ""
+msgstr "Paramètres de Recherche"
 
 msgctxt "view:billing.rate_notes_displayer:"
 msgid "Rate Notes"
