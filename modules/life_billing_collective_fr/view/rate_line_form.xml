@@ -17,10 +17,10 @@
     <newline/>
     <field name="childs" colspan="4"/>
     <newline/>
-    <label name="sum_rate"/>
+    <label name="rate"/>
     <group col="2" id="rate">
-        <field name="sum_rate" factor="100" xexpand="0"/>
-        <label name="sum_rate" string="%" xalign="0.0" xexpand="1"/>
+        <field name="rate" factor="100" xexpand="0"/>
+        <label name="rate" string="%" xalign="0.0" xexpand="1"/>
     </group>
     <newline/>
     <label name="tranche"/>

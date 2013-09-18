@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -77,10 +77,6 @@ msgstr "Valeur de Référence"
 msgctxt "field:billing.rate_line,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
-
-msgctxt "field:billing.rate_line,sum_rate:"
-msgid "Sum Rate"
-msgstr "Somme des Taux"
 
 msgctxt "field:billing.rate_line,tranche:"
 msgid "Tranche"

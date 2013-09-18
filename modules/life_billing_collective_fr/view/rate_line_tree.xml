@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <tree string="Rate Line">
     <field name="rec_name"/>
-    <field name="sum_rate" factor="100">
+    <field name="rate" factor="100">
         <suffix string="%"/>
     </field>
     <field name="index"/>

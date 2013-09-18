@@ -90,11 +90,19 @@ already exists and can't be modified (%s)'''),
                 rate_line.contract = self
                 rate_line.covered_element = population
                 rate_line.start_date = at_date
-                tranche_dict = {}
-                pop_rates[(population, at_date)] = rate_line, tranche_dict
+                option_dict = {}
+                pop_rates[(population, at_date)] = rate_line, option_dict
             else:
-                rate_line, tranche_dict = pop_rates[(population, at_date)]
+                rate_line, option_dict = pop_rates[(population, at_date)]
             for rate in rate_dict['rates']:
+                if not rate['rate']:
+                    continue
+                if not rate_dict['covered_data'].option in option_dict:
+                    sub_rate_line = rate_line.add_option_rate_line(
+                        rate_dict['covered_data'].option)
+                    option_dict[rate_dict['covered_data'].option] = sub_rate_line
+                else:
+                    sub_rate_line = option_dict[rate_dict['covered_data'].option]
                 if rate['kind'] == 'tranche':
                     tranche = rate['key']
                     index = None
@@ -103,14 +111,8 @@ already exists and can't be modified (%s)'''),
                     tranche = None
                     index = rate['index']
                     fare_class = rate['key']
-                if not rate['key'] in tranche_dict:
-                    sub_rate_line = rate_line.add_main_rate_line(
-                        tranche=tranche, fare_class=fare_class, index=index)
-                    tranche_dict[rate['key']] = sub_rate_line
-                else:
-                    sub_rate_line = tranche_dict[rate['key']]
-                sub_rate_line.add_option_rate_line(
-                    rate_dict['covered_data'].option, rate['rate'])
+                sub_rate_line.add_sub_rate_line(rate['rate'], tranche=tranche,
+                    fare_class=fare_class, index=index)
         for population in self.covered_elements:
             if not population in [x[0] for x in pop_rates.iterkeys()]:
                 continue

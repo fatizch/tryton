@@ -44,9 +44,6 @@ class RateLine(model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     rate = fields.Numeric('Rate', digits=(16, 4))
-    sum_rate = fields.Function(
-        fields.Numeric('Sum Rate', digits=(16, 4)),
-        'get_sum_rate')
     reference_value = fields.Function(
         fields.Char('Reference Value'),
         'get_reference_value')
@@ -58,17 +55,18 @@ class RateLine(model.CoopSQL, model.CoopView):
         self.childs.append(child_line)
         return child_line
 
-    def add_main_rate_line(self, tranche=None, fare_class=None, index=None):
+    def add_sub_rate_line(self, rate, tranche=None, fare_class=None,
+            index=None):
         child_line = self.add_child()
         child_line.tranche = tranche
         child_line.fare_class = fare_class
         child_line.index = index
+        child_line.rate = rate
         return child_line
 
-    def add_option_rate_line(self, option, rate):
+    def add_option_rate_line(self, option):
         child_line = self.add_child()
         child_line.option = option
-        child_line.rate = rate
         return child_line
 
     def get_rec_name(self, name):
@@ -83,12 +81,6 @@ class RateLine(model.CoopSQL, model.CoopView):
             return self.fare_class.rec_name
         elif self.index:
             return self.index.rec_name
-
-    def get_sum_rate(self, name):
-        if self.contract:
-            return None
-        return (self.rate if self.rate else 0) + sum(
-            map(lambda x: x.sum_rate, self.childs))
 
     def create_rate_note_line(self, rate_note_line_model=None):
         if not rate_note_line_model:
@@ -219,7 +211,7 @@ class RateNoteParameters(model.CoopView):
         'billing.rate_note_process_parameter-contract',
         'parameters_view', 'contract', 'Contracts',
         on_change=['products', 'contracts', 'group_clients', 'clients'],
-        domain=[('is_group', '=', True)])
+        domain=[('is_group', '=', True), ('status', '=', 'active')])
     group_clients = fields.Many2Many(
         'billing.rate_note_process_parameter-group_client',
         'parameters_view', 'group', 'Group Clients',
@@ -235,7 +227,8 @@ class RateNoteParameters(model.CoopView):
         contracts = self.contracts
         if self.products:
             contracts.extend(Contract.search([
-                ('offered', 'in', [x.id for x in self.products])]))
+                ('offered', 'in', [x.id for x in self.products]),
+                ('status', '=', 'active')]))
         for group in self.group_clients:
             clients.extend([x for x in group.parties])
         clients.extend([x.subscriber for x in contracts])
@@ -328,7 +321,8 @@ class RateNoteProcess(model.CoopWizard):
         contract = None
         if Transaction().context.get('active_model') == 'contract.contract':
             contract = Contract(Transaction().context.get('active_id'))
-            if not contract or not contract.offered.is_group:
+            if (not contract or not contract.offered.is_group
+                    or contract.status != 'active'):
                 contract = None
         return {
             'until_date': coop_date.get_end_of_month(utils.today()),
