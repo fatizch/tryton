@@ -52,17 +52,17 @@ def add_duration(date, duration, duration_unit):
     Returns the first day of the begining of the next period
     for example : 01/01/Y + 1 year = 01/01/Y+1
     '''
-    if duration_unit == 'day':
+    if duration_unit in ['day', 'dayly']:
         res = add_day(date, duration)
-    elif duration_unit == 'week':
+    elif duration_unit in ['week', 'weekly']:
         res = add_day(date, 7 * duration)
-    elif duration_unit == 'month':
+    elif duration_unit in ['month', 'monthly']:
         res = add_month(date, duration)
-    elif duration_unit == 'quarter':
+    elif duration_unit in ['quarter', 'quarterly']:
         res = add_month(date, 3 * duration)
-    elif duration_unit == 'half_year':
+    elif duration_unit in ['half_year', 'half_yearly']:
         res = add_month(date, 6 * duration)
-    elif duration_unit == 'year':
+    elif duration_unit in ['year', 'yearly']:
         res = add_year(date, duration)
     return res
 
@@ -134,3 +134,15 @@ def add_frequency(frequency, to_date):
     if frequency == 'biyearly':
         return add_duration(to_date, 2, 'year')
     return add_duration(to_date, 1, frequency[:-2])
+
+
+def get_good_period_from_frequency(for_date, frequency, from_date=None):
+    if not from_date:
+        from_date = datetime.date(for_date.year, 1, 1)
+    if frequency == 'quarterly':
+        month = (for_date.month - 1) / 3 * 3 + 1
+    elif frequency == 'monthly':
+        month = for_date.month
+    from_date = datetime.date(for_date.year, month, 1)
+    end_date = get_end_of_period(from_date, 1, frequency)
+    return from_date, end_date
