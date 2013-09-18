@@ -51,6 +51,10 @@ msgctxt "field:account.move,wo_fee_amount:"
 msgid "Amount w/o fees"
 msgstr "Montant hors Frais"
 
+msgctxt "field:account.move,wo_tax_amount:"
+msgid ""
+msgstr ""
+
 msgctxt "field:account.move.line,origin_name:"
 msgid "Origin Name"
 msgstr "Source"
@@ -690,6 +694,10 @@ msgstr "Gestionnaires d'Appel de Cotisation"
 msgctxt "field:contract.contract,billing_periods:"
 msgid "Billing Periods"
 msgstr "Période de Facturation"
+
+msgctxt "field:contract.contract,display_all_lines:"
+msgid ""
+msgstr ""
 
 msgctxt "field:contract.contract,last_bill:"
 msgid "Last Bill"

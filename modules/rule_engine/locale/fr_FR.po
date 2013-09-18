@@ -758,6 +758,10 @@ msgid "Rule Engine Tree Element"
 msgstr "Elément de l'Arbre"
 
 msgctxt "selection:rule_engine,extra_data_kind:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:rule_engine,extra_data_kind:"
 msgid "Rule"
 msgstr "Règle"
 

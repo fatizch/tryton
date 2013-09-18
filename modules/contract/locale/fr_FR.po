@@ -146,6 +146,10 @@ msgctxt "field:contract.contract,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
+msgctxt "field:contract.contract,subscriber_kind:"
+msgid ""
+msgstr ""
+
 msgctxt "field:contract.contract,summary:"
 msgid ""
 msgstr " "

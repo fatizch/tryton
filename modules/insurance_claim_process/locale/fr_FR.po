@@ -86,6 +86,10 @@ msgctxt "field:ins_claim.loss,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
 
+msgctxt "field:ins_claim.loss,can_modify_benefit:"
+msgid "Can Modify Benefit?"
+msgstr ""
+
 msgctxt "model:ins_claim.declaration_process_parameters,name:"
 msgid "Declaration Process Parameters"
 msgstr "Paramètres du Processus de Déclaration Sinistre"

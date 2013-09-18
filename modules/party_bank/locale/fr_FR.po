@@ -98,6 +98,10 @@ msgctxt "field:party.bank_account,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
+msgctxt "field:party.bank_account,number:"
+msgid "Main Account Number"
+msgstr ""
+
 msgctxt "field:party.bank_account,numbers_as_char:"
 msgid "Numbers"
 msgstr "Numéros"
@@ -213,6 +217,10 @@ msgstr "Autre"
 msgctxt "selection:party.bank_account_number,kind:"
 msgid "RIB"
 msgstr "RIB"
+
+msgctxt "view:party.bank:"
+msgid "Bank"
+msgstr "Banque"
 
 msgctxt "view:party.bank_account_number:"
 msgid "Account Number"

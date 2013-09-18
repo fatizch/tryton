@@ -627,6 +627,10 @@ msgid "==> Document Request"
 msgstr ""
 
 msgctxt "view:contract.contract:"
+msgid "==> Documents"
+msgstr ""
+
+msgctxt "view:contract.contract:"
 msgid "==> Garanties"
 msgstr ""
 
@@ -635,7 +639,15 @@ msgid "==> Options Selection"
 msgstr ""
 
 msgctxt "view:contract.contract:"
+msgid "==> Personnes Couvertes"
+msgstr ""
+
+msgctxt "view:contract.contract:"
 msgid "==> Populations"
+msgstr ""
+
+msgctxt "view:contract.contract:"
+msgid "==> Produit"
 msgstr ""
 
 msgctxt "view:contract.contract:"
@@ -652,6 +664,10 @@ msgstr ""
 
 msgctxt "view:contract.contract:"
 msgid "==> Validation de l'avenant"
+msgstr ""
+
+msgctxt "view:contract.contract:"
+msgid "==> Validation du contract"
 msgstr ""
 
 msgctxt "view:contract.contract:"
@@ -751,6 +767,10 @@ msgid "Options Selection"
 msgstr "Garanties"
 
 msgctxt "view:contract.contract:"
+msgid "Personnes Couvertes"
+msgstr ""
+
+msgctxt "view:contract.contract:"
 msgid "Populations"
 msgstr "Populations"
 
@@ -761,6 +781,10 @@ msgstr "Précédent"
 msgctxt "view:contract.contract:"
 msgid "Processus de souscription individuel"
 msgstr "Processus de souscription individuel"
+
+msgctxt "view:contract.contract:"
+msgid "Produit"
+msgstr ""
 
 msgctxt "view:contract.contract:"
 msgid "Prêt"
@@ -793,8 +817,24 @@ msgid ""
 msgstr ""
 
 msgctxt "view:contract.contract:"
+msgid ""
+"The current record isin a state (Validation du contract) that you are not "
+"allowed to view."
+msgstr ""
+
+msgctxt "view:contract.contract:"
+msgid ""
+"The current record isin a state (Validation du contrat) that you are not "
+"allowed to view."
+msgstr ""
+
+msgctxt "view:contract.contract:"
 msgid "Validation de l'avenant"
 msgstr "Validation de l'avenant"
+
+msgctxt "view:contract.contract:"
+msgid "Validation du contract"
+msgstr "Validation du contrat"
 
 msgctxt "view:contract.contract:"
 msgid "Validation du contrat"
@@ -863,6 +903,10 @@ msgstr "Déclarant"
 msgctxt "view:ins_claim.claim:"
 msgid "Déclaration de Sinistre"
 msgstr "Déclaration de Sinistre"
+
+msgctxt "view:ins_claim.claim:"
+msgid "Losses"
+msgstr "Préjudices"
 
 msgctxt "view:ins_claim.claim:"
 msgid "Next"
