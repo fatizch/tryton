@@ -96,6 +96,9 @@ class RateLine(model.CoopSQL, model.CoopView):
             res.childs.append(child.create_rate_note_line(RateNoteLine))
         return res
 
+    def _expand_tree(self, name):
+        return True
+
 
 class RateNote(model.CoopSQL, model.CoopView):
     'Rate Note'
@@ -225,6 +228,9 @@ class RateNoteLine(model.CoopSQL, model.CoopView):
         return (self.amount if self.amount else 0) + sum(
             map(lambda x: x.sum_amount, self.childs))
 
+    def _expand_tree(self, name):
+        return True
+
 
 class RateNoteParameters(model.CoopView):
     'Rate Note Parameters'
@@ -258,36 +264,42 @@ class RateNoteParameters(model.CoopView):
         on_change=['products', 'contracts', 'group_clients', 'clients',
             'until_date'])
 
-    def _on_change(self):
+    def _on_change(self, name):
         Contract = Pool().get('contract.contract')
         res = {}
         clients = self.clients
         contracts = self.contracts
+        domain = [
+            ('status', '=', 'active'),
+            ['OR', [('next_assessment_date', '=', None)],
+                [('next_assessment_date', '<=', self.until_date)]],
+            ]
         if self.products:
-            contracts.extend(Contract.search([
-                ('offered', 'in', [x.id for x in self.products]),
-                ('status', '=', 'active'),
-                ['OR', [('next_assessment_date', '=', None)],
-                    [('next_assessment_date', '<=', self.until_date)]],
-                ]))
+            domain.append(('offered', 'in', [x.id for x in self.products]))
         for group in self.group_clients:
             clients.extend([x for x in group.parties])
         clients.extend([x.subscriber for x in contracts])
-        res['clients'] = [x.id for x in clients]
-        res['contracts'] = [x.id for x in contracts]
+        if clients:
+            domain.append(('subscriber', 'in', [x.id for x in clients]))
+        contracts.extend(Contract.search(domain))
+
+        if clients and name != 'clients':
+            res['clients'] = [x.id for x in clients]
+        if contracts and name != 'contracts':
+            res['contracts'] = [x.id for x in contracts]
         return res
 
     def on_change_products(self):
-        return self._on_change()
+        return self._on_change('products')
 
     def on_change_contracts(self):
-        return self._on_change()
+        return self._on_change('contracts')
 
     def on_change_group_clients(self):
-        return self._on_change()
+        return self._on_change('group_clients')
 
     def on_change_clients(self):
-        return self._on_change()
+        return self._on_change('clients')
 
 
 class RateNoteParameterClientRelation(model.CoopView):

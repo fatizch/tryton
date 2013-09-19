@@ -6,6 +6,10 @@ from .billing import *
 from .rule_engine import *
 from .party import *
 
+from trytond.modules.coop_utils import expand_tree
+RateLineTreeExpansion = expand_tree('billing.rate_line')
+RateNoteLineTreeExpansion = expand_tree('billing.rate_note_line')
+
 
 def register():
     Pool.register(
@@ -35,6 +39,9 @@ def register():
         # From Party
         GroupParty,
         Party,
+        #For tree expand
+        RateLineTreeExpansion,
+        RateNoteLineTreeExpansion,
         module='life_billing_collective_fr', type_='model')
     Pool.register(
         RateNoteProcess,
