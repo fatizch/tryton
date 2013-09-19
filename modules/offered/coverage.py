@@ -30,8 +30,10 @@ class Coverage(model.CoopSQL, Offered):
     products = fields.Many2Many(
         'offered.product-options-coverage',
         'coverage', 'product', 'Products',
-        domain=[('currency', '=', Eval('currency'))],
-        depends=['currency'])
+        domain=[
+            ('currency', '=', Eval('currency')),
+            ('company', '=', Eval('company'))],
+        depends=['currency', 'company'])
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
     subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
         'Subscription Behaviour', sort=False)
@@ -92,7 +94,6 @@ class Coverage(model.CoopSQL, Offered):
         skips = super(Coverage, cls)._export_skips()
         skips.add('products')
         return skips
-
 
     @classmethod
     def get_var_names_for_full_extract(cls):

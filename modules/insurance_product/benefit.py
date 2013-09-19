@@ -1,4 +1,7 @@
 #-*- coding:utf-8 -*-
+from trytond.pyson import Eval
+from trytond.transaction import Transaction
+
 from trytond.modules.coop_utils import model, coop_date, fields
 from trytond.modules.offered import offered
 from trytond.modules.offered import EligibilityResultLine
@@ -45,13 +48,20 @@ class EventDesc(model.CoopSQL, model.CoopView):
     name = fields.Char('Name', translate=True)
     loss_descs = fields.Many2Many(
         'ins_product.event_desc-loss_desc', 'event_desc', 'loss_desc',
-        'Loss Descriptions')
+        'Loss Descriptions', domain=[('company', '=', Eval('company'))],
+        depends=['company'])
+    company = fields.Many2One('company.company', 'Company', required=True,
+        ondelete='RESTRICT')
 
     def __export_json(self, skip_fields=None):
         if skip_fields is None:
             skip_fields = set()
         skip_fields.add('loss_descs')
         return super(EventDesc, self).export_json(skip_fields)
+
+    @classmethod
+    def default_company(cls):
+        return Transaction().context.get('company') or None
 
 
 class LossDescDocumentsRelation(model.CoopSQL):
@@ -74,7 +84,8 @@ class LossDesc(model.CoopSQL, model.CoopView):
     name = fields.Char('Name', translate=True)
     event_descs = fields.Many2Many(
         'ins_product.event_desc-loss_desc', 'loss_desc', 'event_desc',
-        'Events Descriptions')
+        'Events Descriptions', domain=[('company', '=', Eval('company'))],
+        depends=['company'])
     item_kind = fields.Selection('get_possible_item_kind', 'Kind')
     with_end_date = fields.Boolean('With End Date')
     complementary_data_def = fields.Many2Many(
@@ -83,6 +94,8 @@ class LossDesc(model.CoopSQL, model.CoopView):
         domain=[('kind', '=', 'loss')], )
     documents = fields.Many2Many(
         'ins_product.loss-document-relation', 'loss', 'document', 'Documents')
+    company = fields.Many2One('company.company', 'Company', required=True,
+        ondelete='RESTRICT')
 
     @classmethod
     def get_possible_item_kind(cls):
@@ -93,6 +106,10 @@ class LossDesc(model.CoopSQL, model.CoopView):
             return []
 
         return self.documents
+
+    @classmethod
+    def default_company(cls):
+        return Transaction().context.get('company') or None
 
 
 class LossDescComplementaryDataRelation(model.CoopSQL):
@@ -131,7 +148,8 @@ class Benefit(model.CoopSQL, offered.Offered):
         'Indemnification Kind', sort=False, required=True)
     loss_descs = fields.Many2Many(
         'ins_product.benefit-loss_desc', 'benefit', 'loss_desc',
-        'Loss Descriptions', required=True)
+        'Loss Descriptions', domain=[('company', '=', Eval('company'))],
+        depends=['company'], required=True)
     complementary_data_def = fields.Many2Many(
         'ins_product.benefit-complementary_data_def',
         'benefit', 'complementary_data_def', 'Complementary Data',

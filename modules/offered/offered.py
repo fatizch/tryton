@@ -161,6 +161,8 @@ class Offered(model.CoopView, GetResult, Templated):
         context={'complementary_data_kind': 'product'},
         domain=[('kind', '=', 'product')],
         on_change_with=['complementary_data'])
+    company = fields.Many2One('company.company', 'Company', required=True,
+        ondelete="RESTRICT")
 
     @classmethod
     def __setup__(cls):
@@ -195,6 +197,10 @@ class Offered(model.CoopView, GetResult, Templated):
         if not res:
             res = utils.today()
         return res
+
+    @classmethod
+    def default_company(cls):
+        return Transaction().context.get('company') or None
 
     @classmethod
     def get_summary(cls, offereds, name=None, at_date=None, lang=None):
@@ -281,7 +287,8 @@ class Product(model.CoopSQL, Offered):
         domain=[
             ('currency', '=', Eval('currency')),
             ('kind', '=', Eval('kind')),
-            ], depends=['currency', 'kind'])
+            ('company', '=', Eval('company')),
+            ], depends=['currency', 'kind', 'company'])
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
     contract_generator = fields.Many2One('ir.sequence',
         'Contract Number Generator', context={'code': 'offered.product'},

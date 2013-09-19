@@ -31,7 +31,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     @classmethod
     def depending_modules(cls):
-        return ['rule_engine']
+        return ['rule_engine', 'offered']
 
     @classmethod
     def get_models(cls):
@@ -39,7 +39,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Product': 'offered.product',
             'Coverage': 'offered.coverage',
             'Pricing': 'ins_product.pricing_rule',
-            'Currency': 'currency.currency',
             'Eligibility': 'ins_product.eligibility_rule',
             'PricingComponent': 'ins_product.pricing_component',
             'Tax': 'coop_account.tax_desc',
@@ -204,15 +203,7 @@ return True'''
         ng.save()
         self.assert_(ng.id)
 
-    def test0005_testCurrencyCreation(self):
-        euro = self.Currency()
-        euro.name = 'Euro'
-        euro.symbol = u'€'
-        euro.code = 'EUR'
-        euro.save()
-        self.assert_(euro.id)
-
-    def test0006_testItemDescCreation(self):
+    def test0005_testItemDescCreation(self):
         item_desc = self.ItemDesc()
         item_desc.kind = 'person'
         item_desc.code = 'person'
@@ -225,13 +216,14 @@ return True'''
         'insurance_product.test0002_testTaxCreation',
         'insurance_product.test0003_testFeeCreation',
         'insurance_product.test0004_testNumberGeneratorCreation',
-        'insurance_product.test0005_testCurrencyCreation',
-        'insurance_product.test0006_testItemDescCreation',
+        'insurance_product.test0005_testItemDescCreation',
+        'offered.test0002_testCompanyCreation',
     )
     def test0010Coverage_creation(self):
         '''
             Tests process desc creation
         '''
+        company, = self.Company.search([('party.name', '=', 'World Company')])
         rule = self.RuleEngine.search([('name', '=', 'test_rule')])[0]
         ng = self.Sequence.search([('code', '=', 'offered.product')])[0]
 
@@ -302,6 +294,7 @@ return True'''
 
         coverage_a.item_desc = item_desc
 
+        coverage_a.company = company
         coverage_a.save()
 
         # Coverage B
@@ -339,6 +332,7 @@ return True'''
         coverage_b.pricing_rules = [pricing_ruleb]
 
         coverage_b.item_desc = item_desc
+        coverage_b.company = company
         coverage_b.save()
 
         # Coverage C
@@ -359,6 +353,7 @@ return True'''
         coverage_c.eligibility_rules = [eligibility_rule_a]
 
         coverage_c.item_desc = item_desc
+        coverage_c.company = company
 
         coverage_c.save()
 
@@ -380,6 +375,7 @@ return True'''
         coverage_d.eligibility_rules = [eligibility_rule_d]
 
         coverage_d.item_desc = item_desc
+        coverage_d.company = company
 
         coverage_d.save()
 
@@ -402,6 +398,7 @@ return True'''
         product_a.eligibility_rules = [eligibility_rule_b]
         product_a.contract_generator = ng
         product_a.item_descriptors = [item_desc]
+        product_a.company = company
         product_a.save()
 
         self.assert_(product_a.id)

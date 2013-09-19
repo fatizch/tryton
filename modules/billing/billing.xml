@@ -14,9 +14,20 @@
       <field name="type">tree</field>
       <field name="name">payment_method_tree</field>
     </record>
+    <!-- Read / Write rule -->
+    <record model="ir.rule.group" id="rule_group_payment_method">
+        <field name="model" search="[('model', '=', 'billing.payment_method')]"/>
+        <field name="global_p" eval="True"/>
+    </record>
+    <record model="ir.rule" id="rule_payment_method_1">
+      <field name="domain">[('payment_rule.company', 'in', [c.id for c in user.companies])]</field>
+      <field name="rule_group" ref="rule_group_payment_method"/>
+    </record>
+    <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_payment_method">
       <field name="name">Payment Methods</field>
       <field name="res_model">billing.payment_method</field>
+      <field name="domain">[('payment_rule.company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_payment_method_view1">
       <field name="sequence" eval="16"/>
@@ -62,6 +73,19 @@
       <field name="type">tree</field>
       <field name="name">price_line-tax-relation_tree</field>
     </record>
+    <!-- Read / Write rule -->
+    <record model="ir.rule.group" id="rule_group_tax">
+      <field name="model" search="[('model', '=', 'coop_account.tax_desc')]"/>
+      <field name="global_p" eval="True"/>
+    </record>
+    <record model="ir.rule" id="rule_tax_1">
+      <field name="domain">[('company', 'in', [c.id for c in user.companies])]</field>
+      <field name="rule_group" ref="rule_group_tax"/>
+    </record>
+    <!-- Entry Point -->
+    <record model="ir.action.act_window" id="coop_account.act_tax_form">
+      <field name="domain">[('account_for_billing.company', '=', Eval('context', {}).get('company', False))]</field>
+    </record>
     <!--################################################################ -->
     <!-- Fee Lines -->
     <!--################################################################ -->
@@ -74,6 +98,19 @@
       <field name="model">billing.price_line-fee-relation</field>
       <field name="type">tree</field>
       <field name="name">price_line-fee-relation_tree</field>
+    </record>
+    <!-- Read / Write rule -->
+    <record model="ir.rule.group" id="rule_group_fee">
+      <field name="model" search="[('model', '=', 'coop_account.fee_desc')]"/>
+      <field name="global_p" eval="True"/>
+    </record>
+    <record model="ir.rule" id="rule_fee_1">
+      <field name="domain">[('company', 'in', [c.id for c in user.companies])]</field>
+      <field name="rule_group" ref="rule_group_fee"/>
+    </record>
+    <!-- Entry Point -->
+    <record model="ir.action.act_window" id="coop_account.act_fee_form">
+      <field name="domain">[('account_for_billing.company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
     <!--################################################################ -->
     <!-- Billing Manager -->

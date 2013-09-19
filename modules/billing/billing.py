@@ -620,8 +620,8 @@ class Product():
                 Eval('payment_delay', ''))],
         depends=['payment_delay'])
     account_for_billing = fields.Many2One('account.account',
-        'Account for billing', required=True,
-        domain=[('kind', '=', 'revenue')])
+        'Account for billing', required=True, depends=['company'],
+        domain=[('kind', '=', 'revenue'), ('company', '=', Eval('company'))])
 
     def get_default_payment_method(self):
         if not self.payment_methods:
@@ -655,7 +655,9 @@ class Coverage():
     __name__ = 'offered.coverage'
 
     account_for_billing = fields.Many2One('account.account',
-        'Account for billing', domain=[('kind', '=', 'revenue')], states={
+        'Account for billing', depends=['company'], domain=[
+            ('kind', '=', 'revenue'), ('company', '=', Eval('company'))],
+        states={
             'required': ~Eval('is_package'),
             'invisible': ~~Eval('is_package'),
             })
@@ -1291,10 +1293,26 @@ class TaxDesc():
     __name__ = 'coop_account.tax_desc'
 
     account_for_billing = fields.Many2One('account.account',
-        'Account for billing', required=True)
+        'Account for billing', depends=['company'], domain=[
+            ('company', '=', Eval('context', {}).get('company'))],
+        required=True)
+    company = fields.Function(
+        fields.Many2One('company.company', 'Company',
+            depends=['account_for_billing']),
+        'get_company', searcher='search_company')
 
     def get_account_for_billing(self):
         return self.account_for_billing
+
+    def get_company(self, name):
+        if not (hasattr(self, 'account_for_billing') and
+                self.account_for_billing):
+            return None
+        return self.account_for_billing.company
+
+    @classmethod
+    def search_company(cls, name, clause):
+        return [(('account_for_billing.company',) + tuple(clause[1:]))]
 
 
 class FeeDesc():
@@ -1304,10 +1322,26 @@ class FeeDesc():
     __name__ = 'coop_account.fee_desc'
 
     account_for_billing = fields.Many2One('account.account',
-        'Account for billing', required=True)
+        'Account for billing', depends=['company'], domain=[
+            ('company', '=', Eval('context', {}).get('company'))],
+        required=True)
+    company = fields.Function(
+        fields.Many2One('company.company', 'Company',
+            depends=['account_for_billing']),
+        'get_company', searcher='search_company')
 
     def get_account_for_billing(self):
         return self.account_for_billing
+
+    def get_company(self, name):
+        if not (hasattr(self, 'account_for_billing') and
+                self.account_for_billing):
+            return None
+        return self.account_for_billing.company
+
+    @classmethod
+    def search_company(cls, name, clause):
+        return [(('account_for_billing.company',) + tuple(clause[1:]))]
 
 
 class Sequence():

@@ -10,6 +10,7 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['LossDesc'] = Model.get('ins_product.loss_desc')
     cfg_dict['EventDesc'] = Model.get('ins_product.event_desc')
     cfg_dict['Document'] = Model.get('ins_product.document_desc')
+    cfg_dict['Company'] = Model.get('company.company')
 
 
 def create_loss_desc(cfg_dict, data, event_codes=None, document_codes=None):
@@ -82,6 +83,8 @@ def create_document_descs(cfg_dict):
 
 def launch_test_case(cfg_dict):
     update_cfg_dict_with_models(cfg_dict)
+    company, = cfg_dict['Company'].find([('party.name', '=', 'Coop')])
+    cfg_dict['_config'].set_context({'company': company.id})
     proteus_tools.set_global_search('ins_claim.claim')
     create_document_descs(cfg_dict)
     create_event_desc(cfg_dict)

@@ -7,6 +7,7 @@ from trytond.pyson import Eval, Bool, Or, If
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.wizard import Wizard, StateView, StateTransition, Button
+from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, utils, coop_date, fields
 from trytond.modules.coop_utils import coop_string
@@ -93,13 +94,15 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         'needed_by', 'Documents')
     claim_history = fields.One2Many('ins_claim.claim.history',
         'from_object', 'History')
+    company = fields.Many2One('company.company', 'Company')
     #The Main contract is only used to ease the declaration process for 80%
     #of the claims where there is only one contract involved. This link should
     #not be used for other reason than initiating sub elements on claim.
     #Otherwise use claim.get_contract()
     main_contract = fields.Many2One('contract.contract', 'Main Contract',
-        domain=[('id', 'in', Eval('possible_contracts'))],
-        depends=['possible_contracts'])
+        domain=[('id', 'in', Eval('possible_contracts')),
+            ('company', '=', Eval('company'))],
+        depends=['possible_contracts', 'company'])
     possible_contracts = fields.Function(
         fields.One2Many(
             'contract.contract', None, 'Contracts',
@@ -123,6 +126,10 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         if self.claimant:
             res += ' %s' % self.claimant.get_rec_name(name)
         return res
+
+    @classmethod
+    def default_company(cls):
+        return Transaction().context.get('company') or None
 
     def is_open(self):
         return self.status in ['open', 'reopened']

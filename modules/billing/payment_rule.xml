@@ -14,9 +14,20 @@
       <field name="type">tree</field>
       <field name="name">payment_rule_tree</field>
     </record>
+    <!-- Read / Write rule -->
+    <record model="ir.rule.group" id="rule_group_payment_rule">
+        <field name="model" search="[('model', '=', 'billing.payment_rule')]"/>
+        <field name="global_p" eval="True"/>
+    </record>
+    <record model="ir.rule" id="rule_payment_rule_1">
+      <field name="domain">[('company', 'in', [c.id for c in user.companies])]</field>
+      <field name="rule_group" ref="rule_group_payment_rule"/>
+    </record>
+    <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_payment_rule">
       <field name="name">Payment Rule</field>
       <field name="res_model">billing.payment_rule</field>
+      <field name="domain">[('company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_payment_rule_view1">
       <field name="sequence" eval="5"/>

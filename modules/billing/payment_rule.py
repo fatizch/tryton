@@ -2,6 +2,7 @@ import datetime
 from decimal import Decimal
 from dateutil.relativedelta import relativedelta
 
+from trytond.transaction import Transaction
 from trytond.pool import Pool
 from trytond.pyson import Eval
 from trytond.modules.coop_utils import fields, model, coop_date
@@ -102,7 +103,8 @@ class PaymentRuleLine(model.CoopSQL, model.CoopView):
             'invisible': ~Eval('add_calculated_period'),
             'required': ~~Eval('add_calculated_period')})
     is_remainder = fields.Boolean('Is remainder',
-        states={'invisible': Eval('_parent_payment_rule', {}).get('remaining_position', '')
+        states={'invisible':
+            Eval('_parent_payment_rule', {}).get('remaining_position', '')
             != 'custom'})
 
     @classmethod
@@ -198,8 +200,8 @@ class PaymentRuleLine(model.CoopSQL, model.CoopView):
             payment_rule = self.payment_rule
             my_start_date = self.get_date(start_date)
             if payment_rule.with_sync_date:
-                temp_date = coop_date.add_frequency(payment_rule.base_frequency,
-                    my_start_date)
+                temp_date = coop_date.add_frequency(
+                    payment_rule.base_frequency, my_start_date)
                 if payment_rule.base_frequency == 'yearly':
                     final_date = datetime.date(temp_date.year,
                         payment_rule.sync_date.month,
@@ -212,11 +214,13 @@ class PaymentRuleLine(model.CoopSQL, model.CoopView):
                 else:
                     my_end_date = end_date
             else:
-                my_end_date = coop_date.add_frequency(payment_rule.base_frequency,
-                    my_start_date)
+                my_end_date = coop_date.add_frequency(
+                    payment_rule.base_frequency, my_start_date)
             my_end_date = coop_date.add_day(my_end_date, -1)
-            period = coop_date.number_of_days_between(my_start_date, my_end_date)
-            total_period = coop_date.number_of_days_between(start_date, end_date)
+            period = coop_date.number_of_days_between(
+                my_start_date, my_end_date)
+            total_period = coop_date.number_of_days_between(
+                start_date, end_date)
             return currency.round(amount * period / total_period)
         return 0
 
@@ -266,8 +270,15 @@ class PaymentRule(model.CoopSQL, model.CoopView):
     start_lines = fields.One2Many('billing.payment_rule_line', 'payment_rule',
         'Start Lines')
     appliable_fees = fields.Many2Many('billing.payment_rule-fee-relation',
-        'payment_rule', 'fee', 'Appliable fees')
+        'payment_rule', 'fee', 'Appliable fees', depends=['company'],
+        domain=[('company', '=', Eval('company'))])
     payment_mode = fields.Selection(PAYMENT_DELAYS, 'Payment Mode')
+    company = fields.Many2One('company.company', 'Company', required=True,
+        ondelete='RESTRICT')
+
+    @classmethod
+    def default_company(cls):
+        return Transaction().context.get('company') or None
 
     @classmethod
     def default_payment_mode(cls):
