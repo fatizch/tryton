@@ -14,7 +14,7 @@
       <label name="receivable_today"/>
       <field name="receivable_today"/>
       <group id="lines" colspan="2" col="2" yexpand="1" yfill="1">
-        <field name="receivable_lines" colspan="2" view_ids="billing.move_line_tree,account.move_line_view_form"/>
+        <field name="receivable_lines" colspan="2" view_ids="billing_individual.move_line_tree,account.move_line_view_form"/>
         <label name="display_all_lines"/>
         <field name="display_all_lines"/>
       </group>

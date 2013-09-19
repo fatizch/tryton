@@ -29,7 +29,7 @@
       <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
     </group>
   </group>
-  <field name="all_lines" colspan="1" mode="tree" yfill="1" yexpand="1" view_ids="billing.price_line_expandable_view_tree"/>
+  <field name="all_lines" colspan="1" mode="tree" yfill="1" yexpand="1" view_ids="billing_individual.price_line_expandable_view_tree"/>
   <group id="special_lines" yexpand="1" yfill="1" colspan="1" col="1">
     <field name="tax_lines" yfill="1" yexpand="1"/>
     <field name="fee_lines" yfill="1" yexpand="1"/>
