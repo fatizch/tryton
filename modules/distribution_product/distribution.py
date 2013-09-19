@@ -58,6 +58,12 @@ class Product():
         res.remove('com_products')
         return res
 
+    @classmethod
+    def _export_skips(cls):
+        result = super(Product, cls)._export_skips()
+        result.add('com_products')
+        return result
+
 
 class CommercialProduct(model.CoopSQL, model.CoopView):
     'Commercial Product'
