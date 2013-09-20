@@ -34,8 +34,6 @@ class PaymentRuleLine(model.CoopSQL, model.CoopView):
     __name__ = 'billing.payment_rule_line'
 
     sequence = fields.Integer('Sequence',
-        order_field='(%(table)s.sequence IS NULL) %(order)s, '
-        '%(table)s.sequence %(order)s',
         help='Use to order lines in ascending order')
     payment_rule = fields.Many2One('billing.payment_rule', 'Payment Term',
         required=True, ondelete="CASCADE")
@@ -106,6 +104,11 @@ class PaymentRuleLine(model.CoopSQL, model.CoopView):
         states={'invisible':
             Eval('_parent_payment_rule', {}).get('remaining_position', '')
             != 'custom'})
+
+    @classmethod
+    def order_sequence(cls, tables):
+        rule_line, _ = tables[None]
+        return [rule_line.sequence is None, rule_line.sequence]
 
     @classmethod
     def default_add_calculated_period(cls):
