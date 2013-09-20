@@ -36,13 +36,11 @@ class Contract():
 already exists and can't be modified (%s)'''),
                 })
 
+        utils.update_on_change(cls, 'manual_billing',
+            ['rates', 'manual_billing'])
+
     def get_use_rates(self, name):
-        if not self.offered or not self.offered.is_group:
-            return False
-        for option in self.options:
-            if option.offered.rating_rules:
-                return True
-        return False
+        return self.offered.use_rates if self.offered else False
 
     def calculate_rate_dict_at_date(self, date):
         cur_dict = {'date': date}
@@ -184,6 +182,14 @@ already exists and can't be modified (%s)'''),
             if start <= end:
                 res.append(((start, end), rate_line))
         return res
+
+    def on_change_manual_billing(self):
+        return {'rates': {'update': [{
+                        'id': r.id,
+                        'manual_billing': self.manual_billing,
+                        'childs': r.on_change_manual_billing(
+                            self.manual_billing)['childs']}
+                    for r in self.rates]}}
 
 
 class CoveredData():

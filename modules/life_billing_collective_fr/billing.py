@@ -27,8 +27,9 @@ class RateLine(model.CoopSQL, model.CoopView):
     __name__ = 'billing.rate_line'
 
     manual_billing = fields.Function(
-        fields.Boolean('Manual Biiling', on_change_with=['contract', 'parent']),
-        'on_change_with_manual_billing')
+        fields.Boolean('Manual Biiling',
+            on_change=['manual_billing', 'childs']),
+        'get_manual_billing')
     contract = fields.Many2One('contract.contract', 'Contract',
         ondelete='CASCADE',
         states={'invisible': ~~Eval('parent')})
@@ -103,12 +104,21 @@ class RateLine(model.CoopSQL, model.CoopView):
     def _expand_tree(self, name):
         return True
 
-    def on_change_with_manual_billing(self, name=None):
+    def get_manual_billing(self, name):
         if self.contract:
             return self.contract.manual_billing
         elif self.parent:
             return self.parent.manual_billing
         return False
+
+    def on_change_manual_billing(self, value=None):
+        if value is None:
+            value = self.manual_billing
+        return {'childs': {'update': [{
+                        'id': c.id,
+                        'manual_billing': value,
+                        'childs': c.on_change_manual_billing(value)['childs']}
+                    for c in self.childs]}}
 
 
 class RateNote(model.CoopSQL, model.CoopView):

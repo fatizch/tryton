@@ -7,6 +7,9 @@
         </page>
     </xpath>
     <xpath expr="/form" position="inside">
+        <newline/>
         <field name="is_rating_by_fare_class"/>
+        <field name="use_rates"/>
+        <newline/>
     </xpath>
 </data>

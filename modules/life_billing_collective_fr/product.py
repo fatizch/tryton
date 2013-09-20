@@ -23,8 +23,15 @@ class Product():
 
     __name__ = 'offered.product'
 
+    use_rates = fields.Function(
+        fields.Boolean('Use Rates', states={'invisible': True}),
+        'get_use_rates')
+
     def get_collective_rating_frequency(self):
         return 'quarterly'
+
+    def get_use_rates(self, name):
+        return self.is_group and any([x.rating_rules for x in self.coverages])
 
 
 class Coverage():
@@ -35,6 +42,9 @@ class Coverage():
     is_rating_by_fare_class = fields.Function(
         fields.Boolean('Rating by Fare Class', states={'invisible': True}),
         'get_rating_by_fare_class')
+    use_rates = fields.Function(
+        fields.Boolean('Use Rates', states={'invisible': True}),
+        'get_use_rates')
     rating_rules = fields.One2Many('collective.rating_rule', 'offered',
         'Rating Rules', states={'invisible': ~Eval('is_group')})
 
@@ -45,6 +55,9 @@ class Coverage():
             if rating_rule.rating_kind == 'fare_class':
                 return True
         return False
+
+    def get_use_rates(self, name):
+        return self.is_group and self.rating_rules
 
 
 class FareClass(model.CoopSQL, model.CoopView):
