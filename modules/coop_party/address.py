@@ -96,7 +96,7 @@ class Address(model.CoopSQL):
 
     @classmethod
     def _export_keys(cls):
-        return set(('party.code', 'name'))
+        return set(('party.name', 'name'))
 
     def on_change_with_city(self):
         if self.zip and self.country:

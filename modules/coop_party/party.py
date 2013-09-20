@@ -261,6 +261,10 @@ class Party(model.CoopSQL):
             ('lang', 'light')])
         return res
 
+    @classmethod
+    def _export_keys(cls):
+        return set(['name'])
+
 
 class Actor(CoopView):
     'Actor'

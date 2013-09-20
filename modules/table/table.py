@@ -427,12 +427,6 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         table = TableHandler(cursor, cls, module_name)
         table.index_action(['definition', 'type'], 'add')
 
-    # @classmethod
-    # def _export_keys(cls):
-        # return set([
-            # 'definition.code', 'type', 'date', 'start',
-            # 'end', 'start_date', 'end_date', 'value'])
-
     @classmethod
     def clean_sequence(cls, records):
         to_clean = []

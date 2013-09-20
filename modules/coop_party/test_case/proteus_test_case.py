@@ -243,9 +243,9 @@ def create_company(cfg_dict, name, short_name=None, parent=None,
 
 def create_hierarchy(cfg_dict):
     if proteus_tools.get_objects_from_db(cfg_dict, 'Party', key='name',
-            value='Mother House'):
+            value='Coop'):
         return
-    create_company(cfg_dict, 'Mother House', 'MH', None, 1, 4)
+    create_company(cfg_dict, 'Coop', 'MH', None, 1, 4)
 
 
 def create_contact_mechanisms(cfg_dict):

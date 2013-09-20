@@ -257,13 +257,16 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         cls.options = copy.copy(cls.options)
         cls.options.model_name = cls.get_options_model_name()
         super(Contract, cls).__setup__()
+        cls.offered = copy.copy(cls.offered)
+        cls.offered.domain.append(('company', '=', Eval('company')))
+        cls.offered.depends.append('company')
         utils.update_on_change(cls, 'start_date', [
                 'start_date', 'appliable_conditions_date'])
         utils.update_depends(cls, 'start_date', ['appliable_conditions_date'])
 
-    @staticmethod
-    def default_company():
-        return Transaction().context.get('company')
+    @classmethod
+    def default_company(cls):
+        return Transaction().context.get('company', None)
 
     @classmethod
     def subscribe_contract(cls, offered, party, at_date=None,
@@ -482,7 +485,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             ('status_history.start_date', '<=', at_date),
             ['OR',
                 [('status_history.end_date', '=', None)],
-                [('status_history.end_date', '>=', at_date)]]
+                [('status_history.end_date', '>=', at_date)]],
+            ('company', '=', Eval('context', {}).get('company')),
             ]
         return cls.search(domain)
 

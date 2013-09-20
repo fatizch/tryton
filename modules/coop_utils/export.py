@@ -102,10 +102,15 @@ class ExportImportMixin(Model):
         # functional key for self.
         # field_name may use "." to chain if it is not ambiguous
         # TODO : Look for a field with 'UNIQUE' and 'required' attributes set
+        res = []
+        if 'company' in cls._fields and (
+                not isinstance(cls._fields['company'], tryton_fields.Function)
+                or isinstance(cls._fields['company'], tryton_fields.Property)):
+            res.append('company.party.name')
         if 'code' in cls._fields:
-            return set(['code'])
+            return set(res + ['code'])
         elif 'name' in cls._fields:
-            return set(['name'])
+            return set(res + ['name'])
         else:
             return set()
 

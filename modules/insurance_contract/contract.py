@@ -708,7 +708,8 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             ('covered_data.start_date', '<=', at_date),
             ['OR',
                 ['covered_data.end_date', '=', None],
-                ['covered_data.end_date', '>=', at_date]]
+                ['covered_data.end_date', '>=', at_date]],
+            ('contract.company', '=', Eval('context', {}).get('company')),
         ]
         return cls.search([domain])
 

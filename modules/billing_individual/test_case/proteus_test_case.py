@@ -43,11 +43,8 @@ def create_methods(cfg_dict):
 def launch_test_case(cfg_dict):
     update_cfg_dict_with_models(cfg_dict)
     meths = create_methods(cfg_dict)
-    company_candidates = cfg_dict['Company'].find([])
-    if company_candidates:
-        company = company_candidates[0]
-    else:
-        company = proteus_tools.get_or_create_company(cfg_dict, 'Mother House')
+    company, = cfg_dict['Company'].find([('party.name', '=', 'Coop')])
+    cfg_dict['_config'].set_context({'company': company.id})
 
     bad_contracts = cfg_dict['Contract'].find([('company', '=', None)])
     cfg_dict['Contract'].write([x.id for x in bad_contracts],

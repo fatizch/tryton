@@ -54,7 +54,7 @@ class Insurer(Actor, model.CoopSQL):
 
     @classmethod
     def _export_keys(cls):
-        return set(['party.code'])
+        return set(['party.name'])
 
     @classmethod
     def get_summary(cls, insurers, name=None, at_date=None, lang=None):

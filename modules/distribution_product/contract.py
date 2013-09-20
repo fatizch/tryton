@@ -1,4 +1,5 @@
 from trytond.pool import PoolMeta
+from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import fields, utils
 
@@ -14,7 +15,8 @@ class Contract():
     __metaclass__ = PoolMeta
 
     dist_network = fields.Many2One('distribution.dist_network',
-        'Distribution Network')
+        'Distribution Network', domain=[('company', '=', Eval('company'))],
+        depends=['company'])
     com_product = fields.Function(
         fields.Many2One('distribution.commercial_product',
             'Commercial Product'),
