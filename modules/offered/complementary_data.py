@@ -98,6 +98,13 @@ class ComplementaryDataDefinition(
             cls.type_.on_change = []
         cls.type_.on_change.append('type_')
 
+        cls.selection = copy.copy(cls.selection)
+        if not cls.selection.on_change:
+            cls.selection.on_change = []
+        cls.selection.on_change += ['selection', 'default_value_selection']
+        cls.selection.states['required'] = (Eval('type_') == 'selection'
+            and ~~Eval('with_default_value'))
+
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(name)', 'The code must be unique!'),
         ]
@@ -119,6 +126,19 @@ class ComplementaryDataDefinition(
         else:
             res['default'] = ''
         return res
+
+    def on_change_selection(self):
+        if not (hasattr(self, 'default_value_selection') and
+                self.default_value_selection):
+            return {}
+        if not (hasattr(self, 'selection') and self.selection):
+            return {'default_value_selection': ''}
+        db_selection = self.selection
+        selection = [v.split(':')[0].strip()
+            for v in db_selection.splitlines() if v]
+        if not self.default_value_selection in selection:
+            return {'default_value_selection': selection[0] or None}
+        return {}
 
     def get_default_value_selection(self):
         if not (hasattr(self, 'type_') and self.type_ == 'selection'):
