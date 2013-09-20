@@ -5,7 +5,7 @@ from trytond.pyson import Eval
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import StateTransition, StateView, Button, StateAction
-from trytond.backend import TableHandler
+from trytond import backend
 
 from trytond.modules.coop_utils import model, fields, utils, coop_date, \
     coop_string
@@ -304,6 +304,7 @@ class RateNoteLine(model.CoopSQL, model.CoopView):
         cursor = Transaction().cursor
 
         # Migration from X.X: rename quantity to base
+        TableHandler = backend.get('TableHandler')
         table = TableHandler(cursor, cls, module_name)
         table.column_rename('quantity', 'base')
 

@@ -107,13 +107,13 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
     @classmethod
     def search(
             cls, domain, offset=0, limit=None, order=None, count=False,
-            query_string=False):
+            query=False):
         #Set your class here to see the domain on the search
         # if cls.__name__ == 'ins_contract.loan_share':
         #     print domain
         return super(CoopSQL, cls).search(
             domain=domain, offset=offset,
-            limit=limit, order=order, count=count, query_string=query_string)
+            limit=limit, order=order, count=count, query=query)
 
     def get_currency(self):
         print self.__name__
@@ -327,11 +327,11 @@ class TableOfTable(CoopSQL, CoopView):
     @classmethod
     def search(
             cls, domain, offset=0, limit=None, order=None, count=False,
-            query_string=False):
+            query=False):
         domain.append(('my_model_name', '=', cls.__name__))
         return super(TableOfTable, cls).search(
             domain, offset=offset,
-            limit=limit, order=order, count=count, query_string=query_string)
+            limit=limit, order=order, count=count, query=query)
 
     @staticmethod
     def get_values_as_selection(model_name):

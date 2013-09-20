@@ -11,7 +11,7 @@ from trytond.model import Model, ModelSQL, ModelView, fields as tryton_fields
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pool import Pool, PoolMeta
 from trytond.rpc import RPC
-from trytond.backend import TableHandler
+from trytond import backend
 from trytond.exceptions import UserError
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If, PYSONEncoder
@@ -72,7 +72,7 @@ class ExportImportMixin(Model):
             return
         cursor = Transaction().cursor
         try:
-            table = TableHandler(cursor, cls, module_name)
+            table = backend.get('TableHandler')(cursor, cls, module_name)
         except AttributeError:
             # No _table defined for model
             return

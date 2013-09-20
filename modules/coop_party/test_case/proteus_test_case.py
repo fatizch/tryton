@@ -250,7 +250,7 @@ def create_hierarchy(cfg_dict):
 
 def create_contact_mechanisms(cfg_dict):
     Contact = cfg_dict['Contact']
-    for party in cfg_dict['Party'].find([('contact_mechanisms', '=', False)]):
+    for party in cfg_dict['Party'].find([('contact_mechanisms', '=', None)]):
         contact_types = ['phone', 'email']
         while len(contact_types) > 0:
             contact = Contact()

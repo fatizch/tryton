@@ -111,7 +111,7 @@ class Payment(Workflow, ModelSQL, ModelView):
     kind = fields.Selection(KINDS, 'Kind', required=True, on_change=['kind'],
         states=_STATES, depends=_DEPENDS)
     party = fields.Many2One('party.party', 'Party', required=True,
-        states=_STATES, depends=_DEPENDS)
+        states=_STATES, depends=_DEPENDS, on_change=['party'])
     date = fields.Date('Date', required=True, states=_STATES, depends=_DEPENDS)
     amount = fields.Numeric('Amount', required=True,
         digits=(16, Eval('currency_digits', 2)), states=_STATES,
@@ -119,26 +119,10 @@ class Payment(Workflow, ModelSQL, ModelView):
     line = fields.Many2One('account.move.line', 'Line', ondelete='RESTRICT',
         domain=[
             If(Eval('kind') == 'receivable',
-                ['OR',
-                    [
-                        ('account.kind', '=', 'receivable'),
-                        ('debit', '!=', 0),
-                        ],
-                    [
-                        ('account.kind', '=', 'payable'),
-                        ('credit', '!=', 0),
-                        ],
-                    ],
-                ['OR',
-                    [
-                        ('account.kind', '=', 'payable'),
-                        ('credit', '!=', 0),
-                        ],
-                    [
-                        ('account.kind', '=', 'receivable'),
-                        ('debit', '!=', 0),
-                        ],
-                    ]),
+                ['OR', ('debit', '>', 0), ('credit', '<', 0)],
+                ['OR', ('credit', '>', 0), ('debit', '<', 0)],
+                ),
+            ('account.kind', 'in', ['receivable', 'payable']),
             ('party', '=', Eval('party', None)),
             If(Eval('state') == 'draft',
                 [
@@ -225,6 +209,11 @@ class Payment(Workflow, ModelSQL, ModelView):
         return 2
 
     def on_change_kind(self):
+        return {
+            'line': None,
+            }
+
+    def on_change_party(self):
         return {
             'line': None,
             }
@@ -319,13 +308,12 @@ class ProcessPayment(Wizard):
     def do_process(self, action):
         pool = Pool()
         Payment = pool.get('account.payment')
-        # payments = Payment.browse(Transaction().context['active_ids'])
-        payments = Payment.search([('state', '=', 'approved')])
+        payments = Payment.browse(Transaction().context['active_ids'])
 
-        # for payment in payments:
-            # if (payment.line, payment.line.payment_amount < 0):
-                # self.raise_user_warning(str(payment),
-                    # 'overpay', (payment.rec_name, payment.line.rec_name))
+        for payment in payments:
+            if payment.line and payment.line.payment_amount < 0:
+                self.raise_user_warning(str(payment),
+                    'overpay', (payment.rec_name, payment.line.rec_name))
 
         groups = []
         payments = sorted(payments, key=self._group_payment_key)
@@ -336,8 +324,7 @@ class ProcessPayment(Wizard):
                 group.save()
                 groups.append(group)
                 return group
-            the_list = list(grouped_payments)
-            Payment.process(the_list, group)
+            Payment.process(list(grouped_payments), group)
 
         return action, {
             'res_id': [g.id for g in groups],

@@ -68,9 +68,9 @@ class ZipCode(model.CoopSQL, model.CoopView):
 
     @classmethod
     def search(cls, domain, offset=0, limit=None, order=None, count=False,
-            query_string=False):
+            query=False):
         res = super(ZipCode, cls).search(
-            domain, offset, limit, order, count, query_string)
+            domain, offset, limit, order, count, query)
         if res:
             return res
         for cur_domain in domain:
@@ -83,4 +83,4 @@ class ZipCode(model.CoopSQL, model.CoopView):
                 domain.append([u'city', cur_domain[1], city])
                 break
         return super(ZipCode, cls).search(
-            domain, offset, limit, order, count, query_string)
+            domain, offset, limit, order, count, query)

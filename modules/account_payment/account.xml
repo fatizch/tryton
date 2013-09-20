@@ -21,16 +21,18 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="move_line_view_list"/>
             <field name="act_window" ref="act_move_line_form"/>
         </record>
-        <record model="ir.action.act_window.domain" id="act_move_line_form_domain_payable">
+        <record model="ir.action.act_window.domain"
+            id="act_move_line_form_domain_payable">
             <field name="name">Payable</field>
             <field name="sequence" eval="10"/>
-            <field name="domain">['OR', [('payment_kind', '=', 'payable'), ('credit', '!=', 0)], [('payment_kind', '=', 'receivable'), ('debit', '!=', 0)]]</field>
+            <field name="domain">['OR', ('credit', '&gt;', 0), ('debit', '&lt;', 0)]</field>
             <field name="act_window" ref="act_move_line_form"/>
         </record>
-        <record model="ir.action.act_window.domain" id="act_move_line_form_domain_receivable">
+        <record model="ir.action.act_window.domain"
+            id="act_move_line_form_domain_receivable">
             <field name="name">Receivable</field>
             <field name="sequence" eval="20"/>
-            <field name="domain">['OR', [('payment_kind', '=', 'receivable'), ('debit', '!=', 0)], [('payment_kind', '=', 'payable'), ('credit', '!=', 0)]]</field>
+            <field name="domain">['OR', ('debit', '&gt;', 0), ('credit', '&lt;', 0)]</field>
             <field name="act_window" ref="act_move_line_form"/>
         </record>
 

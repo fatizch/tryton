@@ -3,8 +3,11 @@ import copy
 from datetime import datetime
 from decimal import Decimal
 
+from sql import Column, Literal, Flavor
+from sql.functions import Function, Now
+
 from trytond.config import CONFIG
-from trytond.backend import TableHandler
+from trytond import backend
 from trytond.pool import Pool
 from trytond.rpc import RPC
 from trytond.pyson import Not, Eval, If, Bool, Or, PYSONEncoder
@@ -416,13 +419,6 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         super(TableDefinitionDimension, cls).__setup__()
 
         cls._order.insert(0, ('rec_name', 'ASC'))
-        cls.rec_name.order_field = (
-            "%(table)s.sequence IS NULL %(order)s, "
-            "%(table)s.sequence %(order)s, "
-            "%(table)s.value %(order)s, "
-            "%(table)s.date %(order)s, "
-            "%(table)s.start %(order)s, %(table)s.end %(order)s, "
-            "%(table)s.start_date %(order)s, %(table)s.end_date %(order)s")
         if not cls.rec_name.on_change_with:
             cls.rec_name.on_change_with = []
         for field in ('type', 'value', 'date', 'start', 'end', 'start_date',
@@ -436,6 +432,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
     @classmethod
     def __register__(cls, module_name):
         cursor = Transaction().cursor
+        TableHandler = backend.get('TableHandler')
 
         super(TableDefinitionDimension, cls).__register__(module_name)
 
@@ -511,6 +508,18 @@ class TableDefinitionDimension(ModelSQL, ModelView):
     def search_rec_name(cls, name, clause):
         return [('value',) + tuple(clause[1:])]
 
+    @staticmethod
+    def order_rec_name(tables):
+        table, _ = tables[None]
+        return [
+            table.sequence == None,
+            table.sequence,
+            table.value,
+            table.date,
+            table.start, table.end,
+            table.start_date, table.end_date,
+            ]
+
 
 class TableCell(ModelSQL, ModelView):
     "Cell"
@@ -555,6 +564,7 @@ class TableCell(ModelSQL, ModelView):
     @classmethod
     def __register__(cls, module_name):
         cursor = Transaction().cursor
+        TableHandler = backend.get('TableHandler')
 
         super(TableCell, cls).__register__(module_name)
 
@@ -841,6 +851,10 @@ class Table2DDict(dict):
         return result
 
 
+class Crosstab(Function):
+    _function = 'CROSSTAB'
+
+
 class Table2D(ModelSQL, ModelView):
     "Table 2D"
     __name__ = 'table.2d'
@@ -868,6 +882,8 @@ class Table2D(ModelSQL, ModelView):
         TableDefinition = pool.get('table.table_def')
         TableDefinitionDimension = pool.get(
             'table.table_dimension')
+        context = Transaction().context
+        cursor = Transaction().cursor
         definition_id = int(
             Transaction().context.get('table.table_def', -1))
         if definition_id != -1:
@@ -879,39 +895,55 @@ class Table2D(ModelSQL, ModelView):
                     or (definition.dimension_kind4
                         and not Transaction().context.get('dimension4'))):
                 cls.raise_user_error('not_2d')
+
+        dimension = TableDefinitionDimension.__table__()
+        cell = TableCell.__table__()
+
         dimensions2 = TableDefinitionDimension.search([
                 ('type', '=', 'dimension2'),
                 ('definition', '=', definition_id),
             ])
-        cols = ', '.join('col%d VARCHAR' % d.id for d in dimensions2)
-        if cols:
-            cols = ', ' + cols
-        dimensions_clause = ''
-        dimensions_args = []
-        for dimension in ('dimension3', 'dimension4'):
-            if Transaction().context.get(dimension) is not None:
-                dimensions_clause += 'AND i.%s= %%s ' % dimension
-                dimensions_args.append(Transaction().context[dimension])
+        columns_definitions = [('id', cls.id.sql_type().base)]
+        columns_definitions += [
+            ('col%d' % d.id, TableCell.value.sql_type().base)
+            for d in dimensions2]
+        dimensions_clause = Literal(True)
+        for dimension_name in ('dimension3', 'dimension4'):
+            column = Column(cell, dimension_name)
+            if context.get(dimension_name) is not None:
+                dimensions_clause &= column == context[dimension_name]
             else:
-                dimensions_clause += 'AND i.%s IS NULL ' % dimension
-        return ("SELECT *, id AS row, 0 AS create_uid, NULL AS write_uid, "
-                " NOW() AS create_date, NULL AS write_date "
-            "FROM CROSSTAB("
-            "'SELECT d.id, i.dimension2, i.value "
-            'FROM "' + TableDefinitionDimension._table + '" AS d '
-            'LEFT JOIN "' + TableCell._table + '" AS i '
-                "ON (d.id = i.dimension1 " + dimensions_clause + ") "
-            + ("WHERE d.definition = %s " % definition_id)
-                + "AND type = ''dimension1'' "
-            "ORDER BY 1', "
-            "'SELECT id "
-            'FROM "' + TableDefinitionDimension._table + '" '
-            "WHERE type = ''dimension2'' "
-                + ("AND definition = %s " % definition_id)
-            + " ORDER BY sequence IS NULL, sequence ASC, value ASC, "
-                "date ASC, start ASC, \"end\" ASC, "
-                "start_date ASC, end_date ASC') "
-            "AS ct(id INTEGER" + cols + ")", dimensions_args)
+                dimensions_clause &= column == None
+
+        source = dimension.join(cell, 'LEFT',
+            (dimension.id == cell.dimension1) & dimensions_clause
+            ).select(dimension.id, cell.dimension2, cell.value,
+                where=(dimension.definition == definition_id)
+                & (dimension.type == 'dimension1'),
+                order_by=dimension.id)
+        category = dimension.select(dimension.id,
+            where=(dimension.type == 'dimension2')
+            & (dimension.definition == definition_id),
+            order_by=[
+                dimension.sequence == None,
+                dimension.sequence.asc,
+                dimension.value.asc,
+                dimension.date.asc,
+                dimension.start.asc, dimension.end.asc,
+                dimension.start_date.asc, dimension.end_date.asc])
+
+        cursor.execute(*source)
+        source_text = cursor.query
+        cursor.execute(*category)
+        category_text = cursor.query
+
+        func = Crosstab(source_text, category_text,
+            columns_definitions=columns_definitions)
+        columns = [Column(func, c).as_(c) for c, _ in columns_definitions]
+        columns += [func.id.as_('row'),
+            Literal(0).as_('create_uid'), Literal(None).as_('write_uid'),
+            Now().as_('create_date'), Literal(None).as_('write_date')]
+        return func.select(*columns)
 
     @classmethod
     def fields_view_get(cls, view_id=None, view_type='form'):
@@ -963,7 +995,7 @@ class Table2D(ModelSQL, ModelView):
             'type': 'tree',
             'arch': xml,
             'fields': fields,
-            'field_childs': False,
+            'field_childs': None,
             'view_id': 0,
         }
 

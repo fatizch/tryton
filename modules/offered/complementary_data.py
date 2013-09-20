@@ -181,7 +181,7 @@ class ComplementaryDataDefinition(
     @classmethod
     def _search(
             cls, domain, offset=0, limit=None, order=None, count=False,
-            query_string=False):
+            query=False):
         # Important : if you do not check (and set below) relation_selection,
         # There is a risk of infinite recursion if your code needs to do a
         # search (might only be a O2M / M2M)
@@ -205,7 +205,7 @@ class ComplementaryDataDefinition(
                 domain.append(('id', 'in', good_schemas[0]))
         return super(ComplementaryDataDefinition, cls).search(
             domain, offset=offset, limit=limit, order=order, count=count,
-            query_string=query_string)
+            query=query)
 
     def valid_at_date(self, at_date):
         if at_date and hasattr(self, 'start_date') and self.start_date:
