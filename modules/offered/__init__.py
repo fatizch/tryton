@@ -4,6 +4,7 @@ from .rule_engine_results import *
 from .offered import *
 from .complementary_data import *
 from .coverage import *
+from .export import *
 
 
 def register():
@@ -20,4 +21,6 @@ def register():
         CoverageComplementaryDataRelation,
         Tag,
         ComplementaryDataDefTagRelation,
+        #For export use
+        ExportPackage,
         module='offered', type_='model')

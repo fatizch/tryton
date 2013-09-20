@@ -698,6 +698,34 @@ class ExportPackage(ExportImportMixin, ModelSQL, ModelView):
     package_name = fields.Char('Package Name', required=True)
     instances_to_export = fields.One2Many('coop_utils.export_instance',
         'package', 'Instances to export')
+    model = fields.Function(
+        fields.Selection('get_possible_models_to_export', 'Model'),
+        'getter_void', setter='setter_void')
+
+    @classmethod
+    def __setup__(cls):
+        super(ExportPackage, cls).__setup__()
+        cls.__rpc__.update({'get_possible_models_to_export': RPC()})
+
+    @classmethod
+    def get_possible_models_to_export(cls):
+        return [('', '')]
+
+    def _on_change(self, name):
+        existing = [x.to_export for x in self.instances_to_export]
+        offered = [x for x in getattr(self, name) if not x in existing]
+        res = {'instances_to_export': {'add': [{
+                        'to_export': '%s,%s' % (x.__name__, x.id)}
+                    for x in offered]}}
+        res['model'] = ''
+        return res
+
+    def getter_void(self, name):
+        return None
+
+    @classmethod
+    def setter_void(cls, instances, name, value):
+        pass
 
 
 class Group(ExportImportMixin):
