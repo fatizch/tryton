@@ -28,4 +28,6 @@
     <newline/>
     <label name="index"/>
     <field name="index"/>
+    <newline/>
+    <field name="manual_billing"/>
 </form>

@@ -672,9 +672,14 @@ class Contract():
 
     billing_managers = fields.One2Many('billing.billing_manager', 'contract',
         'Billing Managers')
-    next_billing_date = fields.Date('Next Billing Date')
+    use_prices = fields.Function(
+        fields.Boolean('Use Prices', states={'invisible': True}),
+        'get_use_prices')
+    next_billing_date = fields.Date('Next Billing Date',
+        states={'invisible': ~Eval('use_prices')})
     prices = fields.One2Many(
-        'billing.price_line', 'contract', 'Prices')
+        'billing.price_line', 'contract', 'Prices',
+        states={'invisible': ~Eval('use_prices')})
     billing_periods = fields.One2Many('billing.period', 'contract',
         'Billing Periods')
     receivable_lines = fields.Function(
@@ -703,7 +708,7 @@ class Contract():
     def __setup__(cls):
         super(Contract, cls).__setup__()
         cls._buttons.update({
-                'button_calculate_prices': {},
+                'button_calculate_prices': {'invisible': ~Eval('use_prices')},
                 })
 
     def on_change_with_receivable_lines(self, name=None):
@@ -1237,6 +1242,16 @@ class Contract():
         res = super(Contract, cls).get_var_names_for_full_extract()
         res.extend(['billing_managers'])
         return res
+
+    def get_use_prices(self, name):
+        if not self.offered:
+            return False
+        for rules in self.offered.pricing_rules:
+            return True
+        for option in self.options:
+            if option.offered.pricing_rules:
+                return True
+        return False
 
 
 class Option():

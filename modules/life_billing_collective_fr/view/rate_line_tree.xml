@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<tree string="Rate Line">
+<tree string="Rate Line" editable="bottom">
     <field name="rec_name"/>
     <field name="rate" factor="100">
         <suffix string="%"/>
@@ -7,4 +7,5 @@
     <field name="index"/>
     <field name="childs" tree_invisible="1"/>
     <field name="parent" tree_invisible="1"/>
+    <field name="manual_billing" tree_invisible="1"/>
 </tree>

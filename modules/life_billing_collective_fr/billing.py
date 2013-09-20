@@ -26,6 +26,9 @@ class RateLine(model.CoopSQL, model.CoopView):
 
     __name__ = 'billing.rate_line'
 
+    manual_billing = fields.Function(
+        fields.Boolean('Manual Biiling', on_change_with=['contract', 'parent']),
+        'on_change_with_manual_billing')
     contract = fields.Many2One('contract.contract', 'Contract',
         ondelete='CASCADE',
         states={'invisible': ~~Eval('parent')})
@@ -44,7 +47,8 @@ class RateLine(model.CoopSQL, model.CoopView):
         states={'invisible': ~~Eval('tranche')})
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    rate = fields.Numeric('Rate', digits=(16, 4))
+    rate = fields.Numeric('Rate', digits=(16, 4),
+        states={'readonly': ~Eval('manual_billing')})
     reference_value = fields.Function(
         fields.Char('Reference Value'),
         'get_reference_value')
@@ -98,6 +102,13 @@ class RateLine(model.CoopSQL, model.CoopView):
 
     def _expand_tree(self, name):
         return True
+
+    def on_change_with_manual_billing(self, name=None):
+        if self.contract:
+            return self.contract.manual_billing
+        elif self.parent:
+            return self.parent.manual_billing
+        return False
 
 
 class RateNote(model.CoopSQL, model.CoopView):
