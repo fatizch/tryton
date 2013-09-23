@@ -184,6 +184,8 @@ already exists and can't be modified (%s)'''),
         return res
 
     def on_change_manual_billing(self):
+        if not self.rates:
+            return {}
         return {'rates': {'update': [{
                         'id': r.id,
                         'manual_billing': self.manual_billing,
