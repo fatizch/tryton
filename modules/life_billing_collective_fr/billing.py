@@ -118,13 +118,11 @@ class RateLine(model.CoopSQL, model.CoopView):
             return {}
         child_dicts = []
         for c in self.childs:
+            child_dict = {'id': c.id, 'manual_billing': value}
             sub_child_dict = c.on_change_manual_billing(value)
-            if not 'childs' in sub_child_dict:
-                continue
-            child_dicts.append({
-                        'id': c.id,
-                        'manual_billing': value,
-                        'childs': sub_child_dict['childs']})
+            if 'childs' in sub_child_dict:
+                child_dict['childs'] = sub_child_dict['childs']
+            child_dicts.append(child_dict)
         if child_dicts:
             return {'childs': {'update': child_dicts}}
         else:

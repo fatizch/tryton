@@ -188,13 +188,11 @@ already exists and can't be modified (%s)'''),
             return {}
         rate_dicts = []
         for r in self.rates:
+            rate_dict = {'id': r.id, 'manual_billing': self.manual_billing}
             child_dict = r.on_change_manual_billing(self.manual_billing)
-            if not 'childs' in child_dict:
-                continue
-            rate_dicts.append({
-                    'id': r.id,
-                    'manual_billing': self.manual_billing,
-                    'childs': child_dict['childs']})
+            if 'childs' in child_dict:
+                rate_dict['childs'] = child_dict['childs']
+            rate_dicts.append(rate_dict)
         if rate_dicts:
             return {'rates': {'update': rate_dicts}}
         else:
