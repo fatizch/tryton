@@ -186,12 +186,19 @@ already exists and can't be modified (%s)'''),
     def on_change_manual_billing(self):
         if not self.rates:
             return {}
-        return {'rates': {'update': [{
-                        'id': r.id,
-                        'manual_billing': self.manual_billing,
-                        'childs': r.on_change_manual_billing(
-                            self.manual_billing)['childs']}
-                    for r in self.rates]}}
+        rate_dicts = []
+        for r in self.rates:
+            child_dict = r.on_change_manual_billing(self.manual_billing)
+            if not 'childs' in child_dict:
+                continue
+            rate_dicts.append({
+                    'id': r.id,
+                    'manual_billing': self.manual_billing,
+                    'childs': child_dict['childs']})
+        if rate_dicts:
+            return {'rates': {'update': rate_dicts}}
+        else:
+            return {}
 
 
 class CoveredData():

@@ -114,11 +114,21 @@ class RateLine(model.CoopSQL, model.CoopView):
     def on_change_manual_billing(self, value=None):
         if value is None:
             value = self.manual_billing
-        return {'childs': {'update': [{
+        if not self.childs:
+            return {}
+        child_dicts = []
+        for c in self.childs:
+            sub_child_dict = c.on_change_manual_billing(value)
+            if not 'childs' in sub_child_dict:
+                continue
+            child_dicts.append({
                         'id': c.id,
                         'manual_billing': value,
-                        'childs': c.on_change_manual_billing(value)['childs']}
-                    for c in self.childs]}}
+                        'childs': sub_child_dict['childs']})
+        if child_dicts:
+            return {'childs': {'update': child_dicts}}
+        else:
+            return {}
 
 
 class RateNote(model.CoopSQL, model.CoopView):
