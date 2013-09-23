@@ -1,8 +1,11 @@
+import copy
+
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, fields, utils, coop_string
+from trytond.modules.coop_utils import export
 
 __all__ = [
     'DistributionNetwork',
@@ -93,6 +96,13 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True, on_change_with=['name', 'code'])
     description = fields.Text('Description')
+
+    @classmethod
+    def __setup__(cls):
+        super(CommercialProduct, cls).__setup__()
+        cls.product = copy.copy(cls.product)
+        cls.product.domain = export.clean_domain_for_import(
+            cls.product.domain, 'company')
 
     @staticmethod
     def default_start_date():
