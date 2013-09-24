@@ -15,7 +15,7 @@
         <field name="item_desc"/>
         <newline/>
         <label name="insurer"/>
-        <field name="insurer" widget="selection"/>
+        <field name="insurer"/>
         <newline/>
     </xpath>
     <xpath expr="/form/label[@name='template']" position="before">
