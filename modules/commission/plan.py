@@ -2,6 +2,7 @@
 import copy
 
 from trytond.pool import PoolMeta
+from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import model, fields
 from trytond.modules.insurance_product.business_rule import business_rule
@@ -13,6 +14,11 @@ __all__ = [
     'CommissionRule',
     ]
 
+COMMISSION_KIND = [
+    ('business_provider', 'Business Provider'),
+    ('management', 'Management Delegation'),
+    ]
+
 
 class CommissionPlan():
     'Commission Plan'
@@ -22,6 +28,8 @@ class CommissionPlan():
 
     dist_networks = fields.Many2Many('distribution.dist_network-plan',
         'com_plan', 'dist_network', 'Distribution Networks')
+    commission_kind = fields.Selection(COMMISSION_KIND, 'Kind',
+        states={'invisible': ~(Eval('kind') == 'commission')})
 
     @classmethod
     def __setup__(cls):

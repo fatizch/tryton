@@ -1,3 +1,5 @@
+import copy
+
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If, Or, Bool
 from trytond.transaction import Transaction
@@ -993,7 +995,17 @@ class ManagementRole(model.CoopSQL, model.CoopView):
         ondelete='RESTRICT',)
     contract = fields.Many2One('contract.contract', 'Contract',
         depends=['party'], ondelete='CASCADE')
-    kind = fields.Char('Kind')
+    kind = fields.Selection([('', '')], 'Kind')
+
+    @classmethod
+    def __setup__(cls):
+        cls.kind = copy.copy(cls.kind)
+        cls.kind.selection = list(set(cls.get_possible_management_role_kind()))
+        super(ManagementRole, cls).__setup__()
+
+    @classmethod
+    def get_possible_management_role_kind(cls):
+        return [('', '')]
 
 
 class DeliveredService(model.CoopView, model.CoopSQL):

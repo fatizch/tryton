@@ -5,11 +5,15 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coop_utils import model, fields, coop_date
 from trytond.modules.offered import PricingResultDetail
+from .plan import COMMISSION_KIND
+
+__metaclass__ = PoolMeta
 
 __all__ = [
     'PriceLineComRelation',
     'PriceLine',
     'Contract',
+    'ManagementRole',
     ]
 
 
@@ -29,7 +33,6 @@ class PriceLineComRelation(model.CoopSQL, model.CoopView):
 class PriceLine():
     'Price Line'
 
-    __metaclass__ = PoolMeta
     __name__ = 'billing.price_line'
 
     com_lines = fields.One2Many('commission.price_line-com-relation',
@@ -101,15 +104,15 @@ class Contract():
     'Contract'
 
     __name__ = 'contract.contract'
-    __metaclass__ = PoolMeta
 
     def get_protocol_offered(self, kind):
         dist_network = self.get_dist_network()
-        if kind != 'commission' or not dist_network:
+        if kind not in ['business_provider', 'management'] or not dist_network:
             return super(Contract, self).get_protocol(kind)
         coverages = [x.offered for x in self.options]
         for comp_plan in [x for x in dist_network.all_com_plans
-                if not x.end_date or x.end_date >= self.start_date]:
+                if x.commission_kind == kind
+                and (not x.end_date or x.end_date >= self.start_date)]:
             compensated_cov = []
             for comp in comp_plan.coverages:
                 compensated_cov.extend(comp.coverages)
@@ -155,3 +158,15 @@ class Contract():
         work_set['total_amount'] = ht_total
         self.calculate_final_coms(work_set)
         work_set['total_amount'] += new_total - ht_total
+
+
+class ManagementRole():
+    'Management Role'
+
+    __name__ = 'ins_contract.management_role'
+
+    @classmethod
+    def get_possible_management_role_kind(cls):
+        res = super(ManagementRole, cls).get_possible_management_role_kind()
+        res.extend(COMMISSION_KIND)
+        return list(set(res))
