@@ -1,73 +1,76 @@
 <?xml version="1.0"?>
 <tryton>
-    <data>
-        <record model="ir.ui.view" id="rate_line_view_tree">
-            <field name="model">billing.rate_line</field>
-            <field name="type">tree</field>
-            <field name="field_childs">childs</field>
-            <field name="name">rate_line_tree</field>
-        </record>
-        <record model="ir.ui.view" id="rate_line_view_form">
-            <field name="model">billing.rate_line</field>
-            <field name="type">form</field>
-            <field name="name">rate_line_form</field>
-        </record>
-        <record model="ir.ui.view" id="rate_note_process_parameters_view_form">
-          <field name="model">billing.rate_note_process_parameters</field>
-          <field name="type">form</field>
-          <field name="name">rate_note_process_parameters_form</field>
-      </record>
-      <record model="ir.ui.view" id="rate_notes_displayer_view_form">
-          <field name="model">billing.rate_notes_displayer</field>
-          <field name="type">form</field>
-          <field name="name">rate_notes_displayer_form</field>
-      </record>
-
-    <!-- RateNote -->
-
-      <record model="ir.ui.view" id="rate_note_view_form">
-          <field name="model">billing.rate_note</field>
-          <field name="type">form</field>
-          <field name="name">rate_note_form</field>
-      </record>
-      <record model="ir.ui.view" id="rate_note_view_tree">
-          <field name="model">billing.rate_note</field>
-          <field name="type">tree</field>
-          <field name="name">rate_note_tree</field>
-      </record>
-      <record model="ir.action.act_window" id="act_rate_note_form">
-          <field name="name">Rate Notes</field>
-          <field name="res_model">billing.rate_note</field>
-      </record>
-
-      <record model="ir.action.act_window.view" id="act_rate_note_form_view_tree">
-          <field name="sequence" eval="10"/>
-          <field name="view" ref="rate_note_view_tree"/>
-          <field name="act_window" ref="act_rate_note_form"/>
-      </record>
-      <record model="ir.action.act_window.view" id="act_rate_note_form_view_form">
-          <field name="sequence" eval="20"/>
-          <field name="view" ref="rate_note_view_form"/>
-          <field name="act_window" ref="act_rate_note_form"/>
-      </record>
-      <menuitem parent="insurance_collective.menu_group" sequence="20" id="menu_rate_note_form"
-          icon="tryton-list" action="act_rate_note_form"/>
-
-    <!-- RateNoteLine -->
+  <data>
+    <!-- ############################################################ -->
+    <!-- Rate Line -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="rate_line_view_tree">
+      <field name="model">billing.rate_line</field>
+      <field name="type">tree</field>
+      <field name="field_childs">childs</field>
+      <field name="name">rate_line_tree</field>
+    </record>
+    <record model="ir.ui.view" id="rate_line_view_form">
+      <field name="model">billing.rate_line</field>
+      <field name="type">form</field>
+      <field name="name">rate_line_form</field>
+    </record>
+    <!-- Entry Point -->
+    <record model="ir.ui.view" id="rate_note_process_parameters_view_form">
+      <field name="model">billing.rate_note_process_parameters</field>
+      <field name="type">form</field>
+      <field name="name">rate_note_process_parameters_form</field>
+    </record>
+    <record model="ir.ui.view" id="rate_notes_displayer_view_form">
+      <field name="model">billing.rate_notes_displayer</field>
+      <field name="type">form</field>
+      <field name="name">rate_notes_displayer_form</field>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Rate Note -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="rate_note_view_form">
+      <field name="model">billing.rate_note</field>
+      <field name="type">form</field>
+      <field name="name">rate_note_form</field>
+    </record>
+    <record model="ir.ui.view" id="rate_note_view_tree">
+      <field name="model">billing.rate_note</field>
+      <field name="type">tree</field>
+      <field name="name">rate_note_tree</field>
+    </record>
+    <!-- Entry Point -->
+    <record model="ir.action.act_window" id="act_rate_note_form">
+      <field name="name">Rate Notes</field>
+      <field name="res_model">billing.rate_note</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_rate_note_form_view_tree">
+      <field name="sequence" eval="10"/>
+      <field name="view" ref="rate_note_view_tree"/>
+      <field name="act_window" ref="act_rate_note_form"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_rate_note_form_view_form">
+      <field name="sequence" eval="20"/>
+      <field name="view" ref="rate_note_view_form"/>
+      <field name="act_window" ref="act_rate_note_form"/>
+    </record>
+    <menuitem parent="insurance_collective.menu_group" sequence="20" id="menu_rate_note_form" icon="tryton-list" action="act_rate_note_form"/>
+    <!-- ############################################################ -->
+    <!-- Rate Note Line -->
+    <!-- ############################################################ -->
     <record model="ir.ui.view" id="rate_note_line_view_form">
-        <field name="model">billing.rate_note_line</field>
-        <field name="type">form</field>
-        <field name="name">rate_note_line_form</field>
+      <field name="model">billing.rate_note_line</field>
+      <field name="type">form</field>
+      <field name="name">rate_note_line_form</field>
     </record>
     <record model="ir.ui.view" id="rate_note_line_view_tree">
-        <field name="model">billing.rate_note_line</field>
-        <field name="type">tree</field>
-        <field name="field_childs">childs</field>
-        <field name="name">rate_note_line_tree</field>
+      <field name="model">billing.rate_note_line</field>
+      <field name="type">tree</field>
+      <field name="field_childs">childs</field>
+      <field name="name">rate_note_line_tree</field>
     </record>
-
     <!--################################################################-->
-    <!--                          Actions Entries                       -->
+    <!-- Rate Note Process -->
     <!--################################################################-->
     <record model="ir.action.wizard" id="launch_rate_notes_process">
       <field name="name">Rate Note Process</field>
@@ -78,12 +81,7 @@
       <field name="model">contract.contract,-1</field>
       <field name="action" ref="launch_rate_notes_process"/>
     </record>
-    <menuitem id="menu_rate_note_process" sequence="30" action="launch_rate_notes_process"
-        parent="insurance_collective.menu_group"/>
-
-    <!--################################################################ -->
-    <!-- Relate -->
-    <!--################################################################ -->
+    <menuitem id="menu_rate_note_process" sequence="30" action="launch_rate_notes_process" parent="insurance_collective.menu_group"/>
     <record model="ir.action.act_window" id="act_rate_note_relate_form">
       <field name="name">Rate Notes</field>
       <field name="res_model">billing.rate_note</field>
@@ -93,6 +91,44 @@
       <field name="keyword">form_relate</field>
       <field name="model">contract.contract,-1</field>
       <field name="action" ref="act_rate_note_relate_form"/>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Rate Note Selection -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="rate_note_selection_form">
+      <field name="model">billing.rate_note_selection</field>
+      <field name="type">form</field>
+      <field name="name">rate_note_selection_form</field>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Rate Note Move Displayer -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="rate_note_move_displayer_form">
+      <field name="model">billing.rate_note_move_displayer</field>
+      <field name="type">form</field>
+      <field name="name">rate_note_move_displayer_form</field>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Rate Note Reception -->
+    <!-- ############################################################ -->
+    <record model="ir.action.wizard" id="act_rate_note_reception">
+      <field name="name">Rate Note Reception</field>
+      <field name="wiz_name">billing.rate_note_reception</field>
+    </record>
+    <record model="ir.action.keyword" id="act_rate_note_reception_keyword">
+      <field name="keyword">form_action</field>
+      <field name="model">billing.rate_note,-1</field>
+      <field name="action" ref="act_rate_note_reception"/>
+    </record>
+    <menuitem id="menu_rate_note_reception" sequence="31" action="act_rate_note_reception" parent="insurance_collective.menu_group"/>
+    <!-- ############################################################ -->
+    <!-- Account Configuration -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="configuration_form">
+      <field name="model">account.configuration</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="account.configuration_view_form"/>
+      <field name="name">configuration_form</field>
     </record>
   </data>
 </tryton>

@@ -40,7 +40,8 @@ already exists and can't be modified (%s)'''),
             ['rates', 'manual_billing'])
 
     def get_use_rates(self, name):
-        return self.offered.use_rates if self.offered else False
+        return [x.id for x in self.offered.use_rates] \
+            if self.offered else False
 
     def calculate_rate_dict_at_date(self, date):
         cur_dict = {'date': date}

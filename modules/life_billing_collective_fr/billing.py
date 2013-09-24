@@ -1,5 +1,8 @@
+import copy
+from decimal import Decimal
+
 from trytond.pyson import Eval
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import StateTransition, StateView, Button
 from trytond.backend import TableHandler
@@ -18,6 +21,14 @@ __all__ = [
     'RateNoteParameterGroupPartyRelation',
     'RateNotesDisplayer',
     'RateNoteProcess',
+    'RateNoteSelection',
+    'RateNoteMoveDisplayer',
+    'RateNoteReception',
+    'ContractForBilling',
+    'Configuration',
+    'SuspenseParty',
+    'Move',
+    'MoveLine',
     ]
 
 
@@ -27,7 +38,7 @@ class RateLine(model.CoopSQL, model.CoopView):
     __name__ = 'billing.rate_line'
 
     manual_billing = fields.Function(
-        fields.Boolean('Manual Biiling',
+        fields.Boolean('Manual Billing',
             on_change=['manual_billing', 'childs']),
         'get_manual_billing')
     contract = fields.Many2One('contract.contract', 'Contract',
@@ -128,6 +139,11 @@ class RateLine(model.CoopSQL, model.CoopView):
         else:
             return {}
 
+    def get_option(self):
+        if not self.option:
+            return self.parent.get_option()
+        return self.option
+
 
 class RateNote(model.CoopSQL, model.CoopView):
     'Rate Note'
@@ -210,8 +226,16 @@ class RateNoteLine(model.CoopSQL, model.CoopView):
     rate_line = fields.Many2One('billing.rate_line', 'Rate Line')
     amount = fields.Numeric('Amount')
     sum_amount = fields.Function(
-        fields.Numeric('Amount', on_change_with=['amount', 'childs', 'base']),
-        'on_change_with_sum_amount', 'setter_void')
+        fields.Numeric('Amount', on_change_with=['rate', 'childs', 'base'],
+            on_change=['amount', 'sum_amount', 'childs'], states={'readonly':
+                ~~Eval('childs')},),
+        'get_sum_amount', 'setter_void')
+    client_amount = fields.Numeric('Client Amount')
+    client_sum_amount = fields.Function(
+        fields.Numeric('Client Amount', on_change_with=['rate', 'childs',
+                'base'], on_change=['client_amount', 'client_sum_amount',
+                'childs'], states={'readonly': ~~Eval('childs')},),
+        'get_client_sum_amount', 'setter_void')
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency'),
         'get_currency_id')
@@ -253,12 +277,59 @@ class RateNoteLine(model.CoopSQL, model.CoopView):
         elif self.rate_note:
             return self.rate_note.currency
 
-    def on_change_with_sum_amount(self, name=None):
-        return (self.amount if self.amount else 0) + sum(
-            map(lambda x: x.sum_amount, self.childs))
+    def on_change_with_sum_amount(self):
+        if (hasattr(self, 'childs') and self.childs):
+            return sum(map(lambda x: x.sum_amount or 0, self.childs)) or None
+        if not (hasattr(self, 'base') and self.base):
+            return None
+        if not (hasattr(self, 'rate') and self.rate):
+            return None
+        return self.base * self.rate
+
+    def on_change_sum_amount(self):
+        if (hasattr(self, 'childs') and self.childs):
+            return {}
+        return {'amount': self.sum_amount}
+
+    def get_sum_amount(self, name):
+        if (hasattr(self, 'childs') and self.childs):
+            return sum(map(lambda x: x.sum_amount or 0, self.childs)) or None
+        if not (hasattr(self, 'amount') and self.amount):
+            return None
+        return self.amount
+
+    def on_change_with_client_sum_amount(self, name=None):
+        if (hasattr(self, 'childs') and self.childs):
+            return sum(map(
+                    lambda x: x.client_sum_amount or 0, self.childs)) or None
+        if not (hasattr(self, 'base') and self.base):
+            return None
+        if not (hasattr(self, 'rate') and self.rate):
+            return None
+        return self.base * self.rate
+
+    def on_change_client_sum_amount(self):
+        if (hasattr(self, 'childs') and self.childs):
+            return {}
+        return {'client_amount': self.client_sum_amount}
+
+    def get_client_sum_amount(self, name):
+        if (hasattr(self, 'childs') and self.childs):
+            return sum(map(
+                    lambda x: x.client_sum_amount or 0, self.childs)) or None
+        if not (hasattr(self, 'client_amount') and self.client_amount):
+            return None
+        return self.client_amount
 
     def _expand_tree(self, name):
         return True
+
+    def get_contract(self):
+        if not self.rate_line or not self.rate_line.contract:
+            if self.parent:
+                return self.parent.get_contract()
+            return None
+        return self.rate_line.contract
 
 
 class RateNoteParameters(model.CoopView):
@@ -426,3 +497,212 @@ class RateNoteProcess(model.CoopWizard):
         for rate_note in self.rate_notes.rate_notes:
             rate_note.save()
         return 'end'
+
+
+class RateNoteSelection(model.CoopView):
+    'Rate Note Selection'
+
+    __name__ = 'billing.rate_note_selection'
+
+    selected_note = fields.Many2One('billing.rate_note', 'Selected Note',
+        domain=[('status', '=', 'completed_by_blient')], states={
+            'required': True})
+
+
+class RateNoteMoveDisplayer(model.CoopView):
+    'Rate Note Move Displayer'
+
+    __name__ = 'billing.rate_note_move_displayer'
+
+    move = fields.One2Many('account.move', None, 'Move',
+        states={'readonly': True})
+
+
+class RateNoteReception(model.CoopWizard):
+    'Rate Note Reception Wizard'
+
+    __name__ = 'billing.rate_note_reception'
+
+    start_state = 'calculate_start'
+    calculate_start = StateTransition()
+    select_note = StateView('billing.rate_note_selection',
+        'life_billing_collective_fr.rate_note_selection_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Continue', 'preview_bill', 'tryton-ok')])
+    preview_bill = StateView('billing.rate_note_move_displayer',
+        'life_billing_collective_fr.rate_note_move_displayer_form', [
+            Button('Cancel', 'clean_up', 'tryton-cancel'),
+            Button('Validate', 'validate', 'tryton-ok')])
+    clean_up = StateTransition()
+    validate = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        super(RateNoteReception, cls).__setup__()
+        cls._error_messages.update({
+            'bad_status': 'Selected Rate Note is not in a valid status to '
+                'start reception process',
+        })
+
+    def transition_calculate_start(self):
+        if (Transaction().context.get('active_model') == 'billing.rate_note'
+                and Transaction().context.get('active_id')):
+            self.select_note.selected_note = Transaction().context.get(
+                'active_id')
+            if self.select_note.selected_note.status != 'completed_by_client':
+                self.raise_user_error('bad_status')
+            return 'preview_bill'
+        return 'select_note'
+
+    def default_preview_bill(self, name):
+        base_note = self.select_note.selected_note
+        with Transaction().set_context(rate_note=base_note):
+            good_period = base_note.contract.get_billing_period_at_date(
+                base_note.start_date)
+            if not good_period:
+                good_move = base_note.contract.bill().id
+            else:
+                good_move = base_note.contract.bill(good_period).id
+        return {'move': [good_move]}
+
+    def transition_validate(self):
+        if (hasattr(self.preview_bill, 'id') and self.preview_bill.id):
+            Move = Pool().get('account.move')
+            if self.preview_bill.lines:
+                Move.post([self.preview_bill])
+            else:
+                Move.delete([self.preview_bill])
+        self.select_note.selected_note.status = 'validated'
+        self.select_note.selected_note.save()
+        return 'end'
+
+    def transition_clean_up(self):
+        if (hasattr(self.preview_bill, 'id') and self.preview_bill.id):
+            Move = Pool().get('account.move')
+            Move.delete([self.preview_bill])
+        return 'end'
+
+
+class ContractForBilling():
+    'Contract'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'contract.contract'
+
+    def create_price_list(self, start_date, end_date):
+        if not 'rate_note' in Transaction().context:
+            return super(ContractForBilling, self).create_price_list(
+                start_date, end_date)
+        return []
+
+    def calculate_base_lines(self, work_set):
+        if not 'rate_note' in Transaction().context:
+            return super(ContractForBilling, self).calculate_base_lines(
+                work_set)
+        rate_note = Transaction().context.get('rate_note')
+        work_set['_remaining'] = Decimal(0)
+
+        def crawl_line(line):
+            if not line.amount or not line.client_amount or line.childs:
+                for sub_line in line.childs:
+                    crawl_line(sub_line)
+                return
+            rate_line = line.rate_line
+            bill_line = work_set['lines'][(rate_line.covered_element,
+                    rate_line.get_option().offered.account_for_billing)]
+            bill_line.second_origin = rate_line.get_option().offered
+            bill_line.credit += work_set['currency'].round(line.amount)
+            work_set['_remaining'] += work_set['currency'].round(
+                line.amount) - work_set['currency'].round(line.client_amount)
+            bill_line.account = rate_line.get_option(
+                ).offered.account_for_billing
+            bill_line.party = line.get_contract().subscriber
+            work_set['total_amount'] += work_set['currency'].round(line.amount)
+
+        for rate_line in rate_note.lines:
+            crawl_line(rate_line)
+
+        if not work_set['_remaining']:
+            return
+
+        suspense_line = work_set['lines'][(None,
+            rate_note.contract.subscriber.suspense_account)]
+        suspense_line.second_origin = rate_note
+        suspense_line.debit = work_set['_remaining']
+        suspense_line.account = rate_note.contract.subscriber.suspense_account
+        suspense_line.party = rate_note.contract.subscriber
+        work_set['total_amount'] -= suspense_line.debit
+
+    def compensate_existing_moves_on_period(self, work_set):
+        if not 'rate_note' in Transaction().context:
+            return super(
+                ContractForBilling, self).compensate_existing_moves_on_period(
+                    work_set)
+        # No compensation when billing a rate note
+        pass
+
+
+class Configuration():
+    'Account Configuration'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'account.configuration'
+
+    default_suspense_account = fields.Function(fields.Many2One(
+        'account.account', 'Default Suspense Account',
+        domain=[
+                ('kind', '=', 'other'),
+                ('company', '=', Eval('context', {}).get('company')),
+                ]),
+        'get_account', setter='set_account')
+
+
+class SuspenseParty():
+    'Party'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'party.party'
+
+    suspense_account = fields.Property(fields.Many2One('account.account',
+            'Suspense Account', domain=[
+                ('kind', '=', 'other'),
+                ('company', '=', Eval('context', {}).get('company')),
+                ],
+            states={
+                'required': ~~(Eval('context', {}).get('company')),
+                'invisible': ~Eval('context', {}).get('company'),
+                }))
+
+
+class Move():
+    'Move'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'account.move'
+
+    @classmethod
+    def __setup__(cls):
+        super(Move, cls).__setup__()
+        cls.coverage_details = copy.copy(cls.coverage_details)
+        cls.coverage_details.domain[1].append(
+            ('second_origin', 'like', 'billing.rate_note,%'))
+
+
+class MoveLine():
+    'Move Line'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'account.move.line'
+
+    @classmethod
+    def _get_second_origin(cls):
+        result = super(MoveLine, cls)._get_second_origin()
+        result.append('billing.rate_note')
+        return result
+
+    def get_second_origin_name(self, name):
+        if not (hasattr(self, 'second_origin') and self.second_origin):
+            return ''
+        if not self.second_origin.__name__ == 'billing.rate_note':
+            return super(MoveLine, self).get_second_origin_name(name)
+        return 'Rate Note compensation'

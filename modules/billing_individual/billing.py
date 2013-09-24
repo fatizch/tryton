@@ -752,6 +752,17 @@ class Contract():
                         or manager.end_date >= date)):
                 return manager
 
+    def get_billing_period_at_date(self, date):
+        Period = Pool().get('billing.period')
+        candidates = Period.search([
+                ('start_date', '<=', date), ('end_date', '>=', date)])
+        if not candidates:
+            return None
+        elif len(candidates) > 1:
+            raise Exception('Multiple billing periods found for date %s' %
+                date)
+        return (candidates[0].start_date, candidates[0].end_date)
+
     def next_billing_period(self):
         start_date = self.next_billing_date
         last_date = coop_date.add_day(self.start_date, -1)

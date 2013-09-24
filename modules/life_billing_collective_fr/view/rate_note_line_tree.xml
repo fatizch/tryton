@@ -1,12 +1,16 @@
 <?xml version="1.0"?>
 <tree string="Rate Note Line" editable="bottom">
-    <field name="rec_name"/>
-    <field name="base"/>
-    <field name="rate" factor="100">
-        <suffix string="%"/>
-    </field>
-    <field name="sum_amount" sum="Total">
-         <suffix name="currency_symbol"/>
-    </field>
-    <field name="amount" tree_invisible="1"/>
+  <field name="rec_name"/>
+  <field name="base"/>
+  <field name="rate" factor="100">
+    <suffix string="%"/>
+  </field>
+  <field name="sum_amount" sum="Total">
+    <suffix name="currency_symbol"/>
+  </field>
+  <field name="client_sum_amount" sum="Client Total">
+    <suffix name="currency_symbol"/>
+  </field>
+  <field name="amount" tree_invisible="1"/>
+  <field name="client_amount" tree_invisible="1"/>
 </tree>

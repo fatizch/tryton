@@ -34,6 +34,13 @@ def register():
         RateNoteParameterContractRelation,
         RateNoteParameterGroupPartyRelation,
         RateNotesDisplayer,
+        RateNoteSelection,
+        RateNoteMoveDisplayer,
+        ContractForBilling,
+        SuspenseParty,
+        Configuration,
+        Move,
+        MoveLine,
         # from Rule Engine
         OfferedContext,
         # From Party
@@ -45,4 +52,5 @@ def register():
         module='life_billing_collective_fr', type_='model')
     Pool.register(
         RateNoteProcess,
+        RateNoteReception,
         module='life_billing_collective_fr', type_='wizard')

@@ -19,5 +19,7 @@
     </group>
     <label name="amount"/>
     <field name="amount"/>
+    <label name="client_amount"/>
+    <field name="client_amount"/>
     <field name="childs" colspan="4"/>
 </form>

@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<form string="Move">
+  <field name="move" mode="form" view_ids="billing_individual.move_form"/>
+</form>

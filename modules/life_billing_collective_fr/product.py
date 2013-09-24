@@ -57,7 +57,7 @@ class Coverage():
         return False
 
     def get_use_rates(self, name):
-        return self.is_group and self.rating_rules
+        return self.is_group and len(self.rating_rules) > 0
 
 
 class FareClass(model.CoopSQL, model.CoopView):
