@@ -269,6 +269,7 @@ class Party(model.CoopSQL):
 class Actor(CoopView):
     'Actor'
     __name__ = 'party.actor'
+    _rec_name = 'party'
 
     reference = fields.Char('Reference')
     party = fields.Many2One(
