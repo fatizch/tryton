@@ -5,6 +5,7 @@ from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, business, utils, fields
+from trytond.modules.coop_utils import coop_string
 from trytond.modules.offered import EligibilityResultLine
 
 __all__ = [
@@ -144,7 +145,8 @@ class Offered(model.CoopView, GetResult, Templated):
     __name__ = 'offered.offered'
     _export_name = 'code'
 
-    code = fields.Char('Code', required=True, select=1)
+    code = fields.Char('Code', required=True, select=1,
+        on_change_with=['code', 'name'])
     name = fields.Char('Name', required=True, select=1, translate=True)
     start_date = fields.Date('Start Date', required=True, select=1)
     end_date = fields.Date('End Date')
@@ -274,6 +276,11 @@ class Offered(model.CoopView, GetResult, Templated):
         except ValueError:
             return None
 
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
+
 
 class Product(model.CoopSQL, Offered):
     'Product'
@@ -292,7 +299,7 @@ class Product(model.CoopSQL, Offered):
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
     contract_generator = fields.Many2One('ir.sequence',
         'Contract Number Generator', context={'code': 'offered.product'},
-        ondelete='RESTRICT')
+        ondelete='RESTRICT', required=True)
     complementary_data_def = fields.Many2Many(
         'offered.product-complementary_data_def',
         'product', 'complementary_data_def', 'Complementary Data',
