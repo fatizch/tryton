@@ -18,23 +18,23 @@
     <record model="ir.ui.view" id="insurer_view_form_hosted">
       <field name="model">party.insurer</field>
       <field name="type">form</field>
-      <field name="name">insurer_view_form</field>
+      <field name="name">insurer_form</field>
     </record>
     <record model="ir.ui.view" id="insurer_view_tree">
       <field name="model">party.insurer</field>
       <field name="type">tree</field>
-      <field name="name">insurer_view_tree</field>
+      <field name="name">insurer_tree</field>
     </record>
     <!-- Customer -->
     <record model="ir.ui.view" id="customer_view_form">
       <field name="model">party.customer</field>
       <field name="type">form</field>
-      <field name="name">customer_view_form</field>
+      <field name="name">customer_form</field>
     </record>
     <record model="ir.ui.view" id="customer_view_tree">
       <field name="model">party.customer</field>
       <field name="type">tree</field>
-      <field name="name">customer_view_tree</field>
+      <field name="name">customer_tree</field>
     </record>
   </data>
 </tryton>
