@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <form string="Assign Collection">
+  <label name="party"/>
+  <field name="party" colspan="3"/>
   <label name="amount"/>
-  <field name="amount" colspan="3"/>
+  <field name="amount"/>
   <label name="remaining"/>
   <field name="remaining"/>
   <label name="create_suspense_line_with_rest"/>

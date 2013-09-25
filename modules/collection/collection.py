@@ -159,14 +159,14 @@ class AssignCollection(model.CoopView):
     __name__ = 'collection.assign_collection'
 
     amount = fields.Numeric('Amount', states={'readonly': True})
-    party = fields.Many2One('party.party', 'party')
+    party = fields.Many2One('party.party', 'Party')
     assignments = fields.One2Many('collection.assignment', None, 'Assignments',
         context={'from_party': Eval('party'), 'remaining': Eval('remaining')},
         depends=['party'])
     create_suspense_line_with_rest = fields.Boolean(
         'Create Suspense Line from Remaining', states={
             'invisible': ~Eval('remaining')})
-    remaining = fields.Numeric('remaining', on_change_with=['amount',
+    remaining = fields.Numeric('Remaining', on_change_with=['amount',
             'assignments'])
 
     def on_change_with_remaining(self):
