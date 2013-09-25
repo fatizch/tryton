@@ -7,6 +7,7 @@ from trytond.transaction import Transaction
 from trytond.modules.coop_utils import model, business, utils, fields
 from trytond.modules.coop_utils import coop_string
 from trytond.modules.offered import EligibilityResultLine
+from trytond.modules.rule_engine import RuleEngineResult
 
 __all__ = [
     'NonExistingRuleKindException',
@@ -130,6 +131,8 @@ class GetResult(object):
         target_func = getattr(self, 'give_me_' + target)
 
         result = target_func(args)
+        if isinstance(result, RuleEngineResult):
+            return result
         if not isinstance(result, tuple) and not result is None:
             return (result, [])
         return result
