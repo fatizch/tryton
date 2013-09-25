@@ -158,7 +158,7 @@ class AssignCollection(model.CoopView):
 
     __name__ = 'collection.assign_collection'
 
-    amount = fields.Numeric('Amount', states={'readonly': True})
+    amount = fields.Numeric('Amount')
     party = fields.Many2One('party.party', 'Party')
     assignments = fields.One2Many('collection.assignment', None, 'Assignments',
         context={'from_party': Eval('party'), 'remaining': Eval('remaining')},
@@ -218,7 +218,7 @@ class CollectionWizard(model.CoopWizard):
     def transition_check_amount(self):
         if self.assign.create_suspense_line_with_rest:
             return 'validate'
-        amount = self.input_collection_parameters.amount
+        amount = self.assign.amount
         ventilated_amount = sum(map(lambda x: x.amount,
                 self.assign.assignments))
         if amount != ventilated_amount:
@@ -278,7 +278,7 @@ class CollectionWizard(model.CoopWizard):
             payment_group.save()
         collection_line = MoveLine()
         collection_line.party = self.assign.party
-        collection_line.debit = self.input_collection_parameters.amount
+        collection_line.debit = self.assign.amount
         collection_line.account = getattr(company, '%s_account' %
             self.input_collection_parameters.kind)
         collection_move.lines.append(collection_line)
@@ -286,7 +286,7 @@ class CollectionWizard(model.CoopWizard):
         Move.post([collection_move])
         log = Collection()
         log.party = self.input_collection_parameters.party
-        log.amount = self.input_collection_parameters.amount
+        log.amount = self.assign.amount
         log.kind = self.input_collection_parameters.kind
         log.assignment_move = collection_move
         if self.input_collection_parameters.check_number:

@@ -172,6 +172,11 @@ class RateNote(model.CoopSQL, model.CoopView):
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency'),
         'get_currency_id')
+    move = fields.Many2One('account.move', 'Move')
+    amount_paid = fields.Function(fields.Numeric('Amount Paid'),
+        'get_amount_paid')
+    amount_expected = fields.Function(fields.Numeric('Amount Expected'),
+        'get_amount_expected')
 
     @staticmethod
     def default_status():
@@ -213,6 +218,25 @@ class RateNote(model.CoopSQL, model.CoopView):
 
     def get_currency(self):
         return self.contract.currency if self.contract else None
+
+    def get_amount_paid(self, name):
+        if not self.move:
+            return None
+        res = sum(map(
+                lambda x: x.debit - x.credit - x.payment_amount if
+                x.payment_amount else 0,
+                filter(lambda x: x.account.kind == 'receivable',
+                    self.move.lines)))
+        return res
+
+    def get_amount_expected(self, name):
+        if not self.move:
+            return None
+        res = sum(map(
+                lambda x: x.debit - x.credit,
+                filter(lambda x: x.account.kind == 'receivable',
+                    self.move.lines)))
+        return res
 
 
 class RateNoteLine(model.CoopSQL, model.CoopView):
@@ -597,6 +621,7 @@ class RateNoteReception(model.CoopWizard):
             Move = Pool().get('account.move')
             if move.lines:
                 Move.post([move])
+                self.select_note.selected_note.move = move
             else:
                 Move.delete([move])
         self.select_note.selected_note.status = 'validated'

@@ -5,4 +5,6 @@
     <field name="status"/>
     <field name="start_date"/>
     <field name="end_date"/>
+    <field name="amount_expected"/>
+    <field name="amount_paid"/>
 </tree>
