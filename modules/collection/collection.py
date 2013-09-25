@@ -44,6 +44,9 @@ class Collection(model.CoopSQL, model.CoopView):
     create_user = fields.Function(
         fields.Many2One('res.user', 'Created by', states={'readonly': True}),
         'get_create_user')
+    check_number = fields.Integer('Check Number', states={
+            'invisible': Eval('kind') != 'check',
+            'required': Eval('kind') == 'check'})
 
     def get_create_user(self, name):
         return self.create_uid.id
@@ -58,6 +61,9 @@ class CollectionParameters(model.CoopView):
         required=True)
     amount = fields.Numeric('Amount', required=True)
     party = fields.Many2One('party.party', 'Party', required=True)
+    check_number = fields.Integer('Check Number', states={
+            'invisible': Eval('kind') != 'check',
+            'required': Eval('kind') == 'check'})
 
 
 class Assignment(model.CoopView):
@@ -180,5 +186,7 @@ class CollectionWizard(model.CoopWizard):
         log.amount = self.input_collection_parameters.amount
         log.kind = self.input_collection_parameters.kind
         log.assignment_move = collection_move
+        if self.input_collection_parameters.check_number:
+            log.check_number = self.input_collection_parameters.check_number
         log.save()
         return 'end'

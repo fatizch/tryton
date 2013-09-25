@@ -6,4 +6,6 @@
   <field name="party" colspan="3"/>
   <label name="kind"/>
   <field name="kind" colspan="3"/>
+  <label name="check_number"/>
+  <field name="check_number"/>
 </form>
