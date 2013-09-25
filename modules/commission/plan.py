@@ -15,6 +15,7 @@ __all__ = [
     ]
 
 COMMISSION_KIND = [
+    ('', ''),
     ('business_provider', 'Business Provider'),
     ('management', 'Management Delegation'),
     ]
@@ -28,8 +29,10 @@ class CommissionPlan():
 
     dist_networks = fields.Many2Many('distribution.dist_network-plan',
         'com_plan', 'dist_network', 'Distribution Networks')
-    commission_kind = fields.Selection(COMMISSION_KIND, 'Kind',
-        states={'invisible': ~(Eval('kind') == 'commission')})
+    commission_kind = fields.Selection(COMMISSION_KIND, 'Commission Kind',
+        states={
+            'invisible': ~(Eval('kind') == 'commission'),
+            'required': ~~(Eval('kind') == 'commission')})
 
     @classmethod
     def __setup__(cls):
