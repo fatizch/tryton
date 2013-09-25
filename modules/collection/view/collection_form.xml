@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<form string="Assignment Log">
+<form string="Collection">
   <label name="create_user"/>
   <field name="create_user"/>
   <label name="create_date"/>

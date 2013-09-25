@@ -2,5 +2,9 @@
 <form string="Assign Collection">
   <label name="amount"/>
   <field name="amount" colspan="3"/>
-  <field name="assignments" colspan="4"/>
+  <label name="remaining"/>
+  <field name="remaining"/>
+  <label name="create_suspense_line_with_rest"/>
+  <field name="create_suspense_line_with_rest"/>
+  <field name="assignments" colspan="4" pre_validate="1"/>
 </form>

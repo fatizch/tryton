@@ -174,6 +174,14 @@ class MoveLine:
                 ])
         return [('', '')] + [(m.model, m.name) for m in models]
 
+    @classmethod
+    def get_payment_amount(cls, lines, name):
+        res = super(MoveLine, cls).get_payment_amount(lines, name)
+        for k, v in res.iteritems():
+            if v < 0:
+                res[k] = 0
+        return res
+
 
 class Account(export.ExportImportMixin):
     __metaclass__ = PoolMeta

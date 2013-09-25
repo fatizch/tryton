@@ -37,8 +37,6 @@ def register():
         RateNoteSelection,
         RateNoteMoveDisplayer,
         ContractForBilling,
-        SuspenseParty,
-        Configuration,
         Move,
         MoveLine,
         # from Rule Engine

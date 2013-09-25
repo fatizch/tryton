@@ -11,6 +11,15 @@
       <field name="name">company_form</field>
     </record>
     <!-- ############################################################ -->
+    <!-- Account Configuration -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="configuration_form">
+      <field name="model">account.configuration</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="account.configuration_view_form"/>
+      <field name="name">configuration_form</field>
+    </record>
+    <!-- ############################################################ -->
     <!-- Collection -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="collection_form">
@@ -75,6 +84,11 @@
     <record model="ir.action.wizard" id="act_collection_wizard">
       <field name="name">Collection Wizard</field>
       <field name="wiz_name">collection.collection_wizard</field>
+    </record>
+    <record model="ir.action.keyword" id="act_collection_wizard_keyword">
+      <field name="keyword">form_action</field>
+      <field name="model">party.party,-1</field>
+      <field name="action" ref="act_collection_wizard"/>
     </record>
     <menuitem name="Collection Wizard" id="menu_collection_wizard" sequence="35" action="act_collection_wizard" parent="account.menu_account"/>
   </data>

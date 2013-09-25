@@ -5,16 +5,11 @@ from .collection import *
 def register():
     Pool.register(
         # from collection
-        Company,
-        SuspenseParty,
-        Configuration,
-        Collection,
         CollectionParameters,
-        Assignment,
         AssignCollection,
-        module='collection', type_='model')
+        module='insurance_collection', type_='model')
 
     Pool.register(
         # from collection
         CollectionWizard,
-        module='collection', type_='wizard')
+        module='insurance_collection', type_='wizard')

@@ -25,8 +25,6 @@ __all__ = [
     'RateNoteMoveDisplayer',
     'RateNoteReception',
     'ContractForBilling',
-    'Configuration',
-    'SuspenseParty',
     'Move',
     'MoveLine',
     ]
@@ -650,38 +648,6 @@ class ContractForBilling():
                     work_set)
         # No compensation when billing a rate note
         pass
-
-
-class Configuration():
-    'Account Configuration'
-
-    __metaclass__ = PoolMeta
-    __name__ = 'account.configuration'
-
-    default_suspense_account = fields.Function(fields.Many2One(
-        'account.account', 'Default Suspense Account',
-        domain=[
-                ('kind', '=', 'other'),
-                ('company', '=', Eval('context', {}).get('company')),
-                ]),
-        'get_account', setter='set_account')
-
-
-class SuspenseParty():
-    'Party'
-
-    __metaclass__ = PoolMeta
-    __name__ = 'party.party'
-
-    suspense_account = fields.Property(fields.Many2One('account.account',
-            'Suspense Account', domain=[
-                ('kind', '=', 'other'),
-                ('company', '=', Eval('context', {}).get('company')),
-                ],
-            states={
-                'required': ~~(Eval('context', {}).get('company')),
-                'invisible': ~Eval('context', {}).get('company'),
-                }))
 
 
 class Move():
