@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<tryton>
+  <data>
+    <!-- ############################################################ -->
+    <!-- Company -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="company_form">
+      <field name="model">company.company</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="company.company_view_form"/>
+      <field name="name">company_form</field>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Collection -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="collection_form">
+      <field name="model">collection.collection</field>
+      <field name="type">form</field>
+      <field name="name">collection_form</field>
+    </record>
+    <record model="ir.ui.view" id="collection_tree">
+      <field name="model">collection.collection</field>
+      <field name="type">tree</field>
+      <field name="name">collection_tree</field>
+    </record>
+    <!-- Entry Point -->
+    <record model="ir.action.act_window" id="act_collection">
+      <field name="name">Assignment Log</field>
+      <field name="res_model">collection.collection</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_collection_view1">
+      <field name="sequence" eval="10"/>
+      <field name="view" ref="collection_tree"/>
+      <field name="act_window" ref="act_collection"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_collection_view2">
+      <field name="sequence" eval="10"/>
+      <field name="view" ref="collection_form"/>
+      <field name="act_window" ref="act_collection"/>
+    </record>
+    <menuitem parent="account.menu_account" sequence="31"
+      action="act_collection" id="menu_collection"/>
+    <!-- ############################################################ -->
+    <!-- CollectionParameters -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="collection_parameters_form">
+      <field name="model">collection.collection_parameters</field>
+      <field name="type">form</field>
+      <field name="name">collection_parameters_form</field>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Assignment -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="assignment_form">
+      <field name="model">collection.assignment</field>
+      <field name="type">form</field>
+      <field name="name">assignment_form</field>
+    </record>
+    <record model="ir.ui.view" id="assignment_tree">
+      <field name="model">collection.assignment</field>
+      <field name="type">tree</field>
+      <field name="name">assignment_tree</field>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Assign Collection -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="assign_collection_form">
+      <field name="model">collection.assign_collection</field>
+      <field name="type">form</field>
+      <field name="name">assign_collection_form</field>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Collection Wizard -->
+    <!-- ############################################################ -->
+    <record model="ir.action.wizard" id="act_collection_wizard">
+      <field name="name">Collection Wizard</field>
+      <field name="wiz_name">collection.collection_wizard</field>
+    </record>
+    <menuitem name="Collection" id="menu_collection_wizard" sequence="35" action="act_collection_wizard" parent="account.menu_account"/>
+  </data>
+</tryton>

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<form string="Assignment">
+  <label name="amount"/>
+  <field name="amount"/>
+  <label name="kind"/>
+  <field name="kind"/>
+  <label name="source_move_line"/>
+  <field name="source_move_line"/>
+  <label name="target_account"/>
+  <field name="target_account"/>
+</form>

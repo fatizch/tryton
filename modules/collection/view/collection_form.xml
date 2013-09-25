@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<form string="Assignment Log">
+  <label name="create_user"/>
+  <field name="create_user"/>
+  <label name="create_date"/>
+  <field name="create_date"/>
+  <label name="amount"/>
+  <field name="amount" colspan="3"/>
+  <label name="kind"/>
+  <field name="kind" colspan="3"/>
+  <label name="party"/>
+  <field name="party" colspan="3"/>
+  <label name="assignment_move"/>
+  <field name="assignment_move" colspan="3"/>
+</form>

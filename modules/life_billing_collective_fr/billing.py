@@ -566,12 +566,13 @@ class RateNoteReception(model.CoopWizard):
         return {'move': [good_move]}
 
     def transition_validate(self):
-        if (hasattr(self.preview_bill, 'id') and self.preview_bill.id):
+        move = self.preview_bill.move[0]
+        if (hasattr(move, 'id') and move.id):
             Move = Pool().get('account.move')
-            if self.preview_bill.lines:
-                Move.post([self.preview_bill])
+            if move.lines:
+                Move.post([move])
             else:
-                Move.delete([self.preview_bill])
+                Move.delete([move])
         self.select_note.selected_note.status = 'validated'
         self.select_note.selected_note.save()
         return 'end'

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<form string="Assign Collection">
+  <label name="amount"/>
+  <field name="amount" colspan="3"/>
+  <field name="assignments" colspan="4"/>
+</form>

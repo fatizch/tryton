@@ -23,6 +23,7 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['Company'] = Model.get('company.company')
     cfg_dict['Product'] = Model.get('offered.product')
     cfg_dict['Coverage'] = Model.get('offered.coverage')
+    cfg_dict['Journal'] = Model.get('account.journal')
 
 
 def create_methods(cfg_dict):
@@ -44,6 +45,31 @@ def launch_test_case(cfg_dict):
     update_cfg_dict_with_models(cfg_dict)
     meths = create_methods(cfg_dict)
     company, = cfg_dict['Company'].find([('party.name', '=', 'Coop')])
+    collection_account_kind = meths['AccountType'](
+        {'name': 'Collection Account', 'company': company},
+    )
+    cash_account = meths['Account'](
+        {
+            'name': 'Cash Account',
+            'kind': 'revenue',
+            'type': collection_account_kind,
+        },
+        {'company': company.id},
+    )
+    check_account = meths['Account'](
+        {
+            'name': 'Check Account',
+            'kind': 'revenue',
+            'type': collection_account_kind,
+        },
+        {'company': company.id},
+    )
+    company.collection_journal = cfg_dict['Journal'].find(
+        [('type', '=', 'cash')])[0]
+    company.cash_account = cash_account
+    company.check_account = check_account
+    company.save()
+
     cfg_dict['_config'].set_context({'company': company.id})
 
     bad_contracts = cfg_dict['Contract'].find([('company', '=', None)])
