@@ -230,7 +230,8 @@ class RateNoteLine(model.CoopSQL, model.CoopView):
             on_change=['amount', 'sum_amount', 'childs'], states={'readonly':
                 ~~Eval('childs')},),
         'get_sum_amount', 'setter_void')
-    client_amount = fields.Numeric('Client Amount')
+    client_amount = fields.Numeric('Client Amount', on_change_with=['base',
+            'rate'])
     client_sum_amount = fields.Function(
         fields.Numeric('Client Amount', on_change_with=['rate', 'childs',
                 'base'], on_change=['client_amount', 'client_sum_amount',
@@ -290,6 +291,13 @@ class RateNoteLine(model.CoopSQL, model.CoopView):
         if (hasattr(self, 'childs') and self.childs):
             return {}
         return {'amount': self.sum_amount}
+
+    def on_change_with_client_amount(self):
+        if not (hasattr(self, 'base') and self.base):
+            return None
+        if not (hasattr(self, 'rate') and self.rate):
+            return None
+        return self.base * self.rate
 
     def get_sum_amount(self, name):
         if (hasattr(self, 'childs') and self.childs):
