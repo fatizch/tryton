@@ -17,6 +17,7 @@ NEEDED_MODULES = [
     'life_contract_collective',
     'insurance_collective_subscription',
     'commission',
+    'commission_collective',
     'billing',
     'coop_account_payment',
     'coop_account_payment_sepa',

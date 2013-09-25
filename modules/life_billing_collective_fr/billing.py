@@ -39,7 +39,8 @@ class RateLine(model.CoopSQL, model.CoopView):
 
     manual_billing = fields.Function(
         fields.Boolean('Manual Billing',
-            on_change=['manual_billing', 'childs']),
+            on_change=['manual_billing', 'childs'],
+            states={'invisible': True}),
         'get_manual_billing')
     contract = fields.Many2One('contract.contract', 'Contract',
         ondelete='CASCADE',
@@ -48,6 +49,9 @@ class RateLine(model.CoopSQL, model.CoopView):
         'Covered Element', ondelete='CASCADE')
     option = fields.Many2One('contract.subscribed_option', 'Option',
         ondelete='CASCADE')
+    option_ = fields.Function(
+        fields.Many2One('contract.subscribed_option', 'Option'),
+        'get_option_id')
     tranche = fields.Many2One('tranche.tranche', 'Tranche',
         ondelete='RESTRICT', states={'invisible': ~Eval('tranche')})
     fare_class = fields.Many2One('collective.fare_class', 'Fare Class',
@@ -139,10 +143,11 @@ class RateLine(model.CoopSQL, model.CoopView):
         else:
             return {}
 
-    def get_option(self):
-        if not self.option:
-            return self.parent.get_option()
-        return self.option
+    def get_option_id(self, name):
+        if self.option:
+            return self.option.id
+        elif self.parent:
+            return self.parent.option_.id
 
 
 class RateNote(model.CoopSQL, model.CoopView):
@@ -338,6 +343,21 @@ class RateNoteLine(model.CoopSQL, model.CoopView):
                 return self.parent.get_contract()
             return None
         return self.rate_line.contract
+
+    def calculate_bill_line(self, work_set):
+        if not self.amount or not self.client_amount or self.childs:
+            for sub_line in self.childs:
+                sub_line.calculate_bill_line(work_set)
+            return
+        bill_line = work_set['lines'][(self.rate_line.covered_element,
+                self.rate_line.option_.offered.account_for_billing)]
+        bill_line.second_origin = self.rate_line.option_.offered
+        bill_line.credit += work_set['currency'].round(self.amount)
+        work_set['_remaining'] += work_set['currency'].round(
+            self.amount) - work_set['currency'].round(self.client_amount)
+        bill_line.account = self.rate_line.option_.offered.account_for_billing
+        bill_line.party = self.get_contract().subscriber
+        work_set['total_amount'] += work_set['currency'].round(self.amount)
 
 
 class RateNoteParameters(model.CoopView):
@@ -610,27 +630,8 @@ class ContractForBilling():
                 work_set)
         rate_note = Transaction().context.get('rate_note')
         work_set['_remaining'] = Decimal(0)
-
-        def crawl_line(line):
-            if not line.amount or not line.client_amount or line.childs:
-                for sub_line in line.childs:
-                    crawl_line(sub_line)
-                return
-            rate_line = line.rate_line
-            bill_line = work_set['lines'][(rate_line.covered_element,
-                    rate_line.get_option().offered.account_for_billing)]
-            bill_line.second_origin = rate_line.get_option().offered
-            bill_line.credit += work_set['currency'].round(line.amount)
-            work_set['_remaining'] += work_set['currency'].round(
-                line.amount) - work_set['currency'].round(line.client_amount)
-            bill_line.account = rate_line.get_option(
-                ).offered.account_for_billing
-            bill_line.party = line.get_contract().subscriber
-            work_set['total_amount'] += work_set['currency'].round(line.amount)
-
         for rate_line in rate_note.lines:
-            crawl_line(rate_line)
-
+            rate_line.calculate_bill_line(work_set)
         if not work_set['_remaining']:
             return
 

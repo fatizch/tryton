@@ -71,10 +71,7 @@ class CommissionComponent():
         cls.kind.selection = list(set(cls.kind.selection))
 
     def give_me_commission(self, args):
-        res, errs = self.get_result(args=args, kind='commission')
-        if hasattr(res, 'result'):
-            return res.result, errs
-        return res, errs
+        return self.get_result(args=args, kind='commission')
 
 
 class CommissionComponentCoverageRelation(model.CoopSQL):

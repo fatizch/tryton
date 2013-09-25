@@ -9,8 +9,8 @@
     <field name="end_date"/>
     <label name="covered_element"/>
     <field name="covered_element"/>
-    <label name="option"/>
-    <field name="option"/>
+    <label name="option_"/>
+    <field name="option_"/>
     <newline/>
     <label name="parent"/>
     <field name="parent"/>
