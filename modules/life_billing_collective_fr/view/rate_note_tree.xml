@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <tree string="Rate Note">
+    <field name="name"/>
     <field name="client"/>
     <field name="contract"/>
     <field name="status"/>

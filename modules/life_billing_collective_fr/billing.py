@@ -152,8 +152,8 @@ class RateNote(model.CoopSQL, model.CoopView):
     'Rate Note'
 
     __name__ = 'billing.rate_note'
-    _rec_name = 'client'
 
+    name = fields.Char('Number', states={'readonly': True})
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     status = fields.Selection([
@@ -172,7 +172,8 @@ class RateNote(model.CoopSQL, model.CoopView):
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency'),
         'get_currency_id')
-    move = fields.Many2One('account.move', 'Move')
+    move = fields.Many2One('account.move', 'Move',
+        states={'invisible': ~Eval('move')})
     amount_paid = fields.Function(fields.Numeric('Amount Paid'),
         'get_amount_paid')
     amount_expected = fields.Function(fields.Numeric('Amount Expected'),
@@ -212,9 +213,7 @@ class RateNote(model.CoopSQL, model.CoopView):
         return [('contract.subscriber',) + tuple(clause[1:])]
 
     def get_rec_name(self, name):
-        return '%s (%s - %s)' % (self.client.rec_name,
-            coop_string.date_as_string(self.start_date),
-            coop_string.date_as_string(self.end_date))
+        return '%s - %s' % (self.name, self.client.rec_name)
 
     def get_currency(self):
         return self.contract.currency if self.contract else None
@@ -545,6 +544,10 @@ class RateNoteProcess(model.CoopWizard):
 
     def transition_validate_rate_notes(self):
         for rate_note in self.rate_notes.rate_notes:
+            sequence = rate_note.contract.company.rate_note_sequence
+            if sequence:
+                rate_note.name = sequence.get_id(sequence.id)
+            rate_note.status = 'sent'
             rate_note.save()
         return 'end'
 
