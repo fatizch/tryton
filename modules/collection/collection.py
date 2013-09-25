@@ -99,7 +99,7 @@ class Assignment(model.CoopView):
     def on_change_with_amount(self):
         if not (hasattr(self, 'source_move_line') and self.source_move_line):
             return 0
-        return self.source_move_line.credit
+        return self.source_move_line.debit
 
     @classmethod
     def default_kind(cls):
@@ -172,11 +172,11 @@ class CollectionWizard(model.CoopWizard):
             new_line = MoveLine()
             new_line.account = line.target_account
             new_line.party = self.assign.party
-            new_line.debit = line.amount
+            new_line.credit = line.amount
             collection_move.lines.append(new_line)
         collection_line = MoveLine()
         collection_line.party = self.assign.party
-        collection_line.credit = self.input_collection_parameters.amount
+        collection_line.debit = self.input_collection_parameters.amount
         collection_line.account = getattr(company, '%s_account' %
             self.input_collection_parameters.kind)
         collection_move.lines.append(collection_line)
