@@ -53,7 +53,7 @@ msgstr "Montant hors Frais"
 
 msgctxt "field:account.move,wo_tax_amount:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:account.move.line,origin_name:"
 msgid "Origin Name"
@@ -230,6 +230,10 @@ msgstr "Fréquence de base"
 msgctxt "field:billing.payment_rule,code:"
 msgid "Code"
 msgstr "Code"
+
+msgctxt "field:billing.payment_rule,company:"
+msgid "Company"
+msgstr "Société"
 
 msgctxt "field:billing.payment_rule,create_date:"
 msgid "Create Date"
@@ -697,7 +701,7 @@ msgstr "Période de Facturation"
 
 msgctxt "field:contract.contract,display_all_lines:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:contract.contract,last_bill:"
 msgid "Last Bill"
@@ -719,13 +723,25 @@ msgctxt "field:contract.contract,receivable_today:"
 msgid "Receivable Today"
 msgstr "Montant Dû"
 
+msgctxt "field:contract.contract,use_prices:"
+msgid "Use Prices"
+msgstr ""
+
 msgctxt "field:coop_account.fee_desc,account_for_billing:"
 msgid "Account for billing"
 msgstr "Compte de Facturation"
 
+msgctxt "field:coop_account.fee_desc,company:"
+msgid "Company"
+msgstr "Société"
+
 msgctxt "field:coop_account.tax_desc,account_for_billing:"
 msgid "Account for billing"
 msgstr "Compte de Facturation"
+
+msgctxt "field:coop_account.tax_desc,company:"
+msgid "Company"
+msgstr "Société"
 
 msgctxt "field:ins_contract.covered_element,indemnification_bank_account:"
 msgid "Indemnification Bank Account"
@@ -1148,10 +1164,6 @@ msgstr "Méthodes de Paiement"
 msgctxt "view:contract.contract:"
 msgid "Accounting"
 msgstr "Comptabilité"
-
-msgctxt "view:contract.contract:"
-msgid "Billing"
-msgstr "Cotisation"
 
 msgctxt "view:contract.contract:"
 msgid "Calculate Prices"

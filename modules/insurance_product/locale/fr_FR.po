@@ -2,11 +2,19 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:ins_product.attachment_setter:"
+msgid "Duplicate name on attachments : %s"
+msgstr ""
+
 msgctxt "error:ins_product.benefit:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
 msgctxt "error:ins_product.benefit_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
+
+msgctxt "error:ins_product.business_rule_root:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
@@ -25,6 +33,10 @@ msgstr "2 règles se chevauchent!"
 msgctxt "error:ins_product.deductible_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
+
+msgctxt "error:ins_product.document_request_batch:"
+msgid "No Batch Path Specified"
+msgstr ""
 
 msgctxt "error:ins_product.document_rule:"
 msgid "You can not have 2 business rules that overlaps!"
@@ -51,11 +63,19 @@ msgctxt "error:ins_product.pricing_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
+msgctxt "error:ins_product.product_validation_batch:"
+msgid "No Batch Path Specified"
+msgstr ""
+
 msgctxt "error:ins_product.receive_document_wizard:"
 msgid "No document request found for this object"
 msgstr "Aucune demande de document trouvé pour cet objet"
 
 msgctxt "error:ins_product.reserve_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
+
+msgctxt "error:ins_product.simple_pricing_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
@@ -134,6 +154,10 @@ msgstr "Clauses"
 msgctxt "field:ins_product.benefit,code:"
 msgid "Code"
 msgstr "Code"
+
+msgctxt "field:ins_product.benefit,company:"
+msgid "Company"
+msgstr "Société"
 
 msgctxt "field:ins_product.benefit,complementary_data:"
 msgid "Offered Kind"
@@ -1289,6 +1313,10 @@ msgctxt "field:ins_product.event_desc,code:"
 msgid "Code"
 msgstr "Code"
 
+msgctxt "field:ins_product.event_desc,company:"
+msgid "Company"
+msgstr "Société"
+
 msgctxt "field:ins_product.event_desc,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -1717,6 +1745,10 @@ msgstr "Mis à jour par"
 msgctxt "field:ins_product.loss_desc,code:"
 msgid "Code"
 msgstr "Code"
+
+msgctxt "field:ins_product.loss_desc,company:"
+msgid "Company"
+msgstr "Société"
 
 msgctxt "field:ins_product.loss_desc,complementary_data_def:"
 msgid "Complementary Data"

@@ -14,6 +14,10 @@ msgctxt "error:process.process_desc:"
 msgid "The technical name must be unique"
 msgstr "Le nom technique doit être unique"
 
+msgctxt "error:process.process_framework:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
 msgctxt "error:process.step_desc:"
 msgid "The technical name must be unique"
 msgstr "Le nom technique doit être unique"
@@ -607,14 +611,6 @@ msgid "==> Affiliations"
 msgstr ""
 
 msgctxt "view:contract.contract:"
-msgid "==> Choix des personnes couvertes"
-msgstr ""
-
-msgctxt "view:contract.contract:"
-msgid "==> Choix du souscripteur"
-msgstr ""
-
-msgctxt "view:contract.contract:"
 msgid "==> Commission"
 msgstr ""
 
@@ -623,19 +619,11 @@ msgid "==> Cotisations"
 msgstr ""
 
 msgctxt "view:contract.contract:"
-msgid "==> Document Request"
-msgstr ""
-
-msgctxt "view:contract.contract:"
 msgid "==> Documents"
 msgstr ""
 
 msgctxt "view:contract.contract:"
 msgid "==> Garanties"
-msgstr ""
-
-msgctxt "view:contract.contract:"
-msgid "==> Options Selection"
 msgstr ""
 
 msgctxt "view:contract.contract:"
@@ -664,10 +652,6 @@ msgstr ""
 
 msgctxt "view:contract.contract:"
 msgid "==> Validation de l'avenant"
-msgstr ""
-
-msgctxt "view:contract.contract:"
-msgid "==> Validation du contract"
 msgstr ""
 
 msgctxt "view:contract.contract:"
@@ -711,14 +695,6 @@ msgid "Calculer les Taux"
 msgstr ""
 
 msgctxt "view:contract.contract:"
-msgid "Choix des personnes couvertes"
-msgstr "Personnes Couvertes"
-
-msgctxt "view:contract.contract:"
-msgid "Choix du souscripteur"
-msgstr "Produit"
-
-msgctxt "view:contract.contract:"
 msgid "Commission"
 msgstr "Commission"
 
@@ -743,10 +719,6 @@ msgid "Covered Elements/Options"
 msgstr "Eléments Couverts/Garanties"
 
 msgctxt "view:contract.contract:"
-msgid "Document Request"
-msgstr "Documents"
-
-msgctxt "view:contract.contract:"
 msgid "Documents"
 msgstr "Documents"
 
@@ -763,12 +735,8 @@ msgid "Options"
 msgstr "Garanties"
 
 msgctxt "view:contract.contract:"
-msgid "Options Selection"
-msgstr "Garanties"
-
-msgctxt "view:contract.contract:"
 msgid "Personnes Couvertes"
-msgstr ""
+msgstr "Personnes Couvertes"
 
 msgctxt "view:contract.contract:"
 msgid "Populations"
@@ -784,7 +752,7 @@ msgstr "Processus de souscription individuel"
 
 msgctxt "view:contract.contract:"
 msgid "Produit"
-msgstr ""
+msgstr "Produit"
 
 msgctxt "view:contract.contract:"
 msgid "Prêt"
@@ -817,24 +785,8 @@ msgid ""
 msgstr ""
 
 msgctxt "view:contract.contract:"
-msgid ""
-"The current record isin a state (Validation du contract) that you are not "
-"allowed to view."
-msgstr ""
-
-msgctxt "view:contract.contract:"
-msgid ""
-"The current record isin a state (Validation du contrat) that you are not "
-"allowed to view."
-msgstr ""
-
-msgctxt "view:contract.contract:"
 msgid "Validation de l'avenant"
 msgstr "Validation de l'avenant"
-
-msgctxt "view:contract.contract:"
-msgid "Validation du contract"
-msgstr "Validation du contrat"
 
 msgctxt "view:contract.contract:"
 msgid "Validation du contrat"

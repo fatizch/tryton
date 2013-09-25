@@ -1,0 +1,11 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:contract.contract,manual_billing:"
+msgid "Manual Billing"
+msgstr "Facturation manuelle"
+
+msgctxt "view:contract.contract:"
+msgid "Billing"
+msgstr "Cotisation"

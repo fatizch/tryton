@@ -162,6 +162,11 @@ msgctxt "field:ins_contract.subscription_process_parameters,broker:"
 msgid "Broker"
 msgstr "Courtier"
 
+msgctxt ""
+"field:ins_contract.subscription_process_parameters,business_provider:"
+msgid "Business Provider"
+msgstr "Apporteur d'affaires"
+
 msgctxt "field:ins_contract.subscription_process_parameters,com_product:"
 msgid "Product Commercial"
 msgstr "Produit Commercial"
@@ -169,6 +174,11 @@ msgstr "Produit Commercial"
 msgctxt "field:ins_contract.subscription_process_parameters,date:"
 msgid "Date"
 msgstr "Date"
+
+msgctxt ""
+"field:ins_contract.subscription_process_parameters,delegated_manager:"
+msgid "Delegated Manager"
+msgstr "Délégataire de gestion"
 
 msgctxt "field:ins_contract.subscription_process_parameters,dist_network:"
 msgid "Distribution Network"

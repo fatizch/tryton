@@ -933,6 +933,10 @@ msgctxt "selection:ins_contract.delivered_service,status:"
 msgid "Not Eligible"
 msgstr "Non Eligible"
 
+msgctxt "selection:ins_contract.management_role,kind:"
+msgid ""
+msgstr " "
+
 msgctxt "selection:ins_product.document,for_object:"
 msgid "Contract"
 msgstr "Contrat"

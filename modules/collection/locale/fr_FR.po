@@ -1,0 +1,309 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:collection.assignment:"
+msgid "Amount (%s) for line is too big. It mustbe lower than %s"
+msgstr "Le montant proposé (%s) est trop élevé. Il doit être inférieur à %s."
+
+msgctxt "error:collection.collection_wizard:"
+msgid "Ventilation is not consistent : %s declared, %s assigned"
+msgstr "La ventilation n'est pas consistente : %s déclaré, %s affecté"
+
+msgctxt "field:collection.assign_collection,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:collection.assign_collection,assignments:"
+msgid "Assignments"
+msgstr "Affectations"
+
+msgctxt "field:collection.assign_collection,create_suspense_line_with_rest:"
+msgid "Create Suspense Line from Remaining"
+msgstr "Placer le reste dans le compte d'attente"
+
+msgctxt "field:collection.assign_collection,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:collection.assign_collection,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:collection.assign_collection,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:collection.assign_collection,remaining:"
+msgid "Remaining"
+msgstr "Reste"
+
+msgctxt "field:collection.assignment,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:collection.assignment,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:collection.assignment,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:collection.assignment,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:collection.assignment,source_move_line:"
+msgid "Source Move Line"
+msgstr "Lignes comptable d'origine"
+
+msgctxt "field:collection.assignment,target_account:"
+msgid "Target Account"
+msgstr "Compte concerné"
+
+msgctxt "field:collection.assignment_log,amount:"
+msgid "Numeric"
+msgstr "Numérique"
+
+msgctxt "field:collection.assignment_log,assignment_move:"
+msgid "Assignment Move"
+msgstr "Mouvement d'encaissement"
+
+msgctxt "field:collection.assignment_log,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:collection.assignment_log,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:collection.assignment_log,create_user:"
+msgid "Created by"
+msgstr "Créé par"
+
+msgctxt "field:collection.assignment_log,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:collection.assignment_log,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:collection.assignment_log,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:collection.assignment_log,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:collection.assignment_log,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:collection.assignment_log,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:collection.assignment_log,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:collection.collection,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:collection.collection,assignment_move:"
+msgid "Assignment Move"
+msgstr "Mouvement d'encaissement"
+
+msgctxt "field:collection.collection,check_number:"
+msgid "Check Number"
+msgstr "Numéro de chèque"
+
+msgctxt "field:collection.collection,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:collection.collection,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:collection.collection,create_user:"
+msgid "Created by"
+msgstr "Créé par"
+
+msgctxt "field:collection.collection,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:collection.collection,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:collection.collection,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:collection.collection,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:collection.collection,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:collection.collection,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:collection.collection,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:collection.collection_parameters,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:collection.collection_parameters,check_number:"
+msgid "Check Number"
+msgstr "Numéro de chèque"
+
+msgctxt "field:collection.collection_parameters,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:collection.collection_parameters,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:collection.collection_parameters,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:collection.collection_parameters,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:company.company,cash_account:"
+msgid "Cash Account"
+msgstr "Cash Account"
+
+msgctxt "field:company.company,check_account:"
+msgid "Check Account"
+msgstr "Check Account"
+
+msgctxt "field:company.company,collection_journal:"
+msgid "Journal"
+msgstr "Journal"
+
+msgctxt "model:collection.assign_collection,name:"
+msgid "Assign Collection"
+msgstr "Affecter l'encaissement"
+
+msgctxt "model:collection.assignment,name:"
+msgid "Assignment"
+msgstr "Affectation"
+
+msgctxt "model:collection.assignment_log,name:"
+msgid "Assignment Log"
+msgstr "Encaissement"
+
+msgctxt "model:collection.collection,name:"
+msgid "Collection"
+msgstr "Encaissement"
+
+msgctxt "model:collection.collection_parameters,name:"
+msgid "Collection parameters"
+msgstr "Informations de l'encaissement"
+
+msgctxt "model:ir.action,name:act_collection"
+msgid "Assignment Log"
+msgstr "Encaissement"
+
+msgctxt "model:ir.action,name:act_collection_wizard"
+msgid "Collection Wizard"
+msgstr "Processus d'encaissement"
+
+msgctxt "model:ir.ui.menu,name:menu_collection"
+msgid "Assignment Log"
+msgstr "Encaissement"
+
+msgctxt "model:ir.ui.menu,name:menu_collection_wizard"
+msgid "Collection"
+msgstr "Encaissement"
+
+msgctxt "selection:collection.assignment,kind:"
+msgid "From Move Line"
+msgstr "A partir d'une ligne"
+
+msgctxt "selection:collection.assignment,kind:"
+msgid "Select Account"
+msgstr "Sélection du compte"
+
+msgctxt "selection:collection.assignment_log,kind:"
+msgid "Cash"
+msgstr "Cash"
+
+msgctxt "selection:collection.assignment_log,kind:"
+msgid "Check"
+msgstr "Chèque"
+
+msgctxt "selection:collection.collection,kind:"
+msgid "Cash"
+msgstr "Cash"
+
+msgctxt "selection:collection.collection,kind:"
+msgid "Check"
+msgstr "Chèque"
+
+msgctxt "selection:collection.collection_parameters,kind:"
+msgid "Cash"
+msgstr "Cash"
+
+msgctxt "selection:collection.collection_parameters,kind:"
+msgid "Check"
+msgstr "Chèque"
+
+msgctxt "view:collection.assign_collection:"
+msgid "Assign Collection"
+msgstr "Affecter l'encaissement"
+
+msgctxt "view:collection.assignment:"
+msgid "Assignment"
+msgstr "Affectation"
+
+msgctxt "view:collection.assignment:"
+msgid "Assignments"
+msgstr "Affectations"
+
+msgctxt "view:collection.collection:"
+msgid "Collection"
+msgstr "Encaissement"
+
+msgctxt "view:collection.collection:"
+msgid "Collections"
+msgstr "Encaissements"
+
+msgctxt "view:collection.collection_parameters:"
+msgid "Collection Parameters"
+msgstr "informations d'encaissement"
+
+msgctxt "wizard_button:collection.collection_wizard,assign,check_amount:"
+msgid "Validate"
+msgstr "Valider"
+
+msgctxt "wizard_button:collection.collection_wizard,assign,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:collection.collection_wizard,input_collection_parameters,assign:"
+msgid "Assign"
+msgstr "Affecter"
+
+msgctxt ""
+"wizard_button:collection.collection_wizard,input_collection_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"

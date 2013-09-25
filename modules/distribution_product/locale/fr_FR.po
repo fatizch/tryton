@@ -14,6 +14,10 @@ msgctxt "field:contract.contract,is_health:"
 msgid "Is Health"
 msgstr "Santé"
 
+msgctxt "field:coop_utils.export_package,com_products:"
+msgid "Com Products"
+msgstr ""
+
 msgctxt "field:distribution.commercial_product,code:"
 msgid "Code"
 msgstr "Code"
@@ -73,6 +77,10 @@ msgstr "Mis à jour par"
 msgctxt "field:distribution.dist_network,commercial_products:"
 msgid "Commercial Products"
 msgstr "Produits Commerciaux"
+
+msgctxt "field:distribution.dist_network,company:"
+msgid "Company"
+msgstr "Société"
 
 msgctxt "field:distribution.dist_network,parent_com_products:"
 msgid "Top Level Commercial Products"

@@ -1,6 +1,11 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:billing.rate_note_reception:"
+msgid "Selected Rate Note is not in a valid status to start reception process"
+msgstr ""
+"Le statut du bordereau ne permet pas de démarrer le processus de réception"
 
 msgctxt "error:collective.rating_rule:"
 msgid "You can not have 2 business rules that overlaps!"
@@ -13,6 +18,10 @@ msgid ""
 msgstr ""
 "Un bordereau exist déjà pour le contrat %s (%s, %s) et ne peut pas être "
 "modifié (%s)"
+
+msgctxt "field:account.configuration,default_suspense_account:"
+msgid "Default Suspense Account"
+msgstr "Compte d'attente par défaut"
 
 msgctxt "field:billing.rate_line,childs:"
 msgid "Childs"
@@ -50,11 +59,19 @@ msgctxt "field:billing.rate_line,index:"
 msgid "Index"
 msgstr "indice"
 
+msgctxt "field:billing.rate_line,manual_billing:"
+msgid "Manual Billing"
+msgstr "Facturation manuelle"
+
 msgctxt "field:billing.rate_line,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
 msgctxt "field:billing.rate_line,option:"
+msgid "Option"
+msgstr "Garantie"
+
+msgctxt "field:billing.rate_line,option_:"
 msgid "Option"
 msgstr "Garantie"
 
@@ -90,6 +107,14 @@ msgctxt "field:billing.rate_line,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:billing.rate_note,amount_expected:"
+msgid "Amount Expected"
+msgstr "Montant attendu"
+
+msgctxt "field:billing.rate_note,amount_paid:"
+msgid "Amount Paid"
+msgstr "Montant payé"
+
 msgctxt "field:billing.rate_note,client:"
 msgid "Client"
 msgstr "Client"
@@ -106,6 +131,10 @@ msgctxt "field:billing.rate_note,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:billing.rate_note,currency:"
+msgid "Currency"
+msgstr "Devises"
+
 msgctxt "field:billing.rate_note,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -117,6 +146,10 @@ msgstr "ID"
 msgctxt "field:billing.rate_note,lines:"
 msgid "Lines"
 msgstr "Lignes"
+
+msgctxt "field:billing.rate_note,move:"
+msgid "Move"
+msgstr "Mouvement"
 
 msgctxt "field:billing.rate_note,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -146,9 +179,21 @@ msgctxt "field:billing.rate_note_line,amount:"
 msgid "Amount"
 msgstr "Montant"
 
+msgctxt "field:billing.rate_note_line,base:"
+msgid "Base"
+msgstr "Base"
+
 msgctxt "field:billing.rate_note_line,childs:"
 msgid "Childs"
 msgstr "Enfants"
+
+msgctxt "field:billing.rate_note_line,client_amount:"
+msgid "Client Amount"
+msgstr "Montant client"
+
+msgctxt "field:billing.rate_note_line,client_sum_amount:"
+msgid "Client Amount"
+msgstr "Montant Client"
 
 msgctxt "field:billing.rate_note_line,create_date:"
 msgid "Create Date"
@@ -186,10 +231,6 @@ msgctxt "field:billing.rate_note_line,parent:"
 msgid "Parent"
 msgstr "Parent"
 
-msgctxt "field:billing.rate_note_line,base:"
-msgid "Base"
-msgstr "Base"
-
 msgctxt "field:billing.rate_note_line,rate:"
 msgid "Rate"
 msgstr "Taux"
@@ -210,6 +251,10 @@ msgctxt "field:billing.rate_note_line,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
+msgctxt "field:billing.rate_note_line,sum_amount:"
+msgid "Amount"
+msgstr "Montant"
+
 msgctxt "field:billing.rate_note_line,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -217,6 +262,18 @@ msgstr "Date de mise à jour"
 msgctxt "field:billing.rate_note_line,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:billing.rate_note_move_displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.rate_note_move_displayer,move:"
+msgid "Move"
+msgstr "Mouvement"
+
+msgctxt "field:billing.rate_note_move_displayer,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
 
 msgctxt "field:billing.rate_note_process_parameter-client,client:"
 msgid "Client"
@@ -311,6 +368,18 @@ msgstr "Produits"
 msgctxt "field:billing.rate_note_process_parameters,until_date:"
 msgid "Until Date"
 msgstr "Jusqu'à la Date"
+
+msgctxt "field:billing.rate_note_selection,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:billing.rate_note_selection,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:billing.rate_note_selection,selected_note:"
+msgid "Selected Note"
+msgstr "Bordereau sélectionné"
 
 msgctxt "field:billing.rate_notes_displayer,id:"
 msgid "ID"
@@ -592,6 +661,14 @@ msgctxt "field:offered.coverage,rating_rules:"
 msgid "Rating Rules"
 msgstr "Règles de Tarification"
 
+msgctxt "field:offered.coverage,use_rates:"
+msgid "Use Rates"
+msgstr "Utiliser le Tarif"
+
+msgctxt "field:offered.product,use_rates:"
+msgid "Use Rates"
+msgstr "Utiliser le Tarif"
+
 msgctxt "field:party.group,code:"
 msgid "Code"
 msgstr "Code"
@@ -636,6 +713,10 @@ msgctxt "field:party.party,group:"
 msgid "Group"
 msgstr "Groupe"
 
+msgctxt "field:party.party,suspense_account:"
+msgid "Suspense Account"
+msgstr "Compte d'attente"
+
 msgctxt "model:billing.rate_line,name:"
 msgid "Rate Line"
 msgstr "Ligne de Tarif"
@@ -647,6 +728,10 @@ msgstr "Bordereau de Cotisation"
 msgctxt "model:billing.rate_note_line,name:"
 msgid "Rate Note Line"
 msgstr "Ligne de Bordereau"
+
+msgctxt "model:billing.rate_note_move_displayer,name:"
+msgid "Rate Note Move Displayer"
+msgstr "Réception du bordereau"
 
 msgctxt "model:billing.rate_note_process_parameter-client,name:"
 msgid "Rate Note Parameter Client Relation"
@@ -667,6 +752,10 @@ msgstr "Relation Bordereau Produit"
 msgctxt "model:billing.rate_note_process_parameters,name:"
 msgid "Rate Note Parameters"
 msgstr "Paramètres de Recherche"
+
+msgctxt "model:billing.rate_note_selection,name:"
+msgid "Rate Note Selection"
+msgstr "Sélection du bordereau"
 
 msgctxt "model:billing.rate_notes_displayer,name:"
 msgid "Rate Notes"
@@ -708,6 +797,10 @@ msgctxt "model:ir.action,name:act_rate_note_form"
 msgid "Rate Notes"
 msgstr "Bordereaux de Cotisations"
 
+msgctxt "model:ir.action,name:act_rate_note_reception"
+msgid "Rate Note Reception"
+msgstr "Réception d'un bordereau"
+
 msgctxt "model:ir.action,name:act_rate_note_relate_form"
 msgid "Rate Notes"
 msgstr "Bordereaux de Cotisations"
@@ -735,6 +828,10 @@ msgstr "Bordereaux de Cotisations"
 msgctxt "model:ir.ui.menu,name:menu_rate_note_process"
 msgid "Rate Note Process"
 msgstr "Processus d'Appel de Cotisation"
+
+msgctxt "model:ir.ui.menu,name:menu_rate_note_reception"
+msgid "Rate Note Reception"
+msgstr "Réception d'un bordereau"
 
 msgctxt "model:party.group,name:"
 msgid "Group Party"
@@ -825,12 +922,28 @@ msgid "%"
 msgstr ""
 
 msgctxt "view:billing.rate_note_line:"
+msgid "Client Total"
+msgstr "Total Client"
+
+msgctxt "view:billing.rate_note_line:"
 msgid "Rate Note Line"
 msgstr "Ligne de Bordereau"
+
+msgctxt "view:billing.rate_note_line:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "view:billing.rate_note_move_displayer:"
+msgid "Move"
+msgstr "Mouvement"
 
 msgctxt "view:billing.rate_note_process_parameters:"
 msgid "Rate Note Process Parameters"
 msgstr "Paramètres de Recherche"
+
+msgctxt "view:billing.rate_note_selection:"
+msgid "Rate Note Selection"
+msgstr "Sélection du bordereau"
 
 msgctxt "view:billing.rate_notes_displayer:"
 msgid "Rate Notes"
@@ -868,10 +981,6 @@ msgctxt "view:contract.contract:"
 msgid "Calculate Rates"
 msgstr "Calcul des Taux"
 
-msgctxt "view:contract.contract:"
-msgid "Rates"
-msgstr "Taux"
-
 msgctxt "view:offered.coverage:"
 msgid "Rating"
 msgstr "Tarif"
@@ -896,3 +1005,19 @@ msgctxt ""
 "wizard_button:billing.rate_note_process,rate_notes,validate_rate_notes:"
 msgid "Validate"
 msgstr "Valider"
+
+msgctxt "wizard_button:billing.rate_note_reception,preview_bill,clean_up:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:billing.rate_note_reception,preview_bill,validate:"
+msgid "Validate"
+msgstr "Valider"
+
+msgctxt "wizard_button:billing.rate_note_reception,select_note,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:billing.rate_note_reception,select_note,preview_bill:"
+msgid "Continue"
+msgstr "Continuer"

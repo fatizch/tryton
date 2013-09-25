@@ -148,7 +148,7 @@ msgstr "Souscripteur"
 
 msgctxt "field:contract.contract,subscriber_kind:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "field:contract.contract,summary:"
 msgid ""
@@ -441,10 +441,6 @@ msgstr "Documents"
 msgctxt "view:contract.contract:"
 msgid "Options"
 msgstr "Options"
-
-msgctxt "view:contract.contract:"
-msgid "contract"
-msgstr "contrat"
 
 msgctxt "view:contract.status_history:"
 msgid "Status History"
