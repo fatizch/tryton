@@ -711,8 +711,10 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             ['OR',
                 ['covered_data.end_date', '=', None],
                 ['covered_data.end_date', '>=', at_date]],
-            ('contract.company', '=', Eval('context', {}).get('company')),
-        ]
+            ]
+        if 'company' in Transaction().context:
+            domain.append(
+                ('contract.company', '=', Transaction().context['company']))
         return cls.search([domain])
 
     def get_currency(self):

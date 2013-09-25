@@ -486,8 +486,9 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             ['OR',
                 [('status_history.end_date', '=', None)],
                 [('status_history.end_date', '>=', at_date)]],
-            ('company', '=', Eval('context', {}).get('company')),
             ]
+        if 'company' in Transaction().context:
+            domain.append(('company', '=', Transaction().context['company']))
         return cls.search(domain)
 
     def get_current_policy_owner(self, name):
