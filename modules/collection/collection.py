@@ -31,9 +31,9 @@ class Company():
 
 
 class Collection(model.CoopSQL, model.CoopView):
-    'Assignment Log'
+    'Collection'
 
-    __name__ = 'collection.assignment_log'
+    __name__ = 'collection.collection'
 
     amount = fields.Numeric('Numeric', states={'readonly': True})
     kind = fields.Selection([('cash', 'Cash'), ('check', 'Check')], 'Kind',
@@ -46,7 +46,7 @@ class Collection(model.CoopSQL, model.CoopView):
         'get_create_user')
 
     def get_create_user(self, name):
-        return self.create_uid
+        return self.create_uid.id
 
 
 class CollectionParameters(model.CoopView):
@@ -176,7 +176,7 @@ class CollectionWizard(model.CoopWizard):
         collection_move.lines.append(collection_line)
         collection_move.save()
         log = Collection()
-        log.party = self.input_collection_parameters.partyy
+        log.party = self.input_collection_parameters.party
         log.amount = self.input_collection_parameters.amount
         log.kind = self.input_collection_parameters.kind
         log.assignment_move = collection_move
