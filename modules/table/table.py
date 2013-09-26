@@ -14,7 +14,7 @@ from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
 from trytond.modules.coop_utils.model import CoopSQL as ModelSQL
 from trytond.modules.coop_utils.model import CoopView as ModelView
 from trytond.modules.coop_utils import fields
-from trytond.modules.coop_utils import coop_string
+from trytond.modules.coop_utils import utils, coop_string
 
 __all__ = [
     'TableCell',
@@ -344,6 +344,21 @@ class TableDefinition(ModelSQL, ModelView):
     @ModelView.button_action('table.act_manage_dimension_4')
     def manage_dimension_4(cls, tables):
         pass
+
+    def get_index_value(self, at_date=None):
+        Cell = Pool().get('table.table_cell')
+        if not at_date:
+            at_date = utils.today()
+        cell = Cell.get_cell(self, (at_date))
+        return cell.get_value_with_type() if cell else None
+
+    def get_rec_name(self, name):
+        res = super(TableDefinition, self).get_rec_name(name)
+        if self.kind == 'Index':
+            cell = self.get_index_value()
+            if cell:
+                res = '%s (%s)' % (res, cell)
+        return res
 
 
 class TableDefinitionDimension(ModelSQL, ModelView):
