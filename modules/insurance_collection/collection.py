@@ -19,7 +19,7 @@ class CollectionParameters():
     __name__ = 'collection.collection_parameters'
 
     contract = fields.Many2One('contract.contract', 'Contract', on_change=[
-            'contract', 'party'], domain=[
+            'contract', 'party'], depends=['party'], domain=[
                 If(~Eval('party'),
                     ('id', '!=', 0),
                     ('subscriber', '=', Eval('party')))])

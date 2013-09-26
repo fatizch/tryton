@@ -499,16 +499,16 @@ class BillingPeriod(model.CoopSQL, model.CoopView):
 
     def check_dates(self):
         cursor = Transaction().cursor
-        cursor.execute('SELECT id '
-            'FROM "' + self._table + '" '
-            'WHERE ((start_date <= %s AND end_date >= %s) '
-                'OR (start_date <= %s AND end_date >= %s) '
-                'OR (start_date >= %s AND end_date <= %s)) '
-            'AND id != %s AND contract = %s',
-            (self.start_date, self.start_date,
-                self.end_date, self.end_date,
-                self.start_date, self.end_date,
-                self.id, self.contract.id))
+        table = self.__table__()
+        request = table.select(table.id,
+            where=((table.start_date <= self.start_date and table.end_date >=
+                    self.start_date)
+                | (table.start_date <= self.end_date and table.end_date >=
+                    self.end_date)
+                | (table.start_date <= self.start_date and table.end_date <=
+                    self.end_date))
+                & (table.contract != self.contract) & (table.id != self.id))
+        cursor.execute(*request)
         second_id = cursor.fetchone()
         if second_id:
             second = self.__class__(second_id[0])
