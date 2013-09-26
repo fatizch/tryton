@@ -57,10 +57,15 @@ class RateLine(model.CoopSQL, model.CoopView):
         states={'invisible': ~Eval('fare_class_group')})
     index = fields.Many2One('table.table_def', 'Index',
         states={'invisible': ~Eval('index')}, ondelete='RESTRICT')
+    index_value = fields.Function(fields.Numeric('Index Value'),
+        'get_index_value')
     parent = fields.Many2One('billing.rate_line', 'Parent', ondelete='CASCADE')
     childs = fields.One2Many('billing.rate_line', 'parent', 'Childs',
         states={'invisible': ~~Eval('tranche')})
     start_date = fields.Date('Start Date')
+    start_date_ = fields.Function(
+        fields.Date('Start Date'),
+        'get_start_date')
     end_date = fields.Date('End Date')
     rate = fields.Numeric('Rate', digits=(16, 4),
         states={'readonly': ~Eval('manual_billing')})
@@ -147,6 +152,19 @@ class RateLine(model.CoopSQL, model.CoopView):
             return self.option.id
         elif self.parent:
             return self.parent.option_.id
+
+    def get_index_value(self, name):
+        if not self.index:
+            return
+        Cell = Pool().get('table.table_cell')
+        cell = Cell.get_cell(self.index, (self.start_date_))
+        return cell.get_value_with_type() if cell else None
+
+    def get_start_date(self, name):
+        if self.start_date:
+            return self.start_date
+        elif self.parent:
+            return self.parent.start_date_
 
 
 class RateNote(model.CoopSQL, model.CoopView):

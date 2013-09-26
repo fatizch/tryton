@@ -4,6 +4,7 @@
     <field name="rate" factor="100">
         <suffix string="%"/>
     </field>
+    <field name="index_value"/>
     <field name="index"/>
     <field name="childs" tree_invisible="1"/>
     <field name="parent" tree_invisible="1"/>

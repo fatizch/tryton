@@ -3,8 +3,8 @@
     <label name="contract"/>
     <field name="contract"/>
     <newline/>
-    <label name="start_date"/>
-    <field name="start_date"/>
+    <label name="start_date_"/>
+    <field name="start_date_"/>
     <label name="end_date"/>
     <field name="end_date"/>
     <label name="covered_element"/>
@@ -28,6 +28,9 @@
     <newline/>
     <label name="index"/>
     <field name="index"/>
+    <label name="index_value"/>
+    <field name="index_value"/>
+
     <newline/>
     <field name="manual_billing"/>
 </form>
