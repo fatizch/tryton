@@ -28,8 +28,8 @@
     <newline/>
     <label name="index"/>
     <field name="index"/>
-    <label name="index_value"/>
-    <field name="index_value"/>
+    <label name="indexed_value"/>
+    <field name="indexed_value"/>
 
     <newline/>
     <field name="manual_billing"/>

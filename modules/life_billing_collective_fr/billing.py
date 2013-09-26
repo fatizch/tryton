@@ -57,8 +57,10 @@ class RateLine(model.CoopSQL, model.CoopView):
         states={'invisible': ~Eval('fare_class_group')})
     index = fields.Many2One('table.table_def', 'Index',
         states={'invisible': ~Eval('index')}, ondelete='RESTRICT')
-    index_value = fields.Function(fields.Numeric('Index Value'),
-        'get_index_value')
+    indexed_value = fields.Function(
+        fields.Numeric('Indexed Value',
+            on_change_with=['rate', 'index', 'start_date_']),
+        'on_change_with_indexed_value')
     parent = fields.Many2One('billing.rate_line', 'Parent', ondelete='CASCADE')
     childs = fields.One2Many('billing.rate_line', 'parent', 'Childs',
         states={'invisible': ~~Eval('tranche')})
@@ -150,12 +152,14 @@ class RateLine(model.CoopSQL, model.CoopView):
         elif self.parent:
             return self.parent.option_.id
 
-    def get_index_value(self, name):
+    def on_change_with_indexed_value(self, name=None):
         if not self.index:
             return
         Cell = Pool().get('table.table_cell')
         cell = Cell.get_cell(self.index, (self.start_date_))
-        return cell.get_value_with_type() if cell else None
+        value = cell.get_value_with_type() if cell else None
+        if value:
+            return value * self.rate
 
     def get_start_date(self, name):
         if self.start_date:
@@ -406,8 +410,8 @@ class RateNoteLine(model.CoopSQL, model.CoopView):
         work_set['total_amount'] += work_set['currency'].round(self.amount)
 
     def on_change_with_indexed_rate(self, name=None):
-        if self.rate_line and self.rate_line.index_value and self.rate:
-            return self.rate * self.rate_line.index_value
+        if self.rate_line and self.rate_line.indexed_value:
+            return self.rate_line.indexed_value
 
 
 class RateNoteParameters(model.CoopView):
