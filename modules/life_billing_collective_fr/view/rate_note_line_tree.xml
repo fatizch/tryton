@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tree string="Rate Note Line" editable="bottom"
-    colors="If(Bool(Eval('childs')), 'black', If(Eval('amount') != Eval('client_amount'), 'blue', 'green'))">
+    colors="If(Or(Bool(Eval('childs')), Not(Bool(Eval('base')))), 'black', If(Eval('amount') != Eval('client_amount'), 'red', 'black'))">
   <field name="rec_name"/>
   <field name="base"/>
   <field name="rate" factor="100">
