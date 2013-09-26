@@ -122,6 +122,10 @@ msgctxt "field:collection.collection,check_number:"
 msgid "Check Number"
 msgstr "Numéro de chèque"
 
+msgctxt "field:collection.collection,check_reception_date:"
+msgid "Check Reception Date"
+msgstr "Date de Remise à la Banque"
+
 msgctxt "field:collection.collection,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -169,6 +173,10 @@ msgstr "Montant"
 msgctxt "field:collection.collection_parameters,check_number:"
 msgid "Check Number"
 msgstr "Numéro de chèque"
+
+msgctxt "field:collection.collection_parameters,check_reception_date:"
+msgid "Check Reception Date"
+msgstr "Date de Remise à la Banque"
 
 msgctxt "field:collection.collection_parameters,id:"
 msgid "ID"
@@ -219,19 +227,23 @@ msgid "Collection parameters"
 msgstr "Informations de l'encaissement"
 
 msgctxt "model:ir.action,name:act_collection"
-msgid "Assignment Log"
+msgid "Collection"
 msgstr "Encaissement"
 
 msgctxt "model:ir.action,name:act_collection_wizard"
 msgid "Collection Wizard"
 msgstr "Processus d'encaissement"
 
+msgctxt "model:ir.action,name:act_open_party_collections"
+msgid "Collections"
+msgstr "Encaissements"
+
 msgctxt "model:ir.ui.menu,name:menu_collection"
-msgid "Assignment Log"
+msgid "Collection"
 msgstr "Encaissement"
 
 msgctxt "model:ir.ui.menu,name:menu_collection_wizard"
-msgid "Collection"
+msgid "Collection Wizard"
 msgstr "Encaissement"
 
 msgctxt "selection:collection.assignment,kind:"

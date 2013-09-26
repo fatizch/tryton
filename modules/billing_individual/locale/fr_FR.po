@@ -871,7 +871,7 @@ msgstr "Cash"
 
 msgctxt "selection:billing.payment_method,payment_mode:"
 msgid "Check"
-msgstr ""
+msgstr "Chèque"
 
 msgctxt "selection:billing.payment_method,payment_mode:"
 msgid "Direct Debit"

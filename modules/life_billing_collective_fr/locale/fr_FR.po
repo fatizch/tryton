@@ -59,6 +59,14 @@ msgctxt "field:billing.rate_line,index:"
 msgid "Index"
 msgstr "indice"
 
+msgctxt "field:billing.rate_line,index_value:"
+msgid "Index Value"
+msgstr ""
+
+msgctxt "field:billing.rate_line,indexed_value:"
+msgid "Indexed Value"
+msgstr "Valeur Indexé"
+
 msgctxt "field:billing.rate_line,manual_billing:"
 msgid "Manual Billing"
 msgstr "Facturation manuelle"
@@ -92,6 +100,10 @@ msgid "Reference Value"
 msgstr "Valeur de Référence"
 
 msgctxt "field:billing.rate_line,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:billing.rate_line,start_date_:"
 msgid "Start Date"
 msgstr "Date de Début"
 
@@ -154,6 +166,10 @@ msgstr "Mouvement"
 msgctxt "field:billing.rate_note,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
+
+msgctxt "field:billing.rate_note,name:"
+msgid "Number"
+msgstr "Numéro"
 
 msgctxt "field:billing.rate_note,rec_name:"
 msgid "Name"
@@ -222,6 +238,10 @@ msgstr "Date de Fin"
 msgctxt "field:billing.rate_note_line,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:billing.rate_note_line,indexed_rate:"
+msgid "Indexed Rate"
+msgstr "Taux Indexé"
 
 msgctxt "field:billing.rate_note_line,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -633,6 +653,10 @@ msgctxt "field:collective.sub_rating_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:company.company,rate_note_sequence:"
+msgid "Rate Note Sequence"
+msgstr ""
+
 msgctxt "field:contract.contract,next_assessment_date:"
 msgid "Next Assessment Date"
 msgstr "Prochain Appel de Cotisation"
@@ -1021,3 +1045,21 @@ msgstr "Annuler"
 msgctxt "wizard_button:billing.rate_note_reception,select_note,preview_bill:"
 msgid "Continue"
 msgstr "Continuer"
+
+msgctxt "wizard_button:collection.collection_wizard,assign,check_amount:"
+msgid "Validate"
+msgstr "Valider"
+
+msgctxt "wizard_button:collection.collection_wizard,assign,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:collection.collection_wizard,input_collection_parameters,assign:"
+msgid "Assign"
+msgstr "Affecter"
+
+msgctxt ""
+"wizard_button:collection.collection_wizard,input_collection_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"

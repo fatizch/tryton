@@ -507,6 +507,10 @@ msgid "Remove"
 msgstr "Remplacer"
 
 msgctxt "selection:ins_contract.management_role,kind:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:ins_contract.management_role,kind:"
 msgid "Business Provider"
 msgstr "Apporteur d'affaires"
 
