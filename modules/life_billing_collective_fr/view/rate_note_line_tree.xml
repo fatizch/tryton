@@ -6,6 +6,7 @@
   <field name="rate" factor="100">
     <suffix string="%"/>
   </field>
+  <field name="indexed_rate"/>
   <field name="sum_amount" sum="Total">
     <suffix name="currency_symbol"/>
   </field>
