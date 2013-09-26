@@ -297,5 +297,7 @@ class CollectionWizard(model.CoopWizard):
         log.assignment_move = collection_move
         if self.input_collection_parameters.check_number:
             log.check_number = self.input_collection_parameters.check_number
+            log.check_reception_date = \
+                self.input_collection_parameters.check_reception_date
         log.save()
         return 'end'
