@@ -6,22 +6,10 @@ from trytond.modules.coop_utils import fields
 
 
 __all__ = [
-    'MoveLine',
     'CollectionParameters',
     'AssignCollection',
     'CollectionWizard',
     ]
-
-
-class MoveLine():
-    'Move Line'
-
-    __metaclass__ = PoolMeta
-    __name__ = 'account.move.line'
-
-    def get_rec_name(self, name):
-        return '%.2f - %s' % (
-            self.debit - self.credit, self.move.origin.get_rec_name(None))
 
 
 class CollectionParameters():

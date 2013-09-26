@@ -5,7 +5,6 @@ from .collection import *
 def register():
     Pool.register(
         # from collection
-        MoveLine,
         CollectionParameters,
         AssignCollection,
         module='insurance_collection', type_='model')

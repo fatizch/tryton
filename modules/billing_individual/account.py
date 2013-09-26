@@ -127,6 +127,11 @@ class Move:
     def get_wo_fee_amount(self, name):
         return self.wo_tax_amount - self.fee_amount
 
+    def get_rec_name(self, name):
+        if not self.contract:
+            return super(Move, self).get_rec_name(name)
+        return self.contract.get_rec_name(name)
+
 
 class MoveLine:
     __name__ = 'account.move.line'
@@ -181,6 +186,10 @@ class MoveLine:
             if v < 0:
                 res[k] = 0
         return res
+
+    def get_rec_name(self, name):
+        return '%.2f - %s' % (
+            self.debit - self.credit, self.move.get_rec_name(None))
 
 
 class Account(export.ExportImportMixin):
