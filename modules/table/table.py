@@ -877,6 +877,8 @@ class Table2D(ModelSQL, ModelView):
 
     @classmethod
     def table_query(cls):
+        if not CONFIG['db_type'] == 'postgresql':
+            return True
         pool = Pool()
         TableCell = pool.get('table.table_cell')
         TableDefinition = pool.get('table.table_def')
