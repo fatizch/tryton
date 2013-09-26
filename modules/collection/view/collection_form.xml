@@ -9,7 +9,9 @@
   <label name="kind"/>
   <field name="kind" colspan="3"/>
   <label name="check_number"/>
-  <field name="check_number" colspan="3"/>
+  <field name="check_number"/>
+  <label name="check_reception_date"/>
+  <field name="check_reception_date"/>
   <label name="party"/>
   <field name="party" colspan="3"/>
   <label name="assignment_move"/>

@@ -54,4 +54,5 @@ def register():
     Pool.register(
         RateNoteProcess,
         RateNoteReception,
+        CollectionWizard,
         module='life_billing_collective_fr', type_='wizard')

@@ -81,6 +81,9 @@ class Collection(model.CoopSQL, model.CoopView):
     check_number = fields.Char('Check Number', states={
             'invisible': Eval('kind') != 'check',
             'required': Eval('kind') == 'check'})
+    check_reception_date = fields.Date('Check Reception Date', states={
+            'invisible': Eval('kind') != 'check',
+            'required': Eval('kind') == 'check'})
 
     def get_create_user(self, name):
         return self.create_uid.id
@@ -96,6 +99,9 @@ class CollectionParameters(model.CoopView):
     amount = fields.Numeric('Amount', required=True)
     party = fields.Many2One('party.party', 'Party', required=True)
     check_number = fields.Char('Check Number', states={
+            'invisible': Eval('kind') != 'check',
+            'required': Eval('kind') == 'check'})
+    check_reception_date = fields.Date('Check Reception Date', states={
             'invisible': Eval('kind') != 'check',
             'required': Eval('kind') == 'check'})
 

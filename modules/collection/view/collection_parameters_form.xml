@@ -8,4 +8,6 @@
   <field name="amount" colspan="3"/>
   <label name="check_number"/>
   <field name="check_number"/>
+  <label name="check_reception_date"/>
+  <field name="check_reception_date"/>
 </form>

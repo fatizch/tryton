@@ -4,7 +4,7 @@ from decimal import Decimal
 from trytond.pyson import Eval
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
-from trytond.wizard import StateTransition, StateView, Button
+from trytond.wizard import StateTransition, StateView, Button, StateAction
 from trytond.backend import TableHandler
 
 from trytond.modules.coop_utils import model, fields, utils, coop_date, \
@@ -27,6 +27,7 @@ __all__ = [
     'ContractForBilling',
     'Move',
     'MoveLine',
+    'CollectionWizard',
     ]
 
 
@@ -588,6 +589,7 @@ class RateNoteReception(model.CoopWizard):
             Button('Validate', 'validate', 'tryton-ok')])
     clean_up = StateTransition()
     validate = StateTransition()
+    start_collection = StateAction('collection.act_collection_wizard')
 
     @classmethod
     def __setup__(cls):
@@ -629,13 +631,20 @@ class RateNoteReception(model.CoopWizard):
                 Move.delete([move])
         self.select_note.selected_note.status = 'validated'
         self.select_note.selected_note.save()
-        return 'end'
+        return 'start_collection'
 
     def transition_clean_up(self):
         if (hasattr(self.preview_bill, 'id') and self.preview_bill.id):
             Move = Pool().get('account.move')
             Move.delete([self.preview_bill])
         return 'end'
+
+    def do_start_collection(self, action):
+        return action, {
+            'model': 'billing.rate_note',
+            'id': self.select_note.selected_note.id,
+            'ids': [self.select_note.selected_note.id],
+            }
 
 
 class ContractForBilling():
@@ -710,3 +719,24 @@ class MoveLine():
         if not self.second_origin.__name__ == 'billing.rate_note':
             return super(MoveLine, self).get_second_origin_name(name)
         return 'Rate Note compensation'
+
+
+class CollectionWizard():
+    'Collection Wizard'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'collection.collection_wizard'
+
+    def default_input_collection_parameters(self, name):
+        res = super(
+            CollectionWizard, self).default_input_collection_parameters(name)
+        the_model = Transaction().context.get('active_model', None)
+        if not the_model or the_model != 'billing.rate_note':
+            return res
+        rate_note = Pool().get(the_model)(
+            Transaction().context.get('active_id'))
+        res['contract'] = rate_note.contract.id
+        res['party'] = rate_note.contract.subscriber.id
+        res['amount'] = rate_note.amount_expected
+        res['kind'] = 'check'
+        return res
