@@ -23,9 +23,4 @@
       <field name="addresses"/>
     </page>
   </xpath>
-  <xpath expr="/form/notebook" position="inside">
-    <page string="History" id="history">
-      <field name="contract_history" colspan="4"/>
-    </page>
-  </xpath>
 </data>

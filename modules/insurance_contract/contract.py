@@ -52,8 +52,6 @@ class InsurancePolicy():
     managing_roles = fields.One2Many('ins_contract.management_role',
         'protocol', 'Managing Roles',
         states={'invisible': Eval('product_kind') == 'insurance'})
-    contract_history = fields.One2Many('contract.contract.history',
-        'from_object', 'Contract History')
     next_renewal_date = fields.Date('Next Renewal Date')
     last_renewed = fields.Date('Last Renewed')
 
@@ -615,10 +613,10 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             for x in self.complementary_data.iteritems()])
 
     def get_main_contract_id(self, name):
-        if not utils.is_none(self, 'parent'):
-            return self.parent.main_contract.id
-        elif not utils.is_none(self, 'contract'):
+        if not utils.is_none(self, 'contract'):
             return self.contract.id
+        elif not utils.is_none(self, 'parent'):
+            return self.parent.main_contract.id
         elif 'contract' in Transaction().context:
             return Transaction().context.get('contract')
 
