@@ -128,6 +128,10 @@ class Party(model.CoopSQL):
 
     @classmethod
     def search_is_actor(cls, name, clause):
+        if clause[2] is True:
+            clause[1], clause[2] = ('!=', None)
+        elif clause[2] is False:
+            clause[2] = None
         field_name = Party.get_actor_var_name(name)
         return [(field_name, ) + tuple(clause[1:])]
 

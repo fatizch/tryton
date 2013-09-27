@@ -77,7 +77,8 @@ class Contract():
         today_query = (move_line.maturity_date <= Date.today()) | (
             move_line.maturity_date == None)
         good_moves_query = move.id.in_(move.select(move.id, where=(
-                    move.origin in contracts)))
+                    move.origin.in_(
+                        ['contract.contract,%s' % x.id for x in contracts]))))
 
         cursor.execute(*query_table.select(move.origin, Sum(
                     Coalesce(payment.amount, 0)),
@@ -86,7 +87,7 @@ class Contract():
                 & (move_line.reconciliation == None)
                 & good_moves_query
                 & today_query
-                & (account.company == user.company),
+                & (account.company == user.company.id),
                 group_by=move.origin))
         for contract_id, sum in cursor.fetchall():
             # SQLite uses float for SUM
