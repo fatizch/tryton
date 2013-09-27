@@ -1,4 +1,6 @@
 from decimal import Decimal
+from sql.aggregate import Sum
+from sql.conditionals import Coalesce
 
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
@@ -58,26 +60,30 @@ class Move:
         res = dict((m.id, Decimal('0.0')) for m in moves)
         cursor = Transaction().cursor
 
-        extra_clause = ''
-        account_clause = 'AND a.kind = \'receivable\' '
+        pool = Pool()
+        move_line = pool.get('account.move.line').__table__()
+        account = pool.get('account.account').__table__()
+        move = pool.get('account.move').__table__()
+
+        query_table = move.join(move_line,
+            condition=(move.id == move_line.move)
+            ).join(account, condition=(account.id == move_line.account))
+
+        extra_clause = (account.kind == 'receivable')
         sign = 1
         if name in ('tax_amount', 'fee_amount'):
-            extra_clause = 'AND '
-            extra_clause += 'l.second_origin LIKE '
-            extra_clause += '\'coop_account.%s_desc' % name[0:3]
-            extra_clause += ',%%\' '
-            account_clause = 'AND a.kind != \'receivable\' '
+            extra_clause = ((move_line.second_origin.like(
+                        'coop_account.%s_desc,%%' % name[0:3]))
+                & (account.kind != 'receivable'))
             sign = -1
 
-        cursor.execute('SELECT m.id, '
-                'SUM((COALESCE(l.debit, 0) - COALESCE(l.credit, 0))) '
-            'FROM account_move_line AS l, account_account AS a '
-            ', account_move as m '
-            'WHERE a.id = l.account '
-                '' + account_clause + 'AND a.active '
-                '' + extra_clause + 'AND l.move = m.id '
-                'AND m.id IN (' + ','.join(('%s',) * len(moves)) + ') '
-            'GROUP BY m.id', [m.id for m in moves])
+        cursor.execute(*query_table.select(move.id, Sum(
+                    Coalesce(move_line.debit, 0)
+                    - Coalesce(move_line.credit, 0)),
+                where=(account.active)
+                & extra_clause
+                & (move.id in [m.id for m in moves]),
+                group_by=(move.id)))
         for move_id, sum in cursor.fetchall():
             # SQLite uses float for SUM
             if not isinstance(sum, Decimal):
@@ -92,26 +98,34 @@ class Move:
     def search_basic_amount(cls, name, clause):
         cursor = Transaction().cursor
 
-        extra_clause = ''
-        account_clause = 'AND a.kind = \'receivable\' '
+        _, operator, value = clause
+        Operator = fields.SQL_OPERATORS[operator]
+
+        pool = Pool()
+        move_line = pool.get('account.move.line').__table__()
+        account = pool.get('account.account').__table__()
+        move = pool.get('account.move').__table__()
+
+        query_table = move.join(move_line,
+            condition=(move.id == move_line.move)
+            ).join(account, condition=(account.id == move_line.account))
+
+        extra_clause = (account.kind == 'receivable')
         sign = 1
         if name in ('tax_amount', 'fee_amount'):
-            extra_clause = 'AND '
-            extra_clause += 'l.second_origin LIKE '
-            extra_clause += '\'coop_account.%s_desc' % name[0:3]
-            extra_clause += ',%%\' '
-            account_clause = 'AND a.kind != \'receivable\' '
+            extra_clause = ((move_line.second_origin.like(
+                        'coop_account.%s_desc,%%' % name[0:3]))
+                & (account.kind != 'receivable'))
             sign = -1
 
-        cursor.execute('SELECT m.id '
-            'FROM account_move_line AS l, account_account AS a '
-            ', account_move as m '
-            'WHERE a.id = l.account '
-                '' + account_clause + 'AND a.active '
-                '' + extra_clause + 'AND l.move = m.id '
-            'GROUP BY m.id '
-            'HAVING (%s * SUM((COALESCE(l.debit, 0) - COALESCE(l.credit, 0))) '
-                + clause[1] + ' %s)', [sign] + [Decimal(clause[2] or 0)])
+        cursor.execute(*query_table.select(move.id,
+                where=(account.active)
+                & extra_clause,
+                group_by=(move.id),
+                having=Operator(sign * Sum(Coalesce(move_line.debit, 0)
+                        - Coalesce(move_line.credit, 0)),
+                    getattr(cls, name).sql_format(value))))
+
         return [('id', 'in', [x[0] for x in cursor.fetchall()])]
 
     def get_contract(self, name):

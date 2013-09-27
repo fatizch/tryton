@@ -2,6 +2,8 @@ import copy
 import datetime
 from collections import defaultdict
 from itertools import repeat, izip, chain
+from sql.aggregate import Sum
+from sql.conditionals import Coalesce
 
 from decimal import Decimal
 
@@ -1154,33 +1156,30 @@ class Contract():
         user = User(user_id)
         if not user.company:
             return res
-        company_id = user.company.id
 
-        line_query, _ = MoveLine.query_get()
+        move_line = MoveLine.__table__()
+        account = pool.get('account.account').__table__()
+        move = pool.get('account.move').__table__()
+        line_query, _ = MoveLine.query_get(move_line)
 
-        today_query = 'AND (l.maturity_date <= %s ' \
-            'OR l.maturity_date IS NULL) '
-        today_value = [Date.today()]
+        query_table = move.join(move_line,
+            condition=(move.id == move_line.move)
+            ).join(account, condition=(account.id == move_line.account))
+        today_query = (move_line.maturity_date <= Date.today()) | (
+            move_line.maturity_date == None)
+        good_moves_query = move.id.in_(move.select(move.id, where=(
+                    move.origin in contracts)))
 
-        cursor.execute('SELECT m.origin, '
-                'SUM((COALESCE(l.debit, 0) - COALESCE(l.credit, 0))) '
-            'FROM account_move_line AS l, account_account AS a '
-            ', account_move as m '
-            'WHERE a.id = l.account '
-                'AND a.active '
-                'AND a.kind = \'receivable\' '
-                'AND l.move = m.id '
-                'AND m.id IN '
-                    '(SELECT m.id FROM account_move as m '
-                    'WHERE m.origin IN '
-                    '(' + ','.join(('%s',) * len(contracts)) + ')) '
-                'AND l.reconciliation IS NULL '
-                'AND ' + line_query + ' '
-                + today_query +
-                'AND a.company = %s '
-            'GROUP BY m.origin',
-            [utils.convert_to_reference(p) for p in contracts] +
-            today_value + [company_id])
+        cursor.execute(*query_table.select(move.origin, Sum(
+                Coalesce(move_line.debit, 0) - Coalesce(move_line.credit, 0)),
+                where=(account.active)
+                & (account.kind == 'receivable')
+                & good_moves_query
+                & (move_line.reconciliation == None)
+                & line_query
+                & today_query
+                & (account.company == user.company),
+                group_by=(move.origin)))
         for contract_id, sum in cursor.fetchall():
             # SQLite uses float for SUM
             if not isinstance(sum, Decimal):
@@ -1222,32 +1221,40 @@ class Contract():
         if not company_id:
             return []
 
+        _, operator, value = clause
+        Operator = fields.SQL_OPERATORS[operator]
+
+        move_line = MoveLine.__table__()
+        account = pool.get('account.account').__table__()
+        move = pool.get('account.move').__table__()
+        line_query, _ = MoveLine.query_get(move_line)
+
+        query_table = move.join(move_line,
+            condition=(move.id == move_line.move)
+            ).join(account, condition=(account.id == move_line.account))
+        today_query = (move_line.maturity_date <= Date.today()) | (
+            move_line.maturity_date == None)
+
         code = name
-        today_query = ''
-        today_value = []
+        today_query = True
         if name in ('receivable_today', 'payable_today'):
             code = name[:-6]
-            today_query = 'AND (l.maturity_date <= %s ' \
-                'OR l.maturity_date IS NULL) '
-            today_value = [Date.today()]
+            today_query = (move_line.maturity_date <= Date.today()) | (
+                move_line.maturity_date == None)
 
-        line_query, _ = MoveLine.query_get()
+        cursor.execute(*query_table.select(move.contract,
+                where=(account.active)
+                & (account.kind == code)
+                & (move_line.reconciliation == None)
+                & line_query
+                & today_query
+                & (account.company == Company(company_id)),
+                group_by=(move_line.party),
+                having=Operator(Sum(
+                        Coalesce(move_line.debit, 0) -
+                        Coalesce(move_line.credit, 0)),
+                    getattr(cls, name).sql_format(value))))
 
-        cursor.execute('SELECT m.contract '
-            'FROM account_move_line AS l, account_account AS a '
-            ', account_move as m '
-            'WHERE a.id = l.account '
-                'AND a.active '
-                'AND a.kind = %s '
-                'AND l.move = m.id '
-                'AND l.reconciliation IS NULL '
-                'AND ' + line_query + ' '
-                + today_query +
-                'AND a.company = %s '
-            'GROUP BY l.party '
-            'HAVING (SUM((COALESCE(l.debit, 0) - COALESCE(l.credit, 0))) '
-                + clause[1] + ' %s)',
-            [code] + today_value + [company_id] + [Decimal(clause[2] or 0)])
         return [('id', 'in', [x[0] for x in cursor.fetchall()])]
 
     @classmethod

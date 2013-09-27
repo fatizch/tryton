@@ -1,4 +1,6 @@
 from decimal import Decimal
+from sql.aggregate import Sum
+from sql.conditionals import Coalesce
 
 from trytond.pool import PoolMeta, Pool
 
@@ -61,31 +63,31 @@ class Contract():
         user = User(user_id)
         if not user.company:
             return res
-        company_id = user.company.id
 
-        today_query = 'AND (l.maturity_date <= %s ' \
-            'OR l.maturity_date IS NULL) '
-        today_value = [Date.today()]
+        move_line = pool.get('account.move.line').__table__()
+        payment = pool.get('account.payment').__table__()
+        account = pool.get('account.account').__table__()
+        move = pool.get('account.move').__table__()
 
-        cursor.execute('SELECT m.origin, '
-                'SUM(COALESCE(p.amount, 0)) '
-            'FROM account_move_line AS l '
-            'LEFT JOIN account_payment p ON l.id = p.line '
-            'JOIN account_account AS a ON a.id = l.account '
-            'JOIN account_move AS m ON l.move = m.id  '
-            'WHERE '
-                'a.active '
-                'AND a.kind = \'receivable\' '
-                'AND m.id IN '
-                    '(SELECT m.id FROM account_move as m '
-                    'WHERE m.origin IN '
-                    '(' + ','.join(('%s',) * len(contracts)) + ')) '
-                'AND l.reconciliation IS NULL '
-                + today_query +
-                'AND a.company = %s '
-            'GROUP BY m.origin',
-            [utils.convert_to_reference(p) for p in contracts] +
-            today_value + [company_id])
+        query_table = move_line.join(payment, type_='LEFT',
+            condition=(move_line.id == payment.line)
+            ).join(move,
+            condition=(move.id == move_line.move)
+            ).join(account, condition=(account.id == move_line.account))
+        today_query = (move_line.maturity_date <= Date.today()) | (
+            move_line.maturity_date == None)
+        good_moves_query = move.id.in_(move.select(move.id, where=(
+                    move.origin in contracts)))
+
+        cursor.execute(*query_table.select(move.origin, Sum(
+                    Coalesce(payment.amount, 0)),
+                where=(account.active)
+                & (account.kind == 'receivable')
+                & (move_line.reconciliation == None)
+                & good_moves_query
+                & today_query
+                & (account.company == user.company),
+                group_by=move.origin))
         for contract_id, sum in cursor.fetchall():
             # SQLite uses float for SUM
             if not isinstance(sum, Decimal):
