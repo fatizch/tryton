@@ -514,6 +514,16 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         'on_change_with_covered_name')
 
     @classmethod
+    def write(cls, cov_elements, vals):
+        if 'sub_covered_elements' in vals:
+            for cov_element in cov_elements:
+                for val in vals['sub_covered_elements']:
+                    if val[0] == 'create':
+                        for sub_cov_elem in val[1]:
+                            sub_cov_elem['contract'] = cov_element.contract.id
+        super(CoveredElement, cls).write(cov_elements, vals)
+
+    @classmethod
     def get_var_names_for_full_extract(cls):
         return ['name', 'sub_covered_elements',
             'complementary_data', 'party', 'covered_relations']
