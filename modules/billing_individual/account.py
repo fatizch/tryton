@@ -82,7 +82,7 @@ class Move:
                     - Coalesce(move_line.credit, 0)),
                 where=(account.active)
                 & extra_clause
-                & (move.id in [m.id for m in moves]),
+                & (move.id.in_([m.id for m in moves])),
                 group_by=(move.id)))
         for move_id, sum in cursor.fetchall():
             # SQLite uses float for SUM

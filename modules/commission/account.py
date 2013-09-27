@@ -1,7 +1,7 @@
 from decimal import Decimal
+from sql import Cast
 from sql.aggregate import Sum
 from sql.conditionals import Coalesce
-from sql.functions import ToChar
 from sql.operators import Concat
 
 from trytond.transaction import Transaction
@@ -49,11 +49,11 @@ class Move():
                     Coalesce(move_line.credit, 0)
                     - Coalesce(move_line.debit, 0)),
                 where=(account.kind != 'receivable')
-                & (move.second_origin._in(coverage.select(
-                            Concat('offered.coverage,', ToChar(coverage.id)),
+                & (move_line.second_origin.in_(coverage.select(
+                            Concat('offered.coverage,', Cast(coverage.id, 'CHAR')),
                             where=(coverage.kind == 'commission'))))
                 & (account.active)
-                & (move.id in [m.id for m in moves]),
+                & (move.id.in_([m.id for m in moves])),
                 group_by=move.id))
         for move_id, sum in cursor.fetchall():
             # SQLite uses float for SUM

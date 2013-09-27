@@ -509,7 +509,7 @@ class BillingPeriod(model.CoopSQL, model.CoopView):
                     self.end_date)
                 | (table.start_date <= self.start_date and table.end_date <=
                     self.end_date))
-                & (table.contract != self.contract) & (table.id != self.id))
+                & (table.contract == self.contract.id) & (table.id != self.id))
         cursor.execute(*request)
         second_id = cursor.fetchone()
         if second_id:
@@ -1017,6 +1017,8 @@ class Contract():
         # Get the appliable prices ont the period. This is a list of tuples
         # of the form ((start_date, end_date), PriceLine)
         price_lines = self.create_price_list(*period)
+        if not price_lines:
+            return
 
         # Init the work_set which will be used
         currency = self.get_currency()
