@@ -728,10 +728,6 @@ msgctxt "selection:offered.coverage,kind:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:offered.coverage,kind:"
-msgid "Default"
-msgstr "Défaut"
-
 msgctxt "selection:offered.coverage,subscription_behaviour:"
 msgid "Mandatory"
 msgstr "Obligatoire"
@@ -771,10 +767,6 @@ msgstr "Remplacer"
 msgctxt "selection:offered.product,kind:"
 msgid ""
 msgstr " "
-
-msgctxt "selection:offered.product,kind:"
-msgid "Default"
-msgstr "Défaut"
 
 msgctxt "selection:offered.product,subscriber_kind:"
 msgid "All"

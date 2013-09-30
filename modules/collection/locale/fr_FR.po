@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:collection.assignment:"
-msgid "Amount (%s) for line is too big. It mustbe lower than %s"
-msgstr "Le montant proposé (%s) est trop élevé. Il doit être inférieur à %s."
-
 msgctxt "error:collection.collection_wizard:"
 msgid "Ventilation is not consistent : %s declared, %s assigned"
 msgstr "La ventilation n'est pas consistente : %s déclaré, %s affecté"
@@ -61,54 +57,6 @@ msgstr "Lignes comptable d'origine"
 msgctxt "field:collection.assignment,target_account:"
 msgid "Target Account"
 msgstr "Compte concerné"
-
-msgctxt "field:collection.assignment_log,amount:"
-msgid "Numeric"
-msgstr "Numérique"
-
-msgctxt "field:collection.assignment_log,assignment_move:"
-msgid "Assignment Move"
-msgstr "Mouvement d'encaissement"
-
-msgctxt "field:collection.assignment_log,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:collection.assignment_log,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:collection.assignment_log,create_user:"
-msgid "Created by"
-msgstr "Créé par"
-
-msgctxt "field:collection.assignment_log,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:collection.assignment_log,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:collection.assignment_log,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:collection.assignment_log,party:"
-msgid "Party"
-msgstr "Tiers"
-
-msgctxt "field:collection.assignment_log,rec_name:"
-msgid "Name"
-msgstr "Valeur"
-
-msgctxt "field:collection.assignment_log,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:collection.assignment_log,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
 
 msgctxt "field:collection.collection,amount:"
 msgid "Amount"
@@ -214,10 +162,6 @@ msgctxt "model:collection.assignment,name:"
 msgid "Assignment"
 msgstr "Affectation"
 
-msgctxt "model:collection.assignment_log,name:"
-msgid "Assignment Log"
-msgstr "Encaissement"
-
 msgctxt "model:collection.collection,name:"
 msgid "Collection"
 msgstr "Encaissement"
@@ -253,14 +197,6 @@ msgstr "A partir d'une ligne"
 msgctxt "selection:collection.assignment,kind:"
 msgid "Select Account"
 msgstr "Sélection du compte"
-
-msgctxt "selection:collection.assignment_log,kind:"
-msgid "Cash"
-msgstr "Cash"
-
-msgctxt "selection:collection.assignment_log,kind:"
-msgid "Check"
-msgstr "Chèque"
 
 msgctxt "selection:collection.collection,kind:"
 msgid "Cash"

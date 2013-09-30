@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:ins_claim.indemnification_selection:"
-msgid "Please unselect all indemnifications first"
-msgstr ""
-
 msgctxt "error:ins_claim.loss:"
 msgid "End Date is smaller than start date"
 msgstr "La date de fin est antérieure à la date de début"

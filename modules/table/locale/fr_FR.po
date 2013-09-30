@@ -6,10 +6,6 @@ msgctxt "error:table.2d:"
 msgid "The table is not 2D"
 msgstr "La table n'est pas 2D"
 
-msgctxt "error:table.dimension_displayer:"
-msgid "Impossible to convert data %s with format %s"
-msgstr ""
-
 msgctxt "error:table.manage_dimension_1:"
 msgid "The requested change might delete data."
 msgstr ""

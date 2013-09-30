@@ -95,10 +95,6 @@ msgctxt "field:billing.rate_line,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:billing.rate_line,reference_value:"
-msgid "Reference Value"
-msgstr "Valeur de Référence"
-
 msgctxt "field:billing.rate_line,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
@@ -208,8 +204,12 @@ msgid "Client Amount"
 msgstr "Montant client"
 
 msgctxt "field:billing.rate_note_line,client_sum_amount:"
-msgid "Client Amount"
+msgid "Client Sum Amount"
 msgstr "Montant Client"
+
+msgctxt "field:billing.rate_note_line,contract:"
+msgid "Contract"
+msgstr "Contrat"
 
 msgctxt "field:billing.rate_note_line,create_date:"
 msgid "Create Date"
@@ -222,10 +222,6 @@ msgstr "Créé par"
 msgctxt "field:billing.rate_note_line,currency:"
 msgid "Currency"
 msgstr "Devises"
-
-msgctxt "field:billing.rate_note_line,currency_digits:"
-msgid "Currency Digits"
-msgstr "Précision"
 
 msgctxt "field:billing.rate_note_line,currency_symbol:"
 msgid "Currency Symbol"
@@ -272,7 +268,7 @@ msgid "Start Date"
 msgstr "Date de Début"
 
 msgctxt "field:billing.rate_note_line,sum_amount:"
-msgid "Amount"
+msgid "Sum Amount"
 msgstr "Montant"
 
 msgctxt "field:billing.rate_note_line,write_date:"

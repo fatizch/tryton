@@ -158,10 +158,6 @@ msgctxt "field:ins_contract.subscription_mgr,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_contract.subscription_process_parameters,broker:"
-msgid "Broker"
-msgstr "Courtier"
-
 msgctxt ""
 "field:ins_contract.subscription_process_parameters,business_provider:"
 msgid "Business Provider"
