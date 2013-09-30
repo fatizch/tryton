@@ -1017,8 +1017,6 @@ class Contract():
         # Get the appliable prices ont the period. This is a list of tuples
         # of the form ((start_date, end_date), PriceLine)
         price_lines = self.create_price_list(*period)
-        if not price_lines:
-            return
 
         # Init the work_set which will be used
         currency = self.get_currency()
@@ -1057,8 +1055,11 @@ class Contract():
 
         work_set['move'].lines = work_set['lines'].values() + \
             work_set['counterparts']
-        work_set['move'].save()
-        return work_set['move']
+        if work_set['total_amount'] > 0:
+            work_set['move'].save()
+            return work_set['move']
+        else:
+            return
 
     def bill_and_post(self, post=True):
         Move = Pool().get('account.move')
