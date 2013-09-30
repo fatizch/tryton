@@ -223,8 +223,14 @@ def load_table_from_csv(cfg_dict, path, file_name):
             continue
         if line == 2:
             table.dimension_kind1 = get_dimension_kind(cur_line[0])
-        table.dimension1.append(create_dim_value(
-            cfg_dict, 1, cur_line[0], line, table.dimension_kind1))
+        dim_value = create_dim_value(
+            cfg_dict, 1, cur_line[0], line, table.dimension_kind1)
+        if len(table.dimension1) > 0:
+            if table.dimension_kind1 == 'range-date':
+                table.dimension1[-1].end_date = dim_value.start_date
+            elif table.dimension_kind1 == 'range':
+                table.dimension1[-1].end = dim_value.start
+        table.dimension1.append(dim_value)
         table.save()
         dim1 = table.dimension1[-1]
 
@@ -255,19 +261,19 @@ def load_table_from_csv(cfg_dict, path, file_name):
         else:
             cell.save()
 
-    #Setting end value for range kind
-    for dim_nb in range(1, 5):
-        dimensions = getattr(table, 'dimension%s' % dim_nb)
-        n = len(dimensions)
-        dim_kind = getattr(table, 'dimension_kind%s' % dim_nb)
-        if not dim_kind or not dim_kind.startswith('range'):
-            continue
-        for i in range(n - 1):
-            ext = ''
-            if dim_kind == 'range-date':
-                ext = '_date'
-            end = getattr(dimensions[i + 1], 'start' + ext)
-            setattr(dimensions[i], 'end' + ext, end)
+    # #Setting end value for range kind
+    # for dim_nb in range(1, 5):
+    #     dimensions = getattr(table, 'dimension%s' % dim_nb)
+    #     n = len(dimensions)
+    #     dim_kind = getattr(table, 'dimension_kind%s' % dim_nb)
+    #     if not dim_kind or not dim_kind.startswith('range'):
+    #         continue
+    #     for i in range(n - 1):
+    #         ext = ''
+    #         if dim_kind == 'range-date':
+    #             ext = '_date'
+    #         end = getattr(dimensions[i + 1], 'start' + ext)
+    #         setattr(dimensions[i], 'end' + ext, end)
     table.save()
 
 
