@@ -17,5 +17,5 @@
     <field name="amount_paid"/>
     <label name="move"/>
     <field name="move"/>
-    <field name="lines" colspan="4"/>
+    <field name="lines" colspan="4" mode="tree"/>
 </form>

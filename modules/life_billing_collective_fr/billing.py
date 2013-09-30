@@ -5,7 +5,6 @@ from trytond.pyson import Eval
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import StateTransition, StateView, Button, StateAction
-from trytond import backend
 
 from trytond.modules.coop_utils import model, fields, utils, coop_date, \
     coop_string
@@ -57,9 +56,12 @@ class RateLine(model.CoopSQL, model.CoopView):
         states={'invisible': ~Eval('fare_class_group')})
     index = fields.Many2One('table.table_def', 'Index',
         states={'invisible': ~Eval('index')}, ondelete='RESTRICT')
+    index_value = fields.Function(
+        fields.Numeric('Index Value'),
+        'get_index_value')
     indexed_value = fields.Function(
         fields.Numeric('Indexed Value',
-            on_change_with=['rate', 'index', 'start_date_']),
+            on_change_with=['rate', 'index', 'start_date_', 'indexed_value']),
         'on_change_with_indexed_value')
     parent = fields.Many2One('billing.rate_line', 'Parent', ondelete='CASCADE')
     childs = fields.One2Many('billing.rate_line', 'parent', 'Childs',
@@ -113,6 +115,7 @@ class RateLine(model.CoopSQL, model.CoopView):
             RateNoteLine = rate_note_line_model
         res = RateNoteLine()
         res.rate_line = self
+        res.rate = self.rate
         if not hasattr(res, 'childs'):
             res.childs = []
         for child in self.childs:
@@ -153,13 +156,14 @@ class RateLine(model.CoopSQL, model.CoopView):
             return self.parent.option_.id
 
     def on_change_with_indexed_value(self, name=None):
+        return self.index_value * self.rate if self.index_value else None
+
+    def get_index_value(self, name):
         if not self.index:
             return
         Cell = Pool().get('table.table_cell')
         cell = Cell.get_cell(self.index, (self.start_date_))
-        value = cell.get_value_with_type() if cell else None
-        if value:
-            return value * self.rate
+        return cell.get_value_with_type() if cell else None
 
     def get_start_date(self, name):
         if self.start_date:
@@ -265,26 +269,23 @@ class RateNoteLine(model.CoopSQL, model.CoopView):
 
     rate_note = fields.Many2One('billing.rate_note', 'Rate Note',
         ondelete='CASCADE')
+    contract = fields.Function(
+        fields.Many2One('contract.contract', 'Contract'),
+        'get_contract_id')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    base = fields.Numeric('Base', on_change=['base', 'rate', 'indexed_rate'],
-        states={'readonly': ~Eval('rate')})
+    base = fields.Numeric('Base',
+        on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line',
+            'client_amount'],
+        states={'readonly': ~~Eval('childs')})
     rate_line = fields.Many2One('billing.rate_line', 'Rate Line')
-    amount = fields.Numeric('Amount')
-    sum_amount = fields.Function(
-        fields.Numeric('Amount',
-            on_change_with=['rate', 'childs', 'base', 'indexed_rate'],
-            on_change=['amount', 'sum_amount', 'childs'], states={'readonly':
-                ~~Eval('childs')},),
-        'get_sum_amount', 'setter_void')
-    client_amount = fields.Numeric('Client Amount', on_change_with=['base',
-            'rate', 'indexed_rate'])
-    client_sum_amount = fields.Function(
-        fields.Numeric('Client Amount', on_change_with=['rate', 'childs',
-                'base', 'indexed_rate'],
-                on_change=['client_amount', 'client_sum_amount',
-                'childs'], states={'readonly': ~~Eval('childs')},),
-        'get_client_sum_amount', 'setter_void')
+    amount = fields.Numeric('Amount',
+        on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line'],
+        states={'readonly': ~~Eval('childs')})
+    client_amount = fields.Numeric('Client Amount',
+        on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line',
+            'client_amount'],
+        states={'readonly': ~~Eval('childs')})
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency'),
         'get_currency_id')
@@ -294,43 +295,60 @@ class RateNoteLine(model.CoopSQL, model.CoopView):
     parent = fields.Many2One('billing.rate_note_line', 'Parent',
         ondelete='CASCADE')
     childs = fields.One2Many('billing.rate_note_line', 'parent', 'Childs')
-    rate = fields.Function(fields.Numeric('Rate', digits=(16, 4)), 'get_rate')
+    rate = fields.Numeric('Rate', digits=(16, 4),
+        on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line',
+            'client_amount'], states={'readonly': ~~Eval('childs')})
     indexed_rate = fields.Function(
-        fields.Numeric('Indexed Rate', on_change_with=['rate']),
-        'on_change_with_indexed_rate')
-
-    @classmethod
-    def __register__(cls, module_name):
-        cursor = Transaction().cursor
-
-        # Migration from X.X: rename quantity to base
-        TableHandler = backend.get('TableHandler')
-        table = TableHandler(cursor, cls, module_name)
-        table.column_rename('quantity', 'base')
-
-        super(RateNoteLine, cls).__register__(module_name)
+        fields.Numeric('Indexed Rate'),
+        'get_indexed_rate')
+    sum_amount = fields.Function(
+        fields.Numeric('Sum Amount', on_change_with=['childs', 'amount']),
+        'on_change_with_sum_amount')
+    client_sum_amount = fields.Function(
+        fields.Numeric('Client Sum Amount',
+            on_change_with=['childs', 'client_amount']),
+        'on_change_with_client_sum_amount')
 
     def get_rec_name(self, name):
         return (self.rate_line.rec_name if self.rate_line
             else super(RateNoteLine, self).get_rec_name(name))
 
-    def get_rate(self, name):
-        return (self.rate_line.rate if self.rate_line and self.rate_line.rate
-            else None)
-
-    def get_coeff(self):
+    def _on_change(self, name):
+        res = {}
         if self.indexed_rate:
-            return self.indexed_rate
-        elif self.rate:
-            return self.rate
+            coeff = self.rate_line.index_value * self.rate
+        else:
+            coeff = self.rate
+        if name in ['base', 'rate']:
+            if name == 'rate' and self.indexed_rate:
+                res['indexed_rate'] = coeff
+            amount = coeff * self.base if coeff and self.base else None
+            res['amount'] = amount
+        else:
+            amount = self.amount
+        if name == 'client_amount':
+            res['client_sum_amount'] = self.client_amount
+        else:
+            res['client_amount'] = amount
+            res['sum_amount'] = amount
+            res['client_sum_amount'] = amount
+        return res
 
     def on_change_base(self):
-        if hasattr(self, 'rate') and hasattr(self, 'base'):
-            coeff = self.get_coeff()
-            amount = coeff * self.base if coeff and self.base else None
-            return {'amount': amount, 'sum_amount': amount,
-                'client_amount': amount}
-        return {}
+        return self._on_change('base')
+
+    def on_change_rate(self):
+        return self._on_change('rate')
+
+    def on_change_amount(self):
+        return self._on_change('amount')
+
+    def on_change_client_amount(self):
+        return self._on_change('client_amount')
+
+    def get_indexed_rate(self, name):
+        return (self.rate_line.index_value * self.rate
+            if self.rate_line.index_value else None)
 
     def get_currency(self):
         if self.parent:
@@ -338,62 +356,15 @@ class RateNoteLine(model.CoopSQL, model.CoopView):
         elif self.rate_note:
             return self.rate_note.currency
 
-    def on_change_with_sum_amount(self):
-        if (hasattr(self, 'childs') and self.childs):
-            return sum(map(lambda x: x.sum_amount or 0, self.childs)) or None
-        if not (hasattr(self, 'base') and self.base):
-            return None
-        if not (hasattr(self, 'rate') and self.rate):
-            return None
-        return self.on_change_base()['sum_amount']
-
-    def on_change_sum_amount(self):
-        if (hasattr(self, 'childs') and self.childs):
-            return {}
-        return {'amount': self.sum_amount}
-
-    def on_change_with_client_amount(self):
-        return self.on_change_base()['client_amount']
-
-    def get_sum_amount(self, name):
-        if (hasattr(self, 'childs') and self.childs):
-            return sum(map(lambda x: x.sum_amount or 0, self.childs)) or None
-        if not (hasattr(self, 'amount') and self.amount):
-            return None
-        return self.amount
-
-    def on_change_with_client_sum_amount(self, name=None):
-        if (hasattr(self, 'childs') and self.childs):
-            return sum(map(
-                    lambda x: x.client_sum_amount or 0, self.childs)) or None
-        if not (hasattr(self, 'base') and self.base):
-            return None
-        if not (hasattr(self, 'rate') and self.rate):
-            return None
-        return self.on_change_base()['client_amount']
-
-    def on_change_client_sum_amount(self):
-        if (hasattr(self, 'childs') and self.childs):
-            return {}
-        return {'client_amount': self.client_sum_amount}
-
-    def get_client_sum_amount(self, name):
-        if (hasattr(self, 'childs') and self.childs):
-            return sum(map(
-                    lambda x: x.client_sum_amount or 0, self.childs)) or None
-        if not (hasattr(self, 'client_amount') and self.client_amount):
-            return None
-        return self.client_amount
-
     def _expand_tree(self, name):
         return True
 
-    def get_contract(self):
+    def get_contract_id(self, name):
         if not self.rate_line or not self.rate_line.contract:
             if self.parent:
-                return self.parent.get_contract()
+                return self.parent.contract.id
             return None
-        return self.rate_line.contract
+        return self.rate_line.contract.id
 
     def calculate_bill_line(self, work_set):
         if not self.amount or not self.client_amount or self.childs:
@@ -407,12 +378,23 @@ class RateNoteLine(model.CoopSQL, model.CoopView):
         work_set['_remaining'] += work_set['currency'].round(
             self.amount) - work_set['currency'].round(self.client_amount)
         bill_line.account = self.rate_line.option_.offered.account_for_billing
-        bill_line.party = self.get_contract().subscriber
+        bill_line.party = self.contract.subscriber
         work_set['total_amount'] += work_set['currency'].round(self.amount)
 
-    def on_change_with_indexed_rate(self, name=None):
-        if self.rate_line and self.rate_line.indexed_value:
-            return self.rate_line.indexed_value
+    def on_change_with_sum_amount(self, name=None):
+        if (hasattr(self, 'childs') and self.childs):
+            return sum(map(lambda x: x.sum_amount or 0, self.childs)) or None
+        if not (hasattr(self, 'amount') and self.amount):
+            return None
+        return self.amount
+
+    def on_change_with_client_sum_amount(self, name=None):
+        if (hasattr(self, 'childs') and self.childs):
+            return (sum(map(lambda x: x.client_sum_amount or 0, self.childs))
+                or None)
+        if not (hasattr(self, 'client_amount') and self.client_amount):
+            return None
+        return self.client_amount
 
 
 class RateNoteParameters(model.CoopView):

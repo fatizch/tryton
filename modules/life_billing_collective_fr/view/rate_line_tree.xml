@@ -10,4 +10,5 @@
     <field name="parent" tree_invisible="1"/>
     <field name="manual_billing" tree_invisible="1"/>
     <field name="start_date_" tree_invisible="1"/>
+    <field name="index_value" tree_invisible="1"/>
 </tree>
