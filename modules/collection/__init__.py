@@ -5,7 +5,6 @@ from .collection import *
 def register():
     Pool.register(
         # from collection
-        Company,
         SuspenseParty,
         Configuration,
         Collection,

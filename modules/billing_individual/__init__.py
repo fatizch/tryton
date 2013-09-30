@@ -50,4 +50,5 @@ def register():
             ('company.company', ('party.name', )),
             ('account.tax', ('name', )),
             ('account.account.type', ('name', )),
+            ('account.journal', ('name', )),
             ], 'billing_individual')

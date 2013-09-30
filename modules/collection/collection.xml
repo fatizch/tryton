@@ -2,15 +2,6 @@
 <tryton>
   <data>
     <!-- ############################################################ -->
-    <!-- Company -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="company_form">
-      <field name="model">company.company</field>
-      <field name="type">form</field>
-      <field name="inherit" ref="company.company_view_form"/>
-      <field name="name">company_form</field>
-    </record>
-    <!-- ############################################################ -->
     <!-- Account Configuration -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="configuration_form">

@@ -45,30 +45,6 @@ def launch_test_case(cfg_dict):
     update_cfg_dict_with_models(cfg_dict)
     meths = create_methods(cfg_dict)
     company, = cfg_dict['Company'].find([('party.name', '=', 'Coop')])
-    collection_account_kind = meths['AccountType'](
-        {'name': 'Collection Account', 'company': company},
-    )
-    cash_account = meths['Account'](
-        {
-            'name': 'Cash Account',
-            'kind': 'revenue',
-            'type': collection_account_kind,
-        },
-        {'company': company.id},
-    )
-    check_account = meths['Account'](
-        {
-            'name': 'Check Account',
-            'kind': 'revenue',
-            'type': collection_account_kind,
-        },
-        {'company': company.id},
-    )
-    company.collection_journal = cfg_dict['Journal'].find(
-        [('type', '=', 'cash')])[0]
-    company.cash_account = cash_account
-    company.check_account = check_account
-    company.save()
 
     cfg_dict['_config'].set_context({'company': company.id})
 
@@ -171,4 +147,30 @@ def launch_test_case(cfg_dict):
             },
             {'company': company.id})
         account_config.default_account_payable = default_account
+    collection_account_kind = meths['AccountType'](
+        {'name': 'Collection Account', 'company': company},
+    )
+    if not account_config.cash_account:
+        cash_account = meths['Account'](
+            {
+                'name': 'Cash Account',
+                'kind': 'revenue',
+                'type': collection_account_kind,
+            },
+            {'company': company.id},
+        )
+        account_config.cash_account = cash_account
+    if not account_config.check_account:
+        check_account = meths['Account'](
+            {
+                'name': 'Check Account',
+                'kind': 'revenue',
+                'type': collection_account_kind,
+            },
+            {'company': company.id},
+        )
+        account_config.check_account = check_account
+    if not account_config.collection_journal:
+        account_config.collection_journal = cfg_dict['Journal'].find(
+            [('type', '=', 'cash')])[0]
     account_config.save()

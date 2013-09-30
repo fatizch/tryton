@@ -7,7 +7,6 @@ from trytond.modules.coop_utils import fields, model
 
 
 __all__ = [
-    'Company',
     'Configuration',
     'SuspenseParty',
     'Collection',
@@ -16,20 +15,6 @@ __all__ = [
     'AssignCollection',
     'CollectionWizard',
     ]
-
-
-class Company():
-    'Company'
-
-    __metaclass__ = PoolMeta
-    __name__ = 'company.company'
-
-    cash_account = fields.Many2One('account.account', 'Cash Account',
-        required=True)
-    check_account = fields.Many2One('account.account', 'Check Account',
-        required=True)
-    collection_journal = fields.Many2One('account.journal', 'Journal',
-        required=True)
 
 
 class Configuration():
@@ -45,6 +30,14 @@ class Configuration():
                 ('company', '=', Eval('context', {}).get('company')),
                 ]),
         'get_account', setter='set_account')
+    cash_account = fields.Property(
+        fields.Many2One('account.account', 'Cash Account',
+            domain=[('kind', '=', 'revenue')]))
+    check_account = fields.Property(
+        fields.Many2One('account.account', 'Check Account',
+            domain=[('kind', '=', 'revenue')]))
+    collection_journal = fields.Property(
+        fields.Many2One('account.journal', 'Journal'))
 
 
 class SuspenseParty():
@@ -241,9 +234,11 @@ class CollectionWizard(model.CoopWizard):
         Collection = pool.get('collection.collection')
         Payment = pool.get('account.payment')
         PaymentGroup = pool.get('account.payment.group')
+        AccountConfiguration = pool.get('account.configuration')
         company = Company(Transaction().context.get('company'))
+        account_configuration = AccountConfiguration(1)
         collection_move = Move()
-        collection_move.journal = company.collection_journal
+        collection_move.journal = account_configuration.collection_journal
         collection_move.date = Date.today()
         collection_move.lines = []
         remaining = self.assign.amount
@@ -285,7 +280,7 @@ class CollectionWizard(model.CoopWizard):
         collection_line = MoveLine()
         collection_line.party = self.assign.party
         collection_line.debit = self.assign.amount
-        collection_line.account = getattr(company, '%s_account' %
+        collection_line.account = getattr(account_configuration, '%s_account' %
             self.input_collection_parameters.kind)
         collection_move.lines.append(collection_line)
         collection_move.save()

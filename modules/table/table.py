@@ -194,13 +194,14 @@ class TableDefinition(ModelSQL, ModelView):
     def __register__(cls, module_name):
         super(TableDefinition, cls).__register__(module_name)
 
-        if not CONFIG['db_type'] == 'postgresql':
+        if CONFIG['db_type'] != 'postgresql':
             return
 
         with Transaction().new_cursor() as transaction:
             cursor = transaction.cursor
             try:
                 cursor.execute('CREATE EXTENSION IF NOT EXISTS tablefunc', ())
+                cursor.commit()
             except:
                 import logging
                 logger = logging.getLogger('database')
