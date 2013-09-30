@@ -51,4 +51,7 @@ def register():
             ('account.tax', ('name', )),
             ('account.account.type', ('name', )),
             ('account.journal', ('name', )),
+            # Account Configuration is a singleton, so the id is an acceptable
+            # key
+            ('account.configuration', ('id', )),
             ], 'billing_individual')
