@@ -6,10 +6,14 @@ from .coverage import *
 from .benefit import *
 from .clause import *
 from .process import *
+from .party import *
 
 
 def register():
     Pool.register(
+        #from party
+        Party,
+        Insurer,
         # from product
         Offered,
         ItemDescriptor,

@@ -2,19 +2,11 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:ins_product.attachment_setter:"
-msgid "Duplicate name on attachments : %s"
-msgstr ""
-
 msgctxt "error:ins_product.benefit:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
 msgctxt "error:ins_product.benefit_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
-
-msgctxt "error:ins_product.business_rule_root:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
@@ -33,10 +25,6 @@ msgstr "2 règles se chevauchent!"
 msgctxt "error:ins_product.deductible_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
-
-msgctxt "error:ins_product.document_request_batch:"
-msgid "No Batch Path Specified"
-msgstr ""
 
 msgctxt "error:ins_product.document_rule:"
 msgid "You can not have 2 business rules that overlaps!"
@@ -63,19 +51,11 @@ msgctxt "error:ins_product.pricing_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
-msgctxt "error:ins_product.product_validation_batch:"
-msgid "No Batch Path Specified"
-msgstr ""
-
 msgctxt "error:ins_product.receive_document_wizard:"
 msgid "No document request found for this object"
 msgstr "Aucune demande de document trouvé pour cet objet"
 
 msgctxt "error:ins_product.reserve_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
-
-msgctxt "error:ins_product.simple_pricing_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
@@ -4213,20 +4193,8 @@ msgid "Mandatory"
 msgstr "Obligatoire"
 
 msgctxt "selection:offered.coverage,subscription_behaviour:"
-msgid "Mandatory"
-msgstr "Obligatoire"
-
-msgctxt "selection:offered.coverage,subscription_behaviour:"
 msgid "Optional"
 msgstr "En Option"
-
-msgctxt "selection:offered.coverage,subscription_behaviour:"
-msgid "Optional"
-msgstr "En Option"
-
-msgctxt "selection:offered.coverage,subscription_behaviour:"
-msgid "Proposed"
-msgstr "Proposé par Défaut"
 
 msgctxt "selection:offered.coverage,subscription_behaviour:"
 msgid "Proposed"
@@ -4237,20 +4205,8 @@ msgid ""
 msgstr " "
 
 msgctxt "selection:offered.coverage,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:offered.coverage,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
-
-msgctxt "selection:offered.coverage,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:offered.coverage,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
 
 msgctxt "selection:offered.coverage,template_behaviour:"
 msgid "Remove"
@@ -4555,6 +4511,10 @@ msgstr "Biens Couverts"
 msgctxt "view:offered.product:"
 msgid "Term - Renewal"
 msgstr "Terme - Renouvellement"
+
+msgctxt "view:party.party:"
+msgid "Insurer"
+msgstr "Assureur"
 
 msgctxt "view:process.process_desc:"
 msgid "Products"

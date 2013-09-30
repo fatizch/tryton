@@ -62,10 +62,6 @@ msgctxt "field:contract.contract,contact:"
 msgid "Contact"
 msgstr "Contact"
 
-msgctxt "field:contract.contract,contract_history:"
-msgid "Contract History"
-msgstr "Historique de Contrat"
-
 msgctxt "field:contract.contract,contract_number:"
 msgid "Contract Number"
 msgstr "Numéro de Contrat"
@@ -974,10 +970,6 @@ msgid "Covered Elements"
 msgstr "Eléments Couverts"
 
 msgctxt "view:contract.contract:"
-msgid "History"
-msgstr "Historique"
-
-msgctxt "view:contract.contract:"
 msgid "Managing Entities"
 msgstr "Délégataires"
 
@@ -1044,6 +1036,14 @@ msgstr "Résultat du Renouvellement"
 msgctxt "view:ins_contract.renewal_start:"
 msgid "Renewal Start"
 msgstr "Paramètres du Renouvellement"
+
+msgctxt "view:party.party:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "view:party.party:"
+msgid "Customer"
+msgstr "Client"
 
 msgctxt "wizard_button:ins_contract.renewal_wizard,renewal_result,end:"
 msgid "End"

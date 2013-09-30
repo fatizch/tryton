@@ -13,8 +13,10 @@ CoveredDataTreeExpansion = expand_tree('ins_contract.covered_data')
 
 def register():
     Pool.register(
-        # contract.py classes
+        #From Party
         Party,
+        Customer,
+        # contract.py classes
         InsurancePolicy,
         ContractHistory,
         ManagementRole,
