@@ -247,7 +247,8 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
             ('offered.product', 'Product'),
             ('offered.coverage', 'Coverage'),
             ('ins_product.benefit', 'Benefit')
-            ])
+            ],
+        states={'required': True})
     start_date = fields.Date('From Date', required=True)
     end_date = fields.Date('To Date')
     config_kind = fields.Selection(

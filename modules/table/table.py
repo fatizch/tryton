@@ -3,7 +3,7 @@ import copy
 from datetime import datetime
 from decimal import Decimal
 
-from sql import Column, Literal, Flavor
+from sql import Column, Literal
 from sql.functions import Function, Now
 
 from trytond.config import CONFIG

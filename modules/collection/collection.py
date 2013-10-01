@@ -1,9 +1,11 @@
+import copy
+
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.wizard import StateView, Button, StateTransition
 
-from trytond.modules.coop_utils import fields, model
+from trytond.modules.coop_utils import fields, model, export
 
 
 __all__ = [
@@ -55,6 +57,13 @@ class SuspenseParty():
                 'required': ~~(Eval('context', {}).get('company')),
                 'invisible': ~Eval('context', {}).get('company'),
                 }))
+
+    @classmethod
+    def __setup__(cls):
+        super(SuspenseParty, cls).__setup__()
+        cls.suspense_account = copy.copy(cls.suspense_account)
+        cls.suspense_account.domain = export.clean_domain_for_import(
+            cls.suspense_account.domain, 'company')
 
 
 class Collection(model.CoopSQL, model.CoopView):

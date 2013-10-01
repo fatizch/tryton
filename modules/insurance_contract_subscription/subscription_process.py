@@ -26,8 +26,7 @@ class SubscriptionManager(model.CoopSQL):
     contract = fields.Reference(
         'Contract',
         [
-            ('contract.contract', 'Contract'),
-            ('ins_collective.contract', 'Contract')],
+            ('contract.contract', 'Contract')],
     )
     is_custom = fields.Boolean('Custom')
 

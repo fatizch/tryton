@@ -360,6 +360,7 @@ class ExportImportMixin(Model):
     def _import_single_link(
             cls, instance, field_name, field, field_value, created, relink,
             target_model, to_relink):
+        check_req = False
         if isinstance(field_value, tuple):
             if (target_model.__name__ in created and
                     field_value in created[target_model.__name__]):
@@ -369,23 +370,32 @@ class ExportImportMixin(Model):
                     setattr(instance, field_name, created[
                         target_model.__name__][field_value])
                 else:
-                    to_relink.append(
-                        (field_name, (target_model.__name__, field_value)))
-                    return False
+                    check_req = True
             else:
                 good_value = target_model._export_find_instance(
                     field_value)
                 if good_value:
                     setattr(instance, field_name, good_value)
                 else:
-                    to_relink.append(
-                        (field_name, (target_model.__name__, field_value)))
-                    return False
+                    check_req = True
         else:
             setattr(
                 instance, field_name, target_model._import_json(
                     field_value, created=created, relink=relink))
-        return True
+        if not check_req:
+            return True
+        if (not('required' in field.states) and not
+                field.required):
+            to_relink.insert(0,
+                (field_name, (target_model.__name__, field_value)))
+            return True
+        if field.required:
+            to_relink.append(
+                (field_name, (target_model.__name__, field_value)))
+            return False
+        to_relink.insert(0,
+            (field_name, (target_model.__name__, field_value)))
+        return not utils.pyson_result(field.states['required'], instance, True)
 
     @classmethod
     def _import_one2many(
@@ -455,8 +465,7 @@ class ExportImportMixin(Model):
                 raise
 
         if to_relink:
-            relink.append(((cls.__name__, key), dict([
-                (name, value) for name, value in to_relink])))
+            relink.append(((cls.__name__, key), to_relink))
 
     @classmethod
     def _import_json(
@@ -516,7 +525,9 @@ class ExportImportMixin(Model):
         # Useful for debugging
         # print utils.format_data(created)
         # print '\n'.join([str(x) for x in relink])
+        counter = 0
         while len(relink) > 0:
+            counter += 1
             cur_errs = []
             to_del = []
             idx = 0
@@ -525,7 +536,9 @@ class ExportImportMixin(Model):
                 # print utils.format_data(working_instance)
                 all_done = True
                 clean_keys = []
-                for field_name, field_value in value.iteritems():
+                relink_idx = -1
+                for field_name, field_value in value:
+                    relink_idx += 1
                     if isinstance(field_value[1], list):
                         to_append = []
                         for elem in field_value[1]:
@@ -547,13 +560,27 @@ class ExportImportMixin(Model):
                             all_done = False
                             continue
                         setattr(working_instance, field_name, the_value)
-                        clean_keys.append(field_name)
-                for elem in clean_keys:
-                    value.pop(elem, '')
+                        clean_keys.append(relink_idx)
+                for k in sorted(clean_keys, reverse=True):
+                    value.pop(k)
                 try:
-                    working_instance.save()
-                    if all_done:
-                        to_del.append(idx)
+                    if working_instance.id or not value:
+                        working_instance.save()
+                        if all_done:
+                            to_del.append(idx)
+                    else:
+                        first_remaining = value[0]
+                        field = working_instance._fields[first_remaining[0]]
+                        req = False
+                        if field.required:
+                            req = True
+                        elif 'required' in field.states:
+                            req = utils.pyson_result(field.states['required'],
+                                working_instance, True)
+                        if not req:
+                            working_instance.save()
+                            if all_done:
+                                to_del.append(idx)
                     idx += 1
                 except UserError, e:
                     cur_errs.append(e.args)
@@ -578,6 +605,9 @@ class ExportImportMixin(Model):
                 print 'User Errors'
                 print '\n'.join((utils.format_data(err) for err in cur_errs))
                 raise NotExportImport('Infinite loop detected in import')
+        print '#' * 80
+        print 'FINISHED IMPORT'
+        print counter
 
     @classmethod
     def _import_complete(cls, created):
