@@ -366,12 +366,12 @@ class BillingManager(model.CoopSQL, model.CoopView):
     payment_bank_account = fields.Many2One('bank.account',
         'Payment Bank Account',
         states={'invisible': Eval('payment_mode') != 'direct_debit'},
-        domain=[('party', '=', Eval('policy_owner'))],
+        domain=[('owners', '=', Eval('policy_owner'))],
         depends=['policy_owner'])
     disbursment_bank_account = fields.Many2One('bank.account',
         'Disbursement Bank Account',
         states={'invisible': Eval('payment_mode') != 'direct_debit'},
-        domain=[('party', '=', Eval('policy_owner'))],
+        domain=[('owners', '=', Eval('policy_owner'))],
         depends=['policy_owner'])
     payment_date_selector = fields.Function(
         fields.Selection('get_allowed_payment_dates',
@@ -1303,8 +1303,8 @@ class CoveredElement():
         depends=['item_kind', 'party', 'subscriber'],
         domain=[
             ['OR',
-                ('party', '=', Eval('subscriber')),
-                If(IS_PARTY, ('party', '=', Eval('party', 0)), ())]])
+                ('owners', '=', Eval('subscriber')),
+                If(IS_PARTY, ('owners', '=', Eval('party', 0)), ())]])
 
     def get_name_for_billing(self):
         return self.get_rec_name('billing')
