@@ -641,6 +641,7 @@ class ExportImportMixin(Model):
                 log_name = instance.get_rec_name([instance], None)[instance.id]
             logging.getLogger('export_import').debug(
                 'Successfully imported %s' % log_name)
+        return created
 
 
 class FileSelector(ModelView):

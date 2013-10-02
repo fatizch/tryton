@@ -2,6 +2,10 @@ import re
 import copy
 from datetime import datetime
 from decimal import Decimal
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
 from sql import Column, Literal
 from sql.functions import Function, Now
@@ -14,6 +18,8 @@ from trytond.pyson import Not, Eval, If, Bool, Or, PYSONEncoder
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
     Button
+from trytond.protocols.jsonrpc import JSONEncoder
+
 from trytond.modules.coop_utils.model import CoopSQL as ModelSQL
 from trytond.modules.coop_utils.model import CoopView as ModelView
 from trytond.modules.coop_utils import fields
@@ -74,9 +80,7 @@ class TableDefinition(ModelSQL, ModelView):
     __name__ = 'table.table_def'
 
     name = fields.Char('Name', required=True)
-    code = fields.Char(
-        'Code', required=True,
-        on_change_with=['name', 'code'])
+    code = fields.Char('Code', required=True, on_change_with=['name', 'code'])
     type_ = fields.Selection(
         [
             ('char', 'Char'),
@@ -179,8 +183,8 @@ class TableDefinition(ModelSQL, ModelView):
     def __setup__(cls):
         super(TableDefinition, cls).__setup__()
         cls._sql_constraints = [
-            ('name_unique', 'UNIQUE(name)',
-                'The name of "Table Definition" must be unique'),
+            ('code_unique', 'UNIQUE(code)',
+                'The code of "Table Definition" must be unique'),
         ]
         cls.__rpc__.update({
                 'manage_dimension_1': RPC(instantiate=0),
@@ -189,6 +193,9 @@ class TableDefinition(ModelSQL, ModelView):
                 'manage_dimension_4': RPC(instantiate=0),
                 })
         cls._order.insert(0, ('name', 'ASC'))
+
+        cls._error_messages.update({
+                'existing_clone': ('A clone record already exists : %s(%s)')})
 
     @classmethod
     def __register__(cls, module_name):
@@ -208,6 +215,26 @@ class TableDefinition(ModelSQL, ModelView):
                 logger.warning('Unable to activate tablefunc extension, '
                     '2D displaying of tables will not be available')
                 cursor.rollback()
+
+    @classmethod
+    def copy(cls, records, default=None):
+        result = []
+        for record in records:
+            existings = cls.search(['OR',
+                    [('code', '=', '%s_clone' % record.code)],
+                    [('name', '=', '%s Clone' % record.name)]])
+            for existing in existings:
+                cls.raise_user_error('existing_clone',
+                    (existing.name, existing.code))
+            values = json.dumps(record.export_json()[1], cls=JSONEncoder)
+            values = values.replace('["code", "%s"]' % record.code,
+                '["code", "%s_clone"]' % record.code)
+            values = values.replace('"code": "%s"' % record.code,
+                '"code": "%s_clone"' % record.code)
+            values = values.replace(u'"name": "%s"' % record.name,
+                u'"name": "%s Clone"' % record.name)
+            result += record.import_json(values)[cls.__name__].values()
+        return result
 
     def _export_override_cells(self, exported, my_key):
         def lock_dim_and_export(locked, results, dimensions):
