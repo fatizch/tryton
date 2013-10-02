@@ -5,7 +5,7 @@ IMPORT_FILE = '/path/to/export_file.json'
 
 NEEDED_MODULES = [
     'coop_translation',
-    'party_bank',
+    'coop_bank',
     'table',
     'health_fr',
     'property_product',

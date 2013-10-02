@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-    <tree string="Bank">
-        <field name="party"/>
-        <field name="bic"/>
-        <field name="bank_code"/>
-        <field name="branch_code"/>
-    </tree>

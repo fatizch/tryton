@@ -5,7 +5,7 @@ from proteus import config, Model, Wizard
 ##Comment##Constants
 NEEDED_MODULES = [
     'coop_translation',
-    'party_bank',
+    'coop_bank',
     'table',
     'health_fr',
     'property_product',

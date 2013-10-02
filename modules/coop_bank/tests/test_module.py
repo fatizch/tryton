@@ -26,9 +26,9 @@ class ModuleTestCase(unittest.TestCase):
     def setUp(self):
         trytond.tests.test_tryton.install_module(MODULE_NAME)
         self.Party = POOL.get('party.party')
-        self.Bank = POOL.get('party.bank')
-        self.BankAccount = POOL.get('party.bank_account')
-        self.BankAccountNumber = POOL.get('party.bank_account_number')
+        self.Bank = POOL.get('bank')
+        self.BankAccount = POOL.get('bank.account')
+        self.BankAccountNumber = POOL.get('bank.account.number')
         self.Currency = POOL.get('currency.currency')
 
     def test0005views(self):
@@ -71,6 +71,7 @@ class ModuleTestCase(unittest.TestCase):
         '''
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             party1, = self.Party.search([], limit=1)
+            bank1, = self.Bank.search([], limit=1)
 
             currency, = self.Currency.create([{
                     'name': 'Euro',
@@ -79,16 +80,14 @@ class ModuleTestCase(unittest.TestCase):
             }])
 
             bank_account = self.BankAccount()
-            bank_account.party = party1.id
+            bank_account.bank = bank1
+            bank_account.owners = [party1]
             bank_account.currency = currency
-            rib = self.BankAccountNumber()
-            rib.kind = 'RIB'
-            rib.number = '15970003860000690570007'
             iban = self.BankAccountNumber()
-            iban.kind = 'IBAN'
+            iban.type = 'iban'
             iban.number = 'FR7615970003860000690570007'
 
-            bank_account.account_numbers = [rib, iban]
+            bank_account.numbers = [iban]
             bank_account.save()
             self.assert_(bank_account.id)
 
@@ -97,36 +96,16 @@ class ModuleTestCase(unittest.TestCase):
         Test IBAN
         '''
         values = (
-                ('FR7615970003860000690570007', True),
-                ('FR7619530001040006462803348', True),
-                ('FR7610423009910003104438477', True),
-                ('FR76104230099100031044T8477', False),
-                ('FR47104230099100031044T8477', True),
-                ('104230099100031044T8477', False),
-                ('099100031044T8477', False),
+            ('FR7615970003860000690570007', True),
+            ('FR7619530001040006462803348', True),
+            ('FR7610423009910003104438477', True),
+            ('FR76104230099100031044T8477', False),
+            ('FR47104230099100031044T8477', True),
+            ('104230099100031044T8477', False),
+            ('099100031044T8477', False),
         )
         for value, test in values:
             self.assert_(ibanlib.iban.valid(value) == test)
-
-    def test0050rib(self):
-        '''
-        Test RIB
-        '''
-        values = (
-                ('11006005410000104703939', True),
-                ('11600003910000247105389', True),
-                ('11749006730007094332254', True),
-                ('30047009950008375267822', True),
-                ('11790003250008688281087', True),
-                ('11790003250008688281088', False),
-                ('1179003250008688281087', False),
-                ('104230099100031044T8477', True),
-                ('104230099100031044T8478', False),
-        )
-        for value, test in values:
-            res = self.BankAccountNumber.check_rib(value)
-            self.assert_(res == test, 'Error for %s, expected : %s, found : %s'
-                % (value, test, res))
 
 
 def suite():

@@ -363,12 +363,12 @@ class BillingManager(model.CoopSQL, model.CoopView):
         fields.Char('Payment Mode', states={'invisible': True},
             on_change_with=['payment_method']),
         'on_change_with_payment_mode')
-    payment_bank_account = fields.Many2One('party.bank_account',
+    payment_bank_account = fields.Many2One('bank.account',
         'Payment Bank Account',
         states={'invisible': Eval('payment_mode') != 'direct_debit'},
         domain=[('party', '=', Eval('policy_owner'))],
         depends=['policy_owner'])
-    disbursment_bank_account = fields.Many2One('party.bank_account',
+    disbursment_bank_account = fields.Many2One('bank.account',
         'Disbursement Bank Account',
         states={'invisible': Eval('payment_mode') != 'direct_debit'},
         domain=[('party', '=', Eval('policy_owner'))],
@@ -425,7 +425,7 @@ class BillingManager(model.CoopSQL, model.CoopView):
         if good_payment_date:
             self.payment_date = int(good_payment_date)
         if self.payment_method.payment_mode == 'direct_debit':
-            BankAccount = Pool().get('party.bank_account')
+            BankAccount = Pool().get('bank.account')
             try:
                 party = contract.get_policy_owner(self.start_date)
                 if party:
@@ -1297,7 +1297,7 @@ class CoveredElement():
     subscriber = fields.Function(
         fields.Many2One('party.party', 'Subscriber'),
         'get_subscriber_id')
-    indemnification_bank_account = fields.Many2One('party.bank_account',
+    indemnification_bank_account = fields.Many2One('bank.account',
         'Indemnification Bank Account',
         states={'invisible': ~Eval('is_person')},
         depends=['item_kind', 'party', 'subscriber'],
