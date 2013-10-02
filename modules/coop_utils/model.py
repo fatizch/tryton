@@ -100,9 +100,9 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
     @classmethod
     def search_rec_name(cls, name, clause):
         if (hasattr(cls, 'code')
-                and cls.search([('code',) + clause[1:]], limit=1)):
-            return [('code',) + clause[1:]]
-        return [(cls._rec_name,) + clause[1:]]
+                and cls.search([('code',) + tuple(clause[1:])], limit=1)):
+            return [('code',) + tuple(clause[1:])]
+        return [(cls._rec_name,) + tuple(clause[1:])]
 
     @classmethod
     def search(
