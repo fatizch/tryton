@@ -8,6 +8,7 @@ except ImportError:
 
 from trytond.protocols.jsonrpc import JSONEncoder, object_hook
 from trytond.model import Model, ModelSQL, ModelView, fields as tryton_fields
+from trytond.model import ModelSingleton
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pool import Pool, PoolMeta
 from trytond.rpc import RPC
@@ -275,6 +276,11 @@ class ExportImportMixin(Model):
 
     def _export_json(
             self, exported, export_result, from_field=None, force_key=None):
+        singleton = isinstance(self, ModelSingleton)
+        if not (self.id > 0) and singleton:
+            instance = self.get_singleton()
+            return instance._export_json(exported, export_result, from_field,
+                force_key)
         try:
             log_name = self.get_rec_name(None)
         except TypeError:
@@ -291,12 +297,13 @@ class ExportImportMixin(Model):
             field = self._fields[field_name]
             if not self._export_must_export_field(field_name, field):
                 continue
-            field_value = getattr(self, field_name)
-            if field_value is None:
-                continue
             if hasattr(self, '_export_override_%s' % field_name):
                 values[field_name] = getattr(
-                    self, '_export_override_%s' % field_name)(exported, my_key)
+                    self, '_export_override_%s' % field_name)(exported,
+                        export_result, my_key)
+                continue
+            field_value = getattr(self, field_name)
+            if field_value is None:
                 continue
             self._export_check_value_exportable(field_name, field, field_value)
             logging.getLogger('export_import').debug(
@@ -317,7 +324,8 @@ class ExportImportMixin(Model):
             else:
                 values[field_name] = getattr(self, field_name)
         if force_key is None and from_field is None:
-            export_result.append(values)
+            if not singleton:
+                export_result.append(values)
             logging.getLogger('export_import').debug(
                 'Successfully exported %s' % log_name)
         return values

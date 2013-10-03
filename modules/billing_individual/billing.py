@@ -42,6 +42,7 @@ __all__ = [
     'FeeDesc',
     'Sequence',
     'FiscalYear',
+    'Period',
     'Company',
 ]
 
@@ -1409,7 +1410,7 @@ class Sequence():
             cls.company.domain, 'company')
 
 
-class Company():
+class Company(export.ExportImportMixin):
     'Company'
 
     __metaclass__ = PoolMeta
@@ -1440,10 +1441,20 @@ class Company():
         account_configuration.save()
 
     @classmethod
-    def _post_import(cls, companies):
+    def __post_import(cls, companies):
         for company in companies:
             with Transaction().set_context(company=company.id):
                 company._post_import_set_default_accounts()
+
+    @classmethod
+    def _export_force_recreate(cls):
+        result = super(Company, cls)._export_force_recreate()
+        result.remove('fiscal_years')
+        return result
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['party.name'])
 
 
 class FiscalYear(export.ExportImportMixin):
@@ -1464,3 +1475,46 @@ class FiscalYear(export.ExportImportMixin):
         result = super(FiscalYear, cls)._export_skips()
         result.add('close_lines')
         return result
+
+    @classmethod
+    def _export_force_recreate(cls):
+        res = super(FiscalYear, cls)._export_force_recreate()
+        res.remove('periods')
+        return res
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['company.party.name', 'code'])
+
+
+class Period(export.ExportImportMixin):
+    'Period'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'account.period'
+
+    @classmethod
+    def write(cls, periods, vals):
+        # Overwritten to check for moves only if start_date / end_date /
+        # fiscalyear actually changes
+        found = [x for x in ('start_date', 'end_date', 'fiscalyear')
+                if x in vals]
+        if not found:
+            return super(Period, cls).write(periods, vals)
+        for period in periods:
+            if ('start_date' in found and period.start_date !=
+                    vals['start_date']) or ('end_date' in found and
+                    period.end_date != vals['end_date']) or (
+                    'fiscalyear' in found and period.fiscalyear.id !=
+                        vals['fiscalyear']):
+                if period.moves:
+                    cls.raise_user_error('modify_del_period_moves', (
+                        period.rec_name))
+        for x in found:
+            del vals[x]
+        return super(Period, cls).write(periods, vals)
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['code', 'fiscalyear.code',
+                'fiscalyear.company.party.name'])
