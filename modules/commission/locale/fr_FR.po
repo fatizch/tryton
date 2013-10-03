@@ -346,6 +346,10 @@ msgctxt "field:offered.coverage,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
 
+msgctxt "field:offered.product,commission_kind:"
+msgid "Commission Kind"
+msgstr "Type de commission"
+
 msgctxt "field:offered.product,dist_networks:"
 msgid "Distribution Networks"
 msgstr "Réseaux de Distribution"
@@ -502,9 +506,33 @@ msgctxt "selection:commission.commission_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
+msgctxt "selection:ins_contract.management_role,kind:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:ins_contract.management_role,kind:"
+msgid "Business Provider"
+msgstr "Apporteur d'affaires"
+
+msgctxt "selection:ins_contract.management_role,kind:"
+msgid "Management Delegation"
+msgstr "Délégation de gestion"
+
 msgctxt "selection:offered.coverage,kind:"
 msgid "Commission"
 msgstr "Commission"
+
+msgctxt "selection:offered.product,commission_kind:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:offered.product,commission_kind:"
+msgid "Business Provider"
+msgstr "Apporteur d'affaires"
+
+msgctxt "selection:offered.product,commission_kind:"
+msgid "Management Delegation"
+msgstr "Délégation de gestion"
 
 msgctxt "selection:offered.product,kind:"
 msgid "Commission"

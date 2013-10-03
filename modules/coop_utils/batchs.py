@@ -52,17 +52,15 @@ class BatchRoot(ModelView):
 
     @classmethod
     def select_ids(cls):
-        SearchModel = Pool().get(cls.get_batch_search_model())
         cursor = Transaction().cursor
-        qu1, qu2, tables, tables_args = SearchModel.search_domain(
+        SearchModel = Pool().get(cls.get_batch_search_model())
+        search_table = SearchModel.__table__()
+        search_column = getattr(search_table, cls.get_batch_field())
+        tables, expression = SearchModel.search_domain(
             cls.get_batch_domain())
-        cursor.execute(
-            'SELECT DISTINCT "%s"."%s" FROM ' % (
-                SearchModel._table, cls.get_batch_field())
-            + ' '.join(tables) + (qu1 and ' WHERE ' + qu1 or '')
-            + ' ORDER BY "%s"."%s" ASC' % (
-                SearchModel._table, cls.get_batch_field()),
-            tables_args + qu2)
+        cursor.execute(*tables.select(search_column,
+                where=expression,
+                order_by=search_column))
         res = cursor.fetchall()
         return res
 

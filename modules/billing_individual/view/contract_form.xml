@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<data>
+  <xpath expr="/form/notebook/page[@id='billing']" position="inside">
+      <field name="billing_managers" mode="form,tree" colspan="4"/>
+        <label name="next_billing_date"/>
+        <field name="next_billing_date"/>
+        <field name="prices" colspan="4"/>
+        <button name="button_calculate_prices" string="Calculate Prices" colspan="4"/>
+  </xpath>
+  <xpath expr="/form/notebook/page[@id='billing']" position="after">
+    <page string="Accounting" id="accounting" col="2">
+      <label name="receivable_today"/>
+      <field name="receivable_today"/>
+      <group id="lines" colspan="2" col="2" yexpand="1" yfill="1">
+        <field name="receivable_lines" colspan="2" view_ids="billing_individual.move_line_tree,account.move_line_view_form"/>
+        <label name="display_all_lines"/>
+        <field name="display_all_lines"/>
+      </group>
+    </page>
+  </xpath>
+  <xpath expr="/form">
+    <newline/>
+    <field name="use_prices"/>
+    <newline/>
+  </xpath>
+</data>

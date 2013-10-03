@@ -5,7 +5,7 @@ IMPORT_FILE = '/path/to/export_file.json'
 
 NEEDED_MODULES = [
     'coop_translation',
-    'party_bank',
+    'coop_bank',
     'table',
     'health_fr',
     'property_product',
@@ -17,6 +17,7 @@ NEEDED_MODULES = [
     'life_contract_collective',
     'insurance_collective_subscription',
     'commission',
+    'commission_collective',
     'billing',
     'coop_account_payment',
     'coop_account_payment_sepa',

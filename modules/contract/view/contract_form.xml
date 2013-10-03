@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form string="contract">
+<form string="Contract">
     <label name="contract_number"/>
     <field name="contract_number"/>
     <label name="status"/>

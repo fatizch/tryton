@@ -606,6 +606,8 @@ class ProcessStepRelation(model.CoopSQL):
         cls.step.domain.extend([(
             'main_model', '=', Eval('_parent_process', {}).get(
                 'on_model', 0))])
+        cls.process = copy.copy(cls.process)
+        cls.process.required = True
 
     @classmethod
     def _export_keys(cls):

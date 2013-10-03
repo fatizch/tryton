@@ -5,7 +5,7 @@
     </xpath>
     <xpath expr="/form/field[@name='complementary_data']" position="before">
         <label name="fare_class_group"/>
-        <field name="fare_class_group"/>
+        <field name="fare_class_group" widget="selection"/>
         <newline/>
     </xpath>
 </data>

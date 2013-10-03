@@ -31,6 +31,7 @@ def register():
         PriceLineComRelation,
         PriceLine,
         Contract,
+        ManagementRole,
         #Rule Engine
         OfferedContext,
         # Account

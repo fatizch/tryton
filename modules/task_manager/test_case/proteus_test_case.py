@@ -62,281 +62,281 @@ def create_methods(cfg_dict):
 def launch_test_case(cfg_dict):
     update_cfg_dict_with_models(cfg_dict)
     meths = create_methods(cfg_dict)
-    translater = proteus_tools.translate_this(cfg_dict)
+    # translater = proteus_tools.translate_this(cfg_dict)
 
-    admin_user = meths['User']({
-        'login': 'admin',
-    })
+    # admin_user = meths['User']({
+        # 'login': 'admin',
+    # })
 
-    product_mod = meths['Model']({
-        'model': 'offered.product',
-    })
+    # product_mod = meths['Model']({
+        # 'model': 'offered.product',
+    # })
 
-    coverage_mod = meths['Model']({
-        'model': 'offered.coverage',
-    })
+    # coverage_mod = meths['Model']({
+        # 'model': 'offered.coverage',
+    # })
 
-    company_mod = meths['Model']({
-        'model': 'party.party',
-    })
+    # company_mod = meths['Model']({
+        # 'model': 'party.party',
+    # })
 
-    subs_process = meths['ProcessDesc']({
-        'technical_name': 'individual_subscription',
-    })
+    # subs_process = meths['ProcessDesc']({
+        # 'technical_name': 'individual_subscription',
+    # })
 
-    contract_admin_grp = meths['Group']({
-        'name': translater('Contract Administration'),
-        'menu_access': [
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'insurance_contract',
-                'fs_id': 'menu_contract'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'insurance_contract',
-                'fs_id': 'menu_individual'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'insurance_contract',
-                'fs_id': 'menu_contract_form'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'offered',
-                'fs_id': 'menu_product'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'offered',
-                'fs_id': 'menu_product_form'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'offered',
-                'fs_id': 'menu_coverage_form'}).db_id),
-        ],
-        'users': [admin_user],
-    })
+    # contract_admin_grp = meths['Group']({
+        # 'name': translater('Contract Administration'),
+        # 'menu_access': [
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'insurance_contract',
+                # 'fs_id': 'menu_contract'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'insurance_contract',
+                # 'fs_id': 'menu_individual'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'insurance_contract',
+                # 'fs_id': 'menu_contract_form'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'offered',
+                # 'fs_id': 'menu_product'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'offered',
+                # 'fs_id': 'menu_product_form'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'offered',
+                # 'fs_id': 'menu_coverage_form'}).db_id),
+        # ],
+        # 'users': [admin_user],
+    # })
 
-    meths['ModelAccess']({
-        'model': product_mod,
-        'group': contract_admin_grp,
-        'perm_read': True,
-    })
+    # meths['ModelAccess']({
+        # 'model': product_mod,
+        # 'group': contract_admin_grp,
+        # 'perm_read': True,
+    # })
 
-    meths['ModelAccess']({
-        'model': coverage_mod,
-        'group': contract_admin_grp,
-        'perm_read': True,
-    })
+    # meths['ModelAccess']({
+        # 'model': coverage_mod,
+        # 'group': contract_admin_grp,
+        # 'perm_read': True,
+    # })
 
-    meths['ModelAccess']({
-        'model': company_mod,
-        'group': contract_admin_grp,
-        'perm_read': True,
-        'perm_write': True,
-        'perm_create': True,
-        'perm_delete': True,
-    })
+    # meths['ModelAccess']({
+        # 'model': company_mod,
+        # 'group': contract_admin_grp,
+        # 'perm_read': True,
+        # 'perm_write': True,
+        # 'perm_create': True,
+        # 'perm_delete': True,
+    # })
 
-    coverage_mod = meths['Model']({
-        'model': 'offered.coverage',
-    })
+    # coverage_mod = meths['Model']({
+        # 'model': 'offered.coverage',
+    # })
 
-    menu_mod = meths['Model']({
-        'model': 'ir.ui.menu',
-    })
+    # menu_mod = meths['Model']({
+        # 'model': 'ir.ui.menu',
+    # })
 
-    act_win_mod = meths['Model']({
-        'model': 'ir.action.act_window',
-    })
+    # act_win_mod = meths['Model']({
+        # 'model': 'ir.action.act_window',
+    # })
 
-    param_grp = meths['Group']({
-        'name': translater('Functional Admin'),
-        'menu_access': [
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'offered',
-                'fs_id': 'menu_product'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'offered',
-                'fs_id': 'menu_product_form'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'offered',
-                'fs_id': 'menu_product_configuration'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'offered',
-                'fs_id': 'menu_product_configuration'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'rule_engine',
-                'fs_id': 'menu_rule_engine'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'insurance_product',
-                'fs_id': 'menu_model_clause'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'offered',
-                'fs_id': 'menu_model_coop_schema'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'offered',
-                'fs_id': 'menu_coverage_form'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'party',
-                'fs_id': 'menu_configuration'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'insurance_collective',
-                'fs_id': 'menu_coverage_form'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'insurance_collective',
-                'fs_id': 'menu_product_form'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'process',
-                'fs_id': 'process_menu_id'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'process',
-                'fs_id': 'menu_process_status'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'process',
-                'fs_id': 'menu_process_desc'}).db_id),
-            cfg_dict['Menu'](meths['ModelData']({
-                'module': 'process',
-                'fs_id': 'menu_step_desc'}).db_id),
-        ],
-        'users': [admin_user],
-    })
+    # param_grp = meths['Group']({
+        # 'name': translater('Functional Admin'),
+        # 'menu_access': [
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'offered',
+                # 'fs_id': 'menu_product'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'offered',
+                # 'fs_id': 'menu_product_form'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'offered',
+                # 'fs_id': 'menu_product_configuration'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'offered',
+                # 'fs_id': 'menu_product_configuration'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'rule_engine',
+                # 'fs_id': 'menu_rule_engine'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'insurance_product',
+                # 'fs_id': 'menu_model_clause'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'offered',
+                # 'fs_id': 'menu_model_coop_schema'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'offered',
+                # 'fs_id': 'menu_coverage_form'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'party',
+                # 'fs_id': 'menu_configuration'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'insurance_collective',
+                # 'fs_id': 'menu_coverage_form'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'insurance_collective',
+                # 'fs_id': 'menu_product_form'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'process',
+                # 'fs_id': 'process_menu_id'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'process',
+                # 'fs_id': 'menu_process_status'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'process',
+                # 'fs_id': 'menu_process_desc'}).db_id),
+            # cfg_dict['Menu'](meths['ModelData']({
+                # 'module': 'process',
+                # 'fs_id': 'menu_step_desc'}).db_id),
+        # ],
+        # 'users': [admin_user],
+    # })
 
-    meths['ModelAccess']({
-        'model': product_mod,
-        'group': param_grp,
-        'perm_read': True,
-        'perm_write': True,
-        'perm_create': True,
-        'perm_delete': True,
-    })
+    # meths['ModelAccess']({
+        # 'model': product_mod,
+        # 'group': param_grp,
+        # 'perm_read': True,
+        # 'perm_write': True,
+        # 'perm_create': True,
+        # 'perm_delete': True,
+    # })
 
-    meths['ModelAccess']({
-        'model': coverage_mod,
-        'group': param_grp,
-        'perm_read': True,
-        'perm_write': True,
-        'perm_create': True,
-        'perm_delete': True,
-    })
+    # meths['ModelAccess']({
+        # 'model': coverage_mod,
+        # 'group': param_grp,
+        # 'perm_read': True,
+        # 'perm_write': True,
+        # 'perm_create': True,
+        # 'perm_delete': True,
+    # })
 
-    meths['ModelAccess']({
-        'model': menu_mod,
-        'group': param_grp,
-        'perm_read': True,
-        'perm_write': True,
-        'perm_create': True,
-        'perm_delete': True,
-    })
+    # meths['ModelAccess']({
+        # 'model': menu_mod,
+        # 'group': param_grp,
+        # 'perm_read': True,
+        # 'perm_write': True,
+        # 'perm_create': True,
+        # 'perm_delete': True,
+    # })
 
-    meths['ModelAccess']({
-        'model': act_win_mod,
-        'group': param_grp,
-        'perm_read': True,
-        'perm_write': True,
-        'perm_create': True,
-        'perm_delete': True,
-    })
+    # meths['ModelAccess']({
+        # 'model': act_win_mod,
+        # 'group': param_grp,
+        # 'perm_read': True,
+        # 'perm_write': True,
+        # 'perm_create': True,
+        # 'perm_delete': True,
+    # })
 
-    menu_item_fld = meths['Field']({
-        'model': meths['Model']({
-            'model': 'process.process_desc',
-        }),
-        'name': 'menu_items',
-    })
+    # menu_item_fld = meths['Field']({
+        # 'model': meths['Model']({
+            # 'model': 'process.process_desc',
+        # }),
+        # 'name': 'menu_items',
+    # })
 
-    meths['FieldAccess']({
-        'field': menu_item_fld,
-        'group': param_grp,
-        'perm_read': True,
-        'perm_write': True,
-        'perm_create': True,
-        'perm_delete': True,
-    })
+    # meths['FieldAccess']({
+        # 'field': menu_item_fld,
+        # 'group': param_grp,
+        # 'perm_read': True,
+        # 'perm_write': True,
+        # 'perm_create': True,
+        # 'perm_delete': True,
+    # })
 
-    param_user = meths['User']({
-        'login': 'param',
-        'password': 'param',
-        'name': translater('Lab Manager'),
-        'groups': [
-            param_grp,
-        ]})
+    # param_user = meths['User']({
+        # 'login': 'param',
+        # 'password': 'param',
+        # 'name': translater('Lab Manager'),
+        # 'groups': [
+            # param_grp,
+        # ]})
 
-    ctr_adm_user = meths['User']({
-        'login': 'contract',
-        'password': 'contract',
-        'name': translater('Contract Administrator'),
-        'groups': [
-            contract_admin_grp,
-        ]})
+    # ctr_adm_user = meths['User']({
+        # 'login': 'contract',
+        # 'password': 'contract',
+        # 'name': translater('Contract Administrator'),
+        # 'groups': [
+            # contract_admin_grp,
+        # ]})
 
-    ctr_valid_grp = meths['Group']({
-        'name': translater('Contract Validation'),
-        'users': [admin_user],
-    })
+    # ctr_valid_grp = meths['Group']({
+        # 'name': translater('Contract Validation'),
+        # 'users': [admin_user],
+    # })
 
-    ctr_validation_user = meths['User']({
-        'login': 'contract_validation',
-        'password': 'contract_validation',
-        'name': translater('Contract Validation'),
-        'groups': [
-            contract_admin_grp,
-            ctr_valid_grp,
-        ]})
+    # ctr_validation_user = meths['User']({
+        # 'login': 'contract_validation',
+        # 'password': 'contract_validation',
+        # 'name': translater('Contract Validation'),
+        # 'groups': [
+            # contract_admin_grp,
+            # ctr_valid_grp,
+        # ]})
 
-    valid_step = meths['StepDesc']({
-        'technical_name': 'ctr_validation'
-    })
+    # valid_step = meths['StepDesc']({
+        # 'technical_name': 'ctr_validation'
+    # })
 
-    proteus_tools.proteus_append_extend(
-        valid_step, 'authorizations', ctr_valid_grp)
+    # proteus_tools.proteus_append_extend(
+        # valid_step, 'authorizations', ctr_valid_grp)
 
-    valid_step.save()
+    # valid_step.save()
 
-    basic_team = meths['Team']({
-        'name': translater('Contract Data Team'),
-        'code': 'ctr_data_team',
-        'members': [ctr_adm_user],
-        'priorities': [
-            meths['Priority']({
-                'priority': 1,
-                'process_step': meths['ProcessStepRelation']({
-                    'process': subs_process,
-                    'step': meths['StepDesc']({
-                        'technical_name': 'pricing'}),
-                }),
-            }),
-            meths['Priority']({
-                'priority': 2,
-                'process_step': meths['ProcessStepRelation']({
-                    'process': subs_process,
-                    'step': meths['StepDesc']({
-                        'technical_name': 'covered_person_selection'}),
-                }),
-            }),
-            meths['Priority']({
-                'priority': 3,
-                'process_step': meths['ProcessStepRelation']({
-                    'process': subs_process,
-                    'step': meths['StepDesc']({
-                        'technical_name': 'option_selection'}),
-                }),
-            }),
-            meths['Priority']({
-                'priority': 4,
-                'process_step': meths['ProcessStepRelation']({
-                    'process': subs_process,
-                    'step': meths['StepDesc']({
-                        'technical_name': 'subscriber_selection'}),
-                }),
-            }),
-        ],
-    })
+    # basic_team = meths['Team']({
+        # 'name': translater('Contract Data Team'),
+        # 'code': 'ctr_data_team',
+        # 'members': [ctr_adm_user],
+        # 'priorities': [
+            # meths['Priority']({
+                # 'priority': 1,
+                # 'process_step': meths['ProcessStepRelation']({
+                    # 'process': subs_process,
+                    # 'step': meths['StepDesc']({
+                        # 'technical_name': 'pricing'}),
+                # }),
+            # }),
+            # meths['Priority']({
+                # 'priority': 2,
+                # 'process_step': meths['ProcessStepRelation']({
+                    # 'process': subs_process,
+                    # 'step': meths['StepDesc']({
+                        # 'technical_name': 'covered_person_selection'}),
+                # }),
+            # }),
+            # meths['Priority']({
+                # 'priority': 3,
+                # 'process_step': meths['ProcessStepRelation']({
+                    # 'process': subs_process,
+                    # 'step': meths['StepDesc']({
+                        # 'technical_name': 'option_selection'}),
+                # }),
+            # }),
+            # meths['Priority']({
+                # 'priority': 4,
+                # 'process_step': meths['ProcessStepRelation']({
+                    # 'process': subs_process,
+                    # 'step': meths['StepDesc']({
+                        # 'technical_name': 'subscriber_selection'}),
+                # }),
+            # }),
+        # ],
+    # })
 
-    valid_team = meths['Team']({
-        'name': translater('Validation Team'),
-        'code': 'ctr_valid_team',
-        'members': [ctr_validation_user],
-        'priorities': [
-            meths['Priority']({
-                'priority': 1,
-                'process_step': meths['ProcessStepRelation']({
-                    'process': subs_process,
-                    'step': meths['StepDesc']({
-                        'technical_name': 'ctr_validation'}),
-                }),
-            }),
-        ],
-    })
+    # valid_team = meths['Team']({
+        # 'name': translater('Validation Team'),
+        # 'code': 'ctr_valid_team',
+        # 'members': [ctr_validation_user],
+        # 'priorities': [
+            # meths['Priority']({
+                # 'priority': 1,
+                # 'process_step': meths['ProcessStepRelation']({
+                    # 'process': subs_process,
+                    # 'step': meths['StepDesc']({
+                        # 'technical_name': 'ctr_validation'}),
+                # }),
+            # }),
+        # ],
+    # })

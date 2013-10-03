@@ -26,12 +26,12 @@ def remove_comment(stream):
 
 class Journal:
     __name__ = 'account.payment.journal'
-    sepa_bank_account_number = fields.Many2One('party.bank_account_number',
+    sepa_bank_account_number = fields.Many2One('bank.account.number',
         'Bank Account', states={
             'required': Eval('process_method') == 'sepa',
             'invisible': Eval('process_method') != 'sepa',
             },
-        domain=[('kind', '=', 'IBAN')],  # TODO filter on party company
+        domain=[('type', '=', 'iban')],  # TODO filter on party company
         depends=['process_method'])
 
     @classmethod
@@ -95,5 +95,5 @@ class Payment:
             if billing_manager.payment_bank_account:
                 for account_number in \
                         billing_manager.payment_bank_account.account_numbers:
-                    if account_number.kind == 'IBAN':
+                    if account_number.type == 'iban':
                         return account_number

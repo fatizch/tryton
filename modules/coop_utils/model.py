@@ -100,20 +100,20 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
     @classmethod
     def search_rec_name(cls, name, clause):
         if (hasattr(cls, 'code')
-                and cls.search([('code',) + clause[1:]], limit=1)):
-            return [('code',) + clause[1:]]
-        return [(cls._rec_name,) + clause[1:]]
+                and cls.search([('code',) + tuple(clause[1:])], limit=1)):
+            return [('code',) + tuple(clause[1:])]
+        return [(cls._rec_name,) + tuple(clause[1:])]
 
     @classmethod
     def search(
             cls, domain, offset=0, limit=None, order=None, count=False,
-            query_string=False):
+            query=False):
         #Set your class here to see the domain on the search
         # if cls.__name__ == 'ins_contract.loan_share':
         #     print domain
         return super(CoopSQL, cls).search(
             domain=domain, offset=offset,
-            limit=limit, order=order, count=count, query_string=query_string)
+            limit=limit, order=order, count=count, query=query)
 
     def get_currency(self):
         print self.__name__
@@ -327,11 +327,11 @@ class TableOfTable(CoopSQL, CoopView):
     @classmethod
     def search(
             cls, domain, offset=0, limit=None, order=None, count=False,
-            query_string=False):
+            query=False):
         domain.append(('my_model_name', '=', cls.__name__))
         return super(TableOfTable, cls).search(
             domain, offset=offset,
-            limit=limit, order=order, count=count, query_string=query_string)
+            limit=limit, order=order, count=count, query=query)
 
     @staticmethod
     def get_values_as_selection(model_name):

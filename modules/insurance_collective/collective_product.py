@@ -38,7 +38,8 @@ class GroupCoverage():
     __name__ = 'offered.coverage'
     __metaclass__ = PoolMeta
 
-    is_group = fields.Boolean('Group Coverage')
+    is_group = fields.Boolean('Group Coverage',
+        states={'invisible': Eval('kind') != 'insurance'})
 
     @classmethod
     def __setup__(cls):

@@ -51,17 +51,18 @@ class CreateReceivablePayment(Wizard):
             contract = line.move.origin
             billing_manager = contract.get_billing_manager(
                 line.maturity_date or today)
-            if (not billing_manager or not billing_manager.payment_method
-                    or billing_manager.payment_method.payment_mode !=
-                    'direct_debit'):
-                continue
+            # if (not billing_manager or not billing_manager.payment_method
+                    # or billing_manager.payment_method.payment_mode !=
+                    # 'direct_debit'):
+                # continue
             payment = Payment()
             currency = line.second_currency or line.account.company.currency
             company = line.account.company
             payment.journal = company.get_payment_journal(currency)
             payment.kind = 'receivable'
             payment.party = line.party
-            payment.date = line.maturity_date or today  # XXX check if past is allowed
+            # TODO check if past is allowed
+            payment.date = line.maturity_date or today
             payment.amount = line.payment_amount
             payment.line = line
             payment.state = 'approved'

@@ -1,5 +1,6 @@
 from trytond.pool import Pool
 from .coop_process import *
+from .export import *
 
 
 def register():
@@ -13,6 +14,8 @@ def register():
         XMLViewDesc,
         StepDesc,
         ProcessParameters,
+        # From export
+        ExportPackage,
         module='coop_process', type_='model')
 
     Pool.register(

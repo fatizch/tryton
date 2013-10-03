@@ -46,4 +46,4 @@ class Broker(model.CoopSQL, model.CoopView):
 
     @classmethod
     def _export_keys(cls):
-        return set(['party.code'])
+        return set(['party.name'])

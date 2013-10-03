@@ -4,7 +4,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model, fields
+from trytond.modules.coop_utils import model, fields, utils
 from trytond.modules.coop_process import ProcessFinder, ProcessParameters
 
 
@@ -26,8 +26,7 @@ class SubscriptionManager(model.CoopSQL):
     contract = fields.Reference(
         'Contract',
         [
-            ('contract.contract', 'Contract'),
-            ('ins_collective.contract', 'Contract')],
+            ('contract.contract', 'Contract')],
     )
     is_custom = fields.Boolean('Custom')
 
@@ -54,13 +53,18 @@ class SubscriptionProcessParameters(ProcessParameters):
 
     dist_network = fields.Many2One('distribution.dist_network',
         'Distribution Network', on_change=['dist_network', 'possible_brokers',
-        'broker'])
+        'business_provider', 'management_delegation'])
     possible_brokers = fields.Function(
         fields.Many2Many('party.party', None, None, 'Possible Brokers',
             on_change_with=['dist_network', 'possible_brokers'],
             states={'invisible': True},
             ), 'on_change_with_possible_brokers')
-    broker = fields.Many2One('party.party', 'Broker',
+    business_provider = fields.Many2One('party.party', 'Business Provider',
+        domain=[
+            ('id', 'in', Eval('possible_brokers')),
+            ('is_broker', '=', True),
+            ], depends=['possible_brokers'])
+    delegated_manager = fields.Many2One('party.party', 'Delegated Manager',
         domain=[
             ('id', 'in', Eval('possible_brokers')),
             ('is_broker', '=', True),
@@ -140,10 +144,15 @@ class SubscriptionProcessParameters(ProcessParameters):
     def on_change_dist_network(self):
         res = {}
         res['possible_brokers'] = self.on_change_with_possible_brokers()
-        if self.broker and self.broker.id not in res['possible_brokers']:
-            res['broker'] = None
+        if (not utils.is_none(self, 'business_provider')
+                and self.business_provider.id not in res['possible_brokers']):
+            res['business_provider'] = None
+        elif (not utils.is_none(self, 'delegated_manager')
+                and self.delegated_manager.id not in res['possible_brokers']):
+            res['delegated_manager'] = None
         elif len(res['possible_brokers']) == 1:
-            res['broker'] = res['possible_brokers'][0]
+            res['business_provider'] = res['possible_brokers'][0]
+            res['delegated_manager'] = res['possible_brokers'][0]
         return res
 
 
@@ -168,9 +177,12 @@ class SubscriptionProcessFinder(ProcessFinder):
         if res:
             res, err = obj.init_from_offered(process_param.product,
                 process_param.date)
-            if process_param.broker:
-                obj.get_or_create_management_role('commission',
-                    process_param.broker)
+            if process_param.business_provider:
+                obj.get_or_create_management_role('business_provider',
+                    process_param.business_provider)
+            if process_param.delegated_manager:
+                obj.get_or_create_management_role('management',
+                    process_param.delegated_manager)
             obj.dist_network = process_param.dist_network
             errs += err
         return res, errs

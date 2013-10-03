@@ -1,7 +1,11 @@
 from decimal import Decimal
+from sql import Cast
+from sql.aggregate import Sum
+from sql.conditionals import Coalesce
+from sql.operators import Concat
 
 from trytond.transaction import Transaction
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coop_utils import fields
 
@@ -30,24 +34,27 @@ class Move():
     @classmethod
     def get_com_amount(cls, moves, name):
         res = dict((m.id, Decimal('0.0')) for m in moves)
+        pool = Pool()
         cursor = Transaction().cursor
 
-        cursor.execute('SELECT m.id, '
-                'SUM((COALESCE(l.credit, 0) - COALESCE(l.debit, 0))) '
-            'FROM account_move_line AS l, account_account AS a '
-            ', account_move as m '
-            'WHERE a.id = l.account '
-                'AND a.kind != \'receivable\' '
-                'AND m.id IN (SELECT id FROM "account_move" '
-                    'WHERE CAST(SUBSTR(second_origin, '
-                            'POSITION(\',\' IN second_origin) + 1) '
-                        'AS INT4) '
-                        'IN (SELECT id FROM "offered_coverage" '
-                            'WHERE kind = \'commission\')) '
-                'AND a.active '
-                'AND l.move = m.id '
-                'AND m.id IN (' + ','.join(('%s',) * len(moves)) + ') '
-            'GROUP BY m.id', [m.id for m in moves])
+        move_line = pool.get('account.move.line').__table__()
+        account = pool.get('account.account').__table__()
+        move = pool.get('account.move').__table__()
+        coverage = pool.get('offered.coverage').__table__()
+
+        query_table = move_line.join(move,
+            condition=(move.id == move_line.move)
+            ).join(account, condition=(account.id == move_line.account))
+        cursor.execute(*query_table.select(move.id, Sum(
+                    Coalesce(move_line.credit, 0)
+                    - Coalesce(move_line.debit, 0)),
+                where=(account.kind != 'receivable')
+                & (move_line.second_origin.in_(coverage.select(
+                            Concat('offered.coverage,', Cast(coverage.id, 'CHAR')),
+                            where=(coverage.kind == 'commission'))))
+                & (account.active)
+                & (move.id.in_([m.id for m in moves])),
+                group_by=move.id))
         for move_id, sum in cursor.fetchall():
             # SQLite uses float for SUM
             if not isinstance(sum, Decimal):

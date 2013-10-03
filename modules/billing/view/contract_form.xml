@@ -2,22 +2,8 @@
 <data>
   <xpath expr="/form/notebook/page[@id='options']" position="after">
     <page string="Billing" id="billing">
-      <field name="billing_managers" mode="form,tree" colspan="4"/>
-      <group id="prices" colspan="4" yexpand="1" yfill="1">
-        <label name="next_billing_date"/>
-        <field name="next_billing_date"/>
-        <field name="prices" colspan="4"/>
-        <button name="button_calculate_prices" string="Calculate Prices" colspan="4"/>
-      </group>
-    </page>
-    <page string="Accounting" id="accounting" col="2">
-      <label name="receivable_today"/>
-      <field name="receivable_today"/>
-      <group id="lines" colspan="2" col="2" yexpand="1" yfill="1">
-        <field name="receivable_lines" colspan="2" view_ids="billing.move_line_tree,account.move_line_view_form"/>
-        <label name="display_all_lines"/>
-        <field name="display_all_lines"/>
-      </group>
+      <label name="manual_billing"/>
+      <field name="manual_billing"/>
     </page>
   </xpath>
 </data>

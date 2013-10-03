@@ -41,8 +41,9 @@ class TrytonTask(Task):
         from trytond.pool import Pool
         from trytond.transaction import Transaction
         from trytond.cache import Cache
-        from trytond.backend import DatabaseOperationalError
+        from trytond import backend
 
+        DatabaseOperationalError = backend.get('DatabaseOperationalError')
         Cache.clean(database)
         if database not in Pool.database_list():
             with Transaction().start(database, 0, readonly=True):

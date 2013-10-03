@@ -1,12 +1,21 @@
 <?xml version="1.0"?>
-<tree string="Rate Note Line" editable="bottom">
-    <field name="rec_name"/>
-    <field name="base"/>
-    <field name="rate" factor="100">
-        <suffix string="%"/>
-    </field>
-    <field name="sum_amount" sum="Total">
-         <suffix name="currency_symbol"/>
-    </field>
-    <field name="amount" tree_invisible="1"/>
+<tree string="Rate Note Line" editable="bottom"
+    colors="If(Or(Bool(Eval('childs')), Not(Bool(Eval('base')))), 'black', If(Eval('amount') != Eval('client_amount'), 'red', 'black'))">
+  <field name="rec_name"/>
+  <field name="base"/>
+  <field name="rate" factor="100">
+    <suffix string="%"/>
+  </field>
+  <field name="indexed_rate"/>
+  <field name="amount">
+    <suffix name="currency_symbol"/>
+  </field>
+  <field name="client_amount" >
+    <suffix name="currency_symbol"/>
+  </field>
+  <field name="amount" tree_invisible="1"/>
+  <field name="client_amount" tree_invisible="1"/>
+  <field name="rate_line" tree_invisible="1"/>
+  <field name="sum_amount" sum="Total" tree_invisible="1"/>
+  <field name="client_sum_amount" sum="Client Total" tree_invisible="1"/>
 </tree>

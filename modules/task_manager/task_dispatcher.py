@@ -23,8 +23,7 @@ class ProcessLog():
     __metaclass__ = PoolMeta
     __name__ = 'coop_process.process_log'
 
-    priority = fields.Function(
-        fields.Integer('Priority', order_field='id'), 'get_priority')
+    priority = fields.Function(fields.Integer('Priority'), 'get_priority')
     task_start = fields.Function(
         fields.DateTime('Task Start', on_change_with=['task']),
         'on_change_with_task_start')
@@ -35,6 +34,11 @@ class ProcessLog():
     is_current_user = fields.Function(
         fields.Boolean('Is current user', depends=['user']),
         'get_is_current_user')
+
+    @classmethod
+    def order_priority(cls, tables):
+        process_log, _ = tables[None]
+        return [process_log.id]
 
     @classmethod
     def setter_void(cls, *args):
@@ -63,9 +67,9 @@ class ProcessLog():
     @classmethod
     def search(
             cls, domain, offset=0, limit=None, order=None, count=False,
-            query_string=False):
+            query=False):
         result = super(ProcessLog, cls).search(
-            domain, offset, limit, order, count, query_string)
+            domain, offset, limit, order, count, query)
         if not (order and len(order) == 1):
             return result
         if not order[0][0] in ('priority', 'task_start'):

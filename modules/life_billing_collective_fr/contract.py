@@ -21,27 +21,26 @@ class Contract():
         fields.Boolean('Use Rates', states={'invisible': True}),
         'get_use_rates')
     rates = fields.One2Many('billing.rate_line', 'contract', 'Rates',
-        states={'invisible': ~Eval('is_group')})
-    next_assessment_date = fields.Date('Next Assessment Date')
+        states={'invisible': ~Eval('use_rates')})
+    next_assessment_date = fields.Date('Next Assessment Date',
+        states={'invisible': ~Eval('use_rates')})
 
     @classmethod
     def __setup__(cls):
         super(Contract, cls).__setup__()
         cls._buttons.update({
-                'button_calculate_rates': {},
+                'button_calculate_rates': {'invisible': ~Eval('use_rates')},
                 })
         cls._error_messages.update({
                 'existing_rate_note': ('''A rate note for contract %s (%s, %s)
 already exists and can't be modified (%s)'''),
                 })
 
+        utils.update_on_change(cls, 'manual_billing',
+            ['rates', 'manual_billing'])
+
     def get_use_rates(self, name):
-        if not self.offered or not self.offered.is_group:
-            return False
-        for option in self.options:
-            if option.offered.rating_rules:
-                return True
-        return False
+        return self.offered.use_rates if self.offered else False
 
     def calculate_rate_dict_at_date(self, date):
         cur_dict = {'date': date}
@@ -183,6 +182,21 @@ already exists and can't be modified (%s)'''),
             if start <= end:
                 res.append(((start, end), rate_line))
         return res
+
+    def on_change_manual_billing(self):
+        if not self.rates:
+            return {}
+        rate_dicts = []
+        for r in self.rates:
+            rate_dict = {'id': r.id, 'manual_billing': self.manual_billing}
+            child_dict = r.on_change_manual_billing(self.manual_billing)
+            if 'childs' in child_dict:
+                rate_dict['childs'] = child_dict['childs']
+            rate_dicts.append(rate_dict)
+        if rate_dicts:
+            return {'rates': {'update': rate_dicts}}
+        else:
+            return {}
 
 
 class CoveredData():

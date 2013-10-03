@@ -1,3 +1,4 @@
+from trytond.transaction import Transaction
 from trytond.modules.coop_utils import model, fields
 
 __all__ = [
@@ -42,3 +43,19 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
     def get_parents(self):
         return self.search([
                 ('left', '<', self.left), ('right', '>', self.right)])
+
+    @classmethod
+    def _update_mptt(cls, field_names, list_ids, values=None):
+        # MPTT update is rather long, and calling it once for each node is
+        # expensive when updating hundreds of them. So we delay the computation
+        # until the end of the import process
+        if '__importing__' in Transaction().context:
+            pass
+        else:
+            super(DistributionNetwork, cls)._update_mptt(field_names, list_ids,
+                values)
+
+    @classmethod
+    def _post_import(cls, records):
+        super(DistributionNetwork, cls)._update_mptt(['parent'],
+            [[x.id for x in records]])

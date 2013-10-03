@@ -1,3 +1,5 @@
+import copy
+
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If, Or, Bool
 from trytond.transaction import Transaction
@@ -50,8 +52,6 @@ class InsurancePolicy():
     managing_roles = fields.One2Many('ins_contract.management_role',
         'protocol', 'Managing Roles',
         states={'invisible': Eval('product_kind') == 'insurance'})
-    contract_history = fields.One2Many('contract.contract.history',
-        'from_object', 'Contract History')
     next_renewal_date = fields.Date('Next Renewal Date')
     last_renewed = fields.Date('Last Renewed')
 
@@ -512,6 +512,16 @@ class CoveredElement(model.CoopSQL, model.CoopView):
         'on_change_with_covered_name')
 
     @classmethod
+    def write(cls, cov_elements, vals):
+        if 'sub_covered_elements' in vals:
+            for cov_element in cov_elements:
+                for val in vals['sub_covered_elements']:
+                    if val[0] == 'create':
+                        for sub_cov_elem in val[1]:
+                            sub_cov_elem['contract'] = cov_element.contract.id
+        super(CoveredElement, cls).write(cov_elements, vals)
+
+    @classmethod
     def get_var_names_for_full_extract(cls):
         return ['name', 'sub_covered_elements',
             'complementary_data', 'party', 'covered_relations']
@@ -603,10 +613,10 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             for x in self.complementary_data.iteritems()])
 
     def get_main_contract_id(self, name):
-        if not utils.is_none(self, 'parent'):
-            return self.parent.main_contract.id
-        elif not utils.is_none(self, 'contract'):
+        if not utils.is_none(self, 'contract'):
             return self.contract.id
+        elif not utils.is_none(self, 'parent'):
+            return self.parent.main_contract.id
         elif 'contract' in Transaction().context:
             return Transaction().context.get('contract')
 
@@ -709,8 +719,10 @@ class CoveredElement(model.CoopSQL, model.CoopView):
             ['OR',
                 ['covered_data.end_date', '=', None],
                 ['covered_data.end_date', '>=', at_date]],
-            ('contract.company', '=', Eval('context', {}).get('company')),
-        ]
+            ]
+        if 'company' in Transaction().context:
+            domain.append(
+                ('contract.company', '=', Transaction().context['company']))
         return cls.search([domain])
 
     def get_currency(self):
@@ -993,7 +1005,17 @@ class ManagementRole(model.CoopSQL, model.CoopView):
         ondelete='RESTRICT',)
     contract = fields.Many2One('contract.contract', 'Contract',
         depends=['party'], ondelete='CASCADE')
-    kind = fields.Char('Kind')
+    kind = fields.Selection([('', '')], 'Kind')
+
+    @classmethod
+    def __setup__(cls):
+        cls.kind = copy.copy(cls.kind)
+        cls.kind.selection = list(set(cls.get_possible_management_role_kind()))
+        super(ManagementRole, cls).__setup__()
+
+    @classmethod
+    def get_possible_management_role_kind(cls):
+        return [('', '')]
 
 
 class DeliveredService(model.CoopView, model.CoopSQL):

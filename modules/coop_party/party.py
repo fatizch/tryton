@@ -128,6 +128,10 @@ class Party(model.CoopSQL):
 
     @classmethod
     def search_is_actor(cls, name, clause):
+        if clause[2] is True:
+            clause[1], clause[2] = ('!=', None)
+        elif clause[2] is False:
+            clause[2] = None
         field_name = Party.get_actor_var_name(name)
         return [(field_name, ) + tuple(clause[1:])]
 
@@ -261,10 +265,15 @@ class Party(model.CoopSQL):
             ('lang', 'light')])
         return res
 
+    @classmethod
+    def _export_keys(cls):
+        return set(['name'])
+
 
 class Actor(CoopView):
     'Actor'
     __name__ = 'party.actor'
+    _rec_name = 'party'
 
     reference = fields.Char('Reference')
     party = fields.Many2One(

@@ -5,8 +5,11 @@
         <label name="dist_network"/>
         <field name="dist_network"/>
         <newline/>
-        <label name="broker"/>
-        <field name="broker"/>
+        <label name="business_provider"/>
+        <field name="business_provider"/>
+        <newline/>
+        <label name="delegated_manager"/>
+        <field name="delegated_manager"/>
         <newline/>
         <field name="possible_com_product" colspan="2"/>
         <newline/>

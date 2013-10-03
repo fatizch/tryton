@@ -4,6 +4,7 @@ from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import fields, model, utils
 
+from .plan import COMMISSION_KIND
 
 __all__ = [
     'CommissionAgreement',
@@ -30,12 +31,13 @@ class CommissionAgreement():
 
     def update_management_roles(self):
         super(CommissionAgreement, self).update_management_roles()
-        role = self.get_management_role('commission')
-        agreement = role.protocol if role else None
-        if not agreement:
-            return
-        for option in self.options:
-            option.update_commissions(agreement)
+        for com_kind in [x[0] for x in COMMISSION_KIND]:
+            role = self.get_management_role(com_kind)
+            agreement = role.protocol if role else None
+            if not agreement:
+                continue
+            for option in self.options:
+                option.update_commissions(agreement)
 
 
 class CommissionOption():
@@ -75,14 +77,10 @@ class CommissionOption():
 
     def get_com_options_and_rates_at_date(self, at_date):
         for commission in self.commissions:
-            if commission.start_date > at_date:
-                continue
-            if commission.end_date and commission.end_date < at_date:
-                continue
-            com_rate = commission.get_com_rate()
+            com_rate = commission.get_com_rate(at_date)
             if not com_rate:
                 continue
-            yield((commission, com_rate[0]))
+            yield((commission, com_rate))
 
     def get_account_for_billing(self):
         if self.coverage_kind != 'commission':
@@ -140,20 +138,29 @@ class CompensatedOption(model.CoopSQL, model.CoopView):
         args['comp_option'] = self
         self.com_option.init_dict_for_rule_engine(args)
 
-    def get_com_rate(self):
-        cur_dict = {'date': self.start_date}
+    def get_com_rate(self, at_date=None):
+        if not at_date:
+            at_date = utils.today()
+        if not(at_date >= self.start_date
+                and (not self.end_date or at_date <= self.end_date)):
+            return 0, None
+        cur_dict = {'date': at_date}
         self.init_dict_for_rule_engine(cur_dict)
-        res = self.com_option.offered.get_result('commission', cur_dict)
-        return res
+        rer = self.com_option.offered.get_result('commission', cur_dict)
+        if hasattr(rer, 'errors') and not rer.errors:
+            return rer.result
+        else:
+            return 0
+
+    def calculate_com(self, base_amount, at_date):
+        #TODO : deal with non linear com
+        com_rate = self.get_com_rate(at_date)
+        return com_rate * base_amount, com_rate
 
     def get_com_amount(self, name):
-        com_rate = self.get_com_rate()
-        if not com_rate or not com_rate[0] or not hasattr(
-                com_rate[0], 'result'):
-            return 0
         for price_line in self.subs_option.contract.prices:
             if price_line.on_object == self.subs_option.offered:
-                return com_rate[0].result * price_line.amount
+                return self.calculate_com(price_line.amount).result
 
     def get_currency(self):
         return self.com_option.currency

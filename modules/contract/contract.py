@@ -400,8 +400,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def search_rec_name(cls, name, clause):
         contracts = cls.search([
             'OR',
-            ('contract_number',) + clause[1:],
-            ('subscriber.name',) + clause[1:],
+            ('contract_number',) + tuple(clause[1:]),
+            ('subscriber.name',) + tuple(clause[1:]),
         ])
         return [('id', 'in', [c.id for c in contracts])]
 
@@ -486,8 +486,9 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             ['OR',
                 [('status_history.end_date', '=', None)],
                 [('status_history.end_date', '>=', at_date)]],
-            ('company', '=', Eval('context', {}).get('company')),
             ]
+        if 'company' in Transaction().context:
+            domain.append(('company', '=', Transaction().context['company']))
         return cls.search(domain)
 
     def get_current_policy_owner(self, name):

@@ -168,7 +168,8 @@ class RuleEngine():
         cls.extra_data_kind = copy.copy(cls.extra_data_kind)
         cls.extra_data_kind.selection.extend([('compl', 'Complementary Data'),
                 ('rule_compl', 'Rule Parameter')])
-        cls.extra_data_kind.selection = list(set(cls.extra_data_kind.selection))
+        cls.extra_data_kind.selection = list(set(
+                cls.extra_data_kind.selection))
 
     @classmethod
     def _export_skips(cls):
@@ -246,7 +247,8 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
             ('offered.product', 'Product'),
             ('offered.coverage', 'Coverage'),
             ('ins_product.benefit', 'Benefit')
-            ])
+            ],
+        states={'required': True})
     start_date = fields.Date('From Date', required=True)
     end_date = fields.Date('To Date')
     config_kind = fields.Selection(
@@ -331,27 +333,22 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
 
     def check_dates(self):
         cursor = Transaction().cursor
-        request = 'SELECT id ' + \
-            'FROM ' + self._table + ' ' + \
-            'WHERE ((start_date <= %s AND end_date >= %s) ' + \
-            '        OR (start_date <= %s AND end_date >= %s) ' + \
-            '        OR (start_date >= %s AND end_date <= %s)) ' + \
-            '    AND offered = %s' + \
-            '    AND id != %s'
-
+        table = self.__table__()
         #offered depends if the link is a reference link or a M2O
         if hasattr(self.__class__.offered, 'selection'):
             offered = '%s,%s' % (self.offered.__class__.__name__,
                 self.offered.id)
         else:
             offered = self.offered.id
-        args = (
-            self.start_date, self.start_date,
-            self.end_date, self.end_date,
-            self.start_date, self.end_date,
-            offered,
-            self.id)
-        cursor.execute(request, args)
+        request = table.select(table.id,
+            where=((table.start_date <= self.start_date and table.end_date >=
+                    self.start_date)
+                | (table.start_date <= self.end_date and table.end_date >=
+                    self.end_date)
+                | (table.start_date <= self.start_date and table.end_date <=
+                    self.end_date))
+                & (table.offered != offered) & (table.id != self.id))
+        cursor.execute(*request)
         if cursor.fetchone():
             return False
         return True

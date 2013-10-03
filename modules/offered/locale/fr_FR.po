@@ -14,6 +14,18 @@ msgctxt "error:offered.product:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
+msgctxt "field:coop_utils.export_package,compl_data_defs:"
+msgid "Complementary Data Def"
+msgstr "Définition de Données Complémentaires"
+
+msgctxt "field:coop_utils.export_package,coverages:"
+msgid "Coverages"
+msgstr "Garanties"
+
+msgctxt "field:coop_utils.export_package,products:"
+msgid "Products"
+msgstr "Produits"
+
 msgctxt "field:offered.compl_data_def-tag,compl_data_def:"
 msgid "Complementary Data Def"
 msgstr "Définition de Données Complémentaires"
@@ -191,6 +203,10 @@ msgctxt "field:offered.coverage,code:"
 msgid ""
 msgstr " "
 
+msgctxt "field:offered.coverage,company:"
+msgid "Company"
+msgstr "Société"
+
 msgctxt "field:offered.coverage,complementary_data:"
 msgid ""
 msgstr " "
@@ -320,6 +336,10 @@ msgctxt "field:offered.offered,code:"
 msgid ""
 msgstr " "
 
+msgctxt "field:offered.offered,company:"
+msgid "Company"
+msgstr "Société"
+
 msgctxt "field:offered.offered,complementary_data:"
 msgid ""
 msgstr " "
@@ -399,6 +419,10 @@ msgstr " "
 msgctxt "field:offered.product,code:"
 msgid ""
 msgstr " "
+
+msgctxt "field:offered.product,company:"
+msgid "Company"
+msgstr "Société"
 
 msgctxt "field:offered.product,complementary_data:"
 msgid ""

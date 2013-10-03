@@ -135,6 +135,10 @@ msgctxt "field:ins_product.benefit,code:"
 msgid "Code"
 msgstr "Code"
 
+msgctxt "field:ins_product.benefit,company:"
+msgid "Company"
+msgstr "Société"
+
 msgctxt "field:ins_product.benefit,complementary_data:"
 msgid "Offered Kind"
 msgstr "Typage"
@@ -1289,6 +1293,10 @@ msgctxt "field:ins_product.event_desc,code:"
 msgid "Code"
 msgstr "Code"
 
+msgctxt "field:ins_product.event_desc,company:"
+msgid "Company"
+msgstr "Société"
+
 msgctxt "field:ins_product.event_desc,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -1717,6 +1725,10 @@ msgstr "Mis à jour par"
 msgctxt "field:ins_product.loss_desc,code:"
 msgid "Code"
 msgstr "Code"
+
+msgctxt "field:ins_product.loss_desc,company:"
+msgid "Company"
+msgstr "Société"
 
 msgctxt "field:ins_product.loss_desc,complementary_data_def:"
 msgid "Complementary Data"
@@ -4181,20 +4193,8 @@ msgid "Mandatory"
 msgstr "Obligatoire"
 
 msgctxt "selection:offered.coverage,subscription_behaviour:"
-msgid "Mandatory"
-msgstr "Obligatoire"
-
-msgctxt "selection:offered.coverage,subscription_behaviour:"
 msgid "Optional"
 msgstr "En Option"
-
-msgctxt "selection:offered.coverage,subscription_behaviour:"
-msgid "Optional"
-msgstr "En Option"
-
-msgctxt "selection:offered.coverage,subscription_behaviour:"
-msgid "Proposed"
-msgstr "Proposé par Défaut"
 
 msgctxt "selection:offered.coverage,subscription_behaviour:"
 msgid "Proposed"
@@ -4205,20 +4205,8 @@ msgid ""
 msgstr " "
 
 msgctxt "selection:offered.coverage,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:offered.coverage,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
-
-msgctxt "selection:offered.coverage,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:offered.coverage,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
 
 msgctxt "selection:offered.coverage,template_behaviour:"
 msgid "Remove"
@@ -4523,6 +4511,10 @@ msgstr "Biens Couverts"
 msgctxt "view:offered.product:"
 msgid "Term - Renewal"
 msgstr "Terme - Renouvellement"
+
+msgctxt "view:party.party:"
+msgid "Insurer"
+msgstr "Assureur"
 
 msgctxt "view:process.process_desc:"
 msgid "Products"

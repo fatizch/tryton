@@ -14,7 +14,10 @@ def generate_module_translation(cfg_dict, base_path, module_name):
     wiz_form.language, = Model.get('ir.lang').find(
         [('code', '=', cfg_dict['language'])])
     Module = Model.get('ir.module.module')
-    wiz_form.module, = Module.find([('name', '=', module_name)])
+    try:
+        wiz_form.module, = Module.find([('name', '=', module_name)])
+    except ValueError:
+        return
     export_wizard.execute('export')
     locale_dir = os.path.join(base_path, 'locale')
     if not os.path.exists(locale_dir):

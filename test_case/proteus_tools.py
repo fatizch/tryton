@@ -268,7 +268,6 @@ def get_cfg_as_dict(cfg, section, items_as_list=None):
     [config]
     database_type = sqlite
     modules:
-        insurance_party
         insurance_product
 
     get_cfg_as_dict(cfg, 'config', ['modules'])'''

@@ -309,7 +309,8 @@ class ClaimHistory(model.ObjectHistory):
 
     name = fields.Char('Number')
     status = fields.Selection(CLAIM_STATUS, 'Status')
-    sub_status = fields.Selection(CLAIM_CLOSED_REASON + CLAIM_OPEN_SUB_STATUS,
+    sub_status = fields.Selection(list(set(CLAIM_CLOSED_REASON +
+                CLAIM_OPEN_SUB_STATUS)),
         'Sub Status')
     declaration_date = fields.Date('Declaration Date')
     end_date = fields.Date('End Date',

@@ -7,7 +7,6 @@ if os.path.isdir(DIR):
     sys.path.insert(0, os.path.dirname(DIR))
 
 import trytond.tests.test_tryton
-from trytond.backend.sqlite.database import Database as SQLiteDatabase
 
 MODULE_NAME = os.path.basename(
     os.path.abspath(
@@ -15,6 +14,8 @@ MODULE_NAME = os.path.basename(
 
 
 def doctest_dropdb(test):
+    from trytond import backend
+    SQLiteDatabase = backend.get('Database')
     database = SQLiteDatabase().connect()
     cursor = database.cursor(autocommit=True)
     try:

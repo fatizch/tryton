@@ -182,6 +182,14 @@ msgctxt "field:coop_process.xml_view_desc,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:coop_utils.export_package,process:"
+msgid "Process"
+msgstr "Processus"
+
+msgctxt "field:coop_utils.export_package,steps:"
+msgid "Steps"
+msgstr "Etapes"
+
 msgctxt "field:process.process_desc,custom_transitions:"
 msgid "Custom Transitions"
 msgstr "Transitions Personnalisés"

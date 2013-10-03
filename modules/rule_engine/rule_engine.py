@@ -89,8 +89,7 @@ def decistmt(s):
     g = tokenize.generate_tokens(StringIO(s).readline)
     for toknum, tokval, _, _, _ in g:
         # replace NUMBER tokens
-        # if toknum == tokenize.NUMBER and '.' in tokval:
-        if toknum == tokenize.NUMBER:
+        if toknum == tokenize.NUMBER and '.' in tokval:
             result.extend([
                 (tokenize.NAME, 'Decimal'),
                 (tokenize.OP, '('),

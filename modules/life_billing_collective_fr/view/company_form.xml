@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form" position="inside">
+        <label name="rate_note_sequence"/>
+        <field name="rate_note_sequence"/>
+    </xpath>
+</data>
