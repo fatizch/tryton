@@ -3,7 +3,7 @@ from ibanlib import iban
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import utils, fields
+from trytond.modules.coop_utils import utils, fields, export
 from trytond.modules.coop_utils import coop_string
 
 
@@ -16,7 +16,7 @@ __all__ = [
     ]
 
 
-class Bank():
+class Bank(export.ExportImportMixin):
     'Bank'
 
     __name__ = 'bank'
@@ -29,12 +29,16 @@ class Bank():
                 })
 
     @classmethod
+    def _export_keys(cls):
+        return set(['bic'])
+
+    @classmethod
     def validate(cls, banks):
         super(Bank, cls).validate(banks)
         for bank in banks:
             cls.check_bic(bank)
 
-    def Bank(self):
+    def pre_validate(self):
         super(Bank, self).pre_validate()
         self.check_bic()
 
@@ -56,7 +60,7 @@ class Bank():
         return ['bic']
 
 
-class BankAccount():
+class BankAccount(export.ExportImportMixin):
     'Bank Account'
 
     __name__ = 'bank.account'
@@ -115,7 +119,7 @@ class BankAccount():
             return self.numbers[-1].number
 
 
-class BankAccountNumber():
+class BankAccountNumber(export.ExportImportMixin):
     'Bank account Number'
 
     __name__ = 'bank.account.number'
