@@ -22,6 +22,12 @@ class Party:
         })
 
     @classmethod
+    def _export_force_recreate(cls):
+        res = super(Party, cls)._export_force_recreate()
+        res.remove('bank_role')
+        return res
+
+    @classmethod
     def get_summary(cls, parties, name=None, at_date=None, lang=None):
         res = super(Party, cls).get_summary(
             parties, name=name, at_date=at_date, lang=lang)
