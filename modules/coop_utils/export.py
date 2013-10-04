@@ -553,6 +553,8 @@ class ExportImportMixin(Model):
             to_del = []
             idx = 0
             for key, value in relink:
+                logging.getLogger('export_import').debug(
+                    'Relinking %s' % str(key))
                 working_instance = created[key[0]][key[1]]
                 # print utils.format_data(working_instance)
                 all_done = True
@@ -626,9 +628,8 @@ class ExportImportMixin(Model):
                 print 'User Errors'
                 print '\n'.join((utils.format_data(err) for err in cur_errs))
                 raise NotExportImport('Infinite loop detected in import')
-        print '#' * 80
-        print 'FINISHED IMPORT'
-        print counter
+        logging.getLogger('export_import').debug('FINISHED IMPORT')
+        logging.getLogger('export_import').debug(counter)
 
     @classmethod
     def _import_complete(cls, created):
