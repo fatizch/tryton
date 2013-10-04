@@ -108,6 +108,16 @@ class Party(model.CoopSQL):
                 setattr(
                     cls, on_change_method, get_on_change(is_actor_var_name))
 
+    @classmethod
+    def _export_keys(cls):
+        return set(['name'])
+
+    @classmethod
+    def _export_skips(cls):
+        res = super(Party, cls)._export_skips()
+        res.add('code')
+        return res
+
     @staticmethod
     def get_is_actor_var_name(var_name):
         res = 'is_'
@@ -264,10 +274,6 @@ class Party(model.CoopSQL):
             'short_name', 'addresses', 'contact_mechanisms',
             ('lang', 'light')])
         return res
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['name'])
 
 
 class Actor(CoopView):

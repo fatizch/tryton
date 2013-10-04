@@ -1518,3 +1518,8 @@ class Period(export.ExportImportMixin):
     def _export_keys(cls):
         return set(['code', 'fiscalyear.code',
                 'fiscalyear.company.party.name'])
+
+    def check_dates(self):
+        if not '__importing__' in Transaction().context:
+            return super(Period, self).check_dates()
+        return True

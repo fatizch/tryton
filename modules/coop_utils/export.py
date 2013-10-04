@@ -412,14 +412,27 @@ class ExportImportMixin(Model):
         existing_values = getattr(instance, field_name) \
             if hasattr(instance, field_name) else None
         TargetModel = Pool().get(field.model_name)
-        if (field_name in cls._export_force_recreate() and existing_values):
+        if not instance.id:
+            pass
+        elif (field_name in cls._export_force_recreate()):
             TargetModel.delete([elem for elem in existing_values])
-        good_value = []
+        # else:
+            # found = []
+            # for elem in field_value:
+                # if isinstance(elem, tuple):
+                    # found.append(elem)
+                # else:
+                    # found.append(elem['_export_key'])
+            # print found
+            # print str([z for z in found])
+            # TargetModel.delete(TargetModel.search([
+                    # (field.field, '=', instance.id)] + [
+                        # [['OR'] + [(k, '!=', v) for k, v in z]]
+                        # for z in found]))
         for elem in field_value:
             if isinstance(elem, tuple):
                 continue
-            good_value.append(TargetModel._import_json(
-                elem, created=created, relink=relink))
+            TargetModel._import_json(elem, created=created, relink=relink)
 
     @classmethod
     def _import_many2many(

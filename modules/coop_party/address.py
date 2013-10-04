@@ -54,6 +54,10 @@ class Address(model.CoopSQL):
         cls.zip.states['invisible'] = True
 
     @classmethod
+    def _export_light(cls):
+        return set(['country'])
+
+    @classmethod
     def get_summary(cls, addresses, name=None, at_date=None, lang=None):
         res = {}
         for address in addresses:
