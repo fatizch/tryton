@@ -117,7 +117,7 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
             domain=domain, offset=offset,
             limit=limit, order=order, count=count, query=query)
 
-    def get_creation_date(self):
+    def get_creation_date(self, name):
         if not (hasattr(self, 'create_date') and self.create_date):
             return None
         return datetime.datetime.fromtimestamp(self.create_date)
