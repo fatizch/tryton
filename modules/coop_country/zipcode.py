@@ -67,6 +67,10 @@ class ZipCode(model.CoopSQL, model.CoopView):
         return [(cls._rec_name,) + tuple(clause[1:])]
 
     @classmethod
+    def _export_light(cls):
+        return set(['country'])
+
+    @classmethod
     def search(cls, domain, offset=0, limit=None, order=None, count=False,
             query=False):
         res = super(ZipCode, cls).search(

@@ -103,7 +103,7 @@ def launch_test_case(cfg_dict):
         for i in range(10):
             post_move_seq = meths['Sequence'](
                 {
-                    'name': 'Post Move (%i)' % (2010 + i),
+                    'name': 'Mouvements Postés %s' % (2010 + i),
                     'code': 'account.move',
                 },
                 {'company': company.id},
@@ -113,7 +113,7 @@ def launch_test_case(cfg_dict):
                     'name': 'Fiscal Year %s' % str(2010 + i),
                     'start_date': datetime.date(2010 + i, 1, 1),
                     'end_date': datetime.date(2010 + i, 12, 31),
-                    'code': 'FY%i' % i,
+                    'code': '%i' % (2010 + i),
                     'post_move_sequence': post_move_seq,
                 },
                 {'company': company.id},

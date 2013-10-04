@@ -1,7 +1,7 @@
 import copy
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If
 from trytond.transaction import Transaction
 from trytond.wizard import StateView, Button, StateTransition
 
@@ -16,10 +16,11 @@ __all__ = [
     'Assignment',
     'AssignCollection',
     'CollectionWizard',
+    'Property',
     ]
 
 
-class Configuration():
+class Configuration(export.ExportImportMixin):
     'Account Configuration'
 
     __metaclass__ = PoolMeta
@@ -40,6 +41,80 @@ class Configuration():
             domain=[('kind', '=', 'revenue')]))
     collection_journal = fields.Property(
         fields.Many2One('account.journal', 'Journal'))
+
+    @classmethod
+    def _export_keys(cls):
+        # Account Configuration is a singleton, so the id is an acceptable
+        # key
+        return set(['id'])
+
+    @classmethod
+    def _export_must_export_field(cls, field_name, field):
+        # Function field are not exported by default
+        if field_name in ('default_account_receivable',
+                'default_account_payable', 'default_suspense_account'):
+            return True
+        return super(Configuration, cls)._export_must_export_field(
+            field_name, field)
+
+    def _export_default_account(self, name, exported, result, my_key):
+        pool = Pool()
+        Property = pool.get('ir.property')
+        ModelField = pool.get('ir.model.field')
+        company_id = Transaction().context.get('company')
+        account_field, = ModelField.search([
+            ('model.model', '=', 'party.party'),
+            ('name', '=', name[8:]),
+            ], limit=1)
+        properties = Property.search([
+            ('field', '=', account_field.id),
+            ('res', '=', None),
+            ('company', '=', company_id),
+            ], limit=1)
+        if properties:
+            prop, = properties
+            prop._export_json(exported, result)
+        return None
+
+    def _export_override_default_account_receivable(self, exported, result,
+            my_key):
+        return self._export_default_account('default_account_receivable',
+            exported, result, my_key)
+
+    def _export_override_default_account_payable(self, exported, result,
+            my_key):
+        return self._export_default_account('default_account_payable',
+            exported, result, my_key)
+
+    def _export_override_default_suspense_account(self, exported, result,
+            my_key):
+        return self._export_default_account('default_suspense_account',
+            exported, result, my_key)
+
+    @classmethod
+    def _import_default_account(cls, name, instance_key, good_instance,
+            field_value, values, created, relink):
+        if not field_value:
+            return
+        _account_field, _company, _value = field_value
+
+    @classmethod
+    def __import_override_default_account_receivable(cls, instance_key,
+            good_instance, field_value, values, created, relink):
+        return cls._import_default_account('default_account_receivable',
+            instance_key, good_instance, field_value, values, created, relink)
+
+    @classmethod
+    def __import_override_default_account_payable(cls, instance_key,
+            good_instance, field_value, values, created, relink):
+        return cls._import_default_account('default_account_payable',
+            instance_key, good_instance, field_value, values, created, relink)
+
+    @classmethod
+    def __import_override_default_suspense_account(cls, instance_key,
+            good_instance, field_value, values, created, relink):
+        return cls._import_default_account('default_suspense_account',
+            instance_key, good_instance, field_value, values, created, relink)
 
 
 class SuspenseParty():
@@ -305,3 +380,32 @@ class CollectionWizard(model.CoopWizard):
                 self.input_collection_parameters.check_reception_date
         log.save()
         return 'end'
+
+
+class Property(export.ExportImportMixin):
+    'Property'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'ir.property'
+
+    @classmethod
+    def __setup__(cls):
+        super(Property, cls).__setup__()
+        cls.company = copy.copy(cls.company)
+        cls.company.domain = [
+            If(Eval('context', {}).contains('__importing__'),
+                ('id', '>', 0),
+                ('id', If(Eval('context', {}).contains('company'), '=', '!='),
+                    Eval('context', {}).get('company', 0)))
+            ]
+
+    @classmethod
+    def _export_keys(cls):
+        # Properties are only fit for export / import if they are "global",
+        # meaning they are not set for a given instance. See
+        # account.configuration default accounts.
+        return set(['field.name', 'field.model.model', 'company.party.name'])
+
+    @classmethod
+    def _export_light(cls):
+        return set(['field'])

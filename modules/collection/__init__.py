@@ -11,6 +11,8 @@ def register():
         CollectionParameters,
         Assignment,
         AssignCollection,
+        # TODO : Move in utils.export
+        Property,
         module='collection', type_='model')
 
     Pool.register(

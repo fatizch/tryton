@@ -32,6 +32,7 @@ def register():
         FeeDesc,
         Sequence,
         FiscalYear,
+        Period,
         Company,
         # from party
         Party,
@@ -46,12 +47,7 @@ def register():
         module='billing_individual', type_='wizard')
 
     export.add_export_to_model([
-            ('account.period', ('code', )),
-            ('company.company', ('party.name', )),
             ('account.tax', ('name', )),
             ('account.account.type', ('name', )),
             ('account.journal', ('name', )),
-            # Account Configuration is a singleton, so the id is an acceptable
-            # key
-            ('account.configuration', ('id', )),
             ], 'billing_individual')
