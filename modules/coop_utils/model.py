@@ -67,6 +67,8 @@ def serialize_this(the_data, from_field=None):
 
 class CoopSQL(export.ExportImportMixin, ModelSQL):
     'Root class for all stored classes'
+    create_date_ = fields.Function(fields.DateTime('Creation date'),
+        'get_creation_date')
 
     @classmethod
     def __setup__(cls):
@@ -114,6 +116,11 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
         return super(CoopSQL, cls).search(
             domain=domain, offset=offset,
             limit=limit, order=order, count=count, query=query)
+
+    def get_creation_date(self):
+        if not (hasattr(self, 'create_date') and self.create_date):
+            return None
+        return datetime.datetime.fromtimestamp(self.create_date)
 
     def get_currency(self):
         print self.__name__
