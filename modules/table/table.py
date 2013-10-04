@@ -1200,7 +1200,7 @@ class DimensionDisplayer(ModelView):
     def convert_existing_values(cls, values, kind, date_format=None):
         res = []
         if kind in ('value', 'range'):
-            the_func = lambda x: x
+            the_func = lambda x: str(x)
         elif kind in ('date', 'range-date'):
             the_func = lambda x: datetime.strftime(x, date_format)
         for elem in values:
@@ -1215,6 +1215,9 @@ class DimensionDisplayer(ModelView):
         elif self.kind in ('date', 'range-date'):
             the_list = []
             for elem in text_values:
+                if elem == 'None':
+                    the_list.append(None)
+                    continue
                 try:
                     the_list.append(datetime.strptime(elem, self.date_format))
                 except ValueError:
