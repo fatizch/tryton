@@ -3,6 +3,7 @@
 
 import os
 import csv
+import logging
 from proteus import Model
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
@@ -35,9 +36,11 @@ def load_zipcode(cfg_dict):
             res.append({'city': city, 'zip': zip, 'country': country.id})
     if len(res):
         cfg_dict['ZipCode'].create(res, {})
-        print 'Successfully created %s zipcodes' % len(res)
+        logging.getLogger('test_case').info(
+            'Successfully created %s zipcodes' % len(res))
     else:
-        print 'No zipcode to update'
+        logging.getLogger('test_case').info(
+            'No zipcode to update')
 
 
 def launch_test_case(cfg_dict):

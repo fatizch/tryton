@@ -2,6 +2,7 @@ import re
 import os
 import random
 import warnings
+import logging
 
 from proteus import Model
 import proteus_tools
@@ -51,7 +52,8 @@ def create_banks(cfg_dict):
                 warnings.warn('Impossible to create bank %s' %
                     line[11:51].strip(), stacklevel=2)
     if n > 0:
-        print 'Successfully imported %s banks' % n
+        logging.getLogger('test_case').info(
+            'Successfully imported %s banks' % n)
     return banks
 
 
@@ -100,7 +102,8 @@ def create_bank_accounts(cfg_dict, banks):
     Party = cfg_dict['Party']
     n = 0
     parties = Party.find([('bank_accounts', '=', None)])
-    print 'Creating %s bank accounts' % len(parties)
+    logging.getLogger('test_case').info(
+        'Creating %s bank accounts' % len(parties))
     for party in parties:
         try:
             add_bank_account(cfg_dict, party, banks)
@@ -110,7 +113,8 @@ def create_bank_accounts(cfg_dict, banks):
             warnings.warn('Impossible to create bank account for %s'
                 % party.name, stacklevel=2)
     if n > 0:
-        print 'Successfully created %s/%s bank accounts' % (n, len(parties))
+        logging.getLogger('test_case').info(
+            'Successfully created %s/%s bank accounts' % (n, len(parties)))
 
 
 def get_random(the_dict):
@@ -147,8 +151,10 @@ def migrate_old_bank_account(cfg_dict, banks):
                 bank_account.bank = old_bank_account.bank.bank_role[0]
             else:
                 bank_account.bank = banks[random.choice(banks.keys())]
-            bank_account.numbers[0].number = old_bank_account.account_numbers[0].number
-            bank_account.numbers[0].type = old_bank_account.account_numbers[0].kind.lower()
+            bank_account.numbers[0].number = \
+                old_bank_account.account_numbers[0].number
+            bank_account.numbers[0].type = \
+                old_bank_account.account_numbers[0].kind.lower()
             bank_account.save()
         old_bank_account.delete()
 

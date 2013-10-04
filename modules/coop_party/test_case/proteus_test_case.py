@@ -5,6 +5,7 @@ from datetime import date
 import random
 import os
 import csv
+import logging
 from proteus import Model
 import proteus_tools
 
@@ -58,8 +59,9 @@ def create_address(cfg_dict, party, party_kind):
         res.save()
         return res
     except:
-        print 'Impossible to store address % s' % res
-        print data
+        logging.getLogger('test_case').error(
+            'Impossible to store address % s' % res)
+        logging.getLogger('test_case').debug(str(data))
         return None
 
 
@@ -82,7 +84,8 @@ def create_persons(cfg_dict, nb_male, nb_female, relations_kind,
         name = random.choice(dicts['last_name'])
         person1 = add_person(cfg_dict, name, dicts, adult_date_interv, 'male')
         while not create_address(cfg_dict, person1, 'person'):
-            print 'Erreur in address, retrying'
+            logging.getLogger('test_case').info(
+                'Erreur in address, retrying')
         if launch_dice(cfg_dict, 'percent_of_couple'):
             if not launch_dice(cfg_dict, 'percent_of_couple_with_same_name'):
                 name = random.choice(dicts['last_name'])
@@ -103,7 +106,8 @@ def create_persons(cfg_dict, nb_male, nb_female, relations_kind,
         name = random.choice(dicts['last_name'])
         add_person(cfg_dict, name, dicts, adult_date_interv, 'female')
 
-    print 'Successfully created %s parties' % (nb_male + nb_female)
+    logging.getLogger('test_case').info(
+        'Successfully created %s parties' % (nb_male + nb_female))
 
 
 def create_relation(cfg_dict, from_actor, to_actor, kind, start_date=None):
@@ -292,7 +296,8 @@ def migrate_relations(cfg_dict):
         n += 1
         relation.relation_kind = relations_kind[relation.kind]
         relation.save()
-    print 'Successfully migrated %s relations' % n
+    logging.getLogger('test_case').info(
+        'Successfully migrated %s relations' % n)
 
 
 def launch_test_case(cfg_dict):

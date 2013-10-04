@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from datetime import date
 import random
 import os
+import logging
 from proteus import Model
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
@@ -17,11 +17,10 @@ def get_models():
 
 def update_persons(cfg_dict, models):
     n = 0
-    for cur_pers in models['Person'].find(
-        [
-            ('ssn', '=', None),
-            ('is_person', '=', True),
-        ]):
+    for cur_pers in models['Person'].find([
+                ('ssn', '=', None),
+                ('is_person', '=', True),
+            ]):
         if cur_pers.gender == 'male':
             ssn = '1'
         elif cur_pers.gender == 'female':
@@ -38,7 +37,8 @@ def update_persons(cfg_dict, models):
         cur_pers.save()
         n += 1
     if n > 0:
-        print 'Successfully updated %s parties' % n
+        logging.getLogger('test_case').info(
+            'Successfully updated %s parties' % n)
 
 
 def launch_test_case(cfg_dict):

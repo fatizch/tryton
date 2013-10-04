@@ -4,8 +4,10 @@
 import os
 import csv
 import datetime
-from proteus import Model
+import logging
 from decimal import Decimal
+
+from proteus import Model
 
 
 def update_cfg_dict_with_models(cfg_dict):
@@ -79,7 +81,8 @@ def create_objects(cfg_dict, name):
         get_or_create_objects(cfg_dict, cur_line)
         n += 1
 
-    print 'Successfully created %s %s' % (n, name)
+    logging.getLogger('test_case').info(
+        'Successfully created %s %s' % (n, name))
 
 
 def launch_test_case(cfg_dict):

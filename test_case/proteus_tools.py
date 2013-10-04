@@ -86,9 +86,12 @@ def multiprocess_this(fun, the_args, cfg_dict, connexion_date):
 
     grouping = int((len(the_args) - 1) / num_processes) + 1
 
-    print 'Num processes : %s' % num_processes
-    print 'Grouping : %s' % grouping
-    print 'Number of args : %s\n' % len(the_args)
+    logging.getLogger('test_case').info(
+        'Num processes : %s' % num_processes)
+    logging.getLogger('test_case').info(
+        'Grouping : %s' % grouping)
+    logging.getLogger('test_case').info(
+        'Number of args : %s\n' % len(the_args))
 
     get_config(cfg_dict, connexion_date)
 
@@ -99,7 +102,8 @@ def multiprocess_this(fun, the_args, cfg_dict, connexion_date):
             connexion_date))
         p.start()
         p.join()
-        print 'Number of args remaining : %s' % len(the_args)
+        logging.getLogger('test_case').info(
+            'Number of args remaining : %s' % len(the_args))
 
 
 def get_objects_from_db(
@@ -154,8 +158,8 @@ def get_or_create_this(data, cfg_dict, class_key='', sel_val='', ctx=None,
                 else:
                     setattr(the_object, key, value)
             except AttributeError:
-                print key
-                print value
+                logging.getLogger('test_case').debug(key)
+                logging.getLogger('test_case').debug(value)
                 raise
 
         if to_store:
@@ -353,9 +357,11 @@ def import_file(cfg_dict, file_name, class_key, sel_val, delimiter=';'):
             objects.append(
                 (data, get_or_create_this(data, cfg_dict, class_key, sel_val)))
         except:
-            print 'Error importing %s' % str(data).encode('utf8')
+            logging.getLogger('test_case').error(
+                'Error importing %s' % str(data).encode('utf8'))
             raise
-    print 'Successfully created %s %s' % (n, class_key)
+    logging.getLogger('test_case').info(
+        'Successfully created %s %s' % (n, class_key))
     return objects
 
 
@@ -398,7 +404,8 @@ def try_to_save_object(cfg_dict, cur_object):
     try:
         cur_object.save()
     except:
-        print 'Exception raised when trying to save', cur_object
+        logging.getLogger('test_case').error(
+            'Exception raised when trying to save %s' % cur_object)
 
 
 def get_or_create_company(cfg_dict, party_name):

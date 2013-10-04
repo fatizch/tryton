@@ -1,5 +1,6 @@
 import os
 import csv
+import logging
 
 from proteus import Model
 
@@ -68,7 +69,8 @@ def create_insurers(cfg_dict):
     for insurer in reader:
         get_or_create_insurer(cfg_dict, insurer[0], insurer[1])
         n += 1
-    print 'Successfully created %s insurers' % n
+    logging.getLogger('test_case').info(
+        'Successfully created %s insurers' % n)
 
 
 def launch_test_case(cfg_dict):

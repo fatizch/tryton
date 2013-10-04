@@ -8,8 +8,6 @@ from proteus_tools import multiprocess_this
 
 
 # def create_contract(on_party, on_product, date_delta):
-#     print '%s, %s, %s' % (on_party.party.name, on_product.name,
-#         date_delta)
 #     wizard = Wizard('ins_contract.subs_process')
 #     wizard._config._context['from_session'] = wizard.session_id
 #     wizard._config.context['from_session'] = wizard.session_id

@@ -6,6 +6,7 @@ import glob
 import random
 import csv
 import datetime
+import logging
 
 from proteus import Model
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
@@ -284,7 +285,8 @@ def load_tables_from_csv(cfg_dict):
         try:
             load_table_from_csv(cfg_dict, cur_file, name)
         except:
-            print 'Impossible to load file %s' % cur_file
+            logging.getLogger('test_case').error(
+                'Impossible to load file %s' % cur_file)
             raise
 
 
