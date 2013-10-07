@@ -1163,6 +1163,8 @@ class DimensionDisplayer(ModelView):
         if self.kind != getattr(self.table, 'dimension_kind%s' %
                 self.cur_dimension):
             return False
+        if not self.input_text and self.input_mode == 'flat_file':
+            return True
         if self.input_text:
             return False
         if self.get_existing_values(self.kind, self.values) != \
@@ -1261,7 +1263,6 @@ class ManageDimensionGeneric(Wizard):
         TableDimension = Pool().get('table.table_dimension')
         Displayer = Pool().get('table.dimension_displayer')
         selected_table = TableDef(Transaction().context.get('active_id'))
-        # Let's assume we are working on dimension 1 for now
         selected_dimension = self.get_my_dimension()
 
         values = TableDimension.search([

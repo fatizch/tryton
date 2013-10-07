@@ -11,6 +11,7 @@ import datetime
 from decimal import Decimal
 
 import trytond.tests.test_tryton
+from trytond.transaction import Transaction
 from trytond.modules.coop_utils import test_framework
 
 MODULE_NAME = os.path.basename(
@@ -33,6 +34,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Definition': 'table.table_def',
             'Dimension': 'table.table_dimension',
             'Cell': 'table.table_cell',
+            'ManageDimension1': 'table.manage_dimension_1',
         }
 
     def test0010definition_get(self):
@@ -346,6 +348,27 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 self.Cell._load_value(
                     self.Cell._dump_value({'value': value})['value'],
                     type_), value)
+
+    @test_framework.prepare_test('table.test0060table_2dim')
+    def test0080test_manage_dimension1_wizard(self):
+        table = self.Definition.search([('code', '=', 'test_code')])[0]
+        with Transaction().set_context({'active_id': table.id}):
+            wizard_id, _, _ = self.ManageDimension1.create()
+            wizard = self.ManageDimension1(wizard_id)
+            wizard._execute('dimension_management')
+            res = wizard.default_dimension_management(None)
+            self.assertEqual(res, {
+                    'date_format': "%d%m%y",
+                    'kind': "value",
+                    'name': "Value",
+                    'cur_dimension': 1,
+                    'converted_text': "bar\nfoo",
+                    'values': [2, 1],
+                    'table': 1,
+                    'order': "alpha",
+                })
+            self.assertEqual(self.ManageDimension1.next_dim_action.action_id,
+                'table.act_manage_dimension_2')
 
 
 def suite():
