@@ -8,7 +8,10 @@
     <label name="end_date"/>
     <field name="end_date"/>
     <label name="share"/>
-    <field name="share"/>
+    <group id="share">
+      <field name="share" xexpand="0" factor="100"/>
+      <label string="%" id="share" xexpand="0" xalign="0"/>
+    </group>
     <label name="person"/>
     <field name="person"/>
 </form>

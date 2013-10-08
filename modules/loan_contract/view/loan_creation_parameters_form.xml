@@ -27,6 +27,8 @@
     <field name="first_payment_date"/>
     <label name="lender"/>
     <field name="lender"/>
+    <newline/>
+    <field name="loan_shares" colspan="4"/>
     <field name="currency"/>
     <newline/>
     <field name="contract"/>

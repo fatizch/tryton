@@ -72,16 +72,16 @@ class LoanContract():
                 return True
         return False
 
-    def init_from_subscriber(self):
-        if not utils.is_none(self, 'loans'):
-            return True
-        loan = utils.instanciate_relation(self, 'loans')
-        loan.init_from_contract(self)
-        loan.init_from_borrowers([self.subscriber])
-        if not hasattr(self, 'loan'):
-            self.loans = []
-        self.loans.append(loan)
-        return True
+    # def init_from_subscriber(self):
+    #     if not utils.is_none(self, 'loans'):
+    #         return True
+    #     loan = utils.instanciate_relation(self, 'loans')
+    #     loan.init_from_contract(self)
+    #     loan.init_from_borrowers([self.subscriber])
+    #     if not hasattr(self, 'loan'):
+    #         self.loans = []
+    #     self.loans.append(loan)
+    #     return True
 
     def init_dict_for_rule_engine(self, cur_dict):
         super(LoanContract, self).init_dict_for_rule_engine(cur_dict)
@@ -290,9 +290,9 @@ class Loan(model.CoopSQL, model.CoopView, model.ModelCurrency):
                 self.payment_frequency, increment.number_of_payments)
             defferal = (increment.defferal
                 if hasattr(increment, 'defferal') else None)
-            increment.amount = self.calculate_payment_amount(increment.rate,
-                self.number_of_payments - deffered_payments, self.amount,
-                defferal)
+            increment.payment_amount = self.calculate_payment_amount(
+                increment.rate, self.number_of_payments - deffered_payments,
+                self.amount, defferal)
             if defferal:
                 deffered_payments += increment.number_of_payments
             start_date = coop_date.add_day(increment.end_date, 1)
@@ -338,7 +338,7 @@ class LoanShare(model.CoopSQL, model.CoopView):
 
     @staticmethod
     def default_share():
-        return 100
+        return 1
 
 
 class LoanCoveredElement():
@@ -511,6 +511,8 @@ class LoanParameters(model.CoopView, model.ModelCurrency):
     lender = fields.Many2One('bank', 'Lender', required=True)
     defferal = fields.Selection(DEFFERALS, 'Differal', sort=False)
     defferal_duration = fields.Integer('Differal Duration')
+    loan_shares = fields.One2Many('ins_contract.loan_share', None,
+        'Loan Shares')
 
 
 class LoanIncrementsDisplayer(model.CoopView):
@@ -569,6 +571,11 @@ class LoanCreation(model.CoopWizard):
             'kind': 'fixed_rate',
             'payment_frequency': 'month',
             'funds_release_date': contract.start_date,
+            'loan_shares': [{
+                    'start_date': contract.start_date,
+                    'share': 1,
+                    'person': x.party.id,
+                    } for x in contract.covered_elements]
             }
 
     def default_increments(self, values):
@@ -592,6 +599,7 @@ class LoanCreation(model.CoopWizard):
         loan.first_payment_date = self.loan_parameters.first_payment_date
         loan.currency = contract.currency
         loan.payment_amount = loan.on_change_with_payment_amount()
+        loan.loan_shares = self.loan_parameters.loan_shares
         if (self.loan_parameters.defferal
                 and self.loan_parameters.defferal_duration):
             loan.calculate_increments(defferal=self.loan_parameters.defferal,
