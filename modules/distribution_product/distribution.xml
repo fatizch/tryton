@@ -21,7 +21,7 @@
     </record>
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="distribution.act_dist_network_form">
-      <field name="domain">[('parent', '=', False), ('company', '=', Eval('context', {}).get('company', False))]</field>
+      <field name="domain">[('parent', '=', None), ('company', '=', Eval('context', {}).get('company', None))]</field>
     </record>
     <!-- ############################################################ -->
     <!-- Product -->
