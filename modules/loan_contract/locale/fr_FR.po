@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -94,11 +94,11 @@ msgctxt "field:ins_contract.loan,loan_shares:"
 msgid "Loan Shares"
 msgstr "Quotités"
 
-msgctxt "field:ins_contract.loan,monthly_payment_amount:"
+msgctxt "field:ins_contract.loan,payment_amount:"
 msgid "Monthly Payment Amount"
 msgstr "Mensualité"
 
-msgctxt "field:ins_contract.loan,monthly_payment_number:"
+msgctxt "field:ins_contract.loan,number_of_payments:"
 msgid "Monthly Payment Number"
 msgstr "Nombre de Mensualités"
 
@@ -243,7 +243,7 @@ msgid "Revolving"
 msgstr "Crédit Permanent"
 
 msgctxt "selection:ins_contract.loan,kind:"
-msgid "Zero Interest Loan"
+msgid "Interest Free Loan"
 msgstr "Taux Zéro"
 
 msgctxt "view:contract.contract:"

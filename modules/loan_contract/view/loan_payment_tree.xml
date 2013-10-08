@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<tree string="Loan Payment">
+    <field name="kind"/>
+    <field name="number"/>
+    <field name="start_date"/>
+    <field name="begin_balance"/>
+    <field name="amount"/>
+    <field name="principal"/>
+    <field name="interest" sum="Total Interest"/>
+    <field name="insurance"/>
+    <field name="end_balance"/>
+</tree>

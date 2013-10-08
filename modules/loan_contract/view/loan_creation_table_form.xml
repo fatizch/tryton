@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<form string="Amortization Table">
+    <field name="payments" colspan="4"/>
+</form>

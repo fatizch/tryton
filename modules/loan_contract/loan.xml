@@ -52,5 +52,37 @@
             <field name="inherit" ref="insurance_contract.covered_data_view_form"/>
             <field name="name">covered_data_form</field>
         </record>
+        <record model="ir.ui.view" id="loan_payment_view_tree">
+            <field name="model">ins_contract.loan_payment</field>
+            <field name="type">tree</field>
+            <field name="name">loan_payment_tree</field>
+        </record>
+        <record model="ir.ui.view" id="loan_increment_view_tree">
+            <field name="model">ins_contract.loan_increment</field>
+            <field name="type">tree</field>
+            <field name="name">loan_increment_tree</field>
+        </record>
+
+        <!-- Loan Creation Wizard -->
+        <record model="ir.action.wizard" id="launch_loan_creation_wizard">
+          <field name="name">Loan Creation</field>
+          <field name="wiz_name">ins_contract.loan_creation</field>
+        </record>
+
+        <record model="ir.ui.view" id="loan_creation_parameters_view_form">
+            <field name="model">ins_contract.loan_creation_parameters</field>
+            <field name="type">form</field>
+            <field name="name">loan_creation_parameters_form</field>
+        </record>
+        <record model="ir.ui.view" id="loan_creation_increments_view_form">
+            <field name="model">ins_contract.loan_creation_increments</field>
+            <field name="type">form</field>
+            <field name="name">loan_creation_increments_form</field>
+        </record>
+        <record model="ir.ui.view" id="loan_creation_table_view_form">
+            <field name="model">ins_contract.loan_creation_table</field>
+            <field name="type">form</field>
+            <field name="name">loan_creation_table_form</field>
+        </record>
     </data>
 </tryton>

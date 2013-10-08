@@ -78,14 +78,6 @@ class ComplementaryDataDefinition(
             [(elem, getattr(cls, elem)) for elem in dir(cls) if
                 elem.startswith('default_value_')])
 
-        cls.type_ = copy.copy(cls.type_)
-        utils.remove_tuple_from_list(cls.type_.selection, 'sha')
-        utils.remove_tuple_from_list(cls.type_.selection, 'datetime')
-        utils.remove_tuple_from_list(cls.type_.selection, 'float')
-        utils.remove_tuple_from_list(cls.type_.selection, 'timestamp')
-        utils.remove_tuple_from_list(cls.type_.selection, 'time')
-        utils.remove_tuple_from_list(cls.type_.selection, 'binary')
-
         cls.name = copy.copy(cls.name)
         if not cls.name.on_change_with:
             cls.name.on_change_with = []

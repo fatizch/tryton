@@ -21,17 +21,17 @@ class LoanContext(RuleEngineContext):
 
     @classmethod
     @check_args('loan')
-    def _re_get_loan_monthly_payment_number(cls, args):
+    def _re_get_loan_number_of_payments(cls, args):
         loan = args['loan']
-        if hasattr(loan, 'monthly_payment_number'):
-            return loan.monthly_payment_number
+        if hasattr(loan, 'number_of_payments'):
+            return loan.number_of_payments
 
     @classmethod
     @check_args('loan')
-    def _re_get_loan_monthly_payment_amount(cls, args):
+    def _re_get_loan_payment_amount(cls, args):
         loan = args['loan']
-        if hasattr(loan, 'monthly_payment_amount'):
-            return loan.monthly_payment_amount
+        if hasattr(loan, 'payment_amount'):
+            return loan.payment_amount
 
     @classmethod
     @check_args('loan')
