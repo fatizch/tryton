@@ -684,7 +684,8 @@ class Contract():
         states={'invisible': ~Eval('use_prices')})
     prices = fields.One2Many(
         'billing.price_line', 'contract', 'Prices',
-        states={'invisible': ~Eval('use_prices')})
+        states={'invisible': ~Eval('use_prices')},
+        order=[('start_date', 'ASC'), ('on_object', 'ASC')])
     billing_periods = fields.One2Many('billing.period', 'contract',
         'Billing Periods')
     receivable_lines = fields.Function(

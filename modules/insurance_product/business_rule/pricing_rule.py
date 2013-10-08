@@ -245,14 +245,18 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
         from_detail.to_recalculate = fee_vers.apply_at_pricing_time
         from_detail.amount = amount
 
-    def calculate_price(self, args, rated_object_kind='global'):
-        result = PricingResultLine()
-        errors = []
-        errs = []
+    def calculate_components_contribution(self, args, result, errors,
+            rated_object_kind):
         for component in self.get_components(rated_object_kind):
             res, errs = component.calculate_value(args)
             result.add_detail(res)
             errors += errs
+
+    def calculate_price(self, args, rated_object_kind='global'):
+        result = PricingResultLine()
+        errors = []
+        self.calculate_components_contribution(args, result, errors,
+            rated_object_kind)
         combination_rule = self.get_combination_rule(rated_object_kind)
         if not errors and combination_rule:
             new_args = copy.copy(args)
@@ -266,7 +270,7 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
             details = self.build_details(new_args['final_details'])
             result.amount = res
             result.details = details
-        elif not errs and not combination_rule:
+        elif not errors and not combination_rule:
             result.amount = 0
             group_details = dict([(key, []) for key, _ in PRICING_LINE_KINDS])
             for detail in result.details:

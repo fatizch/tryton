@@ -12,6 +12,7 @@ __all__ = [
     'LoanOption',
     'Loan',
     'LoanShare',
+    'LoanPriceLine',
     'LoanCoveredElement',
     'LoanCoveredData',
     'LoanCoveredDataLoanShareRelation',
@@ -88,6 +89,13 @@ class LoanContract():
         #TODO : To enhance
         if not utils.is_none(self, 'loans'):
             cur_dict['loan'] = self.loans[-1]
+
+    def get_dates(self):
+        result = super(LoanContract, self).get_dates()
+        for loan in self.loans:
+            for payment in loan.payments:
+                result.add(payment.start_date)
+        return result
 
     @classmethod
     @model.CoopView.button_action('loan_contract.launch_loan_creation_wizard')
@@ -335,7 +343,13 @@ class Loan(model.CoopSQL, model.CoopView, model.ModelCurrency):
             return payments[0]
 
     def get_remaining_capital(self, at_date=None):
-        return self.get_payment(at_date).end_balance
+        payment = self.get_payment(at_date)
+        if not payment:
+            return 0
+        return payment.end_balance
+
+    def init_dict_for_rule_engine(self, current_dict):
+        current_dict['loan'] = self
 
 
 class LoanShare(model.CoopSQL, model.CoopView):
@@ -354,6 +368,14 @@ class LoanShare(model.CoopSQL, model.CoopView):
     @staticmethod
     def default_share():
         return 1
+
+    def get_name_for_billing(self):
+        return '%s %s%% %s' % (self.person.get_rec_name(None),
+            str(self.share * 100), self.loan.get_rec_name(None))
+
+    def init_dict_for_rule_engine(self, current_dict):
+        self.loan.init_dict_for_rule_engine(current_dict)
+        current_dict['share'] = self
 
 
 class LoanCoveredElement():
@@ -410,6 +432,19 @@ class LoanCoveredDataLoanShareRelation(model.CoopSQL):
         ondelete='CASCADE')
     loan_share = fields.Many2One('ins_contract.loan_share', 'Loan Share',
         ondelete='RESTRICT')
+
+
+class LoanPriceLine():
+    'Loan Price Line'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'billing.price_line'
+
+    @classmethod
+    def get_line_target_models(cls):
+        result = super(LoanPriceLine, cls).get_line_target_models()
+        result.append(('ins_contract.loan_share', 'ins_contract.loan_share'))
+        return result
 
 
 class LoanIncrement(model.CoopSQL, model.CoopView, model.ModelCurrency):

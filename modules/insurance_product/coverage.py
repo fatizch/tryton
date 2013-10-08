@@ -71,19 +71,7 @@ class Coverage():
         cls.delete_rules(entities)
         super(Coverage, cls).delete(entities)
 
-    def give_me_price(self, args):
-        data_dict, errs = utils.get_data_from_dict(['contract', 'date'], args)
-        if errs:
-            return ([], errs)
-        contract = data_dict['contract']
-        date = data_dict['date']
-
-        active_coverages = contract.get_active_coverages_at_date(date)
-        if not self in active_coverages:
-            return (None, [])
-
-        result_line = PricingResultLine(on_object=self)
-        result_line.init_from_args(args)
+    def calculate_main_price(self, args, result_line, errs, date, contract):
         try:
             coverage_line, coverage_errs = self.get_result(
                 'price', args, kind='pricing')
@@ -98,6 +86,7 @@ class Coverage():
             result_line.add_detail_from_line(coverage_line)
         errs += coverage_errs
 
+    def calculate_sub_elem_price(self, args, result_line, errs):
         for covered, covered_data in self.give_me_covered_elements_at_date(
                 args)[0]:
             tmp_args = args.copy()
@@ -112,6 +101,23 @@ class Coverage():
                 sub_elem_line.on_object = covered_data
                 result_line.add_detail_from_line(sub_elem_line)
             errs += sub_elem_errs
+
+    def give_me_price(self, args):
+        data_dict, errs = utils.get_data_from_dict(['contract', 'date'], args)
+        if errs:
+            return ([], errs)
+        contract = data_dict['contract']
+        date = data_dict['date']
+        active_coverages = contract.get_active_coverages_at_date(date)
+        if not self in active_coverages:
+            return (None, [])
+
+        result_line = PricingResultLine(on_object=self)
+        result_line.init_from_args(args)
+        self.calculate_main_price(args, result_line, errs, date, contract)
+
+        self.calculate_sub_elem_price(args, result_line, errs)
+
         return ([result_line], errs)
 
     def get_dates(self, dates=None):

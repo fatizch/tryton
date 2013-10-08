@@ -16,6 +16,7 @@ def register():
         LoanParameters,
         LoanIncrementsDisplayer,
         AmortizationTableDisplayer,
+        LoanPriceLine,
         module='loan_contract', type_='model')
     Pool.register(
         LoanCreation,
