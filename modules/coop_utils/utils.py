@@ -172,13 +172,6 @@ def tuple_index(value, the_tuple, key_index=0):
     return [y[key_index] for y in list(the_tuple)].index(value)
 
 
-def remove_tuple_from_list(cur_list, key):
-    for cur_tuple in cur_list:
-        if cur_tuple[0] == key:
-            cur_list.remove(cur_tuple)
-    return cur_list
-
-
 def get_module_path(module_name):
     module_path = os.path.abspath(os.path.join(
         os.path.normpath(__file__), '..', '..', module_name))
@@ -516,6 +509,17 @@ def update_on_change(cls, var_name, new_on_change):
     if not field_name.on_change:
         field_name.on_change = []
     field_name.on_change.extend(new_on_change)
+    setattr(cls, var_name, field_name)
+
+
+def update_selection(cls, var_name, tuple_to_add=None, keys_to_remove=None):
+    field_name = copy.copy(getattr(cls, var_name))
+    if keys_to_remove:
+        field_name.selection[:] = [(x[0], x[1]) for x in field_name.selection
+            if not x[0] in keys_to_remove]
+    if tuple_to_add:
+        field_name.selection += tuple_to_add
+    field_name.selection = list(set(field_name.selection))
     setattr(cls, var_name, field_name)
 
 
