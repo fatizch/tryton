@@ -9,10 +9,13 @@ from .business import *
 from .session import *
 from .test_framework import *
 from .batchs import *
+from .currency import *
 
 
 def register():
     Pool.register(
+        #from Currency
+        Currency,
         # from export
         ExportPackage,
         ExportInstance,
