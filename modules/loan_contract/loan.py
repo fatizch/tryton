@@ -322,6 +322,21 @@ class Loan(model.CoopSQL, model.CoopView, model.ModelCurrency):
         self.increments += increments
         self.update_increments()
 
+    def get_payment(self, at_date=None):
+        Payment = Pool().get('ins_contract.loan_payment')
+        if not at_date:
+            at_date = utils.today()
+        payments = Payment.search([
+                ('start_date', '<=', at_date),
+                ('end_date', '>=', at_date),
+                ('kind', '=', 'scheduled'),
+                ('loan', '=', self)])
+        if len(payments) == 1:
+            return payments[0]
+
+    def get_remaining_capital(self, at_date=None):
+        return self.get_payment(at_date).end_balance
+
 
 class LoanShare(model.CoopSQL, model.CoopView):
     'Loan Share'
