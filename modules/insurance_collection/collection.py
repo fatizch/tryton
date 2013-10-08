@@ -67,7 +67,8 @@ class CollectionWizard():
                         self.input_collection_parameters.contract.id)),
                 ('party', '=', self.input_collection_parameters.party),
                 ('account.kind', '=', 'receivable'),
-                ('move.state', '=', 'posted')])
+                ('move.state', '=', 'posted')], order=[('maturity_date',
+                    'ASC')])
         if not line_candidates:
             return res
         exact = False
