@@ -15,14 +15,14 @@ __all__ = [
     'number_of_years_between',
     'number_of_months_between',
     'duration_between',
-]
+    ]
 
 
 HOURLY_DURATION = [
     ('second', 'Second'),
     ('minute', 'Minute'),
     ('hour', 'Hour'),
-]
+    ]
 
 DAILY_DURATION = [
     ('', ''),
@@ -32,7 +32,17 @@ DAILY_DURATION = [
     ('quarter', 'Quarter'),
     ('half_year', 'Half-year'),
     ('year', 'Year'),
-]
+    ]
+
+FREQUENCY = [
+    ('', ''),
+    ('dayly', 'Dayly'),
+    ('weekly', 'Weekly'),
+    ('monthly', 'Monthly'),
+    ('quarterly', 'Quarterly'),
+    ('half_yearly', 'Half-yearly'),
+    ('yearly', 'Yearly'),
+    ]
 
 
 def add_day(date, nb):
@@ -67,7 +77,7 @@ def add_duration(date, duration, duration_unit):
     return res
 
 
-def get_end_of_period(date, duration, duration_unit):
+def get_end_of_period(date, duration_unit, duration=1):
     '''
     Returns the last day of period
     for example : 01/01/Y + 1 year = 31/12/Y
@@ -144,5 +154,23 @@ def get_good_period_from_frequency(for_date, frequency, from_date=None):
     elif frequency == 'monthly':
         month = for_date.month
     from_date = datetime.date(for_date.year, month, 1)
-    end_date = get_end_of_period(from_date, 1, frequency)
+    end_date = get_end_of_period(from_date, frequency)
     return from_date, end_date
+
+
+def convert_frequency(from_frequency, to_frequency):
+    unsupported_freq = ['day', 'dayly', 'week', 'weekly']
+    if from_frequency in unsupported_freq or to_frequency in unsupported_freq:
+        raise Exception('Frequency Conversion Unsupported')
+
+    def convert_frequency_to_month(freq):
+        if freq in ['month', 'monthly']:
+            return 1
+        elif freq in ['quarter', 'quarterly']:
+            return 3
+        elif freq in ['half_year', 'half_yearly']:
+            return 6
+        elif freq in ['year', 'yearly']:
+            return 12
+    return (convert_frequency_to_month(to_frequency)
+        / float(convert_frequency_to_month(from_frequency)))

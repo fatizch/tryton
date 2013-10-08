@@ -216,8 +216,8 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
         if (self.max_duration_per_indemnification
                 and self.max_duration_per_indemnification_unit):
             max_end_date = coop_date.get_end_of_period(from_date,
-                self.max_duration_per_indemnification,
-                self.max_duration_per_indemnification_unit)
+                self.max_duration_per_indemnification_unit,
+                self.max_duration_per_indemnification)
         elif self.use_monthly_period:
             max_end_date = coop_date.get_end_of_month(from_date)
         else:
@@ -368,8 +368,8 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
     def get_end_date(self, from_date, to_date):
         if not self.limited_duration:
             return to_date
-        max_end_date = coop_date.get_end_of_period(from_date, self.duration,
-            self.duration_unit)
+        max_end_date = coop_date.get_end_of_period(from_date,
+            self.duration_unit, self.duration)
         return min(to_date, max_end_date) if to_date else max_end_date
 
     def get_rule_result(self, args):

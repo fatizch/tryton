@@ -161,8 +161,7 @@ already exists and can't be modified (%s)'''),
             res.append(rate_note)
             next_date = coop_date.add_day(rate_note.end_date, 1)
             if self.offered.payment_delay == 'in_arrears':
-                next_date = coop_date.get_end_of_period(next_date, 1,
-                    rating_freq)
+                next_date = coop_date.get_end_of_period(next_date, rating_freq)
             self.next_assessment_date = next_date
         return res
 

@@ -1174,7 +1174,7 @@ class IndemnificationValidation(Wizard):
         today = utils.today()
         default_max_date = datetime.date(today.year, today.month, 1)
         domain_string = 'status: = calculated, start_date: <= %s' % (
-            coop_date.get_end_of_period(default_max_date, 1, 'month'))
+            coop_date.get_end_of_period(default_max_date, 'month'))
         Selector = Pool().get('ins_claim.indemnification_selection')
         return {
             'domain_string': domain_string,
