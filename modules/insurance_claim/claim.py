@@ -92,8 +92,8 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         states={'readonly': Eval('status') == 'closed'})
     documents = fields.One2Many('ins_product.document_request',
         'needed_by', 'Documents')
-    claim_history = fields.One2Many('ins_claim.claim.history',
-        'from_object', 'History')
+    # claim_history = fields.One2Many('ins_claim.claim.history',
+    #     'from_object', 'History')
     company = fields.Many2One('company.company', 'Company')
     #The Main contract is only used to ease the declaration process for 80%
     #of the claims where there is only one contract involved. This link should
