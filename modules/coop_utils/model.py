@@ -26,6 +26,7 @@ __all__ = [
     'VersionObject',
     'ObjectHistory',
     'expand_tree',
+    'ModelCurrency',
 ]
 
 
@@ -513,3 +514,47 @@ class ObjectHistory(CoopSQL, CoopView):
                             values['date'], '%Y-%m-%d %H:%M:%S.%f')[:6])
                 values['date'] = values['date'].replace(microsecond=0)
         return res
+
+
+class ModelCurrency(object):
+    """
+    Define a model with Currency.
+    """
+
+    currency = fields.Function(
+        fields.Many2One('currency.currency', 'Currency',
+            on_change=['currency'], states={'invisible': True}),
+        'get_currency_id')
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'get_currency_digits')
+    currency_symbol = fields.Function(
+        fields.Char('Currency Symbol'),
+        'get_currency_symbol')
+
+    @staticmethod
+    def default_currency():
+        return ModelCurrency.get_currency_from_context()
+
+    @staticmethod
+    def get_currency_from_context():
+        if 'currency' in Transaction().context:
+            return Transaction().context.get('currency')
+
+    def get_currency(self):
+        print self.__name__
+        raise NotImplementedError
+
+    def on_change_currency(self):
+        digits = self.currency.digits if self.currency else 2
+        symbol = self.currency.symbol if self.currency else ''
+        return {'currency_digits': digits, 'currency_symbol': symbol}
+
+    def get_currency_id(self, name):
+        return self.get_currency().id
+
+    def get_currency_digits(self, name):
+        return self.on_change_currency()['currency_digits']
+
+    def get_currency_symbol(self, name):
+        return self.on_change_currency()['currency_symbol']
