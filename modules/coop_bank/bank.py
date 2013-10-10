@@ -84,7 +84,7 @@ class BankAccount(export.ExportImportMixin):
     @staticmethod
     def default_numbers():
         if not Transaction().context.get('__importing__'):
-            return [{}]
+            return [{'sequence': 0}]
         else:
             return []
 
