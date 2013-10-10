@@ -15,7 +15,7 @@
     <field name="use_specific_rate"/>
     <label name="rate"/>
     <group id="rate">
-      <field name="rate" xexpand="0"/>
+      <field name="rate" xexpand="0" factor="100"/>
       <label string="%" id="rate" xexpand="0" xalign="0"
         states="{'invisible': ~Eval('use_specific_rate')}"/>
     </group>
