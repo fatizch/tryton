@@ -42,6 +42,10 @@ msgctxt "field:tranche.tranche,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:tranche.tranche,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:tranche.tranche,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -89,6 +93,10 @@ msgstr "Plafond"
 msgctxt "field:tranche.tranche_version,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
+
+msgctxt "field:tranche.tranche_version,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:tranche.tranche_version,create_uid:"
 msgid "Create User"

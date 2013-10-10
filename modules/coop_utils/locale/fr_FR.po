@@ -30,6 +30,10 @@ msgctxt "field:coop.dyn_selection,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:coop.dyn_selection,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:coop.dyn_selection,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -73,6 +77,10 @@ msgstr "Mis à jour par"
 msgctxt "field:coop.table_of_table,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
+
+msgctxt "field:coop.table_of_table,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:coop.table_of_table,create_uid:"
 msgid "Create User"

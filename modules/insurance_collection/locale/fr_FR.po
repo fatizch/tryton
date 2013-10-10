@@ -1,18 +1,10 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "field:collection.assign_collection,contract:"
 msgid "Contract"
 msgstr "Contrat"
-
-msgctxt "field:collection.assign_collection,create_suspense_line_with_rest:"
-msgid ""
-msgstr ""
-
-msgctxt "field:collection.assign_collection,remaining:"
-msgid ""
-msgstr ""
 
 msgctxt "field:collection.collection_parameters,contract:"
 msgid "Contract"

@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:country.country,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:country.zipcode,city:"
 msgid ""
 msgstr " "
@@ -13,6 +17,10 @@ msgstr " "
 msgctxt "field:country.zipcode,create_date:"
 msgid ""
 msgstr " "
+
+msgctxt "field:country.zipcode,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:country.zipcode,create_uid:"
 msgid ""

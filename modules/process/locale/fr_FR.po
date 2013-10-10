@@ -607,10 +607,6 @@ msgid "==> Affiliations"
 msgstr ""
 
 msgctxt "view:contract.contract:"
-msgid "==> Commission"
-msgstr ""
-
-msgctxt "view:contract.contract:"
 msgid "==> Cotisations"
 msgstr ""
 
@@ -691,10 +687,6 @@ msgid "Calculer les Taux"
 msgstr ""
 
 msgctxt "view:contract.contract:"
-msgid "Commission"
-msgstr "Commission"
-
-msgctxt "view:contract.contract:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -713,6 +705,10 @@ msgstr "Eléments Couverts"
 msgctxt "view:contract.contract:"
 msgid "Covered Elements/Options"
 msgstr "Eléments Couverts/Garanties"
+
+msgctxt "view:contract.contract:"
+msgid "Create Loan"
+msgstr ""
 
 msgctxt "view:contract.contract:"
 msgid "Documents"
@@ -777,6 +773,12 @@ msgstr "Processus Terminé. Commencez une nouvelle tâche"
 msgctxt "view:contract.contract:"
 msgid ""
 "The current record isin a state (Validation de l'avenant) that you are not "
+"allowed to view."
+msgstr ""
+
+msgctxt "view:contract.contract:"
+msgid ""
+"The current record isin a state (Validation du contrat) that you are not "
 "allowed to view."
 msgstr ""
 

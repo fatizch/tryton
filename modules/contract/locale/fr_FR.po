@@ -14,6 +14,10 @@ msgctxt "field:contract.address,create_date:"
 msgid ""
 msgstr " "
 
+msgctxt "field:contract.address,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:contract.address,create_uid:"
 msgid ""
 msgstr " "
@@ -77,6 +81,10 @@ msgstr "Numéro de Contrat"
 msgctxt "field:contract.contract,create_date:"
 msgid ""
 msgstr " "
+
+msgctxt "field:contract.contract,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:contract.contract,create_uid:"
 msgid ""
@@ -178,6 +186,10 @@ msgctxt "field:contract.status_history,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:contract.status_history,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:contract.status_history,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -237,6 +249,10 @@ msgstr "Type de Garantie"
 msgctxt "field:contract.subscribed_option,create_date:"
 msgid ""
 msgstr " "
+
+msgctxt "field:contract.subscribed_option,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:contract.subscribed_option,create_uid:"
 msgid ""

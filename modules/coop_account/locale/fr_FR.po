@@ -18,6 +18,10 @@ msgctxt "field:coop_account.fee_desc,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:coop_account.fee_desc,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:coop_account.fee_desc,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -61,6 +65,10 @@ msgstr "Mis à jour par"
 msgctxt "field:coop_account.fee_version,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
+
+msgctxt "field:coop_account.fee_version,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:coop_account.fee_version,create_uid:"
 msgid "Create User"
@@ -114,6 +122,10 @@ msgctxt "field:coop_account.tax_desc,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:coop_account.tax_desc,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:coop_account.tax_desc,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -157,6 +169,10 @@ msgstr "Mis à jour par"
 msgctxt "field:coop_account.tax_version,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
+
+msgctxt "field:coop_account.tax_version,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:coop_account.tax_version,create_uid:"
 msgid "Create User"

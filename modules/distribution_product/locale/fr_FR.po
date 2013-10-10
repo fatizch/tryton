@@ -26,6 +26,10 @@ msgctxt "field:distribution.commercial_product,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:distribution.commercial_product,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:distribution.commercial_product,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -93,6 +97,10 @@ msgstr "Produit Commercial"
 msgctxt "field:distribution.dist_network-com_product,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
+
+msgctxt "field:distribution.dist_network-com_product,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:distribution.dist_network-com_product,create_uid:"
 msgid "Create User"

@@ -1,10 +1,26 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:collection.collection_wizard:"
 msgid "Ventilation is not consistent : %s declared, %s assigned"
 msgstr "La ventilation n'est pas consistente : %s déclaré, %s affecté"
+
+msgctxt "field:account.configuration,cash_account:"
+msgid "Cash Account"
+msgstr "Compte d'Espèce"
+
+msgctxt "field:account.configuration,check_account:"
+msgid "Check Account"
+msgstr "Compte de Chèque"
+
+msgctxt "field:account.configuration,collection_journal:"
+msgid "Journal"
+msgstr "Journal"
+
+msgctxt "field:account.configuration,default_suspense_account:"
+msgid ""
+msgstr ""
 
 msgctxt "field:collection.assign_collection,amount:"
 msgid "Amount"
@@ -78,6 +94,10 @@ msgctxt "field:collection.collection,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:collection.collection,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:collection.collection,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -141,18 +161,6 @@ msgstr "Must Expand Tree"
 msgctxt "field:collection.collection_parameters,party:"
 msgid "Party"
 msgstr "Tiers"
-
-msgctxt "field:company.company,cash_account:"
-msgid "Cash Account"
-msgstr "Cash Account"
-
-msgctxt "field:company.company,check_account:"
-msgid "Check Account"
-msgstr "Check Account"
-
-msgctxt "field:company.company,collection_journal:"
-msgid "Journal"
-msgstr "Journal"
 
 msgctxt "model:collection.assign_collection,name:"
 msgid "Assign Collection"

@@ -22,6 +22,10 @@ msgctxt "field:coop_process.process_log,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:coop_process.process_log,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:coop_process.process_log,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -110,6 +114,10 @@ msgctxt "field:coop_process.xml_view_desc,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:coop_process.xml_view_desc,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:coop_process.xml_view_desc,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -190,6 +198,14 @@ msgctxt "field:coop_utils.export_package,steps:"
 msgid "Steps"
 msgstr "Etapes"
 
+msgctxt "field:process.code,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:process.process_desc,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:process.process_desc,custom_transitions:"
 msgid "Custom Transitions"
 msgstr "Transitions Personnalisés"
@@ -214,6 +230,18 @@ msgctxt "field:process.process_desc,with_prev_next:"
 msgid "With Previous / Next button"
 msgstr "Avec Préc/Suiv."
 
+msgctxt "field:process.process_step_relation,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:process.status,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:process.step_desc,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:process.step_desc,custom_views:"
 msgid "Custom Views"
 msgstr "Vues Personnalisées"
@@ -233,6 +261,10 @@ msgstr " "
 msgctxt "field:process.step_transition,choice_if_true:"
 msgid ""
 msgstr " "
+
+msgctxt "field:process.step_transition,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:process.step_transition,pyson_choice:"
 msgid ""
