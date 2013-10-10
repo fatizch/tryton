@@ -176,7 +176,7 @@ class Subscribed(model.CoopView):
 
     @classmethod
     def get_summary(cls, instances, name):
-        return dict((x.id, '') for x in instances)
+        return dict((x.id, x.rec_name) for x in instances)
 
     def get_currency_id(self, name):
         currency = self.get_currency()
@@ -406,8 +406,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         return [('id', 'in', [c.id for c in contracts])]
 
     @classmethod
-    def get_summary(cls, insurers, name=None, at_date=None, lang=None):
-        return ''
+    def get_summary(cls, instances, name, at_date=None, lang=None):
+        return dict((x.id, x.contract_number) for x in instances)
 
     @staticmethod
     def get_possible_status(name=None):

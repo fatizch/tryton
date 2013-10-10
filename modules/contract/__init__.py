@@ -17,5 +17,6 @@ def register():
         OfferedContext,
         ContractContext,
         # from party
+        Party,
         ContactHistory,
         module='contract', type_='model')
