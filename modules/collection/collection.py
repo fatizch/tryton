@@ -397,7 +397,7 @@ class Property(export.ExportImportMixin):
             If(Eval('context', {}).contains('__importing__'),
                 ('id', '>', 0),
                 ('id', If(Eval('context', {}).contains('company'), '=', '!='),
-                    Eval('context', {}).get('company', 0)))
+                    Eval('context', {}).get('company', -1)))
             ]
 
     @classmethod
