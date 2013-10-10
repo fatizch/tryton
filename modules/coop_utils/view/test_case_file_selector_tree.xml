@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Test Case Files" editable="bottom">
+  <field name="selected"/>
+  <field name="filename" readonly="1"/>
+  <field name="full_path" tree_invisible="1"/>
+</tree>

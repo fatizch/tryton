@@ -1,3 +1,5 @@
+import traceback
+import sys
 import copy
 import datetime
 import logging
@@ -483,6 +485,8 @@ class ExportImportMixin(Model):
                 # print '\n'.join([str(x) for x in relink])
                 # print utils.format_data(created)
                 # print utils.format_data(instance)
+                for x in traceback.format_exception(*sys.exc_info()):
+                    logging.getLogger('export_import').debug(str(x))
                 raise
 
         if to_relink:
@@ -613,6 +617,8 @@ class ExportImportMixin(Model):
                     logging.getLogger('export_import').debug(
                         'Error trying to save \n%s' % utils.format_data(
                             working_instance))
+                    for x in traceback.format_exception(*sys.exc_info()):
+                        logging.getLogger('export_import').debug(str(x))
                     raise
             for k in sorted(to_del, reverse=True):
                 relink.pop(k)

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<form string="Select Test Cases">
+  <field name="test_cases" colspan="4" mode="tree"/>
+  <label name="select_all"/>
+  <field name="select_all" colspan="3"/>
+</form>

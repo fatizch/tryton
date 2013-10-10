@@ -10,11 +10,12 @@ from .session import *
 from .test_framework import *
 from .batchs import *
 from .currency import *
+from .test_case_framework import *
 
 
 def register():
     Pool.register(
-        #from Currency
+        # from Currency
         Currency,
         # from export
         ExportPackage,
@@ -29,10 +30,18 @@ def register():
         VersionObject,
         # from session
         DateClass,
+        # from test_case_framework
+        TestCaseModel,
+        TestCaseSelector,
+        SelectTestCase,
+        TestCaseFileSelector,
+        LoadTestCaseFiles,
         module='coop_utils', type_='model')
     Pool.register(
         # from export
         ImportWizard,
+        # from test_case_framework
+        TestCaseWizard,
         module='coop_utils', type_='wizard')
 
     add_export_to_model([
