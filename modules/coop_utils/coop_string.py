@@ -44,10 +44,11 @@ def get_field_as_summary(instance, var_name, with_label=True, at_date=None,
                     res = '<b>%s :</b>\n' % translate_label(
                         instance, var_name, lang=lang)
                 sub_indent = 1
-            summary_dict = element.__class__.get_summary(
+            summary_dict = element.get_summary(
                 [element], name=var_name, at_date=at_date, lang=lang)
-            res += re_indent_text(
-                '%s\n' % summary_dict[element.id], sub_indent)
+            if summary_dict and element.id in summary_dict:
+                res += re_indent_text(
+                    '%s\n' % summary_dict[element.id], sub_indent)
     else:
         if with_label:
             res = '%s : ' % translate_label(instance, var_name, lang=lang)
