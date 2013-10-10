@@ -1,9 +1,5 @@
 from trytond.modules.rule_engine import RuleEngineContext
-from trytond.modules.rule_engine import InternalRuleEngineError
 from trytond.modules.rule_engine import check_args
-from trytond.modules.rule_engine import RuleTools
-
-from trytond.modules.coop_utils import utils
 
 
 class LoanContext(RuleEngineContext):
@@ -57,8 +53,7 @@ class LoanContext(RuleEngineContext):
     @classmethod
     @check_args('loan')
     def _re_get_loan_remaining_capital(cls, args):
-        return args['loan'].get_remaining_capital(args['date']) \
-            * args['share'].share
+        return args['loan'].get_remaining_capital(args['date'])
 
     @classmethod
     @check_args('share')

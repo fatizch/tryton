@@ -780,7 +780,7 @@ class Indemnification(model.CoopView, model.CoopSQL):
         return self.delivered_service.benefit.indemnification_kind
 
     def get_beneficiary(self, beneficiary_kind, del_service):
-        res = ''
+        res = None
         if beneficiary_kind == 'subscriber':
             res = del_service.contract.get_policy_owner(
                 del_service.loss.start_date)
@@ -803,9 +803,10 @@ class Indemnification(model.CoopView, model.CoopSQL):
                 detail.kind = key
                 for field_name, value in detail_dict.iteritems():
                     #TODO: Temporary Hack
-                    if field_name == 'beneficiary_kind':
+                    if (field_name == 'beneficiary_kind'
+                            and not self.beneficiary):
                         self.beneficiary = self.get_beneficiary(value,
-                            del_service) or None
+                            del_service)
                     else:
                         setattr(detail, field_name, value)
                 if ('start_date' in detail_dict

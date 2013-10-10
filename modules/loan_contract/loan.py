@@ -73,17 +73,6 @@ class LoanContract():
                 return True
         return False
 
-    # def init_from_subscriber(self):
-    #     if not utils.is_none(self, 'loans'):
-    #         return True
-    #     loan = utils.instanciate_relation(self, 'loans')
-    #     loan.init_from_contract(self)
-    #     loan.init_from_borrowers([self.subscriber])
-    #     if not hasattr(self, 'loan'):
-    #         self.loans = []
-    #     self.loans.append(loan)
-    #     return True
-
     def init_dict_for_rule_engine(self, cur_dict):
         super(LoanContract, self).init_dict_for_rule_engine(cur_dict)
         #TODO : To enhance
@@ -91,7 +80,9 @@ class LoanContract():
             cur_dict['loan'] = self.loans[-1]
 
     def get_dates(self):
-        result = super(LoanContract, self).get_dates()
+        if not self.is_loan:
+            return super(LoanContract, self).get_dates()
+        result = set()
         for loan in self.loans:
             for payment in loan.payments:
                 result.add(payment.start_date)
@@ -149,7 +140,7 @@ class Loan(model.CoopSQL, model.CoopView, model.ModelCurrency):
     payments = fields.One2Many('ins_contract.loan_payment', 'loan',
         'Payments')
     early_payments = fields.One2ManyDomain('ins_contract.loan_payment', 'loan',
-        'Payments', domain=[('kind', '=', 'early')])
+        'Early Payments', domain=[('kind', '=', 'early')])
     increments = fields.One2Many('ins_contract.loan_increment', 'loan',
         'Increments')
     defferal = fields.Function(
@@ -351,6 +342,11 @@ class Loan(model.CoopSQL, model.CoopView, model.ModelCurrency):
     def init_dict_for_rule_engine(self, current_dict):
         current_dict['loan'] = self
 
+    def get_loan_share(self, party):
+        for share in self.loan_shares:
+            if share.person == party:
+                return share
+
 
 class LoanShare(model.CoopSQL, model.CoopView):
     'Loan Share'
@@ -539,7 +535,8 @@ class LoanPayment(model.CoopSQL, model.CoopView, model.ModelCurrency):
         self.end_balance = self.get_end_balance()
 
     def get_end_balance(self, name=None):
-        return self.begin_balance - self.principal
+        if self.begin_balance is not None and self.principal is not None:
+            return self.begin_balance - self.principal
 
 
 class LoanParameters(model.CoopView, model.ModelCurrency):
@@ -654,6 +651,9 @@ class LoanCreation(model.CoopWizard):
                 and self.loan_parameters.defferal_duration):
             loan.calculate_increments(defferal=self.loan_parameters.defferal,
                 defferal_duration=self.loan_parameters.defferal_duration)
+        elif loan.kind == 'intermediate':
+            loan.calculate_increments(defferal='partially',
+                defferal_duration=loan.number_of_payments - 1)
         loan.save()
         contract.save()
         if loan.kind != 'graduated' and not loan.increments:

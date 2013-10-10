@@ -1,9 +1,12 @@
 from trytond.pool import PoolMeta
+from trytond.pyson import Eval
+
+from trytond.modules.coop_utils import fields
 
 __all__ = [
     'LoanClaimDeliveredService',
     'LoanIndemnification',
-]
+    ]
 
 
 class LoanClaimDeliveredService():
@@ -12,11 +15,12 @@ class LoanClaimDeliveredService():
     __name__ = 'ins_contract.delivered_service'
     __metaclass__ = PoolMeta
 
-        #TODO: Temporary hack
+    loan = fields.Many2One('ins_contract.loan', 'Loan',
+        domain=[('contract', '=', Eval('contract'))],
+        depends=['contract'])
+
     def get_loan(self):
-        for covered_data in self.subscribed_service.covered_data:
-            for share in covered_data.loan_shares:
-                return share.loan
+        return self.loan
 
     def is_loan(self):
         return self.subscribed_service.is_loan
@@ -26,7 +30,8 @@ class LoanClaimDeliveredService():
             cur_dict)
         if not self.is_loan():
             return
-        cur_dict['loan'] = self.get_loan()
+        cur_dict['loan'] = self.loan
+        cur_dict['share'] = self.loan.get_loan_share(self.loss.covered_person)
 
 
 class LoanIndemnification():
@@ -40,4 +45,4 @@ class LoanIndemnification():
             delivered_service)
         if not delivered_service.is_loan():
             return
-        self.beneficiary = delivered_service.get_loan().lender
+        self.beneficiary = delivered_service.loan.lender.party
