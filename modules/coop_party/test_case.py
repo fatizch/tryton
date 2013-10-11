@@ -169,7 +169,8 @@ class TestCaseModel():
         cls.read_list_file('male', MODULE_NAME)
         cls.read_list_file('female', MODULE_NAME)
         cls.read_list_file('last_name', MODULE_NAME)
-        cls.read_csv_file('address_person.csv', MODULE_NAME)
+        cls.read_csv_file('address_person.csv', MODULE_NAME, sep=';',
+            reader='dict')
         relation_spouse = RelationKind.search([('code', '=', 'spouse')])[0]
         relation_child = RelationKind.search([('code', '=', 'parent')])[0]
         persons = []
