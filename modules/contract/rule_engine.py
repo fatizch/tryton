@@ -1,6 +1,7 @@
 from trytond.pool import Pool
 
 from trytond.modules.rule_engine import RuleEngineContext
+from trytond.modules.rule_engine import check_args
 
 __all__ = [
     'OfferedContext',
@@ -42,3 +43,24 @@ class ContractContext(RuleEngineContext):
     @classmethod
     def _re_contract_conditions_date(cls, args):
         return args['appliable_conditions_date']
+
+    @classmethod
+    @check_args('contract')
+    def _re_contract_complementary_data(cls, args, data_name):
+        cls.append_error(args, 'deprecated_method')
+
+    @classmethod
+    @check_args('contract')
+    def _re_contract_address_country(cls, args):
+        contract = args['contract']
+        address = contract.get_contract_address(args['date'])
+        if address:
+            return address.country
+
+    @classmethod
+    @check_args('contract')
+    def _re_contract_address_zip(cls, args):
+        contract = args['contract']
+        address = contract.get_contract_address(args['date'])
+        if address:
+            return address.zip

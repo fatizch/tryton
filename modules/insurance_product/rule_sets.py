@@ -94,35 +94,6 @@ class PersonContext(RuleEngineContext):
         return person.get_relation_with(subscriber)
 
 
-class ContractContext(RuleEngineContext):
-    '''
-        Context functions for contract related data
-    '''
-
-    __name__ = 'ins_product.rule_sets.contract'
-
-    @classmethod
-    @check_args('contract')
-    def _re_contract_complementary_data(cls, args, data_name):
-        cls.append_error(args, 'deprecated_method')
-
-    @classmethod
-    @check_args('contract')
-    def _re_contract_address_country(cls, args):
-        contract = args['contract']
-        address = contract.get_contract_address(args['date'])
-        if address:
-            return address.country
-
-    @classmethod
-    @check_args('contract')
-    def _re_contract_address_zip(cls, args):
-        contract = args['contract']
-        address = contract.get_contract_address(args['date'])
-        if address:
-            return address.zip
-
-
 class OptionContext(RuleEngineContext):
     '''
         Context functions for option related data

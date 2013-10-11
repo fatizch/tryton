@@ -30,5 +30,25 @@
         <field name="translated_technical_name">date_de_conditions</field>
         <field name="language" ref="ir.lang_fr"/>
     </record>
-</data>
+        <record model="rule_engine.tree_element" id="code_postal_du_contrat">
+            <field name="translated_technical_name">code_postal_du_contrat</field>
+            <field name="description">Code postal du contrat</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">contract.rule_sets</field>
+            <field name="name">_re_contract_address_zip</field>
+            <field name="long_description">Code postal de l'adresse associée au contrat</field>
+            <field name="parent" ref="te_contract"/>
+        </record>
+        <record model="rule_engine.tree_element" id="pays_du_contrat">
+            <field name="translated_technical_name">pays_du_contrat</field>
+            <field name="description">Pays du contrat</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">contract.rule_sets</field>
+            <field name="name">_re_contract_address_country</field>
+            <field name="long_description">Pays de l'adresse associée au contrat</field>
+            <field name="parent" ref="te_contract"/>
+        </record>
+    </data>
 </tryton>

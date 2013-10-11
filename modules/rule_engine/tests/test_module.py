@@ -99,7 +99,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         ct = self.Context()
         ct.name = 'test_context'
         ct.allowed_elements = []
-        for elem in self.TreeElement.search([]):
+        for elem in self.TreeElement.search([('language.code', '=', 'en_US')]):
             ct.allowed_elements.append(elem)
         self.assertEqual(len(ct.allowed_elements), 7)
         ct.save()

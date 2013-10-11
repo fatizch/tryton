@@ -15,27 +15,33 @@ def write_footer(f):
 def write_record(f, te, parent=None):
     id = te.translated_technical_name
     record = u'''        <record model="rule_engine.tree_element" id="%s">
-            <field name="name">%s</field>
-            <field name="description">%s</field>
-            <field name="namespace">%s</field>
-            <field name="type">%s</field>
             <field name="translated_technical_name">%s</field>
-            <field name="fct_args">%s</field>
-            <field name="long_description">%s</field>
+            <field name="description">%s</field>
+            <field name="type">%s</field>
             <field name="language" ref="ir.lang_%s"/>''' % (
         id,
-        te.name,
-        te.description,
-        te.namespace,
-        te.type,
         te.translated_technical_name,
-        te.fct_args,
-        te.long_description,
+        te.description,
+        te.type,
         te.language.code[0:2])
+    if te.namespace:
+        record += u'\n            <field name="namespace">%s</field>' % te.namespace
+    if te.name:
+        record += u'\n            <field name="name">%s</field>' % te.name
+    if te.fct_args:
+        record += u'\n            <field name="fct_args">%s</field>' % te.fct_args
+    if te.long_description:
+        record += u'\n            <field name="long_description">%s</field>' % te.long_description
     if parent:
         record += u'\n            <field name="parent" ref="%s"/>' % parent
     record += '\n        </record>\n'
     f.write(record.encode('utf-8'))
+    if not parent:
+        record = u'''        <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_%s">
+            <field name="context" ref="rule_engine.default_context"/>
+            <field name="tree_element" ref="%s"/>
+        </record>\n''' % (id, id)
+        f.write(record.encode('utf-8'))
     for children in te.children:
         write_record(f, children, id)
 

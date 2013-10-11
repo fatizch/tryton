@@ -14,8 +14,6 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['Currency'] = Model.get('currency.currency')
     cfg_dict['Coverage'] = Model.get('offered.coverage')
     cfg_dict['Product'] = Model.get('offered.product')
-    cfg_dict['TreeElement'] = Model.get('rule_engine.tree_element')
-    cfg_dict['Context'] = Model.get('rule_engine.context')
     cfg_dict['RuleEngine'] = Model.get('rule_engine')
     cfg_dict['TestCase'] = Model.get('rule_engine.test_case')
     cfg_dict['TestCaseValue'] = Model.get('rule_engine.test_case.value')
@@ -30,8 +28,6 @@ def update_cfg_dict_with_models(cfg_dict):
     cfg_dict['Lang'] = Model.get('ir.lang')
     cfg_dict['Benefit'] = Model.get('ins_product.benefit')
     cfg_dict['RuleEngine'] = Model.get('rule_engine')
-    cfg_dict['Context'] = Model.get('rule_engine.context')
-    cfg_dict['TreeElement'] = Model.get('rule_engine.tree_element')
     cfg_dict['Tranche'] = Model.get('tranche.tranche')
     cfg_dict['LossDesc'] = Model.get('ins_product.loss_desc')
     cfg_dict['ComplementaryData'] = Model.get(
@@ -748,15 +744,6 @@ def get_or_create_rule(cfg_dict, name, algo, context_name=None, params=None):
     rule.code = algo
     rule.save()
     return rule
-
-
-def get_tree_element(cfg_dict, name=None):
-    domain = []
-    if name:
-        domain.append(('name', '=', name))
-    elements = cfg_dict['TreeElement'].find(domain, limit=1)
-    if elements:
-        return elements[0]
 
 
 def write_ceiling_code(pss_multiplicator):

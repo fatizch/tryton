@@ -1,6 +1,16 @@
 <?xml version="1.0"?>
 <tryton>
   <data skiptest="1">
+    <record model="rule_engine.tree_element" id="tarif_collectif">
+        <field name="translated_technical_name">tarif_collectif</field>
+        <field name="description">Tarif Collectif</field>
+        <field name="type">folder</field>
+        <field name="language" ref="ir.lang_fr"/>
+    </record>
+    <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_tarif_collectif">
+        <field name="context" ref="rule_engine.default_context"/>
+        <field name="tree_element" ref="tarif_collectif"/>
+    </record>
     <record model="rule_engine.tree_element" id="te_billing_collective_fare_class">
         <field name="description">Classe Tarifaire</field>
         <field name="name">_re_fare_class</field>
@@ -8,8 +18,8 @@
         <field name="type">function</field>
         <field name="translated_technical_name">classe_tarifaire</field>
         <field name="language" ref="ir.lang_fr"/>
+        <field name="parent" ref="tarif_collectif"/>
     </record>
-
     <record model="rule_engine.tree_element" id="te_billing_collective_fare_class_group">
         <field name="description">Groupe de Classe Tarifaire</field>
         <field name="name">_re_fare_class_group</field>
@@ -17,6 +27,7 @@
         <field name="type">function</field>
         <field name="translated_technical_name">groupe_classe_tarifaire</field>
         <field name="language" ref="ir.lang_fr"/>
+        <field name="parent" ref="tarif_collectif"/>
     </record>
 </data>
 </tryton>

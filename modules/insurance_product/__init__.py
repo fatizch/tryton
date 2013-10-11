@@ -75,7 +75,6 @@ def register():
         # from rule_sets
         SubscriberContext,
         PersonContext,
-        ContractContext,
         OptionContext,
         CoveredDataContext,
         RuleCombinationContext,
