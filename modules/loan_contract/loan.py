@@ -455,7 +455,7 @@ class LoanIncrement(model.CoopSQL, model.CoopView, model.ModelCurrency):
     number_of_payments = fields.Integer('Number of Payments')
     rate = fields.Numeric('Annual Rate')
     payment_amount = fields.Numeric('Amount',
-        digits=(16, Eval('currency_digts', 2)), depends=['currency_digits'])
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     defferal = fields.Selection(DEFFERALS, 'Differal', sort=False)
 
     @classmethod
