@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<data>
+  <xpath expr="/form" position="inside">
+    <label name="number_of_parties"/>
+    <field name="number_of_parties"/>
+    <label name="number_of_males"/>
+    <field name="number_of_males"/>
+    <label name="adult_age_min"/>
+    <field name="adult_age_min"/>
+    <label name="adult_age_max"/>
+    <field name="adult_age_max"/>
+    <label name="percent_of_couple"/>
+    <field name="percent_of_couple"/>
+    <label name="max_nb_of_children_per_couple"/>
+    <field name="max_nb_of_children_per_couple"/>
+    <label name="percent_of_couple_with_children"/>
+    <field name="percent_of_couple_with_children"/>
+    <label name="percent_of_couple_with_same_name"/>
+    <field name="percent_of_couple_with_same_name"/>
+    <label name="phone_prefix"/>
+    <field name="phone_prefix"/>
+  </xpath>
+</data>

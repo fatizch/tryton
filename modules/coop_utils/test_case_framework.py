@@ -1,8 +1,15 @@
+import os
+import csv
+import polib
 import logging
+import random
 
 from trytond.pool import Pool
 from trytond.pyson import Eval
 from trytond.wizard import Button, StateView, StateTransition
+from trytond.model import ModelSingleton
+from trytond.transaction import Transaction
+from trytond.cache import Cache
 import model
 import fields
 import export
@@ -15,7 +22,7 @@ __all__ = [
     'TestCaseFileSelector',
     'LoadTestCaseFiles',
     'TestCaseWizard',
-    'add_dependencies',
+    'set_test_case',
     ]
 
 
@@ -23,19 +30,22 @@ def run_test_case_method(source_class, method):
     # Runner function that will be used to automatically call before / after
     # methods. It supports chained before / after though the use of this
     # possibility is not recommanded
+
     method_name = method.__name__
     before_meth = getattr(source_class, '_before_%s' % method_name, None)
     if before_meth:
         run_test_case_method(source_class, before_meth)
     logging.getLogger('test_case').info('Executing test_case %s' %
         method.__name__)
-    method()
+    result = method()
+    if result:
+        source_class.save_objects(result)
     after_meth = getattr(source_class, '_after_%s' % method_name, None)
     if after_meth:
         run_test_case_method(source_class, after_meth)
 
 
-def add_dependencies(name, *args):
+def set_test_case(name, *args):
     # A decorator for test_case functions to be able to build the dependency
     # tree of test_cases
     def wrapper(f):
@@ -70,6 +80,7 @@ def solve_graph(node_name, nodes, resolved=None, unresolved=None):
 def build_dependency_graph(cls, methods):
     # This method will return an ordered list for execution for the selected
     # test cases methods.
+    cls = Pool().get(cls.__name__)
     method_dict = dict([(method.__name__, method) for method in methods])
     method_dependencies = {}
     to_explore = methods[:]
@@ -121,20 +132,54 @@ def build_dependency_graph(cls, methods):
     return (getattr(cls, x) for x in result)
 
 
-class TestCaseModel(model.CoopView):
+class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
     'Test Case Model'
 
     __name__ = 'coop_utils.test_case_model'
 
+    language = fields.Many2One('ir.lang', 'Test Case Language')
+
+    @classmethod
+    def default_language(cls):
+        return 1
+
+    @classmethod
+    def get_instance(cls):
+        return cls.get_singleton()
+
+    @classmethod
+    def get_language(cls):
+        return cls.get_singleton().language
+
+    @classmethod
+    def get_logger(cls):
+        return logging.getLogger('test_case')
+
     @classmethod
     def run_test_case(cls, test_case):
-        run_test_case_method(cls, test_case)
+        with Transaction().new_cursor(), Transaction().set_user(0):
+            run_test_case_method(cls, test_case)
+            Transaction().cursor.commit()
+
+    @classmethod
+    def clear_all_caches(cls):
+        GoodModel = Pool().get(cls.__name__)
+        for elem in [getattr(GoodModel, x) for x in dir(GoodModel)]:
+            if not isinstance(elem, Cache):
+                continue
+            elem.clear()
 
     @classmethod
     def run_test_cases(cls, test_cases):
-        order = build_dependency_graph(TestCaseModel, test_cases)
-        for elem in order:
-            cls.run_test_case(elem)
+        cls.clear_all_caches()
+        try:
+            cls._loaded_resources = {}
+            order = build_dependency_graph(TestCaseModel, test_cases)
+            for elem in order:
+                cls.run_test_case(elem)
+        finally:
+            del cls._loaded_resources
+            cls.clear_all_caches()
 
     @classmethod
     def run_all_test_cases(cls):
@@ -142,30 +187,136 @@ class TestCaseModel(model.CoopView):
 
     @classmethod
     def get_all_tests(cls):
-        for elem in [getattr(TestCaseModel, x) for x in dir(TestCaseModel)]:
+        GoodModel = Pool().get(cls.__name__)
+        for elem in [getattr(GoodModel, x) for x in dir(GoodModel)]:
             if not hasattr(elem, '_test_case_name'):
                 continue
             yield elem
 
     @classmethod
-    @add_dependencies('Party Test Case')
-    def party_test_case(cls):
-        pass
+    def global_search_list(cls):
+        return set([])
 
     @classmethod
-    @add_dependencies('Bank Test Case', 'party_test_case')
-    def bank_test_case(cls):
-        pass
+    def save_objects(cls, objects):
+        GoodModel = Pool().get(cls.__name__)
+        group = {}
+        for elem in objects:
+            if elem._export_find_instance(elem._export_get_key()):
+                continue
+            if not elem.__name__ in group:
+                group[elem.__name__] = []
+            group[elem.__name__].append(elem)
+        for class_name, elems in group.iteritems():
+            save_method_hook = '_save_%s' % (
+                class_name.replace('.', '_').replace('-', '_'))
+            if hasattr(GoodModel, save_method_hook):
+                getattr(GoodModel, save_method_hook)(elems)
+            for elem in elems:
+                elem.save()
 
     @classmethod
-    @add_dependencies('Product Test Case', 'party_test_case')
-    def product_test_case(cls):
-        pass
+    @set_test_case('Set Global Search')
+    def set_global_search(cls):
+        Model = Pool().get('ir.model')
+        targets = Model.search([
+                ('model', 'in', cls.global_search_list())])
+        Model.write(targets, {'global_search_p': True})
 
     @classmethod
-    @add_dependencies('Contract Test Case', 'product_test_case')
-    def contract_test_case(cls):
-        pass
+    def read_data_file(cls, filename, sep='|'):
+        res = {}
+        cur_model = ''
+        cur_data = []
+        lines = open(filename).readlines()
+        for line in lines:
+            line = line[:-1]
+            line.rstrip()
+            if line == '':
+                continue
+            if line[0] == '[' and line[-1] == ']':
+                if cur_model and cur_data:
+                    res[cur_model] = cur_data
+                cur_model = line[1:-1]
+                cur_data = []
+                continue
+            cur_data.append(line.split(sep))
+
+        res[cur_model] = cur_data
+
+        return res
+
+    @classmethod
+    def read_list_file(cls, filename, module):
+        cls.load_resources(module)
+        if isinstance(cls._loaded_resources[module]['files'][filename], list):
+            return cls._loaded_resources[module]['files'][filename]
+        with open(cls._loaded_resources[module]['files'][filename], 'r') as f:
+            res = []
+            n = 0
+            for line in f:
+                res.append(line.decode('utf8').strip())
+                n += 1
+        cls._loaded_resources[module]['files'][filename] = res
+        return res
+
+    @classmethod
+    def read_csv_file(cls, filename, module, sep=';'):
+        cls.load_resources(module)
+        if isinstance(cls._loaded_resources[module]['files'][filename], list):
+            return cls._loaded_resources[module]['files'][filename]
+        with open(cls._loaded_resources[module]['files'][filename], 'r') as f:
+            reader = csv.DictReader(f, delimiter=sep)
+            res = []
+            for line in reader:
+                res.append(line)
+        cls._loaded_resources[module]['files'][filename] = res
+        return res
+
+    @classmethod
+    def launch_dice(cls, probability):
+        return random.randint(0, 99) < probability
+
+    @classmethod
+    def translate_this(cls, msg_id, module_name):
+        cls.load_resources(module_name)
+        return cls._loaded_resources[module_name]['translations'][msg_id]
+
+    @classmethod
+    def load_resources(cls, modules_to_load=None):
+        if not hasattr(cls, '_loaded_resources'):
+            cls._loaded_resources = {}
+        if isinstance(modules_to_load, basestring):
+            modules_to_load = [modules_to_load]
+        elif modules_to_load is None:
+            Module = Pool().get('ir.module.module')
+            modules_to_load = [x.name
+                for x in Module.search([('state', '=', 'installed')])]
+        # trytond/trytond/modules path
+        top_path = os.path.abspath(os.path.join(os.path.normpath(__file__),
+                '..', '..'))
+        language_path = cls.get_language().code
+        for module_name in modules_to_load:
+            if module_name in cls._loaded_resources:
+                continue
+            resource_path = os.path.join(top_path, module_name,
+                'test_case_data', language_path)
+            result = {
+                'files': {},
+                'translations': {}}
+            if not os.path.exists(resource_path) or not os.path.isdir(
+                    resource_path):
+                cls._loaded_resources[module_name] = result
+                continue
+            for file_name in os.listdir(resource_path):
+                if file_name.endswith('.po'):
+                    po = polib.pofile(os.path.join(resource_path, file_name))
+                    for entry in po.translated_entries():
+                        result['translations'][entry.msgid] = entry.msgstr
+                    continue
+                result['files'][file_name] = os.path.join(resource_path,
+                    file_name)
+            cls._loaded_resources[module_name] = result
 
 
 class TestCaseSelector(model.CoopView):

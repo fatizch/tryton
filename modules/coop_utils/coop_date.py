@@ -174,3 +174,13 @@ def convert_frequency(from_frequency, to_frequency):
             return 12
     return (convert_frequency_to_month(to_frequency)
         / float(convert_frequency_to_month(from_frequency)))
+
+
+def calculate_date_interval(age_min, age_max):
+    start_date = datetime.date.today()
+    start_date = start_date.replace(year=start_date.year
+        - int(age_max)).toordinal()
+    end_date = datetime.date.today()
+    end_date = end_date.replace(year=end_date.year
+        - int(age_min)).toordinal()
+    return [start_date, end_date]
