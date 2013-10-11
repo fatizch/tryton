@@ -11,7 +11,7 @@ cd tryton-workspace/conf
 . ./scripts.conf
 cd ../coopbusiness/scripts
 SCRIPT_NAME=$1
-while getopts ":bdehkloprstu" opt; do
+while getopts ":bdehkloprstux" opt; do
    case $opt in
         b)
             SCRIPT_NAME=launch_batch ;;
@@ -30,7 +30,8 @@ while getopts ":bdehkloprstu" opt; do
 -r reset
 -s sync_coop
 -t test_case
--u unittest" ;;
+-u unittest
+-x export configurations to xml" ;;
         k)
             SCRIPT_NAME=killtryton  ;;
         l)
@@ -47,6 +48,8 @@ while getopts ":bdehkloprstu" opt; do
             SCRIPT_NAME=test_case  ;;
         u)
             SCRIPT_NAME=unittest  ;;
+        x)
+            SCRIPT_NAME=export_configuration  ;;
         \?)
             echo "Invalid Option" ;;
    esac
