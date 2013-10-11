@@ -63,5 +63,5 @@ class LoanContext(RuleEngineContext):
 
     @classmethod
     @check_args('loan')
-    def _re_normalize_loan_rate(cls, args, value=1):
-        return args['loan'].get_rate(value)
+    def _re_get_periodic_rate_from_annual_rate(cls, args, rate=1):
+        return args['loan'].get_rate(rate)
