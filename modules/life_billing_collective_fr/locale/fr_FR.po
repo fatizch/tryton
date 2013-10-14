@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -73,7 +73,7 @@ msgstr "Valeur Indexé"
 
 msgctxt "field:billing.rate_line,manual_billing:"
 msgid "Manual Billing"
-msgstr "Facturation manuelle"
+msgstr "Tarification Manuelle"
 
 msgctxt "field:billing.rate_line,must_expand_tree:"
 msgid "Must Expand Tree"
