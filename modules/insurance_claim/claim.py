@@ -804,7 +804,7 @@ class Indemnification(model.CoopView, model.CoopSQL):
                 for field_name, value in detail_dict.iteritems():
                     #TODO: Temporary Hack
                     if (field_name == 'beneficiary_kind'
-                            and not self.beneficiary):
+                            and utils.is_none(self, 'beneficiary')):
                         self.beneficiary = self.get_beneficiary(value,
                             del_service)
                     else:
