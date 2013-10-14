@@ -1,7 +1,7 @@
 import copy
 from decimal import Decimal
 
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Or
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import StateTransition, StateView, Button, StateAction
@@ -61,7 +61,7 @@ class RateLine(model.CoopSQL, model.CoopView):
         'get_index_value')
     indexed_value = fields.Function(
         fields.Numeric('Indexed Value',
-            on_change_with=['rate', 'index', 'start_date_', 'indexed_value']),
+            on_change_with=['rate', 'index', 'start_date_', 'index_value']),
         'on_change_with_indexed_value')
     parent = fields.Many2One('billing.rate_line', 'Parent', ondelete='CASCADE')
     childs = fields.One2Many('billing.rate_line', 'parent', 'Childs',
@@ -72,7 +72,7 @@ class RateLine(model.CoopSQL, model.CoopView):
         'get_start_date')
     end_date = fields.Date('End Date')
     rate = fields.Numeric('Rate', digits=(16, 4),
-        states={'readonly': ~Eval('manual_billing')})
+        states={'readonly': Or(~Eval('manual_billing'), ~~Eval('childs'))})
 
     def add_child(self):
         if utils.is_none(self, 'childs'):
