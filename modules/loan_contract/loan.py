@@ -117,7 +117,7 @@ class Loan(model.CoopSQL, model.CoopView, model.ModelCurrency):
     kind = fields.Selection(LOAN_KIND, 'Kind', sort=False, states=STATES,
         depends=DEPENDS)
     contract = fields.Many2One('contract.contract', 'Contract',
-        ondelete='CASCADE')
+        ondelete='CASCADE', required=True)
     number_of_payments = fields.Integer('Number of Payments', states=STATES,
         depends=DEPENDS)
     payment_frequency = fields.Selection(coop_date.DAILY_DURATION,
@@ -633,9 +633,7 @@ class LoanCreation(model.CoopWizard):
         Loan = Pool().get('ins_contract.loan')
         loan = Loan()
         self.loan_parameters.loan = loan
-        contract = self.loan_parameters.contract
-        contract.loans = list(contract.loans)
-        contract.loans.append(loan)
+        loan.contract = self.loan_parameters.contract
         loan.kind = self.loan_parameters.kind
         loan.payment_frequency = self.loan_parameters.payment_frequency
         loan.number_of_payments = self.loan_parameters.number_of_payments
@@ -644,7 +642,7 @@ class LoanCreation(model.CoopWizard):
         loan.rate = self.loan_parameters.rate
         loan.lender = self.loan_parameters.lender
         loan.first_payment_date = self.loan_parameters.first_payment_date
-        loan.currency = contract.currency
+        loan.currency = loan.contract.currency
         loan.payment_amount = loan.on_change_with_payment_amount()
         loan.loan_shares = self.loan_parameters.loan_shares
         if (self.loan_parameters.defferal
@@ -655,7 +653,6 @@ class LoanCreation(model.CoopWizard):
             loan.calculate_increments(defferal='partially',
                 defferal_duration=loan.number_of_payments - 1)
         loan.save()
-        contract.save()
         if loan.kind != 'graduated' and not loan.increments:
             return 'create_payments'
         return 'increments'
