@@ -41,7 +41,7 @@ class Configuration(export.ExportImportMixin):
             domain=[('kind', '=', 'revenue')]))
     collection_journal = fields.Property(
         fields.Many2One('account.journal', 'Journal', domain=[
-                ('process_method', '=', 'manual')]))
+                ('type', '=', 'cash')]))
 
     @classmethod
     def _export_keys(cls):
