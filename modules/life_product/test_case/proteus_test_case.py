@@ -7,7 +7,6 @@ from decimal import Decimal
 from proteus import Model
 import proteus_tools
 from trytond.modules.insurance_product.test_case import get_or_create_context
-from trytond.modules.insurance_product.test_case import create_or_update_folder
 
 
 def update_cfg_dict_with_models(cfg_dict):
@@ -329,10 +328,6 @@ return True'''
     proteus_tools.try_to_save_object(cfg_dict, rule)
 
     return rule
-
-
-def create_rule_engine_data(cfg_dict):
-    create_or_update_folder(cfg_dict, 'ins_product.rule_sets.covered_data')
 
 
 def create_BBB_product(cfg_dict, code, name):
@@ -802,7 +797,6 @@ def launch_test_case(cfg_dict):
     cfg_dict = update_cfg_dict_with_models(cfg_dict)
     get_or_create_currency(cfg_dict)
     create_shared_complementary_data(cfg_dict)
-    create_rule_engine_data(cfg_dict)
     # create_AAA_Product(cfg_dict, 'AAA', 'Awesome Alternative Allowance')
     # create_BBB_product(cfg_dict, 'BBB', 'Big Bad Bully')
     # create_prev_product(cfg_dict)
