@@ -222,8 +222,8 @@ class TestCaseModel():
         if cur_depth and cur_depth > 0:
             for i in range(1, 3):
                 result += cls.create_company(
-                    '%s %s%s' % (cls.translate_this('Subsidiary'), child_level,
-                        i),
+                    '%s %s%s' % (cls.translate_this('Subsidiary', MODULE_NAME),
+                        child_level, i),
                     '%s%s' % (child_level, i), child_level + 1, cur_depth - 1)
         company.children = result
         return [company]
