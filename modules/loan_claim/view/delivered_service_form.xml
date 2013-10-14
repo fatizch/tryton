@@ -4,4 +4,8 @@
         <label name="loan"/>
         <field name="loan" widget="selection"/>
     </xpath>
+    <xpath expr="/form" position="inside">
+        <newline/>
+        <field name="is_loan"/>
+    </xpath>
 </data>
