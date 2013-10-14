@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -612,7 +612,7 @@ msgctxt "field:offered.product-options-coverage,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:rule_engine.tag,compl_data_defs:"
+msgctxt "field:tag,compl_data_defs:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -900,6 +900,6 @@ msgctxt "view:offered.product:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "view:rule_engine.tag:"
+msgctxt "view:tag:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"

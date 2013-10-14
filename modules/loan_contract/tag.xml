@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tryton>
+    <data skiptest="1">
+        <record model="tag" id="tag_loan">
+            <field name="code">loan</field>
+            <field name="name">Loan</field>
+        </record>
+    </data>
+</tryton>

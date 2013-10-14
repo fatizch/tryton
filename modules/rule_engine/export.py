@@ -35,8 +35,8 @@ class ExportPackage():
                 add_remove=[]),
         'getter_void', setter='setter_void')
     tags = fields.Function(
-        fields.One2Many('rule_engine.tag', None, 'Tags', states={
-                'invisible': Bool(Eval('model') != 'rule_engine.tag')},
+        fields.One2Many('tag', None, 'Tags', states={
+                'invisible': Bool(Eval('model') != 'tag')},
                 on_change=['tags', 'instances_to_export'],
                 add_remove=[]),
         'getter_void', setter='setter_void')
@@ -48,7 +48,7 @@ class ExportPackage():
                 ('rule_engine', 'Rule'),
                 ('rule_engine.context', 'Context'),
                 ('rule_engine.tree_element', 'Tree Element'),
-                ('rule_engine.tag', 'Tag'),
+                ('tag', 'Tag'),
                 ])
         return list(set(res))
 

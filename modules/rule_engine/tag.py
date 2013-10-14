@@ -8,13 +8,13 @@ __all__ = [
 class Tag(model.CoopSQL, model.CoopView):
     'Tag'
 
-    __name__ = 'rule_engine.tag'
+    __name__ = 'tag'
 
     code = fields.Char('Code', on_change_with=['code', 'name'], required=True)
-    name = fields.Char('Name')
-    parent = fields.Many2One('rule_engine.tag', 'Parent', ondelete='CASCADE')
-    childs = fields.One2Many('rule_engine.tag', 'parent', 'Childs')
-    rules = fields.Many2Many('rule_engine.rule_engine-tag', 'tag',
+    name = fields.Char('Name', translate=True)
+    parent = fields.Many2One('tag', 'Parent', ondelete='CASCADE')
+    childs = fields.One2Many('tag', 'parent', 'Childs')
+    rules = fields.Many2Many('rule_engine-tag', 'tag',
         'rule_engine', 'Rules')
 
     def on_change_with_code(self):

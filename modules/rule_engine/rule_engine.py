@@ -561,7 +561,7 @@ class Rule(ModelView, ModelSQL):
                 ('rule', 'Rule'), ('table', 'Table')],
             'Kind', states={'invisible': ~Eval('extra_data')}),
         'get_extra_data_kind', 'setter_void')
-    tags = fields.Many2Many('rule_engine.rule_engine-tag', 'rule_engine',
+    tags = fields.Many2Many('rule_engine-tag', 'rule_engine',
         'tag', 'Tags')
     tags_name = fields.Function(
         fields.Char('Tags', on_change_with=['tags']),
@@ -1333,8 +1333,8 @@ class RuleError(model.CoopSQL, model.CoopView):
 class RuleEngineTagRelation(model.CoopSQL):
     'Relation between rule engine and tag'
 
-    __name__ = 'rule_engine.rule_engine-tag'
+    __name__ = 'rule_engine-tag'
 
     rule_engine = fields.Many2One('rule_engine',
         'Rule Engine', ondelete='CASCADE')
-    tag = fields.Many2One('rule_engine.tag', 'Tag', ondelete='RESTRICT')
+    tag = fields.Many2One('tag', 'Tag', ondelete='RESTRICT')

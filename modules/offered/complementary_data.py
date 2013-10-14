@@ -352,7 +352,7 @@ class ComplementaryDataRecursiveRelation(model.CoopSQL, model.CoopView):
 class Tag():
     'Tag'
 
-    __name__ = 'rule_engine.tag'
+    __name__ = 'tag'
 
     compl_data_defs = fields.Many2Many('offered.compl_data_def-tag', 'tag',
         'compl_data_def', 'Complementary Data')
@@ -365,4 +365,4 @@ class ComplementaryDataDefTagRelation(model.CoopSQL):
 
     compl_data_def = fields.Many2One('offered.complementary_data_def',
         'Complementary Data Def', ondelete='CASCADE')
-    tag = fields.Many2One('rule_engine.tag', 'Tag', ondelete='RESTRICT')
+    tag = fields.Many2One('tag', 'Tag', ondelete='RESTRICT')
