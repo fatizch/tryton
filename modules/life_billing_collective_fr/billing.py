@@ -628,11 +628,11 @@ class RateNoteReception(model.CoopWizard):
         base_note = self.select_note.selected_note
         with Transaction().set_context(rate_note=base_note):
             good_period = base_note.contract.get_billing_period_at_date(
-                base_note.start_date)
+                max(base_note.start_date, base_note.contract.start_date))
             if not good_period:
                 good_move = base_note.contract.bill().id
             else:
-                good_move = base_note.contract.bill(good_period).id
+                good_move = base_note.contract.bill(*good_period).id
         return {'move': [good_move]}
 
     def transition_validate(self):

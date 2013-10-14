@@ -759,7 +759,8 @@ class Contract():
     def get_billing_period_at_date(self, date):
         Period = Pool().get('billing.period')
         candidates = Period.search([
-                ('start_date', '<=', date), ('end_date', '>=', date)])
+                ('contract', '=', self.id), ('start_date', '<=', date),
+                ('end_date', '>=', date)])
         if not candidates:
             return None
         elif len(candidates) > 1:
