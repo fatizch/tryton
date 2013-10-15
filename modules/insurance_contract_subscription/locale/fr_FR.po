@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -215,7 +215,7 @@ msgstr "Produit"
 
 msgctxt "field:process.process_desc,display_steps_without_status:"
 msgid "Display Steps Without Status"
-msgstr "Afficher les Etapes sans Statuts"
+msgstr "Afficher les Etapes sans Statut"
 
 msgctxt "field:process.process_desc,steps_to_display:"
 msgid "Steps"
