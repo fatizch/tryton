@@ -7,6 +7,7 @@ from .benefit import *
 from .clause import *
 from .process import *
 from .party import *
+from .test_case import *
 
 
 def register():
@@ -87,6 +88,8 @@ def register():
         ProcessProductRelation,
         ProcessDesc,
         ExpenseKind,
+        # from test_case
+        TestCaseModel,
         module='insurance_product', type_='model')
     Pool.register(
         LetterReport,
