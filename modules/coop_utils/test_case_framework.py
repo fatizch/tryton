@@ -318,8 +318,8 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
                     for entry in po.translated_entries():
                         result['translations'][entry.msgid] = entry.msgstr
                     continue
-                result['files'][file_name] = os.path.join(resource_path,
-                    file_name)
+                result['files'][u'%s' % file_name] = os.path.join(
+                    resource_path, file_name)
             cls._loaded_resources[module_name] = result
 
 
