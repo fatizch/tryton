@@ -213,8 +213,15 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
             if hasattr(GoodModel, save_method_hook):
                 getattr(GoodModel, save_method_hook)(elems)
             for elem in elems:
-                if force_save or not elem._export_find_instance(
-                        elem._export_get_key()):
+                try:
+                    if force_save or not elem._export_find_instance(
+                            elem._export_get_key()):
+                        elem.save()
+                except export.NotExportImport:
+                    # Known Exception is _export_find_instance raising a
+                    # multiple found error due to bad key definition. As a key
+                    # is currently not properly se on some models
+                    # (party.party), we just re-save if it happens
                     elem.save()
 
     @classmethod

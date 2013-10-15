@@ -45,7 +45,7 @@ class TestCaseModel():
         bank.addresses = [address]
 
     @classmethod
-    @set_test_case('Bank Test Case')
+    @set_test_case('Bank Test Case', 'address_kind_test_case')
     def bank_test_case(cls):
         Bank = Pool().get('bank')
         Configuration = cls.get_instance()
@@ -61,7 +61,7 @@ class TestCaseModel():
                     continue
                 bank = Bank()
                 company = cls.create_company(line[11:51].strip(),
-                    line[51:61].strip())
+                    line[51:61].strip())[0]
                 company.currency = Configuration.currency
                 cls.add_address(line, company)
                 bank.bic = coop_string.check_for_pattern(line[236:247],
@@ -72,7 +72,7 @@ class TestCaseModel():
                 bank.save()
             except:
                 cls.get_logger().warning('Impossible to create bank %s' %
-                    line[11:51].strip(), stacklevel=2)
+                    line[11:51].strip())
                 raise
 
     @classmethod
