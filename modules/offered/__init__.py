@@ -5,6 +5,7 @@ from .offered import *
 from .complementary_data import *
 from .coverage import *
 from .export import *
+from .test_case import *
 
 
 def register():
@@ -21,6 +22,8 @@ def register():
         CoverageComplementaryDataRelation,
         Tag,
         ComplementaryDataDefTagRelation,
+        # from test_case
+        TestCaseModel,
         #For export use
         ExportPackage,
         module='offered', type_='model')
