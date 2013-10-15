@@ -2,7 +2,7 @@ import copy
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Or
 
-from trytond.modules.coop_utils import fields, utils
+from trytond.modules.coop_utils import fields
 
 __all__ = [
     'Contract',
@@ -19,7 +19,7 @@ class Contract():
 
     is_health = fields.Function(
         fields.Boolean('Is Health', states={'invisible': True}),
-        'get_is_health')
+        'get_is_health', searcher='search_is_health')
 
     def get_is_health(self, name):
         if not self.options and self.offered:
@@ -29,6 +29,9 @@ class Contract():
                 return True
         return False
 
+    @classmethod
+    def search_is_health(cls, name, clause):
+        return [('offered.is_health',) + tuple(clause[1:])]
 
 class Option():
     'Option'

@@ -22,6 +22,10 @@ class Party():
     health_complement = fields.One2Many('health.party_complement', 'party',
         'Health Complement', size=1, states={
             'invisible': And(~Eval('health_complement'), ~Eval('is_health'))})
+    health_contract = fields.Function(
+        fields.Many2One('contract.contract', 'Health Contract', states={
+                'invisible': Eval('context', {}).get('synthesis') != 'health',
+                }), 'get_health_contract_id')
 
     def get_is_health(self, name):
         return Transaction().context.get('is_health')
@@ -31,6 +35,11 @@ class Party():
         if Transaction().context.get('is_health'):
             return [{}]
         return []
+
+    def get_health_contract_id(self, name):
+        for contract in self.contracts:
+            if contract.is_health:
+                return contract.id
 
 
 class PartyHealthComplement(model.CoopSQL, model.CoopView):

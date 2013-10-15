@@ -3,6 +3,7 @@ from .claim import *
 from .product import *
 from .contract import *
 from .rule_engine import *
+from .party import *
 
 
 def register():
@@ -25,6 +26,8 @@ def register():
         #From Rule Engine
         OfferedContext,
         ClaimContext,
+        # From Party,
+        Party,
         module='insurance_claim', type_='model')
 
     Pool.register(
