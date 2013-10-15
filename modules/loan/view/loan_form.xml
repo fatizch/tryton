@@ -46,7 +46,7 @@
       <newline/>
       <label name="lender"/>
       <field name="lender"/>
-      <field name="loan_shares" colspan="4" mode="tree,form" view_ids="loan_contract.loan_share_view_tree_editable,loan_contract.loan_share_view_form"/>
+      <field name="loan_shares" colspan="4" mode="tree,form" view_ids="loan.loan_share_view_tree_editable,loan.loan_share_view_form"/>
     </page>
     <page id="increments" string="Increments">
       <field name="increments" colspan="4" mode="tree"/>

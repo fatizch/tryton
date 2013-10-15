@@ -1,29 +1,17 @@
 from decimal import Decimal
-from trytond.pool import PoolMeta, Pool
+
+from trytond.pool import Pool
 from trytond.pyson import Eval
-from trytond.wizard import StateTransition, StateView, Button
-from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import utils, coop_date, fields, model
 from trytond.modules.coop_utils import coop_string
 
 __all__ = [
-    'LoanContract',
-    'LoanOption',
     'Loan',
     'LoanShare',
-    'LoanPriceLine',
-    'LoanCoveredElement',
-    'LoanCoveredData',
-    'LoanCoveredDataLoanShareRelation',
     'LoanIncrement',
     'LoanPayment',
-    'LoanParameters',
-    'LoanIncrementsDisplayer',
-    'AmortizationTableDisplayer',
-    'LoanCreation',
     ]
-
 
 LOAN_KIND = [
     ('fixed_rate', 'Fixed Rate'),
@@ -46,72 +34,10 @@ STATES = {'required': ~~Eval('active')}
 DEPENDS = ['active']
 
 
-class LoanContract():
-    'Loan Contract'
-
-    __name__ = 'contract.contract'
-    __metaclass__ = PoolMeta
-
-    is_loan = fields.Function(
-        fields.Boolean('Is Loan', states={'invisible': True}),
-        'get_is_loan')
-    loans = fields.One2Many('ins_contract.loan', 'contract', 'Loans',
-        states={'invisible': ~Eval('is_loan')},
-        depends=['is_loan', 'currency'],
-        context={'currency': Eval('currency')})
-
-    @classmethod
-    def __setup__(cls):
-        super(LoanContract, cls).__setup__()
-        cls._buttons.update({'create_loan': {}})
-
-    def get_is_loan(self, name):
-        if not self.options and self.offered:
-            return self.offered.is_loan
-        for option in self.options:
-            if option.is_loan:
-                return True
-        return False
-
-    def init_dict_for_rule_engine(self, cur_dict):
-        super(LoanContract, self).init_dict_for_rule_engine(cur_dict)
-        #TODO : To enhance
-        if not utils.is_none(self, 'loans'):
-            cur_dict['loan'] = self.loans[-1]
-
-    def get_dates(self):
-        if not self.is_loan:
-            return super(LoanContract, self).get_dates()
-        result = set()
-        for loan in self.loans:
-            for payment in loan.payments:
-                result.add(payment.start_date)
-        return result
-
-    @classmethod
-    @model.CoopView.button_action('loan_contract.launch_loan_creation_wizard')
-    def create_loan(cls, loans):
-        pass
-
-
-class LoanOption():
-    'Loan Option'
-
-    __name__ = 'contract.subscribed_option'
-    __metaclass__ = PoolMeta
-
-    is_loan = fields.Function(
-        fields.Boolean('Is Loan', states={'invisible': True}),
-        'get_is_loan')
-
-    def get_is_loan(self, name=None):
-        return self.offered and self.offered.family == 'loan'
-
-
 class Loan(model.CoopSQL, model.CoopView, model.ModelCurrency):
     'Loan'
 
-    __name__ = 'ins_contract.loan'
+    __name__ = 'loan.loan'
 
     active = fields.Boolean('Active')
     kind = fields.Selection(LOAN_KIND, 'Kind', sort=False, states=STATES,
@@ -131,17 +57,17 @@ class Loan(model.CoopSQL, model.CoopView, model.ModelCurrency):
     funds_release_date = fields.Date('Funds Release Date')
     first_payment_date = fields.Date('First Payment Date', states=STATES,
         depends=DEPENDS)
-    loan_shares = fields.One2Many('ins_contract.loan_share',
+    loan_shares = fields.One2Many('loan.share',
         'loan', 'Loan Shares')
     outstanding_capital = fields.Numeric('Outstanding Capital')
     rate = fields.Numeric('Annual Rate', states={
             'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate'])})
     lender = fields.Many2One('bank', 'Lender')
-    payments = fields.One2Many('ins_contract.loan_payment', 'loan',
+    payments = fields.One2Many('loan.payment', 'loan',
         'Payments')
-    early_payments = fields.One2ManyDomain('ins_contract.loan_payment', 'loan',
+    early_payments = fields.One2ManyDomain('loan.payment', 'loan',
         'Early Payments', domain=[('kind', '=', 'early')])
-    increments = fields.One2Many('ins_contract.loan_increment', 'loan',
+    increments = fields.One2Many('loan.increment', 'loan',
         'Increments')
     defferal = fields.Function(
         fields.Selection(DEFFERALS, 'Differal'),
@@ -220,7 +146,7 @@ class Loan(model.CoopSQL, model.CoopView, model.ModelCurrency):
         return self.currency.round(res)
 
     def calculate_payments(self):
-        Payment = Pool().get('ins_contract.loan_payment')
+        Payment = Pool().get('loan.payment')
         res = []
         from_date = self.first_payment_date
         begin_balance = self.amount
@@ -242,7 +168,7 @@ class Loan(model.CoopSQL, model.CoopView, model.ModelCurrency):
     @classmethod
     @model.CoopView.button
     def calculate_amortization_table(cls, loans):
-        Payment = Pool().get('ins_contract.loan_payment')
+        Payment = Pool().get('loan.payment')
         for loan in loans:
             if loan.payments:
                 Payment.delete(
@@ -297,7 +223,7 @@ class Loan(model.CoopSQL, model.CoopView, model.ModelCurrency):
             start_date = coop_date.add_day(increment.end_date, 1)
 
     def create_increments_from_defferal(self, defferal, duration):
-        Increment = Pool().get('ins_contract.loan_increment')
+        Increment = Pool().get('loan.increment')
         increment_1 = Increment()
         increment_1.defferal = defferal
         increment_1.number_of_payments = duration
@@ -322,7 +248,7 @@ class Loan(model.CoopSQL, model.CoopView, model.ModelCurrency):
         self.update_increments()
 
     def get_payment(self, at_date=None):
-        Payment = Pool().get('ins_contract.loan_payment')
+        Payment = Pool().get('loan.payment')
         if not at_date:
             at_date = utils.today()
         payments = Payment.search([
@@ -351,12 +277,12 @@ class Loan(model.CoopSQL, model.CoopView, model.ModelCurrency):
 class LoanShare(model.CoopSQL, model.CoopView):
     'Loan Share'
 
-    __name__ = 'ins_contract.loan_share'
+    __name__ = 'loan.share'
     _rec_name = 'share'
 
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    loan = fields.Many2One('ins_contract.loan', 'Loan', ondelete='CASCADE')
+    loan = fields.Many2One('loan.loan', 'Loan', ondelete='CASCADE')
     share = fields.Numeric('Loan Share')
     person = fields.Many2One('party.party', 'Person', ondelete='RESTRICT',
         domain=[('is_person', '=', True)])
@@ -374,84 +300,15 @@ class LoanShare(model.CoopSQL, model.CoopView):
         current_dict['share'] = self
 
 
-class LoanCoveredElement():
-    'Borrower'
-
-    __name__ = 'ins_contract.covered_element'
-    __metaclass__ = PoolMeta
-
-
-class LoanCoveredData():
-    'Loan Covered Data'
-
-    __name__ = 'ins_contract.covered_data'
-    __metaclass__ = PoolMeta
-
-    loan_shares = fields.Many2Many(
-        'ins_contract.loan_covered_data-loan_share',
-        'covered_data', 'loan_share', 'Loan Shares',
-        states={'invisible': ~Eval('is_loan')},
-        domain=[
-            ('person', '=', Eval('person')),
-            ('loan.contract', '=', Eval('contract'))],
-        depends=['person', 'contract'])
-    person = fields.Function(
-        fields.Many2One('party.party', 'Person'),
-        'get_person')
-    is_loan = fields.Function(
-        fields.Boolean('Is Loan', states={'invisible': True}),
-        'get_is_loan')
-
-    def get_person(self, name=None):
-        if self.covered_element and self.covered_element.party:
-            return self.covered_element.party.id
-
-    def init_from_option(self, option):
-        super(LoanCoveredData, self).init_from_option(option)
-        if not hasattr(self, 'loan_shares'):
-            self.loan_shares = []
-        for loan in option.contract.loans:
-            for share in loan.loan_shares:
-                if share.person.id == self.covered_element.party.id:
-                    self.loan_shares.append(share)
-
-    def get_is_loan(self, name):
-        return self.option and self.option.is_loan
-
-
-class LoanCoveredDataLoanShareRelation(model.CoopSQL):
-    'Loan Covered Data Loan Share Relation'
-
-    __name__ = 'ins_contract.loan_covered_data-loan_share'
-
-    covered_data = fields.Many2One('ins_contract.covered_data', 'Covered Data',
-        ondelete='CASCADE')
-    loan_share = fields.Many2One('ins_contract.loan_share', 'Loan Share',
-        ondelete='RESTRICT')
-
-
-class LoanPriceLine():
-    'Loan Price Line'
-
-    __metaclass__ = PoolMeta
-    __name__ = 'billing.price_line'
-
-    @classmethod
-    def get_line_target_models(cls):
-        result = super(LoanPriceLine, cls).get_line_target_models()
-        result.append(('ins_contract.loan_share', 'ins_contract.loan_share'))
-        return result
-
-
 class LoanIncrement(model.CoopSQL, model.CoopView, model.ModelCurrency):
     'Loan Increment'
 
-    __name__ = 'ins_contract.loan_increment'
+    __name__ = 'loan.increment'
 
     number = fields.Integer('Number')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    loan = fields.Many2One('ins_contract.loan', 'Loan', ondelete='CASCADE')
+    loan = fields.Many2One('loan.loan', 'Loan', ondelete='CASCADE')
     number_of_payments = fields.Integer('Number of Payments')
     rate = fields.Numeric('Annual Rate')
     payment_amount = fields.Numeric('Amount',
@@ -470,9 +327,9 @@ class LoanIncrement(model.CoopSQL, model.CoopView, model.ModelCurrency):
 class LoanPayment(model.CoopSQL, model.CoopView, model.ModelCurrency):
     'Loan Payment'
 
-    __name__ = 'ins_contract.loan_payment'
+    __name__ = 'loan.payment'
 
-    loan = fields.Many2One('ins_contract.loan', 'Loan', ondelete='CASCADE')
+    loan = fields.Many2One('loan.loan', 'Loan', ondelete='CASCADE')
     kind = fields.Selection([
             ('scheduled', 'Scheduled'),
             ('early', 'Early'),
@@ -537,142 +394,3 @@ class LoanPayment(model.CoopSQL, model.CoopView, model.ModelCurrency):
     def get_end_balance(self, name=None):
         if self.begin_balance is not None and self.principal is not None:
             return self.begin_balance - self.principal
-
-
-class LoanParameters(model.CoopView, model.ModelCurrency):
-    'Loan Parameters'
-
-    __name__ = 'ins_contract.loan_creation_parameters'
-
-    contract = fields.Many2One('contract.contract', 'Contract',
-        states={"invisible": True})
-    loan = fields.Many2One('ins_contract.loan', 'Loan')
-    kind = fields.Selection(LOAN_KIND, 'Kind', required=True)
-    number_of_payments = fields.Integer('Number of Payments', required=True)
-    payment_frequency = fields.Selection(coop_date.DAILY_DURATION,
-        'Payment Frequency', required=True, sort=False)
-    amount = fields.Numeric('Amount', required=True)
-    funds_release_date = fields.Date('Funds Release Date', required=True)
-    first_payment_date = fields.Date('First Payment Date', required=True)
-    rate = fields.Numeric('Annual Rate', required=True)
-    lender = fields.Many2One('bank', 'Lender', required=True)
-    defferal = fields.Selection(DEFFERALS, 'Differal', sort=False)
-    defferal_duration = fields.Integer('Differal Duration')
-    loan_shares = fields.One2Many('ins_contract.loan_share', None,
-        'Loan Shares')
-
-
-class LoanIncrementsDisplayer(model.CoopView):
-    'Increments'
-
-    __name__ = 'ins_contract.loan_creation_increments'
-
-    increments = fields.One2Many('ins_contract.loan_increment', None,
-        'Increments')
-
-
-class AmortizationTableDisplayer(model.CoopView):
-    'Amortization Table'
-
-    __name__ = 'ins_contract.loan_creation_table'
-
-    payments = fields.One2Many('ins_contract.loan_payment', None, 'Payments')
-
-
-class LoanCreation(model.CoopWizard):
-    'Loan Creation'
-
-    __name__ = 'ins_contract.loan_creation'
-
-    start_state = 'loan_parameters'
-    loan_parameters = StateView('ins_contract.loan_creation_parameters',
-        'loan_contract.loan_creation_parameters_view_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Next', 'create_loan', 'tryton-go-next'),
-            ])
-    create_loan = StateTransition()
-    increments = StateView('ins_contract.loan_creation_increments',
-        'loan_contract.loan_creation_increments_view_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Previous', 'loan_parameters', 'tryton-go-previous'),
-            Button('Next', 'create_payments', 'tryton-go-next',
-                default=True),
-            ])
-    create_payments = StateTransition()
-    amortization_table = StateView('ins_contract.loan_creation_table',
-        'loan_contract.loan_creation_table_view_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Previous', 'increments', 'tryton-go-previous'),
-            Button('End', 'validate_loan', 'tryton-go-next',
-                default=True),
-            ])
-    validate_loan = StateTransition()
-
-    def default_loan_parameters(self, values):
-        Contract = Pool().get('contract.contract')
-        contract = Contract(Transaction().context.get('active_id'))
-        return {
-            'contract': contract.id,
-            'currency': contract.currency.id,
-            'currency_symbol': contract.currency.symbol,
-            'kind': 'fixed_rate',
-            'payment_frequency': 'month',
-            'funds_release_date': contract.start_date,
-            'loan_shares': [{
-                    'start_date': contract.start_date,
-                    'share': 1,
-                    'person': x.party.id,
-                    } for x in contract.covered_elements]
-            }
-
-    def default_increments(self, values):
-        return {'increments':
-            [x.id for x in self.loan_parameters.loan.increments]}
-
-    def transition_create_loan(self):
-        Loan = Pool().get('ins_contract.loan')
-        loan = Loan()
-        self.loan_parameters.loan = loan
-        loan.contract = self.loan_parameters.contract
-        loan.kind = self.loan_parameters.kind
-        loan.payment_frequency = self.loan_parameters.payment_frequency
-        loan.number_of_payments = self.loan_parameters.number_of_payments
-        loan.amount = self.loan_parameters.amount
-        loan.funds_release_date = self.loan_parameters.funds_release_date
-        loan.rate = self.loan_parameters.rate
-        loan.lender = self.loan_parameters.lender
-        loan.first_payment_date = self.loan_parameters.first_payment_date
-        loan.currency = loan.contract.currency
-        loan.payment_amount = loan.on_change_with_payment_amount()
-        loan.loan_shares = self.loan_parameters.loan_shares
-        if (self.loan_parameters.defferal
-                and self.loan_parameters.defferal_duration):
-            loan.calculate_increments(defferal=self.loan_parameters.defferal,
-                defferal_duration=self.loan_parameters.defferal_duration)
-        elif loan.kind == 'intermediate':
-            loan.calculate_increments(defferal='partially',
-                defferal_duration=loan.number_of_payments - 1)
-        loan.save()
-        if loan.kind != 'graduated' and not loan.increments:
-            return 'create_payments'
-        return 'increments'
-
-    def default_amortization_table(self, values):
-        return {'payments': [x.id for x in self.loan_parameters.loan.payments]}
-
-    def transition_create_payments(self):
-        if hasattr(self.increments, 'increments'):
-            for increment in self.increments.increments:
-                increment.save()
-        self.loan_parameters.loan.calculate_amortization_table(
-            [self.loan_parameters.loan])
-        return 'amortization_table'
-
-    def transition_validate_loan(self):
-        contract = self.loan_parameters.contract
-        if not contract.loans:
-            contract.loans = []
-        contract.loans = list(contract.loans)
-        contract.loans.append(self.loan_parameters.loan)
-        contract.save()
-        return 'end'

@@ -18,7 +18,7 @@ class LoanClaimDeliveredService():
     is_loan = fields.Function(
         fields.Boolean('Is loan', states={'invisible': True}),
         'get_is_loan')
-    loan = fields.Many2One('ins_contract.loan', 'Loan',
+    loan = fields.Many2One('loan.loan', 'Loan',
         domain=[('contract', '=', Eval('contract'))],
         states={'invisible': ~Eval('is_loan')},
         depends=['contract', 'is_loan'])

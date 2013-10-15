@@ -7,6 +7,7 @@ from trytond.modules.coop_utils import utils, fields
 from trytond.modules.insurance_product import product
 
 
+__metaclass__ = PoolMeta
 __all__ = [
     'LoanProduct',
     'LoanCoverage',
@@ -17,7 +18,6 @@ class LoanProduct():
     'Loan Product'
 
     __name__ = 'offered.product'
-    __metaclass__ = PoolMeta
 
     is_loan = fields.Function(
         fields.Boolean('Is Loan', states={'invisible': True}),
@@ -34,7 +34,6 @@ class LoanCoverage():
     'Loan Coverage'
 
     __name__ = 'offered.coverage'
-    __metaclass__ = PoolMeta
 
     is_loan = fields.Function(
         fields.Boolean('Is Loan', states={'invisible': True}),
