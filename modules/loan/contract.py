@@ -63,7 +63,6 @@ class LoanOption():
     'Loan Option'
 
     __name__ = 'contract.subscribed_option'
-    __metaclass__ = PoolMeta
 
     is_loan = fields.Function(
         fields.Boolean('Is Loan', states={'invisible': True}),
@@ -77,7 +76,6 @@ class LoanCoveredData():
     'Loan Covered Data'
 
     __name__ = 'ins_contract.covered_data'
-    __metaclass__ = PoolMeta
 
     loan_shares = fields.Many2Many(
         'loan.covered_data-loan_share',
