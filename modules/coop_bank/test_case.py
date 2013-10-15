@@ -77,7 +77,7 @@ class TestCaseModel():
 
     @classmethod
     @set_test_case('Bank Accounts Test Case', 'bank_test_case',
-        'party_test_case')
+        'party_test_case', 'main_company_test_case')
     def bank_account_test_case(cls):
         Party = Pool().get('party.party')
         Bank = Pool().get('bank')

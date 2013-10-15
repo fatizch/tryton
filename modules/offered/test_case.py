@@ -19,8 +19,6 @@ class TestCaseModel():
         super(TestCaseModel, cls).__setup__()
         cls.contact_mechanism_test_case._dependencies.append(
             'main_company_test_case')
-        cls.bank_account_test_case._dependencies.append(
-            'main_company_test_case')
 
     @classmethod
     def global_search_list(cls):
