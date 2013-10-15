@@ -468,6 +468,7 @@ class TestCaseWizard(model.CoopWizard):
                     'selected': False,
                     'selection': 'not_selected',
                     })
+        test_cases.sort(key=lambda x: x['name'])
         return {'test_cases': test_cases}
 
     def transition_execute_test_cases(self):
