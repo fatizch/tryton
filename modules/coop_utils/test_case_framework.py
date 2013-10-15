@@ -244,26 +244,30 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
         Lang.write(langs, {'translatable': True})
 
     @classmethod
-    def read_data_file(cls, filename, sep='|'):
-        res = {}
-        cur_model = ''
-        cur_data = []
-        lines = open(filename).readlines()
-        for line in lines:
-            line = line[:-1]
-            line.rstrip()
-            if line == '':
-                continue
-            if line[0] == '[' and line[-1] == ']':
-                if cur_model and cur_data:
-                    res[cur_model] = cur_data
-                cur_model = line[1:-1]
-                cur_data = []
-                continue
-            cur_data.append(line.split(sep))
-
-        res[cur_model] = cur_data
-
+    def read_data_file(cls, filename, module, sep='|'):
+        cls.load_resources(module)
+        if isinstance(cls._loaded_resources[module]['files'][filename], (
+                    list, dict)):
+            return cls._loaded_resources[module]['files'][filename]
+        res, cur_model, cur_data = {}, '', []
+        with open(cls._loaded_resources[module]['files'][filename], 'r') as f:
+            for line in f:
+                line = line[:-1]
+                line.rstrip()
+                if line == '':
+                    continue
+                if line[0] == '[' and line[-1] == ']':
+                    if cur_model and cur_data:
+                        res[cur_model] = cur_data
+                    cur_model = line[1:-1]
+                    cur_data = []
+                    continue
+                cur_data.append(line.split(sep))
+            if cur_model:
+                res[cur_model] = cur_data
+            else:
+                res = cur_data
+        cls._loaded_resources[module]['files'][filename] = res
         return res
 
     @classmethod
