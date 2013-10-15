@@ -2,11 +2,9 @@ import copy
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Less
 
-from trytond.modules.coop_utils import fields, utils, coop_string
+from trytond.modules.coop_utils import fields, utils, coop_string, model
 
-from trytond.modules.coop_utils import fields, model
 __metaclass__ = PoolMeta
-
 __all__ = [
     'Party',
     'ContactHistory',
@@ -71,7 +69,7 @@ class Party():
     def get_last_quote_id(self, name):
         return self.quotes[-1].id if self.quotes else None
 
-	@classmethod
+    @classmethod
     def get_summary(cls, parties, name=None, at_date=None, lang=None):
         if not lang:
             lang = utils.get_user_language()

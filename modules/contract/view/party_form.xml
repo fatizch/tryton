@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <data>
-  <xpath expr="//page[@id='summary']" position="inside">
+  <xpath expr="//page[@id='summary']/field[@name='summary']" position="before">
     <newline/>
     <label name="last_quote"/>
     <group id='quote' col="50" colspan="2">

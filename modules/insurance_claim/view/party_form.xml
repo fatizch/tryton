@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <data>
-    <xpath expr="/form/notebook/page[@id='summary']" position="inside">
+    <xpath expr="/form/notebook/page[@id='summary']/field[@name='summary']" position="before">
+        <newline/>
         <label name="last_claim"/>
         <group id='last_claim' col='50' colspan="3">
             <field name="last_claim" colspan="49"/>

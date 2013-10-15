@@ -13,6 +13,7 @@
                 <field name="main_contact_mechanism" colspan="49"/>
                 <button string="+" name="open_contact_mechanisms"/>
             </group>
+            <field name="summary" colspan="6" widget="richtext"/>
         </page>
     </xpath>
     <xpath expr="/form/group[@id='checkboxes']/label[@name='active']"
