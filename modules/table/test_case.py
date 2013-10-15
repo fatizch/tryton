@@ -113,6 +113,11 @@ class TestCaseModel():
         cls.read_csv_file('IPC;Indice des prix consommation;numeric.csv',
             MODULE_NAME)
         cls.read_csv_file('MORTAL;Table de mortalite;numeric.csv', MODULE_NAME)
+        cls.read_csv_file(
+            'PMSS;Plafond Mensuel de la Securite Sociale;numeric.csv',
+            MODULE_NAME)
         cls.load_table_from_file(
             'IPC;Indice des prix consommation;numeric.csv')
         cls.load_table_from_file('MORTAL;Table de mortalite;numeric.csv')
+        cls.load_table_from_file(
+            'PMSS;Plafond Mensuel de la Securite Sociale;numeric.csv')
