@@ -49,10 +49,7 @@ def set_test_case(name, *args):
     # A decorator for test_case functions to be able to build the dependency
     # tree of test_cases
     def wrapper(f):
-        if hasattr(f, '_dependencies'):
-            f._dependencies = list(set(f._dependencies, args))
-        else:
-            f._dependencies = list(set(args))
+        f._dependencies = list(set(args))
         f._test_case_name = name
         return f
     return wrapper
@@ -202,18 +199,23 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
         GoodModel = Pool().get(cls.__name__)
         group = {}
         for elem in objects:
-            if elem._export_find_instance(elem._export_get_key()):
-                continue
             if not elem.__name__ in group:
                 group[elem.__name__] = []
             group[elem.__name__].append(elem)
         for class_name, elems in group.iteritems():
+            force_save = False
+            if not elems[0]._export_keys():
+                force_save = True
+                cls.get_logger().warning('Unable to get export keys for '
+                    'model %s, no check will be done when saving' % class_name)
             save_method_hook = '_save_%s' % (
                 class_name.replace('.', '_').replace('-', '_'))
             if hasattr(GoodModel, save_method_hook):
                 getattr(GoodModel, save_method_hook)(elems)
             for elem in elems:
-                elem.save()
+                if force_save or not elem._export_find_instance(
+                        elem._export_get_key()):
+                    elem.save()
 
     @classmethod
     @set_test_case('Set Global Search')

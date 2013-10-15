@@ -32,6 +32,7 @@ class TestCaseModel():
         ' with the same name')
     phone_prefix = fields.Char('Phone Prefix')
     _get_country_cache = Cache('get_country')
+    _get_country_code_cache = Cache('get_country_by_code')
 
     @classmethod
     def global_search_list(cls):
@@ -94,12 +95,22 @@ class TestCaseModel():
 
     @classmethod
     def get_country(cls, country_name):
-        result = cls._get_country_cache(country_name)
+        result = cls._get_country_cache.get(country_name)
         if result:
             return result
         result = Pool().get('country.country').search([
                 ('name', 'ilike', country_name.upper())], limit=1)[0]
         cls._get_country_cache.set(country_name, result)
+        return result
+
+    @classmethod
+    def get_country_by_code(cls, country_code):
+        result = cls._get_country_code_cache.get(country_code)
+        if result:
+            return result
+        result = Pool().get('country.country').search([
+                ('code', '=', country_code.upper())], limit=1)[0]
+        cls._get_country_code_cache.set(country_code, result)
         return result
 
     @classmethod

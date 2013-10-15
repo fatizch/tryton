@@ -214,3 +214,12 @@ def get_amount_from_currency(amount, currency):
     amount = amount.strip(currency.symbol)
     amount = amount.replace(currency.mon_decimal_point, '.')
     return Decimal(atof(amount))
+
+
+def check_for_pattern(s, pattern):
+    if s is not None:
+        s = s.strip()
+        matchObj = re.match(pattern, s)
+        if matchObj:
+            return matchObj.group()
+        return False
