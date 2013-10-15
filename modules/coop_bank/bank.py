@@ -129,6 +129,9 @@ class BankAccountNumber(export.ExportImportMixin):
         super(BankAccountNumber, cls).__setup__()
         cls._error_messages.update({
                 'invalid_number': ('Invalid %s number : %s')})
+        cls._sql_constraints += [
+            ('number_uniq', 'UNIQUE(number)', 'The number must be unique!'),
+            ]
 
     @classmethod
     def validate(cls, numbers):
