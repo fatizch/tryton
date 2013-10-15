@@ -34,7 +34,7 @@ class TestCaseModel():
         Company = Pool().get('company.company')
         if Company.search([]):
             return
-        company_party = cls.create_company(Configuration.main_company_name)[0]
+        company_party = cls.create_company(Configuration.main_company_name)
         company = Company()
         company.party = company_party
         company.currency = Configuration.currency

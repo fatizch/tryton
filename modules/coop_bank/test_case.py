@@ -61,7 +61,7 @@ class TestCaseModel():
                     continue
                 bank = Bank()
                 company = cls.create_company(line[11:51].strip(),
-                    line[51:61].strip())[0]
+                    line[51:61].strip())
                 company.currency = Configuration.currency
                 cls.add_address(line, company)
                 bank.bic = coop_string.check_for_pattern(line[236:247],

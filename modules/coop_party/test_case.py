@@ -235,16 +235,17 @@ class TestCaseModel():
         result = []
         if cur_depth and cur_depth > 0:
             for i in range(1, 3):
-                result += cls.create_company(
-                    '%s %s%s' % (translater('Subsidiary'), child_level, i),
-                    '%s%s' % (child_level, i), child_level + 1, cur_depth - 1)
+                result.append(cls.create_company(
+                        '%s %s%s' % (translater('Subsidiary'), child_level, i),
+                        '%s%s' % (child_level, i), child_level + 1,
+                        cur_depth - 1))
         company.children = result
-        return [company]
+        return company
 
     @classmethod
     @set_test_case('Hierarchy Test Case')
     def hierarchy_test_case(cls):
-        return cls.create_company('Coop', 'Coop', 1, 4)
+        return [cls.create_company('Coop', 'Coop', 1, 4)]
 
     @classmethod
     @set_test_case('Contact Mechanism Test Case', 'party_test_case')
