@@ -233,6 +233,17 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
         Model.write(targets, {'global_search_p': True})
 
     @classmethod
+    @set_test_case('Set translatable languages')
+    def set_language_translatable(cls):
+        Lang = Pool().get('ir.lang')
+        langs = Lang.search([
+                ('translatable', '=', False),
+                ('code', 'in', ['fr_FR', 'en_US'])])
+        # We force the write on existing records, do not use the auto-save on
+        # test_case return values
+        Lang.write(langs, {'translatable': True})
+
+    @classmethod
     def read_data_file(cls, filename, sep='|'):
         res = {}
         cur_model = ''
