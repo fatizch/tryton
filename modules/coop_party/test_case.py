@@ -43,30 +43,32 @@ class TestCaseModel():
     @classmethod
     @set_test_case('Relation Kind Test Case')
     def relation_kind_test_case(cls):
+        translater = cls.get_translater(MODULE_NAME)
         RelationKind = Pool().get('party.party_relation_kind')
         spouse = RelationKind()
         spouse.code = 'spouse'
-        spouse.name = cls.translate_this('Spouse', MODULE_NAME)
-        spouse.reversed_name = cls.translate_this('Spouse', MODULE_NAME)
+        spouse.name = translater('Spouse')
+        spouse.reversed_name = translater('Spouse')
         parent = RelationKind()
         parent.code = 'parent'
-        parent.name = cls.translate_this('Parent', MODULE_NAME)
-        parent.reversed_name = cls.translate_this('Children', MODULE_NAME)
+        parent.name = translater('Parent')
+        parent.reversed_name = translater('Children')
         return [spouse, parent]
 
     @classmethod
     @set_test_case('Address Kind Test Case')
     def address_kind_test_case(cls):
+        translater = cls.get_translater(MODULE_NAME)
         AddressKind = Pool().get('party.address_kind')
         main = AddressKind()
         main.key = 'main'
-        main.name = cls.translate_this('Main', MODULE_NAME)
+        main.name = translater('Main')
         second = AddressKind()
         second.key = '2nd'
-        second.name = cls.translate_this('Secondary', MODULE_NAME)
+        second.name = translater('Secondary')
         job = AddressKind()
         job.key = 'job'
-        job.name = cls.translate_this('Job', MODULE_NAME)
+        job.name = translater('Job')
         return [main, second, job]
 
     @classmethod
@@ -225,6 +227,7 @@ class TestCaseModel():
     @classmethod
     def create_company(cls, name, short_name='', child_level=None,
             cur_depth=None):
+        translater = cls.get_translater(MODULE_NAME)
         company = Pool().get('party.party')()
         company.is_company = True
         company.name = name
@@ -233,8 +236,7 @@ class TestCaseModel():
         if cur_depth and cur_depth > 0:
             for i in range(1, 3):
                 result += cls.create_company(
-                    '%s %s%s' % (cls.translate_this('Subsidiary', MODULE_NAME),
-                        child_level, i),
+                    '%s %s%s' % (translater('Subsidiary'), child_level, i),
                     '%s%s' % (child_level, i), child_level + 1, cur_depth - 1)
         company.children = result
         return [company]

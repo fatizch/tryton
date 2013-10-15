@@ -346,6 +346,10 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
                     resource_path, file_name)
             cls._loaded_resources[module_name] = result
 
+    @classmethod
+    def get_translater(cls, module):
+        return lambda x: cls.translate_this(x, module)
+
 
 class TestCaseSelector(model.CoopView):
     'Test Case Selector'
