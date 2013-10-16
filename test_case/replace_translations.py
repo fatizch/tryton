@@ -5,6 +5,7 @@ import proteus_tools
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
+
 def get_modules(from_modules):
     from trytond.modules import create_graph
 
@@ -32,11 +33,11 @@ def replace_translations(test_config_file, language, update_dict,
             continue
         po = polib.pofile(translation_file)
         for entry in po.translated_entries():
-            if not entry.msgstr in update_dict:
+            if not (entry.msgid, entry.msgstr) in update_dict:
                 continue
             ttype, name, res_id = entry.msgctxt.split(':')
             entry.msgctxt = '%s:%s:%s.%s' % (ttype, name, cur_module, res_id)
-            entry.msgstr = update_dict[entry.msgstr]
+            entry.msgstr = update_dict[(entry.msgid, entry.msgstr)]
             po_file.append(entry)
 
     po_file.sort()
@@ -48,6 +49,10 @@ def replace_translations(test_config_file, language, update_dict,
 
 
 if __name__ == '__main__':
+    update_dict = {
+        ('Party', 'Tiers'): 'Acteur',
+        ('Parties', 'Tiers'): 'Acteurs',
+        }
     replace_translations(os.path.join(DIR, 'test_case.cfg'), 'fr_FR',
-        {'Tiers': 'Acteurs'}, os.path.abspath(os.path.join(DIR, '..',
+        update_dict, os.path.abspath(os.path.join(DIR, '..',
                 'modules', 'coop_translation', 'locale')))
