@@ -12,7 +12,7 @@ __all__ = [
 class LoanClaimDeliveredService():
     'Claim Delivered Service'
 
-    __name__ = 'ins_contract.delivered_service'
+    __name__ = 'contract.delivered_service'
     __metaclass__ = PoolMeta
 
     is_loan = fields.Function(

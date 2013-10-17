@@ -490,23 +490,23 @@ msgctxt "field:claim.loss,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_contract.delivered_service,benefit:"
+msgctxt "field:contract.delivered_service,benefit:"
 msgid "Benefit"
 msgstr "Prestation"
 
-msgctxt "field:ins_contract.delivered_service,complementary_data:"
+msgctxt "field:contract.delivered_service,complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:ins_contract.delivered_service,indemnifications:"
+msgctxt "field:contract.delivered_service,indemnifications:"
 msgid "Indemnifications"
 msgstr "indemnisations"
 
-msgctxt "field:ins_contract.delivered_service,loss:"
+msgctxt "field:contract.delivered_service,loss:"
 msgid "Loss"
 msgstr "Préjudice"
 
-msgctxt "field:ins_contract.delivered_service,multi_level_view:"
+msgctxt "field:contract.delivered_service,multi_level_view:"
 msgid "Indemnifications"
 msgstr "Indemnisations"
 

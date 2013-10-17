@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -550,55 +550,55 @@ msgctxt "field:ins_contract.covered_element-party_relation,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.delivered_service,contract:"
+msgctxt "field:contract.delivered_service,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:ins_contract.delivered_service,create_date:"
+msgctxt "field:contract.delivered_service,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_contract.delivered_service,create_date_:"
+msgctxt "field:contract.delivered_service,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_contract.delivered_service,create_uid:"
+msgctxt "field:contract.delivered_service,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_contract.delivered_service,expenses:"
+msgctxt "field:contract.delivered_service,expenses:"
 msgid "Expenses"
 msgstr "Frais"
 
-msgctxt "field:ins_contract.delivered_service,func_error:"
+msgctxt "field:contract.delivered_service,func_error:"
 msgid "Error"
 msgstr "Erreur"
 
-msgctxt "field:ins_contract.delivered_service,id:"
+msgctxt "field:contract.delivered_service,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_contract.delivered_service,must_expand_tree:"
+msgctxt "field:contract.delivered_service,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_contract.delivered_service,rec_name:"
+msgctxt "field:contract.delivered_service,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_contract.delivered_service,status:"
+msgctxt "field:contract.delivered_service,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:ins_contract.delivered_service,subscribed_service:"
+msgctxt "field:contract.delivered_service,subscribed_service:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "field:ins_contract.delivered_service,write_date:"
+msgctxt "field:contract.delivered_service,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_contract.delivered_service,write_uid:"
+msgctxt "field:contract.delivered_service,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -885,7 +885,7 @@ msgctxt "model:ins_contract.covered_element-party_relation,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:ins_contract.delivered_service,name:"
+msgctxt "model:contract.delivered_service,name:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 
@@ -1001,19 +1001,19 @@ msgctxt "selection:ins_contract.covered_data,status:"
 msgid "Terminated"
 msgstr "Terminé"
 
-msgctxt "selection:ins_contract.delivered_service,status:"
+msgctxt "selection:contract.delivered_service,status:"
 msgid "Calculated"
 msgstr "Calculé"
 
-msgctxt "selection:ins_contract.delivered_service,status:"
+msgctxt "selection:contract.delivered_service,status:"
 msgid "Calculating"
 msgstr "Calcul en Cours"
 
-msgctxt "selection:ins_contract.delivered_service,status:"
+msgctxt "selection:contract.delivered_service,status:"
 msgid "Delivered"
 msgstr "Delivré"
 
-msgctxt "selection:ins_contract.delivered_service,status:"
+msgctxt "selection:contract.delivered_service,status:"
 msgid "Not Eligible"
 msgstr "Non Eligible"
 
@@ -1097,7 +1097,7 @@ msgctxt "view:ins_contract.covered_element:"
 msgid "Sub Covered Elements"
 msgstr "Sous Eléments Couverts"
 
-msgctxt "view:ins_contract.delivered_service:"
+msgctxt "view:contract.delivered_service:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 

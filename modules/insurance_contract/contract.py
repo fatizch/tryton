@@ -1021,7 +1021,7 @@ class ManagementRole(model.CoopSQL, model.CoopView):
 class DeliveredService(model.CoopView, model.CoopSQL):
     'Delivered Service'
 
-    __name__ = 'ins_contract.delivered_service'
+    __name__ = 'contract.delivered_service'
 
     status = fields.Selection(DELIVERED_SERVICES_STATUSES, 'Status')
     expenses = fields.One2Many('ins_contract.expense',
@@ -1074,7 +1074,7 @@ class Expense(model.CoopSQL, model.CoopView):
     __name__ = 'ins_contract.expense'
 
     delivered_service = fields.Many2One(
-        'ins_contract.delivered_service', 'Delivered Service',
+        'contract.delivered_service', 'Delivered Service',
         ondelete='CASCADE')
     kind = fields.Many2One('ins_product.expense_kind', 'Kind')
     amount = fields.Numeric(
