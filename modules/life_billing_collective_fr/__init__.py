@@ -6,6 +6,7 @@ from .billing import *
 from .rule_engine import *
 from .party import *
 from .company import *
+from .test_case import *
 
 from trytond.modules.coop_utils import expand_tree
 RateLineTreeExpansion = expand_tree('billing.rate_line')
@@ -14,7 +15,7 @@ RateNoteLineTreeExpansion = expand_tree('billing.rate_note_line')
 
 def register():
     Pool.register(
-        # From Product
+        # from Product
         Product,
         Coverage,
         CollectiveRatingRule,
@@ -22,10 +23,10 @@ def register():
         FareClassGroup,
         FareClassGroupFareClassRelation,
         SubRatingRule,
-        #From Contract
+        #from Contract
         Contract,
         CoveredData,
-        # From billing,
+        # from billing,
         RateLine,
         RateNote,
         RateNoteLine,
@@ -42,14 +43,16 @@ def register():
         MoveLine,
         # from Rule Engine
         OfferedContext,
-        # From Party
+        # from Party
         GroupParty,
         Party,
-        #For tree expand
+        # For tree expand
         RateLineTreeExpansion,
         RateNoteLineTreeExpansion,
-        # From Company
+        # from Company
         Company,
+        # from test_case
+        TestCaseModel,
         module='life_billing_collective_fr', type_='model')
     Pool.register(
         RateNoteProcess,

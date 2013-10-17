@@ -1,0 +1,7 @@
+msgid "Suspense Account"
+msgstr "Compte d'attente"
+
+msgid "Default Suspense Account"
+msgstr "Compte d'attente par défaut"
+
+
