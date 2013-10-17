@@ -500,4 +500,4 @@ class TestCaseWizard(model.CoopWizard):
                     logging.getLogger('test_case').info('Failed to import %s' %
                         elem.filename)
                     self.raise_user_error('bad_json', (elem.filename))
-        return 'end'
+        return 'select_test_cases'
