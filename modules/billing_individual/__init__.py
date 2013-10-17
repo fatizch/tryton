@@ -4,6 +4,7 @@ from .billing import *
 from .account import *
 from .party import *
 from .payment_rule import *
+from .test_case import *
 
 
 def register():
@@ -40,6 +41,8 @@ def register():
         Move,
         MoveLine,
         Account,
+        # from test_case
+        TestCaseModel,
         module='billing_individual', type_='model')
 
     Pool.register(

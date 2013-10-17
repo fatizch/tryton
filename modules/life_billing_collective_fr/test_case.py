@@ -24,7 +24,7 @@ class TestCaseModel():
 
     @classmethod
     @set_test_case('Create default accounts', 'account_kind_test_case')
-    def create_default_accounts(cls):
+    def account_test_case(cls):
         result = super(TestCaseModel, cls).create_default_accounts()
         translater = cls.get_translater(MODULE_NAME)
         result.append(cls.create_account(translater(
@@ -33,7 +33,7 @@ class TestCaseModel():
         return result
 
     @classmethod
-    @set_test_case('Configure Accounting', 'account_kind_test_case')
+    @set_test_case('Configure Accounting', 'account_test_case')
     def configure_accounting_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
         account_config = Pool().get('account.configuration').search([])[0]
