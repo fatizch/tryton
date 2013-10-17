@@ -1165,7 +1165,7 @@ class IndemnificationValidation(Wizard):
 
     select_indemnifications = StateView(
         'claim.indemnification_selection',
-        'insurance_claim.indemnification_selection_form',
+        'claim.indemnification_selection_form',
         [
             Button('Quit', 'end', 'tryton-cancel'),
             Button('Continue', 'reload_selection', 'tryton-refresh')])

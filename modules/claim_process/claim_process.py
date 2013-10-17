@@ -320,7 +320,7 @@ class DeclarationProcessFinder(ProcessFinder):
     @classmethod
     def get_parameters_view(cls):
         return '%s.%s' % (
-            'insurance_claim_process',
+            'claim_process',
             'declaration_process_parameters_form')
 
     def init_main_object_from_process(self, obj, process_param):

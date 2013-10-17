@@ -29,7 +29,7 @@
       <field name="name">Start Declaration</field>
       <field name="wiz_name">claim.declaration_process_finder</field>
     </record>
-    <menuitem parent="insurance_claim.menu_claim" sequence="1"
+    <menuitem parent="claim.menu_claim" sequence="1"
         action="declaration_process_launcher" id="menu_start_declaration"/>
     <record model="ir.action.act_window" id="act_claim_logs">
       <field name="name">Logs</field>

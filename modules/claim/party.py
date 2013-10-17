@@ -37,7 +37,7 @@ class Party():
         return len(self.claims)
 
     @classmethod
-    @model.CoopView.button_action('insurance_claim.act_claims_button')
+    @model.CoopView.button_action('claim.act_claims_button')
     def open_claims(cls, objs):
         pass
 

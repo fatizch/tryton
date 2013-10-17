@@ -28,8 +28,8 @@ def register():
         ClaimContext,
         # From Party,
         Party,
-        module='insurance_claim', type_='model')
+        module='claim', type_='model')
 
     Pool.register(
         IndemnificationValidation,
-        module='insurance_claim', type_='wizard')
+        module='claim', type_='wizard')

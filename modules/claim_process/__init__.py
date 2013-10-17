@@ -9,8 +9,8 @@ def register():
         ProcessDesc,
         DeliveredServiceProcess,
         DeclarationProcessParameters,
-        module='insurance_claim_process', type_='model')
+        module='claim_process', type_='model')
 
     Pool.register(
         DeclarationProcessFinder,
-        module='insurance_claim_process', type_='wizard')
+        module='claim_process', type_='wizard')

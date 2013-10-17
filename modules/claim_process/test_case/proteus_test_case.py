@@ -128,8 +128,8 @@ def launch_test_case(cfg_dict):
 <label name="declaration_date"/>
 <field name="declaration_date"/>
 <field name="losses" colspan="4" mode="form,tree" expand_toolbar="0" \
-view_ids="insurance_claim_process.loss_delivered_services_view_form,\
-insurance_claim.loss_view_tree"/>
+view_ids="claim_process.loss_delivered_services_view_form,\
+claim.loss_view_tree"/>
 <field name="doc_received" invisible="1"/>''',
     })
     step_documents = meths['StepDesc']({
