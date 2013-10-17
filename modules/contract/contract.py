@@ -5,7 +5,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval, If
 from trytond.pool import Pool, PoolMeta
 
-from trytond.modules.coop_utils import utils
+from trytond.modules.coop_utils import utils, coop_string
 from trytond.modules.insurance_product import Printable
 
 CONTRACTSTATUSES = [
@@ -25,6 +25,7 @@ __all__ = [
     'Contract',
     'SubscribedCoverage',
     'ContractAddress',
+    'DeliveredService',
     'LetterModel',
     ]
 
@@ -645,6 +646,46 @@ class ContractAddress(model.CoopSQL, model.CoopView):
     @staticmethod
     def default_start_date():
         return Transaction().context.get('start_date')
+
+
+class DeliveredService(model.CoopView, model.CoopSQL):
+    'Delivered Service'
+
+    __name__ = 'contract.delivered_service'
+
+    status = fields.Selection([
+            ('calculating', 'Calculating'),
+            ('not_eligible', 'Not Eligible'),
+            ('calculated', 'Calculated'),
+            ('delivered', 'Delivered'),
+            ], 'Status')
+    contract = fields.Many2One('contract.contract', 'Contract',
+        ondelete='RESTRICT')
+    subscribed_service = fields.Many2One(
+        'contract.subscribed_option', 'Coverage', ondelete='RESTRICT',
+        domain=[
+            If(~~Eval('contract'), ('contract', '=', Eval('contract', {})), ())
+        ], depends=['contract'])
+    func_error = fields.Many2One('rule_engine.error', 'Error',
+        ondelete='RESTRICT', states={
+            'invisible': ~Eval('func_error'),
+            'readonly': True})
+
+    def get_rec_name(self, name=None):
+        if self.subscribed_service:
+            res = self.subscribed_service.get_rec_name(name)
+        else:
+            res = super(DeliveredService, self).get_rec_name(name)
+        if self.status:
+            res += ' [%s]' % coop_string.translate_value(self, 'status')
+        return res
+
+    @staticmethod
+    def default_status():
+        return 'calculating'
+
+    def get_contract(self):
+        return self.contract
 
 
 class LetterModel():

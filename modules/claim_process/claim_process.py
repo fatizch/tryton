@@ -15,7 +15,6 @@ __all__ = [
     'ProcessDesc',
     'DeclarationProcessParameters',
     'DeclarationProcessFinder',
-    'DeliveredServiceProcess',
     ]
 
 
@@ -241,13 +240,6 @@ class LossProcess():
         return (not self.delivered_services
             or (len(self.delivered_services) == 1
                 and self.delivered_services[0].status == 'calculating'))
-
-
-class DeliveredServiceProcess():
-    'Claim Delivered Service'
-
-    __name__ = 'contract.delivered_service'
-    __metaclass__ = PoolMeta
 
 
 class ProcessDesc():

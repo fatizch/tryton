@@ -12,6 +12,7 @@ def register():
         Contract,
         SubscribedCoverage,
         ContractAddress,
+        DeliveredService,
         LetterModel,
         #From Rule Engine
         OfferedContext,

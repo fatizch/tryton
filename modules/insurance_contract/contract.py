@@ -12,15 +12,9 @@ from trytond.modules.offered.offered import DEF_CUR_DIG
 from trytond.modules.insurance_product import product
 
 
-DELIVERED_SERVICES_STATUSES = [
-    ('calculating', 'Calculating'),
-    ('not_eligible', 'Not Eligible'),
-    ('calculated', 'Calculated'),
-    ('delivered', 'Delivered'),
-]
-
 IS_PARTY = Eval('item_kind').in_(['person', 'company', 'party'])
 
+__metaclass__ = PoolMeta
 __all__ = [
     'InsurancePolicy',
     'ContractHistory',
@@ -40,7 +34,6 @@ class InsurancePolicy():
     'Insurance Policy'
 
     __name__ = 'contract.contract'
-    __metaclass__ = PoolMeta
 
     covered_elements = fields.One2ManyDomain(
         'ins_contract.covered_element', 'contract', 'Covered Elements',
@@ -281,7 +274,6 @@ class InsuranceSubscribedCoverage():
     'Subscribed Coverage'
 
     __name__ = 'contract.subscribed_option'
-    __metaclass__ = PoolMeta
 
     covered_data = fields.One2ManyDomain(
         'ins_contract.covered_data', 'option', 'Covered Data',
@@ -362,7 +354,6 @@ class SubscribedCoverageComplement(model.CoopSQL, model.CoopView):
 class StatusHistory():
     'Status History'
 
-    __metaclass__ = PoolMeta
     __name__ = 'contract.status_history'
 
     @classmethod
@@ -1018,34 +1009,13 @@ class ManagementRole(model.CoopSQL, model.CoopView):
         return [('', '')]
 
 
-class DeliveredService(model.CoopView, model.CoopSQL):
+class DeliveredService():
     'Delivered Service'
 
     __name__ = 'contract.delivered_service'
 
-    status = fields.Selection(DELIVERED_SERVICES_STATUSES, 'Status')
     expenses = fields.One2Many('ins_contract.expense',
         'delivered_service', 'Expenses')
-    contract = fields.Many2One('contract.contract', 'Contract',
-        ondelete='RESTRICT')
-    subscribed_service = fields.Many2One(
-        'contract.subscribed_option', 'Coverage', ondelete='RESTRICT',
-        domain=[
-            If(~~Eval('contract'), ('contract', '=', Eval('contract', {})), ())
-        ], depends=['contract'])
-    func_error = fields.Many2One('rule_engine.error', 'Error',
-        ondelete='RESTRICT', states={
-            'invisible': ~Eval('func_error'),
-            'readonly': True})
-
-    def get_rec_name(self, name=None):
-        if self.subscribed_service:
-            res = self.subscribed_service.get_rec_name(name)
-        else:
-            res = super(DeliveredService, self).get_rec_name(name)
-        if self.status:
-            res += ' [%s]' % coop_string.translate_value(self, 'status')
-        return res
 
     def get_expense(self, code, currency):
         for expense in self.expenses:
@@ -1059,13 +1029,6 @@ class DeliveredService(model.CoopView, model.CoopSQL):
             if expense.currency == currency:
                 res += expense.amount
         return res
-
-    @staticmethod
-    def default_status():
-        return 'calculating'
-
-    def get_contract(self):
-        return self.contract
 
 
 class Expense(model.CoopSQL, model.CoopView):

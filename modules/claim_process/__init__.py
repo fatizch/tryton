@@ -7,7 +7,6 @@ def register():
         ClaimProcess,
         LossProcess,
         ProcessDesc,
-        DeliveredServiceProcess,
         DeclarationProcessParameters,
         module='claim_process', type_='model')
 
