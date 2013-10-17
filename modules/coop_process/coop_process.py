@@ -827,7 +827,7 @@ class StepDesc(model.CoopSQL):
         states={'readonly': ~Eval('technical_name')})
     main_model = fields.Many2One(
         'ir.model', 'Main Model',
-        states={'readonly': Eval('processes', []) != []},
+        # states={'readonly': Eval('processes', []) != []},
         domain=[
             ('is_workflow', '=', True),
             ('model', '!=', 'process.process_framework')
