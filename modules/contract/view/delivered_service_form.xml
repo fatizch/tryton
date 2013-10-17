@@ -8,5 +8,4 @@
     <field name="contract"/>
     <label name="subscribed_service"/>
     <field name="subscribed_service" widget="selection"/>
-    <field name="expenses" colspan="4"/>
 </form>
