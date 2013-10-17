@@ -82,7 +82,8 @@ class TestCaseModel():
         if result:
             return result
         result = Pool().get('ins_product.event_desc').search([
-                ('code', '=', code)], limit=1)[0]
+                ('code', '=', code),
+                ('company', '=', cls.get_company())], limit=1)[0]
         cls._get_event_desc_cache.set(code, result)
         return result
 
