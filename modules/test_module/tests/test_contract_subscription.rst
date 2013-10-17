@@ -20,7 +20,6 @@ Constants::
     ...     'coop_process',
     ...     'life_claim_process',
     ...     'loan_claim',
-    ...     'life_contract_collective',
     ...     'insurance_collective_subscription',
     ...     'commission',
     ...     'billing',
