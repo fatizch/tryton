@@ -20,7 +20,6 @@ __all__ = [
     'TestCaseSelector',
     'SelectTestCase',
     'TestCaseFileSelector',
-    'LoadTestCaseFiles',
     'TestCaseWizard',
     'set_test_case',
     ]
@@ -366,15 +365,29 @@ class TestCaseSelector(model.CoopView):
             ('not_selected', 'Not Selected')], 'Selection')
 
 
+class TestCaseFileSelector(model.CoopView):
+    'Test Case File Selector'
+
+    __name__ = 'coop_utils.test_case_file_selector'
+
+    selected = fields.Boolean('Will be loaded')
+    filename = fields.Char('File name', states={'readonly': True})
+    full_path = fields.Char('Full Path')
+
+
 class SelectTestCase(model.CoopView):
     'Select Test Case'
 
     __name__ = 'coop_utils.select_test_cases'
 
-    select_all = fields.Boolean('Select All', on_change=['select_all',
-            'test_cases'])
+    select_all_test_cases = fields.Boolean('Select All',
+        on_change=['select_all_test_cases', 'test_cases'])
+    select_all_files = fields.Boolean('Select All',
+        on_change=['select_all_files', 'test_files'])
     test_cases = fields.One2Many('coop_utils.test_case_selector', None,
         'Test Cases', on_change=['test_cases'])
+    test_files = fields.One2Many('coop_utils.test_case_file_selector', None,
+        'Test Files')
 
     def on_change_test_cases(self):
         TestCaseModel = Pool().get('coop_utils.test_case_model')
@@ -396,41 +409,20 @@ class SelectTestCase(model.CoopView):
                     'selection': 'manual' if x in selected else 'automatic'})
         return {'test_cases': {'update': to_update}}
 
-    def on_change_select_all(self):
+    def on_change_select_all_test_cases(self):
         return {
             'test_cases': {'update': [{
                         'id': x.id,
-                        'selection': 'manual' if self.select_all else
-                        'not_selected',
-                        'selected': self.select_all}
+                        'selection': 'manual' if self.select_all_test_cases
+                        else 'not_selected',
+                        'selected': self.select_all_test_cases}
                     for x in self.test_cases]}}
 
-
-class TestCaseFileSelector(model.CoopView):
-    'Test Case File Selector'
-
-    __name__ = 'coop_utils.test_case_file_selector'
-
-    selected = fields.Boolean('Will be loaded')
-    filename = fields.Char('File name', states={'readonly': True})
-    full_path = fields.Char('Full Path')
-
-
-class LoadTestCaseFiles(model.CoopView):
-    'Load Test Case Files'
-
-    __name__ = 'coop_utils.load_test_case_files'
-
-    select_all = fields.Boolean('Select All', on_change=['select_all',
-            'test_files'])
-    test_files = fields.One2Many('coop_utils.test_case_file_selector', None,
-        'Test Files')
-
-    def on_change_select_all(self):
+    def on_change_select_all_files(self):
         return {
             'test_files': {'update': [{
                         'id': x.id,
-                        'selected': self.select_all}
+                        'selected': self.select_all_files}
                     for x in self.test_files]}}
 
 
@@ -442,13 +434,9 @@ class TestCaseWizard(model.CoopWizard):
     start_state = 'select_test_cases'
     select_test_cases = StateView('coop_utils.select_test_cases',
         'coop_utils.select_test_cases_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Execute', 'execute_test_cases', 'tryton-ok')])
+            Button('Quit', 'end', 'tryton-cancel'),
+            Button('Execute Selected', 'execute_test_cases', 'tryton-ok')])
     execute_test_cases = StateTransition()
-    select_files = StateView('coop_utils.load_test_case_files',
-        'coop_utils.load_test_case_files_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Load', 'load_files', 'tryton-ok')])
     load_files = StateTransition()
 
     @classmethod
@@ -459,6 +447,20 @@ class TestCaseWizard(model.CoopWizard):
         })
 
     def default_select_test_cases(self, name):
+        import os
+        # Look for files
+        DIR = os.path.abspath(os.path.normpath(os.path.join(
+                    __file__, '..', 'json_files')))
+        file_names = [f for f in os.listdir(DIR)
+            if os.path.isfile(os.path.join(DIR, f)) and f.endswith('.json')]
+        test_files = []
+        for file_name in file_names:
+            test_files.append({
+                    'filename': file_name,
+                    'full_path': os.path.join(DIR, f)})
+        result = {'test_files': test_files}
+
+        # Look for test cases
         TestCaseModel = Pool().get('coop_utils.test_case_model')
         test_cases = []
         for elem in TestCaseModel.get_all_tests():
@@ -469,7 +471,8 @@ class TestCaseWizard(model.CoopWizard):
                     'selection': 'not_selected',
                     })
         test_cases.sort(key=lambda x: x['name'])
-        return {'test_cases': test_cases}
+        result['test_cases'] = test_cases
+        return result
 
     def transition_execute_test_cases(self):
         TestCaseModel = Pool().get('coop_utils.test_case_model')
@@ -478,26 +481,12 @@ class TestCaseWizard(model.CoopWizard):
             if test_case.selection == 'manual':
                 to_execute.append(
                     getattr(TestCaseModel, test_case.method_name))
-        if not to_execute:
-            return 'select_files'
-        TestCaseModel.run_test_cases(to_execute)
-        return 'select_files'
-
-    def default_select_files(self, name):
-        import os
-        DIR = os.path.abspath(os.path.normpath(os.path.join(
-                    __file__, '..', 'json_files')))
-        file_names = [f for f in os.listdir(DIR)
-            if os.path.isfile(os.path.join(DIR, f)) and f.endswith('.json')]
-        test_files = []
-        for file_name in file_names:
-            test_files.append({
-                    'filename': file_name,
-                    'full_path': os.path.join(DIR, f)})
-        return {'test_files': test_files}
+        if to_execute:
+            TestCaseModel.run_test_cases(to_execute)
+        return 'load_files'
 
     def transition_load_files(self):
-        for elem in self.select_files.test_files:
+        for elem in self.select_test_cases.test_files:
             if not elem.selected:
                 continue
             with open(elem.full_path, 'rb') as the_file:

@@ -35,7 +35,6 @@ def register():
         TestCaseSelector,
         SelectTestCase,
         TestCaseFileSelector,
-        LoadTestCaseFiles,
         module='coop_utils', type_='model')
     Pool.register(
         # from export

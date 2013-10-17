@@ -54,14 +54,6 @@
       <field name="name">test_case_file_selector_tree</field>
     </record>
     <!-- ############################################################ -->
-    <!-- Load Test Case Files -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="load_test_case_files_form">
-      <field name="model">coop_utils.load_test_case_files</field>
-      <field name="type">form</field>
-      <field name="name">load_test_case_files_form</field>
-    </record> 
-    <!-- ############################################################ -->
     <!-- Test Case Wizard -->
     <!-- ############################################################ -->
     <record model="ir.action.wizard" id="act_test_case_wizard">
