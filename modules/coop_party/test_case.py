@@ -2,7 +2,7 @@ import random
 import datetime
 from trytond.pool import PoolMeta, Pool
 from trytond.cache import Cache
-from trytond.modules.coop_utils import set_test_case, fields, coop_date
+from trytond.modules.coop_utils import fields, coop_date
 from trytond.modules.coop_utils import coop_string
 
 
@@ -35,13 +35,38 @@ class TestCaseModel():
     _get_country_code_cache = Cache('get_country_by_code')
 
     @classmethod
+    def _get_test_case_dependencies(cls):
+        result = super(TestCaseModel, cls)._get_test_case_dependencies()
+        result['relation_kind_test_case'] = {
+            'name': 'Relation Kind Test Case',
+            'dependencies': set([]),
+        }
+        result['address_kind_test_case'] = {
+            'name': 'Address Kind Test Case',
+            'dependencies': set([]),
+        }
+        result['party_test_case'] = {
+            'name': 'Party Test Case',
+            'dependencies': set(['relation_kind_test_case',
+                    'address_kind_test_case']),
+        }
+        result['hierarchy_test_case'] = {
+            'name': 'Hierarchy Test Case',
+            'dependencies': set([]),
+        }
+        result['contact_mechanism_test_case'] = {
+            'name': 'Contact Mechanism Test Case',
+            'dependencies': set(['party_test_case']),
+        }
+        return result
+
+    @classmethod
     def global_search_list(cls):
         res = super(TestCaseModel, cls).global_search_list()
         res.add('party.party')
         return res
 
     @classmethod
-    @set_test_case('Relation Kind Test Case')
     def relation_kind_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
         RelationKind = Pool().get('party.party_relation_kind')
@@ -56,7 +81,6 @@ class TestCaseModel():
         return [spouse, parent]
 
     @classmethod
-    @set_test_case('Address Kind Test Case')
     def address_kind_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
         AddressKind = Pool().get('party.address_kind')
@@ -160,8 +184,6 @@ class TestCaseModel():
         return address
 
     @classmethod
-    @set_test_case('Party Test Case', 'relation_kind_test_case',
-        'address_kind_test_case')
     def party_test_case(cls):
         Party = Pool().get('party.party')
         PartyRelation = Pool().get('party.party-relation')
@@ -243,12 +265,10 @@ class TestCaseModel():
         return company
 
     @classmethod
-    @set_test_case('Hierarchy Test Case')
     def hierarchy_test_case(cls):
         return [cls.create_company('Coop', 'Coop', 1, 4)]
 
     @classmethod
-    @set_test_case('Contact Mechanism Test Case', 'party_test_case')
     def contact_mechanism_test_case(cls):
         pool = Pool()
         Party = pool.get('party.party')

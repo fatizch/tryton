@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.coop_utils import set_test_case, fields
+from trytond.modules.coop_utils import fields
 
 MODULE_NAME = 'coop_country'
 
@@ -18,7 +18,15 @@ class TestCaseModel():
     main_zip = fields.Integer('Main Zip')
 
     @classmethod
-    @set_test_case('Zip Code Test Case')
+    def _get_test_case_dependencies(cls):
+        result = super(TestCaseModel, cls)._get_test_case_dependencies()
+        result['zip_code_test_case'] = {
+            'name': 'Zip Code Test Case',
+            'dependencies': set([]),
+        }
+        return result
+
+    @classmethod
     def zip_code_test_case(cls):
         Country = Pool().get('country.country')
         Zip = Pool().get('country.zipcode')

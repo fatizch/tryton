@@ -1,6 +1,5 @@
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.coop_utils import set_test_case
 
 MODULE_NAME = 'insurance_product'
 
@@ -16,13 +15,17 @@ class TestCaseModel():
     __name__ = 'coop_utils.test_case_model'
 
     @classmethod
-    def __setup__(cls):
-        super(TestCaseModel, cls).__setup__()
-        cls.contact_mechanism_test_case._dependencies.append(
+    def _get_test_case_dependencies(cls):
+        result = super(TestCaseModel, cls)._get_test_case_dependencies()
+        result['contact_mechanism_test_case']['dependencies'].add(
             'insurer_test_case')
+        result['insurer_test_case'] = {
+            'name': 'Insurer Test Case',
+            'dependencies': set([]),
+        }
+        return result
 
     @classmethod
-    @set_test_case('Insurer Test Case')
     def insurer_test_case(cls):
         Insurer = Pool().get('party.insurer')
         cls.load_resources(MODULE_NAME)

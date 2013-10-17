@@ -2,7 +2,6 @@ import datetime
 from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.coop_utils import set_test_case
 
 MODULE_NAME = 'coop_account'
 
@@ -16,6 +15,15 @@ class TestCaseModel():
 
     __metaclass__ = PoolMeta
     __name__ = 'coop_utils.test_case_model'
+
+    @classmethod
+    def _get_test_case_dependencies(cls):
+        result = super(TestCaseModel, cls)._get_test_case_dependencies()
+        result['tax_test_case'] = {
+            'name': 'Tax Test Case',
+            'dependencies': set([]),
+        }
+        return result
 
     @classmethod
     def create_tax_from_line(cls, tax_data):
@@ -34,7 +42,6 @@ class TestCaseModel():
         return tax
 
     @classmethod
-    @set_test_case('Taxes Test Case')
     def tax_test_case(cls):
         cls.load_resources(MODULE_NAME)
         tax_file = cls.read_data_file('taxes', MODULE_NAME, ';')

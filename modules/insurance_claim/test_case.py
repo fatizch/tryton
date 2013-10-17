@@ -1,6 +1,5 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.cache import Cache
-from trytond.modules.coop_utils import set_test_case
 
 
 MODULE_NAME = 'insurance_claim'
@@ -20,6 +19,24 @@ class TestCaseModel():
     _get_document_desc_cache = Cache('get_document_desc')
 
     @classmethod
+    def _get_test_case_dependencies(cls):
+        result = super(TestCaseModel, cls)._get_test_case_dependencies()
+        result['document_desc_test_case'] = {
+            'name': 'Document Desc Test Case',
+            'dependencies': set([]),
+        }
+        result['event_desc_test_case'] = {
+            'name': 'Event Desc Test Case',
+            'dependencies': set([]),
+        }
+        result['loss_desc_test_case'] = {
+            'name': 'Loss Desc Test Case',
+            'dependencies': set(['document_desc_test_case',
+                    'event_desc_test_case']),
+        }
+        return result
+
+    @classmethod
     def global_search_list(cls):
         result = super(TestCaseModel, cls).global_search_list()
         result.add('ins_claim.claim')
@@ -34,7 +51,6 @@ class TestCaseModel():
         return doc
 
     @classmethod
-    @set_test_case('Document Desc Test Case')
     def document_desc_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
         documents = []
@@ -68,7 +84,6 @@ class TestCaseModel():
         return event_desc
 
     @classmethod
-    @set_test_case('Event Desc Test Case')
     def event_desc_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
         event_descs = []
@@ -106,8 +121,6 @@ class TestCaseModel():
         return loss_desc
 
     @classmethod
-    @set_test_case('Loss Desc Test Case', 'document_desc_test_case',
-        'event_desc_test_case')
     def loss_desc_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
         loss_descs = []

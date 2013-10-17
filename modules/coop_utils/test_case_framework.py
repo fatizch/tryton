@@ -21,7 +21,6 @@ __all__ = [
     'SelectTestCase',
     'TestCaseFileSelector',
     'TestCaseWizard',
-    'set_test_case',
     ]
 
 
@@ -42,16 +41,6 @@ def run_test_case_method(source_class, method):
     after_meth = getattr(source_class, '_after_%s' % method_name, None)
     if after_meth:
         run_test_case_method(source_class, after_meth)
-
-
-def set_test_case(name, *args):
-    # A decorator for test_case functions to be able to build the dependency
-    # tree of test_cases
-    def wrapper(f):
-        f._dependencies = list(set(args))
-        f._test_case_name = name
-        return f
-    return wrapper
 
 
 def solve_graph(node_name, nodes, resolved=None, unresolved=None):
@@ -77,12 +66,14 @@ def build_dependency_graph(cls, methods):
     # This method will return an ordered list for execution for the selected
     # test cases methods.
     cls = Pool().get(cls.__name__)
+    dependency_data = cls._get_test_case_dependencies()
     method_dict = dict([(method.__name__, method) for method in methods])
     method_dependencies = {}
     to_explore = methods[:]
     while to_explore:
         method = to_explore.pop()
-        method_dependencies[method.__name__] = method._dependencies[:]
+        method_dependencies[method.__name__] = dependency_data[
+            method.__name__]['dependencies'].copy()
         for dep in method_dependencies[method.__name__]:
             if dep not in method_dict:
                 method_dict[dep] = getattr(cls, dep)
@@ -97,7 +88,7 @@ def build_dependency_graph(cls, methods):
         if not res:
             res = set([])
             add2cache = True
-        for elem in method._dependencies:
+        for elem in dependency_data[method.__name__]['dependencies']:
             res.add(elem)
             get_deps(method_dict[elem], res)
         if add2cache:
@@ -134,6 +125,17 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
     __name__ = 'coop_utils.test_case_model'
 
     language = fields.Many2One('ir.lang', 'Test Case Language')
+
+    @classmethod
+    def _get_test_case_dependencies(cls):
+        return {
+            'set_global_search': {
+                'name': 'Set Global Search',
+                'dependencies': set([])},
+            'set_language_translatable': {
+                'name': 'Set translatable languages',
+                'dependencies': set([])},
+            }
 
     @classmethod
     def default_language(cls):
@@ -183,11 +185,13 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
 
     @classmethod
     def get_all_tests(cls):
-        GoodModel = Pool().get(cls.__name__)
-        for elem in [getattr(GoodModel, x) for x in dir(GoodModel)]:
-            if not hasattr(elem, '_test_case_name'):
-                continue
-            yield elem
+        for elem in cls._get_test_case_dependencies().keys():
+            yield getattr(cls, elem)
+
+    @classmethod
+    def get_test_data(cls):
+        for k, v in cls._get_test_case_dependencies().iteritems():
+            yield getattr(cls, k), k, v
 
     @classmethod
     def global_search_list(cls):
@@ -224,7 +228,6 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
                     elem.save()
 
     @classmethod
-    @set_test_case('Set Global Search')
     def set_global_search(cls):
         Model = Pool().get('ir.model')
         targets = Model.search([
@@ -232,7 +235,6 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
         Model.write(targets, {'global_search_p': True})
 
     @classmethod
-    @set_test_case('Set translatable languages')
     def set_language_translatable(cls):
         Lang = Pool().get('ir.lang')
         langs = Lang.search([
@@ -463,10 +465,10 @@ class TestCaseWizard(model.CoopWizard):
         # Look for test cases
         TestCaseModel = Pool().get('coop_utils.test_case_model')
         test_cases = []
-        for elem in TestCaseModel.get_all_tests():
+        for _, name, info in TestCaseModel.get_test_data():
             test_cases.append({
-                    'method_name': elem.__name__,
-                    'name': elem._test_case_name,
+                    'method_name': name,
+                    'name': info['name'],
                     'selected': False,
                     'selection': 'not_selected',
                     })

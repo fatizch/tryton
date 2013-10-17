@@ -1,7 +1,6 @@
 import random
 
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.coop_utils import set_test_case
 
 MODULE_NAME = 'distribution'
 
@@ -15,6 +14,15 @@ class TestCaseModel():
 
     __metaclass__ = PoolMeta
     __name__ = 'coop_utils.test_case_model'
+
+    @classmethod
+    def _get_test_case_dependencies(cls):
+        result = super(TestCaseModel, cls)._get_test_case_dependencies()
+        result['distribution_network_test_case'] = {
+            'name': 'Distribution Network Test Case',
+            'dependencies': set(['main_company_test_case']),
+        }
+        return result
 
     @classmethod
     def create_distribution_network(cls, name, children_name=None,
@@ -32,7 +40,6 @@ class TestCaseModel():
         return res
 
     @classmethod
-    @set_test_case('Distribution Network Test Case', 'main_company_test_case')
     def distribution_network_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
         DistributionNetwork = Pool().get('distribution.dist_network')

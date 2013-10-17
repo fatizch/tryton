@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.coop_utils import fields, set_test_case
+from trytond.modules.coop_utils import fields
 
 __all__ = [
     'TestCaseModel',
@@ -15,10 +15,15 @@ class TestCaseModel():
     main_company_name = fields.Char('Main Company Name')
 
     @classmethod
-    def __setup__(cls):
-        super(TestCaseModel, cls).__setup__()
-        cls.contact_mechanism_test_case._dependencies.append(
+    def _get_test_case_dependencies(cls):
+        result = super(TestCaseModel, cls)._get_test_case_dependencies()
+        result['contact_mechanism_test_case']['dependencies'].add(
             'main_company_test_case')
+        result['main_company_test_case'] = {
+            'name': 'Main Company Test Case',
+            'dependencies': set([]),
+        }
+        return result
 
     @classmethod
     def global_search_list(cls):
@@ -27,7 +32,6 @@ class TestCaseModel():
         return res
 
     @classmethod
-    @set_test_case('Main Company Test Case')
     def main_company_test_case(cls):
         Configuration = cls.get_instance()
         User = Pool().get('res.user')

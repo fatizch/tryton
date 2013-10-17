@@ -2,7 +2,6 @@ import datetime
 from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.coop_utils import set_test_case
 
 MODULE_NAME = 'table'
 
@@ -16,6 +15,15 @@ class TestCaseModel():
 
     __metaclass__ = PoolMeta
     __name__ = 'coop_utils.test_case_model'
+
+    @classmethod
+    def _get_test_case_dependencies(cls):
+        result = super(TestCaseModel, cls)._get_test_case_dependencies()
+        result['table_test_case'] = {
+            'name': 'Table Test Case',
+            'dependencies': set([]),
+        }
+        return result
 
     @classmethod
     def create_table_from_filename(cls, filename):
@@ -107,7 +115,6 @@ class TestCaseModel():
                 cell.save()
 
     @classmethod
-    @set_test_case('Table Test Case')
     def table_test_case(cls):
         cls.load_resources(MODULE_NAME)
         cls.read_csv_file('IPC;Indice des prix consommation;numeric.csv',

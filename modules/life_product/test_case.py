@@ -1,5 +1,4 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.coop_utils import set_test_case
 
 MODULE_NAME = 'life_product'
 
@@ -15,6 +14,23 @@ class TestCaseModel():
     __name__ = 'coop_utils.test_case_model'
 
     @classmethod
+    def _get_test_case_dependencies(cls):
+        result = super(TestCaseModel, cls)._get_test_case_dependencies()
+        result['shared_complementary_data_test_case'] = {
+            'name': 'Shared Complementary Data Test Case',
+            'dependencies': set([]),
+        }
+        result['ceiling_rule_test_case'] = {
+            'name': 'Ceiling Rule Test Case',
+            'dependencies': set(['table_test_case']),
+        }
+        result['tranche_test_case'] = {
+            'name': 'Tranche Test Case',
+            'dependencies': set(['ceiling_rule_test_case']),
+        }
+        return result
+
+    @classmethod
     def get_or_create_complementary_data(cls, name, string=None, type_=None,
             kind=None, selection=None):
         ComplementaryData = Pool().get('offered.complementary_data_def')
@@ -27,7 +43,6 @@ class TestCaseModel():
         return schema_el
 
     @classmethod
-    @set_test_case('Shared Complementary Data Test Case')
     def shared_complementary_data_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
         schemas = []
@@ -67,7 +82,6 @@ class TestCaseModel():
         return rule
 
     @classmethod
-    @set_test_case('Ceiling Rules Test Case', 'table_test_case')
     def ceiling_rule_test_case(cls):
         rules = []
         for (name, factor) in [('Plafond TA', 1), ('Plafond TB', 4),
@@ -94,7 +108,6 @@ class TestCaseModel():
         return tranche
 
     @classmethod
-    @set_test_case('Tranche Test Case', 'ceiling_rule_test_case')
     def tranche_test_case(cls):
         result = []
         result.append(cls.create_tranche('TA', ceiling_name='Plafond TA'))

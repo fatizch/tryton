@@ -1,6 +1,5 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.cache import Cache
-from trytond.modules.coop_utils import set_test_case
 
 MODULE_NAME = 'billing_individual'
 
@@ -19,15 +18,32 @@ class TestCaseModel():
     _get_account_cache = Cache('get_account')
 
     @classmethod
+    def _get_test_case_dependencies(cls):
+        result = super(TestCaseModel, cls)._get_test_case_dependencies()
+        result['tax_test_case']['dependencies'].add('account_kind_test_case')
+        result['account_kind_test_case'] = {
+            'name': 'Account Kind Test Case',
+            'dependencies': set([]),
+        }
+        result['account_test_case'] = {
+            'name': 'Account Test Case',
+            'dependencies': set(['account_kind_test_case']),
+        }
+        result['configure_accounting_test_case'] = {
+            'name': 'Accounting Configuration Test Case',
+            'dependencies': set(['account_test_case']),
+        }
+        return result
+
+    @classmethod
     def create_account_kind(cls, name):
-        AccountKind = Pool().get('account.account.kind')
+        AccountKind = Pool().get('account.account.type')
         account_kind = AccountKind()
         account_kind.name = name
         account_kind.company = cls.get_company()
         return account_kind
 
     @classmethod
-    @set_test_case('Create Account Kinds')
     def account_kind_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
         account_kinds = []
@@ -52,7 +68,7 @@ class TestCaseModel():
         result = cls._get_account_kind_cache.get(name)
         if result:
             return result
-        result = Pool().get('account.account.kind').search([
+        result = Pool().get('account.account.type').search([
                 ('name', '=', name),
                 ('company', '=', cls.get_company())], limit=1)[0]
         cls._get_account_kind_cache.set(name, result)
@@ -63,13 +79,13 @@ class TestCaseModel():
         Account = Pool().get('account.account')
         account = Account()
         account.name = name
+        account.code = name
         account.kind = kind
         account.type = cls.get_account_kind(type_name)
         account.company = cls.get_company()
         return account
 
     @classmethod
-    @set_test_case('Create default accounts', 'account_kind_test_case')
     def account_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
         accounts = []
@@ -78,13 +94,13 @@ class TestCaseModel():
                 'payable', translater('Client Payable')))
         accounts.append(cls.create_account(translater(
                     'Default Receivable Account'),
-                'payable', translater('Client Receivable')))
+                'receivable', translater('Client Receivable')))
         accounts.append(cls.create_account(translater(
                     'Cash Account'),
-                'receivable', translater('Collection Account')))
+                'revenue', translater('Collection Account')))
         accounts.append(cls.create_account(translater(
                     'Check Account'),
-                'receivable', translater('Collection Account')))
+                'revenue', translater('Collection Account')))
         return accounts
 
     @classmethod
@@ -99,7 +115,6 @@ class TestCaseModel():
         return result
 
     @classmethod
-    @set_test_case('Configure Accounting', 'account_kind_test_case')
     def configure_accounting_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
         account_config = Pool().get('account.configuration').search([])[0]

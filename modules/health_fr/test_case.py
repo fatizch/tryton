@@ -1,5 +1,4 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.coop_utils import set_test_case
 
 
 MODULE_NAME = 'health_fr'
@@ -16,6 +15,23 @@ class TestCaseModel():
     __name__ = 'coop_utils.test_case_model'
 
     @classmethod
+    def _get_test_case_dependencies(cls):
+        result = super(TestCaseModel, cls)._get_test_case_dependencies()
+        result['expense_kind_test_case'] = {
+            'name': 'Expense Kind Test Case',
+            'dependencies': set([]),
+        }
+        result['regime_test_case'] = {
+            'name': 'Regime Test Case',
+            'dependencies': set([]),
+        }
+        result['fund_test_case'] = {
+            'name': 'Fund Test Case',
+            'dependencies': set(['regime_test_case']),
+        }
+        return result
+
+    @classmethod
     def create_expense_kind_from_line(cls, data):
         ExpenseKind = Pool().get('ins_product.expense_kind')
         expense = ExpenseKind()
@@ -24,7 +40,6 @@ class TestCaseModel():
         return expense
 
     @classmethod
-    @set_test_case('Expense Kind Test Case')
     def expense_kind_test_case(cls):
         cls.load_resources(MODULE_NAME)
         expense_kind_file = cls.read_csv_file('expense_kind.csv', MODULE_NAME,
@@ -44,7 +59,6 @@ class TestCaseModel():
         return regime
 
     @classmethod
-    @set_test_case('Regime Test Case')
     def regime_test_case(cls):
         cls.load_resources(MODULE_NAME)
         regime_file = cls.read_csv_file('regime.csv', MODULE_NAME,
@@ -72,7 +86,6 @@ class TestCaseModel():
         return fund
 
     @classmethod
-    @set_test_case('Fund Test Case', 'regime_test_case')
     def fund_test_case(cls):
         cls.load_resources(MODULE_NAME)
         fund_file = cls.read_csv_file('caisse_affiliation.csv', MODULE_NAME,

@@ -1,7 +1,7 @@
 import random
 
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.coop_utils import set_test_case, fields, coop_string
+from trytond.modules.coop_utils import fields, coop_string
 
 
 MODULE_NAME = 'coop_bank'
@@ -21,9 +21,20 @@ class TestCaseModel():
     currency = fields.Many2One('currency.currency', 'Main Currency')
 
     @classmethod
-    def __setup__(cls):
-        super(TestCaseModel, cls).__setup__()
-        cls.contact_mechanism_test_case._dependencies.append('bank_test_case')
+    def _get_test_case_dependencies(cls):
+        result = super(TestCaseModel, cls)._get_test_case_dependencies()
+        result['contact_mechanism_test_case']['dependencies'].add(
+            'bank_test_case')
+        result['bank_test_case'] = {
+            'name': 'Bank Test Case',
+            'dependencies': set(['address_kind_test_case']),
+        }
+        result['bank_account_test_case'] = {
+            'name': 'Bank Account Test Case',
+            'dependencies': set(['bank_test_case', 'party_test_case',
+                    'main_company_test_case']),
+        }
+        return result
 
     @classmethod
     def add_address(cls, line, bank):
@@ -45,7 +56,6 @@ class TestCaseModel():
         bank.addresses = [address]
 
     @classmethod
-    @set_test_case('Bank Test Case', 'address_kind_test_case')
     def bank_test_case(cls):
         Bank = Pool().get('bank')
         Configuration = cls.get_instance()
@@ -76,8 +86,6 @@ class TestCaseModel():
                 raise
 
     @classmethod
-    @set_test_case('Bank Accounts Test Case', 'bank_test_case',
-        'party_test_case', 'main_company_test_case')
     def bank_account_test_case(cls):
         Party = Pool().get('party.party')
         Bank = Pool().get('bank')
