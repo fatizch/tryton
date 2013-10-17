@@ -15,13 +15,13 @@ class Party():
 
     __name__ = 'party.party'
 
-    claims = fields.One2Many('ins_claim.claim', 'claimant', 'Claims')
+    claims = fields.One2Many('claim.claim', 'claimant', 'Claims')
     number_of_claims = fields.Function(
         fields.Integer('Number Of Claims', on_change_with=['claims'],
             states={'invisible': True}),
         'on_change_with_number_of_claims')
     last_claim = fields.Function(
-        fields.Many2One('ins_claim.claim', 'Last Claim'),
+        fields.Many2One('claim.claim', 'Last Claim'),
         'get_last_claim_id')
 
     @classmethod

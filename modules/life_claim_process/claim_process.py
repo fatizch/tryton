@@ -10,7 +10,7 @@ __all__ = [
 class LifeLossProcess():
     'Loss'
 
-    __name__ = 'ins_claim.loss'
+    __name__ = 'claim.loss'
     __metaclass__ = PoolMeta
 
     @classmethod

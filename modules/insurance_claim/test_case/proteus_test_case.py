@@ -81,7 +81,7 @@ def launch_test_case(cfg_dict):
     update_cfg_dict_with_models(cfg_dict)
     company, = cfg_dict['Company'].find([('party.name', '=', 'Coop')])
     cfg_dict['_config'].set_context({'company': company.id})
-    proteus_tools.set_global_search('ins_claim.claim')
+    proteus_tools.set_global_search('claim.claim')
     create_document_descs(cfg_dict)
     create_event_desc(cfg_dict)
     create_loss_descs(cfg_dict)

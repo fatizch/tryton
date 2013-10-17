@@ -69,7 +69,7 @@ def launch_test_case(cfg_dict):
     })
 
     claim_model = Model.get('ir.model').find(
-        [('model', '=', 'ins_claim.claim')])[0]
+        [('model', '=', 'claim.claim')])[0]
 
     step_claimant = meths['StepDesc']({
         'technical_name': 'claimant',

@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -794,103 +794,103 @@ msgctxt "view:contract.contract:"
 msgid "Validation du contrat Collectif"
 msgstr "Validation du contrat Collectif"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "==> Clôture"
 msgstr ""
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "==> Documents"
 msgstr ""
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "==> Décl. du Préjudice"
 msgstr ""
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "==> Déclarant"
 msgstr ""
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "==> Prestations"
 msgstr ""
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "==> Rechute"
 msgstr ""
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "==> Remboursement"
 msgstr ""
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "==> Réouverture"
 msgstr ""
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "==> Validation de l'indemnisation"
 msgstr ""
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Clôture"
 msgstr "Clôture"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Complete"
 msgstr "Terminer"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Décl. du Préjudice"
 msgstr "Décl. du Préjudice"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Déclarant"
 msgstr "Déclarant"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Déclaration de Sinistre"
 msgstr "Déclaration de Sinistre"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Losses"
 msgstr "Préjudices"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Next"
 msgstr "Suivant"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Prestations"
 msgstr "Prestations"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Previous"
 msgstr "Précédent"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Rechute"
 msgstr "Rechute"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Remboursement"
 msgstr "Remboursement"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Réouverture"
 msgstr "Réouverture"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Réouverture De Sinistre"
 msgstr "Réouverture De Sinistre"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "The current record completed the current process, please go ahead"
 msgstr "Processus Terminé. Commencez une nouvelle tâche"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Validation de l'indemnisation"
 msgstr "Validation"
 

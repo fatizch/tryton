@@ -41,7 +41,7 @@ class LoanClaimDeliveredService():
 class LoanIndemnification():
     'Indemnification'
 
-    __name__ = 'ins_claim.indemnification'
+    __name__ = 'claim.indemnification'
     __metaclass__ = PoolMeta
 
     def init_from_delivered_service(self, delivered_service):

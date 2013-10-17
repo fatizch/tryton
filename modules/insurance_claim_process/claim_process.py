@@ -23,7 +23,7 @@ class ClaimProcess(CoopProcessFramework):
     'Claim'
 
     __metaclass__ = ClassAttr
-    __name__ = 'ins_claim.claim'
+    __name__ = 'claim.claim'
 
     doc_received = fields.Function(
         fields.Boolean(
@@ -32,10 +32,10 @@ class ClaimProcess(CoopProcessFramework):
             on_change_with=['documents']),
         'on_change_with_doc_received')
     indemnifications = fields.Function(
-        fields.One2Many('ins_claim.indemnification', None, 'Indemnifications'),
+        fields.One2Many('claim.indemnification', None, 'Indemnifications'),
         'get_indemnifications', 'set_indemnifications')
     indemnifications_consult = fields.Function(
-        fields.One2Many('ins_claim.indemnification', None, 'Indemnifications'),
+        fields.One2Many('claim.indemnification', None, 'Indemnifications'),
         'get_indemnifications')
     contact_history = fields.Function(
         fields.One2Many(
@@ -121,7 +121,7 @@ class ClaimProcess(CoopProcessFramework):
 
     @classmethod
     def set_indemnifications(cls, instances, name, vals):
-        Indemnification = Pool().get('ins_claim.indemnification')
+        Indemnification = Pool().get('claim.indemnification')
         for val in vals:
             if not val[0] == 'write':
                 continue
@@ -144,7 +144,7 @@ class ClaimProcess(CoopProcessFramework):
 class LossProcess():
     'Loss'
 
-    __name__ = 'ins_claim.loss'
+    __name__ = 'claim.loss'
     __metaclass__ = PoolMeta
 
     #The Benefit to deliver is just a shortcut to ease delivered service
@@ -269,14 +269,14 @@ class ProcessDesc():
 class DeclarationProcessParameters(ProcessParameters):
     'Declaration Process Parameters'
 
-    __name__ = 'ins_claim.declaration_process_parameters'
+    __name__ = 'claim.declaration_process_parameters'
 
     party = fields.Many2One('party.party', 'Party')
-    claim = fields.Many2One('ins_claim.claim', 'Claim',
+    claim = fields.Many2One('claim.claim', 'Claim',
         domain=[('id', 'in', Eval('claims'))],
         depends=['claims'])
     claims = fields.Function(
-        fields.One2Many('ins_claim.claim', None, 'Claims',
+        fields.One2Many('claim.claim', None, 'Claims',
             on_change_with=['party']),
         'on_change_with_claims')
 
@@ -301,21 +301,21 @@ class DeclarationProcessParameters(ProcessParameters):
     @classmethod
     def default_model(cls):
         Model = Pool().get('ir.model')
-        return Model.search([('model', '=', 'ins_claim.claim')])[0].id
+        return Model.search([('model', '=', 'claim.claim')])[0].id
 
     def on_change_with_claims(self, name=None):
-        Claim = Pool().get('ins_claim.claim')
+        Claim = Pool().get('claim.claim')
         return [x.id for x in Claim.search([('claimant', '=', self.party)])]
 
 
 class DeclarationProcessFinder(ProcessFinder):
     'Declaration Process Finder'
 
-    __name__ = 'ins_claim.declaration_process_finder'
+    __name__ = 'claim.declaration_process_finder'
 
     @classmethod
     def get_parameters_model(cls):
-        return 'ins_claim.declaration_process_parameters'
+        return 'claim.declaration_process_parameters'
 
     @classmethod
     def get_parameters_view(cls):

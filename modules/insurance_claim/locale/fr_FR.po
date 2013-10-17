@@ -1,492 +1,492 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:ins_claim.loss:"
+msgctxt "error:claim.loss:"
 msgid "End Date is smaller than start date"
 msgstr "La date de fin est antérieure à la date de début"
 
-msgctxt "field:ins_claim.claim,claimant:"
+msgctxt "field:claim.claim,claimant:"
 msgid "Claimant"
 msgstr "Déclarant"
 
-msgctxt "field:ins_claim.claim,company:"
+msgctxt "field:claim.claim,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:ins_claim.claim,create_date:"
+msgctxt "field:claim.claim,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_claim.claim,create_date_:"
+msgctxt "field:claim.claim,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_claim.claim,create_uid:"
+msgctxt "field:claim.claim,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_claim.claim,current_state:"
+msgctxt "field:claim.claim,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
 
-msgctxt "field:ins_claim.claim,declaration_date:"
+msgctxt "field:claim.claim,declaration_date:"
 msgid "Declaration Date"
 msgstr "Date de Déclaration"
 
-msgctxt "field:ins_claim.claim,documents:"
+msgctxt "field:claim.claim,documents:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "field:ins_claim.claim,end_date:"
+msgctxt "field:claim.claim,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_claim.claim,id:"
+msgctxt "field:claim.claim,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_claim.claim,losses:"
+msgctxt "field:claim.claim,losses:"
 msgid "Losses"
 msgstr "Préjudices"
 
-msgctxt "field:ins_claim.claim,main_contract:"
+msgctxt "field:claim.claim,main_contract:"
 msgid "Main Contract"
 msgstr "Contrat Principal"
 
-msgctxt "field:ins_claim.claim,must_expand_tree:"
+msgctxt "field:claim.claim,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_claim.claim,name:"
+msgctxt "field:claim.claim,name:"
 msgid "Number"
 msgstr "Numéro"
 
-msgctxt "field:ins_claim.claim,possible_contracts:"
+msgctxt "field:claim.claim,possible_contracts:"
 msgid "Contracts"
 msgstr "Contrats"
 
-msgctxt "field:ins_claim.claim,rec_name:"
+msgctxt "field:claim.claim,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_claim.claim,reopened_reason:"
+msgctxt "field:claim.claim,reopened_reason:"
 msgid "Reopened Reason"
 msgstr "Motif de Réouverture"
 
-msgctxt "field:ins_claim.claim,status:"
+msgctxt "field:claim.claim,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:ins_claim.claim,sub_status:"
+msgctxt "field:claim.claim,sub_status:"
 msgid "Sub Status"
 msgstr "Sous Statut"
 
-msgctxt "field:ins_claim.claim,write_date:"
+msgctxt "field:claim.claim,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_claim.claim,write_uid:"
+msgctxt "field:claim.claim,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_claim.claim.history,create_date:"
+msgctxt "field:claim.claim.history,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_claim.claim.history,create_date_:"
+msgctxt "field:claim.claim.history,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_claim.claim.history,create_uid:"
+msgctxt "field:claim.claim.history,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_claim.claim.history,date:"
+msgctxt "field:claim.claim.history,date:"
 msgid "Change Date"
 msgstr "Date du Changement"
 
-msgctxt "field:ins_claim.claim.history,declaration_date:"
+msgctxt "field:claim.claim.history,declaration_date:"
 msgid "Declaration Date"
 msgstr "Date de Déclaration"
 
-msgctxt "field:ins_claim.claim.history,end_date:"
+msgctxt "field:claim.claim.history,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_claim.claim.history,from_object:"
+msgctxt "field:claim.claim.history,from_object:"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "field:ins_claim.claim.history,id:"
+msgctxt "field:claim.claim.history,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_claim.claim.history,must_expand_tree:"
+msgctxt "field:claim.claim.history,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_claim.claim.history,name:"
+msgctxt "field:claim.claim.history,name:"
 msgid "Number"
 msgstr "Numéro"
 
-msgctxt "field:ins_claim.claim.history,rec_name:"
+msgctxt "field:claim.claim.history,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_claim.claim.history,status:"
+msgctxt "field:claim.claim.history,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:ins_claim.claim.history,sub_status:"
+msgctxt "field:claim.claim.history,sub_status:"
 msgid "Sub Status"
 msgstr "Sous Statut"
 
-msgctxt "field:ins_claim.claim.history,user:"
+msgctxt "field:claim.claim.history,user:"
 msgid "User"
 msgstr "Utilisateur"
 
-msgctxt "field:ins_claim.claim.history,write_date:"
+msgctxt "field:claim.claim.history,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_claim.claim.history,write_uid:"
+msgctxt "field:claim.claim.history,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_claim.indemnification,amount:"
+msgctxt "field:claim.indemnification,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:ins_claim.indemnification,beneficiary:"
+msgctxt "field:claim.indemnification,beneficiary:"
 msgid "Beneficiary"
 msgstr "Bénéficiaire"
 
-msgctxt "field:ins_claim.indemnification,create_date:"
+msgctxt "field:claim.indemnification,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_claim.indemnification,create_date_:"
+msgctxt "field:claim.indemnification,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_claim.indemnification,create_uid:"
+msgctxt "field:claim.indemnification,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_claim.indemnification,currency:"
+msgctxt "field:claim.indemnification,currency:"
 msgid "Currency"
 msgstr "Devises"
 
-msgctxt "field:ins_claim.indemnification,currency_digits:"
+msgctxt "field:claim.indemnification,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
-msgctxt "field:ins_claim.indemnification,currency_symbol:"
+msgctxt "field:claim.indemnification,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:ins_claim.indemnification,customer:"
+msgctxt "field:claim.indemnification,customer:"
 msgid "Customer"
 msgstr "Client"
 
-msgctxt "field:ins_claim.indemnification,delivered_service:"
+msgctxt "field:claim.indemnification,delivered_service:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 
-msgctxt "field:ins_claim.indemnification,details:"
+msgctxt "field:claim.indemnification,details:"
 msgid "Details"
 msgstr "Détails"
 
-msgctxt "field:ins_claim.indemnification,end_date:"
+msgctxt "field:claim.indemnification,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_claim.indemnification,id:"
+msgctxt "field:claim.indemnification,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_claim.indemnification,kind:"
+msgctxt "field:claim.indemnification,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:ins_claim.indemnification,local_currency:"
+msgctxt "field:claim.indemnification,local_currency:"
 msgid "Local Currency"
 msgstr "Devise Locale"
 
-msgctxt "field:ins_claim.indemnification,local_currency_amount:"
+msgctxt "field:claim.indemnification,local_currency_amount:"
 msgid "Local Currency Amount"
 msgstr "Montant en Devise Locale"
 
-msgctxt "field:ins_claim.indemnification,local_currency_digits:"
+msgctxt "field:claim.indemnification,local_currency_digits:"
 msgid "Local Currency Digits"
 msgstr "Précision de la Devise Locale"
 
-msgctxt "field:ins_claim.indemnification,manual:"
+msgctxt "field:claim.indemnification,manual:"
 msgid "Manual Calculation"
 msgstr "Calcul Manuel"
 
-msgctxt "field:ins_claim.indemnification,must_expand_tree:"
+msgctxt "field:claim.indemnification,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_claim.indemnification,rec_name:"
+msgctxt "field:claim.indemnification,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_claim.indemnification,start_date:"
+msgctxt "field:claim.indemnification,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:ins_claim.indemnification,status:"
+msgctxt "field:claim.indemnification,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:ins_claim.indemnification,write_date:"
+msgctxt "field:claim.indemnification,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_claim.indemnification,write_uid:"
+msgctxt "field:claim.indemnification,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_claim.indemnification_detail,amount:"
+msgctxt "field:claim.indemnification_detail,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:ins_claim.indemnification_detail,amount_per_unit:"
+msgctxt "field:claim.indemnification_detail,amount_per_unit:"
 msgid "Amount per Unit"
 msgstr "Montant par Unité"
 
-msgctxt "field:ins_claim.indemnification_detail,create_date:"
+msgctxt "field:claim.indemnification_detail,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_claim.indemnification_detail,create_date_:"
+msgctxt "field:claim.indemnification_detail,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_claim.indemnification_detail,create_uid:"
+msgctxt "field:claim.indemnification_detail,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_claim.indemnification_detail,currency:"
+msgctxt "field:claim.indemnification_detail,currency:"
 msgid "Currency"
 msgstr "Devises"
 
-msgctxt "field:ins_claim.indemnification_detail,currency_digits:"
+msgctxt "field:claim.indemnification_detail,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
-msgctxt "field:ins_claim.indemnification_detail,currency_symbol:"
+msgctxt "field:claim.indemnification_detail,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:ins_claim.indemnification_detail,end_date:"
+msgctxt "field:claim.indemnification_detail,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_claim.indemnification_detail,id:"
+msgctxt "field:claim.indemnification_detail,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_claim.indemnification_detail,indemnification:"
+msgctxt "field:claim.indemnification_detail,indemnification:"
 msgid "Indemnification"
 msgstr "Indemnisation"
 
-msgctxt "field:ins_claim.indemnification_detail,kind:"
+msgctxt "field:claim.indemnification_detail,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:ins_claim.indemnification_detail,must_expand_tree:"
+msgctxt "field:claim.indemnification_detail,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_claim.indemnification_detail,nb_of_unit:"
+msgctxt "field:claim.indemnification_detail,nb_of_unit:"
 msgid "Nb of Unit"
 msgstr "Nombre d'Unité"
 
-msgctxt "field:ins_claim.indemnification_detail,rec_name:"
+msgctxt "field:claim.indemnification_detail,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_claim.indemnification_detail,start_date:"
+msgctxt "field:claim.indemnification_detail,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:ins_claim.indemnification_detail,unit:"
+msgctxt "field:claim.indemnification_detail,unit:"
 msgid "Unit"
 msgstr "Unité"
 
-msgctxt "field:ins_claim.indemnification_detail,write_date:"
+msgctxt "field:claim.indemnification_detail,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_claim.indemnification_detail,write_uid:"
+msgctxt "field:claim.indemnification_detail,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_claim.indemnification_displayer,amount:"
+msgctxt "field:claim.indemnification_displayer,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:ins_claim.indemnification_displayer,claim:"
+msgctxt "field:claim.indemnification_displayer,claim:"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "field:ins_claim.indemnification_displayer,claim_declaration_date:"
+msgctxt "field:claim.indemnification_displayer,claim_declaration_date:"
 msgid "Claim Declaration Date"
 msgstr "Date de déclaration"
 
-msgctxt "field:ins_claim.indemnification_displayer,claim_number:"
+msgctxt "field:claim.indemnification_displayer,claim_number:"
 msgid "Claim Number"
 msgstr "Numéro de Sinistre"
 
-msgctxt "field:ins_claim.indemnification_displayer,covered_element:"
+msgctxt "field:claim.indemnification_displayer,covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
-msgctxt "field:ins_claim.indemnification_displayer,currency_digits:"
+msgctxt "field:claim.indemnification_displayer,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
-msgctxt "field:ins_claim.indemnification_displayer,end_date:"
+msgctxt "field:claim.indemnification_displayer,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_claim.indemnification_displayer,id:"
+msgctxt "field:claim.indemnification_displayer,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_claim.indemnification_displayer,indemnification:"
+msgctxt "field:claim.indemnification_displayer,indemnification:"
 msgid "Indemnification"
 msgstr "Indemnisation"
 
-msgctxt "field:ins_claim.indemnification_displayer,indemnification_displayer:"
+msgctxt "field:claim.indemnification_displayer,indemnification_displayer:"
 msgid "Indemnification"
 msgstr "Indemnisation"
 
-msgctxt "field:ins_claim.indemnification_displayer,must_expand_tree:"
+msgctxt "field:claim.indemnification_displayer,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_claim.indemnification_displayer,selection:"
+msgctxt "field:claim.indemnification_displayer,selection:"
 msgid "Selection"
 msgstr "Sélection"
 
-msgctxt "field:ins_claim.indemnification_displayer,start_date:"
+msgctxt "field:claim.indemnification_displayer,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:ins_claim.indemnification_selection,display_domain:"
+msgctxt "field:claim.indemnification_selection,display_domain:"
 msgid "Display Search"
 msgstr "Afficher les critères de recherche"
 
-msgctxt "field:ins_claim.indemnification_selection,domain_string:"
+msgctxt "field:claim.indemnification_selection,domain_string:"
 msgid "Domain"
 msgstr "Domaine"
 
-msgctxt "field:ins_claim.indemnification_selection,global_value:"
+msgctxt "field:claim.indemnification_selection,global_value:"
 msgid "Force Value"
 msgstr "Valeur globale"
 
-msgctxt "field:ins_claim.indemnification_selection,id:"
+msgctxt "field:claim.indemnification_selection,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_claim.indemnification_selection,indemnifications:"
+msgctxt "field:claim.indemnification_selection,indemnifications:"
 msgid "Indemnifications"
 msgstr "Indemnisations"
 
-msgctxt "field:ins_claim.indemnification_selection,modified:"
+msgctxt "field:claim.indemnification_selection,modified:"
 msgid "Modified"
 msgstr "Modifié"
 
-msgctxt "field:ins_claim.indemnification_selection,must_expand_tree:"
+msgctxt "field:claim.indemnification_selection,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_claim.indemnification_selection,search_size:"
+msgctxt "field:claim.indemnification_selection,search_size:"
 msgid "Search Size"
 msgstr "Taille de recherche"
 
-msgctxt "field:ins_claim.loss,claim:"
+msgctxt "field:claim.loss,claim:"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "field:ins_claim.loss,complementary_data:"
+msgctxt "field:claim.loss,complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:ins_claim.loss,create_date:"
+msgctxt "field:claim.loss,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_claim.loss,create_date_:"
+msgctxt "field:claim.loss,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_claim.loss,create_uid:"
+msgctxt "field:claim.loss,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_claim.loss,delivered_services:"
+msgctxt "field:claim.loss,delivered_services:"
 msgid "Delivered Services"
 msgstr "Prestations Fournies"
 
-msgctxt "field:ins_claim.loss,end_date:"
+msgctxt "field:claim.loss,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_claim.loss,event_desc:"
+msgctxt "field:claim.loss,event_desc:"
 msgid "Event"
 msgstr "Fait Générateur"
 
-msgctxt "field:ins_claim.loss,id:"
+msgctxt "field:claim.loss,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_claim.loss,loss_desc:"
+msgctxt "field:claim.loss,loss_desc:"
 msgid "Loss Descriptor"
 msgstr "Description du Préjudice"
 
-msgctxt "field:ins_claim.loss,main_loss:"
+msgctxt "field:claim.loss,main_loss:"
 msgid "Main Loss"
 msgstr "Préjudice Initial"
 
-msgctxt "field:ins_claim.loss,multi_level_view:"
+msgctxt "field:claim.loss,multi_level_view:"
 msgid "Delivered Services"
 msgstr "Prestations Fournies"
 
-msgctxt "field:ins_claim.loss,must_expand_tree:"
+msgctxt "field:claim.loss,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:ins_claim.loss,possible_loss_descs:"
+msgctxt "field:claim.loss,possible_loss_descs:"
 msgid "Possible Loss Descs"
 msgstr "Possible Loss Descs"
 
-msgctxt "field:ins_claim.loss,rec_name:"
+msgctxt "field:claim.loss,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_claim.loss,start_date:"
+msgctxt "field:claim.loss,start_date:"
 msgid "Loss Date"
 msgstr "Date du préjudice"
 
-msgctxt "field:ins_claim.loss,sub_losses:"
+msgctxt "field:claim.loss,sub_losses:"
 msgid "Sub Losses"
 msgstr "Préjudices liés"
 
-msgctxt "field:ins_claim.loss,with_end_date:"
+msgctxt "field:claim.loss,with_end_date:"
 msgid "With End Date"
 msgstr "Avec Date de Fin"
 
-msgctxt "field:ins_claim.loss,write_date:"
+msgctxt "field:claim.loss,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_claim.loss,write_uid:"
+msgctxt "field:claim.loss,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -550,31 +550,31 @@ msgctxt "field:offered.coverage,is_coverage_amount_needed:"
 msgid "Coverage Amount Needed"
 msgstr "Montant de Couverture Nécessaire"
 
-msgctxt "model:ins_claim.claim,name:"
+msgctxt "model:claim.claim,name:"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "model:ins_claim.claim.history,name:"
+msgctxt "model:claim.claim.history,name:"
 msgid "Claim History"
 msgstr "Historique du Sinistre"
 
-msgctxt "model:ins_claim.indemnification,name:"
+msgctxt "model:claim.indemnification,name:"
 msgid "Indemnification"
 msgstr "Indemnisation"
 
-msgctxt "model:ins_claim.indemnification_detail,name:"
+msgctxt "model:claim.indemnification_detail,name:"
 msgid "Indemnification Detail"
 msgstr "Détail de l'indemnisation"
 
-msgctxt "model:ins_claim.indemnification_displayer,name:"
+msgctxt "model:claim.indemnification_displayer,name:"
 msgid "Indemnification Displayer"
 msgstr "Indemnisations"
 
-msgctxt "model:ins_claim.indemnification_selection,name:"
+msgctxt "model:claim.indemnification_selection,name:"
 msgid "Indemnification Selection"
 msgstr "Choix des Indemnisations"
 
-msgctxt "model:ins_claim.loss,name:"
+msgctxt "model:claim.loss,name:"
 msgid "Loss"
 msgstr "Préjudice"
 
@@ -622,211 +622,211 @@ msgctxt "model:ir.ui.menu,name:menu_validate_indemnification"
 msgid "Validate Indemnifications"
 msgstr "Validation des Indemnisations"
 
-msgctxt "selection:ins_claim.claim,reopened_reason:"
+msgctxt "selection:claim.claim,reopened_reason:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:ins_claim.claim,reopened_reason:"
+msgctxt "selection:claim.claim,reopened_reason:"
 msgid "Reclamation"
 msgstr "Réclamation"
 
-msgctxt "selection:ins_claim.claim,reopened_reason:"
+msgctxt "selection:claim.claim,reopened_reason:"
 msgid "Regularization"
 msgstr "Régularisation"
 
-msgctxt "selection:ins_claim.claim,reopened_reason:"
+msgctxt "selection:claim.claim,reopened_reason:"
 msgid "Relapse"
 msgstr "Rechute"
 
-msgctxt "selection:ins_claim.claim,status:"
+msgctxt "selection:claim.claim,status:"
 msgid "Closed"
 msgstr "Fermé"
 
-msgctxt "selection:ins_claim.claim,status:"
+msgctxt "selection:claim.claim,status:"
 msgid "Open"
 msgstr "Ouvert"
 
-msgctxt "selection:ins_claim.claim,status:"
+msgctxt "selection:claim.claim,status:"
 msgid "Reopened"
 msgstr "Réouvert"
 
-msgctxt "selection:ins_claim.claim,sub_status:"
+msgctxt "selection:claim.claim,sub_status:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:ins_claim.claim,sub_status:"
+msgctxt "selection:claim.claim,sub_status:"
 msgid "Instruction"
 msgstr "Instruction"
 
-msgctxt "selection:ins_claim.claim,sub_status:"
+msgctxt "selection:claim.claim,sub_status:"
 msgid "Paid"
 msgstr "Payé"
 
-msgctxt "selection:ins_claim.claim,sub_status:"
+msgctxt "selection:claim.claim,sub_status:"
 msgid "Reclamation"
 msgstr "Réclamation"
 
-msgctxt "selection:ins_claim.claim,sub_status:"
+msgctxt "selection:claim.claim,sub_status:"
 msgid "Regularization"
 msgstr "Régularisation"
 
-msgctxt "selection:ins_claim.claim,sub_status:"
+msgctxt "selection:claim.claim,sub_status:"
 msgid "Rejected"
 msgstr "Refusé"
 
-msgctxt "selection:ins_claim.claim,sub_status:"
+msgctxt "selection:claim.claim,sub_status:"
 msgid "Relapse"
 msgstr "Rechute"
 
-msgctxt "selection:ins_claim.claim,sub_status:"
+msgctxt "selection:claim.claim,sub_status:"
 msgid "Validated"
 msgstr "Validé"
 
-msgctxt "selection:ins_claim.claim,sub_status:"
+msgctxt "selection:claim.claim,sub_status:"
 msgid "Waiting For Documents"
 msgstr "En Attente de Documents"
 
-msgctxt "selection:ins_claim.claim,sub_status:"
+msgctxt "selection:claim.claim,sub_status:"
 msgid "Waiting Validation"
 msgstr "En Attente de Validation"
 
-msgctxt "selection:ins_claim.claim.history,status:"
+msgctxt "selection:claim.claim.history,status:"
 msgid "Closed"
 msgstr "Fermé"
 
-msgctxt "selection:ins_claim.claim.history,status:"
+msgctxt "selection:claim.claim.history,status:"
 msgid "Open"
 msgstr "Ouvert"
 
-msgctxt "selection:ins_claim.claim.history,status:"
+msgctxt "selection:claim.claim.history,status:"
 msgid "Reopened"
 msgstr "Réouvert"
 
-msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgctxt "selection:claim.claim.history,sub_status:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgctxt "selection:claim.claim.history,sub_status:"
 msgid "Instruction"
 msgstr "Instruction"
 
-msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgctxt "selection:claim.claim.history,sub_status:"
 msgid "Paid"
 msgstr "Payé"
 
-msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgctxt "selection:claim.claim.history,sub_status:"
 msgid "Rejected"
 msgstr "Refusé"
 
-msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgctxt "selection:claim.claim.history,sub_status:"
 msgid "Validated"
 msgstr "Validé"
 
-msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgctxt "selection:claim.claim.history,sub_status:"
 msgid "Waiting For Documents"
 msgstr "En Attente de Documents"
 
-msgctxt "selection:ins_claim.claim.history,sub_status:"
+msgctxt "selection:claim.claim.history,sub_status:"
 msgid "Waiting Validation"
 msgstr "En Attente de Validation"
 
-msgctxt "selection:ins_claim.indemnification,kind:"
+msgctxt "selection:claim.indemnification,kind:"
 msgid "Annuity"
 msgstr "Rente"
 
-msgctxt "selection:ins_claim.indemnification,kind:"
+msgctxt "selection:claim.indemnification,kind:"
 msgid "Capital"
 msgstr "Capital"
 
-msgctxt "selection:ins_claim.indemnification,kind:"
+msgctxt "selection:claim.indemnification,kind:"
 msgid "Period"
 msgstr "Période"
 
-msgctxt "selection:ins_claim.indemnification,status:"
+msgctxt "selection:claim.indemnification,status:"
 msgid "Calculated"
 msgstr "Calculé"
 
-msgctxt "selection:ins_claim.indemnification,status:"
+msgctxt "selection:claim.indemnification,status:"
 msgid "Paid"
 msgstr "Payé"
 
-msgctxt "selection:ins_claim.indemnification,status:"
+msgctxt "selection:claim.indemnification,status:"
 msgid "Rejected"
 msgstr "Refusé"
 
-msgctxt "selection:ins_claim.indemnification,status:"
+msgctxt "selection:claim.indemnification,status:"
 msgid "Validated"
 msgstr "Validé"
 
-msgctxt "selection:ins_claim.indemnification_detail,kind:"
+msgctxt "selection:claim.indemnification_detail,kind:"
 msgid "Deductible"
 msgstr "Franchise"
 
-msgctxt "selection:ins_claim.indemnification_detail,kind:"
+msgctxt "selection:claim.indemnification_detail,kind:"
 msgid "Indemnified"
 msgstr "Indemnisé"
 
-msgctxt "selection:ins_claim.indemnification_detail,kind:"
+msgctxt "selection:claim.indemnification_detail,kind:"
 msgid "Limit"
 msgstr "Plafond"
 
-msgctxt "selection:ins_claim.indemnification_detail,kind:"
+msgctxt "selection:claim.indemnification_detail,kind:"
 msgid "Regularization"
 msgstr "Régularisation"
 
-msgctxt "selection:ins_claim.indemnification_detail,kind:"
+msgctxt "selection:claim.indemnification_detail,kind:"
 msgid "Waiting Period"
 msgstr "Carence"
 
-msgctxt "selection:ins_claim.indemnification_detail,unit:"
+msgctxt "selection:claim.indemnification_detail,unit:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:ins_claim.indemnification_detail,unit:"
+msgctxt "selection:claim.indemnification_detail,unit:"
 msgid "Day"
 msgstr "Jour"
 
-msgctxt "selection:ins_claim.indemnification_detail,unit:"
+msgctxt "selection:claim.indemnification_detail,unit:"
 msgid "Half-year"
 msgstr "Semestre"
 
-msgctxt "selection:ins_claim.indemnification_detail,unit:"
+msgctxt "selection:claim.indemnification_detail,unit:"
 msgid "Month"
 msgstr "Mois"
 
-msgctxt "selection:ins_claim.indemnification_detail,unit:"
+msgctxt "selection:claim.indemnification_detail,unit:"
 msgid "Quarter"
 msgstr "Trimestre"
 
-msgctxt "selection:ins_claim.indemnification_detail,unit:"
+msgctxt "selection:claim.indemnification_detail,unit:"
 msgid "Week"
 msgstr "Semaine"
 
-msgctxt "selection:ins_claim.indemnification_detail,unit:"
+msgctxt "selection:claim.indemnification_detail,unit:"
 msgid "Year"
 msgstr "Année"
 
-msgctxt "selection:ins_claim.indemnification_displayer,selection:"
+msgctxt "selection:claim.indemnification_displayer,selection:"
 msgid "Nothing"
 msgstr "Ne rien faire"
 
-msgctxt "selection:ins_claim.indemnification_displayer,selection:"
+msgctxt "selection:claim.indemnification_displayer,selection:"
 msgid "Refuse"
 msgstr "Refusé"
 
-msgctxt "selection:ins_claim.indemnification_displayer,selection:"
+msgctxt "selection:claim.indemnification_displayer,selection:"
 msgid "Validate"
 msgstr "Validé"
 
-msgctxt "selection:ins_claim.indemnification_selection,global_value:"
+msgctxt "selection:claim.indemnification_selection,global_value:"
 msgid "Nothing"
 msgstr "Ne rien faire"
 
-msgctxt "selection:ins_claim.indemnification_selection,global_value:"
+msgctxt "selection:claim.indemnification_selection,global_value:"
 msgid "Refuse"
 msgstr "Refuser"
 
-msgctxt "selection:ins_claim.indemnification_selection,global_value:"
+msgctxt "selection:claim.indemnification_selection,global_value:"
 msgid "Validate"
 msgstr "Valider"
 
@@ -858,56 +858,56 @@ msgctxt "selection:party.contact_history,for_object_ref:"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "view:ins_claim.claim.history:"
+msgctxt "view:claim.claim.history:"
 msgid "History"
 msgstr "Historique"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "view:ins_claim.claim:"
+msgctxt "view:claim.claim:"
 msgid "Losses"
 msgstr "Préjudices"
 
-msgctxt "view:ins_claim.indemnification:"
+msgctxt "view:claim.indemnification:"
 msgid "Indemnification"
 msgstr "Indemnisation"
 
-msgctxt "view:ins_claim.indemnification_detail:"
+msgctxt "view:claim.indemnification_detail:"
 msgid "Indemnification Detail"
 msgstr "Détail de l'indemnisation"
 
-msgctxt "view:ins_claim.indemnification_displayer:"
+msgctxt "view:claim.indemnification_displayer:"
 msgid "Indemnification"
 msgstr "Indemnisation"
 
-msgctxt "view:ins_claim.indemnification_displayer:"
+msgctxt "view:claim.indemnification_displayer:"
 msgid "Indemnifications"
 msgstr "Indemnisations"
 
-msgctxt "view:ins_claim.indemnification_selection:"
+msgctxt "view:claim.indemnification_selection:"
 msgid "Indemnification Validation"
 msgstr "Validation des Indemnisations"
 
-msgctxt "view:ins_claim.loss:"
+msgctxt "view:claim.loss:"
 msgid "Loss"
 msgstr "Préjudice"
 
-msgctxt "view:ins_claim.loss:"
+msgctxt "view:claim.loss:"
 msgid "Losses"
 msgstr "Préjudices"
 
 msgctxt ""
-"wizard_button:ins_claim.indemnification_validation,select_indemnifications,end:"
+"wizard_button:claim.indemnification_validation,select_indemnifications,end:"
 msgid "Quit"
 msgstr "Quitter"
 
 msgctxt ""
-"wizard_button:ins_claim.indemnification_validation,select_indemnifications,reload_selection:"
+"wizard_button:claim.indemnification_validation,select_indemnifications,reload_selection:"
 msgid "Continue"
 msgstr "Continuer"
