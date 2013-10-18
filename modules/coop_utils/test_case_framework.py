@@ -412,6 +412,8 @@ class SelectTestCase(model.CoopView):
         return {'test_cases': {'update': to_update}}
 
     def on_change_select_all_test_cases(self):
+        if not (hasattr(self, 'test_cases') and self.test_cases):
+            return {}
         return {
             'test_cases': {'update': [{
                         'id': x.id,
@@ -421,6 +423,8 @@ class SelectTestCase(model.CoopView):
                     for x in self.test_cases]}}
 
     def on_change_select_all_files(self):
+        if not (hasattr(self, 'test_files') and self.test_files):
+            return {}
         return {
             'test_files': {'update': [{
                         'id': x.id,

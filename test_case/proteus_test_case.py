@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-import time
 
 from proteus import Model, Wizard
 
@@ -10,14 +9,6 @@ import proteus_tools
 import logging
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
-CODE_TEMPLATE = '''def execute_test(cfg_dict):
-    from %s import launch_test_case
-
-    launch_test_case(cfg_dict)
-
-execute_test(cfg_dict)
-'''
-
 format = '[%(asctime)s] %(levelname)s:%(name)s:%(message)s'
 datefmt = '%a %b %d %H:%M:%S %Y'
 logging.basicConfig(level=logging.INFO, format=format,
@@ -63,78 +54,10 @@ def install_modules(config, modules_to_install, cfg_dict, only_this_module):
             module = module[0]
             Module.install([module.id], config.context)
             Wizard('ir.module.module.install_upgrade').execute('upgrade')
-            # Hack to force proteus to update its cached model definition
-            # in case an already loaded Model was updated during the module
-            # installation process
-            Model.reset()
             for item in ConfigWizardItem.find([('state', '!=', 'done')]):
                 item.state = 'done'
                 item.save()
-        if not cfg_dict['only_install']:
-            update_modules(cfg_dict, [cur_module], True)
     return installed_modules
-
-
-def get_module_cfg(path, cfg_dict):
-    if not os.path.isfile(os.path.join(path, 'test_case', 'test_case.cfg')):
-        return cfg_dict
-    module_cfg = proteus_tools.get_cfg_as_dict(
-        os.path.join(path, 'test_case', 'test_case.cfg'), 'options',
-        ['depends'])
-    if 'depends' in module_cfg.keys():
-        for dependency in module_cfg['depends']:
-            module_cfg = dict(get_module_cfg(
-                os.path.abspath(
-                    os.path.join(path, '..', 'modules', dependency)),
-                cfg_dict).items() + module_cfg.items())
-        module_cfg.pop('depends')
-    return dict(cfg_dict.items() + module_cfg.items())
-
-
-def load_test_case_translations(cfg_dict, path):
-    import polib
-    if not 'translate' in cfg_dict.keys():
-        cfg_dict['translate'] = {}
-    for po_file in [f for f in os.listdir(path) if f.endswith('.po')]:
-        po = polib.pofile(os.path.join(path, po_file))
-        for entry in po.translated_entries():
-            cfg_dict['translate'][entry.msgid] = entry.msgstr
-    return cfg_dict
-
-
-def update_modules(cfg_dict, modules, only_this_module=False):
-    cfg_dict = set_currency(cfg_dict)
-    if not only_this_module:
-        modules = proteus_tools.get_modules_to_update(modules)
-    for cur_module in modules:
-        start = time.clock()
-        cur_path = os.path.abspath(
-            os.path.join(DIR, '..', 'modules', cur_module))
-        module_dict = get_module_cfg(cur_path, cfg_dict)
-        module_dir = os.path.join(cur_path, 'test_case')
-        if not os.path.isfile(os.path.join(
-                module_dir, 'proteus_test_case.py')):
-            logging.getLogger('test_case').info(
-                'Missing test case file for module %s' % cur_module)
-            continue
-        logging.getLogger('test_case').info('Running test case for module % s'
-            % cur_module)
-
-        code = CODE_TEMPLATE % ('trytond.modules.' + cur_module + '.test_case')
-        module_dict = get_module_cfg(cur_path, cfg_dict)
-        module_dict['dir'] = module_dir
-        dir_loc = os.path.join(
-            module_dir, module_dict.get('language', 'fr')[0:2].lower())
-        if os.path.exists(dir_loc):
-            module_dict['dir_loc'] = dir_loc
-            module_dict = load_test_case_translations(
-                module_dict, module_dict['dir_loc'])
-        context = {'cfg_dict': module_dict}
-        localcontext = {}
-        exec code in context, localcontext
-        logging.getLogger('test_case').info(
-            '  -> Test Case executed for module %s in %s s' %
-            (cur_module, time.clock() - start))
 
 
 def import_json_files(cfg_dict):
@@ -164,6 +87,17 @@ def import_json_files(cfg_dict):
                 'Successfully imported file %s' % cur_file)
 
 
+def execute_test_cases(cfg_dict, files=True):
+    if cfg_dict['only_install']:
+        return
+    wizard = Wizard('coop_utils.test_case_wizard')
+    wizard.form.select_all_test_cases = True
+    if files:
+        wizard.form.select_all_files = True
+    wizard.execute('execute_test_cases')
+    wizard.execute('end')
+
+
 def launch_proteus_test_case(test_config_file=None, module=None):
     if not test_config_file:
         test_config_file = os.path.join(DIR, 'test_case.cfg')
@@ -182,19 +116,6 @@ def launch_proteus_test_case(test_config_file=None, module=None):
     return cfg_dict
 
 
-def set_currency(cfg_dict):
-    Currency = Model.get('currency.currency')
-    cur_domain = []
-    if cfg_dict['currency']:
-        if isinstance(cfg_dict['currency'], Model):
-            return cfg_dict
-        cur_domain.append(('code', '=', cfg_dict['currency']))
-    currencies = Currency.find(cur_domain, limit=1)
-    if len(currencies) > 0:
-        cfg_dict['currency'] = currencies[0]
-    return cfg_dict
-
-
 if __name__ == '__main__':
     logging.getLogger('test_case').info('Launching Proteus Test Case')
     module = None
@@ -202,4 +123,4 @@ if __name__ == '__main__':
         module = sys.argv[1]
     cfg_dict = launch_proteus_test_case(module=module)
     if not module and not cfg_dict['only_install']:
-        import_json_files(cfg_dict)
+        execute_test_cases(cfg_dict, True)
