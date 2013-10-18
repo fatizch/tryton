@@ -99,7 +99,7 @@ class CoopTestCase(unittest.TestCase):
 
     @classmethod
     def get_models(cls):
-        return {}
+        return {'TestCaseModel': 'coop_utils.test_case_model'}
 
     @classmethod
     def get_all_modules(cls, modules):
@@ -149,6 +149,9 @@ class CoopTestCase(unittest.TestCase):
         '''
         import trytond.tests.test_tryton
         trytond.tests.test_tryton.test_depends()
+
+    def test9999_launch_test_cases(self):
+        self.TestCaseModel.run_all_test_cases()
 
     def __getattr__(self, name):
         if name == '_models':
