@@ -14,9 +14,6 @@
     <label name="covered_element"/>
     <field name="covered_element"/>
     <newline/>
-    <label name="coverage_amount"/>
-    <field name="coverage_amount"/>
-    <newline/>
     <label name="deductible_duration"/>
     <field name="deductible_duration" widget="selection"/>
     <newline/>
