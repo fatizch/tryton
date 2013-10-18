@@ -1,0 +1,10 @@
+msgid "Is VIP"
+msgstr "Est VIP"
+
+msgid "Annual Salary"
+msgstr "Salaire Annuel"
+
+msgid "CSP"
+msgstr "CSP"
+
+
