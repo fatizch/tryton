@@ -24,25 +24,6 @@ __all__ = [
     ]
 
 
-def run_test_case_method(source_class, method):
-    # Runner function that will be used to automatically call before / after
-    # methods. It supports chained before / after though the use of this
-    # possibility is not recommanded
-
-    method_name = method.__name__
-    before_meth = getattr(source_class, '_before_%s' % method_name, None)
-    if before_meth:
-        run_test_case_method(source_class, before_meth)
-    logging.getLogger('test_case').info('Executing test_case %s' %
-        method.__name__)
-    result = method()
-    if result:
-        source_class.save_objects(result)
-    after_meth = getattr(source_class, '_after_%s' % method_name, None)
-    if after_meth:
-        run_test_case_method(source_class, after_meth)
-
-
 def solve_graph(node_name, nodes, resolved=None, unresolved=None):
     if node_name is None:
         resolved = []
@@ -127,6 +108,24 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
     language = fields.Many2One('ir.lang', 'Test Case Language')
 
     @classmethod
+    def run_test_case_method(cls, method):
+        # Runner function that will be used to automatically call before /
+        # after methods. It supports chained before / after though the use of
+        # this possibility is not recommanded
+        method_name = method.__name__
+        before_meth = getattr(cls, '_before_%s' % method_name, None)
+        if before_meth:
+            cls.run_test_case_method(before_meth)
+        logging.getLogger('test_case').info('Executing test_case %s' %
+            method.__name__)
+        result = method()
+        if result:
+            cls.save_objects(result)
+        after_meth = getattr(cls, '_after_%s' % method_name, None)
+        if after_meth:
+            cls.run_test_case_method(after_meth)
+
+    @classmethod
     def _get_test_case_dependencies(cls):
         return {
             'set_global_search': {
@@ -156,7 +155,8 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
     @classmethod
     def run_test_case(cls, test_case):
         with Transaction().new_cursor(), Transaction().set_user(0):
-            run_test_case_method(cls, test_case)
+            print Transaction().context.get('company', 'Inside : not found')
+            cls.run_test_case_method(test_case)
             Transaction().cursor.commit()
 
     @classmethod

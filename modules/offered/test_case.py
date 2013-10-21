@@ -1,4 +1,5 @@
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
 from trytond.modules.coop_utils import fields
 
 __all__ = [
@@ -30,6 +31,15 @@ class TestCaseModel():
         res = super(TestCaseModel, cls).global_search_list()
         res.add('offered.product')
         return res
+
+    @classmethod
+    def run_test_case_method(cls, method):
+        try:
+            company = cls.get_company()
+            with Transaction().set_context(company=company.id):
+                super(TestCaseModel, cls).run_test_case_method(method)
+        except IndexError:
+            super(TestCaseModel, cls).run_test_case_method(method)
 
     @classmethod
     def main_company_test_case(cls):

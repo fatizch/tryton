@@ -122,5 +122,6 @@ if __name__ == '__main__':
     if len(sys.argv) == 2:
         module = sys.argv[1]
     cfg_dict = launch_proteus_test_case(module=module)
-    if not module and not cfg_dict['only_install']:
-        execute_test_cases(cfg_dict, True)
+    # if not module and not cfg_dict['only_install']:
+        # Model.reset()
+        # execute_test_cases(cfg_dict, True)

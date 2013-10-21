@@ -23,7 +23,7 @@ class TestCaseModel():
         result['tax_test_case']['dependencies'].add('account_kind_test_case')
         result['account_kind_test_case'] = {
             'name': 'Account Kind Test Case',
-            'dependencies': set([]),
+            'dependencies': set(['main_company_test_case']),
         }
         result['account_test_case'] = {
             'name': 'Account Test Case',
