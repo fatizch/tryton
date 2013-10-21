@@ -43,3 +43,7 @@ class Party():
 
     def get_last_claim_id(self, name):
         return self.claims[-1].id if self.claims else None
+
+    @staticmethod
+    def default_number_of_claims():
+        return 0

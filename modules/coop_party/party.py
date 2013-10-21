@@ -314,6 +314,10 @@ class Party(model.CoopSQL):
     def on_change_with_number_of_contact_mechanisms(self, name=None):
         return len(self.contact_mechanisms)
 
+    @staticmethod
+    def default_number_of_contact_mechanisms():
+        return 0
+
 
 class Actor(CoopView):
     'Actor'

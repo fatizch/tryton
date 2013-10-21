@@ -79,6 +79,14 @@ class Party():
                 party, 'contracts', True, at_date, lang=lang)
         return res
 
+    @staticmethod
+    def default_number_of_quotes():
+        return 0
+
+    @staticmethod
+    def default_number_of_contracts():
+        return 0
+
 
 class ContactHistory():
     'Contact History'
