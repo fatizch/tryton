@@ -29,7 +29,7 @@ class LoanParameters(model.CoopView, model.ModelCurrency):
     amount = fields.Numeric('Amount', required=True)
     funds_release_date = fields.Date('Funds Release Date', required=True)
     first_payment_date = fields.Date('First Payment Date', required=True)
-    rate = fields.Numeric('Annual Rate', required=True)
+    rate = fields.Numeric('Annual Rate', digits=(16, 4), required=True)
     lender = fields.Many2One('bank', 'Lender', required=True)
     defferal = fields.Selection(DEFFERALS, 'Differal', sort=False)
     defferal_duration = fields.Integer('Differal Duration')
@@ -62,13 +62,13 @@ class LoanCreation(model.CoopWizard):
     start_state = 'loan_parameters'
     loan_parameters = StateView('loan.creation_parameters',
         'loan.loan_creation_parameters_view_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Cancel', 'cancel_loan', 'tryton-cancel'),
             Button('Next', 'create_loan', 'tryton-go-next'),
             ])
     create_loan = StateTransition()
     increments = StateView('loan.creation_increments',
         'loan.loan_creation_increments_view_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Cancel', 'cancel_loan', 'tryton-cancel'),
             Button('Previous', 'loan_parameters', 'tryton-go-previous'),
             Button('Next', 'create_payments', 'tryton-go-next',
                 default=True),
@@ -76,12 +76,13 @@ class LoanCreation(model.CoopWizard):
     create_payments = StateTransition()
     amortization_table = StateView('loan.creation_table',
         'loan.loan_creation_table_view_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Cancel', 'cancel_loan', 'tryton-cancel'),
             Button('Previous', 'increments', 'tryton-go-previous'),
             Button('End', 'validate_loan', 'tryton-go-next',
                 default=True),
             ])
     validate_loan = StateTransition()
+    cancel_loan = StateTransition()
 
     def default_loan_parameters(self, values):
         Contract = Pool().get('contract.contract')
@@ -150,4 +151,10 @@ class LoanCreation(model.CoopWizard):
         contract.loans = list(contract.loans)
         contract.loans.append(self.loan_parameters.loan)
         contract.save()
+        return 'end'
+
+    def transition_cancel_loan(self):
+        Loan = Pool().get('loan.loan')
+        if self.loan_parameters.loan and self.loan_parameters.loan.id > 0:
+            Loan.delete([self.loan_parameters.loan])
         return 'end'

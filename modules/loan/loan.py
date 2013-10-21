@@ -60,7 +60,7 @@ class Loan(model.CoopSQL, model.CoopView, model.ModelCurrency):
     loan_shares = fields.One2Many('loan.share',
         'loan', 'Loan Shares')
     outstanding_capital = fields.Numeric('Outstanding Capital')
-    rate = fields.Numeric('Annual Rate', states={
+    rate = fields.Numeric('Annual Rate', digits=(16, 4), states={
             'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate'])})
     lender = fields.Many2One('bank', 'Lender')
     payments = fields.One2Many('loan.payment', 'loan',
@@ -248,14 +248,11 @@ class Loan(model.CoopSQL, model.CoopView, model.ModelCurrency):
         self.update_increments()
 
     def get_payment(self, at_date=None):
-        Payment = Pool().get('loan.payment')
         if not at_date:
             at_date = utils.today()
-        payments = Payment.search([
-                ('start_date', '<=', at_date),
-                ('end_date', '>=', at_date),
-                ('kind', '=', 'scheduled'),
-                ('loan', '=', self)])
+        payments = [x for x in self.payments
+            if x.start_date <= at_date and x.end_date >= at_date
+            and x.kind == 'scheduled']
         if len(payments) == 1:
             return payments[0]
 
@@ -376,7 +373,7 @@ class LoanPayment(model.CoopSQL, model.CoopView, model.ModelCurrency):
         if early_payments:
             self.begin_balance -= sum(map(lambda x: x.amount, early_payments))
         self.interest = self.loan.currency.round(begin_balance * rate)
-        if increment and increment.defferal:
+        if increment and not utils.is_none(increment, 'defferal'):
             if increment.defferal == 'partially':
                 self.principal = 0
                 self.interest = payment_amount

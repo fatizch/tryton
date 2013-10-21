@@ -9,9 +9,8 @@ import unittest
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import test_view, test_depends
 
-MODULE_NAME = os.path.basename(
-                  os.path.abspath(
-                      os.path.join(os.path.normpath(__file__), '..', '..')))
+MODULE_NAME = os.path.basename(os.path.abspath(
+        os.path.join(os.path.normpath(__file__), '..', '..')))
 
 
 class ModuleTestCase(unittest.TestCase):
@@ -26,7 +25,7 @@ class ModuleTestCase(unittest.TestCase):
         '''
         Test views.
         '''
-        #test_view(MODULE_NAME)
+        test_view(MODULE_NAME)
 
     def test0006depends(self):
         '''
