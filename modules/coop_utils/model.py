@@ -11,7 +11,6 @@ from trytond.wizard import Wizard
 from trytond.rpc import RPC
 
 import utils
-import coop_string
 import fields
 import export
 
@@ -257,8 +256,6 @@ class TableOfTable(CoopSQL, CoopView):
     key = fields.Char(
         'Key', states={'readonly': Bool(Eval('is_used'))}, depends=['is_used'])
     name = fields.Char('Value', required=True, translate=True)
-    is_used = fields.Function(
-            fields.Boolean('Is Used'), 'get_is_used')
 
     @classmethod
     def __setup__(cls):
@@ -299,34 +296,6 @@ class TableOfTable(CoopSQL, CoopView):
     def get_func_pk_name():
         'return the functional key var name used when not using the id'
         return 'key'
-
-    @classmethod
-    def get_is_used(cls, instances, name):
-        using_inst = cls.get_instances_using_me(instances)
-        res = dict(
-            (instance.id, len(using_inst[instance.id]) > 0)
-            for instance in instances)
-        return res
-
-    @classmethod
-    def check_if_used(cls, instances):
-        using_inst = cls.get_instances_using_me(instances)
-        for instance in instances:
-            for using_instance in using_inst[instance.id]:
-                cls.raise_user_error(
-                    'item_used',
-                    (
-                        instance.rec_name,
-                        using_instance.rec_name,
-                        coop_string.translate_model_name(
-                            using_instance.__class__),
-                        using_instance.id,
-                    ))
-
-    @classmethod
-    def delete(cls, instances):
-        cls.check_if_used(instances)
-        super(TableOfTable, cls).delete(instances)
 
     @classmethod
     def default_my_model_name(cls):
