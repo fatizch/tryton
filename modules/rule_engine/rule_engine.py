@@ -881,6 +881,12 @@ class Context(ModelView, ModelSQL):
             element.as_context(context)
         return context
 
+    @classmethod
+    def _export_light(cls):
+        result = super(Context, cls)._export_light()
+        result.add('allowed_elements')
+        return result
+
 
 class TreeElement(ModelView, ModelSQL):
     "Rule Engine Tree Element"
