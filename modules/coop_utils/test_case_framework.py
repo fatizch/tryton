@@ -155,7 +155,6 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
     @classmethod
     def run_test_case(cls, test_case):
         with Transaction().new_cursor(), Transaction().set_user(0):
-            print Transaction().context.get('company', 'Inside : not found')
             cls.run_test_case_method(test_case)
             Transaction().cursor.commit()
 
@@ -185,8 +184,10 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
 
     @classmethod
     def get_all_tests(cls):
+        result = []
         for elem in cls._get_test_case_dependencies().keys():
-            yield getattr(cls, elem)
+            result.append(getattr(cls, elem))
+        return result
 
     @classmethod
     def get_test_data(cls):

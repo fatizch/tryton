@@ -99,7 +99,7 @@ class CoopTestCase(unittest.TestCase):
 
     @classmethod
     def get_models(cls):
-        return {'TestCaseModel': 'coop_utils.test_case_model'}
+        return {}
 
     @classmethod
     def get_all_modules(cls, modules):
@@ -117,7 +117,7 @@ class CoopTestCase(unittest.TestCase):
         for module in modules.itervalues():
             module.ModuleTestCase.install_module()
 
-        models = {}
+        models = {'TestCaseModel': 'coop_utils.test_case_model'}
         for modules in modules.itervalues():
             models.update(modules.ModuleTestCase.get_models())
 

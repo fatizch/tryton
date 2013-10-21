@@ -79,10 +79,10 @@ class TestCaseModel():
                     else None)
             if getattr(table, 'dimension_kind%s' % n) == 'range-date':
                 res.start_date = datetime.datetime.strptime(elem,
-                    Configuration.language.date)
+                    Configuration.language.date).date()
                 res.end_date = (datetime.datetime.strptime(values[idx + 1],
-                    Configuration.language.date) if idx < len(values) - 1 else
-                    None)
+                    Configuration.language.date).date()
+                    if idx < len(values) - 1 else None)
             res.sequence = idx
             res.definition = table
             res.save()
