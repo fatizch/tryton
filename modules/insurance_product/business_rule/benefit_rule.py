@@ -44,7 +44,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
                 STATES_AMOUNT_EVOLVES,
             )
         })
-    coef_coverage_amount = fields.Numeric('Multiplier',
+    coef_coverage_amount = fields.Numeric('Multiplier', digits=(16, 4),
         states={
             'invisible': Or(
                 STATE_ADVANCED,

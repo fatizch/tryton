@@ -102,7 +102,7 @@ class CompensatedOption(model.CoopSQL, model.CoopView):
         'Subscribed Coverage', domain=[('coverage_kind', '=', 'insurance')],
         ondelete='CASCADE')
     use_specific_rate = fields.Boolean('Specific Rate')
-    rate = fields.Numeric('Rate', states={
+    rate = fields.Numeric('Rate', digits=(16, 4), states={
             'invisible': ~Eval('use_specific_rate'),
             'required': ~~Eval('use_specific_rate'),
             })

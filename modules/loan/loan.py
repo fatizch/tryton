@@ -280,7 +280,7 @@ class LoanShare(model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     loan = fields.Many2One('loan.loan', 'Loan', ondelete='CASCADE')
-    share = fields.Numeric('Loan Share')
+    share = fields.Numeric('Loan Share', digits=(16, 4))
     person = fields.Many2One('party.party', 'Person', ondelete='RESTRICT',
         domain=[('is_person', '=', True)])
 
@@ -307,7 +307,7 @@ class LoanIncrement(model.CoopSQL, model.CoopView, model.ModelCurrency):
     end_date = fields.Date('End Date')
     loan = fields.Many2One('loan.loan', 'Loan', ondelete='CASCADE')
     number_of_payments = fields.Integer('Number of Payments')
-    rate = fields.Numeric('Annual Rate')
+    rate = fields.Numeric('Annual Rate', digits=(16, 4))
     payment_amount = fields.Numeric('Amount',
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     defferal = fields.Selection(DEFFERALS, 'Differal', sort=False)
