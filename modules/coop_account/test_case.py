@@ -37,7 +37,7 @@ class TestCaseModel():
         version.kind = tax_data[4]
         version.value = Decimal(tax_data[3])
         version.start_date = datetime.datetime.strptime(tax_data[2],
-            '%d/%m/%Y')
+            '%d/%m/%Y').date()
         tax.versions = [version]
         return tax
 
