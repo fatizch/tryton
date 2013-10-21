@@ -2,7 +2,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.cache import Cache
 
 
-MODULE_NAME = 'insurance_claim'
+MODULE_NAME = 'claim'
 
 __all__ = [
     'TestCaseModel',
