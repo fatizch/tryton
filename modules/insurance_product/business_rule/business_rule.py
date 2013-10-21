@@ -186,8 +186,7 @@ class RuleEngine():
                 (elem.the_complementary_data.name, existing_values.get(
                         elem.the_complementary_data.name,
                         elem.the_complementary_data.get_default_value(None)))
-                for elem in self.rule_parameters
-                if elem.kind == 'complementary_data'])
+                for elem in self.rule_compl_datas])
 
     def on_change_rule_compl_datas(self):
         return self.on_change_rule_parameters()
