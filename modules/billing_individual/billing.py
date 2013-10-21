@@ -1355,7 +1355,7 @@ class TaxDesc():
         if not (hasattr(self, 'account_for_billing') and
                 self.account_for_billing):
             return None
-        return self.account_for_billing.company
+        return self.account_for_billing.company.id
 
     @classmethod
     def search_company(cls, name, clause):
@@ -1391,7 +1391,7 @@ class FeeDesc():
         if not (hasattr(self, 'account_for_billing') and
                 self.account_for_billing):
             return None
-        return self.account_for_billing.company
+        return self.account_for_billing.company.id
 
     @classmethod
     def search_company(cls, name, clause):
