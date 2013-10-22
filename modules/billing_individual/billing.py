@@ -209,7 +209,8 @@ class PriceLine(model.CoopSQL, model.CoopView):
                 continue
             detail_line = PriceLineModel()
             detail_line.init_from_result_line(detail)
-            self.all_lines.append(detail_line)
+            if detail_line.amount:
+                self.all_lines.append(detail_line)
         if not line.details:
             self.amount = line.amount
         else:
@@ -255,8 +256,7 @@ class PriceLine(model.CoopSQL, model.CoopView):
                 else:
                     fees[elem.on_object.fee.id] = [elem]
             else:
-                for detail in elem.details:
-                    self.get_fee_details(detail, fees)
+                self.get_fee_details(elem, fees)
 
     def build_fee_lines(self, line):
         fee_details = {}
