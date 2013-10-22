@@ -207,8 +207,10 @@ class Party(model.CoopSQL):
         return super(Party, self).get_rec_name(name)
 
     def get_relation_with(self, target):
-        kind = set([elem.kind for elem in self.relations
-            if elem.to_party.id == elem.id])
+        kind = [rel.relation_kind.name for rel in self.relations
+            if rel.to_party.id == target.id]
+        kind += [rel.relation_kind.reversed_name
+            for rel in self.in_relation_with if rel.from_party.id == target.id]
         if kind:
             return kind[0]
         return None
