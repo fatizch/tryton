@@ -50,7 +50,8 @@ class Move():
                     - Coalesce(move_line.debit, 0)),
                 where=(account.kind != 'receivable')
                 & (move_line.second_origin.in_(coverage.select(
-                            Concat('offered.coverage,', Cast(coverage.id, 'CHAR')),
+                            Concat('offered.coverage,',
+                                Cast(coverage.id, 'VARCHAR')),
                             where=(coverage.kind == 'commission'))))
                 & (account.active)
                 & (move.id.in_([m.id for m in moves])),
