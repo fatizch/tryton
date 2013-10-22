@@ -17,6 +17,12 @@ class Tag(model.CoopSQL, model.CoopView):
     rules = fields.Many2Many('rule_engine-tag', 'tag',
         'rule_engine', 'Rules')
 
+    @classmethod
+    def _export_skips(cls):
+        result = super(Tag, cls)._export_skips()
+        result.add('rules')
+        return result
+
     def on_change_with_code(self):
         if self.code:
             return self.code
