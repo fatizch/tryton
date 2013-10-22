@@ -91,7 +91,7 @@ class PersonContext(RuleEngineContext):
     def _re_link_with_subscriber(cls, args):
         person = cls.get_person(args)
         subscriber = args['contract'].subscriber
-        return person.get_relation_with(subscriber)
+        return person.get_relation_with(subscriber, args['date'])
 
 
 class OptionContext(RuleEngineContext):

@@ -256,6 +256,10 @@ class RuleEngineContext(CoopView):
     def append_error(cls, args, error_msg):
         cls.get_result(args).errors.append(error_msg)
 
+    @classmethod
+    def debug(cls, args, debug):
+        args['__result__'].debug.append(debug)
+
 
 class RuleTools(RuleEngineContext):
     '''

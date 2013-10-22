@@ -1,6 +1,5 @@
 from trytond.pool import Pool
 from contract import *
-from subs_process import *
 from .party import *
 from .document import *
 from .renewal import *
@@ -38,6 +37,7 @@ def register():
         RenewalResult,
         #From Rule Engine,
         OfferedContext,
+        ContractContext,
         module='insurance_contract', type_='model')
 
     Pool.register(

@@ -206,11 +206,15 @@ class Party(model.CoopSQL):
             return res
         return super(Party, self).get_rec_name(name)
 
-    def get_relation_with(self, target):
-        kind = [rel.relation_kind.name for rel in self.relations
+    def get_relation_with(self, target, at_date=None):
+        if not at_date:
+            at_date = utils.today()
+        kind = [rel.relation_kind.name for rel in
+            utils.get_good_versions_at_date(self, 'relations', at_date)
             if rel.to_party.id == target.id]
-        kind += [rel.relation_kind.reversed_name
-            for rel in self.in_relation_with if rel.from_party.id == target.id]
+        kind += [rel.relation_kind.reversed_name for rel in
+            utils.get_good_versions_at_date(self, 'in_relation_with', at_date)
+            if rel.from_party.id == target.id]
         if kind:
             return kind[0]
         return None

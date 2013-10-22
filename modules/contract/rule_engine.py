@@ -64,3 +64,11 @@ class ContractContext(RuleEngineContext):
         address = contract.get_contract_address(args['date'])
         if address:
             return address.zip
+
+    @classmethod
+    def get_person(cls, args):
+        if 'person' in args:
+            return args['person']
+        elif 'sub_elem' in args:
+            return args['sub_elem'].party
+        cls.append_error(args, 'Cannot find a person to get')
