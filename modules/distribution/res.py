@@ -15,3 +15,9 @@ class User():
 
     dist_network = fields.Many2One('distribution.dist_network',
         'Distribution Network')
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(User, cls)._export_skips()
+        result.add('employee')
+        return result

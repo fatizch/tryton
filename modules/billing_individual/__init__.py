@@ -41,6 +41,7 @@ def register():
         Move,
         MoveLine,
         Account,
+        Journal,
         # from test_case
         TestCaseModel,
         module='billing_individual', type_='model')
@@ -52,5 +53,4 @@ def register():
     export.add_export_to_model([
             ('account.tax', ('name', )),
             ('account.account.type', ('name', )),
-            ('account.journal', ('name', )),
             ], 'billing_individual')

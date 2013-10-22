@@ -1,3 +1,5 @@
+import copy
+
 from decimal import Decimal
 from sql.aggregate import Sum
 from sql.conditionals import Coalesce
@@ -6,7 +8,7 @@ from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.coop_utils import fields, export
 
-__all__ = ['Move', 'MoveLine', 'Account']
+__all__ = ['Move', 'MoveLine', 'Account', 'Journal']
 __metaclass__ = PoolMeta
 
 
@@ -207,7 +209,6 @@ class MoveLine:
 
 
 class Account(export.ExportImportMixin):
-    __metaclass__ = PoolMeta
     __name__ = 'account.account'
 
     @classmethod
@@ -220,3 +221,21 @@ class Account(export.ExportImportMixin):
         res.add('left')
         res.add('right')
         return res
+
+
+class Journal(export.ExportImportMixin):
+    __name__ = 'account.journal'
+
+    @classmethod
+    def __setup__(cls):
+        super(Journal, cls).__setup__()
+        cls.credit_account = copy.copy(cls.credit_account)
+        cls.credit_account.domain = export.clean_domain_for_import(
+            cls.credit_account.domain, 'company')
+        cls.debit_account = copy.copy(cls.debit_account)
+        cls.debit_account.domain = export.clean_domain_for_import(
+            cls.debit_account.domain, 'company')
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['name'])

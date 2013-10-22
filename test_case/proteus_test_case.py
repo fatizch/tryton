@@ -60,40 +60,14 @@ def install_modules(config, modules_to_install, cfg_dict, only_this_module):
     return installed_modules
 
 
-def import_json_files(cfg_dict):
-    json_dir = os.path.join(
-        DIR, 'json_files', cfg_dict.get('language', 'fr_FR'))
-    if os.path.isdir(json_dir):
-        files = [
-            os.path.join(json_dir, f) for f in os.listdir(json_dir)
-            if os.path.isfile(os.path.join(
-                json_dir, f)) and f.endswith('.json')]
-        if files:
-            logging.getLogger('test_case').info('')
-            logging.getLogger('test_case').info('Loading json files')
-        for cur_file in files:
-            try:
-                f = open(cur_file, 'rb')
-                wizard = Wizard('coop_utils.import_wizard')
-                wizard.form.selected_file = f.read()
-                wizard.execute('file_import')
-                f.close()
-            except Exception as e:
-                logging.getLogger('test_case').error('Could not import %s' %
-                    cur_file)
-                logging.getLogger('test_case').debug(str(e))
-                continue
-            logging.getLogger('test_case').info(
-                'Successfully imported file %s' % cur_file)
-
-
-def execute_test_cases(cfg_dict, files=True):
+def execute_test_cases(cfg_dict, files=False):
     if cfg_dict['only_install']:
         return
     wizard = Wizard('coop_utils.test_case_wizard')
-    wizard.form.select_all_test_cases = True
     if files:
         wizard.form.select_all_files = True
+    else:
+        wizard.form.select_all_test_cases = True
     wizard.execute('execute_test_cases')
     wizard.execute('end')
 
@@ -124,4 +98,5 @@ if __name__ == '__main__':
     cfg_dict = launch_proteus_test_case(module=module)
     if not module and not cfg_dict['only_install']:
         Model.reset()
-        execute_test_cases(cfg_dict, True)
+        execute_test_cases(cfg_dict)
+        execute_test_cases(cfg_dict, files=True)

@@ -48,6 +48,13 @@ class Party():
                 })
 
     @classmethod
+    def _export_skips(cls):
+        result = super(Party, cls)._export_skips()
+        result.add('quotes')
+        result.add('contracts')
+        return result
+
+    @classmethod
     @model.CoopView.button_action('contract.act_contract_button')
     def open_contracts(cls, objs):
         pass

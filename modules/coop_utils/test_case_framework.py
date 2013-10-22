@@ -352,6 +352,30 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
     def get_translater(cls, module):
         return lambda x: cls.translate_this(x, module)
 
+    @classmethod
+    def get_all_test_files(cls):
+        Module = Pool().get('ir.module.module')
+        result = {}
+        # trytond/trytond/modules path
+        top_path = os.path.abspath(os.path.join(os.path.normpath(__file__),
+                '..', '..', '..', 'modules'))
+        language_path = Pool().get(
+            'coop_utils.test_case_model').get_language().code
+        modules_to_load = [x.name
+            for x in Module.search([('state', '=', 'installed')])]
+        for module in modules_to_load:
+            file_path = os.path.join(top_path, module, 'test_case_data',
+                language_path)
+            if not os.path.exists(file_path) or not os.path.isdir(
+                    file_path):
+                continue
+            for file_name in os.listdir(file_path):
+                if not file_name.endswith('.json'):
+                    continue
+                result[u'%s' % file_name] = os.path.join(
+                    file_path, file_name)
+        return result
+
 
 class TestCaseSelector(model.CoopView):
     'Test Case Selector'
@@ -454,17 +478,14 @@ class TestCaseWizard(model.CoopWizard):
         })
 
     def default_select_test_cases(self, name):
-        import os
         # Look for files
-        DIR = os.path.abspath(os.path.normpath(os.path.join(
-                    __file__, '..', 'json_files')))
-        file_names = [f for f in os.listdir(DIR)
-            if os.path.isfile(os.path.join(DIR, f)) and f.endswith('.json')]
         test_files = []
-        for file_name in file_names:
+        files = Pool().get(
+            'coop_utils.test_case_model').get_all_test_files()
+        for file_name, file_path in files.iteritems():
             test_files.append({
                     'filename': file_name,
-                    'full_path': os.path.join(DIR, f)})
+                    'full_path': file_path})
         result = {'test_files': test_files}
 
         # Look for test cases
@@ -506,5 +527,6 @@ class TestCaseWizard(model.CoopWizard):
                 except:
                     logging.getLogger('test_case').info('Failed to import %s' %
                         elem.filename)
+                    raise
                     self.raise_user_error('bad_json', (elem.filename))
         return 'select_test_cases'

@@ -305,7 +305,11 @@ class ExportImportMixin(Model):
                         export_result, my_key)
                 continue
             field_value = getattr(self, field_name)
+            # We cannot just test "if field_value:" because 0 or '' might be
+            # acceptable non-default values
             if field_value is None:
+                continue
+            if isinstance(field_value, tuple) and len(field_value) == 0:
                 continue
             self._export_check_value_exportable(field_name, field, field_value)
             logging.getLogger('export_import').debug(
@@ -632,7 +636,11 @@ class ExportImportMixin(Model):
                 # print '\n'.join([str(x) for x in relink])
                 # print '#' * 80
                 print 'User Errors'
-                print '\n'.join((utils.format_data(err) for err in cur_errs))
+                try:
+                    print '\n'.join((utils.format_data(err)
+                            for err in cur_errs))
+                except:
+                    print '\n'.join((str(err) for err in cur_errs))
                 raise NotExportImport('Infinite loop detected in import')
         logging.getLogger('export_import').debug('FINISHED IMPORT')
         logging.getLogger('export_import').debug(counter)
