@@ -62,7 +62,7 @@ class StatusHistory(model.CoopSQL, model.CoopView):
             reference.end_date = previous_status.end_date
 
 
-class Subscribed(model.CoopView):
+class Subscribed(model.CoopView, model.ModelCurrency):
     'Subscribed'
 
     offered = fields.Many2One(
@@ -83,12 +83,6 @@ class Subscribed(model.CoopView):
     # contract. Default value is start_date
     start_management_date = fields.Date('Management Date')
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
-    currency = fields.Function(
-        fields.Many2One('currency.currency', 'Currency'),
-        'get_currency_id')
-    currency_digits = fields.Function(
-        fields.Integer('Currency Digits'),
-        'get_currency_digits')
     status_history = fields.One2Many(
         'contract.status_history', 'reference', 'Status History')
 
@@ -171,18 +165,9 @@ class Subscribed(model.CoopView):
             self.sub_status = sub_status
         return True, []
 
-    def get_currency_digits(self, name):
-        if hasattr(self, 'currency') and self.currency:
-            return self.currency.digits
-
     @classmethod
     def get_summary(cls, instances, name):
         return dict((x.id, x.rec_name) for x in instances)
-
-    def get_currency_id(self, name):
-        currency = self.get_currency()
-        if currency:
-            return currency.id
 
     def is_active_at_date(self, at_date):
         for status_hist in self.status_history:
@@ -468,7 +453,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
 
     def get_currency(self):
         if hasattr(self, 'offered') and self.offered:
-            return self.offered.get_currency()
+            return self.offered.currency
 
     def on_change_complementary_data(self):
         args = {'date': self.start_date, 'level': 'contract'}
@@ -579,7 +564,7 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
 
     def get_currency(self):
         if hasattr(self, 'offered') and self.offered:
-            return self.offered.get_currency()
+            return self.offered.currency
 
     def get_contract_number(self, name):
         return self.contract.contract_number if self.contract else ''

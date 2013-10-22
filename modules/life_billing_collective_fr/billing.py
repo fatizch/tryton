@@ -172,7 +172,7 @@ class RateLine(model.CoopSQL, model.CoopView):
             return self.parent.start_date_
 
 
-class RateNote(model.CoopSQL, model.CoopView):
+class RateNote(model.CoopSQL, model.CoopView, model.ModelCurrency):
     'Rate Note'
 
     __name__ = 'billing.rate_note'
@@ -262,7 +262,7 @@ class RateNote(model.CoopSQL, model.CoopView):
         return res
 
 
-class RateNoteLine(model.CoopSQL, model.CoopView):
+class RateNoteLine(model.CoopSQL, model.CoopView, model.ModelCurrency):
     'Rate Note Line'
 
     __name__ = 'billing.rate_note_line'
@@ -286,12 +286,6 @@ class RateNoteLine(model.CoopSQL, model.CoopView):
         on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line',
             'client_amount'],
         states={'readonly': ~~Eval('childs')})
-    currency = fields.Function(
-        fields.Many2One('currency.currency', 'Currency'),
-        'get_currency_id')
-    currency_symbol = fields.Function(
-        fields.Char('Currency Symbol'),
-        'get_currency_symbol')
     parent = fields.Many2One('billing.rate_note_line', 'Parent',
         ondelete='CASCADE')
     childs = fields.One2Many('billing.rate_note_line', 'parent', 'Childs')

@@ -26,7 +26,7 @@ STATES_ANNUITY = Eval('_parent_offered', {}).get(
 STATES_AMOUNT_EVOLVES = Bool(Eval('amount_evolves_over_time'))
 
 
-class BenefitRule(BusinessRuleRoot, model.CoopSQL):
+class BenefitRule(BusinessRuleRoot, model.CoopSQL, model.ModelCurrency):
     'Benefit Rule'
 
     __name__ = 'ins_product.benefit_rule'
@@ -124,7 +124,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
 
     def get_currency(self):
         if self.offered:
-            return self.offered.get_currency()
+            return self.offered.currency
 
     @staticmethod
     def default_coef_coverage_amount():
@@ -307,7 +307,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
             return self.get_indemnification_for_capital(args)
 
 
-class SubBenefitRule(model.CoopSQL, model.CoopView):
+class SubBenefitRule(model.CoopSQL, model.CoopView, model.ModelCurrency):
     'Sub Benefit Rule'
 
     __name__ = 'ins_product.sub_benefit_rule'
@@ -359,7 +359,7 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
 
     def get_currency(self):
         if self.benefit_rule:
-            return self.benefit_rule.get_currency()
+            return self.benefit_rule.currency
 
     @staticmethod
     def default_config_kind():

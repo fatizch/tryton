@@ -379,9 +379,6 @@ class ContractHistory(model.ObjectHistory):
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency'),
         'get_currency_id')
-    currency_digits = fields.Function(
-        fields.Integer('Currency Digits'),
-        'get_currency_digits')
     options = fields.Function(
         fields.One2Many('contract.subscribed_option', None, 'Options',
             datetime_field='date'),
@@ -409,7 +406,7 @@ class ContractHistory(model.ObjectHistory):
         return [o.id for o in options]
 
 
-class CoveredElement(model.CoopSQL, model.CoopView):
+class CoveredElement(model.CoopSQL, model.CoopView, model.ModelCurrency):
     'Covered Element'
     '''
         Covered elements represents anything which is covered by at least one
@@ -792,7 +789,7 @@ class CoveredElementPartyRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class CoveredData(model.CoopSQL, model.CoopView):
+class CoveredData(model.CoopSQL, model.CoopView, model.ModelCurrency):
     'Covered Data'
 
     __name__ = 'ins_contract.covered_data'
@@ -822,9 +819,6 @@ class CoveredData(model.CoopSQL, model.CoopView):
         fields.Many2One('currency.currency', 'Currency',
             states={'invisible': True}),
         'get_currency_id')
-    currency_symbol = fields.Function(
-        fields.Char('Currency Symbol'),
-        'get_currency_symbol')
     deductible_duration = fields.Many2One('ins_product.deductible_duration',
         'Deductible Duration', states={
             'invisible': ~Eval('possible_deductible_duration'),
@@ -898,15 +892,8 @@ class CoveredData(model.CoopSQL, model.CoopView):
         return contract.id if contract else None
 
     def get_currency(self):
-        return (self.covered_element.get_currency()
+        return (self.covered_element.currency
             if self.covered_element else None)
-
-    def get_currency_id(self, name):
-        currency = self.get_currency()
-        return currency.id if currency else None
-
-    def get_currency_symbol(self, name):
-        return self.currency.symbol if self.currency else None
 
     def get_possible_deductible_duration(self, name):
         try:

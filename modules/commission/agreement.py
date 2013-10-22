@@ -88,7 +88,7 @@ class CommissionOption():
         return self.current_policy_owner.account_payable
 
 
-class CompensatedOption(model.CoopSQL, model.CoopView):
+class CompensatedOption(model.CoopSQL, model.CoopView, model.ModelCurrency):
     'Compensated Option'
 
     __name__ = 'commission.compensated_option'
@@ -109,9 +109,6 @@ class CompensatedOption(model.CoopSQL, model.CoopView):
     com_amount = fields.Function(
         fields.Numeric('Com Amount'),
         'get_com_amount')
-    currency_symbol = fields.Function(
-        fields.Char('Currency Symbol'),
-        'get_currency_symbol')
 
     def get_rec_name(self, name):
         option = None

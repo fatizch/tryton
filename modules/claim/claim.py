@@ -692,7 +692,7 @@ class ClaimDeliveredService():
         return res
 
 
-class Indemnification(model.CoopView, model.CoopSQL):
+class Indemnification(model.CoopView, model.CoopSQL, model.ModelCurrency):
     'Indemnification'
 
     __name__ = 'claim.indemnification'
@@ -723,15 +723,6 @@ class Indemnification(model.CoopView, model.CoopSQL):
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
         depends=['currency_digits'],
         states={'readonly': Or(~Eval('manual'), Eval('status') == 'paid')})
-    currency = fields.Function(
-        fields.Many2One('currency.currency', 'Currency'),
-        'get_currency_id')
-    currency_digits = fields.Function(
-        fields.Integer('Currency Digits', states={'invisible': True}),
-        'get_currency_digits')
-    currency_symbol = fields.Function(
-        fields.Char('Currency Symbol'),
-        'get_currency_symbol')
     local_currency_amount = fields.Numeric('Local Currency Amount',
         digits=(16, Eval('local_currency_digits', DEF_CUR_DIG)),
         states={
@@ -841,17 +832,6 @@ class Indemnification(model.CoopView, model.CoopSQL):
         if self.delivered_service:
             return self.delivered_service.get_currency()
 
-    def get_currency_id(self, name):
-        currency = self.get_currency()
-        if currency:
-            return currency.id
-
-    def get_currency_digits(self, name):
-        return self.currency.digits if self.currency else DEF_CUR_DIG
-
-    def get_currency_symbol(self, name):
-        return self.currency.symbol if self.currency else ''
-
     def on_change_with_local_currency_digits(self, name=None):
         if self.local_currency:
             return self.local_currency.digits
@@ -893,7 +873,8 @@ class Indemnification(model.CoopView, model.CoopSQL):
         cls.write(indemnifications, {'status': 'rejected'})
 
 
-class IndemnificationDetail(model.CoopSQL, model.CoopView):
+class IndemnificationDetail(model.CoopSQL, model.CoopView,
+        model.ModelCurrency):
     'Indemnification Detail'
 
     __name__ = 'claim.indemnification_detail'
@@ -913,15 +894,6 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView):
     nb_of_unit = fields.Numeric('Nb of Unit')
     unit = fields.Selection(coop_date.DAILY_DURATION, 'Unit')
     amount = fields.Numeric('Amount')
-    currency = fields.Function(
-        fields.Many2One('currency.currency', 'Currency'),
-        'get_currency_id')
-    currency_digits = fields.Function(
-        fields.Integer('Currency Digits'),
-        'get_currency_digits')
-    currency_symbol = fields.Function(
-        fields.Char('Currency Symbol'),
-        'get_currency_symbol')
 
     def init_from_indemnification(self, indemnification):
         pass
@@ -937,17 +909,6 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView):
                 return self.indemnification.local_currency
             else:
                 return self.indemnification.currency
-
-    def get_currency_digits(self, name):
-        return self.currency.digits if self.currency else DEF_CUR_DIG
-
-    def get_currency_id(self, name):
-        currency = self.get_currency()
-        if currency:
-            return currency.id
-
-    def get_currency_symbol(self, name):
-        return self.currency.symbol if self.currency else ''
 
 
 class DocumentRequest():

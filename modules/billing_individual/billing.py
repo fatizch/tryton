@@ -122,7 +122,7 @@ class PriceLineFeeRelation(model.CoopSQL, model.CoopView):
         return False
 
 
-class PriceLine(model.CoopSQL, model.CoopView):
+class PriceLine(model.CoopSQL, model.CoopView, model.ModelCurrency):
     'Price Line'
 
     __name__ = 'billing.price_line'
@@ -148,15 +148,6 @@ class PriceLine(model.CoopSQL, model.CoopView):
         'price_line', 'Tax Lines')
     fee_lines = fields.One2Many('billing.price_line-fee-relation',
         'price_line', 'Fee Lines')
-    currency = fields.Function(
-        fields.Many2One('currency.currency', 'Currency'),
-        'get_currency_id')
-    currency_digits = fields.Function(
-        fields.Integer('Currency Digits'),
-        'get_currency_digits')
-    currency_symbol = fields.Function(
-        fields.Char('Currency Symbol'),
-        'get_currency_symbol')
 
     def get_estimated_total(self, name):
         return self.amount + self.estimated_fees + self.estimated_taxes

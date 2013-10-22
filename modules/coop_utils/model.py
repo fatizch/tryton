@@ -67,6 +67,7 @@ def serialize_this(the_data, from_field=None):
 
 class CoopSQL(export.ExportImportMixin, ModelSQL):
     'Root class for all stored classes'
+
     create_date_ = fields.Function(fields.DateTime('Creation date'),
         '_get_creation_date')
 
@@ -121,21 +122,6 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
         if not (hasattr(self, 'create_date') and self.create_date):
             return None
         return self.create_date
-
-    def get_currency(self):
-        print self.__name__
-        raise NotImplementedError
-
-    def get_currency_id(self, name):
-        return self.get_currency().id
-
-    def get_currency_digits(self, name):
-        return (self.currency.digits
-            if not utils.is_none(self, 'currency') else 2)
-
-    def get_currency_symbol(self, name):
-        return (self.currency.symbol
-            if not utils.is_none(self, 'currency') else '')
 
     @classmethod
     def copy(cls, objects, default=None):
@@ -254,7 +240,7 @@ class TableOfTable(CoopSQL, CoopView):
 
     my_model_name = fields.Char('Model Name')
     key = fields.Char(
-        'Key', states={'readonly': Bool(Eval('is_used'))}, depends=['is_used'])
+        'Key', states={'readonly': Bool(Eval('is_used'))})
     name = fields.Char('Value', required=True, translate=True)
 
     @classmethod
