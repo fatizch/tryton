@@ -717,6 +717,13 @@ class MoveLine():
     __name__ = 'account.move.line'
 
     @classmethod
+    def __setup__(cls):
+        super(MoveLine, cls).__setup__()
+        cls._error_messages.update({
+            'mes_rate_note_compensation': 'Rate Note Compensation',
+        })
+
+    @classmethod
     def _get_second_origin(cls):
         result = super(MoveLine, cls)._get_second_origin()
         result.append('billing.rate_note')
@@ -727,7 +734,8 @@ class MoveLine():
             return ''
         if not self.second_origin.__name__ == 'billing.rate_note':
             return super(MoveLine, self).get_second_origin_name(name)
-        return 'Rate Note compensation'
+        return coop_string.translate(self, '', 'mes_rate_note_compensation',
+            'error')
 
 
 class CollectionWizard():

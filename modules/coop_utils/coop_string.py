@@ -103,13 +103,10 @@ def translate_field(instance, var_name, src, ttype='field', lang=None):
 
 
 def translate(model, var_name, src, ttype, lang=None):
-    if lang:
-        language = lang.code
-    else:
-        language = Transaction().language
     Translation = Pool().get('ir.translation')
-    res = Translation.get_source(
-        '%s,%s' % (model.__name__, var_name), ttype, language, src)
+    language = lang.code if lang else Transaction().language
+    target = '%s%s' % (model.__name__, ',%s' % var_name if var_name else '')
+    res = Translation.get_source(target, ttype, language, src)
     if not res:
         return src
     return res
