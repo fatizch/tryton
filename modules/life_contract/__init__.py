@@ -8,5 +8,4 @@ def register():
         Contract,
         LifeOption,
         LifeCoveredData,
-        PriceLine,
         module='life_contract', type_='model')

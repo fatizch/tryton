@@ -9,7 +9,6 @@ __all__ = [
     'Contract',
     'LifeOption',
     'LifeCoveredData',
-    'PriceLine',
     ]
 
 
@@ -86,19 +85,6 @@ class LifeOption():
         if covered_data:
             return covered_data.coverage_amount
         return 0
-
-
-class PriceLine():
-    'Price Line'
-
-    __name__ = 'ins_contract.price_line'
-
-    @classmethod
-    def get_line_target_models(cls):
-        res = super(PriceLine, cls).get_line_target_models()
-        res.append(('life_contract.covered_data',
-            'life_contract.covered_data'))
-        return res
 
 
 class LifeCoveredData():
