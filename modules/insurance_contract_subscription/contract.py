@@ -216,9 +216,6 @@ class ContractSubscription(CoopProcessFramework):
     def finalize_contract(self):
         res = super(ContractSubscription, self).finalize_contract()
         return res
-        # Model = utils.get_relation_model(self.__class__, 'subscription_mgr')
-        # Model.delete([self.subscription_mgr])
-        # return res
 
     def init_subscription_document_request(self):
         DocRequest = Pool().get('ins_product.document_request')
@@ -287,6 +284,13 @@ class ContractSubscription(CoopProcessFramework):
         good_req.clean_extras(documents)
 
         return True, ()
+
+    def subscribe_contract(self, *args, **kwargs):
+        result = super(ContractSubscription, self).subscribe_contract(
+            *args, **kwargs)
+        result.current_state = None
+        result.save()
+        return result
 
 
 class Option():
