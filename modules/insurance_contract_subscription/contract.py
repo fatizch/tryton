@@ -48,6 +48,8 @@ class ContractSubscription(CoopProcessFramework):
             'bad_start_date': 'Option %s must be subscribed after %s',
             'need_option': 'At least one option must be selected for %s',
             'need_covered': 'There must be at least one covered element',
+            'payment_bank_account_required': 'The payment bank account is '
+                'required as the payment mode is Direct Debit'
         })
         cls.__rpc__.update({'get_allowed_payment_methods': RPC(instantiate=0)})
 
@@ -192,6 +194,17 @@ class ContractSubscription(CoopProcessFramework):
                 return True, ()
 
         return False, (('no_option', ()),)
+
+    def check_billing_manager(self):
+        result = True
+        errs = []
+        for manager in self.billing_managers:
+            if not manager.payment_mode == 'direct_debit':
+                continue
+            if not manager.payment_bank_account:
+                result = False
+                errs.append(('payment_bank_account_required', ()))
+        return result, errs
 
     def check_option_dates(self):
         result = True
