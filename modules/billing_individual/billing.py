@@ -1402,6 +1402,12 @@ class Sequence():
         cls.company.domain = export.clean_domain_for_import(
             cls.company.domain, 'company')
 
+    @classmethod
+    def _export_skips(cls):
+        result = super(Sequence, cls)._export_skips()
+        result.add('number_next_internal')
+        return result
+
 
 class Company(export.ExportImportMixin):
     'Company'
