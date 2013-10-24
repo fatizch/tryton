@@ -185,23 +185,33 @@ class RuleEngineResult(object):
         return bool(self.errors)
 
     def __str__(self):
-        return '[' + ', '.join(map(str, [
-            self.result, self.errors, self.warnings, self.info])) + ']'
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
+        result = '[' + self.print_result()
+        result += ', [' + ', '.join(self.print_errors()) + ']'
+        result += ', [' + ', '.join(self.print_warnings()) + ']'
+        result += ', [' + ', '.join(self.print_info()) + ']'
+        result += ']'
+        return result
 
     def print_errors(self):
-        return map(str, self.errors)
+        return map(unicode, self.errors)
 
     def print_warnings(self):
-        return map(str, self.warnings)
+        return map(unicode, self.warnings)
 
     def print_info(self):
-        return map(str, self.info)
+        return map(unicode, self.info)
 
     def print_debug(self):
-        return map(str, self.debug)
+        return map(unicode, self.debug)
 
     def print_result(self):
-        return str(self.result)
+        return unicode(self.result)
+
+    def print_low_level_debug(self):
+        return map(unicode, self.low_level_debug)
 
 
 class RuleExecutionLog(ModelSQL, ModelView):
@@ -1175,7 +1185,19 @@ class TestCase(ModelView, ModelSQL):
         test_context = {
             key: noargs_func(key, value)
             for key, value in test_context.items()}
-        return self.rule.compute(test_context, debug_mode=True)
+        result = self.rule.compute(test_context)
+        if not self.rule.debug_mode:
+            return result
+        with Transaction().new_cursor() as transaction:
+            RuleExecution = Pool().get('rule_engine.execution_log')
+            rule_execution = RuleExecution()
+            rule_execution.rule = self.rule
+            rule_execution.create_date = datetime.datetime.now()
+            rule_execution.user = Transaction().user
+            rule_execution.init_from_rule_result(result)
+            rule_execution.save()
+            transaction.cursor.commit()
+        return result
 
     def on_change_test_values(self):
         try:
@@ -1199,7 +1221,7 @@ class TestCase(ModelView, ModelSQL):
             'result_warning': '\n'.join(test_result.print_warnings()),
             'result_errors': '\n'.join(test_result.print_errors()),
             'debug': '\n'.join(test_result.print_debug()),
-            'low_debug': '\n'.join(test_result.low_level_debug),
+            'low_debug': '\n'.join(test_result.print_low_level_debug()),
             'expected_result': str(test_result),
         }
 
@@ -1210,11 +1232,10 @@ class TestCase(ModelView, ModelSQL):
             raise
             return False, sys.exc_info()
         try:
-            assert str(test_result) == self.expected_result
+            assert unicode(test_result) == self.expected_result
             return True, None
         except AssertionError:
-            return False, str(test_result) + ' vs. ' + str(
-                self.expected_result)
+            return False, unicode(test_result) + ' vs. ' + self.expected_result
         except:
             return False, str(sys.exc_info())
 
@@ -1291,6 +1312,9 @@ class RuleError(model.CoopSQL, model.CoopView):
     arguments = fields.Char('Arguments')
 
     def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
         return '[%s] %s' % (self.kind, self.name)
 
     @classmethod
