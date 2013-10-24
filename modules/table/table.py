@@ -812,6 +812,20 @@ class TableOpen2DAskDimensions(ModelView):
     def default_dimension4_required(cls):
         return cls.default_dimension_required(4)
 
+    @classmethod
+    def fields_view_get(cls, view_id=None, view_type='form'):
+        'Dynamically use the current table dimension names'
+        result = super(TableOpen2DAskDimensions, cls).fields_view_get(view_id,
+            view_type)
+        TableDefinition = Pool().get('table.table_def')
+        definition_id = Transaction().context.get('active_id')
+        if definition_id:
+            definition = TableDefinition(definition_id)
+            view_fields = result['fields']
+            view_fields['dimension3']['string'] = definition.dimension_name3
+            view_fields['dimension4']['string'] = definition.dimension_name4
+        return result
+
 
 class TableOpen2D(Wizard):
     "Table Open 2D"
