@@ -1,3 +1,4 @@
+import copy
 from ibanlib import iban
 
 from trytond.pool import Pool, PoolMeta
@@ -72,6 +73,12 @@ class BankAccount(export.ExportImportMixin):
         fields.Char('Main Account Number'),
         'get_main_bank_account_number',
         searcher='search_main_bank_account_number')
+
+    @classmethod
+    def __setup__(cls):
+        super(BankAccount, cls).__setup__()
+        cls.numbers = copy.copy(cls.numbers)
+        cls.numbers.required = False
 
     @classmethod
     def _export_keys(cls):
