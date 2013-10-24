@@ -4,6 +4,7 @@ from ibanlib import iban
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.model import fields as tryton_fields
+from trytond.pyson import If, Bool, Eval
 
 from trytond.modules.coop_utils import utils, fields, export
 from trytond.modules.coop_utils import coop_string
@@ -79,6 +80,9 @@ class BankAccount(export.ExportImportMixin):
         super(BankAccount, cls).__setup__()
         cls.numbers = copy.copy(cls.numbers)
         cls.numbers.required = False
+        cls.numbers.states['required'] = If(
+            Bool(Eval('context', {}).get('__importing__', '')),
+            False, True)
 
     @classmethod
     def _export_keys(cls):
