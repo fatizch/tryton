@@ -12,43 +12,32 @@ from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED, STATE_SIMPLE
 
 __all__ = [
-    'SimplePricingRule',
     'PricingRule',
     'PricingComponent',
     'TaxVersion',
     'FeeVersion',
-]
+    ]
 
 PRICING_LINE_KINDS = [
     ('base', 'Base Price'),
     ('tax', 'Tax'),
     ('fee', 'Fee')
-]
+    ]
 
 PRICING_FREQUENCY = [
     ('yearly', 'Yearly'),
     ('half_yearly', 'Half Yearly'),
     ('quarterly', 'Quarterly'),
     ('monthly', 'Monthly')
-]
+    ]
 
 RATED_OBJECT_KIND = [
     ('global', 'Global'),
     ('sub_item', 'Covered Item'),
-]
+    ]
 
 
-class SimplePricingRule(BusinessRuleRoot):
-    'Simple Pricing Rule'
-
-    __name__ = 'ins_product.simple_pricing_rule'
-
-    @staticmethod
-    def default_frequency():
-        return 'yearly'
-
-
-class PricingRule(SimplePricingRule, model.CoopSQL):
+class PricingRule(BusinessRuleRoot, model.CoopSQL):
     'Pricing Rule'
 
     __name__ = 'ins_product.pricing_rule'

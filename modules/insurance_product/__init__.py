@@ -49,7 +49,6 @@ def register():
         DocumentRequestDisplayer,
         DocumentRequestBatch,
         # from pricing_rule
-        SimplePricingRule,
         PricingRule,
         PricingComponent,
         TaxVersion,
