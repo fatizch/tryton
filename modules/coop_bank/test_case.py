@@ -112,6 +112,7 @@ class TestCaseModel():
                     account_number, key)
                 account.numbers = [number]
                 account.owners = [party]
+                account.number = number.number
                 accounts.append(account)
             except:
                 raise
