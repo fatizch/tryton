@@ -301,6 +301,8 @@ class ContractSubscription(CoopProcessFramework):
     def subscribe_contract(self, *args, **kwargs):
         result = super(ContractSubscription, self).subscribe_contract(
             *args, **kwargs)
+        # Make sure that using the subscribe_contract does not create a
+        # process task
         result.current_state = None
         result.save()
         return result
