@@ -24,6 +24,8 @@ class LifeContractSubscription():
             for covered_element in self.covered_elements:
                 if covered_element.party == subscriber:
                     return True
+            CoveredElement.delete(self.covered_elements)
+
         covered_element = CoveredElement()
         covered_element.start_date = self.start_date
         item_descs = CoveredElement.get_possible_item_desc(self)
