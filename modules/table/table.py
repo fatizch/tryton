@@ -337,10 +337,13 @@ class TableDefinition(ModelSQL, ModelView):
 
     def get_kind(self, name):
         nb_dim = 0
+        has_date_range = False
         for i in range(1, DIMENSION_MAX + 1):
             if getattr(self, 'dimension_kind%s' % i):
                 nb_dim += 1
-        if nb_dim == 1:
+                if getattr(self, 'dimension_kind%s' % i) == 'range-date':
+                    has_date_range = True
+        if nb_dim == 1 and has_date_range:
             return 'Index'
         elif nb_dim == 2:
             return 'Table'
