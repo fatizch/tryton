@@ -22,6 +22,17 @@
             <field name="long_description">Calcule le nombre d'années entre deux dates</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
+        <record model="rule_engine.tree_element" id="jours_entre">
+            <field name="translated_technical_name">jours_entre</field>
+            <field name="description">Nombre de jours entre...</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.tools_functions</field>
+            <field name="name">_re_days_between</field>
+            <field name="fct_args">Debut, Fin</field>
+            <field name="long_description">Calcule le nombre de jours entre deux dates</field>
+            <field name="parent" ref="dossier_outils"/>
+        </record>
         <record model="rule_engine.tree_element" id="date_de_calcul">
             <field name="translated_technical_name">date_de_calcul</field>
             <field name="description">Date de Calcul</field>

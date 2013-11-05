@@ -286,6 +286,14 @@ class RuleTools(RuleEngineContext):
         return coop_date.number_of_years_between(date1, date2)
 
     @classmethod
+    def _re_days_between(cls, args, date1, date2):
+        if (not isinstance(date1, datetime.date)
+                or not isinstance(date2, datetime.date)):
+            args['errors'].append('days_between needs datetime types')
+            raise CatchedRuleEngineError
+        return coop_date.number_of_days_between(date1, date2)
+
+    @classmethod
     def _re_today(cls, args):
         return utils.today()
 
