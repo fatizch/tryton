@@ -557,6 +557,7 @@ class ClaimDeliveredService():
 
     def init_dict_for_rule_engine(self, cur_dict):
         cur_dict['delivered_service'] = self
+        self.benefit.init_dict_for_rule_engine(cur_dict)
         self.loss.init_dict_for_rule_engine(cur_dict)
         self.get_covered_data().init_dict_for_rule_engine(cur_dict)
 

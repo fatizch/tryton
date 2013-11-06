@@ -285,6 +285,9 @@ class Offered(model.CoopView, GetResult, Templated):
             return self.code
         return coop_string.remove_blank_and_invalid_char(self.name)
 
+    def init_dict_for_rule_engine(self, args):
+        pass
+
 
 class Product(model.CoopSQL, Offered):
     'Product'
@@ -324,6 +327,7 @@ class Product(model.CoopSQL, Offered):
                 yield coverage
 
     def init_dict_for_rule_engine(self, args):
+        super(Product, self).init_dict_for_rule_engine(args)
         if not 'product' in args:
             args['product'] = self
 

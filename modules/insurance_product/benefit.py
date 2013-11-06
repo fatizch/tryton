@@ -223,6 +223,10 @@ class Benefit(model.CoopSQL, offered.Offered):
     def default_beneficiary_kind():
         return 'subscriber'
 
+    def init_dict_for_rule_engine(self, args):
+        super(Benefit, self).init_dict_for_rule_engine(args)
+        args['benefit'] = self
+
 
 class InsuranceBenefit(Offered):
     'Insurance Benefit'

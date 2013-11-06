@@ -517,7 +517,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     @classmethod
     def get_var_names_for_full_extract(cls):
         return ['subscriber', ('offered', 'light'), 'complementary_data',
-        'options', 'covered_elements', 'start_date', 'end_date']
+            'options', 'covered_elements', 'start_date', 'end_date']
 
 
 class SubscribedCoverage(model.CoopSQL, Subscribed):
@@ -591,7 +591,7 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
 
     def init_dict_for_rule_engine(self, args):
         args['option'] = self
-        args['coverage'] = self.offered
+        self.offered.init_dict_for_rule_engine(args)
         self.contract.init_dict_for_rule_engine(args)
 
     @classmethod
