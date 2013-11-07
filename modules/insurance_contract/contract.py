@@ -343,7 +343,8 @@ class SubscribedCoverageComplement(model.CoopSQL, model.CoopView):
                 'possible_deductible_duration', {
                     'date': self.start_date,
                     'appliable_conditions_date':
-                        self.subscribed_coverage.contract.appliable_conditions_date,
+                        self.subscribed_coverage.
+                            contract.appliable_conditions_date,
                     'scope': 'coverage'},
                 kind='deductible')[0]
             return [x.id for x in durations] if durations else []
@@ -937,7 +938,8 @@ class CoveredData(model.CoopSQL, model.CoopView, model.ModelCurrency):
         res = {}
         if not utils.is_none(self, 'complementary_data'):
             res = self.complementary_data
-            res.update(self.covered_element.get_all_complementary_data(at_date))
+            res.update(self.covered_element.get_all_complementary_data(
+                    at_date))
         res.update(self.option.get_all_complementary_data(at_date))
         parent_covered_data = self.get_parent_covered_data()
         if parent_covered_data:
@@ -962,6 +964,13 @@ class CoveredData(model.CoopSQL, model.CoopView, model.ModelCurrency):
     def get_parent_covered_data_id(self, name):
         covered_data = self.get_parent_covered_data()
         return covered_data.id if covered_data else None
+
+    def is_active_at_date(self, date):
+        if self.start_date > date:
+            return False
+        if not self.end_date or self.end_date <= date:
+            return True
+        return False
 
 
 class ManagementRole(model.CoopSQL, model.CoopView):
