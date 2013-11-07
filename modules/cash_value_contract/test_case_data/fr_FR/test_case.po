@@ -1,0 +1,4 @@
+msgid "Cash Value Journal"
+msgstr "Journal d'Epargne"
+
+

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<data>
+  <xpath expr="/form/field[@name='coverage_amount_selection']" position="after">
+    <newline/>
+    <label name="cash_value_collection_amount"/>
+    <field name="cash_value_collection_amount"/>
+    <label name="cash_value_payment_mode"/>
+    <field name="cash_value_payment_mode"/>
+  </xpath>
+  <xpath expr="/form" position="inside">
+    <field name="is_cash_value"/>
+  </xpath>
+</data>
