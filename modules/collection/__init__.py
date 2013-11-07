@@ -8,6 +8,7 @@ def register():
         SuspenseParty,
         Configuration,
         Collection,
+        Payment,
         CollectionParameters,
         Assignment,
         AssignCollection,
