@@ -20,12 +20,15 @@ def generate_module_translation(cfg_dict, base_path, module_name):
         return
     export_wizard.execute('export')
     locale_dir = os.path.join(base_path, 'locale')
+    result = export_wizard.form.file
+    if not result:
+        return
     if not os.path.exists(locale_dir):
         os.mkdir(locale_dir)
     po_path = os.path.join(locale_dir, '%s.po' % cfg_dict['language'])
     with open(po_path, 'w') as csv_file:
         print 'Generating translation file ', po_path
-        csv_file.write(export_wizard.form.file)
+        csv_file.write(result)
 
 
 def launch_proteus_test_case(test_config_file):
