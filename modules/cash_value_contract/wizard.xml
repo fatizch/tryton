@@ -9,11 +9,6 @@
       <field name="type">form</field>
       <field name="name">select_date_form</field>
     </record>
-    <record model="ir.ui.view" id="select_date_tree">
-      <field name="model">collection.wizard.collection_to_cash_value.select_date</field>
-      <field name="type">tree</field>
-      <field name="name">select_date_tree</field>
-    </record>
     <!-- ############################################################ -->
     <!-- Collection To Cash Value -->
     <!-- ############################################################ -->
