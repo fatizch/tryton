@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -25,6 +25,10 @@ msgstr "Garanties"
 msgctxt "field:coop_utils.export_package,products:"
 msgid "Products"
 msgstr "Produits"
+
+msgctxt "field:coop_utils.test_case_model,main_company_name:"
+msgid "Main Company Name"
+msgstr "Nom de la company principale"
 
 msgctxt "field:offered.compl_data_def-tag,compl_data_def:"
 msgid "Complementary Data Def"
@@ -772,6 +776,10 @@ msgctxt "selection:offered.coverage,kind:"
 msgid ""
 msgstr " "
 
+msgctxt "selection:offered.coverage,kind:"
+msgid "Default"
+msgstr "Défaut"
+
 msgctxt "selection:offered.coverage,subscription_behaviour:"
 msgid "Mandatory"
 msgstr "Obligatoire"
@@ -811,6 +819,10 @@ msgstr "Remplacer"
 msgctxt "selection:offered.product,kind:"
 msgid ""
 msgstr " "
+
+msgctxt "selection:offered.product,kind:"
+msgid "Default"
+msgstr "Défaut"
 
 msgctxt "selection:offered.product,subscriber_kind:"
 msgid "All"

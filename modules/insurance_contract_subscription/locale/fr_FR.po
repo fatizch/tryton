@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -41,6 +41,13 @@ msgstr "La garantie %s n'est pas éligible"
 msgctxt "error:contract.contract:"
 msgid "Option %s must be subscribed after %s"
 msgstr "La Garantie %s doit être souscrite après le %s"
+
+msgctxt "error:contract.contract:"
+msgid ""
+"The payment bank account is required as the payment mode is Direct Debit"
+msgstr ""
+"Le compte bancaire de paiement doit être renseigné, le mode de paiement "
+"choisit étant le prélèvement"
 
 msgctxt "error:contract.contract:"
 msgid "There must be at least one covered element"

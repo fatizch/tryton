@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:coop_utils.test_case_model,load_all_zipcodes:"
+msgid "Load all Zip Codes"
+msgstr "Charger les codes postaux"
+
+msgctxt "field:coop_utils.test_case_model,main_zip:"
+msgid "Main Zip"
+msgstr "Code postal principal"
+
 msgctxt "field:country.country,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"

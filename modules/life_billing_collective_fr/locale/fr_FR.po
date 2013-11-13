@@ -1,6 +1,10 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:account.move.line:"
+msgid "Rate Note Compensation"
+msgstr "Equilibrage du bordereau"
 
 msgctxt "error:billing.rate_note_reception:"
 msgid "Selected Rate Note is not in a valid status to start reception process"
@@ -151,6 +155,14 @@ msgctxt "field:billing.rate_note,currency:"
 msgid "Currency"
 msgstr "Devises"
 
+msgctxt "field:billing.rate_note,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:billing.rate_note,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
 msgctxt "field:billing.rate_note,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -234,6 +246,10 @@ msgstr "Créé par"
 msgctxt "field:billing.rate_note_line,currency:"
 msgid "Currency"
 msgstr "Devises"
+
+msgctxt "field:billing.rate_note_line,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
 
 msgctxt "field:billing.rate_note_line,currency_symbol:"
 msgid "Currency Symbol"
@@ -963,7 +979,7 @@ msgstr "Simple"
 
 msgctxt "view:billing.rate_line:"
 msgid "%"
-msgstr ""
+msgstr "%"
 
 msgctxt "view:billing.rate_line:"
 msgid "Rate Line"
@@ -975,7 +991,7 @@ msgstr "Bordereau de Cotisation"
 
 msgctxt "view:billing.rate_note_line:"
 msgid "%"
-msgstr ""
+msgstr "%"
 
 msgctxt "view:billing.rate_note_line:"
 msgid "Client Total"
@@ -1019,7 +1035,7 @@ msgstr "Règle de Tarification Collective"
 
 msgctxt "view:collective.sub_rating_rule:"
 msgid "%"
-msgstr ""
+msgstr "%"
 
 msgctxt "view:collective.sub_rating_rule:"
 msgid "Fare Class Rating Rule"

@@ -2,11 +2,19 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:ins_product.attachment_setter:"
+msgid "Duplicate name on attachments : %s"
+msgstr "Nom dupliqués sur les pièces jointe : %s"
+
 msgctxt "error:ins_product.benefit:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
 msgctxt "error:ins_product.benefit_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
+
+msgctxt "error:ins_product.business_rule_root:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
@@ -25,6 +33,10 @@ msgstr "2 règles se chevauchent!"
 msgctxt "error:ins_product.deductible_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
+
+msgctxt "error:ins_product.document_request_batch:"
+msgid "No Batch Path Specified"
+msgstr "Le chemin d'exécution des batchs n'est pas configuré"
 
 msgctxt "error:ins_product.document_rule:"
 msgid "You can not have 2 business rules that overlaps!"
@@ -51,11 +63,19 @@ msgctxt "error:ins_product.pricing_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
+msgctxt "error:ins_product.product_validation_batch:"
+msgid "No Batch Path Specified"
+msgstr "Le chemin d'exécution des batchs n'est pas configuré"
+
 msgctxt "error:ins_product.receive_document_wizard:"
 msgid "No document request found for this object"
 msgstr "Aucune demande de document trouvé pour cet objet"
 
 msgctxt "error:ins_product.reserve_rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
+
+msgctxt "error:ins_product.simple_pricing_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
@@ -351,6 +371,18 @@ msgstr "Creation date"
 msgctxt "field:ins_product.benefit_rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:ins_product.benefit_rule,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_product.benefit_rule,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:ins_product.benefit_rule,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
 
 msgctxt "field:ins_product.benefit_rule,end_date:"
 msgid "To Date"
@@ -2346,6 +2378,18 @@ msgstr "Creation date"
 msgctxt "field:ins_product.sub_benefit_rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:ins_product.sub_benefit_rule,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_product.sub_benefit_rule,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:ins_product.sub_benefit_rule,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
 
 msgctxt "field:ins_product.sub_benefit_rule,duration:"
 msgid "Duration"
@@ -4482,7 +4526,7 @@ msgstr "Provision"
 
 msgctxt "view:ins_product.benefit_rule:"
 msgid "%"
-msgstr ""
+msgstr "%"
 
 msgctxt "view:ins_product.benefit_rule:"
 msgid "benefit rule"

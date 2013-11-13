@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -98,6 +98,10 @@ msgctxt "field:contract.contract,currency_digits:"
 msgid ""
 msgstr " "
 
+msgctxt "field:contract.contract,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
 msgctxt "field:contract.contract,current_policy_owner:"
 msgid ""
 msgstr " "
@@ -173,6 +177,54 @@ msgstr " "
 msgctxt "field:contract.contract,write_uid:"
 msgid ""
 msgstr " "
+
+msgctxt "field:contract.delivered_service,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.delivered_service,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:contract.delivered_service,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:contract.delivered_service,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.delivered_service,func_error:"
+msgid "Error"
+msgstr "Erreur"
+
+msgctxt "field:contract.delivered_service,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.delivered_service,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:contract.delivered_service,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.delivered_service,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:contract.delivered_service,subscribed_service:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:contract.delivered_service,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.delivered_service,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
 
 msgctxt "field:contract.rule_sets,id:"
 msgid "ID"
@@ -266,6 +318,10 @@ msgctxt "field:contract.subscribed_option,currency_digits:"
 msgid ""
 msgstr " "
 
+msgctxt "field:contract.subscribed_option,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
 msgctxt "field:contract.subscribed_option,current_policy_owner:"
 msgid "Current Policy Owner"
 msgstr "Responsable Courant de la Police"
@@ -330,6 +386,30 @@ msgctxt "field:offered.rule_sets,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
+msgctxt "field:party.party,contracts:"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "field:party.party,last_quote:"
+msgid "Last Quote"
+msgstr "Dernier devis"
+
+msgctxt "field:party.party,main_contract:"
+msgid "Main Contract"
+msgstr "Contrat Principal"
+
+msgctxt "field:party.party,number_of_contracts:"
+msgid "Number of Contracts"
+msgstr "Nombre de contrats"
+
+msgctxt "field:party.party,number_of_quotes:"
+msgid "Number of Quotes"
+msgstr "Nombre de devis"
+
+msgctxt "field:party.party,quotes:"
+msgid "Quotes"
+msgstr "Devis"
+
 msgctxt "model:contract.address,name:"
 msgid ""
 msgstr " "
@@ -337,6 +417,10 @@ msgstr " "
 msgctxt "model:contract.contract,name:"
 msgid ""
 msgstr " "
+
+msgctxt "model:contract.delivered_service,name:"
+msgid ""
+msgstr "Nom"
 
 msgctxt "model:contract.rule_sets,name:"
 msgid "Context functions for contract related data"
@@ -350,9 +434,17 @@ msgctxt "model:contract.subscribed_option,name:"
 msgid ""
 msgstr " "
 
+msgctxt "model:ir.action,name:act_contract_button"
+msgid "Contracts"
+msgstr "Contrats"
+
 msgctxt "model:ir.action,name:act_contract_form"
 msgid "Contract"
 msgstr "Contrat"
+
+msgctxt "model:ir.action,name:act_quote_button"
+msgid "Contracts"
+msgstr "Contrats"
 
 msgctxt "model:offered.rule_sets,name:"
 msgid "Offered Context"
@@ -377,6 +469,22 @@ msgstr "Devis"
 msgctxt "selection:contract.contract,status:"
 msgid "Terminated"
 msgstr "Terminé"
+
+msgctxt "selection:contract.delivered_service,status:"
+msgid "Calculated"
+msgstr "Calculé"
+
+msgctxt "selection:contract.delivered_service,status:"
+msgid "Calculating"
+msgstr "Calcul en Cours"
+
+msgctxt "selection:contract.delivered_service,status:"
+msgid "Delivered"
+msgstr "Delivré"
+
+msgctxt "selection:contract.delivered_service,status:"
+msgid "Not Eligible"
+msgstr "Non Eligible"
 
 msgctxt "selection:contract.status_history,status:"
 msgid ""
@@ -458,6 +566,10 @@ msgctxt "view:contract.contract:"
 msgid "Options"
 msgstr "Options"
 
+msgctxt "view:contract.delivered_service:"
+msgid "Delivered Service"
+msgstr "Prestation Fournie"
+
 msgctxt "view:contract.status_history:"
 msgid "Status History"
 msgstr "Historique des Statuts"
@@ -474,51 +586,6 @@ msgctxt "view:contract.subscribed_option:"
 msgid "option"
 msgstr "option"
 
-
-msgctxt "field:contract.delivered_service,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:contract.delivered_service,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:contract.delivered_service,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:contract.delivered_service,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:contract.delivered_service,func_error:"
-msgid "Error"
-msgstr "Erreur"
-
-msgctxt "field:contract.delivered_service,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.delivered_service,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:contract.delivered_service,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:contract.delivered_service,status:"
-msgid "Status"
-msgstr "Statut"
-
-msgctxt "field:contract.delivered_service,subscribed_service:"
-msgid "Coverage"
-msgstr "Garantie"
-
-msgctxt "field:contract.delivered_service,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:contract.delivered_service,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
+msgctxt "view:party.party:"
+msgid "+"
+msgstr "+"

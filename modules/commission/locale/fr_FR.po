@@ -126,6 +126,14 @@ msgctxt "field:commission.compensated_option,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:commission.compensated_option,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:commission.compensated_option,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
 msgctxt "field:commission.compensated_option,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
@@ -502,6 +510,10 @@ msgctxt "model:party.broker,name:"
 msgid "Broker"
 msgstr "Courtier"
 
+msgctxt "model:tag,name:tag_commission"
+msgid "Commission"
+msgstr "Commission"
+
 msgctxt "selection:commission.commission_rule,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
@@ -568,7 +580,7 @@ msgstr "Commission"
 
 msgctxt "view:commission.commission_rule:"
 msgid "%"
-msgstr ""
+msgstr "%"
 
 msgctxt "view:commission.commission_rule:"
 msgid "Commission rule"
@@ -576,7 +588,7 @@ msgstr "Règle de Commissionnement"
 
 msgctxt "view:commission.compensated_option:"
 msgid "%"
-msgstr ""
+msgstr "%"
 
 msgctxt "view:commission.compensated_option:"
 msgid "Compensated Option"

@@ -1,6 +1,10 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:claim.indemnification_selection:"
+msgid "Please unselect all indemnifications first"
+msgstr "Veuillez déselectionner toutes les indemnités."
 
 msgctxt "error:claim.loss:"
 msgid "End Date is smaller than start date"
@@ -550,6 +554,18 @@ msgctxt "field:offered.coverage,is_coverage_amount_needed:"
 msgid "Coverage Amount Needed"
 msgstr "Montant de Couverture Nécessaire"
 
+msgctxt "field:party.party,claims:"
+msgid "Claims"
+msgstr "Sinistres"
+
+msgctxt "field:party.party,last_claim:"
+msgid "Last Claim"
+msgstr "Dernier sinistre"
+
+msgctxt "field:party.party,number_of_claims:"
+msgid "Number Of Claims"
+msgstr "Nombre de sinistres"
+
 msgctxt "model:claim.claim,name:"
 msgid "Claim"
 msgstr "Sinistre"
@@ -594,6 +610,10 @@ msgctxt "model:ir.action,name:act_claim_relate_form"
 msgid "Claims"
 msgstr "Sinistres"
 
+msgctxt "model:ir.action,name:act_claims_button"
+msgid "Claims"
+msgstr "Sinistres"
+
 msgctxt "model:ir.action,name:act_indemnification_relate_form"
 msgid "Indemnifications"
 msgstr "Indemnisations"
@@ -621,6 +641,10 @@ msgstr "Sinistres"
 msgctxt "model:ir.ui.menu,name:menu_validate_indemnification"
 msgid "Validate Indemnifications"
 msgstr "Validation des Indemnisations"
+
+msgctxt "model:tag,name:tag_claim"
+msgid "Claim"
+msgstr "Sinistre"
 
 msgctxt "selection:claim.claim,reopened_reason:"
 msgid ""
@@ -901,6 +925,10 @@ msgstr "Préjudice"
 msgctxt "view:claim.loss:"
 msgid "Losses"
 msgstr "Préjudices"
+
+msgctxt "view:party.party:"
+msgid "+"
+msgstr "+"
 
 msgctxt ""
 "wizard_button:claim.indemnification_validation,select_indemnifications,end:"

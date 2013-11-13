@@ -6,6 +6,10 @@ msgctxt "error:bank.account.number:"
 msgid "Invalid %s number : %s"
 msgstr ""
 
+msgctxt "error:bank.account.number:"
+msgid "The number must be unique!"
+msgstr "Le numéro de compte doit être unique"
+
 msgctxt "error:bank:"
 msgid "Invalid BIC : %s"
 msgstr ""
@@ -25,6 +29,14 @@ msgstr "Numéros"
 msgctxt "field:bank.account,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
+
+msgctxt "field:coop_utils.test_case_model,currency:"
+msgid "Main Currency"
+msgstr "Monnaie principale"
+
+msgctxt "field:coop_utils.test_case_model,number_of_banks:"
+msgid "Number of Banks"
+msgstr "Nombre de banques"
 
 msgctxt "field:party.bank,bank_code:"
 msgid "Bank Code"
@@ -173,6 +185,10 @@ msgstr "Banque"
 msgctxt "field:party.party,is_bank:"
 msgid "Bank"
 msgstr "Banque"
+
+msgctxt "field:party.party,main_bank_account:"
+msgid "Main Bank Account"
+msgstr "Compte bancaire principal"
 
 msgctxt "model:party.bank,name:"
 msgid "Bank"

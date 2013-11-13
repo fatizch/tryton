@@ -154,6 +154,10 @@ msgctxt "model:ir.ui.menu,name:menu_model_tranche"
 msgid "Tranches"
 msgstr "Tranches"
 
+msgctxt "model:tag,name:tag_life"
+msgid "Life"
+msgstr "Prévoyance"
+
 msgctxt "model:tranche.tranche,name:"
 msgid "Tranche"
 msgstr "Tranche"
