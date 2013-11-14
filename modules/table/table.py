@@ -1331,6 +1331,7 @@ class ManageDimensionGeneric(Wizard):
             new_dim = Dimension()
             new_dim.type = 'dimension%s' % idx
             new_dim.definition = the_table.id
+            new_dim.sequence = i
             if dim_type == 'date':
                 new_dim.date = elem
             elif dim_type == 'value':
