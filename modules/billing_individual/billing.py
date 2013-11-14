@@ -926,7 +926,7 @@ class Contract():
                 amount = data['amount']
             line.second_origin = data['object']
             line.credit = work_set['currency'].round(amount)
-            work_set['total_amount'] += amount
+            work_set['total_amount'] += line.credit
 
     def calculate_billing_fees(self, work_set):
         if not work_set['payment_rule']:
