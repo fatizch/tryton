@@ -73,8 +73,9 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
 
     def give_me_sub_elem_eligibility(self, args):
         if hasattr(self, 'sub_elem_rule') and self.sub_elem_rule:
-            res, mess, errs = utils.execute(self, self.sub_elem_rule, args)
-            return (EligibilityResultLine(eligible=res, details=mess), errs)
+            result = self.sub_elem_rule.execute(args)
+            return (EligibilityResultLine(eligible=result.result,
+                    details=result.warnings), result.errors)
         return (EligibilityResultLine(True), [])
 
     def on_change_with_sub_elem_rule_complementary_data(self):

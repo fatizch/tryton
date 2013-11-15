@@ -374,7 +374,7 @@ class SubBenefitRule(model.CoopSQL, model.CoopView, model.ModelCurrency):
 
     def get_rule_result(self, args):
         if self.rule:
-            rule_result = utils.execute_rule(self, self.rule, args)
+            rule_result = self.rule.execute(args, self.rule_complementary_data)
             return rule_result.result, rule_result.errors
 
     def give_me_result(self, args):

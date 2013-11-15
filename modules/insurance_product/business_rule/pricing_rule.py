@@ -251,8 +251,7 @@ class PricingRule(BusinessRuleRoot, model.CoopSQL):
             new_args = copy.copy(args)
             new_args['price_details'] = result.details
             new_args['final_details'] = {}
-            rule_result = utils.execute_rule(
-                self, combination_rule, new_args)
+            rule_result = combination_rule.execute(new_args)
             res = rule_result.result
             errors.extend(rule_result.print_errors())
             errors.extend(rule_result.print_warnings())
@@ -363,7 +362,7 @@ class PricingComponent(model.CoopSQL, model.CoopView):
         elif self.config_kind == 'simple':
             amount = self.fixed_amount
         elif self.config_kind == 'advanced' and self.rule:
-            rule_result = utils.execute_rule(self, self.rule, args)
+            rule_result = self.rule.execute(args, self.rule_complementary_data)
             amount, errors = rule_result.result, rule_result.print_errors()
         return amount, errors
 

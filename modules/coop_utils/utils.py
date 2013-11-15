@@ -547,23 +547,6 @@ def init_complementary_data_from_ids(ids):
     return res
 
 
-def execute_rule(_caller, _rule, _args, **kwargs):
-    _args['_caller'] = _caller
-    result = _rule.compute(_args, **kwargs)
-    if not (hasattr(_rule, 'debug_mode') and _rule.debug_mode):
-        return result
-    with Transaction().new_cursor() as transaction:
-        RuleExecution = Pool().get('rule_engine.execution_log')
-        rule_execution = RuleExecution()
-        rule_execution.rule = _rule
-        rule_execution.create_date = datetime.datetime.now()
-        rule_execution.user = Transaction().user
-        rule_execution.init_from_rule_result(result)
-        rule_execution.save()
-        transaction.cursor.commit()
-    return result
-
-
 def recursive_list_tuple_convert(the_list):
     if isinstance(the_list, (list, tuple)):
         return tuple((recursive_list_tuple_convert(x) for x in the_list))

@@ -22,7 +22,7 @@ class CashValueRule(BusinessRuleRoot, model.CoopSQL):
     saving_account = fields.Many2One('account.account', 'saving_account')
 
     def give_me_computed_cash_values(self, args):
-        return utils.execute_rule(self, self.computation_rule, args)
+        return self.computation_rule.execute(args)
 
     def give_me_actualized_cash_value(self, args):
         return self.get_rule_result(args)

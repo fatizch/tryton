@@ -133,7 +133,8 @@ class CollectiveRatingRule(business_rule.BusinessRuleRoot, model.CoopSQL):
                     if sub_rule.fare_class_group != cov_data.fare_class_group:
                         continue
                     cov_data_args['fare_class'] = sub_rule.fare_class
-                    cov_data_args['fare_class_group'] = cov_data.fare_class_group
+                    cov_data_args['fare_class_group'] = \
+                        cov_data.fare_class_group
                 rule_engine_res = sub_rule.get_result(cov_data_args)
                 if rule_engine_res.errors:
                     errs += rule_engine_res.errors
@@ -189,4 +190,4 @@ class SubRatingRule(model.CoopView, model.CoopSQL):
         if self.config_kind == 'simple':
             return RuleEngineResult(self.simple_rate)
         elif self.rule:
-            return utils.execute_rule(self, self.rule, args)
+            return self.rule.execute(args)

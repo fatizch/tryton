@@ -71,10 +71,10 @@ class TrancheVersion(CoopSQL, VersionObject):
         args = {}
         if at_date:
             args['date'] = at_date
-        return self.floor.compute(args).result if self.floor else 0
+        return self.floor.execute(args).result if self.floor else 0
 
     def get_ceiling(self, at_date=None):
         args = {}
         if at_date:
             args['date'] = at_date
-        return self.ceiling.compute(args).result if self.ceiling else None
+        return self.ceiling.execute(args).result if self.ceiling else None

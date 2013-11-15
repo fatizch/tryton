@@ -66,13 +66,7 @@ class RuleEngineParameter():
 
     @classmethod
     def get_complementary_parameter_value(cls, args, schema_name):
-        return args['_caller'].get_rule_complementary_data(schema_name)
-
-    def get_rule_complementary_data(self, schema_name):
-        if not (hasattr(self, 'rule_complementary_data') and
-                self.rule_complementary_data):
-            return None
-        return self.rule_complementary_data.get(schema_name, None)
+        return args['_complementary_data'][schema_name]
 
     def get_external_complementary_data(self, args):
         OfferedSet = Pool().get('offered.rule_sets')
@@ -280,7 +274,7 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
 
     def get_rule_result(self, args):
         if self.rule:
-            return utils.execute_rule(self, self.rule, args)
+            return self.rule.execute(args, self.rule_complementary_data)
 
     def on_change_with_rule_complementary_data(self):
         if not (hasattr(self, 'rule') and self.rule):

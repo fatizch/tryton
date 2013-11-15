@@ -254,7 +254,7 @@ class ComplementaryDataDefinition(
         # We set a boolean to know if the value is forced through rule engine
         new_vals[self.name] = (cur_value, False)
         if self.sub_data_config_kind == 'advanced' and self.rule:
-            rule_engine_result = utils.execute_rule(self, self.rule, args)
+            rule_engine_result = self.rule.execute(args)
             if (not rule_engine_result.errors
                     and type(rule_engine_result.result) is dict):
                 for key, value in rule_engine_result.result.items():

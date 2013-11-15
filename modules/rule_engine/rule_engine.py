@@ -442,9 +442,8 @@ class RuleEngineParameter(ModelView, ModelSQL):
     def get_translated_technical_name(self):
         return '%s_%s' % (self.kind, self.code)
 
-    def execute_rule(self, evaluation_context, **kwargs):
-        result = utils.execute_rule(self, self.the_rule, evaluation_context,
-            **kwargs)
+    def execute_rule(self, evaluation_context, **execution_kwargs):
+        result = self.the_rule.execute(evaluation_context, execution_kwargs)
         if result.has_errors:
             raise InternalRuleEngineError(
                 'Impossible to evaluate parameter %s when computing rule %s' %
@@ -708,28 +707,31 @@ class Rule(ModelView, ModelSQL):
     def get_context_for_execution(self):
         return self.context.get_context(self)
 
-    def add_rule_parameters_to_context(self, evaluation_context, kwargs,
-            context):
-        if not kwargs:
-            kwargs = {}
+    def add_rule_parameters_to_context(self, evaluation_context,
+            execution_kwargs, context):
         for elem in self.rule_parameters:
-            elem.as_context(evaluation_context, context, kwargs[elem.code]
-                if elem.code in kwargs else None)
+            if elem.code in execution_kwargs:
+                forced_value = execution_kwargs[elem.code]
+            elif elem.code in execution_kwargs:
+                forced_value = execution_kwargs[elem.code]
+            else:
+                forced_value = None
+            elem.as_context(evaluation_context, context, forced_value)
 
-    def prepare_context(self, evaluation_context, debug_mode, **kwargs):
+    def prepare_context(self, evaluation_context, execution_kwargs):
         context = self.get_context_for_execution()
         the_result = RuleEngineResult()
         context['__result__'] = the_result
-        self.add_rule_parameters_to_context(evaluation_context, kwargs,
-            context)
+        self.add_rule_parameters_to_context(evaluation_context,
+            execution_kwargs, context)
         context.update(evaluation_context)
         context['context'] = context
         return context
 
-    def compute(self, evaluation_context, debug_mode=False, **kwargs):
-        with Transaction().set_context(debug=debug_mode):
-            context = self.prepare_context(evaluation_context, debug_mode,
-                **kwargs)
+    def compute(self, evaluation_context, execution_kwargs):
+        with Transaction().set_context(debug=self.debug_mode):
+            context = self.prepare_context(evaluation_context,
+                execution_kwargs)
             the_result = context['__result__']
             localcontext = {}
             try:
@@ -738,7 +740,7 @@ class Rule(ModelView, ModelSQL):
                     ('result_%s' % hash(self.name)).replace('-', '_')]
                 the_result.result_set = True
             except (TooFewFunctionCall, TooManyFunctionCall):
-                if debug_mode:
+                if self.debug_mode:
                     raise
             except CatchedRuleEngineError:
                 pass
@@ -779,7 +781,7 @@ class Rule(ModelView, ModelSQL):
                             ' - ' + str(exc))
                         rule_execution.save()
                         transaction.cursor.commit()
-                if debug_mode:
+                if self.debug_mode:
                     the_result.result = str(exc)
                     return the_result
                 self.raise_user_error('bad_rule_computation', (self.name,
@@ -855,6 +857,22 @@ class Rule(ModelView, ModelSQL):
     @classmethod
     def search_tags(cls, name, clause):
         return [('tags.name',) + tuple(clause[1:])]
+
+    def execute(self, arguments, parameters=None):
+        result = self.compute(arguments,
+            {} if parameters is None else parameters)
+        if not (hasattr(self, 'debug_mode') and self.debug_mode):
+            return result
+        with Transaction().new_cursor() as transaction:
+            RuleExecution = Pool().get('rule_engine.execution_log')
+            rule_execution = RuleExecution()
+            rule_execution.rule = self
+            rule_execution.create_date = datetime.datetime.now()
+            rule_execution.user = transaction.user
+            rule_execution.init_from_rule_result(result)
+            rule_execution.save()
+            transaction.cursor.commit()
+        return result
 
 
 class Context(ModelView, ModelSQL):
@@ -1193,19 +1211,7 @@ class TestCase(ModelView, ModelSQL):
         test_context = {
             key: noargs_func(key, value)
             for key, value in test_context.items()}
-        result = self.rule.compute(test_context)
-        if not self.rule.debug_mode:
-            return result
-        with Transaction().new_cursor() as transaction:
-            RuleExecution = Pool().get('rule_engine.execution_log')
-            rule_execution = RuleExecution()
-            rule_execution.rule = self.rule
-            rule_execution.create_date = datetime.datetime.now()
-            rule_execution.user = Transaction().user
-            rule_execution.init_from_rule_result(result)
-            rule_execution.save()
-            transaction.cursor.commit()
-        return result
+        return self.rule.execute(test_context)
 
     def on_change_test_values(self):
         try:
