@@ -120,7 +120,7 @@ class SubscriptionProcessParameters(ProcessParameters):
         return user.dist_network.id if user.dist_network else None
 
     def get_possible_com_product(self):
-        return (self.dist_network.get_commercial_products()
+        return (self.dist_network.all_com_products
             if self.dist_network else [])
 
     def on_change_with_possible_com_product(self, name=None):

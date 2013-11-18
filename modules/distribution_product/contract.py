@@ -23,10 +23,14 @@ class Contract():
         'get_com_product_id')
 
     def get_com_product_id(self, name):
+        print '#' * 80
+        print 'QKJSNDDDALZLKJNQQ'
+        print self.dist_network
         if not self.dist_network:
             return None
         com_products = utils.get_good_versions_at_date(self.dist_network,
-            'commercial_products', self.start_date)
+            'all_com_products', self.start_date)
+        print com_products
         com_product = [x for x in com_products if x.product == self.offered]
         if com_product:
             return com_product[0].id
