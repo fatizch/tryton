@@ -988,7 +988,7 @@ class ProcessFinder(Wizard):
         if is_ok:
             return good_obj
         else:
-            print errs
+            pass
             #TODO What if?
 
     def init_main_object_from_process(self, obj, process_param):

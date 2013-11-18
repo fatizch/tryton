@@ -1,5 +1,5 @@
 #-*- coding:utf-8 -*-
-from trytond.pyson import Eval, Or
+from trytond.pyson import Eval, Or, And
 
 from trytond.modules.coop_utils import model, fields
 from trytond.modules.offered.offered import DEF_CUR_DIG
@@ -19,7 +19,8 @@ class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
     kind = fields.Selection(
         [
             ('amount', 'Amount'),
-            ('cal_list', 'Calculated List')
+            ('cal_list', 'Calculated List'),
+            ('another_coverage', 'From another Coverage'),
         ],
         'Kind', states={'invisible': STATE_ADVANCED}, )
     amounts = fields.Char(
@@ -57,6 +58,18 @@ class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
                 (Eval('config_kind') != 'simple'),
             ),
         })
+    other_coverage = fields.Many2One('offered.coverage', 'Source Coverage',
+        domain=[('coverage_amount_rules', '!=', None)],
+        states={
+            'invisible': Or(
+                (Eval('config_kind') != 'simple'),
+                (Eval('kind') != 'another_coverage'),
+            ),
+            'required': And(
+                (Eval('config_kind') != 'simple'),
+                (Eval('kind') != 'another_coverage'),
+            )},
+        depends=['kind', 'config_kind'])
 
     @classmethod
     def __setup__(cls):
@@ -81,6 +94,11 @@ class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
                 step = self.amount_step if self.amount_step else 1
                 res = range(start, self.amount_end + 1, step)
                 return res, []
+            elif self.kind == 'another_coverage':
+                # Returning nothing will make the contract assume there is no
+                # need to input a coverage amount on the covered data, which is
+                # exactly what we need
+                return self.other_coverage.get_result('allowed_amounts', args)
         elif self.config_kind == 'advanced' and self.rule:
             rule_result = self.get_rule_result(args)
             if rule_result.result_set:
@@ -102,6 +120,11 @@ class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
                     args['data'].coverage.code)]
                 return (False, errs), []
         return (True, []), []
+
+    def give_me_dependant_amount_coverage(self, args):
+        if self.kind != 'another_coverage':
+            return None, []
+        return self.other_coverage, []
 
     def pre_validate(self):
         if not hasattr(self, 'amounts'):

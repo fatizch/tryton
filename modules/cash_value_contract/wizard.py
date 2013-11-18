@@ -98,11 +98,8 @@ class CollectionToCashValue(Wizard):
                     Move.id.sql_type().base),
                     payment_table.date]))
 
-        print '#' * 80
-        print 'QKSJDNQKSJDNKQSJND'
-        for elem in cursor.fetchall():
-            print elem
-        print cursor.query
+        # for elem in cursor.fetchall():
+            # print elem
 
         return 'end'
 

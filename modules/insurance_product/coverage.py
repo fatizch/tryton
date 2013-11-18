@@ -193,6 +193,15 @@ class Coverage():
         except product.NonExistingRuleKindException:
             return (True, []), []
 
+    def give_me_dependant_amount_coverage(self, args):
+        try:
+            return self.get_result(
+                'dependant_amount_coverage',
+                args,
+                kind='coverage_amount')
+        except product.NonExistingRuleKindException:
+            return (True, []), []
+
     def get_currency(self):
         return self.currency
 

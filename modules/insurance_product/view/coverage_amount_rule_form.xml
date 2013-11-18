@@ -19,5 +19,8 @@
         <label name="amount_step"/>
         <field name="amount_step"/>
         <newline/>
+        <label name="other_coverage"/>
+        <field name="other_coverage"/>
+        <newline/>
     </xpath>
 </data>

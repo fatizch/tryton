@@ -17,6 +17,27 @@ class Contract():
 
     __name__ = 'contract.contract'
 
+    def update_coverage_amounts_if_needed(self, at_date=None):
+        if not at_date:
+            at_date = self.start_date
+        for covered_element in self.covered_elements:
+            values = {}
+            to_update = {}
+            for covered_data in covered_element.covered_data:
+                values[covered_data.option.offered.id] = \
+                    covered_data.coverage_amount
+                rule_dict = {}
+                covered_data.init_dict_for_rule_engine(rule_dict)
+                result, errs = covered_data.option.offered.get_result(
+                    'dependant_amount_coverage', rule_dict)
+                if errs or result is None:
+                    continue
+                to_update[covered_data] = result.id
+            for data, offered in to_update.iteritems():
+                data.coverage_amount = values[offered]
+                data.save()
+        return True
+
     def check_covered_amounts(self, at_date=None):
         if not at_date:
             at_date = self.start_date
@@ -29,6 +50,8 @@ class Contract():
                         or hasattr(covered_data, 'end_date') and
                         covered_data.end_date and
                         covered_data.end_date > at_date):
+                    continue
+                if not covered_data.with_coverage_amount:
                     continue
                 coverage = covered_data.option.offered
                 validity, errors = coverage.get_result(
@@ -115,8 +138,6 @@ class LifeCoveredData():
                 'date': self.start_date,
                 'appliable_conditions_date':
                 self.option.contract.appliable_conditions_date,
-                #'contract': abstract.WithAbstract.get_abstract_objects(
-                #    wizard, 'for_contract')
             },)[0]
         if vals:
             res = map(lambda x: (x, x),
@@ -126,7 +147,17 @@ class LifeCoveredData():
         return [('', '')]
 
     def get_with_coverage_amount(self, name):
-        return len(self.get_possible_amounts()) > 1
+        has_coverage_amount = len(self.get_possible_amounts()) > 1
+        if not has_coverage_amount:
+            return False
+        if not self.get_coverage().get_result(
+                'dependant_amount_coverage', {
+                    'date': self.start_date,
+                    'appliable_conditions_date':
+                    self.option.contract.appliable_conditions_date,
+                })[0]:
+            return True
+        return False
 
     def is_party_covered(self, party, at_date):
         return self.covered_element.is_party_covered(party, at_date,
