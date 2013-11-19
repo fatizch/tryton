@@ -200,7 +200,7 @@ class Coverage():
                 args,
                 kind='coverage_amount')
         except product.NonExistingRuleKindException:
-            return (True, []), []
+            return None, []
 
     def get_currency(self):
         return self.currency
