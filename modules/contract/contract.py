@@ -24,6 +24,7 @@ __all__ = [
     'StatusHistory',
     'Contract',
     'SubscribedCoverage',
+    'ContractClause',
     'ContractAddress',
     'DeliveredService',
     'LetterModel',
@@ -237,6 +238,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             }, depends=['current_policy_owner'])
     #temporary field to remove ASAP
     temp_endorsment_date = fields.Date('Endorsment Date')
+    clauses = fields.One2Many('contract.clause', 'contract',
+        'Clauses', context={'start_date': Eval('start_date')})
 
     @classmethod
     def __setup__(cls):
@@ -280,10 +283,27 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def ws_subscribe_contract(cls, contract_dict):
         'This method is a standard API for webservice use'
 
+    def init_clauses(self, offered):
+        ClauseRelation = Pool().get('contract.clause')
+        clauses, errs = offered.get_result('all_clauses', {
+                'date': self.start_date,
+                'appliable_conditions_date': self.appliable_conditions_date,
+            })
+        if errs or not clauses:
+            return
+        self.clauses = []
+        for clause in clauses:
+            new_clause = ClauseRelation()
+            new_clause.clause = clause
+            new_clause.text = clause.get_good_version_at_date(
+                self.start_date).content
+            self.clauses.append(new_clause)
+
     def init_from_offered(self, offered, start_date=None, end_date=None):
         res = super(Contract, self).init_from_offered(offered, start_date,
             end_date)
         self.appliable_conditions_date = self.start_date
+        self.init_clauses(offered)
         return res
 
     @classmethod
@@ -597,6 +617,49 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
     @classmethod
     def get_var_names_for_full_extract(cls):
         return [('offered', 'light'), 'start_date', 'end_date']
+
+
+class ContractClause(model.CoopSQL, model.CoopView):
+    'Contract clauses'
+
+    __name__ = 'contract.clause'
+
+    contract = fields.Many2One('contract.contract', 'Contract',
+        ondelete='CASCADE')
+    clause = fields.Many2One('ins_product.clause', 'Clause',
+        ondelete='RESTRICT')
+    override_text = fields.Function(
+        fields.Boolean('Override Text', on_change_with=['clause']),
+        'on_change_with_override_text')
+    text = fields.Text('Text', states={
+            'readonly': ~Eval('override_text'),
+            'invisible': True,
+        })
+    visual_text = fields.Function(
+        fields.Text('Clause Text', on_change_with=[
+                'text', 'clause', 'override_text', 'contract']),
+        'on_change_with_visual_text')
+    kind = fields.Function(
+        fields.Char('Kind', on_change_with=['clause', 'contract']),
+        'on_change_with_kind')
+
+    def on_change_with_override_text(self, name=None):
+        if not self.clause:
+            return False
+        return self.clause.may_be_overriden
+
+    def on_change_with_visual_text(self, name=None):
+        if not self.clause:
+            return ''
+        if self.override_text:
+            return self.text
+        return self.clause.get_version_at_date(
+            self.contract.appliable_conditions_date).content
+
+    def on_change_with_kind(self, name=None):
+        if not self.clause:
+            return ''
+        return self.clause.kind
 
 
 class ContractAddress(model.CoopSQL, model.CoopView):

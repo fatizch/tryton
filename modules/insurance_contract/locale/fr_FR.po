@@ -50,6 +50,10 @@ msgctxt "field:contract.address,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:contract.clause,covered_data:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
 msgctxt "field:contract.contract,addresses:"
 msgid "Addresses"
 msgstr "Adresses"
@@ -333,6 +337,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:contract.subscribed_option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:ins_contract.covered_data,clauses:"
+msgid "Clauses"
+msgstr "Clauses"
 
 msgctxt "field:ins_contract.covered_data,complementary_data:"
 msgid "Complementary Data"
@@ -1020,6 +1028,10 @@ msgstr "Historique de Contrat"
 msgctxt "view:contract.contract:"
 msgid "Addresses"
 msgstr "Adresses"
+
+msgctxt "view:contract.contract:"
+msgid "Clauses"
+msgstr "Clauses"
 
 msgctxt "view:contract.contract:"
 msgid "Covered Elements"

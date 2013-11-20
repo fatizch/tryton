@@ -24,6 +24,7 @@ __all__ = [
     'CoveredElement',
     'CoveredElementPartyRelation',
     'CoveredData',
+    'ContractClause',
     'ManagementRole',
     'DeliveredService',
     'Expense',
@@ -834,6 +835,8 @@ class CoveredData(model.CoopSQL, model.CoopView, model.ModelCurrency):
     parent_covered_data = fields.Function(
         fields.Many2One('ins_contract.covered_data', 'Parent Covered Data'),
         'get_parent_covered_data_id')
+    clauses = fields.One2Many('contract.clause', 'covered_data',
+        'Clauses', context={'start_date': Eval('start_date')})
 
     @classmethod
     def default_status(cls):
@@ -853,6 +856,24 @@ class CoveredData(model.CoopSQL, model.CoopView, model.ModelCurrency):
         self.complementary_data = self.on_change_complementary_data()[
             'complementary_data']
 
+    def init_clauses(self, option):
+        clauses, errs = self.option.offered.get_result('all_clauses', {
+                'date': option.start_date,
+                'appliable_conditions_date':
+                self.option.contract.appliable_conditions_date,
+            })
+        self.clauses = []
+        if errs or not clauses:
+            return
+        ClauseRelation = Pool().get('contract.clause')
+        for clause in clauses:
+            new_clause = ClauseRelation()
+            new_clause.clause = clause
+            new_clause.text = clause.get_version_at_date(
+                option.start_date).content
+            new_clause.contract = option.contract
+            self.clauses.append(new_clause)
+
     def init_from_option(self, option):
         self.option = option
         #TODO : Ugly endorsment temporary hack to remove ASAP
@@ -862,6 +883,7 @@ class CoveredData(model.CoopSQL, model.CoopView, model.ModelCurrency):
         else:
             self.start_date = option.start_date
         self.end_date = option.end_date
+        self.init_clauses(option)
         self.init_complementary_data()
 
     def on_change_complementary_data(self):
@@ -971,6 +993,15 @@ class CoveredData(model.CoopSQL, model.CoopView, model.ModelCurrency):
         if not self.end_date or self.end_date <= date:
             return True
         return False
+
+
+class ContractClause:
+    'Contract Clause'
+
+    __name__ = 'contract.clause'
+
+    covered_data = fields.Many2One('ins_contract.covered_data', 'Covered Data',
+        ondelete='CASCADE', states={'invisible': ~Eval('covered_data')})
 
 
 class ManagementRole(model.CoopSQL, model.CoopView):

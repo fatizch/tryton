@@ -553,6 +553,14 @@ msgctxt "field:ins_product.clause,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ins_product.clause,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:ins_product.clause,may_be_overriden:"
+msgid "May be Overriden"
+msgstr "Peut être surchargé"
+
 msgctxt "field:ins_product.clause,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -796,6 +804,10 @@ msgstr "Etendre Arbre"
 msgctxt "field:ins_product.coverage_amount_rule,offered:"
 msgid "Offered"
 msgstr "Offre"
+
+msgctxt "field:ins_product.coverage_amount_rule,other_coverage:"
+msgid "Source Coverage"
+msgstr "Garantie d'origine"
 
 msgctxt "field:ins_product.coverage_amount_rule,rec_name:"
 msgid "Name"
@@ -3819,6 +3831,10 @@ msgstr "Montant"
 msgctxt "selection:ins_product.coverage_amount_rule,kind:"
 msgid "Calculated List"
 msgstr "Liste Calculé"
+
+msgctxt "selection:ins_product.coverage_amount_rule,kind:"
+msgid "From another Coverage"
+msgstr "A partir d'une autre garantie"
 
 msgctxt "selection:ins_product.coverage_amount_rule,offered:"
 msgid "Benefit"

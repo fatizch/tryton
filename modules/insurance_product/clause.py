@@ -16,7 +16,8 @@ class Clause(model.CoopSQL, model.VersionedObject):
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', required=True)
     title = fields.Char('Title')
-    rule = fields.Many2One('ins_product.clause_rule', 'Rule')
+    kind = fields.Selection('get_possible_clause_kinds', 'Kind')
+    may_be_overriden = fields.Boolean('May be Overriden')
 
     @classmethod
     def version_model(cls):
@@ -25,6 +26,13 @@ class Clause(model.CoopSQL, model.VersionedObject):
     @classmethod
     def default_versions(cls):
         return utils.create_inst_with_default_val(cls, 'versions')
+
+    @classmethod
+    def get_possible_clause_kinds(cls):
+        return [
+            ('', ''),
+            ('beneficiary', 'Beneficiary'),
+            ]
 
 
 class ClauseVersion(model.CoopSQL, model.VersionObject):

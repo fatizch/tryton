@@ -123,10 +123,6 @@ class ContractSubscription(CoopProcessFramework):
                     and the_billing_manager.payment_bank_account):
                 return the_billing_manager.payment_bank_account.id
 
-    @classmethod
-    def setter_void(cls, contracts, name, values):
-        pass
-
     def check_product_not_null(self):
         if not (hasattr(self, 'offered') and self.offered):
             return False, (('no_product', ()),)

@@ -27,6 +27,7 @@ def register():
         CoveredElementPartyRelation,
         CoveredData,
         CoveredDataTreeExpansion,
+        ContractClause,
         Document,
         DocumentRequest,
         DeliveredService,

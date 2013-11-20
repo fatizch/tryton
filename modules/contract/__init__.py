@@ -12,6 +12,7 @@ def register():
         StatusHistory,
         Contract,
         SubscribedCoverage,
+        ContractClause,
         ContractAddress,
         DeliveredService,
         LetterModel,

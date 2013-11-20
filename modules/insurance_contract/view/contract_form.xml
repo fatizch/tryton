@@ -22,5 +22,8 @@
     <page string="Addresses" id="contract_adresses">
       <field name="addresses"/>
     </page>
+    <page string="Clauses" id="clauses">
+      <field name="clauses"/>
+    </page>
   </xpath>
 </data>

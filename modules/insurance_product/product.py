@@ -78,6 +78,12 @@ class Offered():
         except NonExistingRuleKindException:
             return [], ()
 
+    def give_me_all_clauses(self, args):
+        try:
+            return self.get_result('all_clauses', args, kind='clause')
+        except NonExistingRuleKindException:
+            return [], ()
+
 
 class Product():
     'Product'

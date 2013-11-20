@@ -155,7 +155,7 @@ msgid "Tranches"
 msgstr "Tranches"
 
 msgctxt "model:tag,name:tag_life"
-msgid "Life"
+msgid "Prévoyance"
 msgstr "Prévoyance"
 
 msgctxt "model:tranche.tranche,name:"

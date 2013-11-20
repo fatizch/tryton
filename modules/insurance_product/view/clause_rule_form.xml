@@ -5,7 +5,6 @@
     </xpath>
     <xpath expr="/form" position="inside">
         <newline/>
-        <field name="specific_clauses" xexpand="1" yexpand="1" colspan="2"/>
-        <field name="shared_clauses" xexpand="1" yexpand="1" colspan="2"/>
+        <field name="shared_clauses" xexpand="1" yexpand="1" colspan="4"/>
     </xpath>
 </data>

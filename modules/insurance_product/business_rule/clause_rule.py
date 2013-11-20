@@ -15,10 +15,11 @@ class ClauseRule(BusinessRuleRoot, model.CoopSQL):
 
     __name__ = 'ins_product.clause_rule'
 
-    specific_clauses = fields.One2Many('ins_product.clause', 'rule',
-        'Specific Clauses')
     shared_clauses = fields.Many2Many('ins_product.clause_relation',
         'rule', 'clause', 'Shared Clauses')
+
+    def give_me_all_clauses(self, args):
+        return self.shared_clauses, []
 
 
 class ClauseRelation(model.CoopSQL):

@@ -528,7 +528,7 @@ msgstr " "
 
 msgctxt "model:ins_product.rule_sets.loan,name:"
 msgid "Context functions for Loans."
-msgstr ""
+msgstr "Eléments du contexte Emprunteur"
 
 msgctxt "model:ir.action,name:launch_loan_creation_wizard"
 msgid "Loan Creation"
@@ -571,7 +571,7 @@ msgid "Loan Share"
 msgstr "Quotité"
 
 msgctxt "model:tag,name:tag_loan"
-msgid "Loan"
+msgid "Prêt"
 msgstr "Prêt"
 
 msgctxt "selection:loan.creation_parameters,defferal:"

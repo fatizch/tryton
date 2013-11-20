@@ -812,7 +812,7 @@ msgstr "Eléments Couverts/Garanties"
 
 msgctxt "view:contract.contract:"
 msgid "Create Loan"
-msgstr ""
+msgstr "Créer un prêt"
 
 msgctxt "view:contract.contract:"
 msgid "Documents"

@@ -607,7 +607,7 @@ msgstr "Paramètres de la Fonction"
 
 msgctxt "field:rule_engine.tree_element,full_path:"
 msgid "Full Path"
-msgstr ""
+msgstr "Chemin complet"
 
 msgctxt "field:rule_engine.tree_element,id:"
 msgid "ID"
