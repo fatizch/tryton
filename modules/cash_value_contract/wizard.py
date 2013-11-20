@@ -142,12 +142,11 @@ class CollectionToCashValue(Wizard):
             ).join(collection_table, condition=(
                     collection_table.assignment_move == move_table.id)
             ).join(cash_value_table, type_='LEFT',
-            condition=(
-                (cash_value_table.id == None)
-                & (cash_value_table.collection == collection_table.id)))
+            condition=(cash_value_table.collection == collection_table.id))
 
         cursor.execute(*query_table.select(contract_table.id,
-                collection_table.id, move_table.post_date))
+                collection_table.id, move_table.post_date, where=(
+                    cash_value_table.id == None)))
 
         contracts, collections, dates = zip(*cursor.fetchall())
         contracts = Contract.browse(contracts)
@@ -159,7 +158,8 @@ class CollectionToCashValue(Wizard):
                 map(lambda x: (x.account, x.credit), Line.search([
                             ('move.origin', '=', 'contract.contract,%s' %
                                 contract.id),
-                            ('account', 'in', coverage_accounts.keys())])))
+                            ('account', 'in', coverage_accounts.keys()),
+                            ('move.post_date', '<=', date)])))
             remaining_amount = expected_amount - sum(map(lambda x: x.amount,
                     CashValueCollection.search([('contract', '=', contract)])))
             if remaining_amount <= 0:
