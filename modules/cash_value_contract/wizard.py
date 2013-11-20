@@ -190,6 +190,9 @@ class CollectionToCashValue(Wizard):
             cashing_line.second_origin = cash_value
             cashing_move.lines.append(cashing_line)
             cashing_move.date = date
+            Period = Pool().get('account.period')
+            cashing_move.period = Period.find(Transaction().context.get(
+                    'company'), date=date, exception=False)
             cashing_move.journal = Configuration(1).cash_value_journal
             cashing_move.save()
             cashing_moves.append(cashing_move)

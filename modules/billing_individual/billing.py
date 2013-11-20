@@ -489,7 +489,9 @@ class BillingPeriod(model.CoopSQL, model.CoopView):
     @classmethod
     def validate(cls, periods):
         for period in periods:
-            period.check_dates()
+            # TODO : Temporary remove check
+            # period.check_dates()
+            pass
 
     def check_dates(self):
         cursor = Transaction().cursor
