@@ -179,7 +179,8 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
 
 
 class CoopView(ModelView):
-    must_expand_tree = fields.Function(fields.Boolean('Must Expand Tree'),
+    must_expand_tree = fields.Function(fields.Boolean('Must Expand Tree',
+            states={'invisible': True}),
         '_expand_tree')
 
     @classmethod
