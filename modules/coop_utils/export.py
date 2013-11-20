@@ -8,6 +8,8 @@ try:
 except ImportError:
     import json
 
+from sql.operators import Concat
+
 from trytond.protocols.jsonrpc import JSONEncoder, object_hook
 from trytond.model import Model, ModelSQL, ModelView, fields as tryton_fields
 from trytond.model import ModelSingleton
@@ -42,6 +44,10 @@ class NotExportImport(Exception):
 class ExportImportMixin(Model):
     'Mixin to support export/import in json'
     __metaclass__ = PoolMeta
+
+    functional_id = fields.Function(
+        fields.Char('Functional Id', states={'invisible': True}),
+        'get_functional_id', searcher='search_functional_id')
 
     @classmethod
     def __setup__(cls):
@@ -91,6 +97,30 @@ class ExportImportMixin(Model):
                 'ALTER COLUMN "%s" DROP NOT NULL'
                 % (table.table_name, field_name))
             table._update_definitions()
+
+    @classmethod
+    def get_functional_id(cls, objects, name):
+        ModelData = Pool().get('ir.model.data')
+        values = ModelData.search([
+                ('model', '=', cls.__name__),
+                ('db_id', 'in', [x.id for x in objects])])
+        return dict([(x.db_id, '%s.%s' % (x.module, x.fs_id)) for x in values])
+
+    @classmethod
+    def search_functional_id(cls, name, clause):
+        cursor = Transaction().cursor
+        _, operator, value = clause
+        Operator = tryton_fields.SQL_OPERATORS[operator]
+        ModelData = Pool().get('ir.model.data')
+        model_table = ModelData.__table__()
+
+        cursor.execute(*model_table.select(model_table.db_id,
+                where=(
+                    (model_table.model == cls.__name__)
+                    & Operator(Concat(model_table.module,
+                            Concat('.', model_table.fs_id)),
+                        getattr(cls, name).sql_format(value)))))
+        return [('id', 'in', [x[0] for x in cursor.fetchall()])]
 
     def _prepare_for_import(self):
         pass
