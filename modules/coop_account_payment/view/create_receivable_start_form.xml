@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <form string="Create Receivable Payment">
     <image name="tryton-dialog-information" xexpand="0" xfill="0"/>
     <label string="Create Receivable Payment?" id="create"

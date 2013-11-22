@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <data>
   <xpath expr="//page[@id='summary']/field[@name='summary']" position="before">
     <newline/>

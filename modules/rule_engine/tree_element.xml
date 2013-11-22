@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <tryton>
     <data>
         <record model="rule_engine.tree_element" id="dossier_outils">

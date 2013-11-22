@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <data>
   <xpath expr="/form/field[@name='process_method']" position="after">
     <label name="sepa_bank_account_number"/>

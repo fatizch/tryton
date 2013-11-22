@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <tree string="Loan Increments" editable="bottom">
     <field name="number"/>
     <field name="start_date"/>

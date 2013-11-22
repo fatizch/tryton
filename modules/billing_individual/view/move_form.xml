@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <form string="Move" col="6">
   <group id="amount" colspan="4">
     <label name="wo_fee_amount"/>

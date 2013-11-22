@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <tryton>
     <data>
         <menuitem name="Actors" id="menu_health_party" sequence="10" parent="menu_health" icon="tryton-party"/>

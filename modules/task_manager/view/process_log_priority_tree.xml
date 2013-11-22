@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <tree string="Tasks" editable="bottom">
   <field name="task_selected"/>
   <field name="user" readonly="1"/>
