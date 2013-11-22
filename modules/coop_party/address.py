@@ -100,7 +100,7 @@ class Address(model.CoopSQL):
 
     @classmethod
     def _export_keys(cls):
-        return set(('party.code', 'name'))
+        return set(('party.name', 'name'))
 
     def on_change_with_city(self):
         if self.zip and self.country:
@@ -194,6 +194,7 @@ class Address(model.CoopSQL):
     @classmethod
     def get_var_names_for_full_extract(cls):
         return['street', 'streetbis', 'zip', 'city', ('country', 'light')]
+
     def get_rec_name(self, name):
         return self.get_address_as_char(name)
 

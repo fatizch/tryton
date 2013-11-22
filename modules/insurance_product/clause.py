@@ -1,5 +1,5 @@
 #-*- coding:utf-8 -*-
-from trytond.modules.coop_utils import model, utils, fields
+from trytond.modules.coop_utils import model, fields
 
 
 __all__ = [
@@ -22,10 +22,6 @@ class Clause(model.CoopSQL, model.VersionedObject):
     @classmethod
     def version_model(cls):
         return 'ins_product.clause_version'
-
-    @classmethod
-    def default_versions(cls):
-        return utils.create_inst_with_default_val(cls, 'versions')
 
     @classmethod
     def get_possible_clause_kinds(cls):

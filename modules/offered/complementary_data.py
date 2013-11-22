@@ -357,6 +357,12 @@ class Tag():
     compl_data_defs = fields.Many2Many('offered.compl_data_def-tag', 'tag',
         'compl_data_def', 'Complementary Data')
 
+    @classmethod
+    def _export_skips(cls):
+        result = super(Tag, cls)._export_skips()
+        result.add('compl_data_defs')
+        return result
+
 
 class ComplementaryDataDefTagRelation(model.CoopSQL):
     'Relation between complementary data def and tag'

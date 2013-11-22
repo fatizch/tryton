@@ -137,6 +137,7 @@ class Party(model.CoopSQL):
     def _export_skips(cls):
         res = super(Party, cls)._export_skips()
         res.add('code')
+        res.add('code_length')
         return res
 
     @staticmethod

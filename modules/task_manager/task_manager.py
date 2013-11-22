@@ -25,6 +25,12 @@ class User():
 
     team = fields.Many2One('task_manager.team', 'Team')
 
+    @classmethod
+    def _export_light(cls):
+        result = super(User, cls)._export_light()
+        result.add('team')
+        return result
+
 
 class Session():
     'Session'
