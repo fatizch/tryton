@@ -1,112 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
-    <data>
-        <record model="rule_engine.tree_element" id="dossier_outils">
-            <field name="translated_technical_name">dossier_outils</field>
-            <field name="description">Outils</field>
-            <field name="type">folder</field>
-            <field name="language" ref="ir.lang_fr"/>
-        </record>
-        <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_dossier_outils">
-            <field name="context" ref="default_context"/>
-            <field name="tree_element" ref="dossier_outils"/>
-        </record>
-        <record model="rule_engine.tree_element" id="annees_entre">
-            <field name="translated_technical_name">annees_entre</field>
-            <field name="description">Nombre d'années entre...</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.tools_functions</field>
-            <field name="name">_re_years_between</field>
-            <field name="fct_args">Debut, Fin</field>
-            <field name="long_description">Calcule le nombre d'années entre deux dates</field>
-            <field name="parent" ref="dossier_outils"/>
-        </record>
-        <record model="rule_engine.tree_element" id="jours_entre">
-            <field name="translated_technical_name">jours_entre</field>
-            <field name="description">Nombre de jours entre...</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.tools_functions</field>
-            <field name="name">_re_days_between</field>
-            <field name="fct_args">Debut, Fin</field>
-            <field name="long_description">Calcule le nombre de jours entre deux dates</field>
-            <field name="parent" ref="dossier_outils"/>
-        </record>
-        <record model="rule_engine.tree_element" id="date_de_calcul">
-            <field name="translated_technical_name">date_de_calcul</field>
-            <field name="description">Date de Calcul</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.tools_functions</field>
-            <field name="name">_re_calculation_date</field>
-            <field name="long_description">Retrouve la date du calcul</field>
-            <field name="parent" ref="dossier_outils"/>
-        </record>
-        <record model="rule_engine.tree_element" id="aujourd_hui">
-            <field name="translated_technical_name">aujourd_hui</field>
-            <field name="description">Aujourd'hui</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.tools_functions</field>
-            <field name="name">_re_today</field>
-            <field name="long_description">Retourne la date du jour</field>
-            <field name="parent" ref="dossier_outils"/>
-        </record>
-        <record model="rule_engine.tree_element" id="ajouter_erreur">
-            <field name="translated_technical_name">ajouter_erreur</field>
-            <field name="description">Ajouter Erreur</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.tools_functions</field>
-            <field name="name">_re_add_error</field>
-            <field name="fct_args">Message</field>
-            <field name="long_description">Ajouter un message d'erreur</field>
-            <field name="parent" ref="dossier_outils"/>
-        </record>
-        <record model="rule_engine.tree_element" id="ajouter_avertissement">
-            <field name="translated_technical_name">ajouter_avertissement</field>
-            <field name="description">Ajouter Avertissement</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.tools_functions</field>
-            <field name="name">_re_add_warning</field>
-            <field name="fct_args">Message</field>
-            <field name="long_description">Ajouter un message d'avertissement</field>
-            <field name="parent" ref="dossier_outils"/>
-        </record>
-        <record model="rule_engine.tree_element" id="message_debug">
-            <field name="translated_technical_name">message_debug</field>
-            <field name="description">Message de debug</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.tools_functions</field>
-            <field name="name">_re_debug</field>
-            <field name="fct_args">Message</field>
-            <field name="long_description">Ajoute un message de debug qui sera affichée lors de la création des cas de test</field>
-            <field name="parent" ref="dossier_outils"/>
-        </record>
-        <record model="rule_engine.tree_element" id="ajouter_code_erreur">
-            <field name="translated_technical_name">ajouter_code_erreur</field>
-            <field name="description">Ajouter message prédéfini</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.tools_functions</field>
-            <field name="name">_re_add_error_code</field>
-            <field name="fct_args">Code Erreur</field>
-            <field name="long_description">Ajouter un message prédéfini</field>
-            <field name="parent" ref="dossier_outils"/>
-        </record>
-        <record model="rule_engine.tree_element" id="ajouter_info">
-            <field name="translated_technical_name">ajouter_info</field>
-            <field name="description">Ajouter Info</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.tools_functions</field>
-            <field name="name">_re_add_info</field>
-            <field name="fct_args">Message</field>
-            <field name="long_description">Ajouter un message informatif</field>
-            <field name="parent" ref="dossier_outils"/>
-        </record>
-    </data>
+  <data noupdate="1">
+    <record model="rule_engine.tree_element" id="dossier_outils">
+      <field name="translated_technical_name">dossier_outils</field>
+      <field name="description">Outils</field>
+      <field name="type">folder</field>
+      <field name="language" ref="ir.lang_fr"/>
+    </record>
+    <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_dossier_outils">
+      <field name="context" ref="default_context"/>
+      <field name="tree_element" ref="dossier_outils"/>
+    </record>
+  </data>
+  <data>
+    <record model="rule_engine.tree_element" id="annees_entre">
+      <field name="translated_technical_name">annees_entre</field>
+      <field name="description">Nombre d'années entre...</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.tools_functions</field>
+      <field name="name">_re_years_between</field>
+      <field name="fct_args">Debut, Fin</field>
+      <field name="long_description">Calcule le nombre d'années entre deux dates</field>
+      <field name="parent" ref="dossier_outils"/>
+    </record>
+    <record model="rule_engine.tree_element" id="jours_entre">
+      <field name="translated_technical_name">jours_entre</field>
+      <field name="description">Nombre de jours entre...</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.tools_functions</field>
+      <field name="name">_re_days_between</field>
+      <field name="fct_args">Debut, Fin</field>
+      <field name="long_description">Calcule le nombre de jours entre deux dates</field>
+      <field name="parent" ref="dossier_outils"/>
+    </record>
+    <record model="rule_engine.tree_element" id="date_de_calcul">
+      <field name="translated_technical_name">date_de_calcul</field>
+      <field name="description">Date de Calcul</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.tools_functions</field>
+      <field name="name">_re_calculation_date</field>
+      <field name="long_description">Retrouve la date du calcul</field>
+      <field name="parent" ref="dossier_outils"/>
+    </record>
+    <record model="rule_engine.tree_element" id="aujourd_hui">
+      <field name="translated_technical_name">aujourd_hui</field>
+      <field name="description">Aujourd'hui</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.tools_functions</field>
+      <field name="name">_re_today</field>
+      <field name="long_description">Retourne la date du jour</field>
+      <field name="parent" ref="dossier_outils"/>
+    </record>
+    <record model="rule_engine.tree_element" id="ajouter_erreur">
+      <field name="translated_technical_name">ajouter_erreur</field>
+      <field name="description">Ajouter Erreur</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.tools_functions</field>
+      <field name="name">_re_add_error</field>
+      <field name="fct_args">Message</field>
+      <field name="long_description">Ajouter un message d'erreur</field>
+      <field name="parent" ref="dossier_outils"/>
+    </record>
+    <record model="rule_engine.tree_element" id="ajouter_avertissement">
+      <field name="translated_technical_name">ajouter_avertissement</field>
+      <field name="description">Ajouter Avertissement</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.tools_functions</field>
+      <field name="name">_re_add_warning</field>
+      <field name="fct_args">Message</field>
+      <field name="long_description">Ajouter un message d'avertissement</field>
+      <field name="parent" ref="dossier_outils"/>
+    </record>
+    <record model="rule_engine.tree_element" id="message_debug">
+      <field name="translated_technical_name">message_debug</field>
+      <field name="description">Message de debug</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.tools_functions</field>
+      <field name="name">_re_debug</field>
+      <field name="fct_args">Message</field>
+      <field name="long_description">Ajoute un message de debug qui sera affichée lors de la création des cas de test</field>
+      <field name="parent" ref="dossier_outils"/>
+    </record>
+    <record model="rule_engine.tree_element" id="ajouter_code_erreur">
+      <field name="translated_technical_name">ajouter_code_erreur</field>
+      <field name="description">Ajouter message prédéfini</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.tools_functions</field>
+      <field name="name">_re_add_error_code</field>
+      <field name="fct_args">Code Erreur</field>
+      <field name="long_description">Ajouter un message prédéfini</field>
+      <field name="parent" ref="dossier_outils"/>
+    </record>
+    <record model="rule_engine.tree_element" id="ajouter_info">
+      <field name="translated_technical_name">ajouter_info</field>
+      <field name="description">Ajouter Info</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.tools_functions</field>
+      <field name="name">_re_add_info</field>
+      <field name="fct_args">Message</field>
+      <field name="long_description">Ajouter un message informatif</field>
+      <field name="parent" ref="dossier_outils"/>
+    </record>
+  </data>
 </tryton>
