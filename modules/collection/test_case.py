@@ -7,6 +7,8 @@ __all__ = [
     ]
 
 
+# TODO : Make it inherit from the soon to exist coop_account module which will
+# include test cases for receivable / payable accounts
 class TestCaseModel():
     'Test Case Model'
 
