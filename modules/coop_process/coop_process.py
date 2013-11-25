@@ -746,6 +746,8 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
             the_step, self.on_change_with_view_name(), self.view_kind)
 
     def create_update_view(self):
+        if Transaction().context.get('__importing__'):
+            return None
         if (hasattr(self, 'the_view') and self.the_view):
             the_view = self.the_view
         else:
