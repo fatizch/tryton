@@ -100,7 +100,8 @@ class CoveredDataSubs():
             on_change=['clauses', 'may_override_beneficiary_clause_text',
                 'beneficiary_clause_override_text', 'option', 'start_date',
                 'need_to_chose_beneficiary_clause',
-                'beneficiary_clause_selection']),
+                'beneficiary_clause_selection'],
+            depends=['possible_beneficiary_clauses']),
         'get_beneficiary_clause_selection', 'setter_void')
     may_override_beneficiary_clause_text = fields.Function(
         fields.Boolean('May override Beneficiary Clause Texte',
