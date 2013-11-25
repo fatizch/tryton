@@ -33,6 +33,8 @@ class TestCaseModel():
             'name': 'Accounting Configuration Test Case',
             'dependencies': set(['account_test_case']),
         }
+        result['insurer_test_case']['dependencies'].add(
+            'configure_accounting_test_case')
         return result
 
     @classmethod
@@ -45,8 +47,8 @@ class TestCaseModel():
 
     @classmethod
     def account_kind_test_case(cls):
+        account_kinds = super(TestCaseModel, cls).account_kind_test_case()
         translater = cls.get_translater(MODULE_NAME)
-        account_kinds = []
         account_kinds.append(cls.create_account_kind(translater(
                     'Tax Account')))
         account_kinds.append(cls.create_account_kind(translater(
@@ -87,8 +89,8 @@ class TestCaseModel():
 
     @classmethod
     def account_test_case(cls):
+        accounts = super(TestCaseModel, cls).account_test_case()
         translater = cls.get_translater(MODULE_NAME)
-        accounts = []
         accounts.append(cls.create_account(translater(
                     'Default Payable Account'),
                 'payable', translater('Client Payable')))
@@ -116,6 +118,7 @@ class TestCaseModel():
 
     @classmethod
     def configure_accounting_test_case(cls):
+        super(TestCaseModel, cls).configure_accounting_test_case()
         translater = cls.get_translater(MODULE_NAME)
         account_config = Pool().get('account.configuration').search([])[0]
         if not account_config.default_account_payable:
