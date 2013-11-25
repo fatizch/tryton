@@ -52,17 +52,7 @@ class TestCaseModel():
 
     @classmethod
     def document_desc_test_case(cls):
-        translater = cls.get_translater(MODULE_NAME)
-        documents = []
-        documents.append(cls.create_document('WI', translater(
-                    'Work Incapacity')))
-        documents.append(cls.create_document('DH', translater(
-                    'Death Certificate')))
-        documents.append(cls.create_document('AT', translater(
-                    'Amortization Table')))
-        documents.append(cls.create_document('DY', translater(
-                    'Disability Justification')))
-        return documents
+        return []
 
     @classmethod
     def get_document_desc(cls, code):
@@ -85,11 +75,7 @@ class TestCaseModel():
 
     @classmethod
     def event_desc_test_case(cls):
-        translater = cls.get_translater(MODULE_NAME)
-        event_descs = []
-        event_descs.append(cls.create_event_desc('DI', translater('Disease')))
-        event_descs.append(cls.create_event_desc('AC', translater('Accident')))
-        return event_descs
+        return []
 
     @classmethod
     def get_event_desc(cls, code):
@@ -122,12 +108,4 @@ class TestCaseModel():
 
     @classmethod
     def loss_desc_test_case(cls):
-        translater = cls.get_translater(MODULE_NAME)
-        loss_descs = []
-        loss_descs.append(cls.create_loss_desc('WI', translater(
-                    'Work Incapacity'), 'person', True, ['AC'], ['WI']))
-        loss_descs.append(cls.create_loss_desc('DH', translater('Death'),
-                'person', False, ['AC', 'DI'], ['DH']))
-        loss_descs.append(cls.create_loss_desc('DY', translater('Disability'),
-                'person', False, ['AC', 'DI'], ['WI']))
-        return loss_descs
+        return []
