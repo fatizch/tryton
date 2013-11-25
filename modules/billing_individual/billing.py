@@ -1411,7 +1411,7 @@ class Sequence():
         return result
 
 
-class Company(export.ExportImportMixin):
+class Company():
     'Company'
 
     __metaclass__ = PoolMeta
@@ -1452,10 +1452,6 @@ class Company(export.ExportImportMixin):
         result = super(Company, cls)._export_force_recreate()
         result.remove('fiscal_years')
         return result
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['party.name'])
 
 
 class FiscalYear(export.ExportImportMixin):

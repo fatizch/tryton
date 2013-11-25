@@ -24,6 +24,6 @@ def register():
         ComplementaryDataDefTagRelation,
         # from test_case
         TestCaseModel,
-        #For export use
+        # from export
         ExportPackage,
         module='offered', type_='model')
