@@ -16,6 +16,7 @@ from pyflakes.checker import Checker
 import pyflakes.messages
 
 from trytond.rpc import RPC
+from trytond import backend
 
 from trytond.modules.coop_utils import fields
 from trytond.modules.coop_utils.model import CoopSQL as ModelSQL
@@ -780,7 +781,12 @@ class Rule(ModelView, ModelSQL):
                             coop_string.remove_invalid_char(self.name) +
                             ' - ' + str(exc))
                         rule_execution.save()
-                        transaction.cursor.commit()
+                        DatabaseOperationalError = backend.get(
+                            'DatabaseOperationalError')
+                        try:
+                            transaction.cursor.commit()
+                        except DatabaseOperationalError:
+                            transaction.cursor.rollback()
                 if self.debug_mode:
                     the_result.result = str(exc)
                     return the_result
@@ -863,6 +869,7 @@ class Rule(ModelView, ModelSQL):
             {} if parameters is None else parameters)
         if not (hasattr(self, 'debug_mode') and self.debug_mode):
             return result
+        DatabaseOperationalError = backend.get('DatabaseOperationalError')
         with Transaction().new_cursor() as transaction:
             RuleExecution = Pool().get('rule_engine.execution_log')
             rule_execution = RuleExecution()
@@ -871,7 +878,10 @@ class Rule(ModelView, ModelSQL):
             rule_execution.user = transaction.user
             rule_execution.init_from_rule_result(result)
             rule_execution.save()
-            transaction.cursor.commit()
+            try:
+                transaction.cursor.commit()
+            except DatabaseOperationalError:
+                transaction.cursor.rollback()
         return result
 
 
