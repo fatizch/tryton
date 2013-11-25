@@ -173,7 +173,12 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
             cls._loaded_resources = {}
             order = build_dependency_graph(TestCaseModel, test_cases)
             for elem in order:
-                cls.run_test_case(elem)
+                try:
+                    cls.run_test_case(elem)
+                except:
+                    logging.getLogger('test_case').warning('Error executing '
+                        'test case %s' % elem.__name__)
+                    raise
         finally:
             del cls._loaded_resources
             cls.clear_all_caches()
