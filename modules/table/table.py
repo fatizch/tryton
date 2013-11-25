@@ -605,12 +605,6 @@ class TableCell(ModelSQL, ModelView):
                 'definition', 'dimension1', 'dimension2',
                 'dimension3', 'dimension4'], 'add')
 
-    # @classmethod
-    # def _export_light(cls):
-        # return set([
-            # 'definition', 'dimension1', 'dimension2', 'dimension3',
-            # 'dimension4'])
-
     @classmethod
     def fields_get(cls, fields_names=None):
         pool = Pool()
