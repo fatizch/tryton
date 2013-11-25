@@ -18,7 +18,6 @@ class TestCaseModel():
     __name__ = 'coop_utils.test_case_model'
 
     number_of_banks = fields.Integer('Number of Banks')
-    currency = fields.Many2One('currency.currency', 'Main Currency')
 
     @classmethod
     def _get_test_case_dependencies(cls):

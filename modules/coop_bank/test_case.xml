@@ -13,7 +13,6 @@
     <!-- Data -->
     <record model="coop_utils.test_case_model" id="coop_utils.test_case_configuration">
       <field name="number_of_banks">50</field>
-      <field name="currency" ref="currency.eur"/>
     </record>
   </data>
 </tryton>

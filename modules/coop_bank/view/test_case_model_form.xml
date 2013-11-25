@@ -3,7 +3,5 @@
   <xpath expr="/form" position="inside">
     <label name="number_of_banks"/>
     <field name="number_of_banks"/>
-    <label name="currency"/>
-    <field name="currency"/>
   </xpath>
 </data>

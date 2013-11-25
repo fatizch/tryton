@@ -9,14 +9,11 @@ from .business import *
 from .session import *
 from .test_framework import *
 from .batchs import *
-from .currency import *
 from .test_case_framework import *
 
 
 def register():
     Pool.register(
-        # from Currency
-        Currency,
         # from export
         ExportPackage,
         ExportInstance,
@@ -57,6 +54,4 @@ def register():
             ('ir.rule', ('domain',)),
             ('ir.ui.view', ('module', 'type', 'name')),
             ('ir.lang', ('code',)),
-            ('currency.currency', ('code',)),
-            ('currency.currency.rate', ()),
             ], 'coop_utils')
