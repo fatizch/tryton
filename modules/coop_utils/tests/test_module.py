@@ -18,10 +18,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assert_(utils.get_module_path('coop_utils'))
         self.assert_(utils.get_module_path('dfsfsfsdf') is None)
 
-    def test9999_launch_test_cases(self):
-        # We do not want to import the json test file
-        pass
-
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
