@@ -1,11 +1,3 @@
-#!/usr/bin/env python
-import sys
-import os
-DIR = os.path.abspath(os.path.normpath(os.path.join(
-    __file__, '..', '..', '..', '..', '..', 'trytond')))
-if os.path.isdir(DIR):
-    sys.path.insert(0, os.path.dirname(DIR))
-
 import unittest
 import datetime
 from decimal import Decimal
@@ -14,19 +6,14 @@ import trytond.tests.test_tryton
 from trytond.transaction import Transaction
 from trytond.modules.coop_utils import test_framework
 
-MODULE_NAME = os.path.basename(
-    os.path.abspath(
-        os.path.join(os.path.normpath(__file__), '..', '..')))
-
 
 class ModuleTestCase(test_framework.CoopTestCase):
     '''
     Test Coop module.
     '''
-
     @classmethod
     def get_module_name(cls):
-        return MODULE_NAME
+        return 'table'
 
     @classmethod
     def get_models(cls):
