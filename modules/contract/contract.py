@@ -629,7 +629,8 @@ class ContractClause(model.CoopSQL, model.CoopView):
     clause = fields.Many2One('ins_product.clause', 'Clause',
         ondelete='RESTRICT')
     override_text = fields.Function(
-        fields.Boolean('Override Text', on_change_with=['clause']),
+        fields.Boolean('Override Text', on_change_with=['clause'],
+            states={'invisible': True}),
         'on_change_with_override_text')
     text = fields.Text('Text', states={
             'readonly': ~Eval('override_text'),

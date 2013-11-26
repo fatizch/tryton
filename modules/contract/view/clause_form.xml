@@ -4,10 +4,7 @@
   <field name="clause" colspan="3"/>
   <label name="kind"/>
   <field name="kind" colspan="3"/>
-  <label name="covered_data"/>
-  <field name="covered_data" colspan="3"/>
   <field name="visual_text" colspan="4"/>
   <field name="text"/>
-  <field name="override_clause" invisible="1"/>
   <field name="override_text"/>
 </form>

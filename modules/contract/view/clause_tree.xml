@@ -3,5 +3,4 @@
   <field name="clause"/>
   <field name="kind"/>
   <field name="override_text"/>
-  <field name="covered_data"/>
 </tree>

@@ -74,6 +74,21 @@
           <field name="field_childs">covered_data</field>
           <field name="name">covered_elements_clean_tree</field>
         </record>
+        <!-- ############################################################ -->
+        <!-- Clauses -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="clause_form">
+          <field name="model">contract.clause</field>
+          <field name="type">form</field>
+          <field name="inherit" ref="contract.clause_form"/>
+          <field name="name">clause_form</field>
+        </record>
+        <record model="ir.ui.view" id="clause_tree">
+          <field name="model">contract.clause</field>
+          <field name="type">tree</field>
+          <field name="inherit" ref="contract.clause_tree"/>
+          <field name="name">clause_tree</field>
+        </record>
         <!--################################################################ -->
         <!-- Menus -->
         <!--################################################################ -->
