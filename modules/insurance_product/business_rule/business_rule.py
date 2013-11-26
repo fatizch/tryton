@@ -265,8 +265,6 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
         cls.template.model_name = cls.__name__
         if hasattr(cls, '_order'):
             cls._order.insert(0, ('start_date', 'ASC'))
-        if hasattr(cls, '_constraints'):
-            cls._constraints += [('check_dates', 'businessrule_overlaps')]
         if hasattr(cls, '_error_messages'):
             cls._error_messages.update({
                 'businessrule_overlaps':
@@ -325,6 +323,7 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
         return res
 
     def check_dates(self):
+        # TODO : use class method to validate as a group
         cursor = Transaction().cursor
         table = self.__table__()
         #offered depends if the link is a reference link or a M2O
@@ -343,8 +342,13 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
                 & (table.offered != offered) & (table.id != self.id))
         cursor.execute(*request)
         if cursor.fetchone():
-            return False
-        return True
+            self.raise_user_error('businessrule_overlaps')
+
+    @classmethod
+    def validate(cls, rules):
+        super(BusinessRuleRoot, cls).validate(rules)
+        for rule in rules:
+            rule.check_dates
 
     @classmethod
     def copy(cls, rules, default):
