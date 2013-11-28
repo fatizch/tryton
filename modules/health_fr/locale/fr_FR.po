@@ -10,6 +10,10 @@ msgctxt "field:health.insurance_fund,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:health.insurance_fund,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:health.insurance_fund,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -65,6 +69,10 @@ msgstr "Code"
 msgctxt "field:health.regime,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
+
+msgctxt "field:health.regime,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:health.regime,create_uid:"
 msgid "Create User"

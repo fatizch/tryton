@@ -12,43 +12,32 @@ from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED, STATE_SIMPLE
 
 __all__ = [
-    'SimplePricingRule',
     'PricingRule',
     'PricingComponent',
     'TaxVersion',
     'FeeVersion',
-]
+    ]
 
 PRICING_LINE_KINDS = [
     ('base', 'Base Price'),
     ('tax', 'Tax'),
     ('fee', 'Fee')
-]
+    ]
 
 PRICING_FREQUENCY = [
     ('yearly', 'Yearly'),
     ('half_yearly', 'Half Yearly'),
     ('quarterly', 'Quarterly'),
     ('monthly', 'Monthly')
-]
+    ]
 
 RATED_OBJECT_KIND = [
     ('global', 'Global'),
     ('sub_item', 'Covered Item'),
-]
+    ]
 
 
-class SimplePricingRule(BusinessRuleRoot):
-    'Simple Pricing Rule'
-
-    __name__ = 'ins_product.simple_pricing_rule'
-
-    @staticmethod
-    def default_frequency():
-        return 'yearly'
-
-
-class PricingRule(SimplePricingRule, model.CoopSQL):
+class PricingRule(BusinessRuleRoot, model.CoopSQL):
     'Pricing Rule'
 
     __name__ = 'ins_product.pricing_rule'
@@ -245,28 +234,31 @@ class PricingRule(SimplePricingRule, model.CoopSQL):
         from_detail.to_recalculate = fee_vers.apply_at_pricing_time
         from_detail.amount = amount
 
-    def calculate_price(self, args, rated_object_kind='global'):
-        result = PricingResultLine()
-        errors = []
-        errs = []
+    def calculate_components_contribution(self, args, result, errors,
+            rated_object_kind):
         for component in self.get_components(rated_object_kind):
             res, errs = component.calculate_value(args)
             result.add_detail(res)
             errors += errs
+
+    def calculate_price(self, args, rated_object_kind='global'):
+        result = PricingResultLine()
+        errors = []
+        self.calculate_components_contribution(args, result, errors,
+            rated_object_kind)
         combination_rule = self.get_combination_rule(rated_object_kind)
         if not errors and combination_rule:
             new_args = copy.copy(args)
             new_args['price_details'] = result.details
             new_args['final_details'] = {}
-            rule_result = utils.execute_rule(
-                self, combination_rule, new_args)
+            rule_result = combination_rule.execute(new_args)
             res = rule_result.result
             errors.extend(rule_result.print_errors())
             errors.extend(rule_result.print_warnings())
             details = self.build_details(new_args['final_details'])
             result.amount = res
             result.details = details
-        elif not errs and not combination_rule:
+        elif not errors and not combination_rule:
             result.amount = 0
             group_details = dict([(key, []) for key, _ in PRICING_LINE_KINDS])
             for detail in result.details:
@@ -370,7 +362,7 @@ class PricingComponent(model.CoopSQL, model.CoopView):
         elif self.config_kind == 'simple':
             amount = self.fixed_amount
         elif self.config_kind == 'advanced' and self.rule:
-            rule_result = utils.execute_rule(self, self.rule, args)
+            rule_result = self.rule.execute(args, self.rule_complementary_data)
             amount, errors = rule_result.result, rule_result.print_errors()
         return amount, errors
 

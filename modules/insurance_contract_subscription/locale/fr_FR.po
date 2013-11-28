@@ -43,6 +43,13 @@ msgid "Option %s must be subscribed after %s"
 msgstr "La Garantie %s doit être souscrite après le %s"
 
 msgctxt "error:contract.contract:"
+msgid ""
+"The payment bank account is required as the payment mode is Direct Debit"
+msgstr ""
+"Le compte bancaire de paiement doit être renseigné, le mode de paiement "
+"choisit étant le prélèvement"
+
+msgctxt "error:contract.contract:"
 msgid "There must be at least one covered element"
 msgstr "Saisir un élement couvert"
 
@@ -134,6 +141,10 @@ msgctxt "field:ins_contract.subscription_mgr,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:ins_contract.subscription_mgr,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:ins_contract.subscription_mgr,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -211,7 +222,7 @@ msgstr "Produit"
 
 msgctxt "field:process.process_desc,display_steps_without_status:"
 msgid "Display Steps Without Status"
-msgstr "Afficher les Etapes sans Statuts"
+msgstr "Afficher les Etapes sans Statut"
 
 msgctxt "field:process.process_desc,steps_to_display:"
 msgid "Steps"

@@ -2,13 +2,41 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:party.bank:"
-msgid "Invalid BIC!"
-msgstr "BIC non valide!"
-
-msgctxt "error:party.bank_account_number:"
+msgctxt "error:bank.account.number:"
 msgid "Invalid %s number : %s"
-msgstr "Le compte %s avec le numéro %s est invalide"
+msgstr ""
+
+msgctxt "error:bank.account.number:"
+msgid "The number must be unique!"
+msgstr "Le numéro de compte doit être unique"
+
+msgctxt "error:bank:"
+msgid "Invalid BIC : %s"
+msgstr ""
+
+msgctxt "field:bank.account,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:bank.account,number:"
+msgid "Main Account Number"
+msgstr ""
+
+msgctxt "field:bank.account,numbers_as_char:"
+msgid "Numbers"
+msgstr "Numéros"
+
+msgctxt "field:bank.account,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:coop_utils.test_case_model,currency:"
+msgid "Main Currency"
+msgstr "Monnaie principale"
+
+msgctxt "field:coop_utils.test_case_model,number_of_banks:"
+msgid "Number of Banks"
+msgstr "Nombre de banques"
 
 msgctxt "field:party.bank,bank_code:"
 msgid "Bank Code"
@@ -34,10 +62,6 @@ msgctxt "field:party.bank,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.bank,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:party.bank,party:"
 msgid "Party"
 msgstr "Acteur"
@@ -45,10 +69,6 @@ msgstr "Acteur"
 msgctxt "field:party.bank,rec_name:"
 msgid "Name"
 msgstr "Nom"
-
-msgctxt "field:party.bank,reference:"
-msgid "Reference"
-msgstr "Référence"
 
 msgctxt "field:party.bank,write_date:"
 msgid "Write Date"
@@ -94,14 +114,6 @@ msgctxt "field:party.bank_account,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.bank_account,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:party.bank_account,number:"
-msgid "Main Account Number"
-msgstr ""
-
 msgctxt "field:party.bank_account,numbers_as_char:"
 msgid "Numbers"
 msgstr "Numéros"
@@ -126,21 +138,9 @@ msgctxt "field:party.bank_account,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:party.bank_account_number,account_number:"
-msgid "Account Number"
-msgstr "Numéro de Compte"
-
 msgctxt "field:party.bank_account_number,bank_account:"
 msgid "Bank Account"
 msgstr "Compte Bancaire"
-
-msgctxt "field:party.bank_account_number,bank_code:"
-msgid "Bank Code"
-msgstr "Code Banque"
-
-msgctxt "field:party.bank_account_number,branch_code:"
-msgid "Branch Code"
-msgstr "Code Guichet"
 
 msgctxt "field:party.bank_account_number,create_date:"
 msgid "Create Date"
@@ -154,17 +154,9 @@ msgctxt "field:party.bank_account_number,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.bank_account_number,key:"
-msgid "Key"
-msgstr "Clé"
-
 msgctxt "field:party.bank_account_number,kind:"
 msgid "Kind"
 msgstr "Type"
-
-msgctxt "field:party.bank_account_number,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
 
 msgctxt "field:party.bank_account_number,number:"
 msgid "Number"
@@ -194,6 +186,10 @@ msgctxt "field:party.party,is_bank:"
 msgid "Bank"
 msgstr "Banque"
 
+msgctxt "field:party.party,main_bank_account:"
+msgid "Main Bank Account"
+msgstr "Compte bancaire principal"
+
 msgctxt "model:party.bank,name:"
 msgid "Bank"
 msgstr "Banque"
@@ -205,18 +201,6 @@ msgstr "Compte Bancaire"
 msgctxt "model:party.bank_account_number,name:"
 msgid "Bank account Number"
 msgstr "Numéro de Compte"
-
-msgctxt "selection:party.bank_account_number,kind:"
-msgid "IBAN"
-msgstr "IBAN"
-
-msgctxt "selection:party.bank_account_number,kind:"
-msgid "Other"
-msgstr "Autre"
-
-msgctxt "selection:party.bank_account_number,kind:"
-msgid "RIB"
-msgstr "RIB"
 
 msgctxt "view:party.bank:"
 msgid "Bank"
@@ -233,7 +217,3 @@ msgstr ""
 msgctxt "view:party.party:"
 msgid "Bank"
 msgstr "Banque"
-
-msgctxt "view:party.party:"
-msgid "Bank accounts"
-msgstr "Comptes Bancaires"

@@ -30,6 +30,10 @@ msgctxt "field:task_manager.priority,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:task_manager.priority,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:task_manager.priority,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -166,6 +170,10 @@ msgctxt "field:task_manager.team,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:task_manager.team,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:task_manager.team,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -205,6 +213,10 @@ msgstr "Mis à jour par"
 msgctxt "field:task_manager.team_group_relation,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
+
+msgctxt "field:task_manager.team_group_relation,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:task_manager.team_group_relation,create_uid:"
 msgid "Create User"

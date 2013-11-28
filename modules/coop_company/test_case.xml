@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+  <data>
+    <!-- ############################################################ -->
+    <!-- Test Case Model -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="test_case_model_form">
+      <field name="model">coop_utils.test_case_model</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="coop_utils.test_case_model_form"/>
+      <field name="name">test_case_model_form</field>
+    </record>
+    <!-- Data -->
+    <record model="coop_utils.test_case_model" id="coop_utils.test_case_configuration">
+      <field name="main_company_name">Coop</field>
+    </record>
+  </data>
+</tryton>

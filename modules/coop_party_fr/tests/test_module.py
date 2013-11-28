@@ -1,62 +1,41 @@
 #-*- coding:utf-8 -*-
-import sys
-import os
+import unittest
 from datetime import date
 
-DIR = os.path.abspath(os.path.normpath(os.path.join(__file__,
-    '..', '..', '..', '..', '..', 'trytond')))
-if os.path.isdir(DIR):
-    sys.path.insert(0, os.path.dirname(DIR))
-
-import unittest
 import trytond.tests.test_tryton
-from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT, test_view,\
-    test_depends
-from trytond.transaction import Transaction
-
-MODULE_NAME = os.path.basename(
-    os.path.abspath(os.path.join(os.path.normpath(__file__), '..', '..')))
+from trytond.modules.coop_utils import test_framework
 
 
-class ModuleTestCase(unittest.TestCase):
+class ModuleTestCase(test_framework.CoopTestCase):
     '''
     Test Coop module.
     '''
+    @classmethod
+    def get_module_name(cls):
+        return 'coop_party_fr'
 
-    def setUp(self):
-        trytond.tests.test_tryton.install_module(MODULE_NAME)
-        self.Person = POOL.get('party.party')
-
-    def test0005views(self):
-        '''
-        Test views.
-        '''
-        test_view(MODULE_NAME)
-
-    def test0006depends(self):
-        '''
-        Test depends.
-        '''
-        test_depends()
+    @classmethod
+    def get_models(cls):
+        return {
+            'Person': 'party.party',
+        }
 
     def createPerson(
             self, birth_date, ssn, expected_return, gender='male', i=0):
-        with Transaction().start(DB_NAME, USER,
-           context=CONTEXT):
-            try:
-                person, = self.Person.create([{
-                    'is_person': True,
-                    'name': 'Person %s' % i,
-                    'first_name': 'first name %s' % i,
-                    'ssn': ssn,
-                    'birth_date': birth_date,
-                    'gender': gender,
-                    'addresses': []
-                }])
-                res = person.id > 0
-            except:
-                res = False
-            self.assertEqual(res, expected_return)
+        try:
+            person, = self.Person.create([{
+                'is_person': True,
+                'name': 'Person %s' % i,
+                'first_name': 'first name %s' % i,
+                'ssn': ssn,
+                'birth_date': birth_date,
+                'gender': gender,
+                'addresses': []
+            }])
+            res = person.id > 0
+        except:
+            res = False
+        self.assertEqual(res, expected_return)
 
     def test0010ssn(self):
         '''

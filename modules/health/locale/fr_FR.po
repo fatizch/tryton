@@ -14,6 +14,10 @@ msgctxt "field:health.party_complement,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:health.party_complement,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:health.party_complement,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -62,6 +66,10 @@ msgctxt "field:party.party,health_complement:"
 msgid "Health Complement"
 msgstr "Complément Santé"
 
+msgctxt "field:party.party,health_contract:"
+msgid "Health Contract"
+msgstr "Contrat Santé"
+
 msgctxt "field:party.party,is_health:"
 msgid "Is Health"
 msgstr "Santé"
@@ -70,6 +78,18 @@ msgctxt "model:health.party_complement,name:"
 msgid "Party Health Complement"
 msgstr "Complément Santé"
 
+msgctxt "model:ir.action,name:act_contract_form"
+msgid "Health Contracts"
+msgstr "Contrats Santé"
+
+msgctxt "model:ir.action,name:act_person_form"
+msgid "Persons"
+msgstr "Personnes"
+
+msgctxt "model:ir.ui.menu,name:menu_contract_form"
+msgid "Contracts"
+msgstr "Contrats"
+
 msgctxt "model:ir.ui.menu,name:menu_health"
 msgid "Health"
 msgstr "Santé"
@@ -77,6 +97,18 @@ msgstr "Santé"
 msgctxt "model:ir.ui.menu,name:menu_health_configuration"
 msgid "Configuration"
 msgstr "Configuration"
+
+msgctxt "model:ir.ui.menu,name:menu_health_party"
+msgid "Actors"
+msgstr "Acteurs"
+
+msgctxt "model:ir.ui.menu,name:menu_person_form"
+msgid "Persons"
+msgstr "Personnes"
+
+msgctxt "model:tag,name:tag_health"
+msgid "Health"
+msgstr "Santé"
 
 msgctxt "selection:offered.coverage,family:"
 msgid "Health"

@@ -66,13 +66,7 @@ class RuleEngineParameter():
 
     @classmethod
     def get_complementary_parameter_value(cls, args, schema_name):
-        return args['_caller'].get_rule_complementary_data(schema_name)
-
-    def get_rule_complementary_data(self, schema_name):
-        if not (hasattr(self, 'rule_complementary_data') and
-                self.rule_complementary_data):
-            return None
-        return self.rule_complementary_data.get(schema_name, None)
+        return args['_complementary_data'][schema_name]
 
     def get_external_complementary_data(self, args):
         OfferedSet = Pool().get('offered.rule_sets')
@@ -186,8 +180,7 @@ class RuleEngine():
                 (elem.the_complementary_data.name, existing_values.get(
                         elem.the_complementary_data.name,
                         elem.the_complementary_data.get_default_value(None)))
-                for elem in self.rule_parameters
-                if elem.kind == 'complementary_data'])
+                for elem in self.rule_compl_datas])
 
     def on_change_rule_compl_datas(self):
         return self.on_change_rule_parameters()
@@ -255,7 +248,7 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
         CONFIG_KIND, 'Conf. kind', required=True)
     rule = fields.Many2One(
         'rule_engine', 'Rule Engine', states={'invisible': STATE_SIMPLE},
-        depends=['config_kind'])
+        depends=['config_kind'], ondelete='RESTRICT')
     view_rec_name = fields.Function(
         fields.Char('Name'),
         'get_rec_name')
@@ -272,8 +265,6 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
         cls.template.model_name = cls.__name__
         if hasattr(cls, '_order'):
             cls._order.insert(0, ('start_date', 'ASC'))
-        if hasattr(cls, '_constraints'):
-            cls._constraints += [('check_dates', 'businessrule_overlaps')]
         if hasattr(cls, '_error_messages'):
             cls._error_messages.update({
                 'businessrule_overlaps':
@@ -281,7 +272,7 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
 
     def get_rule_result(self, args):
         if self.rule:
-            return utils.execute_rule(self, self.rule, args)
+            return self.rule.execute(args, self.rule_complementary_data)
 
     def on_change_with_rule_complementary_data(self):
         if not (hasattr(self, 'rule') and self.rule):
@@ -332,6 +323,7 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
         return res
 
     def check_dates(self):
+        # TODO : use class method to validate as a group
         cursor = Transaction().cursor
         table = self.__table__()
         #offered depends if the link is a reference link or a M2O
@@ -350,8 +342,13 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
                 & (table.offered != offered) & (table.id != self.id))
         cursor.execute(*request)
         if cursor.fetchone():
-            return False
-        return True
+            self.raise_user_error('businessrule_overlaps')
+
+    @classmethod
+    def validate(cls, rules):
+        super(BusinessRuleRoot, cls).validate(rules)
+        for rule in rules:
+            rule.check_dates
 
     @classmethod
     def copy(cls, rules, default):

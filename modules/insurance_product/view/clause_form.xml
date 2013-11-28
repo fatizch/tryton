@@ -1,19 +1,23 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <data>
-    <xpath expr="/form" position="replace_attributes">
-        <form string="Clause"/>
-    </xpath>
-    <xpath expr="/form/group[@id='basic data']" position="inside">
-        <label name="name"/>
-        <field name="name" colspan="9"/>
-        <label name="code"/>
-        <field name="code"/>
-        <newline/>
-        <label name="title"/>
-        <field name="title" colspan="11"/>
-    </xpath>
-    <xpath expr="/form/group[@id='versions']/field[@name='versions']"
-        position="replace_attributes">
-        <field name="versions" mode="form, tree"/>
-    </xpath>
+  <xpath expr="/form" position="replace_attributes">
+    <form string="Clause"/>
+  </xpath>
+  <xpath expr="/form/group[@id='basic data']" position="inside">
+    <label name="name"/>
+    <field name="name" colspan="9"/>
+    <label name="code"/>
+    <field name="code"/>
+    <label name="kind"/>
+    <field name="kind"/>
+    <newline/>
+    <label name="title"/>
+    <field name="title" colspan="11"/>
+    <newline/>
+    <label name="may_be_overriden"/>
+    <field name="may_be_overriden"/>
+  </xpath>
+  <xpath expr="/form/group[@id='versions']/field[@name='versions']" position="replace_attributes">
+    <field name="versions" mode="form, tree"/>
+  </xpath>
 </data>

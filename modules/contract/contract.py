@@ -5,7 +5,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval, If
 from trytond.pool import Pool, PoolMeta
 
-from trytond.modules.coop_utils import utils
+from trytond.modules.coop_utils import utils, coop_string
 from trytond.modules.insurance_product import Printable
 
 CONTRACTSTATUSES = [
@@ -24,7 +24,9 @@ __all__ = [
     'StatusHistory',
     'Contract',
     'SubscribedCoverage',
+    'ContractClause',
     'ContractAddress',
+    'DeliveredService',
     'LetterModel',
     ]
 
@@ -61,7 +63,7 @@ class StatusHistory(model.CoopSQL, model.CoopView):
             reference.end_date = previous_status.end_date
 
 
-class Subscribed(model.CoopView):
+class Subscribed(model.CoopView, model.ModelCurrency):
     'Subscribed'
 
     offered = fields.Many2One(
@@ -82,12 +84,6 @@ class Subscribed(model.CoopView):
     # contract. Default value is start_date
     start_management_date = fields.Date('Management Date')
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
-    currency = fields.Function(
-        fields.Many2One('currency.currency', 'Currency'),
-        'get_currency_id')
-    currency_digits = fields.Function(
-        fields.Integer('Currency Digits'),
-        'get_currency_digits')
     status_history = fields.One2Many(
         'contract.status_history', 'reference', 'Status History')
 
@@ -170,18 +166,9 @@ class Subscribed(model.CoopView):
             self.sub_status = sub_status
         return True, []
 
-    def get_currency_digits(self, name):
-        if hasattr(self, 'currency') and self.currency:
-            return self.currency.digits
-
     @classmethod
     def get_summary(cls, instances, name):
-        return dict((x.id, '') for x in instances)
-
-    def get_currency_id(self, name):
-        currency = self.get_currency()
-        if currency:
-            return currency.id
+        return dict((x.id, x.rec_name) for x in instances)
 
     def is_active_at_date(self, at_date):
         for status_hist in self.status_history:
@@ -251,6 +238,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             }, depends=['current_policy_owner'])
     #temporary field to remove ASAP
     temp_endorsment_date = fields.Date('Endorsment Date')
+    clauses = fields.One2Many('contract.clause', 'contract',
+        'Clauses', context={'start_date': Eval('start_date')})
 
     @classmethod
     def __setup__(cls):
@@ -294,10 +283,27 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def ws_subscribe_contract(cls, contract_dict):
         'This method is a standard API for webservice use'
 
+    def init_clauses(self, offered):
+        ClauseRelation = Pool().get('contract.clause')
+        clauses, errs = offered.get_result('all_clauses', {
+                'date': self.start_date,
+                'appliable_conditions_date': self.appliable_conditions_date,
+            })
+        if errs or not clauses:
+            return
+        self.clauses = []
+        for clause in clauses:
+            new_clause = ClauseRelation()
+            new_clause.clause = clause
+            new_clause.text = clause.get_good_version_at_date(
+                self.start_date).content
+            self.clauses.append(new_clause)
+
     def init_from_offered(self, offered, start_date=None, end_date=None):
         res = super(Contract, self).init_from_offered(offered, start_date,
             end_date)
         self.appliable_conditions_date = self.start_date
+        self.init_clauses(offered)
         return res
 
     @classmethod
@@ -406,8 +412,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         return [('id', 'in', [c.id for c in contracts])]
 
     @classmethod
-    def get_summary(cls, insurers, name=None, at_date=None, lang=None):
-        return ''
+    def get_summary(cls, instances, name, at_date=None, lang=None):
+        return dict((x.id, x.contract_number) for x in instances)
 
     @staticmethod
     def get_possible_status(name=None):
@@ -467,7 +473,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
 
     def get_currency(self):
         if hasattr(self, 'offered') and self.offered:
-            return self.offered.get_currency()
+            return self.offered.currency
 
     def on_change_complementary_data(self):
         args = {'date': self.start_date, 'level': 'contract'}
@@ -531,7 +537,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     @classmethod
     def get_var_names_for_full_extract(cls):
         return ['subscriber', ('offered', 'light'), 'complementary_data',
-        'options', 'covered_elements', 'start_date', 'end_date']
+            'options', 'covered_elements', 'start_date', 'end_date']
 
 
 class SubscribedCoverage(model.CoopSQL, Subscribed):
@@ -578,7 +584,7 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
 
     def get_currency(self):
         if hasattr(self, 'offered') and self.offered:
-            return self.offered.get_currency()
+            return self.offered.currency
 
     def get_contract_number(self, name):
         return self.contract.contract_number if self.contract else ''
@@ -605,12 +611,56 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
 
     def init_dict_for_rule_engine(self, args):
         args['option'] = self
-        args['coverage'] = self.offered
+        self.offered.init_dict_for_rule_engine(args)
         self.contract.init_dict_for_rule_engine(args)
 
     @classmethod
     def get_var_names_for_full_extract(cls):
         return [('offered', 'light'), 'start_date', 'end_date']
+
+
+class ContractClause(model.CoopSQL, model.CoopView):
+    'Contract clauses'
+
+    __name__ = 'contract.clause'
+
+    contract = fields.Many2One('contract.contract', 'Contract',
+        ondelete='CASCADE')
+    clause = fields.Many2One('ins_product.clause', 'Clause',
+        ondelete='RESTRICT')
+    override_text = fields.Function(
+        fields.Boolean('Override Text', on_change_with=['clause'],
+            states={'invisible': True}),
+        'on_change_with_override_text')
+    text = fields.Text('Text', states={
+            'readonly': ~Eval('override_text'),
+            'invisible': True,
+        })
+    visual_text = fields.Function(
+        fields.Text('Clause Text', on_change_with=[
+                'text', 'clause', 'override_text', 'contract']),
+        'on_change_with_visual_text')
+    kind = fields.Function(
+        fields.Char('Kind', on_change_with=['clause', 'contract']),
+        'on_change_with_kind')
+
+    def on_change_with_override_text(self, name=None):
+        if not self.clause:
+            return False
+        return self.clause.may_be_overriden
+
+    def on_change_with_visual_text(self, name=None):
+        if not self.clause:
+            return ''
+        if self.override_text:
+            return self.text
+        return self.clause.get_version_at_date(
+            self.contract.appliable_conditions_date).content
+
+    def on_change_with_kind(self, name=None):
+        if not self.clause:
+            return ''
+        return self.clause.kind
 
 
 class ContractAddress(model.CoopSQL, model.CoopView):
@@ -645,6 +695,46 @@ class ContractAddress(model.CoopSQL, model.CoopView):
     @staticmethod
     def default_start_date():
         return Transaction().context.get('start_date')
+
+
+class DeliveredService(model.CoopView, model.CoopSQL):
+    'Delivered Service'
+
+    __name__ = 'contract.delivered_service'
+
+    status = fields.Selection([
+            ('calculating', 'Calculating'),
+            ('not_eligible', 'Not Eligible'),
+            ('calculated', 'Calculated'),
+            ('delivered', 'Delivered'),
+            ], 'Status')
+    contract = fields.Many2One('contract.contract', 'Contract',
+        ondelete='RESTRICT')
+    subscribed_service = fields.Many2One(
+        'contract.subscribed_option', 'Coverage', ondelete='RESTRICT',
+        domain=[
+            If(~~Eval('contract'), ('contract', '=', Eval('contract', {})), ())
+        ], depends=['contract'])
+    func_error = fields.Many2One('rule_engine.error', 'Error',
+        ondelete='RESTRICT', states={
+            'invisible': ~Eval('func_error'),
+            'readonly': True})
+
+    def get_rec_name(self, name=None):
+        if self.subscribed_service:
+            res = self.subscribed_service.get_rec_name(name)
+        else:
+            res = super(DeliveredService, self).get_rec_name(name)
+        if self.status:
+            res += ' [%s]' % coop_string.translate_value(self, 'status')
+        return res
+
+    @staticmethod
+    def default_status():
+        return 'calculating'
+
+    def get_contract(self):
+        return self.contract
 
 
 class LetterModel():

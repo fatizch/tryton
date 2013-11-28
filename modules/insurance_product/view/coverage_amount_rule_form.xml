@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <data>
     <xpath expr="/form" position="replace_attributes">
         <form string="Coverage Amount rule"/>
@@ -18,6 +18,9 @@
         <newline/>
         <label name="amount_step"/>
         <field name="amount_step"/>
+        <newline/>
+        <label name="other_coverage"/>
+        <field name="other_coverage"/>
         <newline/>
     </xpath>
 </data>

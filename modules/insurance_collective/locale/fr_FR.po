@@ -50,6 +50,10 @@ msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Group Products"
 msgstr "Produits Collectifs"
 
+msgctxt "model:tag,name:tag_group"
+msgid "Group"
+msgstr "Groupe"
+
 msgctxt "view:contract.contract:"
 msgid "Enrollments"
 msgstr "Affiliations"

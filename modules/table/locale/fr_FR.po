@@ -6,6 +6,10 @@ msgctxt "error:table.2d:"
 msgid "The table is not 2D"
 msgstr "La table n'est pas 2D"
 
+msgctxt "error:table.dimension_displayer:"
+msgid "Impossible to convert data %s with format %s"
+msgstr "Impossible de convertir la donnée %s avec le format %s"
+
 msgctxt "error:table.manage_dimension_1:"
 msgid "The requested change might delete data."
 msgstr ""
@@ -23,12 +27,20 @@ msgid "The requested change might delete data."
 msgstr ""
 
 msgctxt "error:table.table_def:"
-msgid "The name of \"Table Definition\" must be unique"
-msgstr "Le nom de la table doit être unique"
+msgid "A clone record already exists : %s(%s)"
+msgstr ""
+
+msgctxt "error:table.table_def:"
+msgid "The code of \"Table Definition\" must be unique"
+msgstr ""
 
 msgctxt "field:table.2d,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
+
+msgctxt "field:table.2d,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:table.2d,create_uid:"
 msgid "Create User"
@@ -138,6 +150,10 @@ msgctxt "field:table.table_cell,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:table.table_cell,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:table.table_cell,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -197,6 +213,10 @@ msgstr "Code"
 msgctxt "field:table.table_def,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
+
+msgctxt "field:table.table_def,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:table.table_def,create_uid:"
 msgid "Create User"
@@ -305,6 +325,10 @@ msgstr "Mis à jour par"
 msgctxt "field:table.table_dimension,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
+
+msgctxt "field:table.table_dimension,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:table.table_dimension,create_uid:"
 msgid "Create User"

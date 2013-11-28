@@ -1,0 +1,20 @@
+msgid "Spouse"
+msgstr "Conjoint"
+
+msgid "Parent"
+msgstr "Parent"
+
+msgid "Children"
+msgstr "Enfant"
+
+msgid "Main"
+msgstr "Principale"
+
+msgid "Secondary"
+msgstr "Secondaire"
+
+msgid "Job"
+msgstr "Lieu de travail"
+
+msgid "Subsidiary"
+msgstr "Filiale"

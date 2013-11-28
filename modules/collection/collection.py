@@ -12,6 +12,7 @@ __all__ = [
     'Configuration',
     'SuspenseParty',
     'Collection',
+    'Payment',
     'CollectionParameters',
     'Assignment',
     'AssignCollection',
@@ -40,7 +41,8 @@ class Configuration(export.ExportImportMixin):
         fields.Many2One('account.account', 'Check Account',
             domain=[('kind', '=', 'revenue')]))
     collection_journal = fields.Property(
-        fields.Many2One('account.journal', 'Journal'))
+        fields.Many2One('account.journal', 'Journal', domain=[
+                ('type', '=', 'cash')]))
 
     @classmethod
     def _export_keys(cls):
@@ -98,24 +100,6 @@ class Configuration(export.ExportImportMixin):
             return
         _account_field, _company, _value = field_value
 
-    @classmethod
-    def __import_override_default_account_receivable(cls, instance_key,
-            good_instance, field_value, values, created, relink):
-        return cls._import_default_account('default_account_receivable',
-            instance_key, good_instance, field_value, values, created, relink)
-
-    @classmethod
-    def __import_override_default_account_payable(cls, instance_key,
-            good_instance, field_value, values, created, relink):
-        return cls._import_default_account('default_account_payable',
-            instance_key, good_instance, field_value, values, created, relink)
-
-    @classmethod
-    def __import_override_default_suspense_account(cls, instance_key,
-            good_instance, field_value, values, created, relink):
-        return cls._import_default_account('default_suspense_account',
-            instance_key, good_instance, field_value, values, created, relink)
-
 
 class SuspenseParty():
     'Party'
@@ -166,6 +150,13 @@ class Collection(model.CoopSQL, model.CoopView):
         return self.create_uid.id
 
 
+class Payment:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.payment'
+
+    collection = fields.Many2One('collection.collection', 'Collection')
+
+
 class CollectionParameters(model.CoopView):
     'Collection parameters'
 
@@ -181,6 +172,8 @@ class CollectionParameters(model.CoopView):
     check_reception_date = fields.Date('Check Reception Date', states={
             'invisible': Eval('kind') != 'check',
             'required': Eval('kind') == 'check'})
+    collection = fields.Many2One('collection.collection', 'Collection',
+        states={'invisible': True})
 
 
 class Assignment(model.CoopView):
@@ -309,24 +302,33 @@ class CollectionWizard(model.CoopWizard):
                     ventilated_amount))
         return 'validate'
 
-    def transition_validate(self):
+    def get_collection_move(self):
         pool = Pool()
         Move = pool.get('account.move')
-        MoveLine = pool.get('account.move.line')
-        Company = pool.get('company.company')
-        Date = pool.get('ir.date')
-        Collection = pool.get('collection.collection')
-        Payment = pool.get('account.payment')
-        PaymentGroup = pool.get('account.payment.group')
         AccountConfiguration = pool.get('account.configuration')
-        company = Company(Transaction().context.get('company'))
+        Date = pool.get('ir.date')
         account_configuration = AccountConfiguration(1)
         collection_move = Move()
         collection_move.journal = account_configuration.collection_journal
         collection_move.date = Date.today()
         collection_move.lines = []
+        return collection_move
+
+    def transition_validate(self):
+        pool = Pool()
+        MoveLine = pool.get('account.move.line')
+        Move = pool.get('account.move')
+        Collection = pool.get('collection.collection')
+        Company = pool.get('company.company')
+        Payment = pool.get('account.payment')
+        AccountConfiguration = pool.get('account.configuration')
+        Date = pool.get('ir.date')
+        account_configuration = AccountConfiguration(1)
+        PaymentGroup = pool.get('account.payment.group')
+        company = Company(Transaction().context.get('company'))
         remaining = self.assign.amount
         payments = []
+        collection_move = self.get_collection_move()
         for line in self.assign.assignments:
             new_line = MoveLine()
             new_line.account = line.target_account
@@ -353,14 +355,6 @@ class CollectionWizard(model.CoopWizard):
             suspense_line.account = self.assign.party.suspense_account
             suspense_line.party = self.assign.party
             collection_move.lines.append(suspense_line)
-        if payments:
-            payment_group = PaymentGroup()
-            payment_group.company = company
-            payment_group.journal = company.get_payment_journal(
-                company.currency)
-            payment_group.kind = 'receivable'
-            payment_group.payments = payments
-            payment_group.save()
         collection_line = MoveLine()
         collection_line.party = self.assign.party
         collection_line.debit = self.assign.amount
@@ -379,6 +373,18 @@ class CollectionWizard(model.CoopWizard):
             log.check_reception_date = \
                 self.input_collection_parameters.check_reception_date
         log.save()
+        if payments:
+            payment_group = PaymentGroup()
+            payment_group.company = company
+            payment_group.journal = company.get_payment_journal(
+                company.currency)
+            payment_group.kind = 'receivable'
+            payment_group.payments = []
+            for payment in payments:
+                payment.collection = log
+                payment_group.payments.append(payment)
+            payment_group.payments = payments
+            payment_group.save()
         return 'end'
 
 
@@ -396,7 +402,7 @@ class Property(export.ExportImportMixin):
             If(Eval('context', {}).contains('__importing__'),
                 ('id', '>', 0),
                 ('id', If(Eval('context', {}).contains('company'), '=', '!='),
-                    Eval('context', {}).get('company', 0)))
+                    Eval('context', {}).get('company', -1)))
             ]
 
     @classmethod

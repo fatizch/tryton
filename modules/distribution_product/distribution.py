@@ -29,6 +29,10 @@ class DistributionNetwork():
         fields.Many2Many('distribution.commercial_product', None, None,
             'Top Level Commercial Products'),
         'get_parent_com_products_id')
+    all_com_products = fields.Function(
+        fields.Many2Many('distribution.commercial_product', None, None,
+            'All Comercial Products'),
+        'get_all_commercial_products_id')
     company = fields.Many2One('company.company', 'Company',
             depends=['commercial_products'])
 
@@ -40,8 +44,9 @@ class DistributionNetwork():
                     ])
             ]
 
-    def get_commercial_products(self):
-        return list(set(self.commercial_products + self.parent_com_products))
+    def get_all_commercial_products_id(self, name):
+        return [x.id for x in set(
+                self.commercial_products + self.parent_com_products)]
 
     @classmethod
     def default_company(cls):

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data skiptest="1">
+        <record model="tag" id="tag_group">
+            <field name="code">group</field>
+            <field name="name">Group</field>
+        </record>
+    </data>
+</tryton>

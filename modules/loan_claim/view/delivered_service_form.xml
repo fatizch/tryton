@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='subscribed_service']" position="after">
+        <label name="loan"/>
+        <field name="loan" widget="selection"/>
+    </xpath>
+    <xpath expr="/form" position="inside">
+        <newline/>
+        <field name="is_loan"/>
+    </xpath>
+</data>

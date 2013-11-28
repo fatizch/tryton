@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import re
-import locale
 from decimal import Decimal
 
 from trytond.pool import Pool
@@ -45,10 +44,11 @@ def get_field_as_summary(instance, var_name, with_label=True, at_date=None,
                     res = '<b>%s :</b>\n' % translate_label(
                         instance, var_name, lang=lang)
                 sub_indent = 1
-            summary_dict = element.__class__.get_summary(
+            summary_dict = element.get_summary(
                 [element], name=var_name, at_date=at_date, lang=lang)
-            res += re_indent_text(
-                '%s\n' % summary_dict[element.id], sub_indent)
+            if summary_dict and element.id in summary_dict:
+                res += re_indent_text(
+                    '%s\n' % summary_dict[element.id], sub_indent)
     else:
         if with_label:
             res = '%s : ' % translate_label(instance, var_name, lang=lang)
@@ -103,13 +103,10 @@ def translate_field(instance, var_name, src, ttype='field', lang=None):
 
 
 def translate(model, var_name, src, ttype, lang=None):
-    if lang:
-        language = lang.code
-    else:
-        language = Transaction().language
     Translation = Pool().get('ir.translation')
-    res = Translation.get_source(
-        '%s,%s' % (model.__name__, var_name), ttype, language, src)
+    language = lang.code if lang else Transaction().language
+    target = '%s%s' % (model.__name__, ',%s' % var_name if var_name else '')
+    res = Translation.get_source(target, ttype, language, src)
     if not res:
         return src
     return res
@@ -210,6 +207,16 @@ def is_ascii(s):
 
 
 def get_amount_from_currency(amount, currency):
+    from locale import atof
     amount = amount.strip(currency.symbol)
     amount = amount.replace(currency.mon_decimal_point, '.')
-    return Decimal(locale.atof(amount))
+    return Decimal(atof(amount))
+
+
+def check_for_pattern(s, pattern):
+    if s is not None:
+        s = s.strip()
+        matchObj = re.match(pattern, s)
+        if matchObj:
+            return matchObj.group()
+        return False

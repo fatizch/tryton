@@ -60,6 +60,10 @@ class ContactMechanism(model.CoopSQL):
     def get_var_names_for_full_extract(cls):
         return ['type', 'value']
 
+    @classmethod
+    def _export_keys(cls):
+        return ('party.name', 'type', 'value')
+
 
 class ContactHistory(model.CoopSQL, model.CoopView):
     'Contact History'

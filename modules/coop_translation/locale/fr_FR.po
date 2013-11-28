@@ -1,0 +1,51 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.move.line,party:account."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:company.company,party:company."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:company.employee,party:company."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:party.address,party:party."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:party.contact_mechanism,party:party."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:party.party-party.category,party:party."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "model:ir.action,name:party.act_party_form"
+msgid "Parties"
+msgstr "Acteurs"
+
+msgctxt "model:ir.sequence,name:party.sequence_party"
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "model:ir.sequence.type,name:party.sequence_type_party"
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "model:ir.ui.menu,name:party.menu_party"
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "model:ir.ui.menu,name:party.menu_party_form"
+msgid "Parties"
+msgstr "Acteurs"
+
+msgctxt "model:party.party,name:party."
+msgid "Party"
+msgstr "Acteur"

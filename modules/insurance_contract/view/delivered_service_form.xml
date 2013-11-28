@@ -1,12 +1,6 @@
-<?xml version="1.0"?>
-<form string="Delivered Service">
-    <label name="status"/>
-    <field name="status"/>
-    <label name="func_error"/>
-    <field name="func_error"/>
-    <label name="contract"/>
-    <field name="contract"/>
-    <label name="subscribed_service"/>
-    <field name="subscribed_service" widget="selection"/>
-    <field name="expenses" colspan="4"/>
-</form>
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form" position="inside">
+        <field name="expenses" colspan="4"/>
+    </xpath>
+</data>

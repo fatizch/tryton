@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <data>
   <xpath expr="/form/group[@id='amount']/label[@name='wo_fee_amount']" position="before">
     <label name="wo_com_amount"/>

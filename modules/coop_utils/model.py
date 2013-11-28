@@ -11,7 +11,6 @@ from trytond.wizard import Wizard
 from trytond.rpc import RPC
 
 import utils
-import coop_string
 import fields
 import export
 
@@ -26,6 +25,7 @@ __all__ = [
     'VersionObject',
     'ObjectHistory',
     'expand_tree',
+    'ModelCurrency',
 ]
 
 
@@ -67,6 +67,9 @@ def serialize_this(the_data, from_field=None):
 
 class CoopSQL(export.ExportImportMixin, ModelSQL):
     'Root class for all stored classes'
+
+    create_date_ = fields.Function(fields.DateTime('Creation date'),
+        '_get_creation_date')
 
     @classmethod
     def __setup__(cls):
@@ -115,20 +118,10 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
             domain=domain, offset=offset,
             limit=limit, order=order, count=count, query=query)
 
-    def get_currency(self):
-        print self.__name__
-        raise NotImplementedError
-
-    def get_currency_id(self, name):
-        return self.get_currency().id
-
-    def get_currency_digits(self, name):
-        return (self.currency.digits
-            if not utils.is_none(self, 'currency') else 2)
-
-    def get_currency_symbol(self, name):
-        return (self.currency.symbol
-            if not utils.is_none(self, 'currency') else '')
+    def _get_creation_date(self, name):
+        if not (hasattr(self, 'create_date') and self.create_date):
+            return None
+        return self.create_date
 
     @classmethod
     def copy(cls, objects, default=None):
@@ -186,7 +179,8 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
 
 
 class CoopView(ModelView):
-    must_expand_tree = fields.Function(fields.Boolean('Must Expand Tree'),
+    must_expand_tree = fields.Function(fields.Boolean('Must Expand Tree',
+            states={'invisible': True}),
         '_expand_tree')
 
     @classmethod
@@ -247,10 +241,8 @@ class TableOfTable(CoopSQL, CoopView):
 
     my_model_name = fields.Char('Model Name')
     key = fields.Char(
-        'Key', states={'readonly': Bool(Eval('is_used'))}, depends=['is_used'])
+        'Key', states={'readonly': Bool(Eval('is_used'))})
     name = fields.Char('Value', required=True, translate=True)
-    is_used = fields.Function(
-            fields.Boolean('Is Used'), 'get_is_used')
 
     @classmethod
     def __setup__(cls):
@@ -291,34 +283,6 @@ class TableOfTable(CoopSQL, CoopView):
     def get_func_pk_name():
         'return the functional key var name used when not using the id'
         return 'key'
-
-    @classmethod
-    def get_is_used(cls, instances, name):
-        using_inst = cls.get_instances_using_me(instances)
-        res = dict(
-            (instance.id, len(using_inst[instance.id]) > 0)
-            for instance in instances)
-        return res
-
-    @classmethod
-    def check_if_used(cls, instances):
-        using_inst = cls.get_instances_using_me(instances)
-        for instance in instances:
-            for using_instance in using_inst[instance.id]:
-                cls.raise_user_error(
-                    'item_used',
-                    (
-                        instance.rec_name,
-                        using_instance.rec_name,
-                        coop_string.translate_model_name(
-                            using_instance.__class__),
-                        using_instance.id,
-                    ))
-
-    @classmethod
-    def delete(cls, instances):
-        cls.check_if_used(instances)
-        super(TableOfTable, cls).delete(instances)
 
     @classmethod
     def default_my_model_name(cls):
@@ -506,3 +470,47 @@ class ObjectHistory(CoopSQL, CoopView):
                             values['date'], '%Y-%m-%d %H:%M:%S.%f')[:6])
                 values['date'] = values['date'].replace(microsecond=0)
         return res
+
+
+class ModelCurrency(object):
+    """
+    Define a model with Currency.
+    """
+
+    currency = fields.Function(
+        fields.Many2One('currency.currency', 'Currency',
+            on_change=['currency'], states={'invisible': True}),
+        'get_currency_id')
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'get_currency_digits')
+    currency_symbol = fields.Function(
+        fields.Char('Currency Symbol'),
+        'get_currency_symbol')
+
+    @staticmethod
+    def default_currency():
+        return ModelCurrency.get_currency_from_context()
+
+    @staticmethod
+    def get_currency_from_context():
+        if 'currency' in Transaction().context:
+            return Transaction().context.get('currency')
+
+    def get_currency(self):
+        print self.__name__
+        raise NotImplementedError
+
+    def on_change_currency(self):
+        digits = self.currency.digits if self.currency else 2
+        symbol = self.currency.symbol if self.currency else ''
+        return {'currency_digits': digits, 'currency_symbol': symbol}
+
+    def get_currency_id(self, name):
+        return self.get_currency().id
+
+    def get_currency_digits(self, name):
+        return self.on_change_currency()['currency_digits']
+
+    def get_currency_symbol(self, name):
+        return self.on_change_currency()['currency_symbol']

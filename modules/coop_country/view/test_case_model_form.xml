@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+  <xpath expr="/form" position="inside">
+    <label name="load_all_zipcodes"/>
+    <field name="load_all_zipcodes"/>
+    <label name="main_zip"/>
+    <field name="main_zip"/>
+  </xpath>
+</data>

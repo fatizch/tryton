@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Loan Parameters">
+    <label name="kind"/>
+    <field name="kind"/>
+    <label name="rate"/>
+    <group id="rate">
+      <field name="rate" factor="100" xexpand="0"/>
+      <label string="%" id="rate" xexpand="0" xalign="0"/>
+    </group>
+    <label name="amount"/>
+    <group id="amount">
+        <field name="amount" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
+    <newline/>
+    <label name="number_of_payments"/>
+    <field name="number_of_payments"/>
+    <label name="payment_frequency"/>
+    <field name="payment_frequency"/>
+    <label name="defferal"/>
+    <field name="defferal"/>
+    <label name="defferal_duration"/>
+    <field name="defferal_duration"/>
+    <label name="funds_release_date"/>
+    <field name="funds_release_date"/>
+    <label name="first_payment_date"/>
+    <field name="first_payment_date"/>
+    <label name="lender"/>
+    <field name="lender"/>
+    <newline/>
+    <field name="loan_shares" colspan="4"/>
+    <field name="currency"/>
+    <newline/>
+    <field name="contract"/>
+</form>

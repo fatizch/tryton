@@ -1,6 +1,0 @@
-[ins_product.rule_sets.claim]
-ins_product.rule_sets.claim|Sinistre|dossier_sinistre|
-ins_product.rule_sets.claim|Sinistre|dossier_sinistre|
-_re_delivered_service_expense|Récupérer la Dépense|depense|Code de la depense|
-ins_product.rule_sets.claim|Sinistre|dossier_sinistre|
-_re_delivered_service_total_expenses|Récupérer le total des dépenses|total_depenses||

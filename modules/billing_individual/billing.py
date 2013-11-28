@@ -122,7 +122,7 @@ class PriceLineFeeRelation(model.CoopSQL, model.CoopView):
         return False
 
 
-class PriceLine(model.CoopSQL, model.CoopView):
+class PriceLine(model.CoopSQL, model.CoopView, model.ModelCurrency):
     'Price Line'
 
     __name__ = 'billing.price_line'
@@ -148,15 +148,6 @@ class PriceLine(model.CoopSQL, model.CoopView):
         'price_line', 'Tax Lines')
     fee_lines = fields.One2Many('billing.price_line-fee-relation',
         'price_line', 'Fee Lines')
-    currency = fields.Function(
-        fields.Many2One('currency.currency', 'Currency'),
-        'get_currency_id')
-    currency_digits = fields.Function(
-        fields.Integer('Currency Digits'),
-        'get_currency_digits')
-    currency_symbol = fields.Function(
-        fields.Char('Currency Symbol'),
-        'get_currency_symbol')
 
     def get_estimated_total(self, name):
         return self.amount + self.estimated_fees + self.estimated_taxes
@@ -209,7 +200,8 @@ class PriceLine(model.CoopSQL, model.CoopView):
                 continue
             detail_line = PriceLineModel()
             detail_line.init_from_result_line(detail)
-            self.all_lines.append(detail_line)
+            if detail_line.amount:
+                self.all_lines.append(detail_line)
         if not line.details:
             self.amount = line.amount
         else:
@@ -255,8 +247,7 @@ class PriceLine(model.CoopSQL, model.CoopView):
                 else:
                     fees[elem.on_object.fee.id] = [elem]
             else:
-                for detail in elem.details:
-                    self.get_fee_details(detail, fees)
+                self.get_fee_details(elem, fees)
 
     def build_fee_lines(self, line):
         fee_details = {}
@@ -498,7 +489,9 @@ class BillingPeriod(model.CoopSQL, model.CoopView):
     @classmethod
     def validate(cls, periods):
         for period in periods:
-            period.check_dates()
+            # TODO : Temporary remove check
+            # period.check_dates()
+            pass
 
     def check_dates(self):
         cursor = Transaction().cursor
@@ -684,7 +677,8 @@ class Contract():
         states={'invisible': ~Eval('use_prices')})
     prices = fields.One2Many(
         'billing.price_line', 'contract', 'Prices',
-        states={'invisible': ~Eval('use_prices')})
+        states={'invisible': ~Eval('use_prices')},
+        order=[('start_date', 'ASC'), ('on_object', 'ASC')])
     billing_periods = fields.One2Many('billing.period', 'contract',
         'Billing Periods')
     receivable_lines = fields.Function(
@@ -758,7 +752,8 @@ class Contract():
     def get_billing_period_at_date(self, date):
         Period = Pool().get('billing.period')
         candidates = Period.search([
-                ('start_date', '<=', date), ('end_date', '>=', date)])
+                ('contract', '=', self.id), ('start_date', '<=', date),
+                ('end_date', '>=', date)])
         if not candidates:
             return None
         elif len(candidates) > 1:
@@ -933,7 +928,7 @@ class Contract():
                 amount = data['amount']
             line.second_origin = data['object']
             line.credit = work_set['currency'].round(amount)
-            work_set['total_amount'] += amount
+            work_set['total_amount'] += line.credit
 
     def calculate_billing_fees(self, work_set):
         if not work_set['payment_rule']:
@@ -1353,7 +1348,7 @@ class TaxDesc():
         if not (hasattr(self, 'account_for_billing') and
                 self.account_for_billing):
             return None
-        return self.account_for_billing.company
+        return self.account_for_billing.company.id
 
     @classmethod
     def search_company(cls, name, clause):
@@ -1389,7 +1384,7 @@ class FeeDesc():
         if not (hasattr(self, 'account_for_billing') and
                 self.account_for_billing):
             return None
-        return self.account_for_billing.company
+        return self.account_for_billing.company.id
 
     @classmethod
     def search_company(cls, name, clause):
@@ -1409,8 +1404,14 @@ class Sequence():
         cls.company.domain = export.clean_domain_for_import(
             cls.company.domain, 'company')
 
+    @classmethod
+    def _export_skips(cls):
+        result = super(Sequence, cls)._export_skips()
+        result.add('number_next_internal')
+        return result
 
-class Company(export.ExportImportMixin):
+
+class Company():
     'Company'
 
     __metaclass__ = PoolMeta
@@ -1451,10 +1452,6 @@ class Company(export.ExportImportMixin):
         result = super(Company, cls)._export_force_recreate()
         result.remove('fiscal_years')
         return result
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['party.name'])
 
 
 class FiscalYear(export.ExportImportMixin):

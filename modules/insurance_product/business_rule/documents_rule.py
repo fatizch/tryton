@@ -761,6 +761,7 @@ class RequestFinder(model.CoopView):
         super(RequestFinder, cls).__setup__()
         cls.kind = copy.copy(cls.kind)
         idx = 0
+        cls.kind.selection = [('', '')]
         for k, v in cls.allowed_values().iteritems():
             cls.kind.selection.append((k, v[0]))
             tmp = fields.Many2One(
@@ -801,12 +802,14 @@ class RequestFinder(model.CoopView):
     @classmethod
     def fields_view_get(cls, view_id=None, view_type='form'):
         result = super(RequestFinder, cls).fields_view_get(view_id, view_type)
+        request_finder = Pool().get('ir.model').search([
+                ('model', '=', cls.__name__)])[0]
 
         fields = ['kind', 'value', 'request']
 
         xml = '<?xml version="1.0"?>'
-        xml += '<form string="%s">' % cls.__name__
-        xml += '<label name="kind" xalign="0"/>'
+        xml += '<form string="%s">' % request_finder.name
+        xml += '<label name="kind" xalign="0" colspan="1"/>'
         xml += '<field name="kind" colspan="3"/>'
         xml += '<field name="value" invisible="1"/>'
         xml += '<newline/>'
@@ -817,7 +820,8 @@ class RequestFinder(model.CoopView):
                 continue
 
             xml += '<newline/>'
-            xml += '<field name="%s" colspan="4"/>' % k
+            xml += '<label name="%s" colspan="1"/>' % k
+            xml += '<field name="%s" colspan="3"/>' % k
 
             fields.append(k)
 

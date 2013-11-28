@@ -1,7 +1,7 @@
 import copy
 from decimal import Decimal
 
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Or
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import StateTransition, StateView, Button, StateAction
@@ -61,7 +61,7 @@ class RateLine(model.CoopSQL, model.CoopView):
         'get_index_value')
     indexed_value = fields.Function(
         fields.Numeric('Indexed Value',
-            on_change_with=['rate', 'index', 'start_date_', 'indexed_value']),
+            on_change_with=['rate', 'index', 'start_date_', 'index_value']),
         'on_change_with_indexed_value')
     parent = fields.Many2One('billing.rate_line', 'Parent', ondelete='CASCADE')
     childs = fields.One2Many('billing.rate_line', 'parent', 'Childs',
@@ -72,7 +72,7 @@ class RateLine(model.CoopSQL, model.CoopView):
         'get_start_date')
     end_date = fields.Date('End Date')
     rate = fields.Numeric('Rate', digits=(16, 4),
-        states={'readonly': ~Eval('manual_billing')})
+        states={'readonly': Or(~Eval('manual_billing'), ~~Eval('childs'))})
 
     def add_child(self):
         if utils.is_none(self, 'childs'):
@@ -172,7 +172,7 @@ class RateLine(model.CoopSQL, model.CoopView):
             return self.parent.start_date_
 
 
-class RateNote(model.CoopSQL, model.CoopView):
+class RateNote(model.CoopSQL, model.CoopView, model.ModelCurrency):
     'Rate Note'
 
     __name__ = 'billing.rate_note'
@@ -262,7 +262,7 @@ class RateNote(model.CoopSQL, model.CoopView):
         return res
 
 
-class RateNoteLine(model.CoopSQL, model.CoopView):
+class RateNoteLine(model.CoopSQL, model.CoopView, model.ModelCurrency):
     'Rate Note Line'
 
     __name__ = 'billing.rate_note_line'
@@ -286,12 +286,6 @@ class RateNoteLine(model.CoopSQL, model.CoopView):
         on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line',
             'client_amount'],
         states={'readonly': ~~Eval('childs')})
-    currency = fields.Function(
-        fields.Many2One('currency.currency', 'Currency'),
-        'get_currency_id')
-    currency_symbol = fields.Function(
-        fields.Char('Currency Symbol'),
-        'get_currency_symbol')
     parent = fields.Many2One('billing.rate_note_line', 'Parent',
         ondelete='CASCADE')
     childs = fields.One2Many('billing.rate_note_line', 'parent', 'Childs')
@@ -628,11 +622,11 @@ class RateNoteReception(model.CoopWizard):
         base_note = self.select_note.selected_note
         with Transaction().set_context(rate_note=base_note):
             good_period = base_note.contract.get_billing_period_at_date(
-                base_note.start_date)
+                max(base_note.start_date, base_note.contract.start_date))
             if not good_period:
                 good_move = base_note.contract.bill().id
             else:
-                good_move = base_note.contract.bill(good_period).id
+                good_move = base_note.contract.bill(*good_period).id
         return {'move': [good_move]}
 
     def transition_validate(self):
@@ -723,6 +717,13 @@ class MoveLine():
     __name__ = 'account.move.line'
 
     @classmethod
+    def __setup__(cls):
+        super(MoveLine, cls).__setup__()
+        cls._error_messages.update({
+            'mes_rate_note_compensation': 'Rate Note Compensation',
+        })
+
+    @classmethod
     def _get_second_origin(cls):
         result = super(MoveLine, cls)._get_second_origin()
         result.append('billing.rate_note')
@@ -733,7 +734,8 @@ class MoveLine():
             return ''
         if not self.second_origin.__name__ == 'billing.rate_note':
             return super(MoveLine, self).get_second_origin_name(name)
-        return 'Rate Note compensation'
+        return coop_string.translate(self, '', 'mes_rate_note_compensation',
+            'error')
 
 
 class CollectionWizard():

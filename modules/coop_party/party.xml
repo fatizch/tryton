@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <tryton>
     <data>
         <!-- Move configuration to end of the menu -->
@@ -90,5 +90,16 @@
             <field name="field_childs">children</field>
             <field name="name">company_tree_hierarchical</field>
         </record>
+
+    <record model="ir.action.act_window" id="act_addresses_button">
+      <field name="name">Addresses</field>
+      <field name="res_model">party.address</field>
+      <field name="domain">[('party', '=', Eval('active_id'))]</field>
+    </record>
+    <record model="ir.action.act_window" id="act_contact_mechanisms_button">
+      <field name="name">Contact Mechanisms</field>
+      <field name="res_model">party.contact_mechanism</field>
+      <field name="domain">[('party', '=', Eval('active_id'))]</field>
+    </record>
     </data>
 </tryton>

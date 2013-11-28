@@ -746,6 +746,8 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
             the_step, self.on_change_with_view_name(), self.view_kind)
 
     def create_update_view(self):
+        if Transaction().context.get('__importing__'):
+            return None
         if (hasattr(self, 'the_view') and self.the_view):
             the_view = self.the_view
         else:
@@ -827,7 +829,7 @@ class StepDesc(model.CoopSQL):
         states={'readonly': ~Eval('technical_name')})
     main_model = fields.Many2One(
         'ir.model', 'Main Model',
-        states={'readonly': Eval('processes', []) != []},
+        # states={'readonly': Eval('processes', []) != []},
         domain=[
             ('is_workflow', '=', True),
             ('model', '!=', 'process.process_framework')
@@ -988,7 +990,7 @@ class ProcessFinder(Wizard):
         if is_ok:
             return good_obj
         else:
-            print errs
+            pass
             #TODO What if?
 
     def init_main_object_from_process(self, obj, process_param):

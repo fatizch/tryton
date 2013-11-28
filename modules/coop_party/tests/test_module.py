@@ -1,20 +1,10 @@
-import sys
-import os
 import datetime
-
-DIR = os.path.abspath(os.path.normpath(
-    os.path.join(__file__, '..', '..', '..', '..', '..', 'trytond')))
-if os.path.isdir(DIR):
-    sys.path.insert(0, os.path.dirname(DIR))
-
 import unittest
+
 import trytond.tests.test_tryton
 
 from trytond.transaction import Transaction
 from trytond.modules.coop_utils import test_framework
-
-MODULE_NAME = os.path.basename(os.path.abspath(os.path.join(
-    os.path.normpath(__file__), '..', '..')))
 
 
 class ModuleTestCase(test_framework.CoopTestCase):
@@ -23,7 +13,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     @classmethod
     def get_module_name(cls):
-        return MODULE_NAME
+        return 'coop_party'
 
     @classmethod
     def get_models(cls):
@@ -35,17 +25,17 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     def test0001_createParties(self):
         self.Party.create([{
-                'name': 'Parent',
-                'addresses': [],
+                    'name': 'Parent',
+                    'addresses': [],
                 }, {
-                'name': 'Children',
-                'addresses': [],
+                    'name': 'Children',
+                    'addresses': [],
                 }])
         self.RelationKind.create([{
-                'code': 'parent',
-                'name': 'Parent',
-                'reversed_name': 'Children'
-            }])
+                    'code': 'parent',
+                    'name': 'Parent',
+                    'reversed_name': 'Children'
+                    }])
 
     @test_framework.prepare_test('coop_party.test0001_createParties')
     def test0010relations(self):

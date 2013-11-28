@@ -2,6 +2,7 @@ from trytond.pool import Pool
 
 from .tax import *
 from .fee import *
+from .test_case import *
 
 
 def register():
@@ -12,4 +13,6 @@ def register():
         # from fee
         FeeDesc,
         FeeVersion,
+        # from test_case
+        TestCaseModel,
         module='coop_account', type_='model')

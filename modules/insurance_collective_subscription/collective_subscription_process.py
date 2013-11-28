@@ -43,7 +43,9 @@ class GroupSubscriptionProcessParameters():
     def get_possible_com_product(self):
         res = super(GroupSubscriptionProcessParameters,
             self).get_possible_com_product()
-        return [x for x in res
+        if not res:
+            return res
+        return [x for x in res[0].browse([y.id for y in res])
             if x.product.is_group == self.is_group]
 
 

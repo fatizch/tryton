@@ -90,7 +90,7 @@ class CommissionRule(business_rule.BusinessRuleRoot, model.CoopSQL):
 
     __name__ = 'commission.commission_rule'
 
-    rate = fields.Numeric('Rate', states={
+    rate = fields.Numeric('Rate', digits=(16, 4), states={
             'invisible': business_rule.STATE_ADVANCED,
             'required': ~business_rule.STATE_ADVANCED,
             })

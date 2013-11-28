@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <form string="Covered Data">
     <label name="status"/>
     <field name="status"/>
@@ -14,9 +14,6 @@
     <label name="covered_element"/>
     <field name="covered_element"/>
     <newline/>
-    <label name="coverage_amount"/>
-    <field name="coverage_amount"/>
-    <newline/>
     <label name="deductible_duration"/>
     <field name="deductible_duration" widget="selection"/>
     <newline/>
@@ -24,4 +21,6 @@
     <field name="currency"/>
     <newline/>
     <field name="complementary_data" colspan="2" no_command="1"/>
+    <newline/>
+    <field name="clauses" colspan="2"/>
 </form>

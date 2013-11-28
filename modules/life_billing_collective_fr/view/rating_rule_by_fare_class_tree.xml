@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <tree string="Fare Class Rating Rule">
     <field name="fare_class_group"/>
     <field name="fare_class"/>

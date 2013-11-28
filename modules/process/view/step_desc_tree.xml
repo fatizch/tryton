@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <tree string="Step Descriptors">
 	<field name="fancy_name"/>
 	<field name="technical_name"/>

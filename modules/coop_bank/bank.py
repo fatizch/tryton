@@ -1,7 +1,10 @@
+import copy
 from ibanlib import iban
 
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
+from trytond.model import fields as tryton_fields
+from trytond.pyson import If, Bool, Eval
 
 from trytond.modules.coop_utils import utils, fields, export
 from trytond.modules.coop_utils import coop_string
@@ -67,12 +70,36 @@ class BankAccount(export.ExportImportMixin):
 
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    numbers_as_char = fields.Function(
-        fields.Char('Numbers'),
-        'get_numbers_as_char')
     number = fields.Function(
         fields.Char('Main Account Number'),
-        'get_main_bank_account_number')
+        'get_main_bank_account_number',
+        searcher='search_main_bank_account_number')
+
+    @classmethod
+    def __setup__(cls):
+        super(BankAccount, cls).__setup__()
+        cls.numbers = copy.copy(cls.numbers)
+        cls.numbers.required = False
+        cls.numbers.states['required'] = If(
+            Bool(Eval('context', {}).get('__importing__', '')),
+            False, True)
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['number'])
+
+    @classmethod
+    def search_main_bank_account_number(cls, name, clause):
+        pool = Pool()
+        account = pool.get('bank.account').__table__()
+        number = pool.get('bank.account.number').__table__()
+        _, operator, value = clause
+        Operator = tryton_fields.SQL_OPERATORS[operator]
+        query_table = account.join(number, condition=(
+                account.id == number.account))
+        query = query_table.select(account.id, where=Operator(
+                number.number, getattr(cls, name).sql_format(value)))
+        return [('id', 'in', query)]
 
     @staticmethod
     def default_currency():
@@ -84,7 +111,7 @@ class BankAccount(export.ExportImportMixin):
     @staticmethod
     def default_numbers():
         if not Transaction().context.get('__importing__'):
-            return [{}]
+            return [{'sequence': 0}]
         else:
             return []
 
@@ -112,7 +139,7 @@ class BankAccount(export.ExportImportMixin):
         return ['numbers', ('bank', 'light'), ('currency', 'light')]
 
     def get_main_bank_account_number(self, name):
-        ibans = [x.number for x in self.numbers if x.kind == 'iban']
+        ibans = [x for x in self.numbers if x.type == 'iban']
         if ibans:
             return ibans[-1].number
         elif self.numbers:
@@ -129,6 +156,9 @@ class BankAccountNumber(export.ExportImportMixin):
         super(BankAccountNumber, cls).__setup__()
         cls._error_messages.update({
                 'invalid_number': ('Invalid %s number : %s')})
+        cls._sql_constraints += [
+            ('number_uniq', 'UNIQUE(number)', 'The number must be unique!'),
+            ]
 
     @classmethod
     def validate(cls, numbers):

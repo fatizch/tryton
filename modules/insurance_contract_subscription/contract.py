@@ -48,6 +48,8 @@ class ContractSubscription(CoopProcessFramework):
             'bad_start_date': 'Option %s must be subscribed after %s',
             'need_option': 'At least one option must be selected for %s',
             'need_covered': 'There must be at least one covered element',
+            'payment_bank_account_required': 'The payment bank account is '
+                'required as the payment mode is Direct Debit'
         })
         cls.__rpc__.update({'get_allowed_payment_methods': RPC(instantiate=0)})
 
@@ -121,10 +123,6 @@ class ContractSubscription(CoopProcessFramework):
                     and the_billing_manager.payment_bank_account):
                 return the_billing_manager.payment_bank_account.id
 
-    @classmethod
-    def setter_void(cls, contracts, name, values):
-        pass
-
     def check_product_not_null(self):
         if not (hasattr(self, 'offered') and self.offered):
             return False, (('no_product', ()),)
@@ -193,6 +191,17 @@ class ContractSubscription(CoopProcessFramework):
 
         return False, (('no_option', ()),)
 
+    def check_billing_manager(self):
+        result = True
+        errs = []
+        for manager in self.billing_managers:
+            if not manager.payment_mode == 'direct_debit':
+                continue
+            if not manager.payment_bank_account:
+                result = False
+                errs.append(('payment_bank_account_required', ()))
+        return result, errs
+
     def check_option_dates(self):
         result = True
         errs = []
@@ -216,9 +225,6 @@ class ContractSubscription(CoopProcessFramework):
     def finalize_contract(self):
         res = super(ContractSubscription, self).finalize_contract()
         return res
-        # Model = utils.get_relation_model(self.__class__, 'subscription_mgr')
-        # Model.delete([self.subscription_mgr])
-        # return res
 
     def init_subscription_document_request(self):
         DocRequest = Pool().get('ins_product.document_request')
@@ -287,6 +293,15 @@ class ContractSubscription(CoopProcessFramework):
         good_req.clean_extras(documents)
 
         return True, ()
+
+    def subscribe_contract(self, *args, **kwargs):
+        result = super(ContractSubscription, self).subscribe_contract(
+            *args, **kwargs)
+        # Make sure that using the subscribe_contract does not create a
+        # process task
+        result.current_state = None
+        result.save()
+        return result
 
 
 class Option():

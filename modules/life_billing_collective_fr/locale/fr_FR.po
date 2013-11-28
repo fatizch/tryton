@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.move.line:"
+msgid "Rate Note Compensation"
+msgstr "Equilibrage du bordereau"
+
 msgctxt "error:billing.rate_note_reception:"
 msgid "Selected Rate Note is not in a valid status to start reception process"
 msgstr ""
@@ -39,6 +43,10 @@ msgctxt "field:billing.rate_line,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:billing.rate_line,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:billing.rate_line,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -69,7 +77,7 @@ msgstr "Valeur Indexé"
 
 msgctxt "field:billing.rate_line,manual_billing:"
 msgid "Manual Billing"
-msgstr "Facturation manuelle"
+msgstr "Tarification Manuelle"
 
 msgctxt "field:billing.rate_line,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -135,6 +143,10 @@ msgctxt "field:billing.rate_note,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:billing.rate_note,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:billing.rate_note,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -142,6 +154,14 @@ msgstr "Créé par"
 msgctxt "field:billing.rate_note,currency:"
 msgid "Currency"
 msgstr "Devises"
+
+msgctxt "field:billing.rate_note,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:billing.rate_note,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
 
 msgctxt "field:billing.rate_note,end_date:"
 msgid "End Date"
@@ -215,6 +235,10 @@ msgctxt "field:billing.rate_note_line,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:billing.rate_note_line,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:billing.rate_note_line,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -222,6 +246,10 @@ msgstr "Créé par"
 msgctxt "field:billing.rate_note_line,currency:"
 msgid "Currency"
 msgstr "Devises"
+
+msgctxt "field:billing.rate_note_line,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
 
 msgctxt "field:billing.rate_note_line,currency_symbol:"
 msgid "Currency Symbol"
@@ -417,6 +445,10 @@ msgctxt "field:collective.fare_class,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:collective.fare_class,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:collective.fare_class,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -452,6 +484,10 @@ msgstr "Code"
 msgctxt "field:collective.fare_class_group,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
+
+msgctxt "field:collective.fare_class_group,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:collective.fare_class_group,create_uid:"
 msgid "Create User"
@@ -489,6 +525,10 @@ msgctxt "field:collective.fare_class_group-fare_class,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:collective.fare_class_group-fare_class,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:collective.fare_class_group-fare_class,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -524,6 +564,10 @@ msgstr "Type de Conf."
 msgctxt "field:collective.rating_rule,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
+
+msgctxt "field:collective.rating_rule,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:collective.rating_rule,create_uid:"
 msgid "Create User"
@@ -600,6 +644,10 @@ msgstr "Type de Conf."
 msgctxt "field:collective.sub_rating_rule,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
+
+msgctxt "field:collective.sub_rating_rule,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:collective.sub_rating_rule,create_uid:"
 msgid "Create User"
@@ -696,6 +744,10 @@ msgstr "Code"
 msgctxt "field:party.group,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
+
+msgctxt "field:party.group,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:party.group,create_uid:"
 msgid "Create User"
@@ -927,7 +979,7 @@ msgstr "Simple"
 
 msgctxt "view:billing.rate_line:"
 msgid "%"
-msgstr ""
+msgstr "%"
 
 msgctxt "view:billing.rate_line:"
 msgid "Rate Line"
@@ -939,7 +991,7 @@ msgstr "Bordereau de Cotisation"
 
 msgctxt "view:billing.rate_note_line:"
 msgid "%"
-msgstr ""
+msgstr "%"
 
 msgctxt "view:billing.rate_note_line:"
 msgid "Client Total"
@@ -983,7 +1035,7 @@ msgstr "Règle de Tarification Collective"
 
 msgctxt "view:collective.sub_rating_rule:"
 msgid "%"
-msgstr ""
+msgstr "%"
 
 msgctxt "view:collective.sub_rating_rule:"
 msgid "Fare Class Rating Rule"

@@ -3,6 +3,7 @@ import copy
 from trytond.pool import Pool
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
+from trytond.rpc import RPC
 
 from trytond.modules.coop_utils import model, business, utils, fields
 from trytond.modules.coop_utils import coop_string
@@ -284,6 +285,9 @@ class Offered(model.CoopView, GetResult, Templated):
             return self.code
         return coop_string.remove_blank_and_invalid_char(self.name)
 
+    def init_dict_for_rule_engine(self, args):
+        pass
+
 
 class Product(model.CoopSQL, Offered):
     'Product'
@@ -314,7 +318,8 @@ class Product(model.CoopSQL, Offered):
         super(Product, cls).__setup__()
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
-        ]
+            ]
+        cls.__rpc__.update({'get_product_def': RPC()})
 
     def get_valid_coverages(self):
         for coverage in self.coverages:
@@ -322,6 +327,7 @@ class Product(model.CoopSQL, Offered):
                 yield coverage
 
     def init_dict_for_rule_engine(self, args):
+        super(Product, self).init_dict_for_rule_engine(args)
         if not 'product' in args:
             args['product'] = self
 
@@ -445,6 +451,12 @@ class Product(model.CoopSQL, Offered):
             'coverages', 'description', 'subscriber_kind',
             ('currency', 'light')])
         return res
+
+    @classmethod
+    def get_product_def(cls, code):
+        products = cls.search([('code', '=', code)])
+        if len(products) == 1:
+            return products[0].extract_object('full')
 
 
 class ProductOptionsCoverage(model.CoopSQL):

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <tree string="Payment Methods" sequence="order" editable="bottom">
   <field name="payment_method" widget="selection"/>
   <field name="order" tree_invisible="1"/>

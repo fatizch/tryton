@@ -1,22 +1,11 @@
 # -*- coding: utf-8 -*-
-import sys
-import os
-DIR = os.path.abspath(os.path.normpath(os.path.join(
-    __file__, '..', '..', '..', '..', '..', 'trytond')))
-if os.path.isdir(DIR):
-    sys.path.insert(0, os.path.dirname(DIR))
-
 import unittest
 import trytond.tests.test_tryton
 
 from trytond.transaction import Transaction
 from trytond.error import UserError
 
-from trytond.modules.coop_utils import test_framework, utils
-
-MODULE_NAME = os.path.basename(
-    os.path.abspath(
-        os.path.join(os.path.normpath(__file__), '..', '..')))
+from trytond.modules.coop_utils import test_framework
 
 
 class ModuleTestCase(test_framework.CoopTestCase):
@@ -26,7 +15,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     @classmethod
     def get_module_name(cls):
-        return MODULE_NAME
+        return 'rule_engine'
 
     @classmethod
     def get_models(cls):
@@ -99,7 +88,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         ct = self.Context()
         ct.name = 'test_context'
         ct.allowed_elements = []
-        for elem in self.TreeElement.search([]):
+        for elem in self.TreeElement.search([('language.code', '=', 'en_US')]):
             ct.allowed_elements.append(elem)
         self.assertEqual(len(ct.allowed_elements), 7)
         ct.save()
@@ -411,7 +400,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @test_framework.prepare_test('rule_engine.test0020_testAdvancedRule')
     def test0021_testRuleEngineExecution(self):
         rule, = self.RuleEngine.search([('name', '=', 'Test Rule Advanced')])
-        result = utils.execute_rule(rule, rule, {})
+        result = rule.execute({})
         self.assertEqual(result.result, 20)
         self.assertEqual(result.errors, ['test error'])
         self.assertEqual(result.warnings, ['test warning'])
@@ -488,13 +477,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     "Entering rule_test_rule\n"
                     "\tkwargs : {'test_parameter': 20}\n"
                     "\tresult = 20",
-                    'result_warning': 'test warning',
-                    'result_value': '20',
+                    'result_warning': u'test warning',
+                    'result_value': u'20',
                     'debug': '',
-                    'result_errors': 'test error',
-                    'expected_result': "[20, ['test error'], ['test warning'],"
-                    " ['test info']]",
-                    'result_info': 'test info'})
+                    'result_errors': u'test error',
+                    'expected_result': '[20, [test error], [test warning],'
+                    ' [test info]]',
+                    'result_info': u'test info'})
             tc.test_values = [tcv1]
             self.assertEqual(tc.on_change_test_values(), {
                     'low_debug': '',
@@ -512,7 +501,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             tc = self.TestCase()
             tc.description = 'Remove Errors'
             tc.test_values = [tcv1]
-            tc.expected_result = "[20, [], ['test warning'], ['test info']]"
+            tc.expected_result = '[20, [], [test warning], [test info]]'
             tc.rule = rule
             tc.save()
 
@@ -522,7 +511,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             tc.description = 'Override rule'
             tc.test_values = [tcv1]
             tc.expected_result = \
-                "[50, ['test error'], ['test warning'], ['test info']]"
+                '[50, [test error], [test warning], [test info]]'
             tc.rule = rule
             tc.save()
 
@@ -544,19 +533,17 @@ class ModuleTestCase(test_framework.CoopTestCase):
         # Check Debug mode
         rule.debug_mode = True
         rule.save()
-        utils.execute_rule(rule, rule, {})
+        rule.execute({})
         self.assertEqual(len(rule.exec_logs), 1)
 
         # Check execution errors raise UserErrors
+        rule.debug_mode = False
         rule.code = 'return rule_test_rule()'
         rule.save()
-        self.assertRaises(UserError, utils.execute_rule, rule, rule, {})
+        self.assertRaises(UserError, rule.execute, {})
         rule.code = 'return 1 / 0'
         rule.save()
-        self.assertRaises(UserError, utils.execute_rule, rule, rule, {})
-
-        # Check debug mode logs errored executions
-        self.assertEqual(len(rule.exec_logs), 3)
+        self.assertRaises(UserError, rule.execute, {})
 
         # Test that disabling debug_mode effectively delete existing logs
         rule.debug_mode = False

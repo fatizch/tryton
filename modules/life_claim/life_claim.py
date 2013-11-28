@@ -17,14 +17,14 @@ __all__ = [
 class LifeClaim():
     'Claim'
 
-    __name__ = 'ins_claim.claim'
+    __name__ = 'claim.claim'
     __metaclass__ = PoolMeta
 
 
 class LifeLoss():
     'Life Loss'
 
-    __name__ = 'ins_claim.loss'
+    __name__ = 'claim.loss'
     __metaclass__ = PoolMeta
 
     possible_covered_persons = fields.Function(
@@ -80,7 +80,7 @@ class LifeLoss():
 class LifeClaimDeliveredService():
     'Claim Delivered Service'
 
-    __name__ = 'ins_contract.delivered_service'
+    __name__ = 'contract.delivered_service'
     __metaclass__ = PoolMeta
 
     def get_covered_person(self):
@@ -102,7 +102,7 @@ class LifeClaimDeliveredService():
 class LifeIndemnification():
     'Indemnification'
 
-    __name__ = 'ins_claim.indemnification'
+    __name__ = 'claim.indemnification'
     __metaclass__ = PoolMeta
 
     def get_beneficiary(self, beneficiary_kind, del_service):

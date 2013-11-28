@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<form string="Loan Share">
+    <label name="loan"/>
+    <field name="loan"/>
+    <newline/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <label name="share"/>
+    <group id="share">
+      <field name="share" xexpand="0" factor="100"/>
+      <label string="%" id="share" xexpand="0" xalign="0"/>
+    </group>
+    <label name="person"/>
+    <field name="person"/>
+</form>

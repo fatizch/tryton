@@ -14,7 +14,7 @@ RateNoteLineTreeExpansion = expand_tree('billing.rate_note_line')
 
 def register():
     Pool.register(
-        # From Product
+        # from Product
         Product,
         Coverage,
         CollectiveRatingRule,
@@ -22,10 +22,10 @@ def register():
         FareClassGroup,
         FareClassGroupFareClassRelation,
         SubRatingRule,
-        #From Contract
+        #from Contract
         Contract,
         CoveredData,
-        # From billing,
+        # from billing,
         RateLine,
         RateNote,
         RateNoteLine,
@@ -42,13 +42,13 @@ def register():
         MoveLine,
         # from Rule Engine
         OfferedContext,
-        # From Party
+        # from Party
         GroupParty,
         Party,
-        #For tree expand
+        # For tree expand
         RateLineTreeExpansion,
         RateNoteLineTreeExpansion,
-        # From Company
+        # from Company
         Company,
         module='life_billing_collective_fr', type_='model')
     Pool.register(

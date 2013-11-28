@@ -102,6 +102,10 @@ class Coverage(model.CoopSQL, Offered):
             'subscription_behaviour'])
         return res
 
+    def init_dict_for_rule_engine(self, args):
+        super(Coverage, self).init_dict_for_rule_engine(args)
+        args['coverage'] = self
+
 
 class PackageCoverage(model.CoopSQL):
     'Link Package Coverage'

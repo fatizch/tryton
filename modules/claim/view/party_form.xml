@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='summary']/field[@name='summary']" position="before">
+        <newline/>
+        <label name="last_claim"/>
+        <group id='last_claim' col='50' colspan="3">
+            <field name="last_claim" colspan="49"/>
+            <button string="+" name="open_claims"/>
+        </group>
+    </xpath>
+    <xpath expr="/form" position="inside">
+        <newline/>
+        <field name="number_of_claims"/>
+    </xpath>
+</data>

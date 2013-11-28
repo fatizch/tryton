@@ -50,6 +50,10 @@ msgctxt "field:contract.address,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:contract.clause,covered_data:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
 msgctxt "field:contract.contract,addresses:"
 msgid "Addresses"
 msgstr "Adresses"
@@ -170,6 +174,10 @@ msgctxt "field:contract.contract.history,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:contract.contract.history,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:contract.contract.history,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -245,6 +253,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:contract.contract.history,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:contract.delivered_service,expenses:"
+msgid "Expenses"
+msgstr "Frais"
 
 msgctxt "field:contract.subscribed_option,benefits:"
 msgid "Benefits"
@@ -326,6 +338,10 @@ msgctxt "field:contract.subscribed_option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ins_contract.covered_data,clauses:"
+msgid "Clauses"
+msgstr "Clauses"
+
 msgctxt "field:ins_contract.covered_data,complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
@@ -346,6 +362,10 @@ msgctxt "field:ins_contract.covered_data,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:ins_contract.covered_data,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:ins_contract.covered_data,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -353,6 +373,10 @@ msgstr "Créé par"
 msgctxt "field:ins_contract.covered_data,currency:"
 msgid ""
 msgstr " "
+
+msgctxt "field:ins_contract.covered_data,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
 
 msgctxt "field:ins_contract.covered_data,currency_symbol:"
 msgid "Currency Symbol"
@@ -438,9 +462,25 @@ msgctxt "field:ins_contract.covered_element,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:ins_contract.covered_element,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:ins_contract.covered_element,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:ins_contract.covered_element,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:ins_contract.covered_element,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:ins_contract.covered_element,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
 
 msgctxt "field:ins_contract.covered_element,id:"
 msgid "ID"
@@ -510,6 +550,10 @@ msgctxt "field:ins_contract.covered_element-party_relation,create_date:"
 msgid ""
 msgstr " "
 
+msgctxt "field:ins_contract.covered_element-party_relation,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:ins_contract.covered_element-party_relation,create_uid:"
 msgid ""
 msgstr " "
@@ -534,54 +578,6 @@ msgctxt "field:ins_contract.covered_element-party_relation,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.delivered_service,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:ins_contract.delivered_service,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_contract.delivered_service,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_contract.delivered_service,expenses:"
-msgid "Expenses"
-msgstr "Frais"
-
-msgctxt "field:ins_contract.delivered_service,func_error:"
-msgid "Error"
-msgstr "Erreur"
-
-msgctxt "field:ins_contract.delivered_service,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_contract.delivered_service,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:ins_contract.delivered_service,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_contract.delivered_service,status:"
-msgid "Status"
-msgstr "Statut"
-
-msgctxt "field:ins_contract.delivered_service,subscribed_service:"
-msgid "Coverage"
-msgstr "Garantie"
-
-msgctxt "field:ins_contract.delivered_service,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_contract.delivered_service,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:ins_contract.expense,amount:"
 msgid "Amount"
 msgstr "Montant"
@@ -589,6 +585,10 @@ msgstr "Montant"
 msgctxt "field:ins_contract.expense,create_date:"
 msgid ""
 msgstr " "
+
+msgctxt "field:ins_contract.expense,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:ins_contract.expense,create_uid:"
 msgid ""
@@ -637,6 +637,10 @@ msgstr "Contrat"
 msgctxt "field:ins_contract.management_role,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
+
+msgctxt "field:ins_contract.management_role,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:ins_contract.management_role,create_uid:"
 msgid "Create User"
@@ -726,6 +730,10 @@ msgctxt "field:ins_contract.subscribed_coverage_complement,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:ins_contract.subscribed_coverage_complement,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:ins_contract.subscribed_coverage_complement,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -769,9 +777,61 @@ msgctxt "field:ins_product.request_finder,tmp_0:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "field:party.customer,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:party.customer,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:party.customer,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.customer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.customer,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:party.customer,party:"
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:party.customer,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.customer,reference:"
+msgid "Reference"
+msgstr "Référence"
+
+msgctxt "field:party.customer,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.customer,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:party.party,complementary_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
 msgctxt "field:party.party,covered_elements:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
+
+msgctxt "field:party.party,customer_role:"
+msgid "Customer"
+msgstr "Client"
+
+msgctxt "field:party.party,is_customer:"
+msgid "Customer"
+msgstr "Client"
 
 msgctxt "model:contract.address,name:"
 msgid "Contract Address"
@@ -784,6 +844,10 @@ msgstr "Contrat"
 msgctxt "model:contract.contract.history,name:"
 msgid "Contract History"
 msgstr "Historique de Contrat"
+
+msgctxt "model:contract.delivered_service,name:"
+msgid "Delivered Service"
+msgstr "Prestation Fournie"
 
 msgctxt "model:contract.subscribed_option,name:"
 msgid "Subscribed Coverage"
@@ -800,10 +864,6 @@ msgstr "Elément Couvert"
 msgctxt "model:ins_contract.covered_element-party_relation,name:"
 msgid ""
 msgstr " "
-
-msgctxt "model:ins_contract.delivered_service,name:"
-msgid "Delivered Service"
-msgstr "Prestation Fournie"
 
 msgctxt "model:ins_contract.expense,name:"
 msgid ""
@@ -853,6 +913,10 @@ msgctxt "model:ir.ui.menu,name:menu_renew_contract"
 msgid "Renew Contracts"
 msgstr "Renouvellement"
 
+msgctxt "model:party.customer,name:"
+msgid "Customer"
+msgstr "Client"
+
 msgctxt "selection:contract.contract,status:"
 msgid "Active"
 msgstr "Actif"
@@ -868,6 +932,22 @@ msgstr "Devis"
 msgctxt "selection:contract.contract,status:"
 msgid "Terminated"
 msgstr "Terminé"
+
+msgctxt "selection:contract.delivered_service,status:"
+msgid "Calculated"
+msgstr "Calculé"
+
+msgctxt "selection:contract.delivered_service,status:"
+msgid "Calculating"
+msgstr "Calcul en Cours"
+
+msgctxt "selection:contract.delivered_service,status:"
+msgid "Delivered"
+msgstr "Delivré"
+
+msgctxt "selection:contract.delivered_service,status:"
+msgid "Not Eligible"
+msgstr "Non Eligible"
 
 msgctxt "selection:contract.subscribed_option,status:"
 msgid "Active"
@@ -912,22 +992,6 @@ msgstr "Refusé"
 msgctxt "selection:ins_contract.covered_data,status:"
 msgid "Terminated"
 msgstr "Terminé"
-
-msgctxt "selection:ins_contract.delivered_service,status:"
-msgid "Calculated"
-msgstr "Calculé"
-
-msgctxt "selection:ins_contract.delivered_service,status:"
-msgid "Calculating"
-msgstr "Calcul en Cours"
-
-msgctxt "selection:ins_contract.delivered_service,status:"
-msgid "Delivered"
-msgstr "Delivré"
-
-msgctxt "selection:ins_contract.delivered_service,status:"
-msgid "Not Eligible"
-msgstr "Non Eligible"
 
 msgctxt "selection:ins_contract.management_role,kind:"
 msgid ""
@@ -966,12 +1030,20 @@ msgid "Addresses"
 msgstr "Adresses"
 
 msgctxt "view:contract.contract:"
+msgid "Clauses"
+msgstr "Clauses"
+
+msgctxt "view:contract.contract:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
 
 msgctxt "view:contract.contract:"
 msgid "Managing Entities"
 msgstr "Délégataires"
+
+msgctxt "view:contract.delivered_service:"
+msgid "Delivered Service"
+msgstr "Prestation Fournie"
 
 msgctxt "view:contract.subscribed_option:"
 msgid "Covered Data"
@@ -1008,10 +1080,6 @@ msgstr "Relations Couvertes"
 msgctxt "view:ins_contract.covered_element:"
 msgid "Sub Covered Elements"
 msgstr "Sous Eléments Couverts"
-
-msgctxt "view:ins_contract.delivered_service:"
-msgid "Delivered Service"
-msgstr "Prestation Fournie"
 
 msgctxt "view:ins_contract.expense:"
 msgid "Expense"

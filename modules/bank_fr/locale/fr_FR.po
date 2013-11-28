@@ -1,0 +1,27 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:bank.account.number:"
+msgid "Invalid RIB number : %s"
+msgstr ""
+
+msgctxt "field:bank.account.number,account_number:"
+msgid "Account Number"
+msgstr "Numéro de Compte"
+
+msgctxt "field:bank.account.number,bank_code:"
+msgid "Bank Code"
+msgstr "Code Banque"
+
+msgctxt "field:bank.account.number,branch_code:"
+msgid "Branch Code"
+msgstr "Code Guichet"
+
+msgctxt "field:bank.account.number,key:"
+msgid "Key"
+msgstr "Clé"
+
+msgctxt "selection:bank.account.number,type:"
+msgid "RIB"
+msgstr ""

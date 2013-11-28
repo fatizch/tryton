@@ -9,6 +9,7 @@ from .business import *
 from .session import *
 from .test_framework import *
 from .batchs import *
+from .test_case_framework import *
 
 
 def register():
@@ -18,6 +19,10 @@ def register():
         ExportInstance,
         Group,
         UIMenu,
+        RuleGroup,
+        Action,
+        IrModel,
+        ModelAccess,
         # from model
         FileSelector,
         TableOfTable,
@@ -26,28 +31,27 @@ def register():
         VersionObject,
         # from session
         DateClass,
+        # from test_case_framework
+        TestCaseModel,
+        TestCaseSelector,
+        SelectTestCase,
+        TestCaseFileSelector,
         module='coop_utils', type_='model')
     Pool.register(
         # from export
         ImportWizard,
+        # from test_case_framework
+        TestCaseWizard,
         module='coop_utils', type_='wizard')
 
     add_export_to_model([
-            ('ir.model', ('model',)),
             ('ir.model.field', ('name', 'model.model')),
-            ('res.group', ('name',)),
-            ('ir.ui.menu', ('name',)),
             ('ir.model.field.access', ('field.name', 'field.model.model')),
-            ('ir.rule.group', ('name',)),
             ('ir.sequence', ('code', 'name')),
             ('res.user', ('login',)),
-            ('ir.action', ('type', 'name')),
             ('ir.action.keyword', ('keyword',)),
             ('res.user.warning', ('name', 'user')),
             ('ir.rule', ('domain',)),
-            ('ir.model.access', ('group.name', 'model.model')),
             ('ir.ui.view', ('module', 'type', 'name')),
             ('ir.lang', ('code',)),
-            ('currency.currency', ('code',)),
-            ('currency.currency.rate', ()),
             ], 'coop_utils')

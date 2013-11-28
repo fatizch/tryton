@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <tree string="Kwargs" editable="bottom">
   <field name="name"/>
   <field name="code"/>

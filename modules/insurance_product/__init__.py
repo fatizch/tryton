@@ -7,6 +7,7 @@ from .benefit import *
 from .clause import *
 from .process import *
 from .party import *
+from .test_case import *
 
 
 def register():
@@ -48,7 +49,6 @@ def register():
         DocumentRequestDisplayer,
         DocumentRequestBatch,
         # from pricing_rule
-        SimplePricingRule,
         PricingRule,
         PricingComponent,
         TaxVersion,
@@ -75,7 +75,6 @@ def register():
         # from rule_sets
         SubscriberContext,
         PersonContext,
-        ContractContext,
         OptionContext,
         CoveredDataContext,
         RuleCombinationContext,
@@ -88,6 +87,8 @@ def register():
         ProcessProductRelation,
         ProcessDesc,
         ExpenseKind,
+        # from test_case
+        TestCaseModel,
         module='insurance_product', type_='model')
     Pool.register(
         LetterReport,

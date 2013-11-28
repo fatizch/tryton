@@ -88,7 +88,7 @@ class CommissionOption():
         return self.current_policy_owner.account_payable
 
 
-class CompensatedOption(model.CoopSQL, model.CoopView):
+class CompensatedOption(model.CoopSQL, model.CoopView, model.ModelCurrency):
     'Compensated Option'
 
     __name__ = 'commission.compensated_option'
@@ -102,16 +102,13 @@ class CompensatedOption(model.CoopSQL, model.CoopView):
         'Subscribed Coverage', domain=[('coverage_kind', '=', 'insurance')],
         ondelete='CASCADE')
     use_specific_rate = fields.Boolean('Specific Rate')
-    rate = fields.Numeric('Rate', states={
+    rate = fields.Numeric('Rate', digits=(16, 4), states={
             'invisible': ~Eval('use_specific_rate'),
             'required': ~~Eval('use_specific_rate'),
             })
     com_amount = fields.Function(
         fields.Numeric('Com Amount'),
         'get_com_amount')
-    currency_symbol = fields.Function(
-        fields.Char('Currency Symbol'),
-        'get_currency_symbol')
 
     def get_rec_name(self, name):
         option = None

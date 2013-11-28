@@ -16,6 +16,7 @@ from pyflakes.checker import Checker
 import pyflakes.messages
 
 from trytond.rpc import RPC
+from trytond import backend
 
 from trytond.modules.coop_utils import fields
 from trytond.modules.coop_utils.model import CoopSQL as ModelSQL
@@ -185,23 +186,33 @@ class RuleEngineResult(object):
         return bool(self.errors)
 
     def __str__(self):
-        return '[' + ', '.join(map(str, [
-            self.result, self.errors, self.warnings, self.info])) + ']'
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
+        result = '[' + self.print_result()
+        result += ', [' + ', '.join(self.print_errors()) + ']'
+        result += ', [' + ', '.join(self.print_warnings()) + ']'
+        result += ', [' + ', '.join(self.print_info()) + ']'
+        result += ']'
+        return result
 
     def print_errors(self):
-        return map(str, self.errors)
+        return map(unicode, self.errors)
 
     def print_warnings(self):
-        return map(str, self.warnings)
+        return map(unicode, self.warnings)
 
     def print_info(self):
-        return map(str, self.info)
+        return map(unicode, self.info)
 
     def print_debug(self):
-        return map(str, self.debug)
+        return map(unicode, self.debug)
 
     def print_result(self):
-        return str(self.result)
+        return unicode(self.result)
+
+    def print_low_level_debug(self):
+        return map(unicode, self.low_level_debug)
 
 
 class RuleExecutionLog(ModelSQL, ModelView):
@@ -256,6 +267,10 @@ class RuleEngineContext(CoopView):
     def append_error(cls, args, error_msg):
         cls.get_result(args).errors.append(error_msg)
 
+    @classmethod
+    def debug(cls, args, debug):
+        args['__result__'].debug.append(debug)
+
 
 class RuleTools(RuleEngineContext):
     '''
@@ -270,6 +285,14 @@ class RuleTools(RuleEngineContext):
             args['errors'].append('years_between needs datetime types')
             raise CatchedRuleEngineError
         return coop_date.number_of_years_between(date1, date2)
+
+    @classmethod
+    def _re_days_between(cls, args, date1, date2):
+        if (not isinstance(date1, datetime.date)
+                or not isinstance(date2, datetime.date)):
+            args['errors'].append('days_between needs datetime types')
+            raise CatchedRuleEngineError
+        return coop_date.number_of_days_between(date1, date2)
 
     @classmethod
     def _re_today(cls, args):
@@ -420,9 +443,8 @@ class RuleEngineParameter(ModelView, ModelSQL):
     def get_translated_technical_name(self):
         return '%s_%s' % (self.kind, self.code)
 
-    def execute_rule(self, evaluation_context, **kwargs):
-        result = utils.execute_rule(self, self.the_rule, evaluation_context,
-            **kwargs)
+    def execute_rule(self, evaluation_context, **execution_kwargs):
+        result = self.the_rule.execute(evaluation_context, execution_kwargs)
         if result.has_errors:
             raise InternalRuleEngineError(
                 'Impossible to evaluate parameter %s when computing rule %s' %
@@ -561,7 +583,7 @@ class Rule(ModelView, ModelSQL):
                 ('rule', 'Rule'), ('table', 'Table')],
             'Kind', states={'invisible': ~Eval('extra_data')}),
         'get_extra_data_kind', 'setter_void')
-    tags = fields.Many2Many('rule_engine.rule_engine-tag', 'rule_engine',
+    tags = fields.Many2Many('rule_engine-tag', 'rule_engine',
         'tag', 'Tags')
     tags_name = fields.Function(
         fields.Char('Tags', on_change_with=['tags']),
@@ -686,28 +708,31 @@ class Rule(ModelView, ModelSQL):
     def get_context_for_execution(self):
         return self.context.get_context(self)
 
-    def add_rule_parameters_to_context(self, evaluation_context, kwargs,
-            context):
-        if not kwargs:
-            kwargs = {}
+    def add_rule_parameters_to_context(self, evaluation_context,
+            execution_kwargs, context):
         for elem in self.rule_parameters:
-            elem.as_context(evaluation_context, context, kwargs[elem.code]
-                if elem.code in kwargs else None)
+            if elem.code in execution_kwargs:
+                forced_value = execution_kwargs[elem.code]
+            elif elem.code in execution_kwargs:
+                forced_value = execution_kwargs[elem.code]
+            else:
+                forced_value = None
+            elem.as_context(evaluation_context, context, forced_value)
 
-    def prepare_context(self, evaluation_context, debug_mode, **kwargs):
+    def prepare_context(self, evaluation_context, execution_kwargs):
         context = self.get_context_for_execution()
         the_result = RuleEngineResult()
         context['__result__'] = the_result
-        self.add_rule_parameters_to_context(evaluation_context, kwargs,
-            context)
+        self.add_rule_parameters_to_context(evaluation_context,
+            execution_kwargs, context)
         context.update(evaluation_context)
         context['context'] = context
         return context
 
-    def compute(self, evaluation_context, debug_mode=False, **kwargs):
-        with Transaction().set_context(debug=debug_mode):
-            context = self.prepare_context(evaluation_context, debug_mode,
-                **kwargs)
+    def compute(self, evaluation_context, execution_kwargs):
+        with Transaction().set_context(debug=self.debug_mode):
+            context = self.prepare_context(evaluation_context,
+                execution_kwargs)
             the_result = context['__result__']
             localcontext = {}
             try:
@@ -716,7 +741,7 @@ class Rule(ModelView, ModelSQL):
                     ('result_%s' % hash(self.name)).replace('-', '_')]
                 the_result.result_set = True
             except (TooFewFunctionCall, TooManyFunctionCall):
-                if debug_mode:
+                if self.debug_mode:
                     raise
             except CatchedRuleEngineError:
                 pass
@@ -756,8 +781,13 @@ class Rule(ModelView, ModelSQL):
                             coop_string.remove_invalid_char(self.name) +
                             ' - ' + str(exc))
                         rule_execution.save()
-                        transaction.cursor.commit()
-                if debug_mode:
+                        DatabaseOperationalError = backend.get(
+                            'DatabaseOperationalError')
+                        try:
+                            transaction.cursor.commit()
+                        except DatabaseOperationalError:
+                            transaction.cursor.rollback()
+                if self.debug_mode:
                     the_result.result = str(exc)
                     return the_result
                 self.raise_user_error('bad_rule_computation', (self.name,
@@ -834,6 +864,26 @@ class Rule(ModelView, ModelSQL):
     def search_tags(cls, name, clause):
         return [('tags.name',) + tuple(clause[1:])]
 
+    def execute(self, arguments, parameters=None):
+        result = self.compute(arguments,
+            {} if parameters is None else parameters)
+        if not (hasattr(self, 'debug_mode') and self.debug_mode):
+            return result
+        DatabaseOperationalError = backend.get('DatabaseOperationalError')
+        with Transaction().new_cursor() as transaction:
+            RuleExecution = Pool().get('rule_engine.execution_log')
+            rule_execution = RuleExecution()
+            rule_execution.rule = self
+            rule_execution.create_date = datetime.datetime.now()
+            rule_execution.user = transaction.user
+            rule_execution.init_from_rule_result(result)
+            rule_execution.save()
+            try:
+                transaction.cursor.commit()
+            except DatabaseOperationalError:
+                transaction.cursor.rollback()
+        return result
+
 
 class Context(ModelView, ModelSQL):
     "Context"
@@ -880,6 +930,12 @@ class Context(ModelView, ModelSQL):
         for element in self.allowed_elements:
             element.as_context(context)
         return context
+
+    @classmethod
+    def _export_light(cls):
+        result = super(Context, cls)._export_light()
+        result.add('allowed_elements')
+        return result
 
 
 class TreeElement(ModelView, ModelSQL):
@@ -1165,7 +1221,7 @@ class TestCase(ModelView, ModelSQL):
         test_context = {
             key: noargs_func(key, value)
             for key, value in test_context.items()}
-        return self.rule.compute(test_context, debug_mode=True)
+        return self.rule.execute(test_context)
 
     def on_change_test_values(self):
         try:
@@ -1189,7 +1245,7 @@ class TestCase(ModelView, ModelSQL):
             'result_warning': '\n'.join(test_result.print_warnings()),
             'result_errors': '\n'.join(test_result.print_errors()),
             'debug': '\n'.join(test_result.print_debug()),
-            'low_debug': '\n'.join(test_result.low_level_debug),
+            'low_debug': '\n'.join(test_result.print_low_level_debug()),
             'expected_result': str(test_result),
         }
 
@@ -1200,11 +1256,10 @@ class TestCase(ModelView, ModelSQL):
             raise
             return False, sys.exc_info()
         try:
-            assert str(test_result) == self.expected_result
+            assert unicode(test_result) == self.expected_result
             return True, None
         except AssertionError:
-            return False, str(test_result) + ' vs. ' + str(
-                self.expected_result)
+            return False, unicode(test_result) + ' vs. ' + self.expected_result
         except:
             return False, str(sys.exc_info())
 
@@ -1281,6 +1336,9 @@ class RuleError(model.CoopSQL, model.CoopView):
     arguments = fields.Char('Arguments')
 
     def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
         return '[%s] %s' % (self.kind, self.name)
 
     @classmethod
@@ -1333,8 +1391,8 @@ class RuleError(model.CoopSQL, model.CoopView):
 class RuleEngineTagRelation(model.CoopSQL):
     'Relation between rule engine and tag'
 
-    __name__ = 'rule_engine.rule_engine-tag'
+    __name__ = 'rule_engine-tag'
 
     rule_engine = fields.Many2One('rule_engine',
         'Rule Engine', ondelete='CASCADE')
-    tag = fields.Many2One('rule_engine.tag', 'Tag', ondelete='RESTRICT')
+    tag = fields.Many2One('tag', 'Tag', ondelete='RESTRICT')

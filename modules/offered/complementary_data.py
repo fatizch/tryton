@@ -78,14 +78,6 @@ class ComplementaryDataDefinition(
             [(elem, getattr(cls, elem)) for elem in dir(cls) if
                 elem.startswith('default_value_')])
 
-        cls.type_ = copy.copy(cls.type_)
-        utils.remove_tuple_from_list(cls.type_.selection, 'sha')
-        utils.remove_tuple_from_list(cls.type_.selection, 'datetime')
-        utils.remove_tuple_from_list(cls.type_.selection, 'float')
-        utils.remove_tuple_from_list(cls.type_.selection, 'timestamp')
-        utils.remove_tuple_from_list(cls.type_.selection, 'time')
-        utils.remove_tuple_from_list(cls.type_.selection, 'binary')
-
         cls.name = copy.copy(cls.name)
         if not cls.name.on_change_with:
             cls.name.on_change_with = []
@@ -262,7 +254,7 @@ class ComplementaryDataDefinition(
         # We set a boolean to know if the value is forced through rule engine
         new_vals[self.name] = (cur_value, False)
         if self.sub_data_config_kind == 'advanced' and self.rule:
-            rule_engine_result = utils.execute_rule(self, self.rule, args)
+            rule_engine_result = self.rule.execute(args)
             if (not rule_engine_result.errors
                     and type(rule_engine_result.result) is dict):
                 for key, value in rule_engine_result.result.items():
@@ -360,10 +352,16 @@ class ComplementaryDataRecursiveRelation(model.CoopSQL, model.CoopView):
 class Tag():
     'Tag'
 
-    __name__ = 'rule_engine.tag'
+    __name__ = 'tag'
 
     compl_data_defs = fields.Many2Many('offered.compl_data_def-tag', 'tag',
         'compl_data_def', 'Complementary Data')
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(Tag, cls)._export_skips()
+        result.add('compl_data_defs')
+        return result
 
 
 class ComplementaryDataDefTagRelation(model.CoopSQL):
@@ -373,4 +371,4 @@ class ComplementaryDataDefTagRelation(model.CoopSQL):
 
     compl_data_def = fields.Many2One('offered.complementary_data_def',
         'Complementary Data Def', ondelete='CASCADE')
-    tag = fields.Many2One('rule_engine.tag', 'Tag', ondelete='RESTRICT')
+    tag = fields.Many2One('tag', 'Tag', ondelete='RESTRICT')

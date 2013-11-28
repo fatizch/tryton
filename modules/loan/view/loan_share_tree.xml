@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<tree string="Loan Shares" editable="bottom">
+    <field name="loan"/>
+    <field name="share" factor="100">
+        <suffix string="%"/>
+    </field>
+    <field name="person"/>
+    <field name="start_date"/>
+    <field name="end_date"/>
+</tree>

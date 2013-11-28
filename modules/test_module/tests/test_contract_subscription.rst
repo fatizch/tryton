@@ -4,14 +4,16 @@ Contract Subscription Scenario
 
 Imports::
 
-    >>> import os
     >>> from proteus import config, Model, Wizard
 
 Constants::
 
     >>> NEEDED_MODULES = [
     ...     'coop_translation',
+    ...     'coop_party',
+    ...     'coop_party_fr',
     ...     'coop_bank',
+    ...     'bank_fr',
     ...     'table',
     ...     'health_fr',
     ...     'property_product',
@@ -20,12 +22,16 @@ Constants::
     ...     'coop_process',
     ...     'life_claim_process',
     ...     'loan_claim',
-    ...     'life_contract_collective',
     ...     'insurance_collective_subscription',
     ...     'commission',
+    ...     'commission_collective',
     ...     'billing',
+    ...     'billing_individual',
     ...     'coop_account_payment',
     ...     'coop_account_payment_sepa',
+    ...     'life_billing_collective_fr',
+    ...     'insurance_collection',
+    ...     'cash_value_contract',
     ...     ]
 
 Create Database::
@@ -40,12 +46,10 @@ Create Database::
 
 Import Exported DB::
 
-    >>> import_wizard = Wizard('coop_utils.import_wizard')
-    >>> with open(os.path.abspath(os.path.normpath(os.path.join(
-    ...                     __file__, '..', 'exported_db.json'))), 'r') as f:
-    ...     file_content = f.read()
-    ...     import_wizard.form.selected_file = file_content
-    ...     import_wizard.execute('file_import')
+    >>> wizard = Wizard('coop_utils.test_case_wizard')
+    >>> wizard.form.select_all_files = True
+    >>> wizard.execute('execute_test_cases')
+    >>> wizard.execute('end')
     >>> Product = Model.get('offered.product')
     >>> len(Product.find([], order=[('code', 'ASC')]))
     9

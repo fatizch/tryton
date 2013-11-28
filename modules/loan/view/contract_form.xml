@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='cov_elements']" position="after">
+        <page id="loans" string="Loans"
+            states="{'invisible': ~Eval('is_loan')}">
+            <button name="create_loan" string="Create Loan"/>
+            <field name="loans" colspan="4"/>
+        </page>
+    </xpath>
+</data>

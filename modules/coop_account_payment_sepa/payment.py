@@ -5,8 +5,9 @@ import genshi
 import genshi.template
 
 from trytond.pool import Pool, PoolMeta
-from trytond.model import fields
 from trytond.pyson import Eval
+
+from trytond.modules.coop_utils import fields, export
 
 __metaclass__ = PoolMeta
 __all__ = ['Journal', 'Group', 'Payment']
@@ -24,7 +25,7 @@ def remove_comment(stream):
         yield kind, data, pos
 
 
-class Journal:
+class Journal(export.ExportImportMixin):
     __name__ = 'account.payment.journal'
     sepa_bank_account_number = fields.Many2One('bank.account.number',
         'Bank Account', states={
@@ -40,6 +41,10 @@ class Journal:
         sepa_method = ('sepa', 'Sepa')
         if sepa_method not in cls.process_method.selection:
             cls.process_method.selection.append(sepa_method)
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['name'])
 
 
 class Group:

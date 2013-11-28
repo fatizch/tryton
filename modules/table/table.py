@@ -337,10 +337,13 @@ class TableDefinition(ModelSQL, ModelView):
 
     def get_kind(self, name):
         nb_dim = 0
+        has_date_range = False
         for i in range(1, DIMENSION_MAX + 1):
             if getattr(self, 'dimension_kind%s' % i):
                 nb_dim += 1
-        if nb_dim == 1:
+                if getattr(self, 'dimension_kind%s' % i) == 'range-date':
+                    has_date_range = True
+        if nb_dim == 1 and has_date_range:
             return 'Index'
         elif nb_dim == 2:
             return 'Table'
@@ -602,12 +605,6 @@ class TableCell(ModelSQL, ModelView):
                 'definition', 'dimension1', 'dimension2',
                 'dimension3', 'dimension4'], 'add')
 
-    # @classmethod
-    # def _export_light(cls):
-        # return set([
-            # 'definition', 'dimension1', 'dimension2', 'dimension3',
-            # 'dimension4'])
-
     @classmethod
     def fields_get(cls, fields_names=None):
         pool = Pool()
@@ -811,6 +808,20 @@ class TableOpen2DAskDimensions(ModelView):
     @classmethod
     def default_dimension4_required(cls):
         return cls.default_dimension_required(4)
+
+    @classmethod
+    def fields_view_get(cls, view_id=None, view_type='form'):
+        'Dynamically use the current table dimension names'
+        result = super(TableOpen2DAskDimensions, cls).fields_view_get(view_id,
+            view_type)
+        TableDefinition = Pool().get('table.table_def')
+        definition_id = Transaction().context.get('active_id')
+        if definition_id:
+            definition = TableDefinition(definition_id)
+            view_fields = result['fields']
+            view_fields['dimension3']['string'] = definition.dimension_name3
+            view_fields['dimension4']['string'] = definition.dimension_name4
+        return result
 
 
 class TableOpen2D(Wizard):
@@ -1163,6 +1174,8 @@ class DimensionDisplayer(ModelView):
         if self.kind != getattr(self.table, 'dimension_kind%s' %
                 self.cur_dimension):
             return False
+        if not self.input_text and self.input_mode == 'flat_file':
+            return True
         if self.input_text:
             return False
         if self.get_existing_values(self.kind, self.values) != \
@@ -1200,7 +1213,7 @@ class DimensionDisplayer(ModelView):
     def convert_existing_values(cls, values, kind, date_format=None):
         res = []
         if kind in ('value', 'range'):
-            the_func = lambda x: x
+            the_func = lambda x: str(x)
         elif kind in ('date', 'range-date'):
             the_func = lambda x: datetime.strftime(x, date_format)
         for elem in values:
@@ -1215,6 +1228,9 @@ class DimensionDisplayer(ModelView):
         elif self.kind in ('date', 'range-date'):
             the_list = []
             for elem in text_values:
+                if elem == 'None':
+                    the_list.append(None)
+                    continue
                 try:
                     the_list.append(datetime.strptime(elem, self.date_format))
                 except ValueError:
@@ -1258,7 +1274,6 @@ class ManageDimensionGeneric(Wizard):
         TableDimension = Pool().get('table.table_dimension')
         Displayer = Pool().get('table.dimension_displayer')
         selected_table = TableDef(Transaction().context.get('active_id'))
-        # Let's assume we are working on dimension 1 for now
         selected_dimension = self.get_my_dimension()
 
         values = TableDimension.search([
@@ -1310,6 +1325,7 @@ class ManageDimensionGeneric(Wizard):
             new_dim = Dimension()
             new_dim.type = 'dimension%s' % idx
             new_dim.definition = the_table.id
+            new_dim.sequence = i
             if dim_type == 'date':
                 new_dim.date = elem
             elif dim_type == 'value':

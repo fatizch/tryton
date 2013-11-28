@@ -1,8 +1,0 @@
-msgid "Spouse"
-msgstr "Conjoint"
-
-msgid "Parent"
-msgstr "Parent"
-
-msgid "Children"
-msgstr "Enfant"

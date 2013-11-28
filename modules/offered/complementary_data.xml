@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <tryton>
   <data>
     <!-- Complementary Datas -->
@@ -39,7 +39,7 @@
       <field name="name">complementary_data_recursive_relation_tree</field>
     </record>
     <record model="ir.ui.view" id="tag_view_form">
-        <field name="model">rule_engine.tag</field>
+        <field name="model">tag</field>
         <field name="type">form</field>
         <field name="inherit" ref="rule_engine.tag_view_form"/>
         <field name="name">tag_form</field>

@@ -1,9 +1,9 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <form string="Collection">
   <label name="create_user"/>
   <field name="create_user"/>
-  <label name="create_date"/>
-  <field name="create_date"/>
+  <label name="create_date_"/>
+  <field name="create_date_"/>
   <label name="amount"/>
   <field name="amount" colspan="3"/>
   <label name="kind"/>

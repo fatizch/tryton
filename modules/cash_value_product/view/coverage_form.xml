@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+  <xpath expr="/form/notebook/page/notebook" position="inside">
+    <page string="Cash Value" id="cash_value" states="{'invisible': Or(Bool(Eval('is_package')), Eval('family') != 'cash_value')}">
+      <field name="cash_value_rules" colspan="4"/>
+    </page>
+  </xpath>
+  <xpath expr="/form/notebook/page/notebook/page[@id='coverage_amount']" position="replace_attributes">
+    <page string="Coverage Amount" id="coverage_amount" states="{'invisible': Or(Bool(Eval('is_package')), Not(In(Eval('family'), ['cash_value', 'life_product.definition'])))}"/>
+  </xpath>
+</data>

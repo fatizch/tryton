@@ -1,3 +1,5 @@
+import traceback
+import sys
 import copy
 import datetime
 import logging
@@ -5,6 +7,8 @@ try:
     import simplejson as json
 except ImportError:
     import json
+
+from sql.operators import Concat
 
 from trytond.protocols.jsonrpc import JSONEncoder, object_hook
 from trytond.model import Model, ModelSQL, ModelView, fields as tryton_fields
@@ -29,6 +33,10 @@ __all__ = [
     'ExportPackage',
     'Group',
     'UIMenu',
+    'RuleGroup',
+    'Action',
+    'IrModel',
+    'ModelAccess',
     'add_export_to_model',
 ]
 
@@ -40,6 +48,10 @@ class NotExportImport(Exception):
 class ExportImportMixin(Model):
     'Mixin to support export/import in json'
     __metaclass__ = PoolMeta
+
+    xml_id = fields.Function(
+        fields.Char('XML Id', states={'invisible': True}),
+        'get_xml_id', searcher='search_xml_id')
 
     @classmethod
     def __setup__(cls):
@@ -89,6 +101,31 @@ class ExportImportMixin(Model):
                 'ALTER COLUMN "%s" DROP NOT NULL'
                 % (table.table_name, field_name))
             table._update_definitions()
+
+    @classmethod
+    def get_xml_id(cls, objects, name):
+        ModelData = Pool().get('ir.model.data')
+        values = ModelData.search([
+                ('model', '=', cls.__name__),
+                ('db_id', 'in', [x.id for x in objects])])
+        # TODO : What do we do if some ids do not have a match ?
+        return dict([(x.db_id, '%s.%s' % (x.module, x.fs_id)) for x in values])
+
+    @classmethod
+    def search_xml_id(cls, name, clause):
+        cursor = Transaction().cursor
+        _, operator, value = clause
+        Operator = tryton_fields.SQL_OPERATORS[operator]
+        ModelData = Pool().get('ir.model.data')
+        model_table = ModelData.__table__()
+
+        cursor.execute(*model_table.select(model_table.db_id,
+                where=(
+                    (model_table.model == cls.__name__)
+                    & Operator(Concat(model_table.module,
+                            Concat('.', model_table.fs_id)),
+                        getattr(cls, name).sql_format(value)))))
+        return [('id', 'in', [x[0] for x in cursor.fetchall()])]
 
     def _prepare_for_import(self):
         pass
@@ -303,7 +340,11 @@ class ExportImportMixin(Model):
                         export_result, my_key)
                 continue
             field_value = getattr(self, field_name)
+            # We cannot just test "if field_value:" because 0 or '' might be
+            # acceptable non-default values
             if field_value is None:
+                continue
+            if isinstance(field_value, tuple) and len(field_value) == 0:
                 continue
             self._export_check_value_exportable(field_name, field, field_value)
             logging.getLogger('export_import').debug(
@@ -483,6 +524,8 @@ class ExportImportMixin(Model):
                 # print '\n'.join([str(x) for x in relink])
                 # print utils.format_data(created)
                 # print utils.format_data(instance)
+                for x in traceback.format_exception(*sys.exc_info()):
+                    logging.getLogger('export_import').debug(str(x))
                 raise
 
         if to_relink:
@@ -613,6 +656,8 @@ class ExportImportMixin(Model):
                     logging.getLogger('export_import').debug(
                         'Error trying to save \n%s' % utils.format_data(
                             working_instance))
+                    for x in traceback.format_exception(*sys.exc_info()):
+                        logging.getLogger('export_import').debug(str(x))
                     raise
             for k in sorted(to_del, reverse=True):
                 relink.pop(k)
@@ -626,7 +671,11 @@ class ExportImportMixin(Model):
                 # print '\n'.join([str(x) for x in relink])
                 # print '#' * 80
                 print 'User Errors'
-                print '\n'.join((utils.format_data(err) for err in cur_errs))
+                try:
+                    print '\n'.join((utils.format_data(err)
+                            for err in cur_errs))
+                except:
+                    print '\n'.join((str(err) for err in cur_errs))
                 raise NotExportImport('Infinite loop detected in import')
         logging.getLogger('export_import').debug('FINISHED IMPORT')
         logging.getLogger('export_import').debug(counter)
@@ -781,21 +830,6 @@ class ExportPackage(ExportImportMixin, ModelSQL, ModelView):
         pass
 
 
-class Group(ExportImportMixin):
-    __metaclass__ = PoolMeta
-    __name__ = 'res.group'
-
-    @classmethod
-    def _export_skips(cls):
-        result = super(Group, cls)._export_skips()
-        result.add('users')
-        return result
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['name'])
-
-
 def add_export_to_model(models, module_name):
     def class_generator(model_name, keys):
         class GenericClass(ExportImportMixin):
@@ -838,10 +872,173 @@ def clean_domain_for_import(domain, detect_key=None):
     return final_domain
 
 
-class UIMenu():
-    "UI menu"
+class Group(ExportImportMixin):
+    __metaclass__ = PoolMeta
+    __name__ = 'res.group'
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(Group, cls)._export_skips()
+        result.add('users')
+        return result
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['name'])
+
+    @classmethod
+    def _export_light(cls):
+        return set(['menu_access'])
+
+
+class UIMenu(ExportImportMixin):
+    'UI menu'
     __name__ = 'ir.ui.menu'
     __metaclass__ = PoolMeta
 
     def get_rec_name(self, name):
         return self.name
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['xml_id'])
+
+
+class RuleGroup(ExportImportMixin):
+    'Rule Group'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'ir.rule.group'
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['model.model', 'global_p', 'default_p', 'perm_read',
+                'perm_write', 'perm_create', 'perm_delete'])
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(RuleGroup, cls)._export_skips()
+        result.add('groups')
+        result.add('users')
+        return result
+
+
+class Action(ExportImportMixin):
+    'Action'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'ir.action'
+
+    xml_id = fields.Function(
+        fields.Char('Xml Id', states={'invisible': True}),
+        'get_xml_id', searcher='search_xml_id')
+
+    @classmethod
+    def get_xml_id(cls, actions, name):
+        cursor = Transaction().cursor
+        pool = Pool()
+        ModelData = pool.get('ir.model.data')
+        Action = pool.get('ir.action')
+        # Possible actions
+        action_model_names = ['ir.action.wizard', 'ir.action.act_window',
+            'ir.action.report']
+        ActionModels = map(pool.get, action_model_names)
+        data_table = ModelData.__table__()
+        action_table = Action.__table__()
+        action_tables = map(lambda x: x.__table__(), ActionModels)
+
+        query_table = action_table.join(data_table, type_='LEFT', condition=(
+                data_table.model == action_table.type))
+        for table in action_tables:
+            query_table = query_table.join(table, type_='LEFT', condition=(
+                    table.action == action_table.id))
+
+        condition = None
+        for table in action_tables:
+            if condition is None:
+                condition = (
+                    (table.action == action_table.id)
+                    & (data_table.db_id == table.id))
+            else:
+                condition = condition | (
+                    (table.action == action_table.id)
+                    & (data_table.db_id == table.id))
+
+        cursor.execute(*query_table.select(action_table.id,
+                Concat(data_table.module, Concat('.', data_table.fs_id)),
+                where=condition))
+        # TODO : What do we do if some ids do not have a match ?
+        return dict(cursor.fetchall())
+
+    @classmethod
+    def search_xml_id(cls, name, clause):
+        cursor = Transaction().cursor
+        _, operator, value = clause
+        Operator = tryton_fields.SQL_OPERATORS[operator]
+        pool = Pool()
+        ModelData = pool.get('ir.model.data')
+        Action = pool.get('ir.action')
+        # Possible actions
+        action_model_names = ['ir.action.wizard', 'ir.action.act_window',
+            'ir.action.report']
+        ActionModels = map(pool.get, action_model_names)
+        data_table = ModelData.__table__()
+        action_table = Action.__table__()
+        action_tables = map(lambda x: x.__table__(), ActionModels)
+
+        query_table = action_table.join(data_table, type_='LEFT', condition=(
+                data_table.model == action_table.type))
+        for table in action_tables:
+            query_table = query_table.join(table, type_='LEFT', condition=(
+                    table.action == action_table.id))
+
+        condition = None
+        for table in action_tables:
+            if condition is None:
+                condition = (
+                    (table.action == action_table.id)
+                    & (data_table.db_id == table.id))
+            else:
+                condition = condition | (
+                    (table.action == action_table.id)
+                    & (data_table.db_id == table.id))
+
+        cursor.execute(*query_table.select(action_table.id,
+                where=(condition)
+                    & Operator(Concat(data_table.module,
+                            Concat('.', data_table.fs_id)),
+                        getattr(cls, name).sql_format(value))))
+        return [('id', 'in', [x[0] for x in cursor.fetchall()])]
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['xml_id'])
+
+
+class IrModel(ExportImportMixin):
+    'Model'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'ir.model'
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['model'])
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(IrModel, cls)._export_skips()
+        result.add('fields')
+        return result
+
+
+class ModelAccess(ExportImportMixin):
+    'Model Access'
+
+    __metaclass__ = PoolMeta
+    __name__ = 'ir.model.access'
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['model.model', 'group.name', 'perm_read', 'perm_write',
+                'perm_create', 'perm_delete'])

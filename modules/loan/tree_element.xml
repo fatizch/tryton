@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+  <data noupdate="1">
+    <record model="rule_engine.tree_element" id="pret">
+      <field name="translated_technical_name">pret</field>
+      <field name="description">Prêt</field>
+      <field name="type">folder</field>
+      <field name="language" ref="ir.lang_fr"/>
+    </record>
+    <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_pret">
+      <field name="context" ref="rule_engine.default_context"/>
+      <field name="tree_element" ref="pret"/>
+    </record>
+  </data>
+  <data>
+    <record model="rule_engine.tree_element" id="type_de_pret">
+      <field name="translated_technical_name">type_de_pret</field>
+      <field name="description">Type de Prêt</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">loan.rule_sets</field>
+      <field name="name">_re_get_loan_kind</field>
+      <field name="parent" ref="pret"/>
+    </record>
+    <record model="rule_engine.tree_element" id="nombre_de_mensualites">
+      <field name="translated_technical_name">nombre_de_mensualites</field>
+      <field name="description">Nombre de Mensualités</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">loan.rule_sets</field>
+      <field name="name">_re_get_loan_number_of_payments</field>
+      <field name="parent" ref="pret"/>
+    </record>
+    <record model="rule_engine.tree_element" id="montant_de_la_mensualite">
+      <field name="translated_technical_name">montant_de_la_mensualite</field>
+      <field name="description">Montant de la Mensualité</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">loan.rule_sets</field>
+      <field name="name">_re_get_loan_payment_amount</field>
+      <field name="parent" ref="pret"/>
+    </record>
+    <record model="rule_engine.tree_element" id="montant_du_pret">
+      <field name="translated_technical_name">montant_du_pret</field>
+      <field name="description">Montant du Prêt</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">loan.rule_sets</field>
+      <field name="name">_re_get_loan_amount</field>
+      <field name="parent" ref="pret"/>
+    </record>
+    <record model="rule_engine.tree_element" id="date_de_deblocage_des_fonds">
+      <field name="translated_technical_name">date_de_deblocage_des_fonds</field>
+      <field name="description">Date de Déblocage des Fonds</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">loan.rule_sets</field>
+      <field name="name">_re_get_loan_funds_release_date</field>
+      <field name="parent" ref="pret"/>
+    </record>
+    <record model="rule_engine.tree_element" id="date_du_premier_paiement">
+      <field name="translated_technical_name">date_du_premier_paiement</field>
+      <field name="description">Date du Premier Paiement</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">loan.rule_sets</field>
+      <field name="name">_re_get_loan_first_payment_date</field>
+      <field name="parent" ref="pret"/>
+    </record>
+    <record model="rule_engine.tree_element" id="capital_restant_du">
+      <field name="translated_technical_name">capital_restant_du</field>
+      <field name="description">Capital restant dû</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">loan.rule_sets</field>
+      <field name="name">_re_get_loan_remaining_capital</field>
+      <field name="parent" ref="pret"/>
+    </record>
+    <record model="rule_engine.tree_element" id="quotite">
+      <field name="translated_technical_name">quotite</field>
+      <field name="description">Quotité</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">loan.rule_sets</field>
+      <field name="name">_re_get_loan_share</field>
+      <field name="parent" ref="pret"/>
+    </record>
+    <record model="rule_engine.tree_element" id="taux_periode_depuis_taux_annuel">
+      <field name="translated_technical_name">taux_periode_depuis_taux_annuel</field>
+      <field name="description">Taux Période Depuis Taux Annuel</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">loan.rule_sets</field>
+      <field name="name">_re_get_periodic_rate_from_annual_rate</field>
+      <field name="fct_args">taux_annuel</field>
+      <field name="parent" ref="pret"/>
+    </record>
+  </data>
+</tryton>

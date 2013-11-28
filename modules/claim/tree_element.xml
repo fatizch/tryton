@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+  <data noupdate="1">
+    <record model="rule_engine.tree_element" id="dossier_sinistre">
+      <field name="translated_technical_name">dossier_sinistre</field>
+      <field name="description">Sinistre</field>
+      <field name="type">folder</field>
+      <field name="language" ref="ir.lang_fr"/>
+    </record>
+    <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_dossier_sinistre">
+      <field name="context" ref="rule_engine.default_context"/>
+      <field name="tree_element" ref="dossier_sinistre"/>
+    </record>
+  </data>
+  <data>
+    <record model="rule_engine.tree_element" id="total_depenses">
+      <field name="translated_technical_name">total_depenses</field>
+      <field name="description">Récupérer le total des dépenses</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">ins_product.rule_sets.claim</field>
+      <field name="name">_re_delivered_service_total_expenses</field>
+      <field name="parent" ref="dossier_sinistre"/>
+    </record>
+    <record model="rule_engine.tree_element" id="depense">
+      <field name="translated_technical_name">depense</field>
+      <field name="description">Récupérer la Dépense</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">ins_product.rule_sets.claim</field>
+      <field name="name">_re_delivered_service_expense</field>
+      <field name="fct_args">Code de la depense</field>
+      <field name="parent" ref="dossier_sinistre"/>
+    </record>
+    <record model="rule_engine.tree_element" id="donnee_compl_prestation">
+      <field name="translated_technical_name">donnee_compl_prestation</field>
+      <field name="description">Donnée Complémentaire Prestation</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">ins_product.rule_sets.claim</field>
+      <field name="name">_re_delivered_service_complementary_data</field>
+      <field name="fct_args">Code donnee complementaire</field>
+      <field name="parent" ref="dossier_sinistre"/>
+    </record>
+  </data>
+</tryton>

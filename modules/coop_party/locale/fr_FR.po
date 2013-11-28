@@ -14,6 +14,42 @@ msgctxt "error:party.party_relation_kind:"
 msgid "The key must be unique!"
 msgstr "La clé doit être unique"
 
+msgctxt "field:coop_utils.test_case_model,adult_age_max:"
+msgid "Maximum age for adults"
+msgstr "Age maximum des adultes"
+
+msgctxt "field:coop_utils.test_case_model,adult_age_min:"
+msgid "Minimum age for adults"
+msgstr "Age minimum des adultes"
+
+msgctxt "field:coop_utils.test_case_model,max_nb_of_children_per_couple:"
+msgid "Maximum number of children per couple"
+msgstr "Nombre maximum d'enfants par couple"
+
+msgctxt "field:coop_utils.test_case_model,number_of_males:"
+msgid "Number of Males"
+msgstr "Nombre d'hommes"
+
+msgctxt "field:coop_utils.test_case_model,number_of_parties:"
+msgid "Number of Parties"
+msgstr "Nombre de Tiers"
+
+msgctxt "field:coop_utils.test_case_model,percent_of_couple:"
+msgid "Percentage of couples"
+msgstr "Pourcentage de couples"
+
+msgctxt "field:coop_utils.test_case_model,percent_of_couple_with_children:"
+msgid "Percentage of couples with children"
+msgstr "Pourcentage de couples ayant des enfants"
+
+msgctxt "field:coop_utils.test_case_model,percent_of_couple_with_same_name:"
+msgid "Percentage of couples with the same name"
+msgstr "Pourcentage de couples de même nom"
+
+msgctxt "field:coop_utils.test_case_model,phone_prefix:"
+msgid "Phone Prefix"
+msgstr "Préfixe des numéro de téléphone"
+
 msgctxt "field:country.zipcode,city:"
 msgid "City"
 msgstr "Ville"
@@ -66,6 +102,10 @@ msgctxt "field:party.actor,reference:"
 msgid "Reference"
 msgstr "Référence"
 
+msgctxt "field:party.address,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:party.address,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -85,6 +125,10 @@ msgstr "Code Postal"
 msgctxt "field:party.address_kind,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
+
+msgctxt "field:party.address_kind,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:party.address_kind,create_uid:"
 msgid "Create User"
@@ -150,6 +194,10 @@ msgctxt "field:party.contact_history,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:party.contact_history,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:party.contact_history,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -202,6 +250,10 @@ msgctxt "field:party.contact_history,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:party.contact_mechanism,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:party.party,birth_date:"
 msgid "Birth Date"
 msgstr "Date de Naissance"
@@ -209,6 +261,10 @@ msgstr "Date de Naissance"
 msgctxt "field:party.party,children:"
 msgid "Children"
 msgstr "Enfants"
+
+msgctxt "field:party.party,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:party.party,first_name:"
 msgid "First Name"
@@ -239,8 +295,20 @@ msgid "Maiden Name"
 msgstr "Nom de Jeune Fille"
 
 msgctxt "field:party.party,main_address:"
-msgid "Address"
+msgid "Main Address"
 msgstr "Adresse"
+
+msgctxt "field:party.party,main_contact_mechanism:"
+msgid "Main Contact Mechanism"
+msgstr "Moyen de contact principal"
+
+msgctxt "field:party.party,number_of_addresses:"
+msgid "Number Of Addresses"
+msgstr "Nombre d'adresses"
+
+msgctxt "field:party.party,number_of_contact_mechanisms:"
+msgid "Number Of Contact Mechanisms"
+msgstr "Nombres de moyens de contact"
 
 msgctxt "field:party.party,parent:"
 msgid "Parent"
@@ -265,6 +333,10 @@ msgstr "Synthèse"
 msgctxt "field:party.party-relation,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
+
+msgctxt "field:party.party-relation,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
 msgctxt "field:party.party-relation,create_uid:"
 msgid "Create User"
@@ -326,6 +398,10 @@ msgctxt "field:party.party_relation_kind,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
+msgctxt "field:party.party_relation_kind,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
 msgctxt "field:party.party_relation_kind,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -366,6 +442,10 @@ msgctxt "model:ir.action,name:act_address_kind_form"
 msgid "Address Kind"
 msgstr "Type d'Adresse"
 
+msgctxt "model:ir.action,name:act_addresses_button"
+msgid "Addresses"
+msgstr "Adresses"
+
 msgctxt "model:ir.action,name:act_company_form"
 msgid "Companies"
 msgstr "Sociétés"
@@ -373,6 +453,10 @@ msgstr "Sociétés"
 msgctxt "model:ir.action,name:act_contact_history_relate_form"
 msgid "Contact History"
 msgstr "Historique des Contacts"
+
+msgctxt "model:ir.action,name:act_contact_mechanisms_button"
+msgid "Contact Mechanisms"
+msgstr "Moyens de contact"
 
 msgctxt "model:ir.action,name:act_party_relation_kind_form"
 msgid "Party Relation Kind"
@@ -405,18 +489,6 @@ msgstr "Acteur"
 msgctxt "model:party.address_kind,name:"
 msgid "Addresse Kind"
 msgstr "Type d'Adresse"
-
-msgctxt "model:party.address_kind,name:job"
-msgid "Job"
-msgstr "Lieu de Travail"
-
-msgctxt "model:party.address_kind,name:main"
-msgid "Main"
-msgstr "Principale"
-
-msgctxt "model:party.address_kind,name:second"
-msgid "Secondary"
-msgstr "Secondaire"
 
 msgctxt "model:party.contact_history,name:"
 msgid "Contact History"
@@ -497,6 +569,10 @@ msgstr "Rôles"
 msgctxt "view:party.contact_history:"
 msgid "Communication Log"
 msgstr "Historique des Contacts"
+
+msgctxt "view:party.party:"
+msgid "+"
+msgstr "+"
 
 msgctxt "view:party.party:"
 msgid "Company"

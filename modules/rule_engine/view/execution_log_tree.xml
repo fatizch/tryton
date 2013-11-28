@@ -1,6 +1,6 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <tree string="Rule Executions">
-    <field name="create_date"/>
+    <field name="create_date_"/>
     <field name="user"/>
     <field name="result"/>
 </tree>

@@ -26,7 +26,7 @@ class Contract():
         'get_due_today')
     payment_lines = fields.Function(
         fields.One2Many('account.payment', None, 'Payment Lines',
-            domain=[
+            depends=['display_all_lines', 'id'], domain=[
                 ('line.move.origin', '=', (__name__, Eval('id', 0))),
                 ('state', 'in', ('approved', 'processing', 'succeeded')),
                 If(~Eval('display_all_lines'),

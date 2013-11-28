@@ -67,7 +67,8 @@ class CollectionWizard():
                         self.input_collection_parameters.contract.id)),
                 ('party', '=', self.input_collection_parameters.party),
                 ('account.kind', '=', 'receivable'),
-                ('move.state', '=', 'posted')])
+                ('move.state', '=', 'posted')], order=[('maturity_date',
+                    'ASC')])
         if not line_candidates:
             return res
         exact = False
@@ -109,3 +110,10 @@ class CollectionWizard():
             if res['remaining']:
                 res['create_suspense_line_with_rest'] = True
         return res
+
+    def get_collection_move(self):
+        result = super(CollectionWizard, self).get_collection_move()
+        if not self.input_collection_parameters.contract:
+            return result
+        result.origin = self.input_collection_parameters.contract
+        return result

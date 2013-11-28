@@ -117,7 +117,7 @@ class CoopTestCase(unittest.TestCase):
         for module in modules.itervalues():
             module.ModuleTestCase.install_module()
 
-        models = {}
+        models = {'TestCaseModel': 'coop_utils.test_case_model'}
         for modules in modules.itervalues():
             models.update(modules.ModuleTestCase.get_models())
 
@@ -149,6 +149,9 @@ class CoopTestCase(unittest.TestCase):
         '''
         import trytond.tests.test_tryton
         trytond.tests.test_tryton.test_depends()
+
+    def test9999_launch_test_cases(self):
+        self.TestCaseModel.run_all_test_cases()
 
     def __getattr__(self, name):
         if name == '_models':

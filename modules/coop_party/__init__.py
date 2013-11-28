@@ -4,6 +4,7 @@ from .party import *
 from .contact_mechanism import *
 from .address import *
 from .relation import *
+from .test_case import *
 
 
 def register():
@@ -16,6 +17,8 @@ def register():
         ContactMechanism,
         AddresseKind,
         ContactHistory,
+        # from test_case
+        TestCaseModel,
         module='coop_party', type_='model')
 
     export.add_export_to_model([

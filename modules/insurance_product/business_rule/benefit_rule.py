@@ -26,7 +26,7 @@ STATES_ANNUITY = Eval('_parent_offered', {}).get(
 STATES_AMOUNT_EVOLVES = Bool(Eval('amount_evolves_over_time'))
 
 
-class BenefitRule(BusinessRuleRoot, model.CoopSQL):
+class BenefitRule(BusinessRuleRoot, model.CoopSQL, model.ModelCurrency):
     'Benefit Rule'
 
     __name__ = 'ins_product.benefit_rule'
@@ -44,7 +44,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
                 STATES_AMOUNT_EVOLVES,
             )
         })
-    coef_coverage_amount = fields.Numeric('Multiplier',
+    coef_coverage_amount = fields.Numeric('Multiplier', digits=(16, 4),
         states={
             'invisible': Or(
                 STATE_ADVANCED,
@@ -124,7 +124,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
 
     def get_currency(self):
         if self.offered:
-            return self.offered.get_currency()
+            return self.offered.currency
 
     @staticmethod
     def default_coef_coverage_amount():
@@ -216,8 +216,8 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
         if (self.max_duration_per_indemnification
                 and self.max_duration_per_indemnification_unit):
             max_end_date = coop_date.get_end_of_period(from_date,
-                self.max_duration_per_indemnification,
-                self.max_duration_per_indemnification_unit)
+                self.max_duration_per_indemnification_unit,
+                self.max_duration_per_indemnification)
         elif self.use_monthly_period:
             max_end_date = coop_date.get_end_of_month(from_date)
         else:
@@ -307,7 +307,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL):
             return self.get_indemnification_for_capital(args)
 
 
-class SubBenefitRule(model.CoopSQL, model.CoopView):
+class SubBenefitRule(model.CoopSQL, model.CoopView, model.ModelCurrency):
     'Sub Benefit Rule'
 
     __name__ = 'ins_product.sub_benefit_rule'
@@ -359,7 +359,7 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
 
     def get_currency(self):
         if self.benefit_rule:
-            return self.benefit_rule.get_currency()
+            return self.benefit_rule.currency
 
     @staticmethod
     def default_config_kind():
@@ -368,13 +368,13 @@ class SubBenefitRule(model.CoopSQL, model.CoopView):
     def get_end_date(self, from_date, to_date):
         if not self.limited_duration:
             return to_date
-        max_end_date = coop_date.get_end_of_period(from_date, self.duration,
-            self.duration_unit)
+        max_end_date = coop_date.get_end_of_period(from_date,
+            self.duration_unit, self.duration)
         return min(to_date, max_end_date) if to_date else max_end_date
 
     def get_rule_result(self, args):
         if self.rule:
-            rule_result = utils.execute_rule(self, self.rule, args)
+            rule_result = self.rule.execute(args, self.rule_complementary_data)
             return rule_result.result, rule_result.errors
 
     def give_me_result(self, args):

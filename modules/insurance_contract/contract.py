@@ -12,15 +12,9 @@ from trytond.modules.offered.offered import DEF_CUR_DIG
 from trytond.modules.insurance_product import product
 
 
-DELIVERED_SERVICES_STATUSES = [
-    ('calculating', 'Calculating'),
-    ('not_eligible', 'Not Eligible'),
-    ('calculated', 'Calculated'),
-    ('delivered', 'Delivered'),
-]
-
 IS_PARTY = Eval('item_kind').in_(['person', 'company', 'party'])
 
+__metaclass__ = PoolMeta
 __all__ = [
     'InsurancePolicy',
     'ContractHistory',
@@ -30,6 +24,7 @@ __all__ = [
     'CoveredElement',
     'CoveredElementPartyRelation',
     'CoveredData',
+    'ContractClause',
     'ManagementRole',
     'DeliveredService',
     'Expense',
@@ -40,7 +35,6 @@ class InsurancePolicy():
     'Insurance Policy'
 
     __name__ = 'contract.contract'
-    __metaclass__ = PoolMeta
 
     covered_elements = fields.One2ManyDomain(
         'ins_contract.covered_element', 'contract', 'Covered Elements',
@@ -281,7 +275,6 @@ class InsuranceSubscribedCoverage():
     'Subscribed Coverage'
 
     __name__ = 'contract.subscribed_option'
-    __metaclass__ = PoolMeta
 
     covered_data = fields.One2ManyDomain(
         'ins_contract.covered_data', 'option', 'Covered Data',
@@ -351,7 +344,8 @@ class SubscribedCoverageComplement(model.CoopSQL, model.CoopView):
                 'possible_deductible_duration', {
                     'date': self.start_date,
                     'appliable_conditions_date':
-                        self.subscribed_coverage.contract.appliable_conditions_date,
+                        self.subscribed_coverage.
+                            contract.appliable_conditions_date,
                     'scope': 'coverage'},
                 kind='deductible')[0]
             return [x.id for x in durations] if durations else []
@@ -362,7 +356,6 @@ class SubscribedCoverageComplement(model.CoopSQL, model.CoopView):
 class StatusHistory():
     'Status History'
 
-    __metaclass__ = PoolMeta
     __name__ = 'contract.status_history'
 
     @classmethod
@@ -388,9 +381,6 @@ class ContractHistory(model.ObjectHistory):
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency'),
         'get_currency_id')
-    currency_digits = fields.Function(
-        fields.Integer('Currency Digits'),
-        'get_currency_digits')
     options = fields.Function(
         fields.One2Many('contract.subscribed_option', None, 'Options',
             datetime_field='date'),
@@ -418,7 +408,7 @@ class ContractHistory(model.ObjectHistory):
         return [o.id for o in options]
 
 
-class CoveredElement(model.CoopSQL, model.CoopView):
+class CoveredElement(model.CoopSQL, model.CoopView, model.ModelCurrency):
     'Covered Element'
     '''
         Covered elements represents anything which is covered by at least one
@@ -801,7 +791,7 @@ class CoveredElementPartyRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class CoveredData(model.CoopSQL, model.CoopView):
+class CoveredData(model.CoopSQL, model.CoopView, model.ModelCurrency):
     'Covered Data'
 
     __name__ = 'ins_contract.covered_data'
@@ -831,9 +821,6 @@ class CoveredData(model.CoopSQL, model.CoopView):
         fields.Many2One('currency.currency', 'Currency',
             states={'invisible': True}),
         'get_currency_id')
-    currency_symbol = fields.Function(
-        fields.Char('Currency Symbol'),
-        'get_currency_symbol')
     deductible_duration = fields.Many2One('ins_product.deductible_duration',
         'Deductible Duration', states={
             'invisible': ~Eval('possible_deductible_duration'),
@@ -848,6 +835,8 @@ class CoveredData(model.CoopSQL, model.CoopView):
     parent_covered_data = fields.Function(
         fields.Many2One('ins_contract.covered_data', 'Parent Covered Data'),
         'get_parent_covered_data_id')
+    clauses = fields.One2Many('contract.clause', 'covered_data',
+        'Clauses', context={'start_date': Eval('start_date')})
 
     @classmethod
     def default_status(cls):
@@ -867,6 +856,24 @@ class CoveredData(model.CoopSQL, model.CoopView):
         self.complementary_data = self.on_change_complementary_data()[
             'complementary_data']
 
+    def init_clauses(self, option):
+        clauses, errs = self.option.offered.get_result('all_clauses', {
+                'date': option.start_date,
+                'appliable_conditions_date':
+                self.option.contract.appliable_conditions_date,
+            })
+        self.clauses = []
+        if errs or not clauses:
+            return
+        ClauseRelation = Pool().get('contract.clause')
+        for clause in clauses:
+            new_clause = ClauseRelation()
+            new_clause.clause = clause
+            new_clause.text = clause.get_version_at_date(
+                option.start_date).content
+            new_clause.contract = option.contract
+            self.clauses.append(new_clause)
+
     def init_from_option(self, option):
         self.option = option
         #TODO : Ugly endorsment temporary hack to remove ASAP
@@ -876,6 +883,7 @@ class CoveredData(model.CoopSQL, model.CoopView):
         else:
             self.start_date = option.start_date
         self.end_date = option.end_date
+        self.init_clauses(option)
         self.init_complementary_data()
 
     def on_change_complementary_data(self):
@@ -907,15 +915,8 @@ class CoveredData(model.CoopSQL, model.CoopView):
         return contract.id if contract else None
 
     def get_currency(self):
-        return (self.covered_element.get_currency()
+        return (self.covered_element.currency
             if self.covered_element else None)
-
-    def get_currency_id(self, name):
-        currency = self.get_currency()
-        return currency.id if currency else None
-
-    def get_currency_symbol(self, name):
-        return self.currency.symbol if self.currency else None
 
     def get_possible_deductible_duration(self, name):
         try:
@@ -959,7 +960,8 @@ class CoveredData(model.CoopSQL, model.CoopView):
         res = {}
         if not utils.is_none(self, 'complementary_data'):
             res = self.complementary_data
-            res.update(self.covered_element.get_all_complementary_data(at_date))
+            res.update(self.covered_element.get_all_complementary_data(
+                    at_date))
         res.update(self.option.get_all_complementary_data(at_date))
         parent_covered_data = self.get_parent_covered_data()
         if parent_covered_data:
@@ -984,6 +986,22 @@ class CoveredData(model.CoopSQL, model.CoopView):
     def get_parent_covered_data_id(self, name):
         covered_data = self.get_parent_covered_data()
         return covered_data.id if covered_data else None
+
+    def is_active_at_date(self, date):
+        if self.start_date > date:
+            return False
+        if not self.end_date or self.end_date <= date:
+            return True
+        return False
+
+
+class ContractClause:
+    'Contract Clause'
+
+    __name__ = 'contract.clause'
+
+    covered_data = fields.Many2One('ins_contract.covered_data', 'Covered Data',
+        ondelete='CASCADE', states={'invisible': ~Eval('covered_data')})
 
 
 class ManagementRole(model.CoopSQL, model.CoopView):
@@ -1018,34 +1036,13 @@ class ManagementRole(model.CoopSQL, model.CoopView):
         return [('', '')]
 
 
-class DeliveredService(model.CoopView, model.CoopSQL):
+class DeliveredService():
     'Delivered Service'
 
-    __name__ = 'ins_contract.delivered_service'
+    __name__ = 'contract.delivered_service'
 
-    status = fields.Selection(DELIVERED_SERVICES_STATUSES, 'Status')
     expenses = fields.One2Many('ins_contract.expense',
         'delivered_service', 'Expenses')
-    contract = fields.Many2One('contract.contract', 'Contract',
-        ondelete='RESTRICT')
-    subscribed_service = fields.Many2One(
-        'contract.subscribed_option', 'Coverage', ondelete='RESTRICT',
-        domain=[
-            If(~~Eval('contract'), ('contract', '=', Eval('contract', {})), ())
-        ], depends=['contract'])
-    func_error = fields.Many2One('rule_engine.error', 'Error',
-        ondelete='RESTRICT', states={
-            'invisible': ~Eval('func_error'),
-            'readonly': True})
-
-    def get_rec_name(self, name=None):
-        if self.subscribed_service:
-            res = self.subscribed_service.get_rec_name(name)
-        else:
-            res = super(DeliveredService, self).get_rec_name(name)
-        if self.status:
-            res += ' [%s]' % coop_string.translate_value(self, 'status')
-        return res
 
     def get_expense(self, code, currency):
         for expense in self.expenses:
@@ -1060,13 +1057,6 @@ class DeliveredService(model.CoopView, model.CoopSQL):
                 res += expense.amount
         return res
 
-    @staticmethod
-    def default_status():
-        return 'calculating'
-
-    def get_contract(self):
-        return self.contract
-
 
 class Expense(model.CoopSQL, model.CoopView):
     'Expense'
@@ -1074,7 +1064,7 @@ class Expense(model.CoopSQL, model.CoopView):
     __name__ = 'ins_contract.expense'
 
     delivered_service = fields.Many2One(
-        'ins_contract.delivered_service', 'Delivered Service',
+        'contract.delivered_service', 'Delivered Service',
         ondelete='CASCADE')
     kind = fields.Many2One('ins_product.expense_kind', 'Kind')
     amount = fields.Numeric(
