@@ -253,6 +253,13 @@ class Contract(model.CoopSQL, Subscribed, Printable):
                 'start_date', 'appliable_conditions_date'])
         utils.update_depends(cls, 'start_date', ['appliable_conditions_date'])
 
+        cls._buttons.update({'option_subscription': {}})
+
+    @classmethod
+    @model.CoopView.button_action('contract.option_subscription_wizard')
+    def option_subscription(cls, contracts):
+        pass
+
     @classmethod
     def default_company(cls):
         return Transaction().context.get('company', None)

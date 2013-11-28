@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/field[@name='contract']" position="after">
+    <newline/>
+    <label name="covered_element"/>
+    <field name="covered_element" widget="selection"/>
+    <newline/>
+    <label name="possible_covered_elements"/>
+    <field name="possible_covered_elements"/>
+    <newline/>
+    </xpath>
+</data>
