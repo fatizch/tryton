@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+  <data>
+    <!-- ############################################################ -->
+    <!-- EndorsementTemplate -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="template_form">
+      <field name="model">endorsement.template</field>
+      <field name="type">form</field>
+      <field name="name">template_form</field>
+    </record>
+    <record model="ir.ui.view" id="template_tree">
+      <field name="model">endorsement.template</field>
+      <field name="type">tree</field>
+      <field name="name">template_tree</field>
+    </record>
+    <!-- Entry Point -->
+    <record model="ir.action.act_window" id="act_template">
+      <field name="name">Endorsement Template</field>
+      <field name="res_model">endorsement.template</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_template_view1">
+      <field name="sequence" eval="10"/>
+      <field name="view" ref="template_tree"/>
+      <field name="act_window" ref="act_template"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_template_view2">
+      <field name="sequence" eval="10"/>
+      <field name="view" ref="template_form"/>
+      <field name="act_window" ref="act_template"/>
+    </record>
+    <menuitem parent="offered.menu_product_configuration" sequence="10"
+      action="act_template" id="menu_endorsement_template"/>
+    <!-- ############################################################ -->
+    <!-- Product -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="product_form">
+      <field name="model">offered.product</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="offered.product_view_form"/>
+      <field name="name">product_form</field>
+    </record>
+  </data>
+</tryton>

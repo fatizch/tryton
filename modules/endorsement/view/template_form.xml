@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Templates">
+  <label name="name"/>
+  <field name="name"/>
+  <label name="code"/>
+  <field name="code"/>
+  <notebook>
+    <page string="Description" id="description">
+      <field name="description"/>
+    </page>
+    <page string="Definition" id="definition">
+      <notebook>
+        <page string="Contract fields" id="contract">
+          <field name="contract_fields"/>
+        </page>
+        <page string="Option fields" id="options">
+          <field name="option_fields"/>
+        </page>
+      </notebook>
+    </page>
+    <page string="Usage" id="usage">
+      <field name="products"/>
+    </page>
+  </notebook>
+</form>
