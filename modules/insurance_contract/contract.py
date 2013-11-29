@@ -298,9 +298,11 @@ class InsuranceSubscribedCoverage():
         res = utils.instanciate_relation(self.__class__, 'covered_data')
         if not hasattr(self, 'covered_data'):
             self.covered_data = []
+        else:
+            self.covered_data = list(self.covered_data)
         self.covered_data.append(res)
-        res.init_from_option(self)
         res.init_from_covered_element(covered_element)
+        res.init_from_option(self)
         return res
 
     def get_covered_data(self):
@@ -798,7 +800,7 @@ class CoveredData(model.CoopSQL, model.CoopView, model.ModelCurrency):
 
     option = fields.Many2One('contract.subscribed_option',
         'Subscribed Coverage', domain=[('id', 'in', Eval('possible_options'))],
-        depends=['possible_options'])
+        depends=['possible_options'], ondelete='CASCADE')
     possible_options = fields.Function(
         fields.Many2Many('contract.subscribed_option', None, None,
             'Possible Options', states={'invisible': True}),
