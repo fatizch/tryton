@@ -151,6 +151,8 @@ class CoopTestCase(unittest.TestCase):
         trytond.tests.test_tryton.test_depends()
 
     def test9999_launch_test_cases(self):
+        if os.environ.get('DO_NOT_TEST_CASES'):
+            return
         self.TestCaseModel.run_all_test_cases()
 
     def __getattr__(self, name):
