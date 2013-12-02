@@ -4,7 +4,7 @@ from trytond.pool import Pool
 from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import utils, coop_date, fields, model
-from trytond.modules.coop_currency import ModelCurrency, currency_utils
+from trytond.modules.coop_currency import ModelCurrency
 
 __all__ = [
     'Loan',
@@ -99,7 +99,7 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_rec_name(self, name):
         res = ''
         if self.amount:
-            res = currency_utils.amount_as_string(self.amount, self.currency)
+            res = self.currency.amount_as_string(self.amount)
         return res
 
     def init_from_borrowers(self, parties):

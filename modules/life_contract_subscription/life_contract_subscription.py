@@ -2,7 +2,6 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import fields, utils
-from trytond.modules.coop_currency import currency_utils
 
 
 __all__ = [
@@ -124,13 +123,13 @@ class CoveredDataSubs():
     def get_coverage_amount_selection(self, name):
         if (hasattr(self, 'coverage_amount') and self.coverage_amount):
             # return '%.2f' % self.coverage_amount
-            return currency_utils.amount_as_string(self.coverage_amount,
-                self.currency)
+            return self.currency.amount_as_string(self.coverage_amount)
         return ''
 
     def on_change_coverage_amount_selection(self):
         if not utils.is_none(self, 'coverage_amount_selection'):
-            return {'coverage_amount': currency_utils.get_amount_from_currency(
+            return {'coverage_amount':
+                Pool().get('utils.currency').get_amount_from_currency(
                     self.coverage_amount_selection, self.currency)}
         else:
             return {'coverage_amount': None}

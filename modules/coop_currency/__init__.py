@@ -10,6 +10,8 @@ def register():
         # From file currency
         Currency,
         CurrencyRate,
+        # From currency_utils
+        CurrencyUtils,
         # From file test_case
         TestCaseModel,
         module='coop_currency', type_='model')
