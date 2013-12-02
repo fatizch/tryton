@@ -3,7 +3,8 @@ import copy
 
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.coop_utils import model, business, fields
+from trytond.modules.coop_utils import model, fields
+from trytond.modules.coop_currency import ModelCurrency
 from trytond.modules.offered import Offered
 
 
@@ -63,9 +64,9 @@ class Coverage(model.CoopSQL, Offered):
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
             ]
 
-    @staticmethod
-    def default_currency():
-        return business.get_default_currency()
+    @classmethod
+    def default_currency(cls):
+        return ModelCurrency.default_currency()
 
     def is_valid(self):
         if self.template_behaviour == 'remove':

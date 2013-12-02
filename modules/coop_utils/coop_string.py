@@ -159,13 +159,6 @@ def date_as_string(date, lang=None):
     return Lang.strftime(date, lang.code, lang.date)
 
 
-def amount_as_string(amount, currency, symbol=True, lang=None):
-    Lang = Pool().get('ir.lang')
-    if not lang:
-        lang = utils.get_user_language()
-    return Lang.currency(lang, amount, currency, symbol=symbol)
-
-
 def remove_invalid_char(from_string):
     import unicodedata
     res = ''.join((
@@ -204,13 +197,6 @@ def is_ascii(s):
         return True
     except UnicodeEncodeError:
         return False
-
-
-def get_amount_from_currency(amount, currency):
-    from locale import atof
-    amount = amount.strip(currency.symbol)
-    amount = amount.replace(currency.mon_decimal_point, '.')
-    return Decimal(atof(amount))
 
 
 def check_for_pattern(s, pattern):

@@ -8,6 +8,7 @@ from trytond.wizard import StateTransition, StateView, Button, StateAction
 
 from trytond.modules.coop_utils import model, fields, utils, coop_date, \
     coop_string
+from trytond.modules.coop_currency import ModelCurrency
 
 __all__ = [
     'RateLine',
@@ -172,7 +173,7 @@ class RateLine(model.CoopSQL, model.CoopView):
             return self.parent.start_date_
 
 
-class RateNote(model.CoopSQL, model.CoopView, model.ModelCurrency):
+class RateNote(model.CoopSQL, model.CoopView, ModelCurrency):
     'Rate Note'
 
     __name__ = 'billing.rate_note'
@@ -262,7 +263,7 @@ class RateNote(model.CoopSQL, model.CoopView, model.ModelCurrency):
         return res
 
 
-class RateNoteLine(model.CoopSQL, model.CoopView, model.ModelCurrency):
+class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
     'Rate Note Line'
 
     __name__ = 'billing.rate_note_line'

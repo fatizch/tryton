@@ -3,6 +3,7 @@ from trytond.wizard import StateTransition, StateView, Button
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import coop_date, fields, model
+from trytond.modules.coop_currency import ModelCurrency
 
 from .loan import LOAN_KIND, DEFFERALS
 
@@ -14,7 +15,7 @@ __all__ = [
     ]
 
 
-class LoanParameters(model.CoopView, model.ModelCurrency):
+class LoanParameters(model.CoopView, ModelCurrency):
     'Loan Parameters'
 
     __name__ = 'loan.creation_parameters'

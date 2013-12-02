@@ -7,6 +7,7 @@ from trytond.transaction import Transaction
 from trytond.modules.coop_utils import model, fields
 from trytond.modules.coop_utils import utils, business, coop_date
 from trytond.modules.coop_utils import coop_string
+from trytond.modules.coop_currency import ModelCurrency
 from trytond.modules.contract import contract
 from trytond.modules.offered.offered import DEF_CUR_DIG
 from trytond.modules.insurance_product import product
@@ -410,7 +411,7 @@ class ContractHistory(model.ObjectHistory):
         return [o.id for o in options]
 
 
-class CoveredElement(model.CoopSQL, model.CoopView, model.ModelCurrency):
+class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     'Covered Element'
     '''
         Covered elements represents anything which is covered by at least one
@@ -793,7 +794,7 @@ class CoveredElementPartyRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class CoveredData(model.CoopSQL, model.CoopView, model.ModelCurrency):
+class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     'Covered Data'
 
     __name__ = 'ins_contract.covered_data'
@@ -1060,7 +1061,7 @@ class DeliveredService():
         return res
 
 
-class Expense(model.CoopSQL, model.CoopView):
+class Expense(model.CoopSQL, model.CoopView, ModelCurrency):
     'Expense'
 
     __name__ = 'ins_contract.expense'
@@ -1073,14 +1074,10 @@ class Expense(model.CoopSQL, model.CoopView):
         'Amount', required=True,
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
         depends=['currency_digits'])
-    currency = fields.Many2One('currency.currency', 'Currency', required=True)
-    currency_digits = fields.Function(
-        fields.Integer('Currency Digits', states={'invisible': True}),
-        'get_currency_digits')
 
-    @staticmethod
-    def default_currency():
-        return business.get_default_currency()
+    @classmethod
+    def default_currency(cls):
+        return ModelCurrency.default_currency()
 
     def get_currency_digits(self, name):
         if hasattr(self, 'currency') and self.currency:

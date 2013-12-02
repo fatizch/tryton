@@ -6,6 +6,7 @@ from trytond.pyson import Eval, If
 from trytond.pool import Pool, PoolMeta
 
 from trytond.modules.coop_utils import utils, coop_string
+from trytond.modules.coop_currency import ModelCurrency
 from trytond.modules.insurance_product import Printable
 
 CONTRACTSTATUSES = [
@@ -63,7 +64,7 @@ class StatusHistory(model.CoopSQL, model.CoopView):
             reference.end_date = previous_status.end_date
 
 
-class Subscribed(model.CoopView, model.ModelCurrency):
+class Subscribed(model.CoopView, ModelCurrency):
     'Subscribed'
 
     offered = fields.Many2One(

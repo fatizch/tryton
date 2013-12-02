@@ -3,6 +3,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import fields, model, utils
+from trytond.modules.coop_currency import ModelCurrency
 
 from .plan import COMMISSION_KIND
 
@@ -88,7 +89,7 @@ class CommissionOption():
         return self.current_policy_owner.account_payable
 
 
-class CompensatedOption(model.CoopSQL, model.CoopView, model.ModelCurrency):
+class CompensatedOption(model.CoopSQL, model.CoopView, ModelCurrency):
     'Compensated Option'
 
     __name__ = 'commission.compensated_option'

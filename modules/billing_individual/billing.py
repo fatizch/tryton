@@ -15,6 +15,7 @@ from trytond.rpc import RPC
 
 from trytond.modules.coop_utils import model, fields, utils, coop_date
 from trytond.modules.coop_utils import export, coop_string
+from trytond.modules.coop_currency import ModelCurrency
 from trytond.modules.insurance_product.business_rule.pricing_rule import \
     PRICING_FREQUENCY
 from trytond.modules.insurance_contract.contract import IS_PARTY
@@ -122,7 +123,7 @@ class PriceLineFeeRelation(model.CoopSQL, model.CoopView):
         return False
 
 
-class PriceLine(model.CoopSQL, model.CoopView, model.ModelCurrency):
+class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
     'Price Line'
 
     __name__ = 'billing.price_line'

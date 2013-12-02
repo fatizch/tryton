@@ -7,6 +7,7 @@ from trytond.rpc import RPC
 
 from trytond.modules.coop_utils import model, business, utils, fields
 from trytond.modules.coop_utils import coop_string
+from trytond.modules.coop_currency import ModelCurrency
 from trytond.modules.offered import EligibilityResultLine
 from trytond.modules.rule_engine import RuleEngineResult
 
@@ -331,9 +332,9 @@ class Product(model.CoopSQL, Offered):
         if not 'product' in args:
             args['product'] = self
 
-    @staticmethod
-    def default_currency():
-        return business.get_default_currency()
+    @classmethod
+    def default_currency(cls):
+        return ModelCurrency.default_currency()
 
     def give_me_new_contract_number(self, args=None):
         return (self.contract_generator.get_id(self.contract_generator.id)
