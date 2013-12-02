@@ -129,8 +129,8 @@ class CoveredDataSubs():
     def on_change_coverage_amount_selection(self):
         if not utils.is_none(self, 'coverage_amount_selection'):
             return {'coverage_amount':
-                Pool().get('utils.currency').get_amount_from_currency(
-                    self.coverage_amount_selection, self.currency)}
+                self.currency.get_amount_from_string(
+                    self.coverage_amount_selection)}
         else:
             return {'coverage_amount': None}
 
