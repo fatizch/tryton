@@ -1,7 +1,7 @@
 import copy
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, If
+from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.wizard import StateView, Button, StateTransition
 
@@ -17,7 +17,6 @@ __all__ = [
     'Assignment',
     'AssignCollection',
     'CollectionWizard',
-    'Property',
     ]
 
 
@@ -386,32 +385,3 @@ class CollectionWizard(model.CoopWizard):
             payment_group.payments = payments
             payment_group.save()
         return 'end'
-
-
-class Property(export.ExportImportMixin):
-    'Property'
-
-    __metaclass__ = PoolMeta
-    __name__ = 'ir.property'
-
-    @classmethod
-    def __setup__(cls):
-        super(Property, cls).__setup__()
-        cls.company = copy.copy(cls.company)
-        cls.company.domain = [
-            If(Eval('context', {}).contains('__importing__'),
-                ('id', '>', 0),
-                ('id', If(Eval('context', {}).contains('company'), '=', '!='),
-                    Eval('context', {}).get('company', -1)))
-            ]
-
-    @classmethod
-    def _export_keys(cls):
-        # Properties are only fit for export / import if they are "global",
-        # meaning they are not set for a given instance. See
-        # account.configuration default accounts.
-        return set(['field.name', 'field.model.model', 'company.party.name'])
-
-    @classmethod
-    def _export_light(cls):
-        return set(['field'])

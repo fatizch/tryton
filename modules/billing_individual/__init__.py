@@ -9,7 +9,7 @@ from .test_case import *
 
 def register():
     Pool.register(
-        # from payment_rule
+        # From payment_rule
         PaymentRule,
         PaymentRuleFeeRelation,
         PaymentRuleLine,
@@ -31,18 +31,17 @@ def register():
         CoveredData,
         TaxDesc,
         FeeDesc,
-        Sequence,
         FiscalYear,
         Period,
         Company,
-        # from party
+        # From party
         Party,
-        # from account
+        # From account
         Move,
         MoveLine,
         Account,
         Journal,
-        # from test_case
+        # From test_case
         TestCaseModel,
         module='billing_individual', type_='model')
 

@@ -1,4 +1,4 @@
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import Pool
 
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, Button, StateTransition
@@ -7,52 +7,12 @@ from trytond.modules.coop_utils import model, fields
 
 
 __all__ = [
-    'User',
-    'Session',
     'Priority',
     'Team',
     'TeamGroupRelation',
     'SelectUser',
     'AddTeamUser',
 ]
-
-
-class User():
-    'User'
-
-    __metaclass__ = PoolMeta
-    __name__ = 'res.user'
-
-    team = fields.Many2One('task_manager.team', 'Team')
-
-    @classmethod
-    def _export_light(cls):
-        result = super(User, cls)._export_light()
-        result.add('team')
-        return result
-
-
-class Session():
-    'Session'
-
-    __metaclass__ = PoolMeta
-    __name__ = 'ir.session'
-
-    @classmethod
-    def delete(cls, sessions):
-        Log = Pool().get('coop_process.process_log')
-        for session in sessions:
-            locks = Log.search([
-                ('user', '=', session.create_uid),
-                ('locked', '=', True)])
-            if locks:
-                Log.write(locks, {'locked': False})
-        super(Session, cls).delete(sessions)
-
-    @classmethod
-    def create(cls, values):
-        cls.delete(cls.search([('create_uid', '=', Transaction().user)]))
-        return super(Session, cls).create(values)
 
 
 class Priority(model.CoopSQL, model.CoopView):

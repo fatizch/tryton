@@ -5,7 +5,7 @@ from .test_case import *
 
 def register():
     Pool.register(
-        # from collection
+        # From collection
         SuspenseParty,
         Configuration,
         Collection,
@@ -13,13 +13,11 @@ def register():
         CollectionParameters,
         Assignment,
         AssignCollection,
-        # TODO : Move in utils.export
-        Property,
-        # from test_case
+        # From test_case
         TestCaseModel,
         module='collection', type_='model')
 
     Pool.register(
-        # from collection
+        # From collection
         CollectionWizard,
         module='collection', type_='wizard')

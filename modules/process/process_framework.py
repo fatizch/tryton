@@ -8,7 +8,6 @@ from trytond.modules.coop_utils import utils
 
 
 __all__ = [
-    'WorkflowModel',
     'ProcessFramework',
     'ClassAttr',
 ]
@@ -93,19 +92,6 @@ class ClassAttr(PoolMeta):
             # We return the methods computed with the generic method.
             return self.default_button_method(name)
         return super(ClassAttr, self).__getattr__(name)
-
-
-class WorkflowModel():
-    'Model'
-    '''
-        We need to override the Model Class in order to add the is_workflow
-        field so we can find which classes are workflow compatible.
-    '''
-
-    __metaclass__ = PoolMeta
-    __name__ = 'ir.model'
-
-    is_workflow = fields.Boolean('Is Workflow')
 
 
 class ProcessFramework(ModelView):

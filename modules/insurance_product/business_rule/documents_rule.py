@@ -4,7 +4,7 @@ import StringIO
 import functools
 
 from trytond.model import Model
-from trytond.pool import Pool, PoolMeta
+from trytond.pool import Pool
 from trytond.wizard import Wizard, StateAction, StateView, Button
 from trytond.wizard import StateTransition
 from trytond.report import Report
@@ -19,7 +19,6 @@ from trytond.modules.insurance_product.business_rule.business_rule import \
 from trytond.modules.coop_utils import BatchRoot
 
 __all__ = [
-    'NoTargetCheckAttachment',
     'DocumentDesc',
     'DocumentRule',
     'DocumentRuleRelation',
@@ -28,7 +27,6 @@ __all__ = [
     'LetterModel',
     'LetterVersion',
     'Printable',
-    'OverridenModel',
     'LetterModelDisplayer',
     'LetterModelSelection',
     'LetterReport',
@@ -96,15 +94,6 @@ class LetterVersion(Attachment):
     @classmethod
     def default_type(cls):
         return 'data'
-
-
-class OverridenModel():
-    'Model'
-
-    __name__ = 'ir.model'
-    __metaclass__ = PoolMeta
-
-    printable = fields.Boolean('Printable')
 
 
 class Printable(Model):
@@ -831,19 +820,6 @@ class RequestFinder(model.CoopView):
         result['fields'] = cls.fields_get(fields_names=fields)
 
         return result
-
-
-class NoTargetCheckAttachment():
-    'Attachment'
-
-    __metaclass__ = PoolMeta
-    __name__ = 'ir.attachment'
-
-    @classmethod
-    def check_access(cls, ids, mode='read'):
-        if '_force_access' in Transaction().context:
-            return
-        super(NoTargetCheckAttachment, cls).check_access(ids, mode)
 
 
 class AttachmentSetter(model.CoopView):
