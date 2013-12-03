@@ -12,10 +12,10 @@ from .test_case import *
 
 def register():
     Pool.register(
-        #from party
+        # From party
         Party,
         Insurer,
-        # from product
+        # From product
         Offered,
         ItemDescriptor,
         Coverage,
@@ -26,13 +26,15 @@ def register():
         ItemDescriptorComplementaryDataRelation,
         ProductItemDescriptorRelation,
         ProductValidationBatch,
-        # from business_rule
+        # From business_rule
         RuleEngineParameter,
         RuleEngine,
         DimensionDisplayer,
         BusinessRuleRoot,
-        # from documents_rule
-        OverridenModel,
+        # From business_rule.ir
+        PrintableModel,
+        NoTargetCheckAttachment,
+        # From business_rule.documents_rule
         LetterModel,
         LetterVersion,
         DocumentDesc,
@@ -42,18 +44,17 @@ def register():
         Document,
         LetterModelDisplayer,
         LetterModelSelection,
-        NoTargetCheckAttachment,
         AttachmentCreation,
         RequestFinder,
         AttachmentSetter,
         DocumentRequestDisplayer,
         DocumentRequestBatch,
-        # from pricing_rule
+        # From business_rule.pricing_rule
         PricingRule,
         PricingComponent,
         TaxVersion,
         FeeVersion,
-        # from eligibility_rule
+        # From business_rule.eligibility_rule
         EligibilityRule,
         EligibilityRelationKind,
         EventDesc,
@@ -72,7 +73,7 @@ def register():
         DeductibleRule,
         DeductibleDuration,
         TermRenewalRule,
-        # from rule_sets
+        # From rule_sets
         SubscriberContext,
         PersonContext,
         OptionContext,
@@ -83,17 +84,19 @@ def register():
         ClauseRelation,
         ClauseVersion,
         LossDescComplementaryDataRelation,
-        # from process
+        # From process
         ProcessProductRelation,
         ProcessDesc,
         ExpenseKind,
-        # from test_case
+        # From test_case
         TestCaseModel,
         module='insurance_product', type_='model')
     Pool.register(
+        # From business_rule.documents_rule
         LetterReport,
         module='insurance_product', type_='report')
     Pool.register(
+        # From business_rule.documents_rule
         LetterGeneration,
         ReceiveDocuments,
         module='insurance_product', type_='wizard')

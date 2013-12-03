@@ -41,7 +41,6 @@ __all__ = [
     'CoveredData',
     'TaxDesc',
     'FeeDesc',
-    'Sequence',
     'FiscalYear',
     'Period',
     'Company',
@@ -1390,26 +1389,6 @@ class FeeDesc():
     @classmethod
     def search_company(cls, name, clause):
         return [(('account_for_billing.company',) + tuple(clause[1:]))]
-
-
-class Sequence():
-    'Sequence'
-
-    __metaclass__ = PoolMeta
-    __name__ = 'ir.sequence'
-
-    @classmethod
-    def __setup__(cls):
-        super(Sequence, cls).__setup__()
-        cls.company = copy.copy(cls.company)
-        cls.company.domain = export.clean_domain_for_import(
-            cls.company.domain, 'company')
-
-    @classmethod
-    def _export_skips(cls):
-        result = super(Sequence, cls)._export_skips()
-        result.add('number_next_internal')
-        return result
 
 
 class Company():

@@ -4,12 +4,13 @@ from trytond.pyson import Eval, Bool, Less
 from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import CoopView
-from trytond.modules.coop_utils import utils, fields, model
+from trytond.modules.coop_utils import utils, fields, model, export
 from trytond.modules.coop_utils import coop_string
 
 
 __all__ = [
     'Party',
+    'PartyCategory',
     'Actor',
     ]
 
@@ -324,6 +325,12 @@ class Party(model.CoopSQL):
     @staticmethod
     def default_number_of_contact_mechanisms():
         return 0
+
+
+class PartyCategory(export.ExportImportMixin):
+    'Party Category'
+
+    __name__ = 'party.category'
 
 
 class Actor(CoopView):
