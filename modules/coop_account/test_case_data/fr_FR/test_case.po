@@ -16,22 +16,11 @@ msgstr "Compte à recevoir"
 msgid "Client Payable"
 msgstr "Compte à payer"
 
-msgid "Collection Account"
-msgstr "Compte d'Encaissement"
-
 msgid "Default Payable Account"
 msgstr "Compte à payer par défaut"
 
 msgid "Default Receivable Account"
 msgstr "Compte à recevoir par défaut"
 
-msgid "Cash Account"
-msgstr "Compte de Cash"
-
-msgid "Check Account"
-msgstr "Compte de Chèque"
-
 msgid "Account for %s"
 msgstr "Compte pour %s"
-
-

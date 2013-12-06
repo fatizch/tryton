@@ -21,7 +21,7 @@ class TestCaseModel():
             'insurer_test_case')
         result['insurer_test_case'] = {
             'name': 'Insurer Test Case',
-            'dependencies': set([]),
+            'dependencies': set(['configure_accounting_test_case']),
         }
         return result
 
