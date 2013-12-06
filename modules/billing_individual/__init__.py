@@ -48,8 +48,3 @@ def register():
     Pool.register(
         BillingProcess,
         module='billing_individual', type_='wizard')
-
-    export.add_export_to_model([
-            ('account.tax', ('name', )),
-            ('account.account.type', ('name', )),
-            ], 'billing_individual')
