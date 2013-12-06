@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tryton>
+  <data>
+    <!-- ############################################################ -->
+    <!-- Menus -->
+    <!-- ############################################################ -->
+    <menuitem parent="insurance_contract.menu_contract" name="Endorsement" id="menu_endorsement" sequence="20"/>
+    <menuitem parent="menu_endorsement" name="Configuration" id="menu_configuration" sequence="0" icon="tryton-preferences"/>
+    <!-- ############################################################ -->
+    <!-- Endorsement -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="endorsement_view_form">
+      <field name="model">endorsement</field>
+      <field name="type">form</field>
+      <field name="name">endorsement_form</field>
+    </record>
+    <record model="ir.ui.view" id="endorsement_view_list">
+      <field name="model">endorsement</field>
+      <field name="type">tree</field>
+      <field name="name">endorsement_list</field>
+    </record>
+    <!-- Entry Point -->
+    <record model="ir.action.act_window" id="act_endorsement_form">
+      <field name="name">Endorsements</field>
+      <field name="res_model">endorsement</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_endorsement_form_view1">
+      <field name="sequence" eval="10"/>
+      <field name="view" ref="endorsement_view_list"/>
+      <field name="act_window" ref="act_endorsement_form"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_endorsement_form_view2">
+      <field name="sequence" eval="20"/>
+      <field name="view" ref="endorsement_view_form"/>
+      <field name="act_window" ref="act_endorsement_form"/>
+    </record>
+    <menuitem parent="menu_endorsement" sequence="10" id="menu_endorsement_form" action="act_endorsement_form"/>
+    <!-- ############################################################ -->
+    <!-- Endorsement Fields -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="endorsement_field_view_form">
+      <field name="model">endorsement.field</field>
+      <field name="type">form</field>
+      <field name="name">field_form</field>
+    </record>
+    <record model="ir.ui.view" id="endorsement_field_view_list">
+      <field name="model">endorsement.field</field>
+      <field name="type">tree</field>
+      <field name="name">field_list</field>
+    </record>
+    <!-- Entry Point -->
+    <record model="ir.action.act_window" id="act_endorsement_field_form">
+      <field name="name">Endorsement Fields</field>
+      <field name="res_model">endorsement.field</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_endorsement_field_form_view1">
+      <field name="sequence" eval="10"/>
+      <field name="view" ref="endorsement_field_view_list"/>
+      <field name="act_window" ref="act_endorsement_field_form"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_endorsement_field_form_view2">
+      <field name="sequence" eval="20"/>
+      <field name="view" ref="endorsement_field_view_form"/>
+      <field name="act_window" ref="act_endorsement_field_form"/>
+    </record>
+    <menuitem parent="menu_configuration" sequence="10" id="menu_endorsement_field_form" action="act_endorsement_field_form"/>
+    <!-- ############################################################ -->
+    <!-- Endorsement Option -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="endorsement_option_view_form">
+      <field name="model">endorsement.option</field>
+      <field name="type">form</field>
+      <field name="name">endorsement_option_form</field>
+    </record>
+    <record model="ir.ui.view" id="endorsement_option_view_list">
+      <field name="model">endorsement.option</field>
+      <field name="type">tree</field>
+      <field name="name">endorsement_option_list</field>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Endorsement Option Field -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="endorsement_option_field_view_list">
+      <field name="model">endorsement.option.field</field>
+      <field name="type">tree</field>
+      <field name="name">field_list</field>
+    </record>
+    <record model="ir.ui.view" id="endorsement_option_field_view_form">
+      <field name="model">endorsement.option.field</field>
+      <field name="type">form</field>
+      <field name="name">field_form</field>
+    </record>
+    <!-- Entry Point -->
+    <record model="ir.action.act_window" id="act_endorsement_option_field_form">
+      <field name="name">Endorsement Option Fields</field>
+      <field name="res_model">endorsement.option.field</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_endorsement_option_field_form_view1">
+      <field name="sequence" eval="10"/>
+      <field name="view" ref="endorsement_option_field_view_list"/>
+      <field name="act_window" ref="act_endorsement_option_field_form"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_endorsement_option_field_form_view2">
+      <field name="sequence" eval="20"/>
+      <field name="view" ref="endorsement_option_field_view_form"/>
+      <field name="act_window" ref="act_endorsement_option_field_form"/>
+    </record>
+    <menuitem parent="menu_configuration" sequence="20" id="menu_endorsement_option_field_form" action="act_endorsement_option_field_form"/>
+  </data>
+</tryton>
