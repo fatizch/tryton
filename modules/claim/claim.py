@@ -11,6 +11,7 @@ from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, utils, coop_date, fields
 from trytond.modules.coop_utils import coop_string
+from trytond.modules.coop_currency import ModelCurrency
 from trytond.modules.insurance_product.benefit import INDEMNIFICATION_KIND, \
     INDEMNIFICATION_DETAIL_KIND
 from trytond.modules.insurance_product import Printable
@@ -689,7 +690,7 @@ class ClaimDeliveredService():
         return res
 
 
-class Indemnification(model.CoopView, model.CoopSQL, model.ModelCurrency):
+class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
     'Indemnification'
 
     __name__ = 'claim.indemnification'
@@ -838,7 +839,7 @@ class Indemnification(model.CoopView, model.CoopSQL, model.ModelCurrency):
         return u'%s %s [%s]' % (
             coop_string.translate_value(self, 'start_date')
             if self.start_date else '',
-            coop_string.amount_as_string(self.amount, self.currency),
+            self.currency.amount_as_string(self.amount),
             coop_string.translate_value(self, 'status') if self.status else '',
         )
 
@@ -870,8 +871,7 @@ class Indemnification(model.CoopView, model.CoopSQL, model.ModelCurrency):
         cls.write(indemnifications, {'status': 'rejected'})
 
 
-class IndemnificationDetail(model.CoopSQL, model.CoopView,
-        model.ModelCurrency):
+class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
     'Indemnification Detail'
 
     __name__ = 'claim.indemnification_detail'

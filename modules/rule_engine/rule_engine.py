@@ -1119,7 +1119,8 @@ class TestCaseValue(ModelView, ModelSQL):
 
     name = fields.Selection(
         'get_selection', 'Name',
-        selection_change_with=['rule'], depends=['rule'])
+        selection_change_with=['rule', 'test_case'], depends=['rule',
+            'test_case'])
     value = fields.Char('Value', states={'invisible': ~Eval('override_value')})
     override_value = fields.Boolean('Override Value')
     test_case = fields.Many2One(

@@ -135,14 +135,17 @@ if __name__ == '__main__':
 
         summary[cur_module] = sum
 
-    logging.getLogger('unittest').info('\n' + '=' * 80 + '\n' +
-        'Global summary' + '\n' + '=' * 80)
+    logging.getLogger('unittest').info('=' * 80)
+    logging.getLogger('unittest').info('Global summary')
+    logging.getLogger('unittest').info('=' * 80)
     final = {'number': 0, 'time': 0.00, 'errors': 0}
 
     tag = False
     for key, value in summary.iteritems():
         if not tag:
-            logging.getLogger('unittest').info('\n\tPASSED :\n')
+            logging.getLogger('unittest').info('=' * 80)
+            logging.getLogger('unittest').info('PASSED :')
+            logging.getLogger('unittest').info('=' * 80)
             tag = True
         if value['errors'] == 0:
             logging.getLogger('unittest').info('Module %s ran %s tests '
@@ -154,7 +157,9 @@ if __name__ == '__main__':
     for key, value in summary.iteritems():
         if value['errors'] != 0:
             if not tag:
-                logging.getLogger('unittest').info('\n\tFAILED :\n')
+                logging.getLogger('unittest').info('=' * 80)
+                logging.getLogger('unittest').info('FAILED :')
+                logging.getLogger('unittest').info('=' * 80)
                 tag = True
             logging.getLogger('unittest').info('Module %s ran %s tests '
                 'in %s seconds with %s failures' % (

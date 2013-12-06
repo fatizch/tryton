@@ -15,6 +15,7 @@ from trytond.rpc import RPC
 
 from trytond.modules.coop_utils import model, fields, utils, coop_date
 from trytond.modules.coop_utils import export, coop_string
+from trytond.modules.coop_currency import ModelCurrency
 from trytond.modules.insurance_product.business_rule.pricing_rule import \
     PRICING_FREQUENCY
 from trytond.modules.insurance_contract.contract import IS_PARTY
@@ -40,7 +41,6 @@ __all__ = [
     'CoveredData',
     'TaxDesc',
     'FeeDesc',
-    'Sequence',
     'FiscalYear',
     'Period',
     'Company',
@@ -122,7 +122,7 @@ class PriceLineFeeRelation(model.CoopSQL, model.CoopView):
         return False
 
 
-class PriceLine(model.CoopSQL, model.CoopView, model.ModelCurrency):
+class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
     'Price Line'
 
     __name__ = 'billing.price_line'
@@ -1389,26 +1389,6 @@ class FeeDesc():
     @classmethod
     def search_company(cls, name, clause):
         return [(('account_for_billing.company',) + tuple(clause[1:]))]
-
-
-class Sequence():
-    'Sequence'
-
-    __metaclass__ = PoolMeta
-    __name__ = 'ir.sequence'
-
-    @classmethod
-    def __setup__(cls):
-        super(Sequence, cls).__setup__()
-        cls.company = copy.copy(cls.company)
-        cls.company.domain = export.clean_domain_for_import(
-            cls.company.domain, 'company')
-
-    @classmethod
-    def _export_skips(cls):
-        result = super(Sequence, cls)._export_skips()
-        result.add('number_next_internal')
-        return result
 
 
 class Company():

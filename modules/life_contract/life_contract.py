@@ -2,7 +2,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.rpc import RPC
 
-from trytond.modules.coop_utils import utils, fields, coop_string
+from trytond.modules.coop_utils import utils, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -141,8 +141,7 @@ class LifeCoveredData():
             },)[0]
         if vals:
             res = map(lambda x: (x, x),
-                map(lambda x: coop_string.amount_as_string(x, self.currency),
-                    vals))
+                map(lambda x: self.currency.amount_as_string(x), vals))
             return [('', '')] + res
         return [('', '')]
 

@@ -4,6 +4,7 @@ from trytond.pool import Pool
 
 from trytond.modules.coop_utils import model, coop_string, coop_date, utils
 from trytond.modules.coop_utils import fields
+from trytond.modules.coop_currency import ModelCurrency
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED, CONFIG_KIND, STATE_SIMPLE
 from trytond.modules.offered.offered import DEF_CUR_DIG
@@ -26,7 +27,7 @@ STATES_ANNUITY = Eval('_parent_offered', {}).get(
 STATES_AMOUNT_EVOLVES = Bool(Eval('amount_evolves_over_time'))
 
 
-class BenefitRule(BusinessRuleRoot, model.CoopSQL, model.ModelCurrency):
+class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
     'Benefit Rule'
 
     __name__ = 'ins_product.benefit_rule'
@@ -307,7 +308,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, model.ModelCurrency):
             return self.get_indemnification_for_capital(args)
 
 
-class SubBenefitRule(model.CoopSQL, model.CoopView, model.ModelCurrency):
+class SubBenefitRule(model.CoopSQL, model.CoopView, ModelCurrency):
     'Sub Benefit Rule'
 
     __name__ = 'ins_product.sub_benefit_rule'

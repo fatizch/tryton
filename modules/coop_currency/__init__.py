@@ -1,5 +1,6 @@
 from trytond.pool import Pool
 from .currency import *
+from .model import *
 from .test_case import *
 
 

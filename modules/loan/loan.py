@@ -4,7 +4,7 @@ from trytond.pool import Pool
 from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import utils, coop_date, fields, model
-from trytond.modules.coop_utils import coop_string
+from trytond.modules.coop_currency import ModelCurrency
 
 __all__ = [
     'Loan',
@@ -34,7 +34,7 @@ STATES = {'required': ~~Eval('active')}
 DEPENDS = ['active']
 
 
-class Loan(model.CoopSQL, model.CoopView, model.ModelCurrency):
+class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     'Loan'
 
     __name__ = 'loan.loan'
@@ -99,7 +99,7 @@ class Loan(model.CoopSQL, model.CoopView, model.ModelCurrency):
     def get_rec_name(self, name):
         res = ''
         if self.amount:
-            res = coop_string.amount_as_string(self.amount, self.currency)
+            res = self.currency.amount_as_string(self.amount)
         return res
 
     def init_from_borrowers(self, parties):
@@ -297,7 +297,7 @@ class LoanShare(model.CoopSQL, model.CoopView):
         current_dict['share'] = self
 
 
-class LoanIncrement(model.CoopSQL, model.CoopView, model.ModelCurrency):
+class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     'Loan Increment'
 
     __name__ = 'loan.increment'
@@ -321,7 +321,7 @@ class LoanIncrement(model.CoopSQL, model.CoopView, model.ModelCurrency):
         return self.loan.currency
 
 
-class LoanPayment(model.CoopSQL, model.CoopView, model.ModelCurrency):
+class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
     'Loan Payment'
 
     __name__ = 'loan.payment'
