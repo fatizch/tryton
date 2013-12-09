@@ -23,6 +23,8 @@ then
 elif [ $TRYTON_LAUNCH_MODE = "debug" ]
 then
     env UBUNTU_MENUPROXY= $TRYTON_PATH/tryton -c $TRYTON_CONF -l DEBUG -d -v &
+else
+    exit 0
 fi
 sleep 2
 echo $SEP
