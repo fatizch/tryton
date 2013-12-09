@@ -1,0 +1,45 @@
+#!/bin/sh
+# This is for the 'update-rc.d', so it knows when to start your service.
+### BEGIN INIT INFO
+# Provides:          tryton_server
+# Required-Start:    $all
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: a short description
+# Description:       a long description
+### END INIT INFO
+SCRIPT=`readlink -f $0`
+SCRIPTPATH=`dirname $SCRIPT`
+log () {
+    echo "$@"
+    logger -p user.info -t "Tryton Server $SERVERNAME [$$]" "$@"
+}
+start()
+{
+     # Mettez ici le démarrage de votre programme
+     sh $SCRIPTPATH/start.sh -l 2>&1 | log &
+}
+
+stop()
+{
+     # Mettez ici un kill sur votre programme
+     sh $SCRIPTPATH/start.sh -k 2>&1 | log &
+}
+
+restart()
+{
+    stop;
+    sleep 1;
+    start;
+}
+case $1 in
+start) 
+      start;;
+stop)
+      stop;;
+restart)
+      restart;;
+*)
+      start;;
+esac
