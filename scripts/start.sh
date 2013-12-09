@@ -4,7 +4,7 @@ SCRIPTPATH=`dirname $SCRIPT`
 PREV_WD=`readlink -f .`
 VE=`echo $VIRTUAL_ENV`
 if [ -z $VE ]; then
-   source bin/activate
+   . $SCRIPTPATH/../../../bin/activate
 fi
 cd $VIRTUAL_ENV
 cd tryton-workspace/conf
