@@ -1,7 +1,14 @@
 msgid "Suspense Account"
 msgstr "Compte d'attente"
 
+msgid "Collection Account"
+msgstr "Compte d'Encaissement"
+
 msgid "Default Suspense Account"
 msgstr "Compte d'attente par défaut"
 
+msgid "Cash Account"
+msgstr "Compte de Cash"
 
+msgid "Check Account"
+msgstr "Compte de Chèque"

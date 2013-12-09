@@ -1,5 +1,7 @@
 from trytond.pool import Pool
 
+from .account import *
+from .company import *
 from .tax import *
 from .fee import *
 from .test_case import *
@@ -7,12 +9,21 @@ from .test_case import *
 
 def register():
     Pool.register(
-        # from tax
+        # From account
+        Account,
+        AccountKind,
+        Journal,
+        FiscalYear,
+        Period,
+        Configuration,
+        # From company
+        Company,
+        # From tax
         TaxDesc,
         TaxVersion,
-        # from fee
+        # From fee
         FeeDesc,
         FeeVersion,
-        # from test_case
+        # From test_case
         TestCaseModel,
         module='coop_account', type_='model')

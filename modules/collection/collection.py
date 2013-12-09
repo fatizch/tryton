@@ -20,7 +20,7 @@ __all__ = [
     ]
 
 
-class Configuration(export.ExportImportMixin):
+class Configuration():
     'Account Configuration'
 
     __metaclass__ = PoolMeta
@@ -44,60 +44,17 @@ class Configuration(export.ExportImportMixin):
                 ('type', '=', 'cash')]))
 
     @classmethod
-    def _export_keys(cls):
-        # Account Configuration is a singleton, so the id is an acceptable
-        # key
-        return set(['id'])
-
-    @classmethod
     def _export_must_export_field(cls, field_name, field):
         # Function field are not exported by default
-        if field_name in ('default_account_receivable',
-                'default_account_payable', 'default_suspense_account'):
+        if field_name == 'default_suspense_account':
             return True
         return super(Configuration, cls)._export_must_export_field(
             field_name, field)
-
-    def _export_default_account(self, name, exported, result, my_key):
-        pool = Pool()
-        Property = pool.get('ir.property')
-        ModelField = pool.get('ir.model.field')
-        company_id = Transaction().context.get('company')
-        account_field, = ModelField.search([
-            ('model.model', '=', 'party.party'),
-            ('name', '=', name[8:]),
-            ], limit=1)
-        properties = Property.search([
-            ('field', '=', account_field.id),
-            ('res', '=', None),
-            ('company', '=', company_id),
-            ], limit=1)
-        if properties:
-            prop, = properties
-            prop._export_json(exported, result)
-        return None
-
-    def _export_override_default_account_receivable(self, exported, result,
-            my_key):
-        return self._export_default_account('default_account_receivable',
-            exported, result, my_key)
-
-    def _export_override_default_account_payable(self, exported, result,
-            my_key):
-        return self._export_default_account('default_account_payable',
-            exported, result, my_key)
 
     def _export_override_default_suspense_account(self, exported, result,
             my_key):
         return self._export_default_account('default_suspense_account',
             exported, result, my_key)
-
-    @classmethod
-    def _import_default_account(cls, name, instance_key, good_instance,
-            field_value, values, created, relink):
-        if not field_value:
-            return
-        _account_field, _company, _value = field_value
 
 
 class SuspenseParty():
