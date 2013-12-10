@@ -537,8 +537,7 @@ class ClaimDeliveredService():
         'offered.complementary_data_def', 'Complementary Data',
         on_change=['benefit', 'complementary_data', 'loss',
             'subscribed_service', 'is_loan', 'contract'],
-        #states={'invisible': ~Eval('complementary_data')},)
-        )
+        states={'invisible': ~Eval('complementary_data')})
 
     @classmethod
     def __setup__(cls):
