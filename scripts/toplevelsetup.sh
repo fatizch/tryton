@@ -37,7 +37,7 @@ sudo apt-get install python-gtksourceview2
 echo $SEP
 echo Installing virtualenv for multi env management
 echo $SEP
-sudo pip-python install virtualenv
+sudo pip install virtualenv
 echo $SEP
 echo System ready
 echo $SEP
