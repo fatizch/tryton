@@ -247,7 +247,6 @@ class Benefit(model.CoopSQL, offered.Offered):
         existing_data = args['loss'].complementary_data
         existing_data.update(args['delivered_service'].complementary_data)
         ComplementaryData = Pool().get('offered.complementary_data_def')
-        print possible_schemas, all_schemas
         result = ComplementaryData.calculate_value_set(
             possible_schemas, all_schemas, existing_data, args)
         return result, ()
