@@ -17,7 +17,7 @@ fi
 echo $SEP
 echo Installing core packages
 echo $SEP
-sudo apt-get install python python-pip python-devel mercurial
+sudo apt-get install python python-pip python-dev mercurial
 echo $SEP
 echo Installing server packages
 echo $SEP
