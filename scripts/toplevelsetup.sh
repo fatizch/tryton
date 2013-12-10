@@ -17,7 +17,7 @@ fi
 echo $SEP
 echo Installing core packages
 echo $SEP
-sudo apt-get install python python-pip python-devel mercurial
+sudo apt-get install python python-pip python-dev mercurial
 echo $SEP
 echo Installing server packages
 echo $SEP
@@ -37,7 +37,7 @@ sudo apt-get install python-gtksourceview2
 echo $SEP
 echo Installing virtualenv for multi env management
 echo $SEP
-sudo pip-python install virtualenv
+sudo pip install virtualenv
 echo $SEP
 echo System ready
 echo $SEP
