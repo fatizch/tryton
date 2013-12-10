@@ -1,5 +1,6 @@
 #-*- coding:utf-8 -*-
 from trytond.pyson import Eval
+from trytond.pool import Pool
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, coop_date, fields
@@ -226,6 +227,30 @@ class Benefit(model.CoopSQL, offered.Offered):
     def init_dict_for_rule_engine(self, args):
         super(Benefit, self).init_dict_for_rule_engine(args)
         args['benefit'] = self
+
+    def get_compl_data_for_exec(self, args):
+        all_schemas = set(self.get_complementary_data_def('benefit',
+            args['date']))
+        return all_schemas, all_schemas
+
+    def give_me_calculated_complementary_datas(self, args):
+        # We prepare the call to the 'calculate_value_set' API.
+        # It needs the following parameters:
+        #  - The list of the schemas it must look for
+        #  - The list of all the schemas in the tree. This list should
+        #    contain all the schemas from the first list
+        #  - All the values available for all relevent schemas
+        if not 'loss' in args or not 'date' in args:
+            raise Exception('Expected loss and date in args, got %s' % (
+                str([k for k in args.iterkeys()])))
+        all_schemas, possible_schemas = self.get_compl_data_for_exec(args)
+        existing_data = args['loss'].complementary_data
+        existing_data.update(args['delivered_service'].complementary_data)
+        ComplementaryData = Pool().get('offered.complementary_data_def')
+        print possible_schemas, all_schemas
+        result = ComplementaryData.calculate_value_set(
+            possible_schemas, all_schemas, existing_data, args)
+        return result, ()
 
 
 class InsuranceBenefit(Offered):
