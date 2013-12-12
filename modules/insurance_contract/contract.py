@@ -489,7 +489,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             on_change_with=['party']),
         'on_change_with_is_person')
     covered_relations = fields.Many2Many(
-        'ins_contract.covered_element-party_relation', 'covered_element',
+        'contract.covered_element-party', 'covered_element',
         'party_relation', 'Covered Relations', domain=[
             'OR',
             [('from_party', '=', Eval('party'))],
@@ -786,7 +786,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
 class CoveredElementPartyRelation(model.CoopSQL):
     'Relation between Covered Element and Covered Relations'
 
-    __name__ = 'ins_contract.covered_element-party_relation'
+    __name__ = 'contract.covered_element-party'
 
     covered_element = fields.Many2One('contract.covered_element',
         'Covered Element', ondelete='CASCADE')

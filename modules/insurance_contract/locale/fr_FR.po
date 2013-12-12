@@ -542,39 +542,39 @@ msgctxt "field:contract.covered_element,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_contract.covered_element-party_relation,covered_element:"
+msgctxt "field:contract.covered_element-party,covered_element:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.covered_element-party_relation,create_date:"
+msgctxt "field:contract.covered_element-party,create_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.covered_element-party_relation,create_date_:"
+msgctxt "field:contract.covered_element-party,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_contract.covered_element-party_relation,create_uid:"
+msgctxt "field:contract.covered_element-party,create_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.covered_element-party_relation,id:"
+msgctxt "field:contract.covered_element-party,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.covered_element-party_relation,party_relation:"
+msgctxt "field:contract.covered_element-party,party_relation:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.covered_element-party_relation,rec_name:"
+msgctxt "field:contract.covered_element-party,rec_name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.covered_element-party_relation,write_date:"
+msgctxt "field:contract.covered_element-party,write_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.covered_element-party_relation,write_uid:"
+msgctxt "field:contract.covered_element-party,write_uid:"
 msgid ""
 msgstr " "
 
@@ -861,7 +861,7 @@ msgctxt "model:contract.covered_element,name:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
-msgctxt "model:ins_contract.covered_element-party_relation,name:"
+msgctxt "model:contract.covered_element-party,name:"
 msgid ""
 msgstr " "
 
