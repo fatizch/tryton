@@ -42,12 +42,12 @@
     </record>
     <!-- Document -->
     <record model="ir.ui.view" id="document_form">
-      <field name="model">ins_product.document</field>
+      <field name="model">document.request.line</field>
       <field name="type">form</field>
       <field name="name">document_form</field>
     </record>
     <record model="ir.ui.view" id="document_tree">
-      <field name="model">ins_product.document</field>
+      <field name="model">document.request.line</field>
       <field name="type">tree</field>
       <field name="name">document_tree</field>
     </record>

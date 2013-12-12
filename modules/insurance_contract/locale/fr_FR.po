@@ -997,15 +997,15 @@ msgctxt "selection:contract-agreement,kind:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:ins_product.document,for_object:"
+msgctxt "selection:document.request.line,for_object:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "selection:ins_product.document,for_object:"
+msgctxt "selection:document.request.line,for_object:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
-msgctxt "selection:ins_product.document,for_object:"
+msgctxt "selection:document.request.line,for_object:"
 msgid "Option"
 msgstr "Garantie"
 

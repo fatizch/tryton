@@ -940,7 +940,7 @@ class DocumentRequest():
 class Document():
     'Document'
 
-    __name__ = 'ins_product.document'
+    __name__ = 'document.request.line'
     __metaclass__ = PoolMeta
 
     @classmethod

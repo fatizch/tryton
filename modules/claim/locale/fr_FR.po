@@ -854,11 +854,11 @@ msgctxt "selection:claim.indemnification.validate.select,global_value:"
 msgid "Validate"
 msgstr "Valider"
 
-msgctxt "selection:ins_product.document,for_object:"
+msgctxt "selection:document.request.line,for_object:"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "selection:ins_product.document,for_object:"
+msgctxt "selection:document.request.line,for_object:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 

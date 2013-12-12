@@ -218,7 +218,7 @@ class DocumentRule(BusinessRuleRoot, model.CoopSQL):
             return [], ['Invalid rule']
         try:
             result = utils.get_those_objects(
-                'ins_product.document', [
+                'document.request.line', [
                     ('code', 'in', rule_result.result)])
             return result, []
         except:
@@ -243,7 +243,7 @@ class DocumentRuleRelation(model.CoopSQL):
 class Document(model.CoopSQL, model.CoopView):
     'Document'
 
-    __name__ = 'ins_product.document'
+    __name__ = 'document.request.line'
 
     document_desc = fields.Many2One(
         'ins_product.document_desc', 'Document Definition', required=True)
@@ -365,7 +365,7 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
 
     needed_by = fields.Reference('Requested for', [('', '')])
     documents = fields.One2Many(
-        'ins_product.document', 'request', 'Documents',
+        'document.request.line', 'request', 'Documents',
         depends=['needed_by_str'], on_change=['documents', 'is_complete'],
         context={'request_owner': Eval('needed_by_str')})
     is_complete = fields.Function(
@@ -459,7 +459,7 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
     def add_documents(self, date, docs):
         # "docs" should be a list of tuple (doc_desc, for_object)
         existing_docs = self.get_current_docs()
-        Document = Pool().get('ins_product.document')
+        Document = Pool().get('document.request.line')
         for desc, obj in docs:
             if ((desc.id, utils.convert_to_reference(obj))) in existing_docs:
                 continue
@@ -479,7 +479,7 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
             if not k in id_docs:
                 to_del.append(v)
 
-        Document = Pool().get('ins_product.document')
+        Document = Pool().get('document.request.line')
 
         Document.delete(to_del)
 
@@ -1031,7 +1031,7 @@ class DocumentRequestBatch(BatchRoot):
 
     @classmethod
     def get_batch_search_model(cls):
-        return 'ins_product.document'
+        return 'document.request.line'
 
     @classmethod
     def get_batch_field(cls):

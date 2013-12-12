@@ -985,67 +985,67 @@ msgctxt "field:offered.deductible.rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.document,attachment:"
+msgctxt "field:document.request.line,attachment:"
 msgid "Attachment"
 msgstr "Pièce jointe"
 
-msgctxt "field:ins_product.document,create_date:"
+msgctxt "field:document.request.line,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.document,create_date_:"
+msgctxt "field:document.request.line,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.document,create_uid:"
+msgctxt "field:document.request.line,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.document,document_desc:"
+msgctxt "field:document.request.line,document_desc:"
 msgid "Document Definition"
 msgstr "Définition du Document"
 
-msgctxt "field:ins_product.document,for_object:"
+msgctxt "field:document.request.line,for_object:"
 msgid "Needed For"
 msgstr "Nécessaire Pour"
 
-msgctxt "field:ins_product.document,id:"
+msgctxt "field:document.request.line,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.document,must_expand_tree:"
+msgctxt "field:document.request.line,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.document,rec_name:"
+msgctxt "field:document.request.line,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.document,received:"
+msgctxt "field:document.request.line,received:"
 msgid "Received"
 msgstr "Reçu"
 
-msgctxt "field:ins_product.document,reception_date:"
+msgctxt "field:document.request.line,reception_date:"
 msgid "Reception Date"
 msgstr "Date de Réception"
 
-msgctxt "field:ins_product.document,request:"
+msgctxt "field:document.request.line,request:"
 msgid "Document Request"
 msgstr "Demande de Documents"
 
-msgctxt "field:ins_product.document,request_date:"
+msgctxt "field:document.request.line,request_date:"
 msgid "Request Date"
 msgstr "Date de la Demande"
 
-msgctxt "field:ins_product.document,send_date:"
+msgctxt "field:document.request.line,send_date:"
 msgid "Send Date"
 msgstr "Date d'Envoi"
 
-msgctxt "field:ins_product.document,write_date:"
+msgctxt "field:document.request.line,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.document,write_uid:"
+msgctxt "field:document.request.line,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3316,7 +3316,7 @@ msgctxt "model:offered.deductible.rule,name:"
 msgid "Deductible Rule"
 msgstr "Franchise"
 
-msgctxt "model:ins_product.document,name:"
+msgctxt "model:document.request.line,name:"
 msgid "Document"
 msgstr "Document"
 
@@ -3972,7 +3972,7 @@ msgctxt "selection:offered.deductible.rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:ins_product.document,for_object:"
+msgctxt "selection:document.request.line,for_object:"
 msgid ""
 msgstr " "
 
@@ -4580,11 +4580,11 @@ msgctxt "view:offered.deductible.rule:"
 msgid "Deductible rule"
 msgstr "Franchise"
 
-msgctxt "view:ins_product.document:"
+msgctxt "view:document.request.line:"
 msgid "Document"
 msgstr "Document"
 
-msgctxt "view:ins_product.document:"
+msgctxt "view:document.request.line:"
 msgid "Documents"
 msgstr "Documents"
 
