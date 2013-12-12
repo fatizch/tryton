@@ -149,7 +149,7 @@ class ProcessFramework(ModelView):
     def build_instruction_transition_method(cls, process, transition):
         def button_transition_generic(works):
             # Pretty straightforward : we find the matching transition
-            StepTransition = Pool().get('process.step_transition')
+            StepTransition = Pool().get('process.transition')
             good_trans = StepTransition(int(transition[0]))
 
             for work in works:
@@ -301,7 +301,7 @@ class ProcessFramework(ModelView):
                     self.current_state.step.id == executable.id:
                 return False
             button_name = '_button_step_%s_%s' % (process.id, executable.id)
-        elif executable.__name__ == 'process.step_transition':
+        elif executable.__name__ == 'process.transition':
             button_name = '_button_transition_%s_%s' % (
                 process.id, executable.id)
         return self.button_is_active(button_name)
@@ -312,7 +312,7 @@ class ProcessFramework(ModelView):
 
         # We need to find the transition which matches the id given
         # through the name of the method.
-        TransitionDesc = Pool().get('process.step_transition')
+        TransitionDesc = Pool().get('process.transition')
         good_transition = TransitionDesc(transition_id)
 
         # We need to manage the authroizations on the transition

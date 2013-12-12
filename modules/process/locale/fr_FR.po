@@ -22,11 +22,11 @@ msgctxt "error:process.step:"
 msgid "The technical name must be unique"
 msgstr "Le nom technique doit être unique"
 
-msgctxt "error:process.step_transition:"
+msgctxt "error:process.transition:"
 msgid "Both choices must be filled !"
 msgstr "Saisir les deux choix"
 
-msgctxt "error:process.step_transition:"
+msgctxt "error:process.transition:"
 msgid "Pyson expression and description is mandatory"
 msgstr "Expression Pyson et la description sont obligatoires"
 
@@ -370,79 +370,79 @@ msgctxt "field:process.step-group,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:process.step_transition,authorizations:"
+msgctxt "field:process.transition,authorizations:"
 msgid "Authorizations"
 msgstr "Autorisations"
 
-msgctxt "field:process.step_transition,choice_if_false:"
+msgctxt "field:process.transition,choice_if_false:"
 msgid "Transition if False"
 msgstr "Transition Si Faux"
 
-msgctxt "field:process.step_transition,choice_if_true:"
+msgctxt "field:process.transition,choice_if_true:"
 msgid "Transition if True"
 msgstr "Transition Si Vrai"
 
-msgctxt "field:process.step_transition,create_date:"
+msgctxt "field:process.transition,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:process.step_transition,create_uid:"
+msgctxt "field:process.transition,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:process.step_transition,from_step:"
+msgctxt "field:process.transition,from_step:"
 msgid "From Step"
 msgstr "Depuis l'Etape"
 
-msgctxt "field:process.step_transition,id:"
+msgctxt "field:process.transition,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:process.step_transition,kind:"
+msgctxt "field:process.transition,kind:"
 msgid "Transition Kind"
 msgstr "Type"
 
-msgctxt "field:process.step_transition,method_kind:"
+msgctxt "field:process.transition,method_kind:"
 msgid "Method Behaviour"
 msgstr "Comportement de la Méthode"
 
-msgctxt "field:process.step_transition,methods:"
+msgctxt "field:process.transition,methods:"
 msgid "Methods"
 msgstr "Méthodes"
 
-msgctxt "field:process.step_transition,on_process:"
+msgctxt "field:process.transition,on_process:"
 msgid "On Process"
 msgstr "Sur le Processus"
 
-msgctxt "field:process.step_transition,priority:"
+msgctxt "field:process.transition,priority:"
 msgid "Priority"
 msgstr "Priorité"
 
-msgctxt "field:process.step_transition,pyson:"
+msgctxt "field:process.transition,pyson:"
 msgid "Pyson Constraint"
 msgstr "Contraintes Pyson"
 
-msgctxt "field:process.step_transition,pyson_choice:"
+msgctxt "field:process.transition,pyson_choice:"
 msgid "Choice"
 msgstr "Choix"
 
-msgctxt "field:process.step_transition,pyson_description:"
+msgctxt "field:process.transition,pyson_description:"
 msgid "Pyson Description"
 msgstr "Description Pyson"
 
-msgctxt "field:process.step_transition,rec_name:"
+msgctxt "field:process.transition,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.step_transition,to_step:"
+msgctxt "field:process.transition,to_step:"
 msgid "To Step"
 msgstr "Vers l'Etape"
 
-msgctxt "field:process.step_transition,write_date:"
+msgctxt "field:process.transition,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:process.step_transition,write_uid:"
+msgctxt "field:process.transition,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -550,7 +550,7 @@ msgctxt "model:process.step-group,name:"
 msgid "Step Desc Authorization"
 msgstr "Autorisations pour l'Etape"
 
-msgctxt "model:process.step_transition,name:"
+msgctxt "model:process.transition,name:"
 msgid "Step Transition"
 msgstr "Transition d'Etape"
 
@@ -582,23 +582,23 @@ msgctxt "selection:process,step_button_group_position:"
 msgid "Right"
 msgstr "Droite"
 
-msgctxt "selection:process.step_transition,kind:"
+msgctxt "selection:process.transition,kind:"
 msgid "Calculated"
 msgstr "Calculé"
 
-msgctxt "selection:process.step_transition,kind:"
+msgctxt "selection:process.transition,kind:"
 msgid "Complete Process"
 msgstr "Terminer le processus"
 
-msgctxt "selection:process.step_transition,kind:"
+msgctxt "selection:process.transition,kind:"
 msgid "Standard Transition"
 msgstr "Transition Standard"
 
-msgctxt "selection:process.step_transition,method_kind:"
+msgctxt "selection:process.transition,method_kind:"
 msgid "Executed between steps"
 msgstr "Exécuter entre les Etapes"
 
-msgctxt "selection:process.step_transition,method_kind:"
+msgctxt "selection:process.transition,method_kind:"
 msgid "Replace Step Methods"
 msgstr "Remplacer les Méthodes de l'Etape"
 
@@ -952,10 +952,10 @@ msgctxt "view:process.step:"
 msgid "XML"
 msgstr "Description de la Vue"
 
-msgctxt "view:process.step_transition:"
+msgctxt "view:process.transition:"
 msgid "Step Transition Descriptor"
 msgstr "Descripteur de Transition"
 
-msgctxt "view:process.step_transition:"
+msgctxt "view:process.transition:"
 msgid "Transitions"
 msgstr "Transitions"

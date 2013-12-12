@@ -58,7 +58,7 @@ class StepTransition(model.CoopSQL):
     'Step Transition'
 
     __metaclass__ = PoolMeta
-    __name__ = 'process.step_transition'
+    __name__ = 'process.transition'
 
     pyson_choice = fields.Char(
         'Choice', states={'invisible': Eval('kind') != 'choice'})
@@ -66,7 +66,7 @@ class StepTransition(model.CoopSQL):
         'Pyson Description',
         states={'invisible': Eval('kind') != 'choice'})
     choice_if_true = fields.Many2One(
-        'process.step_transition',
+        'process.transition',
         'Transition if True',
         states={'invisible': Eval('kind') != 'choice'},
         domain=[
@@ -74,7 +74,7 @@ class StepTransition(model.CoopSQL):
             ('main_model', '=', Eval('_parent_on_process', {}).get(
                 'on_model'))])
     choice_if_false = fields.Many2One(
-        'process.step_transition',
+        'process.transition',
         'Transition if False',
         states={'invisible': Eval('kind') != 'choice'},
         domain=[

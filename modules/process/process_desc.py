@@ -99,7 +99,7 @@ class ProcessDesc(ModelSQL, ModelView):
         'process', 'step', 'Steps',
         states={'invisible': Bool(~Eval('display_steps_without_status'))})
     transitions = fields.One2Many(
-        'process.step_transition', 'on_process', 'Transitions')
+        'process.transition', 'on_process', 'Transitions')
     xml_header = fields.Text('Header XML')
     xml_footer = fields.Text('Footer XML')
     xml_tree = fields.Text('Tree View XML')
@@ -587,7 +587,7 @@ class TransitionAuthorization(ModelSQL):
     __name__ = 'process.transition_authorization'
 
     transition = fields.Many2One(
-        'process.step_transition', 'Transition', ondelete='CASCADE')
+        'process.transition', 'Transition', ondelete='CASCADE')
     group = fields.Many2One(
         'res.group', 'Group', ondelete='CASCADE')
 
@@ -612,7 +612,7 @@ class Code(ModelSQL, ModelView):
     parent_step = fields.Many2One(
         'process.step', 'Parent Step', ondelete='CASCADE')
     parent_transition = fields.Many2One(
-        'process.step_transition', 'Parent Transition', ondelete='CASCADE')
+        'process.transition', 'Parent Transition', ondelete='CASCADE')
     sequence = fields.Integer('Sequence', states={'invisible': True})
 
     @classmethod
@@ -669,7 +669,7 @@ class Code(ModelSQL, ModelView):
 class StepTransition(ModelSQL, ModelView):
     'Step Transition'
 
-    __name__ = 'process.step_transition'
+    __name__ = 'process.transition'
 
     on_process = fields.Many2One(
         'process', 'On Process', required=True,

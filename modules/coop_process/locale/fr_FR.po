@@ -10,11 +10,11 @@ msgctxt "error:ir.ui.view.description:"
 msgid "The functional id must be unique !"
 msgstr "L'identifiant fonctionnel doit être unique"
 
-msgctxt "error:process.step_transition:"
+msgctxt "error:process.transition:"
 msgid "Both choices must be filled !"
 msgstr "Saisir les deux choix"
 
-msgctxt "error:process.step_transition:"
+msgctxt "error:process.transition:"
 msgid "Pyson expression and description is mandatory"
 msgstr "Expression Pyson et la description sont obligatoires"
 
@@ -254,23 +254,23 @@ msgctxt "field:process.step,pyson:"
 msgid "Pyson Constraint"
 msgstr "Contraintes Pyson"
 
-msgctxt "field:process.step_transition,choice_if_false:"
+msgctxt "field:process.transition,choice_if_false:"
 msgid ""
 msgstr " "
 
-msgctxt "field:process.step_transition,choice_if_true:"
+msgctxt "field:process.transition,choice_if_true:"
 msgid ""
 msgstr " "
 
-msgctxt "field:process.step_transition,create_date_:"
+msgctxt "field:process.transition,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:process.step_transition,pyson_choice:"
+msgctxt "field:process.transition,pyson_choice:"
 msgid ""
 msgstr " "
 
-msgctxt "field:process.step_transition,pyson_description:"
+msgctxt "field:process.transition,pyson_description:"
 msgid ""
 msgstr " "
 
@@ -306,7 +306,7 @@ msgctxt "selection:process,kind:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:process.step_transition,kind:"
+msgctxt "selection:process.transition,kind:"
 msgid "Calculated"
 msgstr "Calculé"
 
