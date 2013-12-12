@@ -135,7 +135,7 @@ class CollectionParameters(model.CoopView):
 class Assignment(model.CoopView):
     'Assignment'
 
-    __name__ = 'collection.assignment'
+    __name__ = 'collection.create.assign.lines'
 
     amount = fields.Numeric('Amount', on_change_with=['source_move_line'])
     source_move_line = fields.Many2One('account.move.line', 'Source Move Line',
@@ -192,7 +192,7 @@ class AssignCollection(model.CoopView):
 
     amount = fields.Numeric('Amount')
     party = fields.Many2One('party.party', 'Party')
-    assignments = fields.One2Many('collection.assignment', None, 'Assignments',
+    assignments = fields.One2Many('collection.create.assign.lines', None, 'Assignments',
         context={'from_party': Eval('party'), 'remaining': Eval('remaining')},
         depends=['party'])
     create_suspense_line_with_rest = fields.Boolean(

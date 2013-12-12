@@ -2,7 +2,7 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:collection.assignment:"
+msgctxt "error:collection.create.assign.lines:"
 msgid "Amount (%s) for line is too big. It mustbe lower than %s"
 msgstr ""
 "Le montant (%s) de la ligne est trop élevé. Il doit être inférieur à %s."
@@ -59,27 +59,27 @@ msgctxt "field:collection.create.assign,remaining:"
 msgid "Remaining"
 msgstr "Reste"
 
-msgctxt "field:collection.assignment,amount:"
+msgctxt "field:collection.create.assign.lines,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:collection.assignment,id:"
+msgctxt "field:collection.create.assign.lines,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:collection.assignment,kind:"
+msgctxt "field:collection.create.assign.lines,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:collection.assignment,must_expand_tree:"
+msgctxt "field:collection.create.assign.lines,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:collection.assignment,source_move_line:"
+msgctxt "field:collection.create.assign.lines,source_move_line:"
 msgid "Source Move Line"
 msgstr "Lignes comptable d'origine"
 
-msgctxt "field:collection.assignment,target_account:"
+msgctxt "field:collection.create.assign.lines,target_account:"
 msgid "Target Account"
 msgstr "Compte concerné"
 
@@ -183,7 +183,7 @@ msgctxt "model:collection.create.assign,name:"
 msgid "Assign Collection"
 msgstr "Affecter l'encaissement"
 
-msgctxt "model:collection.assignment,name:"
+msgctxt "model:collection.create.assign.lines,name:"
 msgid "Assignment"
 msgstr "Affectation"
 
@@ -215,11 +215,11 @@ msgctxt "model:ir.ui.menu,name:menu_collection_wizard"
 msgid "Collection Wizard"
 msgstr "Encaissement"
 
-msgctxt "selection:collection.assignment,kind:"
+msgctxt "selection:collection.create.assign.lines,kind:"
 msgid "From Move Line"
 msgstr "A partir d'une ligne"
 
-msgctxt "selection:collection.assignment,kind:"
+msgctxt "selection:collection.create.assign.lines,kind:"
 msgid "Select Account"
 msgstr "Sélection du compte"
 
@@ -243,11 +243,11 @@ msgctxt "view:collection.create.assign:"
 msgid "Assign Collection"
 msgstr "Affecter l'encaissement"
 
-msgctxt "view:collection.assignment:"
+msgctxt "view:collection.create.assign.lines:"
 msgid "Assignment"
 msgstr "Affectation"
 
-msgctxt "view:collection.assignment:"
+msgctxt "view:collection.create.assign.lines:"
 msgid "Assignments"
 msgstr "Affectations"
 

@@ -63,12 +63,12 @@
     <!-- Assignment -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="assignment_form">
-      <field name="model">collection.assignment</field>
+      <field name="model">collection.create.assign.lines</field>
       <field name="type">form</field>
       <field name="name">assignment_form</field>
     </record>
     <record model="ir.ui.view" id="assignment_tree">
-      <field name="model">collection.assignment</field>
+      <field name="model">collection.create.assign.lines</field>
       <field name="type">tree</field>
       <field name="name">assignment_tree</field>
     </record>
