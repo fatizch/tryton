@@ -1277,39 +1277,39 @@ msgctxt "field:document.rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.eligibility_relation_kind,create_date:"
+msgctxt "field:offered.eligibility.rule-relation.kind,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.eligibility_relation_kind,create_date_:"
+msgctxt "field:offered.eligibility.rule-relation.kind,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.eligibility_relation_kind,create_uid:"
+msgctxt "field:offered.eligibility.rule-relation.kind,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.eligibility_relation_kind,eligibility_rule:"
+msgctxt "field:offered.eligibility.rule-relation.kind,eligibility_rule:"
 msgid "Eligibility Rule"
 msgstr "Eligibilite"
 
-msgctxt "field:ins_product.eligibility_relation_kind,id:"
+msgctxt "field:offered.eligibility.rule-relation.kind,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.eligibility_relation_kind,rec_name:"
+msgctxt "field:offered.eligibility.rule-relation.kind,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.eligibility_relation_kind,relation_kind:"
+msgctxt "field:offered.eligibility.rule-relation.kind,relation_kind:"
 msgid "Relation Kind"
 msgstr "Type de Relation"
 
-msgctxt "field:ins_product.eligibility_relation_kind,write_date:"
+msgctxt "field:offered.eligibility.rule-relation.kind,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.eligibility_relation_kind,write_uid:"
+msgctxt "field:offered.eligibility.rule-relation.kind,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3344,7 +3344,7 @@ msgctxt "model:document.rule,name:"
 msgid "Document Managing Rule"
 msgstr ""
 
-msgctxt "model:ins_product.eligibility_relation_kind,name:"
+msgctxt "model:offered.eligibility.rule-relation.kind,name:"
 msgid "Define relation between eligibility rule and relation kind authorized"
 msgstr ""
 "Table intermédiaire entre la règle d'égibilité et les relations autorisées"

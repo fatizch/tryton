@@ -45,7 +45,7 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
             'required': Eval('offered_kind') != 'benefit',
         })
     relation_kinds = fields.Many2Many(
-        'ins_product.eligibility_relation_kind',
+        'offered.eligibility.rule-relation.kind',
         'eligibility_rule', 'relation_kind', 'Relations Authorized',
         states={
             'invisible': Or(
@@ -118,7 +118,7 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
 class EligibilityRelationKind(model.CoopSQL):
     'Define relation between eligibility rule and relation kind authorized'
 
-    __name__ = 'ins_product.eligibility_relation_kind'
+    __name__ = 'offered.eligibility.rule-relation.kind'
 
     eligibility_rule = fields.Many2One(
         'ins_product.eligibility_rule', 'Eligibility Rule', ondelete='CASCADE')
