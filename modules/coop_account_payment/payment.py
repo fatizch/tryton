@@ -8,7 +8,7 @@ __all__ = ['CreateReceivablePaymentStart', 'CreateReceivablePayment']
 
 class CreateReceivablePaymentStart(ModelView):
     'Create Receivable Payment'
-    __name__ = 'coop_account_payment.create_receivable.start'
+    __name__ = 'account.payment.create.parameters'
     until = fields.Date('Until', required=True)
 
     @staticmethod
@@ -20,7 +20,7 @@ class CreateReceivablePaymentStart(ModelView):
 class CreateReceivablePayment(Wizard):
     'Create Receivable Payment'
     __name__ = 'account.payment.create'
-    start = StateView('coop_account_payment.create_receivable.start',
+    start = StateView('account.payment.create.parameters',
         'coop_account_payment.create_receivable_start_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Create', 'create_', 'tryton-ok', default=True),

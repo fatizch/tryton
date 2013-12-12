@@ -26,15 +26,15 @@ msgctxt "field:contract,payment_lines:"
 msgid "Payment Lines"
 msgstr "Lignes de Paiement"
 
-msgctxt "field:coop_account_payment.create_receivable.start,id:"
+msgctxt "field:account.payment.create.parameters,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_account_payment.create_receivable.start,until:"
+msgctxt "field:account.payment.create.parameters,until:"
 msgid "Until"
 msgstr "Jusqu'à"
 
-msgctxt "model:coop_account_payment.create_receivable.start,name:"
+msgctxt "model:account.payment.create.parameters,name:"
 msgid "Create Receivable Payment"
 msgstr "Créer Paiement"
 
@@ -62,11 +62,11 @@ msgctxt "view:contract:"
 msgid "As of today"
 msgstr ""
 
-msgctxt "view:coop_account_payment.create_receivable.start:"
+msgctxt "view:account.payment.create.parameters:"
 msgid "Create Receivable Payment"
 msgstr "Créer Paiement"
 
-msgctxt "view:coop_account_payment.create_receivable.start:"
+msgctxt "view:account.payment.create.parameters:"
 msgid "Create Receivable Payment?"
 msgstr "Créer Paiement?"
 
