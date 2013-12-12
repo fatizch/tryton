@@ -5,7 +5,7 @@
             ************** Offered **************
             ******************************************* -->
         <record model="ir.ui.view" id="offered_view_form">
-            <field name="model">offered.offered</field>
+            <field name="model">offered</field>
             <field name="type">form</field>
             <field name="inherit" ref="offered.offered_view_form"/>
             <field name="name">offered_form</field>

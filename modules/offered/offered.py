@@ -147,7 +147,7 @@ class GetResult(object):
 class Offered(model.CoopView, GetResult, Templated):
     'Offered'
 
-    __name__ = 'offered.offered'
+    __name__ = 'offered'
     _export_name = 'code'
 
     code = fields.Char('Code', required=True, select=1,

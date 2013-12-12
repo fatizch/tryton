@@ -2856,71 +2856,71 @@ msgctxt "field:offered.option.description-extra_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.offered,clause_rules:"
+msgctxt "field:offered,clause_rules:"
 msgid "Clause Rules"
 msgstr "Clauses"
 
-msgctxt "field:offered.offered,code:"
+msgctxt "field:offered,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:offered.offered,complementary_data:"
+msgctxt "field:offered,complementary_data:"
 msgid "Offered Kind"
 msgstr "Typage"
 
-msgctxt "field:offered.offered,currency_digits:"
+msgctxt "field:offered,currency_digits:"
 msgid "Currency Digits"
 msgstr "Nbre de chiffres après la virgule"
 
-msgctxt "field:offered.offered,deductible_rules:"
+msgctxt "field:offered,deductible_rules:"
 msgid "Deductible Rules"
 msgstr "Franchises"
 
-msgctxt "field:offered.offered,description:"
+msgctxt "field:offered,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:offered.offered,document_rules:"
+msgctxt "field:offered,document_rules:"
 msgid "Document Rules"
 msgstr "Documents"
 
-msgctxt "field:offered.offered,eligibility_rules:"
+msgctxt "field:offered,eligibility_rules:"
 msgid "Eligibility Rules"
 msgstr "Règles d'Eligibilité"
 
-msgctxt "field:offered.offered,end_date:"
+msgctxt "field:offered,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:offered.offered,id:"
+msgctxt "field:offered,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.offered,name:"
+msgctxt "field:offered,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:offered.offered,pricing_rules:"
+msgctxt "field:offered,pricing_rules:"
 msgid "Pricing Rules"
 msgstr "Règles de Cotisation"
 
-msgctxt "field:offered.offered,start_date:"
+msgctxt "field:offered,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:offered.offered,sub_document_rules:"
+msgctxt "field:offered,sub_document_rules:"
 msgid "Sub Document Rules"
 msgstr "Documents Eléments Couverts"
 
-msgctxt "field:offered.offered,summary:"
+msgctxt "field:offered,summary:"
 msgid "Summary"
 msgstr "Synthèse"
 
-msgctxt "field:offered.offered,template:"
+msgctxt "field:offered,template:"
 msgid "Template"
 msgstr "Modèle"
 
-msgctxt "field:offered.offered,template_behaviour:"
+msgctxt "field:offered,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
 
@@ -3569,7 +3569,7 @@ msgctxt "model:offered.option.description-extra_data,name:"
 msgid "Relation between Coverage and Complementary Data"
 msgstr "Garantie-Complementary Data Relation"
 
-msgctxt "model:offered.offered,name:"
+msgctxt "model:offered,name:"
 msgid "Offered"
 msgstr "Offre"
 
@@ -4468,15 +4468,15 @@ msgctxt "selection:offered.option.description,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:offered.offered,template_behaviour:"
+msgctxt "selection:offered,template_behaviour:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:offered.offered,template_behaviour:"
+msgctxt "selection:offered,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
-msgctxt "selection:offered.offered,template_behaviour:"
+msgctxt "selection:offered,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
@@ -4740,11 +4740,11 @@ msgctxt "view:offered.option.description:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "view:offered.offered:"
+msgctxt "view:offered:"
 msgid "Eligibility"
 msgstr "Eligibilité"
 
-msgctxt "view:offered.offered:"
+msgctxt "view:offered:"
 msgid "Pricing"
 msgstr "Cotisation"
 

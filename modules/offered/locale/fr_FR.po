@@ -356,55 +356,55 @@ msgctxt "field:offered.option.description-extra_data,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,code:"
+msgctxt "field:offered,code:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,company:"
+msgctxt "field:offered,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:offered.offered,complementary_data:"
+msgctxt "field:offered,complementary_data:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,currency_digits:"
+msgctxt "field:offered,currency_digits:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,description:"
+msgctxt "field:offered,description:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,end_date:"
+msgctxt "field:offered,end_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,id:"
+msgctxt "field:offered,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,must_expand_tree:"
+msgctxt "field:offered,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:offered.offered,name:"
+msgctxt "field:offered,name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,start_date:"
+msgctxt "field:offered,start_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,summary:"
+msgctxt "field:offered,summary:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,template:"
+msgctxt "field:offered,template:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,template_behaviour:"
+msgctxt "field:offered,template_behaviour:"
 msgid ""
 msgstr " "
 
@@ -688,7 +688,7 @@ msgctxt "model:offered.option.description-extra_data,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:offered.offered,name:"
+msgctxt "model:offered,name:"
 msgid ""
 msgstr " "
 
@@ -804,15 +804,15 @@ msgctxt "selection:offered.option.description,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:offered.offered,template_behaviour:"
+msgctxt "selection:offered,template_behaviour:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:offered.offered,template_behaviour:"
+msgctxt "selection:offered,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
-msgctxt "selection:offered.offered,template_behaviour:"
+msgctxt "selection:offered,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
@@ -884,19 +884,19 @@ msgctxt "view:offered.option.description:"
 msgid "Coverages"
 msgstr "Garanties"
 
-msgctxt "view:offered.offered:"
+msgctxt "view:offered:"
 msgid "Administration"
 msgstr "Administration"
 
-msgctxt "view:offered.offered:"
+msgctxt "view:offered:"
 msgid "Offered"
 msgstr "Offre"
 
-msgctxt "view:offered.offered:"
+msgctxt "view:offered:"
 msgid "Rules"
 msgstr "Règles"
 
-msgctxt "view:offered.offered:"
+msgctxt "view:offered:"
 msgid "Summary"
 msgstr "Synthèse"
 

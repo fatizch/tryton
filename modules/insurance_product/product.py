@@ -32,7 +32,7 @@ IS_INSURANCE = Eval('kind') == 'insurance'
 class Offered():
     'Offered'
 
-    __name__ = 'offered.offered'
+    __name__ = 'offered'
     __metaclass__ = PoolMeta
 
     pricing_rules = fields.One2Many('billing.premium.rule',
