@@ -255,7 +255,7 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
     code = fields.Char('Code', required=True, on_change_with=['name', 'code'])
     name = fields.Char('Name')
     complementary_data_def = fields.Many2Many(
-        'ins_product.item_desc-complementary_data_def',
+        'offered.item.description-extra_data',
         'item_desc', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'sub_elem')], )
     kind = fields.Selection('get_possible_item_kind', 'Kind')
@@ -305,7 +305,7 @@ class ItemDescSubItemDescRelation(model.CoopSQL):
 class ItemDescriptorComplementaryDataRelation(model.CoopSQL):
     'Relation between Item Descriptor and Complementary Data'
 
-    __name__ = 'ins_product.item_desc-complementary_data_def'
+    __name__ = 'offered.item.description-extra_data'
 
     item_desc = fields.Many2One(
         'offered.item.description', 'Item Desc', ondelete='CASCADE', )
