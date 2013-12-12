@@ -75,7 +75,7 @@
             <field name="name">loan_creation_parameters_form</field>
         </record>
         <record model="ir.ui.view" id="loan_creation_increments_view_form">
-            <field name="model">loan.creation_increments</field>
+            <field name="model">loan.create.increments</field>
             <field name="type">form</field>
             <field name="name">loan_creation_increments_form</field>
         </record>

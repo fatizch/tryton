@@ -41,7 +41,7 @@ class LoanParameters(model.CoopView, ModelCurrency):
 class LoanIncrementsDisplayer(model.CoopView):
     'Increments'
 
-    __name__ = 'loan.creation_increments'
+    __name__ = 'loan.create.increments'
 
     increments = fields.One2Many('loan.increment', None,
         'Increments')
@@ -67,7 +67,7 @@ class LoanCreation(model.CoopWizard):
             Button('Next', 'create_loan', 'tryton-go-next'),
             ])
     create_loan = StateTransition()
-    increments = StateView('loan.creation_increments',
+    increments = StateView('loan.create.increments',
         'loan.loan_creation_increments_view_form', [
             Button('Cancel', 'cancel_loan', 'tryton-cancel'),
             Button('Previous', 'loan_parameters', 'tryton-go-previous'),

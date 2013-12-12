@@ -82,15 +82,15 @@ msgctxt "field:contract.covered_data-loan.share,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:loan.creation_increments,id:"
+msgctxt "field:loan.create.increments,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:loan.creation_increments,increments:"
+msgctxt "field:loan.create.increments,increments:"
 msgid "Increments"
 msgstr "Paliers"
 
-msgctxt "field:loan.creation_increments,must_expand_tree:"
+msgctxt "field:loan.create.increments,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
@@ -538,7 +538,7 @@ msgctxt "model:contract.covered_data-loan.share,name:"
 msgid "Loan Covered Data Loan Share Relation"
 msgstr "Relation Données de Couverture et Quotités"
 
-msgctxt "model:loan.creation_increments,name:"
+msgctxt "model:loan.create.increments,name:"
 msgid "Increments"
 msgstr "Paliers"
 
@@ -750,7 +750,7 @@ msgctxt "view:contract:"
 msgid "Loans"
 msgstr "Prêts"
 
-msgctxt "view:loan.creation_increments:"
+msgctxt "view:loan.create.increments:"
 msgid "Increments"
 msgstr "Paliers"
 
