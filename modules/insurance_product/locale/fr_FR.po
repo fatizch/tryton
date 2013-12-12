@@ -107,19 +107,19 @@ msgctxt "field:account.tax.description.version,apply_at_pricing_time:"
 msgid "Apply when Pricing"
 msgstr ""
 
-msgctxt "field:ins_product.attach_letter,attachment:"
+msgctxt "field:document.create.attach,attachment:"
 msgid "Data File"
 msgstr "Fichier"
 
-msgctxt "field:ins_product.attach_letter,id:"
+msgctxt "field:document.create.attach,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.attach_letter,must_expand_tree:"
+msgctxt "field:document.create.attach,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.attach_letter,name:"
+msgctxt "field:document.create.attach,name:"
 msgid "Filename"
 msgstr "Nom du Fichier"
 
@@ -3260,7 +3260,7 @@ msgctxt "help:offered.complementary_data_def,selection:"
 msgid "A couple of key and label separated by \":\" per line"
 msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
 
-msgctxt "model:ins_product.attach_letter,name:"
+msgctxt "model:document.create.attach,name:"
 msgid "Attachment Creation"
 msgstr "Création de l'attachment"
 
@@ -4516,7 +4516,7 @@ msgctxt "selection:table.dimension_displayer,input_mode:"
 msgid "Complementary data"
 msgstr "Données Complémentaires"
 
-msgctxt "view:ins_product.attach_letter:"
+msgctxt "view:document.create.attach:"
 msgid "Attachment"
 msgstr "Pièce jointe"
 

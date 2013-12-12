@@ -619,7 +619,7 @@ class LetterReport(Report):
 class AttachmentCreation(model.CoopView):
     'Attachment Creation'
 
-    __name__ = 'ins_product.attach_letter'
+    __name__ = 'document.create.attach'
 
     attachment = fields.Binary('Data File', filename='name')
     name = fields.Char('Filename')
@@ -655,7 +655,7 @@ class LetterGeneration(Wizard):
             Button('Generate', 'generate', 'tryton-ok'),
             Button('Attach', 'attach', 'tryton-go-next')])
     attach = StateView(
-        'ins_product.attach_letter',
+        'document.create.attach',
         'insurance_product.attach_letter_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),

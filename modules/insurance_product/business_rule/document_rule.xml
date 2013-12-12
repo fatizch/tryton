@@ -121,7 +121,7 @@
       <field name="name">letter_model_selection_form</field>
     </record>
     <record model="ir.ui.view" id="attach_letter_form">
-      <field name="model">ins_product.attach_letter</field>
+      <field name="model">document.create.attach</field>
       <field name="type">form</field>
       <field name="name">attach_letter_form</field>
     </record>
