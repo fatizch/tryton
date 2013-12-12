@@ -750,7 +750,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
             states={'invisible': True},
             on_change_with=['local_currency']),
         'on_change_with_local_currency_digits')
-    details = fields.One2Many('claim.indemnification_detail',
+    details = fields.One2Many('claim.indemnification.detail',
         'indemnification', 'Details',
         states={'readonly': Or(~Eval('manual'), Eval('status') == 'paid')})
     manual = fields.Boolean('Manual Calculation',
@@ -794,7 +794,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
             self.details = []
         else:
             self.details = list(self.details)
-            Pool().get('claim.indemnification_detail').delete(self.details)
+            Pool().get('claim.indemnification.detail').delete(self.details)
             self.details[:] = []
         for key, fancy_name in INDEMNIFICATION_DETAIL_KIND:
             if not key in details_dict:
@@ -888,7 +888,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
 class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
     'Indemnification Detail'
 
-    __name__ = 'claim.indemnification_detail'
+    __name__ = 'claim.indemnification.detail'
 
     indemnification = fields.Many2One('claim.indemnification',
         'Indemnification', ondelete='CASCADE')
