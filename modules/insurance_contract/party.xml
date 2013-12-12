@@ -15,12 +15,12 @@
     </record>
     <!-- Customer -->
     <record model="ir.ui.view" id="customer_view_form">
-      <field name="model">party.customer</field>
+      <field name="model">customer</field>
       <field name="type">form</field>
       <field name="name">customer_form</field>
     </record>
     <record model="ir.ui.view" id="customer_view_tree">
-      <field name="model">party.customer</field>
+      <field name="model">customer</field>
       <field name="type">tree</field>
       <field name="name">customer_tree</field>
     </record>

@@ -20,7 +20,7 @@ class Party:
         'Complementary Data')
     covered_elements = fields.One2Many('contract.covered_element',
         'party', 'Covered Elements')
-    customer_role = fields.One2Many('party.customer', 'party', 'Customer',
+    customer_role = fields.One2Many('customer', 'party', 'Customer',
         size=1)
 
     @classmethod
@@ -47,7 +47,7 @@ class Party:
 class Customer(Actor, model.CoopSQL):
     'Customer'
 
-    __name__ = 'party.customer'
+    __name__ = 'customer'
 
     @classmethod
     def get_summary(cls, customers, name=None, at_date=None, lang=None):
