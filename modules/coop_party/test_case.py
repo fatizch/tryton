@@ -186,7 +186,7 @@ class TestCaseModel():
     @classmethod
     def party_test_case(cls):
         Party = Pool().get('party.party')
-        PartyRelation = Pool().get('party.party-relation')
+        PartyRelation = Pool().get('party.relation')
         RelationKind = Pool().get('party.relation.kind')
         Configuration = cls.get_instance()
         nb_males = Party.search_count([('is_person', '=', True),

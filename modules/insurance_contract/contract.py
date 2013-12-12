@@ -790,7 +790,7 @@ class CoveredElementPartyRelation(model.CoopSQL):
 
     covered_element = fields.Many2One('ins_contract.covered_element',
         'Covered Element', ondelete='CASCADE')
-    party_relation = fields.Many2One('party.party-relation', 'Party Relation',
+    party_relation = fields.Many2One('party.relation', 'Party Relation',
         ondelete='RESTRICT')
 
 

@@ -20,7 +20,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         return {
             'Party': 'party.party',
             'RelationKind': 'party.relation.kind',
-            'PartyRelation': 'party.party-relation',
+            'PartyRelation': 'party.relation',
         }
 
     def test0001_createParties(self):

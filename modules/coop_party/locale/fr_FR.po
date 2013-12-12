@@ -330,63 +330,63 @@ msgctxt "field:party.party,summary:"
 msgid "Summary"
 msgstr "Synthèse"
 
-msgctxt "field:party.party-relation,create_date:"
+msgctxt "field:party.relation,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:party.party-relation,create_date_:"
+msgctxt "field:party.relation,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:party.party-relation,create_uid:"
+msgctxt "field:party.relation,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:party.party-relation,end_date:"
+msgctxt "field:party.relation,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:party.party-relation,from_party:"
+msgctxt "field:party.relation,from_party:"
 msgid "From Party"
 msgstr "Depuis l'acteur"
 
-msgctxt "field:party.party-relation,id:"
+msgctxt "field:party.relation,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.party-relation,kind:"
+msgctxt "field:party.relation,kind:"
 msgid "Temporary kind for migration use, to be deleted"
 msgstr "Type"
 
-msgctxt "field:party.party-relation,must_expand_tree:"
+msgctxt "field:party.relation,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:party.party-relation,rec_name:"
+msgctxt "field:party.relation,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:party.party-relation,relation_kind:"
+msgctxt "field:party.relation,relation_kind:"
 msgid "Relation Kind"
 msgstr "Type de Relation"
 
-msgctxt "field:party.party-relation,relation_name:"
+msgctxt "field:party.relation,relation_name:"
 msgid "Relation Name"
 msgstr ""
 
-msgctxt "field:party.party-relation,start_date:"
+msgctxt "field:party.relation,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:party.party-relation,to_party:"
+msgctxt "field:party.relation,to_party:"
 msgid "To Party"
 msgstr "Vers l'acteur"
 
-msgctxt "field:party.party-relation,write_date:"
+msgctxt "field:party.relation,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:party.party-relation,write_uid:"
+msgctxt "field:party.relation,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -494,7 +494,7 @@ msgctxt "model:party.interaction,name:"
 msgid "Contact History"
 msgstr "Historique des Contacts"
 
-msgctxt "model:party.party-relation,name:"
+msgctxt "model:party.relation,name:"
 msgid "Party Relation"
 msgstr "Relations entre Acteurs"
 

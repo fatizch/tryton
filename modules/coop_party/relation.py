@@ -38,7 +38,7 @@ class PartyRelationKind(model.CoopSQL, model.CoopView):
 class PartyRelation(model.CoopSQL, model.CoopView):
     'Party Relation'
 
-    __name__ = 'party.party-relation'
+    __name__ = 'party.relation'
     _rec_name = 'to_party'
 
     from_party = fields.Many2One('party.party', 'From Party',

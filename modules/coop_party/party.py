@@ -33,9 +33,9 @@ class Party(model.CoopSQL):
     is_person = fields.Boolean('Person')
     is_company = fields.Boolean('Company')
 
-    relations = fields.One2Many('party.party-relation',
+    relations = fields.One2Many('party.relation',
         'from_party', 'Relations', context={'direction': 'normal'})
-    in_relation_with = fields.One2Many('party.party-relation',
+    in_relation_with = fields.One2Many('party.relation',
         'to_party', 'in relation with', context={'direction': 'reverse'})
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
     main_address = fields.Function(
