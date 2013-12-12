@@ -72,7 +72,7 @@
     <!-- ############################################################ -->
     <record model="ir.action.wizard" id="act_task_dispatcher">
       <field name="name">New Task</field>
-      <field name="wiz_name">task_manager.task_dispatcher</field>
+      <field name="wiz_name">task.select</field>
     </record>
     <menuitem parent="menu_task" sequence="100" action="act_task_dispatcher" id="menu_task_dispatcher"/>
     <!-- ############################################################ -->

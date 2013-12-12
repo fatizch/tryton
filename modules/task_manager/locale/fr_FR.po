@@ -2,7 +2,7 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:task_manager.task_dispatcher:"
+msgctxt "error:task.select:"
 msgid "No task has been selected."
 msgstr "Pas de Tâche Sélectionnée"
 
@@ -383,10 +383,10 @@ msgid "Cancel"
 msgstr "Annuler"
 
 msgctxt ""
-"wizard_button:task_manager.task_dispatcher,select_context,calculate_action:"
+"wizard_button:task.select,select_context,calculate_action:"
 msgid "Compute Task"
 msgstr "Réaliser la Tâche"
 
-msgctxt "wizard_button:task_manager.task_dispatcher,select_context,end:"
+msgctxt "wizard_button:task.select,select_context,end:"
 msgid "Cancel"
 msgstr "Annuler"

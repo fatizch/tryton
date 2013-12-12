@@ -268,7 +268,7 @@ class TaskSelector(model.CoopView):
 class TaskDispatcher(Wizard):
     'Task Dispatcher'
 
-    __name__ = 'task_manager.task_dispatcher'
+    __name__ = 'task.select'
 
     start_state = 'remove_locks'
 
