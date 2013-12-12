@@ -90,7 +90,7 @@ class LossDesc(model.CoopSQL, model.CoopView):
     item_kind = fields.Selection('get_possible_item_kind', 'Kind')
     with_end_date = fields.Boolean('With End Date')
     complementary_data_def = fields.Many2Many(
-        'ins_product.loss_desc-complementary_data_def',
+        'benefit.loss.description-extra_data',
         'loss_desc', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'loss')], )
     documents = fields.Many2Many(
@@ -116,7 +116,7 @@ class LossDesc(model.CoopSQL, model.CoopView):
 class LossDescComplementaryDataRelation(model.CoopSQL):
     'Relation between Loss Desc and Complementary Data'
 
-    __name__ = 'ins_product.loss_desc-complementary_data_def'
+    __name__ = 'benefit.loss.description-extra_data'
 
     loss_desc = fields.Many2One(
         'benefit.loss.description', 'Loss Desc', ondelete='CASCADE')

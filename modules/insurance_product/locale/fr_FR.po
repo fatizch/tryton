@@ -1935,39 +1935,39 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt ""
-"field:ins_product.loss_desc-complementary_data_def,complementary_data_def:"
+"field:benefit.loss.description-extra_data,complementary_data_def:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:ins_product.loss_desc-complementary_data_def,create_date:"
+msgctxt "field:benefit.loss.description-extra_data,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.loss_desc-complementary_data_def,create_date_:"
+msgctxt "field:benefit.loss.description-extra_data,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.loss_desc-complementary_data_def,create_uid:"
+msgctxt "field:benefit.loss.description-extra_data,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.loss_desc-complementary_data_def,id:"
+msgctxt "field:benefit.loss.description-extra_data,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.loss_desc-complementary_data_def,loss_desc:"
+msgctxt "field:benefit.loss.description-extra_data,loss_desc:"
 msgid "Loss Desc"
 msgstr "Descripteur de Préjudice"
 
-msgctxt "field:ins_product.loss_desc-complementary_data_def,rec_name:"
+msgctxt "field:benefit.loss.description-extra_data,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.loss_desc-complementary_data_def,write_date:"
+msgctxt "field:benefit.loss.description-extra_data,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.loss_desc-complementary_data_def,write_uid:"
+msgctxt "field:benefit.loss.description-extra_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3401,7 +3401,7 @@ msgctxt "model:benefit.loss.description,name:"
 msgid "Loss Desc"
 msgstr "Descripteur de Préjudice"
 
-msgctxt "model:ins_product.loss_desc-complementary_data_def,name:"
+msgctxt "model:benefit.loss.description-extra_data,name:"
 msgid "Relation between Loss Desc and Complementary Data"
 msgstr "Relation Type de Préjudice et Données Complémentaires"
 
