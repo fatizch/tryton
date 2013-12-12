@@ -181,7 +181,7 @@
     <!-- Run Tests Wizard -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="run_tests_report">
-      <field name="model">rule_engine.run_tests.report</field>
+      <field name="model">rule_engine.run_tests.results</field>
       <field name="type">form</field>
       <field name="name">run_tests_report</field>
     </record>

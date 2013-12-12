@@ -433,15 +433,15 @@ msgctxt "field:rule_engine.parameter,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:rule_engine.run_tests.report,id:"
+msgctxt "field:rule_engine.run_tests.results,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.run_tests.report,must_expand_tree:"
+msgctxt "field:rule_engine.run_tests.results,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:rule_engine.run_tests.report,report:"
+msgctxt "field:rule_engine.run_tests.results,report:"
 msgid "Report"
 msgstr "Rapport"
 
@@ -793,7 +793,7 @@ msgctxt "model:rule_engine.parameter,name:"
 msgid "Rule Engine Parameter"
 msgstr "Paramètre du moteur de règle"
 
-msgctxt "model:rule_engine.run_tests.report,name:"
+msgctxt "model:rule_engine.run_tests.results,name:"
 msgid "Test Run Report"
 msgstr "Tester le rapport d'exécution"
 
@@ -917,7 +917,7 @@ msgctxt "view:rule_engine.parameter:"
 msgid "Tables"
 msgstr "Tables"
 
-msgctxt "view:rule_engine.run_tests.report:"
+msgctxt "view:rule_engine.run_tests.results:"
 msgid "Tests Report"
 msgstr ""
 

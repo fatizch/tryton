@@ -1288,7 +1288,7 @@ class TestCase(ModelView, ModelSQL):
 
 class RunTestsReport(ModelView):
     "Test Run Report"
-    __name__ = 'rule_engine.run_tests.report'
+    __name__ = 'rule_engine.run_tests.results'
 
     report = fields.Text('Report', readonly=True)
 
@@ -1299,7 +1299,7 @@ class RunTests(Wizard):
     start_state = 'report'
 
     report = StateView(
-        'rule_engine.run_tests.report',
+        'rule_engine.run_tests.results',
         'rule_engine.run_tests_report', [
             Button('OK', 'end', 'tryton-ok', True),
         ])
