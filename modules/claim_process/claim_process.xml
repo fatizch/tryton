@@ -38,7 +38,7 @@
     </record>
     <record model="ir.action.keyword" id="act_claim_logs_keyword1">
       <field name="keyword">form_relate</field>
-      <field name="model">claim.claim,-1</field>
+      <field name="model">claim,-1</field>
       <field name="action" ref="act_claim_logs"/>
     </record>
   </data>

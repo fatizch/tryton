@@ -22,7 +22,7 @@ class ClaimProcess(CoopProcessFramework):
     'Claim'
 
     __metaclass__ = ClassAttr
-    __name__ = 'claim.claim'
+    __name__ = 'claim'
 
     doc_received = fields.Function(
         fields.Boolean(
@@ -264,11 +264,11 @@ class DeclarationProcessParameters(ProcessParameters):
     __name__ = 'claim.declare.find_process'
 
     party = fields.Many2One('party.party', 'Party')
-    claim = fields.Many2One('claim.claim', 'Claim',
+    claim = fields.Many2One('claim', 'Claim',
         domain=[('id', 'in', Eval('claims'))],
         depends=['claims'])
     claims = fields.Function(
-        fields.One2Many('claim.claim', None, 'Claims',
+        fields.One2Many('claim', None, 'Claims',
             on_change_with=['party']),
         'on_change_with_claims')
 
@@ -293,10 +293,10 @@ class DeclarationProcessParameters(ProcessParameters):
     @classmethod
     def default_model(cls):
         Model = Pool().get('ir.model')
-        return Model.search([('model', '=', 'claim.claim')])[0].id
+        return Model.search([('model', '=', 'claim')])[0].id
 
     def on_change_with_claims(self, name=None):
-        Claim = Pool().get('claim.claim')
+        Claim = Pool().get('claim')
         return [x.id for x in Claim.search([('claimant', '=', self.party)])]
 
 

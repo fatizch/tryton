@@ -17,7 +17,7 @@ __all__ = [
 class LifeClaim():
     'Claim'
 
-    __name__ = 'claim.claim'
+    __name__ = 'claim'
     __metaclass__ = PoolMeta
 
 

@@ -10,87 +10,87 @@ msgctxt "error:claim.loss:"
 msgid "End Date is smaller than start date"
 msgstr "La date de fin est antérieure à la date de début"
 
-msgctxt "field:claim.claim,claimant:"
+msgctxt "field:claim,claimant:"
 msgid "Claimant"
 msgstr "Déclarant"
 
-msgctxt "field:claim.claim,company:"
+msgctxt "field:claim,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:claim.claim,create_date:"
+msgctxt "field:claim,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:claim.claim,create_date_:"
+msgctxt "field:claim,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:claim.claim,create_uid:"
+msgctxt "field:claim,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:claim.claim,current_state:"
+msgctxt "field:claim,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
 
-msgctxt "field:claim.claim,declaration_date:"
+msgctxt "field:claim,declaration_date:"
 msgid "Declaration Date"
 msgstr "Date de Déclaration"
 
-msgctxt "field:claim.claim,documents:"
+msgctxt "field:claim,documents:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "field:claim.claim,end_date:"
+msgctxt "field:claim,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:claim.claim,id:"
+msgctxt "field:claim,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:claim.claim,losses:"
+msgctxt "field:claim,losses:"
 msgid "Losses"
 msgstr "Préjudices"
 
-msgctxt "field:claim.claim,main_contract:"
+msgctxt "field:claim,main_contract:"
 msgid "Main Contract"
 msgstr "Contrat Principal"
 
-msgctxt "field:claim.claim,must_expand_tree:"
+msgctxt "field:claim,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:claim.claim,name:"
+msgctxt "field:claim,name:"
 msgid "Number"
 msgstr "Numéro"
 
-msgctxt "field:claim.claim,possible_contracts:"
+msgctxt "field:claim,possible_contracts:"
 msgid "Contracts"
 msgstr "Contrats"
 
-msgctxt "field:claim.claim,rec_name:"
+msgctxt "field:claim,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:claim.claim,reopened_reason:"
+msgctxt "field:claim,reopened_reason:"
 msgid "Reopened Reason"
 msgstr "Motif de Réouverture"
 
-msgctxt "field:claim.claim,status:"
+msgctxt "field:claim,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:claim.claim,sub_status:"
+msgctxt "field:claim,sub_status:"
 msgid "Sub Status"
 msgstr "Sous Statut"
 
-msgctxt "field:claim.claim,write_date:"
+msgctxt "field:claim,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:claim.claim,write_uid:"
+msgctxt "field:claim,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -566,7 +566,7 @@ msgctxt "field:party.party,number_of_claims:"
 msgid "Number Of Claims"
 msgstr "Nombre de sinistres"
 
-msgctxt "model:claim.claim,name:"
+msgctxt "model:claim,name:"
 msgid "Claim"
 msgstr "Sinistre"
 
@@ -646,71 +646,71 @@ msgctxt "model:tag,name:tag_claim"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "selection:claim.claim,reopened_reason:"
+msgctxt "selection:claim,reopened_reason:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:claim.claim,reopened_reason:"
+msgctxt "selection:claim,reopened_reason:"
 msgid "Reclamation"
 msgstr "Réclamation"
 
-msgctxt "selection:claim.claim,reopened_reason:"
+msgctxt "selection:claim,reopened_reason:"
 msgid "Regularization"
 msgstr "Régularisation"
 
-msgctxt "selection:claim.claim,reopened_reason:"
+msgctxt "selection:claim,reopened_reason:"
 msgid "Relapse"
 msgstr "Rechute"
 
-msgctxt "selection:claim.claim,status:"
+msgctxt "selection:claim,status:"
 msgid "Closed"
 msgstr "Fermé"
 
-msgctxt "selection:claim.claim,status:"
+msgctxt "selection:claim,status:"
 msgid "Open"
 msgstr "Ouvert"
 
-msgctxt "selection:claim.claim,status:"
+msgctxt "selection:claim,status:"
 msgid "Reopened"
 msgstr "Réouvert"
 
-msgctxt "selection:claim.claim,sub_status:"
+msgctxt "selection:claim,sub_status:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:claim.claim,sub_status:"
+msgctxt "selection:claim,sub_status:"
 msgid "Instruction"
 msgstr "Instruction"
 
-msgctxt "selection:claim.claim,sub_status:"
+msgctxt "selection:claim,sub_status:"
 msgid "Paid"
 msgstr "Payé"
 
-msgctxt "selection:claim.claim,sub_status:"
+msgctxt "selection:claim,sub_status:"
 msgid "Reclamation"
 msgstr "Réclamation"
 
-msgctxt "selection:claim.claim,sub_status:"
+msgctxt "selection:claim,sub_status:"
 msgid "Regularization"
 msgstr "Régularisation"
 
-msgctxt "selection:claim.claim,sub_status:"
+msgctxt "selection:claim,sub_status:"
 msgid "Rejected"
 msgstr "Refusé"
 
-msgctxt "selection:claim.claim,sub_status:"
+msgctxt "selection:claim,sub_status:"
 msgid "Relapse"
 msgstr "Rechute"
 
-msgctxt "selection:claim.claim,sub_status:"
+msgctxt "selection:claim,sub_status:"
 msgid "Validated"
 msgstr "Validé"
 
-msgctxt "selection:claim.claim,sub_status:"
+msgctxt "selection:claim,sub_status:"
 msgid "Waiting For Documents"
 msgstr "En Attente de Documents"
 
-msgctxt "selection:claim.claim,sub_status:"
+msgctxt "selection:claim,sub_status:"
 msgid "Waiting Validation"
 msgstr "En Attente de Validation"
 
@@ -886,15 +886,15 @@ msgctxt "view:claim.claim.history:"
 msgid "History"
 msgstr "Historique"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Losses"
 msgstr "Préjudices"
 

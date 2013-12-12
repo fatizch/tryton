@@ -602,103 +602,103 @@ msgctxt "selection:process.step_transition,method_kind:"
 msgid "Replace Step Methods"
 msgstr "Remplacer les Méthodes de l'Etape"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Clôture"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Documents"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Décl. du Préjudice"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Déclarant"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Prestations"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Rechute"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Remboursement"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Réouverture"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Validation"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Clôture"
 msgstr "Clôture"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Complete"
 msgstr "Terminer"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Décl. du Préjudice"
 msgstr "Décl. du Préjudice"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Déclarant"
 msgstr "Déclarant"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Déclaration de Sinistre"
 msgstr "Déclaration de Sinistre"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Losses"
 msgstr "Préjudices"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Next"
 msgstr "Suivant"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Prestations"
 msgstr "Prestations"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Previous"
 msgstr "Précédent"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Rechute"
 msgstr "Rechute"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Remboursement"
 msgstr "Remboursement"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Réouverture"
 msgstr "Réouverture"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Réouverture De Sinistre"
 msgstr "Réouverture De Sinistre"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "The current record completed the current process, please go ahead"
 msgstr "Processus Terminé. Commencez une nouvelle tâche"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Validation"
 msgstr "Validation"
 

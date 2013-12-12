@@ -72,7 +72,7 @@ INDEMNIFICATION_STATUS = [
 class Claim(model.CoopSQL, model.CoopView, Printable):
     'Claim'
 
-    __name__ = 'claim.claim'
+    __name__ = 'claim'
     _history = True
 
     name = fields.Char('Number', select=True,
@@ -219,7 +219,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             return True
         Generator = Pool().get('ir.sequence')
         good_gen, = Generator.search([
-            ('code', '=', 'claim.claim'),
+            ('code', '=', 'claim'),
         ], limit=1)
         self.name = good_gen.get_id(good_gen.id)
         return True
@@ -328,7 +328,7 @@ class ClaimHistory(model.ObjectHistory):
 
     @classmethod
     def get_object_model(cls):
-        return 'claim.claim'
+        return 'claim'
 
     @classmethod
     def get_object_name(cls):
@@ -340,7 +340,7 @@ class Loss(model.CoopSQL, model.CoopView):
 
     __name__ = 'claim.loss'
 
-    claim = fields.Many2One('claim.claim', 'Claim', ondelete='CASCADE')
+    claim = fields.Many2One('claim', 'Claim', ondelete='CASCADE')
     start_date = fields.Date('Loss Date')
     end_date = fields.Date('End Date', states={
             'invisible': Bool(~Eval('with_end_date')),
@@ -932,7 +932,7 @@ class DocumentRequest():
     def __setup__(cls):
         super(DocumentRequest, cls).__setup__()
         cls.needed_by = copy.copy(cls.needed_by)
-        cls.needed_by.selection.append(('claim.claim', 'Claim'))
+        cls.needed_by.selection.append(('claim', 'Claim'))
         cls.needed_by.selection.append(
             ('contract.delivered_service', 'Delivered Service'))
 
@@ -947,7 +947,7 @@ class Document():
     def __setup__(cls):
         super(Document, cls).__setup__()
         cls.for_object = copy.copy(cls.for_object)
-        cls.for_object.selection.append(('claim.claim', 'Claim'))
+        cls.for_object.selection.append(('claim', 'Claim'))
         cls.for_object.selection.append(
             ('contract.delivered_service', 'Delivered Service'))
 
@@ -962,7 +962,7 @@ class RequestFinder():
     def allowed_values(cls):
         result = super(RequestFinder, cls).allowed_values()
         result.update({
-            'claim.claim': (
+            'claim': (
                 'Claim', 'name')})
         return result
 
@@ -977,7 +977,7 @@ class ContactHistory():
     def __setup__(cls):
         super(ContactHistory, cls).__setup__()
         cls.for_object_ref = copy.copy(cls.for_object_ref)
-        cls.for_object_ref.selection.append(['claim.claim', 'Claim'])
+        cls.for_object_ref.selection.append(['claim', 'Claim'])
 
 
 class IndemnificationDisplayer(model.CoopView):
@@ -1007,7 +1007,7 @@ class IndemnificationDisplayer(model.CoopView):
     covered_element = fields.Char('Covered Element', states={'readonly': True})
     claim_number = fields.Char('Claim Number', states={'readonly': True})
     claim = fields.Many2One(
-        'claim.claim', 'Claim', states={'readonly': True})
+        'claim', 'Claim', states={'readonly': True})
     claim_declaration_date = fields.Date('Claim Declaration Date')
 
 
@@ -1168,7 +1168,7 @@ class IndemnificationValidation(Wizard):
             elif elem.selection == 'refuse':
                 to_reject.add(elem.indemnification.id)
                 claims.add(elem.claim.id)
-        Claim = Pool().get('claim.claim')
+        Claim = Pool().get('claim')
         Indemnification = Pool().get('claim.indemnification')
         Indemnification.validate_indemnification(
             Indemnification.browse(to_validate))

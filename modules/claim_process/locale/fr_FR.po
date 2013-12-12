@@ -2,11 +2,11 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:claim.claim:"
+msgctxt "error:claim:"
 msgid "Everything is good !"
 msgstr "Tout est bon!"
 
-msgctxt "error:claim.claim:"
+msgctxt "error:claim:"
 msgid "Object %s is currently locked by user %s"
 msgstr "L'objet %s est verrouillé par l'utilisateur %s"
 
@@ -14,35 +14,35 @@ msgctxt "error:claim.declare:"
 msgid "Please pick a process from the selection"
 msgstr "Choisir un processus de la sélection"
 
-msgctxt "field:claim.claim,contact_history:"
+msgctxt "field:claim,contact_history:"
 msgid "History"
 msgstr "Historique"
 
-msgctxt "field:claim.claim,current_log:"
+msgctxt "field:claim,current_log:"
 msgid "Current Log"
 msgstr ""
 
-msgctxt "field:claim.claim,current_state:"
+msgctxt "field:claim,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
 
-msgctxt "field:claim.claim,doc_received:"
+msgctxt "field:claim,doc_received:"
 msgid "All Document Received"
 msgstr "Documents Reçus"
 
-msgctxt "field:claim.claim,indemnifications:"
+msgctxt "field:claim,indemnifications:"
 msgid "Indemnifications"
 msgstr "Indemnisations"
 
-msgctxt "field:claim.claim,indemnifications_consult:"
+msgctxt "field:claim,indemnifications_consult:"
 msgid "Indemnifications"
 msgstr "Indemnisations"
 
-msgctxt "field:claim.claim,is_pending_indemnification:"
+msgctxt "field:claim,is_pending_indemnification:"
 msgid "Pending Indemnification"
 msgstr "Indemnisation en attente"
 
-msgctxt "field:claim.claim,logs:"
+msgctxt "field:claim,logs:"
 msgid "Task"
 msgstr "Tâche"
 
