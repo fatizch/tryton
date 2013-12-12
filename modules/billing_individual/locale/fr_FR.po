@@ -635,51 +635,51 @@ msgctxt "field:contract.billing.premium-fee,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:billing.price_line-tax-relation,amount:"
+msgctxt "field:contract.billing.premium-tax,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:billing.price_line-tax-relation,create_date:"
+msgctxt "field:contract.billing.premium-tax,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:billing.price_line-tax-relation,create_date_:"
+msgctxt "field:contract.billing.premium-tax,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:billing.price_line-tax-relation,create_uid:"
+msgctxt "field:contract.billing.premium-tax,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:billing.price_line-tax-relation,id:"
+msgctxt "field:contract.billing.premium-tax,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.price_line-tax-relation,must_expand_tree:"
+msgctxt "field:contract.billing.premium-tax,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:billing.price_line-tax-relation,price_line:"
+msgctxt "field:contract.billing.premium-tax,price_line:"
 msgid "Price Line"
 msgstr "Ligne de Prime"
 
-msgctxt "field:billing.price_line-tax-relation,rec_name:"
+msgctxt "field:contract.billing.premium-tax,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:billing.price_line-tax-relation,tax_desc:"
+msgctxt "field:contract.billing.premium-tax,tax_desc:"
 msgid "Tax"
 msgstr "Taxe"
 
-msgctxt "field:billing.price_line-tax-relation,to_recalculate:"
+msgctxt "field:contract.billing.premium-tax,to_recalculate:"
 msgid "Recalculate at billing"
 msgstr "Recalculer à la facturation"
 
-msgctxt "field:billing.price_line-tax-relation,write_date:"
+msgctxt "field:contract.billing.premium-tax,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:billing.price_line-tax-relation,write_uid:"
+msgctxt "field:contract.billing.premium-tax,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -869,7 +869,7 @@ msgctxt "model:contract.billing.premium-fee,name:"
 msgid "Price Line Fee Relation"
 msgstr ""
 
-msgctxt "model:billing.price_line-tax-relation,name:"
+msgctxt "model:contract.billing.premium-tax,name:"
 msgid "Price Line Tax Relation"
 msgstr ""
 
@@ -1173,11 +1173,11 @@ msgctxt "view:contract.billing.premium-fee:"
 msgid "Fee Lines"
 msgstr "Lignes de Frais"
 
-msgctxt "view:billing.price_line-tax-relation:"
+msgctxt "view:contract.billing.premium-tax:"
 msgid "Tax Line"
 msgstr "Ligne de taxe"
 
-msgctxt "view:billing.price_line-tax-relation:"
+msgctxt "view:contract.billing.premium-tax:"
 msgid "Tax Lines"
 msgstr "Lignes de taxe"
 

@@ -64,12 +64,12 @@
     <!-- Tax lines -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="price_line-tax-relation_form">
-      <field name="model">billing.price_line-tax-relation</field>
+      <field name="model">contract.billing.premium-tax</field>
       <field name="type">form</field>
       <field name="name">price_line-tax-relation_form</field>
     </record>
     <record model="ir.ui.view" id="price_line-tax-relation_tree">
-      <field name="model">billing.price_line-tax-relation</field>
+      <field name="model">contract.billing.premium-tax</field>
       <field name="type">tree</field>
       <field name="name">price_line-tax-relation_tree</field>
     </record>
