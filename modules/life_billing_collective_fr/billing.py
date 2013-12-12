@@ -395,7 +395,7 @@ class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
 class RateNoteParameters(model.CoopView):
     'Rate Note Parameters'
 
-    __name__ = 'billing.rate_note_process_parameters'
+    __name__ = 'billing.premium_rate.form.create.param'
 
     until_date = fields.Date('Until Date', required=True)
     products = fields.Many2Many('billing.premium_rate.form.create.param-product',
@@ -467,7 +467,7 @@ class RateNoteParameterClientRelation(model.CoopView):
 
     __name__ = 'billing.premium_rate.form.create.param-client'
 
-    parameters_view = fields.Many2One('billing.rate_note_process_parameters',
+    parameters_view = fields.Many2One('billing.premium_rate.form.create.param',
         'Parameter View')
     client = fields.Many2One('party.party', 'Client')
 
@@ -477,7 +477,7 @@ class RateNoteParameterProductRelation(model.CoopView):
 
     __name__ = 'billing.premium_rate.form.create.param-product'
 
-    parameters_view = fields.Many2One('billing.rate_note_process_parameters',
+    parameters_view = fields.Many2One('billing.premium_rate.form.create.param',
         'Parameter View')
     product = fields.Many2One('offered.product', 'Product')
 
@@ -487,7 +487,7 @@ class RateNoteParameterContractRelation(model.CoopView):
 
     __name__ = 'billing.premium_rate.form.create.param-contract'
 
-    parameters_view = fields.Many2One('billing.rate_note_process_parameters',
+    parameters_view = fields.Many2One('billing.premium_rate.form.create.param',
         'Parameter View')
     contract = fields.Many2One('contract', 'Contract')
 
@@ -497,7 +497,7 @@ class RateNoteParameterGroupPartyRelation(model.CoopView):
 
     __name__ = 'billing.premium_rate.form.create.param-group_client'
 
-    parameters_view = fields.Many2One('billing.rate_note_process_parameters',
+    parameters_view = fields.Many2One('billing.premium_rate.form.create.param',
         'Parameter View')
     group = fields.Many2One('party.group', 'Group Party')
 
@@ -516,7 +516,7 @@ class RateNoteProcess(model.CoopWizard):
     __name__ = 'billing.premium_rate.form.create'
 
     start_state = 'parameters'
-    parameters = StateView('billing.rate_note_process_parameters',
+    parameters = StateView('billing.premium_rate.form.create.param',
         'life_billing_collective_fr.rate_note_process_parameters_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Next', 'rate_notes', 'tryton-go-next', default=True),

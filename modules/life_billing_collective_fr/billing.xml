@@ -17,7 +17,7 @@
     </record>
     <!-- Entry Point -->
     <record model="ir.ui.view" id="rate_note_process_parameters_view_form">
-      <field name="model">billing.rate_note_process_parameters</field>
+      <field name="model">billing.premium_rate.form.create.param</field>
       <field name="type">form</field>
       <field name="name">rate_note_process_parameters_form</field>
     </record>
