@@ -49,7 +49,7 @@ class ComplementaryDataDefinition(
         ],
         'Kind')
     sub_datas = fields.One2Many(
-        'offered.complementary_data_recursive_relation',
+        'extra_data-sub_extra_data',
         'master', 'Sub Data', context={
             'kind': Eval('complementary_data_kind')},
         states={'invisible': Eval('sub_data_config_kind') != 'simple'})
@@ -328,7 +328,7 @@ class ComplementaryDataDefinition(
 class ComplementaryDataRecursiveRelation(model.CoopSQL, model.CoopView):
     'Complementary Data recursive relation'
 
-    __name__ = 'offered.complementary_data_recursive_relation'
+    __name__ = 'extra_data-sub_extra_data'
 
     master = fields.Many2One(
         'extra_data', 'Master', ondelete='CASCADE')

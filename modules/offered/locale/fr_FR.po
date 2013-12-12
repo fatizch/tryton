@@ -170,48 +170,48 @@ msgctxt "field:extra_data,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_recursive_relation,child:"
+msgctxt "field:extra_data-sub_extra_data,child:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_recursive_relation,create_date:"
+msgctxt "field:extra_data-sub_extra_data,create_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_recursive_relation,create_date_:"
+msgctxt "field:extra_data-sub_extra_data,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:offered.complementary_data_recursive_relation,create_uid:"
+msgctxt "field:extra_data-sub_extra_data,create_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_recursive_relation,id:"
+msgctxt "field:extra_data-sub_extra_data,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_recursive_relation,master:"
+msgctxt "field:extra_data-sub_extra_data,master:"
 msgid ""
 msgstr " "
 
 msgctxt ""
-"field:offered.complementary_data_recursive_relation,must_expand_tree:"
+"field:extra_data-sub_extra_data,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:offered.complementary_data_recursive_relation,rec_name:"
+msgctxt "field:extra_data-sub_extra_data,rec_name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_recursive_relation,select_value:"
+msgctxt "field:extra_data-sub_extra_data,select_value:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_recursive_relation,write_date:"
+msgctxt "field:extra_data-sub_extra_data,write_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_recursive_relation,write_uid:"
+msgctxt "field:extra_data-sub_extra_data,write_uid:"
 msgid ""
 msgstr " "
 
@@ -676,7 +676,7 @@ msgctxt "model:extra_data,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:offered.complementary_data_recursive_relation,name:"
+msgctxt "model:extra_data-sub_extra_data,name:"
 msgid ""
 msgstr " "
 
@@ -868,11 +868,11 @@ msgctxt "view:extra_data:"
 msgid "Tags"
 msgstr "Labels"
 
-msgctxt "view:offered.complementary_data_recursive_relation:"
+msgctxt "view:extra_data-sub_extra_data:"
 msgid "Relation"
 msgstr ""
 
-msgctxt "view:offered.complementary_data_recursive_relation:"
+msgctxt "view:extra_data-sub_extra_data:"
 msgid "Relations"
 msgstr "Relations"
 

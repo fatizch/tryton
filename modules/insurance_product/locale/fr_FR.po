@@ -2619,39 +2619,39 @@ msgctxt "field:extra_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.complementary_data_recursive_relation,child:"
+msgctxt "field:extra_data-sub_extra_data,child:"
 msgid "Child"
 msgstr "Donnée Liée"
 
-msgctxt "field:offered.complementary_data_recursive_relation,create_date:"
+msgctxt "field:extra_data-sub_extra_data,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:offered.complementary_data_recursive_relation,create_uid:"
+msgctxt "field:extra_data-sub_extra_data,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:offered.complementary_data_recursive_relation,id:"
+msgctxt "field:extra_data-sub_extra_data,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.complementary_data_recursive_relation,master:"
+msgctxt "field:extra_data-sub_extra_data,master:"
 msgid "Master"
 msgstr "Maître"
 
-msgctxt "field:offered.complementary_data_recursive_relation,rec_name:"
+msgctxt "field:extra_data-sub_extra_data,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:offered.complementary_data_recursive_relation,select_value:"
+msgctxt "field:extra_data-sub_extra_data,select_value:"
 msgid "Select value"
 msgstr ""
 
-msgctxt "field:offered.complementary_data_recursive_relation,write_date:"
+msgctxt "field:extra_data-sub_extra_data,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:offered.complementary_data_recursive_relation,write_uid:"
+msgctxt "field:extra_data-sub_extra_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3553,7 +3553,7 @@ msgctxt "model:extra_data,name:"
 msgid "Complementary Data Definition"
 msgstr "Définition de Données Complémentaires"
 
-msgctxt "model:offered.complementary_data_recursive_relation,name:"
+msgctxt "model:extra_data-sub_extra_data,name:"
 msgid "Complementary Data recursive relation"
 msgstr "Données Complémentaires Récursives"
 
@@ -4712,11 +4712,11 @@ msgctxt "view:extra_data:"
 msgid "Complementary Data Descriptors"
 msgstr "Descripteurs de Données Complémentaires"
 
-msgctxt "view:offered.complementary_data_recursive_relation:"
+msgctxt "view:extra_data-sub_extra_data:"
 msgid "Relation"
 msgstr ""
 
-msgctxt "view:offered.complementary_data_recursive_relation:"
+msgctxt "view:extra_data-sub_extra_data:"
 msgid "Relations"
 msgstr "Relations"
 
