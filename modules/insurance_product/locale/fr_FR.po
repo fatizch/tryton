@@ -2367,83 +2367,83 @@ msgctxt "field:ins_product.simple_pricing_rule,view_rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.sub_benefit_rule,amount:"
+msgctxt "field:benefit.rule.stage,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:ins_product.sub_benefit_rule,benefit_rule:"
+msgctxt "field:benefit.rule.stage,benefit_rule:"
 msgid "Benefit Rule"
 msgstr "Règle de Prestation"
 
-msgctxt "field:ins_product.sub_benefit_rule,config_kind:"
+msgctxt "field:benefit.rule.stage,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
 
-msgctxt "field:ins_product.sub_benefit_rule,create_date:"
+msgctxt "field:benefit.rule.stage,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.sub_benefit_rule,create_date_:"
+msgctxt "field:benefit.rule.stage,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.sub_benefit_rule,create_uid:"
+msgctxt "field:benefit.rule.stage,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.sub_benefit_rule,currency:"
+msgctxt "field:benefit.rule.stage,currency:"
 msgid "Currency"
 msgstr "Devises"
 
-msgctxt "field:ins_product.sub_benefit_rule,currency_digits:"
+msgctxt "field:benefit.rule.stage,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
-msgctxt "field:ins_product.sub_benefit_rule,currency_symbol:"
+msgctxt "field:benefit.rule.stage,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:ins_product.sub_benefit_rule,duration:"
+msgctxt "field:benefit.rule.stage,duration:"
 msgid "Duration"
 msgstr "Durée"
 
-msgctxt "field:ins_product.sub_benefit_rule,duration_unit:"
+msgctxt "field:benefit.rule.stage,duration_unit:"
 msgid "Duration Unit"
 msgstr "Unité de la Durée"
 
-msgctxt "field:ins_product.sub_benefit_rule,id:"
+msgctxt "field:benefit.rule.stage,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.sub_benefit_rule,indemnification_calc_unit:"
+msgctxt "field:benefit.rule.stage,indemnification_calc_unit:"
 msgid "Calculation Unit"
 msgstr "Unité de Calcul"
 
-msgctxt "field:ins_product.sub_benefit_rule,limited_duration:"
+msgctxt "field:benefit.rule.stage,limited_duration:"
 msgid "Limited Duration"
 msgstr "Durée Limitée"
 
-msgctxt "field:ins_product.sub_benefit_rule,must_expand_tree:"
+msgctxt "field:benefit.rule.stage,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.sub_benefit_rule,rec_name:"
+msgctxt "field:benefit.rule.stage,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.sub_benefit_rule,rule:"
+msgctxt "field:benefit.rule.stage,rule:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:ins_product.sub_benefit_rule,rule_complementary_data:"
+msgctxt "field:benefit.rule.stage,rule_complementary_data:"
 msgid "Rule Complementary Data"
 msgstr "Paramètres de Rêgle"
 
-msgctxt "field:ins_product.sub_benefit_rule,write_date:"
+msgctxt "field:benefit.rule.stage,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.sub_benefit_rule,write_uid:"
+msgctxt "field:benefit.rule.stage,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3457,7 +3457,7 @@ msgctxt "model:ins_product.simple_pricing_rule,name:"
 msgid "Simple Pricing Rule"
 msgstr "Règle de Cotisation Simple"
 
-msgctxt "model:ins_product.sub_benefit_rule,name:"
+msgctxt "model:benefit.rule.stage,name:"
 msgid "Sub Benefit Rule"
 msgstr "Sous Règles de Prestation"
 
@@ -4260,67 +4260,67 @@ msgctxt "selection:ins_product.simple_pricing_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:ins_product.sub_benefit_rule,config_kind:"
+msgctxt "selection:benefit.rule.stage,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
 
-msgctxt "selection:ins_product.sub_benefit_rule,config_kind:"
+msgctxt "selection:benefit.rule.stage,config_kind:"
 msgid "Simple"
 msgstr "Simple"
 
-msgctxt "selection:ins_product.sub_benefit_rule,duration_unit:"
+msgctxt "selection:benefit.rule.stage,duration_unit:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:ins_product.sub_benefit_rule,duration_unit:"
+msgctxt "selection:benefit.rule.stage,duration_unit:"
 msgid "Day"
 msgstr "Jour"
 
-msgctxt "selection:ins_product.sub_benefit_rule,duration_unit:"
+msgctxt "selection:benefit.rule.stage,duration_unit:"
 msgid "Half-year"
 msgstr "Semestre"
 
-msgctxt "selection:ins_product.sub_benefit_rule,duration_unit:"
+msgctxt "selection:benefit.rule.stage,duration_unit:"
 msgid "Month"
 msgstr "Mois"
 
-msgctxt "selection:ins_product.sub_benefit_rule,duration_unit:"
+msgctxt "selection:benefit.rule.stage,duration_unit:"
 msgid "Quarter"
 msgstr "Trimestre"
 
-msgctxt "selection:ins_product.sub_benefit_rule,duration_unit:"
+msgctxt "selection:benefit.rule.stage,duration_unit:"
 msgid "Week"
 msgstr "Semaine"
 
-msgctxt "selection:ins_product.sub_benefit_rule,duration_unit:"
+msgctxt "selection:benefit.rule.stage,duration_unit:"
 msgid "Year"
 msgstr "Année"
 
-msgctxt "selection:ins_product.sub_benefit_rule,indemnification_calc_unit:"
+msgctxt "selection:benefit.rule.stage,indemnification_calc_unit:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:ins_product.sub_benefit_rule,indemnification_calc_unit:"
+msgctxt "selection:benefit.rule.stage,indemnification_calc_unit:"
 msgid "Day"
 msgstr "Jour"
 
-msgctxt "selection:ins_product.sub_benefit_rule,indemnification_calc_unit:"
+msgctxt "selection:benefit.rule.stage,indemnification_calc_unit:"
 msgid "Half-year"
 msgstr "Semestre"
 
-msgctxt "selection:ins_product.sub_benefit_rule,indemnification_calc_unit:"
+msgctxt "selection:benefit.rule.stage,indemnification_calc_unit:"
 msgid "Month"
 msgstr "Mois"
 
-msgctxt "selection:ins_product.sub_benefit_rule,indemnification_calc_unit:"
+msgctxt "selection:benefit.rule.stage,indemnification_calc_unit:"
 msgid "Quarter"
 msgstr "Trimestre"
 
-msgctxt "selection:ins_product.sub_benefit_rule,indemnification_calc_unit:"
+msgctxt "selection:benefit.rule.stage,indemnification_calc_unit:"
 msgid "Week"
 msgstr "Semaine"
 
-msgctxt "selection:ins_product.sub_benefit_rule,indemnification_calc_unit:"
+msgctxt "selection:benefit.rule.stage,indemnification_calc_unit:"
 msgid "Year"
 msgstr "Année"
 
@@ -4696,7 +4696,7 @@ msgctxt "view:ins_product.reserve_rule:"
 msgid "Reserve rule"
 msgstr "Provisionnement"
 
-msgctxt "view:ins_product.sub_benefit_rule:"
+msgctxt "view:benefit.rule.stage:"
 msgid "Sub Benefit Rule"
 msgstr "Sous Règles de Prestation"
 

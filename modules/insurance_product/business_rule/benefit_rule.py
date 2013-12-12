@@ -59,7 +59,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
             'invisible': Or(STATES_CAPITAL, STATES_AMOUNT_EVOLVES),
             'required': ~STATES_CAPITAL,
         }, sort=False)
-    sub_benefit_rules = fields.One2Many('ins_product.sub_benefit_rule',
+    sub_benefit_rules = fields.One2Many('benefit.rule.stage',
         'benefit_rule', 'Sub Benefit Rules',
         states={'invisible': ~STATES_AMOUNT_EVOLVES})
     use_monthly_period = fields.Boolean('Monthly Period',
@@ -311,7 +311,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
 class SubBenefitRule(model.CoopSQL, model.CoopView, ModelCurrency):
     'Sub Benefit Rule'
 
-    __name__ = 'ins_product.sub_benefit_rule'
+    __name__ = 'benefit.rule.stage'
 
     benefit_rule = fields.Many2One('benefit.rule', 'Benefit Rule',
         ondelete='CASCADE')
