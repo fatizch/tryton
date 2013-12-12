@@ -30,39 +30,39 @@ msgctxt "field:ir.test_case,main_company_name:"
 msgid "Main Company Name"
 msgstr "Nom de la company principale"
 
-msgctxt "field:offered.compl_data_def-tag,compl_data_def:"
+msgctxt "field:extra_data-tag,compl_data_def:"
 msgid "Complementary Data Def"
 msgstr "Définition de Données Complémentaires"
 
-msgctxt "field:offered.compl_data_def-tag,create_date:"
+msgctxt "field:extra_data-tag,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:offered.compl_data_def-tag,create_date_:"
+msgctxt "field:extra_data-tag,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:offered.compl_data_def-tag,create_uid:"
+msgctxt "field:extra_data-tag,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:offered.compl_data_def-tag,id:"
+msgctxt "field:extra_data-tag,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.compl_data_def-tag,rec_name:"
+msgctxt "field:extra_data-tag,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:offered.compl_data_def-tag,tag:"
+msgctxt "field:extra_data-tag,tag:"
 msgid "Tag"
 msgstr "Label"
 
-msgctxt "field:offered.compl_data_def-tag,write_date:"
+msgctxt "field:extra_data-tag,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:offered.compl_data_def-tag,write_uid:"
+msgctxt "field:extra_data-tag,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -668,7 +668,7 @@ msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Products"
 msgstr "Produits"
 
-msgctxt "model:offered.compl_data_def-tag,name:"
+msgctxt "model:extra_data-tag,name:"
 msgid "Relation between complementary data def and tag"
 msgstr ""
 
