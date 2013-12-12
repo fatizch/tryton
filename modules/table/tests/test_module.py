@@ -19,7 +19,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def get_models(cls):
         return {
             'Definition': 'table',
-            'Dimension': 'table.table_dimension',
+            'Dimension': 'table.dimension.value',
             'Cell': 'table.cell',
             'ManageDimension1': 'table.manage_dimension.show_dimension_1',
         }

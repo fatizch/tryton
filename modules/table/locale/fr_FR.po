@@ -322,71 +322,71 @@ msgctxt "field:table,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:table.table_dimension,create_date:"
+msgctxt "field:table.dimension.value,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:table.table_dimension,create_date_:"
+msgctxt "field:table.dimension.value,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:table.table_dimension,create_uid:"
+msgctxt "field:table.dimension.value,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:table.table_dimension,date:"
+msgctxt "field:table.dimension.value,date:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt "field:table.table_dimension,definition:"
+msgctxt "field:table.dimension.value,definition:"
 msgid "Definition"
 msgstr "Définition"
 
-msgctxt "field:table.table_dimension,end:"
+msgctxt "field:table.dimension.value,end:"
 msgid "End"
 msgstr "Borne Supérieure"
 
-msgctxt "field:table.table_dimension,end_date:"
+msgctxt "field:table.dimension.value,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:table.table_dimension,id:"
+msgctxt "field:table.dimension.value,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:table.table_dimension,must_expand_tree:"
+msgctxt "field:table.dimension.value,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:table.table_dimension,rec_name:"
+msgctxt "field:table.dimension.value,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:table.table_dimension,sequence:"
+msgctxt "field:table.dimension.value,sequence:"
 msgid "Sequence"
 msgstr "Séquence"
 
-msgctxt "field:table.table_dimension,start:"
+msgctxt "field:table.dimension.value,start:"
 msgid "Start"
 msgstr "Borne Inférieure"
 
-msgctxt "field:table.table_dimension,start_date:"
+msgctxt "field:table.dimension.value,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:table.table_dimension,type:"
+msgctxt "field:table.dimension.value,type:"
 msgid "Type"
 msgstr "Type"
 
-msgctxt "field:table.table_dimension,value:"
+msgctxt "field:table.dimension.value,value:"
 msgid "Value"
 msgstr "Valeur"
 
-msgctxt "field:table.table_dimension,write_date:"
+msgctxt "field:table.dimension.value,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:table.table_dimension,write_uid:"
+msgctxt "field:table.dimension.value,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -458,7 +458,7 @@ msgctxt "model:table,name:"
 msgid "Table Definition"
 msgstr "Table"
 
-msgctxt "model:table.table_dimension,name:"
+msgctxt "model:table.dimension.value,name:"
 msgid "Table Definition Dimension"
 msgstr "Dimension"
 
@@ -630,19 +630,19 @@ msgctxt "selection:table,type_:"
 msgid "Numeric"
 msgstr "Numérique"
 
-msgctxt "selection:table.table_dimension,type:"
+msgctxt "selection:table.dimension.value,type:"
 msgid "Dimension 1"
 msgstr "Dimension 1"
 
-msgctxt "selection:table.table_dimension,type:"
+msgctxt "selection:table.dimension.value,type:"
 msgid "Dimension 2"
 msgstr "Dimension 2"
 
-msgctxt "selection:table.table_dimension,type:"
+msgctxt "selection:table.dimension.value,type:"
 msgid "Dimension 3"
 msgstr "Dimension 3"
 
-msgctxt "selection:table.table_dimension,type:"
+msgctxt "selection:table.dimension.value,type:"
 msgid "Dimension 4"
 msgstr "Dimension 4"
 
@@ -682,11 +682,11 @@ msgctxt "view:table:"
 msgid "Table Definition"
 msgstr "Table"
 
-msgctxt "view:table.table_dimension:"
+msgctxt "view:table.dimension.value:"
 msgid "Table Definition Dimension"
 msgstr "Dimension"
 
-msgctxt "view:table.table_dimension:"
+msgctxt "view:table.dimension.value:"
 msgid "Table Definition Dimensions"
 msgstr "Dimensions"
 

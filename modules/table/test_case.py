@@ -30,7 +30,7 @@ class TestCaseModel():
         # Remove file extension
         filename = filename.split('.')[0]
         Table = Pool().get('table')
-        Dimension = Pool().get('table.table_dimension')
+        Dimension = Pool().get('table.dimension.value')
         Cell = Pool().get('table.cell')
         if ';' in filename:
             code, name, kind = filename.split(';')
@@ -64,7 +64,7 @@ class TestCaseModel():
     @classmethod
     def create_nth_dimension(cls, table, values, n):
         Configuration = cls.get_instance()
-        Dimension = Pool().get('table.table_dimension')
+        Dimension = Pool().get('table.dimension.value')
         dimensions = []
         for idx, elem in enumerate(values):
             res = Dimension()
