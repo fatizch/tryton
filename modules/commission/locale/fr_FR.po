@@ -106,75 +106,75 @@ msgctxt "field:commission.commission_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:commission.compensated_option,com_amount:"
+msgctxt "field:contract.option-commission.option,com_amount:"
 msgid "Com Amount"
 msgstr "Montant de la commission"
 
-msgctxt "field:commission.compensated_option,com_option:"
+msgctxt "field:contract.option-commission.option,com_option:"
 msgid "Commission Option"
 msgstr "Option de Commissionnement"
 
-msgctxt "field:commission.compensated_option,create_date:"
+msgctxt "field:contract.option-commission.option,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:commission.compensated_option,create_date_:"
+msgctxt "field:contract.option-commission.option,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:commission.compensated_option,create_uid:"
+msgctxt "field:contract.option-commission.option,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:commission.compensated_option,currency:"
+msgctxt "field:contract.option-commission.option,currency:"
 msgid "Currency"
 msgstr "Devises"
 
-msgctxt "field:commission.compensated_option,currency_digits:"
+msgctxt "field:contract.option-commission.option,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
-msgctxt "field:commission.compensated_option,currency_symbol:"
+msgctxt "field:contract.option-commission.option,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:commission.compensated_option,end_date:"
+msgctxt "field:contract.option-commission.option,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:commission.compensated_option,id:"
+msgctxt "field:contract.option-commission.option,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:commission.compensated_option,must_expand_tree:"
+msgctxt "field:contract.option-commission.option,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:commission.compensated_option,rate:"
+msgctxt "field:contract.option-commission.option,rate:"
 msgid "Rate"
 msgstr "Taux"
 
-msgctxt "field:commission.compensated_option,rec_name:"
+msgctxt "field:contract.option-commission.option,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:commission.compensated_option,start_date:"
+msgctxt "field:contract.option-commission.option,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:commission.compensated_option,subs_option:"
+msgctxt "field:contract.option-commission.option,subs_option:"
 msgid "Subscribed Coverage"
 msgstr "Garantie Souscrite"
 
-msgctxt "field:commission.compensated_option,use_specific_rate:"
+msgctxt "field:contract.option-commission.option,use_specific_rate:"
 msgid "Specific Rate"
 msgstr "Taux Spécifique"
 
-msgctxt "field:commission.compensated_option,write_date:"
+msgctxt "field:contract.option-commission.option,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:commission.compensated_option,write_uid:"
+msgctxt "field:contract.option-commission.option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -446,7 +446,7 @@ msgctxt "model:commission.commission_rule,name:"
 msgid "Commission Rule"
 msgstr "Règle de Commissionnement"
 
-msgctxt "model:commission.compensated_option,name:"
+msgctxt "model:contract.option-commission.option,name:"
 msgid "Compensated Option"
 msgstr "Option Commissionnée"
 
@@ -586,11 +586,11 @@ msgctxt "view:commission.commission_rule:"
 msgid "Commission rule"
 msgstr "Règle de Commissionnement"
 
-msgctxt "view:commission.compensated_option:"
+msgctxt "view:contract.option-commission.option:"
 msgid "%"
 msgstr "%"
 
-msgctxt "view:commission.compensated_option:"
+msgctxt "view:contract.option-commission.option:"
 msgid "Compensated Option"
 msgstr "Option Commissionnée"
 

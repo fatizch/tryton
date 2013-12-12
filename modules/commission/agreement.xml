@@ -59,12 +59,12 @@
 
         <!-- CompensatedOption -->
         <record model="ir.ui.view" id="compensated_option_view_tree">
-            <field name="model">commission.compensated_option</field>
+            <field name="model">contract.option-commission.option</field>
             <field name="type">tree</field>
             <field name="name">compensated_option_tree</field>
         </record>
         <record model="ir.ui.view" id="compensated_option_view_form">
-            <field name="model">commission.compensated_option</field>
+            <field name="model">contract.option-commission.option</field>
             <field name="type">form</field>
             <field name="name">compensated_option_form</field>
         </record>

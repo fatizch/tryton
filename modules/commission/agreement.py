@@ -47,17 +47,17 @@ class CommissionOption():
     __name__ = 'contract.subscribed_option'
     __metaclass__ = PoolMeta
 
-    compensated_options = fields.One2Many('commission.compensated_option',
+    compensated_options = fields.One2Many('contract.option-commission.option',
         'com_option', 'Compensated Options',
         states={'invisible': Eval('coverage_kind') != 'commission'},
         context={'from': 'com'})
-    commissions = fields.One2Many('commission.compensated_option',
+    commissions = fields.One2Many('contract.option-commission.option',
         'subs_option', 'Commissions',
         states={'invisible': Eval('coverage_kind') != 'insurance'},
         context={'from': 'subscribed'})
 
     def update_commissions(self, agreement):
-        CompOption = Pool().get('commission.compensated_option')
+        CompOption = Pool().get('contract.option-commission.option')
         for com_option in agreement.options:
             if not self.offered in com_option.offered.coverages:
                 continue
@@ -92,7 +92,7 @@ class CommissionOption():
 class CompensatedOption(model.CoopSQL, model.CoopView, ModelCurrency):
     'Compensated Option'
 
-    __name__ = 'commission.compensated_option'
+    __name__ = 'contract.option-commission.option'
 
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')

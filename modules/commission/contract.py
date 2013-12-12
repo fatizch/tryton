@@ -56,7 +56,7 @@ class PriceLine():
         res = super(PriceLine, cls).must_create_detail(detail)
         if not res:
             return res
-        if detail.on_object.__name__ == 'commission.compensated_option':
+        if detail.on_object.__name__ == 'contract.option-commission.option':
             return False
         return True
 
@@ -65,7 +65,7 @@ class PriceLine():
         if not (hasattr(self, 'com_lines') and self.com_lines):
             self.com_lines = []
         for com_line in (x for x in line.details if x.on_object and
-                x.on_object.__name__ == 'commission.compensated_option'):
+                x.on_object.__name__ == 'contract.option-commission.option'):
             com_relation = ComLine()
             com_relation.com_subscribed = com_line.on_object.com_option
             # Com detail lines store the rate in the amount field. We need
