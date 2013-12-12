@@ -44,19 +44,19 @@
     <!-- Price Lines -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="price_line_expandable_view_tree">
-      <field name="model">billing.price_line</field>
+      <field name="model">contract.billing.premium</field>
       <field name="type">tree</field>
       <field name="field_childs">all_lines</field>
       <field name="name">price_line_expandable_tree</field>
       <field name="priority">20</field>
     </record>
     <record model="ir.ui.view" id="price_line_view_tree">
-      <field name="model">billing.price_line</field>
+      <field name="model">contract.billing.premium</field>
       <field name="type">tree</field>
       <field name="name">price_line_tree</field>
     </record>
     <record model="ir.ui.view" id="price_line_view_form">
-      <field name="model">billing.price_line</field>
+      <field name="model">contract.billing.premium</field>
       <field name="type">form</field>
       <field name="name">price_line_form</field>
     </record>

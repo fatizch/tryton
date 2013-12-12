@@ -487,103 +487,103 @@ msgctxt "field:contract.billing.period,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:billing.price_line,all_lines:"
+msgctxt "field:contract.billing.premium,all_lines:"
 msgid "Lines"
 msgstr "Lignes"
 
-msgctxt "field:billing.price_line,amount:"
+msgctxt "field:contract.billing.premium,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:billing.price_line,contract:"
+msgctxt "field:contract.billing.premium,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:billing.price_line,create_date:"
+msgctxt "field:contract.billing.premium,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:billing.price_line,create_date_:"
+msgctxt "field:contract.billing.premium,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:billing.price_line,create_uid:"
+msgctxt "field:contract.billing.premium,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:billing.price_line,currency:"
+msgctxt "field:contract.billing.premium,currency:"
 msgid "Currency"
 msgstr "Devises"
 
-msgctxt "field:billing.price_line,currency_digits:"
+msgctxt "field:contract.billing.premium,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
-msgctxt "field:billing.price_line,currency_symbol:"
+msgctxt "field:contract.billing.premium,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:billing.price_line,end_date:"
+msgctxt "field:contract.billing.premium,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:billing.price_line,estimated_fees:"
+msgctxt "field:contract.billing.premium,estimated_fees:"
 msgid "Estimated Fees"
 msgstr "Estimation des Frais"
 
-msgctxt "field:billing.price_line,estimated_taxes:"
+msgctxt "field:contract.billing.premium,estimated_taxes:"
 msgid "Estimated Taxes"
 msgstr "Estimation des Taxes"
 
-msgctxt "field:billing.price_line,estimated_total:"
+msgctxt "field:contract.billing.premium,estimated_total:"
 msgid "Estimated total"
 msgstr "Montant total estimé"
 
-msgctxt "field:billing.price_line,fee_lines:"
+msgctxt "field:contract.billing.premium,fee_lines:"
 msgid "Fee Lines"
 msgstr "Lignes de Frais"
 
-msgctxt "field:billing.price_line,frequency:"
+msgctxt "field:contract.billing.premium,frequency:"
 msgid "Frequency"
 msgstr "Fréquence"
 
-msgctxt "field:billing.price_line,id:"
+msgctxt "field:contract.billing.premium,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.price_line,master:"
+msgctxt "field:contract.billing.premium,master:"
 msgid "Master Line"
 msgstr ""
 
-msgctxt "field:billing.price_line,must_expand_tree:"
+msgctxt "field:contract.billing.premium,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:billing.price_line,name:"
+msgctxt "field:contract.billing.premium,name:"
 msgid "Short Description"
 msgstr "Description Courte"
 
-msgctxt "field:billing.price_line,on_object:"
+msgctxt "field:contract.billing.premium,on_object:"
 msgid "Priced object"
 msgstr "Objet Tarifé"
 
-msgctxt "field:billing.price_line,rec_name:"
+msgctxt "field:contract.billing.premium,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:billing.price_line,start_date:"
+msgctxt "field:contract.billing.premium,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:billing.price_line,tax_lines:"
+msgctxt "field:contract.billing.premium,tax_lines:"
 msgid "Tax Lines"
 msgstr "Lignes de taxe"
 
-msgctxt "field:billing.price_line,write_date:"
+msgctxt "field:contract.billing.premium,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:billing.price_line,write_uid:"
+msgctxt "field:contract.billing.premium,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -861,7 +861,7 @@ msgctxt "model:contract.billing.period,name:"
 msgid "Billing Period"
 msgstr "Période de Facturation"
 
-msgctxt "model:billing.price_line,name:"
+msgctxt "model:contract.billing.premium,name:"
 msgid "Price Line"
 msgstr "Ligne de Prime"
 
@@ -1057,23 +1057,23 @@ msgctxt "selection:billing.payment_rule_line,weekday:"
 msgid "Wednesday"
 msgstr "Mercredi"
 
-msgctxt "selection:billing.price_line,frequency:"
+msgctxt "selection:contract.billing.premium,frequency:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:billing.price_line,frequency:"
+msgctxt "selection:contract.billing.premium,frequency:"
 msgid "Half Yearly"
 msgstr "Semestriel"
 
-msgctxt "selection:billing.price_line,frequency:"
+msgctxt "selection:contract.billing.premium,frequency:"
 msgid "Monthly"
 msgstr "Mensuel"
 
-msgctxt "selection:billing.price_line,frequency:"
+msgctxt "selection:contract.billing.premium,frequency:"
 msgid "Quarterly"
 msgstr "Trimestriel"
 
-msgctxt "selection:billing.price_line,frequency:"
+msgctxt "selection:contract.billing.premium,frequency:"
 msgid "Yearly"
 msgstr "Annuel"
 
@@ -1181,15 +1181,15 @@ msgctxt "view:billing.price_line-tax-relation:"
 msgid "Tax Lines"
 msgstr "Lignes de taxe"
 
-msgctxt "view:billing.price_line:"
+msgctxt "view:contract.billing.premium:"
 msgid "Amount w/o taxes"
 msgstr "Montant Hors Taxes"
 
-msgctxt "view:billing.price_line:"
+msgctxt "view:contract.billing.premium:"
 msgid "Price Line"
 msgstr "Ligne de Prime"
 
-msgctxt "view:billing.price_line:"
+msgctxt "view:contract.billing.premium:"
 msgid "Pricing Lines"
 msgstr "Lignes de Prime"
 

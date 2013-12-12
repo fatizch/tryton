@@ -90,7 +90,7 @@ class PriceLineTaxRelation(model.CoopSQL, model.CoopView):
 
     __name__ = 'billing.price_line-tax-relation'
 
-    price_line = fields.Many2One('billing.price_line', 'Price Line',
+    price_line = fields.Many2One('contract.billing.premium', 'Price Line',
         ondelete='CASCADE')
     tax_desc = fields.Many2One('coop_account.tax_desc', 'Tax',
         ondelete='RESTRICT')
@@ -107,7 +107,7 @@ class PriceLineFeeRelation(model.CoopSQL, model.CoopView):
 
     __name__ = 'billing.price_line-fee-relation'
 
-    price_line = fields.Many2One('billing.price_line', 'Price Line',
+    price_line = fields.Many2One('contract.billing.premium', 'Price Line',
         ondelete='CASCADE')
     fee_desc = fields.Many2One('coop_account.fee_desc', 'Fee',
         ondelete='RESTRICT')
@@ -122,17 +122,17 @@ class PriceLineFeeRelation(model.CoopSQL, model.CoopView):
 class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
     'Price Line'
 
-    __name__ = 'billing.price_line'
+    __name__ = 'contract.billing.premium'
 
     amount = fields.Numeric('Amount')
     name = fields.Function(fields.Char('Short Description'), 'get_short_name')
-    master = fields.Many2One('billing.price_line', 'Master Line')
+    master = fields.Many2One('contract.billing.premium', 'Master Line')
     on_object = fields.Reference('Priced object', 'get_line_target_models')
     frequency = fields.Selection(PRICING_FREQUENCY + [('', '')], 'Frequency')
     contract = fields.Many2One('contract.contract', 'Contract')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    all_lines = fields.One2Many('billing.price_line', 'master', 'Lines',
+    all_lines = fields.One2Many('contract.billing.premium', 'master', 'Lines',
         readonly=True, loading='lazy')
     estimated_total = fields.Function(
         fields.Numeric('Estimated total'),
@@ -673,7 +673,7 @@ class Contract():
     next_billing_date = fields.Date('Next Billing Date',
         states={'invisible': ~Eval('use_prices')})
     prices = fields.One2Many(
-        'billing.price_line', 'contract', 'Prices',
+        'contract.billing.premium', 'contract', 'Prices',
         states={'invisible': ~Eval('use_prices')},
         order=[('start_date', 'ASC'), ('on_object', 'ASC')])
     billing_periods = fields.One2Many('contract.billing.period', 'contract',

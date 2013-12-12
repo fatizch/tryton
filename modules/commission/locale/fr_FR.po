@@ -22,15 +22,15 @@ msgctxt "field:account.move,wo_tax_amount:"
 msgid "Total Amount w/o taxes"
 msgstr "Montant total hors Taxes"
 
-msgctxt "field:billing.price_line,com_lines:"
+msgctxt "field:contract.billing.premium,com_lines:"
 msgid "Commission lines"
 msgstr "Lignes de Commissions"
 
-msgctxt "field:billing.price_line,estimated_com:"
+msgctxt "field:contract.billing.premium,estimated_com:"
 msgid "Estimated Commissions"
 msgstr "Commissions estimées"
 
-msgctxt "field:billing.price_line,estimated_wo_com:"
+msgctxt "field:contract.billing.premium,estimated_wo_com:"
 msgid "Estimated w/o coms"
 msgstr "Montant estimé hors Commissions"
 

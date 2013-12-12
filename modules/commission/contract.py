@@ -22,7 +22,7 @@ class PriceLineComRelation(model.CoopSQL, model.CoopView):
 
     __name__ = 'commission.price_line-com-relation'
 
-    price_line = fields.Many2One('billing.price_line', 'Price Line',
+    price_line = fields.Many2One('contract.billing.premium', 'Price Line',
         ondelete='CASCADE')
     com_subscribed = fields.Many2One('contract.subscribed_option',
         'Commission Subscribed', ondelete='RESTRICT')
@@ -33,7 +33,7 @@ class PriceLineComRelation(model.CoopSQL, model.CoopView):
 class PriceLine():
     'Price Line'
 
-    __name__ = 'billing.price_line'
+    __name__ = 'contract.billing.premium'
 
     com_lines = fields.One2Many('commission.price_line-com-relation',
         'price_line', 'Commission lines')
