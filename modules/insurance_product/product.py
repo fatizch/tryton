@@ -44,11 +44,11 @@ class Offered():
     deductible_rules = fields.One2Many(
         'offered.deductible.rule', 'offered', 'Deductible Rules')
     document_rules = fields.One2ManyDomain(
-        'ins_product.document_rule', 'offered', 'Document Rules',
+        'document.rule', 'offered', 'Document Rules',
         context={'doc_rule_kind': 'main'},
         domain=[('kind', '=', 'main')])
     sub_document_rules = fields.One2ManyDomain(
-        'ins_product.document_rule', 'offered', 'Sub Document Rules',
+        'document.rule', 'offered', 'Sub Document Rules',
         context={'doc_rule_kind': 'sub'},
         domain=[('kind', '=', 'sub')])
 

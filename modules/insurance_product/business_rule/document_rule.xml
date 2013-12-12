@@ -29,13 +29,13 @@
     <menuitem parent="offered.menu_product_configuration" sequence="30" action="act_document_desc" id="menu_document_desc"/>
     <!-- Document Rule -->
     <record model="ir.ui.view" id="document_rule_form">
-      <field name="model">ins_product.document_rule</field>
+      <field name="model">document.rule</field>
       <field name="type">form</field>
       <field name="inherit" ref="businessruleroot_view_form"/>
       <field name="name">document_rule_form</field>
     </record>
     <record model="ir.ui.view" id="document_rule_tree">
-      <field name="model">ins_product.document_rule</field>
+      <field name="model">document.rule</field>
       <field name="type">tree</field>
       <field name="inherit" ref="businessruleroot_view_tree"/>
       <field name="arch" type="xml"/>

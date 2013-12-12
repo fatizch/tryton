@@ -194,7 +194,7 @@ class DocumentDesc(model.CoopSQL, model.CoopView):
 class DocumentRule(BusinessRuleRoot, model.CoopSQL):
     'Document Managing Rule'
 
-    __name__ = 'ins_product.document_rule'
+    __name__ = 'document.rule'
 
     kind = fields.Selection(
         [
@@ -235,7 +235,7 @@ class DocumentRuleRelation(model.CoopSQL):
     __name__ = 'ins_product.document-rule-relation'
 
     rule = fields.Many2One(
-        'ins_product.document_rule', 'Rule', ondelete='CASCADE')
+        'document.rule', 'Rule', ondelete='CASCADE')
     document = fields.Many2One(
         'document.description', 'Document', ondelete='RESTRICT')
 
