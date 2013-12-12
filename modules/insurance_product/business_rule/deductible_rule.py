@@ -21,7 +21,7 @@ DEDUCTIBLE_KIND = [
 class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
     'Deductible Rule'
 
-    __name__ = 'ins_product.deductible_rule'
+    __name__ = 'offered.deductible.rule'
 
     kind = fields.Selection(DEDUCTIBLE_KIND, 'Kind', sort=False, required=True)
     simple_config_choice = fields.Selection(
@@ -153,7 +153,7 @@ class DeductibleDuration(model.CoopSQL, model.CoopView):
 
     __name__ = 'offered.deductible.rule.duration'
 
-    deductible_rule = fields.Many2One('ins_product.deductible_rule',
+    deductible_rule = fields.Many2One('offered.deductible.rule',
         'Deductible Rule')
     duration = fields.Integer('Duration', required=True)
     duration_unit = fields.Selection(coop_date.DAILY_DURATION, 'Duration Unit',

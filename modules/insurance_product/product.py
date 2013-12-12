@@ -42,7 +42,7 @@ class Offered():
     clause_rules = fields.One2Many(
         'clause.rule', 'offered', 'Clause Rules')
     deductible_rules = fields.One2Many(
-        'ins_product.deductible_rule', 'offered', 'Deductible Rules')
+        'offered.deductible.rule', 'offered', 'Deductible Rules')
     document_rules = fields.One2ManyDomain(
         'ins_product.document_rule', 'offered', 'Document Rules',
         context={'doc_rule_kind': 'main'},
