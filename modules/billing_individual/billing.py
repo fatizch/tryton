@@ -460,7 +460,7 @@ class BillingManager(model.CoopSQL, model.CoopView):
 
 class BillingPeriod(model.CoopSQL, model.CoopView):
     'Billing Period'
-    __name__ = 'billing.period'
+    __name__ = 'contract.billing.period'
     contract = fields.Many2One('contract.contract', 'Contract', required=True,
         ondelete='CASCADE')
     start_date = fields.Date('Start Date', required=True)
@@ -676,7 +676,7 @@ class Contract():
         'billing.price_line', 'contract', 'Prices',
         states={'invisible': ~Eval('use_prices')},
         order=[('start_date', 'ASC'), ('on_object', 'ASC')])
-    billing_periods = fields.One2Many('billing.period', 'contract',
+    billing_periods = fields.One2Many('contract.billing.period', 'contract',
         'Billing Periods')
     receivable_lines = fields.Function(
         fields.One2Many('account.move.line', None, 'Receivable Lines',
@@ -747,7 +747,7 @@ class Contract():
                 return manager
 
     def get_billing_period_at_date(self, date):
-        Period = Pool().get('billing.period')
+        Period = Pool().get('contract.billing.period')
         candidates = Period.search([
                 ('contract', '=', self.id), ('start_date', '<=', date),
                 ('end_date', '>=', date)])
@@ -868,7 +868,7 @@ class Contract():
         return journal
 
     def get_or_create_billing_period(self, period):
-        BillingPeriod = Pool().get('billing.period')
+        BillingPeriod = Pool().get('contract.billing.period')
         for billing_period in self.billing_periods \
                 if hasattr(self, 'billing_periods') else []:
             if (billing_period.start_date, billing_period.end_date) == period:

@@ -7,7 +7,7 @@ msgid ""
 "A payment bank account must be provided if the payment mode is Direct Debit"
 msgstr ""
 
-msgctxt "error:billing.period:"
+msgctxt "error:contract.billing.period:"
 msgid "Billing Period \"%(first)s\" and \"%(second)s\" overlap."
 msgstr ""
 
@@ -439,51 +439,51 @@ msgctxt "field:billing.payment_rule_line,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:billing.period,contract:"
+msgctxt "field:contract.billing.period,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:billing.period,create_date:"
+msgctxt "field:contract.billing.period,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:billing.period,create_date_:"
+msgctxt "field:contract.billing.period,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:billing.period,create_uid:"
+msgctxt "field:contract.billing.period,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:billing.period,end_date:"
+msgctxt "field:contract.billing.period,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:billing.period,id:"
+msgctxt "field:contract.billing.period,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.period,moves:"
+msgctxt "field:contract.billing.period,moves:"
 msgid "Moves"
 msgstr "Mouvements"
 
-msgctxt "field:billing.period,must_expand_tree:"
+msgctxt "field:contract.billing.period,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:billing.period,rec_name:"
+msgctxt "field:contract.billing.period,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:billing.period,start_date:"
+msgctxt "field:contract.billing.period,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:billing.period,write_date:"
+msgctxt "field:contract.billing.period,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:billing.period,write_uid:"
+msgctxt "field:contract.billing.period,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -857,7 +857,7 @@ msgctxt "model:billing.payment_rule_line,name:"
 msgid "Payment Rule Line"
 msgstr "Ligne de règle de paiement"
 
-msgctxt "model:billing.period,name:"
+msgctxt "model:contract.billing.period,name:"
 msgid "Billing Period"
 msgstr "Période de Facturation"
 
@@ -1157,11 +1157,11 @@ msgctxt "view:billing.payment_rule_line:"
 msgid "Payment Rule Lines"
 msgstr ""
 
-msgctxt "view:billing.period:"
+msgctxt "view:contract.billing.period:"
 msgid "Billing Period"
 msgstr "Période de Facturation"
 
-msgctxt "view:billing.period:"
+msgctxt "view:contract.billing.period:"
 msgid "Billing Periods"
 msgstr "Période de Facturation"
 

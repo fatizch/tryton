@@ -16,7 +16,7 @@ __all__ = [
 class Move:
     __name__ = 'account.move'
 
-    billing_period = fields.Many2One('billing.period', 'Billing Period',
+    billing_period = fields.Many2One('contract.billing.period', 'Billing Period',
         ondelete='RESTRICT')
     total_amount = fields.Function(
         fields.Numeric('Total due amount'),

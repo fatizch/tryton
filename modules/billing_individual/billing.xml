@@ -129,12 +129,12 @@
     <!-- Billing Period -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="billing_period_view_form">
-      <field name="model">billing.period</field>
+      <field name="model">contract.billing.period</field>
       <field name="type">form</field>
       <field name="name">billing_period_form</field>
     </record>
     <record model="ir.ui.view" id="billing_period_tree">
-      <field name="model">billing.period</field>
+      <field name="model">contract.billing.period</field>
       <field name="type">tree</field>
       <field name="name">billing_period_tree</field>
     </record>
@@ -226,7 +226,7 @@
     </record>
     <record model="ir.action.act_window" id="act_open_billing_period_form">
       <field name="name">Billing Periods</field>
-      <field name="res_model">billing.period</field>
+      <field name="res_model">contract.billing.period</field>
       <field name="domain">[('contract', '=', Eval('id'))]</field>
     </record>
     <record model="ir.action.keyword" id="act_open_billing_period_keyword1">
