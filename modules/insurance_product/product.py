@@ -93,7 +93,7 @@ class Product():
 
     term_renewal_rules = fields.One2Many('offered.term.rule',
         'offered', 'Term - Renewal')
-    item_descriptors = fields.Many2Many('offered.product-item_desc', 'product',
+    item_descriptors = fields.Many2Many('offered.product-item.description', 'product',
         'item_desc', 'Item Descriptors',
         domain=[('id', 'in', Eval('possible_item_descs'))],
         depends=['possible_item_descs'],
@@ -317,7 +317,7 @@ class ItemDescriptorComplementaryDataRelation(model.CoopSQL):
 class ProductItemDescriptorRelation(model.CoopSQL):
     'Relation between Product and Item Descriptor'
 
-    __name__ = 'offered.product-item_desc'
+    __name__ = 'offered.product-item.description'
 
     product = fields.Many2One(
         'offered.product', 'Product', ondelete='CASCADE')

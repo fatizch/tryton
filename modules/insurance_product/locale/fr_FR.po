@@ -3100,39 +3100,39 @@ msgctxt "field:offered.product-complementary_data_def,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.product-item_desc,create_date:"
+msgctxt "field:offered.product-item.description,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:offered.product-item_desc,create_date_:"
+msgctxt "field:offered.product-item.description,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:offered.product-item_desc,create_uid:"
+msgctxt "field:offered.product-item.description,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:offered.product-item_desc,id:"
+msgctxt "field:offered.product-item.description,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.product-item_desc,item_desc:"
+msgctxt "field:offered.product-item.description,item_desc:"
 msgid "Item Descriptor"
 msgstr "Description du Risque"
 
-msgctxt "field:offered.product-item_desc,product:"
+msgctxt "field:offered.product-item.description,product:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "field:offered.product-item_desc,rec_name:"
+msgctxt "field:offered.product-item.description,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:offered.product-item_desc,write_date:"
+msgctxt "field:offered.product-item.description,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:offered.product-item_desc,write_uid:"
+msgctxt "field:offered.product-item.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3585,7 +3585,7 @@ msgctxt "model:offered.product-complementary_data_def,name:"
 msgid "Relation between Product and Complementary Data"
 msgstr "Relation Produit-Données Complémantaires"
 
-msgctxt "model:offered.product-item_desc,name:"
+msgctxt "model:offered.product-item.description,name:"
 msgid "Relation between Product and Item Descriptor"
 msgstr "Relation Produit-Risque"
 
