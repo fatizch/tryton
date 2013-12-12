@@ -31,31 +31,31 @@ msgctxt "field:account.payment,collection:"
 msgid "Collection"
 msgstr "Encaissement"
 
-msgctxt "field:collection.assign_collection,amount:"
+msgctxt "field:collection.create.assign,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:collection.assign_collection,assignments:"
+msgctxt "field:collection.create.assign,assignments:"
 msgid "Assignments"
 msgstr "Affectations"
 
-msgctxt "field:collection.assign_collection,create_suspense_line_with_rest:"
+msgctxt "field:collection.create.assign,create_suspense_line_with_rest:"
 msgid "Create Suspense Line from Remaining"
 msgstr "Placer le reste dans le compte d'attente"
 
-msgctxt "field:collection.assign_collection,id:"
+msgctxt "field:collection.create.assign,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:collection.assign_collection,must_expand_tree:"
+msgctxt "field:collection.create.assign,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:collection.assign_collection,party:"
+msgctxt "field:collection.create.assign,party:"
 msgid "Party"
 msgstr "Tiers"
 
-msgctxt "field:collection.assign_collection,remaining:"
+msgctxt "field:collection.create.assign,remaining:"
 msgid "Remaining"
 msgstr "Reste"
 
@@ -179,7 +179,7 @@ msgctxt "field:party.party,suspense_account:"
 msgid "Suspense account"
 msgstr "Compte d'attente"
 
-msgctxt "model:collection.assign_collection,name:"
+msgctxt "model:collection.create.assign,name:"
 msgid "Assign Collection"
 msgstr "Affecter l'encaissement"
 
@@ -239,7 +239,7 @@ msgctxt "selection:collection.collection_parameters,kind:"
 msgid "Check"
 msgstr "Chèque"
 
-msgctxt "view:collection.assign_collection:"
+msgctxt "view:collection.create.assign:"
 msgid "Assign Collection"
 msgstr "Affecter l'encaissement"
 

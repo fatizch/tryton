@@ -34,7 +34,7 @@ class AssignCollection():
     'Assign Collection'
 
     __metaclass__ = PoolMeta
-    __name__ = 'collection.assign_collection'
+    __name__ = 'collection.create.assign'
 
     contract = fields.Many2One('contract.contract', 'Contract',
         states={'readonly': True})

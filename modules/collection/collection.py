@@ -188,7 +188,7 @@ class Assignment(model.CoopView):
 class AssignCollection(model.CoopView):
     'Assign Collection'
 
-    __name__ = 'collection.assign_collection'
+    __name__ = 'collection.create.assign'
 
     amount = fields.Numeric('Amount')
     party = fields.Many2One('party.party', 'Party')
@@ -220,7 +220,7 @@ class CollectionWizard(model.CoopWizard):
         'collection.collection_parameters_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Assign', 'assign', 'tryton-go-next')])
-    assign = StateView('collection.assign_collection',
+    assign = StateView('collection.create.assign',
         'collection.assign_collection_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Validate', 'check_amount', 'tryton-ok')])

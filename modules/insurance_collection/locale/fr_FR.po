@@ -2,7 +2,7 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:collection.assign_collection,contract:"
+msgctxt "field:collection.create.assign,contract:"
 msgid "Contract"
 msgstr "Contrat"
 

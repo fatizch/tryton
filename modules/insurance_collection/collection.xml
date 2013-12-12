@@ -14,7 +14,7 @@
     <!-- Assign Collection -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="assign_collection_form">
-      <field name="model">collection.assign_collection</field>
+      <field name="model">collection.create.assign</field>
       <field name="type">form</field>
       <field name="inherit" ref="collection.assign_collection_form"/>
       <field name="name">assign_collection_form</field>
