@@ -1217,18 +1217,18 @@ msgctxt "view:party.party:"
 msgid "Accounting"
 msgstr "Comptabilité"
 
-msgctxt "wizard_button:billing.billing_process,bill_display,accept_bill:"
+msgctxt "wizard_button:contract.do_billing,bill_display,accept_bill:"
 msgid "Accept"
 msgstr "Accepter"
 
-msgctxt "wizard_button:billing.billing_process,bill_display,cancel_bill:"
+msgctxt "wizard_button:contract.do_billing,bill_display,cancel_bill:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:billing.billing_process,bill_parameters,bill_display:"
+msgctxt "wizard_button:contract.do_billing,bill_parameters,bill_display:"
 msgid "Preview"
 msgstr "Prévisualiser"
 
-msgctxt "wizard_button:billing.billing_process,bill_parameters,end:"
+msgctxt "wizard_button:contract.do_billing,bill_parameters,end:"
 msgid "Cancel"
 msgstr "Annuler"
