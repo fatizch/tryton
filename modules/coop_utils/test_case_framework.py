@@ -385,7 +385,7 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
 class TestCaseSelector(model.CoopView):
     'Test Case Selector'
 
-    __name__ = 'coop_utils.test_case_selector'
+    __name__ = 'ir.test_case.run.select.method'
 
     method_name = fields.Char('Method Name')
     name = fields.Char('Test Case Name')
@@ -416,7 +416,7 @@ class SelectTestCase(model.CoopView):
         on_change=['select_all_test_cases', 'test_cases'])
     select_all_files = fields.Boolean('Select All',
         on_change=['select_all_files', 'test_files'])
-    test_cases = fields.One2Many('coop_utils.test_case_selector', None,
+    test_cases = fields.One2Many('ir.test_case.run.select.method', None,
         'Test Cases', on_change=['test_cases'])
     test_files = fields.One2Many('ir.test_case.run.select.file', None,
         'Test Files')

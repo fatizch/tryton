@@ -294,27 +294,27 @@ msgctxt "field:ir.test_case,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:coop_utils.test_case_selector,id:"
+msgctxt "field:ir.test_case.run.select.method,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_utils.test_case_selector,method_name:"
+msgctxt "field:ir.test_case.run.select.method,method_name:"
 msgid "Method Name"
 msgstr "Nom de la Méthode"
 
-msgctxt "field:coop_utils.test_case_selector,must_expand_tree:"
+msgctxt "field:ir.test_case.run.select.method,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:coop_utils.test_case_selector,name:"
+msgctxt "field:ir.test_case.run.select.method,name:"
 msgid "Test Case Name"
 msgstr "Nom du jeu d'essai"
 
-msgctxt "field:coop_utils.test_case_selector,selected:"
+msgctxt "field:ir.test_case.run.select.method,selected:"
 msgid "Will be executed"
 msgstr "Sera exécuté"
 
-msgctxt "field:coop_utils.test_case_selector,selection:"
+msgctxt "field:ir.test_case.run.select.method,selection:"
 msgid "Selection"
 msgstr "Sélection"
 
@@ -410,7 +410,7 @@ msgctxt "model:ir.test_case,name:"
 msgid "Test Case Model"
 msgstr "Jeux d'essais"
 
-msgctxt "model:coop_utils.test_case_selector,name:"
+msgctxt "model:ir.test_case.run.select.method,name:"
 msgid "Test Case Selector"
 msgstr "Sélection des jeux d'essai"
 
@@ -470,15 +470,15 @@ msgctxt "model:utils.versionned_object,name:"
 msgid "Versionned Object"
 msgstr "Objet Versionné"
 
-msgctxt "selection:coop_utils.test_case_selector,selection:"
+msgctxt "selection:ir.test_case.run.select.method,selection:"
 msgid "Automatic"
 msgstr "Automatique"
 
-msgctxt "selection:coop_utils.test_case_selector,selection:"
+msgctxt "selection:ir.test_case.run.select.method,selection:"
 msgid "Manual"
 msgstr "Manuel"
 
-msgctxt "selection:coop_utils.test_case_selector,selection:"
+msgctxt "selection:ir.test_case.run.select.method,selection:"
 msgid "Not Selected"
 msgstr "Non Sélectionné"
 
@@ -518,7 +518,7 @@ msgctxt "view:ir.test_case:"
 msgid "Test Case Parameters"
 msgstr "Paramètres des jeu d'essais"
 
-msgctxt "view:coop_utils.test_case_selector:"
+msgctxt "view:ir.test_case.run.select.method:"
 msgid "Test Cases"
 msgstr "Jeux de Test"
 

@@ -33,7 +33,7 @@
     <!-- Test Case Selector -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="test_case_selector_tree">
-      <field name="model">coop_utils.test_case_selector</field>
+      <field name="model">ir.test_case.run.select.method</field>
       <field name="type">tree</field>
       <field name="name">test_case_selector_tree</field>
     </record>
