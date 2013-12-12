@@ -24,7 +24,7 @@
     <menuitem parent="insurance_contract.menu_contract" sequence="1" action="subscription_process_launcher" id="menu_start_subscription"/>
     <record model="ir.action.act_window" id="act_contract_logs">
       <field name="name">Logs</field>
-      <field name="res_model">coop_process.process_log</field>
+      <field name="res_model">process.log</field>
       <field name="domain">[
                 ('task', '=',
                 (Eval('active_model'),Eval('active_id')))]</field>

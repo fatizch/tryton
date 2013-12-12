@@ -36,7 +36,7 @@ class Priority(model.CoopSQL, model.CoopView):
             return None
         process = self.process_step.process
         good_act = process.get_act_window()
-        Log = Pool().get('coop_process.process_log')
+        Log = Pool().get('process.log')
         domain = [
             ('latest', '=', True),
             ('to_state', '=', self.process_step),

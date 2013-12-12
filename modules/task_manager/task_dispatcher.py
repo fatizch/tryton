@@ -21,7 +21,7 @@ class ProcessLog():
     'Process Log'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_process.process_log'
+    __name__ = 'process.log'
 
     priority = fields.Function(fields.Integer('Priority'), 'get_priority')
     task_start = fields.Function(
@@ -137,7 +137,7 @@ class TaskDisplayer(model.CoopView):
     def on_change_with_nb_tasks(self):
         if not (hasattr(self, 'task') and self.task):
             return None
-        Log = Pool().get('coop_process.process_log')
+        Log = Pool().get('process.log')
         return Log.search_count([
             ('latest', '=', True),
             ('to_state', '=', self.task),
@@ -174,12 +174,12 @@ class TaskSelector(model.CoopView):
         domain=[('kind', '=', 'process')],
         states={'readonly': True})
     tasks = fields.One2Many(
-        'coop_process.process_log', '', 'Tasks',
+        'process.log', '', 'Tasks',
         domain=[('latest', '=', True), ('locked', '=', False)],
         order=[('priority', 'ASC')],
         on_change=['selected_task', 'tasks'])
     selected_task = fields.Many2One(
-        'coop_process.process_log', 'Selected Task', states={'readonly': True})
+        'process.log', 'Selected Task', states={'readonly': True})
 
     def on_change_team(self):
         if not (hasattr(self, 'team') and self.team):
@@ -188,7 +188,7 @@ class TaskSelector(model.CoopView):
                 'nb_tasks_team': 0,
                 'tasks_team': []}
         User = Pool().get('res.user')
-        Log = Pool().get('coop_process.process_log')
+        Log = Pool().get('process.log')
         result = {}
         result['nb_users_team'] = User.search_count([('team', '=', self.team)])
         tmp_result = {}
@@ -315,7 +315,7 @@ class TaskDispatcher(Wizard):
         return model.serialize_this(selector)
 
     def transition_remove_locks(self):
-        Log = Pool().get('coop_process.process_log')
+        Log = Pool().get('process.log')
         locked = Log.search([
             ('locked', '=', True),
             ('user', '=', Transaction().user)])
@@ -324,7 +324,7 @@ class TaskDispatcher(Wizard):
         return 'select_context'
 
     def do_calculate_action(self, action):
-        Log = Pool().get('coop_process.process_log')
+        Log = Pool().get('process.log')
         if self.select_context.selected_task:
             good_task = self.select_context.selected_task
             good_id = good_task.task.id
@@ -389,10 +389,10 @@ class LaunchTask(Wizard):
         current_model = Transaction().context.get('active_model')
         try:
             assert current_id
-            assert current_model == 'coop_process.process_log'
+            assert current_model == 'process.log'
         except AssertionError:
             self.raise_user_error('no_task_selected')
-        Log = Pool().get('coop_process.process_log')
+        Log = Pool().get('process.log')
         good_task = Log(current_id)
         good_id = good_task.task.id
         good_model = good_task.task.__name__

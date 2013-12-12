@@ -15,7 +15,7 @@ class Session:
 
     @classmethod
     def delete(cls, sessions):
-        Log = Pool().get('coop_process.process_log')
+        Log = Pool().get('process.log')
         for session in sessions:
             locks = Log.search([
                 ('user', '=', session.create_uid),

@@ -18,75 +18,75 @@ msgctxt "error:process.step_transition:"
 msgid "Pyson expression and description is mandatory"
 msgstr "Expression Pyson et la description sont obligatoires"
 
-msgctxt "field:coop_process.process_log,create_date:"
+msgctxt "field:process.log,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:coop_process.process_log,create_date_:"
+msgctxt "field:process.log,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:coop_process.process_log,create_uid:"
+msgctxt "field:process.log,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:coop_process.process_log,description:"
+msgctxt "field:process.log,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:coop_process.process_log,end_time:"
+msgctxt "field:process.log,end_time:"
 msgid "End Time"
 msgstr "Fin"
 
-msgctxt "field:coop_process.process_log,from_state:"
+msgctxt "field:process.log,from_state:"
 msgid "From State"
 msgstr "Etat de Départ"
 
-msgctxt "field:coop_process.process_log,id:"
+msgctxt "field:process.log,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_process.process_log,latest:"
+msgctxt "field:process.log,latest:"
 msgid "Latest"
 msgstr "Dernier"
 
-msgctxt "field:coop_process.process_log,locked:"
+msgctxt "field:process.log,locked:"
 msgid "Lock"
 msgstr "Verrrouillé"
 
-msgctxt "field:coop_process.process_log,must_expand_tree:"
+msgctxt "field:process.log,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:coop_process.process_log,rec_name:"
+msgctxt "field:process.log,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:coop_process.process_log,session:"
+msgctxt "field:process.log,session:"
 msgid "Session"
 msgstr "Session"
 
-msgctxt "field:coop_process.process_log,start_time:"
+msgctxt "field:process.log,start_time:"
 msgid "Start Time"
 msgstr "Début"
 
-msgctxt "field:coop_process.process_log,task:"
+msgctxt "field:process.log,task:"
 msgid "Task"
 msgstr "Tâche"
 
-msgctxt "field:coop_process.process_log,to_state:"
+msgctxt "field:process.log,to_state:"
 msgid "To State"
 msgstr "Etat Final"
 
-msgctxt "field:coop_process.process_log,user:"
+msgctxt "field:process.log,user:"
 msgid "User"
 msgstr "Utilisateur"
 
-msgctxt "field:coop_process.process_log,write_date:"
+msgctxt "field:process.log,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:coop_process.process_log,write_uid:"
+msgctxt "field:process.log,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -274,7 +274,7 @@ msgctxt "field:process.step_transition,pyson_description:"
 msgid ""
 msgstr " "
 
-msgctxt "model:coop_process.process_log,name:"
+msgctxt "model:process.log,name:"
 msgid "Process Log"
 msgstr ""
 
@@ -310,11 +310,11 @@ msgctxt "selection:process.step_transition,kind:"
 msgid "Calculated"
 msgstr "Calculé"
 
-msgctxt "view:coop_process.process_log:"
+msgctxt "view:process.log:"
 msgid "Log"
 msgstr ""
 
-msgctxt "view:coop_process.process_log:"
+msgctxt "view:process.log:"
 msgid "Logs"
 msgstr ""
 

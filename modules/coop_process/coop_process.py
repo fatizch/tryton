@@ -167,7 +167,7 @@ class StepTransition(model.CoopSQL):
 class ProcessLog(model.CoopSQL, model.CoopView):
     'Process Log'
 
-    __name__ = 'coop_process.process_log'
+    __name__ = 'process.log'
 
     user = fields.Many2One('res.user', 'User')
     from_state = fields.Many2One(
@@ -219,9 +219,9 @@ class ProcessLog(model.CoopSQL, model.CoopView):
 class CoopProcessFramework(ProcessFramework):
     'Coop Process Framework'
 
-    logs = fields.One2Many('coop_process.process_log', 'task', 'Task')
+    logs = fields.One2Many('process.log', 'task', 'Task')
     current_log = fields.Function(
-        fields.Many2One('coop_process.process_log', 'Current Log'),
+        fields.Many2One('process.log', 'Current Log'),
         'get_current_log')
 
     @classmethod
@@ -234,7 +234,7 @@ class CoopProcessFramework(ProcessFramework):
     def get_current_log(self, name=None):
         if not (hasattr(self, 'id') and self.id):
             return None
-        Log = Pool().get('coop_process.process_log')
+        Log = Pool().get('process.log')
         current_log = Log.search([
             ('task', '=', utils.convert_to_reference(self)),
             ('latest', '=', True)])
@@ -251,7 +251,7 @@ class CoopProcessFramework(ProcessFramework):
                             instance.current_log.user.get_rec_name(None)))
         super(CoopProcessFramework, cls).write(instances, values)
         Session = Pool().get('ir.session')
-        Log = Pool().get('coop_process.process_log')
+        Log = Pool().get('process.log')
         try:
             good_session, = Session.search(
                 [('create_uid', '=', Transaction().user)])
@@ -286,7 +286,7 @@ class CoopProcessFramework(ProcessFramework):
     @classmethod
     def create(cls, values):
         instances = super(CoopProcessFramework, cls).create(values)
-        Log = Pool().get('coop_process.process_log')
+        Log = Pool().get('process.log')
         Session = Pool().get('ir.session')
         good_session, = Session.search(
             [('create_uid', '=', Transaction().user)])
@@ -304,7 +304,7 @@ class CoopProcessFramework(ProcessFramework):
     @classmethod
     def delete(cls, records):
         # Delete logs
-        Log = Pool().get('coop_process.process_log')
+        Log = Pool().get('process.log')
         Log.delete(Log.search([('task', 'in', [
             utils.convert_to_reference(x) for x in records])]))
         super(CoopProcessFramework, cls).delete(records)

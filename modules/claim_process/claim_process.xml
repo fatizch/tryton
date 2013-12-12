@@ -33,7 +33,7 @@
         action="declaration_process_launcher" id="menu_start_declaration"/>
     <record model="ir.action.act_window" id="act_claim_logs">
       <field name="name">Logs</field>
-      <field name="res_model">coop_process.process_log</field>
+      <field name="res_model">process.log</field>
       <field name="domain">[('task', '=', (Eval('active_model'),Eval('active_id')))]</field>
     </record>
     <record model="ir.action.keyword" id="act_claim_logs_keyword1">

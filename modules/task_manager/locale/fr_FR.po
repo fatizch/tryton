@@ -6,19 +6,19 @@ msgctxt "error:task_manager.task_dispatcher:"
 msgid "No task has been selected."
 msgstr "Pas de Tâche Sélectionnée"
 
-msgctxt "field:coop_process.process_log,is_current_user:"
+msgctxt "field:process.log,is_current_user:"
 msgid "Is current user"
 msgstr ""
 
-msgctxt "field:coop_process.process_log,priority:"
+msgctxt "field:process.log,priority:"
 msgid "Priority"
 msgstr "Priorité"
 
-msgctxt "field:coop_process.process_log,task_selected:"
+msgctxt "field:process.log,task_selected:"
 msgid "Selected"
 msgstr "Coché"
 
-msgctxt "field:coop_process.process_log,task_start:"
+msgctxt "field:process.log,task_start:"
 msgid "Task Start"
 msgstr "Début de la Tâche"
 
@@ -326,11 +326,11 @@ msgctxt "selection:task_manager.task_displayer,kind:"
 msgid "Team"
 msgstr "Equipe"
 
-msgctxt "view:coop_process.process_log:"
+msgctxt "view:process.log:"
 msgid "Current Tasks"
 msgstr "Tâche courante"
 
-msgctxt "view:coop_process.process_log:"
+msgctxt "view:process.log:"
 msgid "Tasks"
 msgstr "Tâches"
 

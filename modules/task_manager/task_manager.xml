@@ -100,18 +100,18 @@
     <!-- Process Log -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="process_log_priority_tree">
-      <field name="model">coop_process.process_log</field>
+      <field name="model">process.log</field>
       <field name="type">tree</field>
       <field name="name">process_log_priority_tree</field>
     </record>
     <record model="ir.ui.view" id="process_log_tree_launchable">
-      <field name="model">coop_process.process_log</field>
+      <field name="model">process.log</field>
       <field name="type">tree</field>
       <field name="name">process_log_tree_launchable</field>
     </record>
     <record model="ir.action.act_window" id="act_process_log">
       <field name="name">Waiting Tasks</field>
-      <field name="res_model">coop_process.process_log</field>
+      <field name="res_model">process.log</field>
       <field name="auto_refresh">100</field>
       <field name="domain">[('latest', '=', True), ['OR', ('locked', '=', False), ('user', '=', Eval('context', {}).get('_user'))], ('to_state', '!=', None)]</field>
     </record>
@@ -136,7 +136,7 @@
     </record>
     <record model="ir.action.keyword" id="act_launch_task_wizard_keyword">
       <field name="keyword">tree_open</field>
-      <field name="model">coop_process.process_log,-1</field>
+      <field name="model">process.log,-1</field>
       <field name="action" ref="act_launch_task_wizard"/>
     </record>
   </data>
