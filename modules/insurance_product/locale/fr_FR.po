@@ -4784,26 +4784,26 @@ msgctxt "view:rule_engine.parameter:"
 msgid "Tables"
 msgstr "Tables"
 
-msgctxt "wizard_button:ins_product.letter_creation_wizard,attach,end:"
+msgctxt "wizard_button:document.create,attach,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
 msgctxt ""
-"wizard_button:ins_product.letter_creation_wizard,attach,post_generation:"
+"wizard_button:document.create,attach,post_generation:"
 msgid "Attach"
 msgstr "Attacher"
 
 msgctxt ""
-"wizard_button:ins_product.letter_creation_wizard,select_model,attach:"
+"wizard_button:document.create,select_model,attach:"
 msgid "Attach"
 msgstr "Attacher"
 
-msgctxt "wizard_button:ins_product.letter_creation_wizard,select_model,end:"
+msgctxt "wizard_button:document.create,select_model,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
 msgctxt ""
-"wizard_button:ins_product.letter_creation_wizard,select_model,generate:"
+"wizard_button:document.create,select_model,generate:"
 msgid "Generate"
 msgstr "Générer"
 

@@ -65,7 +65,7 @@
     <!-- Report -->
     <record model="ir.action.wizard" id="letter_generation_wizard">
         <field name="name">Letter Generation</field>
-        <field name="wiz_name">ins_product.letter_creation_wizard</field>
+        <field name="wiz_name">document.create</field>
     </record>
     <record model="ir.action.report" id="letter_generation_report">
       <field name="name">Letter Report</field>

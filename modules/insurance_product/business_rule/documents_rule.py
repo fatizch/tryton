@@ -626,7 +626,7 @@ class AttachmentCreation(model.CoopView):
 
 
 class LetterGeneration(Wizard):
-    __name__ = 'ins_product.letter_creation_wizard'
+    __name__ = 'document.create'
 
     class SpecialStateAction(StateAction):
 
@@ -1057,7 +1057,7 @@ class DocumentRequestBatch(BatchRoot):
     @classmethod
     def execute(cls, objects, ids, logger):
         LetterGeneration = Pool().get(
-            'ins_product.letter_creation_wizard', type='wizard')
+            'document.create', type='wizard')
         for cur_object in objects:
             with Transaction().set_context(
                     active_model=cur_object.__name__, active_id=cur_object.id):
