@@ -113,7 +113,7 @@ class CollectionToCashValue(Wizard):
             'offered.product-options-coverage')
         CashValueCollection = pool.get('contract.cash_value.collection')
         Move = pool.get('account.move')
-        Contract = pool.get('contract.contract')
+        Contract = pool.get('contract')
         Coverage = pool.get('offered.coverage')
         Line = pool.get('account.move.line')
         collection_table = Collection.__table__()
@@ -134,7 +134,7 @@ class CollectionToCashValue(Wizard):
                 for x in Coverage.search([('family', '=', 'cash_value')])])
 
         query_table = move_table.join(contract_table, condition=(
-                (move_table.origin == Concat('contract.contract,',
+                (move_table.origin == Concat('contract,',
                         Cast(contract_table.id, 'VARCHAR')))
                 & (contract_table.offered.in_(products))
                 & (move_table.post_date <=
@@ -156,7 +156,7 @@ class CollectionToCashValue(Wizard):
             target_account, expected_amount = reduce(
                 lambda x, y: (x[0] if x[0] else y[0], x[1] + y[1]),
                 map(lambda x: (x.account, x.credit), Line.search([
-                            ('move.origin', '=', 'contract.contract,%s' %
+                            ('move.origin', '=', 'contract,%s' %
                                 contract.id),
                             ('account', 'in', coverage_accounts.keys()),
                             ('move.post_date', '<=', date)])))
@@ -221,12 +221,12 @@ class CashValueUpdate(Wizard):
             }
 
     def transition_update_cash_values(self):
-        if Transaction().context.get('active_model') != 'contract.contract':
+        if Transaction().context.get('active_model') != 'contract':
             return 'end'
         if not Transaction().context.get('active_id'):
             return 'end'
         pool = Pool()
-        Contract = pool.get('contract.contract')
+        Contract = pool.get('contract')
         CashValueCollection = pool.get('contract.cash_value.collection')
         contract = Contract(Transaction().context.get('active_id'))
         CashValueCollection.update_values(contract.cash_value_collections,
@@ -239,7 +239,7 @@ class CashSurrenderParameters(model.CoopView):
 
     __name__ = 'contract.wizard.cash_surrender.parameters'
 
-    contract = fields.Many2One('contract.contract', 'Contract', required=True,
+    contract = fields.Many2One('contract', 'Contract', required=True,
         on_change=['contract', 'surrender_date'])
     surrender_date = fields.Date('Surrender Date', required=True,
         on_change=['contract', 'surrender_date'])
@@ -277,11 +277,11 @@ class CashSurrenderWizard(Wizard):
         pool = Pool()
         Date = pool.get('ir.date')
         result = {'surrender_date': Date.today()}
-        if (Transaction().context.get('active_model') == 'contract.contract'
+        if (Transaction().context.get('active_model') == 'contract'
                 and Transaction().context.get('active_id')):
             result['contract'] = Transaction().context.get('active_id')
             tmp = CashSurrenderParameters()
-            tmp.contract = pool.get('contract.contract')(result['contract'])
+            tmp.contract = pool.get('contract')(result['contract'])
             tmp.surrender_date = result['surrender_date']
             result['surrender_amount'] = tmp.on_change_contract()[
                 'surrender_amount']

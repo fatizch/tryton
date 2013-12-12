@@ -14,7 +14,7 @@ __all__ = [
 class Contract():
     'Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
     __metaclass__ = PoolMeta
 
     is_health = fields.Function(
@@ -73,7 +73,7 @@ class CoveredElement():
     @classmethod
     def create(cls, values):
         pool = Pool()
-        Contract = pool.get('contract.contract')
+        Contract = pool.get('contract')
         Health_Complement = pool.get('health.party_complement')
         Party = pool.get('party.party')
         CovElement = pool.get('ins_contract.covered_element')

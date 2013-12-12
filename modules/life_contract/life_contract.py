@@ -15,7 +15,7 @@ __all__ = [
 class Contract():
     'Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
 
     def update_coverage_amounts_if_needed(self, at_date=None):
         if not at_date:

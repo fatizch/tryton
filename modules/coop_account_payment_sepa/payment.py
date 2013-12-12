@@ -82,7 +82,7 @@ class Payment:
     @property
     def sepa_end_to_end_id(self):
         pool = Pool()
-        Contract = pool.get('contract.contract')
+        Contract = pool.get('contract')
 
         if self.line and isinstance(self.line.move.origin, Contract):
             contract = self.line.move.origin
@@ -91,7 +91,7 @@ class Payment:
     @property
     def sepa_bank_account_number(self):
         pool = Pool()
-        Contract = pool.get('contract.contract')
+        Contract = pool.get('contract')
 
         if self.line and isinstance(self.line.move.origin, Contract):
             contract = self.line.move.origin

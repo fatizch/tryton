@@ -41,7 +41,7 @@ class RateLine(model.CoopSQL, model.CoopView):
             on_change=['manual_billing', 'childs'],
             states={'invisible': True}),
         'get_manual_billing')
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE',
         states={'invisible': ~~Eval('parent')})
     covered_element = fields.Many2One('ins_contract.covered_element',
@@ -189,7 +189,7 @@ class RateNote(model.CoopSQL, model.CoopView, ModelCurrency):
             ('validated', 'Validated'),
             ], 'Status', sort=False)
     lines = fields.One2Many('billing.rate_note_line', 'rate_note', 'Lines')
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE')
     client = fields.Function(
         fields.Many2One('party.party', 'Client'),
@@ -271,7 +271,7 @@ class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
     rate_note = fields.Many2One('billing.rate_note', 'Rate Note',
         ondelete='CASCADE')
     contract = fields.Function(
-        fields.Many2One('contract.contract', 'Contract'),
+        fields.Many2One('contract', 'Contract'),
         'get_contract_id')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
@@ -425,7 +425,7 @@ class RateNoteParameters(model.CoopView):
             'until_date'])
 
     def _on_change(self, name):
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         res = {}
         clients = self.clients
         contracts = self.contracts
@@ -489,7 +489,7 @@ class RateNoteParameterContractRelation(model.CoopView):
 
     parameters_view = fields.Many2One('billing.rate_note_process_parameters',
         'Parameter View')
-    contract = fields.Many2One('contract.contract', 'Contract')
+    contract = fields.Many2One('contract', 'Contract')
 
 
 class RateNoteParameterGroupPartyRelation(model.CoopView):
@@ -530,9 +530,9 @@ class RateNoteProcess(model.CoopWizard):
     validate_rate_notes = StateTransition()
 
     def default_parameters(self, values):
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         contract = None
-        if Transaction().context.get('active_model') == 'contract.contract':
+        if Transaction().context.get('active_model') == 'contract':
             contract = Contract(Transaction().context.get('active_id'))
             if (not contract or not contract.offered.is_group
                     or contract.status != 'active'):
@@ -661,7 +661,7 @@ class ContractForBilling():
     'Contract'
 
     __metaclass__ = PoolMeta
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
 
     def create_price_list(self, start_date, end_date):
         if not 'rate_note' in Transaction().context:

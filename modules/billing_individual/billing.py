@@ -129,7 +129,7 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
     master = fields.Many2One('contract.billing.premium', 'Master Line')
     on_object = fields.Reference('Priced object', 'get_line_target_models')
     frequency = fields.Selection(PRICING_FREQUENCY + [('', '')], 'Frequency')
-    contract = fields.Many2One('contract.contract', 'Contract')
+    contract = fields.Many2One('contract', 'Contract')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     all_lines = fields.One2Many('contract.billing.premium', 'master', 'Lines',
@@ -280,7 +280,7 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
             f(''),
             f('offered.product'),
             f('offered.coverage'),
-            f('contract.contract'),
+            f('contract'),
             f('contract.subscribed_option'),
             f('ins_contract.covered_data'),
             f('coop_account.tax_desc'),
@@ -339,7 +339,7 @@ class BillingManager(model.CoopSQL, model.CoopView):
     '''
     __name__ = 'contract.billing.data'
 
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE')
     policy_owner = fields.Function(
         fields.Many2One('party.party', 'Party', states={'invisible': True}),
@@ -461,7 +461,7 @@ class BillingManager(model.CoopSQL, model.CoopView):
 class BillingPeriod(model.CoopSQL, model.CoopView):
     'Billing Period'
     __name__ = 'contract.billing.period'
-    contract = fields.Many2One('contract.contract', 'Contract', required=True,
+    contract = fields.Many2One('contract', 'Contract', required=True,
         ondelete='CASCADE')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date', required=True)
@@ -519,7 +519,7 @@ class BillParameters(model.CoopView):
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date', required=True)
     contract = fields.Many2One(
-        'contract.contract', 'Contract', states={'invisible': True})
+        'contract', 'Contract', states={'invisible': True})
 
 
 class BillDisplay(model.CoopView):
@@ -663,7 +663,7 @@ class Contract():
     'Contract'
 
     __metaclass__ = PoolMeta
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
 
     billing_managers = fields.One2Many('contract.billing.data', 'contract',
         'Billing Managers')
@@ -683,7 +683,7 @@ class Contract():
             depends=['display_all_lines', 'id'],
             domain=[('account.kind', '=', 'receivable'),
                 ('reconciliation', '=', None),
-                ('origin', '=', ('contract.contract', Eval('id', 0))),
+                ('origin', '=', ('contract', Eval('id', 0))),
                 If(~Eval('display_all_lines'),
                     ('maturity_date', '<=',
                         Eval('context', {}).get(
@@ -1165,7 +1165,7 @@ class Contract():
             move_line.maturity_date == None)
         good_moves_query = move.id.in_(move.select(move.id, where=(
                     move.origin.in_(
-                        ['contract.contract,%s' % x.id for x in contracts]))))
+                        ['contract,%s' % x.id for x in contracts]))))
 
         cursor.execute(*query_table.select(move.origin, Sum(
                 Coalesce(move_line.debit, 0) - Coalesce(move_line.credit, 0)),

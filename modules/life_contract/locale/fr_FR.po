@@ -46,7 +46,7 @@ msgctxt "model:ins_contract.covered_element-party_relation,name:"
 msgid "Relation between Covered Element and Covered Relations"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Extension Life"
 msgstr "Prévoyance"
 

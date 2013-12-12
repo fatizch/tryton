@@ -11,7 +11,7 @@ __all__ = [
 class ClaimContract():
     'Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
     __metaclass__ = PoolMeta
 
     def get_possible_benefits(self, loss):

@@ -18,7 +18,7 @@ class CollectionParameters():
     __metaclass__ = PoolMeta
     __name__ = 'collection.create.parameters'
 
-    contract = fields.Many2One('contract.contract', 'Contract', on_change=[
+    contract = fields.Many2One('contract', 'Contract', on_change=[
             'contract', 'party'], depends=['party'], domain=[
                 If(~Eval('party'),
                     ('id', '!=', 0),
@@ -36,7 +36,7 @@ class AssignCollection():
     __metaclass__ = PoolMeta
     __name__ = 'collection.create.assign'
 
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         states={'readonly': True})
 
 
@@ -49,8 +49,8 @@ class CollectionWizard():
     def default_input_collection_parameters(self, name):
         res = super(
             CollectionWizard, self).default_input_collection_parameters(name)
-        if Transaction().context.get('active_model') == 'contract.contract':
-            Contract = Pool().get('contract.contract')
+        if Transaction().context.get('active_model') == 'contract':
+            Contract = Pool().get('contract')
             res['contract'] = Transaction().context.get('active_id')
             res['party'] = Contract(res['contract']).subscriber.id
         return res
@@ -63,7 +63,7 @@ class CollectionWizard():
         res['contract'] = self.input_collection_parameters.contract.id
         line_candidates = MoveLine.search([
                 ('move.origin', '=', (
-                        'contract.contract',
+                        'contract',
                         self.input_collection_parameters.contract.id)),
                 ('party', '=', self.input_collection_parameters.party),
                 ('account.kind', '=', 'receivable'),

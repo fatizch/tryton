@@ -12,13 +12,13 @@
             <field name="name">loan_tree</field>
         </record>
         <record model="ir.ui.view" id="contract_view_form">
-            <field name="model">contract.contract</field>
+            <field name="model">contract</field>
             <field name="type">form</field>
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="name">contract_form</field>
         </record>
         <record model="ir.ui.view" id="contract_view_tree">
-            <field name="model">contract.contract</field>
+            <field name="model">contract</field>
             <field name="inherit" ref="contract.contract_view_tree"/>
             <field name="type">tree</field>
             <field name="arch" type="xml"/>

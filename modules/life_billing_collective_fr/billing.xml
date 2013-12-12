@@ -78,7 +78,7 @@
     </record>
     <record model="ir.action.keyword" id="launch_rate_note_keyword">
       <field name="keyword">form_action</field>
-      <field name="model">contract.contract,-1</field>
+      <field name="model">contract,-1</field>
       <field name="action" ref="launch_rate_notes_process"/>
     </record>
     <menuitem id="menu_rate_note_process" sequence="30" action="launch_rate_notes_process" parent="insurance_collective.menu_group"/>
@@ -89,7 +89,7 @@
     </record>
     <record model="ir.action.keyword" id="act_rate_note_relate_keyword">
       <field name="keyword">form_relate</field>
-      <field name="model">contract.contract,-1</field>
+      <field name="model">contract,-1</field>
       <field name="action" ref="act_rate_note_relate_form"/>
     </record>
     <!-- ############################################################ -->

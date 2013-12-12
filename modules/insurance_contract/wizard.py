@@ -17,7 +17,7 @@ class OptionSubscription:
     __name__ = 'contract.wizard.option_subscription'
 
     def default_options_displayer(self, values):
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         contract = Contract(Transaction().context.get('active_id'))
         res = super(OptionSubscription, self).default_options_displayer(
             values)

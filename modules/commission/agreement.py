@@ -17,7 +17,7 @@ __all__ = [
 class CommissionAgreement():
     'Commission Agreement'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
     __metaclass__ = PoolMeta
 
     @classmethod

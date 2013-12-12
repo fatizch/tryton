@@ -15,7 +15,7 @@ __all__ = [
 class Contract():
     'Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
 
     use_rates = fields.Function(
         fields.Boolean('Use Rates', states={'invisible': True}),

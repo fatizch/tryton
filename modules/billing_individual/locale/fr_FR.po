@@ -731,39 +731,39 @@ msgctxt "field:company.company,fiscal_years:"
 msgid "Fiscal Years"
 msgstr "Années fiscales"
 
-msgctxt "field:contract.contract,billing_managers:"
+msgctxt "field:contract,billing_managers:"
 msgid "Billing Managers"
 msgstr "Gestionnaires d'Appel de Cotisation"
 
-msgctxt "field:contract.contract,billing_periods:"
+msgctxt "field:contract,billing_periods:"
 msgid "Billing Periods"
 msgstr "Période de Facturation"
 
-msgctxt "field:contract.contract,display_all_lines:"
+msgctxt "field:contract,display_all_lines:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.contract,last_bill:"
+msgctxt "field:contract,last_bill:"
 msgid "Last Bill"
 msgstr "Dernier Décompte"
 
-msgctxt "field:contract.contract,next_billing_date:"
+msgctxt "field:contract,next_billing_date:"
 msgid "Next Billing Date"
 msgstr "Date du Prochain Calcul"
 
-msgctxt "field:contract.contract,prices:"
+msgctxt "field:contract,prices:"
 msgid "Prices"
 msgstr "Primes"
 
-msgctxt "field:contract.contract,receivable_lines:"
+msgctxt "field:contract,receivable_lines:"
 msgid "Receivable Lines"
 msgstr "Lignes à recevoir"
 
-msgctxt "field:contract.contract,receivable_today:"
+msgctxt "field:contract,receivable_today:"
 msgid "Receivable Today"
 msgstr "Montant Dû"
 
-msgctxt "field:contract.contract,use_prices:"
+msgctxt "field:contract,use_prices:"
 msgid "Use Prices"
 msgstr ""
 
@@ -1201,11 +1201,11 @@ msgctxt "view:offered.product-billing.payment.method:"
 msgid "Payment Methods"
 msgstr "Méthodes de Paiement"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Accounting"
 msgstr "Comptabilité"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Calculate Prices"
 msgstr "Calculer les Primes"
 

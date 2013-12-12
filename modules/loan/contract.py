@@ -15,7 +15,7 @@ __all__ = [
 class LoanContract():
     'Loan Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
 
     is_loan = fields.Function(
         fields.Boolean('Is Loan', states={'invisible': True}),

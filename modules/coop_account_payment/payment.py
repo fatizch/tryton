@@ -45,7 +45,7 @@ class CreateReceivablePayment(Wizard):
                     ],
                 ('party', '!=', None),
                 ('move_state', '=', 'posted'),
-                ('move.origin', 'ilike', 'contract.contract,%'),
+                ('move.origin', 'ilike', 'contract,%'),
                 ])
         for line in lines:
             contract = line.move.origin

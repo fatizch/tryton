@@ -14,7 +14,7 @@ __all__ = [
 class LifeContractSubscription():
     'Life Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
     __metaclass__ = PoolMeta
 
     def set_subscriber_as_covered_element(self):

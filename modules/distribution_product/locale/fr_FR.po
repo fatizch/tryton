@@ -2,15 +2,15 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:contract.contract,com_product:"
+msgctxt "field:contract,com_product:"
 msgid "Commercial Product"
 msgstr "Produit Commercial"
 
-msgctxt "field:contract.contract,dist_network:"
+msgctxt "field:contract,dist_network:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
 
-msgctxt "field:contract.contract,is_health:"
+msgctxt "field:contract,is_health:"
 msgid "Is Health"
 msgstr "Santé"
 

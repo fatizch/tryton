@@ -187,7 +187,7 @@ class Subscribed(model.CoopView, ModelCurrency):
 class Contract(model.CoopSQL, Subscribed, Printable):
     'Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
     _rec_name = 'contract_number'
     _history = True
 
@@ -270,7 +270,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             options_code=None):
         'WIP : This method should be the basic API to have a contract.'
         pool = Pool()
-        Contract = pool.get('contract.contract')
+        Contract = pool.get('contract')
         SubscribedOpt = pool.get('contract.subscribed_option')
         contract = Contract()
         contract.subscriber = party
@@ -555,7 +555,7 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
     _history = True
 
     status = fields.Selection(OPTIONSTATUS, 'Status')
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE')
     coverage_kind = fields.Function(
         fields.Char('Coverage Kind', on_change_with=['offered']),
@@ -632,7 +632,7 @@ class ContractClause(model.CoopSQL, model.CoopView):
 
     __name__ = 'contract.clause'
 
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE')
     clause = fields.Many2One('ins_product.clause', 'Clause',
         ondelete='RESTRICT')
@@ -676,7 +676,7 @@ class ContractAddress(model.CoopSQL, model.CoopView):
 
     __name__ = 'contract.address'
 
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
@@ -716,7 +716,7 @@ class DeliveredService(model.CoopView, model.CoopSQL):
             ('calculated', 'Calculated'),
             ('delivered', 'Delivered'),
             ], 'Status')
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         ondelete='RESTRICT')
     subscribed_service = fields.Many2One(
         'contract.subscribed_option', 'Coverage', ondelete='RESTRICT',

@@ -15,7 +15,7 @@ msgctxt "error:collective.rating_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
-msgctxt "error:contract.contract:"
+msgctxt "error:contract:"
 msgid ""
 "A rate note for contract %s (%s, %s)\n"
 "already exists and can't be modified (%s)"
@@ -701,15 +701,15 @@ msgctxt "field:company.company,rate_note_sequence:"
 msgid "Rate Note Sequence"
 msgstr ""
 
-msgctxt "field:contract.contract,next_assessment_date:"
+msgctxt "field:contract,next_assessment_date:"
 msgid "Next Assessment Date"
 msgstr "Prochain Appel de Cotisation"
 
-msgctxt "field:contract.contract,rates:"
+msgctxt "field:contract,rates:"
 msgid "Rates"
 msgstr "Taux"
 
-msgctxt "field:contract.contract,use_rates:"
+msgctxt "field:contract,use_rates:"
 msgid "Use Rates"
 msgstr "Utiliser le Tarif"
 
@@ -1049,7 +1049,7 @@ msgctxt "view:collective.sub_rating_rule:"
 msgid "Tranche Rating Rule"
 msgstr "Règle de Tarif par Tranche"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Calculate Rates"
 msgstr "Calcul des Taux"
 

@@ -31,7 +31,7 @@
     </record>
     <record model="ir.action.keyword" id="act_contract_logs_keyword1">
       <field name="keyword">form_relate</field>
-      <field name="model">contract.contract,-1</field>
+      <field name="model">contract,-1</field>
       <field name="action" ref="act_contract_logs"/>
     </record>
   </data>

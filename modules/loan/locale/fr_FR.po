@@ -2,19 +2,19 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:contract.contract,doc_received:"
+msgctxt "field:contract,doc_received:"
 msgid "All Document Received"
 msgstr "Documents Reçus"
 
-msgctxt "field:contract.contract,documents:"
+msgctxt "field:contract,documents:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "field:contract.contract,is_loan:"
+msgctxt "field:contract,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
 
-msgctxt "field:contract.contract,loans:"
+msgctxt "field:contract,loans:"
 msgid "Loans"
 msgstr "Prêts"
 
@@ -742,11 +742,11 @@ msgctxt "selection:offered.coverage,family:"
 msgid "Loan"
 msgstr "Emprunteur"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Create Loan"
 msgstr "Créer un prêt"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Loans"
 msgstr "Prêts"
 

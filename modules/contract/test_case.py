@@ -14,5 +14,5 @@ class TestCaseModel():
     @classmethod
     def global_search_list(cls):
         result = super(TestCaseModel, cls).global_search_list()
-        result.add('contract.contract')
+        result.add('contract')
         return result

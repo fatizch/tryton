@@ -20,7 +20,7 @@ class LoanParameters(model.CoopView, ModelCurrency):
 
     __name__ = 'loan.creation_parameters'
 
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         states={"invisible": True})
     loan = fields.Many2One('loan.loan', 'Loan')
     kind = fields.Selection(LOAN_KIND, 'Kind', required=True)
@@ -86,7 +86,7 @@ class LoanCreation(model.CoopWizard):
     cancel_loan = StateTransition()
 
     def default_loan_parameters(self, values):
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         contract = Contract(Transaction().context.get('active_id'))
         return {
             'contract': contract.id,

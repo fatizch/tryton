@@ -35,7 +35,7 @@ __all__ = [
 class InsurancePolicy():
     'Insurance Policy'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
 
     covered_elements = fields.One2ManyDomain(
         'ins_contract.covered_element', 'contract', 'Covered Elements',
@@ -364,7 +364,7 @@ class StatusHistory():
     @classmethod
     def get_possible_reference(cls):
         res = super(StatusHistory, cls).get_possible_reference()
-        res.append(('contract.contract', 'Contract'))
+        res.append(('contract', 'Contract'))
         res.append(('contract.subscribed_option', 'Option'))
         return res
 
@@ -393,7 +393,7 @@ class ContractHistory(model.ObjectHistory):
 
     @classmethod
     def get_object_model(cls):
-        return 'contract.contract'
+        return 'contract'
 
     @classmethod
     def get_object_name(cls):
@@ -401,7 +401,7 @@ class ContractHistory(model.ObjectHistory):
 
     @staticmethod
     def get_possible_status():
-        return Pool().get('contract.contract').get_possible_status()
+        return Pool().get('contract').get_possible_status()
 
     def get_options(self, name):
         Option = Pool().get('contract.subscribed_option')
@@ -423,11 +423,11 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
 
     __name__ = 'ins_contract.covered_element'
 
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE', states={'invisible': ~Eval('contract')})
     # The link to use either for direct covered element or sub covered element
     main_contract = fields.Function(
-        fields.Many2One('contract.contract', 'Contract',
+        fields.Many2One('contract', 'Contract',
             states={'invisible': Bool(Eval('contract'))}),
         'get_main_contract_id')
     #We need to put complementary data in depends, because the complementary
@@ -646,7 +646,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_complementary_data_def(self, at_date=None):
         contract = self.main_contract
         if not contract:
-            Contract = Pool().get('contract.contract')
+            Contract = Pool().get('contract')
             contract = Contract(Transaction().context.get('contract'))
         res = []
         if (self.item_desc
@@ -723,7 +723,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def get_possible_item_desc(cls, contract=None, parent=None):
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         if not parent:
             parent = cls.get_parent_in_transaction()
         if parent and parent.item_desc:
@@ -818,7 +818,7 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     end_date = fields.Date('End Date')
     status = fields.Selection(contract.OPTIONSTATUS, 'Status')
     contract = fields.Function(
-        fields.Many2One('contract.contract', 'Contract'),
+        fields.Many2One('contract', 'Contract'),
         'get_contract_id')
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency',
@@ -1015,7 +1015,7 @@ class ManagementRole(model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     party = fields.Many2One('party.party', 'Party', ondelete='RESTRICT')
-    protocol = fields.Many2One('contract.contract', 'Protocol',
+    protocol = fields.Many2One('contract', 'Protocol',
         domain=[
             utils.get_versioning_domain('start_date', 'end_date'),
             ('product_kind', '!=', 'insurance'),
@@ -1024,7 +1024,7 @@ class ManagementRole(model.CoopSQL, model.CoopView):
         #we only need to have a protocole when the management is effective
         states={'required': ~~Eval('start_date')},
         ondelete='RESTRICT',)
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         depends=['party'], ondelete='CASCADE')
     kind = fields.Selection([('', '')], 'Kind')
 

@@ -19,7 +19,7 @@ class DocumentRequest():
         super(DocumentRequest, cls).__setup__()
         cls.needed_by = copy.copy(cls.needed_by)
         cls.needed_by.selection.append(
-            ('contract.contract', 'Contract'))
+            ('contract', 'Contract'))
 
 
 class Document():
@@ -33,7 +33,7 @@ class Document():
         super(Document, cls).__setup__()
         cls.for_object = copy.copy(cls.for_object)
         cls.for_object.selection.append(
-            ('contract.contract', 'Contract'))
+            ('contract', 'Contract'))
         cls.for_object.selection.append(
             ('contract.subscribed_option', 'Option'))
         cls.for_object.selection.append(
@@ -50,6 +50,6 @@ class RequestFinder():
     def allowed_values(cls):
         result = super(RequestFinder, cls).allowed_values()
         result.update({
-            'contract.contract': (
+            'contract': (
                 'Contract', 'contract_number')})
         return result

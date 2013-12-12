@@ -42,7 +42,7 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     active = fields.Boolean('Active')
     kind = fields.Selection(LOAN_KIND, 'Kind', sort=False, states=STATES,
         depends=DEPENDS)
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE', required=True)
     number_of_payments = fields.Integer('Number of Payments', states=STATES,
         depends=DEPENDS)

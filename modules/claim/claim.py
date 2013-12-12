@@ -100,13 +100,13 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     #of the claims where there is only one contract involved. This link should
     #not be used for other reason than initiating sub elements on claim.
     #Otherwise use claim.get_contract()
-    main_contract = fields.Many2One('contract.contract', 'Main Contract',
+    main_contract = fields.Many2One('contract', 'Main Contract',
         domain=[('id', 'in', Eval('possible_contracts')),
             ('company', '=', Eval('company'))],
         depends=['possible_contracts', 'company'])
     possible_contracts = fields.Function(
         fields.One2Many(
-            'contract.contract', None, 'Contracts',
+            'contract', None, 'Contracts',
             on_change_with=['claimant', 'declaration_date']),
         'on_change_with_possible_contracts')
 
@@ -289,7 +289,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def get_possible_contracts(self, at_date=None):
         if not at_date:
             at_date = self.declaration_date
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         return Contract.get_possible_contracts_from_party(self.claimant,
             at_date)
 

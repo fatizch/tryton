@@ -26,7 +26,7 @@ class SubscriptionManager(model.CoopSQL):
     contract = fields.Reference(
         'Contract',
         [
-            ('contract.contract', 'Contract')],
+            ('contract', 'Contract')],
     )
     is_custom = fields.Boolean('Custom')
 
@@ -111,7 +111,7 @@ class SubscriptionProcessParameters(ProcessParameters):
     @classmethod
     def default_model(cls):
         Model = Pool().get('ir.model')
-        return Model.search([('model', '=', 'contract.contract')])[0].id
+        return Model.search([('model', '=', 'contract')])[0].id
 
     @classmethod
     def default_dist_network(cls):

@@ -27,7 +27,7 @@ class OptionSubscription(model.CoopWizard):
     start_state = 'options_displayer'
 
     def default_options_displayer(self, values):
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         contract = Contract(Transaction().context.get('active_id'))
         options = []
         for coverage in contract.offered.coverages:
@@ -79,7 +79,7 @@ class OptionsDisplayer(model.CoopView):
 
     __name__ = 'contract.wizard.option_subscription.options_displayer'
 
-    contract = fields.Many2One('contract.contract', 'Contract')
+    contract = fields.Many2One('contract', 'Contract')
     options = fields.One2Many(
         'contract.wizard.option_subscription.options_displayer.option',
         None, 'Options')

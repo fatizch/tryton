@@ -16,10 +16,10 @@ class Party():
 
     __name__ = 'party.party'
 
-    quotes = fields.One2ManyDomain('contract.contract', 'subscriber', 'Quotes',
+    quotes = fields.One2ManyDomain('contract', 'subscriber', 'Quotes',
         domain=[('status', '=', 'quote')])
     last_quote = fields.Function(
-        fields.Many2One('contract.contract', 'Last Quote'),
+        fields.Many2One('contract', 'Last Quote'),
         'get_last_quote_id')
     number_of_quotes = fields.Function(
         fields.Integer('Number of Quotes', on_change_with=['quotes'],
@@ -30,9 +30,9 @@ class Party():
             states={'invisible': True}),
         'on_change_with_number_of_contracts')
     main_contract = fields.Function(
-        fields.Many2One('contract.contract', 'Main Contract'),
+        fields.Many2One('contract', 'Main Contract'),
         'get_main_contract_id')
-    contracts = fields.One2ManyDomain('contract.contract', 'subscriber',
+    contracts = fields.One2ManyDomain('contract', 'subscriber',
         'Contracts', domain=[('status', '!=', 'quote')])
 
     @classmethod
@@ -104,4 +104,4 @@ class ContactHistory():
     def __setup__(cls):
         super(ContactHistory, cls).__setup__()
         cls.for_object_ref = copy.copy(cls.for_object_ref)
-        cls.for_object_ref.selection.append(('contract.contract', 'Contract'))
+        cls.for_object_ref.selection.append(('contract', 'Contract'))

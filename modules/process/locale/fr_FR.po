@@ -702,193 +702,193 @@ msgctxt "view:claim:"
 msgid "Validation"
 msgstr "Validation"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Adhérent"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Affiliations"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Cotisations"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Documents"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Garanties"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Personnes Couvertes"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Populations"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Produit"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Prêt"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Tarif"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Taux"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Validation de l'avenant"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Validation du contrat"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Validation du contrat Collectif"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "A aujourd'hui"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Accounting"
 msgstr "Comptabilité"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Adhérent"
 msgstr "Adhérent"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Affiliations"
 msgstr "Affiliations"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Avenant"
 msgstr "Avenant"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Billing"
 msgstr "Cotisation"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Calculate Prices"
 msgstr "Calculer les Primes"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Calculer les Taux"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Complete"
 msgstr "Terminer"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Cotisations"
 msgstr "Cotisations"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Covered Elements/Options"
 msgstr "Eléments Couverts/Garanties"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Create Loan"
 msgstr "Créer un prêt"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Garanties"
 msgstr "Garanties"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Next"
 msgstr "Suivant"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Options"
 msgstr "Garanties"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Personnes Couvertes"
 msgstr "Personnes Couvertes"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Populations"
 msgstr "Populations"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Previous"
 msgstr "Précédent"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Processus de souscription individuel"
 msgstr "Processus de souscription individuel"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Produit"
 msgstr "Produit"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Prêt"
 msgstr "Prêt"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Souscription Contrat Collectif"
 msgstr "Souscription Contrat Collectif"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Souscription Emprunteur"
 msgstr "Souscription Emprunteur"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Tarif"
 msgstr "Tarif"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Taux"
 msgstr "Taux"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "The current record completed the current process, please go ahead"
 msgstr "Processus Terminé. Commencez une nouvelle tâche"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid ""
 "The current record isin a state (Validation de l'avenant) that you are not "
 "allowed to view."
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Validation de l'avenant"
 msgstr "Validation de l'avenant"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Validation du contrat"
 msgstr "Validation du contrat"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Validation du contrat Collectif"
 msgstr "Validation du contrat Collectif"
 

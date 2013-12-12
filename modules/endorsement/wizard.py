@@ -17,7 +17,7 @@ class EndorsementSelection(model.CoopView):
 
     __name__ = 'endorsement.wizard.selection'
 
-    contract = fields.Many2One('contract.contract', 'Contract', states={
+    contract = fields.Many2One('contract', 'Contract', states={
             'readonly': ~Eval('to_select')}, depends=['to_select'],
         on_change=['contract'])
     to_select = fields.Boolean('Select Contract', states={'invisible': True})
@@ -75,7 +75,7 @@ class EndorsementLauncher(Wizard):
     def default_select_endorsement(self, name):
         model_name = Transaction().context.get('active_model')
         target_id = Transaction().context.get('active_id')
-        if model_name != 'contract.contract' or not target_id:
+        if model_name != 'contract' or not target_id:
             return {'to_select': True}
         Contract = Pool().get(model_name)
         contract = Contract(target_id)

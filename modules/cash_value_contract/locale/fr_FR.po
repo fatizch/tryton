@@ -66,11 +66,11 @@ msgctxt "field:contract.cash_value.collection,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:contract.contract,cash_value_collections:"
+msgctxt "field:contract,cash_value_collections:"
 msgid "Collections"
 msgstr "Encaissements"
 
-msgctxt "field:contract.contract,is_cash_value:"
+msgctxt "field:contract,is_cash_value:"
 msgid "Is Cash Value"
 msgstr "Est de type Epargne"
 
@@ -172,7 +172,7 @@ msgctxt "view:contract.cash_value.collection:"
 msgid "Updated Amount"
 msgstr "Montant actualisé"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Cash Value Collections"
 msgstr "Versements"
 

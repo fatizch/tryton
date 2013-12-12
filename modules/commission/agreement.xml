@@ -3,7 +3,7 @@
     <data>
         <!-- CommissionAgreement -->
         <record model="ir.ui.view" id="agreement_view_tree">
-            <field name="model">contract.contract</field>
+            <field name="model">contract</field>
             <field name="type">tree</field>
             <field name="inherit" ref="contract.contract_view_tree"/>
             <!-- <field name="name">contract_tree</field> -->
@@ -11,7 +11,7 @@
         </record>
         <!-- form view -->
         <record model="ir.ui.view" id="agreement_view_form">
-            <field name="model">contract.contract</field>
+            <field name="model">contract</field>
             <field name="type">form</field>
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="arch" type="xml"/>
@@ -19,7 +19,7 @@
         </record>
         <record model="ir.action.act_window" id="act_agreement_form">
             <field name="name">Commission Agreements</field>
-            <field name="res_model">contract.contract</field>
+            <field name="res_model">contract</field>
             <field name="domain">[('product_kind', '=', 'commission')]</field>
         </record>
         <record model="ir.action.act_window.view" id="act_agreement_tree_view">

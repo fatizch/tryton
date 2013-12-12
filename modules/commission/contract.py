@@ -103,7 +103,7 @@ class PriceLine():
 class Contract():
     'Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
 
     def get_protocol_offered(self, kind):
         dist_network = self.get_dist_network()

@@ -23,7 +23,7 @@ class Party():
         'Health Complement', size=1, states={
             'invisible': And(~Eval('health_complement'), ~Eval('is_health'))})
     health_contract = fields.Function(
-        fields.Many2One('contract.contract', 'Health Contract', states={
+        fields.Many2One('contract', 'Health Contract', states={
                 'invisible': Eval('context', {}).get('synthesis') != 'health',
                 }), 'get_health_contract_id')
 

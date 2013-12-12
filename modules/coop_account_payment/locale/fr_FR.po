@@ -10,19 +10,19 @@ msgctxt "field:account.payment.journal,sepa_bank_account_number:"
 msgid "Bank Account"
 msgstr "Compte Bancaire"
 
-msgctxt "field:contract.contract,display_all_lines:"
+msgctxt "field:contract,display_all_lines:"
 msgid "Display all lines"
 msgstr "Afficher Toutes les Lignes"
 
-msgctxt "field:contract.contract,due_today:"
+msgctxt "field:contract,due_today:"
 msgid "Due today"
 msgstr "Restant Dû"
 
-msgctxt "field:contract.contract,paid_today:"
+msgctxt "field:contract,paid_today:"
 msgid "Paid today"
 msgstr "Payé"
 
-msgctxt "field:contract.contract,payment_lines:"
+msgctxt "field:contract,payment_lines:"
 msgid "Payment Lines"
 msgstr "Lignes de Paiement"
 
@@ -58,7 +58,7 @@ msgctxt "view:account.move.line:"
 msgid "Payments"
 msgstr "Paiements"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "As of today"
 msgstr ""
 

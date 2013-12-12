@@ -34,7 +34,7 @@ class Move:
         fields.Numeric('Fee amount'),
         'get_basic_amount', searcher='search_basic_amount')
     contract = fields.Function(
-        fields.Many2One('contract.contract', 'Contract'),
+        fields.Many2One('contract', 'Contract'),
         'get_contract')
     schedule = fields.One2ManyDomain('account.move.line', 'move', 'Schedule',
         domain=[('account.kind', '=', 'receivable')], order=[
@@ -56,7 +56,7 @@ class Move:
 
     @classmethod
     def _get_origin(cls):
-        return super(Move, cls)._get_origin() + ['contract.contract']
+        return super(Move, cls)._get_origin() + ['contract']
 
     @classmethod
     def get_basic_amount(cls, moves, name):
@@ -134,7 +134,7 @@ class Move:
     def get_contract(self, name):
         if not (hasattr(self, 'origin') and self.origin):
             return None
-        if not self.origin.__name__ == 'contract.contract':
+        if not self.origin.__name__ == 'contract':
             return None
         return self.origin.id
 

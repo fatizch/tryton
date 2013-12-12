@@ -18,7 +18,7 @@ __all__ = [
 class ContractSubscription(CoopProcessFramework):
     'Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
     __metaclass__ = ClassAttr
 
     subscriber_desc = fields.Function(
@@ -353,7 +353,7 @@ class CoveredElement():
         if not contract:
             return []
 
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         contract = Contract(contract)
 
         CoveredData = Pool().get('ins_contract.covered_data')

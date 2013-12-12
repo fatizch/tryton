@@ -40,7 +40,7 @@ class Party:
         return res
 
     def get_subscribed_contracts(self):
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         return Contract.search(['subscriber', '=', self.id])
 
 
