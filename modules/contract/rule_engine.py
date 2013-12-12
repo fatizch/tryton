@@ -12,7 +12,7 @@ __all__ = [
 class OfferedContext(RuleEngineContext):
     'Offered Context'
 
-    __name__ = 'offered.rule_sets'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def get_lowest_level_object(cls, args):

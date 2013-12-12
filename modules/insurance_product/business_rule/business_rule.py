@@ -69,7 +69,7 @@ class RuleEngineParameter():
         return args['_complementary_data'][schema_name]
 
     def get_external_complementary_data(self, args):
-        OfferedSet = Pool().get('offered.rule_sets')
+        OfferedSet = Pool().get('rule_engine.runtime')
         from_object = OfferedSet.get_lowest_level_object(args)
         return self.external_complementary_data.get_complementary_data_value(
             from_object, self.external_complementary_data.name,

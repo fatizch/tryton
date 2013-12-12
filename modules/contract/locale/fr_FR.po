@@ -438,11 +438,11 @@ msgctxt "field:contract.option,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.rule_sets,id:"
+msgctxt "field:rule_engine.runtime,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.rule_sets,must_expand_tree:"
+msgctxt "field:rule_engine.runtime,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
@@ -510,7 +510,7 @@ msgctxt "model:ir.action,name:act_quote_button"
 msgid "Contracts"
 msgstr "Contrats"
 
-msgctxt "model:offered.rule_sets,name:"
+msgctxt "model:rule_engine.runtime,name:"
 msgid "Offered Context"
 msgstr ""
 

@@ -8,7 +8,7 @@ __all__ = [
 class OfferedContext():
     'Offered Context'
 
-    __name__ = 'offered.rule_sets'
+    __name__ = 'rule_engine.runtime'
     __metaclass__ = PoolMeta
 
     @classmethod

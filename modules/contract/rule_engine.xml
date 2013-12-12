@@ -16,7 +16,7 @@
     <record model="rule_engine.tree_element" id="te_contract_compl_data">
       <field name="description">Donnée Complémentaire</field>
       <field name="name">_re_complementary_data</field>
-      <field name="namespace">offered.rule_sets</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="type">function</field>
       <field name="parent" ref="te_contract"/>
       <field name="translated_technical_name">donnee_compl</field>

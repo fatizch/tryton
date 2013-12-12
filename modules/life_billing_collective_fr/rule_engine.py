@@ -8,7 +8,7 @@ __all__ = [
 class OfferedContext(RuleEngineContext):
     'Offered Context'
 
-    __name__ = 'offered.rule_sets'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def _re_fare_class(cls, args):
