@@ -176,7 +176,7 @@ class RateLine(model.CoopSQL, model.CoopView):
 class RateNote(model.CoopSQL, model.CoopView, ModelCurrency):
     'Rate Note'
 
-    __name__ = 'billing.rate_note'
+    __name__ = 'billing.premium_rate.form'
 
     name = fields.Char('Number', states={'readonly': True})
     start_date = fields.Date('Start Date')
@@ -268,7 +268,7 @@ class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
 
     __name__ = 'billing.rate_note_line'
 
-    rate_note = fields.Many2One('billing.rate_note', 'Rate Note',
+    rate_note = fields.Many2One('billing.premium_rate.form', 'Rate Note',
         ondelete='CASCADE')
     contract = fields.Function(
         fields.Many2One('contract', 'Contract'),
@@ -507,7 +507,7 @@ class RateNotesDisplayer(model.CoopView):
 
     __name__ = 'billing.rate_notes_displayer'
 
-    rate_notes = fields.One2Many('billing.rate_note', None, 'Rate Notes')
+    rate_notes = fields.One2Many('billing.premium_rate.form', None, 'Rate Notes')
 
 
 class RateNoteProcess(model.CoopWizard):
@@ -568,7 +568,7 @@ class RateNoteSelection(model.CoopView):
 
     __name__ = 'billing.rate_note_selection'
 
-    selected_note = fields.Many2One('billing.rate_note', 'Selected Note',
+    selected_note = fields.Many2One('billing.premium_rate.form', 'Selected Note',
         domain=[('status', '=', 'completed_by_blient')], states={
             'required': True})
 
@@ -610,7 +610,7 @@ class RateNoteReception(model.CoopWizard):
         })
 
     def transition_calculate_start(self):
-        if (Transaction().context.get('active_model') == 'billing.rate_note'
+        if (Transaction().context.get('active_model') == 'billing.premium_rate.form'
                 and Transaction().context.get('active_id')):
             self.select_note.selected_note = Transaction().context.get(
                 'active_id')
@@ -651,7 +651,7 @@ class RateNoteReception(model.CoopWizard):
 
     def do_start_collection(self, action):
         return action, {
-            'model': 'billing.rate_note',
+            'model': 'billing.premium_rate.form',
             'id': self.select_note.selected_note.id,
             'ids': [self.select_note.selected_note.id],
             }
@@ -708,7 +708,7 @@ class Move():
         super(Move, cls).__setup__()
         cls.coverage_details = copy.copy(cls.coverage_details)
         cls.coverage_details.domain[1].append(
-            ('second_origin', 'like', 'billing.rate_note,%'))
+            ('second_origin', 'like', 'billing.premium_rate.form,%'))
 
 
 class MoveLine():
@@ -727,13 +727,13 @@ class MoveLine():
     @classmethod
     def _get_second_origin(cls):
         result = super(MoveLine, cls)._get_second_origin()
-        result.append('billing.rate_note')
+        result.append('billing.premium_rate.form')
         return result
 
     def get_second_origin_name(self, name):
         if not (hasattr(self, 'second_origin') and self.second_origin):
             return ''
-        if not self.second_origin.__name__ == 'billing.rate_note':
+        if not self.second_origin.__name__ == 'billing.premium_rate.form':
             return super(MoveLine, self).get_second_origin_name(name)
         return coop_string.translate(self, '', 'mes_rate_note_compensation',
             'error')
@@ -749,7 +749,7 @@ class CollectionWizard():
         res = super(
             CollectionWizard, self).default_input_collection_parameters(name)
         the_model = Transaction().context.get('active_model', None)
-        if not the_model or the_model != 'billing.rate_note':
+        if not the_model or the_model != 'billing.premium_rate.form':
             return res
         rate_note = Pool().get(the_model)(
             Transaction().context.get('active_id'))

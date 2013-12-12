@@ -134,7 +134,7 @@ already exists and can't be modified (%s)'''),
             cls.raise_user_error(errs)
 
     def calculate_rate_notes(self, until_date=None):
-        RateNote = Pool().get('billing.rate_note')
+        RateNote = Pool().get('billing.premium_rate.form')
         res = []
         if not until_date:
             until_date = utils.today()

@@ -123,87 +123,87 @@ msgctxt "field:contract.premium_rate.line,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:billing.rate_note,amount_expected:"
+msgctxt "field:billing.premium_rate.form,amount_expected:"
 msgid "Amount Expected"
 msgstr "Montant attendu"
 
-msgctxt "field:billing.rate_note,amount_paid:"
+msgctxt "field:billing.premium_rate.form,amount_paid:"
 msgid "Amount Paid"
 msgstr "Montant payé"
 
-msgctxt "field:billing.rate_note,client:"
+msgctxt "field:billing.premium_rate.form,client:"
 msgid "Client"
 msgstr "Client"
 
-msgctxt "field:billing.rate_note,contract:"
+msgctxt "field:billing.premium_rate.form,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:billing.rate_note,create_date:"
+msgctxt "field:billing.premium_rate.form,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:billing.rate_note,create_date_:"
+msgctxt "field:billing.premium_rate.form,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:billing.rate_note,create_uid:"
+msgctxt "field:billing.premium_rate.form,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:billing.rate_note,currency:"
+msgctxt "field:billing.premium_rate.form,currency:"
 msgid "Currency"
 msgstr "Devises"
 
-msgctxt "field:billing.rate_note,currency_digits:"
+msgctxt "field:billing.premium_rate.form,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
-msgctxt "field:billing.rate_note,currency_symbol:"
+msgctxt "field:billing.premium_rate.form,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:billing.rate_note,end_date:"
+msgctxt "field:billing.premium_rate.form,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:billing.rate_note,id:"
+msgctxt "field:billing.premium_rate.form,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.rate_note,lines:"
+msgctxt "field:billing.premium_rate.form,lines:"
 msgid "Lines"
 msgstr "Lignes"
 
-msgctxt "field:billing.rate_note,move:"
+msgctxt "field:billing.premium_rate.form,move:"
 msgid "Move"
 msgstr "Mouvement"
 
-msgctxt "field:billing.rate_note,must_expand_tree:"
+msgctxt "field:billing.premium_rate.form,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:billing.rate_note,name:"
+msgctxt "field:billing.premium_rate.form,name:"
 msgid "Number"
 msgstr "Numéro"
 
-msgctxt "field:billing.rate_note,rec_name:"
+msgctxt "field:billing.premium_rate.form,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:billing.rate_note,start_date:"
+msgctxt "field:billing.premium_rate.form,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:billing.rate_note,status:"
+msgctxt "field:billing.premium_rate.form,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:billing.rate_note,write_date:"
+msgctxt "field:billing.premium_rate.form,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:billing.rate_note,write_uid:"
+msgctxt "field:billing.premium_rate.form,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -793,7 +793,7 @@ msgctxt "model:contract.premium_rate.line,name:"
 msgid "Rate Line"
 msgstr "Ligne de Tarif"
 
-msgctxt "model:billing.rate_note,name:"
+msgctxt "model:billing.premium_rate.form,name:"
 msgid "Rate Note"
 msgstr "Bordereau de Cotisation"
 
@@ -909,23 +909,23 @@ msgctxt "model:party.group,name:"
 msgid "Group Party"
 msgstr "Regroupement de Sociétés"
 
-msgctxt "selection:billing.rate_note,status:"
+msgctxt "selection:billing.premium_rate.form,status:"
 msgid "Completed by Client"
 msgstr "Complété par le Client"
 
-msgctxt "selection:billing.rate_note,status:"
+msgctxt "selection:billing.premium_rate.form,status:"
 msgid "Draft"
 msgstr "Brouillon"
 
-msgctxt "selection:billing.rate_note,status:"
+msgctxt "selection:billing.premium_rate.form,status:"
 msgid "Ready to be sent"
 msgstr "Prêt à Etre Envoyé"
 
-msgctxt "selection:billing.rate_note,status:"
+msgctxt "selection:billing.premium_rate.form,status:"
 msgid "Sent"
 msgstr "Envoyé"
 
-msgctxt "selection:billing.rate_note,status:"
+msgctxt "selection:billing.premium_rate.form,status:"
 msgid "Validated"
 msgstr "Validé"
 
@@ -985,7 +985,7 @@ msgctxt "view:contract.premium_rate.line:"
 msgid "Rate Line"
 msgstr "Ligne de Tarif"
 
-msgctxt "view:billing.rate_note:"
+msgctxt "view:billing.premium_rate.form:"
 msgid "Rate Note"
 msgstr "Bordereau de Cotisation"
 
