@@ -52,7 +52,7 @@ class GroupSubscriptionProcessParameters():
 class SubscriptionProcessFinder():
     'Subscription Process Finder'
 
-    __name__ = 'ins_contract.subscription_process_finder'
+    __name__ = 'contract.subscribe'
     __metaclass__ = PoolMeta
 
     def init_main_object_from_process(self, obj, process_param):

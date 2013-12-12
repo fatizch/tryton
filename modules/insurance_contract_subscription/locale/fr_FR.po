@@ -57,7 +57,7 @@ msgctxt "error:contract.endorsement_process_finder:"
 msgid "Please pick a process from the selection"
 msgstr "Choisir un processus de la sélection"
 
-msgctxt "error:ins_contract.subscription_process_finder:"
+msgctxt "error:contract.subscribe:"
 msgid "Please pick a process from the selection"
 msgstr "Choisir un processus de la sélection"
 
@@ -291,11 +291,11 @@ msgid "Cancel"
 msgstr "Annuler"
 
 msgctxt ""
-"wizard_button:ins_contract.subscription_process_finder,process_parameters,action:"
+"wizard_button:contract.subscribe,process_parameters,action:"
 msgid "Start Process"
 msgstr "Démarrer le processus"
 
 msgctxt ""
-"wizard_button:ins_contract.subscription_process_finder,process_parameters,end:"
+"wizard_button:contract.subscribe,process_parameters,end:"
 msgid "Cancel"
 msgstr "Annuler"

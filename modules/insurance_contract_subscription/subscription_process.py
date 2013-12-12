@@ -159,7 +159,7 @@ class SubscriptionProcessParameters(ProcessParameters):
 class SubscriptionProcessFinder(ProcessFinder):
     'Subscription Process Finder'
 
-    __name__ = 'ins_contract.subscription_process_finder'
+    __name__ = 'contract.subscribe'
 
     @classmethod
     def get_parameters_model(cls):
