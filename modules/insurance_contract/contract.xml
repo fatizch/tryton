@@ -139,7 +139,7 @@
         </record>
         <record model="ir.action.act_window" id="act_contract_status_history_relate_form">
             <field name="name">Status History</field>
-            <field name="res_model">contract.status_history</field>
+            <field name="res_model">contract.status.history</field>
             <field name="domain">[('reference', '=', ('contract', Eval('active_id')))]</field>
         </record>
         <record model="ir.action.keyword" id="act_contract_status_history_relate_keyword">

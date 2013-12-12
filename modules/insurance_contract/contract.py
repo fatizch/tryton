@@ -359,7 +359,7 @@ class SubscribedCoverageComplement(model.CoopSQL, model.CoopView):
 class StatusHistory():
     'Status History'
 
-    __name__ = 'contract.status_history'
+    __name__ = 'contract.status.history'
 
     @classmethod
     def get_possible_reference(cls):

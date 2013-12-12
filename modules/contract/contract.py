@@ -35,7 +35,7 @@ __all__ = [
 class StatusHistory(model.CoopSQL, model.CoopView):
     'Status History'
 
-    __name__ = 'contract.status_history'
+    __name__ = 'contract.status.history'
 
     reference = fields.Reference('Reference', 'get_possible_reference')
     status = fields.Selection(OPTIONSTATUS, 'Status',
@@ -86,7 +86,7 @@ class Subscribed(model.CoopView, ModelCurrency):
     start_management_date = fields.Date('Management Date')
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
     status_history = fields.One2Many(
-        'contract.status_history', 'reference', 'Status History')
+        'contract.status.history', 'reference', 'Status History')
 
     @classmethod
     def __setup__(cls):

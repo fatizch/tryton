@@ -294,55 +294,55 @@ msgctxt "field:contract.rule_sets,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:contract.status_history,create_date:"
+msgctxt "field:contract.status.history,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:contract.status_history,create_date_:"
+msgctxt "field:contract.status.history,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:contract.status_history,create_uid:"
+msgctxt "field:contract.status.history,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:contract.status_history,end_date:"
+msgctxt "field:contract.status.history,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:contract.status_history,id:"
+msgctxt "field:contract.status.history,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.status_history,must_expand_tree:"
+msgctxt "field:contract.status.history,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:contract.status_history,rec_name:"
+msgctxt "field:contract.status.history,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:contract.status_history,reference:"
+msgctxt "field:contract.status.history,reference:"
 msgid "Reference"
 msgstr "Référence"
 
-msgctxt "field:contract.status_history,start_date:"
+msgctxt "field:contract.status.history,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:contract.status_history,status:"
+msgctxt "field:contract.status.history,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:contract.status_history,sub_status:"
+msgctxt "field:contract.status.history,sub_status:"
 msgid "Sub Status"
 msgstr "Sous Statut"
 
-msgctxt "field:contract.status_history,write_date:"
+msgctxt "field:contract.status.history,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:contract.status_history,write_uid:"
+msgctxt "field:contract.status.history,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -490,7 +490,7 @@ msgctxt "model:contract.rule_sets,name:"
 msgid "Context functions for contract related data"
 msgstr ""
 
-msgctxt "model:contract.status_history,name:"
+msgctxt "model:contract.status.history,name:"
 msgid "Status History"
 msgstr "Historique des Statuts"
 
@@ -550,27 +550,27 @@ msgctxt "selection:contract.service,status:"
 msgid "Not Eligible"
 msgstr "Non Eligible"
 
-msgctxt "selection:contract.status_history,status:"
+msgctxt "selection:contract.status.history,status:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:contract.status_history,status:"
+msgctxt "selection:contract.status.history,status:"
 msgid "Active"
 msgstr "Active"
 
-msgctxt "selection:contract.status_history,status:"
+msgctxt "selection:contract.status.history,status:"
 msgid "Hold"
 msgstr "Suspendre"
 
-msgctxt "selection:contract.status_history,status:"
+msgctxt "selection:contract.status.history,status:"
 msgid "Quote"
 msgstr "Devis"
 
-msgctxt "selection:contract.status_history,status:"
+msgctxt "selection:contract.status.history,status:"
 msgid "Refused"
 msgstr "Refusé"
 
-msgctxt "selection:contract.status_history,status:"
+msgctxt "selection:contract.status.history,status:"
 msgid "Terminated"
 msgstr "Terminé"
 
@@ -638,7 +638,7 @@ msgctxt "view:contract.service:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 
-msgctxt "view:contract.status_history:"
+msgctxt "view:contract.status.history:"
 msgid "Status History"
 msgstr "Historique des Statuts"
 
