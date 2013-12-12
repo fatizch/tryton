@@ -51,7 +51,7 @@ class RateLine(model.CoopSQL, model.CoopView):
     option_ = fields.Function(
         fields.Many2One('contract.option', 'Option'),
         'get_option_id')
-    tranche = fields.Many2One('tranche.tranche', 'Tranche',
+    tranche = fields.Many2One('salary_range', 'Tranche',
         ondelete='RESTRICT', states={'invisible': ~Eval('tranche')})
     fare_class = fields.Many2One('fare_class', 'Fare Class',
         states={'invisible': ~Eval('fare_class_group')})

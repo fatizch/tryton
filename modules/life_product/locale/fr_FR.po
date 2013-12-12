@@ -30,59 +30,59 @@ msgctxt "field:offered.coverage,is_coverage_amount_needed:"
 msgid ""
 msgstr " "
 
-msgctxt "field:tranche.tranche,ceiling:"
+msgctxt "field:salary_range,ceiling:"
 msgid "Current Ceiling"
 msgstr "Plafond Courant"
 
-msgctxt "field:tranche.tranche,code:"
+msgctxt "field:salary_range,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:tranche.tranche,create_date:"
+msgctxt "field:salary_range,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:tranche.tranche,create_date_:"
+msgctxt "field:salary_range,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:tranche.tranche,create_uid:"
+msgctxt "field:salary_range,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:tranche.tranche,current_rec_name:"
+msgctxt "field:salary_range,current_rec_name:"
 msgid "Current Value"
 msgstr "Valeur Courante"
 
-msgctxt "field:tranche.tranche,floor:"
+msgctxt "field:salary_range,floor:"
 msgid "Current Floor"
 msgstr "Plancher Courant"
 
-msgctxt "field:tranche.tranche,id:"
+msgctxt "field:salary_range,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:tranche.tranche,must_expand_tree:"
+msgctxt "field:salary_range,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:tranche.tranche,name:"
+msgctxt "field:salary_range,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:tranche.tranche,rec_name:"
+msgctxt "field:salary_range,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:tranche.tranche,versions:"
+msgctxt "field:salary_range,versions:"
 msgid "Versions"
 msgstr "Versions"
 
-msgctxt "field:tranche.tranche,write_date:"
+msgctxt "field:salary_range,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:tranche.tranche,write_uid:"
+msgctxt "field:salary_range,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -158,7 +158,7 @@ msgctxt "model:tag,name:tag_life"
 msgid "Prévoyance"
 msgstr "Prévoyance"
 
-msgctxt "model:tranche.tranche,name:"
+msgctxt "model:salary_range,name:"
 msgid "Tranche"
 msgstr "Tranche"
 
@@ -174,7 +174,7 @@ msgctxt "view:offered.coverage:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"
 
-msgctxt "view:tranche.tranche:"
+msgctxt "view:salary_range:"
 msgid "Tranche"
 msgstr "Tranche"
 

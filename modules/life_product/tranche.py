@@ -13,7 +13,7 @@ __all__ = [
 class Tranche(CoopSQL, VersionedObject):
     'Tranche'
 
-    __name__ = 'tranche.tranche'
+    __name__ = 'salary_range'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name')
@@ -27,7 +27,7 @@ class Tranche(CoopSQL, VersionedObject):
     @staticmethod
     def default_versions():
         return utils.create_inst_with_default_val(
-            Pool().get('tranche.tranche'), 'versions')
+            Pool().get('salary_range'), 'versions')
 
     def get_tranche_value(self, value, at_date=None):
         version = self.get_version_at_date(at_date)
@@ -60,7 +60,7 @@ class TrancheVersion(CoopSQL, VersionObject):
 
     @classmethod
     def main_model(cls):
-        return 'tranche.tranche'
+        return 'salary_range'
 
     def get_tranche_value(self, value):
         floor = self.get_floor()

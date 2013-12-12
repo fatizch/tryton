@@ -162,7 +162,7 @@ class SubRatingRule(model.CoopView, model.CoopSQL):
 
     main_rating_rule = fields.Many2One('billing.premium.rate.rule',
         'Main Rating Rule', ondelete='CASCADE')
-    tranche = fields.Many2One('tranche.tranche', 'Tranche',
+    tranche = fields.Many2One('salary_range', 'Tranche',
         states={'invisible': Eval('_parent_main_rating_rule', {}).get(
                 'rating_kind', '') != 'tranche'}, ondelete='RESTRICT')
     fare_class_group = fields.Many2One('fare_class.group',
