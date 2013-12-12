@@ -641,7 +641,7 @@ class ClaimDeliveredService():
         self.func_error = None
         if res and not res.eligible:
             self.status = 'not_eligible'
-            Error = Pool().get('rule_engine.error')
+            Error = Pool().get('functional_error')
             func_err, other_errs = Error.get_functional_errors_from_errors(
                 res.details)
             if func_err:

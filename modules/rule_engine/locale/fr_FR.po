@@ -6,11 +6,11 @@ msgctxt "error:rule_engine.context:"
 msgid "You have defined twice the same name %s in %s and %s"
 msgstr ""
 
-msgctxt "error:rule_engine.error:"
+msgctxt "error:functional_error:"
 msgid "Number of arguments does not match string content"
 msgstr ""
 
-msgctxt "error:rule_engine.error:"
+msgctxt "error:functional_error:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
@@ -265,51 +265,51 @@ msgctxt "field:rule_engine.context-function,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:rule_engine.error,arguments:"
+msgctxt "field:functional_error,arguments:"
 msgid "Arguments"
 msgstr "Arguments"
 
-msgctxt "field:rule_engine.error,code:"
+msgctxt "field:functional_error,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:rule_engine.error,create_date:"
+msgctxt "field:functional_error,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:rule_engine.error,create_date_:"
+msgctxt "field:functional_error,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:rule_engine.error,create_uid:"
+msgctxt "field:functional_error,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:rule_engine.error,id:"
+msgctxt "field:functional_error,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.error,kind:"
+msgctxt "field:functional_error,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:rule_engine.error,must_expand_tree:"
+msgctxt "field:functional_error,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:rule_engine.error,name:"
+msgctxt "field:functional_error,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:rule_engine.error,rec_name:"
+msgctxt "field:functional_error,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:rule_engine.error,write_date:"
+msgctxt "field:functional_error,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:rule_engine.error,write_uid:"
+msgctxt "field:functional_error,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -781,7 +781,7 @@ msgctxt "model:rule_engine.context-function,name:"
 msgid "Context Tree Element"
 msgstr ""
 
-msgctxt "model:rule_engine.error,name:"
+msgctxt "model:functional_error,name:"
 msgid "Rule Error"
 msgstr "Erreur"
 
@@ -841,15 +841,15 @@ msgctxt "selection:rule_engine,status:"
 msgid "Validated"
 msgstr "Validé"
 
-msgctxt "selection:rule_engine.error,kind:"
+msgctxt "selection:functional_error,kind:"
 msgid "Error"
 msgstr "Erreur"
 
-msgctxt "selection:rule_engine.error,kind:"
+msgctxt "selection:functional_error,kind:"
 msgid "Info"
 msgstr "Info"
 
-msgctxt "selection:rule_engine.error,kind:"
+msgctxt "selection:functional_error,kind:"
 msgid "Warning"
 msgstr "Avertissement"
 
@@ -881,11 +881,11 @@ msgctxt "view:rule_engine.context:"
 msgid "Contexts"
 msgstr "Contextes"
 
-msgctxt "view:rule_engine.error:"
+msgctxt "view:functional_error:"
 msgid "Rule Error"
 msgstr "Erreur"
 
-msgctxt "view:rule_engine.error:"
+msgctxt "view:functional_error:"
 msgid "name"
 msgstr "Nom"
 

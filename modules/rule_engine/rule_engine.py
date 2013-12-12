@@ -300,7 +300,7 @@ class RuleTools(RuleEngineContext):
 
     @classmethod
     def add_error(cls, args, error_code, custom=False, lvl=None):
-        RuleError = Pool().get('rule_engine.error')
+        RuleError = Pool().get('functional_error')
         if custom:
             error = error_code
         else:
@@ -1327,7 +1327,7 @@ class RunTests(Wizard):
 class RuleError(model.CoopSQL, model.CoopView):
     'Rule Error'
 
-    __name__ = 'rule_engine.error'
+    __name__ = 'functional_error'
 
     code = fields.Char('Code', required=True, on_change_with=['code', 'name'])
     name = fields.Char('Name', required=True, translate=True)

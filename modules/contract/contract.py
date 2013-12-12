@@ -723,7 +723,7 @@ class DeliveredService(model.CoopView, model.CoopSQL):
         domain=[
             If(~~Eval('contract'), ('contract', '=', Eval('contract', {})), ())
         ], depends=['contract'])
-    func_error = fields.Many2One('rule_engine.error', 'Error',
+    func_error = fields.Many2One('functional_error', 'Error',
         ondelete='RESTRICT', states={
             'invisible': ~Eval('func_error'),
             'readonly': True})
