@@ -91,7 +91,7 @@ class Product():
     __name__ = 'offered.product'
     __metaclass__ = PoolMeta
 
-    term_renewal_rules = fields.One2Many('ins_product.term_renewal_rule',
+    term_renewal_rules = fields.One2Many('offered.term.rule',
         'offered', 'Term - Renewal')
     item_descriptors = fields.Many2Many('offered.product-item_desc', 'product',
         'item_desc', 'Item Descriptors',

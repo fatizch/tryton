@@ -15,7 +15,7 @@ __all__ = [
 class TermRenewalRule(BusinessRuleRoot, model.CoopSQL):
     'Term and Renewal Rule'
 
-    __name__ = 'ins_product.term_renewal_rule'
+    __name__ = 'offered.term.rule'
 
     with_term = fields.Boolean('With Term')
     can_be_renewed = fields.Boolean('Can be renewed',
