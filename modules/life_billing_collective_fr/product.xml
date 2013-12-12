@@ -26,17 +26,17 @@
             <field name="name">rating_rule_form</field>
         </record>
         <record model="ir.ui.view" id="rating_rule_by_tranche_view_tree">
-            <field name="model">collective.sub_rating_rule</field>
+            <field name="model">billing.premium.rate.rule.line</field>
             <field name="type">tree</field>
             <field name="name">rating_rule_by_tranche_tree</field>
         </record>
         <record model="ir.ui.view" id="rating_rule_by_fare_class_view_tree">
-            <field name="model">collective.sub_rating_rule</field>
+            <field name="model">billing.premium.rate.rule.line</field>
             <field name="type">tree</field>
             <field name="name">rating_rule_by_fare_class_tree</field>
         </record>
         <record model="ir.ui.view" id="sub_rating_rule_view_form">
-            <field name="model">collective.sub_rating_rule</field>
+            <field name="model">billing.premium.rate.rule.line</field>
             <field name="type">form</field>
             <field name="name">sub_rating_rule_form</field>
         </record>

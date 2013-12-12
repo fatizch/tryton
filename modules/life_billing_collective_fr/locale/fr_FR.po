@@ -637,63 +637,63 @@ msgctxt "field:billing.premium.rate.rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:collective.sub_rating_rule,config_kind:"
+msgctxt "field:billing.premium.rate.rule.line,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
 
-msgctxt "field:collective.sub_rating_rule,create_date:"
+msgctxt "field:billing.premium.rate.rule.line,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:collective.sub_rating_rule,create_date_:"
+msgctxt "field:billing.premium.rate.rule.line,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:collective.sub_rating_rule,create_uid:"
+msgctxt "field:billing.premium.rate.rule.line,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:collective.sub_rating_rule,fare_class:"
+msgctxt "field:billing.premium.rate.rule.line,fare_class:"
 msgid "Fare Class"
 msgstr "Classe Tarif"
 
-msgctxt "field:collective.sub_rating_rule,fare_class_group:"
+msgctxt "field:billing.premium.rate.rule.line,fare_class_group:"
 msgid "Fare Class Group"
 msgstr "Cotisation Groupe de Tarif"
 
-msgctxt "field:collective.sub_rating_rule,id:"
+msgctxt "field:billing.premium.rate.rule.line,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:collective.sub_rating_rule,main_rating_rule:"
+msgctxt "field:billing.premium.rate.rule.line,main_rating_rule:"
 msgid "Main Rating Rule"
 msgstr "Principale Règle de Tarif"
 
-msgctxt "field:collective.sub_rating_rule,must_expand_tree:"
+msgctxt "field:billing.premium.rate.rule.line,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:collective.sub_rating_rule,rec_name:"
+msgctxt "field:billing.premium.rate.rule.line,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:collective.sub_rating_rule,rule:"
+msgctxt "field:billing.premium.rate.rule.line,rule:"
 msgid "Rule"
 msgstr "Règle"
 
-msgctxt "field:collective.sub_rating_rule,simple_rate:"
+msgctxt "field:billing.premium.rate.rule.line,simple_rate:"
 msgid "Rate"
 msgstr "Taux"
 
-msgctxt "field:collective.sub_rating_rule,tranche:"
+msgctxt "field:billing.premium.rate.rule.line,tranche:"
 msgid "Tranche"
 msgstr "Tranche"
 
-msgctxt "field:collective.sub_rating_rule,write_date:"
+msgctxt "field:billing.premium.rate.rule.line,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:collective.sub_rating_rule,write_uid:"
+msgctxt "field:billing.premium.rate.rule.line,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -849,7 +849,7 @@ msgctxt "model:billing.premium.rate.rule,name:"
 msgid "Collective Rating Rule"
 msgstr "Règle de Tarification Collective"
 
-msgctxt "model:collective.sub_rating_rule,name:"
+msgctxt "model:billing.premium.rate.rule.line,name:"
 msgid "Sub Rating Rule"
 msgstr ""
 
@@ -969,11 +969,11 @@ msgctxt "selection:billing.premium.rate.rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:collective.sub_rating_rule,config_kind:"
+msgctxt "selection:billing.premium.rate.rule.line,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
 
-msgctxt "selection:collective.sub_rating_rule,config_kind:"
+msgctxt "selection:billing.premium.rate.rule.line,config_kind:"
 msgid "Simple"
 msgstr "Simple"
 
@@ -1033,19 +1033,19 @@ msgctxt "view:billing.premium.rate.rule:"
 msgid "Collective Rating Rule"
 msgstr "Règle de Tarification Collective"
 
-msgctxt "view:collective.sub_rating_rule:"
+msgctxt "view:billing.premium.rate.rule.line:"
 msgid "%"
 msgstr "%"
 
-msgctxt "view:collective.sub_rating_rule:"
+msgctxt "view:billing.premium.rate.rule.line:"
 msgid "Fare Class Rating Rule"
 msgstr "Règle de Classe Tarifaire"
 
-msgctxt "view:collective.sub_rating_rule:"
+msgctxt "view:billing.premium.rate.rule.line:"
 msgid "Sub Rating Rule"
 msgstr ""
 
-msgctxt "view:collective.sub_rating_rule:"
+msgctxt "view:billing.premium.rate.rule.line:"
 msgid "Tranche Rating Rule"
 msgstr "Règle de Tarif par Tranche"
 

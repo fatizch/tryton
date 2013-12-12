@@ -109,7 +109,7 @@ class CollectiveRatingRule(business_rule.BusinessRuleRoot, model.CoopSQL):
     rating_kind = fields.Selection(
         [('tranche', 'by Tranche'), ('fare_class', 'by Fare Class')],
         'Rating Kind', states={'readonly': ~~Eval('sub_rating_rules')})
-    sub_rating_rules = fields.One2Many('collective.sub_rating_rule',
+    sub_rating_rules = fields.One2Many('billing.premium.rate.rule.line',
         'main_rating_rule', 'Sub Rating Rules')
     index = fields.Many2One('table.table_def', 'Index',
         domain=[
@@ -158,7 +158,7 @@ class CollectiveRatingRule(business_rule.BusinessRuleRoot, model.CoopSQL):
 class SubRatingRule(model.CoopView, model.CoopSQL):
     'Sub Rating Rule'
 
-    __name__ = 'collective.sub_rating_rule'
+    __name__ = 'billing.premium.rate.rule.line'
 
     main_rating_rule = fields.Many2One('billing.premium.rate.rule',
         'Main Rating Rule', ondelete='CASCADE')
