@@ -193,7 +193,7 @@ class DimensionDisplayer():
     'Dimension Displayer'
 
     __metaclass__ = PoolMeta
-    __name__ = 'table.dimension_displayer'
+    __name__ = 'table.manage_dimension.show.dimension'
 
     complementary_data = fields.Many2One('extra_data',
         'Complementary Data', domain=[('type_', '=', 'selection')], states={

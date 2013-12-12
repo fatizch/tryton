@@ -6,7 +6,7 @@ msgctxt "error:table.2d:"
 msgid "The table is not 2D"
 msgstr "La table n'est pas 2D"
 
-msgctxt "error:table.dimension_displayer:"
+msgctxt "error:table.manage_dimension.show.dimension:"
 msgid "Impossible to convert data %s with format %s"
 msgstr "Impossible de convertir la donnée %s avec le format %s"
 
@@ -98,51 +98,51 @@ msgctxt "field:table.2d.open.ask_dimensions,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:table.dimension_displayer,converted_text:"
+msgctxt "field:table.manage_dimension.show.dimension,converted_text:"
 msgid "Converted Text"
 msgstr "Texte Convertit"
 
-msgctxt "field:table.dimension_displayer,cur_dimension:"
+msgctxt "field:table.manage_dimension.show.dimension,cur_dimension:"
 msgid "Current Dimension"
 msgstr "Dimension Courante"
 
-msgctxt "field:table.dimension_displayer,date_format:"
+msgctxt "field:table.manage_dimension.show.dimension,date_format:"
 msgid "Date Format"
 msgstr "Format Date"
 
-msgctxt "field:table.dimension_displayer,id:"
+msgctxt "field:table.manage_dimension.show.dimension,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:table.dimension_displayer,input_mode:"
+msgctxt "field:table.manage_dimension.show.dimension,input_mode:"
 msgid "Input Mode"
 msgstr "Mode de Saisie"
 
-msgctxt "field:table.dimension_displayer,input_text:"
+msgctxt "field:table.manage_dimension.show.dimension,input_text:"
 msgid "Input Text"
 msgstr "Texte à saisir"
 
-msgctxt "field:table.dimension_displayer,kind:"
+msgctxt "field:table.manage_dimension.show.dimension,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:table.dimension_displayer,must_expand_tree:"
+msgctxt "field:table.manage_dimension.show.dimension,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:table.dimension_displayer,name:"
+msgctxt "field:table.manage_dimension.show.dimension,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:table.dimension_displayer,order:"
+msgctxt "field:table.manage_dimension.show.dimension,order:"
 msgid "Order"
 msgstr "Ordre"
 
-msgctxt "field:table.dimension_displayer,table:"
+msgctxt "field:table.manage_dimension.show.dimension,table:"
 msgid "Table"
 msgstr "Table"
 
-msgctxt "field:table.dimension_displayer,values:"
+msgctxt "field:table.manage_dimension.show.dimension,values:"
 msgid "Dimension Values"
 msgstr "Valeurs"
 
@@ -446,7 +446,7 @@ msgctxt "model:table.2d.open.ask_dimensions,name:"
 msgid "Table Open 2D Ask Dimensions"
 msgstr "Table Open 2D Ask Dimensions"
 
-msgctxt "model:table.dimension_displayer,name:"
+msgctxt "model:table.manage_dimension.show.dimension,name:"
 msgid "Dimension Displayer"
 msgstr ""
 
@@ -462,39 +462,39 @@ msgctxt "model:table.table_dimension,name:"
 msgid "Table Definition Dimension"
 msgstr "Dimension"
 
-msgctxt "selection:table.dimension_displayer,input_mode:"
+msgctxt "selection:table.manage_dimension.show.dimension,input_mode:"
 msgid "Boolean"
 msgstr "Booléen"
 
-msgctxt "selection:table.dimension_displayer,input_mode:"
+msgctxt "selection:table.manage_dimension.show.dimension,input_mode:"
 msgid "Flat data"
 msgstr ""
 
-msgctxt "selection:table.dimension_displayer,kind:"
+msgctxt "selection:table.manage_dimension.show.dimension,kind:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:table.dimension_displayer,kind:"
+msgctxt "selection:table.manage_dimension.show.dimension,kind:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt "selection:table.dimension_displayer,kind:"
+msgctxt "selection:table.manage_dimension.show.dimension,kind:"
 msgid "Range"
 msgstr "Intervalle"
 
-msgctxt "selection:table.dimension_displayer,kind:"
+msgctxt "selection:table.manage_dimension.show.dimension,kind:"
 msgid "Range-Date"
 msgstr "Plage de Date"
 
-msgctxt "selection:table.dimension_displayer,kind:"
+msgctxt "selection:table.manage_dimension.show.dimension,kind:"
 msgid "Value"
 msgstr "Valeur"
 
-msgctxt "selection:table.dimension_displayer,order:"
+msgctxt "selection:table.manage_dimension.show.dimension,order:"
 msgid "Alphabetical"
 msgstr "Alphabétique"
 
-msgctxt "selection:table.dimension_displayer,order:"
+msgctxt "selection:table.manage_dimension.show.dimension,order:"
 msgid "Sequence"
 msgstr "Séquence"
 
@@ -650,7 +650,7 @@ msgctxt "view:table.2d.open.ask_dimensions:"
 msgid "Dimensions"
 msgstr "Dimensions"
 
-msgctxt "view:table.dimension_displayer:"
+msgctxt "view:table.manage_dimension.show.dimension:"
 msgid "Manage Dimensions"
 msgstr "Sélection Dimension"
 

@@ -5,7 +5,7 @@
     <!-- Dimension Displayer -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="dimension_displayer_form">
-      <field name="model">table.dimension_displayer</field>
+      <field name="model">table.manage_dimension.show.dimension</field>
       <field name="type">form</field>
       <field name="inherit" ref="table.dimension_displayer_form"/>
       <field name="name">dimension_displayer_form</field>

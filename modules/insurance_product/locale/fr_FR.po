@@ -3240,7 +3240,7 @@ msgctxt "field:rule_engine.parameter,the_complementary_data:"
 msgid "Complementary Parameters"
 msgstr "Paramètres Complémentaires"
 
-msgctxt "field:table.dimension_displayer,complementary_data:"
+msgctxt "field:table.manage_dimension.show.dimension,complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -4512,7 +4512,7 @@ msgctxt "selection:rule_engine.parameter,kind:"
 msgid "Rule Complementary Data"
 msgstr "Paramètres de Rêgle"
 
-msgctxt "selection:table.dimension_displayer,input_mode:"
+msgctxt "selection:table.manage_dimension.show.dimension,input_mode:"
 msgid "Complementary data"
 msgstr "Données Complémentaires"
 

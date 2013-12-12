@@ -1097,7 +1097,7 @@ class Table2D(ModelSQL, ModelView):
 class DimensionDisplayer(ModelView):
     'Dimension Displayer'
 
-    __name__ = 'table.dimension_displayer'
+    __name__ = 'table.manage_dimension.show.dimension'
 
     name = fields.Char('Name')
     order = fields.Selection(ORDER, 'Order')
@@ -1243,7 +1243,7 @@ class ManageDimensionGeneric(Wizard):
     'Manage Dimension'
 
     start_state = 'dimension_management'
-    dimension_management = StateView('table.dimension_displayer',
+    dimension_management = StateView('table.manage_dimension.show.dimension',
         'table.dimension_displayer_form', [
             Button('Exit', 'end', 'tryton-cancel'),
             Button('Apply', 'apply_', 'tryton-ok', True),
@@ -1272,7 +1272,7 @@ class ManageDimensionGeneric(Wizard):
     def default_dimension_management(self, data):
         TableDef = Pool().get('table.table_def')
         TableDimension = Pool().get('table.table_dimension')
-        Displayer = Pool().get('table.dimension_displayer')
+        Displayer = Pool().get('table.manage_dimension.show.dimension')
         selected_table = TableDef(Transaction().context.get('active_id'))
         selected_dimension = self.get_my_dimension()
 
