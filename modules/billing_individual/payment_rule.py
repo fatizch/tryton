@@ -31,7 +31,7 @@ PAYMENT_DELAYS = [
 class PaymentRuleLine(model.CoopSQL, model.CoopView):
     'Payment Rule Line'
 
-    __name__ = 'billing.payment_rule_line'
+    __name__ = 'billing.payment.term.line'
 
     sequence = fields.Integer('Sequence',
         help='Use to order lines in ascending order')
@@ -270,7 +270,7 @@ class PaymentRule(model.CoopSQL, model.CoopView):
     sync_date = fields.Date('Sync Date', states={
             'invisible': ~Eval('with_sync_date'),
             'required': ~~Eval('with_sync_date')})
-    start_lines = fields.One2Many('billing.payment_rule_line', 'payment_rule',
+    start_lines = fields.One2Many('billing.payment.term.line', 'payment_rule',
         'Start Lines')
     appliable_fees = fields.Many2Many('billing.payment_rule-fee-relation',
         'payment_rule', 'fee', 'Appliable fees', depends=['company'],

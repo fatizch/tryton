@@ -339,103 +339,103 @@ msgctxt "field:billing.payment_rule-fee-relation,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:billing.payment_rule_line,add_calculated_period:"
+msgctxt "field:billing.payment.term.line,add_calculated_period:"
 msgid "Add calculated period"
 msgstr "Ajouter une période calculée"
 
-msgctxt "field:billing.payment_rule_line,amount:"
+msgctxt "field:billing.payment.term.line,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:billing.payment_rule_line,create_date:"
+msgctxt "field:billing.payment.term.line,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:billing.payment_rule_line,create_date_:"
+msgctxt "field:billing.payment.term.line,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:billing.payment_rule_line,create_uid:"
+msgctxt "field:billing.payment.term.line,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:billing.payment_rule_line,currency:"
+msgctxt "field:billing.payment.term.line,currency:"
 msgid "Currency"
 msgstr "Devises"
 
-msgctxt "field:billing.payment_rule_line,currency_digits:"
+msgctxt "field:billing.payment.term.line,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
-msgctxt "field:billing.payment_rule_line,day:"
+msgctxt "field:billing.payment.term.line,day:"
 msgid "Day of Month"
 msgstr "Jour du mois"
 
-msgctxt "field:billing.payment_rule_line,days:"
+msgctxt "field:billing.payment.term.line,days:"
 msgid "Number of Days"
 msgstr "Nombre de jours"
 
-msgctxt "field:billing.payment_rule_line,divisor:"
+msgctxt "field:billing.payment.term.line,divisor:"
 msgid "Divisor"
 msgstr "Diviseur"
 
-msgctxt "field:billing.payment_rule_line,id:"
+msgctxt "field:billing.payment.term.line,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.payment_rule_line,is_remainder:"
+msgctxt "field:billing.payment.term.line,is_remainder:"
 msgid "Is remainder"
 msgstr "Contient le reste"
 
-msgctxt "field:billing.payment_rule_line,month:"
+msgctxt "field:billing.payment.term.line,month:"
 msgid "Month"
 msgstr "Mois"
 
-msgctxt "field:billing.payment_rule_line,months:"
+msgctxt "field:billing.payment.term.line,months:"
 msgid "Number of Months"
 msgstr "Nombre de mois"
 
-msgctxt "field:billing.payment_rule_line,must_expand_tree:"
+msgctxt "field:billing.payment.term.line,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:billing.payment_rule_line,number_of_periods:"
+msgctxt "field:billing.payment.term.line,number_of_periods:"
 msgid "Number of periods"
 msgstr "Nombre de périodes"
 
-msgctxt "field:billing.payment_rule_line,payment_rule:"
+msgctxt "field:billing.payment.term.line,payment_rule:"
 msgid "Payment Term"
 msgstr "Conditions de paiement"
 
-msgctxt "field:billing.payment_rule_line,percentage:"
+msgctxt "field:billing.payment.term.line,percentage:"
 msgid "Percentage"
 msgstr "Pourcentage"
 
-msgctxt "field:billing.payment_rule_line,rec_name:"
+msgctxt "field:billing.payment.term.line,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:billing.payment_rule_line,sequence:"
+msgctxt "field:billing.payment.term.line,sequence:"
 msgid "Sequence"
 msgstr "Séquence"
 
-msgctxt "field:billing.payment_rule_line,type:"
+msgctxt "field:billing.payment.term.line,type:"
 msgid "Type"
 msgstr "Type"
 
-msgctxt "field:billing.payment_rule_line,weekday:"
+msgctxt "field:billing.payment.term.line,weekday:"
 msgid "Day of Week"
 msgstr "Jour de la semaine"
 
-msgctxt "field:billing.payment_rule_line,weeks:"
+msgctxt "field:billing.payment.term.line,weeks:"
 msgid "Number of Weeks"
 msgstr "Nombre de semaines"
 
-msgctxt "field:billing.payment_rule_line,write_date:"
+msgctxt "field:billing.payment.term.line,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:billing.payment_rule_line,write_uid:"
+msgctxt "field:billing.payment.term.line,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -825,7 +825,7 @@ msgstr ""
 "mois possibles pour le prélèvement automatique.\\n\\nUne liste vide laisse "
 "le choix au client."
 
-msgctxt "help:billing.payment_rule_line,sequence:"
+msgctxt "help:billing.payment.term.line,sequence:"
 msgid "Use to order lines in ascending order"
 msgstr "Utilisé pour trier les lignes en ordre croissant"
 
@@ -853,7 +853,7 @@ msgctxt "model:billing.payment_rule-fee-relation,name:"
 msgid "Payment Rule - Fee relation"
 msgstr "Relation Règle de paiement - Frais"
 
-msgctxt "model:billing.payment_rule_line,name:"
+msgctxt "model:billing.payment.term.line,name:"
 msgid "Payment Rule Line"
 msgstr "Ligne de règle de paiement"
 
@@ -961,99 +961,99 @@ msgctxt "selection:billing.payment.term,remaining_position:"
 msgid "Last calculated"
 msgstr "Dernière ligne calculée"
 
-msgctxt "selection:billing.payment_rule_line,month:"
+msgctxt "selection:billing.payment.term.line,month:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:billing.payment_rule_line,month:"
+msgctxt "selection:billing.payment.term.line,month:"
 msgid "April"
 msgstr "Avril"
 
-msgctxt "selection:billing.payment_rule_line,month:"
+msgctxt "selection:billing.payment.term.line,month:"
 msgid "August"
 msgstr "Août"
 
-msgctxt "selection:billing.payment_rule_line,month:"
+msgctxt "selection:billing.payment.term.line,month:"
 msgid "December"
 msgstr "Décembre"
 
-msgctxt "selection:billing.payment_rule_line,month:"
+msgctxt "selection:billing.payment.term.line,month:"
 msgid "February"
 msgstr "Février"
 
-msgctxt "selection:billing.payment_rule_line,month:"
+msgctxt "selection:billing.payment.term.line,month:"
 msgid "January"
 msgstr "Janvier"
 
-msgctxt "selection:billing.payment_rule_line,month:"
+msgctxt "selection:billing.payment.term.line,month:"
 msgid "July"
 msgstr "Juillet"
 
-msgctxt "selection:billing.payment_rule_line,month:"
+msgctxt "selection:billing.payment.term.line,month:"
 msgid "June"
 msgstr "Juin"
 
-msgctxt "selection:billing.payment_rule_line,month:"
+msgctxt "selection:billing.payment.term.line,month:"
 msgid "March"
 msgstr "Mars"
 
-msgctxt "selection:billing.payment_rule_line,month:"
+msgctxt "selection:billing.payment.term.line,month:"
 msgid "May"
 msgstr "Mai"
 
-msgctxt "selection:billing.payment_rule_line,month:"
+msgctxt "selection:billing.payment.term.line,month:"
 msgid "November"
 msgstr "Novembre"
 
-msgctxt "selection:billing.payment_rule_line,month:"
+msgctxt "selection:billing.payment.term.line,month:"
 msgid "October"
 msgstr "Octobre"
 
-msgctxt "selection:billing.payment_rule_line,month:"
+msgctxt "selection:billing.payment.term.line,month:"
 msgid "September"
 msgstr "Septembre"
 
-msgctxt "selection:billing.payment_rule_line,type:"
+msgctxt "selection:billing.payment.term.line,type:"
 msgid "Fixed"
 msgstr "Fixé"
 
-msgctxt "selection:billing.payment_rule_line,type:"
+msgctxt "selection:billing.payment.term.line,type:"
 msgid "Percentage on Total"
 msgstr "Pourcentage du total"
 
-msgctxt "selection:billing.payment_rule_line,type:"
+msgctxt "selection:billing.payment.term.line,type:"
 msgid "Prorata"
 msgstr "Au prorata"
 
-msgctxt "selection:billing.payment_rule_line,weekday:"
+msgctxt "selection:billing.payment.term.line,weekday:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:billing.payment_rule_line,weekday:"
+msgctxt "selection:billing.payment.term.line,weekday:"
 msgid "Friday"
 msgstr "Vendredi"
 
-msgctxt "selection:billing.payment_rule_line,weekday:"
+msgctxt "selection:billing.payment.term.line,weekday:"
 msgid "Monday"
 msgstr "Lundi"
 
-msgctxt "selection:billing.payment_rule_line,weekday:"
+msgctxt "selection:billing.payment.term.line,weekday:"
 msgid "Saturday"
 msgstr "Samedi"
 
-msgctxt "selection:billing.payment_rule_line,weekday:"
+msgctxt "selection:billing.payment.term.line,weekday:"
 msgid "Sunday"
 msgstr "Dimanche"
 
-msgctxt "selection:billing.payment_rule_line,weekday:"
+msgctxt "selection:billing.payment.term.line,weekday:"
 msgid "Thursday"
 msgstr "Jeudi"
 
-msgctxt "selection:billing.payment_rule_line,weekday:"
+msgctxt "selection:billing.payment.term.line,weekday:"
 msgid "Tuesday"
 msgstr "Mardi"
 
-msgctxt "selection:billing.payment_rule_line,weekday:"
+msgctxt "selection:billing.payment.term.line,weekday:"
 msgid "Wednesday"
 msgstr "Mercredi"
 
@@ -1149,11 +1149,11 @@ msgctxt "view:billing.payment.term:"
 msgid "payment_rule"
 msgstr ""
 
-msgctxt "view:billing.payment_rule_line:"
+msgctxt "view:billing.payment.term.line:"
 msgid "Payment Rule Line"
 msgstr "Ligne de règle de paiement"
 
-msgctxt "view:billing.payment_rule_line:"
+msgctxt "view:billing.payment.term.line:"
 msgid "Payment Rule Lines"
 msgstr ""
 

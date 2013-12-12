@@ -45,12 +45,12 @@
     <!-- Payment Rule Line -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="payment_rule_line_form">
-      <field name="model">billing.payment_rule_line</field>
+      <field name="model">billing.payment.term.line</field>
       <field name="type">form</field>
       <field name="name">payment_rule_line_form</field>
     </record>
     <record model="ir.ui.view" id="payment_rule_line_tree">
-      <field name="model">billing.payment_rule_line</field>
+      <field name="model">billing.payment.term.line</field>
       <field name="type">tree</field>
       <field name="name">payment_rule_line_tree</field>
     </record>
