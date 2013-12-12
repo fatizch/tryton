@@ -35,7 +35,7 @@ class Offered():
     __name__ = 'offered.offered'
     __metaclass__ = PoolMeta
 
-    pricing_rules = fields.One2Many('ins_product.pricing_rule',
+    pricing_rules = fields.One2Many('billing.premium.rule',
         'offered', 'Pricing Rules')
     eligibility_rules = fields.One2Many(
         'offered.eligibility.rule', 'offered', 'Eligibility Rules')

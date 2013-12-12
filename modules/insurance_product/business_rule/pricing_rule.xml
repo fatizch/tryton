@@ -18,13 +18,13 @@
     <!-- Pricing Rule -->
     <!--################################################################-->
     <record model="ir.ui.view" id="pricingrule_view_tree">
-      <field name="model">ins_product.pricing_rule</field>
+      <field name="model">billing.premium.rule</field>
       <field name="type">tree</field>
       <field name="inherit" ref="businessruleroot_view_tree"/>
       <field name="arch" type="xml"/>
     </record>
     <record model="ir.ui.view" id="pricingrule_view_form">
-      <field name="model">ins_product.pricing_rule</field>
+      <field name="model">billing.premium.rule</field>
       <field name="type">form</field>
       <field name="inherit" ref="businessruleroot_view_form"/>
       <field name="name">pricing_rule_form</field>

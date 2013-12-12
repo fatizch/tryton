@@ -40,7 +40,7 @@ RATED_OBJECT_KIND = [
 class PricingRule(BusinessRuleRoot, model.CoopSQL):
     'Pricing Rule'
 
-    __name__ = 'ins_product.pricing_rule'
+    __name__ = 'billing.premium.rule'
 
     components = fields.One2ManyDomain(
         'billing.premium.rule.component', 'pricing_rule', 'Components',
@@ -289,7 +289,7 @@ class PricingComponent(model.CoopSQL, model.CoopView):
     __name__ = 'billing.premium.rule.component'
 
     pricing_rule = fields.Many2One(
-        'ins_product.pricing_rule', 'Pricing Rule', ondelete='CASCADE')
+        'billing.premium.rule', 'Pricing Rule', ondelete='CASCADE')
     fixed_amount = fields.Numeric(
         'Amount', depends=['kind', 'config_kind'],
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),

@@ -51,15 +51,15 @@ msgid "The  names of attachments must be unique by resource!"
 msgstr ""
 "Le nom des pièces jointes doivent être unique pour une même ressource !"
 
-msgctxt "error:ins_product.pricing_rule:"
+msgctxt "error:billing.premium.rule:"
 msgid "%s : Rule combination unavailable with fee (%s) version (%s)"
 msgstr ""
 
-msgctxt "error:ins_product.pricing_rule:"
+msgctxt "error:billing.premium.rule:"
 msgid "%s : Rule combination unavailable with tax (%s) version (%s)"
 msgstr ""
 
-msgctxt "error:ins_product.pricing_rule:"
+msgctxt "error:billing.premium.rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
@@ -2047,99 +2047,99 @@ msgctxt "field:billing.premium.rule.component,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.pricing_rule,basic_price:"
+msgctxt "field:billing.premium.rule,basic_price:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:ins_product.pricing_rule,basic_tax:"
+msgctxt "field:billing.premium.rule,basic_tax:"
 msgid "Tax"
 msgstr "Taxe"
 
-msgctxt "field:ins_product.pricing_rule,components:"
+msgctxt "field:billing.premium.rule,components:"
 msgid "Components"
 msgstr "Composantes"
 
-msgctxt "field:ins_product.pricing_rule,config_kind:"
+msgctxt "field:billing.premium.rule,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
 
-msgctxt "field:ins_product.pricing_rule,create_date:"
+msgctxt "field:billing.premium.rule,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.pricing_rule,create_date_:"
+msgctxt "field:billing.premium.rule,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.pricing_rule,create_uid:"
+msgctxt "field:billing.premium.rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.pricing_rule,end_date:"
+msgctxt "field:billing.premium.rule,end_date:"
 msgid "To Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_product.pricing_rule,frequency:"
+msgctxt "field:billing.premium.rule,frequency:"
 msgid "Rate Frequency"
 msgstr "Fréquence de calcul"
 
-msgctxt "field:ins_product.pricing_rule,id:"
+msgctxt "field:billing.premium.rule,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.pricing_rule,must_expand_tree:"
+msgctxt "field:billing.premium.rule,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.pricing_rule,offered:"
+msgctxt "field:billing.premium.rule,offered:"
 msgid "Offered"
 msgstr "Offre"
 
-msgctxt "field:ins_product.pricing_rule,rec_name:"
+msgctxt "field:billing.premium.rule,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.pricing_rule,rule:"
+msgctxt "field:billing.premium.rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:ins_product.pricing_rule,rule_complementary_data:"
+msgctxt "field:billing.premium.rule,rule_complementary_data:"
 msgid "Rule Complementary Data"
 msgstr "Paramètres de Rêgle"
 
-msgctxt "field:ins_product.pricing_rule,specific_combination_rule:"
+msgctxt "field:billing.premium.rule,specific_combination_rule:"
 msgid "Combination Rule"
 msgstr "Règle de Combinaison"
 
-msgctxt "field:ins_product.pricing_rule,start_date:"
+msgctxt "field:billing.premium.rule,start_date:"
 msgid "From Date"
 msgstr "Date de Début"
 
-msgctxt "field:ins_product.pricing_rule,sub_item_components:"
+msgctxt "field:billing.premium.rule,sub_item_components:"
 msgid "Covered Item Components"
 msgstr "Composantes Eléments Couverts"
 
-msgctxt "field:ins_product.pricing_rule,sub_item_specific_combination_rule:"
+msgctxt "field:billing.premium.rule,sub_item_specific_combination_rule:"
 msgid "Sub Item Combination Rule"
 msgstr "Règle de Combinaison Elèments Couverts"
 
-msgctxt "field:ins_product.pricing_rule,template:"
+msgctxt "field:billing.premium.rule,template:"
 msgid "Template"
 msgstr "Modèle"
 
-msgctxt "field:ins_product.pricing_rule,template_behaviour:"
+msgctxt "field:billing.premium.rule,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
 
-msgctxt "field:ins_product.pricing_rule,view_rec_name:"
+msgctxt "field:billing.premium.rule,view_rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.pricing_rule,write_date:"
+msgctxt "field:billing.premium.rule,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.pricing_rule,write_uid:"
+msgctxt "field:billing.premium.rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3409,7 +3409,7 @@ msgctxt "model:billing.premium.rule.component,name:"
 msgid "Pricing Component"
 msgstr "Composante de Cotisation"
 
-msgctxt "model:ins_product.pricing_rule,name:"
+msgctxt "model:billing.premium.rule,name:"
 msgid "Pricing Rule"
 msgstr "Règle de Cotisation"
 
@@ -4144,51 +4144,51 @@ msgctxt "selection:billing.premium.rule.component,rated_object_kind:"
 msgid "Global"
 msgstr "Global"
 
-msgctxt "selection:ins_product.pricing_rule,config_kind:"
+msgctxt "selection:billing.premium.rule,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
 
-msgctxt "selection:ins_product.pricing_rule,config_kind:"
+msgctxt "selection:billing.premium.rule,config_kind:"
 msgid "Simple"
 msgstr "Simple"
 
-msgctxt "selection:ins_product.pricing_rule,frequency:"
+msgctxt "selection:billing.premium.rule,frequency:"
 msgid "Half Yearly"
 msgstr "Semestriel"
 
-msgctxt "selection:ins_product.pricing_rule,frequency:"
+msgctxt "selection:billing.premium.rule,frequency:"
 msgid "Monthly"
 msgstr "Mensuel"
 
-msgctxt "selection:ins_product.pricing_rule,frequency:"
+msgctxt "selection:billing.premium.rule,frequency:"
 msgid "Quarterly"
 msgstr "Trimestriel"
 
-msgctxt "selection:ins_product.pricing_rule,frequency:"
+msgctxt "selection:billing.premium.rule,frequency:"
 msgid "Yearly"
 msgstr "Annuel"
 
-msgctxt "selection:ins_product.pricing_rule,offered:"
+msgctxt "selection:billing.premium.rule,offered:"
 msgid "Benefit"
 msgstr "Prestation"
 
-msgctxt "selection:ins_product.pricing_rule,offered:"
+msgctxt "selection:billing.premium.rule,offered:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "selection:ins_product.pricing_rule,offered:"
+msgctxt "selection:billing.premium.rule,offered:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
+msgctxt "selection:billing.premium.rule,template_behaviour:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
+msgctxt "selection:billing.premium.rule,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
-msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
+msgctxt "selection:billing.premium.rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
@@ -4680,11 +4680,11 @@ msgctxt "view:billing.premium.rule.component:"
 msgid "Pricing Components"
 msgstr "Composantes de Cotisation"
 
-msgctxt "view:ins_product.pricing_rule:"
+msgctxt "view:billing.premium.rule:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
-msgctxt "view:ins_product.pricing_rule:"
+msgctxt "view:billing.premium.rule:"
 msgid "Pricing rule"
 msgstr "Règle de Cotisation"
 
