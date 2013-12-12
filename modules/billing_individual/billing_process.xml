@@ -13,7 +13,7 @@
     <!--                            Bill Display                        -->
     <!--################################################################-->
     <record model="ir.ui.view" id="bill_display_form">
-      <field name="model">billing.billing_process.bill_display</field>
+      <field name="model">contract.do_billing.bill</field>
       <field name="type">form</field>
       <field name="name">bill_display_form</field>
     </record>

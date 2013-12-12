@@ -143,15 +143,15 @@ msgctxt "field:contract.billing.data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:billing.billing_process.bill_display,id:"
+msgctxt "field:contract.do_billing.bill,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.billing_process.bill_display,moves:"
+msgctxt "field:contract.do_billing.bill,moves:"
 msgid "Bill"
 msgstr ""
 
-msgctxt "field:billing.billing_process.bill_display,must_expand_tree:"
+msgctxt "field:contract.do_billing.bill,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
@@ -833,7 +833,7 @@ msgctxt "model:contract.billing.data,name:"
 msgid "Billing Manager"
 msgstr "Gestionnaire d'Appel de Cotisation"
 
-msgctxt "model:billing.billing_process.bill_display,name:"
+msgctxt "model:contract.do_billing.bill,name:"
 msgid "Bill Displayer"
 msgstr ""
 
@@ -1125,7 +1125,7 @@ msgctxt "view:contract.billing.data:"
 msgid "billing_manager"
 msgstr ""
 
-msgctxt "view:billing.billing_process.bill_display:"
+msgctxt "view:contract.do_billing.bill:"
 msgid "Bill Result"
 msgstr ""
 

@@ -525,7 +525,7 @@ class BillParameters(model.CoopView):
 class BillDisplay(model.CoopView):
     'Bill Displayer'
 
-    __name__ = 'billing.billing_process.bill_display'
+    __name__ = 'contract.do_billing.bill'
 
     moves = fields.One2Many('account.move', None, 'Bill', readonly=True)
 
@@ -542,7 +542,7 @@ class BillingProcess(Wizard):
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Preview', 'bill_display', 'tryton-go-next')])
     bill_display = StateView(
-        'billing.billing_process.bill_display',
+        'contract.do_billing.bill',
         'billing_individual.bill_display_form', [
             Button('Cancel', 'cancel_bill', 'tryton-cancel'),
             Button('Accept', 'accept_bill', 'tryton-go-next')])
