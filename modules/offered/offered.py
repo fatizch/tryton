@@ -309,7 +309,7 @@ class Product(model.CoopSQL, Offered):
         'Contract Number Generator', context={'code': 'offered.product'},
         ondelete='RESTRICT', required=True)
     complementary_data_def = fields.Many2Many(
-        'offered.product-complementary_data_def',
+        'offered.product-extra_data',
         'product', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', 'in', ['contract', 'sub_elem'])])
     subscriber_kind = fields.Selection(SUBSCRIBER_KIND, 'Subscriber Kind')
@@ -476,7 +476,7 @@ class ProductOptionsCoverage(model.CoopSQL):
 class ProductComplementaryDataRelation(model.CoopSQL):
     'Relation between Product and Complementary Data'
 
-    __name__ = 'offered.product-complementary_data_def'
+    __name__ = 'offered.product-extra_data'
 
     product = fields.Many2One(
         'offered.product', 'Product', ondelete='CASCADE')

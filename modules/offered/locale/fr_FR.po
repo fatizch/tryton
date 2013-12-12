@@ -544,39 +544,39 @@ msgctxt "field:offered.product,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-complementary_data_def,complementary_data_def:"
+msgctxt "field:offered.product-extra_data,complementary_data_def:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-complementary_data_def,create_date:"
+msgctxt "field:offered.product-extra_data,create_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-complementary_data_def,create_date_:"
+msgctxt "field:offered.product-extra_data,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:offered.product-complementary_data_def,create_uid:"
+msgctxt "field:offered.product-extra_data,create_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-complementary_data_def,id:"
+msgctxt "field:offered.product-extra_data,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-complementary_data_def,product:"
+msgctxt "field:offered.product-extra_data,product:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-complementary_data_def,rec_name:"
+msgctxt "field:offered.product-extra_data,rec_name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-complementary_data_def,write_date:"
+msgctxt "field:offered.product-extra_data,write_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-complementary_data_def,write_uid:"
+msgctxt "field:offered.product-extra_data,write_uid:"
 msgid ""
 msgstr " "
 
@@ -700,7 +700,7 @@ msgctxt "model:offered.product,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:offered.product-complementary_data_def,name:"
+msgctxt "model:offered.product-extra_data,name:"
 msgid ""
 msgstr " "
 
