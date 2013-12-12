@@ -18,7 +18,7 @@
       <field name="description">Type de Prêt</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">loan.rule_sets</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_loan_kind</field>
       <field name="parent" ref="pret"/>
     </record>
@@ -27,7 +27,7 @@
       <field name="description">Nombre de Mensualités</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">loan.rule_sets</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_loan_number_of_payments</field>
       <field name="parent" ref="pret"/>
     </record>
@@ -36,7 +36,7 @@
       <field name="description">Montant de la Mensualité</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">loan.rule_sets</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_loan_payment_amount</field>
       <field name="parent" ref="pret"/>
     </record>
@@ -45,7 +45,7 @@
       <field name="description">Montant du Prêt</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">loan.rule_sets</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_loan_amount</field>
       <field name="parent" ref="pret"/>
     </record>
@@ -54,7 +54,7 @@
       <field name="description">Date de Déblocage des Fonds</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">loan.rule_sets</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_loan_funds_release_date</field>
       <field name="parent" ref="pret"/>
     </record>
@@ -63,7 +63,7 @@
       <field name="description">Date du Premier Paiement</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">loan.rule_sets</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_loan_first_payment_date</field>
       <field name="parent" ref="pret"/>
     </record>
@@ -72,7 +72,7 @@
       <field name="description">Capital restant dû</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">loan.rule_sets</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_loan_remaining_capital</field>
       <field name="parent" ref="pret"/>
     </record>
@@ -81,7 +81,7 @@
       <field name="description">Quotité</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">loan.rule_sets</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_loan_share</field>
       <field name="parent" ref="pret"/>
     </record>
@@ -90,7 +90,7 @@
       <field name="description">Taux Période Depuis Taux Annuel</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">loan.rule_sets</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_periodic_rate_from_annual_rate</field>
       <field name="fct_args">taux_annuel</field>
       <field name="parent" ref="pret"/>

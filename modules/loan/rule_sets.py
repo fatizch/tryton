@@ -6,7 +6,7 @@ class LoanContext(RuleEngineContext):
     '''
         Context functions for Loans.
     '''
-    __name__ = 'loan.rule_sets'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     @check_args('loan')

@@ -458,11 +458,11 @@ msgctxt "field:loan.payment,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:loan.rule_sets,id:"
+msgctxt "field:rule_engine.runtime,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:loan.rule_sets,must_expand_tree:"
+msgctxt "field:rule_engine.runtime,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
@@ -562,7 +562,7 @@ msgctxt "model:loan.payment,name:"
 msgid "Loan Payment"
 msgstr "Echéance"
 
-msgctxt "model:loan.rule_sets,name:"
+msgctxt "model:rule_engine.runtime,name:"
 msgid "Context functions for Loans."
 msgstr "Eléments du contexte Emprunteur"
 
