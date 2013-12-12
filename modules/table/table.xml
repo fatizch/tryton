@@ -177,7 +177,7 @@
     <!-- ############################################################ -->
     <record model="ir.action.wizard" id="act_create_table">
       <field name="name">Create Table</field>
-      <field name="wiz_name">table.create_table</field>
+      <field name="wiz_name">table.create</field>
     </record>
     <menuitem name="Create Table" id="menu_create_table" action="act_create_table" sequence="4"/>
   </data>

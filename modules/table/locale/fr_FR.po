@@ -698,11 +698,11 @@ msgctxt "wizard_button:table.2d.open,ask_dimensions,open_:"
 msgid "Open"
 msgstr "Ouvert"
 
-msgctxt "wizard_button:table.create_table,new_table,edit_dim_1:"
+msgctxt "wizard_button:table.create,new_table,edit_dim_1:"
 msgid "Edit Dimension 1"
 msgstr "Modifier Dimension1"
 
-msgctxt "wizard_button:table.create_table,new_table,end:"
+msgctxt "wizard_button:table.create,new_table,end:"
 msgid "Exit"
 msgstr "Fin"
 

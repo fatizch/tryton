@@ -1404,7 +1404,7 @@ class ManageDimension4(ManageDimensionGeneric):
 class TableCreation(Wizard):
     'Create New Table'
 
-    __name__ = 'table.create_table'
+    __name__ = 'table.create'
 
     start_state = 'new_table'
     new_table = StateView('table.table_def', 'table.table_basic_data_form', [
