@@ -10,7 +10,7 @@ msgctxt "error:table.manage_dimension.show.dimension:"
 msgid "Impossible to convert data %s with format %s"
 msgstr "Impossible de convertir la donnée %s avec le format %s"
 
-msgctxt "error:table.manage_dimension_1:"
+msgctxt "error:table.manage_dimension.show_dimension_1:"
 msgid "The requested change might delete data."
 msgstr ""
 
@@ -706,21 +706,21 @@ msgctxt "wizard_button:table.create,new_table,end:"
 msgid "Exit"
 msgstr "Fin"
 
-msgctxt "wizard_button:table.manage_dimension_1,dimension_management,apply_:"
+msgctxt "wizard_button:table.manage_dimension.show_dimension_1,dimension_management,apply_:"
 msgid "Apply"
 msgstr "Appliquer"
 
-msgctxt "wizard_button:table.manage_dimension_1,dimension_management,end:"
+msgctxt "wizard_button:table.manage_dimension.show_dimension_1,dimension_management,end:"
 msgid "Exit"
 msgstr "Fin"
 
 msgctxt ""
-"wizard_button:table.manage_dimension_1,dimension_management,next_dim:"
+"wizard_button:table.manage_dimension.show_dimension_1,dimension_management,next_dim:"
 msgid "Dimension 2"
 msgstr "Dimension 2"
 
 msgctxt ""
-"wizard_button:table.manage_dimension_1,dimension_management,view_data:"
+"wizard_button:table.manage_dimension.show_dimension_1,dimension_management,view_data:"
 msgid "View Data"
 msgstr "Visualisation des données"
 

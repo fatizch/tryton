@@ -1368,7 +1368,7 @@ class ManageDimensionGeneric(Wizard):
 class ManageDimension1(ManageDimensionGeneric):
     'Manage Dimension 1'
 
-    __name__ = 'table.manage_dimension_1'
+    __name__ = 'table.manage_dimension.show_dimension_1'
 
     def get_my_dimension(self):
         return 1

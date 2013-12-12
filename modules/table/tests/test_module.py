@@ -21,7 +21,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Definition': 'table.table_def',
             'Dimension': 'table.table_dimension',
             'Cell': 'table.table_cell',
-            'ManageDimension1': 'table.manage_dimension_1',
+            'ManageDimension1': 'table.manage_dimension.show_dimension_1',
         }
 
     def test0010definition_get(self):

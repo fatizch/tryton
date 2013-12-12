@@ -149,7 +149,7 @@
     <!-- ############################################################ -->
     <record model="ir.action.wizard" id="act_manage_dimension_1">
       <field name="name">Manage Dimension 1</field>
-      <field name="wiz_name">table.manage_dimension_1</field>
+      <field name="wiz_name">table.manage_dimension.show_dimension_1</field>
     </record>
     <!-- ############################################################ -->
     <!-- Manage Dimension 2 Wizard -->
