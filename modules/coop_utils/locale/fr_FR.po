@@ -530,11 +530,11 @@ msgctxt "view:utils.versionned_object:"
 msgid "Versionned Object"
 msgstr "Objet Versionné"
 
-msgctxt "wizard_button:coop_utils.import_wizard,file_selector,end:"
+msgctxt "wizard_button:ir.import,file_selector,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:coop_utils.import_wizard,file_selector,file_import:"
+msgctxt "wizard_button:ir.import,file_selector,file_import:"
 msgid "Import"
 msgstr "Importer"
 

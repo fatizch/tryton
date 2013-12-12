@@ -32,7 +32,7 @@ for module in coop_utils_modules:
     Module.install([module.id], config.context)
 Wizard('ir.module.module.install_upgrade').execute('upgrade')
 
-import_wizard = Wizard('coop_utils.import_wizard')
+import_wizard = Wizard('ir.import')
 with open(IMPORT_FILE, 'r') as f:
     file_content = f.read()
     import_wizard.form.selected_file = file_content

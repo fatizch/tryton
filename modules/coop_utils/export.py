@@ -741,7 +741,7 @@ class FileSelector(ModelView):
 class ImportWizard(Wizard):
     'Import Wizard'
 
-    __name__ = 'coop_utils.import_wizard'
+    __name__ = 'ir.import'
 
     start_state = 'file_selector'
     file_selector = StateView(
