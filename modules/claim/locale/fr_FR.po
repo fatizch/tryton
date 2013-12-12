@@ -542,14 +542,6 @@ msgctxt "field:document.receive.request,tmp_1:"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "field:rule_engine.runtime,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:rule_engine.runtime,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:offered.option.description,is_coverage_amount_needed:"
 msgid "Coverage Amount Needed"
 msgstr "Montant de Couverture Nécessaire"
@@ -597,10 +589,6 @@ msgstr "Préjudice"
 msgctxt "model:expense,name:"
 msgid "Expense"
 msgstr "Frais"
-
-msgctxt "model:rule_engine.runtime,name:"
-msgid "Context functions for Claims."
-msgstr "Fonctions contextuels pour les sinistres"
 
 msgctxt "model:ir.action,name:act_claim_form"
 msgid "Claims"

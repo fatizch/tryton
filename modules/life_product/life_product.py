@@ -181,7 +181,6 @@ class LifeBenefitRule():
 
 
 class CoveredDataContext(RuleEngineContext):
-    'Covered data context'
 
     __name__ = 'rule_engine.runtime'
 

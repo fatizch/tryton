@@ -10,7 +10,6 @@ __all__ = [
 
 
 class OfferedContext(RuleEngineContext):
-    'Offered Context'
 
     __name__ = 'rule_engine.runtime'
 
@@ -34,9 +33,6 @@ class OfferedContext(RuleEngineContext):
 
 
 class ContractContext(RuleEngineContext):
-    '''
-        Context functions for contract related data
-    '''
 
     __name__ = 'rule_engine.runtime'
 

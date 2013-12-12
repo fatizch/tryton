@@ -11,7 +11,6 @@ __all__ = [
 
 
 class OfferedContext():
-    'Offered Context'
 
     __name__ = 'rule_engine.runtime'
 
@@ -23,7 +22,6 @@ class OfferedContext():
 
 
 class ContractContext():
-    'Contract Context'
 
     __name__ = 'rule_engine.runtime'
 

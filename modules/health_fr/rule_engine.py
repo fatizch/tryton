@@ -2,9 +2,7 @@ from trytond.pool import PoolMeta
 
 
 class HealthContext():
-    '''
-        Context functions for Health.
-    '''
+
     __name__ = 'rule_engine.runtime'
     __metaclass__ = PoolMeta
 

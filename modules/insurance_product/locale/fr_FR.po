@@ -2275,54 +2275,6 @@ msgctxt "field:benefit.reserve.rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.rule_sets.contract,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_product.rule_sets.contract,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:rule_engine.runtime,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:rule_engine.runtime,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:rule_engine.runtime,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:rule_engine.runtime,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:rule_engine.runtime,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:rule_engine.runtime,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:rule_engine.runtime,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:rule_engine.runtime,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:rule_engine.runtime,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:rule_engine.runtime,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:ins_product.simple_pricing_rule,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
@@ -3431,26 +3383,6 @@ msgstr "Provisionnement"
 
 msgctxt "model:ins_product.rule_sets.contract,name:"
 msgid "Context functions for contract related data"
-msgstr ""
-
-msgctxt "model:rule_engine.runtime,name:"
-msgid "Context functions for Coverage-Covered associations objects"
-msgstr ""
-
-msgctxt "model:rule_engine.runtime,name:"
-msgid "Context functions for option related data"
-msgstr ""
-
-msgctxt "model:rule_engine.runtime,name:"
-msgid "Context functions for Persons."
-msgstr ""
-
-msgctxt "model:rule_engine.runtime,name:"
-msgid "Context functions for combination of rule_engine results (see"
-msgstr ""
-
-msgctxt "model:rule_engine.runtime,name:"
-msgid "Context functions for Contracts."
 msgstr ""
 
 msgctxt "model:ins_product.simple_pricing_rule,name:"

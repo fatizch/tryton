@@ -8,6 +8,7 @@ __all__ = [
 
 
 class CoveredDataRuleSet:
+
     __name__ = 'rule_engine.runtime'
 
     @classmethod
