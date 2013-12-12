@@ -90,12 +90,12 @@
     <!-- Fee Lines -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="price_line-fee-relation_form">
-      <field name="model">billing.price_line-fee-relation</field>
+      <field name="model">contract.billing.premium-fee</field>
       <field name="type">form</field>
       <field name="name">price_line-fee-relation_form</field>
     </record>
     <record model="ir.ui.view" id="price_line-fee-relation_tree">
-      <field name="model">billing.price_line-fee-relation</field>
+      <field name="model">contract.billing.premium-fee</field>
       <field name="type">tree</field>
       <field name="name">price_line-fee-relation_tree</field>
     </record>

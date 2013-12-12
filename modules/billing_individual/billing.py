@@ -105,7 +105,7 @@ class PriceLineTaxRelation(model.CoopSQL, model.CoopView):
 class PriceLineFeeRelation(model.CoopSQL, model.CoopView):
     'Price Line Fee Relation'
 
-    __name__ = 'billing.price_line-fee-relation'
+    __name__ = 'contract.billing.premium-fee'
 
     price_line = fields.Many2One('contract.billing.premium', 'Price Line',
         ondelete='CASCADE')
@@ -143,7 +143,7 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
         fields.Numeric('Estimated Fees'), 'get_estimated_fees')
     tax_lines = fields.One2Many('billing.price_line-tax-relation',
         'price_line', 'Tax Lines')
-    fee_lines = fields.One2Many('billing.price_line-fee-relation',
+    fee_lines = fields.One2Many('contract.billing.premium-fee',
         'price_line', 'Fee Lines')
 
     def get_estimated_total(self, name):
@@ -252,7 +252,7 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
             self.fee_lines = []
         self.get_fee_details(line, fee_details)
         FeeDesc = Pool().get('coop_account.fee_desc')
-        FeeRelation = Pool().get('billing.price_line-fee-relation')
+        FeeRelation = Pool().get('contract.billing.premium-fee')
         for fee_id, fee_lines in fee_details.iteritems():
             the_fee = FeeDesc(fee_id)
             fee_relation = FeeRelation()
