@@ -931,11 +931,11 @@ msgid "+"
 msgstr "+"
 
 msgctxt ""
-"wizard_button:claim.indemnification_validation,select_indemnifications,end:"
+"wizard_button:claim.indemnification.validate,select_indemnifications,end:"
 msgid "Quit"
 msgstr "Quitter"
 
 msgctxt ""
-"wizard_button:claim.indemnification_validation,select_indemnifications,reload_selection:"
+"wizard_button:claim.indemnification.validate,select_indemnifications,reload_selection:"
 msgid "Continue"
 msgstr "Continuer"

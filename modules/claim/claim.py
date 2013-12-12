@@ -1131,7 +1131,7 @@ class IndemnificationSelection(model.CoopView):
 class IndemnificationValidation(Wizard):
     'Indemnification Validation'
 
-    __name__ = 'claim.indemnification_validation'
+    __name__ = 'claim.indemnification.validate'
 
     start_state = 'select_indemnifications'
 

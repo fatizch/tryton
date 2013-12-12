@@ -190,7 +190,7 @@
     <!-- Indemnification Validation -->
     <record model="ir.action.wizard" id="indemnification_validation_wizard">
         <field name="name">Indemnification Validation</field>
-        <field name="wiz_name">claim.indemnification_validation</field>
+        <field name="wiz_name">claim.indemnification.validate</field>
     </record>
     <menuitem name="Validate Indemnifications" id="menu_validate_indemnification" sequence="15"
         parent="menu_claim" action="indemnification_validation_wizard"/>
