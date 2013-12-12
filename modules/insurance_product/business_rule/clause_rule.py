@@ -13,7 +13,7 @@ __all__ = [
 class ClauseRule(BusinessRuleRoot, model.CoopSQL):
     'Clause Rule'
 
-    __name__ = 'ins_product.clause_rule'
+    __name__ = 'clause.rule'
 
     shared_clauses = fields.Many2Many('clause.rule-clause',
         'rule', 'clause', 'Shared Clauses')
@@ -27,7 +27,7 @@ class ClauseRelation(model.CoopSQL):
 
     __name__ = 'clause.rule-clause'
 
-    rule = fields.Many2One('ins_product.clause_rule',
+    rule = fields.Many2One('clause.rule',
         'Rule', select=1, required=True, ondelete='CASCADE')
     clause = fields.Many2One('ins_product.clause',
         'Clause', select=1, required=True, ondelete='RESTRICT')
