@@ -43,11 +43,11 @@ class PricingRule(BusinessRuleRoot, model.CoopSQL):
     __name__ = 'ins_product.pricing_rule'
 
     components = fields.One2ManyDomain(
-        'ins_product.pricing_component', 'pricing_rule', 'Components',
+        'billing.premium.rule.component', 'pricing_rule', 'Components',
         domain=[('rated_object_kind', '=', 'global')],
         states={'invisible': STATE_SIMPLE})
     sub_item_components = fields.One2ManyDomain(
-        'ins_product.pricing_component',
+        'billing.premium.rule.component',
         'pricing_rule', 'Covered Item Components',
         domain=[('rated_object_kind', '=', 'sub_item')])
     frequency = fields.Selection(
@@ -85,7 +85,7 @@ class PricingRule(BusinessRuleRoot, model.CoopSQL):
     def set_basic_price(cls, pricing_rules, name, value):
         if not value:
             return
-        Component = Pool().get('ins_product.pricing_component')
+        Component = Pool().get('billing.premium.rule.component')
         for pricing in pricing_rules:
             Component.delete(
                 [component for component in pricing.components
@@ -111,7 +111,7 @@ class PricingRule(BusinessRuleRoot, model.CoopSQL):
         except ValueError:
             raise Exception(
                 'Could not found a Tax Desc with code %s' % value)
-        Component = Pool().get('ins_product.pricing_component')
+        Component = Pool().get('billing.premium.rule.component')
         for pricing in pricing_rules:
             Component.delete(
                 [component for component in pricing.components
@@ -286,7 +286,7 @@ class PricingRule(BusinessRuleRoot, model.CoopSQL):
 class PricingComponent(model.CoopSQL, model.CoopView):
     'Pricing Component'
 
-    __name__ = 'ins_product.pricing_component'
+    __name__ = 'billing.premium.rule.component'
 
     pricing_rule = fields.Many2One(
         'ins_product.pricing_rule', 'Pricing Rule', ondelete='CASCADE')

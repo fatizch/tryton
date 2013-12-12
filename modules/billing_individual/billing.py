@@ -163,7 +163,7 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def must_create_detail(cls, detail):
         if detail.on_object:
-            if detail.on_object.__name__ == 'ins_product.pricing_component':
+            if detail.on_object.__name__ == 'billing.premium.rule.component':
                 if detail.on_object.kind in ('tax', 'fee'):
                     return False
                 return True
@@ -173,7 +173,7 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
         if not line.on_object:
             return None
         target = line.on_object
-        if target.__name__ == 'ins_product.pricing_component':
+        if target.__name__ == 'billing.premium.rule.component':
             if target.kind == 'tax':
                 return target.tax
             if target.kind == 'fee':
@@ -210,7 +210,7 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_tax_details(self, line, taxes):
         for elem in line.details:
             if (elem.on_object and elem.on_object.__name__ ==
-                    'ins_product.pricing_component' and
+                    'billing.premium.rule.component' and
                     elem.on_object.kind == 'tax'):
                 if elem.on_object.tax.id in taxes:
                     taxes[elem.on_object.tax.id].append(elem)
@@ -237,7 +237,7 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_fee_details(self, line, fees):
         for elem in line.details:
             if (elem.on_object and elem.on_object.__name__ ==
-                    'ins_product.pricing_component' and
+                    'billing.premium.rule.component' and
                     elem.on_object.kind == 'fee'):
                 if elem.on_object.fee.id in fees:
                     fees[elem.on_object.fee.id].append(elem)

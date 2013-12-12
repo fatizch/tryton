@@ -1971,79 +1971,79 @@ msgctxt "field:benefit.loss.description-extra_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.pricing_component,code:"
+msgctxt "field:billing.premium.rule.component,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:ins_product.pricing_component,config_kind:"
+msgctxt "field:billing.premium.rule.component,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
 
-msgctxt "field:ins_product.pricing_component,create_date:"
+msgctxt "field:billing.premium.rule.component,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.pricing_component,create_date_:"
+msgctxt "field:billing.premium.rule.component,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.pricing_component,create_uid:"
+msgctxt "field:billing.premium.rule.component,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.pricing_component,fee:"
+msgctxt "field:billing.premium.rule.component,fee:"
 msgid "Fee"
 msgstr "Frais"
 
-msgctxt "field:ins_product.pricing_component,fixed_amount:"
+msgctxt "field:billing.premium.rule.component,fixed_amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:ins_product.pricing_component,id:"
+msgctxt "field:billing.premium.rule.component,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.pricing_component,kind:"
+msgctxt "field:billing.premium.rule.component,kind:"
 msgid "Line kind"
 msgstr "Type"
 
-msgctxt "field:ins_product.pricing_component,must_expand_tree:"
+msgctxt "field:billing.premium.rule.component,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.pricing_component,pricing_rule:"
+msgctxt "field:billing.premium.rule.component,pricing_rule:"
 msgid "Pricing Rule"
 msgstr "Règle de Cotisation"
 
-msgctxt "field:ins_product.pricing_component,rated_object_kind:"
+msgctxt "field:billing.premium.rule.component,rated_object_kind:"
 msgid "Rated Object Level"
 msgstr "Niveau d'Objet Tarifé"
 
-msgctxt "field:ins_product.pricing_component,rec_name:"
+msgctxt "field:billing.premium.rule.component,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.pricing_component,rule:"
+msgctxt "field:billing.premium.rule.component,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:ins_product.pricing_component,rule_complementary_data:"
+msgctxt "field:billing.premium.rule.component,rule_complementary_data:"
 msgid "Rule Complementary Data"
 msgstr "Paramètres de Rêgle"
 
-msgctxt "field:ins_product.pricing_component,summary:"
+msgctxt "field:billing.premium.rule.component,summary:"
 msgid "Value"
 msgstr "Valeur"
 
-msgctxt "field:ins_product.pricing_component,tax:"
+msgctxt "field:billing.premium.rule.component,tax:"
 msgid "Tax"
 msgstr "Taxe"
 
-msgctxt "field:ins_product.pricing_component,write_date:"
+msgctxt "field:billing.premium.rule.component,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.pricing_component,write_uid:"
+msgctxt "field:billing.premium.rule.component,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3405,7 +3405,7 @@ msgctxt "model:benefit.loss.description-extra_data,name:"
 msgid "Relation between Loss Desc and Complementary Data"
 msgstr "Relation Type de Préjudice et Données Complémentaires"
 
-msgctxt "model:ins_product.pricing_component,name:"
+msgctxt "model:billing.premium.rule.component,name:"
 msgid "Pricing Component"
 msgstr "Composante de Cotisation"
 
@@ -4116,31 +4116,31 @@ msgctxt "selection:document.template.version,type:"
 msgid "Link"
 msgstr "Lien"
 
-msgctxt "selection:ins_product.pricing_component,config_kind:"
+msgctxt "selection:billing.premium.rule.component,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
 
-msgctxt "selection:ins_product.pricing_component,config_kind:"
+msgctxt "selection:billing.premium.rule.component,config_kind:"
 msgid "Simple"
 msgstr "Simple"
 
-msgctxt "selection:ins_product.pricing_component,kind:"
+msgctxt "selection:billing.premium.rule.component,kind:"
 msgid "Base Price"
 msgstr "Prime de base"
 
-msgctxt "selection:ins_product.pricing_component,kind:"
+msgctxt "selection:billing.premium.rule.component,kind:"
 msgid "Fee"
 msgstr "Frais"
 
-msgctxt "selection:ins_product.pricing_component,kind:"
+msgctxt "selection:billing.premium.rule.component,kind:"
 msgid "Tax"
 msgstr "Taxe"
 
-msgctxt "selection:ins_product.pricing_component,rated_object_kind:"
+msgctxt "selection:billing.premium.rule.component,rated_object_kind:"
 msgid "Covered Item"
 msgstr "Elèment Couvert"
 
-msgctxt "selection:ins_product.pricing_component,rated_object_kind:"
+msgctxt "selection:billing.premium.rule.component,rated_object_kind:"
 msgid "Global"
 msgstr "Global"
 
@@ -4672,11 +4672,11 @@ msgctxt "view:benefit.loss.description:"
 msgid "Loss Descriptor"
 msgstr "Description du Préjudice"
 
-msgctxt "view:ins_product.pricing_component:"
+msgctxt "view:billing.premium.rule.component:"
 msgid "Pricing Component"
 msgstr "Composante de Cotisation"
 
-msgctxt "view:ins_product.pricing_component:"
+msgctxt "view:billing.premium.rule.component:"
 msgid "Pricing Components"
 msgstr "Composantes de Cotisation"
 
