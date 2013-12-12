@@ -111,7 +111,7 @@ class CollectiveRatingRule(business_rule.BusinessRuleRoot, model.CoopSQL):
         'Rating Kind', states={'readonly': ~~Eval('sub_rating_rules')})
     sub_rating_rules = fields.One2Many('billing.premium.rate.rule.line',
         'main_rating_rule', 'Sub Rating Rules')
-    index = fields.Many2One('table.table_def', 'Index',
+    index = fields.Many2One('table', 'Index',
         domain=[
             ('dimension_kind1', '=', 'range-date'),
             ('dimension_kind2', '=', None),

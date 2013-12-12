@@ -91,7 +91,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
             'invisible': Bool(~Eval('with_revaluation')),
             'required': Bool(Eval('with_revaluation')),
         })
-    revaluation_index = fields.Many2One('table.table_def', 'Revaluation Index',
+    revaluation_index = fields.Many2One('table', 'Revaluation Index',
         domain=[
             ('dimension_kind1', '=', 'range-date'),
             ('dimension_kind2', '=', None),

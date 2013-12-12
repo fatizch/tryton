@@ -29,7 +29,7 @@ class TestCaseModel():
     def create_table_from_filename(cls, filename):
         # Remove file extension
         filename = filename.split('.')[0]
-        Table = Pool().get('table.table_def')
+        Table = Pool().get('table')
         Dimension = Pool().get('table.table_dimension')
         Cell = Pool().get('table.cell')
         if ';' in filename:

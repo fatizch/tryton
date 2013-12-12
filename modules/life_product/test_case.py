@@ -60,7 +60,7 @@ class TestCaseModel():
     def create_rule(cls, name, code, tables=None):
         RuleEngine = Pool().get('rule_engine')
         RuleParameter = Pool().get('rule_engine.parameter')
-        Table = Pool().get('table.table_def')
+        Table = Pool().get('table')
         Context = Pool().get('rule_engine.context')
         existing = RuleEngine.search([('name', '=', name)])
         if existing:

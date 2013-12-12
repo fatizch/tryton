@@ -28,7 +28,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'RunTests': 'rule_engine.run_tests',
             'Language': 'ir.lang',
             'RuleParameter': 'rule_engine.parameter',
-            'Table': 'table.table_def',
+            'Table': 'table',
         }
 
     @classmethod

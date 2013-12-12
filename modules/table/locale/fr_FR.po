@@ -26,11 +26,11 @@ msgctxt "error:table.manage_dimension.show_dimension_4:"
 msgid "The requested change might delete data."
 msgstr ""
 
-msgctxt "error:table.table_def:"
+msgctxt "error:table:"
 msgid "A clone record already exists : %s(%s)"
 msgstr ""
 
-msgctxt "error:table.table_def:"
+msgctxt "error:table:"
 msgid "The code of \"Table Definition\" must be unique"
 msgstr ""
 
@@ -202,123 +202,123 @@ msgctxt "field:table.cell,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:table.table_def,cells:"
+msgctxt "field:table,cells:"
 msgid "Cells"
 msgstr "Cellules"
 
-msgctxt "field:table.table_def,code:"
+msgctxt "field:table,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:table.table_def,create_date:"
+msgctxt "field:table,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:table.table_def,create_date_:"
+msgctxt "field:table,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:table.table_def,create_uid:"
+msgctxt "field:table,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:table.table_def,dimension1:"
+msgctxt "field:table,dimension1:"
 msgid "Dimension 1"
 msgstr "Dimension 1"
 
-msgctxt "field:table.table_def,dimension2:"
+msgctxt "field:table,dimension2:"
 msgid "Dimension 2"
 msgstr "Dimension 2"
 
-msgctxt "field:table.table_def,dimension3:"
+msgctxt "field:table,dimension3:"
 msgid "Dimension 3"
 msgstr "Dimension 3"
 
-msgctxt "field:table.table_def,dimension4:"
+msgctxt "field:table,dimension4:"
 msgid "Dimension 4"
 msgstr "Dimension 4"
 
-msgctxt "field:table.table_def,dimension_kind1:"
+msgctxt "field:table,dimension_kind1:"
 msgid "Dimension Kind 1"
 msgstr "Type Dim 1"
 
-msgctxt "field:table.table_def,dimension_kind2:"
+msgctxt "field:table,dimension_kind2:"
 msgid "Dimension Kind 2"
 msgstr "Type Dim 2"
 
-msgctxt "field:table.table_def,dimension_kind3:"
+msgctxt "field:table,dimension_kind3:"
 msgid "Dimension Kind 3"
 msgstr "Type Dim 3"
 
-msgctxt "field:table.table_def,dimension_kind4:"
+msgctxt "field:table,dimension_kind4:"
 msgid "Dimension Kind 4"
 msgstr "Type Dim 4"
 
-msgctxt "field:table.table_def,dimension_name1:"
+msgctxt "field:table,dimension_name1:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:table.table_def,dimension_name2:"
+msgctxt "field:table,dimension_name2:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:table.table_def,dimension_name3:"
+msgctxt "field:table,dimension_name3:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:table.table_def,dimension_name4:"
+msgctxt "field:table,dimension_name4:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:table.table_def,dimension_order1:"
+msgctxt "field:table,dimension_order1:"
 msgid "Dimension Order 1"
 msgstr "Ordre Dimension 1"
 
-msgctxt "field:table.table_def,dimension_order2:"
+msgctxt "field:table,dimension_order2:"
 msgid "Dimension Order 2"
 msgstr "Ordre Dimension 2"
 
-msgctxt "field:table.table_def,dimension_order3:"
+msgctxt "field:table,dimension_order3:"
 msgid "Dimension Order 3"
 msgstr "Ordre Dimension 3"
 
-msgctxt "field:table.table_def,dimension_order4:"
+msgctxt "field:table,dimension_order4:"
 msgid "Dimension Order 4"
 msgstr "Ordre Dimension 4"
 
-msgctxt "field:table.table_def,id:"
+msgctxt "field:table,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:table.table_def,kind:"
+msgctxt "field:table,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:table.table_def,must_expand_tree:"
+msgctxt "field:table,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:table.table_def,name:"
+msgctxt "field:table,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:table.table_def,number_of_digits:"
+msgctxt "field:table,number_of_digits:"
 msgid "Number of Digits"
 msgstr "Nombre de Décimales"
 
-msgctxt "field:table.table_def,rec_name:"
+msgctxt "field:table,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:table.table_def,type_:"
+msgctxt "field:table,type_:"
 msgid "Type"
 msgstr "Type"
 
-msgctxt "field:table.table_def,write_date:"
+msgctxt "field:table,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:table.table_def,write_uid:"
+msgctxt "field:table,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -454,7 +454,7 @@ msgctxt "model:table.cell,name:"
 msgid "Cell"
 msgstr "Cellule"
 
-msgctxt "model:table.table_def,name:"
+msgctxt "model:table,name:"
 msgid "Table Definition"
 msgstr "Table"
 
@@ -498,135 +498,135 @@ msgctxt "selection:table.manage_dimension.show.dimension,order:"
 msgid "Sequence"
 msgstr "Séquence"
 
-msgctxt "selection:table.table_def,dimension_kind1:"
+msgctxt "selection:table,dimension_kind1:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:table.table_def,dimension_kind1:"
+msgctxt "selection:table,dimension_kind1:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt "selection:table.table_def,dimension_kind1:"
+msgctxt "selection:table,dimension_kind1:"
 msgid "Range"
 msgstr "Intervalle"
 
-msgctxt "selection:table.table_def,dimension_kind1:"
+msgctxt "selection:table,dimension_kind1:"
 msgid "Range-Date"
 msgstr "Intervalle de Date"
 
-msgctxt "selection:table.table_def,dimension_kind1:"
+msgctxt "selection:table,dimension_kind1:"
 msgid "Value"
 msgstr "Valeur"
 
-msgctxt "selection:table.table_def,dimension_kind2:"
+msgctxt "selection:table,dimension_kind2:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:table.table_def,dimension_kind2:"
+msgctxt "selection:table,dimension_kind2:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt "selection:table.table_def,dimension_kind2:"
+msgctxt "selection:table,dimension_kind2:"
 msgid "Range"
 msgstr "Intervalle"
 
-msgctxt "selection:table.table_def,dimension_kind2:"
+msgctxt "selection:table,dimension_kind2:"
 msgid "Range-Date"
 msgstr "Intervalle de Date"
 
-msgctxt "selection:table.table_def,dimension_kind2:"
+msgctxt "selection:table,dimension_kind2:"
 msgid "Value"
 msgstr "Valeur"
 
-msgctxt "selection:table.table_def,dimension_kind3:"
+msgctxt "selection:table,dimension_kind3:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:table.table_def,dimension_kind3:"
+msgctxt "selection:table,dimension_kind3:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt "selection:table.table_def,dimension_kind3:"
+msgctxt "selection:table,dimension_kind3:"
 msgid "Range"
 msgstr "Intervalle"
 
-msgctxt "selection:table.table_def,dimension_kind3:"
+msgctxt "selection:table,dimension_kind3:"
 msgid "Range-Date"
 msgstr "Intervalle de Date"
 
-msgctxt "selection:table.table_def,dimension_kind3:"
+msgctxt "selection:table,dimension_kind3:"
 msgid "Value"
 msgstr "Valeur"
 
-msgctxt "selection:table.table_def,dimension_kind4:"
+msgctxt "selection:table,dimension_kind4:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:table.table_def,dimension_kind4:"
+msgctxt "selection:table,dimension_kind4:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt "selection:table.table_def,dimension_kind4:"
+msgctxt "selection:table,dimension_kind4:"
 msgid "Range"
 msgstr "Intervalle"
 
-msgctxt "selection:table.table_def,dimension_kind4:"
+msgctxt "selection:table,dimension_kind4:"
 msgid "Range-Date"
 msgstr "Plage de Date"
 
-msgctxt "selection:table.table_def,dimension_kind4:"
+msgctxt "selection:table,dimension_kind4:"
 msgid "Value"
 msgstr "Valeur"
 
-msgctxt "selection:table.table_def,dimension_order1:"
+msgctxt "selection:table,dimension_order1:"
 msgid "Alphabetical"
 msgstr "Alphabétique"
 
-msgctxt "selection:table.table_def,dimension_order1:"
+msgctxt "selection:table,dimension_order1:"
 msgid "Sequence"
 msgstr "Séquence"
 
-msgctxt "selection:table.table_def,dimension_order2:"
+msgctxt "selection:table,dimension_order2:"
 msgid "Alphabetical"
 msgstr "Alphabétique"
 
-msgctxt "selection:table.table_def,dimension_order2:"
+msgctxt "selection:table,dimension_order2:"
 msgid "Sequence"
 msgstr "Séquence"
 
-msgctxt "selection:table.table_def,dimension_order3:"
+msgctxt "selection:table,dimension_order3:"
 msgid "Alphabetical"
 msgstr "Alphabétique"
 
-msgctxt "selection:table.table_def,dimension_order3:"
+msgctxt "selection:table,dimension_order3:"
 msgid "Sequence"
 msgstr "Séquence"
 
-msgctxt "selection:table.table_def,dimension_order4:"
+msgctxt "selection:table,dimension_order4:"
 msgid "Alphabetical"
 msgstr "Alphabétique"
 
-msgctxt "selection:table.table_def,dimension_order4:"
+msgctxt "selection:table,dimension_order4:"
 msgid "Sequence"
 msgstr "Séquence"
 
-msgctxt "selection:table.table_def,type_:"
+msgctxt "selection:table,type_:"
 msgid "Boolean"
 msgstr "Booléen"
 
-msgctxt "selection:table.table_def,type_:"
+msgctxt "selection:table,type_:"
 msgid "Char"
 msgstr "Alphanumérique"
 
-msgctxt "selection:table.table_def,type_:"
+msgctxt "selection:table,type_:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt "selection:table.table_def,type_:"
+msgctxt "selection:table,type_:"
 msgid "Integer"
 msgstr "Entier"
 
-msgctxt "selection:table.table_def,type_:"
+msgctxt "selection:table,type_:"
 msgid "Numeric"
 msgstr "Numérique"
 
@@ -658,27 +658,27 @@ msgctxt "view:table.cell:"
 msgid "Table"
 msgstr "Table"
 
-msgctxt "view:table.table_def:"
+msgctxt "view:table:"
 msgid "Basic Table Definition"
 msgstr ""
 
-msgctxt "view:table.table_def:"
+msgctxt "view:table:"
 msgid "Manage dimension 1"
 msgstr "Sélection Dimension 1"
 
-msgctxt "view:table.table_def:"
+msgctxt "view:table:"
 msgid "Manage dimension 2"
 msgstr "Sélection Dimension 2"
 
-msgctxt "view:table.table_def:"
+msgctxt "view:table:"
 msgid "Manage dimension 3"
 msgstr "Sélection Dimension 3"
 
-msgctxt "view:table.table_def:"
+msgctxt "view:table:"
 msgid "Manage dimension 4"
 msgstr "Sélection Dimension 4"
 
-msgctxt "view:table.table_def:"
+msgctxt "view:table:"
 msgid "Table Definition"
 msgstr "Table"
 

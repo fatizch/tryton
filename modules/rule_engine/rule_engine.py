@@ -378,7 +378,7 @@ class RuleEngineParameter(ModelView, ModelSQL):
             'invisible': Eval('kind', '') != 'rule',
             'required': Eval('kind', '') == 'rule'},
         ondelete='RESTRICT', on_change=['the_rule'])
-    the_table = fields.Many2One('table.table_def', 'Table to use', states={
+    the_table = fields.Many2One('table', 'Table to use', states={
             'invisible': Eval('kind', '') != 'table',
             'required': Eval('kind', '') == 'table'},
         ondelete='RESTRICT', on_change=['the_table'])
