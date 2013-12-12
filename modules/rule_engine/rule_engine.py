@@ -218,7 +218,7 @@ class RuleEngineResult(object):
 class RuleExecutionLog(ModelSQL, ModelView):
     'Rule Execution Log'
 
-    __name__ = 'rule_engine.execution_log'
+    __name__ = 'rule_engine.log'
 
     user = fields.Many2One('res.user', 'User')
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='CASCADE')
@@ -558,7 +558,7 @@ class Rule(ModelView, ModelSQL):
         ], 'Status')
     debug_mode = fields.Boolean('Debug Mode')
     exec_logs = fields.One2Many(
-        'rule_engine.execution_log', 'rule', 'Execution Logs',
+        'rule_engine.log', 'rule', 'Execution Logs',
         states={'readonly': True, 'invisible': ~Eval('debug_mode')},
         depends=['debug_mode'])
     rule_parameters = fields.One2Many('rule_engine.parameter', 'parent_rule',
@@ -616,7 +616,7 @@ class Rule(ModelView, ModelSQL):
     @classmethod
     def write(cls, rules, values):
         if 'debug_mode' in values and not values['debug_mode']:
-            RuleExecutionLog = Pool().get('rule_engine.execution_log')
+            RuleExecutionLog = Pool().get('rule_engine.log')
             RuleExecutionLog.delete(RuleExecutionLog.search([
                 ('rule', 'in', [x.id for x in rules])]))
         super(Rule, cls).write(rules, values)
@@ -771,7 +771,7 @@ class Rule(ModelView, ModelSQL):
                     the_result.low_level_debug.append(stack_info)
                 if self.debug_mode:
                     with Transaction().new_cursor() as transaction:
-                        RuleExecution = Pool().get('rule_engine.execution_log')
+                        RuleExecution = Pool().get('rule_engine.log')
                         rule_execution = RuleExecution()
                         rule_execution.rule = self
                         rule_execution.create_date = datetime.datetime.now()
@@ -871,7 +871,7 @@ class Rule(ModelView, ModelSQL):
             return result
         DatabaseOperationalError = backend.get('DatabaseOperationalError')
         with Transaction().new_cursor() as transaction:
-            RuleExecution = Pool().get('rule_engine.execution_log')
+            RuleExecution = Pool().get('rule_engine.log')
             rule_execution = RuleExecution()
             rule_execution.rule = self
             rule_execution.create_date = datetime.datetime.now()

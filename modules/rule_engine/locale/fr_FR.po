@@ -313,67 +313,67 @@ msgctxt "field:functional_error,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:rule_engine.execution_log,create_date:"
+msgctxt "field:rule_engine.log,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:rule_engine.execution_log,create_date_:"
+msgctxt "field:rule_engine.log,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:rule_engine.execution_log,create_uid:"
+msgctxt "field:rule_engine.log,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:rule_engine.execution_log,debug:"
+msgctxt "field:rule_engine.log,debug:"
 msgid "Debug"
 msgstr ""
 
-msgctxt "field:rule_engine.execution_log,errors:"
+msgctxt "field:rule_engine.log,errors:"
 msgid "Errors"
 msgstr "Erreurs"
 
-msgctxt "field:rule_engine.execution_log,id:"
+msgctxt "field:rule_engine.log,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.execution_log,info:"
+msgctxt "field:rule_engine.log,info:"
 msgid "Info"
 msgstr "Info"
 
-msgctxt "field:rule_engine.execution_log,low_level_debug:"
+msgctxt "field:rule_engine.log,low_level_debug:"
 msgid "Execution Trace"
 msgstr ""
 
-msgctxt "field:rule_engine.execution_log,must_expand_tree:"
+msgctxt "field:rule_engine.log,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:rule_engine.execution_log,rec_name:"
+msgctxt "field:rule_engine.log,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:rule_engine.execution_log,result:"
+msgctxt "field:rule_engine.log,result:"
 msgid "Result"
 msgstr "Résultat"
 
-msgctxt "field:rule_engine.execution_log,rule:"
+msgctxt "field:rule_engine.log,rule:"
 msgid "Rule"
 msgstr "Règle"
 
-msgctxt "field:rule_engine.execution_log,user:"
+msgctxt "field:rule_engine.log,user:"
 msgid "User"
 msgstr "Utilisateur"
 
-msgctxt "field:rule_engine.execution_log,warnings:"
+msgctxt "field:rule_engine.log,warnings:"
 msgid "Warnings"
 msgstr "Avertissements"
 
-msgctxt "field:rule_engine.execution_log,write_date:"
+msgctxt "field:rule_engine.log,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:rule_engine.execution_log,write_uid:"
+msgctxt "field:rule_engine.log,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -785,7 +785,7 @@ msgctxt "model:functional_error,name:"
 msgid "Rule Error"
 msgstr "Erreur"
 
-msgctxt "model:rule_engine.execution_log,name:"
+msgctxt "model:rule_engine.log,name:"
 msgid "Rule Execution Log"
 msgstr ""
 
@@ -889,11 +889,11 @@ msgctxt "view:functional_error:"
 msgid "name"
 msgstr "Nom"
 
-msgctxt "view:rule_engine.execution_log:"
+msgctxt "view:rule_engine.log:"
 msgid "Execution Log"
 msgstr ""
 
-msgctxt "view:rule_engine.execution_log:"
+msgctxt "view:rule_engine.log:"
 msgid "Rule Executions"
 msgstr ""
 

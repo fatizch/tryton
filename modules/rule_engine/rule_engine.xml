@@ -9,12 +9,12 @@
     <!-- Rule Execution Log -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="execution_log_form">
-      <field name="model">rule_engine.execution_log</field>
+      <field name="model">rule_engine.log</field>
       <field name="type">form</field>
       <field name="name">execution_log_form</field>
     </record>
     <record model="ir.ui.view" id="execution_log_tree">
-      <field name="model">rule_engine.execution_log</field>
+      <field name="model">rule_engine.log</field>
       <field name="type">tree</field>
       <field name="name">execution_log_tree</field>
     </record>
