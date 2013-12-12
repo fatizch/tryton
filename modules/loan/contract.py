@@ -75,7 +75,7 @@ class LoanOption():
 class LoanCoveredData():
     'Loan Covered Data'
 
-    __name__ = 'ins_contract.covered_data'
+    __name__ = 'contract.covered_data'
 
     loan_shares = fields.Many2Many(
         'loan.covered_data-loan_share',
@@ -114,7 +114,7 @@ class LoanCoveredDataLoanShareRelation(model.CoopSQL):
 
     __name__ = 'loan.covered_data-loan_share'
 
-    covered_data = fields.Many2One('ins_contract.covered_data', 'Covered Data',
+    covered_data = fields.Many2One('contract.covered_data', 'Covered Data',
         ondelete='CASCADE')
     loan_share = fields.Many2One('loan.share', 'Loan Share',
         ondelete='RESTRICT')

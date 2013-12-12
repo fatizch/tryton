@@ -278,7 +278,7 @@ class InsuranceSubscribedCoverage():
     __name__ = 'contract.option'
 
     covered_data = fields.One2ManyDomain(
-        'ins_contract.covered_data', 'option', 'Covered Data',
+        'contract.covered_data', 'option', 'Covered Data',
         domain=[('covered_element.parent', '=', None)])
     ins_complement = fields.One2Many(
         'ins_contract.subscribed_coverage_complement', 'subscribed_coverage',
@@ -445,7 +445,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         fields.Many2Many('ins_product.item_desc', None, None,
             'Possible Item Desc', states={'invisible': True}),
         'get_possible_item_desc_ids')
-    covered_data = fields.One2Many('ins_contract.covered_data',
+    covered_data = fields.One2Many('contract.covered_data',
         'covered_element', 'Covered Element Data')
     name = fields.Char('Name', states={'invisible': IS_PARTY})
     parent = fields.Many2One('ins_contract.covered_element', 'Parent')
@@ -531,7 +531,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         master = cls.get_parent_in_transaction()
         if not master:
             return None
-        CoveredData = Pool().get('ins_contract.covered_data')
+        CoveredData = Pool().get('contract.covered_data')
         result = []
         for covered_data in master.covered_data:
             tmp_covered = CoveredData()
@@ -797,7 +797,7 @@ class CoveredElementPartyRelation(model.CoopSQL):
 class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     'Covered Data'
 
-    __name__ = 'ins_contract.covered_data'
+    __name__ = 'contract.covered_data'
 
     option = fields.Many2One('contract.option',
         'Subscribed Coverage', domain=[('id', 'in', Eval('possible_options'))],
@@ -836,7 +836,7 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
             'Possible Deductible Duration', states={'invisible': True}),
         'get_possible_deductible_duration')
     parent_covered_data = fields.Function(
-        fields.Many2One('ins_contract.covered_data', 'Parent Covered Data'),
+        fields.Many2One('contract.covered_data', 'Parent Covered Data'),
         'get_parent_covered_data_id')
     clauses = fields.One2Many('contract.clause', 'covered_data',
         'Clauses', context={'start_date': Eval('start_date')})
@@ -1003,7 +1003,7 @@ class ContractClause:
 
     __name__ = 'contract.clause'
 
-    covered_data = fields.Many2One('ins_contract.covered_data', 'Covered Data',
+    covered_data = fields.Many2One('contract.covered_data', 'Covered Data',
         ondelete='CASCADE', states={'invisible': ~Eval('covered_data')})
 
 

@@ -129,7 +129,7 @@ msgctxt "field:contract.option,status_selection:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:ins_contract.covered_data,status_selection:"
+msgctxt "field:contract.covered_data,status_selection:"
 msgid "Status"
 msgstr "Statut"
 
@@ -276,7 +276,7 @@ msgctxt "view:contract.option:"
 msgid "Options"
 msgstr "Garanties"
 
-msgctxt "view:ins_contract.covered_data:"
+msgctxt "view:contract.covered_data:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
 

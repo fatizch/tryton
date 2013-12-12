@@ -2,11 +2,11 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:ins_contract.covered_data,coverage_amount:"
+msgctxt "field:contract.covered_data,coverage_amount:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"
 
-msgctxt "field:ins_contract.covered_data,with_coverage_amount:"
+msgctxt "field:contract.covered_data,with_coverage_amount:"
 msgid ""
 msgstr " "
 

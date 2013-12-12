@@ -112,15 +112,15 @@ msgctxt "field:contract.wizard.collection_to_cash_value.select_date,to_date:"
 msgid "To Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_contract.covered_data,cash_value_collection_amount:"
+msgctxt "field:contract.covered_data,cash_value_collection_amount:"
 msgid "Cash value collection amount"
 msgstr "Montant du versement"
 
-msgctxt "field:ins_contract.covered_data,cash_value_payment_mode:"
+msgctxt "field:contract.covered_data,cash_value_payment_mode:"
 msgid "Cash Value Payment Mode"
 msgstr "Mode de paiement des versements"
 
-msgctxt "field:ins_contract.covered_data,is_cash_value:"
+msgctxt "field:contract.covered_data,is_cash_value:"
 msgid "Is Cash Value"
 msgstr "Est de type Epargne"
 

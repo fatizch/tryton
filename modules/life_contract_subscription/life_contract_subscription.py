@@ -60,7 +60,7 @@ class CoveredPersonSubs():
 class CoveredDataSubs():
     'Covered Data'
 
-    __name__ = 'ins_contract.covered_data'
+    __name__ = 'contract.covered_data'
     __metaclass__ = PoolMeta
 
     coverage_amount_selection = fields.Function(

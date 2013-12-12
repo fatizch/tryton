@@ -356,7 +356,7 @@ class CoveredElement():
         Contract = Pool().get('contract')
         contract = Contract(contract)
 
-        CoveredData = Pool().get('ins_contract.covered_data')
+        CoveredData = Pool().get('contract.covered_data')
 
         covered_datas = []
         for option in contract.options:
@@ -373,7 +373,7 @@ class CoveredElement():
 class CoveredData():
     'Coverage Data'
 
-    __name__ = 'ins_contract.covered_data'
+    __name__ = 'contract.covered_data'
     __metaclass__ = PoolMeta
 
     status_selection = fields.Function(

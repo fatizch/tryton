@@ -22,19 +22,19 @@ msgctxt "field:contract.option,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
 
-msgctxt "field:ins_contract.covered_data,contract:"
+msgctxt "field:contract.covered_data,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:ins_contract.covered_data,is_loan:"
+msgctxt "field:contract.covered_data,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
 
-msgctxt "field:ins_contract.covered_data,loan_shares:"
+msgctxt "field:contract.covered_data,loan_shares:"
 msgid "Loan Shares"
 msgstr "Quotités"
 
-msgctxt "field:ins_contract.covered_data,person:"
+msgctxt "field:contract.covered_data,person:"
 msgid "Person"
 msgstr "Personne Physique"
 

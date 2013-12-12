@@ -113,7 +113,7 @@ class LifeOption():
 class LifeCoveredData():
     'Covered Data'
 
-    __name__ = 'ins_contract.covered_data'
+    __name__ = 'contract.covered_data'
 
     coverage_amount = fields.Numeric('Coverage Amount', states={
             'invisible': ~Eval('with_coverage_amount'),

@@ -713,11 +713,11 @@ msgctxt "field:contract,use_rates:"
 msgid "Use Rates"
 msgstr "Utiliser le Tarif"
 
-msgctxt "field:ins_contract.covered_data,fare_class_group:"
+msgctxt "field:contract.covered_data,fare_class_group:"
 msgid "Fare Class Group"
 msgstr "Cotisation Groupe de Tarif"
 
-msgctxt "field:ins_contract.covered_data,is_rating_by_fare_class:"
+msgctxt "field:contract.covered_data,is_rating_by_fare_class:"
 msgid "Rating by Fare Class"
 msgstr "Taux par Classe Tarif"
 

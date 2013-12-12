@@ -338,99 +338,99 @@ msgctxt "field:contract.option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_contract.covered_data,clauses:"
+msgctxt "field:contract.covered_data,clauses:"
 msgid "Clauses"
 msgstr "Clauses"
 
-msgctxt "field:ins_contract.covered_data,complementary_data:"
+msgctxt "field:contract.covered_data,complementary_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:ins_contract.covered_data,contract:"
+msgctxt "field:contract.covered_data,contract:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.covered_data,coverage_amount:"
+msgctxt "field:contract.covered_data,coverage_amount:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.covered_data,covered_element:"
+msgctxt "field:contract.covered_data,covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
-msgctxt "field:ins_contract.covered_data,create_date:"
+msgctxt "field:contract.covered_data,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_contract.covered_data,create_date_:"
+msgctxt "field:contract.covered_data,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_contract.covered_data,create_uid:"
+msgctxt "field:contract.covered_data,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_contract.covered_data,currency:"
+msgctxt "field:contract.covered_data,currency:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.covered_data,currency_digits:"
+msgctxt "field:contract.covered_data,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
-msgctxt "field:ins_contract.covered_data,currency_symbol:"
+msgctxt "field:contract.covered_data,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:ins_contract.covered_data,deductible_duration:"
+msgctxt "field:contract.covered_data,deductible_duration:"
 msgid "Deductible Duration"
 msgstr "Franchise"
 
-msgctxt "field:ins_contract.covered_data,end_date:"
+msgctxt "field:contract.covered_data,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_contract.covered_data,id:"
+msgctxt "field:contract.covered_data,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_contract.covered_data,must_expand_tree:"
+msgctxt "field:contract.covered_data,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_contract.covered_data,option:"
+msgctxt "field:contract.covered_data,option:"
 msgid "Subscribed Coverage"
 msgstr "Garantie Souscrite"
 
-msgctxt "field:ins_contract.covered_data,parent_covered_data:"
+msgctxt "field:contract.covered_data,parent_covered_data:"
 msgid "Parent Covered Data"
 msgstr ""
 
-msgctxt "field:ins_contract.covered_data,possible_deductible_duration:"
+msgctxt "field:contract.covered_data,possible_deductible_duration:"
 msgid "Possible Deductible Duration"
 msgstr "Franchises Possibles"
 
-msgctxt "field:ins_contract.covered_data,possible_options:"
+msgctxt "field:contract.covered_data,possible_options:"
 msgid "Possible Options"
 msgstr "Options Possibles"
 
-msgctxt "field:ins_contract.covered_data,rec_name:"
+msgctxt "field:contract.covered_data,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_contract.covered_data,start_date:"
+msgctxt "field:contract.covered_data,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:ins_contract.covered_data,status:"
+msgctxt "field:contract.covered_data,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:ins_contract.covered_data,write_date:"
+msgctxt "field:contract.covered_data,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_contract.covered_data,write_uid:"
+msgctxt "field:contract.covered_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -853,7 +853,7 @@ msgctxt "model:contract.option,name:"
 msgid "Subscribed Coverage"
 msgstr "Garantie"
 
-msgctxt "model:ins_contract.covered_data,name:"
+msgctxt "model:contract.covered_data,name:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
 
@@ -969,27 +969,27 @@ msgctxt "selection:contract.option,status:"
 msgid "Terminated"
 msgstr "Terminé"
 
-msgctxt "selection:ins_contract.covered_data,status:"
+msgctxt "selection:contract.covered_data,status:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:ins_contract.covered_data,status:"
+msgctxt "selection:contract.covered_data,status:"
 msgid "Active"
 msgstr "Actif"
 
-msgctxt "selection:ins_contract.covered_data,status:"
+msgctxt "selection:contract.covered_data,status:"
 msgid "Hold"
 msgstr "Suspendre"
 
-msgctxt "selection:ins_contract.covered_data,status:"
+msgctxt "selection:contract.covered_data,status:"
 msgid "Quote"
 msgstr "Devis"
 
-msgctxt "selection:ins_contract.covered_data,status:"
+msgctxt "selection:contract.covered_data,status:"
 msgid "Refused"
 msgstr "Refusé"
 
-msgctxt "selection:ins_contract.covered_data,status:"
+msgctxt "selection:contract.covered_data,status:"
 msgid "Terminated"
 msgstr "Terminé"
 
@@ -1049,11 +1049,11 @@ msgctxt "view:contract.option:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
 
-msgctxt "view:ins_contract.covered_data:"
+msgctxt "view:contract.covered_data:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
 
-msgctxt "view:ins_contract.covered_data:"
+msgctxt "view:contract.covered_data:"
 msgid "Data"
 msgstr "Données"
 
