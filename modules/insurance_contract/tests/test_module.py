@@ -25,7 +25,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         return {
             'Contract': 'contract',
             'Party': 'party.party',
-            'AddressKind': 'party.address_kind',
+            'AddressKind': 'party.address.kind',
             'Sequence': 'ir.sequence',
             # 'BillingProcess': 'contract.do_billing',
         }

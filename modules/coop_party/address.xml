@@ -18,7 +18,7 @@
         </record>
         <!-- Address kind tree view -->
         <record model="ir.ui.view" id="address_kind_view_tree">
-            <field name="model">party.address_kind</field>
+            <field name="model">party.address.kind</field>
             <field name="type">tree</field>
             <field name="inherit" ref="coop_utils.dyn_selection_view_tree"/>
             <field name="arch" type="xml"/>
@@ -26,7 +26,7 @@
 
         <!-- Address Kind form view -->
         <record model="ir.ui.view" id="address_kind_view_form">
-            <field name="model">party.address_kind</field>
+            <field name="model">party.address.kind</field>
             <field name="type">form</field>
             <field name="arch" type="xml"/>
             <field name="inherit" ref="coop_utils.dyn_selection_view_form"/>
@@ -34,7 +34,7 @@
         <!-- View for the main menu and the event -->
         <record model="ir.action.act_window" id="act_address_kind_form">
             <field name="name">Address Kind</field>
-            <field name="res_model">party.address_kind</field>
+            <field name="res_model">party.address.kind</field>
         </record>
 
         <!-- View that connects the form in the tree with the specification -->

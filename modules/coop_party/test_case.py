@@ -83,7 +83,7 @@ class TestCaseModel():
     @classmethod
     def address_kind_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
-        AddressKind = Pool().get('party.address_kind')
+        AddressKind = Pool().get('party.address.kind')
         main = AddressKind()
         main.key = 'main'
         main.name = translater('Main')

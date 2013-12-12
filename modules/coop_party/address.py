@@ -77,7 +77,7 @@ class Address(model.CoopSQL):
 
     @classmethod
     def get_possible_address_kind(cls, vals=None):
-        return AddresseKind.get_values_as_selection('party.address_kind')
+        return AddresseKind.get_values_as_selection('party.address.kind')
 
     @staticmethod
     def default_kind():
@@ -202,7 +202,7 @@ class Address(model.CoopSQL):
 class AddresseKind(DynamicSelection):
     'Addresse Kind'
 
-    __name__ = 'party.address_kind'
+    __name__ = 'party.address.kind'
     _table = 'coop_table_of_table'
 
     @staticmethod

@@ -2,7 +2,7 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:party.address_kind:"
+msgctxt "error:party.address.kind:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -122,51 +122,51 @@ msgctxt "field:party.address,zip_and_city:"
 msgid "Zip"
 msgstr "Code Postal"
 
-msgctxt "field:party.address_kind,create_date:"
+msgctxt "field:party.address.kind,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:party.address_kind,create_date_:"
+msgctxt "field:party.address.kind,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:party.address_kind,create_uid:"
+msgctxt "field:party.address.kind,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:party.address_kind,id:"
+msgctxt "field:party.address.kind,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.address_kind,is_used:"
+msgctxt "field:party.address.kind,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-msgctxt "field:party.address_kind,key:"
+msgctxt "field:party.address.kind,key:"
 msgid "Key"
 msgstr "Clé"
 
-msgctxt "field:party.address_kind,must_expand_tree:"
+msgctxt "field:party.address.kind,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:party.address_kind,my_model_name:"
+msgctxt "field:party.address.kind,my_model_name:"
 msgid "Model Name"
 msgstr "Nom de l'objet"
 
-msgctxt "field:party.address_kind,name:"
+msgctxt "field:party.address.kind,name:"
 msgid "Value"
 msgstr "Valeur"
 
-msgctxt "field:party.address_kind,rec_name:"
+msgctxt "field:party.address.kind,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:party.address_kind,write_date:"
+msgctxt "field:party.address.kind,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:party.address_kind,write_uid:"
+msgctxt "field:party.address.kind,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -486,7 +486,7 @@ msgctxt "model:party.actor,name:"
 msgid "Actor"
 msgstr "Acteur"
 
-msgctxt "model:party.address_kind,name:"
+msgctxt "model:party.address.kind,name:"
 msgid "Addresse Kind"
 msgstr "Type d'Adresse"
 
