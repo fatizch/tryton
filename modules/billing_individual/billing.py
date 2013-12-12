@@ -533,7 +533,7 @@ class BillDisplay(model.CoopView):
 class BillingProcess(Wizard):
     'Billing Process'
 
-    __name__ = 'billing.billing_process'
+    __name__ = 'contract.do_billing'
 
     start_state = 'bill_parameters'
     bill_parameters = StateView(

@@ -27,7 +27,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Party': 'party.party',
             'AddressKind': 'party.address_kind',
             'Sequence': 'ir.sequence',
-            # 'BillingProcess': 'billing.billing_process',
+            # 'BillingProcess': 'contract.do_billing',
         }
 
     def test0001_testPersonCreation(self):

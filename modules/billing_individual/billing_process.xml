@@ -22,7 +22,7 @@
     <!--################################################################-->
     <record model="ir.action.wizard" id="launch_billing_process">
       <field name="name">Billing</field>
-      <field name="wiz_name">billing.billing_process</field>
+      <field name="wiz_name">contract.do_billing</field>
       <field name="model">contract.contract</field>
     </record>
     <record model="ir.action.keyword" id="launch_billing_keyword">
