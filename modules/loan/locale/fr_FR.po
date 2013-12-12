@@ -46,39 +46,39 @@ msgctxt "field:ins_product.rule_sets.loan,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:loan.covered_data-loan_share,covered_data:"
+msgctxt "field:contract.covered_data-loan.share,covered_data:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
 
-msgctxt "field:loan.covered_data-loan_share,create_date:"
+msgctxt "field:contract.covered_data-loan.share,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:loan.covered_data-loan_share,create_date_:"
+msgctxt "field:contract.covered_data-loan.share,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:loan.covered_data-loan_share,create_uid:"
+msgctxt "field:contract.covered_data-loan.share,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:loan.covered_data-loan_share,id:"
+msgctxt "field:contract.covered_data-loan.share,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:loan.covered_data-loan_share,loan_share:"
+msgctxt "field:contract.covered_data-loan.share,loan_share:"
 msgid "Loan Share"
 msgstr "Quotité"
 
-msgctxt "field:loan.covered_data-loan_share,rec_name:"
+msgctxt "field:contract.covered_data-loan.share,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:loan.covered_data-loan_share,write_date:"
+msgctxt "field:contract.covered_data-loan.share,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:loan.covered_data-loan_share,write_uid:"
+msgctxt "field:contract.covered_data-loan.share,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -534,7 +534,7 @@ msgctxt "model:ir.action,name:launch_loan_creation_wizard"
 msgid "Loan Creation"
 msgstr "Création du Prêt"
 
-msgctxt "model:loan.covered_data-loan_share,name:"
+msgctxt "model:contract.covered_data-loan.share,name:"
 msgid "Loan Covered Data Loan Share Relation"
 msgstr "Relation Données de Couverture et Quotités"
 

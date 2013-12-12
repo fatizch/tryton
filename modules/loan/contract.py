@@ -78,7 +78,7 @@ class LoanCoveredData():
     __name__ = 'contract.covered_data'
 
     loan_shares = fields.Many2Many(
-        'loan.covered_data-loan_share',
+        'contract.covered_data-loan.share',
         'covered_data', 'loan_share', 'Loan Shares',
         states={'invisible': ~Eval('is_loan')},
         domain=[
@@ -112,7 +112,7 @@ class LoanCoveredData():
 class LoanCoveredDataLoanShareRelation(model.CoopSQL):
     'Loan Covered Data Loan Share Relation'
 
-    __name__ = 'loan.covered_data-loan_share'
+    __name__ = 'contract.covered_data-loan.share'
 
     covered_data = fields.Many2One('contract.covered_data', 'Covered Data',
         ondelete='CASCADE')
