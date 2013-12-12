@@ -593,39 +593,39 @@ msgctxt "field:ins_product.clause,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.clause_relation,clause:"
+msgctxt "field:clause.rule-clause,clause:"
 msgid "Clause"
 msgstr "Clause"
 
-msgctxt "field:ins_product.clause_relation,create_date:"
+msgctxt "field:clause.rule-clause,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.clause_relation,create_date_:"
+msgctxt "field:clause.rule-clause,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.clause_relation,create_uid:"
+msgctxt "field:clause.rule-clause,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.clause_relation,id:"
+msgctxt "field:clause.rule-clause,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.clause_relation,rec_name:"
+msgctxt "field:clause.rule-clause,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.clause_relation,rule:"
+msgctxt "field:clause.rule-clause,rule:"
 msgid "Rule"
 msgstr "Règle"
 
-msgctxt "field:ins_product.clause_relation,write_date:"
+msgctxt "field:clause.rule-clause,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.clause_relation,write_uid:"
+msgctxt "field:clause.rule-clause,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3292,7 +3292,7 @@ msgctxt "model:ins_product.clause,name:"
 msgid "Clause"
 msgstr "Clause"
 
-msgctxt "model:ins_product.clause_relation,name:"
+msgctxt "model:clause.rule-clause,name:"
 msgid "Relation between clause and offered"
 msgstr "Table intermédiaire entre l'offre et le clause"
 
