@@ -8,8 +8,8 @@ def register():
         LossProcess,
         ProcessDesc,
         DeclarationProcessParameters,
-        module='claim_process', type_='model')
+        module='claim.declare.find_process', type_='model')
 
     Pool.register(
         DeclarationProcessFinder,
-        module='claim_process', type_='wizard')
+        module='claim.declare.find_process', type_='wizard')

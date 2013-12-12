@@ -312,7 +312,7 @@ class DeclarationProcessFinder(ProcessFinder):
     @classmethod
     def get_parameters_view(cls):
         return '%s.%s' % (
-            'claim_process',
+            'claim.declare.find_process',
             'declaration_process_parameters_form')
 
     def init_main_object_from_process(self, obj, process_param):
