@@ -6,7 +6,7 @@ msgctxt "error:ProcessFinder:"
 msgid "Please pick a process from the selection"
 msgstr "Choisir un processus de la sélection"
 
-msgctxt "error:coop_process.xml_view_desc:"
+msgctxt "error:ir.ui.view.description:"
 msgid "The functional id must be unique !"
 msgstr "L'identifiant fonctionnel doit être unique"
 
@@ -110,83 +110,83 @@ msgctxt "field:process.start,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:coop_process.xml_view_desc,create_date:"
+msgctxt "field:ir.ui.view.description,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:coop_process.xml_view_desc,create_date_:"
+msgctxt "field:ir.ui.view.description,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:coop_process.xml_view_desc,create_uid:"
+msgctxt "field:ir.ui.view.description,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:coop_process.xml_view_desc,field_childs:"
+msgctxt "field:ir.ui.view.description,field_childs:"
 msgid "Children field"
 msgstr ""
 
-msgctxt "field:coop_process.xml_view_desc,for_step:"
+msgctxt "field:ir.ui.view.description,for_step:"
 msgid "For Step"
 msgstr "Pour l'Etape"
 
-msgctxt "field:coop_process.xml_view_desc,header_line:"
+msgctxt "field:ir.ui.view.description,header_line:"
 msgid "Header Line"
 msgstr "Ligne d'Entête"
 
-msgctxt "field:coop_process.xml_view_desc,id:"
+msgctxt "field:ir.ui.view.description,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_process.xml_view_desc,input_mode:"
+msgctxt "field:ir.ui.view.description,input_mode:"
 msgid "Input Mode"
 msgstr "Mode de Saisie"
 
-msgctxt "field:coop_process.xml_view_desc,must_expand_tree:"
+msgctxt "field:ir.ui.view.description,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:coop_process.xml_view_desc,nb_col:"
+msgctxt "field:ir.ui.view.description,nb_col:"
 msgid "Number of columns"
 msgstr "Nombre de Colonnes"
 
-msgctxt "field:coop_process.xml_view_desc,rec_name:"
+msgctxt "field:ir.ui.view.description,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:coop_process.xml_view_desc,the_view:"
+msgctxt "field:ir.ui.view.description,the_view:"
 msgid "View"
 msgstr "Vue"
 
-msgctxt "field:coop_process.xml_view_desc,view_content:"
+msgctxt "field:ir.ui.view.description,view_content:"
 msgid "View Content"
 msgstr "Contenu de la Vue"
 
-msgctxt "field:coop_process.xml_view_desc,view_final_name:"
+msgctxt "field:ir.ui.view.description,view_final_name:"
 msgid "View Name"
 msgstr "Nom de le Vue"
 
-msgctxt "field:coop_process.xml_view_desc,view_kind:"
+msgctxt "field:ir.ui.view.description,view_kind:"
 msgid "View Kind"
 msgstr "Type de Vue"
 
-msgctxt "field:coop_process.xml_view_desc,view_model:"
+msgctxt "field:ir.ui.view.description,view_model:"
 msgid "View Model"
 msgstr "Vue du Modèle"
 
-msgctxt "field:coop_process.xml_view_desc,view_name:"
+msgctxt "field:ir.ui.view.description,view_name:"
 msgid "View Name"
 msgstr "Nom de le Vue"
 
-msgctxt "field:coop_process.xml_view_desc,view_string:"
+msgctxt "field:ir.ui.view.description,view_string:"
 msgid "View String"
 msgstr "Libellé de la Vue"
 
-msgctxt "field:coop_process.xml_view_desc,write_date:"
+msgctxt "field:ir.ui.view.description,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:coop_process.xml_view_desc,write_uid:"
+msgctxt "field:ir.ui.view.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -282,23 +282,23 @@ msgctxt "model:process.start,name:"
 msgid "Process Parameters"
 msgstr "Paramètres du Processus"
 
-msgctxt "model:coop_process.xml_view_desc,name:"
+msgctxt "model:ir.ui.view.description,name:"
 msgid "XML View Descriptor"
 msgstr "Descripteur de Vue XML"
 
-msgctxt "selection:coop_process.xml_view_desc,input_mode:"
+msgctxt "selection:ir.ui.view.description,input_mode:"
 msgid "Classic"
 msgstr "Classique"
 
-msgctxt "selection:coop_process.xml_view_desc,input_mode:"
+msgctxt "selection:ir.ui.view.description,input_mode:"
 msgid "Expert"
 msgstr "Avancé"
 
-msgctxt "selection:coop_process.xml_view_desc,view_kind:"
+msgctxt "selection:ir.ui.view.description,view_kind:"
 msgid "Form"
 msgstr "Formulaire"
 
-msgctxt "selection:coop_process.xml_view_desc,view_kind:"
+msgctxt "selection:ir.ui.view.description,view_kind:"
 msgid "Tree"
 msgstr "Arbre"
 
@@ -322,11 +322,11 @@ msgctxt "view:process.start:"
 msgid "Process Parameters"
 msgstr "Paramètres du Processus"
 
-msgctxt "view:coop_process.xml_view_desc:"
+msgctxt "view:ir.ui.view.description:"
 msgid "View Descriptor"
 msgstr "Descripteur de Vue"
 
-msgctxt "view:coop_process.xml_view_desc:"
+msgctxt "view:ir.ui.view.description:"
 msgid "View Descriptors"
 msgstr "Descripteurs de Vue"
 

@@ -617,7 +617,7 @@ class ProcessStepRelation(model.CoopSQL):
 class XMLViewDesc(model.CoopSQL, model.CoopView):
     'XML View Descriptor'
 
-    __name__ = 'coop_process.xml_view_desc'
+    __name__ = 'ir.ui.view.description'
 
     the_view = fields.Many2One(
         'ir.ui.view', 'View',
@@ -824,7 +824,7 @@ class StepDesc(model.CoopSQL):
 
     pyson = fields.Char('Pyson Constraint')
     custom_views = fields.One2Many(
-        'coop_process.xml_view_desc', 'for_step', 'Custom Views',
+        'ir.ui.view.description', 'for_step', 'Custom Views',
         context={'for_step_name': Eval('technical_name', '')},
         states={'readonly': ~Eval('technical_name')})
     main_model = fields.Many2One(

@@ -36,12 +36,12 @@
     </record>
     <!-- XML View Desc -->
     <record model="ir.ui.view" id="xml_view_desc_form">
-      <field name="model">coop_process.xml_view_desc</field>
+      <field name="model">ir.ui.view.description</field>
       <field name="type">form</field>
       <field name="name">xml_view_desc_form</field>
     </record>
     <record model="ir.ui.view" id="xml_view_desc_tree">
-      <field name="model">coop_process.xml_view_desc</field>
+      <field name="model">ir.ui.view.description</field>
       <field name="type">tree</field>
       <field name="name">xml_view_desc_tree</field>
     </record>
