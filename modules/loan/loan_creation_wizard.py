@@ -22,7 +22,7 @@ class LoanParameters(model.CoopView, ModelCurrency):
 
     contract = fields.Many2One('contract', 'Contract',
         states={"invisible": True})
-    loan = fields.Many2One('loan.loan', 'Loan')
+    loan = fields.Many2One('loan', 'Loan')
     kind = fields.Selection(LOAN_KIND, 'Kind', required=True)
     number_of_payments = fields.Integer('Number of Payments', required=True)
     payment_frequency = fields.Selection(coop_date.DAILY_DURATION,
@@ -107,7 +107,7 @@ class LoanCreation(model.CoopWizard):
             [x.id for x in self.loan_parameters.loan.increments]}
 
     def transition_create_loan(self):
-        Loan = Pool().get('loan.loan')
+        Loan = Pool().get('loan')
         loan = Loan()
         self.loan_parameters.loan = loan
         loan.contract = self.loan_parameters.contract
@@ -155,7 +155,7 @@ class LoanCreation(model.CoopWizard):
         return 'end'
 
     def transition_cancel_loan(self):
-        Loan = Pool().get('loan.loan')
+        Loan = Pool().get('loan')
         if self.loan_parameters.loan and self.loan_parameters.loan.id > 0:
             Loan.delete([self.loan_parameters.loan])
         return 'end'

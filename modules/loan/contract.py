@@ -20,7 +20,7 @@ class LoanContract():
     is_loan = fields.Function(
         fields.Boolean('Is Loan', states={'invisible': True}),
         'get_is_loan')
-    loans = fields.One2Many('loan.loan', 'contract', 'Loans',
+    loans = fields.One2Many('loan', 'contract', 'Loans',
         states={'invisible': ~Eval('is_loan')},
         depends=['is_loan', 'currency'],
         context={'currency': Eval('currency')})

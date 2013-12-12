@@ -2,12 +2,12 @@
 <tryton>
     <data>
         <record model="ir.ui.view" id="loan_view_form">
-            <field name="model">loan.loan</field>
+            <field name="model">loan</field>
             <field name="type">form</field>
             <field name="name">loan_form</field>
         </record>
         <record model="ir.ui.view" id="loan_view_tree">
-            <field name="model">loan.loan</field>
+            <field name="model">loan</field>
             <field name="type">tree</field>
             <field name="name">loan_tree</field>
         </record>
