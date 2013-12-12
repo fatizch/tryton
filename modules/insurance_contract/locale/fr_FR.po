@@ -630,59 +630,59 @@ msgctxt "field:expense,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.management_role,contract:"
+msgctxt "field:contract-agreement,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:ins_contract.management_role,create_date:"
+msgctxt "field:contract-agreement,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_contract.management_role,create_date_:"
+msgctxt "field:contract-agreement,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_contract.management_role,create_uid:"
+msgctxt "field:contract-agreement,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_contract.management_role,end_date:"
+msgctxt "field:contract-agreement,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_contract.management_role,id:"
+msgctxt "field:contract-agreement,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_contract.management_role,kind:"
+msgctxt "field:contract-agreement,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:ins_contract.management_role,must_expand_tree:"
+msgctxt "field:contract-agreement,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_contract.management_role,party:"
+msgctxt "field:contract-agreement,party:"
 msgid "Party"
 msgstr "Acteur"
 
-msgctxt "field:ins_contract.management_role,protocol:"
+msgctxt "field:contract-agreement,protocol:"
 msgid "Protocol"
 msgstr "Protocole de gestion"
 
-msgctxt "field:ins_contract.management_role,rec_name:"
+msgctxt "field:contract-agreement,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_contract.management_role,start_date:"
+msgctxt "field:contract-agreement,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:ins_contract.management_role,write_date:"
+msgctxt "field:contract-agreement,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_contract.management_role,write_uid:"
+msgctxt "field:contract-agreement,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -869,7 +869,7 @@ msgctxt "model:expense,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:ins_contract.management_role,name:"
+msgctxt "model:contract-agreement,name:"
 msgid "Management Role"
 msgstr "Gestionnaire"
 
@@ -993,7 +993,7 @@ msgctxt "selection:contract.covered_data,status:"
 msgid "Terminated"
 msgstr "Terminé"
 
-msgctxt "selection:ins_contract.management_role,kind:"
+msgctxt "selection:contract-agreement,kind:"
 msgid ""
 msgstr " "
 
@@ -1089,11 +1089,11 @@ msgctxt "view:expense:"
 msgid "Expenses"
 msgstr "Frais"
 
-msgctxt "view:ins_contract.management_role:"
+msgctxt "view:contract-agreement:"
 msgid "Management"
 msgstr "Gestionnaire"
 
-msgctxt "view:ins_contract.management_role:"
+msgctxt "view:contract-agreement:"
 msgid "Manager"
 msgstr "Géré par"
 

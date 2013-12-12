@@ -163,7 +163,7 @@ class Contract():
 class ManagementRole():
     'Management Role'
 
-    __name__ = 'ins_contract.management_role'
+    __name__ = 'contract-agreement'
 
     @classmethod
     def get_possible_management_role_kind(cls):

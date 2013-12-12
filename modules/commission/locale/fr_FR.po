@@ -546,15 +546,15 @@ msgctxt "selection:commission.rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:ins_contract.management_role,kind:"
+msgctxt "selection:contract-agreement,kind:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:ins_contract.management_role,kind:"
+msgctxt "selection:contract-agreement,kind:"
 msgid "Business Provider"
 msgstr "Apporteur d'affaires"
 
-msgctxt "selection:ins_contract.management_role,kind:"
+msgctxt "selection:contract-agreement,kind:"
 msgid "Management Delegation"
 msgstr "Délégation de gestion"
 

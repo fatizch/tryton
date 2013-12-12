@@ -41,10 +41,10 @@ class InsurancePolicy():
         'contract.covered_element', 'contract', 'Covered Elements',
         domain=[('parent', '=', None)],
         context={'contract': Eval('id')})
-    management_roles = fields.One2Many('ins_contract.management_role',
+    management_roles = fields.One2Many('contract-agreement',
         'contract', 'Management Roles',
         states={'invisible': Eval('product_kind') != 'insurance'})
-    managing_roles = fields.One2Many('ins_contract.management_role',
+    managing_roles = fields.One2Many('contract-agreement',
         'protocol', 'Managing Roles',
         states={'invisible': Eval('product_kind') == 'insurance'})
     next_renewal_date = fields.Date('Next Renewal Date')
@@ -1010,7 +1010,7 @@ class ContractClause:
 class ManagementRole(model.CoopSQL, model.CoopView):
     'Management Role'
 
-    __name__ = 'ins_contract.management_role'
+    __name__ = 'contract-agreement'
 
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
