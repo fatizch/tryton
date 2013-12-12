@@ -38,7 +38,7 @@ class Offered():
     pricing_rules = fields.One2Many('ins_product.pricing_rule',
         'offered', 'Pricing Rules')
     eligibility_rules = fields.One2Many(
-        'ins_product.eligibility_rule', 'offered', 'Eligibility Rules')
+        'offered.eligibility.rule', 'offered', 'Eligibility Rules')
     clause_rules = fields.One2Many(
         'clause.rule', 'offered', 'Clause Rules')
     deductible_rules = fields.One2Many(

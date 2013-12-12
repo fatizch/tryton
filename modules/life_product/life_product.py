@@ -70,7 +70,7 @@ class LifeEligibilityRule():
 
     __metaclass__ = PoolMeta
 
-    __name__ = 'ins_product.eligibility_rule'
+    __name__ = 'offered.eligibility.rule'
 
     min_age = fields.Integer('Minimum Age',
         states={'invisible': Or(STATE_LIFE, STATE_ADVANCED)})

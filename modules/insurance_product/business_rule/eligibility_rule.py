@@ -21,7 +21,7 @@ SUBSCRIBER_CLASSES = [
 class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
     'Eligibility Rule'
 
-    __name__ = 'ins_product.eligibility_rule'
+    __name__ = 'offered.eligibility.rule'
 
     sub_elem_config_kind = fields.Selection(
         CONFIG_KIND, 'Sub Elem Conf. kind', states={
@@ -121,6 +121,6 @@ class EligibilityRelationKind(model.CoopSQL):
     __name__ = 'offered.eligibility.rule-relation.kind'
 
     eligibility_rule = fields.Many2One(
-        'ins_product.eligibility_rule', 'Eligibility Rule', ondelete='CASCADE')
+        'offered.eligibility.rule', 'Eligibility Rule', ondelete='CASCADE')
     relation_kind = fields.Many2One(
         'party.relation.kind', 'Relation Kind', ondelete='CASCADE')

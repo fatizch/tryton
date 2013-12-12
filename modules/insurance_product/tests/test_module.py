@@ -27,7 +27,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Product': 'offered.product',
             'Coverage': 'offered.coverage',
             'Pricing': 'ins_product.pricing_rule',
-            'Eligibility': 'ins_product.eligibility_rule',
+            'Eligibility': 'offered.eligibility.rule',
             'PricingComponent': 'ins_product.pricing_component',
             'Tax': 'account.tax.description',
             'TaxVersion': 'account.tax.description.version',
