@@ -52,7 +52,7 @@ class TestCaseModel():
 
     @classmethod
     def create_regime_from_line(cls, data):
-        Regime = Pool().get('health.regime')
+        Regime = Pool().get('health.care_system')
         regime = Regime()
         for elem in ('code', 'name', 'short_name'):
             setattr(regime, elem, data[elem])
@@ -71,7 +71,7 @@ class TestCaseModel():
     @classmethod
     def create_fund_from_line(cls, data, addresses):
         Fund = Pool().get('health.insurance_fund')
-        Regime = Pool().get('health.regime')
+        Regime = Pool().get('health.care_system')
         fund = Fund()
         for elem in ('code', 'name'):
             setattr(fund, elem, data[elem])

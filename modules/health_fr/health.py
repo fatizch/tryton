@@ -9,7 +9,7 @@ __all_ = [
 class Regime(model.CoopSQL, model.CoopView):
     'Regime'
 
-    __name__ = 'health.regime'
+    __name__ = 'health.care_system'
     _order_name = 'code'
 
     code = fields.Char('Code', required=True)
@@ -24,7 +24,7 @@ class InsuranceFund(model.CoopSQL, model.CoopView):
     code = fields.Char('Code')
     name = fields.Char('Name')
     department = fields.Char('Department')
-    regime = fields.Many2One('health.regime', 'Regime')
+    regime = fields.Many2One('health.care_system', 'Regime')
 
     @classmethod
     def search_from_zipcode_and_regime(cls, zipcode, regime):
