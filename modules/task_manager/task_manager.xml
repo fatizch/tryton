@@ -55,7 +55,7 @@
     <menuitem parent="menu_task" sequence="100" action="act_team" id="menu_team"/>
     <!-- Select User entries -->
     <record model="ir.ui.view" id="select_user_form">
-      <field name="model">task_manager.select_user</field>
+      <field name="model">res.team.add_user.select</field>
       <field name="type">form</field>
       <field name="name">select_user_form</field>
     </record>

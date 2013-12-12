@@ -74,19 +74,19 @@ msgctxt "field:res.team.priority,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:task_manager.select_user,id:"
+msgctxt "field:res.team.add_user.select,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:task_manager.select_user,must_expand_tree:"
+msgctxt "field:res.team.add_user.select,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:task_manager.select_user,user:"
+msgctxt "field:res.team.add_user.select,user:"
 msgid "User"
 msgstr "Utilisateur"
 
-msgctxt "field:task_manager.select_user,user_ok:"
+msgctxt "field:res.team.add_user.select,user_ok:"
 msgid "User Ok"
 msgstr "Utilisateur Ok"
 
@@ -286,7 +286,7 @@ msgctxt "model:res.team.priority,name:"
 msgid "Priority"
 msgstr "Priorité"
 
-msgctxt "model:task_manager.select_user,name:"
+msgctxt "model:res.team.add_user.select,name:"
 msgid "Select User"
 msgstr "Saisir un utilisateur"
 
@@ -346,7 +346,7 @@ msgctxt "view:res.team.priority:"
 msgid "Priority"
 msgstr "Priorité"
 
-msgctxt "view:task_manager.select_user:"
+msgctxt "view:res.team.add_user.select:"
 msgid "Add User"
 msgstr "Ajouter l'Utilisateur"
 

@@ -109,7 +109,7 @@ class Team(model.CoopSQL, model.CoopView):
 class SelectUser(model.CoopView):
     'Select User'
 
-    __name__ = 'task_manager.select_user'
+    __name__ = 'res.team.add_user.select'
 
     user = fields.Many2One('res.user', 'User')
     user_ok = fields.Function(
@@ -134,7 +134,7 @@ class AddTeamUser(Wizard):
 
     start_state = 'select_user'
     select_user = StateView(
-        'task_manager.select_user',
+        'res.team.add_user.select',
         'task_manager.select_user_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
