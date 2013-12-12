@@ -58,7 +58,7 @@ class Priority(model.CoopSQL, model.CoopView):
 class TeamGroupRelation(model.CoopSQL):
     'Team - Group Relation'
 
-    __name__ = 'task_manager.team_group_relation'
+    __name__ = 'res.team-res.group'
 
     team = fields.Many2One('res.team', 'Team', ondelete='CASCADE')
     group = fields.Many2One('res.group', 'Group', ondelete='CASCADE')
@@ -74,7 +74,7 @@ class Team(model.CoopSQL, model.CoopView):
     members = fields.One2Many(
         'res.user', 'team', 'Members', states={'readonly': True})
     authorizations = fields.Many2Many(
-        'task_manager.team_group_relation', 'team', 'group', 'Authorizations')
+        'res.team-res.group', 'team', 'group', 'Authorizations')
     priorities = fields.One2Many(
         'res.team.priority', 'team', 'Priorities',
         order=[('priority', 'ASC')],
