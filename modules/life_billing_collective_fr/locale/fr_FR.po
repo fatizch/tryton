@@ -437,43 +437,43 @@ msgctxt "field:billing.premium_rate.form.create.show_forms,rate_notes:"
 msgid "Rate Notes"
 msgstr "Bordereaux de Cotisations"
 
-msgctxt "field:collective.fare_class,code:"
+msgctxt "field:fare_class,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:collective.fare_class,create_date:"
+msgctxt "field:fare_class,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:collective.fare_class,create_date_:"
+msgctxt "field:fare_class,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:collective.fare_class,create_uid:"
+msgctxt "field:fare_class,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:collective.fare_class,id:"
+msgctxt "field:fare_class,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:collective.fare_class,must_expand_tree:"
+msgctxt "field:fare_class,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:collective.fare_class,name:"
+msgctxt "field:fare_class,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:collective.fare_class,rec_name:"
+msgctxt "field:fare_class,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:collective.fare_class,write_date:"
+msgctxt "field:fare_class,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:collective.fare_class,write_uid:"
+msgctxt "field:fare_class,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -833,7 +833,7 @@ msgctxt "model:billing.premium_rate.form.create.show_forms,name:"
 msgid "Rate Notes"
 msgstr "Bordereaux de Cotisations"
 
-msgctxt "model:collective.fare_class,name:"
+msgctxt "model:fare_class,name:"
 msgid "Fare Class"
 msgstr "Classe Tarif"
 
@@ -1021,7 +1021,7 @@ msgctxt "view:billing.premium_rate.form.create.show_forms:"
 msgid "Rate Notes"
 msgstr "Bordereaux de Cotisations"
 
-msgctxt "view:collective.fare_class:"
+msgctxt "view:fare_class:"
 msgid "Fare Class"
 msgstr "Classe Tarif"
 

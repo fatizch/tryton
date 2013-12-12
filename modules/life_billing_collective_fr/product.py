@@ -63,7 +63,7 @@ class Coverage():
 class FareClass(model.CoopSQL, model.CoopView):
     'Fare Class'
 
-    __name__ = 'collective.fare_class'
+    __name__ = 'fare_class'
 
     code = fields.Char('Code', on_change_with=['code', 'name'], required=True)
     name = fields.Char('Name')
@@ -97,7 +97,7 @@ class FareClassGroupFareClassRelation(model.CoopSQL):
 
     group = fields.Many2One('collective.fare_class_group', 'Group',
         ondelete='CASCADE')
-    fare_class = fields.Many2One('collective.fare_class', 'Fare Class',
+    fare_class = fields.Many2One('fare_class', 'Fare Class',
         ondelete='RESTRICT')
 
 
@@ -171,7 +171,7 @@ class SubRatingRule(model.CoopView, model.CoopSQL):
                     'rating_kind', '') != 'fare_class'}, ondelete='RESTRICT',
         domain=[('fare_classes', '=', Eval('fare_class'))],
         depends=['fare_class'])
-    fare_class = fields.Many2One('collective.fare_class', 'Fare Class',
+    fare_class = fields.Many2One('fare_class', 'Fare Class',
         states={'invisible': Eval('_parent_main_rating_rule', {}).get(
                     'rating_kind', '') != 'fare_class'},
         ondelete='RESTRICT')

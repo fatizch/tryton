@@ -43,18 +43,18 @@
 
         <!-- Fare Class -->
         <record model="ir.ui.view" id="fare_class_view_form">
-            <field name="model">collective.fare_class</field>
+            <field name="model">fare_class</field>
             <field name="type">form</field>
             <field name="name">fare_class_form</field>
         </record>
         <record model="ir.ui.view" id="fare_class_view_tree">
-            <field name="model">collective.fare_class</field>
+            <field name="model">fare_class</field>
             <field name="type">tree</field>
             <field name="name">fare_class_tree</field>
         </record>
         <record model="ir.action.act_window" id="act_fare_class_form">
             <field name="name">Fare Classes</field>
-            <field name="res_model">collective.fare_class</field>
+            <field name="res_model">fare_class</field>
         </record>
 
         <record model="ir.action.act_window.view" id="act_fare_class_form_view_tree">
