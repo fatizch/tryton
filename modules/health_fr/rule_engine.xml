@@ -16,7 +16,7 @@
     <record model="rule_engine.tree_element" id="te_health_regime">
       <field name="description">Code Régime</field>
       <field name="name">_re_health_regime</field>
-      <field name="namespace">ins_product.rule_sets.person</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="type">function</field>
       <field name="parent" ref="te_health"/>
       <field name="translated_technical_name">code_regime</field>

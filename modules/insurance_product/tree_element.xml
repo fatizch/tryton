@@ -18,7 +18,7 @@
       <field name="description">A souscrit le produit...</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.person</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_person_subscribed</field>
       <field name="fct_args">Code Produit</field>
       <field name="long_description">Indique si le souscripteur a souscrit le produit</field>
@@ -29,7 +29,7 @@
       <field name="description">Est majeur ?</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.person</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_is_person_of_age</field>
       <field name="long_description">Renvoie True si la personne est majeure</field>
       <field name="parent" ref="dossier_personne_couverte"/>
@@ -39,7 +39,7 @@
       <field name="description">Date de naissance</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.person</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_person_birthdate</field>
       <field name="parent" ref="dossier_personne_couverte"/>
     </record>
@@ -48,7 +48,7 @@
       <field name="description">Relation avec le souscripteur</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.person</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_link_with_subscriber</field>
       <field name="long_description">Précise la nature de la relation avec le souscripteur</field>
       <field name="parent" ref="dossier_personne_couverte"/>
@@ -58,7 +58,7 @@
       <field name="description">Pays de résidence</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.person</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_person_living_country</field>
       <field name="parent" ref="dossier_personne_couverte"/>
     </record>

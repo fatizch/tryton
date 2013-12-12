@@ -5,7 +5,7 @@ class HealthContext():
     '''
         Context functions for Health.
     '''
-    __name__ = 'ins_product.rule_sets.person'
+    __name__ = 'rule_engine.runtime'
     __metaclass__ = PoolMeta
 
     @classmethod

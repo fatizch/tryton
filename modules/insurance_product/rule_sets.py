@@ -47,7 +47,7 @@ class PersonContext(RuleEngineContext):
     '''
         Context functions for Persons.
     '''
-    __name__ = 'ins_product.rule_sets.person'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def get_person(cls, args):
