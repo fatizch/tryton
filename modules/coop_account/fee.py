@@ -10,7 +10,7 @@ __all__ = [
 class FeeDesc(model.CoopSQL, model.VersionedObject):
     '''Fee Descriptor'''
 
-    __name__ = 'coop_account.fee_desc'
+    __name__ = 'account.fee.description'
 
     name = fields.Char('Fee Name', required=True)
     code = fields.Char('Code', required=True)
@@ -53,7 +53,7 @@ class FeeVersion(model.CoopSQL, model.VersionObject):
 
     @classmethod
     def main_model(cls):
-        return 'coop_account.fee_desc'
+        return 'account.fee.description'
 
     @staticmethod
     def default_kind():

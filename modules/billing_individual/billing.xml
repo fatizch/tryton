@@ -101,7 +101,7 @@
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_fee">
-      <field name="model" search="[('model', '=', 'coop_account.fee_desc')]"/>
+      <field name="model" search="[('model', '=', 'account.fee.description')]"/>
       <field name="global_p" eval="True"/>
     </record>
     <record model="ir.rule" id="rule_fee_1">
@@ -206,7 +206,7 @@
     <!-- Fee Version -->
     <!--################################################################-->
     <record model="ir.ui.view" id="fee_desc_form">
-      <field name="model">coop_account.fee_desc</field>
+      <field name="model">account.fee.description</field>
       <field name="type">form</field>
       <field name="inherit" ref="coop_account.fee_desc_view_form"/>
       <field name="name">fee_desc_form</field>

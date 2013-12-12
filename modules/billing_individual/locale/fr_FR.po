@@ -767,11 +767,11 @@ msgctxt "field:contract,use_prices:"
 msgid "Use Prices"
 msgstr ""
 
-msgctxt "field:coop_account.fee_desc,account_for_billing:"
+msgctxt "field:account.fee.description,account_for_billing:"
 msgid "Account for billing"
 msgstr "Compte de Facturation"
 
-msgctxt "field:coop_account.fee_desc,company:"
+msgctxt "field:account.fee.description,company:"
 msgid "Company"
 msgstr "Société"
 

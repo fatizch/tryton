@@ -109,7 +109,7 @@ class PriceLineFeeRelation(model.CoopSQL, model.CoopView):
 
     price_line = fields.Many2One('contract.billing.premium', 'Price Line',
         ondelete='CASCADE')
-    fee_desc = fields.Many2One('coop_account.fee_desc', 'Fee',
+    fee_desc = fields.Many2One('account.fee.description', 'Fee',
         ondelete='RESTRICT')
     to_recalculate = fields.Boolean('Recalculate at billing')
     amount = fields.Numeric('Amount')
@@ -251,7 +251,7 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
         if not (hasattr(self, 'fee_lines') and self.fee_lines):
             self.fee_lines = []
         self.get_fee_details(line, fee_details)
-        FeeDesc = Pool().get('coop_account.fee_desc')
+        FeeDesc = Pool().get('account.fee.description')
         FeeRelation = Pool().get('contract.billing.premium-fee')
         for fee_id, fee_lines in fee_details.iteritems():
             the_fee = FeeDesc(fee_id)
@@ -284,7 +284,7 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
             f('contract.option'),
             f('ins_contract.covered_data'),
             f('coop_account.tax_desc'),
-            f('coop_account.fee_desc')]
+            f('account.fee.description')]
         return res
 
     def get_account_for_billing(self):
@@ -1356,7 +1356,7 @@ class FeeDesc():
     'Fee Desc'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_account.fee_desc'
+    __name__ = 'account.fee.description'
 
     account_for_billing = fields.Many2One('account.account',
         'Account for billing', depends=['company'], domain=[

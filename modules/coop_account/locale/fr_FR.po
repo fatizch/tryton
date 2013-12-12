@@ -2,7 +2,7 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:coop_account.fee_desc:"
+msgctxt "error:account.fee.description:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
@@ -10,55 +10,55 @@ msgctxt "error:coop_account.tax_desc:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
-msgctxt "field:coop_account.fee_desc,code:"
+msgctxt "field:account.fee.description,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:coop_account.fee_desc,create_date:"
+msgctxt "field:account.fee.description,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:coop_account.fee_desc,create_date_:"
+msgctxt "field:account.fee.description,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:coop_account.fee_desc,create_uid:"
+msgctxt "field:account.fee.description,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:coop_account.fee_desc,current_rec_name:"
+msgctxt "field:account.fee.description,current_rec_name:"
 msgid "Current Value"
 msgstr "Valeur Courante"
 
-msgctxt "field:coop_account.fee_desc,description:"
+msgctxt "field:account.fee.description,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:coop_account.fee_desc,id:"
+msgctxt "field:account.fee.description,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_account.fee_desc,must_expand_tree:"
+msgctxt "field:account.fee.description,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:coop_account.fee_desc,name:"
+msgctxt "field:account.fee.description,name:"
 msgid "Fee Name"
 msgstr "Nom du Frais"
 
-msgctxt "field:coop_account.fee_desc,rec_name:"
+msgctxt "field:account.fee.description,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:coop_account.fee_desc,versions:"
+msgctxt "field:account.fee.description,versions:"
 msgid "Versions"
 msgstr "Versions"
 
-msgctxt "field:coop_account.fee_desc,write_date:"
+msgctxt "field:account.fee.description,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:coop_account.fee_desc,write_uid:"
+msgctxt "field:account.fee.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -218,7 +218,7 @@ msgctxt "field:coop_account.tax_version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "model:coop_account.fee_desc,name:"
+msgctxt "model:account.fee.description,name:"
 msgid "Fee Descriptor"
 msgstr "Descripteur de Frais"
 
@@ -274,7 +274,7 @@ msgctxt "selection:coop_account.tax_version,kind:"
 msgid "Rule"
 msgstr "Règle"
 
-msgctxt "view:coop_account.fee_desc:"
+msgctxt "view:account.fee.description:"
 msgid "Fee Descriptor"
 msgstr "Descripteur de Frais"
 

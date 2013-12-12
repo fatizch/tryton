@@ -249,7 +249,7 @@ class PaymentRuleFeeRelation(model.CoopSQL):
 
     payment_rule = fields.Many2One('billing.payment.term', 'Payment Rule',
         required=True, ondelete='CASCADE')
-    fee = fields.Many2One('coop_account.fee_desc', 'Fee', required=True,
+    fee = fields.Many2One('account.fee.description', 'Fee', required=True,
         ondelete='RESTRICT')
 
 

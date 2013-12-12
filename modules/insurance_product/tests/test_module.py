@@ -31,7 +31,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'PricingComponent': 'ins_product.pricing_component',
             'Tax': 'coop_account.tax_desc',
             'TaxVersion': 'coop_account.tax_version',
-            'Fee': 'coop_account.fee_desc',
+            'Fee': 'account.fee.description',
             'FeeVersion': 'coop_account.fee_version',
             'Sequence': 'ir.sequence',
             'Lang': 'ir.lang',
