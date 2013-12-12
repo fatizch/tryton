@@ -175,7 +175,7 @@ class TableDefinition(ModelSQL, ModelView):
             'invisible': ~Eval('dimension_kind4'),
         })
     kind = fields.Function(fields.Char('Kind'), 'get_kind')
-    cells = fields.One2Many('table.table_cell', 'definition', 'Cells')
+    cells = fields.One2Many('table.cell', 'definition', 'Cells')
     number_of_digits = fields.Integer('Number of Digits', states={
             'invisible': Eval('type_', '') != 'numeric'})
 
@@ -267,7 +267,7 @@ class TableDefinition(ModelSQL, ModelView):
     @classmethod
     def _import_override_cells(cls, instance_key, good_instance,
             field_value, values, created, relink):
-        Cell = Pool().get('table.table_cell')
+        Cell = Pool().get('table.cell')
         if (hasattr(good_instance, 'id') and good_instance.id):
             table_id = good_instance.id
             Cell.delete(Cell.search([('definition', '=', table_id)]))
@@ -380,7 +380,7 @@ class TableDefinition(ModelSQL, ModelView):
         pass
 
     def get_index_value(self, at_date=None):
-        Cell = Pool().get('table.table_cell')
+        Cell = Pool().get('table.cell')
         if not at_date:
             at_date = utils.today()
         cell = Cell.get_cell(self, (at_date))
@@ -554,7 +554,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
 
 class TableCell(ModelSQL, ModelView):
     "Cell"
-    __name__ = 'table.table_cell'
+    __name__ = 'table.cell'
     definition = fields.Many2One(
         'table.table_def', 'Definition',
         required=True)
@@ -863,7 +863,7 @@ class Table2DDict(dict):
 
     def __getitem__(self, key):
         pool = Pool()
-        TableCell = pool.get('table.table_cell')
+        TableCell = pool.get('table.cell')
         if key.startswith('col'):
             field = copy.copy(TableCell.value)
             field.string = ''
@@ -919,7 +919,7 @@ class Table2D(ModelSQL, ModelView):
         if not CONFIG['db_type'] == 'postgresql':
             return True
         pool = Pool()
-        TableCell = pool.get('table.table_cell')
+        TableCell = pool.get('table.cell')
         TableDefinition = pool.get('table.table_def')
         TableDefinitionDimension = pool.get(
             'table.table_dimension')
@@ -989,7 +989,7 @@ class Table2D(ModelSQL, ModelView):
     @classmethod
     def fields_view_get(cls, view_id=None, view_type='form'):
         pool = Pool()
-        TableCell = pool.get('table.table_cell')
+        TableCell = pool.get('table.cell')
         TableDefinition = pool.get('table.table_def')
         TableDefinitionDimension = pool.get(
             'table.table_dimension')
@@ -1043,7 +1043,7 @@ class Table2D(ModelSQL, ModelView):
     @classmethod
     def write(cls, rows, values):
         pool = Pool()
-        TableCell = pool.get('table.table_cell')
+        TableCell = pool.get('table.cell')
         super(Table2D, cls).write(rows, values)
         dim1_ids = [r.id for r in rows]
         definition_id = int(
@@ -1081,7 +1081,7 @@ class Table2D(ModelSQL, ModelView):
     def read(cls, ids, fields_names=None):
         pool = Pool()
         TableDefinition = pool.get('table.table_def')
-        TableCell = pool.get('table.table_cell')
+        TableCell = pool.get('table.cell')
         result = super(Table2D, cls).read(ids, fields_names=fields_names)
         definition_id = int(
             Transaction().context.get('table.table_def', -1))

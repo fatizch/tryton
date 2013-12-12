@@ -56,18 +56,18 @@
     <!-- Table Cell -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="cell_form_view">
-      <field name="model">table.table_cell</field>
+      <field name="model">table.cell</field>
       <field name="type">form</field>
       <field name="name">cell_form</field>
     </record>
     <record model="ir.ui.view" id="cell_list_view">
-      <field name="model">table.table_cell</field>
+      <field name="model">table.cell</field>
       <field name="type">tree</field>
       <field name="name">cell_tree</field>
     </record>
     <record model="ir.action.act_window" id="act_cell_form">
       <field name="name">Cells</field>
-      <field name="res_model">table.table_cell</field>
+      <field name="res_model">table.cell</field>
     </record>
     <record model="ir.action.act_window.view" id="act_cell_form_view1">
       <field name="sequence" eval="10"/>
@@ -87,7 +87,7 @@
         -->
     <record model="ir.action.act_window" id="act_cell_relate_form">
       <field name="name">Cells</field>
-      <field name="res_model">table.table_cell</field>
+      <field name="res_model">table.cell</field>
       <field name="domain">[('definition', '=', Eval('active_id'))]</field>
       <field name="context">{'table.table_def': Eval('active_id')}</field>
     </record>

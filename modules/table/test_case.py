@@ -31,7 +31,7 @@ class TestCaseModel():
         filename = filename.split('.')[0]
         Table = Pool().get('table.table_def')
         Dimension = Pool().get('table.table_dimension')
-        Cell = Pool().get('table.table_cell')
+        Cell = Pool().get('table.cell')
         if ';' in filename:
             code, name, kind = filename.split(';')
         else:
@@ -91,7 +91,7 @@ class TestCaseModel():
 
     @classmethod
     def load_table_from_file(cls, filename):
-        Cell = Pool().get('table.table_cell')
+        Cell = Pool().get('table.cell')
         the_file = cls._loaded_resources[MODULE_NAME]['files'][filename]
         table = cls.create_table_from_filename(filename)
         cls.set_dimensions_from_first_cell(the_file[0][0], table)

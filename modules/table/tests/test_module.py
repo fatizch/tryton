@@ -20,7 +20,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         return {
             'Definition': 'table.table_def',
             'Dimension': 'table.table_dimension',
-            'Cell': 'table.table_cell',
+            'Cell': 'table.cell',
             'ManageDimension1': 'table.manage_dimension.show_dimension_1',
         }
 

@@ -146,59 +146,59 @@ msgctxt "field:table.manage_dimension.show.dimension,values:"
 msgid "Dimension Values"
 msgstr "Valeurs"
 
-msgctxt "field:table.table_cell,create_date:"
+msgctxt "field:table.cell,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:table.table_cell,create_date_:"
+msgctxt "field:table.cell,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:table.table_cell,create_uid:"
+msgctxt "field:table.cell,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:table.table_cell,definition:"
+msgctxt "field:table.cell,definition:"
 msgid "Definition"
 msgstr "Définition"
 
-msgctxt "field:table.table_cell,dimension1:"
+msgctxt "field:table.cell,dimension1:"
 msgid "Dimension 1"
 msgstr "Dimension 1"
 
-msgctxt "field:table.table_cell,dimension2:"
+msgctxt "field:table.cell,dimension2:"
 msgid "Dimension 2"
 msgstr "Dimension 2"
 
-msgctxt "field:table.table_cell,dimension3:"
+msgctxt "field:table.cell,dimension3:"
 msgid "Dimension 3"
 msgstr "Dimension 3"
 
-msgctxt "field:table.table_cell,dimension4:"
+msgctxt "field:table.cell,dimension4:"
 msgid "Dimension 4"
 msgstr "Dimension 4"
 
-msgctxt "field:table.table_cell,id:"
+msgctxt "field:table.cell,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:table.table_cell,must_expand_tree:"
+msgctxt "field:table.cell,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:table.table_cell,rec_name:"
+msgctxt "field:table.cell,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:table.table_cell,value:"
+msgctxt "field:table.cell,value:"
 msgid "Value"
 msgstr "Valeur"
 
-msgctxt "field:table.table_cell,write_date:"
+msgctxt "field:table.cell,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:table.table_cell,write_uid:"
+msgctxt "field:table.cell,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -450,7 +450,7 @@ msgctxt "model:table.manage_dimension.show.dimension,name:"
 msgid "Dimension Displayer"
 msgstr ""
 
-msgctxt "model:table.table_cell,name:"
+msgctxt "model:table.cell,name:"
 msgid "Cell"
 msgstr "Cellule"
 
@@ -654,7 +654,7 @@ msgctxt "view:table.manage_dimension.show.dimension:"
 msgid "Manage Dimensions"
 msgstr "Sélection Dimension"
 
-msgctxt "view:table.table_cell:"
+msgctxt "view:table.cell:"
 msgid "Table"
 msgstr "Table"
 

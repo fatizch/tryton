@@ -161,7 +161,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
     def get_index_at_date(self, at_date):
         if not self.revaluation_index:
             return
-        Cell = Pool().get('table.table_cell')
+        Cell = Pool().get('table.cell')
         return Cell.get_cell(self.revaluation_index, (at_date))
 
     def on_change_with_index_initial_value(self, name=None):

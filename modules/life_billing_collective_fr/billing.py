@@ -162,7 +162,7 @@ class RateLine(model.CoopSQL, model.CoopView):
     def get_index_value(self, name):
         if not self.index:
             return
-        Cell = Pool().get('table.table_cell')
+        Cell = Pool().get('table.cell')
         cell = Cell.get_cell(self.index, (self.start_date_))
         return cell.get_value_with_type() if cell else None
 
