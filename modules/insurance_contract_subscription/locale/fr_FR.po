@@ -170,53 +170,53 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt ""
-"field:ins_contract.subscription_process_parameters,business_provider:"
+"field:contract.subscribe.find_process,business_provider:"
 msgid "Business Provider"
 msgstr "Apporteur d'affaires"
 
-msgctxt "field:ins_contract.subscription_process_parameters,com_product:"
+msgctxt "field:contract.subscribe.find_process,com_product:"
 msgid "Product Commercial"
 msgstr "Produit Commercial"
 
-msgctxt "field:ins_contract.subscription_process_parameters,date:"
+msgctxt "field:contract.subscribe.find_process,date:"
 msgid "Date"
 msgstr "Date"
 
 msgctxt ""
-"field:ins_contract.subscription_process_parameters,delegated_manager:"
+"field:contract.subscribe.find_process,delegated_manager:"
 msgid "Delegated Manager"
 msgstr "Délégataire de gestion"
 
-msgctxt "field:ins_contract.subscription_process_parameters,dist_network:"
+msgctxt "field:contract.subscribe.find_process,dist_network:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
 
-msgctxt "field:ins_contract.subscription_process_parameters,good_process:"
+msgctxt "field:contract.subscribe.find_process,good_process:"
 msgid "Good Process"
 msgstr "Processus"
 
-msgctxt "field:ins_contract.subscription_process_parameters,id:"
+msgctxt "field:contract.subscribe.find_process,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_contract.subscription_process_parameters,model:"
+msgctxt "field:contract.subscribe.find_process,model:"
 msgid "Model"
 msgstr "Modèle"
 
-msgctxt "field:ins_contract.subscription_process_parameters,must_expand_tree:"
+msgctxt "field:contract.subscribe.find_process,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_contract.subscription_process_parameters,possible_brokers:"
+msgctxt "field:contract.subscribe.find_process,possible_brokers:"
 msgid "Possible Brokers"
 msgstr "Courtiers Possibles"
 
 msgctxt ""
-"field:ins_contract.subscription_process_parameters,possible_com_product:"
+"field:contract.subscribe.find_process,possible_com_product:"
 msgid "Commercial Products Available"
 msgstr "Produits Commerciaux Disponibles"
 
-msgctxt "field:ins_contract.subscription_process_parameters,product:"
+msgctxt "field:contract.subscribe.find_process,product:"
 msgid "Product"
 msgstr "Produit"
 
@@ -236,7 +236,7 @@ msgctxt "model:ins_contract.subscription_mgr,name:"
 msgid "Subscription Manager"
 msgstr ""
 
-msgctxt "model:ins_contract.subscription_process_parameters,name:"
+msgctxt "model:contract.subscribe.find_process,name:"
 msgid "Subscription Process Parameters"
 msgstr "Paramètres du Processus de Souscription"
 

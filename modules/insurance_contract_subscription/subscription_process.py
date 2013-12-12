@@ -49,7 +49,7 @@ class ProcessDesc():
 class SubscriptionProcessParameters(ProcessParameters):
     'Subscription Process Parameters'
 
-    __name__ = 'ins_contract.subscription_process_parameters'
+    __name__ = 'contract.subscribe.find_process'
 
     dist_network = fields.Many2One('distribution.network',
         'Distribution Network', on_change=['dist_network', 'possible_brokers',
@@ -163,7 +163,7 @@ class SubscriptionProcessFinder(ProcessFinder):
 
     @classmethod
     def get_parameters_model(cls):
-        return 'ins_contract.subscription_process_parameters'
+        return 'contract.subscribe.find_process'
 
     @classmethod
     def get_parameters_view(cls):

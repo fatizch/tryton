@@ -2,7 +2,7 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:ins_contract.subscription_process_parameters,is_group:"
+msgctxt "field:contract.subscribe.find_process,is_group:"
 msgid "Group"
 msgstr "Groupe"
 
