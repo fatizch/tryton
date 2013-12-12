@@ -22,7 +22,7 @@ msgctxt "error:table.manage_dimension.show_dimension_3:"
 msgid "The requested change might delete data."
 msgstr ""
 
-msgctxt "error:table.manage_dimension_4:"
+msgctxt "error:table.manage_dimension.show_dimension_4:"
 msgid "The requested change might delete data."
 msgstr ""
 
@@ -760,15 +760,15 @@ msgctxt ""
 msgid "View Data"
 msgstr "Visualisation des données"
 
-msgctxt "wizard_button:table.manage_dimension_4,dimension_management,apply_:"
+msgctxt "wizard_button:table.manage_dimension.show_dimension_4,dimension_management,apply_:"
 msgid "Apply"
 msgstr "Appliquer"
 
-msgctxt "wizard_button:table.manage_dimension_4,dimension_management,end:"
+msgctxt "wizard_button:table.manage_dimension.show_dimension_4,dimension_management,end:"
 msgid "Exit"
 msgstr "Fin"
 
 msgctxt ""
-"wizard_button:table.manage_dimension_4,dimension_management,view_data:"
+"wizard_button:table.manage_dimension.show_dimension_4,dimension_management,view_data:"
 msgid "View Data"
 msgstr "Visualisation des données"

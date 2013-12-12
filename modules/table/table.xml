@@ -170,7 +170,7 @@
     <!-- ############################################################ -->
     <record model="ir.action.wizard" id="act_manage_dimension_4">
       <field name="name">Manage Dimension 4</field>
-      <field name="wiz_name">table.manage_dimension_4</field>
+      <field name="wiz_name">table.manage_dimension.show_dimension_4</field>
     </record>
     <!-- ############################################################ -->
     <!-- Create Table -->
