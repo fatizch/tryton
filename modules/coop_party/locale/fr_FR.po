@@ -10,7 +10,7 @@ msgctxt "error:party.contact_mechanism:"
 msgid "Invalid Email !"
 msgstr "e-Mail Invalide"
 
-msgctxt "error:party.party_relation_kind:"
+msgctxt "error:party.relation.kind:"
 msgid "The key must be unique!"
 msgstr "La clé doit être unique"
 
@@ -390,47 +390,47 @@ msgctxt "field:party.party-relation,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:party.party_relation_kind,code:"
+msgctxt "field:party.relation.kind,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:party.party_relation_kind,create_date:"
+msgctxt "field:party.relation.kind,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:party.party_relation_kind,create_date_:"
+msgctxt "field:party.relation.kind,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:party.party_relation_kind,create_uid:"
+msgctxt "field:party.relation.kind,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:party.party_relation_kind,id:"
+msgctxt "field:party.relation.kind,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.party_relation_kind,must_expand_tree:"
+msgctxt "field:party.relation.kind,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:party.party_relation_kind,name:"
+msgctxt "field:party.relation.kind,name:"
 msgid "Name"
 msgstr "Valeur"
 
-msgctxt "field:party.party_relation_kind,rec_name:"
+msgctxt "field:party.relation.kind,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:party.party_relation_kind,reversed_name:"
+msgctxt "field:party.relation.kind,reversed_name:"
 msgid "Reversed Name"
 msgstr ""
 
-msgctxt "field:party.party_relation_kind,write_date:"
+msgctxt "field:party.relation.kind,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:party.party_relation_kind,write_uid:"
+msgctxt "field:party.relation.kind,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -498,7 +498,7 @@ msgctxt "model:party.party-relation,name:"
 msgid "Party Relation"
 msgstr "Relations entre Acteurs"
 
-msgctxt "model:party.party_relation_kind,name:"
+msgctxt "model:party.relation.kind,name:"
 msgid "Party Relation Kind"
 msgstr "Type de Relation entre Acteurs"
 
@@ -590,6 +590,6 @@ msgctxt "view:party.party:"
 msgid "Summary"
 msgstr "Synthèse"
 
-msgctxt "view:party.party_relation_kind:"
+msgctxt "view:party.relation.kind:"
 msgid "Party Relation Kind"
 msgstr "Type de Relation entre Acteurs"

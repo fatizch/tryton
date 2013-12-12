@@ -123,4 +123,4 @@ class EligibilityRelationKind(model.CoopSQL):
     eligibility_rule = fields.Many2One(
         'ins_product.eligibility_rule', 'Eligibility Rule', ondelete='CASCADE')
     relation_kind = fields.Many2One(
-        'party.party_relation_kind', 'Relation Kind', ondelete='CASCADE')
+        'party.relation.kind', 'Relation Kind', ondelete='CASCADE')
