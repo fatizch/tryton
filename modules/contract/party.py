@@ -98,7 +98,7 @@ class Party():
 class ContactHistory():
     'Contact History'
 
-    __name__ = 'party.contact_history'
+    __name__ = 'party.interaction'
 
     @classmethod
     def __setup__(cls):

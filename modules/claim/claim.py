@@ -970,7 +970,7 @@ class RequestFinder():
 class ContactHistory():
     'Contact History'
 
-    __name__ = 'party.contact_history'
+    __name__ = 'party.interaction'
     __metaclass__ = PoolMeta
 
     @classmethod

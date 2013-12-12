@@ -715,7 +715,7 @@ class LetterGeneration(Wizard):
         good_obj = GoodModel(Transaction().context.get('active_id'))
         good_obj.post_generation()
 
-        ContactHistory = Pool().get('party.contact_history')
+        ContactHistory = Pool().get('party.interaction')
         contact = ContactHistory()
         contact.party = good_obj.get_contact()
         contact.media = 'mail'

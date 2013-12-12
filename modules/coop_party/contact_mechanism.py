@@ -68,7 +68,7 @@ class ContactMechanism(model.CoopSQL):
 class ContactHistory(model.CoopSQL, model.CoopView):
     'Contact History'
 
-    __name__ = 'party.contact_history'
+    __name__ = 'party.interaction'
 
     party = fields.Many2One('party.party', 'Actor',
         ondelete='CASCADE',

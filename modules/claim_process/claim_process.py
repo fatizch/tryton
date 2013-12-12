@@ -38,7 +38,7 @@ class ClaimProcess(CoopProcessFramework):
         'get_indemnifications')
     contact_history = fields.Function(
         fields.One2Many(
-            'party.contact_history', '', 'History',
+            'party.interaction', '', 'History',
             on_change_with=['claimant'], depends=['claimant']),
         'on_change_with_contact_history')
     is_pending_indemnification = fields.Function(
@@ -48,7 +48,7 @@ class ClaimProcess(CoopProcessFramework):
     def on_change_with_contact_history(self, name=None):
         if not (hasattr(self, 'claimant') and self.claimant):
             return []
-        ContactHistory = Pool().get('party.contact_history')
+        ContactHistory = Pool().get('party.interaction')
         return [x.id for x in ContactHistory.search(
             [('party', '=', self.claimant)])]
 

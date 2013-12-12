@@ -878,7 +878,7 @@ msgctxt "selection:offered.coverage,family:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:party.contact_history,for_object_ref:"
+msgctxt "selection:party.interaction,for_object_ref:"
 msgid "Claim"
 msgstr "Sinistre"
 

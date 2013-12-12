@@ -602,7 +602,7 @@ msgctxt "selection:ins_product.letter_model,kind:"
 msgid "Contract Documents"
 msgstr "Documents du contrat"
 
-msgctxt "selection:party.contact_history,for_object_ref:"
+msgctxt "selection:party.interaction,for_object_ref:"
 msgid "Contract"
 msgstr "Contrat"
 
