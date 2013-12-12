@@ -267,40 +267,40 @@ msgctxt "field:benefit,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.benefit-complementary_data_def,benefit:"
+msgctxt "field:benefit-extra_data,benefit:"
 msgid "Benefit"
 msgstr "Prestation"
 
 msgctxt ""
-"field:ins_product.benefit-complementary_data_def,complementary_data_def:"
+"field:benefit-extra_data,complementary_data_def:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:ins_product.benefit-complementary_data_def,create_date:"
+msgctxt "field:benefit-extra_data,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.benefit-complementary_data_def,create_date_:"
+msgctxt "field:benefit-extra_data,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.benefit-complementary_data_def,create_uid:"
+msgctxt "field:benefit-extra_data,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.benefit-complementary_data_def,id:"
+msgctxt "field:benefit-extra_data,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.benefit-complementary_data_def,rec_name:"
+msgctxt "field:benefit-extra_data,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.benefit-complementary_data_def,write_date:"
+msgctxt "field:benefit-extra_data,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.benefit-complementary_data_def,write_uid:"
+msgctxt "field:benefit-extra_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3272,7 +3272,7 @@ msgctxt "model:benefit,name:"
 msgid "Benefit"
 msgstr "Prestation"
 
-msgctxt "model:ins_product.benefit-complementary_data_def,name:"
+msgctxt "model:benefit-extra_data,name:"
 msgid "Relation between Benefit and Complementary Data"
 msgstr "Relation entre Prestation et Données Complémentaires"
 

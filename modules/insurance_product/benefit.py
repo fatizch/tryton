@@ -152,7 +152,7 @@ class Benefit(model.CoopSQL, offered.Offered):
         'Loss Descriptions', domain=[('company', '=', Eval('company'))],
         depends=['company'], required=True)
     complementary_data_def = fields.Many2Many(
-        'ins_product.benefit-complementary_data_def',
+        'benefit-extra_data',
         'benefit', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'benefit')])
     use_local_currency = fields.Boolean('Use Local Currency')
@@ -285,7 +285,7 @@ class CoverageBenefitRelation(model.CoopSQL):
 class BenefitComplementaryDataRelation(model.CoopSQL):
     'Relation between Benefit and Complementary Data'
 
-    __name__ = 'ins_product.benefit-complementary_data_def'
+    __name__ = 'benefit-extra_data'
 
     benefit = fields.Many2One(
         'benefit', 'Benefit', ondelete='CASCADE')
