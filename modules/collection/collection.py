@@ -116,7 +116,7 @@ class Payment:
 class CollectionParameters(model.CoopView):
     'Collection parameters'
 
-    __name__ = 'collection.collection_parameters'
+    __name__ = 'collection.create.parameters'
 
     kind = fields.Selection([('cash', 'Cash'), ('check', 'Check')], 'Kind',
         required=True)
@@ -216,7 +216,7 @@ class CollectionWizard(model.CoopWizard):
     __name__ = 'collection.collection_wizard'
 
     start_state = 'input_collection_parameters'
-    input_collection_parameters = StateView('collection.collection_parameters',
+    input_collection_parameters = StateView('collection.create.parameters',
         'collection.collection_parameters_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Assign', 'assign', 'tryton-go-next')])

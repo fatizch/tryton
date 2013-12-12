@@ -143,35 +143,35 @@ msgctxt "field:collection,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:collection.collection_parameters,amount:"
+msgctxt "field:collection.create.parameters,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:collection.collection_parameters,check_number:"
+msgctxt "field:collection.create.parameters,check_number:"
 msgid "Check Number"
 msgstr "Numéro de chèque"
 
-msgctxt "field:collection.collection_parameters,check_reception_date:"
+msgctxt "field:collection.create.parameters,check_reception_date:"
 msgid "Check Reception Date"
 msgstr "Date de Remise à la Banque"
 
-msgctxt "field:collection.collection_parameters,collection:"
+msgctxt "field:collection.create.parameters,collection:"
 msgid "Collection"
 msgstr "Encaissement"
 
-msgctxt "field:collection.collection_parameters,id:"
+msgctxt "field:collection.create.parameters,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:collection.collection_parameters,kind:"
+msgctxt "field:collection.create.parameters,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:collection.collection_parameters,must_expand_tree:"
+msgctxt "field:collection.create.parameters,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:collection.collection_parameters,party:"
+msgctxt "field:collection.create.parameters,party:"
 msgid "Party"
 msgstr "Tiers"
 
@@ -191,7 +191,7 @@ msgctxt "model:collection,name:"
 msgid "Collection"
 msgstr "Encaissement"
 
-msgctxt "model:collection.collection_parameters,name:"
+msgctxt "model:collection.create.parameters,name:"
 msgid "Collection parameters"
 msgstr "Informations de l'encaissement"
 
@@ -231,11 +231,11 @@ msgctxt "selection:collection,kind:"
 msgid "Check"
 msgstr "Chèque"
 
-msgctxt "selection:collection.collection_parameters,kind:"
+msgctxt "selection:collection.create.parameters,kind:"
 msgid "Cash"
 msgstr "Cash"
 
-msgctxt "selection:collection.collection_parameters,kind:"
+msgctxt "selection:collection.create.parameters,kind:"
 msgid "Check"
 msgstr "Chèque"
 
@@ -259,7 +259,7 @@ msgctxt "view:collection:"
 msgid "Collections"
 msgstr "Encaissements"
 
-msgctxt "view:collection.collection_parameters:"
+msgctxt "view:collection.create.parameters:"
 msgid "Collection Parameters"
 msgstr "informations d'encaissement"
 

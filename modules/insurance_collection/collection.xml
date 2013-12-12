@@ -5,7 +5,7 @@
     <!-- CollectionParameters -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="collection_parameters_form">
-      <field name="model">collection.collection_parameters</field>
+      <field name="model">collection.create.parameters</field>
       <field name="type">form</field>
       <field name="inherit" ref="collection.collection_parameters_form"/>
       <field name="name">collection_parameters_form</field>

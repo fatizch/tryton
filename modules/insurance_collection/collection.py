@@ -16,7 +16,7 @@ class CollectionParameters():
     'Collection parameters'
 
     __metaclass__ = PoolMeta
-    __name__ = 'collection.collection_parameters'
+    __name__ = 'collection.create.parameters'
 
     contract = fields.Many2One('contract.contract', 'Contract', on_change=[
             'contract', 'party'], depends=['party'], domain=[

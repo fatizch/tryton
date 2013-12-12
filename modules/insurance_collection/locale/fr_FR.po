@@ -6,7 +6,7 @@ msgctxt "field:collection.create.assign,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:collection.collection_parameters,contract:"
+msgctxt "field:collection.create.parameters,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
