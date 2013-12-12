@@ -1730,23 +1730,23 @@ msgctxt "field:document.create.select.template,selected:"
 msgid "Selected"
 msgstr "Coché"
 
-msgctxt "field:ins_product.letter_model_selection,good_address:"
+msgctxt "field:document.create.select,good_address:"
 msgid "Mail Address"
 msgstr "Adresse du courrier"
 
-msgctxt "field:ins_product.letter_model_selection,id:"
+msgctxt "field:document.create.select,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.letter_model_selection,models:"
+msgctxt "field:document.create.select,models:"
 msgid "Models"
 msgstr "Modèles"
 
-msgctxt "field:ins_product.letter_model_selection,must_expand_tree:"
+msgctxt "field:document.create.select,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.letter_model_selection,party:"
+msgctxt "field:document.create.select,party:"
 msgid "Party"
 msgstr "Acteur"
 
@@ -3385,7 +3385,7 @@ msgctxt "model:document.create.select.template,name:"
 msgid "Letter Model Displayer"
 msgstr "Présenteur de Modèle de Lettre"
 
-msgctxt "model:ins_product.letter_model_selection,name:"
+msgctxt "model:document.create.select,name:"
 msgid "Letter Model Selection"
 msgstr "Sélection du modèle de Lettre"
 
@@ -4644,7 +4644,7 @@ msgctxt "view:document.create.select.template:"
 msgid "Letter Models"
 msgstr "Modèles de Lettre"
 
-msgctxt "view:ins_product.letter_model_selection:"
+msgctxt "view:document.create.select:"
 msgid "Letter Models"
 msgstr "Modèles de Lettre"
 

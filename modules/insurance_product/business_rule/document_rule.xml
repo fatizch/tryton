@@ -116,7 +116,7 @@
     </record>
     <!-- Letter Model Selection -->
     <record model="ir.ui.view" id="letter_model_selection_form">
-      <field name="model">ins_product.letter_model_selection</field>
+      <field name="model">document.create.select</field>
       <field name="type">form</field>
       <field name="name">letter_model_selection_form</field>
     </record>

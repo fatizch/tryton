@@ -523,7 +523,7 @@ class LetterModelDisplayer(model.CoopView):
 class LetterModelSelection(model.CoopView):
     'Letter Model Selection'
 
-    __name__ = 'ins_product.letter_model_selection'
+    __name__ = 'document.create.select'
 
     models = fields.One2Many(
         'document.create.select.template',
@@ -648,7 +648,7 @@ class LetterGeneration(Wizard):
     generate = StateAction('insurance_product.letter_generation_report')
     post_generation = StateTransition()
     select_model = StateView(
-        'ins_product.letter_model_selection',
+        'document.create.select',
         'insurance_product.letter_model_selection_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
