@@ -330,39 +330,39 @@ msgctxt "field:distribution.network-broker,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:distribution.dist_network-plan,com_plan:"
+msgctxt "field:distribution.network-commission.plan,com_plan:"
 msgid "Commission Plan"
 msgstr "Plan de Commissionnement"
 
-msgctxt "field:distribution.dist_network-plan,create_date:"
+msgctxt "field:distribution.network-commission.plan,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:distribution.dist_network-plan,create_date_:"
+msgctxt "field:distribution.network-commission.plan,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:distribution.dist_network-plan,create_uid:"
+msgctxt "field:distribution.network-commission.plan,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:distribution.dist_network-plan,dist_network:"
+msgctxt "field:distribution.network-commission.plan,dist_network:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
 
-msgctxt "field:distribution.dist_network-plan,id:"
+msgctxt "field:distribution.network-commission.plan,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:distribution.dist_network-plan,rec_name:"
+msgctxt "field:distribution.network-commission.plan,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:distribution.dist_network-plan,write_date:"
+msgctxt "field:distribution.network-commission.plan,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:distribution.dist_network-plan,write_uid:"
+msgctxt "field:distribution.network-commission.plan,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -462,7 +462,7 @@ msgctxt "model:distribution.network-broker,name:"
 msgid "Relation Distribution Network - Broker"
 msgstr "Relation Réseau de Distrib - Courtier"
 
-msgctxt "model:distribution.dist_network-plan,name:"
+msgctxt "model:distribution.network-commission.plan,name:"
 msgid "Relation Distribution Network - Commission Plan"
 msgstr "Relation Réseau de Distrib - Plan de Com"
 

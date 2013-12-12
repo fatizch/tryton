@@ -16,7 +16,7 @@ class DistributionNetwork():
     __name__ = 'distribution.dist_network'
     __metaclass__ = PoolMeta
 
-    commission_plans = fields.Many2Many('distribution.dist_network-plan',
+    commission_plans = fields.Many2Many('distribution.network-commission.plan',
         'dist_network', 'com_plan', 'Commission Plans',
         domain=[('kind', '=', 'commission')])
     parent_com_plans = fields.Function(
@@ -68,7 +68,7 @@ class DistributionNetwork():
 class DistributionNetworkComPlanRelation(model.CoopSQL):
     'Relation Distribution Network - Commission Plan'
 
-    __name__ = 'distribution.dist_network-plan'
+    __name__ = 'distribution.network-commission.plan'
 
     dist_network = fields.Many2One('distribution.dist_network',
         'Distribution Network', ondelete='CASCADE')

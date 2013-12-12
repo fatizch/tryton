@@ -27,7 +27,7 @@ class CommissionPlan():
     __name__ = 'offered.product'
     __metaclass__ = PoolMeta
 
-    dist_networks = fields.Many2Many('distribution.dist_network-plan',
+    dist_networks = fields.Many2Many('distribution.network-commission.plan',
         'com_plan', 'dist_network', 'Distribution Networks')
     commission_kind = fields.Selection(COMMISSION_KIND, 'Commission Kind',
         states={
