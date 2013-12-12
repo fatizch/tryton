@@ -50,7 +50,7 @@ class LoanIncrementsDisplayer(model.CoopView):
 class AmortizationTableDisplayer(model.CoopView):
     'Amortization Table'
 
-    __name__ = 'loan.creation_table'
+    __name__ = 'loan.create.amortization_table'
 
     payments = fields.One2Many('loan.payment', None, 'Payments')
 
@@ -75,7 +75,7 @@ class LoanCreation(model.CoopWizard):
                 default=True),
             ])
     create_payments = StateTransition()
-    amortization_table = StateView('loan.creation_table',
+    amortization_table = StateView('loan.create.amortization_table',
         'loan.loan_creation_table_view_form', [
             Button('Cancel', 'cancel_loan', 'tryton-cancel'),
             Button('Previous', 'increments', 'tryton-go-previous'),

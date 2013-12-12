@@ -80,7 +80,7 @@
             <field name="name">loan_creation_increments_form</field>
         </record>
         <record model="ir.ui.view" id="loan_creation_table_view_form">
-            <field name="model">loan.creation_table</field>
+            <field name="model">loan.create.amortization_table</field>
             <field name="type">form</field>
             <field name="name">loan_creation_table_form</field>
         </record>

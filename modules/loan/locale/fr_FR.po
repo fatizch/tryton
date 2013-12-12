@@ -166,15 +166,15 @@ msgctxt "field:loan.create.parameters,rate:"
 msgid "Annual Rate"
 msgstr "Taux Annuel"
 
-msgctxt "field:loan.creation_table,id:"
+msgctxt "field:loan.create.amortization_table,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:loan.creation_table,must_expand_tree:"
+msgctxt "field:loan.create.amortization_table,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:loan.creation_table,payments:"
+msgctxt "field:loan.create.amortization_table,payments:"
 msgid "Payments"
 msgstr "Echéances"
 
@@ -546,7 +546,7 @@ msgctxt "model:loan.create.parameters,name:"
 msgid "Loan Parameters"
 msgstr "Paramètres du Prêt"
 
-msgctxt "model:loan.creation_table,name:"
+msgctxt "model:loan.create.amortization_table,name:"
 msgid "Amortization Table"
 msgstr "Table d'Amortissement"
 
@@ -762,7 +762,7 @@ msgctxt "view:loan.create.parameters:"
 msgid "Loan Parameters"
 msgstr "Paramètres du Prêt"
 
-msgctxt "view:loan.creation_table:"
+msgctxt "view:loan.create.amortization_table:"
 msgid "Amortization Table"
 msgstr "Table d'Amortissement"
 
