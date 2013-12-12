@@ -346,7 +346,7 @@ class Loss(model.CoopSQL, model.CoopView):
             'invisible': Bool(~Eval('with_end_date')),
             'required': Bool(Eval('with_end_date')),
             }, depends=['with_end_date'],)
-    loss_desc = fields.Many2One('ins_product.loss_desc', 'Loss Descriptor',
+    loss_desc = fields.Many2One('benefit.loss.description', 'Loss Descriptor',
         ondelete='RESTRICT',
         on_change=['event_desc', 'loss_desc', 'with_end_date', 'end_date'],
         domain=[
@@ -355,7 +355,7 @@ class Loss(model.CoopSQL, model.CoopView):
             ],
         depends=['possible_loss_descs'])
     possible_loss_descs = fields.Function(
-        fields.One2Many('ins_product.loss_desc', None, 'Possible Loss Descs',
+        fields.One2Many('benefit.loss.description', None, 'Possible Loss Descs',
             on_change_with=['claim']),
         'on_change_with_possible_loss_descs')
     event_desc = fields.Many2One('benefit.event.description', 'Event',

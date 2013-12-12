@@ -73,13 +73,13 @@ class LossDescDocumentsRelation(model.CoopSQL):
     document = fields.Many2One(
         'ins_product.document_desc', 'Document', ondelete='RESTRICT')
     loss = fields.Many2One(
-        'ins_product.loss_desc', 'Loss', ondelete='CASCADE')
+        'benefit.loss.description', 'Loss', ondelete='CASCADE')
 
 
 class LossDesc(model.CoopSQL, model.CoopView):
     'Loss Desc'
 
-    __name__ = 'ins_product.loss_desc'
+    __name__ = 'benefit.loss.description'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', translate=True)
@@ -119,7 +119,7 @@ class LossDescComplementaryDataRelation(model.CoopSQL):
     __name__ = 'ins_product.loss_desc-complementary_data_def'
 
     loss_desc = fields.Many2One(
-        'ins_product.loss_desc', 'Loss Desc', ondelete='CASCADE')
+        'benefit.loss.description', 'Loss Desc', ondelete='CASCADE')
     complementary_data_def = fields.Many2One(
         'offered.complementary_data_def',
         'Complementary Data', ondelete='RESTRICT')
@@ -133,7 +133,7 @@ class EventDescLossDescRelation(model.CoopSQL):
     event_desc = fields.Many2One(
         'benefit.event.description', 'Event Desc', ondelete='CASCADE')
     loss_desc = fields.Many2One(
-        'ins_product.loss_desc', 'Loss Desc', ondelete='RESTRICT')
+        'benefit.loss.description', 'Loss Desc', ondelete='RESTRICT')
 
 
 class Benefit(model.CoopSQL, offered.Offered):
@@ -268,7 +268,7 @@ class BenefitLossDescRelation(model.CoopSQL):
     benefit = fields.Many2One(
         'benefit', 'Benefit', ondelete='CASCADE')
     loss_desc = fields.Many2One(
-        'ins_product.loss_desc', 'Loss Desc', ondelete='RESTRICT')
+        'benefit.loss.description', 'Loss Desc', ondelete='RESTRICT')
 
 
 class CoverageBenefitRelation(model.CoopSQL):

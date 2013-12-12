@@ -91,7 +91,7 @@ class TestCaseModel():
     @classmethod
     def create_loss_desc(cls, code, name, item_kind, with_end_date,
             events, documents):
-        LossDesc = Pool().get('ins_product.loss_desc')
+        LossDesc = Pool().get('benefit.loss.description')
         loss_desc = LossDesc()
         loss_desc.code = code
         loss_desc.name = name

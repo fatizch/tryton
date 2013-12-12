@@ -146,7 +146,7 @@ class LifeEligibilityRule():
 class LifeLossDesc():
     'Loss Desc'
 
-    __name__ = 'ins_product.loss_desc'
+    __name__ = 'benefit.loss.description'
     __metaclass__ = PoolMeta
 
     @classmethod

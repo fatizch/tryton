@@ -1870,67 +1870,67 @@ msgctxt "field:ins_product.loss-document-relation,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.loss_desc,code:"
+msgctxt "field:benefit.loss.description,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:ins_product.loss_desc,company:"
+msgctxt "field:benefit.loss.description,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:ins_product.loss_desc,complementary_data_def:"
+msgctxt "field:benefit.loss.description,complementary_data_def:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:ins_product.loss_desc,create_date:"
+msgctxt "field:benefit.loss.description,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.loss_desc,create_date_:"
+msgctxt "field:benefit.loss.description,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.loss_desc,create_uid:"
+msgctxt "field:benefit.loss.description,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.loss_desc,documents:"
+msgctxt "field:benefit.loss.description,documents:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "field:ins_product.loss_desc,event_descs:"
+msgctxt "field:benefit.loss.description,event_descs:"
 msgid "Events Descriptions"
 msgstr "Descripteurs d'Evénement"
 
-msgctxt "field:ins_product.loss_desc,id:"
+msgctxt "field:benefit.loss.description,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.loss_desc,item_kind:"
+msgctxt "field:benefit.loss.description,item_kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:ins_product.loss_desc,must_expand_tree:"
+msgctxt "field:benefit.loss.description,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.loss_desc,name:"
+msgctxt "field:benefit.loss.description,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.loss_desc,rec_name:"
+msgctxt "field:benefit.loss.description,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.loss_desc,with_end_date:"
+msgctxt "field:benefit.loss.description,with_end_date:"
 msgid "With End Date"
 msgstr "Avec Date de Fin"
 
-msgctxt "field:ins_product.loss_desc,write_date:"
+msgctxt "field:benefit.loss.description,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.loss_desc,write_uid:"
+msgctxt "field:benefit.loss.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3397,7 +3397,7 @@ msgctxt "model:ins_product.loss-document-relation,name:"
 msgid "Loss Desc to Document relation"
 msgstr "Relation Descripteur de Préjudice Document"
 
-msgctxt "model:ins_product.loss_desc,name:"
+msgctxt "model:benefit.loss.description,name:"
 msgid "Loss Desc"
 msgstr "Descripteur de Préjudice"
 
@@ -4656,19 +4656,19 @@ msgctxt "view:ins_product.letter_version:"
 msgid "Letter Versions"
 msgstr "Versions de Lettre"
 
-msgctxt "view:ins_product.loss_desc:"
+msgctxt "view:benefit.loss.description:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "view:ins_product.loss_desc:"
+msgctxt "view:benefit.loss.description:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "view:ins_product.loss_desc:"
+msgctxt "view:benefit.loss.description:"
 msgid "Events"
 msgstr "Evénements"
 
-msgctxt "view:ins_product.loss_desc:"
+msgctxt "view:benefit.loss.description:"
 msgid "Loss Descriptor"
 msgstr "Description du Préjudice"
 
