@@ -155,23 +155,23 @@ msgctxt "field:contract.do_billing.bill,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:billing.billing_process.bill_parameters,contract:"
+msgctxt "field:contract.do_billing.parameters,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:billing.billing_process.bill_parameters,end_date:"
+msgctxt "field:contract.do_billing.parameters,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:billing.billing_process.bill_parameters,id:"
+msgctxt "field:contract.do_billing.parameters,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.billing_process.bill_parameters,must_expand_tree:"
+msgctxt "field:contract.do_billing.parameters,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:billing.billing_process.bill_parameters,start_date:"
+msgctxt "field:contract.do_billing.parameters,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
@@ -837,7 +837,7 @@ msgctxt "model:contract.do_billing.bill,name:"
 msgid "Bill Displayer"
 msgstr ""
 
-msgctxt "model:billing.billing_process.bill_parameters,name:"
+msgctxt "model:contract.do_billing.parameters,name:"
 msgid "Bill Parameters"
 msgstr "Paramètres de Facturation"
 
@@ -1129,7 +1129,7 @@ msgctxt "view:contract.do_billing.bill:"
 msgid "Bill Result"
 msgstr ""
 
-msgctxt "view:billing.billing_process.bill_parameters:"
+msgctxt "view:contract.do_billing.parameters:"
 msgid "Bill Parameters"
 msgstr "Paramètres de Facturation"
 

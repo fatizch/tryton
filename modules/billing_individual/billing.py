@@ -514,7 +514,7 @@ class BillingPeriod(model.CoopSQL, model.CoopView):
 class BillParameters(model.CoopView):
     'Bill Parameters'
 
-    __name__ = 'billing.billing_process.bill_parameters'
+    __name__ = 'contract.do_billing.parameters'
 
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date', required=True)
@@ -537,7 +537,7 @@ class BillingProcess(Wizard):
 
     start_state = 'bill_parameters'
     bill_parameters = StateView(
-        'billing.billing_process.bill_parameters',
+        'contract.do_billing.parameters',
         'billing_individual.bill_parameters_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Preview', 'bill_display', 'tryton-go-next')])
