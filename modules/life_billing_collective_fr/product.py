@@ -45,7 +45,7 @@ class Coverage():
     use_rates = fields.Function(
         fields.Boolean('Use Rates', states={'invisible': True}),
         'get_use_rates')
-    rating_rules = fields.One2Many('collective.rating_rule', 'offered',
+    rating_rules = fields.One2Many('billing.premium.rate.rule', 'offered',
         'Rating Rules', states={'invisible': ~Eval('is_group')})
 
     def get_rating_by_fare_class(self, name):
@@ -104,7 +104,7 @@ class FareClassGroupFareClassRelation(model.CoopSQL):
 class CollectiveRatingRule(business_rule.BusinessRuleRoot, model.CoopSQL):
     'Collective Rating Rule'
 
-    __name__ = 'collective.rating_rule'
+    __name__ = 'billing.premium.rate.rule'
 
     rating_kind = fields.Selection(
         [('tranche', 'by Tranche'), ('fare_class', 'by Fare Class')],
@@ -160,7 +160,7 @@ class SubRatingRule(model.CoopView, model.CoopSQL):
 
     __name__ = 'collective.sub_rating_rule'
 
-    main_rating_rule = fields.Many2One('collective.rating_rule',
+    main_rating_rule = fields.Many2One('billing.premium.rate.rule',
         'Main Rating Rule', ondelete='CASCADE')
     tranche = fields.Many2One('tranche.tranche', 'Tranche',
         states={'invisible': Eval('_parent_main_rating_rule', {}).get(
