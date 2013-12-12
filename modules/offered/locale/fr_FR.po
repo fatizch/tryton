@@ -408,39 +408,39 @@ msgctxt "field:offered.offered,template_behaviour:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.package-coverage,coverage:"
+msgctxt "field:offered.package-option.description,coverage:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.package-coverage,create_date:"
+msgctxt "field:offered.package-option.description,create_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.package-coverage,create_date_:"
+msgctxt "field:offered.package-option.description,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:offered.package-coverage,create_uid:"
+msgctxt "field:offered.package-option.description,create_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.package-coverage,id:"
+msgctxt "field:offered.package-option.description,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.package-coverage,package:"
+msgctxt "field:offered.package-option.description,package:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.package-coverage,rec_name:"
+msgctxt "field:offered.package-option.description,rec_name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.package-coverage,write_date:"
+msgctxt "field:offered.package-option.description,write_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.package-coverage,write_uid:"
+msgctxt "field:offered.package-option.description,write_uid:"
 msgid ""
 msgstr " "
 
@@ -692,7 +692,7 @@ msgctxt "model:offered.offered,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:offered.package-coverage,name:"
+msgctxt "model:offered.package-option.description,name:"
 msgid ""
 msgstr " "
 

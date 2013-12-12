@@ -39,7 +39,7 @@ class Coverage(model.CoopSQL, Offered):
     subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
         'Subscription Behaviour', sort=False)
     is_package = fields.Boolean('Package')
-    coverages_in_package = fields.Many2Many('offered.package-coverage',
+    coverages_in_package = fields.Many2Many('offered.package-option.description',
         'package', 'coverage', 'Coverages In Package',
         states={'invisible': Bool(~Eval('is_package'))},
         depends=['is_package', 'kind'],
@@ -111,7 +111,7 @@ class Coverage(model.CoopSQL, Offered):
 class PackageCoverage(model.CoopSQL):
     'Link Package Coverage'
 
-    __name__ = 'offered.package-coverage'
+    __name__ = 'offered.package-option.description'
 
     package = fields.Many2One('offered.option.description', 'Package')
     coverage = fields.Many2One('offered.option.description', 'Coverage')
