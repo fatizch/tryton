@@ -369,19 +369,19 @@ msgctxt ""
 msgid "Parameter View"
 msgstr "Paramètres"
 
-msgctxt "field:billing.rate_note_process_parameter-product,id:"
+msgctxt "field:billing.premium_rate.form.create.param-product,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.rate_note_process_parameter-product,must_expand_tree:"
+msgctxt "field:billing.premium_rate.form.create.param-product,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:billing.rate_note_process_parameter-product,parameters_view:"
+msgctxt "field:billing.premium_rate.form.create.param-product,parameters_view:"
 msgid "Parameter View"
 msgstr "Paramètres"
 
-msgctxt "field:billing.rate_note_process_parameter-product,product:"
+msgctxt "field:billing.premium_rate.form.create.param-product,product:"
 msgid "Product"
 msgstr "Produit"
 
@@ -817,7 +817,7 @@ msgctxt "model:billing.premium_rate.form.create.param-group_client,name:"
 msgid "Rate Note Parameter Group Party Relation"
 msgstr "Relation Bordereau Acteur"
 
-msgctxt "model:billing.rate_note_process_parameter-product,name:"
+msgctxt "model:billing.premium_rate.form.create.param-product,name:"
 msgid "Rate Note Parameter Product Relation"
 msgstr "Relation Bordereau Produit"
 
