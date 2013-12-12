@@ -508,7 +508,7 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
 class LetterModelDisplayer(model.CoopView):
     'Letter Model Displayer'
 
-    __name__ = 'ins_product.letter_model_displayer'
+    __name__ = 'document.create.select.template'
 
     letter_model = fields.Many2One(
         'document.template',
@@ -526,7 +526,7 @@ class LetterModelSelection(model.CoopView):
     __name__ = 'ins_product.letter_model_selection'
 
     models = fields.One2Many(
-        'ins_product.letter_model_displayer',
+        'document.create.select.template',
         '',
         'Models',
     )

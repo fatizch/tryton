@@ -126,7 +126,7 @@
       <field name="name">attach_letter_form</field>
     </record>
     <record model="ir.ui.view" id="letter_model_displayer_tree">
-      <field name="model">ins_product.letter_model_displayer</field>
+      <field name="model">document.create.select.template</field>
       <field name="type">tree</field>
       <field name="name">letter_model_displayer_tree</field>
     </record>

@@ -1714,19 +1714,19 @@ msgctxt "field:document.template,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.letter_model_displayer,id:"
+msgctxt "field:document.create.select.template,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.letter_model_displayer,letter_model:"
+msgctxt "field:document.create.select.template,letter_model:"
 msgid "Letter Model"
 msgstr "Modèle de Lettre"
 
-msgctxt "field:ins_product.letter_model_displayer,must_expand_tree:"
+msgctxt "field:document.create.select.template,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.letter_model_displayer,selected:"
+msgctxt "field:document.create.select.template,selected:"
 msgid "Selected"
 msgstr "Coché"
 
@@ -3381,7 +3381,7 @@ msgctxt "model:document.template,name:"
 msgid "Letter Model"
 msgstr "Modèle de Lettre"
 
-msgctxt "model:ins_product.letter_model_displayer,name:"
+msgctxt "model:document.create.select.template,name:"
 msgid "Letter Model Displayer"
 msgstr "Présenteur de Modèle de Lettre"
 
@@ -4640,7 +4640,7 @@ msgctxt "view:document.template:"
 msgid "Letter Models"
 msgstr "Modèles de Lettre"
 
-msgctxt "view:ins_product.letter_model_displayer:"
+msgctxt "view:document.create.select.template:"
 msgid "Letter Models"
 msgstr "Modèles de Lettre"
 
