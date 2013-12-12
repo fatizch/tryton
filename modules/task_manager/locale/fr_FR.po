@@ -90,27 +90,27 @@ msgctxt "field:task_manager.select_user,user_ok:"
 msgid "User Ok"
 msgstr "Utilisateur Ok"
 
-msgctxt "field:task_manager.task_displayer,id:"
+msgctxt "field:task.select.available_tasks.task,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:task_manager.task_displayer,kind:"
+msgctxt "field:task.select.available_tasks.task,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:task_manager.task_displayer,must_expand_tree:"
+msgctxt "field:task.select.available_tasks.task,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:task_manager.task_displayer,nb_tasks:"
+msgctxt "field:task.select.available_tasks.task,nb_tasks:"
 msgid "Number"
 msgstr "Numéro"
 
-msgctxt "field:task_manager.task_displayer,task:"
+msgctxt "field:task.select.available_tasks.task,task:"
 msgid "Task"
 msgstr "Tâche"
 
-msgctxt "field:task_manager.task_displayer,task_name:"
+msgctxt "field:task.select.available_tasks.task,task_name:"
 msgid "Task Name"
 msgstr "Nom de la Tâche"
 
@@ -290,7 +290,7 @@ msgctxt "model:task_manager.select_user,name:"
 msgid "Select User"
 msgstr "Saisir un utilisateur"
 
-msgctxt "model:task_manager.task_displayer,name:"
+msgctxt "model:task.select.available_tasks.task,name:"
 msgid "Task Displayer"
 msgstr "Tableau de Bord"
 
@@ -318,11 +318,11 @@ msgctxt "selection:task_manager.priority,kind:"
 msgid "User Issues"
 msgstr "Tâches de l'utilisateur"
 
-msgctxt "selection:task_manager.task_displayer,kind:"
+msgctxt "selection:task.select.available_tasks.task,kind:"
 msgid "Process"
 msgstr "Processus"
 
-msgctxt "selection:task_manager.task_displayer,kind:"
+msgctxt "selection:task.select.available_tasks.task,kind:"
 msgid "Team"
 msgstr "Equipe"
 
@@ -350,11 +350,11 @@ msgctxt "view:task_manager.select_user:"
 msgid "Add User"
 msgstr "Ajouter l'Utilisateur"
 
-msgctxt "view:task_manager.task_displayer:"
+msgctxt "view:task.select.available_tasks.task:"
 msgid "Tasks"
 msgstr "Tâches"
 
-msgctxt "view:task_manager.task_displayer:"
+msgctxt "view:task.select.available_tasks.task:"
 msgid "Tasks Repartition"
 msgstr "Repartition des Tâches"
 

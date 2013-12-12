@@ -87,12 +87,12 @@
     <!-- Task Displayer -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="task_displayer_tree">
-      <field name="model">task_manager.task_displayer</field>
+      <field name="model">task.select.available_tasks.task</field>
       <field name="type">tree</field>
       <field name="name">task_displayer_tree</field>
     </record>
     <record model="ir.ui.view" id="task_displayer_graph">
-        <field name="model">task_manager.task_displayer</field>
+        <field name="model">task.select.available_tasks.task</field>
         <field name="type">graph</field>
         <field name="name">task_displayer_graph</field>
     </record>

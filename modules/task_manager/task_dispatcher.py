@@ -116,7 +116,7 @@ class ProcessLog():
 class TaskDisplayer(model.CoopView):
     'Task Displayer'
 
-    __name__ = 'task_manager.task_displayer'
+    __name__ = 'task.select.available_tasks.task'
 
     task = fields.Many2One('process-process.step', 'Task')
     nb_tasks = fields.Integer(
@@ -166,11 +166,11 @@ class TaskSelector(model.CoopView):
         'Process Tasks',
         states={'readonly': True})
     tasks_team = fields.One2ManyDomain(
-        'task_manager.task_displayer', '', 'Team Tasks',
+        'task.select.available_tasks.task', '', 'Team Tasks',
         domain=[('kind', '=', 'team')],
         states={'readonly': True})
     tasks_process = fields.One2ManyDomain(
-        'task_manager.task_displayer', '', 'Process Tasks',
+        'task.select.available_tasks.task', '', 'Process Tasks',
         domain=[('kind', '=', 'process')],
         states={'readonly': True})
     tasks = fields.One2Many(
@@ -194,7 +194,7 @@ class TaskSelector(model.CoopView):
         tmp_result = {}
         final_result = []
         nb_tasks = 0
-        TaskDisplayer = Pool().get('task_manager.task_displayer')
+        TaskDisplayer = Pool().get('task.select.available_tasks.task')
         valid_states = []
         for priority in self.team.priorities:
             if (priority.process_step.id, priority.priority) in tmp_result:
@@ -228,7 +228,7 @@ class TaskSelector(model.CoopView):
         result = {}
         tmp_result = []
         nb_tasks = 0
-        TaskDisplayer = Pool().get('task_manager.task_displayer')
+        TaskDisplayer = Pool().get('task.select.available_tasks.task')
         for step in self.process.all_steps:
             task = TaskDisplayer()
             task.kind = 'process'
