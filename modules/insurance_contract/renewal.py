@@ -62,7 +62,7 @@ class RenewalStart(model.CoopView):
 class RenewalResult(model.CoopView):
     'Renewal Result'
 
-    __name__ = 'ins_contract.renewal_result'
+    __name__ = 'contract.renew.report'
 
     renewal_log_success = fields.Text('Succeeded', states={'readonly': True})
     renewal_log_failure = fields.Text('Failed', states={'readonly': True})
@@ -78,7 +78,7 @@ class RenewalWizard(Wizard):
         'insurance_contract.renewal_start_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Start', 'renewal_result', 'tryton-go-next')])
-    renewal_result = StateView('ins_contract.renewal_result',
+    renewal_result = StateView('contract.renew.report',
         'insurance_contract.renewal_result_form', [
             Button('End', 'end', 'tryton-cancel')])
 

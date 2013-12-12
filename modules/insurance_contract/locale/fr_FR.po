@@ -686,19 +686,19 @@ msgctxt "field:contract-agreement,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_contract.renewal_result,id:"
+msgctxt "field:contract.renew.report,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_contract.renewal_result,must_expand_tree:"
+msgctxt "field:contract.renew.report,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:ins_contract.renewal_result,renewal_log_failure:"
+msgctxt "field:contract.renew.report,renewal_log_failure:"
 msgid "Failed"
 msgstr "Ont échoués"
 
-msgctxt "field:ins_contract.renewal_result,renewal_log_success:"
+msgctxt "field:contract.renew.report,renewal_log_success:"
 msgid "Succeeded"
 msgstr "Ont réussit"
 
@@ -873,7 +873,7 @@ msgctxt "model:contract-agreement,name:"
 msgid "Management Role"
 msgstr "Gestionnaire"
 
-msgctxt "model:ins_contract.renewal_result,name:"
+msgctxt "model:contract.renew.report,name:"
 msgid "Renewal Result"
 msgstr "Résultat du Renouvellement"
 
@@ -1097,7 +1097,7 @@ msgctxt "view:contract-agreement:"
 msgid "Manager"
 msgstr "Géré par"
 
-msgctxt "view:ins_contract.renewal_result:"
+msgctxt "view:contract.renew.report:"
 msgid "Renewal Result"
 msgstr "Résultat du Renouvellement"
 
