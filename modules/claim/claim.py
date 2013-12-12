@@ -358,7 +358,7 @@ class Loss(model.CoopSQL, model.CoopView):
         fields.One2Many('ins_product.loss_desc', None, 'Possible Loss Descs',
             on_change_with=['claim']),
         'on_change_with_possible_loss_descs')
-    event_desc = fields.Many2One('ins_product.event_desc', 'Event',
+    event_desc = fields.Many2One('benefit.event.description', 'Event',
         domain=[('loss_descs', '=', Eval('loss_desc'))],
         states={'invisible': Bool(Eval('main_loss'))},
         depends=['loss_desc'], ondelete='RESTRICT')

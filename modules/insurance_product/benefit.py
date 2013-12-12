@@ -43,7 +43,7 @@ CURRENCY_SETTING = [
 class EventDesc(model.CoopSQL, model.CoopView):
     'Event Desc'
 
-    __name__ = 'ins_product.event_desc'
+    __name__ = 'benefit.event.description'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', translate=True)
@@ -131,7 +131,7 @@ class EventDescLossDescRelation(model.CoopSQL):
     __name__ = 'ins_product.event_desc-loss_desc'
 
     event_desc = fields.Many2One(
-        'ins_product.event_desc', 'Event Desc', ondelete='CASCADE')
+        'benefit.event.description', 'Event Desc', ondelete='CASCADE')
     loss_desc = fields.Many2One(
         'ins_product.loss_desc', 'Loss Desc', ondelete='RESTRICT')
 

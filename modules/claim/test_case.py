@@ -66,7 +66,7 @@ class TestCaseModel():
 
     @classmethod
     def create_event_desc(cls, code, name):
-        EventDesc = Pool().get('ins_product.event_desc')
+        EventDesc = Pool().get('benefit.event.description')
         event_desc = EventDesc()
         event_desc.code = code
         event_desc.name = name
@@ -82,7 +82,7 @@ class TestCaseModel():
         result = cls._get_event_desc_cache.get(code)
         if result:
             return result
-        result = Pool().get('ins_product.event_desc').search([
+        result = Pool().get('benefit.event.description').search([
                 ('code', '=', code),
                 ('company', '=', cls.get_company())], limit=1)[0]
         cls._get_event_desc_cache.set(code, result)
