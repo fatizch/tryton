@@ -43,7 +43,7 @@ __all__ = [
 class LetterModel(model.CoopSQL, model.CoopView):
     'Letter Model'
 
-    __name__ = 'ins_product.letter_model'
+    __name__ = 'document.template'
 
     name = fields.Char('Name', required=True, translate=True)
     on_model = fields.Many2One(
@@ -89,7 +89,7 @@ class LetterVersion(Attachment):
 
         cls.resource = copy.copy(cls.resource)
         cls.resource.selection = [(
-            'ins_product.letter_model', 'Letter Model')]
+            'document.template', 'Letter Model')]
 
     @classmethod
     def default_type(cls):
@@ -139,7 +139,7 @@ class Printable(Model):
         return address.full_address
 
     def get_available_letter_models(self, kind=None):
-        LetterModel = Pool().get('ins_product.letter_model')
+        LetterModel = Pool().get('document.template')
 
         domain = [
             ('on_model.model', '=', self.__name__),
@@ -511,7 +511,7 @@ class LetterModelDisplayer(model.CoopView):
     __name__ = 'ins_product.letter_model_displayer'
 
     letter_model = fields.Many2One(
-        'ins_product.letter_model',
+        'document.template',
         'Letter Model',
     )
 
@@ -571,7 +571,7 @@ class LetterReport(Report):
         action_report = action_reports[0]
         records = None
         records = cls._get_records(ids, data['model'], data)
-        LetterModel = Pool().get('ins_product.letter_model')
+        LetterModel = Pool().get('document.template')
         good_letter = LetterModel(data['letter_model'])
         GoodModel = Pool().get(data['model'])
         good_obj = GoodModel(data['id'])
@@ -608,7 +608,7 @@ class LetterReport(Report):
         localcontext['Today'] = utils.today()
         GoodModel = Pool().get(data['model'])
         good_obj = GoodModel(data['id'])
-        LetterModel = Pool().get('ins_product.letter_model')
+        LetterModel = Pool().get('document.template')
         good_letter = LetterModel(data['letter_model'])
         report.report_content = good_letter.get_good_version(
             utils.today(), good_obj.get_lang()).data

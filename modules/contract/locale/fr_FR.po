@@ -598,7 +598,7 @@ msgctxt "selection:contract.option,status:"
 msgid "Terminated"
 msgstr "Terminé"
 
-msgctxt "selection:ins_product.letter_model,kind:"
+msgctxt "selection:document.template,kind:"
 msgid "Contract Documents"
 msgstr "Documents du contrat"
 

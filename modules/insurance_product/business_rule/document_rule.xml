@@ -78,18 +78,18 @@
     </record>
     <!-- Letter Model -->
     <record model="ir.ui.view" id="letter_model_form">
-      <field name="model">ins_product.letter_model</field>
+      <field name="model">document.template</field>
       <field name="type">form</field>
       <field name="name">letter_model_form</field>
     </record>
     <record model="ir.ui.view" id="letter_model_tree">
-      <field name="model">ins_product.letter_model</field>
+      <field name="model">document.template</field>
       <field name="type">tree</field>
       <field name="name">letter_model_tree</field>
     </record>
     <record model="ir.action.act_window" id="act_letter_model">
       <field name="name">Letter Models</field>
-      <field name="res_model">ins_product.letter_model</field>
+      <field name="res_model">document.template</field>
     </record>
     <record model="ir.action.act_window.view" id="act_letter_model_view1">
       <field name="sequence" eval="16"/>

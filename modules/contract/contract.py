@@ -749,7 +749,7 @@ class LetterModel():
     'Letter Model'
 
     __metaclass__ = PoolMeta
-    __name__ = 'ins_product.letter_model'
+    __name__ = 'document.template'
 
     @classmethod
     def __setup__(cls):
