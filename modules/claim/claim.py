@@ -167,6 +167,15 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             return 'rejected'
         return 'instruction'
 
+    def update_delivered_services_complementary_data(self):
+        for loss in self.losses:
+            for delivered_service in loss.delivered_services:
+                delivered_service.complementary_data = \
+                    delivered_service.on_change_complementary_data()[
+                        'complementary_data']
+                delivered_service.save()
+        return True
+
     def update_sub_status(self):
         sub_status = self.get_sub_status()
         if sub_status in [x[0] for x in self.get_possible_sub_status()]:
@@ -526,8 +535,9 @@ class ClaimDeliveredService():
         'claim.indemnification', 'delivered_service', 'Indemnifications')
     complementary_data = fields.Dict(
         'offered.complementary_data_def', 'Complementary Data',
-        on_change_with=['benefit', 'complementary_data'],
-        states={'invisible': ~Eval('complementary_data')},)
+        on_change=['benefit', 'complementary_data', 'loss',
+            'subscribed_service', 'is_loan', 'contract'],
+        states={'invisible': ~Eval('complementary_data')})
 
     @classmethod
     def __setup__(cls):
@@ -549,7 +559,8 @@ class ClaimDeliveredService():
 
     def init_from_loss(self, loss, benefit):
         self.benefit = benefit
-        self.complementary_data = self.on_change_with_complementary_data()
+        self.complementary_data = self.on_change_complementary_data()[
+            'complementary_data']
 
     def get_covered_data(self):
         #TODO : retrieve the good covered data
@@ -653,8 +664,11 @@ class ClaimDeliveredService():
             return res
         return super(ClaimDeliveredService, self).get_rec_name(name)
 
-    def on_change_with_complementary_data(self):
-        return utils.init_complementary_data(self.get_complementary_data_def())
+    def on_change_complementary_data(self):
+        args = {'date': self.loss.start_date, 'level': 'delivered_service'}
+        self.init_dict_for_rule_engine(args)
+        return {'complementary_data': self.benefit.get_result(
+                'calculated_complementary_datas', args)[0]}
 
     def get_complementary_data_def(self):
         if self.benefit:
