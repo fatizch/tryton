@@ -390,43 +390,43 @@ msgctxt "field:offered.product,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
 
-msgctxt "field:party.broker,create_date:"
+msgctxt "field:broker,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:party.broker,create_date_:"
+msgctxt "field:broker,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:party.broker,create_uid:"
+msgctxt "field:broker,create_uid:"
 msgid "Create User"
 msgstr "Create User"
 
-msgctxt "field:party.broker,id:"
+msgctxt "field:broker,id:"
 msgid "ID"
 msgstr " "
 
-msgctxt "field:party.broker,must_expand_tree:"
+msgctxt "field:broker,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:party.broker,party:"
+msgctxt "field:broker,party:"
 msgid "Party"
 msgstr "Acteur"
 
-msgctxt "field:party.broker,rec_name:"
+msgctxt "field:broker,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:party.broker,reference:"
+msgctxt "field:broker,reference:"
 msgid "Reference"
 msgstr "Référence"
 
-msgctxt "field:party.broker,write_date:"
+msgctxt "field:broker,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:party.broker,write_uid:"
+msgctxt "field:broker,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -506,7 +506,7 @@ msgctxt "model:ir.ui.menu,name:menu_plan_form"
 msgid "Commission Plans"
 msgstr "Plans de Commissionnement"
 
-msgctxt "model:party.broker,name:"
+msgctxt "model:broker,name:"
 msgid "Broker"
 msgstr "Courtier"
 

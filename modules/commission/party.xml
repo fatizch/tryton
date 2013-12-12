@@ -17,12 +17,12 @@
 
     <!-- Broker -->
     <record model="ir.ui.view" id="broker_view_form">
-      <field name="model">party.broker</field>
+      <field name="model">broker</field>
       <field name="type">form</field>
       <field name="name">broker_view_form</field>
     </record>
     <record model="ir.ui.view" id="broker_view_tree">
-      <field name="model">party.broker</field>
+      <field name="model">broker</field>
       <field name="type">tree</field>
       <field name="name">broker_view_tree</field>
     </record>
