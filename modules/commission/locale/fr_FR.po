@@ -214,51 +214,51 @@ msgctxt "field:commission.component-coverage,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:commission.price_line-com-relation,amount:"
+msgctxt "field:contract.billing.premium-commission.option,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:commission.price_line-com-relation,com_subscribed:"
+msgctxt "field:contract.billing.premium-commission.option,com_subscribed:"
 msgid "Commission Subscribed"
 msgstr "Garantie commissionée"
 
-msgctxt "field:commission.price_line-com-relation,create_date:"
+msgctxt "field:contract.billing.premium-commission.option,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:commission.price_line-com-relation,create_date_:"
+msgctxt "field:contract.billing.premium-commission.option,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:commission.price_line-com-relation,create_uid:"
+msgctxt "field:contract.billing.premium-commission.option,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:commission.price_line-com-relation,id:"
+msgctxt "field:contract.billing.premium-commission.option,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:commission.price_line-com-relation,must_expand_tree:"
+msgctxt "field:contract.billing.premium-commission.option,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:commission.price_line-com-relation,price_line:"
+msgctxt "field:contract.billing.premium-commission.option,price_line:"
 msgid "Price Line"
 msgstr "Ligne de Prime"
 
-msgctxt "field:commission.price_line-com-relation,rec_name:"
+msgctxt "field:contract.billing.premium-commission.option,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:commission.price_line-com-relation,to_recalculate:"
+msgctxt "field:contract.billing.premium-commission.option,to_recalculate:"
 msgid "Recalculate at billing"
 msgstr "Recalculer à la facturation"
 
-msgctxt "field:commission.price_line-com-relation,write_date:"
+msgctxt "field:contract.billing.premium-commission.option,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:commission.price_line-com-relation,write_uid:"
+msgctxt "field:contract.billing.premium-commission.option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -454,7 +454,7 @@ msgctxt "model:commission.component-coverage,name:"
 msgid "Relation Commission Component and Coverage"
 msgstr "Relation Composante de Com - Garantie"
 
-msgctxt "model:commission.price_line-com-relation,name:"
+msgctxt "model:contract.billing.premium-commission.option,name:"
 msgid "Price line to Commission relation"
 msgstr "Relation Ligne de Prime - Commission"
 
@@ -594,11 +594,11 @@ msgctxt "view:contract.option-commission.option:"
 msgid "Compensated Option"
 msgstr "Option Commissionnée"
 
-msgctxt "view:commission.price_line-com-relation:"
+msgctxt "view:contract.billing.premium-commission.option:"
 msgid "Com Line"
 msgstr "Ligne de Commission"
 
-msgctxt "view:commission.price_line-com-relation:"
+msgctxt "view:contract.billing.premium-commission.option:"
 msgid "Com Lines"
 msgstr "Lignes de Commission"
 

@@ -20,7 +20,7 @@ __all__ = [
 class PriceLineComRelation(model.CoopSQL, model.CoopView):
     'Price line to Commission relation'
 
-    __name__ = 'commission.price_line-com-relation'
+    __name__ = 'contract.billing.premium-commission.option'
 
     price_line = fields.Many2One('contract.billing.premium', 'Price Line',
         ondelete='CASCADE')
@@ -35,7 +35,7 @@ class PriceLine():
 
     __name__ = 'contract.billing.premium'
 
-    com_lines = fields.One2Many('commission.price_line-com-relation',
+    com_lines = fields.One2Many('contract.billing.premium-commission.option',
         'price_line', 'Commission lines')
     estimated_com = fields.Function(
         fields.Numeric('Estimated Commissions'), 'get_estimated_coms')
@@ -61,7 +61,7 @@ class PriceLine():
         return True
 
     def build_com_lines(self, line):
-        ComLine = Pool().get('commission.price_line-com-relation')
+        ComLine = Pool().get('contract.billing.premium-commission.option')
         if not (hasattr(self, 'com_lines') and self.com_lines):
             self.com_lines = []
         for com_line in (x for x in line.details if x.on_object and
