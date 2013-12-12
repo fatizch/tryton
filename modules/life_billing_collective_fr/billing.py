@@ -404,7 +404,7 @@ class RateNoteParameters(model.CoopView):
             'until_date'],
         domain=[('is_group', '=', True)])
     contracts = fields.Many2Many(
-        'billing.rate_note_process_parameter-contract',
+        'billing.premium_rate.form.create.param-contract',
         'parameters_view', 'contract', 'Contracts',
         on_change=['products', 'contracts', 'group_clients', 'clients',
             'until_date'],
@@ -485,7 +485,7 @@ class RateNoteParameterProductRelation(model.CoopView):
 class RateNoteParameterContractRelation(model.CoopView):
     'Rate Note Parameter Contract Relation'
 
-    __name__ = 'billing.rate_note_process_parameter-contract'
+    __name__ = 'billing.premium_rate.form.create.param-contract'
 
     parameters_view = fields.Many2One('billing.rate_note_process_parameters',
         'Parameter View')

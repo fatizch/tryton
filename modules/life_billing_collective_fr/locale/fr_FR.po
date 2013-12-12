@@ -335,19 +335,19 @@ msgctxt "field:billing.premium_rate.form.create.param-client,parameters_view:"
 msgid "Parameter View"
 msgstr "Paramètres"
 
-msgctxt "field:billing.rate_note_process_parameter-contract,contract:"
+msgctxt "field:billing.premium_rate.form.create.param-contract,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:billing.rate_note_process_parameter-contract,id:"
+msgctxt "field:billing.premium_rate.form.create.param-contract,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.rate_note_process_parameter-contract,must_expand_tree:"
+msgctxt "field:billing.premium_rate.form.create.param-contract,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:billing.rate_note_process_parameter-contract,parameters_view:"
+msgctxt "field:billing.premium_rate.form.create.param-contract,parameters_view:"
 msgid "Parameter View"
 msgstr "Paramètres"
 
@@ -809,7 +809,7 @@ msgctxt "model:billing.premium_rate.form.create.param-client,name:"
 msgid "Rate Note Parameter Client Relation"
 msgstr "Relation Bordereau Client"
 
-msgctxt "model:billing.rate_note_process_parameter-contract,name:"
+msgctxt "model:billing.premium_rate.form.create.param-contract,name:"
 msgid "Rate Note Parameter Contract Relation"
 msgstr "Relation Bordereau Contrat"
 
