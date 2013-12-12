@@ -276,7 +276,7 @@ class RuleTools(RuleEngineContext):
     '''
         Tools functions
     '''
-    __name__ = 'rule_engine.tools_functions'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def _re_years_between(cls, args, date1, date2):

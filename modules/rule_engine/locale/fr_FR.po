@@ -573,11 +573,11 @@ msgctxt "field:rule_engine.test_case.value,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:rule_engine.tools_functions,id:"
+msgctxt "field:rule_engine.runtime,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.tools_functions,must_expand_tree:"
+msgctxt "field:rule_engine.runtime,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
@@ -805,7 +805,7 @@ msgctxt "model:rule_engine.test_case.value,name:"
 msgid "Test Case Value"
 msgstr "Valeur du Test"
 
-msgctxt "model:rule_engine.tools_functions,name:"
+msgctxt "model:rule_engine.runtime,name:"
 msgid "Tools functions"
 msgstr "Outils"
 

@@ -67,19 +67,19 @@ class ModuleTestCase(test_framework.CoopTestCase):
             return te
 
         create_tree_elem('function', '_re_today', 'today',
-            'rule_engine.tools_functions', 'Today')
+            'rule_engine.runtime', 'Today')
         create_tree_elem('function', '_re_add_error', 'add_error',
-            'rule_engine.tools_functions', 'Add Error')
+            'rule_engine.runtime', 'Add Error')
         create_tree_elem('function', '_re_add_warning', 'add_warning',
-            'rule_engine.tools_functions', 'Add Warning')
+            'rule_engine.runtime', 'Add Warning')
         create_tree_elem('function', '_re_add_info', 'add_info',
-            'rule_engine.tools_functions', 'Add Info')
+            'rule_engine.runtime', 'Add Info')
         create_tree_elem('function', '_re_add_error_code',
-            'add_error_code', 'rule_engine.tools_functions', 'Add Error Code')
+            'add_error_code', 'rule_engine.runtime', 'Add Error Code')
         create_tree_elem('function', '_re_debug', 'add_debug',
-            'rule_engine.tools_functions', 'Add Debug')
+            'rule_engine.runtime', 'Add Debug')
         create_tree_elem('function', '_re_calculation_date',
-            'calculation_date', 'rule_engine.tools_functions',
+            'calculation_date', 'rule_engine.runtime',
             'Calculation Date')
 
     @test_framework.prepare_test(

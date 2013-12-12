@@ -66,7 +66,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         te3.name = '_re_years_between'
         te3.translated_technical_name = 'annees_entre'
         te3.description = 'Années entre...'
-        te3.namespace = 'rule_engine.tools_functions'
+        te3.namespace = 'rule_engine.runtime'
 
         te3.save()
 
@@ -76,7 +76,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         te5.translated_technical_name = 'aujourd_hui'
         te5.name = '_re_today'
         te5.description = "Aujourd'hui"
-        te5.namespace = 'rule_engine.tools_functions'
+        te5.namespace = 'rule_engine.runtime'
 
         te5.save()
 
@@ -86,7 +86,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         te6.name = '_re_add_warning'
         te6.translated_technical_name = 'ajouter_warning'
         te6.description = 'Ajouter warning'
-        te6.namespace = 'rule_engine.tools_functions'
+        te6.namespace = 'rule_engine.runtime'
 
         te6.save()
 
