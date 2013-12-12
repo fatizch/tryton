@@ -13,7 +13,7 @@ __all__ = [
 class ExportPackage():
     'Export Package'
 
-    __name__ = 'coop_utils.export_package'
+    __name__ = 'ir.export_package'
 
     products = fields.Function(
         fields.One2Many('offered.product', None, 'Products', states={

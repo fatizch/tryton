@@ -14,15 +14,15 @@ msgctxt "error:offered.product:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
-msgctxt "field:coop_utils.export_package,compl_data_defs:"
+msgctxt "field:ir.export_package,compl_data_defs:"
 msgid "Complementary Data Def"
 msgstr "Définition de Données Complémentaires"
 
-msgctxt "field:coop_utils.export_package,coverages:"
+msgctxt "field:ir.export_package,coverages:"
 msgid "Coverages"
 msgstr "Garanties"
 
-msgctxt "field:coop_utils.export_package,products:"
+msgctxt "field:ir.export_package,products:"
 msgid "Products"
 msgstr "Produits"
 

@@ -14,7 +14,7 @@ msgctxt "field:contract,is_health:"
 msgid "Is Health"
 msgstr "Santé"
 
-msgctxt "field:coop_utils.export_package,com_products:"
+msgctxt "field:ir.export_package,com_products:"
 msgid "Com Products"
 msgstr ""
 

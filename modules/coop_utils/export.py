@@ -769,7 +769,7 @@ class ExportInstance(ExportImportMixin, ModelSQL, ModelView):
 
     to_export = fields.Reference('To export', 'get_all_exportable_models',
         required=True)
-    package = fields.Many2One('coop_utils.export_package', 'Package',
+    package = fields.Many2One('ir.export_package', 'Package',
         ondelete='CASCADE')
 
     @staticmethod
@@ -786,7 +786,7 @@ class ExportInstance(ExportImportMixin, ModelSQL, ModelView):
 class ExportPackage(ExportImportMixin, ModelSQL, ModelView):
     'Export Package'
 
-    __name__ = 'coop_utils.export_package'
+    __name__ = 'ir.export_package'
     _rec_name = 'package_name'
 
     code = fields.Char('Code')

@@ -27,18 +27,18 @@
     </record>
     <!-- Export Package -->
     <record model="ir.ui.view" id="export_package_form">
-      <field name="model">coop_utils.export_package</field>
+      <field name="model">ir.export_package</field>
       <field name="type">form</field>
       <field name="name">export_package_form</field>
     </record>
     <record model="ir.ui.view" id="export_package_tree">
-      <field name="model">coop_utils.export_package</field>
+      <field name="model">ir.export_package</field>
       <field name="type">tree</field>
       <field name="name">export_package_tree</field>
     </record>
     <record model="ir.action.act_window" id="act_export_package">
       <field name="name">Export Package</field>
-      <field name="res_model">coop_utils.export_package</field>
+      <field name="res_model">ir.export_package</field>
     </record>
     <record model="ir.action.act_window.view" id="act_export_package_view1">
       <field name="sequence" eval="16"/>

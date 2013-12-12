@@ -190,11 +190,11 @@ msgctxt "field:ir.ui.view.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:coop_utils.export_package,process:"
+msgctxt "field:ir.export_package,process:"
 msgid "Process"
 msgstr "Processus"
 
-msgctxt "field:coop_utils.export_package,steps:"
+msgctxt "field:ir.export_package,steps:"
 msgid "Steps"
 msgstr "Etapes"
 

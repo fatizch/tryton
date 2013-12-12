@@ -41,19 +41,19 @@ msgctxt "error:rule_engine:"
 msgid "Your code has errors!"
 msgstr "L'algorithme contient des erreurs"
 
-msgctxt "field:coop_utils.export_package,contexts:"
+msgctxt "field:ir.export_package,contexts:"
 msgid "Contexts"
 msgstr "Contextes"
 
-msgctxt "field:coop_utils.export_package,rules:"
+msgctxt "field:ir.export_package,rules:"
 msgid "Rules"
 msgstr "Règles"
 
-msgctxt "field:coop_utils.export_package,tags:"
+msgctxt "field:ir.export_package,tags:"
 msgid "Tags"
 msgstr "Labels"
 
-msgctxt "field:coop_utils.export_package,tree_elements:"
+msgctxt "field:ir.export_package,tree_elements:"
 msgid "Tree Elements"
 msgstr "Eléments de l'arbre"
 
