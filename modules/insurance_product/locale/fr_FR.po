@@ -3168,43 +3168,43 @@ msgctxt "field:offered.product-options-coverage,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:party.insurer,create_date:"
+msgctxt "field:insurer,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:party.insurer,create_date_:"
+msgctxt "field:insurer,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:party.insurer,create_uid:"
+msgctxt "field:insurer,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:party.insurer,id:"
+msgctxt "field:insurer,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.insurer,must_expand_tree:"
+msgctxt "field:insurer,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:party.insurer,party:"
+msgctxt "field:insurer,party:"
 msgid "Party"
 msgstr "Acteur"
 
-msgctxt "field:party.insurer,rec_name:"
+msgctxt "field:insurer,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:party.insurer,reference:"
+msgctxt "field:insurer,reference:"
 msgid "Reference"
 msgstr "Référence"
 
-msgctxt "field:party.insurer,write_date:"
+msgctxt "field:insurer,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:party.insurer,write_uid:"
+msgctxt "field:insurer,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3593,7 +3593,7 @@ msgctxt "model:offered.product-options-coverage,name:"
 msgid "Define Product - Coverage relations"
 msgstr "Relations Produit Garantie"
 
-msgctxt "model:party.insurer,name:"
+msgctxt "model:insurer,name:"
 msgid "Insurer"
 msgstr "Assureur"
 

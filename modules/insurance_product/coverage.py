@@ -33,7 +33,7 @@ class Coverage():
             'readonly': ~Eval('start_date'),
             'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE),
             }, depends=['currency_digits'])
-    insurer = fields.Many2One('party.insurer', 'Insurer', states={
+    insurer = fields.Many2One('insurer', 'Insurer', states={
             'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE)
             }, depends=['is_package'])
     family = fields.Selection([('', '')], 'Family', states={

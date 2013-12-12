@@ -27,7 +27,7 @@ class TestCaseModel():
 
     @classmethod
     def insurer_test_case(cls):
-        Insurer = Pool().get('party.insurer')
+        Insurer = Pool().get('insurer')
         cls.load_resources(MODULE_NAME)
         insurer_file = cls.read_data_file('insurer', MODULE_NAME, ';')
         insurers = []
