@@ -172,7 +172,7 @@ class LifeBenefit():
 class LifeBenefitRule():
     'Life Benefit Rule'
 
-    __name__ = 'ins_product.benefit_rule'
+    __name__ = 'benefit.rule'
     __metaclass__ = PoolMeta
 
     def get_coverage_amount(self, args):

@@ -30,7 +30,7 @@ STATES_AMOUNT_EVOLVES = Bool(Eval('amount_evolves_over_time'))
 class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
     'Benefit Rule'
 
-    __name__ = 'ins_product.benefit_rule'
+    __name__ = 'benefit.rule'
 
     amount_evolves_over_time = fields.Boolean('Evolves Over Time',
         states={'invisible': ~STATES_PERIOD})
@@ -313,7 +313,7 @@ class SubBenefitRule(model.CoopSQL, model.CoopView, ModelCurrency):
 
     __name__ = 'ins_product.sub_benefit_rule'
 
-    benefit_rule = fields.Many2One('ins_product.benefit_rule', 'Benefit Rule',
+    benefit_rule = fields.Many2One('benefit.rule', 'Benefit Rule',
         ondelete='CASCADE')
     config_kind = fields.Selection(CONFIG_KIND,
         'Conf. kind', required=True)
