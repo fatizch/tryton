@@ -67,7 +67,7 @@ class ProcessStepRelation(ModelSQL, ModelView):
 class ProcessMenuRelation(ModelSQL):
     'Process Menu Relation'
 
-    __name__ = 'process.process_menu_relation'
+    __name__ = 'process-menu'
 
     process = fields.Many2One(
         'process', 'Process', ondelete='CASCADE')
@@ -107,7 +107,7 @@ class ProcessDesc(ModelSQL, ModelView):
         [('', 'None'), ('right', 'Right'), ('bottom', 'Bottom')],
         'Process Overview Positioning')
     menu_items = fields.Many2Many(
-        'process.process_menu_relation', 'process', 'menu', 'Menus')
+        'process-menu', 'process', 'menu', 'Menus')
     menu_icon = fields.Selection('list_icons', 'Menu Icon')
     menu_name = fields.Char(
         'Menu name', on_change_with=['fancy_name', 'menu_name'])
