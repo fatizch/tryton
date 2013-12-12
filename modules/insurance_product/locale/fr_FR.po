@@ -2824,35 +2824,35 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt ""
-"field:offered.coverage-complementary_data_def,complementary_data_def:"
+"field:offered.option.description-extra_data,complementary_data_def:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:offered.coverage-complementary_data_def,coverage:"
+msgctxt "field:offered.option.description-extra_data,coverage:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "field:offered.coverage-complementary_data_def,create_date:"
+msgctxt "field:offered.option.description-extra_data,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:offered.coverage-complementary_data_def,create_uid:"
+msgctxt "field:offered.option.description-extra_data,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:offered.coverage-complementary_data_def,id:"
+msgctxt "field:offered.option.description-extra_data,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.coverage-complementary_data_def,rec_name:"
+msgctxt "field:offered.option.description-extra_data,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:offered.coverage-complementary_data_def,write_date:"
+msgctxt "field:offered.option.description-extra_data,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:offered.coverage-complementary_data_def,write_uid:"
+msgctxt "field:offered.option.description-extra_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3565,7 +3565,7 @@ msgctxt "model:option.description-benefit,name:"
 msgid "Coverage Benefit Relation"
 msgstr "Relation Garantie Prestation"
 
-msgctxt "model:offered.coverage-complementary_data_def,name:"
+msgctxt "model:offered.option.description-extra_data,name:"
 msgid "Relation between Coverage and Complementary Data"
 msgstr "Garantie-Complementary Data Relation"
 

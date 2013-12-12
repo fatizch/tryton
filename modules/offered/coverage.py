@@ -45,7 +45,7 @@ class Coverage(model.CoopSQL, Offered):
         depends=['is_package', 'kind'],
         domain=[('is_package', '=', False), ('kind', '=', Eval('kind'))])
     complementary_data_def = fields.Many2Many(
-        'offered.coverage-complementary_data_def',
+        'offered.option.description-extra_data',
         'coverage', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', 'in', ['contract', 'sub_elem'])])
 
@@ -120,7 +120,7 @@ class PackageCoverage(model.CoopSQL):
 class CoverageComplementaryDataRelation(model.CoopSQL):
     'Relation between Coverage and Complementary Data'
 
-    __name__ = 'offered.coverage-complementary_data_def'
+    __name__ = 'offered.option.description-extra_data'
 
     coverage = fields.Many2One('offered.option.description', 'Coverage',
         ondelete='CASCADE')

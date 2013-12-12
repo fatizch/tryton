@@ -320,39 +320,39 @@ msgid ""
 msgstr " "
 
 msgctxt ""
-"field:offered.coverage-complementary_data_def,complementary_data_def:"
+"field:offered.option.description-extra_data,complementary_data_def:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage-complementary_data_def,coverage:"
+msgctxt "field:offered.option.description-extra_data,coverage:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage-complementary_data_def,create_date:"
+msgctxt "field:offered.option.description-extra_data,create_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage-complementary_data_def,create_date_:"
+msgctxt "field:offered.option.description-extra_data,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:offered.coverage-complementary_data_def,create_uid:"
+msgctxt "field:offered.option.description-extra_data,create_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage-complementary_data_def,id:"
+msgctxt "field:offered.option.description-extra_data,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage-complementary_data_def,rec_name:"
+msgctxt "field:offered.option.description-extra_data,rec_name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage-complementary_data_def,write_date:"
+msgctxt "field:offered.option.description-extra_data,write_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage-complementary_data_def,write_uid:"
+msgctxt "field:offered.option.description-extra_data,write_uid:"
 msgid ""
 msgstr " "
 
@@ -684,7 +684,7 @@ msgctxt "model:offered.option.description,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:offered.coverage-complementary_data_def,name:"
+msgctxt "model:offered.option.description-extra_data,name:"
 msgid ""
 msgstr " "
 
