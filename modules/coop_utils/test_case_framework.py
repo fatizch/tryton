@@ -410,7 +410,7 @@ class TestCaseFileSelector(model.CoopView):
 class SelectTestCase(model.CoopView):
     'Select Test Case'
 
-    __name__ = 'coop_utils.select_test_cases'
+    __name__ = 'ir.test_case.run.select'
 
     select_all_test_cases = fields.Boolean('Select All',
         on_change=['select_all_test_cases', 'test_cases'])
@@ -468,7 +468,7 @@ class TestCaseWizard(model.CoopWizard):
     __name__ = 'coop_utils.test_case_wizard'
 
     start_state = 'select_test_cases'
-    select_test_cases = StateView('coop_utils.select_test_cases',
+    select_test_cases = StateView('ir.test_case.run.select',
         'coop_utils.select_test_cases_form', [
             Button('Quit', 'end', 'tryton-cancel'),
             Button('Execute Selected', 'execute_test_cases', 'tryton-ok')])

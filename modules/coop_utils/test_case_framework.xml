@@ -41,7 +41,7 @@
     <!-- Select Test Case -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="select_test_cases_form">
-      <field name="model">coop_utils.select_test_cases</field>
+      <field name="model">ir.test_case.run.select</field>
       <field name="type">form</field>
       <field name="name">select_test_cases_form</field>
     </record>

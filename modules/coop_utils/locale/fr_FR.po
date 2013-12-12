@@ -214,27 +214,27 @@ msgctxt "field:ir.import.select_file,selected_file:"
 msgid "Import File"
 msgstr "Importer le Fichier"
 
-msgctxt "field:coop_utils.select_test_cases,id:"
+msgctxt "field:ir.test_case.run.select,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_utils.select_test_cases,must_expand_tree:"
+msgctxt "field:ir.test_case.run.select,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:coop_utils.select_test_cases,select_all_files:"
+msgctxt "field:ir.test_case.run.select,select_all_files:"
 msgid "Select All"
 msgstr "Tout sélectionner"
 
-msgctxt "field:coop_utils.select_test_cases,select_all_test_cases:"
+msgctxt "field:ir.test_case.run.select,select_all_test_cases:"
 msgid "Select All"
 msgstr "Tout sélectionner"
 
-msgctxt "field:coop_utils.select_test_cases,test_cases:"
+msgctxt "field:ir.test_case.run.select,test_cases:"
 msgid "Test Cases"
 msgstr "Jeux de Test"
 
-msgctxt "field:coop_utils.select_test_cases,test_files:"
+msgctxt "field:ir.test_case.run.select,test_files:"
 msgid "Test Files"
 msgstr "Fichiers de test"
 
@@ -398,7 +398,7 @@ msgctxt "model:ir.import.select_file,name:"
 msgid "File Selector"
 msgstr "Selecteur de fichier"
 
-msgctxt "model:coop_utils.select_test_cases,name:"
+msgctxt "model:ir.test_case.run.select,name:"
 msgid "Select Test Case"
 msgstr "Sélection des jeux d'essai"
 
@@ -506,7 +506,7 @@ msgctxt "view:ir.import.select_file:"
 msgid "File Selection"
 msgstr "Sélection de Fichier"
 
-msgctxt "view:coop_utils.select_test_cases:"
+msgctxt "view:ir.test_case.run.select:"
 msgid "Select Test Cases"
 msgstr "Sélection des jeux d'essai"
 
