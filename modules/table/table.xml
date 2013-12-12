@@ -163,7 +163,7 @@
     <!-- ############################################################ -->
     <record model="ir.action.wizard" id="act_manage_dimension_3">
       <field name="name">Manage Dimension 3</field>
-      <field name="wiz_name">table.manage_dimension_3</field>
+      <field name="wiz_name">table.manage_dimension.show_dimension_3</field>
     </record>
     <!-- ############################################################ -->
     <!-- Manage Dimension 4 Wizard -->
