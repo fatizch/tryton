@@ -1113,15 +1113,15 @@ msgctxt "view:party.party:"
 msgid "Customer"
 msgstr "Client"
 
-msgctxt "wizard_button:ins_contract.renewal_wizard,renewal_result,end:"
+msgctxt "wizard_button:contract.renew,renewal_result,end:"
 msgid "End"
 msgstr "Terminer"
 
-msgctxt "wizard_button:ins_contract.renewal_wizard,renewal_start,end:"
+msgctxt "wizard_button:contract.renew,renewal_start,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
 msgctxt ""
-"wizard_button:ins_contract.renewal_wizard,renewal_start,renewal_result:"
+"wizard_button:contract.renew,renewal_start,renewal_result:"
 msgid "Start"
 msgstr "Commencer"

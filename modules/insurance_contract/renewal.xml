@@ -22,7 +22,7 @@
     <!-- ############################################################ -->
     <record model="ir.action.wizard" id="act_renewal_wizard">
       <field name="name">Renew Contracts</field>
-      <field name="wiz_name">ins_contract.renewal_wizard</field>
+      <field name="wiz_name">contract.renew</field>
     </record>
     <menuitem id="menu_renew_contract" sequence="15" action="act_renewal_wizard"
         parent="insurance_contract.menu_contract"/>

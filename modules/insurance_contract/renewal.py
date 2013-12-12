@@ -71,7 +71,7 @@ class RenewalResult(model.CoopView):
 class RenewalWizard(Wizard):
     'Renewal Wizard'
 
-    __name__ = 'ins_contract.renewal_wizard'
+    __name__ = 'contract.renew'
 
     start_state = 'renewal_start'
     renewal_start = StateView('contract.renew.parameters',
