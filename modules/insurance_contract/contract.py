@@ -1069,7 +1069,7 @@ class Expense(model.CoopSQL, model.CoopView, ModelCurrency):
     delivered_service = fields.Many2One(
         'contract.service', 'Delivered Service',
         ondelete='CASCADE')
-    kind = fields.Many2One('ins_product.expense_kind', 'Kind')
+    kind = fields.Many2One('expense.kind', 'Kind')
     amount = fields.Numeric(
         'Amount', required=True,
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),

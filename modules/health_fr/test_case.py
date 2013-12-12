@@ -33,7 +33,7 @@ class TestCaseModel():
 
     @classmethod
     def create_expense_kind_from_line(cls, data):
-        ExpenseKind = Pool().get('ins_product.expense_kind')
+        ExpenseKind = Pool().get('expense.kind')
         expense = ExpenseKind()
         for elem in ('kind', 'code', 'name', 'short_name'):
             setattr(expense, elem, data[elem])

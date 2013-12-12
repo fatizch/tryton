@@ -6,18 +6,18 @@
         <!--################################################################ -->
 
         <record model="ir.ui.view" id="expense_kind_view_tree">
-            <field name="model">ins_product.expense_kind</field>
+            <field name="model">expense.kind</field>
             <field name="type">tree</field>
             <field name="name">expense_kind_tree</field>
         </record>
         <record model="ir.ui.view" id="expense_kind_view_form">
-            <field name="model">ins_product.expense_kind</field>
+            <field name="model">expense.kind</field>
             <field name="type">form</field>
             <field name="name">expense_kind_form</field>
         </record>
         <record model="ir.action.act_window" id="act_model_expense_kind">
             <field name="name">Expenses Kind</field>
-            <field name="res_model">ins_product.expense_kind</field>
+            <field name="res_model">expense.kind</field>
         </record>
         <record model="ir.action.act_window.view" id="act_model_expense_kind_tree">
             <field name="sequence" eval="10"/>

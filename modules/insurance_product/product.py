@@ -328,7 +328,7 @@ class ProductItemDescriptorRelation(model.CoopSQL):
 class ExpenseKind(model.CoopSQL, model.CoopView):
     'Expense Kind'
 
-    __name__ = 'ins_product.expense_kind'
+    __name__ = 'expense.kind'
 
     kind = fields.Selection(
         [

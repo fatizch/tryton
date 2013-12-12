@@ -1489,51 +1489,51 @@ msgctxt "field:benefit.event.description-loss.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.expense_kind,code:"
+msgctxt "field:expense.kind,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:ins_product.expense_kind,create_date:"
+msgctxt "field:expense.kind,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.expense_kind,create_date_:"
+msgctxt "field:expense.kind,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.expense_kind,create_uid:"
+msgctxt "field:expense.kind,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.expense_kind,id:"
+msgctxt "field:expense.kind,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.expense_kind,kind:"
+msgctxt "field:expense.kind,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:ins_product.expense_kind,must_expand_tree:"
+msgctxt "field:expense.kind,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.expense_kind,name:"
+msgctxt "field:expense.kind,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.expense_kind,rec_name:"
+msgctxt "field:expense.kind,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.expense_kind,short_name:"
+msgctxt "field:expense.kind,short_name:"
 msgid "Short Name"
 msgstr "Nom Court"
 
-msgctxt "field:ins_product.expense_kind,write_date:"
+msgctxt "field:expense.kind,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.expense_kind,write_uid:"
+msgctxt "field:expense.kind,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3361,7 +3361,7 @@ msgctxt "model:benefit.event.description-loss.description,name:"
 msgid "Event Desc - Loss Desc Relation"
 msgstr "Relation Descripteur d'Evénement Descripteur de Préjudice"
 
-msgctxt "model:ins_product.expense_kind,name:"
+msgctxt "model:expense.kind,name:"
 msgid "Expense Kind"
 msgstr "Type de Frais"
 
@@ -4080,19 +4080,19 @@ msgctxt "selection:offered.eligibility.rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:ins_product.expense_kind,kind:"
+msgctxt "selection:expense.kind,kind:"
 msgid "Expert"
 msgstr "Avancé"
 
-msgctxt "selection:ins_product.expense_kind,kind:"
+msgctxt "selection:expense.kind,kind:"
 msgid "Judiciary"
 msgstr "Judiciaire"
 
-msgctxt "selection:ins_product.expense_kind,kind:"
+msgctxt "selection:expense.kind,kind:"
 msgid "Medical"
 msgstr "Médical"
 
-msgctxt "selection:ins_product.expense_kind,kind:"
+msgctxt "selection:expense.kind,kind:"
 msgid "Other"
 msgstr "Autre"
 
@@ -4628,7 +4628,7 @@ msgctxt "view:benefit.event.description:"
 msgid "Event Descriptor"
 msgstr "Descripteur d'Evénement"
 
-msgctxt "view:ins_product.expense_kind:"
+msgctxt "view:expense.kind:"
 msgid "Expense Kind"
 msgstr "Type de Frais"
 
