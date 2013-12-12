@@ -270,23 +270,23 @@ msgctxt "field:contract.option,compensated_options:"
 msgid "Compensated Options"
 msgstr "Options Commissionnées"
 
-msgctxt "field:distribution.dist_network,all_com_plans:"
+msgctxt "field:distribution.network,all_com_plans:"
 msgid "Top Level Commission Plans"
 msgstr "Plans de Commissionnement Hérités"
 
-msgctxt "field:distribution.dist_network,brokers:"
+msgctxt "field:distribution.network,brokers:"
 msgid "Brokers"
 msgstr "Courtiers"
 
-msgctxt "field:distribution.dist_network,childs_brokers:"
+msgctxt "field:distribution.network,childs_brokers:"
 msgid "Sub Level Brokers"
 msgstr "Courtiers du Réseau"
 
-msgctxt "field:distribution.dist_network,commission_plans:"
+msgctxt "field:distribution.network,commission_plans:"
 msgid "Commission Plans"
 msgstr "Plans de Commissionnement"
 
-msgctxt "field:distribution.dist_network,parent_com_plans:"
+msgctxt "field:distribution.network,parent_com_plans:"
 msgid "Top Level Commission Plans"
 msgstr "Plans de Commissionnement Hérités"
 
@@ -614,7 +614,7 @@ msgctxt "view:contract.option:"
 msgid "Coverages"
 msgstr "Garanties"
 
-msgctxt "view:distribution.dist_network:"
+msgctxt "view:distribution.network:"
 msgid "Commissioning"
 msgstr "Commissionnement"
 

@@ -27,7 +27,7 @@ class TestCaseModel():
     @classmethod
     def create_distribution_network(cls, name, children_name=None,
             children_number=None):
-        DistributionNetwork = Pool().get('distribution.dist_network')
+        DistributionNetwork = Pool().get('distribution.network')
         res = DistributionNetwork()
         res.name = name
         res.childs = []
@@ -42,7 +42,7 @@ class TestCaseModel():
     @classmethod
     def distribution_network_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
-        DistributionNetwork = Pool().get('distribution.dist_network')
+        DistributionNetwork = Pool().get('distribution.network')
         if DistributionNetwork.search([('name', '=', translater('Root'))]):
             return
         root = cls.create_distribution_network(translater('Root'))

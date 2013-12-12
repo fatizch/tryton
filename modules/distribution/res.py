@@ -14,7 +14,7 @@ class User:
 
     __name__ = 'res.user'
 
-    dist_network = fields.Many2One('distribution.dist_network',
+    dist_network = fields.Many2One('distribution.network',
         'Distribution Network')
 
     @classmethod

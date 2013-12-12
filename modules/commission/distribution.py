@@ -13,7 +13,7 @@ __all__ = [
 class DistributionNetwork():
     'Distribution Network'
 
-    __name__ = 'distribution.dist_network'
+    __name__ = 'distribution.network'
     __metaclass__ = PoolMeta
 
     commission_plans = fields.Many2Many('distribution.network-commission.plan',
@@ -70,7 +70,7 @@ class DistributionNetworkComPlanRelation(model.CoopSQL):
 
     __name__ = 'distribution.network-commission.plan'
 
-    dist_network = fields.Many2One('distribution.dist_network',
+    dist_network = fields.Many2One('distribution.network',
         'Distribution Network', ondelete='CASCADE')
     com_plan = fields.Many2One('offered.product', 'Commission Plan',
         ondelete='RESTRICT')
@@ -81,6 +81,6 @@ class DistributionNetworkBrokerRelation(model.CoopSQL, model.CoopView):
 
     __name__ = 'distribution.network-broker'
 
-    dist_network = fields.Many2One('distribution.dist_network',
+    dist_network = fields.Many2One('distribution.network',
         'Distribution Network', ondelete='RESTRICT')
     broker = fields.Many2One('party.party', 'Broker', ondelete='CASCADE')

@@ -18,7 +18,7 @@ __all__ = [
 class DistributionNetwork():
     'Distribution Network'
 
-    __name__ = 'distribution.dist_network'
+    __name__ = 'distribution.network'
     __metaclass__ = PoolMeta
 
     commercial_products = fields.Many2Many(
@@ -124,7 +124,7 @@ class DistributionNetworkComProductRelation(model.CoopSQL):
 
     __name__ = 'distribution.network-commercial_product'
 
-    dist_network = fields.Many2One('distribution.dist_network',
+    dist_network = fields.Many2One('distribution.network',
         'Distribution Network', ondelete='CASCADE')
     com_product = fields.Many2One('distribution.commercial_product',
         'Commercial Product', ondelete='RESTRICT')

@@ -51,7 +51,7 @@ class SubscriptionProcessParameters(ProcessParameters):
 
     __name__ = 'ins_contract.subscription_process_parameters'
 
-    dist_network = fields.Many2One('distribution.dist_network',
+    dist_network = fields.Many2One('distribution.network',
         'Distribution Network', on_change=['dist_network', 'possible_brokers',
         'business_provider', 'management_delegation'])
     possible_brokers = fields.Function(

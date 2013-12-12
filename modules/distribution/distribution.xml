@@ -10,12 +10,12 @@
     <!-- Distribution Network -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="dist_network_view_form">
-      <field name="model">distribution.dist_network</field>
+      <field name="model">distribution.network</field>
       <field name="type">form</field>
       <field name="name">dist_network_form</field>
     </record>
     <record model="ir.ui.view" id="dist_network_view_tree">
-      <field name="model">distribution.dist_network</field>
+      <field name="model">distribution.network</field>
       <field name="type">tree</field>
       <field name="field_childs">childs</field>
       <field name="name">dist_network_tree</field>
@@ -23,7 +23,7 @@
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_dist_network_form">
       <field name="name">Distribution Networks</field>
-      <field name="res_model">distribution.dist_network</field>
+      <field name="res_model">distribution.network</field>
       <field name="domain">[('parent', '=', None)]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_dist_network_tree_view">
