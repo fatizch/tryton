@@ -3,18 +3,18 @@
   <data>
     <!-- Document Desc -->
     <record model="ir.ui.view" id="document_desc_form">
-      <field name="model">ins_product.document_desc</field>
+      <field name="model">document.description</field>
       <field name="type">form</field>
       <field name="name">document_desc_form</field>
     </record>
     <record model="ir.ui.view" id="document_desc_tree">
-      <field name="model">ins_product.document_desc</field>
+      <field name="model">document.description</field>
       <field name="type">tree</field>
       <field name="name">document_desc_tree</field>
     </record>
     <record model="ir.action.act_window" id="act_document_desc">
       <field name="name">Document Descriptors</field>
-      <field name="res_model">ins_product.document_desc</field>
+      <field name="res_model">document.description</field>
     </record>
     <record model="ir.action.act_window.view" id="act_document_desc_view1">
       <field name="sequence" eval="16"/>

@@ -1085,51 +1085,51 @@ msgctxt "field:ins_product.document-rule-relation,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.document_desc,code:"
+msgctxt "field:document.description,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:ins_product.document_desc,create_date:"
+msgctxt "field:document.description,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.document_desc,create_date_:"
+msgctxt "field:document.description,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.document_desc,create_uid:"
+msgctxt "field:document.description,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.document_desc,end_date:"
+msgctxt "field:document.description,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_product.document_desc,id:"
+msgctxt "field:document.description,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.document_desc,must_expand_tree:"
+msgctxt "field:document.description,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.document_desc,name:"
+msgctxt "field:document.description,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.document_desc,rec_name:"
+msgctxt "field:document.description,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.document_desc,start_date:"
+msgctxt "field:document.description,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:ins_product.document_desc,write_date:"
+msgctxt "field:document.description,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.document_desc,write_uid:"
+msgctxt "field:document.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3324,7 +3324,7 @@ msgctxt "model:ins_product.document-rule-relation,name:"
 msgid "Relation between rule and document"
 msgstr "Relation Règle Document"
 
-msgctxt "model:ins_product.document_desc,name:"
+msgctxt "model:document.description,name:"
 msgid "Document Descriptor"
 msgstr "Descripteur de Document"
 
@@ -4588,11 +4588,11 @@ msgctxt "view:document.request.line:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "view:ins_product.document_desc:"
+msgctxt "view:document.description:"
 msgid "Document"
 msgstr "Document"
 
-msgctxt "view:ins_product.document_desc:"
+msgctxt "view:document.description:"
 msgid "Documents"
 msgstr "Documents"
 

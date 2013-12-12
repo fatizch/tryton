@@ -183,7 +183,7 @@ class Printable(Model):
 class DocumentDesc(model.CoopSQL, model.CoopView):
     'Document Descriptor'
 
-    __name__ = 'ins_product.document_desc'
+    __name__ = 'document.description'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', required=True, translate=True)
@@ -237,7 +237,7 @@ class DocumentRuleRelation(model.CoopSQL):
     rule = fields.Many2One(
         'ins_product.document_rule', 'Rule', ondelete='CASCADE')
     document = fields.Many2One(
-        'ins_product.document_desc', 'Document', ondelete='RESTRICT')
+        'document.description', 'Document', ondelete='RESTRICT')
 
 
 class Document(model.CoopSQL, model.CoopView):
@@ -246,7 +246,7 @@ class Document(model.CoopSQL, model.CoopView):
     __name__ = 'document.request.line'
 
     document_desc = fields.Many2One(
-        'ins_product.document_desc', 'Document Definition', required=True)
+        'document.description', 'Document Definition', required=True)
     for_object = fields.Reference(
         'Needed For', [('', '')], states={'readonly': ~~Eval('for_object')})
 

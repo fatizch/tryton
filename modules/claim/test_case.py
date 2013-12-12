@@ -44,7 +44,7 @@ class TestCaseModel():
 
     @classmethod
     def create_document(cls, code, name):
-        Document = Pool().get('ins_product.document_desc')
+        Document = Pool().get('document.description')
         doc = Document()
         doc.code = code
         doc.name = name
@@ -59,7 +59,7 @@ class TestCaseModel():
         result = cls._get_document_desc_cache.get(code)
         if result:
             return result
-        result = Pool().get('ins_product.document_desc').search([
+        result = Pool().get('document.description').search([
                 ('code', '=', code)], limit=1)[0]
         cls._get_document_desc_cache.set(code, result)
         return result

@@ -71,7 +71,7 @@ class LossDescDocumentsRelation(model.CoopSQL):
     __name__ = 'benefit.loss.description-document.description'
 
     document = fields.Many2One(
-        'ins_product.document_desc', 'Document', ondelete='RESTRICT')
+        'document.description', 'Document', ondelete='RESTRICT')
     loss = fields.Many2One(
         'benefit.loss.description', 'Loss', ondelete='CASCADE')
 
