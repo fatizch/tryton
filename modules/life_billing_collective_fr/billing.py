@@ -419,7 +419,7 @@ class RateNoteParameters(model.CoopView):
         'parameters_view', 'group', 'Group Clients',
         on_change=['products', 'contracts', 'group_clients', 'clients',
             'until_date'])
-    clients = fields.Many2Many('billing.rate_note_process_parameter-client',
+    clients = fields.Many2Many('billing.premium_rate.form.create.param-client',
         'parameters_view', 'client', 'Clients',
         on_change=['products', 'contracts', 'group_clients', 'clients',
             'until_date'])
@@ -465,7 +465,7 @@ class RateNoteParameters(model.CoopView):
 class RateNoteParameterClientRelation(model.CoopView):
     'Rate Note Parameter Client Relation'
 
-    __name__ = 'billing.rate_note_process_parameter-client'
+    __name__ = 'billing.premium_rate.form.create.param-client'
 
     parameters_view = fields.Many2One('billing.rate_note_process_parameters',
         'Parameter View')
