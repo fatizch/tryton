@@ -425,15 +425,15 @@ msgctxt "field:billing.premium_rate.form.receive.select,selected_note:"
 msgid "Selected Note"
 msgstr "Bordereau sélectionné"
 
-msgctxt "field:billing.rate_notes_displayer,id:"
+msgctxt "field:billing.premium_rate.form.create.show_forms,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.rate_notes_displayer,must_expand_tree:"
+msgctxt "field:billing.premium_rate.form.create.show_forms,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:billing.rate_notes_displayer,rate_notes:"
+msgctxt "field:billing.premium_rate.form.create.show_forms,rate_notes:"
 msgid "Rate Notes"
 msgstr "Bordereaux de Cotisations"
 
@@ -829,7 +829,7 @@ msgctxt "model:billing.premium_rate.form.receive.select,name:"
 msgid "Rate Note Selection"
 msgstr "Sélection du bordereau"
 
-msgctxt "model:billing.rate_notes_displayer,name:"
+msgctxt "model:billing.premium_rate.form.create.show_forms,name:"
 msgid "Rate Notes"
 msgstr "Bordereaux de Cotisations"
 
@@ -1017,7 +1017,7 @@ msgctxt "view:billing.premium_rate.form.receive.select:"
 msgid "Rate Note Selection"
 msgstr "Sélection du bordereau"
 
-msgctxt "view:billing.rate_notes_displayer:"
+msgctxt "view:billing.premium_rate.form.create.show_forms:"
 msgid "Rate Notes"
 msgstr "Bordereaux de Cotisations"
 

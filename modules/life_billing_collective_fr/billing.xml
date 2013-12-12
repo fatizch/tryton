@@ -22,7 +22,7 @@
       <field name="name">rate_note_process_parameters_form</field>
     </record>
     <record model="ir.ui.view" id="rate_notes_displayer_view_form">
-      <field name="model">billing.rate_notes_displayer</field>
+      <field name="model">billing.premium_rate.form.create.show_forms</field>
       <field name="type">form</field>
       <field name="name">rate_notes_displayer_form</field>
     </record>

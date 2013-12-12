@@ -505,7 +505,7 @@ class RateNoteParameterGroupPartyRelation(model.CoopView):
 class RateNotesDisplayer(model.CoopView):
     'Rate Notes'
 
-    __name__ = 'billing.rate_notes_displayer'
+    __name__ = 'billing.premium_rate.form.create.show_forms'
 
     rate_notes = fields.One2Many('billing.premium_rate.form', None, 'Rate Notes')
 
@@ -521,7 +521,7 @@ class RateNoteProcess(model.CoopWizard):
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Next', 'rate_notes', 'tryton-go-next', default=True),
             ])
-    rate_notes = StateView('billing.rate_notes_displayer',
+    rate_notes = StateView('billing.premium_rate.form.create.show_forms',
         'life_billing_collective_fr.rate_notes_displayer_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Validate', 'validate_rate_notes', 'tryton-go-next',
