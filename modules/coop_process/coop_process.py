@@ -171,9 +171,9 @@ class ProcessLog(model.CoopSQL, model.CoopView):
 
     user = fields.Many2One('res.user', 'User')
     from_state = fields.Many2One(
-        'process.process_step_relation', 'From State')
+        'process-process.step', 'From State')
     to_state = fields.Many2One(
-        'process.process_step_relation', 'To State', select=True)
+        'process-process.step', 'To State', select=True)
     start_time = fields.DateTime('Start Time')
     end_time = fields.DateTime('End Time')
     description = fields.Text('Description')
@@ -597,7 +597,7 @@ class ProcessStepRelation(model.CoopSQL):
     'Process to Step relation'
 
     __metaclass__ = PoolMeta
-    __name__ = 'process.process_step_relation'
+    __name__ = 'process-process.step'
 
     @classmethod
     def __setup__(cls):

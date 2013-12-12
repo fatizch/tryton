@@ -206,43 +206,43 @@ msgctxt "field:process-menu,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:process.process_step_relation,create_date:"
+msgctxt "field:process-process.step,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:process.process_step_relation,create_uid:"
+msgctxt "field:process-process.step,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:process.process_step_relation,id:"
+msgctxt "field:process-process.step,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:process.process_step_relation,order:"
+msgctxt "field:process-process.step,order:"
 msgid "Order"
 msgstr "Ordre"
 
-msgctxt "field:process.process_step_relation,process:"
+msgctxt "field:process-process.step,process:"
 msgid "Process"
 msgstr "Processus"
 
-msgctxt "field:process.process_step_relation,rec_name:"
+msgctxt "field:process-process.step,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.process_step_relation,status:"
+msgctxt "field:process-process.step,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:process.process_step_relation,step:"
+msgctxt "field:process-process.step,step:"
 msgid "Step"
 msgstr "Etape"
 
-msgctxt "field:process.process_step_relation,write_date:"
+msgctxt "field:process-process.step,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:process.process_step_relation,write_uid:"
+msgctxt "field:process-process.step,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -534,7 +534,7 @@ msgctxt "model:process-menu,name:"
 msgid "Process Menu Relation"
 msgstr "Relation Processus Menu"
 
-msgctxt "model:process.process_step_relation,name:"
+msgctxt "model:process-process.step,name:"
 msgid "Process to Step relation"
 msgstr "Relation Processus - Etape"
 
@@ -916,11 +916,11 @@ msgctxt "view:process:"
 msgid "XML"
 msgstr "Description de la Vue"
 
-msgctxt "view:process.process_step_relation:"
+msgctxt "view:process-process.step:"
 msgid "Process Relation"
 msgstr ""
 
-msgctxt "view:process.process_step_relation:"
+msgctxt "view:process-process.step:"
 msgid "Process Steps"
 msgstr ""
 

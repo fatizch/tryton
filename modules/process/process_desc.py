@@ -34,14 +34,14 @@ class Status(ModelSQL, ModelView):
     name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
     relations = fields.One2Many(
-        'process.process_step_relation', 'status', 'Relations',
+        'process-process.step', 'status', 'Relations',
         states={'readonly': True})
 
 
 class ProcessStepRelation(ModelSQL, ModelView):
     'Process to Step relation'
 
-    __name__ = 'process.process_step_relation'
+    __name__ = 'process-process.step'
 
     process = fields.Many2One('process', 'Process',
         ondelete='CASCADE')
@@ -89,13 +89,13 @@ class ProcessDesc(ModelSQL, ModelView):
             ('model', '!=', 'process.process_framework')
         ],
         required=True)
-    all_steps = fields.One2Many('process.process_step_relation',
+    all_steps = fields.One2Many('process-process.step',
         'process', 'All Steps', order=[('order', 'ASC')],
         states={'invisible': Bool(Eval('display_steps_without_status'))})
     display_steps_without_status = fields.Function(
         fields.Boolean('Display Steps Without Status'),
         'get_display_steps_without_status', 'set_void')
-    steps_to_display = fields.Many2Many('process.process_step_relation',
+    steps_to_display = fields.Many2Many('process-process.step',
         'process', 'step', 'Steps',
         states={'invisible': Bool(~Eval('display_steps_without_status'))})
     transitions = fields.One2Many(
@@ -809,7 +809,7 @@ class StepDesc(ModelSQL, ModelView):
         order=[('sequence', 'ASC')])
     colspan = fields.Integer('View columns', required=True)
     processes = fields.One2Many(
-        'process.process_step_relation', 'step', 'Transitions')
+        'process-process.step', 'step', 'Transitions')
 
     @classmethod
     def __setup__(cls):
@@ -823,7 +823,7 @@ class StepDesc(ModelSQL, ModelView):
         super(StepDesc, cls).write(steps, values)
 
         # If we write a step that's being used in the definition of a process
-        ProcessStepRelation = Pool().get('process.process_step_relation')
+        ProcessStepRelation = Pool().get('process-process.step')
         processes = set()
 
         for step in steps:

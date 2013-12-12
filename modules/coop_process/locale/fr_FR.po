@@ -230,7 +230,7 @@ msgctxt "field:process,with_prev_next:"
 msgid "With Previous / Next button"
 msgstr "Avec Préc/Suiv."
 
-msgctxt "field:process.process_step_relation,create_date_:"
+msgctxt "field:process-process.step,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 

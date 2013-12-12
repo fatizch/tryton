@@ -107,7 +107,7 @@ class ProcessFramework(ModelView):
     # The current state is used to store which process is currently being
     # executed and which step is the current step
     current_state = fields.Many2One(
-        'process.process_step_relation',
+        'process-process.step',
         'Current State',
         ondelete='RESTRICT', states={'readonly': True})
 

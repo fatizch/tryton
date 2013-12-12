@@ -118,7 +118,7 @@ class TaskDisplayer(model.CoopView):
 
     __name__ = 'task_manager.task_displayer'
 
-    task = fields.Many2One('process.process_step_relation', 'Task')
+    task = fields.Many2One('process-process.step', 'Task')
     nb_tasks = fields.Integer(
         'Number', on_change_with=['task'], depends=['task', 'kind'])
     kind = fields.Selection(
