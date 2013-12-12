@@ -43,7 +43,7 @@ class Document():
 class RequestFinder():
     'Request Finder'
 
-    __name__ = 'ins_product.request_finder'
+    __name__ = 'document.receive.request'
     __metaclass__ = PoolMeta
 
     @classmethod

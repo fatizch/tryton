@@ -773,7 +773,7 @@ msgctxt "field:ins_contract.subscribed_coverage_complement,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.request_finder,tmp_0:"
+msgctxt "field:document.receive.request,tmp_0:"
 msgid "Contract"
 msgstr "Contrat"
 
@@ -1013,7 +1013,7 @@ msgctxt "selection:document.request,needed_by:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "selection:ins_product.request_finder,kind:"
+msgctxt "selection:document.receive.request,kind:"
 msgid "Contract"
 msgstr "Contrat"
 

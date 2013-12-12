@@ -538,7 +538,7 @@ msgctxt "field:expense,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.request_finder,tmp_1:"
+msgctxt "field:document.receive.request,tmp_1:"
 msgid "Claim"
 msgstr "Sinistre"
 
@@ -870,7 +870,7 @@ msgctxt "selection:document.request,needed_by:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 
-msgctxt "selection:ins_product.request_finder,kind:"
+msgctxt "selection:document.receive.request,kind:"
 msgid "Claim"
 msgstr "Sinistre"
 

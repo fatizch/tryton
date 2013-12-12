@@ -2183,23 +2183,23 @@ msgctxt "field:ins_product.product_validation_batch,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.request_finder,id:"
+msgctxt "field:document.receive.request,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.request_finder,kind:"
+msgctxt "field:document.receive.request,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:ins_product.request_finder,must_expand_tree:"
+msgctxt "field:document.receive.request,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.request_finder,request:"
+msgctxt "field:document.receive.request,request:"
 msgid "Request"
 msgstr "Demande"
 
-msgctxt "field:ins_product.request_finder,value:"
+msgctxt "field:document.receive.request,value:"
 msgid "Value"
 msgstr "Nom"
 
@@ -3421,7 +3421,7 @@ msgctxt "model:ins_product.product_validation_batch,name:"
 msgid "Product Validation Batch"
 msgstr ""
 
-msgctxt "model:ins_product.request_finder,name:"
+msgctxt "model:document.receive.request,name:"
 msgid "Request Finder"
 msgstr "Rechercher une Demande"
 
@@ -4192,7 +4192,7 @@ msgctxt "selection:ins_product.pricing_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:ins_product.request_finder,kind:"
+msgctxt "selection:document.receive.request,kind:"
 msgid ""
 msgstr " "
 
@@ -4688,7 +4688,7 @@ msgctxt "view:ins_product.pricing_rule:"
 msgid "Pricing rule"
 msgstr "Règle de Cotisation"
 
-msgctxt "view:ins_product.request_finder:"
+msgctxt "view:document.receive.request:"
 msgid "Request Finder"
 msgstr "Rechercher une Demande"
 

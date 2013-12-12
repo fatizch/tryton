@@ -738,7 +738,7 @@ class LetterGeneration(Wizard):
 class RequestFinder(model.CoopView):
     'Request Finder'
 
-    __name__ = 'ins_product.request_finder'
+    __name__ = 'document.receive.request'
 
     kind = fields.Selection([('', '')], 'Kind', on_change=['kind'])
     value = fields.Char('Value')
@@ -874,7 +874,7 @@ class ReceiveDocuments(Wizard):
     start_state = 'start'
     start = StateTransition()
     select_instance = StateView(
-        'ins_product.request_finder',
+        'document.receive.request',
         'insurance_product.request_finder_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
