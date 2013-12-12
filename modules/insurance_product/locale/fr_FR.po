@@ -2143,39 +2143,39 @@ msgctxt "field:billing.premium.rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.process_product_relation,create_date:"
+msgctxt "field:process-offered.product,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.process_product_relation,create_date_:"
+msgctxt "field:process-offered.product,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.process_product_relation,create_uid:"
+msgctxt "field:process-offered.product,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.process_product_relation,id:"
+msgctxt "field:process-offered.product,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.process_product_relation,process:"
+msgctxt "field:process-offered.product,process:"
 msgid "Process"
 msgstr "Processus"
 
-msgctxt "field:ins_product.process_product_relation,product:"
+msgctxt "field:process-offered.product,product:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "field:ins_product.process_product_relation,rec_name:"
+msgctxt "field:process-offered.product,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.process_product_relation,write_date:"
+msgctxt "field:process-offered.product,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.process_product_relation,write_uid:"
+msgctxt "field:process-offered.product,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3413,7 +3413,7 @@ msgctxt "model:billing.premium.rule,name:"
 msgid "Pricing Rule"
 msgstr "Règle de Cotisation"
 
-msgctxt "model:ins_product.process_product_relation,name:"
+msgctxt "model:process-offered.product,name:"
 msgid "Process Product Relation"
 msgstr "Relation Processus Produit"
 

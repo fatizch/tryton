@@ -12,7 +12,7 @@ __all__ = [
 class ProcessProductRelation(model.CoopSQL):
     'Process Product Relation'
 
-    __name__ = 'ins_product.process_product_relation'
+    __name__ = 'process-offered.product'
 
     product = fields.Many2One('offered.product', 'Product',
         ondelete='CASCADE')
@@ -26,5 +26,5 @@ class ProcessDesc():
     __name__ = 'process.process_desc'
     __metaclass__ = PoolMeta
 
-    for_products = fields.Many2Many('ins_product.process_product_relation',
+    for_products = fields.Many2Many('process-offered.product',
         'process', 'product', 'Products')
