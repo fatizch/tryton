@@ -303,39 +303,39 @@ msgctxt "field:billing.payment.term,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:billing.payment_rule-fee-relation,create_date:"
+msgctxt "field:billing.payment.term-fee,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:billing.payment_rule-fee-relation,create_date_:"
+msgctxt "field:billing.payment.term-fee,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:billing.payment_rule-fee-relation,create_uid:"
+msgctxt "field:billing.payment.term-fee,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:billing.payment_rule-fee-relation,fee:"
+msgctxt "field:billing.payment.term-fee,fee:"
 msgid "Fee"
 msgstr "Frais"
 
-msgctxt "field:billing.payment_rule-fee-relation,id:"
+msgctxt "field:billing.payment.term-fee,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.payment_rule-fee-relation,payment_rule:"
+msgctxt "field:billing.payment.term-fee,payment_rule:"
 msgid "Payment Rule"
 msgstr "Règle de paiement"
 
-msgctxt "field:billing.payment_rule-fee-relation,rec_name:"
+msgctxt "field:billing.payment.term-fee,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:billing.payment_rule-fee-relation,write_date:"
+msgctxt "field:billing.payment.term-fee,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:billing.payment_rule-fee-relation,write_uid:"
+msgctxt "field:billing.payment.term-fee,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -849,7 +849,7 @@ msgctxt "model:billing.payment.term,name:"
 msgid "Payment Rule"
 msgstr "Règle de paiement"
 
-msgctxt "model:billing.payment_rule-fee-relation,name:"
+msgctxt "model:billing.payment.term-fee,name:"
 msgid "Payment Rule - Fee relation"
 msgstr "Relation Règle de paiement - Frais"
 

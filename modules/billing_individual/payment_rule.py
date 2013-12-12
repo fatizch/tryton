@@ -245,7 +245,7 @@ class PaymentRuleLine(model.CoopSQL, model.CoopView):
 class PaymentRuleFeeRelation(model.CoopSQL):
     'Payment Rule - Fee relation'
 
-    __name__ = 'billing.payment_rule-fee-relation'
+    __name__ = 'billing.payment.term-fee'
 
     payment_rule = fields.Many2One('billing.payment.term', 'Payment Rule',
         required=True, ondelete='CASCADE')
@@ -272,7 +272,7 @@ class PaymentRule(model.CoopSQL, model.CoopView):
             'required': ~~Eval('with_sync_date')})
     start_lines = fields.One2Many('billing.payment.term.line', 'payment_rule',
         'Start Lines')
-    appliable_fees = fields.Many2Many('billing.payment_rule-fee-relation',
+    appliable_fees = fields.Many2Many('billing.payment.term-fee',
         'payment_rule', 'fee', 'Appliable fees', depends=['company'],
         domain=[('company', '=', Eval('company'))])
     payment_mode = fields.Selection(PAYMENT_DELAYS, 'Payment Mode')
