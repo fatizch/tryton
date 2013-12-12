@@ -68,7 +68,7 @@ class EventDesc(model.CoopSQL, model.CoopView):
 class LossDescDocumentsRelation(model.CoopSQL):
     'Loss Desc to Document relation'
 
-    __name__ = 'ins_product.loss-document-relation'
+    __name__ = 'benefit.loss.description-document.description'
 
     document = fields.Many2One(
         'ins_product.document_desc', 'Document', ondelete='RESTRICT')
@@ -94,7 +94,7 @@ class LossDesc(model.CoopSQL, model.CoopView):
         'loss_desc', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'loss')], )
     documents = fields.Many2Many(
-        'ins_product.loss-document-relation', 'loss', 'document', 'Documents')
+        'benefit.loss.description-document.description', 'loss', 'document', 'Documents')
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
 
