@@ -30,7 +30,7 @@ __all__ = [
 class LifeItemDescriptor():
     'Item Descriptor'
 
-    __name__ = 'ins_product.item_desc'
+    __name__ = 'offered.item.description'
     __metaclass__ = PoolMeta
 
 

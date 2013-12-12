@@ -102,7 +102,7 @@ class Product():
             'invisible': ~IS_INSURANCE,
             })
     possible_item_descs = fields.Function(
-        fields.Many2Many('ins_product.item_desc', None, None,
+        fields.Many2Many('offered.item.description', None, None,
             'Possible Item Descriptors', on_change_with=['coverages']),
         'on_change_with_possible_item_descs')
 
@@ -250,7 +250,7 @@ class OfferedProduct(Offered):
 class ItemDescriptor(model.CoopSQL, model.CoopView):
     'Item Descriptor'
 
-    __name__ = 'ins_product.item_desc'
+    __name__ = 'offered.item.description'
 
     code = fields.Char('Code', required=True, on_change_with=['name', 'code'])
     name = fields.Char('Name')
@@ -296,9 +296,9 @@ class ItemDescSubItemDescRelation(model.CoopSQL):
 
     __name__ = 'ins_product.item_desc-sub_item_desc'
 
-    item_desc = fields.Many2One('ins_product.item_desc', 'Item Desc',
+    item_desc = fields.Many2One('offered.item.description', 'Item Desc',
         ondelete='CASCADE')
-    sub_item_desc = fields.Many2One('ins_product.item_desc', 'Sub Item Desc',
+    sub_item_desc = fields.Many2One('offered.item.description', 'Sub Item Desc',
         ondelete='RESTRICT')
 
 
@@ -308,7 +308,7 @@ class ItemDescriptorComplementaryDataRelation(model.CoopSQL):
     __name__ = 'ins_product.item_desc-complementary_data_def'
 
     item_desc = fields.Many2One(
-        'ins_product.item_desc', 'Item Desc', ondelete='CASCADE', )
+        'offered.item.description', 'Item Desc', ondelete='CASCADE', )
     complementary_data_def = fields.Many2One(
         'offered.complementary_data_def',
         'Complementary Data', ondelete='RESTRICT', )
@@ -322,7 +322,7 @@ class ProductItemDescriptorRelation(model.CoopSQL):
     product = fields.Many2One(
         'offered.product', 'Product', ondelete='CASCADE')
     item_desc = fields.Many2One(
-        'ins_product.item_desc', 'Item Descriptor', ondelete='RESTRICT')
+        'offered.item.description', 'Item Descriptor', ondelete='RESTRICT')
 
 
 class ExpenseKind(model.CoopSQL, model.CoopView):

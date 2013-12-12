@@ -40,7 +40,7 @@ class Coverage():
             'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE),
             'required': And(~Eval('is_package'), IS_INSURANCE),
             }, depends=['is_package'])
-    item_desc = fields.Many2One('ins_product.item_desc', 'Item Descriptor',
+    item_desc = fields.Many2One('offered.item.description', 'Item Descriptor',
         states={
             'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE),
             'required': And(~Eval('is_package'), IS_INSURANCE),

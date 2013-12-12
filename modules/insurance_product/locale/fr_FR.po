@@ -1537,55 +1537,55 @@ msgctxt "field:expense.kind,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.item_desc,code:"
+msgctxt "field:offered.item.description,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:ins_product.item_desc,complementary_data_def:"
+msgctxt "field:offered.item.description,complementary_data_def:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:ins_product.item_desc,create_date:"
+msgctxt "field:offered.item.description,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.item_desc,create_date_:"
+msgctxt "field:offered.item.description,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.item_desc,create_uid:"
+msgctxt "field:offered.item.description,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.item_desc,id:"
+msgctxt "field:offered.item.description,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.item_desc,kind:"
+msgctxt "field:offered.item.description,kind:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_product.item_desc,must_expand_tree:"
+msgctxt "field:offered.item.description,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.item_desc,name:"
+msgctxt "field:offered.item.description,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.item_desc,rec_name:"
+msgctxt "field:offered.item.description,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.item_desc,sub_item_descs:"
+msgctxt "field:offered.item.description,sub_item_descs:"
 msgid "Sub Item Descriptors"
 msgstr "Descriptions des Sous Eléments"
 
-msgctxt "field:ins_product.item_desc,write_date:"
+msgctxt "field:offered.item.description,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.item_desc,write_uid:"
+msgctxt "field:offered.item.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3365,7 +3365,7 @@ msgctxt "model:expense.kind,name:"
 msgid "Expense Kind"
 msgstr "Type de Frais"
 
-msgctxt "model:ins_product.item_desc,name:"
+msgctxt "model:offered.item.description,name:"
 msgid "Item Descriptor"
 msgstr "Description du Risque"
 

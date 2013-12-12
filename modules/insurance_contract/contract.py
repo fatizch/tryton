@@ -433,7 +433,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     #We need to put complementary data in depends, because the complementary
     #data are set through on_change_with and the item desc can be set on an
     #editable tree, or we can not display for the moment dictionnary in tree
-    item_desc = fields.Many2One('ins_product.item_desc', 'Item Desc',
+    item_desc = fields.Many2One('offered.item.description', 'Item Desc',
         on_change=['item_desc', 'complementary_data', 'party', 'main_contract',
             'start_date'], domain=[If(
                 ~~Eval('possible_item_desc'),
@@ -442,7 +442,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             ], depends=['possible_item_desc', 'complementary_data'],
             ondelete='RESTRICT')
     possible_item_desc = fields.Function(
-        fields.Many2Many('ins_product.item_desc', None, None,
+        fields.Many2Many('offered.item.description', None, None,
             'Possible Item Desc', states={'invisible': True}),
         'get_possible_item_desc_ids')
     covered_data = fields.One2Many('contract.covered_data',

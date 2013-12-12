@@ -18,7 +18,7 @@ msgctxt "field:offered.eligibility.rule,sub_min_age:"
 msgid "Minimum Age"
 msgstr "Age Minimum"
 
-msgctxt "field:ins_product.item_desc,kind:"
+msgctxt "field:offered.item.description,kind:"
 msgid "Kind"
 msgstr "Type"
 

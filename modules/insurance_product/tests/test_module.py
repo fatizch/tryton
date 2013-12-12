@@ -35,7 +35,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'FeeVersion': 'account.fee.description.version',
             'Sequence': 'ir.sequence',
             'Lang': 'ir.lang',
-            'ItemDesc': 'ins_product.item_desc',
+            'ItemDesc': 'offered.item.description',
         }
 
     def test0001_testFunctionalRuleCreation(self):
