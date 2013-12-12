@@ -2291,11 +2291,11 @@ msgctxt "field:rule_engine.runtime,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.rule_sets.option,id:"
+msgctxt "field:rule_engine.runtime,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.rule_sets.option,must_expand_tree:"
+msgctxt "field:rule_engine.runtime,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
@@ -3437,7 +3437,7 @@ msgctxt "model:rule_engine.runtime,name:"
 msgid "Context functions for Coverage-Covered associations objects"
 msgstr ""
 
-msgctxt "model:ins_product.rule_sets.option,name:"
+msgctxt "model:rule_engine.runtime,name:"
 msgid "Context functions for option related data"
 msgstr ""
 

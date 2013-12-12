@@ -99,7 +99,7 @@ class OptionContext(RuleEngineContext):
         Context functions for option related data
     '''
 
-    __name__ = 'ins_product.rule_sets.option'
+    __name__ = 'rule_engine.runtime'
 
 
 class CoveredDataContext(RuleEngineContext):
