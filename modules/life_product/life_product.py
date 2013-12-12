@@ -37,7 +37,7 @@ class LifeItemDescriptor():
 class LifeCoverage():
     'Coverage'
 
-    __name__ = 'offered.coverage'
+    __name__ = 'offered.option.description'
     __metaclass__ = PoolMeta
 
     coverage_amount_rules = fields.One2Many('offered.coverage_amount.rule',

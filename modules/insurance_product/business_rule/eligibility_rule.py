@@ -25,19 +25,19 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
 
     sub_elem_config_kind = fields.Selection(
         CONFIG_KIND, 'Sub Elem Conf. kind', states={
-            'invisible': Eval('offered_kind') != 'offered.coverage',
-            'required': Eval('offered_kind') == 'offered.coverage',
+            'invisible': Eval('offered_kind') != 'offered.option.description',
+            'required': Eval('offered_kind') == 'offered.option.description',
         })
     sub_elem_rule = fields.Many2One(
         'rule_engine', 'Sub Elem Rule Engine', depends=['config_kind'],
         states={
-            'invisible': Eval('offered_kind') != 'offered.coverage',
+            'invisible': Eval('offered_kind') != 'offered.option.description',
         })
     sub_elem_rule_complementary_data = fields.Dict(
         'extra_data', 'Rule Complementary Data',
         on_change_with=['sub_elem_rule', 'sub_elem_rule_complementary_data'],
         states={
-            'invisible': Eval('offered_kind') != 'offered.coverage',
+            'invisible': Eval('offered_kind') != 'offered.option.description',
         })
     subscriber_classes = fields.Selection(SUBSCRIBER_CLASSES,
         'Can be subscribed', states={
@@ -50,7 +50,7 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
         states={
             'invisible': Or(
                 Eval('sub_elem_config_kind') != 'simple',
-                Eval('offered_kind') != 'offered.coverage',
+                Eval('offered_kind') != 'offered.option.description',
             )
         }, depends=['sub_elem_config_kind'])
     offered_kind = fields.Function(

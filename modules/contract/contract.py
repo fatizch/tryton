@@ -571,7 +571,7 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
 
     @classmethod
     def get_offered_name(cls):
-        return 'offered.coverage', 'Coverage'
+        return 'offered.option.description', 'Coverage'
 
     def get_coverage(self):
         return self.offered

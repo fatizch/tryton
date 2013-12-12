@@ -37,13 +37,13 @@
     <!-- Coverage -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="coverage_view_form">
-      <field name="model">offered.coverage</field>
+      <field name="model">offered.option.description</field>
       <field name="type">form</field>
       <field name="inherit" ref="offered.coverage_view_form"/>
       <field name="name">collective_coverage_form</field>
     </record>
     <record model="ir.ui.view" id="coverage_view_tree">
-      <field name="model">offered.coverage</field>
+      <field name="model">offered.option.description</field>
       <field name="type">tree</field>
       <field name="inherit" ref="offered.coverage_view_tree"/>
       <field name="arch" type="xml"/>
@@ -51,7 +51,7 @@
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_coverage_form">
       <field name="name">Group Coverages</field>
-      <field name="res_model">offered.coverage</field>
+      <field name="res_model">offered.option.description</field>
       <field name="domain">[('is_group', '=', True), ('kind', '=', 'insurance'), ('company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_coverage_tree_view">
@@ -69,13 +69,13 @@
     <!-- Package -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="package_view_form">
-      <field name="model">offered.coverage</field>
+      <field name="model">offered.option.description</field>
       <field name="type">form</field>
       <field name="inherit" ref="offered.coverage_view_form"/>
       <field name="arch" type="xml"/>
     </record>
     <record model="ir.ui.view" id="package_view_tree">
-      <field name="model">offered.coverage</field>
+      <field name="model">offered.option.description</field>
       <field name="type">tree</field>
       <field name="inherit" ref="offered.coverage_view_tree"/>
       <field name="arch" type="xml"/>
@@ -83,7 +83,7 @@
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_package_form">
       <field name="name">Group Packages</field>
-      <field name="res_model">offered.coverage</field>
+      <field name="res_model">offered.option.description</field>
       <field name="domain">[("is_package", "=", True), ('is_group', '=', True), ('kind', '=', 'insurance'), ('company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_package_tree_view">

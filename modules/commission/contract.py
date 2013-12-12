@@ -123,7 +123,7 @@ class Contract():
         prices, errs = super(Contract, self).calculate_price_at_date(date)
         for price in prices:
             target = price.on_object
-            if target.__name__ != 'offered.coverage':
+            if target.__name__ != 'offered.option.description':
                 continue
             target = self.get_option_for_coverage_at_date(target, date)
             if not target:

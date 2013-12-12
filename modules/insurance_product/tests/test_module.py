@@ -25,7 +25,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def get_models(cls):
         return {
             'Product': 'offered.product',
-            'Coverage': 'offered.coverage',
+            'Coverage': 'offered.option.description',
             'Pricing': 'billing.premium.rule',
             'Eligibility': 'offered.eligibility.rule',
             'PricingComponent': 'billing.premium.rule.component',

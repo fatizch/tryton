@@ -111,11 +111,11 @@ msgctxt "field:cash_value.cash_value_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.coverage,cash_value_rules:"
+msgctxt "field:offered.option.description,cash_value_rules:"
 msgid "Cash Value Rules"
 msgstr "Règles d'Epargne"
 
-msgctxt "field:offered.coverage,is_cash_value:"
+msgctxt "field:offered.option.description,is_cash_value:"
 msgid "Is Cash Value"
 msgstr "Est de type Epargne"
 
@@ -159,7 +159,7 @@ msgctxt "selection:cash_value.cash_value_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:offered.coverage,family:"
+msgctxt "selection:offered.option.description,family:"
 msgid "Cash Value"
 msgstr "Epargne"
 
@@ -167,10 +167,10 @@ msgctxt "view:cash_value.cash_value_rule:"
 msgid "Cash Value Rule"
 msgstr "Règle d'Epargne"
 
-msgctxt "view:offered.coverage:"
+msgctxt "view:offered.option.description:"
 msgid "Cash Value"
 msgstr "Epargne"
 
-msgctxt "view:offered.coverage:"
+msgctxt "view:offered.option.description:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"

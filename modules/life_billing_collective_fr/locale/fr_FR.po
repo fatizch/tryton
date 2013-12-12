@@ -721,15 +721,15 @@ msgctxt "field:contract.covered_data,is_rating_by_fare_class:"
 msgid "Rating by Fare Class"
 msgstr "Taux par Classe Tarif"
 
-msgctxt "field:offered.coverage,is_rating_by_fare_class:"
+msgctxt "field:offered.option.description,is_rating_by_fare_class:"
 msgid "Rating by Fare Class"
 msgstr "Taux par Classe Tarif"
 
-msgctxt "field:offered.coverage,rating_rules:"
+msgctxt "field:offered.option.description,rating_rules:"
 msgid "Rating Rules"
 msgstr "Règles de Tarification"
 
-msgctxt "field:offered.coverage,use_rates:"
+msgctxt "field:offered.option.description,use_rates:"
 msgid "Use Rates"
 msgstr "Utiliser le Tarif"
 
@@ -1053,7 +1053,7 @@ msgctxt "view:contract:"
 msgid "Calculate Rates"
 msgstr "Calcul des Taux"
 
-msgctxt "view:offered.coverage:"
+msgctxt "view:offered.option.description:"
 msgid "Rating"
 msgstr "Tarif"
 

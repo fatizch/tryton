@@ -518,7 +518,7 @@ msgctxt "field:loan.share,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.coverage,is_loan:"
+msgctxt "field:offered.option.description,is_loan:"
 msgid ""
 msgstr " "
 
@@ -738,7 +738,7 @@ msgctxt "selection:loan.payment,kind:"
 msgid "Scheduled"
 msgstr "Planifié"
 
-msgctxt "selection:offered.coverage,family:"
+msgctxt "selection:offered.option.description,family:"
 msgid "Loan"
 msgstr "Emprunteur"
 

@@ -22,8 +22,8 @@ class ExportPackage():
                 add_remove=[]),
         'getter_void', setter='setter_void')
     coverages = fields.Function(
-        fields.One2Many('offered.coverage', None, 'Coverages', states={
-                'invisible': Bool(Eval('model') != 'offered.coverage')},
+        fields.One2Many('offered.option.description', None, 'Coverages', states={
+                'invisible': Bool(Eval('model') != 'offered.option.description')},
                 on_change=['coverages', 'instances_to_export'],
                 add_remove=[]),
         'getter_void', setter='setter_void')
@@ -40,7 +40,7 @@ class ExportPackage():
         res = super(ExportPackage, cls).get_possible_models_to_export()
         res.extend([
                 ('offered.product', 'Product'),
-                ('offered.coverage', 'Coverage'),
+                ('offered.option.description', 'Coverage'),
                 ('extra_data', 'Complementary Data'),
                 ])
         return list(set(res))

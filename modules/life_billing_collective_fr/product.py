@@ -37,7 +37,7 @@ class Product():
 class Coverage():
     'Coverage'
 
-    __name__ = 'offered.coverage'
+    __name__ = 'offered.option.description'
 
     is_rating_by_fare_class = fields.Function(
         fields.Boolean('Rating by Fare Class', states={'invisible': True}),

@@ -279,7 +279,7 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
         res = [
             f(''),
             f('offered.product'),
-            f('offered.coverage'),
+            f('offered.option.description'),
             f('contract'),
             f('contract.option'),
             f('contract.covered_data'),
@@ -645,7 +645,7 @@ class Coverage():
     'Coverage'
 
     __metaclass__ = PoolMeta
-    __name__ = 'offered.coverage'
+    __name__ = 'offered.option.description'
 
     account_for_billing = fields.Many2One('account.account',
         'Account for billing', depends=['company'], domain=[

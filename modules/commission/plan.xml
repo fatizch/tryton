@@ -40,13 +40,13 @@
             icon="tryton-list" action="act_plan_form"/>
 
         <record model="ir.ui.view" id="component_view_form">
-            <field name="model">offered.coverage</field>
+            <field name="model">offered.option.description</field>
             <field name="type">form</field>
             <field name="inherit" ref="offered.coverage_view_form"/>
             <field name="name">component_form</field>
         </record>
         <record model="ir.ui.view" id="component_view_tree">
-            <field name="model">offered.coverage</field>
+            <field name="model">offered.option.description</field>
             <field name="type">tree</field>
             <field name="inherit" ref="offered.coverage_view_tree"/>
             <field name="arch" type="xml"/>
@@ -54,7 +54,7 @@
 
         <record model="ir.action.act_window" id="act_component_form">
             <field name="name">Commission Components</field>
-            <field name="res_model">offered.coverage</field>
+            <field name="res_model">offered.option.description</field>
             <field name="domain">[('kind', '=', 'commission')]</field>
         </record>
 

@@ -53,7 +53,7 @@ class CommissionPlan():
 class CommissionComponent():
     'Commission Component'
 
-    __name__ = 'offered.coverage'
+    __name__ = 'offered.option.description'
     __metaclass__ = PoolMeta
 
     commission_rules = fields.One2Many('commission.rule',
@@ -79,9 +79,9 @@ class CommissionComponentCoverageRelation(model.CoopSQL):
 
     __name__ = 'commission.option.description-option.description'
 
-    component = fields.Many2One('offered.coverage', 'Component',
+    component = fields.Many2One('offered.option.description', 'Component',
         ondelete='CASCADE')
-    coverage = fields.Many2One('offered.coverage', 'Coverage',
+    coverage = fields.Many2One('offered.option.description', 'Coverage',
         ondelete='RESTRICT')
 
 

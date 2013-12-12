@@ -22,7 +22,7 @@ COULD_NOT_FIND_A_MATCHING_RULE = 'Could not find a matching rule'
 class Coverage():
     'Coverage'
 
-    __name__ = 'offered.coverage'
+    __name__ = 'offered.option.description'
     __metaclass__ = PoolMeta
 
     benefits = fields.Many2Many('option.description-benefit', 'coverage',
@@ -215,6 +215,6 @@ class Coverage():
 class OfferedCoverage(product.Offered):
     'Offered Coverage'
 
-    __name__ = 'offered.coverage'
+    __name__ = 'offered.option.description'
     #This empty override is necessary to have in the coverage the fields added
     #in the override of offered

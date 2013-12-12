@@ -54,7 +54,7 @@ class CollectionToCashValue(Wizard):
         # collection yet
         pool = Pool()
         Collection = pool.get('collection')
-        Coverage = Pool().get('offered.coverage')
+        Coverage = Pool().get('offered.option.description')
         CashValueCollection = pool.get('contract.cash_value.collection')
         Line = pool.get('account.move.line')
         Move = pool.get('account.move')
@@ -114,7 +114,7 @@ class CollectionToCashValue(Wizard):
         CashValueCollection = pool.get('contract.cash_value.collection')
         Move = pool.get('account.move')
         Contract = pool.get('contract')
-        Coverage = pool.get('offered.coverage')
+        Coverage = pool.get('offered.option.description')
         Line = pool.get('account.move.line')
         collection_table = Collection.__table__()
         move_table = Move.__table__()

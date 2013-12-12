@@ -24,7 +24,7 @@ SUBSCRIPTION_BEHAVIOUR = [
 class Coverage(model.CoopSQL, Offered):
     'Coverage'
 
-    __name__ = 'offered.coverage'
+    __name__ = 'offered.option.description'
 
     kind = fields.Selection([('', ''), ('default', 'Default')],
         'Coverage Kind')
@@ -113,8 +113,8 @@ class PackageCoverage(model.CoopSQL):
 
     __name__ = 'offered.package-coverage'
 
-    package = fields.Many2One('offered.coverage', 'Package')
-    coverage = fields.Many2One('offered.coverage', 'Coverage')
+    package = fields.Many2One('offered.option.description', 'Package')
+    coverage = fields.Many2One('offered.option.description', 'Coverage')
 
 
 class CoverageComplementaryDataRelation(model.CoopSQL):
@@ -122,7 +122,7 @@ class CoverageComplementaryDataRelation(model.CoopSQL):
 
     __name__ = 'offered.coverage-complementary_data_def'
 
-    coverage = fields.Many2One('offered.coverage', 'Coverage',
+    coverage = fields.Many2One('offered.option.description', 'Coverage',
         ondelete='CASCADE')
     complementary_data_def = fields.Many2One(
         'extra_data',

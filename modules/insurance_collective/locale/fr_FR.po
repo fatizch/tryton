@@ -6,7 +6,7 @@ msgctxt "field:contract,is_group:"
 msgid "Group Contract"
 msgstr "Contrat Collectif"
 
-msgctxt "field:offered.coverage,is_group:"
+msgctxt "field:offered.option.description,is_group:"
 msgid "Group Coverage"
 msgstr "Garantie Collective"
 

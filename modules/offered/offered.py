@@ -469,7 +469,7 @@ class ProductOptionsCoverage(model.CoopSQL):
         'offered.product', 'Product',
         select=1, required=True, ondelete='CASCADE')
     coverage = fields.Many2One(
-        'offered.coverage', 'Coverage',
+        'offered.option.description', 'Coverage',
         select=1, required=True, ondelete='RESTRICT')
 
 

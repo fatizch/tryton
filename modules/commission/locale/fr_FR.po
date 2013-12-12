@@ -366,15 +366,15 @@ msgctxt "field:distribution.network-commission.plan,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.coverage,commission_rules:"
+msgctxt "field:offered.option.description,commission_rules:"
 msgid "Commission Rules"
 msgstr "Règles de Commissionnement"
 
-msgctxt "field:offered.coverage,coverages:"
+msgctxt "field:offered.option.description,coverages:"
 msgid "Coverages"
 msgstr "Garanties"
 
-msgctxt "field:offered.coverage,is_loan:"
+msgctxt "field:offered.option.description,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
 
@@ -558,7 +558,7 @@ msgctxt "selection:contract-agreement,kind:"
 msgid "Management Delegation"
 msgstr "Délégation de gestion"
 
-msgctxt "selection:offered.coverage,kind:"
+msgctxt "selection:offered.option.description,kind:"
 msgid "Commission"
 msgstr "Commission"
 
@@ -618,7 +618,7 @@ msgctxt "view:distribution.network:"
 msgid "Commissioning"
 msgstr "Commissionnement"
 
-msgctxt "view:offered.coverage:"
+msgctxt "view:offered.option.description:"
 msgid "Commissioning"
 msgstr "Commissionnement"
 

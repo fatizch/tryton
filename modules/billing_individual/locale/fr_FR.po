@@ -791,7 +791,7 @@ msgctxt "field:contract.covered_element,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
-msgctxt "field:offered.coverage,account_for_billing:"
+msgctxt "field:offered.option.description,account_for_billing:"
 msgid "Account for billing"
 msgstr "Compte de Facturation"
 

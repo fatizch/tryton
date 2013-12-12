@@ -238,7 +238,7 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
     offered = fields.Reference('Offered',
         selection=[
             ('offered.product', 'Product'),
-            ('offered.coverage', 'Coverage'),
+            ('offered.option.description', 'Coverage'),
             ('benefit', 'Benefit')
             ],
         states={'required': True})

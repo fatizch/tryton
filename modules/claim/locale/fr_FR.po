@@ -550,7 +550,7 @@ msgctxt "field:rule_engine.runtime,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:offered.coverage,is_coverage_amount_needed:"
+msgctxt "field:offered.option.description,is_coverage_amount_needed:"
 msgid "Coverage Amount Needed"
 msgstr "Montant de Couverture Nécessaire"
 
@@ -874,7 +874,7 @@ msgctxt "selection:document.receive.request,kind:"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "selection:offered.coverage,family:"
+msgctxt "selection:offered.option.description,family:"
 msgid ""
 msgstr " "
 

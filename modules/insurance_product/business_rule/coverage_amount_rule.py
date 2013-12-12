@@ -58,7 +58,7 @@ class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
                 (Eval('config_kind') != 'simple'),
             ),
         })
-    other_coverage = fields.Many2One('offered.coverage', 'Source Coverage',
+    other_coverage = fields.Many2One('offered.option.description', 'Source Coverage',
         domain=[('coverage_amount_rules', '!=', None)],
         states={
             'invisible': Or(

@@ -293,7 +293,7 @@ class InsuranceSubscribedCoverage():
 
     @classmethod
     def get_offered_name(cls):
-        return 'offered.coverage', 'Coverage'
+        return 'offered.option.description', 'Coverage'
 
     def append_covered_data(self, covered_element=None):
         res = utils.instanciate_relation(self.__class__, 'covered_data')
