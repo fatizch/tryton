@@ -711,7 +711,7 @@ class ExportImportMixin(Model):
 class FileSelector(ModelView):
     'File Selector'
 
-    __name__ = 'coop_utils.file_selector'
+    __name__ = 'ir.import.select_file'
 
     selected_file = fields.Binary('Import File', filename='name')
     name = fields.Char('Filename')
@@ -745,7 +745,7 @@ class ImportWizard(Wizard):
 
     start_state = 'file_selector'
     file_selector = StateView(
-        'coop_utils.file_selector',
+        'ir.import.select_file',
         'coop_utils.file_selector_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),

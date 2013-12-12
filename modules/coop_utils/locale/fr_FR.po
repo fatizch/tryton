@@ -198,19 +198,19 @@ msgctxt "field:ir.export_package,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:coop_utils.file_selector,file_content:"
+msgctxt "field:ir.import.select_file,file_content:"
 msgid "File Content"
 msgstr "Contenu du fichier"
 
-msgctxt "field:coop_utils.file_selector,id:"
+msgctxt "field:ir.import.select_file,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_utils.file_selector,name:"
+msgctxt "field:ir.import.select_file,name:"
 msgid "Filename"
 msgstr "Nom du Fichier"
 
-msgctxt "field:coop_utils.file_selector,selected_file:"
+msgctxt "field:ir.import.select_file,selected_file:"
 msgid "Import File"
 msgstr "Importer le Fichier"
 
@@ -394,7 +394,7 @@ msgctxt "model:ir.export_package,name:"
 msgid "Export Package"
 msgstr "Exports groupés"
 
-msgctxt "model:coop_utils.file_selector,name:"
+msgctxt "model:ir.import.select_file,name:"
 msgid "File Selector"
 msgstr "Selecteur de fichier"
 
@@ -502,7 +502,7 @@ msgctxt "view:ir.export_package:"
 msgid "Export Packages"
 msgstr ""
 
-msgctxt "view:coop_utils.file_selector:"
+msgctxt "view:ir.import.select_file:"
 msgid "File Selection"
 msgstr "Sélection de Fichier"
 

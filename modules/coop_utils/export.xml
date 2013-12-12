@@ -5,7 +5,7 @@
     <menuitem name="Export Import" id="menu_export_import" sequence="50" parent="ir.menu_administration"/>
     <!-- Import Wizard -->
     <record model="ir.ui.view" id="file_selector_form">
-      <field name="model">coop_utils.file_selector</field>
+      <field name="model">ir.import.select_file</field>
       <field name="type">form</field>
       <field name="name">file_selector_form</field>
     </record>
