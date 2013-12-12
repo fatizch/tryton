@@ -20,7 +20,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def get_models(cls):
         return {
-            'TreeElement': 'rule_engine.tree_element',
+            'TreeElement': 'rule_engine.function',
             'Context': 'rule_engine.context',
             'RuleEngine': 'rule_engine',
             'TestCase': 'rule_engine.test_case',

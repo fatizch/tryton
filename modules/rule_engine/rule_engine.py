@@ -940,7 +940,7 @@ class Context(ModelView, ModelSQL):
 
 class TreeElement(ModelView, ModelSQL):
     "Rule Engine Tree Element"
-    __name__ = 'rule_engine.tree_element'
+    __name__ = 'rule_engine.function'
     _rec_name = 'description'
 
     description = fields.Char(
@@ -965,9 +965,9 @@ class TreeElement(ModelView, ModelSQL):
             ('folder', 'Folder'),
             ('function', 'Function'),
         ], 'Type', required=True)
-    parent = fields.Many2One('rule_engine.tree_element', 'Parent')
+    parent = fields.Many2One('rule_engine.function', 'Parent')
     children = fields.One2Many(
-        'rule_engine.tree_element', 'parent', 'Children')
+        'rule_engine.function', 'parent', 'Children')
     translated_technical_name = fields.Char(
         'Translated technical name',
         states={
@@ -1109,7 +1109,7 @@ class ContextTreeElement(ModelSQL):
     context = fields.Many2One(
         'rule_engine.context', 'Context', required=True, ondelete='CASCADE')
     tree_element = fields.Many2One(
-        'rule_engine.tree_element', 'Tree Element',
+        'rule_engine.function', 'Tree Element',
         required=True, ondelete='CASCADE')
 
 

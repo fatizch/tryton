@@ -18,11 +18,11 @@ msgctxt "error:rule_engine.parameter:"
 msgid "Expected %s as a parameter for rule %s"
 msgstr "L'argument %s est nécessaire pour la règle %s"
 
-msgctxt "error:rule_engine.tree_element:"
+msgctxt "error:rule_engine.function:"
 msgid "Function arguments must only use ascii"
 msgstr "Paramètres de la Fonction ne doit pas utiliser de caracères spéciaux"
 
-msgctxt "error:rule_engine.tree_element:"
+msgctxt "error:rule_engine.function:"
 msgid "Technical name must only use ascii"
 msgstr ""
 
@@ -581,83 +581,83 @@ msgctxt "field:rule_engine.runtime,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:rule_engine.tree_element,children:"
+msgctxt "field:rule_engine.function,children:"
 msgid "Children"
 msgstr "Enfants"
 
-msgctxt "field:rule_engine.tree_element,create_date:"
+msgctxt "field:rule_engine.function,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:rule_engine.tree_element,create_date_:"
+msgctxt "field:rule_engine.function,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:rule_engine.tree_element,create_uid:"
+msgctxt "field:rule_engine.function,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:rule_engine.tree_element,description:"
+msgctxt "field:rule_engine.function,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:rule_engine.tree_element,fct_args:"
+msgctxt "field:rule_engine.function,fct_args:"
 msgid "Function Arguments"
 msgstr "Paramètres de la Fonction"
 
-msgctxt "field:rule_engine.tree_element,full_path:"
+msgctxt "field:rule_engine.function,full_path:"
 msgid "Full Path"
 msgstr "Chemin complet"
 
-msgctxt "field:rule_engine.tree_element,id:"
+msgctxt "field:rule_engine.function,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.tree_element,language:"
+msgctxt "field:rule_engine.function,language:"
 msgid "Language"
 msgstr "Langues"
 
-msgctxt "field:rule_engine.tree_element,long_description:"
+msgctxt "field:rule_engine.function,long_description:"
 msgid "Long Description"
 msgstr "Description"
 
-msgctxt "field:rule_engine.tree_element,must_expand_tree:"
+msgctxt "field:rule_engine.function,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:rule_engine.tree_element,name:"
+msgctxt "field:rule_engine.function,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:rule_engine.tree_element,namespace:"
+msgctxt "field:rule_engine.function,namespace:"
 msgid "Namespace"
 msgstr "Espace de Nom"
 
-msgctxt "field:rule_engine.tree_element,parent:"
+msgctxt "field:rule_engine.function,parent:"
 msgid "Parent"
 msgstr "Parent"
 
-msgctxt "field:rule_engine.tree_element,rec_name:"
+msgctxt "field:rule_engine.function,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:rule_engine.tree_element,rule:"
+msgctxt "field:rule_engine.function,rule:"
 msgid "Rule"
 msgstr "Règle"
 
-msgctxt "field:rule_engine.tree_element,translated_technical_name:"
+msgctxt "field:rule_engine.function,translated_technical_name:"
 msgid "Translated technical name"
 msgstr "Nom Technique Traduit"
 
-msgctxt "field:rule_engine.tree_element,type:"
+msgctxt "field:rule_engine.function,type:"
 msgid "Type"
 msgstr "Type"
 
-msgctxt "field:rule_engine.tree_element,write_date:"
+msgctxt "field:rule_engine.function,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:rule_engine.tree_element,write_uid:"
+msgctxt "field:rule_engine.function,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -809,7 +809,7 @@ msgctxt "model:rule_engine.runtime,name:"
 msgid "Tools functions"
 msgstr "Outils"
 
-msgctxt "model:rule_engine.tree_element,name:"
+msgctxt "model:rule_engine.function,name:"
 msgid "Rule Engine Tree Element"
 msgstr "Elément de l'Arbre"
 
@@ -865,11 +865,11 @@ msgctxt "selection:rule_engine.parameter,kind:"
 msgid "Table"
 msgstr "Table"
 
-msgctxt "selection:rule_engine.tree_element,type:"
+msgctxt "selection:rule_engine.function,type:"
 msgid "Folder"
 msgstr "Dossier"
 
-msgctxt "selection:rule_engine.tree_element,type:"
+msgctxt "selection:rule_engine.function,type:"
 msgid "Function"
 msgstr "Fonction"
 
@@ -937,7 +937,7 @@ msgctxt "view:rule_engine.test_case:"
 msgid "Test Case"
 msgstr "Jeu de Test"
 
-msgctxt "view:rule_engine.tree_element:"
+msgctxt "view:rule_engine.function:"
 msgid "Tree Element"
 msgstr "Elément de l'Arbre"
 

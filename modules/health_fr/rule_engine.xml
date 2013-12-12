@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
   <data noupdate="1">
-    <record model="rule_engine.tree_element" id="te_health">
+    <record model="rule_engine.function" id="te_health">
       <field name="description">Santé</field>
       <field name="type">folder</field>
       <field name="language" ref="ir.lang_fr"/>
@@ -13,7 +13,7 @@
     </record>
   </data>
   <data>
-    <record model="rule_engine.tree_element" id="te_health_regime">
+    <record model="rule_engine.function" id="te_health_regime">
       <field name="description">Code Régime</field>
       <field name="name">_re_health_regime</field>
       <field name="namespace">rule_engine.runtime</field>
