@@ -129,7 +129,7 @@
         <record model="ir.action.report" id="report_generate_graph">
             <field name="name">Graph</field>
             <field name="model">process.process_desc</field>
-            <field name="report_name">process.graph_generation</field>
+            <field name="report_name">process.generate_graph.report</field>
         </record>
         <record model="ir.action.wizard" id="generate_graph_wizard">
             <field name="name">Graph</field>

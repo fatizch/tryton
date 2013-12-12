@@ -1009,7 +1009,7 @@ class GenerateGraph():
     'Generate Graph'
 
     __metaclass__ = PoolMeta
-    __name__ = 'process.graph_generation'
+    __name__ = 'process.generate_graph.report'
 
     @classmethod
     def build_transition(cls, process, step, transition, graph, nodes, edges):

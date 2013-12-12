@@ -885,7 +885,7 @@ class StepDesc(ModelSQL, ModelView):
 
 
 class GenerateGraph(Report):
-    __name__ = 'process.graph_generation'
+    __name__ = 'process.generate_graph.report'
 
     @classmethod
     def build_graph(cls, process):
