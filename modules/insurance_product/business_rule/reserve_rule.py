@@ -15,7 +15,7 @@ __all__ = [
 class ReserveRule(BusinessRuleRoot, model.CoopSQL):
     'Reserve Rule'
 
-    __name__ = 'ins_product.reserve_rule'
+    __name__ = 'benefit.reserve.rule'
 
     amount = fields.Numeric('Amount',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),

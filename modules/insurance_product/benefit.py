@@ -144,7 +144,7 @@ class Benefit(model.CoopSQL, offered.Offered):
     benefit_rules = fields.One2Many(
         'benefit.rule', 'offered', 'Benefit Rules')
     reserve_rules = fields.One2Many(
-        'ins_product.reserve_rule', 'offered', 'Reserve Rules')
+        'benefit.reserve.rule', 'offered', 'Reserve Rules')
     indemnification_kind = fields.Selection(INDEMNIFICATION_KIND,
         'Indemnification Kind', sort=False, required=True)
     loss_descs = fields.Many2Many(
