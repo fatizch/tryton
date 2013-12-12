@@ -14,7 +14,7 @@ __all__ = [
 class RenewalStart(model.CoopView):
     'Renewal Start'
 
-    __name__ = 'ins_contract.renewal_start'
+    __name__ = 'contract.renew.parameters'
 
     renewal_date = fields.Date('Renewal Date', on_change=['renewal_date',
         'renew_what'])
@@ -74,7 +74,7 @@ class RenewalWizard(Wizard):
     __name__ = 'ins_contract.renewal_wizard'
 
     start_state = 'renewal_start'
-    renewal_start = StateView('ins_contract.renewal_start',
+    renewal_start = StateView('contract.renew.parameters',
         'insurance_contract.renewal_start_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Start', 'renewal_result', 'tryton-go-next')])

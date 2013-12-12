@@ -702,27 +702,27 @@ msgctxt "field:contract.renew.report,renewal_log_success:"
 msgid "Succeeded"
 msgstr "Ont réussit"
 
-msgctxt "field:ins_contract.renewal_start,id:"
+msgctxt "field:contract.renew.parameters,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_contract.renewal_start,must_expand_tree:"
+msgctxt "field:contract.renew.parameters,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:ins_contract.renewal_start,renew_what:"
+msgctxt "field:contract.renew.parameters,renew_what:"
 msgid "All contracts"
 msgstr "Tous les contrats"
 
-msgctxt "field:ins_contract.renewal_start,renewal_date:"
+msgctxt "field:contract.renew.parameters,renewal_date:"
 msgid "Renewal Date"
 msgstr "Date de renouvellement"
 
-msgctxt "field:ins_contract.renewal_start,this_contract:"
+msgctxt "field:contract.renew.parameters,this_contract:"
 msgid "Renew this contract"
 msgstr "Seulement ce contrat"
 
-msgctxt "field:ins_contract.renewal_start,will_be_renewed:"
+msgctxt "field:contract.renew.parameters,will_be_renewed:"
 msgid "Will be renewed"
 msgstr "A renouveller"
 
@@ -877,7 +877,7 @@ msgctxt "model:contract.renew.report,name:"
 msgid "Renewal Result"
 msgstr "Résultat du Renouvellement"
 
-msgctxt "model:ins_contract.renewal_start,name:"
+msgctxt "model:contract.renew.parameters,name:"
 msgid "Renewal Start"
 msgstr "Paramètres du Renouvellement"
 
@@ -1101,7 +1101,7 @@ msgctxt "view:contract.renew.report:"
 msgid "Renewal Result"
 msgstr "Résultat du Renouvellement"
 
-msgctxt "view:ins_contract.renewal_start:"
+msgctxt "view:contract.renew.parameters:"
 msgid "Renewal Start"
 msgstr "Paramètres du Renouvellement"
 
