@@ -74,7 +74,7 @@
     <!--################################################################-->
     <record model="ir.action.wizard" id="launch_rate_notes_process">
       <field name="name">Rate Note Process</field>
-      <field name="wiz_name">billing.rate_note_process</field>
+      <field name="wiz_name">billing.premium_rate.form.create</field>
     </record>
     <record model="ir.action.keyword" id="launch_rate_note_keyword">
       <field name="keyword">form_action</field>

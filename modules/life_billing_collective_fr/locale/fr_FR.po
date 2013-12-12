@@ -1061,20 +1061,20 @@ msgctxt "view:party.group:"
 msgid "Group Party"
 msgstr "Regroupement de Sociétés"
 
-msgctxt "wizard_button:billing.rate_note_process,parameters,end:"
+msgctxt "wizard_button:billing.premium_rate.form.create,parameters,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:billing.rate_note_process,parameters,rate_notes:"
+msgctxt "wizard_button:billing.premium_rate.form.create,parameters,rate_notes:"
 msgid "Next"
 msgstr "Suivant"
 
-msgctxt "wizard_button:billing.rate_note_process,rate_notes,end:"
+msgctxt "wizard_button:billing.premium_rate.form.create,rate_notes,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
 msgctxt ""
-"wizard_button:billing.rate_note_process,rate_notes,validate_rate_notes:"
+"wizard_button:billing.premium_rate.form.create,rate_notes,validate_rate_notes:"
 msgid "Validate"
 msgstr "Valider"
 

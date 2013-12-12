@@ -513,7 +513,7 @@ class RateNotesDisplayer(model.CoopView):
 class RateNoteProcess(model.CoopWizard):
     'Rate Note Process'
 
-    __name__ = 'billing.rate_note_process'
+    __name__ = 'billing.premium_rate.form.create'
 
     start_state = 'parameters'
     parameters = StateView('billing.rate_note_process_parameters',
