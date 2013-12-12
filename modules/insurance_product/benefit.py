@@ -148,7 +148,7 @@ class Benefit(model.CoopSQL, offered.Offered):
     indemnification_kind = fields.Selection(INDEMNIFICATION_KIND,
         'Indemnification Kind', sort=False, required=True)
     loss_descs = fields.Many2Many(
-        'ins_product.benefit-loss_desc', 'benefit', 'loss_desc',
+        'benefit-loss.description', 'benefit', 'loss_desc',
         'Loss Descriptions', domain=[('company', '=', Eval('company'))],
         depends=['company'], required=True)
     complementary_data_def = fields.Many2Many(
@@ -263,7 +263,7 @@ class InsuranceBenefit(Offered):
 class BenefitLossDescRelation(model.CoopSQL):
     'Benefit Loss Desc Relation'
 
-    __name__ = 'ins_product.benefit-loss_desc'
+    __name__ = 'benefit-loss.description'
 
     benefit = fields.Many2One(
         'benefit', 'Benefit', ondelete='CASCADE')
