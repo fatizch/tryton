@@ -29,5 +29,5 @@ class ClauseRelation(model.CoopSQL):
 
     rule = fields.Many2One('clause.rule',
         'Rule', select=1, required=True, ondelete='CASCADE')
-    clause = fields.Many2One('ins_product.clause',
+    clause = fields.Many2One('clause',
         'Clause', select=1, required=True, ondelete='RESTRICT')

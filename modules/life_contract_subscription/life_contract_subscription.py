@@ -86,12 +86,12 @@ class CoveredDataSubs():
             on_change=['need_to_chose_beneficiary_clause']),
         'on_change_with_need_to_chose_beneficiary_clause')
     possible_beneficiary_clauses = fields.Function(
-        fields.One2Many('ins_product.clause', None,
+        fields.One2Many('clause', None,
             'Possible beneficiary Clauses', states={'invisible': True},
             on_change_with=['option', 'start_date']),
         'on_change_with_possible_beneficiary_clauses')
     beneficiary_clause_selection = fields.Function(
-        fields.Many2One('ins_product.clause',
+        fields.Many2One('clause',
             'Beneficiary Clause', states={
                 'invisible': ~Eval('need_to_chose_beneficiary_clause'),
                 'required': ~~Eval('need_to_chose_beneficiary_clause'),

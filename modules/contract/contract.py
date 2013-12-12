@@ -634,7 +634,7 @@ class ContractClause(model.CoopSQL, model.CoopView):
 
     contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE')
-    clause = fields.Many2One('ins_product.clause', 'Clause',
+    clause = fields.Many2One('clause', 'Clause',
         ondelete='RESTRICT')
     override_text = fields.Function(
         fields.Boolean('Override Text', on_change_with=['clause'],

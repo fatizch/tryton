@@ -529,67 +529,67 @@ msgctxt "field:offered.business_rule_root,view_rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.clause,code:"
+msgctxt "field:clause,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:ins_product.clause,create_date:"
+msgctxt "field:clause,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.clause,create_date_:"
+msgctxt "field:clause,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.clause,create_uid:"
+msgctxt "field:clause,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.clause,current_rec_name:"
+msgctxt "field:clause,current_rec_name:"
 msgid "Current Value"
 msgstr "Valeur Courante"
 
-msgctxt "field:ins_product.clause,id:"
+msgctxt "field:clause,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.clause,kind:"
+msgctxt "field:clause,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:ins_product.clause,may_be_overriden:"
+msgctxt "field:clause,may_be_overriden:"
 msgid "May be Overriden"
 msgstr "Peut être surchargé"
 
-msgctxt "field:ins_product.clause,must_expand_tree:"
+msgctxt "field:clause,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.clause,name:"
+msgctxt "field:clause,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.clause,rec_name:"
+msgctxt "field:clause,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.clause,rule:"
+msgctxt "field:clause,rule:"
 msgid "Rule"
 msgstr "Règle"
 
-msgctxt "field:ins_product.clause,title:"
+msgctxt "field:clause,title:"
 msgid "Title"
 msgstr "Titre"
 
-msgctxt "field:ins_product.clause,versions:"
+msgctxt "field:clause,versions:"
 msgid "Versions"
 msgstr "Versions"
 
-msgctxt "field:ins_product.clause,write_date:"
+msgctxt "field:clause,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.clause,write_uid:"
+msgctxt "field:clause,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3288,7 +3288,7 @@ msgctxt "model:offered.business_rule_root,name:"
 msgid "Business Rule Root"
 msgstr "Règle Métier Racine"
 
-msgctxt "model:ins_product.clause,name:"
+msgctxt "model:clause,name:"
 msgid "Clause"
 msgstr "Clause"
 
@@ -4552,7 +4552,7 @@ msgctxt "view:offered.business_rule_root:"
 msgid "Business Rule Root"
 msgstr "Règle Métier Racine"
 
-msgctxt "view:ins_product.clause:"
+msgctxt "view:clause:"
 msgid "Clause"
 msgstr "Clause"
 
