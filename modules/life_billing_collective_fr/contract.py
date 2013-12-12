@@ -20,7 +20,7 @@ class Contract():
     use_rates = fields.Function(
         fields.Boolean('Use Rates', states={'invisible': True}),
         'get_use_rates')
-    rates = fields.One2Many('billing.rate_line', 'contract', 'Rates',
+    rates = fields.One2Many('contract.premium_rate.line', 'contract', 'Rates',
         states={'invisible': ~Eval('use_rates')})
     next_assessment_date = fields.Date('Next Assessment Date',
         states={'invisible': ~Eval('use_rates')})
@@ -73,7 +73,7 @@ already exists and can't be modified (%s)'''),
         return rates, errs
 
     def calculate_rates(self):
-        RateLine = Pool().get('billing.rate_line')
+        RateLine = Pool().get('contract.premium_rate.line')
         rates, errs = self.calculate_rates_dicts_between_dates()
         if errs:
             return False, errs

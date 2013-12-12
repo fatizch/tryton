@@ -27,99 +27,99 @@ msgctxt "field:account.configuration,default_suspense_account:"
 msgid "Default Suspense Account"
 msgstr "Compte d'attente par défaut"
 
-msgctxt "field:billing.rate_line,childs:"
+msgctxt "field:contract.premium_rate.line,childs:"
 msgid "Childs"
 msgstr "Enfants"
 
-msgctxt "field:billing.rate_line,contract:"
+msgctxt "field:contract.premium_rate.line,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:billing.rate_line,covered_element:"
+msgctxt "field:contract.premium_rate.line,covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
-msgctxt "field:billing.rate_line,create_date:"
+msgctxt "field:contract.premium_rate.line,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:billing.rate_line,create_date_:"
+msgctxt "field:contract.premium_rate.line,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:billing.rate_line,create_uid:"
+msgctxt "field:contract.premium_rate.line,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:billing.rate_line,end_date:"
+msgctxt "field:contract.premium_rate.line,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:billing.rate_line,fare_class:"
+msgctxt "field:contract.premium_rate.line,fare_class:"
 msgid "Fare Class"
 msgstr "Classe Tarif"
 
-msgctxt "field:billing.rate_line,id:"
+msgctxt "field:contract.premium_rate.line,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.rate_line,index:"
+msgctxt "field:contract.premium_rate.line,index:"
 msgid "Index"
 msgstr "indice"
 
-msgctxt "field:billing.rate_line,index_value:"
+msgctxt "field:contract.premium_rate.line,index_value:"
 msgid "Index Value"
 msgstr ""
 
-msgctxt "field:billing.rate_line,indexed_value:"
+msgctxt "field:contract.premium_rate.line,indexed_value:"
 msgid "Indexed Value"
 msgstr "Valeur Indexé"
 
-msgctxt "field:billing.rate_line,manual_billing:"
+msgctxt "field:contract.premium_rate.line,manual_billing:"
 msgid "Manual Billing"
 msgstr "Tarification Manuelle"
 
-msgctxt "field:billing.rate_line,must_expand_tree:"
+msgctxt "field:contract.premium_rate.line,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:billing.rate_line,option:"
+msgctxt "field:contract.premium_rate.line,option:"
 msgid "Option"
 msgstr "Garantie"
 
-msgctxt "field:billing.rate_line,option_:"
+msgctxt "field:contract.premium_rate.line,option_:"
 msgid "Option"
 msgstr "Garantie"
 
-msgctxt "field:billing.rate_line,parent:"
+msgctxt "field:contract.premium_rate.line,parent:"
 msgid "Parent"
 msgstr "Parent"
 
-msgctxt "field:billing.rate_line,rate:"
+msgctxt "field:contract.premium_rate.line,rate:"
 msgid "Rate"
 msgstr "Taux"
 
-msgctxt "field:billing.rate_line,rec_name:"
+msgctxt "field:contract.premium_rate.line,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:billing.rate_line,start_date:"
+msgctxt "field:contract.premium_rate.line,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:billing.rate_line,start_date_:"
+msgctxt "field:contract.premium_rate.line,start_date_:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:billing.rate_line,tranche:"
+msgctxt "field:contract.premium_rate.line,tranche:"
 msgid "Tranche"
 msgstr "Tranche"
 
-msgctxt "field:billing.rate_line,write_date:"
+msgctxt "field:contract.premium_rate.line,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:billing.rate_line,write_uid:"
+msgctxt "field:contract.premium_rate.line,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -789,7 +789,7 @@ msgctxt "field:party.party,suspense_account:"
 msgid "Suspense Account"
 msgstr "Compte d'attente"
 
-msgctxt "model:billing.rate_line,name:"
+msgctxt "model:contract.premium_rate.line,name:"
 msgid "Rate Line"
 msgstr "Ligne de Tarif"
 
@@ -977,11 +977,11 @@ msgctxt "selection:collective.sub_rating_rule,config_kind:"
 msgid "Simple"
 msgstr "Simple"
 
-msgctxt "view:billing.rate_line:"
+msgctxt "view:contract.premium_rate.line:"
 msgid "%"
 msgstr "%"
 
-msgctxt "view:billing.rate_line:"
+msgctxt "view:contract.premium_rate.line:"
 msgid "Rate Line"
 msgstr "Ligne de Tarif"
 

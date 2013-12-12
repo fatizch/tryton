@@ -34,7 +34,7 @@ __all__ = [
 class RateLine(model.CoopSQL, model.CoopView):
     'Rate Line'
 
-    __name__ = 'billing.rate_line'
+    __name__ = 'contract.premium_rate.line'
 
     manual_billing = fields.Function(
         fields.Boolean('Manual Billing',
@@ -64,8 +64,8 @@ class RateLine(model.CoopSQL, model.CoopView):
         fields.Numeric('Indexed Value',
             on_change_with=['rate', 'index', 'start_date_', 'index_value']),
         'on_change_with_indexed_value')
-    parent = fields.Many2One('billing.rate_line', 'Parent', ondelete='CASCADE')
-    childs = fields.One2Many('billing.rate_line', 'parent', 'Childs',
+    parent = fields.Many2One('contract.premium_rate.line', 'Parent', ondelete='CASCADE')
+    childs = fields.One2Many('contract.premium_rate.line', 'parent', 'Childs',
         states={'invisible': ~~Eval('tranche')})
     start_date = fields.Date('Start Date')
     start_date_ = fields.Function(
@@ -279,7 +279,7 @@ class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
         on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line',
             'client_amount'],
         states={'readonly': ~~Eval('childs')})
-    rate_line = fields.Many2One('billing.rate_line', 'Rate Line')
+    rate_line = fields.Many2One('contract.premium_rate.line', 'Rate Line')
     amount = fields.Numeric('Amount',
         on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line'],
         states={'readonly': ~~Eval('childs')})
