@@ -17,7 +17,7 @@ class TestCaseModel():
     'Test Case Model'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_utils.test_case_model'
+    __name__ = 'ir.test_case'
 
     number_of_parties = fields.Integer('Number of Parties')
     number_of_males = fields.Integer('Number of Males')
@@ -273,7 +273,7 @@ class TestCaseModel():
         pool = Pool()
         Party = pool.get('party.party')
         Contact = pool.get('party.contact_mechanism')
-        Configuration = pool.get('coop_utils.test_case_model').get_instance()
+        Configuration = pool.get('ir.test_case').get_instance()
         possible_domains = ['gmail.com', 'yahoo.com', 'aol.com',
             'hotmail.com']
         result = []

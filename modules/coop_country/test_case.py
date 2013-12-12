@@ -12,7 +12,7 @@ class TestCaseModel():
     'Test Case Model'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_utils.test_case_model'
+    __name__ = 'ir.test_case'
 
     load_all_zipcodes = fields.Boolean('Load all Zip Codes')
     main_zip = fields.Integer('Main Zip')

@@ -9,14 +9,14 @@
     <!-- Test Case Model -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="test_case_model_form">
-      <field name="model">coop_utils.test_case_model</field>
+      <field name="model">ir.test_case</field>
       <field name="type">form</field>
       <field name="name">test_case_model_form</field>
     </record>
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_test_case_model">
       <field name="name">Test Case Parameters</field>
-      <field name="res_model">coop_utils.test_case_model</field>
+      <field name="res_model">ir.test_case</field>
     </record>
     <record model="ir.action.act_window.view" id="act_test_case_model_view2">
       <field name="sequence" eval="10"/>
@@ -26,7 +26,7 @@
     <menuitem parent="menu_test_case" sequence="1"
       action="act_test_case_model" id="menu_test_case_model"/>
     <!-- Data -->
-    <record model="coop_utils.test_case_model" id="test_case_configuration">
+    <record model="ir.test_case" id="test_case_configuration">
       <field name="language" ref="ir.lang_fr"/>
     </record>
     <!-- ############################################################ -->

@@ -14,39 +14,39 @@ msgctxt "error:party.relation.kind:"
 msgid "The key must be unique!"
 msgstr "La clé doit être unique"
 
-msgctxt "field:coop_utils.test_case_model,adult_age_max:"
+msgctxt "field:ir.test_case,adult_age_max:"
 msgid "Maximum age for adults"
 msgstr "Age maximum des adultes"
 
-msgctxt "field:coop_utils.test_case_model,adult_age_min:"
+msgctxt "field:ir.test_case,adult_age_min:"
 msgid "Minimum age for adults"
 msgstr "Age minimum des adultes"
 
-msgctxt "field:coop_utils.test_case_model,max_nb_of_children_per_couple:"
+msgctxt "field:ir.test_case,max_nb_of_children_per_couple:"
 msgid "Maximum number of children per couple"
 msgstr "Nombre maximum d'enfants par couple"
 
-msgctxt "field:coop_utils.test_case_model,number_of_males:"
+msgctxt "field:ir.test_case,number_of_males:"
 msgid "Number of Males"
 msgstr "Nombre d'hommes"
 
-msgctxt "field:coop_utils.test_case_model,number_of_parties:"
+msgctxt "field:ir.test_case,number_of_parties:"
 msgid "Number of Parties"
 msgstr "Nombre de Tiers"
 
-msgctxt "field:coop_utils.test_case_model,percent_of_couple:"
+msgctxt "field:ir.test_case,percent_of_couple:"
 msgid "Percentage of couples"
 msgstr "Pourcentage de couples"
 
-msgctxt "field:coop_utils.test_case_model,percent_of_couple_with_children:"
+msgctxt "field:ir.test_case,percent_of_couple_with_children:"
 msgid "Percentage of couples with children"
 msgstr "Pourcentage de couples ayant des enfants"
 
-msgctxt "field:coop_utils.test_case_model,percent_of_couple_with_same_name:"
+msgctxt "field:ir.test_case,percent_of_couple_with_same_name:"
 msgid "Percentage of couples with the same name"
 msgstr "Pourcentage de couples de même nom"
 
-msgctxt "field:coop_utils.test_case_model,phone_prefix:"
+msgctxt "field:ir.test_case,phone_prefix:"
 msgid "Phone Prefix"
 msgstr "Préfixe des numéro de téléphone"
 

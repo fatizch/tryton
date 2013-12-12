@@ -13,7 +13,7 @@ class TestCaseModel():
     'Test Case Model'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_utils.test_case_model'
+    __name__ = 'ir.test_case'
 
     _get_event_desc_cache = Cache('get_event_desc')
     _get_document_desc_cache = Cache('get_document_desc')

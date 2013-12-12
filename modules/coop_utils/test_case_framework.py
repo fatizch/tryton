@@ -103,7 +103,7 @@ def build_dependency_graph(cls, methods):
 class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
     'Test Case Model'
 
-    __name__ = 'coop_utils.test_case_model'
+    __name__ = 'ir.test_case'
 
     language = fields.Many2One('ir.lang', 'Test Case Language')
 
@@ -365,7 +365,7 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
         top_path = os.path.abspath(os.path.join(os.path.normpath(__file__),
                 '..', '..', '..', 'modules'))
         language_path = Pool().get(
-            'coop_utils.test_case_model').get_language().code
+            'ir.test_case').get_language().code
         modules_to_load = [x.name
             for x in Module.search([('state', '=', 'installed')])]
         for module in modules_to_load:
@@ -422,7 +422,7 @@ class SelectTestCase(model.CoopView):
         'Test Files')
 
     def on_change_test_cases(self):
-        TestCaseModel = Pool().get('coop_utils.test_case_model')
+        TestCaseModel = Pool().get('ir.test_case')
         selected = [elem for elem in self.test_cases
             if elem.selection in ('manual', 'not_selected') and elem.selected]
         order = [y.__name__ for y in build_dependency_graph(TestCaseModel, [
@@ -486,7 +486,7 @@ class TestCaseWizard(model.CoopWizard):
         # Look for files
         test_files = []
         files = Pool().get(
-            'coop_utils.test_case_model').get_all_test_files()
+            'ir.test_case').get_all_test_files()
         for file_name, file_path in files.iteritems():
             test_files.append({
                     'filename': file_name,
@@ -494,7 +494,7 @@ class TestCaseWizard(model.CoopWizard):
         result = {'test_files': test_files}
 
         # Look for test cases
-        TestCaseModel = Pool().get('coop_utils.test_case_model')
+        TestCaseModel = Pool().get('ir.test_case')
         test_cases = []
         for _, name, info in TestCaseModel.get_test_data():
             test_cases.append({
@@ -508,7 +508,7 @@ class TestCaseWizard(model.CoopWizard):
         return result
 
     def transition_execute_test_cases(self):
-        TestCaseModel = Pool().get('coop_utils.test_case_model')
+        TestCaseModel = Pool().get('ir.test_case')
         to_execute = []
         for test_case in self.select_test_cases.test_cases:
             if test_case.selection == 'manual':

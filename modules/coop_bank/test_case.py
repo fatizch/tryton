@@ -15,7 +15,7 @@ class TestCaseModel():
     'Test Case Model'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_utils.test_case_model'
+    __name__ = 'ir.test_case'
 
     number_of_banks = fields.Integer('Number of Banks')
 

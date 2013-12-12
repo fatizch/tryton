@@ -258,39 +258,39 @@ msgctxt "field:ir.test_case.run.select.file,selected:"
 msgid "Will be loaded"
 msgstr "Seront chargés"
 
-msgctxt "field:coop_utils.test_case_model,create_date:"
+msgctxt "field:ir.test_case,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:coop_utils.test_case_model,create_date_:"
+msgctxt "field:ir.test_case,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:coop_utils.test_case_model,create_uid:"
+msgctxt "field:ir.test_case,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:coop_utils.test_case_model,id:"
+msgctxt "field:ir.test_case,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_utils.test_case_model,language:"
+msgctxt "field:ir.test_case,language:"
 msgid "Test Case Language"
 msgstr "Langue des jeux d'essai"
 
-msgctxt "field:coop_utils.test_case_model,must_expand_tree:"
+msgctxt "field:ir.test_case,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:coop_utils.test_case_model,rec_name:"
+msgctxt "field:ir.test_case,rec_name:"
 msgid "Name"
 msgstr "Valeur"
 
-msgctxt "field:coop_utils.test_case_model,write_date:"
+msgctxt "field:ir.test_case,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:coop_utils.test_case_model,write_uid:"
+msgctxt "field:ir.test_case,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -406,7 +406,7 @@ msgctxt "model:ir.test_case.run.select.file,name:"
 msgid "Test Case File Selector"
 msgstr "Sélection des fichiers de jeu d'essai"
 
-msgctxt "model:coop_utils.test_case_model,name:"
+msgctxt "model:ir.test_case,name:"
 msgid "Test Case Model"
 msgstr "Jeux d'essais"
 
@@ -514,7 +514,7 @@ msgctxt "view:ir.test_case.run.select.file:"
 msgid "Test Case Files"
 msgstr "Fichiers de jeu d'essai"
 
-msgctxt "view:coop_utils.test_case_model:"
+msgctxt "view:ir.test_case:"
 msgid "Test Case Parameters"
 msgstr "Paramètres des jeu d'essais"
 

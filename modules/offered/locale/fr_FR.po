@@ -26,7 +26,7 @@ msgctxt "field:ir.export_package,products:"
 msgid "Products"
 msgstr "Produits"
 
-msgctxt "field:coop_utils.test_case_model,main_company_name:"
+msgctxt "field:ir.test_case,main_company_name:"
 msgid "Main Company Name"
 msgstr "Nom de la company principale"
 
