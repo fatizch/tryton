@@ -43,7 +43,7 @@ DEF_CUR_DIG = 2
 class Templated(object):
     'Templated Class'
 
-    __name__ = 'offered.templated'
+    __name__ = 'offered.template'
 
     template = fields.Many2One(
         None, 'Template',
