@@ -58,7 +58,7 @@ class CommissionComponent():
 
     commission_rules = fields.One2Many('commission.rule',
         'offered', 'Commission Rules')
-    coverages = fields.Many2Many('commission.component-coverage', 'component',
+    coverages = fields.Many2Many('commission.option.description-option.description', 'component',
         'coverage', 'Coverages', domain=[('kind', '=', 'insurance')])
 
     @classmethod
@@ -77,7 +77,7 @@ class CommissionComponent():
 class CommissionComponentCoverageRelation(model.CoopSQL):
     'Relation Commission Component and Coverage'
 
-    __name__ = 'commission.component-coverage'
+    __name__ = 'commission.option.description-option.description'
 
     component = fields.Many2One('offered.coverage', 'Component',
         ondelete='CASCADE')
