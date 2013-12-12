@@ -779,7 +779,7 @@ class StepTransition(ModelSQL, ModelView):
 class StepDescAuthorization(ModelSQL):
     'Step Desc Authorization'
 
-    __name__ = 'process.step_desc_authorization'
+    __name__ = 'process.step-group'
 
     step_desc = fields.Many2One(
         'process.step', 'Step Desc', ondelete='CASCADE')
@@ -797,7 +797,7 @@ class StepDesc(ModelSQL, ModelView):
     fancy_name = fields.Char('Name', required=True, translate=True)
     step_xml = fields.Text('XML')
     authorizations = fields.Many2Many(
-        'process.step_desc_authorization', 'step_desc', 'group',
+        'process.step-group', 'step_desc', 'group',
         'Authorizations')
     code_before = fields.One2ManyDomain(
         'process.action', 'parent_step', 'Executed Before Step',
