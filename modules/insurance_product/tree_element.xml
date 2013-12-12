@@ -81,7 +81,7 @@
       <field name="description">Date de naissance</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.subscriber</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_subscriber_birthdate</field>
       <field name="parent" ref="dossier_souscripteur"/>
     </record>
@@ -90,7 +90,7 @@
       <field name="description">Pays de résidence</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.subscriber</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_subscriber_living_country</field>
       <field name="parent" ref="dossier_souscripteur"/>
     </record>
@@ -99,7 +99,7 @@
       <field name="description">A souscrit le produit</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.subscriber</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_subscriber_subscribed</field>
       <field name="parent" ref="dossier_souscripteur"/>
     </record>

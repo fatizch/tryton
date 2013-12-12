@@ -18,7 +18,7 @@ class SubscriberContext(RuleEngineContext):
     '''
         Context functions for Contracts.
     '''
-    __name__ = 'ins_product.rule_sets.subscriber'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     @check_args('subscriber_person')

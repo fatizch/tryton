@@ -47,7 +47,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         te2.name = '_re_get_subscriber_birthdate'
         te2.translated_technical_name = 'date_de_naissance_souscripteur'
         te2.description = 'Date de naissance du Souscripteur'
-        te2.namespace = 'ins_product.rule_sets.subscriber'
+        te2.namespace = 'rule_engine.runtime'
 
         te2.save()
 

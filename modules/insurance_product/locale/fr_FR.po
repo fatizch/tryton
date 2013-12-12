@@ -2315,11 +2315,11 @@ msgctxt "field:rule_engine.runtime,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.rule_sets.subscriber,id:"
+msgctxt "field:rule_engine.runtime,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.rule_sets.subscriber,must_expand_tree:"
+msgctxt "field:rule_engine.runtime,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
@@ -3449,7 +3449,7 @@ msgctxt "model:rule_engine.runtime,name:"
 msgid "Context functions for combination of rule_engine results (see"
 msgstr ""
 
-msgctxt "model:ins_product.rule_sets.subscriber,name:"
+msgctxt "model:rule_engine.runtime,name:"
 msgid "Context functions for Contracts."
 msgstr ""
 
