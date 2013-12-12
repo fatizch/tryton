@@ -303,7 +303,7 @@ class DeclarationProcessParameters(ProcessParameters):
 class DeclarationProcessFinder(ProcessFinder):
     'Declaration Process Finder'
 
-    __name__ = 'claim.declaration_process_finder'
+    __name__ = 'claim.declare'
 
     @classmethod
     def get_parameters_model(cls):

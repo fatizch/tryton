@@ -27,7 +27,7 @@
     </record>
     <record model="ir.action.wizard" id="declaration_process_launcher">
       <field name="name">Start Declaration</field>
-      <field name="wiz_name">claim.declaration_process_finder</field>
+      <field name="wiz_name">claim.declare</field>
     </record>
     <menuitem parent="claim.menu_claim" sequence="1"
         action="declaration_process_launcher" id="menu_start_declaration"/>
