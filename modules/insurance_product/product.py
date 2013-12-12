@@ -259,7 +259,7 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
         'item_desc', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'sub_elem')], )
     kind = fields.Selection('get_possible_item_kind', 'Kind')
-    sub_item_descs = fields.Many2Many('ins_product.item_desc-sub_item_desc',
+    sub_item_descs = fields.Many2Many('offered.item.description-sub_item.description',
         'item_desc', 'sub_item_desc', 'Sub Item Descriptors',
         states={'invisible': Eval('kind') == 'person'})
 
@@ -294,7 +294,7 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
 class ItemDescSubItemDescRelation(model.CoopSQL):
     'Relation between Item Desc and Sub Item Desc'
 
-    __name__ = 'ins_product.item_desc-sub_item_desc'
+    __name__ = 'offered.item.description-sub_item.description'
 
     item_desc = fields.Many2One('offered.item.description', 'Item Desc',
         ondelete='CASCADE')

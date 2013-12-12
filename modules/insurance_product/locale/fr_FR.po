@@ -1626,39 +1626,39 @@ msgctxt "field:offered.item.description-extra_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.item_desc-sub_item_desc,create_date:"
+msgctxt "field:offered.item.description-sub_item.description,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.item_desc-sub_item_desc,create_date_:"
+msgctxt "field:offered.item.description-sub_item.description,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.item_desc-sub_item_desc,create_uid:"
+msgctxt "field:offered.item.description-sub_item.description,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.item_desc-sub_item_desc,id:"
+msgctxt "field:offered.item.description-sub_item.description,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.item_desc-sub_item_desc,item_desc:"
+msgctxt "field:offered.item.description-sub_item.description,item_desc:"
 msgid "Item Desc"
 msgstr "Desc Risque"
 
-msgctxt "field:ins_product.item_desc-sub_item_desc,rec_name:"
+msgctxt "field:offered.item.description-sub_item.description,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.item_desc-sub_item_desc,sub_item_desc:"
+msgctxt "field:offered.item.description-sub_item.description,sub_item_desc:"
 msgid "Sub Item Desc"
 msgstr ""
 
-msgctxt "field:ins_product.item_desc-sub_item_desc,write_date:"
+msgctxt "field:offered.item.description-sub_item.description,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.item_desc-sub_item_desc,write_uid:"
+msgctxt "field:offered.item.description-sub_item.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3373,7 +3373,7 @@ msgctxt "model:offered.item.description-extra_data,name:"
 msgid "Relation between Item Descriptor and Complementary Data"
 msgstr "Relation Risque - Données Complémentaires"
 
-msgctxt "model:ins_product.item_desc-sub_item_desc,name:"
+msgctxt "model:offered.item.description-sub_item.description,name:"
 msgid "Relation between Item Desc and Sub Item Desc"
 msgstr ""
 
