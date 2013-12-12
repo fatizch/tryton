@@ -25,7 +25,7 @@ class Coverage():
     __name__ = 'offered.coverage'
     __metaclass__ = PoolMeta
 
-    benefits = fields.Many2Many('offered.coverage-benefit', 'coverage',
+    benefits = fields.Many2Many('option.description-benefit', 'coverage',
         'benefit', 'Benefits', context={
             'start_date': Eval('start_date'),
             'currency_digits': Eval('currency_digits')},

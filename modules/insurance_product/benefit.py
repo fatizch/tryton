@@ -274,7 +274,7 @@ class BenefitLossDescRelation(model.CoopSQL):
 class CoverageBenefitRelation(model.CoopSQL):
     'Coverage Benefit Relation'
 
-    __name__ = 'offered.coverage-benefit'
+    __name__ = 'option.description-benefit'
 
     coverage = fields.Many2One(
         'offered.coverage', 'Coverage', ondelete='CASCADE')

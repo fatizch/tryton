@@ -2787,39 +2787,39 @@ msgctxt "field:offered.coverage,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.coverage-benefit,benefit:"
+msgctxt "field:option.description-benefit,benefit:"
 msgid "Benefit"
 msgstr "Prestation"
 
-msgctxt "field:offered.coverage-benefit,coverage:"
+msgctxt "field:option.description-benefit,coverage:"
 msgid "Coverage"
 msgstr "Offre"
 
-msgctxt "field:offered.coverage-benefit,create_date:"
+msgctxt "field:option.description-benefit,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:offered.coverage-benefit,create_date_:"
+msgctxt "field:option.description-benefit,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:offered.coverage-benefit,create_uid:"
+msgctxt "field:option.description-benefit,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:offered.coverage-benefit,id:"
+msgctxt "field:option.description-benefit,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.coverage-benefit,rec_name:"
+msgctxt "field:option.description-benefit,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:offered.coverage-benefit,write_date:"
+msgctxt "field:option.description-benefit,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:offered.coverage-benefit,write_uid:"
+msgctxt "field:option.description-benefit,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3561,7 +3561,7 @@ msgctxt "model:offered.coverage,name:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "model:offered.coverage-benefit,name:"
+msgctxt "model:option.description-benefit,name:"
 msgid "Coverage Benefit Relation"
 msgstr "Relation Garantie Prestation"
 
