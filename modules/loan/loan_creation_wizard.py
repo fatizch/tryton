@@ -58,7 +58,7 @@ class AmortizationTableDisplayer(model.CoopView):
 class LoanCreation(model.CoopWizard):
     'Loan Creation'
 
-    __name__ = 'loan.creation'
+    __name__ = 'loan.create'
 
     start_state = 'loan_parameters'
     loan_parameters = StateView('loan.creation_parameters',

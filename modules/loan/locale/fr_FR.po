@@ -822,46 +822,46 @@ msgctxt "view:loan.share:"
 msgid "Loan Shares"
 msgstr "Quotités"
 
-msgctxt "wizard_button:loan.creation,amortization_table,cancel_loan:"
+msgctxt "wizard_button:loan.create,amortization_table,cancel_loan:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:loan.creation,amortization_table,end:"
+msgctxt "wizard_button:loan.create,amortization_table,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:loan.creation,amortization_table,increments:"
+msgctxt "wizard_button:loan.create,amortization_table,increments:"
 msgid "Previous"
 msgstr "Précédent"
 
-msgctxt "wizard_button:loan.creation,amortization_table,validate_loan:"
+msgctxt "wizard_button:loan.create,amortization_table,validate_loan:"
 msgid "End"
 msgstr "Terminer"
 
-msgctxt "wizard_button:loan.creation,increments,cancel_loan:"
+msgctxt "wizard_button:loan.create,increments,cancel_loan:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:loan.creation,increments,create_payments:"
+msgctxt "wizard_button:loan.create,increments,create_payments:"
 msgid "Next"
 msgstr "Suivant"
 
-msgctxt "wizard_button:loan.creation,increments,end:"
+msgctxt "wizard_button:loan.create,increments,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:loan.creation,increments,loan_parameters:"
+msgctxt "wizard_button:loan.create,increments,loan_parameters:"
 msgid "Previous"
 msgstr "Précédent"
 
-msgctxt "wizard_button:loan.creation,loan_parameters,cancel_loan:"
+msgctxt "wizard_button:loan.create,loan_parameters,cancel_loan:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:loan.creation,loan_parameters,create_loan:"
+msgctxt "wizard_button:loan.create,loan_parameters,create_loan:"
 msgid "Next"
 msgstr "Suivant"
 
-msgctxt "wizard_button:loan.creation,loan_parameters,end:"
+msgctxt "wizard_button:loan.create,loan_parameters,end:"
 msgid "Cancel"
 msgstr "Annuler"
