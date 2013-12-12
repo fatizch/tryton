@@ -2,7 +2,7 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:billing.billing_manager:"
+msgctxt "error:contract.billing.data:"
 msgid ""
 "A payment bank account must be provided if the payment mode is Direct Debit"
 msgstr ""
@@ -71,75 +71,75 @@ msgctxt "field:account.move.line,total_amount:"
 msgid "Total amount"
 msgstr "Montant total"
 
-msgctxt "field:billing.billing_manager,contract:"
+msgctxt "field:contract.billing.data,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:billing.billing_manager,create_date:"
+msgctxt "field:contract.billing.data,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:billing.billing_manager,create_date_:"
+msgctxt "field:contract.billing.data,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:billing.billing_manager,create_uid:"
+msgctxt "field:contract.billing.data,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:billing.billing_manager,disbursment_bank_account:"
+msgctxt "field:contract.billing.data,disbursment_bank_account:"
 msgid "Disbursement Bank Account"
 msgstr "Compte de Virement"
 
-msgctxt "field:billing.billing_manager,end_date:"
+msgctxt "field:contract.billing.data,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:billing.billing_manager,id:"
+msgctxt "field:contract.billing.data,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.billing_manager,must_expand_tree:"
+msgctxt "field:contract.billing.data,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:billing.billing_manager,payment_bank_account:"
+msgctxt "field:contract.billing.data,payment_bank_account:"
 msgid "Payment Bank Account"
 msgstr "Compte de Paiement"
 
-msgctxt "field:billing.billing_manager,payment_date:"
+msgctxt "field:contract.billing.data,payment_date:"
 msgid "Payment Date"
 msgstr "Jour de paiement"
 
-msgctxt "field:billing.billing_manager,payment_date_selector:"
+msgctxt "field:contract.billing.data,payment_date_selector:"
 msgid "Payment Date"
 msgstr "Jour de paiement"
 
-msgctxt "field:billing.billing_manager,payment_method:"
+msgctxt "field:contract.billing.data,payment_method:"
 msgid "Payment Method"
 msgstr "Méthode de Paiement"
 
-msgctxt "field:billing.billing_manager,payment_mode:"
+msgctxt "field:contract.billing.data,payment_mode:"
 msgid "Payment Mode"
 msgstr "Mode de Paiement"
 
-msgctxt "field:billing.billing_manager,policy_owner:"
+msgctxt "field:contract.billing.data,policy_owner:"
 msgid "Party"
 msgstr "Acteur"
 
-msgctxt "field:billing.billing_manager,rec_name:"
+msgctxt "field:contract.billing.data,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:billing.billing_manager,start_date:"
+msgctxt "field:contract.billing.data,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:billing.billing_manager,write_date:"
+msgctxt "field:contract.billing.data,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:billing.billing_manager,write_uid:"
+msgctxt "field:contract.billing.data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -829,7 +829,7 @@ msgctxt "help:billing.payment_rule_line,sequence:"
 msgid "Use to order lines in ascending order"
 msgstr "Utilisé pour trier les lignes en ordre croissant"
 
-msgctxt "model:billing.billing_manager,name:"
+msgctxt "model:contract.billing.data,name:"
 msgid "Billing Manager"
 msgstr "Gestionnaire d'Appel de Cotisation"
 
@@ -1117,11 +1117,11 @@ msgctxt "view:account.move:"
 msgid "Moves"
 msgstr "Mouvements"
 
-msgctxt "view:billing.billing_manager:"
+msgctxt "view:contract.billing.data:"
 msgid "Billing Managers"
 msgstr "Gestionnaires d'Appel de Cotisation"
 
-msgctxt "view:billing.billing_manager:"
+msgctxt "view:contract.billing.data:"
 msgid "billing_manager"
 msgstr ""
 

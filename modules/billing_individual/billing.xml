@@ -116,12 +116,12 @@
     <!-- Billing Manager -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="billing_manager_view_form">
-      <field name="model">billing.billing_manager</field>
+      <field name="model">contract.billing.data</field>
       <field name="type">form</field>
       <field name="name">billing_manager_form</field>
     </record>
     <record model="ir.ui.view" id="billing_manager_tree">
-      <field name="model">billing.billing_manager</field>
+      <field name="model">contract.billing.data</field>
       <field name="type">tree</field>
       <field name="name">billing_manager_tree</field>
     </record>

@@ -337,7 +337,7 @@ class BillingManager(model.CoopSQL, model.CoopView):
         It will be the target of all sql requests for automated bill
         calculation, lapsing, etc...
     '''
-    __name__ = 'billing.billing_manager'
+    __name__ = 'contract.billing.data'
 
     contract = fields.Many2One('contract.contract', 'Contract',
         ondelete='CASCADE')
@@ -665,7 +665,7 @@ class Contract():
     __metaclass__ = PoolMeta
     __name__ = 'contract.contract'
 
-    billing_managers = fields.One2Many('billing.billing_manager', 'contract',
+    billing_managers = fields.One2Many('contract.billing.data', 'contract',
         'Billing Managers')
     use_prices = fields.Function(
         fields.Boolean('Use Prices', states={'invisible': True}),
