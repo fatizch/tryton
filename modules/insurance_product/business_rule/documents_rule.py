@@ -204,7 +204,7 @@ class DocumentRule(BusinessRuleRoot, model.CoopSQL):
             ('', ''),
         ], 'Kind')
     documents = fields.Many2Many(
-        'ins_product.document-rule-relation', 'rule', 'document', 'Documents',
+        'document.rule-document.description', 'rule', 'document', 'Documents',
         states={'invisible': STATE_ADVANCED})
 
     def give_me_documents(self, args):
@@ -232,7 +232,7 @@ class DocumentRule(BusinessRuleRoot, model.CoopSQL):
 class DocumentRuleRelation(model.CoopSQL):
     'Relation between rule and document'
 
-    __name__ = 'ins_product.document-rule-relation'
+    __name__ = 'document.rule-document.description'
 
     rule = fields.Many2One(
         'document.rule', 'Rule', ondelete='CASCADE')

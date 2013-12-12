@@ -1049,39 +1049,39 @@ msgctxt "field:document.request.line,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.document-rule-relation,create_date:"
+msgctxt "field:document.rule-document.description,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.document-rule-relation,create_date_:"
+msgctxt "field:document.rule-document.description,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.document-rule-relation,create_uid:"
+msgctxt "field:document.rule-document.description,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.document-rule-relation,document:"
+msgctxt "field:document.rule-document.description,document:"
 msgid "Document"
 msgstr "Document"
 
-msgctxt "field:ins_product.document-rule-relation,id:"
+msgctxt "field:document.rule-document.description,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.document-rule-relation,rec_name:"
+msgctxt "field:document.rule-document.description,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.document-rule-relation,rule:"
+msgctxt "field:document.rule-document.description,rule:"
 msgid "Rule"
 msgstr "Règle"
 
-msgctxt "field:ins_product.document-rule-relation,write_date:"
+msgctxt "field:document.rule-document.description,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.document-rule-relation,write_uid:"
+msgctxt "field:document.rule-document.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3320,7 +3320,7 @@ msgctxt "model:document.request.line,name:"
 msgid "Document"
 msgstr "Document"
 
-msgctxt "model:ins_product.document-rule-relation,name:"
+msgctxt "model:document.rule-document.description,name:"
 msgid "Relation between rule and document"
 msgstr "Relation Règle Document"
 
