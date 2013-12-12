@@ -10,7 +10,7 @@ msgctxt "error:coop.table_of_table:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:coop_utils.test_case_wizard:"
+msgctxt "error:ir.test_case.run:"
 msgid "Cannot load test case file %s"
 msgstr "Impossible de charger le jeu d'essai du fichier %s"
 
@@ -538,11 +538,11 @@ msgctxt "wizard_button:ir.import,file_selector,file_import:"
 msgid "Import"
 msgstr "Importer"
 
-msgctxt "wizard_button:coop_utils.test_case_wizard,select_test_cases,end:"
+msgctxt "wizard_button:ir.test_case.run,select_test_cases,end:"
 msgid "Quit"
 msgstr "Quitter"
 
 msgctxt ""
-"wizard_button:coop_utils.test_case_wizard,select_test_cases,execute_test_cases:"
+"wizard_button:ir.test_case.run,select_test_cases,execute_test_cases:"
 msgid "Execute Selected"
 msgstr "Exécuter les jeux d'essai sélectionnés"

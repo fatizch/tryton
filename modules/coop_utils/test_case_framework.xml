@@ -58,7 +58,7 @@
     <!-- ############################################################ -->
     <record model="ir.action.wizard" id="act_test_case_wizard">
       <field name="name">Test Case Launcher</field>
-      <field name="wiz_name">coop_utils.test_case_wizard</field>
+      <field name="wiz_name">ir.test_case.run</field>
     </record>
     <menuitem name="Test Case Launcher" id="test_case_menu" sequence="100" parent="menu_test_case" action="act_test_case_wizard"/>
   </data>

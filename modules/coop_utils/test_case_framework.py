@@ -465,7 +465,7 @@ class SelectTestCase(model.CoopView):
 class TestCaseWizard(model.CoopWizard):
     'Test Case Wizard'
 
-    __name__ = 'coop_utils.test_case_wizard'
+    __name__ = 'ir.test_case.run'
 
     start_state = 'select_test_cases'
     select_test_cases = StateView('ir.test_case.run.select',
