@@ -220,11 +220,11 @@ msgctxt "field:contract.subscribe.find_process,product:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "field:process.process_desc,display_steps_without_status:"
+msgctxt "field:process,display_steps_without_status:"
 msgid "Display Steps Without Status"
 msgstr "Afficher les Etapes sans Statut"
 
-msgctxt "field:process.process_desc,steps_to_display:"
+msgctxt "field:process,steps_to_display:"
 msgid "Steps"
 msgstr "Etapes"
 
@@ -264,11 +264,11 @@ msgctxt "selection:ins_contract.subscription_mgr,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "selection:process.process_desc,kind:"
+msgctxt "selection:process,kind:"
 msgid "Contract Endorsement"
 msgstr "Avenant"
 
-msgctxt "selection:process.process_desc,kind:"
+msgctxt "selection:process,kind:"
 msgid "Contract Subscription"
 msgstr "Souscription Contrat"
 

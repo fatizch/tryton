@@ -173,7 +173,7 @@ class ProcessFramework(ModelView):
         # The pattern for the transition is as follow :
         #      <instruction>_<process_desc_id>(_<data>)
         instruction = button_data[0]
-        ProcessDesc = Pool().get('process.process_desc')
+        ProcessDesc = Pool().get('process')
         process = ProcessDesc(button_data[1])
 
         try:
@@ -198,7 +198,7 @@ class ProcessFramework(ModelView):
             # We calculate it from the current_state
             process_desc = self.current_state.process
         else:
-            ProcessDesc = Pool().get('process.process_desc')
+            ProcessDesc = Pool().get('process')
             process_desc, = ProcessDesc.search([
                 ('technical_name', '=', process_name),
             ], limit=1)
@@ -215,7 +215,7 @@ class ProcessFramework(ModelView):
         if not process_name:
             return
 
-        ProcessDesc = Pool().get('process.process_desc')
+        ProcessDesc = Pool().get('process')
 
         process_desc, = ProcessDesc.search([
             ('technical_name', '=', process_name),
@@ -344,7 +344,7 @@ class ProcessFramework(ModelView):
         # The pattern for the transition is as follow :
         #      <instruction>_<process_desc_id>(_<data>)
         instruction = button_data[0]
-        ProcessDesc = Pool().get('process.process_desc')
+        ProcessDesc = Pool().get('process')
         process = ProcessDesc(button_data[1])
 
         try:

@@ -6,11 +6,11 @@ msgctxt "error:process.action:"
 msgid "Method %s does not exist on model %s"
 msgstr "La méthode %s n'existe pas sur le modèle %s"
 
-msgctxt "error:process.process_desc:"
+msgctxt "error:process:"
 msgid "%s: Step %s cannot be used more than once"
 msgstr "%s: L'étape %s ne peut être utilisée qu'une seule fois"
 
-msgctxt "error:process.process_desc:"
+msgctxt "error:process:"
 msgid "The technical name must be unique"
 msgstr "Le nom technique doit être unique"
 
@@ -86,83 +86,83 @@ msgctxt "field:process.action,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:process.process_desc,all_steps:"
+msgctxt "field:process,all_steps:"
 msgid "All Steps"
 msgstr "Toutes les Etapes"
 
-msgctxt "field:process.process_desc,create_date:"
+msgctxt "field:process,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:process.process_desc,create_uid:"
+msgctxt "field:process,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:process.process_desc,display_steps_without_status:"
+msgctxt "field:process,display_steps_without_status:"
 msgid ""
 msgstr " "
 
-msgctxt "field:process.process_desc,fancy_name:"
+msgctxt "field:process,fancy_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.process_desc,id:"
+msgctxt "field:process,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:process.process_desc,menu_icon:"
+msgctxt "field:process,menu_icon:"
 msgid "Menu Icon"
 msgstr "Icône du Menu"
 
-msgctxt "field:process.process_desc,menu_items:"
+msgctxt "field:process,menu_items:"
 msgid "Menus"
 msgstr "Menus"
 
-msgctxt "field:process.process_desc,menu_name:"
+msgctxt "field:process,menu_name:"
 msgid "Menu name"
 msgstr "Nom du Menu"
 
-msgctxt "field:process.process_desc,on_model:"
+msgctxt "field:process,on_model:"
 msgid "On Model"
 msgstr "Modèle"
 
-msgctxt "field:process.process_desc,rec_name:"
+msgctxt "field:process,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.process_desc,step_button_group_position:"
+msgctxt "field:process,step_button_group_position:"
 msgid "Process Overview Positioning"
 msgstr "Position des Boutons"
 
-msgctxt "field:process.process_desc,steps_to_display:"
+msgctxt "field:process,steps_to_display:"
 msgid ""
 msgstr " "
 
-msgctxt "field:process.process_desc,technical_name:"
+msgctxt "field:process,technical_name:"
 msgid "Technical Name"
 msgstr "Nom Technique"
 
-msgctxt "field:process.process_desc,transitions:"
+msgctxt "field:process,transitions:"
 msgid "Transitions"
 msgstr "Transitions"
 
-msgctxt "field:process.process_desc,write_date:"
+msgctxt "field:process,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:process.process_desc,write_uid:"
+msgctxt "field:process,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:process.process_desc,xml_footer:"
+msgctxt "field:process,xml_footer:"
 msgid "Footer XML"
 msgstr "Pied de Page XML"
 
-msgctxt "field:process.process_desc,xml_header:"
+msgctxt "field:process,xml_header:"
 msgid "Header XML"
 msgstr "Entête XML"
 
-msgctxt "field:process.process_desc,xml_tree:"
+msgctxt "field:process,xml_tree:"
 msgid "Tree View XML"
 msgstr "Description de la Vue Arbre"
 
@@ -522,7 +522,7 @@ msgctxt "model:process.action,name:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "model:process.process_desc,name:"
+msgctxt "model:process,name:"
 msgid "Process Descriptor"
 msgstr "Descripteur de Processus"
 
@@ -570,15 +570,15 @@ msgctxt "selection:process.action,technical_kind:"
 msgid "Transition"
 msgstr "Transition"
 
-msgctxt "selection:process.process_desc,step_button_group_position:"
+msgctxt "selection:process,step_button_group_position:"
 msgid "Bottom"
 msgstr "Bas"
 
-msgctxt "selection:process.process_desc,step_button_group_position:"
+msgctxt "selection:process,step_button_group_position:"
 msgid "None"
 msgstr "Aucun"
 
-msgctxt "selection:process.process_desc,step_button_group_position:"
+msgctxt "selection:process,step_button_group_position:"
 msgid "Right"
 msgstr "Droite"
 
@@ -896,23 +896,23 @@ msgctxt "view:process.action:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "view:process.process_desc:"
+msgctxt "view:process:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "view:process.process_desc:"
+msgctxt "view:process:"
 msgid "Process Descriptor"
 msgstr "Descripteur de Processus"
 
-msgctxt "view:process.process_desc:"
+msgctxt "view:process:"
 msgid "Process Descriptors"
 msgstr "Paramétrage des Processus"
 
-msgctxt "view:process.process_desc:"
+msgctxt "view:process:"
 msgid "Update Menu"
 msgstr "Recharger le Menu"
 
-msgctxt "view:process.process_desc:"
+msgctxt "view:process:"
 msgid "XML"
 msgstr "Description de la Vue"
 

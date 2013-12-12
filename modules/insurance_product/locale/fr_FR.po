@@ -3216,7 +3216,7 @@ msgctxt "field:party.party,is_insurer:"
 msgid "Insurer"
 msgstr "Assureur"
 
-msgctxt "field:process.process_desc,for_products:"
+msgctxt "field:process,for_products:"
 msgid "Products"
 msgstr "Produits"
 
@@ -4772,7 +4772,7 @@ msgctxt "view:party.party:"
 msgid "Insurer"
 msgstr "Assureur"
 
-msgctxt "view:process.process_desc:"
+msgctxt "view:process:"
 msgid "Products"
 msgstr "Produits"
 

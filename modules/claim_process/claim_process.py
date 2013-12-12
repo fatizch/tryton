@@ -247,7 +247,7 @@ class ProcessDesc():
 
     __metaclass__ = PoolMeta
 
-    __name__ = 'process.process_desc'
+    __name__ = 'process'
 
     @classmethod
     def __setup__(cls):

@@ -57,12 +57,12 @@
         </record>
         <!-- Process Desc entries -->
         <record model="ir.ui.view" id="process_desc_form">
-            <field name="model">process.process_desc</field>
+            <field name="model">process</field>
             <field name="type">form</field>
             <field name="name">process_desc_form</field>
         </record>
         <record model="ir.ui.view" id="process_desc_tree">
-            <field name="model">process.process_desc</field>
+            <field name="model">process</field>
             <field name="type">tree</field>
             <field name="name">process_desc_tree</field>
         </record>
@@ -91,7 +91,7 @@
         <!-- Menu for process desc -->
         <record model="ir.action.act_window" id="act_process_desc">
             <field name="name">Process Descriptors</field>
-            <field name="res_model">process.process_desc</field>
+            <field name="res_model">process</field>
         </record>
         <record model="ir.action.act_window.view" id="act_process_desc_view1">
             <field name="sequence" eval="10"/>
@@ -128,17 +128,17 @@
         <!-- Visualization of process description -->
         <record model="ir.action.report" id="report_generate_graph">
             <field name="name">Graph</field>
-            <field name="model">process.process_desc</field>
+            <field name="model">process</field>
             <field name="report_name">process.generate_graph.report</field>
         </record>
         <record model="ir.action.wizard" id="generate_graph_wizard">
             <field name="name">Graph</field>
             <field name="wiz_name">process.generate_graph</field>
-            <field name="model">process.process_desc</field>
+            <field name="model">process</field>
         </record>
         <record model="ir.action.keyword" id="generate_graph_wizard_keyword">
             <field name="keyword">form_print</field>
-            <field name="model">process.process_desc,-1</field>
+            <field name="model">process,-1</field>
             <field name="action" ref="generate_graph_wizard"/>
         </record>
         <!-- Code -->

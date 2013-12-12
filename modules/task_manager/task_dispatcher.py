@@ -154,7 +154,7 @@ class TaskSelector(model.CoopView):
         on_change=[
             'team', 'nb_tasks_team', 'nb_users_team', 'tasks_team', 'tasks'])
     process = fields.Many2One(
-        'process.process_desc', 'Process',
+        'process', 'Process',
         on_change=['process', 'nb_tasks_process', 'tasks_process'])
     nb_tasks_team = fields.Integer(
         'Team Tasks',

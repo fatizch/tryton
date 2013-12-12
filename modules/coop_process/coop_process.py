@@ -428,7 +428,7 @@ class ProcessDesc(model.CoopSQL):
     'Process Descriptor'
 
     __metaclass__ = PoolMeta
-    __name__ = 'process.process_desc'
+    __name__ = 'process'
 
     with_prev_next = fields.Boolean('With Previous / Next button')
     custom_transitions = fields.Boolean('Custom Transitions')
@@ -875,7 +875,7 @@ class ProcessParameters(model.CoopView):
         domain=[('is_workflow', '=', 'True')],
         states={'readonly': True, 'invisible': True})
     good_process = fields.Many2One(
-        'process.process_desc',
+        'process',
         'Good Process',
         on_change_with=['date, model'],
         depends=['date', 'model'])

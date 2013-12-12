@@ -202,31 +202,31 @@ msgctxt "field:process.action,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:process.process_desc,create_date_:"
+msgctxt "field:process,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:process.process_desc,custom_transitions:"
+msgctxt "field:process,custom_transitions:"
 msgid "Custom Transitions"
 msgstr "Transitions Personnalisés"
 
-msgctxt "field:process.process_desc,end_date:"
+msgctxt "field:process,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:process.process_desc,kind:"
+msgctxt "field:process,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:process.process_desc,start_date:"
+msgctxt "field:process,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:process.process_desc,steps_implicitly_available:"
+msgctxt "field:process,steps_implicitly_available:"
 msgid "Steps Implicitly Available"
 msgstr "Etapes Implicites"
 
-msgctxt "field:process.process_desc,with_prev_next:"
+msgctxt "field:process,with_prev_next:"
 msgid "With Previous / Next button"
 msgstr "Avec Préc/Suiv."
 
@@ -302,7 +302,7 @@ msgctxt "selection:ir.ui.view.description,view_kind:"
 msgid "Tree"
 msgstr "Arbre"
 
-msgctxt "selection:process.process_desc,kind:"
+msgctxt "selection:process,kind:"
 msgid ""
 msgstr " "
 

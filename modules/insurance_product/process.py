@@ -16,14 +16,14 @@ class ProcessProductRelation(model.CoopSQL):
 
     product = fields.Many2One('offered.product', 'Product',
         ondelete='CASCADE')
-    process = fields.Many2One('process.process_desc', 'Process',
+    process = fields.Many2One('process', 'Process',
         ondelete='CASCADE')
 
 
 class ProcessDesc():
     'Process Desc'
 
-    __name__ = 'process.process_desc'
+    __name__ = 'process'
     __metaclass__ = PoolMeta
 
     for_products = fields.Many2Many('process-offered.product',

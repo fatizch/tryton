@@ -106,11 +106,11 @@ msgctxt "model:ir.ui.menu,name:menu_start_declaration"
 msgid "Start Declaration"
 msgstr "Commencer la Déclaration"
 
-msgctxt "selection:process.process_desc,kind:"
+msgctxt "selection:process,kind:"
 msgid "Claim Declaration"
 msgstr "Claim Declaration"
 
-msgctxt "selection:process.process_desc,kind:"
+msgctxt "selection:process,kind:"
 msgid "Claim Reopening"
 msgstr "Réouverture de Sinistre"
 

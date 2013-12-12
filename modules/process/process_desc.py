@@ -43,7 +43,7 @@ class ProcessStepRelation(ModelSQL, ModelView):
 
     __name__ = 'process.process_step_relation'
 
-    process = fields.Many2One('process.process_desc', 'Process',
+    process = fields.Many2One('process', 'Process',
         ondelete='CASCADE')
     step = fields.Many2One('process.step_desc', 'Step',
         ondelete='RESTRICT')
@@ -70,14 +70,14 @@ class ProcessMenuRelation(ModelSQL):
     __name__ = 'process.process_menu_relation'
 
     process = fields.Many2One(
-        'process.process_desc', 'Process', ondelete='CASCADE')
+        'process', 'Process', ondelete='CASCADE')
     menu = fields.Many2One('ir.ui.menu', 'Menu', ondelete='RESTRICT')
 
 
 class ProcessDesc(ModelSQL, ModelView):
     'Process Descriptor'
 
-    __name__ = 'process.process_desc'
+    __name__ = 'process'
 
     technical_name = fields.Char('Technical Name', required=True,
         on_change_with=['fancy_name', 'technical_name'])
@@ -508,7 +508,7 @@ completed the current process, please go ahead"/>'
 
     def set_menu_item_list(self, previous_ids, new_ids):
         Menu = Pool().get('ir.ui.menu')
-        Process = Pool().get('process.process_desc')
+        Process = Pool().get('process')
         MenuItem = Pool().get('ir.ui.menu')
         ActWin = Pool().get('ir.action.act_window')
         View = Pool().get('ir.ui.view')
@@ -672,7 +672,7 @@ class StepTransition(ModelSQL, ModelView):
     __name__ = 'process.step_transition'
 
     on_process = fields.Many2One(
-        'process.process_desc', 'On Process', required=True,
+        'process', 'On Process', required=True,
         ondelete='CASCADE')
     from_step = fields.Many2One(
         'process.step_desc', 'From Step', ondelete='CASCADE', required=True)
@@ -834,7 +834,7 @@ class StepDesc(ModelSQL, ModelView):
         if not processes:
             return
 
-        Process = Pool().get('process.process_desc')
+        Process = Pool().get('process')
         # We need to update each of those processes view.
         for process in processes:
             Process(process).create_update_menu_entry()
@@ -975,7 +975,7 @@ class GenerateGraph(Report):
             raise Exception('Error', 'Report (%s) not find!' % cls.__name__)
         action_report = ActionReport(action_report_ids[0])
 
-        Process = Pool().get('process.process_desc')
+        Process = Pool().get('process')
         the_process = Process(Transaction().context.get('active_id'))
 
         graph = cls.build_graph(the_process)

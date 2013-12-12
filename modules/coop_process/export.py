@@ -16,8 +16,8 @@ class ExportPackage():
     __name__ = 'ir.export_package'
 
     process = fields.Function(
-        fields.One2Many('process.process_desc', None, 'Process', states={
-                'invisible': Bool(Eval('model') != 'process.process_desc')},
+        fields.One2Many('process', None, 'Process', states={
+                'invisible': Bool(Eval('model') != 'process')},
                 on_change=['process', 'instances_to_export'],
                 add_remove=[]),
         'getter_void', setter='setter_void')
@@ -32,7 +32,7 @@ class ExportPackage():
     def get_possible_models_to_export(cls):
         res = super(ExportPackage, cls).get_possible_models_to_export()
         res.extend([
-                ('process.process_desc', 'Process'),
+                ('process', 'Process'),
                 ('process.step_desc', 'Steps'),
                 ])
         return list(set(res))
