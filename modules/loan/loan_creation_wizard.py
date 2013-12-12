@@ -18,7 +18,7 @@ __all__ = [
 class LoanParameters(model.CoopView, ModelCurrency):
     'Loan Parameters'
 
-    __name__ = 'loan.creation_parameters'
+    __name__ = 'loan.create.parameters'
 
     contract = fields.Many2One('contract', 'Contract',
         states={"invisible": True})
@@ -61,7 +61,7 @@ class LoanCreation(model.CoopWizard):
     __name__ = 'loan.create'
 
     start_state = 'loan_parameters'
-    loan_parameters = StateView('loan.creation_parameters',
+    loan_parameters = StateView('loan.create.parameters',
         'loan.loan_creation_parameters_view_form', [
             Button('Cancel', 'cancel_loan', 'tryton-cancel'),
             Button('Next', 'create_loan', 'tryton-go-next'),

@@ -70,7 +70,7 @@
         </record>
 
         <record model="ir.ui.view" id="loan_creation_parameters_view_form">
-            <field name="model">loan.creation_parameters</field>
+            <field name="model">loan.create.parameters</field>
             <field name="type">form</field>
             <field name="name">loan_creation_parameters_form</field>
         </record>
