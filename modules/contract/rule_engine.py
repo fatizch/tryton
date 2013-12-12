@@ -28,7 +28,7 @@ class OfferedContext(RuleEngineContext):
     def _re_complementary_data(cls, args, data_name, from_object=None):
         if not from_object:
             from_object = cls.get_lowest_level_object(args)
-        ComplDataDef = Pool().get('offered.complementary_data_def')
+        ComplDataDef = Pool().get('extra_data')
         return ComplDataDef.get_complementary_data_value(from_object,
             data_name, args['date'])
 

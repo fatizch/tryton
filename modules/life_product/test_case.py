@@ -33,7 +33,7 @@ class TestCaseModel():
     @classmethod
     def get_or_create_complementary_data(cls, name, string=None, type_=None,
             kind=None, selection=None):
-        ComplementaryData = Pool().get('offered.complementary_data_def')
+        ComplementaryData = Pool().get('extra_data')
         schema_el = ComplementaryData()
         schema_el.name = name
         schema_el.string = string

@@ -381,7 +381,7 @@ class Loss(model.CoopSQL, model.CoopView):
         fields.Boolean('With End Date'),
         'get_with_end_date')
     complementary_data = fields.Dict(
-        'offered.complementary_data_def', 'Complementary Data',
+        'extra_data', 'Complementary Data',
         on_change_with=['loss_desc', 'complementary_data'],
         states={'invisible': ~Eval('complementary_data')})
 
@@ -534,7 +534,7 @@ class ClaimDeliveredService():
     multi_level_view = fields.One2Many(
         'claim.indemnification', 'delivered_service', 'Indemnifications')
     complementary_data = fields.Dict(
-        'offered.complementary_data_def', 'Complementary Data',
+        'extra_data', 'Complementary Data',
         on_change=['benefit', 'complementary_data', 'loss',
             'subscribed_service', 'is_loan', 'contract'],
         states={'invisible': ~Eval('complementary_data')})

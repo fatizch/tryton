@@ -125,5 +125,5 @@ class CoverageComplementaryDataRelation(model.CoopSQL):
     coverage = fields.Many2One('offered.coverage', 'Coverage',
         ondelete='CASCADE')
     complementary_data_def = fields.Many2One(
-        'offered.complementary_data_def',
+        'extra_data',
         'Complementary Data', ondelete='RESTRICT')

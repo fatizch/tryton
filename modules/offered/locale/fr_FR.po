@@ -2,7 +2,7 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:offered.complementary_data_def:"
+msgctxt "error:extra_data:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
@@ -66,107 +66,107 @@ msgctxt "field:extra_data-tag,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.complementary_data_def,create_date:"
+msgctxt "field:extra_data,create_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,create_date_:"
+msgctxt "field:extra_data,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:offered.complementary_data_def,create_uid:"
+msgctxt "field:extra_data,create_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,default_value:"
+msgctxt "field:extra_data,default_value:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,default_value_boolean:"
+msgctxt "field:extra_data,default_value_boolean:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,default_value_selection:"
+msgctxt "field:extra_data,default_value_selection:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,digits:"
+msgctxt "field:extra_data,digits:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,end_date:"
+msgctxt "field:extra_data,end_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,id:"
+msgctxt "field:extra_data,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,kind:"
+msgctxt "field:extra_data,kind:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,must_expand_tree:"
+msgctxt "field:extra_data,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:offered.complementary_data_def,name:"
+msgctxt "field:extra_data,name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,rec_name:"
+msgctxt "field:extra_data,rec_name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,rule:"
+msgctxt "field:extra_data,rule:"
 msgid "Rule"
 msgstr "Règle"
 
-msgctxt "field:offered.complementary_data_def,selection:"
+msgctxt "field:extra_data,selection:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,selection_json:"
+msgctxt "field:extra_data,selection_json:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,start_date:"
+msgctxt "field:extra_data,start_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,string:"
+msgctxt "field:extra_data,string:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,sub_data_config_kind:"
+msgctxt "field:extra_data,sub_data_config_kind:"
 msgid "Sub Data Config Kind"
 msgstr ""
 
-msgctxt "field:offered.complementary_data_def,sub_datas:"
+msgctxt "field:extra_data,sub_datas:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,tags:"
+msgctxt "field:extra_data,tags:"
 msgid "Tags"
 msgstr "Labels"
 
-msgctxt "field:offered.complementary_data_def,tags_name:"
+msgctxt "field:extra_data,tags_name:"
 msgid "Tags"
 msgstr "Labels"
 
-msgctxt "field:offered.complementary_data_def,type_:"
+msgctxt "field:extra_data,type_:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,with_default_value:"
+msgctxt "field:extra_data,with_default_value:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,write_date:"
+msgctxt "field:extra_data,write_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,write_uid:"
+msgctxt "field:extra_data,write_uid:"
 msgid ""
 msgstr " "
 
@@ -620,7 +620,7 @@ msgctxt "field:tag,compl_data_defs:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "help:offered.complementary_data_def,selection:"
+msgctxt "help:extra_data,selection:"
 msgid ""
 msgstr " "
 
@@ -672,7 +672,7 @@ msgctxt "model:extra_data-tag,name:"
 msgid "Relation between complementary data def and tag"
 msgstr ""
 
-msgctxt "model:offered.complementary_data_def,name:"
+msgctxt "model:extra_data,name:"
 msgid ""
 msgstr " "
 
@@ -708,67 +708,67 @@ msgctxt "model:offered.product-options-coverage,name:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Benefit"
 msgstr "Prestation"
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Loss"
 msgstr "Préjudice"
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "selection:offered.complementary_data_def,sub_data_config_kind:"
+msgctxt "selection:extra_data,sub_data_config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
 
-msgctxt "selection:offered.complementary_data_def,sub_data_config_kind:"
+msgctxt "selection:extra_data,sub_data_config_kind:"
 msgid "Simple"
 msgstr "Simple"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Boolean"
 msgstr "Booléen"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Char"
 msgstr "Alphanumérique"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "DateTime"
 msgstr ""
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Float"
 msgstr ""
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Integer"
 msgstr "Entier"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Numeric"
 msgstr "Numérique"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Selection"
 msgstr "Sélection"
 
@@ -848,23 +848,23 @@ msgctxt "selection:offered.product,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "view:offered.complementary_data_def:"
+msgctxt "view:extra_data:"
 msgid "Complementary Data Descriptor"
 msgstr "Descripteur de Données Complémentaires"
 
-msgctxt "view:offered.complementary_data_def:"
+msgctxt "view:extra_data:"
 msgid "Complementary Data Descriptors"
 msgstr "Descripteurs de Données Complémentaires"
 
-msgctxt "view:offered.complementary_data_def:"
+msgctxt "view:extra_data:"
 msgid "Main"
 msgstr "Principale"
 
-msgctxt "view:offered.complementary_data_def:"
+msgctxt "view:extra_data:"
 msgid "Sub Data"
 msgstr "Sous Donnée"
 
-msgctxt "view:offered.complementary_data_def:"
+msgctxt "view:extra_data:"
 msgid "Tags"
 msgstr "Labels"
 

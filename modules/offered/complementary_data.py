@@ -24,7 +24,7 @@ class ComplementaryDataDefinition(
         DictSchemaMixin, model.CoopSQL, model.CoopView):
     'Complementary Data Definition'
 
-    __name__ = 'offered.complementary_data_def'
+    __name__ = 'extra_data'
 
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
@@ -331,9 +331,9 @@ class ComplementaryDataRecursiveRelation(model.CoopSQL, model.CoopView):
     __name__ = 'offered.complementary_data_recursive_relation'
 
     master = fields.Many2One(
-        'offered.complementary_data_def', 'Master', ondelete='CASCADE')
+        'extra_data', 'Master', ondelete='CASCADE')
     child = fields.Many2One(
-        'offered.complementary_data_def', 'Child', ondelete='RESTRICT')
+        'extra_data', 'Child', ondelete='RESTRICT')
     select_value = fields.Char('Select value')
 
     def does_match(self, value):
@@ -369,6 +369,6 @@ class ComplementaryDataDefTagRelation(model.CoopSQL):
 
     __name__ = 'extra_data-tag'
 
-    compl_data_def = fields.Many2One('offered.complementary_data_def',
+    compl_data_def = fields.Many2One('extra_data',
         'Complementary Data Def', ondelete='CASCADE')
     tag = fields.Many2One('tag', 'Tag', ondelete='RESTRICT')

@@ -28,9 +28,9 @@ class ExportPackage():
                 add_remove=[]),
         'getter_void', setter='setter_void')
     compl_data_defs = fields.Function(
-        fields.One2Many('offered.complementary_data_def', None,
+        fields.One2Many('extra_data', None,
             'Complementary Data Def', states={
-                'invisible': Bool(Eval('model') != 'offered.complementary_data_def')},
+                'invisible': Bool(Eval('model') != 'extra_data')},
                 on_change=['compl_data_defs', 'instances_to_export'],
                 add_remove=[]),
         'getter_void', setter='setter_void')
@@ -41,7 +41,7 @@ class ExportPackage():
         res.extend([
                 ('offered.product', 'Product'),
                 ('offered.coverage', 'Coverage'),
-                ('offered.complementary_data_def', 'Complementary Data'),
+                ('extra_data', 'Complementary Data'),
                 ])
         return list(set(res))
 

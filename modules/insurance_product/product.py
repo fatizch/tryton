@@ -310,7 +310,7 @@ class ItemDescriptorComplementaryDataRelation(model.CoopSQL):
     item_desc = fields.Many2One(
         'offered.item.description', 'Item Desc', ondelete='CASCADE', )
     complementary_data_def = fields.Many2One(
-        'offered.complementary_data_def',
+        'extra_data',
         'Complementary Data', ondelete='RESTRICT', )
 
 

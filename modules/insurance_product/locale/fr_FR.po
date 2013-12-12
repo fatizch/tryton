@@ -83,7 +83,7 @@ msgctxt "error:offered.term.rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
-msgctxt "error:offered.complementary_data_def:"
+msgctxt "error:extra_data:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
@@ -2539,83 +2539,83 @@ msgctxt "field:ir.model,printable:"
 msgid "Printable"
 msgstr "Imprimable"
 
-msgctxt "field:offered.complementary_data_def,create_date:"
+msgctxt "field:extra_data,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:offered.complementary_data_def,create_uid:"
+msgctxt "field:extra_data,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:offered.complementary_data_def,default_value:"
+msgctxt "field:extra_data,default_value:"
 msgid "Default Value"
 msgstr "Valeur par Défaut"
 
-msgctxt "field:offered.complementary_data_def,default_value_boolean:"
+msgctxt "field:extra_data,default_value_boolean:"
 msgid "Default Value"
 msgstr "Valeur par Défaut"
 
-msgctxt "field:offered.complementary_data_def,default_value_selection:"
+msgctxt "field:extra_data,default_value_selection:"
 msgid "Default Value"
 msgstr "Valeur par Défaut"
 
-msgctxt "field:offered.complementary_data_def,digits:"
+msgctxt "field:extra_data,digits:"
 msgid "Digits"
 msgstr "Précision"
 
-msgctxt "field:offered.complementary_data_def,end_date:"
+msgctxt "field:extra_data,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:offered.complementary_data_def,id:"
+msgctxt "field:extra_data,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.complementary_data_def,kind:"
+msgctxt "field:extra_data,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:offered.complementary_data_def,name:"
+msgctxt "field:extra_data,name:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:offered.complementary_data_def,rec_name:"
+msgctxt "field:extra_data,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:offered.complementary_data_def,selection:"
+msgctxt "field:extra_data,selection:"
 msgid "Selection"
 msgstr "Sélection"
 
-msgctxt "field:offered.complementary_data_def,selection_json:"
+msgctxt "field:extra_data,selection_json:"
 msgid "Selection JSON"
 msgstr ""
 
-msgctxt "field:offered.complementary_data_def,start_date:"
+msgctxt "field:extra_data,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:offered.complementary_data_def,string:"
+msgctxt "field:extra_data,string:"
 msgid "String"
 msgstr "Nom"
 
-msgctxt "field:offered.complementary_data_def,sub_datas:"
+msgctxt "field:extra_data,sub_datas:"
 msgid "Sub Data"
 msgstr "Sous Donnée"
 
-msgctxt "field:offered.complementary_data_def,type_:"
+msgctxt "field:extra_data,type_:"
 msgid "Type"
 msgstr "Type"
 
-msgctxt "field:offered.complementary_data_def,with_default_value:"
+msgctxt "field:extra_data,with_default_value:"
 msgid "Default Value"
 msgstr "Valeur par Défaut"
 
-msgctxt "field:offered.complementary_data_def,write_date:"
+msgctxt "field:extra_data,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:offered.complementary_data_def,write_uid:"
+msgctxt "field:extra_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3256,7 +3256,7 @@ msgctxt "help:offered.coverage_amount.rule,amounts:"
 msgid "Specify amounts separated by ;"
 msgstr "Spécifier les montants séparés par des ;"
 
-msgctxt "help:offered.complementary_data_def,selection:"
+msgctxt "help:extra_data,selection:"
 msgid "A couple of key and label separated by \":\" per line"
 msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
 
@@ -3549,7 +3549,7 @@ msgctxt "model:ir.ui.menu,name:menu_receive_documents"
 msgid "Document Received"
 msgstr "Document reçu"
 
-msgctxt "model:offered.complementary_data_def,name:"
+msgctxt "model:extra_data,name:"
 msgid "Complementary Data Definition"
 msgstr "Définition de Données Complémentaires"
 
@@ -4384,51 +4384,51 @@ msgctxt "selection:offered.term.rule,term_date_choice:"
 msgid "At this Date"
 msgstr "À Cette Date"
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Benefit"
 msgstr "Prestation"
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Loss"
 msgstr "Préjudice"
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Boolean"
 msgstr "Booléen"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Char"
 msgstr "Alphanumérique"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Integer"
 msgstr "Entier"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Numeric"
 msgstr "Numérique"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Selection"
 msgstr "Sélection"
 
@@ -4704,11 +4704,11 @@ msgctxt "view:offered.term.rule:"
 msgid "Term - Renewal rule"
 msgstr "Règle de Terme - Renouvellement"
 
-msgctxt "view:offered.complementary_data_def:"
+msgctxt "view:extra_data:"
 msgid "Complementary Data Descriptor"
 msgstr "Descripteur de Données Complémentaires"
 
-msgctxt "view:offered.complementary_data_def:"
+msgctxt "view:extra_data:"
 msgid "Complementary Data Descriptors"
 msgstr "Descripteurs de Données Complémentaires"
 

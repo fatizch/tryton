@@ -320,7 +320,7 @@ class SubBenefitRule(model.CoopSQL, model.CoopView, ModelCurrency):
     rule = fields.Many2One(
         'rule_engine', 'Amount', states={'invisible': STATE_SIMPLE})
     rule_complementary_data = fields.Dict(
-        'offered.complementary_data_def', 'Rule Complementary Data',
+        'extra_data', 'Rule Complementary Data',
         on_change_with=['rule', 'rule_complementary_data'],
         states={'invisible': STATE_SIMPLE})
     amount = fields.Numeric('Amount',

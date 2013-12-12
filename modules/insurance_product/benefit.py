@@ -121,7 +121,7 @@ class LossDescComplementaryDataRelation(model.CoopSQL):
     loss_desc = fields.Many2One(
         'benefit.loss.description', 'Loss Desc', ondelete='CASCADE')
     complementary_data_def = fields.Many2One(
-        'offered.complementary_data_def',
+        'extra_data',
         'Complementary Data', ondelete='RESTRICT')
 
 
@@ -246,7 +246,7 @@ class Benefit(model.CoopSQL, offered.Offered):
         all_schemas, possible_schemas = self.get_compl_data_for_exec(args)
         existing_data = args['loss'].complementary_data
         existing_data.update(args['delivered_service'].complementary_data)
-        ComplementaryData = Pool().get('offered.complementary_data_def')
+        ComplementaryData = Pool().get('extra_data')
         result = ComplementaryData.calculate_value_set(
             possible_schemas, all_schemas, existing_data, args)
         return result, ()
@@ -290,5 +290,5 @@ class BenefitComplementaryDataRelation(model.CoopSQL):
     benefit = fields.Many2One(
         'benefit', 'Benefit', ondelete='CASCADE')
     complementary_data_def = fields.Many2One(
-        'offered.complementary_data_def',
+        'extra_data',
         'Complementary Data', ondelete='RESTRICT')

@@ -34,7 +34,7 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
             'invisible': Eval('offered_kind') != 'offered.coverage',
         })
     sub_elem_rule_complementary_data = fields.Dict(
-        'offered.complementary_data_def', 'Rule Complementary Data',
+        'extra_data', 'Rule Complementary Data',
         on_change_with=['sub_elem_rule', 'sub_elem_rule_complementary_data'],
         states={
             'invisible': Eval('offered_kind') != 'offered.coverage',

@@ -310,7 +310,7 @@ class PricingComponent(model.CoopSQL, model.CoopView):
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'advanced')))})
     rule_complementary_data = fields.Dict(
-        'offered.complementary_data_def', 'Rule Complementary Data',
+        'extra_data', 'Rule Complementary Data',
         on_change_with=['rule', 'rule_complementary_data'],
         states={
             'invisible': Or(

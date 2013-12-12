@@ -217,7 +217,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         fields.Many2One('party.party', 'Current Policy Owner'),
         'get_current_policy_owner')
     complementary_data = fields.Dict(
-        'offered.complementary_data_def', 'Complementary Data',
+        'extra_data', 'Complementary Data',
         on_change=[
             'complementary_data', 'start_date', 'options', 'offered',
             'appliable_conditions_date'],

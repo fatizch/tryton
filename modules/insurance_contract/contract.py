@@ -454,14 +454,14 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         states={'invisible': Eval('item_kind') == 'person'},
         domain=[('covered_data.option.contract', '=', Eval('contract'))],
         depends=['contract'], context={'_master_covered': Eval('id')})
-    complementary_data = fields.Dict('offered.complementary_data_def',
+    complementary_data = fields.Dict('extra_data',
         'Contract Complementary Data',
         on_change_with=['item_desc', 'complementary_data', 'contract',
             'start_date', 'main_contract'],
         states={'invisible': ~Eval('complementary_data')}
         )
     party_compl_data = fields.Function(
-        fields.Dict('offered.complementary_data_def',
+        fields.Dict('extra_data',
             'Party Complementary Data',
             on_change_with=['item_desc', 'complementary_data', 'party'],
             states={'invisible': Or(~IS_PARTY, ~Eval('party_compl_data'))}),
@@ -809,7 +809,7 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     covered_element = fields.Many2One(
         'contract.covered_element', 'Covered Element', ondelete='CASCADE')
     complementary_data = fields.Dict(
-        'offered.complementary_data_def', 'Complementary Data', on_change=[
+        'extra_data', 'Complementary Data', on_change=[
             'complementary_data', 'option', 'start_date',
             'deductible_duration', 'covered_element'],
         depends=['complementary_data', 'option', 'start_date'],

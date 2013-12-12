@@ -3,18 +3,18 @@
   <data>
     <!-- Complementary Datas -->
     <record model="ir.ui.view" id="complementary_data_view_tree">
-      <field name="model">offered.complementary_data_def</field>
+      <field name="model">extra_data</field>
       <field name="type">tree</field>
       <field name="name">complementary_data_tree</field>
     </record>
     <record model="ir.ui.view" id="complementary_data_view_form">
-      <field name="model">offered.complementary_data_def</field>
+      <field name="model">extra_data</field>
       <field name="type">form</field>
       <field name="name">complementary_data_form</field>
     </record>
     <record model="ir.action.act_window" id="act_model_coop_schema">
       <field name="name">Complementary Data</field>
-      <field name="res_model">offered.complementary_data_def</field>
+      <field name="res_model">extra_data</field>
     </record>
     <record model="ir.action.act_window.view" id="act_model_coop_schema_tree">
       <field name="sequence" eval="10"/>
