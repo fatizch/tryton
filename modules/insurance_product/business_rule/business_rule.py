@@ -233,7 +233,7 @@ class DimensionDisplayer():
 class BusinessRuleRoot(model.CoopView, GetResult, Templated):
     'Business Rule Root'
 
-    __name__ = 'ins_product.business_rule_root'
+    __name__ = 'offered.business_rule_root'
 
     offered = fields.Reference('Offered',
         selection=[

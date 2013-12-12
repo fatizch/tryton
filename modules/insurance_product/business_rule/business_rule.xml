@@ -42,12 +42,12 @@
     <!-- Business Rule Root -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="businessruleroot_view_form">
-      <field name="model">ins_product.business_rule_root</field>
+      <field name="model">offered.business_rule_root</field>
       <field name="type">form</field>
       <field name="name">br_root_form</field>
     </record>
     <record model="ir.ui.view" id="businessruleroot_view_tree">
-      <field name="model">ins_product.business_rule_root</field>
+      <field name="model">offered.business_rule_root</field>
       <field name="type">tree</field>
       <field name="name">br_root_tree</field>
     </record>

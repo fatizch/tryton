@@ -14,7 +14,7 @@ msgctxt "error:benefit.rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
-msgctxt "error:ins_product.business_rule_root:"
+msgctxt "error:offered.business_rule_root:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
@@ -485,47 +485,47 @@ msgctxt "field:benefit.rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.business_rule_root,config_kind:"
+msgctxt "field:offered.business_rule_root,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
 
-msgctxt "field:ins_product.business_rule_root,end_date:"
+msgctxt "field:offered.business_rule_root,end_date:"
 msgid "To Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_product.business_rule_root,id:"
+msgctxt "field:offered.business_rule_root,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.business_rule_root,must_expand_tree:"
+msgctxt "field:offered.business_rule_root,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.business_rule_root,offered:"
+msgctxt "field:offered.business_rule_root,offered:"
 msgid "Offered"
 msgstr "Offre"
 
-msgctxt "field:ins_product.business_rule_root,rule:"
+msgctxt "field:offered.business_rule_root,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:ins_product.business_rule_root,rule_complementary_data:"
+msgctxt "field:offered.business_rule_root,rule_complementary_data:"
 msgid "Rule Complementary Data"
 msgstr "Paramètres de Rêgle"
 
-msgctxt "field:ins_product.business_rule_root,start_date:"
+msgctxt "field:offered.business_rule_root,start_date:"
 msgid "From Date"
 msgstr "Date de Début"
 
-msgctxt "field:ins_product.business_rule_root,template:"
+msgctxt "field:offered.business_rule_root,template:"
 msgid "Template"
 msgstr "Modèle"
 
-msgctxt "field:ins_product.business_rule_root,template_behaviour:"
+msgctxt "field:offered.business_rule_root,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
 
-msgctxt "field:ins_product.business_rule_root,view_rec_name:"
+msgctxt "field:offered.business_rule_root,view_rec_name:"
 msgid "Name"
 msgstr "Nom"
 
@@ -3284,7 +3284,7 @@ msgctxt "model:benefit.rule,name:"
 msgid "Benefit Rule"
 msgstr "Prestation"
 
-msgctxt "model:ins_product.business_rule_root,name:"
+msgctxt "model:offered.business_rule_root,name:"
 msgid "Business Rule Root"
 msgstr "Règle Métier Racine"
 
@@ -3752,35 +3752,35 @@ msgctxt "selection:benefit.rule,validation_delay_unit:"
 msgid "Year"
 msgstr "Année"
 
-msgctxt "selection:ins_product.business_rule_root,config_kind:"
+msgctxt "selection:offered.business_rule_root,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
 
-msgctxt "selection:ins_product.business_rule_root,config_kind:"
+msgctxt "selection:offered.business_rule_root,config_kind:"
 msgid "Simple"
 msgstr "Simple"
 
-msgctxt "selection:ins_product.business_rule_root,offered:"
+msgctxt "selection:offered.business_rule_root,offered:"
 msgid "Benefit"
 msgstr "Prestation"
 
-msgctxt "selection:ins_product.business_rule_root,offered:"
+msgctxt "selection:offered.business_rule_root,offered:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "selection:ins_product.business_rule_root,offered:"
+msgctxt "selection:offered.business_rule_root,offered:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
+msgctxt "selection:offered.business_rule_root,template_behaviour:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
+msgctxt "selection:offered.business_rule_root,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
-msgctxt "selection:ins_product.business_rule_root,template_behaviour:"
+msgctxt "selection:offered.business_rule_root,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
@@ -4548,7 +4548,7 @@ msgctxt "view:benefit.rule:"
 msgid "benefit rule"
 msgstr "Règle de Prestation"
 
-msgctxt "view:ins_product.business_rule_root:"
+msgctxt "view:offered.business_rule_root:"
 msgid "Business Rule Root"
 msgstr "Règle Métier Racine"
 
