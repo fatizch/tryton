@@ -238,23 +238,23 @@ msgctxt "field:ir.test_case.run.select,test_files:"
 msgid "Test Files"
 msgstr "Fichiers de test"
 
-msgctxt "field:coop_utils.test_case_file_selector,filename:"
+msgctxt "field:ir.test_case.run.select.file,filename:"
 msgid "File name"
 msgstr "Nom du fichier"
 
-msgctxt "field:coop_utils.test_case_file_selector,full_path:"
+msgctxt "field:ir.test_case.run.select.file,full_path:"
 msgid "Full Path"
 msgstr "Chemin complet"
 
-msgctxt "field:coop_utils.test_case_file_selector,id:"
+msgctxt "field:ir.test_case.run.select.file,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_utils.test_case_file_selector,must_expand_tree:"
+msgctxt "field:ir.test_case.run.select.file,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:coop_utils.test_case_file_selector,selected:"
+msgctxt "field:ir.test_case.run.select.file,selected:"
 msgid "Will be loaded"
 msgstr "Seront chargés"
 
@@ -402,7 +402,7 @@ msgctxt "model:ir.test_case.run.select,name:"
 msgid "Select Test Case"
 msgstr "Sélection des jeux d'essai"
 
-msgctxt "model:coop_utils.test_case_file_selector,name:"
+msgctxt "model:ir.test_case.run.select.file,name:"
 msgid "Test Case File Selector"
 msgstr "Sélection des fichiers de jeu d'essai"
 
@@ -510,7 +510,7 @@ msgctxt "view:ir.test_case.run.select:"
 msgid "Select Test Cases"
 msgstr "Sélection des jeux d'essai"
 
-msgctxt "view:coop_utils.test_case_file_selector:"
+msgctxt "view:ir.test_case.run.select.file:"
 msgid "Test Case Files"
 msgstr "Fichiers de jeu d'essai"
 

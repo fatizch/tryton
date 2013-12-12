@@ -400,7 +400,7 @@ class TestCaseSelector(model.CoopView):
 class TestCaseFileSelector(model.CoopView):
     'Test Case File Selector'
 
-    __name__ = 'coop_utils.test_case_file_selector'
+    __name__ = 'ir.test_case.run.select.file'
 
     selected = fields.Boolean('Will be loaded')
     filename = fields.Char('File name', states={'readonly': True})
@@ -418,7 +418,7 @@ class SelectTestCase(model.CoopView):
         on_change=['select_all_files', 'test_files'])
     test_cases = fields.One2Many('coop_utils.test_case_selector', None,
         'Test Cases', on_change=['test_cases'])
-    test_files = fields.One2Many('coop_utils.test_case_file_selector', None,
+    test_files = fields.One2Many('ir.test_case.run.select.file', None,
         'Test Files')
 
     def on_change_test_cases(self):
