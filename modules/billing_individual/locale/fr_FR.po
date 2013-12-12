@@ -227,79 +227,79 @@ msgctxt "field:billing.payment.method,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:billing.payment_rule,appliable_fees:"
+msgctxt "field:billing.payment.term,appliable_fees:"
 msgid "Appliable fees"
 msgstr "Frais applicables"
 
-msgctxt "field:billing.payment_rule,base_frequency:"
+msgctxt "field:billing.payment.term,base_frequency:"
 msgid "Base Frequency"
 msgstr "Fréquence de base"
 
-msgctxt "field:billing.payment_rule,code:"
+msgctxt "field:billing.payment.term,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:billing.payment_rule,company:"
+msgctxt "field:billing.payment.term,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:billing.payment_rule,create_date:"
+msgctxt "field:billing.payment.term,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:billing.payment_rule,create_date_:"
+msgctxt "field:billing.payment.term,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:billing.payment_rule,create_uid:"
+msgctxt "field:billing.payment.term,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:billing.payment_rule,force_line_at_start:"
+msgctxt "field:billing.payment.term,force_line_at_start:"
 msgid "Force start date line"
 msgstr "Ligne à la date de création"
 
-msgctxt "field:billing.payment_rule,id:"
+msgctxt "field:billing.payment.term,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.payment_rule,must_expand_tree:"
+msgctxt "field:billing.payment.term,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:billing.payment_rule,name:"
+msgctxt "field:billing.payment.term,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:billing.payment_rule,payment_mode:"
+msgctxt "field:billing.payment.term,payment_mode:"
 msgid "Payment Mode"
 msgstr "Mode de Paiement"
 
-msgctxt "field:billing.payment_rule,rec_name:"
+msgctxt "field:billing.payment.term,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:billing.payment_rule,remaining_position:"
+msgctxt "field:billing.payment.term,remaining_position:"
 msgid "Remaining position"
 msgstr "Position du reste"
 
-msgctxt "field:billing.payment_rule,start_lines:"
+msgctxt "field:billing.payment.term,start_lines:"
 msgid "Start Lines"
 msgstr "Lignes du début"
 
-msgctxt "field:billing.payment_rule,sync_date:"
+msgctxt "field:billing.payment.term,sync_date:"
 msgid "Sync Date"
 msgstr "Date de Synchro"
 
-msgctxt "field:billing.payment_rule,with_sync_date:"
+msgctxt "field:billing.payment.term,with_sync_date:"
 msgid "With Sync Date"
 msgstr "Avec date de synchronisation"
 
-msgctxt "field:billing.payment_rule,write_date:"
+msgctxt "field:billing.payment.term,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:billing.payment_rule,write_uid:"
+msgctxt "field:billing.payment.term,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -845,7 +845,7 @@ msgctxt "model:billing.payment.method,name:"
 msgid "Payment Method"
 msgstr "Méthode de Paiement"
 
-msgctxt "model:billing.payment_rule,name:"
+msgctxt "model:billing.payment.term,name:"
 msgid "Payment Rule"
 msgstr "Règle de paiement"
 
@@ -921,43 +921,43 @@ msgctxt "selection:billing.payment.method,payment_mode:"
 msgid "Wire Transfer"
 msgstr "Virement Bancaire"
 
-msgctxt "selection:billing.payment_rule,base_frequency:"
+msgctxt "selection:billing.payment.term,base_frequency:"
 msgid "Half Yearly"
 msgstr "Semestriel"
 
-msgctxt "selection:billing.payment_rule,base_frequency:"
+msgctxt "selection:billing.payment.term,base_frequency:"
 msgid "Monthly"
 msgstr "Mensuel"
 
-msgctxt "selection:billing.payment_rule,base_frequency:"
+msgctxt "selection:billing.payment.term,base_frequency:"
 msgid "Quarterly"
 msgstr "Trimestriel"
 
-msgctxt "selection:billing.payment_rule,base_frequency:"
+msgctxt "selection:billing.payment.term,base_frequency:"
 msgid "Yearly"
 msgstr "Annuel"
 
-msgctxt "selection:billing.payment_rule,payment_mode:"
+msgctxt "selection:billing.payment.term,payment_mode:"
 msgid "In Advance"
 msgstr "Terme à échoir"
 
-msgctxt "selection:billing.payment_rule,payment_mode:"
+msgctxt "selection:billing.payment.term,payment_mode:"
 msgid "In Arrears"
 msgstr "Terme échu"
 
-msgctxt "selection:billing.payment_rule,remaining_position:"
+msgctxt "selection:billing.payment.term,remaining_position:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:billing.payment_rule,remaining_position:"
+msgctxt "selection:billing.payment.term,remaining_position:"
 msgid "Custom Lines"
 msgstr "Parmi les lignes fixes"
 
-msgctxt "selection:billing.payment_rule,remaining_position:"
+msgctxt "selection:billing.payment.term,remaining_position:"
 msgid "First calculated"
 msgstr "Première ligne calculée"
 
-msgctxt "selection:billing.payment_rule,remaining_position:"
+msgctxt "selection:billing.payment.term,remaining_position:"
 msgid "Last calculated"
 msgstr "Dernière ligne calculée"
 
@@ -1141,11 +1141,11 @@ msgctxt "view:billing.payment.method:"
 msgid "Payment Methods"
 msgstr "Méthode de Paiement"
 
-msgctxt "view:billing.payment_rule:"
+msgctxt "view:billing.payment.term:"
 msgid "Payment Rules"
 msgstr ""
 
-msgctxt "view:billing.payment_rule:"
+msgctxt "view:billing.payment.term:"
 msgid "payment_rule"
 msgstr ""
 

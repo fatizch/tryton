@@ -58,7 +58,7 @@ class PaymentMethod(model.CoopSQL, model.CoopView):
 
     name = fields.Char('Name')
     code = fields.Char('Code', required=True, on_change_with=['code', 'name'])
-    payment_rule = fields.Many2One('billing.payment_rule', 'Payment Rule',
+    payment_rule = fields.Many2One('billing.payment.term', 'Payment Rule',
         ondelete='RESTRICT', required=True)
     payment_mode = fields.Selection(PAYMENT_MODES, 'Payment Mode',
         required=True)
