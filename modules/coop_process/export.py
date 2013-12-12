@@ -22,8 +22,8 @@ class ExportPackage():
                 add_remove=[]),
         'getter_void', setter='setter_void')
     steps = fields.Function(
-        fields.One2Many('process.step_desc', None, 'Steps', states={
-                'invisible': Bool(Eval('model') != 'process.step_desc')},
+        fields.One2Many('process.step', None, 'Steps', states={
+                'invisible': Bool(Eval('model') != 'process.step')},
                 on_change=['steps', 'instances_to_export'],
                 add_remove=[]),
         'getter_void', setter='setter_void')
@@ -33,7 +33,7 @@ class ExportPackage():
         res = super(ExportPackage, cls).get_possible_models_to_export()
         res.extend([
                 ('process', 'Process'),
-                ('process.step_desc', 'Steps'),
+                ('process.step', 'Steps'),
                 ])
         return list(set(res))
 

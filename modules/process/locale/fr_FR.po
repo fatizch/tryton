@@ -18,7 +18,7 @@ msgctxt "error:process.process_framework:"
 msgid "Everything is good !"
 msgstr "Tout est bon!"
 
-msgctxt "error:process.step_desc:"
+msgctxt "error:process.step:"
 msgid "The technical name must be unique"
 msgstr "Le nom technique doit être unique"
 
@@ -282,59 +282,59 @@ msgctxt "field:process.status,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:process.step_desc,authorizations:"
+msgctxt "field:process.step,authorizations:"
 msgid "Authorizations"
 msgstr "Autorisations"
 
-msgctxt "field:process.step_desc,code_after:"
+msgctxt "field:process.step,code_after:"
 msgid "Executed After Step"
 msgstr "Executé après l'Etape"
 
-msgctxt "field:process.step_desc,code_before:"
+msgctxt "field:process.step,code_before:"
 msgid "Executed Before Step"
 msgstr "Executé avant l'Etape"
 
-msgctxt "field:process.step_desc,colspan:"
+msgctxt "field:process.step,colspan:"
 msgid "View columns"
 msgstr "Colonnes de la Vue"
 
-msgctxt "field:process.step_desc,create_date:"
+msgctxt "field:process.step,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:process.step_desc,create_uid:"
+msgctxt "field:process.step,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:process.step_desc,fancy_name:"
+msgctxt "field:process.step,fancy_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.step_desc,id:"
+msgctxt "field:process.step,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:process.step_desc,processes:"
+msgctxt "field:process.step,processes:"
 msgid "Transitions"
 msgstr "Transitions"
 
-msgctxt "field:process.step_desc,rec_name:"
+msgctxt "field:process.step,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.step_desc,step_xml:"
+msgctxt "field:process.step,step_xml:"
 msgid "XML"
 msgstr "Description de la Vue"
 
-msgctxt "field:process.step_desc,technical_name:"
+msgctxt "field:process.step,technical_name:"
 msgid "Technical Name"
 msgstr "Nom Technique"
 
-msgctxt "field:process.step_desc,write_date:"
+msgctxt "field:process.step,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:process.step_desc,write_uid:"
+msgctxt "field:process.step,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -542,7 +542,7 @@ msgctxt "model:process.status,name:"
 msgid "Process Status"
 msgstr "Statuts des Etapes"
 
-msgctxt "model:process.step_desc,name:"
+msgctxt "model:process.step,name:"
 msgid "Step Descriptor"
 msgstr "Descripteur d'Etape"
 
@@ -928,27 +928,27 @@ msgctxt "view:process.status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "view:process.step_desc:"
+msgctxt "view:process.step:"
 msgid "Authorizations"
 msgstr "Autorisations"
 
-msgctxt "view:process.step_desc:"
+msgctxt "view:process.step:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "view:process.step_desc:"
+msgctxt "view:process.step:"
 msgid "Step Descriptor"
 msgstr "Descripteur d'Etape"
 
-msgctxt "view:process.step_desc:"
+msgctxt "view:process.step:"
 msgid "Step Descriptors"
 msgstr "Paramétrage des Etapes"
 
-msgctxt "view:process.step_desc:"
+msgctxt "view:process.step:"
 msgid "Usage"
 msgstr "Utilisation"
 
-msgctxt "view:process.step_desc:"
+msgctxt "view:process.step:"
 msgid "XML"
 msgstr "Description de la Vue"
 

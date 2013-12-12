@@ -296,7 +296,7 @@ class ProcessFramework(ModelView):
             utils.pyson_result(good_button['invisible'], self, evaled=True))
 
     def is_button_available(self, process, executable):
-        if executable.__name__ == 'process.step_desc':
+        if executable.__name__ == 'process.step':
             if self.current_state and \
                     self.current_state.step.id == executable.id:
                 return False

@@ -68,12 +68,12 @@
         </record>
         <!-- Step Desc Entries -->
         <record model="ir.ui.view" id="step_desc_form">
-            <field name="model">process.step_desc</field>
+            <field name="model">process.step</field>
             <field name="type">form</field>
             <field name="name">step_desc_form</field>
         </record>
         <record model="ir.ui.view" id="step_desc_tree">
-            <field name="model">process.step_desc</field>
+            <field name="model">process.step</field>
             <field name="type">tree</field>
             <field name="name">step_desc_tree</field>
         </record>
@@ -108,7 +108,7 @@
         <!-- Menu for step desc -->
         <record model="ir.action.act_window" id="act_step_desc">
             <field name="name">Step Descriptors</field>
-            <field name="res_model">process.step_desc</field>
+            <field name="res_model">process.step</field>
         </record>
         <record model="ir.action.act_window.view" id="act_step_desc_view1">
             <field name="sequence" eval="11"/>

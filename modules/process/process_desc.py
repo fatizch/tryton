@@ -45,7 +45,7 @@ class ProcessStepRelation(ModelSQL, ModelView):
 
     process = fields.Many2One('process', 'Process',
         ondelete='CASCADE')
-    step = fields.Many2One('process.step_desc', 'Step',
+    step = fields.Many2One('process.step', 'Step',
         ondelete='RESTRICT')
     status = fields.Many2One('process.status', 'Status',
         ondelete='RESTRICT')
@@ -610,7 +610,7 @@ class Code(ModelSQL, ModelView):
         'get_on_model')
     method_name = fields.Char('Method Name', required=True)
     parent_step = fields.Many2One(
-        'process.step_desc', 'Parent Step', ondelete='CASCADE')
+        'process.step', 'Parent Step', ondelete='CASCADE')
     parent_transition = fields.Many2One(
         'process.step_transition', 'Parent Transition', ondelete='CASCADE')
     sequence = fields.Integer('Sequence', states={'invisible': True})
@@ -675,9 +675,9 @@ class StepTransition(ModelSQL, ModelView):
         'process', 'On Process', required=True,
         ondelete='CASCADE')
     from_step = fields.Many2One(
-        'process.step_desc', 'From Step', ondelete='CASCADE', required=True)
+        'process.step', 'From Step', ondelete='CASCADE', required=True)
     to_step = fields.Many2One(
-        'process.step_desc', 'To Step', ondelete='CASCADE',
+        'process.step', 'To Step', ondelete='CASCADE',
         domain=[('id', '!=', Eval('from_step'))],
         depends=['from_step'],
         states={'invisible': Eval('kind') != 'standard'})
@@ -782,14 +782,14 @@ class StepDescAuthorization(ModelSQL):
     __name__ = 'process.step_desc_authorization'
 
     step_desc = fields.Many2One(
-        'process.step_desc', 'Step Desc', ondelete='CASCADE')
+        'process.step', 'Step Desc', ondelete='CASCADE')
     group = fields.Many2One('res.group', 'Group', ondelete='CASCADE')
 
 
 class StepDesc(ModelSQL, ModelView):
     'Step Descriptor'
 
-    __name__ = 'process.step_desc'
+    __name__ = 'process.step'
     _rec_name = 'fancy_name'
 
     technical_name = fields.Char(

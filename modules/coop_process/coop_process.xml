@@ -23,13 +23,13 @@
     </record>
     <!-- Step Override -->
     <record model="ir.ui.view" id="step_desc_form">
-      <field name="model">process.step_desc</field>
+      <field name="model">process.step</field>
       <field name="type">form</field>
       <field name="inherit" ref="process.step_desc_form"/>
       <field name="name">step_desc_form</field>
     </record>
     <record model="ir.ui.view" id="step_desc_tree">
-      <field name="model">process.step_desc</field>
+      <field name="model">process.step</field>
       <field name="type">tree</field>
       <field name="inherit" ref="process.step_desc_tree"/>
       <field name="name">step_desc_tree</field>

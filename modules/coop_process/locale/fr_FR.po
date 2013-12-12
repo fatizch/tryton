@@ -238,19 +238,19 @@ msgctxt "field:process.status,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:process.step_desc,create_date_:"
+msgctxt "field:process.step,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:process.step_desc,custom_views:"
+msgctxt "field:process.step,custom_views:"
 msgid "Custom Views"
 msgstr "Vues Personnalisées"
 
-msgctxt "field:process.step_desc,main_model:"
+msgctxt "field:process.step,main_model:"
 msgid "Main Model"
 msgstr "Modèle Principal"
 
-msgctxt "field:process.step_desc,pyson:"
+msgctxt "field:process.step,pyson:"
 msgid "Pyson Constraint"
 msgstr "Contraintes Pyson"
 
@@ -330,7 +330,7 @@ msgctxt "view:ir.ui.view.description:"
 msgid "View Descriptors"
 msgstr "Descripteurs de Vue"
 
-msgctxt "view:process.step_desc:"
+msgctxt "view:process.step:"
 msgid "Custom Views"
 msgstr "Vues Personnalisées"
 

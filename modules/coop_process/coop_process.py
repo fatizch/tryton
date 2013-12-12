@@ -352,7 +352,7 @@ class CoopProcessFramework(ProcessFramework):
     @classmethod
     def build_instruction_step_method(cls, process, data):
         def button_step_generic(works):
-            StepDesc = Pool().get('process.step_desc')
+            StepDesc = Pool().get('process.step')
             target = StepDesc(data[0])
             for work in works:
                 target.execute(work)
@@ -382,7 +382,7 @@ class CoopProcessFramework(ProcessFramework):
         if process.custom_transitions and \
                 not process.steps_implicitly_available:
             return {'readonly': True}
-        StepDesc = Pool().get('process.step_desc')
+        StepDesc = Pool().get('process.step')
         good_step = StepDesc(int(step_data[0]))
         if not good_step.pyson:
             return {}
@@ -662,7 +662,7 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
         'ir.model', 'View Model', required=True,
         states={'readonly': Eval('id', 0) > 0})
     for_step = fields.Many2One(
-        'process.step_desc', 'For Step', ondelete='CASCADE')
+        'process.step', 'For Step', ondelete='CASCADE')
     field_childs = fields.Selection(
         'get_field_childs', 'Children field',
         selection_change_with=['view_model'], depends=['view_model'],
@@ -820,7 +820,7 @@ class StepDesc(model.CoopSQL):
     'Step Desc'
 
     __metaclass__ = PoolMeta
-    __name__ = 'process.step_desc'
+    __name__ = 'process.step'
 
     pyson = fields.Char('Pyson Constraint')
     custom_views = fields.One2Many(
