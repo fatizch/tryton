@@ -103,7 +103,7 @@ msgctxt "field:account.fee.description.version,apply_at_pricing_time:"
 msgid "Apply when Pricing"
 msgstr ""
 
-msgctxt "field:coop_account.tax_version,apply_at_pricing_time:"
+msgctxt "field:account.tax.description.version,apply_at_pricing_time:"
 msgid "Apply when Pricing"
 msgstr ""
 

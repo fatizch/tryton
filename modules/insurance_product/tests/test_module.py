@@ -30,7 +30,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Eligibility': 'ins_product.eligibility_rule',
             'PricingComponent': 'ins_product.pricing_component',
             'Tax': 'account.tax.description',
-            'TaxVersion': 'coop_account.tax_version',
+            'TaxVersion': 'account.tax.description.version',
             'Fee': 'account.fee.description',
             'FeeVersion': 'account.fee.description.version',
             'Sequence': 'ir.sequence',

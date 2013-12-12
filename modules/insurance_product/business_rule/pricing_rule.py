@@ -419,7 +419,7 @@ class TaxVersion():
     'Tax Version'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_account.tax_version'
+    __name__ = 'account.tax.description.version'
 
     apply_at_pricing_time = fields.Boolean('Apply when Pricing')
 
