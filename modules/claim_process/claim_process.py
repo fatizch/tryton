@@ -261,7 +261,7 @@ class ProcessDesc():
 class DeclarationProcessParameters(ProcessParameters):
     'Declaration Process Parameters'
 
-    __name__ = 'claim.declaration_process_parameters'
+    __name__ = 'claim.declare.find_process'
 
     party = fields.Many2One('party.party', 'Party')
     claim = fields.Many2One('claim.claim', 'Claim',
@@ -307,7 +307,7 @@ class DeclarationProcessFinder(ProcessFinder):
 
     @classmethod
     def get_parameters_model(cls):
-        return 'claim.declaration_process_parameters'
+        return 'claim.declare.find_process'
 
     @classmethod
     def get_parameters_view(cls):

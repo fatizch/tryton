@@ -46,35 +46,35 @@ msgctxt "field:claim.claim,logs:"
 msgid "Task"
 msgstr "Tâche"
 
-msgctxt "field:claim.declaration_process_parameters,claim:"
+msgctxt "field:claim.declare.find_process,claim:"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "field:claim.declaration_process_parameters,claims:"
+msgctxt "field:claim.declare.find_process,claims:"
 msgid "Claims"
 msgstr "Sinistres"
 
-msgctxt "field:claim.declaration_process_parameters,date:"
+msgctxt "field:claim.declare.find_process,date:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt "field:claim.declaration_process_parameters,good_process:"
+msgctxt "field:claim.declare.find_process,good_process:"
 msgid "Good Process"
 msgstr "Processus"
 
-msgctxt "field:claim.declaration_process_parameters,id:"
+msgctxt "field:claim.declare.find_process,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:claim.declaration_process_parameters,model:"
+msgctxt "field:claim.declare.find_process,model:"
 msgid "Model"
 msgstr "Modèle"
 
-msgctxt "field:claim.declaration_process_parameters,must_expand_tree:"
+msgctxt "field:claim.declare.find_process,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:claim.declaration_process_parameters,party:"
+msgctxt "field:claim.declare.find_process,party:"
 msgid "Party"
 msgstr "Acteur"
 
@@ -90,7 +90,7 @@ msgctxt "field:claim.loss,can_modify_benefit:"
 msgid "Can Modify Benefit?"
 msgstr ""
 
-msgctxt "model:claim.declaration_process_parameters,name:"
+msgctxt "model:claim.declare.find_process,name:"
 msgid "Declaration Process Parameters"
 msgstr "Paramètres du Processus de Déclaration Sinistre"
 
