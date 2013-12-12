@@ -29,7 +29,7 @@ class Coverage(model.CoopSQL, Offered):
     kind = fields.Selection([('', ''), ('default', 'Default')],
         'Coverage Kind')
     products = fields.Many2Many(
-        'offered.product-options-coverage',
+        'offered.product-option.description',
         'coverage', 'product', 'Products',
         domain=[
             ('currency', '=', Eval('currency')),

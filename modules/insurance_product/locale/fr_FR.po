@@ -3136,35 +3136,35 @@ msgctxt "field:offered.product-item.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.product-options-coverage,coverage:"
+msgctxt "field:offered.product-option.description,coverage:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "field:offered.product-options-coverage,create_date:"
+msgctxt "field:offered.product-option.description,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:offered.product-options-coverage,create_uid:"
+msgctxt "field:offered.product-option.description,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:offered.product-options-coverage,id:"
+msgctxt "field:offered.product-option.description,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.product-options-coverage,product:"
+msgctxt "field:offered.product-option.description,product:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "field:offered.product-options-coverage,rec_name:"
+msgctxt "field:offered.product-option.description,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:offered.product-options-coverage,write_date:"
+msgctxt "field:offered.product-option.description,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:offered.product-options-coverage,write_uid:"
+msgctxt "field:offered.product-option.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3589,7 +3589,7 @@ msgctxt "model:offered.product-item.description,name:"
 msgid "Relation between Product and Item Descriptor"
 msgstr "Relation Produit-Risque"
 
-msgctxt "model:offered.product-options-coverage,name:"
+msgctxt "model:offered.product-option.description,name:"
 msgid "Define Product - Coverage relations"
 msgstr "Relations Produit Garantie"
 

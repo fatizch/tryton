@@ -297,7 +297,7 @@ class Product(model.CoopSQL, Offered):
 
     kind = fields.Selection([('', ''), ('default', 'Default')],
         'Product Kind')
-    coverages = fields.Many2Many('offered.product-options-coverage',
+    coverages = fields.Many2Many('offered.product-option.description',
         'product', 'coverage', 'Coverages',
         domain=[
             ('currency', '=', Eval('currency')),
@@ -463,7 +463,7 @@ class Product(model.CoopSQL, Offered):
 class ProductOptionsCoverage(model.CoopSQL):
     'Define Product - Coverage relations'
 
-    __name__ = 'offered.product-options-coverage'
+    __name__ = 'offered.product-option.description'
 
     product = fields.Many2One(
         'offered.product', 'Product',

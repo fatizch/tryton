@@ -110,7 +110,7 @@ class CollectionToCashValue(Wizard):
         Collection = pool.get('collection')
         Configuration = pool.get('account.configuration')
         ProductCoverageRelation = Pool().get(
-            'offered.product-options-coverage')
+            'offered.product-option.description')
         CashValueCollection = pool.get('contract.cash_value.collection')
         Move = pool.get('account.move')
         Contract = pool.get('contract')
