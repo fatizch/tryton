@@ -132,7 +132,7 @@
       <field name="description">Date d'effet du contrat</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.covered_data</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_initial_subscription_date</field>
       <field name="parent" ref="dossier_donnees_couverture"/>
     </record>
@@ -141,7 +141,7 @@
       <field name="description">Date de fin du contrat</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.covered_data</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_subscription_end_date</field>
       <field name="parent" ref="dossier_donnees_couverture"/>
     </record>
@@ -150,7 +150,7 @@
       <field name="description">Montant de couverture</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.covered_data</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_coverage_amount</field>
       <field name="parent" ref="dossier_donnees_couverture"/>
     </record>
@@ -159,7 +159,7 @@
       <field name="description">Donnée complémentaire Elément Couvert</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.covered_data</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_covered_data_complementary_data</field>
       <field name="fct_args">Code donnee complementaire</field>
       <field name="parent" ref="dossier_donnees_couverture"/>

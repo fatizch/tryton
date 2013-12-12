@@ -183,7 +183,7 @@ class LifeBenefitRule():
 class CoveredDataContext(RuleEngineContext):
     'Covered data context'
 
-    __name__ = 'ins_product.rule_sets.covered_data'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def _re_get_coverage_amount(cls, args):

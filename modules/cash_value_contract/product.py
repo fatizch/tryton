@@ -8,7 +8,7 @@ __all__ = [
 
 
 class CoveredDataRuleSet:
-    __name__ = 'ins_product.rule_sets.covered_data'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def _re_get_cash_value_payment_mode(cls, args):

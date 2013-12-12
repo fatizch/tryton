@@ -107,7 +107,7 @@ class CoveredDataContext(RuleEngineContext):
         Context functions for Coverage-Covered associations objects
         (CoveredData)
     '''
-    __name__ = 'ins_product.rule_sets.covered_data'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def get_covered_data(cls, args):
