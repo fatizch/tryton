@@ -83,63 +83,63 @@ msgctxt "field:collection.create.assign.lines,target_account:"
 msgid "Target Account"
 msgstr "Compte concerné"
 
-msgctxt "field:collection.collection,amount:"
+msgctxt "field:collection,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:collection.collection,assignment_move:"
+msgctxt "field:collection,assignment_move:"
 msgid "Assignment Move"
 msgstr "Mouvement d'encaissement"
 
-msgctxt "field:collection.collection,check_number:"
+msgctxt "field:collection,check_number:"
 msgid "Check Number"
 msgstr "Numéro de chèque"
 
-msgctxt "field:collection.collection,check_reception_date:"
+msgctxt "field:collection,check_reception_date:"
 msgid "Check Reception Date"
 msgstr "Date de Remise à la Banque"
 
-msgctxt "field:collection.collection,create_date:"
+msgctxt "field:collection,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:collection.collection,create_date_:"
+msgctxt "field:collection,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:collection.collection,create_uid:"
+msgctxt "field:collection,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:collection.collection,create_user:"
+msgctxt "field:collection,create_user:"
 msgid "Created by"
 msgstr "Créé par"
 
-msgctxt "field:collection.collection,id:"
+msgctxt "field:collection,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:collection.collection,kind:"
+msgctxt "field:collection,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:collection.collection,must_expand_tree:"
+msgctxt "field:collection,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:collection.collection,party:"
+msgctxt "field:collection,party:"
 msgid "Party"
 msgstr "Tiers"
 
-msgctxt "field:collection.collection,rec_name:"
+msgctxt "field:collection,rec_name:"
 msgid "Name"
 msgstr "Valeur"
 
-msgctxt "field:collection.collection,write_date:"
+msgctxt "field:collection,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:collection.collection,write_uid:"
+msgctxt "field:collection,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -187,7 +187,7 @@ msgctxt "model:collection.create.assign.lines,name:"
 msgid "Assignment"
 msgstr "Affectation"
 
-msgctxt "model:collection.collection,name:"
+msgctxt "model:collection,name:"
 msgid "Collection"
 msgstr "Encaissement"
 
@@ -223,11 +223,11 @@ msgctxt "selection:collection.create.assign.lines,kind:"
 msgid "Select Account"
 msgstr "Sélection du compte"
 
-msgctxt "selection:collection.collection,kind:"
+msgctxt "selection:collection,kind:"
 msgid "Cash"
 msgstr "Cash"
 
-msgctxt "selection:collection.collection,kind:"
+msgctxt "selection:collection,kind:"
 msgid "Check"
 msgstr "Chèque"
 
@@ -251,11 +251,11 @@ msgctxt "view:collection.create.assign.lines:"
 msgid "Assignments"
 msgstr "Affectations"
 
-msgctxt "view:collection.collection:"
+msgctxt "view:collection:"
 msgid "Collection"
 msgstr "Encaissement"
 
-msgctxt "view:collection.collection:"
+msgctxt "view:collection:"
 msgid "Collections"
 msgstr "Encaissements"
 

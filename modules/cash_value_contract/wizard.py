@@ -53,7 +53,7 @@ class CollectionToCashValue(Wizard):
         # with the 'cash_value' family tag for which there is not a cash value
         # collection yet
         pool = Pool()
-        Collection = pool.get('collection.collection')
+        Collection = pool.get('collection')
         Coverage = Pool().get('offered.coverage')
         CashValueCollection = pool.get('contract.cash_value.collection')
         Line = pool.get('account.move.line')
@@ -107,7 +107,7 @@ class CollectionToCashValue(Wizard):
     # collections
     def transition_convert_to_cash_values(self):
         pool = Pool()
-        Collection = pool.get('collection.collection')
+        Collection = pool.get('collection')
         Configuration = pool.get('account.configuration')
         ProductCoverageRelation = Pool().get(
             'offered.product-options-coverage')

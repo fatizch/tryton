@@ -84,7 +84,7 @@ class SuspenseParty():
 class Collection(model.CoopSQL, model.CoopView):
     'Collection'
 
-    __name__ = 'collection.collection'
+    __name__ = 'collection'
 
     amount = fields.Numeric('Amount', states={'readonly': True})
     kind = fields.Selection([('cash', 'Cash'), ('check', 'Check')], 'Kind',
@@ -110,7 +110,7 @@ class Payment:
     __metaclass__ = PoolMeta
     __name__ = 'account.payment'
 
-    collection = fields.Many2One('collection.collection', 'Collection')
+    collection = fields.Many2One('collection', 'Collection')
 
 
 class CollectionParameters(model.CoopView):
@@ -128,7 +128,7 @@ class CollectionParameters(model.CoopView):
     check_reception_date = fields.Date('Check Reception Date', states={
             'invisible': Eval('kind') != 'check',
             'required': Eval('kind') == 'check'})
-    collection = fields.Many2One('collection.collection', 'Collection',
+    collection = fields.Many2One('collection', 'Collection',
         states={'invisible': True})
 
 
@@ -274,7 +274,7 @@ class CollectionWizard(model.CoopWizard):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         Move = pool.get('account.move')
-        Collection = pool.get('collection.collection')
+        Collection = pool.get('collection')
         Company = pool.get('company.company')
         Payment = pool.get('account.payment')
         AccountConfiguration = pool.get('account.configuration')
