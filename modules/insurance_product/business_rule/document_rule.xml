@@ -69,7 +69,7 @@
     </record>
     <record model="ir.action.report" id="letter_generation_report">
       <field name="name">Letter Report</field>
-      <field name="report_name">ins_product.letter_report</field>
+      <field name="report_name">document.generate.report</field>
     </record>
     <record model="ir.action.keyword" id="report_document_request_keyword">
       <field name="keyword">form_action</field>

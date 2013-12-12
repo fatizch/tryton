@@ -557,7 +557,7 @@ class LetterModelSelection(model.CoopView):
 
 
 class LetterReport(Report):
-    __name__ = 'ins_product.letter_report'
+    __name__ = 'document.generate.report'
 
     @classmethod
     def execute(cls, ids, data):
@@ -637,7 +637,7 @@ class LetterGeneration(Wizard):
             Action = Pool().get('ir.action')
             ActionReport = Pool().get('ir.action.report')
             good_report, = ActionReport.search([
-                ('report_name', '=', 'ins_product.letter_report')
+                ('report_name', '=', 'document.generate.report')
                 ('model', '=', Transaction().context.get('active_model')),
             ], limit=1)
             return Action.get_action_values(
