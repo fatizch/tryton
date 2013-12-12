@@ -229,39 +229,39 @@ msgctxt "field:rule_engine.context,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:rule_engine.context-rule_engine.tree_element,context:"
+msgctxt "field:rule_engine.context-function,context:"
 msgid "Context"
 msgstr "Contexte"
 
-msgctxt "field:rule_engine.context-rule_engine.tree_element,create_date:"
+msgctxt "field:rule_engine.context-function,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:rule_engine.context-rule_engine.tree_element,create_date_:"
+msgctxt "field:rule_engine.context-function,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:rule_engine.context-rule_engine.tree_element,create_uid:"
+msgctxt "field:rule_engine.context-function,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:rule_engine.context-rule_engine.tree_element,id:"
+msgctxt "field:rule_engine.context-function,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.context-rule_engine.tree_element,rec_name:"
+msgctxt "field:rule_engine.context-function,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:rule_engine.context-rule_engine.tree_element,tree_element:"
+msgctxt "field:rule_engine.context-function,tree_element:"
 msgid "Tree Element"
 msgstr "Elément de l'Arbre"
 
-msgctxt "field:rule_engine.context-rule_engine.tree_element,write_date:"
+msgctxt "field:rule_engine.context-function,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:rule_engine.context-rule_engine.tree_element,write_uid:"
+msgctxt "field:rule_engine.context-function,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -777,7 +777,7 @@ msgctxt "model:rule_engine.context,name:"
 msgid "Context"
 msgstr "Contexte"
 
-msgctxt "model:rule_engine.context-rule_engine.tree_element,name:"
+msgctxt "model:rule_engine.context-function,name:"
 msgid "Context Tree Element"
 msgstr ""
 

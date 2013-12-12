@@ -37,7 +37,7 @@ def write_record(f, te, parent=None):
     record += '\n        </record>\n'
     f.write(record.encode('utf-8'))
     if not parent:
-        record = u'''        <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_%s">
+        record = u'''        <record model="rule_engine.context-function" id="cte_default_%s">
             <field name="context" ref="rule_engine.default_context"/>
             <field name="tree_element" ref="%s"/>
         </record>\n''' % (id, id)

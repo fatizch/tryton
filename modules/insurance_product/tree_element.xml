@@ -7,7 +7,7 @@
       <field name="type">folder</field>
       <field name="language" ref="ir.lang_fr"/>
     </record>
-    <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_dossier_personne_couverte">
+    <record model="rule_engine.context-function" id="cte_default_dossier_personne_couverte">
       <field name="context" ref="rule_engine.default_context"/>
       <field name="tree_element" ref="dossier_personne_couverte"/>
     </record>
@@ -70,7 +70,7 @@
       <field name="type">folder</field>
       <field name="language" ref="ir.lang_fr"/>
     </record>
-    <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_dossier_souscripteur">
+    <record model="rule_engine.context-function" id="cte_default_dossier_souscripteur">
       <field name="context" ref="rule_engine.default_context"/>
       <field name="tree_element" ref="dossier_souscripteur"/>
     </record>
@@ -111,7 +111,7 @@
       <field name="type">folder</field>
       <field name="language" ref="ir.lang_fr"/>
     </record>
-    <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_dossier_option">
+    <record model="rule_engine.context-function" id="cte_default_dossier_option">
       <field name="context" ref="rule_engine.default_context"/>
       <field name="tree_element" ref="dossier_option"/>
     </record>
@@ -121,7 +121,7 @@
       <field name="type">folder</field>
       <field name="language" ref="ir.lang_fr"/>
     </record>
-    <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_dossier_donnees_couverture">
+    <record model="rule_engine.context-function" id="cte_default_dossier_donnees_couverture">
       <field name="context" ref="rule_engine.default_context"/>
       <field name="tree_element" ref="dossier_donnees_couverture"/>
     </record>
@@ -172,7 +172,7 @@
       <field name="type">folder</field>
       <field name="language" ref="ir.lang_fr"/>
     </record>
-    <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_dossier_rule_combination">
+    <record model="rule_engine.context-function" id="cte_default_dossier_rule_combination">
       <field name="context" ref="rule_engine.default_context"/>
       <field name="tree_element" ref="dossier_rule_combination"/>
     </record>

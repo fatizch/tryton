@@ -891,7 +891,7 @@ class Context(ModelView, ModelSQL):
 
     name = fields.Char('Name', required=True)
     allowed_elements = fields.Many2Many(
-        'rule_engine.context-rule_engine.tree_element', 'context',
+        'rule_engine.context-function', 'context',
         'tree_element', 'Allowed tree elements')
 
     @classmethod
@@ -1104,7 +1104,7 @@ class TreeElement(ModelView, ModelSQL):
 
 class ContextTreeElement(ModelSQL):
     "Context Tree Element"
-    __name__ = 'rule_engine.context-rule_engine.tree_element'
+    __name__ = 'rule_engine.context-function'
 
     context = fields.Many2One(
         'rule_engine.context', 'Context', required=True, ondelete='CASCADE')
