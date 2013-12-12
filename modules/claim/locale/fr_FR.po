@@ -542,11 +542,11 @@ msgctxt "field:ins_product.request_finder,tmp_1:"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "field:ins_product.rule_sets.claim,id:"
+msgctxt "field:rule_engine.runtime,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.rule_sets.claim,must_expand_tree:"
+msgctxt "field:rule_engine.runtime,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
@@ -598,7 +598,7 @@ msgctxt "model:ins_contract.expense,name:"
 msgid "Expense"
 msgstr "Frais"
 
-msgctxt "model:ins_product.rule_sets.claim,name:"
+msgctxt "model:rule_engine.runtime,name:"
 msgid "Context functions for Claims."
 msgstr "Fonctions contextuels pour les sinistres"
 

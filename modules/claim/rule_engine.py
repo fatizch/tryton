@@ -26,7 +26,7 @@ class ClaimContext(RuleEngineContext):
     '''
         Context functions for Claims.
     '''
-    __name__ = 'ins_product.rule_sets.claim'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     @check_args('delivered_service')
