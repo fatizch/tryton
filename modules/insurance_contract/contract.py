@@ -326,7 +326,7 @@ class SubscribedCoverageComplement(model.CoopSQL, model.CoopView):
 
     subscribed_coverage = fields.Many2One('contract.option',
         'Subscribed Coverage', ondelete='CASCADE')
-    deductible_duration = fields.Many2One('ins_product.deductible_duration',
+    deductible_duration = fields.Many2One('offered.deductible.rule.duration',
         'Deductible Duration', states={
             'invisible': ~Eval('possible_deductible_duration'),
             # 'required': ~~Eval('possible_deductible_duration'),
@@ -334,7 +334,7 @@ class SubscribedCoverageComplement(model.CoopSQL, model.CoopView):
         depends=['possible_deductible_duration'])
     possible_deductible_duration = fields.Function(
         fields.Many2Many(
-            'ins_product.deductible_duration', None, None,
+            'offered.deductible.rule.duration', None, None,
             'Possible Deductible Duration', states={'invisible': True}),
         'get_possible_deductible_duration')
 
@@ -824,7 +824,7 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
         fields.Many2One('currency.currency', 'Currency',
             states={'invisible': True}),
         'get_currency_id')
-    deductible_duration = fields.Many2One('ins_product.deductible_duration',
+    deductible_duration = fields.Many2One('offered.deductible.rule.duration',
         'Deductible Duration', states={
             'invisible': ~Eval('possible_deductible_duration'),
             # 'required': ~~Eval('possible_deductible_duration')
@@ -832,7 +832,7 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
         depends=['possible_deductible_duration'])
     possible_deductible_duration = fields.Function(
         fields.Many2Many(
-            'ins_product.deductible_duration', None, None,
+            'offered.deductible.rule.duration', None, None,
             'Possible Deductible Duration', states={'invisible': True}),
         'get_possible_deductible_duration')
     parent_covered_data = fields.Function(
