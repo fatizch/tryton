@@ -26,51 +26,51 @@ msgctxt "field:res.user,team:"
 msgid "Team"
 msgstr "Equipe"
 
-msgctxt "field:task_manager.priority,create_date:"
+msgctxt "field:res.team.priority,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:task_manager.priority,create_date_:"
+msgctxt "field:res.team.priority,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:task_manager.priority,create_uid:"
+msgctxt "field:res.team.priority,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:task_manager.priority,id:"
+msgctxt "field:res.team.priority,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:task_manager.priority,kind:"
+msgctxt "field:res.team.priority,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:task_manager.priority,must_expand_tree:"
+msgctxt "field:res.team.priority,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:task_manager.priority,priority:"
+msgctxt "field:res.team.priority,priority:"
 msgid "Priority"
 msgstr "Priorité"
 
-msgctxt "field:task_manager.priority,process_step:"
+msgctxt "field:res.team.priority,process_step:"
 msgid "Process Step"
 msgstr "Etape"
 
-msgctxt "field:task_manager.priority,rec_name:"
+msgctxt "field:res.team.priority,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:task_manager.priority,team:"
+msgctxt "field:res.team.priority,team:"
 msgid "Team"
 msgstr "Equipe"
 
-msgctxt "field:task_manager.priority,write_date:"
+msgctxt "field:res.team.priority,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:task_manager.priority,write_uid:"
+msgctxt "field:res.team.priority,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -282,7 +282,7 @@ msgctxt "model:ir.ui.menu,name:menu_team"
 msgid "Team"
 msgstr "Equipe"
 
-msgctxt "model:task_manager.priority,name:"
+msgctxt "model:res.team.priority,name:"
 msgid "Priority"
 msgstr "Priorité"
 
@@ -306,15 +306,15 @@ msgctxt "model:task_manager.team_group_relation,name:"
 msgid "Team - Group Relation"
 msgstr "Relation Equipe - Groupe"
 
-msgctxt "selection:task_manager.priority,kind:"
+msgctxt "selection:res.team.priority,kind:"
 msgid "Another User issues"
 msgstr "Tâches des Autres Utilisateurs"
 
-msgctxt "selection:task_manager.priority,kind:"
+msgctxt "selection:res.team.priority,kind:"
 msgid "Both"
 msgstr "Les Deux"
 
-msgctxt "selection:task_manager.priority,kind:"
+msgctxt "selection:res.team.priority,kind:"
 msgid "User Issues"
 msgstr "Tâches de l'utilisateur"
 
@@ -338,11 +338,11 @@ msgctxt "view:res.user:"
 msgid "Team management"
 msgstr "Gestion de l'Equipe"
 
-msgctxt "view:task_manager.priority:"
+msgctxt "view:res.team.priority:"
 msgid "Priorities"
 msgstr "Priorités"
 
-msgctxt "view:task_manager.priority:"
+msgctxt "view:res.team.priority:"
 msgid "Priority"
 msgstr "Priorité"
 

@@ -16,12 +16,12 @@
     <!-- Priority -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="priority_form">
-      <field name="model">task_manager.priority</field>
+      <field name="model">res.team.priority</field>
       <field name="type">form</field>
       <field name="name">priority_form</field>
     </record>
     <record model="ir.ui.view" id="priority_tree">
-      <field name="model">task_manager.priority</field>
+      <field name="model">res.team.priority</field>
       <field name="type">tree</field>
       <field name="name">priority_tree</field>
     </record>

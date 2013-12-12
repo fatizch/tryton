@@ -18,7 +18,7 @@ __all__ = [
 class Priority(model.CoopSQL, model.CoopView):
     'Priority'
 
-    __name__ = 'task_manager.priority'
+    __name__ = 'res.team.priority'
 
     process_step = fields.Many2One('process-process.step',
         'Process Step', required=True, ondelete='CASCADE')
@@ -76,7 +76,7 @@ class Team(model.CoopSQL, model.CoopView):
     authorizations = fields.Many2Many(
         'task_manager.team_group_relation', 'team', 'group', 'Authorizations')
     priorities = fields.One2Many(
-        'task_manager.priority', 'team', 'Priorities',
+        'res.team.priority', 'team', 'Priorities',
         order=[('priority', 'ASC')],
     )
 
