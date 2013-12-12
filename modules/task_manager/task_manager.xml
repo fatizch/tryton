@@ -29,18 +29,18 @@
     <!-- Team -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="team_form">
-      <field name="model">task_manager.team</field>
+      <field name="model">res.team</field>
       <field name="type">form</field>
       <field name="name">team_form</field>
     </record>
     <record model="ir.ui.view" id="team_tree">
-      <field name="model">task_manager.team</field>
+      <field name="model">res.team</field>
       <field name="type">tree</field>
       <field name="name">team_tree</field>
     </record>
     <record model="ir.action.act_window" id="act_team">
       <field name="name">Team</field>
-      <field name="res_model">task_manager.team</field>
+      <field name="res_model">res.team</field>
     </record>
     <record model="ir.action.act_window.view" id="act_team_view1">
       <field name="sequence" eval="16"/>
@@ -65,7 +65,7 @@
     <record model="ir.action.wizard" id="wizard_add_user">
       <field name="name">Add Team User</field>
       <field name="wiz_name">res.team.add_user</field>
-      <field name="model">task_manager.team</field>
+      <field name="model">res.team</field>
     </record>
     <!-- ############################################################ -->
     <!-- Task Dispatcher -->

@@ -14,7 +14,7 @@ class User():
 
     __name__ = 'res.user'
 
-    team = fields.Many2One('task_manager.team', 'Team')
+    team = fields.Many2One('res.team', 'Team')
 
     @classmethod
     def _export_light(cls):

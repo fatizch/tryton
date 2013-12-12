@@ -22,7 +22,7 @@ class Priority(model.CoopSQL, model.CoopView):
 
     process_step = fields.Many2One('process-process.step',
         'Process Step', required=True, ondelete='CASCADE')
-    team = fields.Many2One('task_manager.team', 'Team', ondelete='CASCADE')
+    team = fields.Many2One('res.team', 'Team', ondelete='CASCADE')
     priority = fields.Integer('Priority')
     kind = fields.Selection(
         [
@@ -60,14 +60,14 @@ class TeamGroupRelation(model.CoopSQL):
 
     __name__ = 'task_manager.team_group_relation'
 
-    team = fields.Many2One('task_manager.team', 'Team', ondelete='CASCADE')
+    team = fields.Many2One('res.team', 'Team', ondelete='CASCADE')
     group = fields.Many2One('res.group', 'Group', ondelete='CASCADE')
 
 
 class Team(model.CoopSQL, model.CoopView):
     'Team'
 
-    __name__ = 'task_manager.team'
+    __name__ = 'res.team'
 
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)

@@ -150,7 +150,7 @@ class TaskSelector(model.CoopView):
     __name__ = 'task.select.available_tasks'
 
     team = fields.Many2One(
-        'task_manager.team', 'Team',
+        'res.team', 'Team',
         on_change=[
             'team', 'nb_tasks_team', 'nb_users_team', 'tasks_team', 'tasks'])
     process = fields.Many2One(

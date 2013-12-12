@@ -158,55 +158,55 @@ msgctxt "field:task.select.available_tasks,team:"
 msgid "Team"
 msgstr "Equipe"
 
-msgctxt "field:task_manager.team,authorizations:"
+msgctxt "field:res.team,authorizations:"
 msgid "Authorizations"
 msgstr "Autorisations"
 
-msgctxt "field:task_manager.team,code:"
+msgctxt "field:res.team,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:task_manager.team,create_date:"
+msgctxt "field:res.team,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:task_manager.team,create_date_:"
+msgctxt "field:res.team,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:task_manager.team,create_uid:"
+msgctxt "field:res.team,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:task_manager.team,id:"
+msgctxt "field:res.team,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:task_manager.team,members:"
+msgctxt "field:res.team,members:"
 msgid "Members"
 msgstr "Membres"
 
-msgctxt "field:task_manager.team,must_expand_tree:"
+msgctxt "field:res.team,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:task_manager.team,name:"
+msgctxt "field:res.team,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:task_manager.team,priorities:"
+msgctxt "field:res.team,priorities:"
 msgid "Priorities"
 msgstr "Priorités"
 
-msgctxt "field:task_manager.team,rec_name:"
+msgctxt "field:res.team,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:task_manager.team,write_date:"
+msgctxt "field:res.team,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:task_manager.team,write_uid:"
+msgctxt "field:res.team,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -298,7 +298,7 @@ msgctxt "model:task.select.available_tasks,name:"
 msgid "Task Selector"
 msgstr "Sélectionneur de Tâche"
 
-msgctxt "model:task_manager.team,name:"
+msgctxt "model:res.team,name:"
 msgid "Team"
 msgstr "Equipe"
 
@@ -362,15 +362,15 @@ msgctxt "view:task.select.available_tasks:"
 msgid "Task Selector"
 msgstr "Sélectionneur de Tâche"
 
-msgctxt "view:task_manager.team:"
+msgctxt "view:res.team:"
 msgid "Add User"
 msgstr "Ajouter l'Utilisateur"
 
-msgctxt "view:task_manager.team:"
+msgctxt "view:res.team:"
 msgid "Team"
 msgstr "Equipe"
 
-msgctxt "view:task_manager.team:"
+msgctxt "view:res.team:"
 msgid "Teams"
 msgstr "Equipes"
 
