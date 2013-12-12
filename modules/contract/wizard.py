@@ -43,7 +43,7 @@ class OptionSubscription(model.CoopWizard):
             }
 
     def subscribe_option(self, coverage):
-        Option = Pool().get('contract.subscribed_option')
+        Option = Pool().get('contract.option')
         option = Option()
         option.init_from_offered(coverage,
             self.options_displayer.contract.start_date)
@@ -51,7 +51,7 @@ class OptionSubscription(model.CoopWizard):
         return option
 
     def transition_update_options(self):
-        Option = Pool().get('contract.subscribed_option')
+        Option = Pool().get('contract.option')
         to_delete = []
         to_subscribe = [x.coverage for x in self.options_displayer.options
             if x.is_selected]

@@ -94,7 +94,7 @@ class Contract():
 class LifeOption():
     'Subscribed Life Coverage'
 
-    __name__ = 'contract.subscribed_option'
+    __name__ = 'contract.option'
 
     def get_covered_data(self, covered_person):
         for covered_data in self.covered_data:

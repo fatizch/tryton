@@ -40,7 +40,7 @@ class OptionSubscription:
         return option
 
     def delete_options(self, options):
-        Option = Pool().get('contract.subscribed_option')
+        Option = Pool().get('contract.option')
         CoveredData = Pool().get('ins_contract.covered_data')
         cov_element = self.options_displayer.covered_element
         cov_data_to_del = []

@@ -377,7 +377,7 @@ class Contract(object, EndorsementHistory):
 
 class ContractOption(object, EndorsementHistory):
     __metaclass__ = PoolMeta
-    __name__ = 'contract.subscribed_option'
+    __name__ = 'contract.option'
 
 
 class Endorsement(values_mixin('endorsement.field'),
@@ -444,7 +444,7 @@ class Endorsement(values_mixin('endorsement.field'),
     def draft(cls, endorsements):
         pool = Pool()
         Contract = pool.get('contract')
-        ContractOption = pool.get('contract.subscribed_option')
+        ContractOption = pool.get('contract.option')
 
         for endorsement in endorsements:
             latest_applied, = cls.search([
@@ -506,7 +506,7 @@ class EndorsementField(field_mixin('contract'), ModelSQL, ModelView):
 
 
 class EndorsementOption(relation_mixin('endorsement.option.field', 'option',
-            'contract.subscribed_option', 'Options'),
+            'contract.option', 'Options'),
         ModelSQL, ModelView):
     'Endorsement Option'
     __metaclass__ = PoolMeta
@@ -535,7 +535,7 @@ class EndorsementOption(relation_mixin('endorsement.option.field', 'option',
         return self.endorsement.template
 
 
-class EndorsementOptionField(field_mixin('contract.subscribed_option'),
+class EndorsementOptionField(field_mixin('contract.option'),
         ModelSQL, ModelView):
     'Endorsement Option Field'
     __metaclass__ = PoolMeta

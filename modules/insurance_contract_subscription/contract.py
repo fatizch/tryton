@@ -309,7 +309,7 @@ class Option():
 
     __metaclass__ = PoolMeta
 
-    __name__ = 'contract.subscribed_option'
+    __name__ = 'contract.option'
 
     status_selection = fields.Function(
         fields.Boolean('Status',

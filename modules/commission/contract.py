@@ -24,7 +24,7 @@ class PriceLineComRelation(model.CoopSQL, model.CoopView):
 
     price_line = fields.Many2One('contract.billing.premium', 'Price Line',
         ondelete='CASCADE')
-    com_subscribed = fields.Many2One('contract.subscribed_option',
+    com_subscribed = fields.Many2One('contract.option',
         'Commission Subscribed', ondelete='RESTRICT')
     amount = fields.Numeric('Amount')
     to_recalculate = fields.Boolean('Recalculate at billing')

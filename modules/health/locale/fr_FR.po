@@ -6,7 +6,7 @@ msgctxt "field:contract,is_health:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.subscribed_option,is_health:"
+msgctxt "field:contract.option,is_health:"
 msgid ""
 msgstr " "
 

@@ -62,7 +62,7 @@ class LoanContract():
 class LoanOption():
     'Loan Option'
 
-    __name__ = 'contract.subscribed_option'
+    __name__ = 'contract.option'
 
     is_loan = fields.Function(
         fields.Boolean('Is Loan', states={'invisible': True}),

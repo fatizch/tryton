@@ -44,7 +44,7 @@ class CommissionAgreement():
 class CommissionOption():
     'Commission Option'
 
-    __name__ = 'contract.subscribed_option'
+    __name__ = 'contract.option'
     __metaclass__ = PoolMeta
 
     compensated_options = fields.One2Many('contract.option-commission.option',
@@ -96,10 +96,10 @@ class CompensatedOption(model.CoopSQL, model.CoopView, ModelCurrency):
 
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    com_option = fields.Many2One('contract.subscribed_option',
+    com_option = fields.Many2One('contract.option',
         'Commission Option', domain=[('coverage_kind', '=', 'commission')],
         ondelete='RESTRICT')
-    subs_option = fields.Many2One('contract.subscribed_option',
+    subs_option = fields.Many2One('contract.option',
         'Subscribed Coverage', domain=[('coverage_kind', '=', 'insurance')],
         ondelete='CASCADE')
     use_specific_rate = fields.Boolean('Specific Rate')

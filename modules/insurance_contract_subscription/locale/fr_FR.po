@@ -121,11 +121,11 @@ msgctxt "field:contract.endorsement_process_parameters,product:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "field:contract.subscribed_option,is_health:"
+msgctxt "field:contract.option,is_health:"
 msgid "Is Health"
 msgstr "Santé"
 
-msgctxt "field:contract.subscribed_option,status_selection:"
+msgctxt "field:contract.option,status_selection:"
 msgid "Status"
 msgstr "Statut"
 
@@ -272,7 +272,7 @@ msgctxt "selection:process.process_desc,kind:"
 msgid "Contract Subscription"
 msgstr "Souscription Contrat"
 
-msgctxt "view:contract.subscribed_option:"
+msgctxt "view:contract.option:"
 msgid "Options"
 msgstr "Garanties"
 

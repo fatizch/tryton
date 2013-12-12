@@ -346,95 +346,95 @@ msgctxt "field:contract.status.history,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:contract.subscribed_option,contract:"
+msgctxt "field:contract.option,contract:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.subscribed_option,contract_number:"
+msgctxt "field:contract.option,contract_number:"
 msgid "Contract Number"
 msgstr "Numéro de Contrat"
 
-msgctxt "field:contract.subscribed_option,coverage_kind:"
+msgctxt "field:contract.option,coverage_kind:"
 msgid "Coverage Kind"
 msgstr "Type de Garantie"
 
-msgctxt "field:contract.subscribed_option,create_date:"
+msgctxt "field:contract.option,create_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.subscribed_option,create_date_:"
+msgctxt "field:contract.option,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:contract.subscribed_option,create_uid:"
+msgctxt "field:contract.option,create_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.subscribed_option,currency:"
+msgctxt "field:contract.option,currency:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.subscribed_option,currency_digits:"
+msgctxt "field:contract.option,currency_digits:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.subscribed_option,currency_symbol:"
+msgctxt "field:contract.option,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:contract.subscribed_option,current_policy_owner:"
+msgctxt "field:contract.option,current_policy_owner:"
 msgid "Current Policy Owner"
 msgstr "Responsable Courant de la Police"
 
-msgctxt "field:contract.subscribed_option,end_date:"
+msgctxt "field:contract.option,end_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.subscribed_option,id:"
+msgctxt "field:contract.option,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.subscribed_option,must_expand_tree:"
+msgctxt "field:contract.option,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:contract.subscribed_option,offered:"
+msgctxt "field:contract.option,offered:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.subscribed_option,product:"
+msgctxt "field:contract.option,product:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "field:contract.subscribed_option,rec_name:"
+msgctxt "field:contract.option,rec_name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.subscribed_option,start_date:"
+msgctxt "field:contract.option,start_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.subscribed_option,start_management_date:"
+msgctxt "field:contract.option,start_management_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.subscribed_option,status:"
+msgctxt "field:contract.option,status:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.subscribed_option,status_history:"
+msgctxt "field:contract.option,status_history:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.subscribed_option,summary:"
+msgctxt "field:contract.option,summary:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.subscribed_option,write_date:"
+msgctxt "field:contract.option,write_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.subscribed_option,write_uid:"
+msgctxt "field:contract.option,write_uid:"
 msgid ""
 msgstr " "
 
@@ -494,7 +494,7 @@ msgctxt "model:contract.status.history,name:"
 msgid "Status History"
 msgstr "Historique des Statuts"
 
-msgctxt "model:contract.subscribed_option,name:"
+msgctxt "model:contract.option,name:"
 msgid ""
 msgstr " "
 
@@ -574,27 +574,27 @@ msgctxt "selection:contract.status.history,status:"
 msgid "Terminated"
 msgstr "Terminé"
 
-msgctxt "selection:contract.subscribed_option,status:"
+msgctxt "selection:contract.option,status:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:contract.subscribed_option,status:"
+msgctxt "selection:contract.option,status:"
 msgid "Active"
 msgstr "Active"
 
-msgctxt "selection:contract.subscribed_option,status:"
+msgctxt "selection:contract.option,status:"
 msgid "Hold"
 msgstr "Suspendre"
 
-msgctxt "selection:contract.subscribed_option,status:"
+msgctxt "selection:contract.option,status:"
 msgid "Quote"
 msgstr "Devis"
 
-msgctxt "selection:contract.subscribed_option,status:"
+msgctxt "selection:contract.option,status:"
 msgid "Refused"
 msgstr "Refusé"
 
-msgctxt "selection:contract.subscribed_option,status:"
+msgctxt "selection:contract.option,status:"
 msgid "Terminated"
 msgstr "Terminé"
 
@@ -642,15 +642,15 @@ msgctxt "view:contract.status.history:"
 msgid "Status History"
 msgstr "Historique des Statuts"
 
-msgctxt "view:contract.subscribed_option:"
+msgctxt "view:contract.option:"
 msgid "Administration"
 msgstr "Administration"
 
-msgctxt "view:contract.subscribed_option:"
+msgctxt "view:contract.option:"
 msgid "Status History"
 msgstr "Historique des Statuts"
 
-msgctxt "view:contract.subscribed_option:"
+msgctxt "view:contract.option:"
 msgid "option"
 msgstr "option"
 

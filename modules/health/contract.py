@@ -36,7 +36,7 @@ class Contract():
 class Option():
     'Option'
 
-    __name__ = 'contract.subscribed_option'
+    __name__ = 'contract.option'
     __metaclass__ = PoolMeta
 
     is_health = fields.Function(

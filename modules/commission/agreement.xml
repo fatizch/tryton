@@ -38,20 +38,20 @@
 
         <!-- CommissionOption -->
         <record model="ir.ui.view" id="option_view_tree">
-            <field name="model">contract.subscribed_option</field>
+            <field name="model">contract.option</field>
             <field name="type">tree</field>
             <field name="inherit" ref="contract.option_view_tree"/>
             <!-- <field name="name">option_tree</field> -->
             <field name="arch" type="xml"/>
         </record>
         <record model="ir.ui.view" id="option_view_form">
-            <field name="model">contract.subscribed_option</field>
+            <field name="model">contract.option</field>
             <field name="type">form</field>
             <field name="inherit" ref="contract.option_view_form"/>
             <field name="name">option_form</field>
         </record>
         <record model="ir.ui.view" id="option_com_tree">
-          <field name="model">contract.subscribed_option</field>
+          <field name="model">contract.option</field>
           <field name="type">tree</field>
           <field name="field_childs">commissions</field>
           <field name="name">option_com_tree</field>

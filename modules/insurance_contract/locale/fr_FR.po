@@ -258,83 +258,83 @@ msgctxt "field:contract.service,expenses:"
 msgid "Expenses"
 msgstr "Frais"
 
-msgctxt "field:contract.subscribed_option,benefits:"
+msgctxt "field:contract.option,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
 
-msgctxt "field:contract.subscribed_option,complement:"
+msgctxt "field:contract.option,complement:"
 msgid "Complement"
 msgstr "Complément"
 
-msgctxt "field:contract.subscribed_option,contract:"
+msgctxt "field:contract.option,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:contract.subscribed_option,covered_data:"
+msgctxt "field:contract.option,covered_data:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
 
-msgctxt "field:contract.subscribed_option,create_date:"
+msgctxt "field:contract.option,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:contract.subscribed_option,create_uid:"
+msgctxt "field:contract.option,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:contract.subscribed_option,currency:"
+msgctxt "field:contract.option,currency:"
 msgid "Currency"
 msgstr "Devises"
 
-msgctxt "field:contract.subscribed_option,currency_digits:"
+msgctxt "field:contract.option,currency_digits:"
 msgid "Currency Digits"
 msgstr "Nbre de chiffres après la virgule"
 
-msgctxt "field:contract.subscribed_option,end_date:"
+msgctxt "field:contract.option,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:contract.subscribed_option,id:"
+msgctxt "field:contract.option,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.subscribed_option,ins_complement:"
+msgctxt "field:contract.option,ins_complement:"
 msgid "Complement"
 msgstr "Complément"
 
-msgctxt "field:contract.subscribed_option,offered:"
+msgctxt "field:contract.option,offered:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "field:contract.subscribed_option,rec_name:"
+msgctxt "field:contract.option,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:contract.subscribed_option,start_date:"
+msgctxt "field:contract.option,start_date:"
 msgid "Effective Date"
 msgstr "Date d'Effet"
 
-msgctxt "field:contract.subscribed_option,start_management_date:"
+msgctxt "field:contract.option,start_management_date:"
 msgid "Management Date"
 msgstr "Date de Début de Gestion"
 
-msgctxt "field:contract.subscribed_option,status:"
+msgctxt "field:contract.option,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:contract.subscribed_option,status_history:"
+msgctxt "field:contract.option,status_history:"
 msgid "Status History"
 msgstr "Historique des Statuts"
 
-msgctxt "field:contract.subscribed_option,summary:"
+msgctxt "field:contract.option,summary:"
 msgid "Summary"
 msgstr "Synthèse"
 
-msgctxt "field:contract.subscribed_option,write_date:"
+msgctxt "field:contract.option,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:contract.subscribed_option,write_uid:"
+msgctxt "field:contract.option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -849,7 +849,7 @@ msgctxt "model:contract.service,name:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 
-msgctxt "model:contract.subscribed_option,name:"
+msgctxt "model:contract.option,name:"
 msgid "Subscribed Coverage"
 msgstr "Garantie"
 
@@ -949,23 +949,23 @@ msgctxt "selection:contract.service,status:"
 msgid "Not Eligible"
 msgstr "Non Eligible"
 
-msgctxt "selection:contract.subscribed_option,status:"
+msgctxt "selection:contract.option,status:"
 msgid "Active"
 msgstr "Actif"
 
-msgctxt "selection:contract.subscribed_option,status:"
+msgctxt "selection:contract.option,status:"
 msgid "Hold"
 msgstr "Suspendre"
 
-msgctxt "selection:contract.subscribed_option,status:"
+msgctxt "selection:contract.option,status:"
 msgid "Quote"
 msgstr "Devis"
 
-msgctxt "selection:contract.subscribed_option,status:"
+msgctxt "selection:contract.option,status:"
 msgid "Refused"
 msgstr "Refusé"
 
-msgctxt "selection:contract.subscribed_option,status:"
+msgctxt "selection:contract.option,status:"
 msgid "Terminated"
 msgstr "Terminé"
 
@@ -1045,7 +1045,7 @@ msgctxt "view:contract.service:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 
-msgctxt "view:contract.subscribed_option:"
+msgctxt "view:contract.option:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
 

@@ -18,7 +18,7 @@ msgctxt "field:contract,loans:"
 msgid "Loans"
 msgstr "Prêts"
 
-msgctxt "field:contract.subscribed_option,is_loan:"
+msgctxt "field:contract.option,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
 

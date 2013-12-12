@@ -262,11 +262,11 @@ msgctxt "field:contract.billing.premium-commission.option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:contract.subscribed_option,commissions:"
+msgctxt "field:contract.option,commissions:"
 msgid "Commissions"
 msgstr "Commissions"
 
-msgctxt "field:contract.subscribed_option,compensated_options:"
+msgctxt "field:contract.option,compensated_options:"
 msgid "Compensated Options"
 msgstr "Options Commissionnées"
 
@@ -602,15 +602,15 @@ msgctxt "view:contract.billing.premium-commission.option:"
 msgid "Com Lines"
 msgstr "Lignes de Commission"
 
-msgctxt "view:contract.subscribed_option:"
+msgctxt "view:contract.option:"
 msgid "Commissions"
 msgstr "Commissions"
 
-msgctxt "view:contract.subscribed_option:"
+msgctxt "view:contract.option:"
 msgid "Compensated Options"
 msgstr "Options Commissionnées"
 
-msgctxt "view:contract.subscribed_option:"
+msgctxt "view:contract.option:"
 msgid "Coverages"
 msgstr "Garanties"
 

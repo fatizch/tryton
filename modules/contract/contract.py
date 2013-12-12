@@ -271,7 +271,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         'WIP : This method should be the basic API to have a contract.'
         pool = Pool()
         Contract = pool.get('contract')
-        SubscribedOpt = pool.get('contract.subscribed_option')
+        SubscribedOpt = pool.get('contract.option')
         contract = Contract()
         contract.subscriber = party
         contract.init_from_offered(offered)
@@ -316,7 +316,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
 
     @classmethod
     def get_options_model_name(cls):
-        return 'contract.subscribed_option'
+        return 'contract.option'
 
     @classmethod
     def get_offered_name(cls):
@@ -551,7 +551,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
 class SubscribedCoverage(model.CoopSQL, Subscribed):
     'Subscribed Coverage'
 
-    __name__ = 'contract.subscribed_option'
+    __name__ = 'contract.option'
     _history = True
 
     status = fields.Selection(OPTIONSTATUS, 'Status')
@@ -719,7 +719,7 @@ class DeliveredService(model.CoopView, model.CoopSQL):
     contract = fields.Many2One('contract', 'Contract',
         ondelete='RESTRICT')
     subscribed_service = fields.Many2One(
-        'contract.subscribed_option', 'Coverage', ondelete='RESTRICT',
+        'contract.option', 'Coverage', ondelete='RESTRICT',
         domain=[
             If(~~Eval('contract'), ('contract', '=', Eval('contract', {})), ())
         ], depends=['contract'])

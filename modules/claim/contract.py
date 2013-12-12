@@ -24,7 +24,7 @@ class ClaimContract():
 class ClaimOption():
     'Option'
 
-    __name__ = 'contract.subscribed_option'
+    __name__ = 'contract.option'
     __metaclass__ = PoolMeta
 
     def is_item_covered(self, loss):

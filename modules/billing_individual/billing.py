@@ -281,7 +281,7 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
             f('offered.product'),
             f('offered.coverage'),
             f('contract'),
-            f('contract.subscribed_option'),
+            f('contract.option'),
             f('ins_contract.covered_data'),
             f('coop_account.tax_desc'),
             f('coop_account.fee_desc')]
@@ -1275,7 +1275,7 @@ class Option():
     'Option'
 
     __metaclass__ = PoolMeta
-    __name__ = 'contract.subscribed_option'
+    __name__ = 'contract.option'
 
     def get_name_for_billing(self):
         return self.get_coverage().name + ' - Base Price'

@@ -52,7 +52,7 @@ class InsurancePolicy():
 
     @classmethod
     def get_options_model_name(cls):
-        return 'contract.subscribed_option'
+        return 'contract.option'
 
     def check_sub_elem_eligibility(self, at_date=None, ext=None):
         errors = []
@@ -275,7 +275,7 @@ class InsurancePolicy():
 class InsuranceSubscribedCoverage():
     'Subscribed Coverage'
 
-    __name__ = 'contract.subscribed_option'
+    __name__ = 'contract.option'
 
     covered_data = fields.One2ManyDomain(
         'ins_contract.covered_data', 'option', 'Covered Data',
@@ -324,7 +324,7 @@ class SubscribedCoverageComplement(model.CoopSQL, model.CoopView):
 
     __name__ = 'ins_contract.subscribed_coverage_complement'
 
-    subscribed_coverage = fields.Many2One('contract.subscribed_option',
+    subscribed_coverage = fields.Many2One('contract.option',
         'Subscribed Coverage', ondelete='CASCADE')
     deductible_duration = fields.Many2One('ins_product.deductible_duration',
         'Deductible Duration', states={
@@ -365,7 +365,7 @@ class StatusHistory():
     def get_possible_reference(cls):
         res = super(StatusHistory, cls).get_possible_reference()
         res.append(('contract', 'Contract'))
-        res.append(('contract.subscribed_option', 'Option'))
+        res.append(('contract.option', 'Option'))
         return res
 
 
@@ -385,7 +385,7 @@ class ContractHistory(model.ObjectHistory):
         fields.Many2One('currency.currency', 'Currency'),
         'get_currency_id')
     options = fields.Function(
-        fields.One2Many('contract.subscribed_option', None, 'Options',
+        fields.One2Many('contract.option', None, 'Options',
             datetime_field='date'),
         'get_options')
     subscriber = fields.Many2One('party.party', 'Subscriber',
@@ -404,7 +404,7 @@ class ContractHistory(model.ObjectHistory):
         return Pool().get('contract').get_possible_status()
 
     def get_options(self, name):
-        Option = Pool().get('contract.subscribed_option')
+        Option = Pool().get('contract.option')
         options = Option.search([
                 ('contract', '=', self.from_object.id),
                 ])
@@ -799,11 +799,11 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
 
     __name__ = 'ins_contract.covered_data'
 
-    option = fields.Many2One('contract.subscribed_option',
+    option = fields.Many2One('contract.option',
         'Subscribed Coverage', domain=[('id', 'in', Eval('possible_options'))],
         depends=['possible_options'], ondelete='CASCADE')
     possible_options = fields.Function(
-        fields.Many2Many('contract.subscribed_option', None, None,
+        fields.Many2Many('contract.option', None, None,
             'Possible Options', states={'invisible': True}),
         'get_possible_options')
     covered_element = fields.Many2One(

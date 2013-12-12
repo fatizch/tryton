@@ -35,7 +35,7 @@ class Document():
         cls.for_object.selection.append(
             ('contract', 'Contract'))
         cls.for_object.selection.append(
-            ('contract.subscribed_option', 'Option'))
+            ('contract.option', 'Option'))
         cls.for_object.selection.append(
             ('ins_contract.covered_element', 'Covered Element'))
 
