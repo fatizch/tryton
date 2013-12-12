@@ -432,7 +432,7 @@ class FeeVersion():
     'Fee Version'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_account.fee_version'
+    __name__ = 'account.fee.description.version'
 
     apply_at_pricing_time = fields.Boolean('Apply when Pricing')
 

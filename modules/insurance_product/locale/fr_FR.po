@@ -99,7 +99,7 @@ msgctxt "error:offered.product:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
-msgctxt "field:coop_account.fee_version,apply_at_pricing_time:"
+msgctxt "field:account.fee.description.version,apply_at_pricing_time:"
 msgid "Apply when Pricing"
 msgstr ""
 

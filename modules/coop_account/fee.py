@@ -25,7 +25,7 @@ class FeeDesc(model.CoopSQL, model.VersionedObject):
 
     @classmethod
     def version_model(cls):
-        return 'coop_account.fee_version'
+        return 'account.fee.description.version'
 
     def get_rec_name(self, name):
         res = ''
@@ -43,7 +43,7 @@ class FeeDesc(model.CoopSQL, model.VersionedObject):
 class FeeVersion(model.CoopSQL, model.VersionObject):
     '''Fee Version'''
 
-    __name__ = 'coop_account.fee_version'
+    __name__ = 'account.fee.description.version'
 
     kind = fields.Selection(
         [('flat', 'Flat'), ('rate', 'Rate')],

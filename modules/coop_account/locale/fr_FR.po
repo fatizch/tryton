@@ -62,55 +62,55 @@ msgctxt "field:account.fee.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:coop_account.fee_version,create_date:"
+msgctxt "field:account.fee.description.version,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:coop_account.fee_version,create_date_:"
+msgctxt "field:account.fee.description.version,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:coop_account.fee_version,create_uid:"
+msgctxt "field:account.fee.description.version,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:coop_account.fee_version,end_date:"
+msgctxt "field:account.fee.description.version,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:coop_account.fee_version,id:"
+msgctxt "field:account.fee.description.version,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_account.fee_version,kind:"
+msgctxt "field:account.fee.description.version,kind:"
 msgid "Rating mode"
 msgstr "Type"
 
-msgctxt "field:coop_account.fee_version,main_elem:"
+msgctxt "field:account.fee.description.version,main_elem:"
 msgid "Descriptor"
 msgstr "Descripteur"
 
-msgctxt "field:coop_account.fee_version,must_expand_tree:"
+msgctxt "field:account.fee.description.version,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:coop_account.fee_version,rec_name:"
+msgctxt "field:account.fee.description.version,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:coop_account.fee_version,start_date:"
+msgctxt "field:account.fee.description.version,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:coop_account.fee_version,value:"
+msgctxt "field:account.fee.description.version,value:"
 msgid "Value"
 msgstr "Valeur"
 
-msgctxt "field:coop_account.fee_version,write_date:"
+msgctxt "field:account.fee.description.version,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:coop_account.fee_version,write_uid:"
+msgctxt "field:account.fee.description.version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -222,7 +222,7 @@ msgctxt "model:account.fee.description,name:"
 msgid "Fee Descriptor"
 msgstr "Descripteur de Frais"
 
-msgctxt "model:coop_account.fee_version,name:"
+msgctxt "model:account.fee.description.version,name:"
 msgid "Fee Version"
 msgstr "Version de Frais"
 
@@ -254,11 +254,11 @@ msgctxt "model:ir.ui.menu,name:menu_product_taxes"
 msgid "Taxes"
 msgstr "Taxes"
 
-msgctxt "selection:coop_account.fee_version,kind:"
+msgctxt "selection:account.fee.description.version,kind:"
 msgid "Flat"
 msgstr "Fixe"
 
-msgctxt "selection:coop_account.fee_version,kind:"
+msgctxt "selection:account.fee.description.version,kind:"
 msgid "Rate"
 msgstr "Taux"
 
@@ -278,7 +278,7 @@ msgctxt "view:account.fee.description:"
 msgid "Fee Descriptor"
 msgstr "Descripteur de Frais"
 
-msgctxt "view:coop_account.fee_version:"
+msgctxt "view:account.fee.description.version:"
 msgid "Fee Version"
 msgstr "Version"
 

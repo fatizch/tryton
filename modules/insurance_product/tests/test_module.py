@@ -32,7 +32,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Tax': 'coop_account.tax_desc',
             'TaxVersion': 'coop_account.tax_version',
             'Fee': 'account.fee.description',
-            'FeeVersion': 'coop_account.fee_version',
+            'FeeVersion': 'account.fee.description.version',
             'Sequence': 'ir.sequence',
             'Lang': 'ir.lang',
             'ItemDesc': 'ins_product.item_desc',
