@@ -1017,7 +1017,7 @@ class GenerateGraph(Report):
 
 
 class GenerateGraphWizard(Wizard):
-    __name__ = 'process.generate_graph_wizard'
+    __name__ = 'process.generate_graph'
 
     start_state = 'print_'
 

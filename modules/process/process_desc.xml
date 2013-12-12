@@ -133,7 +133,7 @@
         </record>
         <record model="ir.action.wizard" id="generate_graph_wizard">
             <field name="name">Graph</field>
-            <field name="wiz_name">process.generate_graph_wizard</field>
+            <field name="wiz_name">process.generate_graph</field>
             <field name="model">process.process_desc</field>
         </record>
         <record model="ir.action.keyword" id="generate_graph_wizard_keyword">
