@@ -81,7 +81,7 @@ class FareClassGroup(model.CoopSQL, model.CoopView):
 
     code = fields.Char('Code', on_change_with=['code', 'name'], required=True)
     name = fields.Char('Name')
-    fare_classes = fields.Many2Many('collective.fare_class_group-fare_class',
+    fare_classes = fields.Many2Many('fare_class.group-fare_class',
         'group', 'fare_class', 'Fare Classes')
 
     def on_change_with_code(self):
@@ -93,7 +93,7 @@ class FareClassGroup(model.CoopSQL, model.CoopView):
 class FareClassGroupFareClassRelation(model.CoopSQL):
     'Relation between fare class group and fare class'
 
-    __name__ = 'collective.fare_class_group-fare_class'
+    __name__ = 'fare_class.group-fare_class'
 
     group = fields.Many2One('fare_class.group', 'Group',
         ondelete='CASCADE')
