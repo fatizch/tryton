@@ -206,7 +206,7 @@ class CoveredData():
     is_rating_by_fare_class = fields.Function(
         fields.Boolean('Rating by Fare Class', states={'invisible': True}),
         'get_rating_by_fare_class')
-    fare_class_group = fields.Many2One('collective.fare_class_group',
+    fare_class_group = fields.Many2One('fare_class.group',
         'Fare Class Group', ondelete='RESTRICT',
         states={'invisible': ~Eval('is_rating_by_fare_class')})
 
