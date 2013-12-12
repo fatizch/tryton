@@ -16,12 +16,12 @@
     <menuitem name="Import Wizard" id="menu_import_wizard" sequence="50" parent="menu_export_import" action="import_wizard"/>
     <!-- Export Instance -->
     <record model="ir.ui.view" id="export_instance_form">
-      <field name="model">coop_utils.export_instance</field>
+      <field name="model">ir.export_package.item</field>
       <field name="type">form</field>
       <field name="name">export_instance_form</field>
     </record>
     <record model="ir.ui.view" id="export_instance_tree">
-      <field name="model">coop_utils.export_instance</field>
+      <field name="model">ir.export_package.item</field>
       <field name="type">tree</field>
       <field name="name">export_instance_tree</field>
     </record>

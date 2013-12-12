@@ -126,35 +126,35 @@ msgctxt "field:coop.table_of_table,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:coop_utils.export_instance,create_date:"
+msgctxt "field:ir.export_package.item,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:coop_utils.export_instance,create_uid:"
+msgctxt "field:ir.export_package.item,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:coop_utils.export_instance,id:"
+msgctxt "field:ir.export_package.item,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_utils.export_instance,package:"
+msgctxt "field:ir.export_package.item,package:"
 msgid "Package"
 msgstr "Formule"
 
-msgctxt "field:coop_utils.export_instance,rec_name:"
+msgctxt "field:ir.export_package.item,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:coop_utils.export_instance,to_export:"
+msgctxt "field:ir.export_package.item,to_export:"
 msgid "To export"
 msgstr "Elément à exporter"
 
-msgctxt "field:coop_utils.export_instance,write_date:"
+msgctxt "field:ir.export_package.item,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:coop_utils.export_instance,write_uid:"
+msgctxt "field:ir.export_package.item,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -386,7 +386,7 @@ msgctxt "model:coop.table_of_table,name:"
 msgid "Table of table"
 msgstr "Table des Tables"
 
-msgctxt "model:coop_utils.export_instance,name:"
+msgctxt "model:ir.export_package.item,name:"
 msgid "Export Instance"
 msgstr "Elément à exporter"
 
@@ -486,11 +486,11 @@ msgctxt "view:coop.dyn_selection:"
 msgid "Dynamic Selection"
 msgstr "Sélection Dynamique"
 
-msgctxt "view:coop_utils.export_instance:"
+msgctxt "view:ir.export_package.item:"
 msgid "Export Instance"
 msgstr "Elément à exporter"
 
-msgctxt "view:coop_utils.export_instance:"
+msgctxt "view:ir.export_package.item:"
 msgid "Export instances"
 msgstr ""
 

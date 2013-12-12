@@ -765,7 +765,7 @@ class ImportWizard(Wizard):
 class ExportInstance(ExportImportMixin, ModelSQL, ModelView):
     'Export Instance'
 
-    __name__ = 'coop_utils.export_instance'
+    __name__ = 'ir.export_package.item'
 
     to_export = fields.Reference('To export', 'get_all_exportable_models',
         required=True)
@@ -791,7 +791,7 @@ class ExportPackage(ExportImportMixin, ModelSQL, ModelView):
 
     code = fields.Char('Code')
     package_name = fields.Char('Package Name', required=True)
-    instances_to_export = fields.One2Many('coop_utils.export_instance',
+    instances_to_export = fields.One2Many('ir.export_package.item',
         'package', 'Instances to export')
     model = fields.Function(
         fields.Selection('get_possible_models_to_export', 'Model'),
