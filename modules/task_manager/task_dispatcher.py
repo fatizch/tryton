@@ -147,7 +147,7 @@ class TaskDisplayer(model.CoopView):
 class TaskSelector(model.CoopView):
     'Task Selector'
 
-    __name__ = 'task_manager.task_selector'
+    __name__ = 'task.select.available_tasks'
 
     team = fields.Many2One(
         'task_manager.team', 'Team',
@@ -281,7 +281,7 @@ class TaskDispatcher(Wizard):
 
     remove_locks = StateTransition()
     select_context = StateView(
-        'task_manager.task_selector',
+        'task.select.available_tasks',
         'task_manager.task_selector_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
@@ -297,7 +297,7 @@ class TaskDispatcher(Wizard):
         })
 
     def default_select_context(self, name):
-        Selector = Pool().get('task_manager.task_selector')
+        Selector = Pool().get('task.select.available_tasks')
         User = Pool().get('res.user')
         user = User(Transaction().user)
         if not (hasattr(user, 'team') and user.team):

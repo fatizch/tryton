@@ -114,47 +114,47 @@ msgctxt "field:task.select.available_tasks.task,task_name:"
 msgid "Task Name"
 msgstr "Nom de la Tâche"
 
-msgctxt "field:task_manager.task_selector,id:"
+msgctxt "field:task.select.available_tasks,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:task_manager.task_selector,must_expand_tree:"
+msgctxt "field:task.select.available_tasks,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:task_manager.task_selector,nb_tasks_process:"
+msgctxt "field:task.select.available_tasks,nb_tasks_process:"
 msgid "Process Tasks"
 msgstr "Tâches du Process"
 
-msgctxt "field:task_manager.task_selector,nb_tasks_team:"
+msgctxt "field:task.select.available_tasks,nb_tasks_team:"
 msgid "Team Tasks"
 msgstr "Tâches de l'Equipe"
 
-msgctxt "field:task_manager.task_selector,nb_users_team:"
+msgctxt "field:task.select.available_tasks,nb_users_team:"
 msgid "Team Users"
 msgstr "Membre de l'Equipe"
 
-msgctxt "field:task_manager.task_selector,process:"
+msgctxt "field:task.select.available_tasks,process:"
 msgid "Process"
 msgstr "Processus"
 
-msgctxt "field:task_manager.task_selector,selected_task:"
+msgctxt "field:task.select.available_tasks,selected_task:"
 msgid "Selected Task"
 msgstr "Tâche Sélectionnée"
 
-msgctxt "field:task_manager.task_selector,tasks:"
+msgctxt "field:task.select.available_tasks,tasks:"
 msgid "Tasks"
 msgstr "Tâches"
 
-msgctxt "field:task_manager.task_selector,tasks_process:"
+msgctxt "field:task.select.available_tasks,tasks_process:"
 msgid "Process Tasks"
 msgstr "Tâches du Process"
 
-msgctxt "field:task_manager.task_selector,tasks_team:"
+msgctxt "field:task.select.available_tasks,tasks_team:"
 msgid "Team Tasks"
 msgstr "Tâches de l'Equipe"
 
-msgctxt "field:task_manager.task_selector,team:"
+msgctxt "field:task.select.available_tasks,team:"
 msgid "Team"
 msgstr "Equipe"
 
@@ -294,7 +294,7 @@ msgctxt "model:task.select.available_tasks.task,name:"
 msgid "Task Displayer"
 msgstr "Tableau de Bord"
 
-msgctxt "model:task_manager.task_selector,name:"
+msgctxt "model:task.select.available_tasks,name:"
 msgid "Task Selector"
 msgstr "Sélectionneur de Tâche"
 
@@ -358,7 +358,7 @@ msgctxt "view:task.select.available_tasks.task:"
 msgid "Tasks Repartition"
 msgstr "Repartition des Tâches"
 
-msgctxt "view:task_manager.task_selector:"
+msgctxt "view:task.select.available_tasks:"
 msgid "Task Selector"
 msgstr "Sélectionneur de Tâche"
 
