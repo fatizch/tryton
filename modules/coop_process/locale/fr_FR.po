@@ -90,23 +90,23 @@ msgctxt "field:process.log,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:coop_process.process_parameters,date:"
+msgctxt "field:process.start,date:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt "field:coop_process.process_parameters,good_process:"
+msgctxt "field:process.start,good_process:"
 msgid "Good Process"
 msgstr "Processus"
 
-msgctxt "field:coop_process.process_parameters,id:"
+msgctxt "field:process.start,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_process.process_parameters,model:"
+msgctxt "field:process.start,model:"
 msgid "Model"
 msgstr "Modèle"
 
-msgctxt "field:coop_process.process_parameters,must_expand_tree:"
+msgctxt "field:process.start,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
@@ -278,7 +278,7 @@ msgctxt "model:process.log,name:"
 msgid "Process Log"
 msgstr ""
 
-msgctxt "model:coop_process.process_parameters,name:"
+msgctxt "model:process.start,name:"
 msgid "Process Parameters"
 msgstr "Paramètres du Processus"
 
@@ -318,7 +318,7 @@ msgctxt "view:process.log:"
 msgid "Logs"
 msgstr ""
 
-msgctxt "view:coop_process.process_parameters:"
+msgctxt "view:process.start:"
 msgid "Process Parameters"
 msgstr "Paramètres du Processus"
 

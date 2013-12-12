@@ -47,7 +47,7 @@
     </record>
     <!-- Process Parameters -->
     <record model="ir.ui.view" id="process_parameters_form">
-      <field name="model">coop_process.process_parameters</field>
+      <field name="model">process.start</field>
       <field name="type">form</field>
       <field name="name">process_parameters_form</field>
     </record>

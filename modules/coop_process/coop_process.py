@@ -868,7 +868,7 @@ class StepDesc(model.CoopSQL):
 class ProcessParameters(model.CoopView):
     'Process Parameters'
 
-    __name__ = 'coop_process.process_parameters'
+    __name__ = 'process.start'
 
     date = fields.Date('Date')
     model = fields.Many2One('ir.model', 'Model',
@@ -928,7 +928,7 @@ class ProcessFinder(Wizard):
 
     start_state = 'process_parameters'
     process_parameters = StateView(
-        'coop_process.process_parameters',
+        'process.start',
         'coop_process.process_parameters_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
@@ -998,7 +998,7 @@ class ProcessFinder(Wizard):
 
     @classmethod
     def get_parameters_model(cls):
-        return 'coop_process.process_parameters'
+        return 'process.start'
 
     @classmethod
     def get_parameters_view(cls):
