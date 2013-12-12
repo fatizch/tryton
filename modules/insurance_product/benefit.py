@@ -48,7 +48,7 @@ class EventDesc(model.CoopSQL, model.CoopView):
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', translate=True)
     loss_descs = fields.Many2Many(
-        'ins_product.event_desc-loss_desc', 'event_desc', 'loss_desc',
+        'benefit.event.description-loss.description', 'event_desc', 'loss_desc',
         'Loss Descriptions', domain=[('company', '=', Eval('company'))],
         depends=['company'])
     company = fields.Many2One('company.company', 'Company', required=True,
@@ -84,7 +84,7 @@ class LossDesc(model.CoopSQL, model.CoopView):
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', translate=True)
     event_descs = fields.Many2Many(
-        'ins_product.event_desc-loss_desc', 'loss_desc', 'event_desc',
+        'benefit.event.description-loss.description', 'loss_desc', 'event_desc',
         'Events Descriptions', domain=[('company', '=', Eval('company'))],
         depends=['company'])
     item_kind = fields.Selection('get_possible_item_kind', 'Kind')
@@ -128,7 +128,7 @@ class LossDescComplementaryDataRelation(model.CoopSQL):
 class EventDescLossDescRelation(model.CoopSQL):
     'Event Desc - Loss Desc Relation'
 
-    __name__ = 'ins_product.event_desc-loss_desc'
+    __name__ = 'benefit.event.description-loss.description'
 
     event_desc = fields.Many2One(
         'benefit.event.description', 'Event Desc', ondelete='CASCADE')

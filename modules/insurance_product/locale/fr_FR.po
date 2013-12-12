@@ -1453,39 +1453,39 @@ msgctxt "field:benefit.event.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.event_desc-loss_desc,create_date:"
+msgctxt "field:benefit.event.description-loss.description,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.event_desc-loss_desc,create_date_:"
+msgctxt "field:benefit.event.description-loss.description,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.event_desc-loss_desc,create_uid:"
+msgctxt "field:benefit.event.description-loss.description,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.event_desc-loss_desc,event_desc:"
+msgctxt "field:benefit.event.description-loss.description,event_desc:"
 msgid "Event Desc"
 msgstr "Descripteur d'Evénement"
 
-msgctxt "field:ins_product.event_desc-loss_desc,id:"
+msgctxt "field:benefit.event.description-loss.description,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.event_desc-loss_desc,loss_desc:"
+msgctxt "field:benefit.event.description-loss.description,loss_desc:"
 msgid "Loss Desc"
 msgstr "Descripteur de Préjudice"
 
-msgctxt "field:ins_product.event_desc-loss_desc,rec_name:"
+msgctxt "field:benefit.event.description-loss.description,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.event_desc-loss_desc,write_date:"
+msgctxt "field:benefit.event.description-loss.description,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.event_desc-loss_desc,write_uid:"
+msgctxt "field:benefit.event.description-loss.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3357,7 +3357,7 @@ msgctxt "model:benefit.event.description,name:"
 msgid "Event Desc"
 msgstr "Descripteur d'Evénement"
 
-msgctxt "model:ins_product.event_desc-loss_desc,name:"
+msgctxt "model:benefit.event.description-loss.description,name:"
 msgid "Event Desc - Loss Desc Relation"
 msgstr "Relation Descripteur d'Evénement Descripteur de Préjudice"
 
