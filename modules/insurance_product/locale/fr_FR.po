@@ -34,7 +34,7 @@ msgctxt "error:offered.deductible.rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
-msgctxt "error:ins_product.document_request_batch:"
+msgctxt "error:document.request.batch:"
 msgid "No Batch Path Specified"
 msgstr "Le chemin d'exécution des batchs n'est pas configuré"
 
@@ -1185,7 +1185,7 @@ msgctxt "field:document.request,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.document_request_batch,id:"
+msgctxt "field:document.request.batch,id:"
 msgid "ID"
 msgstr "ID"
 
@@ -3332,7 +3332,7 @@ msgctxt "model:document.request,name:"
 msgid "Document Request"
 msgstr "Demande de Documents"
 
-msgctxt "model:ins_product.document_request_batch,name:"
+msgctxt "model:document.request.batch,name:"
 msgid "Document Request Batch Definition"
 msgstr ""
 

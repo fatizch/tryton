@@ -1023,7 +1023,7 @@ this object'})
 class DocumentRequestBatch(BatchRoot):
     'Document Request Batch Definition'
 
-    __name__ = 'ins_product.document_request_batch'
+    __name__ = 'document.request.batch'
 
     @classmethod
     def get_batch_main_model_name(cls):

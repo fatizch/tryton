@@ -30,7 +30,7 @@ from celery.utils.log import get_task_logger
 #   celery call trytond.modules.coop_utils.batch_launcher.generate_all
 #                         --args='[args]'
 #   args are :
-#      - batch class __name__ ("ins_product.document_request_batch")
+#      - batch class __name__ ("document.request.batch")
 #      - business date "YYYY-MM-DD"
 #
 # Start Monitoring web server :
