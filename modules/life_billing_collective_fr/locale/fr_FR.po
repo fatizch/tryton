@@ -207,103 +207,103 @@ msgctxt "field:billing.premium_rate.form,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:billing.rate_note_line,amount:"
+msgctxt "field:billing.premium_rate.form.line,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:billing.rate_note_line,base:"
+msgctxt "field:billing.premium_rate.form.line,base:"
 msgid "Base"
 msgstr "Base"
 
-msgctxt "field:billing.rate_note_line,childs:"
+msgctxt "field:billing.premium_rate.form.line,childs:"
 msgid "Childs"
 msgstr "Enfants"
 
-msgctxt "field:billing.rate_note_line,client_amount:"
+msgctxt "field:billing.premium_rate.form.line,client_amount:"
 msgid "Client Amount"
 msgstr "Montant client"
 
-msgctxt "field:billing.rate_note_line,client_sum_amount:"
+msgctxt "field:billing.premium_rate.form.line,client_sum_amount:"
 msgid "Client Sum Amount"
 msgstr "Montant Client"
 
-msgctxt "field:billing.rate_note_line,contract:"
+msgctxt "field:billing.premium_rate.form.line,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:billing.rate_note_line,create_date:"
+msgctxt "field:billing.premium_rate.form.line,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:billing.rate_note_line,create_date_:"
+msgctxt "field:billing.premium_rate.form.line,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:billing.rate_note_line,create_uid:"
+msgctxt "field:billing.premium_rate.form.line,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:billing.rate_note_line,currency:"
+msgctxt "field:billing.premium_rate.form.line,currency:"
 msgid "Currency"
 msgstr "Devises"
 
-msgctxt "field:billing.rate_note_line,currency_digits:"
+msgctxt "field:billing.premium_rate.form.line,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
-msgctxt "field:billing.rate_note_line,currency_symbol:"
+msgctxt "field:billing.premium_rate.form.line,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:billing.rate_note_line,end_date:"
+msgctxt "field:billing.premium_rate.form.line,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:billing.rate_note_line,id:"
+msgctxt "field:billing.premium_rate.form.line,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.rate_note_line,indexed_rate:"
+msgctxt "field:billing.premium_rate.form.line,indexed_rate:"
 msgid "Indexed Rate"
 msgstr "Taux Indexé"
 
-msgctxt "field:billing.rate_note_line,must_expand_tree:"
+msgctxt "field:billing.premium_rate.form.line,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:billing.rate_note_line,parent:"
+msgctxt "field:billing.premium_rate.form.line,parent:"
 msgid "Parent"
 msgstr "Parent"
 
-msgctxt "field:billing.rate_note_line,rate:"
+msgctxt "field:billing.premium_rate.form.line,rate:"
 msgid "Rate"
 msgstr "Taux"
 
-msgctxt "field:billing.rate_note_line,rate_line:"
+msgctxt "field:billing.premium_rate.form.line,rate_line:"
 msgid "Rate Line"
 msgstr "Ligne de Taux"
 
-msgctxt "field:billing.rate_note_line,rate_note:"
+msgctxt "field:billing.premium_rate.form.line,rate_note:"
 msgid "Rate Note"
 msgstr "Bordereau de Cotisation"
 
-msgctxt "field:billing.rate_note_line,rec_name:"
+msgctxt "field:billing.premium_rate.form.line,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:billing.rate_note_line,start_date:"
+msgctxt "field:billing.premium_rate.form.line,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:billing.rate_note_line,sum_amount:"
+msgctxt "field:billing.premium_rate.form.line,sum_amount:"
 msgid "Sum Amount"
 msgstr "Montant"
 
-msgctxt "field:billing.rate_note_line,write_date:"
+msgctxt "field:billing.premium_rate.form.line,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:billing.rate_note_line,write_uid:"
+msgctxt "field:billing.premium_rate.form.line,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -797,7 +797,7 @@ msgctxt "model:billing.premium_rate.form,name:"
 msgid "Rate Note"
 msgstr "Bordereau de Cotisation"
 
-msgctxt "model:billing.rate_note_line,name:"
+msgctxt "model:billing.premium_rate.form.line,name:"
 msgid "Rate Note Line"
 msgstr "Ligne de Bordereau"
 
@@ -989,19 +989,19 @@ msgctxt "view:billing.premium_rate.form:"
 msgid "Rate Note"
 msgstr "Bordereau de Cotisation"
 
-msgctxt "view:billing.rate_note_line:"
+msgctxt "view:billing.premium_rate.form.line:"
 msgid "%"
 msgstr "%"
 
-msgctxt "view:billing.rate_note_line:"
+msgctxt "view:billing.premium_rate.form.line:"
 msgid "Client Total"
 msgstr "Total Client"
 
-msgctxt "view:billing.rate_note_line:"
+msgctxt "view:billing.premium_rate.form.line:"
 msgid "Rate Note Line"
 msgstr "Ligne de Bordereau"
 
-msgctxt "view:billing.rate_note_line:"
+msgctxt "view:billing.premium_rate.form.line:"
 msgid "Total"
 msgstr "Total"
 

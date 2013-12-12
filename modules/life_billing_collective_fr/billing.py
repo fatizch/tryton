@@ -111,7 +111,7 @@ class RateLine(model.CoopSQL, model.CoopView):
 
     def create_rate_note_line(self, rate_note_line_model=None):
         if not rate_note_line_model:
-            RateNoteLine = Pool().get('billing.rate_note_line')
+            RateNoteLine = Pool().get('billing.premium_rate.form.line')
         else:
             RateNoteLine = rate_note_line_model
         res = RateNoteLine()
@@ -188,7 +188,7 @@ class RateNote(model.CoopSQL, model.CoopView, ModelCurrency):
             ('completed_by_client', 'Completed by Client'),
             ('validated', 'Validated'),
             ], 'Status', sort=False)
-    lines = fields.One2Many('billing.rate_note_line', 'rate_note', 'Lines')
+    lines = fields.One2Many('billing.premium_rate.form.line', 'rate_note', 'Lines')
     contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE')
     client = fields.Function(
@@ -215,7 +215,7 @@ class RateNote(model.CoopSQL, model.CoopView, ModelCurrency):
         self.contract = contract
 
     def calculate(self):
-        RateNoteLine = Pool().get('billing.rate_note_line')
+        RateNoteLine = Pool().get('billing.premium_rate.form.line')
         if self.status != 'draft':
             return
         if not hasattr(self, 'lines'):
@@ -266,7 +266,7 @@ class RateNote(model.CoopSQL, model.CoopView, ModelCurrency):
 class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
     'Rate Note Line'
 
-    __name__ = 'billing.rate_note_line'
+    __name__ = 'billing.premium_rate.form.line'
 
     rate_note = fields.Many2One('billing.premium_rate.form', 'Rate Note',
         ondelete='CASCADE')
@@ -287,9 +287,9 @@ class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
         on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line',
             'client_amount'],
         states={'readonly': ~~Eval('childs')})
-    parent = fields.Many2One('billing.rate_note_line', 'Parent',
+    parent = fields.Many2One('billing.premium_rate.form.line', 'Parent',
         ondelete='CASCADE')
-    childs = fields.One2Many('billing.rate_note_line', 'parent', 'Childs')
+    childs = fields.One2Many('billing.premium_rate.form.line', 'parent', 'Childs')
     rate = fields.Numeric('Rate', digits=(16, 4),
         on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line',
             'client_amount'], states={'readonly': ~~Eval('childs')})

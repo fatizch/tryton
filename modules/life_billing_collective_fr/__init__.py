@@ -9,7 +9,7 @@ from .company import *
 
 from trytond.modules.coop_utils import expand_tree
 RateLineTreeExpansion = expand_tree('contract.premium_rate.line')
-RateNoteLineTreeExpansion = expand_tree('billing.rate_note_line')
+RateNoteLineTreeExpansion = expand_tree('billing.premium_rate.form.line')
 
 
 def register():
