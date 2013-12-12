@@ -38,7 +38,7 @@ class ContractContext(RuleEngineContext):
         Context functions for contract related data
     '''
 
-    __name__ = 'contract.rule_sets'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def _re_contract_conditions_date(cls, args):

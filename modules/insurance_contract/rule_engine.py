@@ -25,7 +25,7 @@ class OfferedContext():
 class ContractContext():
     'Contract Context'
 
-    __name__ = 'contract.rule_sets'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     @check_args('contract')

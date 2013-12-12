@@ -286,11 +286,11 @@ msgctxt "field:contract.service,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:contract.rule_sets,id:"
+msgctxt "field:rule_engine.runtime,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.rule_sets,must_expand_tree:"
+msgctxt "field:rule_engine.runtime,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
@@ -486,7 +486,7 @@ msgctxt "model:contract.service,name:"
 msgid ""
 msgstr "Nom"
 
-msgctxt "model:contract.rule_sets,name:"
+msgctxt "model:rule_engine.runtime,name:"
 msgid "Context functions for contract related data"
 msgstr ""
 
