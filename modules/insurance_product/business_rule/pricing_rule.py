@@ -66,7 +66,7 @@ class PricingRule(BusinessRuleRoot, model.CoopSQL):
         'set_basic_price')
     basic_tax = fields.Function(
         fields.Many2One(
-            'coop_account.tax_desc', 'Tax',
+            'account.tax.description', 'Tax',
             states={'invisible': STATE_ADVANCED}),
         'get_basic_tax',
         'set_basic_tax')
@@ -106,7 +106,7 @@ class PricingRule(BusinessRuleRoot, model.CoopSQL):
             return
         try:
             tax, = utils.get_those_objects(
-                'coop_account.tax_desc',
+                'account.tax.description',
                 [('id', '=', value)])
         except ValueError:
             raise Exception(
@@ -321,7 +321,7 @@ class PricingComponent(model.CoopSQL, model.CoopView):
     code = fields.Char(
         'Code', required=True, on_change_with=['code', 'tax', 'fee'])
     tax = fields.Many2One(
-        'coop_account.tax_desc', 'Tax',
+        'account.tax.description', 'Tax',
         states={'invisible': Eval('kind') != 'tax'}, ondelete='RESTRICT')
     fee = fields.Many2One(
         'account.fee.description', 'Fee',

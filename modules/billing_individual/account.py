@@ -49,7 +49,7 @@ class Move:
                 ('second_origin', 'like', 'offered.product,%')]])
     tax_details = fields.One2ManyDomain('account.move.line', 'move', 'Taxes',
         domain=[('account.kind', '!=', 'receivable'),
-                ('second_origin', 'like', 'coop_account.tax_desc,%')])
+                ('second_origin', 'like', 'account.tax.description,%')])
     fee_details = fields.One2ManyDomain('account.move.line', 'move', 'Fees',
         domain=[('account.kind', '!=', 'receivable'),
             ('second_origin', 'like', 'account.fee.description,%')])
@@ -183,7 +183,7 @@ class MoveLine:
         return [
             'offered.product',
             'offered.coverage',
-            'coop_account.tax_desc',
+            'account.tax.description',
             'account.fee.description',
             ]
 

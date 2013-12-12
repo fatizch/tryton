@@ -129,7 +129,7 @@ class TestCaseModel():
     @classmethod
     def create_tax_from_line(cls, tax_data):
         translater = cls.get_translater(MODULE_NAME)
-        TaxDesc = Pool().get('coop_account.tax_desc')
+        TaxDesc = Pool().get('account.tax.description')
         TaxVersion = Pool().get('coop_account.tax_version')
         tax = TaxDesc()
         tax.code = tax_data[0]

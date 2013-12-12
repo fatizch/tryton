@@ -775,11 +775,11 @@ msgctxt "field:account.fee.description,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:coop_account.tax_desc,account_for_billing:"
+msgctxt "field:account.tax.description,account_for_billing:"
 msgid "Account for billing"
 msgstr "Compte de Facturation"
 
-msgctxt "field:coop_account.tax_desc,company:"
+msgctxt "field:account.tax.description,company:"
 msgid "Company"
 msgstr "Société"
 
