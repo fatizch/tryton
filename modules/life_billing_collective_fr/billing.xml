@@ -104,7 +104,7 @@
     <!-- Rate Note Move Displayer -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="rate_note_move_displayer_form">
-      <field name="model">billing.rate_note_move_displayer</field>
+      <field name="model">billing.premium_rate.form.receive.create_move</field>
       <field name="type">form</field>
       <field name="name">rate_note_move_displayer_form</field>
     </record>

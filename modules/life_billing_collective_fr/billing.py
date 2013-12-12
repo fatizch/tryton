@@ -576,7 +576,7 @@ class RateNoteSelection(model.CoopView):
 class RateNoteMoveDisplayer(model.CoopView):
     'Rate Note Move Displayer'
 
-    __name__ = 'billing.rate_note_move_displayer'
+    __name__ = 'billing.premium_rate.form.receive.create_move'
 
     move = fields.One2Many('account.move', None, 'Move',
         states={'readonly': True})
@@ -593,7 +593,7 @@ class RateNoteReception(model.CoopWizard):
         'life_billing_collective_fr.rate_note_selection_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Continue', 'preview_bill', 'tryton-ok')])
-    preview_bill = StateView('billing.rate_note_move_displayer',
+    preview_bill = StateView('billing.premium_rate.form.receive.create_move',
         'life_billing_collective_fr.rate_note_move_displayer_form', [
             Button('Cancel', 'clean_up', 'tryton-cancel'),
             Button('Validate', 'validate', 'tryton-ok')])

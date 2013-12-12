@@ -307,15 +307,15 @@ msgctxt "field:billing.premium_rate.form.line,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:billing.rate_note_move_displayer,id:"
+msgctxt "field:billing.premium_rate.form.receive.create_move,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.rate_note_move_displayer,move:"
+msgctxt "field:billing.premium_rate.form.receive.create_move,move:"
 msgid "Move"
 msgstr "Mouvement"
 
-msgctxt "field:billing.rate_note_move_displayer,must_expand_tree:"
+msgctxt "field:billing.premium_rate.form.receive.create_move,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
@@ -801,7 +801,7 @@ msgctxt "model:billing.premium_rate.form.line,name:"
 msgid "Rate Note Line"
 msgstr "Ligne de Bordereau"
 
-msgctxt "model:billing.rate_note_move_displayer,name:"
+msgctxt "model:billing.premium_rate.form.receive.create_move,name:"
 msgid "Rate Note Move Displayer"
 msgstr "Réception du bordereau"
 
@@ -1005,7 +1005,7 @@ msgctxt "view:billing.premium_rate.form.line:"
 msgid "Total"
 msgstr "Total"
 
-msgctxt "view:billing.rate_note_move_displayer:"
+msgctxt "view:billing.premium_rate.form.receive.create_move:"
 msgid "Move"
 msgstr "Mouvement"
 
