@@ -22,7 +22,7 @@ class DistributionNetwork():
     __metaclass__ = PoolMeta
 
     commercial_products = fields.Many2Many(
-        'distribution.dist_network-com_product', 'dist_network', 'com_product',
+        'distribution.network-commercial_product', 'dist_network', 'com_product',
         'Commercial Products', depends=['company'], domain=[
             ('product.company', '=', Eval('company'))])
     parent_com_products = fields.Function(
@@ -93,7 +93,7 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
             ('company', '=', Eval('context', {}).get('company'))],
         depends=['start_date'],
         required=True)
-    dist_networks = fields.Many2Many('distribution.dist_network-com_product',
+    dist_networks = fields.Many2Many('distribution.network-commercial_product',
         'com_product', 'dist_network',
         'Distribution Networks')
     start_date = fields.Date('Start Date', required=True)
@@ -122,7 +122,7 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
 class DistributionNetworkComProductRelation(model.CoopSQL):
     'Relation Distribution Network - Commercial Product'
 
-    __name__ = 'distribution.dist_network-com_product'
+    __name__ = 'distribution.network-commercial_product'
 
     dist_network = fields.Many2One('distribution.dist_network',
         'Distribution Network', ondelete='CASCADE')
