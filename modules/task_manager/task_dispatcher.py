@@ -371,7 +371,7 @@ class TaskDispatcher(Wizard):
 class LaunchTask(Wizard):
     'Launch Selected Task'
 
-    __name__ = 'task_manager.launch_task_wizard'
+    __name__ = 'task.launch'
 
     start_state = 'calculate_action'
 

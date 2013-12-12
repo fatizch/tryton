@@ -132,7 +132,7 @@
     <!-- ############################################################ -->
     <record model="ir.action.wizard" id="act_launch_task_wizard">
       <field name="name">Launch Task</field>
-      <field name="wiz_name">task_manager.launch_task_wizard</field>
+      <field name="wiz_name">task.launch</field>
     </record>
     <record model="ir.action.keyword" id="act_launch_task_wizard_keyword">
       <field name="keyword">tree_open</field>
