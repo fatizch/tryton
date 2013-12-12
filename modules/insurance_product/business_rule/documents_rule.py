@@ -825,7 +825,7 @@ class RequestFinder(model.CoopView):
 class AttachmentSetter(model.CoopView):
     'Attachment Setter'
 
-    __name__ = 'ins_product.attachment_setter'
+    __name__ = 'document.receive.attach'
 
     attachments = fields.One2Many(
         'ir.attachment', '', 'Attachments',
@@ -880,7 +880,7 @@ class ReceiveDocuments(Wizard):
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Continue', 'attachment_setter', 'tryton-ok')])
     attachment_setter = StateView(
-        'ins_product.attachment_setter',
+        'document.receive.attach',
         'insurance_product.attachment_setter_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),

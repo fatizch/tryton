@@ -2,7 +2,7 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:ins_product.attachment_setter:"
+msgctxt "error:document.receive.attach:"
 msgid "Duplicate name on attachments : %s"
 msgstr "Nom dupliqués sur les pièces jointe : %s"
 
@@ -123,19 +123,19 @@ msgctxt "field:document.create.attach,name:"
 msgid "Filename"
 msgstr "Nom du Fichier"
 
-msgctxt "field:ins_product.attachment_setter,attachments:"
+msgctxt "field:document.receive.attach,attachments:"
 msgid "Attachments"
 msgstr "Pièces jointes"
 
-msgctxt "field:ins_product.attachment_setter,id:"
+msgctxt "field:document.receive.attach,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.attachment_setter,must_expand_tree:"
+msgctxt "field:document.receive.attach,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.attachment_setter,resource:"
+msgctxt "field:document.receive.attach,resource:"
 msgid "Resource"
 msgstr "Ressource"
 
@@ -3264,7 +3264,7 @@ msgctxt "model:document.create.attach,name:"
 msgid "Attachment Creation"
 msgstr "Création de l'attachment"
 
-msgctxt "model:ins_product.attachment_setter,name:"
+msgctxt "model:document.receive.attach,name:"
 msgid "Attachment Setter"
 msgstr "Gestionnaire de Pièces Jointes"
 
@@ -4520,7 +4520,7 @@ msgctxt "view:document.create.attach:"
 msgid "Attachment"
 msgstr "Pièce jointe"
 
-msgctxt "view:ins_product.attachment_setter:"
+msgctxt "view:document.receive.attach:"
 msgid "Attachments"
 msgstr "Pièces jointes"
 
