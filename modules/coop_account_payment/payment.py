@@ -19,7 +19,7 @@ class CreateReceivablePaymentStart(ModelView):
 
 class CreateReceivablePayment(Wizard):
     'Create Receivable Payment'
-    __name__ = 'coop_account_payment.create_receivable'
+    __name__ = 'account.payment.create'
     start = StateView('coop_account_payment.create_receivable.start',
         'coop_account_payment.create_receivable_start_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),

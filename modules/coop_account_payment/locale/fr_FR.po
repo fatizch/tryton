@@ -70,10 +70,10 @@ msgctxt "view:coop_account_payment.create_receivable.start:"
 msgid "Create Receivable Payment?"
 msgstr "Créer Paiement?"
 
-msgctxt "wizard_button:coop_account_payment.create_receivable,start,create_:"
+msgctxt "wizard_button:account.payment.create,start,create_:"
 msgid "Create"
 msgstr "Créer"
 
-msgctxt "wizard_button:coop_account_payment.create_receivable,start,end:"
+msgctxt "wizard_button:account.payment.create,start,end:"
 msgid "Cancel"
 msgstr "Annuler"
