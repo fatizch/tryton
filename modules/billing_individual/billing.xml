@@ -5,18 +5,18 @@
     <!-- Payment Methods -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="payment_method_form">
-      <field name="model">billing.payment_method</field>
+      <field name="model">billing.payment.method</field>
       <field name="type">form</field>
       <field name="name">payment_method_form</field>
     </record>
     <record model="ir.ui.view" id="payment_method_tree">
-      <field name="model">billing.payment_method</field>
+      <field name="model">billing.payment.method</field>
       <field name="type">tree</field>
       <field name="name">payment_method_tree</field>
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_payment_method">
-        <field name="model" search="[('model', '=', 'billing.payment_method')]"/>
+        <field name="model" search="[('model', '=', 'billing.payment.method')]"/>
         <field name="global_p" eval="True"/>
     </record>
     <record model="ir.rule" id="rule_payment_method_1">
@@ -26,7 +26,7 @@
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_payment_method">
       <field name="name">Payment Methods</field>
-      <field name="res_model">billing.payment_method</field>
+      <field name="res_model">billing.payment.method</field>
       <field name="domain">[('payment_rule.company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_payment_method_view1">

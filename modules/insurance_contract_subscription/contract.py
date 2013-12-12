@@ -85,7 +85,7 @@ class ContractSubscription(CoopProcessFramework):
     def on_change_payment_method(self):
         if not (hasattr(self, 'payment_method') and self.payment_method):
             return {}
-        PaymentMethod = Pool().get('billing.payment_method')
+        PaymentMethod = Pool().get('billing.payment.method')
         payment_method = PaymentMethod(int(self.payment_method))
         return {
             'payment_mode': payment_method.payment_mode,
@@ -104,7 +104,7 @@ class ContractSubscription(CoopProcessFramework):
     def get_payment_mode(self, name):
         if not (hasattr(self, 'payment_method') and self.payment_method):
             return ''
-        PaymentMethod = Pool().get('billing.payment_method')
+        PaymentMethod = Pool().get('billing.payment.method')
         payment_method = PaymentMethod(int(self.payment_method))
         return payment_method.payment_mode
 

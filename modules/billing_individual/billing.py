@@ -54,7 +54,7 @@ PAYMENT_MODES = [
 class PaymentMethod(model.CoopSQL, model.CoopView):
     'Payment Method'
 
-    __name__ = 'billing.payment_method'
+    __name__ = 'billing.payment.method'
 
     name = fields.Char('Name')
     code = fields.Char('Code', required=True, on_change_with=['code', 'name'])
@@ -346,7 +346,7 @@ class BillingManager(model.CoopSQL, model.CoopView):
         'get_policy_owner_id')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
-    payment_method = fields.Many2One('billing.payment_method',
+    payment_method = fields.Many2One('billing.payment.method',
         'Payment Method', on_change=['payment_method', 'payment_date'])
     payment_mode = fields.Function(
         fields.Char('Payment Mode', states={'invisible': True},
@@ -590,7 +590,7 @@ class ProductPaymentMethodRelation(model.CoopSQL, model.CoopView):
 
     product = fields.Many2One('offered.product', 'Product',
         ondelete='CASCADE')
-    payment_method = fields.Many2One('billing.payment_method',
+    payment_method = fields.Many2One('billing.payment.method',
         'Payment Method', ondelete='RESTRICT')
     order = fields.Integer('Order', required=True)
 

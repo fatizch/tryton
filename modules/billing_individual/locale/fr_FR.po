@@ -175,55 +175,55 @@ msgctxt "field:contract.do_billing.parameters,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:billing.payment_method,allowed_payment_dates:"
+msgctxt "field:billing.payment.method,allowed_payment_dates:"
 msgid "Allowed Payment Dates"
 msgstr "Jours de paiement possibles"
 
-msgctxt "field:billing.payment_method,code:"
+msgctxt "field:billing.payment.method,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:billing.payment_method,create_date:"
+msgctxt "field:billing.payment.method,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:billing.payment_method,create_date_:"
+msgctxt "field:billing.payment.method,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:billing.payment_method,create_uid:"
+msgctxt "field:billing.payment.method,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:billing.payment_method,id:"
+msgctxt "field:billing.payment.method,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.payment_method,must_expand_tree:"
+msgctxt "field:billing.payment.method,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:billing.payment_method,name:"
+msgctxt "field:billing.payment.method,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:billing.payment_method,payment_mode:"
+msgctxt "field:billing.payment.method,payment_mode:"
 msgid "Payment Mode"
 msgstr "Mode de Paiement"
 
-msgctxt "field:billing.payment_method,payment_rule:"
+msgctxt "field:billing.payment.method,payment_rule:"
 msgid "Payment Rule"
 msgstr "Règle de paiement"
 
-msgctxt "field:billing.payment_method,rec_name:"
+msgctxt "field:billing.payment.method,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:billing.payment_method,write_date:"
+msgctxt "field:billing.payment.method,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:billing.payment_method,write_uid:"
+msgctxt "field:billing.payment.method,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -815,7 +815,7 @@ msgctxt "field:party.party,receivable_lines:"
 msgid "Receivable Lines"
 msgstr "Lignes à recevoir"
 
-msgctxt "help:billing.payment_method,allowed_payment_dates:"
+msgctxt "help:billing.payment.method,allowed_payment_dates:"
 msgid ""
 "A list of comma-separated numbers that resolves to the list ofallowed days of the month eligible for direct debit.\n"
 "\n"
@@ -841,7 +841,7 @@ msgctxt "model:contract.do_billing.parameters,name:"
 msgid "Bill Parameters"
 msgstr "Paramètres de Facturation"
 
-msgctxt "model:billing.payment_method,name:"
+msgctxt "model:billing.payment.method,name:"
 msgid "Payment Method"
 msgstr "Méthode de Paiement"
 
@@ -905,19 +905,19 @@ msgctxt "model:ir.ui.menu,name:menu_payment_rule"
 msgid "Payment Rule"
 msgstr "Règle de paiement"
 
-msgctxt "selection:billing.payment_method,payment_mode:"
+msgctxt "selection:billing.payment.method,payment_mode:"
 msgid "Cash"
 msgstr "Cash"
 
-msgctxt "selection:billing.payment_method,payment_mode:"
+msgctxt "selection:billing.payment.method,payment_mode:"
 msgid "Check"
 msgstr "Chèque"
 
-msgctxt "selection:billing.payment_method,payment_mode:"
+msgctxt "selection:billing.payment.method,payment_mode:"
 msgid "Direct Debit"
 msgstr "Prélèvement Automatique"
 
-msgctxt "selection:billing.payment_method,payment_mode:"
+msgctxt "selection:billing.payment.method,payment_mode:"
 msgid "Wire Transfer"
 msgstr "Virement Bancaire"
 
@@ -1133,11 +1133,11 @@ msgctxt "view:contract.do_billing.parameters:"
 msgid "Bill Parameters"
 msgstr "Paramètres de Facturation"
 
-msgctxt "view:billing.payment_method:"
+msgctxt "view:billing.payment.method:"
 msgid "Payment Method"
 msgstr "Méthode de Paiement"
 
-msgctxt "view:billing.payment_method:"
+msgctxt "view:billing.payment.method:"
 msgid "Payment Methods"
 msgstr "Méthode de Paiement"
 
