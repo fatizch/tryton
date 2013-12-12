@@ -345,7 +345,7 @@ class ExpenseKind(model.CoopSQL, model.CoopView):
 class ProductValidationBatch(BatchRoot):
     'Product Validation Batch'
 
-    __name__ = 'ins_product.product_validation_batch'
+    __name__ = 'offered.validate.batch'
 
     @classmethod
     def get_batch_main_model_name(cls):

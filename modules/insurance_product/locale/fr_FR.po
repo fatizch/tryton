@@ -63,7 +63,7 @@ msgctxt "error:billing.premium.rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
-msgctxt "error:ins_product.product_validation_batch:"
+msgctxt "error:offered.validate.batch:"
 msgid "No Batch Path Specified"
 msgstr "Le chemin d'exécution des batchs n'est pas configuré"
 
@@ -2179,7 +2179,7 @@ msgctxt "field:process-offered.product,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_product.product_validation_batch,id:"
+msgctxt "field:offered.validate.batch,id:"
 msgid "ID"
 msgstr "ID"
 
@@ -3417,7 +3417,7 @@ msgctxt "model:process-offered.product,name:"
 msgid "Process Product Relation"
 msgstr "Relation Processus Produit"
 
-msgctxt "model:ins_product.product_validation_batch,name:"
+msgctxt "model:offered.validate.batch,name:"
 msgid "Product Validation Batch"
 msgstr ""
 
