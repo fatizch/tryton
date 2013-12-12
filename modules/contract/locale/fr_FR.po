@@ -238,51 +238,51 @@ msgctxt "field:contract,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.delivered_service,contract:"
+msgctxt "field:contract.service,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:contract.delivered_service,create_date:"
+msgctxt "field:contract.service,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:contract.delivered_service,create_date_:"
+msgctxt "field:contract.service,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:contract.delivered_service,create_uid:"
+msgctxt "field:contract.service,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:contract.delivered_service,func_error:"
+msgctxt "field:contract.service,func_error:"
 msgid "Error"
 msgstr "Erreur"
 
-msgctxt "field:contract.delivered_service,id:"
+msgctxt "field:contract.service,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.delivered_service,must_expand_tree:"
+msgctxt "field:contract.service,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:contract.delivered_service,rec_name:"
+msgctxt "field:contract.service,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:contract.delivered_service,status:"
+msgctxt "field:contract.service,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:contract.delivered_service,subscribed_service:"
+msgctxt "field:contract.service,subscribed_service:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "field:contract.delivered_service,write_date:"
+msgctxt "field:contract.service,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:contract.delivered_service,write_uid:"
+msgctxt "field:contract.service,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -482,7 +482,7 @@ msgctxt "model:contract,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:contract.delivered_service,name:"
+msgctxt "model:contract.service,name:"
 msgid ""
 msgstr "Nom"
 
@@ -534,19 +534,19 @@ msgctxt "selection:contract,status:"
 msgid "Terminated"
 msgstr "Terminé"
 
-msgctxt "selection:contract.delivered_service,status:"
+msgctxt "selection:contract.service,status:"
 msgid "Calculated"
 msgstr "Calculé"
 
-msgctxt "selection:contract.delivered_service,status:"
+msgctxt "selection:contract.service,status:"
 msgid "Calculating"
 msgstr "Calcul en Cours"
 
-msgctxt "selection:contract.delivered_service,status:"
+msgctxt "selection:contract.service,status:"
 msgid "Delivered"
 msgstr "Delivré"
 
-msgctxt "selection:contract.delivered_service,status:"
+msgctxt "selection:contract.service,status:"
 msgid "Not Eligible"
 msgstr "Non Eligible"
 
@@ -634,7 +634,7 @@ msgctxt "view:contract:"
 msgid "Options"
 msgstr "Options"
 
-msgctxt "view:contract.delivered_service:"
+msgctxt "view:contract.service:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 

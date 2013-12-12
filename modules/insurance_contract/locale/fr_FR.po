@@ -254,7 +254,7 @@ msgctxt "field:contract.contract.history,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:contract.delivered_service,expenses:"
+msgctxt "field:contract.service,expenses:"
 msgid "Expenses"
 msgstr "Frais"
 
@@ -845,7 +845,7 @@ msgctxt "model:contract.contract.history,name:"
 msgid "Contract History"
 msgstr "Historique de Contrat"
 
-msgctxt "model:contract.delivered_service,name:"
+msgctxt "model:contract.service,name:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 
@@ -933,19 +933,19 @@ msgctxt "selection:contract,status:"
 msgid "Terminated"
 msgstr "Terminé"
 
-msgctxt "selection:contract.delivered_service,status:"
+msgctxt "selection:contract.service,status:"
 msgid "Calculated"
 msgstr "Calculé"
 
-msgctxt "selection:contract.delivered_service,status:"
+msgctxt "selection:contract.service,status:"
 msgid "Calculating"
 msgstr "Calcul en Cours"
 
-msgctxt "selection:contract.delivered_service,status:"
+msgctxt "selection:contract.service,status:"
 msgid "Delivered"
 msgstr "Delivré"
 
-msgctxt "selection:contract.delivered_service,status:"
+msgctxt "selection:contract.service,status:"
 msgid "Not Eligible"
 msgstr "Non Eligible"
 
@@ -1041,7 +1041,7 @@ msgctxt "view:contract:"
 msgid "Managing Entities"
 msgstr "Délégataires"
 
-msgctxt "view:contract.delivered_service:"
+msgctxt "view:contract.service:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 

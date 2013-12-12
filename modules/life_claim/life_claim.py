@@ -80,7 +80,7 @@ class LifeLoss():
 class LifeClaimDeliveredService():
     'Claim Delivered Service'
 
-    __name__ = 'contract.delivered_service'
+    __name__ = 'contract.service'
     __metaclass__ = PoolMeta
 
     def get_covered_person(self):

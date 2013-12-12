@@ -708,7 +708,7 @@ class ContractAddress(model.CoopSQL, model.CoopView):
 class DeliveredService(model.CoopView, model.CoopSQL):
     'Delivered Service'
 
-    __name__ = 'contract.delivered_service'
+    __name__ = 'contract.service'
 
     status = fields.Selection([
             ('calculating', 'Calculating'),

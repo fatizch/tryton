@@ -363,12 +363,12 @@ class Loss(model.CoopSQL, model.CoopView):
         states={'invisible': Bool(Eval('main_loss'))},
         depends=['loss_desc'], ondelete='RESTRICT')
     delivered_services = fields.One2Many(
-        'contract.delivered_service', 'loss', 'Delivered Services',
+        'contract.service', 'loss', 'Delivered Services',
         domain=[
             ('contract', 'in',
                 Eval('_parent_claim', {}).get('possible_contracts'))
             ],)
-    multi_level_view = fields.One2Many('contract.delivered_service',
+    multi_level_view = fields.One2Many('contract.service',
         'loss', 'Delivered Services')
     main_loss = fields.Many2One('claim.loss', 'Main Loss',
         domain=[('claim', '=', Eval('claim')), ('id', '!=', Eval('id'))],
@@ -517,7 +517,7 @@ class Loss(model.CoopSQL, model.CoopView):
 class ClaimDeliveredService():
     'Claim Delivered Service'
 
-    __name__ = 'contract.delivered_service'
+    __name__ = 'contract.service'
     __metaclass__ = PoolMeta
 
     loss = fields.Many2One('claim.loss', 'Loss', ondelete='CASCADE')
@@ -714,7 +714,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         states={'readonly': Eval('status') == 'paid'})
     customer = fields.Many2One('party.party', 'Customer', ondelete='RESTRICT',
         states={'readonly': Eval('status') == 'paid'})
-    delivered_service = fields.Many2One('contract.delivered_service',
+    delivered_service = fields.Many2One('contract.service',
         'Delivered Service', ondelete='CASCADE',
         states={'readonly': Eval('status') == 'paid'})
     kind = fields.Function(
@@ -934,7 +934,7 @@ class DocumentRequest():
         cls.needed_by = copy.copy(cls.needed_by)
         cls.needed_by.selection.append(('claim', 'Claim'))
         cls.needed_by.selection.append(
-            ('contract.delivered_service', 'Delivered Service'))
+            ('contract.service', 'Delivered Service'))
 
 
 class Document():
@@ -949,7 +949,7 @@ class Document():
         cls.for_object = copy.copy(cls.for_object)
         cls.for_object.selection.append(('claim', 'Claim'))
         cls.for_object.selection.append(
-            ('contract.delivered_service', 'Delivered Service'))
+            ('contract.service', 'Delivered Service'))
 
 
 class RequestFinder():
