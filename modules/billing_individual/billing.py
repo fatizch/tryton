@@ -1285,7 +1285,7 @@ class CoveredElement():
     'Covered Element'
 
     __metaclass__ = PoolMeta
-    __name__ = 'ins_contract.covered_element'
+    __name__ = 'contract.covered_element'
 
     subscriber = fields.Function(
         fields.Many2One('party.party', 'Subscriber'),

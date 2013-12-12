@@ -44,7 +44,7 @@ class RateLine(model.CoopSQL, model.CoopView):
     contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE',
         states={'invisible': ~~Eval('parent')})
-    covered_element = fields.Many2One('ins_contract.covered_element',
+    covered_element = fields.Many2One('contract.covered_element',
         'Covered Element', ondelete='CASCADE')
     option = fields.Many2One('contract.option', 'Option',
         ondelete='CASCADE')

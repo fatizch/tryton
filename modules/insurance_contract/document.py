@@ -37,7 +37,7 @@ class Document():
         cls.for_object.selection.append(
             ('contract.option', 'Option'))
         cls.for_object.selection.append(
-            ('ins_contract.covered_element', 'Covered Element'))
+            ('contract.covered_element', 'Covered Element'))
 
 
 class RequestFinder():

@@ -46,11 +46,11 @@ msgctxt "field:health.party_complement,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_contract.covered_element,health_complement:"
+msgctxt "field:contract.covered_element,health_complement:"
 msgid "Health Complement"
 msgstr "Complément Santé"
 
-msgctxt "field:ins_contract.covered_element,is_health:"
+msgctxt "field:contract.covered_element,is_health:"
 msgid "Is Health"
 msgstr "Santé"
 

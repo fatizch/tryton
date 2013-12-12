@@ -783,11 +783,11 @@ msgctxt "field:account.tax.description,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:ins_contract.covered_element,indemnification_bank_account:"
+msgctxt "field:contract.covered_element,indemnification_bank_account:"
 msgid "Indemnification Bank Account"
 msgstr "Compte de Remboursement"
 
-msgctxt "field:ins_contract.covered_element,subscriber:"
+msgctxt "field:contract.covered_element,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 

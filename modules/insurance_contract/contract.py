@@ -38,7 +38,7 @@ class InsurancePolicy():
     __name__ = 'contract'
 
     covered_elements = fields.One2ManyDomain(
-        'ins_contract.covered_element', 'contract', 'Covered Elements',
+        'contract.covered_element', 'contract', 'Covered Elements',
         domain=[('parent', '=', None)],
         context={'contract': Eval('id')})
     management_roles = fields.One2Many('ins_contract.management_role',
@@ -421,7 +421,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         It could contains recursively sub covered element (fleet or population)
     '''
 
-    __name__ = 'ins_contract.covered_element'
+    __name__ = 'contract.covered_element'
 
     contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE', states={'invisible': ~Eval('contract')})
@@ -448,8 +448,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     covered_data = fields.One2Many('contract.covered_data',
         'covered_element', 'Covered Element Data')
     name = fields.Char('Name', states={'invisible': IS_PARTY})
-    parent = fields.Many2One('ins_contract.covered_element', 'Parent')
-    sub_covered_elements = fields.One2Many('ins_contract.covered_element',
+    parent = fields.Many2One('contract.covered_element', 'Parent')
+    sub_covered_elements = fields.One2Many('contract.covered_element',
         'parent', 'Sub Covered Elements',
         states={'invisible': Eval('item_kind') == 'person'},
         domain=[('covered_data.option.contract', '=', Eval('contract'))],
@@ -788,7 +788,7 @@ class CoveredElementPartyRelation(model.CoopSQL):
 
     __name__ = 'ins_contract.covered_element-party_relation'
 
-    covered_element = fields.Many2One('ins_contract.covered_element',
+    covered_element = fields.Many2One('contract.covered_element',
         'Covered Element', ondelete='CASCADE')
     party_relation = fields.Many2One('party.relation', 'Party Relation',
         ondelete='RESTRICT')
@@ -807,7 +807,7 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
             'Possible Options', states={'invisible': True}),
         'get_possible_options')
     covered_element = fields.Many2One(
-        'ins_contract.covered_element', 'Covered Element', ondelete='CASCADE')
+        'contract.covered_element', 'Covered Element', ondelete='CASCADE')
     complementary_data = fields.Dict(
         'offered.complementary_data_def', 'Complementary Data', on_change=[
             'complementary_data', 'option', 'start_date',

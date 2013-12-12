@@ -106,11 +106,11 @@ msgctxt "field:health.care_system,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_contract.covered_element,is_law_madelin:"
+msgctxt "field:contract.covered_element,is_law_madelin:"
 msgid "Law Madelin"
 msgstr "Loi Madelin"
 
-msgctxt "field:ins_contract.covered_element,is_rsi:"
+msgctxt "field:contract.covered_element,is_rsi:"
 msgid "Is RSI"
 msgstr "RSI"
 

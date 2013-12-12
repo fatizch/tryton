@@ -434,111 +434,111 @@ msgctxt "field:contract.covered_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_contract.covered_element,complementary_data:"
+msgctxt "field:contract.covered_element,complementary_data:"
 msgid "Contract Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:ins_contract.covered_element,complementary_data_summary:"
+msgctxt "field:contract.covered_element,complementary_data_summary:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:ins_contract.covered_element,contract:"
+msgctxt "field:contract.covered_element,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:ins_contract.covered_element,covered_data:"
+msgctxt "field:contract.covered_element,covered_data:"
 msgid "Covered Element Data"
 msgstr "Données de Couverture"
 
-msgctxt "field:ins_contract.covered_element,covered_name:"
+msgctxt "field:contract.covered_element,covered_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_contract.covered_element,covered_relations:"
+msgctxt "field:contract.covered_element,covered_relations:"
 msgid "Covered Relations"
 msgstr "Relations Couvertes"
 
-msgctxt "field:ins_contract.covered_element,create_date:"
+msgctxt "field:contract.covered_element,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_contract.covered_element,create_date_:"
+msgctxt "field:contract.covered_element,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_contract.covered_element,create_uid:"
+msgctxt "field:contract.covered_element,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_contract.covered_element,currency:"
+msgctxt "field:contract.covered_element,currency:"
 msgid "Currency"
 msgstr "Devises"
 
-msgctxt "field:ins_contract.covered_element,currency_digits:"
+msgctxt "field:contract.covered_element,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
-msgctxt "field:ins_contract.covered_element,currency_symbol:"
+msgctxt "field:contract.covered_element,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:ins_contract.covered_element,id:"
+msgctxt "field:contract.covered_element,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_contract.covered_element,is_person:"
+msgctxt "field:contract.covered_element,is_person:"
 msgid "Is Person"
 msgstr ""
 
-msgctxt "field:ins_contract.covered_element,item_desc:"
+msgctxt "field:contract.covered_element,item_desc:"
 msgid "Item Desc"
 msgstr "Desc Risque"
 
-msgctxt "field:ins_contract.covered_element,item_kind:"
+msgctxt "field:contract.covered_element,item_kind:"
 msgid "Item Kind"
 msgstr "Type de Bien"
 
-msgctxt "field:ins_contract.covered_element,main_contract:"
+msgctxt "field:contract.covered_element,main_contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:ins_contract.covered_element,must_expand_tree:"
+msgctxt "field:contract.covered_element,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:ins_contract.covered_element,name:"
+msgctxt "field:contract.covered_element,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_contract.covered_element,parent:"
+msgctxt "field:contract.covered_element,parent:"
 msgid "Parent"
 msgstr "Parent"
 
-msgctxt "field:ins_contract.covered_element,party:"
+msgctxt "field:contract.covered_element,party:"
 msgid "Actor"
 msgstr "Acteur"
 
-msgctxt "field:ins_contract.covered_element,party_compl_data:"
+msgctxt "field:contract.covered_element,party_compl_data:"
 msgid "Party Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:ins_contract.covered_element,possible_item_desc:"
+msgctxt "field:contract.covered_element,possible_item_desc:"
 msgid "Possible Item Desc"
 msgstr ""
 
-msgctxt "field:ins_contract.covered_element,rec_name:"
+msgctxt "field:contract.covered_element,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_contract.covered_element,sub_covered_elements:"
+msgctxt "field:contract.covered_element,sub_covered_elements:"
 msgid "Sub Covered Elements"
 msgstr "Sous Eléments Couverts"
 
-msgctxt "field:ins_contract.covered_element,write_date:"
+msgctxt "field:contract.covered_element,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_contract.covered_element,write_uid:"
+msgctxt "field:contract.covered_element,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -857,7 +857,7 @@ msgctxt "model:contract.covered_data,name:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
 
-msgctxt "model:ins_contract.covered_element,name:"
+msgctxt "model:contract.covered_element,name:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
@@ -1057,27 +1057,27 @@ msgctxt "view:contract.covered_data:"
 msgid "Data"
 msgstr "Données"
 
-msgctxt "view:ins_contract.covered_element:"
+msgctxt "view:contract.covered_element:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "view:ins_contract.covered_element:"
+msgctxt "view:contract.covered_element:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
 
-msgctxt "view:ins_contract.covered_element:"
+msgctxt "view:contract.covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
-msgctxt "view:ins_contract.covered_element:"
+msgctxt "view:contract.covered_element:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
 
-msgctxt "view:ins_contract.covered_element:"
+msgctxt "view:contract.covered_element:"
 msgid "Covered Relations"
 msgstr "Relations Couvertes"
 
-msgctxt "view:ins_contract.covered_element:"
+msgctxt "view:contract.covered_element:"
 msgid "Sub Covered Elements"
 msgstr "Sous Eléments Couverts"
 

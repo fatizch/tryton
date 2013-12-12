@@ -88,10 +88,10 @@ class OptionsDisplayer:
 
     __name__ = 'contract.wizard.option_subscription.options_displayer'
 
-    covered_element = fields.Many2One('ins_contract.covered_element',
+    covered_element = fields.Many2One('contract.covered_element',
         'Covered Element',
         domain=[('id', 'in', Eval('possible_covered_elements'))],
         depends=['possible_covered_elements'], required=True)
     possible_covered_elements = fields.Many2Many(
-        'ins_contract.covered_element', None, None, 'Covered Elements',
+        'contract.covered_element', None, None, 'Covered Elements',
         states={'invisible': True})

@@ -62,7 +62,7 @@ class LifeLoss():
 
     def get_possible_covered_persons(self):
         res = []
-        CoveredElement = Pool().get('ins_contract.covered_element')
+        CoveredElement = Pool().get('contract.covered_element')
         for covered_element in CoveredElement.get_possible_covered_elements(
                 self.claim.claimant, self.start_date):
             res.extend(covered_element.get_covered_parties(self.start_date))

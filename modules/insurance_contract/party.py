@@ -18,7 +18,7 @@ class Party:
 
     complementary_data = fields.Dict('offered.complementary_data_def',
         'Complementary Data')
-    covered_elements = fields.One2Many('ins_contract.covered_element',
+    covered_elements = fields.One2Many('contract.covered_element',
         'party', 'Covered Elements')
     customer_role = fields.One2Many('party.customer', 'party', 'Customer',
         size=1)

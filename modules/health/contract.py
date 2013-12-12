@@ -50,7 +50,7 @@ class Option():
 class CoveredElement():
     'Covered Element'
 
-    __name__ = 'ins_contract.covered_element'
+    __name__ = 'contract.covered_element'
     __metaclass__ = PoolMeta
 
     is_health = fields.Function(
@@ -76,7 +76,7 @@ class CoveredElement():
         Contract = pool.get('contract')
         Health_Complement = pool.get('health.party_complement')
         Party = pool.get('party.party')
-        CovElement = pool.get('ins_contract.covered_element')
+        CovElement = pool.get('contract.covered_element')
         health_complements = []
         for cov_dict in values:
             contract = None

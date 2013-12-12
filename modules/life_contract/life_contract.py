@@ -87,7 +87,7 @@ class Contract():
 
     @classmethod
     def get_possible_covered_elements(cls, party, at_date):
-        CoveredElement = Pool().get('ins_contract.covered_element')
+        CoveredElement = Pool().get('contract.covered_element')
         return CoveredElement.get_possible_covered_elements(party, at_date)
 
 

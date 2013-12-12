@@ -58,6 +58,6 @@ msgctxt "view:contract:"
 msgid "Enrollments"
 msgstr "Affiliations"
 
-msgctxt "view:ins_contract.covered_element:"
+msgctxt "view:contract.covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"

@@ -18,7 +18,7 @@ class LifeContractSubscription():
     __metaclass__ = PoolMeta
 
     def set_subscriber_as_covered_element(self):
-        CoveredElement = Pool().get('ins_contract.covered_element')
+        CoveredElement = Pool().get('contract.covered_element')
         subscriber = self.get_policy_owner(self.start_date)
         if not utils.is_none(self, 'covered_elements'):
             for covered_element in self.covered_elements:
@@ -53,7 +53,7 @@ class LifeContractSubscription():
 class CoveredPersonSubs():
     'Covered Person'
 
-    __name__ = 'ins_contract.covered_element'
+    __name__ = 'contract.covered_element'
     __metaclass__ = PoolMeta
 
 
