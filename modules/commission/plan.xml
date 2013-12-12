@@ -77,13 +77,13 @@
           ********    Commission Rule    ********
           *******************************************-->
           <record model="ir.ui.view" id="commission_rule_view_tree">
-            <field name="model">commission.commission_rule</field>
+            <field name="model">commission.rule</field>
             <field name="type">tree</field>
             <field name="inherit" ref="insurance_product.businessruleroot_view_tree"/>
             <field name="arch" type="xml"/>
         </record>
         <record model="ir.ui.view" id="commission_rule_view_form">
-            <field name="model">commission.commission_rule</field>
+            <field name="model">commission.rule</field>
             <field name="type">form</field>
             <field name="inherit" ref="insurance_product.businessruleroot_view_form"/>
             <field name="name">commission_rule_form</field>

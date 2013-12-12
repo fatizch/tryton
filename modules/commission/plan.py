@@ -56,7 +56,7 @@ class CommissionComponent():
     __name__ = 'offered.coverage'
     __metaclass__ = PoolMeta
 
-    commission_rules = fields.One2Many('commission.commission_rule',
+    commission_rules = fields.One2Many('commission.rule',
         'offered', 'Commission Rules')
     coverages = fields.Many2Many('commission.component-coverage', 'component',
         'coverage', 'Coverages', domain=[('kind', '=', 'insurance')])
@@ -88,7 +88,7 @@ class CommissionComponentCoverageRelation(model.CoopSQL):
 class CommissionRule(business_rule.BusinessRuleRoot, model.CoopSQL):
     'Commission Rule'
 
-    __name__ = 'commission.commission_rule'
+    __name__ = 'commission.rule'
 
     rate = fields.Numeric('Rate', digits=(16, 4), states={
             'invisible': business_rule.STATE_ADVANCED,
