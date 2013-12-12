@@ -7,7 +7,7 @@ msgid "Amount (%s) for line is too big. It mustbe lower than %s"
 msgstr ""
 "Le montant (%s) de la ligne est trop élevé. Il doit être inférieur à %s."
 
-msgctxt "error:collection.collection_wizard:"
+msgctxt "error:collection.create:"
 msgid "Ventilation is not consistent : %s declared, %s assigned"
 msgstr "La ventilation n'est pas consistente : %s déclaré, %s affecté"
 
@@ -263,20 +263,20 @@ msgctxt "view:collection.create.parameters:"
 msgid "Collection Parameters"
 msgstr "informations d'encaissement"
 
-msgctxt "wizard_button:collection.collection_wizard,assign,check_amount:"
+msgctxt "wizard_button:collection.create,assign,check_amount:"
 msgid "Validate"
 msgstr "Valider"
 
-msgctxt "wizard_button:collection.collection_wizard,assign,end:"
+msgctxt "wizard_button:collection.create,assign,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
 msgctxt ""
-"wizard_button:collection.collection_wizard,input_collection_parameters,assign:"
+"wizard_button:collection.create,input_collection_parameters,assign:"
 msgid "Assign"
 msgstr "Affecter"
 
 msgctxt ""
-"wizard_button:collection.collection_wizard,input_collection_parameters,end:"
+"wizard_button:collection.create,input_collection_parameters,end:"
 msgid "Cancel"
 msgstr "Annuler"

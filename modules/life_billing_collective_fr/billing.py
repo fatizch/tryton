@@ -743,7 +743,7 @@ class CollectionWizard():
     'Collection Wizard'
 
     __metaclass__ = PoolMeta
-    __name__ = 'collection.collection_wizard'
+    __name__ = 'collection.create'
 
     def default_input_collection_parameters(self, name):
         res = super(

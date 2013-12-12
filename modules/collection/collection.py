@@ -213,7 +213,7 @@ class AssignCollection(model.CoopView):
 class CollectionWizard(model.CoopWizard):
     'Collection Wizard'
 
-    __name__ = 'collection.collection_wizard'
+    __name__ = 'collection.create'
 
     start_state = 'input_collection_parameters'
     input_collection_parameters = StateView('collection.create.parameters',

@@ -85,7 +85,7 @@
     <!-- ############################################################ -->
     <record model="ir.action.wizard" id="act_collection_wizard">
       <field name="name">Collection Wizard</field>
-      <field name="wiz_name">collection.collection_wizard</field>
+      <field name="wiz_name">collection.create</field>
     </record>
     <record model="ir.action.keyword" id="act_collection_wizard_keyword">
       <field name="keyword">form_action</field>
