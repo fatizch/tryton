@@ -6,7 +6,7 @@ msgctxt "error:account.move.line:"
 msgid "Rate Note Compensation"
 msgstr "Equilibrage du bordereau"
 
-msgctxt "error:billing.rate_note_reception:"
+msgctxt "error:billing.premium_rate.form.receive:"
 msgid "Selected Rate Note is not in a valid status to start reception process"
 msgstr ""
 "Le statut du bordereau ne permet pas de démarrer le processus de réception"
@@ -1078,19 +1078,19 @@ msgctxt ""
 msgid "Validate"
 msgstr "Valider"
 
-msgctxt "wizard_button:billing.rate_note_reception,preview_bill,clean_up:"
+msgctxt "wizard_button:billing.premium_rate.form.receive,preview_bill,clean_up:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:billing.rate_note_reception,preview_bill,validate:"
+msgctxt "wizard_button:billing.premium_rate.form.receive,preview_bill,validate:"
 msgid "Validate"
 msgstr "Valider"
 
-msgctxt "wizard_button:billing.rate_note_reception,select_note,end:"
+msgctxt "wizard_button:billing.premium_rate.form.receive,select_note,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:billing.rate_note_reception,select_note,preview_bill:"
+msgctxt "wizard_button:billing.premium_rate.form.receive,select_note,preview_bill:"
 msgid "Continue"
 msgstr "Continuer"
 

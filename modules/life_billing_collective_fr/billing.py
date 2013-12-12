@@ -585,7 +585,7 @@ class RateNoteMoveDisplayer(model.CoopView):
 class RateNoteReception(model.CoopWizard):
     'Rate Note Reception Wizard'
 
-    __name__ = 'billing.rate_note_reception'
+    __name__ = 'billing.premium_rate.form.receive'
 
     start_state = 'calculate_start'
     calculate_start = StateTransition()

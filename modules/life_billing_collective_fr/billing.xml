@@ -113,7 +113,7 @@
     <!-- ############################################################ -->
     <record model="ir.action.wizard" id="act_rate_note_reception">
       <field name="name">Rate Note Reception</field>
-      <field name="wiz_name">billing.rate_note_reception</field>
+      <field name="wiz_name">billing.premium_rate.form.receive</field>
     </record>
     <record model="ir.action.keyword" id="act_rate_note_reception_keyword">
       <field name="keyword">form_action</field>
