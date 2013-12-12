@@ -1189,15 +1189,15 @@ msgctxt "field:document.request.batch,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.document_request_displayer,documents:"
+msgctxt "field:document.receive.set_requests,documents:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "field:ins_product.document_request_displayer,id:"
+msgctxt "field:document.receive.set_requests,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.document_request_displayer,must_expand_tree:"
+msgctxt "field:document.receive.set_requests,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
@@ -3336,7 +3336,7 @@ msgctxt "model:document.request.batch,name:"
 msgid "Document Request Batch Definition"
 msgstr ""
 
-msgctxt "model:ins_product.document_request_displayer,name:"
+msgctxt "model:document.receive.set_requests,name:"
 msgid "Document Request Displayer"
 msgstr "Document en attente"
 
@@ -4608,7 +4608,7 @@ msgctxt "view:document.request:"
 msgid "Send Request"
 msgstr "Envoyer la demande"
 
-msgctxt "view:ins_product.document_request_displayer:"
+msgctxt "view:document.receive.set_requests:"
 msgid "Document Request"
 msgstr "Document Request"
 

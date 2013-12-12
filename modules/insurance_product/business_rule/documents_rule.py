@@ -856,7 +856,7 @@ class AttachmentSetter(model.CoopView):
 class DocumentRequestDisplayer(model.CoopView):
     'Document Request Displayer'
 
-    __name__ = 'ins_product.document_request_displayer'
+    __name__ = 'document.receive.set_requests'
 
     documents = fields.One2Many(
         'document.request',
@@ -889,7 +889,7 @@ class ReceiveDocuments(Wizard):
     store_attachments = StateTransition()
     store_and_reconcile = StateTransition()
     input_document = StateView(
-        'ins_product.document_request_displayer',
+        'document.receive.set_requests',
         'insurance_product.document_request_displayer_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),

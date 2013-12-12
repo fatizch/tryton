@@ -137,7 +137,7 @@
       <field name="name">request_finder_form</field>
     </record>
     <record model="ir.ui.view" id="document_request_displayer_form">
-      <field name="model">ins_product.document_request_displayer</field>
+      <field name="model">document.receive.set_requests</field>
       <field name="type">form</field>
       <field name="name">document_request_displayer_form</field>
     </record>
