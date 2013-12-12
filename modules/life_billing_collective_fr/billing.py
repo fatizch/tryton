@@ -415,7 +415,7 @@ class RateNoteParameters(model.CoopView):
                 [('next_assessment_date', '<=', Eval('until_date'))]]
             ], depends=['until_date'])
     group_clients = fields.Many2Many(
-        'billing.rate_note_process_parameter-group_client',
+        'billing.premium_rate.form.create.param-group_client',
         'parameters_view', 'group', 'Group Clients',
         on_change=['products', 'contracts', 'group_clients', 'clients',
             'until_date'])
@@ -495,7 +495,7 @@ class RateNoteParameterContractRelation(model.CoopView):
 class RateNoteParameterGroupPartyRelation(model.CoopView):
     'Rate Note Parameter Group Party Relation'
 
-    __name__ = 'billing.rate_note_process_parameter-group_client'
+    __name__ = 'billing.premium_rate.form.create.param-group_client'
 
     parameters_view = fields.Many2One('billing.rate_note_process_parameters',
         'Parameter View')

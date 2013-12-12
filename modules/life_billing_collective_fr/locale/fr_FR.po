@@ -351,21 +351,21 @@ msgctxt "field:billing.premium_rate.form.create.param-contract,parameters_view:"
 msgid "Parameter View"
 msgstr "Paramètres"
 
-msgctxt "field:billing.rate_note_process_parameter-group_client,group:"
+msgctxt "field:billing.premium_rate.form.create.param-group_client,group:"
 msgid "Group Party"
 msgstr "Regroupement de Sociétés"
 
-msgctxt "field:billing.rate_note_process_parameter-group_client,id:"
+msgctxt "field:billing.premium_rate.form.create.param-group_client,id:"
 msgid "ID"
 msgstr "ID"
 
 msgctxt ""
-"field:billing.rate_note_process_parameter-group_client,must_expand_tree:"
+"field:billing.premium_rate.form.create.param-group_client,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
 msgctxt ""
-"field:billing.rate_note_process_parameter-group_client,parameters_view:"
+"field:billing.premium_rate.form.create.param-group_client,parameters_view:"
 msgid "Parameter View"
 msgstr "Paramètres"
 
@@ -813,7 +813,7 @@ msgctxt "model:billing.premium_rate.form.create.param-contract,name:"
 msgid "Rate Note Parameter Contract Relation"
 msgstr "Relation Bordereau Contrat"
 
-msgctxt "model:billing.rate_note_process_parameter-group_client,name:"
+msgctxt "model:billing.premium_rate.form.create.param-group_client,name:"
 msgid "Rate Note Parameter Group Party Relation"
 msgstr "Relation Bordereau Acteur"
 
