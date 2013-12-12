@@ -522,7 +522,7 @@ class ClaimDeliveredService():
 
     loss = fields.Many2One('claim.loss', 'Loss', ondelete='CASCADE')
     benefit = fields.Many2One(
-        'ins_product.benefit', 'Benefit', ondelete='RESTRICT',
+        'benefit', 'Benefit', ondelete='RESTRICT',
         domain=[
             If(~~Eval('_parent_loss', {}).get('loss_desc'),
                 ('loss_descs', '=', Eval('_parent_loss', {}).get('loss_desc')),

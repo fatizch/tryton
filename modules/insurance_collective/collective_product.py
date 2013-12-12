@@ -52,7 +52,7 @@ class GroupCoverage():
 class GroupBenefit():
     'Benefit'
 
-    __name__ = 'ins_product.benefit'
+    __name__ = 'benefit'
     __metaclass__ = PoolMeta
 
     @classmethod

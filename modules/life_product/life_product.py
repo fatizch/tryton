@@ -159,7 +159,7 @@ class LifeLossDesc():
 class LifeBenefit():
     'Benefit'
 
-    __name__ = 'ins_product.benefit'
+    __name__ = 'benefit'
     __metaclass__ = PoolMeta
 
     @classmethod

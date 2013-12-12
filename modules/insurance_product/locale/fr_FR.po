@@ -6,7 +6,7 @@ msgctxt "error:ins_product.attachment_setter:"
 msgid "Duplicate name on attachments : %s"
 msgstr "Nom dupliqués sur les pièces jointe : %s"
 
-msgctxt "error:ins_product.benefit:"
+msgctxt "error:benefit:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
@@ -139,131 +139,131 @@ msgctxt "field:ins_product.attachment_setter,resource:"
 msgid "Resource"
 msgstr "Ressource"
 
-msgctxt "field:ins_product.benefit,beneficiary_kind:"
+msgctxt "field:benefit,beneficiary_kind:"
 msgid "Beneficiary Kind"
 msgstr "Type de Bénéficiaire"
 
-msgctxt "field:ins_product.benefit,benefit_rules:"
+msgctxt "field:benefit,benefit_rules:"
 msgid "Benefit Rules"
 msgstr "Règles de Prestation"
 
-msgctxt "field:ins_product.benefit,clause_rules:"
+msgctxt "field:benefit,clause_rules:"
 msgid "Clause Rules"
 msgstr "Clauses"
 
-msgctxt "field:ins_product.benefit,code:"
+msgctxt "field:benefit,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:ins_product.benefit,company:"
+msgctxt "field:benefit,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:ins_product.benefit,complementary_data:"
+msgctxt "field:benefit,complementary_data:"
 msgid "Offered Kind"
 msgstr "Typage"
 
-msgctxt "field:ins_product.benefit,complementary_data_def:"
+msgctxt "field:benefit,complementary_data_def:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:ins_product.benefit,create_date:"
+msgctxt "field:benefit,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.benefit,create_date_:"
+msgctxt "field:benefit,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_product.benefit,create_uid:"
+msgctxt "field:benefit,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.benefit,currency_digits:"
+msgctxt "field:benefit,currency_digits:"
 msgid "Currency Digits"
 msgstr "Nbre de chiffres après la virgule"
 
-msgctxt "field:ins_product.benefit,deductible_rules:"
+msgctxt "field:benefit,deductible_rules:"
 msgid "Deductible Rules"
 msgstr "Franchises"
 
-msgctxt "field:ins_product.benefit,description:"
+msgctxt "field:benefit,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:ins_product.benefit,document_rules:"
+msgctxt "field:benefit,document_rules:"
 msgid "Document Rules"
 msgstr "Documents"
 
-msgctxt "field:ins_product.benefit,eligibility_rules:"
+msgctxt "field:benefit,eligibility_rules:"
 msgid "Eligibility Rules"
 msgstr "Règles d'Eligibilité"
 
-msgctxt "field:ins_product.benefit,end_date:"
+msgctxt "field:benefit,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_product.benefit,id:"
+msgctxt "field:benefit,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.benefit,indemnification_kind:"
+msgctxt "field:benefit,indemnification_kind:"
 msgid "Indemnification Kind"
 msgstr "Type d'Indemnisation"
 
-msgctxt "field:ins_product.benefit,loss_descs:"
+msgctxt "field:benefit,loss_descs:"
 msgid "Loss Descriptions"
 msgstr "Types de Préjudice Couverts"
 
-msgctxt "field:ins_product.benefit,must_expand_tree:"
+msgctxt "field:benefit,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.benefit,name:"
+msgctxt "field:benefit,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.benefit,pricing_rules:"
+msgctxt "field:benefit,pricing_rules:"
 msgid "Pricing Rules"
 msgstr "Règles de Cotisation"
 
-msgctxt "field:ins_product.benefit,rec_name:"
+msgctxt "field:benefit,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.benefit,reserve_rules:"
+msgctxt "field:benefit,reserve_rules:"
 msgid "Reserve Rules"
 msgstr "Règle de Provisions"
 
-msgctxt "field:ins_product.benefit,start_date:"
+msgctxt "field:benefit,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:ins_product.benefit,sub_document_rules:"
+msgctxt "field:benefit,sub_document_rules:"
 msgid "Sub Document Rules"
 msgstr "Documents Eléments Couverts"
 
-msgctxt "field:ins_product.benefit,summary:"
+msgctxt "field:benefit,summary:"
 msgid "Summary"
 msgstr "Synthèse"
 
-msgctxt "field:ins_product.benefit,template:"
+msgctxt "field:benefit,template:"
 msgid "Template"
 msgstr "Modèle"
 
-msgctxt "field:ins_product.benefit,template_behaviour:"
+msgctxt "field:benefit,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement de Modèle"
 
-msgctxt "field:ins_product.benefit,use_local_currency:"
+msgctxt "field:benefit,use_local_currency:"
 msgid "Use Local Currency"
 msgstr "Utiliser la Devise Locale"
 
-msgctxt "field:ins_product.benefit,write_date:"
+msgctxt "field:benefit,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.benefit,write_uid:"
+msgctxt "field:benefit,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3268,7 +3268,7 @@ msgctxt "model:ins_product.attachment_setter,name:"
 msgid "Attachment Setter"
 msgstr "Gestionnaire de Pièces Jointes"
 
-msgctxt "model:ins_product.benefit,name:"
+msgctxt "model:benefit,name:"
 msgid "Benefit"
 msgstr "Prestation"
 
@@ -3597,27 +3597,27 @@ msgctxt "model:party.insurer,name:"
 msgid "Insurer"
 msgstr "Assureur"
 
-msgctxt "selection:ins_product.benefit,indemnification_kind:"
+msgctxt "selection:benefit,indemnification_kind:"
 msgid "Annuity"
 msgstr "Rente"
 
-msgctxt "selection:ins_product.benefit,indemnification_kind:"
+msgctxt "selection:benefit,indemnification_kind:"
 msgid "Capital"
 msgstr "Capital"
 
-msgctxt "selection:ins_product.benefit,indemnification_kind:"
+msgctxt "selection:benefit,indemnification_kind:"
 msgid "Period"
 msgstr "Période"
 
-msgctxt "selection:ins_product.benefit,template_behaviour:"
+msgctxt "selection:benefit,template_behaviour:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:ins_product.benefit,template_behaviour:"
+msgctxt "selection:benefit,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
-msgctxt "selection:ins_product.benefit,template_behaviour:"
+msgctxt "selection:benefit,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
@@ -4524,19 +4524,19 @@ msgctxt "view:ins_product.attachment_setter:"
 msgid "Attachments"
 msgstr "Pièces jointes"
 
-msgctxt "view:ins_product.benefit:"
+msgctxt "view:benefit:"
 msgid "Benefit"
 msgstr "Prestation"
 
-msgctxt "view:ins_product.benefit:"
+msgctxt "view:benefit:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "view:ins_product.benefit:"
+msgctxt "view:benefit:"
 msgid "Deductible"
 msgstr "Franchise"
 
-msgctxt "view:ins_product.benefit:"
+msgctxt "view:benefit:"
 msgid "Reserve"
 msgstr "Provision"
 

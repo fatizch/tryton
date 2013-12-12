@@ -41,8 +41,8 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
         })
     subscriber_classes = fields.Selection(SUBSCRIBER_CLASSES,
         'Can be subscribed', states={
-            'invisible': Eval('offered_kind') == 'ins_product.benefit',
-            'required': Eval('offered_kind') != 'ins_product.benefit',
+            'invisible': Eval('offered_kind') == 'benefit',
+            'required': Eval('offered_kind') != 'benefit',
         })
     relation_kinds = fields.Many2Many(
         'ins_product.eligibility_relation_kind',

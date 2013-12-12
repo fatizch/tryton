@@ -139,7 +139,7 @@ class EventDescLossDescRelation(model.CoopSQL):
 class Benefit(model.CoopSQL, offered.Offered):
     'Benefit'
 
-    __name__ = 'ins_product.benefit'
+    __name__ = 'benefit'
 
     benefit_rules = fields.One2Many(
         'ins_product.benefit_rule', 'offered', 'Benefit Rules')
@@ -255,7 +255,7 @@ class Benefit(model.CoopSQL, offered.Offered):
 class InsuranceBenefit(Offered):
     'Insurance Benefit'
 
-    __name__ = 'ins_product.benefit'
+    __name__ = 'benefit'
     #This empty override is necessary to have in the benefit the fields added
     #in the override of offered
 
@@ -266,7 +266,7 @@ class BenefitLossDescRelation(model.CoopSQL):
     __name__ = 'ins_product.benefit-loss_desc'
 
     benefit = fields.Many2One(
-        'ins_product.benefit', 'Benefit', ondelete='CASCADE')
+        'benefit', 'Benefit', ondelete='CASCADE')
     loss_desc = fields.Many2One(
         'ins_product.loss_desc', 'Loss Desc', ondelete='RESTRICT')
 
@@ -279,7 +279,7 @@ class CoverageBenefitRelation(model.CoopSQL):
     coverage = fields.Many2One(
         'offered.coverage', 'Coverage', ondelete='CASCADE')
     benefit = fields.Many2One(
-        'ins_product.benefit', 'Benefit', ondelete='RESTRICT')
+        'benefit', 'Benefit', ondelete='RESTRICT')
 
 
 class BenefitComplementaryDataRelation(model.CoopSQL):
@@ -288,7 +288,7 @@ class BenefitComplementaryDataRelation(model.CoopSQL):
     __name__ = 'ins_product.benefit-complementary_data_def'
 
     benefit = fields.Many2One(
-        'ins_product.benefit', 'Benefit', ondelete='CASCADE')
+        'benefit', 'Benefit', ondelete='CASCADE')
     complementary_data_def = fields.Many2One(
         'offered.complementary_data_def',
         'Complementary Data', ondelete='RESTRICT')

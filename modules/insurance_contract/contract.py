@@ -288,7 +288,7 @@ class InsuranceSubscribedCoverage():
             'Complement'),
         'get_ins_complement_id')
     benefits = fields.Function(
-        fields.Many2Many('ins_product.benefit', None, None, 'Benefits'),
+        fields.Many2Many('benefit', None, None, 'Benefits'),
         'get_benefits_ids')
 
     @classmethod

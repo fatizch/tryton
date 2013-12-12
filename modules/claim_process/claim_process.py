@@ -149,7 +149,7 @@ class LossProcess():
     #The Benefit to deliver is just a shortcut to ease delivered service
     #creation. it should not be used once a delivered_service has been created
     benefit_to_deliver = fields.Function(
-        fields.Many2One('ins_product.benefit', 'Benefit',
+        fields.Many2One('benefit', 'Benefit',
             domain=[('id', 'in', Eval('benefits'))],
             depends=['benefits', 'can_modify_benefit'],
             states={'invisible': ~Eval('can_modify_benefit')},
@@ -158,7 +158,7 @@ class LossProcess():
         'get_benefit_to_deliver', 'set_void')
     benefits = fields.Function(
         fields.One2Many(
-            'ins_product.benefit', None, 'Benefits',
+            'benefit', None, 'Benefits',
             on_change_with=['loss_desc', 'event_desc', 'start_date', 'claim']),
         'on_change_with_benefits')
     can_modify_benefit = fields.Function(
