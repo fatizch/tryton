@@ -64,7 +64,7 @@
     <!-- ############################################################ -->
     <record model="ir.action.wizard" id="wizard_add_user">
       <field name="name">Add Team User</field>
-      <field name="wiz_name">task_manager.add_user</field>
+      <field name="wiz_name">res.team.add_user</field>
       <field name="model">task_manager.team</field>
     </record>
     <!-- ############################################################ -->

@@ -130,7 +130,7 @@ class SelectUser(model.CoopView):
 class AddTeamUser(Wizard):
     'Add Team User'
 
-    __name__ = 'task_manager.add_user'
+    __name__ = 'res.team.add_user'
 
     start_state = 'select_user'
     select_user = StateView(

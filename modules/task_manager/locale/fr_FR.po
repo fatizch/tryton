@@ -374,11 +374,11 @@ msgctxt "view:task_manager.team:"
 msgid "Teams"
 msgstr "Equipes"
 
-msgctxt "wizard_button:task_manager.add_user,select_user,add_user:"
+msgctxt "wizard_button:res.team.add_user,select_user,add_user:"
 msgid "Add User"
 msgstr "Ajouter l'Utilisateur"
 
-msgctxt "wizard_button:task_manager.add_user,select_user,end:"
+msgctxt "wizard_button:res.team.add_user,select_user,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
