@@ -40,7 +40,7 @@ class LifeCoverage():
     __name__ = 'offered.coverage'
     __metaclass__ = PoolMeta
 
-    coverage_amount_rules = fields.One2Many('ins_product.coverage_amount_rule',
+    coverage_amount_rules = fields.One2Many('offered.coverage_amount.rule',
         'offered', 'Coverage Amount Rules',
         states={
             'invisible': Or(

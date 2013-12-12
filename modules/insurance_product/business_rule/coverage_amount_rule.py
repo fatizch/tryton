@@ -14,7 +14,7 @@ __all__ = [
 class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
     'Coverage Amount Rule'
 
-    __name__ = 'ins_product.coverage_amount_rule'
+    __name__ = 'offered.coverage_amount.rule'
 
     kind = fields.Selection(
         [
