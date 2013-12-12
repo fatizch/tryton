@@ -584,7 +584,7 @@ completed the current process, please go ahead"/>'
 class TransitionAuthorization(ModelSQL):
     'Transition Authorization'
 
-    __name__ = 'process.transition_authorization'
+    __name__ = 'process.transition-group'
 
     transition = fields.Many2One(
         'process.transition', 'Transition', ondelete='CASCADE')
@@ -700,7 +700,7 @@ class StepTransition(ModelSQL, ModelView):
             ('add', 'Executed between steps')],
         'Method Behaviour')
     authorizations = fields.Many2Many(
-        'process.transition_authorization', 'transition', 'group',
+        'process.transition-group', 'transition', 'group',
         'Authorizations')
     priority = fields.Integer('Priority')
 

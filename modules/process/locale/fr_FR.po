@@ -446,35 +446,35 @@ msgctxt "field:process.transition,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:process.transition_authorization,create_date:"
+msgctxt "field:process.transition-group,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:process.transition_authorization,create_uid:"
+msgctxt "field:process.transition-group,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:process.transition_authorization,group:"
+msgctxt "field:process.transition-group,group:"
 msgid "Group"
 msgstr "Groupe"
 
-msgctxt "field:process.transition_authorization,id:"
+msgctxt "field:process.transition-group,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:process.transition_authorization,rec_name:"
+msgctxt "field:process.transition-group,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.transition_authorization,transition:"
+msgctxt "field:process.transition-group,transition:"
 msgid "Transition"
 msgstr "Transition"
 
-msgctxt "field:process.transition_authorization,write_date:"
+msgctxt "field:process.transition-group,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:process.transition_authorization,write_uid:"
+msgctxt "field:process.transition-group,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -554,7 +554,7 @@ msgctxt "model:process.transition,name:"
 msgid "Step Transition"
 msgstr "Transition d'Etape"
 
-msgctxt "model:process.transition_authorization,name:"
+msgctxt "model:process.transition-group,name:"
 msgid "Transition Authorization"
 msgstr "Autorisations pour les Transitions"
 
