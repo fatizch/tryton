@@ -61,7 +61,7 @@ class ClaimProcess(CoopProcessFramework):
         return True
 
     def init_declaration_document_request(self):
-        DocRequest = Pool().get('ins_product.document_request')
+        DocRequest = Pool().get('document.request')
         if not (hasattr(self, 'documents') and self.documents):
             good_req = DocRequest()
             good_req.needed_by = self

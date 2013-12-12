@@ -862,11 +862,11 @@ msgctxt "selection:document.request.line,for_object:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 
-msgctxt "selection:ins_product.document_request,needed_by:"
+msgctxt "selection:document.request,needed_by:"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "selection:ins_product.document_request,needed_by:"
+msgctxt "selection:document.request,needed_by:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 

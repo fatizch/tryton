@@ -11,7 +11,7 @@ __all__ = [
 class DocumentRequest():
     'Document Request'
 
-    __name__ = 'ins_product.document_request'
+    __name__ = 'document.request'
     __metaclass__ = PoolMeta
 
     @classmethod

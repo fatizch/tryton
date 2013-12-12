@@ -278,7 +278,7 @@ class Document(model.CoopSQL, model.CoopView):
     )
 
     request = fields.Many2One(
-        'ins_product.document_request',
+        'document.request',
         'Document Request',
         ondelete='CASCADE',
     )
@@ -361,7 +361,7 @@ class Document(model.CoopSQL, model.CoopView):
 class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
     'Document Request'
 
-    __name__ = 'ins_product.document_request'
+    __name__ = 'document.request'
 
     needed_by = fields.Reference('Requested for', [('', '')])
     documents = fields.One2Many(
@@ -742,7 +742,7 @@ class RequestFinder(model.CoopView):
 
     kind = fields.Selection([('', '')], 'Kind', on_change=['kind'])
     value = fields.Char('Value')
-    request = fields.Many2One('ins_product.document_request', 'Request',
+    request = fields.Many2One('document.request', 'Request',
         states={'invisible': True})
 
     @classmethod
@@ -859,7 +859,7 @@ class DocumentRequestDisplayer(model.CoopView):
     __name__ = 'ins_product.document_request_displayer'
 
     documents = fields.One2Many(
-        'ins_product.document_request',
+        'document.request',
         '',
         'Documents',
         size=1,
@@ -1027,7 +1027,7 @@ class DocumentRequestBatch(BatchRoot):
 
     @classmethod
     def get_batch_main_model_name(cls):
-        return 'ins_product.document_request'
+        return 'document.request'
 
     @classmethod
     def get_batch_search_model(cls):

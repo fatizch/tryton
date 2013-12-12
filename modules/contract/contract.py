@@ -229,7 +229,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     contact = fields.Many2One('party.party', 'Contact')
     appliable_conditions_date = fields.Date('Appliable Conditions Date')
     documents = fields.One2Many(
-        'ins_product.document_request', 'needed_by', 'Documents', size=1)
+        'document.request', 'needed_by', 'Documents', size=1)
     company = fields.Many2One('company.company', 'Company', required=True,
         select=True)
     addresses = fields.One2Many('contract.address', 'contract',

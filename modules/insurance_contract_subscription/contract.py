@@ -227,7 +227,7 @@ class ContractSubscription(CoopProcessFramework):
         return res
 
     def init_subscription_document_request(self):
-        DocRequest = Pool().get('ins_product.document_request')
+        DocRequest = Pool().get('document.request')
 
         if not (hasattr(self, 'documents') and self.documents):
             good_req = DocRequest()

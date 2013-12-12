@@ -91,7 +91,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     claimant = fields.Many2One('party.party', 'Claimant', ondelete='RESTRICT')
     losses = fields.One2Many('claim.loss', 'claim', 'Losses',
         states={'readonly': Eval('status') == 'closed'})
-    documents = fields.One2Many('ins_product.document_request',
+    documents = fields.One2Many('document.request',
         'needed_by', 'Documents')
     # claim_history = fields.One2Many('claim.claim.history',
     #     'from_object', 'History')
@@ -925,7 +925,7 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
 class DocumentRequest():
     'Document Request'
 
-    __name__ = 'ins_product.document_request'
+    __name__ = 'document.request'
     __metaclass__ = PoolMeta
 
     @classmethod

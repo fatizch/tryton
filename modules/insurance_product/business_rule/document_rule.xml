@@ -53,12 +53,12 @@
     </record>
     <!-- Document Request -->
     <record model="ir.ui.view" id="document_request_form">
-      <field name="model">ins_product.document_request</field>
+      <field name="model">document.request</field>
       <field name="type">form</field>
       <field name="name">document_request_form</field>
     </record>
     <record model="ir.ui.view" id="document_request_tree">
-      <field name="model">ins_product.document_request</field>
+      <field name="model">document.request</field>
       <field name="type">tree</field>
       <field name="name">document_request_tree</field>
     </record>
@@ -73,7 +73,7 @@
     </record>
     <record model="ir.action.keyword" id="report_document_request_keyword">
       <field name="keyword">form_action</field>
-      <field name="model">ins_product.document_request,-1</field>
+      <field name="model">document.request,-1</field>
       <field name="action" ref="letter_generation_wizard"/>
     </record>
     <!-- Letter Model -->
@@ -152,7 +152,7 @@
     </record>
     <record model="ir.action.keyword" id="receive_documents_wizard_keyword">
       <field name="keyword">form_action</field>
-      <field name="model">ins_product.document_request,-1</field>
+      <field name="model">document.request,-1</field>
       <field name="action" ref="receive_documents_wizard"/>
     </record>
     <menuitem name="EDM" id="menu_edm" sequence="2"/>

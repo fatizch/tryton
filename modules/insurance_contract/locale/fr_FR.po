@@ -1009,7 +1009,7 @@ msgctxt "selection:document.request.line,for_object:"
 msgid "Option"
 msgstr "Garantie"
 
-msgctxt "selection:ins_product.document_request,needed_by:"
+msgctxt "selection:document.request,needed_by:"
 msgid "Contract"
 msgstr "Contrat"
 
