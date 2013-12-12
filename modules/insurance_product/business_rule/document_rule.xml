@@ -105,12 +105,12 @@
       action="act_letter_model" id="menu_letter_model"/>
     <!-- Letter Version -->
     <record model="ir.ui.view" id="letter_version_form">
-      <field name="model">ins_product.letter_version</field>
+      <field name="model">document.template.version</field>
       <field name="type">form</field>
       <field name="name">letter_version_form</field>
     </record>
     <record model="ir.ui.view" id="letter_version_tree">
-      <field name="model">ins_product.letter_version</field>
+      <field name="model">document.template.version</field>
       <field name="type">tree</field>
       <field name="name">letter_version_tree</field>
     </record>

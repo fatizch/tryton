@@ -46,7 +46,7 @@ msgctxt "error:ins_product.eligibility_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
-msgctxt "error:ins_product.letter_version:"
+msgctxt "error:document.template.version:"
 msgid "The  names of attachments must be unique by resource!"
 msgstr ""
 "Le nom des pièces jointes doivent être unique pour une même ressource !"
@@ -1750,87 +1750,87 @@ msgctxt "field:document.create.select,party:"
 msgid "Party"
 msgstr "Acteur"
 
-msgctxt "field:ins_product.letter_version,collision:"
+msgctxt "field:document.template.version,collision:"
 msgid "Collision"
 msgstr "Collision"
 
-msgctxt "field:ins_product.letter_version,create_date:"
+msgctxt "field:document.template.version,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:ins_product.letter_version,create_uid:"
+msgctxt "field:document.template.version,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:ins_product.letter_version,data:"
+msgctxt "field:document.template.version,data:"
 msgid "Data"
 msgstr "Données"
 
-msgctxt "field:ins_product.letter_version,data_size:"
+msgctxt "field:document.template.version,data_size:"
 msgid "Data size"
 msgstr "Taille des données"
 
-msgctxt "field:ins_product.letter_version,description:"
+msgctxt "field:document.template.version,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:ins_product.letter_version,digest:"
+msgctxt "field:document.template.version,digest:"
 msgid "Digest"
 msgstr "Empreinte"
 
-msgctxt "field:ins_product.letter_version,end_date:"
+msgctxt "field:document.template.version,end_date:"
 msgid "End date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_product.letter_version,id:"
+msgctxt "field:document.template.version,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.letter_version,language:"
+msgctxt "field:document.template.version,language:"
 msgid "Language"
 msgstr "Langues"
 
-msgctxt "field:ins_product.letter_version,last_modification:"
+msgctxt "field:document.template.version,last_modification:"
 msgid "Last Modification"
 msgstr "Dernière modification"
 
-msgctxt "field:ins_product.letter_version,last_user:"
+msgctxt "field:document.template.version,last_user:"
 msgid "Last User"
 msgstr "Dernier utilisateur"
 
-msgctxt "field:ins_product.letter_version,link:"
+msgctxt "field:document.template.version,link:"
 msgid "Link"
 msgstr "Lien"
 
-msgctxt "field:ins_product.letter_version,name:"
+msgctxt "field:document.template.version,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.letter_version,rec_name:"
+msgctxt "field:document.template.version,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:ins_product.letter_version,resource:"
+msgctxt "field:document.template.version,resource:"
 msgid "Resource"
 msgstr "Ressource"
 
-msgctxt "field:ins_product.letter_version,start_date:"
+msgctxt "field:document.template.version,start_date:"
 msgid "Start date"
 msgstr "Date de Début"
 
-msgctxt "field:ins_product.letter_version,summary:"
+msgctxt "field:document.template.version,summary:"
 msgid "Summary"
 msgstr "Synthèse"
 
-msgctxt "field:ins_product.letter_version,type:"
+msgctxt "field:document.template.version,type:"
 msgid "Type"
 msgstr "Type"
 
-msgctxt "field:ins_product.letter_version,write_date:"
+msgctxt "field:document.template.version,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:ins_product.letter_version,write_uid:"
+msgctxt "field:document.template.version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -3389,7 +3389,7 @@ msgctxt "model:document.create.select,name:"
 msgid "Letter Model Selection"
 msgstr "Sélection du modèle de Lettre"
 
-msgctxt "model:ins_product.letter_version,name:"
+msgctxt "model:document.template.version,name:"
 msgid "Letter Version"
 msgstr "Version de Lettre"
 
@@ -4104,15 +4104,15 @@ msgctxt "selection:document.template,kind:"
 msgid "Document Request"
 msgstr "Demande de Documents"
 
-msgctxt "selection:ins_product.letter_version,resource:"
+msgctxt "selection:document.template.version,resource:"
 msgid "Letter Model"
 msgstr "Modèle de Lettre"
 
-msgctxt "selection:ins_product.letter_version,type:"
+msgctxt "selection:document.template.version,type:"
 msgid "Data"
 msgstr "Données"
 
-msgctxt "selection:ins_product.letter_version,type:"
+msgctxt "selection:document.template.version,type:"
 msgid "Link"
 msgstr "Lien"
 
@@ -4648,11 +4648,11 @@ msgctxt "view:document.create.select:"
 msgid "Letter Models"
 msgstr "Modèles de Lettre"
 
-msgctxt "view:ins_product.letter_version:"
+msgctxt "view:document.template.version:"
 msgid "Letter Version"
 msgstr "Version de Lettre"
 
-msgctxt "view:ins_product.letter_version:"
+msgctxt "view:document.template.version:"
 msgid "Letter Versions"
 msgstr "Versions de Lettre"
 

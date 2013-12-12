@@ -50,7 +50,7 @@ class LetterModel(model.CoopSQL, model.CoopView):
         'ir.model', 'Model', domain=[('printable', '=', True)], required=True)
     code = fields.Char('Code', required=True)
     versions = fields.One2Many(
-        'ins_product.letter_version', 'resource', 'Versions')
+        'document.template.version', 'resource', 'Versions')
     kind = fields.Selection(
         [('', ''), ('doc_request', 'Document Request')], 'name')
 
@@ -73,7 +73,7 @@ class LetterModel(model.CoopSQL, model.CoopView):
 class LetterVersion(Attachment):
     'Letter Version'
 
-    __name__ = 'ins_product.letter_version'
+    __name__ = 'document.template.version'
     _table = None
 
     start_date = fields.Date('Start date', required=True)
