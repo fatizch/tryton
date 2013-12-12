@@ -172,12 +172,12 @@
     </record>
     <!-- Indemnification Displayer -->
     <record model="ir.ui.view" id="indemnification_displayer_form">
-      <field name="model">claim.indemnification_displayer</field>
+      <field name="model">claim.indemnification.validate.display</field>
       <field name="type">form</field>
       <field name="name">indemnification_displayer_form</field>
     </record>
     <record model="ir.ui.view" id="indemnification_displayer_tree">
-      <field name="model">claim.indemnification_displayer</field>
+      <field name="model">claim.indemnification.validate.display</field>
       <field name="type">tree</field>
       <field name="name">indemnification_displayer_tree</field>
     </record>

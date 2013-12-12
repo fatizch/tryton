@@ -983,7 +983,7 @@ class ContactHistory():
 class IndemnificationDisplayer(model.CoopView):
     'Indemnification Displayer'
 
-    __name__ = 'claim.indemnification_displayer'
+    __name__ = 'claim.indemnification.validate.display'
 
     selection = fields.Selection([
         ('nothing', 'Nothing'), ('validate', 'Validate'),
@@ -1017,7 +1017,7 @@ class IndemnificationSelection(model.CoopView):
     __name__ = 'claim.indemnification_selection'
 
     indemnifications = fields.One2Many(
-        'claim.indemnification_displayer', '', 'Indemnifications')
+        'claim.indemnification.validate.display', '', 'Indemnifications')
     domain_string = fields.Char(
         'Domain', states={'invisible': ~Eval('display_domain')},
         on_change=['domain_string', 'indemnifications', 'search_size'])

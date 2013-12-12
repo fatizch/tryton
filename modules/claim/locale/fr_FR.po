@@ -330,55 +330,55 @@ msgctxt "field:claim.indemnification.detail,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:claim.indemnification_displayer,amount:"
+msgctxt "field:claim.indemnification.validate.display,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:claim.indemnification_displayer,claim:"
+msgctxt "field:claim.indemnification.validate.display,claim:"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "field:claim.indemnification_displayer,claim_declaration_date:"
+msgctxt "field:claim.indemnification.validate.display,claim_declaration_date:"
 msgid "Claim Declaration Date"
 msgstr "Date de déclaration"
 
-msgctxt "field:claim.indemnification_displayer,claim_number:"
+msgctxt "field:claim.indemnification.validate.display,claim_number:"
 msgid "Claim Number"
 msgstr "Numéro de Sinistre"
 
-msgctxt "field:claim.indemnification_displayer,covered_element:"
+msgctxt "field:claim.indemnification.validate.display,covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
-msgctxt "field:claim.indemnification_displayer,currency_digits:"
+msgctxt "field:claim.indemnification.validate.display,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
-msgctxt "field:claim.indemnification_displayer,end_date:"
+msgctxt "field:claim.indemnification.validate.display,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:claim.indemnification_displayer,id:"
+msgctxt "field:claim.indemnification.validate.display,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:claim.indemnification_displayer,indemnification:"
+msgctxt "field:claim.indemnification.validate.display,indemnification:"
 msgid "Indemnification"
 msgstr "Indemnisation"
 
-msgctxt "field:claim.indemnification_displayer,indemnification_displayer:"
+msgctxt "field:claim.indemnification.validate.display,indemnification_displayer:"
 msgid "Indemnification"
 msgstr "Indemnisation"
 
-msgctxt "field:claim.indemnification_displayer,must_expand_tree:"
+msgctxt "field:claim.indemnification.validate.display,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:claim.indemnification_displayer,selection:"
+msgctxt "field:claim.indemnification.validate.display,selection:"
 msgid "Selection"
 msgstr "Sélection"
 
-msgctxt "field:claim.indemnification_displayer,start_date:"
+msgctxt "field:claim.indemnification.validate.display,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
@@ -582,7 +582,7 @@ msgctxt "model:claim.indemnification.detail,name:"
 msgid "Indemnification Detail"
 msgstr "Détail de l'indemnisation"
 
-msgctxt "model:claim.indemnification_displayer,name:"
+msgctxt "model:claim.indemnification.validate.display,name:"
 msgid "Indemnification Displayer"
 msgstr "Indemnisations"
 
@@ -830,15 +830,15 @@ msgctxt "selection:claim.indemnification.detail,unit:"
 msgid "Year"
 msgstr "Année"
 
-msgctxt "selection:claim.indemnification_displayer,selection:"
+msgctxt "selection:claim.indemnification.validate.display,selection:"
 msgid "Nothing"
 msgstr "Ne rien faire"
 
-msgctxt "selection:claim.indemnification_displayer,selection:"
+msgctxt "selection:claim.indemnification.validate.display,selection:"
 msgid "Refuse"
 msgstr "Refusé"
 
-msgctxt "selection:claim.indemnification_displayer,selection:"
+msgctxt "selection:claim.indemnification.validate.display,selection:"
 msgid "Validate"
 msgstr "Validé"
 
@@ -906,11 +906,11 @@ msgctxt "view:claim.indemnification.detail:"
 msgid "Indemnification Detail"
 msgstr "Détail de l'indemnisation"
 
-msgctxt "view:claim.indemnification_displayer:"
+msgctxt "view:claim.indemnification.validate.display:"
 msgid "Indemnification"
 msgstr "Indemnisation"
 
-msgctxt "view:claim.indemnification_displayer:"
+msgctxt "view:claim.indemnification.validate.display:"
 msgid "Indemnifications"
 msgstr "Indemnisations"
 
