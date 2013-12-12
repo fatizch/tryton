@@ -566,7 +566,7 @@ class RateNoteProcess(model.CoopWizard):
 class RateNoteSelection(model.CoopView):
     'Rate Note Selection'
 
-    __name__ = 'billing.rate_note_selection'
+    __name__ = 'billing.premium_rate.form.receive.select'
 
     selected_note = fields.Many2One('billing.premium_rate.form', 'Selected Note',
         domain=[('status', '=', 'completed_by_blient')], states={
@@ -589,7 +589,7 @@ class RateNoteReception(model.CoopWizard):
 
     start_state = 'calculate_start'
     calculate_start = StateTransition()
-    select_note = StateView('billing.rate_note_selection',
+    select_note = StateView('billing.premium_rate.form.receive.select',
         'life_billing_collective_fr.rate_note_selection_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Continue', 'preview_bill', 'tryton-ok')])

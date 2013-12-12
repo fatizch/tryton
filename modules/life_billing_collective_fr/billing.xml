@@ -96,7 +96,7 @@
     <!-- Rate Note Selection -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="rate_note_selection_form">
-      <field name="model">billing.rate_note_selection</field>
+      <field name="model">billing.premium_rate.form.receive.select</field>
       <field name="type">form</field>
       <field name="name">rate_note_selection_form</field>
     </record>
