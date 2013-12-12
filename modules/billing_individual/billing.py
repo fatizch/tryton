@@ -586,7 +586,7 @@ class BillingProcess(Wizard):
 class ProductPaymentMethodRelation(model.CoopSQL, model.CoopView):
     'Product to Payment Method Relation definition'
 
-    __name__ = 'billing.product-payment_method-relation'
+    __name__ = 'offered.product-billing.payment.method'
 
     product = fields.Many2One('offered.product', 'Product',
         ondelete='CASCADE')
@@ -607,7 +607,7 @@ class Product():
 
     payment_delay = fields.Selection(PAYMENT_DELAYS, 'Payment delay')
     payment_methods = fields.One2Many(
-        'billing.product-payment_method-relation', 'product',
+        'offered.product-billing.payment.method', 'product',
         'Payment Methods', order=[('order', 'ASC')],
         domain=[('payment_method.payment_rule.payment_mode', '=',
                 Eval('payment_delay', ''))],

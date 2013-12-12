@@ -683,47 +683,47 @@ msgctxt "field:contract.billing.premium-tax,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:billing.product-payment_method-relation,create_date:"
+msgctxt "field:offered.product-billing.payment.method,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:billing.product-payment_method-relation,create_date_:"
+msgctxt "field:offered.product-billing.payment.method,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:billing.product-payment_method-relation,create_uid:"
+msgctxt "field:offered.product-billing.payment.method,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:billing.product-payment_method-relation,id:"
+msgctxt "field:offered.product-billing.payment.method,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.product-payment_method-relation,must_expand_tree:"
+msgctxt "field:offered.product-billing.payment.method,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:billing.product-payment_method-relation,order:"
+msgctxt "field:offered.product-billing.payment.method,order:"
 msgid "Order"
 msgstr "Ordre"
 
-msgctxt "field:billing.product-payment_method-relation,payment_method:"
+msgctxt "field:offered.product-billing.payment.method,payment_method:"
 msgid "Payment Method"
 msgstr "Méthode de Paiement"
 
-msgctxt "field:billing.product-payment_method-relation,product:"
+msgctxt "field:offered.product-billing.payment.method,product:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "field:billing.product-payment_method-relation,rec_name:"
+msgctxt "field:offered.product-billing.payment.method,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:billing.product-payment_method-relation,write_date:"
+msgctxt "field:offered.product-billing.payment.method,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:billing.product-payment_method-relation,write_uid:"
+msgctxt "field:offered.product-billing.payment.method,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -873,7 +873,7 @@ msgctxt "model:contract.billing.premium-tax,name:"
 msgid "Price Line Tax Relation"
 msgstr ""
 
-msgctxt "model:billing.product-payment_method-relation,name:"
+msgctxt "model:offered.product-billing.payment.method,name:"
 msgid "Product to Payment Method Relation definition"
 msgstr ""
 
@@ -1193,11 +1193,11 @@ msgctxt "view:contract.billing.premium:"
 msgid "Pricing Lines"
 msgstr "Lignes de Prime"
 
-msgctxt "view:billing.product-payment_method-relation:"
+msgctxt "view:offered.product-billing.payment.method:"
 msgid "Payment Method"
 msgstr "Méthode de Paiement"
 
-msgctxt "view:billing.product-payment_method-relation:"
+msgctxt "view:offered.product-billing.payment.method:"
 msgid "Payment Methods"
 msgstr "Méthodes de Paiement"
 
