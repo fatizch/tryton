@@ -1014,7 +1014,7 @@ class IndemnificationDisplayer(model.CoopView):
 class IndemnificationSelection(model.CoopView):
     'Indemnification Selection'
 
-    __name__ = 'claim.indemnification_selection'
+    __name__ = 'claim.indemnification.validate.select'
 
     indemnifications = fields.One2Many(
         'claim.indemnification.validate.display', '', 'Indemnifications')
@@ -1136,7 +1136,7 @@ class IndemnificationValidation(Wizard):
     start_state = 'select_indemnifications'
 
     select_indemnifications = StateView(
-        'claim.indemnification_selection',
+        'claim.indemnification.validate.select',
         'claim.indemnification_selection_form',
         [
             Button('Quit', 'end', 'tryton-cancel'),
@@ -1148,7 +1148,7 @@ class IndemnificationValidation(Wizard):
         default_max_date = datetime.date(today.year, today.month, 1)
         domain_string = 'status: = calculated, start_date: <= %s' % (
             coop_date.get_end_of_period(default_max_date, 'month'))
-        Selector = Pool().get('claim.indemnification_selection')
+        Selector = Pool().get('claim.indemnification.validate.select')
         return {
             'domain_string': domain_string,
             'global_value': 'nothing',
@@ -1177,7 +1177,7 @@ class IndemnificationValidation(Wizard):
         for claim in Claim.browse(claims):
             claim.complete_indemnifications()
             Claim.write([claim], {})
-        Selector = Pool().get('claim.indemnification_selection')
+        Selector = Pool().get('claim.indemnification.validate.select')
         self.select_indemnifications.indemnifications = \
             Selector.find_indemnifications(
                 Selector.build_domain(

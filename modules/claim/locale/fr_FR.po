@@ -2,7 +2,7 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:claim.indemnification_selection:"
+msgctxt "error:claim.indemnification.validate.select:"
 msgid "Please unselect all indemnifications first"
 msgstr "Veuillez déselectionner toutes les indemnités."
 
@@ -382,35 +382,35 @@ msgctxt "field:claim.indemnification.validate.display,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:claim.indemnification_selection,display_domain:"
+msgctxt "field:claim.indemnification.validate.select,display_domain:"
 msgid "Display Search"
 msgstr "Afficher les critères de recherche"
 
-msgctxt "field:claim.indemnification_selection,domain_string:"
+msgctxt "field:claim.indemnification.validate.select,domain_string:"
 msgid "Domain"
 msgstr "Domaine"
 
-msgctxt "field:claim.indemnification_selection,global_value:"
+msgctxt "field:claim.indemnification.validate.select,global_value:"
 msgid "Force Value"
 msgstr "Valeur globale"
 
-msgctxt "field:claim.indemnification_selection,id:"
+msgctxt "field:claim.indemnification.validate.select,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:claim.indemnification_selection,indemnifications:"
+msgctxt "field:claim.indemnification.validate.select,indemnifications:"
 msgid "Indemnifications"
 msgstr "Indemnisations"
 
-msgctxt "field:claim.indemnification_selection,modified:"
+msgctxt "field:claim.indemnification.validate.select,modified:"
 msgid "Modified"
 msgstr "Modifié"
 
-msgctxt "field:claim.indemnification_selection,must_expand_tree:"
+msgctxt "field:claim.indemnification.validate.select,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:claim.indemnification_selection,search_size:"
+msgctxt "field:claim.indemnification.validate.select,search_size:"
 msgid "Search Size"
 msgstr "Taille de recherche"
 
@@ -586,7 +586,7 @@ msgctxt "model:claim.indemnification.validate.display,name:"
 msgid "Indemnification Displayer"
 msgstr "Indemnisations"
 
-msgctxt "model:claim.indemnification_selection,name:"
+msgctxt "model:claim.indemnification.validate.select,name:"
 msgid "Indemnification Selection"
 msgstr "Choix des Indemnisations"
 
@@ -842,15 +842,15 @@ msgctxt "selection:claim.indemnification.validate.display,selection:"
 msgid "Validate"
 msgstr "Validé"
 
-msgctxt "selection:claim.indemnification_selection,global_value:"
+msgctxt "selection:claim.indemnification.validate.select,global_value:"
 msgid "Nothing"
 msgstr "Ne rien faire"
 
-msgctxt "selection:claim.indemnification_selection,global_value:"
+msgctxt "selection:claim.indemnification.validate.select,global_value:"
 msgid "Refuse"
 msgstr "Refuser"
 
-msgctxt "selection:claim.indemnification_selection,global_value:"
+msgctxt "selection:claim.indemnification.validate.select,global_value:"
 msgid "Validate"
 msgstr "Valider"
 
@@ -914,7 +914,7 @@ msgctxt "view:claim.indemnification.validate.display:"
 msgid "Indemnifications"
 msgstr "Indemnisations"
 
-msgctxt "view:claim.indemnification_selection:"
+msgctxt "view:claim.indemnification.validate.select:"
 msgid "Indemnification Validation"
 msgstr "Validation des Indemnisations"
 

@@ -183,7 +183,7 @@
     </record>
     <!-- Indemnification Selection -->
     <record model="ir.ui.view" id="indemnification_selection_form">
-      <field name="model">claim.indemnification_selection</field>
+      <field name="model">claim.indemnification.validate.select</field>
       <field name="type">form</field>
       <field name="name">indemnification_selection_form</field>
     </record>
