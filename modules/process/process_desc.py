@@ -595,7 +595,7 @@ class TransitionAuthorization(ModelSQL):
 class Code(ModelSQL, ModelView):
     'Code'
 
-    __name__ = 'process.code'
+    __name__ = 'process.action'
 
     technical_kind = fields.Selection([
             ('step_before', 'Before'),
@@ -691,7 +691,7 @@ class StepTransition(ModelSQL, ModelView):
     #  re.compile('Eval\(\'([a-zA-Z0-9._]*)\'', re.I|re.U) + finditer
     pyson = fields.Char('Pyson Constraint')
     methods = fields.One2ManyDomain(
-        'process.code', 'parent_transition', 'Methods',
+        'process.action', 'parent_transition', 'Methods',
         domain=[('technical_kind', '=', 'transition')],
         order=[('sequence', 'ASC')])
     method_kind = fields.Selection(
@@ -800,11 +800,11 @@ class StepDesc(ModelSQL, ModelView):
         'process.step_desc_authorization', 'step_desc', 'group',
         'Authorizations')
     code_before = fields.One2ManyDomain(
-        'process.code', 'parent_step', 'Executed Before Step',
+        'process.action', 'parent_step', 'Executed Before Step',
         domain=[('technical_kind', '=', 'step_before')],
         order=[('sequence', 'ASC')])
     code_after = fields.One2ManyDomain(
-        'process.code', 'parent_step', 'Executed After Step',
+        'process.action', 'parent_step', 'Executed After Step',
         domain=[('technical_kind', '=', 'step_after')],
         order=[('sequence', 'ASC')])
     colspan = fields.Integer('View columns', required=True)

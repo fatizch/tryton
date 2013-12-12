@@ -47,7 +47,7 @@ class Code(model.CoopSQL):
     'Code'
 
     __metaclass__ = PoolMeta
-    __name__ = 'process.code'
+    __name__ = 'process.action'
 
     @classmethod
     def _export_light(cls):

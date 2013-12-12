@@ -2,7 +2,7 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:process.code:"
+msgctxt "error:process.action:"
 msgid "Method %s does not exist on model %s"
 msgstr "La méthode %s n'existe pas sur le modèle %s"
 
@@ -34,55 +34,55 @@ msgctxt "field:ir.model,is_workflow:"
 msgid "Is Workflow"
 msgstr "Processus"
 
-msgctxt "field:process.code,create_date:"
+msgctxt "field:process.action,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:process.code,create_uid:"
+msgctxt "field:process.action,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:process.code,id:"
+msgctxt "field:process.action,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:process.code,method_name:"
+msgctxt "field:process.action,method_name:"
 msgid "Method Name"
 msgstr "Nom de la Méthode"
 
-msgctxt "field:process.code,on_model:"
+msgctxt "field:process.action,on_model:"
 msgid "On Model"
 msgstr "Modèle"
 
-msgctxt "field:process.code,parent_step:"
+msgctxt "field:process.action,parent_step:"
 msgid "Parent Step"
 msgstr "Etape Parente"
 
-msgctxt "field:process.code,parent_transition:"
+msgctxt "field:process.action,parent_transition:"
 msgid "Parent Transition"
 msgstr "Transition Parente"
 
-msgctxt "field:process.code,rec_name:"
+msgctxt "field:process.action,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.code,sequence:"
+msgctxt "field:process.action,sequence:"
 msgid "Sequence"
 msgstr "Séquence"
 
-msgctxt "field:process.code,source_code:"
+msgctxt "field:process.action,source_code:"
 msgid "Source Code"
 msgstr "Code Source"
 
-msgctxt "field:process.code,technical_kind:"
+msgctxt "field:process.action,technical_kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:process.code,write_date:"
+msgctxt "field:process.action,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:process.code,write_uid:"
+msgctxt "field:process.action,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -518,7 +518,7 @@ msgctxt "model:ir.ui.menu,name:process_menu_id"
 msgid "Process Main Menu"
 msgstr "Moteur de Processus"
 
-msgctxt "model:process.code,name:"
+msgctxt "model:process.action,name:"
 msgid "Code"
 msgstr "Code"
 
@@ -558,15 +558,15 @@ msgctxt "model:process.transition_authorization,name:"
 msgid "Transition Authorization"
 msgstr "Autorisations pour les Transitions"
 
-msgctxt "selection:process.code,technical_kind:"
+msgctxt "selection:process.action,technical_kind:"
 msgid "After"
 msgstr "Après"
 
-msgctxt "selection:process.code,technical_kind:"
+msgctxt "selection:process.action,technical_kind:"
 msgid "Before"
 msgstr "Avant"
 
-msgctxt "selection:process.code,technical_kind:"
+msgctxt "selection:process.action,technical_kind:"
 msgid "Transition"
 msgstr "Transition"
 
@@ -892,7 +892,7 @@ msgctxt "view:contract:"
 msgid "Validation du contrat Collectif"
 msgstr "Validation du contrat Collectif"
 
-msgctxt "view:process.code:"
+msgctxt "view:process.action:"
 msgid "Code"
 msgstr "Code"
 

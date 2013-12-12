@@ -198,7 +198,7 @@ msgctxt "field:ir.export_package,steps:"
 msgid "Steps"
 msgstr "Etapes"
 
-msgctxt "field:process.code,create_date_:"
+msgctxt "field:process.action,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
