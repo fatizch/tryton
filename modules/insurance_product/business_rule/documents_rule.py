@@ -869,7 +869,7 @@ class DocumentRequestDisplayer(model.CoopView):
 class ReceiveDocuments(Wizard):
     'Receive Documents Wizard'
 
-    __name__ = 'ins_product.receive_document_wizard'
+    __name__ = 'document.receive'
 
     start_state = 'start'
     start = StateTransition()
