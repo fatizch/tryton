@@ -1044,7 +1044,7 @@ class DeliveredService():
 
     __name__ = 'contract.service'
 
-    expenses = fields.One2Many('ins_contract.expense',
+    expenses = fields.One2Many('expense',
         'delivered_service', 'Expenses')
 
     def get_expense(self, code, currency):
@@ -1064,7 +1064,7 @@ class DeliveredService():
 class Expense(model.CoopSQL, model.CoopView, ModelCurrency):
     'Expense'
 
-    __name__ = 'ins_contract.expense'
+    __name__ = 'expense'
 
     delivered_service = fields.Many2One(
         'contract.service', 'Delivered Service',

@@ -578,55 +578,55 @@ msgctxt "field:contract.covered_element-party,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.expense,amount:"
+msgctxt "field:expense,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:ins_contract.expense,create_date:"
+msgctxt "field:expense,create_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.expense,create_date_:"
+msgctxt "field:expense,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:ins_contract.expense,create_uid:"
+msgctxt "field:expense,create_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.expense,currency:"
+msgctxt "field:expense,currency:"
 msgid "Currency"
 msgstr "Devises"
 
-msgctxt "field:ins_contract.expense,currency_digits:"
+msgctxt "field:expense,currency_digits:"
 msgid "Currency Digits"
 msgstr "Nbre de chiffres après la virgule"
 
-msgctxt "field:ins_contract.expense,delivered_service:"
+msgctxt "field:expense,delivered_service:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 
-msgctxt "field:ins_contract.expense,id:"
+msgctxt "field:expense,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.expense,kind:"
+msgctxt "field:expense,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:ins_contract.expense,must_expand_tree:"
+msgctxt "field:expense,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_contract.expense,rec_name:"
+msgctxt "field:expense,rec_name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.expense,write_date:"
+msgctxt "field:expense,write_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ins_contract.expense,write_uid:"
+msgctxt "field:expense,write_uid:"
 msgid ""
 msgstr " "
 
@@ -865,7 +865,7 @@ msgctxt "model:contract.covered_element-party,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:ins_contract.expense,name:"
+msgctxt "model:expense,name:"
 msgid ""
 msgstr " "
 
@@ -1081,11 +1081,11 @@ msgctxt "view:contract.covered_element:"
 msgid "Sub Covered Elements"
 msgstr "Sous Eléments Couverts"
 
-msgctxt "view:ins_contract.expense:"
+msgctxt "view:expense:"
 msgid "Expense"
 msgstr "Frais"
 
-msgctxt "view:ins_contract.expense:"
+msgctxt "view:expense:"
 msgid "Expenses"
 msgstr "Frais"
 
