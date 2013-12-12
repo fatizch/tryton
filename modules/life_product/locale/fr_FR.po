@@ -86,63 +86,63 @@ msgctxt "field:salary_range,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:tranche.tranche_version,ceiling:"
+msgctxt "field:salary_range.version,ceiling:"
 msgid "Ceiling"
 msgstr "Plafond"
 
-msgctxt "field:tranche.tranche_version,create_date:"
+msgctxt "field:salary_range.version,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:tranche.tranche_version,create_date_:"
+msgctxt "field:salary_range.version,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:tranche.tranche_version,create_uid:"
+msgctxt "field:salary_range.version,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:tranche.tranche_version,end_date:"
+msgctxt "field:salary_range.version,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:tranche.tranche_version,floor:"
+msgctxt "field:salary_range.version,floor:"
 msgid "Floor"
 msgstr "Seuil"
 
-msgctxt "field:tranche.tranche_version,id:"
+msgctxt "field:salary_range.version,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:tranche.tranche_version,main_elem:"
+msgctxt "field:salary_range.version,main_elem:"
 msgid "Descriptor"
 msgstr "Descripteur"
 
-msgctxt "field:tranche.tranche_version,must_expand_tree:"
+msgctxt "field:salary_range.version,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:tranche.tranche_version,rec_name:"
+msgctxt "field:salary_range.version,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:tranche.tranche_version,start_date:"
+msgctxt "field:salary_range.version,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:tranche.tranche_version,write_date:"
+msgctxt "field:salary_range.version,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:tranche.tranche_version,write_uid:"
+msgctxt "field:salary_range.version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "help:tranche.tranche_version,ceiling:"
+msgctxt "help:salary_range.version,ceiling:"
 msgid "Included"
 msgstr "Inclus"
 
-msgctxt "help:tranche.tranche_version,floor:"
+msgctxt "help:salary_range.version,floor:"
 msgid "Not Included"
 msgstr "Non Inclus"
 
@@ -162,7 +162,7 @@ msgctxt "model:salary_range,name:"
 msgid "Tranche"
 msgstr "Tranche"
 
-msgctxt "model:tranche.tranche_version,name:"
+msgctxt "model:salary_range.version,name:"
 msgid "Tranche Version"
 msgstr ""
 
@@ -178,6 +178,6 @@ msgctxt "view:salary_range:"
 msgid "Tranche"
 msgstr "Tranche"
 
-msgctxt "view:tranche.tranche_version:"
+msgctxt "view:salary_range.version:"
 msgid "Tranche Version"
 msgstr ""

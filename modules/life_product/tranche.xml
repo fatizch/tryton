@@ -37,13 +37,13 @@
             ******** tranche Version ***************
             ******************************************* -->
         <record model="ir.ui.view" id="tranche_version_view_tree">
-            <field name="model">tranche.tranche_version</field>
+            <field name="model">salary_range.version</field>
             <field name="type">tree</field>
             <field name="inherit" ref="coop_utils.version_object_view_tree"/>
             <field name="name">tranche_version_tree</field>
         </record>
         <record model="ir.ui.view" id="tranche_version_view_form">
-            <field name="model">tranche.tranche_version</field>
+            <field name="model">salary_range.version</field>
             <field name="type">form</field>
             <field name="inherit" ref="coop_utils.version_object_view_form"/>
             <field name="name">tranche_version_form</field>

@@ -95,7 +95,7 @@ class TestCaseModel():
     @classmethod
     def create_tranche(cls, code, floor_name=None, ceiling_name=None):
         Tranche = Pool().get('salary_range')
-        TrancheVersion = Pool().get('tranche.tranche_version')
+        TrancheVersion = Pool().get('salary_range.version')
         Rule = Pool().get('rule_engine')
         tranche = Tranche()
         tranche.code = code

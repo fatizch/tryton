@@ -22,7 +22,7 @@ class Tranche(CoopSQL, VersionedObject):
 
     @classmethod
     def version_model(cls):
-        return 'tranche.tranche_version'
+        return 'salary_range.version'
 
     @staticmethod
     def default_versions():
@@ -51,7 +51,7 @@ class Tranche(CoopSQL, VersionedObject):
 class TrancheVersion(CoopSQL, VersionObject):
     'Tranche Version'
 
-    __name__ = 'tranche.tranche_version'
+    __name__ = 'salary_range.version'
 
     floor = fields.Many2One('rule_engine', 'Floor', help='Not Included',
         ondelete='RESTRICT')
