@@ -15,7 +15,7 @@ class Party:
     __metaclass__ = PoolMeta
 
     broker_role = fields.One2Many('party.broker', 'party', 'Broker', size=1)
-    dist_networks = fields.Many2Many('distribution.dist_network-broker',
+    dist_networks = fields.Many2Many('distribution.network-broker',
         'broker', 'dist_network', 'Distribution Networks')
 
     @classmethod

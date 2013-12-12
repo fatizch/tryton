@@ -290,43 +290,43 @@ msgctxt "field:distribution.dist_network,parent_com_plans:"
 msgid "Top Level Commission Plans"
 msgstr "Plans de Commissionnement Hérités"
 
-msgctxt "field:distribution.dist_network-broker,broker:"
+msgctxt "field:distribution.network-broker,broker:"
 msgid "Broker"
 msgstr "Courtier"
 
-msgctxt "field:distribution.dist_network-broker,create_date:"
+msgctxt "field:distribution.network-broker,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:distribution.dist_network-broker,create_date_:"
+msgctxt "field:distribution.network-broker,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:distribution.dist_network-broker,create_uid:"
+msgctxt "field:distribution.network-broker,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:distribution.dist_network-broker,dist_network:"
+msgctxt "field:distribution.network-broker,dist_network:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
 
-msgctxt "field:distribution.dist_network-broker,id:"
+msgctxt "field:distribution.network-broker,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:distribution.dist_network-broker,must_expand_tree:"
+msgctxt "field:distribution.network-broker,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:distribution.dist_network-broker,rec_name:"
+msgctxt "field:distribution.network-broker,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:distribution.dist_network-broker,write_date:"
+msgctxt "field:distribution.network-broker,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:distribution.dist_network-broker,write_uid:"
+msgctxt "field:distribution.network-broker,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -458,7 +458,7 @@ msgctxt "model:contract.billing.premium-commission.option,name:"
 msgid "Price line to Commission relation"
 msgstr "Relation Ligne de Prime - Commission"
 
-msgctxt "model:distribution.dist_network-broker,name:"
+msgctxt "model:distribution.network-broker,name:"
 msgid "Relation Distribution Network - Broker"
 msgstr "Relation Réseau de Distrib - Courtier"
 

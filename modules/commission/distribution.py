@@ -27,7 +27,7 @@ class DistributionNetwork():
         fields.Many2Many('offered.product', None, None,
             'Top Level Commission Plans'),
         'get_all_com_plans_id')
-    brokers = fields.Many2Many('distribution.dist_network-broker',
+    brokers = fields.Many2Many('distribution.network-broker',
         'dist_network', 'broker', 'Brokers',
         domain=[('is_broker', '=', True)])
     childs_brokers = fields.Function(
@@ -79,7 +79,7 @@ class DistributionNetworkComPlanRelation(model.CoopSQL):
 class DistributionNetworkBrokerRelation(model.CoopSQL, model.CoopView):
     'Relation Distribution Network - Broker'
 
-    __name__ = 'distribution.dist_network-broker'
+    __name__ = 'distribution.network-broker'
 
     dist_network = fields.Many2One('distribution.dist_network',
         'Distribution Network', ondelete='RESTRICT')
