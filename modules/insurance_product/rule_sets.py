@@ -140,7 +140,7 @@ class RuleCombinationContext(RuleEngineContext):
         ins_product.pricing_rule
     '''
 
-    __name__ = 'ins_product.rule_sets.rule_combination'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     @check_args('price_details')

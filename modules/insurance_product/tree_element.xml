@@ -183,7 +183,7 @@
       <field name="description">Ajouter un détail</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.rule_combination</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_append_detail</field>
       <field name="fct_args">Code detail, Montant</field>
       <field name="parent" ref="dossier_rule_combination"/>
@@ -193,7 +193,7 @@
       <field name="description">Appliquer le frais</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.rule_combination</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_apply_fee</field>
       <field name="fct_args">Code Frais, Assiette</field>
       <field name="parent" ref="dossier_rule_combination"/>
@@ -203,7 +203,7 @@
       <field name="description">Valeur de la composante</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.rule_combination</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_sub_component</field>
       <field name="fct_args">Code composante</field>
       <field name="parent" ref="dossier_rule_combination"/>
@@ -213,7 +213,7 @@
       <field name="description">Appliquer la taxe</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.rule_combination</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_apply_tax</field>
       <field name="fct_args">Code Taxe, Assiette</field>
       <field name="parent" ref="dossier_rule_combination"/>
