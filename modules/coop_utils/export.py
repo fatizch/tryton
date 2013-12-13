@@ -675,9 +675,13 @@ class ExportImportMixin(Model):
 
     @classmethod
     def _import_complete(cls, created):
+        pool = Pool()
         for k, v in created.iteritems():
-            CurModel = Pool().get(k)
+            CurModel = pool.get(k)
             CurModel._post_import([elem for elem in v.itervalues()])
+        for k, v in created.iteritems():
+            CurModel = pool.get(k)
+            CurModel._validate([elem for elem in v.itervalues()])
 
     @classmethod
     def import_json(cls, values):
@@ -697,7 +701,7 @@ class ExportImportMixin(Model):
                 main_instances.append(
                     TargetModel._import_json(value, created, relink))
             cls._import_relink(created, relink)
-            cls._import_complete(created)
+        cls._import_complete(created)
         for instance in main_instances:
             try:
                 log_name = instance.get_rec_name(None)
