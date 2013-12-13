@@ -10,7 +10,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     @classmethod
     def get_module_name(cls):
-        return 'claim.declare.find_process'
+        return 'claim_process'
 
 
 def suite():
