@@ -297,7 +297,8 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
     def get_indemnification_for_capital(self, args):
         res = {}
         res['nb_of_unit'] = 1
-        res['amount_per_unit'], errs = self.give_me_result(args)
+        result = self.give_me_result(args)
+        res['amount_per_unit'], errs = result.result, result.errors
         res['beneficiary_kind'] = self.offered.beneficiary_kind
         return [res], errs
 
