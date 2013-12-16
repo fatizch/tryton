@@ -54,11 +54,27 @@ class BatchRoot(ModelView):
     def select_ids(cls):
         cursor = Transaction().cursor
         SearchModel = Pool().get(cls.get_batch_search_model())
-        search_table = SearchModel.__table__()
-        search_column = getattr(search_table, cls.get_batch_field())
         tables, expression = SearchModel.search_domain(
             cls.get_batch_domain())
-        cursor.execute(*tables.select(search_column,
+
+        main_table, _ = tables[None]
+
+        def convert_from(table, tables):
+            right, condition = tables[None]
+            if table:
+                table = table.join(right, 'LEFT', condition)
+            else:
+                table = right
+            for k, sub_tables in tables.iteritems():
+                if k is None:
+                    continue
+                table = convert_from(table, sub_tables)
+            return table
+        table = convert_from(None, tables)
+
+        search_column = getattr(main_table, cls.get_batch_field())
+
+        cursor.execute(*table.select(search_column,
                 where=expression,
                 order_by=search_column))
         res = cursor.fetchall()

@@ -102,7 +102,9 @@ class ExportImportMixin(Model):
                 ('model', '=', cls.__name__),
                 ('db_id', 'in', [x.id for x in objects])])
         # TODO : What do we do if some ids do not have a match ?
-        return dict([(x.db_id, '%s.%s' % (x.module, x.fs_id)) for x in values])
+        result = dict([(elem.id, '') for elem in objects])
+        return result.update(
+            dict([(x.db_id, '%s.%s' % (x.module, x.fs_id)) for x in values]))
 
     @classmethod
     def search_xml_id(cls, name, clause):

@@ -100,6 +100,8 @@ def is_coop_module(module):
 
 
 def get_module_depends(module):
+    # Very bad performances, especially since it is recursive. Consider moving
+    # import at the top
     from trytond.modules import get_module_info
 
     res = set()

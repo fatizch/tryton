@@ -10,6 +10,7 @@ from .many2one_form import *
 from .business import *
 from .test_framework import *
 from .batchs import *
+from .view_validation_batch import *
 from .test_case_framework import *
 
 
@@ -43,6 +44,8 @@ def register():
         DynamicSelection,
         VersionedObject,
         VersionObject,
+        # From view_validation_batch
+        ViewValidationBatch,
         # From test_case_framework
         TestCaseModel,
         TestCaseSelector,
